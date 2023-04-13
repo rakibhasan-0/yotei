@@ -1,0 +1,103 @@
+/**
+ *  Css för komponenter som hör till admin sidan.
+ *
+ *  @author Team Quattro Formaggi (Group 1)
+ */
+
+.btn-admin{
+    width: 300px;
+    height: 75px;
+    border-radius: 15px;
+    font-size: large;
+}
+
+.file-input-admin{
+    width: 300px;
+    text-align: center;
+    height: 44px;
+}
+
+.status-admin{
+    float: left;
+    margin-bottom: 0px;
+    /*min-height: 25px;*/
+    margin-top: 5px;
+    text-align: left;
+}
+
+.admin-container {
+    width: 300px;
+    margin-bottom: 0px;
+    padding: 0;
+}
+
+#overlay-admin{
+    background-color:rgba(0,0,0,0.8);
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0px;
+    left:0px;
+    visibility: hidden;
+    z-index: 110;
+}
+
+.overlay-box{
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 40px;
+    max-width: 500px;
+}
+
+.overlay-close{
+    border: none;
+    color: #000;
+    box-shadow: none;
+    font-size: x-large;
+    float: right;
+    position: fixed;
+    right: 10px;
+    top: 10px;
+}
+
+.overlay-close:hover{
+    background-color: transparent;
+    border: none;
+    color: #000;
+    box-shadow: none;
+    cursor: pointer;
+}
+
+.overlay-close:active{
+    background-color: transparent !important;
+    border: none !important;
+    color: #000 !important;
+    box-shadow: none !important;
+}
+
+.overlay-close:focus{
+    background-color: transparent !important;
+    border: none !important;
+    color: #000 !important;
+    box-shadow: none;
+}
+
+.form-add-user{
+    margin-top: 20px;
+    width: 300px;
+}
+
+.form-group-admin {
+    width: 300px;
+}
+
+#register-admin-check {
+    margin-left: 5px;
+}
+
+#choose-user-select {
+    text-align: left;
+    z-index: 10;
+}

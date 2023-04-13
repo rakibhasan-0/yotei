@@ -1,0 +1,120 @@
+/*Style sheet ordered by element hierarchy*/
+
+.mt-10 {
+    margin-top: 0%;
+}
+
+.page-content-container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid #ccc;
+    border-top: 4px solid #BE3B41;
+}
+
+@media (max-width: 450px){
+    .page-content-container {
+        margin-left: 0px;
+        margin-right: 0px;
+        padding: 0px;
+    }
+}
+
+#profile-tab-container {
+    width: 80%;
+    padding: 2rem;
+}
+
+@media (max-width: 800px) {
+    #profile-tab-container {
+        width: 100%;
+        padding: 0rem;
+    }
+}
+
+/*The tab bar*/
+.tab-bar {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-bottom: 0px;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+   
+}
+
+/*The tab*/
+.page-tab {
+    background-color: white;
+    color: #BE3B41;
+    display: flex;
+    align-items: center;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+}
+
+.page-tab:hover {
+    background-color: #BE3B41;
+    color: white;
+}
+
+.page-tab-active {
+    background-color: #BE3B41;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+}
+
+@media (max-width: 500px){
+    .page-tab {
+        font-size: 10pt;
+    }
+}
+
+@media (max-width: 500px){
+    .page-tab-active {
+        font-size: 10pt;
+    }
+}
+
+@media (max-width: 425px){
+    .page-tab {
+        font-size: 9pt;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;    
+    }
+}
+
+@media (max-width: 425px){
+    .page-tab-active {
+        font-size: 9pt;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem; 
+    }
+}
+
+.page-tab > p {
+    margin: 0;
+}
+
+.page-tab-active > p {
+    margin: 0;
+}
+
+/*The tab-content*/
+/*Shows nothing when corresponding tab is not active (display: none)*/
+.content {
+    display: none;
+}
+
+.content-active {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    margin-left: auto;
+    margin-right: auto;
+}

@@ -1,0 +1,22 @@
+/**
+	Styling for 404-budo
+	@author Team 2
+*/
+
+#noPageBudo {
+	margin-top: 20vh;
+	vertical-align: middle;
+	border-style: none;
+	width: 100%;
+	max-width: max-content;
+	animation: rotation 10s infinite linear;
+}
+
+@keyframes rotation {
+	from {
+		transform: rotate3d(1.0, 1, 0.2, 0deg);
+	}
+	to {
+		transform: rotate3d(0.2, 1, 0.6, 359deg);
+	}
+}

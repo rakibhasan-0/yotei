@@ -1,0 +1,16 @@
+/*
+ * @author Team Capricciosa (Group 2)
+ * @version 1.0
+ */
+.btn-add-activity {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    font-size:xx-large;
+    text-align: center;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    padding: 10px;
+    margin: 10px;
+}

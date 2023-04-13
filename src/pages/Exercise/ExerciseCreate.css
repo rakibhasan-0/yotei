@@ -1,0 +1,38 @@
+.btn-done{
+    width: 80px;
+    height: 80px;
+    float: right;
+    border-radius: 50%;
+    margin-top:10px;
+    background-color: #BE3B41;
+    border-color: #BE3B41;
+}
+
+.stay-box{
+    margin-top: 3%;
+}
+
+.desc-form{
+    height: 100px;
+}
+
+.alert{
+    width: 40%;
+    margin-top: 10%;
+    margin-left: auto;
+    margin-right: auto;
+    /*align-items: left;*/
+}
+@media (max-width: 600px) {
+    .alert {
+        width: 60%;
+        margin-top: 15%;
+    }
+}
+
+@media (max-width: 400px) {
+    .alert {
+        width: 40%;
+        margin-top: 15%;
+    }
+}

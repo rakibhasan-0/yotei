@@ -1,0 +1,71 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  background-color: white;
+  color: black;
+  padding: 0;
+  font-family: Sans-Serif, serif;
+  text-align: center;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.center{   
+  text-align: center;   
+  display: block;   
+  justify-content: center;   
+  align-items: center;   
+  margin: auto;   
+  width: 100%; 
+}  
+
+.btn-color{
+  background-color: #BE3B41;
+  border-color: #BE3B41;
+  color: #fff;
+}
+
+.btn-color:disabled{
+  background-color: #BE3B41;
+  border-color: #BE3B41;
+  color: #fff;
+}
+
+.btn-color:disabled:hover{
+  background-color: #BE3B41;
+  border-color: #BE3B41;
+  color: #fff;
+}
+
+.btn-color:active{
+  background-color: #BE3B41 !important;
+  border-color: #BE3B41 !important;
+  color: #fff !important;
+}
+
+.btn-color:focus{
+  box-shadow: none !important;
+}
+
+.btn-color:hover{
+  color:#fff; 
+  background-color:#d74249;
+  border-color: #c93b42
+}
+
+.href-link{
+  color: #0e0f0f;
+}
+
+.href-link:hover{
+  color: #BE3B41;
+}
+

@@ -1,0 +1,19 @@
+.div-day-selected-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+}
+
+.div-day-selected{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: fit-content;
+}
+
+.day-selected-text{
+    width: fit-content;
+}
+
+.day-selected-date{
+    width: fit-content;
+}

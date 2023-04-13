@@ -1,0 +1,116 @@
+#plan-nav-bar {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    background: #BE3B41;
+    padding: 5px;
+    border-bottom: solid 2px black;
+    height: 7vh;
+    min-height: 100px;
+    max-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 5vmin;
+
+}
+
+#checkBoxes {
+    margin-top: 10px;
+    overflow-x: auto;
+    overflow-y: auto;
+    height: 300px;
+}
+
+#checkboxpad:hover {
+    background-color:#BE3B41;
+}
+
+#checkboxpad {
+    white-space: nowrap;
+    overflow: auto;
+}
+
+#toggleButton {
+    padding-right: 20px;
+    justify-content: space-between;
+}
+
+#buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+#toggleTitle {
+    padding-top: 5px;
+    font-size: 1.2rem;
+}
+
+#filter{
+    padding-top: 10px;
+    text-align: start;
+    position: absolute;
+    background: white;
+    padding-bottom: 8px;
+    border-right: solid 2px rgb(182, 181, 181);
+    border-bottom: solid 2px rgb(182, 181, 181);
+    border-left: solid 2px rgb(182, 181, 181);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+#checkboxpad label{
+
+    margin-left: 0.2rem;
+}
+
+#dropdownfilter{
+    list-style-type: none;
+    z-index: 9;
+    padding-left: 5px;
+    text-align: start;
+    position: absolute;
+    display: flex;
+}
+
+#title {
+    font-size: 5vmin;
+}
+
+#searchBar {
+    margin-top: 10px;
+    max-height: 95px;
+}
+
+#dropdownCalendar {
+    background-color: transparent;
+    z-index: 9;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: solid 2px rgb(182, 181, 181);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+
+#nav-bar-name {
+    text-align: center;
+    width: max-content;
+}
+
+@media  (max-width: 400px) {
+     #filter{
+        width: 300px;
+    }
+}
+
+@media (min-width: 400px) {
+    #filter {
+        width: 360px;
+    }
+}
+
+
+/* 
+* Response for when the screen is more than 500px
+*/
+@media (min-width: 550px) {
+    #filter{
+        width: 400px;
+    }
+}
