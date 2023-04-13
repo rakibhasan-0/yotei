@@ -1,0 +1,161 @@
+version: "3.7"
+services:
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /etc/letsencrypt/:/etc/letsencrypt/
+    ports:
+      - 80:80
+      - 443:443
+    links:
+      - gateway
+  psql:
+    build: ./database
+    environment:
+      - POSTGRES_USER=psql
+      - POSTGRES_PASSWORD=yotei123
+      - POSTGRES_DB=yotei
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+  frontend:
+    image: pvt2023/frontend:0.1.0
+    ports:
+      - "3000:3000"
+    links:
+      - psql
+  gateway:
+    image: pvt2023/backend:gateway-1.0
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - POSTGRES_USER=psql
+      - POSTGRES_PASSWORD=yotei123
+      - POSTGRES_DB=yotei
+    links:
+      - frontend
+      - exercise-api
+      - techniques-api
+      - workout-api
+      - user-api
+      - tag-api
+      - plan-api
+      - comment-api
+      - session-api
+      - usersettings-api
+  exercise-api:
+    image: pvt2023/backend:exercise-api-1.0
+    ports:
+      - "8082:8082"
+    links:
+      - psql
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - POSTGRES_USER=psql
+      - POSTGRES_PASSWORD=yotei123
+      - POSTGRES_DB=yotei
+  techniques-api:
+    image: pvt2023/backend:techniques-api-1.0
+    ports:
+      - "8083:8083"
+    links:
+      - psql
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - POSTGRES_USER=psql
+      - POSTGRES_PASSWORD=yotei123
+      - POSTGRES_DB=yotei
+  workout-api:
+    image: pvt2023/backend:workout-api-1.0
+    ports:
+      - "8084:8084"
+    links:
+      - psql
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - POSTGRES_USER=psql
+      - POSTGRES_PASSWORD=yotei123
+      - POSTGRES_DB=yotei
+  user-api:
+    image: pvt2023/backend:user-1.0
+    ports:
+      - "8085:8085"
+    links:
+      - psql
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - POSTGRES_USER=psql
+      - POSTGRES_PASSWORD=yotei123
+      - POSTGRES_DB=yotei
+  tag-api:
+    image: pvt2023/backend:tag-api-1.0
+    ports:
+      - "8086:8086"
+    links:
+      - psql
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - POSTGRES_USER=psql
+      - POSTGRES_PASSWORD=yotei123
+      - POSTGRES_DB=yotei
+  plan-api:
+    image: pvt2023/backend:plan-api-1.0
+    ports:
+      - "8087:8087"
+    links:
+      - psql
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - POSTGRES_USER=psql
+      - POSTGRES_PASSWORD=yotei123
+      - POSTGRES_DB=yotei
+  comment-api:
+    image: pvt2023/backend:comment-api-1.0
+    ports:
+      - "8088:8088"
+    links:
+      - psql
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - POSTGRES_USER=psql
+      - POSTGRES_PASSWORD=yotei123
+      - POSTGRES_DB=yotei
+  session-api:
+    image: pvt2023/backend:session-api-1.0
+    ports:
+      - "8089:8089"
+    links:
+      - psql
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - POSTGRES_USER=psql
+      - POSTGRES_PASSWORD=yotei123
+      - POSTGRES_DB=yotei
+  usersettings-api:
+    image: pvt2023/backend:usersettings-api-1.0
+    ports:
+      - "6969:6969"
+    links:
+      - psql
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - POSTGRES_USER=psql
+      - POSTGRES_PASSWORD=yotei123
+      - POSTGRES_DB=yotei
+
+volumes:
+  pgdata:
+
+#                 O  O  O
+#                        O
+#                  ._, __|__.
+#                  || ||_____\
+#                  || ||    |
+#            .---------------------------.
+#             \   O   O   O   O -YOTEI- /
+#        ~ ~ ~ ~ ~ ~ ~ ~  ~ ~ ~ ~ ~ ~ ~ ~
+#      ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
