@@ -21,16 +21,16 @@ deploy:
 
   variables:
     DOCKER_DRIVER: "overlay2"
-    CONTAINER_REGISTRY: "hub.docker.com"
     CONTAINER_REPOSITORY: "pvt2023/frontend"
 
   before_script:
     - apk update && apk add jq
+    - docker login -u "$DOCKER_CLIENT" -p "$DOCKER_SECRET"
+
   script:
     - DOCKER_IMAGE_TAG=$(cat package.json | jq -r '.version')
     - echo "Building website version $DOCKER_IMAGE_TAG"
-    - docker build -t $CONTAINER_REGISTRY/$CONTAINER_REPOSITORY:$DOCKER_IMAGE_TAG .
-    - docker login -u "$DOCKER_CLIENT" -p "$DOCKER_SECRET" $CONTAINER_REGISTRY
-    - docker push $CONTAINER_REGISTRY/$CONTAINER_REPOSITORY:$DOCKER_IMAGE_TAG
+    - docker build -t CONTAINER_REPOSITORY:$DOCKER_IMAGE_TAG .
+    - docker push $CONTAINER_REPOSITORY:$DOCKER_IMAGE_TAG
   only:
     - main
