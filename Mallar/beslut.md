@@ -1,17 +1,23 @@
-# Beslut
-Beslut dokumenteras på sidan för det chapter som fattade beslutet. Om beslutet fattades av en grupp utan inblandning av ett chapter så sparas dokumentationen istället på [Övriga Beslut](/Chapters/Övriga Beslut)
+# Beslut där alternativ övervägdes
 
-Alla beslut dokumenteras i fallande ordning, med det översta beslutet som det senast fattade. För exampel på formulering, se följande:
-
-## Exempel
-Kort beskrivning av beslutet (Z) som fattats
+## Vad gällde beslutet? (till exempelt dokumentations-hantering)
 
 - **Datum** - YYMMDD
-- **Chapters** - [Namn](/Chapters/Namn)
-- **Grupp** - N/A
+- **Chapters** - Namn på chapter (N/A om ej relevant)
+- **Grupp** - Namn på grupp (N/A om ej relevant)
 - **Alternativ** - X, Y, **Z**
 - **Motivation**
   - Längre beskrivning om varför Z valdes
   - Längre beskrivning om varför X _inte_ valdes
   - Längre beskrivning om varför Y _inte_ valdes
 
+# Beslut utan alternativ
+
+## Vad beslutades?
+
+- **Datum** - YYMMDD
+- **Chapters** - Namn på chapter (N/A om ej relevant)
+- **Grupp** -  Namn på grupp (N/A om ej relevant)
+- **Beslut** - Vad beslutades?
+- **Motivation**
+  - Längre beskrivning om varför X valdes
