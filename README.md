@@ -13,7 +13,7 @@ Beslut som tas loggas genom en beslutslogg för respektive grupp/chapter.
 ### Vilka beslut loggas?
 - Alla beslut som tas inom chapters som påverkar projektet ska dokumenteras under respektive chapter - [Chapters](/Chapters)
 - Små beslut inom grupperna som påverkar gruppen dokumenteras under respektive grupp. Här ska ej projektövergripande beslut loggas - [Grupper](/Grupper).
-- Projektövergripande projekt som tas utanför chapters loggas i filen övriga beslut - - [Övriga beslut](/övriga_beslut.md)
+- Projektövergripande beslut som tas utanför chapters loggas i filen övriga beslut - [Övriga beslut](/övriga_beslut.md)
 
 
 # Tickets
