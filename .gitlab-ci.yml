@@ -12,6 +12,9 @@ build-job:
     - npm run build
     - echo "Compile complete."
 
+services:
+  - docker:dind
+
 deploy:
   image: docker:latest
   stage: deploy
@@ -21,8 +24,6 @@ deploy:
     CONTAINER_REGISTRY: "hub.docker.com"
     CONTAINER_REPOSITORY: "pvt2023/frontend"
 
-  services:
-    - docker:dind
 
   before_script:
     - apk update && apk add jq
