@@ -6,9 +6,11 @@ stages:
 build-job:       
   stage: build
   image: node:19
+  before_script:
+    - npm install
   script:
     - echo "Compiling the code..."
-    - npm install
+    - npm run build
     - echo "Compile complete."
 
 lint-test-job:   # This job also runs in the test stage.
