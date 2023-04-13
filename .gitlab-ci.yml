@@ -13,11 +13,11 @@ build-job:
     - echo "Compile complete."
 
 deploy:
-  image: docker:20.10.24
+  image: docker:20
   services:
-    - docker:20.10.24-dind
+    - docker:20-dind
 
-  stage: build
+  stage: deploy
 
   variables:
     DOCKER_DRIVER: "overlay2"
