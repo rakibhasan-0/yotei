@@ -1,0 +1,20 @@
+server:
+    port : 8087
+spring:
+    datasource:
+        url: jdbc:postgresql://postgres.cs.umu.se:5432/c5dv214_vt22_dev
+        username: c5dv214_vt22_dev
+        password: j79piCPvkHTc
+        driver-class-name: org.postgresql.Driver
+        type: org.springframework.jdbc.datasource.SimpleDriverDataSource
+    jpa:
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+                temp:
+                    use_jdbc_metadata_defaults: false
+                ddl-auto: update
+        show-sql: true
+logging:
+    level:
+        root: debug

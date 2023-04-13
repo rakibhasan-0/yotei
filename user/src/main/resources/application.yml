@@ -1,0 +1,9 @@
+server:
+  port: 8085
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres.cs.umu.se:5432/c5dv214_vt22_dev
+    username: c5dv214_vt22_dev
+    password: j79piCPvkHTc
+    driver-class-name: org.postgresql.Driver
+    type: org.springframework.jdbc.datasource.SimpleDriverDataSource

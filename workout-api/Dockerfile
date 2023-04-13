@@ -1,0 +1,13 @@
+# Workout API
+
+FROM maven
+
+WORKDIR /
+
+COPY . ./
+
+EXPOSE 8084
+
+RUN mvn clean
+RUN mvn -q install
+CMD ["mvn", "spring-boot:run"]

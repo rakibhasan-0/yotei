@@ -1,0 +1,60 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        # id: choose an appropriate id for your service
+        # uri: the uri of the service to route to
+        # predicates: Use Path predicate to define the api-mapping that goes to the micro-service
+
+        - id: exercise
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/exercises/**
+
+        - id: technique
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/techniques/**
+
+        - id: workout
+          uri: http://localhost:8084
+          predicates:
+            - Path=/api/workouts/**
+
+        - id: user
+          uri: http://localhost:8085
+          predicates:
+            - Path=/user/**
+
+        - id: tag
+          uri: http://localhost:8086
+          predicates:
+            - Path=/api/tags/**
+        - id: plan
+          uri: http://localhost:8087
+          predicates:
+            - Path=/api/plan/**
+
+        - id: session
+          uri: http://localhost:8088
+          predicates:
+            - Path=/api/session/**
+
+        - id: comment
+          uri: http://localhost:8089
+          predicates:
+            - Path=/api/comment/**
+
+        # Please remember to add the same service to application-docker.yml!
+        # (also remember to change localhost to the name of the container
+        #  name specified in docker-compose.yml (in the project's top directory))
+        ################################################################################################
+        # Do not put any other routes below here!
+        - id: webserver
+          uri: http://localhost:3000
+          predicates:
+            - Path=/**
+
+logging:
+  level:
+    root: debug
