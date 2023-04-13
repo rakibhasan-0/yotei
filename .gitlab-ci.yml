@@ -1,0 +1,10 @@
+
+stages.
+ - test
+
+
+tests:
+    stage: test
+    image: maven:3.8.3-openjdk-17
+    script:
+        - mvn test
