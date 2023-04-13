@@ -8,18 +8,7 @@
 ## Beslut
 Beslut som tas loggas genom en beslutslogg för respektive grupp/chapter.
 
-### Exempel på beslutslogg
-Kort beskrivning av beslutet (Z) som fattats
-
-- **Datum** - YYMMDD
-- **Chapters** - Namn på chapters
-- **Grupp** - N/A
-- **Alternativ** - X, Y, **Z**
-- **Motivation**
-  - Längre beskrivning om varför Z valdes
-  - Längre beskrivning om varför X _inte_ valdes
-  - Längre beskrivning om varför Y _inte_ valdes
-
+[Mall](/Mallar/beslut)
 
 ### Vilka beslut loggas?
 - Alla beslut som tas inom chapters som påverkar projektet ska dokumenteras under respektive chapter - [Chapters](/Chapters)
