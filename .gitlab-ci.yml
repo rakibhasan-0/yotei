@@ -17,9 +17,9 @@ deploy:
   stage: deploy
 
   variables:
-    DOCKER_DRIVER: overlay2
-    CONTAINER_REGISTRY: hub.docker.com
-    CONTAINER_REPOSITORY: pvt2023/frontend
+    DOCKER_DRIVER: "overlay2"
+    CONTAINER_REGISTRY: "hub.docker.com"
+    CONTAINER_REPOSITORY: "pvt2023/frontend"
 
   services:
     - docker:dind
