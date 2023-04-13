@@ -33,7 +33,7 @@
   "scripts": {
     "start": "cross-env HOST=localhost NODE_ENV=production node_modules/react-scripts/bin/react-scripts.js start",
     "prod_start": "react-scripts start",
-    "build": "DISABLE_ESLINT_PLUGIN=TRUE react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint ./ --ignore-path .gitignore",
