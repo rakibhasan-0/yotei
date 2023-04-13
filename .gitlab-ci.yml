@@ -34,11 +34,11 @@ build_image:
     - docker build -t $CONTAINER_REPOSITORY:gateway-$VERSION gateway
     - docker push $CONTAINER_REPOSITORY:gateway-$VERSION
     - docker build -t $CONTAINER_REPOSITORY:plan-api-$VERSION plan-api
-    - docker push $CONTAINER_REPOSITORY:plan-api--$VERSION
+    - docker push $CONTAINER_REPOSITORY:plan-api-$VERSION
     - docker build -t $CONTAINER_REPOSITORY:session-api-$VERSION session-api
     - docker push $CONTAINER_REPOSITORY:session-api-$VERSION
     - docker build -t $CONTAINER_REPOSITORY:tag-api-$VERSION tag-api
-    - docker push $CONTAINER_REPOSITORY:tag-api--$VERSION
+    - docker push $CONTAINER_REPOSITORY:tag-api-$VERSION
     - docker build -t $CONTAINER_REPOSITORY:techniques-api-$VERSION techniques-api
     - docker push $CONTAINER_REPOSITORY:techniques-api-$VERSION
     - docker build -t $CONTAINER_REPOSITORY:user-$VERSION user
