@@ -12,11 +12,11 @@ build-job:
     - npm run build
     - echo "Compile complete."
 
-services:
-  - docker:dind
-
 deploy:
-  image: docker:latest
+  image: docker:20.10.24
+  services:
+    - docker:20.10.24-dind
+
   stage: deploy
 
   variables:
