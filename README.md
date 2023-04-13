@@ -1,13 +1,9 @@
 # Dokumentation
 
-## Användarhandledning
 
-Skriven i `.docx` 
-Finns [här](/userguide).
-
-
-## API dokumentation
-API dokumentationen finns på [Swaggerhub](https://app.swaggerhub.com/apis-docs/Calzone/PvtOpenApi/1.0.0) och i OpenAPI format
+* **Användarhandledning:** [user-guide](/user-guide)
+* **API:** [Swaggerhub](https://app.swaggerhub.com/apis-docs/Calzone/PvtOpenApi/1.0.0)
+* **JavaDoc:** TODO
 
 ## Beslut
 Beslut som tas loggas genom en beslutslogg för respektive grupp/chapter.
@@ -30,11 +26,6 @@ Kort beskrivning av beslutet (Z) som fattats
 - Små beslut inom grupperna som påverkar gruppen dokumenteras under respektive grupp. Här ska ej projektövergripande beslut loggas - [Grupper](/Grupper).
 - Projektövergripande projekt som tas utanför chapters loggas i filen övriga beslut - - [Övriga beslut](/övriga_beslut)
 
-
-
-## JavaDoc
-
-TODO
 
 # Tickets
 
