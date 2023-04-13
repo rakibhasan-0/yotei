@@ -12,7 +12,7 @@ build-job:
     - npm run build
     - echo "Compile complete."
 
-deploy:
+build-image:
   image: docker:20
   services:
     - docker:20-dind
