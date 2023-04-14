@@ -8,18 +8,18 @@ This is a template which is to be copied prior to making any changes, title the 
 
 
 ## What needs to be fixed?
-|Title|TicketNo|Description|Affected Chapter/-s|Identifier|
+|Title|TicketNo|Description|Affected Chapter(s)|Identifier|
 |-----|:------:|-----------|-------------------|----------|
 |Faulty interface|1|Margins too small on xxx|Frontend|QA|
 
 
 ## What should be introduced next?
-|Title|Description|Affected Chapter/-s|Identifier|
+|Title|Description|Affected Chapter(s)|Identifier|
 |-----|-----------|-------------------|----------|
 |Auto-Complete|Implement auto-complete in search-function|Backend, Frontend|Customer|
 
 ## What is the priority?
-|PrioNo|Fix/Intro|Description|Affected Chapter/-s|TicketNo|
+|PrioNo|Fix/Intro|Description|Affected Chapter(s)|TicketNo|
 |:----:|:-------:|-----------|-------------------|:------:|
 |1-3|Fix|Margins too small on xxx|Frontend|0|
 
@@ -29,8 +29,8 @@ This is a template which is to be copied prior to making any changes, title the 
 Useful definitions to further understand the tables located below.
 #### Priority
 1/high - needs to be done the same day as issued.
-2/medium - done within a couple of days.
-3/low - hopefully done within the sprint.
+2/medium - done within two days.
+3/low - done within 4 days.
 
 #### TicketNo
 If 0/empty; there exists no ticket for it,
