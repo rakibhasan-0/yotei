@@ -1,7 +1,7 @@
 stages:
  - test
  - build
-
+ - deploy
 
 tests:
     stage: test
@@ -29,24 +29,57 @@ build_image:
     - echo "Building backend"
     - docker build -t $CONTAINER_REPOSITORY/comment-api:$VERSION comment-api
     - docker push $CONTAINER_REPOSITORY/comment-api:$VERSION
+    - docker tag $CONTAINER_REPOSITORY/comment-api:$VERSION $CONTAINER_REPOSITORY/comment-api:latest
+    - docker push $CONTAINER_REPOSITORY/comment-api:latest
     - docker build -t $CONTAINER_REPOSITORY/exercise-api:$VERSION exercise-api
     - docker push $CONTAINER_REPOSITORY/exercise-api:$VERSION
+    - docker tag $CONTAINER_REPOSITORY/exercise-api:$VERSION $CONTAINER_REPOSITORY/exercise-api:latest
+    - docker push $CONTAINER_REPOSITORY/exercise-api:latest
     - docker build -t $CONTAINER_REPOSITORY/gateway:$VERSION gateway
     - docker push $CONTAINER_REPOSITORY/gateway:$VERSION
+    - docker tag $CONTAINER_REPOSITORY/gateway:$VERSION $CONTAINER_REPOSITORY/gateway:latest
+    - docker push $CONTAINER_REPOSITORY/gateway:latest
     - docker build -t $CONTAINER_REPOSITORY/plan-api:$VERSION plan-api
     - docker push $CONTAINER_REPOSITORY/plan-api:$VERSION
+    - docker tag $CONTAINER_REPOSITORY/plan-api:$VERSION $CONTAINER_REPOSITORY/plan-api:latest
+    - docker push $CONTAINER_REPOSITORY/plan-api:latest
     - docker build -t $CONTAINER_REPOSITORY/session-api:$VERSION session-api
     - docker push $CONTAINER_REPOSITORY/session-api:$VERSION
+    - docker tag $CONTAINER_REPOSITORY/session-api:$VERSION $CONTAINER_REPOSITORY/session-api:latest
+    - docker push $CONTAINER_REPOSITORY/session-api:latest
     - docker build -t $CONTAINER_REPOSITORY/tag-api:$VERSION tag-api
     - docker push $CONTAINER_REPOSITORY/tag-api:$VERSION
+    - docker tag $CONTAINER_REPOSITORY/tag-api:$VERSION $CONTAINER_REPOSITORY/tag-api:latest
+    - docker push $CONTAINER_REPOSITORY/tag-api:latest
     - docker build -t $CONTAINER_REPOSITORY/techniques-api:$VERSION techniques-api
     - docker push $CONTAINER_REPOSITORY/techniques-api:$VERSION
+    - docker tag $CONTAINER_REPOSITORY/techniques-api:$VERSION $CONTAINER_REPOSITORY/techniques-api:latest
+    - docker push $CONTAINER_REPOSITORY/techniques-api:latest
     - docker build -t $CONTAINER_REPOSITORY/user:$VERSION user
     - docker push $CONTAINER_REPOSITORY/user:$VERSION
+    - docker tag $CONTAINER_REPOSITORY/user:$VERSION $CONTAINER_REPOSITORY/user:latest
+    - docker push $CONTAINER_REPOSITORY/user:latest
     - docker build -t $CONTAINER_REPOSITORY/usersettings-api:$VERSION usersettings-api
     - docker push $CONTAINER_REPOSITORY/usersettings-api:$VERSION
+    - docker tag $CONTAINER_REPOSITORY/usersettings-api:$VERSION $CONTAINER_REPOSITORY/usersettings-api:latest
+    - docker push $CONTAINER_REPOSITORY/usersettings-api:latest
     - docker build -t $CONTAINER_REPOSITORY/workout-api:$VERSION workout-api
     - docker push $CONTAINER_REPOSITORY/workout-api:$VERSION
+    - docker tag $CONTAINER_REPOSITORY/workout-api:$VERSION $CONTAINER_REPOSITORY/workout-api:latest
+    - docker push $CONTAINER_REPOSITORY/workout-api:latest
   only:
     - main
 
+deploy:
+  image: ubuntu:latest
+  stage: deploy
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - mkdir -p ~/.ssh
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_PRIVATE_KEY" | tr -d '\r')
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+  script:
+    - ssh pvt@imp.cs.umu.se "cd /home/pvt/Desktop/infra && docker compose pull && docker compose down && docker compose up -d"
+  only:
+    - main
