@@ -52,7 +52,7 @@ import AlertWindow from "../Common/AlertWindow";
      * @param inputValue an array of the tags that are currently selected 
      */
     handleCreate = (inputValue) => {
-        this.state.setState({tags: inputValue});
+        this.setState({tags: inputValue});
         this.handleChange(this.state)
     }   
     /**
@@ -101,7 +101,7 @@ import AlertWindow from "../Common/AlertWindow";
      * Hide the alert window
      */
     handleClose = () => {
-        this.state.setState({show: false});
+        this.setState({show: false});
         this.forceUpdate();
     }
     
@@ -109,7 +109,7 @@ import AlertWindow from "../Common/AlertWindow";
      * Display the alert window
      */
     handleShow = () => {
-        this.state.setState({show: true});
+        this.setState({show: true});
         this.forceUpdate();
     }
 

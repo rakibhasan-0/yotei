@@ -35,7 +35,7 @@ class Technique extends React.Component {
 
     /**
      * Event handler for create. Used when submitting the form. Forces
-     * re-rendering if there is an error or response from insert is not ok.
+     * re-rendering if there is an error or response from insert is not ok
      * @param e
      */
     async addTechnique() {
