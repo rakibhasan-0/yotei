@@ -35,16 +35,13 @@ build_exercise_image:
   services:
     - docker:20-dind
   stage: build
-
   variables:
     DOCKER_DRIVER: "overlay2"
     CONTAINER_REPOSITORY: "pvt2023"
     VERSION: "1.0"
-
   before_script:
     - apk update && apk add jq
     - docker login -u "$DOCKER_CLIENT" -p "$DOCKER_SECRET"
-
   script:
     - docker build -t $CONTAINER_REPOSITORY/exercise-api:$VERSION exercise-api
     - docker push $CONTAINER_REPOSITORY/exercise-api:$VERSION
@@ -77,18 +74,14 @@ build_plan_image:
   image: docker:20
   services:
     - docker:20-dind
-
   stage: build
-
   variables:
     DOCKER_DRIVER: "overlay2"
     CONTAINER_REPOSITORY: "pvt2023"
     VERSION: "1.0"
-
   before_script:
     - apk update && apk add jq
     - docker login -u "$DOCKER_CLIENT" -p "$DOCKER_SECRET"
-
   script:
     - docker build -t $CONTAINER_REPOSITORY/plan-api:$VERSION plan-api
     - docker push $CONTAINER_REPOSITORY/plan-api:$VERSION
@@ -101,18 +94,14 @@ build_session_image:
   image: docker:20
   services:
     - docker:20-dind
-
   stage: build
-
   variables:
     DOCKER_DRIVER: "overlay2"
     CONTAINER_REPOSITORY: "pvt2023"
     VERSION: "1.0"
-
   before_script:
     - apk update && apk add jq
     - docker login -u "$DOCKER_CLIENT" -p "$DOCKER_SECRET"
-
   script:
     - docker build -t $CONTAINER_REPOSITORY/session-api:$VERSION session-api
     - docker push $CONTAINER_REPOSITORY/session-api:$VERSION
@@ -125,18 +114,14 @@ build_tag_image:
   image: docker:20
   services:
     - docker:20-dind
-
   stage: build
-
   variables:
     DOCKER_DRIVER: "overlay2"
     CONTAINER_REPOSITORY: "pvt2023"
     VERSION: "1.0"
-
   before_script:
     - apk update && apk add jq
     - docker login -u "$DOCKER_CLIENT" -p "$DOCKER_SECRET"
-
   script:
     - docker build -t $CONTAINER_REPOSITORY/tag-api:$VERSION tag-api
     - docker push $CONTAINER_REPOSITORY/tag-api:$VERSION
@@ -149,18 +134,14 @@ build_techniques_image:
   image: docker:20
   services:
     - docker:20-dind
-
   stage: build
-
   variables:
     DOCKER_DRIVER: "overlay2"
     CONTAINER_REPOSITORY: "pvt2023"
     VERSION: "1.0"
-
   before_script:
     - apk update && apk add jq
     - docker login -u "$DOCKER_CLIENT" -p "$DOCKER_SECRET"
-
   script:
     - docker build -t $CONTAINER_REPOSITORY/techniques-api:$VERSION techniques-api
     - docker push $CONTAINER_REPOSITORY/techniques-api:$VERSION
@@ -173,18 +154,14 @@ build_user_image:
   image: docker:20
   services:
     - docker:20-dind
-
   stage: build
-
   variables:
     DOCKER_DRIVER: "overlay2"
     CONTAINER_REPOSITORY: "pvt2023"
     VERSION: "1.0"
-
   before_script:
     - apk update && apk add jq
     - docker login -u "$DOCKER_CLIENT" -p "$DOCKER_SECRET"
-
   script:
     - docker build -t $CONTAINER_REPOSITORY/user:$VERSION user
     - docker push $CONTAINER_REPOSITORY/user:$VERSION
@@ -197,18 +174,14 @@ build_usersettings_image:
   image: docker:20
   services:
     - docker:20-dind
-
   stage: build
-
   variables:
     DOCKER_DRIVER: "overlay2"
     CONTAINER_REPOSITORY: "pvt2023"
     VERSION: "1.0"
-
   before_script:
     - apk update && apk add jq
     - docker login -u "$DOCKER_CLIENT" -p "$DOCKER_SECRET"
-
   script:
     - docker build -t $CONTAINER_REPOSITORY/usersettings-api:$VERSION usersettings-api
     - docker push $CONTAINER_REPOSITORY/usersettings-api:$VERSION
@@ -221,18 +194,14 @@ build_workout_image:
   image: docker:20
   services:
     - docker:20-dind
-
   stage: build
-
   variables:
     DOCKER_DRIVER: "overlay2"
     CONTAINER_REPOSITORY: "pvt2023"
     VERSION: "1.0"
-
   before_script:
     - apk update && apk add jq
     - docker login -u "$DOCKER_CLIENT" -p "$DOCKER_SECRET"
-
   script:
     - docker build -t $CONTAINER_REPOSITORY/workout-api:$VERSION workout-api
     - docker push $CONTAINER_REPOSITORY/workout-api:$VERSION
@@ -240,7 +209,6 @@ build_workout_image:
     - docker push $CONTAINER_REPOSITORY/workout-api:latest
   only:
     - main
-    
 
 deploy:
   image: ubuntu:latest
