@@ -24,7 +24,7 @@ export default function ExerciseCommentSection ({ex_id}) {
             return
         }
 
-        const requestOptions = {
+        /*const requestOptions = {
             method: "POST",
             headers: {
                 'Content-type': 'application/json',
@@ -33,11 +33,11 @@ export default function ExerciseCommentSection ({ex_id}) {
             body: JSON.stringify({
                 commentText: comment
             })
-        };
+        };*/
 
         // FIXME: Används verkligen detta???
-        const response = await fetch(`/api/comment/exercise/add?id=${ex_id}`, requestOptions);
-        const data = await response.json();
+        //const response = await fetch(`/api/comment/exercise/add?id=${ex_id}`, requestOptions);
+        //const data = await response.json();
 
         await fetchComments()
         setComment('')
@@ -89,7 +89,7 @@ export default function ExerciseCommentSection ({ex_id}) {
             }
         };
         fetchData()
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     /**
      * A function for setting the state to be equal to the value of the event.

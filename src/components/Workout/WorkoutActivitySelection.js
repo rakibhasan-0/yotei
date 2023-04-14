@@ -24,7 +24,7 @@ function WorkoutActivitySelection({closePopup, addActivities}) {
 
     useEffect(() => {
         fetchFunc();
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     /**
      * Function to perform all fetches that are required
@@ -46,12 +46,12 @@ function WorkoutActivitySelection({closePopup, addActivities}) {
         
         // Set start values of techniques_checked, exercises_checked
         let copy = {...technique_checked}
-        techniques.map((t, index) => {
+        techniques.forEach((index) => {
             copy[index] = false;
             setTechnique_checked(copy)
         });
         copy = {...exercise_checked}
-        exercises.map((t, index) => {
+        exercises.forEach((index) => {
             copy[index] = false;
             setExercise_checked(copy)
         });
@@ -76,9 +76,9 @@ function WorkoutActivitySelection({closePopup, addActivities}) {
         await fetch(`/api/tags/fetch/techniques/by-tag`, {headers})
         .then(res => res.json())
         .then((data) => {
-                    setTechniqueRelations(Object.keys(data).map(key => {
+                    setTechniqueRelations(Object.keys(data).forEach(key => {
                         for(let i = 0; i < all_tags.length; i++){
-                            if(all_tags[i].id == key){
+                            if(all_tags[i].id === key){
                                 return {tag_id: all_tags[i].id, activity_id: data[key]}
                             }
                         }
@@ -94,9 +94,9 @@ function WorkoutActivitySelection({closePopup, addActivities}) {
         await fetch(`/api/tags/fetch/exercises/by-tag`, {headers})
             .then(res => res.json())
                 .then((data) => {
-                    setExerciseRelations(Object.keys(data).map(key => {
+                    setExerciseRelations(Object.keys(data).forEach(key => {
                         for(let i = 0; i < all_tags.length; i++){
-                            if(all_tags[i].id == key){
+                            if(all_tags[i].id === key){
                                 return {tag_id: all_tags[i].id, activity_id: data[key]}
                             }
                         }
@@ -113,14 +113,14 @@ function WorkoutActivitySelection({closePopup, addActivities}) {
         for (let k in technique_checked) {
             if (technique_checked.hasOwnProperty(k)) {
                 if (technique_checked[k]) {
-                    activities.push(techniques.find( t => t.id == k));
+                    activities.push(techniques.find( t => t.id === k));
                 }
             }
         }
         for (let k in exercise_checked) {
             if (exercise_checked.hasOwnProperty(k)) {
                 if (exercise_checked[k]) {
-                    activities.push(exercises.find( e => e.id == k));
+                    activities.push(exercises.find( e => e.id === k));
                 }
             }
         }
@@ -133,7 +133,7 @@ function WorkoutActivitySelection({closePopup, addActivities}) {
     return (
         <>
             <div className="popup-close-btn-container">
-                <Button className="popup-close-btn" onClick={closePopup} variant="inline"><img src="/cross.svg" /></Button>
+                <Button className="popup-close-btn" onClick={closePopup} variant="inline"><img alt="cross" src="/cross.svg" /></Button>
             </div>
             <Modal.Body>
                 <Tabs defaultActiveKey="technique" className="mb-3">

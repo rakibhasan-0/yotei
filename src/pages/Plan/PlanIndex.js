@@ -3,8 +3,7 @@ import { AccountContext } from '../../context'
 import PlanList from '../../components/Plan/PlanList';
 import PlanNav from '../../components/Plan/PlanNav';
 import PlanOrSessionDialog from '../../components/Plan/PlanOrSessionDialog';
-import AddButton from '../../components/Common/AddButton';
-import AddActivityButton from "../../components/Activity/AddActivityButton";
+
 
 
 /**

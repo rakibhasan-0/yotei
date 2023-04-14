@@ -4,8 +4,6 @@ import Creatable from 'react-select/creatable';
 import {AccountContext} from "../../context"
 import './FormButton.css';
 import './ValidationFormStyle.css';
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
 import AlertWindow from "../Common/AlertWindow";
 
 /**
@@ -54,7 +52,7 @@ import AlertWindow from "../Common/AlertWindow";
      * @param inputValue an array of the tags that are currently selected 
      */
     handleCreate = (inputValue) => {
-        this.state.tags= inputValue;
+        this.state.setState({tags: inputValue});
         this.handleChange(this.state)
     }   
     /**
@@ -103,7 +101,7 @@ import AlertWindow from "../Common/AlertWindow";
      * Hide the alert window
      */
     handleClose = () => {
-        this.state.show = false;
+        this.state.setState({show: false});
         this.forceUpdate();
     }
     
@@ -111,7 +109,7 @@ import AlertWindow from "../Common/AlertWindow";
      * Display the alert window
      */
     handleShow = () => {
-        this.state.show = true;
+        this.state.setState({show: true});
         this.forceUpdate();
     }
 

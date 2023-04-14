@@ -88,7 +88,7 @@ const WorkoutCreate = () => {
                 method: "POST",
                 headers: {'Content-type': 'application/json', token},
             };
-            const responseUserWorkout = await fetch(`/api/workouts/add/workout/${workoutId}/user/${user.value}`, requestOptionsUserWorkout);
+            await fetch(`/api/workouts/add/workout/${workoutId}/user/${user.value}`, requestOptionsUserWorkout);
             }
         }
     }
@@ -142,7 +142,7 @@ const WorkoutCreate = () => {
     * @returns the id of the workout that has been created
     */
     async function linkExerciseTag(work_id, tag_id) {
-        let tagfailed;
+        //let tagfailed;
         const requestOptions = {
             method: "POST",
             headers: { 'Content-type': 'application/json', 'token': token },
@@ -152,13 +152,13 @@ const WorkoutCreate = () => {
         try {
             const response = await fetch('/api/tags/add/workout?tag=' + tag_id, requestOptions);
             if (response.ok) {
-                tagfailed = false;
+                //tagfailed = false;
             } else {
-                tagfailed = true;
+                //tagfailed = true;
             }
         } catch (error) {
             console.log("Error at tag link");
-            tagfailed = true;
+            //tagfailed = true;
         }
     }
 

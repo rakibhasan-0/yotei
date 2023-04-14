@@ -48,14 +48,14 @@ function ActivitySelectionList({activities, dictionary, tags, relations}) {
     */
     const getActivityIdFromTag = async (tagList) => {
         let activityIds = []
-        tagList.map(tag => {
-            relations.map(relation => {
+        tagList.forEach(tag => {
+            relations.forEach(relation => {
                 if (relation.tag_id === tag.id) {
                     relation.activity_id.forEach(technique => {
                         activityIds.push(technique)
                     })
                 }
-            })
+            })  
         })
         return activityIds
     }

@@ -127,15 +127,15 @@ class TechniqueEdit extends React.Component {
             if (!response.ok) {
                 this.setState({failed: true})
                 console.log("response not OK");
-                this.state.editFailed = true;   
-                this.state.errorName = this.state.name;     //store the name of technique that could not be edited
+                this.state.setState({editFailed: true});   
+                this.state.setState({errorName: this.state.name})   //store the name of technique that could not be edited
                 this.forceUpdate();
             }
         } catch (error) {
             this.setState({failed: true})
             console.log("error")
-            this.state.editFailed = true;   
-            this.state.errorName = this.state.name;         //store the name of technique that could not be edited
+            this.state.setState({editFailed: true});   
+            this.state.setState({errorName: this.state.name});         //store the name of technique that could not be edited
             this.forceUpdate();
         }
         await this.addTag(this.state.id);
@@ -162,17 +162,17 @@ class TechniqueEdit extends React.Component {
                     if (response.ok) {
                         const data = await response.json();
                         tag_id = data.id;
-                        this.state.addTagfailed = false;
+                        this.state.setState({addTagfailed: false});
                         this.forceUpdate();
                     } else {
                         this.setState({failed: true})
-                        this.state.addTagfailed = true;
+                        this.state.setState({addTagfailed: true});
                         this.forceUpdate();
                     }
                 } catch (error) {
                     this.setState({failed: true})
                     console.log("Error at tag insert");
-                    this.state.addTagfailed = true;
+                    this.state.setState({addTagfailed: true});
                     this.forceUpdate();
                 }
             } else {
@@ -207,17 +207,17 @@ class TechniqueEdit extends React.Component {
         try {
             const response = await fetch(`/api/tags/remove/technique?tag=${tag_id}`, requestOptions);
             if (response.ok) {
-                this.state.removeTagFailed = false;
+                this.state.setState({removeTagFailed: false});
                 this.forceUpdate();
             } else {
                 this.setState({failed: true})
-                this.state.removeTagFailed = true;
+                this.state.setState({removeTagFailed: true});
                 this.forceUpdate();
             }
         } catch (error) {
             this.setState({failed: true})
             console.log("Error at tag link");
-            this.state.removeTagFailed = true;
+            this.state.setState({removeTagFailed: true})
             this.forceUpdate();
         }
     }
@@ -237,17 +237,17 @@ class TechniqueEdit extends React.Component {
         try {
             const response = await fetch('/api/tags/add/technique?tag=' + tag_id, requestOptions);
             if (response.ok) {
-                this.state.linkTagFailed = false;
+                this.state.setState({linkTagFailed: false});
                 this.forceUpdate();
             } else {
                 this.setState({failed: true})
-                this.state.linkTagFailed = true;
+                this.state.setState({linkTagFailed: true});
                 this.forceUpdate();
             }
         } catch (error) {
             this.setState({failed: true})
             console.log("Error at tag link");
-            this.state.linkTagFailed = true;
+            this.state.setState({linkTagFailed: true});
             this.forceUpdate();
         }
     }
@@ -258,9 +258,9 @@ class TechniqueEdit extends React.Component {
      */
     handleCallback(formData) {
         if (this.state.callBack) {
-            this.state.isChanged = true
+            this.state.setState({isChanged: true});
         }
-        this.state.callBack = true
+        this.state.setState({callBack: true});
         this.setState(formData);
     }
 

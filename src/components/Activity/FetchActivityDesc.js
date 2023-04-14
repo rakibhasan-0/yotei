@@ -27,7 +27,7 @@ const FetchActivityDesc =  ({activity, apiPath}) => {
             setOut(data);
 
         });
-    }, [activity.id, apiPath, token]);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
             <div className="col">

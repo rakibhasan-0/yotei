@@ -9,7 +9,7 @@ import PrintButton from '../../components/Common/PrintButton';
 import ReviewForm from '../../components/Workout/ReviewFormComponent';
 import GoBackButton from '../../components/Common/GoBackButton';
 import DuplicateButton from '../../components/Common/DuplicateButton';
-import {ButtonGroup, Collapse, Dropdown, DropdownButton, SplitButton} from "react-bootstrap";
+import {ButtonGroup, Collapse, Dropdown} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
@@ -64,7 +64,7 @@ class WorkoutView extends React.Component {
         await fetch(`/api/workouts/get/userworkout/${this.workoutID}`, requestOptions)
         .then(res => res.json())    
         .then((data) => {
-            data.map( (user) => {
+            data.forEach( (user) => {
                 this.state.users.push( {
                     label: user.username, 
                     value: user.user_id 
@@ -295,11 +295,11 @@ class WorkoutView extends React.Component {
 
         // Delete related users to the workout
         this.state.users.forEach( async (user) => {
-            const response = await fetch(`/api/workouts/remove/workout/${this.workoutID}/user/${user.value}`, requestOptions)
+            await fetch(`/api/workouts/remove/workout/${this.workoutID}/user/${user.value}`, requestOptions)
         })
 
         // Delete the workout and its linked activities
-        const response = await fetch(`/api/workouts/delete_full_workout/${this.workoutID}`, requestOptions);
+        await fetch(`/api/workouts/delete_full_workout/${this.workoutID}`, requestOptions);
         window.location.href = "/workout";
     }
 

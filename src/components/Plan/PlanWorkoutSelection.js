@@ -43,13 +43,13 @@ function PlanWorkoutSelection({onClose, onAddClick, workout}) {
                         })
                         .catch(console.log)
                 })
-            }, [userId])
+            }, [userId]) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
 
         <>
             <div className="popup-close-btn-container">
-                <Button className="popup-close-btn" onClick={onClose} variant="inline"><img src="/cross.svg" /></Button>
+                <Button className="popup-close-btn" onClick={onClose} variant="inline"><img alt="cross" src="/cross.svg" /></Button>
             </div>
             <Modal.Body>
                 <Tabs defaultActiveKey="workouts" className="mb-3">

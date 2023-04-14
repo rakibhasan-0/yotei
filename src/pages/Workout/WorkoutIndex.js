@@ -34,7 +34,7 @@ class Workout extends React.Component {
     }
 
     updateSearch(searchParams) {
-        if (searchParams.date != ""){
+        if (searchParams.date !== ""){
             this.updateDate(searchParams.date)
             searchParams.date = searchParams.date.toLocaleDateString("sv-SV")
         }
@@ -170,9 +170,9 @@ class Workout extends React.Component {
             const response = await fetch(`/api/tags/fetch/workouts/by-tag`, requestOptions);
             if (response.ok) {
                 var data = await response.json(); 
-                this.setState({tags: Object.keys(data).map(key => {
+                this.setState({tags: Object.keys(data).forEach(key => {
                     for(let i = 0; i< this.state.allTags.length; i++){
-                        if(this.state.allTags[i].value == key){
+                        if(this.state.allTags[i].value === key){
                             return {tag_name: this.state.allTags[i].label, workout_ids: data[key]}
                         }
                     }

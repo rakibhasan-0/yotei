@@ -1,8 +1,6 @@
 import './GoBackButton.css';
 import {useNavigate} from "react-router-dom";
 import React, {useState} from "react";
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
 import AlertWindow from "./AlertWindow";
 
 /**

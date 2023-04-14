@@ -8,7 +8,6 @@
  import { AccountContext } from '../../context';
  import ActivityList from '../Activity/ActivityList';
  import SearchBar from '../../components/Common/SearchBar';
- import Workout from '../../pages/Workout/WorkoutIndex';
  
  const DisplayFavoriteWorkouts = () => {
      const [data, setData] = useState([])
@@ -19,7 +18,7 @@
  
      useEffect(() => {
          getFavoriteWorkouts()
-     }, [])
+     }, []) // eslint-disable-line react-hooks/exhaustive-deps
  
      /**
       * Fetches the favorite workouts of the user 
@@ -50,9 +49,9 @@
                 fetch(`/api/tags/fetch/workouts/by-tag`, requestOptions)
                 .then(data => data.json())
                 .then(data => {
-                    setTags(Object.keys(data).map(key => {
+                    setTags(Object.keys(data).forEach(key => {
                         for(let i = 0; i< allTags.length; i++){
-                            if(allTags[i].id == key){
+                            if(allTags[i].id === key){
                                 return {name: allTags[i].name, workout_ids: data[key]}
                             }
                         }
@@ -60,7 +59,7 @@
                 })
             })
             
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     /**
      * Filter the list of visible workouts     

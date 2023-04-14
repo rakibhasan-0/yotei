@@ -22,7 +22,7 @@ const WorkoutActivityListItem = ({ activity, apiPath, index }) => {
             const element = document.getElementById(`textarea-${activity.id}`)
             element.style.cssText = `height:${element.scrollHeight}px`;
         }
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const name = isFreeTextElem() ? (
         <textarea id={`textarea-${activity.id}`} className="textarea" readOnly value={activity.name}/>

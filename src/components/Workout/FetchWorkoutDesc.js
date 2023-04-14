@@ -34,7 +34,7 @@ const FetchWorkoutDesc = ({workout, apiPath}) => {
                 setMin(data.duration + " min");
             })
         });
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div className="col">

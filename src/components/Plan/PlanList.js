@@ -1,7 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
 import PlanItem from './PlanItem.js';
-import {AccountContext} from "../../context";
-import Weekday from './Weekday.js';
 
 /**
  * This is the list shown on planIndex containing the sessions of all the plans
@@ -36,8 +33,8 @@ const PlanList = ({ plans, sessions, onEdit, onDelete }) => {
      */
     const getWeek = (sessionDate) => {
         let currentdate = new Date(sessionDate);
-        const oneJan = new Date(currentdate.getFullYear(), 0, 1);
-        const numberOfDays = Math.floor((currentdate - oneJan) / (24 * 60 * 60 * 1000));
+        //const oneJan = new Date(currentdate.getFullYear(), 0, 1);
+        //const numberOfDays = Math.floor((currentdate - oneJan) / (24 * 60 * 60 * 1000));
         //const result = Math.floor((currentdate.getDay() + 1 + numberOfDays) / 7) ;
         const result = getCurrentWeek(currentdate, 1);
 
@@ -51,7 +48,7 @@ const PlanList = ({ plans, sessions, onEdit, onDelete }) => {
 
     const planColor = (session) => {
         let color = "#ffffff"
-        plans.find(plan => {
+        plans.forEach(plan => {
             if (plan.id === session.plan) {
                 color = plan.color
             }

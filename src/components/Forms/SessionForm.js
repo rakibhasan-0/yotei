@@ -26,8 +26,9 @@ function SessionForm(props) {
 	var date = props.data.date
 	var time = props.data.time
 
-	var okDate = props.dateOk
-	var buttonClicked = props.buttonClicked
+	
+	var okDate = props.dateOk // eslint-disable-line no-unused-vars
+	var buttonClicked = props.buttonClicked // eslint-disable-line no-unused-vars
 
 	var onClickPlan = props.onClickPlan
 	var onClickData = props.onClickData
@@ -70,7 +71,7 @@ function SessionForm(props) {
 	 */
 	useEffect(() => {
 		getPlans();
-	}, [])
+	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 
 	return (
@@ -117,8 +118,7 @@ function SessionForm(props) {
 							name="time"
 							id="time"
 							type="time"
-							className="DateTimePicker"
-							className="form-control"
+							className="DateTimePicker form-control"
 							format="H:mm"
 							maxTime="23:59"
 							minTime="00:00"

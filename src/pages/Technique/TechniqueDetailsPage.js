@@ -4,8 +4,6 @@ import TagList from "../../components/TagDisplay/TagList";
 import {Link} from "react-router-dom";
 import {useParams} from "react-router";
 import {AccountContext} from "../../context";
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
 import GoBackButton from "../../components/Common/GoBackButton";
 import AlertWindow from "../../components/Common/AlertWindow";
 
@@ -63,7 +61,7 @@ const TechniqueDetailsPage = () => {
             }
         };
         fetchData()
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     /**
      * Function that deletes the technique, returns to the list of techniques afterwards

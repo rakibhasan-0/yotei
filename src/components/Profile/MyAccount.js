@@ -10,8 +10,8 @@ import {useNavigate} from "react-router-dom";
  * @author Team Quattro Formaggio (Group 1) 
  */
 function MyAccount() {
-    //DONT REMOVE THE UNUSED VARIABLE 'cookie', it is essential.
-    const [cookie, setCookie, removeCookie] = useCookies(['token']);
+    //DONT REMOVE THE UNUSED VARIABLE 'cookie', it is essential. Why? Should be a ticket
+    const [cookie, setCookie, removeCookie] = useCookies(['token']); // eslint-disable-line no-unused-vars
     const navigate = useNavigate();
 
     /**

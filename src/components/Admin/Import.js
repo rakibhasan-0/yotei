@@ -169,7 +169,7 @@ class Import extends React.Component {
                     name: element
                 })
             });
-            if (this.importType == 'exercises') {
+            if (this.importType === 'exercises') {
                 tagBody.push({
                     exerciseId: activitiesResponseData[i],
                     tags: formatedTags

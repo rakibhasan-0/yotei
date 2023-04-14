@@ -39,7 +39,7 @@ function AddUserWorkoutSelect(props) {
                 console.log("error :", error);
             }
         }
-    }, []);
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     /**
      * Fetches the data from the API and sets the states.

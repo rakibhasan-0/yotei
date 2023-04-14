@@ -24,7 +24,7 @@ const EditWorkout = ({startActivities, updateOutputArray}) => {
     useEffect(() => {
         updateComponent();
         setElements([...elements]);
-    }, []);
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     //Triggered when an element is added or removed.
     useEffect(() => {
@@ -65,7 +65,7 @@ const EditWorkout = ({startActivities, updateOutputArray}) => {
         prevElements.current = [...elements];
         setElements([...elements]);
 
-    }, [elements.length]);
+    }, [elements.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
 
     //Moves the given element to the given position and moves relevant elements
@@ -178,7 +178,7 @@ const EditWorkout = ({startActivities, updateOutputArray}) => {
 
     //Adds new activity elements.
     function addActivities(activities){
-        activities.map(activity => {
+        activities.forEach(activity => {
             elements.push({name: activity.name, duration: activity.duration ? activity.duration : 0, workoutId:null, id:getUniqueId(), exerciseId: activity.exerciseId, techniqueId: activity.techniqueId, order:elements.length, yPos:0, height: 0, activity: true})
             setElements([...elements]);
         })

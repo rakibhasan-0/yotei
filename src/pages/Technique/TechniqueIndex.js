@@ -63,8 +63,8 @@ class TechniqueIndex extends React.Component {
     async getTechniqueIdsFromTag(tagList) {
         let techniqueIds = []
 
-        tagList.map(tag => {
-            this.state.relations.map(relation => {
+        tagList.forEach(tag => {
+            this.state.relations.forEach(relation => {
                 if (relation.tag_id === tag.id) {
                     relation.technique_ids.forEach(technique => {
                         techniqueIds.push(technique)
@@ -118,9 +118,9 @@ class TechniqueIndex extends React.Component {
         await fetch(`/api/tags/fetch/techniques/by-tag`, {headers})
             .then(res => res.json())
                 .then((data) => {
-                    this.setState({relations: Object.keys(data).map(key => {
+                    this.setState({relations: Object.keys(data).forEach(key => {
                         for(let i = 0; i < this.state.tags.length; i++){
-                            if(this.state.tags[i].id == key){
+                            if(this.state.tags[i].id === key){
                                 return {tag_id: this.state.tags[i].id, technique_ids: data[key]}
                             }
                         }

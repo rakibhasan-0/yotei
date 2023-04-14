@@ -26,8 +26,8 @@ export default function TechniqueCommentSection ({technique_id}) {
             })
         };
 
-        const response = await fetch(`/api/exercises/comment/?techniqueId=${technique_id}`, requestOptions);
-        const data = await response.json();
+        await fetch(`/api/exercises/comment/?techniqueId=${technique_id}`, requestOptions);
+        //const data = await response.json();
 
         await fetchComments()
         setComment('')
@@ -74,7 +74,7 @@ export default function TechniqueCommentSection ({technique_id}) {
             }
         };
         fetchData()
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     /**
      * A function for setting the state to be equal to the value of the event.

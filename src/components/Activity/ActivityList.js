@@ -17,7 +17,8 @@ const ActivityList = ({activities, apiPath, detailURL}) => {
 
     useEffect(() => {
         getFavoriteWorkouts(token, userId).then(data => (data.json())).then(data => setFavoriteList(data.map(obj => obj.id)))
-    }, [])
+        
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div className="container grid-striped activity-list">
@@ -40,5 +41,6 @@ async function getFavoriteWorkouts(token, userId) {
     const response = await fetch(`/api/workouts/favorites/${userId}`, requestOptions);
     return response;
 }
+
 
 export default ActivityList;

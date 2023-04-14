@@ -117,13 +117,13 @@ class ExerciseEdit extends React.Component {
         try {
             if (!response.ok) {
                 console.log("response not OK")
-                this.state.editFailed = true;
+                this.state.setState({editFailed: true});
                 this.setState({errorName: this.state.name});     //store the name of exercise that could not be edited
                 this.forceUpdate();
             }
         } catch (error) {
             console.log("error")
-            this.state.editFailed = true;
+            this.state.setState({editFailed: true})
             this.setState({errorName: this.state.name})     //store the name of exercise that could not be edited
             this.forceUpdate();
         }
@@ -154,13 +154,13 @@ class ExerciseEdit extends React.Component {
                         tag_id = data.id;
                         this.forceUpdate();
                     } else {
-                        this.state.tagAddFailed = true;
+                        this.state.setState({tagAddFailed: true});
                         this.setState({errorName: this.state.tags[i].label})
                         this.forceUpdate();
                     }
                 } catch (error) {
                     alert("Error at tag insert");
-                    this.state.tagAddFailed = true;
+                    this.state.setState({tagAddFailed: true});
                     this.setState({errorName: this.state.tags[i].label})
                     this.forceUpdate();
                 }
@@ -192,10 +192,10 @@ class ExerciseEdit extends React.Component {
         try {
             const response = await fetch(`/api/tags/remove/exercise?tag=${tag_id}`, requestOptions);
             if (response.ok) {
-                this.state.tagRemoveFailed = false;
+                this.state.setState({tagRemoveFailed: false});
                 this.forceUpdate();
             } else {
-                this.state.tagRemoveFailed = true;
+                this.state.setState({tagRemoveFailed: true});
                 this.setState({errorName: tag_name})
                 alert("Failed to remove tag");
                 this.forceUpdate();
@@ -203,7 +203,7 @@ class ExerciseEdit extends React.Component {
         } catch (error) {
             alert("Error when removing tag");
             this.setState({errorName: tag_name})
-            this.state.tagRemoveFailed = true;
+            this.state.setState({tagRemoveFailed: true});
             this.forceUpdate();
         }
     }
@@ -221,16 +221,16 @@ class ExerciseEdit extends React.Component {
         try {
             const response = await fetch('/api/tags/add/exercise?tag=' + tag_id, requestOptions);
             if (response.ok) {
-                this.state.tagLinkFailed = false;
+                this.state.setState({tagLinkFailed: false});
                 this.forceUpdate();
             } else {
-                this.state.tagLinkFailed = true;
+                this.state.setState({tagLinkFailed: true});
                 this.setState({errorName: tag_name})
                 this.forceUpdate();
             }
         } catch (error) {
             alert("Error at tag link");
-            this.state.tagLinkFailed = true;
+            this.state.setState({tagLinkFailed: true});
             this.setState({errorName: tag_name})
             this.forceUpdate();
         }
@@ -244,9 +244,9 @@ class ExerciseEdit extends React.Component {
     handleCallback(formData) {
         //Will skip changing the boolean at load
         if (this.state.callBack) {
-            this.state.isChanged = true
+            this.state.setState({isChanged: true});
         }
-        this.state.callBack = true
+        this.state.setState({callBack: true});
         this.setState(formData);
     }
 

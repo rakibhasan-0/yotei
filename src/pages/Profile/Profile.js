@@ -3,7 +3,6 @@ import DisplayCreatedWorkouts from '../../components/Workout/DisplayCreatedWorko
 import DisplayFavoriteWorkouts from '../../components/Workout/DisplayFavoriteWorkouts.js';
 import MyAccount from '../../components/Profile/MyAccount.js';
 import './Profile.css';
-import ChangeUsernameForm from "../../components/Forms/ChangeUsernameForm";
 
 /**
  * Used to show user specific information.
