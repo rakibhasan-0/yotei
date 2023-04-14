@@ -1,4 +1,4 @@
-<h2>Yatoi Git Användarhandblad</h2>
+<h2>Yatoi Git User Manual</h2>
 
 Yatoit's git is divide into four repositories.
 - Backend - This repository holds the codebase and all documentation for the backend.
