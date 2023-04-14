@@ -44,7 +44,7 @@ If the rebase was successful, a merge request should be sent using the gitlab we
 Always remeber to check both "Delete source branch" and "Squash commits".
 The merge resuest can only be approved by a DevOps however DevOps will not be obliged to review the code. Instead always assign one reviewer(not a DevOps) of your choice to review the merge, if no reviwer has been appointed DevOps will not approve the merge request regardless of content. 
 
-![Merge Request]("git.png")
+![Merge Request]("https://git.cs.umu.se/courses-project/5dv214vt23/docs/-/blob/main/git.png")
 
 If a reviewer has been assigned and has approved the merge a DevOps will approve the merge and the updated main branch will be automatically set up on the test server.
 
