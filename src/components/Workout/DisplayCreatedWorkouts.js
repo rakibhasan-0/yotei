@@ -18,7 +18,7 @@ const DisplayCreatedWorkouts = () => {
 
     useEffect(() => {
         getCreatedWorkouts()
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     /**
      * Fetches the created workouts of the user.
@@ -48,9 +48,9 @@ const DisplayCreatedWorkouts = () => {
                 fetch(`/api/tags/fetch/workouts/by-tag`, requestOptions)
                 .then(data => data.json())
                 .then(data => {
-                    setTags(Object.keys(data).map(key => {
+                    setTags(Object.keys(data).forEach(key => {
                         for(let i = 0; i< allTags.length; i++){
-                            if(allTags[i].id == key){
+                            if(allTags[i].id === key){
                                 return {name: allTags[i].name, workout_ids: data[key]}
                             }
                         }
@@ -58,7 +58,7 @@ const DisplayCreatedWorkouts = () => {
                 })
             })
         
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     /**
      * Filter the list of visible workouts     

@@ -43,7 +43,7 @@ const WorkoutEdit = () => {
         if (props?.workout !== undefined ){
             getWorkoutAndTags();
         }
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
     if (props?.workout === undefined ){
         return (<Navigate to='/workout' replace={true} />);
     }
@@ -135,7 +135,7 @@ const WorkoutEdit = () => {
         }        
 
         // Set workoutId to every activity in the draggable list
-        _activities.map(activity => {
+        _activities.forEach(activity => {
             activity.workoutId = props.workout.id;
         })
 
@@ -185,7 +185,7 @@ const WorkoutEdit = () => {
                 method: "DELETE",
                 headers: {'Content-type': 'application/json', token}
             }
-            const response = await fetch(`/api/workouts/remove/workout/${props.workout.id}/user/${user.value}`, requestOptions)
+            await fetch(`/api/workouts/remove/workout/${props.workout.id}/user/${user.value}`, requestOptions)
         })
         
         // Add user workout connections
@@ -194,7 +194,7 @@ const WorkoutEdit = () => {
                 method: "POST",
                 headers: {'Content-type': 'application/json', token}
             }
-            const response = await fetch(`/api/workouts/add/workout/${props.workout.id}/user/${user.value}`, requestOptions)
+            await fetch(`/api/workouts/add/workout/${props.workout.id}/user/${user.value}`, requestOptions)
         });
         
 
@@ -225,7 +225,7 @@ const WorkoutEdit = () => {
     
         const response = await fetch(`/api/workouts/update_full_workout`, requestOptions);
         // Take user to the created workout.
-        const jsonResp = await response.json()
+        await response.json()
         updateTags(inputTagList, props.workout.id).then(() => { navigate(`/workout/${props.workout.id}`); })
     }
 
@@ -238,7 +238,7 @@ const WorkoutEdit = () => {
      */
     async function updateTags(inputTagList, id) {
         let tag_id = null;
-        let tagAddFailed;
+        //let tagAddFailed;
 
         if(inputTagList === undefined) {
             return(alert("Error, tags are undefined"))
@@ -261,14 +261,14 @@ const WorkoutEdit = () => {
                         const data = await response.json();
                         tag_id = data.id;
                     } else {
-                        tagAddFailed = true;
+                        //tagAddFailed = true;
                         setTagData({ errorName: inputTagList.label })
 
                     }
                 } catch (error) {
                     console.error(error);
                     alert("Error at tag insert");
-                    tagAddFailed = true;
+                    //tagAddFailed = true;
                     setTagData({ errorName: inputTagList[i].label })
 
                 }
@@ -296,7 +296,7 @@ const WorkoutEdit = () => {
     * @returns the id of the exercise that has been created
     */
      async function linkWorkoutTag(work_id, tag_id, tag_name) {
-        let tagLinkFailed;
+        //let tagLinkFailed;
 
         const requestOptions = {
             method: "POST",
@@ -306,14 +306,14 @@ const WorkoutEdit = () => {
         try {
             const response = await fetch('/api/tags/add/workout?tag=' + tag_id, requestOptions);
             if (response.ok) {
-                tagLinkFailed = false;
+                //tagLinkFailed = false;
             } else {
-                tagLinkFailed = true;
+                //tagLinkFailed = true;
                 setTagData({ errorName: tag_name })
             }
         } catch (error) {
             alert("Error at tag link");
-            tagLinkFailed = true;
+            //tagLinkFailed = true;
             setTagData({ errorName: tag_name })
         }
     }
@@ -325,7 +325,7 @@ const WorkoutEdit = () => {
      * @param {tag id} tag_id 
      */
        async function removeTag(work_id, tag_id, tag_name){
-        let tagRemoveFailed;
+        //let tagRemoveFailed;
 
         const requestOptions = {
             method: "DELETE",
@@ -335,16 +335,16 @@ const WorkoutEdit = () => {
         try {
             const response = await fetch(`/api/tags/remove/workout?tag=${JSON.stringify(tag_id)}` ,requestOptions);
             if (response.ok) {
-                tagRemoveFailed = false;
+                //tagRemoveFailed = false;
             } else {
-                tagRemoveFailed = true;
+                //tagRemoveFailed = true;
                 setTagData({errorName: tag_name})
                 alert("Failed to remove tag");
             }
         } catch(error) {    
             alert("Error when removing tag");
             setTagData({errorName: tag_name})
-            tagRemoveFailed = true;
+            //tagRemoveFailed = true;
         }
     }
 

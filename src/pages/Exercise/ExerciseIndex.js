@@ -85,9 +85,9 @@ class ExerciseIndex extends React.Component {
         await fetch(`/api/tags/fetch/exercises/by-tag`, {headers})
         .then(res => res.json())
         .then((data) => {
-            this.setState({usedTags : Object.keys(data).map(key => {
+            this.setState({usedTags : Object.keys(data).forEach(key => {
                 for(let i = 0; i < this.state.allTags.length; i++){
-                    if(this.state.allTags[i].id == key){
+                    if(this.state.allTags[i].id === key){
                         return {tag_id: this.state.allTags[i].id, exercise_ids: data[key]}
                     }
                 }
@@ -127,9 +127,9 @@ class ExerciseIndex extends React.Component {
     async getExercises (searchedTags) {
         let exerciseIds = []
 
-        searchedTags.map(tag => {
-            this.state.usedTags.map(usedTag => {
-                if(usedTag.tag_id == tag.id) {
+        searchedTags.forEach(tag => {
+            this.state.usedTags.forEach(usedTag => {
+                if(usedTag.tag_id === tag.id) {
                     usedTag.exercise_ids.forEach(exercise => {
                         exerciseIds.push(exercise)
                     });

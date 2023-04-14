@@ -1,6 +1,5 @@
 import { React, useState, useContext } from 'react';
 import { AccountContext } from "../../context";
-import { useNavigate } from 'react-router-dom';
 import GoBackButton from '../../components/Common/GoBackButton';
 import AddButton from '../../components/Common/AddButton';
 import SessionForm from '../../components/Forms/SessionForm';

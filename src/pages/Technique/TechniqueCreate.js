@@ -57,18 +57,18 @@ class Technique extends React.Component {
             const response = await fetch(`/api/techniques/add`, requestOptions);
             if (response.ok) {
                 data = await response.json();
-                this.state.insertFailed = false;
+                this.state.setState({insertFailed: false});
                 this.forceUpdate();
             } else {
-                if (response.status == 409) {
+                if (response.status === 409) {
                     alert("Namnet '" + this.state.storedName + "' är upptaget.");
                 }
-                this.state.insertFailed = true;
+                this.state.setState({insertFailed: true});
                 this.setState({boxChecked: false})
             }
         } catch (error) {
             console.log("Error at technique insert");
-            this.state.insertFailed = true;
+            this.state.setState({insertFailed: true})
             this.forceUpdate();
         }
         return data.id;
@@ -98,15 +98,15 @@ class Technique extends React.Component {
                     if (response.ok) {
                         const data = await response.json();
                         tag_id = data.id;
-                        this.state.tagFailed = false;
+                        this.state.setState({tagFailed: false});
                         this.forceUpdate();
                     } else {
-                        this.state.tagFailed = true;
+                        this.state.setState({tagFailed: true});
                         this.forceUpdate();
                     }
                 } catch (error) {
                     console.log("Error at tag insert");
-                    this.state.tagFailed = true;
+                    this.state.setState({tagFailed: true});
                     this.forceUpdate();
                 }
             } else {
@@ -132,15 +132,15 @@ class Technique extends React.Component {
         try {
             const response = await fetch('/api/tags/add/technique?tag=' + tag_id, requestOptions);
             if (response.ok) {
-                this.state.tagFailed = false;
+                this.state.setState({tagFailed: false});
                 this.forceUpdate();
             } else {
-                this.state.tagFailed = true;
+                this.state.setState({tagFailed: true});
                 this.forceUpdate();
             }
         } catch (error) {
             console.log("Error at tag link");
-            this.state.tagFailed = true;
+            this.state.setState({tagFailed: true})
             this.forceUpdate();
         }
     }
@@ -158,9 +158,9 @@ class Technique extends React.Component {
      */
     handleCallback = (formData) => {
         if (this.state.callBack) {
-            this.state.isChanged = true
+            this.state.setState({isChanged: true})
         }
-        this.state.callBack = true
+        this.state.setState({callBack: true})
         this.setState(formData);
     }
 
@@ -215,7 +215,7 @@ class Technique extends React.Component {
                     this.setState({name: ''});
                     this.setState({desc: ''});
                 }
-                this.state.isChanged = false;
+                this.state.setState({isChanged: false});
                 this.setState({boxChecked: true});
                 this.forceUpdate();
             }

@@ -1,14 +1,11 @@
 import { useRef, useState, useContext, useEffect} from 'react';
 import { Form, Button } from "react-bootstrap";
 import DraggableList from "./DraggableList"
-import InputGroup from 'react-bootstrap/InputGroup'
 import { Col, Row } from "react-bootstrap";
 import AddUserWorkoutSelect from './AddUserWorkoutSelect';
 import { GoBackButton } from "../Common/GoBackButton";
 import Creatable from 'react-select/creatable';
 import { AccountContext } from "../../context"
-import TimePicker from 'react-time-picker';
-import DatePicker from 'react-date-picker';
 import './Calendar.css'
 /**
  *  This component is an input form and is used in the page for creating
@@ -20,7 +17,7 @@ import './Calendar.css'
 function WorkoutFormComponent(props){
     const [validated, setValidated] = useState(false);
     const workout = props.workout
-    const currentTags = props.tags
+    //const currentTags = props.tags
 
     const inputName = useRef();
     const inputDesc = useRef();
@@ -69,7 +66,7 @@ function WorkoutFormComponent(props){
             setTags(names);
             setSelectedUsers(props.workout.users);
         })
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     /**
      * Handles the submition of a workout. This function is called when the
@@ -127,7 +124,7 @@ function WorkoutFormComponent(props){
             for (let i = 0; i < inputTaglist.length; i++) {
                 console.log(inputTaglist[i]);
                 for (let j = 0; j < inputTaglist.length; j++) {
-                    if (inputTaglist[i].label === inputTaglist[j].label && i != j){
+                    if (inputTaglist[i].label === inputTaglist[j].label && i !== j){
                         if (j > -1) {
                             inputTaglist.splice(j, 1); // 2nd parameter means remove one item only
                         }

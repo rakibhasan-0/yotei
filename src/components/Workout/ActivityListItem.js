@@ -3,7 +3,6 @@ import "./ActivitySelectionList.css"
 import { AccountContext } from '../../context'
 import React, { useState, useContext } from 'react';
 import DescriptionToggle from './../Common/DescriptionToggle';
-import FetchActivityDesc from "../Activity/FetchActivityDesc";
 
 /**
  * This class is responsible for reprecenting a item in a ActivitySelectionList

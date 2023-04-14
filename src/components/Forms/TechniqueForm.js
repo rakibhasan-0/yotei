@@ -49,7 +49,7 @@ class TechniqueForm extends React.Component {
      * @param inputValue an array of the tags that are currently selected
      */
     handleCreate = (inputValue) => {
-        this.state.tags = inputValue
+        this.state.setState({tags: inputValue})
         this.handleChange(this.state)
     }
 
@@ -101,14 +101,14 @@ class TechniqueForm extends React.Component {
      * Hide the alert window
      */
     handleClose = () => {
-        this.state.show = false;
+        this.state.setState({show: false});
         this.forceUpdate();
     }
     /**
      * Display the alert window
      */
     handleShow = () => {
-        this.state.show = true;
+        this.state.setState({show: true});
         this.forceUpdate();
     }
 

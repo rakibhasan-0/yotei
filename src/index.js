@@ -104,7 +104,7 @@ export default function App() {
         setInterval(() => {
             updateCookie(stateRef.current)
         }, 1000 * 60 * 10)
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <>

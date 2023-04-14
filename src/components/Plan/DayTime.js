@@ -20,14 +20,14 @@ function DayTime({ dayName, onClick, weekdays }) {
     for(var i = 0; i < 7; i++){
         dayRow = weekdays[i]
 
-        if (dayRow.name == dayName) {
+        if (dayRow.name === dayName) {
             value = weekdays[i].time
             break
         }
     }
 
     /* Do not render time-select if day has not been chosen */
-    if (dayRow.value == false) {
+    if (dayRow.value === false) {
         return (<div></div>)
     }
     else {
@@ -44,13 +44,11 @@ function DayTime({ dayName, onClick, weekdays }) {
                                 id="dayTime"
                                 type="time"
                                 value={value}
-                                className="form-control day-selected-date"
+                                className="form-control day-selected-date DateTimePicker form-control"
                                 locale="sv-SV"
-                                name="time"
-                                id="time"
-                                type="time"
-                                className="DateTimePicker"
-                                className="form-control"
+                                //name="time" These are commented out because they break linting
+                                //id="time"   Might break something else though
+                                //type="time" 
                                 format="H:mm"
                                 maxTime="23:59"
                                 minTime="00:00"

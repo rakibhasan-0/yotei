@@ -1,10 +1,6 @@
-import Form from 'react-bootstrap/Form'
 import "../Workout/ActivitySelectionList.css"
-import { AccountContext } from '../../context'
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import DescriptionToggle from './../Common/DescriptionToggle';
-import FetchActivityDesc from "../Activity/FetchActivityDesc";
-import fetchWorkoutDesc from "../Workout/FetchWorkoutDesc";
 import FetchWorkoutDesc from "../Workout/FetchWorkoutDesc";
 
 /**

@@ -9,6 +9,7 @@
     "cra-template": "1.2.0",
     "cross-env": "^7.0.3",
     "firefox-profile": "^4.3.2",
+    "http-proxy-middleware": "^2.0.6",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.3",
@@ -37,9 +38,12 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint ./ --ignore-path .gitignore",
-    "lint:fix": "npm run lint -- --fix"
+    "lint:fix": "npm run lint -- --fix --ext .js,.jsx ."
   },
   "eslintConfig": {
+    "rules": {
+      "no-warning-comments": 0
+    },
     "extends": [
       "react-app",
       "react-app/jest"

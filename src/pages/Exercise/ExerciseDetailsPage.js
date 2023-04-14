@@ -5,8 +5,6 @@ import ExerciseCommentSection from "./ExerciseCommentSection"
 import {AccountContext} from "../../context";
 import {useParams} from "react-router";
 import {Link} from "react-router-dom"
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
 import GoBackButton from "../../components/Common/GoBackButton";
 import AlertWindow from "../../components/Common/AlertWindow";
 
@@ -64,7 +62,7 @@ const ExerciseDetailsPage = () => {
             }
         };
         fetchData()
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     /**
      * Function that deletes the exercise, returns to the list of exercises afterwards

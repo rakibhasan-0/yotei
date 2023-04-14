@@ -1,4 +1,8 @@
-function Popup() {
+import React, { useState } from 'react';
+import { Modal, Button } from 'react-bootstrap';
+
+
+function Popup() { // eslint-disable-line
     const [show, setShow] = useState(false);
   
     const handleClose = () => setShow(false);

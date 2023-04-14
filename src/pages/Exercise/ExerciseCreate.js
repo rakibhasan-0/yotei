@@ -71,18 +71,18 @@ class ExerciseCreate extends React.Component {
             const response = await fetch(`/api/exercises/add`, requestOptions);
             if (response.ok) {
                 data = await response.json();
-                this.state.insertFailed = false;
+                this.state.setState({insertFailed: false});
                 this.forceUpdate();
             } else {
                  if (response.status === 409) {
                     alert("Namnet '" + this.state.storedName + "' är upptaget.");
                 }
-                this.state.insertFailed = true;
+                this.state.setState({insertFailed: true});
                 this.setState({boxChecked: false})
             }
         } catch (error) {
             console.log("Error at exercise insert");
-            this.state.insertFailed = true;
+            this.state.setState({insertFailed: true});
             this.forceUpdate();
         }
         return data.id;
@@ -112,15 +112,15 @@ class ExerciseCreate extends React.Component {
                     if (response.ok) {
                         const data = await response.json();
                         tag_id = data.id;
-                        this.state.tagfailed = false;
+                        this.state.setState({tagfailed: false});
                         this.forceUpdate();
                     } else {
-                        this.state.tagfailed = true;
+                        this.state.setState({tagfailed: true});
                         this.forceUpdate();
                     }
                 } catch (error) {
                     console.log("Error at tag insert");
-                    this.state.tagfailed = true;
+                    this.state.setState({tagfailed: true});
                     this.forceUpdate();
                 }
             } else {
@@ -147,15 +147,15 @@ class ExerciseCreate extends React.Component {
         try {
             const response = await fetch('/api/tags/add/exercise?tag=' + tag_id, requestOptions);
             if (response.ok) {
-                this.state.tagfailed = false;
+                this.state.setState({tagfailed: false});
                 this.forceUpdate();
             } else {
-                this.state.tagfailed = true;
+                this.state.setState({tagfailed: true});
                 this.forceUpdate();
             }
         } catch (error) {
             console.log("Error at tag link");
-            this.state.tagfailed = true;
+            this.state.setState({tagfailed: true});
             this.forceUpdate();
         }
     }
@@ -175,9 +175,9 @@ class ExerciseCreate extends React.Component {
     handleCallback = (formData) => {
         //Will skip changing the boolean at load
         if (this.state.callBack) {
-            this.state.isChanged = true
+            this.state.setState({isChanged: true})
         }
-        this.state.callBack = true
+        this.state.setState({callBack: true})
         this.setState(formData);
     }
 
@@ -206,7 +206,7 @@ class ExerciseCreate extends React.Component {
                     this.setState({desc: ''});
                     this.setState({time: ''});
                 }
-                this.state.isChanged = false;
+                this.state.setState({isChanged: false});
 
                 this.setState({boxChecked: true});
                 this.forceUpdate();

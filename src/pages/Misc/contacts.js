@@ -2,10 +2,6 @@ import React from 'react'
 
 const Contacts = ({ contacts }) => {
 
-    const arr = {
-        
-    }
-
     return (
         <div>
             <center>
