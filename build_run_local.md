@@ -7,7 +7,7 @@
     > cd backend/comment-api
 3. Build and package
     > mvn package
-4. The produced JAR file is not available under ./target
+4. The produced JAR file is now available under ./target
 
 # Frontend
 1. Install npm, https://docs.npmjs.com/
