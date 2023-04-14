@@ -8,6 +8,7 @@
     "cors": "^2.8.5",
     "cra-template": "1.2.0",
     "cross-env": "^7.0.3",
+    "eslint-plugin-jest": "^27.2.1",
     "firefox-profile": "^4.3.2",
     "http-proxy-middleware": "^2.0.6",
     "moment": "^2.29.4",
@@ -35,19 +36,28 @@
     "start": "cross-env HOST=localhost NODE_ENV=production node_modules/react-scripts/bin/react-scripts.js start",
     "prod_start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --passWithNoTests",
+    "test": "react-scripts test --watchAll --ci --no-watchAll --passWithNoTests",
+    "test:coverage": "npm test -- --watchAll --ci --no-watchAll --coverage --collectCoverageFrom='./src/**'",
+    "test:watch": "npm test -- --watchAll",
     "eject": "react-scripts eject",
     "lint": "eslint ./ --ignore-path .gitignore",
     "lint:fix": "npm run lint -- --fix --ext .js,.jsx ."
   },
   "eslintConfig": {
     "rules": {
-      "no-warning-comments": 0
+        "jest/no-disabled-tests": "warn",
+        "jest/no-focused-tests": "error",
+        "jest/no-identical-title": "error",
+        "jest/prefer-to-have-length": "warn",
+        "jest/valid-expect": "error"
     },
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "env": {
+        "jest/globals": true
+    }
   },
   "prettier": "@imaginary-cloud/prettier-config",
   "browserslist": {
