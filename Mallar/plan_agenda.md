@@ -1,5 +1,5 @@
 # Plan Agenda
-This is a template which is to be copied prior to making any changes, title the new file plan_SX(x = sprintno).
+This is a template which is to be copied prior to making any changes, title the new file plan_SX (x = sprintno).
 
 ## What has been done?
 |TicketNo|Successfull|
@@ -28,9 +28,9 @@ This is a template which is to be copied prior to making any changes, title the 
 ### Definitions
 Useful definitions to further understand the tables located below.
 #### Priority
-1/high - needs to be done the same day as issued.
-2/medium - done within two days.
-3/low - done within 4 days.
+1 - highest priority.
+2 - medium priority.
+3 - low priority.
 
 #### TicketNo
 If 0/empty; there exists no ticket for it,
