@@ -1,3 +1,4 @@
+## Hur ska en ticket se ut (skapas i Trello)
 **En beskrivande titel**
 
 ---
@@ -17,3 +18,6 @@ OBS: Glöm ej att använda rätt taggar på din ticket\
 Exempel:
 
 ![Exempel ticket](../images/example-ticket.png)
+
+## När är en ticket färdig? 
+Se [dod](/definition_of_done.md)
