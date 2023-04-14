@@ -28,9 +28,9 @@ This is a template which is to be copied prior to making any changes, title the 
 ### Definitions
 Useful definitions to further understand the tables located below.
 #### Priority
-1 - highest priority.
-2 - medium priority.
-3 - low priority.
+- 1 - highest priority.
+- 2 - medium priority.
+- 3 - low priority.
 
 #### TicketNo
 If 0/empty; there exists no ticket for it,
