@@ -18,6 +18,6 @@
 4. Install
     > npm install
 5. Run
-    > npm run
+    > npm start
 
 Note: This will use the dev build as backend, so you need to be connected to eduroam.
