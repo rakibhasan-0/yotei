@@ -93,7 +93,7 @@ function Login() {
             <div className="card bg-light center" style={{ maxWidth: 550}}>
                 <Form style={{ maxWidth: 500}} className="center pt-4 pb-4 pr-4 pl-4">
                     <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label className="float-left">Användarnamn TEST DEPLOY</Form.Label>
+                        <Form.Label className="float-left">Användarnamn</Form.Label>
                         <Form.Control type="user" value={username} placeholder="Användarnamn" onChange={e => {setUsername(e.target.value)}}/>
                     </Form.Group>
 
