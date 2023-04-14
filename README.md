@@ -5,6 +5,9 @@
 * **API:** [Swaggerhub](https://app.swaggerhub.com/apis-docs/Calzone/PvtOpenApi/1.0.0)
 * **JavaDoc:** TODO
 
+## Projektkalender
+Can be found -> [HERE](https://docs.google.com/spreadsheets/d/109tNRiRW9tyxdab9B4ap0jj3ZXgl275GzOLMBALoqUw/edit?usp=sharing)
+
 ## Beslut
 Beslut som tas loggas genom en beslutslogg för respektive grupp/chapter.
 
