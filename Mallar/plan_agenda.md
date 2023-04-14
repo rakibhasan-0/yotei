@@ -8,18 +8,18 @@ This is a template which is to be copied prior to making any changes, title the 
 
 
 ## What needs to be fixed?
-|Title|TicketNo|Description|Affected Chapter/-s|Identifier|
+|Title|TicketNo|Description|Affected Chapter(s)|Identifier|
 |-----|:------:|-----------|-------------------|----------|
 |Faulty interface|1|Margins too small on xxx|Frontend|QA|
 
 
 ## What should be introduced next?
-|Title|Description|Affected Chapter/-s|Identifier|
+|Title|Description|Affected Chapter(s)|Identifier|
 |-----|-----------|-------------------|----------|
 |Auto-Complete|Implement auto-complete in search-function|Backend, Frontend|Customer|
 
 ## What is the priority?
-|PrioNo|Fix/Intro|Description|Affected Chapter/-s|TicketNo|
+|PrioNo|Fix/Intro|Description|Affected Chapter(s)|TicketNo|
 |:----:|:-------:|-----------|-------------------|:------:|
 |1-3|Fix|Margins too small on xxx|Frontend|0|
 
