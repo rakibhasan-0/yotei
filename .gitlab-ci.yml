@@ -32,5 +32,7 @@ build-image:
     - echo "Building website version $DOCKER_IMAGE_TAG"
     - docker build -t $CONTAINER_REPOSITORY:$DOCKER_IMAGE_TAG .
     - docker push $CONTAINER_REPOSITORY:$DOCKER_IMAGE_TAG
+    - docker tag $CONTAINER_REPOSITORY:$DOCKER_IMAGE_TAG $CONTAINER_REPOSITORY:latest
+    - docker push $CONTAINER_REPOSITORY:latest
   only:
     - main
