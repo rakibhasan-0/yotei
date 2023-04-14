@@ -22,13 +22,13 @@ services:
       - pgdata:/var/lib/postgresql/data
       - ./database/init:/docker-entrypoint-initdb.d
   frontend:
-    image: pvt2023/frontend:0.1.0
+    image: pvt2023/frontend:latest
     ports:
       - "3000:3000"
     links:
       - psql
   gateway:
-    image: pvt2023/backend:gateway-1.0
+    image: pvt2023/gateway:latest
     ports:
       - "8080:8080"
     environment:
@@ -48,7 +48,7 @@ services:
       - session-api
       - usersettings-api
   exercise-api:
-    image: pvt2023/backend:exercise-api-1.0
+    image: pvt2023/exercise-api:latest
     ports:
       - "8082:8082"
     links:
@@ -59,7 +59,7 @@ services:
       - POSTGRES_PASSWORD=yotei123
       - POSTGRES_DB=yotei
   techniques-api:
-    image: pvt2023/backend:techniques-api-1.0
+    image: pvt2023/techniques-api:latest
     ports:
       - "8083:8083"
     links:
@@ -70,7 +70,7 @@ services:
       - POSTGRES_PASSWORD=yotei123
       - POSTGRES_DB=yotei
   workout-api:
-    image: pvt2023/backend:workout-api-1.0
+    image: pvt2023/workout-api:latest
     ports:
       - "8084:8084"
     links:
@@ -81,7 +81,7 @@ services:
       - POSTGRES_PASSWORD=yotei123
       - POSTGRES_DB=yotei
   user-api:
-    image: pvt2023/backend:user-1.0
+    image: pvt2023/user:latest
     ports:
       - "8085:8085"
     links:
@@ -92,7 +92,7 @@ services:
       - POSTGRES_PASSWORD=yotei123
       - POSTGRES_DB=yotei
   tag-api:
-    image: pvt2023/backend:tag-api-1.0
+    image: pvt2023/tag-api:latest
     ports:
       - "8086:8086"
     links:
@@ -103,7 +103,7 @@ services:
       - POSTGRES_PASSWORD=yotei123
       - POSTGRES_DB=yotei
   plan-api:
-    image: pvt2023/backend:plan-api-1.0
+    image: pvt2023/plan-api:latest
     ports:
       - "8087:8087"
     links:
@@ -114,7 +114,7 @@ services:
       - POSTGRES_PASSWORD=yotei123
       - POSTGRES_DB=yotei
   comment-api:
-    image: pvt2023/backend:comment-api-1.0
+    image: pvt2023/comment-api:latest
     ports:
       - "8088:8088"
     links:
@@ -125,7 +125,7 @@ services:
       - POSTGRES_PASSWORD=yotei123
       - POSTGRES_DB=yotei
   session-api:
-    image: pvt2023/backend:session-api-1.0
+    image: pvt2023/session-api:latest
     ports:
       - "8089:8089"
     links:
@@ -136,7 +136,7 @@ services:
       - POSTGRES_PASSWORD=yotei123
       - POSTGRES_DB=yotei
   usersettings-api:
-    image: pvt2023/backend:usersettings-api-1.0
+    image: pvt2023/usersettings-api:latest
     ports:
       - "6969:6969"
     links:
