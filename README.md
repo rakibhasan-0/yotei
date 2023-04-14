@@ -30,6 +30,8 @@ Vi använder Trello som ticketsystem. Varje Squad har en egen *workspace* tänkt
 * [Squad 8](https://trello.com/invite/b/Phbgoxtd/ATTI44e9d2c1d31680f1fc304edf652ab43438FE10C4/s8)
 
 
+Ifall du upptäcker en bugg eller annat förbättringsområde som normalt sett hade varit ett issue i gitlab lägger du till denna i listan "Issues/PO" på din workspace. Denna ska ha en kort titel **och** beskrivelse. Ifall du har hittat en bugg ska du ge en beskrivning om vilka steg du tog och hur den går att reproducera. 
+
 
 Generellt arbetsflöde:
 
