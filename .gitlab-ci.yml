@@ -1,7 +1,19 @@
-stages:         
+stages:
+  - test    
   - build
   - docker
   - deploy
+
+test-job:
+  stage: test
+  image: node:19
+  before_script:
+    - npm install
+  script:
+    - echo "Testing frontend"
+    - npm run test --passWithNoTests
+    - npm run lint
+    - echo "Finished testing"
 
 build-job:       
   stage: build
