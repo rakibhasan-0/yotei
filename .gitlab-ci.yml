@@ -1,12 +1,11 @@
 stages:         
   - build
+  - docker
   - deploy
 
 build-job:       
   stage: build
   image: node:19
-  variables:
-    CI: "false"
   before_script:
     - npm install
   script:
@@ -19,7 +18,7 @@ build-image:
   services:
     - docker:20-dind
 
-  stage: deploy
+  stage: docker
 
   variables:
     DOCKER_DRIVER: "overlay2"
@@ -36,5 +35,19 @@ build-image:
     - docker push $CONTAINER_REPOSITORY:$DOCKER_IMAGE_TAG
     - docker tag $CONTAINER_REPOSITORY:$DOCKER_IMAGE_TAG $CONTAINER_REPOSITORY:latest
     - docker push $CONTAINER_REPOSITORY:latest
+  only:
+    - main
+
+deploy:
+  image: ubuntu:latest
+  stage: deploy
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - mkdir -p ~/.ssh
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_PRIVATE_KEY" | tr -d '\r')
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+  script:
+    - ssh pvt@imp.cs.umu.se "cd /home/pvt/Desktop/infra && docker compose pull && docker compose down && docker compose up -d"
   only:
     - main
