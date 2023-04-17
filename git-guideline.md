@@ -1,6 +1,6 @@
-<h1>Yatoi Git Workflow</h1>
+<h1>Yotei Git Workflow</h1>
 
-Yatoit's git is divide into four repositories.
+Yotei's git is divided into four repositories.
 - Backend - This repository holds the codebase and all documentation for the backend.
 - Frontend - This repository holds the codebase and all documentation for the frontend.
 - Infrastructure - This repository holds the config files, including the docker compose file.
@@ -11,7 +11,7 @@ When working on a ticket the developer should branch to a devloper branch with
 
 `git switch -c <branch_name>`
 
-The branch name needs to be `#[ticket_name]_[squad_name]`, e.g #mockticket_kraken-killers. This should be followed, as it will simplify managing branches.
+The branch name needs to be `#[ticket_name]_[squad_name]`, e.g `#mockticket_kraken-killers`. This should be followed, as it will simplify managing branches.
 
 When working on a feature branch remember to commit **often** and make sure to push to the feature branch at the **end of the day**.
 
@@ -36,7 +36,7 @@ To continue with the rebase. Alternatively the developer could abort the rebase 
 `git rebase --abort`
 
 If the rebase was successful, a merge request should be sent using the gitlab website. The following template should be used when creating a new merge resuest via the website.
-- Title - <branch_name>
+- Title - `<branch_name>`
 - Description - 
         
         <Trello ticket link>
