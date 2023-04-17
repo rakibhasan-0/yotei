@@ -3,7 +3,7 @@ Kort beskrivning av beslutet (Z) som fattats
 
 - **Datum** - YYMMDD
 - **Chapters** - [Namn](/Chapters/Namn)
-- **Grupp** - N/A
+- **Grupp** - Phoenix Flyers
 - **Alternativ** - X, Y, **Z**
 - **Motivation**
   - Längre beskrivning om varför Z valdes
