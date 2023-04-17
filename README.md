@@ -4,8 +4,19 @@ För att köra frontend krävs det att ett antal API:er och REACT servern körs.
 
 ### Att använda React och npm på skoldatorer
 
-Klona projektet och navigera till frontend mappen med cd <br>
-kör kommandot: <br>
+Om du har en developer branch, klona den med kommandot:
+
+```
+git clone https://git.cs.umu.se/courses-project/5dv214vt23/frontend/-/tree/[name-of-branch]
+```
+
+Om du inte har det, klona repot med kommandot:
+
+```
+git clone https://git.cs.umu.se/courses-project/5dv214vt23/frontend
+```
+
+Installera npm med kommandot: <br>
 ```
 npm install 
 ```
