@@ -65,5 +65,14 @@ After the merge a Squash commit will be produced with the following format.
     %{all_commits}
 
 
+## Gitikett
+- Help eachother.
+- Make sure to commit often.
+- Always `pull` from **main** before creating a new branch.
+- Always `rebase` before creating a merge request to **main** branch.
+- At the end of the day, `push` changes to your feature branch, in case you are sick/not available the day after, such that another member of the squad can continue working on the feature.
+
+
+
                 
     
