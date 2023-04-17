@@ -25,12 +25,7 @@ Om det uppstod fel när npm installerades se till att ta bort mappen <em>node mo
 
 ### API:er för backend
 
-För att frontend ska få ut den information den behöver för att visa upp sidorna krävs det att API:erna körs. Projektet har en micro services struktur vilket betyder att API:erna är särkopplade och måste därför startas individuellt. För att inte behöva köra varje API för sig i olika terminaler finns det ett script som startar allihop med ett kommando. För att göra detta navigera till huvudmappen för projektet "5dv214vt22" med cd-kommandot och kör kommandot: <br>
-
-```
-sh start_all_apis.sh
-```
-Terminalen kommer då köra alla API:er med något som heter SpringBoot. Den kommer ta en liten stund innan den har startat upp allt men den är färdig då terminalen stannar av och det på sista raden den skrev ut står "ACCEPTING_TRAFFIC". Nu är API:erna igång och React servern kan startas.
+API:erna körs på testservern (imp.cs.umu.se). Frontend är konfigurerat att använda sig av dem som backend. Det kräver att datorn som kör frontend är uppkopplad mot eduroam. Vid hemmajobb kan frontend köras på itchy, scratchy osv.
 
 ### Starta React appen
 
