@@ -10,7 +10,7 @@ After editing the source code, go into the backend directory, and run
 
 ## Starting the backend
 
-Go into the `infra` directory, and run `docker compose up -d`.
+Go into the `infra` directory, and run `docker compose up -d`. Open `localhost` in your browser. 
 
 ### Updating
 
