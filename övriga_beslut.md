@@ -1,7 +1,7 @@
 # PO-möten med chapters 18/04/23
 ## QA
 * Systemtester
-  * Ärende/ticket är gjort i trello
+  * Ärende/ticket är gjort i trello (tilldelas till Squad 8)
 * Få in nån typ av profiling på frontend och backend
   * QA fixar en guide för hur man gör i intellij
 * Spike för att researcha miljön för att kolla prestanda. Kör detta till en ticket.
