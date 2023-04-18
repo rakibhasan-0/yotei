@@ -1,5 +1,5 @@
 ## Mall
-[mall för beslut](/../../Mallar/beslut.md)
+[mall för beslut](../../Mallar/beslut.md)
 
 
 # Beslut
