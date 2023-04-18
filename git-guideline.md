@@ -11,7 +11,17 @@ When working on a ticket the developer should branch to a devloper branch with
 
 `git switch -c <branch_name>`
 
-The branch name needs to be `#[ticket_name]_[squad_name]`, e.g `#mockticket_kraken-killers`. This should be followed, as it will simplify managing branches.
+The branch name needs to be `#[ticket_name]_[squad-name]`, e.g `#mockticket_kraken-killers`. This should be followed, as it will simplify managing branches.
+To see all available branches use the command:
+
+`git branch`
+
+Push the branch to origin with the command: 
+
+`git push -u origin [branch_name]` 
+
+Example:
+`git push -u origin #mocket_kraken-killers`
 
 When working on a feature branch remember to commit **often** and make sure to push to the feature branch at the **end of the day**.
 
