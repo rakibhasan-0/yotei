@@ -21,3 +21,26 @@
 * Mycket ska dokumenteras, egentligen allt QA relaterat.
   * Gör detta till en ticket och tilldela den till Squad 2 (Gryffin-guardians)
 * Petition för att kapa andra namnet i squadet så att det endast blir mythological creatures.
+
+## DevOps + Arkitektur
+### Arkitektur
+* Arkitekterna vill undersöka om det går att reducera antalet container.
+  * Gör en spike för att undersöka om en client-server arkitektur är möjlig. 
+  * PO bestämmer vilken Squad som ska göra detta. Gör en ticket av detta.
+### Backend
+* Backend
+  * Spike där det ska undersökas vilka Java RESTful bibliotek det finns. Samt Spring Boot optimering.
+  * PO ska göra tickets av dessa och de får även bestämma vilka Squads som ska göra detta.
+### Förslag på Ticket
+* Ticket: Refaktorisering av kommentarer. Just nu är det blandat svenska och engelska.
+
+### Preliminär spike
+Är det nyttigt med en databas spike? Tanken är att undersöka om det finns ett bättre sätt att strukturera databasen. Just nu finns det cirkulära relationer. 
+
+## Backend
+* Spike för att se över databassystemet. Se över hur ER-diagrammet ser ut i befintligt system. Det ska vara enkelt att uppdatera ER-diagrammet. Gör man en ändring i databasen ska det vara enkelt att ändra ER-diagrammet
+* Någon typ av förhållningssätt i databasen. Tagg i trello för att se att det tillhör databas.
+* Dokumentation för källkod. Ta fram mallar för dokumentation. Kör JavaDoc för backend. Frontend oklart.
+
+## Frontend
+* Förslag om ändring i design i frontend. Försök kopplat till förslagen som kom i början. 
