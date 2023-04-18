@@ -1,6 +1,9 @@
 ## Mall
+[mall för beslut](/../../Mallar/beslut.md)
 
-## Exempel
+
+# Beslut
+
 Kort beskrivning av beslutet (Z) som fattats
 
 - **Datum** - YYMMDD
@@ -11,8 +14,4 @@ Kort beskrivning av beslutet (Z) som fattats
   - Längre beskrivning om varför Z valdes
   - Längre beskrivning om varför X _inte_ valdes
   - Längre beskrivning om varför Y _inte_ valdes
-
-
-
-# Beslut
 
