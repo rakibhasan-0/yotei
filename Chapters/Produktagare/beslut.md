@@ -23,7 +23,7 @@
   - **Eget gitlab repo för dokumentation** Ett beslut att ha separat gitlab repo för dokumentation valdes då DevOps tyckte att byggandet av projektet underlättades med separata repos för client- respektive server- delen av applikationen. Det blev inte självklart var Gitlab Wiki sidan skulle förläggas så ett separat repo (inuti projektets "grupp av repon") blev enklast.
   - _Gitlab Wiki_ se motivation ovan.
 
-## Beslut
+## Tidsläggning för att lära sig nya tekniker etc
 - **Datum** - 230417
 - **Chapters** - PO
 - **Grupp** - N/A
@@ -32,3 +32,17 @@
   - Vi valde att sätta flexibel tid för code reviews samt research/learning för att på så sätt kan alla själva bestämma efter behov när de skall researcha, lära sig något nytt samt gå igenom kod i Code Reviews.
   - Vi valde inte att utelämna detta helt då det är en viktig del i quality assurance.
   - Vi valde inte schemalägga denna tid då vi inte kan förutspå vilka dagar som det kommer vara mycket för de olika grupperna att göra, samt planera så att allt jobb infaller specifika dagar.
+
+## Dokumentation för Java-backend
+- **Datum** - 230418
+- **Chapters** - PO
+- **Grupp** -  N/A
+- **Beslut** - **JavaDoc**
+- **Motivation**
+  - JavaDoc och dess standard används för metod och funktionskommentarer för backend. Detta valdes då det är en känd
+  standard för Java som många känner till. Beslut togs snabbt och därför övervägdes inga alternativ.
+
+
+
+
+
