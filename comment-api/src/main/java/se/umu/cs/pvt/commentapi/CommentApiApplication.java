@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * Spring Boot application.
+ * Spring Boot application!
  * @author Henrik Aili (c20hai) - Grupp 3 Hawaii
  */
 @SpringBootApplication
