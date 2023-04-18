@@ -47,7 +47,7 @@ public class Comment implements Serializable {
     }
 
     /**
-     * Get the exercise id
+     * Get the exercise id!
      * @return The exercise id
      */
     public Long getExerciseId() {
