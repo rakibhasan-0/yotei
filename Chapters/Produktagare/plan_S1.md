@@ -14,19 +14,23 @@ This is the plan for sprint 1, a visual preliminary plan can ba found in the [ca
 |Database Spike|0|Research possible restructuring of the database and the circular dependendencies|BE|BE|
 |Restful Spike|0|Reasearch possible optimization with Spring Boot or replacement|BE|BE|
 |Profiling Spike|0|Implement profiling in the system and summarize the results|QA, BE, FE|QA|
-
+|Frontend Prototype|0|Create templates for the application.|FE|FE, Customer|
+|Search function|0|Summarize current search-backlog, create common solution|FE, BE|FE, customer|
 
 ## What should be introduced next?
 |Title|Description|Affected Chapter(s)|Identifier|
 |-----|-----------|-------------------|----------|
-|Auto-Complete|Implement auto-complete in search-function|Backend, Frontend|Customer|
+|null|null|null|null|
 
 ## What is the priority?
-|PrioNo|Fix/Intro|Description|Affected Chapter(s)|TicketNo|
-|:----:|:-------:|-----------|-------------------|:------:|
-|1-3|Fix|Margins too small on xxx|Frontend|0|
-
-
+|PrioNo|Fix/Intro|Affected Chapter(s)|TicketNo|
+|:----:|:-------:|-------------------|:------:|
+|1-3|Architecture Spike|BE, DevOps|0|
+|1-3|Database Spike|BE|0|
+|1-3|Restful Spike|BE|0|
+|1-3|Profiling Spike|QA, BE, FE|0|
+|1-3|Frontend Spike|FE|0|
+|1-3|Search Spike|FE, BE|0|
 
 ### Definitions
 Useful definitions to further understand the tables located below.
