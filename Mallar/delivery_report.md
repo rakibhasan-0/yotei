@@ -5,13 +5,24 @@
 This is the delivery reoprt for __sprint X__. The sprint plan can be found in its completeness at [HERE](../Chapters/Produktagare/plan_SX.md) on [GIT](https://git.cs.umu.se/courses-project/5dv214vt23/docs).
 
 ## What Has Been Done?
-Completed Features/Epics with descriptions and ticket number(s)
+### According to sprint plan.
+Completed Features/Epics with descriptions and ticket number(s).
 * Feature 1: Description 1
 * Epic 1: Description 2
 
 |TicketNo|Squad|
 |:------:|-----|
 |        |     |
+
+### Outside of Sprint Plan
+Completed Features/Epics with descriptions and ticket number(s).
+* Feature 1: Description 1
+* Epic 1: Description 2
+
+|TicketNo|Squad|
+|:------:|-----|
+|        |     |
+
 
 ## What Has Not Been Completed And Why?
 Features and Epics that has not been completed
