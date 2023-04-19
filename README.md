@@ -65,9 +65,30 @@ Notera: Om du använder windows istället för linux som på skoldatorerna kan d
 
 REACT servern kommer per default köras på **localhost:3000**, men enligt den gateway som finns i koden är det **localhost:8080** som är rätt port. Därför behöver man byta till port **8080** manuellt i URL:en.
 
-### Resurser:
+### React Tester
 
-Värdefulla resurser för att sätta sig in i REACT:
+Testerna använder sig av **Jest** för mocking och **REACT**s egen testsuite för att interagera med DOM. För att testa appen innan commit till pipelinen finns följande kommandon
+som kan köras lokalt.
+```
+1. npm test
+2. npm run test:watch
+3. npm run test:coverage
+```
+Det första kommandot kör alla enhetstester i repot, det andra startar en liveterminal som kör testerna och sedan kör om dem när de uppdateras. Det tredje kör en täckningsanalys av projektet. Resultatet presenteras i terminalen men det genereras också en egen *coverage* mapp som innehåller en hemsida (**coverage/lcov-report/index.html**) där man kan få en överblick av coverage för projektet. 
+
+
+För linting (statisk kodanalys) kan man köra följande.
+```
+npm run lint
+```
+
+**Tips:** 
+1. Tester skapas genom att döpa filerna till `KOMPONENT.test.js` och sedan anropa funktionen `it("Testnamn", () => { 'Test Content...' })`
+2. Man kan planera för tester även innan man har en implementation genom att använda `it.todo("Testnamn")`.
+
+### Resurser
+
+#### Grunder i REACT
 
 [React - Quick Start](https://react.dev/learn)
 
@@ -76,3 +97,10 @@ Värdefulla resurser för att sätta sig in i REACT:
 [Enkel tutorial för att hämta data från en JSON](https://pusher.com/tutorials/consume-restful-api-react/#prerequisites)
 
 [RESTful API in React](https://rapidapi.com/blog/how-to-use-an-api-with-react/)
+
+
+#### Tester
+
+[REACT Testing Library: Getting Started](https://testing-library.com/docs/)
+[REACT Hooks Testing Example](https://github.com/iqbal125/react-hooks-testing-complete)
+[Jest: Getting Started](https://jestjs.io/docs/getting-started)
