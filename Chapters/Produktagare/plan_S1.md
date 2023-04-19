@@ -11,14 +11,14 @@ Nothing has been done, this is the plan for the initial sprint.
 ## What needs to be fixed?
 |Title|TicketLink|Description|Affected Chapter(s)|Identifier|
 |-----|:------:|-----------|-------------------|----------|
-|Architecture Spike|[TBD](https://trello.com/c/beY6rmWt/14-spike-arkitektur)|Research possible restructuring of the architecture|BE, DevOps|Customer, BE, Arch|
-|Architecture Spike|[TBD](https://trello.com/c/oVCS3HOG/11-spike-arkitektur)|Research possible restructuring of the architecture|BE, DevOps|Customer, BE, Arch|
-|Database Spike|[TBD](https://trello.com/c/VOY7OJ5Z/16-spike-databas)|Research possible restructuring of the database and the circular dependendencies|BE|BE|
-|Restful Spike|[TBD](https://trello.com/c/5iAICSY8/10-spike-restful)|Reasearch possible optimization with Spring Boot or replacement|BE|BE|
-|Profiling Spike|[TBD](https://trello.com/c/am5ks7Qi/12-spike-profiling)|Implement profiling in the system and summarize the results|QA, BE, FE|QA|
-|Frontend Prototype|[TBD](https://trello.com/c/ZRKA9pyY/8-frontend-spike)|Create templates for the application.|FE|FE, Customer|
-|Search function|[TBD](https://trello.com/c/rrikYBdz/9-s%C3%B6k-funktionalitet)|Summarize current search-backlog, create common solution|FE, BE|FE, customer|
-|System test|[TBD](https://trello.com/c/3Wm2EKKw/15-spike-system-enhetstester)|Implement unit, component and system tests.|QA, BE, DevOps|QA|
+|Architecture Spike|[ticket](https://trello.com/c/beY6rmWt/14-spike-arkitektur)|Research possible restructuring of the architecture|BE, DevOps|Customer, BE, Arch|
+|Architecture Spike|[ticket](https://trello.com/c/oVCS3HOG/11-spike-arkitektur)|Research possible restructuring of the architecture|BE, DevOps|Customer, BE, Arch|
+|Database Spike|[ticket](https://trello.com/c/VOY7OJ5Z/16-spike-databas)|Research possible restructuring of the database and the circular dependendencies|BE|BE|
+|Restful Spike|[ticket](https://trello.com/c/5iAICSY8/10-spike-restful)|Reasearch possible optimization with Spring Boot or replacement|BE|BE|
+|Profiling Spike|[ticket](https://trello.com/c/am5ks7Qi/12-spike-profiling)|Implement profiling in the system and summarize the results|QA, BE, FE|QA|
+|Frontend Prototype|[ticket](https://trello.com/c/ZRKA9pyY/8-frontend-spike)|Create templates for the application.|FE|FE, Customer|
+|Search function|[ticket](https://trello.com/c/rrikYBdz/9-s%C3%B6k-funktionalitet)|Summarize current search-backlog, create common solution|FE, BE|FE, customer|
+|System test|[ticket](https://trello.com/c/3Wm2EKKw/15-spike-system-enhetstester)|Implement unit, component and system tests.|QA, BE, DevOps|QA|
 
 ## What should be introduced next?
 This will be updated following the presentations on Friday April 21st.
