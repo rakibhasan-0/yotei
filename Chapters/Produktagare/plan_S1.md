@@ -1,7 +1,7 @@
 # Plan Agenda S1S
-Sprint plan -> [Google Sheets](https://docs.google.com/spreadsheets/d/109tNRiRW9tyxdab9B4ap0jj3ZXgl275GzOLMBALoqUw/edit?usp=sharing)
-Spike details -> [Google Doc](https://docs.google.com/document/d/1DLiyURMAam4Hb5CyXgGDpYfy9f4yDpsIcmzml7vVPis/edit?usp=sharing)
-Frontend prototype -> [Google Pres.](https://docs.google.com/presentation/d/1fxL4xPZJz-2F0jEbvsLIh5VCciM5xxQlX5eYVVOfkJU/edit?usp=sharing)
+- Sprint plan -> [Google Sheets](https://docs.google.com/spreadsheets/d/109tNRiRW9tyxdab9B4ap0jj3ZXgl275GzOLMBALoqUw/edit?usp=sharing)
+- Spike details -> [Google Doc](https://docs.google.com/document/d/1DLiyURMAam4Hb5CyXgGDpYfy9f4yDpsIcmzml7vVPis/edit?usp=sharing)
+- Frontend prototype -> [Google Pres.](https://docs.google.com/presentation/d/1fxL4xPZJz-2F0jEbvsLIh5VCciM5xxQlX5eYVVOfkJU/edit?usp=sharing)
 
 
 ## What has been done?
