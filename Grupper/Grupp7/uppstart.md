@@ -4,3 +4,4 @@
 * Tid för morgonmötet: 08:30
   
 ## Övriga punkter
+Obligatorisk fika vid 15.00
