@@ -6,7 +6,8 @@
 * För att stänga av alla api:er: [kill-all-apis.sh](/Grupper/Grupp6/profiling/kill-all-apis.sh)
 * Minnesprofilering utan docker: [memtest.sh](/Grupper/Grupp6/profiling/memtest.sh)
 
-
+echo Frontend memory usage: ${MEM}MB
+```
 
 ## Resultat utan docker:
 
