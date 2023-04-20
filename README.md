@@ -4,6 +4,7 @@
 * **Användarhandledning:** [user-guide](/user-guide)
 * **API:** [Swaggerhub](https://app.swaggerhub.com/apis-docs/Calzone/PvtOpenApi/1.0.0)
 * **JavaDoc:** TODO
+* **Prototype:** [Figma](https://www.figma.com/file/64zymyGJSp7BuQthnOhvMt/PVT?node-id=447%3A2536&t=Itsg7Erptg72Tts5-1)
 
 ## Projektkalender
 Can be found -> [HERE](https://docs.google.com/spreadsheets/d/109tNRiRW9tyxdab9B4ap0jj3ZXgl275GzOLMBALoqUw/edit?usp=sharing)
