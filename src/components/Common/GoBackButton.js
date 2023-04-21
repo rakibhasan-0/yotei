@@ -6,15 +6,21 @@ import AlertWindow from "./AlertWindow";
 /**
  * Defines the button to go back to the previous page. Has a boolean value to show confirmation prompt, if the
  * boolean value is false then no message is presented to the user.
+ * Takes a optional prop onClick that runs when clicked, the return value of this function defines wheter or not to show a confirmation.
+ * NOTE: The return value of onClick overrides the confirmationNeeded prop.
  *
  * @author Team Capricciosa (Group 2), Team Carlskrove (Group 6)
  * @version 1.0
  */
 export function GoBackButton(props) {
     const navigate = useNavigate();
-    const confirmationNeeded = props.confirmationNeeded;
+    let confirmationNeeded = props.confirmationNeeded
+    const onClick = props.onClick
 
     const confirm = () => {
+        if(onClick !== undefined) {
+            confirmationNeeded = onClick()
+        }
         if (!confirmationNeeded) {
             navigate(-1);
         } else {

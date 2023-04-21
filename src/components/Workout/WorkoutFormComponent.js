@@ -1,4 +1,4 @@
-import { useRef, useState, useContext, useEffect} from 'react';
+import { useState, useContext, useEffect} from 'react';
 import { Form, Button } from "react-bootstrap";
 import DraggableList from "./DraggableList"
 import { Col, Row } from "react-bootstrap";
@@ -19,8 +19,8 @@ function WorkoutFormComponent(props){
     const workout = props.workout
     //const currentTags = props.tags
 
-    const inputName = useRef();
-    const inputDesc = useRef();
+    const [name, setName] = useState("");
+    const [desc, setDesc] = useState("");
     
     //const [workoutDate, setWorkoutDate] = useState(null);
     //const [workoutTime, setWorkoutTime] = useState(null);
@@ -32,11 +32,11 @@ function WorkoutFormComponent(props){
             value: 1
         }
     ]);
-    const [activities, setActivities] = useState(null);
+    const [activities, setActivities] = useState([]);
     // false = checkbox is checked, true = checkbox is unchecked
     const [workoutVisibility, setWorkoutVisibility] = useState(false);
-    const [tag, setTags] = useState(null);
-    const [inputTaglist, setInputTaglist] = useState(null);
+    const [tag, setTags] = useState([]);
+    const [inputTaglist, setInputTaglist] = useState([]);
     const { token } = useContext(AccountContext)
 
     /**
@@ -134,8 +134,8 @@ function WorkoutFormComponent(props){
         } 
         props.callback(
             true, 
-            inputName.current.value,
-            inputDesc.current.value,
+            name,
+            desc,
             workoutDate,
             workoutTime,
             selectedUsers,
@@ -179,7 +179,14 @@ function WorkoutFormComponent(props){
             <Row style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', height: '100%'}}>
                 <Form.Group as={Col} md="9" controlId='validationCustom01' className='mb-3'>
                     {/*<Form.Label>Namn på pass</Form.Label>*/}
-                    <Form.Control type="text" placeholder="Namn" defaultValue={workout.name} required ref={inputName}/>
+                    <Form.Control
+                        type="text"
+                        placeholder="Namn"
+                        defaultValue={workout.name}
+                        required
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                    />
                     <Form.Control.Feedback type="invalid">
                         Detta fält kan inte lämnas tomt
                     </Form.Control.Feedback>
@@ -226,7 +233,14 @@ function WorkoutFormComponent(props){
 
                 <Form.Group as={Col} md="9" controlId='validationCustom03' className='mb-3'>
                     {/*<Form.Label>Beskrivning</Form.Label>*/}
-                    <Form.Control as="textarea" rows={3} placeholder="Beskrivning av pass" defaultValue={workout.desc} required ref={inputDesc}/>
+                    <Form.Control
+                        as="textarea"
+                        rows={3}
+                        placeholder="Beskrivning av pass"
+                        defaultValue={workout.desc}
+                        required value={desc}
+                        onChange={e => setDesc(e.target.value)}
+                    />
                     <Form.Control.Feedback type="invalid">
                         Detta fält kan inte lämnas tomt
                     </Form.Control.Feedback>
@@ -235,7 +249,10 @@ function WorkoutFormComponent(props){
                     </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group as={Col} md="9" className="mb-3">
-                    <DraggableList startActivities={workout.activities} updateOutputArray={setActivities}/>
+                    <DraggableList 
+                        startActivities={workout.activities}
+                        updateOutputArray={setActivities}
+                    />
                     <Creatable
                         options={tag}
                         placeholder="Taggar"
@@ -255,7 +272,11 @@ function WorkoutFormComponent(props){
                 </Form.Group>
 
                 <Form.Group as={Col} md="9" className="mb-3">
-                    <AddUserWorkoutSelect addedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} author={workout.authorName}/> 
+                    <AddUserWorkoutSelect 
+                        addedUsers={selectedUsers}
+                        setSelectedUsers={setSelectedUsers}
+                        author={workout.authorName}
+                    /> 
                 </Form.Group>
                 
                 <Form.Group as={Col} md="9" className="mb-3">
@@ -264,7 +285,7 @@ function WorkoutFormComponent(props){
                     </div>
 
                     <div className='mb-3' style={{float:'left', marginTop: '1rem'}}>
-                        <GoBackButton confirmationNeeded={true}></GoBackButton>
+                        <GoBackButton onClick={() => !(isEmpty(name) && isEmpty(desc) && isEmpty(activities) && isEmpty(tag))}></GoBackButton>
                     </div>
                 </Form.Group>
             </Row>
@@ -272,5 +293,9 @@ function WorkoutFormComponent(props){
 
         </Form>
     )
+}
+
+function isEmpty(array) {
+    return array.length === 0
 }
 export default WorkoutFormComponent;
