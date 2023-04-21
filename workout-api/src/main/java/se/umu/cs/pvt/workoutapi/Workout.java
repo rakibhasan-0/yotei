@@ -57,7 +57,6 @@ public class Workout implements Serializable {
      * @param desc desc of workout
      * @param duration duration of workout
      * @param created date created
-     * @param changed date last edited
      * @param date date
      * @param hidden hidden
      * @param author foreign key to user

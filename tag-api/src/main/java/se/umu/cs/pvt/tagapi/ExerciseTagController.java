@@ -51,7 +51,7 @@ public class ExerciseTagController {
 
     /**
      * Finds all Exercise Ids that has a specific tag on it.
-     * @param id The tag Id of the specified tag.
+     * @param tagId The tag Id of the specified tag.
      * @return A response entity with the list of Exercise ids with status OK or
      * BAD_REQUEST if no Exercises with that tag exist.
      */
@@ -65,7 +65,7 @@ public class ExerciseTagController {
 
     /**
      * Finds all Tags for a given Exercise.
-     * @param id The Id of an exercise.
+     * @param exerciseId The Id of an exercise.
      * @return A list of Tag elements.
      */
     @GetMapping("/get/tag/by-exercise")

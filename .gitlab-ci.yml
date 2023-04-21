@@ -223,3 +223,18 @@ deploy:
     - ssh pvt@imp.cs.umu.se "cd /home/pvt/Desktop/infra && docker compose pull && docker compose down && docker compose up -d"
   only:
     - main
+
+deploy_javadoc:
+    image: ubuntu:latest
+    stage: deploy
+    before_script:
+      - apt-get update -y && apt-get upgrade -y && apt install openssh-client maven rsync openjdk-17-jdk openjdk-17-jre -y
+      - mkdir -p ~/.ssh
+      - eval $(ssh-agent -s)
+      - ssh-add <(echo "$SSH_PRIVATE_KEY" | tr -d '\r')
+      - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    script:
+      - mvn javadoc:aggregate
+      - rsync -avzhuP  ./target/site/apidocs/* pvt@imp.cs.umu.se:/home/pvt/pvt-web/javadoc/
+    only:
+      - main

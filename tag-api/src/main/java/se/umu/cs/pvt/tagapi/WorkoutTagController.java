@@ -93,7 +93,7 @@ public class WorkoutTagController {
 
     /**
      * Finds all Tags for a given workout. 
-     * @param id The Id of an workout.
+     * @param workId The Id of an workout.
      * @return A list of Tag elements.
      */
     @GetMapping("/get/tag/by-workout")
