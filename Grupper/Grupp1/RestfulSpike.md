@@ -7,3 +7,8 @@
 
 ## Bör vi byta? Vad skulle detta innebära i effort?
 * Nej, vi anser inte att vi bör byta. Spring Boot är redan lightweight och som sagt, vi tror att det stora problemet sitter i docker-containers. Vi tror att Efforten som går åt att förstå hur spring boot fungerar är för stor gentemot rewarden.
+
+## Spring-Boot
+Vi siktar på att behålla Spring Boot, speciellt om vi behåller microservice-arkitektur. Just nu tittar vi på om vi kan byta till Spring Boot Native eftersom det är mindre resurskrävande än Spring Boot. Nackdelen är att mockito inte stöds och det används itesterna dag. Ett alternativ är att vi endast deployar i Spring Boot Native men vi testar i Spring Boot. Detta endast om det är lätt att byta mellan Spring Boot och Spring Boot Native.
+
+Skulle det vara så att vi byter från Spring Boot måste vi hitta något nytt. Vi anser inte att det är värt tiden den kommer att ta för att göra detta.
