@@ -3,7 +3,7 @@
 
 * **Användarhandledning:** [user-guide](/user-guide)
 * **API:** [Swaggerhub](https://app.swaggerhub.com/apis-docs/Calzone/PvtOpenApi/1.0.0)
-* **JavaDoc:** TODO
+* **JavaDoc:** [imp.cs.umu.se/javadoc](https://imp.cs.umu.se:2443/javadoc/)
 * **Prototype:** [Figma](https://www.figma.com/file/64zymyGJSp7BuQthnOhvMt/PVT?node-id=447%3A2536&t=Itsg7Erptg72Tts5-1)
 
 ## Projektkalender
