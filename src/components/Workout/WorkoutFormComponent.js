@@ -285,7 +285,7 @@ function WorkoutFormComponent(props){
                     </div>
 
                     <div className='mb-3' style={{float:'left', marginTop: '1rem'}}>
-                        <GoBackButton onClick={() => !(isEmpty(name) && isEmpty(desc) && isEmpty(activities) && isEmpty(tag))}></GoBackButton>
+                        <GoBackButton onClick={() => !(isEmpty(name) && isEmpty(desc) && isEmpty(activities) && isEmpty(inputTaglist))}></GoBackButton>
                     </div>
                 </Form.Group>
             </Row>
