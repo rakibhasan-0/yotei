@@ -21,7 +21,6 @@ Total: 6628.532 MiB
 
 # Lokal profiling
 
-## Frontend
 
 * För att starta alla api:er utan docker: [start-all-apis.sh](/Grupper/Grupp6/profiling/start-all-apis.sh)
 * För att stänga av alla api:er: [kill-all-apis.sh](/Grupper/Grupp6/profiling/kill-all-apis.sh) **varning** detta kör `ps | grep backend | kill` så allt med taggen `backend` stängs av! 
@@ -38,19 +37,38 @@ Total: 6628.532 MiB
 2. Frontend som körs med `npm run build && serve -s build`: ~65MB
 
 ```
-API                      MB     
-Frontend                 395.605
-Comment-API              252.957
-Exercise                 218.004
-Plan-API                 243.973
-Session-API              235.758
-TAG                      237.07 
-Teknik                   216.188
-User                     218.477
-User-setting             216.879
-Workout                  220.223
-Total: 2455.13MB
+API                      MB
+Frontend                 395.793
+Comment                  279.027
+Exercise                 208.359
+Plan                     250.008
+Session                  249.805
+TAG                      225.168
+Teknik                   184.152
+User                     193.434
+User-setting             195.023
+Workout                  207.629
+Gateway                  171.566
+Total: 2559.96MB
 ```
 
 
 ## Resultat med docker
+
+```
+NAME                       CPU %     MEM USAGE / LIMIT
+infra-gateway-1            0.10%     447.1MiB / 15.21GiB
+infra-frontend-1           0.01%     404.9MiB / 15.21GiB
+infra-usersettings-api-1   0.14%     486.5MiB / 15.21GiB
+infra-comment-api-1        0.18%     571MiB / 15.21GiB
+infra-techniques-api-1     0.18%     487.8MiB / 15.21GiB
+infra-tag-api-1            0.17%     540.9MiB / 15.21GiB
+infra-workout-api-1        0.12%     518.5MiB / 15.21GiB
+infra-session-api-1        0.16%     522.4MiB / 15.21GiB
+infra-user-api-1           0.13%     503.6MiB / 15.21GiB
+infra-plan-api-1           0.17%     556.3MiB / 15.21GiB
+infra-exercise-api-1       0.14%     484.4MiB / 15.21GiB
+
+Yotei is currently using: 5523.4 MiB
+```
+
