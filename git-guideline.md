@@ -7,7 +7,7 @@ Yotei's git is divided into four repositories.
 - Documentation - This repository holds all user documentation.
 
 <h3>Working on a ticket</h3>
-<h6>Creating a branch</h6>
+<h4>Creating a branch</h4>
 When working on a ticket the developer should branch to a devloper branch with 
 
 `git switch -c <branch_name>`
@@ -30,16 +30,16 @@ Example:
 
 When working on a feature branch remember to commit **often** and make sure to push to the feature branch at the **end of the day**.
 
-<h6>Fetch and pull from a created branch</h6>
+<h4>Working on a pre-existing branch</h4>
 First create a local branch with a reasonable name
 `git switch -c <branch_name>`
 
-After this you want to associate it with the ticket branch created on the remote repository
+After this you want to associate it with the pre-existing branch created on the remote repository
 `git branch --set-upstream-to=origin/<branch_name_to_fetch>`
 
 Now you are ready to pull.
 
-<h6>Done with ticket</h6>
+<h4>Done with ticket</h4>
 When the feature has been implemented and is ready to be integrated into the main branch, the devloper should rebase the developer branch with the main branch using the command
 
 `git rebase main`
