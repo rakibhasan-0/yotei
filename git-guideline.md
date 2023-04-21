@@ -12,7 +12,11 @@ When working on a ticket the developer should branch to a devloper branch with
 
 `git switch -c <branch_name>`
 
-The branch name needs to be `[ticket_number]_[squad-name]`, e.g `21_kraken`. This should be followed, as it will simplify managing branches.
+The branch name needs to be `[card_number]_[squad-name]`, e.g `21_kraken`. This should be followed, as it will simplify managing branches.
+
+![Trello example](images/trello.png)
+
+
 To see all available branches use the command:
 
 `git branch`
