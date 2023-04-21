@@ -1,4 +1,4 @@
-* Säkerhetskopiering av databas
+# Säkerhetskopiering av databas
   Kör `backup_db.sh fil.sql` för att spara databasen till `fil.sql`
 ** Återställning av databas
 	Kör `restore_db.sh fil.sql` för att återställa databasen från `fil.sql`
@@ -11,7 +11,12 @@
 	0 0 */5 * * backup.sh backup_$(date +\%Y\%m\%d).sql >/dev/null 2>&1
 	```
 
-* Databas
+# Databas
+## Guidelines
+- Ändringar i databasstrukturen sker endast via init-filen. Inte via osparade kommandon eller GUI-verktyg.
+- Synkronisera DB-ändringar med backend så API:erna inte går sönder.
+
+
 Dev db credentials:
 - Användarnamn: c5dv214_vt22_dev
 - Databas:      c5dv214_vt22_dev
