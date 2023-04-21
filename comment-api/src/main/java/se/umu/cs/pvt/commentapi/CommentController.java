@@ -39,7 +39,6 @@ public class CommentController {
           return checkComment(toAdd);
      }
 
-
      /**
       * Add a comment to a workout.
       * @param workoutId the id of the workout
@@ -50,7 +49,6 @@ public class CommentController {
           toAdd.setWorkoutId(workoutId);
           return checkComment(toAdd);
      }
-
      /**
       * Get all comments for an exercise.
       * @param exerciseId the id of the exercise
@@ -64,7 +62,6 @@ public class CommentController {
                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
           }
      }
-
      /**
       * Get all comments for a workout.
       * @param workoutId the id of the workout
