@@ -39,6 +39,9 @@ DROP TABLE IF EXISTS workout_favorite CASCADE;
 DROP TABLE IF EXISTS workout_review CASCADE;
 DROP TABLE IF EXISTS user_settings CASCADE;
 DROP TABLE IF EXISTS user_to_plan CASCADE;
+DROP TABLE IF EXISTS belt CASCADE;
+DROP TABLE IF EXISTS plan_to_belt CASCADE;
+DROP TABLE IF EXISTS technique_to_belt CASCADE;
 
 -- TODO: Lägg till dessa till alla CREATE TABLE (vet inte om det finns bättre lösning)
 -- ENCODING 'UTF8'
@@ -300,6 +303,36 @@ CREATE TABLE workout_review(
                 CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES user_table(user_id)
                 );
 ALTER TABLE workout_review OWNER TO psql;
+--
+-- Name: belt; Type: TABLE; Schema: public; Owner: psql
+--
+CREATE TABLE belt (
+                belt_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                belt_name TEXT NOT NULL,
+                belt_color TEXT NOT NULL,
+                is_child BOOLEAN NOT NULL
+            );
+ALTER TABLE belt OWNER TO psql;
+--
+-- Name: plan_to_belt; Type: TABLE; Schema: public; Owner: psql
+--
+CREATE TABLE plan_to_belt (
+                belt_id INT CHECK ( belt_id IS NOT NULL),
+                plan_id INT CHECK ( plan_id IS NOT NULL),
+                CONSTRAINT fk_belt_id FOREIGN KEY (belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE,
+                CONSTRAINT fk_plan_id FOREIGN KEY (plan_id) REFERENCES plan(plan_id) ON DELETE CASCADE
+            );
+ALTER TABLE plan_to_belt OWNER TO psql;
+--
+-- Name: technique_to_belt; Type: TABLE; Schema: public; Owner: psql
+--
+CREATE TABLE technique_to_belt (
+                belt_id INT CHECK ( belt_id IS NOT NULL),
+                technique_id INT CHECK ( technique_id IS NOT NULL),
+                CONSTRAINT fk_belt_id FOREIGN KEY (belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE,
+                CONSTRAINT fk_technique_id FOREIGN KEY (technique_id) REFERENCES technique(technique_id) ON DELETE CASCADE
+            );
+ALTER TABLE technique_to_belt OWNER TO psql;
 
 
 INSERT INTO user_table(username, password, user_role)  
