@@ -29,8 +29,7 @@
     "react-scripts": "^5.0.1",
     "react-select": "^5.7.2",
     "react-time-picker": "^6.0.4",
-    "react-toastify": "^9.1.2",
-    "serve": "^14.2.0"
+    "react-toastify": "^9.1.2"
   },
   "scripts": {
     "start": "cross-env HOST=localhost NODE_ENV=production node_modules/react-scripts/bin/react-scripts.js start",
