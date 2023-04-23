@@ -16,23 +16,20 @@
 - Ändringar i databasstrukturen sker endast via init-filen. Inte via osparade kommandon eller GUI-verktyg.
 - Synkronisera DB-ändringar med backend så API:erna inte går sönder.
 
+### DB Credentials
+- Användarnamn: psql
+- Databas: yotei
+- Lösenord: yotei123
+- Port: 5432 (standard)
 
-Dev db credentials:
-- Användarnamn: c5dv214_vt22_dev
-- Databas:      c5dv214_vt22_dev
-- Server:       postgres (postgres.cs.umu.se)
-- Port:         5432 (standardport)
-- Lösenord:     j79piCPvkHTc
+## Lokal testning av databas
+När du gjort dina ändringar i `init.sql`, kör först `docker compose down -d --volumes` följt av `docker compose up -d --build psql` för att starta databasen.
 
 Hur man loggar in:
-- ```psql -U c5dv214_vt22_dev -h postgres c5dv214_vt22_dev```
+- `psql -h localhost -p 5432 -U psql -d yotei`
 
-Hur man bygger om databasen (krävs att man står i database/src mappen):
-- ~~```java -cp "../lib/postgresql-42.3.4.jar" INIT_DB.java```~~
-
-   ```shell
-   psql -h localhost -p 5432 -U psql -W yotei -f database/init.sql
-   ```
+För att stänga databasen:
+- `docker compose down -d --volumes`.
 
 Som det ser ut nu:
 - Om en användare som redan finns läggs till kommer *id* i databasen att ökas även om inget läggs till.
