@@ -16,6 +16,14 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+/**
+ * @author UNKNOWN (Doc: Griffin c20wnn)
+ *
+ * AuthFilter.java - Authorization class.
+ * GatewayApplication.java - SpringBootApplication
+ * GatewayApplicationTests.java - Tests.
+ */
+
 @Component
 public class AuthFilter implements GlobalFilter, Ordered {
 

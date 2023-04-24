@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * Never write any code in this file, use the application.yml to add new routes.
+ * @author UNKNOWN
  */
 
 @SpringBootApplication
