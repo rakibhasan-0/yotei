@@ -11,9 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import se.umu.cs.pvt.technique.Technique;
-import se.umu.cs.pvt.technique.TechniqueController;
-import se.umu.cs.pvt.technique.TechniqueRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,12 +40,12 @@ public class TechniqueApiApplicationTests {
         assertThat(controller).isNotNull();
     }
 
-    private Technique tec1 = new Technique(1L, "Test1", "Descripton1");
-    private Technique tec2 = new Technique(2L, "Test2", "Descripton2");
+    private final Technique tec1 = new Technique(1L, "Test1", "Descripton1");
+    private final Technique tec2 = new Technique(2L, "Test2", "Descripton2");
     private ArrayList<Technique> techniques;
 
     @BeforeEach
-    private void init() {
+    public void init() {
         controller = new TechniqueController(repository);
 
         techniques = new ArrayList<>();
@@ -124,7 +121,7 @@ public class TechniqueApiApplicationTests {
     void postImportReturnsOkStatusOnSuccess() {
         Mockito.when(repository.save(tec1)).thenReturn(tec1);
         Mockito.when(repository.save(tec2)).thenReturn(tec2);
-        ResponseEntity response = (ResponseEntity) controller.postImport(techniques);
+        ResponseEntity response = controller.postImport(techniques);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
@@ -147,7 +144,7 @@ public class TechniqueApiApplicationTests {
 
     @Test
     void postImportReturnsBadRequestOnNullInput() {
-        ResponseEntity response = (ResponseEntity) controller.postImport(null);
+        ResponseEntity response = controller.postImport(null);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
