@@ -86,3 +86,8 @@
 | Tag |  100 | |
 | TagApiApplication |  0 | Main|
 | TagController |  100 | |
+|TechniqueTag| 71| En getter och setter som inte är testad|
+|TechniqueTagController|75| postImport och getExport behöver mocktestning|
+|TechniqueTagMap| 0| Enbart getters och setters|
+|WorkoutTag| 100||
+|WorkoutTagController| 100| Långa tester|
