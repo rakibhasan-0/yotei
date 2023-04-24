@@ -3,9 +3,15 @@ package se.umu.cs.pvt.usersettings;
 import javax.persistence.*;
 
 /**
- * This is the Usersettings class for handling users settings between units
- * that are then saved inside the database.
+ * Model for UserSettings
  *
+ * JPA (Java Persistence API)
+ *
+ * UserSettings.java - This is the Usersettings class for handling users settings between units
+ * UserSettingsController.java - Controller for handling user settings.
+ * UserSettingsRepository.java (Interface) - JPARepository file.
+ * UserToPlan.java - Hold relation between User and Plan.
+ * UserToPlanRepository.java (Interface) - JPARepository file.
  * @author Group 1 - Quattro Formaggio
  */
 @Entity
