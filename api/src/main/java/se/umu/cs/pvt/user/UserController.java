@@ -152,8 +152,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Optional<User> user = repository.findUserByUsername(username);
-        return user;
+        return repository.findUserByUsername(username);
     }
 
     /**
@@ -173,7 +172,7 @@ public class UserController {
             System.err.println("No password given\n");
             return new ResponseEntity<>("Inget lösenord angivet", HttpStatus.NOT_ACCEPTABLE);
         }
-        if(!repository.findUserByUsername(user.getUsername()).isEmpty()) {
+        if(repository.findUserByUsername(user.getUsername()).isPresent()) {
             System.err.println("Username is already taken!\n");
             return new ResponseEntity<>("Användarnamnet används redan", HttpStatus.NOT_ACCEPTABLE);
         }
@@ -203,8 +202,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Optional<User> user = repository.findById(userId);
-        return user;
+        return repository.findById(userId);
     }
 
     /**

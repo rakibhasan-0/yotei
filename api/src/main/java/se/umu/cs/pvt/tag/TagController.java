@@ -21,7 +21,7 @@ import java.util.List;
 public class TagController {
 
     @Autowired
-    private TagRepository tagRepository;
+    private final TagRepository tagRepository;
 
     /**
      * Contructor for the TagController object.

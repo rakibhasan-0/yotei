@@ -17,14 +17,6 @@ public class TechniqueTagMap {
     }
 
     /**
-     * Setter for the technique id.
-     * @param techId the value to give the technique id.
-     */
-    public void setTechId(Long techId) {
-        this.techId = techId;
-    }
-
-    /**
      * Getter for the tags.
      * @return the list of tags.
      */

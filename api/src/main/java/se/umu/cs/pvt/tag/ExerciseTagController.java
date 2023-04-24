@@ -221,7 +221,7 @@ public class ExerciseTagController {
                 }
             }
         }
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
@@ -247,6 +247,6 @@ public class ExerciseTagController {
                 System.out.println("Exercise does not exist");
             }
         }
-        return new ResponseEntity(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

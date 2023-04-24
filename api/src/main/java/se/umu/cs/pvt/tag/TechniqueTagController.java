@@ -160,7 +160,7 @@ public class TechniqueTagController {
                 }
             }
         }
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
@@ -185,6 +185,6 @@ public class TechniqueTagController {
                 System.out.println("Technique does not exist");
             }
         }
-        return new ResponseEntity(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
