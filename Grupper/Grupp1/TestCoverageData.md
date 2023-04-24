@@ -61,8 +61,9 @@
 | UserController |  72 | Getters och setter + ngra branches|
 
 
+# Exercise-api
 
-
-
-
-
+| Class                  | Coverage (%) | Comment |
+|------------------------|:------------:|:-------------:|
+| ExerciseImportResponse |      16      |Getters och setters|
+|ExerciseController| 80| Method "image" needs testing with mock|
