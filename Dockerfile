@@ -24,3 +24,4 @@ EXPOSE 3000
 
 # start app, remember to run "npm run build" before!
 CMD ["serve", "-s", "build"]
+

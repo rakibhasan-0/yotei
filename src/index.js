@@ -113,9 +113,9 @@ export default function App() {
                 <BrowserRouter>
                     <Routes>
                         {
-                            cookies.token || process.env.REACT_APP_LOGIN_ENABLED === 'false' ? (
+                            cookies.token || process.env.VITE_APP_LOGIN_ENABLED === 'false' ? (
                                 <>
-                                    {process.env.REACT_APP_LOGIN_ENABLED !== 'false' ? <Route index element={<Login />} /> : null}
+                                    {process.env.VITE_APP_LOGIN_ENABLED !== 'false' ? <Route index element={<Login />} /> : null}
                                     <Route path="/" element={<Nav />}>
                                         <Route path="about" element={<About />} />
                                         <Route path="admin" element={<Admin />} />
