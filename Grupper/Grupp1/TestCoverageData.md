@@ -32,9 +32,8 @@
 | WorkoutTag |  100 |  |
 | WorkoutTagController |  100 |  |
 
-
-
-
-
-
-
+# Exercise-api
+| Class                  | Coverage (%) | Comment |
+|------------------------|:------------:|:-------------:|
+| ExerciseImportResponse |      16      |Getters och setters|
+|ExerciseController| 80| Method "image" needs testing with mock|
