@@ -7,7 +7,16 @@ import java.security.spec.InvalidKeySpecException;
 
 /**
  * This is the User class that is responsible for the credentials of a registered user.
- * @author Team Hot-Pepper (G7)
+ * 
+ * UserController.java - Main class for handling login information and transactions with the database.
+ * UserRepository.java - Interface for handling SQL transactions which may be empty.
+ * UserShort.java - Minimal data stucture for User entity.
+ * PasswordHash.java - The class handles the hashing of passwords.
+ * JWTUtil.java - Utility class for creating and verifying Json Web Tokens.
+ * InvalidUserNameException.java - An exception that can be thrown when an invalid username is given.
+ * InvalidPasswordException.java - An exception that can be thrown when an invalid password is entered.
+ * 
+ * @author Team Hot-Pepper (G7) (Doc: Griffin c17wfn)
  */
 @Entity
 @Table(name = "user_table")
@@ -106,10 +115,7 @@ public class User implements Serializable {
         }
     }
 
-    /**
-     * Returns the username.
-     * @return the username
-     */
+
     public String getUsername() {
         return username;
     }
@@ -117,6 +123,7 @@ public class User implements Serializable {
     /**
      * Sets the username.
      * @param username the username to set
+     * @throws InvalidUserNameException Thrown when username is empty.
      */
     public void setUsername(String username) throws InvalidUserNameException {
         if (username != null) {
@@ -126,10 +133,7 @@ public class User implements Serializable {
         }
     }
 
-    /**
-     * Returns the password.
-     * @return  the password
-     */
+
     public String getPassword() {
         return password;
     }
@@ -148,34 +152,17 @@ public class User implements Serializable {
         }
     }
 
-    /**
-     * Sets the ID.
-     * @param userId the user id
-     */
+
     public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    /**
-     * Returns the ID.
-     * @return the ID
-     */
+
     public Long getUserId() {
         return userId;
     }
 
-    /**
-     * Sets the user privileges to ADMIN.
-     */
-    /*
-    public void setAdmin_Role() {
-        this.userRole = Role.ADMIN;
-    }
-     */
 
-    /**
-     * Sets the user privileges to a default user.
-     */
     public void setUserRole(int role) {
         if(role == 1) {
             userRole = Role.USER;
@@ -185,10 +172,7 @@ public class User implements Serializable {
         }
     }
 
-    /**
-     * Returns the role.
-     * @return the role
-     */
+    
     public Role getUserRole() {
         return this.userRole;
     }

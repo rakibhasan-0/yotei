@@ -11,7 +11,7 @@ import java.util.Date;
 
 /**
  * Utility class for creating and verifying Json Web Tokens.
- * @author Team Hot-Pepper (G7)
+ * @author Team Hot-Pepper (G7) (Doc: Grupp 2 Griffin c17wfn)
  */
 public class JWTUtil {
 

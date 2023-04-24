@@ -14,7 +14,7 @@ import java.util.Optional;
 
 /**
  * Main class for handling login information and transactions with the database.
- * @author Team Hot-Pepper (G7), Quattro formaggio (G1)
+ * @author Team Hot-Pepper (G7), Quattro formaggio (G1) (Doc: Grupp 2 Griffin c17wfn)
  */
 @RestController
 @CrossOrigin
@@ -134,7 +134,7 @@ public class UserController {
     public Object getUsers() {
         List<UserShort> result = repository.findAllProjectedBy();
         if (result == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return result;
     }
@@ -191,6 +191,12 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /**
+     * Gets the Username by an id. User ID must be greater than or equal to zero.
+     * 
+     * @param userId The ID of the user to get the username for.
+     * @return BAD_REQUEST if userId is null or less than zero. 
+     */
     @GetMapping("/getname/{id}")
     public Object getUsername(@PathVariable("id") Long userId){
         if (userId == null || userId < 0) {
@@ -201,10 +207,14 @@ public class UserController {
         return user;
     }
 
-
+    /**
+     * Refreshes the JWT-Token from a previous JWT-Token.
+     * 
+     * @param token The current JWT-Token.
+     * @return The previous JWT-token.
+     */
     @PostMapping("/refresh")
     public Object refreshToken(@RequestBody String token){
-        //return token;
         Map<String, Claim> oldToken = new JWTUtil().validateToken(token).getClaims();
 
         return new JWTUtil().generateToken(oldToken.get("username").asString(), oldToken.get("role").asString(), oldToken.get("userId").asInt());
@@ -215,7 +225,6 @@ public class UserController {
      * @param body HTTP body of information
      * @return HTTP status code and body, where body could be a message or the user.
      */
-
     @PutMapping("/updatepassword")
     public ResponseEntity<Object> updatePassword(@RequestBody Map<String, String> body) {
         //HTTP input

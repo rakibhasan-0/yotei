@@ -8,7 +8,7 @@ import java.security.spec.InvalidKeySpecException;
 
 /**
  * The class handles the hashing of passwords.
- * @author Team Hot-Pepper (G7)
+ * @author Team Hot-Pepper (G7) (Doc: Grupp 2 Griffin c17wfn)
  */
 
 public class PasswordHash {
@@ -19,6 +19,9 @@ public class PasswordHash {
      * and the hashed password separated by a colon (:).
      * @param passwordToHash The password to be hashed.
      * @return Amount of iterations : salt : the hashed password.
+     * @throws NoSuchAlgorithmException Thrown when the requested Cryptographic algorithm isn't available in the 
+     *                                  environment.
+     * @throws InvalidKeySpecException Thrown when an invalid key specification is given.
      */
     public static String hashPassword(String passwordToHash) throws NoSuchAlgorithmException, InvalidKeySpecException {
         String hashedPassword;
