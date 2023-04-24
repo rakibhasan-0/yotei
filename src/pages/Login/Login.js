@@ -55,7 +55,7 @@ function Login() {
      */
     useEffect(() => {
         if(cookies.token){
-            navigate('/home')
+            navigate('/plan')
         }
     })
 
@@ -72,7 +72,7 @@ function Login() {
         const response = await fetch(`/user/verify`, requestOptions)
         
         if(loginIsOk(response)) {
-            navigate("/home")
+            navigate("/plan")
         } 
     }
 

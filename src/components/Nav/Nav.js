@@ -72,7 +72,7 @@ const Nav = () => {
                             {menuOpen && (
                                 <ul className={'menu'}>
                                     <li className={'menu-item'}>
-                                        <Link onClick={() => setMenuOpen(false)} to="/home">Hem</Link>
+                                        <Link onClick={() => setMenuOpen(false)} to="/plan">Grupp</Link>
                                     </li>
                                     <li className={'menu-item'}>
                                         <Link onClick={() => setMenuOpen(false)} to="/workout">Pass</Link>
@@ -82,9 +82,6 @@ const Nav = () => {
                                     </li>
                                     <li className={'menu-item'}>
                                         <Link onClick={() => setMenuOpen(false)} to="/technique">Tekniker</Link>
-                                    </li>
-                                    <li className={'menu-item'}>
-                                        <Link onClick={() => setMenuOpen(false)} to="/plan">Termin</Link>
                                     </li>
                                     {
                                         role === "ADMIN" ? (
