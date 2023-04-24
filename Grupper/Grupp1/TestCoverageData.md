@@ -75,3 +75,14 @@
 | Plan |  70 | Getters och setter|
 | PlanApiApplication |  0 | Main|
 | PlanController |  100 | |
+
+# Tag-api
+
+| Class   |      Coverage (%)      | Comment |
+|----------|:-------------:|:-------------:|
+| ExerciseTag |  100 | Getters och setters|
+| ExerciseTagController |  72 | Behövs mocking|
+| ExerciseTagMap |  0 | Getters och setters|
+| Tag |  100 | |
+| TagApiApplication |  0 | Main|
+| TagController |  100 | |
