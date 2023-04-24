@@ -37,8 +37,8 @@ services:
       - POSTGRES_PASSWORD=yotei123
       - POSTGRES_DB=yotei
     links:
-      - user-api
-  user-api:
+      - api
+  api:
     image: pvt2023/api:latest
     ports:
       - "8085:8085"
