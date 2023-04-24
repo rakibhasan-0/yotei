@@ -339,6 +339,9 @@ INSERT INTO user_table(username, password, user_role)
        VALUES ('admin', '1000:b7fdda8fd62b8bb1b602d39f3b4175ab:2793a42fdc4552496d82ad442794cd2aa246945a5958173104b44f194feddfe59e47871825b76240728125ab4b96cb8ad3ba54496762230990dbcef47d4b6461', 0
 );
 
+INSERT INTO tag(name)
+       VALUES ('Kihon');
+
 CREATE OR REPLACE FUNCTION remove_user_references() RETURNS TRIGGER AS $$
        BEGIN
               DELETE FROM workout_favorite WHERE user_id = OLD.user_id;
