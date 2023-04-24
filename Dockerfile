@@ -1,5 +1,5 @@
 # pull official base image
-FROM node:alpine
+FROM node:19-alpine
 
 # set working directory
 WORKDIR /
@@ -9,7 +9,7 @@ ENV PATH /app/node_modules/.bin:$PATH
 ENV PORT 3000
 
 # install app dependencies
-COPY package*.json .
+COPY package*.json ./
 # COPY package-lock.json ./
 RUN npm install --silent
 RUN npm install -g serve
