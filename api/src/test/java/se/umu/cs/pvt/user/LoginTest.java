@@ -27,7 +27,7 @@ public class LoginTest {
     private Map<String, String> map;
 
     @Mock
-    private UserRepository userRepository = Mockito.mock(UserRepository.class);
+    private final UserRepository userRepository = Mockito.mock(UserRepository.class);
 
     @BeforeEach
     void init() {

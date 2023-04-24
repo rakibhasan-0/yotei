@@ -4,9 +4,4 @@
 package se.umu.cs.pvt.tag;
 
 public interface WorkoutTagShortId {
-    /**
-     * Gets the Id of the tag.
-     * @return The Id.
-     */
-    Long getTagId();
 }

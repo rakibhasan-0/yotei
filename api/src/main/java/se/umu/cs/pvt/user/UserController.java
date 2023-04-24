@@ -186,7 +186,6 @@ public class UserController {
         } catch (Exception e) {
             return new ResponseEntity<>("Kunde inte spara användare i databasen", HttpStatus.NOT_ACCEPTABLE);
         }
-
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

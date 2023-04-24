@@ -206,7 +206,7 @@ public class ExerciseTagController {
     public ResponseEntity postImport(@RequestBody List<ExerciseTagMap> tagMap) {
         for (ExerciseTagMap tagMapping:tagMap) {
             for (Tag tag:tagMapping.getTags()) {
-                Tag tagInDatabase = null;
+                Tag tagInDatabase;
                 try {
                     tagInDatabase = tagRepository.save(tag);
                 } catch (Exception e) {

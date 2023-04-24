@@ -31,7 +31,7 @@ class TagControllerTest {
     private ArrayList<Tag> tags;
 
     @Mock
-    private TagRepository tagRepository = Mockito.mock(TagRepository.class);
+    private final TagRepository tagRepository = Mockito.mock(TagRepository.class);
 
     @BeforeEach
     void init() {
@@ -56,7 +56,7 @@ class TagControllerTest {
         Tag tag = new Tag((long) 1, "blå");
 
         // Saves a tag in the database (mock)
-        Mockito.when(tagRepository.save((Tag)Mockito.any())).thenAnswer(invocation -> {
+        Mockito.when(tagRepository.save(Mockito.any())).thenAnswer(invocation -> {
             tags.add((Tag)invocation.getArguments()[0]);
             return null;
         });

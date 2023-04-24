@@ -33,7 +33,7 @@ public class UpdateUserTest {
     private Map<String, String> map;
 
     @Mock
-    private UserRepository userRepository = Mockito.mock(UserRepository.class);
+    private final UserRepository userRepository = Mockito.mock(UserRepository.class);
 
     @BeforeEach
     void init() {
@@ -65,6 +65,7 @@ public class UpdateUserTest {
             // You should check if a user was found (HttpStatus) before doing the following...
             user = (User) response.getBody();
 
+            assert user != null;
             assertEquals("newName", user.getUsername());
 
         } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
@@ -198,6 +199,7 @@ public class UpdateUserTest {
         ResponseEntity<Object> response = userController.updatePassword(map);
         user = (User) response.getBody();
 
+        assert user != null;
         assertTrue(PasswordHash.validatePassword("4321", user.getPassword()));
     }
 }

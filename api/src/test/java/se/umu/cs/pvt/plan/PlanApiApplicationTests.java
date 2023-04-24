@@ -26,9 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class PlanApiApplicationTests
 {
 
-
     @Mock
-    private PlanRepository repository = Mockito.mock(PlanRepository.class);
+    private final PlanRepository repository = Mockito.mock(PlanRepository.class);
     @Autowired
     private PlanController controller;
     @Test
@@ -99,13 +98,13 @@ class PlanApiApplicationTests
 
     @Test
     void getAllOnEmptyTable() {
-        ResponseEntity response = (ResponseEntity) controller.getAllPlan();
+        ResponseEntity response = controller.getAllPlan();
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
     void getNonExistingPlanFromUserID() {
-        ResponseEntity response = (ResponseEntity) controller.getPlanByUserID(3L);
+        ResponseEntity response = controller.getPlanByUserID(3L);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
@@ -130,7 +129,7 @@ class PlanApiApplicationTests
 
     @Test
     void removeExistingPlan () {
-        Mockito.when(repository.findById(ex1.getId())).thenReturn(Optional.ofNullable(ex1));
+        Mockito.when(repository.findById(ex1.getId())).thenReturn(Optional.of(ex1));
         assertEquals(HttpStatus.OK, controller.removePlan(ex1.getId()).getStatusCode());
     }
 }

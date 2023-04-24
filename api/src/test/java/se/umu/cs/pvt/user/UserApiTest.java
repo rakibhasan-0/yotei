@@ -30,16 +30,15 @@ public class UserApiTest {
     private User user;
     private ArrayList<User> users;
     private UserController lc;
-    private Map<String, String> map;
 
     @Mock
-    private UserRepository userRepository = Mockito.mock(UserRepository.class);
+    private final UserRepository userRepository = Mockito.mock(UserRepository.class);
 
     @BeforeEach
     void init() {
         user = new User();
         lc = new UserController(userRepository);
-        map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
     }
 
     /**

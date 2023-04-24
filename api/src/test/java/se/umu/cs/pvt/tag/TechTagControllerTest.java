@@ -17,10 +17,7 @@ import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -35,8 +32,8 @@ public class TechTagControllerTest {
     private ArrayList<TechniqueTag> techniqueTags;
 
     @Mock
-    private TechniqueTagRepository techRepository = Mockito.mock(TechniqueTagRepository.class);
-    private TagRepository tagRepository = Mockito.mock(TagRepository.class);
+    private final TechniqueTagRepository techRepository = Mockito.mock(TechniqueTagRepository.class);
+    private final TagRepository tagRepository = Mockito.mock(TagRepository.class);
 
 
     @BeforeEach
@@ -46,7 +43,7 @@ public class TechTagControllerTest {
     }
 
     @Test
-    void testAddtechTag() {
+    void testAddTechTag() {
         Tag regularTag = new Tag((long) 1, "blå");
         TechniqueTag techTag = new TechniqueTag((long) 1);
         techTag.setTag(regularTag);
@@ -104,7 +101,7 @@ public class TechTagControllerTest {
     }
 
     @Test
-    void testGetTagBytechnique() {
+    void testGetTagByTechnique() {
         final long TECHNIQUE_ONE = 3;
         final long TECHNIQUE_TWO = 4;
 
@@ -142,9 +139,9 @@ public class TechTagControllerTest {
             return tagIds;
         });
 
-        // check that the different TECHNIQUEs have the correct amount of tags and a Http status code is returned when trying to fetch with non existing technique id.
-        assertEquals(2, techController.getTagByTechnique(TECHNIQUE_ONE).getBody().size());
-        assertEquals(1, techController.getTagByTechnique(TECHNIQUE_TWO).getBody().size());
+        // check that the different TECHNIQUES have the correct amount of tags and a Http status code is returned when trying to fetch with non existing technique id.
+        assertEquals(2, Objects.requireNonNull(techController.getTagByTechnique(TECHNIQUE_ONE).getBody()).size());
+        assertEquals(1, Objects.requireNonNull(techController.getTagByTechnique(TECHNIQUE_TWO).getBody()).size());
         assertEquals(new ResponseEntity<>(HttpStatus.BAD_REQUEST), techController.getTagByTechnique((long) 32));
     }
 

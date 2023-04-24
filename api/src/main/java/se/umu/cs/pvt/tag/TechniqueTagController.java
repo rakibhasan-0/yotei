@@ -145,7 +145,7 @@ public class TechniqueTagController {
     public ResponseEntity postImport(@RequestBody List<TechniqueTagMap> tagMap) {
         for (TechniqueTagMap tagMapping:tagMap) {
             for (Tag tag:tagMapping.getTags()) {
-                Tag tagInDatabase = null;
+                Tag tagInDatabase;
                 try {
                     tagInDatabase = tagRepository.save(tag);
                 } catch (Exception e) {

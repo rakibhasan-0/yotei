@@ -4,9 +4,4 @@
 package se.umu.cs.pvt.tag;
 
 public interface TechniqueTagShortId {
-    /**
-     * Gets the Id of the tag.
-     * @return The tag Id.
-     */
-    Long getTagId(); 
 }

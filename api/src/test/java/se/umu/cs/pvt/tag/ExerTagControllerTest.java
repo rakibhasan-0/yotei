@@ -34,8 +34,8 @@ public class ExerTagControllerTest {
     private ArrayList<Tag> tagList;
 
     @Mock
-    private ExerciseTagRepository exerRepository = Mockito.mock(ExerciseTagRepository.class);
-    private TagRepository tagRepository = Mockito.mock(TagRepository.class);
+    private final ExerciseTagRepository exerRepository = Mockito.mock(ExerciseTagRepository.class);
+    private final TagRepository tagRepository = Mockito.mock(TagRepository.class);
 
 
     @BeforeEach
@@ -46,13 +46,13 @@ public class ExerTagControllerTest {
     }
 
     @Test
-    void testAddexerTag() {
+    void testAddExerTag() {
         Tag regularTag = new Tag((long) 1, "blå");
         ExerciseTag exerTag = new ExerciseTag((long) 1);
         exerTag.setTag(regularTag);
 
         // save is a function called in the JPA repository when a exercise tag is added via the controller
-        Mockito.when(exerRepository.save((ExerciseTag)Mockito.any())).thenAnswer(invocation -> {
+        Mockito.when(exerRepository.save(Mockito.any())).thenAnswer(invocation -> {
             exerciseTags.add((ExerciseTag)invocation.getArguments()[0]);
             return null;
         });
@@ -69,7 +69,7 @@ public class ExerTagControllerTest {
     }
 
     @Test
-    void testGetexerciseByTag() {
+    void testGetExerciseByTag() {
         final long exercise_ONE = 1;
         final long exercise_TWO = 2;
 
@@ -99,12 +99,12 @@ public class ExerTagControllerTest {
         Mockito.when(tagRepository.findById(regularTag.getId())).thenReturn(Optional.of(regularTag));
 
         // check that exactly two elements have been added when getting with the regular tags id, the correct Http status code with a random id
-        assertEquals(2, exerController.getExerciseByTag(regularTag.getId()).getBody().size());
+        assertEquals(2, Objects.requireNonNull(exerController.getExerciseByTag(regularTag.getId()).getBody()).size());
         assertEquals(new ResponseEntity<>(HttpStatus.BAD_REQUEST), exerController.getExerciseByTag((long) 32));  
     }
 
     @Test
-    void testGetTagByexercise() {
+    void testGetTagByExercise() {
         final long EXERCISE_ONE = 3;
         final long EXERCISE_TWO = 4;
 
@@ -131,7 +131,7 @@ public class ExerTagControllerTest {
             return null;
         });
 
-        // findAllProjectedByexerId is the function called in the JPA repository when a search for tags related to a exercise is made.
+        // findAllProjectedByExerId is the function called in the JPA repository when a search for tags related to a exercise is made.
         Mockito.when(exerRepository.findAllProjectedByExerciseId(anyLong())).thenAnswer(invocation -> {
             ArrayList<Long> tagIds = new ArrayList<>();
             for(ExerciseTag w : exerciseTags) {
@@ -143,13 +143,13 @@ public class ExerTagControllerTest {
         });
 
         // check that the different exercises have the correct amount of tags and a Http status code is returned when trying to fetch with non existing exercise id.
-        assertEquals(2, exerController.getTagByExercises(EXERCISE_ONE).getBody().size());
-        assertEquals(1, exerController.getTagByExercises(EXERCISE_TWO).getBody().size());
+        assertEquals(2, Objects.requireNonNull(exerController.getTagByExercises(EXERCISE_ONE).getBody()).size());
+        assertEquals(1, Objects.requireNonNull(exerController.getTagByExercises(EXERCISE_TWO).getBody()).size());
         assertEquals(new ResponseEntity<>(HttpStatus.BAD_REQUEST), exerController.getTagByExercises((long) 32));
     }
 
     @Test
-    void testRemoveexerciseTag() {
+    void testRemoveExerciseTag() {
         // simulate that we have added thousand elements to the database
         final int ADDED_exerciseTAGS = 1000;
         Tag regularTag = new Tag((long) 1, "blå");
@@ -177,17 +177,15 @@ public class ExerTagControllerTest {
         });
 
         // redefinition of the delete function
-        doAnswer(new Answer<Void>(){
-            public Void answer(InvocationOnMock invocation) {
-                if(exerciseIds.contains(invocation.getArguments()[0])) {
-                    // find the position of the exercisepair
-                    int indexToRemove = exerciseIds.indexOf(invocation.getArguments()[0]);
-                    exerciseIds.remove(indexToRemove);
-                    exerciseTags.remove(indexToRemove);
-                }
-                
-                return null;
+        doAnswer((Answer<Void>) invocation -> {
+            if(exerciseIds.contains(invocation.getArguments()[0])) {
+                // find the position of the exercisepair
+                int indexToRemove = exerciseIds.indexOf(invocation.getArguments()[0]);
+                exerciseIds.remove(indexToRemove);
+                exerciseTags.remove(indexToRemove);
             }
+
+            return null;
         }).when(exerRepository).deleteByExerciseIdAndTagId(anyLong(), anyLong());
 
         // remove everything
@@ -302,21 +300,19 @@ public class ExerTagControllerTest {
         tagList.add(regularTag2);
 
         // Define what mockito should do when saving data to the repository.
-        Mockito.when(exerRepository.save((ExerciseTag)Mockito.any())).thenAnswer(invocation -> {
+        Mockito.when(exerRepository.save(Mockito.any())).thenAnswer(invocation -> {
             exerciseTags.add((ExerciseTag)invocation.getArguments()[0]);
             return null;
         });
 
-        doAnswer(new Answer<Void>() {
-           public Void answer(InvocationOnMock invocation) {
-                ArrayList<ExerciseTag> tExerciseTags = new ArrayList<>((List<ExerciseTag>)invocation.getArguments()[0]);
+        doAnswer((Answer<Void>) invocation -> {
+             ArrayList<ExerciseTag> tExerciseTags = new ArrayList<>((List<ExerciseTag>)invocation.getArguments()[0]);
 
-                for (ExerciseTag et : tExerciseTags) {
-                    exerciseTags.remove(et);
-                }
-                
-                return null;
-           }
+             for (ExerciseTag et : tExerciseTags) {
+                 exerciseTags.remove(et);
+             }
+
+             return null;
         }).when(exerRepository).deleteAll(Mockito.anyList());
 
         Mockito.when(exerRepository.findByExerciseId(anyLong())).thenAnswer(invocation -> {
@@ -329,14 +325,14 @@ public class ExerTagControllerTest {
             return temp;
         });
 
-        Mockito.when(tagRepository.save((Tag)Mockito.any())).thenAnswer(invocation -> {
+        Mockito.when(tagRepository.save(Mockito.any())).thenAnswer(invocation -> {
             tagList.add((Tag)invocation.getArguments()[0]);
             return null;
         });
 
         Mockito.when(tagRepository.getTagByName(anyString())).thenAnswer(invocation -> {
             for (Tag t : tagList) {
-                if (t.getName().equals((String)invocation.getArguments()[0])) {
+                if (t.getName().equals(invocation.getArguments()[0])) {
                     return t;
                 }
             }
