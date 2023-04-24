@@ -155,7 +155,7 @@ class ExerciseApiApplicationTests {
         Mockito.when(repository.findById(ex1.getId())).thenReturn(Optional.ofNullable(ex1));
         Mockito.when(repository.existsById(ex1.getId())).thenReturn(true);
 
-        Exercise result = (Exercise) controller.getExercises(ex1.getId());
+        Exercise result = (Exercise) controller.getExercise(ex1.getId());
 
         assertThat(result).isEqualTo(ex1);
     }

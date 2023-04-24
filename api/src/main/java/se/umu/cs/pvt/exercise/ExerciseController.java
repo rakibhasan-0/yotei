@@ -42,7 +42,7 @@ public class ExerciseController {
         List<Exercise> exerciseList = exerciseRepository.findAll();
 
         if (exerciseList == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         return exerciseList;
@@ -55,9 +55,7 @@ public class ExerciseController {
      * indicating error
      */
     @GetMapping("/{id}")
-    public Object getExercises(@PathVariable("id") Long id) {
-        //todo: this method should be called 'getExercise?'
-
+    public Object getExercise(@PathVariable("id") Long id) {
         if (id == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -80,11 +78,11 @@ public class ExerciseController {
     @GetMapping("/getdesc")
     public Object getDescription(@RequestParam Long id) {
         if (id == null) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         if (!exerciseRepository.existsById(id)) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         ExerciseDropDownProjection exercise = exerciseRepository.getExerciseDropDownById(id).get();
@@ -100,7 +98,7 @@ public class ExerciseController {
         List<ExerciseShort> exerciseList = exerciseRepository.findAllProjectedBy(ExerciseShort.class);
 
         if (exerciseList == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         return exerciseList;
@@ -160,7 +158,7 @@ public class ExerciseController {
         List<Long> ids = new ArrayList<>();
 
         if (listImport == null) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         for (Exercise exercise : listImport) {
@@ -175,15 +173,15 @@ public class ExerciseController {
                 }
             }
             else {
-                return new ResponseEntity(new ExerciseImportResponse("Övningar fram till " + i +  ".\"" + exercise.getName() + "\" har importerats", ids), HttpStatus.UNPROCESSABLE_ENTITY);
+                return new ResponseEntity<>(new ExerciseImportResponse("Övningar fram till " + i +  ".\"" + exercise.getName() + "\" har importerats", ids), HttpStatus.UNPROCESSABLE_ENTITY);
             }
         }
 
         if(duplicates > 0) {
-            return new ResponseEntity(new ExerciseImportResponse(duplicates + " övningar av samma namn existerar redan", ids), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(new ExerciseImportResponse(duplicates + " övningar av samma namn existerar redan", ids), HttpStatus.CONFLICT);
         }
 
-        return new ResponseEntity(new ExerciseImportResponse("", ids), HttpStatus.OK);
+        return new ResponseEntity<>(new ExerciseImportResponse("", ids), HttpStatus.OK);
     }
 
 
