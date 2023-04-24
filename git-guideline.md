@@ -6,8 +6,8 @@ Yotei's git is divided into four repositories.
 - Infrastructure - This repository holds the config files, including the docker compose file.
 - Documentation - This repository holds all user documentation.
 
-<h3>Working on a ticket</h3>
-<h4>Creating a branch</h4>
+<h2>Working on a ticket</h2>
+<h3>Creating a branch</h3>
 When working on a ticket the developer should branch to a devloper branch with 
 
 `git switch -c <branch_name>`
@@ -30,7 +30,7 @@ Example:
 
 When working on a feature branch remember to commit **often** and make sure to push to the feature branch at the **end of the day**.
 
-<h4>Working on a pre-existing branch</h4>
+<h3>Working on a pre-existing branch</h3>
 First create a local branch with a reasonable name
 `git switch -c <branch_name>`
 
@@ -39,7 +39,7 @@ After this you want to associate it with the pre-existing branch created on the 
 
 Now you are ready to pull.
 
-<h4>Done with ticket</h4>
+<h2>Done with ticket</h2>
 When the feature has been implemented and is ready to be integrated into the main branch, the developer should rebase onto the remote main branch with the command
 
 `git rebase origin/main`
@@ -69,21 +69,24 @@ If the rebase was successful, a merge request should be sent using the gitlab we
 ### Example of merge request:
 ![Exempel på merge request](images/git.png)
 
-<h4>Assigning a reviewer</h4>
+<h3>Assigning a reviewer</h3>
 The merge resuest can only be approved by a DevOps, they will however not be obliged to review the code. Instead always assign one reviewer (not a DevOps) of your choice to review the merge, if no reviwer has been appointed or have not reviewed the code, DevOps will not approve the merge request regardless of content. If a reviewer has been assigned and has approved the merge a DevOps will approve the merge request and the updated main branch will be automatically deployed on the test server.
 
-### Reviewing a merge request
+<h2> Reviewing a merge request </h2>
 If you have been assigned to review a merge request, start by clicking the changes tab.
 
 ![Changes tab](images/changes.png)
+
 
 Review the code start your review by pressing the comment icon by the line number.
 
 ![Review tab](images/review.png)
 
+
 When done reviewing the code, click the Finish review button located at the bottom of the screen. You may write an optional summary and then submit the review.
 
 ![Finish review](images/finish_review.png)
+
 
 After submitting the review, you will be brought back to the merge request. It is **important** to press the **Approve** button so that DevOps can see that the merge request has been reviewed!
 
