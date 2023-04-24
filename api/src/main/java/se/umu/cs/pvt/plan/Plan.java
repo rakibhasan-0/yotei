@@ -5,23 +5,19 @@ import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+ 
 /**
  * Model for plan data in database
  *
- * @author Calzone (Doc:Griffin c20wnn)
- */
-
-/**
  * Documentation Griffin c20wnn
  * JPA (Java Persistence API)
  *
  *  Plan.java - Plan class. Represents the Plan Entity.
- *  PlanApiApplication.java - Bootstrap of Spring.
  *  PlanController.java - Plan API for creating, reading, updating and deleting plans.
  *  PlanRepository.java (Interface) - JPARepository file.
  *  PlanApiApplicationTests.java (Tests)
  *
+ * @author Calzone (Doc:Griffin c20wnn)
  */
 
 @Entity
