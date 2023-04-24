@@ -6,12 +6,12 @@ spring:
         # uri: the uri of the service to route to
         # predicates: Use Path predicate to define the api-mapping that goes to the micro-service
         - id: all
-          uri: http://user-api:8085
+          uri: http://api:8085
           predicates:
             - Path=/api/**
 
         - id: user
-          uri: http://user-api:8085
+          uri: http://api:8085
           predicates:
             - Path=/user/**
 
