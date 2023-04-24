@@ -5,7 +5,7 @@ import { AccountContext } from '../../context';
  * This class creates a favorite button instance.
  *
  * @author Hot-pepper (Group 7)
- * @deprecated use Button.js instead
+ * @deprecated use StarButton.jsx instead
  */
 const FavoriteButton = ({ workoutId, initState }) => {
     const { token, userId } = useContext(AccountContext)
