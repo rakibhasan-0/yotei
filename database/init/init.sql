@@ -114,7 +114,7 @@ CREATE TABLE workout(
        workout_hidden BOOLEAN NOT NULL,
        workout_author INT NOT NULL,
        CONSTRAINT fk_user_table FOREIGN KEY (workout_author)
-       		  REFERENCES user_table(user_id)
+        REFERENCES user_table(user_id)
 );
 
 ALTER TABLE workout OWNER TO psql;
@@ -129,9 +129,9 @@ CREATE TABLE user_workout(
        workout_id INT NOT NULL,
        user_id INT NOT NULL,
        CONSTRAINT fk_workout_uw FOREIGN KEY (workout_id)
-       		  REFERENCES workout(workout_id), 
+        REFERENCES workout(workout_id) ON DELETE CASCADE,
        CONSTRAINT fk_user_uw FOREIGN KEY (user_id)
-       		  REFERENCES user_table(user_id)
+        REFERENCES user_table(user_id) ON DELETE CASCADE
 );
 
 ALTER TABLE user_workout OWNER TO psql;
@@ -151,11 +151,11 @@ CREATE TABLE activity(
        activity_duration INT NOT NULL,
        activity_order INT NOT NULL,
        CONSTRAINT fk_exercise_activity FOREIGN KEY (exercise_id)
-                 REFERENCES exercise(exercise_id),
+        REFERENCES exercise(exercise_id),
        CONSTRAINT fk_technique_activity FOREIGN KEY (technique_id)
-                 REFERENCES technique(technique_id),
+        REFERENCES technique(technique_id),
        CONSTRAINT fk_workout_activity FOREIGN KEY (workout_id)
-                 REFERENCES workout(workout_id)
+        REFERENCES workout(workout_id) ON DELETE CASCADE
 );
 
 ALTER TABLE activity OWNER TO psql;
@@ -197,7 +197,7 @@ CREATE TABLE workout_tag(
        work_id INT NOT NULL,
        tag_id INT NOT NULL,
        CONSTRAINT fk_workout FOREIGN KEY(work_id)
-       		  REFERENCES workout(workout_id) ON DELETE CASCADE,
+        REFERENCES workout(workout_id) ON DELETE CASCADE,
        CONSTRAINT fk_tag FOREIGN KEY(tag_id)
        		  REFERENCES tag(tag_Id) ON DELETE CASCADE,
        UNIQUE (work_id, tag_id)
@@ -210,8 +210,8 @@ ALTER TABLE workout_tag OWNER TO psql;
 --
 
 CREATE TABLE workout_favorite(
-       workout_id INT REFERENCES workout(workout_id),
-       user_id INT REFERENCES user_table(user_id),
+       workout_id INT REFERENCES workout(workout_id) ON DELETE CASCADE,
+       user_id INT REFERENCES user_table(user_id) ON DELETE CASCADE,
        PRIMARY KEY (user_id, workout_id)
 );
 
@@ -226,8 +226,7 @@ CREATE TABLE plan (plan_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY
        name VARCHAR NOT NULL,
        color VARCHAR NOT NULL,
        user_id INT NOT NULL,
-       CONSTRAINT fk_user_id FOREIGN KEY (user_id)
-                 REFERENCES user_table(user_id)
+       CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES user_table(user_id)
 );
 
 ALTER TABLE plan OWNER TO psql;
@@ -243,9 +242,9 @@ CREATE TABLE session (session_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMA
        date DATE NOT NULL,
        time TIME,
        CONSTRAINT fk_workout_id FOREIGN KEY (workout_id)
-                 REFERENCES workout(workout_id),
+        REFERENCES workout(workout_id),
        CONSTRAINT fk_plan_id FOREIGN KEY (plan_id)
-                 REFERENCES plan(plan_id)
+        REFERENCES plan(plan_id) ON DELETE CASCADE
 );
 
 ALTER TABLE session OWNER TO psql;
@@ -255,19 +254,17 @@ ALTER TABLE session OWNER TO psql;
 -- Name: comments; Type: TABLE; Schema: public; Owner: psql
 --
 
-CREATE TABLE comments( 
-       comment_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY, 
-       comment_text TEXT NOT NULL, 
-       workout_id INT CHECK (
-                 workout_id IS NULL OR (
-                   workout_id IS NOT NULL and exercise_id IS NULL)),
-       exercise_id INT CHECK (
-                  exercise_id IS NULL OR (
-                      exercise_id IS NOT NULL and workout_id IS NULL)), 
+CREATE TABLE comments(
+       comment_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+       comment_text TEXT NOT NULL,
+       workout_id INT CHECK (workout_id IS NULL OR
+           (workout_id IS NOT NULL and exercise_id IS NULL)),
+       exercise_id INT CHECK (exercise_id IS NULL OR
+           (exercise_id IS NOT NULL and workout_id IS NULL)),
        CONSTRAINT fk_workout_id FOREIGN KEY(workout_id)
-                 REFERENCES workout(workout_id) ON DELETE CASCADE, 
-       CONSTRAINT fk_exercise_id FOREIGN KEY(exercise_id) REFERENCES
-                 exercise(exercise_id) ON DELETE CASCADE 
+        REFERENCES workout(workout_id) ON DELETE CASCADE,
+       CONSTRAINT fk_exercise_id FOREIGN KEY(exercise_id)
+        REFERENCES exercise(exercise_id) ON DELETE CASCADE
 );
 
 ALTER TABLE comments OWNER TO psql;
@@ -275,7 +272,8 @@ ALTER TABLE comments OWNER TO psql;
 -- Name: user_settings; Type: TABLE; Schema: public; Owner: psql
 --
 CREATE TABLE user_settings(user_id INT CHECK (user_id IS NOT NULL),
-                  CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE
+                  CONSTRAINT fk_user_id FOREIGN KEY (user_id)
+                    REFERENCES user_table(user_id) ON DELETE CASCADE
 );
 ALTER TABLE user_settings OWNER TO psql;
 --
@@ -284,8 +282,10 @@ ALTER TABLE user_settings OWNER TO psql;
 CREATE TABLE user_to_plan (
                 user_id INT CHECK ( user_id IS NOT NULL),
                 plan_id INT CHECK ( plan_id IS NOT NULL),
-                CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE,
-                CONSTRAINT fk_plan_id FOREIGN KEY (plan_id) REFERENCES plan(plan_id) ON DELETE CASCADE
+                CONSTRAINT fk_user_id FOREIGN KEY (user_id)
+                    REFERENCES user_table(user_id) ON DELETE CASCADE,
+                CONSTRAINT fk_plan_id FOREIGN KEY (plan_id)
+                    REFERENCES plan(plan_id) ON DELETE CASCADE
             );
 ALTER TABLE user_to_plan OWNER TO psql;
 --
@@ -299,8 +299,10 @@ CREATE TABLE workout_review(
                 positive_comment TEXT,
                 negative_comment TEXT,
                 review_date TIMESTAMP NOT NULL,
-                CONSTRAINT fk_workout_id FOREIGN KEY(workout_id) REFERENCES workout(workout_id) ON DELETE CASCADE,
-                CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES user_table(user_id)
+                CONSTRAINT fk_workout_id FOREIGN KEY(workout_id)
+                    REFERENCES workout(workout_id) ON DELETE CASCADE,
+                CONSTRAINT fk_user_id FOREIGN KEY (user_id)
+                    REFERENCES user_table(user_id) ON DELETE CASCADE
                 );
 ALTER TABLE workout_review OWNER TO psql;
 --
@@ -319,8 +321,12 @@ ALTER TABLE belt OWNER TO psql;
 CREATE TABLE plan_to_belt (
                 belt_id INT CHECK ( belt_id IS NOT NULL),
                 plan_id INT CHECK ( plan_id IS NOT NULL),
-                CONSTRAINT fk_belt_id FOREIGN KEY (belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE,
-                CONSTRAINT fk_plan_id FOREIGN KEY (plan_id) REFERENCES plan(plan_id) ON DELETE CASCADE
+                CONSTRAINT fk_belt_id FOREIGN KEY (belt_id)
+                    REFERENCES belt(belt_id) ON DELETE CASCADE,
+                CONSTRAINT fk_plan_id FOREIGN KEY (plan_id)
+                    REFERENCES plan(plan_id) ON DELETE CASCADE,
+                CONSTRAINT fk_plan_id FOREIGN KEY (plan_id)
+                    REFERENCES plan(plan_id) ON DELETE CASCADE
             );
 ALTER TABLE plan_to_belt OWNER TO psql;
 --
@@ -329,13 +335,15 @@ ALTER TABLE plan_to_belt OWNER TO psql;
 CREATE TABLE technique_to_belt (
                 belt_id INT CHECK ( belt_id IS NOT NULL),
                 technique_id INT CHECK ( technique_id IS NOT NULL),
-                CONSTRAINT fk_belt_id FOREIGN KEY (belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE,
-                CONSTRAINT fk_technique_id FOREIGN KEY (technique_id) REFERENCES technique(technique_id) ON DELETE CASCADE
+                CONSTRAINT fk_belt_id FOREIGN KEY (belt_id)
+                    REFERENCES belt(belt_id) ON DELETE CASCADE,
+                CONSTRAINT fk_technique_id FOREIGN KEY (technique_id)
+                    REFERENCES technique(technique_id) ON DELETE CASCADE
             );
 ALTER TABLE technique_to_belt OWNER TO psql;
 
 
-INSERT INTO user_table(username, password, user_role)  
+INSERT INTO user_table(username, password, user_role)
        VALUES ('admin', '1000:b7fdda8fd62b8bb1b602d39f3b4175ab:2793a42fdc4552496d82ad442794cd2aa246945a5958173104b44f194feddfe59e47871825b76240728125ab4b96cb8ad3ba54496762230990dbcef47d4b6461', 0
 );
 
@@ -344,8 +352,6 @@ INSERT INTO tag(name)
 
 CREATE OR REPLACE FUNCTION remove_user_references() RETURNS TRIGGER AS $$
        BEGIN
-              DELETE FROM workout_favorite WHERE user_id = OLD.user_id;
-              DELETE FROM user_workout WHERE user_id = OLD.user_id;
               DELETE FROM workout WHERE workout_hidden = TRUE AND workout_author = OLD.user_id;
               UPDATE workout SET workout_author = 1 WHERE workout_author = OLD.user_id;
               UPDATE plan SET user_id = 1 WHERE user_id = OLD.user_id;
