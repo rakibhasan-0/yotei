@@ -15,15 +15,8 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>user</module>
+    <module>api</module>
     <module>gateway</module>
-    <module>exercise-api</module>
-    <module>techniques-api</module>
-    <module>workout-api</module>
-    <module>tag-api</module>
-    <module>comment-api</module>
-    <module>plan-api</module>
-    <module>session-api</module>
   </modules>
 
   <version>1.0-SNAPSHOT</version>

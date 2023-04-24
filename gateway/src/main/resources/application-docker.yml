@@ -5,45 +5,15 @@ spring:
         # id: choose an appropriate id for your service
         # uri: the uri of the service to route to
         # predicates: Use Path predicate to define the api-mapping that goes to the micro-service
-        - id: exercise
-          uri: http://exercise-api:8082
+        - id: all
+          uri: http://user-api:8085
           predicates:
-            - Path=/api/exercises/**
-
-        - id: technique
-          uri: http://techniques-api:8083
-          predicates:
-            - Path=/api/techniques/**
-
-        - id: workout
-          uri: http://workout-api:8084
-          predicates:
-            - Path=/api/workouts/**
+            - Path=/api/**
 
         - id: user
           uri: http://user-api:8085
           predicates:
             - Path=/user/**
-
-        - id: tag
-          uri: http://tag-api:8086
-          predicates:
-            - Path=/api/tags/**
-        
-        - id: plan
-          uri: http://plan-api:8087
-          predicates:
-            - Path=/api/plan/**
-
-        - id: session
-          uri: http://session-api:8088
-          predicates:
-            - Path=/api/session/**
-
-        - id: comment
-          uri: http://comment-api:8089
-          predicates:
-            - Path=/api/comment/**
 
         ################################################################################################
         #do not put any other routes below here

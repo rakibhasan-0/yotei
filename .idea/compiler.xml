@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="gateway" />
+        <module name="api" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="comment-api" target="17" />
+      <module name="exercise-api" target="17" />
+      <module name="plan-api" target="17" />
+      <module name="session-api" target="17" />
+      <module name="tag-api" target="17" />
+      <module name="techniques-api" target="17" />
+      <module name="workout-api" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="api" options="-parameters" />
+      <module name="comment-api" options="-parameters" />
+      <module name="exercise-api" options="-parameters" />
+      <module name="gateway" options="-parameters" />
+      <module name="plan-api" options="-parameters" />
+      <module name="session-api" options="-parameters" />
+      <module name="tag-api" options="-parameters" />
+      <module name="techniques-api" options="-parameters" />
+      <module name="workout-api" options="-parameters" />
+    </option>
+  </component>
+</project>
