@@ -346,8 +346,6 @@ CREATE TABLE plan_to_belt (
                 CONSTRAINT p2b_fk_belt_id FOREIGN KEY (belt_id)
                     REFERENCES belt(belt_id) ON DELETE CASCADE,
                 CONSTRAINT p2b_fk_plan_id FOREIGN KEY (plan_id)
-                    REFERENCES plan(plan_id) ON DELETE CASCADE,
-                CONSTRAINT p2b_fk_plan_id FOREIGN KEY (plan_id)
                     REFERENCES plan(plan_id) ON DELETE CASCADE
             );
 ALTER TABLE plan_to_belt OWNER TO psql;
