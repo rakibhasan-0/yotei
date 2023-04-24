@@ -1,26 +1,52 @@
+default:
+  image: node:19
+  before_script:
+    - npm install --no-progress --quiet --cache .npm --prefer-offline
+  cache:
+    key: "node-modules"
+    paths:
+      - node-modules/
+      - .npm/
+
 stages:
-  - test    
   - build
+  - test
   - docker
   - systest
   - deploy
 
+lint-job:
+  stage: test
+  script:
+    - echo "Linting started..."
+    - npm run lint
+    - echo "Linting finished."
+
 test-job:
   stage: test
-  image: node:19
-  before_script:
-    - npm install
   script:
-    - echo "Testing frontend"
-    - npm run test --passWithNoTests
-    - npm run lint
-    - echo "Finished testing"
+    - echo "Testing started..."
+    - npm run test
+    - echo "Testing finished."
+
+coverage-job:
+  stage: test
+  allow_failure: true
+  when: manual
+  coverage: /Branches\s*:\s*(\d+.?\d+)%/
+  script:
+    - echo "Coverage report started..."
+    - npm run test:coverage
+    - echo "Coverage report finished."
+  artifacts:
+    reports:
+       coverage_report:
+          coverage_format: cobertura
+          path: coverage/cobertura-coverage.xml
 
 build-job:       
   stage: build
   image: node:19
-  before_script:
-    - npm install
   script:
     - echo "Compiling the code..."
     - npm run build

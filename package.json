@@ -8,6 +8,7 @@
     "cors": "^2.8.5",
     "cra-template": "1.2.0",
     "cross-env": "^7.0.3",
+    "dotenv": "^16.0.3",
     "esbuild": "^0.17.17",
     "eslint-plugin-jest": "^27.2.1",
     "firefox-profile": "^4.3.2",
@@ -39,13 +40,29 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "jest --watchAll --ci --no-watchAll --passWithNoTests",
-    "test:coverage": "npm test -- --watchAll --ci --no-watchAll --passWithNoTests --coverage --collectCoverageFrom='./src/**'",
+    "test:coverage": "npm test -- --coverage --collectCoverageFrom='./src/**'",
     "test:watch": "npm test -- --watchAll",
     "lint": "eslint ./ --ignore-path .gitignore",
     "lint:fix": "npm run lint -- --fix --ext .js,.jsx,.ts .",
     "systest": "npx playwright test --reporter list",
     "systest:fast": "npx playwright test --reporter list --project 'Mobile Chrome'",
     "systest:ui": "npx playwright test --ui"
+  },
+  "jest": {
+    "coverageReporters": [
+      "text-summary",
+      "cobertura"
+    ],
+    "modulePathIgnorePatterns": [
+      "sys-test"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 50,
+        "lines": 90
+      }
+    },
+    "coverageDirectory": "coverage/"
   },
   "eslintConfig": {
     "rules": {
@@ -62,11 +79,17 @@
     ],
     "overrides": [
       {
-        "files": ["sys-test/**/*.ts", "sys-test/**/*.tsx"],
+        "files": [
+          "sys-test/**/*.ts",
+          "sys-test/**/*.tsx"
+        ],
         "plugins": [
           "@typescript-eslint"
         ],
-        "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+        "extends": [
+          "eslint:recommended",
+          "plugin:@typescript-eslint/recommended"
+        ],
         "parser": "@typescript-eslint/parser"
       }
     ],
@@ -106,9 +129,5 @@
     "vite": "^4.3.1",
     "vite-plugin-eslint": "^1.8.1",
     "web-vitals": "^3.3.1"
-  },
-  "jest": {
-    "coverageReporters": ["text-summary"],
-    "modulePathIgnorePatterns": ["sys-test"]
   }
 }

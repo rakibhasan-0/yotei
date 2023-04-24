@@ -89,7 +89,6 @@ npm run lint
 ### Resurser
 
 #### Grunder i REACT
-
 [React - Quick Start](https://react.dev/learn)
 
 [W3schools react tutorial](https://www.w3schools.com/REACT/DEFAULT.ASP)
