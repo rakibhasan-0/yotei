@@ -315,6 +315,28 @@ CREATE TABLE belt (
                 is_child BOOLEAN NOT NULL
             );
 ALTER TABLE belt OWNER TO psql;
+
+INSERT INTO belt(belt_name, belt_color, is_child) VALUES ('Svart', '000000', FALSE);
+INSERT INTO belt(belt_name, belt_color, is_child) VALUES ('Svart', '000000', TRUE);
+
+INSERT INTO belt(belt_name, belt_color, is_child) VALUES ('Brunt', '964B00', FALSE);
+INSERT INTO belt(belt_name, belt_color, is_child) VALUES ('Brunt', '964B00', TRUE);
+
+INSERT INTO belt(belt_name, belt_color, is_child) VALUES ('Blått', '0000FF', FALSE);
+INSERT INTO belt(belt_name, belt_color, is_child) VALUES ('Blått', '0000FF', TRUE);
+
+INSERT INTO belt(belt_name, belt_color, is_child) VALUES ('Grönt', '00FF00', FALSE);
+INSERT INTO belt(belt_name, belt_color, is_child) VALUES ('Grönt', '00FF00', TRUE);
+
+INSERT INTO belt(belt_name, belt_color, is_child) VALUES ('Orange', 'FFA500', FALSE);
+INSERT INTO belt(belt_name, belt_color, is_child) VALUES ('Orange', 'FFA500', TRUE);
+
+INSERT INTO belt(belt_name, belt_color, is_child) VALUES ('Gult', 'FFFF00', FALSE);
+INSERT INTO belt(belt_name, belt_color, is_child) VALUES ('Gult', 'FFFF00', TRUE);
+
+INSERT INTO belt(belt_name, belt_color, is_child) VALUES ('Vitt', 'FFFFFF', FALSE);
+INSERT INTO belt(belt_name, belt_color, is_child) VALUES ('Vitt', 'FFFFFF', TRUE);
+
 --
 -- Name: plan_to_belt; Type: TABLE; Schema: public; Owner: psql
 --
