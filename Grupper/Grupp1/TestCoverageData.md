@@ -67,3 +67,11 @@
 |------------------------|:------------:|:-------------:|
 | ExerciseImportResponse |      16      |Getters och setters|
 |ExerciseController| 80| Method "image" needs testing with mock|
+
+# Plan-api
+
+| Class   |      Coverage (%)      | Comment |
+|----------|:-------------:|:-------------:|
+| Plan |  70 | Getters och setter|
+| PlanApiApplication |  0 | Main|
+| PlanController |  100 | |
