@@ -10,7 +10,19 @@ import java.util.regex.Pattern;
 /**
  * Model for plan data in database
  *
- * @author Calzone
+ * @author Calzone (Doc:Griffin c20wnn)
+ */
+
+/**
+ * Documentation Griffin c20wnn
+ * JPA (Java Persistence API)
+ *
+ *  Plan.java - Plan class. Represents the Plan Entity.
+ *  PlanApiApplication.java - Bootstrap of Spring.
+ *  PlanController.java - Plan API for creating, reading, updating and deleting plans.
+ *  PlanRepository.java (Interface) - JPARepository file.
+ *  PlanApiApplicationTests.java (Tests)
+ *
  */
 
 @Entity
@@ -35,6 +47,7 @@ public class Plan implements Serializable {
     @Column(nullable = false, name = "user_id")
     private Long userId;
 
+    //Constructor used for Tests.
     protected Plan() {}
 
     /**
@@ -52,30 +65,21 @@ public class Plan implements Serializable {
         this.userId = userId;
     }
 
-    /**
-     * @return id
-     */
     public Long getId() {
         return id;
     }
 
-    /**
-     * @return name of plan
-     */
+
     public String getName() {
         return name;
     }
 
-    /**
-     * @return color of plan
-     */
+
     public String getColor() {
         return color;
     }
 
-    /**
-     * @return user id
-     */
+
     public Long getUserId() {
         return userId;
     }

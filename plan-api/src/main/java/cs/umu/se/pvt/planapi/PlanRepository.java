@@ -4,7 +4,9 @@ import java.util.List;
 
 /**
  * JPARepository for Plan
- * @author Calzone
+ * @author Calzone (Doc:Griffin c20wnn)
+ * JPARepository is used for managing the data in a Spring Boot Application.
+ *  JPARepository contains the APIs for basic CRUD operations, the APIS for pagination, and the APIs for sorting.
  */
 
 public interface PlanRepository extends JpaRepository<Plan, Long> {

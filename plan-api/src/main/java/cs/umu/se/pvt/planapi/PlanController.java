@@ -9,8 +9,9 @@ import java.util.List;
 /**
  * Plan API for creating, reading, updating and deleting plans.
  *
- * @author Calzone
+ * @author Calzone (Doc:Griffin c20wnn)
  */
+
 @RestController
 @CrossOrigin
 @RequestMapping(path = "/api/plan")
@@ -98,7 +99,7 @@ public class PlanController {
     }
 
     /**
-     * Returns all plan from the database, or if no plans are present, the 404 HTTP status is returned.
+     * Returns all plans from the database, or if no plans are present, the 404 HTTP status is returned.
      * @return HTTP response status:
      *         * 404: No plans exist in the database
      *         * 200: A list of all plans is returned
