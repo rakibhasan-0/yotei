@@ -1,12 +1,12 @@
 # Session-api
-| Class   |      Coverage (%)      | Comment |
-|----------|:-------------:|:-------------:|
-| AddListInput|  100 | |
-| DateAndTime |    100   | |
-| Session | 66 | Mycket getters och setters|
-| SessionApiApplication | 0 | En main som kör allt|
-| SessionController | 60 | Behövs integrationstester|
-| SessionTimeConverter | N/A | Används ej|
+| Class   |      Coverage (%)      | Coverage (%) efter refaktorisering | Comment |
+|----------|:-------------:|:-------------:|:-------------:|
+| AddListInput|  100 | 0 | Borttagen |
+| DateAndTime |    100   | 0 | Borttagen |
+| Session | 66 | 63| Getters och setters. Testas men ej branch coverage. Lätt fix|
+| SessionApiApplication | 0 | 0 |En main som kör allt|
+| SessionController | 60 | 100 | **Dessa metoder kan kanske tas bort**: add, addList, addRepeating, createSessions, getByPlan, getByPlans. **Dessa klasser kan kanske tas bort**: SessionControllerAddList, SessionDeleteByPlanTest SessionControllerGetByPlanTest. AddListInput, DateAndTime, SessionTimeConverter|
+| SessionTimeConverter | N/A | N/A |Används ej. Borttagen|
 
 # Techniques-api
 | Class   |      Coverage (%)      | Comment |
