@@ -1,4 +1,4 @@
-* Säkerhetskopiering av databas
+# Säkerhetskopiering av databas
   Kör `backup_db.sh fil.sql` för att spara databasen till `fil.sql`
 ** Återställning av databas
 	Kör `restore_db.sh fil.sql` för att återställa databasen från `fil.sql`
@@ -11,23 +11,30 @@
 	0 0 */5 * * backup.sh backup_$(date +\%Y\%m\%d).sql >/dev/null 2>&1
 	```
 
-* Databas
-Dev db credentials:
-- Användarnamn: c5dv214_vt22_dev
-- Databas:      c5dv214_vt22_dev
-- Server:       postgres (postgres.cs.umu.se)
-- Port:         5432 (standardport)
-- Lösenord:     j79piCPvkHTc
+# Databas arbetsflöde
+- Om en ändring görs i databasen så ska [ER-diagrammet](https://app.diagrams.net/#G1f41RYjCnPTYaiUNRlPZrmHsyy15M7DXc) uppdateras.
+- ER-diagrammet ska även exporteras i XML-format och sparas i courses-project/5dv214vt23/infra/resources. För att göra detta klicka på **File** i menyn sedan **Export as -> XML**. **TA ÄVEN BORT** det gammla ER-diagrammet från denna mapp.
+
+
+**Länk till ER-diagramm**: https://app.diagrams.net/#G1f41RYjCnPTYaiUNRlPZrmHsyy15M7DXc
+## Guidelines
+- Ändringar i databasstrukturen sker endast via init-filen. Inte via osparade kommandon eller GUI-verktyg.
+- Synkronisera DB-ändringar med backend så API:erna inte går sönder.
+
+### DB Credentials
+- Användarnamn: psql
+- Databas: yotei
+- Lösenord: yotei123
+- Port: 5432 (standard)
+
+## Lokal testning av databas
+När du gjort dina ändringar i `init.sql`, kör först `docker compose down -d --volumes` följt av `docker compose up -d --build psql` för att starta databasen.
 
 Hur man loggar in:
-- ```psql -U c5dv214_vt22_dev -h postgres c5dv214_vt22_dev```
+- `psql -h localhost -p 5432 -U psql -d yotei`
 
-Hur man bygger om databasen (krävs att man står i database/src mappen):
-- ~~```java -cp "../lib/postgresql-42.3.4.jar" INIT_DB.java```~~
-
-   ```shell
-   psql -h localhost -p 5432 -U psql -W yotei -f database/init.sql
-   ```
+För att stänga databasen:
+- `docker compose down -d --volumes`.
 
 Som det ser ut nu:
 - Om en användare som redan finns läggs till kommer *id* i databasen att ökas även om inget läggs till.
