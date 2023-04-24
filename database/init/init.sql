@@ -170,7 +170,7 @@ CREATE TABLE IF NOT EXISTS exercise_tag (
     REFERENCES exercise(exercise_id) ON DELETE CASCADE,
   CONSTRAINT fk_tag FOREIGN KEY (tag_id)
     REFERENCES tag(tag_id) ON DELETE CASCADE,
-  CONSTRAINT unique_pair UNIQUE (ex_id, tag_id)
+    UNIQUE (ex_id, tag_id)
 );
 
 CREATE TABLE IF NOT EXISTS technique_tag (
@@ -181,7 +181,7 @@ CREATE TABLE IF NOT EXISTS technique_tag (
     REFERENCES technique(technique_id) ON DELETE CASCADE,
   CONSTRAINT fk_tag_tech FOREIGN KEY (tag_id)
     REFERENCES tag(tag_id) ON DELETE CASCADE,
-  CONSTRAINT unique_tech_pair UNIQUE (tech_id, tag_id)
+    UNIQUE (tech_id, tag_id)
 );
 
 
@@ -197,7 +197,7 @@ CREATE TABLE workout_tag(
        		  REFERENCES workout(workout_id) ON DELETE CASCADE,
        CONSTRAINT fk_tag FOREIGN KEY(tag_id)
        		  REFERENCES tag(tag_Id) ON DELETE CASCADE,
-       CONSTRAINT unique_work_pair UNIQUE (work_id, tag_id)
+       UNIQUE (work_id, tag_id)
 );
 
 ALTER TABLE workout_tag OWNER TO psql;
