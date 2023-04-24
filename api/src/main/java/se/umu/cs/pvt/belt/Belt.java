@@ -31,7 +31,15 @@ public class Belt implements Serializable {
     /**
      * No-args constructor required JPA spec
      */
-    protected Belt() {}
+    protected Belt() {
+    }
+
+    public Belt(Long id, String name, String color, boolean isChild) {
+        this.id = id;
+        this.name = name;
+        this.color = color;
+        this.isChild = isChild;
+    }
 
     public Long getId() {
         return id;
@@ -43,5 +51,9 @@ public class Belt implements Serializable {
 
     public String getColor() {
         return color;
+    }
+
+    public boolean isChild() {
+        return isChild;
     }
 }
