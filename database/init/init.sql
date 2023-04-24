@@ -343,10 +343,9 @@ INSERT INTO belt(belt_name, belt_color, is_child) VALUES ('Vitt', 'FFFFFF', TRUE
 CREATE TABLE plan_to_belt (
                 belt_id INT CHECK ( belt_id IS NOT NULL),
                 plan_id INT CHECK ( plan_id IS NOT NULL),
-                CONSTRAINT p2b_fk_belt_id FOREIGN KEY (belt_id)
-                    REFERENCES belt(belt_id) ON DELETE CASCADE,
-                CONSTRAINT p2b_fk_plan_id FOREIGN KEY (plan_id)
-                    REFERENCES plan(plan_id) ON DELETE CASCADE
+                UNIQUE (belt_id, plan_id),
+                CONSTRAINT fk_belt_id FOREIGN KEY (belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE,
+                CONSTRAINT fk_plan_id FOREIGN KEY (plan_id) REFERENCES plan(plan_id) ON DELETE CASCADE
             );
 ALTER TABLE plan_to_belt OWNER TO psql;
 --
@@ -355,10 +354,9 @@ ALTER TABLE plan_to_belt OWNER TO psql;
 CREATE TABLE technique_to_belt (
                 belt_id INT CHECK ( belt_id IS NOT NULL),
                 technique_id INT CHECK ( technique_id IS NOT NULL),
-                CONSTRAINT t2b_fk_belt_id FOREIGN KEY (belt_id)
-                    REFERENCES belt(belt_id) ON DELETE CASCADE,
-                CONSTRAINT t2b_fk_technique_id FOREIGN KEY (technique_id)
-                    REFERENCES technique(technique_id) ON DELETE CASCADE
+                UNIQUE (belt_id, technique_id),
+                CONSTRAINT fk_belt_id FOREIGN KEY (belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE,
+                CONSTRAINT fk_technique_id FOREIGN KEY (technique_id) REFERENCES technique(technique_id) ON DELETE CASCADE
             );
 ALTER TABLE technique_to_belt OWNER TO psql;
 
