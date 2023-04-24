@@ -32,6 +32,22 @@
 | WorkoutTag |  100 |  |
 | WorkoutTagController |  100 |  |
 
+# Workout-api
+
+| Class   |      Coverage (%)      | Comment |
+|----------|:-------------:|:-------------:|
+| Activity |  27 | Getters och setters|
+| ActivityController |  100 | |
+| UserShort |  0 | Getters och setters|
+| UserWorkout |  0 | Getters och setters|
+| UserWorkoutController |  0 | Behövs mocking |
+| Workout |  100 | Getters och setters|
+| WorkoutApiApplication |  0 | Main|
+| WorkoutController |  81 | Behövs mocking|
+| WorkoutDataPackage |  0 |  Getters och setters|
+| WorkoutFavorite |  100 | |
+| WorkoutReview |  80 | Getters och setters|
+
 
 
 
