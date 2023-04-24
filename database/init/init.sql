@@ -113,7 +113,7 @@ CREATE TABLE workout(
        workout_date TIMESTAMP NOT NULL,
        workout_hidden BOOLEAN NOT NULL,
        workout_author INT NOT NULL,
-       CONSTRAINT fk_user_table FOREIGN KEY (workout_author)
+       CONSTRAINT workout_fk_user_table FOREIGN KEY (workout_author)
         REFERENCES user_table(user_id)
 );
 
@@ -169,9 +169,9 @@ CREATE TABLE IF NOT EXISTS exercise_tag (
   exertag_id SERIAL PRIMARY KEY,
   ex_id INT NOT NULL,
   tag_id INT NOT NULL,
-  CONSTRAINT fk_exercise FOREIGN KEY (ex_id)
+  CONSTRAINT et_fk_exercise FOREIGN KEY (ex_id)
     REFERENCES exercise(exercise_id) ON DELETE CASCADE,
-  CONSTRAINT fk_tag FOREIGN KEY (tag_id)
+  CONSTRAINT et_fk_tag FOREIGN KEY (tag_id)
     REFERENCES tag(tag_id) ON DELETE CASCADE,
     UNIQUE (ex_id, tag_id)
 );
@@ -180,9 +180,9 @@ CREATE TABLE IF NOT EXISTS technique_tag (
   techtag_id SERIAL PRIMARY KEY,
   tech_id INT NOT NULL,
   tag_id INT NOT NULL,
-  CONSTRAINT fk_technique FOREIGN KEY (tech_id)
+  CONSTRAINT tt_fk_technique FOREIGN KEY (tech_id)
     REFERENCES technique(technique_id) ON DELETE CASCADE,
-  CONSTRAINT fk_tag_tech FOREIGN KEY (tag_id)
+  CONSTRAINT tt_fk_tag_tech FOREIGN KEY (tag_id)
     REFERENCES tag(tag_id) ON DELETE CASCADE,
     UNIQUE (tech_id, tag_id)
 );
@@ -196,9 +196,9 @@ CREATE TABLE workout_tag(
        worktag_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
        work_id INT NOT NULL,
        tag_id INT NOT NULL,
-       CONSTRAINT fk_workout FOREIGN KEY(work_id)
+       CONSTRAINT wt_fk_workout FOREIGN KEY(work_id)
         REFERENCES workout(workout_id) ON DELETE CASCADE,
-       CONSTRAINT fk_tag FOREIGN KEY(tag_id)
+       CONSTRAINT wt_fk_tag FOREIGN KEY(tag_id)
        		  REFERENCES tag(tag_Id) ON DELETE CASCADE,
        UNIQUE (work_id, tag_id)
 );
@@ -226,7 +226,7 @@ CREATE TABLE plan (plan_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY
        name VARCHAR NOT NULL,
        color VARCHAR NOT NULL,
        user_id INT NOT NULL,
-       CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES user_table(user_id)
+       CONSTRAINT plan_fk_user_id FOREIGN KEY (user_id) REFERENCES user_table(user_id)
 );
 
 ALTER TABLE plan OWNER TO psql;
@@ -241,9 +241,9 @@ CREATE TABLE session (session_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMA
        plan_id INT NOT NULL,
        date DATE NOT NULL,
        time TIME,
-       CONSTRAINT fk_workout_id FOREIGN KEY (workout_id)
+       CONSTRAINT session_fk_workout_id FOREIGN KEY (workout_id)
         REFERENCES workout(workout_id),
-       CONSTRAINT fk_plan_id FOREIGN KEY (plan_id)
+       CONSTRAINT session_fk_plan_id FOREIGN KEY (plan_id)
         REFERENCES plan(plan_id) ON DELETE CASCADE
 );
 
@@ -261,9 +261,9 @@ CREATE TABLE comments(
            (workout_id IS NOT NULL and exercise_id IS NULL)),
        exercise_id INT CHECK (exercise_id IS NULL OR
            (exercise_id IS NOT NULL and workout_id IS NULL)),
-       CONSTRAINT fk_workout_id FOREIGN KEY(workout_id)
+       CONSTRAINT comment_fk_workout_id FOREIGN KEY(workout_id)
         REFERENCES workout(workout_id) ON DELETE CASCADE,
-       CONSTRAINT fk_exercise_id FOREIGN KEY(exercise_id)
+       CONSTRAINT comment_fk_exercise_id FOREIGN KEY(exercise_id)
         REFERENCES exercise(exercise_id) ON DELETE CASCADE
 );
 
@@ -282,9 +282,9 @@ ALTER TABLE user_settings OWNER TO psql;
 CREATE TABLE user_to_plan (
                 user_id INT CHECK ( user_id IS NOT NULL),
                 plan_id INT CHECK ( plan_id IS NOT NULL),
-                CONSTRAINT fk_user_id FOREIGN KEY (user_id)
+                CONSTRAINT u2p_fk_user_id FOREIGN KEY (user_id)
                     REFERENCES user_table(user_id) ON DELETE CASCADE,
-                CONSTRAINT fk_plan_id FOREIGN KEY (plan_id)
+                CONSTRAINT u2p_fk_plan_id FOREIGN KEY (plan_id)
                     REFERENCES plan(plan_id) ON DELETE CASCADE
             );
 ALTER TABLE user_to_plan OWNER TO psql;
@@ -299,9 +299,9 @@ CREATE TABLE workout_review(
                 positive_comment TEXT,
                 negative_comment TEXT,
                 review_date TIMESTAMP NOT NULL,
-                CONSTRAINT fk_workout_id FOREIGN KEY(workout_id)
+                CONSTRAINT wr_fk_workout_id FOREIGN KEY(workout_id)
                     REFERENCES workout(workout_id) ON DELETE CASCADE,
-                CONSTRAINT fk_user_id FOREIGN KEY (user_id)
+                CONSTRAINT wr_fk_user_id FOREIGN KEY (user_id)
                     REFERENCES user_table(user_id) ON DELETE CASCADE
                 );
 ALTER TABLE workout_review OWNER TO psql;
@@ -343,11 +343,11 @@ INSERT INTO belt(belt_name, belt_color, is_child) VALUES ('Vitt', 'FFFFFF', TRUE
 CREATE TABLE plan_to_belt (
                 belt_id INT CHECK ( belt_id IS NOT NULL),
                 plan_id INT CHECK ( plan_id IS NOT NULL),
-                CONSTRAINT fk_belt_id FOREIGN KEY (belt_id)
+                CONSTRAINT p2b_fk_belt_id FOREIGN KEY (belt_id)
                     REFERENCES belt(belt_id) ON DELETE CASCADE,
-                CONSTRAINT fk_plan_id FOREIGN KEY (plan_id)
+                CONSTRAINT p2b_fk_plan_id FOREIGN KEY (plan_id)
                     REFERENCES plan(plan_id) ON DELETE CASCADE,
-                CONSTRAINT fk_plan_id FOREIGN KEY (plan_id)
+                CONSTRAINT p2b_fk_plan_id FOREIGN KEY (plan_id)
                     REFERENCES plan(plan_id) ON DELETE CASCADE
             );
 ALTER TABLE plan_to_belt OWNER TO psql;
@@ -357,9 +357,9 @@ ALTER TABLE plan_to_belt OWNER TO psql;
 CREATE TABLE technique_to_belt (
                 belt_id INT CHECK ( belt_id IS NOT NULL),
                 technique_id INT CHECK ( technique_id IS NOT NULL),
-                CONSTRAINT fk_belt_id FOREIGN KEY (belt_id)
+                CONSTRAINT t2b_fk_belt_id FOREIGN KEY (belt_id)
                     REFERENCES belt(belt_id) ON DELETE CASCADE,
-                CONSTRAINT fk_technique_id FOREIGN KEY (technique_id)
+                CONSTRAINT t2b_fk_technique_id FOREIGN KEY (technique_id)
                     REFERENCES technique(technique_id) ON DELETE CASCADE
             );
 ALTER TABLE technique_to_belt OWNER TO psql;
