@@ -1,14 +1,8 @@
 package se.umu.se.pvt.sessionapi;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.util.Date;
 import java.time.LocalTime;
-import java.util.List;
 
 import javax.persistence.*;
 
