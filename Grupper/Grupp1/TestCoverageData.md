@@ -66,7 +66,7 @@
 | Class                  | Coverage (%) | Comment |
 |------------------------|:------------:|:-------------:|
 | ExerciseImportResponse |      16      |Getters och setters|
-|ExerciseController| 80| Method "image" needs testing with mock|
+|ExerciseController| 80| Method "image" behöver testning med mock|
 
 # Plan-api
 
