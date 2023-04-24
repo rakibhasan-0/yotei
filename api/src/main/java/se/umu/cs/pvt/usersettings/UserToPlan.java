@@ -20,7 +20,7 @@ public class UserToPlan {
     private Long plan_id;
 
     /**
-     * Default constructor class for Bootspring.
+     * Default constructor class for Springboot.
      */
     public UserToPlan() {
     }
@@ -35,40 +35,21 @@ public class UserToPlan {
         this.plan_id = plan_id;
     }
 
-    /**
-     * Sets the user ID from table.
-     * @param user_id the id of the user.
-     */
     public void setUser_id(Long user_id) {
         this.user_id = user_id;
     }
 
-    /**
-     * Gets the user ID from table.
-     */
     public Long getUser_id() {
         return user_id;
     }
 
-    /**
-     * Gets the plan ID from table.
-     * @param plan_id the id of the plan.
-     */
     public void setPlan_id(Long plan_id) {
         this.plan_id = plan_id;
     }
 
-    /**
-     * Gets the plan ID from table.
-     */
     public Long getPlan_id() {
         return plan_id;
     }
 
-    /**
-     * Gets the userplan combined ID.
-     *
-     * @return The id of userplan.
-     */
 
 }

@@ -18,26 +18,16 @@ public class UserSettings {
     private Long user_id;
 
     /**
-     * Default constructor needed for Bootspring,
+     * Default constructor needed for Springboot,
      * automatically uses the set and get functions after.
      */
     public UserSettings() {
     }
 
-    /**
-     * Sets the user_id.
-     *
-     * @param user_id The id to be set.
-     */
     public void setUser_id(Long user_id) {
         this.user_id = user_id;
     }
 
-    /**
-     * Gets the user's ID.
-     *
-     * @return The ID that is returned.
-     */
     public Long getUser_id() {
         return user_id;
     }
