@@ -11,7 +11,12 @@
 	0 0 */5 * * backup.sh backup_$(date +\%Y\%m\%d).sql >/dev/null 2>&1
 	```
 
-# Databas
+# Databas arbetsflöde
+- Om en ändring görs i databasen så ska [ER-diagrammet](https://app.diagrams.net/#G1f41RYjCnPTYaiUNRlPZrmHsyy15M7DXc) uppdateras.
+- ER-diagrammet ska även exporteras i XML-format och sparas i courses-project/5dv214vt23/infra/resources. För att göra detta klicka på **File** i menyn sedan **Export as -> XML**. **TA ÄVEN BORT** det gammla ER-diagrammet från denna mapp.
+
+
+**Länk till ER-diagramm**: https://app.diagrams.net/#G1f41RYjCnPTYaiUNRlPZrmHsyy15M7DXc
 ## Guidelines
 - Ändringar i databasstrukturen sker endast via init-filen. Inte via osparade kommandon eller GUI-verktyg.
 - Synkronisera DB-ändringar med backend så API:erna inte går sönder.
