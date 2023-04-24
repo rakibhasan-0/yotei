@@ -8,22 +8,11 @@ package se.umu.cs.pvt.exercise;
  */
 public interface ExerciseShort {
 
-    /**
-     * Returns the id of the exercise.
-     * @return the id of the exercise.
-     */
+    
     Long getId();
 
-    /**
-     * Returns the name of the exercise.
-     * @return the name of the exercise.
-     */
+
     String getName();
-
-
-    /**
-     * Returns the duration of the exercise.
-     * @return the duration of the exercise.
-     */
+    
     Integer getDuration();
 }

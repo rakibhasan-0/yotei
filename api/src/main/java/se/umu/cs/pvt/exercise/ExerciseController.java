@@ -62,7 +62,7 @@ public class ExerciseController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        //return NOT_FOUND if no exercise with given id exists
+        
         if (!exerciseRepository.existsById(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -122,15 +122,15 @@ public class ExerciseController {
     @PostMapping("/add")
     public ResponseEntity<Object> postExercise(@RequestBody Exercise toAdd) {
 
-        //remove leading and trailing whitespaces
+        
         toAdd.trimText();
 
-        // If the name is already in the database the exercises will not be added.
+        
         if (!exerciseRepository.findByNameIgnoreCase(toAdd.getName()).isEmpty()) {
             return new ResponseEntity<>(toAdd,HttpStatus.CONFLICT);
         }
 
-        // Exercise with invalid format can not be added.
+        
         if (!toAdd.validFormat()) {
             return new ResponseEntity<>("Fel format",HttpStatus.BAD_REQUEST);
         }
@@ -194,7 +194,7 @@ public class ExerciseController {
      */
     @PutMapping("/update")
     public ResponseEntity<Object> updateExercise(@RequestBody Exercise toUpdate) {
-        // Checks that entry exists in the database, exits with error if id is not found
+        
         if (exerciseRepository.findById(toUpdate.getId()).isEmpty()) {
             return new ResponseEntity<>(toUpdate, HttpStatus.BAD_REQUEST);
         }
@@ -254,7 +254,6 @@ public class ExerciseController {
         String folder = "./database/images/";
         try {
             byte[] bytes = file.getBytes();
-            // Path to file
             Path path = Paths.get(folder + file.getOriginalFilename());
             Files.write(path,bytes);
         } catch (IOException e) {

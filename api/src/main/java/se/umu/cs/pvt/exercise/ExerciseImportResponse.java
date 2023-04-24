@@ -27,34 +27,22 @@ public class ExerciseImportResponse {
         this.data = data;
     }
 
-    /**
-     * Getter for the message.
-     * @return the message.
-     */
+    
     public String getMessage() {
         return message;
     }
 
-    /**
-     * Setter for the message.
-     * @param message string to set the message as.
-     */
+    
     public void setMessage(String message) {
         this.message = message;
     }
 
-    /**
-     * Getter for the data.
-     * @return the data.
-     */
+    
     public List<Long> getData() {
         return data;
     }
 
-    /**
-     * Setter for the data
-     * @param data list of longs that will become the data.
-     */
+    
     public void setData(List<Long> data) {
         this.data = data;
     }

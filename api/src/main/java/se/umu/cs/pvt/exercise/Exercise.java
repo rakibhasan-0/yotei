@@ -49,34 +49,22 @@ public class Exercise implements Serializable {
         this.duration = duration;
     }
 
-    /**
-     * Gets id
-     * @return id
-     */
+    
     public Long getId() {
         return id;
     }
 
-    /**
-     * Gets name
-     * @return name
-     */
+
     public String getName() {
         return name;
     }
 
-    /**
-     * Gets desc
-     * @return desc
-     */
+    
     public String getDescription() {
         return description;
     }
 
-    /**
-     * Gets duration
-     * @return duration
-     */
+    
     public int getDuration() {
         return duration;
     }

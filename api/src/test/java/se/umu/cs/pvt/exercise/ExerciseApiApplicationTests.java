@@ -13,16 +13,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import se.umu.cs.pvt.exercise.Exercise;
-import se.umu.cs.pvt.exercise.ExerciseController;
-import se.umu.cs.pvt.exercise.ExerciseRepository;
 
-import javax.print.attribute.standard.MediaSize;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.shouldHaveThrown;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -116,9 +112,7 @@ class ExerciseApiApplicationTests {
         assertEquals(HttpStatus.BAD_REQUEST, controller.removeExercise(ex1.getId()).getStatusCode());
     }
 
-    /**
-     *
-     */
+    
     @Test
     void removeExistingExerciseShouldSucceed() {
         Mockito.when(repository.findById(ex1.getId())).thenReturn(Optional.ofNullable(ex1));
