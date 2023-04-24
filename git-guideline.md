@@ -40,17 +40,17 @@ After this you want to associate it with the pre-existing branch created on the 
 Now you are ready to pull.
 
 <h4>Done with ticket</h4>
-When the feature has been implemented and is ready to be integrated into the main branch, the devloper should rebase the developer branch with the main branch using the command
+When the feature has been implemented and is ready to be integrated into the main branch, the developer should rebase onto the remote main branch with the command
 
-`git rebase main`
+`git rebase origin/main`
 
-If any conflicts arise the rebase will stop and leave conflict markers on the conflicting areas. The developer can then use 
+If any conflicts arise the developer will have to resolve the conflicts **manually** using either an IDE or the terminal. The developer can then use 
 
 `git diff`
 
 This will locate the markers (<<<<<<), and the developer can then fix these conflicts. The next step will be
 
-`git add < filename >`
+`git add <filename>`
 
 To add each file with a resolved conflict, then use the command
 
@@ -63,35 +63,32 @@ To continue with the rebase. Alternatively the developer could abort the rebase 
 If the rebase was successful, a merge request should be sent using the gitlab website. The following template should be used when creating a new merge resuest via the website.
 - Title - `<branch_name>`
 - Description - 
-        
         <Trello ticket link>
         <Description, a breif description about what has been implemented and how it has been done.> 
-Always remeber to check both "Delete source branch" and "Squash commits".
-The merge resuest can only be approved by a DevOps however DevOps will not be obliged to review the code. Instead always assign one reviewer (not a DevOps) of your choice to review the merge, if no reviwer has been appointed DevOps will not approve the merge request regardless of content. 
 
 ### Example of merge request:
 ![Exempel på merge request](images/git.png)
 
-If a reviewer has been assigned and has approved the merge a DevOps will approve the merge request and the updated main branch will be automatically deployed on the test server.
+<h4>Assigning a reviewer</h4>
+The merge resuest can only be approved by a DevOps, they will however not be obliged to review the code. Instead always assign one reviewer (not a DevOps) of your choice to review the merge, if no reviwer has been appointed or have not reviewed the code, DevOps will not approve the merge request regardless of content. If a reviewer has been assigned and has approved the merge a DevOps will approve the merge request and the updated main branch will be automatically deployed on the test server.
 
-After the merge a Squash commit will be produced with the following format.
+### Reviewing a merge request
+If you have been assigned to review a merge request, start by clicking the changes tab.
 
-    %{title}
+![Changes tab](images/changes.png)
 
-    Merge branch '%{source_branch}' into '%{target_branch}'
+Review the code start your review by pressing the comment icon by the line number.
 
-    Reviewed by %{reviewed_by}
-    Approved by %{approved_by}
+![Review tab](images/review.png)
 
-    Description
-    %{description}
+When done reviewing the code, click the Finish review button located at the bottom of the screen. You may write an optional summary and then submit the review.
 
-    Branch commits
-    %{all_commits}
+![Finish review](images/finish_review.png)
 
+After submitting the review, you will be brought back to the merge request. It is **important** to press the **Approve** button so that DevOps can see that the merge request has been reviewed!
 
 ## Gitikett
-- Help eachother.
+- Help each other.
 - Make sure to commit often.
 - Always `pull` from **main** before creating a new branch.
 - Always `rebase` before creating a merge request to **main** branch.
