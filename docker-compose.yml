@@ -39,7 +39,7 @@ services:
     links:
       - user-api
   user-api:
-    image: pvt2023/user:latest
+    image: pvt2023/api:latest
     ports:
       - "8085:8085"
     links:
