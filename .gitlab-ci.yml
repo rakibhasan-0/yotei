@@ -2,6 +2,7 @@ stages:
   - test    
   - build
   - docker
+  - systest
   - deploy
 
 test-job:
@@ -50,6 +51,19 @@ build-image:
   only:
     - main
 
+# https://playwright.dev/docs/ci as inspiration
+systest-job:
+  stage: systest
+  image: mcr.microsoft.com/playwright:v1.32.0-focal
+  before_script:
+    - npm install --silent
+    - npm install pm2 -g
+  script:
+    - pm2 start npm -- start
+    - sleep 15 # Give serve some time to start up
+    - SYSTEST_HOST=http://localhost:3000 npx playwright test --reporter=list
+  when: manual
+    
 deploy:
   image: ubuntu:latest
   stage: deploy
