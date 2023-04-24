@@ -48,6 +48,18 @@
 | WorkoutFavorite |  100 | |
 | WorkoutReview |  80 | Getters och setters|
 
+# User-api
+
+| Class   |      Coverage (%)      | Comment |
+|----------|:-------------:|:-------------:|
+| InvalidPasswordException |  100 | |
+| InvalidUserNameException |  100 | |
+| JWTUtil |  100 | |
+| PasswordHash |  100 | |
+| User |  100 | |
+| UserApplication |  0 | Main|
+| UserController |  72 | Getters och setter + ngra branches|
+
 
 
 
