@@ -1,6 +1,5 @@
 package se.cs.umu.pvt.exerciseapi;
 
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
