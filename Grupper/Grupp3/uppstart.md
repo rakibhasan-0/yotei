@@ -1,6 +1,7 @@
 # Uppstart utvecklingsfasen
-* Scrum master: {Namn}
-* Namn på team (Utgå från givet tema): {Namn}
-* Tid för morgonmötet: {hh:mm}
+* Scrum master: Adrian Alagic
+* Namn på team (Utgå från givet tema): Dragon
+* Tid för morgonmötet: 8:15 @MIT-Place
   
 ## Övriga punkter
+* TBD
