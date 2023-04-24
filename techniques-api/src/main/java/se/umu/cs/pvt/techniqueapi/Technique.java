@@ -25,10 +25,7 @@ public class Technique implements Serializable {
      * no-args constructor required by JPA spec
      * this one is protected since it shouldn't be used directly
      */
-    protected Technique() {
-        // no-args constructor required by JPA spec
-        // this one is protected since it shouldn't be used directly
-    }
+    protected Technique() {}
 
     /**
      * Creates a technique
@@ -42,26 +39,14 @@ public class Technique implements Serializable {
         this.description = description;
     }
 
-    /**
-     * Gets id
-     * @return id
-     */
     public Long getId() {
         return id;
     }
 
-    /**
-     * Gets name
-     * @return name
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * Gets desc
-     * @return desc
-     */
     public String getDescription() {
         return description;
     }

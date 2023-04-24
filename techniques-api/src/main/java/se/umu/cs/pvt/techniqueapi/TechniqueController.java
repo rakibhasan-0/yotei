@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class to get, insert, update, and remove technique
+ * Class to get, insert, update, and remove technique.
  *
- * @author Quattro Formaggio, Carlskrove, Hawaii
+ * @author Quattro Formaggio, Carlskrove, Hawaii (Doc: Griffin ens19amd)
  */
 @RestController
 @CrossOrigin
@@ -40,8 +40,8 @@ public class TechniqueController {
     }
 
     /**
-     * Returns the description of specified technique given an id
-     * @param id The id to query to the database
+     * Returns the description of specified technique given an id.
+     * @param id The id to query to the database.
      * @return Description for technique, or if technique could not be found:
      * response indicating error.
      */
@@ -61,7 +61,7 @@ public class TechniqueController {
     /**
      * Returns a technique depending on the id, or a HttpStatus indicating if
      * there is a bad request or no technique with id found.
-     * @param id the id
+     * @param id the id.
      * @return a technique, or HttpStatus indicating error.
      */
     @GetMapping("/{id}")
@@ -70,7 +70,7 @@ public class TechniqueController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
-        //return not found if no technique with given id could be found
+        //return not found if no technique with given id could be found.
         if (!techniqueRepository.existsById(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -80,8 +80,8 @@ public class TechniqueController {
     }
 
     /**
-     * Returns all techniques with only Id and Name
-     * @return all techniques with only Id and Name, or HttpStatus indicating
+     * Returns all techniques with only Id and Name.
+     * @return all techniques with only Id and Name, or HttpStatus indicating.
      * techniques could not be found.
      */
     @GetMapping("/all/idname")
@@ -96,15 +96,15 @@ public class TechniqueController {
     }
 
     /**
-     * This method adds an technique to the database
+     * This method adds an technique to the database.
      *
-     * Returns 409 CONFLICT if given name is taken
-     * Returns 400 BAD REQUEST if technique does not have valid format
-     * Returns 200 OK if technique is posted
+     * Returns 409 CONFLICT if given name is taken.
+     * Returns 400 BAD REQUEST if technique does not have valid format.
+     * Returns 200 OK if technique is posted.
      *
      * @param toAdd the body in json format with correct attributes example:
      *              {name: "cool_name", description: "cool_desc", duration: 2}
-     * @return responseEntity indicating the success-status of the post
+     * @return responseEntity indicating the success-status of the post.
      */
     @PostMapping("/add")
     public ResponseEntity<Object> postTechnique(@RequestBody Technique toAdd) {
@@ -117,11 +117,12 @@ public class TechniqueController {
             return new ResponseEntity<>(toAdd, HttpStatus.CONFLICT);
         }
 
-        // If technique has invalid format it will not be added
+        // If technique has invalid format it will not be added.
         if (!toAdd.validFormat()) {
             return new ResponseEntity<>("Fel format", HttpStatus.BAD_REQUEST);
         }
-
+        
+        // Otherwise the technique is added.
         try {
             techniqueRepository.save(toAdd);
         } catch (Exception e) {
@@ -163,7 +164,7 @@ public class TechniqueController {
      * as individual JSON objects. Saves only those techniques that had valid
      * format.
      *
-     * @param listImport The list of JSON objects
+     * @param listImport The list of JSON objects.
      * @return response indicating if all techniques was added or if it was a
      * bad request.
      */
@@ -180,19 +181,23 @@ public class TechniqueController {
         for (Technique technique : listImport) {
             i++;
             if(technique.validFormat()) {
+                // Remove leading and trailing whitespace.
                 technique.trimText();
                 try {
                     ids.add(techniqueRepository.save(technique).getId());
                 } catch (Exception e) {
+                    // Technique duplicate found.
                     ids.add(techniqueRepository.findByName(technique.getName()).getId());
                     duplicates += 1;
                 }
             }
             else {
+                // Respond with wich numbers of techiques were found.
                 return new ResponseEntity(new TechniqueImportResponse("Tekniker fram till " + i +  ".\"" + technique.getName() + "\" har importerats", ids), HttpStatus.UNPROCESSABLE_ENTITY);
             }
         }
 
+        // Respond with numbers of duplicate names found.
         if(duplicates > 0) {
             return new ResponseEntity(new TechniqueImportResponse(duplicates + " tekniker av samma namn existerar redan", ids), HttpStatus.CONFLICT);
         }

@@ -2,20 +2,17 @@ package se.umu.cs.pvt.techniqueapi;
 
 import java.util.List;
 
-import java.util.List;
-
 /**
  * Class made to make the response on import easier.
  * The class consist of a message and a list of ids that should be
  * returned when an import is called.
+ * 
+ * @author UNKNOWN (Docs: Griffin, André)
  */
 public class TechniqueImportResponse {
     private String message;
     private List<Long> data;
 
-    /**
-     * Empty constructor.
-     */
     public TechniqueImportResponse() {}
 
     /**
@@ -29,36 +26,21 @@ public class TechniqueImportResponse {
         this.data = data;
     }
 
-    /**
-     * Getter for the message.
-     * @return the message.
-     */
     public String getMessage() {
         return message;
     }
 
-    /**
-     * Setter for the message.
-     * @param message string to set the message as.
-     */
     public void setMessage(String message) {
         this.message = message;
     }
 
-    /**
-     * Getter for the data.
-     * @return the data.
-     */
     public List<Long> getData() {
         return data;
     }
 
-    /**
-     * Setter for the data
-     * @param data list of longs that will become the data.
-     */
     public void setData(List<Long> data) {
         this.data = data;
     }
+
 }
 
