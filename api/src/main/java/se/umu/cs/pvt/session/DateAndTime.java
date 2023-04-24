@@ -6,16 +6,18 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 /**
+ * Should be depricated? Is only used in tests and other depricated methods.
+ * 
  * Data class for structuring input to the "/addlist" request in the session api. Models a weekday/time pair from
- * the plan creation page in the frontend
+ * the plan creation page in the frontend.
  * @author c19rll (Hawaii)
  * implNote Data is a lombok feature (https://projectlombok.org/features/Data) which creates getters
  * and a constructor automatically.
  */
 @Data
 public class DateAndTime {
-    //The date
+    // The date
     private final LocalDate date;
-    //The time in minutes from 00.00
+    // The time in minutes from 00.00
     private final LocalTime time;
 }

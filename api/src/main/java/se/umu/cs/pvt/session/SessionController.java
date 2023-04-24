@@ -16,9 +16,12 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Class for handling requests to the session api
+ * Class for handling requests to the session api.
+ * 
+ * Contains two depricated methods, 'addRepeating' and 'createSessions' 
+ * that have been replaced by 'addList'. 
  *
- * @author Hawaii
+ * @author Hawaii (Doc: Griffins c20jjs)
  */
 @RestController
 @RequestMapping(path = "/api/session")
@@ -30,13 +33,11 @@ public class SessionController {
         this.sessionRepository = sessionRepository;
     }
 
-
     /**
-     * Adds a single session to the database
-     * @param session Object mapped session from request body
-     * @return Response containing the added session and an HTTP code:
-     *      CREATED: If session was created
-     *      BAD_REQUEST: If id was given or if plan id or date is missing
+     * Adds a single session to the database.
+     * 
+     * @param session Object mapped session from request body.
+     * @return Response containing the added session and an HTTP code.
      */
     @PostMapping("/add")
     public ResponseEntity<Session> add(@RequestBody Session session){
@@ -47,8 +48,9 @@ public class SessionController {
 
     /**
      * Adds a list of sessions into the database.
-     * @param sessions A JSON list of sessions with all required fields excluding id
-     * @return The added sessions including id:s
+     * 
+     * @param sessions A JSON list of sessions with all required fields excluding id.
+     * @return The added sessions including id:s.
      */
     @PostMapping("/addList")
     public ResponseEntity<List<Session>> addList(@RequestBody List<Session> sessions){
@@ -60,6 +62,8 @@ public class SessionController {
     }
 
     /**
+     * Is depricated, is only used in testfiles.
+     * 
      * Adds a set of sessions based on a list of given week days as dates and an amount weeks for which
      * to create sessions for.
      * @return HTTP-status code BAD_REQUEST if the format of the input is incorrect else return HTTP-status
@@ -79,10 +83,12 @@ public class SessionController {
         return new ResponseEntity<>(sessionList, HttpStatus.CREATED);
     }
 
-
     /**
+     * Is depricated, is only used in 'addRepeating'.
+     * 
      * Creates a session for each day of the week in the input for the specified amount of weeks.
      * Binds all sessions to the given plan id.
+     * 
      * @param input AddListInput with all the needed data
      * @return A list of the sessions created
      */
@@ -105,6 +111,8 @@ public class SessionController {
 
     /**
      * Delete a session given an id.
+     * 
+     * @param id The id of the session that is to be deleted. 
      * @return HTTP-status code
      */
     @DeleteMapping("/delete")
@@ -120,10 +128,9 @@ public class SessionController {
 
     /**
      * Deletes all sessions containing the given plan id.
+     * 
      * @param id plan_id
-     * @return HTTP-status code for the request
-     *         - 200 if the request was successful
-     *         - 404 if the plan was not found
+     * @return HTTP-status code for the request.
      */
     @DeleteMapping("/deleteByPlan")
     public ResponseEntity<Void> deleteByPlan(@RequestParam Long id) {
@@ -136,7 +143,10 @@ public class SessionController {
 
     /**
      * Get all sessions belonging to a plan given a plan id.
-     * @return HTTP-status code
+     * 
+     * @param id The session id.
+     * @param startDate Optional, filters the search by only getting the sessions after this date. 
+     * @return HTTP-status code and the list of sessions. 
      */
     @GetMapping("/getByPlan")
     public Object getByPlan(@RequestParam Long id, @RequestParam(required = false) Long startDate) {
@@ -154,13 +164,20 @@ public class SessionController {
         return new ResponseEntity<>(sessionList, HttpStatus.OK);
     }
 
-
+    /**
+     * Get all sessions belonging to several plans given a list of plan sessison ids.
+     * 
+     * @param id The list of session ids.
+     * @param startDate Optional, filters the search by only getting the sessions after this date.
+     * @return HTTP- status code and the list of sessions.
+     */
     @GetMapping("/getByPlans")
     public Object getByPlans(@RequestParam List<Long> id, @RequestParam(required = false) Long startDate) {
         List<Session> sessionList = new ArrayList<>();
         for (Long i : id) {
             if(startDate != null){
-                sessionList.addAll(sessionRepository.findAllByPlanAfterGivenDate(i, LocalDate.ofInstant(Instant.ofEpochMilli(startDate), ZoneId.of("UTC"))));
+                sessionList.addAll(sessionRepository.findAllByPlanAfterGivenDate(
+                    i, LocalDate.ofInstant(Instant.ofEpochMilli(startDate), ZoneId.of("UTC"))));
             } else{
                 sessionList.addAll(sessionRepository.findAllByPlan(i));
             }
@@ -175,12 +192,10 @@ public class SessionController {
 
     /**
      * Updates session with given id using the provided text, workout id, and time.
+     * 
      * @param id Id of session to update
      * @param updateInfo Map of fields and values sent through request body.
-     * @return Response with status code and body containing the updated session
-     * Status codes:
-     *    OK: On successful update
-     *    NOT_FOUND: If no session with given id is present
+     * @return Response with status code and body containing the updated session.
      */
     @PutMapping("/update")
     public ResponseEntity<Session> update(@RequestParam Long id, @RequestBody Map<String, Object> updateInfo){
