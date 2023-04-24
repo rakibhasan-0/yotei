@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
  * 
  * @author Team Capricciosa (Group 2), Kebabpizza (Group 8)
  * @version 1.0
+ * @deprecated use Button.js instead
  */
 function HomePageLogoButton(props) {
     const buttonName = props.buttonName;

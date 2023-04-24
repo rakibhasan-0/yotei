@@ -6,6 +6,7 @@ import './EditButton.css';
  * 
  * @author Team Capriciosa (Group 2)
  * @version 1.0
+ * @deprecated use Button.js instead
  */
 function EditButton(props) {
     return (

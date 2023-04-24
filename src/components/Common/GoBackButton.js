@@ -11,6 +11,7 @@ import AlertWindow from "./AlertWindow";
  *
  * @author Team Capricciosa (Group 2), Team Carlskrove (Group 6)
  * @version 1.0
+ * @deprecated use Button.js instead
  */
 export function GoBackButton(props) {
     const navigate = useNavigate();

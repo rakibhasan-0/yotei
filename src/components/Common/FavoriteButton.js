@@ -1,13 +1,12 @@
+import React, { useState, useEffect, useContext } from 'react';
+import { AccountContext } from '../../context';
+
 /**
  * This class creates a favorite button instance.
  *
  * @author Hot-pepper (Group 7)
+ * @deprecated use Button.js instead
  */
- import React, { useState, useEffect, useContext } from 'react';
-
-
- import { AccountContext } from '../../context';
-
 const FavoriteButton = ({ workoutId, initState }) => {
     const { token, userId } = useContext(AccountContext)
     const [isFavorite, setFavorite] = useState(initState);
