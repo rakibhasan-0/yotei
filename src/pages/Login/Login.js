@@ -22,6 +22,7 @@ function Login() {
     const [cookies, setCookies] = useCookies(['token']) 
     const navigate = useNavigate()
     const {token, setToken} = useContext(AccountContext)
+    const currentPath = window.location.pathname
 
     /**
      * Checks the HTTP status code for the login credentials.
@@ -55,7 +56,12 @@ function Login() {
      */
     useEffect(() => {
         if(cookies.token){
-            navigate(window.location.pathname)
+            if (currentPath === '/' || currentPath === '' || currentPath === undefined) {
+                navigate('/plan');
+            } else {
+                navigate(currentPath);
+            }
+
         }
     })
 
@@ -72,7 +78,11 @@ function Login() {
         const response = await fetch(`/user/verify`, requestOptions)
         
         if(loginIsOk(response)) {
-            navigate(window.location.pathname)
+            if (currentPath === '/' || currentPath === '' || currentPath === undefined) {
+                navigate('/plan');
+            } else {
+                navigate(currentPath);
+            }
         } 
     }
 
