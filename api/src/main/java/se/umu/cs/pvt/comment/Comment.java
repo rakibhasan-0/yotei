@@ -4,8 +4,15 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * A comment entity for Spring JPA. 
- * @author Henrik Aili (c20hai) - Grupp 3 (Hawaii) 
+ * Model for comments api.
+ *
+ * JPA (Java Persistence API)
+ *
+ * Comment.java - The comment class.
+ * CommentController.java  - The controller for the ExercisComment entity.
+ * CommentRepository.java (Interface) - JPARepository file.
+ * CommentShort.java (Interface) - A projection for a short comment.
+ * @author Henrik Aili (c20hai) - Grupp 3 (Hawaii) (Doc: Griffin ie15enm)
  */
 @Entity(name = "comments")
 public class Comment implements Serializable {
