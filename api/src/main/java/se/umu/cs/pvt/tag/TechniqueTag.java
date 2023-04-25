@@ -1,15 +1,14 @@
 /**
  * The TechniqueTag entity.
- * @Author Team 5 Verona
+ * Model for technique_tag data in database.
+ *
+ * @Author Team 5 Verona (Doc: Griffin dv21jjn)
  */
 package se.umu.cs.pvt.tag;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
-/**
- * Model for technique_tag data in database
- */
 @Entity
 @Table(name = "technique_tag")
 public class TechniqueTag implements Serializable { 
@@ -26,57 +25,59 @@ public class TechniqueTag implements Serializable {
     @JoinColumn(name = "tag_id")
     private Tag tag;
 
+
     /**
      * no-args constructor required by JPA spec
      * this one is protected since it shouldn't be used directly
      */
     protected TechniqueTag() {}
 
+
     /**
      * Creates a TechniqueTag.
      * 
-     * @param techId Id of the technique
+     * @param   techId      ID of the Technique.
      */
     public TechniqueTag(Long techId) {
         this.techId = techId;
     }
-    
+
+
     /**
-     * Get the technique Id.
-     * 
-     * @return The technique Id.
+     * Get the technique ID.
+     *
+     * @return          The Technique ID.
      */
-    
     public Long getTechId() {
         return techId;
     }
 
+
     /**
-     * Gets the tag Id.
-     * @return Id.
+     * Gets the Tag ID.
+     *
+     * @return          The Tag ID.
      */
     public Long getTag() {
         return tag.getId();
     }
 
-    /**
-     * Sets the tag.
-     * @param tag
-     */
+
     public void setTag(Tag tag) {
         this.tag = tag;
     }
 
+
     /**
-     * @return tag object
+     * Gets the Tag object.
+     *
+     * @return          The Tag object.
      */
     public Tag getTagObject() {
         return tag;
     }
 
-    /**
-     * @param techId new techId
-     */
+
     public void setTechId(Long techId) {
         this.techId = techId;
     }

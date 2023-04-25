@@ -1,6 +1,41 @@
 /**
  * The Tag entity.
- * @Author Team 5 Verona
+ *
+ * ExerciseTag              - The ExcerciseTag entity, model for exercise_tag data in database.
+ * ExerciseTagContoller     - API controller for managing ExerciseTag API calls.
+ * ExerciseTagMap           - Mapping between exercise and tags, used to import functions for exercise-tags.
+ * ExerciseTagRepository    - Repository used for the ExerciseTag entities. Based on Spring JPA Repository.
+ * ExerciseTagShort         - Projection of the ExerciseTag entity that only returns the ID of the Exercise from
+ *                            the exercise-tag pair.
+ * ExerciseTagShortId       - Projection of the ExerciseTag entity that only returns the ID of the Tag from the
+ *                            exercise-tag pair.
+ *
+ *
+ * Tag                      - The Tag entity, model for tag data in database.
+ * TagController            - API controller for managing Tag API calls.
+ * TagRepository            - Repository used for the Tag entities. Based on Spring JPA Repository.
+ * TagShort                 - Projection of the Tag entity that only returns the ID of the tag.
+ *
+ *
+ * TechniqueTag             - Technique tag entity - model for technique_tag data in database.
+ * TechniqueTagController   - API controller for managing TechniqueTag API calls.
+ * TechniqueTagMap          - Mapping between technique and tags, used to import functions for technique-tags.
+ * TechniqueTagRepository   - Repository used for the TechniqueTag entities. Based on Spring JPA Repository.
+ * TechniqueTagShort        - Projection of the TechniqueTag entity that only returns the ID of the Technique from
+ *                            the related technique-tag pair.
+ * TechniqueTagShortId      - Projection of the TechniqueTag entity that only returns the ID of the Tag from
+ *                            the techinque-tag pair.
+ *
+ *
+ * WorkoutTag               - Workout entity - model for workout_tag data in database.
+ * WorkoutTagController     - API controller for managing WorkoutTag API calls.
+ * WorkoutTagRepository     - Repository used for the WorkoutTag entities. Based on JPA Repository.
+ * WorkoutTagShort          - Projection of the WorkoutTag entity that only returns the ID of the Workout from
+ *                            the workout-tag pair.
+ * WorkoutTagShortId        - Projection of the WorkoutTag entity that only returns the ID of the Tag from the
+ *                            workout-tag pair.
+ *
+ * @Author Team 5 Verona (Doc: Griffin dv21jjn)
  */
 package se.umu.cs.pvt.tag;
 
@@ -40,29 +75,23 @@ public class Tag implements Serializable{
     protected Tag() {}
 
     /**
-     * Creates a tag.
-     * @param id Id of the tag.
-     * @param name Name of the tag.
+     * Creates a Tag.
+     *
+     * @param   id      Id of the Tag.
+     * @param   name    Name of the Tag.
      */
     public Tag(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    /**
-     * Get Id of the Tag.
-     * @return The TagId.
-     */
+
     public Long getId() {
         return id;
     }
 
-    /**
-     * Get the name of the Tag.
-     * @return The TagName.
-     */
+
     public String getName() {
         return name;
     }
-
 }

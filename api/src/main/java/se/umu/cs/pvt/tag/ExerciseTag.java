@@ -1,15 +1,14 @@
 /**
- * The Tag API ExcerciseTag Entity.
- * @Author Team 5 Verona
+ * The Tag API ExcerciseTag Entity, model for exercise_tag data in database.
+ *
+ * @Author Team 5 Verona (Doc: Griffin dv21jjn)
  */
 package se.umu.cs.pvt.tag;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
-/**
- * Model for excercise_tag data in database
- */
+
 @Entity
 @Table(name = "exercise_tag")
 public class ExerciseTag implements Serializable { 
@@ -35,32 +34,26 @@ public class ExerciseTag implements Serializable {
     /**
      * Creates a ExerciseTag.
      * 
-     * @param exerciseId Id of the exercise.
+     * @param   exerciseId      Id of the exercise.
      */
     public ExerciseTag(Long exerciseId) {
         this.exerciseId = exerciseId;
     }
 
-    /**
-     * Get the exercise Id.
-     * 
-     * @return The exercise Id.
-     */
+
     public Long getExerciseId() {
         return exerciseId;
     }
 
-    /**
-     * Sets the tag.
-     * @param tag
-     */
+
     public void setTag(Tag tag) {
         this.tag = tag;
     }
 
     /**
      * Gets the tag Id.
-     * @return The Id of the tag.
+     *
+     * @return          The Id of the Tag.
      */
     public Long getTag() {
         return tag.getId();
@@ -69,17 +62,13 @@ public class ExerciseTag implements Serializable {
     /**
      * Returns the Tag.
      * 
-     * @return tag object.
+     * @return          The Tag object.
      */
     public Tag getTagObject() {
         return tag;
     }
 
-    /**
-     * Sets the exercise Id.
-     * 
-     * @param exerciseId new exerciseId.
-     */
+
     public void setExerciseId(Long exerciseId) {
         this.exerciseId = exerciseId;
     }

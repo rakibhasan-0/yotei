@@ -1,6 +1,6 @@
 /**
  * The controller for the ExerciseTag entities. Includes informaton for all of the API calls for exerciseTag.
- * @Author Team 5 Verona
+ * @Author Team 5 Verona (Doc: Griffin dv21jjn)
  */
 package se.umu.cs.pvt.tag;
 
@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +17,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/tags")
 public class ExerciseTagController {
+
 
     /* Repositorys used by the ExerciseTagController. */
     private final ExerciseTagRepository exerciseTagRepository;
@@ -29,12 +29,15 @@ public class ExerciseTagController {
         this.tagRepository = tagRepository;
     }
 
+
     /**
      * Creates a Tag and Exercise pair.
-     * @param toAddExerciseTag The ExerciseTag entity without tagId (RequestBody).
-     * @param tagId The Id of the specified tag (RequestParam).
-     * @return A response entity containing the added Exercise/Tag pair with status OK or
-     * BAD_REQUEST if that tag Id doesn't exist.
+     *
+     * @param   toAddExerciseTag    The ExerciseTag entity without tagId (RequestBody).
+     * @param   tagId               The ID of the specified tag (RequestParam).
+     * @return                      HTTP response
+     *                                  A response entity containing the added Exercise/Tag pair with status OK.
+     *                                  BAD_REQUEST if that tag ID doesn't exist.
      */ 
     @PostMapping("/add/exercise")
     public ResponseEntity<ExerciseTag> postExerciseTagPair(@RequestBody ExerciseTag toAddExerciseTag,
@@ -48,11 +51,14 @@ public class ExerciseTagController {
         return new ResponseEntity<>(toAddExerciseTag, HttpStatus.BAD_REQUEST);
     }
 
+
     /**
      * Finds all Exercise Ids that has a specific tag on it.
-     * @param tagId The tag Id of the specified tag.
-     * @return A response entity with the list of Exercise ids with status OK or
-     * BAD_REQUEST if no Exercises with that tag exist.
+     *
+     * @param   tagId       The tag Id of the specified tag.
+     * @return              HTTP reponse
+     *                          A response entity with the list of Exercise ids with status OK.
+     *                          BAD_REQUEST if no Exercises with that tag exist.
      */
     @GetMapping("/get/exercise/by-tag")
     public ResponseEntity<List<ExerciseTagShort>> getExerciseByTag(@RequestParam(name = "tag") Long tagId) {
@@ -64,8 +70,11 @@ public class ExerciseTagController {
 
     /**
      * Finds all Tags for a given Exercise.
-     * @param exerciseId The Id of an exercise.
-     * @return A list of Tag elements.
+     *
+     * @param   exerciseId      The Id of an exercise.
+     * @return                  HTTP response
+     *                              A response entity with the list of Tag elements with status OK.
+     *                              BAD_REQUEST if Exercise has no tags.
      */
     @GetMapping("/get/tag/by-exercise")
     public ResponseEntity<List<ExerciseTagShortId>> getTagByExercises(@RequestParam(name = "exerciseId") Long exerciseId ) {
@@ -77,10 +86,12 @@ public class ExerciseTagController {
 
     /**
      * Removes a Tag from an Exercise by removing it from the ExerciseTag pair.
-     * @param toAddExerciseTag The ExerciseTag entity without tagId.
-     * @param tagId The Id of the specified tag.
-     * @return A response entity indicating if the Exercise Tag pair has been successfully deleted or 
-     * if the pair could not be found.
+     *
+     * @param   toAddExerciseTag    The ExerciseTag entity without tagId.
+     * @param   tagId               The Id of the specified tag.
+     * @return                      HTTP response
+     *                                  OK is deletion successful.
+     *                                  BAD_REQUEST if deletion pair not found.
      */
     @Transactional
     @DeleteMapping("/remove/exercise") 
@@ -98,10 +109,14 @@ public class ExerciseTagController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+
     /**
      * Gets all ExerciseIds mapped by their Tags.
-     * @return Response BAD_REQUEST for faulty requests, OK if a non-empty body is returned and NO_CONTENT if there
-     * doesnt exist any tags for exercises.
+     *
+     * @return              HTTP reponse
+     *                          OK if non-empty body is returned.
+     *                          NO_CONTENT if there doesn't exist any tags for exercises.
+     *                          BAD_REQUEST for faulty requests.
      */ 
     @GetMapping("/fetch/exercises/by-tag")
     public ResponseEntity<Map<Long, List<Long>>> getExercisesByTags() {
@@ -133,13 +148,15 @@ public class ExerciseTagController {
         return new ResponseEntity<>(exTags, HttpStatus.OK);
     }
 
+
     /**
      * Adds ExerciseTags to a given exercise.
-     * @param exerciseId given exercise id.
-     * @param exerciseTags ExerciseTags to be added.
-     * @return HTTP status
-     * BAD_REQUEST if no tags was found
-     * OK if the setting of tags was successful
+     *
+     * @param   exerciseId      given exercise id.
+     * @param   exerciseTags    ExerciseTags to be added.
+     * @return                  HTTP status
+     *                              OK if the setting of tags was successful.
+     *                              BAD_REQUEST if no tags was found.
      */
     @PostMapping("/set-tags/exercises")
     public ResponseEntity<ExerciseTag> setExerciseTagsPost(@RequestParam(name = "exercise_id") long exerciseId,
@@ -147,13 +164,15 @@ public class ExerciseTagController {
         return setExerciseTags(exerciseId, exerciseTags);
     }
 
+
     /**
      * Updates ExerciseTags for a given exercise.
-     * @param exerciseId given exercise id.
-     * @param exerciseTags ExerciseTags to be added.
-     * @return HTTP status
-     * BAD_REQUEST if no tags was found
-     * OK if the setting of tags was successful
+     *
+     * @param   exerciseId      given exercise id.
+     * @param   exerciseTags    ExerciseTags to be added.
+     * @return                  HTTP status
+     *                              OK if the setting of tags was successful.
+     *                              BAD_REQUEST if no tags was found.
      */
     @PutMapping("/set-tags/exercises")
     public ResponseEntity<ExerciseTag> setExerciseTags(@RequestParam(name = "exercise_id") long exerciseId,
@@ -182,10 +201,13 @@ public class ExerciseTagController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+
     /**
      * Removes the ExerciseTags for a given exercise.
-     * @param exerciseId given exercise id.
-     * @return success message if successful.
+     *
+     * @param   exerciseId      given exercise id.
+     * @return                  HTTP response
+     *                              OK if successful.
      */
     @DeleteMapping("/remove-tags/exercises/{exercise_id}")
     public ResponseEntity<ExerciseTag> deleteExerciseTagPair(@PathVariable("exercise_id") long exerciseId) {
@@ -198,9 +220,11 @@ public class ExerciseTagController {
      * Imports a mapping between techniques and tags into the database.
      * New techniques and relations between techniques and tags are added
      * as needed.
-     * @param tagMap A list containing mappings between exercise ids and
-     *               tag names.
-     * @return Http status.
+     *
+     * @param   tagMap      A list containing mappings between exercise ids and
+     *                      tag names.
+     * @return              HTTP status.
+     *                          OK if import successful.
      */
     @PostMapping("/import/exercises")
     public ResponseEntity postImport(@RequestBody List<ExerciseTagMap> tagMap) {
@@ -228,8 +252,10 @@ public class ExerciseTagController {
     /**
      * Fetches a list of tags associated with the list of exercise ids
      * taken as a parameter.
-     * @param exerciseIds exercise ids for which tags will be fetched.
-     * @return Http response with the fetched tags.
+     *
+     * @param   exerciseIds     exercise ids for which tags will be fetched.
+     * @return                  HTTP response
+     *                              A response entity with the fetched tags.
      */
     @GetMapping("/export/exercises")
     public ResponseEntity getExport(@RequestParam(name = "exerciseIds") List<Long> exerciseIds) {

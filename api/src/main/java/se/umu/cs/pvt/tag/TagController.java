@@ -1,6 +1,8 @@
 /**
  * The Tag API controller.
- * @Author Team 5 Verona
+ * Class for managing tag API calls.
+ *
+ * @Author Team 5 Verona (Doc: Griffin dv21jjn)
  */
 package se.umu.cs.pvt.tag;
 
@@ -8,13 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 
-/**
- * Class for managing tag API calls.
- */
 @RestController
 @CrossOrigin
 @RequestMapping(path = "/api/tags")
@@ -23,17 +21,21 @@ public class TagController {
     @Autowired
     private final TagRepository tagRepository;
 
+
     /**
      * Contructor for the TagController object.
-     * @param tagRepository Autowired
+     *
+     * @param   tagRepository   Autowired.
      */
     public TagController(TagRepository tagRepository) {
         this.tagRepository = tagRepository;
     }
 
+
     /**
-     * Returns all tags from the database.
-     * @return All tags.
+     * Returns all Tags from the database.
+     *
+     * @return      All tags.
      */
     @GetMapping("/all")
     public ResponseEntity<List<Tag>> getTags() {
@@ -44,9 +46,11 @@ public class TagController {
         return new ResponseEntity<>(tags, HttpStatus.OK);
     }
 
+
     /**
-     * Removes a tag with a given Id.
-     * @param id The Id of the tag to remove.
+     * Removes a Tag with a given ID.
+     *
+     * @param   id      The IdD of the Tag to remove.
      */
     @DeleteMapping("/remove")
     public ResponseEntity<Object> removeTag(@RequestParam(name = "id") Long id) {
@@ -62,9 +66,10 @@ public class TagController {
     }
     
     /**
-     * Adds a tag.
-     * @param toAdd The tag to add.
-     * @return The newly added tag.
+     * Adds a Tag.
+     *
+     * @param   toAdd       The Tag to add.
+     * @return              The newly added Tag.
      */
     @PostMapping("/add")
     public ResponseEntity<Tag> postTag(@RequestBody Tag toAdd) {

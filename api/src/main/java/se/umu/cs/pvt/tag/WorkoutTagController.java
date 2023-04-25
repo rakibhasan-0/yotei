@@ -1,6 +1,7 @@
 /**
  * The WorkoutTagController for WorkoutTags.
- * @Author Team 5 Verona
+ *
+ * @Author Team 5 Verona (Doc: Griffin dv21jjn)
  */
 package se.umu.cs.pvt.tag;
 
@@ -9,11 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api/tags")
@@ -31,10 +32,12 @@ public class WorkoutTagController {
 
     /**
      * Creats a Tag and Workout pair.
-     * @param toAddWorkoutTag The WorkoutTag entity without tagId.
-     * @param tagId The Id of the specified tag.
-     * @return A response entity containing the added Workout/Tag pair with status OK or
-     * BAD_REQUEST if that tag Id doesn't exist.
+     *
+     * @param   toAddWorkoutTag     The WorkoutTag entity without TagId.
+     * @param   tagId               The ID of the specified Tag.
+     * @return                      HTTP reponse
+     *                                  A response entity containing the added Workout/Tag pair with status OK.
+     *                                  BAD_REQUEST if that Tag ID doesn't exist.
      */ 
     @PostMapping("/add/workout")
     public ResponseEntity<WorkoutTag> postWorkoutTagPair(@RequestBody WorkoutTag toAddWorkoutTag,
@@ -47,11 +50,14 @@ public class WorkoutTagController {
         return new ResponseEntity<>(toAddWorkoutTag, HttpStatus.BAD_REQUEST);
     }
 
+
     /**
-     * Finds all Workout Ids that has a given tag on it.
-     * @param id The tag Id of the specified tag.
-     * @return A response entity with the list of workout Ids with status OK or
-     * BAD_REQUEST if no Workouts with that tag exist.
+     * Finds all Workout IDs that has a given Tag on it.
+     *
+     * @param   id      The Tag ID of the specified Tag.
+     * @return          HTTP reponse
+     *                      A response entity with the list of Workout IDs with status OK.
+     *                      BAD_REQUEST if no Workouts with that Tag exist.
      */
     @GetMapping("/get/workout/by-tag")
     public ResponseEntity<List<WorkoutTagShort>> getWorkoutByTag(@RequestParam(name = "tag") Long id) {
@@ -61,12 +67,15 @@ public class WorkoutTagController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+
     /**
      * Removes a given Workout Tag pair.
-     * @param toAddWorkoutTag The WorkoutTag entity without tagId.
-     * @param tagId The Id of the specified tag.
-     * @return A response entity indicating if the Workout Tag pair has been successfully deleted or 
-     * if the pair could not be found.
+     *
+     * @param   toAddWorkoutTag     The WorkoutTag entity without TagId.
+     * @param   tagId               The ID of the specified Tag.
+     * @return                      HTTP response
+     *                                  OK if the Workout Tag pair has been successfully deleted.
+     *                                  BAD_REQUEST if the pair could not be found.
      */
     @Transactional
     @DeleteMapping("/remove/workout") 
@@ -85,10 +94,14 @@ public class WorkoutTagController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+
     /**
-     * Finds all Tags for a given workout. 
-     * @param workId The Id of an workout.
-     * @return A list of Tag elements.
+     * Finds all Tags for a given Workout.
+     *
+     * @param   workId      The ID of an Workout.
+     * @return              HTTP response
+     *                          A reponse entity with a list of the Tag elements and status OK.
+     *                          BAD_REQUEST if Workout has no Tags.
      */
     @GetMapping("/get/tag/by-workout")
     public ResponseEntity<List<WorkoutTagShortId>> getTagByWorkout(@RequestParam(name = "workId") Long workId) {
@@ -99,10 +112,14 @@ public class WorkoutTagController {
 
     }
 
+
     /**
-     * Gets all workout Ids mapped by their tags
-     * @return Response BAD_REQUEST for faulty requests, OK if a non-empty body is returned and NO_CONTENT if there
-     * doesnt exist any tags for workouts.
+     * Gets all Workout IDs mapped by their Tags.
+     *
+     * @return          HTTP response
+     *                      OK if a non-empty body is returned.
+     *                      NO_CONTENT if there doesn't exist any tags for workouts.
+     *                      BAD_REQUEST for faulty requests.
      */ 
     @GetMapping("/fetch/workouts/by-tag")
     public ResponseEntity<Map<Long, List<Long>>> getWorkoutsByTags() {

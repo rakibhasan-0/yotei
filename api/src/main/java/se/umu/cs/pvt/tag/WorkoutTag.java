@@ -1,15 +1,15 @@
 /**
  * The WorkoutTag entity.
- * @Author Team 5 Verona
+ * Model for workout_tag data in database.
+ *
+ * @Author Team 5 Verona (Doc: Griffin dv21jjn)
  */
 package se.umu.cs.pvt.tag;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
-/**
- * Model for workout_tag data in database
- */
+
 @Entity
 @Table(name = "workout_tag")
 public class WorkoutTag implements Serializable { 
@@ -32,37 +32,37 @@ public class WorkoutTag implements Serializable {
      */
     protected WorkoutTag() {}
 
+
     /**
      * Creates a WorkoutTag.
      * 
-     * @param workId Id of the Workout.
+     * @param   workId      ID of the Workout.
      */
     public WorkoutTag(Long workId) {
         this.workId = workId;
     }
-    
+
+
     /**
-     * Get the workout Id.
+     * Get the Workout ID.
      * 
-     * @return The workout Id.
+     * @return  The Workout ID.
      */
-    
     public Long getWorkId() {
         return workId;
     }
 
+
     /**
-     * Gets the tag id.
-     * @return
+     * Gets the Tag ID.
+     *
+     * @return  The Tag ID.
      */
     public Long getTag() {
         return tag.getId();
     }
 
-    /**
-     * Sets the tag.
-     * @param tag
-     */
+
     public void setTag(Tag tag) {
         this.tag = tag;
     }
