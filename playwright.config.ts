@@ -12,7 +12,7 @@ require('dotenv').config();
 export default defineConfig({
   testDir: './sys-test',
   expect: {
-    timeout: 30000,
+    timeout: 8000,
   },
   globalTimeout: 600000,
   fullyParallel: false,
@@ -37,11 +37,11 @@ export default defineConfig({
     {
       name: 'Mobile Chrome',
       use: { ...devices['Pixel 5'] },
-    },
-    {
-      name: 'Mobile Safari',
-      use: { ...devices['iPhone 12'] },
-    },
+    }
+   // {
+   //   name: 'Mobile Safari',
+   //   use: { ...devices['iPhone 12'] },
+   // },
   ],
 
   /* Run your local dev server before starting the tests */

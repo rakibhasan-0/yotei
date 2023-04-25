@@ -95,10 +95,11 @@ systest-job:
   before_script:
     - npm install --silent
     - npm install pm2 -g
+    - npx playwright install --with-deps
   script:
     - pm2 start npm -- start
-    - sleep 15 # Give serve some time to start up
-    - SYSTEST_HOST=http://localhost:3000 npx playwright test --reporter=list
+    - sleep 15 # Give pm2 some time to start up
+    - SYSTEST_HOST=http://localhost:3000 npx playwright test --reporter=line
   when: manual
     
 deploy:
