@@ -3,13 +3,24 @@ stages:
  - build
  - deploy
 
+.skippable: &skippable
+  except:
+    variables:
+      # Possible improvement for later: /^\[(.*,\s*)*skip?(,.*)*\]/i
+      # This would allow for patterns such as [abc, skip, cba] etc.
+      # This tag allows for skipping the pipeline, useful for example
+      # if you want to push unfinished changes or for documentation.
+      - $CI_COMMIT_MESSAGE =~ /^\[skip?\]/i
+
 tests:
-    stage: test
-    image: maven:3.8.3-openjdk-17
-    script:
-        - mvn -q test
+  <<: *skippable
+  stage: test
+  image: maven:3.8.3-openjdk-17
+  script:
+    - mvn -q test
 
 build_gateway_image:
+  <<: *skippable
   image: docker:20
   services:
     - docker:20-dind
@@ -31,6 +42,7 @@ build_gateway_image:
 
 
 build_api_image:
+  <<: *skippable
   image: docker:20
   services:
     - docker:20-dind
@@ -51,6 +63,7 @@ build_api_image:
     - main
 
 deploy:
+  <<: *skippable
   image: ubuntu:latest
   stage: deploy
   before_script:
@@ -65,16 +78,17 @@ deploy:
     - main
 
 deploy_javadoc:
-    image: ubuntu:latest
-    stage: deploy
-    before_script:
-      - apt-get update -y && apt-get upgrade -y && apt install openssh-client maven rsync openjdk-17-jdk openjdk-17-jre -y
-      - mkdir -p ~/.ssh
-      - eval $(ssh-agent -s)
-      - ssh-add <(echo "$SSH_PRIVATE_KEY" | tr -d '\r')
-      - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    script:
-      - mvn javadoc:aggregate
-      - rsync -avzhuP  ./target/site/apidocs/* pvt@imp.cs.umu.se:/home/pvt/pvt-web/javadoc/
-    only:
-      - main
+  <<: *skippable
+  image: ubuntu:latest
+  stage: deploy
+  before_script:
+    - apt-get update -y && apt-get upgrade -y && apt install openssh-client maven rsync openjdk-17-jdk openjdk-17-jre -y
+    - mkdir -p ~/.ssh
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_PRIVATE_KEY" | tr -d '\r')
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+  script:
+    - mvn javadoc:aggregate
+    - rsync -avzhuP  ./target/site/apidocs/* pvt@imp.cs.umu.se:/home/pvt/pvt-web/javadoc/
+  only:
+    - main
