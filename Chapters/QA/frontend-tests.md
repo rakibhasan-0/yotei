@@ -32,7 +32,7 @@ There is a extensions in VSCode for Jest and React Testing Library.
 
 ## Example unit test
 
-```Javascript import userEvent from '@testing-library/react'
+```javascript import userEvent from '@testing-library/react'
 import Button from '../src/components/Common/Button/Button'
 import '@testing-library/jest-dom'
 
