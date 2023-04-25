@@ -6,12 +6,16 @@ We expect people from now on to start building tests and develop TDD-ish.
 - [Jest](https://jestjs.io/docs/getting-started)
 - [React Testing Library](https://testing-library.com/docs/react-testing-library/intro)
 
-# React Testing Library
+# Getting started
 React Testing Library includes functionality to test React components. It is used together with Jest to make a testing framework for our frontend.
 
 **Install React Testing Library with:**
 
     npm install --save-dev @testing-library/react 
+
+**Install Jest with:**
+
+    npm install --save-dev jest 
 
 **Tests should be placed in a folder called:**
 
@@ -21,16 +25,8 @@ React Testing Library includes functionality to test React components. It is use
 
     filename.test.jsx
     
-For example the file **plan.jsx** should have the corresponding testfile **plan.test.jsx** placed in the test folder.
 
-# Jest
-Jest is a framework for testing Javascript code that will be used together with the React Testing Library.
+## TODO:Test code here
 
-**Install Jest with:**
+#¤ TODO: Mocking REST 
 
-    npm install --save-dev jest 
-
-## TODO: Jest code exampels of tests here
-
-
-## TODO: React Testing Library code examples here
