@@ -184,7 +184,6 @@ function WorkoutFormComponent(props){
                         placeholder="Namn"
                         defaultValue={workout.name}
                         required
-                        value={name}
                         onChange={e => setName(e.target.value)}
                     />
                     <Form.Control.Feedback type="invalid">
@@ -238,7 +237,7 @@ function WorkoutFormComponent(props){
                         rows={3}
                         placeholder="Beskrivning av pass"
                         defaultValue={workout.desc}
-                        required value={desc}
+                        required
                         onChange={e => setDesc(e.target.value)}
                     />
                     <Form.Control.Feedback type="invalid">
