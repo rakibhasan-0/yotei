@@ -26,7 +26,7 @@ React Testing Library includes functionality to test React components. It is use
 
     __tests__ 
 
-**Tests should use the naming conventing **
+**Tests should use the naming conventing**
 
     filename.test.jsx
     
