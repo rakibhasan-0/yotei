@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import classes from "./WorkoutCreate.css";
 import { useLocation, useNavigate } from 'react-router-dom';
 import WorkoutFormComponent from '../../components/Workout/WorkoutFormComponent.js';

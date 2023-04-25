@@ -203,7 +203,11 @@ function SessionCreate() {
                         <Check />
                     </RoundButton>
 
-                    <GoBackButton returnPath={'/plan'} confirmationNeeded="true" />
+                    <GoBackButton returnPath={'/plan'} confirmationNeeded={
+                        !((sessionData.plan === undefined || sessionData.plan === '')
+                            && (sessionData.name === undefined || sessionData.name === '')
+                            && (sessionData.date === undefined || sessionData.date === '')
+                            && (sessionData.time === undefined || sessionData.time === ''))} />
                     {fieldCheck.buttonClicked ? displayAlert : ''}
                 </div>
             </div>

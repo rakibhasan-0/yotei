@@ -8,11 +8,11 @@ import { Check } from 'react-bootstrap-icons';
 /**
  * This is a page containing components to allow creation of 'Plan'
  * objects.
- * 
+ *
  * Contains a form for collecting a name, colour, start & end dates.
- * As well as checkboxes, indicating which day of the week to 
+ * As well as checkboxes, indicating which day of the week to
  * include.
- * 
+ *
  * @author Calzone (2022-05-13), Hawaii (2022-05-13)
  */
 function PlanCreate() {
@@ -29,12 +29,13 @@ function PlanCreate() {
         name: "",
         color: "#000000",
         startDate: "",
-        endDate: ""
+        endDate: "",
+        weekdaysSelected: false
     });
 
     /**
      * A state representing each day of the week. The boolean values are used for deciding which days should be displayed.
-     * The user can choose a time for each day. 
+     * The user can choose a time for each day.
      */
     const [weekdays, setWeekdays] = useState([
         { name: "Mån", value: false, time: "" },
@@ -47,6 +48,21 @@ function PlanCreate() {
     ]);
 
     /**
+     * Checks if any weekdays selected
+     * Return true if 1+ weekdays selected, false if none
+     */
+    function setWeekdaysSelected() {
+        for (let i = 0; i < weekdays.length; i++) {
+            if (weekdays[i].value === true) {
+                setPlanData({ ...planData, weekdaysSelected: true})
+                return true;
+            }
+        }
+        setPlanData({ ...planData, weekdaysSelected: false})
+        return false;
+    }
+
+    /**
      * Will hold the dates for the weekdays
      * initially selected in the form.
      */
@@ -54,8 +70,8 @@ function PlanCreate() {
 
     /**
      * Will hold the dates for all weekdays
-     * selected in the form, between the 
-     * starting date and ending date. 
+     * selected in the form, between the
+     * starting date and ending date.
      */
     var allDatesArray = []
 
@@ -70,14 +86,14 @@ function PlanCreate() {
     })
 
     /**
-     * 
+     *
      */
     const [displayAlert, setDisplayAlert] = useState()
 
     /**
      * Is called when the data is modified by the form.
      * Updates the local data.
-     * 
+     *
      * @param variableName  The name of the variable being updated.
      * @param value         The updated value.
      */
@@ -88,7 +104,7 @@ function PlanCreate() {
     /**
      * Is called when a weekday is chosen in the form.
      * Updates the local data.
-     * 
+     *
      * @param dayName   The 3-4 letter name of the day.
      */
     const weekdayClickHandler = (dayName) => {
@@ -104,12 +120,13 @@ function PlanCreate() {
                 break
             }
         }
+        setWeekdaysSelected();
     }
 
     /**
      * Is called when the time slot for a day is modified in the form.
      * Updates the local data.
-     * 
+     *
      * @param dayName   The 3-4 letter name of the day.
      * @param value     The time value.
      */
@@ -161,7 +178,7 @@ function PlanCreate() {
      * Function for api call when creating a plan
      */
     async function addSessions() {
-        
+
         allDatesArray = allDatesArray.map(session => {
             let x = new Date(session.date);
             let hoursDiff = x.getHours() - x.getTimezoneOffset() / 60;
@@ -171,7 +188,7 @@ function PlanCreate() {
             x.setDate(x.getDate()+2)
             return { ...session, date: new Date(x)}
         })
-        
+
         const requestOptions = {
             method: "POST",
             headers: { 'Content-type': 'application/json', 'token': token },
@@ -196,8 +213,8 @@ function PlanCreate() {
     /**
      * Handles the dates for the chosen sessions. Populates allDatesArray with
      * the days chosen by the user within the span
-     * between startDate and endDate.   
-     * 
+     * between startDate and endDate.
+     *
      * @param plan  the id of the created plan
      */
     function dateHandler(plan) {
@@ -268,7 +285,7 @@ function PlanCreate() {
     /**
      * A function that checks that a given field in the form is not empty.
      * Updates the fieldCheck useState.
-     * 
+     *
      * @param fieldName     The name of the field being checked
      * @returns             If the field is not empty.
      */
@@ -290,9 +307,9 @@ function PlanCreate() {
     }
 
     /**
-     * A function that checks if both date-fields are empty, or a given 
+     * A function that checks if both date-fields are empty, or a given
      * date-field in the form is not empty.
-     * 
+     *
      * @param dateFieldName The name of the date-field being checked
      * @returns             True if both date fields are empty.
      *                      Else returns whether the field is not empty.
@@ -302,10 +319,10 @@ function PlanCreate() {
         checkNotEmpty("startDate")
         checkNotEmpty("endDate")
 
-        if (!fieldCheck.startDate && !fieldCheck.endDate) 
+        if (!fieldCheck.startDate && !fieldCheck.endDate)
             return true
 
-        else 
+        else
             checkNotEmpty(dateFieldName)
 
         return fieldCheck[dateFieldName]
@@ -313,7 +330,7 @@ function PlanCreate() {
 
     /**
      * A function that updates the displayAlert useState with a success message.
-     * 
+     *
      * @returns     True
      */
     function successAlert() {
@@ -328,9 +345,9 @@ function PlanCreate() {
     /**
      * A function that updates the displayAlert useState with a fail message.
      * The message is appended by a given body.
-     * 
+     *
      * @param body  The string to append the message
-     * 
+     *
      * @returns     False
      */
     function failureAlert(body) {
@@ -348,7 +365,7 @@ function PlanCreate() {
      * If the input is invalid it will send a signal to the form and change
      * the input style.
      *
-     * @returns Boolean 
+     * @returns Boolean
      */
     function validateForm() {
 
@@ -399,9 +416,15 @@ function PlanCreate() {
                     <RoundButton onClick={() => { addPlan().then(() => { setFieldCheck({ ...fieldCheck, buttonClicked: true }) }) }}>
                         <Check />
                     </RoundButton>
-                    
 
-                    <GoBackButton confirmationNeeded="true" />
+
+                    <GoBackButton confirmationNeeded={
+                        !((planData.name === undefined || planData.name === '')
+                        && (planData.color === undefined || planData.color === "#000000")
+                        && (planData.startDate === undefined || planData.startDate === '')
+                        && (planData.endDate === undefined || planData.endDate === '')
+                        && (!planData.weekdaysSelected))
+} />
                     {fieldCheck.buttonClicked ? displayAlert : ''}
                 </div>
             </div>
