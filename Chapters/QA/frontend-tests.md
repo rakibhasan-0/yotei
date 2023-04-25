@@ -8,6 +8,14 @@ From now on, tests should be written for new functionality produced in the front
 # Jest
 Jest is a framework for testing Javascript code that will be used together with the React Testing Library.
 
-*Install Jest with:*
-```npm install --save-dev jest```
+**Install Jest with:**
 
+    ```npm install --save-dev jest``` 
+
+## TODO: Jest code exampels of tests here
+
+# React Testing Library
+React Testing Library includes functionality to test React components. It is used together with Jest to make a testing framework for our frontend.
+
+**Install React Testing Library with:**
+    ```npm install --save-dev @testing-library/react``` 
