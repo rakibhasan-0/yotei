@@ -32,7 +32,7 @@ export class UserApi {
   }
 
   /**
-     * Skapar en ny användare.
+     * Skapar en ny användare. Går inte fel om användaren redan finns.
      * 
      * @param username Användarnamn för ny användare
      * @param password Lösenord för ny användare
@@ -41,6 +41,7 @@ export class UserApi {
   static async register_user(username: string, password: string, is_admin: boolean) {
     const ctx = await UserApi.make_ctx();
 
+    await UserApi.remove_user(username);
     const response = await ctx.post('/user/register', {
       data: {
         username: username,
@@ -58,7 +59,6 @@ export class UserApi {
      */
   static async remove_user(username: string) {
     const ctx = await UserApi.make_ctx();
-    const response = await ctx.delete('/user/remove/' + username);
-    expect(response.status()).toBeLessThan(400);
+    await ctx.delete('/user/remove/' + username);
   }
 }

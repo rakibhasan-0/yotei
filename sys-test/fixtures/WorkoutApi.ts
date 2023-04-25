@@ -38,15 +38,13 @@ export class WorkoutApi {
 
   static async delete_workout(id: number) {
     const ctx = await WorkoutApi.make_ctx();
-    const response = await ctx.delete('/api/workouts/delete_full_workout/' + id);
-    expect(response.status()).toBeLessThan(400);
+    await ctx.delete('/api/workouts/delete_full_workout/' + id);
   }
 
   static async delete_all_workouts() {
     const ctx = await WorkoutApi.make_ctx();
 
     const workouts_response = await ctx.get('/api/workouts/all');
-    expect(workouts_response.status()).toBeLessThan(400);
     const workouts = await workouts_response.json();
 
     for(const element in workouts) {

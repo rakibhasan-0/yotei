@@ -13,7 +13,7 @@ class LoginPage {
     await this.page.getByPlaceholder('Lösenord').fill('admin');
 
     await this.page.getByRole('button', {name: 'Logga in'}).click();
-    await this.page.waitForURL(/\**\/home/);
+    await this.page.waitForURL(/\**\/plan/);
   }
 }
 
