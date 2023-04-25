@@ -20,10 +20,8 @@ const DraggableListElement = ({element, elements, setElements, updateComponent})
         document.querySelector("#list-element" + elements[index].id).setAttribute("state", "snap");
         document.querySelector("#list-element" + elements[index].id).style.transform = `translate(0px, ${elements[elements.length-1].yPos}px)`
 
-        //Removes small flickering caused by the removed HTML element moving up the page as it is being removed.
-        document.querySelector("#list-element" + elements[elements.length-1].id).style.display = `none`;
-
-        elements[index] = [...elements][elements.length-1];
+        elements[index] = [...elements][elements.length-1]; // swaps element in index with last element. 
+       
         elements.pop();
 
         setElements([...elements]);

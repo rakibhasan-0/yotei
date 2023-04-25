@@ -32,8 +32,8 @@ const EditWorkout = ({startActivities, updateOutputArray}) => {
             let removedPos = -1;
 
             for (let i = 0; i < elements.length; i++) {
-                if(prevElements.current[i].id !== elements[i].id){
-                    removedPos = prevElements.current[i].order;
+                if(prevElements.current[i].id !== elements[i].id){ // check element ids (if no match then the element has been removed)
+                    removedPos = prevElements.current[i].order; //sets RemovedPos to the removed element.
                 }
             }
 
