@@ -1,0 +1,14 @@
+.check {
+    color: var(--checkbox-press);
+    position: relative;
+    border: 1.5px solid black;
+    border-radius: 4px;
+}
+
+
+.square{
+    color: var(--background);
+    position: relative;
+    border: 1.5px solid black;
+    border-radius: 4px;
+}
