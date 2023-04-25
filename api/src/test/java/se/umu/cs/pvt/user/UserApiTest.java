@@ -156,7 +156,7 @@ public class UserApiTest {
             }
             Object response = lc.getUsers();
             if (response instanceof ResponseEntity<?>) {
-                assertEquals(new ResponseEntity(HttpStatus.NOT_FOUND), response);
+                assertEquals(new ResponseEntity<>(HttpStatus.NOT_FOUND), response);
             }
         } catch (Exception e) {
             fail();
