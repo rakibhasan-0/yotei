@@ -44,14 +44,12 @@ public class ExportControllerGetTest {
                    Set.of(new TagExport(1L, "test")))
         ));
 
-        TechniqueExport technique = exportController.exportTechniques().getTechniques().get(0);
-        TagExport tag = technique.getTags().stream().findFirst().get();
+        TechniqueExportResponse technique = exportController.exportTechniques().getTechniques().get(0);
+        String tag = technique.getTags().get(0);
 
-        assertThat(technique.getId()).isEqualTo(1);
         assertThat(technique.getName()).isEqualTo("test");
         assertThat(technique.getDescription()).isEqualTo("test");
-        assertThat(tag.getId()).isEqualTo(1);
-        assertThat(tag.getName()).isEqualTo("test");
+        assertThat(tag).isEqualTo("test");
     }
 
     @Test
@@ -64,14 +62,12 @@ public class ExportControllerGetTest {
                         Set.of(new TagExport(1L, "test")))
         ));
 
-        ExerciseExport exercise = exportController.exportExercises().getExercises().get(0);
-        TagExport tag = exercise.getTags().stream().findFirst().get();
+        ExerciseExportResponse exercise = exportController.exportExercises().getExercises().get(0);
+        String tag = exercise.getTags().get(0);
 
-        assertThat(exercise.getId()).isEqualTo(1);
         assertThat(exercise.getName()).isEqualTo("test");
         assertThat(exercise.getDescription()).isEqualTo("test");
         assertThat(exercise.getDuration()).isEqualTo(2);
-        assertThat(tag.getId()).isEqualTo(1);
-        assertThat(tag.getName()).isEqualTo("test");
+        assertThat(tag).isEqualTo("test");
     }
 }

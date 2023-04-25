@@ -9,13 +9,13 @@ import java.util.List;
  * date: 2023-04-25
  */
 public class TechniqueContainer {
-    private List<TechniqueExport> techniques;
+    private List<TechniqueExportResponse> techniques;
 
-    public TechniqueContainer(List<TechniqueExport> techniques) {
+    public TechniqueContainer(List<TechniqueExportResponse> techniques) {
         this.techniques = techniques;
     }
 
-    public List<TechniqueExport> getTechniques() {
+    public List<TechniqueExportResponse> getTechniques() {
         return techniques;
     }
 }

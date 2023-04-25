@@ -9,13 +9,13 @@ import java.util.List;
  * date: 2023-04-25
  */
 public class ExerciseContainer {
-    private List<ExerciseExport> exercises;
+    private List<ExerciseExportResponse> exercises;
 
-    public ExerciseContainer(List<ExerciseExport> exercises) {
+    public ExerciseContainer(List<ExerciseExportResponse> exercises) {
         this.exercises = exercises;
     }
 
-    public List<ExerciseExport> getExercises() {
+    public List<ExerciseExportResponse> getExercises() {
         return exercises;
     }
 }
