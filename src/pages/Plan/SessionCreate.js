@@ -4,6 +4,7 @@ import GoBackButton from '../../components/Common/GoBackButton';
 import SessionForm from '../../components/Forms/SessionForm';
 import RoundButton from '../../components/Common/RoundButton/RoundButton';
 import { Check } from 'react-bootstrap-icons';
+import {useNavigate} from "react-router-dom";
 
 /**
  * A component for creating a session.
@@ -15,6 +16,7 @@ import { Check } from 'react-bootstrap-icons';
  */
 function SessionCreate() {
 
+    const navigate = useNavigate()
     /**
      * A state for storing the chosen plan, start-date and time
      */
@@ -176,6 +178,7 @@ function SessionCreate() {
 
                 if (res.ok)
                     successAlert()
+                    navigate("/plan")
 
             } catch (error) {
                 failureAlert("Generellt fel.")

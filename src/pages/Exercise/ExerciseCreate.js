@@ -76,8 +76,11 @@ class ExerciseCreate extends React.Component {
             } else {
                  if (response.status === 409) {
                     alert("Namnet '" + this.state.storedName + "' är upptaget.");
+                 }
+                if (response.status === 400) {
+                    alert("Övning kräver ett namn");
                 }
-                this.setState({insertFailed: true});
+                //this.setState({insertFailed: true});
                 this.setState({boxChecked: false})
             }
         } catch (error) {
@@ -272,7 +275,7 @@ class ExerciseCreate extends React.Component {
     render() {
         let failedAlert;    //should be true if insert failed
         let successAlert;
-        if (this.state.insertFailed | this.state.tagfailed) {
+        if (this.state.insertFailed || this.state.tagfailed) {
             failedAlert = <div className="alert alert-danger" role="alert">
                 Övningen {this.state.storedName} kunde ej läggas till
             </div>;
