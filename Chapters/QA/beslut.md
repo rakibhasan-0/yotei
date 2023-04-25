@@ -9,7 +9,7 @@
 - **Grupp** -  N/A
 - **Beslut** - Att fortsätta med Maven som project management verktyg.
 - **Motivation**
-  - Vi beslutade att fortsätta med Maven då ett byte till annat verktyg skulle innebära en viss omkonfiguration 
+  - Vi beslutade att fortsätta med Maven då ett byte till annat verktyg skulle innebära en viss omkonfiguration av befintlig backend. Detta skulle vara tidskrävande. Det finns erfarenhet av båda verktygen men, det finns inte en stor efterfrågan att byta så det är inte värt mödan. 
 
 ## Framework för testning frontend
 - **Datum** - 230425
