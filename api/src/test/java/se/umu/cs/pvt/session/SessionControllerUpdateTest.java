@@ -9,11 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import se.umu.cs.pvt.session.Session;
-import se.umu.cs.pvt.session.SessionController;
-import se.umu.cs.pvt.session.SessionRepository;
 
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;

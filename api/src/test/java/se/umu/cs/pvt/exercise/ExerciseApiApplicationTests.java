@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -112,7 +111,9 @@ class ExerciseApiApplicationTests {
         assertEquals(HttpStatus.BAD_REQUEST, controller.removeExercise(ex1.getId()).getStatusCode());
     }
 
-    
+    /**
+     *
+     */
     @Test
     void removeExistingExerciseShouldSucceed() {
         Mockito.when(repository.findById(ex1.getId())).thenReturn(Optional.ofNullable(ex1));
