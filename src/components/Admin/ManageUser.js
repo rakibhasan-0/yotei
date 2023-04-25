@@ -9,7 +9,7 @@ import { reactSelectStyle } from '../../Globals/global_style'
 
 /**
  * Component made for the admin page. Made to handle the add user 
- * feature on the front-end.
+ * feature on the front-end..
  *
  *  @author Team Quattro Formaggi (Group 1)
  */
@@ -129,7 +129,7 @@ class ManageUser extends React.Component {
                     </Form.Group>
                 </Form>
 
-                <Form className='mt-5'>
+                <Form className='mt-5' onSubmit={(e) => e.preventDefault()}>
                     <h2>Hantera användare</h2>
                     <Form.Group className='row mt-3 mb-3'>
                         <div className='admin-container container-fluid'>
@@ -142,8 +142,8 @@ class ManageUser extends React.Component {
                                 placeholder='Användare'
                                 onChange={this.manageButtonsSet}
                                 noOptionsMessage={() => `Hittade ingen användare`}
-                                isSearchable
-                                isClearable
+                                isSearchable = {false}
+                                isClearable = {true}
                                 styles={reactSelectStyle}
                             />
                         </div>
@@ -316,7 +316,7 @@ class ManageUser extends React.Component {
     }
 
     /**
-     * Sets up variables sush as currentStatusLabel, successMessage 
+     * Sets up variables such as currentStatusLabel, successMessage 
      * and the components confirmUserBtn, confirmLbl and confirmUserInput
      * appropriate so the the confirmation window will
      * show correctly and a user will change role if everything is correct and the
