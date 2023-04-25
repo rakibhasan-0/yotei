@@ -1,7 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useRef } from "react"
-import { useCookies } from 'react-cookie';
+import { Cookies } from 'react-cookie';
 import Nav from "./components/Nav/Nav";
 import Home from "./pages/Home/Home";
 import ExerciseCreate from "./pages/Exercise/ExerciseCreate";
@@ -13,7 +13,7 @@ import './index.css';
 import './components/Activity/activity.css';
 import './components/Plan/PlanList.css'
 import Login from "./pages/Login/Login";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Admin from "./pages/Admin/Admin";
 import About from "./pages/About/About";
 import WorkoutView from "./pages/Workout/WorkoutView";
@@ -46,65 +46,51 @@ const planURI = "https://jsonplaceholder.typicode.com/users"
  * @version 1.0
  */
 export default function App() {
-    const [cookies, setCookie, removeCookie] = useCookies(['token'])
-    const [logoutTimer, setLogoutTimer] = useState(0)
-    const [token, setToken] = useState(cookies.token)
+    const cookie = new Cookies().get("token");
+    const [token, setToken] = useState(cookie)
 
     const stateRef = useRef()
     stateRef.current = token
 
-    const role = cookies.token !== undefined ? decodeToken(cookies.token).role : ""
-    const userId = cookies.token !== undefined ? decodeToken(cookies.token).userId : 0
+    const role = cookie !== undefined ? decodeToken(cookie).role : ""
+    const userId = cookie !== undefined ? decodeToken(cookie).userId : 0
 
-    const updateCookie = (token) => {
-        if(!token){
-            return
+    const logOut = () => {
+        new Cookies().remove("token")
+        document.location.href = "/"
+    }
+
+    const onIdle = () => {
+        if(cookie != null) {
+            logOut();
         }
+    }
 
-        fetch("/user/refresh", {body: token, method: 'POST', headers: {token}})
-            .then(data => data.text())
-            .then(data => {
-                setToken(data)
-                setCookie('token', data, {secure: false, maxAge: 1200, path: "/"})
+    const onPrompt = () => {
+        if(cookie != null) {
+            toast.warn("Du kommer snart att loggas ut på grund av inaktivitet!",{
+                autoClose: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                position: "top-center"
             })
-            .catch(error => console.error(error))
+        }
     }
 
-    const logout = () => {
-        const id = setInterval(() => {
-            removeCookie("token")
-            document.location.href = "/"
-        }, 1000 * 60 * 2)
-
-        toast.warn("Du kommer snart att loggas ut på grund av inaktivitet!",{
-            autoClose: false,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-            position: "top-center"
-            });
-        setLogoutTimer(id)
+    const onAction = () => { 
+        toast.dismiss();
+        idleTimer.reset();
     }
 
-    useIdleTimer({
-        timeout: 1000 * 60* 20,
-        onIdle: logout,
-        onActive: () => {
-            if(logoutTimer !== 0){
-                toast.dismiss();
-                clearInterval(logoutTimer);
-            }
-        },
-        debounce: 500
-    })
-
-    useEffect(()=> {
-        updateCookie(token)
-        setInterval(() => {
-            updateCookie(stateRef.current)
-        }, 1000 * 60 * 10)
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    const idleTimer = useIdleTimer({
+        onIdle,
+        onPrompt,
+        onAction,
+        promptTimeout: 1000 * 60 * 18,
+        timeout: 1000 * 60 * 20
+      })
 
     return (
         <>
@@ -113,7 +99,7 @@ export default function App() {
                 <BrowserRouter>
                     <Routes>
                         {
-                            cookies.token || process.env.VITE_APP_LOGIN_ENABLED === 'false' ? (
+                            cookie || process.env.VITE_APP_LOGIN_ENABLED === 'false' ? (
                                 <>
                                     {process.env.VITE_APP_LOGIN_ENABLED !== 'false' ? <Route index element={<Login />} /> : null}
                                     <Route path="/" element={<Nav />}>

@@ -44,7 +44,8 @@ function Login() {
 
         if (response.status === 200) {
             response.text().then(token => {
-                setCookies('token', token, {secure: false, maxAge: 1200, path: '/'})
+                //No expiry date set for the cookie so it will be deleted when the browser is closed
+                setCookies('token', token, {secure: false, path: '/'})
                 setToken(token)
             })
             return true
