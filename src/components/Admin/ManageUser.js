@@ -224,7 +224,7 @@ class ManageUser extends React.Component {
                 })
             }
         } catch (error) {
-            console.log('Error at exercise insert')
+            console.log('Error at admin get users')
             this.setState({
                 fetchUsersFailed: true
             })
