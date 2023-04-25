@@ -59,11 +59,14 @@ class Technique extends React.Component {
                 data = await response.json();
                 this.setState({insertFailed: false});
                 this.forceUpdate();
-            } else {
+            }
+            else {
                 if (response.status === 409) {
                     alert("Namnet '" + this.state.storedName + "' är upptaget.");
+                }else if (response.status === 400){
+                    alert("Ange ett namn för tekniken");
                 }
-                this.setState({insertFailed: true});
+                //this.setState({insertFailed: true});
                 this.setState({boxChecked: false})
             }
         } catch (error) {
