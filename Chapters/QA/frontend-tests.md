@@ -27,7 +27,24 @@ React Testing Library includes functionality to test React components. It is use
     
 For example the file **plan.jsx** should have a corresponding testfile called **plan.test.jsx** placed in the testfolder.
 
-## TODO:Test code here
+### Tip:
+There is a extensions in VSCode for Jest and React Testing Library.
 
-#¤ TODO: Mocking REST 
+## Example unit test
+
+    import userEvent from '@testing-library/react'
+    import Button from '../src/components/Common/Button/Button'
+    import '@testing-library/jest-dom'
+
+    test('Tests interaction with button', async() => {
+    // ARRANGE
+    const [clicked, setClicked] = useState(0);
+    render(<Button onClick={()=>{setClicked(1)}}><p>Hello</p></Button>)
+
+    // ACT
+    await userEvent.click(screen.getByText("Hello"))
+
+    // ASSERT
+    expect(clicked == 1)
+    }) 
 
