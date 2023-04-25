@@ -23,7 +23,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doAnswer;
 
-
+/**
+ * @author  Phoenix (25-04-2023)
+ */
 @ExtendWith(MockitoExtension.class)
 class TagControllerTest {
 
@@ -42,7 +44,7 @@ class TagControllerTest {
     }
 
     @Test
-    void testFindAllTags() {
+    void shouldSucceedWhenFindingAllTags() {
         tags.add(new Tag((long) 1, "blå"));
         tags.add(new Tag((long) 2, "svart"));
         tags.add(new Tag((long) 3, "benövning"));
@@ -52,7 +54,7 @@ class TagControllerTest {
     }
 
     @Test
-    void testAddTag() {
+    void shouldSucceedWhenAddingTag() {
         Tag tag = new Tag((long) 1, "blå");
 
         // Saves a tag in the database (mock)
@@ -68,7 +70,7 @@ class TagControllerTest {
 
 
      @Test
-    void testRemoveTag() {
+    void shouldSucceedWhenWhenRemovingTag() {
         final int ADDED_TAGS = 1000;
         ArrayList<Long> tagIds = new ArrayList<>();
         

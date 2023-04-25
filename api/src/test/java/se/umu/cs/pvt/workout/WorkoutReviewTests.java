@@ -9,8 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class WorkoutReviewTests {
 
+    /**
+     * @author  Phoenix (25-04-2023)
+     */
     @Test
-    void getIdOfReview() {
+    void shouldGetIdOfReview() {
         WorkoutReview review = new WorkoutReview((long) 1,0,4,10,"","",null);
         assertEquals(1,review.getId().intValue());
         WorkoutReview review2 = new WorkoutReview((long) 3,0,4,10,"","",null);
@@ -19,7 +22,7 @@ public class WorkoutReviewTests {
     }
 
     @Test
-    void getRatingOfReview() {
+    void shouldGetRatingOfReview() {
         WorkoutReview review = new WorkoutReview((long)1,3,4,10,"","",null);
         assertEquals(3,review.getRating());
         WorkoutReview review2 = new WorkoutReview((long)1,2,4,10,"","",null);
@@ -27,7 +30,7 @@ public class WorkoutReviewTests {
     }
 
     @Test
-    void getUserIdOfReview() {
+    void shouldGetUserIdOfReview() {
         WorkoutReview review = new WorkoutReview((long)1,3,4,10,"","",null);
         assertEquals(4,review.getUserId());
         WorkoutReview review2 = new WorkoutReview((long)1,2,5,10,"","",null);
@@ -36,7 +39,7 @@ public class WorkoutReviewTests {
 
 
     @Test
-    void getPositiveCommentOfReview() {
+    void shouldGetPositiveCommentOfReview() {
         WorkoutReview review = new WorkoutReview((long)1,3,4, 10, "Snyggt byggt, fräsig kärra!","",null);
         assertEquals("Snyggt byggt, fräsig kärra!",review.getPositiveComment());
         WorkoutReview review2 = new WorkoutReview((long)1,2,5, 10, "Jag har lämnat lite skrot på gården din.","",null);
@@ -45,7 +48,7 @@ public class WorkoutReviewTests {
 
 
     @Test
-    void getNegativeCommentOfReview() {
+    void shouldGetNegativeCommentOfReview() {
         WorkoutReview review = new WorkoutReview((long)1,3,4,10,"","Man behöver en ratt!",null);
         assertEquals("Man behöver en ratt!",review.getNegativeComment());
         WorkoutReview review2 = new WorkoutReview((long)1,2,5,10,"","Man behöver hjul på bilen!",null);
@@ -53,7 +56,7 @@ public class WorkoutReviewTests {
     }
 
     @Test
-    void getDateOfReview() {
+    void shouldGetDateOfReview() {
         Date date1 = new Date(1648930522000L);
         WorkoutReview review = new WorkoutReview((long)1,3,4,10,"","Man behöver en ratt!", date1);
         assertEquals(date1,review.getDate());
@@ -63,7 +66,7 @@ public class WorkoutReviewTests {
     }
 
     @Test
-    void getWorkoutIdOfReview() {
+    void shouldGetWorkoutIdOfReview() {
         WorkoutReview review = new WorkoutReview((long)1,3,4, 10,"","Man behöver en ratt!",null);
         assertEquals(10,review.getWorkoutId());
         WorkoutReview review2 = new WorkoutReview((long)1,2,5,20,"","Man behöver hjul på bilen!",null);

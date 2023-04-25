@@ -18,6 +18,9 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * @author  Phoenix (25-04-2023)
+ */
 @ExtendWith(MockitoExtension.class)
 public class LoginTest {
 
@@ -37,7 +40,7 @@ public class LoginTest {
     }
 
     @Test
-    void loginWithoutCredentialsShouldFail() {
+    void shouldFailWhenLoginWithoutCredentials() {
         try {
             user.setUsername("");
             user.setPassword("");
@@ -55,7 +58,7 @@ public class LoginTest {
     }
 
     @Test
-    void loginWithEmptyUsernameShouldFail() {
+    void shouldFailWhenLoginWithEmptyUsername() {
         try {
             user.setUsername("");
             user.setPassword("1234");
@@ -73,7 +76,7 @@ public class LoginTest {
     }
 
     @Test
-    void loginWithEmptyPasswordShouldFail() {
+    void shouldFailWhenLoginWithEmptyPassword() {
         try {
             user.setUsername("user");
             map.put("username", user.getUsername());
@@ -90,7 +93,7 @@ public class LoginTest {
     }
 
     @Test
-    void loginWithoutExistingUserShouldFail() {
+    void shouldFailWhenLoginWithoutExistingUser() {
         try {
             user.setUsername("nonExistingUser");
             user.setPassword("randomPassword");
@@ -111,7 +114,7 @@ public class LoginTest {
     }
 
     @Test
-    void loginWithWrongPasswordShouldFail() {
+    void shouldFailWhenLoginWithWrongPassword() {
         try {
             user.setUsername("user");
             user.setPassword("invalidPassword");
@@ -132,7 +135,7 @@ public class LoginTest {
     }
 
     @Test
-    void loginWithUserShouldSucceed() {
+    void shouldSucceedWhenLoginWithUser() {
 
         try {
             user.setUsername("user");

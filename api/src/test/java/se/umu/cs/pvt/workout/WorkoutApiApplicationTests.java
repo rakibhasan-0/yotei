@@ -23,6 +23,8 @@ import static org.mockito.Mockito.*;
 /**
  * As of (18/05-2022) this testclass only tests each individual return statement from each method in the
  * WorkoutController class.
+ *
+ * @author  Phoenix (25-04-2023)
  */
 @ExtendWith(MockitoExtension.class)
 class WorkoutApiApplicationTests {
@@ -44,7 +46,7 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void addWorkoutShouldSucceed() {
+    void shouldSucceedWithAddWorkout() {
         workout = new Workout(1L, "test", "Description", 1000L,
                 LocalDate.of(2022,1,1), LocalDate.of(2022,1,1),
                 new Date(),false, 1L);
@@ -57,13 +59,13 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void addWorkoutShouldFail() {
+    void shouldFailWithRemovingANullWorkout() {
         ResponseEntity<Workout> response = wc.postWorkout(null);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
-    void getWorkoutsIsEmpty() {
+    void shouldFailWhenGettingEmptyWorkout() {
         Mockito.when(workoutRepository.findAllProjectedBy()).thenReturn(new ArrayList<>());
 
         ResponseEntity<List<WorkoutShort>> response = wc.getWorkouts();
@@ -72,7 +74,7 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void getWorkoutsSucceeds() {
+    void shouldSucceedWithGetWorkout() {
         List<WorkoutShort> workoutList = new ArrayList<>();
         WorkoutShort workoutShort = new WorkoutShort() {
             @Override
@@ -105,7 +107,7 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void getRelevantWorkoutsIsEmpty() {
+    void shouldFailWhenGetRelevantWorkoutIsEmpty() {
         Mockito.when(workoutRepository.findAllRelevant(1L)).thenReturn(new ArrayList<>());
 
         ResponseEntity<List<WorkoutShort>> response = wc.getRelevantWorkouts(1);
@@ -114,7 +116,7 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void getRelevantWorkoutsSucceeds() {
+    void shouldSucceedWithGetRelevantWorkout() {
         List<WorkoutShort> workoutList = new ArrayList<>();
         WorkoutShort workoutShort = new WorkoutShort() {
             @Override
@@ -147,7 +149,7 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void getWorkoutDescriptionSucceeds() {
+    void shouldSucceedWithGetWorkoutDescription() {
         Mockito.when(workoutRepository.findById(1L)).thenReturn(Optional.of(new Workout(1L, "test",
                 "Description", 1000L, LocalDate.of(2022,1,1),
                 LocalDate.of(2022,1,1), new Date(),false, 1L)));
@@ -182,13 +184,13 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void getWorkoutDescriptionIsNull() {
+    void shouldFailWhenGetWorkoutDescriptionIsNull() {
         ResponseEntity<WorkoutDropDownProjection> response = wc.getDescription(null);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
-    void getWorkoutDescriptionWithWrongId() {
+    void shouldFailWhenGetWorkoutDescriptionWithWrongId() {
         Mockito.when(workoutRepository.findById(1L)).thenReturn(Optional.empty());
 
         ResponseEntity<WorkoutDropDownProjection> response = wc.getDescription(1L);
@@ -197,7 +199,7 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void getWorkoutByIdSucceeds() {
+    void shouldSucceedWithGetWorkoutById() {
         workout = new Workout(1L, "test", "Description", 1000L,
                 LocalDate.of(2022,1,1), LocalDate.of(2022,1,1),
                 new Date(),false, 1L);
@@ -210,13 +212,13 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void getWorkoutByIdIsNull() {
+    void shouldFailWhenGetWorkoutByIdIsNull() {
         ResponseEntity<Workout> response = wc.getWorkout(null);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
-    void getWorkoutByIdWithWrongId() {
+    void shouldFailWhenGetWorkoutByIdWithWorngId() {
         Mockito.when(workoutRepository.findById(1L)).thenReturn(Optional.empty());
 
         ResponseEntity<Workout> response = wc.getWorkout(1L);
@@ -225,7 +227,7 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void getCreatedWorkoutByIdSucceeds() {
+    void shouldSucceedWithGetCreatedWorkoutById() {
         WorkoutShort workoutShort = new WorkoutShort() {
 
             public Long getId() {
@@ -256,13 +258,13 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void getCreatedWorkoutByIdIsNull() {
+    void shouldFailWhenGetCreatedWorkoutByIdIsNull() {
         ResponseEntity<List<WorkoutShort>> response = wc.getCreatedWorkouts(null);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
-    void getCreatedWorkoutByIdWithWrongId() {
+    void shouldFailWhenGetCreatedWorkoutByIdWithWrongId() {
         List<WorkoutShort> workoutList = new ArrayList<>();
         Mockito.when(workoutRepository.findAllByAuthor(1L)).thenReturn(workoutList);
 
@@ -272,7 +274,7 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void deleteWorkoutShouldSucceed() {
+    void shouldSucceedWithDeletingWorkout() {
         workout = new Workout(1L, "test", "Description", 1000L,
                 LocalDate.of(2022,1,1), LocalDate.of(2022,1,1),
                 new Date(),false, 1L);
@@ -287,13 +289,13 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void deletedWorkoutIsNull() {
+    void shouldFailWhenDeletingWorkoutThatIsNull() {
         ResponseEntity<Long> response = wc.deleteWorkout(null);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
-    void deleteWorkoutWithWrongId() {
+    void shouldFailWhenDeletingWorkoutWithWrongId() {
         Mockito.when(workoutRepository.findById(1L)).thenReturn(Optional.empty());
 
         ResponseEntity<Long> response = wc.deleteWorkout(1L);
@@ -302,7 +304,7 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void updateWorkoutShouldSucceed() {
+    void shouldSucceedWithUpdatingWorkout() {
         workout = new Workout(1L, "test", "Description", 1000L,
                 LocalDate.of(2022,1,1), LocalDate.of(2022,1,1),
                 new Date(),false, 1L);
@@ -317,13 +319,13 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void updateWorkoutIsNull() {
+    void shouldFailWhenUpdatingWorkoutThatIsNull() {
         ResponseEntity<Workout> response = wc.updateWorkout(null);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
-    void updateWorkoutWithInvalidId() {
+    void shouldFailWhenUpdatingWorkoutWithInvalidId() {
         workout = new Workout(1L, "test", "Description", 1000L,
                 LocalDate.of(2022,1,1), LocalDate.of(2022,1,1),
                 new Date(),false, 1L);
@@ -336,7 +338,7 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void addWorkoutToFavoriteShouldSucceed() {
+    void shouldSucceedWithAddingWorkoutToFavorites() {
         wc = new WorkoutController(workoutFavoriteRepository);
         WorkoutFavorite workoutFavorite = new WorkoutFavorite();
 
@@ -348,7 +350,7 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void addWorkoutToFavoriteShouldFail() {
+    void shouldFailWithAddingWorkoutToFavoritesThatIsNull() {
         wc = new WorkoutController(workoutFavoriteRepository);
 
         ResponseEntity<WorkoutFavorite> response = wc.markAsFavorite(null);
@@ -356,7 +358,7 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void removeWorkoutFromFavoritesShouldSucceed() {
+    void shouldSucceedWithRemovingWorkoutFromFavorites() {
        wc = new WorkoutController(workoutFavoriteRepository);
        WorkoutFavorite workoutFavorite = new WorkoutFavorite();
 
@@ -370,7 +372,7 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void removeWorkoutFromFavoritesShouldFail() {
+    void shouldFailWithRemovingWorkoutFromFavorites() {
         wc = new WorkoutController(workoutFavoriteRepository);
         WorkoutFavorite workoutFavorite = new WorkoutFavorite();
 
@@ -382,7 +384,7 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void removeWorkoutFromFavoritesIsNull() {
+    void shouldFailWithRemovingWorkoutFromFavoritesThatIsNull() {
         wc = new WorkoutController(workoutFavoriteRepository);
 
         ResponseEntity<WorkoutFavorite> response = wc.removeFavorite(null);
@@ -390,7 +392,7 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void getFavoritesShouldReturnAnEmptyList() {
+    void shouldReturnAnEmptyListFromGetFavorites() {
         int id = 1;
         Mockito.when(workoutRepository.findAllFavorites(id)).thenReturn(new ArrayList<>());
 
@@ -400,7 +402,7 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void getFavoritesShouldReturnAList() {
+    void shouldReturnAListFromGetFavorites() {
         int id = 1;
         workout = new Workout(1L, "test", "Description", 1000L,
                 LocalDate.of(2022,1,1), LocalDate.of(2022,1,1),
@@ -416,7 +418,7 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void getFavoriteByIdShouldReturnTrue() {
+    void shouldReturnTrueWhenGetFavoritesById() {
         int user_id = 1;
         int workout_id = 1;
         workout = new Workout(1L, "test", "Description", 1000L,
@@ -433,7 +435,7 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void getFavoriteByIdShouldReturnFalse() {
+    void shouldReturnFalseWhenGetFavoritesById() {
         int user_id = 1;
         int workout_id = 1;
 
@@ -446,20 +448,20 @@ class WorkoutApiApplicationTests {
 
 
     @Test
-    void getReview() {
+    void shouldSucceedWithGetReview() {
         Mockito.when(repository.findReviewsForWorkout(1)).thenReturn(new ArrayList<WorkoutReviewReturnInterface>());
         assertEquals(HttpStatus.OK, workoutReviewController.getReviewsForWorkout(1).getStatusCode());
     }
 
     @Test
-    void insertReview() {
+    void shouldSucceedWithInsertReview() {
         WorkoutReview review = new WorkoutReview((long)1,3,4,5,"Snyggt byggt","fräsig kärra",new Date(1648930522000L));
         Mockito.when(repository.save(review)).thenReturn(review);
         assertEquals(HttpStatus.OK, workoutReviewController.insertReviewForWorkout(review).getStatusCode());
     }
 
     @Test
-    void updateReview() {
+    void shouldSucceedWithUpdateReview() {
 
         WorkoutReview review = new WorkoutReview((long)1,3,4,5,"Snyggt byggt","fräsig kärra",new Date(1648930522000L));
         Mockito.when(repository.save(review)).thenReturn(review);

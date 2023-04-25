@@ -5,10 +5,13 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * @author  Phoenix (25-04-2023)
+ */
 class PasswordHashTest {
 
     @Test
-    void validatePasswordShouldSucceedWhenCorrect() {
+    void shouldSucceedWhenValidatePasswordIsCorrect() {
         String password = "test";
 
         try {
@@ -21,7 +24,7 @@ class PasswordHashTest {
     }
 
     @Test
-    void validatePasswordShouldFailWhenIncorrect() {
+    void shouldFailWhenValidatePasswordIsIncorrect() {
         String password = "test1";
 
         try {
@@ -34,7 +37,7 @@ class PasswordHashTest {
     }
 
     @Test
-    void hashEmptyPasswordShouldSucceed() {
+    void shouldSucceedWhenHashEmptyPassword() {
         String password = "";
 
         try {

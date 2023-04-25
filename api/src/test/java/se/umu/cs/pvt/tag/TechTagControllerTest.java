@@ -24,7 +24,9 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doAnswer;
 
 
-
+/**
+ * @author  Phoenix (25-04-2023)
+ */
 @ExtendWith(MockitoExtension.class)
 public class TechTagControllerTest {
     
@@ -43,7 +45,7 @@ public class TechTagControllerTest {
     }
 
     @Test
-    void testAddTechTag() {
+    void shouldSucceedWhenAddingTechniqueTag() {
         Tag regularTag = new Tag((long) 1, "blå");
         TechniqueTag techTag = new TechniqueTag((long) 1);
         techTag.setTag(regularTag);
@@ -66,7 +68,7 @@ public class TechTagControllerTest {
     }
 
     @Test
-    void testGettechniqueByTag() {
+    void shouldSucceedWhenGettingTechniqueByTag() {
         final long TECHNIQUE_ONE = 1;
         final long TECHNIQUE_TWO = 2;
 
@@ -101,7 +103,7 @@ public class TechTagControllerTest {
     }
 
     @Test
-    void testGetTagByTechnique() {
+    void shouldSucceedWhenGettingTagByTechnique() {
         final long TECHNIQUE_ONE = 3;
         final long TECHNIQUE_TWO = 4;
 
@@ -146,7 +148,7 @@ public class TechTagControllerTest {
     }
 
     @Test
-    void testRemovetechniqueTag() {
+    void shouldSucceedWhenRemovingTechniqueTag() {
         // simulate that we have added thousand elements to the database
         final int ADDED_techniqueTAGS = 1000;
         Tag regularTag = new Tag((long) 1, "blå");
@@ -199,7 +201,7 @@ public class TechTagControllerTest {
         assertEquals(new ResponseEntity<>(HttpStatus.BAD_REQUEST), techController.deleteTechniqueTagPair(new TechniqueTag((long) 32), regularTag.getId()));   
     }    
     @Test
-    void getTagRelations() {
+    void shouldSucceedWhenGettingTagRelations() {
         final long TECHNIQUE_ONE = 3;
         final long TECHNIQUE_TWO = 4;
 

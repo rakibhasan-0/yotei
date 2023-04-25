@@ -2,7 +2,7 @@ package se.umu.cs.pvt.plan;
 /**
  * A test-class for the Plan-controller API-methods
  *
- * @author Calzone
+ * @author Calzone, Phoenix (25-04-2023)
  */
 
 import org.junit.jupiter.api.BeforeEach;
@@ -48,87 +48,95 @@ class PlanApiApplicationTests
         plans.add(ex3);
     }
 
+
     @Test
-    void testUpdatingANonExistingPlan() {
+    void shouldFailWhenUpdatingANonExistingPlan() {
         Mockito.when(repository.findById(ex1.getId())).thenReturn(Optional.empty());
         controller.updatePlan(ex1);
         assertEquals(HttpStatus.NOT_FOUND, controller.updatePlan(ex1).getStatusCode());
     }
 
+
     @Test
-    void testUpdatingWithoutId() {
+    void shouldFailWhenUpdatingWithoutId() {
         Plan invalidPlan = new Plan(null, "name", "#FFFFFF", 1L);
         ResponseEntity<Plan> response = controller.updatePlan(invalidPlan);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
+
     @Test
-    void testUpdateWithNullAttributes() {
+    void shouldFailWhenUpdatingWithNullAttributes() {
         Plan invalidPlan = new Plan(1L, "color", null, null);
         ResponseEntity<Plan> response = controller.updatePlan(invalidPlan);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
+
     @Test
-    void testUpdateWithInvalidColorCode() {
+    void shouldFailWhenUpdatingWithInvalidColorCode() {
         Plan invalidPlan = new Plan(1L, "name", "invalid hex code", 1L);
         ResponseEntity<Plan> response = controller.updatePlan(invalidPlan);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
+
     @Test
-    void testAddWithInvalidColorCode() {
+    void shouldFailWhenAddingPlanWithInvalidColorCode() {
         Plan invalidPlan = new Plan(null, "name", "invalid hex code", 1L);
         ResponseEntity<Plan> response = controller.postPlan(invalidPlan);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
+
     @Test
-    void testAddWithNullAttributes() {
+    void shouldFailWhenAddingPlanWithNullAttributes() {
         Plan invalidPlan = new Plan(null, null, null, 1L);
         ResponseEntity<Plan> response = controller.postPlan(invalidPlan);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
+
     @Test
-    void updateExistingPlanShouldSucceed() {
+    void shouldSucceedUpdatingExistingPlan() {
         Mockito.when(repository.findById(ex1.getId())).thenReturn(Optional.of(ex1));
         assertEquals(HttpStatus.OK, controller.updatePlan(ex1).getStatusCode());
     }
 
+
     @Test
-    void getAllOnEmptyTable() {
+    void shouldFailWhenGettingAllPlansFromEmptyTable() {
         ResponseEntity response = controller.getAllPlan();
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
-    void getNonExistingPlanFromUserID() {
+    void shouldFailWhenGettingNonExistingPlanFromUserID() {
         ResponseEntity response = controller.getPlanByUserID(3L);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
-    void addNothingShouldFail() {
+    void shouldFailWhenAddNothing() {
         ResponseEntity<Plan> response = controller.postPlan(new Plan());
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
-    void addPlanShouldSucceed() {
+    void shouldSucceedWhenAddingPlan() {
         Plan ex4 = new Plan(null, "namn 4", "#123456", 2L);
         ResponseEntity<Plan> response = controller.postPlan(ex4);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
 
     @Test
-    void removeNoneExistingPlan() {
+    void shouldFailWhenRemovingNoneExistingPlan() {
         ResponseEntity responseEntity = controller.removePlan(72L);
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
 
     @Test
-    void removeExistingPlan () {
+    void shouldSucceedWhenRemovingExistingPlan() {
         Mockito.when(repository.findById(ex1.getId())).thenReturn(Optional.of(ex1));
         assertEquals(HttpStatus.OK, controller.removePlan(ex1.getId()).getStatusCode());
     }

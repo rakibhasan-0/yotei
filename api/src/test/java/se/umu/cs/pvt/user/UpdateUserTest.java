@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Test class for UPDATE-USER methods.
  *
- * @author Quattro Formaggio (Group 1)
+ * @author Quattro Formaggio (Group 1), Phoenix (25-04-2023)
  */
 
 @ExtendWith(MockitoExtension.class)
@@ -43,7 +43,7 @@ public class UpdateUserTest {
     }
 
     @Test
-    void updatingUsernameWithCorrectInputShouldSucceed() {
+    void shouldSucceedWhenUpdatingUsernameWithCorrectInput() {
 
         try {
             map.put("newUsername", "newName");
@@ -75,7 +75,7 @@ public class UpdateUserTest {
     }
 
     @Test
-    void updatingUsernameWithWrongPasswordShouldNotSucceed() {
+    void shouldFailWhenUpdatingUsernameWithWrongPassword() {
 
         try {
             map.put("newUsername", "newName");
@@ -99,7 +99,7 @@ public class UpdateUserTest {
     }
 
     @Test
-    void updatingUsernameWithUsernameAlreadyExistingShouldNotSucceed() {
+    void shouldFailWhenUpdatingUsernameWithAlreadyExistingUsername() {
 
         try {
             map.put("newUsername", "user");
@@ -121,7 +121,7 @@ public class UpdateUserTest {
         }
     }
     @Test
-    void updatingPasswordWithNoInputShouldFail() {
+    void shouldFailWhenUpdatingPasswordWithNoInput() {
         try {
             user.setUsername("user");
             user.setPassword("1234");
@@ -141,7 +141,7 @@ public class UpdateUserTest {
 
     }
     @Test
-    void updatingPasswordWithNewPasswordsDifferShouldNotSucceed() {
+    void shouldFailWhenUpdatingPasswordWithNewPasswordsDifferent() {
         try {
             user.setUsername("user");
             user.setPassword("1234");
@@ -160,7 +160,7 @@ public class UpdateUserTest {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
     @Test
-    void updatingPasswordWithOldPasswordsWrongShouldNotSucceed() {
+    void shouldFailWhenUpdatingPasswordWithOldPasswordWrong() {
         try {
             user.setUsername("user");
             user.setPassword("1234");
@@ -180,7 +180,7 @@ public class UpdateUserTest {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
     @Test
-    void updatingPasswordWithCorrectInputShouldSucceed() throws NoSuchAlgorithmException, InvalidKeySpecException {
+    void shouldSucceedWhenUpdatingPasswordWithCorrectInput() throws NoSuchAlgorithmException, InvalidKeySpecException {
         try {
             user.setUsername("user");
             user.setPassword("1234");

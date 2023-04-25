@@ -19,6 +19,8 @@ import static org.mockito.Mockito.*;
 /**
  * As of (18/05-2022) this testclass only tests each individual return statement from each method in the
  * WorkoutController class.
+ *
+ * @author  Phoenix (25-04-2023)
  */
 
 @ExtendWith(MockitoExtension.class)
@@ -37,25 +39,25 @@ public class ActivityControllerTests {
     }
 
     @Test
-    void getActivitiesIsNull() {
+    void shouldFailWhenGetActivityIsNull() {
         ResponseEntity<List<Activity>> response = ac.getActivities(null);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
-    void getActivitiesShouldSucceed() {
+    void shouldSucceedFromGetActivities() {
         ResponseEntity<List<Activity>> response = ac.getActivities(1L);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
-    void addActivityIsNull() {
+    void shouldFailIfAddActivityIsNull() {
         ResponseEntity<Activity> response = ac.addActivity(null);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
-    void addActivityShouldSucceed() {
+    void shouldSucceedFromAddActivity() {
         activity = new Activity();
 
         Mockito.when(activityRepository.save(activity)).thenReturn(activity);
@@ -66,20 +68,20 @@ public class ActivityControllerTests {
     }
 
     @Test
-    void updateActivityIsNull() {
+    void shouldFailIfUpdateActivityIsNull() {
         ResponseEntity<Activity> response = ac.updateActivity(null);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
-    void updateActivityIdIsNull() {
+    void shouldFailIfUpdateActivityIdIsNull() {
         activity = new Activity();
         ResponseEntity<Activity> response = ac.updateActivity(activity);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
-    void updateActivityShouldSucceed() {
+    void shouldSucceedWithUpdatingActivity() {
         activity = new Activity(1L, "name", "description", 1, 1);
 
         Mockito.when(activityRepository.findById(activity.getId())).thenReturn(Optional.of(activity));
@@ -92,7 +94,7 @@ public class ActivityControllerTests {
     }
 
     @Test
-    void updateActivityWithInvalidId() {
+    void shouldFailWithUpdatingActivityWithInvalidId() {
         activity = new Activity(1L, "name", "description", 1, 1);
 
         Mockito.when(activityRepository.findById(activity.getId())).thenReturn(Optional.empty());
@@ -103,13 +105,13 @@ public class ActivityControllerTests {
     }
 
     @Test
-    void deleteActivityIsNull() {
+    void shouldFailWhenDeletingActivityThatIsNull() {
         ResponseEntity<Activity> response = ac.updateActivity(null);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
-    void deleteActivityShouldSucceed() {
+    void shouldSucceedWithDeletingActivity() {
         activity = new Activity(1L, "name", "description", 1, 1);
 
         Mockito.when(activityRepository.findById(activity.getId())).thenReturn(Optional.of(activity));
@@ -122,7 +124,7 @@ public class ActivityControllerTests {
     }
 
     @Test
-    void deleteActivityWithInvalidId() {
+    void shouldFailWithDeletingActivityWithInvalidId() {
         activity = new Activity(1L, "name", "description", 1, 1);
 
         Mockito.when(activityRepository.findById(activity.getId())).thenReturn(Optional.empty());

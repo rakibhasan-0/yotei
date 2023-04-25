@@ -26,7 +26,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doAnswer;
 
-
+/**
+ * @author  Phoenix (25-04-2023)
+ */
 @ExtendWith(MockitoExtension.class)
 public class WorkTagControllerTest {
     
@@ -45,7 +47,7 @@ public class WorkTagControllerTest {
     }
 
     @Test
-    void testAddWorkTag() {
+    void shouldSucceedWhenAddingWorkTag() {
         Tag regularTag = new Tag((long) 1, "blå");
         WorkoutTag workTag = new WorkoutTag((long) 1);
         workTag.setTag(regularTag);
@@ -69,7 +71,7 @@ public class WorkTagControllerTest {
     }
     
     @Test
-    void testGetWorkoutByTag() {
+    void shouldSucceedWhenGettingWorkoutByTag() {
         final long WORKOUT_ONE = 1;
         final long WORKOUT_TWO = 2;
 
@@ -102,7 +104,7 @@ public class WorkTagControllerTest {
     }
 
     @Test
-    void testGetTagByWorkout() {
+    void shouldSucceedWhenGettingTagByWorkout() {
         final long WORKOUT_ONE = 3;
         final long WORKOUT_TWO = 4;
 
@@ -148,7 +150,7 @@ public class WorkTagControllerTest {
 
 
     @Test
-    void testRemoveWorkoutTag() {
+    void shouldSucceedWhenRemovingWorkoutTag() {
         // simulate that we have added three elements to the database
         final int ADDED_WORKOUTTAGS = 1000;
         Tag regularTag = new Tag((long) 1, "blå");
@@ -201,7 +203,7 @@ public class WorkTagControllerTest {
     }
 
     @Test
-    void getTagRelations() {
+    void shouldSucceedWhenGettingTagRelations() {
         final long WORKOUT_ONE = 3;
         final long WORKOUT_TWO = 4;
 

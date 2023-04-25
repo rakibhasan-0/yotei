@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Test class for USER-API methods.
  *
- * @author Quattro Formaggio (Group 1)
+ * @author Quattro Formaggio (Group 1), Phoenix (25-04-2023)
  */
 
 @ExtendWith(MockitoExtension.class)
@@ -41,11 +41,9 @@ public class UserApiTest {
         Map<String, String> map = new HashMap<>();
     }
 
-    /**
-     * Tests if no credentials then fail.
-     */
+
     @Test
-    void createWithoutCredentialsShouldFail() {
+    void shouldFailWhenCreatingWithoutCredentials() {
         try {
             user.setUsername("");
             user.setPassword("");
@@ -60,11 +58,9 @@ public class UserApiTest {
         }
     }
 
-    /**
-     * Tests HTTP-response of already existing user.
-     */
+
     @Test
-    void createdUserShouldExist() {
+    void shouldFailIfCreatedUserExists() {
         try {
             user.setUsername("user");
             user.setPassword("1234");
@@ -82,11 +78,9 @@ public class UserApiTest {
         }
     }
 
-    /**
-     * Tests that a newly created user gives right HTTP-response.
-     */
+
     @Test
-    void createdNewUserShouldNotFail() {
+    void shouldSucceedIfNewUserGivesRightResponse() {
         try {
             user.setUsername("user");
             user.setPassword("1234");
@@ -105,12 +99,8 @@ public class UserApiTest {
     }
 
 
-
-    /**
-     * Tests that all users excluding their password and id is returned on fetching all.
-     */
     @Test
-    void fetchingUsersShouldReturnAllExistingUsersWithoutIdAndPassword() {
+    void shouldReturnAllExistingUsersWithoutIdAndPasswordWhenFetchingUsers() {
         try {
             users = new ArrayList<>();
             for (int i = 1; i < 11; i++) {
@@ -137,11 +127,9 @@ public class UserApiTest {
         }
     }
 
-    /**
-     * Tests that a 404 NOT FOUND is returned if the users could not be found.
-     */
+
     @Test
-    void fetchingUsersShouldReturnNotFoundIfCouldNotGetUsers() {
+    void shouldReturnNotFoundIfCantGetUsersFromFetchingUsers() {
         try {
             users = new ArrayList<>();
             for (int i = 1; i < 11; i++) {
@@ -164,11 +152,9 @@ public class UserApiTest {
         }
     }
 
-    /**
-     * Tests that an OK is returned on a successful remove of user.
-     */
+
     @Test
-    void removeUserSuccessfully() {
+    void shouldSucceedWhenRemovingUsers() {
         try {
             users = new ArrayList<>();
             for (int i = 1; i < 11; i++) {
@@ -193,11 +179,9 @@ public class UserApiTest {
         }
     }
 
-    /**
-     * Tests that a BAD REQUEST is returned on a remove of a none existing user.
-     */
+
     @Test
-    void removeUserNoneExistingUser() {
+    void shouldFailWhenRemovingNoneExistingUser() {
         try {
             users = new ArrayList<>();
             for (int i = 1; i < 11; i++) {
@@ -223,11 +207,9 @@ public class UserApiTest {
         }
     }
 
-    /**
-     * Tests that a BAD REQUEST is returned on a remove of a user with a database fail.
-     */
+
     @Test
-    void removeUserDatabaseFail() {
+    void shouldFailWhenRemovingUserWithDatabaseFail() {
         try {
             users = new ArrayList<>();
             for (int i = 1; i < 11; i++) {
@@ -253,11 +235,8 @@ public class UserApiTest {
     }
 
 
-    /**
-     * Tests that an OK is returned on a successful change of role for a user.
-     */
     @Test
-    void changeRoleSuccessfully() {
+    void shouldSucceedWhenChangingUserRole() {
         try {
             users = new ArrayList<>();
             for (int i = 1; i < 11; i++) {
@@ -283,11 +262,9 @@ public class UserApiTest {
         }
     }
 
-    /**
-     * Tests that a BAD REQUEST is returned on a change role of a none existing user.
-     */
+
     @Test
-    void changeRoleNoneExistingUser() {
+    void shouldFailWhenChangingRoleOnNoneExistingUser() {
         try {
             users = new ArrayList<>();
             for (int i = 1; i < 11; i++) {
@@ -313,11 +290,9 @@ public class UserApiTest {
         }
     }
 
-    /**
-     * Tests that a BAD REQUEST is returned on a change role of a user with a database fail.
-     */
+
     @Test
-    void changeRoleDatabaseFail() {
+    void shouldFailWhenChangingRoleOnUserWithDatabaseFail() {
         try {
             users = new ArrayList<>();
             for (int i = 1; i < 11; i++) {

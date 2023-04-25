@@ -24,7 +24,9 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 
-
+/**
+ * @author  Phoenix (25-04-2023)
+ */
 
 @ExtendWith(MockitoExtension.class)
 public class ExerTagControllerTest {
@@ -46,7 +48,7 @@ public class ExerTagControllerTest {
     }
 
     @Test
-    void testAddExerTag() {
+    void shouldAddExerTag() {
         Tag regularTag = new Tag((long) 1, "blå");
         ExerciseTag exerTag = new ExerciseTag((long) 1);
         exerTag.setTag(regularTag);
@@ -69,7 +71,7 @@ public class ExerTagControllerTest {
     }
 
     @Test
-    void testGetExerciseByTag() {
+    void shouldGiveExercisesByTag() {
         final long exercise_ONE = 1;
         final long exercise_TWO = 2;
 
@@ -104,7 +106,7 @@ public class ExerTagControllerTest {
     }
 
     @Test
-    void testGetTagByExercise() {
+    void shouldGetTagsFromExercise() {
         final long EXERCISE_ONE = 3;
         final long EXERCISE_TWO = 4;
 
@@ -149,7 +151,7 @@ public class ExerTagControllerTest {
     }
 
     @Test
-    void testRemoveExerciseTag() {
+    void shouldRemoveExerciseTags() {
         // simulate that we have added thousand elements to the database
         final int ADDED_exerciseTAGS = 1000;
         Tag regularTag = new Tag((long) 1, "blå");
@@ -201,7 +203,7 @@ public class ExerTagControllerTest {
     }
 
     @Test
-    void getTagRelations() {
+    void shouldGetTagRelations() {
         final long EXERCISE_ONE = 3;
         final long EXERCISE_TWO = 4;
 
@@ -283,7 +285,7 @@ public class ExerTagControllerTest {
     }
 
     @Test
-    void testSetExerciseTags() {
+    void shouldSetExerciseTags() {
         final long EXERCISE_ONE = 3;
         final long EXERCISE_TWO = 4;
 

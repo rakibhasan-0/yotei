@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 /**
  * A test-class for the Exercise-controller API-methods.
  *
- * @author Quattro Formaggio, Carlskrove (05-05-2022)
+ * @author Quattro Formaggio, Carlskrove (05-05-2022), Phoenix (25-04-2023)
  */
 
 @ExtendWith(MockitoExtension.class)
@@ -56,33 +56,27 @@ class ExerciseApiApplicationTests {
         assertThat(controller).isNotNull();
     }
 
-    /**
-     * Tries to update a non-existing exercise. Checks that the result is equal to BAD_REQUEST.
-     */
+
     @Test
-    void testUpdatingANonExistingExercise(){
+    void shouldGiveBadRequestUpdatingANonExistingExercise(){
         Mockito.when(repository.findById(ex1.getId())).thenReturn(Optional.empty());
         controller.updateExercise(ex1);
         assertEquals(HttpStatus.BAD_REQUEST, controller.updateExercise(ex1).getStatusCode());
 
     }
 
-    /**
-     * Tries to update a non-existing exercise. Checks that the result is NOT equal to OK.
-     */
+
     @Test
-    void testUpdatingANonExistingExerciseFail(){
+    void shouldFailUpdatingANonExistingExercise(){
         Mockito.when(repository.findById(ex1.getId())).thenReturn(Optional.empty());
         controller.updateExercise(ex1);
         assertNotEquals(HttpStatus.OK, controller.updateExercise(ex1).getStatusCode());
 
     }
 
-    /**
-     * Updates exercise with valid format and receives Http status bad request.
-     */
+
     @Test
-    void updateExerciseWithInvalidFormatShouldFail() {
+    void shouldFailUpdateExerciseWithInvalidFormat() {
         Exercise exercise = new Exercise(1L, "ex1", "exercise 1", -1);
         Mockito.when(repository.findById(exercise.getId())).thenReturn(Optional.of(exercise));
 
@@ -91,42 +85,34 @@ class ExerciseApiApplicationTests {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
-    /**
-     * Updates existing exercise with valid format and receives Http status OK.
-     */
+
     @Test
-    void updateExistingExerciseShouldSucceed() {
+    void shouldSucceedUpdateExistingExercise() {
         Mockito.when(repository.findById(ex1.getId())).thenReturn(Optional.ofNullable(ex1));
 
         assertEquals(HttpStatus.OK, controller.updateExercise(ex1).getStatusCode());
     }
 
-    /**
-     * Tries to remove a non-existing exercise. Checks that the result is equal to BAD_REQUEST.
-     */
+
     @Test
-    void removeNonExistingExercise(){
+    void shouldFailWhenRemovingNonExistingExercise(){
         Mockito.when(repository.findById(ex1.getId())).thenReturn(Optional.empty());
 
         assertEquals(HttpStatus.BAD_REQUEST, controller.removeExercise(ex1.getId()).getStatusCode());
     }
 
-    /**
-     *
-     */
+
     @Test
-    void removeExistingExerciseShouldSucceed() {
+    void shouldSucceedWhenRemovingExistingExercise() {
         Mockito.when(repository.findById(ex1.getId())).thenReturn(Optional.ofNullable(ex1));
 
         assertEquals(HttpStatus.OK, controller.removeExercise(ex1.getId()).getStatusCode());
 
     }
 
-    /**
-     * Checks if test returns the right imported JSON list.
-     */
+
     @Test
-    void postImportShouldReturnCorrectList() {
+    void shouldReturnCorrectListFromPostImport() {
         Mockito.when(repository.save(ex1)).thenReturn(ex1);
         Mockito.when(repository.save(ex2)).thenReturn(ex2);
 
@@ -135,11 +121,9 @@ class ExerciseApiApplicationTests {
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-    /**
-     * Checks if test returns all the elements.
-     */
+
     @Test
-    void getExercisesShouldReturnAllExercises() {
+    void shouldReturnAllExercisesFromGetExercises() {
         Mockito.when(repository.findAll()).thenReturn(exercises);
 
         List<Exercise> result = (List<Exercise>)controller.getExercises();
@@ -148,11 +132,9 @@ class ExerciseApiApplicationTests {
         assertThat(result.get(1)).isEqualTo(ex2);
     }
 
-    /**
-     * Checks if test returns one correct id.
-     */
+
     @Test
-    void getExerciseWithRealIdShouldReturnExercise() {
+    void shouldReturnExerciseFromGetExerciseWithRealId() {
         Mockito.when(repository.findById(ex1.getId())).thenReturn(Optional.ofNullable(ex1));
         Mockito.when(repository.existsById(ex1.getId())).thenReturn(true);
 
@@ -161,12 +143,9 @@ class ExerciseApiApplicationTests {
         assertThat(result).isEqualTo(ex1);
     }
 
-    /**
-     * Checks so posting invalid formatted exercise because of negative time
-     * returns bad request.
-     */
+
     @Test
-    void exerciseInvalidFormatReturnsBadRequest() {
+    void shouldFailWhenExerciseHasInvalidNameAndDuration() {
         Exercise exerciseWithInvalidDuration = new Exercise(1L, "Invalid " +
                 "exercise", "Negative time", -1);
 
@@ -174,24 +153,18 @@ class ExerciseApiApplicationTests {
                 controller.postExercise(exerciseWithInvalidDuration).getStatusCode());
     }
 
-    /**
-     * Checks so posting invalid formatted exercise because of empty name
-     * returns bad request.
-     */
+
     @Test
-    void exerciseInvalidFormat2ReturnsBadRequest() {
+    void  shouldFailWhenExerciseHasNoName() {
         Exercise exerciseWithNoName = new Exercise(1L, "", "No name", 32);
 
         Assertions.assertEquals(HttpStatus.BAD_REQUEST,
                 controller.postExercise(exerciseWithNoName).getStatusCode());
     }
 
-    /**
-     * Checks so posting invalid formatted exercise because of null id
-     * returns bad request.
-     */
+
     @Test
-    void exerciseInvalidFormat3ReturnsBadRequest() {
+    void shouldFailWhenExerciseHasInvalidIdAndName() {
         Exercise exerciseWithNullId = new Exercise(null, "", "No name", 32);
 
         Assertions.assertEquals(HttpStatus.BAD_REQUEST,
@@ -199,12 +172,8 @@ class ExerciseApiApplicationTests {
     }
 
 
-    /**
-     * PostImporting list with some invalid formatted exercise returns bad
-     * request, (note the valid exercises may still be added).
-     */
     @Test
-    void postImportWithSomeInvalidFormattedExerciseReturnsUnprocessableEntity() {
+    void shouldFailWhenPostImportHasInvalidFormattedExercise() {
         List<Exercise> toAdd = new ArrayList<>();
         toAdd.add(new Exercise(1L, "Valid", " ", 2));
         toAdd.add(new Exercise(2L, "Invalid", " ", -1));
@@ -216,7 +185,7 @@ class ExerciseApiApplicationTests {
     }
 
     @Test
-    void updatingTestToHaveNegativeDurationReturnsBadRequest() {
+    void shouldFailWhenUpdatingTestToHaveNegativeDuration() {
         Exercise invalid = new Exercise(2L, "Invalid", " ", -1);
         Mockito.when(repository.findById(invalid.getId())).thenReturn(Optional.of(invalid));
 
@@ -224,20 +193,16 @@ class ExerciseApiApplicationTests {
                 controller.updateExercise(invalid).getStatusCode());
     }
 
-    /**
-     * Post-importing null returns BAD_REQUEST.
-     */
+
     @Test
-    void postImportNullReturnsBadRequest() {
+    void shouldFailWhenPostImportNull() {
         Assertions.assertEquals(HttpStatus.BAD_REQUEST,
                 controller.postImport(null).getStatusCode());
     }
 
-    /**
-     * Checks if test returns description.
-     */
+
     @Test
-    void getDescriptionShouldReturnDescription() {
+    void shouldReturnDescriptionFromGetDescription() {
         Mockito.when(repository.getExerciseDropDownById(ex1.getId())).thenReturn(Optional.of(new ExerciseDropDownProjection() {
             @Override
             public String getDescription() {
