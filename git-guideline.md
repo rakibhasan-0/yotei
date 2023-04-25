@@ -68,6 +68,12 @@ If the rebase was successful, a merge request should be sent using the gitlab we
 
         [A more detailed description about what has been implemented and how it has been done.]
 
+### Tags
+The backend and frontend repos both use an automated pipeline with build, test and potentially deployment stages. If for some reason you want to skip these steps you can add `[skip]` **at the start** of your commit message. This can be useful if you have unfinished changes and still want to push to the remote or if your work contains purely documentation changes.
+**Note:** To merge a branch with `main`, the final commit on the branch **must not** skip the pipeline or the merge request will be denied automatically.
+**Example:** 
+`git commit -m "[skip] Documentation changes"`
+
 ### Example of merge request:
 ![Exempel på merge request](images/git.png)
 
