@@ -70,7 +70,7 @@ If the rebase was successful, a merge request should be sent using the gitlab we
 ![Exempel på merge request](images/git.png)
 
 <h3>Assigning a reviewer</h3>
-The merge resuest can only be approved by a DevOps, they will however not be obliged to review the code. Instead always assign one reviewer (not a DevOps) of your choice to review the merge, if no reviwer has been appointed or have not reviewed the code, DevOps will not approve the merge request regardless of content. If a reviewer has been assigned and has approved the merge a DevOps will approve the merge request and the updated main branch will be automatically deployed on the test server.
+The merge request can only be approved by a DevOps, they will however not be obliged to review the code. Instead always assign one reviewer (not a DevOps) of your choice to review the merge, if no reviwer has been appointed or have not reviewed the code, DevOps will not approve the merge request regardless of content. If a reviewer has been assigned and has approved the merge a DevOps will approve the merge request and the updated main branch will be automatically deployed on the test server.
 
 <h2> Reviewing a merge request </h2>
 If you have been assigned to review a merge request, start by clicking the changes tab.
@@ -94,8 +94,9 @@ After submitting the review, you will be brought back to the merge request. It i
 - Help each other.
 - Make sure to commit often.
 - Always `pull` from **main** before creating a new branch.
-- Always `rebase` before creating a merge request to **main** branch.
+- Always `rebase` to **origin/main** before creating a merge request to **main** branch.
 - At the end of the day, `push` changes to your feature branch, in case you are sick/not available the day after, such that another member of the squad can continue working on the feature.
+- If you work on a larger feature, make sure to `rebase` to origin/main continuously (perhaps a couple of times per day), to handle conflicts as you go intead of having to handle all conflicts before a merge request. 
 
 
 
