@@ -51,11 +51,11 @@ function Login() {
     }
 
     /**
-     * Redirects the user to the home page if the user has previously logged in.
+     * Redirects the user to the given link if the user has previously logged in.
      */
     useEffect(() => {
         if(cookies.token){
-            navigate('/plan')
+            navigate(window.location.pathname)
         }
     })
 
@@ -72,7 +72,7 @@ function Login() {
         const response = await fetch(`/user/verify`, requestOptions)
         
         if(loginIsOk(response)) {
-            navigate("/plan")
+            navigate(window.location.pathname)
         } 
     }
 

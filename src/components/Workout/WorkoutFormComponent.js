@@ -77,7 +77,7 @@ function WorkoutFormComponent(props){
     function handleSubmit(event){
         const form = event.currentTarget;
 
-        if (name.trim() == "") {
+        if (name.trim() === "") {
             alert("Invalid name.");
             event.preventDefault();
             event.stopPropagation();
@@ -127,7 +127,7 @@ function WorkoutFormComponent(props){
         // the add button is pressed.
         
         if (inputTaglist !== null){
-            //Removes the possibillity of multiple tags with the same label.
+            //Removes the possibility of multiple tags with the same label.
             for (let i = 0; i < inputTaglist.length; i++) {
                 console.log(inputTaglist[i]);
                 for (let j = 0; j < inputTaglist.length; j++) {
@@ -165,8 +165,8 @@ function WorkoutFormComponent(props){
     }
 
     /**
-     * Returns todays date.
-     * @returns todays date
+     * Returns today's date.
+     * @returns today's date
      */
     function getTodaysDate() {
         let today = new Date();
