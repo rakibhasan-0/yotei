@@ -2,7 +2,7 @@ import React from "react";
 import "./DatePicker.css";
 
 /**
- * Defines the button used in the home page. 
+ * Defines the date picker. 
  * 
  * @author Chimera (Group 4)
  * @version 1.0
