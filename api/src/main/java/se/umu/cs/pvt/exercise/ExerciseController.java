@@ -152,7 +152,7 @@ public class ExerciseController {
      * BAD_REQUEST if some exercise has invalid format.
      */
     @PostMapping("/import")
-    public ResponseEntity postImport(@RequestBody List<Exercise> listImport) {
+    public ResponseEntity<ExerciseImportResponse> postImport(@RequestBody List<Exercise> listImport) {
         int duplicates = 0;
         int i = 0;
         List<Long> ids = new ArrayList<>();

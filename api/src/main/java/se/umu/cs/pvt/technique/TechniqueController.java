@@ -169,7 +169,7 @@ public class TechniqueController {
      * bad request.
      */
     @PostMapping("/import")
-    public ResponseEntity postImport(@RequestBody List<Technique> listImport) {
+    public ResponseEntity<TechniqueImportResponse> postImport(@RequestBody List<Technique> listImport) {
         int duplicates = 0;
         int i = 0;
         List<Long> ids = new ArrayList<>();

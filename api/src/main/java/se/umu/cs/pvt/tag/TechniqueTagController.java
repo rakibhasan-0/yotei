@@ -163,7 +163,7 @@ public class TechniqueTagController {
      *                          OK if import wasa successful.
      */
     @PostMapping("/import/techniques")
-    public ResponseEntity postImport(@RequestBody List<TechniqueTagMap> tagMap) {
+    public ResponseEntity<Void> postImport(@RequestBody List<TechniqueTagMap> tagMap) {
         for (TechniqueTagMap tagMapping:tagMap) {
             for (Tag tag:tagMapping.getTags()) {
                 Tag tagInDatabase;
@@ -194,7 +194,7 @@ public class TechniqueTagController {
      *                              A response entity with the fetched tags and status OK.
      */
     @GetMapping("/export/techniques")
-    public ResponseEntity getExport(@RequestParam(name = "techniqueIds") List<Long> techIds) {
+    public ResponseEntity<Object> getExport(@RequestParam(name = "techniqueIds") List<Long> techIds) {
         List<List<String>> response = new ArrayList<>();
         for (Long id:techIds) {
             if (techniqueTagRepository.findByTechId(id) != null) {

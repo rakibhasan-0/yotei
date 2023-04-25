@@ -227,7 +227,7 @@ public class ExerciseTagController {
      *                          OK if import successful.
      */
     @PostMapping("/import/exercises")
-    public ResponseEntity postImport(@RequestBody List<ExerciseTagMap> tagMap) {
+    public ResponseEntity<Void> postImport(@RequestBody List<ExerciseTagMap> tagMap) {
         for (ExerciseTagMap tagMapping:tagMap) {
             for (Tag tag:tagMapping.getTags()) {
                 Tag tagInDatabase;
@@ -258,7 +258,7 @@ public class ExerciseTagController {
      *                              A response entity with the fetched tags.
      */
     @GetMapping("/export/exercises")
-    public ResponseEntity getExport(@RequestParam(name = "exerciseIds") List<Long> exerciseIds) {
+    public ResponseEntity<Object> getExport(@RequestParam(name = "exerciseIds") List<Long> exerciseIds) {
         List<List<String>> response = new ArrayList<>();
         for (Long id:exerciseIds) {
             if (exerciseTagRepository.findByExerciseId(id) != null) {
