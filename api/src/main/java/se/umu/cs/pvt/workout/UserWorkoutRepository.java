@@ -9,9 +9,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
- * JPARepository for UserWorkout
+ * Interface for UserWorkout
  *
- * @author Grupp 2 Cappriciosa
+ * @author Grupp 2 Cappriciosa (DOCS griffin ens19amd)
  */
 
 @Repository

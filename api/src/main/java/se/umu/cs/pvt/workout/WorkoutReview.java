@@ -7,6 +7,13 @@ import java.util.Date;
 
 /**
  * Entity for the workout_review table.
+ * 
+ *  Documentation Griffin ens19amd
+ *  JPA (Java Persistence API)
+ * 
+ *  WorkoutReview.java - WorkoutReview class. Represents the Workout Entity.
+ *  WorkoutReviewRepository.java (Interface) - JPARepository file.
+ *  WorkoutReviewReturnInterface.java - Interface for returning information about reviews.
  *
  * @author Calskrove (Team 6)
  */

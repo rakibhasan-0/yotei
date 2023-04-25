@@ -6,9 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 /**
- * Repository for workout reviews.
+ * Interface for workout reviews.
  *
- * @author Calskrove (Team 6)
+ * @author Calskrove (Team 6) (DOCS: Griffin ens19amd)
  */
 public interface WorkoutReviewRepository extends JpaRepository<WorkoutReview,Long> {
     

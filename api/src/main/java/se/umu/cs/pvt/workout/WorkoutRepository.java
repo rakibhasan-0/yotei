@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * JPARepository for exercises
+ * Interface for exercises
  *
- * @author Grupp 8 Kebabpizza, Hawaii
+ * @author Grupp 8 Kebabpizza, Hawaii (DOCS: Griffin ens19amd)
  */
 
 @Repository
@@ -24,9 +24,4 @@ public interface WorkoutRepository extends JpaRepository<Workout, Long> {
     List<WorkoutShort> findAllRelevant(Long user_id);
 
     List<WorkoutShort> findAllByAuthor(Long user_id);
-
-    /*
-    //Example of reference to stored procedure in the database [Kan användas för att refaktoresera kod]
-    @Procedure
-    List<Workout> test_function(int workoutid);*/
 }

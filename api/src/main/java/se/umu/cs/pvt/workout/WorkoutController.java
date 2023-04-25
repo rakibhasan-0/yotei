@@ -12,10 +12,11 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
- * Class to get and insert workout.
+ *  UserWorkout API for creating, reading and deleting workouts.
  *
- * @author Grupp 8 Kebabpizza
+ *  @author Grupp 8 Kebabpizza (Doc: Griffin ens19amd)
  */
+
 @RestController
 @CrossOrigin
 @RequestMapping(path = "/api/workouts")
@@ -446,17 +447,6 @@ public class WorkoutController {
             return new ResponseEntity<>(review, HttpStatus.NOT_FOUND);
         }
     }
-
-
-        /*
-    //Example of how to use stored procedures [Kan användas för att refaktoresera kod].
-    @GetMapping("/test/{id}")
-    @Transactional
-    public List<Workout> testGetWorkout(@PathVariable("id") int id) {
-        List<Workout> workoutList = workoutRepository.test_function(id);
-
-        return workoutList;
-    }*/
 }
 
 /**

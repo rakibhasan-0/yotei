@@ -1,11 +1,17 @@
 package se.umu.cs.pvt.workout;
 
-
 import javax.persistence.*;
 import java.io.Serializable;
 
 /**
  * Model for UserwWorkout data in database
+ * 
+ *  Documentation Griffin ens19amd
+ *  JPA (Java Persistence API)
+ * 
+ *  UserWorkout.java - UserWorkout class. Represents the UserWorkout Entity.
+ *  UserWorkoutController.java - UserWorkout API for creating, reading and deleting plans.
+ *  UserWorkoutRepository.java (Interface) - JPARepository file.
  *
  * @author Grupp 2 Cappriciosa
  */
@@ -29,14 +35,6 @@ public class UserWorkout implements Serializable {
      */
     protected UserWorkout() {}
 
-    /**
-     * Creates a UserWorkout.
-     * @param userId id of the user.
-
-    public UserWorkout(Long userId) {
-        this.userId = userId;
-    }
-     */
     public void setUserId(Long userId) {
         this.userId = userId;
     }
@@ -45,16 +43,10 @@ public class UserWorkout implements Serializable {
         this.workoutId = workoutId;
     }
 
-    /**
-     * @return user id.
-     */
     public Long getUserId() {
         return userId;
     }
 
-    /**
-     * @return Id of the workout.
-     */
     public Long getWorkoutId() {
         return workoutId;
     }

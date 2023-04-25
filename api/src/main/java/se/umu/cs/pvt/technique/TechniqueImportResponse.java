@@ -7,7 +7,7 @@ import java.util.List;
  * The class consist of a message and a list of ids that should be
  * returned when an import is called.
  * 
- * @author UNKNOWN (Docs: Griffin, André)
+ * @author UNKNOWN (Docs: Griffin, ens19amd)
  */
 public class TechniqueImportResponse {
     private String message;

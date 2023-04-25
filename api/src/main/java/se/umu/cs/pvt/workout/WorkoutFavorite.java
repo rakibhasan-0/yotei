@@ -6,6 +6,18 @@ import javax.persistence.IdClass;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Model for activity data in database
+ *
+ * Documentation Griffin ens19amd
+ * JPA (Java Persistence API)
+ *
+ *  WorkoutFavorite.java - WorkoutFavorite class. Represents the Workout Entity.
+ *  WorkoutFavoriteRepository.java (Interface) - JPARepository file. 
+ *
+ * @author Unknown (DOCS: Griffin ens19amd)
+ */
+
 @Entity
 @IdClass(WorkoutFavorite.class)
 public class WorkoutFavorite implements Serializable {

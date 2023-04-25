@@ -7,6 +7,15 @@ import java.util.Date;
 
 /**
  * Model for workout data in database
+ * 
+ *  Documentation Griffin ens19amd
+ *  JPA (Java Persistence API)
+ * 
+ *  Workout.java - Workout class. Represents the Workout Entity.
+ *  WorkoutController.java - Workout API for creating, reading, updating and deleting workouts.
+ *  WorkoutDropDownProjection.java - JPA-entity projection for dropdown information Workouts.
+ *  WorkoutRepository.java (Interface) - JPARepository file.
+ *  WorkoutShort.java - Represents a minimal data structure for workout.
  *
  * @author Grupp 8 Kebabpizza
  */
@@ -49,19 +58,8 @@ public class Workout implements Serializable {
      */
     protected Workout() {}
 
-    /**
-     * Constructor for workout
-     * @param id id of workout
-     * @param name name of workout
-     * @param desc desc of workout
-     * @param duration duration of workout
-     * @param created date created
-     * @param date date
-     * @param hidden hidden
-     * @param author foreign key to user
-     */
     public Workout(Long id, String name, String desc, Long duration, LocalDate created, LocalDate edited,
-                   Date date, boolean hidden, Long author) {
+                    Date date, boolean hidden, Long author) {
         this.id = id;
         this.name = name;
         this.desc = desc;
@@ -73,63 +71,36 @@ public class Workout implements Serializable {
         this.author = author;
     }
 
-    /**
-     * @return the id
-     */
     public Long getId() {
         return id;
     }
 
-    /**
-     * @return the name
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * @return the description
-     */
     public String getDesc() {
         return desc;
     }
 
-    /**
-     * @return the duration
-     */
     public Long getDuration() { return duration; }
 
-    /**
-     * @return the created date
-     */
     public LocalDate getCreated() {
         return created;
     }
 
-    /**
-     * @return the changed date
-     */
     public LocalDate getChanged() {
         return changed;
     }
 
-    /**
-     * @return the date
-     */
     public Date getDate() {
         return date;
     }
 
-    /**
-     * @return the hidden
-     */
     public Boolean getHidden() {
         return hidden;
     }
 
-    /**
-     * @return the author
-     */
     public Long getAuthor() {
         return author;
     }

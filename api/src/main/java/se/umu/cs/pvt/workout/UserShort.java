@@ -30,20 +30,12 @@ public class UserShort {
      * no-args constructor required by JPA spec
      * this one is protected since it shouldn't be used directly
      */
-    public UserShort() {
+    public UserShort() {}
 
-    }
-
-    /**
-     * @return Id of user.
-     */
     public Long getUser_id() {
         return user_id;
     }
 
-    /**
-     * @return Name of the user.
-     */
     public String getUsername() {
         return username;
     }

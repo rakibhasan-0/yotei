@@ -7,6 +7,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ *  UserWorkout API for creating, reading and deleting activities.
+ *
+ *  @author Unknown (Doc: Griffin ens19amd)
+ */
+
 @RestController
 @CrossOrigin
 @RequestMapping(path = "/api/workouts/activities")

@@ -5,6 +5,16 @@ import javax.persistence.*;
 /**
  * Model for activity data in database
  *
+ * Documentation Griffin ens19amd
+ * JPA (Java Persistence API)
+ *
+ *  Activity.java - Activity class. Represents the Plan Entity.
+ *  ActivityController.java - Activity API for creating, reading, updating and deleting plans.
+ *  ActivityRepository.java (Interface) - JPARepository file.
+ * 
+ *  UserShort.java - Represents a minimal data structure for user table.
+ *  UserShortRepository.java (Interface) - JPARepository file.
+ * 
  * @author Grupp 8 Kebabpizza
  */
 @Entity
@@ -58,66 +68,38 @@ public class Activity {
         this.order = order;
     }
 
-    /**
-     * @return the id
-     */
     public Long getId() {
         return id;
     }
 
-    /**
-     * @return the workout id
-     */
     public Long getWorkoutId() {
         return workoutId;
     }
 
-    /**
-     * @return the exercise id
-     */
     public Long getExerciseId() {
         return exerciseId;
     }
 
-    /**
-     * @return the technique id
-     */
     public Long getTechniqueId() {
         return techniqueId;
     }
 
-    /**
-     * @return the name
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * @return the desc
-     */
     public String getDesc() {
         return desc;
     }
 
-    /**
-     * @return the duration
-     */
     public int getDuration() {
         return duration;
     }
 
-    /**
-     * @return the order
-     */
     public int getOrder() {
         return order;
     }
-
-    /**
-     *
-     * @param workoutId workout id to reference
-     */
+    
     public void setWorkoutId(Long workoutId) {
         this.workoutId = workoutId;
     }

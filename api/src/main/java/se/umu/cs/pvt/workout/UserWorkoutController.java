@@ -8,6 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ *  UserWorkout API for creating, reading and deleting plans.
+ *
+ *  @author Unknown (Doc: Griffin ens19amd)
+ */
+
 @RestController
 @CrossOrigin
 @RequestMapping("/api/workouts")
@@ -19,7 +25,7 @@ public class UserWorkoutController {
 
     @Autowired
     public UserWorkoutController(UserWorkoutRepository userWorkoutRepository, WorkoutRepository workoutRepository,
-                                 UserShortRepository userShortRepository) {
+                                    UserShortRepository userShortRepository) {
         this.userWorkoutRepository = userWorkoutRepository;
         this.workoutRepository = workoutRepository;
         this.userShortRepository = userShortRepository;
@@ -34,7 +40,7 @@ public class UserWorkoutController {
      */
     @PostMapping("/add/workout/{workout_id}/user/{user_id}")
     public ResponseEntity<UserWorkout> postUserWorkoutPair(@PathVariable(name = "workout_id") Long workoutId,
-                                                           @PathVariable(name = "user_id") Long userId) {
+                                                            @PathVariable(name = "user_id") Long userId) {
         if ( (userId < 0) || (workoutId < 0) )
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
