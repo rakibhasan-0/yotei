@@ -12,7 +12,7 @@
 }
 
 .button-normal {
-    background-color: var(--secondary);
+    background-color: var(--red-primary);
     color: whitesmoke;
 }
 

@@ -1,18 +1,19 @@
 :root {
   --background: #ffffff;
-  --primary: #201e1f;
-  --secondary: #BD3B41;
-  --details: #C27074;
-  --secondaryTest: #F8EBEC;
+  --black-primary: #201E1F;
+  --red-primary: #BD3B41;
+  --red-secondary: #F8EBEC;
+  --gray: #B4B4B4;
 
   --button-hover: #d74249;
   --button-border: #BE3B41;
-  --button-press: var(--details);
+  --button-press: #C27074;
 
   --header: #333333;
   --body: #666666;
 
   --border-radius: 0.3rem;
+
 }
 
 body {
