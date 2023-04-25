@@ -241,7 +241,7 @@
 }
 
 .list-element-content[state|="time"] > .content-popup > .content-popup-time > #edit-time > .counter {
-    width: 40px;
+    width: 50px;
     height: 40px;
     border-radius: 0.25em;
     text-align: center;

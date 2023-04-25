@@ -27,10 +27,10 @@ const DraggableListElement = ({element, elements, setElements, updateComponent})
         setElements([...elements]);
     }
 
-    //Sets the time of an element but limits the time to be between 0 to 99.
+    //Sets the time of an element but limits the time to be between 0 to 999.
     function setTime(element, newTime) {
         if(newTime < 0 || isNaN(newTime)) {newTime = 0;}
-        if(newTime > 99) {newTime = 99;}
+        if(newTime > 999) {newTime = 999;}
         element.duration = newTime;
         document.querySelector("#list-element" + element.id + " > .list-element-content > .content-popup > .content-popup-time > #edit-time > .counter").value = newTime;
         setElements([...elements]);
@@ -114,7 +114,7 @@ const DraggableListElement = ({element, elements, setElements, updateComponent})
                                 document.querySelector("#list-element" + element.id + " > .list-element-content > .content-popup > .content-popup-time > #edit-time > #decrease").setAttribute("state", "active");
                             }
 
-                            if(element.duration === 99){
+                            if(element.duration === 999){
                                 document.querySelector("#list-element" + element.id + " > .list-element-content > .content-popup > .content-popup-time > #edit-time > #increase").setAttribute("state", "inactive");
                             } else {
                                 document.querySelector("#list-element" + element.id + " > .list-element-content > .content-popup > .content-popup-time > #edit-time > #increase").setAttribute("state", "active");
@@ -125,7 +125,7 @@ const DraggableListElement = ({element, elements, setElements, updateComponent})
                             setTime(element, element.duration+1);
 
                             document.querySelector("#list-element" + element.id + " > .list-element-content > .content-popup > .content-popup-time > #edit-time > #decrease").setAttribute("state", "active");
-                            if(element.duration === 99){
+                            if(element.duration === 999){
                                 document.querySelector("#list-element" + element.id + " > .list-element-content > .content-popup > .content-popup-time > #edit-time > #increase").setAttribute("state", "inactive");
                             }
                         }}>+</h3>
