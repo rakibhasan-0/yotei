@@ -77,6 +77,13 @@ function WorkoutFormComponent(props){
     function handleSubmit(event){
         const form = event.currentTarget;
 
+        if (name.trim() == "") {
+            alert("Invalid name.");
+            event.preventDefault();
+            event.stopPropagation();
+            return;
+        }
+        
         if (form.checkValidity() === false){
             event.preventDefault();
             event.stopPropagation();
