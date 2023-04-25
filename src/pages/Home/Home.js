@@ -16,7 +16,7 @@ function Home() {
                 <HomePageLogoButton buttonName="Pass" linkTo="/workout"/>
                 <HomePageLogoButton buttonName="Övningar" linkTo="/exercise"/>
                 <HomePageLogoButton buttonName="Tekniker" linkTo="/technique"/>
-                <HomePageLogoButton buttonName="Termin" linkTo="/plan"/>
+                <HomePageLogoButton buttonName="Grupp" linkTo="/plan"/>
             </div>
         </div>
     );

@@ -42,7 +42,7 @@ const PlanNav = (props) => {
                     }</div>
                 </div>
 
-              <h2 id="title" style={{color: "white"}}>Terminsplanering</h2>
+              <h2 id="title" style={{color: "white"}}>Grupplanering</h2>
 
                 <div className="accordion-title" onClick={() => setIsActiveCal(!isActiveCal)}>
                     <div className='text-right'>{isActiveCal ?
