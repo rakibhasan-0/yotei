@@ -61,12 +61,12 @@ To continue with the rebase. Alternatively the developer could abort the rebase 
 `git rebase --abort`
 
 If the rebase was successful, a merge request should be sent using the gitlab website. The following template should be used when creating a new merge resuest via the website.
-- Title - `<branch_name>`
+- Title - `<branch_name: Short description of what was implemented>`
 - Description -
 
-        <Trello ticket link>
+        [Trello ticket link]
 
-        <Description, a breif description about what has been implemented and how it has been done.> 
+        [A more detailed description about what has been implemented and how it has been done.]
 
 ### Example of merge request:
 ![Exempel på merge request](images/git.png)
