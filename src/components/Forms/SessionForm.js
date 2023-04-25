@@ -2,7 +2,7 @@ import Select from 'react-select'
 import { useState, useEffect, useContext } from 'react'
 import { AccountContext } from "../../context";
 import TimePicker from 'react-time-picker'
-import DatePicker from 'react-date-picker'
+import DatePicker from '../Common/DatePicker/DatePicker'
 import '../../Globals/DatePicker.css'
 import '../../Globals/TimePicker.css'
 /**
@@ -95,15 +95,6 @@ function SessionForm(props) {
 			<label htmlFor="date">
 				Datum
 				<DatePicker
-					locale="sv-SV"
-					name="date"
-					id="date"
-					type="date"
-					placeholder="Datum"
-					className="form-control"
-					required={true}
-					autoFocus={false}
-					value={date}
 					onChange={(e) => { onClickData("date", e) }}
 				/>
 			</label>

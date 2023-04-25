@@ -1,7 +1,7 @@
 import React from 'react'
 import Weekday from '../Plan/Weekday'
 import DayTime from '../Plan/DayTime'
-import DatePicker from 'react-date-picker'
+import DatePicker from '../Common/DatePicker/DatePicker'
 import 'react-time-picker/dist/TimePicker.css'; 
 /**
  * This functional component is used as a form for adding plans.
@@ -26,7 +26,6 @@ function PlanForm(props) {
     var color = props.planData.color;
     var startDate = props.planData.startDate;
     var endDate = props.planData.endDate;
-
 
     return (
 
@@ -67,12 +66,6 @@ function PlanForm(props) {
                 <label htmlFor="startDate">
                     Startdatum:
                     <DatePicker
-					locale="sv-SV"
-					name="date"
-                    id="date"
-                    type="date"
-                    className={props.okStartDate || !props.buttonClicked ? 'form-control' : 'form-control is-invalid'}
-					value={startDate}
 					onChange={(e) => { props.onClickData("startDate", e) }}
                     />
                 </label>
@@ -81,12 +74,6 @@ function PlanForm(props) {
                 <label htmlFor="endDate">
                     Slutdatum:
                     <DatePicker
-					locale="sv-SV"
-					name="date"
-                    id="date"
-                    type="date"
-                    className={props.okStartDate || !props.buttonClicked ? 'form-control' : 'form-control is-invalid'}
-					value={endDate}
 					onChange={(e) => { props.onClickData("endDate", e) }}
                     />
                 </label>

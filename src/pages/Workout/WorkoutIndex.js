@@ -3,7 +3,7 @@ import SearchBar from '../../components/Common/SearchBar';
 import ActivityList from "../../components/Activity/ActivityList";
 import './WorkoutIndex.css';
 import { AccountContext } from '../../context';
-import DatePicker from 'react-datetime-picker';
+import DatePicker from '../../components/Common/DatePicker/DatePicker';
 import RoundButton from '../../components/Common/RoundButton/RoundButton';
 import { Plus } from 'react-bootstrap-icons';
 
@@ -38,7 +38,7 @@ class Workout extends React.Component {
     updateSearch(searchParams) {
         if (searchParams.date !== ""){
             this.updateDate(searchParams.date)
-            searchParams.date = searchParams.date.toLocaleDateString("sv-SV")
+            searchParams.date = searchParams.date
         }
         let workout_ids = [];
         const tags = this.state.tags.filter(tag =>
@@ -79,18 +79,6 @@ class Workout extends React.Component {
                     }}/>
                     <center>
                         <DatePicker
-                            locale="sv"
-                            name="date"
-                            id="date-form"
-                            type="date-form"
-                            clearIcon={null}
-                            className="date-display"
-                            dayPlaceholder="valt"
-                            yearPlaceholder="Inget"
-                            monthPlaceholder="datum"
-                            autoFocus={false}
-                            value={this.value}
-                            format={"y-MM-dd"}
                             onChange={(e) => {this.updateSearch({name: this.state.nameSearchParams, date: e});
 
                         }}/>

@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import Calendar from 'react-calendar'
+import DatePicker from '../Common/DatePicker/DatePicker';
 import 'react-calendar/dist/Calendar.css';
 
 /**
@@ -19,11 +19,9 @@ export default function PlanCalendar() {
     }
     return (
         <>
-        <Calendar
-                value={dateState}
-                onChange={changeDate}
-                locale="sv-SV"
-            />
+        <DatePicker
+            onChange={changeDate}
+        />
         
         </>
     )
