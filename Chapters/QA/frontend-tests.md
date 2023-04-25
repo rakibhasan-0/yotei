@@ -18,4 +18,5 @@ Jest is a framework for testing Javascript code that will be used together with 
 React Testing Library includes functionality to test React components. It is used together with Jest to make a testing framework for our frontend.
 
 **Install React Testing Library with:**
+
     ```npm install --save-dev @testing-library/react``` 
