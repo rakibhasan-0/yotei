@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import HomePageLogoButton from '../Home/HomePageLogoButton';
+import RoundButton from '../../components/Common/RoundButton/RoundButton';
+import { Plus } from 'react-bootstrap-icons';
 
 const PlanOrSessionDialog = () => {
     const handleShow = () => setShow(true);
@@ -25,7 +27,9 @@ const PlanOrSessionDialog = () => {
                 </Modal.Body>
                 <Modal.Footer></Modal.Footer>
             </Modal>
-            <Button className="btn btn-color btn-add container-fluid" onClick={handleShow}>+</Button>
+            <RoundButton onClick={handleShow}>
+                <Plus />
+            </RoundButton>
         </div>
     )
 }

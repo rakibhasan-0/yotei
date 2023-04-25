@@ -2,7 +2,8 @@ import { React, useState, useContext } from 'react';
 import { AccountContext } from "../../context";
 import PlanForm from '../../components/Forms/PlanForm';
 import GoBackButton from '../../components/Common/GoBackButton';
-import AddButton from '../../components/Common/AddButton';
+import RoundButton from '../../components/Common/RoundButton/RoundButton';
+import { Check } from 'react-bootstrap-icons';
 
 /**
  * This is a page containing components to allow creation of 'Plan'
@@ -395,9 +396,10 @@ function PlanCreate() {
                     />
 
                     {/*Button for the form. Retrieves the users input*/}
-                    <div onClick={() => { addPlan().then(() => { setFieldCheck({ ...fieldCheck, buttonClicked: true }) }) }}>
-                        <AddButton buttonName="&#10004;" />
-                    </div>
+                    <RoundButton onClick={() => { addPlan().then(() => { setFieldCheck({ ...fieldCheck, buttonClicked: true }) }) }}>
+                        <Check />
+                    </RoundButton>
+                    
 
                     <GoBackButton confirmationNeeded="true" />
                     {fieldCheck.buttonClicked ? displayAlert : ''}

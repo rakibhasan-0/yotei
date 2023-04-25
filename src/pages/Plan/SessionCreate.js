@@ -1,8 +1,9 @@
 import { React, useState, useContext } from 'react';
 import { AccountContext } from "../../context";
 import GoBackButton from '../../components/Common/GoBackButton';
-import AddButton from '../../components/Common/AddButton';
 import SessionForm from '../../components/Forms/SessionForm';
+import RoundButton from '../../components/Common/RoundButton/RoundButton';
+import { Check } from 'react-bootstrap-icons';
 
 /**
  * A component for creating a session.
@@ -198,11 +199,9 @@ function SessionCreate() {
                     />
 
                     {/*Button for the form. Calls the function addPlan. Retrieve the users input*/}
-                    <div onClick={() => addSession().then(() => {
-                        setFieldCheck({ ...fieldCheck, buttonClicked: true })
-                    })}>
-                        <AddButton buttonName="&#10004;" />
-                    </div>
+                    <RoundButton onClick={ () => addSession().then(() => {setFieldCheck({ ...fieldCheck, buttonClicked: true })})}>
+                        <Check />
+                    </RoundButton>
 
                     <GoBackButton returnPath={'/plan'} confirmationNeeded="true" />
                     {fieldCheck.buttonClicked ? displayAlert : ''}

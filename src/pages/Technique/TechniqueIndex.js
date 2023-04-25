@@ -2,8 +2,9 @@ import React from 'react';
 import SearchBar from '../../components/Common/SearchBar';
 import '../../components/Activity/activity.css';
 import ActivityList from '../../components/Activity/ActivityList';
-import AddActivityButton from '../../components/Activity/AddActivityButton';
 import {AccountContext} from "../../context"
+import RoundButton from '../../components/Common/RoundButton/RoundButton';
+import { Plus } from 'react-bootstrap-icons';
 
 /**
  * Class for the Technique-page that creates the searchbar and the list.
@@ -30,7 +31,9 @@ class TechniqueIndex extends React.Component {
                 <SearchBar onSearch={this.search}/>
                 <ActivityList activities={this.state.visibleList}  apiPath={"techniques"} detailURL={this.detailURL} />
                 <div style={{padding: '50px'}}/>
-                <AddActivityButton buttonName="+" linkTo="/technique/create"/>
+                <RoundButton linkTo={"/technique/create"}>
+                    <Plus />
+                </RoundButton>
             </div>
             
         )

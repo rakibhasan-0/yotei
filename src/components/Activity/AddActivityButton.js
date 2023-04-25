@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
  *
  * @author Team Capricciosa (Group 2) and Team Hawaii
  * @version 1.0
- * @deprecated use Button.js instead
+ * @deprecated use RoundButton.jsx instead
  */
 function AddActivityButton(props) {
     const buttonName = props.buttonName;

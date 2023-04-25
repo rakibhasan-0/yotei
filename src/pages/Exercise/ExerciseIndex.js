@@ -1,9 +1,10 @@
 import React from 'react';
 import SearchBar from '../../components/Common/SearchBar';
 import '../../components/Activity/activity.css';
-import AddActivityButton from '../../components/Activity/AddActivityButton'; //Keep :)
 import ActivityList from '../../components/Activity/ActivityList';
 import { AccountContext } from '../../context'
+import RoundButton from '../../components/Common/RoundButton/RoundButton';
+import { Plus } from 'react-bootstrap-icons';
 
 
 /**
@@ -34,7 +35,9 @@ class ExerciseIndex extends React.Component {
                 }}/>
                 <ActivityList activities={this.state.visibleList}  apiPath={"exercises"} detailURL={this.detailURL}/>
                 <div style={{padding: '50px'}}/>
-                <AddActivityButton buttonName="+" linkTo="/exercise/create"/>
+                <RoundButton linkTo={"/exercise/create"}>
+                    <Plus />
+                </RoundButton>
             </div>
         )
     }

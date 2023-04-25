@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
  * 
  * @author Capricciosa (2022-04-28), Calzone (2022-05-16), Hawaii (2022-05-16)
  * @version 2.0
- * @deprecated use Button.js instead
+ * @deprecated use RoundButton.jsx instead
  */
 function AddButton(props) {
 

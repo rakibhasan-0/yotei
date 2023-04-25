@@ -4,7 +4,9 @@ import ActivityList from "../../components/Activity/ActivityList";
 import './WorkoutIndex.css';
 import { AccountContext } from '../../context';
 import DatePicker from 'react-datetime-picker';
-import AddActivityButton from '../../components/Activity/AddActivityButton'
+import RoundButton from '../../components/Common/RoundButton/RoundButton';
+import { Plus } from 'react-bootstrap-icons';
+
 /**
  * Workout class. 
  * Creates the searchbar and the activitylist.
@@ -96,7 +98,9 @@ class Workout extends React.Component {
                 </div>
                 <ActivityList activities={this.state.visibleList} apiPath={"workouts"} detailURL={this.detailURL}/>
                 <div style={{padding: '50px'}}/>
-                <AddActivityButton buttonName="+" linkTo="/workout/create"/>
+                <RoundButton linkTo={"/workout/create"}>
+                    <Plus />
+                </RoundButton>
             </>
         );
     }
