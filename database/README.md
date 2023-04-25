@@ -28,13 +28,13 @@
 - Port: 5432 (standard)
 
 ## Lokal testning av databas
-När du gjort dina ändringar i `init.sql`, kör först `docker compose down -d --volumes` följt av `docker compose up -d --build psql` för att starta databasen.
+När du gjort dina ändringar i `init.sql`, kör först `docker compose down -v` följt av `docker compose up -d --build psql` för att starta databasen.
 
 Hur man loggar in:
 - `psql -h localhost -p 5432 -U psql -d yotei`
 
 För att stänga databasen:
-- `docker compose down -d --volumes`.
+- `docker compose down -v`.
 
 Som det ser ut nu:
 - Om en användare som redan finns läggs till kommer *id* i databasen att ökas även om inget läggs till.
