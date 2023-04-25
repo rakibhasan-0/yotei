@@ -11,6 +11,7 @@ require('dotenv').config();
  */
 export default defineConfig({
   testDir: './sys-test',
+  timeout: 8000,
   expect: {
     timeout: 8000,
   },
