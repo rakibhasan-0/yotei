@@ -1,5 +1,6 @@
 # Test guide for frontend 
 From now on, tests should be written for new functionality produced in the frontend of the project.
+We expect people from now on to start building tests and develop TDD-ish. 
 
 ## Testing frameorks to be used
 - [Jest](https://jestjs.io/docs/getting-started)
@@ -20,3 +21,8 @@ React Testing Library includes functionality to test React components. It is use
 **Install React Testing Library with:**
 
     npm install --save-dev @testing-library/react 
+
+Tests should be placed in a folder called **__tests__** and use the naming conventing **filename.test.jsx**
+For example the file **plan.jsx** should have the corresponding testfile **plan.test.jsx** place in the **__tests__** folder.
+
+## TODO: React Testing Library code examples here
