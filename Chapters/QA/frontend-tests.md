@@ -32,19 +32,20 @@ There is a extensions in VSCode for Jest and React Testing Library.
 
 ## Example unit test
 
-    import userEvent from '@testing-library/react'
-    import Button from '../src/components/Common/Button/Button'
-    import '@testing-library/jest-dom'
+```Javascript import userEvent from '@testing-library/react'
+import Button from '../src/components/Common/Button/Button'
+import '@testing-library/jest-dom'
 
-    test('Tests interaction with button', async() => {
-    // ARRANGE
-    const [clicked, setClicked] = useState(0);
-    render(<Button onClick={()=>{setClicked(1)}}><p>Hello</p></Button>)
+test('Tests interaction with button', async() => {
+// ARRANGE
+const [clicked, setClicked] = useState(0);
+render(<Button onClick={()=>{setClicked(1)}}><p>Hello</p></Button>)
 
-    // ACT
-    await userEvent.click(screen.getByText("Hello"))
+// ACT
+await userEvent.click(screen.getByText("Hello"))
 
-    // ASSERT
-    expect(clicked == 1)
-    }) 
+// ASSERT
+expect(clicked == 1)
+})
+```
 
