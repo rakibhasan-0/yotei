@@ -22,11 +22,11 @@ React Testing Library includes functionality to test React components. It is use
 
     npm install --save-dev @testing-library/react 
 
-**Tests should be placed in a folder called**
+**Tests should be placed in a folder called:**
 
     __tests__ 
 
-** Tests should use the naming conventing **
+**Tests should use the naming conventing **
 
     filename.test.jsx
     
