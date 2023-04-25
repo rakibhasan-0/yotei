@@ -1,8 +1,0 @@
-/* 
- * @author Team Capricciosa (Group 2)
- * @version 1.0
- */
-.form-control:focus {
-    border-color: #BE3B41;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 0, 0, 0.6);
-  }

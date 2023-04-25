@@ -3,7 +3,6 @@ import classes from "./WorkoutEdit.css";
 import { useLocation, useNavigate, Navigate } from 'react-router-dom';
 import WorkoutFormComponent from '../../components/Workout/WorkoutFormComponent.js';
 import ContainerComponent from '../../components/Common/ContainerComponent';
-import '../../Globals/global_styles.css';
 import { AccountContext } from "../../context";
 
 /**
