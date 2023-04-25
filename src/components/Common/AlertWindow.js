@@ -1,6 +1,6 @@
 import React from 'react'
 import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
+import Button from "./Button/Button";
 
 
 /**
@@ -9,7 +9,7 @@ import Button from "react-bootstrap/Button";
  * 'handleClose', 'handleShow' and the the callbackFunction.
  * See example in exerciseForm.js.
  *
- * @author Grupp 6 (Calskrove) (2022-05-31)
+ * @author Squad 1-Phoenix (25/4-2023)
  */
 class AlertWindow extends React.Component{
     constructor(props) {
@@ -30,8 +30,6 @@ class AlertWindow extends React.Component{
         if (this.state.yesText!==""){
             return (
                 <Button
-                    type="button"
-                    style={{color: "#FFFFFF", borderColor: "#FFFFFF", backgroundColor: "#BE3B41"}}
                     onClick={() => this.props.callback()}>
                     {this.state.yesText}
                 </Button>
@@ -50,17 +48,12 @@ class AlertWindow extends React.Component{
             <Modal show={this.props.show} onHide={() => this.props.hideFunc()} dialogClassName="deleteModal">
                 <Modal.Header>
                     <Modal.Title>{this.state.title}</Modal.Title>
-                    <Button type="button" onClick={() => this.props.hideFunc()}
-                            style={{color: "gray", borderColor: "#FFFFFF", backgroundColor: "#FFFFFF"}}>
-                        <i className="bi bi-x-lg"></i>
-                    </Button>
                 </Modal.Header>
-
                 <Modal.Body>{this.state.body}</Modal.Body>
                 <Modal.Footer>
                     {this.yesButtonFunc()}
-                    <Button type="button" style={{color: "#FFFFFF", borderColor: "#FFFFFF", backgroundColor: "#BE3B41"}}
-                            onClick={() => this.props.hideFunc()}>
+                    <Button
+                        onClick={() => this.props.hideFunc()}>
                         {this.state.noText}</Button>
                 </Modal.Footer>
             </Modal>

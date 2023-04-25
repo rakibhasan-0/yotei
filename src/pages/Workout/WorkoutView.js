@@ -10,7 +10,7 @@ import ReviewForm from '../../components/Workout/ReviewFormComponent';
 import GoBackButton from '../../components/Common/GoBackButton';
 import DuplicateButton from '../../components/Common/DuplicateButton';
 import {ButtonGroup, Collapse, Dropdown} from "react-bootstrap";
-import Button from "react-bootstrap/Button";
+import Button from "../../components/Common/Button/Button";
 import Modal from "react-bootstrap/Modal";
 
 /**
@@ -25,7 +25,7 @@ function withParams(WorkoutView) {
 
 /**
  * Class for viewing a single workout.
- * 
+ *
  * @author Team Capricciosa (Group 2), Kebabpizza (Group 8) Verona (Grupp 5)
  * @version 1.0
  */
@@ -62,21 +62,21 @@ class WorkoutView extends React.Component {
 
     async getAddedUserWorkouts(requestOptions){
         await fetch(`/api/workouts/get/userworkout/${this.workoutID}`, requestOptions)
-        .then(res => res.json())    
-        .then((data) => {
-            data.forEach( (user) => {
-                this.state.users.push( {
-                    label: user.username, 
-                    value: user.user_id 
-                });
+            .then(res => res.json())
+            .then((data) => {
+                data.forEach( (user) => {
+                    this.state.users.push( {
+                        label: user.username,
+                        value: user.user_id
+                    });
+                })
             })
-        })
     }
 
     /**
      * Checks if the workout is created by the current user or if the current user is an admin.
-     * 
-     * @returns True if the current user is an admin or is the creator of the workout and false otherwise. 
+     *
+     * @returns True if the current user is an admin or is the creator of the workout and false otherwise.
      */
     isCreatorOrAdmin() {
         return this.context.role === "ADMIN" || this.state.authorID === this.context.userId
@@ -98,7 +98,7 @@ class WorkoutView extends React.Component {
                 <div className="header">
                     <div className="left-box" id="no-print"> <FavoriteButton workoutId={ this.state.id } initState={this.state.favorite}/> </div>
                     <div className="middle-box">
-                            <h5 className={"title"}>{this.state.name}</h5>
+                        <h5 className={"title"}>{this.state.name}</h5>
                     </div>
                     <div className="right-box" id="no-print">
                         <Dropdown as={ButtonGroup}>
@@ -107,19 +107,17 @@ class WorkoutView extends React.Component {
                             <Modal show={this.state.isOpen} onHide={this.closeModal} dialogClassName="deleteModal">
                                 <Modal.Header>
                                     <Modal.Title>Ta bort pass</Modal.Title>
-                                    <Button onClick={this.closeModal}
-                                            style={{color: "gray", borderColor: "#FFFFFF", backgroundColor: "#FFFFFF"}}>
-                                        <i className="bi bi-x-lg"></i>
-                                    </Button>
                                 </Modal.Header>
                                 <Modal.Body>Är du säker på att du vill ta bort passet?</Modal.Body>
                                 <Modal.Footer>
-                                    <Button style={{color: "#FFFFFF", borderColor: "#FFFFFF", backgroundColor: "#BE3B41"}}
-                                            onClick={(e) => this.deleteWorkout()}>
-                                        Ta bort pass</Button>
-                                    <Button style={{color: "#FFFFFF", borderColor: "#FFFFFF", backgroundColor: "#BE3B41"}}
-                                            onClick={this.closeModal}>
-                                        Avbryt</Button>
+                                    <Button
+                                        onClick={(e) => this.deleteWorkout()}>
+                                        Ta bort pass
+                                    </Button>
+                                    <Button
+                                        onClick={this.closeModal}>
+                                        Avbryt
+                                    </Button>
                                 </Modal.Footer>
                             </Modal>
 
@@ -167,8 +165,8 @@ class WorkoutView extends React.Component {
                         </div>
                     </div>
 
-                        <h6 className="font-weight-bold">Beskrivning:</h6>
-                        <p className="font-italic properties">{this.state.desc}</p>
+                    <h6 className="font-weight-bold">Beskrivning:</h6>
+                    <p className="font-italic properties">{this.state.desc}</p>
                 </div>
 
                 <ActivityList activities={this.state.activities} apiPath="workouts/activities"/>
@@ -208,7 +206,7 @@ class WorkoutView extends React.Component {
 
         this.getWorkout(requestOptions);
         this.getFavorite();
-        
+
         this.getAddedUserWorkouts(requestOptions);
         // Get the activities of the workout
         fetch(`/api/workouts/activities/all/${this.workoutID}`, requestOptions)
@@ -217,7 +215,7 @@ class WorkoutView extends React.Component {
                 this.setState({activities: data})
             })
 
-           .catch(console.log);
+            .catch(console.log);
 
         this.getTags();
     }
@@ -232,21 +230,21 @@ class WorkoutView extends React.Component {
                 this.setState({id: data.id, name: data.name, desc: data.desc, duration: data.duration, created: data.created, changed: data.changed, date: data.date, authorID: data.author, favorite: this.state.favorite})
                 this.getAuthorName(requestOptions, data.author)
             })
-            .catch(console.log);  
+            .catch(console.log);
     }
 
     /**
      * Gets the author name from the databse through the user API using authorID.
-     * 
+     *
      * @param {*} requestOptions Parameters for the API call.
      * @param {*} authorID Integer ID for the author.
      */
     async getAuthorName(requestOptions, authorID) {
         fetch(`/user/getname/${authorID}`, requestOptions)
-           .then(res => res.json())    
-           .then((data) => {
+            .then(res => res.json())
+            .then((data) => {
                 this.setState({authorName: data.username})
-           })
+            })
     }
 
     getFavorite() {
@@ -261,9 +259,9 @@ class WorkoutView extends React.Component {
     }
 
     /**
-    * Fetches the tags for the specific workout and sets the states for tags.
-    */
-     async getTags(){
+     * Fetches the tags for the specific workout and sets the states for tags.
+     */
+    async getTags(){
         const requestOptions = {
             method: "GET",
             headers: { 'Content-type': 'application/json' , token: this.context.token},
@@ -276,8 +274,8 @@ class WorkoutView extends React.Component {
         const tagResponse = await fetch(`/api/tags/get/tag/by-workout?workId=${this.workoutID}`, requestOptions)
         const tagJSON = await tagResponse.json();
         mappedTags = allTagsJSON.filter((tag) => tagJSON.map(obj => obj.tagId).includes(tag.id)).map((tags) =>{
-           return tags.name
-       })
+            return tags.name
+        })
         this.setState({
             tags:mappedTags
         })

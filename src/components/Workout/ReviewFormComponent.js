@@ -3,7 +3,7 @@ import Ratings from 'react-ratings-declarative';
 import './ReviewFormComponent.css';
 import {AccountContext} from "../../context";
 import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
+import Button from "../Common/Button/Button";
 import AlertWindow from "../Common/AlertWindow";
 
 //should be 0 for the smileys to work
@@ -15,7 +15,7 @@ const UNINITIALIZED = 0;
  *
  * It also contains the previous reviews for the workout
  *
- * @author Calskrove (grupp 6)
+ * @author Squad 1-Phoenix (25/4-2023)
  */
 class ReviewForm extends React.Component {
     constructor(props) {
@@ -444,14 +444,6 @@ class ReviewForm extends React.Component {
                                     <Modal.Header>
                                         {/* Header with some header text and a button to cancel editing. */}
                                         <Modal.Title>Redigera utvärdering</Modal.Title>
-                                        <Button type='button' onClick={() => this.handleEditClose(review)}
-                                                style={{
-                                                    color: "gray",
-                                                    borderColor: "#FFFFFF",
-                                                    backgroundColor: "#FFFFFF"
-                                                }}>
-                                            <i class="bi bi-x-lg"></i>
-                                        </Button>
                                     </Modal.Header>
 
                                     {/* A body with the fields used for editing the review. */}
@@ -497,20 +489,14 @@ class ReviewForm extends React.Component {
 
                                     {/* A footer with buttons to either cancel or save the edit. */}
                                     <Modal.Footer>
-                                        <Button type='button' style={{
-                                            color: "#FFFFFF",
-                                            borderColor: "#FFFFFF",
-                                            backgroundColor: "#BE3B41"
-                                        }}
-                                                onClick={() => this.editReview(review.id)}>
-                                            Spara</Button>
-                                        <Button type='button' style={{
-                                            color: "#FFFFFF",
-                                            borderColor: "#FFFFFF",
-                                            backgroundColor: "#BE3B41"
-                                        }}
-                                                onClick={() => this.handleEditClose(review)}>
-                                            Avbryt</Button>
+                                        <Button
+                                            onClick={() => this.editReview(review.id)}>
+                                            Spara
+                                        </Button>
+                                        <Button
+                                            onClick={() => this.handleEditClose(review)}>
+                                            Avbryt
+                                        </Button>
                                     </Modal.Footer>
                                 </Modal>
                             </>
