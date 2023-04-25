@@ -1,0 +1,10 @@
+.radio,
+.radio-container {
+    width: 3rem;
+    height: 3rem;
+    color: var(--secondary);
+}
+
+.radio-container {
+    position: relative;   
+}
