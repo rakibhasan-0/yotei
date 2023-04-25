@@ -11,7 +11,6 @@ public interface ExerciseShort {
     
     Long getId();
 
-
     String getName();
     
     Integer getDuration();

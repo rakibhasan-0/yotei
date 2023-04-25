@@ -6,6 +6,9 @@ import java.io.Serializable;
 /**
  * A belt entity for Spring
  *
+ * Belt.java - Belt class
+ * BeltController.java - Controller for fetching belts.
+ * BeltRepository.java - (Interface) Repository for belts.
  * @author Max Thorén
  * @author Andre Byström
  * date: 2023-04-24
