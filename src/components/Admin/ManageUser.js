@@ -348,6 +348,12 @@ class ManageUser extends React.Component {
             this.changeStatus(this.confirmUserStatusLbl, 'Fel lösenord', '#f00')
             return
         }
+        else if(!this.validateUsername(this.registerUserUsernameInput.value)){
+            //Username contains unvalid characters, see validateUsername method
+            this.changeStatus(this.confirmUserStatusLbl, "Otillåtna tecken i användarnamnet. "
+                + "Kan innehålla 0-9, a-ö (versaler och gemener), _ och -", '#f00')
+            return
+        }
         else {
             const data = {
                 'username' : this.registerUserUsernameInput.value,
@@ -368,6 +374,14 @@ class ManageUser extends React.Component {
         }
     }
 
+     /**
+     * Validate that a username is valid (does not contain problematic characters) using regex.
+     * @param {String} userName
+     */
+    validateUsername(userName){
+        return userName.match(/^([-a-zA-Z0-9_åöäÅÄÖ]+)$/)
+    }
+
 
     /**
      * Function called when the confirm button is pressed and after prepareRemove or prepareChangeRole has run.
@@ -384,7 +398,10 @@ class ManageUser extends React.Component {
             method: method,
             headers: { 'Content-Type': 'application/json', token: this.context.token}
         }
-        const path = `/user/${action}/${this.chooseUserSelect.getValue()[0].value.username}`
+        //Encode the username as it will be sent in URI
+        const path = "/user/"+ action + "/" +
+            encodeURIComponent(this.chooseUserSelect.getValue()[0].value.username)
+
         this.sendData(path, requestOptions)
         this.chooseUserSelect.setValue(null)
         this.overlayClose()
