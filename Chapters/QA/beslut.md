@@ -11,6 +11,14 @@
 - **Motivation**
   - Vi beslutade att fortsätta med Maven då ett byte till annat verktyg skulle innebära en viss omkonfiguration av befintlig backend. Detta skulle vara tidskrävande. Det finns erfarenhet av båda verktygen men, det finns inte en stor efterfrågan att byta så det är inte värt mödan. 
 
+## Verktyg för systemtest
+- **Datum** - 230419
+- **Chapters** - Test/QA
+- **Grupp** -  N/A
+- **Beslut** - Playwritght används för systemtester.
+- **Motivation**
+  - Verktyget kan emulera en webbläsare. Playwright är lätt att skriva systemtester i och funktionalitet för att underlätta skapandet av systemtester finns tillgängligt i verktyget.
+
 ## Framework för testning frontend
 - **Datum** - 230425
 - **Chapters** - Test/QA
@@ -20,16 +28,6 @@
   - Jest är det framework som rekommenderas för testning, av Facebook(React) [källa](https://legacy.reactjs.org/docs/testing.html). Jest är simpelt och anpassat för React.
   - Mocha valdes bort på grund av att det kräver ytterligare dependencies, samt att det Mocha är utvecklat för Node.js och inte specifikt för React.
 
-
-
-- **Datum** - YYMMDD
-- **Chapters** - Namn på chapter (N/A om ej relevant)
-- **Grupp** - Namn på grupp (N/A om ej relevant)
-- **Alternativ** - X, Y, **Z**
-- **Motivation**
-  - Längre beskrivning om varför Z valdes
-  - Längre beskrivning om varför X _inte_ valdes
-  - Längre beskrivning om varför Y _inte_ valdes
 
 
 ## Framework för testning backend
