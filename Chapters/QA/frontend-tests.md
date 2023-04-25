@@ -25,6 +25,7 @@ React Testing Library includes functionality to test React components. It is use
 
     filename.test.jsx
     
+For example the file **plan.jsx** should have a corresponding testfile called **plan.test.jsx** placed in the testfolder.
 
 ## TODO:Test code here
 
