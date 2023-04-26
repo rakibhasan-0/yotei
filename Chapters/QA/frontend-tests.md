@@ -30,7 +30,7 @@ React Testing Library includes functionality to test React components. It is use
 
     filename.test.jsx
     
-For example the file **plan.jsx** should have a corresponding testfile called **plan.test.jsx** and be placed in it's corresponding place in **\_\_test\_\_**.
+For example the file **plan.jsx** should have a corresponding testfile called **plan.test.jsx** and be placed in it's corresponding place in **\_\_tests\_\_**.
 ```
 
 src
@@ -38,7 +38,7 @@ src
  │    ├── Common
  │        ├──ExampleButton
  │            ├──ExampleButton.js
- ├── __test__
+ ├── __tests__
  │    ├── components
  │        ├── Common
  │            ├──ExampleButton
