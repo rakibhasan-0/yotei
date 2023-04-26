@@ -6,6 +6,9 @@ import Select from "react-select"
 import { X } from "react-bootstrap-icons"
 import { AccountContext } from "../../context"
 import { reactSelectStyle } from "../../Globals/global_style"
+import { Cookies } from "react-cookie"
+import { decodeToken } from "react-jwt"
+
 
 /**
  * Component made for the admin page. Made to handle the add user 
@@ -13,8 +16,9 @@ import { reactSelectStyle } from "../../Globals/global_style"
  *
  *  @author Team Quattro Formaggi (Group 1)
  */
-
 class ManageUser extends React.Component {
+
+
 	/**
      * Constructor.
      * Maps functions.
@@ -218,13 +222,15 @@ class ManageUser extends React.Component {
 						return { label: users.username, value: users }
 					})
 				})
+                
 			} else {
 				this.setState({
 					fetchUsersFailed: true
 				})
 			}
+
+            
 		} catch (error) {
-			console.log("Error at admin get users")
 			this.setState({
 				fetchUsersFailed: true
 			})
@@ -261,6 +267,7 @@ class ManageUser extends React.Component {
      * selected value in the select component. Both text and availability are set.
      * @param {Options<any>} inputValue the value that will be set on the select component
      */
+
 	manageButtonsSet(inputValue) {
 		if (inputValue === null) {
 			this.changeRoleBtn.innerHTML = "Ändra roll"
@@ -326,6 +333,7 @@ class ManageUser extends React.Component {
      */
 	prepareChangeRole() {
 		this.currentStatusLabel = this.changeRoleStatusLbl
+
 		if (this.chooseUserSelect.getValue()[0].value.userRole === "ADMIN") {
 			this.successMessage = `${this.chooseUserSelect.getValue()[0].value.username} är inte längre admin`
 		}
@@ -336,6 +344,7 @@ class ManageUser extends React.Component {
 		this.confirmLbl.innerHTML = "Ange användarnamnet igen"
 		this.confirmUserInput.type = "text"
 		this.overlayOpen()
+        
 	}
 
 	/**
@@ -389,8 +398,11 @@ class ManageUser extends React.Component {
      * @see prepareRemove
      * @see prepareChangeRole
      */
-	confirmManage(action, method) {
-		if (this.chooseUserSelect.getValue()[0].label !== this.confirmUserInput.value) {
+	async confirmManage(action, method) {
+		const cookie = new Cookies().get("token")
+		const affectedUser = this.chooseUserSelect.getValue()[0].value.username
+        
+		if (affectedUser !== this.confirmUserInput.value) {
 			this.changeStatus(this.confirmUserStatusLbl, "Fel användarnamn", "#f00")
 			return
 		}
@@ -398,15 +410,37 @@ class ManageUser extends React.Component {
 			method: method,
 			headers: { "Content-Type": "application/json", token: this.context.token}
 		}
-		//Encode the username as it will be sent in URI
-		const path = "/user/"+ action + "/" +
-            encodeURIComponent(this.chooseUserSelect.getValue()[0].value.username)
 
-		this.sendData(path, requestOptions)
+		//Encode the username as it will be sent in URI
+		const path = "/user/"+ action + "/" + affectedUser
+
+		//Send the request
+		const response = await fetch(path, requestOptions)
+        
+		//Update GUI and avaliable users
+		this.responseUpdateStatus(response)
+		this.getUsers()
 		this.chooseUserSelect.setValue(null)
 		this.overlayClose()
+
+		//Fetch name of current user
+		var currentUserName = decodeToken(cookie).username
+
+		//If the action affected the currently logged in account, log out and redirect!
+		if(response.ok && affectedUser === currentUserName){
+			this.logout()
+		}
 	}
 
+
+	/**
+     * Logout the currently logged in user
+     */
+	logout(){
+		new Cookies().remove("token")
+		document.location.href = "/"
+	}
+    
 	/**
      * Sends data to the back-end.
      * @param {String} path path to API to send data to
@@ -421,6 +455,7 @@ class ManageUser extends React.Component {
 	/**
      * Sets a status text to a status label set in any of the prepare functions.
      * The status is according to the response from back-end.
+     * Returns true if status was ok and false if status was not
      * @param {JSON} response response from the back-end
      * @see prepareRegistration
      * @see prepareRemove
