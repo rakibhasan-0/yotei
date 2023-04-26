@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
-import './RoundButton.css';
+import { useNavigate } from "react-router-dom"
+import "./RoundButton.css"
 
 /**
  * Defines the button to add activity. Props: onClick, children, linkTo
@@ -10,22 +10,22 @@ import './RoundButton.css';
  * @version 1.0
  */
 function RoundButton({onClick, children, linkTo}) {
-    let navigate = useNavigate();
+	let navigate = useNavigate()
 
-    function goTo() {
-        console.log(linkTo);
-        navigate(linkTo);
-    }
+	function goTo() {
+		console.log(linkTo)
+		navigate(linkTo)
+	}
 
-    return (
-        <div onClick={linkTo != null ? () => goTo(linkTo) : onClick} className="btn btn-color btn-add-activity container-fluid">
-                <p className="py-1">
-                    {children}
-                </p>
-        </div>
-    );
+	return (
+		<div onClick={linkTo != null ? () => goTo(linkTo) : onClick} className="btn btn-color btn-add-activity container-fluid">
+			<p className="py-1">
+				{children}
+			</p>
+		</div>
+	)
 }
 
 
 
-export default RoundButton;
+export default RoundButton

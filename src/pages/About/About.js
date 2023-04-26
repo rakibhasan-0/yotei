@@ -1,6 +1,6 @@
-import React from 'react';
-import './About.css'
-import about from './About.txt'
+import React from "react"
+import "./About.css"
+import about from "./About.txt"
 
 /**
  * This is the about page. The user can read information 
@@ -12,33 +12,33 @@ import about from './About.txt'
  * @version 1.0
  */
 class About extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            fileData: null
-        }
-    }
+	constructor(props) {
+		super(props)
+		this.state = {
+			fileData: null
+		}
+	}
 
-    componentDidMount() {
-        fetch(about)
-            .then(r => r.text())
-            .then(text => {
-                this.setState(
-                    {fileData: text}
-                )
-            });
-    }
+	componentDidMount() {
+		fetch(about)
+			.then(r => r.text())
+			.then(text => {
+				this.setState(
+					{fileData: text}
+				)
+			})
+	}
     
-    render() {
-        return (
-            <div>
-                <div className="container about-container">
-                    <h1><u>Om Yotei</u></h1>
-                    {this.state.fileData}
-                </div>
-            </div>
-        );
-    }
+	render() {
+		return (
+			<div>
+				<div className="container about-container">
+					<h1><u>Om Yotei</u></h1>
+					{this.state.fileData}
+				</div>
+			</div>
+		)
+	}
 }
 
-export default About;
+export default About

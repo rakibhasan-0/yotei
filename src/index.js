@@ -1,40 +1,40 @@
-import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { createRoot } from "react-dom/client"
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { useRef } from "react"
-import { Cookies } from 'react-cookie';
-import Nav from "./components/Nav/Nav";
-import Home from "./pages/Home/Home";
-import ExerciseCreate from "./pages/Exercise/ExerciseCreate";
-import TechniqueCreate from "./pages/Technique/TechniqueCreate";
-import WorkoutIndex from "./pages/Workout/WorkoutIndex";
-import NoPage from "./pages/Misc/NoPage";
-import WorkoutCreate from "./pages/Workout/WorkoutCreate";
-import './index.css';
-import './components/Activity/activity.css';
-import './components/Plan/PlanList.css'
-import Login from "./pages/Login/Login";
-import React, { useState } from "react";
-import Admin from "./pages/Admin/Admin";
-import About from "./pages/About/About";
-import WorkoutView from "./pages/Workout/WorkoutView";
-import WorkoutEdit from './pages/Workout/WorkoutEdit';
-import TechniqueEdit from './pages/Technique/TechniqueEdit';
-import TechniqueIndex from "./pages/Technique/TechniqueIndex";
-import ExerciseIndex from "./pages/Exercise/ExerciseIndex";
-import ExerciseEdit from "./pages/Exercise/ExerciseEdit";
+import { Cookies } from "react-cookie"
+import Nav from "./components/Nav/Nav"
+import Home from "./pages/Home/Home"
+import ExerciseCreate from "./pages/Exercise/ExerciseCreate"
+import TechniqueCreate from "./pages/Technique/TechniqueCreate"
+import WorkoutIndex from "./pages/Workout/WorkoutIndex"
+import NoPage from "./pages/Misc/NoPage"
+import WorkoutCreate from "./pages/Workout/WorkoutCreate"
+import "./index.css"
+import "./components/Activity/activity.css"
+import "./components/Plan/PlanList.css"
+import Login from "./pages/Login/Login"
+import React, { useState } from "react"
+import Admin from "./pages/Admin/Admin"
+import About from "./pages/About/About"
+import WorkoutView from "./pages/Workout/WorkoutView"
+import WorkoutEdit from "./pages/Workout/WorkoutEdit"
+import TechniqueEdit from "./pages/Technique/TechniqueEdit"
+import TechniqueIndex from "./pages/Technique/TechniqueIndex"
+import ExerciseIndex from "./pages/Exercise/ExerciseIndex"
+import ExerciseEdit from "./pages/Exercise/ExerciseEdit"
 import { AccountContext } from "./context"
-import { decodeToken } from "react-jwt";
-import ImageForm from './components/Forms/ImageForm';
-import ExerciseDetailsPage from "./pages/Exercise/ExerciseDetailsPage";
-import TechniqueDetailsPage from "./pages/Technique/TechniqueDetailsPage";
-import Profile from './pages/Profile/Profile';
-import PlanCreate from './pages/Plan/PlanCreate';
-import SessionCreate from './pages/Plan/SessionCreate'
-import PlanIndex from './pages/Plan/PlanIndex';
+import { decodeToken } from "react-jwt"
+import ImageForm from "./components/Forms/ImageForm"
+import ExerciseDetailsPage from "./pages/Exercise/ExerciseDetailsPage"
+import TechniqueDetailsPage from "./pages/Technique/TechniqueDetailsPage"
+import Profile from "./pages/Profile/Profile"
+import PlanCreate from "./pages/Plan/PlanCreate"
+import SessionCreate from "./pages/Plan/SessionCreate"
+import PlanIndex from "./pages/Plan/PlanIndex"
 
-import { useIdleTimer } from 'react-idle-timer';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useIdleTimer } from "react-idle-timer"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 const exerciseURI = "https://jsonplaceholder.typicode.com/users"
 const techniqueURI = "https://jsonplaceholder.typicode.com/users"
@@ -46,98 +46,101 @@ const planURI = "https://jsonplaceholder.typicode.com/users"
  * @version 1.0
  */
 export default function App() {
-    const cookie = new Cookies().get("token");
-    const [token, setToken] = useState(cookie)
+	const cookie = new Cookies().get("token")
+	const [token, setToken] = useState(cookie)
 
-    const stateRef = useRef()
-    stateRef.current = token
+	const stateRef = useRef()
+	stateRef.current = token
 
-    const role = cookie !== undefined ? decodeToken(cookie).role : ""
-    const userId = cookie !== undefined ? decodeToken(cookie).userId : 0
+	const role = cookie !== undefined ? decodeToken(cookie).role : ""
+	const userId = cookie !== undefined ? decodeToken(cookie).userId : 0
 
-    const logOut = () => {
-        new Cookies().remove("token")
-        document.location.href = "/"
-    }
+	const logOut = () => {
+		new Cookies().remove("token")
+		document.location.href = "/"
+	}
 
-    const onIdle = () => {
-        if(cookie != null) {
-            logOut();
-        }
-    }
+	const onIdle = () => {
+		if(cookie != null) {
+			logOut()
+		}
+	}
 
-    const onPrompt = () => {
-        if(cookie != null) {
-            toast.warn("Du kommer snart att loggas ut på grund av inaktivitet!",{
-                autoClose: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-                position: "top-center"
-            })
-        }
-    }
+	const onPrompt = () => {
+		if(cookie != null) {
+			toast.warn("Du kommer snart att loggas ut på grund av inaktivitet!",{
+				autoClose: false,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: "dark",
+				position: "top-center"
+			})
+		}
+	}
 
-    const onAction = () => { 
-        toast.dismiss();
-        idleTimer.reset();
-    }
+	const onAction = () => { 
+		toast.dismiss()
+		idleTimer.reset()
+	}
 
-    const idleTimer = useIdleTimer({
-        onIdle,
-        onPrompt,
-        onAction,
-        promptTimeout: 1000 * 60 * 18,
-        timeout: 1000 * 60 * 20
-      })
+	const idleTimer = useIdleTimer({
+		onIdle,
+		onPrompt,
+		onAction,
+		promptTimeout: 1000 * 60 * 18,
+		timeout: 1000 * 60 * 20
+	})
 
-    return (
-        <>
-            <ToastContainer/>
-            <AccountContext.Provider value={{token: token, role: role, userId: userId, setToken: setToken}}>
-                <BrowserRouter>
-                    <Routes>
-                        {
-                            cookie || process.env.VITE_APP_LOGIN_ENABLED === 'false' ? (
-                                <>
-                                    {process.env.VITE_APP_LOGIN_ENABLED !== 'false' ? <Route index element={<Login />} /> : null}
-                                    <Route path="/" element={<Nav />}>
-                                        <Route path="about" element={<About />} />
-                                        <Route path="admin" element={<Admin />} />
-                                        <Route path="profile" element={<Profile />} />
-                                        <Route path="exercise" element={<ExerciseIndex uri={exerciseURI}/>} />
-                                        <Route path="exercise/create" element={<ExerciseCreate />} />
-                                        <Route path="exercise/edit/:editID" element={<ExerciseEdit />} />
-                                        <Route path="home" element={<Home />} />
-                                        <Route path="technique" element={<TechniqueIndex uri={techniqueURI}/>} />
-                                        <Route path="technique/create" element={<TechniqueCreate />} />
-                                        <Route path="technique/edit/:editID" element={<TechniqueEdit />} />
-                                        <Route path="techniques/add" element={<TechniqueCreate />} />
-                                        <Route path="upload-image" element = {<ImageForm/> }/>
-                                        <Route path="workout" element={<WorkoutIndex uri={workoutURI}/>} />
-                                        <Route path="exercise/exercise_page/:ex_id" element={<ExerciseDetailsPage/>} />
-                                        <Route path="technique/technique_page/:technique_id" element={<TechniqueDetailsPage/>} />
-                                        <Route path="workout/create" element={<WorkoutCreate />} />
-                                        <Route path="workout/:workoutID" element={<WorkoutView/>}/>
-                                        <Route path="workout/edit" element={<WorkoutEdit/>}/>
-                                        <Route path="plan" element={<PlanIndex uri={planURI}/>} />
-                                        <Route path="plan/create" element={<PlanCreate/>} />
-                                        <Route path="session/create" element={<SessionCreate/>} />
-                                        <Route path="*" element={<NoPage />} />
-                                    </Route>
-                                </>
-                            ) : (
-                                <Route path="*" element={<Login />} />
-                            )
-                        }
-                    </Routes>
-                </BrowserRouter>
-            </AccountContext.Provider>
-        </>
-    )
+	return (
+		<>
+			<ToastContainer/>
+			<AccountContext.Provider value={{token: token, role: role, userId: userId, setToken: setToken}}>
+				<BrowserRouter>
+					<Routes>
+						{
+							// eslint-disable-next-line no-undef
+							cookie || process.env.VITE_APP_LOGIN_ENABLED === "false" ? (
+								<>
+									{
+										// eslint-disable-next-line no-undef
+										process.env.VITE_APP_LOGIN_ENABLED !== "false" ? <Route index element={<Login />} /> : null}
+									<Route path="/" element={<Nav />}>
+										<Route path="about" element={<About />} />
+										<Route path="admin" element={<Admin />} />
+										<Route path="profile" element={<Profile />} />
+										<Route path="exercise" element={<ExerciseIndex uri={exerciseURI}/>} />
+										<Route path="exercise/create" element={<ExerciseCreate />} />
+										<Route path="exercise/edit/:editID" element={<ExerciseEdit />} />
+										<Route path="home" element={<Home />} />
+										<Route path="technique" element={<TechniqueIndex uri={techniqueURI}/>} />
+										<Route path="technique/create" element={<TechniqueCreate />} />
+										<Route path="technique/edit/:editID" element={<TechniqueEdit />} />
+										<Route path="techniques/add" element={<TechniqueCreate />} />
+										<Route path="upload-image" element = {<ImageForm/> }/>
+										<Route path="workout" element={<WorkoutIndex uri={workoutURI}/>} />
+										<Route path="exercise/exercise_page/:ex_id" element={<ExerciseDetailsPage/>} />
+										<Route path="technique/technique_page/:technique_id" element={<TechniqueDetailsPage/>} />
+										<Route path="workout/create" element={<WorkoutCreate />} />
+										<Route path="workout/:workoutID" element={<WorkoutView/>}/>
+										<Route path="workout/edit" element={<WorkoutEdit/>}/>
+										<Route path="plan" element={<PlanIndex uri={planURI}/>} />
+										<Route path="plan/create" element={<PlanCreate/>} />
+										<Route path="session/create" element={<SessionCreate/>} />
+										<Route path="*" element={<NoPage />} />
+									</Route>
+								</>
+							) : (
+								<Route path="*" element={<Login />} />
+							)
+						}
+					</Routes>
+				</BrowserRouter>
+			</AccountContext.Provider>
+		</>
+	)
 }
 
-const container = document.getElementById('root');
-const root = createRoot(container);
-root.render(<App />);
+const container = document.getElementById("root")
+const root = createRoot(container)
+root.render(<App />)

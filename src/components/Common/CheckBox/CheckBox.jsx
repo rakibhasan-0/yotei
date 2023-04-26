@@ -1,5 +1,5 @@
-import './CheckBox.css'
-import {Square , CheckSquareFill} from 'react-bootstrap-icons'
+import "./CheckBox.css"
+import {Square , CheckSquareFill} from "react-bootstrap-icons"
 
 /** 
  * A default checkbox that should be used throughout the project.
@@ -21,14 +21,14 @@ import {Square , CheckSquareFill} from 'react-bootstrap-icons'
  * @version 1.0  
  */
 export default function CheckBox({checked, onClick}) {
-  return (
-    <div className="checkbox-container" onClick={onClick}>
-      {checked
-          ? <>
-            <CheckSquareFill className='check'/>
-            </>
-          : <Square className='square' />
-      }  
-    </div>  
-  );
+	return (
+		<div className="checkbox-container" onClick={onClick}>
+			{checked
+				? <>
+					<CheckSquareFill className='check'/>
+				</>
+				: <Square className='square' />
+			}  
+		</div>  
+	)
 }

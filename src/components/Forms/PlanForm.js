@@ -1,8 +1,8 @@
-import React from 'react'
-import Weekday from '../Plan/Weekday'
-import DayTime from '../Plan/DayTime'
-import DatePicker from '../Common/DatePicker/DatePicker'
-import 'react-time-picker/dist/TimePicker.css'; 
+import React from "react"
+import Weekday from "../Plan/Weekday"
+import DayTime from "../Plan/DayTime"
+import DatePicker from "../Common/DatePicker/DatePicker"
+import "react-time-picker/dist/TimePicker.css" 
 /**
  * This functional component is used as a form for adding plans.
  * 
@@ -22,89 +22,87 @@ import 'react-time-picker/dist/TimePicker.css';
  */
 function PlanForm(props) {
 
-    var name = props.planData.name;
-    var color = props.planData.color;
-    var startDate = props.planData.startDate;
-    var endDate = props.planData.endDate;
+	var name = props.planData.name
+	var color = props.planData.color
 
-    return (
+	return (
 
-        <form className="d-flex flex-column">
+		<form className="d-flex flex-column">
 
-            {/* Ask the user for the name of the plan */}
-            <label htmlFor="name">
+			{/* Ask the user for the name of the plan */}
+			<label htmlFor="name">
                 Välj namn:
-                <input
-                    name="name"
-                    id="name"
-                    type="text"
-                    placeholder="Namn"
-                    className={props.okName || !props.buttonClicked ? 'form-control' : 'form-control is-invalid'}
-                    value={name}
-                    onChange={(e) => { props.onClickData("name", e.target.value) }}
-                    required
-                />
-            </label>
+				<input
+					name="name"
+					id="name"
+					type="text"
+					placeholder="Namn"
+					className={props.okName || !props.buttonClicked ? "form-control" : "form-control is-invalid"}
+					value={name}
+					onChange={(e) => { props.onClickData("name", e.target.value) }}
+					required
+				/>
+			</label>
 
-            {/* Ask the user for a color of the plan */}
-            <label htmlFor="color">
+			{/* Ask the user for a color of the plan */}
+			<label htmlFor="color">
                 Välj färg:
-                <input
-                    name="color"
-                    id="color"
-                    type="color"
-                    placeholder="Färg"
-                    className="form-control"
-                    value={color}
-                    onChange={(e) => { props.onClickData("color", e.target.value) }}
-                    required
-                />
-            </label>
+				<input
+					name="color"
+					id="color"
+					type="color"
+					placeholder="Färg"
+					className="form-control"
+					value={color}
+					onChange={(e) => { props.onClickData("color", e.target.value) }}
+					required
+				/>
+			</label>
 
-            <div>
-                {/* Ask the user for the start-date of the plan */}
-                <label htmlFor="startDate">
+			<div>
+				{/* Ask the user for the start-date of the plan */}
+				<label htmlFor="startDate">
                     Startdatum:
-                    <DatePicker
-					onChange={(e) => { props.onClickData("startDate", e) }}
-                    />
-                </label>
+					<DatePicker
+						onChange={(e) => { props.onClickData("startDate", e) }}
+					/>
+				</label>
 
-                {/* Ask the user for the end-date of the plan */}
-                <label htmlFor="endDate">
+				{/* Ask the user for the end-date of the plan */}
+				<label htmlFor="endDate">
                     Slutdatum:
-                    <DatePicker
-					onChange={(e) => { props.onClickData("endDate", e) }}
-                    />
-                </label>
-            </div>
+					<DatePicker
+						onChange={(e) => { props.onClickData("endDate", e) }}
+					/>
+				</label>
+			</div>
 
-            {/* Ask the user for the weekdays for the plan */}
-            <p></p>
-            <p></p>
-            <div className="div-week" >
-                <Weekday dayName="Mån" onClick={props.onClickWeekday} weekdays={props.weekdays} />
-                <Weekday dayName="Tis" onClick={props.onClickWeekday} weekdays={props.weekdays} />
-                <Weekday dayName="Ons" onClick={props.onClickWeekday} weekdays={props.weekdays} />
-                <Weekday dayName="Tors" onClick={props.onClickWeekday} weekdays={props.weekdays} />
-                <Weekday dayName="Fre" onClick={props.onClickWeekday} weekdays={props.weekdays} />
-                <Weekday dayName="Lör" onClick={props.onClickWeekday} weekdays={props.weekdays} />
-                <Weekday dayName="Sön" onClick={props.onClickWeekday} weekdays={props.weekdays} />
-            </div>
+			{/* Ask the user for the weekdays for the plan */}
+			<p></p>
+			<p></p>
+			<div className="div-week" >
+				<Weekday dayName="Mån" onClick={props.onClickWeekday} weekdays={props.weekdays} />
+				<Weekday dayName="Tis" onClick={props.onClickWeekday} weekdays={props.weekdays} />
+				<Weekday dayName="Ons" onClick={props.onClickWeekday} weekdays={props.weekdays} />
+				<Weekday dayName="Tors" onClick={props.onClickWeekday} weekdays={props.weekdays} />
+				<Weekday dayName="Fre" onClick={props.onClickWeekday} weekdays={props.weekdays} />
+				<Weekday dayName="Lör" onClick={props.onClickWeekday} weekdays={props.weekdays} />
+				<Weekday dayName="Sön" onClick={props.onClickWeekday} weekdays={props.weekdays} />
+			</div>
 
-            {/* If a weekday is checked, ask the user for a time for events */}
-            <p></p>
-            <h3>Tider</h3>
-            <DayTime dayName="Mån" onClick={props.onClickDayTime} weekdays={props.weekdays} />
-            <DayTime dayName="Tis" onClick={props.onClickDayTime} weekdays={props.weekdays} />
-            <DayTime dayName="Ons" onClick={props.onClickDayTime} weekdays={props.weekdays} />
-            <DayTime dayName="Tors" onClick={props.onClickDayTime} weekdays={props.weekdays} />
-            <DayTime dayName="Fre" onClick={props.onClickDayTime} weekdays={props.weekdays} />
-            <DayTime dayName="Lör" onClick={props.onClickDayTime} weekdays={props.weekdays} />
-            <DayTime dayName="Sön" onClick={props.onClickDayTime} weekdays={props.weekdays} />
+			{/* If a weekday is checked, ask the user for a time for events */}
+			<p></p>
+			<h3>Tider</h3>
+			<DayTime dayName="Mån" onClick={props.onClickDayTime} weekdays={props.weekdays} />
+			<DayTime dayName="Tis" onClick={props.onClickDayTime} weekdays={props.weekdays} />
+			<DayTime dayName="Ons" onClick={props.onClickDayTime} weekdays={props.weekdays} />
+			<DayTime dayName="Tors" onClick={props.onClickDayTime} weekdays={props.weekdays} />
+			<DayTime dayName="Fre" onClick={props.onClickDayTime} weekdays={props.weekdays} />
+			<DayTime dayName="Lör" onClick={props.onClickDayTime} weekdays={props.weekdays} />
+			<DayTime dayName="Sön" onClick={props.onClickDayTime} weekdays={props.weekdays} />
 
-        </form>
-    )
+		</form>
+	)
 }
 
 export default PlanForm

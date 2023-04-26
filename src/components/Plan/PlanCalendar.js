@@ -1,6 +1,6 @@
-import React, {useState} from 'react'
-import DatePicker from '../Common/DatePicker/DatePicker';
-import 'react-calendar/dist/Calendar.css';
+import React, {useState} from "react"
+import DatePicker from "../Common/DatePicker/DatePicker"
+import "react-calendar/dist/Calendar.css"
 
 /**
  * The calendar component for Plan.
@@ -13,16 +13,17 @@ import 'react-calendar/dist/Calendar.css';
  * This is not used for anything and is only there for visual purposes
  */
 export default function PlanCalendar() {
-    const [dateState, setDateState] = useState(new Date())
-    const changeDate = (e) => {
-        setDateState(e)
-    }
-    return (
-        <>
-        <DatePicker
-            onChange={changeDate}
-        />
+	// eslint-disable-next-line no-unused-vars
+	const [_, setDateState] = useState(new Date())
+	const changeDate = (e) => {
+		setDateState(e)
+	}
+	return (
+		<>
+			<DatePicker
+				onChange={changeDate}
+			/>
         
-        </>
-    )
+		</>
+	)
 }

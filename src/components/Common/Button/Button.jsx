@@ -1,4 +1,4 @@
-import './Button.css';
+import "./Button.css"
 
 /**
  * A default button that should be used throughout the project.
@@ -20,9 +20,9 @@ import './Button.css';
  * @version 1.0
  */
 export default function Button({onClick, outlined, children}) {
-    return (
-        <div onClick={onClick} className={ ['button', outlined ? 'button-back' : 'button-normal'].join(" ") }>
-            {children}
-        </div>
-    )
+	return (
+		<div onClick={onClick} className={ ["button", outlined ? "button-back" : "button-normal"].join(" ") }>
+			{children}
+		</div>
+	)
 }

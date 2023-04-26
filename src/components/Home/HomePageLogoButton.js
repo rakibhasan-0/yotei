@@ -1,5 +1,5 @@
-import './HomePageLogoButton.css';
-import { Link } from "react-router-dom";
+import "./HomePageLogoButton.css"
+import { Link } from "react-router-dom"
 
 /**
  * Defines the button used in the home page. 
@@ -9,12 +9,12 @@ import { Link } from "react-router-dom";
  * @deprecated use Button.js instead
  */
 function HomePageLogoButton(props) {
-    const buttonName = props.buttonName;
-    return (
-        <div className="row col-12 mt-4">
-            <Link to={props.linkTo} className="btn btn-color btn-home container-fluid">{buttonName}</Link>
-        </div>
-    );
+	const buttonName = props.buttonName
+	return (
+		<div className="row col-12 mt-4">
+			<Link to={props.linkTo} className="btn btn-color btn-home container-fluid">{buttonName}</Link>
+		</div>
+	)
 }
 
-export default HomePageLogoButton;
+export default HomePageLogoButton

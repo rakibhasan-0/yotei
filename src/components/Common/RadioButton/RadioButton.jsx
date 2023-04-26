@@ -1,5 +1,5 @@
-import { Record, Record2} from 'react-bootstrap-icons';
-import './RadioButton.css';
+import { Record, Record2} from "react-bootstrap-icons"
+import "./RadioButton.css"
 
 /**
  * A radio button that can be toggled on or off, where the
@@ -21,14 +21,14 @@ import './RadioButton.css';
  * @version 1.0
  */
 export default function RadioButton({onClick,toggled}){
-    return(
-        <div onClick={onClick} className="radio-container">
-            {toggled
-                ?   <>
-                        <Record2 className='radio'/>
-                    </>
-                :   <Record className='radio'/>
-            }
-        </div>
-    )
+	return(
+		<div onClick={onClick} className="radio-container">
+			{toggled
+				?   <>
+					<Record2 className='radio'/>
+				</>
+				:   <Record className='radio'/>
+			}
+		</div>
+	)
 }

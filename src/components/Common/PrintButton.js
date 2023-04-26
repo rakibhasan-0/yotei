@@ -1,5 +1,5 @@
-import './EditButton.css';
-import React from 'react';
+import "./EditButton.css"
+import React from "react"
 
 /**
  * Defines the print button.
@@ -10,19 +10,19 @@ import React from 'react';
  * @version 1.0
  * @deprecated use Button.js instead
  */
-function PrintButton(props) {
-    return (
-        <div className="btn btn-edit container-fluid">
-            <img onClick={savePDF} src="/print.svg" alt="print icon"/>
-        </div>
-    );
+function PrintButton() {
+	return (
+		<div className="btn btn-edit container-fluid">
+			<img onClick={savePDF} src="/print.svg" alt="print icon"/>
+		</div>
+	)
 }
 
 /**
  * Saves the current page to PDF. Same as doing CTRL-P.
  */
 function savePDF() {
-    /** window.print funkar på (telefon):
+	/** window.print funkar på (telefon):
      *      chrome
      *      opera
      *      brave
@@ -35,7 +35,7 @@ function savePDF() {
      *      duckduckgo
      *      opera gx
      */
-    window.print();
+	window.print()
 }
 
-export default PrintButton;
+export default PrintButton

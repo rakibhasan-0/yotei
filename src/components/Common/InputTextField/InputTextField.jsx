@@ -1,5 +1,5 @@
-import React from "react";
-import './InputTextField.css';
+import React from "react"
+import "./InputTextField.css"
 
 /**
  * This is the standard InputTextField page, used for using standard InputTextField.
@@ -17,12 +17,12 @@ import './InputTextField.css';
  * @since 2023-04-24
  */
 export default function InputTextField({ placeholder, text, onChange }) {
-    return(
-        <input
-            className="input-area"
-            placeholder={placeholder}
-            value={text}
-            onChange={e => onChange?.(e.target.value)}
-        />
-    )
+	return(
+		<input
+			className="input-area"
+			placeholder={placeholder}
+			value={text}
+			onChange={e => onChange?.(e.target.value)}
+		/>
+	)
 }

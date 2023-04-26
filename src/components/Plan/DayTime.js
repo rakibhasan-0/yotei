@@ -1,6 +1,6 @@
-import React from 'react'
-import './DayTime.css'
-import TimePicker from 'react-time-picker'
+import React from "react"
+import "./DayTime.css"
+import TimePicker from "react-time-picker"
 /**
  * A component for choosing a time for a day. 
  * 
@@ -12,55 +12,55 @@ import TimePicker from 'react-time-picker'
  */
 function DayTime({ dayName, onClick, weekdays }) {
 
-    var dayRow
-    var value
+	var dayRow
+	var value
 
-    /* Finds the right time in the weekdays-state so that 
+	/* Finds the right time in the weekdays-state so that 
      * the value is updated correctly in the time-input */
-    for(var i = 0; i < 7; i++){
-        dayRow = weekdays[i]
+	for(var i = 0; i < 7; i++){
+		dayRow = weekdays[i]
 
-        if (dayRow.name === dayName) {
-            value = weekdays[i].time
-            break
-        }
-    }
+		if (dayRow.name === dayName) {
+			value = weekdays[i].time
+			break
+		}
+	}
 
-    /* Do not render time-select if day has not been chosen */
-    if (dayRow.value === false) {
-        return (<div></div>)
-    }
-    else {
-        return (
-            <label htmlFor="dayTime">
-                <div className="div-day-selected-container">
-                    <div className="div-day-selected">
-                        <div className="day-selected-text">{dayName}dag</div>
+	/* Do not render time-select if day has not been chosen */
+	if (dayRow.value === false) {
+		return (<div></div>)
+	}
+	else {
+		return (
+			<label htmlFor="dayTime">
+				<div className="div-day-selected-container">
+					<div className="div-day-selected">
+						<div className="day-selected-text">{dayName}dag</div>
 
-                        {/*Select start-time for a selected day*/}
-                        <div>
-                            <TimePicker 
-                                name="dayTime"
-                                id="dayTime"
-                                type="time"
-                                value={value}
-                                className="form-control day-selected-date DateTimePicker form-control"
-                                locale="sv-SV"
-                                //name="time" These are commented out because they break linting
-                                //id="time"   Might break something else though
-                                //type="time" 
-                                format="H:mm"
-                                maxTime="23:59"
-                                minTime="00:00"
-                                disableClock={true}
-                                onChange={(e) => { onClick(dayName, e) }}
+						{/*Select start-time for a selected day*/}
+						<div>
+							<TimePicker 
+								name="dayTime"
+								id="dayTime"
+								type="time"
+								value={value}
+								className="form-control day-selected-date DateTimePicker form-control"
+								locale="sv-SV"
+								//name="time" These are commented out because they break linting
+								//id="time"   Might break something else though
+								//type="time" 
+								format="H:mm"
+								maxTime="23:59"
+								minTime="00:00"
+								disableClock={true}
+								onChange={(e) => { onClick(dayName, e) }}
 							/>
-                        </div>
-                    </div>
-                </div>
-            </label>
-        )
-    }
+						</div>
+					</div>
+				</div>
+			</label>
+		)
+	}
 }
 
 export default DayTime

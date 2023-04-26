@@ -1,5 +1,5 @@
-import React from "react";
-import './TextArea.css';
+import React from "react"
+import "./TextArea.css"
 
 /**
  * This is the standard textarea page, used for using standard textareas.
@@ -17,12 +17,12 @@ import './TextArea.css';
  * @since 2023-04-24
  */
 export default function TextArea({ placeholder, text, onChange }) {
-    return(
-        <textarea
-            className="stand-area"
-            placeholder={placeholder}
-            value={text}
-            onChange={e => onChange(e.target.value)}
-        />
-    )
+	return(
+		<textarea
+			className="stand-area"
+			placeholder={placeholder}
+			value={text}
+			onChange={e => onChange(e.target.value)}
+		/>
+	)
 }

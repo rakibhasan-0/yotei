@@ -1,10 +1,10 @@
-import Select from 'react-select'
-import { useState, useEffect, useContext } from 'react'
-import { AccountContext } from "../../context";
-import TimePicker from 'react-time-picker'
-import DatePicker from '../Common/DatePicker/DatePicker'
-import '../../Globals/DatePicker.css'
-import '../../Globals/TimePicker.css'
+import Select from "react-select"
+import { useState, useEffect, useContext } from "react"
+import { AccountContext } from "../../context"
+import TimePicker from "react-time-picker"
+import DatePicker from "../Common/DatePicker/DatePicker"
+import "../../Globals/DatePicker.css"
+import "../../Globals/TimePicker.css"
 /**
  * This functional component is used as a form for adding sessions.
  * 
@@ -23,7 +23,6 @@ function SessionForm(props) {
 
 	/* Local names for entered data */
 	var name = props.data.name
-	var date = props.data.date
 	var time = props.data.time
 
 	
@@ -45,11 +44,11 @@ function SessionForm(props) {
 	 */
 	async function getPlans() {
 
-		var json;
+		var json
 
 		try {
-			const response = await fetch(`/api/plan/all`, { headers: { token } });
-			json = await response.json();
+			const response = await fetch("/api/plan/all", { headers: { token } })
+			json = await response.json()
 
 		} catch (error) {
 			alert("Could not find details about the plans")
@@ -70,7 +69,7 @@ function SessionForm(props) {
 	 * Is called when the component is mounted 
 	 */
 	useEffect(() => {
-		getPlans();
+		getPlans()
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 
@@ -116,7 +115,7 @@ function SessionForm(props) {
 							disableClock={true}
 							value={time}
 							onChange={(e) => onClickData("time", e)}
-							/>
+						/>
 					</div>
 				</div>
 			</label>

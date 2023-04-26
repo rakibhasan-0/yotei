@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import "./Weekday.css"
 
 /**
@@ -11,20 +11,20 @@ import "./Weekday.css"
  */
 function Weekday({ dayName, onClick }) {
 
-  return (
-    <label className="label-day">
-      {dayName}dag
+	return (
+		<label className="label-day">
+			{dayName}dag
       
-        {/* Checkbox */}
-        <input
-            name="day"
-            id="day"
-            type="checkbox"
-            className="form-control"
-            onChange={() => onClick(dayName)}
-        />
-    </label>
-  )
+			{/* Checkbox */}
+			<input
+				name="day"
+				id="day"
+				type="checkbox"
+				className="form-control"
+				onChange={() => onClick(dayName)}
+			/>
+		</label>
+	)
 }
 
 export default Weekday

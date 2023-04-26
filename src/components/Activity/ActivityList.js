@@ -5,42 +5,42 @@
  * @param activity The exercise or technique
  * @param apiPath The path to the function (either 'exercises' or 'techniques')
  */
-import React, { useState, useContext, useEffect } from "react";
-import ListItem from "../Common/ListItem.js";
-import WorkoutListItem from "../Workout/WorkoutListItem.js";
-import WorkoutActivityListItem from "../Workout/WorkoutActivityListItem.js";
-import { AccountContext } from '../../context';
+import React, { useState, useContext, useEffect } from "react"
+import ListItem from "../Common/ListItem.js"
+import WorkoutListItem from "../Workout/WorkoutListItem.js"
+import WorkoutActivityListItem from "../Workout/WorkoutActivityListItem.js"
+import { AccountContext } from "../../context"
 
 const ActivityList = ({activities, apiPath, detailURL}) => {
-    const { token, userId } = useContext(AccountContext)
-    const [favoriteList, setFavoriteList] = useState([])
+	const { token, userId } = useContext(AccountContext)
+	const [favoriteList, setFavoriteList] = useState([])
 
-    useEffect(() => {
-        getFavoriteWorkouts(token, userId).then(data => (data.json())).then(data => setFavoriteList(data.map(obj => obj.id)))
+	useEffect(() => {
+		getFavoriteWorkouts(token, userId).then(data => (data.json())).then(data => setFavoriteList(data.map(obj => obj.id)))
         
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-    return (
-        <div className="container grid-striped activity-list">
-            {apiPath === "workouts" ? 
-                activities.map((activity, index) => <WorkoutListItem key={activity.id} workout={activity} apiPath={apiPath} index={index} initState={favoriteList.includes(activity.id)}/>)
-                :
-                apiPath === "workouts/activities" ?
-                    activities.map((activity, index) => <WorkoutActivityListItem key={activity.id} activity={activity} index={index}/>)
-                :    
-                    activities.map((activity, index) => <ListItem key={activity.id} activity={activity} apiPath = {apiPath} detailURL={detailURL} index={index}/>)
-            }
-        </div>
-    );
-};
+	return (
+		<div className="container grid-striped activity-list">
+			{apiPath === "workouts" ? 
+				activities.map((activity, index) => <WorkoutListItem key={activity.id} workout={activity} apiPath={apiPath} index={index} initState={favoriteList.includes(activity.id)}/>)
+				:
+				apiPath === "workouts/activities" ?
+					activities.map((activity, index) => <WorkoutActivityListItem key={activity.id} activity={activity} index={index}/>)
+					:    
+					activities.map((activity, index) => <ListItem key={activity.id} activity={activity} apiPath = {apiPath} detailURL={detailURL} index={index}/>)
+			}
+		</div>
+	)
+}
 
 async function getFavoriteWorkouts(token, userId) {
-    const requestOptions = {
-        headers: { 'Content-type': 'application/json', token }
-    };
-    const response = await fetch(`/api/workouts/favorites/${userId}`, requestOptions);
-    return response;
+	const requestOptions = {
+		headers: { "Content-type": "application/json", token }
+	}
+	const response = await fetch(`/api/workouts/favorites/${userId}`, requestOptions)
+	return response
 }
 
 
-export default ActivityList;
+export default ActivityList

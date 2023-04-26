@@ -1,5 +1,5 @@
-import './AddButton.css';
-import { useNavigate } from 'react-router-dom';
+import "./AddButton.css"
+import { useNavigate } from "react-router-dom"
 
 /**
  * Defines the button to add elements.
@@ -13,22 +13,22 @@ import { useNavigate } from 'react-router-dom';
  */
 function AddButton(props) {
 
-    const navigate = useNavigate()
+	const navigate = useNavigate()
     
-    const buttonName = props.buttonName;
-    const navPath = props.navPath;
+	const buttonName = props.buttonName
+	const navPath = props.navPath
 
-    const response = () => {
-        if (navPath) {
-            navigate(navPath)
-        } 
-    }
+	const response = () => {
+		if (navPath) {
+			navigate(navPath)
+		} 
+	}
 
-    return (
-        <button onClick={response} className="btn btn-color btn-add-activity container-fluid">
-            <p className="py-1">{buttonName}</p>
-        </button>
-    );
+	return (
+		<button onClick={response} className="btn btn-color btn-add-activity container-fluid">
+			<p className="py-1">{buttonName}</p>
+		</button>
+	)
 }
 
-export default AddButton;
+export default AddButton
