@@ -24,19 +24,19 @@ import "./TextArea.css"
  * @since 2023-04-24
  */
 export default function TextArea({ placeholder, text, onChange, required, onBlur, onInput, readOnly, id,defVal,type}) {
-    return(
-        <textarea
-            className="stand-area"
-            placeholder={placeholder}
-            value={text}
-            defaultValue={defVal}
-            onChange={onChange}
-            onBlur={onBlur}
-            onInput={onInput}
-            required={required}
-            readOnly={readOnly}
-            id={id}
-            type={type}
-        />
-    ); 
+	return(
+		<textarea
+			className="stand-area"
+			placeholder={placeholder}
+			value={text}
+			defaultValue={defVal}
+			onChange={onChange}
+			onBlur={onBlur}
+			onInput={onInput}
+			required={required}
+			readOnly={readOnly}
+			id={id}
+			type={type}
+		/>
+	) 
 }

@@ -30,8 +30,8 @@
     "test": "jest --watchAll --ci --no-watchAll --passWithNoTests",
     "test:coverage": "npm test -- --coverage --collectCoverageFrom='./src/**'",
     "test:watch": "npm test -- --watchAll",
-    "lint": "eslint ./ --ignore-path .gitignore",
-    "lint:fix": "npm run lint -- --fix --ext .js,.jsx,.ts .",
+    "lint": "eslint --fix --ext js,jsx,ts src --ignore-path .gitignore",
+    "lint:ci": "eslint --ext js,jsx,ts src --ignore-path .gitignore",
     "systest": "npx playwright test --reporter list",
     "systest:fast": "npx playwright test --reporter list --project 'Mobile Chrome'",
     "systest:ui": "npx playwright test --ui"
@@ -56,66 +56,6 @@
     },
     "coverageDirectory": "coverage/"
   },
-  "eslintConfig": {
-    "parserOptions": {
-      "ecmaVersion": "latest",
-      "sourceType": "module"
-    },
-    "rules": {
-      "jest/no-disabled-tests": "warn",
-      "jest/no-focused-tests": "error",
-      "jest/no-identical-title": "error",
-      "jest/prefer-to-have-length": "warn",
-      "jest/valid-expect": "error",
-      "testing-library/prefer-screen-queries": "off",
-      "react/react-in-jsx-scope": "off",
-      "react/prop-types": "off",
-      "indent": [
-        "error",
-        "tab"
-      ],
-      "quotes": [
-        "error",
-        "double"
-      ],
-      "semi": [
-        "error",
-        "never"
-      ]
-    },
-    "extends": [
-      "eslint:recommended",
-      "plugin:react/recommended",
-      "plugin:react-hooks/recommended",
-      "react-app/jest"
-    ],
-    "overrides": [
-      {
-        "files": [
-          "sys-test/**/*.ts",
-          "sys-test/**/*.tsx"
-        ],
-        "plugins": [
-          "@typescript-eslint"
-        ],
-        "extends": [
-          "eslint:recommended",
-          "plugin:@typescript-eslint/recommended"
-        ],
-        "parser": "@typescript-eslint/parser"
-      }
-    ],
-    "env": {
-      "jest/globals": true,
-      "browser": true,
-      "es2021": true
-    },
-    "settings": {
-      "react": {
-        "version": "detect"
-      }
-    }
-  },
   "babel": {
     "presets": [
       "@babel/preset-env",
@@ -139,6 +79,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.21.3",
     "@imaginary-cloud/prettier-config": "^1.0.0",
     "@playwright/test": "^1.32.3",
     "@testing-library/jest-dom": "^5.16.5",

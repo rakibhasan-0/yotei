@@ -29,7 +29,7 @@ lint-job:
   stage: test
   script:
     - echo "Linting started..."
-    - npm run lint
+    - npm run lint:ci
     - echo "Linting finished."
 
 test-job:

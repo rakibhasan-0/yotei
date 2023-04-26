@@ -1,6 +1,6 @@
-import React from 'react'
-import SearchIcon from '../../../../public/search.svg'
-import './SearchBar.css';
+import React from "react"
+import SearchIcon from "../../../../public/search.svg"
+import "./SearchBar.css"
 
 /**
  * Creates the UI for the searchbar. Props: placeholder (placeholdertext in searchbar),
@@ -10,16 +10,16 @@ import './SearchBar.css';
  * @version 1.0
  */
 export default function SearchBar({placeholder,text,onChange}) {
-  return (
-    <>
-    <div className='search-bar'>
-       <input
-            className="input-area"
-            placeholder={placeholder}
-            value={text}
-            onChange={e => onChange?.(e.target.value)}></input>
-        <i><img className= "search-icon" src={SearchIcon} alt='Search icon'/></i>
-    </div>
-    </>
-  )
+	return (
+		<>
+			<div className='search-bar'>
+				<input
+					className="input-area"
+					placeholder={placeholder}
+					value={text}
+					onChange={e => onChange?.(e.target.value)}></input>
+				<i><img className= "search-icon" src={SearchIcon} alt='Search icon'/></i>
+			</div>
+		</>
+	)
 }

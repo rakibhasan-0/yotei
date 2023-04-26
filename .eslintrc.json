@@ -1,0 +1,76 @@
+{
+  "root": true,
+  "parserOptions": {
+    "parser": "@babel/eslint-parser",
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "rules": {
+    "jest/no-disabled-tests": "warn",
+    "jest/no-focused-tests": "error",
+    "jest/no-identical-title": "error",
+    "jest/prefer-to-have-length": "warn",
+    "jest/valid-expect": "error",
+    "testing-library/prefer-screen-queries": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
+    "indent": [
+      "error",
+      "tab"
+    ],
+    "linebreak-style": [
+      "warn",
+      "unix"
+    ],
+    "quotes": [
+      "error",
+      "double"
+    ],
+    "semi": [
+      "error",
+      "never"
+    ]
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "react-app/jest"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "./*.ts",
+        "sys-test/**/*.ts",
+        "sys-test/**/*.tsx"
+      ],
+      "plugins": [
+        "@typescript-eslint"
+      ],
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended"
+      ],
+      "env": {
+        "node": true,
+        "commonjs": true
+      },
+      "parser": "@typescript-eslint/parser"
+    }
+  ],
+  "env": {
+    "jest/globals": true,
+    "browser": true,
+    "es2021": true
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "/public/**",
+    "sys-test"
+  ]
+}

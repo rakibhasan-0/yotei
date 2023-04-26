@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import { ChevronDown } from 'react-bootstrap-icons'
-import './Component.css'
+import { useState } from "react"
+import { ChevronDown } from "react-bootstrap-icons"
+import "./Component.css"
 
 /**
  * A generic list item that can be used in a list view,
@@ -23,23 +23,23 @@ import './Component.css'
  * @version 1.0
  */
 export default function Component({ item, text, children }) {
-    const [toggled, setToggled] = useState(false)
-    return (
-        <div className="list-container">
-            <div className='list-header'>
-                <div className="list-item">
-                    {item}
-                </div>
-                <p>{text}</p>
-                <div className={["list-toggle", toggled ? "list-rotate" : ""].join(" ")}>
-                    <ChevronDown size={28} onClick={() => setToggled(!toggled)} />
-                </div>
-            </div>
-            { toggled && 
-                <div className="list-child">
-                    {children}
-                </div> 
-            }
-        </div>
-    )
+	const [toggled, setToggled] = useState(false)
+	return (
+		<div className="list-container">
+			<div className='list-header'>
+				<div className="list-item">
+					{item}
+				</div>
+				<p>{text}</p>
+				<div className={["list-toggle", toggled ? "list-rotate" : ""].join(" ")}>
+					<ChevronDown size={28} onClick={() => setToggled(!toggled)} />
+				</div>
+			</div>
+			{ toggled && 
+				<div className="list-child">
+					{children}
+				</div> 
+			}
+		</div>
+	)
 }

@@ -22,16 +22,16 @@ import "./InputTextField.css"
  * @since 2023-04-24
  */
 export default function InputTextField({ placeholder, text, onChange, required,type,id, onKeyUp}) {
-    return(
-        <input
-            className="input-area"
-            placeholder={placeholder}
-            value={text}
-            onChange={onChange}
-            type={type}
-            id={id}
-            onKeyUp={onKeyUp}
-            required={required}
-        />
-    )
+	return(
+		<input
+			className="input-area"
+			placeholder={placeholder}
+			value={text}
+			onChange={onChange}
+			type={type}
+			id={id}
+			onKeyUp={onKeyUp}
+			required={required}
+		/>
+	)
 }
