@@ -73,7 +73,7 @@ Mocks is created in the directory:
 To mock API communication, msv uses what they call [request handler](https://mswjs.io/docs/basics/request-handler) to specify wich request should be made, and what the mocked response should be.
 For example, a mocked response from a get request could be:
 
-```javasript import { rest } from 'msw'
+```javascript import { rest } from 'msw'
 // Matches any "GET /user" requests,
 // and responds using the `responseResolver` function.
 rest.get('/user', responseResolver)
