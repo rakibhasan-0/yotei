@@ -6,7 +6,8 @@ package se.umu.cs.pvt.user;
  * @author Grupp 2 Griffin
  */
 
-public interface UserShort {
+public interface UserShort{
     String getUsername();
+    String getUserRole();
     Long getUserId();
 }
