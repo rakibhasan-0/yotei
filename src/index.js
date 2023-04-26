@@ -35,6 +35,7 @@ import PlanIndex from "./pages/Plan/PlanIndex"
 import { useIdleTimer } from "react-idle-timer"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import { logOut } from "./utils"
 
 const exerciseURI = "https://jsonplaceholder.typicode.com/users"
 const techniqueURI = "https://jsonplaceholder.typicode.com/users"
@@ -52,23 +53,23 @@ export default function App() {
 	const stateRef = useRef()
 	stateRef.current = token
 
-	const role = cookie !== undefined ? decodeToken(cookie).role : ""
-	const userId = cookie !== undefined ? decodeToken(cookie).userId : 0
+	let role
+	let userId
 
-	const logOut = () => {
-		new Cookies().remove("token")
-		document.location.href = "/"
+	if (cookie != null) {
+		role = decodeToken(cookie) !== null ? decodeToken(cookie).role : logOut()
+		userId = decodeToken(cookie) !== null ? decodeToken(cookie).userId : logOut()
 	}
 
 	const onIdle = () => {
-		if(cookie != null) {
+		if (cookie != null) {
 			logOut()
 		}
 	}
 
 	const onPrompt = () => {
-		if(cookie != null) {
-			toast.warn("Du kommer snart att loggas ut på grund av inaktivitet!",{
+		if (cookie != null) {
+			toast.warn("Du kommer snart att loggas ut på grund av inaktivitet!", {
 				autoClose: false,
 				pauseOnHover: true,
 				draggable: true,
@@ -79,7 +80,7 @@ export default function App() {
 		}
 	}
 
-	const onAction = () => { 
+	const onAction = () => {
 		toast.dismiss()
 		idleTimer.reset()
 	}
@@ -94,8 +95,8 @@ export default function App() {
 
 	return (
 		<>
-			<ToastContainer/>
-			<AccountContext.Provider value={{token: token, role: role, userId: userId, setToken: setToken}}>
+			<ToastContainer />
+			<AccountContext.Provider value={{ token: token, role: role, userId: userId, setToken: setToken }}>
 				<BrowserRouter>
 					<Routes>
 						{
@@ -109,24 +110,24 @@ export default function App() {
 										<Route path="about" element={<About />} />
 										<Route path="admin" element={<Admin />} />
 										<Route path="profile" element={<Profile />} />
-										<Route path="exercise" element={<ExerciseIndex uri={exerciseURI}/>} />
+										<Route path="exercise" element={<ExerciseIndex uri={exerciseURI} />} />
 										<Route path="exercise/create" element={<ExerciseCreate />} />
 										<Route path="exercise/edit/:editID" element={<ExerciseEdit />} />
 										<Route path="home" element={<Home />} />
-										<Route path="technique" element={<TechniqueIndex uri={techniqueURI}/>} />
+										<Route path="technique" element={<TechniqueIndex uri={techniqueURI} />} />
 										<Route path="technique/create" element={<TechniqueCreate />} />
 										<Route path="technique/edit/:editID" element={<TechniqueEdit />} />
 										<Route path="techniques/add" element={<TechniqueCreate />} />
-										<Route path="upload-image" element = {<ImageForm/> }/>
-										<Route path="workout" element={<WorkoutIndex uri={workoutURI}/>} />
-										<Route path="exercise/exercise_page/:ex_id" element={<ExerciseDetailsPage/>} />
-										<Route path="technique/technique_page/:technique_id" element={<TechniqueDetailsPage/>} />
+										<Route path="upload-image" element={<ImageForm />} />
+										<Route path="workout" element={<WorkoutIndex uri={workoutURI} />} />
+										<Route path="exercise/exercise_page/:ex_id" element={<ExerciseDetailsPage />} />
+										<Route path="technique/technique_page/:technique_id" element={<TechniqueDetailsPage />} />
 										<Route path="workout/create" element={<WorkoutCreate />} />
-										<Route path="workout/:workoutID" element={<WorkoutView/>}/>
-										<Route path="workout/edit" element={<WorkoutEdit/>}/>
-										<Route path="plan" element={<PlanIndex uri={planURI}/>} />
-										<Route path="plan/create" element={<PlanCreate/>} />
-										<Route path="session/create" element={<SessionCreate/>} />
+										<Route path="workout/:workoutID" element={<WorkoutView />} />
+										<Route path="workout/edit" element={<WorkoutEdit />} />
+										<Route path="plan" element={<PlanIndex uri={planURI} />} />
+										<Route path="plan/create" element={<PlanCreate />} />
+										<Route path="session/create" element={<SessionCreate />} />
 										<Route path="*" element={<NoPage />} />
 									</Route>
 								</>

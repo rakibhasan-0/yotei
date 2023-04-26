@@ -8,6 +8,7 @@ import { AccountContext } from "../../context"
 import { reactSelectStyle } from "../../Globals/global_style"
 import { Cookies } from "react-cookie"
 import { decodeToken } from "react-jwt"
+import { logOut } from "/src/utils"
 
 
 /**
@@ -428,17 +429,8 @@ class ManageUser extends React.Component {
 
 		//If the action affected the currently logged in account, log out and redirect!
 		if(response.ok && affectedUser === currentUserName){
-			this.logout()
+			logOut()
 		}
-	}
-
-
-	/**
-     * Logout the currently logged in user
-     */
-	logout(){
-		new Cookies().remove("token")
-		document.location.href = "/"
 	}
     
 	/**
