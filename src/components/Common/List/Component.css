@@ -1,0 +1,36 @@
+.list-container {
+    border-radius: 5px;
+    border: 1px solid var(--black-primary);
+    padding: 18px;
+    user-select: none;
+}
+
+.list-header {
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.list-header > p {
+    margin: 0;
+}
+
+.list-toggle {
+    cursor: pointer;
+    margin-left: auto;
+    transition: all 0.2s ease-in;
+}
+
+.list-item {
+    cursor: pointer;
+    margin-right: 14px;
+    height: 32px;
+}
+
+.list-child {
+    margin-top: 15px;
+}
+
+.list-rotate {
+    rotate: 180deg;
+}
