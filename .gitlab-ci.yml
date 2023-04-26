@@ -11,7 +11,11 @@ default:
 .skippable: &skippable
   except:
     variables:
-      - $CI_COMMIT_MESSAGE =~ /\[skip?\]/i
+      # Possible improvement for later: /^\[(.*,\s*)*skip?(,.*)*\]/i
+      # This would allow for patterns such as [abc, skip, cba] etc.
+      # This tag allows for skipping the pipeline, useful for example
+      # if you want to push unfinished changes or for documentation. 
+      - $CI_COMMIT_MESSAGE =~ /^\[skip?\]/i
 
 stages:
   - build
