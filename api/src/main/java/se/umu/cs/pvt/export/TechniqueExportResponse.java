@@ -3,7 +3,7 @@ package se.umu.cs.pvt.export;
 import java.util.List;
 
 /**
- * Response class for techniques.
+ * Response class for techniques. Used to conform to the expected response format.
  *
  * @author Andre Byström
  * date: 2023-04-25

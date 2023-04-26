@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 /**
  * Handles export requests for techniques and exercises.
@@ -34,11 +34,12 @@ public class ExportController {
         return new TechniqueContainer(
                 techniqueExportRepository.findAll().stream()
                         .map(t -> {
-                            List<String> tags = t.getTags().stream()
-                                    .map(TagExport::getName)
-                                    .collect(Collectors.toList());
-                            return new TechniqueExportResponse(t.getName(), t.getDescription(), tags);
-                        }).collect(Collectors.toList()));
+                            return new TechniqueExportResponse(
+                                    t.getName(),
+                                    t.getDescription(),
+                                    getTagNames(t.getTags()));
+                        })
+                        .toList());
     }
 
     @GetMapping("/exercises")
@@ -46,11 +47,18 @@ public class ExportController {
         return new ExerciseContainer(
                 exerciseExportRepository.findAll().stream()
                         .map(e -> {
-                            List<String> tags = e.getTags().stream()
-                                    .map(TagExport::getName)
-                                    .toList();
-                            return new ExerciseExportResponse(e.getName(), e.getDescription(), e.getDuration(), tags);
-                        }).toList()
-        );
+                            return new ExerciseExportResponse(
+                                    e.getName(),
+                                    e.getDescription(),
+                                    e.getDuration(),
+                                    getTagNames(e.getTags()));
+                        })
+                        .toList());
+    }
+
+    private List<String> getTagNames(Set<TagExport> tags) {
+        return tags.stream()
+                .map(TagExport::getName)
+                .toList();
     }
 }

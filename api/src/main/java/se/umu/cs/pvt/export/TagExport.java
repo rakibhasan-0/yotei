@@ -32,18 +32,6 @@ public class TagExport implements Serializable{
     @Column(nullable = false, name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "tag",
-                cascade = CascadeType.ALL)
-    private List<WorkoutTag> workoutTags;
-    
-    @OneToMany(mappedBy = "tag",
-                cascade = CascadeType.ALL)
-    private List<ExerciseTag> exerciseTags;
-
-    @OneToMany(mappedBy = "tag",
-                cascade = CascadeType.ALL)
-    private List<TechniqueTag> techniqueTags;
-
     /**
      * no-args constructor required by JPA spec
      * this one is protected since it shouldn't be used directly
