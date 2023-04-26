@@ -32,17 +32,19 @@ React Testing Library includes functionality to test React components. It is use
     
 For example the file **plan.jsx** should have a corresponding testfile called **plan.test.jsx** and be placed in it's corresponding place in **\_\_test\_\_**.
 ```
-frontend
-├── src
-│   ├── components
-│       ├── Common
-│           ├──ExampleButton
-│               ├──ExampleButton.js
-├── __test__
-│   ├── components
-│       ├── Common
-│           ├──ExampleButton
-│               ├──ExampleButton.test.js
+
+src
+ ├── components
+ │    ├── Common
+ │        ├──ExampleButton
+ │            ├──ExampleButton.js
+ ├── __test__
+ │    ├── components
+ │        ├── Common
+ │            ├──ExampleButton
+ │                ├──ExampleButton.test.js
+ ├── mocks
+
 ```
 
 ### Tip:
