@@ -16,7 +16,7 @@
 - ER-diagrammet ska även exporteras i XML-format och sparas i courses-project/5dv214vt23/infra/resources. För att göra detta klicka på **File** i menyn sedan **Export as -> XML**. **TA ÄVEN BORT** det gammla ER-diagrammet från denna mapp.
 
 
-**Länk till ER-diagramm**: https://app.diagrams.net/#G1f41RYjCnPTYaiUNRlPZrmHsyy15M7DXc
+**Länk till ER-diagramm**: https://drive.google.com/file/d/1f41RYjCnPTYaiUNRlPZrmHsyy15M7DXc/view?usp=sharing
 ## Guidelines
 - Ändringar i databasstrukturen sker endast via init-filen. Inte via osparade kommandon eller GUI-verktyg.
 - Synkronisera DB-ändringar med backend så API:erna inte går sönder.
