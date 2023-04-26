@@ -73,7 +73,7 @@ test('Tests interaction with button', async() => {
     expect(clicked).toEqual(1);
 })
 
-
+OBS!: screen.debug() kan användas för att se DOM för det rendererade objektet, i terminal.
 
 ```
 # Mock Service Worker
