@@ -2,7 +2,7 @@
 From now on, tests should be written for new functionality produced in the frontend of the project.
 We expect people from now on to start building tests and develop TDD-ish. 
 
-## Testing frameorks to be used
+## Testing frameworks to be used
 - [Jest](https://jestjs.io/docs/getting-started)
 - [React Testing Library](https://testing-library.com/docs/react-testing-library/intro)
 - [Mock Service Worker](https://mswjs.io/docs/)
