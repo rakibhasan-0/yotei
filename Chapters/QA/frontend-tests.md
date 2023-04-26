@@ -5,6 +5,7 @@ We expect people from now on to start building tests and develop TDD-ish.
 ## Testing frameorks to be used
 - [Jest](https://jestjs.io/docs/getting-started)
 - [React Testing Library](https://testing-library.com/docs/react-testing-library/intro)
+- [Mock Service Worker](https://mswjs.io/docs/)
 
 # Getting started
 React Testing Library includes functionality to test React components. It is used together with Jest to make a testing framework for our frontend.
@@ -16,6 +17,10 @@ React Testing Library includes functionality to test React components. It is use
 **Install Jest with:**
 
     npm install --save-dev jest 
+
+**Install Mock Service Worker with:**
+
+    npm install msw --save-dev
 
 **Tests should be placed in a folder called:**
 
