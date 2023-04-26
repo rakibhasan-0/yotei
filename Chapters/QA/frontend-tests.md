@@ -61,12 +61,13 @@ test('Tests interaction with button', async() => {
     // ARRANGE
     var clicked = 0;
     
-    let dom = render(<div><Button onClick={()=>{clicked=1}}>Testing</Button></div>);
+    let dom = render(<div><Button onClick={
+                            ()=> {clicked=1}} id={"testbutton"}></Button></div>)
     
 
     // ACT
     screen.debug();
-    document.getElementsByClassName('button button-normal')[0].click();
+    document.getElementById('testbutton').click();
 
     // ASSERT
     expect(clicked).toEqual(1);
