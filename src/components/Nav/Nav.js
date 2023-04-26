@@ -101,7 +101,7 @@ const Nav = () => {
 						</div>
 					</ClickAwayListener>
 					<div className={"log-info"}>Inloggad som: <a className={"log-info-user"} href={"/profile"}> {userName}</a></div>
-					<Link id="home-link" to="/home">
+					<Link id="plan-link" to="/plan">
 						<img id="logo" src="/ubk-logga.jpg" alt="logga" />
 					</Link>
 				</Navbar>
