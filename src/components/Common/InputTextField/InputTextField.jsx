@@ -10,19 +10,28 @@ import "./InputTextField.css"
  *    placeholder: string
  *    text: string
  *    onChange: function
+ *    required: boolean
+ *    type: string
+ *    id: string
+ *    onKeyUp: function
+ *    
  * }
  * 
  * @author Team Chimera
  * @version 1.0
  * @since 2023-04-24
  */
-export default function InputTextField({ placeholder, text, onChange }) {
-	return(
-		<input
-			className="input-area"
-			placeholder={placeholder}
-			value={text}
-			onChange={e => onChange?.(e.target.value)}
-		/>
-	)
+export default function InputTextField({ placeholder, text, onChange, required,type,id, onKeyUp}) {
+    return(
+        <input
+            className="input-area"
+            placeholder={placeholder}
+            value={text}
+            onChange={onChange}
+            type={type}
+            id={id}
+            onKeyUp={onKeyUp}
+            required={required}
+        />
+    )
 }
