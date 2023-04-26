@@ -1,8 +1,4 @@
-## Mall
-[Template for decisions](../../Mallar/beslut.md)
-
-
-# Beslut
+# Decisions
 
 - **Date** - 230424
 - **Chapters** - N/A 
@@ -11,6 +7,8 @@
 - **Motivation**
   - Getter's och setter's do not need comments unless the names are inconsistent and may result in missunderstandings.
 
+***
+
 - **Date** - 230424
 - **Chapters** - N/A
 - **Squad** -  Griffin Guardians
@@ -18,3 +16,13 @@
 - **Motivation**
   - We log what classes exist within a package followed by a short description to give a better overview of the package. (Ex, package backend/api/src/main/java/se/umu/cs/pvt/user, log classes and descriptions in the class-comment in User.java)
 
+***
+- **Date** - YYMMDD
+- **Chapters** - N/A
+- **Squad** -  Griffin Guardians
+- **Decision** - 
+- **Alternatives** - X, Y, **Z**
+- **Motivation** 
+  - Why not X?
+  - Why not z?
+  - **Why Z?**
