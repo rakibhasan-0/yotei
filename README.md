@@ -14,6 +14,34 @@ Har man en ändring som inte har något med gränssnittet, så behöver man ej h
 
 Skapar man en ny komponent, så skall man göra en ny mapp i src/components eller src/pages. Mappens namn skall vara namnet på komponenten. I denna så skall det finnas två filer, en jsx-fil, och en css-fil. I css-filen så skall stilar som hör till komponenten läggas. Man bör ej ha flera komponenter i samma mapp.
 
+Alla komponenter som skrivs skall vara funktionella komponenter. Komponenten skall exporteras som en default export. När @version uppdateras så ökas den första siffran med 1, ex. 1.0 -> 2.0 -> 3.0 -> etc. Exempel på formatet som komponenter ungefär bör följa:
+```jsx
+/**
+ * This is an example description.
+ * 
+ * Props:
+ *     prop1 @type {string}  - A description of prop1
+ *     prop2 @type {number}  - A description of prop2
+ *     prop3 @type {boolean} - A description of prop3
+ *
+ * Example usage:
+ *     <MyComponent prop1="Hello world!" prop2={42} prop3={true}/>
+ *
+ * @author Team Name
+ * @version 1.0
+ * @since 20XX-XX-XX
+ */
+function MyComponent({ prop1, prop2, prop3, id }) {
+	return(
+        <div id={id}>
+            ...
+        </div>
+    )
+}
+export default MyComponent
+```
+Värt att förtydliga är att alla komponenter skall ta en prop "id". Detta för att underlätta testning. Detta id kan sätts på lämpligt element i komponeten, alla komponenter behöver alltså ej ha en container-div som i exemplet ovan.
+
 [Länk till figma](https://www.figma.com/file/64zymyGJSp7BuQthnOhvMt/PVT?node-id=1%3A68&t=WL4siHHSRFAsrkq5-1)
 
 ## Att köra frontend
@@ -30,24 +58,13 @@ git clone https://git.cs.umu.se/courses-project/5dv214vt23/frontend/-/tree/[name
 Om du inte har det, klona repot med kommandot:
 
 ```
-git clone https://git.cs.umu.se/courses-project/5dv214vt23/frontend
+git clone https://git.cs.umu.se/courses-project/5dv214vt23/frontend.git
 ```
 
 Installera npm med kommandot: <br>
 ```
 npm install 
 ```
-följt av: <br>
-```
-npm install react-bootstrap bootstrap
-```
-Om error 122 kastas när npm installleras beror det på att det finns för lite minne på datorn. Radera lite filer, töm papperskorgen och försök igen. Om detta inte funkar kör <br>
-```
-cleanup-vscode.sh
-```
-i en terminal så får du ytterligare några hundra MB ledigt. Detta är för att VSCode remote-development är väldigt dålig på att städa gammalt skräpt efter sig.
-
-Det går också att be support@cs.umu.se om extra minne. <br>
 
 Om det uppstod fel när npm installerades se till att ta bort mappen <em>node modules</em> innan du försöker igen. <br>
 
@@ -61,9 +78,7 @@ För att sedan starta React appen kör kommandot: <br>
 ```
 npm start
 ```
-Notera: Om du använder windows istället för linux som på skoldatorerna kan du behöva ändra lite i package.json filen.
-
-REACT servern kommer per default köras på **localhost:3000**, men enligt den gateway som finns i koden är det **localhost:8080** som är rätt port. Därför behöver man byta till port **8080** manuellt i URL:en.
+REACT servern kommer per default köras på **localhost:3000**. Per default körs frontend mot imp (dev servern) om du vill köra backend lokalt kan du ändra USE_IMP_SERVER till "false" i .env filen.
 
 ### React Tester
 
@@ -81,6 +96,7 @@ För linting (statisk kodanalys) kan man köra följande.
 ```
 npm run lint
 ```
+Värt att notera är att detta kommando även försöker fixa problemen med flaggan --fix
 
 **Tips:** 
 1. Tester skapas genom att döpa filerna till `KOMPONENT.test.js` och sedan anropa funktionen `it("Testnamn", () => { 'Test Content...' })`
