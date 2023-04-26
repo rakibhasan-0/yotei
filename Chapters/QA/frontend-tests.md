@@ -90,7 +90,7 @@ import { rest } from 'msw'
 // and responds using the `responseResolver` function.
 rest.get('/user', responseResolver)
 ```
-
+[How to define the responseResolver](https://mswjs.io/docs/getting-started/mocks/rest-api). Will make a guide for this after some testing.
 
 
 
