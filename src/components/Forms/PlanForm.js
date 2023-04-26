@@ -64,7 +64,7 @@ function PlanForm(props) {
 				<label htmlFor="startDate">
                     Startdatum:
 					<DatePicker
-						onChange={(e) => { props.onClickData("startDate", e) }}
+						onChange={(e) => { props.onClickData("startDate", e.target.value) }}
 					/>
 				</label>
 
@@ -72,7 +72,7 @@ function PlanForm(props) {
 				<label htmlFor="endDate">
                     Slutdatum:
 					<DatePicker
-						onChange={(e) => { props.onClickData("endDate", e) }}
+						onChange={(e) => { props.onClickData("endDate", e.target.value) }}
 					/>
 				</label>
 			</div>

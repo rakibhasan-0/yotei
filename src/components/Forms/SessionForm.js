@@ -94,7 +94,7 @@ function SessionForm(props) {
 			<label htmlFor="date">
 				Datum
 				<DatePicker
-					onChange={(e) => { onClickData("date", e) }}
+					onChange={(e) => { onClickData("date", e.target.value) }}
 				/>
 			</label>
 

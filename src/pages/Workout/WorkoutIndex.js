@@ -81,7 +81,7 @@ class Workout extends React.Component {
 					}}/>
 					<center>
 						<DatePicker
-							onChange={(e) => {this.updateSearch({name: this.state.nameSearchParams, date: e})
+							onChange={(e) => {this.updateSearch({name: this.state.nameSearchParams, date: e.target.value})
 
 							}}/>
 					</center>
