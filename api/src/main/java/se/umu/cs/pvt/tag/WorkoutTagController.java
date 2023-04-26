@@ -60,9 +60,9 @@ public class WorkoutTagController {
      *                      BAD_REQUEST if no Workouts with that Tag exist.
      */
     @GetMapping("/get/workout/by-tag")
-    public ResponseEntity<List<WorkoutTagShort>> getWorkoutByTag(@RequestParam(name = "tag") Long id) {
+    public ResponseEntity<List<WorkoutTag>> getWorkoutByTag(@RequestParam(name = "tag") Long id) {
         if (tagRepository.findById(id).orElse(null) != null) {
-            return new ResponseEntity<>(workoutTagRepository.findAllProjectedByTagId(id), HttpStatus.OK);
+            return new ResponseEntity<>(workoutTagRepository.findAllByTagId(id), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
@@ -104,9 +104,9 @@ public class WorkoutTagController {
      *                          BAD_REQUEST if Workout has no Tags.
      */
     @GetMapping("/get/tag/by-workout")
-    public ResponseEntity<List<WorkoutTagShortId>> getTagByWorkout(@RequestParam(name = "workId") Long workId) {
+    public ResponseEntity<List<WorkoutTag>> getTagByWorkout(@RequestParam(name = "workId") Long workId) {
         if (workoutTagRepository.findByWorkId(workId) != null) {
-            return new ResponseEntity<>(workoutTagRepository.findAllProjectedByWorkId(workId), HttpStatus.OK);
+            return new ResponseEntity<>(workoutTagRepository.findByWorkId(workId), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
@@ -130,9 +130,9 @@ public class WorkoutTagController {
         for (Tag tag : tags) {
             Long tagId = tag.getId();
             ArrayList<Long> temp = new ArrayList<>();
-            if (workoutTagRepository.findAllProjectedByTagId(tagId) != null) {
-                ArrayList<WorkoutTagShort> workoutTags = (ArrayList<WorkoutTagShort>) workoutTagRepository.findAllProjectedByTagId(tagId);
-                for (WorkoutTagShort workTag : workoutTags) {
+            if (workoutTagRepository.findAllByTagId(tagId) != null) {
+                ArrayList<WorkoutTag> workoutTags = (ArrayList<WorkoutTag>) workoutTagRepository.findAllByTagId(tagId);
+                for (WorkoutTag workTag : workoutTags) {
                     temp.add(workTag.getWorkId());
                 } 
             }

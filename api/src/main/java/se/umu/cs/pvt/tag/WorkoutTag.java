@@ -38,8 +38,9 @@ public class WorkoutTag implements Serializable {
      * 
      * @param   workId      ID of the Workout.
      */
-    public WorkoutTag(Long workId) {
+    public WorkoutTag(Long workId, Tag tag) {
         this.workId = workId;
+        this.tag = tag;
     }
 
 

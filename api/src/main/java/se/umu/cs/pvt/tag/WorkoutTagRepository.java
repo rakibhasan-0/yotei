@@ -19,7 +19,7 @@ public interface WorkoutTagRepository extends JpaRepository<WorkoutTag, Long>{
     * @param   tagId       ID of the Tag.
     * @return              List of Workouts IDs.
     */
-   List<WorkoutTagShort> findAllProjectedByTagId(Long tagId);
+   List<WorkoutTag> findAllByTagId(Long tagId);
 
 
    /**
@@ -28,7 +28,7 @@ public interface WorkoutTagRepository extends JpaRepository<WorkoutTag, Long>{
     * @param   workId      ID of the Workout.
     * @return              A list of Tag IDs.
     */
-   List<WorkoutTagShortId> findAllProjectedByWorkId(Long workId);
+   List<Long> findAllProjectedByWorkId(Long workId);
 
 
    /**

@@ -49,8 +49,7 @@ public class WorkTagControllerTest {
     @Test
     void shouldSucceedWhenAddingWorkTag() {
         Tag regularTag = new Tag((long) 1, "blå");
-        WorkoutTag workTag = new WorkoutTag((long) 1);
-        workTag.setTag(regularTag);
+        WorkoutTag workTag = new WorkoutTag(1L, regularTag);
 
         // save is a function called in the JPA repository when a workout tag is added via the controller
         Mockito.when(workRepository.save((WorkoutTag)Mockito.any())).thenAnswer(invocation -> {
@@ -75,17 +74,15 @@ public class WorkTagControllerTest {
         final long WORKOUT_ONE = 1;
         final long WORKOUT_TWO = 2;
 
-        Tag regularTag = new Tag((long) 1, "blå");
-        WorkoutTag workTag1 = new WorkoutTag(WORKOUT_ONE);
-        WorkoutTag workTag2 = new WorkoutTag(WORKOUT_TWO);
-        workTag1.setTag(regularTag);
-        workTag2.setTag(regularTag);
+        Tag regularTag = new Tag(1L, "blå");
+        WorkoutTag workTag1 = new WorkoutTag(WORKOUT_ONE, regularTag);
+        WorkoutTag workTag2 = new WorkoutTag(WORKOUT_TWO, regularTag);
 
         workoutTags.add(workTag1);
         workoutTags.add(workTag2);
 
         // findAllProjectedByTagId is the function called in the JPA repository when a search for workouts with a specific tag is initiated
-        Mockito.when(workRepository.findAllProjectedByTagId(anyLong())).thenAnswer(invocation -> {
+        Mockito.when(workRepository.findAllByTagId(anyLong())).thenAnswer(invocation -> {
             ArrayList<Long> workIds = new ArrayList<>();
             for(WorkoutTag w : workoutTags) {
                 if(w.getTag() == invocation.getArguments()[0]) {
@@ -108,14 +105,11 @@ public class WorkTagControllerTest {
         final long WORKOUT_ONE = 3;
         final long WORKOUT_TWO = 4;
 
-        Tag regularTag1 = new Tag((long) 1, "blå");
-        Tag regularTag2 = new Tag((long) 2, "instant killing technique");
-        WorkoutTag workTag1 = new WorkoutTag(WORKOUT_ONE);
-        WorkoutTag workTag2 = new WorkoutTag(WORKOUT_ONE);
-        WorkoutTag workTag3 = new WorkoutTag(WORKOUT_TWO);
-        workTag1.setTag(regularTag1);
-        workTag2.setTag(regularTag2);
-        workTag3.setTag(regularTag1);
+        Tag regularTag1 = new Tag(1L, "blå");
+        Tag regularTag2 = new Tag(2L, "instant killing technique");
+        WorkoutTag workTag1 = new WorkoutTag(WORKOUT_ONE, regularTag1);
+        WorkoutTag workTag2 = new WorkoutTag(WORKOUT_ONE, regularTag2);
+        WorkoutTag workTag3 = new WorkoutTag(WORKOUT_TWO, regularTag1);
 
         workoutTags.add(workTag1);
         workoutTags.add(workTag2);
@@ -131,21 +125,11 @@ public class WorkTagControllerTest {
             return null;
         });
 
-        // findAllProjectedByWorkId is the function called in the JPA repository when a search for tags related to a workout is made.
-        Mockito.when(workRepository.findAllProjectedByWorkId(anyLong())).thenAnswer(invocation -> {
-            ArrayList<Long> tagIds = new ArrayList<>();
-            for(WorkoutTag w : workoutTags) {
-                if(w.getWorkId() == invocation.getArguments()[0]) {
-                    tagIds.add(w.getTag());
-                }
-            }
-            return tagIds;
-        });
-
         // check that the different WORKOUTs have the correct amount of tags and a Http status code is returned when trying to fetch with non existing workout id.
-        assertEquals(2, workController.getTagByWorkout(WORKOUT_ONE).getBody().size());
-        assertEquals(1, workController.getTagByWorkout(WORKOUT_TWO).getBody().size());
-        assertEquals(new ResponseEntity<>(HttpStatus.BAD_REQUEST), workController.getTagByWorkout((long) 32));
+        assertEquals(1, workController.getTagByWorkout(WORKOUT_ONE).getBody().get(0).getTag());
+        assertEquals(2, workController.getTagByWorkout(WORKOUT_ONE).getBody().get(1).getTag());
+        assertEquals(1, workController.getTagByWorkout(WORKOUT_TWO).getBody().get(0).getTag());
+        assertEquals(new ResponseEntity<>(HttpStatus.BAD_REQUEST), workController.getTagByWorkout(32L));
     }
 
 
@@ -156,10 +140,9 @@ public class WorkTagControllerTest {
         Tag regularTag = new Tag((long) 1, "blå");
         ArrayList<Long> workoutIds = new ArrayList<>();
 
-        for(int i = 0; i < ADDED_WORKOUTTAGS ; i++) {
-            workoutTags.add(new WorkoutTag((long) i));
-            workoutTags.get(i).setTag(regularTag);
-            workoutIds.add((long) i);
+        for(Long i = 0L; i < ADDED_WORKOUTTAGS ; i++) {
+            workoutTags.add(new WorkoutTag(i, regularTag));
+            workoutIds.add(i);
         }
         assertEquals(ADDED_WORKOUTTAGS, workoutTags.size());
    
@@ -199,7 +182,7 @@ public class WorkTagControllerTest {
         assertEquals(0, workoutTags.size()); 
 
         // should return null when attempting to remove a workoutTag that does not exist
-        assertEquals(new ResponseEntity<>(HttpStatus.BAD_REQUEST), workController.deleteWorkoutTagPair(new WorkoutTag((long) 32), regularTag.getId()));   
+        assertEquals(new ResponseEntity<>(HttpStatus.BAD_REQUEST), workController.deleteWorkoutTagPair(new WorkoutTag(32L, regularTag), regularTag.getId()));
     }
 
     @Test
@@ -210,13 +193,9 @@ public class WorkTagControllerTest {
         ArrayList<Tag> tags = new ArrayList<>();
         Tag regularTag1 = new Tag((long) 1, "blå");
         Tag regularTag2 = new Tag((long) 2, "instant killing technique");
-        WorkoutTag workTag1 = new WorkoutTag(WORKOUT_ONE);
-        WorkoutTag workTag2 = new WorkoutTag(WORKOUT_ONE);
-        WorkoutTag workTag3 = new WorkoutTag(WORKOUT_TWO);
-        workTag1.setTag(regularTag1);
-        workTag2.setTag(regularTag2);
-        workTag3.setTag(regularTag1);
-
+        WorkoutTag workTag1 = new WorkoutTag(WORKOUT_ONE, regularTag1);
+        WorkoutTag workTag2 = new WorkoutTag(WORKOUT_ONE, regularTag2);
+        WorkoutTag workTag3 = new WorkoutTag(WORKOUT_TWO, regularTag1);
         
         tags.add(regularTag1);
         tags.add(regularTag2);
@@ -238,14 +217,12 @@ public class WorkTagControllerTest {
         });
         
         // Answer with matching WorkoutTag id when projection method is called on repository.
-        Mockito.when(workRepository.findAllProjectedByTagId(anyLong())).thenAnswer(invocation -> {
-            ArrayList<WorkoutTagShort> workIds = new ArrayList<>();
-            WorkoutTagShort temp;
+        Mockito.when(workRepository.findAllByTagId(anyLong())).thenAnswer(invocation -> {
+            ArrayList<WorkoutTag> workIds = new ArrayList<>();
+            WorkoutTag temp;
             for (WorkoutTag workTag : workoutTags) {
                 if (workTag.getTag() == invocation.getArguments()[0]) {
-                    Map<String, Object> sourceMap = Map.of("workId", workTag.getWorkId());
-                    temp = factory.createProjection(WorkoutTagShort.class, sourceMap);
-                    workIds.add(temp);
+                    workIds.add(workTag);
                 }
             }
             return workIds;
