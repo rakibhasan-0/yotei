@@ -70,7 +70,9 @@ test('Tests interaction with button', async() => {
 # Mock Service Worker
 Msv is used in our development to mock Restful requests. This is used to "fake" api requests and responses to test how our code works with different API calls and to find buggs by writing tests integrating the service. 
 Mocks is created in the directory:
+
     src/mocks
+    
 To mock API communication, msv uses what they call [request handler](https://mswjs.io/docs/basics/request-handler) to specify wich request should be made, and what the mocked response should be.
 For example, a mocked response from a get request could be:
 
