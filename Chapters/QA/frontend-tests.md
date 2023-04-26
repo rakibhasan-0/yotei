@@ -50,7 +50,8 @@ There is a extensions in VSCode for Jest and React Testing Library.
 
 ## Example unit test
 
-```javascript import userEvent from '@testing-library/react'
+```javascript 
+import userEvent from '@testing-library/react'
 import Button from '../src/components/Common/Button/Button'
 import '@testing-library/jest-dom'
 
@@ -73,7 +74,8 @@ Mocks is created in the directory:
 To mock API communication, msv uses what they call [request handler](https://mswjs.io/docs/basics/request-handler) to specify wich request should be made, and what the mocked response should be.
 For example, a mocked response from a get request could be:
 
-```javascript import { rest } from 'msw'
+```javascript 
+import { rest } from 'msw'
 // Matches any "GET /user" requests,
 // and responds using the `responseResolver` function.
 rest.get('/user', responseResolver)
