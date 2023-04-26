@@ -21,15 +21,19 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-@Deprecated
 public class SessionControllerAddListTest {
-
+    private final LocalDate testDate1 = LocalDate.of(2023, 1, 10);
+    private final LocalDate testDate2 = LocalDate.of(2023, 1, 17);
+    private final LocalDate testDate3 = LocalDate.of(2023, 2, 14);
+    private final LocalDate testDate4 = LocalDate.of(2023, 3, 14);
+    private final LocalTime testTime = LocalTime.of(10, 0);
+    
     private SessionController sessionController;
     private List<Session> sessionList;
-
-    private final LocalDate testDate1 = LocalDate.of(2022, 1, 10);
-    private final LocalDate testDate2 = LocalDate.of(2022, 1, 14);
-    private final LocalTime testTime = LocalTime.of(10, 0);
+    Session testSession1 = new Session(1L,"test",1L,1L,testDate1, testTime);
+    Session testSession2 = new Session(2L,"test",1L,1L,testDate2, testTime);
+    Session testSession3 = new Session(2L,"test",1L,1L,testDate3, testTime);
+    Session testSession4 = new Session(2L,"test",1L,1L,testDate4, testTime);
 
     @Mock
     private SessionRepository sessionRepository;
@@ -57,116 +61,103 @@ public class SessionControllerAddListTest {
     }
 
     @Test
-    void addSingleSession() {
+    void shouldSucceedWithAddingSingleSession() {
+        List<Session> tempList = new ArrayList<>();
+        tempList.add(0, testSession1);
+        sessionController.addList(tempList);
 
-        AddListInput mockInput = new AddListInput(1L, List.of(new DateAndTime(testDate1, testTime)), 1);
-        sessionController.addRepeating(mockInput);
-
-        assertEquals(sessionRepository.findAll().size(),1);
+        assertEquals(1, sessionRepository.findAll().size());
         assertEquals(sessionRepository.findAll().get(0).getDate(), testDate1);
     }
 
     @Test
-    void addMultipleSessionSameWeek() {
+    void shouldSucceedWithAddMultipleSessionSameWeek() {
+        List<Session> tempList = new ArrayList<>();
+        tempList.add(0, testSession1);
+        tempList.add(1, testSession2);
+        sessionController.addList(tempList);
 
-        AddListInput mockInput = new AddListInput(1L, List.of(new DateAndTime(testDate1, testTime), new DateAndTime(testDate2, testTime)), 1);
-        sessionController.addRepeating(mockInput);
-        assertEquals(sessionRepository.findAll().size(),2);
+        assertEquals(2, sessionRepository.findAll().size());
     }
 
     @Test
-    void multipleWeeksAddCorrectAmount() {
+    void shouldSucceedAddingSessionsOnMultipleWeeks() {
+        List<Session> tempList = new ArrayList<>();
+        tempList.add(0, testSession1);
+        tempList.add(1, testSession2);
+        tempList.add(2, testSession3);
+        tempList.add(3, testSession4);
+        sessionController.addList(tempList);
 
-        AddListInput mockInput = new AddListInput(1L, List.of(new DateAndTime(testDate1, testTime), new DateAndTime(testDate2, testTime)), 2);
-        sessionController.addRepeating(mockInput);
         assertEquals(sessionRepository.findAll().size(),4);
     }
 
     @Test
-    void multipleWeeksCalculatesDateCorrectly() {
-
-        AddListInput mockInput = new AddListInput(1L, List.of(new DateAndTime(testDate1, testTime), new DateAndTime(testDate2, testTime)), 2);
-        sessionController.addRepeating(mockInput);
+    void shouldAddSessionsOnMultipleWeeksAndCalculateDateCorrectly() {
+        sessionList.add(0, testSession1);
+        sessionList.add(1, testSession2);
+        sessionController.addList(sessionList);
         List<Session> allSessions = sessionRepository.findAll();
-        assertEquals(allSessions.get(2).getDate(), allSessions.get(0).getDate().plus(7, ChronoUnit.DAYS));
+
+        assertEquals(allSessions.get(1).getDate(), allSessions.get(0).getDate().plus(7, ChronoUnit.DAYS));
     }
 
     @Test
-    void acceptNullTime(){
-        AddListInput mockInput = new AddListInput(1L, List.of(new DateAndTime(testDate1, null)), 1);
-        ResponseEntity<List<Session>> response = sessionController.addRepeating(mockInput);
+    void shouldAcceptSessionWithNullTime(){
+        Session testSessionWithNullTime = new Session(1L,"test",1L,1L,testDate1, null);
+        sessionList.add(0, testSessionWithNullTime);
+        ResponseEntity<List<Session>> response = sessionController.addList(sessionList);
         List<Session> allSessions = sessionRepository.findAll();
+
         assertNull(allSessions.get(0).getTime());
-        assertEquals(response.getStatusCode(), HttpStatus.CREATED);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+    }
+    
+    @Test
+    void shouldReturnBadRequestWhenAddingSessionWithMissingPlan(){
+        Session missingPlanSession = new Session(1L,"test",1L,null,testDate1, testTime);
+        List<Session> tempList = new ArrayList<Session>();
+        tempList.add(0, missingPlanSession);
+        ResponseEntity<List<Session>> response = sessionController.addList(tempList);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
-    void badRequestDoesNotAdd() {
-        AddListInput missingPlanInput = new AddListInput(null, List.of(new DateAndTime(testDate1, testTime), new DateAndTime(testDate2, testTime)), 2);
+    void shouldNotAddSessionWhenGettingBadRequest() {
+        Session missingPlanSession = new Session(1L,"test",1L,null,testDate1, testTime);
+        List<Session> tempList = new ArrayList<Session>();
+        tempList.add(0, missingPlanSession);
+        ResponseEntity<List<Session>> response = sessionController.addList(tempList);
 
-        sessionController.addRepeating(missingPlanInput);
-        assertEquals(sessionRepository.findAll().size(), 0);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
-    void missingPlanReturnsBadRequest(){
-        AddListInput missingPlanInput = new AddListInput(null, List.of(new DateAndTime(testDate1, testTime), new DateAndTime(testDate2, testTime)), 2);
+    void shouldReturnBadRequestWhenAddingSessionWithMissingDate(){
+        Session missingPlanSession = new Session(1L,"test",1L,1L,null, testTime);
+        List<Session> tempList = new ArrayList<Session>();
+        tempList.add(0, missingPlanSession);
+        ResponseEntity<List<Session>> response = sessionController.addList(tempList);
 
-        ResponseEntity<List<Session>> response = sessionController.addRepeating(missingPlanInput);
-        assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
-    void missingDatesReturnsBadRequest(){
-        AddListInput missingDatesInput = new AddListInput(1L, null, 2);
-
-        ResponseEntity<List<Session>> response = sessionController.addRepeating(missingDatesInput);
-        assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
-    }
-
-    @Test
-    void missingWeeksReturnsBadRequest(){
-        AddListInput missingWeeksInput = new AddListInput(1L, List.of(new DateAndTime(testDate1, testTime), new DateAndTime(testDate2, testTime)), null);
-
-        ResponseEntity<List<Session>> response = sessionController.addRepeating(missingWeeksInput);
-        assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
-    }
-
-    @Test
-    void duplicateDateReturnsBadRequest() {
-        AddListInput mockInput = new AddListInput(1L, List.of(new DateAndTime(testDate1, testTime),
-                new DateAndTime(testDate1, testTime.plusHours(1))), 2);
-
-        ResponseEntity<List<Session>> response = sessionController.addRepeating(mockInput);
-        assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
-    }
-
-    @Test
-    void excessiveDatesReturnsBadRequest() {
-        List<DateAndTime> dateList = new ArrayList<>();
-
-        for (int i = 0; i < 8; i++) {
-            dateList.add(new DateAndTime(LocalDate.of(2022, 1, i+1), testTime));
-        }
-        AddListInput mockInput = new AddListInput(1L, dateList, 2);
-
-        ResponseEntity<List<Session>> response = sessionController.addRepeating(mockInput);
-        assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
-    }
-
-    @Test
-    void createdResponseContainsSessions() {
-        AddListInput mockInput = new AddListInput(1L, List.of(new DateAndTime(testDate1, null)), 1);
-        ResponseEntity<List<Session>> response = sessionController.addRepeating(mockInput);
+    void shouldContainSessionWhenSessionsAdded() {
+        sessionList.add(0, testSession1);
+        sessionController.addList(sessionList);
+        ResponseEntity<List<Session>> response = sessionController.addList(sessionList);
         List<Session> allSessions = sessionRepository.findAll();
 
-        assertEquals(response.getBody(), allSessions);
+        assertEquals(allSessions, response.getBody());
     }
 
     @Test
-    void badRequestResponseContainsNothing() {
-        AddListInput mockInput = new AddListInput(1L, List.of(new DateAndTime(null, null)), 1);
-        ResponseEntity<List<Session>> response = sessionController.addRepeating(mockInput);
+    void shouldBeEmptyWhenGettingBadRequestResponse() {
+        Session missingPlanSession = new Session(1L,"test",1L,1L,null, testTime);
+        sessionList.add(0, missingPlanSession);
+        ResponseEntity<List<Session>> response = sessionController.addList(sessionList);
 
         assertNull(response.getBody());
     }

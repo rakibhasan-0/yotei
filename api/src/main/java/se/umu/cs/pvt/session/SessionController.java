@@ -9,7 +9,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -55,58 +54,10 @@ public class SessionController {
     @PostMapping("/addList")
     public ResponseEntity<List<Session>> addList(@RequestBody List<Session> sessions){
 
-        if(sessions.isEmpty() || sessions.stream().anyMatch(session -> session.getId() != null || session.invalidFormat()))
+        if(sessions.isEmpty() || sessions.stream().anyMatch(session -> session.getId() == null || session.invalidFormat()))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         return new ResponseEntity<>(sessionRepository.saveAll(sessions), HttpStatus.CREATED);
-    }
-
-    /**
-     * Is depricated, is only used in testfiles.
-     * 
-     * Adds a set of sessions based on a list of given week days as dates and an amount weeks for which
-     * to create sessions for.
-     * @return HTTP-status code BAD_REQUEST if the format of the input is incorrect else return HTTP-status
-     * code CREATED on successfully adding sessions and also returns the sessionList in body.
-     */
-    @Deprecated
-    public ResponseEntity<List<Session>> addRepeating(@RequestBody AddListInput input) {
-
-        //Check if any required field is not given/null or if duplicate/excessive or no dates are given
-        if(input.invalidFormat()){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        List<Session> sessionList = createSessions(input);
-        sessionRepository.saveAll(sessionList);
-
-        return new ResponseEntity<>(sessionList, HttpStatus.CREATED);
-    }
-
-    /**
-     * Is depricated, is only used in 'addRepeating'.
-     * 
-     * Creates a session for each day of the week in the input for the specified amount of weeks.
-     * Binds all sessions to the given plan id.
-     * 
-     * @param input AddListInput with all the needed data
-     * @return A list of the sessions created
-     */
-    @Deprecated
-    private List<Session> createSessions(AddListInput input) {
-        List<Session> sessionList = new ArrayList<>();
-
-        for(int i = 0; i < input.getWeeks(); i++){
-            for(DateAndTime d : input.getDate_info()){
-                LocalDate dateToUse = d.getDate().plus(7L*i, ChronoUnit.DAYS);
-                //Convert time if time was given
-                LocalTime sessionTime = null;
-                if(d.getTime() != null) sessionTime = d.getTime();
-                //Id is generated and text and workout are normally not specified on creation
-                sessionList.add(new Session(null, null, null, input.getPlan_id(), dateToUse, sessionTime));
-            }
-        }
-        return sessionList;
     }
 
     /**

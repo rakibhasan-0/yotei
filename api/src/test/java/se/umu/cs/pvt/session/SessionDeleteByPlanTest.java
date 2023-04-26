@@ -30,7 +30,8 @@ class SessionDeleteByPlanTest {
     private final LocalDate testDate2 = LocalDate.of(2022, 1, 14);
     private final LocalTime testTime = LocalTime.of(10, 0);
 
-
+    Session testSession1 = new Session(1L,"test",1L,1L,testDate1, testTime);
+    Session testSession2 = new Session(2L,"test",1L,1L,testDate2, testTime);
 
     @Mock
     private SessionRepository sessionRepository;
@@ -68,8 +69,11 @@ class SessionDeleteByPlanTest {
         sessionRepository.deleteAllByPlan(832L);
         sessionRepository.saveAll(new ArrayList<>());
         sessionRepository.findAll();
-        AddListInput mockInput = new AddListInput(1L, List.of(new DateAndTime(testDate1, testTime), new DateAndTime(testDate2, testTime)), 1);
-        sessionController.addRepeating(mockInput);
+
+        List<Session> mockInput = new ArrayList<>();
+        mockInput.add(0, testSession1);
+        mockInput.add(1, testSession2);
+        sessionController.addList(mockInput);
     }
 
     @AfterEach
