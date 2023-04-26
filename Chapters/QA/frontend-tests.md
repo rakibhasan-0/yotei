@@ -51,21 +51,29 @@ There is a extensions in VSCode for Jest and React Testing Library.
 ## Example unit test
 
 ```javascript 
-import userEvent from '@testing-library/react'
+/** @jest-environment jsdom */
+import React from 'react'
+import {render, screen, userEvent} from '@testing-library/react'
 import Button from '../src/components/Common/Button/Button'
 import '@testing-library/jest-dom'
 
 test('Tests interaction with button', async() => {
     // ARRANGE
-    const [clicked, setClicked] = useState(0);
-    render(<Button onClick={()=>{setClicked(1)}}><p>Hello</p></Button>)
+    var clicked = 0;
+    
+    let dom = render(<div><Button onClick={()=>{clicked=1}}>Testing</Button></div>);
+    
 
     // ACT
-    await userEvent.click(screen.getByText("Hello"))
+    screen.debug();
+    document.getElementsByClassName('button button-normal')[0].click();
 
     // ASSERT
-    expect(clicked == 1)
+    expect(clicked).toEqual(1);
 })
+
+
+
 ```
 # Mock Service Worker
 Msv is used in our development to mock Restful requests. This is used to "fake" api requests and responses to test how our code works with different API calls and to find buggs by writing tests integrating the service. 
