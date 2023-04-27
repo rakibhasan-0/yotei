@@ -274,7 +274,7 @@ class WorkoutView extends React.Component {
 		const allTagsJSON  = await allTags.json()
 		const tagResponse = await fetch(`/api/tags/get/tag/by-workout?workId=${this.workoutID}`, requestOptions)
 		const tagJSON = await tagResponse.json()
-		mappedTags = allTagsJSON.filter((tag) => tagJSON.map(obj => obj.tagId).includes(tag.id)).map((tags) =>{
+		mappedTags = allTagsJSON.filter((tag) => tagJSON.map(obj => obj.tag).includes(tag.id)).map((tags) =>{
 			return tags.name
 		})
 		this.setState({

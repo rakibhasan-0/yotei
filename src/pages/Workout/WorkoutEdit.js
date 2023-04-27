@@ -88,7 +88,7 @@ const WorkoutEdit = () => {
 
 			const tagIdResponse = await fetch(`/api/tags/get/tag/by-workout?workId=${props.workout.id}`, requestOptions)
 			const tagIdJson = await tagIdResponse.json()
-			filteredTags = allTagsJson.filter((tag) => tagIdJson.map(obj => obj.tagId).includes(tag.id)).map((tags) => {
+			filteredTags = allTagsJson.filter((tag) => tagIdJson.map(obj => obj.tag).includes(tag.id)).map((tags) => {
 				return { label: tags.name, value: tags.id }
 			})
 		} catch (error) {
