@@ -45,10 +45,10 @@ export class WorkoutApi {
 		const ctx = await WorkoutApi.make_ctx()
 
 		const workouts_response = await ctx.get("/api/workouts/all")
-		const workouts = await workouts_response.json()
+		const workouts = await workouts_response.json().catch(e => [])
 
-		for(const element in workouts) {
-			await WorkoutApi.delete_workout(Number.parseInt(element))
-		}
+		await workouts.forEach(element => {
+			WorkoutApi.delete_workout(Number.parseInt(element['id']))
+		});
 	}
 }

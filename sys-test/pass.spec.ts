@@ -12,7 +12,7 @@ test.describe("ST-2 pass-sida", () => {
 
 	test(".5 favoritmarkera skapat pass och se att det syns på \"mina pass\"", async ({ page }) => {
 		// 1. Lägger in en workout via workout-api
-		const pass_title = "Mitt favoritpass"
+		const pass_title = "Favoritpass";
 		const pass_description = "Ett väldigt bra pass"
 		const pass_id = await WorkoutApi.add_workout({
 			name: pass_title,
@@ -21,16 +21,16 @@ test.describe("ST-2 pass-sida", () => {
 			hidden: false,
 		})
 
+		await page.goto('/workout/create');
 		// Skapa pass och favoritmarkera det.
 		await page.getByPlaceholder("Namn").fill(pass_title)
 		await page.getByPlaceholder("Beskrivning av pass").fill(pass_description)
 		await page.getByRole("button", { name: "Spara" }).click()
-		await page.getByRole("button", { name: "" }).click()
+		await page.getByRole('button', { name: '' }).click()
 
-		// Gå till profil och kolla att favoritmarkerat pass finns.
 		await page.goto("/profile")
-		await page.getByText("Favoritpass").click()
-		await expect(page.getByText(pass_title)).not.toBeVisible()
+		await page.getByRole('listitem').filter({ hasText: 'Favoritpass' }).click()
+		await expect(page.getByRole('link', { name: pass_title })).toBeVisible()
 
 		// Cleanup. Ta bort passet
 		await WorkoutApi.delete_workout(pass_id)
@@ -38,7 +38,7 @@ test.describe("ST-2 pass-sida", () => {
 
 	test(".4 borttagning av skapade pass via gränssnitt",async ({ page }) => {
 		// 1. Lägger in en workout via workout-api
-		const pass_title = "Ett stort pass"
+		const pass_title = "Skapat pass";
 		const pass_id = await WorkoutApi.add_workout({
 			name: pass_title,
 			desc: "",
@@ -51,7 +51,7 @@ test.describe("ST-2 pass-sida", () => {
 
 		await page.locator("#dropdown-split-basic").click()
 		await page.getByRole("button", { name: "trashcan icon" }).click()
-		await page.getByRole("button", { name: "Ta bort pass" }).click()
+		await page.getByText('Ta bort pass').nth(2).click()
 
 		await expect(page.getByRole("heading", { name: pass_title })).toBeHidden()
 	})
@@ -62,7 +62,7 @@ test.describe("ST-2 pass-sida", () => {
    */
 	test(".3 skapat pass är synligt under mina pass", async ({ page }) => {
 		// 1. Lägger in en workout via workout-api
-		const pass_title = "Ett stort pass"
+		const pass_title = "Synligt under mina pass";
 		const pass_id = await WorkoutApi.add_workout({
 			name: pass_title,
 			desc: "",
@@ -84,7 +84,7 @@ test.describe("ST-2 pass-sida", () => {
    */
 	test(".2 skapat pass är synligt", async ({ page }) => {
 		// 1. Lägger in en workout via workout-api
-		const pass_title = "Ett stort pass"
+		const pass_title = "Synligt";
 		const pass_id = await WorkoutApi.add_workout({
 			name: pass_title,
 			desc: "",
@@ -106,7 +106,7 @@ test.describe("ST-2 pass-sida", () => {
 	test(".1 skapa pass med gränssnitt", async ({ page }) => {
 		// 1. Gå till workout och tryck för att lägga till nytt pass
 		await page.goto("/workout")
-		await page.getByRole("link", { name: "+" }).click()
+		await page.locator('div:nth-child(6)').click()
 
 		// 2. Fyll i namn och beskrivning
 		const t1 = "Synligt pass"

@@ -95,17 +95,22 @@ build-image:
 systest-job:
   <<: *skippable
   stage: systest
-  image: mcr.microsoft.com/playwright:v1.32.0-focal
+  image: mcr.microsoft.com/playwright:v1.33.0-focal
+  artifacts:
+    when: always
+    paths:
+      - results.xml
+    reports:
+      junit: results.xml
   before_script:
     - npm install --silent
     - npm install pm2 -g
-    - npx playwright install --with-deps
   script:
     - pm2 start npm -- start
-    - sleep 15 # Give pm2 some time to start up
-    - SYSTEST_HOST=http://localhost:3000 npx playwright test --reporter=line
-  when: manual
-    
+    - sleep 5
+    - pm2 logs --nostream
+    - SYSTEST_HOST=http://localhost:3001 npx playwright test
+  
 deploy:
   <<: *skippable
   image: ubuntu:latest
