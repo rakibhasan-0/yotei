@@ -68,7 +68,6 @@ test('Tests interaction with button', async() => {
     
 
     // ACT
-    screen.debug();
     document.getElementById('testbutton').click();
 
     // ASSERT
