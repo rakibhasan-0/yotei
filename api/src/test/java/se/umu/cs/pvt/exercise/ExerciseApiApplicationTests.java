@@ -10,7 +10,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -28,24 +30,21 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
  */
 
 @ExtendWith(MockitoExtension.class)
-
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@WebMvcTest(controllers = ExerciseController.class)
 class ExerciseApiApplicationTests {
 
-
-    @Mock
-    private ExerciseRepository repository = Mockito.mock(ExerciseRepository.class);
+    @MockBean
+    private ExerciseRepository repository;
 
     @Autowired
     private ExerciseController controller;
+
     private Exercise ex1 = new Exercise(1L, "Test1", "Descripton1", 10);
     private Exercise ex2 = new Exercise(2L, "Test2", "Descripton2", 20);
 
     ArrayList<Exercise> exercises;
     @BeforeEach
     void init() {
-        controller = new ExerciseController(repository);
-
         exercises = new ArrayList<>();
         exercises.add(ex1);
         exercises.add(ex2);

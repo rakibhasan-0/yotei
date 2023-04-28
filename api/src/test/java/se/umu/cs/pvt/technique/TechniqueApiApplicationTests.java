@@ -8,7 +8,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -27,12 +29,11 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
  */
 
 @ExtendWith(MockitoExtension.class)
-
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@WebMvcTest(controllers = TechniqueController.class)
 public class TechniqueApiApplicationTests {
 
-    @Mock
-    private TechniqueRepository repository = Mockito.mock(TechniqueRepository.class);
+    @MockBean
+    private TechniqueRepository repository;
     @Autowired
     private TechniqueController controller;
     @Test
@@ -46,8 +47,6 @@ public class TechniqueApiApplicationTests {
 
     @BeforeEach
     public void init() {
-        controller = new TechniqueController(repository);
-
         techniques = new ArrayList<>();
         techniques.add(tec1);
         techniques.add(tec2);

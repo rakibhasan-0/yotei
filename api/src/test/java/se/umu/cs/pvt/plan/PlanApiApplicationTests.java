@@ -8,10 +8,11 @@ package se.umu.cs.pvt.plan;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -21,15 +22,15 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
+@WebMvcTest(controllers = PlanController.class)
 @ExtendWith(MockitoExtension.class)
-class PlanApiApplicationTests
-{
+class PlanApiApplicationTests {
+    @MockBean
+    private PlanRepository repository;
 
-    @Mock
-    private final PlanRepository repository = Mockito.mock(PlanRepository.class);
     @Autowired
     private PlanController controller;
+
     @Test
     void contextLoads() {
         assertThat(controller).isNotNull();
@@ -38,10 +39,10 @@ class PlanApiApplicationTests
     private final Plan ex1 = new Plan(1L, "namn 1", "#F12F12", 1L);
     private final Plan ex2 = new Plan(2L, "namn 2", "#983229", 2L);
     private final Plan ex3 = new Plan(3L, "namn 3", "#2342A2", 1L);
-    ArrayList<Plan> plans;
+    private ArrayList<Plan> plans;
+
     @BeforeEach
     void init() {
-        controller = new PlanController(repository);
         plans = new ArrayList<>();
         plans.add(ex1);
         plans.add(ex2);

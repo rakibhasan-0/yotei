@@ -1,11 +1,15 @@
 package se.umu.cs.pvt.export;
 
+import lombok.experimental.WithBy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 import java.util.Set;
@@ -19,21 +23,17 @@ import static org.mockito.Mockito.when;
  * @author Andre Byström
  * date: 2023-04-25
  */
-@SpringBootTest
+@WebMvcTest(controllers = ExportController.class)
 @ExtendWith(MockitoExtension.class)
 public class ExportControllerGetTest {
-    @Mock
+    @MockBean
     private TechniqueExportRepository techniqueExportRepository;
 
-    @Mock
+    @MockBean
     private ExerciseExportRepository exerciseExportRepository;
 
+    @Autowired
     private ExportController exportController;
-
-    @BeforeEach
-    public void init() {
-        exportController = new ExportController(techniqueExportRepository, exerciseExportRepository);
-    }
 
     @Test
     public void shouldGetTechniques() {

@@ -6,7 +6,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -19,7 +22,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-@SpringBootTest
+@WebMvcTest(controllers = SessionController.class)
 @ExtendWith(MockitoExtension.class)
 public class SessionControllerAddListTest {
     private final LocalDate testDate1 = LocalDate.of(2023, 1, 10);
@@ -27,23 +30,24 @@ public class SessionControllerAddListTest {
     private final LocalDate testDate3 = LocalDate.of(2023, 2, 14);
     private final LocalDate testDate4 = LocalDate.of(2023, 3, 14);
     private final LocalTime testTime = LocalTime.of(10, 0);
-    
-    private SessionController sessionController;
+
     private List<Session> sessionList;
     Session testSession1 = new Session(1L,"test",1L,1L,testDate1, testTime);
     Session testSession2 = new Session(2L,"test",1L,1L,testDate2, testTime);
     Session testSession3 = new Session(2L,"test",1L,1L,testDate3, testTime);
     Session testSession4 = new Session(2L,"test",1L,1L,testDate4, testTime);
 
-    @Mock
+    @MockBean
     private SessionRepository sessionRepository;
+
+    @Autowired
+    private SessionController sessionController;
 
     public SessionControllerAddListTest() {
     }
 
     @BeforeEach
     void init() {
-        sessionController = new SessionController(sessionRepository);
         sessionList = new ArrayList<>();
 
         //Mock the "saveAll" call to the repository using custom function call which updates to sessionList instead

@@ -6,7 +6,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -21,10 +24,11 @@ import static org.mockito.ArgumentMatchers.any;
  * Tests for the update method in the session api
  * @author Hawaii, Calzone
  */
-@SpringBootTest
+@WebMvcTest(controllers = SessionController.class)
 @ExtendWith(MockitoExtension.class)
 public class SessionControllerUpdateTest {
 
+    @Autowired
     private SessionController sessionController;
     private Map<Long, Session> sessionMap;
 
@@ -35,14 +39,13 @@ public class SessionControllerUpdateTest {
     private final Session testSession2 = new Session(2L, null, null, 1L, testDate1, null);
     private final Map<String, Object> mockInput = new HashMap<>();
 
-    @Mock
+    @MockBean
     private SessionRepository sessionRepository;
 
     @BeforeEach
     void init() {
         mockInput.put("text", "Uppdaterad");
         mockInput.put("workout", 5L);
-        sessionController = new SessionController(sessionRepository);
         sessionMap = new HashMap<>();
 
         //Mock the "save" call to the repository using custom function call which updates in sessionMap instead

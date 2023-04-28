@@ -2,9 +2,10 @@ package se.umu.cs.pvt.belt;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 
@@ -18,16 +19,19 @@ import static org.mockito.Mockito.when;
  * @author Andre Byström
  * date: 2023-04-24
  */
-@SpringBootTest
+@WebMvcTest(controllers = BeltController.class)
 @ExtendWith(MockitoExtension.class)
 public class BeltControllerGetTest {
-    @Mock
+
+    @MockBean
     private BeltRepository beltRepository;
+
+    @Autowired
+    private BeltController controller;
 
     @Test
     public void shouldGetBelts() {
         // Arrange
-        BeltController controller = new BeltController(beltRepository);
         when(beltRepository.findAll()).thenReturn(List.of(
                 new Belt(1L, "Gult", "50000", true),
                 new Belt(2L, "Svart", "000000", false)

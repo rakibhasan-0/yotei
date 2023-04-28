@@ -6,7 +6,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
@@ -19,23 +22,22 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 
 
-@SpringBootTest
+@WebMvcTest(controllers = SessionController.class)
 @ExtendWith(MockitoExtension.class)
 public class SessionControllerDeleteTest {
 
+    @Autowired
     private SessionController sessionController;
     private List<Session> sessionList;
 
     private final LocalDate testDate1 = LocalDate.of(2022, 1, 10);
     private final LocalDate testDate2 = LocalDate.of(2022, 1, 14);
 
-    @Mock
+    @MockBean
     private SessionRepository sessionRepository;
 
     @BeforeEach
     void init() {
-
-        sessionController = new SessionController(sessionRepository);
         sessionList = new ArrayList<>();
 
         //Mock the "deleteById" call to the repository by instead removing by id in sessionList instead
