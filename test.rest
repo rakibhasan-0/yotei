@@ -1,0 +1,27 @@
+
+
+### Lägg till en tagg katt
+POST http://localhost:8085/api/tags/add
+Content-Type: application/json
+
+{
+    "name": "katt"
+}
+
+### Gör en slagning mot teknik-sökning api:et
+
+GET http://localhost:8085/api/search/techniques?name=slå+kniv&tags=kat,kan&kihon=ONLY_KIHON&belts=0,1,2
+Content-Type: application/json
+
+###
+### name=slå,kniv,katt&tags=kat,kan
+### name=slå+kniv+katt&tags=kat+kan
+###
+
+GET http://localhost:8085/api/search/workouts?q=slå+#kniv+katt&date=2020-01-01
+Content-Type: application/json
+
+###
+
+GET http://localhost:8085/api/search/exercises?q=slå+#kniv+katt
+Content-Type: application/json
