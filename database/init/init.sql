@@ -326,8 +326,8 @@ ALTER TABLE technique_to_belt OWNER TO psql;
 -- Logging tables; Type: TABLE; Schema: public; Owner: psql
 CREATE TABLE IF NOT EXISTS error_log (
        log_id SERIAL PRIMARY KEY,
-       error_message VARCHAR(240) NOT NULL,
-       info_message VARCHAR(240)  NOT NULL
+       error_message text NOT NULL,
+       info_message text  NOT NULL
 );
 ALTER TABLE error_log OWNER TO psql;
 
