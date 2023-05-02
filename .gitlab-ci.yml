@@ -1,6 +1,7 @@
 stages:
  - test
  - build
+ - publish
  - deploy
 
 .skippable: &skippable
@@ -19,12 +20,47 @@ tests:
   script:
     - mvn -q test
 
+
+
 build_gateway_image:
   <<: *skippable
   image: docker:20
   services:
     - docker:20-dind
   stage: build
+  variables:
+    DOCKER_DRIVER: "overlay2"
+    CONTAINER_REPOSITORY: "pvt2023"
+    VERSION: "1.0"
+  before_script:
+    - apk update && apk add jq
+  script:
+    - docker build -t $CONTAINER_REPOSITORY/gateway:$VERSION gateway
+  
+
+build_api_image:
+  <<: *skippable
+  image: docker:20
+  services:
+    - docker:20-dind
+  stage: build
+  variables:
+    DOCKER_DRIVER: "overlay2"
+    CONTAINER_REPOSITORY: "pvt2023"
+    VERSION: "1.0"
+  before_script:
+    - apk update && apk add jq
+  script:
+    - docker build -t $CONTAINER_REPOSITORY/api:$VERSION api
+  
+
+
+publish_gateway_image:
+  <<: *skippable
+  image: docker:20
+  services:
+    - docker:20-dind
+  stage: publish
   variables:
     DOCKER_DRIVER: "overlay2"
     CONTAINER_REPOSITORY: "pvt2023"
@@ -40,13 +76,12 @@ build_gateway_image:
   only:
     - main
 
-
-build_api_image:
+publish_api_image:
   <<: *skippable
   image: docker:20
   services:
     - docker:20-dind
-  stage: build
+  stage: publish
   variables:
     DOCKER_DRIVER: "overlay2"
     CONTAINER_REPOSITORY: "pvt2023"
@@ -61,6 +96,7 @@ build_api_image:
     - docker push $CONTAINER_REPOSITORY/api:latest
   only:
     - main
+
 
 deploy:
   <<: *skippable
