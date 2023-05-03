@@ -55,20 +55,22 @@ There is a extensions in VSCode for Jest and React Testing Library.
 ```javascript 
 /** @jest-environment jsdom */
 import React from 'react'
-import {render, screen, userEvent} from '@testing-library/react'
+import {render, screen, configure} from '@testing-library/react'
 import Button from '../src/components/Common/Button/Button'
 import '@testing-library/jest-dom'
+
+configure({testIdAttribute: 'id'})
 
 test('Tests interaction with button', async() => {
     // ARRANGE
     var clicked = 0;
     
-    let dom = render(<div><Button onClick={
+    render(<div><Button onClick={
                             ()=> {clicked=1}} id={"testbutton"}></Button></div>)
     
 
     // ACT
-    document.getElementById('testbutton').click();
+    screen.getByTestId('testbutton').click();
 
     // ASSERT
     expect(clicked).toEqual(1);
