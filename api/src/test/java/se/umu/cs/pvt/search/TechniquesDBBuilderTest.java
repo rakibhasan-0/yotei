@@ -8,6 +8,13 @@ import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+/**
+ * Test class for SearchTechniquesDBBuilder
+ *
+ * @author Jonas Gustavsson
+ * @author James Eriksson
+ * date: 2023-05-03
+ */
 public class TechniquesDBBuilderTest {
 
     SearchTechniquesParams params;

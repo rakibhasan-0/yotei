@@ -8,6 +8,12 @@ import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+/**
+ * Test class for SearchWorkoutDBBuilder
+ *
+ * @author Jonas Gustavsson
+ * date: 2023-05-03
+ */
 public class WorkoutDBBuilderTest {
     SearchWorkoutParams params;
     SearchWorkoutDBBuilder builder;

@@ -27,6 +27,12 @@ import se.umu.cs.pvt.search.interfaces.WorkoutSearchResponse;
 import se.umu.cs.pvt.search.persistance.SearchRepository;
 import se.umu.cs.pvt.search.persistance.TagCompleteRepository;
 
+/**
+ * Test class for SearchController endpoint
+ *
+ * @author Kraken & Minotaur
+ * date: 2023-05-03
+ */
 @WebMvcTest(controllers = SearchController.class)
 @ExtendWith(MockitoExtension.class)
 public class SearchControllerTest {

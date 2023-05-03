@@ -3,13 +3,17 @@ package se.umu.cs.pvt.search;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Test class for SearchTechniquesParams
+ *
+ * @author Jonas Gustavsson
+ * date: 2023-05-03
+ */
 public class TechniquesParamsTest {
     SearchTechniquesParams params;
 

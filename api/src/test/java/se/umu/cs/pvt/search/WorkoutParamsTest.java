@@ -9,6 +9,12 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Test class for SearchWorkoutParams
+ *
+ * @author Jonas Gustavsson
+ * date: 2023-05-03
+ */
 public class WorkoutParamsTest {
     SearchWorkoutParams params;
 
