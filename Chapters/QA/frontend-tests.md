@@ -30,7 +30,7 @@ React Testing Library includes functionality to test React components. It is use
 
     filename.test.jsx
     
-For example the file **plan.jsx** should have a corresponding testfile called **plan.test.jsx** and be placed in it's corresponding place in **\_\_tests\_\_**.
+For example the file **plan.jsx** should have a corresponding testfile called **plan.test.jsx** and be placed in it"s corresponding place in **\_\_tests\_\_**.
 ```
 
 src
@@ -54,14 +54,14 @@ There is a extensions in VSCode for Jest and React Testing Library.
 
 ```javascript 
 /** @jest-environment jsdom */
-import React from 'react'
-import {render, screen, configure} from '@testing-library/react'
-import Button from '../src/components/Common/Button/Button'
-import '@testing-library/jest-dom'
+import React from "react"
+import {render, screen, configure} from "@testing-library/react"
+import Button from "../src/components/Common/Button/Button"
+import "@testing-library/jest-dom"
 
-configure({testIdAttribute: 'id'})
+configure({testIdAttribute: "id"})
 
-test('Tests interaction with button', async() => {
+test("Tests interaction with button", async() => {
     // ARRANGE
     var clicked = 0;
     
@@ -70,7 +70,7 @@ test('Tests interaction with button', async() => {
     
 
     // ACT
-    screen.getByTestId('testbutton').click();
+    screen.getByTestId("testbutton").click();
 
     // ASSERT
     expect(clicked).toEqual(1);
@@ -92,10 +92,10 @@ To mock API communication, msv uses what they call [request handler](https://msw
 For example, a mocked response from a get request could be:
 
 ```javascript 
-import { rest } from 'msw'
+import { rest } from "msw"
 // Matches any "GET /user" requests,
 // and responds using the `responseResolver` function.
-rest.get('/user', responseResolver)
+rest.get("/user", responseResolver)
 ```
 [How to define the responseResolver](https://mswjs.io/docs/getting-started/mocks/rest-api). Will make a guide for this after some testing.
 
