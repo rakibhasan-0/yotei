@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/user-event": "^14.4.3",
     "dotenv": "^16.0.3",
     "http-proxy-middleware": "^2.0.6",
     "react": "^18.2.0",
@@ -25,7 +24,7 @@
     "react-toastify": "^9.1.2"
   },
   "scripts": {
-    "start": "vite --host",
+    "start": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "host": "vite --host",
