@@ -73,6 +73,13 @@
 - **Alternativ** - Dubbelarbete
 - **Påverkan** - Front-end
 
+# Migration från CRA (Create React App) till Vite.
+- **Datum** - 230424
+- **Beskrivning** - Projektet använde sig av byggverktyget/mallen CRA för frontenden innan. Vi har valt att byta till ett annat byggverktyg vid namn Vite.
+- **Motivation** - Vi har valt att byta till Vite för att det har mycket snabbare byggtider genetemot CRA. Det gör att personer som jobbar mot frontenden behöver vänta mindre varje gång den skall startas. Byggtiden i pipelinen minskar även. Bytet till Vite kunde även ske sådant att det i praktiken inte innebär någon förändring för de som arbetar mot frontenden eller bygg.
+- **Alternativ** - Fortsätta använda CRA, byte till Next.js, byte till T3 stacken.
+- **Påverkan** - Minimal påverkan: Front-end, Bygg
+
 # Funktionella beslut 
 
 # Kategorier i ett pass

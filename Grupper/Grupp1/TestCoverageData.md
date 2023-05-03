@@ -1,3 +1,10 @@
+# Belt-api
+| Class   |      Coverage (%)      | Comment |
+|----------|:-------------:|:-------------:|
+| Belt |  100 | |
+| BeltController |  100 | |
+| BeltRepository |   | Interface |
+
 # Session-api
 | Class   |      Coverage (%)      | Coverage (%) efter refaktorisering | Comment |
 |----------|:-------------:|:-------------:|:-------------:|

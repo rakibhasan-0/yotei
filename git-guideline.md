@@ -40,11 +40,13 @@ After this you want to associate it with the pre-existing branch created on the 
 Now you are ready to pull.
 
 <h2>Done with ticket</h2>
-When the feature has been implemented and is ready to be integrated into the main branch, the developer should rebase onto the remote main branch with the command
+When the feature has been implemented and is ready to be integrated into the main branch, the developer should rebase onto the remote main branch with the command. This command will pull the latest changes from main and rebase.
 
-`git rebase origin/main`
+`git pull --rebase origin main` (Pull is short for both fetch and merge)
 
-If any conflicts arise the developer will have to resolve the conflicts **manually** using either an IDE or the terminal. The developer can then use 
+If any conflicts arise the developer will have to resolve the conflicts **manually** using either an IDE or the terminal.
+You will see the conflicts with the text `CONFLICT <file>` after running the above command.
+The developer can then use 
 
 `git diff`
 
@@ -60,11 +62,26 @@ To continue with the rebase. Alternatively the developer could abort the rebase 
 
 `git rebase --abort`
 
+After the rebase, you should run:
+
+`git push origin <your branch>`
+
+It may be neccessary to append `-ff` to fast forward if your branch is behind. 
+(I.e. if you get a message saying something about being behind, run `git push origin <your branch> -ff`)
+
 If the rebase was successful, a merge request should be sent using the gitlab website. The following template should be used when creating a new merge resuest via the website.
-- Title - `<branch_name>`
-- Description - 
-        <Trello ticket link>
-        <Description, a breif description about what has been implemented and how it has been done.> 
+- Title - `<branch_name: Short description of what was implemented>`
+- Description -
+
+        [Trello ticket link]
+
+        [A more detailed description about what has been implemented and how it has been done.]
+
+### Tags
+The backend and frontend repos both use an automated pipeline with build, test and potentially deployment stages. If for some reason you want to skip these steps you can add `[skip]` **at the start** of your commit message. This can be useful if you have unfinished changes and still want to push to the remote or if your work contains purely documentation changes.
+**Note:** To merge a branch with `main`, the final commit on the branch **must not** skip the pipeline or the merge request will be denied automatically.
+**Example:** 
+`git commit -m "[skip] Documentation changes"`
 
 ### Example of merge request:
 ![Exempel på merge request](images/git.png)
