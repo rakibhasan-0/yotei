@@ -34,7 +34,7 @@ function Navbar({ testId }) {
 	return (
 		<nav data-testid={testId} className={"common-navbar"}>
 			<HamburgerIcon role="button" className="common-navbar-icon" size="48px" onClick={() => setOpen(true)}/>
-			<img src="ubk-logga.jpg" className="budo-logo"/>
+			<img src="/ubk-logga.jpg" className="budo-logo"/>
 
 			<div className={`common-navbar-sidebar p-4 ${open ? "open" : ""}`}>
 
