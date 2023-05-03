@@ -10,6 +10,7 @@ import {Square , CheckSquareFill} from "react-bootstrap-icons"
  * props = {
  *     checked: boolean
  *     onClick: function,
+ *     id: string
  * }
  * 
  * example:
@@ -17,12 +18,13 @@ import {Square , CheckSquareFill} from "react-bootstrap-icons"
  * <CheckBox checked=state onClick={()=>setChecked(!checked)}></CheckBox>
  * 
  *   
- * @author Chimera (2023-04-21) 
- * @version 1.0  
+ * @author Chimera
+ * @since 2023-05-02
+ * @version 2.0  
  */
-export default function CheckBox({checked, onClick}) {
+export default function CheckBox({checked, onClick, id}) {
 	return (
-		<div className="checkbox-container" onClick={onClick}>
+		<div id={id} className="checkbox-container" onClick={onClick}>
 			{checked
 				? <>
 					<CheckSquareFill className='check'/>

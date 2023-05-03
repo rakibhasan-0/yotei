@@ -4,12 +4,19 @@ import "./TimePicker.css"
 /**
  * Defines the time picker. 
  * 
+ * props = {
+ *    selectedTime: string,
+ *    onChange: function
+ *    id: string
+ * }
+ * 
  * @author Chimera (Group 4)
- * @version 1.0
+ * @since 2023-05-02
+ * @version 2.0 
  */
-export default function TimePicker({onChange, selectedTime}) {
+export default function TimePicker({onChange, selectedTime, id}) {
 	return (
-		<div>
+		<div id={id}>
 			<input 
 				type="time" 
 				value={selectedTime} 

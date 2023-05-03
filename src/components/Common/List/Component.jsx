@@ -15,13 +15,14 @@ import "./Component.css"
  *     text: Text of the component,
  *     children: JSX element which will be displayed when the component is expanded
  * 	   centered: Boolean to set text as centered
+ *     id: string
  * }
  * 
  * The parent container using this button must constrain its width.
  * 
- * @author Chimera dv21aag, dv21oby
- * @since 2023-04-25
- * @version 1.0
+ * @author Chimera
+ * @since 2023-05-02
+ * @version 2.0 
  */
 export default function Component({ item, text, children, id, centered }) {
 	const [toggled, setToggled] = useState(false)

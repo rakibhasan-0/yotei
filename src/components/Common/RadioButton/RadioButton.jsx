@@ -14,15 +14,16 @@ import "./RadioButton.css"
  * props = {
  *    toggled: boolean,
  *    onClick: function
+ *    id: string
  * }
  * 
  * @author Chimera
- * @since 2023-04-24
- * @version 1.0
+ * @since 2023-05-02
+ * @version 2.0 
  */
-export default function RadioButton({onClick,toggled}){
+export default function RadioButton({onClick,toggled,id}){
 	return(
-		<div onClick={onClick} className="radio-container">
+		<div id={id} onClick={onClick} className="radio-container">
 			{toggled
 				?   <>
 					<Record2 className='radio'/>

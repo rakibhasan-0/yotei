@@ -7,12 +7,13 @@ import "./SearchBar.css"
  * text (optional value (text) for the searchbar),onChange (for when searchtext is entered). 
  *
  * @author Team Minotaur Mavericks & Team Kraken (Group 8,Group 7)
- * @version 1.0
+ * @since 2023-05-02
+ * @version 2.0 
  */
-export default function SearchBar({placeholder,text,onChange}) {
+export default function SearchBar({placeholder,text,onChange, id}) {
 	return (
 		<>
-			<div className='search-bar'>
+			<div id={id} className='search-bar'>
 				<input
 					className="input-area"
 					placeholder={placeholder}

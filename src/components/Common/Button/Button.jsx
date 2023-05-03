@@ -11,17 +11,18 @@ import "./Button.css"
  * props = {
  *     onClick: function,
  *     outlined: boolean
+ *     id: string
  * }
  * 
  * The parent container using this button must constrain its width.
  * 
  * @author Chimera
- * @since 2023-04-21
- * @version 1.0
+ * @since 2023-05-02
+ * @version 2.0 
  */
-export default function Button({onClick, outlined, children}) {
+export default function Button({onClick, outlined, children, id}) {
 	return (
-		<div onClick={onClick} className={ ["button", outlined ? "button-back" : "button-normal"].join(" ") }>
+		<div id={id} onClick={onClick} className={ ["button", outlined ? "button-back" : "button-normal"].join(" ") }>
 			{children}
 		</div>
 	)

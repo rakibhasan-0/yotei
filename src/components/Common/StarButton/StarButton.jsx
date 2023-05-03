@@ -14,15 +14,16 @@ import "./StarButton.css"
  * props = {
  *    toggled: boolean,
  *    onClick: function
+ *    id: string
  * }
  * 
  * @author Chimera
- * @since 2023-04-24
- * @version 1.0
+ * @since 2023-05-02
+ * @version 2.0 
  */
-export default function StarButton({onClick, toggled}) {
+export default function StarButton({onClick, toggled, id}) {
 	return (
-		<div onClick={onClick} className='star-container'>
+		<div id={id} onClick={onClick} className='star-container'>
 			{toggled 
 				?   <>
 					<StarFill className='star' color='yellow' />
