@@ -30,6 +30,7 @@ DROP TABLE IF EXISTS tag CASCADE;
 DROP TABLE IF EXISTS user_workout CASCADE;
 DROP TABLE IF EXISTS workout CASCADE;
 DROP TABLE IF EXISTS technique CASCADE;
+DROP TABLE IF EXISTS techniques_url CASCADE;
 DROP TABLE IF EXISTS exercise CASCADE;
 DROP TABLE IF EXISTS user_table CASCADE;
 DROP TABLE IF EXISTS comments CASCADE;
@@ -336,8 +337,7 @@ ALTER TABLE error_log OWNER TO psql;
 --
 CREATE TABLE techniques_url (
        media_url TEXT PRIMARY KEY,
-       technique_id INT
-        REFERENCES technique(technique_id) NOT NULL ON DELETE CASCADE
+       technique_id INT NOT NULL REFERENCES technique(technique_id) ON DELETE CASCADE
 );
 ALTER TABLE techniques_url OWNER TO psql;
 
