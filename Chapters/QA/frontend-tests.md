@@ -77,6 +77,9 @@ test('Tests interaction with button', async() => {
 OBS!: screen.debug() kan användas för att se DOM för det rendererade objektet, i terminal.
 
 ```
+### Tip:
+Man kan planera för tester även innan man har en implementation genom att använda `it.todo("Testnamn")`.
+
 # Mock Service Worker
 Msv is used in our development to mock Restful requests. This is used to "fake" api requests and responses to test how our code works with different API calls and to find buggs by writing tests integrating the service. 
 Mocks is created in the directory:
@@ -94,6 +97,23 @@ rest.get('/user', responseResolver)
 ```
 [How to define the responseResolver](https://mswjs.io/docs/getting-started/mocks/rest-api). Will make a guide for this after some testing.
 
+### Köra testerna
+
+För att testa appen innan commit till pipelinen finns följande kommandon
+som kan köras lokalt.
+```
+1. npm test
+2. npm run test:watch
+3. npm run test:coverage
+```
+Det första kommandot kör alla enhetstester i repot, det andra startar en liveterminal som kör testerna och sedan kör om dem när de uppdateras. Det tredje kör en täckningsanalys av projektet. Resultatet presenteras i terminalen men det genereras också en egen *coverage* mapp som innehåller en hemsida (**coverage/lcov-report/index.html**) där man kan få en överblick av coverage för projektet. 
+
+
+För linting (statisk kodanalys) kan man köra följande.
+```
+npm run lint
+```
+Värt att notera är att detta kommando även försöker fixa problemen med flaggan --fix
 
 
 
