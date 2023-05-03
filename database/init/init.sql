@@ -324,12 +324,22 @@ CREATE TABLE technique_to_belt (
 ALTER TABLE technique_to_belt OWNER TO psql;
 
 -- Logging tables; Type: TABLE; Schema: public; Owner: psql
-CREATE TABLE IF NOT EXISTS error_log (
+CREATE TABLE error_log (
        log_id SERIAL PRIMARY KEY,
-       error_message text NOT NULL,
-       info_message text  NOT NULL
+       error_message TEXT NOT NULL,
+       info_message TEXT  NOT NULL
 );
 ALTER TABLE error_log OWNER TO psql;
+
+--
+-- Name: techniques_url; Type: TABLE; Schema: public; Owner: psql
+--
+CREATE TABLE techniques_url (
+       media_url TEXT PRIMARY KEY,
+       technique_id INT
+        REFERENCES technique(technique_id) NOT NULL ON DELETE CASCADE
+);
+ALTER TABLE techniques_url OWNER TO psql;
 
 --
 -- Inserts
