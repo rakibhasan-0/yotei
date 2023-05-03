@@ -1,27 +1,31 @@
-# pull official base image
-FROM node:19-alpine
+# Build app 
+FROM node:20-alpine AS BASE_IMAGE
 
-# set working directory
-WORKDIR /
+# Store the app in /usr/src/app
+RUN mkdir -p /usr/src/app/
+WORKDIR /usr/src/app
 
-# add `/app/node_modules/.bin` to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
 ENV PORT 3000
 
-# install app dependencies
+# Install dependencies
 COPY package*.json ./
-# COPY package-lock.json ./
 RUN npm install --silent
-RUN npm install -g serve
 
-# add app
+# Build with vite
 COPY . ./
-
 RUN npm run build
 
-# exposes 3000 to the outside
+# Build production image
+FROM node:20-alpine
+WORKDIR /usr/src/app
+
+RUN npm install -g serve
+
+# Only copy the built app
+COPY --from=BASE_IMAGE /usr/src/app/build ./build
+
+# Run it on port 3000
 EXPOSE 3000
 
 # start app, remember to run "npm run build" before!
 CMD ["serve", "-s", "build"]
-
