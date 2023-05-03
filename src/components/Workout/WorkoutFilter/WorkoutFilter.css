@@ -1,0 +1,43 @@
+fieldset.title-border {
+    border-style: solid;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: black;
+    margin-top: 50px;
+    margin: 10px;
+}
+
+legend.title-border {
+    margin-left: 20px;
+    text-align: left;
+    border-bottom: none;
+    width: auto;
+    padding-right: 40px;
+}
+
+.filter-fieldset {
+    text-align: left;
+    padding-left: 20px;
+}
+
+.form-control {
+    background-color: #F8EBEC;
+}
+
+.input-datepicker {
+    background-color: #F8EBEC;
+}
+
+.fav-on {
+    color: #ffd700;  
+}
+
+.star-col {
+    text-align: center;
+}
+
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
