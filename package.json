@@ -27,6 +27,7 @@
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "host": "vite --host",
     "test": "jest --watchAll --ci --no-watchAll --passWithNoTests",
     "test:coverage": "npm test -- --coverage --collectCoverageFrom='./src/**'",
     "test:watch": "npm test -- --watchAll",
