@@ -96,6 +96,7 @@ systest-job:
   <<: *skippable
   stage: systest
   image: mcr.microsoft.com/playwright:v1.33.0-focal
+  when: manual
   artifacts:
     when: always
     paths:
