@@ -1,4 +1,3 @@
-
 # API DOCS
 
 Documentation for the Search API calls to the Budoklubb API. 
@@ -193,3 +192,44 @@ If a name is entered the search result will be sorted based on the fuzzy search 
 
 The tag completion array consists of a maximum of 3 tags that were found, these tags are based on the 'name' query parameter that was entered.
 
+## Searching Tags(Taggar) NOT IMPLEMENTED
+
+### API Endpoint:
+
+    (GET) /api/search/tags
+
+### Params
+
+| Query | Explanation | Example | Type | Status |
+|--|--|--|--|--|
+| name | Name of technique | Karate-kick | String | Not implemented
+| tagAmount | Number of tag suggestions to return | 3 | Number | Not implemented
+
+
+### Example query:
+
+    (GET) /api/search/tags?name=lmao&tagAmount=3
+
+### Example response
+
+    {
+    	result: [
+    		{
+    			tagID: 1,
+				tagName: "tagSuggestion1"
+    		},
+    		{
+    			tagID: 2,
+				tagName: "tagSuggestion2"
+    		},
+    		{
+    			tagID: 3,
+				tagName: "tagSuggestion3"
+    		}
+    	]
+    }
+
+  
+## Extra
+
+The returned tags are based on the 'name' query parameter that was entered using fuzzy search. 
