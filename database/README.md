@@ -28,6 +28,10 @@
 
 ## Lokal testning av databas
 När du gjort dina ändringar i `init.sql`, kör först `docker compose down -v` följt av `docker compose up -d --build psql` för att starta databasen. Om det blir errors vid docker compose så är antagligen port 5432. För att lösa detta, gå in i docker-compose.yml och ändra porten för psql servicen till en annan port (endast den till vänster om **:**). Denna ändring får inte pushas upp utan används endast för lokal testning av databas.
+
+Starta sedan databasen med:
+- `docker compose up psql -d`
+
 Hur man loggar in:
 - `psql -h localhost -p <port> -U psql -d yotei`
 
