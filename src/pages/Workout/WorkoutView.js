@@ -144,29 +144,29 @@ class WorkoutView extends React.Component {
 				</div>
 
 				<div className={"info"}>
-					<h6 className="font-weight-bold" id="no-print">Fullständigt namn:</h6>
+					<h6 className="font-weight-bold" id="no-print">Fullständigt namn</h6>
 					<p className="font-italic properties" id="no-print">{this.state.name}</p>
 
 					<div className={"row-item"}>
 						<div className={"column-item"}>
 							{/*<h6 className="font-weight-bold">Datum:</h6><p className="font-italic">{this.state.date}</p>*/}
-							<h6 className="font-weight-bold">Författare:</h6><p className="font-italic">{this.state.authorName}</p>
+							<h6 className="font-weight-bold">Författare</h6><p className="font-italic">{this.state.authorName}</p>
 						</div>
 						<div className={"column-item column-item-right"}>
-							<h6 className="font-weight-bold">Tidslängd:</h6><p className="font-italic">{this.state.duration} min</p>
+							<h6 className="font-weight-bold">Tidslängd</h6><p className="font-italic">{this.state.duration} min</p>
 						</div>
 					</div>
 
 					<div className={"row-item"} id="no-print">
 						<div className={"column-item"}>
-							<h6 className="font-weight-bold">Skapad:</h6><p className="font-italic">{this.state.created}</p>
+							<h6 className="font-weight-bold">Skapad</h6><p className="font-italic">{this.state.created}</p>
 						</div>
 						<div className={"column-item column-item-right"}>
-							<h6 className="font-weight-bold">Senast ändrad:</h6><p className="font-italic">{this.state.changed}</p>
+							<h6 className="font-weight-bold">Senast ändrad</h6><p className="font-italic">{this.state.changed}</p>
 						</div>
 					</div>
 
-					<h6 className="font-weight-bold">Beskrivning:</h6>
+					<h6 className="font-weight-bold">Beskrivning</h6>
 					<p className="font-italic properties">{this.state.desc}</p>
 				</div>
 
