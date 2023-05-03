@@ -132,6 +132,7 @@ CREATE TABLE activity(
        workout_id INT NOT NULL,
        exercise_id INT,
        technique_id INT,
+       category_name VARCHAR(255), 
        activity_name VARCHAR(255) NOT NULL,
        activity_desc TEXT,
        activity_duration INT NOT NULL,
