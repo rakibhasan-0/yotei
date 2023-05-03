@@ -1,18 +1,24 @@
+
 # API DOCS
-Documentation for the Search API calls to the Budoklubb API.
+
+Documentation for the Search API calls to the Budoklubb API. 
+
+This documentation does not reflect the Search API currently deployed on the main branch.
 
 ## Searching Techniques(Tekniker)
+
 ### API Endpoint:
 
     (GET) /api/search/techniques
 
 ### Params:
-| Query | Explanation | Example | Type |
-|--|--|--|--|
-| name | Name of technique | Karate-kick | String |
-| beltColors | Name of the belt colors | grön-barn,grön | List of Strings separated by ',' |
-| kihon | If the technique is kihon | true/false | Boolean |
-| tags | Tags related to the techniques | kniv,spark | List of Strings separated by ',' |
+
+| Query | Explanation | Example | Type | Status |
+|--|--|--|--|--|
+| name | Name of technique | Karate-kick | String | Works(not tested)
+| beltColors | Name of the belt colors | grön-barn,grön | List of Strings separated by ',' | Works(not tested) |
+| kihon | If the technique is kihon | true/false | Boolean | Not implemented |
+| tags | Tags related to the techniques | kniv,spark | List of Strings separated by ',' | Works(not tested) |
 
 ### Example query:
 
@@ -21,30 +27,31 @@ Documentation for the Search API calls to the Budoklubb API.
 ### Example Response
 
     {
-	    result: [
-		    {
-			    techniqueID: 1,
-			    name: "Backflip karate kick",
-			    description: "A karate kick while doing a backflip",
-			    beltColors: [
-				    {colorCode: "#123123", isChild: false, name: "shiny green"},
-				    {colorCode: "#123124", isChild: true, name: "shinier green"}
-			    ]
-		    },
-		    {
-			    techniqueID: 2,
-			    name: "Frontflip karate kick",
-			    description: "A karate kick while doing a frontflip",
-			    beltColors: [
-				    {colorCode: "#123125", isChild: true, name: "shiniest green"}
-			    ]
-		    }
-	    ],
-	    tagCompletion: ["tag1", "tag2", "tag3"]
+    	result: [
+    		{
+    			techniqueID: 1,
+    			name: "Backflip karate kick",
+    			description: "A karate kick while doing a backflip",
+    			beltColors: [
+    				{ colorCode: "#123123", isChild: false, name: "shiny green" },
+    				{ colorCode: "#123124", isChild: true, name: "shinier green" }
+    			]
+    		},
+    		{
+    			techniqueID: 2,
+    			name: "Frontflip karate kick",
+    			description: "A karate kick while doing a frontflip",
+    			beltColors: [
+    				{colorCode: "#123125", isChild: true, name: "shiniest green"}
+    			]
+    		}
+    	],
+    	tagCompletion: ["tag1", "tag2", "tag3"]
     }
 
 ### Extra
-If no name is entered the result will be filtered based on the order for the techniques. This order is decided by weights contained by each technique and is based on the book that the customer uses. 
+
+If no name is entered the result will be filtered based on the order for the techniques. This order is decided by weights contained by each technique and is based on the book that the customer uses.
 
 If a name is entered the search result will be sorted based on the fuzzy search algorithm.
 
@@ -55,46 +62,54 @@ If a name is entered the search result will be sorted based on the fuzzy search 
     (GET) /api/search/workouts
 
 ### Params
-| Query | Explanation | Example | Type |
-|--|--|--|--|
-| name | Name of the Workout | Nybörjarpass | String |
-| tags | Tags related to the Workout | kniv,spark | List of Strings seperated by ',' |
-| from | Workouts starting from this date | 2023-04-20 | String with format (YYYY-MM-DD) |
-| to | Workouts up until this date | 2023-06-09 | String with format (YYYY-MM-DD) |
-| favourite | If the workout is a favourite | true/false | Boolean |
+
+| Query | Explanation | Example | Type | Status |
+|--|--|--|--|--|
+| name | Name of the Workout | Nybörjarpass | String | Works(not tested) |
+| tags | Tags related to the Workout | kniv,spark | List of Strings seperated by ',' | Not implemented |
+| from | Workouts starting from this date | 2023-04-20 | String with format (YYYY-MM-DD) | Works(not tested) |
+| to | Workouts up until this date | 2023-06-09 | String with format (YYYY-MM-DD) | Works(not tested) |
+| favourite | If the workout is a favourite | true/false | Boolean | Works(not tested) |
+| id | The id of the user | 1 | Number | Works(not tested) |
 
 ### Example query:
 
-    (GET) /api/search/workouts?name=lmao&from=2023-04-20&to=2023-04-20&favourite=false&tags=kniv,spark
+    (GET) /api/search/workouts?name=lmao&from=2023-04-20&to=2023-04-20&favourite=false&tags=kniv,spark&id=1
 
 ### Example response
 
     {
-	    result: [
-		    {
-			    workoutID: 1,
-			    favourite: false,
-			    name: "Some workout"
-		    },
-		    {
-			    workoutID: 2,
-			    favourite: true,
-			    name: "Some other workout"
-		    }
-	    ]
+    	result: [
+    		{
+    			workoutID: 1,
+    			favourite: false,
+    			name: "Some workout"
+    		},
+    		{
+    			workoutID: 2,
+    			favourite: true,
+    			name: "Some other workout"
+    		}
+    	],
+    	tagCompletion: ["tag1", "tag2", "tag3"]
     }
 
 ## Searching Exercises(Övningar)
 
 ### API Endpoint:
 
+  
+
     (GET) /api/search/exercises
 
+  
+
 ### Params
-| Query | Explanation | Example | Type |
-|--|--|--|--|
-| name | Name of the exercise | Kung fu kick | String |
-| tags | Tags associated with the Exercise | kniv,spark | String |
+
+| Query | Explanation | Example | Type | Status |
+|--|--|--|--|--|
+| name | Name of the exercise | Kung fu kick | String | Not implemented |
+| tags | Tags associated with the Exercise | kniv,spark | String | Not implemented |
 
 ### Example query:
 
@@ -106,10 +121,10 @@ If a name is entered the search result will be sorted based on the fuzzy search 
 	    result: [
 		    {
 			    exerciseID: 1,
-			    description: "Cool exercise",
-			    duration: 13
+		        description: "Cool exercise",
+		        duration: 13
 		    },
-		    {
+	        {
 			    exerciseID: 2,
 			    description: "Another cool exercise",
 			    duration: 14
@@ -118,18 +133,22 @@ If a name is entered the search result will be sorted based on the fuzzy search 
 	    tagCompletion: ["tag1", "tag2", "tag3"]
     }
 
-## Searching Plans(Grupplanering)
+## Searching Plans(Grupplanering) NOT IMPLEMENTED
+
 ### API Endpoint:
 
     (GET) /api/search/plans
+
+### Params
+
+| Query | Explanation | Example | Type | Status |
+|--|--|--|--|--|
+| from | Sessions starting from this date | 2023-04-20 | String with format (YYYY-MM-DD) | Not implemented |
+| to | Sessions up until this date | 2023-04-20 | String with format (YYYY-MM-DD) | Not implemented |
+| previousGroups | Include session before given from date | true/false | Boolean | Not implemented |
+| groups | ID's of specific groups to search for | 6,9,4,2,0 | List of Numbers divided by ',' | Not implemented |
+
   
-  ### Params
-| Query  | Explanation | Example | Type |
-|--|--|--|--|
-| from | Sessions starting from this date | 2023-04-20 | String with format (YYYY-MM-DD) |
-| to | Sessions up until this date | 2023-04-20 | String with format (YYYY-MM-DD) |
-| previousGroups | Include session before given from date | true/false | Boolean |
-| groups | ID's of specific groups to search for | 6,9,4,2,0 | List of Numbers divided by  ',' |
 
 ### Example query:
 
@@ -138,35 +157,39 @@ If a name is entered the search result will be sorted based on the fuzzy search 
 ### Example response
 
     {
-	    result: [
-		    {
-			    groupID: 1,
-			    groupColors: [
-				    {colorCode: "#123123", isChild: false, name: "orange"},
-				    {colorCode: "#123124", isChild: true, name: "orangier"}
-			    ],
-			    sessions: [
-				    {
-                        sessionID: 1,
-					    date: "2023-04-20",
-					    time: "14:30",
-					    text: "Sheesh"
-				    },
-				    {
-                        sessionID: 2,
-					    date: "2023-04-27",
-					    time: "14:30"
-					    text: "Sheesh"
-				    }
-			    ]
-		    },
-		    {
-			    groupID: 2,
-			    groupColors: [],
-			    sessions: []
-		    }
-	    ]
+    	result: [
+    		{
+    			groupID: 1,
+    			groupColors: [
+    				{colorCode: "#123123", isChild: false, name: "orange"},
+    				{colorCode: "#123124", isChild: true, name: "orangier"}
+    			],
+    			sessions: [
+    				{
+    					sessionID: 1,
+    					date: "2023-04-20",
+    					time: "14:30",
+    					text: "Sheesh"
+    				},
+    				{
+    					sessionID: 2,
+    					date: "2023-04-27",
+    					time: "14:30"
+    					text: "Sheesh"
+    				}
+    			]
+    		},
+    		{
+    			groupID: 2,
+    			groupColors: [],
+    			sessions: []
+    		}
+    	]
     }
 
+  
+
 ## Extra
+
 The tag completion array consists of a maximum of 3 tags that were found, these tags are based on the 'name' query parameter that was entered.
+
