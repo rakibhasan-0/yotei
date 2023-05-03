@@ -58,6 +58,6 @@ Beslut - many-to-one relation mellan video/bild och tekniker
 
 ## Motivation
 
-Vi tog beslutet på grund av att det låter rimligt att en teknik kan ha flera olika media representationer, men att flera tekniker inte delar samma media representationer. Detta är preliminärt då kund har kontaktats och vi väntar på svar.
+Vi tog beslutet på grund av att det låter rimligt att en teknik kan ha flera olika media representationer, men att flera olika tekniker inte delar samma media representationer. Detta är preliminärt då kund har kontaktats och vi väntar på svar.
 
 
