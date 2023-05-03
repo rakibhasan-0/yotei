@@ -16,6 +16,7 @@ import javax.persistence.*;
  *  UserShortRepository.java (Interface) - JPARepository file.
  * 
  * @author Grupp 8 Kebabpizza
+ * @author Grupp 5 Cyclops
  */
 @Entity
 public class Activity {
@@ -33,6 +34,9 @@ public class Activity {
 
     @Column(name = "technique_id")
     private Long techniqueId;
+
+    @Column(name = "category_name")
+    private String categoryName;
 
     @Column(nullable = false, name = "activity_name")
     private String name;
@@ -83,6 +87,8 @@ public class Activity {
     public Long getTechniqueId() {
         return techniqueId;
     }
+
+    public String getCategoryName() { return categoryName; }
 
     public String getName() {
         return name;
