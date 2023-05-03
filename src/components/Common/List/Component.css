@@ -1,14 +1,23 @@
 .list-container {
     border-radius: 5px;
     border: 1px solid var(--black-primary);
-    padding: 18px;
+    padding: 0;
     user-select: none;
+}
+
+.list-centered {
+    justify-content: space-between;
 }
 
 .list-header {
     display: flex;
     align-items: center;
     text-align: center;
+    padding: 18px;
+}
+
+.list-centered > .list-toggle {
+    margin-left: unset !important;
 }
 
 .list-header > p {
@@ -21,16 +30,26 @@
     transition: all 0.2s ease-in;
 }
 
+.list-text {
+    font-size: large;
+}
+
 .list-item {
     cursor: pointer;
     margin-right: 14px;
     height: 32px;
 }
 
-.list-child {
-    margin-top: 15px;
-}
-
 .list-rotate {
     rotate: 180deg;
+}
+
+.list-child {
+    margin-top: -100%;
+    transition: all 0.2s ease-in-out;
+    
+}
+
+.list-item-container {
+    overflow: hidden;
 }

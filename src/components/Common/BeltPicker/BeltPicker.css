@@ -1,0 +1,26 @@
+.belt-row {
+    border-top: solid 1px black;
+    height: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    padding: 3px 10px 3px 10px;
+}
+
+.belt-row:nth-child(even) {
+    background-color: var(--red-secondary);
+}
+
+.belt-item {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.belt-text {
+    margin-top: 0;
+    margin-bottom: 0;
+}

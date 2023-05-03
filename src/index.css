@@ -16,6 +16,15 @@
 
 	--border-radius: 0.3rem;
 
+	--belt-red: #BD3B41;
+	--belt-white: #FCFCFC;
+	--belt-yellow: #EDD70D;
+	--belt-orange: #ED930D;
+	--belt-green: #00BE08;
+	--belt-blue: #0DB7ED;
+	--belt-brown: #BB6500;
+	--belt-black: black;
+
 }
 
 body {

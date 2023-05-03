@@ -14,6 +14,7 @@ import "./Component.css"
  *     item: Optional JSX element which will be displayed on the left of the text,
  *     text: Text of the component,
  *     children: JSX element which will be displayed when the component is expanded
+ * 	   centered: Boolean to set text as centered
  * }
  * 
  * The parent container using this button must constrain its width.
@@ -22,24 +23,24 @@ import "./Component.css"
  * @since 2023-04-25
  * @version 1.0
  */
-export default function Component({ item, text, children }) {
+export default function Component({ item, text, children, id, centered }) {
 	const [toggled, setToggled] = useState(false)
 	return (
-		<div className="list-container">
-			<div className='list-header'>
+		<div className="list-container" id={id}>
+			<div className={["list-header", centered ? "list-centered" : ""].join(" ")}>
 				<div className="list-item">
 					{item}
 				</div>
-				<p>{text}</p>
+				<p className="list-text">{text}</p>
 				<div className={["list-toggle", toggled ? "list-rotate" : ""].join(" ")}>
-					<ChevronDown size={28} onClick={() => setToggled(!toggled)} />
+					<ChevronDown id={`${id}-dropdown`} size={28} onClick={() => setToggled(!toggled)} />
 				</div>
 			</div>
-			{ toggled && 
-				<div className="list-child">
+			<div className="list-item-container">
+				<div className="list-child" style={{ marginTop: toggled ? "0" : "-100%" }} id={`${id}-children`}>
 					{children}
 				</div> 
-			}
+			</div>
 		</div>
 	)
 }
