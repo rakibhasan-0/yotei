@@ -43,7 +43,7 @@ export default function Popup({ title, id, isOpen, setIsOpen, children }) {
 					</button>
 					{title && <div className="horizontal-line" />}
 				</div>
-				<div className="content">
+				<div className="popup-content">
 					{children}
 				</div>
 			</div>

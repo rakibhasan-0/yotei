@@ -37,7 +37,7 @@ h1.title {
     margin-bottom: 0px;
 }
 
-.content {
+.popup-content {
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
