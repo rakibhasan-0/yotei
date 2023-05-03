@@ -2,7 +2,6 @@ import { createRoot } from "react-dom/client"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { useRef } from "react"
 import { Cookies } from "react-cookie"
-import Nav from "./components/Nav/Nav"
 import Home from "./pages/Home/Home"
 import ExerciseCreate from "./pages/Exercise/ExerciseCreate"
 import TechniqueCreate from "./pages/Technique/TechniqueCreate"
@@ -31,6 +30,7 @@ import Profile from "./pages/Profile/Profile"
 import PlanCreate from "./pages/Plan/PlanCreate"
 import SessionCreate from "./pages/Plan/SessionCreate"
 import PlanIndex from "./pages/Plan/PlanIndex"
+import BaseLayout from "./components/Common/BaseLayout/BaseLayout"
 
 import { useIdleTimer } from "react-idle-timer"
 import { ToastContainer, toast } from "react-toastify"
@@ -106,7 +106,7 @@ export default function App() {
 									{
 										// eslint-disable-next-line no-undef
 										process.env.VITE_APP_LOGIN_ENABLED !== "false" ? <Route index element={<Login />} /> : null}
-									<Route path="/" element={<Nav />}>
+									<Route path="/" element={<BaseLayout />}>
 										<Route path="about" element={<About />} />
 										<Route path="admin" element={<Admin />} />
 										<Route path="profile" element={<Profile />} />
