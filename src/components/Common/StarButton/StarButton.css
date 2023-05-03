@@ -14,3 +14,7 @@
 .star-container {
     position: relative;   
 }
+
+.star-hidden {
+    display: none;
+}
