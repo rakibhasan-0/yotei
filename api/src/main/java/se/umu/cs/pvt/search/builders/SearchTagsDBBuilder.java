@@ -7,6 +7,14 @@ import se.umu.cs.pvt.search.interfaces.SearchDBBuilderInterface;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class builds a {@link DatabaseQuery DatabaseQuery} based on
+ * the filtering methods used.
+ *
+ * @author Kraken (Jonas Gustavsson) 2023-05-04
+ */
+
+
 public class SearchTagsDBBuilder implements SearchDBBuilderInterface {
     private SearchTagsParams params;
     private final List<DatabaseQuery> queries = new ArrayList<>();
@@ -15,6 +23,11 @@ public class SearchTagsDBBuilder implements SearchDBBuilderInterface {
         params = searchTagsParams;
     }
 
+    /**
+     * Adds a query to the DatabaseQuery list to filter Exercises with tags.
+     *
+     * @return Returns itself.
+     */
     public SearchTagsDBBuilder filterByTags() {
         if(params.hasTags()) {
 
@@ -39,6 +52,11 @@ public class SearchTagsDBBuilder implements SearchDBBuilderInterface {
         return this;
     }
 
+    /**
+     * Bundles all the queries together and returns a {@link DatabaseQuery DatabaseQuery}.
+     *
+     * @return A created DatabaseQuery.
+     */
     public DatabaseQuery build() {
         DatabaseQuery databaseQuery = new DatabaseQuery();
 

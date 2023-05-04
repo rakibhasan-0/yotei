@@ -21,6 +21,10 @@ public class SearchTagsParams {
         if (urlQuery.get("tagAmount") != null) {
             amount = Integer.parseInt(urlQuery.get("tagAmount"));
         }
+        else {
+            // Use 3 as default number if not specified
+            amount = 3;
+        }
 
         if (urlQuery.containsKey("tags")){
             String[] tempTags = urlQuery.get("tags").split(",");
