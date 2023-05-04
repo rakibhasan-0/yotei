@@ -1,6 +1,8 @@
 package se.umu.cs.pvt.exercise;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +42,22 @@ public class ExerciseController {
     @GetMapping("/all")
     public Object getExercises() {
         List<Exercise> exerciseList = exerciseRepository.findAll();
+
+        if (exerciseList == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return exerciseList;
+    }
+    
+    /**
+     * Returns 20 exercises in the database
+     * @return 20 exercises
+     */
+    @GetMapping("/some")
+    public Object getSomeExercises() {
+        Pageable limit = PageRequest.of(0, 20);
+        List<Exercise> exerciseList = exerciseRepository.findAll(limit).toList();
 
         if (exerciseList == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
