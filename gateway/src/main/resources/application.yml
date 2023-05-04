@@ -7,12 +7,12 @@ spring:
         # predicates: Use Path predicate to define the api-mapping that goes to the micro-service
 
         - id: all
-          uri: http://localhost:8085
+          uri: ${BACKEND_HOST}
           predicates:
             - Path=/api/**
 
         - id: user
-          uri: http://localhost:8085
+          uri: ${BACKEND_HOST}
           predicates:
             - Path=/user/**
         # Please remember to add the same service to application-docker.yml!
@@ -21,7 +21,7 @@ spring:
         ################################################################################################
         # Do not put any other routes below here!
         - id: webserver
-          uri: http://localhost:3000
+          uri: ${WEBSERVER_HOST}
           predicates:
             - Path=/**
 
