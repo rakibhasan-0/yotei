@@ -2,7 +2,7 @@ import React from "react"
 import SearchBar from "../../components/Common/SearchBar"
 import "../../components/Activity/activity.css"
 import ActivityList from "../../components/Activity/ActivityList"
-import {AccountContext} from "../../context"
+import { AccountContext } from "../../context"
 import RoundButton from "../../components/Common/RoundButton/RoundButton"
 import { Plus } from "react-bootstrap-icons"
 
@@ -17,7 +17,7 @@ import { Plus } from "react-bootstrap-icons"
 class TechniqueIndex extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = {activities: [], visibleList: [], tags: [], relations: []}
+		this.state = { activities: [], visibleList: [], tags: [], relations: [] }
 		this.uri = this.props.uri
 		this.detailURL = "/technique/technique_page/"
 	}
@@ -28,20 +28,20 @@ class TechniqueIndex extends React.Component {
 				<center>
 					<h2 className="pt-2">Tekniker</h2>
 				</center>
-				<SearchBar onSearch={this.search}/>
-				<ActivityList activities={this.state.visibleList}  apiPath={"techniques"} detailURL={this.detailURL} />
-				<div style={{padding: "50px"}}/>
+				<SearchBar onSearch={this.search} />
+				<ActivityList activities={this.state.visibleList} apiPath={"techniques"} detailURL={this.detailURL} />
+				<div style={{ padding: "50px" }} />
 				<RoundButton linkTo={"/technique/create"}>
 					<Plus />
 				</RoundButton>
 			</div>
-            
+
 		)
-	} 
+	}
 
 	search = async (event) => {
 		const search = event.target.value.toLowerCase()
-        
+
 		const filteredTags = this.state.tags.filter(tag => tag.name.toLowerCase().includes(search))
 
 		const techniqueIds = await this.getTechniqueIdsFromTag(filteredTags)
@@ -52,17 +52,17 @@ class TechniqueIndex extends React.Component {
 
 		const combind = Array.from(new Set(techniqueByName.concat(techniqueByTag)))
 
-		this.setState({visibleList: combind})                   
+		this.setState({ visibleList: combind })
 	}
 
-    
+
 
 	/**
-     * Finds the technique ids for a list of tags.   
-     * @param {List} tagList The list of tags.
-     * 
-     * @returns A list of technique ids.
-     */
+	 * Finds the technique ids for a list of tags.   
+	 * @param {List} tagList The list of tags.
+	 * 
+	 * @returns A list of technique ids.
+	 */
 	async getTechniqueIdsFromTag(tagList) {
 		let techniqueIds = []
 
@@ -85,11 +85,11 @@ class TechniqueIndex extends React.Component {
 	}
 
 	/**
-     * Fetches all techniques.
-     */
+	 * Fetches all techniques.
+	 */
 	async fetchTechniques() {
-		const headers = {token: this.context.token}
-		await fetch("/api/techniques/all", {headers})
+		const headers = { token: this.context.token }
+		await fetch("/api/techniques/all", { headers })
 			.then(res => res.json())
 			.then((data) => {
 				//Set both states to the received list of activities but sorted lexicographically (alphabetically)
@@ -98,36 +98,38 @@ class TechniqueIndex extends React.Component {
 			})
 			.catch(console.log)
 	}
-   
+
 	/**
-     * Fetches all tags.
-     */
+	 * Fetches all tags.
+	 */
 	async fetchTags() {
-		const headers = {token: this.context.token}
-		await fetch("/api/tags/all", {headers})
+		const headers = { token: this.context.token }
+		await fetch("/api/tags/all", { headers })
 			.then(res => res.json())
 			.then((data) => {
 				this.setState({ tags: data })
 			})
 			.catch(console.log)
-                
+
 	}
-    
+
 	/**
-     * Fetches the relation between tags and techniques.
-     */
+	 * Fetches the relation between tags and techniques.
+	 */
 	async fetchTechniqueByTags() {
-		const headers = {token: this.context.token}
-		await fetch("/api/tags/fetch/techniques/by-tag", {headers})
+		const headers = { token: this.context.token }
+		await fetch("/api/tags/fetch/techniques/by-tag", { headers })
 			.then(res => res.json())
 			.then((data) => {
-				this.setState({relations: Object.keys(data).forEach(key => {
-					for(let i = 0; i < this.state.tags.length; i++){
-						if(this.state.tags[i].id === key){
-							return {tag_id: this.state.tags[i].id, technique_ids: data[key]}
+				this.setState({
+					relations: Object.keys(data).forEach(key => {
+						for (let i = 0; i < this.state.tags.length; i++) {
+							if (this.state.tags[i].id === key) {
+								return { tag_id: this.state.tags[i].id, technique_ids: data[key] }
+							}
 						}
-					}
-				})})
+					})
+				})
 			})
 			.catch(console.log)
 

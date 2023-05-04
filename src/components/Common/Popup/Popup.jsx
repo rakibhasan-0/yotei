@@ -7,35 +7,40 @@ import React from "react"
  * 
  * 
  * Props:
- *     title @type {string}  - Sets the title of the popup window
+ *     title @type {string}  - Sets the title of the popup window. Empty title
+ * 							   omits the line under the title
  *     id @type {string} - Sets the id of the popup window
  * 	   isOpen @type {boolean} - Sets if popup should be visible or not
  *     setIsOpen @type {useState} - Sets the state of the popup window
+ * 	   width @type {percentage} - Width of the popup as a percentage of the screen
+ * 	   height @type {percentage} - Height of the popup as a percentage of the screen
+ * 	   noBackground @type {boolean} - disables the tinted background. 
+ * 									  Should be used in nested popups.
  *
- * Example usage:
+ *Example usage:
  *  
  *	const [showPopup, setShowPopup] = useState(false)
- *		return (
- *			<div>
- *				<button onClick={() => setShowPopup(true)}>Skapa teknik</button>
- *				<Popup isOpen={showPopup} setIsOpen={setShowPopup} title="Skapa teknik">
- *					<InputTextField placeholder="Namn"></InputTextField>
- *				</Popup>
- *			</div>
- *		)
+ *
+ *	return (
+ *		<div>
+ *			<Popup id={"test-popup"} title={"Test"} isOpen={showPopup} setIsOpen={setShowPopup} width={60} height={40}>
+ *			</Popup>
+ *			<RoundButton onClick={() => setShowPopup(true)} />
+ *		</div>
+ * 	)
  *
  * @author Team Medusa
  * @version 1.0
  * @since 2023-05-02
  */
-export default function Popup({ title, id, isOpen, setIsOpen, children }) {
+export default function Popup({ title, id, isOpen, setIsOpen, children, width, height, noBackground }) {
 	if (!isOpen)
 		return null
 
 	return (
 		<>
-			<div className="popup-bg" onClick={() => setIsOpen(false)} />
-			<div className="popup" id={id}>
+			{noBackground ? <div className="popup-no-bg" onClick={() => setIsOpen(false)} /> : <div className="popup-bg" onClick={() => setIsOpen(false)} />}
+			<div className="popup" id={id} style={{width: `${width}%`, height: `${height}%`}}>
 				<div className="topbar">
 					{title && <h1 className="title" role="title">{title}</h1>}
 					<button className="closebutton" onClick={() => setIsOpen(false)}>
