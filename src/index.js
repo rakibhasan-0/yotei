@@ -101,11 +101,8 @@ export default function App() {
 					<Routes>
 						{
 							// eslint-disable-next-line no-undef
-							cookie || process.env.VITE_APP_LOGIN_ENABLED === "false" ? (
+							cookie || import.meta.env.VITE_APP_LOGIN_ENABLED === "false" ? (
 								<>
-									{
-										// eslint-disable-next-line no-undef
-										process.env.VITE_APP_LOGIN_ENABLED !== "false" ? <Route index element={<Login />} /> : null}
 									<Route path="/" element={<BaseLayout />}>
 										<Route path="about" element={<About />} />
 										<Route path="admin" element={<Admin />} />

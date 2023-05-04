@@ -36,10 +36,17 @@ import React from "react"
 export default function Popup({ title, id, isOpen, setIsOpen, children, width, height, noBackground }) {
 	if (!isOpen)
 		return null
+	else 
+		document.body.style.overflowY = "hidden"
+
+	const closePopup = () => {
+		setIsOpen(false)
+		document.body.style.overflowY = "visible"
+	}
 
 	return (
 		<>
-			{noBackground ? <div className="popup-no-bg" onClick={() => setIsOpen(false)} /> : <div className="popup-bg" onClick={() => setIsOpen(false)} />}
+			{noBackground ? <div className="popup-no-bg" onClick={closePopup} /> : <div className="popup-bg" onClick={closePopup}  />}
 			<div className="popup" id={id} style={{width: `${width}%`, height: `${height}%`}}>
 				<div className="topbar">
 					{title && <h1 className="title" role="title">{title}</h1>}
