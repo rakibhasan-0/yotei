@@ -132,7 +132,8 @@ CREATE TABLE activity(
        workout_id INT NOT NULL,
        exercise_id INT,
        technique_id INT,
-       category_name VARCHAR(255), 
+       category_name VARCHAR(255),
+       category_order INT NOT NULL,
        activity_name VARCHAR(255) NOT NULL,
        activity_desc TEXT,
        activity_duration INT NOT NULL,
@@ -388,7 +389,7 @@ INSERT INTO belt(belt_name, belt_color, is_child)
        VALUES ('Vitt', 'FFFFFF', TRUE);
 
 --
--- Trigger
+-- Triggers
 --
 CREATE OR REPLACE FUNCTION remove_user_references() RETURNS TRIGGER AS $$
        BEGIN
@@ -397,6 +398,18 @@ CREATE OR REPLACE FUNCTION remove_user_references() RETURNS TRIGGER AS $$
               UPDATE plan SET user_id = 1 WHERE user_id = OLD.user_id;
               RETURN OLD;
        END;
-$$ LANGUAGE 'plpgsql';
+       $$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION no_duplicate_category() RETURNS TRIGGER AS $$
+       BEGIN
+	     IF EXISTS (SELECT * FROM activity as A WHERE A.workout_id = NEW.workout_id AND A.category_order = NEW.category_order AND A.category_name <> NEW.category_name) THEN 
+		RAISE EXCEPTION 'Cannot have two categories with the same order in the same workout!';
+	     ELSE 
+		RETURN NEW;
+	     END IF;	
+       END;
+       $$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER check_order BEFORE INSERT ON activity FOR EACH ROW EXECUTE PROCEDURE no_duplicate_category();
 
 CREATE TRIGGER remove_user BEFORE DELETE ON user_table FOR EACH ROW EXECUTE PROCEDURE remove_user_references();
