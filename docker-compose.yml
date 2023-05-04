@@ -49,6 +49,7 @@ services:
       - POSTGRES_USER=psql
       - POSTGRES_PASSWORD=yotei123
       - POSTGRES_DB=yotei
+      - POSTGRES_PORT=5432
 
 volumes:
   pgdata:
