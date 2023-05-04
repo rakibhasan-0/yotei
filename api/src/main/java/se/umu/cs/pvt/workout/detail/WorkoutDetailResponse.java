@@ -105,7 +105,8 @@ public class WorkoutDetailResponse {
                                 a.getId(),
                                 a.getExercise(),
                                 a.getTechnique(),
-                                a.getDesc());
+                                a.getDesc(),
+                                a.getName());
                     })
                     .toList();
         }
@@ -129,11 +130,14 @@ public class WorkoutDetailResponse {
         private Technique technique;
         private String text;
 
-        public ActivityResponse(long id, Exercise exercise, Technique technique, String text) {
+        private String name;
+
+        public ActivityResponse(long id, Exercise exercise, Technique technique, String text, String name) {
             this.id = id;
             this.exercise = exercise;
             this.technique = technique;
             this.text = text;
+            this.name = name;
         }
 
         public long getId() {
@@ -150,6 +154,10 @@ public class WorkoutDetailResponse {
 
         public String getText() {
             return text;
+        }
+
+        public String getName() {
+            return name;
         }
     }
 
