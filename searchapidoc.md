@@ -151,7 +151,7 @@ If a name is entered the search result will be sorted based on the fuzzy search 
 
 ### Example query:
 
-    (GET) /api/search/plans?from=2023-04-20&to=2023-04-20&previousSessions=false&plans=1,2,3&userId=1
+    (GET) /api/search/plans?from=2023-04-20&to=2023-04-20&previousSessions=false&plans=1,2,3&id=1
 
 ### Example response
 
