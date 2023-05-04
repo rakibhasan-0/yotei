@@ -56,19 +56,28 @@ export default function App() {
 	let role
 	let userId
 
-	if (cookie != null) {
-		role = decodeToken(cookie) !== null ? decodeToken(cookie).role : logOut()
-		userId = decodeToken(cookie) !== null ? decodeToken(cookie).userId : logOut()
+	if (cookie) {
+		try {
+			const decoded = decodeToken(cookie)
+			if (decoded.exp < Date.now() / 1000) {
+				throw new Error("Token has expired")
+			}
+			role = decoded.role
+			userId = decoded.userId
+		} catch (ex) {
+			console.log("Unable to decode token", ex)
+			logOut()
+		}
 	}
 
 	const onIdle = () => {
-		if (cookie != null) {
+		if (!cookie) {
 			logOut()
 		}
 	}
 
 	const onPrompt = () => {
-		if (cookie != null) {
+		if (!cookie) {
 			toast.warn("Du kommer snart att loggas ut på grund av inaktivitet!", {
 				autoClose: false,
 				pauseOnHover: true,
@@ -96,7 +105,7 @@ export default function App() {
 	return (
 		<>
 			<ToastContainer />
-			<AccountContext.Provider value={{ token: token, role: role, userId: userId, setToken: setToken }}>
+			<AccountContext.Provider value={{ token, role, userId, setToken }}>
 				<BrowserRouter>
 					<Routes>
 						{
