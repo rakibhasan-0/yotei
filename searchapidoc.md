@@ -146,7 +146,7 @@ If a name is entered the search result will be sorted based on the fuzzy search 
 | to | Sessions up until this date | 2023-04-20 | String with format (YYYY-MM-DD) | Not implemented |
 | previousSessions | Include session before given from date | true/false | Boolean | Not implemented |
 | plans | ID's of specific groups to search for | 6,9,4,2,0 | List of Numbers divided by ',' | Not implemented |
-| userId | ID of the user making the search | 1 | Number | Not implemented |
+| id | ID of the user making the search | 1 | Number | Not implemented |
 
 
 ### Example query:
