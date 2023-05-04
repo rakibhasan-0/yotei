@@ -1,8 +1,9 @@
-.time-picker {
+.minute-picker {
     width: 5rem;
     height: 2rem;
 }
-.time-input {
+
+.minute-input {
     border-width: 0;
     width: 50%;
     text-align: center;

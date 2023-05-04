@@ -97,6 +97,7 @@ function Login() {
 			loginClicked().then(() => {})
 		}
 	}
+
 	return (
 		<div style={{ maxWidth: 600}} className="center">
 			<img style={{ maxWidth: 500}} src="/ubk-logga.jpg" alt="This is the logo for UBK" className="center mb-5"/>

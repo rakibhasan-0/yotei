@@ -23,7 +23,7 @@ export default function MinutePicker({id, time, updateTime}) {
 		updateTime(e.target.value) : updateTime(time)
 	
 	return (
-		<div className="time-picker">
+		<div className="minute-picker">
 			<input
 				id = {id}
 				type="text"
@@ -32,7 +32,7 @@ export default function MinutePicker({id, time, updateTime}) {
 				placeholder="0"
 				onChange= {handleTime}
 				min="0"
-				className={"time-input"}/>
+				className={"minute-input"}/>
 			<label className="min-text">
 				<p>min</p>
 			</label>
