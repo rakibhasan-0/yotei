@@ -40,27 +40,27 @@ function Navbar({ testId }) {
 
 				<CloseIcon role="button" className="common-navbar-icon" size="48px" onClick={() => setOpen(false)}/>
 
-				<Button onClick={() => navigateAndClose("/plan")}>
+				<Button width={"100%"} onClick={() => navigateAndClose("/plan")}>
 					<h1 style={{fontWeight: 500, fontSize: "32px"}}>Grupper</h1>
 				</Button>
 
-				<Button onClick={() => navigateAndClose("/workout")}>
+				<Button width={"100%"} onClick={() => navigateAndClose("/workout")}>
 					<h1 style={{fontWeight: 500, fontSize: "32px"}}>Pass</h1>
 				</Button>
 
-				<Button onClick={() => navigateAndClose("/exercise")}>
+				<Button width={"100%"} onClick={() => navigateAndClose("/exercise")}>
 					<h1 style={{fontWeight: 500, fontSize: "32px"}}>Övningar</h1>
 				</Button>
 
-				<Button onClick={() => navigateAndClose("/technique")}>
+				<Button width={"100%"} onClick={() => navigateAndClose("/technique")}>
 					<h1 style={{fontWeight: 500, fontSize: "32px"}}>Tekniker</h1>
 				</Button>
 
-				<Button onClick={() => navigateAndClose("/admin")}>
+				<Button width={"100%"} onClick={() => navigateAndClose("/admin")}>
 					<h1 style={{fontWeight: 500, fontSize: "32px"}}>Admin</h1>
 				</Button>
 
-				<Button onClick={() => navigateAndClose("/profile")}>
+				<Button width={"100%"} onClick={() => navigateAndClose("/profile")}>
 					<h1 style={{fontWeight: 500, fontSize: "32px"}}>Min sida</h1>
 				</Button>
 
