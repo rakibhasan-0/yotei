@@ -1,7 +1,12 @@
 .time-picker {
-    background-color: var(--secondaryTest);
-    color: var(--primary);
+    transition: all 0.2s ease-in;
+    background-color: var(--red-secondary);
+    color: black;
     border-radius: 3px;
     padding: 6px 10px 6px 12px;
-    border: 0px;
+    border: none;
+}
+
+.time-picker:focus {
+    outline: var(--red-primary) 2px solid;
 }

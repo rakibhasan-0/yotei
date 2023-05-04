@@ -38,7 +38,7 @@ export default function Component({ item, text, children, id, centered }) {
 				</div>
 			</div>
 			<div className="list-item-container">
-				<div className="list-child" style={{ marginTop: toggled ? "0" : "-100%" }} id={`${id}-children`}>
+				<div className="list-child" style={{ display: toggled ? "inherit" : "none" }} id={`${id}-children`}>
 					{children}
 				</div> 
 			</div>

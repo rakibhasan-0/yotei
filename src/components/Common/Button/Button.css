@@ -9,6 +9,7 @@
     border: 2px solid var(--button-border);
     border-radius: var(--border-radius);
     width: 100%;
+    max-width: 150px;
 }
 
 .button-normal {
@@ -41,6 +42,7 @@
     color: var(--button-border);
 }
 
+.button-back:hover,
 .button-back:hover > * {
     color: whitesmoke;
 }
