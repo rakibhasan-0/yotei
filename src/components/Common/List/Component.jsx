@@ -24,11 +24,11 @@ import "./Component.css"
  * @since 2023-05-02
  * @version 2.0 
  */
-export default function Component({ item, text, children, id, centered }) {
+export default function Component({ item, text, children,id }) {
 	const [toggled, setToggled] = useState(false)
 	return (
-		<div className="list-container" id={id}>
-			<div className={["list-header", centered ? "list-centered" : ""].join(" ")}>
+		<div id={id} className="list-container">
+			<div className='list-header'>
 				<div className="list-item">
 					{item}
 				</div>

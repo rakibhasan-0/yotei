@@ -1,3 +1,4 @@
+import React from "react"
 import "./CheckBox.css"
 import {Square , CheckSquareFill} from "react-bootstrap-icons"
 
@@ -20,7 +21,7 @@ import {Square , CheckSquareFill} from "react-bootstrap-icons"
  *   
  * @author Chimera
  * @since 2023-05-02
- * @version 2.0  
+ * @version 2.0 
  */
 export default function CheckBox({checked, onClick, id}) {
 	return (

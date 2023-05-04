@@ -1,3 +1,4 @@
+import React from "react"
 import { Star, StarFill } from "react-bootstrap-icons"
 import "./StarButton.css"
 

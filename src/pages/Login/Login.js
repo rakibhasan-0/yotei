@@ -5,6 +5,7 @@ import { useState, useEffect, useContext } from "react"
 import { useNavigate } from "react-router-dom"
 import { useCookies } from "react-cookie"
 import { AccountContext } from "../../context"
+import List from"../../components/Common/List/Component"
 
 /**
  * This is the login page, it is the first page the user will see
@@ -122,6 +123,10 @@ function Login() {
                             Logga in
 							</Button>
 						</div>
+						<List id= "listtest">
+							<p>Hello</p>
+						</List>
+
 					</div>
 					{errorMsg ? <p style={{color: "red"}}>{errorMsg}</p> : null}
 				</Form>                
