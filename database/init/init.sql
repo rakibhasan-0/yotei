@@ -236,12 +236,16 @@ ALTER TABLE session OWNER TO psql;
 CREATE TABLE comments(
        comment_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
        comment_text TEXT NOT NULL,
+       user_id INT NOT NULL,
+       created DATE NOT NULL,
        workout_id INT CHECK (workout_id IS NULL OR
         (workout_id IS NOT NULL and exercise_id IS NULL)),
        exercise_id INT CHECK (exercise_id IS NULL OR
         (exercise_id IS NOT NULL and workout_id IS NULL)),
        CONSTRAINT comment_fk_workout_id FOREIGN KEY(workout_id)
         REFERENCES workout(workout_id) ON DELETE CASCADE,
+       CONSTRAINT comment_fk_user_id FOREIGN KEY(user_id)
+        REFERENCES user_table(user_id),
        CONSTRAINT comment_fk_exercise_id FOREIGN KEY(exercise_id)
         REFERENCES exercise(exercise_id) ON DELETE CASCADE
 );
@@ -396,6 +400,7 @@ CREATE OR REPLACE FUNCTION remove_user_references() RETURNS TRIGGER AS $$
               DELETE FROM workout WHERE workout_hidden = TRUE AND workout_author = OLD.user_id;
               UPDATE workout SET workout_author = 1 WHERE workout_author = OLD.user_id;
               UPDATE plan SET user_id = 1 WHERE user_id = OLD.user_id;
+              UPDATE comments SET user_id = 1 WHERE user_id = OLD.user_id;
               RETURN OLD;
        END;
        $$ LANGUAGE 'plpgsql';
@@ -411,5 +416,6 @@ CREATE OR REPLACE FUNCTION no_duplicate_category() RETURNS TRIGGER AS $$
        $$ LANGUAGE 'plpgsql';
 
 CREATE TRIGGER check_order BEFORE INSERT ON activity FOR EACH ROW EXECUTE PROCEDURE no_duplicate_category();
+
 
 CREATE TRIGGER remove_user BEFORE DELETE ON user_table FOR EACH ROW EXECUTE PROCEDURE remove_user_references();
