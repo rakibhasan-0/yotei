@@ -13,7 +13,9 @@ import React from "react"
  * 	   isOpen @type {boolean} - Sets if popup should be visible or not
  *     setIsOpen @type {useState} - Sets the state of the popup window
  * 	   width @type {percentage} - Width of the popup as a percentage of the screen
- * 	   height @type {percentage} - Height of the popup as a percentage of the screen
+ * 	   maxWidth @type {pixels} - Max width of the popup window
+ * 	   height @type {pixels} - Height of the popup as a percentage of the screen
+ * 	   maxHeight @type {pixels} - Max width of the popup window
  * 	   noBackground @type {boolean} - disables the tinted background. 
  * 									  Should be used in nested popups.
  *
@@ -33,7 +35,7 @@ import React from "react"
  * @version 1.0
  * @since 2023-05-02
  */
-export default function Popup({ title, id, isOpen, setIsOpen, children, width, height, noBackground }) {
+export default function Popup({ title, id, isOpen, setIsOpen, children, width, height, noBackground, maxWidth, maxHeight }) {
 	if (!isOpen)
 		return null
 	else 
@@ -47,7 +49,7 @@ export default function Popup({ title, id, isOpen, setIsOpen, children, width, h
 	return (
 		<>
 			{noBackground ? <div className="popup-no-bg" onClick={closePopup} /> : <div className="popup-bg" onClick={closePopup}  />}
-			<div className="popup" id={id} style={{width: `${width}%`, height: `${height}%`}}>
+			<div className="popup" id={id} style={{width: `${width}%`, height: `${height}%`, maxWidth: `${maxWidth}px`, maxHeight: `${maxHeight}px`}}>
 				<div className="topbar">
 					{title && <h1 className="title" role="title">{title}</h1>}
 					<button className="closebutton" onClick={() => setIsOpen(false)}>
