@@ -15,7 +15,6 @@ import java.io.Serializable;
 
 @Entity
 public class TagDBResult implements Serializable, SearchResponseInterface {
-
     @Id
     @Column(nullable = false, name = "tag_id")
     private Long id;
@@ -26,7 +25,7 @@ public class TagDBResult implements Serializable, SearchResponseInterface {
 
     protected TagDBResult() {}
 
-	public TagDBResult(Long id, String name) {
+    protected TagDBResult(Long id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -45,3 +44,4 @@ public class TagDBResult implements Serializable, SearchResponseInterface {
         return name;
     }
 }
+

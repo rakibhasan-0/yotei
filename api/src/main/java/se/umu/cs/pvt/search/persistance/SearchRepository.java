@@ -1,11 +1,7 @@
 package se.umu.cs.pvt.search.persistance;
 
 import org.springframework.stereotype.Repository;
-import se.umu.cs.pvt.search.interfaces.ExerciseDBResult;
-import se.umu.cs.pvt.search.interfaces.PlanDBResult;
-import se.umu.cs.pvt.search.interfaces.TagDBResult;
-import se.umu.cs.pvt.search.interfaces.TechniqueDBResult;
-import se.umu.cs.pvt.search.interfaces.WorkoutDBResult;
+import se.umu.cs.pvt.search.interfaces.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -35,11 +31,11 @@ public class SearchRepository {
         return entityManager.createNativeQuery(query, TechniqueDBResult.class).getResultList();
     }
 
-	public List<TagDBResult> getTagSuggestionsFRomCustomQuery(String query){
-		return entityManager.createNativeQuery(query, TechniqueDBResult.class).getResultList();
+	public List<TagDBResult> getTagSuggestionsFromCustomQuery(String query){
+		return entityManager.createNativeQuery(query, TagDBResult.class).getResultList();
 	}
 
-    public List<PlanDBResult> getPlansFromCustomQuery(String query){
+    public List<PlanDBResult> getPlansFromCustomQuery(String query) {
         return entityManager.createNativeQuery(query, PlanDBResult.class).getResultList();
     }
 }

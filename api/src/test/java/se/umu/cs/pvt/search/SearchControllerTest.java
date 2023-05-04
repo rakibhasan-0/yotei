@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import se.umu.cs.pvt.search.builders.SearchTechniquesDBBuilder;
 import se.umu.cs.pvt.search.interfaces.ExerciseSearchResponse;
+import se.umu.cs.pvt.search.interfaces.TagSearchResponse;
 import se.umu.cs.pvt.search.interfaces.TechniqueSearchResponse;
 import se.umu.cs.pvt.search.interfaces.WorkoutSearchResponse;
 import se.umu.cs.pvt.search.persistance.SearchRepository;
@@ -69,6 +70,17 @@ public class SearchControllerTest {
         urlQuery.put("tag", "katt");
 
         ResponseEntity<SearchResponse<ExerciseSearchResponse>> response = controller.searchExercises(urlQuery);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+	@Test
+    void search_tag_should_return_ok() {
+        Map<String, String> urlQuery = new HashMap<>();
+        urlQuery.put("name", "tag");
+        urlQuery.put("tagAmount", "5");
+		urlQuery.put("tags", "katt");
+
+        ResponseEntity<TagResponse<TagSearchResponse>> response = controller.searchTags(urlQuery);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 }

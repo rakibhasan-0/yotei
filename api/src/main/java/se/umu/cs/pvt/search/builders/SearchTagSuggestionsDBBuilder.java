@@ -34,11 +34,12 @@ import se.umu.cs.pvt.search.enums.*;
      * @return Returns itself.
      */
     public SearchTagSuggestionsDBBuilder filterByTagType() {
-		String tagTypeString = this.tagType.name();
-        DatabaseQuery databaseQuery = new DatabaseQuery();
-        databaseQuery.setQuery("SELECT tag.name, tag.tag_id FROM tag, "+ tagTypeString +" WHERE tag.tag_id = "+ tagTypeString +".tag_id");
-        queries.add(databaseQuery);
-
+		if(this.tagType != null) {
+			String tagTypeString = this.tagType.name();
+			DatabaseQuery databaseQuery = new DatabaseQuery();
+			databaseQuery.setQuery("SELECT tag.name, tag.tag_id FROM tag, "+ tagTypeString +" WHERE tag.tag_id = "+ tagTypeString +".tag_id");
+        	queries.add(databaseQuery);
+		}
         return this;
     }
 

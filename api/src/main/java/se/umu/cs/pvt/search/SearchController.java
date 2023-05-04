@@ -20,6 +20,7 @@ import java.util.*;
  * @author Minotaur (James Eriksson`)
  * @author Kraken (Christoffer Nordlander)
  * @author Kraken (Jonas Gustavsson)
+ * @author Kraken (Oskar Westerlund Holmgren)
  */
 
 @RestController
@@ -67,7 +68,7 @@ public class SearchController {
      * Example query:
      * /api/search/techniques?name=test&tags=tag1,tag2&beltColors=1,2,3&technique=false&kion=true
      *
-     * Not that the query can be empty, or contain any or all of the entries.
+     * Note that the query can be empty, or contain any or all of the entries.
      *
      * @param urlQuery The query passed with the request.
      * @return A SearchResponseInterface.
@@ -100,7 +101,7 @@ public class SearchController {
      * Example query:
      * /api/search/workouts?name=test&date=2020-05-02
      *
-     * Not that the query can be empty, or contain any or all of the entries.
+     * Note that the query can be empty, or contain any or all of the entries.
      *
      * @param urlQuery The query passed with the request.
      * @return A SearchResponseInterface.
@@ -134,7 +135,7 @@ public class SearchController {
      * Example query:
      * /api/search/exercises?name=test&tags=tag1,tag2
      *
-     * Not that the query can be empty, or contain any or all of the entries.
+     * Note that the query can be empty, or contain any or all of the entries.
      *
      * @param urlQuery The query passed with the request.
      * @return A SearchResponseInterface.
@@ -157,6 +158,40 @@ public class SearchController {
         SearchResponse<ExerciseSearchResponse> response = new SearchResponse(filteredResult, tagCompletion);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    /**
+     * API endpoint for getting suggestions for tags.
+     * It filters the tags based on the given query.
+     *
+     * Example query:
+     * /api/search/tags?name=test&tags=tag1,tag2&tagAmount=5
+     *
+     * Note that the query can be empty, or contain any or all of the entries.
+     *
+     * @param urlQuery The query passed with the request.
+     * @return A SearchResponseInterface.
+     */
+    @GetMapping("/tags")
+    public ResponseEntity<TagResponse<TagSearchResponse>> searchTags(@RequestParam Map<String, String> urlQuery) {
+        SearchTagsParams searchTagsParams = new SearchTagsParams(urlQuery);
+
+        DatabaseQuery createdQuery = new SearchTagsDBBuilder(searchTagsParams)
+                .filterByTags()
+                .build();
+
+        List<TagDBResult> result = searchRepository.getTagSuggestionsFromCustomQuery(createdQuery.getQuery());
+        List<TagSearchResponse> tagSearchResponses = new SearchTagsResponseBuilder(result).build();
+        List<TagSearchResponse> filteredResult = fuzzySearchFiltering(searchTagsParams.getName(), tagSearchResponses);
+
+        List<TagSearchResponse> finalResult = new ArrayList<>();
+        for (int i = 0; i < searchTagsParams.getAmount() && i < filteredResult.size(); i++) {
+            finalResult.add(filteredResult.get(i));
+        }
+
+        TagResponse<TagSearchResponse> response = new TagResponse(finalResult);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 
     /**
      * API endpoint for making search requests to Plans.
@@ -183,6 +218,7 @@ public class SearchController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+
     /**
      *
      * @param str The string being used to search the list with.
@@ -194,6 +230,13 @@ public class SearchController {
         return Fuzzy.search(str, response);
     }
 
+	/**
+	 * Gets best tag suggstions based on search.
+	 * @param searchInput Search string.
+	 * @param tags Already chossen tags, will be omitted in the suggestion.
+	 * @param tagType Type of tag, workout technique eg.
+	 * @return List of suggested tags.
+	 */
 	private List<String> getTagSuggestions(String searchInput, List<String> tags, TagType tagType) {
 		// Take out list of tags to check against
 		DatabaseQuery createdQuery = new SearchTagSuggestionsDBBuilder(tags, tagType)
@@ -201,7 +244,7 @@ public class SearchController {
 				.filterByExistingTags()
                 .build();
 
-        List<TagDBResult> tagResult = searchRepository.getTagSuggestionsFRomCustomQuery(createdQuery.getQuery());
+        List<TagDBResult> tagResult = searchRepository.getTagSuggestionsFromCustomQuery(createdQuery.getQuery());
         List<TagDBResult> filteredResult = Fuzzy.search(searchInput, tagResult);
 
 		// Take out first three results.
