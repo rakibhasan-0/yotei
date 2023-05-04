@@ -36,6 +36,8 @@ services:
       - POSTGRES_USER=psql
       - POSTGRES_PASSWORD=yotei123
       - POSTGRES_DB=yotei
+      - BACKEND_HOST=http://api:8085
+      - WEBSERVER_HOST=http://frontend:3000
     links:
       - api
   api:
@@ -49,7 +51,7 @@ services:
       - POSTGRES_USER=psql
       - POSTGRES_PASSWORD=yotei123
       - POSTGRES_DB=yotei
-      - POSTGRES_PORT=5432
+      - POSTGRES_HOST=psql:5432
 
 volumes:
   pgdata:
