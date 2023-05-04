@@ -5,7 +5,6 @@ import { useState, useEffect, useContext } from "react"
 import { useNavigate } from "react-router-dom"
 import { useCookies } from "react-cookie"
 import { AccountContext } from "../../context"
-import List from"../../components/Common/List/Component"
 
 /**
  * This is the login page, it is the first page the user will see
@@ -98,8 +97,7 @@ function Login() {
 			loginClicked().then(() => {})
 		}
 	}
-    
-	return (             
+	return (
 		<div style={{ maxWidth: 600}} className="center">
 			<img style={{ maxWidth: 500}} src="/ubk-logga.jpg" alt="This is the logo for UBK" className="center mb-5"/>
 			<div className="card bg-light center" style={{ maxWidth: 550}}>
@@ -123,10 +121,6 @@ function Login() {
                             Logga in
 							</Button>
 						</div>
-						<List id= "listtest">
-							<p>Hello</p>
-						</List>
-
 					</div>
 					{errorMsg ? <p style={{color: "red"}}>{errorMsg}</p> : null}
 				</Form>                
@@ -134,5 +128,4 @@ function Login() {
 		</div>
 	)
 }
-
 export default Login
