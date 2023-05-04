@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.umu.cs.pvt.search.builders.*;
+import se.umu.cs.pvt.search.enums.TagType;
 import se.umu.cs.pvt.search.interfaces.*;
 import se.umu.cs.pvt.search.persistance.SearchRepository;
 import se.umu.cs.pvt.search.persistance.TagCompleteRepository;
@@ -55,7 +56,7 @@ public class SearchController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        SearchResponse<TechniqueDBResult> response = new SearchResponse<>(result, Optional.empty());
+        SearchResponse<TechniqueDBResult> response = new SearchResponse<>(result, new ArrayList<String>());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -86,12 +87,8 @@ public class SearchController {
         List<TechniqueSearchResponse> techniqueSearchResponses = new SearchTechniqueResponseBuilder(results).build();
         List<TechniqueSearchResponse> filteredResult = fuzzySearchFiltering(searchTechniquesParams.getName(), techniqueSearchResponses);
 
-        List<String> tags = searchTechniquesParams.getTags();
-        Optional<String> tagCompletion = Optional.empty();
-        if (tags != null) {
-            String lastTag = tags.get(tags.size() - 1);
-            tagCompletion = tagCompleteRepository.completeTag(lastTag);
-        }
+		// Get tag complete suggestion from search input
+        List<String> tagCompletion = getTagSuggestions(searchTechniquesParams.getName(), searchTechniquesParams.getTags(), TagType.technique_tag);
 
         SearchResponse<TechniqueSearchResponse> response = new SearchResponse<>(filteredResult, tagCompletion);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -121,8 +118,10 @@ public class SearchController {
         List<WorkoutSearchResponse> workoutSearchResponses = new SearchWorkoutResponseBuilder(result).build();
         List<WorkoutSearchResponse> filteredResult = fuzzySearchFiltering(searchWorkoutParams.getName(), workoutSearchResponses);
 
+		// Get tag complete suggestion from search input
+        List<String> tagCompletion = getTagSuggestions(searchWorkoutParams.getName(), searchWorkoutParams.getTags(), TagType.workout_tag);
 
-        SearchResponse<WorkoutSearchResponse> response = new SearchResponse<>(filteredResult, Optional.empty());
+        SearchResponse<WorkoutSearchResponse> response = new SearchResponse<>(filteredResult, tagCompletion);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -150,7 +149,10 @@ public class SearchController {
         List<ExerciseSearchResponse> exerciseSearchResponses = new SearchExerciseResponseBuilder(result).build();
         List<ExerciseSearchResponse> filteredResult = fuzzySearchFiltering(searchExerciseParams.getName(), exerciseSearchResponses);
 
-        SearchResponse<ExerciseSearchResponse> response = new SearchResponse(filteredResult, Optional.empty());
+		// Get tag complete suggestion from search input
+        List<String> tagCompletion = getTagSuggestions(searchExerciseParams.getName(), searchExerciseParams.getTags(), TagType.exercise_tag);
+
+        SearchResponse<ExerciseSearchResponse> response = new SearchResponse(filteredResult, tagCompletion);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -164,4 +166,29 @@ public class SearchController {
     private <T extends SearchResponseInterface> List<T> fuzzySearchFiltering(String str, List<T> response) {
         return Fuzzy.search(str, response);
     }
+
+	private List<String> getTagSuggestions(String searchInput, List<String> tags, TagType tagType) {
+		// Take out list of tags to check against
+		DatabaseQuery createdQuery = new SearchTagSuggestionsDBBuilder(tags, tagType)
+                .filterByTagType()
+				.filterByExistingTags()
+                .build();
+
+        List<TagDBResult> tagResult = searchRepository.getTagSuggestionsFRomCustomQuery(createdQuery.getQuery());
+        List<TagDBResult> filteredResult = Fuzzy.search(searchInput, tagResult);
+
+		// Take out first three results.
+		List<String> tagCompletion = new ArrayList<String>();
+		int tagAmount = 3;
+		// Check if tag suggestion list is less that desired tag amount.
+		// If thats the case reduce size of desired tag a
+		if(filteredResult.size() < tagAmount) {
+			tagAmount = filteredResult.size();
+		}
+		for(int i = 0; i < tagAmount; i++) {
+			tagCompletion.add(filteredResult.get(i).getName());
+		}
+
+		return tagCompletion;
+	}
 }

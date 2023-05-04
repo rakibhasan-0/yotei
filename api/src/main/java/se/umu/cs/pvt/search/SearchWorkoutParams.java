@@ -1,6 +1,8 @@
 package se.umu.cs.pvt.search;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,9 +15,15 @@ import java.util.Map;
 public class SearchWorkoutParams {
     private String name;
     private LocalDate localDate;
+	private List<String> tags; 
 
     public SearchWorkoutParams(Map<String, String> urlQuery) {
         name = urlQuery.get("name");
+
+		if (urlQuery.containsKey("tags")){
+            String[] tempTags = urlQuery.get("tags").split(" ");
+            tags = Arrays.stream(tempTags).toList();
+        }
 
         if(urlQuery.containsKey("date")) {
             String[] dateObjects = urlQuery.get("date").split("-");
@@ -36,6 +44,14 @@ public class SearchWorkoutParams {
 
     public String getName() {
         return name;
+    }
+
+	public boolean hasTags() {
+        return tags != null;
+    }
+
+    public List<String> getTags() {
+        return tags;
     }
 
     public boolean hasDate() {

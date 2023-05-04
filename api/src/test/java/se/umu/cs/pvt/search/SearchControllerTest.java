@@ -1,25 +1,21 @@
 package se.umu.cs.pvt.search;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.InstanceOfAssertFactories.COLLECTION;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
 import se.umu.cs.pvt.search.builders.SearchTechniquesDBBuilder;
 import se.umu.cs.pvt.search.interfaces.ExerciseSearchResponse;
 import se.umu.cs.pvt.search.interfaces.TechniqueSearchResponse;
@@ -49,7 +45,7 @@ public class SearchControllerTest {
     void search_techniques_should_return_ok() {
         DatabaseQuery query = new SearchTechniquesDBBuilder(new SearchTechniquesParams(new HashMap<>())).build();
         when(searchRepository.getTechniquesFromCustomQuery(query.getQuery())).thenReturn(List.of());
-        when(tagCompleteRepository.completeTag("")).thenReturn(Optional.of(""));
+        when(tagCompleteRepository.completeTag("",new ArrayList<String>())).thenReturn(new ArrayList<String>());
         SearchController searchController = new SearchController(searchRepository, tagCompleteRepository);
 
         ResponseEntity<SearchResponse<TechniqueSearchResponse>> response = searchController.searchTechniques(new HashMap<>());
