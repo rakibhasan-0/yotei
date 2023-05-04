@@ -1,0 +1,35 @@
+.divider_h1_center {
+    margin: 20px;
+    height: 40px;
+    text-align: center;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    color: black;
+}
+
+.divider_h1_left {
+    margin: 20px;
+    height: 40px;
+    text-align: left;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    color: black;
+}
+
+.divider_h2_center {
+    margin: 20px;
+    text-align: center;
+    height: 20px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    color: black;
+}
+
+.divider_h2_left {
+    margin: 20px;
+    text-align: left;
+    height: 20px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    color: black;
+}
