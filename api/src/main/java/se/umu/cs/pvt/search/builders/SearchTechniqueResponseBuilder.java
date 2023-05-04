@@ -32,15 +32,20 @@ public class SearchTechniqueResponseBuilder {
             Long techniqueID = result.getId();
 
             if(map.containsKey(techniqueID)){
-                map.get(techniqueID).addBeltColor(result.getBelt_color());
+                map.get(techniqueID).addBeltColor(
+                        result.getBelt_color(), result.getBelt_name(), result.getIs_child()
+                );
             } else {
                 map.put(techniqueID, new TechniqueSearchResponse(
                         result.getId(),
                         result.getName(),
-                        result.getBelt_color()
+                        result.getBelt_color(),
+                        result.getBelt_name(),
+                        result.getIs_child()
                 ));
             }
         });
+
         return new ArrayList<>(map.values());
     }
 }

@@ -8,6 +8,4 @@ package se.umu.cs.pvt.search.interfaces;
 
 public interface SearchResponseInterface {
     String getName();
-
-    Number getId();
 }

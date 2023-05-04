@@ -14,26 +14,27 @@ import java.util.Map;
  */
 public class SearchWorkoutParams {
     private String name;
-    private LocalDate localDate;
-	private List<String> tags; 
+    private LocalDate from;
+    private LocalDate to;
+    private boolean favourite;
+    private List<String> tags;
+    private String user_id;
 
     public SearchWorkoutParams(Map<String, String> urlQuery) {
         name = urlQuery.get("name");
+        user_id = urlQuery.get("id");
 
-		if (urlQuery.containsKey("tags")){
-            String[] tempTags = urlQuery.get("tags").split(" ");
-            tags = Arrays.stream(tempTags).toList();
+        if(urlQuery.containsKey("from")) from = parseDateString(urlQuery.get("from"));
+
+        if(urlQuery.containsKey("to")) to = parseDateString(urlQuery.get("to"));
+
+        if(urlQuery.containsKey("favourite")){
+            favourite = Boolean.parseBoolean(urlQuery.get("favourite"));
         }
 
-        if(urlQuery.containsKey("date")) {
-            String[] dateObjects = urlQuery.get("date").split("-");
-            if(dateObjects.length == 3){
-                localDate = LocalDate.of(
-                        Integer.parseInt(dateObjects[0]),
-                        Integer.parseInt(dateObjects[1]),
-                        Integer.parseInt(dateObjects[2])
-                );
-            }
+        if(urlQuery.containsKey("tags")) {
+            String tagsString = urlQuery.get("tags");
+            if(!tagsString.isEmpty()) tags = Arrays.stream(tagsString.split(",")).toList();
         }
     }
 
@@ -46,7 +47,27 @@ public class SearchWorkoutParams {
         return name;
     }
 
-	public boolean hasTags() {
+    public boolean hasFrom() {
+        return from != null;
+    }
+
+    public LocalDate getFrom() {
+        return from;
+    }
+
+    public boolean hasTo() {
+        return to != null;
+    }
+
+    public LocalDate getTo() {
+        return to;
+    }
+
+    public boolean isFavourite() {
+        return favourite;
+    }
+
+    public boolean hasTags() {
         return tags != null;
     }
 
@@ -54,11 +75,31 @@ public class SearchWorkoutParams {
         return tags;
     }
 
-    public boolean hasDate() {
-        return localDate != null;
+    public boolean hasUser_id() {
+        return user_id != null;
     }
 
-    public LocalDate getDate() {
+    public String getUser_id() {
+        return user_id;
+    }
+
+    private LocalDate parseDateString(String date){
+        if(date.isEmpty()) return null;
+
+        String[] dateObjects = date.split("-");
+        if(dateObjects.length != 3) return null;
+
+        LocalDate localDate = null;
+        try {
+            localDate = LocalDate.of(
+                    Integer.parseInt(dateObjects[0]),
+                    Integer.parseInt(dateObjects[1]),
+                    Integer.parseInt(dateObjects[2])
+            );
+        } catch (Exception e){
+            // Log incorrect param
+        }
+
         return localDate;
     }
 }

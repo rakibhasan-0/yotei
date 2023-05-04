@@ -14,7 +14,7 @@ import java.io.Serializable;
  */
 
 @Entity
-public class TechniqueDBResult implements Serializable, SearchResponseInterface {
+public class TechniqueDBResult implements Serializable {
 
     @Id
     @Column(nullable = false, name = "technique_id")
@@ -24,35 +24,42 @@ public class TechniqueDBResult implements Serializable, SearchResponseInterface 
     private String name;
 
     @Id
-    @Column(nullable = false, name = "belt_color")
+    @Column(name = "belt_color")
     private String belt_color;
+
+    @Column(name = "is_child")
+    private Boolean is_child;
+
+    @Column(name = "belt_name")
+    private String belt_name;
 
     protected TechniqueDBResult() {}
 
-    public TechniqueDBResult(Long id, String name, String belt_color) {
+    public TechniqueDBResult(Long id, String name, String belt_color, boolean is_child, String belt_name) {
         this.id = id;
         this.name = name;
         this.belt_color = belt_color;
+        this.is_child = is_child;
+        this.belt_name = belt_name;
     }
 
-    /**
-     * @return the id
-     */
     public Long getId() {
         return id;
     }
 
-    /**
-     * @return the name
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * @return the belt color
-     */
     public String getBelt_color() {
         return belt_color;
+    }
+
+    public String getBelt_name() {
+        return belt_name;
+    }
+
+    public Boolean getIs_child() {
+        return is_child;
     }
 }

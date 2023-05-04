@@ -21,7 +21,7 @@ public class ExerciseParamsTest {
 
         Map<String, String> param = new HashMap<>();
         param.put("name","name of exercise");
-        param.put("tags", "tag1 tag2 tag3");
+        param.put("tags", "tag1,tag2,tag3");
 
         params = new SearchExerciseParams(param);
 

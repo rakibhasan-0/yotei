@@ -2,6 +2,7 @@ package se.umu.cs.pvt.search.persistance;
 
 import org.springframework.stereotype.Repository;
 import se.umu.cs.pvt.search.interfaces.ExerciseDBResult;
+import se.umu.cs.pvt.search.interfaces.PlanDBResult;
 import se.umu.cs.pvt.search.interfaces.TagDBResult;
 import se.umu.cs.pvt.search.interfaces.TechniqueDBResult;
 import se.umu.cs.pvt.search.interfaces.WorkoutDBResult;
@@ -37,4 +38,8 @@ public class SearchRepository {
 	public List<TagDBResult> getTagSuggestionsFRomCustomQuery(String query){
 		return entityManager.createNativeQuery(query, TechniqueDBResult.class).getResultList();
 	}
+
+    public List<PlanDBResult> getPlansFromCustomQuery(String query){
+        return entityManager.createNativeQuery(query, PlanDBResult.class).getResultList();
+    }
 }

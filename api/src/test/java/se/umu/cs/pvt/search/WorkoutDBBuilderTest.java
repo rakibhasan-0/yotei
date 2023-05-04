@@ -35,23 +35,8 @@ public class WorkoutDBBuilderTest {
         params = new SearchWorkoutParams(urlQuery);
         builder = new SearchWorkoutDBBuilder(params);
 
-        String expectedQuery = "SELECT workout_name, workout_id FROM workout";
-
-        assertThat(builder
-                .filterByDate()
-                .build().getQuery()).isEqualTo(expectedQuery);
-    }
-
-    @Test
-    void filterByDate(){
-        Map<String, String> urlQuery = new HashMap<>();
-        urlQuery.put("name","name of workout");
-        urlQuery.put("date", "2020-11-24");
-
-        params = new SearchWorkoutParams(urlQuery);
-        builder = new SearchWorkoutDBBuilder(params);
-
-        String expectedQuery = "SELECT workout_name, workout_id FROM workout WHERE workout_created='2020-11-24'";
+        String expectedQuery = "SELECT result.workout_name, result.workout_id, 1=2 AS favourite FROM ( " +
+                "SELECT workout_name, workout_id FROM workout ) AS result";
 
         assertThat(builder
                 .filterByDate()

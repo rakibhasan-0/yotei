@@ -22,7 +22,8 @@ public class WorkoutParamsTest {
     void init() {
         Map<String, String> urlQuery = new HashMap<>();
         urlQuery.put("name","name of workout");
-        urlQuery.put("date", "2020-02-20");
+        urlQuery.put("from", "2020-02-20");
+        urlQuery.put("to", "2020-02-25");
 
         params = new SearchWorkoutParams(urlQuery);
     }
@@ -52,33 +53,33 @@ public class WorkoutParamsTest {
     }
 
     @Test
-    void getDateTest() {
+    void getFromTest() {
         LocalDate date = LocalDate.of(2020, 02,20);
 
-        assertThat(params.getDate().isEqual(date)).isTrue();
+        assertThat(params.getFrom().isEqual(date)).isTrue();
     }
 
     @Test
-    void badDateTest() {
+    void badFromTest() {
         Map<String, String> urlQuery = new HashMap<>();
         urlQuery.put("name","name of workout");
-        urlQuery.put("date", "2020/02/20");
+        urlQuery.put("from", "2020/02/20");
         params = new SearchWorkoutParams(urlQuery);
 
-        assertThat(params.hasDate()).isFalse();
+        assertThat(params.hasFrom()).isFalse();
     }
 
     @Test
     void hasDateTestShouldBeTrue() {
-        assertThat(params.hasDate()).isTrue();
+        assertThat(params.hasFrom()).isTrue();
     }
 
     @Test
     void hasDateTestShouldBeFalse() {
         Map<String, String> urlQuery = new HashMap<>();
-        urlQuery.put("name","name of workout");
+        urlQuery.put("name", "name of workout");
         params = new SearchWorkoutParams(urlQuery);
 
-        assertThat(params.hasDate()).isFalse();
+        assertThat(params.hasFrom()).isFalse();
     }
 }

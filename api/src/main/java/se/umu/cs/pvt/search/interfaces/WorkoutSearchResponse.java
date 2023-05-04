@@ -7,19 +7,25 @@ package se.umu.cs.pvt.search.interfaces;
  * @author Minotaur (James Eriksson)
  */
 public class WorkoutSearchResponse implements SearchResponseInterface {
-    private Long id;
+    private Long workoutID;
     private String name;
+    private boolean favourite;
 
-    public WorkoutSearchResponse(Long id, String name){
-        this.id = id;
+    public WorkoutSearchResponse(Long workoutID, String name, boolean favourite){
+        this.workoutID = workoutID;
         this.name = name;
+        this.favourite = favourite;
     }
 
     public String getName() {
         return name;
     }
 
-    public Number getId() {
-        return id;
+    public Number getWorkoutID() {
+        return workoutID;
+    }
+
+    public boolean getFavourite(){
+        return favourite;
     }
 }

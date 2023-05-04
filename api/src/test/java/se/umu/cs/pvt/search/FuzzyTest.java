@@ -116,10 +116,4 @@ class TestResult implements SearchResponseInterface {
     public String getName() {
         return s;
     }
-
-    @Override
-    public Number getId() {
-        return null;
-    }
-
 }

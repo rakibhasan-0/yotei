@@ -14,7 +14,7 @@ import java.io.Serializable;
  */
 
 @Entity
-public class ExerciseDBResult implements Serializable, SearchResponseInterface {
+public class ExerciseDBResult implements Serializable {
 
     @Id
     @Column(nullable = false, name = "exercise_id")

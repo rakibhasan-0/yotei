@@ -35,8 +35,8 @@ public class SearchTechniquesDBBuilder implements SearchDBBuilderInterface {
             DatabaseQuery databaseQuery = new DatabaseQuery();
             databaseQuery.setQuery(
                     "SELECT te.technique_id, te.name " +
-                            "FROM technique AS te, technique_tag AS tt, tag AS ta " +
-                            "WHERE tt.tech_id = te.technique_id AND tt.tag_id = ta.tag_id AND ta.name='" + tag + "'"
+                    "FROM technique AS te, technique_tag AS tt, tag AS ta " +
+                    "WHERE tt.tech_id = te.technique_id AND tt.tag_id=ta.tag_id AND LOWER(ta.name)=LOWER('" + tag + "')"
             );
             queries.add(databaseQuery);
         }
@@ -50,15 +50,23 @@ public class SearchTechniquesDBBuilder implements SearchDBBuilderInterface {
      * @return Returns itself.
      */
     public SearchTechniquesDBBuilder filterByBelts() {
-        return this;
-    }
+        if(!searchTechniquesParams.hasBeltColors()) return this;
 
-    /**
-     * Adds a query to the DatabaseQuery list to filter Techniques by technique.
-     *
-     * @return Returns itself.
-     */
-    public SearchTechniquesDBBuilder filterByTechnique() {
+        for(String beltColor : searchTechniquesParams.getBeltColors()){
+            boolean isChildColor = beltColor.endsWith("-barn"); // Child colors need to contain the ending -barn
+            String color = beltColor.split("-")[0];
+
+            DatabaseQuery databaseQuery = new DatabaseQuery();
+            databaseQuery.setQuery(
+                    "SELECT te.technique_id, te.name " +
+                    "FROM technique AS te, belt AS b, technique_to_belt AS ttb " +
+                    "WHERE te.technique_id=ttb.technique_id AND b.belt_id=ttb.belt_id AND " +
+                    "LOWER(b.belt_name)=LOWER('" + color + "') AND b.is_child=" + isChildColor
+            );
+
+            queries.add(databaseQuery);
+        }
+
         return this;
     }
 
@@ -67,7 +75,7 @@ public class SearchTechniquesDBBuilder implements SearchDBBuilderInterface {
      *
      * @return Returns itself.
      */
-    public SearchTechniquesDBBuilder filterByKion() {
+    public SearchTechniquesDBBuilder filterByKihon() {
         return this;
     }
 
@@ -110,11 +118,11 @@ public class SearchTechniquesDBBuilder implements SearchDBBuilderInterface {
     private DatabaseQuery createJoinBeltsQuery(DatabaseQuery databaseQuery){
         String resultQuery = databaseQuery.getQuery();
 
-        String stringQuery = "SELECT result.technique_id, result.name, b.belt_color FROM ( " +
+        String stringQuery = "SELECT result.technique_id, result.name, b.belt_name, b.belt_color, b.is_child FROM ( " +
                 resultQuery + " " +
                 ") AS result " +
-                "JOIN technique_to_belt AS ttb ON ttb.technique_id=result.technique_id " +
-                "JOIN belt AS b ON ttb.belt_id=b.belt_id";
+                "LEFT JOIN technique_to_belt AS ttb ON ttb.technique_id=result.technique_id " +
+                "LEFT JOIN belt AS b ON ttb.belt_id=b.belt_id";
 
         DatabaseQuery createdDatabaseQuery = new DatabaseQuery();
         createdDatabaseQuery.setQuery(stringQuery);

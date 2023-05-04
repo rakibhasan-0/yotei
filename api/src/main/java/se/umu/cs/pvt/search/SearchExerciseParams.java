@@ -19,8 +19,8 @@ public class SearchExerciseParams {
         name = urlQuery.get("name");
 
         if (urlQuery.containsKey("tags")){
-            String[] tempTags = urlQuery.get("tags").split(" ");
-            tags = Arrays.stream(tempTags).toList();
+            String tagsString = urlQuery.get("tags");
+            if(!tagsString.isEmpty()) tags = Arrays.stream(tagsString.split(",")).toList();
         }
     }
 

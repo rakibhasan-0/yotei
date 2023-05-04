@@ -28,7 +28,8 @@ public class SearchWorkoutResponseBuilder {
         workoutDBResultList.forEach(result -> array.add(
                 new WorkoutSearchResponse(
                         result.getId(),
-                        result.getName()
+                        result.getName(),
+                        result.getFavourite()
                 )
         ));
         return array;

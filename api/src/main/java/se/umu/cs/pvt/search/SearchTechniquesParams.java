@@ -1,6 +1,5 @@
 package se.umu.cs.pvt.search;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +14,7 @@ import java.util.Map;
 public class SearchTechniquesParams {
     private String name;
     private List<String> tags;
-    private List<Integer> beltColors;
+    private List<String> beltColors;
     private boolean technique;
     private boolean kion;
 
@@ -23,17 +22,13 @@ public class SearchTechniquesParams {
         name = urlQuery.get("name");
 
         if (urlQuery.containsKey("tags")){
-            String[] tempTags = urlQuery.get("tags").split(" ");
-            tags = Arrays.stream(tempTags).toList();
+            String tagString = urlQuery.get("tags");
+            if(!tagString.isEmpty()) tags = Arrays.stream(tagString.split(",")).toList();
         }
 
         if (urlQuery.containsKey("beltColors")){
-            String[] tempBelts = urlQuery.get("beltColors").split(" ");
-            beltColors = new ArrayList();
-
-            for (String belt : tempBelts) {
-                beltColors.add(Integer.parseInt(belt));
-            }
+            String beltString = urlQuery.get("beltColors");
+            if(!beltString.isEmpty()) beltColors = Arrays.stream(beltString.split(",")).toList();
         }
 
         if (urlQuery.containsKey("technique")){
@@ -55,10 +50,6 @@ public class SearchTechniquesParams {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public boolean hasTags() {
         return tags != null;
     }
@@ -67,35 +58,19 @@ public class SearchTechniquesParams {
         return tags;
     }
 
-    public void setTags(List<String> tags) {
-        this.tags = tags;
-    }
-
     public boolean hasBeltColors() {
         return beltColors != null;
     }
 
-    public List<Integer> getBeltColors() {
+    public List<String> getBeltColors() {
         return beltColors;
-    }
-
-    public void setBeltColors(List<Integer> beltColors) {
-        this.beltColors = beltColors;
     }
 
     public boolean isTechnique() {
         return technique;
     }
 
-    public void setTechnique(boolean technique) {
-        this.technique = technique;
-    }
-
     public boolean isKion() {
         return kion;
-    }
-
-    public void setKion(boolean kion) {
-        this.kion = kion;
     }
 }

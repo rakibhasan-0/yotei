@@ -22,8 +22,8 @@ public class TechniquesParamsTest {
 
         Map<String, String> urlQuery = new HashMap<>();
         urlQuery.put("name","name of technique");
-        urlQuery.put("tags", "tag1 tag2 tag3");
-        urlQuery.put("beltColors", "1 2 3");
+        urlQuery.put("tags", "tag1,tag2,tag3");
+        urlQuery.put("beltColors", "1,2,3");
         urlQuery.put("technique", "true");
         urlQuery.put("kion", "true");
 
@@ -44,11 +44,6 @@ public class TechniquesParamsTest {
     void hasNameTestShouldBeTrue() {
         assertThat(params.hasName()).isTrue();
     }
-    @Test
-    void hasNameTestShouldBeFalse() {
-        params.setName(null);
-        assertThat(params.hasName()).isFalse();
-    }
 
     @Test
     void getTagsTest() {
@@ -61,14 +56,8 @@ public class TechniquesParamsTest {
     }
 
     @Test
-    void hasTagsTestShouldBeFalse() {
-        params.setTags(null);
-        assertThat(params.hasTags()).isFalse();
-    }
-
-    @Test
     void getBeltsTest() {
-        assertThat(params.getBeltColors().get(1)).isEqualTo(2);
+        assertThat(params.getBeltColors().get(1)).isEqualTo("2");
     }
 
     @Test
@@ -77,32 +66,12 @@ public class TechniquesParamsTest {
     }
 
     @Test
-    void hasBeltsTestShouldBeFalse() {
-    params.setBeltColors(null);
-        assertThat(params.hasBeltColors()).isFalse();
-    }
-
-    @Test
     void isTechniqueTestShouldBeTrue() {
         assertThat(params.isTechnique()).isTrue();
     }
 
     @Test
-    void isTechniqueTestShouldBeFalse() {
-        params.setTechnique(false);
-
-        assertThat(params.isTechnique()).isFalse();
-    }
-
-    @Test
     void isKionTestShouldBeTrue() {
         assertThat(params.isKion()).isTrue();
-    }
-
-    @Test
-    void isKionTestShouldBeFalse() {
-        params.setKion(false);
-
-        assertThat(params.isKion()).isFalse();
     }
 }

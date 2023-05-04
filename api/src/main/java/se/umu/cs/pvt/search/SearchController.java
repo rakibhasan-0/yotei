@@ -46,7 +46,7 @@ public class SearchController {
      * @return The 15 most used techniques.
      */
     @GetMapping("/techniques/init")
-    public ResponseEntity<SearchResponse<TechniqueDBResult>> getInitialTechniques() {
+    public ResponseEntity<SearchResponse<TechniqueSearchResponse>> getInitialTechniques() {
         List<TechniqueDBResult> result = searchRepository.getTechniquesFromCustomQuery(
                 "SELECT t.technique_id, t.name FROM technique as t, activity as a " +
                         "WHERE t.technique_id = a.technique_id GROUP BY t.technique_id " +
@@ -56,7 +56,7 @@ public class SearchController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        SearchResponse<TechniqueDBResult> response = new SearchResponse<>(result, new ArrayList<String>());
+        SearchResponse<TechniqueSearchResponse> response = new SearchResponse(result, new ArrayList<>());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -79,8 +79,7 @@ public class SearchController {
         DatabaseQuery createdQuery = new SearchTechniquesDBBuilder(searchTechniquesParams)
                 .filterByBelts()
                 .filterByTags()
-                .filterByTechnique()
-                .filterByKion()
+                .filterByKihon()
                 .build();
 
         List<TechniqueDBResult> results = searchRepository.getTechniquesFromCustomQuery(createdQuery.getQuery());
@@ -112,6 +111,9 @@ public class SearchController {
 
         DatabaseQuery createdQuery = new SearchWorkoutDBBuilder(searchWorkoutParams)
                 .filterByDate()
+                .filterByFavourite()
+                .filterByUserId()
+                .filterByTags()
                 .build();
 
         List<WorkoutDBResult> result = searchRepository.getWorkoutsFromCustomQuery(createdQuery.getQuery());
@@ -153,6 +155,31 @@ public class SearchController {
         List<String> tagCompletion = getTagSuggestions(searchExerciseParams.getName(), searchExerciseParams.getTags(), TagType.exercise_tag);
 
         SearchResponse<ExerciseSearchResponse> response = new SearchResponse(filteredResult, tagCompletion);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * API endpoint for making search requests to Plans.
+     * It filters the plans based on the given query.
+     *
+     * Not that the query can be empty, or contain any or all of the entries.
+     *
+     * @param urlQuery The query passed with the request.
+     * @return A SearchResponseInterface.
+     */
+    @GetMapping("/plans")
+    public ResponseEntity<SearchResponse<PlanSearchResponse>> searchPlans(@RequestParam Map<String, String> urlQuery) {
+        SearchPlanParams searchPlanParams = new SearchPlanParams(urlQuery);
+
+        DatabaseQuery createdQuery = new SearchPlanDBBuilder(searchPlanParams)
+                .filterByPlans()
+                .filterById()
+                .build();
+
+        List<PlanDBResult> result = searchRepository.getPlansFromCustomQuery(createdQuery.getQuery());
+        List<PlanSearchResponse> planSearchResponses = new SearchPlanResponseBuilder(result).build();
+
+        SearchResponse<PlanSearchResponse> response = new SearchResponse(planSearchResponses, new ArrayList<>());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

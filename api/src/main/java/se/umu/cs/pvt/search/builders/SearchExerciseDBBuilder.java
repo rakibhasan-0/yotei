@@ -27,17 +27,17 @@ public class SearchExerciseDBBuilder implements SearchDBBuilderInterface {
      * @return Returns itself.
      */
     public SearchExerciseDBBuilder filterByTags() {
-        if(!searchExerciseQuery.hasTags()) return this;
-
-        List<String> tags = searchExerciseQuery.getTags();
-        for (String tag: tags) {
-            DatabaseQuery databaseQuery = new DatabaseQuery();
-            databaseQuery.setQuery(
-                    "SELECT e.name, e.exercise_id " +
-                            "FROM exercise AS e, exercise_tag AS et, tag AS t " +
-                            "WHERE et.ex_id = e.exercise_id AND et.tag_id = t.tag_id AND t.name='" + tag + "'"
-            );
-            queries.add(databaseQuery);
+        if(searchExerciseQuery.hasTags()){
+            List<String> tags = searchExerciseQuery.getTags();
+            for (String tag: tags) {
+                DatabaseQuery databaseQuery = new DatabaseQuery();
+                databaseQuery.setQuery(
+                        "SELECT e.name, e.exercise_id, e.duration " +
+                        "FROM exercise AS e, exercise_tag AS et, tag AS t " +
+                        "WHERE et.ex_id = e.exercise_id AND et.tag_id = t.tag_id AND LOWER(t.name)=LOWER('" + tag + "')"
+                );
+                queries.add(databaseQuery);
+            }
         }
 
         return this;
@@ -53,7 +53,7 @@ public class SearchExerciseDBBuilder implements SearchDBBuilderInterface {
 
         if(queries.isEmpty()) {
             databaseQuery.setQuery(
-                    "SELECT name, exercise_id FROM exercise"
+                    "SELECT name, exercise_id, duration FROM exercise"
             );
         } else {
             List<String> queryList = new ArrayList<>();

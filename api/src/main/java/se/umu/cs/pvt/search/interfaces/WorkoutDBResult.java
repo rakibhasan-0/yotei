@@ -14,33 +14,35 @@ import java.io.Serializable;
  */
 
 @Entity
-public class WorkoutDBResult implements Serializable, SearchResponseInterface {
+public class WorkoutDBResult implements Serializable {
 
     @Id
     @Column(nullable = false, name = "workout_id")
-    private Long id;
+    private Long workoutId;
 
     @Column(nullable = false, name = "workout_name")
     private String name;
 
+    @Column(nullable = false, name = "favourite")
+    private boolean favourite;
+
     protected WorkoutDBResult() {}
 
-    public WorkoutDBResult(Long id, String name) {
-        this.id = id;
+    public WorkoutDBResult(Long workoutId, String name, boolean favourite) {
+        this.workoutId = workoutId;
         this.name = name;
+        this.favourite = favourite;
     }
 
-    /**
-     * @return the id
-     */
     public Long getId() {
-        return id;
+        return workoutId;
     }
 
-    /**
-     * @return the name
-     */
     public String getName() {
         return name;
+    }
+
+    public boolean getFavourite(){
+        return favourite;
     }
 }

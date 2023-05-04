@@ -21,11 +21,11 @@ public class TechniquesDBBuilderTest {
     SearchTechniquesDBBuilder builder;
 
     private String concatJoinBeltQuery(String query){
-        return  "SELECT result.technique_id, result.name, b.belt_color FROM ( " +
+        return  "SELECT result.technique_id, result.name, b.belt_name, b.belt_color, b.is_child FROM ( " +
                 query + " " +
                 ") AS result " +
-                "JOIN technique_to_belt AS ttb ON ttb.technique_id=result.technique_id " +
-                "JOIN belt AS b ON ttb.belt_id=b.belt_id";
+                "LEFT JOIN technique_to_belt AS ttb ON ttb.technique_id=result.technique_id " +
+                "LEFT JOIN belt AS b ON ttb.belt_id=b.belt_id";
     }
 
     @Test
@@ -51,8 +51,7 @@ public class TechniquesDBBuilderTest {
         assertThat(builder
                 .filterByTags()
                 .filterByBelts()
-                .filterByTechnique()
-                .filterByKion()
+                .filterByKihon()
                 .build().getQuery()).isEqualTo(expectedQuery);
     }
 
@@ -62,18 +61,18 @@ public class TechniquesDBBuilderTest {
 
         Map<String, String> urlQuery = new HashMap<>();
         urlQuery.put("name","name of technique");
-        urlQuery.put("tags", "tag1 tag2");
+        urlQuery.put("tags", "tag1,tag2");
 
         params = new SearchTechniquesParams(urlQuery);
         builder = new SearchTechniquesDBBuilder(params);
 
         String baseQuery = "SELECT te.technique_id, te.name " +
                 "FROM technique AS te, technique_tag AS tt, tag AS ta " +
-                "WHERE tt.tech_id = te.technique_id AND tt.tag_id = ta.tag_id AND ta.name='tag1'" +
+                "WHERE tt.tech_id = te.technique_id AND tt.tag_id=ta.tag_id AND LOWER(ta.name)=LOWER('tag1')" +
                 " INTERSECT " +
                 "SELECT te.technique_id, te.name " +
                 "FROM technique AS te, technique_tag AS tt, tag AS ta " +
-                "WHERE tt.tech_id = te.technique_id AND tt.tag_id = ta.tag_id AND ta.name='tag2'";
+                "WHERE tt.tech_id = te.technique_id AND tt.tag_id=ta.tag_id AND LOWER(ta.name)=LOWER('tag2')";
 
         String expectedQuery = concatJoinBeltQuery(baseQuery);
 

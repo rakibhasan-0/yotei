@@ -15,7 +15,7 @@ import java.util.Optional;
  *
  * @param <T> The type being stored in the results list.
  */
-public class SearchResponse<T extends SearchResponseInterface> {
+public class SearchResponse<T> {
     public List<T> results;
     public List<String> tagCompletion;
 

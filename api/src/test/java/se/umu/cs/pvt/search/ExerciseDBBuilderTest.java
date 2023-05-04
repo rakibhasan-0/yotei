@@ -34,7 +34,7 @@ public class ExerciseDBBuilderTest {
         params = new SearchExerciseParams(param);
         builder = new SearchExerciseDBBuilder(params);
 
-        String expectedQuery = "SELECT name, exercise_id FROM exercise";
+        String expectedQuery = "SELECT name, exercise_id, duration FROM exercise";
 
         assertThat(builder
                 .filterByTags()
@@ -48,13 +48,10 @@ public class ExerciseDBBuilderTest {
         params = new SearchExerciseParams(param);
         builder = new SearchExerciseDBBuilder(params);
 
-        String expectedQuery = "SELECT e.name, e.exercise_id " +
+        String expectedQuery = "SELECT e.name, e.exercise_id, e.duration " +
                 "FROM exercise AS e, exercise_tag AS et, tag AS t " +
-                "WHERE et.ex_id = e.exercise_id AND et.tag_id = t.tag_id AND t.name='tag1'" +
-                " INTERSECT " +
-                "SELECT e.name, e.exercise_id " +
-                "FROM exercise AS e, exercise_tag AS et, tag AS t " +
-                "WHERE et.ex_id = e.exercise_id AND et.tag_id = t.tag_id AND t.name='tag2'";
+                "WHERE et.ex_id = e.exercise_id AND et.tag_id = t.tag_id " +
+                "AND LOWER(t.name)=LOWER('tag1 tag2')";
 
         assertThat(builder
                 .filterByTags()
