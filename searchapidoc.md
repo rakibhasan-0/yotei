@@ -202,13 +202,13 @@ The tag completion array consists of a maximum of 3 tags that were found, these 
 
 | Query | Explanation | Example | Type | Status |
 |--|--|--|--|--|
-| name | Name of technique | Karate-kick | String | Not implemented
+| name | Name of tag | Karate-kick | String | Not implemented
 | tagAmount | Number of tag suggestions to return | 3 | Number | Not implemented
-
+| tags | Already chosen tags | kniv,spark | List of Strings seperated by ',' | Not implemented |
 
 ### Example query:
 
-    (GET) /api/search/tags?name=lmao&tagAmount=3
+    (GET) /api/search/tags?name=lmao&tagAmount=3&tags=kniv,spark
 
 ### Example response
 
