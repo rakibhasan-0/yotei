@@ -144,24 +144,25 @@ If a name is entered the search result will be sorted based on the fuzzy search 
 |--|--|--|--|--|
 | from | Sessions starting from this date | 2023-04-20 | String with format (YYYY-MM-DD) | Not implemented |
 | to | Sessions up until this date | 2023-04-20 | String with format (YYYY-MM-DD) | Not implemented |
-| previousGroups | Include session before given from date | true/false | Boolean | Not implemented |
-| groups | ID's of specific groups to search for | 6,9,4,2,0 | List of Numbers divided by ',' | Not implemented |
+| previousSessions | Include session before given from date | true/false | Boolean | Not implemented |
+| plans | ID's of specific groups to search for | 6,9,4,2,0 | List of Numbers divided by ',' | Not implemented |
+| userId | ID of the user making the search | 1 | Number | Not implemented |
 
-  
 
 ### Example query:
 
-    (GET) /api/search/plans?from=2023-04-20&to=2023-04-20&previousGroups=false&groups=1,2,3
+    (GET) /api/search/plans?from=2023-04-20&to=2023-04-20&previousSessions=false&plans=1,2,3&userId=1
 
 ### Example response
 
     {
     	result: [
     		{
-    			groupID: 1,
-    			groupColors: [
-    				{colorCode: "#123123", isChild: false, name: "orange"},
-    				{colorCode: "#123124", isChild: true, name: "orangier"}
+    			planID: 1,
+				name: "Cool plan 1",
+    			planColors: [
+    				{ colorCode: "#123123", isChild: false, name: "orange" },
+    				{ colorCode: "#123124", isChild: true, name: "orangier" }
     			],
     			sessions: [
     				{
@@ -179,8 +180,9 @@ If a name is entered the search result will be sorted based on the fuzzy search 
     			]
     		},
     		{
-    			groupID: 2,
-    			groupColors: [],
+    			planID: 2,
+				name: "Cool group 2",
+    			planColors: [],
     			sessions: []
     		}
     	]
