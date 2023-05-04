@@ -1,28 +1,25 @@
-package se.umu.cs.pvt.workout;
+package se.umu.cs.pvt.workout.detail;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 /**
- * Model for workout data in database
+ * Extension of the workout class to be able to join it to activities.
  * <p>
- * Documentation Griffin ens19amd
- * JPA (Java Persistence API)
- * <p>
- * Workout.java - Workout class. Represents the Workout Entity.
- * WorkoutController.java - Workout API for creating, reading, updating and deleting workouts.
- * WorkoutDropDownProjection.java - JPA-entity projection for dropdown information Workouts.
- * WorkoutRepository.java (Interface) - JPARepository file.
- * WorkoutShort.java - Represents a minimal data structure for workout.
+ * ActivityDetail.java - Activity detail class, maps exercises/techniques to workouts.
+ * Workout.java - Base class that this class extends to provide a mapping
+ * between workouts and activities.
+ * WorkoutDetailRepository.java - JPARepository file.
+ * WorkoutController.java - controller class where it is possible to get
+ * WorkoutDetails from.
  *
- * @author Grupp 8 Kebabpizza
+ * @author Grupp 5 Cyclops
  */
 @Entity
 @Table(name = "workout")
-public class Workout implements Serializable {
-
+public class WorkoutDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "workout_id")
@@ -52,15 +49,20 @@ public class Workout implements Serializable {
     @Column(nullable = false, name = "workout_author")
     private Long author;
 
+    @OneToMany(mappedBy = "workoutId")
+    private List<ActivityDetail> activities;
+
     /**
      * no-args constructor required by JPA spec
      * this one is protected since it shouldn't be used directly
      */
-    protected Workout() {
+    protected WorkoutDetail() {
     }
 
-    public Workout(Long id, String name, String desc, Long duration, LocalDate created, LocalDate edited,
-                   Date date, boolean hidden, Long author) {
+    public WorkoutDetail(
+            long id, String name, String desc, long duration,
+            LocalDate created, LocalDate changed, Date date,
+            boolean hidden, long author, List<ActivityDetail> activities) {
         this.id = id;
         this.name = name;
         this.desc = desc;
@@ -70,6 +72,7 @@ public class Workout implements Serializable {
         this.date = date;
         this.hidden = hidden;
         this.author = author;
+        this.activities = activities;
     }
 
     public Long getId() {
@@ -106,5 +109,9 @@ public class Workout implements Serializable {
 
     public Long getAuthor() {
         return author;
+    }
+
+    public List<ActivityDetail> getActivities() {
+        return activities;
     }
 }

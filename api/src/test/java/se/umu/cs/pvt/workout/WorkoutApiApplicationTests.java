@@ -14,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import se.umu.cs.pvt.workout.detail.WorkoutDetailRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -36,6 +37,9 @@ import static org.mockito.Mockito.*;
 class WorkoutApiApplicationTests {
 
     private Workout workout;
+
+    @MockBean
+    private WorkoutDetailRepository workoutDetailRepository;
 
     @MockBean
     private WorkoutRepository workoutRepository;

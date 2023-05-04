@@ -11,16 +11,15 @@ import javax.persistence.*;
  *  Activity.java - Activity class. Represents the Plan Entity.
  *  ActivityController.java - Activity API for creating, reading, updating and deleting plans.
  *  ActivityRepository.java (Interface) - JPARepository file.
- * 
+ *
  *  UserShort.java - Represents a minimal data structure for user table.
  *  UserShortRepository.java (Interface) - JPARepository file.
- * 
+ *
  * @author Grupp 8 Kebabpizza
  * @author Grupp 5 Cyclops
  */
 @Entity
 public class Activity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "activity_id")
@@ -37,6 +36,9 @@ public class Activity {
 
     @Column(name = "category_name")
     private String categoryName;
+
+    @Column(nullable = false, name = "category_order")
+    private int categoryOrder;
 
     @Column(nullable = false, name = "activity_name")
     private String name;
@@ -89,6 +91,10 @@ public class Activity {
     }
 
     public String getCategoryName() { return categoryName; }
+
+    public int getCategoryOrder() {
+        return categoryOrder;
+    }
 
     public String getName() {
         return name;
