@@ -9,4 +9,13 @@
     bottom: 0;
     padding: 10px;
     margin: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-add-activity > * {
+    font-size: 3rem;
+    filter: brightness(0) invert(1);
+    padding: 0;
 }

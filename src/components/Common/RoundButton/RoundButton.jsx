@@ -11,18 +11,11 @@ import "./RoundButton.css"
  * @version 2.0 
  */
 function RoundButton({onClick, children, linkTo, id}) {
-	let navigate = useNavigate()
-
-	function goTo() {
-		console.log(linkTo)
-		navigate(linkTo)
-	}
+	const navigate = useNavigate()
 
 	return (
-		<div id={id} onClick={linkTo != null ? () => goTo(linkTo) : onClick} className="btn btn-color btn-add-activity container-fluid">
-			<p className="py-1">
-				{children}
-			</p>
+		<div id={id} onClick={linkTo != null ? () => navigate(linkTo) : onClick} className="btn btn-color btn-add-activity container-fluid">
+			{children}
 		</div>
 	)
 }
