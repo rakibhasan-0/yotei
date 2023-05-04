@@ -6,6 +6,7 @@ import "./TimePicker.css"
  * 
  * props = {
  *    selectedTime: string,
+ * 	  ref: ref
  *    onChange: function
  *    id: string
  * }
@@ -14,15 +15,15 @@ import "./TimePicker.css"
  * @since 2023-05-02
  * @version 2.0 
  */
-export default function TimePicker({onChange, selectedTime, id}) {
+export default function TimePicker({onChange, ref, selectedTime, id}) {
 	return (
-		<div id={id}>
-			<input 
-				type="time" 
-				value={selectedTime} 
-				onChange={onChange}
-				className={"time-picker"}
-			/>
-		</div>
+		<input 
+			id={id}
+			type="time" 
+			value={selectedTime} 
+			onChange={onChange}
+			className={"time-picker"}
+			ref={ref}
+		/>
 	)
 }

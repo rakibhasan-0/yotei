@@ -8,6 +8,7 @@ import "./DatePicker.css"
  * Show the properties that can be set in the props object below:
  * props = {
  *     selectDate: string
+ * 	   ref: ref
  *     onChange: function,
  *     id: string
  * }
@@ -16,16 +17,15 @@ import "./DatePicker.css"
  * @since 2023-05-02
  * @version 2.0 
  */
-export default function DatePicker({onChange, selectedDate, id}) {
+export default function DatePicker({onChange, ref, selectedDate, id}) {
 	return (
-		<div >
-			<input 
-				id={id}
-				type="date" 
-				value={selectedDate} 
-				onChange={onChange}
-				className={"date-picker"}
-			/>
-		</div>
+		<input 
+			id={id}
+			type="date" 
+			value={selectedDate} 
+			onChange={onChange}
+			className={"date-picker"}
+			ref={ref}
+		/>
 	)
 }
