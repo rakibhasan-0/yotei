@@ -65,6 +65,37 @@ public class ExerciseController {
 
         return exerciseList;
     }
+        /**
+     * Returns 20 exercises in the database
+     * @return 20 exercises
+     */
+    @GetMapping("/custom/{startIndex}")
+    public Object getSetAmountOfExercises2(@PathVariable("startIndex") Integer startIndex) {
+        Pageable limit = PageRequest.of(0, startIndex+20);
+        List<Exercise> exerciseList = exerciseRepository.findAll(limit).toList();
+
+        if (exerciseList == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return exerciseList;
+    }
+
+        /**
+     * Returns 20 exercises in the database
+     * @return 20 exercises
+     */
+    @GetMapping("/some")
+    public Object getSetAmountOfExercises3() {
+        Pageable limit = PageRequest.of(20, 40);
+        List<Exercise> exerciseList = exerciseRepository.findAll(limit).toList();
+
+        if (exerciseList == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return exerciseList;
+    }
 
     /**
      * Returns an exercise depending on the id
