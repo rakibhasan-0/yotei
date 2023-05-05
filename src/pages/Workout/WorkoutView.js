@@ -1,5 +1,5 @@
 import React, {useState} from "react"
-import ActivityList from "../../components/Activity/ActivityList"
+import WorkoutActivityList from "../../components/Workout/WorkoutActivityList/WorkoutActivityList"
 import EditButton from "../../components/Common/EditButton"
 import "./WorkoutView.css"
 import { AccountContext } from "../../context"
@@ -170,7 +170,7 @@ class WorkoutView extends React.Component {
 					<p className="font-italic properties">{this.state.desc}</p>
 				</div>
 
-				<ActivityList activities={this.state.activities} apiPath="workouts/activities"/>
+				<WorkoutActivityList categoryName="Kategori" activities={this.state.activities} apiPath="workouts/activities"/>
 
 				<div className="container row mt-3">
 					<p className="mr-1 font-weight-bold">Taggar:</p>
