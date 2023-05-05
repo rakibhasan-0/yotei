@@ -11,7 +11,7 @@ test("Test1, should render component to screen", async() => {
 	render(<MinutePicker id="1" time={""} updateTime={updateMock} />)
 	expect(screen.getByTestId("1")).toBeInTheDocument()
 })
-test("Test 2, Alphabetic input value not valid.", async() => {
+test("2, Alphabetic input value not valid.", async() => {
 	// ARRANGE
 	const updateMock = jest.fn()
 	render(<MinutePicker id="1" time={""} updateTime={updateMock} />)
@@ -27,7 +27,7 @@ test("Test 2, Alphabetic input value not valid.", async() => {
 	expect(updateMock).toHaveBeenCalledWith("")
 })
 
-test("Test 3, Number in inputfield", async() => {
+test("3, Number in inputfield", async() => {
 	// ARRANGE
 	const updateMock = jest.fn()
 	render(<MinutePicker id="1" time={""} updateTime={updateMock} />)

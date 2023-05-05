@@ -95,7 +95,7 @@ export default function SessionCreate() {
 			<div className="row justify-content-center">
 				<div className="col-md-8">
 
-					<h1>Tillfälle</h1>
+					<h1 style={{marginTop: "2rem"}}>Tillfälle</h1>
 					<Divider option={"h2_left"} title={"Grupp"} />
 					<Dropdown id={"session-dropdown"} text={group?.name || "Grupp"} centered={true}>
 						{groups?.map((plan, index) => (
@@ -123,9 +123,9 @@ export default function SessionCreate() {
 						</div>
 					</Dropdown>
 
-					<Divider option={"h2_center"} title={"Eller"} />
+					<Divider option={"h2_middle"} title={"Eller"} />
 					<div className="wrap-centering create-button" >
-						<Link to="/workout/create">
+						<Link to="/workout/create" style={{width: "150px"}}>
 							<Button id={"session-create"}><p>Skapa pass</p></Button>
 						</Link>
 					</div>
