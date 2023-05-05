@@ -54,9 +54,9 @@ public class ExerciseController {
      * Returns 20 exercises in the database
      * @return 20 exercises
      */
-    @GetMapping("/some")
-    public Object getSomeExercises() {
-        Pageable limit = PageRequest.of(0, 20);
+    @GetMapping("/from/{startIndex}")
+    public Object getSetAmountOfExercises(@PathVariable("startIndex") int startIndex) {
+        Pageable limit = PageRequest.of(startIndex, startIndex+20);
         List<Exercise> exerciseList = exerciseRepository.findAll(limit).toList();
 
         if (exerciseList == null) {
