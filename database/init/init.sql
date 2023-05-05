@@ -44,6 +44,7 @@ DROP TABLE IF EXISTS belt CASCADE;
 DROP TABLE IF EXISTS plan_to_belt CASCADE;
 DROP TABLE IF EXISTS technique_to_belt CASCADE;
 DROP TABLE IF EXISTS error_log CASCADE;
+DROP TABLE IF EXISTS media_technique CASCADE;
 
 -- TODO: Lägg till dessa till alla CREATE TABLE (vet inte om det finns bättre lösning)
 -- ENCODING 'UTF8'
@@ -339,13 +340,17 @@ CREATE TABLE error_log (
 ALTER TABLE error_log OWNER TO psql;
 
 --
--- Name: techniques_url; Type: TABLE; Schema: public; Owner: psql
+-- Name: media_technique; Type: TABLE; Schema: public; Owner: psql
 --
-CREATE TABLE techniques_url (
-       media_url TEXT PRIMARY KEY,
-       technique_id INT NOT NULL REFERENCES technique(technique_id) ON DELETE CASCADE
+CREATE TABLE media_technique (
+       media_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY, 
+       technique_id INT NOT NULL,
+       url TEXT NOT NULL, 
+       local_storage BOOLEAN NOT NULL, 
+       image BOOLEAN NOT NULL,
+       description TEXT
 );
-ALTER TABLE techniques_url OWNER TO psql;
+ALTER TABLE media_technique OWNER TO psql;
 
 --
 -- Inserts
