@@ -39,12 +39,11 @@ src
  │        ├──ExampleButton
  │            ├──ExampleButton.js
  ├── __tests__
+ |    ├── __mocks__
  │    ├── components
  │        ├── Common
  │            ├──ExampleButton
  │                ├──ExampleButton.test.js
- ├── mocks
-
 ```
 
 ### Tip:
@@ -91,15 +90,61 @@ Mocks is created in the directory:
 To mock API communication, msv uses what they call [request handler](https://mswjs.io/docs/basics/request-handler) to specify wich request should be made, and what the mocked response should be.
 For example, a mocked response from a get request could be:
 
+## Mock exampel
+För att mocka API svar behöver följande importeras i testfilen:
 ```javascript 
 import { rest } from "msw"
-// Matches any "GET /user" requests,
-// and responds using the `responseResolver` function.
-rest.get("/user", responseResolver)
+import { server } from "../../server"
+const requestSpy = jest.fn()
+server.events.on("request:start", requestSpy)
 ```
-[How to define the responseResolver](https://mswjs.io/docs/getting-started/mocks/rest-api). Will make a guide for this after some testing.
+De första raderna importerar den nödvändiga funktionaliteten och de andra två sätter upp en lyssnar-funktion som kan användas för att upptäcka när `fetch requests` har gjorts till APIet.
 
-### Köra testerna
+Om man vill definiera ett specifikt svar för ett test kan man göra det på följande sätt.
+```javascript
+test("some test that should pass", async() => {
+	// ARRANGE
+	server.use(
+		// get kan ersättas av post, delete, put etc...
+		rest.get("http://localhost/api/PATH/TO/ENDPOINT", 
+			{
+				//JSON Objekt som svaret ska bestå av.
+			}
+		)
+	)
+
+	// ACT
+	...
+
+	// ASSERT
+	...
+})
+```
+
+För att göra `assertions` angående huruvida komponenten har interagerat med APIet kan man göra följande. För mer information, se dokumentationen för `jest.fn()`.
+```javascript
+test("some test that should pass", async() => {
+	// ARRANGE
+	...
+
+	// ACT
+	...
+
+	// ASSERT
+	expect(requestSpy).toHaveBeenCalled()
+	expect(requestSpy).toHaveBeenCalledTimes(...)
+})
+``` 
+
+Ett exempel på användning av mockade API svar finns i filen:
+```
+/frontend/src/__tests__/components/Workout/WorkoutFavoriteButton.test.jsx
+```
+
+## Mer information
+[How to define the responseResolver](https://mswjs.io/docs/getting-started/mocks/rest-api).
+
+# Köra testerna
 
 För att testa appen innan commit till pipelinen finns följande kommandon
 som kan köras lokalt.
