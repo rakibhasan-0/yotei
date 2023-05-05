@@ -1,0 +1,53 @@
+.filterButton{
+    display: inline-block;
+    cursor: pointer;
+    opacity: 1; 
+}
+
+.filter {
+    width: 300px;
+    margin: auto;
+    text-align: left;
+    padding: 10px;
+}
+
+.filterButton:hover{
+    opacity: 0.5;
+}
+
+.filterButton-pressed{
+    display: inline-block;
+    cursor: pointer;
+	opacity: 0.5;
+}
+
+.filterButton-pressed:hover{
+    display: inline-block;
+    cursor: pointer;
+    opacity: 0.5;
+    
+}
+
+.filterButton:active {
+    
+    opacity: 0.3;
+    transform: scale(0.8);
+
+}
+
+.filterButton-pressed:active {
+    opacity: 0.3;
+    transform: scale(0.8);
+}
+
+.filterBox {
+    visibility: visible;
+
+     
+}
+
+.filterBox-pressed {
+
+    visibility: hidden;
+
+}

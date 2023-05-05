@@ -5,13 +5,17 @@ import ActivityList from "../../components/Activity/ActivityList"
 import { AccountContext } from "../../context"
 import RoundButton from "../../components/Common/RoundButton/RoundButton"
 import { Plus } from "react-bootstrap-icons"
-
+import TechniqueFilter from "../../components/Common/Filter/TechniqueFilter"
 /**
  * Class for the Technique-page that creates the searchbar and the list.
  * When a user puts an input into the search bar it will filter the
  * list according to the current search term.
  * 
  * Fetches the techniques from the API on pageload (componentDidMount).
+ * 
+ * this.belts is the selected belts
+ * this.kihon is a boolean
+ * 
  * @author Grupp 3 (Hawaii), Grupp 6 (Calskrove, 2022-05-03)
  */
 class TechniqueIndex extends React.Component {
@@ -20,6 +24,26 @@ class TechniqueIndex extends React.Component {
 		this.state = { activities: [], visibleList: [], tags: [], relations: [] }
 		this.uri = this.props.uri
 		this.detailURL = "/technique/technique_page/"
+		
+		this.filters = {
+			belts: [],
+			state: []
+		}
+		
+	}
+
+	callbackBelts = (belts) => {
+		if (belts != []){
+			this.filters.belts = belts	
+		}
+			
+	}
+
+	callbackKihon = (state) => {
+		if (state != []){
+			this.filters.kihon = state
+		}
+			
 	}
 
 	render() {
@@ -28,9 +52,11 @@ class TechniqueIndex extends React.Component {
 				<center>
 					<h2 className="pt-2">Tekniker</h2>
 				</center>
-				<SearchBar onSearch={this.search} />
-				<ActivityList activities={this.state.visibleList} apiPath={"techniques"} detailURL={this.detailURL} />
-				<div style={{ padding: "50px" }} />
+				<SearchBar onSearch={this.search}/>
+				<TechniqueFilter callbackBelts={this.callbackBelts} callbackKihon={this.callbackKihon}/>
+				<ActivityList activities={this.state.visibleList}  apiPath={"techniques"} detailURL={this.detailURL} />
+				<div style={{padding: "50px"}}/>
+
 				<RoundButton linkTo={"/technique/create"}>
 					<Plus />
 				</RoundButton>
@@ -40,6 +66,7 @@ class TechniqueIndex extends React.Component {
 	}
 
 	search = async (event) => {
+	
 		const search = event.target.value.toLowerCase()
 
 		const filteredTags = this.state.tags.filter(tag => tag.name.toLowerCase().includes(search))

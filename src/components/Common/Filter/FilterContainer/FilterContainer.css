@@ -1,0 +1,47 @@
+
+fieldset {
+    border: 3px solid #201E1F;
+    border-radius: 10px;
+    border-top-color: #201E1F; 
+    box-sizing: border-box; 
+    padding: 20px;
+    padding-top: 5px;
+    margin: auto;
+    text-align: center;
+    width: 30%;
+}
+
+.filterPos {
+    
+    width: 100%;
+}
+
+@media  (max-width: 400px) {
+    fieldset{
+        width: 80%;
+    }
+}
+
+@media (min-width: 400px) {
+    fieldset{
+        width: 400px;
+    }
+}
+
+.buttonGroup {
+    width: 300px;
+    margin: auto;
+    text-align: left;
+    padding: 10px;
+}
+
+
+legend{
+    background: #FFFFFF none repeat scroll 0 0;
+    display: inline-block;
+    width: auto;
+    padding: 0px 7px 0px 7px ;
+    margin: auto;
+    text-align: left;
+}
+
