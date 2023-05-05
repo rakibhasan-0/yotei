@@ -7,8 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import se.umu.cs.pvt.technique.Technique;
+import se.umu.cs.pvt.user.InvalidPasswordException;
+import se.umu.cs.pvt.user.InvalidUserNameException;
+import se.umu.cs.pvt.user.User;
 import se.umu.cs.pvt.workout.*;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,7 +44,7 @@ public class WorkoutControllerTest {
 
 
     @Test
-    public void shouldGetWorkoutDetails() {
+    public void shouldGetWorkoutDetails() throws InvalidPasswordException, InvalidUserNameException, NoSuchAlgorithmException, InvalidKeySpecException {
         // Arrange
         List<ActivityDetail> activityDetails = List.of(
                 new ActivityDetail(
@@ -76,6 +81,9 @@ public class WorkoutControllerTest {
                         new Technique(2L, "ex2", "desc2"),
                         null)
         );
+        User author = new User("hej", "hejsan123!");
+        author.setUserId(1L);
+        
         when(workoutDetailRepository.findById(1L))
                 .thenReturn(Optional.of(new WorkoutDetail(
                         1L,
@@ -86,7 +94,7 @@ public class WorkoutControllerTest {
                         null,
                         null,
                         false,
-                        1,
+                        author,
                         activityDetails
                 )));
 

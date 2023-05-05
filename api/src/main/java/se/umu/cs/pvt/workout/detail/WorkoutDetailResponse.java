@@ -2,6 +2,7 @@ package se.umu.cs.pvt.workout.detail;
 
 import se.umu.cs.pvt.exercise.Exercise;
 import se.umu.cs.pvt.technique.Technique;
+import se.umu.cs.pvt.workout.UserShort;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -24,7 +25,7 @@ public class WorkoutDetailResponse {
     private LocalDate changed;
     private Date date;
     private boolean hidden;
-    private long author;
+    private UserShort author;
     private List<ActivityResponseContainer> activityCategories;
 
     public WorkoutDetailResponse(WorkoutDetail workoutDetail) {
@@ -36,7 +37,9 @@ public class WorkoutDetailResponse {
         changed = workoutDetail.getChanged();
         date = workoutDetail.getDate();
         hidden = workoutDetail.getHidden();
-        author = workoutDetail.getAuthor();
+        author = new UserShort(
+                workoutDetail.getAuthor().getUsername(),
+                workoutDetail.getAuthor().getUserId());
 
         Map<Pair, List<ActivityDetail>> categoryMapping = workoutDetail.getActivities().stream()
                 .collect(Collectors.groupingBy(a -> new Pair(a.getCategoryName(), a.getCategoryOrder())));
@@ -83,7 +86,7 @@ public class WorkoutDetailResponse {
         return hidden;
     }
 
-    public long getAuthor() {
+    public UserShort getAuthor() {
         return author;
     }
 

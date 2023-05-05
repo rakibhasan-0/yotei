@@ -1,5 +1,7 @@
 package se.umu.cs.pvt.workout.detail;
 
+import se.umu.cs.pvt.user.User;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
@@ -46,8 +48,9 @@ public class WorkoutDetail {
     @Column(nullable = false, name = "workout_hidden")
     private Boolean hidden;
 
-    @Column(nullable = false, name = "workout_author")
-    private Long author;
+    @ManyToOne
+    @JoinColumn(name = "workout_author")
+    private User author;
 
     @OneToMany(mappedBy = "workoutId")
     private List<ActivityDetail> activities;
@@ -62,7 +65,7 @@ public class WorkoutDetail {
     public WorkoutDetail(
             long id, String name, String desc, long duration,
             LocalDate created, LocalDate changed, Date date,
-            boolean hidden, long author, List<ActivityDetail> activities) {
+            boolean hidden, User author, List<ActivityDetail> activities) {
         this.id = id;
         this.name = name;
         this.desc = desc;
@@ -107,7 +110,7 @@ public class WorkoutDetail {
         return hidden;
     }
 
-    public Long getAuthor() {
+    public User getAuthor() {
         return author;
     }
 
