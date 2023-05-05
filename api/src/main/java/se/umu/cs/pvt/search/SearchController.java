@@ -66,7 +66,7 @@ public class SearchController {
      * It filters the techniques based on the given query.
      *
      * Example query:
-     * /api/search/techniques?name=test&tags=tag1,tag2&beltColors=1,2,3&technique=false&kion=true
+     * (GET) /api/search/techniques?name=lm+ao&beltColors=grön,grön-barn&kihon=false&tags=kniv,spark
      *
      * Note that the query can be empty, or contain any or all of the entries.
      *
@@ -99,7 +99,7 @@ public class SearchController {
      * It filters the workouts based on the given query.
      *
      * Example query:
-     * /api/search/workouts?name=test&date=2020-05-02
+     * (GET) /api/search/workouts?name=lmao&from=2023-04-20&to=2023-04-20&favourite=false&tags=kniv,spark&id=1
      *
      * Note that the query can be empty, or contain any or all of the entries.
      *
@@ -133,7 +133,7 @@ public class SearchController {
      * It filters the exercises based on the given query.
      *
      * Example query:
-     * /api/search/exercises?name=test&tags=tag1,tag2
+     * (GET) /api/search/exercises?name=something+something&tags=kniv,spark
      *
      * Note that the query can be empty, or contain any or all of the entries.
      *
