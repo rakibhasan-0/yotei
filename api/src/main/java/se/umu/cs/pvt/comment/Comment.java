@@ -2,6 +2,8 @@ package se.umu.cs.pvt.comment;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
+
 
 /**
  * Model for comments api.
@@ -26,6 +28,14 @@ public class Comment implements Serializable {
 
     @Column(name = "exercise_id")
     private Long exerciseId;
+
+    @Column(name = "user_id")
+    private Long userId;
+
+
+    @Column(name = "created")
+    private LocalDate created;
+
 
     @Column(nullable = false, name = "comment_text")
     private String commentText;
@@ -53,6 +63,10 @@ public class Comment implements Serializable {
         return exerciseId;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
     public Long getWorkoutId() {
         return workoutId;
     }
@@ -60,6 +74,8 @@ public class Comment implements Serializable {
     public String getCommentText() {
         return commentText;
     }
+
+    public LocalDate getDate() { return created; }
 
     public void setExerciseId(Long exerciseId) {
         this.exerciseId = exerciseId;
@@ -71,5 +87,11 @@ public class Comment implements Serializable {
 
     public void setCommentText(String commentText) {
         this.commentText = commentText;
+    }
+
+    public void setUserId(Long id) { this.userId = id; }
+
+    public void setDate() {
+        created = LocalDate.now();
     }
 }

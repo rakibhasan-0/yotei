@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * ExerciseCommentController is a controller for the ExerciseComment entity.
  * It handles all requests to the /exerciseComments endpoint.
- * @author Henrik Aili (c20hai) - Grupp 3 Hawaii
+ * @author Henrik Aili (c20hai) - Grupp 3 Hawaii, modified by Cyclops 2023-05-04
  */
 @RestController
 @CrossOrigin
@@ -32,11 +32,19 @@ public class CommentController {
       * Add a comment to an exercise.
       * @param exerciseId the id of the exercise
       * @param toAdd the comment to add
+      * @param userId the users id, accessed through the Header.
       */
      @PostMapping("/exercise/add")
-     public ResponseEntity<Comment> addExerciseComment(@RequestParam(name = "id") Long exerciseId, @RequestBody Comment toAdd) {
+     public ResponseEntity<Comment> addExerciseComment(@RequestParam(name = "id") Long exerciseId, @RequestBody Comment toAdd,
+                                                       @RequestHeader("userId") Long userId) {
+
           toAdd.setExerciseId(exerciseId);
-          return checkComment(toAdd);
+          toAdd.setUserId(userId);
+          toAdd.setDate();
+          if(!validateComment(toAdd)){
+               return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+          }
+          return addCommentToDB(toAdd);
      }
 
      /**
@@ -47,7 +55,7 @@ public class CommentController {
      @PostMapping("/workout/add")
      public ResponseEntity<Comment> addWorkoutComment(@RequestParam(name = "id") Long workoutId, @RequestBody Comment toAdd) {
           toAdd.setWorkoutId(workoutId);
-          return checkComment(toAdd);
+          return addCommentToDB(toAdd);
      }
      /**
       * Get all comments for an exercise.
@@ -96,22 +104,17 @@ public class CommentController {
       * @param toAdd the comment to add
       * @return the comment if it is valid, otherwise null
       */
-     private ResponseEntity<Comment> checkComment(Comment toAdd) {
-          if (checkCommentText(toAdd.getCommentText())) {
-               commentRepository.save(toAdd);
-               return new ResponseEntity<>(toAdd, HttpStatus.CREATED);
-          }
-          else {
-               return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-          }
+     private ResponseEntity<Comment> addCommentToDB(Comment toAdd) {
+          commentRepository.save(toAdd);
+          return new ResponseEntity<>(toAdd, HttpStatus.CREATED);
      }
 
      /**
       * Checks a comment if it is valid.
-      * @param textToCheck the comment to check
+      * @param toAdd the comment to check
       */
-     private Boolean checkCommentText(String textToCheck) {
-          return textToCheck != null && !textToCheck.isBlank();
+     private Boolean validateComment(Comment toAdd) {
+          return toAdd.getCommentText() != null && toAdd.getUserId() != null && toAdd.getExerciseId() != null;
      }
 
 

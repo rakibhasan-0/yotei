@@ -191,9 +191,9 @@ public class UserController {
 
     /**
      * Gets the Username by an id. User ID must be greater than or equal to zero.
-     * 
+     *
      * @param userId The ID of the user to get the username for.
-     * @return BAD_REQUEST if userId is null or less than zero. 
+     * @return BAD_REQUEST if userId is null or less than zero.
      */
     @GetMapping("/getname/{id}")
     public Object getUsername(@PathVariable("id") Long userId){
@@ -206,7 +206,7 @@ public class UserController {
 
     /**
      * Refreshes the JWT-Token from a previous JWT-Token.
-     * 
+     *
      * @param token The current JWT-Token.
      * @return The previous JWT-token.
      */
@@ -318,5 +318,3 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
-
-

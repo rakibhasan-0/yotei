@@ -7,6 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="user" />
         <module name="gateway" />
         <module name="api" />
       </profile>
@@ -31,6 +32,7 @@
       <module name="session-api" options="-parameters" />
       <module name="tag-api" options="-parameters" />
       <module name="techniques-api" options="-parameters" />
+      <module name="user" options="-parameters" />
       <module name="workout-api" options="-parameters" />
     </option>
   </component>
