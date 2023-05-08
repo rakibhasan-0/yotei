@@ -14,6 +14,7 @@ import se.umu.cs.pvt.workout.*;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -95,7 +96,8 @@ public class WorkoutControllerTest {
                         null,
                         false,
                         author,
-                        activityDetails
+                        activityDetails,
+                        new ArrayList<>()
                 )));
 
         // Act

@@ -28,6 +28,8 @@ public class WorkoutDetailResponse {
     private UserShort author;
     private List<ActivityResponseContainer> activityCategories;
 
+    private List<TagDetail> tags;
+
     public WorkoutDetailResponse(WorkoutDetail workoutDetail) {
         id = workoutDetail.getId();
         name = workoutDetail.getName();
@@ -40,6 +42,7 @@ public class WorkoutDetailResponse {
         author = new UserShort(
                 workoutDetail.getAuthor().getUsername(),
                 workoutDetail.getAuthor().getUserId());
+        tags = workoutDetail.getTags();
 
         Map<Pair, List<ActivityDetail>> categoryMapping = workoutDetail.getActivities().stream()
                 .collect(Collectors.groupingBy(a -> new Pair(a.getCategoryName(), a.getCategoryOrder())));
@@ -92,6 +95,10 @@ public class WorkoutDetailResponse {
 
     public List<ActivityResponseContainer> getActivityCategories() {
         return activityCategories;
+    }
+
+    public List<TagDetail> getTags() {
+        return tags;
     }
 
     public static class ActivityResponseContainer {

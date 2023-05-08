@@ -55,6 +55,9 @@ public class WorkoutDetail {
     @OneToMany(mappedBy = "workoutId")
     private List<ActivityDetail> activities;
 
+    @ManyToMany(mappedBy = "workouts")
+    private List<TagDetail> tags;
+
     /**
      * no-args constructor required by JPA spec
      * this one is protected since it shouldn't be used directly
@@ -65,7 +68,8 @@ public class WorkoutDetail {
     public WorkoutDetail(
             long id, String name, String desc, long duration,
             LocalDate created, LocalDate changed, Date date,
-            boolean hidden, User author, List<ActivityDetail> activities) {
+            boolean hidden, User author, List<ActivityDetail> activities,
+            List<TagDetail> tags) {
         this.id = id;
         this.name = name;
         this.desc = desc;
@@ -116,5 +120,9 @@ public class WorkoutDetail {
 
     public List<ActivityDetail> getActivities() {
         return activities;
+    }
+
+    public List<TagDetail> getTags() {
+        return tags;
     }
 }
