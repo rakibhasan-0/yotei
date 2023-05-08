@@ -23,7 +23,7 @@ const ActivityList = ({activities, apiPath, detailURL}) => {
 	return (
 		<div className="container grid-striped activity-list">
 			{apiPath === "workouts" ? 
-				activities.map((activity, index) => <WorkoutListItem key={activity.id} workout={activity} apiPath={apiPath} index={index} initState={favoriteList.includes(activity.id)}/>)
+				activities.map((activity) => <WorkoutListItem key={activity.id} workout={activity} isFavorite={favoriteList.includes(activity.id)}/>)
 				:
 				apiPath === "workouts/activities" ?
 					activities.map((activity, index) => <WorkoutActivityListItem key={activity.id} activity={activity} index={index}/>)

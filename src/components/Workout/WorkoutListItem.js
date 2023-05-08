@@ -1,43 +1,28 @@
 /**
  * This class is responsible to create the UI for a Workout-item in the list.
- * It's made up by one stripe row with the name and an arrow to make the description, time
- * author and date for the item fold out beneath.
+ * It's made up by one stripe row with the name and an arrow and redirects the user
+ * to the appropriate workout.
  *
- * @author Hot-pepper (Group 7)
+ * @author Hot-pepper (Group 7), Cyclops (Group 5)
+ * @version 2
  */
-import React, { useState } from "react"
+import React from "react"
 import "./WorkoutListItem.css"
 import { Link } from "react-router-dom"
 import FavoriteButton from "./WorkoutFavoriteButton"
-import FetchWorkoutDesc from "../Workout/FetchWorkoutDesc"
-import DescriptionToggle from "../Common/DescriptionToggle"
 
-const WorkoutListItem = ({ workout, initState}) => {
-	const [isActive, setIsActive] = useState(false)
-
+export default function WorkoutListItem({ workout, isFavorite}) {
 	return (
-		<div>
-			<div className="row align-items-center font-weight-bold py-2 " key={workout.id}>
-				<div className="col col-md-1 workout-star">
-					<FavoriteButton workoutId={workout.id} initState={initState}/>
-				</div>
-
-				<div className="col-md-8 text-left workout-text">
-					<h5 className="text-left workout-name fill"><Link to={`/workout/${workout.id}`}>{workout.name}</Link></h5>
-				</div>
-
-				<div className="toggleIcon" onClick={() => setIsActive(!isActive)}>
-					<DescriptionToggle isActive={isActive} />
-				</div>
+		<div className="row align-items-center font-weight-bold py-2 workout-item-row" key={workout.id}>
+			<div className="col-2 workout-star">
+				<FavoriteButton workoutId={workout.id} initState={isFavorite}/>
 			</div>
-
-
-			<div className="row">
-				{isActive && <FetchWorkoutDesc workout={workout} apiPath={"workouts"} />
-				}
+			<div className="col-8 align-items-center align-self-center workout-text fill">
+				<Link className="text-center workout-name" to={`/workout/${workout.id}`}>{workout.name}</Link>
 			</div>
+			<Link className="col-2 align-items-center align-self-center" to={`/workout/${workout.id}`}>
+				<i id="workout-detail-arrow" className="bi-chevron-right h4"/>
+			</Link>
 		</div>
 	)
 }
-
-export default WorkoutListItem

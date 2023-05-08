@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react"
+import React, { useState, useContext, useEffect } from "react"
 import { AccountContext } from "../../context"
 import StarButton from "../Common/StarButton/StarButton.jsx"
 
@@ -11,6 +11,10 @@ import StarButton from "../Common/StarButton/StarButton.jsx"
 export default function FavoriteButton({id, workoutId, initState}) {
 	const { token, userId } = useContext(AccountContext)
 	const [ isFavorite, setFavorite ] = useState(initState)
+
+	useEffect(() => {
+		setFavorite(initState)
+	}, [initState])
 
 	return(
 		<StarButton id={id} toggled={isFavorite} onClick={handleFavoriteClicked}/>
