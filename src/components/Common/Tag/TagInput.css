@@ -1,0 +1,16 @@
+.add-tag-container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 1rem;
+}
+.added-tag-container{
+    display: flex;
+    gap: 1rem;
+    padding:0.5rem;
+    padding-top:1rem;
+    max-width: 100%;
+    flex-wrap: wrap;
+}
