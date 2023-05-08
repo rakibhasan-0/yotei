@@ -1,0 +1,15 @@
+/* The complete component */
+.beltbox {
+    outline-style: solid;
+    outline-width: 2px;
+    border-radius: 4px;
+}
+
+
+/* Each belt */
+.belt {
+    float: left;
+}
+
+
+
