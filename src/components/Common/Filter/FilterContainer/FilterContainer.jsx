@@ -1,8 +1,9 @@
 import "./FilterContainer.css"
 import { useState } from "react"
 import FilterBox from "../FilterBox/FilterBox"
-import FilterButton from "../FilterButton/FilterButton"
 import React from "react"
+import Button from "../../Button/Button"
+import { Sliders } from "react-bootstrap-icons"
 /**
  * This is the component that holds the filter elements in a single component. 
  * 
@@ -33,9 +34,11 @@ function FilterContainer({ id, children}) {
 	return (
 		<div id={id} className="filterContainer">
 			<div className="buttonGroup">
-				<FilterButton id={1} status={active} onClick={showFilter}/>
+				<Button id={"filter-button"} onClick={showFilter} width='40px'>
+					<Sliders/>	
+				</Button>
 			</div>
-			<FilterBox id={2} status={!active}>
+			<FilterBox id={"filter-box"} status={!active}>
 				{children}
 			</FilterBox>
 		</div>

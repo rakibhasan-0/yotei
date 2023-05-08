@@ -23,7 +23,7 @@ import BeltIcon from "../BeltIcon/BeltIcon"
  */
 function TechniqueFilter({id, callbackBelts, callbackKihon}){
 
-	const [belts, setBelts] = useState()
+	const [belts, setBelts] = useState([])
 	const [kihon, setKihon] = useState(false)
 
 	const onToggle = belt => setBelts(prev => {
@@ -32,16 +32,21 @@ function TechniqueFilter({id, callbackBelts, callbackKihon}){
 		}
 		return [...prev, belt]
 	})
+
+	// Checks if a belt has been selected from the belt-picker.
+	// Iterate each color and check if it has been selected, if not return false
 	
+
 	// Callback functions for returning the selected belts and if kihon is toggled.
 	callbackBelts(belts)
 	callbackKihon(kihon)
 	
+	// Checks which of the belts that should be displayed, should be refactored and made better. Works for now...
 	return (
 		<div id={id} className="filterPos">
 			<FilterContainer id={1}>
 				<BeltPicker onToggle={onToggle} states={belts} />
-				<p className="selected-text">{belts?.length > 0 ? "Valda bälten" : "" }</p>
+				<p className="selected-text">{!(belts.length > 0) ? "" : "Valda bälten"}</p>
 				<div className="selected-group">
 					{belts?.map((belt, index) => (
 						<BeltIcon key={index} color={`#${belt.color}`} child={belt.child}/>
@@ -51,7 +56,7 @@ function TechniqueFilter({id, callbackBelts, callbackKihon}){
 					<CheckBox checked={kihon} onClick={()=>setKihon(!kihon)}/>
 					<p className="kihon-text">Kihon</p>
 				</div>
-			</FilterContainer>	
+			</FilterContainer>
 		</div>	
 	)
 }
