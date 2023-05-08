@@ -46,6 +46,8 @@ DROP TABLE IF EXISTS technique_to_belt CASCADE;
 DROP TABLE IF EXISTS error_log CASCADE;
 DROP TABLE IF EXISTS media_technique CASCADE;
 
+CREATE SEQUENCE serial START WITH 1 INCREMENT BY 1;
+
 -- TODO: Lägg till dessa till alla CREATE TABLE (vet inte om det finns bättre lösning)
 -- ENCODING 'UTF8'
 -- LC_COLLATE = 'sv-SE'
@@ -65,7 +67,7 @@ ALTER TABLE tag OWNER TO psql;
 -- Name: technique; Type: TABLE; Schema: public; Owner: psql
 --
 CREATE TABLE technique(
-       technique_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+       technique_id INT DEFAULT nextval('serial') PRIMARY KEY,
        name VARCHAR(255) UNIQUE,
        description TEXT
 );
@@ -86,7 +88,7 @@ ALTER TABLE user_table OWNER TO psql;
 -- Name: exercise; Type: TABLE; Schema: public; Owner: psql
 --
 CREATE TABLE exercise(
-       exercise_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+       exercise_id INT DEFAULT nextval('serial') PRIMARY KEY,
        name VARCHAR(255) UNIQUE,
        description TEXT,
        duration INT
