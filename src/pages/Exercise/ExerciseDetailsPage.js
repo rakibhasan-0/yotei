@@ -121,7 +121,7 @@ const ExerciseDetailsPage = () => {
 			<div className="tags">
 				<TagList tags={Object.values(tagList)}/>
 			</div>
-			<div>
+			<div style={{width:"100%"}}>
 				<ExerciseCommentSection ex_id={ex_id}/>
 			</div>
 			<div>

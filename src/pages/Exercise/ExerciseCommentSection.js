@@ -11,7 +11,7 @@ export default function ExerciseCommentSection ({ex_id}) {
 	const [commentList, setCommentList] = useState([])
 	const [comment, setComment] = useState("")
 
-	const {token} = useContext(
+	const {token, userId} = useContext(
 		AccountContext
 	)
 
@@ -23,24 +23,24 @@ export default function ExerciseCommentSection ({ex_id}) {
 		if(comment.length === 0){
 			return
 		}
+		const requestOptions = {
+			method: "POST",
+			headers: {
+				"Content-type": "application/json",
+				token,
+				"userId": userId
+			},
+			body: JSON.stringify({
+				commentText: comment
+			})
+		}
 
-		/*const requestOptions = {
-            method: "POST",
-            headers: {
-                'Content-type': 'application/json',
-                token
-            },
-            body: JSON.stringify({
-                commentText: comment
-            })
-        };*/
-
-		// FIXME: Används verkligen detta???
-		//const response = await fetch(`/api/comment/exercise/add?id=${ex_id}`, requestOptions);
-		//const data = await response.json();
-
+		const response = await fetch(`/api/comment/exercise/add?id=${ex_id}`, requestOptions)
+		if(response.status != 201){
+			alert("Error adding comment")
+		}
 		await fetchComments()
-		setComment("")
+		setComment("") 
 	}
 
 
@@ -106,9 +106,9 @@ export default function ExerciseCommentSection ({ex_id}) {
      */
 	function getComments() {
 		return (
-			<div className={"comment-container"}>
+			<div className="d-flex flex-column align-items-center">
 				{/*Ask the user for the name of the exercise*/}
-				<div className={"add-comment"}>
+				<div className="d-flex">
 					<form className="d-flex flex-column padding-right">
 						<input
 							name="name"
@@ -125,24 +125,36 @@ export default function ExerciseCommentSection ({ex_id}) {
                         +
 					</button>
 				</div>
-				{commentList.map((comment) => (
-					<div className="comment" key={comment.commentId}>
-						<p className="comment-header">{comment.commentText}</p>
-						<div className="comment-footer">
-							<button className="comment-footer-delete button-details" onClick={() => deleteComment({comment})}>Ta bort
-							</button>
+				<div className="w-100  d-flex flex-column justify-content-center align-items-center">
+					{commentList.map((comment) => (
+						<div style={{border: "1px solid #B4B4B4", borderRadius: "5px"}} className="col-sm-12 col-md-6 col-lg-4 m-3 p-3 d-flex flex-column" key={comment.commentId}>
+							<div className="d-flex justify-content-between align-items-center">
+								<div className="d-flex align-items-center">
+									<i className="bi bi-person m-0 p-0" style={{margin: "0px", padding: "0px", fontSize:"24px"}}/>
+									<p className="font-weight-bold m-0 ml-2">{comment.user} {userId == comment.userId && <span className="font-weight-light">(jag)</span>}</p>
+								</div>
+								<p className="m-0 font-italic" style={{color: "#B4B4B4"}}>{comment.date}</p>
+							
+							</div>
+							<p className="mt-2" style={{textAlign: "left"}}>{comment.commentText}</p>
+							{userId == comment.userId && 
+								<div className="d-flex align-items-end flex-column">
+									<i style={{color:"#BD3B41", fontSize:"24px"}} onClick={() => deleteComment({comment})} className="bi bi-trash "/>
+								</div>
+							}
 						</div>
-					</div>
-				))}
+					))}
+				</div>
 			</div>)
 	}
+
 
 	/**
      * The returned component.
      */
 	return (
 		<div className="comment-box">
-			<div className="comment-list">{getComments()}</div>
+			<div className="w-100">{getComments()}</div>
 		</div>
 	)
 }
