@@ -52,7 +52,7 @@ function useMap(initialState = new Map()) {
 	 */
 	const initialize = useCallback((mapOrTuple = []) => {
 		setMap(() => new Map(mapOrTuple))
-	}, [map])
+	}, [])
 
 	/**
 	 * Insert a new entry into the map. If the key already exists, 
