@@ -102,6 +102,29 @@ Värt att notera är att detta kommando även försöker fixa problemen med flag
 1. Tester skapas genom att döpa filerna till `KOMPONENT.test.js` och sedan anropa funktionen `it("Testnamn", () => { 'Test Content...' })`
 2. Man kan planera för tester även innan man har en implementation genom att använda `it.todo("Testnamn")`.
 
+### Systemtester
+
+För att testa systemet använder vi oss av [playwright](https://playwright.dev/). Systemtesten finns för att få
+översiktliga tester på hela systemet, och hjälper oss att garantera att allt fungerar som det ska.
+
+När en brytande ändring eller en större förändring är gjord skyddar systemtester oss från att projektet slutar
+fungera i produktion. För tillfället är testerna relativt enkla, men utvecklare **bör** skriva tester när nya
+sidor implementeras.
+
+För att köra systemtesterna, kan du köra:
+
+```sh
+npm run systest
+```
+
+Detta kommando kommer hämta hem och starta upp en backend åt dig, som kommer ligga på i bakgrunden
+med docker-containrar. Denna backend kommer sparas mellan sessioner, så
+**om något spökar kan man testa ta bort dem**. Kör då `docker rm -f systest-psql systest-api systest-gateway`.
+Om du vill ha grafisk återkoppling och en live-miljö, kör `npm run systest:ui`.
+
+Se [handledningen](https://git.cs.umu.se/courses-project/5dv214vt23/docs/-/blob/main/Chapters/QA/systemtest-guide.md)
+för hur tester bör skrivas och vad man ska tänka på.
+
 ### Resurser
 
 #### Grunder i REACT
