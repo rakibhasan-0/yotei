@@ -24,8 +24,8 @@ public class TagDetail {
 
     @ManyToMany
     @JoinTable(name = "workout_tag",
-            joinColumns = @JoinColumn(name = "work_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+            joinColumns = @JoinColumn(name = "tag_id"),
+            inverseJoinColumns = @JoinColumn(name = "work_id"))
     private List<WorkoutDetail> workouts;
 
     protected TagDetail() {
