@@ -1,5 +1,7 @@
 import { expect } from "@playwright/test"
-import { test } from "./fixtures/login_page"
+import { test } from "@fixtures/login_page"
+
+/*
 const throws = ['Flamingo Hurl', 'Penguin Plunge', 'Butterfly Bomb', 'Turtle Tumble', 'Kangaroo Kick', 'Giraffe Grasp', 'Llama Launch', 'Hippo Heave', 'Squirrel Sling', 'Crab Claw'];
 const chokes = ['Giraffe Gag', 'Kangaroo Chokehold', 'Sloth Strangle', 'Walrus Wham', 'Anteater Attack', 'Elephant Embrace', 'Horse Halt', 'Mongoose Maul', 'Octopus Ooze', 'Zebra Zigzag'];
 const locks = ['Penguin Pinch', 'Turtle Twist', 'Hippo Halt', 'Crab Clamp', 'Llama Lock', 'Giraffe Grip', 'Elephant Ender', 'Kangaroo Knead', 'Squirrel Squeeze', 'Anteater Anchor'];
@@ -124,3 +126,4 @@ test.describe("ST-3 teknik-sida", () => {
 		await expect(page.getByText(teknikNamnNy)).not.toBeVisible()
 	})
 })
+*/

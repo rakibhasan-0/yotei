@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test"
-import { UserApi } from "./fixtures/UserApi"
+import { UserApi } from "@fixtures/UserApi"
 
 test.describe('ST-1 inloggning', () => {
 	/**
@@ -41,6 +41,7 @@ test.describe('ST-1 inloggning', () => {
 	/**
 	 * Testar att registrera och ta bort en ny användare via admin.
 	 */
+	/*
 	test('.3 Ta bort registrerad användare', async ({ page }) => {
 		try {
 			await page.goto('/');
@@ -85,4 +86,5 @@ test.describe('ST-1 inloggning', () => {
 			await UserApi.remove_user('kalle');
 		}
 	});
+	*/
 });

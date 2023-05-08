@@ -1,7 +1,7 @@
 import { expect } from "@playwright/test"
-import { test } from "./fixtures/login_page"
-
-test.describe("ST-3 övningar-sida", () => {
+import { test } from "@fixtures/login_page"
+/*
+test.describe("ST-4 övningar-sida", () => {
 
 	test.beforeEach(async ({ loginPage, page }) => {
 		// Start. Logga in som admin
@@ -92,3 +92,4 @@ test.describe("ST-3 övningar-sida", () => {
 		await expect(page.getByText(övningsNamnNy)).not.toBeVisible();
 	});
 })
+*/

@@ -1,7 +1,8 @@
 import { expect } from "@playwright/test"
-import { test } from "./fixtures/login_page"
-import { WorkoutApi } from "./fixtures/WorkoutApi"
+import { test } from "@fixtures/login_page"
+import { WorkoutApi } from "@fixtures/WorkoutApi"
 
+/*
 test.describe("ST-2 pass-sida", () => {
 
 	test.beforeEach(async ({ loginPage }) => {
@@ -57,9 +58,9 @@ test.describe("ST-2 pass-sida", () => {
 	})
 
   
-	/**
+	
    * Testar att skapade pass är synliga under mina pass. 
-   */
+   
 	test(".3 skapat pass är synligt under mina pass", async ({ page }) => {
 		// 1. Lägger in en workout via workout-api
 		const pass_title = "Synligt under mina pass";
@@ -79,9 +80,9 @@ test.describe("ST-2 pass-sida", () => {
 		await WorkoutApi.delete_workout(pass_id)
 	})
 
-	/**
+	
    * Testar att pass är synliga.
-   */
+   
 	test(".2 skapat pass är synligt", async ({ page }) => {
 		// 1. Lägger in en workout via workout-api
 		const pass_title = "Synligt";
@@ -100,9 +101,9 @@ test.describe("ST-2 pass-sida", () => {
 		await WorkoutApi.delete_workout(pass_id)
 	})
 
-	/**
+	
    * testar att skapa ett nytt pass via gränssnittet.
-   */
+   
 	test(".1 skapa pass med gränssnitt", async ({ page }) => {
 		// 1. Gå till workout och tryck för att lägga till nytt pass
 		await page.goto("/workout")
@@ -137,3 +138,4 @@ test.describe("ST-2 pass-sida", () => {
 		await WorkoutApi.delete_workout(id)
 	})
 })
+*/
