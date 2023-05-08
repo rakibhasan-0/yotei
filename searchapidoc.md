@@ -66,7 +66,7 @@ If a name is entered the search result will be sorted based on the fuzzy search 
 | tags | Tags related to the Workout | kniv,spark | List of Strings seperated by ',' | Not implemented |
 | from | Workouts starting from this date | 2023-04-20 | String with format (YYYY-MM-DD) | Works(not tested) |
 | to | Workouts up until this date | 2023-06-09 | String with format (YYYY-MM-DD) | Works(not tested) |
-| favourite | If the workout is a favourite | true/false | Boolean | Works(not tested) |
+| favourite | If the workout is a favourite | true/false | Boolean | Does not work(not tested) |
 | id | The id of the user | 1 | Number | Works(not tested) |
 
 Note that the ID is required to filter with favoruite. If no ID is given, the favoruite filter is not used.
