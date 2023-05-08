@@ -43,6 +43,18 @@
   standard för Java som många känner till. Beslut togs snabbt och därför övervägdes inga alternativ.
 
 
+## PO möte
+- **Datum** - 230508
+- **Chapters** - PO
+- **Grupp** -  N/A
+- **Beslut** - **S2/S3 planering**
+- **Motivation**
+  - **Mega-merge på onsdag 23-05-08**. Tanken är att vi ska ha god marginal om (när) det blir krångel med git.
+  - Testa ordentligt. Kolla att det fungerar på mobilen. Lyckas man inte med att mocka testa på hemsidan och dokumentera.
+  - Föreslå till QA att de ska göra en workshop för testning.
+  - **Deadline: Onsdag 23-05-10 15:00.**
+    - Deadline för kod
+    - Deadline för user stories
 
 
 
