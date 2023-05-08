@@ -363,39 +363,44 @@ INSERT INTO tag(name)
        VALUES ('Kihon');
 
 INSERT INTO belt(belt_name, belt_color, is_child)
+       VALUES ('Rött', 'BD3B41', FALSE);
+INSERT INTO belt(belt_name, belt_color, is_child)
+       VALUES ('Rött', 'BD3B41', TRUE);
+
+INSERT INTO belt(belt_name, belt_color, is_child)
+       VALUES ('Vitt', 'FCFCFC', FALSE);
+INSERT INTO belt(belt_name, belt_color, is_child)
+       VALUES ('Vitt', 'FCFCFC', TRUE);
+
+INSERT INTO belt(belt_name, belt_color, is_child)
+       VALUES ('Gult', 'EDD70D', FALSE);
+INSERT INTO belt(belt_name, belt_color, is_child)
+       VALUES ('Gult', 'EDD70D', TRUE);
+
+INSERT INTO belt(belt_name, belt_color, is_child)
+       VALUES ('Orange', 'ED930D', FALSE);
+INSERT INTO belt(belt_name, belt_color, is_child)
+       VALUES ('Orange', 'ED930D', TRUE);
+
+INSERT INTO belt(belt_name, belt_color, is_child)
+       VALUES ('Grönt', '00BE08', FALSE);
+INSERT INTO belt(belt_name, belt_color, is_child)
+       VALUES ('Grönt', '00BE08', TRUE);
+
+INSERT INTO belt(belt_name, belt_color, is_child)
+       VALUES ('Blått', '0DB7ED', FALSE);
+INSERT INTO belt(belt_name, belt_color, is_child)
+       VALUES ('Blått', '0DB7ED', TRUE);
+
+INSERT INTO belt(belt_name, belt_color, is_child)
+       VALUES ('Brunt', 'BB6500', FALSE);
+INSERT INTO belt(belt_name, belt_color, is_child)
+       VALUES ('Brunt', 'BB6500', TRUE);
+
+INSERT INTO belt(belt_name, belt_color, is_child)
        VALUES ('Svart', '000000', FALSE);
 INSERT INTO belt(belt_name, belt_color, is_child)
        VALUES ('Svart', '000000', TRUE);
-
-INSERT INTO belt(belt_name, belt_color, is_child)
-       VALUES ('Brunt', '964B00', FALSE);
-INSERT INTO belt(belt_name, belt_color, is_child)
-       VALUES ('Brunt', '964B00', TRUE);
-
-INSERT INTO belt(belt_name, belt_color, is_child)
-       VALUES ('Blått', '0000FF', FALSE);
-INSERT INTO belt(belt_name, belt_color, is_child)
-       VALUES ('Blått', '0000FF', TRUE);
-
-INSERT INTO belt(belt_name, belt_color, is_child)
-       VALUES ('Grönt', '00FF00', FALSE);
-INSERT INTO belt(belt_name, belt_color, is_child)
-       VALUES ('Grönt', '00FF00', TRUE);
-
-INSERT INTO belt(belt_name, belt_color, is_child)
-       VALUES ('Orange', 'FFA500', FALSE);
-INSERT INTO belt(belt_name, belt_color, is_child)
-       VALUES ('Orange', 'FFA500', TRUE);
-
-INSERT INTO belt(belt_name, belt_color, is_child)
-       VALUES ('Gult', 'FFFF00', FALSE);
-INSERT INTO belt(belt_name, belt_color, is_child)
-       VALUES ('Gult', 'FFFF00', TRUE);
-
-INSERT INTO belt(belt_name, belt_color, is_child)
-       VALUES ('Vitt', 'FFFFFF', FALSE);
-INSERT INTO belt(belt_name, belt_color, is_child)
-       VALUES ('Vitt', 'FFFFFF', TRUE);
 
 --
 -- Triggers
