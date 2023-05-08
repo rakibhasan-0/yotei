@@ -29,7 +29,9 @@ export default function RadioButton({onClick,toggled,id}){
 				?   <>
 					<Record2 className='radio'/>
 				</>
-				:   <Record className='radio'/>
+				:   <>
+					<Record className='radio'/>
+				</>
 			}
 		</div>
 	)

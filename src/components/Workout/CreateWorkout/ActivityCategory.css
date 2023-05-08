@@ -1,0 +1,31 @@
+.category-list {
+    list-style-type:none;
+    width: 100%;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+.category-list-item {
+    display: flex;
+    justify-content: space-between;
+}
+.radioBtn-category {
+
+}
+.category-text {
+    text-align: left;
+    word-wrap: break-word;
+    width: 70%;
+    font-size: 18px;
+    margin-bottom: 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    align-self: center;
+}
+
+.category-input {
+    width: 95%;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom-width: 2px;
+}
