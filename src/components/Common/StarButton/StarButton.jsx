@@ -22,16 +22,11 @@ import "./StarButton.css"
  * @since 2023-05-02
  * @version 2.0 
  */
-export default function StarButton({onClick, toggled, id}) {
+export default function StarButton({id, onClick, toggled}) {
 	return (
 		<div id={id} onClick={onClick} className='star-container'>
-			{toggled 
-				?   <>
-					<StarFill className='star' color='yellow' />
-					<Star size={"100%"} className='star-overlay' />
-				</>
-				:   <Star className='star' />
-			}
+			<StarFill className={`star star-${toggled ? "" : "hidden"}`} color='yellow' />
+			<Star size={"100%"} className={`star${toggled ? "-overlay" : ""}`} />
 		</div>
 	)
 }

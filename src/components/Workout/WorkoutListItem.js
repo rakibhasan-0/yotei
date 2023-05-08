@@ -33,8 +33,7 @@ const WorkoutListItem = ({ workout, initState}) => {
 
 
 			<div className="row">
-				{isActive &&
-                    <FetchWorkoutDesc workout={workout} apiPath={"workouts"} />
+				{isActive && <FetchWorkoutDesc workout={workout} apiPath={"workouts"} />
 				}
 			</div>
 		</div>

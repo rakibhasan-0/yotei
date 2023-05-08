@@ -1,6 +1,7 @@
 /**
 * @author Melinda Vestberg (dv20mvg), Gustaf Söderlund (et14gsd)
- */
+* @edited 2023 - Cyclops (Group 5) dv21adt
+*/
 
 @media  (max-width: 540px) {
     .grid-striped{
@@ -13,6 +14,13 @@
     .grid-striped{
         width: 540px;
     }
+}
+
+/*
+* Changes the background color of every other listitem.
+*/
+.grid-striped:nth-child(even) * {
+    background-color: #F8EBEC;
 }
 
 

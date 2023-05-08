@@ -1,11 +1,13 @@
 {
   "name": "my-react-app",
+  "type": "module",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@testing-library/user-event": "^14.4.3",
     "dotenv": "^16.0.3",
     "http-proxy-middleware": "^2.0.6",
+    "node-fetch": "^2.6.9",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",
     "react-bootstrap-icons": "^1.10.3",
@@ -39,16 +41,27 @@
     "systest:ui": "npx playwright test --ui"
   },
   "jest": {
+    "setupFilesAfterEnv": [
+      "./src/__tests__/setup-jest.js"
+    ],
     "testEnvironment": "jsdom",
     "moduleNameMapper": {
-      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
+      "\\.(css|less)$": "<rootDir>/src/__tests__/__mocks__/styleMock.js"
     },
     "coverageReporters": [
       "text-summary",
       "cobertura"
     ],
+    "testPathIgnorePatterns": [
+      "<rootDir>/src/__tests__/setup-jest.js",
+      "<rootDir>/src/__tests__/__mocks__/",
+	  "<rootDir>/src/__tests__/server.js"
+    ],
     "modulePathIgnorePatterns": [
       "sys-test"
+    ],
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/node-fetch/"
     ],
     "coverageThreshold": {
       "global": {
@@ -61,10 +74,12 @@
   "babel": {
     "presets": [
       "@babel/preset-env",
-      ["@babel/preset-react",
-      {
-        "runtime": "automatic"
-      }]
+      [
+        "@babel/preset-react",
+        {
+          "runtime": "automatic"
+        }
+      ]
     ],
     "plugins": [
       "@babel/plugin-proposal-class-properties"

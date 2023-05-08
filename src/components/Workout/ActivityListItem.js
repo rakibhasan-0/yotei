@@ -19,14 +19,6 @@ function ActivityListItem({activity, checkboxHasChanged, index, apiPath, default
 	} else {
 		activity.exerciseId = activity.id
 	}
-	let bgColor = "#ffdfe3"
-
-	if (index % 2 === 0) {
-		bgColor = "#ffdfe3"
-	}
-	else {
-		bgColor = "#ffffff"
-	}
 
 	async function toggleDesc() {
 		if (activity.duration != null && !isActive) {
@@ -44,10 +36,7 @@ function ActivityListItem({activity, checkboxHasChanged, index, apiPath, default
 
 	return (
 		<>
-			<div className="row align-items-center py-2  "
-				style={{
-					backgroundColor: bgColor
-				}}>
+			<div className="row align-items-center py-2">
 				<div className="col-1">
 					<Form.Check
 						type="checkbox"
@@ -74,8 +63,8 @@ function ActivityListItem({activity, checkboxHasChanged, index, apiPath, default
 
 				<div>
 					{isActive &&
-                        <div className="col"><div className="text-col">{activity.description}</div>
-                        </div>
+						<div className="col"><div className="text-col">{activity.description}</div>
+						</div>
 					}
 				</div>
 			</div>
