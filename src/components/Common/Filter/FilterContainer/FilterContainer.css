@@ -8,23 +8,21 @@ fieldset {
     padding-top: 5px;
     margin: auto;
     text-align: center;
-    width: 30%;
 }
 
 .filterPos {
-    
     width: 100%;
 }
 
-@media  (max-width: 400px) {
+@media  (max-width: 500px) {
     fieldset{
-        width: 80%;
+        width: 100%;
     }
 }
 
-@media (min-width: 400px) {
+@media (min-width: 500px) {
     fieldset{
-        width: 400px;
+        width: 500px;
     }
 }
 
