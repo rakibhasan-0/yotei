@@ -363,14 +363,9 @@ INSERT INTO tag(name)
        VALUES ('Kihon');
 
 INSERT INTO belt(belt_name, belt_color, is_child)
-       VALUES ('Rött', 'BD3B41', FALSE);
-INSERT INTO belt(belt_name, belt_color, is_child)
-       VALUES ('Rött', 'BD3B41', TRUE);
-
-INSERT INTO belt(belt_name, belt_color, is_child)
        VALUES ('Vitt', 'FCFCFC', FALSE);
 INSERT INTO belt(belt_name, belt_color, is_child)
-       VALUES ('Vitt', 'FCFCFC', TRUE);
+       VALUES ('Vitt', 'BD3B41', TRUE);
 
 INSERT INTO belt(belt_name, belt_color, is_child)
        VALUES ('Gult', 'EDD70D', FALSE);
