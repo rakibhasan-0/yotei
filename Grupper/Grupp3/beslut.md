@@ -61,3 +61,18 @@ Beslut - many-to-one relation mellan video/bild och tekniker
 Vi tog beslutet på grund av att det låter rimligt att en teknik kan ha flera olika media representationer, men att flera olika tekniker inte delar samma media representationer. Detta är preliminärt då kund har kontaktats och vi väntar på svar.
 
 
+# Beslut om relation i databasen angående bild/video för tekniker och övningar
+
+Datum - 24/04/23
+
+Chapters - N/A
+
+Grupp -  Dragon
+
+Beslut - Att ha en tabell för både video/bilder för tekniker och övningar.
+
+## Motivation
+
+Tanken var att video/bild för övningar respektive tekniker skulle ha sin egna tabell i databasen. Men vid närmare granskning så visade det sig mer 
+
+
