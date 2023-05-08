@@ -18,8 +18,10 @@ import { Check, Dash } from "react-bootstrap-icons"
  * @version 3.0 
  */
 export default function CheckBox({checked, onClick, label, disabled, id}) {
+	// The class checkbox component is only there to limit the reach of styles 
+	// put on the input-element.
 	return (
-		<label className="checkbox-label" id={id}>
+		<label className="checkbox-label checkbox-component" id={id}>
 			{disabled && <Dash className="checkbox-icon"/>}
 			{checked && <Check className="checkbox-icon"/>}
 			<input

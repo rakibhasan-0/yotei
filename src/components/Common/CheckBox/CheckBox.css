@@ -3,6 +3,7 @@
     align-items: center;
     width: fit-content;
     gap: 1rem;
+    position: relative;
 }
 .checkbox-icon {
     position: absolute;
@@ -13,7 +14,7 @@
     left: 0;
 }
 
-input[type=checkbox] {
+.checkbox-component input[type=checkbox] {
     width: 2rem;
     height: 2rem;
     border: 2px solid black;
@@ -23,9 +24,9 @@ input[type=checkbox] {
     appearance: none;
 }
 
-input[type=checkbox]:checked {
+.checkbox-component input[type=checkbox]:checked {
     background-color: var(--checkbox-press);
 }
-input[type=checkbox]:disabled {
+.checkbox-component input[type=checkbox]:disabled {
     background-color: var(--gray);
 }
