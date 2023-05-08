@@ -1,0 +1,16 @@
+.outer-buttonpanel {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    height: 100%;
+}
+
+.inner-buttonpanel {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+}
+
+.font{
+    font-size: xx-large;
+}
