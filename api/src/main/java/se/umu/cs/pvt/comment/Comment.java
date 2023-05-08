@@ -1,5 +1,7 @@
 package se.umu.cs.pvt.comment;
 
+import se.umu.cs.pvt.user.User;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -40,6 +42,9 @@ public class Comment implements Serializable {
     @Column(nullable = false, name = "comment_text")
     private String commentText;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private User author;
 
     /**
      * Default constructor for JPA
@@ -94,4 +99,6 @@ public class Comment implements Serializable {
     public void setDate() {
         created = LocalDate.now();
     }
+
+    public String getUser() {return author.getUsername();}
 }

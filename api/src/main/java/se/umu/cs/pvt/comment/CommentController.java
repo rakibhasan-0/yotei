@@ -35,7 +35,7 @@ public class CommentController {
       * @param userId the users id, accessed through the Header.
       */
      @PostMapping("/exercise/add")
-     public ResponseEntity<Comment> addExerciseComment(@RequestParam(name = "id") Long exerciseId, @RequestBody Comment toAdd,
+     public ResponseEntity<String> addExerciseComment(@RequestParam(name = "id") Long exerciseId, @RequestBody Comment toAdd,
                                                        @RequestHeader("userId") Long userId) {
 
           toAdd.setExerciseId(exerciseId);
@@ -53,7 +53,7 @@ public class CommentController {
       * @param toAdd the comment to add
       */
      @PostMapping("/workout/add")
-     public ResponseEntity<Comment> addWorkoutComment(@RequestParam(name = "id") Long workoutId, @RequestBody Comment toAdd) {
+     public ResponseEntity<String> addWorkoutComment(@RequestParam(name = "id") Long workoutId, @RequestBody Comment toAdd) {
           toAdd.setWorkoutId(workoutId);
           return addCommentToDB(toAdd);
      }
@@ -63,7 +63,7 @@ public class CommentController {
       * @return the comments for the exercise
       */
      @GetMapping("/exercise/get")
-     public ResponseEntity<List<CommentShort>> getExerciseComments(@RequestParam(name = "id") Long exerciseId) {
+     public ResponseEntity<List<Comment>> getExerciseComments(@RequestParam(name = "id") Long exerciseId) {
           try {
                return new ResponseEntity<>(commentRepository.findALLProjectedByExerciseId(exerciseId), HttpStatus.OK);
           } catch (Exception e) {
@@ -104,9 +104,9 @@ public class CommentController {
       * @param toAdd the comment to add
       * @return the comment if it is valid, otherwise null
       */
-     private ResponseEntity<Comment> addCommentToDB(Comment toAdd) {
+     private ResponseEntity<String> addCommentToDB(Comment toAdd) {
           commentRepository.save(toAdd);
-          return new ResponseEntity<>(toAdd, HttpStatus.CREATED);
+          return new ResponseEntity<>(HttpStatus.CREATED);
      }
 
      /**

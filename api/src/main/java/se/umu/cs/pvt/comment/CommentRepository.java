@@ -26,7 +26,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     /**
      * Returns a projection of all comments with the given exercise id.
      */
-    List<CommentShort> findALLProjectedByExerciseId(Long exerciseId);
+    List<Comment> findALLProjectedByExerciseId(Long exerciseId);
 
     /**
      * Returns a projection of all comments with the given workout id.
