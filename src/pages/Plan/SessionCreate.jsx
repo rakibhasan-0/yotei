@@ -98,11 +98,13 @@ export default function SessionCreate() {
 					<h1 style={{marginTop: "2rem"}}>Tillfälle</h1>
 					<Divider option={"h2_left"} title={"Grupp"} />
 					<Dropdown id={"session-dropdown"} text={group?.name || "Grupp"} centered={true}>
-						{groups?.map((plan, index) => (
+						{groups && Object.length(groups) > 0 ? groups.map((plan, index) => (
 							<div className="dropdown-row" key={index} onClick={() => setGroup(plan)}>
 								<p className="dropdown-row-text">{plan.name}</p>
 							</div>
-						))}
+						)) : <div className="dropdown-row">
+							<p className="dropdown-row-text">Kunde inte hitta några grupper</p>
+						</div>}
 					</Dropdown>
 					
 					<Divider option={"h2_left"} title={"Datum och Tid"} />

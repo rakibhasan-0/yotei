@@ -40,12 +40,14 @@ const BeltRow = ({ belt, states, onToggle }) => {
  * belts for all the available belts. The parent is responsible
  * for handling the selection logic, as shown in the example below:
  * 
- * states = {
- *  "red": {
- *     "child": true,
- *     "adult": false
- *  }
- * }
+ * states = [
+ *  {
+ *   "id": 1,
+ *   "name": "Brun",
+ *   "color": "FFFFF6",
+ *   "child": false
+ * 	}
+ * ]
  * 
  * The onToggle function should accept a belt, and adult
  * parameter, where belt is the color, and adult 
@@ -54,7 +56,7 @@ const BeltRow = ({ belt, states, onToggle }) => {
  * 
  * Example Usage:
  * 
- * const [belts, setBelts] = useState({})
+ * const [belts, setBelts] = useState([])
  * const onToggle = belt => setBelts(prev => {
  * 	  if (prev.includes(belt)) {
  * 	  	return prev.filter(b => b !== belt)
@@ -95,7 +97,7 @@ export default function BeltPicker({ id, states, onToggle, centered }) {
 	}, [token])
 	
 	return (
-		<DropdownComponent text={"Bälten"} id={id} centered={centered} >
+		<DropdownComponent text={"Bälten"} id={id} centered={centered} autoClose={false} >
 			{belts && Object.values(belts).map((belt, index) => (
 				<BeltRow onToggle={onToggle} states={states} key={index} belt={belt} />
 			))}

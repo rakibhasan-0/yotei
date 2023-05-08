@@ -50,4 +50,5 @@
 
 .list-item-container {
     overflow: hidden;
+    min-height: 0;
 }

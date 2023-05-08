@@ -24,8 +24,13 @@ import "./Component.css"
  * @since 2023-05-02
  * @version 2.0 
  */
-export default function Component({ item, text, children,id }) {
+export default function Component({ item, text, children, id, autoClose }) {
 	const [toggled, setToggled] = useState(false)
+	const onClick = () => {
+		if (autoClose !== false) {
+			setToggled(false)
+		}
+	}
 	return (
 		<div id={id} className="list-container">
 			<div className='list-header'>
@@ -37,8 +42,8 @@ export default function Component({ item, text, children,id }) {
 					<ChevronDown id={`${id}-dropdown`} size={28} onClick={() => setToggled(!toggled)} />
 				</div>
 			</div>
-			<div className="list-item-container">
-				<div className="list-child" style={{ display: toggled ? "inherit" : "none" }} id={`${id}-children`}>
+			<div className="list-item-container" >
+				<div className="list-child" onClick={onClick} style={{ margin: toggled ? "0" : "-100% 0 -100% 0" }} id={`${id}-children`}>
 					{children}
 				</div> 
 			</div>
