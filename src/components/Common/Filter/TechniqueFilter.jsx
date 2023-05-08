@@ -1,5 +1,5 @@
 import { useState } from "react"
-import BeltPicker, { BELTS } from "../BeltPicker/BeltPicker"
+import BeltPicker from "../BeltPicker/BeltPicker"
 import FilterContainer from "./FilterContainer/FilterContainer"
 import CheckBox from "../CheckBox/CheckBox"
 import "./TechniqueFilter.css"
@@ -23,31 +23,15 @@ import BeltIcon from "../BeltIcon/BeltIcon"
  */
 function TechniqueFilter({id, callbackBelts, callbackKihon}){
 
-	const [belts, setBelts] = useState({})
+	const [belts, setBelts] = useState()
 	const [kihon, setKihon] = useState(false)
 
-	const onToggle = ({ belt, adult }) => setBelts(prev => {
-		if (!prev[belt]) {
-			prev[belt] = { child: false, adult: false }
+	const onToggle = belt => setBelts(prev => {
+		if (prev.includes(belt)) {
+			return prev.filter(b => b !== belt)
 		}
-		const key = adult ? "adult" : "child"
-		prev[belt][key] = !prev[belt][key]
-		//getActiveBelts()
-		return {...prev} // Must return a new object to force react to update
+		return [...prev, belt]
 	})
-
-	function getActiveBelts(){
-		let existsBelts = false
-		for (let i = 0; i < BELTS.length; i++){
-			let test = belts[BELTS[i]]
-			if (test !== undefined && (test.child || test.adult)){
-				existsBelts = true
-			}
-		}
-		
-		return existsBelts
-	}
-
 	
 	// Callback functions for returning the selected belts and if kihon is toggled.
 	callbackBelts(belts)
@@ -57,22 +41,11 @@ function TechniqueFilter({id, callbackBelts, callbackKihon}){
 		<div id={id} className="filterPos">
 			<FilterContainer id={1}>
 				<BeltPicker onToggle={onToggle} states={belts} />
-				<p className="selected-text">{!getActiveBelts() ? "" : "Valda bälten"}</p>
+				<p className="selected-text">{belts?.length > 0 ? "Valda bälten" : "" }</p>
 				<div className="selected-group">
-					{Object.entries(belts).map(([key, value]) => {
-						if(value.child && !value.adult) {
-							return (<BeltIcon id={`belt-child-${key}-text`} key={key} belt={key == "white" ? "red" : key} child={true}/>)
-						} else if (!value.child && value.adult) {
-							return (<BeltIcon id={`belt-adult-${key}-text`} key={key} belt={key} child={false}/>)
-						} else if (value.child && value.adult) {
-							return (
-								<div key={key} style={{display: "flex", gap: "10px"}}>
-									<BeltIcon id={`belt-child-${key}-text`} belt={key == "white" ? "red" : key} child={true}/>
-									<BeltIcon id={`belt-adult-${key}-text`} belt={key} child={false}/>
-								</div>
-							)
-						}
-					})}
+					{belts?.map((belt, index) => (
+						<BeltIcon key={index} color={`#${belt.color}`} child={belt.child}/>
+					))}
 				</div>
 				<div className="kihon-group">
 					<CheckBox checked={kihon} onClick={()=>setKihon(!kihon)}/>

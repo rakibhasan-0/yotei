@@ -2,36 +2,38 @@ import "./BeltPicker.css"
 import DropdownComponent from "../List/Component"
 import CheckBox from "../CheckBox/CheckBox"
 import BeltIcon from "../BeltIcon/BeltIcon"
-
-/**
- * A list of all the belts in the belt picker.
- */
-export const BELTS = ["white", "yellow", "orange", "green", "blue", "brown", "black"]
+import { useContext, useEffect, useState } from "react"
+import { AccountContext } from "../../../context"
 
 /**
  * Represents a belt row with text, two checkboxes and two
  * icons. 
  * 
- * @param {String} belt The belt color
- * @param {String} beltName The belt name
- * @param {Object} state
+ * @param {Object} belt The belt object
+ * @param {Object} states Array of selected belts
  * @param {Boolean} onToggle
  * @see BeltPicker.BELTS
  * @returns A new belt row
  */
-const BeltRow = ({ belt, beltName, state, onToggle }) => (
-	<div className="belt-row">
-		<div className="belt-item">
-			<CheckBox id={`belt-child-${belt}`} onClick={() => onToggle({ belt, adult: false })} checked={state?.child} />
-			<BeltIcon id={`belt-child-${belt}-text`} belt={belt == "white" ? "red" : belt} child={true} />
+const BeltRow = ({ belt, states, onToggle }) => {
+	const name = belt[0].name
+	const child = belt[1]
+	const adult = belt[0]
+	return (
+		<div className="belt-row">
+			<div className="belt-item">
+				<CheckBox id={`belt-child-${name}`} onClick={() => onToggle(child)} checked={states?.some(b => b.id === child.id)} />
+				{/* Set the belt color to red if its white and a child */}
+				<BeltIcon id={`belt-child-${name}-text`} color={`#${child.color}`} child={true} />
+			</div>
+			<p id={"belt-text"} className="belt-text">{name}</p>
+			<div className="belt-item">
+				<BeltIcon id={`belt-adult-${name}`} color={`#${adult.color}`} />
+				<CheckBox id={`belt-adult-${name}-text`} onClick={() => onToggle(adult)} checked={states?.some(b => b.id === adult.id)} />
+			</div>
 		</div>
-		<p id={`${belt}-text`} className="belt-text">{beltName}</p>
-		<div className="belt-item">
-			<BeltIcon id={`belt-adult-${belt}`} belt={belt} />
-			<CheckBox id={`belt-adult-${belt}-text`} onClick={() => onToggle({ belt, adult: true })} checked={state?.adult} />
-		</div>
-	</div>
-)
+	)
+}
 
 /**
  * A belt picker component, allowing one to pick child and adult
@@ -52,30 +54,50 @@ const BeltRow = ({ belt, beltName, state, onToggle }) => (
  * 
  * Example Usage:
  * 
- * const [states, setStates] = useState({})
- * const onToggle = ({ belt, adult }) => setStates(prev => {
- *		if (!prev[belt]) {
- *			prev[belt] = { child: false, adult: false }
- *		}
- *		const key = adult ? "adult" : "child"
- *		prev[belt][key] = !prev[belt][key]
- *		return {...prev} // Must return a new object to force react to update
- *	})
- * <BeltPicker onToggle={onToggle} states={states} />
+ * const [belts, setBelts] = useState({})
+ * const onToggle = belt => setBelts(prev => {
+ * 	  if (prev.includes(belt)) {
+ * 	  	return prev.filter(b => b !== belt)
+ * 	  }
+ * 	  return [...prev, belt]
+ * })
+ * <BeltPicker onToggle={onToggle} states={belts} />
  * 
  * @author Chimera (Group 4)
- * @since 2023-05-02
+ * @since 2023-05-12
+ * @version 2.0
  * @param id An id for the belt picker
  * @param states A state object, as shown above
  * @param onToggle A toggle function when a belt is selected (both child and adult)
  * @returns A new belt picker component
  */
 export default function BeltPicker({ id, states, onToggle, centered }) {
-	const colorsInSwedish = ["Vit", "Gul", "Orange", "Grön", "Blå", "Brun", "Svart"]
+	const { token } = useContext(AccountContext)
+	const [belts, setBelts] = useState()
+	
+	useEffect(() => {
+		fetch("/api/belts/all", {
+			headers: { token }
+		}).then(async data => {
+			const json = await data.json()
+			const groups = {}
+			for (const belt of json) {
+				if (!groups[belt.name]) {
+					groups[belt.name] = []
+				}
+				groups[belt.name].push(belt)
+			}
+			setBelts(groups)
+		}).catch(ex => {
+			alert("Kunde inte hämta bälten")
+			console.error(ex)
+		})
+	}, [token])
+	
 	return (
 		<DropdownComponent text={"Bälten"} id={id} centered={centered} >
-			{BELTS.map((color, index) => (
-				<BeltRow onToggle={onToggle} state={states?.[color]} key={index} belt={color} beltName={colorsInSwedish[index]} />
+			{belts && Object.values(belts).map((belt, index) => (
+				<BeltRow onToggle={onToggle} states={states} key={index} belt={belt} />
 			))}
 		</DropdownComponent>
 	)
