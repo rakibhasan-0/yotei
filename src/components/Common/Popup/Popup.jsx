@@ -1,6 +1,6 @@
 import { X } from "react-bootstrap-icons"
 import "./Popup.css"
-import React from "react"
+import React, { useEffect } from "react"
 
 /**
  * Popup is a component that creates a popup window with a title and a close button.
@@ -36,23 +36,30 @@ import React from "react"
  * @since 2023-05-02
  */
 export default function Popup({ title, id, isOpen, setIsOpen, children, width, height, noBackground, maxWidth, maxHeight }) {
-	if (!isOpen)
-		return null
-	else 
-		document.body.style.overflowY = "hidden"
 
-	const closePopup = () => {
-		setIsOpen(false)
-		document.body.style.overflowY = "visible"
-	}
+	useEffect(() => {
+		if (!isOpen) { document.body.style.overflowY = "visible" }
+		else { document.body.style.overflowY = "hidden" }
+	}, [isOpen])
+
+	if (!isOpen) { return null }
 
 	return (
 		<>
-			{noBackground ? <div className="popup-no-bg" onClick={closePopup} /> : <div className="popup-bg" onClick={closePopup}  />}
-			<div className="popup" id={id} style={{width: `${width}%`, height: `${height}%`, maxWidth: `${maxWidth}px`, maxHeight: `${maxHeight}px`}}>
+			{noBackground ? <div className="popup-no-bg" onClick={() => setIsOpen(false)} /> : <div className="popup-bg" onClick={() => setIsOpen(false)} />}
+			<div
+				className="popup"
+				id={id}
+				style={{
+					width: `${width}%`,
+					height: `${height}%`,
+					maxWidth: `${maxWidth}px`,
+					maxHeight: `${maxHeight}px`
+				}}>
+
 				<div className="topbar">
 					{title && <h1 className="title" role="title">{title}</h1>}
-					<button className="closebutton" onClick={closePopup}>
+					<button className="closebutton" onClick={() => setIsOpen(false)}>
 						<X width={44} height={44} />
 					</button>
 					{title && <div className="horizontal-line" />}
