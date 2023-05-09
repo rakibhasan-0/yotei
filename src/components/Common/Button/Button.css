@@ -23,6 +23,12 @@
     background-color: var(--button-press);
 }
 
+.button:disabled {
+	background-color: var(--body);
+	border: none;
+
+}
+
 .button > * {
     padding: 0;
     margin: 0;
