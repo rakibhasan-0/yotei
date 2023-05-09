@@ -1,5 +1,6 @@
 /* The complete component */
 .beltbox {
+	justify-content: center;
     outline-style: solid;
     outline-width: 2px;
     border-radius: 4px;
@@ -9,6 +10,17 @@
 /* Each belt */
 .belt {
     float: left;
+}
+
+
+.belt-error {
+	color: black;
+	background-color: white;
+	float: left;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 
