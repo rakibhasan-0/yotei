@@ -227,7 +227,7 @@ CREATE TABLE session (session_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMA
        date DATE NOT NULL,
        time TIME,
        CONSTRAINT session_fk_workout_id FOREIGN KEY (workout_id)
-        REFERENCES workout(workout_id),
+        REFERENCES workout(workout_id) ON DELETE SET NULL,
        CONSTRAINT session_fk_plan_id FOREIGN KEY (plan_id)
         REFERENCES plan(plan_id) ON DELETE CASCADE
 );
