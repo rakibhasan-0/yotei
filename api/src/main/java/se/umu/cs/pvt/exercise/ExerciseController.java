@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Class to get, insert, update, and remove exercise.
  *
- * @author Quattro Formaggio, Carlskrove, Hawaii
+ * @author Phoenix - Squad 1
  */
 @RestController
 @CrossOrigin
@@ -51,38 +51,12 @@ public class ExerciseController {
     }
     
     /**
-     * Returns 20 exercises in the database
-     * @return 20 exercises
-     */
-    @GetMapping("/jesper/{startIndex}")
+     * Retrieves a set amount of exercises from the database, starting from the specified start index.
+     * @param startIndex the index of the first exercise to retrieve
+     * @return a list of Exercise objects representing the items in the requested range
+    */
+    @GetMapping("/from/{startIndex}")
     public Object getSetAmountOfExercises(@PathVariable("startIndex") Integer startIndex) {
-        Pageable limit = PageRequest.of(startIndex, 20);
-        List<Exercise> exerciseList = exerciseRepository.findAll(limit).toList();
-
-        if (exerciseList == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return exerciseList;
-    }
-        /**
-     * Returns 20 exercises in the database
-     * @return 20 exercises
-     */
-    @GetMapping("/sinthu/{startIndex}")
-    public Object getSetAmountOfExercises2(@PathVariable("startIndex") Integer startIndex) {
-        Pageable limit = PageRequest.of(0, startIndex+20);
-        List<Exercise> exerciseList = exerciseRepository.findAll(limit).toList();
-
-        if (exerciseList == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return exerciseList;
-    }
-
-    @GetMapping("/rasmus/{startIndex}")
-    public Object getSetAmountOfExercises3(@PathVariable("startIndex") Integer startIndex) {
         int pageSize = 20;
         int pageNumber = startIndex / pageSize;
         Pageable limit = PageRequest.of(pageNumber, pageSize);
@@ -94,23 +68,6 @@ public class ExerciseController {
 
         return exerciseList;
     }
-
-
-        /**
-     * Returns 20 exercises in the database
-     * @return 20 exercises
-     */
-    // @GetMapping("/some")
-    // public Object getSetAmountOfExercises3() {
-    //     Pageable limit = PageRequest.of(20, 40);
-    //     List<Exercise> exerciseList = exerciseRepository.findAll(limit).toList();
-
-    //     if (exerciseList == null) {
-    //         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    //     }
-
-    //     return exerciseList;
-    // }
 
     /**
      * Returns an exercise depending on the id
