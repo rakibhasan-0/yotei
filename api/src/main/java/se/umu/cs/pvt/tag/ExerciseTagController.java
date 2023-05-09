@@ -158,9 +158,9 @@ public class ExerciseTagController {
      *                              OK if the setting of tags was successful.
      *                              BAD_REQUEST if no tags was found.
      */
-    @PostMapping("/set-tags/exercises")
-    public ResponseEntity<ExerciseTag> setExerciseTagsPost(@RequestParam(name = "exercise_id") long exerciseId,
-                                                       @RequestBody ArrayList<ExerciseTag> exerciseTags) {
+    @PostMapping("/set-tags/exercises/{exercise_id}/{exerciseTags}")
+    public ResponseEntity<ExerciseTag> setExerciseTagsPost(@PathVariable("exercise_id") Long exerciseId,
+                                                       @PathVariable("exerciseTags") ArrayList<ExerciseTag> exerciseTags) {
         return setExerciseTags(exerciseId, exerciseTags);
     }
 
