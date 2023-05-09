@@ -14,7 +14,7 @@ describe("BeltBox.jsx", () => {
 			var incomingBelts = [{
 				"id": "1",
 				"color": "#00BE08",
-				"is_child": false
+				"child": false
 			}]
 
 			render(<BeltBox id ={"1"} width={35} height={320} belts = {incomingBelts}/>)
@@ -32,7 +32,7 @@ describe("BeltBox.jsx", () => {
 			var incomingBelts = [{
 				"id": "1",
 				"color": "#00BE08",
-				"is_child": false
+				"child": false
 			}]
 			
 			const { container } = render(<BeltBox width={35} height={320} belts={incomingBelts}/>)
@@ -46,7 +46,7 @@ describe("BeltBox.jsx", () => {
 			var incomingBelts = [{
 				"id": "1",
 				"color": "#00BE08",
-				"is_child": false
+				"child": false
 			}]
 			
 			const { container } = render(<BeltBox width={35} height={320} belts={incomingBelts}/>)
@@ -70,7 +70,7 @@ describe("BeltBox.jsx", () => {
 				"id": "1",
 				"color": "00BE08",
 				"name": "grön",
-				"is_child": false
+				"child": false
 			}]
 
 			const { container } = render(<BeltBox id = "testBeltBox" width = {35} height = {320} belts={incomingBelts}/>)
@@ -84,7 +84,7 @@ describe("BeltBox.jsx", () => {
 				"id": "1",
 				"color": "#00BE088888",
 				"name": "grön",
-				"is_child": false
+				"child": false
 			}]
 
 			const { container } = render(<BeltBox id = "testBeltBox" width = {35} height = {320} belts={incomingBelts}/>)
@@ -96,7 +96,7 @@ describe("BeltBox.jsx", () => {
 		test("should display undefined when belt.color is missing and belt name is unavailable has too many characters", () => {
 			var incomingBelts = [{
 				"id": "1",
-				"is_child": false
+				"child": false
 			}]
 
 			const { container } = render(<BeltBox id = "testBeltBox" width = {35} height = {320} belts={incomingBelts}/>)
@@ -105,7 +105,7 @@ describe("BeltBox.jsx", () => {
 			expect(innerHtml).toEqual(expect.stringContaining("undefined"))
 		})
 
-		test("should display belt-error when belt is_child is invalid", () => {
+		test("should display belt-error when belt child is invalid", () => {
 			var incomingBelts = [{
 				"id": "1",
 				"color": "#00BE08",
