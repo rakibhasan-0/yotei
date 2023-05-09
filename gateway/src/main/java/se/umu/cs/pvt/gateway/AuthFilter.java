@@ -19,9 +19,9 @@ import java.util.List;
 /**
  * @author UNKNOWN (Doc: Griffin c20wnn)
  *
- * AuthFilter.java - Authorization class.
- * GatewayApplication.java - SpringBootApplication
- * GatewayApplicationTests.java - Tests.
+ *         AuthFilter.java - Authorization class.
+ *         GatewayApplication.java - SpringBootApplication
+ *         GatewayApplicationTests.java - Tests.
  */
 
 @Component
@@ -35,22 +35,21 @@ public class AuthFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         List<String> apiKeyHeader = exchange.getRequest().getHeaders().get("token");
-        System.out.println("Api key: " +  apiKeyHeader);
+        System.out.println("Api key: " + apiKeyHeader);
 
         Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
         String routeId = route != null ? route.getId() : null;
 
-
         String path = route != null ? exchange.getRequest().getPath().toString() : null;
 
         String apiKey = "";
-        if (apiKeyHeader != null){
+        if (apiKeyHeader != null) {
             apiKey = apiKeyHeader.get(0);
         }
 
-        if (!isAuthorized(routeId, apiKey, path)){
-            System.out.println("We got coffee in our teapot!");
-            throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT, "You cannot consume this service. You can't brew coffee in a teapot! Please check your api key.");
+        if (!isAuthorized(routeId, apiKey, path)) {
+            System.out.println("Unauthorized or invalid api key");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Please check your api key.");
         }
 
         return chain.filter(exchange);
@@ -63,44 +62,40 @@ public class AuthFilter implements GlobalFilter, Ordered {
 
     /**
      * @param routeId id of route
-     * @param apikey client header api key
+     * @param apikey  client header api key
      * @return true if is authorized, false otherwise
      */
     private boolean isAuthorized(String routeId, String apikey, String path) {
 
         // Always access to webserver and login api
-        if (routeId.equals("webserver") || path.equals("/user/verify")){
+        if (routeId.equals("webserver") || path.equals("/user/verify")) {
             return true;
         }
 
-        //check that an api key is given, when accessing api
-        if (apikey.isEmpty()){
+        // check that an api key is given, when accessing api
+        if (apikey.isEmpty()) {
             return false;
         }
 
-        //Select user role from apikey
+        // Select user role from apikey
         String role = "";
-        try{
+        try {
             JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret))
                     .withSubject("User Details")
                     .withIssuer("PVT/User")
                     .build();
-            role =  verifier.verify(apikey).getClaim("role").asString();
-        }  catch (Exception e){
+            role = verifier.verify(apikey).getClaim("role").asString();
+        } catch (Exception e) {
             return false;
         }
 
-        if (role.equals("ADMIN")){
+        if (role.equals("ADMIN")) {
             return true;
         }
 
-
-        //Protect import and export endpoints
-        //Only allow admin to create users
+        // Protect import and export endpoints
+        // Only allow admin to create users
         return !(path.contains("import") || path.contains("export") || path.contains("user/register"));
-
-
-
 
     }
 
