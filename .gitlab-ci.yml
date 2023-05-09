@@ -104,6 +104,7 @@ systest-job:
     when: always
     paths:
       - results.xml
+      - test-results/
     reports:
       junit: results.xml
   before_script:
