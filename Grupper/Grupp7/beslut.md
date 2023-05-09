@@ -10,9 +10,8 @@
 - **Grupp** -  Kraken
 - **Beslut** - Beslutades att dokumnetera resultatet av vår spike.
 - **Motivation**
-  - Vi valde att skapa ett eget dokument kring det vi kom fram till under vår spike. Detta då vi ej skulle ha någon redovisning och troligen skulle få tickets kring nya områden nästa vecka, för att inte spiken skulle vara onödig valde vi då att dokumentera allt. 
+  - Vi valde att skapa ett eget dokument kring det vi kom fram till under vår spike. Detta då vi ej skulle ha någon redovisning och 
 
-# Beslut
 ## Sökfuntion 
 - **Datum** - 230424
 - **Chapters** - N/A
@@ -24,7 +23,6 @@
   - Pros: All sök-funktionalitet samlad, bättre översikt över sökning och lättare för nästa grupp att ta över.
   - Cons: Ny teknologi för att använda databasen.
 
-# Beslut
 ## Funktionskomponenter
 - **Datum** - 230501
 - **Chapters** - N/A
@@ -34,7 +32,6 @@
   - Eftersom det inte går att använda hooks vid Klasskomponenter så skapas problem som lätt går att fixa med hjälp av Funktionskomponenter.
   - Funktionskomponenter används även överallt i hela systemet vilket gör det mer konsistent.
 
-# Beslut 
 ## Abstraktion på söknings API
 - **Datum** - 230504
 - **Chapters** - N/A
