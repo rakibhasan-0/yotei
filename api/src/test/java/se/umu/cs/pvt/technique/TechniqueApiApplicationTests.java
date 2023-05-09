@@ -13,10 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import se.umu.cs.pvt.belt.Belt;
+import se.umu.cs.pvt.tag.Tag;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,35 +41,57 @@ public class TechniqueApiApplicationTests {
         assertThat(controller).isNotNull();
     }
 
-    private final Technique tec1 = new Technique(1L, "Test1", "Descripton1");
-    private final Technique tec2 = new Technique(2L, "Test2", "Descripton2");
+    private final Tag tag1 = new Tag(1L, "tag1");
+    private final Tag tag2 = new Tag(2L, "tag2");
+    private final Belt belt1 = new Belt(1L, "grön", "00000", false);
+    private final Belt belt2 = new Belt(1L, "Vit", "00000", true);
+    private final Set<Belt> belts = new HashSet<>();
+    private final Set<Tag> tags = new HashSet<>();
+
+
+
+    private final Technique tec1 = new Technique(1L, "Test1", "Descripton1", new HashSet<>(), new HashSet<>());
+    private final Technique tec2 = new Technique(2L, "Test2", "Descripton2", new HashSet<>(), new HashSet<>());
     private ArrayList<Technique> techniques;
+
+    private Technique createTechnique(Long id, String name, String description) {
+        return new Technique(id, name, description, new HashSet<>(), new HashSet<>());
+    }
+    private Technique createTechnique(Long id, String name, String description, Set<Belt> belts, Set<Tag> tags) {
+        return new Technique(id, name, description, new HashSet<>(), tags);
+    }
 
     @BeforeEach
     public void init() {
         techniques = new ArrayList<>();
         techniques.add(tec1);
         techniques.add(tec2);
+
+        belts.add(belt1);
+        belts.add(belt2);
+
+        tags.add(tag1);
+        tags.add(tag2);
     }
 
     @Test
     void shouldFailWhenPostingTechniqueWithNoName() {
-        Technique invalid = new Technique(32L, "", "No name");
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST,
+        Technique invalid = createTechnique(32L, "", "No name");
+        Assertions.assertEquals(HttpStatus.NOT_ACCEPTABLE,
                 controller.postTechnique(invalid).getStatusCode());
     }
 
 
     @Test
-    void shouldSucceedWhenUpdatingNonExistingTechnique() {
+    void shouldFailWhenUpdatingNonExistingTechnique() {
         Mockito.when(repository.findById(tec1.getId())).thenReturn(Optional.empty());
         controller.updateTechnique(tec1);
-        assertEquals(HttpStatus.BAD_REQUEST, controller.updateTechnique(tec1).getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, controller.updateTechnique(tec1).getStatusCode());
     }
 
 
     @Test
-    void shouldFailWhenUpdatingNonExistingTechnique() {
+    void shouldSuceedWhenUpdatingExistingTechnique() {
         Mockito.when(repository.findById(tec1.getId())).thenReturn(Optional.empty());
         controller.updateTechnique(tec1);
         assertNotEquals(HttpStatus.OK, controller.updateTechnique(tec1).getStatusCode());
@@ -78,12 +100,12 @@ public class TechniqueApiApplicationTests {
 
     @Test
     void shouldFailWhenUpdatingExerciseWithInvalidFormat() {
-        Technique technique = new Technique(1L, "", "teknik 1");
+        Technique technique = createTechnique(1L, "", "teknik 1");
         Mockito.when(repository.findById(technique.getId())).thenReturn(Optional.of(technique));
 
         ResponseEntity<Object> response = controller.updateTechnique(technique);
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(HttpStatus.NOT_ACCEPTABLE, response.getStatusCode());
     }
 
 
@@ -91,14 +113,16 @@ public class TechniqueApiApplicationTests {
     void shouldSucceedWhenUpdatingExistingTechnique() {
         Mockito.when(repository.findById(tec1.getId())).thenReturn(Optional.ofNullable(tec1));
 
-        assertEquals(HttpStatus.OK, controller.updateTechnique(tec1).getStatusCode());
+        assertEquals(HttpStatus.CREATED, controller.updateTechnique(tec1).getStatusCode());
     }
 
 
     @Test
-    void shouldMakeBadeRequestWhenUpdatingToNoName() {
-        Technique invalid = new Technique(1L, "", "No name");
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST,
+    void shouldMakeNotAcceptableWhenUpdatingToNoName() {
+        Technique invalid = createTechnique(1L, "", "No name");
+
+        Mockito.when(repository.findById(1L)).thenReturn(Optional.of(invalid));
+        Assertions.assertEquals(HttpStatus.NOT_ACCEPTABLE,
                 controller.updateTechnique(invalid).getStatusCode());
     }
 
@@ -109,19 +133,21 @@ public class TechniqueApiApplicationTests {
         Mockito.when(repository.save(tec2)).thenReturn(tec2);
         ResponseEntity response = controller.postImport(techniques);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
 
 
     @Test
     void shouldReturnUnprocessableEntityFromPostImportOnSomeInvalidFormattedTechnique() {
         List<Technique> toAdd = new ArrayList<>();
-        toAdd.add(new Technique(1L, "Wihu", "Invalid"));
-        toAdd.add(new Technique(2L, "", "Invalid"));
+        Technique t1 =  createTechnique(1L, "Wihu", "Invalid");
+        Technique t2 = createTechnique(2L, "", "Invalid");
+        toAdd.add(t1);
+        toAdd.add(t2);
 
-        Mockito.when(repository.findByName("Wihu")).thenReturn(toAdd.get(0));
+        Mockito.when(repository.save(t2)).thenReturn(toAdd.get(1));
 
-        Assertions.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY,
+        Assertions.assertEquals(HttpStatus.NOT_ACCEPTABLE,
                 controller.postImport(toAdd).getStatusCode());
     }
 
@@ -137,7 +163,7 @@ public class TechniqueApiApplicationTests {
     void shouldFailWhenRemovingNoneExistingTechnique(){
         Mockito.when(repository.findById(tec1.getId())).thenReturn(Optional.empty());
 
-        assertEquals(HttpStatus.BAD_REQUEST, controller.removeTechnique(tec1.getId()).getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, controller.removeTechnique(tec1.getId()).getStatusCode());
     }
 
 
@@ -145,7 +171,10 @@ public class TechniqueApiApplicationTests {
     void shouldReturnAllExercisesFromGetExercises() {
         Mockito.when(repository.findAll()).thenReturn(techniques);
 
-        List<Technique> result = (List<Technique>) controller.getTechniques();
+        ResponseEntity<Object> response = controller.getTechniques();
+        List<Technique> result = (List<Technique>) response.getBody();
+
+
 
         assertThat(result.get(0)).isEqualTo(tec1);
         assertThat(result.get(1)).isEqualTo(tec2);
@@ -156,8 +185,10 @@ public class TechniqueApiApplicationTests {
     void shouldReturnExerciseFromGetExerciseWithRealID() {
         Mockito.when(repository.findById(tec1.getId())).thenReturn(Optional.ofNullable(tec1));
         Mockito.when(repository.existsById(tec1.getId())).thenReturn(true);
-        Technique result = (Technique) controller.getTechniques(tec1.getId());
 
+        ResponseEntity<Object> response = controller.getTechniques(tec1.getId());
+        Technique result = (Technique) response.getBody();
         assertThat(result).isEqualTo(tec1);
     }
+
 }

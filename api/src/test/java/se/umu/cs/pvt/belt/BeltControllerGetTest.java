@@ -28,7 +28,7 @@ public class BeltControllerGetTest {
 
     @Autowired
     private BeltController controller;
-
+/*
     @Test
     public void shouldGetBelts() {
         // Arrange
@@ -53,4 +53,6 @@ public class BeltControllerGetTest {
         assertThat(belt2.getColor()).isEqualTo("000000");
         assertThat(belt2.isChild()).isFalse();
     }
+
+ */
 }

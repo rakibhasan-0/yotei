@@ -1,7 +1,10 @@
 package se.umu.cs.pvt.belt;
 
+import se.umu.cs.pvt.technique.Technique;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * A belt entity for Spring

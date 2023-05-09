@@ -57,7 +57,7 @@ public class WorkoutControllerTest {
                         "desc1",
                         1,
                         10,
-                        new Technique(1L, "ex1", "desc1"),
+                        new Technique(1L, "ex1", "desc1", null, null),
                         null),
                 new ActivityDetail(
                         1L,
@@ -68,7 +68,7 @@ public class WorkoutControllerTest {
                         "desc2",
                         2,
                         10,
-                        new Technique(1L, "ex1", "desc1"),
+                        new Technique(1L, "ex1", "desc1", null, null),
                         null),
                 new ActivityDetail(
                         2L,
@@ -79,7 +79,7 @@ public class WorkoutControllerTest {
                         "desc2",
                         1,
                         10,
-                        new Technique(2L, "ex2", "desc2"),
+                        new Technique(2L, "ex2", "desc2", null, null),
                         null)
         );
         User author = new User("hej", "hejsan123!");
