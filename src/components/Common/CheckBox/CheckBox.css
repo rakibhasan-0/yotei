@@ -5,6 +5,9 @@
     gap: 1rem;
     position: relative;
 }
+.checkbox-label-disabled {
+    color: var(--gray);
+}
 .checkbox-icon {
     position: absolute;
     color: white;
@@ -13,7 +16,6 @@
     top: 0;
     left: 0;
 }
-
 .checkbox-component input[type=checkbox] {
     width: 2rem;
     height: 2rem;
@@ -28,5 +30,6 @@
     background-color: var(--checkbox-press);
 }
 .checkbox-component input[type=checkbox]:disabled {
-    background-color: var(--gray);
+    border: 2px solid var(--gray);
+    background-color: var(--background);
 }

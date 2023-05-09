@@ -1,5 +1,6 @@
+import { useEffect } from "react"
 import "./CheckBox.css"
-import { Check, Dash } from "react-bootstrap-icons"
+import { Check } from "react-bootstrap-icons"
 
 /** 
  * A default checkbox that should be used throughout the project.
@@ -20,13 +21,16 @@ import { Check, Dash } from "react-bootstrap-icons"
 export default function CheckBox({checked, onClick, label, disabled, id}) {
 	// The class checkbox component is only there to limit the reach of styles 
 	// put on the input-element.
+
+	useEffect(() => disabled && onClick(false), [disabled, onClick])
+
 	return (
-		<label className="checkbox-label checkbox-component" id={id}>
-			{disabled && <Dash className="checkbox-icon"/>}
+		<label className={`checkbox-label checkbox-component ${disabled ? "checkbox-label-disabled" : ""}`} id={id}>
 			{checked && <Check className="checkbox-icon"/>}
 			<input
 				type="checkbox"
 				value={checked}
+				defaultChecked={checked}
 				onChange={() => onClick(!checked)}
 				disabled={disabled}
 			/>
