@@ -18,7 +18,6 @@ import "./TechniqueCard.css"
  */
 function TechniqueCard({ technique, checkBox, id }) {
 	const [checked, setChecked] = useState(false)
-	// console.log(technique)
 	return (
 		<div className="technique-card" id={id}>
 			<div className="technique-card-belt-color-container">
@@ -54,7 +53,7 @@ function TechniqueCard({ technique, checkBox, id }) {
 				<div className="technique-name-container">
 					<h5 className="technique-name">{technique.name}</h5>	
 				</div>
-				<a href={"/technique/technique_page/" + technique.id}>
+				<a href={"/technique/technique_page/" + technique.techniqueID}>
 					<div className="technique-arrow-container">
 						<ChevronDown />
 					</div>
