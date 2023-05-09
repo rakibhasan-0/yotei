@@ -1,4 +1,3 @@
-import { useState } from "react"
 import BeltPicker from "../BeltPicker/BeltPicker"
 import FilterContainer from "./FilterContainer/FilterContainer"
 import CheckBox from "../CheckBox/CheckBox"
@@ -21,10 +20,7 @@ import BeltIcon from "../BeltIcon/BeltIcon"
  * @version 1.0
  * @since 2023-05-03
  */
-function TechniqueFilter({id, callbackBelts, callbackKihon}){
-
-	const [belts, setBelts] = useState([])
-	const [kihon, setKihon] = useState(false)
+function TechniqueFilter({id, belts, setBelts, kihon, setKihon}){
 
 	const onToggle = belt => setBelts(prev => {
 		if (prev.includes(belt)) {
@@ -32,14 +28,6 @@ function TechniqueFilter({id, callbackBelts, callbackKihon}){
 		}
 		return [...prev, belt]
 	})
-
-	// Checks if a belt has been selected from the belt-picker.
-	// Iterate each color and check if it has been selected, if not return false
-	
-
-	// Callback functions for returning the selected belts and if kihon is toggled.
-	callbackBelts(belts)
-	callbackKihon(kihon)
 	
 	// Checks which of the belts that should be displayed, should be refactored and made better. Works for now...
 	return (
