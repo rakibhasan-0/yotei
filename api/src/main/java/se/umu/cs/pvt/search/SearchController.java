@@ -218,18 +218,6 @@ public class SearchController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
-    /**
-     *
-     * @param str The string being used to search the list with.
-     * @param response The list of responses being filtered.
-     * @param <T> The type of SearchResponse being filtered.
-     * @return The list of the filtered SearchResponse.
-     */
-    private <T extends SearchResponseInterface> List<T> fuzzySearchFiltering(String str, List<T> response) {
-        return Fuzzy.search(str, response);
-    }
-
 	/**
 	 * Gets best tag suggstions based on search.
 	 * @param searchInput Search string.
@@ -261,4 +249,15 @@ public class SearchController {
 
 		return tagCompletion;
 	}
+
+    /**
+     *
+     * @param str The string being used to search the list with.
+     * @param response The list of responses being filtered.
+     * @param <T> The type of SearchResponse being filtered.
+     * @return The list of the filtered SearchResponse.
+     */
+    private <T extends SearchResponseInterface> List<T> fuzzySearchFiltering(String str, List<T> response) {
+        return Fuzzy.search(str, response);
+    }
 }

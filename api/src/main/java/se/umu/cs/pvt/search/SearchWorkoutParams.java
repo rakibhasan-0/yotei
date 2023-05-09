@@ -29,6 +29,7 @@ public class SearchWorkoutParams {
         if(urlQuery.containsKey("to")) to = parseDateString(urlQuery.get("to"));
 
         if(urlQuery.containsKey("favourite")){
+            System.out.println(urlQuery.get("favourite"));
             favourite = Boolean.parseBoolean(urlQuery.get("favourite"));
         }
 
