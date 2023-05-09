@@ -1790,6 +1790,13 @@ INSERT INTO workout_tag (work_id, tag_id) VALUES(2, 27);
 INSERT INTO workout_tag (work_id, tag_id) VALUES(3, 27);
 INSERT INTO workout_tag (work_id, tag_id) VALUES(3, 29);
 
+--
+-- INSERTS FOR WORKOUT FAVOURITES
+--
+
+INSERT INTO workout_favorite (workout_id, user_id) VALUES (1, 1);
+INSERT INTO workout_favorite (workout_id, user_id) VALUES (3, 1);
+
 
 --
 -- CONVERT EXERCISES FROM JSON -- BEGINNING
