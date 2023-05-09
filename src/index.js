@@ -15,7 +15,7 @@ import Login from "./pages/Login/Login"
 import React, { useState } from "react"
 import Admin from "./pages/Admin/Admin"
 import About from "./pages/About/About"
-import WorkoutView from "./pages/Workout/WorkoutView"
+import WorkoutView from "./pages/Workout/WorkoutView/WorkoutView"
 import WorkoutEdit from "./pages/Workout/WorkoutEdit"
 import TechniqueEdit from "./pages/Technique/TechniqueEdit"
 import TechniqueIndex from "./pages/Technique/TechniqueIndex"
@@ -129,7 +129,7 @@ export default function App() {
 										<Route path="exercise/exercise_page/:ex_id" element={<ExerciseDetailsPage />} />
 										<Route path="technique/technique_page/:technique_id" element={<TechniqueDetailsPage />} />
 										<Route path="workout/create" element={<WorkoutCreate />} />
-										<Route path="workout/:workoutID" element={<WorkoutView />} />
+										<Route path="workout/:workoutId" element={<WorkoutView />} />
 										<Route path="workout/edit" element={<WorkoutEdit />} />
 										<Route path="plan" element={<PlanIndex uri={planURI} />} />
 										<Route path="plan/create" element={<PlanCreate />} />

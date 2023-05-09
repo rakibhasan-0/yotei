@@ -7,6 +7,13 @@
     margin: auto;
 }
 
+.click-icon {
+    color: var(--red-primary);
+    margin-left: 2rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
 .toggle {
     background: white;
 }

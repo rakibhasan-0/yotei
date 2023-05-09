@@ -7,16 +7,26 @@
  * 
  * @author G5 Cyclops (2023-05-04)
  */
-import WorkoutActivityListItem from "../WorkoutActivityListItem.js"
+import WorkoutActivityListItem from "../WorkoutActivityListItem/WorkoutActivityListItem.jsx"
 import "./WorkoutActivityList.css"
 
 export default function WorkoutActivityList({categoryName, activities, id}) {
 	return (
-		<fieldset className="mt-5 mb-5 py-2 container workout-activity-list" id={id}>
+		<fieldset className={setPadding(activities.length)} id={id}>
 			{categoryName != null && <legend className="px-2 h3 w-auto">{categoryName}</legend>}
 			{
-				activities.map((activity, index) => <WorkoutActivityListItem key={activity.id} activity={activity} index={index}/>)
+				sortActivities(activities).map((activity, index) => <WorkoutActivityListItem key={activity.id} activity={activity} index={index}/>)
 			}
 		</fieldset>
 	)
+}
+
+function sortActivities(activities) {
+	const  sortedActivites = activities.sort((a, b) => a.order - b.order)
+	return sortedActivites
+}
+
+function setPadding(length) {
+	const padding = (length == 1 ? "pt-0" : "pt-3")
+	return "container workout-activity-list " + padding
 }

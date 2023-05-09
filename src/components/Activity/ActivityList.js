@@ -8,7 +8,7 @@
 import React, { useState, useContext, useEffect } from "react"
 import ListItem from "../Common/ListItem.js"
 import WorkoutListItem from "../Workout/WorkoutListItem.js"
-import WorkoutActivityListItem from "../Workout/WorkoutActivityListItem.js"
+import WorkoutActivityListItem from "../Workout/WorkoutActivityListItem/WorkoutActivityListItem.jsx"
 import { AccountContext } from "../../context"
 
 const ActivityList = ({activities, apiPath, detailURL}) => {
