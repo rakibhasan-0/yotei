@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.swing.text.html.HTML;
+
 /**
  * Class for handling requests to the session api.
  * 
@@ -30,6 +32,22 @@ public class SessionController {
     @Autowired
     public SessionController(SessionRepository sessionRepository){
         this.sessionRepository = sessionRepository;
+    }
+
+     /**
+     * Get session by id
+     * 
+     * @param id The session id.
+     * @return HTTP-status code and the list of sessions. 
+     */
+    @GetMapping("/get")
+    public ResponseEntity<Optional<Session>> get(@RequestParam Long id) {
+        if(sessionRepository.findById(id).isEmpty()){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } 
+        
+        return new ResponseEntity<>(sessionRepository.findById(id), HttpStatus.OK);
+        
     }
 
     /**
