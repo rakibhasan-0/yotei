@@ -355,6 +355,46 @@ CREATE TABLE media_technique (
 );
 ALTER TABLE media_technique OWNER TO psql;
 
+
+--
+-- Triggers
+--
+CREATE OR REPLACE FUNCTION remove_user_references() RETURNS TRIGGER AS $$
+       BEGIN
+              DELETE FROM workout WHERE workout_hidden = TRUE AND workout_author = OLD.user_id;
+              UPDATE workout SET workout_author = 1 WHERE workout_author = OLD.user_id;
+              UPDATE plan SET user_id = 1 WHERE user_id = OLD.user_id;
+              UPDATE comments SET user_id = 1 WHERE user_id = OLD.user_id;
+              RETURN OLD;
+       END;
+       $$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION no_duplicate_category() RETURNS TRIGGER AS $$
+       BEGIN
+	     IF EXISTS (SELECT * FROM activity as A WHERE A.workout_id = NEW.workout_id AND A.category_order = NEW.category_order AND A.category_name <> NEW.category_name) THEN 
+		RAISE EXCEPTION 'Cannot have two categories with the same order in the same workout!';
+	     ELSE 
+		RETURN NEW;
+	     END IF;	
+       END;
+       $$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION tag_to_lowercase() RETURNS TRIGGER AS $$
+	BEGIN
+		NEW.name = LOWER(NEW.name);
+		RETURN NEW;
+	END;
+	$$ LANGUAGE 'plpgsql';
+
+
+CREATE TRIGGER check_order BEFORE INSERT ON activity FOR EACH ROW EXECUTE PROCEDURE no_duplicate_category();
+
+
+CREATE TRIGGER remove_user BEFORE DELETE ON user_table FOR EACH ROW EXECUTE PROCEDURE remove_user_references();
+
+CREATE TRIGGER insert_tag BEFORE INSERT ON tag FOR EACH ROW EXECUTE PROCEDURE tag_to_lowercase();
+
+
 --
 -- Inserts
 --
@@ -1901,30 +1941,4 @@ INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Judo Fitnes
 INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Judo Techniques Practice Session', 3, 1, '2023-04-09', '16:00');
 INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Judo Kata Practice Session', 2, 2, '2023-04-10', '08:00');
 
---
--- Triggers
---
-CREATE OR REPLACE FUNCTION remove_user_references() RETURNS TRIGGER AS $$
-       BEGIN
-              DELETE FROM workout WHERE workout_hidden = TRUE AND workout_author = OLD.user_id;
-              UPDATE workout SET workout_author = 1 WHERE workout_author = OLD.user_id;
-              UPDATE plan SET user_id = 1 WHERE user_id = OLD.user_id;
-              UPDATE comments SET user_id = 1 WHERE user_id = OLD.user_id;
-              RETURN OLD;
-       END;
-       $$ LANGUAGE 'plpgsql';
 
-CREATE OR REPLACE FUNCTION no_duplicate_category() RETURNS TRIGGER AS $$
-       BEGIN
-	     IF EXISTS (SELECT * FROM activity as A WHERE A.workout_id = NEW.workout_id AND A.category_order = NEW.category_order AND A.category_name <> NEW.category_name) THEN 
-		RAISE EXCEPTION 'Cannot have two categories with the same order in the same workout!';
-	     ELSE 
-		RETURN NEW;
-	     END IF;	
-       END;
-       $$ LANGUAGE 'plpgsql';
-
-CREATE TRIGGER check_order BEFORE INSERT ON activity FOR EACH ROW EXECUTE PROCEDURE no_duplicate_category();
-
-
-CREATE TRIGGER remove_user BEFORE DELETE ON user_table FOR EACH ROW EXECUTE PROCEDURE remove_user_references();
