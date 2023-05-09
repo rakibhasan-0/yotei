@@ -18,7 +18,7 @@ import About from "./pages/About/About"
 import WorkoutView from "./pages/Workout/WorkoutView/WorkoutView"
 import WorkoutEdit from "./pages/Workout/WorkoutEdit"
 import TechniqueEdit from "./pages/Technique/TechniqueEdit"
-import TechniqueIndex from "./pages/Technique/TechniqueIndex"
+import TechniqueIndex from "./pages/Technique/TechniqueIndex/TechniqueIndex"
 import ExerciseIndex from "./pages/Exercise/ExerciseIndex"
 import ExerciseEdit from "./pages/Exercise/ExerciseEdit"
 import { AccountContext } from "./context"
@@ -38,7 +38,6 @@ import "react-toastify/dist/ReactToastify.css"
 import { logOut } from "./utils"
 
 const exerciseURI = "https://jsonplaceholder.typicode.com/users"
-const techniqueURI = "https://jsonplaceholder.typicode.com/users"
 const workoutURI = "https://jsonplaceholder.typicode.com/users"
 const planURI = "https://jsonplaceholder.typicode.com/users"
 
@@ -120,7 +119,7 @@ export default function App() {
 										<Route path="exercise/create" element={<ExerciseCreate />} />
 										<Route path="exercise/edit/:editID" element={<ExerciseEdit />} />
 										<Route path="home" element={<Home />} />
-										<Route path="technique" element={<TechniqueIndex uri={techniqueURI} />} />
+										<Route path="technique" element={<TechniqueIndex />} />
 										<Route path="technique/create" element={<TechniqueCreate />} />
 										<Route path="technique/edit/:editID" element={<TechniqueEdit />} />
 										<Route path="techniques/add" element={<TechniqueCreate />} />

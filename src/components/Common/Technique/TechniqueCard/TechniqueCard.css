@@ -1,0 +1,57 @@
+.technique-card {
+		border: solid;
+		border-width: 1px;
+		border-radius: var(--border-radius);
+		border-color: var(--black-primary);
+		overflow: hidden;
+		margin-top: 10px;
+}
+
+.technique-card-belt-color-container {
+		display: flex;
+}
+
+.technique-card-belt-color {
+		width: 100%;
+		height: 30px;
+}
+
+.technique-card-belt-border {
+		border-bottom: solid;
+		border-width: 1px;
+		border-color: var(--black-primary);
+}
+
+.technique-info-container {
+		display: flex;
+}
+
+.technique-checkbox-container {
+		width: 10%;
+}
+
+.technique-checkbox-container .checkbox-container {
+		width: 30px;
+		height: 30px;
+		margin: 10px;
+}
+
+.technique-name-container {
+		width: 100%;
+}
+
+.technique-name-container .technique-name {
+		text-align: left;
+		margin: 10px;
+}
+
+.technique-arrow-container {
+		width: 10%;
+}
+
+.technique-arrow-container svg {
+		width: 30px;
+		height: 30px;
+		margin: 10px;
+		rotate: 270deg;
+}

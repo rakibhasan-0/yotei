@@ -62,7 +62,7 @@ export default function SearchBar({ id, placeholder, text, onChange, addedTags, 
 				placeholder={placeholder}
 				value={text}
 				onChange={e => {
-					return onChange?.(e.target.value)
+					return onChange?.(e)
 				}}
 				onFocus={() => setFocused(true)}
 				onBlur={() => setFocused(false)}

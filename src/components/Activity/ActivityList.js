@@ -7,6 +7,7 @@
  */
 import React, { useState, useContext, useEffect } from "react"
 import ListItem from "../Common/ListItem.js"
+import TechniqueCard from "../Common/Technique/TechniqueCard/TechniqueCard"
 import WorkoutListItem from "../Workout/WorkoutListItem.js"
 import WorkoutActivityListItem from "../Workout/WorkoutActivityListItem/WorkoutActivityListItem.jsx"
 import { AccountContext } from "../../context"
@@ -28,7 +29,11 @@ const ActivityList = ({activities, apiPath, detailURL}) => {
 				apiPath === "workouts/activities" ?
 					activities.map((activity, index) => <WorkoutActivityListItem key={activity.id} activity={activity} index={index}/>)
 					:    
-					activities.map((activity, index) => <ListItem key={activity.id} activity={activity} apiPath = {apiPath} detailURL={detailURL} index={index}/>)
+					apiPath === "techniques" ?
+						activities.map((activity) => <TechniqueCard key={activity.id} technique={activity} checkBox={false}/>)
+						:
+						activities.map((activity, index) => <ListItem key={activity.id} activity={activity} apiPath = {apiPath} detailURL={detailURL} index={index}/>)
+						
 			}
 		</div>
 	)
