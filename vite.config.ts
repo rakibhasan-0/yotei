@@ -1,12 +1,11 @@
 import { defineConfig, loadEnv } from "vite"
 import * as fs from "fs/promises"
 import react from "@vitejs/plugin-react"
-import eslint from "vite-plugin-eslint"
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   return {
-    plugins: [react(), eslint()],
+    plugins: [react()],
     esbuild: {
       loader: 'jsx',
       include: /src\/.*\.jsx?$/,

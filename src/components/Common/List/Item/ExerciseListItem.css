@@ -1,0 +1,69 @@
+.root{
+    overflow: hidden;
+}
+.body{
+    overflow: hidden;
+}
+
+.list-container{
+    border-radius: 5px;
+    border: 1px solid var(--black-primary);
+    user-select: none;
+    overflow: auto;
+    margin-bottom: 1.5rem;
+}
+
+.list-header {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    background-color: var(--red-secondary);
+    padding: 1rem;
+    font-weight: 600;
+    overflow:hidden;
+
+  }
+  
+.list-header p { /* Duration */
+
+    margin: 0;
+    margin-right: 2rem;
+    align-items: end;
+    font-weight: 600;
+
+}
+
+.list-toggle {
+    cursor: pointer;
+    margin-left: auto;
+    transition: all 0.2s ease-in;
+}
+
+.list-item {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-right: 14px;
+    height: auto;
+  }
+    
+.list-duration {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.list-child { /*Description */
+    border-top: 1px solid var(--black-primary);
+    padding: 1rem;
+    word-wrap: break-word;
+    overflow: auto;
+    /*margin-top: 15px;*/
+}
+
+.list-rotate {
+    rotate: 180deg;
+}

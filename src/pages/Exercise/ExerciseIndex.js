@@ -1,11 +1,12 @@
-import React from "react"
-import SearchBar from "../../components/Common/SearchBar"
-import "../../components/Activity/activity.css"
+import React, {useState, useEffect, useContext} from "react"
+import SearchBar from "../../components/Common/SearchBar/SearchBar"
+import "../../components/Common/SearchBar/SearchBarUtils"
+import "../../pages/Exercise/ExerciseIndex.css"
 import ActivityList from "../../components/Activity/ActivityList"
 import { AccountContext } from "../../context"
 import RoundButton from "../../components/Common/RoundButton/RoundButton"
+import InfiniteScroll from "react-infinite-scroll-component"
 import { Plus } from "react-bootstrap-icons"
-
 
 /**
  * Class for the Exercise-page. Creates the searchbar and the list.
@@ -14,135 +15,119 @@ import { Plus } from "react-bootstrap-icons"
  * list after the current search term.
  *
  * Fetches the exercises from the API on pageload (componentDidMount).
- * @author Grupp 3 (Hawaii), Grupp 5 (Verona)
+ * @author Grupp 3 (Hawaii), Grupp 5 (Verona), Grupp 1 - Phoenix
  */
-class ExerciseIndex extends React.Component {
-	constructor(props) {
-		super(props)
-		this.state = {activities: [], visibleList: [], allTags: [], usedTags: []}
-		this.uri = this.props.uri
-		this.detailURL = "/exercise/exercise_page/"
-	}
 
-	render() {
-		return (
-			<div>
-				<center>
-					<h2 className="py-2">Övningar</h2>
-				</center>
-				<SearchBar onSearch={(event)=>{
-					this.search(event)
-				}}/>
-				<ActivityList activities={this.state.visibleList}  apiPath={"exercises"} detailURL={this.detailURL}/>
-				<div style={{padding: "50px"}}/>
-				<RoundButton linkTo={"/exercise/create"}>
-					<Plus />
-				</RoundButton>
-			</div>
-		)
-	}
+function ExerciseIndex() {
+	const [visibleList, setVisibleList] = useState([])
+	// const [allTags, setAllTags] = useState([])
+	// const [usedTags, setUsedTags] = useState([])
+	const [hasMore, setHasMore] = useState(true)
+	const [searchText, setSearchText] = useState("")
+	const [addedTags, setAddedTags] = useState([])
+	const [suggestedTags, setSuggestedTags] = useState([])
+	const { token } = useContext(AccountContext)
+	//const uri = props.uri
+	const detailURL = "/exercise/exercise_page/"
 
-	/**
-     * Called when component is added.
-     */
-	componentDidMount() {
-		this.getAllTags()
-		this.getAllExercises()
-		this.getAllExercisesByTag()
-	}
+	useEffect(() => {
+		// getAllTags();
+		// getAllExercises();
+		//getAllExercisesByTag();
+		getSetAmountOfExercises()
+	}, [])
 
-	/**
-    * Returns all tags.
-    */
-	async getAllTags() {
-		const headers = {token: this.context.token}
+	useEffect(() => {
+		if (searchText === "") {
+			setSuggestedTags([])
+			return
+		}
+		// Check if exists in	// const [allTags, setAllTags] = useState([])
+		// const [usedTags, setUsedTags] = useState([]) hashmap?
+		const handleChange = async () => {
+			const res = await fetch("/api/search/exercises", { headers: { token } })
+			if (!res.ok) {
+				console.log(res)
+				return
+			}
+			// If fetch success, the error message resets
+			let json = await res.json()
+			// Makes sure that added tags are not suggested
+			for (const tagInList of addedTags) {
+				json.tagCompletion = json.tagCompletion.filter((tag) => tag !== tagInList)
+			}
 
-		await fetch("/api/tags/all", {headers})
-			.then(res => res.json())
-			.then((data) => {
-				this.setState({ allTags: data, visibleTags: data })
-			})
-			.catch(console.log)
-	}
+			console.log(json.tagCompletion)
+			console.log(json)
+			setSuggestedTags(json.tagCompletion)
+		}
 
-	/**
-     * Returns all existing exercises.
-     */
-	async getAllExercises() {
-		const headers = {token: this.context.token}
+		handleChange()
+	}, [searchText])
 
-		await fetch("/api/exercises/all", {headers})
-			.then(res => res.json())
-			.then((data) => {
-				this.setState({ activities: data, visibleList: data })
-			})
-			.catch(console.log)
-	}
+	// const getAllTags = async () => {
+	// 	const headers = { token };
 
-	/**
-     * Sets all exercises to their tags.
-     */
-	async getAllExercisesByTag() {
-		const headers = {token: this.context.token}
+	// 	await fetch("/api/tags/all", { headers })
+	// 	.then((res) => res.json())
+	// 	.then((data) => {
+	// 		setAllTags(data);
+	// 		setVisibleTags(data);
+	// 	})
+	// 	.catch(console.log);
+	// };
 
-		await fetch("/api/tags/fetch/exercises/by-tag", {headers})
-			.then(res => res.json())
-			.then((data) => {
-				this.setState({usedTags : Object.keys(data).forEach(key => {
-					for(let i = 0; i < this.state.allTags.length; i++){
-						if(this.state.allTags[i].id === key){
-							return {tag_id: this.state.allTags[i].id, exercise_ids: data[key]}
-						}
-					}
-				})}) 
-			})
-	}
-
-	/**
-     * Used to search for the exercises that includes the searched word in the name or as a tag. 
-     * @param {String} event 
-     */
-	async search(event) {
-		const search = event.target.value.toLowerCase()
-
-		/* Find all tags with the searched word */
-		const searchedTags = this.state.allTags.filter(tag => tag.name.toLowerCase().includes(search))
-
-		/* Get all exercisesIds with the correct tags */
-		const exerciseIds = await this.getExercises(searchedTags)
-
-		/* Get exercises with the correct tags */
-		const exerciseByTag = this.state.activities.filter(activity => exerciseIds.includes(activity.id))
-
-		/* Get exercises with the correct names */
-		const exerciseByName = this.state.activities.filter(activity => activity.name.toLowerCase().includes(search))
-
-		/* Show the exercises without duplicates */
-		this.setState({visibleList: [...new Set([...exerciseByTag, ...exerciseByName])]})
-	}
-
-	/**
-     * Returns the exercises that have a tag that is searched for.
-     * @param {Array} searchedTags
-     *
-     * @returns All exercises with the searched tags.
-     */
-	async getExercises (searchedTags) {
-		let exerciseIds = []
-
-		searchedTags.forEach(tag => {
-			this.state.usedTags.forEach(usedTag => {
-				if(usedTag.tag_id === tag.id) {
-					usedTag.exercise_ids.forEach(exercise => {
-						exerciseIds.push(exercise)
-					})
+	const getSetAmountOfExercises =  async () => {
+		const startIndex = visibleList.length
+		const headers = { token }
+		console.log("GOT HERE")
+		await fetch(`/api/exercises/from/${startIndex}`, { headers })
+			.then((res) => res.json())
+			.then((newData) => {
+				const newVisibleList = [...visibleList, ...newData]
+				setVisibleList(newVisibleList)
+				console.log("GOT HERE")
+				if (newData.length < 20) {
+					setHasMore(false)
+				} else {
+					setHasMore(true)
 				}
-			}) 
-		})
-		return exerciseIds
+			})
+			.catch(console.log)
 	}
-}
 
-ExerciseIndex.contextType = AccountContext
+	return (
+		<div>
+			<center>
+				<h1 className="py-2">Övningar</h1>
+				<SearchBar 
+					id="nåt-id" 
+					text={searchText} 
+					onChange={setSearchText}
+					addedTags={addedTags}
+					setAddedTags={setAddedTags}
+					suggestedTags={suggestedTags}
+					setSuggestedTags={setSuggestedTags}
+				/>
+			</center>
+			<InfiniteScroll
+				dataLength={visibleList.length}
+				next={getSetAmountOfExercises}
+				hasMore={hasMore}
+				loader={<h4>Loading...</h4>}
+				scrollThreshold={0.8}
+			>
+				<ActivityList activities={visibleList}  apiPath={"exercises"} detailURL={detailURL}/>
+			</InfiniteScroll>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			<RoundButton linkTo={"/exercise/create"}> 
+				<Plus />
+			</RoundButton>
+		</div>
+	)
+}
 
 export default ExerciseIndex
