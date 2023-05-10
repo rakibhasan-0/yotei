@@ -113,7 +113,7 @@ done
 # Build and deploy containers.
 
 docker compose down &> /dev/null
-docker build -t pvt2023/gateway:latest gateway &> /dev/null
-docker build -t pvt2023/api:latest api &> /dev/null
-docker build -t pvt2023/frontend:latest . &> /dev/null
+docker build -t --no-cache pvt2023/gateway:latest gateway &> /dev/null
+docker build -t --no-cache pvt2023/api:latest api &> /dev/null
+docker build -t --no-cache pvt2023/frontend:latest . &> /dev/null
 docker compose up
