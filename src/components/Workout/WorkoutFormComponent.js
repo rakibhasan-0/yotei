@@ -7,6 +7,7 @@ import { GoBackButton } from "../Common/GoBackButton"
 import Creatable from "react-select/creatable"
 import { AccountContext } from "../../context"
 import "./Calendar.css"
+
 /**
  *  This component is an input form and is used in the page for creating
  *  a new workout (WorkoutCreate.js)

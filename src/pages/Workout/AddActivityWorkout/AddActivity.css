@@ -1,0 +1,48 @@
+
+.tabs {
+  border-width: medium;
+
+}
+
+.tab {
+	background-color: white;
+  color: black;
+  border-width: medium;
+  border: 2px;
+  height: 32px;
+  width: 99px;
+}
+
+.nav-link.active {
+  color: white !important;
+  background-color: var(--red-primary) !important;
+  border-radius: 5px 5px 0px 0px !important;
+  border: 1px solid var(--black-primary) !important;
+  outline: 1px;
+}
+
+.nav-link:hover {
+  border: 1px solid var(--black-primary) !important;
+  opacity: 0.7;
+
+}
+
+.nav-tabs .nav-link{
+  border-radius: 5px 5px 0px 0px;
+  border: 1px solid var(--black-primary);
+  font-size: 15px;
+}
+
+.nav-link{
+  padding: 0;
+}
+
+.nav-tabs {
+  border-bottom: 1px solid var(--black-primary);
+}
+
+.searchBar {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  
+}

@@ -24,10 +24,14 @@
 
 .technique-info-container {
 		display: flex;
+		align-items: center;
 }
 
 .technique-checkbox-container {
-		width: 10%;
+		text-align: center;
+		padding-left: 10px;
+		padding-top: 10px;
+		padding-bottom: 2px;
 }
 
 .technique-checkbox-container .checkbox-container {
@@ -43,6 +47,7 @@
 .technique-name-container .technique-name {
 		text-align: left;
 		margin: 10px;
+		font-size: 16px;
 }
 
 .technique-arrow-container {

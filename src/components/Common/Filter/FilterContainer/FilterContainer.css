@@ -15,12 +15,11 @@
 }
 
 .buttonGroup {
-    width: 100%;
     margin: auto;
     text-align: left;
-    padding: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
-
 
 legend{
     background: #FFFFFF none repeat scroll 0 0;

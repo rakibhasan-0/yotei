@@ -107,7 +107,6 @@ const WorkoutEdit = () => {
 
 	}
 
-
 	/**
      * Takes in the user input as argument and does a post request
      * with that information to the dabase in order to store it.
