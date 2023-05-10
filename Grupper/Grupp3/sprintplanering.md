@@ -1,4 +1,4 @@
-# Sprintplanering - (Lagnamn)
+# Sprintplanering - (Dragon)
 Inför varje sprint ska samtliga tickets skrivas in nedan. Planera även in tid inför gruppresentation. Varje enskilt team har själva i uppgift att göra en detaljerad sprint-planering för sin sprint-backlogg. Inför varje sprint skriv upp länken till dem tickets som ska göras. I detta dokument ska även övrig dokumentation skrivas.
 ## Sprint 1: 19 april - 28 april
 ### Tickets - Utgå från trello
