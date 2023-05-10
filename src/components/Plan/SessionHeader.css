@@ -1,0 +1,21 @@
+
+.sc23-session-header {
+	display: flex;
+}
+
+.sc23-session-header-item {
+	flex: 1;
+}
+
+.sc23-session-header-day-date {
+	text-align: left;
+	display: flex;
+}
+
+.sc23-session-header-title {
+	text-align: center;
+}
+
+.sc23-session-header-time {
+	text-align: right;
+}
