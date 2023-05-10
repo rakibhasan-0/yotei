@@ -1,19 +1,9 @@
-.btn-done{
-    width: 80px;
-    height: 80px;
-    float: right;
-    border-radius: 50%;
-    margin-top:10px;
-    background-color: #BE3B41;
-    border-color: #BE3B41;
-}
-
 .stay-box{
     margin-top: 3%;
 }
 
 .desc-form{
-    height: 100px;
+    height: 200px;
 }
 
 .alert{
@@ -36,3 +26,62 @@
         margin-top: 15%;
     }
 }
+
+.btn-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    justify-content: space-evenly;
+    margin-top: 4rem;
+}
+
+.checkbox-inactive{
+    color: var(--gray);
+    margin-left: 1rem;
+    padding-top: 1rem;
+}
+
+.add-checkbox,
+.eraseText-checkbox {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.checkbox-text {
+    margin-left: 1rem;
+    padding-top: 1rem;
+}
+
+.input-area {
+    width: 100%;
+    height: 100%;
+    border: 2px solid var(--black-primary);
+    border-radius: 0.3rem;
+    padding: 1rem;
+}
+
+.stand-area {
+    width: 100%;
+    height: 100%;
+    border: 2px solid var(--black-primary);
+    border-radius: 0.3rem;
+    padding: 1rem;
+}
+
+.time-selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text-input-field {
+    margin-bottom: 1rem;
+}
+
+.checkboxes-container {
+    margin-top: 2rem;
+}
+
+.check
