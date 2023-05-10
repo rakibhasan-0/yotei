@@ -1,8 +1,11 @@
 import React from "react"
 import { AccountContext } from "../../context"
+import PlanList from "../../components/Plan/PlanList"
+import PlanNav from "../../components/Plan/PlanNav"
 import PlanOrSessionDialog from "../../components/Plan/PlanOrSessionDialog"
-import "./PlanIndex.css"
-import FilterPlan from "./FilterPlan"
+
+
+
 /**
  * Index page for Plan, uses component PlanList
  *  @author Group 4(Calzone) and Group 3(Hawaii)
@@ -71,15 +74,43 @@ class PlanIndex extends React.Component {
 	render() {
 		return (
 			<div>
-				<h1 className="title">
-					Grupplanering
-				</h1>
-				<FilterPlan/>
+				<PlanNav plans={this.state.plans} setPlanFunction={this.setPlan} checkedChange={(index, checked) => {
+					let items = [...this.state.plans]
+					items[index].checked = checked
+					this.setState({plans: items})
+				}}
+				toggleAll={(toggled, visiblePlans) => this.setState({plans: this.state.plans.map(v => {
+					if(visiblePlans.some(p => p.id === v.id)){
+						v.checked = toggled
+					}
+					return v
+				})})}/>
+				<PlanList plans = {this.state.filteredPlans} sessions={this.state.sessions.filter( session => {
+					return this.state.filteredPlans.some(plan => session.plan === plan.id)
+				})} onEdit={async session => {
+					let index = this.state.sessions.findIndex( sesh => sesh.id === session.id)
+					let items = [...this.state.sessions]
 
-				<h1 style={ {"margin-top": "30px"} }>
-					{"Temporary placeholder for list item"}
-				</h1>
+					//If session has new workout then fetch the new workout into the cache
+					let cacheCopy = {...this.state.workoutCache}
+					if (session.workout && session.workout !== items[index].workout) {
+						await fetch(`api/workouts/workout/${session.workout}`, {headers: {token: this.context.token}})
+							.then(response => response.json())
+							.then(workout => {
+								cacheCopy[session.id] = workout
+								session.workoutObj = cacheCopy[session.id]
+							})
+							.catch(()=>{})
 
+					}
+					items[index] = session
+					let sortedSessions = items.sort((a, b) => new Date(a.date) - new Date(b.date))
+					this.setState({
+						workoutCache: cacheCopy,
+						sessions: sortedSessions,
+						filteredSessions: sortedSessions.filter(session => this.state.filteredPlans.some(plan => session.plan === plan.id))
+					})
+				}} onDelete={this.onDelete.bind(this)}/>
 				<PlanOrSessionDialog/>
 			</div>
 		)
