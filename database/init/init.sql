@@ -44,7 +44,7 @@ DROP TABLE IF EXISTS belt CASCADE;
 DROP TABLE IF EXISTS plan_to_belt CASCADE;
 DROP TABLE IF EXISTS technique_to_belt CASCADE;
 DROP TABLE IF EXISTS error_log CASCADE;
-DROP TABLE IF EXISTS media_technique CASCADE;
+DROP TABLE IF EXISTS media CASCADE;
 DROP SEQUENCE IF EXISTS serial;
 
 CREATE SEQUENCE serial START WITH 1 INCREMENT BY 1;
@@ -343,17 +343,17 @@ CREATE TABLE error_log (
 ALTER TABLE error_log OWNER TO psql;
 
 --
--- Name: media_technique; Type: TABLE; Schema: public; Owner: psql
+-- Name: media; Type: TABLE; Schema: public; Owner: psql
 --
-CREATE TABLE media_technique (
+CREATE TABLE media (
        media_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-       technique_id INT NOT NULL,
+       movement_id INT NOT NULL,
        url TEXT NOT NULL,
        local_storage BOOLEAN NOT NULL,
        image BOOLEAN NOT NULL,
        description TEXT
 );
-ALTER TABLE media_technique OWNER TO psql;
+ALTER TABLE media OWNER TO psql;
 
 
 --
