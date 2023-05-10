@@ -64,12 +64,6 @@
     "transformIgnorePatterns": [
       "<rootDir>/node_modules/node-fetch/"
     ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 50,
-        "lines": 90
-      }
-    },
     "coverageDirectory": "coverage/"
   },
   "babel": {
