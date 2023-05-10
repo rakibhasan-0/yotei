@@ -37,7 +37,7 @@ import se.umu.cs.pvt.search.enums.*;
 		if(this.tagType != null) {
 			String tagTypeString = this.tagType.name();
 			DatabaseQuery databaseQuery = new DatabaseQuery();
-			databaseQuery.setQuery("SELECT tag.name, tag.tag_id FROM tag, "+ tagTypeString +" WHERE tag.tag_id = "+ tagTypeString +".tag_id");
+			databaseQuery.setQuery("SELECT tag.name, tag.tag_id FROM tag, "+ tagTypeString +" WHERE tag.tag_id = "+ tagTypeString +".tag_id GROUP BY tag.tag_id");
         	queries.add(databaseQuery);
 		}
         return this;

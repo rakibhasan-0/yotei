@@ -50,7 +50,7 @@ public class SearchTagSuggestionsDBBuilderTest {
     void filterByTagTypeTechnique(){
         builder = new SearchTagSuggestionsDBBuilder(new ArrayList<String>(), TagType.technique_tag);
 
-        String expectedQuery = "SELECT tag.name, tag.tag_id FROM tag, technique_tag WHERE tag.tag_id = technique_tag.tag_id";
+        String expectedQuery = "SELECT tag.name, tag.tag_id FROM tag, technique_tag WHERE tag.tag_id = technique_tag.tag_id GROUP BY tag.tag_id";
 
         assertThat(builder
 				.filterByTagType()
@@ -61,7 +61,7 @@ public class SearchTagSuggestionsDBBuilderTest {
     void filterByTagTypeWorkout(){
         builder = new SearchTagSuggestionsDBBuilder(new ArrayList<String>(), TagType.workout_tag);
 
-        String expectedQuery = "SELECT tag.name, tag.tag_id FROM tag, workout_tag WHERE tag.tag_id = workout_tag.tag_id";
+        String expectedQuery = "SELECT tag.name, tag.tag_id FROM tag, workout_tag WHERE tag.tag_id = workout_tag.tag_id GROUP BY tag.tag_id";
 
         assertThat(builder
 				.filterByTagType()
@@ -72,7 +72,7 @@ public class SearchTagSuggestionsDBBuilderTest {
     void filterByTagTypeExercise(){
         builder = new SearchTagSuggestionsDBBuilder(new ArrayList<String>(), TagType.exercise_tag);
 
-        String expectedQuery = "SELECT tag.name, tag.tag_id FROM tag, exercise_tag WHERE tag.tag_id = exercise_tag.tag_id";
+        String expectedQuery = "SELECT tag.name, tag.tag_id FROM tag, exercise_tag WHERE tag.tag_id = exercise_tag.tag_id GROUP BY tag.tag_id";
 
         assertThat(builder
 				.filterByTagType()
@@ -102,7 +102,7 @@ public class SearchTagSuggestionsDBBuilderTest {
 
         builder = new SearchTagSuggestionsDBBuilder(tags, TagType.exercise_tag);
 
-        String expectedQuery = "SELECT tag.name, tag.tag_id FROM tag, exercise_tag WHERE tag.tag_id = exercise_tag.tag_id"+
+        String expectedQuery = "SELECT tag.name, tag.tag_id FROM tag, exercise_tag WHERE tag.tag_id = exercise_tag.tag_id GROUP BY tag.tag_id"+
 							   " INTERSECT " +
 							   "SELECT name, tag_id FROM tag WHERE tag.name NOT IN ('katt','kniv')";
 
