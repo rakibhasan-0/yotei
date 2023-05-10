@@ -1,4 +1,3 @@
-
 **Arbete kvar för grupper i arbetsdagar**\
 G1 - 3 dagar\
 G2 - hela\
@@ -9,7 +8,7 @@ G6 - 1dagar\
 G7 - 2dagar\
 G8 - 3dagar
 
-*Förslag På Sprint 3*
+# Förslag På Sprint 3
 - Grupper gör klart arbete ifrån S2 (se ovan för tidsuppskattning), första dagarna i väntan på mer önskade features
     - Testa komponenter
     - Skapa pass
