@@ -1,0 +1,27 @@
+.time-picker-li {
+    right: 0;
+    float: right;
+}
+
+.check-box-li {
+    padding: 0 29px;
+}
+
+ul {
+    list-style-type: none;
+    overflow: hidden;
+    align-self: center;
+}
+
+li {
+    float: left;
+}
+
+.weekday-time-picker {
+    width: 50%;
+    align-items: center;
+    font-size: 15p;
+    font-family: "Open Sans";
+    color: black;
+}
+
