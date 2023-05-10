@@ -5,14 +5,16 @@ import "../../pages/Exercise/ExerciseIndex.css"
 import ActivityList from "../../components/Activity/ActivityList"
 import { AccountContext } from "../../context"
 import RoundButton from "../../components/Common/RoundButton/RoundButton"
-import InfiniteScroll from "react-infinite-scroll-component"
 import { Plus } from "react-bootstrap-icons"
+import { getExercises } from "../../components/Common/SearchBar/SearchBarUtils"
+import useMap from "../../hooks/useMap"
+import Popup from "../../components/Common/Popup/Popup"
+import ExerciseCreate from "../../pages/Exercise/ExerciseCreate"
 
 /**
  * Function for the Exercise-page. Creates the searchbar and the list.
  * 
- * Displays a searchbar and a list of exercises. Only loads 20 exercises at a time
- * and loads more when the user scrolls down.
+ * Displays a searchbar and a list of exercises.
  * 
  * @author Hawaii, Verona, Phoenix
  * @since 2023-05-10
@@ -20,88 +22,60 @@ import { Plus } from "react-bootstrap-icons"
  */
 function ExerciseIndex() {
 	const [visibleList, setVisibleList] = useState([])
-	// const [allTags, setAllTags] = useState([])
-	// const [usedTags, setUsedTags] = useState([])
-	const [hasMore, setHasMore] = useState(true)
+	//const [allTags, setAllTags] = useState([])
+	//const [usedTags, setUsedTags] = useState([])
+	const [selectedTags, setSelectedTags] = useState([])
 	const [searchText, setSearchText] = useState("")
 	const [addedTags, setAddedTags] = useState([])
 	const [suggestedTags, setSuggestedTags] = useState([])
 	const { token } = useContext(AccountContext)
 	//const uri = props.uri
 	const detailURL = "/exercise/exercise_page/"
+	const [popupVisible, setPopupVisible] = useState(false)
+	const [map, mapActions] = useMap()
 
 	useEffect(() => {
 		// getAllTags();
-		// getAllExercises();
+		getAllExercises()
 		//getAllExercisesByTag();
-		getSetAmountOfExercises()
+		// getSetAmountOfExercises()
 	}, [])
 
-	useEffect(() => {
-		if (searchText === "") {
-			setSuggestedTags([])
-			return
-		}
-		// Check if exists in	// const [allTags, setAllTags] = useState([])
-		// const [usedTags, setUsedTags] = useState([]) hashmap?
-		const handleChange = async () => {
-			const res = await fetch("/api/search/exercises", { headers: { token } })
-			if (!res.ok) {
-				console.log(res)
-				return
-			}
-			// If fetch success, the error message resets
-			let json = await res.json()
-			// Makes sure that added tags are not suggested
-			for (const tagInList of addedTags) {
-				json.tagCompletion = json.tagCompletion.filter((tag) => tag !== tagInList)
-			}
 
-			console.log(json.tagCompletion)
-			console.log(json)
-			setSuggestedTags(json.tagCompletion)
-		}
 
-		handleChange()
-	}, [searchText])
-
-	// const getAllTags = async () => {
-	// 	const headers = { token };
-
-	// 	await fetch("/api/tags/all", { headers })
-	// 	.then((res) => res.json())
-	// 	.then((data) => {
-	// 		setAllTags(data);
-	// 		setVisibleTags(data);
-	// 	})
-	// 	.catch(console.log);
-	// };
-
-	const getSetAmountOfExercises =  async () => {
-		const startIndex = visibleList.length
+	const getAllExercises =  async () => {
 		const headers = { token }
-		console.log("GOT HERE")
-		await fetch(`/api/exercises/from/${startIndex}`, { headers })
-			.then((res) => res.json())
-			.then((newData) => {
-				const newVisibleList = [...visibleList, ...newData]
-				setVisibleList(newVisibleList)
-				console.log("GOT HERE")
-				if (newData.length < 20) {
-					setHasMore(false)
-				} else {
-					setHasMore(true)
-				}
+
+		await fetch("/api/exercises/all", {headers})
+			.then(res => res.json())
+			.then((data) => {
+				setVisibleList(data)
 			})
 			.catch(console.log)
-	}
+	} 
+
+
+	useEffect(() => {
+
+		const args = {
+			text: searchText,
+			selectedTags: selectedTags
+		}
+
+		getExercises(args, token, map, mapActions, (result) => {
+			setVisibleList(result.results)
+			setSuggestedTags(result.tagCompletion)
+			console.log(result.results)
+			console.log(setSelectedTags) //Temporary, to avoid lint error
+		})
+	}, [searchText])
 
 	return (
 		<div>
 			<center>
 				<h1 className="py-2">Övningar</h1>
 				<SearchBar 
-					id="cyka-id" 
+					id="exercise_searchbar" 
 					text={searchText} 
 					onChange={setSearchText}
 					addedTags={addedTags}
@@ -110,19 +84,22 @@ function ExerciseIndex() {
 					setSuggestedTags={setSuggestedTags}
 				/>
 			</center>
-			<InfiniteScroll
-				dataLength={visibleList.length}
-				next={getSetAmountOfExercises}
-				hasMore={hasMore}
-				loader={<h4>Loading...</h4>}
-				scrollThreshold={0.8}
-			>
-				<ActivityList activities={visibleList}  apiPath={"exercises"} detailURL={detailURL}/>
-			</InfiniteScroll>
+			<ActivityList activities={visibleList}  apiPath={"exercises"} detailURL={detailURL}/>
+
 			<br/><br/><br/><br/>
-			<RoundButton linkTo={"/exercise/create"}> 
+			<RoundButton linkTo={null} onClick={() => setPopupVisible(true)}>
 				<Plus />
 			</RoundButton>
+			<Popup
+				title={"Skapa övning"}
+				id={"create-exercise-popup"}
+				isOpen={popupVisible}
+				setIsOpen={setPopupVisible}
+				width={90}
+				height={95}
+				noBackground={false}>
+				<ExerciseCreate setShowPopup={setPopupVisible}/>
+			</Popup>
 		</div>
 	)
 }

@@ -9,10 +9,14 @@ import ListItem from "../Common/ListItem"
 import TechniqueCard from "../Common/Technique/TechniqueCard/TechniqueCard"
 import WorkoutListItem from "../Workout/WorkoutListItem"
 import WorkoutActivityListItem from "../Workout/WorkoutActivityListItem/WorkoutActivityListItem"
+import ExerciseListItem from "../Common/List/Item/ExerciseListItem"
+import FetchActivityDesc from "./FetchActivityDesc"
+import "../Common/List/Item/ExerciseListItem.css"
+
 
 const ActivityList = ({activities, apiPath, detailURL, favoriteCallback}) => {
 	return (
-		<div className="container m-0 grid-striped activity-list">
+		<div className="container grid-striped activity-list">
 			{renderItems()}
 		</div>
 	)
@@ -28,7 +32,10 @@ const ActivityList = ({activities, apiPath, detailURL, favoriteCallback}) => {
 
 			case "techniques":
 				return <TechniqueCard key={activity.id} technique={activity} checkBox={false}/>
-			
+
+			case "exercises":
+				return <ExerciseListItem item={activity.name} text={activity.duration + " min"} key={index} id={activity.id} detailURL={detailURL} index={index}><FetchActivityDesc activity = {activity} apiPath={apiPath}/></ExerciseListItem>  
+
 			default:
 				return <ListItem key={activity.id} activity={activity} apiPath = {apiPath} detailURL={detailURL} index={index}/>
 			}
