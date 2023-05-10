@@ -30,7 +30,7 @@ import { ChevronRight } from "react-bootstrap-icons"
  * @version 1.0
  * @since 2023-05-09
  */
-function AddActivity({id}) {
+function AddActivity({id, setShowActivityInfo}) {
 
 	const { token } = useContext(AccountContext)
 
@@ -185,7 +185,7 @@ function AddActivity({id}) {
 						))}
 					</Tab>
 				</Tabs>
-				<RoundButton > 
+				<RoundButton onClick={() => setShowActivityInfo([...checkedBoxesExer, ...checkedBoxesTech])}> 
 					<ChevronRight width={30}/>
 				</RoundButton>
 			</Modal.Body>

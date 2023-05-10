@@ -18,19 +18,16 @@ import "./MinutePicker.css"
  * @version 1.0
  * @since 2023-05-03
  */
-export default function MinutePicker({id, time, updateTime}) {
-	const handleTime = (e) => e.target.validity.valid ?
-		updateTime(e.target.value) : updateTime(time)
-	
+export default function MinutePicker({id, callback}) {
 	return (
 		<div className="minute-picker">
 			<input
-				id = {id}
-				type="text"
+				id={`minute-picker-${id}`}
+				type="number"
 				pattern="[0-9]*"
-				value={time}
+				// value={time}
 				placeholder="0"
-				onChange= {handleTime}
+				onChange={(e) => e.target.validity.valid && callback(id, e.target.value)}
 				min="0"
 				className={"minute-input"}/>
 			<label className="min-text">

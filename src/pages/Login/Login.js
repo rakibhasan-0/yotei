@@ -95,6 +95,7 @@ function Login() {
 	function handleKeyDown(event) {
 		if (event.key === "Enter") {
 			loginClicked().then(() => {})
+			
 		}
 	}
 

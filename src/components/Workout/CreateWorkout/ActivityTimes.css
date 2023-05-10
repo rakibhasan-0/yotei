@@ -1,26 +1,31 @@
 .activity-time-list {
     padding-left: 0rem;
     list-style-type:none;
-    width: 10rem;
+    width: 100%;
     align-content: center;
-
 }
 .activity-time-list-item {
     display: flex;
-    justify-content: center;
-    margin-top: 1rem;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem auto 0 auto;
+    max-width: 500px;
 }
-.activity-time-text {
-    display: flex;
-    width: 4rem;
 
+.activity-time-line-container {
+    margin: 0 10px;
 }
+
 .activity-time-text-item {
     align-items: center;
     font-size: 18px;
     font-weight: 600;
-    margin-top: -0.15rem;
-    margin-right: 1rem;
     margin-left: 0;
     margin-bottom: 0;
+}
+
+@media only screen and (max-width: 600px) {
+    .activity-time-list-item {
+        margin: 1rem 1.5rem 0 1.5rem;
+    }
 }

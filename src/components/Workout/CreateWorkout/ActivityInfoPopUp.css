@@ -1,0 +1,20 @@
+.acitvity-info-activity-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.activity-info-btns {
+    margin-top: 3rem;
+    display: flex;
+    justify-content: center;
+}
+
+.acitvitiy-info-button-divider {
+    margin: 0 10px;
+}
+
+.activity-time-add-activity-button {
+    margin-top: 2rem;
+    min-width: 120px;
+}

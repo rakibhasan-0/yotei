@@ -9,6 +9,9 @@ import Popup from "../Common/Popup/Popup"
 import AddActivity from "../../pages/Workout/AddActivityWorkout/AddActivity"
 
 
+// Temporary import for including the new ActivityInfoPopup
+import ActivityInfoPopUp from "./CreateWorkout/ActivityInfoPopUp.jsx"
+
 /**
  * Draggable list component.
  * Based on: https://codesandbox.io/s/w4bxv?file=/src/App.tsx
@@ -16,12 +19,16 @@ import AddActivity from "../../pages/Workout/AddActivityWorkout/AddActivity"
  */
 
 const EditWorkout = ({startActivities, updateOutputArray}) => {
+	// TEMO SOLUTION DONT KEEP THIS
+	const [activities, setActivities] = useState([])
+
 	let act = startActivities ? startActivities : []
 	const [elements, setElements] = useState(act)
 	const prevElements = useRef(elements)
 	const containerHeight = useRef(0)
 
 	const [showPopup, setShowPopup] = useState(false)
+	const [showActivityInfoPopup, setShowActivityInfoPopup] = useState(false)
 
 	//Triggered on load.
 	useEffect(() => {
@@ -162,30 +169,30 @@ const EditWorkout = ({startActivities, updateOutputArray}) => {
 		updateOutputArray([...elements])
 	}
 
-	//Returns an id that is not used by any element in the list.
-	function getUniqueId(){
-		let firstFreeId=1
-		let uniqueId = false
-		while (!uniqueId){
-			uniqueId = true
-			for (let i = 0; i < elements.length; i++) {
-				if (elements[i].id === firstFreeId){
-					uniqueId = false
-					firstFreeId++
-					break
-				}
-			}
-		}
-		return firstFreeId
-	}
+	// //Returns an id that is not used by any element in the list.
+	// function getUniqueId(){
+	// 	let firstFreeId=1
+	// 	let uniqueId = false
+	// 	while (!uniqueId){
+	// 		uniqueId = true
+	// 		for (let i = 0; i < elements.length; i++) {
+	// 			if (elements[i].id === firstFreeId){
+	// 				uniqueId = false
+	// 				firstFreeId++
+	// 				break
+	// 			}
+	// 		}
+	// 	}
+	// 	return firstFreeId
+	// }
 
 	
-	//Adds new text element.
-	function addText(){
-		elements.push({name:"", duration:0, workoutId:null, id:getUniqueId(), exerciseId: null, techniqueId: null, order:elements.length, yPos:0, height: 0, activity: false})
-		setElements([...elements])
-		updateYPos(-1)
-	}
+	// //Adds new text element.
+	// function addText(){
+	// 	elements.push({name:"", duration:0, workoutId:null, id:getUniqueId(), exerciseId: null, techniqueId: null, order:elements.length, yPos:0, height: 0, activity: false})
+	// 	setElements([...elements])
+	// 	updateYPos(-1)
+	// }
 
 	function dragStart(element, set) {
 		set([0 , element.yPos])
@@ -261,13 +268,20 @@ const EditWorkout = ({startActivities, updateOutputArray}) => {
 			
 
 			<div className={"add-btn-container"}>
-				<Button className="add-button btn-md" variant="inline" onClick={() => addText()}>+ Fri text</Button>
+				<Button className="add-button btn-md" variant="inline" onClick={() => setShowActivityInfoPopup(!showActivityInfoPopup)}>+ Fri text</Button>
 				<Button className="add-button btn-md" variant="inline" onClick={() => setShowPopup(true)}>+ Aktivitet</Button>
-				<Popup id={"test-popup"} title={""} isOpen={showPopup} setIsOpen={setShowPopup}>
-					<AddActivity id={"test-activityy-add"}></AddActivity>
+				<Popup id={"test-popup"} title={"test"} isOpen={showPopup} setIsOpen={setShowPopup}>
+					<AddActivity id={"test-activityy-add"} setShowActivityInfo={(arr) => {
+						setActivities(arr)
+						setShowActivityInfoPopup(true)
+					}}></AddActivity>
 				</Popup>
+				{showActivityInfoPopup && <ActivityInfoPopUp activities={activities} categories={[{name: "Uppvärmning", checked: false},{name: "Träning", checked: false}, {name: "Avslut", checked: false}]} addPressed={(a) => console.log(a)} tempClose={() => {
+					setShowPopup(false)
+					setShowActivityInfoPopup(false)
+					setActivities([])
+				}} />}
 			</div>
-
 		</>
 	)
 }
