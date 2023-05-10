@@ -95,6 +95,7 @@ build-image:
 systest-job:
   <<: *skippable
   stage: systest
+  when: manual
   # We must use ubuntu, as alpine (or docker:20) uses musl instead of glibc,
   # which is a requirement for chromium.
   image: mcr.microsoft.com/playwright:v1.33.0-jammy
