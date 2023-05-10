@@ -135,18 +135,23 @@ public class ExerTagControllerTest {
 
         // findAllProjectedByExerId is the function called in the JPA repository when a search for tags related to a exercise is made.
         Mockito.when(exerRepository.findAllProjectedByExerciseId(anyLong())).thenAnswer(invocation -> {
-            ArrayList<Long> tagIds = new ArrayList<>();
+            ArrayList<ExerciseTagShortId> tagIds = new ArrayList<>();
             for(ExerciseTag w : exerciseTags) {
                 if(w.getExerciseId() == invocation.getArguments()[0]) {
-                    tagIds.add(w.getTag());
+                    tagIds.add(new ExerciseTagShortId() {
+                        @Override
+                        public Tag getTag() {
+                            return w.getTagObject();
+                        }
+                    });
                 }
             }
             return tagIds;
         });
 
         // check that the different exercises have the correct amount of tags and a Http status code is returned when trying to fetch with non existing exercise id.
-        assertEquals(2, Objects.requireNonNull(exerController.getTagByExercises(EXERCISE_ONE).getBody()).size());
-        assertEquals(1, Objects.requireNonNull(exerController.getTagByExercises(EXERCISE_TWO).getBody()).size());
+        assertEquals(2, exerController.getTagByExercises(EXERCISE_ONE).getBody().size());
+        assertEquals(1, exerController.getTagByExercises(EXERCISE_TWO).getBody().size());
         assertEquals(new ResponseEntity<>(HttpStatus.BAD_REQUEST), exerController.getTagByExercises((long) 32));
     }
 

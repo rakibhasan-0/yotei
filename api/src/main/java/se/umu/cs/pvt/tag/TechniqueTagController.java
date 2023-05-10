@@ -105,13 +105,15 @@ public class TechniqueTagController {
      *                          BAD_REQUEST if Exercise has no Tags.
      */
     @GetMapping("/get/tag/by-technique")
-    public ResponseEntity<List<TechniqueTagShortId>> getTagByTechnique(@RequestParam(name = "techId") Long techId) {
+    public ResponseEntity<List<TagResponse>> getTagByTechnique(@RequestParam(name = "techId") Long techId) {
         if (techniqueTagRepository.findByTechId(techId) != null) {
-            return new ResponseEntity<>(techniqueTagRepository.findAllProjectedByTechId(techId), HttpStatus.OK);
+            return new ResponseEntity<>(
+                    techniqueTagRepository.findAllProjectedByTechId(techId).stream()
+                            .map(t -> new TagResponse(t.getTag().getId(), t.getTag().getName()))
+                            .toList(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-
 
     /**
      * Gets all TechniqueIds mapped by their Tags.

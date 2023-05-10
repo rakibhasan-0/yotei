@@ -132,10 +132,15 @@ public class TechTagControllerTest {
 
         // findAllProjectedBytechId is the function called in the JPA repository when a search for tags related to a technique is made.
         Mockito.when(techRepository.findAllProjectedByTechId(anyLong())).thenAnswer(invocation -> {
-            ArrayList<Long> tagIds = new ArrayList<>();
+            ArrayList<TechniqueTagShortId> tagIds = new ArrayList<>();
             for(TechniqueTag w : techniqueTags) {
                 if(w.getTechId() == invocation.getArguments()[0]) {
-                    tagIds.add(w.getTag());
+                    tagIds.add(new TechniqueTagShortId() {
+                        @Override
+                        public Tag getTag() {
+                            return w.getTagObject();
+                        }
+                    });
                 }
             }
             return tagIds;

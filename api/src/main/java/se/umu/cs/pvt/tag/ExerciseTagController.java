@@ -77,9 +77,11 @@ public class ExerciseTagController {
      *                              BAD_REQUEST if Exercise has no tags.
      */
     @GetMapping("/get/tag/by-exercise")
-    public ResponseEntity<List<ExerciseTagShortId>> getTagByExercises(@RequestParam(name = "exerciseId") Long exerciseId ) {
+    public ResponseEntity<List<TagResponse>> getTagByExercises(@RequestParam(name = "exerciseId") Long exerciseId ) {
         if (exerciseTagRepository.findByExerciseId(exerciseId) != null) {
-            return new ResponseEntity<>(exerciseTagRepository.findAllProjectedByExerciseId(exerciseId), HttpStatus.OK);
+            return new ResponseEntity<>(exerciseTagRepository.findAllProjectedByExerciseId(exerciseId).stream()
+                    .map(t -> new TagResponse(t.getTag().getId(), t.getTag().getName()))
+                    .toList(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }

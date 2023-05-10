@@ -6,4 +6,5 @@
 package se.umu.cs.pvt.tag;
 
 public interface TechniqueTagShortId {
+    Tag getTag();
 }
