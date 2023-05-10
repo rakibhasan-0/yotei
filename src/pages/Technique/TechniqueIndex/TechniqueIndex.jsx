@@ -5,8 +5,8 @@ import { AccountContext } from "../../../context"
 import "./TechniqueIndex.css"
 import { Plus } from "react-bootstrap-icons"
 import SearchBar from "../../../components/Common/SearchBar/SearchBar"
-import { getTechniques } from "..//..//..//components/Common/SearchBar/SearchBarUtils"
-import useMap from "..//..//..//hooks/useMap"
+import { getTechniques } from "../../../components/Common/SearchBar/SearchBarUtils"
+import useMap from "../../../hooks/useMap"
 import TechniqueFilter from "../../../components/Common/Filter/TechniqueFilter"
 
 /**
@@ -20,58 +20,46 @@ import TechniqueFilter from "../../../components/Common/Filter/TechniqueFilter"
 function TechniqueIndex() {
 	const [techniques, setTechniques] = useState()
 	const context = useContext(AccountContext)
+
+	const [searchBarText, setSearchBarText] = useState("")
 	const [map, mapActions] = useMap()
 	const [tags, setTags] = useState([])
 	const [suggestedTags, setSuggestedTags] = useState([])
 	const [kihon, setKihon] = useState(false)
-	const [belts, setBelts] = useState([])// eslint-disable-line
+	const [belts, setBelts] = useState([])
 
-	useEffect(() => {handleChange({target: {value: ""}})}, [])//rör inte, permantent lösning
-
-	function removedDuplicates(array) {
-		return [...new Set(array)]
-	}
-
-	function removeUsedTags(array) {
-		let arr1 = array
-		let arr2 = tags
-		let difference = arr1.filter(x => arr2.indexOf(x) === -1)
-		return difference
-	}
-
-	function repair(array) {
-		return removeUsedTags(removedDuplicates(array))
-	}
-	
-	function handleChange(event) {
-		console.log(tags)
+	useEffect(() => {
+		// The selected belts are transformed from an array of belts objects to an array of strings, consisting of the belt names
 		const args = {
-			text: event.target.value,
-			selectedBelts: belts,
+			text: searchBarText,
+			selectedBelts: belts.map(belt => belt.child ? belt.name + "-barn" : belt.name).join(","),
 			kihon: kihon,
 			selectedTags: tags,
 		}
+
 		getTechniques(args, context.token, map, mapActions, res => {
-			setSuggestedTags(repair(res.tagCompletion))
+			setSuggestedTags(res.tagCompletion)
 			setTechniques(res.results)
 		})
-		return event.target.value
-	} 
+
+	}, [searchBarText, belts, kihon, tags])
+
 	return (
 		<>
 			<div className="container grid-striped">
 				<SearchBar 
 					id="searchbar-technique"
 					placeholder="Sök efter tekniker"
-					onChange={handleChange}
+					text={searchBarText}
+					onChange={setSearchBarText}
 					addedTags={tags}
 					setAddedTags={setTags}
 					suggestedTags={suggestedTags}
 					setSuggestedTags={setSuggestedTags}
 				/>
-				<div style={{wid: "0xp"}}>
+				<div style={{}}>
 					<TechniqueFilter
-						setBelts={() => belts.map(belt => belt.child ? belt.name + "-barn" : belt.name)}
+						setBelts={setBelts}
 						belts={belts}
 						setKihon={kihon => {setKihon(kihon)}}
 						kihon={kihon}

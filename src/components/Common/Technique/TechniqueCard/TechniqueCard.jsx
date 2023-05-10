@@ -8,9 +8,10 @@ import "./TechniqueCard.css"
  * Used to display each technique on the technique page.
  * 
  * Props:
- *		activity (object) : The technique/activity object.
+ *		technique (object) : The technique/activity object.
  *		checkBox (boolean) : If a checkbox should be included in the card or not
  *		id: Id used for testing.
+ *		onToggle: Callback function for checkbox toggle.
  * 
  * @author Medusa
  * @version 1.0
@@ -33,14 +34,15 @@ function TechniqueCard({ technique, checkBox, id, onToggle }) {
 						technique.beltColors.length > 0 ?  	
 							technique.beltColors.map((belt) => {
 								return (belt !== undefined ?
-									belt.isChild ? constructChildBelt(technique, belt)
+									belt.is_child ?
+										constructChildBelt(technique, belt)
 										: 
-										constructAdultBelt(technique, belt) //barnbälte 
-									: constructAdultBelt("13c9ed") // när det finns färger och är ett vuxenbälte
+										constructAdultBelt(technique, belt) 
+									: constructAdultBelt("13c9ed") 
 								)})
-							:	constructDefaultBelt("8e03ad") //om vi fär 0st fägerger (lila)
+							:	constructDefaultBelt(technique, "8e03ad") //om vi fär 0st fägerger (lila)
 
-						: constructDefaultBelt("8e03ad") //om vi inte får färger (lila)
+						: constructDefaultBelt(technique, "8e03ad") //om vi inte får färger (lila)
 					
 				}
 				
@@ -83,8 +85,8 @@ function constructDefaultBelt(color) {
 function constructAdultBelt(technique, belt) {
 	return (
 		<div
-			key={technique.id + belt.id}
-			className={["technique-card-belt-color", belt.name === "Vitt" ? "technique-card-belt-border" : ""].join(" ")}
+			key={technique.techniqueID + belt.belt_name + belt.is_child}
+			className={["technique-card-belt-color", belt.belt_name === "Vitt" ? "technique-card-belt-border" : ""].join(" ")}
 			style={{background: `#${belt.belt_color}`}}
 		/>
 	)
@@ -93,7 +95,11 @@ function constructAdultBelt(technique, belt) {
 
 function constructChildBelt(technique, belt) {
 	return (
-		<div key={technique.id  + belt.id} className={["technique-card-belt-color", "technique-card-belt-border"].join(" ")} style={{background: `linear-gradient( #fff 33%, #${belt.belt_color} 33%, #${belt.belt_color} 66%, #fff 0)`}}></div>
+		<div 
+			key={technique.techniqueID  + belt.belt_name + belt.is_child}
+			className={["technique-card-belt-color", "technique-card-belt-border"].join(" ")}
+			style={{background: `linear-gradient( #fff 33%, #${belt.belt_color} 33%, #${belt.belt_color} 66%, #fff 0)`}}
+		/>
 	)
 }
 

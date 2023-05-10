@@ -35,7 +35,7 @@ const ActivityList = ({activities, apiPath, detailURL}) => {
 					activities.map((activity, index) => <WorkoutActivityListItem key={activity.id} activity={activity} index={index}/>)
 					:    
 					apiPath === "techniques" ?
-						activities.map((activity) => <TechniqueCard key={activity.id} technique={activity} checkBox={false}/>)
+						activities.map((activity) => <TechniqueCard key={activity.techniqueID} technique={activity} checkBox={false}/>)
 						:
 						activities.map((activity, index) => <ExerciseListItem item={activity.name} text={activity.duration + " min"} key={activity.id} id={activity.id} detailURL={detailURL} index={index}><FetchActivityDesc activity = {activity} apiPath={apiPath}/></ExerciseListItem>)  
 			}
