@@ -88,7 +88,7 @@ function BeltBox ( {id, belts} ) {
 	return (
 		// Check if able to load BeltBox
 		checkID(id) && checkBelt() ?
-			<div id={id} className="beltbox d-flex">
+			<div id={id} className="sc23-beltbox d-flex">
 				{
 					belts.map(belt => 
 
@@ -99,29 +99,29 @@ function BeltBox ( {id, belts} ) {
 								(
 									belt.child ?
 								
-										<div key={`${belt.id}-child-belt`} className="belt" style={{background:"white"}}>
-											<div id={`${belt.id}-child-belt-color`} className="belt-child" style={{background:belt.color}}/>
+										<div key={`${belt.id}-child-belt`} className="sc23-beltbox-belt" style={{background:"white"}}>
+											<div id={`${belt.id}-child-belt-color`} className="sc23-beltbox-belt-child" style={{background:belt.color}}/>
 										</div>
 										:
-										<div key={`${belt.id}-adult-belt`} className="belt" style={{background: belt.color}}/>	
+										<div key={`${belt.id}-adult-belt`} className="sc23-beltbox-belt" style={{background: belt.color}}/>	
 								)
 								:
 								(
-									<div key={`${belt.id}-belt-error-child`} id={`${id}-belt-error-child`} className="belt-error" style={{background:belt.color}}>child?</div>
+									<div key={`${belt.id}-belt-error-child`} id={`${id}-belt-error-child`} className="sc23-beltbox-belt-error" style={{background:belt.color}}>child?</div>
 								)
 							:
 							
 							// Color unavailable
 							checkBeltName(belt) ?
-								<div key={`${id}-belt-error-color`} id={`${id}-belt-error-color`} className="belt-error">{belt.name}</div>
+								<div key={`${id}-belt-error-color`} id={`${id}-belt-error-color`} className="sc23-beltbox-belt-error">{belt.name}</div>
 								:
-								<div key={`${id}-belt-error-name`} id={`${id}-belt-error-color`} className="belt-error">undefined</div>
+								<div key={`${id}-belt-error-name`} id={`${id}-belt-error-color`} className="sc23-beltbox-belt-error">undefined</div>
 					)
 				}
 			</div>
 			:
 			// Unable to loada BeltBox
-			<div id = "error-load-belt-box" className="beltbox">Error loading component</div>
+			<div id = "error-load-belt-box" className="sc23-beltbox-beltbox">Error loading component</div>
 	)
 }
 

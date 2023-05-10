@@ -1,5 +1,5 @@
 /* The complete component */
-.beltbox {
+.sc23-beltbox {
 	width: 100%;
 	height: 100%;
     outline-style: solid;
@@ -11,21 +11,21 @@
 
 
 /* Each belt */
-.belt {
+.sc23-beltbox-belt {
 	height: 100%;
 	flex: 1;
     float: left;
 	justify-content: center;
 }
 
-.belt-child {
+.sc23-beltbox-belt-child {
 	position: relative;
 	height: 50%;
 	top: 25%;
 }
 
 
-.belt-error {
+.sc23-beltbox-belt-error {
 	height: 100%;
 	flex: 1;
 	color: black;
