@@ -1,4 +1,4 @@
-# Sprintplanering - (Dragon)
+# Sprintplanering - Dragon
 Inför varje sprint ska samtliga tickets skrivas in nedan. Planera även in tid inför gruppresentation. Varje enskilt team har själva i uppgift att göra en detaljerad sprint-planering för sin sprint-backlogg. Inför varje sprint skriv upp länken till dem tickets som ska göras. I detta dokument ska även övrig dokumentation skrivas.
 ## Sprint 1: 19 april - 28 april
 ### Tickets - Utgå från trello
@@ -13,7 +13,7 @@ Inför varje sprint ska samtliga tickets skrivas in nedan. Planera även in tid 
 * https://trello.com/c/vOlIV6hw/40-g%C3%A5r-inte-att-ta-bort-en-anv%C3%A4ndare-som-heter
 * https://trello.com/c/kecGbuBN/41-m%C3%B6jlig-sql-injection-g%C3%A5r-inte-att-ta-bort-en-anv%C3%A4ndare-som-heter-som-f%C3%B6rsta-tecken-i-namnet-server-hittades-inte
 *
-* ...
+* 
 ### Övrigt
 ## Sprint 2: 2 maj - 12 maj
 ### Tickets - Utgå från trello
@@ -24,7 +24,7 @@ Inför varje sprint ska samtliga tickets skrivas in nedan. Planera även in tid 
 * https://trello.com/c/BQD3pHfy/55-byta-editera-video-bild-f%C3%B6r-teknik
 * https://trello.com/c/uqdExoVO/54-ta-bort-video-bild-f%C3%B6r-teknik
 * https://trello.com/c/EhznuV9h/53-ladda-upp-video-bild-f%C3%B6r-teknik
-* ...
+* 
 ### Övrigt
 ## Sprint 3: 15 maj - 26 maj
 ### Tickets - Utgå från trello
