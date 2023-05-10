@@ -44,7 +44,7 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 				}}>
 
 				<div className="col text-left">
-					<h5 className="d-flex align-items-center text-left workout-name">{name}</h5>
+					<h5 className="d-flex align-items-center text-left workout-activity-name">{name}</h5>
 				</div>
 
 				

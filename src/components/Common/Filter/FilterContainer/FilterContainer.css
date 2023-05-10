@@ -1,24 +1,22 @@
+
+fieldset {
+    border: 3px solid #201E1F;
+    border-radius: 10px;
+    border-top-color: #201E1F; 
+    box-sizing: border-box; 
+    padding: 20px;
+    padding-top: 5px;
+    margin: auto;
+    text-align: center;
+}
+
 .filterPos {
     width: 100%;
-}
-
-@media  (max-width: 500px) {
-    fieldset{
-        width: 100%;
-    }
-}
-
-@media (min-width: 500px) {
-    fieldset{
-        width: 500px;
-    }
 }
 
 .buttonGroup {
     margin: auto;
     text-align: left;
-    padding-top: 10px;
-    padding-bottom: 10px;
 }
 
 legend{

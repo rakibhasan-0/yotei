@@ -20,7 +20,12 @@ configure({testIdAttribute: "id"})
 test("Should have correct id in DOM", async() => {
 	// ARRANGE
 	let id = "testy"
-	render(<WorkoutFavoriteButton id={id} workoutId={0} initState={false}/>)
+	const workout = {
+		workoutID: 0,
+		favourite: true,
+		name: "test"
+	}
+	render(<WorkoutFavoriteButton id={id} workout={workout}/>)
 
 	// ACT
 	const elem = screen.getByTestId(id)
@@ -40,8 +45,13 @@ test("Should send DELETE when deselected", async() => {
 			return res(ctx.status(200))
 		})
 	)
+	const workout = {
+		workoutID: 0,
+		favourite: true,
+		name: "test"
+	}
 	const user = userEvent.setup()
-	render(<WorkoutFavoriteButton id="test" workoutId={0} initState={true}/>)
+	render(<WorkoutFavoriteButton id="test" workout={workout}/>)
 
 	// ACT
 	await user.click(screen.getByTestId("test"))
@@ -60,8 +70,13 @@ test("Should send POST when selected", async() => {
 			return res(ctx.status(200))
 		})
 	)
+	const workout = {
+		workoutID: 0,
+		favourite: false,
+		name: "test"
+	}
 	const user = userEvent.setup()
-	render(<WorkoutFavoriteButton id="test" workoutId={0} initState={false}/>)
+	render(<WorkoutFavoriteButton id="test" workout={workout}/>)
 
 	// ACT
 	await user.click(screen.getByTestId("test"))

@@ -172,7 +172,6 @@ export function getWorkouts(args, token, map, mapActions, callBack) {
 	const query = `/api/search/workouts?name=${args.text}&from=${args.from}to=${args.to}&favourite=${args.isFavorite}&tags=${args.selectedTags}&id=${args.id}`
 
 	if(mapActions.lookup(query) !== undefined) {
-		console.log("Got from cache")
 		callBack(mapActions.lookup(query))
 		return
 	}
@@ -185,7 +184,6 @@ export function getWorkouts(args, token, map, mapActions, callBack) {
 	}).then((response) => response.json())
 		.then((data) => {
 			mapActions.insert(query, data)
-			console.log("Fetched")
 			callBack(data)
 			return
 		}).catch((error) => {

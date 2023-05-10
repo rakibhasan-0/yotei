@@ -4,23 +4,23 @@
  * to the appropriate workout.
  *
  * @author Hot-pepper (Group 7), Cyclops (Group 5)
+ * @since May 9, 2023
  * @version 2
  */
-import React from "react"
 import "./WorkoutListItem.css"
 import { Link } from "react-router-dom"
 import FavoriteButton from "./WorkoutFavoriteButton"
 
-export default function WorkoutListItem({ workout, isFavorite}) {
+export default function WorkoutListItem({ workout, favoriteCallback}) {
 	return (
-		<div className="row align-items-center font-weight-bold py-2 workout-item-row" key={workout.id}>
+		<div className="row align-items-center font-weight-bold workout-item-row">
 			<div className="col-2 workout-star">
-				<FavoriteButton workoutId={workout.id} initState={isFavorite}/>
+				<FavoriteButton className="test" workout={workout} favoriteCallback={favoriteCallback}/>
 			</div>
-			<div className="col-8 align-items-center align-self-center workout-text fill">
-				<Link className="text-center workout-name" to={`/workout/${workout.id}`}>{workout.name}</Link>
-			</div>
-			<Link className="col-2 align-items-center align-self-center" to={`/workout/${workout.id}`}>
+			<Link className="col align-items-center align-self-center workout-text fill" to={`/workout/${workout.workoutID}`}>
+				{workout.name}
+			</Link>
+			<Link className="col-2 align-items-center align-self-center workout-text fill" to={`/workout/${workout.workoutID}`}>
 				<i id="workout-detail-arrow" className="bi-chevron-right h4"/>
 			</Link>
 		</div>

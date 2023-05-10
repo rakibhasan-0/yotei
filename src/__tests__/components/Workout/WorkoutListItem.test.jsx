@@ -12,10 +12,9 @@ configure({testIdAttribute: "id"})
 test("Should have correct name", async() => {
 	// ARRANGE
 	const workout = {
-		"name":"asd",
-		"id":1,
-		"created":"2023-05-08",
-		"author":1
+		name:"asd",
+		workoutID:1,
+		favourite: false
 	}
 
 	render(
@@ -35,10 +34,9 @@ test("Should have correct name", async() => {
 test("Should have correct link", async() => {
 	// ARRANGE
 	const workout = {
-		"name":"asd",
-		"id":1,
-		"created":"2023-05-08",
-		"author":1
+		workoutID: 0,
+		favourite: true,
+		name: "test"
 	}
 
 	render(
@@ -52,5 +50,5 @@ test("Should have correct link", async() => {
 
 	// ASSERT
 	expect(link).toBeDefined()
-	expect(link.href).toContain("/workout/" + workout.id)
+	expect(link.href).toContain("/workout/" + workout.workoutID)
 })
