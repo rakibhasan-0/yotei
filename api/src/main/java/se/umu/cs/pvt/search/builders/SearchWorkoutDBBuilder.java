@@ -46,7 +46,7 @@ public class SearchWorkoutDBBuilder implements SearchDBBuilderInterface {
             DatabaseQuery createdQuery = new DatabaseQuery();
             createdQuery.setQuery(
                     "SELECT w.workout_name, w.workout_id " +
-                    "FROM workout AS w WHERE w.workout_author='" + user_id + "'"
+                    "FROM workout AS w WHERE w.workout_author=" + user_id
             );
             queries.add(createdQuery);
         }
@@ -129,14 +129,14 @@ public class SearchWorkoutDBBuilder implements SearchDBBuilderInterface {
         String stringQuery;
         String resultQuery = databaseQuery.getQuery();
 
-        if(searchWorkoutParams.hasUser_id() && searchWorkoutParams.isFavourite()){
+        if(searchWorkoutParams.hasUser_id()){
             String user_id = searchWorkoutParams.getUser_id();
 
             stringQuery = "SELECT result.workout_name, result.workout_id, wf.user_id IS NOT NULL AS favourite FROM ( " +
                     resultQuery + " " +
                     ") AS result " +
                     "LEFT JOIN workout_favorite AS wf " +
-                    "ON wf.workout_id=result.workout_id AND " + "wf.user_id=" + user_id + "";
+                    "ON wf.workout_id=result.workout_id AND " + "wf.user_id=" + user_id;
         } else {
             // If no user_id was given we can't join with the workout_favorite table
             stringQuery = "SELECT result.workout_name, result.workout_id, 1=2 AS favourite FROM ( " +

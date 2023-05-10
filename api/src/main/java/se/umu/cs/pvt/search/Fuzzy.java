@@ -14,7 +14,7 @@ import java.util.*;
  * @author Kraken (Fardis Nazem)
  */
 public class Fuzzy {
-    private static int cutoff = 15;
+    private static int cutoff = 60;
     /**
      * @param str the string to fuzzy search.
      * @param response List of strings to check against the string.
@@ -30,10 +30,7 @@ public class Fuzzy {
 
         dataBaseRes = dataBaseRes.stream().filter(s -> !s.isEmpty()).toList();
 
-        List<ExtractedResult> list = FuzzySearch.extractAll(str, dataBaseRes, getCutoff());
-
-        list = list.stream().sorted(Comparator.comparingInt(ExtractedResult::getScore)
-                    .reversed()).toList();
+        List<ExtractedResult> list = FuzzySearch.extractSorted(str, dataBaseRes, getCutoff());
 
         List<T> map = new ArrayList<>();
         for (ExtractedResult extractedResult : list) {

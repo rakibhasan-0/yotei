@@ -90,9 +90,6 @@ public class FuzzyTest {
 
         facit.add(new TestResult("ABCDEF"));
         facit.add(new TestResult("ABCDEB"));
-        facit.add(new TestResult("ABCDBB"));
-        facit.add(new TestResult("ABCBBB"));
-        facit.add(new TestResult("ABBBBB"));
 
         List<TestResult> databaseResult = new ArrayList<>(facit);
         Collections.shuffle(databaseResult); //shuffle list to check sorting
