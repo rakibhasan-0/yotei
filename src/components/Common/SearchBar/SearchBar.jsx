@@ -58,28 +58,28 @@ export default function SearchBar({ id, placeholder, text, onChange, addedTags, 
 	return (
 		<div id={id} className={focused ? "search-bar open" : "search-bar"}>
 			<input
-				className="input-area"
+				className="search-bar-input-area"
 				placeholder={placeholder}
 				value={text}
 				onChange={e => {
-					return onChange?.(e)
+					return onChange?.(e.target.value)
 				}}
 				onFocus={() => setFocused(true)}
 				onBlur={() => setFocused(false)}
 			>
 			</input>
 			<i className="search-icon"><Search /></i>
-			<div className={focused || (addedTags.length > 0 || suggestedTags.length > 0) ? "tag-container" : "tag-container closed"}>
-				{addedTags.map(tag => <Tag
+			<div className={focused || (addedTags.length > 0 || suggestedTags.length > 0) ? "search-bar-tag-container" : "search-bar-tag-container closed"}>
+				{addedTags.map((tag, key) => <Tag
 					tagType="added"
-					key={tag}
+					key={key}
 					text={tag}
 					onClick={() => handleRemoveTag(tag)}
 				/>)}
-				{suggestedTags.map(tag => <Tag
+				{suggestedTags.map((tag, key) => <Tag
 					id={"tag-in-searchbar"}
 					tagType="suggest"
-					key={tag}
+					key={key}
 					text={tag}
 					onClick={() => handleAddTag(tag)}
 				/>)}

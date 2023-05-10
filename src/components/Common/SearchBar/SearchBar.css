@@ -12,7 +12,7 @@
 	min-height: 100px;
 }
 
-.input-area:focus {
+.search-bar-input-area:focus {
 	outline: 0;
 }
 
@@ -24,7 +24,7 @@
 	height: 100%;
 }
 
-.input-area {
+.search-bar-input-area {
 	padding: 1rem;
 	border: none;
 	width: 100%;
@@ -32,7 +32,7 @@
 	padding-left: 60px;
 }
 
-.tag-container {
+.search-bar-tag-container {
 	width: 100%;
 	display: flex;
 	flex-wrap: wrap;

@@ -16,8 +16,15 @@ import "./TechniqueCard.css"
  * @version 1.0
  * @since 2023-05-02
  */
-function TechniqueCard({ technique, checkBox, id }) {
+function TechniqueCard({ technique, checkBox, id, onToggle }) {
+
 	const [checked, setChecked] = useState(false)
+
+	const handleToggle = (isChecked) => {
+		setChecked(isChecked)
+		onToggle(technique, checked)
+	}
+	
 	return (
 		<div className="technique-card" id={id}>
 			<div className="technique-card-belt-color-container">
@@ -42,9 +49,9 @@ function TechniqueCard({ technique, checkBox, id }) {
 				{checkBox ? 
 					<div className="technique-checkbox-container">
 						{checked ? 
-							<CheckBox checked={true} onClick={() => setChecked(false)}/>
+							<CheckBox checked={true} onClick={() => handleToggle(false)}/>
 							:
-							<CheckBox checked={false} onClick={() => setChecked(true)}/>
+							<CheckBox checked={false} onClick={() => handleToggle(true)}/>
 						}
 					</div>
 					:
