@@ -16,8 +16,8 @@ import React, { useEffect } from "react"
  * 	   maxWidth @type {pixels} - Max width of the popup window
  * 	   height @type {pixels} - Height of the popup as a percentage of the screen
  * 	   maxHeight @type {pixels} - Max width of the popup window
- * 	   noBackground @type {boolean} - disables the tinted background. 
- * 									  Should be used in nested popups.
+ * 	   isNested @type {boolean} - disables the tinted background and fills the parent container. 
+ * 								  Should be used in nested popups.
  *
  *Example usage:
  *  
@@ -35,7 +35,7 @@ import React, { useEffect } from "react"
  * @version 1.0
  * @since 2023-05-02
  */
-export default function Popup({ title, id, isOpen, setIsOpen, children, width, height, noBackground, maxWidth, maxHeight }) {
+export default function Popup({ title, id, isOpen, setIsOpen, children, width, height, isNested, maxWidth, maxHeight }) {
 
 	useEffect(() => {
 		document.body.style.overflowY = isOpen ? "hidden" : "visible"
@@ -43,14 +43,14 @@ export default function Popup({ title, id, isOpen, setIsOpen, children, width, h
 
 	if (!isOpen) { return null }
 
-	const background = noBackground ? "popup-no-bg" : "popup-bg"
+	const background = isNested ? "popup-no-bg" : "popup-bg"
 
 	return (
 		<>
 			<div className={background} onClick={() => setIsOpen(false)} />
 			
 			<div
-				className="popup"
+				className={`popup ${isNested && "popup-nested"}`}
 				id={id}
 				style={{
 					width: `${width}%`,
