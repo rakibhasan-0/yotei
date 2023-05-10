@@ -12,11 +12,11 @@ test.describe('ST-1 inloggning', () => {
 
 			// 2. Fyll i användarnamn och lösenord
 			await page.goto('/');
-			await page.locator('input[type="user"]').fill('kalle');
-   			await page.locator('input[type="password"]').fill('anka');
+			await page.getByPlaceholder('Användarnamn').fill('kalle');
+			await page.getByPlaceholder('Lösenord').fill('anka');
 
 			// 3. Tryck logga in och säkerställ att vi kommer till /home
-			await page.locator('#login-button').click();
+			await page.getByRole('button', {name: 'Logga in'}).click();
 			await page.waitForURL(/\**\/plan/);
 		} finally {
 			// Cleanup. Ta bort den nya användaren
@@ -30,11 +30,11 @@ test.describe('ST-1 inloggning', () => {
 	test('.2 inkorrekt inloggning misslyckas', async ({ page }) => {
 		// 1. Fyll i användarnamn och lösenord
 		await page.goto('/');
-		await page.locator('input[type="user"]').fill('anna');
-   		await page.locator('input[type="password"]').fill('book');
+		await page.getByPlaceholder('Användarnamn').fill('anna');
+		await page.getByPlaceholder('Lösenord').fill('book');
 
 		// 2. Tryck logga in och säkerställ att vi inte lyckas logga in
-		await page.locator('#login-button').click();
+		await page.getByRole('button', {name: 'Logga in'}).click();
 		await expect(page.getByText('Felaktigt')).toBeVisible();
 	});
 
