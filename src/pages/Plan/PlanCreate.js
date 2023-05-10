@@ -1,9 +1,10 @@
 import { React, useState, useContext } from "react"
 import { AccountContext } from "../../context"
-import PlanForm from "../../components/Forms/PlanForm"
+import PlanForm from "../../components/Forms/PlanForm.jsx"
 import GoBackButton from "../../components/Common/GoBackButton"
 import RoundButton from "../../components/Common/RoundButton/RoundButton"
 import { Check } from "react-bootstrap-icons"
+import { useNavigate } from "react-router"
 
 /**
  * This is a page containing components to allow creation of 'Plan'
@@ -21,6 +22,9 @@ function PlanCreate() {
      * Gets the token for the user
      */
 	const { token, userId } = useContext(AccountContext)
+
+
+	const navigate = useNavigate()
 
 	/**
      * Local model of a plan.
@@ -410,6 +414,8 @@ function PlanCreate() {
 						okStartDate={checkDate("startDate")}
 						okEndDate={checkDate("endDate")}
 						buttonClicked={fieldCheck.buttonClicked}
+						submitClicked={() => { addPlan().then(() => { setFieldCheck({ ...fieldCheck, buttonClicked: true }) }) }}
+						backClicked={() => navigate(-1)}
 					/>
 
 					{/*Button for the form. Retrieves the users input*/}
