@@ -96,9 +96,9 @@ function getPopupContainer(showPopup, setShowPopup, workoutId, context, navigate
 			width={95}
 			maxWidth={400}
 			height={40}
-			maxHeight={220}
+			maxHeight={250}
 		>
-			<p className="font-">Är du säker på att du vill radera detta pass?</p>
+			<p className="font-">Är du säker på att du vill ta bort detta pass?</p>
 			<div className="row justify-content-center">
 				<div className="d-flex col justify-content-end">
 					<Button onClick={async () => deleteWorkout(workoutId, context, navigate)}>Ja</Button>

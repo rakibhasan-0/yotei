@@ -52,12 +52,12 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 				{
 					(!isFreeTextElem() && (activity.exercise?.description || activity.technique?.description))
 						? (	
-							<div className="toggleIcon pr-2" onClick={() => setIsActive(!isActive)}>
+							<div role="optional-toggle" className="toggleIcon pr-2" onClick={() => setIsActive(!isActive)}>
 								<DescriptionToggle isActive={isActive} />
 							</div>
 						)
 						: (
-							<div className="pr-5"></div> // Empty div to aligne durations
+							<div role="optional-toggle" className="pr-5"></div> // Empty div to align durations
 						)
 						
 				}
@@ -66,7 +66,7 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 				{isActive && 
 					<div className="row pb-3" style={{ backgroundColor: bgColor }}>
 						<div className="col">
-							<div className="textDesc">{isFreeTextElem() ? activity.text : activity.exercise ? activity.exercise.description : activity.technique.description}</div>
+							<div role="description-div" className="textDesc">{isFreeTextElem() ? activity.text : activity.exercise ? activity.exercise.description : activity.technique.description}</div>
 						</div>
 					</div>
 				}
