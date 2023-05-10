@@ -55,7 +55,7 @@ export default function WorkoutIndex({detailURL}) {
 						id="searchbar-workouts" 
 						placeholder="Sök" 
 						text={searchText} 
-						onChange={(e) => setSearchText(e.target.value)}
+						onChange={setSearchText}
 						addedTags={tags}
 						setAddedTags={setTags}
 						suggestedTags={suggestedTags}
