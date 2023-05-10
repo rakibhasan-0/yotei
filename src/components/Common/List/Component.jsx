@@ -43,7 +43,7 @@ export default function Component({ item, text, children, id, autoClose }) {
 				</div>
 			</div>
 			<div className="list-item-container" >
-				<div className="list-child" onClick={onClick} style={{ margin: toggled ? "0" : "-100% 0 -100% 0" }} id={`${id}-children`}>
+				<div className="list-child" onClick={onClick} style={{ display: toggled ? "inherit" : "none" }} id={`${id}-children`}>
 					{children}
 				</div> 
 			</div>
