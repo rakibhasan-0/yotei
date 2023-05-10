@@ -4,13 +4,13 @@ This file desribes how set up hosting (remotely or locally) for the UBK trainer 
 
 ## Prerequisites
 
-### Remote
+### From zip
 To set up the application using the *budo.zip* file you need:
 - A bash-shell
 - The zip-file *budo.zip*
 - The shell-script *deploy.sh*
 
-### Local
+### With cloned directories
 To  set up the application using cloned directories you need:
 - One parent directory containing the [backend](https://git.cs.umu.se/courses-project/5dv214vt23/backend/), [frontend](https://git.cs.umu.se/courses-project/5dv214vt23/frontend/), and
 [infrastructure](https://git.cs.umu.se/courses-project/5dv214vt23/infra/) repositories.
@@ -18,7 +18,7 @@ To  set up the application using cloned directories you need:
 
 ## How to
 
-### Remote
+### From zip
 
 Place yourself in a directory containing *budo.zip* and *deploy.sh* and run:
 
@@ -26,7 +26,7 @@ Place yourself in a directory containing *budo.zip* and *deploy.sh* and run:
 
 Enter your password and follow the instructions in the script.
 
-### Local
+### With cloned directories
 Place yourself in the *infra/* directory and run the same command as in "remote".
 
 ## The script
