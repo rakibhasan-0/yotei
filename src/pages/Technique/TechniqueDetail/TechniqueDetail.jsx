@@ -11,7 +11,7 @@ import { Pencil, Trash } from "react-bootstrap-icons"
 import "./TechniqueDetail.css"
 import ErrorState from "../../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../../components/Common/Spinner/Spinner" 
-
+import Gallery from "../../../components/Gallery/Gallery"
 /**
  * The detail page for a technique.
  * 
@@ -87,6 +87,7 @@ function TechniqueDetail({id}) {
 
 	return(
 		<div className="technique-detail-container" id={id == undefined ? "technique" : id}>
+			<Gallery id={techniqueId}/>
 			<h1>{technique.name}</h1>
 			<div className="technique-detail-actions-container">
 				<Pencil

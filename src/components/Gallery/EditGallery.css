@@ -1,0 +1,144 @@
+.player-wrapper {
+    z-index: 2;
+    width: auto;
+    height: 300px;
+    /* height: auto; */
+    margin-bottom: 30px;
+}
+
+.react-player {
+    /* padding-top: 56.25%; */
+    position: relative;
+}
+
+.react-player > div {
+    position: absolute;
+}
+
+.react-player > video {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 20px;
+    padding-right: 25px;
+}
+
+.carousel .control-dots {
+    position: absolute;
+    bottom: 0;
+    margin: -5px 0;
+    padding: 0;
+    text-align: center;
+    width: 100%;
+    z-index: 1;
+}
+
+.carousel .control-dots .dot {
+    color: black;
+    /* background: rgb(235, 0, 0); */
+    
+    background: #BE3B41;
+    width: 16px;
+    height: 16px;
+    opacity: 0.2;
+    box-shadow: none;
+}
+
+.carousel .control-arrow, .carousel.carousel-slider .control-arrow {
+    -webkit-transition: all .25s ease-in;
+    -moz-transition: all .25s ease-in;
+    -ms-transition: all .25s ease-in;
+    -o-transition: all .25s ease-in;
+    transition: all .25s ease-in;
+    opacity: .8;
+    filter: alpha(opacity=40);
+    position: absolute;
+    z-index: 2;
+    top: 20px;
+    background: none;
+    border: 0;
+    font-size: 32px;
+    cursor: pointer;
+
+}
+
+.carousel.carousel-slider .control-arrow {
+    top: 0;
+    color: #fff;
+    font-size: 26px;
+    bottom: 0;
+    margin-top: 0;
+    padding: 5px;
+    margin-top: auto;
+    margin-bottom: auto;
+    height: 20%;
+}
+
+.carousel .control-prev.control-arrow::before {
+    border-right: 8px solid black;
+    color: black;
+    opacity: 1;
+}
+
+.carousel .control-next.control-arrow::before {
+    border-left: 8px solid black;
+    color: black;
+    opacity: 1;
+}
+
+@media (min-width: 576px) {
+    .container {
+        max-width: 100%;
+    }
+}
+
+.w-25 {
+    width: 70%!important;
+    padding-top: 15%;
+    padding-bottom: 15%;
+}
+
+.no-media-container{
+
+    margin-top: 60px;
+    margin-bottom: 0px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 400px;
+}
+
+.btn-add-media {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 50px;
+    border-radius: 50%;
+    font-size:xx-large;
+    text-align: center;
+    padding: 10px;
+    margin: 20px;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+.btn-add-media > * {
+    font-size: 3rem;
+    filter: brightness(0) invert(1);
+    padding: 0;
+}
+
+.trash{
+    background-color: var(--black-primary);
+    margin-bottom: 50px;
+    border-radius: 50%;
+    margin-bottom: 50px;
+    z-index: 3;
+    margin-left: auto;
+    margin-right: auto;
+    /*position: relative;
+    bottom: 200px;*/
+}

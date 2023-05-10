@@ -1,0 +1,25 @@
+.upload-media-container {
+    margin-top: 60px;
+    margin-bottom: 50px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 500px;
+}
+
+.link-media-container {
+    margin-top: 60px;
+    margin-bottom: 0px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 500px;
+}
+
+.line {
+    background : var(--black-primary);
+    height: 1px;
+}
