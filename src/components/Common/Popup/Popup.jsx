@@ -62,7 +62,7 @@ export default function Popup({ title, id, isOpen, setIsOpen, children, width, h
 				<div className="popup-topbar">
 					{title && <h1 className="popup-title" role="title">{title}</h1>}
 					<button className="popup-closebutton" onClick={() => setIsOpen(false)}>
-						<X width={44} height={44} />
+						<X width={44} height={44} color="black"/>
 					</button>
 					{title && <div className="popup-horizontal-line" />}
 				</div>

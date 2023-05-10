@@ -5,3 +5,10 @@
     border-radius: 0.3rem;
     padding: 1rem;
   }
+
+.input-textfield-area:focus {
+	border: 2px solid var(--checkbox-press);
+	border-radius: 0.3rem;
+	padding: 1rem;
+	outline: none;
+  }

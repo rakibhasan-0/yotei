@@ -1,6 +1,6 @@
 import React from "react"
 import "./Tag.css"
-import { PlusCircle, XCircle } from "react-bootstrap-icons"
+import { PlusCircle, XCircleFill } from "react-bootstrap-icons"
 
 /**
  * Creates the UI for the Tags
@@ -44,14 +44,14 @@ export default function Tag({ id, tagType, onClick, text }) {
 		return (
 			<button id={id} className="base-tag suggest" onClick={onClick}>
 				<p className="no-margin">{text}</p>
-				<PlusCircle className="ml-2" size={18} />
+				<PlusCircle className="ml-2" size={18} color="black"/>
 			</button>
 		)
 	} else {
 		return (
 			<button id={id} className="base-tag" onClick={onClick}>
 				<p className="no-margin">{text}</p>
-				<XCircle className="ml-2" size={18} />
+				<XCircleFill className="ml-2" size={18} color="black"/>
 			</button>
 		)
 	}

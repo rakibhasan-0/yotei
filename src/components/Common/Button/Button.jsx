@@ -25,7 +25,7 @@ import "./Button.css"
 export default function Button({onClick, outlined, children, width, id, disabled}) {
 	const style = width ? { width } : { width: "100%", maxWidth: "150px" }
 	return (
-		<button id={id} disabled={disabled} onClick={onClick} className={ ["button", outlined ? "button-back" : "button-normal"].join(" ") } style={style}>
+		<button id={id} disabled={disabled} onClick={onClick} className={`yotei-button ${outlined ? "yotei-button-back" : "yotei-button-normal"}`} style={style}>
 			{children}
 		</button>
 	)

@@ -6,3 +6,11 @@
     padding: 1rem;
 	resize: none;
   }
+
+  .stand-area:focus {
+	border: 2px solid var(--checkbox-press);
+	border-radius: 0.3rem;
+	padding: 1rem;
+	outline: none;
+  }
+  
