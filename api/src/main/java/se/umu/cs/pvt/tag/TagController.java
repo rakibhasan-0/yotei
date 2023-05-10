@@ -76,6 +76,8 @@ public class TagController {
         if (toAdd.getName().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+		
+		toAdd.nameToLowerCase();
         tagRepository.save(toAdd);
         return new ResponseEntity<>(tagRepository.getTagByName(toAdd.getName()), HttpStatus.CREATED);
     }  

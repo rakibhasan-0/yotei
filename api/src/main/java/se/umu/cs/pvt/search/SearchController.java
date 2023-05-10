@@ -180,7 +180,8 @@ public class SearchController {
 
         List<TagDBResult> result = searchRepository.getTagSuggestionsFromCustomQuery(createdQuery.getQuery());
         List<TagSearchResponse> tagSearchResponses = new SearchTagsResponseBuilder(result).build();
-        List<TagSearchResponse> filteredResult = fuzzySearchFiltering(searchTagsParams.getName(), tagSearchResponses);
+		// Set to lower case as all tags are fetched in lower case.
+        List<TagSearchResponse> filteredResult = fuzzySearchFiltering(searchTagsParams.getName().toLowerCase(), tagSearchResponses);
 
         List<TagSearchResponse> finalResult = new ArrayList<>();
         for (int i = 0; i < searchTagsParams.getAmount() && i < filteredResult.size(); i++) {
@@ -233,6 +234,10 @@ public class SearchController {
                 .build();
 
         List<TagDBResult> tagResult = searchRepository.getTagSuggestionsFromCustomQuery(createdQuery.getQuery());
+		// Use fuzzy search to find good suggestions, search string forced to lower case as all are fetched in lowercase from DB.
+		if(searchInput != null) {
+			searchInput.toLowerCase();
+		}
         List<TagDBResult> filteredResult = Fuzzy.search(searchInput, tagResult);
 
 		// Take out first three results.

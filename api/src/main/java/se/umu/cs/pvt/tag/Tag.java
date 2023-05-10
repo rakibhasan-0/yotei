@@ -94,4 +94,12 @@ public class Tag implements Serializable{
     public String getName() {
         return name;
     }
+
+	/*
+	 * Set Tag name to lowercase.
+	 */
+	public void nameToLowerCase()
+	{
+		name = name.toLowerCase();
+	}
 }
