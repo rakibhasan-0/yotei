@@ -46,6 +46,20 @@ Beslut - React Player
 React Player används för att visa video för tekniker, huvudsakligen på grund av dess enkelhet iochmed att det är en inbyggd funktionalitet i React. Vi ser ingen anledning att införskaffa en mer robust och komplex video player just nu, med tanke på att det inte är långa klips som ska visas.
 
 
+# Beslut om react-responsive-carousel
+
+Datum - 10/05/23
+
+Chapters - N/A
+
+Grupp -  Dragon
+
+Beslut - Att använda react-responsive-carousel för att visa upp bilder/videor på tekniker/övningar
+
+## Motivation
+Vi tog beslutet att använda react-responsive-carousel för att visa upp bilder/videor på tekniker/övningar på grund av samma anledningar som React-Player: bägge verktyg är inbyggda, light weight, react komponenter, samt enkla att använda och förstå.
+
+
 # Beslut om many-to-one relation mellan video/bild och tekniker
 
 Datum - 24/04/23
@@ -73,6 +87,8 @@ Beslut - Att ha en tabell för både video/bilder för tekniker och övningar.
 
 ## Motivation
 
-Tanken var att video/bild för övningar respektive tekniker skulle ha sin egna tabell i databasen. Men vid närmare granskning så visade det sig mer 
+Tanken var att video/bild för övningar respektive tekniker skulle ha sin egna tabell i databasen. Men vid närmare granskning så visade det sig mer gynnsamt att bara ha en tabell, då CRUD operationer blir simplare för komponenter som ska skicka requests för att nå den. Tex så ger detta oss friheten att endast ta emot ett ID från en teknik eller övning i vår media-spelare för att visa upp de relaterade videos och bilder för den på hemsidan. För att förtydliga görs detta möjligt i databasen via en delad integer (delad sequence) mellan övningar och tekniker vilket gör att det aldrig kan ha samma ID; därmed kan det hämtas från samma tabell eftersom ett teknik eller övnings ID aldrig kan vara densamma. 
+
+
 
 
