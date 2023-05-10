@@ -5,8 +5,9 @@ import {useState, useEffect, useRef} from "react"
 import { List } from "react-bootstrap-icons"
 import Button from "react-bootstrap/Button"
 import DraggableContent from "./DraggableContent"
-import Modal from "react-bootstrap/Modal"
-import WorkoutActivitySelection from "./WorkoutActivitySelection"
+import Popup from "../Common/Popup/Popup"
+import AddActivity from "../../pages/Workout/AddActivityWorkout/AddActivity"
+
 
 /**
  * Draggable list component.
@@ -19,6 +20,8 @@ const EditWorkout = ({startActivities, updateOutputArray}) => {
 	const [elements, setElements] = useState(act)
 	const prevElements = useRef(elements)
 	const containerHeight = useRef(0)
+
+	const [showPopup, setShowPopup] = useState(false)
 
 	//Triggered on load.
 	useEffect(() => {
@@ -176,16 +179,7 @@ const EditWorkout = ({startActivities, updateOutputArray}) => {
 		return firstFreeId
 	}
 
-	//Adds new activity elements.
-	function addActivities(activities){
-		activities.forEach(activity => {
-			elements.push({name: activity.name, duration: activity.duration ? activity.duration : 0, workoutId:null, id:getUniqueId(), exerciseId: activity.exerciseId, techniqueId: activity.techniqueId, order:elements.length, yPos:0, height: 0, activity: true})
-			setElements([...elements])
-		})
-        
-		updateYPos(-1)
-	}
-
+	
 	//Adds new text element.
 	function addText(){
 		elements.push({name:"", duration:0, workoutId:null, id:getUniqueId(), exerciseId: null, techniqueId: null, order:elements.length, yPos:0, height: 0, activity: false})
@@ -232,9 +226,6 @@ const EditWorkout = ({startActivities, updateOutputArray}) => {
 	}
 
 
-	const [popupDisplayed, setPopup] = useState(false)
-	const closePopup = () => setPopup(false)
-
 	return (
 		<>
 			{elements.length === 0 ? "Passet innehåller ingen aktivitet" : null}
@@ -267,15 +258,16 @@ const EditWorkout = ({startActivities, updateOutputArray}) => {
 					</div>
 				))}
 			</div>
+			
 
 			<div className={"add-btn-container"}>
 				<Button className="add-button btn-md" variant="inline" onClick={() => addText()}>+ Fri text</Button>
-				<Button className="add-button btn-md" variant="inline" onClick={() => setPopup(true)}>+ Aktivitet</Button>
+				<Button className="add-button btn-md" variant="inline" onClick={() => setShowPopup(true)}>+ Aktivitet</Button>
+				<Popup id={"test-popup"} title={""} isOpen={showPopup} setIsOpen={setShowPopup}>
+					<AddActivity id={"test-activityy-add"}></AddActivity>
+				</Popup>
 			</div>
-            
-			<Modal show={popupDisplayed} onHide={closePopup}>
-				<WorkoutActivitySelection closePopup={closePopup} addActivities={addActivities}/>
-			</Modal>
+
 		</>
 	)
 }
