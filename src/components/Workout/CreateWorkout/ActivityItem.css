@@ -1,0 +1,14 @@
+.workout-activity-item {
+    width: 100%;
+    border-radius: 10px !important;
+    border: 2px solid black;
+}
+.activity-item-textArea {
+    width: 100%;
+    border: none;
+    resize: none;
+    margin-top: -1rem;
+}
+.activity-item-textArea:disabled {
+    color: var(--black-primary);
+}
