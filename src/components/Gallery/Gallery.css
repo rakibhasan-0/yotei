@@ -84,12 +84,6 @@
     opacity: 1;
 }
 
-@media (min-width: 576px) {
-    .container {
-        max-width: 100%;
-    }
-}
-
 .w-25 {
     width: 70%!important;
     padding-top: 15%;
