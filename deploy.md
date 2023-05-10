@@ -36,3 +36,14 @@ The script will install the programs that are needed to deploy the website. This
 If the user has a domain name the script will guide the user through installation of the TSL-certificates. 
 
 After everything is installed, the script will build and start the docker containers.
+
+Common problems the script solves:
+- Postgres installation blocking ports
+    - Solved by killing any postgres processes
+- No persmission to modify files
+    - Solved with chmod 777 on all directories and files
+- Docker installation crashing because of internal dpkg error
+    - Solved by running the docker installation twice
+- Modifying config files
+    - Solved by prompting the user and using sed to modify the correct lines
+
