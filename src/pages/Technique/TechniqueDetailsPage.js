@@ -69,7 +69,7 @@ const TechniqueDetailsPage = () => {
 	const deleteTechnique = (async () => {
 		handleClose()
 		try {
-			const response = await fetch("/api/techniques/remove/" + technique_id, {
+			const response = await fetch("/api/techniques/" + technique_id, {
 				headers: {token},
 				method: "DELETE"
 			})

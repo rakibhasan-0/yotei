@@ -123,7 +123,7 @@ class TechniqueEdit extends React.Component {
 			})
 		}
 
-		const response = await fetch("/api/techniques/update", requestOptions)
+		const response = await fetch("/api/techniques/", requestOptions)
 		try {
 			if (!response.ok) {
 				this.setState({failed: true})

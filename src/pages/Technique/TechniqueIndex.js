@@ -116,7 +116,7 @@ class TechniqueIndex extends React.Component {
 	 */
 	async fetchTechniques() {
 		const headers = { token: this.context.token }
-		await fetch("/api/techniques/all", { headers })
+		await fetch("/api/techniques", { headers })
 			.then(res => res.json())
 			.then((data) => {
 				//Set both states to the received list of activities but sorted lexicographically (alphabetically)

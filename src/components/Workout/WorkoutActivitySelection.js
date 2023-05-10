@@ -34,7 +34,7 @@ function WorkoutActivitySelection({closePopup, addActivities}) {
 			headers: {"Content-type": "application/json", token}
 		}
 
-		await fetch("/api/techniques/all", requestOptions)
+		await fetch("/api/techniques", requestOptions)
 			.then(res => res.json())
 			.then((data) => setTechniques(data.sort((a, b) => a.name.localeCompare(b.name))))
 			.catch(console.log)
