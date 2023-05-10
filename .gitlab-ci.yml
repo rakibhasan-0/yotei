@@ -28,6 +28,8 @@ stages:
 lint-job:
   <<: *skippable
   stage: test
+  except: 
+    - main
   script:
     - echo "Linting started..."
     - npm run lint:ci
@@ -36,6 +38,8 @@ lint-job:
 test-job:
   <<: *skippable
   stage: test
+  except: 
+    - main
   script:
     - echo "Testing started..."
     - npm run test
@@ -61,6 +65,8 @@ build-job:
   <<: *skippable
   stage: build
   image: node:19
+  except: 
+    - main
   script:
     - echo "Compiling the code..."
     - npm run build
