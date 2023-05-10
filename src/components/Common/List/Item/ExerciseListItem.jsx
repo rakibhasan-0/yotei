@@ -3,45 +3,54 @@ import { ChevronDown } from "react-bootstrap-icons"
 import "./ExerciseListItem.css"
 
 /**
- * A generic list item that can be used in a list view,
- * with a customizable optional item on the left of the
- * component text. The component can be expanded, and
- * the children will be displayed.
+ * An ExerciseListItem that can be used in an list view.
+ * It displays the title of an exercise and its duration,
+ * also the description belonging to the exercise when the
+ * drop-down is toggled.
  * 
- * The width of the component will be set by the parent.
+ * Props:
+ *     	item @type {string} 		- Text displaying the title of the exercise
+ *     	text @type {string} 		- Text displaying the duration of the exercise
+ *     	children @type {string} 	- Text displaying the description of the exercise
+ * 		detailURL @type {string} 	- The base URL for exercises
+ * 		id @type {integer} 			- The ID for this particular exercise in database
+ * 		index @type {integer} 		- The ID for this particular exercise on current page (Used for coloring)
  * 
- * props = {
- *     item: Optional JSX element which will be displayed on the left of the text,
- *     text: Text of the component,
- *     children: JSX element which will be displayed when the component is expanded
- * }
+ * Example usage:
+ * 		<ExerciseListItem
+ * 			item={the exercise name}
+ * 			text={exercise duration + " min"}
+ * 			id={The unique ID for an exercises, gets concatenated onto detailURL}
+ * 			detailURL={the base URL for exercises}
+ * 			index={The index for the exercise in the list containing fetched exercises}>
  * 
- * The parent container using this button must constrain its width.
+ * 			"Description"
+ * 		</ExerciseListItem>
  * 
- * @author Chimera dv21aag, dv21oby + improved by Phoenix bois
- * @since 2023-04-25
+ * @author Chimera, Phoenix
+ * @since 2023-05-10
  * @version 1.0
  */
 export default function ExerciseListItem({ item, text, children, detailURL, id, index}) {
 	const [toggled, setToggled] = useState(false)
 
 	return (
-		<div className="list-container" data-testid="ExerciseListItem">
-			<div className='list-header' style={{backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)"}}>
+		<div className="exercise-list-container" data-testid="ExerciseListItem">
+			<div className='exercise-list-header' style={{backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)"}}>
 				<div style={{display: "flex", justifyContent: "space-between", width: "100%"}}>
-					<div className="list-item">
+					<div className="exercise-list-item">
 						<a href={detailURL + id} className="href-link" style={{wordBreak:"break-word"}} data-testid="ExerciseListItem-item">{item}</a>
 					</div>
-					<div className="list-duration" data-testid="ExerciseListItem-text">
+					<div className="exercise-list-duration" data-testid="ExerciseListItem-text">
 						<p>{text}</p>
 					</div>
 				</div>
-				<div className={["list-toggle", toggled ? "list-rotate" : ""].join(" ")}>
+				<div className={["exercise-list-toggle", toggled ? "exercise-list-rotate" : ""].join(" ")}>
 					<ChevronDown data-testid="ExerciseListItem-toggle" size={28} onClick={() => setToggled(!toggled)} />
 				</div>
 			</div>
 			{ toggled && 
-				<div className="list-child" data-testid="ExerciseListItem-children">
+				<div className="exercise-list-child" data-testid="ExerciseListItem-children">
 					{children}
 				</div> 
 			}

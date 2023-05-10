@@ -9,15 +9,15 @@ import InfiniteScroll from "react-infinite-scroll-component"
 import { Plus } from "react-bootstrap-icons"
 
 /**
- * Class for the Exercise-page. Creates the searchbar and the list.
+ * Function for the Exercise-page. Creates the searchbar and the list.
  * 
- * When a user puts an input into the search bar, it will filter the
- * list after the current search term.
- *
- * Fetches the exercises from the API on pageload (componentDidMount).
- * @author Grupp 3 (Hawaii), Grupp 5 (Verona), Grupp 1 - Phoenix
+ * Displays a searchbar and a list of exercises. Only loads 20 exercises at a time
+ * and loads more when the user scrolls down.
+ * 
+ * @author Hawaii, Verona, Phoenix
+ * @since 2023-05-10
+ * @version 1.0
  */
-
 function ExerciseIndex() {
 	const [visibleList, setVisibleList] = useState([])
 	// const [allTags, setAllTags] = useState([])
@@ -101,7 +101,7 @@ function ExerciseIndex() {
 			<center>
 				<h1 className="py-2">Övningar</h1>
 				<SearchBar 
-					id="nåt-id" 
+					id="cyka-id" 
 					text={searchText} 
 					onChange={setSearchText}
 					addedTags={addedTags}
@@ -119,10 +119,7 @@ function ExerciseIndex() {
 			>
 				<ActivityList activities={visibleList}  apiPath={"exercises"} detailURL={detailURL}/>
 			</InfiniteScroll>
-			<br/>
-			<br/>
-			<br/>
-			<br/>
+			<br/><br/><br/><br/>
 			<RoundButton linkTo={"/exercise/create"}> 
 				<Plus />
 			</RoundButton>

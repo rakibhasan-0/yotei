@@ -1,11 +1,4 @@
-.root{
-    overflow: hidden;
-}
-.body{
-    overflow: hidden;
-}
-
-.list-container{
+.exercise-list-container{
     border-radius: 5px;
     border: 1px solid var(--black-primary);
     user-select: none;
@@ -13,7 +6,7 @@
     margin-bottom: 1.5rem;
 }
 
-.list-header {
+.exercise-list-header {
     display: flex;
     align-items: center;
     text-align: center;
@@ -24,7 +17,7 @@
 
   }
   
-.list-header p { /* Duration */
+.exercise-list-header p { /* Duration */
 
     margin: 0;
     margin-right: 2rem;
@@ -33,13 +26,13 @@
 
 }
 
-.list-toggle {
+.exercise-list-toggle {
     cursor: pointer;
     margin-left: auto;
     transition: all 0.2s ease-in;
 }
 
-.list-item {
+.exercise-list-item {
     text-align: center;
     display: flex;
     align-items: center;
@@ -49,21 +42,20 @@
     height: auto;
   }
     
-.list-duration {
+.exercise-list-duration {
     text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.list-child { /*Description */
+.exercise-list-child { /*Description */
     border-top: 1px solid var(--black-primary);
     padding: 1rem;
     word-wrap: break-word;
     overflow: auto;
-    /*margin-top: 15px;*/
 }
 
-.list-rotate {
+.exercise-list-rotate {
     rotate: 180deg;
 }

@@ -11,34 +11,6 @@ async function getData( ){
 	return response.json()
 }
 
-/* return res(
-  
-    ctx.json({
-        item: "Hoppa högt",
-        text: "420 min",
-        children: "Fall på fötterna.",
-        detailURL: "bsurl.com/fake/",
-        id: 87,
-        index: 420
-    }),
-
-  ) */
-
-// beforeAll(() => { 
-//   server.listen()
-// })
-  
-  
-// afterAll(() => {
-  
-//   // Clean up after all tests are done, preventing this
-  
-//   // interception layer from affecting irrelevant tests.
-  
-//   server.close()
-  
-// })
-
 test("mocked exercise data should match expected data", async() => {
 
 	// ARRANGE
