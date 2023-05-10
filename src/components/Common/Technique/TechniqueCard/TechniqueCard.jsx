@@ -60,13 +60,17 @@ function TechniqueCard({ technique, checkBox, id, onToggle }) {
 					null
 				}
 				<div className="technique-name-container">
-					<h5 className="technique-name">{technique.name}</h5>	
+					<a href={"/technique/technique_page/" + technique.techniqueID}>
+						<h5 className="technique-name">{technique.name}</h5>	
+					</a>
 				</div>
+
 				<a href={"/technique/technique_page/" + technique.techniqueID}>
 					<div className="technique-arrow-container">
 						<ChevronDown />
 					</div>
 				</a>
+
 			</div>
 		</div>
 	)
