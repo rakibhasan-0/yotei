@@ -115,14 +115,14 @@ export default function SessionCreate() {
 
 					<Divider option={"h2_left"} title={"Pass"} />
 					<Dropdown id={"session-dropdown"} text={workout?.name || "Sök befintligt pass"} centered={true}>
+						<div className="dropdown-row" onClick={() => setWorkout(null)}>
+							<p className="dropdown-row-text">Inget pass</p>
+						</div>
 						{workouts?.map((workout, index) => (
 							<div className="dropdown-row" key={index} onClick={() => setWorkout(workout)}>
 								<p className="dropdown-row-text">{workout.name}</p>
 							</div>
 						))}
-						<div className="dropdown-row" onClick={() => setWorkout(null)}>
-							<p className="dropdown-row-text">Inget pass</p>
-						</div>
 					</Dropdown>
 
 					<Divider option={"h2_middle"} title={"Eller"} />
