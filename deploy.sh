@@ -114,6 +114,6 @@ done
 
 docker compose down -v 
 docker build --no-cache -t pvt2023/gateway:latest ../backend/gateway
-docker build --no-cache -t pvt2023/api:latest ../api 
+docker build --no-cache -t pvt2023/api:latest ../backend/api 
 docker build --no-cache -t pvt2023/frontend:latest ../frontend
 docker compose up 
