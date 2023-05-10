@@ -1,0 +1,14 @@
+.input-area{
+    margin-bottom: 50px;
+}
+
+.input-label {
+    position: absolute;
+    z-index: 1;
+    left: 1em;
+    top: -1em;
+    background-color: white;
+    padding: 0 5px;
+    font-family: 'Open sans', sans-serif;
+    color: var(--black-primary);
+}
