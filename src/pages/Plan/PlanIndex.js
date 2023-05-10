@@ -128,6 +128,7 @@ class PlanIndex extends React.Component {
 				fetch("/api/session/getByPlans?id=" + data1.map(plan => plan.id).join(",")  ,{headers})
 					.then(res2 => res2.json())
 					.then(data2 => {
+						console.log(data2)
 						data2.map(session => includeTimeInDate(session))
 						this.setState({sessions: data2.sort( (a, b) => new Date(a.date) - new Date(b.date))})
 					})

@@ -1,13 +1,15 @@
 import DescriptionToggle from "../Common/DescriptionToggle"
 import React, { useState } from "react"
 import DeleteSessionDialog from "./DeleteSessionDialog"
-import EditSessionDialog from "./EditSessionDialog"
+import { useNavigate } from "react-router"
+import { PencilSquare } from "react-bootstrap-icons"
 
 /**
  * The component for a ListItem
  * @author Grupp 3 (Hawaii), Grupp 4 (Calzone)
  */
-const PlanItem = ({ session , color, onEdit, onDelete}) => {
+const PlanItem = ({ session , color, onDelete}) => {
+	const navigate = useNavigate()
 	const [isActive, setIsActive] = useState(false)
 	const hasWorkout = !!session.workoutObj
 	let bgColor = hasWorkout ? "#ffdfe3" : "#fafafa"
@@ -52,8 +54,11 @@ const PlanItem = ({ session , color, onEdit, onDelete}) => {
 
 			<div>
 				{isActive &&
-          <div className="row" style={{ backgroundColor: bgColor }}>{hasWorkout && <p>{session.workoutObj.desc}</p>}<div className="col" /><DeleteSessionDialog session={session} onDelete={onDelete} /><EditSessionDialog session={session} onChange={onEdit} onDelete={onDelete} />
-          </div>
+				<div className="row" style={{ backgroundColor: bgColor }}>{hasWorkout && <p>{session.workoutObj.desc}</p>}<div className="col" />
+					<DeleteSessionDialog session={session} onDelete={onDelete} />
+					<PencilSquare onClick={() => navigate("/session/edit/"+session.id)} />
+					{/* <EditSessionDialog session={session} onClick={() => {Navigate("session/edit/"+session.id)}} onDelete={onDelete} /> */}
+				</div>
 				}
 			</div>
 		</div>
