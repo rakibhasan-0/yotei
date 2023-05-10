@@ -45,3 +45,18 @@ test("CheckBox: nothing should happen on no clicks", async() => {
 	// ASSERT
 	expect(clicked).toEqual(false)
 })
+
+test("CheckBox: disabled checkbox should be not be checked", async() => {
+	let checked = false
+	let disabled = false
+
+	render(<CheckBox onClick={() => !checked } checked={checked} disabled={disabled} id="test"/>)
+
+	// Enable checkbox.
+	screen.getByTestId("test").click()
+
+	disabled = true
+
+	// ASSERT
+	expect(checked).toBeFalsy()
+})
