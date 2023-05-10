@@ -1,0 +1,32 @@
+.create-technique-checkbox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+}
+
+h1.create-technique-title {
+    font-size: 25px;
+    font-weight: 600;
+    margin-left: 5px;
+    margin-bottom: 0px;    
+}
+
+.create-technique-horizontal-line {
+    border-bottom: 0.1px solid #8f8f8f;
+    margin-top: 3px;
+    margin-bottom: 16px;
+    width: 100%;
+}
+
+.create-technique-success {
+	margin-top: -5px;
+	margin-bottom: -5px;
+	color: #4bb543;
+}
+
+.create-technique-error {
+	margin-top: -15px;
+	margin-bottom: 0;
+	color: var(--red-primary);
+}

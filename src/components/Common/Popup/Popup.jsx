@@ -38,15 +38,17 @@ import React, { useEffect } from "react"
 export default function Popup({ title, id, isOpen, setIsOpen, children, width, height, noBackground, maxWidth, maxHeight }) {
 
 	useEffect(() => {
-		if (!isOpen) { document.body.style.overflowY = "visible" }
-		else { document.body.style.overflowY = "hidden" }
+		document.body.style.overflowY = isOpen ? "hidden" : "visible"
 	}, [isOpen])
 
 	if (!isOpen) { return null }
 
+	const background = noBackground ? "popup-no-bg" : "popup-bg"
+
 	return (
 		<>
-			{noBackground ? <div className="popup-no-bg" onClick={() => setIsOpen(false)} /> : <div className="popup-bg" onClick={() => setIsOpen(false)} />}
+			<div className={background} onClick={() => setIsOpen(false)} />
+			
 			<div
 				className="popup"
 				id={id}
@@ -57,12 +59,12 @@ export default function Popup({ title, id, isOpen, setIsOpen, children, width, h
 					maxHeight: `${maxHeight}px`
 				}}>
 
-				<div className="topbar">
-					{title && <h1 className="title" role="title">{title}</h1>}
-					<button className="closebutton" onClick={() => setIsOpen(false)}>
+				<div className="popup-topbar">
+					{title && <h1 className="popup-title" role="title">{title}</h1>}
+					<button className="popup-closebutton" onClick={() => setIsOpen(false)}>
 						<X width={44} height={44} />
 					</button>
-					{title && <div className="horizontal-line" />}
+					{title && <div className="popup-horizontal-line" />}
 				</div>
 				<div className="popup-content">
 					{children}

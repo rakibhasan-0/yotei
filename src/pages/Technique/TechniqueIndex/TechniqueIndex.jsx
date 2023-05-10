@@ -8,6 +8,8 @@ import SearchBar from "../../../components/Common/SearchBar/SearchBar"
 import { getTechniques } from "../../../components/Common/SearchBar/SearchBarUtils"
 import useMap from "../../../hooks/useMap"
 import TechniqueFilter from "../../../components/Common/Filter/TechniqueFilter"
+import Popup from "../../../components/Common/Popup/Popup"
+import CreateTechnique from "../CreateTechnique/CreateTechnique"
 
 /**
  * The technique index page.
@@ -26,7 +28,9 @@ function TechniqueIndex() {
 	const [tags, setTags] = useState([])
 	const [suggestedTags, setSuggestedTags] = useState([])
 	const [kihon, setKihon] = useState(false)
-	const [belts, setBelts] = useState([])
+	const [belts, setBelts] = useState([])// eslint-disable-line
+	const [showPopup, setShowPopup] = useState(false)
+
 
 	useEffect(() => {
 		// The selected belts are transformed from an array of belts objects to an array of strings, consisting of the belt names
@@ -46,6 +50,11 @@ function TechniqueIndex() {
 
 	return (
 		<>
+			<div>
+				<Popup title="Skapa teknik" isOpen={showPopup} setIsOpen={setShowPopup}>
+					<CreateTechnique setIsOpen={setShowPopup}/>
+				</Popup>
+			</div>
 			<div className="container grid-striped">
 				<SearchBar 
 					id="searchbar-technique"
@@ -72,7 +81,7 @@ function TechniqueIndex() {
 				:
 				null
 			}
-			<RoundButton linkTo={"/technique/create"}>
+			<RoundButton onClick={() => setShowPopup(true)}>
 				<Plus className="plus-icon" />
 			</RoundButton>
 		</>

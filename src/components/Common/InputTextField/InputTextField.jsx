@@ -24,7 +24,7 @@ import "./InputTextField.css"
 export default function InputTextField({ placeholder, text, onChange, required,type,id, onKeyUp}) {
 	return(
 		<input
-			className="input-area"
+			className="input-textfield-area"
 			placeholder={placeholder}
 			value={text}
 			onChange={onChange}

@@ -32,7 +32,6 @@ import SessionCreate from "./pages/Plan/SessionCreate"
 import SessionEdit from "./pages/Plan/SessionEdit"
 import PlanIndex from "./pages/Plan/PlanIndex"
 import BaseLayout from "./components/Common/BaseLayout/BaseLayout"
-
 import { useIdleTimer } from "react-idle-timer"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"

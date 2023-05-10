@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react"
+import React, { useState, useContext, useEffect } from "react"
 import "./AddTagPopup.css"
 import Tag from "./Tag"
 import { Search } from "react-bootstrap-icons"
@@ -55,6 +55,11 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 		const newSuggested = copy.filter(tagInCopy => tagInCopy.id !== tag.id)
 		setSuggested(newSuggested)
 	}
+
+	// Fetches tag suggestions on first render
+	useEffect(() => {
+		searchForTags("")
+	}, [])
 
 	/**
 	 * Send request to API for tag suggestion matching the search text.

@@ -4,7 +4,7 @@
     right: 0;
     bottom: 0;
     position: fixed;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0,0,0,0.2);
     z-index: 999;
 }
 
@@ -32,13 +32,18 @@
     flex-direction: column;
 }   
 
-.topbar {
+.popup-nested {
+    height: 100%;
+    width: 100%;
+}  
+
+.popup-topbar {
     display: flex;
     flex-direction: column;
     align-items: start;
 }
 
-h1.title {
+h1.popup-title {
     font-size: 25px;
     font-weight: 600;
     margin-left: 5px;
@@ -54,7 +59,7 @@ h1.title {
     padding-right: 23px;
 }
 
-.closebutton {
+.popup-closebutton {
     display: flex;
     position: absolute;
     justify-content: center;
@@ -67,7 +72,7 @@ h1.title {
     cursor: pointer;
 }
 
-.horizontal-line {
+.popup-horizontal-line {
     border-bottom: 0.1px solid #8f8f8f;
     margin-top: 3px;
     margin-bottom: 16px;
