@@ -1,0 +1,13 @@
+@authToken = {{login.response.body}}
+
+# @name login
+POST http://imp.cs.umu.se/user/verify
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "admin"
+}
+
+### test
+

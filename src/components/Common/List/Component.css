@@ -14,6 +14,7 @@
     align-items: center;
     text-align: center;
     padding: 18px;
+    gap: 20px;
 }
 
 .list-centered > .list-toggle {
@@ -32,6 +33,14 @@
 
 .list-text {
     font-size: large;
+}
+
+input,.list-text {
+    width: 100%;
+}
+
+.list-text::placeholder {
+    text-align: center;
 }
 
 .list-item {
