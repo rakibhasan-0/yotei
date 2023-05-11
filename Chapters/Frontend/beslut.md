@@ -45,6 +45,13 @@
 
 # Tekniska beslut
 
+# Använd CSS-modules framöver
+- **Datum** - 230511
+- **Beskrivning** - Från och med idag ska vi använda oss av CSS-modules för styling. 
+- **Alternativ** - Ha kvar det som förut, inte använda CSS-modules. 
+- **Motivation** - Detta gör så att vi slipper konflikter i CSS-selektorer, alltså klassnamn och id. 
+- **Påverkan** - Front-end
+
 # React 
 - **Datum** - 230416
 - **Föregående års motivering / beskrivning** - Valdes för att göra det smidigt att utveckla dynamiska hemsidor, vilket lämpar sig mycket väl för mobilanpassade gränssnitt. ReactJS gör det enklare att bygga upp hemsidor i form av komponenter, vilket leder till att kodåtervinning kommer naturligt. Komponenterna är enkla att redigera, och gör det möjligt att göra flera ändringar samtidigt. ReactJS är ett bibliotek, men mycket utbyggt, och möjligt att expandera med många verktyg och plugins. Denna utvidgningsbarhet gör att ReactJS egentligen bör anses som ett framework.
