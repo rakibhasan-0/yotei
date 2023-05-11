@@ -44,7 +44,7 @@ DROP TABLE IF EXISTS belt CASCADE;
 DROP TABLE IF EXISTS plan_to_belt CASCADE;
 DROP TABLE IF EXISTS technique_to_belt CASCADE;
 DROP TABLE IF EXISTS error_log CASCADE;
-DROP TABLE IF EXISTS media CASCADE;
+DROP TABLE IF EXISTS media_technique CASCADE;
 DROP SEQUENCE IF EXISTS serial;
 
 CREATE SEQUENCE serial START WITH 1 INCREMENT BY 1;
@@ -343,57 +343,17 @@ CREATE TABLE error_log (
 ALTER TABLE error_log OWNER TO psql;
 
 --
--- Name: media; Type: TABLE; Schema: public; Owner: psql
+-- Name: media_technique; Type: TABLE; Schema: public; Owner: psql
 --
-CREATE TABLE media (
+CREATE TABLE media_technique (
        media_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-       movement_id INT NOT NULL,
+       technique_id INT NOT NULL,
        url TEXT NOT NULL,
        local_storage BOOLEAN NOT NULL,
        image BOOLEAN NOT NULL,
        description TEXT
 );
-ALTER TABLE media OWNER TO psql;
-
-
---
--- Triggers
---
-CREATE OR REPLACE FUNCTION remove_user_references() RETURNS TRIGGER AS $$
-       BEGIN
-              DELETE FROM workout WHERE workout_hidden = TRUE AND workout_author = OLD.user_id;
-              UPDATE workout SET workout_author = 1 WHERE workout_author = OLD.user_id;
-              UPDATE plan SET user_id = 1 WHERE user_id = OLD.user_id;
-              UPDATE comments SET user_id = 1 WHERE user_id = OLD.user_id;
-              RETURN OLD;
-       END;
-       $$ LANGUAGE 'plpgsql';
-
-CREATE OR REPLACE FUNCTION no_duplicate_category() RETURNS TRIGGER AS $$
-       BEGIN
-	     IF EXISTS (SELECT * FROM activity as A WHERE A.workout_id = NEW.workout_id AND A.category_order = NEW.category_order AND A.category_name <> NEW.category_name) THEN 
-		RAISE EXCEPTION 'Cannot have two categories with the same order in the same workout!';
-	     ELSE 
-		RETURN NEW;
-	     END IF;	
-       END;
-       $$ LANGUAGE 'plpgsql';
-
-CREATE OR REPLACE FUNCTION tag_to_lowercase() RETURNS TRIGGER AS $$
-	BEGIN
-		NEW.name = LOWER(NEW.name);
-		RETURN NEW;
-	END;
-	$$ LANGUAGE 'plpgsql';
-
-
-CREATE TRIGGER check_order BEFORE INSERT ON activity FOR EACH ROW EXECUTE PROCEDURE no_duplicate_category();
-
-
-CREATE TRIGGER remove_user BEFORE DELETE ON user_table FOR EACH ROW EXECUTE PROCEDURE remove_user_references();
-
-CREATE TRIGGER insert_tag BEFORE INSERT ON tag FOR EACH ROW EXECUTE PROCEDURE tag_to_lowercase();
-
+ALTER TABLE media_technique OWNER TO psql;
 
 --
 -- Inserts
@@ -470,9 +430,6 @@ INSERT INTO tag (name) VALUES ('Uke Waza');
 INSERT INTO tag (name) VALUES ('Orange');
 INSERT INTO tag (name) VALUES ('Grönt');
 INSERT INTO tag (name) VALUES ('Blått');
-INSERT INTO tag (name) VALUES ('Uppvärmning');
-INSERT INTO tag (name) VALUES ('Cardio');
-INSERT INTO tag (name) VALUES ('Calisthenics');
 INSERT INTO tag (name) VALUES ('Judo');
 INSERT INTO tag (name) VALUES ('Throws');
 INSERT INTO tag (name) VALUES ('Footwork');
@@ -1806,139 +1763,30 @@ INSERT INTO technique_tag (tech_id, tag_id) VALUES (283, 7);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (284, 11);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (284, 8);
 
-
 --
--- CONVERT WORKOUTS FROM JSON BEGINNING
+-- Triggers
 --
+CREATE OR REPLACE FUNCTION remove_user_references() RETURNS TRIGGER AS $$
+       BEGIN
+              DELETE FROM workout WHERE workout_hidden = TRUE AND workout_author = OLD.user_id;
+              UPDATE workout SET workout_author = 1 WHERE workout_author = OLD.user_id;
+              UPDATE plan SET user_id = 1 WHERE user_id = OLD.user_id;
+              UPDATE comments SET user_id = 1 WHERE user_id = OLD.user_id;
+              RETURN OLD;
+       END;
+       $$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION no_duplicate_category() RETURNS TRIGGER AS $$
+       BEGIN
+	     IF EXISTS (SELECT * FROM activity as A WHERE A.workout_id = NEW.workout_id AND A.category_order = NEW.category_order AND A.category_name <> NEW.category_name) THEN 
+		RAISE EXCEPTION 'Cannot have two categories with the same order in the same workout!';
+	     ELSE 
+		RETURN NEW;
+	     END IF;	
+       END;
+       $$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER check_order BEFORE INSERT ON activity FOR EACH ROW EXECUTE PROCEDURE no_duplicate_category();
 
 
---
--- INSERTS FOR WORKOUTS
---
-
-INSERT INTO workout (workout_name, workout_desc, workout_duration, workout_created, workout_changed, workout_date, workout_hidden, workout_author) VALUES ('Basic Judo Throws', 'This Judo workout focuses on practicing basic throws such as the hip throw, shoulder throw, and foot sweep. It includes both solo and partner drills to improve technique and timing.', 90, '2023-04-29', '2023-05-02', '2023-04-30', False, 1);
-INSERT INTO workout (workout_name, workout_desc, workout_duration, workout_created, workout_changed, workout_date, workout_hidden, workout_author) VALUES ('Judo Randori', 'In this Judo workout, you will participate in randori, which is a form of sparring. The focus is on applying techniques learned in class in a live situation. The workout includes both standing and ground techniques.', 76, '2023-04-30', '2023-05-02', '2023-05-01', False, 1);
-INSERT INTO workout (workout_name, workout_desc, workout_duration, workout_created, workout_changed, workout_date, workout_hidden, workout_author) VALUES ('Judo Footwork Drills', 'This Judo workout focuses on footwork drills to improve balance and movement. The drills include various shuffles, steps, and pivots to help develop better footwork on the mat.', 45, '2023-05-01', '2023-05-03', '2023-05-02', False, 1);
-
---
--- INSERTS FOR WORKOUTS TAG
---
-
-INSERT INTO workout_tag (work_id, tag_id) VALUES(1, 27);
-INSERT INTO workout_tag (work_id, tag_id) VALUES(1, 28);
-INSERT INTO workout_tag (work_id, tag_id) VALUES(2, 27);
-INSERT INTO workout_tag (work_id, tag_id) VALUES(3, 27);
-INSERT INTO workout_tag (work_id, tag_id) VALUES(3, 29);
-
---
--- INSERTS FOR WORKOUT FAVOURITES
---
-
-INSERT INTO workout_favorite (workout_id, user_id) VALUES (1, 1);
-INSERT INTO workout_favorite (workout_id, user_id) VALUES (3, 1);
-
-
---
--- CONVERT EXERCISES FROM JSON -- BEGINNING
---
-
-
---
--- INSERTS FOR EXERCISE
---
-
-INSERT INTO exercise (name, description, duration) VALUES ('Springa', 'Placera ena foten framför den andra och upprepa!', 10);
-INSERT INTO exercise (name, description, duration) VALUES ('Burpees', 'Börja ståendes, gör en armhävning, hoppa upp och klappa händerna över huvudet!', 30);
-INSERT INTO exercise (name, description, duration) VALUES ('Jumping Jacks', 'Hoppa upp och brett isär benen samtidigt som du tar armarna upp ovanför huvudet, hoppa sedan tillbaka till startpositionen!', 20);
-INSERT INTO exercise (name, description, duration) VALUES ('Squats', 'Stå med fötterna axelbrett isär och gå ner i en knäböj tills låren är parallella med golvet, res dig upp igen!', 15);
-
---
--- INSERTS FOR EXERCISE TAG
---
-
-
-
---
--- CONVERT PLANS FROM JSON -- BEGINNING
---
-
-
---
--- INSERTS FOR PLANS
---
-
-INSERT INTO plan (name, color, user_id) VALUES ('Green belt training', '', 1);
-INSERT INTO plan (name, color, user_id) VALUES ('Orange and Yellow belt training', '', 1);
-INSERT INTO plan (name, color, user_id) VALUES ('Black belt training', '', 1);
-
---
--- INSERTS FOR PLANS TO BELT
---
-
-INSERT INTO plan_to_belt (belt_id, plan_id) VALUES (7, 1);
-INSERT INTO plan_to_belt (belt_id, plan_id) VALUES (9, 2);
-INSERT INTO plan_to_belt (belt_id, plan_id) VALUES (5, 2);
-INSERT INTO plan_to_belt (belt_id, plan_id) VALUES (13, 3);
-
-
---
--- CONVERT WORKOUT REVIEWS FROM JSON BEGINNING
---
-
-
---
--- INSERTS FOR WORKOUTS REVIEWS
---
-
-INSERT INTO workout_review (workout_id, user_id, rating, positive_comment, negative_comment, review_date) VALUES (1, 1, 5, 'Det var hög närvaro', 'Inget gick dåligt!', '2023-04-30');
-INSERT INTO workout_review (workout_id, user_id, rating, positive_comment, negative_comment, review_date) VALUES (3, 1, 2, 'Inget gick bra :/', 'Alla bara va sämst idag...', '2023-05-03');
-
-
---
--- CONVERT WORKOUTS FROM JSON BEGINNING
---
-
-
---
--- INSERTS FOR ACTIVITIES
---
-
-INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (1, null, null, 'Uppvärmning', 1, 'Uppvärmning Springa', 'Springa i 10 minuter', 10, 1);
-INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (1, null, null, 'Uppvärmning', 1, 'Uppvärmning Burpees', 'Burpees i 5 minuter', 5, 2);
-INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (1, null, null, 'Träning', 2, 'Empi uchi träning', 'Empi uchi i 15 minuter', 15, 1);
-INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (1, null, null, 'Träning', 2, 'Waki gatame träning', 'Waki gatame i 5 minuter', 5, 2);
-INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (1, null, null, 'Träning', 2, 'Waki gatame träning', 'Waki gatame i 7 minuter', 7, 3);
-INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (1, null, null, 'Avslut', 3, 'Waki gatame träning', 'Avsluta med Waki gatame i 15 minuter', 15, 4);
-INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (2, null, null, 'Uppvärmning', 1, 'Uppvärmning Burpees', 'Burpees i 5 minuter', 5, 1);
-INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (2, null, null, 'Uppvärmning', 1, 'Uppvärmning Jumping Jacks', 'Jumping Jacks i 15 minuter', 15, 2);
-INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (2, null, null, 'Träning', 2, 'Empi uchi träning', 'Empi uchi i 15 minuter', 15, 1);
-INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (2, null, null, 'Träning', 2, 'Waki gatame träning', 'Waki gatame i 5 minuter', 5, 2);
-INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (2, null, null, 'Träning', 2, 'Waki gatame träning', 'Waki gatame i 7 minuter', 7, 3);
-INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (2, null, null, 'Avslut', 3, 'Waki gatame träning', 'Avsluta med Waki gatame i 15 minuter', 15, 4);
-INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (3, null, null, 'Träning', 1, 'Empi uchi träning', 'Empi uchi i 15 minuter', 15, 1);
-INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (3, null, null, 'Träning', 1, 'Waki gatame träning', 'Waki gatame i 5 minuter', 5, 2);
-INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (3, null, null, 'Träning', 1, 'Waki gatame träning', 'Waki gatame i 7 minuter', 7, 3);
-INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (3, null, null, 'Avslut', 2, 'Waki gatame träning', 'Avsluta med Waki gatame i 15 minuter', 15, 4);
-
-
---
--- CONVERT SESSIONS FROM JSON -- BEGINNING
---
-
-
---
--- INSERTS FOR SESSION
---
-
-INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Junior Green Belt Training', 2, 1, '2023-04-01', '12:00');
-INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Intermediate Judo Training Session', 3, 2, '2023-04-02', '14:00');
-INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Beginner Judo Training Session', 3, 1, '2023-04-03', '10:00');
-INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Black Belt Judo Training Session', 2, 3, '2023-04-04', '16:00');
-INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Senior Judo Training Session', 3, 3, '2023-04-05', '18:00');
-INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Advanced Judo Training Session', 2, 3, '2023-04-06', '08:00');
-INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Junior Judo Training Session', 1, 1, '2023-04-07', '20:00');
-INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Judo Fitness Training Session', 1, 2, '2023-04-08', '06:00');
-INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Judo Techniques Practice Session', 3, 1, '2023-04-09', '16:00');
-INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Judo Kata Practice Session', 2, 2, '2023-04-10', '08:00');
-
-
+CREATE TRIGGER remove_user BEFORE DELETE ON user_table FOR EACH ROW EXECUTE PROCEDURE remove_user_references();
