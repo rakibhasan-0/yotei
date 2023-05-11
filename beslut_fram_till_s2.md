@@ -15,19 +15,6 @@ Beslut - Monolith Arkitektur
 
 Att gå från en micro-service Arkitektur till en Monolith Arkitektur ledde till en märkbar minskning i CPU samt RAM-minne vid runtime. Vi estimerar att ändrinngen uppnår kundens kriterium på applikationens prestation (1-2GB RAM & ~1 CPU) och kommer därmed att genomdriva denna ändring.
 
-## Beslut om SpringBoot Native
-
-Datum - 24/04/23
-
-Chapters - N/A
-
-Grupp -  Dragon
-
-Beslut - React Player
-
-### Motivation
-
-SpringBoot native valdes inte. Samtidigt som den skulle minska RAM och CPU användningen märkbart mycket, så är tiden för att implementera den för lång för detta projekt. 
 
 
 
@@ -65,6 +52,21 @@ Vi tog beslutet att använda react-responsive-carousel för att visa upp bilder/
 
 
 # Beslut gällande Backend
+
+## Beslut om SpringBoot Native
+
+Datum - 24/04/23
+
+Chapters - N/A
+
+Grupp -  Dragon
+
+Beslut - React Player
+
+### Motivation
+
+SpringBoot native valdes inte för att köra backend-apiet. Detta var något som diskuterades då vi arbetade med att få ner resursanvändningen för server-sidan.  Samtidigt som den skulle minska RAM och CPU användningen märkbart mycket så bedömdes svårigheten att implementera, ökning av byggtiden, svårigheter med mockning för tester (native stödjer inte vissa dynamiska funnktioner) sammanslaget att det skulle vara ovärt för detta projekt. 
+
 
 ## Beslut om many-to-one relation mellan video/bild och tekniker
 
