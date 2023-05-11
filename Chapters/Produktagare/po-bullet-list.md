@@ -13,5 +13,6 @@ Bold marks the latest added points.
 <br />
 
 ## Links to documentation
-Numbers reflect the points in the bullet-list.
+Numbers reflect the points in the bullet-list.<br />
+
 \[1-4] [Documentation](https://docs.google.com/document/d/1fAwyJMEhL7-6Ktr3kHSO7tZZPI5srv3OcO4Zzdy4cFw/edit?usp=sharing)
