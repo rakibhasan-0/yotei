@@ -5,6 +5,13 @@
 
 # Designmässiga beslut
 
+# Felmeddelanden på skärmen
+- **Datum** - 230511
+- **Beskrivning** - Felmeddelanden ska ej ske i form av alerts. De ska istället skrivas ut på lämpligt ställe på skärmen i röd text, eller eventuellt i en popup. 
+- **Alternativ** - Ha kvar så att felmeddelanden kommer i alerts.
+- **Motivation** - Det blir tydligare för användaren vad som har gått fel. 
+- **Påverkan** - Front-end
+
 # Ny hemskärm
 - **Datum** - 230416
 - **Beskrivning** - Vi föreslår en ny startskärm: Grupplanering (Tidigare terminsplanering) Fyller den ett syfte eller blir det bara en landningssida som bidrar till ett extra klick?
