@@ -1,4 +1,4 @@
-#Beslut gällande Arkitektur
+# Beslut gällande Arkitektur
 
 ## Beslut om Monolith Arkitektur
 
@@ -31,7 +31,7 @@ SpringBoot native valdes inte. Samtidigt som den skulle minska RAM och CPU anvä
 
 
 
-#Beslut gällande Frontend
+# Beslut gällande Frontend
 
 ## Beslut om React Player
 
@@ -64,7 +64,7 @@ Vi tog beslutet att använda react-responsive-carousel för att visa upp bilder/
 
 
 
-#Beslut gällande Backend
+# Beslut gällande Backend
 
 ## Beslut om many-to-one relation mellan video/bild och tekniker
 
@@ -96,11 +96,11 @@ Beslut - Att ha en tabell för både video/bilder för tekniker och övningar.
 Tanken var att video/bild för övningar respektive tekniker skulle ha sin egna tabell i databasen. Men vid närmare granskning så visade det sig mer gynnsamt att bara ha en tabell, då CRUD operationer blir simplare för komponenter som ska skicka requests för att nå den. Tex så ger detta oss friheten att endast ta emot ett ID från en teknik eller övning i vår media-spelare för att visa upp de relaterade videos och bilder för den på hemsidan. För att förtydliga görs detta möjligt i databasen via en delad integer (delad sequence) mellan övningar och tekniker vilket gör att det aldrig kan ha samma ID; därmed kan det hämtas från samma tabell eftersom ett teknik eller övnings ID aldrig kan vara densamma. 
 
 
-#Beslut gällande Quality Assurance
+# Beslut gällande Quality Assurance
 
 
 
-#Beslut gällande DevOps
+# Beslut gällande DevOps
 
 
-#Beslut gällande Produktägare
+# Beslut gällande Produktägare
