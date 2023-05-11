@@ -44,6 +44,19 @@ Värt att förtydliga är att alla komponenter skall ta en prop "id". Detta för
 
 [Länk till figma](https://www.figma.com/file/64zymyGJSp7BuQthnOhvMt/PVT?node-id=1%3A68&t=WL4siHHSRFAsrkq5-1)
 
+## Att skriva CSS
+Från och med nu, så kommer all CSS skrivas som CSS-modules. Detta löser problemet att stilar blir globala och kan påverka hela hemsidan. För att använda CSS-modules, så skriver man css precis som vanligt, bara att man döper filen till `filename.module.css`. Exempel på hur dessa stilar används i en komponent ses nedan:
+```js
+import style from "path/to/your/file/filname.module.css"
+
+function ExampleComponent() {
+    return (
+        <div className=`${style.someStyle}`/>
+    )
+}
+```
+Dessa stilar kommer nu att vara lokalt scopade, och endast användas i din komponent. Värt att notera är namn på CSS-klasser och -ids skrivs i camelCase när man använder CSS-modules. Ännu något som är värt att notera är att när du i webbgranskaren inspekterar stilar och element, så kommer namnen på klasser få ett hash (sträng av random siffror och bokstäver) prefixat.
+
 ## Att köra frontend
 För att köra frontend krävs det att ett antal API:er och REACT servern körs. Detta görs enligt nedan:
 
