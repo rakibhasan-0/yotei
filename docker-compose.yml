@@ -2,6 +2,7 @@ version: "3.7"
 services:
   nginx:
     image: nginx:latest
+    restart: always
     volumes:
       - ./nginx/development.conf:/etc/nginx/nginx.conf
       # - /etc/letsencrypt/:/etc/letsencrypt/
@@ -12,6 +13,7 @@ services:
       - gateway
   psql:
     build: ./database
+    restart: always
     environment:
       - POSTGRES_USER=psql
       - POSTGRES_PASSWORD=yotei123
@@ -23,12 +25,14 @@ services:
       - ./database/init:/docker-entrypoint-initdb.d
   frontend:
     image: pvt2023/frontend:latest
+    restart: always
     ports:
       - "3000:3000"
     links:
       - psql
   gateway:
     image: pvt2023/gateway:latest
+    restart: always
     ports:
       - "8080:8080"
     environment:
@@ -42,6 +46,7 @@ services:
       - api
   api:
     image: pvt2023/api:latest
+    restart: always
     ports:
       - "8085:8085"
     links:
