@@ -5,6 +5,13 @@
 
 # Designmässiga beslut
 
+# Maxbredd på baselayout
+- **Datum** - 230511
+- **Beskrivning** - Vi ska sätta en maxbredd på baselayouten. Vi som utvecklare behöver inte bry oss om en webbläsarvyn. Kunden beskrev det som att de sällan använder hemsidan på en datorn vilket är varför vi anpassar det för mobilvyn. 
+- **Alternativ** - Ha fullbredd, då ser det inte bra ut och skulle behövas skrivas speicalanpassad styling för desktop-vyn. 
+- **Motivation** - Användarna använder väldigt sällan desktop när de använder hemsidan. Därför bättre att det ser ut som i mobilvyn. 
+- **Påverkan** - Front-end
+
 # Felmeddelanden på skärmen
 - **Datum** - 230511
 - **Beskrivning** - Felmeddelanden ska ej ske i form av alerts. De ska istället skrivas ut på lämpligt ställe på skärmen i röd text, eller eventuellt i en popup. 
