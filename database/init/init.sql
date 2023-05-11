@@ -347,7 +347,7 @@ ALTER TABLE error_log OWNER TO psql;
 --
 CREATE TABLE media (
        media_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-       technique_id INT NOT NULL,
+       movement_id INT NOT NULL,
        url TEXT NOT NULL,
        local_storage BOOLEAN NOT NULL,
        image BOOLEAN NOT NULL,
