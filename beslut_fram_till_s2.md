@@ -158,9 +158,60 @@ Beslut - Att använda react-responsive-carousel för att visa upp bilder/videor 
 ### Motivation
 Vi tog beslutet att använda react-responsive-carousel för att visa upp bilder/videor på tekniker/övningar på grund av samma anledningar som React-Player: bägge verktyg är inbyggda, light weight, react komponenter, samt enkla att använda och förstå.
 
+## Beslut om att inte visa teknikbeskrivning
+- Datum - 230505
+- Chapters - N/A
+- Grupp -  Medusa Maneaters (Grupp 6)
+- Beslut - Vi visar inte längre beskrivning ifall man trycker på kortet utan man tas till detalj sidan för en teknik
+- Motivation
+  - Teknikernas namn är så pass långa och detaljerade att de inte finns något större syfte med att ha en mer detaljerad beskrivning. Därför beslutades det att ifall man trycker på en teknik ska man tas till detaljsidan för en teknik. Informationen visas ändå på detaljsidan.
 
+## Beslut om att inte ha en vinkel mellan färgerna på teknikkorten
+
+- Datum - 230505
+- Chapters - N/A
+- Grupp -  Medusa Maneaters (Grupp 6)
+- Beslut - Bältesfärgerna för en teknik avskilj inte med en vinkel utan vertikalt
+- Motivation
+  - Implementationen för att få till vinkeln blev för komplicerad och efter samråd med andra grupper kom vi fram till att köra vertikala avdelningar istället. 
+  
+# Beslut om slå ihop exerciseCreate och exerciseForm
+
+
+Datum - 23/05/10
+
+Chapters - N/A
+
+Grupp -  Phoenix
+
+Beslut - Slå ihop exerciseCreate och exerciseForm
+
+## Motivation
+
+Vi bestämde oss att slå ihop exerciseCreate och exerciseForm eftersom de var onödigt att dela upp till att börja med och tjorvigt att kommunicera mellan dem. Formuläret som fanns i exerciseForm fyllde ingen funktion utan lade endast till extra komplexitet.
+
+# Beslut om filtrering på se-alla-övningar-sidan
+Datum - 23/05/10
+
+Chapters - N/A
+
+Grupp -  Phoenix
+
+Beslut - Ingen filtrering på se-alla-övningar-sidan
+
+## Motivation
+
+Vi bestämde att det inte behövs någon filtrering på se övningar sidan då denna funktionalitet kan uppnås med sökfunktionaliteten som kommer med den nya sök-komponenten. 
 
 # Beslut gällande Backend
+
+## Beslut gällande bälten i backend
+- **Datum** - 230505
+- **Chapters** - N/A
+- **Grupp** - 4 Chimera
+- **Beslut** - Att bälten ska hanteras i backenden
+- **Motivation**
+  - För att bälten ska hanteras lika för samtliga komponenter i frontend ska dessa hämta bälten från backenden. 
 
 ## Programspråk
 
@@ -200,6 +251,16 @@ Beslut gällande om Spring Boot fortfarande ska användas som API.
   - Ramverket är enkelt att sätta sig in i.
   - Ger automatisk konfiguration.
   - Apache Struts valdes inte eftersom komponenterna blir hårt kopplade och med det mindre skalbart.
+
+
+## Beslut om refaktorisering av teknik API
+
+- Datum - 230504
+- Chapters - N/A
+- Grupp -  Medusa Maneaters (Grupp 6)
+- Beslut - Beslut om att refaktorisera teknik API:et
+- Motivation
+  - Teknik API:et innehöll inte de nya delarna som taggar och bälten. Det var inte heller enligt standarden med RESTFUL. ändelsen `/techniques/all` togs bort och bytes ut mot `/techniques` för GET och POST. Vissa API:er, såsom `/technique/getdesc` togs bort eftersom de inte använts och itne följer RESTFUL standarder.
 
 ## Säkerhet
 
