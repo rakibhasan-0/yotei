@@ -433,6 +433,9 @@ INSERT INTO tag (name) VALUES ('Blått');
 INSERT INTO tag (name) VALUES ('Judo');
 INSERT INTO tag (name) VALUES ('Throws');
 INSERT INTO tag (name) VALUES ('Footwork');
+INSERT INTO tag (name) VALUES ('Uppvärmning');
+INSERT INTO tag (name) VALUES ('Cardio');
+INSERT INTO tag (name) VALUES ('Calisthenics');
 
 
 --
@@ -1762,6 +1765,163 @@ INSERT INTO technique_tag (tech_id, tag_id) VALUES (283, 3);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (283, 7);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (284, 11);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (284, 8);
+
+
+--
+-- CONVERT WORKOUTS FROM JSON BEGINNING
+--
+
+
+--
+-- INSERTS FOR WORKOUTS
+--
+
+INSERT INTO workout (workout_name, workout_desc, workout_duration, workout_created, workout_changed, workout_date, workout_hidden, workout_author) VALUES ('Basic Judo Throws', 'This Judo workout focuses on practicing basic throws such as the hip throw, shoulder throw, and foot sweep. It includes both solo and partner drills to improve technique and timing.', 90, '2023-04-29', '2023-05-02', '2023-04-30', False, 1);
+INSERT INTO workout (workout_name, workout_desc, workout_duration, workout_created, workout_changed, workout_date, workout_hidden, workout_author) VALUES ('Judo Randori', 'In this Judo workout, you will participate in randori, which is a form of sparring. The focus is on applying techniques learned in class in a live situation. The workout includes both standing and ground techniques.', 76, '2023-04-30', '2023-05-02', '2023-05-01', False, 1);
+INSERT INTO workout (workout_name, workout_desc, workout_duration, workout_created, workout_changed, workout_date, workout_hidden, workout_author) VALUES ('Judo Footwork Drills', 'This Judo workout focuses on footwork drills to improve balance and movement. The drills include various shuffles, steps, and pivots to help develop better footwork on the mat.', 45, '2023-05-01', '2023-05-03', '2023-05-02', False, 1);
+
+--
+-- INSERTS FOR WORKOUTS TAG
+--
+
+INSERT INTO workout_tag (work_id, tag_id) VALUES(1, 24);
+INSERT INTO workout_tag (work_id, tag_id) VALUES(1, 25);
+INSERT INTO workout_tag (work_id, tag_id) VALUES(2, 24);
+INSERT INTO workout_tag (work_id, tag_id) VALUES(3, 24);
+INSERT INTO workout_tag (work_id, tag_id) VALUES(3, 26);
+
+--
+-- INSERTS FOR WORKOUT FAVOURITES
+--
+
+INSERT INTO workout_favorite (workout_id, user_id) VALUES (1, 1);
+INSERT INTO workout_favorite (workout_id, user_id) VALUES (3, 1);
+
+
+--
+-- CONVERT EXERCISES FROM JSON -- BEGINNING
+--
+
+
+--
+-- INSERTS FOR EXERCISE
+--
+
+INSERT INTO exercise (name, description, duration) VALUES ('Springa', 'Placera ena foten framför den andra och upprepa!', 10);
+INSERT INTO exercise (name, description, duration) VALUES ('Burpees', 'Börja ståendes, gör en armhävning, hoppa upp och klappa händerna över huvudet!', 30);
+INSERT INTO exercise (name, description, duration) VALUES ('Jumping Jacks', 'Hoppa upp och brett isär benen samtidigt som du tar armarna upp ovanför huvudet, hoppa sedan tillbaka till startpositionen!', 20);
+INSERT INTO exercise (name, description, duration) VALUES ('Squats', 'Stå med fötterna axelbrett isär och gå ner i en knäböj tills låren är parallella med golvet, res dig upp igen!', 15);
+
+--
+-- INSERTS FOR EXERCISE TAG
+--
+
+INSERT INTO exercise_tag (ex_id, tag_id) VALUES (285, 27);
+INSERT INTO exercise_tag (ex_id, tag_id) VALUES (285, 28);
+INSERT INTO exercise_tag (ex_id, tag_id) VALUES (286, 27);
+INSERT INTO exercise_tag (ex_id, tag_id) VALUES (286, 28);
+INSERT INTO exercise_tag (ex_id, tag_id) VALUES (287, 27);
+INSERT INTO exercise_tag (ex_id, tag_id) VALUES (287, 28);
+INSERT INTO exercise_tag (ex_id, tag_id) VALUES (287, 29);
+INSERT INTO exercise_tag (ex_id, tag_id) VALUES (288, 29);
+INSERT INTO exercise_tag (ex_id, tag_id) VALUES (288, 28);
+
+
+--
+-- CONVERT PLANS FROM JSON -- BEGINNING
+--
+
+
+--
+-- INSERTS FOR PLANS
+--
+
+INSERT INTO plan (name, color, user_id) VALUES ('Grönt bälte träning', '', 1);
+INSERT INTO plan (name, color, user_id) VALUES ('Orange och Gult bälte träning', '', 1);
+INSERT INTO plan (name, color, user_id) VALUES ('Svart bälte träning', '', 1);
+INSERT INTO plan (name, color, user_id) VALUES ('Gult bälte träning', '', 1);
+INSERT INTO plan (name, color, user_id) VALUES ('Brunt bälte träning', '', 1);
+
+--
+-- INSERTS FOR PLANS TO BELT
+--
+
+INSERT INTO plan_to_belt (belt_id, plan_id) VALUES (7, 1);
+INSERT INTO plan_to_belt (belt_id, plan_id) VALUES (9, 2);
+INSERT INTO plan_to_belt (belt_id, plan_id) VALUES (5, 2);
+INSERT INTO plan_to_belt (belt_id, plan_id) VALUES (13, 3);
+INSERT INTO plan_to_belt (belt_id, plan_id) VALUES (3, 4);
+INSERT INTO plan_to_belt (belt_id, plan_id) VALUES (11, 5);
+
+
+--
+-- CONVERT WORKOUT REVIEWS FROM JSON BEGINNING
+--
+
+
+--
+-- INSERTS FOR WORKOUTS REVIEWS
+--
+
+INSERT INTO workout_review (workout_id, user_id, rating, positive_comment, negative_comment, review_date) VALUES (1, 1, 5, 'Det var hög närvaro', 'Inget gick dåligt!', '2023-04-30');
+INSERT INTO workout_review (workout_id, user_id, rating, positive_comment, negative_comment, review_date) VALUES (3, 1, 2, 'Inget gick bra :/', 'Alla bara va sämst idag...', '2023-05-03');
+
+
+--
+-- CONVERT WORKOUTS FROM JSON BEGINNING
+--
+
+
+--
+-- INSERTS FOR ACTIVITIES
+--
+
+INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (1, 285, null, 'Uppvärmning', 1, 'Uppvärmning Springa', 'Springa i 10 minuter', 10, 1);
+INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (1, 286, null, 'Uppvärmning', 1, 'Uppvärmning Burpees', 'Burpees i 5 minuter', 5, 2);
+INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (1, null, 7, 'Träning', 2, 'Empi uchi träning', 'Empi uchi i 15 minuter', 15, 1);
+INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (1, null, 8, 'Träning', 2, 'Waki gatame träning', 'Waki gatame i 5 minuter', 5, 2);
+INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (1, null, 8, 'Träning', 2, 'Waki gatame träning', 'Waki gatame i 7 minuter', 7, 3);
+INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (1, null, 8, 'Avslut', 3, 'Waki gatame träning', 'Avsluta med Waki gatame i 15 minuter', 15, 4);
+INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (2, 286, null, 'Uppvärmning', 1, 'Uppvärmning Burpees', 'Burpees i 5 minuter', 5, 1);
+INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (2, 287, null, 'Uppvärmning', 1, 'Uppvärmning Jumping Jacks', 'Jumping Jacks i 15 minuter', 15, 2);
+INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (2, null, 8, 'Träning', 2, 'Empi uchi träning', 'Empi uchi i 15 minuter', 15, 1);
+INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (2, null, 6, 'Träning', 2, 'Waki gatame träning', 'Waki gatame i 5 minuter', 5, 2);
+INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (2, null, 6, 'Träning', 2, 'Waki gatame träning', 'Waki gatame i 7 minuter', 7, 3);
+INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (2, null, 6, 'Avslut', 3, 'Waki gatame träning', 'Avsluta med Waki gatame i 15 minuter', 15, 4);
+INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (3, null, null, 'Träning', 1, 'Empi uchi träning', 'Empi uchi i 15 minuter', 15, 1);
+INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (3, null, 2, 'Träning', 1, 'Waki gatame träning', 'Waki gatame i 5 minuter', 5, 2);
+INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (3, null, 2, 'Träning', 1, 'Waki gatame träning', 'Waki gatame i 7 minuter', 7, 3);
+INSERT INTO activity (workout_id, exercise_id, technique_id, category_name, category_order, activity_name, activity_desc, activity_duration, activity_order) VALUES (3, null, 2, 'Avslut', 2, 'Waki gatame träning', 'Avsluta med Waki gatame i 15 minuter', 15, 4);
+
+
+--
+-- CONVERT SESSIONS FROM JSON -- BEGINNING
+--
+
+
+--
+-- INSERTS FOR SESSION
+--
+
+INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Junior Grönt Bälte Träning', 2, 1, '2023-04-01', '12:00');
+INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Intermediate Judo träning', 3, 2, '2023-04-02', '14:00');
+INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Beginner Judo träning', 3, 1, '2023-04-03', '10:00');
+INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Black Belt Judo träning', 2, 3, '2023-04-04', '16:00');
+INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Senior Judo träning', 3, 3, '2023-04-05', '18:00');
+INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Advanced Judo träning', 2, 3, '2023-04-06', '08:00');
+INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Junior Judo träning', 1, 1, '2023-04-07', '20:00');
+INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Judo Fitness träning', 1, 2, '2023-04-08', '06:00');
+INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Judo Techniques Practice', 3, 1, '2023-04-09', '16:00');
+INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Judo Kata Practice', 2, 2, '2023-04-10', '08:00');
+INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Judo Fitness träning', 1, 4, '2023-04-08', '06:00');
+INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Judo teknik övningar', 3, 4, '2023-04-09', '16:00');
+INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Judo Kata övning', 2, 4, '2023-04-10', '08:00');
+INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Judo Fitness träning', 1, 5, '2023-04-08', '06:00');
+INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Judo teknik övningar', 3, 5, '2023-04-09', '16:00');
+INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Judo Kata övning', 2, 5, '2023-04-10', '08:00');
+INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Judo Fitness träning', 1, 3, '2023-04-08', '06:00');
+INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Judo teknik övningar', 3, 3, '2023-04-09', '16:00');
+INSERT INTO session (text, workout_id, plan_id, date, time) VALUES ('Judo Kata övning', 2, 3, '2023-04-10', '08:00');
 
 --
 -- Triggers
