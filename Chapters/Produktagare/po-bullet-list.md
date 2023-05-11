@@ -5,4 +5,5 @@
 4. We are one team, no matter the group division and we are all working towards the same goal.
 
 ## Links to documentation
-\[1-4] [Dokumentation](https://docs.google.com/document/d/1fAwyJMEhL7-6Ktr3kHSO7tZZPI5srv3OcO4Zzdy4cFw/edit?usp=sharing)
+Numbers reflect the points in the bullet-list.
+\[1-4] [Documentation](https://docs.google.com/document/d/1fAwyJMEhL7-6Ktr3kHSO7tZZPI5srv3OcO4Zzdy4cFw/edit?usp=sharing)
