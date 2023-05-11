@@ -1,7 +1,7 @@
 **Arbete kvar för grupper i arbetsdagar**\
 G1 - 3 dagar\
 G2 - hela\
-G3 - 2dagar\
+G3 - 3dagar\
 G4 - 0dagar\
 G5 - 0dagar\
 G6 - 1dagar\
