@@ -12,8 +12,8 @@ import "./WorkoutActivityList.css"
 
 export default function WorkoutActivityList({categoryName, activities, id}) {
 	return (
-		<fieldset className={setPadding(activities.length)} id={id}>
-			{categoryName != null && <legend className="px-2 h3 w-auto">{categoryName}</legend>}
+		<fieldset className={setPadding(activities.length, categoryName)} id={id}>
+			{categoryName != null && <legend className="px-2 w-auto"><p className="m-0">{categoryName}</p></legend>}
 			{
 				sortActivities(activities).map((activity, index) => <WorkoutActivityListItem key={activity.id} activity={activity} index={index}/>)
 			}
@@ -26,7 +26,7 @@ function sortActivities(activities) {
 	return sortedActivites
 }
 
-function setPadding(length) {
-	const padding = (length == 1 ? "pt-0" : "pt-3")
-	return "container workout-activity-list " + padding
+function setPadding(length, categoryName) {
+	const paddingY = (length != 1 ? "pt-3" : (!categoryName ? "px-0" : "pt-3"))
+	return "container workout-activity-list " + paddingY
 }

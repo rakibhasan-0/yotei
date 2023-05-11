@@ -1,7 +1,7 @@
 import React, {useState} from "react"
 import WorkoutActivityList from "../../components/Workout/WorkoutActivityList/WorkoutActivityList"
 import EditButton from "../../components/Common/EditButton"
-import "./WorkoutView.css"
+import "/WorkoutView/WorkoutView.css"
 import { AccountContext } from "../../context"
 import {useParams} from "react-router-dom"
 import FavoriteButton from "../../components/Common/StarButton/StarButton"

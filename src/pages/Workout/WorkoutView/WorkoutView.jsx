@@ -1,12 +1,13 @@
 import { useContext, useEffect, useState} from "react"
 import { AccountContext } from "../../../context"
 import WorkoutActivityList from "../../../components/Workout/WorkoutActivityList/WorkoutActivityList"
-import "../WorkoutView.css"
+import "./WorkoutView.css"
 import Tag from "../../../components/Common/Tag/Tag"
 import Button from "../../../components/Common/Button/Button"
 import { useNavigate, Link} from "react-router-dom"
 import {useParams} from "react-router"
 import Popup from "../../../components/Common/Popup/Popup"
+import { Pencil, Trash, Printer} from "react-bootstrap-icons"
 
 /**
  * A page for creating workouts. The user can view the information
@@ -126,7 +127,7 @@ function getTagContainer(workoutData) {
 	return (
 		<div className="container">
 			<div className="row">
-				<h6>Taggar</h6>
+				<h2>Taggar</h2>
 			</div>
 			<div className="row">
 				{
@@ -147,7 +148,7 @@ function getWorkoutUsersContainer(workoutUsers) {
 	return (
 		<div className="container mt-3">
 			<div className="row">
-				<h6>Användare</h6>
+				<h2>Användare</h2>
 			</div>
 			<div className="row">
 				{
@@ -188,47 +189,60 @@ function getWorkoutInfoContainer(workoutData, setShowPopup) {
 				<div className={"info"}>
 					<div className="row-item">
 						<div className="column-item">
-							<h4 className="font-weight-bold text-truncate">{workoutData.name}</h4>
+							<h1 className="font-weight-bold text-truncate">{workoutData.name}</h1>
 						</div>
-						<div className="column-item text-right">
-							<i  className="bi bi-printer bi-lg click click-icon ml-0"></i>
+						<div className="workout-detail-icon-container">
+							<Printer
+								size="24px"
+								color="var(--red-primary)"
+								style={{cursor: "pointer"}}	
+							/>
 							<Link state={{workout: workoutData}} to={"/workout/edit"}>
-								<i className="bi bi-pencil-square bi-lg click-icon"></i>
+								<Pencil
+									size="24px"
+									color="var(--red-primary)"
+									style={{cursor: "pointer"}}
+								/>
 							</Link>
-							<i onClick={() => setShowPopup(true)} className="bi bi-trash bi-lg click-icon"></i>
+							<Trash
+								size="24px"
+								color="var(--red-primary)"
+								style={{cursor: "pointer"}}
+								onClick={() => setShowPopup(true)}
+							/>
 						</div>					
 					</div>
 					
 					<div className="row-item">
 						<div className="column-item">
-							<h6 className="font-weight-bold mb-0" id="no-print">Fullständigt namn</h6>
+							<h2 className="font-weight-bold mb-0" id="no-print">Fullständigt namn</h2>
 							<p className="properties" id="no-print">{workoutData.name}</p>
 						</div>
 					</div>
 					
 					<div className="row-item">
 						<div className="column-item">
-							<h6 className="font-weight-bold mb-0">Författare</h6>
+							<h2 className="font-weight-bold mb-0">Författare</h2>
 							<p>{workoutData.author.username}</p>
 						</div>
 						<div className="column-item column-item-right">
-							<h6 className="font-weight-bold mb-0">Tidslängd</h6>
+							<h2 className="font-weight-bold mb-0">Tidslängd</h2>
 							<p>{workoutData.duration} min</p>
 						</div>
 					</div>
 
 					<div className={"row-item"} id="no-print">
 						<div className={"column-item"}>
-							<h6 className="font-weight-bold mb-0">Skapad</h6>
+							<h2 className="font-weight-bold mb-0">Skapad</h2>
 							<p>{workoutData.created}</p>
 						</div>
 						<div className={"column-item column-item-right"}>
-							<h6 className="font-weight-bold mb-0 text-align-left">Senast ändrad</h6>
+							<h2 className="font-weight-bold mb-0 text-align-left">Senast ändrad</h2>
 							<p>{workoutData.changed}</p>
 						</div>
 					</div>
 
-					<h6 className="font-weight-bold mb-0">Beskrivning</h6>
+					<h2 className="font-weight-bold mb-0">Beskrivning</h2>
 					<p className="properties">{workoutData.description}</p>
 				</div>
 			</div>		

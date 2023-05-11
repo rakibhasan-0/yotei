@@ -44,21 +44,18 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 				}}>
 
 				<div className="col text-left">
-					<h5 className="d-flex align-items-center text-left workout-activity-name">{name}</h5>
+					<p className="d-flex align-items-center text-left workout-activity-name">{name}</p>
 				</div>
 
 				
 				<div className="listItemTime col text-right">{activity.duration} min</div>
 				{
 					(!isFreeTextElem() && (activity.exercise?.description || activity.technique?.description))
-						? (	
-							<div role="optional-toggle" className="toggleIcon pr-2" onClick={() => setIsActive(!isActive)}>
-								<DescriptionToggle isActive={isActive} />
-							</div>
-						)
-						: (
-							<div role="optional-toggle" className="pr-5"></div> // Empty div to align durations
-						)
+						? 
+						(<div role="optional-toggle" className="toggleIcon pr-2" onClick={() => setIsActive(!isActive)}>
+							<DescriptionToggle isActive={isActive} />
+						</div>)
+						:(<div role="optional-toggle" className="pr-5"></div>) // Empty div to align durations)
 						
 				}
 			</div>

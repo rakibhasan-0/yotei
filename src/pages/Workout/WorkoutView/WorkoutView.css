@@ -1,10 +1,20 @@
+
+
 /*
  * @author Team Capricciosa (Group 2)
  * @version 1.0
  */
-.workout {
+ .workout {
     padding-top: 10px;
     margin: auto;
+}
+
+.workout-detail-icon-container {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    width: 50%;
+    gap: 1rem;
 }
 
 .click-icon {
