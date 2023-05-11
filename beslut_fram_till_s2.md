@@ -237,6 +237,16 @@ Beslut - React Player
 
 SpringBoot native valdes inte för att köra backend-apiet. Detta var något som diskuterades då vi arbetade med att få ner resursanvändningen för server-sidan.  Samtidigt som den skulle minska RAM och CPU användningen märkbart mycket så bedömdes svårigheten att implementera, ökning av byggtiden, svårigheter med mockning för tester (native stödjer inte vissa dynamiska funnktioner) sammanslaget att det skulle vara ovärt för detta projekt. 
 
+# Resultat av databas spike
+- **Datum** - 230421
+- **Chapters** - N/A
+- **Grupp** -  Cyclops
+- **Beslut** - Ändra minimalt i databasen
+- **Motivation**
+  - Det gamla ER-diagrammet stämmde inte överens med verkligheten och behövde uppdateras.
+   En bältestabell beslutades att läggas till, samt relationstabeller relaterat till detta kopplat till tekniker och planering.
+   Detta görs med anledning av att vara konsekvent kring bältesfärger, som i nuvarande system väljs av en användare i frontend med en color-picker!
+   Fler constraints och triggers beslutades att läggas till för att bevara referensintegritet.
 
 ## Beslut om many-to-one relation mellan video/bild och tekniker
 
