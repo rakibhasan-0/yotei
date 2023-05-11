@@ -13,7 +13,7 @@ Beslut - Monolith Arkitektur
 
 ### Motivation
 
-Att gå från en micro-service Arkitektur till en Monolith Arkitektur ledde till en märkbar minskning i CPU samt RAM-minne vid runtime. Vi estimerar att ändrinngen uppnår kundens kriterium på applikationens prestation (1-2GB RAM & ~1 CPU) och kommer därmed att genomdriva denna ändring.
+Att gå från en micro-service Arkitektur till en Monolith Arkitektur för backend-APIet ledde till en märkbar minskning i CPU samt RAM-minne vid runtime. Vi estimerar att ändringen uppnår kundens kriterium på applikationens prestation (1-2GB RAM & ~1 CPU) och kommer därmed att genomdriva denna ändring. Länge övervägdes SpringBoot native som ett alternativ för att förbättra prestandan, alternativt att dela upp APIet i mindre containrar. Emellertid bedömdes SpringBoot native efter en dags testning vara tidskrävande att implementera samt att en rad nackdelar med försämrad byggtid och svårare med mockup testning hade följt. 
 
 
 
@@ -283,14 +283,7 @@ Beslut - Att ha en tabell för både video/bilder för tekniker och övningar.
 Tanken var att video/bild för övningar respektive tekniker skulle ha sin egna tabell i databasen. Men vid närmare granskning så visade det sig mer gynnsamt att bara ha en tabell, då CRUD operationer blir simplare för komponenter som ska skicka requests för att nå den. Tex så ger detta oss friheten att endast ta emot ett ID från en teknik eller övning i vår media-spelare för att visa upp de relaterade videos och bilder för den på hemsidan. För att förtydliga görs detta möjligt i databasen via en delad integer (delad sequence) mellan övningar och tekniker vilket gör att det aldrig kan ha samma ID; därmed kan det hämtas från samma tabell eftersom ett teknik eller övnings ID aldrig kan vara densamma. 
 
 
-## Sökfuntion 
-- **Datum** - 230424
-- **Alternativ** - Implemntera nya sökningsfunktionen i de gamla API, **Implemntera nya sökningsfunktionen i ett nytt API**
-- **Motivation**
-  - Vi valde att skapa ett nytt API där all sökningsfunktion ska läggas, eftersom vi ska implementera ny funktionalitet som inte kommer använda föregående sökningslogik.
-  - Det var så mycket ny logik som skulle implementeras och som inte använde det som fanns i de redan befintliga API:erna. Vi ansåg att det skulle bli smidigare att implementera i ett nytt API och inte röra det gamla, om detta i efterhand inte blir bra kan man alltid flytta den nya logiken tillbaka till de gamla API:erna.
-  - Pros: All sök-funktionalitet samlad, bättre översikt över sökning och lättare för nästa grupp att ta över.
-  - Cons: Ny teknologi för att använda databasen.
+
 
 
 # Beslut gällande Quality Assurance
