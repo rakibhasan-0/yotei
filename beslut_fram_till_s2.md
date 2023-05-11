@@ -138,7 +138,12 @@ Beslut - React Player
 
 React Player används för att visa video för tekniker, huvudsakligen på grund av dess enkelhet iochmed att det är en inbyggd funktionalitet i React. Vi ser ingen anledning att införskaffa en mer robust och komplex video player just nu, med tanke på att det inte är långa klips som ska visas.
 
-
+## Abstraktion på söknings API
+- **Datum** - 230504
+- **Beskrivning** - Skapa ytterligare abstraktion för söknings API:et.
+- **Motivation**
+  - Gömmer undan logik som en utvecklare inte behöver för att använda sig av API:et.
+- **Påverkan** - Samtliga
 
 ## Beslut om react-responsive-carousel
 
