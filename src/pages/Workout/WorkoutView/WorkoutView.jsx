@@ -8,6 +8,7 @@ import { useNavigate, Link} from "react-router-dom"
 import {useParams} from "react-router"
 import Popup from "../../../components/Common/Popup/Popup"
 import { Pencil, Trash, Printer} from "react-bootstrap-icons"
+import Review from "../../../components/Workout/ReviewFormComponent.jsx"
 
 /**
  * A page for creating workouts. The user can view the information
@@ -30,6 +31,7 @@ export default function WorkoutView({id}) {
 	const [showPopup, setShowPopup] = useState(false)
 	const [workoutData, setWorkoutData] = useState(null)
 	const [workoutUsers, setWorkoutUsers] = useState(null)
+	const [showRPopup, setRShowPopup] = useState(false)
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -62,6 +64,7 @@ export default function WorkoutView({id}) {
 		<div id={id} className="container px-0 col-lg-4 col-md-4">
 			{getPopupContainer(showPopup, setShowPopup, workoutId, context, navigate)}
 
+			{getReviewContainer(showRPopup, setRShowPopup, workoutId)}
 			{getWorkoutInfoContainer(workoutData, setShowPopup)}
 			{sortByCategories(workoutData).map((activityCategory) => (
 				<div className="my-5" key={activityCategory.categoryOrder}>
@@ -75,7 +78,7 @@ export default function WorkoutView({id}) {
 			))}
 			{workoutData.tags.length != 0 && getTagContainer(workoutData)}
 			{workoutUsers.length > 0 && getWorkoutUsersContainer(workoutUsers)}
-			{getButtons(navigate)}
+			{getButtons(navigate, setRShowPopup)}
 		</div>
 	)	
 }
@@ -110,6 +113,10 @@ function getPopupContainer(showPopup, setShowPopup, workoutId, context, navigate
 			</div>
 		</Popup>
 	)
+}
+
+function getReviewContainer(showRPopup, setRShowPopup, workoutId){
+	return (showRPopup && setRShowPopup && <Review isOpen={showRPopup} setIsOpen={setRShowPopup} workout_id={workoutId}/>)
 }
 
 async function deleteWorkout(workoutId, context, navigate) {
@@ -165,7 +172,7 @@ function getWorkoutUsersContainer(workoutUsers) {
 	)
 }
 
-function getButtons(navigate) {
+function getButtons(navigate, setRShowPopup) {
 	return (
 		<div className="d-flex row justify-content-center">
 			<div className="d-flex col mt-3 justify-content-end">
@@ -174,13 +181,14 @@ function getButtons(navigate) {
 				</Button>
 			</div>
 			<div className="d-flex col mt-3 justify-content-start">
-				<Button onClick={() => alert("Not implemented yet!")} outlined={false}>
+				<Button onClick={() => setRShowPopup(true)} outlined={false}>
 					<p>Utvärdering</p>
 				</Button>
 			</div>
 		</div>
 	)
 }
+
 
 function getWorkoutInfoContainer(workoutData, setShowPopup) {
 	return (
