@@ -9,6 +9,7 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 import TextArea from "../../components/Common/TextArea/TextArea"
 import Button from "../../components/Common/Button/Button"
 import Tag from "../../components/Common/Tag/Tag"
+import Gallery from "../../components/Gallery/Gallery"
 
 export default function ExerciseDetailsPage() {
 	const {ex_id} = useParams()
@@ -82,7 +83,7 @@ export default function ExerciseDetailsPage() {
 				throw new Error("Got a non ok status response from the API")
 			}
 		} catch (error) {
-			alert("Kunde inte ta bot kommentar!")
+			alert("Kunde inte ta bort kommentar!")
 			console.error(error)
 		}
 		setComments(comments => comments.filter(comment => comment.commentId !== id))
@@ -122,10 +123,9 @@ export default function ExerciseDetailsPage() {
 		<div className="container">
 			<div className="row justify-content-center">
 				<div className="col-md-8 text-left">
-					{/* TODO: Add video player here */}
 
 					<div className="d-flex flex-row align-items-center justify-content-between">
-						<h1 className="mt-2">{exercise?.name || "Laddar"}</h1>
+						<h1 className="mt-2">{exercise?.name}</h1>
 						<div className="d-flex flex-row" style={{gap: "10px"}}>
 							<Pencil onClick={() => navigate(`/exercise/edit/${ex_id}`)} size="24px" style={{color: "var(--red-primary)"}} />
 							<Trash onClick={onDelete} size="24px" style={{color: "var(--red-primary)"}} />
@@ -134,13 +134,13 @@ export default function ExerciseDetailsPage() {
 
 					<div className="d-flex flex-row" style={{ gap: "10px" }}>
 						<Clock />
-						<p>{exercise?.duration || "Laddar"} min</p>
+						<p>{exercise?.duration} min</p>
 					</div>
 					
 					<h2 className="bold-font">Beskrivning</h2>
-					<p>{exercise?.description || "Laddar beskrivning..."}</p>
+					<p>{exercise?.description}</p>
 					
-					{tags && <>
+					{tags?.length > 0 && <>
 						<h2 className="bold-font">Taggar</h2>
 						<div className="d-flex flex-wrap mb-4" style={{gap: "10px"}}>
 							{tags.map((tag, index) => (
@@ -149,6 +149,8 @@ export default function ExerciseDetailsPage() {
 						</div>
 					</>}
 
+					<Gallery id={ex_id} />
+
 					<div className="d-flex justify-content-between align-items-center">
 						<h2 className="bold-font">Kommenterer</h2>
 						<Plus size={"24px"} onClick={() => setAddComment(true)} style={{ color: "var(--red-primary)" }} />
@@ -156,6 +158,8 @@ export default function ExerciseDetailsPage() {
 					<div className="w-100">
 						<CommentSection onDelete={showDeletePopup} id="${ex_id}-cs" userId={userId} comments={comments} />
 					</div>
+	
+					<Button outlined={true} onClick={() => navigate(-1)}>Tillbaka</Button>
 					
 				</div>
 			</div>
