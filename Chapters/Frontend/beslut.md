@@ -5,6 +5,16 @@
 
 # Designmässiga beslut
 
+# Felhantering i frontend
+- **Datum** - 230515
+- **Beskrivning** - Standard för att hantera fel:
+    - Vid ett fel som t.ex. när man försöker öppna en sida för ett id som inte finns, ska ErrorState komponenten visas (används för   nuvarande i tekniker)
+    - Vid fel när man hämtar data, t.ex. att fetcha kommenterar för en övning, ska toastify toast.error("ditt fel här") användas 
+    - Vid fel i specifik input ska dess felhanterar användas, medusa jobbar på det
+- **Alternativ** - Använda alerts.  
+- **Motivation** - Kund vill inte ha alerts som felmeddelanden. 
+- **Påverkan** - Front-end
+
 # Maxbredd på baselayout
 - **Datum** - 230511
 - **Beskrivning** - Vi ska sätta en maxbredd på baselayouten. Vi som utvecklare behöver inte bry oss om en webbläsarvyn. Kunden beskrev det som att de sällan använder hemsidan på en datorn vilket är varför vi anpassar det för mobilvyn. 
