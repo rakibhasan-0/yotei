@@ -44,7 +44,7 @@ h1 {
 	display: block;
 	font-family: 'Open Sans', 'Arial', 'Verdana', sans-serif;
 	font-weight: 600;
-	font-size: 34px;
+	font-size: 2rem;
 	color: var(--header)
 }
 
@@ -52,7 +52,7 @@ h2 {
 	display: block;
 	font-family: 'Open Sans', 'Arial', 'Verdana', sans-serif;
 	font-weight: 600;
-	font-size: 14px;
+	font-size: 1rem;
 	color: var(--header)
 }
 
@@ -60,7 +60,7 @@ p {
 	display: block;
 	font-family: 'Open Sans', 'Arial', 'Verdana', sans-serif;
 	font-weight: 400;
-	font-size: 14px;
+	font-size: 0.875rem;
 	color: var(--black-primary)
 }
 
