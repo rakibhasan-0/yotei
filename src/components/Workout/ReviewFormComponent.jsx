@@ -1,6 +1,7 @@
 import React, { useEffect } from "react"
 import { useState, useContext } from "react"
 import Popup from "../Common/Popup/Popup"
+import ConfirmPopup from "../Common/ConfirmPopup/ConfirmPopup"
 import Button from "../Common/Button/Button"
 import Ratings from "react-ratings-declarative"
 import Star from "../Common/StarButton/StarButton"
@@ -14,8 +15,8 @@ import { AccountContext } from "../../context"
  * for the review, and also remove the review if the user id match.
  * 
  * 
- * @author Cyclops (Group 5) (2023-05-11)
- * @version 1.0 
+ * @author Cyclops (Group 5) (2023-05-15)
+ * @version 1.0
  */
 
 export default function Review({isOpen, setIsOpen, workout_id}) {  
@@ -26,6 +27,17 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 	const[currentComment, setCurrentComment] = useState()
 	const[showDeletePopup, setShowDeletePopup] = useState(false)
 	const[addedReview, setAddedReview] = useState("")
+
+	const[size, setSize] = useState(50)
+	var x = window.matchMedia("(max-width: 400px)")
+
+	function myFunction(x) {
+		if (x.matches) { 
+			setSize(40)
+		} else {
+			setSize(50)
+		}
+	}
 
 	const {token, userId} = useContext(
 		AccountContext
@@ -106,32 +118,18 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 	function getPopupContainer() {
 		return (
 			currentComment &&
-			<Popup
+			<ConfirmPopup
+				onClick={() => {deleteReview(currentComment.review_id)}}
 				id={"confirm-popup"}
-				title={"Ta bort utvärdering"}
-				isOpen={showDeletePopup}
-				setIsOpen={setShowDeletePopup}
-				width={95}
-				maxWidth={400}
-				height={40}
-				maxHeight={250}
-				isNested={true}
-			>
-				<p className="font-">Är du säker på att du vill ta bort denna utvärdering?</p>
-				<div className="row justify-content-center">
-					<div className="d-flex col justify-content-end">
-						<Button onClick={async () => {deleteReview(currentComment.review_id), setShowDeletePopup(false)}}>Ja</Button>
-					</div>
-					<div className="d-flex col justify-content-start">
-						<Button onClick={() => setShowDeletePopup(false)}>Nej</Button>
-					</div>
-				</div>
-			</Popup>
+				showPopup={showDeletePopup}
+				setShowPopup={setShowDeletePopup}
+			/>
 		)
 	}
 	
 	return (
 		<>
+			{x.addListener(myFunction)}
 			<div>
 				<Popup id={"review-popup"} isOpen={isOpen} setIsOpen={setIsOpen} width={90} height={95}>
 					<h1 className="align-self-start" style={{padding: "0px", margin: "0px"}}>Utvärdering</h1>
@@ -139,7 +137,7 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 					<div className="d-flex flex-column align-items-center">
 						<h2 style={{marginBottom: "20px"}}>Lägg till utvärdering</h2>
 						<div className="d-flex flex-row">
-							<Ratings rating={rating} widgetRatedColors="gold" changeRating={setRating}>
+							<Ratings widgetDimensions={size} rating={rating} widgetRatedColors="gold" changeRating={setRating}>
 								<Ratings.Widget widgetHoverColor='gold'>
 									<Star/>
 								</Ratings.Widget>
@@ -184,7 +182,7 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 										<p className="m-0 font-italic" maxLength="10" style={{color: "#B4B4B4"}}>{comment.review_date.substring(0,10)}</p>
 									</div>
 									<div className="w-100 d-flex justify-content-start" style={{marginBottom: "20px"}}>
-										<Ratings widgetDimensions="30px" rating={comment.rating} widgetRatedColors="gold">
+										<Ratings widgetDimensions="25px" rating={comment.rating} widgetRatedColors="gold">
 											<Ratings.Widget>
 												<Star/>
 											</Ratings.Widget>
@@ -208,14 +206,14 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 										{comment.negative_comment?.length > 0 && <div className="d-flex flex-row col-md-6"><i className="bi bi-dash-circle" style={{fontSize:"20px", color:"red", marginRight:"10px"}}></i><p style={{marginTop: "3px", display: "block", width: "90%", wordWrap: "break-word", textAlign: "left", margin: "0px"}}> {comment.negative_comment}</p></div>}
 									</div>
 									{userId == comment.user_id && 
-											<div className="d-flex align-items-end flex-column">
-												<Trash
-													size="24px"
-													color="var(--red-primary)"
-													style={{cursor: "pointer"}}
-													onClick={() => {setShowDeletePopup(true), setCurrentComment(comment)}}
-												/>
-											</div>
+										<div className="d-flex align-items-end flex-column">
+											<Trash
+												size="24px"
+												color="var(--red-primary)"
+												style={{cursor: "pointer"}}
+												onClick={() => {setShowDeletePopup(true), setCurrentComment(comment)}}
+											/>
+										</div>
 									}
 								</div>
 							</div>
