@@ -142,7 +142,7 @@ export default function SessionEdit() {
 			<div className="row justify-content-center">
 				<div className="col-md-8">
 
-					<ConfirmPopup onClick={deleteSesssion} showPopup={showPopup} setShowPopup={setShowPopup}></ConfirmPopup>
+					<ConfirmPopup onClick={deleteSesssion} showPopup={showPopup} setShowPopup={setShowPopup} popupText={"Är du säker?"}></ConfirmPopup>
 					<div className="header-container">
 						<Trash className="trashcan-icon" style={{opacity:"0%"} /*Exists for proper spacing*/}></Trash> 
 						<h1 >Redigera Tillfälle</h1>

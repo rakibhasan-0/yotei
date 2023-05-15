@@ -69,3 +69,15 @@ test("ConfirmPopup: When \"Radera\" is clicked popup should close", async() => {
 	// ASSERT
 	expect(setShowPopup).toHaveBeenCalledWith(false)
 })
+
+test("ConfirmPopup: When given a text as input it should appear with that text", async() => {
+	// Arrange
+	let testText = "Den här texten ska synas"
+	render(<ConfirmPopup id={"ConfirmPopup"} showPopup={true} popupText={testText}/>)
+
+	// Act
+	// *crickets*
+
+	// ASSERT
+	expect(screen.getByTestId("ConfirmPopup")).toHaveTextContent(testText)
+})

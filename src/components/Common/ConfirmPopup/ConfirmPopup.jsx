@@ -31,7 +31,7 @@ import Button from "../Button/Button"
  * @since 2023-05-04
  */
 
-export default function ConfirmPopup({ onClick, id, showPopup, setShowPopup}) {
+export default function ConfirmPopup({ onClick, id, showPopup, setShowPopup, popupText}) {
 	const deleteClickHandler = () => {
 		onClick()
 		setShowPopup(false)
@@ -44,7 +44,7 @@ export default function ConfirmPopup({ onClick, id, showPopup, setShowPopup}) {
 			maxHeight={231}
 			maxWidth={333}>
 			<div id={`${id}-text`}>
-				<p className="font">Är du säker?</p>
+				<p className="font">{ popupText }</p>
 			</div>	
 			<div className="outer-buttonpanel">
 				<div className="inner-buttonpanel" id={`${id}-buttons`}>

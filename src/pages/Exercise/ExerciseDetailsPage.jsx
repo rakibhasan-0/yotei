@@ -167,7 +167,12 @@ export default function ExerciseDetailsPage() {
 				<TextArea onInput={e => setCommentText(e.target.value)} />
 				<Button onClick={onAddComment}>Skicka</Button>
 			</Popup>
-			<ConfirmPopup id={`${ex_id}-confirm-popup`} showPopup={showConfirmPopup} setShowPopup={setShowConfirmPopup} onClick={onDeleteComment} />
+			<ConfirmPopup 
+				id={`${ex_id}-confirm-popup`} 
+				showPopup={showConfirmPopup} 
+				setShowPopup={setShowConfirmPopup} 
+				onClick={onDeleteComment} 
+				popupText={"Är du säker?"} />
 		</div>
 	)
 }
