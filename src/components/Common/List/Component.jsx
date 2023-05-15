@@ -33,13 +33,13 @@ export default function Component({ item, text, children, id, autoClose }) {
 	}
 	return (
 		<div id={id} className="list-container">
-			<div className='list-header'>
+			<div className='list-header' onClick={() => setToggled(!toggled)}>
 				<div className="list-item">
 					{item}
 				</div>
 				<p className="list-text">{text}</p>
 				<div className={["list-toggle", toggled ? "list-rotate" : ""].join(" ")}>
-					<ChevronDown id={`${id}-dropdown`} size={28} onClick={() => setToggled(!toggled)} />
+					<ChevronDown id={`${id}-dropdown`} size={28} />
 				</div>
 			</div>
 			<div className="list-item-container" >
