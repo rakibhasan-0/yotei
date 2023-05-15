@@ -19,3 +19,11 @@
 .sc23-session-header-time {
 	text-align: right;
 }
+
+.sc23-session-header-text {
+	margin: 0;
+}
+
+.testanuda {
+	margin-left: 5%;
+}
