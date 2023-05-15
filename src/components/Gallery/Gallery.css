@@ -1,24 +1,31 @@
 .player-wrapper {
-    width: auto;
-    height: 300px;
-    /* height: auto; */
-    margin-bottom: 30px;
+    width: 100%;
+    height: 100%;
+    padding-bottom: 15%;
+    /* margin-bottom: 30px; */
+    margin-top: 3%;
 }
 
 .react-player {
-    /* padding-top: 56.25%; */
+    width: 100%;
     position: relative;
 }
 
 .react-player > div {
+    width: 100%;
     position: absolute;
 }
 
 .react-player > video {
+    width: 100%;
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 20px;
-    padding-right: 25px;
+    padding-right: 20px;
+}
+
+.gallery-container {
+    width: 100%;
 }
 
 .carousel .control-dots {
@@ -32,9 +39,7 @@
 }
 
 .carousel .control-dots .dot {
-    color: black;
-    /* background: rgb(235, 0, 0); */
-    
+    color: black;   
     background: #BE3B41;
     width: 16px;
     height: 16px;
@@ -66,10 +71,11 @@
     font-size: 26px;
     bottom: 0;
     margin-top: 0;
-    padding: 5px;
+    padding: 0px;
     margin-top: auto;
     margin-bottom: auto;
-    height: 20%;
+    height: 0%;
+    /* margin-top: 82%; */
 }
 
 .carousel .control-prev.control-arrow::before {
@@ -84,8 +90,29 @@
     opacity: 1;
 }
 
-.w-25 {
+/* .w-25 {
     width: 70%!important;
     padding-top: 15%;
     padding-bottom: 15%;
+} */
+
+.carousel .slide iframe {
+    display: inline-block;
+    width: 100%;
+    margin: 0;
+    border: 0;
+}
+
+.col-sm-12 {
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.image-player {
+    padding-top: 0%;
+    /* width: 100px;
+    height: 300px; */
 }

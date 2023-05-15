@@ -56,10 +56,10 @@ export default function Gallery({ id }) {
 	})
 
 	return (
-		<div className="container" id={id}>
+		<div className="container gallery-container" id={id}>
 			<div className="row mt-2 mb-2">
 				<div className="col-sm-12 text-center ">
-					<Carousel showThumbs={false} >                         
+					<Carousel showThumbs={false} showStatus={false} showArrows={true}>                         
 						{pictures.map((image, index) => (
 							<Image path={image.url} key={index} />
 						))}
