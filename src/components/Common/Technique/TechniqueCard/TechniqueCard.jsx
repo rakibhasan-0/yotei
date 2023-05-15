@@ -1,5 +1,3 @@
-import { useState } from "react"
-import CheckBox from "../../../Common/CheckBox/CheckBox"
 import { ChevronDown } from "react-bootstrap-icons"
 import "./TechniqueCard.css"
 
@@ -9,22 +7,14 @@ import "./TechniqueCard.css"
  * 
  * Props:
  *		technique (object) : The technique/activity object.
- *		checkBox (boolean) : If a checkbox should be included in the card or not
+*		checkBox (Component) : If you want a checkbox to be displayed, send it as a prop.
  *		id: Id used for testing.
- *		onToggle: Callback function for checkbox toggle.
  * 
  * @author Medusa
  * @version 1.0
- * @since 2023-05-02
+ * @since 2023-05-15
  */
-function TechniqueCard({ technique, checkBox, id, onToggle }) {
-
-	const [checked, setChecked] = useState(false)
-
-	const handleToggle = (isChecked) => {
-		setChecked(isChecked)
-		onToggle(technique, checked)
-	}
+function TechniqueCard({ technique, checkBox, id }) {
 	
 	return (
 		<div className="technique-card" id={id}>
@@ -50,11 +40,7 @@ function TechniqueCard({ technique, checkBox, id, onToggle }) {
 			<div className="technique-info-container">
 				{checkBox ? 
 					<div className="technique-checkbox-container">
-						{checked ? 
-							<CheckBox checked={true} onClick={() => handleToggle(false)}/>
-							:
-							<CheckBox checked={false} onClick={() => handleToggle(true)}/>
-						}
+						{checkBox}
 					</div>
 					:
 					null
