@@ -49,20 +49,28 @@ function AddActivity({id, setShowActivityInfo}) {
 	const [searchExerText, setSearchExerText] = useState("")
 	const [selectedExerTags, setSelectedExerTags] = useState([])
 	const [suggestedExerTags, setSuggestedExerTags] = useState([])
-
-	const [checkedBoxesTech, setCheckedBoxesTech] = useState([])
-	const [checkedBoxesExer, setCheckedBoxesExer] = useState([])
-
-
+	
+	const [checkedActivities, setCheckedActivities] = useState([])
 	
 	useEffect(() => {
+		setTechniques(techniques.filter(technique => checkedActivities.includes(technique)))
 		searchTechniques()
 	}, [searchTechText, selectedBelts, kihon, selectedTechTags])
-
 	
+
 	useEffect(() => {
+		setExercises(exercises.filter(exercise => checkedActivities.includes(exercise)))
 		searchExercises()
 	}, [searchExerText, selectedExerTags])
+
+
+	const onActivityToggle = (activity, type) => setCheckedActivities(prev => {
+		if(prev.includes(activity)) {
+			return prev.filter(a => a !== activity)
+		}
+		activity.type = type
+		return [...prev, activity]
+	})
 
 	const searchTechniques = () => {
 
@@ -73,7 +81,6 @@ function AddActivity({id, setShowActivityInfo}) {
 			if(arrayItem.child == true) {
 				x = x + "-barn"
 			}
-
 			filteredBelts.push(x)
 		})
 
@@ -85,10 +92,9 @@ function AddActivity({id, setShowActivityInfo}) {
 		}
 
 		getTechniques(args, token, map, mapActions, (result) => {
-			setTechniques(result.results)
+			result.results = result.results.filter(technique => !checkedActivities.includes(technique))
+			setTechniques((techniques) => [...techniques, ...result.results])
 			setSuggestedTechTags(result.tagCompletion)
-			console.log(suggestedTechTags)
-			console.log(result)
 		})
 	}
 
@@ -101,32 +107,12 @@ function AddActivity({id, setShowActivityInfo}) {
 		}
 
 		getExercises(args, token, map, mapActions, (result) => {
-			setExercises(result.results)
+			result.results = result.results.filter(exercise => !checkedActivities.includes(exercise))
+			setExercises((exercises) => [...exercises, ...result.results])
 			setSuggestedExerTags(result.tagCompletion)
 		})
 	}
 
-	const onToggleExer = checked => setCheckedBoxesExer(prev => {
-		if (prev.includes(checked)) {
-			return prev.filter(b => b !== checked)
-		}
-		return [...prev, checked]
-	})
-
-	const onToggleTech = technique => setCheckedBoxesTech(prev => {
-		if (prev.includes(technique)) {
-			return prev.filter(b => b !== technique)
-		}
-		return [...prev, technique]
-	})
-
-	useEffect(() => {
-		console.log(checkedBoxesExer)
-	}, [checkedBoxesExer])
-
-	useEffect(() => {
-		console.log(checkedBoxesTech)
-	}, [checkedBoxesTech])
 
 	return (
 		<div id={id}>
@@ -149,9 +135,14 @@ function AddActivity({id, setShowActivityInfo}) {
 						{techniques.map((technique, key) => (
 							<TechniqueCard
 								id={"technique-list-item-" + technique.id}
-								checkBox={true}
+								checkBox={
+									<CheckBox 
+										id=""
+										checked={checkedActivities.includes(technique)}
+										onClick={() => onActivityToggle(technique, "technique")} 
+									/>
+								}
 								technique={technique}
-								onToggle={(technique) => onToggleTech(technique)} 
 								key={key}
 							/>
 						))}
@@ -176,8 +167,9 @@ function AddActivity({id, setShowActivityInfo}) {
 								index={key}
 								item={
 									<CheckBox 
-										id="" 
-										onClick={() => onToggleExer(exercise)} 
+										id=""
+										checked={checkedActivities.includes(exercise)}
+										onClick={() => onActivityToggle(exercise, "exercise")} 
 									/>
 								}
 								key={key}
@@ -185,11 +177,10 @@ function AddActivity({id, setShowActivityInfo}) {
 						))}
 					</Tab>
 				</Tabs>
-				<RoundButton onClick={() => setShowActivityInfo([...checkedBoxesExer, ...checkedBoxesTech])}> 
+				<RoundButton onClick={() => setShowActivityInfo(checkedActivities)}> 
 					<ChevronRight width={30}/>
 				</RoundButton>
 			</Modal.Body>
-			
 		</div>
 	)
 }
