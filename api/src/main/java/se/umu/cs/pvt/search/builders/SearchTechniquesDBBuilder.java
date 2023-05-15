@@ -51,22 +51,25 @@ public class SearchTechniquesDBBuilder implements SearchDBBuilderInterface {
      */
     public SearchTechniquesDBBuilder filterByBelts() {
         if(!searchTechniquesParams.hasBeltColors()) return this;
-
+        List<String> queryList = new ArrayList<>();
         for(String beltColor : searchTechniquesParams.getBeltColors()){
             boolean isChildColor = beltColor.endsWith("-barn"); // Child colors need to contain the ending -barn
             String color = beltColor.split("-")[0];
 
-            DatabaseQuery databaseQuery = new DatabaseQuery();
-            databaseQuery.setQuery(
-                    "SELECT te.technique_id, te.name " +
+            queryList.add("SELECT te.technique_id, te.name " +
                     "FROM technique AS te, belt AS b, technique_to_belt AS ttb " +
                     "WHERE te.technique_id=ttb.technique_id AND b.belt_id=ttb.belt_id AND " +
                     "LOWER(b.belt_name)=LOWER('" + color + "') AND b.is_child=" + isChildColor
             );
-
-            queries.add(databaseQuery);
         }
 
+        DatabaseQuery databaseQuery = new DatabaseQuery();
+
+        databaseQuery.setQuery(
+                String.join(" UNION ", queryList)
+        );
+
+        queries.add(databaseQuery);
         return this;
     }
 

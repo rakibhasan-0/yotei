@@ -11,9 +11,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 /**
  * Test class for SearchTechniquesDBBuilder
  *
- * @author Jonas Gustavsson
- * @author James Eriksson
- * date: 2023-05-03
+ * @author Jonas Gustavsson (Kraken)
+ * @author James Eriksson (Minotaur)
+ * date: 2023-05-15 (Oskar's birthday)
  */
 public class TechniquesDBBuilderTest {
 
@@ -78,6 +78,34 @@ public class TechniquesDBBuilderTest {
 
         assertThat(builder
                 .filterByTags()
+                .build().getQuery()).isEqualTo(expectedQuery);
+    }
+
+    @Test
+    void filterByTwoBeltsTest(){
+
+
+        Map<String, String> urlQuery = new HashMap<>();
+        urlQuery.put("name","name of technique");
+        urlQuery.put("beltColors", "gul,Svart");
+
+        params = new SearchTechniquesParams(urlQuery);
+        builder = new SearchTechniquesDBBuilder(params);
+
+        String baseQuery = "SELECT te.technique_id, te.name " +
+                "FROM technique AS te, belt AS b, technique_to_belt AS ttb " +
+                "WHERE te.technique_id=ttb.technique_id AND b.belt_id=ttb.belt_id AND " +
+                "LOWER(b.belt_name)=LOWER('gul') AND b.is_child=false" +
+                " UNION " +
+                "SELECT te.technique_id, te.name " +
+                "FROM technique AS te, belt AS b, technique_to_belt AS ttb " +
+                "WHERE te.technique_id=ttb.technique_id AND b.belt_id=ttb.belt_id AND " +
+                "LOWER(b.belt_name)=LOWER('Svart') AND b.is_child=false";
+
+        String expectedQuery = concatJoinBeltQuery(baseQuery);
+
+        assertThat(builder
+                .filterByBelts()
                 .build().getQuery()).isEqualTo(expectedQuery);
     }
 
