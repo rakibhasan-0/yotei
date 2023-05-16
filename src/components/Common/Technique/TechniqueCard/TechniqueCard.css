@@ -5,26 +5,27 @@
 		border-color: var(--black-primary);
 		overflow: hidden;
 		margin-top: 10px;
+		display: flex;
 }
 
 .technique-card-belt-color-container {
-		display: flex;
+		height: inherit;
+		width: 3.45%;
+		border-right: solid;
+		border-width: 1px;
+		border-color: var(--black-primary);
+
 }
 
 .technique-card-belt-color {
 		width: 100%;
-		height: 30px;
 }
 
-.technique-card-belt-border {
-		border-bottom: solid;
-		border-width: 1px;
-		border-color: var(--black-primary);
-}
 
 .technique-info-container {
 		display: flex;
 		align-items: center;
+		width: 100%;
 }
 
 .technique-checkbox-container {
@@ -51,7 +52,9 @@
 }
 
 .technique-arrow-container {
-		width: 10%;
+		width: max-content;
+		justify-content: flex-end;
+
 }
 
 .technique-arrow-container svg {
