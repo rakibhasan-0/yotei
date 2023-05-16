@@ -35,7 +35,7 @@ import React, { useEffect } from "react"
  * @version 1.0
  * @since 2023-05-02
  */
-export default function Popup({ title, id, isOpen, setIsOpen, children, width, height, isNested, maxWidth, maxHeight }) {
+export default function Popup({ title, id, isOpen, setIsOpen, children, width, height, isNested, maxWidth, maxHeight, useNoHeightWidth }) {
 
 	useEffect(() => {
 		document.body.style.overflowY = isOpen ? "hidden" : "visible"
@@ -44,20 +44,32 @@ export default function Popup({ title, id, isOpen, setIsOpen, children, width, h
 	if (!isOpen) { return null }
 
 	const background = isNested ? "popup-no-bg" : "popup-bg"
+	
+	let popupStyle = {}
+	
+	if (!useNoHeightWidth) {
+		popupStyle = {
+			width: "90%",
+			height: "95%",
+			maxWidth: `${maxWidth}px`,
+			maxHeight: `${maxHeight}px`
+		}
+		if (width) {
+			popupStyle.width = width
+		}
+		if (height) {
+			popupStyle.height = height
+		}
+		
+	}
 
 	return (
 		<>
 			<div className={background} onClick={() => setIsOpen(false)} />
-			
 			<div
 				className={`popup ${isNested && "popup-nested"}`}
 				id={id}
-				style={{
-					width: `${width}%`,
-					height: `${height}%`,
-					maxWidth: `${maxWidth}px`,
-					maxHeight: `${maxHeight}px`
-				}}>
+				style={popupStyle}>
 
 				<div className="popup-topbar">
 					{title && <h1 className="popup-title" role="title">{title}</h1>}

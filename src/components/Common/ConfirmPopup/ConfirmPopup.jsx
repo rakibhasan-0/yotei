@@ -41,6 +41,7 @@ export default function ConfirmPopup({ onClick, id, showPopup, setShowPopup, pop
 			id={id}
 			isOpen={showPopup}
 			setIsOpen={setShowPopup}
+			useNoHeightWidth={true}
 			maxHeight={231}
 			maxWidth={333}>
 			<div id={`${id}-text`}>
