@@ -34,6 +34,8 @@ lint-job:
     - echo "Linting started..."
     - npm run lint:ci
     - echo "Linting finished."
+  only:
+    - merge_requests
 
 test-job:
   <<: *skippable
@@ -44,6 +46,8 @@ test-job:
     - echo "Testing started..."
     - npm run test
     - echo "Testing finished."
+  only:
+    - merge_requests
 
 coverage-job:
   stage: coverage
@@ -71,6 +75,8 @@ build-job:
     - echo "Compiling the code..."
     - npm run build
     - echo "Compile complete."
+  only:
+    - merge_requests
 
 build-image:
   <<: *skippable
@@ -136,6 +142,8 @@ systest-job:
     - export $(cat .variables | xargs)
     - docker rm -f $PSQL_NAME $API_NAME $GATEWAY_NAME
   when: manual
+  only:
+    - merge_requests
 
 deploy:
   <<: *skippable
