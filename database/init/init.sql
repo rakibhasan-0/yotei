@@ -1835,11 +1835,11 @@ INSERT INTO exercise_tag (ex_id, tag_id) VALUES (288, 28);
 -- INSERTS FOR PLANS
 --
 
-INSERT INTO plan (name, color, user_id) VALUES ('Grönt bälte träning', '', 1);
-INSERT INTO plan (name, color, user_id) VALUES ('Orange och Gult bälte träning', '', 1);
-INSERT INTO plan (name, color, user_id) VALUES ('Svart bälte träning', '', 1);
-INSERT INTO plan (name, color, user_id) VALUES ('Gult bälte träning', '', 1);
-INSERT INTO plan (name, color, user_id) VALUES ('Brunt bälte träning', '', 1);
+INSERT INTO plan (name, user_id) VALUES ('Grönt bälte träning', 1);
+INSERT INTO plan (name, user_id) VALUES ('Orange och Gult bälte träning', 1);
+INSERT INTO plan (name, user_id) VALUES ('Svart bälte träning', 1);
+INSERT INTO plan (name, user_id) VALUES ('Gult bälte träning',  1);
+INSERT INTO plan (name, user_id) VALUES ('Brunt bälte träning', 1);
 
 --
 -- INSERTS FOR PLANS TO BELT
