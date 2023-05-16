@@ -22,14 +22,14 @@ const BeltRow = ({ belt, states, onToggle }) => {
 	return (
 		<div className="belt-row">
 			<div className="belt-item">
-				<CheckBox id={`belt-child-${name}`} onClick={() => onToggle(child)} checked={states?.some(b => b.id === child.id)} />
+				<CheckBox id={`belt-child-${name}`} onClick={(checked) => onToggle(checked, child)} checked={states?.some(b => b.id === child.id)} />
 				{/* Set the belt color to red if its white and a child */}
 				<BeltIcon id={`belt-child-${name}-text`} color={`#${child.color}`} child={true} />
 			</div>
 			<p id={"belt-text"} className="belt-text">{name}</p>
 			<div className="belt-item">
 				<BeltIcon id={`belt-adult-${name}`} color={`#${adult.color}`} />
-				<CheckBox id={`belt-adult-${name}-text`} onClick={() => onToggle(adult)} checked={states?.some(b => b.id === adult.id)} />
+				<CheckBox id={`belt-adult-${name}-text`} onClick={(checked) => onToggle(checked, adult)} checked={states?.some(b => b.id === adult.id)} />
 			</div>
 		</div>
 	)

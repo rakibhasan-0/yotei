@@ -38,7 +38,6 @@ export default function CheckBox({checked, onClick, label, disabled, id}) {
 			<input
 				type="checkbox"
 				checked={checked}
-				defaultChecked={checked}
 				onChange={() => onClick(!checked)}
 				disabled={disabled}
 			/>

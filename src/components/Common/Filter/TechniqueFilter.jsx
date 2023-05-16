@@ -22,11 +22,13 @@ import BeltIcon from "../BeltIcon/BeltIcon"
  */
 function TechniqueFilter({id, belts, setBelts, kihon, setKihon}){
 
-	const onToggle = belt => setBelts(prev => {
-		if (prev.includes(belt)) {
+	const onToggle = (checked, belt) => setBelts(prev => {
+		if(!checked) {
 			return prev.filter(b => b !== belt)
 		}
-		return [...prev, belt]
+		else {
+			return [...prev, belt]
+		}
 	})
 	
 	// Checks which of the belts that should be displayed, should be refactored and made better. Works for now...

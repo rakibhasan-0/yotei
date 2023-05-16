@@ -10,6 +10,7 @@ import useMap from "../../../hooks/useMap"
 import TechniqueFilter from "../../../components/Common/Filter/TechniqueFilter"
 import Popup from "../../../components/Common/Popup/Popup"
 import CreateTechnique from "../CreateTechnique/CreateTechnique"
+import { useCookies } from "react-cookie"
 
 /**
  * The technique index page.
@@ -22,15 +23,17 @@ import CreateTechnique from "../CreateTechnique/CreateTechnique"
 function TechniqueIndex() {
 	const [techniques, setTechniques] = useState()
 	const context = useContext(AccountContext)
+	const [cookies, setCookie] = useCookies(["technique-filter"])
+
+	const filterCookie = cookies["technique-filter"]
+	const [kihon, setKihon] = useState(filterCookie?.kihon || false)
+	const [belts, setBelts] = useState(filterCookie?.belts || [])// eslint-disable-line
 
 	const [searchBarText, setSearchBarText] = useState("")
 	const [map, mapActions] = useMap()
 	const [tags, setTags] = useState([])
 	const [suggestedTags, setSuggestedTags] = useState([])
-	const [kihon, setKihon] = useState(false)
-	const [belts, setBelts] = useState([])// eslint-disable-line
 	const [showPopup, setShowPopup] = useState(false)
-
 
 	useEffect(() => {
 		// The selected belts are transformed from an array of belts objects to an array of strings, consisting of the belt names
@@ -41,12 +44,14 @@ function TechniqueIndex() {
 			selectedTags: tags,
 		}
 
+		setCookie("technique-filter", {belts: belts, kihon: kihon}, {path: "/technique"})
+
 		getTechniques(args, context.token, map, mapActions, res => {
 			setSuggestedTags(res.tagCompletion)
 			setTechniques(res.results)
 		})
 
-	}, [searchBarText, belts, kihon, tags])
+	}, [searchBarText, belts, kihon, tags, setCookie])
 
 	return (
 		<>

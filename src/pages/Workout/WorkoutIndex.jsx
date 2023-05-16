@@ -4,6 +4,7 @@ import { getWorkouts } from "../../components/Common/SearchBar/SearchBarUtils"
 import useMap from "../../hooks/useMap"
 import FilterContainer from "../../components/Common/Filter/FilterContainer/FilterContainer"
 import StarButton from "../../components/Common/StarButton/StarButton"
+import { useCookies } from "react-cookie"
 
 import ActivityList from "../../components/Activity/ActivityList"
 import "./WorkoutIndex.css"
@@ -27,11 +28,11 @@ import { Plus } from "react-bootstrap-icons"
 export default function WorkoutIndex({detailURL}) {
 	const { userId, token } = useContext(AccountContext)
 	const [ workouts, setWorkouts ] = useState()
-	const [ filterFavorites, setFilterFavorites ] = useState(false)
 	const [ searchText, setSearchText ] = useState("")
 	const [ tags, setTags ] = useState([])
 	const [ suggestedTags, setSuggestedTags ] = useState([])
 	const [ cache, cacheActions ] = useMap()
+	const [ cookies, setCookie ] = useCookies(["workout-filter"])
 
 	// Some fucked up shit to get +/- 1 month from today.
 	const today = new Date()
@@ -40,9 +41,11 @@ export default function WorkoutIndex({detailURL}) {
 	const nextMonth = new Date(today)
 	nextMonth.setMonth(today.getMonth() + 1)
 
+	const filterCookie = cookies["workout-filter"] 
+	const [ filterFavorites, setFilterFavorites ] = useState(filterCookie?.isFavorite || false)
 	const [ dates, setDates ] = useState({
-		from: getFormattedDateString(lastMonth), 
-		to: getFormattedDateString(nextMonth)
+		from: filterCookie?.from || getFormattedDateString(lastMonth), 
+		to: filterCookie?.to || getFormattedDateString(nextMonth)
 	})
 
 	useEffect(fetchWorkouts, [dates.from, dates.to, filterFavorites, searchText, token, userId, cache, cacheActions, tags])
@@ -120,6 +123,7 @@ export default function WorkoutIndex({detailURL}) {
 			id: userId,
 			isFavorite: filterFavorites
 		}
+		setCookie("workout-filter", {from: args.from, to: args.to, isFavorite: args.isFavorite}, {path: "/workout"})
 		getWorkouts(args, token, cache, cacheActions, (response) => {
 			if(response) {
 				setWorkouts(response.results)
