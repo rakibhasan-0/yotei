@@ -1,39 +1,39 @@
 body {
-    font-family: Arial;
+	font-family: Arial;
 }
 
 
-legend{
-    background: #FFFFFF none repeat scroll 0 0;
-    display: inline-block;
-    width: auto;
-    padding: 0px 7px 0px 7px ;
-    margin: auto;
-    margin-left: 10px;
+legend {
+	background: #FFFFFF none repeat scroll 0 0;
+	display: inline-block;
+	width: auto;
+	padding: 0px 7px 0px 7px;
+	margin: auto;
+	margin-left: 10px;
 
 }
 
 fieldset {
-    border: 3px solid #201E1F;
-    border-radius: 10px;
-    border-top-color: #201E1F; 
-    box-sizing: border-box; 
-    padding: 20px;
-    padding-top: 5px;
-    margin: auto;
-    text-align: center;
-    margin-bottom: 20px;
+	border: 3px solid #201E1F;
+	border-radius: 10px;
+	border-top-color: #201E1F;
+	box-sizing: border-box;
+	padding: 20px;
+	padding-top: 5px;
+	margin: auto;
+	text-align: center;
+	margin-bottom: 20px;
 }
 
 
 .filterBox {
-    visibility: visible;
-    width: 100%;
+	visibility: visible;
+	opacity: 1;
 }
 
 .filterBox-pressed {
 
-    visibility: hidden;
-    width: 0;
-    height: 0;
+	visibility: hidden;
+	opacity: 0;
+	height: 0;
 }
