@@ -11,7 +11,7 @@ import "./AddActivity.css"
 import CheckBox from "../../../components/Common/CheckBox/CheckBox"
 import TechniqueCard from "../../../components/Common/Technique/TechniqueCard/TechniqueCard"
 //import Component from "../../../components/Common/List/Component"
-import ExerciseListItem from "../../../components/Common/List/Item/ExerciseListItem"
+import ExerciseListItem from "../../../components/Common/ExerciseCard/ExerciseListItem"
 import RoundButton from "../../../components/Common/RoundButton/RoundButton"
 import { ChevronRight } from "react-bootstrap-icons"
 

@@ -77,21 +77,24 @@ function ExerciseIndex() {
 	return (
 		<div>
 			<center>
-				<h1 className="py-2">Övningar</h1>
-				<SearchBar 
-					id="exercise_searchbar" 
-					text={searchText} 
-					onChange={setSearchText}
-					addedTags={addedTags}
-					setAddedTags={setAddedTags}
-					suggestedTags={suggestedTags}
-					setSuggestedTags={setSuggestedTags}
-				/>
+				<h1 className="py-2" style={{marginBottom: "-10px"}}>Övningar</h1>
+				<div className="grid-striped" style={{marginBottom: "-15px"}}>
+					<SearchBar 
+						id="exercise_searchbar" 
+						text={searchText} 
+						onChange={setSearchText}
+						addedTags={addedTags}
+						setAddedTags={setAddedTags}
+						suggestedTags={suggestedTags}
+						setSuggestedTags={setSuggestedTags}
+					/>
+				</div>
+
 			</center>
 			<ActivityList activities={visibleList}  apiPath={"exercises"} detailURL={detailURL}/>
 
 			<br/><br/><br/><br/>
-			<RoundButton linkTo={null} onClick={() => setPopupVisible(true)}>
+			<RoundButton linkTo={null} onClick={() => setPopupVisible(true)} style={{maxWidth: "5px"}}>
 				<Plus />
 			</RoundButton>
 			<Popup
