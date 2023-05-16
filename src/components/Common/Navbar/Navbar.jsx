@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useRef } from "react"
 
 import Button from "../Button/Button"
 
@@ -6,6 +6,7 @@ import { List as HamburgerIcon, X as CloseIcon } from "react-bootstrap-icons"
 
 import "./Navbar.css"
 import { useNavigate } from "react-router"
+import useOutsideClick from "../../../hooks/useOutsideClick"
 /**
  * The navbar for the entire page.
  * 
@@ -31,37 +32,40 @@ function Navbar({ testId }) {
 		setOpen(false)
 	}
 
+	const navbarRef = useRef(null)
+	useOutsideClick(navbarRef, () => setOpen(false))
+
 	return (
-		<nav data-testid={testId} className={"common-navbar"}>
-			<HamburgerIcon role="button" className="common-navbar-icon" size="48px" onClick={() => setOpen(true)}/>
-			<img src="/ubk-logga.jpg" className="budo-logo"/>
+		<nav data-testid={testId} className={"common-navbar"} ref={navbarRef}>
+			<HamburgerIcon role="button" className="common-navbar-icon" size="48px" onClick={() => setOpen(true)} />
+			<img src="/ubk-logga.jpg" className="budo-logo" />
 
 			<div className={`common-navbar-sidebar p-4 ${open ? "open" : ""}`}>
 
-				<CloseIcon role="button" className="common-navbar-icon" size="48px" onClick={() => setOpen(false)}/>
+				<CloseIcon role="button" className="common-navbar-icon" size="48px" onClick={() => setOpen(false)} />
 
 				<Button width={"100%"} onClick={() => navigateAndClose("/plan")}>
-					<h1 style={{fontWeight: 500, fontSize: "32px"}}>Grupper</h1>
+					<h1 style={{ fontWeight: 500, fontSize: "32px" }}>Grupper</h1>
 				</Button>
 
 				<Button width={"100%"} onClick={() => navigateAndClose("/workout")}>
-					<h1 style={{fontWeight: 500, fontSize: "32px"}}>Pass</h1>
+					<h1 style={{ fontWeight: 500, fontSize: "32px" }}>Pass</h1>
 				</Button>
 
 				<Button width={"100%"} onClick={() => navigateAndClose("/exercise")}>
-					<h1 style={{fontWeight: 500, fontSize: "32px"}}>Övningar</h1>
+					<h1 style={{ fontWeight: 500, fontSize: "32px" }}>Övningar</h1>
 				</Button>
 
 				<Button width={"100%"} onClick={() => navigateAndClose("/technique")}>
-					<h1 style={{fontWeight: 500, fontSize: "32px"}}>Tekniker</h1>
+					<h1 style={{ fontWeight: 500, fontSize: "32px" }}>Tekniker</h1>
 				</Button>
 
 				<Button width={"100%"} onClick={() => navigateAndClose("/admin")}>
-					<h1 style={{fontWeight: 500, fontSize: "32px"}}>Admin</h1>
+					<h1 style={{ fontWeight: 500, fontSize: "32px" }}>Admin</h1>
 				</Button>
 
 				<Button width={"100%"} onClick={() => navigateAndClose("/profile")}>
-					<h1 style={{fontWeight: 500, fontSize: "32px"}}>Min sida</h1>
+					<h1 style={{ fontWeight: 500, fontSize: "32px" }}>Min sida</h1>
 				</Button>
 
 			</div>
