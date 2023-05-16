@@ -211,7 +211,6 @@ ALTER TABLE workout_favorite OWNER TO psql;
 --
 CREATE TABLE plan (plan_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
        name VARCHAR NOT NULL,
-       color VARCHAR NOT NULL,
        user_id INT NOT NULL,
        CONSTRAINT plan_fk_user_id FOREIGN KEY (user_id)
         REFERENCES user_table(user_id)
