@@ -1,6 +1,5 @@
 import { createRoot } from "react-dom/client"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import { useRef } from "react"
 import { Cookies } from "react-cookie"
 import Home from "./pages/Home/Home"
 import ExerciseCreate from "./pages/Exercise/ExerciseCreate"
@@ -11,7 +10,7 @@ import "./index.css"
 import "./components/Activity/activity.css"
 import "./components/Plan/PlanList.css"
 import Login from "./pages/Login/Login"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Admin from "./pages/Admin/Admin"
 import About from "./pages/About/About"
 import WorkoutView from "./pages/Workout/WorkoutView/WorkoutView"
@@ -31,10 +30,9 @@ import SessionCreate from "./pages/Plan/SessionCreate"
 import SessionEdit from "./pages/Plan/SessionEdit"
 import PlanIndex from "./pages/Plan/PlanIndex"
 import BaseLayout from "./components/Common/BaseLayout/BaseLayout"
-import { useIdleTimer } from "react-idle-timer"
-import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { logOut } from "./utils"
+import { ToastContainer, toast } from "react-toastify"
 
 const exerciseURI = "https://jsonplaceholder.typicode.com/users"
 const workoutURI = "https://jsonplaceholder.typicode.com/users"
@@ -48,62 +46,49 @@ export default function App() {
 	const cookie = new Cookies().get("token")
 	const [token, setToken] = useState(cookie)
 
-	const stateRef = useRef()
-	stateRef.current = token
+	/**
+	 * The decoded JWT token containing the user's information
+	 */
+	let decodedToken
 
-	let role
-	let userId
+	/**
+	 * Time until the session expires in milliseconds
+	 */
+	let sessionExpiration = 0
 
 	if (cookie) {
 		try {
-			const decoded = decodeToken(cookie)
-			if (decoded.exp < Date.now() / 1000) {
-				throw new Error("Token has expired")
+			decodedToken = decodeToken(cookie)
+			sessionExpiration = decodedToken.exp * 1000 - Date.now()
+			if (sessionExpiration <= 0) {
+				throw new Error("Session has expired")
 			}
-			role = decoded.role
-			userId = decoded.userId
 		} catch (ex) {
-			console.log("Unable to decode token", ex)
 			logOut()
 		}
 	}
 
-	const onIdle = () => {
-		if (!cookie) {
-			logOut()
+	useEffect(() => {
+		if (sessionExpiration > 0) {
+			console.log(`Session will expire in ${(sessionExpiration / 1000 / 60).toFixed(2)} minutes`)
+			const delta = sessionExpiration - 1000 * 60 * 2
+			const warning = setTimeout(() => {
+				toast.warn("Du kommer snart loggas ut")
+			}, Math.max(delta, 1000))
+			const timeout = setTimeout(() => {
+				logOut()
+			}, sessionExpiration)
+			return () => {
+				clearTimeout(timeout)
+				clearTimeout(warning)
+			}
 		}
-	}
-
-	const onPrompt = () => {
-		if (!cookie) {
-			toast.warn("Du kommer snart att loggas ut på grund av inaktivitet!", {
-				autoClose: false,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
-				theme: "dark",
-				position: "top-center"
-			})
-		}
-	}
-
-	const onAction = () => {
-		toast.dismiss()
-		idleTimer.reset()
-	}
-
-	const idleTimer = useIdleTimer({
-		onIdle,
-		onPrompt,
-		onAction,
-		promptTimeout: 1000 * 60 * 18,
-		timeout: 1000 * 60 * 20
-	})
+	}, [sessionExpiration])
 
 	return (
 		<>
 			<ToastContainer />
-			<AccountContext.Provider value={{ token, role, userId, setToken }}>
+			<AccountContext.Provider value={{ token, role: decodedToken?.role, userId: decodedToken?.userId, setToken }}>
 				<BrowserRouter>
 					<Routes>
 						{
