@@ -24,7 +24,7 @@ public class JWTUtil {
     /**
      * The time a token is valid in milliseconds.
      */
-    private final long validDuration = 1000L * 60 * 60 * 24 * 30;
+    private final long validDuration = 1000L * 60 * 60 * 24;
 
     /**
      * Generates a Json Web Token with the given username as the payload claim.
