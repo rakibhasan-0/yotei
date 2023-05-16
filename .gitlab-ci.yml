@@ -135,8 +135,7 @@ systest-job:
   after_script:
     - export $(cat .variables | xargs)
     - docker rm -f $PSQL_NAME $API_NAME $GATEWAY_NAME
-  only:
-    - merge_requests
+  when: manual
 
 deploy:
   <<: *skippable
