@@ -131,13 +131,24 @@ public class TechniqueController {
      */
     @PutMapping("")
     public ResponseEntity<Object> updateTechnique(@RequestBody Technique toUpdate) {
-        Long id = toUpdate.getId();
-        if (techniqueRepository.findById(id).isEmpty()) {
-            return new ResponseEntity<>("Teknik med id " + id + " hittades inte", HttpStatus.NOT_FOUND);
+        Long toUpdateID = toUpdate.getId();
+        String toUpdateName = toUpdate.getName();
+        List<TechniqueShort> existingTechniques = techniqueRepository.findByNameIgnoreCase(toUpdate.getName());
+
+        if (techniqueRepository.findById(toUpdateID).isEmpty()) {
+            return new ResponseEntity<>("Teknik med id " + toUpdateID + " hittades inte", HttpStatus.NOT_FOUND);
         }
 
-        if (!techniqueRepository.findByNameIgnoreCase(toUpdate.getName()).isEmpty()) {
-            return new ResponseEntity<>("Tekniken med namnet '" + toUpdate.getName() + "' finns redan", HttpStatus.CONFLICT);
+        // If we update a technique but don't change the name we get a conflict.
+        if (!existingTechniques.isEmpty()) {
+            for (TechniqueShort technique : existingTechniques) {
+                String existingName = technique.getName();
+                Long existingID = technique.getId();
+
+                if (toUpdateName.equals(existingName) && !toUpdateID.equals(existingID)) {
+                    return new ResponseEntity<>("Tekniken med namnet '" + toUpdate.getName() + "' finns redan", HttpStatus.CONFLICT);
+                }
+            }
         }
 
         if (!toUpdate.validFormat()) {
