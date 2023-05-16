@@ -149,6 +149,7 @@ deploy:
   <<: *skippable
   image: ubuntu:latest
   stage: deploy
+  resource_group: deploy_prod
   before_script:
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - mkdir -p ~/.ssh
