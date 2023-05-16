@@ -1,6 +1,5 @@
-import { X } from "react-bootstrap-icons"
-import "./MiniPopup.css"
 import React from "react"
+import Popup from "../Popup/Popup"
 
 /**
  * MiniPopup is a component that creates a mini popup window with a title and a 
@@ -24,7 +23,7 @@ import React from "react"
  *
  *	return (
  *		<div>
- *			<MiniPopup id={"test-miniPopup"} title={"Test"} isOpen={showPopup} setIsOpen={setShowPopup} titleTopMargin={14}>
+ *			<MiniPopup id={"test-miniPopup"} title={"Test"} isOpen={showPopup} setIsOpen={setShowPopup}>
  *			</MiniPopup>
  *			<RoundButton onClick={() => setShowPopup(true)} />
  *		</div>
@@ -32,33 +31,14 @@ import React from "react"
  *
  * @author Griffin
  * @since 2023-05-05
- * @version 1.0
+ * @version 2.0
  */
-export default function MiniPopup({ title, id, isOpen, setIsOpen, children, noBackground, titleTopMargin }) {
-	if (!isOpen)
-		return null
-	else 
-		document.body.style.overflowY = "hidden"
-
-	const closePopup = () => {
-		setIsOpen(false)
-		document.body.style.overflowY = "visible"
-	}
+export default function MiniPopup({ title, id, isOpen, setIsOpen, children }) {
 
 	return (
-		<>
-			{noBackground ? <div className="popup-no-bg" onClick={closePopup} /> : <div className="popup-bg" onClick={closePopup}  />}
-			<div className="miniPopup" id={id}>
-				<div className="topbar">
-					{title && <h1 className="title" role="title" style={{ marginTop: `${titleTopMargin}px` }}>{title}</h1>}
-					<button className="closebutton" onClick={() => setIsOpen(false)}>
-						<X width={44} height={44} />
-					</button>
-				</div>
-				<div className="popup-content">
-					{children}
-				</div>
-			</div>
-		</>
+		<Popup id={id} isOpen={isOpen} setIsOpen={setIsOpen} maxWidth={350} maxHeight={250}>
+			<h1>{title}</h1>
+			{children}
+		</Popup>
 	)
 }
