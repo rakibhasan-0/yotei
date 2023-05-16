@@ -69,21 +69,23 @@ export default function SearchBar({ id, placeholder, text, onChange, addedTags, 
 			>
 			</input>
 			<i className="search-icon"><Search /></i>
-			<div className={focused || (addedTags.length > 0 || suggestedTags.length > 0) ? "search-bar-tag-container" : "search-bar-tag-container closed"}>
-				{addedTags.map((tag, key) => <Tag
-					tagType="added"
-					key={key}
-					text={tag}
-					onClick={() => handleRemoveTag(tag)}
-				/>)}
-				{suggestedTags.map((tag, key) => <Tag
-					id={"tag-in-searchbar"}
-					tagType="suggest"
-					key={key}
-					text={tag}
-					onClick={() => handleAddTag(tag)}
-				/>)}
-			</div>
+			{suggestedTags && 
+				<div className={focused || (addedTags.length > 0 || suggestedTags.length > 0) ? "search-bar-tag-container" : "search-bar-tag-container closed"}>
+					{addedTags.map((tag, key) => <Tag
+						tagType="added"
+						key={key}
+						text={tag}
+						onClick={() => handleRemoveTag(tag)}
+					/>)}
+					{suggestedTags.map((tag, key) => <Tag
+						id={"tag-in-searchbar"}
+						tagType="suggest"
+						key={key}
+						text={tag}
+						onClick={() => handleAddTag(tag)}
+					/>)}
+				</div>
+			}
 		</div>
 	)
 }

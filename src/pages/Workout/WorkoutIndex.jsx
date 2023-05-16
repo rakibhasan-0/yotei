@@ -12,6 +12,7 @@ import { AccountContext } from "../../context"
 import DatePicker, { getFormattedDateString } from "../../components/Common/DatePicker/DatePicker"
 import RoundButton from "../../components/Common/RoundButton/RoundButton"
 import { Plus } from "react-bootstrap-icons"
+import {toast} from "react-toastify"
 
 /**
  * Workout class. 
@@ -114,6 +115,21 @@ export default function WorkoutIndex({detailURL}) {
 		workout.favourite = !workout.favourite
 	}
 
+	function setError(msg){
+		if (toast.isActive("search-error")) return
+		toast.error(msg, {
+			position: "top-center",
+			autoClose: 5000,
+			hideProgressBar: false,
+			closeOnClick: true,
+			pauseOnHover: true, 
+			draggable: false,
+			progress: undefined,
+			theme: "colored",
+			toastId: "search-error",
+		})
+	}
+
 	function fetchWorkouts() {
 		let args = {
 			from: dates.from,
@@ -125,7 +141,9 @@ export default function WorkoutIndex({detailURL}) {
 		}
 		setCookie("workout-filter", {from: args.from, to: args.to, isFavorite: args.isFavorite}, {path: "/workout"})
 		getWorkouts(args, token, cache, cacheActions, (response) => {
-			if(response) {
+			if(response.error) {
+				setError("Serverfel: Något gick fel med sökningen!")
+			} else {
 				setWorkouts(response.results)
 				setSuggestedTags(response.tagCompletion)
 			}

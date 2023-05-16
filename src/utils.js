@@ -38,9 +38,11 @@ export function logOut() {
 }
 
 export const HTTP_STATUS_CODES = {
+	OK: 200,
 	SUCCESS: 201,
-	CONFLICT: 409,
+	NOT_FOUND: 404,
 	NOT_ACCEPTABLE: 406,
+	CONFLICT: 409,
 	TEAPOT: 418,
 	INTERNAL_SERVER_ERROR: 500,
 }

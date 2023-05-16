@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react"
 import { AccountContext } from "../../context"
 import StarButton from "../Common/StarButton/StarButton.jsx"
+import {toast} from "react-toastify"
 
 /**
  * This component is an extension of the star button which includes
@@ -29,7 +30,16 @@ export default function WorkoutFavoriteButton({id, workout, favoriteCallback}) {
 				setFavorite(!isFavorite)
 			}
 			else {
-				console.log(response)
+				toast.error("Serverfel: Kunde inte lägga till som favorit!", {
+					position: "top-center",
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true, 
+					draggable: false,
+					progress: undefined,
+					theme: "colored",
+				})
 			}
 		})
 

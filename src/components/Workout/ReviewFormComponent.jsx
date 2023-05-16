@@ -5,7 +5,12 @@ import Button from "../Common/Button/Button"
 import Ratings from "react-ratings-declarative"
 import Star from "../Common/StarButton/StarButton"
 import {Trash } from "react-bootstrap-icons"
+import {HTTP_STATUS_CODES} from "../../utils"
 import { AccountContext } from "../../context"
+import {toast} from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+
+
 
 /**
  * Review component for workout. The user can review the workout
@@ -21,7 +26,7 @@ import { AccountContext } from "../../context"
 export default function Review({isOpen, setIsOpen, workout_id}) {  
 	const[rating, setRating] = useState(0)
 	const[commentList, setCommentList] = useState([])
-	const[positiveComment, setpositive] = useState("")
+	const[positiveComment, setPositive] = useState("")
 	const[negativeComment, setNegative] = useState("")
 	const[currentComment, setCurrentComment] = useState()
 	const[showDeletePopup, setShowDeletePopup] = useState(false)
@@ -35,8 +40,12 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 
 		async function fetchComments() {
 			const response = await fetch("/api/workouts/reviews?id=" + workout_id, {headers:{token,"userId": userId}})
+			if(response.status === HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+				setError("Serverfel: Kunde inte hämta utvärderingar för passet!")
+				return
+			} 
+			
 			const data = await response.json()
-			console.log(data)
 			setCommentList(data)
 		}
 
@@ -61,19 +70,36 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 				"date": ts
 			})
 		}
+		// TODO 
+		const postResponse = await fetch("/api/workouts/reviews", requestOptions)
+		if(postResponse.status === HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) { 
+			setError("Serverfel: Kunde inte lägga till utvärdering!")
+			return 
+		}   
 
-		await fetch("/api/workouts/reviews", requestOptions)
 		requestOptions.method = "GET"
 		requestOptions.body = null
-		const response =  await fetch("/api/workouts/reviews?id=" + workout_id, {headers:{token,"userId": userId}})
-		setCommentList(await response.json())
+		const getResponse =  await fetch("/api/workouts/reviews?id=" + workout_id, {headers:{token,"userId": userId}})
+		setCommentList(await getResponse.json())
 
-		setpositive("")
+		setPositive("")
 		setNegative("")
 		setRating(0)
 		setAddedReview("Utvärdering tillagd")
 	}
 
+	function setError(msg){
+		toast.error(msg, {
+			position: "top-center",
+			autoClose: 5000,
+			hideProgressBar: false,
+			closeOnClick: true,
+			pauseOnHover: true, 
+			draggable: false,
+			progress: undefined,
+			theme: "colored",
+		})
+	}
 
 	function getTodaysDate() {
 		var today = new Date()
@@ -85,7 +111,7 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 	}
 
 	function handleChangePos(event){
-		setpositive(event.target.value)
+		setPositive(event.target.value)
 	}
 	
 	function handleChangeNeg(event){
@@ -93,13 +119,17 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 	}
 
 
-	function deleteReview(review_id) {
+	async function deleteReview(review_id) {
 		const requestOptions = {
 			method: "DELETE",
 			headers: {"token": token}
 		}
 
-		fetch(`/api/workouts/reviews?id=${review_id}`, requestOptions)
+		const respone = await fetch(`/api/workouts/reviews?id=${review_id}`, requestOptions)
+		if(respone.status === HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+			setError("Serverfel: Kunde inte ta bort utvärderingen!")
+			return
+		}
 		setCommentList(commentList.filter(c => c.review_id != review_id))
 	}
 

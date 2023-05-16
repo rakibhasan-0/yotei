@@ -9,6 +9,10 @@ import {useParams} from "react-router"
 import Popup from "../../../components/Common/Popup/Popup"
 import { Pencil, Trash, Printer} from "react-bootstrap-icons"
 import Review from "../../../components/Workout/ReviewFormComponent.jsx"
+import ErrorState from "../../../components/Common/ErrorState/ErrorState"
+import Spinner from "../../../components/Common/Spinner/Spinner"
+import {HTTP_STATUS_CODES} from "../../../utils"
+import {toast} from "react-toastify"
 
 /**
  * A page for creating workouts. The user can view the information
@@ -32,6 +36,8 @@ export default function WorkoutView({id}) {
 	const [workoutData, setWorkoutData] = useState(null)
 	const [workoutUsers, setWorkoutUsers] = useState(null)
 	const [showRPopup, setRShowPopup] = useState(false)
+	const [errorStateMsg, setErrorStateMsg] = useState("")
+	const [loading, setLoading] = useState(true)
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -39,8 +45,15 @@ export default function WorkoutView({id}) {
 				headers: {"Content-type": "application/json", token: context.token}
 			}
 			const response = await fetch(`/api/workouts/detail/${workoutId}`, requestOptions)
-			const json = await response.json()
-			setWorkoutData(() => json)
+			if(response.status != HTTP_STATUS_CODES.OK){
+				setErrorStateMsg("Pass med ID '" + workoutId + "' existerar inte. Felkod: " + response.status)
+				setLoading(false)	
+			} else {
+				const json = await response.json()
+				setWorkoutData(() => json)
+				setLoading(false)
+				setErrorStateMsg("")
+			}
 		}
 
 		fetchData()
@@ -52,35 +65,57 @@ export default function WorkoutView({id}) {
 				headers: {"Content-type": "application/json", token: context.token}
 			}
 			const response = await fetch(`/api/workouts/get/userworkout/${workoutId}`, requestOptions)
-			const json = await response.json()
-			setWorkoutUsers(() => json)
+	
+			if (response.status === HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+				setError("Serverfel: Gick inte att hämta användare för passet. Felkod: " + response.status)
+			} else if(response.status === HTTP_STATUS_CODES.NOT_FOUND) {
+				setError("Passet existerar inte längre!")
+			} else {
+				const json = await response.json()
+				setWorkoutUsers(() => json)
+			}
+
 		}
 
 		fetchData()
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
-
+	
 	return ( 
-		workoutData && workoutUsers &&
-		<div id={id} className="container px-0 col-lg-4 col-md-4">
-			{getPopupContainer(showPopup, setShowPopup, workoutId, context, navigate)}
-
-			{getReviewContainer(showRPopup, setRShowPopup, workoutId)}
-			{getWorkoutInfoContainer(workoutData, setShowPopup)}
-			{sortByCategories(workoutData).map((activityCategory) => (
-				<div className="my-5" key={activityCategory.categoryOrder}>
-					<WorkoutActivityList
-						categoryName={activityCategory.categoryName} 
-						activities={activityCategory.activities} 
-						navigate={navigate}
-						id={"WorkoutActivityList-" + activityCategory.categoryOrder}>	
-					</WorkoutActivityList>
+		loading ? <div className="mt-5"> <Spinner/> </div>
+			: !workoutData ? <ErrorState message={errorStateMsg} onBack={() => navigate("/workout")} onRecover={() => window.location.reload(false)}/>
+				:
+				<div id={id} className="container px-0 col-lg-4 col-md-4">
+					{getPopupContainer(showPopup, setShowPopup, workoutId, context, navigate)}
+					{getReviewContainer(showRPopup, setRShowPopup, workoutId)}
+					{getWorkoutInfoContainer(workoutData, setShowPopup)}
+					{sortByCategories(workoutData).map((activityCategory) => (
+						<div className="my-5" key={activityCategory.categoryOrder}>
+							<WorkoutActivityList
+								categoryName={activityCategory.categoryName} 
+								activities={activityCategory.activities} 
+								navigate={navigate}
+								id={"WorkoutActivityList-" + activityCategory.categoryOrder}>	
+							</WorkoutActivityList>
+						</div>
+					))}
+					{workoutData.tags.length != 0 && getTagContainer(workoutData)}
+					{(workoutUsers !== null && workoutUsers.length > 0) && getWorkoutUsersContainer(workoutUsers)}
+					{getButtons(navigate, setRShowPopup)}
 				</div>
-			))}
-			{workoutData.tags.length != 0 && getTagContainer(workoutData)}
-			{workoutUsers.length > 0 && getWorkoutUsersContainer(workoutUsers)}
-			{getButtons(navigate, setRShowPopup)}
-		</div>
 	)	
+}
+
+function setError(msg){
+	toast.error(msg, {
+		position: "top-center",
+		autoClose: 5000,
+		hideProgressBar: false,
+		closeOnClick: true,
+		pauseOnHover: true, 
+		draggable: false,
+		progress: undefined,
+		theme: "colored",
+	})
 }
 
 function sortByCategories(workoutData) {
@@ -105,7 +140,7 @@ function getPopupContainer(showPopup, setShowPopup, workoutId, context, navigate
 			<p className="font-">Är du säker på att du vill ta bort detta pass?</p>
 			<div className="row justify-content-center">
 				<div className="d-flex col justify-content-end">
-					<Button onClick={async () => deleteWorkout(workoutId, context, navigate)}>Ja</Button>
+					<Button onClick={async () => deleteWorkout(workoutId, context, navigate, setShowPopup)}>Ja</Button>
 				</div>
 				<div className="d-flex col justify-content-start">
 					<Button onClick={() => setShowPopup(false)}>Nej</Button>
@@ -119,15 +154,22 @@ function getReviewContainer(showRPopup, setRShowPopup, workoutId){
 	return (showRPopup && setRShowPopup && <Review isOpen={showRPopup} setIsOpen={setRShowPopup} workout_id={workoutId}/>)
 }
 
-async function deleteWorkout(workoutId, context, navigate) {
+async function deleteWorkout(workoutId, context, navigate, setShowPopup) {
 
 	const requestOptions = {
 		headers: {"Content-type": "application/json", token: context.token},
 		method: "DELETE"
 	}
 
-	await fetch(`/api/workouts/delete/${workoutId}`, requestOptions)
-	navigate("/workout")
+	const response = await fetch(`/api/workouts/delete/${workoutId}`, requestOptions)
+	if(response.status === HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR){
+		setError("Något gick fel med att ansluta till servern")
+	}else if(response.status === HTTP_STATUS_CODES.NOT_FOUND) {
+		setError("Passet existerar inte längre!")
+	} else {
+		navigate("/workout")
+	}
+	setShowPopup(false)
 }
 
 function getTagContainer(workoutData) {
