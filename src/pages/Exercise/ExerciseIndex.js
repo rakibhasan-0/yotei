@@ -22,53 +22,31 @@ import ExerciseCreate from "../../pages/Exercise/ExerciseCreate"
  */
 function ExerciseIndex() {
 	const [visibleList, setVisibleList] = useState([])
-	//const [allTags, setAllTags] = useState([])
-	//const [usedTags, setUsedTags] = useState([])
-	const [selectedTags, setSelectedTags] = useState([])
 	const [searchText, setSearchText] = useState("")
 	const [addedTags, setAddedTags] = useState([])
 	const [suggestedTags, setSuggestedTags] = useState([])
 	const { token } = useContext(AccountContext)
-	//const uri = props.uri
 	const detailURL = "/exercise/exercise_page/"
 	const [popupVisible, setPopupVisible] = useState(false)
 	const [map, mapActions] = useMap()
-
-	useEffect(() => {
-		// getAllTags();
-		getAllExercises()
-		//getAllExercisesByTag();
-		// getSetAmountOfExercises()
-	}, [])
-
-
-
-	const getAllExercises =  async () => {
-		const headers = { token }
-
-		await fetch("/api/exercises/all", {headers})
-			.then(res => res.json())
-			.then((data) => {
-				setVisibleList(data)
-			})
-			.catch(console.log)
-	} 
 
 
 	useEffect(() => {
 
 		const args = {
 			text: searchText,
-			selectedTags: selectedTags
+			selectedTags: addedTags
 		}
+
+		console.log(addedTags)
+		console.log(suggestedTags)
 
 		getExercises(args, token, map, mapActions, (result) => {
 			setVisibleList(result.results)
 			setSuggestedTags(result.tagCompletion)
 			console.log(result.results)
-			console.log(setSelectedTags) //Temporary, to avoid lint error
 		})
-	}, [searchText])
+	}, [searchText, addedTags])
 	const handleClosePopup = () => {
 		setPopupVisible(false)
 		window.location.reload() // Reload the page
