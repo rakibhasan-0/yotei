@@ -1,9 +1,11 @@
 package se.umu.cs.pvt.plan;
 
 import javax.persistence.*;
+
+import se.umu.cs.pvt.belt.Belt;
+
 import java.io.Serializable;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Set;
 
  
 /**
@@ -23,11 +25,6 @@ import java.util.regex.Pattern;
 @Entity
 @Table(name = "plan")
 public class Plan implements Serializable {
-
-    private static final String hexColorValidator = "^#([a-fA-F0-9]{6})$";
-    private static final Pattern pattern = Pattern.compile(hexColorValidator);
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "plan_id")
@@ -36,11 +33,16 @@ public class Plan implements Serializable {
     @Column(nullable = false, name = "name")
     private String name;
 
-    @Column(nullable = false, name = "color")
-    private String color;
-
     @Column(nullable = false, name = "user_id")
     private Long userId;
+
+    @ManyToMany()
+    @JoinTable(
+            name = "plan_to_belt",
+            joinColumns = @JoinColumn(name = "plan_id"),
+            inverseJoinColumns = @JoinColumn(name = "belt_id")
+    )
+    private Set<Belt> belts;
 
     //Constructor used for Tests.
     protected Plan() {}
@@ -53,11 +55,11 @@ public class Plan implements Serializable {
      * @param color color-code for plan
      * @param userId id of user responsible for plan
      */
-    public Plan(Long id, String name, String color, Long userId) {
+    public Plan(Long id, String name, Long userId, Set<Belt>belts) {
         this.id = id;
         this.name = name;
-        this.color = color;
         this.userId = userId;
+        this.belts = belts;
     }
 
     public Long getId() {
@@ -70,13 +72,12 @@ public class Plan implements Serializable {
     }
 
 
-    public String getColor() {
-        return color;
-    }
-
-
     public Long getUserId() {
         return userId;
+    }
+
+    public Set<Belt> getBelts() {
+        return belts;
     }
 
     /**
@@ -84,16 +85,10 @@ public class Plan implements Serializable {
      * @return Boolean
      */
     public Boolean hasNullAttributes() {
-        return name == null || color == null || userId == null;
+        return name == null || belts == null || userId == null;
     }
 
     public Boolean nameIsEmpty() {
         return name.isEmpty();
-    }
-
-    public Boolean colorIsValid() {
-
-        Matcher matcher = pattern.matcher(color);
-        return matcher.matches();
     }
 }

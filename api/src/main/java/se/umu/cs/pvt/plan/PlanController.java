@@ -42,7 +42,7 @@ public class PlanController {
     @PostMapping("/add")
     public ResponseEntity<Plan> postPlan(@RequestBody Plan toAdd) {
 
-        if (toAdd.hasNullAttributes() || !toAdd.colorIsValid() || toAdd.nameIsEmpty()) {
+        if (toAdd.hasNullAttributes() || toAdd.nameIsEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -75,7 +75,16 @@ public class PlanController {
     /**
      * This method updates an existing plan to the database.
      * @param toUpdate the body in json format with correct attributes example:
-     *       {"id":1,"name":"updated plan","color":"#000000","startDate":"2020-03-23","endDate":"2022-04-23","userId":1}
+     *       {
+     *          "id":1,
+     *          "name":"updated plan",
+     *          "startDate":"2020-03-23",
+     *          "endDate":"2022-04-23",
+     *          "userId":1,
+     *          belts[{
+     *              belt_id:1
+     *          }]
+     * }
      * @return HTTP response status:
      *         * 400: The updated plan provided is not valid
      *         * 404: The plan to be updated is not stored in the database
@@ -85,8 +94,7 @@ public class PlanController {
     public ResponseEntity<Plan> updatePlan(@RequestBody Plan toUpdate) {
 
         // Abort if the provided plan is invalid
-        if(toUpdate.hasNullAttributes() || (toUpdate.getId() == null)
-                || !toUpdate.colorIsValid() || toUpdate.nameIsEmpty()) {
+        if(toUpdate.hasNullAttributes() || (toUpdate.getId() == null) || toUpdate.nameIsEmpty()) {
             return new ResponseEntity<>(toUpdate, HttpStatus.BAD_REQUEST);
         }
 

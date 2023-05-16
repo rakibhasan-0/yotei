@@ -16,8 +16,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import se.umu.cs.pvt.belt.Belt;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,9 +40,13 @@ class PlanApiApplicationTests {
         assertThat(controller).isNotNull();
     }
 
-    private final Plan ex1 = new Plan(1L, "namn 1", "#F12F12", 1L);
-    private final Plan ex2 = new Plan(2L, "namn 2", "#983229", 2L);
-    private final Plan ex3 = new Plan(3L, "namn 3", "#2342A2", 1L);
+    private final Belt belt1 = new Belt(1L, "Vitt", "#F12F12", false);
+    private final Belt belt2 = new Belt(2L, "Brunt", "#FFFFFF", true);
+    private final Belt belt3 = new Belt(3L, "Svart", "#000000", false);
+    private final Set<Belt> belts = new HashSet<>();
+    private final Plan ex1 = new Plan(1L, "namn 1", 1L, belts);
+    private final Plan ex2 = new Plan(2L, "namn 2", 2L, belts);
+    private final Plan ex3 = new Plan(3L, "namn 3", 1L, belts);
     private ArrayList<Plan> plans;
 
     @BeforeEach
@@ -47,6 +55,10 @@ class PlanApiApplicationTests {
         plans.add(ex1);
         plans.add(ex2);
         plans.add(ex3);
+
+        belts.add(belt1);
+        belts.add(belt2);
+        belts.add(belt3);
     }
 
 
@@ -60,7 +72,7 @@ class PlanApiApplicationTests {
 
     @Test
     void shouldFailWhenUpdatingWithoutId() {
-        Plan invalidPlan = new Plan(null, "name", "#FFFFFF", 1L);
+        Plan invalidPlan = new Plan(null, "name", 1L, belts);
         ResponseEntity<Plan> response = controller.updatePlan(invalidPlan);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
@@ -75,16 +87,16 @@ class PlanApiApplicationTests {
 
 
     @Test
-    void shouldFailWhenUpdatingWithInvalidColorCode() {
-        Plan invalidPlan = new Plan(1L, "name", "invalid hex code", 1L);
+    void shouldFailWhenUpdatingWithInvalidBeltSet() {
+        Plan invalidPlan = new Plan(1L, "name", 1L, null);
         ResponseEntity<Plan> response = controller.updatePlan(invalidPlan);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
 
     @Test
-    void shouldFailWhenAddingPlanWithInvalidColorCode() {
-        Plan invalidPlan = new Plan(null, "name", "invalid hex code", 1L);
+    void shouldFailWhenAddingPlanWithBeltsBeingNull() {
+        Plan invalidPlan = new Plan(null, "name", 1L, null);
         ResponseEntity<Plan> response = controller.postPlan(invalidPlan);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
@@ -92,7 +104,7 @@ class PlanApiApplicationTests {
 
     @Test
     void shouldFailWhenAddingPlanWithNullAttributes() {
-        Plan invalidPlan = new Plan(null, null, null, 1L);
+        Plan invalidPlan = new Plan(null, null, 1L, null);
         ResponseEntity<Plan> response = controller.postPlan(invalidPlan);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
@@ -125,7 +137,7 @@ class PlanApiApplicationTests {
 
     @Test
     void shouldSucceedWhenAddingPlan() {
-        Plan ex4 = new Plan(null, "namn 4", "#123456", 2L);
+        Plan ex4 = new Plan(null, "namn 4", 2L, belts);
         ResponseEntity<Plan> response = controller.postPlan(ex4);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
