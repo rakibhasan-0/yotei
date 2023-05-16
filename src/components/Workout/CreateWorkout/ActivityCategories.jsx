@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react"
+import React, {useState, useContext, useEffect} from "react"
 import RadioButton from "../../Common/RadioButton/RadioButton"
 import { ActivityInfoContext, ActivityInfoDispatchContext } from "./ActivityInfoContext"
 import "./ActivityCategory.css"
@@ -7,16 +7,13 @@ import "./ActivityCategory.css"
  *
  * Props:
  *     prop1 @id {string}  - Id for the component.
- *     prop2 @categories {list with objects name and marked}  - List with objects for the name and marked status for each category.
- *     prop3 @setCategories {setter for categories} - Setters for categories.
  *
  * Example usage:
- *		const [james, setJames] = useState([{name: "gegegegegege", marked: false}, {name: "daddy", marked: false}])
- *		<ActivityCategories id = "10" categories={james} setCategories={setJames}></ActivityCategories>
+ *		<ActivityCategories id = "10"></ActivityCategories>
  *
  * @author Team Minotaur
- * @version 1.0
- * @since 2023-05-08
+ * @version 2.0
+ * @since 2023-05-16
  */
 export default function ActivityCategories({id}) {
 	const [inputValue, setInputValue] = useState("")
@@ -34,6 +31,9 @@ export default function ActivityCategories({id}) {
 			setInputValue("")
 		}
 	}
+	useEffect(() => {
+		dispatch({type: "ADD_DEFAULT_CATEGORY", })
+	}, [])
 
 	return <div>
 		<ul id={id} className={"category-list"}>

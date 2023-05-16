@@ -25,6 +25,23 @@ export const activityReducer = (state, action) => {
 		tempState.chosenCategory = tempState.categories[index].name
 		return tempState
 	}
+
+	case "ADD_DEFAULT_CATEGORY":
+	{
+		tempState.categories = []
+
+		//Add default categories
+		tempState.categories.push({name:"Ingen övning", checked: true})
+		// Add user categories
+		state.categories.forEach(category => {
+			tempState.categories.push(category)
+		})
+		tempState.categories.push({name:"Stretching", checked: false})
+
+		return tempState
+	}
+
+
 	case "ADD_CATEGORY":
 		tempState.categories.push(action.payload)
 		tempState.categories.forEach(category => {

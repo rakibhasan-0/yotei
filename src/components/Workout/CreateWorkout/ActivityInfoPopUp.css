@@ -5,7 +5,7 @@
 }
 
 .activity-info-btns {
-    margin-top: 3rem;
+    margin-top: 0.5rem;
     display: flex;
     justify-content: center;
 }
@@ -13,8 +13,10 @@
 .acitvitiy-info-button-divider {
     margin: 0 10px;
 }
+#activity-time-add-button {
+    padding: 0;
+}
 
 .activity-time-add-activity-button {
-    margin-top: 2rem;
-    min-width: 120px;
+    margin-top: 1rem;
 }

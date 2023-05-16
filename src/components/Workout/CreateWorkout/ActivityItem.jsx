@@ -26,7 +26,7 @@ export default function ActivityItem({categoryName, id, inputDisabled, text}) {
 
 	return (
 		<fieldset className="container workout-activity-item" id={"activity-description-" + id}>
-			{categoryName != null && <legend className="px-2 h3 w-auto">{categoryName}</legend>}
+			{categoryName != null && <legend className="w-auto"><h2>{categoryName}</h2></legend>}
 			<textarea 
 				className={"activity-item-textArea"} 
 				onChange={(e) => setDescription(e.target.value)} 

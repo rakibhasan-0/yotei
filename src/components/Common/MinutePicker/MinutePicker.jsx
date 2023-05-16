@@ -6,15 +6,18 @@ import "./MinutePicker.css"
  *
  * Props:
  *     prop1 @id {string}  - Id for the component.
- *     prop2 @time {variable for number}  - A variable for time.
- *     prop3 @updateTime {function} - A setter for the variable time.
+ *     prop3 @callback {function} - Callback function that will be called on input,
+ *     								should take id and time as input.
  *
  * Example usage:
- *		const [time1, updateTime1] = useState("")
- *		<MinutePicker id="10" updateTime={updateTime1} initialValue={5}></MinutePicker>
+ *      const callback = (id, time) => {
+ *      	console.log("input: " + time + ", on id: " + id)
+ * 		}
+ *
+ *      <MinutePicker id="10" callback={callback}></MinutePicker>
  *
  *
- * @author Team Minotaur, Squad Phoenix
+ * @author Team Minotaur
  * @version 2.0
  * @since 2023-05-03
  */

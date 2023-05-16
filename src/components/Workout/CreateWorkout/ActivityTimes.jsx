@@ -4,23 +4,15 @@ import { ActivityInfoDispatchContext, ActivityInfoContext } from "./ActivityInfo
 import MinutePicker from "../../Common/MinutePicker/MinutePicker"
 
 /**
- * Component for setting the time for each activity connected to a exercise.
+ * Component for setting the time for each activity connected to an exercise.
+ * Context will handle the time update.
  *
  *
  * Props:
  *     prop1 @id {string}  - Id for the component.
- *     prop2 @activityTimes {list with variables}  - List with variables for the time for each activity.
- *     prop3 @updateTime {list with setters for the variables} - List with setters for the variables containing time.
  *
  * Example usage:
- *		const [time1, updateTime1] = useState("")
- * 		const [time2, updateTime2] = useState("")
- * 		const [time3, updateTime3] = useState("")
- *
- * 		const list1 = [time1, time2, time3]
- * 		const list2 = [updateTime1, updateTime2,updateTime3]
- *
- *		<ActivityTimes activityTimes={list1} activityTimesHandler={list2}></ActivityTimes>
+ *		<ActivityTimes id="10"></ActivityTimes>
  *
  *
  * @author Team Minotaur

@@ -74,14 +74,14 @@ export default function ActivityInfoPopUp({categories, activities, addPressed, t
 							})}
 							{isFreeText && 
 								<div className="activity-time-add-activity-button">
-									<Button id="activity-time-add-button" onClick={() => activityInfoDispatch({type: "ADD_ACTIVITIY", payload: ""})}>
+									<Button id="activity-time-add-button" width = {90} onClick={() => activityInfoDispatch({type: "ADD_ACTIVITIY", payload: ""})}>
 										<Plus size="2em" />
 									</Button>
 								</div>}
 						</div>
-						<Divider className="heading" id="Tillagdar" option="h1_left" title="Tid" />
+						<Divider className="heading" id="Tillagdar" option="h2_left" title="Tid" />
 						<ActivityTimes id={"activity-time-1"}></ActivityTimes>
-						<Divider className="heading" id="Tillagdar" option="h1_left" title="Kategori" />
+						<Divider className="heading" id="Tillagdar" option="h2_left" title="Kategori" />
 						<ActivityCategories id="10"></ActivityCategories>
 
 						<div className="activity-info-btns">
