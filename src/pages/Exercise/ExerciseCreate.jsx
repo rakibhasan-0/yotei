@@ -251,32 +251,26 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 					</div>
 				</div>
 				{alertWindow()}
-				<div className="btn-container">
-					<div id={"back"}>
-						<Button
-							id="EC-BackBtn"
-							outlined={"button-back"}
-							onClick={() => {
-								setShowPopup(false)
+				<div className="create-exercise-btn-container">
+					<Button
+						id="EC-BackBtn"
+						outlined={"button-back"}
+						onClick={() => { 
+							setShowPopup(false)
+							onClose()
+						}}>
+						<p>Tillbaka</p>
+					</Button>
+					<Button
+						id="EC-AddBtn"
+						onClick={() => {
+							addExerciseAndTags()
+							if (!addBoxChecked) {
 								onClose()
-							}}
-							width={150}>
-							Tillbaka
-						</Button>
-					</div>
-					<div id={"add"}>
-						<Button
-							id="EC-AddBtn"
-							onClick={() => {
-								addExerciseAndTags()
-								if (!addBoxChecked) {
-									onClose()
-								}
-							}}
-							width={150}>
-							Lägg till
-						</Button>
-					</div>
+							}
+						}}>
+						<p>Lägg till</p>
+					</Button>
 				</div>
 			</div>
 		</div>
