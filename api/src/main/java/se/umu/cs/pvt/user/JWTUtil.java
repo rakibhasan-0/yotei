@@ -22,9 +22,9 @@ public class JWTUtil {
     private final String secret = "PVT";
 
     /**
-     * The time a token is valid.
+     * The time a token is valid in milliseconds.
      */
-    private final int validDuration = 1000 * 60 * 20;
+    private final long validDuration = 1000L * 60 * 60 * 24 * 30;
 
     /**
      * Generates a Json Web Token with the given username as the payload claim.
