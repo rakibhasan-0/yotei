@@ -7,12 +7,13 @@ import Button from "../../../components/Common/Button/Button"
 import { useNavigate, Link} from "react-router-dom"
 import {useParams} from "react-router"
 import Popup from "../../../components/Common/Popup/Popup"
-import { Pencil, Trash, Printer} from "react-bootstrap-icons"
+import { Pencil, Trash} from "react-bootstrap-icons"
 import Review from "../../../components/Workout/ReviewFormComponent.jsx"
 import ErrorState from "../../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../../components/Common/Spinner/Spinner"
 import {HTTP_STATUS_CODES} from "../../../utils"
 import {toast} from "react-toastify"
+import PrintButton from "../../../components/Common/PrintButton/PrintButton"
 
 /**
  * A page for creating workouts. The user can view the information
@@ -241,28 +242,24 @@ function getWorkoutInfoContainer(workoutData, setShowPopup) {
 						<div className="col workout-detail-column-item">
 							<h1 className="font-weight-bold">{workoutData.name}</h1>
 						</div>
-					</div>
-					<div className="d-flex justify-content-end">
-						<Printer
-							size="24px"
-							color="var(--red-primary)"
-							style={{cursor: "pointer"}}	
-						/>
-						<Link className="ml-3" state={{workout: workoutData}} to={"/workout/edit"}>
-							<Pencil
+						<div className="workout-detail-icon-container">
+							<PrintButton workoutData={workoutData} />
+							<Link className="ml-3" state={{workout: workoutData}} to={"/workout/edit"}>
+								<Pencil
+									size="24px"
+									color="var(--red-primary)"
+									style={{cursor: "pointer"}}
+								/>
+							</Link>
+							<Trash
+								className="ml-3 mr-3"
 								size="24px"
 								color="var(--red-primary)"
 								style={{cursor: "pointer"}}
+								onClick={() => setShowPopup(true)}
 							/>
-						</Link>
-						<Trash
-							className="ml-3 mr-3"
-							size="24px"
-							color="var(--red-primary)"
-							style={{cursor: "pointer"}}
-							onClick={() => setShowPopup(true)}
-						/>
-					</div>					
+						</div>	
+					</div>				
 					
 					<div className="workout-detail-row-item mt-3">
 						<div className="workout-detail-column-item">

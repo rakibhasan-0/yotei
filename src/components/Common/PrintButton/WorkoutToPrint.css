@@ -1,0 +1,24 @@
+.WorkoutToPrint-container {
+    padding-left: 100px;
+}
+
+.WorkoutToPrint-column-item-right {
+    padding-left: 135px;
+}
+
+.WorkoutToPrint-column-item {
+    width: 90%;
+    padding-top: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+}
+
+.WorkoutToPrint-row-item {
+    display: flex;
+}
+
+.WorkoutToPrint-properties {
+    word-wrap: break-word;
+    text-overflow: ellipsis;
+}
