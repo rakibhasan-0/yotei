@@ -10,33 +10,37 @@ import TechniqueFilter from "../../../components/Common/Filter/TechniqueFilter"
 import "./AddActivity.css"
 import CheckBox from "../../../components/Common/CheckBox/CheckBox"
 import TechniqueCard from "../../../components/Common/Technique/TechniqueCard/TechniqueCard"
-//import Component from "../../../components/Common/List/Component"
 import ExerciseListItem from "../../../components/Common/ExerciseCard/ExerciseListItem"
 import RoundButton from "../../../components/Common/RoundButton/RoundButton"
 import { ChevronRight } from "react-bootstrap-icons"
 
 /**
- * This is an example description.SearchBarUtils
+ * This component is used to add activities to a workout. It contains two tabs, 
+ * one for techniques and one for exercises.
  * 
- * Props:
- *     id @type {string}     - The id of the class
- *     prop2 @type {number}  - A description of prop2
- *     prop3 @type {boolean} - A description of prop3
- *
- * Example usage:
- *     <MyComponent prop1="Hello world!" prop2={42} prop3={true}/>
- *
+ * What is an activity? In this case an activity is either a technique or an exercise.
+ * 
+ * @param {string} id A unique id of the component (Testing purposes)
+ * @param {function} setShowActivityInfo Callback function to report selected activities
+ *  
  * @author Kraken
- * @version 1.0
- * @since 2023-05-09
+ * @since 2023-05-16
  */
 function AddActivity({id, setShowActivityInfo}) {
 
 	const { token } = useContext(AccountContext)
 
+	/**
+	 * Used to cache techniques and exercises that are fetched from the backend.
+	 * This map is used as a parameter when using getTechniques method.
+	 */
 	const [map, mapActions] = useMap()
 	
-	//Techniques
+	/**
+	 * States related to keeping track of which techniques
+	 * to display, and the search text, selected belts, kihon 
+	 * value and selected tags.
+	 */
 	const [techniques, setTechniques] = useState([])
 	const [searchTechText, setSearchTechText] = useState("")
 	const [selectedBelts, setSelectedBelts] = useState([])
@@ -44,26 +48,42 @@ function AddActivity({id, setShowActivityInfo}) {
 	const [selectedTechTags, setSelectedTechTags] = useState([])
 	const [suggestedTechTags, setSuggestedTechTags] = useState([])
 
-	//Exercises
+	/**
+	 * States related to keeping track of which exercises
+	 * to display, and the search text and selected tags.
+	 */
 	const [exercises, setExercises] = useState([])
 	const [searchExerText, setSearchExerText] = useState("")
 	const [selectedExerTags, setSelectedExerTags] = useState([])
 	const [suggestedExerTags, setSuggestedExerTags] = useState([])
 	
+	/**
+	 * Keeps track of which activities that are checked/selected by the user.
+	 */
 	const [checkedActivities, setCheckedActivities] = useState([])
 	
+	/**
+	 * Fetches techniques when the component is mounted or when the 
+	 * search text, selected belts, kihon value or selected tags are changed.
+	 */
 	useEffect(() => {
 		setTechniques(techniques.filter(technique => checkedActivities.includes(technique)))
 		searchTechniques()
 	}, [searchTechText, selectedBelts, kihon, selectedTechTags])
 	
-
+	/**
+	 * Fetches exercises when the component is mounted or when the
+	 * search text or selected tags are changed.
+	 */
 	useEffect(() => {
 		setExercises(exercises.filter(exercise => checkedActivities.includes(exercise)))
 		searchExercises()
 	}, [searchExerText, selectedExerTags])
 
 
+	/**
+	 * Handles selecting or deselecting a checkbox for an activity.
+	 */
 	const onActivityToggle = (activity, type) => setCheckedActivities(prev => {
 		if(prev.includes(activity)) {
 			return prev.filter(a => a !== activity)
@@ -72,6 +92,15 @@ function AddActivity({id, setShowActivityInfo}) {
 		return [...prev, activity]
 	})
 
+
+	/**
+	 * Fetches techniques from the backend. But first, the selected belts 
+	 * are filtered and parsed to be used in the request. 
+	 * 
+	 * When new techniques are fetched, the results are filtered to not include
+	 * techniques that are checked/selected by the user. Those techniques are
+	 * kept in the state to be displayed.
+	 */
 	const searchTechniques = () => {
 
 		const filteredBelts = []
@@ -98,7 +127,14 @@ function AddActivity({id, setShowActivityInfo}) {
 		})
 	}
 
-	
+
+	/**
+	 * Fetches exercises from the backend.
+	 * 
+	 * When new exercises are fetched, the results are filtered to not include
+	 * exercises that are checked/selected by the user. Those exercises are
+	 * kept in the state to be displayed.
+	 */
 	const searchExercises = () => {
 		
 		const args = {
@@ -162,9 +198,9 @@ function AddActivity({id, setShowActivityInfo}) {
 						</div>
 						{exercises.map((exercise, key) => (
 							<ExerciseListItem
-								id={"exercise-list-item-" + key}
+								id={exercise.id}
 								text={exercise.name}
-								index={key}
+								detailURL={"/exercise/exercise_page/"}
 								item={
 									<CheckBox 
 										id=""
