@@ -9,10 +9,11 @@ package se.umu.cs.pvt.search.interfaces;
 public class ExerciseSearchResponse implements SearchResponseInterface {
     private Long id;
     private String name;
-
-    public ExerciseSearchResponse(Long id, String name){
+    private Long duration;
+    public ExerciseSearchResponse(Long id, String name, Long duration){
         this.id = id;
         this.name = name;
+        this.duration = duration;
     }
 
     public Long getId() {
@@ -21,5 +22,9 @@ public class ExerciseSearchResponse implements SearchResponseInterface {
 
     public String getName() {
         return name;
+    }
+
+    public Long getDuration() {
+        return duration;
     }
 }

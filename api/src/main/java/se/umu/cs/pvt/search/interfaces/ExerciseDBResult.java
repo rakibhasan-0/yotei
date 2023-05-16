@@ -23,6 +23,9 @@ public class ExerciseDBResult implements Serializable {
     @Column(nullable = false, name = "name")
     private String name;
 
+    @Column(name = "duration")
+    private Long duration;
+
     /**
      * no-args constructor required by JPA spec
      * this one is protected since it shouldn't be used directly
@@ -33,23 +36,23 @@ public class ExerciseDBResult implements Serializable {
      * Constructor for workout
      * @param id id of workout
      * @param name name of workout
+     * @param duration duration of workout
      */
-    public ExerciseDBResult(Long id, String name) {
+    public ExerciseDBResult(Long id, String name, Long duration) {
         this.id = id;
         this.name = name;
+        this.duration = duration;
     }
 
-    /**
-     * @return the id
-     */
     public Long getId() {
         return id;
     }
 
-    /**
-     * @return the name
-     */
     public String getName() {
         return name;
+    }
+
+    public Long getDuration() {
+        return duration;
     }
 }

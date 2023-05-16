@@ -25,7 +25,7 @@ public class SearchExerciseResponseBuilder {
         List<ExerciseSearchResponse> array = new ArrayList<>();
         exerciseDBResultList.forEach(result -> array.add(
                 new ExerciseSearchResponse(
-                        result.getId(), result.getName()
+                        result.getId(), result.getName(), result.getDuration()
                 )
         ));
         return array;

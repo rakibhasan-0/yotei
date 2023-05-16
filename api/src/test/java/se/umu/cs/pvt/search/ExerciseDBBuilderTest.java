@@ -11,7 +11,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 /**
  * Test class for SearchExerciseDBBuilder
  *
- * @author Jonas Gustavsson
+ * @author Jonas Gustavsson (Kraken)
  * date: 2023-05-03
  */
 
