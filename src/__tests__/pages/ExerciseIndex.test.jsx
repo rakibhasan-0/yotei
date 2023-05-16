@@ -1,7 +1,11 @@
 import "@testing-library/jest-dom"
 import { rest } from "msw"
 import { server } from "../server"
+import {render, configure, screen} from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
+import ExerciseCreate from "../../pages/Exercise/ExerciseCreate"
 
+configure({testIdAttribute: "id"})
 const requestSpy = jest.fn()
 server.events.on("request:start", requestSpy)
 
@@ -41,4 +45,44 @@ test("mocked exercise data should match expected data", async() => {
 	expect(data.detailURL).toEqual("bsurl.com/fake/")
 	expect(data.id).toEqual(87)
 	expect(data.index).toEqual(420)
+})
+
+test("Should update exercise list page after adding new exercise'", async () => {
+	// ARRANGE
+	const setPopupVisible = jest.fn()
+	const handleClosePopup = jest.fn()
+
+	render(<ExerciseCreate setShowPopup={setPopupVisible} onClose={handleClosePopup}/>)
+	// ACT
+	await userEvent.click(screen.getByTestId("EC-AddBtn"))
+
+	// ASSERT
+	expect(handleClosePopup).toHaveBeenCalled()
+})
+
+test("Should update exercise list page after pressing go back'", async () => {
+	// ARRANGE
+	const setPopupVisible = jest.fn()
+	const handleClosePopup = jest.fn()
+
+	render(<ExerciseCreate setShowPopup={setPopupVisible} onClose={handleClosePopup}/>)
+	// ACT
+	await userEvent.click(screen.getByTestId("EC-BackBtn"))
+
+	// ASSERT
+	expect(handleClosePopup).toHaveBeenCalled()
+})
+
+test("Should not update exercise list page after adding new exercise when 'add multiple checkbox' is checked", async () => {
+	// ARRANGE
+	const setPopupVisible = jest.fn()
+	const handleClosePopup = jest.fn()
+
+	render(<ExerciseCreate setShowPopup={setPopupVisible} onClose={handleClosePopup}/>)
+	// ACT
+	await userEvent.click(screen.getByTestId("EC-AddMultipleChk"))
+	await userEvent.click(screen.getByTestId("EC-AddBtn"))
+
+	// ASSERT
+	expect(handleClosePopup).not.toHaveBeenCalled()
 })

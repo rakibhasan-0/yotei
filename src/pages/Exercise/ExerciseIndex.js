@@ -69,6 +69,10 @@ function ExerciseIndex() {
 			console.log(setSelectedTags) //Temporary, to avoid lint error
 		})
 	}, [searchText])
+	const handleClosePopup = () => {
+		setPopupVisible(false)
+		window.location.reload() // Reload the page
+	}
 
 	return (
 		<div>
@@ -97,8 +101,9 @@ function ExerciseIndex() {
 				setIsOpen={setPopupVisible}
 				width={90}
 				height={95}
-				noBackground={false}>
-				<ExerciseCreate setShowPopup={setPopupVisible}/>
+				noBackground={false}
+			>
+				<ExerciseCreate setShowPopup={setPopupVisible} onClose={handleClosePopup}/>
 			</Popup>
 		</div>
 	)

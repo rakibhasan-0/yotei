@@ -19,7 +19,7 @@ import TagInput from "../../components/Common/Tag/TagInput.jsx"
  * @author Calskrove (2022-05-19), Hawaii (no date), Verona (2022-05-04), Team Phoenix (Group 1) (2023-05-04)
  */
 
-export default function ExerciseCreate({setShowPopup}) {
+export default function ExerciseCreate({setShowPopup, onClose}) {
 	const [name, setName] = useState("")
 	const [desc, setDesc] = useState("")
 	const [time, setTime] = useState(0)
@@ -239,7 +239,7 @@ export default function ExerciseCreate({setShowPopup}) {
 				<div className={"checkboxes-container"}>
 					<div className={"add-checkbox"}>
 						<p className={"checkbox-text"}>Lägg till fler övningar</p>
-						<CheckBox clickable={true} checked={addBoxChecked} onClick={() => {
+						<CheckBox id="EC-AddMultipleChk" clickable={true} checked={addBoxChecked} onClick={() => {
 							setClearAlternative(!clearAlternative)
 							setAddBoxChecked(!addBoxChecked)
 							setEraseBoxChecked(false)
@@ -254,16 +254,24 @@ export default function ExerciseCreate({setShowPopup}) {
 				<div className="btn-container">
 					<div id={"back"}>
 						<Button
+							id="EC-BackBtn"
 							outlined={"button-back"}
-							onClick={() => setShowPopup(false)}
+							onClick={() => {
+								setShowPopup(false)
+								onClose()
+							}}
 							width={150}>
 							Tillbaka
 						</Button>
 					</div>
 					<div id={"add"}>
 						<Button
+							id="EC-AddBtn"
 							onClick={() => {
 								addExerciseAndTags()
+								if (!addBoxChecked) {
+									onClose()
+								}
 							}}
 							width={150}>
 							Lägg till
