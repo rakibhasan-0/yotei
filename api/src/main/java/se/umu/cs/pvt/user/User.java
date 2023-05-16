@@ -51,7 +51,7 @@ public class User implements Serializable {
     /**
      * The different roles the user can have.
      */
-    enum Role {
+    public enum Role {
         ADMIN,
         USER
     }

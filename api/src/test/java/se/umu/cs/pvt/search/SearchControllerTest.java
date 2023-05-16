@@ -20,6 +20,7 @@ import se.umu.cs.pvt.search.builders.SearchTechniquesDBBuilder;
 import se.umu.cs.pvt.search.interfaces.ExerciseSearchResponse;
 import se.umu.cs.pvt.search.interfaces.TagSearchResponse;
 import se.umu.cs.pvt.search.interfaces.TechniqueSearchResponse;
+import se.umu.cs.pvt.search.interfaces.UserSearchResponse;
 import se.umu.cs.pvt.search.interfaces.WorkoutSearchResponse;
 import se.umu.cs.pvt.search.persistance.SearchRepository;
 import se.umu.cs.pvt.search.persistance.TagCompleteRepository;
@@ -81,6 +82,15 @@ public class SearchControllerTest {
 		urlQuery.put("tags", "katt");
 
         ResponseEntity<TagResponse<TagSearchResponse>> response = controller.searchTags(urlQuery);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    void search_user_should_return_ok() {
+        Map<String, String> urlQuery = new HashMap<>();
+        urlQuery.put("name", "user");
+
+        ResponseEntity<SearchResponse<UserSearchResponse>> response = controller.searchUsers(urlQuery);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 }

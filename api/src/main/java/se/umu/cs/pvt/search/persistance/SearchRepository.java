@@ -38,4 +38,8 @@ public class SearchRepository {
     public List<PlanDBResult> getPlansFromCustomQuery(String query) {
         return entityManager.createNativeQuery(query, PlanDBResult.class).getResultList();
     }
+
+    public List<UserDBResult> getUsersFromCustomQuery(String query) {
+        return entityManager.createNativeQuery(query, UserDBResult.class).getResultList();
+    }
 }

@@ -21,6 +21,7 @@ import java.util.*;
  * @author Kraken (Christoffer Nordlander)
  * @author Kraken (Jonas Gustavsson)
  * @author Kraken (Oskar Westerlund Holmgren)
+ * @author Chimera (Ludvig Larsson)
  */
 
 @RestController
@@ -216,6 +217,32 @@ public class SearchController {
         List<PlanSearchResponse> planSearchResponses = new SearchPlanResponseBuilder(result).build();
 
         SearchResponse<PlanSearchResponse> response = new SearchResponse(planSearchResponses, new ArrayList<>());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * API endpoint for making search requests to Users.
+     * It filters the users based on the given query.
+     *
+     * Not that the query can be empty, or contain any or all of the entries.
+     *
+     * @param urlQuery The query passed with the request.
+     * @return A SearchResponseInterface.
+     */
+    @GetMapping("/users")
+    public ResponseEntity<SearchResponse<UserSearchResponse>> searchUsers(@RequestParam Map<String, String> urlQuery) {
+        SearchUserParams searchUserParams = new SearchUserParams(urlQuery);
+
+        DatabaseQuery createdQuery = new SearchUserDBBuilder(searchUserParams)
+                .filterById()
+                .filterByRole()
+                .build();
+
+        List<UserDBResult> result = searchRepository.getUsersFromCustomQuery(createdQuery.getQuery());
+        List<UserSearchResponse> userSearchResponses = new SearchUserResponseBuilder(result).build();
+        List<UserSearchResponse> filteredResult = fuzzySearchFiltering(searchUserParams.getName(), userSearchResponses);
+
+        SearchResponse<UserSearchResponse> response = new SearchResponse(filteredResult, new ArrayList<>());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
