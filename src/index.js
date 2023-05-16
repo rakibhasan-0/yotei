@@ -4,7 +4,6 @@ import { useRef } from "react"
 import { Cookies } from "react-cookie"
 import Home from "./pages/Home/Home"
 import ExerciseCreate from "./pages/Exercise/ExerciseCreate"
-import TechniqueCreate from "./pages/Technique/TechniqueCreate"
 import WorkoutIndex from "./pages/Workout/WorkoutIndex"
 import NoPage from "./pages/Misc/NoPage"
 import WorkoutCreate from "./pages/Workout/WorkoutCreate"
@@ -120,9 +119,7 @@ export default function App() {
 										<Route path="exercise/edit/:editID" element={<ExerciseEdit />} />
 										<Route path="home" element={<Home />} />
 										<Route path="technique" element={<TechniqueIndex />} />
-										<Route path="technique/create" element={<TechniqueCreate />} />
 										<Route path="technique/edit/:editID" element={<TechniqueEdit />} />
-										<Route path="techniques/add" element={<TechniqueCreate />} />
 										<Route path="upload-image" element={<ImageForm />} />
 										<Route path="workout" element={<WorkoutIndex uri={workoutURI} />} />
 										<Route path="exercise/exercise_page/:ex_id" element={<ExerciseDetailsPage />} />
