@@ -193,7 +193,7 @@ public class SessionController {
             toUpdate.setPlan(plan);
         }
         if(updateInfo.containsKey("date")){
-            LocalDate date = (LocalDate) updateInfo.get("date");
+            LocalDate date = LocalDate.parse(updateInfo.get("date").toString());
             toUpdate.setDate(date);
         }
         if(updateInfo.containsKey("time")){
