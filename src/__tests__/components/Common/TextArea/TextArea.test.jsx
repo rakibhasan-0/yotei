@@ -54,3 +54,27 @@ test("TextArea: placeholder should not change value", async() => {
 	// ASSERT
 	expect(textArea).toHaveValue("Default text")
 })
+
+test("TextArea: should display error message", async() => {
+	render(<TextArea id="testField" errorMessage="Something went wrong"/>)
+
+	expect(screen.getByRole("textbox", {name: /something went wrong/i})).toBeInTheDocument()
+})
+
+test("TextArea: should not display error message, empty string", async() => {
+	render(<TextArea id="testField" errorMessage=""/>)
+
+	expect(screen.queryByRole("textbox", {name: /something went wrong/i})).not.toBeInTheDocument()
+})
+
+test("TextArea: should not display error message, null", async() => {
+	render(<TextArea id="testField" errorMessage={null}/>)
+
+	expect(screen.queryByRole("textbox", {name: /something went wrong/i})).not.toBeInTheDocument()
+})
+
+test("TextArea: should not display error message, undefined", async() => {
+	render(<TextArea id="testField" errorMessage={undefined}/>)
+
+	expect(screen.queryByRole("textbox", {name: /something went wrong/i})).not.toBeInTheDocument()
+})

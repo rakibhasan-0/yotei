@@ -18,3 +18,27 @@ test("InputTextField: typed text should be returnable", async() => {
 	// ASSERT
 	expect(inputTextField).toHaveValue(text)
 })
+
+test("InputTextField: should display error message", async() => {
+	render(<InputTextField id="testField" errorMessage="Something went wrong"/>)
+
+	expect(screen.getByRole("textbox", {name: /something went wrong/i})).toBeInTheDocument()
+})
+
+test("InputTextField: should not display error message", async() => {
+	render(<InputTextField id="testField" errorMessage=""/>)
+
+	expect(screen.queryByRole("textbox", {name: /something went wrong/i})).not.toBeInTheDocument()
+})
+
+test("InputTextField: should not display error message, null", async() => {
+	render(<InputTextField id="testField" errorMessage={null}/>)
+
+	expect(screen.queryByRole("textbox", {name: /something went wrong/i})).not.toBeInTheDocument()
+})
+
+test("InputTextField: should not display error message, undefined", async() => {
+	render(<InputTextField id="testField" errorMessage={undefined}/>)
+
+	expect(screen.queryByRole("textbox", {name: /something went wrong/i})).not.toBeInTheDocument()
+})

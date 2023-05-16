@@ -1,5 +1,4 @@
-import React from "react"
-import "./TextArea.css"
+import styles from "./TextArea.module.css"
 
 /**
  * This is the standard textarea page, used for all textareas.
@@ -17,26 +16,37 @@ import "./TextArea.css"
  *    id: string
  *    defVal: string
  *    type: string
+ * 	  errorMessage: string
  * }
  * 
- * @author Team Chimera
- * @version 3.0
+ * Changes version 4.0
+ * 		Updated CSS to use CSS modules.
+ * 		Added prop errorMessage to display errors.
+ * 
+ * @author Team Chimera & Medusa
+ * @version 4.0
  * @since 2023-04-24
  */
-export default function TextArea({ placeholder, text, onChange, required, onBlur, onInput, readOnly, id,defVal,type}) {
+export default function TextArea({ placeholder, text, onChange, required, onBlur, onInput, readOnly, id, defVal, type, errorMessage}) {
+
+	const isErr = !(errorMessage == undefined || errorMessage == null || errorMessage == "")
+
 	return(
-		<textarea
-			className="stand-area"
-			placeholder={placeholder}
-			value={text}
-			defaultValue={defVal}
-			onChange={onChange}
-			onBlur={onBlur}
-			onInput={onInput}
-			required={required}
-			readOnly={readOnly}
-			id={id}
-			type={type}
-		/>
+		<label className={styles.label}>
+			<textarea
+				className={isErr ? `${styles.textarea} ${styles.textareaErr}` : `${styles.textarea}`}
+				placeholder={placeholder}
+				value={text}
+				defaultValue={defVal}
+				onChange={onChange}
+				onBlur={onBlur}
+				onInput={onInput}
+				required={required}
+				readOnly={readOnly}
+				id={id}
+				type={type}
+			/>
+			<p className={styles.err}>{errorMessage}</p>
+		</label>
 	) 
 }
