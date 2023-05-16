@@ -82,7 +82,7 @@ Minst en person måste review:a koden för att det ska gå att mergea till main 
   - Om ingen kollar igenom blir det i bästa fall lite mindre jobb men problem och låg kodkvalitet kan missas
   - Att kräva att fler än en person måste göra review kräver mer jobb och kan göra processen långsammare, men om någon vill lägga till fler än en person för review är det fortfarande möjligt.
 
-
+## 
 
 - **Datum** - 230413
 - **Chapters** - Bygg
@@ -91,6 +91,14 @@ Minst en person måste review:a koden för att det ska gå att mergea till main 
 - **Motivation**
   - Fixade linting för att projekten ska kunna byggas
   - Fixade SQL script för att kunna köras
+
+## Systemtest i pipeline 
+- **Datum** - 23-05-26
+- **Chapters** - Bygg
+- **Grupp** - NA
+- **Alternativ** - NA
+- **Motivation**
+  - Ska fixa så att systemtester endast körs vid mergerequests tills vidare eftersom det tar upp för mycket tid på pipeline. Systemtesterna går fortfarande att köra lokalt under utveckling. 
 
 
 
