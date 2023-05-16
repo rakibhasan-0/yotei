@@ -11,21 +11,21 @@ import "./MinutePicker.css"
  *
  * Example usage:
  *		const [time1, updateTime1] = useState("")
- *		<MinutePicker id="10" time={time1} updateTime={updateTime1}></MinutePicker>
+ *		<MinutePicker id="10" updateTime={updateTime1} initialValue={5}></MinutePicker>
  *
  *
- * @author Team Minotaur
- * @version 1.0
+ * @author Team Minotaur, Squad Phoenix
+ * @version 2.0
  * @since 2023-05-03
  */
-export default function MinutePicker({id, callback}) {
+export default function MinutePicker({id, callback, initialValue}) {
 	return (
 		<div className="minute-picker">
 			<input
 				id={`minute-picker-${id}`}
 				type="number"
 				pattern="[0-9]*"
-				// value={time}
+				value={initialValue}
 				placeholder="0"
 				onChange={(e) => e.target.validity.valid && callback(id, e.target.value)}
 				min="0"
