@@ -9,14 +9,6 @@
     margin: auto;
 }
 
-.workout-detail-icon-container {
-    display: flex;
-    justify-content: end;
-    align-items: center;
-    width: 50%;
-    gap: 1rem;
-}
-
 .click-icon {
     color: var(--red-primary);
     margin-left: 2rem;
@@ -100,7 +92,7 @@
     text-align: left;
 }
 
-.row-item {
+.workout-detail-row-item {
     display: flex;
 }
 
@@ -109,15 +101,15 @@
 
 }
 
-.column-item {
-    width: 50%;
-    padding-top: 10px;
+.workout-detail-column-item {
+    width: 100%;
+    padding: 10px 0px;
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: left;
 }
 
-.column-item-right {
+.workout-detail-column-item-right {
     padding-left: 37px;
 }
 

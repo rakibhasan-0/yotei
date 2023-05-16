@@ -195,56 +195,50 @@ function getWorkoutInfoContainer(workoutData, setShowPopup) {
 		<>
 			<div className="container px-0">
 				<div className={"info"}>
-					<div className="row-item">
-						<div className="column-item">
-							<h1 className="font-weight-bold text-truncate">{workoutData.name}</h1>
+					<div className="workout-detail-row-item">
+						<div className="col workout-detail-column-item">
+							<h1 className="font-weight-bold">{workoutData.name}</h1>
 						</div>
-						<div className="workout-detail-icon-container">
-							<Printer
-								size="24px"
-								color="var(--red-primary)"
-								style={{cursor: "pointer"}}	
-							/>
-							<Link state={{workout: workoutData}} to={"/workout/edit"}>
-								<Pencil
-									size="24px"
-									color="var(--red-primary)"
-									style={{cursor: "pointer"}}
-								/>
-							</Link>
-							<Trash
+					</div>
+					<div className="d-flex justify-content-end">
+						<Printer
+							size="24px"
+							color="var(--red-primary)"
+							style={{cursor: "pointer"}}	
+						/>
+						<Link className="ml-3" state={{workout: workoutData}} to={"/workout/edit"}>
+							<Pencil
 								size="24px"
 								color="var(--red-primary)"
 								style={{cursor: "pointer"}}
-								onClick={() => setShowPopup(true)}
 							/>
-						</div>					
-					</div>
+						</Link>
+						<Trash
+							className="ml-3 mr-3"
+							size="24px"
+							color="var(--red-primary)"
+							style={{cursor: "pointer"}}
+							onClick={() => setShowPopup(true)}
+						/>
+					</div>					
 					
-					<div className="row-item">
-						<div className="column-item">
-							<h2 className="font-weight-bold mb-0" id="no-print">Fullständigt namn</h2>
-							<p className="properties" id="no-print">{workoutData.name}</p>
-						</div>
-					</div>
-					
-					<div className="row-item">
-						<div className="column-item">
+					<div className="workout-detail-row-item mt-3">
+						<div className="workout-detail-column-item">
 							<h2 className="font-weight-bold mb-0">Författare</h2>
 							<p>{workoutData.author.username}</p>
 						</div>
-						<div className="column-item column-item-right">
+						<div className="workout-detail-column-item workout-detail-column-item-right">
 							<h2 className="font-weight-bold mb-0">Tidslängd</h2>
 							<p>{workoutData.duration} min</p>
 						</div>
 					</div>
 
-					<div className={"row-item"} id="no-print">
-						<div className={"column-item"}>
+					<div className={"workout-detail-row-item"} id="no-print">
+						<div className={"workout-detail-column-item"}>
 							<h2 className="font-weight-bold mb-0">Skapad</h2>
 							<p>{workoutData.created}</p>
 						</div>
-						<div className={"column-item column-item-right"}>
+						<div className={"workout-detail-column-item workout-detail-column-item-right"}>
 							<h2 className="font-weight-bold mb-0 text-align-left">Senast ändrad</h2>
 							<p>{workoutData.changed}</p>
 						</div>
