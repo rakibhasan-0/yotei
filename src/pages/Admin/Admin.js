@@ -3,6 +3,7 @@ import Export from "../../components/Admin/Export"
 import Import from "../../components/Admin/Import"
 import ManageUser from "../../components/Admin/ManageUser"
 import { AccountContext } from "../../context"
+import { isAdmin } from "../../utils"
 import "./Admin.css"
 
 /**
@@ -16,7 +17,7 @@ class Developer extends React.Component {
    * Defines the html for the page.
    */
 	render() {
-		if(this.context.role !== "ADMIN"){
+		if(!isAdmin(this.context)){
 			window.location.replace("/home")
 			return null
 		}

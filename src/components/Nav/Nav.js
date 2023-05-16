@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button"
 import { useState, useContext } from "react"
 import ClickAwayListener from "react-click-away-listener"
 import { AccountContext } from "../../context"
+import { isAdmin } from "../../utils"
 
 /**
  * Nav bar for app
@@ -16,7 +17,7 @@ const Nav = () => {
 	let oldScrollY = window.scrollY
 	const [menuOpen, setMenuOpen] = useState(false)
 	const [userName, setUserName] = useState("")
-	const {role} = useContext(AccountContext)
+	const context = useContext(AccountContext)
 	const { token, userId} = useContext(AccountContext)    
     
 	useEffect(() => {
@@ -83,12 +84,10 @@ const Nav = () => {
 									<li className={"menu-item"}>
 										<Link onClick={() => setMenuOpen(false)} to="/technique">Tekniker</Link>
 									</li>
-									{
-										role === "ADMIN" ? (
-											<li className={"menu-item"}>
-												<Link onClick={() => setMenuOpen(false)} to="/admin">Admin</Link>
-											</li>
-										) : null
+									{ isAdmin(context) && 
+										<li className={"menu-item"}>
+											<Link onClick={() => setMenuOpen(false)} to="/admin">Admin</Link>
+										</li>
 									}
 									<li className={"menu-item"}>
 										<Link onClick={() => setMenuOpen(false)} to="/about">About</Link>

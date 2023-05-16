@@ -3,13 +3,14 @@ import WorkoutActivityList from "../../components/Workout/WorkoutActivityList/Wo
 import EditButton from "../../components/Common/EditButton"
 import "/WorkoutView/WorkoutView.css"
 import { AccountContext } from "../../context"
-import {useParams} from "react-router-dom"
+import { useParams } from "react-router-dom"
 import FavoriteButton from "../../components/Common/StarButton/StarButton"
 import PrintButton from "../../components/Common/PrintButton"
 import ReviewForm from "../../components/Workout/ReviewFormComponent"
 import GoBackButton from "../../components/Common/GoBackButton"
 import DuplicateButton from "../../components/Common/DuplicateButton"
-import {ButtonGroup, Collapse, Dropdown} from "react-bootstrap"
+import { ButtonGroup, Collapse, Dropdown } from "react-bootstrap"
+import { isEditor } from "../../utils"
 import Button from "../../components/Common/Button/Button"
 import Modal from "react-bootstrap/Modal"
 
@@ -80,7 +81,7 @@ class WorkoutView extends React.Component {
      * @returns True if the current user is an admin or is the creator of the workout and false otherwise.
      */
 	isCreatorOrAdmin() {
-		return this.context.role === "ADMIN" || this.state.authorID === this.context.userId
+		return isEditor(this.context) || this.state.authorID === this.context.userId
 	}
 
 	/**

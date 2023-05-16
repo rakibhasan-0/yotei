@@ -5,6 +5,7 @@ import {AccountContext} from "../../context"
 import Modal from "react-bootstrap/Modal"
 import Button from "../Common/Button/Button"
 import AlertWindow from "../Common/AlertWindow"
+import { isAdmin } from "../../utils"
 
 //should be 0 for the smileys to work
 const UNINITIALIZED = 0
@@ -243,7 +244,7 @@ class ReviewForm extends React.Component {
 	deleteButtonFunc(review) {
 
 		// Check if the logged in user has delete privileges.
-		if (this.context.role === "ADMIN" || this.context.userId === review.userId) {
+		if (isAdmin(this.context) || this.context.userId === review.userId) {
 			return <button className='delete-btn btn btn-color' onClick={() => {
 				review.showDelete = true
 				this.forceUpdate()

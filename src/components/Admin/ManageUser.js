@@ -9,6 +9,7 @@ import { reactSelectStyle } from "../../Globals/global_style"
 import { Cookies } from "react-cookie"
 import { decodeToken } from "react-jwt"
 import { logOut } from "/src/utils"
+import { Roles } from "/src/context"
 
 
 /**
@@ -276,7 +277,7 @@ class ManageUser extends React.Component {
 			this.removeUserBtn.disabled = true
 		}
 		else {
-			if (inputValue.value.userRole === "ADMIN") {
+			if (inputValue.value.userRole === Roles.admin) {
 				this.changeRoleBtn.innerHTML = "Ta bort admin status"
 			}
 			else {
@@ -335,7 +336,7 @@ class ManageUser extends React.Component {
 	prepareChangeRole() {
 		this.currentStatusLabel = this.changeRoleStatusLbl
 
-		if (this.chooseUserSelect.getValue()[0].value.userRole === "ADMIN") {
+		if (this.chooseUserSelect.getValue()[0].value.userRole === Roles.admin) {
 			this.successMessage = `${this.chooseUserSelect.getValue()[0].value.username} är inte längre admin`
 		}
 		else {
