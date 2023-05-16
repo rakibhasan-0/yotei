@@ -18,6 +18,8 @@ import React, { useEffect } from "react"
  * 	   maxHeight @type {pixels} - Max width of the popup window
  * 	   isNested @type {boolean} - disables the tinted background and fills the parent container. 
  * 								  Should be used in nested popups.
+ * 	   useNoHeightWidth @type {boolean} - disables the height and width properties of the popup.
+ * 					Should be used when the popup should adjust its size to its content.
  *
  *Example usage:
  *  
@@ -31,9 +33,9 @@ import React, { useEffect } from "react"
  *		</div>
  * 	)
  *
- * @author Team Medusa
- * @version 1.0
- * @since 2023-05-02
+ * @author Team Medusa, Team Chimera
+ * @version 1.1
+ * @since 2023-05-16
  */
 export default function Popup({ title, id, isOpen, setIsOpen, children, width, height, isNested, maxWidth, maxHeight, useNoHeightWidth }) {
 
@@ -55,10 +57,10 @@ export default function Popup({ title, id, isOpen, setIsOpen, children, width, h
 			maxHeight: `${maxHeight}px`
 		}
 		if (width) {
-			popupStyle.width = width
+			popupStyle.width = `${width}%`
 		}
 		if (height) {
-			popupStyle.height = height
+			popupStyle.height = `${height}%`
 		}
 		
 	}

@@ -13,6 +13,7 @@ import Button from "../Button/Button"
  * 	   maxWidth @type {pixels} - Max width of the popup window
  * 	   maxHeight @type {pixels} - Max width of the popup window
  *     onClick @type {function} - For the delete button to do something
+ * 	   popupText @type {string} - Text to be displayed in the popup
  *
  *Example usage:
  *  
@@ -27,8 +28,8 @@ import Button from "../Button/Button"
  * 	)
  *
  * @author Team Chimera
- * @version 1.0
- * @since 2023-05-04
+ * @version 1.1
+ * @since 2023-05-16
  */
 
 export default function ConfirmPopup({ onClick, id, showPopup, setShowPopup, popupText}) {
