@@ -102,6 +102,7 @@ deploy:
   <<: *skippable
   image: ubuntu:latest
   stage: deploy
+  resource_group: deploy_prod
   before_script:
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - mkdir -p ~/.ssh
@@ -116,6 +117,7 @@ deploy:
 deploy_javadoc:
   <<: *skippable
   image: ubuntu:latest
+  resource_group: deploy_prod
   stage: deploy
   before_script:
     - apt-get update -y && apt-get upgrade -y && apt install openssh-client maven rsync openjdk-17-jdk openjdk-17-jre -y
