@@ -406,7 +406,9 @@ INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Blått', '0DB7ED', T
 INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Brunt', 'BB6500', False);
 INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Brunt', 'BB6500', True);
 INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Svart', '000000', False);
-INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Svart', '000000', True);
+INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('1 Dan', '000000', False);
+INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('2 Dan', '000000', False);
+INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('3 Dan', '000000', False);
 
 
 --
