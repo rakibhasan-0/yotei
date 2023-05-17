@@ -23,7 +23,7 @@ import { ChevronRight } from "react-bootstrap-icons"
  * @param {string} id A unique id of the component (Testing purposes)
  * @param {function} setShowActivityInfo Callback function to report selected activities
  *  
- * @author Kraken
+ * @author Kraken (Grupp 7)
  * @since 2023-05-16
  */
 function AddActivity({id, setShowActivityInfo}) {
@@ -81,6 +81,13 @@ function AddActivity({id, setShowActivityInfo}) {
 		searchExercises()
 	}, [searchExerText, selectedExerTags])
 
+	/**
+	 * Function for handling when a belt has been picked from the BeltPicker.
+	 * Returns an object that is a list of the selected belts.
+	 * 
+	 * @param {bool} checked Boolean if the checkbox for the selected belt was already pressed.
+	 * @param {object} belt Object that is an list of the selected belts from the BeltPicker.
+	 */
 	function handleBeltChanged(checked, belt) {
 		setSelectedBelts(prev => {
 			if(!checked) {
@@ -92,6 +99,11 @@ function AddActivity({id, setShowActivityInfo}) {
 		})
 	}
 
+	/**
+	 * Function for handling the kihon checkbox in the TechniqueFilter.
+	 * 
+	 * @param {bool} newKihon True/False if the kihon is selected or not.
+	 */
 	function handleKihonChanged(newKihon) {
 		setKihon(newKihon)
 	}
