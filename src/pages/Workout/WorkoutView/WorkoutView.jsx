@@ -152,7 +152,7 @@ function getPopupContainer(showPopup, setShowPopup, workoutId, context, navigate
 }
 
 function getReviewContainer(showRPopup, setRShowPopup, workoutId){
-	return (showRPopup && setRShowPopup && <Review isOpen={showRPopup} setIsOpen={setRShowPopup} workout_id={workoutId}/>)
+	return (<Review isOpen={showRPopup} setIsOpen={setRShowPopup} workout_id={workoutId}/>)
 }
 
 async function deleteWorkout(workoutId, context, navigate, setShowPopup) {
