@@ -151,7 +151,7 @@ export default function WorkoutIndex({detailURL}) {
 		setCookie("workout-filter", {from: args.from, to: args.to, isFavorite: args.isFavorite, tags: tags}, {path: "/"})
 		getWorkouts(args, token, cache, cacheActions, (response) => {
 			if(response.error) {
-				setError("Serverfel: Något gick fel med sökningen!")
+				setError("Serverfel: Kunde inte ansluta till servern!")
 			} else {
 				setWorkouts(response.results)
 				setSuggestedTags(response.tagCompletion)

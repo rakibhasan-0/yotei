@@ -1,5 +1,6 @@
 import { Cookies } from "react-cookie"
 import { Roles } from "./context"
+import {toast} from "react-toastify"
 
 /**
  * Use:
@@ -37,9 +38,42 @@ export function logOut() {
 	document.location.replace("/")
 }
 
+/**
+ * Sets the message of a toast error message and displays it.
+ */
+export function setError(msg) {
+	toast.error(msg, {
+		position: "top-center",
+		autoClose: 5000,
+		hideProgressBar: false,
+		closeOnClick: true,
+		pauseOnHover: true, 
+		draggable: false,
+		progress: undefined,
+		theme: "colored",
+	})
+}
+
+/**
+ * Sets the message of a toast success message and displays it.
+ */
+export function setSuccess(msg) {
+	toast.success(msg, {
+		position: "top-center",
+		autoClose: 5000,
+		hideProgressBar: false,
+		closeOnClick: true,
+		pauseOnHover: true,
+		draggable: true,
+		progress: undefined,
+		theme: "colored",
+	})
+}
+
 export const HTTP_STATUS_CODES = {
 	OK: 200,
 	SUCCESS: 201,
+	BAD_REQUEST: 400,
 	NOT_FOUND: 404,
 	NOT_ACCEPTABLE: 406,
 	CONFLICT: 409,

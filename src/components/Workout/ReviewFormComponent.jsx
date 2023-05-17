@@ -5,9 +5,8 @@ import Button from "../Common/Button/Button"
 import Ratings from "react-ratings-declarative"
 import Star from "../Common/StarButton/StarButton"
 import {Trash } from "react-bootstrap-icons"
-import {HTTP_STATUS_CODES} from "../../utils"
+import {HTTP_STATUS_CODES, setError, setSuccess} from "../../utils"
 import { AccountContext } from "../../context"
-import {toast} from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
 
@@ -30,7 +29,6 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 	const[negativeComment, setNegative] = useState("")
 	const[currentComment, setCurrentComment] = useState()
 	const[showDeletePopup, setShowDeletePopup] = useState(false)
-	const[addedReview, setAddedReview] = useState("")
 
 	const {token, userId} = useContext(
 		AccountContext
@@ -39,9 +37,13 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 	useEffect(() => {
 
 		async function fetchComments() {
-			const response = await fetch("/api/workouts/reviews?id=" + workout_id, {headers:{token,"userId": userId}})
-			if(response.status === HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
-				setError("Serverfel: Kunde inte hämta utvärderingar för passet!")
+			const response = await fetch("/api/workouts/reviews?id=" + workout_id, {headers:{token,"userId": userId}}).catch(() => {
+				setError("Serverfel: Kunde inte hämta utvärderingar för passet.")
+				return	
+			})
+
+			if(response.status != HTTP_STATUS_CODES.OK) {
+				setError("Serverfel: Något gick snett! Felkod: " + response.status)
 				return
 			} 
 			
@@ -70,10 +72,13 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 				"date": ts
 			})
 		}
-		// TODO 
-		const postResponse = await fetch("/api/workouts/reviews", requestOptions)
-		if(postResponse.status === HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) { 
-			setError("Serverfel: Kunde inte lägga till utvärdering!")
+ 
+		const postResponse = await fetch("/api/workouts/reviews", requestOptions).catch(() => {
+			setError("Serverfel: Kunde ansluta till servern.")
+			return	
+		})
+		if(postResponse.status != HTTP_STATUS_CODES.OK) { 
+			setError("Serverfel: Något gick snett! Felkod: " + postResponse.status)
 			return 
 		}   
 
@@ -85,20 +90,7 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 		setPositive("")
 		setNegative("")
 		setRating(0)
-		setAddedReview("Utvärdering tillagd")
-	}
-
-	function setError(msg){
-		toast.error(msg, {
-			position: "top-center",
-			autoClose: 5000,
-			hideProgressBar: false,
-			closeOnClick: true,
-			pauseOnHover: true, 
-			draggable: false,
-			progress: undefined,
-			theme: "colored",
-		})
+		setSuccess("Utvärdering tillagd")
 	}
 
 	function getTodaysDate() {
@@ -125,9 +117,14 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 			headers: {"token": token}
 		}
 
-		const respone = await fetch(`/api/workouts/reviews?id=${review_id}`, requestOptions)
-		if(respone.status === HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
-			setError("Serverfel: Kunde inte ta bort utvärderingen!")
+		const respone = await fetch(`/api/workouts/reviews?id=${review_id}`, requestOptions).catch(() => {
+			setError("Serverfel: Kunde inte ansluta till servern.")
+			return	
+		})
+		if(respone.status === HTTP_STATUS_CODES.NOT_FOUND) {
+			setError("Utvärderingen existerar inte längre!")
+		} else if(respone.status != HTTP_STATUS_CODES.OK) {
+			setError("Serverfel: Något gick snett! Felkod: " + respone.status)
 			return
 		}
 		setCommentList(commentList.filter(c => c.review_id != review_id))
@@ -195,7 +192,6 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 						</div>
 						<div className="col-md-6 p-0"> 
 							<Button width={"100%"} onClick={() => addReview()}>Lägg till</Button>
-							<p style={{color: "green", marginTop: "20px"}}>{addedReview}</p>
 						</div>
 					</div>
 					<div className="horizontal-line align-self-center w-100" style={{marginTop: "20px"}}></div>
