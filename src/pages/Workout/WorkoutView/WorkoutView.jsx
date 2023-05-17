@@ -242,24 +242,24 @@ function getWorkoutInfoContainer(workoutData, setShowPopup) {
 						<div className="col workout-detail-column-item">
 							<h1 className="font-weight-bold">{workoutData.name}</h1>
 						</div>
-						<div className="workout-detail-icon-container">
-							<PrintButton workoutData={workoutData} />
-							<Link className="ml-3" state={{workout: workoutData}} to={"/workout/edit"}>
-								<Pencil
-									size="24px"
-									color="var(--red-primary)"
-									style={{cursor: "pointer"}}
-								/>
-							</Link>
-							<Trash
-								className="ml-3 mr-3"
+					</div>			
+					<div className="d-flex justify-content-end align-items-center">
+						<PrintButton workoutData={workoutData} />
+						<Link className="ml-3" state={{workout: workoutData}} to={"/workout/edit"}>
+							<Pencil
 								size="24px"
 								color="var(--red-primary)"
 								style={{cursor: "pointer"}}
-								onClick={() => setShowPopup(true)}
 							/>
-						</div>	
-					</div>				
+						</Link>
+						<Trash
+							className="ml-3 mr-3"
+							size="24px"
+							color="var(--red-primary)"
+							style={{cursor: "pointer"}}
+							onClick={() => setShowPopup(true)}
+						/>
+					</div>
 					
 					<div className="workout-detail-row-item mt-3">
 						<div className="workout-detail-column-item">
