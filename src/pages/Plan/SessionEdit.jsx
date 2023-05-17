@@ -1,5 +1,5 @@
 import TimePicker from "../../components/Common/TimePicker/TimePicker"
-// import DatePicker from "../../components/Common/DatePicker/DatePicker"
+import DatePicker from "../../components/Common/DatePicker/DatePicker"
 import Button from "../../components/Common/Button/Button"
 import Dropdown from "../../components/Common/List/Component"
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
@@ -110,7 +110,6 @@ export default function SessionEdit() {
 	}
 
 	const updateSession = async () => {
-		console.log(date)
 		try {
 			const requestOptions = {
 				method: "PUT",
@@ -120,10 +119,9 @@ export default function SessionEdit() {
 					time,
 					workout : workout !== null ? workout.id : null,
 					plan: group.id,
-					// date: date + `T${time}:00.000Z`
+					date: date
 				})
 			}
-			console.log(requestOptions.body)
 
 			const response = await fetch(`/api/session/update?id=${params.session_id}`, requestOptions)
 			if (!response.ok) {
@@ -160,8 +158,8 @@ export default function SessionEdit() {
 					
 					<Divider option={"h2_left"} title={"Datum och Tid"} />
 					<div className="wrap-centering" >
+						<DatePicker selectedDate={date} onChange={e => setDate(e.target.value)} id={"session-datepicker"} />
 						<TimePicker selectedTime={time} onChange={e => setTime(e.target.value)} id={"session-timepicker"} />
-						{/* <DatePicker selectedDate={date} onChange={e => setDate(e.target.value)} id={"session-datepicker"} /> */}
 					</div>
 
 					<Divider option={"h2_left"} title={"Pass"} />
