@@ -3,10 +3,10 @@ import ReactPlayer from "react-player"
 
 // Render a YouTube video player or local file
 
-export default function VideoPlayerReactPlayer({ path }) {
-	// return <ReactPlayer url={path} />;
+export default function VideoPlayerReactPlayer({id, path, editMode}) {
+	const style = editMode ? { marginBottom: "0px" } :  { marginBottom: "30px" }
 	return (
-		<div className="player-wrapper">
+		<div className="player-wrapper" style={style} id={id}>
 			<ReactPlayer
 				className="react-player fixed-bottom"
 				url={path}

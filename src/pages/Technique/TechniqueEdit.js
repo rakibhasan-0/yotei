@@ -365,7 +365,7 @@ class TechniqueEdit extends React.Component {
 			<div className="container">
 				<div className="row justify-content-center">
 					<div className="col-md-8">
-						<EditGallery id={this.state.id}/>
+						<EditGallery exerciseId={this.state.id}/>
 						<h2 className="display-4 text-center"><strong>Uppdatera teknik</strong></h2>
 						{/*Form to get input from user*/}
 

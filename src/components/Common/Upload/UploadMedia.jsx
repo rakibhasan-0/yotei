@@ -13,23 +13,19 @@ import ReactPlayer from "react-player"
  * 
  * Props:
  *     id @type {number}  - Id of component
- *     exercise_id - Id of an exercise or technique that the uploaded media belongs to 
+ *     exerciseId  @type {number} - Id of an exercise or technique that the uploaded media belongs to 
  *
  * Example usage:
- *     <UploadMedia id={11} exercise_id={current_technique}/>
+ *     <UploadMedia id={11} exerciseId={current_technique}/>
  *
  * @author Team Dragon (Group 3)
  * @version 1.0
  * @since 20XX-XX-XX
  */
 
-function UploadMedia({id, exercise_id}) {
+function UploadMedia({id, exerciseId}) {
 	const [link, setLink] = useState("")
 	const context = useContext(AccountContext)
-
-	console.log(id)
-	console.log(exercise_id)
-	console.log(context)
 	//const {token, setToken} = useContext(AccountContext)
 
 	
@@ -38,8 +34,6 @@ function UploadMedia({id, exercise_id}) {
      */
 	async function uploadMediaClicked() {
 		setLink("Upload")
-		console.log(link)
-        
 	}
 
 	/**
@@ -57,7 +51,7 @@ function UploadMedia({id, exercise_id}) {
 				method: "POST",
 				headers: { "Content-type": "application/json", "token": context.token },
 				body: JSON.stringify([{
-					movementId: id,
+					movementId: exerciseId,
 					url: link,
 					localStorage: false,
 					image: image,
@@ -84,7 +78,7 @@ function UploadMedia({id, exercise_id}) {
 	}
 
 	return (
-		<div>
+		<div id={id}>
 			<div className="d-flex justify-content-center upload-media-container">
 				<Button onClick={uploadMediaClicked}
 					outlined={false}

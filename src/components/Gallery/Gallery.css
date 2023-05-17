@@ -1,23 +1,20 @@
 .player-wrapper {
-    width: 100%;
-    margin-top: 3%;
+    z-index: 2;
+    width: auto;
+    height: 300px;
+    margin-bottom: 30px;
 }
 
+
 .react-player {
-    width: 100%;
-    height: 100%;
     position: relative;
 }
 
 .react-player > div {
-    width: 100%;
-    height: 100%;
     position: absolute;
 }
 
 .react-player > video {
-    width: 100%;
-    height: 100%;
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 20px;
@@ -72,45 +69,26 @@
 
 .carousel.carousel-slider .control-arrow {
     top: 0;
-    color: #ffff;
+    color: #fff;
     font-size: 26px;
     bottom: 0;
     margin-top: 0;
     padding: 0px;
     margin-top: auto;
     margin-bottom: auto;
-    height: 50%;
+    height: 0%;
 }
 
 .carousel .control-prev.control-arrow::before {
-    content: '';
-    border: solid #BE3B41;
-    border-width: 0 4px 4px 0;
-    display: inline-block;
-    padding: 4px;
-    transform: rotate(135deg);
-    -webkit-transform: rotate(135deg);
+    border-right: 8px solid black;
+    color: black;
+    opacity: 1;
 }
 
 .carousel .control-next.control-arrow::before {
-    content: '';
-    border: solid #BE3B41;
-    border-width: 0 4px 4px 0;
-    display: inline-block;
-    padding: 4px;
-    transform: rotate(-45deg);
-    -webkit-transform: rotate(-45deg);
-    margin: 0px;
-}
-
-.carousel .control-next.control-arrow, .carousel .control-next.control-arrow:hover{
-    background-color: transparent;
-    right: 10px;
-}
-
-.carousel .control-prev.control-arrow, .carousel .control-prev.control-arrow:hover {
-    background-color: transparent;
-    left: 10px;
+    border-left: 8px solid black;
+    color: black;
+    opacity: 1;
 }
 
 .carousel .slide iframe {
@@ -133,4 +111,10 @@
 .image-player {
     padding-top: 0%;
     height: 100%;
+}
+
+.w-25 {
+    width: 70%!important;
+    padding-top: 15%;
+    padding-bottom: 15%;
 }
