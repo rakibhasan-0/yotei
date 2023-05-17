@@ -1,6 +1,6 @@
 import { createRoot } from "react-dom/client"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import { Cookies } from "react-cookie"
+import { Cookies, CookiesProvider } from "react-cookie"
 import Home from "./pages/Home/Home"
 import ExerciseCreate from "./pages/Exercise/ExerciseCreate"
 import WorkoutIndex from "./pages/Workout/WorkoutIndex"
@@ -132,4 +132,4 @@ export default function App() {
 
 const container = document.getElementById("root")
 const root = createRoot(container)
-root.render(<App />)
+root.render(<CookiesProvider><App /></CookiesProvider>)

@@ -1,4 +1,5 @@
-import React, {useState, useEffect, useContext} from "react"
+import React, { useState, useEffect, useContext } from "react"
+import { useCookies } from "react-cookie"
 import SearchBar from "../../components/Common/SearchBar/SearchBar"
 import "../../components/Common/SearchBar/SearchBarUtils"
 import "../../pages/Exercise/ExerciseIndex.css"
@@ -21,6 +22,7 @@ import ExerciseCreate from "../../pages/Exercise/ExerciseCreate"
  * @version 1.0
  */
 function ExerciseIndex() {
+	const [cookies, setCookie] = useCookies(["exercise-filter"])
 	const [visibleList, setVisibleList] = useState([])
 	const [searchText, setSearchText] = useState("")
 	const [addedTags, setAddedTags] = useState([])
@@ -30,6 +32,12 @@ function ExerciseIndex() {
 	const [popupVisible, setPopupVisible] = useState(false)
 	const [map, mapActions] = useMap()
 
+	useEffect(() => {
+		const filterCookie = cookies["exercise-filter"]
+		if(filterCookie) {
+			setAddedTags(filterCookie.tags)
+		}
+	}, [])
 
 	useEffect(() => {
 
@@ -45,6 +53,7 @@ function ExerciseIndex() {
 			setVisibleList(result.results)
 			setSuggestedTags(result.tagCompletion)
 			console.log(result.results)
+			setCookie("exercise-filter", {tags: addedTags}, {path: "/"})
 		})
 	}, [searchText, addedTags])
 	const handleClosePopup = () => {

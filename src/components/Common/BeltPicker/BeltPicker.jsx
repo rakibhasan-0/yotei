@@ -19,20 +19,39 @@ const BeltRow = ({ belt, states, onToggle }) => {
 	const name = belt[0].name
 	const child = belt[1]
 	const adult = belt[0]
+
+	const [childState, setChildState] = useState(false)
+	const [adultState, setAdultState] = useState(false)
+
+	useEffect(() => {
+		setChildState(states?.some(b => b.id === child.id))
+		setAdultState(states?.some(b => b.id === adult.id))
+	}, []) // eslint-disable-line react-hooks/exhaustive-deps
+
 	return (
 		<div className="belt-row">
 			<div className="belt-item">
-				<CheckBox id={`belt-child-${name}`} onClick={(checked) => onToggle(checked, child)} checked={states?.some(b => b.id === child.id)} />
+				<CheckBox id={`belt-child-${name}`} onClick={toggleChildState} checked={childState} />
 				{/* Set the belt color to red if its white and a child */}
 				<BeltIcon id={`belt-child-${name}-text`} color={`#${child.color}`} child={true} />
 			</div>
 			<p id={"belt-text"} className="belt-text">{name}</p>
 			<div className="belt-item">
 				<BeltIcon id={`belt-adult-${name}`} color={`#${adult.color}`} />
-				<CheckBox id={`belt-adult-${name}-text`} onClick={(checked) => onToggle(checked, adult)} checked={states?.some(b => b.id === adult.id)} />
+				<CheckBox id={`belt-adult-${name}-text`} onClick={toggleAdultState} checked={adultState} />
 			</div>
 		</div>
 	)
+
+	function toggleChildState(state) {
+		setChildState(state)
+		onToggle(state, child)
+	}
+
+	function toggleAdultState(state) {
+		setAdultState(state)
+		onToggle(state, adult)
+	}
 }
 
 /**

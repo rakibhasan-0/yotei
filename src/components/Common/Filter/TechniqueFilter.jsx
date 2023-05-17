@@ -20,22 +20,13 @@ import BeltIcon from "../BeltIcon/BeltIcon"
  * @version 1.0
  * @since 2023-05-03
  */
-function TechniqueFilter({id, belts, setBelts, kihon, setKihon}){
-
-	const onToggle = (checked, belt) => setBelts(prev => {
-		if(!checked) {
-			return prev.filter(b => b !== belt)
-		}
-		else {
-			return [...prev, belt]
-		}
-	})
+function TechniqueFilter({id, belts, onBeltChange, kihon, onKihonChange}){
 	
 	// Checks which of the belts that should be displayed, should be refactored and made better. Works for now...
 	return (
 		<div id={id} className="filterPos">
 			<FilterContainer id={1}>
-				<BeltPicker onToggle={onToggle} states={belts} />
+				<BeltPicker onToggle={onBeltChange} states={belts} />
 				<p className="selected-text">{!(belts.length > 0) ? "" : "Valda bälten"}</p>
 				<div className="selected-group">
 					{belts?.map((belt, index) => (
@@ -43,7 +34,7 @@ function TechniqueFilter({id, belts, setBelts, kihon, setKihon}){
 					))}
 				</div>
 				<div className="kihon-group">
-					<CheckBox checked={kihon} onClick={()=>setKihon(!kihon)}/>
+					<CheckBox checked={kihon} onClick={()=> onKihonChange(!kihon)}/>
 					<p className="kihon-text">Kihon</p>
 				</div>
 			</FilterContainer>

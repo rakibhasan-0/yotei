@@ -25,15 +25,24 @@ function TechniqueIndex() {
 	const context = useContext(AccountContext)
 	const [cookies, setCookie] = useCookies(["technique-filter"])
 
-	const filterCookie = cookies["technique-filter"]
-	const [kihon, setKihon] = useState(filterCookie?.kihon || false)
-	const [belts, setBelts] = useState(filterCookie?.belts || [])// eslint-disable-line
+	const [kihon, setKihon] = useState(false)
+	const [belts, setBelts] = useState([])// eslint-disable-line
 
 	const [searchBarText, setSearchBarText] = useState("")
 	const [map, mapActions] = useMap()
 	const [tags, setTags] = useState([])
 	const [suggestedTags, setSuggestedTags] = useState([])
 	const [showPopup, setShowPopup] = useState(false)
+
+	useEffect(() => {
+		const filterCookie = cookies["technique-filter"]
+		if(filterCookie) {
+			setBelts(filterCookie.belts)
+			setKihon(filterCookie.kihon)
+			setTags(filterCookie.tags)
+		}
+	}, []) // eslint-disable-line react-hooks/exhaustive-deps
+
 
 	useEffect(() => {
 		// The selected belts are transformed from an array of belts objects to an array of strings, consisting of the belt names
@@ -43,15 +52,14 @@ function TechniqueIndex() {
 			kihon: kihon,
 			selectedTags: tags,
 		}
-
-		setCookie("technique-filter", {belts: belts, kihon: kihon}, {path: "/technique"})
+		setCookie("technique-filter", {belts: belts, kihon: kihon, tags: tags}, {path: "/"})
 
 		getTechniques(args, context.token, map, mapActions, res => {
 			setSuggestedTags(res.tagCompletion)
 			setTechniques(res.results)
 		})
 
-	}, [searchBarText, belts, kihon, tags, setCookie])
+	}, [searchBarText, belts, kihon, tags, context.token, map, mapActions])
 
 	return (
 		<>
@@ -73,18 +81,16 @@ function TechniqueIndex() {
 				/>
 				<div style={{}}>
 					<TechniqueFilter
-						setBelts={setBelts}
 						belts={belts}
-						setKihon={kihon => {setKihon(kihon)}}
+						onBeltChange={handleBeltChanged}
 						kihon={kihon}
+						onKihonChange={handleKihonChanged}
 						id="test"
 					/>
 				</div>
 			</div>
-			{techniques !== undefined ?
+			{techniques &&
 				<ActivityList activities={techniques} apiPath={"techniques"}/>
-				:
-				null
 			}
 			<RoundButton onClick={() => setShowPopup(true)}>
 				<Plus className="plus-icon" />
@@ -93,6 +99,20 @@ function TechniqueIndex() {
 
 	)
 
+	function handleBeltChanged(checked, belt) {
+		setBelts(prev => {
+			if(!checked) {
+				return prev.filter(b => b.id !== belt.id)
+			}
+			else {
+				return [...prev, belt]
+			}
+		})
+	}
+
+	function handleKihonChanged(newKihon) {
+		setKihon(newKihon)
+	}
 }
 
 export default TechniqueIndex

@@ -42,12 +42,20 @@ export default function WorkoutIndex({detailURL}) {
 	const nextMonth = new Date(today)
 	nextMonth.setMonth(today.getMonth() + 1)
 
-	const filterCookie = cookies["workout-filter"] 
-	const [ filterFavorites, setFilterFavorites ] = useState(filterCookie?.isFavorite || false)
+	const [ filterFavorites, setFilterFavorites ] = useState(false)
 	const [ dates, setDates ] = useState({
-		from: filterCookie?.from || getFormattedDateString(lastMonth), 
-		to: filterCookie?.to || getFormattedDateString(nextMonth)
+		from: getFormattedDateString(lastMonth), 
+		to: getFormattedDateString(nextMonth)
 	})
+
+	useEffect(() => {
+		const filterCookie = cookies["workout-filter"] 
+		if(filterCookie) {
+			setDates({from: filterCookie.from, to: filterCookie.to})
+			setFilterFavorites(filterCookie.isFavorite)
+			setTags(filterCookie.tags)
+		}
+	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 	useEffect(fetchWorkouts, [dates.from, dates.to, filterFavorites, searchText, token, userId, cache, cacheActions, tags])
 	return (
@@ -139,7 +147,8 @@ export default function WorkoutIndex({detailURL}) {
 			id: userId,
 			isFavorite: filterFavorites
 		}
-		setCookie("workout-filter", {from: args.from, to: args.to, isFavorite: args.isFavorite}, {path: "/workout"})
+
+		setCookie("workout-filter", {from: args.from, to: args.to, isFavorite: args.isFavorite, tags: tags}, {path: "/"})
 		getWorkouts(args, token, cache, cacheActions, (response) => {
 			if(response.error) {
 				setError("Serverfel: Något gick fel med sökningen!")
