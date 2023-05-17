@@ -31,7 +31,7 @@ describe("BeltBox.jsx", () => {
 		test("should display error-load-belt-box if given ID is null", async() => {
 			var incomingBelts = [{
 				"id": "1",
-				"color": "#00BE08",
+				"color": "00BE08",
 				"child": false
 			}]
 			
@@ -45,7 +45,7 @@ describe("BeltBox.jsx", () => {
 		test("should display \"Error loading component \" if given ID is null", async() => {
 			var incomingBelts = [{
 				"id": "1",
-				"color": "#00BE08",
+				"color": "00BE08",
 				"child": false
 			}]
 			
@@ -65,24 +65,10 @@ describe("BeltBox.jsx", () => {
 			expect(innerHtml).toEqual(expect.stringContaining("Error loading component"))
 		})
 
-		test("should display belt name when belt color is missing #", () => {
-			var incomingBelts = [{
-				"id": "1",
-				"color": "00BE08",
-				"name": "grön",
-				"child": false
-			}]
-
-			const { container } = render(<BeltBox id = "testBeltBox" width = {35} height = {320} belts={incomingBelts}/>)
-			const innerHtml = container.innerHTML
-
-			expect(innerHtml).toEqual(expect.stringContaining("grön"))
-		})
-
 		test("should display belt name when belt color has too many characters", () => {
 			var incomingBelts = [{
 				"id": "1",
-				"color": "#00BE088888",
+				"color": "00BE088888",
 				"name": "grön",
 				"child": false
 			}]
@@ -108,7 +94,7 @@ describe("BeltBox.jsx", () => {
 		test("should display belt-error when belt child is invalid", () => {
 			var incomingBelts = [{
 				"id": "1",
-				"color": "#00BE08",
+				"color": "00BE08",
 				"name": "grön",
 			}]
 

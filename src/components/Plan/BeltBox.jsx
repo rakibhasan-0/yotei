@@ -11,12 +11,12 @@ import "./BeltBox.css"
  * Example usage:
  *      var belts = [{
  * 			"id":  "1",
- *          "color": "#00BE08",
+ *          "color": "00BE08",
  * 			"name": "grön",
  *          "child": false
  *      }, {
  * * 		"id":  "2",
- *          "color": "#0DB7ED",
+ *          "color": "0DB7ED",
  * 			"name": "blå",
  *          "child": false
  *      }]
@@ -66,8 +66,12 @@ function BeltBox ( {id, belts} ) {
 		return true
 	}
 
+	function adaptColorCode (color) {
+		return "#" + color
+	}
+
 	function checkColorCode (color) {
-		if (!hexReg.test(color)) {
+		if (!hexReg.test(adaptColorCode(color))) {
 			console.error("Invalid colorcode")
 			return false
 		}
@@ -100,14 +104,14 @@ function BeltBox ( {id, belts} ) {
 									belt.child ?
 								
 										<div key={`${belt.id}-child-belt`} className="sc23-beltbox-belt" style={{background:"white"}}>
-											<div id={`${belt.id}-child-belt-color`} className="sc23-beltbox-belt-child" style={{background:belt.color}}/>
+											<div id={`${belt.id}-child-belt-color`} className="sc23-beltbox-belt-child" style={{background: adaptColorCode(belt.color)}}/>
 										</div>
 										:
-										<div key={`${belt.id}-adult-belt`} className="sc23-beltbox-belt" style={{background: belt.color}}/>	
+										<div key={`${belt.id}-adult-belt`} className="sc23-beltbox-belt" style={{background: adaptColorCode(belt.color)}}/>	
 								)
 								:
 								(
-									<div key={`${belt.id}-belt-error-child`} id={`${id}-belt-error-child`} className="sc23-beltbox-belt-error" style={{background:belt.color}}>child?</div>
+									<div key={`${belt.id}-belt-error-child`} id={`${id}-belt-error-child`} className="sc23-beltbox-belt-error" style={{background:adaptColorCode(belt.color)}}>child?</div>
 								)
 							:
 							
