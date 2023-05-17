@@ -33,7 +33,7 @@ import "./ExerciseListItem.css"
 export default function ExerciseListItem({ item, text, detailURL, id, index}) {
 
 	return (
-		<a className="exercise-link" href={detailURL + id}>
+		<a className="exercise-link" href={detailURL + id} data-testid="ExerciseListItem-link">
 			<div className="exercise-list-container" data-testid="ExerciseListItem">
 				<div className='exercise-list-header' style={{backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)"}}>
 					<div style={{display: "flex", justifyContent: "space-between", width: "100%"}}>

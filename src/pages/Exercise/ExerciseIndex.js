@@ -46,13 +46,9 @@ function ExerciseIndex() {
 			selectedTags: addedTags
 		}
 
-		console.log(addedTags)
-		console.log(suggestedTags)
-
 		getExercises(args, token, map, mapActions, (result) => {
 			setVisibleList(result.results)
 			setSuggestedTags(result.tagCompletion)
-			console.log(result.results)
 			setCookie("exercise-filter", {tags: addedTags}, {path: "/"})
 		})
 	}, [searchText, addedTags])
@@ -64,8 +60,8 @@ function ExerciseIndex() {
 	return (
 		<div>
 			<center>
-				<h1 className="py-2" style={{marginBottom: "-10px"}}>Övningar</h1>
-				<div className="grid-striped" style={{marginBottom: "-15px"}}>
+				<h1 className="py-2" id={"exercise-title"} style={{marginBottom: "-10px"}}>Övningar</h1>
+				<div className="grid-striped" id={"exercise-search-bar"} style={{marginBottom: "-15px"}}>
 					<SearchBar 
 						id="exercise_searchbar" 
 						text={searchText} 
@@ -78,10 +74,10 @@ function ExerciseIndex() {
 				</div>
 
 			</center>
-			<ActivityList activities={visibleList}  apiPath={"exercises"} detailURL={detailURL}/>
+			<ActivityList activities={visibleList} apiPath={"exercises"} detailURL={detailURL}/>
 
 			<br/><br/><br/><br/>
-			<RoundButton linkTo={null} onClick={() => setPopupVisible(true)} style={{maxWidth: "5px"}}>
+			<RoundButton linkTo={null} onClick={() => setPopupVisible(true)} id={"exercise-round-button"}  style={{maxWidth: "5px"}}>
 				<Plus />
 			</RoundButton>
 			<Popup

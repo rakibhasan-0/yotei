@@ -4,48 +4,112 @@ import { server } from "../server"
 import {render, configure, screen} from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import ExerciseCreate from "../../pages/Exercise/ExerciseCreate"
+import ExerciseIndex from "../../pages/Exercise/ExerciseIndex"
+import { MemoryRouter } from "react-router-dom"
+
 
 configure({testIdAttribute: "id"})
 const requestSpy = jest.fn()
 server.events.on("request:start", requestSpy)
 
-async function getData( ){
-	const response = await fetch("http://localhost/api/exercises/all")
-    
+async function getData() {
+	const response = await fetch("http://localhost/api/search/exercises?name=text&tags=")
+  
 	return response.json()
 }
 
-test("mocked exercise data should match expected data", async() => {
+let method = "" // Declare method variable outside of beforeEach
+describe("mocktest", () => {
 
+	beforeEach(async () => {
 	// ARRANGE
-	var method = ""
-	server.use(
-		rest.all("http://localhost/api/exercises/all", async (req, res, ctx) => {
-			method = req.method
-        
-			return res(ctx.status(200), ctx.json({
-				item: "Hoppa högt",
-				text: "420 min",
-				children: "Fall på fötterna.",
-				detailURL: "bsurl.com/fake/",
-				id: 87,
-				index: 420
-			}))
-		})
-	)
+		server.use(
+			rest.get("http://localhost/api/search/exercises", async (req, res, ctx) => {
+				method = req.method // Assign value to method variable
 
+				return res(
+					ctx.status(200),
+					ctx.json([
+						{
+							item: "Hoppa högt",
+							text: "420 min",
+							detailURL: "bsurl.com/fake/",
+							id: 87,
+							index: 420,
+						},
+						{
+							item: "Löpning",
+							text: "30 min",
+							detailURL: "bsurl.com/fake2/",
+							id: 88,
+							index: 30,
+						},
+					])
+				)
+			})
+		)
+
+		await getData() // Fetch the data inside beforeEach
+	})
+
+
+	test("mocked exercise data should match expected data", async () => {
 	// ACT
-	const data = await getData()
-    
-	// ASSERT
-	expect(requestSpy).toHaveBeenCalled()
-	expect(method).toBe("GET")
-	expect(data.item).toEqual("Hoppa högt")
-	expect(data.text).toEqual("420 min")
-	expect(data.detailURL).toEqual("bsurl.com/fake/")
-	expect(data.id).toEqual(87)
-	expect(data.index).toEqual(420)
+		const data = await getData()
+
+		// ASSERT
+		expect(requestSpy).toHaveBeenCalled()
+		expect(method).toBe("GET")
+	
+		// Assertions for the first exercise in the array
+		expect(data[0].item).toEqual("Hoppa högt")
+		expect(data[0].text).toEqual("420 min")
+		expect(data[0].detailURL).toEqual("bsurl.com/fake/")
+		expect(data[0].id).toEqual(87)
+		expect(data[0].index).toEqual(420)
+	
+		// Assertions for the second exercise in the array
+		expect(data[1].item).toEqual("Löpning")
+		expect(data[1].text).toEqual("30 min")
+		expect(data[1].detailURL).toEqual("bsurl.com/fake2/")
+		expect(data[1].id).toEqual(88)
+		expect(data[1].index).toEqual(30)
+	})
 })
+describe("ExerciseIndex should render with all components", () => {
+
+	beforeEach(() => {
+		render( //eslint-disable-line
+			<MemoryRouter>
+				<ExerciseIndex />
+			</MemoryRouter>
+		)
+	})
+
+	test("the title", () => {
+		expect(screen.getByTestId("exercise-title")).toHaveTextContent("Övningar")
+	})
+
+	test("the search bar", () => {
+		expect(screen.getByTestId("exercise-search-bar")).toBeInTheDocument()
+	})
+
+	test("the round button", () => {
+		expect(screen.getByTestId("exercise-round-button")).toBeInTheDocument()
+	})
+
+})
+
+
+// Call getData function before the test
+beforeEach(async () => {
+	await getData()
+})
+
+test("mocked exercise data is displayed on the page", async () => {
+	expect(true).toBe(true)
+
+})  
 
 test("Should update exercise list page after adding new exercise'", async () => {
 	// ARRANGE

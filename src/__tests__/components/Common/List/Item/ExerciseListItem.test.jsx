@@ -30,6 +30,7 @@ test("so that the component initializes properly.", async() => {
 	expect(getByTestId("ExerciseListItem")).toBeDefined()
 	expect(getByTestId("ExerciseListItem-item")).toHaveTextContent(name)
 	expect(getByTestId("ExerciseListItem-text")).toHaveTextContent(duration)
+	expect(getByTestId("ExerciseListItem-link")).toHaveAttribute("href", `${detailURL}${pageId}`)
 })
 
 
