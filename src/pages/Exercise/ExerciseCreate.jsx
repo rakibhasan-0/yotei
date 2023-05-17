@@ -11,7 +11,7 @@ import InputTextField from "../../components/Common/InputTextField/InputTextFiel
 import TextArea from "../../components/Common/TextArea/TextArea.jsx"
 import Divider from "../../components/Common/Divider/Divider.jsx"
 import TagInput from "../../components/Common/Tag/TagInput.jsx"
-
+import Popup from "../../components/Common/Popup/Popup"
 
 /**
  * The page for creating new exercises.
@@ -33,6 +33,7 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 	const [addedTags, setAddedTags] = useState([])
 	const [showAlterWindow , setShowAlertWindow] = useState(false)
 	const [clearAlternative, setClearAlternative] = useState(false)
+	const [showMiniPopup, setShowMiniPopup] = useState(false)
 
 	/**
 	 * Method for API call when creating an exercise.
@@ -194,6 +195,20 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 		}
 	}
 
+	function leaveWindow() {
+		if(name !== "" || desc !== "") {
+			setShowMiniPopup(true)
+		} else {
+			closeAll()
+		}
+	}
+
+	function closeAll() {
+		//setShowMiniPopup(false)
+		setShowPopup(false)
+		onClose()
+	}
+
 	return (
 		<div className="row justify-content-center">
 			<div className="col-md-8">
@@ -257,7 +272,7 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 						id="EC-BackBtn"
 						outlined={"button-back"}
 						onClick={() => { 
-							setShowPopup(false)
+							leaveWindow()
 						}}>
 						<p>Tillbaka</p>
 					</Button>
@@ -268,6 +283,21 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 						}}>
 						<p>Lägg till</p>
 					</Button>
+				</div>
+				<div>
+					<Popup
+						id={"EC-changes-mini-popup"}
+						title={"Ändringar gjorda"}
+						isOpen={showMiniPopup}
+						setIsOpen={setShowMiniPopup}
+						height={35}
+					>
+						<p>Är du säker att du vill lämna?</p>
+						<div className="EC-mini-popup-btns">
+							<Button id={"EC-mini-popup-leave-btn"} onClick={() => {closeAll()}} outlined={"button-back"}><p>Lämna</p></Button>
+							<Button id={"EC-mini-popup-stay-btn"} onClick={() => {setShowMiniPopup(false)}}><p>Stanna</p></Button>
+						</div>
+					</Popup>
 				</div>
 			</div>
 		</div>

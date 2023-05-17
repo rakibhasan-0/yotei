@@ -82,3 +82,10 @@
 .checkboxes-container {
     margin-top: 2rem;
 }
+
+.EC-mini-popup-btns {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 14px;
+    margin-top: 2rem;
+}
