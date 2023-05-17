@@ -69,6 +69,7 @@ function AddActivity({id, setShowActivityInfo}) {
 	useEffect(() => {
 		setTechniques(techniques.filter(technique => checkedActivities.includes(technique)))
 		searchTechniques()
+		console.log(selectedBelts)
 	}, [searchTechText, selectedBelts, kihon, selectedTechTags])
 	
 	/**
@@ -80,6 +81,20 @@ function AddActivity({id, setShowActivityInfo}) {
 		searchExercises()
 	}, [searchExerText, selectedExerTags])
 
+	function handleBeltChanged(checked, belt) {
+		setSelectedBelts(prev => {
+			if(!checked) {
+				return prev.filter(b => b.id !== belt.id)
+			}
+			else {
+				return [...prev, belt]
+			}
+		})
+	}
+
+	function handleKihonChanged(newKihon) {
+		setKihon(newKihon)
+	}
 
 	/**
 	 * Handles selecting or deselecting a checkbox for an activity.
@@ -167,7 +182,13 @@ function AddActivity({id, setShowActivityInfo}) {
 								setSuggestedTags={setSuggestedTechTags}
 							/>
 						</div>
-						<TechniqueFilter belts={selectedBelts} setBelts={setSelectedBelts} kihon={kihon} setKihon= {setKihon}/>
+						<TechniqueFilter
+							belts={selectedBelts}
+							onBeltChange={handleBeltChanged}
+							kihon={kihon}
+							onKihonChange={handleKihonChanged}
+							id="test">
+						</TechniqueFilter>
 						{techniques.map((technique, key) => (
 							<TechniqueCard
 								id={"technique-list-item-" + technique.id}
