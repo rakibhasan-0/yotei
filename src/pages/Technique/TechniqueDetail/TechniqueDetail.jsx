@@ -12,6 +12,7 @@ import "./TechniqueDetail.css"
 import ErrorState from "../../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../../components/Common/Spinner/Spinner" 
 import Gallery from "../../../components/Gallery/Gallery"
+import {isEditor} from "../../../utils"
 /**
  * The detail page for a technique.
  * 
@@ -21,9 +22,9 @@ import Gallery from "../../../components/Gallery/Gallery"
  * Example usage:
  * 	   <TechniqueDetail id="test-id"/>
  * 
- * @author Team Medusa (Grupp 6)
- * @version 1.0
- * @since 2023-05-03
+ * @author Team Medusa (Grupp 6) & Cyclops (Group 5)
+ * @version 2.0
+ * @since 2023-05-17
  */
 function TechniqueDetail({id}) {
 
@@ -34,6 +35,8 @@ function TechniqueDetail({id}) {
 	const [technique, setTechnique] = useState()
 	const [error, setError] = useState("")
 	const [loading, setLoading] = useState(true)
+
+	const accountRole = useContext(AccountContext)
 
 	const handleGet = useCallback(() => {
 		setLoading(true)
@@ -89,7 +92,7 @@ function TechniqueDetail({id}) {
 		<div className="technique-detail-container" id={id == undefined ? "technique" : id}>
 			<Gallery id={techniqueId}/>
 			<h1>{technique.name}</h1>
-			<div className="technique-detail-actions-container">
+			{isEditor(accountRole) && <div className="technique-detail-actions-container">
 				<Pencil
 					size="24px"
 					color="var(--red-primary)"
@@ -103,6 +106,7 @@ function TechniqueDetail({id}) {
 					onClick={handleDelete}
 				/>
 			</div>
+			}
 			<p style={{marginBottom: 0}}>{technique.isKihon ? "Kihon" : "Ej kihon"}</p>
 			<div className="technique-detail-belts-container">
 				{technique.belts ? (
