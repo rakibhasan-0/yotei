@@ -355,9 +355,21 @@ CREATE TABLE media (
 ALTER TABLE media OWNER TO psql;
 
 --
+-- Trigger for tag inserts
+
+CREATE OR REPLACE FUNCTION tag_to_lowercase() RETURNS TRIGGER AS $$
+	BEGIN
+		NEW.name = LOWER(NEW.name);
+		RETURN NEW;
+	END;
+	$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER insert_tag BEFORE INSERT ON tag FOR EACH ROW EXECUTE PROCEDURE tag_to_lowercase();
+
+
+--
 -- Inserts
 --
-
 
 
 --
@@ -406,35 +418,35 @@ INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Svart', '000000', Tr
 -- INSERTS FOR TAGS
 --
 
-INSERT INTO tag (name) VALUES ('Brunt');
-INSERT INTO tag (name) VALUES ('Atemi Waza');
-INSERT INTO tag (name) VALUES ('Kihon Waza');
-INSERT INTO tag (name) VALUES ('Kansetsu Waza');
-INSERT INTO tag (name) VALUES ('Nage Waza');
-INSERT INTO tag (name) VALUES ('Katame Waza');
-INSERT INTO tag (name) VALUES ('Kata');
-INSERT INTO tag (name) VALUES ('Randori');
-INSERT INTO tag (name) VALUES ('Jigo Waza');
-INSERT INTO tag (name) VALUES ('Renraku Waza');
-INSERT INTO tag (name) VALUES ('Svart');
-INSERT INTO tag (name) VALUES ('1 Dan');
-INSERT INTO tag (name) VALUES ('Naga Waza');
-INSERT INTO tag (name) VALUES ('2 Dan');
-INSERT INTO tag (name) VALUES ('3 Dan');
-INSERT INTO tag (name) VALUES ('Gult');
-INSERT INTO tag (name) VALUES ('Tachi Waza');
-INSERT INTO tag (name) VALUES ('Taisabaki Waza');
-INSERT INTO tag (name) VALUES ('Ukemi Waza');
-INSERT INTO tag (name) VALUES ('Uke Waza');
-INSERT INTO tag (name) VALUES ('Orange');
-INSERT INTO tag (name) VALUES ('Grönt');
-INSERT INTO tag (name) VALUES ('Blått');
-INSERT INTO tag (name) VALUES ('Judo');
-INSERT INTO tag (name) VALUES ('Throws');
-INSERT INTO tag (name) VALUES ('Footwork');
-INSERT INTO tag (name) VALUES ('Uppvärmning');
-INSERT INTO tag (name) VALUES ('Cardio');
-INSERT INTO tag (name) VALUES ('Calisthenics');
+INSERT INTO tag (name) VALUES ('brunt');
+INSERT INTO tag (name) VALUES ('atemi waza');
+INSERT INTO tag (name) VALUES ('kihon waza');
+INSERT INTO tag (name) VALUES ('kansetsu waza');
+INSERT INTO tag (name) VALUES ('nage waza');
+INSERT INTO tag (name) VALUES ('katame waza');
+INSERT INTO tag (name) VALUES ('kata');
+INSERT INTO tag (name) VALUES ('randori');
+INSERT INTO tag (name) VALUES ('jigo waza');
+INSERT INTO tag (name) VALUES ('renraku waza');
+INSERT INTO tag (name) VALUES ('svart');
+INSERT INTO tag (name) VALUES ('1 dan');
+INSERT INTO tag (name) VALUES ('naga waza');
+INSERT INTO tag (name) VALUES ('2 dan');
+INSERT INTO tag (name) VALUES ('3 dan');
+INSERT INTO tag (name) VALUES ('gult');
+INSERT INTO tag (name) VALUES ('tachi waza');
+INSERT INTO tag (name) VALUES ('taisabaki waza');
+INSERT INTO tag (name) VALUES ('ukemi waza');
+INSERT INTO tag (name) VALUES ('uke waza');
+INSERT INTO tag (name) VALUES ('orange');
+INSERT INTO tag (name) VALUES ('grönt');
+INSERT INTO tag (name) VALUES ('blått');
+INSERT INTO tag (name) VALUES ('judo');
+INSERT INTO tag (name) VALUES ('throws');
+INSERT INTO tag (name) VALUES ('footwork');
+INSERT INTO tag (name) VALUES ('uppvärmning');
+INSERT INTO tag (name) VALUES ('cardio');
+INSERT INTO tag (name) VALUES ('calisthenics');
 
 
 --
