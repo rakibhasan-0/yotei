@@ -4,6 +4,7 @@ import Star from "../../Common/StarButton/StarButton"
 import { useState } from "react"
 import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
 import React from "react"
+import {HTTP_STATUS_CODES, setError, setSuccess} from "../../../utils"
 
 /**
  *  Component for review comment. Includes name, positive comment, negative comment, date.
@@ -15,13 +16,26 @@ import React from "react"
 export default function ReviewComponent({comment, onDelete, editable, token}) {
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
 
-	function deleteReview() {
+	async function deleteReview() {
 		const requestOptions = {
 			method: "DELETE",
 			headers: {"token": token}
 		}
+		
+		const response = await fetch(`/api/workouts/reviews?id=${comment.review_id}`, requestOptions).catch(() => {
+			setError("Serverfel: Kunde inte ansluta till servern.")
+			return	
+		})
 
-		fetch(`/api/workouts/reviews?id=${comment.review_id}`, requestOptions)
+		if(response.status === HTTP_STATUS_CODES.NOT_FOUND) {
+			setError("Utvärderingen existerar inte längre!")
+			return
+		} else if(response.status != HTTP_STATUS_CODES.OK) {
+			setError("Serverfel: Något gick snett! Felkod: " + response.status)
+			return
+		}
+		console.log("hello!")
+		setSuccess("Utvärdering borttagen!")
 		return onDelete(comment)
 	}
 

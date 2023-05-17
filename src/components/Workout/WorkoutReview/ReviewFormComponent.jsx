@@ -6,6 +6,7 @@ import Ratings from "react-ratings-declarative"
 import Star from "../../Common/StarButton/StarButton"
 import ReviewComment from "./ReviewComment"
 import { AccountContext } from "../../../context"
+import {HTTP_STATUS_CODES, setError, setSuccess} from "../../../utils"
 //import { isAdmin } from "../../../utils"
 
 /**
@@ -22,9 +23,8 @@ import { AccountContext } from "../../../context"
 export default function Review({isOpen, setIsOpen, workout_id}) {  
 	const[rating, setRating] = useState(0)
 	const[commentList, setCommentList] = useState([])
-	const[positiveComment, setpositive] = useState("")
+	const[positiveComment, setPositive] = useState("")
 	const[negativeComment, setNegative] = useState("")
-	const[addedReview, setAddedReview] = useState("")
 
 	const context = useContext(AccountContext)
 	const {token, userId} = context
@@ -32,7 +32,16 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 	useEffect(() => {
 
 		async function fetchComments() {
-			const response = await fetch("/api/workouts/reviews?id=" + workout_id, {headers:{token,"userId": userId}})
+			const response = await fetch("/api/workouts/reviews?id=" + workout_id, {headers:{token,"userId": userId}}).catch(() => {
+				setError("Serverfel: Kunde inte hämta utvärderingar för passet.")
+				return	
+			})
+
+			if(response.status != HTTP_STATUS_CODES.OK) {
+				setError("Serverfel: Något gick snett! Felkod: " + response.status)
+				return
+			} 
+			
 			const data = await response.json()
 			setCommentList(data)
 		}
@@ -58,17 +67,25 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 				"date": ts
 			})
 		}
+ 
+		const postResponse = await fetch("/api/workouts/reviews", requestOptions).catch(() => {
+			setError("Serverfel: Kunde ansluta till servern.")
+			return	
+		})
+		if(postResponse.status != HTTP_STATUS_CODES.OK) { 
+			setError("Serverfel: Något gick snett! Felkod: " + postResponse.status)
+			return 
+		}   
 
-		await fetch("/api/workouts/reviews", requestOptions)
 		requestOptions.method = "GET"
 		requestOptions.body = null
-		const response =  await fetch("/api/workouts/reviews?id=" + workout_id, {headers:{token,"userId": userId}})
-		setCommentList(await response.json())
+		const getResponse =  await fetch("/api/workouts/reviews?id=" + workout_id, {headers:{token,"userId": userId}})
+		setCommentList(await getResponse.json())
 
-		setpositive("")
+		setPositive("")
 		setNegative("")
 		setRating(0)
-		setAddedReview("Utvärdering tillagd")
+		setSuccess("Utvärdering tillagd")
 	}
 
 
@@ -82,7 +99,7 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 	}
 
 	function handleChangePos(event){
-		setpositive(event.target.value)
+		setPositive(event.target.value)
 	}
 	
 	function handleChangeNeg(event){
@@ -120,7 +137,6 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 				</div>
 				<div className="col-md-6 p-0"> 
 					<Button width={"100%"} onClick={() => addReview()}>Lägg till</Button>
-					<p style={{color: "green", marginTop: "20px"}}>{addedReview}</p>
 				</div>
 			</div>
 			<div className="horizontal-line align-self-center w-100" style={{marginTop: "20px"}}></div>
