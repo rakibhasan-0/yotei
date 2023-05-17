@@ -235,25 +235,30 @@ The tag completion array consists of a maximum of 3 tags that were found, these 
 
 ### API Endpoint: 
 
-	(GET) /api/search/users?name=<name>&id=<id>&role=<role>
+	(GET) /api/search/users
 
 ### Params
 
 | Query | Explanation | Example | Type | Status |
 |--|--|--|--|--|
-| name | Name of user | Kalle | String | Works |
+| name | Name of user, Fuzzy search | Kalle | String | Works |
 | id | Id of user | 1 | String | Works | 
 | role | role of users | ADMIN | String | Works |
 
+### Example querry
+
+	(GET) /api/search/users?name=admin&id=1&role=ADMIN
+
 ### Example response
-{
-    "results": [
-        {
-            "userId": 1,
-            "name": "admin",
-            "role": "ADMIN"
-        }
-    ]
+
+	{
+		"results": [
+			{
+				"userId": 1,
+				"name": "admin",
+				"role": "ADMIN"
+			}
+		]
 }
   
 ## Extra
