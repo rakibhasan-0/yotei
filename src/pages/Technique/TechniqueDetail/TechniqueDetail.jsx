@@ -128,7 +128,7 @@ function TechniqueDetail({id}) {
 			</div>
 
 			<div className="technique-detail-button-container">
-				<Button outlined={true} onClick={() => navigate("/technique")}>
+				<Button outlined={true} onClick={() => navigate(-1)}>
 					<p>Tillbaka</p>
 				</Button>
 			</div>
