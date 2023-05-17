@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Sort;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -35,20 +36,53 @@ public class ExerciseController {
         this.exerciseRepository = exerciseRepository;
     }
 
+
+    // /**
+    //  * Returns all exercises in the database
+    //  * @return all exercises
+    //  */
+    // @GetMapping("/all")
+    // public Object getExercises() {
+    //     List<Exercise> exerciseList = exerciseRepository.findAll();
+
+        
+    //     if (exerciseList == null) {
+    //         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    //     }
+
+    //     return exerciseList;
+    // }
+
     /**
      * Returns all exercises in the database
+     * @param sort boolean flag indicating whether to sort by duration or name
      * @return all exercises
      */
     @GetMapping("/all")
-    public Object getExercises() {
-        List<Exercise> exerciseList = exerciseRepository.findAll();
-
+    public Object getExercises(@RequestParam(value = "sort", defaultValue = "nameDsc") String sort) {
+        List<Exercise> exerciseList;
+        switch (sort) {
+            case "nameAsc":
+                exerciseList = exerciseRepository.findAllByOrderByNameAsc();
+                break;
+            case "durationAsc":
+                exerciseList = exerciseRepository.findAllByOrderByDurationAsc();
+                break;
+            case "durationDesc":
+                exerciseList = exerciseRepository.findAllByOrderByDurationDesc();
+                break;
+            default:
+                exerciseList = exerciseRepository.findAllByOrderByNameDesc();
+        }
+        
         if (exerciseList == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         return exerciseList;
     }
+
+
     
     /**
      * Retrieves a set amount of exercises from the database, starting from the specified start index.

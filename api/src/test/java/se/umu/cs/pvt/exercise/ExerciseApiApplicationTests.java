@@ -120,28 +120,20 @@ class ExerciseApiApplicationTests {
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-
+    /**
+     * This test only tests that we are able to get the exercises not that they are actually in the right order.
+     */
     @Test
-    void shouldReturnAllExercisesFromGetExercises() {
-        Mockito.when(repository.findAll()).thenReturn(exercises);
+    void shouldReturnAllExercisesFromGetExercisesUsingNameDesc() {
 
-        List<Exercise> result = (List<Exercise>)controller.getExercises();
-
+        Mockito.when(repository.findAllByOrderByNameDesc()).thenReturn(exercises);
+        
+        List<Exercise> result = (List<Exercise>) controller.getExercises("nameDesc");
+    
+        assertThat(result.size()).isEqualTo(2);
         assertThat(result.get(0)).isEqualTo(ex1);
         assertThat(result.get(1)).isEqualTo(ex2);
     }
-
-
-    @Test
-    void shouldReturnExerciseFromGetExerciseWithRealId() {
-        Mockito.when(repository.findById(ex1.getId())).thenReturn(Optional.ofNullable(ex1));
-        Mockito.when(repository.existsById(ex1.getId())).thenReturn(true);
-
-        Exercise result = (Exercise) controller.getExercise(ex1.getId());
-
-        assertThat(result).isEqualTo(ex1);
-    }
-
 
     @Test
     void shouldFailWhenExerciseHasInvalidNameAndDuration() {

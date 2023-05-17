@@ -18,4 +18,10 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
      * no duplicates are added. */
     List<ExerciseShort> findByNameIgnoreCase(String name);
     Optional<ExerciseDropDownProjection> getExerciseDropDownById(Long id);
+
+    List<Exercise> findAllByOrderByNameDesc();
+    List<Exercise> findAllByOrderByNameAsc();
+    List<Exercise> findAllByOrderByDurationDesc();
+    List<Exercise> findAllByOrderByDurationAsc();
+
 }
