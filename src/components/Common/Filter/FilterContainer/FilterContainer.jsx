@@ -8,24 +8,23 @@ import { Sliders } from "react-bootstrap-icons"
  * This is the component that holds the filter elements in a single component. 
  * 
  * Props:
- *		id 			@type {string}  	- The id of the component.
+ *		id 			@type {string}  	- The id of the component, mostly used for testing.
  *		children	@type {component}	- The components that will appear inside of the filter box.
  *
  * Example usage:
- * 		<FilterContainer id={filter}>
- * 			<BeltPicker onToggle={onToggle} states={belts} />
- * 			<div className="kihon-group">
- * 				<p className="kihon-text">Kihon</p>
- * 				<CheckBox checked={kihon} onClick={()=>setKihon(!kihon)}/>
- * 			</div>
- * 		</FilterContainer>	
+ * 		<FilterContainer id={"filter-container"}>
+ *			<div className="kihon-group">
+ *				<CheckBox checked={kihon} onClick={()=> onKihonChange(!kihon)}/>
+ *				<p className="kihon-text">Kihon</p>
+ *			</div>
+ *		</FilterContainer>	
  *
  * @author Kraken (Grupp 7)
  * @version 1.0
  * @since 2023-05-04
  */
 function FilterContainer({ id, children}) {
-	const [active, setActive] = useState(true)
+	const [active, setActive] = useState(false)
 	
 	function showFilter() {
 		setActive(!active)
@@ -38,7 +37,7 @@ function FilterContainer({ id, children}) {
 					<Sliders/>	
 				</Button>
 			</div>
-			<FilterBox id={"filter-box"} status={!active}>
+			<FilterBox id={"filter-box"} status={active}>
 				{children}
 			</FilterBox>
 		</div>
