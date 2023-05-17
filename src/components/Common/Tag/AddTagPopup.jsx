@@ -69,6 +69,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	 */
 	const searchForTags = async (searchText) => {
 		setError("")
+		setSearchText(searchText)
 
 		const tagList = []
 		addedTags.forEach ((tag) => {
@@ -91,8 +92,6 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 		} catch (error) {
 			setError("Något gick fel vid hämtning av taggförslag")
 		}
-
-		setSearchText(searchText)
 	}
 
 	/**
