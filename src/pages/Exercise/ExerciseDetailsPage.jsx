@@ -12,7 +12,7 @@ import Gallery from "../../components/Gallery/Gallery"
 import {toast, ToastContainer} from "react-toastify"
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 import ErrorState from "../../components/Common/ErrorState/ErrorState"
-
+import {isEditor} from "../../utils"
 /**
  * A page for displaying details about an exercise.
  * 
@@ -33,7 +33,7 @@ export default function ExerciseDetailsPage() {
 	const [showDeleteComment, setShowDeleteComment] = useState(false)
 	const [error, setError] = useState()
 	const navigate = useNavigate()
-	
+	const accountRole = useContext(AccountContext)
 	const fetchComments = () => {
 		fetch(`/api/comment/exercise/get?id=${ex_id}`, {
 			headers: { token }
@@ -135,7 +135,6 @@ export default function ExerciseDetailsPage() {
 	if (error) {
 		return <ErrorState message={error} onBack={() => navigate("/exercise")} />
 	}
-
 	return (
 		<div className="container">
 			<div className="row justify-content-center">
@@ -143,10 +142,12 @@ export default function ExerciseDetailsPage() {
 
 					<div className="d-flex flex-row align-items-center justify-content-between">
 						<h1 className="mt-2">{exercise?.name}</h1>
-						<div className="d-flex flex-row" style={{gap: "10px"}}>
-							<Pencil onClick={() => navigate(`/exercise/edit/${ex_id}`)} size="24px" style={{color: "var(--red-primary)"}} />
-							<Trash onClick={() => setShowAlert(true)} size="24px" style={{color: "var(--red-primary)"}} />
-						</div>
+						{isEditor(accountRole) && 
+							<div className="d-flex flex-row" style={{gap: "10px"}}>
+								<Pencil onClick={() => navigate(`/exercise/edit/${ex_id}`)} size="24px" style={{color: "var(--red-primary)"}} />
+								<Trash onClick={() => setShowAlert(true)} size="24px" style={{color: "var(--red-primary)"}} />
+							</div>
+						}
 					</div>
 
 					<div className="d-flex flex-row" style={{ gap: "10px" }}>
