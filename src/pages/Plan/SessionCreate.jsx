@@ -129,7 +129,7 @@ export default function SessionCreate() {
 						))}
 					</Dropdown>
 
-					<Divider option={"h2_middle"} title={"Eller"} />
+					<Divider option={"h2_middle"} title={"eller"} />
 					<div className="wrap-centering create-button" >
 						<Link to="/workout/create" style={{width: "150px"}}>
 							<Button id={"session-create"}><p>Skapa pass</p></Button>
