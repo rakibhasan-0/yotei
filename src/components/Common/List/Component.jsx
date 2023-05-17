@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { ChevronDown } from "react-bootstrap-icons"
-import "./Component.css"
+import styles from "./Component.module.css"
 
 /**
  * A generic list item that can be used in a list view,
@@ -33,24 +33,24 @@ export default function Component({ item, text, children, id, autoClose, errorMe
 	}
 	const style = errorMessage?.length > 0 ? { border: "2px solid var(--red-primary)" } : {}
 	return (
-		<label className="list-label">
-			<div id={id} className="list-container" style={style}>
-				<div className='list-header' onClick={() => setToggled(!toggled)}>
-					<div className="list-item">
+		<label className={styles.listLabel}>
+			<div id={id} className={styles.listContainer} style={style}>
+				<div className={styles.listHeader} onClick={() => setToggled(!toggled)}>
+					<div className={styles.listItem}>
 						{item}
 					</div>
-					<p className="list-text">{text}</p>
-					<div className={["list-toggle", toggled ? "list-rotate" : ""].join(" ")}>
+					<p className={styles.listText}>{text}</p>
+					<div className={[styles.listToggle, toggled ? styles.listRotate : ""].join(" ")}>
 						<ChevronDown id={`${id}-dropdown`} size={28} />
 					</div>
 				</div>
-				<div className="list-item-container" >
-					<div className="list-child" onClick={onClick} style={{ display: toggled ? "inherit" : "none" }} id={`${id}-children`}>
+				<div className={styles.listItemContainer} >
+					<div className={styles.listChild} onClick={onClick} style={{ display: toggled ? "inherit" : "none" }} id={`${id}-children`}>
 						{children}
 					</div> 
 				</div>
 			</div>
-			<p className="list-err">{errorMessage}</p>
+			<p className={styles.listErr}>{errorMessage}</p>
 		</label>
 	)
 }

@@ -1,15 +1,15 @@
-.wrap-centering {
+.wrapCentering {
     display: flex;
     flex-direction: row;
     justify-content: center;
     gap: 15px;
 }
 
-.create-button {
+.createButton {
     margin-bottom: 30px;
 }
 
-.dropdown-row {
+.dropdownRow {
     border-top: solid 1px black;
     height: 50px;
     width: 100%;
@@ -22,21 +22,36 @@
     transition: all 0.2s ease-in;
 }
 
-.dropdown-row:nth-child(even) {
+.dropdownRow:nth-child(even) {
     background-color: var(--red-secondary);
 }
 
-.dropdown-row:last-child {
+.dropdownRow:last-child {
     border-radius: 0 0 4px 4px;
 }
 
-.dropdown-row-text {
+.dropdownRow-text {
     margin-top: 0;
     margin-bottom: 0;
     text-align: left;
 }
 
-.dropdown-row:hover {
+.dropdownRow:hover {
     cursor: pointer;
     background-color: #eac2c2;
+}
+
+.headerContainer {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 2rem;
+}
+
+.trashcanIcon {
+    width:  35px;
+    height: 35px;
+    color: var(--red-primary);
 }

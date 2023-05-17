@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { ChevronDown } from "react-bootstrap-icons"
-import "./Component.css"
+import styles from "./Component.module.css"
 
 /**
  * A searchable drop-down list
@@ -45,15 +45,15 @@ export default function SearchableDropdown({ query, setQuery, placeholder, child
 		}
 	}
 	return (
-		<div id={id} className="list-container">
-			<div className='list-header'>
-				<input className="list-text-input" placeholder={placeholder} value={query} onChange={e => setQuery(e.target.value)}/>
-				<div className={["list-toggle", toggled ? "list-rotate" : ""].join(" ")}>
+		<div id={id} className={styles.listContainer}>
+			<div className={styles.listHeader}>
+				<input className={styles.listTextInput} placeholder={placeholder} value={query} onChange={e => setQuery(e.target.value)}/>
+				<div className={[styles.listToggle, toggled ? styles.listRotate : ""].join(" ")}>
 					<ChevronDown id={`${id}-dropdown`} size={28} onClick={() => setToggled(!toggled)} />
 				</div>
 			</div>
-			<div className="list-item-container" >
-				<div className="list-child" onClick={onClick} style={{ margin: toggled ? "0" : "-100% 0 -100% 0" }} id={`${id}-children`}>
+			<div className={styles.listItemContainer} >
+				<div className={styles.listChild} onClick={onClick} style={{ margin: toggled ? "0" : "-100% 0 -100% 0" }} id={`${id}-children`}>
 					{children}
 				</div> 
 			</div>

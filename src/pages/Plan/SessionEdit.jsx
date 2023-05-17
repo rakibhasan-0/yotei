@@ -3,7 +3,7 @@ import DatePicker from "../../components/Common/DatePicker/DatePicker"
 import Button from "../../components/Common/Button/Button"
 import Dropdown from "../../components/Common/List/Component"
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
-import "./SessionEdit.css"
+import styles from "./SessionEdit.module.css"
 import { useNavigate, useParams } from "react-router-dom"
 import { useContext, useEffect, useState } from "react"
 import { AccountContext } from "../../context"
@@ -149,47 +149,47 @@ export default function SessionEdit() {
 				<div className="col-md-8">
 
 					<ConfirmPopup onClick={deleteSesssion} showPopup={showPopup} setShowPopup={setShowPopup} popupText={"Är du säker?"}></ConfirmPopup>
-					<div className="header-container">
-						<Trash className="trashcan-icon" style={{opacity:"0%"} /*Exists for proper spacing*/}></Trash> 
+					<div className={styles.headerContainer}>
+						<Trash className={styles.trashcanIcon} style={{opacity:"0%"} /*Exists for proper spacing*/}></Trash> 
 						<h1 >Redigera Tillfälle</h1>
-						<Trash className="trashcan-icon" onClick={() => setShowPopup(true)}></Trash>
+						<Trash className={styles.trashcanIcon} onClick={() => setShowPopup(true)}></Trash>
 					</div>
 					
 					<Divider option={"h2_left"} title={"Grupp"} />
 					<Dropdown id={"session-dropdown"} text={group?.name || "Grupp"} centered={true}>
 						{groups?.map((plan, index) => (
-							<div className="dropdown-row" key={index} onClick={() => setGroup(plan)}>
-								<p className="dropdown-row-text">{plan.name}</p>
+							<div className={styles.dropdownRow} key={index} onClick={() => setGroup(plan)}>
+								<p className={styles.dropdownRowText}>{plan.name}</p>
 							</div>
 						))}
 					</Dropdown>
 					
 					<Divider option={"h2_left"} title={"Datum och Tid"} />
-					<div className="wrap-centering" >
+					<div className={styles.wrapCentering} >
 						<DatePicker selectedDate={date} onChange={e => setDate(e.target.value)} id={"session-datepicker"} />
 						<TimePicker selectedTime={time} onChange={e => setTime(e.target.value)} id={"session-timepicker"} />
 					</div>
 
 					<Divider option={"h2_left"} title={"Pass"} />
 					<Dropdown id={"session-dropdown"} text={workout?.name || "Sök befintligt pass"} centered={true}>
-						<div className="dropdown-row" onClick={() => setWorkout(null)}>
-							<p className="dropdown-row-text">Inget pass</p>
+						<div className={styles.dropdownRow} onClick={() => setWorkout(null)}>
+							<p className={styles.dropdownRowText}>Inget pass</p>
 						</div>
 						{workouts?.map((workout, index) => (
-							<div className="dropdown-row" key={index} onClick={() => setWorkout(workout)}>
-								<p className="dropdown-row-text">{workout.name}</p>
+							<div className={styles.dropdownRow} key={index} onClick={() => setWorkout(workout)}>
+								<p className={styles.dropdownRowText}>{workout.name}</p>
 							</div>
 						))}
 					</Dropdown>
 
-					<Divider option={"h2_middle"} title={"Eller"} />
-					<div className="wrap-centering create-button" >
+					<Divider option={"h2_middle"} title={"eller"} />
+					<div className={`${styles.wrapCentering} ${styles.createButton}`} >
 						<Link to="/workout/create" style={{width: "150px"}}>
 							<Button id={"session-create"}><p>Skapa pass</p></Button>
 						</Link>
 					</div>
 
-					<div className="wrap-centering" >
+					<div className={styles.wrapCentering} >
 						<Button onClick={() => navigate(-1)} id={"session-back"} outlined={true}><p>Tillbaka</p></Button> 
 						<Button onClick={updateSession} id={"session-save"}><p>Spara</p></Button>
 					</div>

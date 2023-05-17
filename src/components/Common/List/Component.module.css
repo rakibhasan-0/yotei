@@ -1,15 +1,15 @@
-.list-container {
+.listContainer {
     border-radius: 5px;
     border: 1px solid var(--black-primary);
     padding: 0;
     user-select: none;
 }
 
-.list-centered {
+.listCentered {
     justify-content: space-between;
 }
 
-.list-header {
+.listHeader {
     display: flex;
     align-items: center;
     text-align: center;
@@ -17,59 +17,60 @@
     gap: 20px;
 }
 
-.list-centered > .list-toggle {
+.listCentered > .listToggle {
     margin-left: unset !important;
 }
 
-.list-header > p {
+.listHeader > p {
     margin: 0;
 }
 
-.list-toggle {
+.listToggle {
     cursor: pointer;
     margin-left: auto;
     transition: all 0.2s ease-in;
 }
 
-.list-text {
+.listText {
     font-size: large;
 }
 
-input,.list-text {
+input,
+.listText {
     width: 100%;
 }
 
-.list-text::placeholder {
+.listText::placeholder {
     text-align: center;
 }
 
-.list-item {
+.listItem {
     cursor: pointer;
     margin-right: 14px;
     height: 32px;
 }
 
-.list-rotate {
+.listRotate {
     rotate: 180deg;
 }
 
-.list-child {
+.listChild {
     transition: all 0.2s ease-in-out;
 }
 
-.list-item-container {
+.listItemContainer {
     overflow: hidden;
     min-height: 0;
 }
 
-.list-label {
+.listLabel {
     width: 100%;
     text-align: left;
 }
 
-.list-err {
-color: var(--red-primary);
-margin: 5px 0 0 1rem;
-transition-duration: 200ms;
-height: 21px;
-}
+.listErr {
+    color: var(--red-primary);
+    margin: 5px 0 0 1rem;
+    transition-duration: 200ms;
+    height: 21px;
+    }

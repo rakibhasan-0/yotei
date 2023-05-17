@@ -1,14 +1,16 @@
-.checkbox-label {
+.checkboxLabel {
     display: flex;
     align-items: center;
     width: fit-content;
     gap: 1rem;
     position: relative;
 }
-.checkbox-label-disabled {
+
+.checkboxLabelDisabled {
     color: var(--gray);
 }
-.checkbox-icon {
+
+.checkboxIcon {
     position: absolute;
     color: white;
     height: 2rem;
@@ -16,7 +18,8 @@
     top: 0;
     left: 0;
 }
-.checkbox-component input[type=checkbox] {
+
+.checkboxComponent input[type=checkbox] {
     width: 2rem;
     height: 2rem;
     border: 2px solid black;
@@ -26,10 +29,11 @@
     appearance: none;
 }
 
-.checkbox-component input[type=checkbox]:checked {
+.checkboxComponent input[type=checkbox]:checked {
     background-color: var(--checkbox-press);
 }
-.checkbox-component input[type=checkbox]:disabled {
+
+.checkboxComponent input[type=checkbox]:disabled {
     border: 2px solid var(--gray);
     background-color: var(--background);
 }

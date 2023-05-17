@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
 import {Trash, Pencil, Clock, Plus} from "react-bootstrap-icons"
-import "./ExerciseDetailsPage.css"
 import { AccountContext } from "../../context"
 import { useNavigate, useParams } from "react-router"
 import CommentSection from "../../components/Common/CommentSection/CommentSection"
@@ -158,11 +157,11 @@ export default function ExerciseDetailsPage() {
 						<p>{exercise?.duration} min</p>
 					</div>
 					
-					<h2 className="bold-font">Beskrivning</h2>
+					<h2 className="fw-bold">Beskrivning</h2>
 					<p>{exercise?.description}</p>
 					
 					{tags?.length > 0 && <>
-						<h2 className="bold-font">Taggar</h2>
+						<h2 className="fw-bold">Taggar</h2>
 						<div className="d-flex flex-wrap mb-4" style={{gap: "10px"}}>
 							{tags.map((tag, index) => (
 								<Tag key={index} tagType={"default"} text={tag.tagName} />
@@ -175,7 +174,7 @@ export default function ExerciseDetailsPage() {
 					</div>
 
 					<div className="d-flex justify-content-between align-items-center">
-						<h2 className="bold-font">Kommentarer</h2>
+						<h2 className="fw-bold">Kommentarer</h2>
 						<Plus size={"24px"} onClick={() => setAddComment(true)} style={{ color: "var(--red-primary)" }} />
 					</div>
 					<div className="w-100">

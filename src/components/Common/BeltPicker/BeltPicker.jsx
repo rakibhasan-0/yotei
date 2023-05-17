@@ -1,4 +1,4 @@
-import "./BeltPicker.css"
+import styles from "./BeltPicker.module.css"
 import DropdownComponent from "../List/Component"
 import CheckBox from "../CheckBox/CheckBox"
 import BeltIcon from "../BeltIcon/BeltIcon"
@@ -29,15 +29,15 @@ const BeltRow = ({ belt, states, onToggle }) => {
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
-		<div className="belt-row">
-			<div className="belt-item">
+		<div className={styles.beltRow}>
+			<div className={styles.beltItem}>
 				{child ? <>
 					<CheckBox id={`belt-child-${name}`} onClick={toggleChildState} checked={childState} />
 					<BeltIcon id={`belt-child-${name}-text`} belt={child} />
 				</> : <div style={{width:"72px"}} />}
 			</div>
-			<p id={"belt-text"} className="belt-text">{name}</p>
-			<div className="belt-item">
+			<p id={"belt-text"} className={styles.beltText}>{name}</p>
+			<div className={styles.beltItem}>
 				<BeltIcon id={`belt-adult-${name}`} belt={adult} />
 				<CheckBox id={`belt-adult-${name}-text`} onClick={toggleAdultState} checked={adultState} />
 			</div>

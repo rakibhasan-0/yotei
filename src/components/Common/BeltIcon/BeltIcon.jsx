@@ -1,4 +1,4 @@
-import "./BeltIcon.css"
+import styles from "./BeltIcon.module.css"
 
 /**
  * Represents a belt icon with a white background, and 
@@ -12,18 +12,18 @@ export default function BeltIcon({ belt }) {
 	const color = `#${belt.color}`
 	if (belt.child) {
 		return (
-			<div className="belt-icon" style={{ backgroundColor: "white" }}>
-				<div className="belt-icon-child" style={{ backgroundColor: color }} />
+			<div className={styles.beltIcon} style={{ backgroundColor: "white" }}>
+				<div className={styles.beltIconChild} style={{ backgroundColor: color }} />
 			</div>
 		)
 	}
 	if (belt.name.toLowerCase().includes("dan")) {
 		const num = parseInt(belt.name.split(" ")[0])
 		return (
-			<div className="belt-icon belt-icon-black" style={{ backgroundColor: color }}>
-				{[...Array(num)].map((i) => <div key={i} className="belt-icon-child icon-black" style={{ backgroundColor: "gold" }} />)}
+			<div className={styles.beltIcon} style={{ backgroundColor: color }}>
+				{[...Array(num)].map((i) => <div key={i} className={styles.beltIconChild} style={{ backgroundColor: "gold" }} />)}
 			</div>
 		)
 	}
-	return (<div className="belt-icon" style={{ backgroundColor: color }} />)
+	return (<div className={styles.beltIcon} style={{ backgroundColor: color }} />)
 }

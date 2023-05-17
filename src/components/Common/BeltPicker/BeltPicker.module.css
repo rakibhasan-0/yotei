@@ -1,4 +1,4 @@
-.belt-row {
+.beltRow {
     border-top: solid 1px black;
     height: 50px;
     width: 100%;
@@ -10,17 +10,21 @@
     padding: 3px 10px 3px 10px;
 }
 
-.belt-row:nth-child(even) {
+.beltRow:nth-child(even) {
     background-color: var(--red-secondary);
 }
 
-.belt-item {
+.beltRow:last-child {
+    border-radius: 0 0 4px 4px;
+}
+
+.beltItem {
     display: flex;
     gap: 20px;
     align-items: center;
 }
 
-.belt-text {
+.beltText {
     margin-top: 0;
     margin-bottom: 0;
 }

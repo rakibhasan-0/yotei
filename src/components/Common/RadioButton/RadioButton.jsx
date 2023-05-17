@@ -1,6 +1,6 @@
 import React from "react"
 import { Record, Record2} from "react-bootstrap-icons"
-import "./RadioButton.css"
+import styles from "./RadioButton.module.css"
 
 /**
  * A radio button that can be toggled on or off, where the
@@ -24,13 +24,13 @@ import "./RadioButton.css"
  */
 export default function RadioButton({onClick,toggled,id}){
 	return(
-		<div id={id} onClick={onClick} className="radio-container">
+		<div id={id} onClick={onClick} className={styles.radioContainer}>
 			{toggled
 				?   <>
-					<Record2 className='radio'/>
+					<Record2 className={styles.radio}/>
 				</>
 				:   <>
-					<Record className='radio'/>
+					<Record className={styles.radio} />
 				</>
 			}
 		</div>

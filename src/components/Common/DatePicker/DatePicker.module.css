@@ -1,4 +1,4 @@
-.date-picker {
+.datePicker {
     transition: all 0.2s ease-in;
     background-color: var(--red-secondary);
     color: var(--black-primary);
@@ -8,6 +8,6 @@
     width: fit-content;
 }
 
-.date-picker:focus {
+.datePicker:focus {
     outline: var(--red-primary) 2px solid;
 }

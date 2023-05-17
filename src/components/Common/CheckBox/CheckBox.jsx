@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import "./CheckBox.css"
+import styles from "./CheckBox.module.css"
 import { Check } from "react-bootstrap-icons"
 
 /** 
@@ -33,8 +33,8 @@ export default function CheckBox({checked, onClick, label, disabled, id}) {
 	useEffect(() => {checked && onClick(false)},[disabled])
 
 	return (
-		<label className={`checkbox-label checkbox-component ${disabled ? "checkbox-label-disabled" : ""}`} id={id}>
-			{checked && <Check className="checkbox-icon"/>}
+		<label className={`${styles.checkboxLabel} ${styles.checkboxComponent} ${disabled ? styles.checkboxLabelDisabled : ""}`} id={id}>
+			{checked && <Check className={styles.checkboxIcon} />}
 			<input
 				type="checkbox"
 				checked={checked}

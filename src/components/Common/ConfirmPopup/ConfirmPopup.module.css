@@ -1,11 +1,11 @@
-.outer-buttonpanel {
+.outerButtonpanel {
     display: flex;
     flex-direction: column;
     justify-content: end;
     height: 100%;
 }
 
-.inner-buttonpanel {
+.innerButtonpanel {
     display: flex;
     justify-content: space-around;
     padding: 10px;

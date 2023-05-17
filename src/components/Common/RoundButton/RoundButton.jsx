@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"
-import "./RoundButton.css"
+import styles from "./RoundButton.module.css"
 
 /**
  * Defines the button to add activity. Props: onClick, children, linkTo, id
@@ -14,7 +14,7 @@ function RoundButton({onClick, children, linkTo, id}) {
 	const navigate = useNavigate()
 
 	return (
-		<div id={id} onClick={linkTo != null ? () => navigate(linkTo) : onClick} className="btn btn-color btn-add-activity container-fluid">
+		<div id={id} onClick={linkTo != null ? () => navigate(linkTo) : onClick} className={`${styles.btnAddActivity} ${styles.containerFluid}`}>
 			{children}
 		</div>
 	)

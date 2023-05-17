@@ -1,12 +1,12 @@
-.WorkoutToPrint-container {
+.WorkoutToPrintContainer {
     padding-left: 100px;
 }
 
-.WorkoutToPrint-column-item-right {
+.WorkoutToPrintColumnItemRight {
     padding-left: 135px;
 }
 
-.WorkoutToPrint-column-item {
+.WorkoutToPrintColumnItem {
     width: 90%;
     padding-top: 10px;
     overflow: hidden;
@@ -14,11 +14,11 @@
     text-align: left;
 }
 
-.WorkoutToPrint-row-item {
+.WorkoutToPrintRowItem {
     display: flex;
 }
 
-.WorkoutToPrint-properties {
+.WorkoutToPrintProperties {
     word-wrap: break-word;
     text-overflow: ellipsis;
 }

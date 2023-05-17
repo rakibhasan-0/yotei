@@ -83,41 +83,6 @@ p {
     flex-flow: column;
 }
 
-/* This should be removed when removing the deprecated buttons */
-
-.btn-color {
-	background-color: #BE3B41;
-	border-color: #BE3B41;
-	color: #fff;
-}
-
-.btn-color:disabled {
-	background-color: #BE3B41;
-	border-color: #BE3B41;
-	color: #fff;
-}
-
-.btn-color:disabled:hover {
-	background-color: #BE3B41;
-	border-color: #BE3B41;
-	color: #fff;
-}
-
-.btn-color:active {
-	background-color: #BE3B41 !important;
-	border-color: #BE3B41 !important;
-	color: #fff !important;
-}
-
-.btn-color:focus {
-	box-shadow: none !important;
-}
-
-.btn-color:hover {
-	color: #fff;
-	background-color: #d74249;
-	border-color: #c93b42
-}
 
 .href-link {
 	color: #0e0f0f;

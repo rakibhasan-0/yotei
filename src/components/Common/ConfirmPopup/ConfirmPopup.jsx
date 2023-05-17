@@ -1,5 +1,5 @@
 import Popup from "../Popup/Popup"
-import "./ConfirmPopup.css"
+import styles from "./ConfirmPopup.module.css"
 import Button from "../Button/Button"
 
 /**
@@ -46,10 +46,10 @@ export default function ConfirmPopup({ onClick, id, showPopup, setShowPopup, pop
 			maxHeight={231}
 			maxWidth={333}>
 			<div id={`${id}-text`}>
-				<p className="font">{ popupText }</p>
+				<p className={styles.font}>{ popupText }</p>
 			</div>	
-			<div className="outer-buttonpanel">
-				<div className="inner-buttonpanel" id={`${id}-buttons`}>
+			<div className={styles.outerButtonpanel}>
+				<div className={styles.innerButtonpanel} id={`${id}-buttons`}>
 					<Button width='100px'  outlined='false' onClick={() => setShowPopup(false)}>Tillbaka</Button>
 					<Button width='100px'  onClick={deleteClickHandler}>Radera</Button>
 				</div>

@@ -1,6 +1,6 @@
 import React from "react"
 import { Star, StarFill } from "react-bootstrap-icons"
-import "./StarButton.css"
+import styles from "./StarButton.module.css"
 
 /**
  * A star button that can be toggled on or off, where the
@@ -24,9 +24,9 @@ import "./StarButton.css"
  */
 export default function StarButton({id, onClick, toggled}) {
 	return (
-		<div id={id} onClick={onClick} className='star-container'>
-			<StarFill className={`star star-${toggled ? "" : "hidden"}`} color='yellow' />
-			<Star size={"100%"} className={`star${toggled ? "-overlay" : ""}`} />
+		<div id={id} onClick={onClick} className={styles.starContainer}>
+			<StarFill className={`${styles.star} ${toggled ? "" : styles.starHidden}`} color='yellow' />
+			<Star size={"100%"} className={`${toggled ? styles.starOverlay : styles.star}`} />
 		</div>
 	)
 }

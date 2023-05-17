@@ -1,5 +1,5 @@
 import React from "react"
-import "./Button.css"
+import styles from "./Button.module.css"
 
 /**
  * A default button that should be used throughout the project.
@@ -25,7 +25,7 @@ import "./Button.css"
 export default function Button({onClick, outlined, children, width, id, disabled}) {
 	const style = width ? { width } : { width: "100%", maxWidth: "150px" }
 	return (
-		<button id={id} disabled={disabled} onClick={onClick} className={`yotei-button ${outlined ? "yotei-button-back" : "yotei-button-normal"}`} style={style}>
+		<button id={id} disabled={disabled} onClick={onClick} className={`${styles.yoteiButton} ${outlined ? styles.yoteiButtonBack : styles.yoteiButtonNormal}`} style={style}>
 			{children}
 		</button>
 	)

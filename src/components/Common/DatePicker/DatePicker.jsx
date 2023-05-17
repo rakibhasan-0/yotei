@@ -1,5 +1,5 @@
 import React from "react"
-import "./DatePicker.css"
+import styles from "./DatePicker.module.css"
 
 /**
  * Defines the date picker. 
@@ -24,7 +24,7 @@ export default function DatePicker({onChange, ref, selectedDate, id}) {
 			type="date" 
 			value={selectedDate} 
 			onChange={onChange}
-			className={"date-picker"}
+			className={styles.datePicker}
 			ref={ref}
 		/>
 	)

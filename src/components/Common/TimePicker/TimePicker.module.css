@@ -1,4 +1,4 @@
-.time-picker {
+.timePicker {
     transition: all 0.2s ease-in;
     background-color: var(--red-secondary);
     color: black;
@@ -8,6 +8,6 @@
     width: fit-content;
 }
 
-.time-picker:focus {
+.timePicker:focus {
     outline: var(--red-primary) 2px solid;
 }

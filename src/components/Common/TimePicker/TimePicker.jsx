@@ -1,5 +1,5 @@
 import React from "react"
-import "./TimePicker.css"
+import styles from "./TimePicker.module.css"
 
 /**
  * Defines the time picker. 
@@ -22,7 +22,7 @@ export default function TimePicker({onChange, ref, selectedTime, id}) {
 			type="time" 
 			value={selectedTime} 
 			onChange={onChange}
-			className={"time-picker"}
+			className={styles.timePicker}
 			ref={ref}
 		/>
 	)
