@@ -23,12 +23,8 @@ public class SearchPlanParams {
             to = parseDateString(urlQuery.get("to"));
         }
 
-        if(urlQuery.containsKey("previousSessions")){
-            try {
-                previousSessions = Boolean.parseBoolean(urlQuery.get("previousSessions"));
-            } catch (Exception e){
-                // Log incorrect param
-            }
+        if(urlQuery.containsKey("previousSessions")) {
+            previousSessions = Boolean.parseBoolean(urlQuery.get("previousSessions"));
         }
 
         if(urlQuery.containsKey("plans")){
@@ -54,7 +50,7 @@ public class SearchPlanParams {
     }
 
     public boolean hasPreviousSessions(){
-        return previousSessions != null;
+        return previousSessions != null && previousSessions == true;
     }
 
     public Boolean getPreviousSessions() {
@@ -83,7 +79,7 @@ public class SearchPlanParams {
         String[] dateObjects = date.split("-");
         if(dateObjects.length != 3) return null;
 
-        LocalDate localDate = null;
+        LocalDate localDate;
         try {
             localDate = LocalDate.of(
                     Integer.parseInt(dateObjects[0]),
@@ -91,7 +87,7 @@ public class SearchPlanParams {
                     Integer.parseInt(dateObjects[2])
             );
         } catch (Exception e){
-            // Log incorrect param
+            return null;
         }
 
         return localDate;

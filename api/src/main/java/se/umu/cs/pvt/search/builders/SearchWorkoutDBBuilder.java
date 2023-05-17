@@ -4,7 +4,6 @@ import se.umu.cs.pvt.search.DatabaseQuery;
 import se.umu.cs.pvt.search.SearchWorkoutParams;
 import se.umu.cs.pvt.search.interfaces.SearchDBBuilderInterface;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Test class for SearchTechniquesParams
  *
- * @author Jonas Gustavsson
+ * @author Jonas Gustavsson (Kraken)
  * date: 2023-05-03
  */
 public class TechniquesParamsTest {
