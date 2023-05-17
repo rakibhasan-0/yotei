@@ -254,6 +254,9 @@ public class SearchController {
 	 * @return List of suggested tags.
 	 */
 	private List<String> getTagSuggestions(String searchInput, List<String> tags, TagType tagType) {
+        if (searchInput == null || searchInput.isEmpty()) {
+            return new ArrayList<>();
+        }
 		// Take out list of tags to check against
 		DatabaseQuery createdQuery = new SearchTagSuggestionsDBBuilder(tags, tagType)
                 .filterByTagType()
