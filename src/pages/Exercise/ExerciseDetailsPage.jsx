@@ -12,6 +12,7 @@ import Gallery from "../../components/Gallery/Gallery"
 import {toast, ToastContainer} from "react-toastify"
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 import ErrorState from "../../components/Common/ErrorState/ErrorState"
+import ExerciseEdit from "./ExerciseEdit"
 import {isEditor} from "../../utils"
 /**
  * A page for displaying details about an exercise.
@@ -19,6 +20,7 @@ import {isEditor} from "../../utils"
  * @author Chimera
  * @since 2023-05-16
  */
+
 export default function ExerciseDetailsPage() {
 	const {ex_id} = useParams()
 	const { token, userId } = useContext(AccountContext)
@@ -33,7 +35,9 @@ export default function ExerciseDetailsPage() {
 	const [showDeleteComment, setShowDeleteComment] = useState(false)
 	const [error, setError] = useState()
 	const navigate = useNavigate()
+	const [showEditPopup, setShowEditPopup] = useState(false)
 	const accountRole = useContext(AccountContext)
+
 	const fetchComments = () => {
 		fetch(`/api/comment/exercise/get?id=${ex_id}`, {
 			headers: { token }
@@ -139,12 +143,11 @@ export default function ExerciseDetailsPage() {
 		<div className="container">
 			<div className="row justify-content-center">
 				<div className="col-md-8 text-left">
-
 					<div className="d-flex flex-row align-items-center justify-content-between">
 						<h1 className="mt-2">{exercise?.name}</h1>
 						{isEditor(accountRole) && 
 							<div className="d-flex flex-row" style={{gap: "10px"}}>
-								<Pencil onClick={() => navigate(`/exercise/edit/${ex_id}`)} size="24px" style={{color: "var(--red-primary)"}} />
+								<Pencil onClick={() => setShowEditPopup(true)} size="24px" style={{color: "var(--red-primary)"}} />
 								<Trash onClick={() => setShowAlert(true)} size="24px" style={{color: "var(--red-primary)"}} />
 							</div>
 						}
@@ -203,6 +206,16 @@ export default function ExerciseDetailsPage() {
 				onClick={() => onDeleteComment()}
 				setShowPopup={() => setShowDeleteComment(false)}
 			/>
+
+			<Popup
+				title={"Redigera Övning"}
+				id={"edit-exercise-popup"}
+				isOpen={showEditPopup}
+				setIsOpen={setShowEditPopup}
+				noBackground={false}>
+				<ExerciseEdit setShowPopup={setShowEditPopup}/>
+			</Popup>
 		</div>
+		
 	)
 }

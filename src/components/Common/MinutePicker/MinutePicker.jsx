@@ -10,14 +10,11 @@ import "./MinutePicker.css"
  *     								should take id and time as input.
  *
  * Example usage:
- *      const callback = (id, time) => {
- *      	console.log("input: " + time + ", on id: " + id)
- * 		}
- *
- *      <MinutePicker id="10" callback={callback}></MinutePicker>
+ *		const [time1, updateTime1] = useState("")
+ *		<MinutePicker id="10" updateTime={updateTime1} initialValue={5}></MinutePicker>
  *
  *
- * @author Team Minotaur
+ * @author Team Minotaur, Squad Phoenix
  * @version 2.0
  * @since 2023-05-03
  */
