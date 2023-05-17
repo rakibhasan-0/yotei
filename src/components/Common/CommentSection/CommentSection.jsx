@@ -1,3 +1,5 @@
+import { Trash } from "react-bootstrap-icons"
+
 /**
  * A comment section, used to display comments.#$
  * 
@@ -13,14 +15,16 @@
  *   }
  * ]
  * 
- * @author Chimera (Gruoup 4)
- * @since 2023-05-09
- * @version 1.0
+ * @author Chimera (Gruoup 4) & Cyclops(Group 5)
+ * @since 2023-05-17
+ * @version 2.0
  * @param id An id for the comment section
  * @param userId Id of the current user
  * @param comments Comment object as shown above
  * @param onDelete A delete function to be when comment is to be deleted. Sends commentId
  */
+
+
 export default function CommentSection({ id, userId, comments, onDelete }) {
 	return(
 		<div id={id} className="w-100 d-flex flex-column justify-content-center align-items-center">
@@ -37,7 +41,12 @@ export default function CommentSection({ id, userId, comments, onDelete }) {
 					<p className="mt-2" style={{textAlign: "left"}}>{comment.commentText}</p>
 					{userId == comment.userId && 
 					<div className="d-flex align-items-end flex-column">
-						<i style={{color:"#BD3B41", fontSize:"24px"}} onClick={() => onDelete(comment.commentId)} className="bi bi-trash "/>
+						<Trash
+							size="24px"
+							color="var(--red-primary)"
+							style={{cursor: "pointer"}}
+							onClick={() => onDelete(comment.commentId)}
+						/>
 					</div>
 					}
 				</div>
