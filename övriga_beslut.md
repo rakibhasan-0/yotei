@@ -1,3 +1,7 @@
+# Användarroller 17/05/23
+## Scrum-masters 
+* De roller som ska finnas i systemet är: admin, utökad användare samt vanlig användare. Admin får redigera och lägga till allting i applikationen. Utökad användare får redigera och lägga till övningar men inte tekniker. Vanlig användare får bara redigera och lägga till planeringar och pass. 
+
 # PO-möten med chapters 18/04/23
 ## QA
 * Systemtester
