@@ -66,7 +66,7 @@ public class UserApiTest {
             user.setPassword("1234");
             user.setUserRole(1);
 
-            Mockito.when(userRepository.findUserByUsername(user.getUsername())).thenReturn(Optional.of(user));
+            Mockito.when(userRepository.findUserByUsernameIgnoreCase(user.getUsername())).thenReturn(Optional.of(user));
 
             Object response = lc.registerUser(user);
             if (response instanceof ResponseEntity<?>) {
@@ -86,7 +86,7 @@ public class UserApiTest {
             user.setPassword("1234");
             user.setUserRole(1);
 
-            Mockito.when(userRepository.findUserByUsername(user.getUsername())).thenReturn(Optional.empty());
+            Mockito.when(userRepository.findUserByUsernameIgnoreCase(user.getUsername())).thenReturn(Optional.empty());
 
             Object response = lc.registerUser(user);
             if (response instanceof ResponseEntity<?>) {
@@ -161,7 +161,7 @@ public class UserApiTest {
                 users.add(new User("user" + i, "user" + i, i%2));
             }
             String username = "user3";
-            Mockito.when(userRepository.findUserByUsername(username)).thenAnswer(invocation -> {
+            Mockito.when(userRepository.findUserByUsernameIgnoreCase(username)).thenAnswer(invocation -> {
                 for (User u:users) {
                     if (u.getUsername().equals(username)) {
                         return Optional.of(u);
@@ -188,7 +188,7 @@ public class UserApiTest {
                 users.add(new User("user" + i, "user" + i, i%2));
             }
             String username = "user3";
-            Mockito.when(userRepository.findUserByUsername(username)).thenAnswer(invocation -> {
+            Mockito.when(userRepository.findUserByUsernameIgnoreCase(username)).thenAnswer(invocation -> {
                 for (User u:users) {
                     if (u.getUsername().equals(username)) {
                         return Optional.of(u);
@@ -216,7 +216,7 @@ public class UserApiTest {
                 users.add(new User("user" + i, "user" + i, i%2));
             }
             String username = "user20";
-            Mockito.when(userRepository.findUserByUsername(username)).thenAnswer(invocation -> {
+            Mockito.when(userRepository.findUserByUsernameIgnoreCase(username)).thenAnswer(invocation -> {
                 for (User u:users) {
                     if (u.getUsername().equals(username)) {
                         return Optional.of(u);
@@ -243,7 +243,7 @@ public class UserApiTest {
                 users.add(new User("user" + i, "user" + i, i%2));
             }
             String username = "user3";
-            Mockito.when(userRepository.findUserByUsername(username)).thenAnswer(invocation -> {
+            Mockito.when(userRepository.findUserByUsernameIgnoreCase(username)).thenAnswer(invocation -> {
                 for (User u:users) {
                     if (u.getUsername().equals(username)) {
                         return Optional.of(u);
@@ -271,7 +271,7 @@ public class UserApiTest {
                 users.add(new User("user" + i, "user" + i, i%2));
             }
             String username = "user20";
-            Mockito.when(userRepository.findUserByUsername(username)).thenAnswer(invocation -> {
+            Mockito.when(userRepository.findUserByUsernameIgnoreCase(username)).thenAnswer(invocation -> {
                 for (User u:users) {
                     if (u.getUsername().equals(username)) {
                         return Optional.of(u);
@@ -299,7 +299,7 @@ public class UserApiTest {
                 users.add(new User("user" + i, "user" + i, i%2));
             }
             String username = "user3";
-            Mockito.when(userRepository.findUserByUsername(username)).thenAnswer(invocation -> {
+            Mockito.when(userRepository.findUserByUsernameIgnoreCase(username)).thenAnswer(invocation -> {
                 for (User u:users) {
                     if (u.getUsername().equals(username)) {
                         return Optional.of(u);

@@ -2,15 +2,6 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/api/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/comment-api/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/exercise-api/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/gateway/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/plan-api/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/session-api/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/tag-api/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/techniques-api/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/workout-api/src/main/java" charset="UTF-8" />
   </component>
 </project>

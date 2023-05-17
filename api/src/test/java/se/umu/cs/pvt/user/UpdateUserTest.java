@@ -110,7 +110,7 @@ public class UpdateUserTest {
             user.setUserId(42L);
             user.setUserRole(0);
 
-            Mockito.when(userRepository.findUserByUsername("user")).thenReturn(Optional.of(user));
+            Mockito.when(userRepository.findUserByUsernameIgnoreCase("user")).thenReturn(Optional.of(user));
 
             ResponseEntity<Object> response = userController.updateUsername(map);
             assertEquals(HttpStatus.NOT_ACCEPTABLE, response.getStatusCode());

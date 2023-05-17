@@ -53,7 +53,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
 
-        Optional<User> response = repository.findUserByUsername(body.get("username"));
+        Optional<User> response = repository.findUserByUsernameIgnoreCase(body.get("username"));
 
         if (response.isEmpty()) {
             System.err.println("invalid username");
@@ -94,7 +94,7 @@ public class UserController {
             return new ResponseEntity<>("Fyll i lösenord.",HttpStatus.NOT_ACCEPTABLE);
         }
         //Check if username already exists
-        if (repository.findUserByUsername(body.get("newUsername")).isPresent()) {
+        if (repository.findUserByUsernameIgnoreCase(body.get("newUsername")).isPresent()) {
             return new ResponseEntity<>("Användarnamnet " + body.get("newUsername") + " finns redan.",HttpStatus.NOT_ACCEPTABLE);
         }
 
@@ -152,7 +152,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return repository.findUserByUsername(username);
+        return repository.findUserByUsernameIgnoreCase(username);
     }
 
     /**
@@ -172,7 +172,7 @@ public class UserController {
             System.err.println("No password given\n");
             return new ResponseEntity<>("Inget lösenord angivet", HttpStatus.NOT_ACCEPTABLE);
         }
-        if(repository.findUserByUsername(user.getUsername()).isPresent()) {
+        if(repository.findUserByUsernameIgnoreCase(user.getUsername()).isPresent()) {
             System.err.println("Username is already taken!\n");
             return new ResponseEntity<>("Användarnamnet används redan", HttpStatus.NOT_ACCEPTABLE);
         }
@@ -274,7 +274,7 @@ public class UserController {
      */
     @DeleteMapping("/remove/{id}")
     public Object removeUser(@PathVariable("id") String username) {
-        Optional<User> possibleUser = repository.findUserByUsername(username);
+        Optional<User> possibleUser = repository.findUserByUsernameIgnoreCase(username);
         if (possibleUser.isEmpty()) {
             return new ResponseEntity<>("Användaren finns inte", HttpStatus.BAD_REQUEST);
         }
@@ -297,7 +297,7 @@ public class UserController {
      */
     @PostMapping("/changerole/{id}")
     public Object changeRoleUser(@PathVariable("id") String username) {
-        Optional<User> possibleUser = repository.findUserByUsername(username);
+        Optional<User> possibleUser = repository.findUserByUsernameIgnoreCase(username);
         if (possibleUser.isEmpty()) {
             return new ResponseEntity<>("Användaren finns inte", HttpStatus.BAD_REQUEST);
         }

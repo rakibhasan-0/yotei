@@ -18,7 +18,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
      * @param username  The username for the user
      * @return The User object with the given username
      */
-    Optional<User> findUserByUsername(String username);
+    Optional<User> findUserByUsernameIgnoreCase(String username);
 
     List<UserShort> findAllProjectedBy();
 }

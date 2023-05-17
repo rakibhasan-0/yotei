@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author  Phoenix (25-04-2023)
+ *          Dragon (16-05-2023)
  */
 @ExtendWith(MockitoExtension.class)
 public class LoginTest {
@@ -98,7 +99,7 @@ public class LoginTest {
             user.setUsername("nonExistingUser");
             user.setPassword("randomPassword");
 
-            Mockito.when(userRepository.findUserByUsername(user.getUsername())).thenReturn(Optional.empty());
+            Mockito.when(userRepository.findUserByUsernameIgnoreCase(user.getUsername())).thenReturn(Optional.empty());
 
             map.put("username", user.getUsername());
             map.put("password", user.getPassword());
@@ -119,7 +120,7 @@ public class LoginTest {
             user.setUsername("user");
             user.setPassword("invalidPassword");
 
-            Mockito.when(userRepository.findUserByUsername(user.getUsername())).thenReturn(Optional.of(new User("user", "123")));
+            Mockito.when(userRepository.findUserByUsernameIgnoreCase(user.getUsername())).thenReturn(Optional.of(new User("user", "123")));
 
             map.put("username", user.getUsername());
             map.put("password", user.getPassword());
@@ -143,7 +144,7 @@ public class LoginTest {
             user.setUserRole(1);
             user.setUserId(1L);
 
-            Mockito.when(userRepository.findUserByUsername(user.getUsername())).thenReturn(Optional.of(user));
+            Mockito.when(userRepository.findUserByUsernameIgnoreCase(user.getUsername())).thenReturn(Optional.of(user));
 
             map.put("username", user.getUsername());
             map.put("password", "1234");
@@ -155,4 +156,5 @@ public class LoginTest {
             System.out.println("Exception thrown: " + e.getCause());
         }
     }
+
 }
