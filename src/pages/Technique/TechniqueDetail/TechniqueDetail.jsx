@@ -106,7 +106,7 @@ function TechniqueDetail({id}) {
 			<p style={{marginBottom: 0}}>{technique.isKihon ? "Kihon" : "Ej kihon"}</p>
 			<div className="technique-detail-belts-container">
 				{technique.belts ? (
-					technique.belts.map(belt => <BeltIcon key={belt.name} color={"#" + belt.color} child={belt.child}/>)
+					technique.belts.map(belt => <BeltIcon key={belt.name} belt={belt}/>)
 				) : (
 					<p>Inga bälten kunde hittas för denna teknik.</p>
 				)}

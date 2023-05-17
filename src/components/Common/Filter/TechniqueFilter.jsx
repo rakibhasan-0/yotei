@@ -31,10 +31,9 @@ function TechniqueFilter({id, belts, onBeltChange, kihon, onKihonChange}){
 				{/** If no belts have been picked, hide the "Valda bälten" text. */}
 				<p className="selected-text">{!(belts.length > 0) ? "" : "Valda bälten"}</p>
 				<div className="selected-group">
-					{// Map all the picked belts to be shown as an icon in the filter box.
-						belts?.map((belt, index) => (
-							<BeltIcon key={index} color={`#${belt.color}`} child={belt.child}/>
-						))}
+					{belts?.map((belt, index) => (
+						<BeltIcon key={index} belt={belt}/>
+					))}
 				</div>
 				<div className="kihon-group">
 					<CheckBox checked={kihon} onClick={()=> onKihonChange(!kihon)}/>

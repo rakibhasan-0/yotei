@@ -8,11 +8,20 @@ import "./BeltIcon.css"
  * @returns A new child belt icon
  * @author Chimera 
  */
-export default function BeltIcon({ color, child }) {
-	if (child) {
+export default function BeltIcon({ belt }) {
+	const color = `#${belt.color}`
+	if (belt.child) {
 		return (
 			<div className="belt-icon" style={{ backgroundColor: "white" }}>
 				<div className="belt-icon-child" style={{ backgroundColor: color }} />
+			</div>
+		)
+	}
+	if (belt.name.toLowerCase().includes("dan")) {
+		const num = parseInt(belt.name.split(" ")[0])
+		return (
+			<div className="belt-icon belt-icon-black" style={{ backgroundColor: color }}>
+				{[...Array(num)].map((i) => <div key={i} className="belt-icon-child icon-black" style={{ backgroundColor: "gold" }} />)}
 			</div>
 		)
 	}

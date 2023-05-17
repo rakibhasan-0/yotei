@@ -5,14 +5,17 @@
     width: 25px;
     position: relative;
     overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
 }
 
 .belt-icon-child {
     border: solid 1px black;
     border-radius: 2px 2px 2px 2px;
-    height: 32%;
+    height: 5px;
     width: 110%;
-    position: absolute;
-    top: 33%;
-    left: -5%;
 }
