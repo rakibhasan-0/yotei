@@ -12,7 +12,9 @@ import WorkoutActivityListItem from "../Workout/WorkoutActivityListItem/WorkoutA
 import ExerciseCard from "../Common/ExerciseCard/ExerciseListItem"
 import "../Common/ExerciseCard/ExerciseListItem"
 
-
+/** 
+ * @deprecated
+ */
 const ActivityList = ({activities, apiPath, detailURL, favoriteCallback}) => {
 	return (
 		<div className="container grid-striped activity-list">

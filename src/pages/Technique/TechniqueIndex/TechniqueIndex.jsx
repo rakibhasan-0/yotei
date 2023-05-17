@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from "react"
-import ActivityList from "../../../components/Activity/ActivityList"
 import RoundButton from "../../../components/Common/RoundButton/RoundButton"
 import { AccountContext } from "../../../context"
 import "./TechniqueIndex.css"
@@ -11,6 +10,7 @@ import TechniqueFilter from "../../../components/Common/Filter/TechniqueFilter"
 import Popup from "../../../components/Common/Popup/Popup"
 import CreateTechnique from "../CreateTechnique/CreateTechnique"
 import { useCookies } from "react-cookie"
+import TechniqueCard from "../../../components/Common/Technique/TechniqueCard/TechniqueCard"
 
 /**
  * The technique index page.
@@ -20,7 +20,7 @@ import { useCookies } from "react-cookie"
  * @version 1.0
  * @since 2023-05-03
  */
-function TechniqueIndex() {
+export default function TechniqueIndex() {
 	const [techniques, setTechniques] = useState()
 	const context = useContext(AccountContext)
 	const [cookies, setCookie] = useCookies(["technique-filter"])
@@ -64,12 +64,16 @@ function TechniqueIndex() {
 	return (
 		<>
 			<div>
-				<Popup title="Skapa teknik" isOpen={showPopup} setIsOpen={setShowPopup}>
-					<CreateTechnique setIsOpen={setShowPopup}/>
+				<Popup
+					title="Skapa teknik"
+					isOpen={showPopup}
+					setIsOpen={setShowPopup}>
+					<CreateTechnique setIsOpen={setShowPopup} />
 				</Popup>
 			</div>
-			<div className="container grid-striped">
-				<SearchBar 
+
+			<div>
+				<SearchBar
 					id="searchbar-technique"
 					placeholder="Sök efter tekniker"
 					text={searchBarText}
@@ -77,26 +81,33 @@ function TechniqueIndex() {
 					addedTags={tags}
 					setAddedTags={setTags}
 					suggestedTags={suggestedTags}
-					setSuggestedTags={setSuggestedTags}
-				/>
-				<div style={{}}>
+					setSuggestedTags={setSuggestedTags}>
+				</SearchBar>
+
+				<div>
 					<TechniqueFilter
 						belts={belts}
 						onBeltChange={handleBeltChanged}
 						kihon={kihon}
 						onKihonChange={handleKihonChanged}
-						id="test"
-					/>
+						id="test">
+					</TechniqueFilter>
+				</div>
+
+				<div>
+					{techniques && techniques.map((technique) =>
+						<TechniqueCard
+							key={technique.techniqueID}
+							technique={technique}
+							checkBox={false}>
+						</TechniqueCard>)}
 				</div>
 			</div>
-			{techniques &&
-				<ActivityList activities={techniques} apiPath={"techniques"}/>
-			}
+			
 			<RoundButton onClick={() => setShowPopup(true)}>
 				<Plus className="plus-icon" />
 			</RoundButton>
 		</>
-
 	)
 
 	function handleBeltChanged(checked, belt) {
@@ -114,5 +125,3 @@ function TechniqueIndex() {
 		setKihon(newKihon)
 	}
 }
-
-export default TechniqueIndex
