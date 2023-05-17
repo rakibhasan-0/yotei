@@ -80,3 +80,13 @@ export const HTTP_STATUS_CODES = {
 	TEAPOT: 418,
 	INTERNAL_SERVER_ERROR: 500,
 }
+
+/**
+ * Scrolls an element with given id into view.
+ * This util function exists because the implementation of this might change.
+ * Browser support for scrollIntoView with ScrollOptions is unclear.
+ * @param {string} id - The id of the element to scroll into view. 
+ */
+export function scrollToElementWithId(id) {
+	document.getElementById(id).scrollIntoView({behavior: "smooth"})
+}

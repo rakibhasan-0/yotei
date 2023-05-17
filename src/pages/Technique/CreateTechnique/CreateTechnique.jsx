@@ -7,7 +7,8 @@ import "./CreateTechnique.css"
 import { useContext, useEffect, useState } from "react"
 import { AccountContext } from "../../../context"
 import TagInput from "../../../components/Common/Tag/TagInput"
-import { HTTP_STATUS_CODES } from "../../../utils"
+import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../../utils"
+import { toast } from "react-toastify"
 
 const KIHON_TAG = { id: 1 }
 
@@ -27,8 +28,12 @@ const KIHON_TAG = { id: 1 }
  * 			<CreateTechnique setIsOpen={setShowPopup}/>
  *		</Popup>
  *
+ * Changes version 2:
+ * 		Refactored some code. 
+ *      Moved error handling to InputTextFields and toasts.
+ *
  * @author Team Medusa
- * @version 1.0
+ * @version 2.0
  * @since 2023-05-10
  */
 export default function CreateTechnique({ id, setIsOpen }) {
@@ -36,6 +41,8 @@ export default function CreateTechnique({ id, setIsOpen }) {
 	const token = useContext(AccountContext)
 
 	const [techniqueName, setTechniqueName] = useState("")
+	const [techniqueNameErr, setTechniqueNameErr] = useState("")
+
 	const [techniqueDescription, setTechniqueDescription] = useState("")
 	const [kihonChecked, setKihonChecked] = useState(false)
 	const [belts, setBelts] = useState([])
@@ -43,8 +50,6 @@ export default function CreateTechnique({ id, setIsOpen }) {
 	const [continueToCreate, setContinueToCreate] = useState(false)
 	const [clearFields, setClearFields] = useState(false)
 	const [createButton, setCreateButton] = useState(false)
-	const [errorMessage, setErrorMessage] = useState("")
-	const [successMessage, setSuccessMessage] = useState("")
 
 	// Updates the belts hook array 
 	const onToggle = belt => setBelts(prev => {
@@ -54,29 +59,41 @@ export default function CreateTechnique({ id, setIsOpen }) {
 		return [...prev, belt]
 	})
 	
-	async function handleClick() {
+	async function handleSubmit() {
 		const tagIds = buildTags(addedTags, kihonChecked)
 		const beltIds = buildBelts(belts)
-		const response = await postTechnique({ name: techniqueName, description: techniqueDescription, belts: beltIds, tags: tagIds }, token.token)
-		handleResponse(response)
+
+		postTechnique({ name: techniqueName, description: techniqueDescription, belts: beltIds, tags: tagIds }, token.token)
+			.then(handleResponse)
+			.catch(() => toast.error("Kunde inte spara tekniken. Kontrollera din internetuppkoppling."))
 	}
 
 	function handleResponse(response) {
-		setErrorMessage("")
-		setSuccessMessage("")
-		if (response.status === HTTP_STATUS_CODES.CONFLICT) { setErrorMessage("Tekniken finns redan"); return }
-		if (response.status === HTTP_STATUS_CODES.NOT_ACCEPTABLE) { setErrorMessage("Tekniken måste ha ett namn"); return }
-		if (response.status === HTTP_STATUS_CODES.TEAPOT) { setErrorMessage("Du är inte längre inloggad och kan därför inte skapa tekniker"); return }
+		switch(response.status) {
+		case HTTP_STATUS_CODES.CONFLICT:
+			setTechniqueNameErr("En teknik med detta namn finns redan")
+			scrollToElementWithId("create-technique-input-name")
+			return
+		case HTTP_STATUS_CODES.NOT_ACCEPTABLE:
+			setTechniqueNameErr("En teknik måste ha ett namn")
+			scrollToElementWithId("create-technique-input-name")
+			return
+		case HTTP_STATUS_CODES.TEAPOT:
+			toast.error("Du är inte längre inloggad och kan därför inte skapa tekniker")
+			return
+		}
 
+		toast.success("Tekniken " + techniqueName + " skapades")
+		
 		if (continueToCreate && clearFields) { 
-			setSuccessMessage(techniqueName + " skapades")
-			clearStates() 
+			clearStates()
+			return
 		}
-		else if (continueToCreate) { 
-			setSuccessMessage(techniqueName + " skapades")
+		if (continueToCreate) { 
 			setCreateButton(true)
+			return
 		}
-		else { setIsOpen(false) }
+		setIsOpen(false)
 	}
 
 	function clearStates() {
@@ -92,88 +109,85 @@ export default function CreateTechnique({ id, setIsOpen }) {
 		if (createButton) {
 			setCreateButton(false)
 		}
-	}, [techniqueName])
+	}, [techniqueName, createButton])
 
 	return (
-		<div id={id} style={{ display: "flex", gap: "16px", flexDirection: "column" }}>
+		<div id={id} style={{textAlign: "left"}}>
+			<InputTextField
+				id="create-technique-input-name"
+				text={techniqueName}
+				placeholder="Namn"
+				errorMessage={techniqueNameErr}
+				onChange={e => {
+					setTechniqueName(e.target.value)
+					setTechniqueNameErr(null)
+				}}
+			/>
 
-			<div>
-				<InputTextField
-					id={"create-technique-input-name"}
-					text={techniqueName}
-					onChange={(e) => setTechniqueName(e.target.value)}
-					placeholder={"Namn"}>
-				</InputTextField>
-			</div>
-
-			<div style={{ height: "130px", minHeight: "130px" }}>
-				<TextArea
-					id={"create-technique-input-description"}
-					text={techniqueDescription}
-					onChange={(e) => setTechniqueDescription(e.target.value)}
-					placeholder={"Beskrivning av teknik"}>
-				</TextArea>
-			</div>
+			<TextArea
+				id="create-technique-input-description"
+				text={techniqueDescription}
+				onChange={e => setTechniqueDescription(e.target.value)}
+				placeholder="Beskrivning av teknik"
+			/>
 
 			<CheckBox
-				id={"create-technique-checkbox-kihon"}
+				id="create-technique-checkbox-kihon"
 				checked={kihonChecked}
 				onClick={setKihonChecked}
-				label={"Kihon"} >
-			</CheckBox>
+				label="Kihon"
+			/>
+			<div style={{height: "1rem"}}/>
 
 			<BeltPicker
-				id={"create-technique-beltpicker"}
+				id="create-technique-beltpicker"
 				onToggle={onToggle}
-				states={belts}>
-			</BeltPicker>
+				states={belts}
+			/>
+			<div style={{height: "1rem"}}/>
 
-			<div style={{ display: "flex", marginBottom: "-10px" }}>
-				<h1 className="create-technique-title">Taggar</h1>
-			</div>
-
-			<div className="create-technique-horizontal-line" style={{marginBottom: "-12px"}} />
-
+			<h1 className="create-technique-title">Taggar</h1>
+			<div className="create-technique-horizontal-line"/>
+				
 			<TagInput
-				id={"create-technique-taginput"}
+				id="create-technique-taginput"
 				addedTags={addedTags}
 				setAddedTags={setAddedTags}
-				isNested={true}>
-			</TagInput>	
+				isNested={true}
+			/>	
 
 			<CheckBox
-				id={"create-technique-checkbox-continue"}
+				id="create-technique-checkbox-continue"
 				checked={continueToCreate}
 				onClick={setContinueToCreate}
-				label={"Fortsätt skapa tekniker"}>
-			</CheckBox>
+				label="Fortsätt skapa tekniker"
+			/>
+			<div style={{height: "1rem"}}/>
 
 			<CheckBox
-				id={"create-technique-checkbox-clear"}
+				id="create-technique-checkbox-clear"
 				checked={clearFields}
 				onClick={setClearFields}
-				label={"Rensa fält"}
-				disabled={!continueToCreate}>
-			</CheckBox>
+				label="Rensa fält"
+				disabled={!continueToCreate}
+			/>
+			<div style={{height: "1rem"}}/>
 
-			<div>
-				{successMessage && <p className="create-technique-success">{successMessage}</p> }
-				{errorMessage && <p className="create-technique-error">{errorMessage}</p> }
-			</div>
-
-			{/* Containet for back and create technique buttons */}
+			{/* Container for back and create technique buttons */}
 			<div style={{ display: "flex", gap: "27px", justifyContent: "space-evenly" }}>
 				<Button
-					id={"create-technique-backbutton"}
+					id="create-technique-backbutton"
 					onClick={() => setIsOpen(false)}
-					outlined={true}>
+					outlined={true}
+				>
 					<p>Tillbaka</p>
 				</Button>
 
 				<Button
-					id={"create-technique-createbutton"}
-					onClick={() => handleClick()}
-					disabled={createButton}>
+					id="create-technique-createbutton"
+					onClick={handleSubmit}
+					disabled={createButton}
+				>
 					<p>Lägg till</p>
 				</Button>
 			</div>
