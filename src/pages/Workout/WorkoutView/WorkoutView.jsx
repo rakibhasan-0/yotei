@@ -11,7 +11,7 @@ import { Pencil, Trash} from "react-bootstrap-icons"
 import Review from "../../../components/Workout/ReviewFormComponent.jsx"
 import ErrorState from "../../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../../components/Common/Spinner/Spinner"
-import {HTTP_STATUS_CODES} from "../../../utils"
+import {HTTP_STATUS_CODES, isEditor} from "../../../utils"
 import {toast} from "react-toastify"
 import PrintButton from "../../../components/Common/PrintButton/PrintButton"
 
@@ -88,7 +88,7 @@ export default function WorkoutView({id}) {
 				<div id={id} className="container px-0 col-lg-4 col-md-4">
 					{getPopupContainer(showPopup, setShowPopup, workoutId, context, navigate)}
 					{getReviewContainer(showRPopup, setRShowPopup, workoutId)}
-					{getWorkoutInfoContainer(workoutData, setShowPopup)}
+					{getWorkoutInfoContainer(workoutData, setShowPopup, context)}
 					{sortByCategories(workoutData).map((activityCategory) => (
 						<div className="my-5" key={activityCategory.categoryOrder}>
 							<WorkoutActivityList
@@ -233,7 +233,7 @@ function getButtons(navigate, setRShowPopup) {
 }
 
 
-function getWorkoutInfoContainer(workoutData, setShowPopup) {
+function getWorkoutInfoContainer(workoutData, setShowPopup, context) {
 	return (
 		<>
 			<div className="container px-0">
@@ -245,20 +245,25 @@ function getWorkoutInfoContainer(workoutData, setShowPopup) {
 					</div>			
 					<div className="d-flex justify-content-end align-items-center">
 						<PrintButton workoutData={workoutData} />
-						<Link className="ml-3" state={{workout: workoutData}} to={"/workout/edit"}>
-							<Pencil
-								size="24px"
-								color="var(--red-primary)"
-								style={{cursor: "pointer"}}
-							/>
-						</Link>
-						<Trash
-							className="ml-3 mr-3"
-							size="24px"
-							color="var(--red-primary)"
-							style={{cursor: "pointer"}}
-							onClick={() => setShowPopup(true)}
-						/>
+						{
+							isEditor(context) && 
+								<>
+									<Link className="ml-3" state={{workout: workoutData}} to={"/workout/edit"}>
+										<Pencil
+											size="24px"
+											color="var(--red-primary)"
+											style={{cursor: "pointer"}}
+										/>
+									</Link>
+									<Trash
+										className="ml-3 mr-3"
+										size="24px"
+										color="var(--red-primary)"
+										style={{cursor: "pointer"}}
+										onClick={() => setShowPopup(true)}
+									/> 
+								</>
+						}
 					</div>
 					
 					<div className="workout-detail-row-item mt-3">
