@@ -109,24 +109,25 @@ Note that the ID is required to filter with favoruite. If no ID is given, the fa
 |--|--|--|--|--|
 | name | Name of the exercise | Kung fu kick | String | Not implemented |
 | tags | Tags associated with the Exercise | kniv,spark | String | Not implemented |
+| sort | Sorting order | nameDsc, nameAsc, durationAsc, durationDesc | String | Not implemented |
 
 ### Example query:
 
-    (GET) /api/search/exercises?name=something+something&tags=kniv,spark
+    (GET) /api/search/exercises?name=something+something&tags=kniv,spark&sort=durationDesc
 
 ### Example response:
 
     {
 	    result: [
+			{
+			    exerciseID: 2,
+			    description: "Another cool exercise",
+			    duration: 14
+		    },
 		    {
 			    exerciseID: 1,
 		        description: "Cool exercise",
 		        duration: 13
-		    },
-	        {
-			    exerciseID: 2,
-			    description: "Another cool exercise",
-			    duration: 14
 		    }
 	    ],
 	    tagCompletion: ["tag1", "tag2", "tag3"]
