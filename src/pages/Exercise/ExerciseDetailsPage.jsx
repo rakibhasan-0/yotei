@@ -123,6 +123,7 @@ export default function ExerciseDetailsPage() {
 			toast.error("Ett fel uppstod när kommentaren skulle läggas till")
 			return
 		}
+		setCommentText("")
 		setAddComment(false)
 		// TODO: The comments add method does not
 		// return the comment id, so we have to
@@ -165,10 +166,12 @@ export default function ExerciseDetailsPage() {
 						</div>
 					</>}
 
-					<Gallery id={ex_id} />
+					<div>
+						<Gallery id={ex_id} />
+					</div>
 
 					<div className="d-flex justify-content-between align-items-center">
-						<h2 className="bold-font">Kommenterer</h2>
+						<h2 className="bold-font">Kommentarer</h2>
 						<Plus size={"24px"} onClick={() => setAddComment(true)} style={{ color: "var(--red-primary)" }} />
 					</div>
 					<div className="w-100">
