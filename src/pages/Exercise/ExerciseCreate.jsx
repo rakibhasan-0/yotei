@@ -157,6 +157,7 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 		}
 		setInsertFailed(false)
 		setOkName(false)
+		onClose()
 	}
 
 	/**
@@ -257,7 +258,6 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 						outlined={"button-back"}
 						onClick={() => { 
 							setShowPopup(false)
-							onClose()
 						}}>
 						<p>Tillbaka</p>
 					</Button>
@@ -265,9 +265,6 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 						id="EC-AddBtn"
 						onClick={() => {
 							addExerciseAndTags()
-							if (!addBoxChecked) {
-								onClose()
-							}
 						}}>
 						<p>Lägg till</p>
 					</Button>

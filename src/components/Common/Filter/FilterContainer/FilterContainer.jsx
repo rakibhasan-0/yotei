@@ -23,7 +23,7 @@ import { Sliders } from "react-bootstrap-icons"
  * @version 1.0
  * @since 2023-05-04
  */
-function FilterContainer({ id, children}) {
+function FilterContainer({ id, title ,children}) {
 	const [active, setActive] = useState(false)
 	
 	function showFilter() {
@@ -37,7 +37,7 @@ function FilterContainer({ id, children}) {
 					<Sliders/>	
 				</Button>
 			</div>
-			<FilterBox id={"filter-box"} status={active}>
+			<FilterBox id={"filter-box"} status={active} title={title}>
 				{children}
 			</FilterBox>
 		</div>

@@ -20,11 +20,11 @@ import React from "react"
  * @version 1.0
  * @since 2023-05-04
  */
-function FilterBox({ id, status, children }) {
+function FilterBox({ id, status, title="Filtrering" , children }) {
 	return (
 		<div id={id} className={"filterBox" + ( status ? "" : "-pressed")}>
 			<fieldset>
-				<legend>Filtrering</legend>
+				<legend>{title}</legend>
 				{children}
 			</fieldset>
 		</div>
