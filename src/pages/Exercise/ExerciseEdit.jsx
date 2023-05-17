@@ -246,7 +246,8 @@ export default function ExerciseEdit({setShowPopup}) {
 				<TagInput
 					id={"tagHandler"}
 					addedTags={newTags}
-					setaddedTags={setNewTags}
+					setAddedTags={setNewTags}
+					isNested={true}
 				/>
 
 				{/*Button for the form. Calls the function addExercise. Retrieve the users input*/}
