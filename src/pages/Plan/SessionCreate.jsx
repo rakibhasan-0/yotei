@@ -8,6 +8,7 @@ import { useContext, useEffect, useState } from "react"
 import { AccountContext } from "../../context"
 import { Link } from "react-router-dom"
 import Divider from "../../components/Common/Divider/Divider"
+import {toast, ToastContainer} from "react-toastify"
 
 /**
  * A component for creating a session.
@@ -24,6 +25,8 @@ export default function SessionCreate() {
 	const [group, setGroup] = useState()
 	const [workouts, setWorkouts] = useState()
 	const [workout, setWorkout] = useState()
+	const [groupError, setGroupError] = useState()
+	const [timeError, setTimeError] = useState()
 	useEffect(() => {
 		(async () => {
 			try {
@@ -36,7 +39,7 @@ export default function SessionCreate() {
 				}
 				setGroups(await response.json())
 			} catch (ex) {
-				alert("Kunde inte hämta alla grupper")
+				toast.error("Kunde inte hämta alla grupper")
 				console.error(ex)
 			}
 		})()
@@ -54,7 +57,7 @@ export default function SessionCreate() {
 				}
 				setWorkouts(await response.json())
 			} catch (ex) {
-				alert("Kunde inte hämta alla pass")
+				toast.error("Kunde inte hämta alla pass")
 				console.error(ex)
 			}
 		})()
@@ -62,11 +65,11 @@ export default function SessionCreate() {
 
 	const addSession = async () => {
 		if (!group) {
-			return alert("Vänligen välj en planering, eller skapa en om det inte finns")
+			return setGroupError("Vänligen välj en grupp")
 		}
 
 		if (!time || !date) {
-			return alert("Vänligen ange tid och datum för tillfället")
+			return setTimeError("Vänligen välj tid och datum")
 		}
 
 		try {
@@ -85,7 +88,7 @@ export default function SessionCreate() {
 			}
 			navigate(-1)
 		} catch (ex) {
-			alert("Kunde inte spara tillfälle")
+			toast.error("Kunde inte spara tillfälle")
 			console.error(ex)
 		}
 	}
@@ -97,7 +100,7 @@ export default function SessionCreate() {
 
 					<h1 style={{marginTop: "2rem"}}>Tillfälle</h1>
 					<Divider option={"h2_left"} title={"Grupp"} />
-					<Dropdown id={"session-dropdown"} text={group?.name || "Grupp"} centered={true}>
+					<Dropdown errorMessage={groupError} id={"session-dropdown"} text={group?.name || "Grupp"} centered={true}>
 						{groups?.length > 0 ? groups.map((plan, index) => (
 							<div className="dropdown-row" key={index} onClick={() => setGroup(plan)}>
 								<p className="dropdown-row-text">{plan.name}</p>
@@ -108,9 +111,10 @@ export default function SessionCreate() {
 					</Dropdown>
 					
 					<Divider option={"h2_left"} title={"Datum och Tid"} />
+					{timeError && <p className="error-message">{timeError}</p>}
 					<div className="wrap-centering" >
-						<TimePicker onChange={e => setTime(e.target.value)} id={"session-timepicker"} />
 						<DatePicker onChange={e => setDate(e.target.value)} id={"session-datepicker"} />
+						<TimePicker onChange={e => setTime(e.target.value)} id={"session-timepicker"} />
 					</div>
 
 					<Divider option={"h2_left"} title={"Pass"} />
@@ -138,6 +142,7 @@ export default function SessionCreate() {
 					</div>
 				</div>
 			</div>
+			<ToastContainer autoClose={5000} />
 		</div>
 	)
 }

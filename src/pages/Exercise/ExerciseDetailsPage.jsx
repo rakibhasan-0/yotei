@@ -5,12 +5,20 @@ import { AccountContext } from "../../context"
 import { useNavigate, useParams } from "react-router"
 import CommentSection from "../../components/Common/CommentSection/CommentSection"
 import Popup from "../../components/Common/Popup/Popup"
-import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 import TextArea from "../../components/Common/TextArea/TextArea"
 import Button from "../../components/Common/Button/Button"
 import Tag from "../../components/Common/Tag/Tag"
 import Gallery from "../../components/Gallery/Gallery"
+import {toast, ToastContainer} from "react-toastify"
+import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
+import ErrorState from "../../components/Common/ErrorState/ErrorState"
 
+/**
+ * A page for displaying details about an exercise.
+ * 
+ * @author Chimera
+ * @since 2023-05-16
+ */
 export default function ExerciseDetailsPage() {
 	const {ex_id} = useParams()
 	const { token, userId } = useContext(AccountContext)
@@ -18,9 +26,12 @@ export default function ExerciseDetailsPage() {
 	const [comments, setComments] = useState()
 	const [tags, setTags] = useState()
 	const [isAddingComment, setAddComment] = useState(false)
-	const [showConfirmPopup, setShowConfirmPopup] = useState(false)
 	const [selectedComment, setSelectedComment] = useState()
 	const [commentText, setCommentText] = useState()
+	const [commentError, setCommentError] = useState()
+	const [showAlert, setShowAlert] = useState(false)
+	const [showDeleteComment, setShowDeleteComment] = useState(false)
+	const [error, setError] = useState()
 	const navigate = useNavigate()
 	
 	const fetchComments = () => {
@@ -30,7 +41,7 @@ export default function ExerciseDetailsPage() {
 			.then(res => res.json())
 			.then(data => setComments(data))
 			.catch(ex => {
-				alert("Kunde inte hämta kommentarer")
+				toast.error("Kunde inte hämta kommentarer")
 				console.error(ex)
 			})
 	}
@@ -42,7 +53,7 @@ export default function ExerciseDetailsPage() {
 			.then(res => res.json())
 			.then(data => setExercise(data))
 			.catch(ex => {
-				alert("Kunde inte hämta övning")
+				setError("Kunde inte hämta övning")
 				console.error(ex)
 			})
 
@@ -53,7 +64,7 @@ export default function ExerciseDetailsPage() {
 		}).then(res => res.json())
 			.then(data => setTags(data))
 			.catch(ex => {
-				alert("Kunde inte hämta taggar")
+				toast.error("Kunde inte hämta taggar")
 				console.error(ex)
 			})
 	}, [token, ex_id])
@@ -68,7 +79,7 @@ export default function ExerciseDetailsPage() {
 			}
 			navigate(-1)
 		} catch (error) {
-			alert("Kunde inte ta bort övningen!")
+			toast.error("Kunde inte ta bort övningen!")
 			console.error(error)
 		}
 	}
@@ -83,15 +94,20 @@ export default function ExerciseDetailsPage() {
 				throw new Error("Got a non ok status response from the API")
 			}
 		} catch (error) {
-			alert("Kunde inte ta bort kommentar!")
+			toast.error("Kunde inte ta bort kommentaren")
 			console.error(error)
+			return
 		}
 		setComments(comments => comments.filter(comment => comment.commentId !== id))
 		setSelectedComment()
-		setShowConfirmPopup(false)
+		setShowDeleteComment(false)
 	}
 
 	const onAddComment = async () => {
+		if (!commentText || commentText.length === 0) {
+			setCommentError("Kommentaren får inte vara tom")
+			return
+		}
 		const response = await fetch(`/api/comment/exercise/add?id=${ex_id}`, {
 			method: "POST",
 			headers: {
@@ -100,11 +116,12 @@ export default function ExerciseDetailsPage() {
 				userId
 			},
 			body: JSON.stringify({
-				commentText: commentText
+				commentText
 			})
 		})
 		if(response.status != 201){
-			alert("Error adding comment")
+			toast.error("Ett fel uppstod när kommentaren skulle läggas till")
+			return
 		}
 		setAddComment(false)
 		// TODO: The comments add method does not
@@ -113,10 +130,9 @@ export default function ExerciseDetailsPage() {
 		// This should probably be fixed in the API
 		fetchComments()
 	}
-	
-	const showDeletePopup = (commentId) => {
-		setSelectedComment(commentId)
-		setShowConfirmPopup(true)
+
+	if (error) {
+		return <ErrorState message={error} onBack={() => navigate("/exercise")} />
 	}
 
 	return (
@@ -128,7 +144,7 @@ export default function ExerciseDetailsPage() {
 						<h1 className="mt-2">{exercise?.name}</h1>
 						<div className="d-flex flex-row" style={{gap: "10px"}}>
 							<Pencil onClick={() => navigate(`/exercise/edit/${ex_id}`)} size="24px" style={{color: "var(--red-primary)"}} />
-							<Trash onClick={onDelete} size="24px" style={{color: "var(--red-primary)"}} />
+							<Trash onClick={() => setShowAlert(true)} size="24px" style={{color: "var(--red-primary)"}} />
 						</div>
 					</div>
 
@@ -156,7 +172,10 @@ export default function ExerciseDetailsPage() {
 						<Plus size={"24px"} onClick={() => setAddComment(true)} style={{ color: "var(--red-primary)" }} />
 					</div>
 					<div className="w-100">
-						<CommentSection onDelete={showDeletePopup} id="${ex_id}-cs" userId={userId} comments={comments} />
+						<CommentSection onDelete={id => {
+							setSelectedComment(id)
+							setShowDeleteComment(true)
+						}} id={`${ex_id}-cs`} userId={userId} comments={comments} />
 					</div>
 	
 					<Button outlined={true} onClick={() => navigate(-1)}>Tillbaka</Button>
@@ -164,15 +183,22 @@ export default function ExerciseDetailsPage() {
 				</div>
 			</div>
 			<Popup isOpen={isAddingComment} title={"Lägg till kommentar"} height={"50"} setIsOpen={setAddComment}>
-				<TextArea onInput={e => setCommentText(e.target.value)} />
+				<TextArea errorMessage={commentError} onInput={e => setCommentText(e.target.value)} />
 				<Button onClick={onAddComment}>Skicka</Button>
 			</Popup>
-			<ConfirmPopup 
-				id={`${ex_id}-confirm-popup`} 
-				showPopup={showConfirmPopup} 
-				setShowPopup={setShowConfirmPopup} 
-				onClick={onDeleteComment} 
-				popupText={"Är du säker?"} />
+			<ToastContainer autoClose={5000} />
+			<ConfirmPopup
+				popupText={"Är du säker på att du vill ta bort övningen?"}
+				showPopup={showAlert}
+				onClick={() => onDelete()}
+				setShowPopup={() => setShowAlert(false)}
+			/>
+			<ConfirmPopup
+				popupText={"Är du säker på att du vill ta bort kommentaren?"}
+				showPopup={showDeleteComment}
+				onClick={() => onDeleteComment()}
+				setShowPopup={() => setShowDeleteComment(false)}
+			/>
 		</div>
 	)
 }

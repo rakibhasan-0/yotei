@@ -24,29 +24,33 @@ import "./Component.css"
  * @since 2023-05-02
  * @version 2.0 
  */
-export default function Component({ item, text, children, id, autoClose }) {
+export default function Component({ item, text, children, id, autoClose, errorMessage }) {
 	const [toggled, setToggled] = useState(false)
 	const onClick = () => {
 		if (autoClose !== false) {
 			setToggled(false)
 		}
 	}
+	const style = errorMessage?.length > 0 ? { border: "2px solid var(--red-primary)" } : {}
 	return (
-		<div id={id} className="list-container">
-			<div className='list-header' onClick={() => setToggled(!toggled)}>
-				<div className="list-item">
-					{item}
+		<label className="list-label">
+			<div id={id} className="list-container" style={style}>
+				<div className='list-header' onClick={() => setToggled(!toggled)}>
+					<div className="list-item">
+						{item}
+					</div>
+					<p className="list-text">{text}</p>
+					<div className={["list-toggle", toggled ? "list-rotate" : ""].join(" ")}>
+						<ChevronDown id={`${id}-dropdown`} size={28} />
+					</div>
 				</div>
-				<p className="list-text">{text}</p>
-				<div className={["list-toggle", toggled ? "list-rotate" : ""].join(" ")}>
-					<ChevronDown id={`${id}-dropdown`} size={28} />
+				<div className="list-item-container" >
+					<div className="list-child" onClick={onClick} style={{ display: toggled ? "inherit" : "none" }} id={`${id}-children`}>
+						{children}
+					</div> 
 				</div>
 			</div>
-			<div className="list-item-container" >
-				<div className="list-child" onClick={onClick} style={{ display: toggled ? "inherit" : "none" }} id={`${id}-children`}>
-					{children}
-				</div> 
-			</div>
-		</div>
+			<p className="list-err">{errorMessage}</p>
+		</label>
 	)
 }

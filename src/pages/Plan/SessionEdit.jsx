@@ -10,6 +10,8 @@ import { AccountContext } from "../../context"
 import { Link } from "react-router-dom"
 import Divider from "../../components/Common/Divider/Divider"
 import { Trash } from "react-bootstrap-icons"
+import {toast, ToastContainer} from "react-toastify"
+import ErrorState from "../../components/Common/ErrorState/ErrorState"
 
 /**
  * A component for editing a session.
@@ -20,6 +22,7 @@ import { Trash } from "react-bootstrap-icons"
 export default function SessionEdit() {
 	const navigate = useNavigate()
 	const {token} = useContext(AccountContext)
+	// eslint-disable-next-line no-unused-vars
 	const [date, setDate] = useState("")
 	const [time, setTime] = useState("")
 	const [groups, setGroups] = useState()
@@ -27,6 +30,7 @@ export default function SessionEdit() {
 	const [workouts, setWorkouts] = useState()
 	const [workout, setWorkout] = useState()
 	const [showPopup, setShowPopup] = useState(false)
+	const [error, setError] = useState()
 
 	const params = useParams()
 
@@ -43,7 +47,7 @@ export default function SessionEdit() {
 				}
 				setGroups(await response.json())
 			} catch (ex) {
-				alert("Kunde inte hämta alla grupper")
+				toast.error("Kunde inte hämta alla grupper")
 				console.error(ex)
 			}
 		})()
@@ -61,7 +65,7 @@ export default function SessionEdit() {
 				}
 				setWorkouts(await response.json())
 			} catch (ex) {
-				alert("Kunde inte hämta alla pass")
+				toast.error("Kunde inte hämta alla pass")
 				console.error(ex)
 			}
 		})()
@@ -86,7 +90,7 @@ export default function SessionEdit() {
 				}
 		
 			} catch (ex) {
-				alert("Kunde inte hämta tillfälle")
+				setError("Kunde inte hämta tillfälle")
 				console.error(ex)
 			}
 		})()
@@ -104,7 +108,7 @@ export default function SessionEdit() {
 			}
 			navigate(-1)
 		} catch (ex) {
-			alert("Kunde inte radera tillfälle")
+			toast.error("Kunde inte radera tillfälle")
 			console.error(ex)
 		}
 	}
@@ -130,9 +134,13 @@ export default function SessionEdit() {
 			}
 			navigate(-1)
 		} catch (ex) {
-			alert("Kunde inte spara det nya tillfället")
+			toast.error("Kunde inte spara det nya tillfället")
 			console.error(ex)
 		}
+	}
+
+	if (error) {
+		return <ErrorState message={error} onBack={() => navigate("/plan")} />
 	}
 
 	return (
@@ -187,6 +195,7 @@ export default function SessionEdit() {
 					</div>
 				</div>
 			</div>
+			<ToastContainer autoClose={5000} />
 		</div>
 	)
 }
