@@ -40,15 +40,19 @@ import React, { useEffect } from "react"
 export default function Popup({ title, id, isOpen, setIsOpen, children, width, height, isNested, maxWidth, maxHeight, useNoHeightWidth }) {
 
 	useEffect(() => {
-		document.body.style.overflowY = isOpen ? "hidden" : "visible"
-	}, [isOpen])
+		// Locks the scroll of the parent when the popup is not nested
+		if (!isNested) {
+			document.body.style.overflowY = isOpen ? "hidden" : "visible"
+			document.body.style.touchAction = isOpen ? "none" : "auto"
+		}
+	}, [isOpen, isNested])
 
 	if (!isOpen) { return null }
 
 	const background = isNested ? "popup-no-bg" : "popup-bg"
-	
+
 	let popupStyle = {}
-	
+
 	if (!useNoHeightWidth) {
 		popupStyle = {
 			width: "90%",
@@ -62,7 +66,7 @@ export default function Popup({ title, id, isOpen, setIsOpen, children, width, h
 		if (height) {
 			popupStyle.height = `${height}%`
 		}
-		
+
 	}
 
 	return (
@@ -76,7 +80,7 @@ export default function Popup({ title, id, isOpen, setIsOpen, children, width, h
 				<div className="popup-topbar">
 					{title && <h1 className="popup-title" role="title">{title}</h1>}
 					<button className="popup-closebutton" onClick={() => setIsOpen(false)}>
-						<X width={44} height={44} color="black"/>
+						<X width={44} height={44} color="black" />
 					</button>
 					{title && <div className="popup-horizontal-line" />}
 				</div>
