@@ -11,7 +11,8 @@ import { Pencil, Trash} from "react-bootstrap-icons"
 import Review from "../../../components/Workout/WorkoutReview/ReviewFormComponent.jsx"
 import ErrorState from "../../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../../components/Common/Spinner/Spinner"
-import {HTTP_STATUS_CODES, setError, setSuccess, isEditor} from "../../../utils"
+import {HTTP_STATUS_CODES} from "../../../utils"
+import {toast} from "react-toastify"
 import PrintButton from "../../../components/Common/PrintButton/PrintButton"
 
 /**
@@ -44,12 +45,7 @@ export default function WorkoutView({id}) {
 			const requestOptions = {
 				headers: {"Content-type": "application/json", token: context.token}
 			}
-			const response = await fetch(`/api/workouts/detail/${workoutId}`, requestOptions).catch(() => {
-				setErrorStateMsg("Serverfel: Kunde inte ansluta till servern.")
-				setLoading(false)
-				return	
-			})
-			
+			const response = await fetch(`/api/workouts/detail/${workoutId}`, requestOptions)
 			if(response.status != HTTP_STATUS_CODES.OK){
 				setErrorStateMsg("Pass med ID '" + workoutId + "' existerar inte. Felkod: " + response.status)
 				setLoading(false)	
@@ -69,22 +65,17 @@ export default function WorkoutView({id}) {
 			const requestOptions = {
 				headers: {"Content-type": "application/json", token: context.token}
 			}
-			const response = await fetch(`/api/workouts/get/userworkout/${workoutId}`, requestOptions).catch(() => {
-				setError("Serverfel: Gick inte att hämta användare för passet. Felkod: " + response.status)
-				setLoading(false)
-				return
-			})
+			const response = await fetch(`/api/workouts/get/userworkout/${workoutId}`, requestOptions)
 	
-			
-			if(response.status === HTTP_STATUS_CODES.NOT_FOUND) {
+			if (response.status === HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+				setError("Serverfel: Gick inte att hämta användare för passet. Felkod: " + response.status)
+			} else if(response.status === HTTP_STATUS_CODES.NOT_FOUND) {
 				setError("Passet existerar inte längre!")
-			} else if (response.status != HTTP_STATUS_CODES.OK){
-				setError("Något gick snett! Felkod: " + response.status)
-				return	
+			} else {
+				const json = await response.json()
+				setWorkoutUsers(() => json)
 			}
-			const json = await response.json()
-			setWorkoutUsers(() => json)
-		
+
 		}
 
 		fetchData()
@@ -97,7 +88,7 @@ export default function WorkoutView({id}) {
 				<div id={id} className="container px-0 col-lg-4 col-md-4">
 					{getPopupContainer(showPopup, setShowPopup, workoutId, context, navigate)}
 					{getReviewContainer(showRPopup, setRShowPopup, workoutId)}
-					{getWorkoutInfoContainer(workoutData, setShowPopup, context)}
+					{getWorkoutInfoContainer(workoutData, setShowPopup)}
 					{sortByCategories(workoutData).map((activityCategory) => (
 						<div className="my-5" key={activityCategory.categoryOrder}>
 							<WorkoutActivityList
@@ -113,6 +104,19 @@ export default function WorkoutView({id}) {
 					{getButtons(navigate, setRShowPopup)}
 				</div>
 	)	
+}
+
+function setError(msg){
+	toast.error(msg, {
+		position: "top-center",
+		autoClose: 5000,
+		hideProgressBar: false,
+		closeOnClick: true,
+		pauseOnHover: true, 
+		draggable: false,
+		progress: undefined,
+		theme: "colored",
+	})
 }
 
 function sortByCategories(workoutData) {
@@ -158,24 +162,14 @@ async function deleteWorkout(workoutId, context, navigate, setShowPopup) {
 		method: "DELETE"
 	}
 
-	const response = await fetch(`/api/workouts/delete/${workoutId}`, requestOptions).catch(() => {
-		setError("Serverfel: Kunde inte ansluta till servern.")
-		return	
-	})
-
-	if(response.status === HTTP_STATUS_CODES.NOT_FOUND){
+	const response = await fetch(`/api/workouts/delete/${workoutId}`, requestOptions)
+	if(response.status === HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR){
+		setError("Något gick fel med att ansluta till servern")
+	}else if(response.status === HTTP_STATUS_CODES.NOT_FOUND) {
 		setError("Passet existerar inte längre!")
-		return
-	}else if(response.status === HTTP_STATUS_CODES.BAD_REQUEST) {
-		setError("Kunde inte ta bort pass med id: '" + workoutId + "'.")
-		return
-	} else if (response.status != HTTP_STATUS_CODES.OK){
-		setError("Något gick snett! Felkod: " + response.status)
-		return	
+	} else {
+		navigate("/workout")
 	}
-
-	setSuccess("Pass borttagen!")
-	navigate("/workout")
 	setShowPopup(false)
 }
 
@@ -239,7 +233,7 @@ function getButtons(navigate, setRShowPopup) {
 }
 
 
-function getWorkoutInfoContainer(workoutData, setShowPopup, context) {
+function getWorkoutInfoContainer(workoutData, setShowPopup) {
 	return (
 		<>
 			<div className="container px-0">
@@ -251,25 +245,20 @@ function getWorkoutInfoContainer(workoutData, setShowPopup, context) {
 					</div>			
 					<div className="d-flex justify-content-end align-items-center">
 						<PrintButton workoutData={workoutData} />
-						{
-							isEditor(context) && 
-								<>
-									<Link className="ml-3" state={{workout: workoutData}} to={"/workout/edit"}>
-										<Pencil
-											size="24px"
-											color="var(--red-primary)"
-											style={{cursor: "pointer"}}
-										/>
-									</Link>
-									<Trash
-										className="ml-3 mr-3"
-										size="24px"
-										color="var(--red-primary)"
-										style={{cursor: "pointer"}}
-										onClick={() => setShowPopup(true)}
-									/> 
-								</>
-						}
+						<Link className="ml-3" state={{workout: workoutData}} to={"/workout/edit"}>
+							<Pencil
+								size="24px"
+								color="var(--red-primary)"
+								style={{cursor: "pointer"}}
+							/>
+						</Link>
+						<Trash
+							className="ml-3 mr-3"
+							size="24px"
+							color="var(--red-primary)"
+							style={{cursor: "pointer"}}
+							onClick={() => setShowPopup(true)}
+						/>
 					</div>
 					
 					<div className="workout-detail-row-item mt-3">
