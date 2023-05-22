@@ -12,7 +12,6 @@ import TagInput from "../../components/Common/Tag/TagInput.jsx"
 import {toast} from "react-toastify"
 
 
-
 /**
  * Class for editing an exercise.
  *
@@ -99,7 +98,7 @@ export default function ExerciseEdit({setShowPopup}) {
 
 		return newData
 	}
-
+	
 	/**
      * Is called when an edit request (PUT) is sent to the API.
      *
@@ -108,13 +107,19 @@ export default function ExerciseEdit({setShowPopup}) {
 	async function editExercise() {
 
 		const requestOptionsDuplicate = {
-			method: "POST",
+			method: "PUT",
 			headers: {"Content-type": "application/json", "token": context.token},
-			body: JSON.stringify({name: name, description: desc, duration: time})
+			body: JSON.stringify({
+				id: exId,
+				name: name,
+				description: desc,
+				duration: time,
+			})
 		}
 		try {
-			const response = await fetch("/api/exercises/add", requestOptionsDuplicate)
-			if (response.status === 409 && name != oldName) {
+			const response = await fetch("/api/exercises/update", requestOptionsDuplicate)
+			
+			if (response.status === 406 && name != oldName) {
 				setErrorMessage("Detta namn är redan taget")
 				return
 			}
@@ -127,29 +132,6 @@ export default function ExerciseEdit({setShowPopup}) {
 			setEditFailed(true)
 			setErrorMessage("Övning måste ha ett namn")
 			return
-		}
-
-		const requestOptions = {
-			method: "PUT",
-			headers: {"Content-type": "application/json", token: context.token},
-			body: JSON.stringify({
-				id: exId,
-				name: name,
-				description: desc,
-				duration: time,
-			})
-		}
-
-		try {
-			const response = await fetch("/api/exercises/update", requestOptions)
-			if (!response.ok) {
-				console.log("response not OK")
-				toast.error("Uppdatering misslyckades")
-				setEditFailed(true)
-			}
-		} catch (error) {
-			toast.error("Oj, ett fel har uppstått med att nå servern")
-			setEditFailed(true)
 		}
 		
 		await checkTags()
