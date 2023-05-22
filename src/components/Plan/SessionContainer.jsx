@@ -135,7 +135,7 @@ function SessionContainer ({ id, workout, session, plan}) {
 										<div id><h2 id = "error-session-header">Kunde inte ladda in datum och tid</h2></div>
 							}
 						</div>
-						<div className = "outline">
+						<div className = "sc23-outline">
 							<div className = "sc23-session-header-clickable" role="button" onClick={() => setToggled(!toggled)}>
 								{
 									checkPlan() ?
