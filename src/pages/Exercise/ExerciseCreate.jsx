@@ -12,6 +12,7 @@ import TextArea from "../../components/Common/TextArea/TextArea.jsx"
 import Divider from "../../components/Common/Divider/Divider.jsx"
 import TagInput from "../../components/Common/Tag/TagInput.jsx"
 import Popup from "../../components/Common/Popup/Popup"
+import { toast } from "react-toastify"
 
 /**
  * The page for creating new exercises.
@@ -30,6 +31,7 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 	const [addedTags, setAddedTags] = useState([])
 	const [clearAlternative, setClearAlternative] = useState(false)
 	const [showMiniPopup, setShowMiniPopup] = useState(false)
+	const [errorMessage, setErrorMessage] = useState("")
 
 	/**
 	 * Method for API call when creating an exercise.
@@ -49,23 +51,19 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 			const response = await fetch("/api/exercises/add", requestOptions)
 			if (response.ok) {
 				data = await response.json()
+				setErrorMessage("")
 				return data.id
 			} else {
 				if (response.status === 409) {
-					console.log("409")
-					//should toast
-
+					setErrorMessage("En övning med detta namn existerar redan")
 				}
 				if (response.status === 400) {
-					console.log("400")
-					//should toast
+					setErrorMessage(" ")
 				}
 			}
 		} catch (error) {
-			console.log("error")
-			//should toast
+			toast.error("övningen kunde ej läggas till")
 		}
-		console.log("before return")
 		return null
 	}
 
@@ -123,6 +121,7 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 				return false
 			}
 		} catch (error) {
+			toast.error("Taggar kunde ej kopplas till övningen")
 			return false
 		}
 	}
@@ -146,8 +145,10 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 	 * @param linkedTags - result from linking tags
 	 */
 	function exitProdc(linkedTags) {
+		console.log(insertFailed)
 		setInsertFailed(!linkedTags)
 		if (linkedTags) {
+			toast.success("Övningen " + name + " lades till")
 			if (addBoxChecked === false) {
 				setShowPopup(false)
 			} else {
@@ -169,7 +170,10 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 	 */
 	function checkInput() {
 		if (name !== "" && name !== undefined) {
+			setErrorMessage("")
 			return true
+		} else {
+			setErrorMessage("En övning kräver ett godtyckligt namn")
 		}
 		return false
 	}
@@ -221,6 +225,7 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 						required = {true}
 						type="text"
 						id = "ExerciseNameInput"
+						errorMessage={errorMessage}
 					/>
 				</div>
 				<div>
