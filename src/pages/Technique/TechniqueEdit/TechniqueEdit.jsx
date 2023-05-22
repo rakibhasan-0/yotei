@@ -201,7 +201,7 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 			<div className={style.techniqueEditHorizontalLine} style={{marginBottom: "-6px"}} />
 
 			<div className={style.mediaButtonContainer}>
-				<EditGallery id={1} exerciseId={1} sendData={sendData}/>
+				<EditGallery id={technique.id} exerciseId={technique.id} sendData={sendData}/>
 			</div>
 
 			<Popup title={"Lägg till media"} isOpen={showMediaPopup} setIsOpen={setShowMediaPopup} >
