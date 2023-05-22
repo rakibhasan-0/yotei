@@ -388,7 +388,7 @@ class ManageUser extends React.Component {
      */
 	async confirmManage(path, method) {
 		const cookie = new Cookies().get("token")
-		const affectedUser = this.state.selectedUser.value
+		const affectedUser = this.state.selectedUser
 		console.log(affectedUser)
         
 		if (affectedUser.username !== this.confirmUserInput.value) {
