@@ -167,12 +167,10 @@ class ManageUser extends React.Component {
 							<Select	id='change-user-role-select'
 								className="dropdown-selection"
 								options={Object.values(Roles)
-									.filter((role) => {
-										return !checkRole(this.context, role)
-									})
 									.map((role, index) => {
 										return {label: this.capitalizeFirstLetter(role), value: index}
 									})}
+								filterOption={(role) => !checkRole(this.context, role.label)}
 								placeholder={this.state.selectedUser === null ? "" : this.capitalizeFirstLetter(this.context.role)}
 								onChange={(role) => this.setState({changeUserRole: role})}
 								noOptionsMessage={() => "Hittade ingen roller"}
@@ -326,7 +324,7 @@ class ManageUser extends React.Component {
 	prepareChangeRole() {
 		this.currentStatusLabel = this.changeRoleStatusLbl
 		this.successMessage = `${this.state.selectedUser.username} är nu ${this.state.changeUserRole.label}`
-		this.confirmUserBtn.onclick = this.confirmManage.bind(this, `${this.state.selectedUser.userId}/role${this.state.changeUserRole.value}`, "POST")
+		this.confirmUserBtn.onclick = this.confirmManage.bind(this, `/${this.state.selectedUser.userId}/role/${this.state.changeUserRole.value}`, "POST")
 		this.confirmLbl.innerHTML = "Ange användarnamnet igen"
 		this.confirmUserInput.type = "text"
 		this.overlayOpen()
@@ -339,7 +337,6 @@ class ManageUser extends React.Component {
      * @see prepareRegistration
      */
 	confirmRegistration() {
-		console.log(this.state.newUserPassword)
 		if (this.state.newUserPassword !== this.confirmUserInput.value) {
 			this.changeStatus(this.confirmUserStatusLbl, "Fel lösenord", "#f00")
 			return
@@ -389,7 +386,6 @@ class ManageUser extends React.Component {
 	async confirmManage(path, method) {
 		const cookie = new Cookies().get("token")
 		const affectedUser = this.state.selectedUser
-		console.log(affectedUser)
         
 		if (affectedUser.username !== this.confirmUserInput.value) {
 			this.changeStatus(this.confirmUserStatusLbl, "Fel användarnamn", "#f00")
