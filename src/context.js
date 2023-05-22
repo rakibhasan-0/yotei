@@ -1,9 +1,9 @@
 import React from "react"
 
 export const Roles = Object.freeze({
+	other: "USER",
 	admin: "ADMIN",
-	editor: "EDITOR",
-	other: "USER"
+	editor: "EDITOR"
 })
 
 // eslint-disable-next-line no-unused-vars

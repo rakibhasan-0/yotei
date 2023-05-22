@@ -26,8 +26,8 @@ export function isEditor(context) {
 	return isAdmin(context) || checkRole(context, Roles.editor)
 }
 
-function checkRole(context, role) {
-	return context?.role === role
+export function checkRole(context, role) {
+	return context?.role === role.toUpperCase()
 }
 
 /**

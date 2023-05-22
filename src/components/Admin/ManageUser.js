@@ -8,7 +8,7 @@ import { AccountContext } from "../../context"
 import { reactSelectStyle } from "../../Globals/global_style"
 import { Cookies } from "react-cookie"
 import { decodeToken } from "react-jwt"
-import { logOut } from "/src/utils"
+import { logOut, checkRole } from "/src/utils"
 import { Roles } from "/src/context"
 
 
@@ -28,7 +28,6 @@ class ManageUser extends React.Component {
 	constructor(props) {
 		super(props)
 
-		this.registerButtonSet = this.registerButtonSet.bind(this)
 		this.prepareRegistration = this.prepareRegistration.bind(this)
 
 		this.state = {value: "",
@@ -38,12 +37,15 @@ class ManageUser extends React.Component {
 			users: this.props.users,
 			fetchTagsFailed: false,
 			allUsers: this.props.allUsers,
-			gotUsers: false
+			gotUsers: false,
+			newUserName: "",
+			newUserPassword: "",
+			newUserRole: null,
+			changeUserRole: null,
+			selectedUser: null
 		}
 		this.prepareRemove = this.prepareRemove.bind(this)
-		this.manageButtonsSet = this.manageButtonsSet.bind(this)
 		this.prepareChangeRole = this.prepareChangeRole.bind(this)
-		this.confirmButtonSet = this.confirmButtonSet.bind(this)
 		this.overlayCloseOnEscape = this.overlayCloseOnEscape.bind(this)
 		this.overlayClose = this.overlayClose.bind(this)
 		this.overlayOpen = this.overlayOpen.bind(this)
@@ -59,21 +61,17 @@ class ManageUser extends React.Component {
 		this.registerAdminCheck = document.getElementById("register-admin-check")
 		this.registerUserStatusLbl = document.getElementById("register-user-status-lbl")
 		this.registerUserBtn = document.getElementById("register-user-btn")
-		this.registerUserBtn.disabled = true
 
 		this.removeUserStatusLbl = document.getElementById("remove-user-status-lbl")
 		this.removeUserBtn = document.getElementById("remove-user-btn")
 		this.changeRoleStatusLbl = document.getElementById("change-role-status-lbl")
 		this.changeRoleBtn = document.getElementById("change-role-btn")
-		this.changeRoleBtn.disabled = true
-		this.removeUserBtn.disabled = true
         
 		this.overlay = document.getElementById("overlay-admin")
 		this.confirmLbl = document.getElementById("confirm-lbl")
 		this.confirmUserInput = document.getElementById("confirm-user-input")
 		this.confirmUserStatusLbl = document.getElementById("confirm-user-status-lbl")
 		this.confirmUserBtn = document.getElementById("confirm-user-btn")
-		this.confirmUserBtn.disabled = true
 
 		if (this.state.gotUsers === false) {
 			this.getUsers()
@@ -98,28 +96,37 @@ class ManageUser extends React.Component {
 					<h2>Lägg till användare</h2>
 					<Form.Group className='row mt-3'>
 						<div className='admin-container container-fluid'>
-							<Form.Label className='float-left'>Användarnamn</Form.Label>
 							<Form.Control type='user' 
-								placeholder='' 
-								id='register-user-username-input'
-								onChange={this.registerButtonSet} />
+								placeholder='Användarnamn' 
+								id='register-user-username-input' 
+								onChange={(event) => this.setState({newUserName: event.target.value})}/>
 						</div>
 					</Form.Group>
 
 					<Form.Group className='row mt-3 '>
 						<div className='admin-container container-fluid'>
-							<Form.Label className='float-left'>Lösenord</Form.Label>
 							<Form.Control type='password' 
-								placeholder='' 
-								id='register-user-password-input' 
-								onChange={this.registerButtonSet} />
+								placeholder='Lösenord' 
+								id='register-user-password-input'
+								onChange={(event) => this.setState({newUserPassword: event.target.value})} />
 						</div>
 					</Form.Group>
 
-					<Form.Group className='row mt-3'>
+					<Form.Group className='row mt-3 mb-3'>
 						<div className='admin-container container-fluid'>
-							<Form.Label className='float-left'>Admin</Form.Label>
-							<Form.Check id='register-admin-check' className='float-left' />
+							<Select	id='new-user-role-select'
+								className="dropdown-selection"
+								options={Object.values(Roles)
+									.map((role, index) => {
+										return {label: this.capitalizeFirstLetter(role), value: index}
+									})}
+								placeholder='Välj roll'
+								onChange={(role) => this.setState({newUserRole: role})}
+								noOptionsMessage={() => "Hittade ingen roller"}
+								isSearchable = {false}
+								isClearable = {true}
+								styles={reactSelectStyle}
+							/>
 						</div>
 					</Form.Group>
 					<Form.Group className='row'>
@@ -128,8 +135,12 @@ class ManageUser extends React.Component {
 						</div>
 					</Form.Group>
 					<Form.Group className='row'>
-						<Button id='register-user-btn' className='btn btn-admin btn-color container-fluid'  
-							onClick={this.prepareRegistration} >
+						<Button id='register-user-btn' 
+							className='btn btn-admin btn-color container-fluid'  
+							onClick={this.prepareRegistration} 
+							disabled={this.state.newUserName === ""
+								|| this.state.newUserPassword === ""
+								|| this.state.newUserRole === null}>
                             Lägg till användare
 						</Button>
 					</Form.Group>
@@ -139,15 +150,33 @@ class ManageUser extends React.Component {
 					<h2>Hantera användare</h2>
 					<Form.Group className='row mt-3 mb-3'>
 						<div className='admin-container container-fluid'>
-							<Select
-								id='choose-user-select'
-								ref={ref => {
-									this.chooseUserSelect = ref
-								}}
+							<Select	id='choose-user-select'
+								className="dropdown-selection"
 								options={this.state.allUsers}
 								placeholder='Användare'
-								onChange={this.manageButtonsSet}
+								onChange={(user) => this.setState({selectedUser: user ? user.value : null})}
 								noOptionsMessage={() => "Hittade ingen användare"}
+								isSearchable = {false}
+								isClearable = {true}
+								styles={reactSelectStyle}
+							/>
+						</div>
+					</Form.Group>
+					<Form.Group className='row mt-3 mb-3'>
+						<div className='admin-container container-fluid'>
+							<Select	id='change-user-role-select'
+								className="dropdown-selection"
+								options={Object.values(Roles)
+									.filter((role) => {
+										return !checkRole(this.context, role)
+									})
+									.map((role, index) => {
+										return {label: this.capitalizeFirstLetter(role), value: index}
+									})}
+								placeholder={this.state.selectedUser === null ? "" : this.capitalizeFirstLetter(this.context.role)}
+								onChange={(role) => this.setState({changeUserRole: role})}
+								noOptionsMessage={() => "Hittade ingen roller"}
+								isDisabled={this.state.selectedUser === null}
 								isSearchable = {false}
 								isClearable = {true}
 								styles={reactSelectStyle}
@@ -156,24 +185,29 @@ class ManageUser extends React.Component {
 					</Form.Group>
 					<Form.Group className='row'>
 						<div className='admin-container container-fluid'>
-							<p id='remove-user-status-lbl' className='status-admin' ></p>
-						</div>
-					</Form.Group>
-					<Form.Group className='row'>
-						<Button id='remove-user-btn' className='btn-admin btn-color container-fluid'  
-							onClick={this.prepareRemove} >
-                            Ta bort användare
-						</Button>
-					</Form.Group>
-					<Form.Group className='row'>
-						<div className='admin-container container-fluid'>
 							<p id='change-role-status-lbl' className='status-admin' ></p>
 						</div>
 					</Form.Group>
 					<Form.Group className='row'>
-						<Button id='change-role-btn' className='btn-admin btn-color container-fluid'  
-							onClick={this.prepareChangeRole} >
+						<Button id='change-role-btn' 
+							className='btn-admin btn-color container-fluid'  
+							onClick={this.prepareChangeRole}
+							disabled={this.state.selectedUser === null || 
+								this.state.changeUserRole === null} >
                             Ändra roll
+						</Button>
+					</Form.Group>
+					<Form.Group className='row'>
+						<div className='admin-container container-fluid'>
+							<p id='remove-user-status-lbl' className='status-admin' ></p>
+						</div>
+					</Form.Group>
+					<Form.Group className='row'>
+						<Button id='remove-user-btn' 
+							className='btn-admin btn-color container-fluid'  
+							onClick={this.prepareRemove} 
+							disabled={this.state.selectedUser === null} >
+                            Ta bort användare
 						</Button>
 					</Form.Group>
 				</Form>
@@ -207,6 +241,11 @@ class ManageUser extends React.Component {
 		)
 	}
 
+	capitalizeFirstLetter(str) {
+		let newStr = str.toUpperCase()
+		return newStr.charAt(0) + newStr.slice(1).toLowerCase()
+	}
+
 	/**
     * Method gets all users from the database to the select component
     */
@@ -220,8 +259,8 @@ class ManageUser extends React.Component {
 			if (response.ok) {
 				const data = await response.json()
 				this.setState({
-					allUsers: data.map((users) => {
-						return { label: users.username, value: users }
+					allUsers: data.map((user) => {
+						return { label: user.username, value: user }
 					})
 				})
                 
@@ -236,55 +275,6 @@ class ManageUser extends React.Component {
 			this.setState({
 				fetchUsersFailed: true
 			})
-		}
-	}
-
-	/**
-     * The register button sets to disabled if nothing is written in either the username or password
-     * field associated with user registration.
-     */
-	registerButtonSet() {
-		if (this.registerUserPasswordInput.value === "" || this.registerUserUsernameInput.value === "") {
-			this.registerUserBtn.disabled = true
-		}
-		else {
-			this.registerUserBtn.disabled = false
-		}
-	}
-    
-	/**
-     * The confirmation button sets to disabled if nothing is written in the confirm text input.
-     */
-	confirmButtonSet() {
-		if (this.confirmUserInput.value === "") {
-			this.confirmUserBtn.disabled = true
-		}
-		else {
-			this.confirmUserBtn.disabled = false
-		}
-	}
-
-	/**
-     * The buttons associated with deleting users and changing roles are set according to the
-     * selected value in the select component. Both text and availability are set.
-     * @param {Options<any>} inputValue the value that will be set on the select component
-     */
-
-	manageButtonsSet(inputValue) {
-		if (inputValue === null) {
-			this.changeRoleBtn.innerHTML = "Ändra roll"
-			this.changeRoleBtn.disabled = true
-			this.removeUserBtn.disabled = true
-		}
-		else {
-			if (inputValue.value.userRole === Roles.admin) {
-				this.changeRoleBtn.innerHTML = "Ta bort admin status"
-			}
-			else {
-				this.changeRoleBtn.innerHTML = "Lägg till admin status"
-			}
-			this.changeRoleBtn.disabled = false
-			this.removeUserBtn.disabled = false
 		}
 	}
 
@@ -317,8 +307,8 @@ class ManageUser extends React.Component {
      */
 	prepareRemove() {
 		this.currentStatusLabel = this.removeUserStatusLbl
-		this.successMessage = `${this.chooseUserSelect.getValue()[0].value.username} är borttagen`
-		this.confirmUserBtn.onclick = this.confirmManage.bind(this, "remove", "DELETE")
+		this.successMessage = `${this.state.selectedUser.username} är borttagen`
+		this.confirmUserBtn.onclick = this.confirmManage.bind(this, `/user/remove/${this.state.selectedUser.username}`, "DELETE")
 		this.confirmLbl.innerHTML = "Ange användarnamnet igen"
 		this.confirmUserInput.type = "text"
 		this.overlayOpen()
@@ -335,14 +325,8 @@ class ManageUser extends React.Component {
      */
 	prepareChangeRole() {
 		this.currentStatusLabel = this.changeRoleStatusLbl
-
-		if (this.chooseUserSelect.getValue()[0].value.userRole === Roles.admin) {
-			this.successMessage = `${this.chooseUserSelect.getValue()[0].value.username} är inte längre admin`
-		}
-		else {
-			this.successMessage = `${this.chooseUserSelect.getValue()[0].value.username} är nu admin`
-		}
-		this.confirmUserBtn.onclick = this.confirmManage.bind(this, "changerole", "POST")
+		this.successMessage = `${this.state.selectedUser.username} är nu ${this.state.changeUserRole.label}`
+		this.confirmUserBtn.onclick = this.confirmManage.bind(this, `${this.state.selectedUser.userId}/role${this.state.changeUserRole.value}`, "POST")
 		this.confirmLbl.innerHTML = "Ange användarnamnet igen"
 		this.confirmUserInput.type = "text"
 		this.overlayOpen()
@@ -355,11 +339,12 @@ class ManageUser extends React.Component {
      * @see prepareRegistration
      */
 	confirmRegistration() {
-		if (this.registerUserPasswordInput.value !== this.confirmUserInput.value) {
+		console.log(this.state.newUserPassword)
+		if (this.state.newUserPassword !== this.confirmUserInput.value) {
 			this.changeStatus(this.confirmUserStatusLbl, "Fel lösenord", "#f00")
 			return
 		}
-		else if(!this.validateUsername(this.registerUserUsernameInput.value)){
+		else if(!this.validateUsername(this.state.newUserName)){
 			//Username contains unvalid characters, see validateUsername method
 			this.changeStatus(this.confirmUserStatusLbl, "Otillåtna tecken i användarnamnet. "
                 + "Kan innehålla 0-9, a-ö (versaler och gemener), _ och -", "#f00")
@@ -367,9 +352,9 @@ class ManageUser extends React.Component {
 		}
 		else {
 			const data = {
-				"username" : this.registerUserUsernameInput.value,
-				"password" : this.registerUserPasswordInput.value,
-				"userRole" : + !this.registerAdminCheck.checked
+				"username" : this.state.newUserName,
+				"password" : this.state.newUserPassword,
+				"userRole" : this.state.changeUserRole ? this.state.changeUserRole.value : 0
 			}
 			const requestOptions = {
 				method: "POST",
@@ -378,9 +363,10 @@ class ManageUser extends React.Component {
 			}
 			const path = "/user/register"
 			this.sendData(path, requestOptions)
-			this.registerUserUsernameInput.value = ""
-			this.registerUserPasswordInput.value = ""
-			this.registerButtonSet()
+			this.setState({
+				newUserName: "",
+				newUserPassword: ""
+			})
 			this.overlayClose()
 		}
 	}
@@ -400,11 +386,12 @@ class ManageUser extends React.Component {
      * @see prepareRemove
      * @see prepareChangeRole
      */
-	async confirmManage(action, method) {
+	async confirmManage(path, method) {
 		const cookie = new Cookies().get("token")
-		const affectedUser = this.chooseUserSelect.getValue()[0].value.username
+		const affectedUser = this.state.selectedUser.value
+		console.log(affectedUser)
         
-		if (affectedUser !== this.confirmUserInput.value) {
+		if (affectedUser.username !== this.confirmUserInput.value) {
 			this.changeStatus(this.confirmUserStatusLbl, "Fel användarnamn", "#f00")
 			return
 		}
@@ -413,16 +400,12 @@ class ManageUser extends React.Component {
 			headers: { "Content-Type": "application/json", token: this.context.token}
 		}
 
-		//Encode the username as it will be sent in URI
-		const path = "/user/"+ action + "/" + affectedUser
-
 		//Send the request
 		const response = await fetch(path, requestOptions)
         
 		//Update GUI and avaliable users
 		this.responseUpdateStatus(response)
 		this.getUsers()
-		this.chooseUserSelect.setValue(null)
 		this.overlayClose()
 
 		//Fetch name of current user
@@ -508,7 +491,6 @@ class ManageUser extends React.Component {
 	overlayClose() {
 		this.overlay.style.visibility = "hidden"
 		this.confirmUserInput.value = ""
-		this.confirmUserBtn.disabled = true
 		this.changeStatus(this.confirmUserStatusLbl, "", "#fff")
 	}
 }
