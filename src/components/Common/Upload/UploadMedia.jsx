@@ -65,7 +65,7 @@ function UploadMedia({id, exerciseId}) {
 	
 				if (response.ok) {
 					const data =  await response.json()
-					window.location.reload(true) // ugly autoupdate after fetch
+					// window.location.reload(true) // ugly autoupdate after fetch
 					console.log(data)
 				} 
 			} catch (error) {

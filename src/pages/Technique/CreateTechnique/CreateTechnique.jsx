@@ -52,11 +52,13 @@ export default function CreateTechnique({ id, setIsOpen }) {
 	const [createButton, setCreateButton] = useState(false)
 
 	// Updates the belts hook array 
-	const onToggle = belt => setBelts(prev => {
-		if (prev.includes(belt)) {
-			return prev.filter(b => b !== belt)
+	const onToggle = (checked, belt) => setBelts(() => {
+		if(!checked) {
+			return belts.filter(b => b.id !== belt.id)
 		}
-		return [...prev, belt]
+		else {
+			return [...belts, belt]
+		}
 	})
 	
 	async function handleSubmit() {

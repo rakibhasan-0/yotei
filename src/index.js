@@ -14,7 +14,6 @@ import Admin from "./pages/Admin/Admin"
 import About from "./pages/About/About"
 import WorkoutView from "./pages/Workout/WorkoutView/WorkoutView"
 import WorkoutEdit from "./pages/Workout/WorkoutEdit"
-import TechniqueEdit from "./pages/Technique/TechniqueEdit"
 import TechniqueIndex from "./pages/Technique/TechniqueIndex/TechniqueIndex"
 import ExerciseIndex from "./pages/Exercise/ExerciseIndex"
 import ExerciseEdit from "./pages/Exercise/ExerciseEdit"
@@ -102,7 +101,6 @@ export default function App() {
 										<Route path="exercise/create" element={<ExerciseCreate />} />
 										<Route path="exercise/edit/:editID" element={<ExerciseEdit />} />
 										<Route path="technique" element={<TechniqueIndex />} />
-										<Route path="technique/edit/:editID" element={<TechniqueEdit />} />
 										<Route path="upload-image" element={<ImageForm />} />
 										<Route path="workout" element={<WorkoutIndex uri={workoutURI} />} />
 										<Route path="exercise/exercise_page/:ex_id" element={<ExerciseDetailsPage />} />

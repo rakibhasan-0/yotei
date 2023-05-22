@@ -13,6 +13,12 @@ import ErrorState from "../../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../../components/Common/Spinner/Spinner" 
 import Gallery from "../../../components/Gallery/Gallery"
 import {isEditor} from "../../../utils"
+
+import Popup from "../../../components/Common/Popup/Popup"
+
+import TechniqueEdit from "../TechniqueEdit/TechniqueEdit"
+
+
 /**
  * The detail page for a technique.
  * 
@@ -37,8 +43,14 @@ function TechniqueDetail({id}) {
 	const [loading, setLoading] = useState(true)
 
 	const accountRole = useContext(AccountContext)
+	const [showPopup, setShowPopup] = useState(false)
 
 	const handleGet = useCallback(() => {
+		// Fix to update the details page after an edit
+		if (showPopup !== false) {
+			return
+		}
+
 		setLoading(true)
 		setError("")
 		fetch(`/api/techniques/${techniqueId}`, {headers: {token}})
@@ -57,7 +69,7 @@ function TechniqueDetail({id}) {
 				setError("Ett nätverksfel inträffade. Kontrollera din internetuppkoppling.")
 				setLoading(false)
 			})
-	}, [techniqueId, token])
+	}, [showPopup, techniqueId, token])
 
 	useEffect(() => handleGet(), [handleGet, techniqueId, token])
 
@@ -88,55 +100,64 @@ function TechniqueDetail({id}) {
 
 	if(loading) return <div className='technique-detail-center-spinner'><Spinner/></div>
 
-	return(
-		<div className="technique-detail-container" id={id == undefined ? "technique" : id}>
-			<Gallery id={techniqueId}/>
-			<h1>{technique.name}</h1>
-			{isEditor(accountRole) && <div className="technique-detail-actions-container">
-				<Pencil
-					size="24px"
-					color="var(--red-primary)"
-					style={{cursor: "pointer"}}
-					onClick={() => navigate("/technique/edit/" + techniqueId)}
-				/>
-				<Trash
-					size="24px"
-					color="var(--red-primary)"
-					style={{cursor: "pointer"}}
-					onClick={handleDelete}
-				/>
-			</div>
-			}
-			<p style={{marginBottom: 0}}>{technique.isKihon ? "Kihon" : "Ej kihon"}</p>
-			<div className="technique-detail-belts-container">
-				{technique.belts ? (
-					technique.belts.map(belt => <BeltIcon key={belt.name} belt={belt}/>)
-				) : (
-					<p>Inga bälten kunde hittas för denna teknik.</p>
-				)}
-			</div>
-			<h2>Beskrivning</h2>
-			{technique.description ? (
-				<p>{technique.description}</p>
-			) : (
-				<p>Denna teknik saknar beskrivning.</p>
-			)}
-			<h2>Taggar</h2>
-			<div className="technique-detail-tag-container">
-				{technique.tags ? (
-					technique.tags.map(tag => <Tag key={tag.id} text={tag.name} tagType="default"/>)
-				) : (
-					<p>Denna teknik saknar taggar.</p>
-				)
-				}
+	return (
+		<>
+			<div>
+				<Popup title="Redigera teknik" isOpen={showPopup} setIsOpen={setShowPopup}>
+					<TechniqueEdit setIsOpen={setShowPopup} technique={technique}/>
+				</Popup>
 			</div>
 
-			<div className="technique-detail-button-container">
-				<Button outlined={true} onClick={() => navigate(-1)}>
-					<p>Tillbaka</p>
-				</Button>
+			<div className="technique-detail-container" id={id == undefined ? "technique" : id}>
+				<Gallery id={techniqueId}/>
+				<h1>{technique.name}</h1>
+				{isEditor(accountRole) && <div className="technique-detail-actions-container">
+					<Pencil
+						size="24px"
+						color="var(--red-primary)"
+						style={{cursor: "pointer"}}
+						onClick={() => setShowPopup(true)}
+					/>
+					<Trash
+						size="24px"
+						color="var(--red-primary)"
+						style={{cursor: "pointer"}}
+						onClick={handleDelete}
+					/>
+				</div>
+				}
+				<p style={{marginBottom: 0}}>{technique.isKihon ? "Kihon" : "Ej kihon"}</p>
+				<div className="technique-detail-belts-container">
+					{technique.belts ? (
+						technique.belts.map(belt => <BeltIcon key={belt.name} belt={belt}/>)
+					) : (
+						<p>Inga bälten kunde hittas för denna teknik.</p>
+					)}
+				</div>
+				<h2>Beskrivning</h2>
+				{technique.description ? (
+					<p>{technique.description}</p>
+				) : (
+					<p>Denna teknik saknar beskrivning.</p>
+				)}
+				<h2>Taggar</h2>
+				<div className="technique-detail-tag-container">
+					{technique.tags ? (
+						technique.tags.map(tag => <Tag key={tag.id} text={tag.name} tagType="default"/>)
+					) : (
+						<p>Denna teknik saknar taggar.</p>
+					)
+					}
+				</div>
+
+				<div className="technique-detail-button-container">
+					<Button outlined={true} onClick={() => navigate(-1)}>
+						<p>Tillbaka</p>
+					</Button>
+				</div>
+
 			</div>
-		</div>
+		</>
 	)
 }
 
