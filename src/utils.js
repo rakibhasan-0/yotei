@@ -27,7 +27,12 @@ export function isEditor(context) {
 }
 
 export function checkRole(context, role) {
-	return context?.role === role.toUpperCase()
+	if(!context) return false
+	if(context.role) {
+		return context.role === role.toUpperCase()
+	} else {
+		return context.userRole === role.toUpperCase()
+	}
 }
 
 /**

@@ -28,6 +28,8 @@ class ManageUser extends React.Component {
 	constructor(props) {
 		super(props)
 
+		this.userSelectionRef = React.createRef()
+		this.roleSelectionRef = React.createRef()
 		this.prepareRegistration = this.prepareRegistration.bind(this)
 
 		this.state = {value: "",
@@ -153,6 +155,7 @@ class ManageUser extends React.Component {
 							<Select	id='choose-user-select'
 								className="dropdown-selection"
 								options={this.state.allUsers}
+								ref={this.userSelectionRef}
 								placeholder='Användare'
 								onChange={(user) => this.setState({selectedUser: user ? user.value : null})}
 								noOptionsMessage={() => "Hittade ingen användare"}
@@ -166,12 +169,13 @@ class ManageUser extends React.Component {
 						<div className='admin-container container-fluid'>
 							<Select	id='change-user-role-select'
 								className="dropdown-selection"
+								ref={this.roleSelectionRef}
 								options={Object.values(Roles)
 									.map((role, index) => {
 										return {label: this.capitalizeFirstLetter(role), value: index}
 									})}
-								filterOption={(role) => !checkRole(this.context, role.label)}
-								placeholder={this.state.selectedUser === null ? "" : this.capitalizeFirstLetter(this.context.role)}
+								filterOption={(role) => this.state.selectedUser && !checkRole(this.state.selectedUser, role.label)}
+								placeholder={this.state.selectedUser === null ? "" : this.capitalizeFirstLetter(this.state.selectedUser.userRole)}
 								onChange={(role) => this.setState({changeUserRole: role})}
 								noOptionsMessage={() => "Hittade ingen roller"}
 								isDisabled={this.state.selectedUser === null}
@@ -253,6 +257,7 @@ class ManageUser extends React.Component {
 			headers: { "Content-type": "application/json", "token": this.context.token },
 		}
 		try {
+			this.userSelectionRef.current.setValue(null)
 			const response = await fetch("/user/all", requestOptions)
 			if (response.ok) {
 				const data = await response.json()
@@ -324,7 +329,7 @@ class ManageUser extends React.Component {
 	prepareChangeRole() {
 		this.currentStatusLabel = this.changeRoleStatusLbl
 		this.successMessage = `${this.state.selectedUser.username} är nu ${this.state.changeUserRole.label}`
-		this.confirmUserBtn.onclick = this.confirmManage.bind(this, `/${this.state.selectedUser.userId}/role/${this.state.changeUserRole.value}`, "POST")
+		this.confirmUserBtn.onclick = this.confirmManage.bind(this, `/user/${this.state.selectedUser.userId}/role/${this.state.changeUserRole.value}`, "POST")
 		this.confirmLbl.innerHTML = "Ange användarnamnet igen"
 		this.confirmUserInput.type = "text"
 		this.overlayOpen()
@@ -351,7 +356,7 @@ class ManageUser extends React.Component {
 			const data = {
 				"username" : this.state.newUserName,
 				"password" : this.state.newUserPassword,
-				"userRole" : this.state.changeUserRole ? this.state.changeUserRole.value : 0
+				"userRole" : this.state.newUserRole ? this.state.newUserRole.value : 0
 			}
 			const requestOptions = {
 				method: "POST",
@@ -401,6 +406,7 @@ class ManageUser extends React.Component {
         
 		//Update GUI and avaliable users
 		this.responseUpdateStatus(response)
+		this.roleSelectionRef.current.setValue(null)
 		this.getUsers()
 		this.overlayClose()
 
