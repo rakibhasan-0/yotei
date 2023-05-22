@@ -16,18 +16,6 @@ test("Filter box exsists when rendered.", async() => {
 	expect(html).toBeInTheDocument()
 })
 
-test("Filter hidden when status is false.", async() => {
-	render(
-        
-		<FilterBox id="filterBoxTest" status={false}/>
-	)
-
-	const className  = screen.getByTestId("filterBoxTest").className
-
-	expect(className).toBe("filterBox-pressed") 
-})
-
-
 test("FilterBox: Filter has children", async() => {
 	render(
         

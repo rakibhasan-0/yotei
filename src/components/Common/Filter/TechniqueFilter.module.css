@@ -2,27 +2,19 @@ body {
     font-family: Arial;
 }
 
-.kihon-group {
-
-    display: flex;
-    align-items: center;
-    padding-left: 10px;
-
-}
-
-.kihon-text {
+.kihonText {
 	text-align: center;
     margin: 10px;
 }
 
-.selected-text {
+.selectedText {
     display: flex;
     
     margin: 10px 0px 0px 0px;
     padding-left: 10px;
 }
 
-.selected-group{
+.selectedGroup{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -30,19 +22,11 @@ body {
 	padding: 10px;
 
 }
-.kihon-group {
+.kihonGroup {
     height: 50px;
     width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
 	padding: 10px 0px 0px 0px;
-}
-
-.kihon-text {
-    
-	text-align: center;
-    margin: 10px;
-
-	
 }

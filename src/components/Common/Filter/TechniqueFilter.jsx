@@ -1,8 +1,8 @@
 import BeltPicker from "../BeltPicker/BeltPicker"
 import FilterContainer from "./FilterContainer/FilterContainer"
 import CheckBox from "../CheckBox/CheckBox"
-import "./TechniqueFilter.css"
 import BeltIcon from "../BeltIcon/BeltIcon"
+import style from "./TechniqueFilter.module.css"
 /**
  * This is the filter component for filtering techniques. The component is used on the technique page
  * but additional filter components can be created with the more generic filter components.
@@ -25,19 +25,19 @@ import BeltIcon from "../BeltIcon/BeltIcon"
 function TechniqueFilter({id, belts, onBeltChange, kihon, onKihonChange}){
 	
 	return (
-		<div id={id} className="filterPos">
+		<div id={id} className={style.filterPos}>
 			<FilterContainer id={"technique-filter-container"}>
 				<BeltPicker id={"techniqueFilter-BeltPicker"} onToggle={onBeltChange} states={belts} />
 				{/** If no belts have been picked, hide the "Valda bälten" text. */}
-				<p className="selected-text">{!(belts.length > 0) ? "" : "Valda bälten"}</p>
-				<div className="selected-group">
+				<p className={style.selectedText}>{!(belts.length > 0) ? "" : "Valda bälten"}</p>
+				<div className={style.selectedGroup}>
 					{belts?.map((belt, index) => (
 						<BeltIcon key={index} belt={belt}/>
 					))}
 				</div>
-				<div className="kihon-group">
+				<div className={style.kihonGroup}>
 					<CheckBox id={"techniqueFilter-KihonCheck"} checked={kihon} onClick={()=> onKihonChange(!kihon)}/>
-					<p className="kihon-text">Kihon</p>
+					<p className={style.kihonText}>Kihon</p>
 				</div>
 			</FilterContainer>
 		</div>	

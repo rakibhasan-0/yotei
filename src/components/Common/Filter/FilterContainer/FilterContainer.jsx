@@ -1,4 +1,4 @@
-import "./FilterContainer.css"
+import style from "./FilterContainer.module.css"
 import { useState } from "react"
 import FilterBox from "../FilterBox/FilterBox"
 import React from "react"
@@ -31,13 +31,13 @@ function FilterContainer({ id, title ,children}) {
 	}
 
 	return (
-		<div id={id} className="filterContainer">
-			<div className="buttonGroup">
+		<div id={id}>
+			<div className={style.buttonGroup}>
 				<Button id={"filter-button"} onClick={showFilter} width='40px'>
 					<Sliders/>	
 				</Button>
 			</div>
-			<FilterBox id={"filter-box"} status={active} title={title}>
+			<FilterBox id={"filter-box"} className={style.filterBox} status={active} title={title}>
 				{children}
 			</FilterBox>
 		</div>

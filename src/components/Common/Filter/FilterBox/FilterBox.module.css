@@ -2,7 +2,6 @@ body {
 	font-family: Arial;
 }
 
-
 legend {
 	background: #FFFFFF none repeat scroll 0 0;
 	display: inline-block;
@@ -25,14 +24,12 @@ fieldset {
 	margin-bottom: 20px;
 }
 
-
-.filterBox {
+.filterBoxPressed {
 	visibility: visible;
 	opacity: 1;
 }
 
-.filterBox-pressed {
-
+.filterBox {
 	visibility: hidden;
 	opacity: 0;
 	height: 0;

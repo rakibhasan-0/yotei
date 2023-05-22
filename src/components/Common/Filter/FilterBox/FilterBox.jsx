@@ -1,4 +1,4 @@
-import "./FilterBox.css"
+import style from "./FilterBox.module.css"
 import React from "react"
 /**
  * The component that represent the box that will contain the filter options.
@@ -22,9 +22,9 @@ import React from "react"
  */
 function FilterBox({ id, status, title="Filtrering" , children }) {
 	return (
-		<div id={id} className={"filterBox" + ( status ? "" : "-pressed")}>
-			<fieldset>
-				<legend>{title}</legend>
+		<div id={id} className={( status ? style.filterBoxPressed : style.filterBox)}>
+			<fieldset className={style.fieldset}>
+				<legend className={style.legend}>{title}</legend>
 				{children}
 			</fieldset>
 		</div>
