@@ -85,7 +85,7 @@ export default function WorkoutIndex({detailURL}) {
 							</div>
 							<div className="row row-cols-2 align-items-center filter-row">
 								<p className="m-0 col text-left">Favoriter</p>
-								<div className="col" id="filter-favorites">
+								<div className="col" id="filter-favorites" style={{ maxWidth: "60px" }}>
 									<StarButton toggled={filterFavorites} onClick={toggleFilterFavorite}/>
 								</div>
 							</div>

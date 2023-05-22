@@ -15,7 +15,7 @@ export default function WorkoutListItem({ workout, favoriteCallback}) {
 	return (
 		<div className="row align-items-center font-weight-bold workout-item-row">
 			<div className="col-2 workout-star">
-				<FavoriteButton className="test" workout={workout} favoriteCallback={favoriteCallback}/>
+				<FavoriteButton workout={workout} favoriteCallback={favoriteCallback}/>
 			</div>
 			<Link className="col align-items-center align-self-center workout-text fill" to={`/workout/${workout.workoutID}`}>
 				{workout.name}

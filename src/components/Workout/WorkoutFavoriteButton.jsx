@@ -15,7 +15,9 @@ export default function WorkoutFavoriteButton({id, workout, favoriteCallback}) {
 	const [ isFavorite, setFavorite ] = useState(workout.favourite)
 
 	return(
-		<StarButton id={id} toggled={isFavorite} onClick={handleFavoriteClicked}/>
+		<div style={{ maxWidth: "40px" }}>
+			<StarButton id={id} toggled={isFavorite} onClick={handleFavoriteClicked}/>
+		</div>
 	)
 
 	async function handleFavoriteClicked(event) {
