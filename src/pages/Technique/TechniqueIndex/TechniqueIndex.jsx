@@ -45,6 +45,11 @@ export default function TechniqueIndex() {
 
 
 	useEffect(() => {
+		if (showPopup === true) {
+			map.clear()
+			return
+		}
+
 		// The selected belts are transformed from an array of belts objects to an array of strings, consisting of the belt names
 		const args = {
 			text: searchBarText,
@@ -59,7 +64,7 @@ export default function TechniqueIndex() {
 			setTechniques(res.results)
 		})
 
-	}, [searchBarText, belts, kihon, tags, context.token, map, mapActions])
+	}, [showPopup, searchBarText, belts, kihon, tags, context.token, map, mapActions])
 
 	return (
 		<>
@@ -104,7 +109,7 @@ export default function TechniqueIndex() {
 				</div>
 			</div>
 			
-			<RoundButton onClick={() => setShowPopup(true)}>
+			<RoundButton id="technique-add-button" onClick={() => setShowPopup(true)}>
 				<Plus className="plus-icon" />
 			</RoundButton>
 		</>
