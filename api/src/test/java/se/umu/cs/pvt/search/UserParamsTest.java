@@ -2,6 +2,7 @@ package se.umu.cs.pvt.search;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import se.umu.cs.pvt.user.User;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +68,7 @@ public class UserParamsTest {
 
     @Test
     void getRoleTest() {
-        assertThat(params.getRole()).isEqualTo("0");
+        assertThat(params.getRole()).isEqualTo(String.valueOf(User.Role.ADMIN.getKey()));
     }
 
     @Test

@@ -252,7 +252,7 @@ public class UserApiTest {
                 return Optional.empty();
             });
 
-            Object response = lc.changeRoleUser(username);
+            Object response = lc.changeRoleUser(username, User.Role.USER.getKey());
             if (response instanceof ResponseEntity<?>) {
                 assertEquals(new ResponseEntity<>(HttpStatus.OK), response);
             }
@@ -280,7 +280,7 @@ public class UserApiTest {
                 return Optional.empty();
             });
 
-            Object response = lc.changeRoleUser(username);
+            Object response = lc.changeRoleUser(username, User.Role.ADMIN.getKey());
             if (response instanceof ResponseEntity<?>) {
                 assertEquals(new ResponseEntity<>("Användaren finns inte", HttpStatus.BAD_REQUEST), response);
             }
@@ -309,7 +309,7 @@ public class UserApiTest {
             });
 
             Mockito.doThrow(new IllegalArgumentException()).when(userRepository).save(users.get(3));
-            Object response = lc.changeRoleUser(username);
+            Object response = lc.changeRoleUser(username, User.Role.USER.getKey());
             if (response instanceof ResponseEntity<?>) {
                 assertEquals(new ResponseEntity<>("Gick inte att ändra roll på användaren", HttpStatus.BAD_REQUEST), response);
             }

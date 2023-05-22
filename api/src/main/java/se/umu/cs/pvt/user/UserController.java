@@ -295,19 +295,14 @@ public class UserController {
      * @param username the username of the user that should change role
      * @return HTTP status.
      */
-    @PostMapping("/changerole/{id}")
-    public Object changeRoleUser(@PathVariable("id") String username) {
+    @PostMapping("/{id}/role/{role_id}")
+    public Object changeRoleUser(@PathVariable("id") String username, @PathVariable("role_id") int roleId) {
         Optional<User> possibleUser = repository.findUserByUsernameIgnoreCase(username);
         if (possibleUser.isEmpty()) {
             return new ResponseEntity<>("Användaren finns inte", HttpStatus.BAD_REQUEST);
         }
         User user = possibleUser.get();
-        if (user.getUserRole() == User.Role.ADMIN) {
-            user.setUserRole(User.Role.USER.ordinal());
-        }
-        else {
-            user.setUserRole(User.Role.ADMIN.ordinal());
-        }
+        user.setUserRole(roleId);
 
         try {
             repository.save(user);

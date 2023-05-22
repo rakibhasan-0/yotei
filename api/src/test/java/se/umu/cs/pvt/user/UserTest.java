@@ -74,7 +74,7 @@ public class UserTest {
     public void usersHasAdminRoleAfterSettingToAdmin() {
         try {
             User user = new User("test", "test");
-            user.setUserRole(0);
+            user.setUserRole(User.Role.ADMIN.getKey());
             assertEquals(User.Role.ADMIN, user.getUserRole());
         } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             fail();
@@ -86,8 +86,8 @@ public class UserTest {
     public void usersHasUserRoleAfterSettingToUser() {
         try {
             User user = new User("test", "test");
-            user.setUserRole(0);
-            user.setUserRole(1);
+            user.setUserRole(User.Role.ADMIN.getKey());
+            user.setUserRole(User.Role.USER.getKey());
             assertEquals(User.Role.USER, user.getUserRole());
         } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             fail();

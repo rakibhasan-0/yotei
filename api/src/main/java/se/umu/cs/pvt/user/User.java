@@ -1,9 +1,14 @@
 package se.umu.cs.pvt.user;
 
 import javax.persistence.*;
+
+import static org.mockito.ArgumentMatchers.any;
+
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * This is the User class that is responsible for the credentials of a registered user.
@@ -52,8 +57,22 @@ public class User implements Serializable {
      * The different roles the user can have.
      */
     public enum Role {
-        ADMIN,
-        USER
+        USER(0), ADMIN(1), EDITOR(2);
+        private final int key;
+
+        Role(int key) {
+            this.key = key;
+        }
+
+        public int getKey() {
+            return this.key;
+        }
+
+        public static Role fromKey(int key) {
+            return Arrays.stream(Role.values()).filter((role) -> 
+                role.getKey() == key
+            ).findAny().orElse(null);
+        }
     }
 
     /**
@@ -89,11 +108,12 @@ public class User implements Serializable {
      * User constructor with arguments. Hashes the user password.
      * @param name The username
      * @param password The user password (plain text)
-     * @param userRole The role of the user (0 = admin, 1 = user)
+     * @param userRole The role of the user
      * @throws InvalidPasswordException Thrown when the password is invalid and null
      * @throws InvalidUserNameException Thrown when username is empty
      * @throws NoSuchAlgorithmException Thrown when the hashing algorithm is not found
      * @throws InvalidKeySpecException  Thrown when the key generation fails
+     * @see Role
      */
     public User(String name, String password, int userRole) throws InvalidPasswordException, InvalidUserNameException,
             NoSuchAlgorithmException, InvalidKeySpecException {
@@ -104,15 +124,9 @@ public class User implements Serializable {
             throw new InvalidPasswordException("Password may not be empty!");
         }
 
-        this.username = name;
-        this.password = PasswordHash.hashPassword(password);
-
-        if(userRole == 1) {
-            this.userRole = Role.USER;
-        }
-        else {
-            this.userRole = Role.ADMIN;
-        }
+        setUsername(name);
+        setPassword(password);
+        setUserRole(userRole);
     }
 
 
@@ -164,12 +178,11 @@ public class User implements Serializable {
 
 
     public void setUserRole(int role) {
-        if(role == 1) {
-            userRole = Role.USER;
-        }
-        else {
-            userRole = Role.ADMIN;
-        }
+        setUserRole(Role.fromKey(role));
+    }
+
+    public void setUserRole(Role role) {
+        this.userRole = role;
     }
 
     
