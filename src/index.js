@@ -1,7 +1,6 @@
 import { createRoot } from "react-dom/client"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { Cookies, CookiesProvider } from "react-cookie"
-import Home from "./pages/Home/Home"
 import ExerciseCreate from "./pages/Exercise/ExerciseCreate"
 import WorkoutIndex from "./pages/Workout/WorkoutIndex"
 import NoPage from "./pages/Misc/NoPage"
@@ -102,7 +101,6 @@ export default function App() {
 										<Route path="exercise" element={<ExerciseIndex uri={exerciseURI} />} />
 										<Route path="exercise/create" element={<ExerciseCreate />} />
 										<Route path="exercise/edit/:editID" element={<ExerciseEdit />} />
-										<Route path="home" element={<Home />} />
 										<Route path="technique" element={<TechniqueIndex />} />
 										<Route path="technique/edit/:editID" element={<TechniqueEdit />} />
 										<Route path="upload-image" element={<ImageForm />} />
@@ -116,6 +114,7 @@ export default function App() {
 										<Route path="plan/create" element={<PlanCreate />} />
 										<Route path="session/create" element={<SessionCreate />} />
 										<Route path="session/edit/:session_id" element={<SessionEdit />} />
+										<Route path="" element={<PlanIndex uri={planURI} />} />
 										<Route path="*" element={<NoPage />} />
 									</Route>
 								</>
