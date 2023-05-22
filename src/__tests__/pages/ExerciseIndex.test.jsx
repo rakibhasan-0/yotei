@@ -97,6 +97,12 @@ describe("ExerciseIndex should render with all components", () => {
 	test("the round button", () => {
 		expect(screen.getByTestId("exercise-round-button")).toBeInTheDocument()
 	})
+	test("the filter button", () => {
+		expect(screen.getByTestId("ei-filter")).toBeInTheDocument()
+	})
+	test("the filter container", () => {
+		expect(screen.getByTestId("ei-sort")).toBeInTheDocument()
+	})
 
 })
 

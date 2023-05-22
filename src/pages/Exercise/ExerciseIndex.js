@@ -13,6 +13,7 @@ import Popup from "../../components/Common/Popup/Popup"
 import ExerciseCreate from "../../pages/Exercise/ExerciseCreate"
 import FilterContainer from "../../components/Common/Filter/FilterContainer/FilterContainer"
 import Sorter from "../../components/Common/Sorting/Sorter"
+
 /**
  * Function for the Exercise-page. Creates the searchbar and the list.
  * 
@@ -32,7 +33,7 @@ function ExerciseIndex() {
 	const detailURL = "/exercise/exercise_page/"
 	const [popupVisible, setPopupVisible] = useState(false)
 	const [map, mapActions] = useMap()
-	//const[sort, setSort] = useState("nameDesc")
+	const [sort, setSort] = useState("nameDesc")
 	const [triggerReload, setTriggerReload] = useState(false)
 
 	useEffect(() => {
@@ -44,8 +45,7 @@ function ExerciseIndex() {
 
 	const getAllExercises =  async () => {
 		const headers = { token }
-		//const url = `/api/exercises/all?sort=${sort}`
-		const url = "/api/exercises/all?sort=nameDesc"
+		const url = `/api/exercises/all?sort=${sort}`
 
 		await fetch(url, {headers})
 			.then(res => res.json())
@@ -56,7 +56,6 @@ function ExerciseIndex() {
 	} 
 
 	useEffect(() => {
-
 		const args = {
 			text: searchText,
 			selectedTags: addedTags
@@ -68,9 +67,40 @@ function ExerciseIndex() {
 			setCookie("exercise-filter", {tags: addedTags}, {path: "/"})
 		})
 	}, [searchText, addedTags])
+
+	const handleSortChange = (selectedOption) => {
+		let newSort
+		switch (selectedOption) {
+		case "Namn: A-Ö":
+			newSort = "nameAsc"
+			break
+		case "Namn: Ö-A":
+			newSort = "nameDesc"
+			break
+		case "Längd: Kortast först":
+			newSort = "durationAsc"
+			break
+		case "Längd: Längst först":
+			newSort = "durationDesc"
+			break
+		default:
+			console.error("Invalid sort option")
+			return // Early return if an invalid sort option is selected
+		}
+		if (newSort !== sort) {
+			setSort(newSort)
+		}
+	}
+    
+	useEffect(() => {
+		console.log("Sort: " + sort)
+		getAllExercises()
+	}, [sort])
+
 	const handleClosePopup = () => {
 		setTriggerReload(!triggerReload)
 	}
+
 	useEffect(() => {
 		getAllExercises()
 		setSearchText("")
@@ -92,8 +122,15 @@ function ExerciseIndex() {
 						suggestedTags={suggestedTags}
 						setSuggestedTags={setSuggestedTags}
 					/>
-					<FilterContainer id="EI-Filter" title="Sortering">
-						<Sorter></Sorter>
+					<FilterContainer id="ei-filter" title="Sortering">
+						<Sorter onSortChange={handleSortChange} id="ei-sort" defaultSort={"Namn: A-Ö"}>
+							<div value="option1">Namn: A-Ö</div>
+							<div value="option2">Namn: Ö-A</div>
+							<div value="option3">Längd: Kortast först</div>
+							<div value="option4">Längd: Längst först</div>
+
+							{/* Add more options as needed */}
+						</Sorter>
 					</FilterContainer>
 				</div>
 			</center>

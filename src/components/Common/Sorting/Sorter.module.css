@@ -1,0 +1,27 @@
+.sort {
+    border-top: solid 1px black;
+  }
+  
+  .sortItem {
+    display: flex;
+    height: 3rem;
+    align-items: center;
+    text-align: center;
+    padding-left: 1rem;
+    border-bottom: 1px solid black;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .sortItem:hover {
+    background-color: var(--red-primary);
+  }
+  
+  .sortText {
+    color: var(--gray);
+  }
+  
+  .currentOption {
+    color: var(--gray);
+  }
+  
