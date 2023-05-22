@@ -1,0 +1,36 @@
+.gp23-groupRow{
+    display: flex;
+    
+    padding-inline: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-top-style: solid;
+    border-width: 1px;
+
+    align-items: center;
+}
+
+
+.gp23-GroupRow-check-box{
+    display: flex;
+    gap: 10px;
+    justify-content: right;
+    margin-right: 0;
+    margin-left: auto;
+    width: 15%;
+}
+
+.gp23-groupRow-belt-color{
+    display: flex;
+    gap: 7px;
+    width: 35%;
+}
+
+.gp23-GroupRow-text{
+    float:left;
+    text-align: left;
+    margin-inline: 10px;
+    line-height: 1;
+    margin-bottom: 0;
+    width:50%;
+}
