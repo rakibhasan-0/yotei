@@ -6,7 +6,6 @@ import Tag from "../../../components/Common/Tag/Tag"
 import Button from "../../../components/Common/Button/Button"
 import { useNavigate, Link} from "react-router-dom"
 import {useParams} from "react-router"
-import Popup from "../../../components/Common/Popup/Popup"
 import { Pencil, Trash} from "react-bootstrap-icons"
 import Review from "../../../components/Workout/WorkoutReview/ReviewFormComponent.jsx"
 import ErrorState from "../../../components/Common/ErrorState/ErrorState"
@@ -14,19 +13,20 @@ import Spinner from "../../../components/Common/Spinner/Spinner"
 import {HTTP_STATUS_CODES} from "../../../utils"
 import {toast} from "react-toastify"
 import PrintButton from "../../../components/Common/PrintButton/PrintButton"
+import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
 
 /**
  * A page for creating workouts. The user can view the information
  * about a workout on this page. Activities linked to the workout
  * are displayed in lists in their respective category. Tags and
  * added user are also displayed.
- * 
+ *
  * Props:
  *      workoutId @type {int} - The ID of the workout.
  *      id        @type {int/string} - the id of the component
  *
- * @author Cyclops (Group 5) (2023-05-09)
- * @version 1.0
+ * @author Cyclops (Group 5) (2023-05-22)
+ * @version 1.6
  */
 
 export default function WorkoutView({id}) {
@@ -48,7 +48,7 @@ export default function WorkoutView({id}) {
 			const response = await fetch(`/api/workouts/detail/${workoutId}`, requestOptions)
 			if(response.status != HTTP_STATUS_CODES.OK){
 				setErrorStateMsg("Pass med ID '" + workoutId + "' existerar inte. Felkod: " + response.status)
-				setLoading(false)	
+				setLoading(false)
 			} else {
 				const json = await response.json()
 				setWorkoutData(() => json)
@@ -59,14 +59,14 @@ export default function WorkoutView({id}) {
 
 		fetchData()
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
-	
+
 	useEffect(() => {
 		const fetchData = async () => {
 			const requestOptions = {
 				headers: {"Content-type": "application/json", token: context.token}
 			}
 			const response = await fetch(`/api/workouts/get/userworkout/${workoutId}`, requestOptions)
-	
+
 			if (response.status === HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
 				setError("Serverfel: Gick inte att hämta användare för passet. Felkod: " + response.status)
 			} else if(response.status === HTTP_STATUS_CODES.NOT_FOUND) {
@@ -80,22 +80,22 @@ export default function WorkoutView({id}) {
 
 		fetchData()
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
-	
-	return ( 
+
+	return (
 		loading ? <div className="mt-5"> <Spinner/> </div>
 			: !workoutData ? <ErrorState message={errorStateMsg} onBack={() => navigate("/workout")} onRecover={() => window.location.reload(false)}/>
 				:
 				<div id={id} className="container px-0 col-lg-4 col-md-4">
-					{getPopupContainer(showPopup, setShowPopup, workoutId, context, navigate)}
+					{<ConfirmPopup popupText={"Radera pass"} id={"confirm-popup"} setShowPopup={setShowPopup} showPopup={showPopup} onClick={async () => deleteWorkout(workoutId, context, navigate, setShowPopup)}/>}
 					{getReviewContainer(showRPopup, setRShowPopup, workoutId)}
 					{getWorkoutInfoContainer(workoutData, setShowPopup)}
 					{sortByCategories(workoutData).map((activityCategory) => (
 						<div className="my-5" key={activityCategory.categoryOrder}>
 							<WorkoutActivityList
-								categoryName={activityCategory.categoryName} 
-								activities={activityCategory.activities} 
+								categoryName={activityCategory.categoryName}
+								activities={activityCategory.activities}
 								navigate={navigate}
-								id={"WorkoutActivityList-" + activityCategory.categoryOrder}>	
+								id={"WorkoutActivityList-" + activityCategory.categoryOrder}>
 							</WorkoutActivityList>
 						</div>
 					))}
@@ -103,7 +103,7 @@ export default function WorkoutView({id}) {
 					{(workoutUsers !== null && workoutUsers.length > 0) && getWorkoutUsersContainer(workoutUsers)}
 					{getButtons(navigate, setRShowPopup)}
 				</div>
-	)	
+	)
 }
 
 function setError(msg){
@@ -112,7 +112,7 @@ function setError(msg){
 		autoClose: 5000,
 		hideProgressBar: false,
 		closeOnClick: true,
-		pauseOnHover: true, 
+		pauseOnHover: true,
 		draggable: false,
 		progress: undefined,
 		theme: "colored",
@@ -124,31 +124,6 @@ function sortByCategories(workoutData) {
 	const sortedCategories = workoutData.activityCategories.sort((a, b) => a.categoryOrder - b.categoryOrder)
 
 	return sortedCategories
-}
-
-function getPopupContainer(showPopup, setShowPopup, workoutId, context, navigate) {
-	return (
-		<Popup
-			id={"confirm-popup"}
-			title={"Ta bort pass"}
-			isOpen={showPopup}
-			setIsOpen={setShowPopup}
-			width={95}
-			maxWidth={400}
-			height={40}
-			maxHeight={250}
-		>
-			<p className="font-">Är du säker på att du vill ta bort detta pass?</p>
-			<div className="row justify-content-center">
-				<div className="d-flex col justify-content-end">
-					<Button onClick={async () => deleteWorkout(workoutId, context, navigate, setShowPopup)}>Ja</Button>
-				</div>
-				<div className="d-flex col justify-content-start">
-					<Button onClick={() => setShowPopup(false)}>Nej</Button>
-				</div>
-			</div>
-		</Popup>
-	)
 }
 
 function getReviewContainer(showRPopup, setRShowPopup, workoutId){
@@ -183,14 +158,14 @@ function getTagContainer(workoutData) {
 				{
 					workoutData.tags.map((tag, index) => {
 						return (
-							<div key={"tag" + index} className="mr-2"> 
+							<div key={"tag" + index} className="mr-2">
 								<Tag tagType={"default"} text={tag.name}></Tag>
 							</div>
 						)
-					})	
+					})
 				}
 			</div>
-		</div>	
+		</div>
 	)
 }
 
@@ -242,7 +217,7 @@ function getWorkoutInfoContainer(workoutData, setShowPopup) {
 						<div className="col workout-detail-column-item">
 							<h1 className="font-weight-bold">{workoutData.name}</h1>
 						</div>
-					</div>			
+					</div>
 					<div className="d-flex justify-content-end align-items-center">
 						<PrintButton workoutData={workoutData} />
 						<Link className="ml-3" state={{workout: workoutData}} to={"/workout/edit"}>
@@ -260,7 +235,7 @@ function getWorkoutInfoContainer(workoutData, setShowPopup) {
 							onClick={() => setShowPopup(true)}
 						/>
 					</div>
-					
+
 					<div className="workout-detail-row-item mt-3">
 						<div className="workout-detail-column-item">
 							<h2 className="font-weight-bold mb-0">Författare</h2>
@@ -286,8 +261,7 @@ function getWorkoutInfoContainer(workoutData, setShowPopup) {
 					<h2 className="font-weight-bold mb-0">Beskrivning</h2>
 					<p className="properties">{workoutData.description}</p>
 				</div>
-			</div>		
+			</div>
 		</>
 	)
 }
-
