@@ -126,7 +126,7 @@ public class UserController {
     }
 
     /**
-     * Returns all the users, not including id and password.
+     * Returns all the users, not including password.
      * @return HTTP status code and body, where body could be a message or the users.
      */
     @GetMapping("/all")
@@ -269,12 +269,12 @@ public class UserController {
 
     /**
      * Removes one user from the program(Deletes it from the database).
-     * @param username the username of the user to be removed
+     * @param id The id of the user to remove
      * @return HTTP status.
      */
     @DeleteMapping("/remove/{id}")
-    public Object removeUser(@PathVariable("id") String username) {
-        Optional<User> possibleUser = repository.findUserByUsernameIgnoreCase(username);
+    public Object removeUser(@PathVariable("id") Long id) {
+        Optional<User> possibleUser = repository.findById(id);
         if (possibleUser.isEmpty()) {
             return new ResponseEntity<>("Användaren finns inte", HttpStatus.BAD_REQUEST);
         }
@@ -296,8 +296,8 @@ public class UserController {
      * @return HTTP status.
      */
     @PostMapping("/{id}/role/{role_id}")
-    public Object changeRoleUser(@PathVariable("id") String username, @PathVariable("role_id") int roleId) {
-        Optional<User> possibleUser = repository.findUserByUsernameIgnoreCase(username);
+    public Object changeRoleUser(@PathVariable("id") Long id, @PathVariable("role_id") int roleId) {
+        Optional<User> possibleUser = repository.findById(id);
         if (possibleUser.isEmpty()) {
             return new ResponseEntity<>("Användaren finns inte", HttpStatus.BAD_REQUEST);
         }

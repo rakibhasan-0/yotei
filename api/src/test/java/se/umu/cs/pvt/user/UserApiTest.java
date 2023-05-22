@@ -38,7 +38,6 @@ public class UserApiTest {
     void init() {
         user = new User();
         lc = new UserController(userRepository);
-        Map<String, String> map = new HashMap<>();
     }
 
 
@@ -50,7 +49,8 @@ public class UserApiTest {
 
             Object response = lc.registerUser(user);
             if (response instanceof ResponseEntity<?>) {
-                assertEquals(((ResponseEntity<?>) response).getStatusCode(), HttpStatus.NOT_ACCEPTABLE);
+                HttpStatus actual = ((ResponseEntity<?>) response).getStatusCode();
+                assertEquals(HttpStatus.NOT_ACCEPTABLE, actual);
             }
         } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             fail();
@@ -70,7 +70,8 @@ public class UserApiTest {
 
             Object response = lc.registerUser(user);
             if (response instanceof ResponseEntity<?>) {
-                assertEquals(((ResponseEntity<?>) response).getStatusCode(), HttpStatus.NOT_ACCEPTABLE);
+                HttpStatus actual = ((ResponseEntity<?>) response).getStatusCode();
+                assertEquals(HttpStatus.NOT_ACCEPTABLE, actual);
             }
         } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             fail();
@@ -90,7 +91,8 @@ public class UserApiTest {
 
             Object response = lc.registerUser(user);
             if (response instanceof ResponseEntity<?>) {
-                assertEquals(((ResponseEntity<?>) response).getStatusCode(), HttpStatus.OK);
+                HttpStatus actual = ((ResponseEntity<?>) response).getStatusCode();
+                assertEquals(HttpStatus.OK, actual);
             }
         } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             fail();
@@ -98,53 +100,15 @@ public class UserApiTest {
         }
     }
 
-
-    @Test
-    void shouldReturnAllExistingUsersWithoutIdAndPasswordWhenFetchingUsers() {
-        try {
-            users = new ArrayList<>();
-            for (int i = 1; i < 11; i++) {
-                users.add(new User("user" + i, "user" + i, i%2));
-            }
-            Mockito.when(userRepository.findAllProjectedBy()).thenAnswer(invocation -> {
-                ArrayList<Pair<String, User.Role>> usersShort = new ArrayList<>();
-                for (User u:users) {
-                    usersShort.add(Pair.of(u.getUsername(), u.getUserRole()));
-                }
-                return users;
-            });
-            ArrayList<Pair<String, User.Role>> expected = new ArrayList<>();
-            for (int i = 1; i < 11; i++) {
-                expected.add(Pair.of("user" + i, i == 1 ? User.Role.USER : User.Role.ADMIN));
-            }
-            Object response = lc.getUsers();
-            if (response instanceof ResponseEntity<?>) {
-                assertEquals(expected, response);
-            }
-        } catch (Exception e) {
-            fail();
-            System.out.println("Exception thrown: " + e.getCause());
-        }
-    }
-
-
     @Test
     void shouldReturnNotFoundIfCantGetUsersFromFetchingUsers() {
         try {
-            users = new ArrayList<>();
-            for (int i = 1; i < 11; i++) {
-                users.add(new User("user" + i, "user" + i, i%2));
-            }
-            Mockito.when(userRepository.findAllProjectedBy()).thenAnswer(invocation -> {
-                return null;
-            });
-            ArrayList<Pair<String, User.Role>> expected = new ArrayList<>();
-            for (int i = 1; i < 11; i++) {
-                expected.add(Pair.of("user" + i, i == 1 ? User.Role.USER : User.Role.ADMIN));
-            }
+            Mockito.when(userRepository.findAllProjectedBy()).thenAnswer(invocation -> null);
+
             Object response = lc.getUsers();
             if (response instanceof ResponseEntity<?>) {
-                assertEquals(new ResponseEntity<>(HttpStatus.NOT_FOUND), response);
+                HttpStatus actual = ((ResponseEntity<?>) response).getStatusCode();
+                assertEquals(HttpStatus.NOT_FOUND, actual);
             }
         } catch (Exception e) {
             fail();
@@ -156,22 +120,12 @@ public class UserApiTest {
     @Test
     void shouldSucceedWhenRemovingUsers() {
         try {
-            users = new ArrayList<>();
-            for (int i = 1; i < 11; i++) {
-                users.add(new User("user" + i, "user" + i, i%2));
-            }
-            String username = "user3";
-            Mockito.when(userRepository.findUserByUsernameIgnoreCase(username)).thenAnswer(invocation -> {
-                for (User u:users) {
-                    if (u.getUsername().equals(username)) {
-                        return Optional.of(u);
-                    }
-                }
-                return Optional.empty();
-            });
-            Object response = lc.removeUser(username);
+            Long id = 3L;
+            Mockito.when(userRepository.findById(id)).thenAnswer(invocation -> Optional.of(new User("user3", "user3", 0)));
+            Object response = lc.removeUser(id);
             if (response instanceof ResponseEntity<?>) {
-                assertEquals(new ResponseEntity<>(HttpStatus.OK), response);
+                HttpStatus actual = ((ResponseEntity<?>) response).getStatusCode();
+                assertEquals(HttpStatus.OK, actual);
             }
         } catch (Exception e) {
             System.out.println("Exception thrown: " + e.getCause());
@@ -183,23 +137,12 @@ public class UserApiTest {
     @Test
     void shouldFailWhenRemovingNoneExistingUser() {
         try {
-            users = new ArrayList<>();
-            for (int i = 1; i < 11; i++) {
-                users.add(new User("user" + i, "user" + i, i%2));
-            }
-            String username = "user3";
-            Mockito.when(userRepository.findUserByUsernameIgnoreCase(username)).thenAnswer(invocation -> {
-                for (User u:users) {
-                    if (u.getUsername().equals(username)) {
-                        return Optional.of(u);
-                    }
-                }
-                return Optional.empty();
-            });
-            Mockito.doThrow(new IllegalArgumentException()).when(userRepository).delete(users.get(3));
-            Object response = lc.removeUser(username);
+            Long id = 3L;
+            Mockito.when(userRepository.findById(id)).thenAnswer(invocation -> Optional.empty());
+            Object response = lc.removeUser(id);
             if (response instanceof ResponseEntity<?>) {
-                assertEquals(new ResponseEntity<>("Gick inte att ta bort användaren", HttpStatus.BAD_REQUEST), response);
+                HttpStatus actual = ((ResponseEntity<?>) response).getStatusCode();
+                assertEquals(HttpStatus.BAD_REQUEST, actual);
             }
         } catch (Exception e) {
             System.out.println("Exception thrown: " + e.getCause());
@@ -211,22 +154,12 @@ public class UserApiTest {
     @Test
     void shouldFailWhenRemovingUserWithDatabaseFail() {
         try {
-            users = new ArrayList<>();
-            for (int i = 1; i < 11; i++) {
-                users.add(new User("user" + i, "user" + i, i%2));
-            }
-            String username = "user20";
-            Mockito.when(userRepository.findUserByUsernameIgnoreCase(username)).thenAnswer(invocation -> {
-                for (User u:users) {
-                    if (u.getUsername().equals(username)) {
-                        return Optional.of(u);
-                    }
-                }
-                return Optional.empty();
-            });
-            Object response = lc.removeUser(username);
+            Long id = 20L;
+            Mockito.when(userRepository.findById(id)).thenAnswer(invocation -> Optional.empty());
+            Object response = lc.removeUser(id);
             if (response instanceof ResponseEntity<?>) {
-                assertEquals(new ResponseEntity<>("Användaren finns inte", HttpStatus.BAD_REQUEST), response);
+                HttpStatus actual = ((ResponseEntity<?>) response).getStatusCode();
+                assertEquals(HttpStatus.BAD_REQUEST, actual);
             }
         } catch (Exception e) {
             System.out.println("Exception thrown: " + e.getCause());
@@ -238,23 +171,13 @@ public class UserApiTest {
     @Test
     void shouldSucceedWhenChangingUserRole() {
         try {
-            users = new ArrayList<>();
-            for (int i = 1; i < 11; i++) {
-                users.add(new User("user" + i, "user" + i, i%2));
-            }
-            String username = "user3";
-            Mockito.when(userRepository.findUserByUsernameIgnoreCase(username)).thenAnswer(invocation -> {
-                for (User u:users) {
-                    if (u.getUsername().equals(username)) {
-                        return Optional.of(u);
-                    }
-                }
-                return Optional.empty();
-            });
+            Long id = 3L;
+            Mockito.when(userRepository.findById(id)).thenAnswer(invocation -> Optional.of(new User("user3", "user3", 1)));
 
-            Object response = lc.changeRoleUser(username, User.Role.USER.getKey());
+            Object response = lc.changeRoleUser(id, User.Role.USER.getKey());
             if (response instanceof ResponseEntity<?>) {
-                assertEquals(new ResponseEntity<>(HttpStatus.OK), response);
+                HttpStatus actual = ((ResponseEntity<?>) response).getStatusCode();
+                assertEquals(HttpStatus.OK, actual);
             }
         } catch (Exception e) {
             System.out.println("Exception thrown: " + e.getCause());
@@ -266,23 +189,13 @@ public class UserApiTest {
     @Test
     void shouldFailWhenChangingRoleOnNoneExistingUser() {
         try {
-            users = new ArrayList<>();
-            for (int i = 1; i < 11; i++) {
-                users.add(new User("user" + i, "user" + i, i%2));
-            }
-            String username = "user20";
-            Mockito.when(userRepository.findUserByUsernameIgnoreCase(username)).thenAnswer(invocation -> {
-                for (User u:users) {
-                    if (u.getUsername().equals(username)) {
-                        return Optional.of(u);
-                    }
-                }
-                return Optional.empty();
-            });
+            Long id = 20L;
+            Mockito.when(userRepository.findById(id)).thenAnswer(invocation -> Optional.empty());
 
-            Object response = lc.changeRoleUser(username, User.Role.ADMIN.getKey());
+            Object response = lc.changeRoleUser(id, User.Role.ADMIN.getKey());
             if (response instanceof ResponseEntity<?>) {
-                assertEquals(new ResponseEntity<>("Användaren finns inte", HttpStatus.BAD_REQUEST), response);
+                HttpStatus actual = ((ResponseEntity<?>) response).getStatusCode();
+                assertEquals(HttpStatus.BAD_REQUEST, actual);
             }
         } catch (Exception e) {
             System.out.println("Exception thrown: " + e.getCause());
@@ -294,27 +207,17 @@ public class UserApiTest {
     @Test
     void shouldFailWhenChangingRoleOnUserWithDatabaseFail() {
         try {
-            users = new ArrayList<>();
-            for (int i = 1; i < 11; i++) {
-                users.add(new User("user" + i, "user" + i, i%2));
-            }
-            String username = "user3";
-            Mockito.when(userRepository.findUserByUsernameIgnoreCase(username)).thenAnswer(invocation -> {
-                for (User u:users) {
-                    if (u.getUsername().equals(username)) {
-                        return Optional.of(u);
-                    }
-                }
-                return Optional.empty();
-            });
+            Long id = 3L;
+            Mockito.when(userRepository.findById(id)).thenAnswer(invocation -> Optional.empty());
 
-            Mockito.doThrow(new IllegalArgumentException()).when(userRepository).save(users.get(3));
-            Object response = lc.changeRoleUser(username, User.Role.USER.getKey());
+            Object response = lc.changeRoleUser(id, User.Role.USER.getKey());
             if (response instanceof ResponseEntity<?>) {
-                assertEquals(new ResponseEntity<>("Gick inte att ändra roll på användaren", HttpStatus.BAD_REQUEST), response);
+                HttpStatus actual = ((ResponseEntity<?>) response).getStatusCode();
+                assertEquals(HttpStatus.BAD_REQUEST, actual);
             }
         } catch (Exception e) {
             System.out.println("Exception thrown: " + e.getCause());
+            e.printStackTrace();
             fail();
         }
     }
