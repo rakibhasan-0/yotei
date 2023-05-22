@@ -24,14 +24,10 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 	const [desc, setDesc] = useState("")
 	const [time, setTime] = useState(0)
 	const [insertFailed, setInsertFailed] = useState(false)
-	const [tagFailed, setTagFailed] = useState(false)
-	const [storedName, setStoredName] = useState("")
 	const [addBoxChecked, setAddBoxChecked] = useState(false)
 	const [eraseBoxChecked, setEraseBoxChecked] = useState(false)
-	const [okName, setOkName] = useState(false)
 	const context = useContext(AccountContext)
 	const [addedTags, setAddedTags] = useState([])
-	const [showAlterWindow , setShowAlertWindow] = useState(false)
 	const [clearAlternative, setClearAlternative] = useState(false)
 	const [showMiniPopup, setShowMiniPopup] = useState(false)
 
@@ -53,22 +49,24 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 			const response = await fetch("/api/exercises/add", requestOptions)
 			if (response.ok) {
 				data = await response.json()
-				setInsertFailed(false)
+				return data.id
 			} else {
 				if (response.status === 409) {
-					setInsertFailed(true)
+					console.log("409")
+					//should toast
 
 				}
 				if (response.status === 400) {
-					setInsertFailed(true)
+					console.log("400")
+					//should toast
 				}
 			}
 		} catch (error) {
-
-			setInsertFailed(true)
+			console.log("error")
+			//should toast
 		}
-		setShowAlertWindow(true)
-		return data.id
+		console.log("before return")
+		return null
 	}
 
 
@@ -76,50 +74,56 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 	 * Validates the list of tags and loops through it and tries to link it to the exercise.
 	 *
 	 * @param id - exercise id
-	 * @returns the id of the exercise that has been created
+	 * @returns a boolean if the tags were successfully linked to the exercise
 	 */
-	async function addTag(id) {
-		if(id === null){
+	async function addTag(exId) {
+		let hasLinked = true
+		if(exId === null){
+			console.log("id was null" + insertFailed)
+			//setTagFailed(false)
 			return false
 		}
 		if (addedTags.length === 0) {
-			setTagFailed(false)
-			return false
+			//setTagFailed(false)
+			return true
 		}
 		if (addedTags === undefined) {
-			return false
+			//setTagFailed(false)
+			return true
 		}
 
 		for (let i = 0; i < addedTags.length; i++) {
-			await linkExerciseTag(id, addedTags.at(i).id)
+			let successResponse = await linkExerciseTag(exId, addedTags.at(i).id)
+			if(!successResponse){
+				hasLinked = false
+			}
 		}
-		return tagFailed
+		return hasLinked
 	}
 
 
 	/**
 	 * Method for API call when linking a tag to an exercise.
 	 *
-	 * @param ex_id - id of exercise
-	 * @param tag_id - id of tag
-	 * @returns the id of the exercise that has been created
+	 * @param exId - id of exercise
+	 * @param tagId - id of tag
 	 */
-	async function linkExerciseTag(ex_id, tag_id) {
+	async function linkExerciseTag(exId, tagId) {
 		const requestOptions = {
 			method: "POST",
 			headers: {"Content-type": "application/json", "token": context.token},
-			body: JSON.stringify({"exerciseId": ex_id})
+			body: JSON.stringify({"exerciseId": exId})
 		}
 
 		try {
-			const response = await fetch("/api/tags/add/exercise?tag=" + tag_id, requestOptions)
+			const response = await fetch("/api/tags/add/exercise?tag=" + tagId, requestOptions)
 			if (response.ok) {
-				setTagFailed(false)
+				return true
 			} else {
-				setTagFailed(true)
+				return false
 			}
 		} catch (error) {
-			setTagFailed(true)
+			return false
 		}
 	}
 
@@ -130,25 +134,25 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 	 */
 
 	function addExerciseAndTags () {
-
 		if (checkInput() === true) {
-			addExercise().then((id)  => addTag(id)).then((tag) => exitProdc(tag))
+			addExercise().then((exId)  => addTag(exId)).then((linkedTags) => exitProdc(linkedTags))
 		}
-		setInsertFailed(false)
-		setOkName(false)
+		//setInsertFailed(false)
 	}
 
 
 	/**
 	 * Checks if insert worked, if so redirect back to exercise.
-	 * @param tagFailed - result from linking tags
+	 * @param linkedTags - result from linking tags
 	 */
-	function exitProdc(tagFailed) {
-		if (insertFailed === false && tagFailed === false) {
+	function exitProdc(linkedTags) {
+		setInsertFailed(!linkedTags)
+		if (linkedTags) {
 			if (addBoxChecked === false) {
 				setShowPopup(false)
 			} else {
 				if (eraseBoxChecked === true) {
+					console.log("inne i erase")
 					setName("")
 					setTime(0)
 					setDesc("")
@@ -156,45 +160,29 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 				}
 			}
 		}
-		setInsertFailed(false)
-		setOkName(false)
 		onClose()
 	}
 
 	/**
 	 * A function that will validate the users input on name.
-	 * @returns Boolean
+	 * @returns Boolean if the name is ok or not
 	 */
 	function checkInput() {
-		setStoredName(name)
-		if (okName === false) {
-			if (name !== "" && name !== undefined) {
-				setOkName(true)
-				return true
-			}
+		if (name !== "" && name !== undefined) {
+			return true
 		}
-		return okName
+		return false
+	}
+
+	function timeCallback(id, time){
+		setTime(time)
 	}
 
 
 	/**
-	 * Creates alert window that displays if the exercise could be added to the database or not
-	 * @returns void
+	 * A function that shows the user a popup where they can confirm if they want to stay and keep their 
+	 * changes or actually leave the page and discard the changes.
 	 */
-	function alertWindow() {
-		if (insertFailed && showAlterWindow) {
-			return (<div className="alert alert-danger" role="alert" style={{overflow: "visible", overflowWrap: "anywhere" }}>
-				<p>Övningen {storedName} kunde ej läggas till</p>
-			</div>)
-		}else{
-			if (addBoxChecked && showAlterWindow) {
-				return(<div className="alert alert-success" role="alert"  style={{overflow: "visible", overflowWrap: "anywhere"}}>
-					<p>Övningen {storedName} lades till</p>
-				</div>)
-			}
-		}
-	}
-
 	function leaveWindow() {
 		if(name !== "" || desc !== "") {
 			setShowMiniPopup(true)
@@ -203,8 +191,20 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 		}
 	}
 
+	/**
+	 * Handles logic when add more exercises checkbox is clicked. 
+	 * @param checked - a boolean to set if the add checkbox is clicked or not
+	 */
+	function addCheckboxClicked(checked){
+		setClearAlternative(!clearAlternative)
+		setAddBoxChecked(checked)
+		setEraseBoxChecked(false)
+	}
+
+	/**
+	 * Closes the popup that this component is apart of
+	 */
 	function closeAll() {
-		//setShowMiniPopup(false)
 		setShowPopup(false)
 		onClose()
 	}
@@ -235,12 +235,11 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 					/>
 				</div>
 				<Divider id={"time-selector-title"} option={"h1_left"} title={"Tid"} />
-				<div
-					className="time-selector" >
+				<div className="time-selector" >
 					<MinutePicker
 						id={"minuteSelect"}
-						time={time}
-						updateTime={setTime}
+						initialValue={time}
+						callback={timeCallback}
 					/>
 				</div>
 				<Divider id={"tag-title"} option={"h1_left"} title={"Taggar"} />
@@ -249,38 +248,26 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 					addedTags={addedTags}
 					setAddedTags={setAddedTags}
 				/>
-
-				{/*Button for the form. Calls the function addExercise. Retrieve the users input*/}
-
 				<div className={"checkboxes-container"}>
 					<div className={"add-checkbox"}>
 						<p className={"checkbox-text"}>Lägg till fler övningar</p>
-						<CheckBox id="EC-AddMultipleChk" clickable={true} checked={addBoxChecked} onClick={() => {
-							setClearAlternative(!clearAlternative)
-							setAddBoxChecked(!addBoxChecked)
-							setEraseBoxChecked(false)
-						}}/>
+						<CheckBox id="EC-AddMultipleChk" disabled={false} checked={addBoxChecked} onClick={addCheckboxClicked}/>
 					</div>
 					<div className={"add-checkbox"}>
 						<p className={addBoxChecked ? "checkbox-text" : "checkbox-inactive"}>Rensa text</p>
-						<CheckBox clickable={addBoxChecked} checked={eraseBoxChecked} onClick={() => setEraseBoxChecked(!eraseBoxChecked)}/>
+						<CheckBox id="EC-ClearMultipleChk" disabled={!addBoxChecked} checked={eraseBoxChecked} onClick={setEraseBoxChecked}/>
 					</div>
 				</div>
-				{alertWindow()}
 				<div className="create-exercise-btn-container">
 					<Button
 						id="EC-BackBtn"
 						outlined={"button-back"}
-						onClick={() => { 
-							leaveWindow()
-						}}>
+						onClick={() => { leaveWindow()}}>
 						<p>Tillbaka</p>
 					</Button>
 					<Button
 						id="EC-AddBtn"
-						onClick={() => {
-							addExerciseAndTags()
-						}}>
+						onClick={() => { addExerciseAndTags()}}>
 						<p>Lägg till</p>
 					</Button>
 				</div>
