@@ -7,7 +7,7 @@ import Button from "../../../components/Common/Button/Button"
 import style from "./TechniqueEdit.module.css"
 import { AccountContext } from "../../../context"
 import TagInput from "../../../components/Common/Tag/TagInput"
-import { HTTP_STATUS_CODES } from "../../../utils"
+import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../../utils"
 import { Trash } from "react-bootstrap-icons"
 import Popup from "../../../components/Common/Popup/Popup"
 import UploadMedia from "../../../components/Common/Upload/UploadMedia"
@@ -132,10 +132,19 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 
 		fetch("/api/techniques", requestOptions)
 			.then(res => {
-				if (res.status === HTTP_STATUS_CODES.CONFLICT) { setInputErrorMessage("Tekniknamnet finns redan"); return }
-				if (res.status === HTTP_STATUS_CODES.NOT_ACCEPTABLE) { setInputErrorMessage("Tekniken måste ha ett namn"); return }
-				if (res.status === HTTP_STATUS_CODES.UNAUTHORIZED) { toast.error("Du är inte längre inloggad och kan därför inte skapa tekniker"); return }
-				if (res.status === HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+				switch(res.status) {
+				case HTTP_STATUS_CODES.CONFLICT:
+					setInputErrorMessage("Tekniknamnet finns redan")
+					scrollToElementWithId("techniqueEditInputName")
+					return
+				case HTTP_STATUS_CODES.NOT_ACCEPTABLE:
+					setInputErrorMessage("Tekniken måste ha ett namn")
+					scrollToElementWithId("techniqueEditInputName")
+					return
+				case HTTP_STATUS_CODES.UNAUTHORIZED:
+					toast.error("Du är inte längre inloggad och kan därför inte skapa tekniker")
+					return
+				case HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR:
 					toast.error("Gick inte att updatera tekniken!")
 					console.log(res)
 					return
@@ -197,7 +206,7 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 
 			<div>
 				<InputTextField
-					id={style.techniqueEditInputName}
+					id="techniqueEditInputName"
 					text={techniqueName}
 					onChange={(e) => setTechniqueName(e.target.value)}
 					placeholder={"Namn"}
