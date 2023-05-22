@@ -6,79 +6,63 @@ import { useState } from "react"
 import "./UploadMedia.css"
 import { AccountContext } from "../../../context"
 import React, { useContext } from "react"
-import ReactPlayer from "react-player"
+// import ReactPlayer from "react-player"
 
 /**
  * Handles uploading media to the server, both URLs only aswell as complete media files
  * 
  * Props:
  *     id @type {number}  - Id of component
- *     exerciseId  @type {number} - Id of an exercise or technique that the uploaded media belongs to 
+ *     exercise_id - Id of an exercise or technique that the uploaded media belongs to 
  *
  * Example usage:
- *     <UploadMedia id={11} exerciseId={current_technique}/>
+ *     <UploadMedia id={11} exercise_id={current_technique}/>
  *
  * @author Team Dragon (Group 3)
  * @version 1.0
  * @since 20XX-XX-XX
  */
 
-function UploadMedia({id, exerciseId}) {
+function UploadMedia({id, exercise_id, fetchUrl}) {
 	const [link, setLink] = useState("")
+	const [textField, setTextField] = useState("")
 	const context = useContext(AccountContext)
+
+	console.log(id)
+	console.log(exercise_id)
+	console.log(context)
 	//const {token, setToken} = useContext(AccountContext)
 
 	
 	/**
      * Is called when the upload-media button is clicked
      */
-	async function uploadMediaClicked() {
+	function uploadMediaClicked() {
 		setLink("Upload")
+		console.log(link)
+		setTextField("Klistra in länk")
+        
 	}
-
+	
 	/**
-     * Is called when the link-to-media button is clicked
-     */
-	async function linkMediaClicked() {
-		if (link !== "") {
-			let image = true
-
-			if (ReactPlayer.canPlay(link)) {
-				image = false
-			} 
-			
-			const requestOptions = {
-				method: "POST",
-				headers: { "Content-type": "application/json", "token": context.token },
-				body: JSON.stringify([{
-					movementId: exerciseId,
-					url: link,
-					localStorage: false,
-					image: image,
-					description: "This is a youtube"
-				}])
-			}
-			
-			try {
-				
-				const response = await fetch("/api/media/add", requestOptions)
-	
-				if (response.ok) {
-					const data =  await response.json()
-					// window.location.reload(true) // ugly autoupdate after fetch
-					console.log(data)
-				} 
-			} catch (error) {
-				console.log(error)
-			}
-	
-			console.log(link)
-		} 
-
+	 * Function used for calling the fetchUrl function from parrent
+	 */
+	function linkMedia() {
+		fetchUrl(link)
 	}
 
+	const handleChange = e => {
+		setLink(e.target.value)
+		setTextField(e.target.value)
+	}
+	
+	function handleClick() {
+		linkMedia()
+		setTextField("")
+	}
+	
 	return (
-		<div id={id}>
+		<div>
 			<div className="d-flex justify-content-center upload-media-container">
 				<Button onClick={uploadMediaClicked}
 					outlined={false}
@@ -91,12 +75,13 @@ function UploadMedia({id, exerciseId}) {
 			<div className="d-flex justify-content-center link-media-container">
 				<div>
 					<InputTextField
-						placeholder={"Klistra in länk"} onChange={e => {setLink(e.target.value)}}>
+						// placeholder={textField} onChange={e => {setLink(e.target.value)}}>
+						placeholder="Klistra in länk" onChange={e => {handleChange(e)}} text={textField}>
 						
 					</InputTextField>
 				</div>
 				<div>
-					<Button onClick={linkMediaClicked}
+					<Button onClick={handleClick}
 						outlined={false}
 						width={"100%"}
 					>

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useCallback } from "react"
+import { useContext, useEffect, useState } from "react"
 import CheckBox from "../../../components/Common/CheckBox/CheckBox"
 import InputTextField from "../../../components/Common/InputTextField/InputTextField"
 import TextArea from "../../../components/Common/TextArea/TextArea"
@@ -8,11 +8,10 @@ import style from "./TechniqueEdit.module.css"
 import { AccountContext } from "../../../context"
 import TagInput from "../../../components/Common/Tag/TagInput"
 import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../../utils"
-import { Trash } from "react-bootstrap-icons"
 import Popup from "../../../components/Common/Popup/Popup"
 import UploadMedia from "../../../components/Common/Upload/UploadMedia"
 import { toast } from "react-toastify"
-import Spinner from "../../../components/Common/Spinner/Spinner"
+import EditGallery from "../../../components/Gallery/EditGallery"
 
 const KIHON_TAG = { id: 3, name: "Kihon Waza" }
 
@@ -48,12 +47,11 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 	const [belts, setBelts] = useState(technique.belts)
 	const [addedTags, setAddedTags] = useState(technique.tags)
 
-	const [media, setMedia] = useState([])
-	const [mediaMessage, setMediaMessage] = useState("Ingen media tillgänglig")
 	const [showMediaPopup, setShowMediaPopup] = useState(false)
 
 	const [inputErrorMessage, setInputErrorMessage] = useState("")
-	const [loading, setLoading] = useState(true)
+
+	const [sendData, setSendData] = useState(false)
 
 	useEffect(() => {
 		if (showMediaPopup === true) {
@@ -66,62 +64,7 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 			}
 		})
 
-		handleGetMedia()
 	}, [showMediaPopup])
-
-	const handleGetMedia = useCallback(() => {
-		const requestOptions = {
-			method: "GET",
-			headers: { "Content-Type": "application/json", "token": token.token },
-		}
-
-		fetch(`/api/media/${technique.id}`, requestOptions)
-			.then(async res => {
-				if (res.status === HTTP_STATUS_CODES.OK) {
-					const media = await res.json()
-					setMedia(media)
-				} else if (res.status === HTTP_STATUS_CODES.NOT_FOUND) {
-					setMediaMessage("Ingen media tillgänglig")
-				} else {
-					setMediaMessage("Fel vid hämtning av media")
-				}
-				setLoading(false)
-			})
-			.catch((error) => {
-				console.log(error)
-				toast.error("Fel vid hämtning av media")
-				setMediaMessage("Fel vid hämtning av media")
-				setLoading(false)
-			})
-	}, [technique, token])
-
-	const handleDeleteMedia = (mo) => {
-		const requestOptions = {
-			method: "DELETE",
-			headers: { "Content-type": "application/json", "token": token.token },
-			body: JSON.stringify({
-				id: mo.id,
-				movementId: mo.movementId,
-				url: mo.url,
-				localStorage: mo.localStorage,
-				image: mo.image,
-				description: mo.description
-			})
-		}
-
-		fetch(`/api/media/remove/${technique.id}`, requestOptions)
-			.then(res => {
-				if (res.status === HTTP_STATUS_CODES.OK) {
-					setMedia(media.filter(o => mo.id !== o.id))
-				} else {
-					toast.error("Failed to delete media!")
-				}
-			})
-			.catch((error) => {
-				toast.error("Failed to delete media!")
-				console.log(error)
-			})
-	}
 
 	const handlePutTechnique = (technique) => {
 		const requestOptions = {
@@ -163,6 +106,7 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 		const tagIds = buildTags(addedTags, kihonChecked)
 		const beltIds = buildBelts(belts)
 		handlePutTechnique({ id: technique.id, name: techniqueName, description: techniqueDescription, belts: beltIds, tags: tagIds })
+		setSendData(true)
 	}
 
 	// Beltpicker toggle handler
@@ -256,42 +200,8 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 
 			<div className={style.techniqueEditHorizontalLine} style={{marginBottom: "-6px"}} />
 
-			{loading ? 
-				<div className={style.techniqueEditCenterSpinner}><Spinner/></div>
-				:
-				null
-			}
-
-			{media.length > 0 ? 
-				<>
-					{media.map((o) => {
-						return (
-							<div key={o.id} className={style.mediaNameContainer} >
-								<h2>{o.description} {o.id}</h2>
-								<Trash
-									className={style.trashIcon}
-									size="24px"
-									color="var(--red-primary)"
-									style={{cursor: "pointer"}}
-									onClick={() => handleDeleteMedia(o)}
-								/>
-							</div>
-						)
-					})}
-				</>
-				:
-				!loading ?
-					<div>
-						<h2>{mediaMessage}</h2>
-					</div>
-					:
-					null
-			}
-
 			<div className={style.mediaButtonContainer}>
-				<Button onClick={() => setShowMediaPopup(true)}>
-					<p>Ny media</p>
-				</Button>
+				<EditGallery id={1} exerciseId={1} sendData={sendData}/>
 			</div>
 
 			<Popup title={"Lägg till media"} isOpen={showMediaPopup} setIsOpen={setShowMediaPopup} >

@@ -12,6 +12,7 @@ import {Plus as PlusIcon} from "react-bootstrap-icons"
 import {Trash as TrashIcon } from "react-bootstrap-icons"
 import {CameraVideoOff as NoMediaIcon } from "react-bootstrap-icons"
 import UploadMedia from "../Common/Upload/UploadMedia"
+import ReactPlayer from "react-player"
 /**
  * A media component for displaying video or images.
  * 
@@ -25,12 +26,15 @@ import UploadMedia from "../Common/Upload/UploadMedia"
  * @version 1.0
  * @since 2023-05-04
  */
-export default function EditGallery({ id, exerciseId }) {
+export default function EditGallery({ id, exerciseId, sendData }) {
 	const [media, setMedia] = useState([])
 	const context = useContext(AccountContext)
 	const [showAddPopup, setShowAddPopup] = useState(false)
 	const [showRemovePopup, setShowRemovePopup] = useState(false)
 	const [selectedMedia, setSelectedMedia] = useState()
+
+	const [mediaToRemove, setMediaToRemove] = useState([])
+	const [mediaList, setMediaList] = useState([])
 
 	// We need to filter pictures and videos to two different arrays
 	let pictures = []
@@ -57,7 +61,7 @@ export default function EditGallery({ id, exerciseId }) {
 		} catch (error) {
 			console.log(error)
 		}
-	}, [context.token, id])
+	}, [context.token, exerciseId])
 
 	/**
 	 * Call rerender as soon as new media is fetched
@@ -78,40 +82,13 @@ export default function EditGallery({ id, exerciseId }) {
 	 * 
 	 */
 	async function removeMedia(){
-		const mediaObject = selectedMedia
-		const requestOptions = {
-			method: "DELETE",
-			headers: { "Content-type": "application/json", "token": context.token },
-			body: JSON.stringify({
-				id: mediaObject.id,
-				movementId: mediaObject.movementId,
-				url: mediaObject.url,
-				localStorage: mediaObject.localStorage,
-				image: mediaObject.image,
-				description: mediaObject.description
-			})
-		}
-		try {
-			const response = await fetch(`/api/media/remove/${mediaObject.id}`, requestOptions)
+		setMediaToRemove(mediaToRemove => [...mediaToRemove, selectedMedia])
+		let temp = [... media]
+		var index = temp.indexOf(selectedMedia)
+		temp.splice(index, 1)
 
-			if (response.ok) {
-				getMedia()
-				media.map((m) => {
-					if (m.image == true) {
-						pictures.push(m)
-					} else {
-						videos.push(m)
-					}
-				})
-			}else{
-				//Felmeddelande?
-			}
-		} catch (error) {
-			console.log(error)
-		}
-		setSelectedMedia()
+		setMedia(temp)
 	}
-
 
 	/**
 	 * Is displayed if no media is avaliable
@@ -127,7 +104,7 @@ export default function EditGallery({ id, exerciseId }) {
 	 */
 	const UploadPopup = <div>
 		<Popup id={`${exerciseId}-upload-popup`} title={"Lägg Till Media"} isOpen={showAddPopup} setIsOpen={setShowAddPopup} >
-			<UploadMedia id={`${exerciseId}-upload-page`} exerciseId={exerciseId}/>	
+			<UploadMedia id={`${exerciseId}-upload-page`} exerciseId={exerciseId} fetchUrl={fetchUrl}/>	
 		</Popup>
 	</div>
 
@@ -175,6 +152,84 @@ export default function EditGallery({ id, exerciseId }) {
 		setSelectedMedia(mediaObject)
 		setShowRemovePopup(true)
 	}
+
+	
+
+	/**
+     * fetches an url as a string and appends it to an array of JSON objects for API call
+     * 
+     * @param {String} media 
+     */
+	function fetchUrl(media) {
+        
+		if (media !== "") {
+			let image = true
+            
+			if (ReactPlayer.canPlay(media)) {
+				image = false
+			} 
+
+			let body = {
+				movementId: id,
+				url: media,
+				localStorage: false,
+				image: image,
+				description: "This is a youtube"
+			}
+
+			setMediaList(mediaList => [...mediaList, body])
+        
+		}
+	}
+
+	/**
+     * calls the API for storing newly added links
+     */
+	async function postMedia(list) {
+
+		const requestOptions = {
+			method: "POST",
+			headers: { "Content-type": "application/json", "token": context.token },
+			body: JSON.stringify(list)
+		}
+		try {
+            
+			const response = await fetch("/api/media/add", requestOptions)
+
+			if (response.ok) {
+				console.log("Post request sent")
+			} 
+		} catch (error) {
+			console.log(error)
+		}
+        
+	}
+
+	async function deleteMedia(list) {
+		const requestOptions = {
+			method: "DELETE",
+			headers: { "Content-type": "application/json", "token": context.token },
+			body: JSON.stringify(list)
+		}
+		try {
+			const response = await fetch("/api/media/remove", requestOptions)
+            
+			if (response.ok) {
+				console.log("remove request sent")
+			}
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	useEffect(() => {
+		if (sendData) {
+			postMedia(mediaList)
+			// send remove API call here
+			deleteMedia(mediaToRemove)
+		} 
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [sendData])
 
 
 	return (

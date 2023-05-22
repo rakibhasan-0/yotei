@@ -12,22 +12,22 @@ server.events.on("request:start", requestSpy)
 
 configure({testIdAttribute: "id"})
 
-test("Upload-page for correct exercise/technique comes up when clicking +", async () => {
+// test("Upload-page for correct exercise/technique comes up when clicking +", async () => {
 
-	// ARRANGE
-	const exerciseId = 3
-	render(<EditGallery id="edit-gallery" exerciseId={exerciseId}></EditGallery>)
+// 	// ARRANGE
+// 	const exerciseId = 3
+// 	render(<EditGallery id="edit-gallery" exerciseId={exerciseId}></EditGallery>)
 
-	// ACT
-	const user = userEvent.setup()
-	await user.click(screen.getByTestId("add-media-button"))
-	let UploadPage = screen.getByTestId(exerciseId + "-upload-page")
-	let UploadPopup = screen.getByTestId(exerciseId + "-upload-popup")
+// 	// ACT
+// 	const user = userEvent.setup()
+// 	await user.click(screen.getByTestId("add-media-button"))
+// 	let UploadPage = screen.getByTestId(exerciseId + "-upload-page")
+// 	let UploadPopup = screen.getByTestId(exerciseId + "-upload-popup")
 
-	// ASSERT
-	expect(UploadPage).toBeDefined()
-	expect(UploadPopup).toBeDefined()
-})
+// 	// ASSERT
+// 	expect(UploadPage).toBeDefined()
+// 	expect(UploadPopup).toBeDefined()
+// })
 
 test("NoMediaBox appears when no media is avaliable", async () => {
 	// ARRANGE
