@@ -4,14 +4,8 @@
  */
 package se.umu.cs.pvt.export;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import se.umu.cs.pvt.tag.ExerciseTag;
-import se.umu.cs.pvt.tag.TechniqueTag;
-import se.umu.cs.pvt.tag.WorkoutTag;
-
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Represents a tag export entity.
@@ -26,7 +20,6 @@ public class TagExport implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "tag_id")
-    @JsonIgnore
     private Long id;
 
     @Column(nullable = false, name = "name")

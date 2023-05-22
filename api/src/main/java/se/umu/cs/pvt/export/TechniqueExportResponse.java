@@ -12,11 +12,13 @@ public class TechniqueExportResponse {
     private String name;
     private String description;
     private List<String> tags;
+    private List<Long> belts;
 
-    public TechniqueExportResponse(String name, String description, List<String> tags) {
+    public TechniqueExportResponse(String name, String description, List<String> tags, List<Long> belts) {
         this.name = name;
         this.description = description;
         this.tags = tags;
+        this.belts = belts;
     }
 
     public String getName() {
@@ -30,4 +32,6 @@ public class TechniqueExportResponse {
     public List<String> getTags() {
         return tags;
     }
+
+    public List<Long> getBelts() { return belts; }
 }

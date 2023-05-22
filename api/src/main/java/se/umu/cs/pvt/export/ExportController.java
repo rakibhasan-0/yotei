@@ -37,7 +37,8 @@ public class ExportController {
                             return new TechniqueExportResponse(
                                     t.getName(),
                                     t.getDescription(),
-                                    getTagNames(t.getTags()));
+                                    getTagNames(t.getTags()),
+                                    getBelts(t.getBelts()));
                         })
                         .toList());
     }
@@ -59,6 +60,12 @@ public class ExportController {
     private List<String> getTagNames(Set<TagExport> tags) {
         return tags.stream()
                 .map(TagExport::getName)
+                .toList();
+    }
+
+    private List<Long> getBelts(Set<BeltExport> belts) {
+        return belts.stream()
+                .map(BeltExport::getId)
                 .toList();
     }
 }

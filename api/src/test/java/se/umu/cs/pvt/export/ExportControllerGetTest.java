@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 /**
  * Test class for Belt Controller endpoint.
  *
- * @author Andre Byström
+ * @author Andre Byström 
  * date: 2023-04-25
  */
 @WebMvcTest(controllers = ExportController.class)
@@ -41,8 +41,9 @@ public class ExportControllerGetTest {
            new TechniqueExport(1L,
                    "test",
                    "test",
-                   Set.of(new TagExport(1L, "test")))
-        ));
+                   Set.of(new TagExport(1L, "test")),
+                   Set.of(new BeltExport(1L))
+        )));
 
         TechniqueExportResponse technique = exportController.exportTechniques().getTechniques().get(0);
         String tag = technique.getTags().get(0);
@@ -50,6 +51,7 @@ public class ExportControllerGetTest {
         assertThat(technique.getName()).isEqualTo("test");
         assertThat(technique.getDescription()).isEqualTo("test");
         assertThat(tag).isEqualTo("test");
+        assertThat(technique.getBelts().get(0)).isEqualTo(1L);
     }
 
     @Test

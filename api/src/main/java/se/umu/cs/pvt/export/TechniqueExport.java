@@ -1,6 +1,7 @@
 package se.umu.cs.pvt.export;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import se.umu.cs.pvt.belt.Belt;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -33,6 +34,12 @@ public class TechniqueExport implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<TagExport> tags;
 
+    @ManyToMany
+    @JoinTable(name = "technique_to_belt",
+        joinColumns = @JoinColumn(name = "technique_id"),
+        inverseJoinColumns = @JoinColumn(name = "belt_id"))
+    private Set<BeltExport> belts;
+
     /**
      * no-args constructor required by JPA spec
      * this one is protected since it shouldn't be used directly
@@ -40,11 +47,12 @@ public class TechniqueExport implements Serializable {
     protected TechniqueExport() {
     }
 
-    public TechniqueExport(long id, String name, String description, Set<TagExport> tags){
+    public TechniqueExport(long id, String name, String description, Set<TagExport> tags, Set<BeltExport> belts){
         this.id = id;
         this.name = name;
         this.description = description;
         this.tags = tags;
+        this.belts = belts;
     }
 
     public Long getId() {
@@ -62,4 +70,6 @@ public class TechniqueExport implements Serializable {
     public Set<TagExport> getTags() {
         return tags;
     }
+
+    public Set<BeltExport> getBelts() { return belts; }
 }
