@@ -306,7 +306,7 @@ class ManageUser extends React.Component {
 	prepareRemove() {
 		this.currentStatusLabel = this.removeUserStatusLbl
 		this.successMessage = `${this.state.selectedUser.username} är borttagen`
-		this.confirmUserBtn.onclick = this.confirmManage.bind(this, `/user/remove/${this.state.selectedUser.username}`, "DELETE")
+		this.confirmUserBtn.onclick = this.confirmManage.bind(this, `/user/remove/${this.state.selectedUser.userId}`, "DELETE")
 		this.confirmLbl.innerHTML = "Ange användarnamnet igen"
 		this.confirmUserInput.type = "text"
 		this.overlayOpen()
