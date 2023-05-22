@@ -1,0 +1,22 @@
+stages:
+  - publish
+
+publish_database:
+  image: docker:20
+  services:
+    - docker:20-dind
+  stage: publish
+  variables:
+    DOCKER_DRIVER: "overlay2"
+    CONTAINER_REPOSITORY: "pvt2023"
+    VERSION: "1.0"
+  before_script:
+    - apk update && apk add jq
+    - docker login -u "$DOCKER_CLIENT" -p "$DOCKER_SECRET"
+  script:
+    - docker build -t $CONTAINER_REPOSITORY/database:$VERSION database
+    - docker push $CONTAINER_REPOSITORY/database:$VERSION
+    - docker tag $CONTAINER_REPOSITORY/database:$VERSION $CONTAINER_REPOSITORY/database:latest
+    - docker push $CONTAINER_REPOSITORY/database:latest
+  only:
+    - main
