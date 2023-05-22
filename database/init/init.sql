@@ -337,7 +337,8 @@ ALTER TABLE technique_to_belt OWNER TO psql;
 CREATE TABLE error_log (
        log_id SERIAL PRIMARY KEY,
        error_message TEXT NOT NULL,
-       info_message TEXT  NOT NULL
+       info_message TEXT  NOT NULL,
+       error_date_time TIMESTAMP NOT NULL
 );
 ALTER TABLE error_log OWNER TO psql;
 
