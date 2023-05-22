@@ -13,6 +13,7 @@ import TechniqueCard from "../../../components/Common/Technique/TechniqueCard/Te
 import ExerciseListItem from "../../../components/Common/ExerciseCard/ExerciseListItem"
 import RoundButton from "../../../components/Common/RoundButton/RoundButton"
 import { ChevronRight } from "react-bootstrap-icons"
+import ErrorStateSearch from "../../../components/Common/ErrorState/ErrorStateSearch"
 
 /**
  * This component is used to add activities to a workout. It contains two tabs, 
@@ -26,7 +27,7 @@ import { ChevronRight } from "react-bootstrap-icons"
  * @author Kraken (Grupp 7)
  * @since 2023-05-16
  */
-function AddActivity({id, setShowActivityInfo}) {
+function AddActivity({ id, setShowActivityInfo }) {
 
 	const { token } = useContext(AccountContext)
 
@@ -35,7 +36,7 @@ function AddActivity({id, setShowActivityInfo}) {
 	 * This map is used as a parameter when using getTechniques method.
 	 */
 	const [map, mapActions] = useMap()
-	
+
 	/**
 	 * States related to keeping track of which techniques
 	 * to display, and the search text, selected belts, kihon 
@@ -56,27 +57,31 @@ function AddActivity({id, setShowActivityInfo}) {
 	const [searchExerText, setSearchExerText] = useState("")
 	const [selectedExerTags, setSelectedExerTags] = useState([])
 	const [suggestedExerTags, setSuggestedExerTags] = useState([])
-	
+	const [fetchedTech, setFetchedTech] = useState(false)
+	const [fetchedExer, setFetchedExer] = useState(false)
+
+
 	/**
 	 * Keeps track of which activities that are checked/selected by the user.
 	 */
 	const [checkedActivities, setCheckedActivities] = useState([])
-	
+
 	/**
 	 * Fetches techniques when the component is mounted or when the 
 	 * search text, selected belts, kihon value or selected tags are changed.
 	 */
 	useEffect(() => {
+		setFetchedTech(false)
 		setTechniques(techniques.filter(technique => checkedActivities.includes(technique)))
 		searchTechniques()
-		console.log(selectedBelts)
 	}, [searchTechText, selectedBelts, kihon, selectedTechTags])
-	
+
 	/**
 	 * Fetches exercises when the component is mounted or when the
 	 * search text or selected tags are changed.
 	 */
 	useEffect(() => {
+		setFetchedExer(false)
 		setExercises(exercises.filter(exercise => checkedActivities.includes(exercise)))
 		searchExercises()
 	}, [searchExerText, selectedExerTags])
@@ -90,7 +95,7 @@ function AddActivity({id, setShowActivityInfo}) {
 	 */
 	function handleBeltChanged(checked, belt) {
 		setSelectedBelts(prev => {
-			if(!checked) {
+			if (!checked) {
 				return prev.filter(b => b.id !== belt.id)
 			}
 			else {
@@ -112,7 +117,7 @@ function AddActivity({id, setShowActivityInfo}) {
 	 * Handles selecting or deselecting a checkbox for an activity.
 	 */
 	const onActivityToggle = (activity, type) => setCheckedActivities(prev => {
-		if(prev.includes(activity)) {
+		if (prev.includes(activity)) {
 			return prev.filter(a => a !== activity)
 		}
 		activity.type = type
@@ -131,10 +136,10 @@ function AddActivity({id, setShowActivityInfo}) {
 	const searchTechniques = () => {
 
 		const filteredBelts = []
-		
+
 		selectedBelts.forEach(function (arrayItem) {
 			var x = arrayItem.name
-			if(arrayItem.child == true) {
+			if (arrayItem.child == true) {
 				x = x + "-barn"
 			}
 			filteredBelts.push(x)
@@ -151,6 +156,7 @@ function AddActivity({id, setShowActivityInfo}) {
 			result.results = result.results.filter(technique => !checkedActivities.includes(technique))
 			setTechniques((techniques) => [...techniques, ...result.results])
 			setSuggestedTechTags(result.tagCompletion)
+			setFetchedTech(true)
 		})
 	}
 
@@ -163,7 +169,7 @@ function AddActivity({id, setShowActivityInfo}) {
 	 * kept in the state to be displayed.
 	 */
 	const searchExercises = () => {
-		
+
 		const args = {
 			text: searchExerText,
 			selectedTags: selectedExerTags,
@@ -173,17 +179,17 @@ function AddActivity({id, setShowActivityInfo}) {
 			result.results = result.results.filter(exercise => !checkedActivities.includes(exercise))
 			setExercises((exercises) => [...exercises, ...result.results])
 			setSuggestedExerTags(result.tagCompletion)
+			setFetchedExer(true)
 		})
 	}
-
 
 	return (
 		<div id={id}>
 			<Modal.Body>
 				<Tabs defaultActiveKey="technique" className={style.tabs}>
 					<Tab eventKey="technique" title="Tekniker" tabClassName="tab">
-						<div className={style.searchBar}>		
-							<SearchBar 
+						<div className={style.searchBar}>
+							<SearchBar
 								id="technique-search-bar"
 								placeholder="Sök tekniker"
 								text={searchTechText}
@@ -205,20 +211,23 @@ function AddActivity({id, setShowActivityInfo}) {
 							<TechniqueCard
 								id={"technique-list-item-" + technique.id}
 								checkBox={
-									<CheckBox 
+									<CheckBox
 										id=""
 										checked={checkedActivities.includes(technique)}
-										onClick={() => onActivityToggle(technique, "technique")} 
+										onClick={() => onActivityToggle(technique, "technique")}
 									/>
 								}
 								technique={technique}
 								key={key}
 							/>
 						))}
+						{(techniques.length === 0 && fetchedTech) &&
+							<ErrorStateSearch id="add-activity-no-technique" message="Kunde inte hitta tekniker" />
+						}
 					</Tab>
 					<Tab eventKey="exercise" title="Övningar" tabClassName="tab">
 						<div className={style.searchBar}>
-							<SearchBar 
+							<SearchBar
 								id="exercise-search-bar"
 								placeholder="Sök övningar"
 								text={searchExerText}
@@ -235,19 +244,22 @@ function AddActivity({id, setShowActivityInfo}) {
 								text={exercise.name}
 								detailURL={"/exercise/exercise_page/"}
 								item={
-									<CheckBox 
+									<CheckBox
 										id=""
 										checked={checkedActivities.includes(exercise)}
-										onClick={() => onActivityToggle(exercise, "exercise")} 
+										onClick={() => onActivityToggle(exercise, "exercise")}
 									/>
 								}
 								key={key}
 							/>
 						))}
+						{(exercises.length === 0 && fetchedExer) &&
+							<ErrorStateSearch id="add-activity-no-exercise" message="Kunde inte hitta övningar" />
+						}
 					</Tab>
 				</Tabs>
-				<RoundButton onClick={() => setShowActivityInfo(checkedActivities)}> 
-					<ChevronRight width={30}/>
+				<RoundButton onClick={() => setShowActivityInfo(checkedActivities)}>
+					<ChevronRight width={30} />
 				</RoundButton>
 			</Modal.Body>
 		</div>
