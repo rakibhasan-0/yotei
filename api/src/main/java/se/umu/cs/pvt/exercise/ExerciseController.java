@@ -59,11 +59,11 @@ public class ExerciseController {
      * @return all exercises
      */
     @GetMapping("/all")
-    public Object getExercises(@RequestParam(value = "sort", defaultValue = "nameDsc") String sort) {
+    public Object getExercises(@RequestParam(value = "sort", defaultValue = "nameAsc") String sort) {
         List<Exercise> exerciseList;
         switch (sort) {
-            case "nameAsc":
-                exerciseList = exerciseRepository.findAllByOrderByNameAsc();
+            case "nameDesc":
+                exerciseList = exerciseRepository.findAllByOrderByNameDesc();
                 break;
             case "durationAsc":
                 exerciseList = exerciseRepository.findAllByOrderByDurationAsc();
@@ -72,7 +72,7 @@ public class ExerciseController {
                 exerciseList = exerciseRepository.findAllByOrderByDurationDesc();
                 break;
             default:
-                exerciseList = exerciseRepository.findAllByOrderByNameDesc();
+                exerciseList = exerciseRepository.findAllByOrderByNameAsc();
         }
         
         if (exerciseList == null) {
