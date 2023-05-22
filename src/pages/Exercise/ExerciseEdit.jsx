@@ -9,6 +9,7 @@ import InputTextField from "../../components/Common/InputTextField/InputTextFiel
 import TextArea from "../../components/Common/TextArea/TextArea.jsx"
 import Divider from "../../components/Common/Divider/Divider.jsx"
 import TagInput from "../../components/Common/Tag/TagInput.jsx"
+import {toast} from "react-toastify"
 
 
 
@@ -19,6 +20,7 @@ import TagInput from "../../components/Common/Tag/TagInput.jsx"
  */
 export default function ExerciseEdit({setShowPopup}) {
 	const context = useContext(AccountContext)
+	const [oldName, setOldName] = useState()
 	const [name, setName] = useState("")
 	const [desc, setDesc] = useState("")
 	const [time, setTime] = useState(0)
@@ -37,7 +39,7 @@ export default function ExerciseEdit({setShowPopup}) {
 	},[])
 
 	useEffect(() => {
-		if(exId !== "") {
+		if(exId !== ""){
 			getExerciseInfo()
 			console.log("In useEffect 2")
 		}
@@ -47,7 +49,7 @@ export default function ExerciseEdit({setShowPopup}) {
      * Returns the information about the exercise and its tags with the id in the pathname.
      */
 	async function getExerciseInfo() {
-		console.log("exercise id: "+exId)
+		console.log("exercise id: "+ exId)
 		console.log("inside getInfo")
 		
 		const requestOptions = {
@@ -55,31 +57,31 @@ export default function ExerciseEdit({setShowPopup}) {
 			headers: {"Content-type": "application/json", token: context.token},
 		}
 		let exerciseJson
+		let tagsJson
 		try {
 			const response = await fetch(`/api/exercises/${exId}`, requestOptions)
 			exerciseJson = await response.json()
+			
+			try{
+				const response = await fetch(`/api/tags/get/tag/by-exercise?exerciseId=${exId}`, requestOptions)
+				tagsJson = await response.json()
+				tagsJson = convertJsonString(tagsJson)
+			} catch{
+				toast.error("Oj, det gick inte att hämta taggar")
+				console.error(errorMessage)
+			}
+
 		} catch (error) {
-			alert("Could not find details about the exercise")
-			console.log("error", error)
+			toast.error("Oj, det gick inte att hämta övningsinfo")
+			setShowPopup(false)
 		}
-		let tagsJson
-		try{
-			const response = await fetch(`/api/tags/get/tag/by-exercise?exerciseId=${exId}`, requestOptions)
-			tagsJson = await response.json()
-			tagsJson = convertJsonString(tagsJson)
-		}catch{
-			alert("Kunde inte hämta taggar")
-			console.error(errorMessage)
-		}
+		
 		setName(exerciseJson.name)
 		setDesc(exerciseJson.description)
 		setTime(exerciseJson.duration)
 		setNewTags(tagsJson)
 		setExistingTags(tagsJson)
-		console.log("Skriver in name "+exerciseJson.name)
-		console.log("Skriver in desc "+exerciseJson.description)
-		console.log("Skriver in tid "+exerciseJson.duration)
-		console.log("Tags "+tagsJson)	
+		setOldName(exerciseJson.name)
 	}
 
 
@@ -105,6 +107,28 @@ export default function ExerciseEdit({setShowPopup}) {
      */
 	async function editExercise() {
 
+		const requestOptionsDuplicate = {
+			method: "POST",
+			headers: {"Content-type": "application/json", "token": context.token},
+			body: JSON.stringify({name: name, description: desc, duration: time})
+		}
+		try {
+			const response = await fetch("/api/exercises/add", requestOptionsDuplicate)
+			if (response.status === 409 && name != oldName) {
+				setErrorMessage("Detta namn är redan taget")
+				return
+			}
+		}
+		catch (error) {
+			toast.error("Oj, ett fel har uppstått med att nå servern")
+		}
+
+		if (name.trim() === "") {
+			setEditFailed(true)
+			setErrorMessage("Övning måste ha ett namn")
+			return
+		}
+
 		const requestOptions = {
 			method: "PUT",
 			headers: {"Content-type": "application/json", token: context.token},
@@ -116,17 +140,16 @@ export default function ExerciseEdit({setShowPopup}) {
 			})
 		}
 
-		const response = await fetch("/api/exercises/update", requestOptions)
 		try {
+			const response = await fetch("/api/exercises/update", requestOptions)
 			if (!response.ok) {
 				console.log("response not OK")
+				toast.error("Uppdatering misslyckades")
 				setEditFailed(true)
-				setErrorMessage(name)
 			}
 		} catch (error) {
-			console.log("error")
+			toast.error("Oj, ett fel har uppstått med att nå servern")
 			setEditFailed(true)
-			setErrorMessage(name)
 		}
 		
 		await checkTags()
@@ -175,7 +198,7 @@ export default function ExerciseEdit({setShowPopup}) {
 				setErrorMessage(tag_name)
 			}
 		} catch (error) {
-			alert("Error at tag link")
+			toast.error("Oj, ett fel har uppstått med tag länken")
 			setTagLinkFailed(true)
 			setErrorMessage(tag_name)
 		}
@@ -200,10 +223,10 @@ export default function ExerciseEdit({setShowPopup}) {
 			} else {
 				setTagRemovedFailed(true)			
 				setErrorMessage(tag_name)
-				alert("Failed to remove tag")
+				toast.error("Oj, det gick inte att ta bort taggen")
 			}
 		} catch (error) {
-			alert("Error when removing tag")
+			toast.error("Oj, ett fel har uppstått med att ta bort taggen")
 			setTagRemovedFailed(true)			
 			setErrorMessage(tag_name)
 		}
@@ -221,6 +244,7 @@ export default function ExerciseEdit({setShowPopup}) {
 						required = {true}
 						type="text"
 						id = {"exerciseNameInput"}
+						errorMessage={errorMessage}
 					/>
 				</div>
 				<div>
@@ -252,23 +276,20 @@ export default function ExerciseEdit({setShowPopup}) {
 
 				{/*Button for the form. Calls the function addExercise. Retrieve the users input*/}
 				<div className="create-exercise-btn-container">
-					<div id={"back"}>
-						<Button
-							id={"backBtn"}
-							outlined={"button-back"}
-							onClick={() => setShowPopup(false)}
-							width={150}>
+					<Button
+						id={"backBtn"}
+						outlined={"button-back"}
+						onClick={() => setShowPopup(false)}
+						width={150}>
 						Tillbaka
-						</Button>
-					</div>
-					<div id={"add"}>
-						<Button
-							id={"addBtn"}
-							onClick={() => {editExercise()}}
-							width={150}>
+					</Button>
+					<Button
+						id={"addBtn"}
+						onClick={() => {editExercise()}}
+						width={150}>
 						Spara
-						</Button>
-					</div>
+					</Button>
+					
 				</div>
 			</div>
 		</div>
