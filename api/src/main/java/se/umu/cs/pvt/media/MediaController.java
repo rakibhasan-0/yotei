@@ -53,7 +53,7 @@ public class MediaController {
      * @return a http response, ok if successful and bad request otherwise
      */
      @DeleteMapping("/removeAll/{id}")
-     public ResponseEntity<Void> removeMedia(@PathVariable("id") Long id){
+     public ResponseEntity<Void> removeAllMedia(@PathVariable("id") Long id){
         if (id == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -84,6 +84,18 @@ public class MediaController {
 
          return new ResponseEntity<>(HttpStatus.OK);
      }
+
+    @DeleteMapping("/remove")
+    public ResponseEntity<Object> removeMedia(@RequestBody List<Media> toRemove) {
+
+        try {
+            mediaRepository.deleteAll(toRemove);
+        } catch (Exception e) {
+            return new ResponseEntity<>(toRemove, HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(toRemove, HttpStatus.OK);
+    }
 
     @GetMapping("/all")
     public Object getMediaAll() {
