@@ -1,0 +1,38 @@
+.sc23-session-workout {
+	height: 100%;
+	width: 100%;
+	text-align: left;
+}
+
+.sc23-session-workout-info {
+	padding: 2%;
+}
+
+.sc23-session-workout-text {
+	width: 100%;
+	text-align: left;
+	margin: 0;
+}
+
+
+.sc23-session-workout-buttons {
+	width: 100%;
+	display: flex;
+	padding: 2%;
+}
+
+.sc23-session-workout-links {
+	display: flex;
+	color: #201E1F;
+}
+
+#session-workout-workout-button {
+	width: 10%;
+	margin-right: auto;
+}
+
+#session-workout-edit-session-button {
+	width: 10%;
+	justify-content: right;
+	margin-left: auto;
+}

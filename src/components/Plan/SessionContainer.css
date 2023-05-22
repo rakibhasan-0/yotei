@@ -1,0 +1,69 @@
+
+.sc23-session-container {
+    user-select: none;
+}
+
+.outline {
+	border: 2px solid var(--black-primary);
+	border-radius: 4px;
+    padding: 0;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	overflow: hidden;
+	outline-color: #201E1F;
+}
+
+/* Header */
+.sc23-session-container-header {
+	display: flex;
+	flex-direction: column;
+	border: 0;
+}
+
+.sc23-session-header-clickable {
+	min-height: 20px;
+	display: grid;
+	cursor: pointer;
+	grid-template-columns: repeat(5, 1fr);
+}
+
+#sc23-session-container-beltbox {
+	grid-column: 1 / 6;
+	grid-row: 1 / 2;
+}
+
+#sc23-dropdown {
+	grid-column: 5 / 6;
+	grid-row: 1 / 2;
+	z-index: 99;
+	place-self: center;
+	color: white;
+}
+
+.sc23-chevron-rotate {
+    rotate: 180deg;
+}
+
+.sc23-session-container-chevron-rotation-animation {
+    margin-left: auto;
+    transition: all 0.2s ease-in;
+}
+
+.sc23-session-container-header-overlap {
+	position: relative;
+	float: right;
+}
+
+/* Content */
+.sc23-session-container-content {
+	overflow: hidden;
+    min-height: 0;
+}
+
+.sc23-session-container-child {
+    transition: all 0.2s ease-in-out;
+}
+
+#error-session-header {
+	margin: 0;
+}

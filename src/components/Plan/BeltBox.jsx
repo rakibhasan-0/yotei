@@ -88,6 +88,13 @@ function BeltBox ( {id, belts} ) {
 		return true
 	}
 	
+	function isChild(str) {
+		if (str == "true"){
+			return true
+		}
+		
+		return false
+	}
 
 	return (
 		// Check if able to load BeltBox
@@ -101,7 +108,7 @@ function BeltBox ( {id, belts} ) {
 
 							checkBeltChild(belt) ? 
 								(
-									belt.child ?
+									isChild(belt.child) ?
 								
 										<div key={`${belt.id}-child-belt`} className="sc23-beltbox-belt" style={{background:"white"}}>
 											<div id={`${belt.id}-child-belt-color`} className="sc23-beltbox-belt-child" style={{background: adaptColorCode(belt.color)}}/>

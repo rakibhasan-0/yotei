@@ -18,7 +18,7 @@ import workoutSvg from "./workout.svg"
  * @param workout   @type {boolean} if true renders a workout-icon if false renders the ''add-new-workout''button.
  * 
  * Example usage:
- *          <SessionWorkoutButton id="id" onClick={myFunction} workout={true}/>
+ *          <SessionWorkoutButton id="id" onClick={myFunction} workout={true}/> 
  * 
  * @returns A SessionWorkoutButton rendered according to given input. 
  * In case of incorrect input it returns a placeholder and an error message is displayed in console.error
