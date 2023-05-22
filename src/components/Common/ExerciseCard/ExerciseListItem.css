@@ -4,8 +4,6 @@
     user-select: none;
     overflow: auto;
     margin-bottom: 0.4rem;
-    margin-left: -15px;
-    margin-right: -15px;
 }
 
 .exercise-list-header {
@@ -13,10 +11,9 @@
     align-items: center;
     text-align: center;
     background-color: var(--red-secondary);
-    padding: 1rem;
-    padding-top: 0.2rem;
-    padding-bottom: 0.2rem;
-    padding-right: 0rem;
+	padding-left: 10px;
+	padding-top: 10px;
+	padding-bottom: 2px;
     font-weight: 400;
     overflow:hidden;
 

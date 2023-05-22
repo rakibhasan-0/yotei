@@ -185,7 +185,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 
 	return (
 		<div id={id}>
-			<Modal.Body>
+			<Modal.Body style={{padding: "0"}}>
 				<Tabs defaultActiveKey="technique" className={style.tabs}>
 					<Tab eventKey="technique" title="Tekniker" tabClassName="tab">
 						<div className={style.searchBar}>
