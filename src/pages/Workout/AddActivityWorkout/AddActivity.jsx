@@ -7,7 +7,7 @@ import useMap from "../../../hooks/useMap"
 import SearchBar from "../../../components/Common/SearchBar/SearchBar"
 import { getTechniques, getExercises } from "../../../components/Common/SearchBar/SearchBarUtils"
 import TechniqueFilter from "../../../components/Common/Filter/TechniqueFilter"
-import "./AddActivity.css"
+import style from "./AddActivity.module.css"
 import CheckBox from "../../../components/Common/CheckBox/CheckBox"
 import TechniqueCard from "../../../components/Common/Technique/TechniqueCard/TechniqueCard"
 import ExerciseListItem from "../../../components/Common/ExerciseCard/ExerciseListItem"
@@ -180,9 +180,9 @@ function AddActivity({id, setShowActivityInfo}) {
 	return (
 		<div id={id}>
 			<Modal.Body>
-				<Tabs defaultActiveKey="technique" className="tabs">
+				<Tabs defaultActiveKey="technique" className={style.tabs}>
 					<Tab eventKey="technique" title="Tekniker" tabClassName="tab">
-						<div className="searchBar">		
+						<div className={style.searchBar}>		
 							<SearchBar 
 								id="technique-search-bar"
 								placeholder="Sök tekniker"
@@ -217,7 +217,7 @@ function AddActivity({id, setShowActivityInfo}) {
 						))}
 					</Tab>
 					<Tab eventKey="exercise" title="Övningar" tabClassName="tab">
-						<div className="searchBar">
+						<div className={style.searchBar}>
 							<SearchBar 
 								id="exercise-search-bar"
 								placeholder="Sök övningar"
