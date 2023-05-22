@@ -20,14 +20,14 @@ import BeltIcon from "../BeltIcon/BeltIcon"
  *
  * @author Kraken (Grupp 7)
  * @version 1.0
- * @since 2023-05-017
+ * @since 2023-05-17
  */
 function TechniqueFilter({id, belts, onBeltChange, kihon, onKihonChange}){
 	
 	return (
 		<div id={id} className="filterPos">
 			<FilterContainer id={"technique-filter-container"}>
-				<BeltPicker onToggle={onBeltChange} states={belts} />
+				<BeltPicker id={"techniqueFilter-BeltPicker"} onToggle={onBeltChange} states={belts} />
 				{/** If no belts have been picked, hide the "Valda bälten" text. */}
 				<p className="selected-text">{!(belts.length > 0) ? "" : "Valda bälten"}</p>
 				<div className="selected-group">
@@ -36,7 +36,7 @@ function TechniqueFilter({id, belts, onBeltChange, kihon, onKihonChange}){
 					))}
 				</div>
 				<div className="kihon-group">
-					<CheckBox checked={kihon} onClick={()=> onKihonChange(!kihon)}/>
+					<CheckBox id={"techniqueFilter-KihonCheck"} checked={kihon} onClick={()=> onKihonChange(!kihon)}/>
 					<p className="kihon-text">Kihon</p>
 				</div>
 			</FilterContainer>
@@ -44,5 +44,3 @@ function TechniqueFilter({id, belts, onBeltChange, kihon, onKihonChange}){
 	)
 }
 export default TechniqueFilter
-
-
