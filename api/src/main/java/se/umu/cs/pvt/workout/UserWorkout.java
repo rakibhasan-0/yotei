@@ -35,6 +35,12 @@ public class UserWorkout implements Serializable {
      */
     protected UserWorkout() {}
 
+    protected UserWorkout(Long userId, Long workoutId) {
+        this.userId = userId;
+        this.workoutId = workoutId;
+    }
+
+
     public void setUserId(Long userId) {
         this.userId = userId;
     }

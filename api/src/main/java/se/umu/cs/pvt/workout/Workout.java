@@ -92,6 +92,10 @@ public class Workout implements Serializable {
         return created;
     }
 
+    public void setCreated(LocalDate created) { this.created = created;}
+
+    public void setChanged(LocalDate changed) { this.changed = changed;}
+
     public LocalDate getChanged() {
         return changed;
     }

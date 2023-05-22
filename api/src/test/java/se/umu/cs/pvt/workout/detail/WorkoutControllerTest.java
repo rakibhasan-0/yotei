@@ -6,6 +6,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import se.umu.cs.pvt.tag.TagRepository;
+import se.umu.cs.pvt.tag.WorkoutTagRepository;
 import se.umu.cs.pvt.technique.Technique;
 import se.umu.cs.pvt.user.InvalidPasswordException;
 import se.umu.cs.pvt.user.InvalidUserNameException;
@@ -39,6 +41,12 @@ public class WorkoutControllerTest {
     private WorkoutReviewRepository repository;
     @MockBean
     private ActivityRepository activityRepository;
+    @MockBean
+    private UserWorkoutRepository userWorkoutRepository;
+    @MockBean
+    private TagRepository tagRepository;
+    @MockBean
+    private WorkoutTagRepository workoutTagRepository;
 
     @Autowired
     private WorkoutController controller;

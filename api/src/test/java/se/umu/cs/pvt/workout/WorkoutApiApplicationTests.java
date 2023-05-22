@@ -14,6 +14,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import se.umu.cs.pvt.tag.TagRepository;
+import se.umu.cs.pvt.tag.WorkoutTagRepository;
 import se.umu.cs.pvt.workout.detail.WorkoutDetailRepository;
 
 import java.time.LocalDate;
@@ -49,28 +51,15 @@ class WorkoutApiApplicationTests {
     private WorkoutReviewRepository repository;
     @MockBean
     private ActivityRepository activityRepository;
+    @MockBean
+    private UserWorkoutRepository userWorkoutRepository;
+    @MockBean
+    private TagRepository tagRepository;
+    @MockBean
+    private WorkoutTagRepository workoutTagRepository;
 
     @Autowired
     private WorkoutController workoutController;
-
-    @Test
-    void shouldSucceedWithAddWorkout() {
-        workout = new Workout(1L, "test", "Description", 1000L,
-                LocalDate.of(2022,1,1), LocalDate.of(2022,1,1),
-                new Date(),false, 1L);
-
-        Mockito.when(workoutRepository.save(workout)).thenReturn(workout);
-
-        ResponseEntity<Workout> response = workoutController.postWorkout(workout);
-        verify(workoutRepository, times(1)).save(any());
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-    }
-
-    @Test
-    void shouldFailWithRemovingANullWorkout() {
-        ResponseEntity<Workout> response = workoutController.postWorkout(null);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    }
 
     @Test
     void shouldFailWhenGettingEmptyWorkout() {

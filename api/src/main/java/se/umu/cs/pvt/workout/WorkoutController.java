@@ -4,23 +4,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import se.umu.cs.pvt.tag.TagRepository;
+import se.umu.cs.pvt.tag.WorkoutTag;
+import se.umu.cs.pvt.tag.WorkoutTagRepository;
 import se.umu.cs.pvt.workout.detail.WorkoutDetail;
 import se.umu.cs.pvt.workout.detail.WorkoutDetailRepository;
 import se.umu.cs.pvt.workout.detail.WorkoutDetailResponse;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
  * UserWorkout API for creating, reading and deleting workouts.
  *
- * @author Grupp 8 Kebabpizza (Doc: Griffin ens19amd)
+ * @authors Grupp 8 Kebabpizza (Doc: Griffin ens19amd)
+ *         Group 8 Minotaur, new post method.
  */
-
 @RestController
 @CrossOrigin
 @RequestMapping(path = "/api/workouts")
@@ -41,14 +43,20 @@ public class WorkoutController {
     private WorkoutDetailRepository workoutDetailRepository;
 
     @Autowired
-    public WorkoutController(WorkoutRepository wc) {
-        this.workoutRepository = wc;
-    }
+    private UserWorkoutRepository userWorkoutRepository;
+
+    @Autowired
+    private TagRepository tagRepository;
+
+    @Autowired
+    private WorkoutTagRepository workoutTagRepository;
+
+    @Autowired
+    public WorkoutController(WorkoutRepository wc) { this.workoutRepository = wc;}
 
     public WorkoutController(WorkoutDetailRepository wc){
         this.workoutDetailRepository = wc;
     }
-
     public WorkoutController(WorkoutFavoriteRepository wc) {
         this.favoriteRepository = wc;
     }
@@ -165,25 +173,10 @@ public class WorkoutController {
     }
 
     /**
-     * This method adds a workout to the database.
-     *
-     * @param toAdd the body in json format with correct attributes example:
-     *              {"name": "cool_name", "desc": "cool_desc", "duration": 2}
-     * @return the added workout
-     * HttpStatus
-     * BAD_REQUEST if invalid workout
-     * CREATED if the workout was added
-     */
-    @PostMapping("/add")
-    public ResponseEntity<Workout> postWorkout(@RequestBody Workout toAdd) {
-        if (toAdd == null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        workoutRepository.save(toAdd);
-        return new ResponseEntity<>(toAdd, HttpStatus.CREATED);
-    }
-
-    /**
      * Adds a workout and related activities to the database.
+     *
+     * TODO: This method is outdated. And should be removed after integrating
+     * the new method.
      *
      * @param data WorkoutDataPackage containing the relevant data.
      *             {
@@ -199,7 +192,6 @@ public class WorkoutController {
      */
     @PostMapping("/add_full_workout")
     public ResponseEntity<Workout> postFullWorkout(@RequestBody WorkoutDataPackage data) {
-
         Workout workout = data.getWorkout();
         Activity[] activities = data.getActivities();
 
@@ -218,6 +210,66 @@ public class WorkoutController {
         return new ResponseEntity<>(workout, HttpStatus.CREATED);
     }
 
+    /**
+     * Method for creating a workout. Will handle
+     *  Adding the workout
+     *  Adding the Activities
+     *  Adding the users related to the workout.
+     *  Adding tags related to the workout
+     *
+     * @param data
+     * @return String with status on operations and https response.
+     */
+    @Transactional
+    @PostMapping("/")
+    public ResponseEntity<String> postWorkout(@RequestBody WorkoutDataPackage data) {
+        //Extract data from object.
+        Workout workout = data.getWorkout();
+        workout.setCreated(LocalDate.now());
+        workout.setChanged(LocalDate.now());
+
+        Activity[] activities = data.getActivities();
+
+        try {
+            workout = workoutRepository.save(workout);
+        }catch (Exception e) {
+            return new ResponseEntity<>("Failed to create workout" , HttpStatus.BAD_REQUEST);
+        }
+
+        //Links the activities to the workout id and saves them.
+        for (Activity activity : activities) {
+            activity.setWorkoutId(workout.getId());
+            try {
+                activityRepository.save(activity);
+            }catch (Exception e) {
+                System.out.println("Failed to add activity");
+                return new ResponseEntity<>("Failed to add activity" , HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        //Add users to workout
+        for (Long user : data.getUsers()) {
+            try {
+                userWorkoutRepository.save(new UserWorkout(user, workout.getId()));
+            }catch (Exception e) {
+                System.out.println("Failed to add user");
+                return new ResponseEntity<>("Failed to add user" , HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        //Add tags related to workout
+        for (Long tagId : data.getTagIds()) {
+            try {
+                WorkoutTag toAddWorkoutTag = new WorkoutTag(workout.getId(),
+                        tagRepository.findById(tagId).get());
+                workoutTagRepository.save(toAddWorkoutTag);
+            }catch (Exception e) {
+                System.out.println("Failed to tag to workout");
+                return new ResponseEntity<>("Failed to add tag to workout " , HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+        return new ResponseEntity<>("Succeed to create workout", HttpStatus.CREATED);
+    }
 
     /**
      * Deletes a workout depending on the id.
@@ -256,11 +308,9 @@ public class WorkoutController {
         if (id == null) {
             return new ResponseEntity<>(id, HttpStatus.BAD_REQUEST);
         } else if (workoutRepository.findById(id).isPresent()) {
-
             //Delete old activities
             List<Activity> activities = activityRepository.findAllByWorkoutId(id);
             activityRepository.deleteAll(activities);
-
             //Delete workout
             workoutRepository.deleteById(id);
 
@@ -311,14 +361,12 @@ public class WorkoutController {
      */
     @PutMapping("/update_full_workout")
     public ResponseEntity<Workout> updateFullWorkout(@RequestBody WorkoutDataPackage data) {
-
         Workout workout = data.getWorkout();
         Activity[] activities = data.getActivities();
 
         if (workout == null || workout.getId() == null) {
             return new ResponseEntity<>(workout, HttpStatus.BAD_REQUEST);
         } else if (workoutRepository.findById(workout.getId()).isPresent()) {
-
             //Delete old activities
             List<Activity> oldActivities = activityRepository.findAllByWorkoutId(workout.getId());
             activityRepository.deleteAll(oldActivities);
@@ -369,7 +417,6 @@ public class WorkoutController {
      */
     @DeleteMapping("/favorites")
     public ResponseEntity<WorkoutFavorite> removeFavorite(@RequestBody WorkoutFavorite favorite) {
-
         if (favorite == null || favoriteRepository.findById(favorite).isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
@@ -411,7 +458,6 @@ public class WorkoutController {
      */
     @GetMapping("/reviews")
     public ResponseEntity<Object> getReviewsForWorkout(@RequestParam int id) {
-
         List<WorkoutReviewReturnInterface> list = reviewRepository.findReviewsForWorkout(id);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -462,7 +508,6 @@ public class WorkoutController {
      */
     @PutMapping("/reviews")
     public ResponseEntity<Object> updateReview(@RequestBody WorkoutReview review) {
-
         if (review == null || review.getId() == null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         } else if (reviewRepository.findById(review.getId()).isPresent()) {
@@ -482,6 +527,20 @@ public class WorkoutController {
 class WorkoutDataPackage {
     private Workout workout;
     private Activity[] activities;
+    private Long[] users;
+    private Long[]  tagIds;
+
+    /**
+     *
+     * @return List of user ids
+     */
+    public Long[] getUsers() { return users; }
+
+    /**
+     *
+     * @return List of tags
+     */
+    public Long[] getTagIds() { return tagIds; }
 
     /**
      * @return Workout to update

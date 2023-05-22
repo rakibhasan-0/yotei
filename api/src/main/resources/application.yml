@@ -7,3 +7,4 @@ spring:
     password: ${POSTGRES_PASSWORD}
     driver-class-name: "org.postgresql.Driver"
     type: org.springframework.jdbc.datasource.SimpleDriverDataSource
+
