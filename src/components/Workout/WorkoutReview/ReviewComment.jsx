@@ -1,9 +1,11 @@
-import {Trash } from "react-bootstrap-icons"
+import {Trash, Pencil } from "react-bootstrap-icons"
 import Ratings from "react-ratings-declarative"
 import Star from "../../Common/StarButton/StarButton"
 import { useState } from "react"
 import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
 import React from "react"
+import Button from "../../Common/Button/Button"
+
 import {HTTP_STATUS_CODES, setError, setSuccess} from "../../../utils"
 
 /**
@@ -13,9 +15,30 @@ import {HTTP_STATUS_CODES, setError, setSuccess} from "../../../utils"
  * @version 1.0
  */
 
-export default function ReviewComponent({comment, onDelete, editable, token}) {
+export default function ReviewComponent({comment, onDelete, editable, token, getTodaysDate, updateCommentList}) {
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
+	const [editMode, setEditMode] = useState(false)
+	const [positiveComment, setPositiveComment] = useState(comment.positive_comment)
+	const [negativeComment, setNegativeComment] = useState(comment.negative_comment)
+	const [rating, setRating] = useState(comment.rating)
+	
+	
+	const commentStyle = {
+		display: "block",
+		width: "90%", 
+		wordWrap: "break-word", 
+		textAlign: "left", 
+		margin: "0px",
+		marginTop: "2px",
+	}
 
+	const textAreaStyle = {
+		padding: "10px",
+		border: "1px solid grey",
+		outline:"1px solid grey",
+		borderRadius: "5px",
+		width: "100%"
+	}
 	async function deleteReview() {
 		const requestOptions = {
 			method: "DELETE",
@@ -34,11 +57,76 @@ export default function ReviewComponent({comment, onDelete, editable, token}) {
 			setError("Serverfel: Något gick snett! Felkod: " + response.status)
 			return
 		}
-		console.log("hello!")
 		setSuccess("Utvärdering borttagen!")
 		return onDelete(comment)
 	}
+	async function saveEdits(){
+		let ts = getTodaysDate()
+		const requestOptions = {
+			method: "PUT",
+			headers: {"Content-type": "application/json", "token": token},
+			body: JSON.stringify({
+				"id": comment.review_id,
+				"rating": rating,
+				"userId": comment.user_id,
+				"workoutId": comment.workout_id,
+				"positiveComment": positiveComment,
+				"negativeComment": negativeComment,
+				"date": ts
+			})
+		}
+ 
+		const postResponse = await fetch("/api/workouts/reviews", requestOptions).catch(() => {
+			setError("Serverfel: Kunde ansluta till servern.")
+			return	
+		})
+		if(postResponse.status != HTTP_STATUS_CODES.OK) { 
+			setError("Serverfel: Något gick snett! Felkod: " + postResponse.status)
+			return 
+		}
+		let commentOK = {
+			username: comment.username,
+			review_id: comment.review_id, 
+			rating: rating, 
+			user_id: comment.user_id,
+			workout_id: comment.workout_id, 
+			positive_comment: positiveComment,
+			negative_comment: negativeComment,
+			review_date: ts
+		}
+		
+		updateCommentList(commentOK)
+		setSuccess("Kommentar uppdaterad")
+		setEditMode(false)
+		
+	}
+	function turnOffEditMode(){
+		setPositiveComment(comment.positive_comment)
+		setNegativeComment(comment.negative_comment)
+		setRating(comment.rating) 
+		setEditMode(false)
+	}
 
+	function generateRatings(){
+		const onChangeRating = editMode ? setRating : undefined
+		return <Ratings changeRating={onChangeRating} widgetDimensions="25px" rating={rating} widgetRatedColors="gold">
+			<Ratings.Widget>
+				<Star/>
+			</Ratings.Widget>
+			<Ratings.Widget>
+				<Star/>
+			</Ratings.Widget>
+			<Ratings.Widget>
+				<Star/>
+			</Ratings.Widget>
+			<Ratings.Widget>
+				<Star/>
+			</Ratings.Widget>
+			<Ratings.Widget>
+				<Star/>
+			</Ratings.Widget>
+		</Ratings>
+	}
 	return (
 		<>
 			<div className="row w-100 justify-content-center m-2">
@@ -51,49 +139,59 @@ export default function ReviewComponent({comment, onDelete, editable, token}) {
 						<p className="m-0 font-italic" maxLength="10" style={{color: "#B4B4B4"}}>{comment.review_date.substring(0,10)}</p>
 					</div>
 					<div id="review_rating" className="w-100 d-flex justify-content-start" style={{marginBottom: "20px"}}>
-						<Ratings widgetDimensions="25px" rating={comment.rating} widgetRatedColors="gold">
-							<Ratings.Widget>
-								<Star/>
-							</Ratings.Widget>
-							<Ratings.Widget>
-								<Star/>
-							</Ratings.Widget>
-							<Ratings.Widget>
-								<Star/>
-							</Ratings.Widget>
-							<Ratings.Widget>
-								<Star/>
-							</Ratings.Widget>
-							<Ratings.Widget>
-								<Star/>
-							</Ratings.Widget>
-						</Ratings>
+						{generateRatings()}
 					</div>
-					<div className="w-100 d-flex justify-content-start align-items-start flex-column">
-						{ comment.positive_comment?.length > 0 && 
-						<div className="d-flex flex-row col-md-6">
-							<i id="positive_icon" role="icon" aria-label="positive" className="bi bi-plus-circle" style={{fontSize:"20px", color:"green", marginRight:"10px"}}></i>
-							<p style={{marginTop: "3px", display: "block", width: "90%", wordWrap: "break-word", textAlign: "left"}}> {comment.positive_comment}</p>
+					<div className="w-100 d-flex justify-content-start align-items-start flex-column">  
+						<div className="d-flex flex-row w-100">
+							{(comment.positive_comment?.length > 0 || editMode) && <i id="positive_icon" role="icon" aria-label="positive" className="bi bi-plus-circle" style={{fontSize:"20px", color:"green", marginRight:"10px"}}></i>}
+							{editMode ? 
+								<textarea type="text" style={textAreaStyle} rows={4} onChange={(e) => setPositiveComment(e.target.value)} value={positiveComment} /> 
+								: 
+								comment.positive_comment?.length > 0 && <p style={commentStyle}> {comment.positive_comment}</p>
+							}
 						</div>
+						{ positiveComment?.length > 0 && comment.negative_comment?.length > 0 && 
+							<div id="comment_divider" className="horizontal-line align-self-center w-100"></div>
 						}
-						{ comment.positive_comment?.length > 0 && comment.negative_comment?.length > 0 && 
-						<div id="comment_divider" className="horizontal-line align-self-center w-100"/>
-						}
-						{ comment.negative_comment?.length > 0 && 
-						<div className="d-flex flex-row col-md-6">
-							<i id="negative_icon" role="icon" aria-label="negative" className="bi bi-dash-circle" style={{fontSize:"20px", color:"red", marginRight:"10px"}}></i>
-							<p style={{marginTop: "3px", display: "block", width: "90%", wordWrap: "break-word", textAlign: "left", margin: "0px"}}> {comment.negative_comment}</p>
-						</div>
+						{ 
+							<div className="d-flex flex-row w-100 mt-4">
+								{(comment.negative_comment?.length > 0 || editMode) && <i id="negative_icon" role="icon" aria-label="negative" className="bi bi-dash-circle" style={{fontSize:"20px", color:"red", marginRight:"10px"}}></i>}
+								{
+									editMode ? 
+										<textarea type="text"  style={textAreaStyle} rows={4} onChange={(e) => setNegativeComment(e.target.value)} value={negativeComment} />
+										:
+										comment.negative_comment?.length > 0 && <p style={commentStyle}> {comment.negative_comment}</p>
+								}
+							</div>
 						}
 					</div>
 					{editable && 
-					<div className="d-flex align-items-end flex-column">
-						<Trash
-							size="24px"
-							color="var(--red-primary)"
-							style={{cursor: "pointer"}}
-							onClick={setShowDeletePopup}
-						/>
+					<div className="d-flex align-items-center justify-content-end">
+						{editMode ? 
+							<>
+								<div className="d-flex align-items-center mt-4">
+									<div style={{marginRight:"10px"}}>
+										<Button width="100px" onClick={saveEdits}>Spara</Button> 
+									</div>
+									<Button width="100px" outlined={true} onClick={turnOffEditMode}>Avbryt</Button> 
+								</div>
+							</>
+							:
+							<div style={{marginTop:"10px"}}>
+								<Pencil 
+									size="24px"
+									color="var(--red-primary)"
+									style={{cursor: "pointer", marginRight: "20px" }}
+									onClick={() => setEditMode(!editMode)}
+								/>
+								<Trash
+									size="24px"
+									color="var(--red-primary)"
+									style={{cursor: "pointer"}}
+									onClick={setShowDeletePopup}
+								/>
+							</div>
+						}
 					</div>
 					}
 				</div>

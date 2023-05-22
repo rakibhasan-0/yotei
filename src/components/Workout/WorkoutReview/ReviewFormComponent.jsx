@@ -7,7 +7,7 @@ import Star from "../../Common/StarButton/StarButton"
 import ReviewComment from "./ReviewComment"
 import { AccountContext } from "../../../context"
 import {HTTP_STATUS_CODES, setError, setSuccess} from "../../../utils"
-//import { isAdmin } from "../../../utils"
+import { isAdmin } from "../../../utils"
 
 /**
  * Review component for workout. The user can review the workout
@@ -25,30 +25,27 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 	const[commentList, setCommentList] = useState([])
 	const[positiveComment, setPositive] = useState("")
 	const[negativeComment, setNegative] = useState("")
-
 	const context = useContext(AccountContext)
 	const {token, userId} = context
-
 	useEffect(() => {
-
-		async function fetchComments() {
-			const response = await fetch("/api/workouts/reviews?id=" + workout_id, {headers:{token,"userId": userId}}).catch(() => {
-				setError("Serverfel: Kunde inte hämta utvärderingar för passet.")
-				return	
-			})
-
-			if(response.status != HTTP_STATUS_CODES.OK) {
-				setError("Serverfel: Något gick snett! Felkod: " + response.status)
-				return
-			} 
-			
-			const data = await response.json()
-			setCommentList(data)
-		}
-
 		fetchComments()
 	}, [token, userId, workout_id])
 
+
+	async function fetchComments() {
+		const response = await fetch("/api/workouts/reviews?id=" + workout_id, {headers:{token,"userId": userId}}).catch(() => {
+			setError("Serverfel: Kunde inte hämta utvärderingar för passet.")
+			return	
+		})
+
+		if(response.status != HTTP_STATUS_CODES.OK) {
+			setError("Serverfel: Något gick snett! Felkod: " + response.status)
+			return
+		} 
+		
+		const data = await response.json()
+		setCommentList(data)
+	}
 	async function addReview() {
 		if(rating === 0 && positiveComment === "" && negativeComment === "") {
 			return
@@ -79,15 +76,24 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 
 		requestOptions.method = "GET"
 		requestOptions.body = null
-		const getResponse =  await fetch("/api/workouts/reviews?id=" + workout_id, {headers:{token,"userId": userId}})
-		setCommentList(await getResponse.json())
-
+		fetchComments()
 		setPositive("")
 		setNegative("")
 		setRating(0)
 		setSuccess("Utvärdering tillagd")
 	}
 
+	function updateCommentList(newComment){
+		let newArray = []
+		for(let i = 0; i < commentList.length; i++){
+			if(commentList[i].review_id === newComment.review_id){
+				newArray[i] = newComment
+			}else{
+				newArray[i] = commentList[i]
+			}
+		}
+		setCommentList(newArray)
+	}
 
 	function getTodaysDate() {
 		var today = new Date()
@@ -105,7 +111,7 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 	function handleChangeNeg(event){
 		setNegative(event.target.value)
 	}
-	
+
 	return (
 		<Popup title={"Utvärderingar"} id={"review-popup"} isOpen={isOpen} setIsOpen={setIsOpen} width={90} height={95} noBackground={false} isNested={false}>
 			<div className="d-flex flex-column align-items-center">
@@ -144,8 +150,8 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 				<h2>Tidigare utvärderingar</h2>
 			</div>
 			<div className="w-100  d-flex flex-column justify-content-center align-items-center">
-				{commentList.map((comment, index) => (
-					<ReviewComment key={index} editable={/*isAdmin(context) ||*/ userId == comment.user_id} comment={comment} onDelete={(comment) => {setCommentList(commentList.filter(c => c.review_id != comment.review_id))}} token={token}></ReviewComment> 
+				{commentList.map((comment) => (
+					<ReviewComment key={comment.review_id} updateCommentList={updateCommentList} editable={isAdmin(context) || userId == comment.user_id} comment={comment} onDelete={(comment) => {setCommentList(commentList.filter(c => c.review_id != comment.review_id))}} token={token} getTodaysDate={getTodaysDate}></ReviewComment> 
 				))}
 			</div>
 		</Popup>
