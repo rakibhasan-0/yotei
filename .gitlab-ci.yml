@@ -1,13 +1,18 @@
+variables:
+  CACHE_COMPRESSION_LEVEL: "fastest"
+  FF_USE_FASTZIP: "true"
+
 default:
   image: node:19
   before_script:
-    - npm install --no-progress --quiet --cache .npm --prefer-offline
+    - npm ci --no-progress --quiet --cache .npm --prefer-offline
   cache:
-    key: "node-modules"
+    key:
+      files:
+        - package-lock.json
     paths:
-      - node-modules/
       - .npm/
-  
+
 .skippable: &skippable
   except:
     variables:
@@ -125,7 +130,7 @@ systest-job:
     # we ca-certificates and bash are needed to download node.js 14.x
     - apt install -y --no-install-recommends docker.io curl ncat ca-certificates
     - update-ca-certificates
-    - npm install --no-progress --quiet --cache .npm --prefer-offline
+    - npm ci --no-progress --quiet --cache .npm --prefer-offline
     - docker pull pvt2023/api:latest
     - docker pull pvt2023/gateway:latest
     - docker pull postgres:latest
