@@ -50,6 +50,17 @@ public class SessionController {
         
     }
 
+
+    /**
+     * Gets all sessions.
+     * 
+     * 
+     */
+    @GetMapping("/all")
+    public ResponseEntity<List<Session>> getAll() {
+        return new ResponseEntity<>(sessionRepository.findAll(), HttpStatus.OK);
+    }
+
     /**
      * Adds a single session to the database.
      * 
@@ -72,7 +83,7 @@ public class SessionController {
     @PostMapping("/addList")
     public ResponseEntity<List<Session>> addList(@RequestBody List<Session> sessions){
 
-        if(sessions.isEmpty() || sessions.stream().anyMatch(session -> session.getId() == null || session.invalidFormat()))
+        if(sessions.isEmpty() || sessions.stream().anyMatch(session -> session.invalidFormat()))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         return new ResponseEntity<>(sessionRepository.saveAll(sessions), HttpStatus.CREATED);

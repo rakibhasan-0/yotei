@@ -19,6 +19,8 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
 
     List<Session> findAllByPlan(Long id);
 
+    List<Session> findAll();
+
     @Transactional
     void deleteAllByPlan(Long id);
 }
