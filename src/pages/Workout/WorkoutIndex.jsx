@@ -49,19 +49,21 @@ export default function WorkoutIndex() {
 	const [ filterFavorites, setFilterFavorites ] = useState(false)
 	const [ dates, setDates ] = useState({
 		from: getFormattedDateString(lastMonth), 
-		to: getFormattedDateString(nextMonth)
+		maxFrom: getFormattedDateString(nextMonth),
+		to: getFormattedDateString(nextMonth),
+		minTo: getFormattedDateString(lastMonth)
 	})
 
 	useEffect(() => {
 		const filterCookie = cookies["workout-filter"] 
 		if(filterCookie) {
-			setDates({from: filterCookie.from, to: filterCookie.to})
+			setDates({from: filterCookie.from, maxFrom: filterCookie.to, to: filterCookie.to, minTo: filterCookie.from})
 			setFilterFavorites(filterCookie.isFavorite)
 			setTags(filterCookie.tags)
 		}
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-	useEffect(fetchWorkouts, [dates.from, dates.to, filterFavorites, searchText, token, userId, cache, cacheActions, tags])
+	useEffect(fetchWorkouts, [dates.from, dates.maxFrom, dates.to, dates.minTo, filterFavorites, searchText, token, userId, cache, cacheActions, tags])
 	return (
 		<>
 			<div id="search-area">
@@ -81,11 +83,11 @@ export default function WorkoutIndex() {
 						<div id="filter-container" className="container">
 							<div className="row align-items-center">
 								<p className="m-0 col text-left">Från</p>
-								<DatePicker className="col" selectedDate={dates.from} onChange={handleFromDateChange}/>
+								<DatePicker className="col" selectedDate={dates.from} maxDate={dates.maxFrom} onChange={handleFromDateChange}/>
 							</div>
 							<div className="row align-items-center filter-row">
 								<p className="m-0 col text-left">Till</p>
-								<DatePicker className="col" selectedDate={dates.to} onChange={handleToDateChange}/>
+								<DatePicker className="col" selectedDate={dates.to} minDate={dates.minTo} onChange={handleToDateChange}/>
 							</div>
 							<div className="row align-items-center filter-row">
 								<p className="m-0 col text-left">Favoriter</p>
@@ -120,14 +122,16 @@ export default function WorkoutIndex() {
 	function handleFromDateChange(date) {
 		setDates({
 			...dates,
-			from: `${date.target.value}`
+			from: `${date.target.value}`,
+			minTo: `${date.target.value}`
 		})
 	}
 
 	function handleToDateChange(date) {
 		setDates({
 			...dates,
-			to: `${date.target.value}`
+			to: `${date.target.value}`,
+			maxFrom: `${date.target.value}`
 		})
 	}
 

@@ -7,17 +7,20 @@ import styles from "./DatePicker.module.css"
  * 
  * Show the properties that can be set in the props object below:
  * props = {
- *     selectDate: string
- * 	   ref: ref
- *     onChange: function,
- *     id: string
+ *     	selectDate: string
+ * 	   	ref: ref
+ *     	onChange: function,
+ *     	id: string
+ * 		minDate: Earliest date one can choose. All dates before will be blocked.
+ * 		maxDate: Latest date one can choose. All dates after will be blocked.
  * }
  * 
  * @author Chimera
  * @since 2023-05-02
- * @version 2.0 
+ * @updated 2023-05-09 Griffin, added minDate, maxDate
+ * @version 2.1 
  */
-export default function DatePicker({onChange, ref, selectedDate, id}) {
+export default function DatePicker({onChange, ref, selectedDate, id, minDate, maxDate}) {
 	return (
 		<input 
 			id={id}
@@ -26,6 +29,8 @@ export default function DatePicker({onChange, ref, selectedDate, id}) {
 			onChange={onChange}
 			className={styles.datePicker}
 			ref={ref}
+			min={minDate}
+			max={maxDate ? maxDate : "9999-12-31"}
 		/>
 	)
 
