@@ -83,6 +83,13 @@ export default function ExerciseEdit({setShowPopup}) {
 		setOldName(exerciseJson.name)
 	}
 
+	/**
+	 * Used to pass 2 parameters to setTime 
+	 * to avoid errors with different number props
+	 */
+	function timeCallback(id, time){
+		setTime(time)
+	}
 
 	/**
      * Create a new array with updated property names
@@ -245,7 +252,7 @@ export default function ExerciseEdit({setShowPopup}) {
 					<MinutePicker
 						id={"minuteSelect"}
 						initialValue={time}
-						updateTime={setTime}
+						callback={timeCallback}
 					/>
 				</div>
 				<Divider id={"tag-title"} option={"h1_left"} title={"Taggar"} />
