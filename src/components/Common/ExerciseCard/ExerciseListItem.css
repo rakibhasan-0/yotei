@@ -3,7 +3,7 @@
     border: 1px solid var(--black-primary);
     user-select: none;
     overflow: auto;
-    margin-bottom: 0.4rem;
+    margin-top: 0.4rem;
 }
 
 .exercise-list-header {
@@ -16,7 +16,6 @@
 	padding-bottom: 5px;
     font-weight: 400;
     overflow:hidden;
-
   }
   
 .exercise-list-header p { /* Duration */
@@ -26,37 +25,10 @@
     font-weight: 600;
 
 }
-
-
-.exercise-list-toggle {
-    cursor: pointer;
-    margin-left: auto;
-    transition: all 0.2s ease-in;
-}
-.exercise-list-item {
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    margin-right: 14px;
-    height: auto;
-  }
     
 .exercise-list-duration {
     text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.exercise-list-child { /*Description */
-    border-top: 1px solid var(--black-primary);
-    padding: 1rem;
-    word-wrap: break-word;
-    overflow: auto;
-}
-
-.exercise-list-rotate {
-    rotate: 180deg;
 }

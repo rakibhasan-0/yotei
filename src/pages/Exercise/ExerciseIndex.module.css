@@ -1,42 +1,6 @@
-/**
-* @author Melinda Vestberg (dv20mvg), Gustaf Söderlund (et14gsd)
- */
-/**/
-/* @media (max-width: 540px) { */
-/*     .grid-striped, .search-bar{ */
-/*         width: auto; */
-/*     } */
-/* } */
-/**/
-
-/* @media (min-width: 540px) { */
-/*     .grid-striped, .search-bar{ */
-/*         width: 540px; */
-/*     } */
-/* } */
-
-/* 
-* Search components.
-*/
-
-/* .search {
-    padding-left: 10px;
-    width: 300px;
-}
-
-.svg-search {
-    width: 2.5em;
-    padding-top: 3px;
-    height: 2.5em;
-} */
-
-
-
 .name-col:hover>* {
     color: #BE3B41;
 }
-
-
 
 /*
 * Column that contains the created by text
