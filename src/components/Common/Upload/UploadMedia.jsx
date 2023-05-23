@@ -39,9 +39,7 @@ function UploadMedia({id, exercise_id, fetchUrl}) {
      */
 	function uploadMediaClicked() {
 		setLink("Upload")
-		console.log(link)
 		setTextField("Klistra in länk")
-        
 	}
 	
 	/**

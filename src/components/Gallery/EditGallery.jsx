@@ -115,7 +115,8 @@ export default function EditGallery({ id, exerciseId, sendData }) {
 		<ConfirmPopup id={"confirm-remove-popup"}
 			showPopup={showRemovePopup} 
 			setShowPopup={setShowRemovePopup} 
-			onClick={removeMedia}/>
+			onClick={removeMedia}
+			popupText="Är du säker?"/>
 
 	/**
 	 * Button for requesting removal of a media-object
@@ -160,25 +161,28 @@ export default function EditGallery({ id, exerciseId, sendData }) {
      * 
      * @param {String} media 
      */
-	function fetchUrl(media) {
+	function fetchUrl(m) {
         
-		if (media !== "") {
+		if (m !== "") {
 			let image = true
             
-			if (ReactPlayer.canPlay(media)) {
+			if (ReactPlayer.canPlay(m)) {
 				image = false
 			} 
 
 			let body = {
 				movementId: id,
-				url: media,
+				url: m,
 				localStorage: false,
 				image: image,
 				description: "This is a youtube"
 			}
 
 			setMediaList(mediaList => [...mediaList, body])
-        
+			
+			// experimental for showing in the gallery that something has been added. Only visual feedback for the user
+			setMedia(media => [...media, body])
+			setShowAddPopup(false)
 		}
 	}
 
@@ -222,15 +226,20 @@ export default function EditGallery({ id, exerciseId, sendData }) {
 		}
 	}
 
+
+	const makeAPICalls = async () => {
+		await postMedia(mediaList)
+		deleteMedia(mediaToRemove)
+	}
+	
 	useEffect(() => {
+		
 		if (sendData) {
-			postMedia(mediaList)
-			// send remove API call here
-			deleteMedia(mediaToRemove)
-		} 
+			makeAPICalls()
+		}
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sendData])
-
 
 	return (
 		
@@ -239,7 +248,7 @@ export default function EditGallery({ id, exerciseId, sendData }) {
 			{UploadPopup}
 			<div className="row mt-2 mb-2">
 				<div className="col-sm-12 text-center ">
-					<Carousel showThumbs={false} >                         
+					<Carousel showThumbs={false} showStatus={false}>                         
 						{pictures.map((image, index) => (
 							<div key={index} style={{backgroundColor : "var(--black-primary)"}}  className="d-flex flex-column justify-content-center">
 								<Image id={`${image.id}-image`} path={image.url} />
