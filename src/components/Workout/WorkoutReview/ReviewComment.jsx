@@ -5,12 +5,13 @@ import { useState } from "react"
 import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
 import React from "react"
 import Button from "../../Common/Button/Button"
+import TextArea from "../../Common/TextArea/TextArea"
 
 import {HTTP_STATUS_CODES, setError, setSuccess} from "../../../utils"
 
 /**
  *  Component for review comment. Includes name, positive comment, negative comment, date.
- * 
+ *
  * @author Cyclops (Group 5) (2023-05-16)
  * @version 1.0
  */
@@ -21,13 +22,13 @@ export default function ReviewComponent({comment, onDelete, editable, token, get
 	const [positiveComment, setPositiveComment] = useState(comment.positive_comment)
 	const [negativeComment, setNegativeComment] = useState(comment.negative_comment)
 	const [rating, setRating] = useState(comment.rating)
-	
-	
+
+
 	const commentStyle = {
 		display: "block",
-		width: "90%", 
-		wordWrap: "break-word", 
-		textAlign: "left", 
+		width: "90%",
+		wordWrap: "break-word",
+		textAlign: "left",
 		margin: "0px",
 		marginTop: "2px",
 	}
@@ -44,10 +45,10 @@ export default function ReviewComponent({comment, onDelete, editable, token, get
 			method: "DELETE",
 			headers: {"token": token}
 		}
-		
+
 		const response = await fetch(`/api/workouts/reviews?id=${comment.review_id}`, requestOptions).catch(() => {
 			setError("Serverfel: Kunde inte ansluta till servern.")
-			return	
+			return
 		})
 
 		if(response.status === HTTP_STATUS_CODES.NOT_FOUND) {
@@ -75,35 +76,35 @@ export default function ReviewComponent({comment, onDelete, editable, token, get
 				"date": ts
 			})
 		}
- 
+
 		const postResponse = await fetch("/api/workouts/reviews", requestOptions).catch(() => {
 			setError("Serverfel: Kunde ansluta till servern.")
-			return	
+			return
 		})
-		if(postResponse.status != HTTP_STATUS_CODES.OK) { 
+		if(postResponse.status != HTTP_STATUS_CODES.OK) {
 			setError("Serverfel: Något gick snett! Felkod: " + postResponse.status)
-			return 
+			return
 		}
 		let commentOK = {
 			username: comment.username,
-			review_id: comment.review_id, 
-			rating: rating, 
+			review_id: comment.review_id,
+			rating: rating,
 			user_id: comment.user_id,
-			workout_id: comment.workout_id, 
+			workout_id: comment.workout_id,
 			positive_comment: positiveComment,
 			negative_comment: negativeComment,
 			review_date: ts
 		}
-		
+
 		updateCommentList(commentOK)
 		setSuccess("Kommentar uppdaterad")
 		setEditMode(false)
-		
+
 	}
 	function turnOffEditMode(){
 		setPositiveComment(comment.positive_comment)
 		setNegativeComment(comment.negative_comment)
-		setRating(comment.rating) 
+		setRating(comment.rating)
 		setEditMode(false)
 	}
 
@@ -141,44 +142,44 @@ export default function ReviewComponent({comment, onDelete, editable, token, get
 					<div id="review_rating" className="w-100 d-flex justify-content-start" style={{marginBottom: "20px"}}>
 						{generateRatings()}
 					</div>
-					<div className="w-100 d-flex justify-content-start align-items-start flex-column">  
+					<div className="w-100 d-flex justify-content-start align-items-start flex-column">
 						<div className="d-flex flex-row w-100">
 							{(comment.positive_comment?.length > 0 || editMode) && <i id="positive_icon" role="icon" aria-label="positive" className="bi bi-plus-circle" style={{fontSize:"20px", color:"green", marginRight:"10px"}}></i>}
-							{editMode ? 
-								<textarea type="text" style={textAreaStyle} rows={4} onChange={(e) => setPositiveComment(e.target.value)} value={positiveComment} /> 
-								: 
+							{editMode ?
+								<TextArea type="text" style={textAreaStyle} rows={4} onChange={(e) => setPositiveComment(e.target.value)} value={positiveComment} />
+								:
 								comment.positive_comment?.length > 0 && <p style={commentStyle}> {comment.positive_comment}</p>
 							}
 						</div>
-						{ positiveComment?.length > 0 && comment.negative_comment?.length > 0 && 
+						{ positiveComment?.length > 0 && comment.negative_comment?.length > 0 &&
 							<div id="comment_divider" className="horizontal-line align-self-center w-100"></div>
 						}
-						{ 
+						{
 							<div className="d-flex flex-row w-100 mt-4">
 								{(comment.negative_comment?.length > 0 || editMode) && <i id="negative_icon" role="icon" aria-label="negative" className="bi bi-dash-circle" style={{fontSize:"20px", color:"red", marginRight:"10px"}}></i>}
 								{
-									editMode ? 
-										<textarea type="text"  style={textAreaStyle} rows={4} onChange={(e) => setNegativeComment(e.target.value)} value={negativeComment} />
+									editMode ?
+										<TextArea type="text"  style={textAreaStyle} rows={4} onChange={(e) => setNegativeComment(e.target.value)} value={negativeComment} />
 										:
 										comment.negative_comment?.length > 0 && <p style={commentStyle}> {comment.negative_comment}</p>
 								}
 							</div>
 						}
 					</div>
-					{editable && 
+					{editable &&
 					<div className="d-flex align-items-center justify-content-end">
-						{editMode ? 
+						{editMode ?
 							<>
 								<div className="d-flex align-items-center mt-4">
 									<div style={{marginRight:"10px"}}>
-										<Button width="100px" onClick={saveEdits}>Spara</Button> 
+										<Button width="100px" onClick={saveEdits}>Spara</Button>
 									</div>
-									<Button width="100px" outlined={true} onClick={turnOffEditMode}>Avbryt</Button> 
+									<Button width="100px" outlined={true} onClick={turnOffEditMode}>Avbryt</Button>
 								</div>
 							</>
 							:
 							<div style={{marginTop:"10px"}}>
-								<Pencil 
+								<Pencil
 									size="24px"
 									color="var(--red-primary)"
 									style={{cursor: "pointer", marginRight: "20px" }}
