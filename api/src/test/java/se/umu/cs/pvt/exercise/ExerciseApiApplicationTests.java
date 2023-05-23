@@ -120,15 +120,49 @@ class ExerciseApiApplicationTests {
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-    /**
-     * This test only tests that we are able to get the exercises not that they are actually in the right order.
-     */
     @Test
-    void shouldReturnAllExercisesFromGetExercisesUsingNameDesc() {
+    void shouldReturnAllExercisesSortedNameDesc() {
 
-        Mockito.when(repository.findAllByOrderByNameDesc()).thenReturn(exercises);
+        Mockito.when(repository.findAll()).thenReturn(exercises);
         
         List<Exercise> result = (List<Exercise>) controller.getExercises("nameDesc");
+    
+        assertThat(result.size()).isEqualTo(2);
+        assertThat(result.get(0)).isEqualTo(ex2);
+        assertThat(result.get(1)).isEqualTo(ex1);
+    }
+
+    @Test
+    void shouldReturnAllExercisesSortedNameAsc() {
+
+        Mockito.when(repository.findAll()).thenReturn(exercises);
+        
+        List<Exercise> result = (List<Exercise>) controller.getExercises("nameAsc");
+    
+        assertThat(result.size()).isEqualTo(2);
+        assertThat(result.get(0)).isEqualTo(ex1);
+        assertThat(result.get(1)).isEqualTo(ex2);
+    }
+
+    @Test
+    void shouldReturnAllExercisesSortedNDurationDesc() {
+
+        Mockito.when(repository.findAll()).thenReturn(exercises);
+        
+        List<Exercise> result = (List<Exercise>) controller.getExercises("durationDesc");
+    
+        assertThat(result.size()).isEqualTo(2);
+        assertThat(result.get(0)).isEqualTo(ex2);
+        assertThat(result.get(1)).isEqualTo(ex1);
+    }
+
+
+    @Test
+    void shouldReturnAllExercisesSortedNDurationAsc() {
+
+        Mockito.when(repository.findAll()).thenReturn(exercises);
+        
+        List<Exercise> result = (List<Exercise>) controller.getExercises("durationAsc");
     
         assertThat(result.size()).isEqualTo(2);
         assertThat(result.get(0)).isEqualTo(ex1);

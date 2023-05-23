@@ -40,22 +40,6 @@ public class ExerciseController {
     }
 
 
-    // /**
-    //  * Returns all exercises in the database
-    //  * @return all exercises
-    //  */
-    // @GetMapping("/all")
-    // public Object getExercises() {
-    //     List<Exercise> exerciseList = exerciseRepository.findAll();
-
-        
-    //     if (exerciseList == null) {
-    //         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    //     }
-
-    //     return exerciseList;
-    // }
-
     /**
      * Returns all exercises in the database
      * @param sort boolean flag indicating whether to sort by duration or name
@@ -64,20 +48,25 @@ public class ExerciseController {
     @GetMapping("/all")
     public Object getExercises(@RequestParam(value = "sort", defaultValue = "nameAsc") String sort) {
         List<Exercise> exerciseList;
+        Comparator<Exercise> exerciseComparator;
+
         switch (sort) {
             case "nameDesc":
-                exerciseList = exerciseRepository.findAllByOrderByNameDesc();
+                exerciseComparator = Comparator.comparing(Exercise::getName, getCollator().reversed());
                 break;
             case "durationAsc":
-                exerciseList = exerciseRepository.findAllByOrderByDurationAsc();
+                exerciseComparator = Comparator.comparing(Exercise::getDuration);
                 break;
             case "durationDesc":
-                exerciseList = exerciseRepository.findAllByOrderByDurationDesc();
+                exerciseComparator = Comparator.comparing(Exercise::getDuration).reversed();
                 break;
             default:
-                exerciseList = exerciseRepository.findAllByOrderByNameAsc();
+                exerciseComparator = Comparator.comparing(Exercise::getName, getCollator());
         }
-        
+
+        exerciseList = exerciseRepository.findAll();
+        exerciseList.sort(exerciseComparator);
+
         if (exerciseList == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -85,42 +74,12 @@ public class ExerciseController {
         return exerciseList;
     }
 
-
-@GetMapping("/all2")
-public Object getExercises2(@RequestParam(value = "sort", defaultValue = "nameAsc") String sort) {
-    List<Exercise> exerciseList;
-    Comparator<Exercise> exerciseComparator;
-
-    switch (sort) {
-        case "nameDesc":
-            exerciseComparator = Comparator.comparing(Exercise::getName, getCollator().reversed());
-            break;
-        case "durationAsc":
-            exerciseComparator = Comparator.comparing(Exercise::getDuration);
-            break;
-        case "durationDesc":
-            exerciseComparator = Comparator.comparing(Exercise::getDuration).reversed();
-            break;
-        default:
-            exerciseComparator = Comparator.comparing(Exercise::getName, getCollator());
+    private Collator getCollator() {
+        Locale swedishLocale = new Locale("sv", "SE");
+        Collator collator = Collator.getInstance(swedishLocale);
+        collator.setStrength(Collator.SECONDARY); // Adjust the collation strength if needed
+        return collator;
     }
-
-    exerciseList = exerciseRepository.findAll();
-    exerciseList.sort(exerciseComparator);
-
-    if (exerciseList == null) {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    return exerciseList;
-}
-
-private Collator getCollator() {
-    Locale swedishLocale = new Locale("sv", "SE");
-    Collator collator = Collator.getInstance(swedishLocale);
-    collator.setStrength(Collator.SECONDARY); // Adjust the collation strength if needed
-    return collator;
-}
 
 
 
