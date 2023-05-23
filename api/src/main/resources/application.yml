@@ -1,5 +1,8 @@
 server:
   port: 8085
+  tomcat:
+    max-swallow-size: -1
+
 spring:
   datasource:
     url: jdbc:postgresql://${POSTGRES_HOST}/${POSTGRES_DB}
@@ -7,4 +10,8 @@ spring:
     password: ${POSTGRES_PASSWORD}
     driver-class-name: "org.postgresql.Driver"
     type: org.springframework.jdbc.datasource.SimpleDriverDataSource
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 

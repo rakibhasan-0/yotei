@@ -68,7 +68,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
     private boolean isAuthorized(String routeId, String apikey, String path) {
 
         // Always access to webserver and login api
-        if (routeId.equals("webserver") || path.equals("/user/verify")) {
+        if (routeId.equals("webserver") || path.equals("/user/verify") || path.startsWith("/api/media/files/")) {
             return true;
         }
 
