@@ -3,8 +3,7 @@ import Popup from "../Popup/Popup"
 
 /**
  * MiniPopup is a component that creates a mini popup window with a title and a 
- * close button. This popup serves as an alternative for Popup.jsx where a
- * smaller popup with rounded corners and shadow is required by design.
+ * close button. 
  * 
  * 
  * Props:
@@ -17,7 +16,7 @@ import Popup from "../Popup/Popup"
 										be cautious since a too high margin will
 										result in title placed beneath the popup
  *
- *Example usage:
+ *  Example usage:
  *  
  *	const [showPopup, setShowPopup] = useState(false)
  *
@@ -29,7 +28,7 @@ import Popup from "../Popup/Popup"
  *		</div>
  * 	)
  *
- * @author Griffin
+ * @author Griffin & Medusa
  * @since 2023-05-05
  * @version 2.0
  */

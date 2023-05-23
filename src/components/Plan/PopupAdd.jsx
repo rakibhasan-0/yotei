@@ -18,9 +18,9 @@ import "./PopupAdd.css"
 export default function PopupAdd({id, isOpen, setIsOpen}) {
 	const navigate = useNavigate()
 
-	const navigateAndClose = path => {
-		navigate(path)
-		setIsOpen(false)
+	const navigateAndClose = async path => {
+		await setIsOpen(false)
+		navigate(path)	
 	}
 
 	return(
