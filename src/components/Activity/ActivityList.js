@@ -23,7 +23,7 @@ const ActivityList = ({activities, apiPath, detailURL, favoriteCallback}) => {
 	)
 
 	function renderItems() {
-		const items = activities.map((activity, index) => {
+		const items = activities?.map((activity, index) => {
 			switch(apiPath) {
 			case "workouts":
 				return <WorkoutListItem key={index} workout={activity} favoriteCallback={favoriteCallback}/>

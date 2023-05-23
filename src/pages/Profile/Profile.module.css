@@ -1,0 +1,21 @@
+.tabs {
+    padding-top: 1rem;
+}
+
+.tabs > li {
+    flex: 1;
+}
+
+.tabs > li button {
+    width: 100%;
+    height: 38px;
+}
+
+.floatRight {
+    display: flex;
+    justify-content: end;
+}
+
+.tab #searchbar-workouts {
+    margin-bottom: 10rem;
+}

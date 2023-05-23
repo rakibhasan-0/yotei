@@ -26,6 +26,7 @@ a:hover {
 .workout-item-row {
 	border: 1px var(--black-primary) solid;
 	border-radius: 3px;
+	margin-bottom: 10px;
 }
 
 .workout-text {

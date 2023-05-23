@@ -22,7 +22,7 @@ import InputTextField from "../InputTextField/InputTextField"
  * @version 1.0
  * @since 2023-05-02
  */
-export default function InputTextFieldBorderLabel({ placeholder, text, onChange, required,type,id, onKeyUp, label}) {
+export default function InputTextFieldBorderLabel({ placeholder, text, onChange, required,type,id, onKeyUp, label, errorMessage}) {
 	return(
 		<div style={{position: "relative"}}>
 			<label className="input-label">{label}</label>
@@ -34,7 +34,8 @@ export default function InputTextFieldBorderLabel({ placeholder, text, onChange,
 				type={type} 
 				id={id} 
 				onKeyUp={onKeyUp}
-				label={label}>
+				label={label}
+				errorMessage={errorMessage}>
 			</InputTextField>
 		</div>
 

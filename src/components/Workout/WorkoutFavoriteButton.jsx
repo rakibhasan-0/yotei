@@ -27,7 +27,7 @@ export default function WorkoutFavoriteButton({id, workout, favoriteCallback}) {
 			body: JSON.stringify({userId: userId, workoutId: workout.workoutID})
 		}
 
-		fetch("/api/workouts/favorites", requestOptions).then(response => {
+		await fetch("/api/workouts/favorites", requestOptions).then(response => {
 			if(response.ok) {
 				setFavorite(!isFavorite)
 			}
