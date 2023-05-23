@@ -22,10 +22,10 @@ import styles from "./Button.module.css"
  * @since 2023-05-02
  * @version 2.0 
  */
-export default function Button({onClick, outlined, children, width, id, disabled}) {
+export default function Button({onClick, outlined, children, width, id, disabled, isToggled}) {
 	const style = width ? { width } : { width: "100%", maxWidth: "150px" }
 	return (
-		<button id={id} disabled={disabled} onClick={onClick} className={`${styles.yoteiButton} ${outlined ? styles.yoteiButtonBack : styles.yoteiButtonNormal}`} style={style}>
+		<button id={id} disabled={disabled} onClick={onClick} className={`${styles.yoteiButton} ${outlined ? styles.yoteiButtonBack : isToggled ? styles.yoteiButtonToggle : styles.yoteiButtonNormal}`} style={style}>
 			{children}
 		</button>
 	)

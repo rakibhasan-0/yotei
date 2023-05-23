@@ -13,6 +13,13 @@
 .yoteiButtonNormal {
     background-color: var(--red-primary);
     color: whitesmoke;
+	border: 2px solid var(--button-border);
+}
+
+.yoteiButtonToggle {
+	background-color: var(--button-press);
+    color: whitesmoke;
+	border: 2px solid var(--button-press);
 }
 
 .yoteiButton:hover {

@@ -25,15 +25,17 @@ import { Sliders } from "react-bootstrap-icons"
  */
 function FilterContainer({ id, title ,children}) {
 	const [active, setActive] = useState(false)
-	
+	const [buttonToggle, setToggle] = useState(false)
+
 	function showFilter() {
+		setToggle(!buttonToggle)
 		setActive(!active)
 	}
 
 	return (
 		<div id={id}>
 			<div className={style.buttonGroup}>
-				<Button id={"filter-button"} onClick={showFilter} width='40px'>
+				<Button id={"filter-button"} onClick={showFilter} outlined={false} isToggled={buttonToggle} width='40px'>
 					<Sliders/>	
 				</Button>
 			</div>
