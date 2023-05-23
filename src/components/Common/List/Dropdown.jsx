@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { ChevronDown } from "react-bootstrap-icons"
-import styles from "./Component.module.css"
+import styles from "./Dropdown.module.css"
 
 /**
  * A generic list item that can be used in a list view,

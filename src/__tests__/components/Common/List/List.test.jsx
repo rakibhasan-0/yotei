@@ -1,6 +1,6 @@
 import React from "react"
 import { render, screen, configure } from "@testing-library/react"
-import List from "../../../../components/Common/List/Component"
+import List from "../../../../components/Common/List/Dropdown"
 import "@testing-library/jest-dom"
 
 configure({testIdAttribute: "id"})

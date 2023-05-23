@@ -1,4 +1,4 @@
-import DropDown from "../Common/List/Component"
+import DropDown from "../Common/List/Dropdown"
 import { useState, useEffect, useContext } from "react"
 import { AccountContext } from "../../context"
 import BeltIcon from "../Common/BeltIcon/BeltIcon"

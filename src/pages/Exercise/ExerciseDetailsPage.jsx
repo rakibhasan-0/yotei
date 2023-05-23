@@ -8,7 +8,7 @@ import TextArea from "../../components/Common/TextArea/TextArea"
 import Button from "../../components/Common/Button/Button"
 import Tag from "../../components/Common/Tag/Tag"
 import Gallery from "../../components/Gallery/Gallery"
-import {toast, ToastContainer} from "react-toastify"
+import {toast} from "react-toastify"
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 import ErrorState from "../../components/Common/ErrorState/ErrorState"
 import ExerciseEdit from "./ExerciseEdit"
@@ -139,60 +139,54 @@ export default function ExerciseDetailsPage() {
 		return <ErrorState message={error} onBack={() => navigate("/exercise")} />
 	}
 	return (
-		<div className="container">
-			<div className="row justify-content-center">
-				<div className="col-md-8 text-left">
-					<div className="d-flex flex-row align-items-center justify-content-between">
-						<h1 className="mt-2">{exercise?.name}</h1>
-						{isEditor(accountRole) && 
-							<div className="d-flex flex-row" style={{gap: "10px"}}>
-								<Pencil onClick={() => setShowEditPopup(true)} size="24px" style={{color: "var(--red-primary)"}} />
-								<Trash onClick={() => setShowAlert(true)} size="24px" style={{color: "var(--red-primary)"}} />
-							</div>
-						}
+		<div className="text-left">
+			<div className="d-flex flex-row align-items-center justify-content-between">
+				<h1 className="mt-2">{exercise?.name}</h1>
+				{isEditor(accountRole) && 
+					<div className="d-flex flex-row" style={{gap: "10px"}}>
+						<Pencil onClick={() => setShowEditPopup(true)} size="24px" style={{color: "var(--red-primary)"}} />
+						<Trash onClick={() => setShowAlert(true)} size="24px" style={{color: "var(--red-primary)"}} />
 					</div>
-
-					<div className="d-flex flex-row" style={{ gap: "10px" }}>
-						<Clock />
-						<p>{exercise?.duration} min</p>
-					</div>
-					
-					<h2 className="fw-bold">Beskrivning</h2>
-					<p>{exercise?.description}</p>
-					
-					{tags?.length > 0 && <>
-						<h2 className="fw-bold">Taggar</h2>
-						<div className="d-flex flex-wrap mb-4" style={{gap: "10px"}}>
-							{tags.map((tag, index) => (
-								<Tag key={index} tagType={"default"} text={tag.tagName} />
-							))}
-						</div>
-					</>}
-
-					<div>
-						<Gallery id={ex_id} />
-					</div>
-
-					<div className="d-flex justify-content-between align-items-center">
-						<h2 className="fw-bold">Kommentarer</h2>
-						<Plus size={"24px"} onClick={() => setAddComment(true)} style={{ color: "var(--red-primary)" }} />
-					</div>
-					<div className="w-100">
-						<CommentSection onDelete={id => {
-							setSelectedComment(id)
-							setShowDeleteComment(true)
-						}} id={`${ex_id}-cs`} userId={userId} comments={comments} />
-					</div>
-	
-					<Button outlined={true} onClick={() => navigate(-1)}><p>Tillbaka</p></Button>
-					
-				</div>
+				}
 			</div>
+
+			<div className="d-flex flex-row" style={{ gap: "10px" }}>
+				<Clock />
+				<p>{exercise?.duration} min</p>
+			</div>
+			
+			<h2 className="fw-bold">Beskrivning</h2>
+			<p>{exercise?.description}</p>
+			
+			{tags?.length > 0 && <>
+				<h2 className="fw-bold">Taggar</h2>
+				<div className="d-flex flex-wrap mb-4" style={{gap: "10px"}}>
+					{tags.map((tag, index) => (
+						<Tag key={index} tagType={"default"} text={tag.tagName} />
+					))}
+				</div>
+			</>}
+
+			<div>
+				<Gallery id={ex_id} />
+			</div>
+
+			<div className="d-flex justify-content-between align-items-center">
+				<h2 className="fw-bold">Kommentarer</h2>
+				<Plus size={"24px"} onClick={() => setAddComment(true)} style={{ color: "var(--red-primary)" }} />
+			</div>
+			<div className="w-100">
+				<CommentSection onDelete={id => {
+					setSelectedComment(id)
+					setShowDeleteComment(true)
+				}} id={`${ex_id}-cs`} userId={userId} comments={comments} />
+			</div>
+
+			<Button outlined={true} onClick={() => navigate(-1)}><p>Tillbaka</p></Button>
 			<Popup isOpen={isAddingComment} title={"Lägg till kommentar"} height={"50"} setIsOpen={setAddComment}>
 				<TextArea errorMessage={commentError} onInput={e => setCommentText(e.target.value)} />
 				<Button onClick={onAddComment}>Skicka</Button>
 			</Popup>
-			<ToastContainer autoClose={5000} />
 			<ConfirmPopup
 				popupText={"Är du säker på att du vill ta bort övningen?"}
 				showPopup={showAlert}
@@ -215,6 +209,5 @@ export default function ExerciseDetailsPage() {
 				<ExerciseEdit setShowPopup={setShowEditPopup}/>
 			</Popup>
 		</div>
-		
 	)
 }

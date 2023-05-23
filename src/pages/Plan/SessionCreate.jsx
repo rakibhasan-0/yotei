@@ -1,14 +1,14 @@
 import TimePicker from "../../components/Common/TimePicker/TimePicker"
 import DatePicker from "../../components/Common/DatePicker/DatePicker"
 import Button from "../../components/Common/Button/Button"
-import Dropdown from "../../components/Common/List/Component"
+import Dropdown from "../../components/Common/List/Dropdown"
 import styles from "./SessionCreate.module.css"
 import { useNavigate } from "react-router-dom"
 import { useContext, useEffect, useState } from "react"
 import { AccountContext } from "../../context"
 import { Link } from "react-router-dom"
 import Divider from "../../components/Common/Divider/Divider"
-import {toast, ToastContainer} from "react-toastify"
+import {toast} from "react-toastify"
 
 /**
  * A component for creating a session.
@@ -94,55 +94,49 @@ export default function SessionCreate() {
 	}
 
 	return (
-		<div className="container">
-			<div className="row justify-content-center">
-				<div className="col-md-8">
-
-					<h1 style={{marginTop: "2rem"}}>Tillfälle</h1>
-					<Divider option={"h2_left"} title={"Grupp"} />
-					<Dropdown errorMessage={groupError} id={"session-dropdown"} text={group?.name || "Grupp"} centered={true}>
-						{groups?.length > 0 ? groups.map((plan, index) => (
-							<div className={styles.dropdownRow} key={index} onClick={() => setGroup(plan)}>
-								<p className={styles.dropdownRowText}>{plan.name}</p>
-							</div>
-						)) : <div className={styles.dropdownRow}>
-							<p className={styles.dropdownRowText}>Kunde inte hitta några grupper</p>
-						</div>}
-					</Dropdown>
-					
-					<Divider option={"h2_left"} title={"Datum och Tid"} />
-					{timeError && <p className="error-message">{timeError}</p>}
-					<div className={styles.wrapCentering}>
-						<DatePicker onChange={e => setDate(e.target.value)} id={"session-datepicker"} />
-						<TimePicker onChange={e => setTime(e.target.value)} id={"session-timepicker"} />
+		<>
+			<h1 style={{marginTop: "2rem"}}>Tillfälle</h1>
+			<Divider option={"h2_left"} title={"Grupp"} />
+			<Dropdown errorMessage={groupError} id={"session-dropdown"} text={group?.name || "Grupp"} centered={true}>
+				{groups?.length > 0 ? groups.map((plan, index) => (
+					<div className={styles.dropdownRow} key={index} onClick={() => setGroup(plan)}>
+						<p className={styles.dropdownRowText}>{plan.name}</p>
 					</div>
-
-					<Divider option={"h2_left"} title={"Pass"} />
-					<Dropdown id={"session-dropdown"} text={workout?.name || "Sök befintligt pass"} centered={true}>
-						<div className={styles.dropdownRow} onClick={() => setWorkout(null)}>
-							<p className={styles.dropdownRowText}>Inget pass</p>
-						</div>
-						{workouts?.map((workout, index) => (
-							<div className={styles.dropdownRow} key={index} onClick={() => setWorkout(workout)}>
-								<p className={styles.dropdownRowText}>{workout.name}</p>
-							</div>
-						))}
-					</Dropdown>
-
-					<Divider option={"h2_middle"} title={"eller"} />
-					<div className={`${styles.wrapCentering} ${styles.createButton}`} >
-						<Link to="/workout/create" style={{width: "150px"}}>
-							<Button id={"session-create"}><p>Skapa pass</p></Button>
-						</Link>
-					</div>
-
-					<div className={styles.wrapCentering} >
-						<Button onClick={() => navigate(-1)} id={"session-back"} outlined={true}><p>Tillbaka</p></Button> 
-						<Button onClick={addSession} id={"session-save"}><p>Spara</p></Button>
-					</div>
-				</div>
+				)) : <div className={styles.dropdownRow}>
+					<p className={styles.dropdownRowText}>Kunde inte hitta några grupper</p>
+				</div>}
+			</Dropdown>
+			
+			<Divider option={"h2_left"} title={"Datum och Tid"} />
+			{timeError && <p className="error-message">{timeError}</p>}
+			<div className={styles.wrapCentering}>
+				<DatePicker onChange={e => setDate(e.target.value)} id={"session-datepicker"} />
+				<TimePicker onChange={e => setTime(e.target.value)} id={"session-timepicker"} />
 			</div>
-			<ToastContainer autoClose={5000} />
-		</div>
+
+			<Divider option={"h2_left"} title={"Pass"} />
+			<Dropdown id={"session-dropdown"} text={workout?.name || "Sök befintligt pass"} centered={true}>
+				<div className={styles.dropdownRow} onClick={() => setWorkout(null)}>
+					<p className={styles.dropdownRowText}>Inget pass</p>
+				</div>
+				{workouts?.map((workout, index) => (
+					<div className={styles.dropdownRow} key={index} onClick={() => setWorkout(workout)}>
+						<p className={styles.dropdownRowText}>{workout.name}</p>
+					</div>
+				))}
+			</Dropdown>
+
+			<Divider option={"h2_middle"} title={"eller"} />
+			<div className={`${styles.wrapCentering} ${styles.createButton}`} >
+				<Link to="/workout/create" style={{width: "150px"}}>
+					<Button id={"session-create"}><p>Skapa pass</p></Button>
+				</Link>
+			</div>
+
+			<div className={styles.wrapCentering} >
+				<Button onClick={() => navigate(-1)} id={"session-back"} outlined={true}><p>Tillbaka</p></Button> 
+				<Button onClick={addSession} id={"session-save"}><p>Spara</p></Button>
+			</div>
+		</>
 	)
 }

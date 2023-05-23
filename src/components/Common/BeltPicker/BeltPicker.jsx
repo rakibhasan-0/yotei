@@ -1,5 +1,5 @@
 import styles from "./BeltPicker.module.css"
-import DropdownComponent from "../List/Component"
+import DropdownComponent from "../List/Dropdown"
 import CheckBox from "../CheckBox/CheckBox"
 import BeltIcon from "../BeltIcon/BeltIcon"
 import { useContext, useEffect, useState } from "react"

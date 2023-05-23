@@ -1,5 +1,5 @@
 import React,{ useEffect, useState } from "react"
-import Component from "../List/Component"
+import Component from "../List/Dropdown"
 import style from "./Sorter.module.css"
 import "../BeltPicker/BeltPicker.module.css"
 
