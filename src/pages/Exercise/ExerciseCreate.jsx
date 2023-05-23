@@ -1,5 +1,5 @@
 import React, {useContext, useState} from "react"
-import "./ExerciseCreate.css"
+import styles from "./ExerciseCreate.module.css"
 import {AccountContext} from "../../context"
 import Button from "../../components/Common/Button/Button"
 import  "../../components/Common/InputTextField/InputTextField"
@@ -18,6 +18,8 @@ import { toast } from "react-toastify"
  * The page for creating new exercises.
  *
  * @author Calskrove (2022-05-19), Hawaii (no date), Verona (2022-05-04), Team Phoenix (Group 1) (2023-05-04)
+ * @since 2023-05-22
+ * @version 1.0
  */
 
 export default function ExerciseCreate({setShowPopup, onClose}) {
@@ -217,7 +219,7 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 		<div className="row justify-content-center">
 			<div className="col-md-8">
 				{/*Form to get input from user*/}
-				<div className={"text-input-field"}>
+				<div className={styles.textInputField}>
 					<InputTextField
 						placeholder="Namn"
 						text={name}
@@ -230,7 +232,7 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 				</div>
 				<div>
 					<TextArea
-						className="stand-area"
+						className={styles.standArea}
 						placeholder="Beskrivning"
 						text={desc}
 						onChange={(e) => setDesc(e.target.value)}
@@ -240,7 +242,7 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 					/>
 				</div>
 				<Divider id={"time-selector-title"} option={"h1_left"} title={"Tid"} />
-				<div className="time-selector" >
+				<div className={styles.timeSelector} >
 					<MinutePicker
 						id={"minuteSelect"}
 						initialValue={time}
@@ -253,16 +255,17 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 					addedTags={addedTags}
 					setAddedTags={setAddedTags}
 				/>
-				<div className={"checkboxes-container"}>
-					<div className={"add-checkbox"}>
-						<CheckBox id="EC-AddMultipleChk" disabled={false} checked={addBoxChecked} onClick={addCheckboxClicked} label={"Lägg till fler övningar"}/>
+				<div className={styles.checkboxesContainer}>
+					<div className={styles.addCheckbox}>
+						<p className={styles.checkboxText}>Lägg till fler övningar</p>
+						<CheckBox id="EC-AddMultipleChk" disabled={false} checked={addBoxChecked} onClick={addCheckboxClicked}/>
 					</div>
-					<div style={{height: "1rem"}}/>
-					<div className={"add-checkbox"}>
-						<CheckBox id="EC-ClearMultipleChk" disabled={!addBoxChecked} checked={eraseBoxChecked} onClick={setEraseBoxChecked} label={"Rensa text"}/>
+					<div className={styles.eraseTextCheckbox}>
+						<p className={addBoxChecked ? styles.checkboxText : styles.checkboxInactive}>Rensa text</p>
+						<CheckBox id="EC-ClearMultipleChk" disabled={!addBoxChecked} checked={eraseBoxChecked} onClick={setEraseBoxChecked}/>
 					</div>
 				</div>
-				<div className="create-exercise-btn-container">
+				<div className={styles.createExerciseBtnContainer}>
 					<Button
 						id="EC-BackBtn"
 						outlined={"button-back"}
@@ -284,7 +287,7 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 						height={35}
 					>
 						<p>Är du säker att du vill lämna?</p>
-						<div className="EC-mini-popup-btns">
+						<div className={styles.ECMiniPopupBtns}>
 							<Button id={"EC-mini-popup-leave-btn"} onClick={() => {closeAll()}} outlined={"button-back"}><p>Lämna</p></Button>
 							<Button id={"EC-mini-popup-stay-btn"} onClick={() => {setShowMiniPopup(false)}}><p>Stanna</p></Button>
 						</div>

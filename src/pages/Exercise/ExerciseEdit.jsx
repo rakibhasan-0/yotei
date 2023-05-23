@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
-import "./ExerciseCreate.css"
+import styles from "./ExerciseCreate.module.css"
 import {AccountContext} from "../../context"
 import Button from "../../components/Common/Button/Button"
 import  "../../components/Common/InputTextField/InputTextField"
@@ -16,6 +16,8 @@ import {toast} from "react-toastify"
  * Class for editing an exercise.
  *
  * @author Calskrove (2022-05-19), Verona (2022-05-16) , Team Phoenix (Group 1) (2023-05-15)
+ * @since 2023-05-22
+ * @version 1.0
  */
 export default function ExerciseEdit({setShowPopup}) {
 	const context = useContext(AccountContext)
@@ -225,7 +227,7 @@ export default function ExerciseEdit({setShowPopup}) {
 		<div className="row justify-content-center">
 			<div className="col-md-8">
 				{/*Form to get input from user*/}
-				<div className={"text-input-field"}>
+				<div className={styles.textInputField}>
 					<InputTextField
 						placeholder={"Namn"}
 						text={name}
@@ -238,7 +240,7 @@ export default function ExerciseEdit({setShowPopup}) {
 				</div>
 				<div>
 					<TextArea
-						className="stand-area"
+						className={styles.standArea}
 						placeholder={"Beskrivning"}
 						text={desc}
 						onChange={(e) => setDesc(e.target.value)}
@@ -248,7 +250,7 @@ export default function ExerciseEdit({setShowPopup}) {
 					/>
 				</div>
 				<Divider id={"timeSelectorTitle"} option={"h1_left"} title={"Tid"} />
-				<div className="time-selector" >
+				<div className={styles.timeSelector} >
 					<MinutePicker
 						id={"minuteSelect"}
 						initialValue={time}
@@ -264,7 +266,7 @@ export default function ExerciseEdit({setShowPopup}) {
 				/>
 
 				{/*Button for the form. Calls the function addExercise. Retrieve the users input*/}
-				<div className="create-exercise-btn-container">
+				<div className={styles.createExerciseBtnContainer}>
 					<Button
 						id={"backBtn"}
 						outlined={"button-back"}

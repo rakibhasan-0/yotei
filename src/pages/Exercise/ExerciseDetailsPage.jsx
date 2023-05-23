@@ -18,6 +18,7 @@ import {isEditor} from "../../utils"
  * 
  * @author Chimera
  * @since 2023-05-16
+ * @version 1.0
  */
 
 export default function ExerciseDetailsPage() {
