@@ -3,6 +3,7 @@ package se.umu.cs.pvt.media;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -86,10 +87,14 @@ public class MediaController {
      }
 
     @DeleteMapping("/remove")
+    @Transactional
     public ResponseEntity<Object> removeMedia(@RequestBody List<Media> toRemove) {
 
         try {
-            mediaRepository.deleteAll(toRemove);
+//            mediaRepository.deleteAll(toRemove);
+            for (Media m: toRemove) {
+                mediaRepository.deleteListOfMedia(m.getMovementId(), m.getUrl());
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(toRemove, HttpStatus.BAD_REQUEST);
         }
