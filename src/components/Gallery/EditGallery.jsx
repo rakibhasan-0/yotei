@@ -40,6 +40,8 @@ export default function EditGallery({ id, exerciseId, sendData }) {
 	let pictures = []
 	let videos = []
 	
+	console.log("exID from exercise: ->>>>> " + exerciseId)
+	console.log("SEND DATA IS: ->>>> " + sendData)
 	/**
 	 * Callback for retrieving media from server
 	 */
@@ -190,26 +192,29 @@ export default function EditGallery({ id, exerciseId, sendData }) {
      * calls the API for storing newly added links
      */
 	async function postMedia(list) {
-
+		
 		const requestOptions = {
 			method: "POST",
 			headers: { "Content-type": "application/json", "token": context.token },
 			body: JSON.stringify(list)
 		}
 		try {
-            
+			console.log("before post")
 			const response = await fetch("/api/media/add", requestOptions)
-
+			
+			console.log("After post")
 			if (response.ok) {
 				console.log("Post request sent")
 			} 
 		} catch (error) {
+			console.log("ARE WE SENDING?")
 			console.log(error)
 		}
         
 	}
 
 	async function deleteMedia(list) {
+		console.log("ARE WE DELETINIG?")
 		const requestOptions = {
 			method: "DELETE",
 			headers: { "Content-type": "application/json", "token": context.token },
@@ -228,13 +233,26 @@ export default function EditGallery({ id, exerciseId, sendData }) {
 
 
 	const makeAPICalls = async () => {
-		await postMedia(mediaList)
-		deleteMedia(mediaToRemove)
+		try {
+			
+			await postMedia(mediaList)
+			console.log("AFTER AWAIT")
+			deleteMedia(mediaToRemove)
+			console.log("AFTER DELETE")
+		} catch {
+			deleteMedia(mediaToRemove)
+		}
 	}
 	
 	useEffect(() => {
 		
 		if (sendData) {
+
+			console.log("exID from exercise: ->>>>> " + exerciseId)
+			console.log("SEND DATA IS: ->>>> " + sendData)
+			console.log("MEDIA: " + media)
+			console.log("MEDIALIST: " + mediaList)
+			console.log("MEDIATOREMOVE: " + mediaToRemove)
 			makeAPICalls()
 		}
 

@@ -10,6 +10,7 @@ import TextArea from "../../components/Common/TextArea/TextArea.jsx"
 import Divider from "../../components/Common/Divider/Divider.jsx"
 import TagInput from "../../components/Common/Tag/TagInput.jsx"
 import {toast} from "react-toastify"
+import EditGallery from "../../components/Gallery/EditGallery"
 
 
 /**
@@ -32,6 +33,7 @@ export default function ExerciseEdit({setShowPopup}) {
 	const [newTags, setNewTags] = useState([])
 	const [tagRemoveFailed, setTagRemovedFailed] = useState(false)
 	const [exId, setExId] = useState("")
+	const [sendData, setSendData] = useState(false)
 
 
 	useEffect(() => {
@@ -114,7 +116,9 @@ export default function ExerciseEdit({setShowPopup}) {
      * @param {*} e The event that caused editExercise.
      */
 	async function editExercise() {
+		setSendData(true)
 
+		
 		const requestOptionsDuplicate = {
 			method: "PUT",
 			headers: {"Content-type": "application/json", "token": context.token},
@@ -136,7 +140,7 @@ export default function ExerciseEdit({setShowPopup}) {
 		catch (error) {
 			toast.error("Oj, ett fel har uppstått med att nå servern")
 		}
-
+		
 		if (name.trim() === "") {
 			setEditFailed(true)
 			setErrorMessage("Övning måste ha ett namn")
@@ -146,8 +150,13 @@ export default function ExerciseEdit({setShowPopup}) {
 		await checkTags()
 		if (!(editFailed || tagRemoveFailed || tagLinkFailed)) {
 			//borde bytas till att stänga popupen
-			window.location.href = "/exercise"
+			// window.location.href = "/exercise"
+			console.log("SEND DATA: ->>> " + sendData)
+			setShowPopup(false)
+			location.reload(1) // forcing reload of the page.... 
+
 		}
+
 
 	}
 
@@ -264,6 +273,8 @@ export default function ExerciseEdit({setShowPopup}) {
 					setAddedTags={setNewTags}
 					isNested={true}
 				/>
+				<Divider id={"media-title"} option={"h1_left"} title={"Media"} />
+				<EditGallery id={exId} exerciseId={exId} sendData={sendData}/>
 
 				{/*Button for the form. Calls the function addExercise. Retrieve the users input*/}
 				<div className={styles.createExerciseBtnContainer}>
