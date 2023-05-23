@@ -71,17 +71,31 @@ export default function CreateTechnique({ id, setIsOpen }) {
 	}
 
 	function handleResponse(response) {
-		switch(response.status) {
-		case HTTP_STATUS_CODES.CONFLICT:
+
+		if (response.status == HTTP_STATUS_CODES.CONFLICT) {
 			setTechniqueNameErr("En teknik med detta namn finns redan")
 			scrollToElementWithId("create-technique-input-name")
 			return
-		case HTTP_STATUS_CODES.NOT_ACCEPTABLE:
+		}
+
+		if (response.status == HTTP_STATUS_CODES.NOT_ACCEPTABLE) {
 			setTechniqueNameErr("En teknik måste ha ett namn")
 			scrollToElementWithId("create-technique-input-name")
 			return
-		case HTTP_STATUS_CODES.TEAPOT:
-			toast.error("Du är inte längre inloggad och kan därför inte skapa tekniker")
+		}
+
+		if (response.status == HTTP_STATUS_CODES.UNAUTHORIZED) {
+			toast.error("Du är inte längre inloggad och kan därför inte skapa tekniken")
+			return
+		}
+
+		if (response.status == HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+			toast.error("Det har uppstått ett problem med servern, kunde inte skapa tekniken")
+			return
+		}
+
+		if (response.status != HTTP_STATUS_CODES.SUCCESS && response.status != HTTP_STATUS_CODES.OK) {
+			toast.error("Det har uppstått ett oväntat problem")
 			return
 		}
 
