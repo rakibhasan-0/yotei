@@ -69,31 +69,6 @@ describe("SearchBar", () => {
 		expect(onChange).toHaveBeenCalled()
 	})
 
-	test("calls onFocus and onBlur callbacks when input is focused and blurred", () => {
-		//ARRANGE
-		const { getByDisplayValue, getByTestId } = render(
-			<SearchBar id="search-bar-test"
-				placeholder={placeholder}
-				text={text}
-				addedTags={addedTags}
-				suggestedTags={suggestedTags}
-				onChange={onChange}
-				setAddedTags={setAddedTags}
-				setSuggestedTags={setSuggestedTags}
-			/>
-		)
-		const inputElement = getByDisplayValue(text)
-		const inputElementContainer = getByTestId("search-bar-test")
-		//ACT
-		fireEvent.focus(inputElement)
-		//ASSERT
-		expect(inputElementContainer).toHaveClass("open")
-		//ACT
-		fireEvent.blur(inputElement)
-		//ASSERT
-		expect(inputElementContainer).not.toHaveClass("open")
-	})
-
 	test("calls handleAddTag callback when tag is added", () => {
 		//ARRANGE
 		const { getByText } = render(

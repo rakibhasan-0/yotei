@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import "./SearchBar.css"
+import style from "./SearchBar.module.css"
 import { Search } from "react-bootstrap-icons"
 import Tag from "../Tag/Tag"
 /**
@@ -55,10 +55,12 @@ export default function SearchBar({ id, placeholder, text, onChange, addedTags, 
 		setSuggestedTags([...suggestedTags, tag])
 	}
 
+	const isFocus = focused ? `${style.searchBar} ${style.open}` : style.searchBar
+
 	return (
-		<div id={id} className={focused ? "search-bar open" : "search-bar"}>
+		<div id={id} className={isFocus}>
 			<input
-				className="search-bar-input-area"
+				className={style.searchBarInputArea}
 				placeholder={placeholder}
 				value={text}
 				onChange={e => {
@@ -68,9 +70,9 @@ export default function SearchBar({ id, placeholder, text, onChange, addedTags, 
 				onBlur={() => setFocused(false)}
 			>
 			</input>
-			<i className="search-icon"><Search /></i>
-			{suggestedTags && 
-				<div className={focused || (addedTags.length > 0 || suggestedTags.length > 0) ? "search-bar-tag-container" : "search-bar-tag-container closed"}>
+			<i className={style.searchIcon}><Search /></i>
+			{suggestedTags &&
+				<div className={focused || (addedTags.length > 0 || suggestedTags.length > 0) ? style.searchBarTagContainer : `${style.searchBarTagContainer} ${style.closed}`}>
 					{addedTags.map((tag, key) => <Tag
 						tagType="added"
 						key={key}
