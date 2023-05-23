@@ -4,6 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import se.umu.cs.pvt.exercise.Exercise;
+import se.umu.cs.pvt.exercise.ExerciseRepository;
+import se.umu.cs.pvt.technique.Technique;
+import se.umu.cs.pvt.technique.TechniqueRepository;
 import se.umu.cs.pvt.tag.TagRepository;
 import se.umu.cs.pvt.tag.WorkoutTag;
 import se.umu.cs.pvt.tag.WorkoutTagRepository;
@@ -11,6 +15,7 @@ import se.umu.cs.pvt.workout.detail.WorkoutDetail;
 import se.umu.cs.pvt.workout.detail.WorkoutDetailRepository;
 import se.umu.cs.pvt.workout.detail.WorkoutDetailResponse;
 
+import java.util.*;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
@@ -41,6 +46,12 @@ public class WorkoutController {
 
     @Autowired
     private WorkoutDetailRepository workoutDetailRepository;
+
+    @Autowired
+    private TechniqueRepository techniqueRepository;
+
+    @Autowired
+    private ExerciseRepository exerciseRepository;
 
     @Autowired
     private UserWorkoutRepository userWorkoutRepository;
@@ -517,7 +528,90 @@ public class WorkoutController {
             return new ResponseEntity<>(review, HttpStatus.NOT_FOUND);
         }
     }
+
+
+    /**
+     * This method returns a list of all workout containing a specific technique
+     *
+     * Returns 200 OK if the technique is posted.
+     * Returns 404 NOT FOUND if the given technique ID was not found or if no workouts were found.
+     * Returns 500 INTERNAL SERVER ERROR if an error occurs during the database transaction.
+     *
+     * @param id of the technique
+     * @return responseEntity indicating the success-status of the post as well as a JSON list
+     * of all techniques.
+     */
+    @GetMapping("/associated/technique/{id}")
+    public ResponseEntity<Object> associatedTechniques(@PathVariable("id") Long id) {
+        if (techniqueRepository.findById(id).isEmpty()) {
+            return new ResponseEntity<>("Ingen teknik med ID " + id + " hittades", HttpStatus.NOT_FOUND);
+        }
+
+        List<Workout> foundWorkouts = findWorkouts(id, Technique.class);
+
+        if (foundWorkouts.isEmpty()) {
+            return new ResponseEntity<>("Tekniken med id " + id + " finns inte inlagt i några pass.", HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(foundWorkouts, HttpStatus.OK);
+    }
+
+    /**
+     * Find all workouts associated with a technique or exercise
+     * @param id the id of what you want to find workouts for
+     * @param object Class objectt. Must be either Technique.class or Exercise.class
+     * @return
+     * @throws IllegalArgumentException
+     */
+    private List<Workout> findWorkouts(Long id, Object object) throws IllegalArgumentException {
+        boolean isTechnique = object == Technique.class;
+        boolean isExercise = object == Exercise.class;
+        List<Workout> foundWorkouts = new ArrayList<>();
+        List<Activity> activities = activityRepository.findAll();
+
+        if (!(isTechnique || isExercise)) {
+            throw new IllegalArgumentException("Object must either Technique or Exercise");
+        }
+
+        for (Activity activity : activities) {
+            long temp_id = -1337L; // was chosen by dev team as a default error-value
+            if (isTechnique && activity.getTechniqueId() != null) temp_id = activity.getTechniqueId();
+            if (isExercise && activity.getExerciseId() != null)  temp_id = activity.getExerciseId();
+            if (temp_id == -1337L) continue;
+
+            if (id.equals(temp_id)) {
+                Optional<Workout> result = workoutRepository.findById(activity.getWorkoutId());
+                result.ifPresent(foundWorkouts::add);
+            }
+        }
+        return foundWorkouts.stream().distinct().toList();
+    }
+
+
+    /**
+     * This method returns a list of all workout containing a specific technique
+     *
+     * Returns 200 OK if the technique is posted.
+     * Returns 404 NOT FOUND if the given technique ID was not found or if no workouts were found.
+     * Returns 500 INTERNAL SERVER ERROR if an error occurs during the database transaction.
+     *
+     * @param id of the technique
+     * @return responseEntity indicating the success-status of the post as well as a JSON list
+     * of all techniques.
+     */
+    @GetMapping("/associated/exercise/{id}")
+    public ResponseEntity<Object> associatedExercises(@PathVariable("id") Long id) {
+        if (exerciseRepository.findById(id).isEmpty()) {
+            return new ResponseEntity<>("Ingen övning med ID " + id + " hittades", HttpStatus.NOT_FOUND);
+        }
+        List<Workout> foundWorkouts = findWorkouts(id, Exercise.class);
+        if (foundWorkouts.isEmpty()) {
+            return new ResponseEntity<>("Övningen med id " + id + " finns inte inlagt i några pass.", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(foundWorkouts, HttpStatus.OK);
+    }
 }
+
 
 /**
  * Package containing data needed to update a workout.

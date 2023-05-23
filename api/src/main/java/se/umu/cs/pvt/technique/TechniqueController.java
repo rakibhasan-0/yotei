@@ -4,8 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import se.umu.cs.pvt.media.MediaRepository;
+import se.umu.cs.pvt.workout.Activity;
+import se.umu.cs.pvt.workout.*;
+import se.umu.cs.pvt.media.*;
 import java.util.*;
+
 
 /**
  * Class to get, insert, update, and remove technique.
@@ -20,8 +24,17 @@ import java.util.*;
 @CrossOrigin
 @RequestMapping(path = "/api/techniques")
 public class TechniqueController {
+    @Autowired
+    private WorkoutRepository workoutRepository;
 
-    private TechniqueRepository techniqueRepository;
+    @Autowired
+    private ActivityRepository activityRepository;
+
+    @Autowired
+    private final TechniqueRepository techniqueRepository;
+
+    @Autowired
+    private MediaRepository mediaRepository;
 
     @Autowired
     public TechniqueController(TechniqueRepository techniqueRepository) {
@@ -35,6 +48,7 @@ public class TechniqueController {
      */
     @GetMapping("")
     public ResponseEntity<Object> getTechniques() {
+
         List<Technique> allTechniques = techniqueRepository.findAll();
 
         if (allTechniques.isEmpty()) {
@@ -102,7 +116,7 @@ public class TechniqueController {
         if (!toAdd.validFormat()) {
             return new ResponseEntity<>("Fel format: Namn på teknik saknas eller är för långt.", HttpStatus.NOT_ACCEPTABLE);
         }
-        
+
         try {
             return new ResponseEntity<>(techniqueRepository.save(toAdd), HttpStatus.CREATED);
         } catch (Exception e) {
@@ -233,14 +247,41 @@ public class TechniqueController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> removeTechnique(@PathVariable("id") Long id) {
-        if (techniqueRepository.findById(id).isEmpty()) {
+        Optional<Technique> technique = techniqueRepository.findById(id);
+        if (technique.isEmpty()) {
             return new ResponseEntity<>("Ingen teknik med ID " + id + " hittades", HttpStatus.NOT_FOUND);
         }
 
-        Technique technique = techniqueRepository.findById(id).get();
-        techniqueRepository.delete(technique);
+        //remove technique from any activity
+        List<Activity> affectedActivities = findAssociatedActivities(id);
+
+        for (Activity activity : affectedActivities) {
+            activity.setTechniqueId(null);
+            activityRepository.save(activity);
+        }
+
+        // remove any existing media
+        List<Media> existingMedia = this.mediaRepository.findAllMediaById(id);
+        this.mediaRepository.deleteAll(existingMedia);
+
+        //remove technique
+        Technique toBeDeleted = technique.get();
+        techniqueRepository.delete(toBeDeleted);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    private List<Activity> findAssociatedActivities(Long id) {
+        List<Activity> activities = activityRepository.findAll();
+        List<Activity> associatedActivities = new ArrayList<>();
+
+        for (Activity activity : activities) {
+            if (id.equals(activity.getTechniqueId())) {
+                associatedActivities.add(activity);
+            }
+        }
+        return associatedActivities;
     }
 
 }

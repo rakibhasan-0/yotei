@@ -115,4 +115,8 @@ public class Activity {
     public void setWorkoutId(Long workoutId) {
         this.workoutId = workoutId;
     }
+
+    public void setTechniqueId(Long techniqueId) { this.techniqueId = techniqueId; }
+
+    public void setExerciseId(Long exerciseId) { this.exerciseId = exerciseId; }
 }

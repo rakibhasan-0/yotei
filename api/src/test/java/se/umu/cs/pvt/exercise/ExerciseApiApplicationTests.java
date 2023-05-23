@@ -15,6 +15,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import se.umu.cs.pvt.media.MediaRepository;
+import se.umu.cs.pvt.workout.ActivityRepository;
+import se.umu.cs.pvt.workout.WorkoutRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +38,15 @@ class ExerciseApiApplicationTests {
 
     @MockBean
     private ExerciseRepository repository;
+
+    @MockBean
+    private WorkoutRepository workoutRepository;
+
+    @MockBean
+    private ActivityRepository activityRepository;
+
+    @MockBean
+    private MediaRepository mediaRepository;
 
     @Autowired
     private ExerciseController controller;

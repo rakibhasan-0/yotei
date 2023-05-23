@@ -14,7 +14,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import se.umu.cs.pvt.belt.Belt;
+import se.umu.cs.pvt.media.MediaRepository;
 import se.umu.cs.pvt.tag.Tag;
+import se.umu.cs.pvt.workout.ActivityRepository;
+import se.umu.cs.pvt.workout.WorkoutRepository;
 
 import java.util.*;
 
@@ -34,6 +37,16 @@ public class TechniqueApiApplicationTests {
 
     @MockBean
     private TechniqueRepository repository;
+
+    @MockBean
+    private WorkoutRepository workoutRepository;
+
+    @MockBean
+    private ActivityRepository activityRepository;
+
+    @MockBean
+    private MediaRepository mediaRepository;
+
     @Autowired
     private TechniqueController controller;
     @Test

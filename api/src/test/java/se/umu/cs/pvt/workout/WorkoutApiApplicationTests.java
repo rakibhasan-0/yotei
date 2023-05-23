@@ -14,6 +14,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import se.umu.cs.pvt.exercise.Exercise;
+import se.umu.cs.pvt.exercise.ExerciseRepository;
+import se.umu.cs.pvt.technique.TechniqueRepository;
 import se.umu.cs.pvt.tag.TagRepository;
 import se.umu.cs.pvt.tag.WorkoutTagRepository;
 import se.umu.cs.pvt.workout.detail.WorkoutDetailRepository;
@@ -57,6 +60,12 @@ class WorkoutApiApplicationTests {
     private TagRepository tagRepository;
     @MockBean
     private WorkoutTagRepository workoutTagRepository;
+
+    @MockBean
+    TechniqueRepository techniqueRepository;
+
+    @MockBean
+    ExerciseRepository exerciseRepository;
 
     @Autowired
     private WorkoutController workoutController;

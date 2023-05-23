@@ -8,7 +8,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.data.domain.Sort;
+import se.umu.cs.pvt.media.MediaRepository;
+import se.umu.cs.pvt.workout.Activity;
+import se.umu.cs.pvt.workout.ActivityRepository;
+import se.umu.cs.pvt.workout.WorkoutRepository;
+import se.umu.cs.pvt.media.*;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -22,6 +26,8 @@ import java.text.Collator;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
+
 
 /**
  * Class to get, insert, update, and remove exercise.
@@ -33,6 +39,15 @@ import java.util.Locale;
 @RequestMapping(path = "/api/exercises")
 public class ExerciseController {
     private ExerciseRepository exerciseRepository;
+
+    @Autowired
+    private WorkoutRepository workoutRepository;
+
+    @Autowired
+    private ActivityRepository activityRepository;
+
+    @Autowired
+    private MediaRepository mediaRepository;
 
     @Autowired
     public ExerciseController(ExerciseRepository exerciseRepository) {
@@ -273,13 +288,39 @@ public class ExerciseController {
      */
     @DeleteMapping("/remove/{id}")
     public ResponseEntity<Exercise> removeExercise(@PathVariable("id") Long id) {
-        if (exerciseRepository.findById(id).isEmpty()) {
+        Optional<Exercise> result = exerciseRepository.findById(id);
+        if (result.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        Exercise exercise = exerciseRepository.findById(id).get();
+
+        //remove exercise from any activity
+        Exercise exercise = result.get();
+        List<Activity> affectedActivities = findAssociatedActivities(id);
+
+        for (Activity activity : affectedActivities) {
+            activity.setTechniqueId(null);
+            activityRepository.save(activity);
+        }
+
+        //delete any existing media
+        List<Media> existingMedia = mediaRepository.findAllMediaById(id);
+        mediaRepository.deleteAll(existingMedia);
+        // finally delete exercise
         exerciseRepository.delete(exercise);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private List<Activity> findAssociatedActivities(Long id) {
+        List<Activity> activities = activityRepository.findAll();
+        List<Activity> associatedActivities = new ArrayList<>();
+
+        for (Activity activity : activities) {
+            if (id.equals(activity.getExerciseId())) {
+                associatedActivities.add(activity);
+            }
+        }
+        return associatedActivities;
     }
 
     /**
