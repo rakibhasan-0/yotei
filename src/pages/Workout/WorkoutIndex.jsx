@@ -13,6 +13,8 @@ import RoundButton from "../../components/Common/RoundButton/RoundButton"
 import { Plus } from "react-bootstrap-icons"
 import {toast} from "react-toastify"
 import WorkoutListItem from "../../components/Workout/WorkoutListItem"
+import ErrorStateSearch from "../../components/Common/ErrorState/ErrorStateSearch.jsx"
+import Spinner from "../../components/Common/Spinner/Spinner.jsx"
 
 /**
  * Workout class. 
@@ -28,12 +30,14 @@ import WorkoutListItem from "../../components/Workout/WorkoutListItem"
 
 export default function WorkoutIndex() {
 	const { userId, token } = useContext(AccountContext)
-	const [ workouts, setWorkouts ] = useState()
+	const [ workouts, setWorkouts ] = useState([])
 	const [ searchText, setSearchText ] = useState("")
 	const [ tags, setTags ] = useState([])
 	const [ suggestedTags, setSuggestedTags ] = useState([])
 	const [ cache, cacheActions ] = useMap()
 	const [ cookies, setCookie ] = useCookies(["workout-filter"])
+	const [ searchErrorMessage, setSearchErrorMessage ] = useState("")
+	const [ loading, setLoading ] = useState(false)
 
 	// Some fucked up shit to get +/- 1 month from today.
 	const today = new Date()
@@ -93,7 +97,7 @@ export default function WorkoutIndex() {
 					</FilterContainer>
 				</center>
 			</div>
-			{workouts && 
+			{workouts.length !== 0 ?
 				<div className="grid-striped mt-3">
 					{workouts.map((workout, index) => {
 						return (
@@ -104,6 +108,8 @@ export default function WorkoutIndex() {
 							/>)
 					})}
 				</div>
+				: (loading ? <Spinner/> : <ErrorStateSearch id="error-search"
+					message={searchErrorMessage}/>)
 			}
 			<RoundButton linkTo="/workout/create">
 				<Plus />
@@ -148,7 +154,27 @@ export default function WorkoutIndex() {
 		})
 	}
 
+	function constructSearchErrorMessage(args) {
+		const searchText = args.text.trim()
+		const selectedTags = args.selectedTags
+		let msg = "Kunde inte hitta "
+
+		args.isFavorite ? msg += "något favoritmarkerat pass" : msg += "något pass"
+
+		if (searchText !== "")
+			msg += ` med namnet "${searchText}"`
+
+		if (searchText !== "" && selectedTags.length !== 0)
+			msg += " och"
+
+		if (selectedTags.length !== 0)
+			msg += ` med taggarna: ${selectedTags.join(", ")}`
+
+		setSearchErrorMessage(msg)
+	}
+
 	function fetchWorkouts() {
+		setLoading(true)
 		let args = {
 			from: dates.from,
 			to: dates.to,
@@ -163,9 +189,11 @@ export default function WorkoutIndex() {
 			if(response.error) {
 				setError("Serverfel: Kunde inte ansluta till servern!")
 			} else {
+				if (response.results.length === 0) constructSearchErrorMessage(args)
 				setWorkouts(response.results)
 				setSuggestedTags(response.tagCompletion)
 			}
+			setLoading(false)
 		})
 	}
 }
