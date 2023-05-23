@@ -4,7 +4,7 @@ import Button from "../Button/Button"
 
 import { List as HamburgerIcon, X as CloseIcon } from "react-bootstrap-icons"
 
-import "./Navbar.css"
+import styles from "./Navbar.module.css"
 import { useNavigate } from "react-router"
 import useOutsideClick from "../../../hooks/useOutsideClick"
 /**
@@ -16,9 +16,9 @@ import useOutsideClick from "../../../hooks/useOutsideClick"
  * Example usage:
  * 		<Navbar testId="test-id"/>
  *
- * @author Team Medusa
- * @version 1.0
- * @since 2023-05-02
+ * @author Team Medusa & Team Cyclops
+ * @version 2.0
+ * @since 2023-05-23
  */
 function Navbar({ testId }) {
 
@@ -36,41 +36,41 @@ function Navbar({ testId }) {
 	useOutsideClick(navbarRef, () => setOpen(false))
 
 	return (
-		<nav data-testid={testId} className={"common-navbar"} ref={navbarRef}>
-			<HamburgerIcon role="button" className="common-navbar-icon" size="48px" onClick={() => setOpen(true)} />
-			<img src="/ubk-logga.jpg" className="budo-logo" />
+		<nav data-testid={testId} className={styles.commonNavbar} ref={navbarRef}>
+			<HamburgerIcon role="button" className={styles.commonNavbarIcon} onClick={() => setOpen(true)}/>
+			<img src="/ubk-logga.jpg" className={styles.budoLogo} />
 
-			<div className={`common-navbar-sidebar p-4 ${open ? "open" : ""}`}>
+			<div className={`${styles.commonNavbarSidebar} p-4  ${open ? styles.open : ""}`}>
 
-				<CloseIcon role="button" className="common-navbar-icon" size="48px" onClick={() => setOpen(false)} />
+				<CloseIcon role="button" className={styles.commonNavbarIconClose} onClick={() => setOpen(false)} />
 
 				<Button width={"100%"} onClick={() => navigateAndClose("/plan")}>
-					<h1 style={{ fontWeight: 500, fontSize: "32px" }}>Grupper</h1>
+					<h1 className={styles.commonNavbarButton}>Grupper</h1>
 				</Button>
 
 				<Button width={"100%"} onClick={() => navigateAndClose("/workout")}>
-					<h1 style={{ fontWeight: 500, fontSize: "32px" }}>Pass</h1>
+					<h1 className={styles.commonNavbarButton}>Pass</h1>
 				</Button>
 
 				<Button width={"100%"} onClick={() => navigateAndClose("/exercise")}>
-					<h1 style={{ fontWeight: 500, fontSize: "32px" }}>Övningar</h1>
+					<h1 className={styles.commonNavbarButton}>Övningar</h1>
 				</Button>
 
 				<Button width={"100%"} onClick={() => navigateAndClose("/technique")}>
-					<h1 style={{ fontWeight: 500, fontSize: "32px" }}>Tekniker</h1>
+					<h1 className={styles.commonNavbarButton}>Tekniker</h1>
 				</Button>
 
 				<Button width={"100%"} onClick={() => navigateAndClose("/admin")}>
-					<h1 style={{ fontWeight: 500, fontSize: "32px" }}>Admin</h1>
+					<h1 className={styles.commonNavbarButton}>Admin</h1>
 				</Button>
 
 				<Button width={"100%"} onClick={() => navigateAndClose("/profile")}>
-					<h1 style={{ fontWeight: 500, fontSize: "32px" }}>Min sida</h1>
+					<h1 className={styles.commonNavbarButton}>Min sida</h1>
 				</Button>
 
 			</div>
+			<div className={`${styles.boxShadowBackground} ${open ? styles.boxShadowBackgroundOpen : styles.boxShadowBackgroundClosed}`} onClick={() => setOpen(false)}/>
 		</nav>
 	)
-
 }
 export default Navbar
