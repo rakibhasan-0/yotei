@@ -97,16 +97,23 @@ function ExerciseIndex() {
 		getAllExercises()
 	}, [sort])
 
-	const handleClosePopup = () => {
-		setTriggerReload(!triggerReload)
-	}
-
 	useEffect(() => {
 		getAllExercises()
 		setSearchText("")
 		console.log("reloaded")
 	}, [triggerReload])
 
+	useEffect(() => {
+		const handlePopstate = () => {
+			setTriggerReload(true)
+		}
+
+		window.addEventListener("popstate", handlePopstate)
+
+		return () => {
+			window.removeEventListener("popstate", handlePopstate)
+		}
+	}, [])
 
 	return (
 		<div>
@@ -124,10 +131,10 @@ function ExerciseIndex() {
 					/>
 					<FilterContainer id="ei-filter" title="Sortering">
 						<Sorter onSortChange={handleSortChange} id="ei-sort" defaultSort={"Namn: A-Ö"}>
-							<div value="option1">Namn: A-Ö</div>
-							<div value="option2">Namn: Ö-A</div>
-							<div value="option3">Längd: Kortast först</div>
-							<div value="option4">Längd: Längst först</div>
+							<div>Namn: A-Ö</div>
+							<div>Namn: Ö-A</div>
+							<div>Längd: Kortast först</div>
+							<div>Längd: Längst först</div>
 
 							{/* Add more options as needed */}
 						</Sorter>
@@ -147,7 +154,7 @@ function ExerciseIndex() {
 				setIsOpen={setPopupVisible}
 				noBackground={false}
 			>
-				<ExerciseCreate setShowPopup={setPopupVisible} onClose={handleClosePopup}/>
+				<ExerciseCreate setShowPopup={setPopupVisible} onClose={() => setTriggerReload((prevState) => !prevState)}/>
 			</Popup>
 		</div>
 	)
