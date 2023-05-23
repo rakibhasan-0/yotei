@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import style from "./SearchBar.module.css"
 import { Search } from "react-bootstrap-icons"
 import Tag from "../Tag/Tag"
@@ -34,8 +34,6 @@ import Tag from "../Tag/Tag"
 
 export default function SearchBar({ id, placeholder, text, onChange, addedTags, setAddedTags, suggestedTags, setSuggestedTags }) {
 
-	const [focused, setFocused] = useState(false)
-
 	const handleAddTag = (tag) => {
 		// if tag is already added, don't add it
 		for (const tagInList of addedTags) {
@@ -55,10 +53,8 @@ export default function SearchBar({ id, placeholder, text, onChange, addedTags, 
 		setSuggestedTags([...suggestedTags, tag])
 	}
 
-	const isFocus = focused ? `${style.searchBar} ${style.open}` : style.searchBar
-
 	return (
-		<div id={id} className={isFocus}>
+		<div id={id} className={style.searchBar}>
 			<input
 				className={style.searchBarInputArea}
 				placeholder={placeholder}
@@ -66,13 +62,11 @@ export default function SearchBar({ id, placeholder, text, onChange, addedTags, 
 				onChange={e => {
 					return onChange?.(e.target.value)
 				}}
-				onFocus={() => setFocused(true)}
-				onBlur={() => setFocused(false)}
 			>
 			</input>
 			<i className={style.searchIcon}><Search /></i>
 			{suggestedTags &&
-				<div className={focused || (addedTags.length > 0 || suggestedTags.length > 0) ? style.searchBarTagContainer : `${style.searchBarTagContainer} ${style.closed}`}>
+				<div className={addedTags.length > 0 || suggestedTags.length > 0 ? style.searchBarTagContainer : `${style.searchBarTagContainer} ${style.closed}`}>
 					{addedTags.map((tag, key) => <Tag
 						tagType="added"
 						key={key}

@@ -4,13 +4,8 @@
 	border: 2px solid var(--black-primary);
 	border-radius: 0.3rem;
 	min-height: 2rem;
-	transition-duration: 200ms;
 	background-color: var(--background);
 	margin: 10px 0;
-}
-
-.open {
-	min-height: 100px;
 }
 
 .searchBarInputArea:focus {
@@ -40,6 +35,7 @@
 	flex-wrap: wrap;
 	gap: 0.5rem;
 	padding: 0 1.5rem 1.5rem 1.5rem;
+	transition-duration: 300ms;
 }
 
 .closed {
