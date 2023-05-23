@@ -118,7 +118,7 @@ export default function ExerciseEdit({setShowPopup}) {
 			headers: {"Content-type": "application/json", "token": context.token},
 			body: JSON.stringify({
 				id: exId,
-				name: name,
+				name: name.trim(),
 				description: desc,
 				duration: time,
 			})
