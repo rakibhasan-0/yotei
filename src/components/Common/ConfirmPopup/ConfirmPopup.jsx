@@ -45,12 +45,12 @@ export default function ConfirmPopup({ onClick, id, showPopup, setShowPopup, pop
 			useNoHeightWidth={true}
 			maxHeight={231}
 			maxWidth={333}>
-			<div id={`${id}-text`}>
+			<div id={`${id}-text`} style={{textAlign:"center"}}>
 				<p className={styles.font}>{ popupText }</p>
 			</div>	
 			<div className={styles.outerButtonpanel}>
 				<div className={styles.innerButtonpanel} id={`${id}-buttons`}>
-					<Button width='100px'  outlined='false' onClick={() => setShowPopup(false)}>Tillbaka</Button>
+					<Button width='100px'  outlined='false' onClick={() => setShowPopup(false)}><p>Tillbaka</p></Button>
 					<Button width='100px'  onClick={deleteClickHandler}>Radera</Button>
 				</div>
 			</div>

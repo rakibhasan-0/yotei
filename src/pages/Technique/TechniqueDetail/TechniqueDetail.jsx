@@ -10,11 +10,12 @@ import { Pencil, Trash } from "react-bootstrap-icons"
 
 import "./TechniqueDetail.css"
 import ErrorState from "../../../components/Common/ErrorState/ErrorState"
-import Spinner from "../../../components/Common/Spinner/Spinner" 
+import Spinner from "../../../components/Common/Spinner/Spinner"
 import Gallery from "../../../components/Gallery/Gallery"
-import {isEditor} from "../../../utils"
+import { isEditor } from "../../../utils"
 
 import Popup from "../../../components/Common/Popup/Popup"
+import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
 
 import TechniqueEdit from "../TechniqueEdit/TechniqueEdit"
 
@@ -32,7 +33,7 @@ import TechniqueEdit from "../TechniqueEdit/TechniqueEdit"
  * @version 2.0
  * @since 2023-05-17
  */
-function TechniqueDetail({id}) {
+function TechniqueDetail({ id }) {
 
 	const { techniqueId } = useParams()
 	const { token } = useContext(AccountContext)
@@ -44,6 +45,7 @@ function TechniqueDetail({id}) {
 
 	const accountRole = useContext(AccountContext)
 	const [showPopup, setShowPopup] = useState(false)
+	const [showConfirmPopup, setShowConfirmPopup] = useState(false)
 
 	const handleGet = useCallback(() => {
 		// Fix to update the details page after an edit
@@ -53,9 +55,9 @@ function TechniqueDetail({id}) {
 
 		setLoading(true)
 		setError("")
-		fetch(`/api/techniques/${techniqueId}`, {headers: {token}})
+		fetch(`/api/techniques/${techniqueId}`, { headers: { token } })
 			.then(async res => {
-				if(!res.ok) {
+				if (!res.ok) {
 					// Quick fix with + " " because old API returns empty body on 404.
 					setError(await res.text() + " ")
 					setLoading(false)
@@ -76,10 +78,10 @@ function TechniqueDetail({id}) {
 	async function handleDelete() {
 		try {
 			const res = await fetch("/api/techniques/" + techniqueId, {
-				headers: {token},
+				headers: { token },
 				method: "DELETE"
 			})
-	
+
 			if (!res.ok) {
 				const msg = await res.text()
 				// Quick fix with + " " because old API returns empty body on 404.
@@ -92,44 +94,44 @@ function TechniqueDetail({id}) {
 		}
 	}
 
-	if(error != "") return <ErrorState
+	if (error != "") return <ErrorState
 		message={error}
 		onBack={() => navigate("/technique")}
 		onRecover={handleGet}
 	/>
 
-	if(loading) return <div className='technique-detail-center-spinner'><Spinner/></div>
+	if (loading) return <div className='technique-detail-center-spinner'><Spinner /></div>
 
 	return (
 		<>
 			<div>
 				<Popup title="Redigera teknik" isOpen={showPopup} setIsOpen={setShowPopup}>
-					<TechniqueEdit setIsOpen={setShowPopup} technique={technique}/>
+					<TechniqueEdit setIsOpen={setShowPopup} technique={technique} />
 				</Popup>
 			</div>
 
 			<div className="technique-detail-container" id={id == undefined ? "technique" : id}>
-				<Gallery id={techniqueId}/>
+				<Gallery id={techniqueId} />
 				<h1>{technique.name}</h1>
 				{isEditor(accountRole) && <div className="technique-detail-actions-container">
 					<Pencil
 						size="24px"
 						color="var(--red-primary)"
-						style={{cursor: "pointer"}}
+						style={{ cursor: "pointer" }}
 						onClick={() => setShowPopup(true)}
 					/>
 					<Trash
 						size="24px"
 						color="var(--red-primary)"
-						style={{cursor: "pointer"}}
-						onClick={handleDelete}
+						style={{ cursor: "pointer" }}
+						onClick={() => setShowConfirmPopup(true)}
 					/>
 				</div>
 				}
-				<p style={{marginBottom: 0}}>{technique.isKihon ? "Kihon" : "Ej kihon"}</p>
+				<p style={{ marginBottom: 0 }}>{technique.isKihon ? "Kihon" : "Ej kihon"}</p>
 				<div className="technique-detail-belts-container">
 					{technique.belts ? (
-						technique.belts.map(belt => <BeltIcon key={belt.name} belt={belt}/>)
+						technique.belts.map(belt => <BeltIcon key={belt.name} belt={belt} />)
 					) : (
 						<p>Inga bälten kunde hittas för denna teknik.</p>
 					)}
@@ -143,12 +145,19 @@ function TechniqueDetail({id}) {
 				<h2>Taggar</h2>
 				<div className="technique-detail-tag-container">
 					{technique.tags ? (
-						technique.tags.map(tag => <Tag key={tag.id} text={tag.name} tagType="default"/>)
+						technique.tags.map(tag => <Tag key={tag.id} text={tag.name} tagType="default" />)
 					) : (
 						<p>Denna teknik saknar taggar.</p>
 					)
 					}
 				</div>
+
+				<ConfirmPopup
+					popupText={"Är du säker på att du vill ta bort tekniken?"}
+					showPopup={showConfirmPopup}
+					onClick={handleDelete}
+					setShowPopup={() => setShowConfirmPopup(false)}
+				/>
 
 				<div className="technique-detail-button-container">
 					<Button outlined={true} onClick={() => navigate(-1)}>
