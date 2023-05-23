@@ -2,6 +2,19 @@
 
 All API documentation is consolidated here.
 
+# Installation guide
+
+To serve the documentation locally, you will need `python3.8` and `pip3.8`.
+
+```sh
+cd api-docs
+pip3.8 install --user mkdocs mkdocs-material
+mkdocs serve
+```
+
+If `python --version` command reports `3.8`, you can probably use `pip install ...` instead.
+The documentation will now be available at `localhost:8000`.
+
 # Documentation progress
 
 Remove this paragraph when documentation is done.
