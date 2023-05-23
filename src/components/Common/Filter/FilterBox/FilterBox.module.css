@@ -13,9 +13,8 @@ legend {
 }
 
 fieldset {
-	border: 3px solid #201E1F;
-	border-radius: 10px;
-	border-top-color: #201E1F;
+	border: 2px solid var(--black-primary);
+	border-radius: 0.3rem;
 	box-sizing: border-box;
 	padding: 20px;
 	padding-top: 5px;
