@@ -33,7 +33,7 @@ function ExerciseIndex() {
 	const detailURL = "/exercise/exercise_page/"
 	const [popupVisible, setPopupVisible] = useState(false)
 	const [map, mapActions] = useMap()
-	const [sort, setSort] = useState("nameDesc")
+	const [sort, setSort] = useState("nameAsc")
 	const [triggerReload, setTriggerReload] = useState(false)
 
 	useEffect(() => {
