@@ -172,8 +172,8 @@ export default function ExerciseDetailsPage() {
 			</div>
 
 			<div className="d-flex justify-content-between align-items-center">
-				<h2 className="fw-bold">Kommentarer</h2>
-				<Plus size={"24px"} onClick={() => setAddComment(true)} style={{ color: "var(--red-primary)" }} />
+				<h2 className="fw-bold my-auto">Kommentarer</h2>
+				<Plus size={"24px"} onClick={() => setAddComment(true)} style={{ color: "var(--red-primary)", border: "2px solid var(--button-border)", borderRadius: "50%" }} />
 			</div>
 			<div className="w-100">
 				<CommentSection onDelete={id => {
@@ -181,10 +181,10 @@ export default function ExerciseDetailsPage() {
 					setShowDeleteComment(true)
 				}} id={`${ex_id}-cs`} userId={userId} comments={comments} />
 			</div>
-
-			<Button outlined={true} onClick={() => navigate(-1)}><p>Tillbaka</p></Button>
+			<div className="mt-4">
+				<Button outlined={true} onClick={() => navigate(-1)}><p>Tillbaka</p></Button>
+			</div>
 			<Popup isOpen={isAddingComment} title={"Lägg till kommentar"} style={{height: "fit-content"}} setIsOpen={setAddComment}>
-
 				<TextArea errorMessage={commentError} onInput={e => setCommentText(e.target.value)} />
 				<Button onClick={onAddComment}>Skicka</Button>
 			</Popup>
