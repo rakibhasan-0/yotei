@@ -33,13 +33,13 @@ const BeltRow = ({ belt, states, onToggle }) => {
 			<div className={styles.beltItem}>
 				{child ? <>
 					<CheckBox id={`belt-child-${name}`} onClick={toggleChildState} checked={childState} />
-					<BeltIcon id={`belt-child-${name}-text`} belt={child} />
+					<BeltIcon id={`belt-child-${name}-icon`} belt={child} />
 				</> : <div style={{width:"72px"}} />}
 			</div>
-			<p id={"belt-text"} className={styles.beltText}>{name}</p>
+			<p id={`belt-text-${name}`} className={styles.beltText}>{name}</p>
 			<div className={styles.beltItem}>
-				<BeltIcon id={`belt-adult-${name}`} belt={adult} />
-				<CheckBox id={`belt-adult-${name}-text`} onClick={toggleAdultState} checked={adultState} />
+				<BeltIcon id={`belt-adult-${name}-icon`} belt={adult} />
+				<CheckBox id={`belt-adult-${name}`} onClick={toggleAdultState} checked={adultState} />
 			</div>
 		</div>
 	)

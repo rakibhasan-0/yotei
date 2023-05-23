@@ -35,12 +35,12 @@ export default function Component({ item, text, children, id, autoClose, errorMe
 	return (
 		<label className={styles.listLabel}>
 			<div id={id} className={styles.listContainer} style={style}>
-				<div className={styles.listHeader} onClick={() => setToggled(!toggled)}>
+				<div className={styles.listHeader} onClick={() => setToggled(!toggled)} id={`${id}-header`}>
 					<div className={styles.listItem}>
 						{item}
 					</div>
 					<p className={styles.listText}>{text}</p>
-					<div className={[styles.listToggle, toggled ? styles.listRotate : ""].join(" ")}>
+					<div className={[styles.listToggle, toggled ? styles.listRotate : ""].join(" ")} id={`${id}-toggle-dropdown`}>
 						<ChevronDown id={`${id}-dropdown`} size={28} />
 					</div>
 				</div>
