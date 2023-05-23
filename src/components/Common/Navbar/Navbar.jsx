@@ -35,14 +35,22 @@ function Navbar({ testId }) {
 	const navbarRef = useRef(null)
 	useOutsideClick(navbarRef, () => setOpen(false))
 
+	function disableScroll() {
+		document.body.style.overflow = "hidden"
+	}
+
+	function enableScroll() {
+		document.body.style.overflow = "scroll"
+	}
+
 	return (
 		<nav data-testid={testId} className={styles.commonNavbar} ref={navbarRef}>
-			<HamburgerIcon role="button" className={styles.commonNavbarIcon} onClick={() => setOpen(true)}/>
+			<HamburgerIcon role="button" className={styles.commonNavbarIcon} onClick={() => {setOpen(true), disableScroll()}}/>
 			<img src="/ubk-logga.jpg" className={styles.budoLogo} />
 
 			<div className={`${styles.commonNavbarSidebar} p-4  ${open ? styles.open : ""}`}>
 
-				<CloseIcon role="button" className={styles.commonNavbarIconClose} onClick={() => setOpen(false)} />
+				<CloseIcon role="button" className={styles.commonNavbarIconClose} onClick={() => {setOpen(false), enableScroll()}} />
 
 				<Button width={"100%"} onClick={() => navigateAndClose("/plan")}>
 					<h1 className={styles.commonNavbarButton}>Grupper</h1>
@@ -69,7 +77,7 @@ function Navbar({ testId }) {
 				</Button>
 
 			</div>
-			<div className={`${styles.boxShadowBackground} ${open ? styles.boxShadowBackgroundOpen : styles.boxShadowBackgroundClosed}`} onClick={() => setOpen(false)}/>
+			<div className={`${styles.boxShadowBackground} ${open ? styles.boxShadowBackgroundOpen : styles.boxShadowBackgroundClosed}`} onClick={() => {setOpen(false), enableScroll()}}/>
 		</nav>
 	)
 }
