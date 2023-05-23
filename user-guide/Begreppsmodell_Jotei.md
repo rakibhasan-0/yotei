@@ -25,21 +25,21 @@ Ett pass kan kopplas till ett **tillfälle**, så att tränare enkelt kan planer
 _Exempel_
  Vi har vår grupp  “Grön och gul barn”. Till vårt extratillfälle den 5e augusti vill vi planera hur träningen ska se ut. Vi skapar ett nytt pass där vi planerar vilka aktiviteter som ska ske. Vi kopplar det passet till vårt tillfälle.
 
-##Aktiviteter 
+## Aktiviteter 
 Aktivitet är ett samlingsnamn för tekniker och övningar. Under pass kan man även välja att lägga till fri text som en aktivitet, men det är inget som sparas som varken teknik eller övning. 
 
-###Tekniker
+### Tekniker
 Tekniker är tekniker som används i Budo. Dessa finns i databasen för applikationen samt går att skapa nya. En teknik är kopplad till ett  bälte. Tekniker kan också vara något som kallas för ***Kihon***. Kihon är grundtekniker för ett visst bälte, alltså de tekniker som man måste klara av för att få ett visst bälte. 
 
 För att få ett högre bälte måste man vid varje tillfälle visa att man klarar kihon för de bälten som är under. På så sätt räknas Kihon för ett lägre bälte till de högre bältena också, även fast de inte är kopplade till just det bältet. 
 
-###Övningar 
+### Övningar 
 Övningar är mer vanliga övningar, så som joggning eller hoppa x-hopp. Det kan också vara andra Budo-träningstyper som inte är tekniker. Dessa finns också i databasen för applikationen samt går att skapa nya. 
 
-##Taggar
+## Taggar
 I applikationen används något som heter taggar. Taggar består av ett namn, och kan kopplas till ett pass, en övning eller en teknik. Taggarna syns i samband med dessa pass,övningar eller tekniker, men de används också vid sökning på pass,övningar och tekniker. 
 
-##Roller
+## Roller
 I Jotei finns det 3 olika roller som en användare kan ha
 
 - Admin kan skapa och hantera användare. Välja/ändra roll. Utöver detta kan admin skapa, redigera och ta bort pass, övningar samt tekniker. Det måste alltid finnas minst en admin-användare. 
@@ -48,7 +48,7 @@ I Jotei finns det 3 olika roller som en användare kan ha
 
 - Vanlig användare kan skapa och redigera sina egna skapade pass. En vanlig användare kan inte skapa eller redigera varken övningar eller tekniker. 
 
-##Sökning i applikationen
+## Sökning i applikationen
 På sidorna pass, övningar och tekniker finns sökfunktionalitet i applikationen. Det finns en sökruta där man kan söka med fri text. I denna sökruta kommer förslag på taggar som matchar fritexten upp, där kan man välja att lägga till taggar som man också vill ska vara med i sökningen. Viktigt här är att det bara dyker upp taggar som är kopplade till den sida man är på. Söker man exempelvis bland pass så kommer det bara upp förslag på taggar som är kopplade till ett pass. 
 
 Filtrering finns också på sidorna och fungerar lite olika: 
