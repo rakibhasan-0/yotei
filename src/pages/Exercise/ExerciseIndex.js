@@ -50,10 +50,10 @@ function ExerciseIndex() {
 		await fetch(url, {headers})
 			.then(res => res.json())
 			.then((data) => {
+				setVisibleList("") // Need to empty list before inserting new data.
 				setVisibleList(data)
-			})
-			.catch(console.log)
-	} 
+			})            
+	}
 
 	useEffect(() => {
 		const args = {
