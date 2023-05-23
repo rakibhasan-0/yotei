@@ -66,7 +66,7 @@ export default function Popup({ title, id, isOpen, setIsOpen, children, isNested
 					</button>
 					{title && <div className={styles.horizontalLine} />}
 				</div>
-				<div className={styles.content}>
+				<div className={styles.content} id = "scrollable-content">
 					{children}
 					{/* This div is here to force the browser to make this container scrollable
 						It needs to be here so that Safari prioritizes scrolling this container

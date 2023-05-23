@@ -15,6 +15,7 @@ import { ChevronRight } from "react-bootstrap-icons"
 import ErrorStateSearch from "../../../components/Common/ErrorState/ErrorStateSearch"
 import style from "./AddActivity.module.css"
 
+import InfiniteScrollComponent from "../../../components/Common/List/InfiniteScrollComponent"
 
 /**
  * This component is used to add activities to a workout. It contains two tabs, 
@@ -26,7 +27,7 @@ import style from "./AddActivity.module.css"
  * @param {function} setShowActivityInfo Callback function to report selected activities
  *  
  * @author Kraken (Grupp 7)
- * @since 2023-05-16
+ * @since 2023-05-23
  */
 function AddActivity({ id, setShowActivityInfo }) {
 
@@ -73,8 +74,10 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 */
 	useEffect(() => {
 		setFetchedTech(false)
-		setTechniques(techniques.filter(technique => checkedActivities.includes(technique)))
+		let filtered = techniques.filter(technique => checkedActivities.includes(technique))
+		setTechniques(filtered)
 		searchTechniques()
+		
 	}, [searchTechText, selectedBelts, kihon, selectedTechTags])
 
 	/**
@@ -154,13 +157,12 @@ function AddActivity({ id, setShowActivityInfo }) {
 		}
 
 		getTechniques(args, token, map, mapActions, (result) => {
-			result.results = result.results.filter(technique => !checkedActivities.includes(technique))
-			setTechniques((techniques) => [...techniques, ...result.results])
+			const res = result.results.filter((technique) => !checkedActivities.includes(technique))
+			setTechniques((techniques) => [...techniques, ...res])
 			setSuggestedTechTags(result.tagCompletion)
 			setFetchedTech(true)
 		})
 	}
-
 
 	/**
 	 * Fetches exercises from the backend.
@@ -208,23 +210,29 @@ function AddActivity({ id, setShowActivityInfo }) {
 							onKihonChange={handleKihonChanged}
 							id="test">
 						</TechniqueFilter>
-						{techniques.map((technique, key) => (
-							<TechniqueCard
-								id={"technique-list-item-" + technique.id}
-								checkBox={
-									<CheckBox
-										id=""
-										checked={checkedActivities.includes(technique)}
-										onClick={() => onActivityToggle(technique, "technique")}
+
+						{
+							<InfiniteScrollComponent>
+								{techniques.map((technique, key) => (
+									<TechniqueCard
+										id={"technique-list-item-" + technique.id}
+										checkBox={
+											<CheckBox
+												checked={checkedActivities.includes(technique)}
+												onClick={() => onActivityToggle(technique, "technique")}
+											/>
+										}
+										technique={technique}
+										key={key}
 									/>
-								}
-								technique={technique}
-								key={key}
-							/>
-						))}
-						{(techniques.length === 0 && fetchedTech) &&
+								))}
+								{(techniques.length === 0 && fetchedTech) &&
 							<ErrorStateSearch id="add-activity-no-technique" message="Kunde inte hitta tekniker" />
+								}
+							</ InfiniteScrollComponent>
 						}
+
+
 					</Tab>
 					<Tab eventKey="exercise" title="Övningar" tabClassName={style.tab}>
 						<div className={style.searchBar}>
@@ -239,24 +247,29 @@ function AddActivity({ id, setShowActivityInfo }) {
 								setSuggestedTags={setSuggestedExerTags}
 							/>
 						</div>
-						{exercises.map((exercise, key) => (
-							<ExerciseListItem
-								id={exercise.id}
-								text={exercise.name}
-								detailURL={"/exercise/exercise_page/"}
-								item={
-									<CheckBox
-										id=""
-										checked={checkedActivities.includes(exercise)}
-										onClick={() => onActivityToggle(exercise, "exercise")}
+
+						{
+							<InfiniteScrollComponent>
+								{exercises.map((exercise, key) => (
+									<ExerciseListItem
+										id={exercise.id}
+										text={exercise.name}
+										detailURL={"/exercise/exercise_page/"}
+										item={
+											<CheckBox
+												id=""
+												checked={checkedActivities.includes(exercise)}
+												onClick={() => onActivityToggle(exercise, "exercise")}
+											/>
+										}
+										key={key}
+										index={key}
 									/>
-								}
-								key={key}
-								index={key}
-							/>
-						))}
-						{(exercises.length === 0 && fetchedExer) &&
+								))}
+								{(exercises.length === 0 && fetchedExer) &&
 							<ErrorStateSearch id="add-activity-no-exercise" message="Kunde inte hitta övningar" />
+								}
+							</InfiniteScrollComponent>
 						}
 					</Tab>
 				</Tabs>

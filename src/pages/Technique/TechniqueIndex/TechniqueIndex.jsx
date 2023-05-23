@@ -11,6 +11,7 @@ import Popup from "../../../components/Common/Popup/Popup"
 import CreateTechnique from "../CreateTechnique/CreateTechnique"
 import { useCookies } from "react-cookie"
 import TechniqueCard from "../../../components/Common/Technique/TechniqueCard/TechniqueCard"
+import InfiniteScrollComponent from "../../../components/Common/List/InfiniteScrollComponent"
 
 /**
  * The technique index page.
@@ -21,7 +22,7 @@ import TechniqueCard from "../../../components/Common/Technique/TechniqueCard/Te
  * @since 2023-05-03
  */
 export default function TechniqueIndex() {
-	const [techniques, setTechniques] = useState()
+	const [techniques, setTechniques] = useState([])
 	const context = useContext(AccountContext)
 	const [cookies, setCookie] = useCookies(["technique-filter"])
 
@@ -100,14 +101,14 @@ export default function TechniqueIndex() {
 					</TechniqueFilter>
 				</div>
 
-				<div>
-					{techniques && techniques.map((technique) =>
+				<InfiniteScrollComponent>
+					{techniques.map((technique, key) =>
 						<TechniqueCard
-							key={technique.techniqueID}
+							key={key}
 							technique={technique}
 							checkBox={false}>
 						</TechniqueCard>)}
-				</div>
+				</InfiniteScrollComponent>
 			</div>
 			
 			<RoundButton id="technique-add-button" onClick={() => setShowPopup(true)}>
