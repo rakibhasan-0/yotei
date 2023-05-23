@@ -12,6 +12,7 @@ import CreateTechnique from "../CreateTechnique/CreateTechnique"
 import { useCookies } from "react-cookie"
 import TechniqueCard from "../../../components/Common/Technique/TechniqueCard/TechniqueCard"
 import InfiniteScrollComponent from "../../../components/Common/List/InfiniteScrollComponent"
+import { isAdmin } from "../../../utils"
 
 /**
  * The technique index page.
@@ -111,9 +112,11 @@ export default function TechniqueIndex() {
 				</InfiniteScrollComponent>
 			</div>
 			
-			<RoundButton id="technique-add-button" onClick={() => setShowPopup(true)}>
-				<Plus className="plus-icon" />
-			</RoundButton>
+			{isAdmin(context) &&
+				<RoundButton id="technique-add-button" onClick={() => setShowPopup(true)}>
+					<Plus className="plus-icon" />
+				</RoundButton>
+			}
 		</>
 	)
 

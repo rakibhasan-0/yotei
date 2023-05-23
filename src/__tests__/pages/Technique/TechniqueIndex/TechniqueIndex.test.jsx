@@ -5,6 +5,8 @@ import userEvent from "@testing-library/user-event"
 import TechniqueIndex from "../../../../pages/Technique/TechniqueIndex/TechniqueIndex"
 import "@testing-library/jest-dom"
 import { MemoryRouter } from "react-router-dom"
+import { AccountContext } from "../../../../context"
+
 
 import { rest } from "msw"
 import { server } from "../../../server"
@@ -14,16 +16,39 @@ server.events.on("request:start", requestSpy)
 
 configure({testIdAttribute: "id"})
 
-describe("should render components", () => {
-	test("the search bar", () => {
-		render (
+test("should render the search bar", () => {
+	render (
+		<MemoryRouter>
+			<TechniqueIndex/>
+		</MemoryRouter>
+	)
+	expect(screen.getByTestId("searchbar-technique")).toBeInTheDocument()
+})
+
+test("should render create technique button as admin", () => {
+	render (
+		// eslint-disable-next-line no-dupe-keys
+		<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", undefined }}>
 			<MemoryRouter>
 				<TechniqueIndex/>
 			</MemoryRouter>
-		)
-		expect(screen.getByTestId("searchbar-technique")).toBeInTheDocument()
-	})
+		</AccountContext.Provider>
+	)
 
+	expect(screen.getByTestId("technique-add-button")).toBeInTheDocument()
+})
+
+test("should not render create technique button when user is not admin", () => {
+	render (
+		// eslint-disable-next-line no-dupe-keys
+		<AccountContext.Provider value={{ undefined, role: "USER", userId: "", undefined }}>
+			<MemoryRouter>
+				<TechniqueIndex/>
+			</MemoryRouter>
+		</AccountContext.Provider>
+	)
+
+	expect(screen.queryByTestId("technique-add-button")).not.toBeInTheDocument()
 })
 
 describe("should update", () => {
@@ -108,9 +133,12 @@ describe("should update", () => {
 	// The initial technique and the added technique should be in the document
 	test("when a technique is created", async () => {
 		render (
-			<MemoryRouter>
-				<TechniqueIndex/>
-			</MemoryRouter>
+			// eslint-disable-next-line no-dupe-keys
+			<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", undefined }}>
+				<MemoryRouter>
+					<TechniqueIndex/>
+				</MemoryRouter>
+			</AccountContext.Provider>
 		)
 
 		const user = userEvent.setup()
