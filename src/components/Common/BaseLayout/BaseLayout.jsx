@@ -1,5 +1,6 @@
 import { Outlet } from "react-router"
 import Navbar from "../Navbar/Navbar"
+import styles from "./BaseLayout.module.css"
 /**
  * The base layout used for all pages.
  * Adds the navbar on top, and a bootstrap m-4 margin around all contents.
@@ -16,10 +17,12 @@ import Navbar from "../Navbar/Navbar"
  */
 function BaseLayout({ id }) {
 	return (
-		<div id={id} className="m-4">
+		<>
 			<Navbar/>
-			<Outlet/>
-		</div>
+			<div id={id} className={styles.container}>
+				<Outlet/>
+			</div>
+		</>
 	)
 }
 export default BaseLayout

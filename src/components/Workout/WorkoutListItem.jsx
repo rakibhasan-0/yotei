@@ -13,7 +13,7 @@ import FavoriteButton from "./WorkoutFavoriteButton"
 
 export default function WorkoutListItem({ workout, favoriteCallback}) {
 	return (
-		<div className="row align-items-center font-weight-bold workout-item-row">
+		<div className="row align-items-center font-weight-bold workout-item-row mb-3" style={{marginRight: 0, marginLeft: 0}}>
 			<div className="col-2 workout-star">
 				<FavoriteButton workout={workout} favoriteCallback={favoriteCallback}/>
 			</div>

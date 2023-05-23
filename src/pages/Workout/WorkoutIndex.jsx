@@ -6,13 +6,13 @@ import FilterContainer from "../../components/Common/Filter/FilterContainer/Filt
 import StarButton from "../../components/Common/StarButton/StarButton"
 import { useCookies } from "react-cookie"
 
-import ActivityList from "../../components/Activity/ActivityList"
 import "./WorkoutIndex.css"
 import { AccountContext } from "../../context"
 import DatePicker, { getFormattedDateString } from "../../components/Common/DatePicker/DatePicker"
 import RoundButton from "../../components/Common/RoundButton/RoundButton"
 import { Plus } from "react-bootstrap-icons"
 import {toast} from "react-toastify"
+import WorkoutListItem from "../../components/Workout/WorkoutListItem"
 
 /**
  * Workout class. 
@@ -26,7 +26,7 @@ import {toast} from "react-toastify"
  * @version 1.0
  */
 
-export default function WorkoutIndex({detailURL}) {
+export default function WorkoutIndex() {
 	const { userId, token } = useContext(AccountContext)
 	const [ workouts, setWorkouts ] = useState()
 	const [ searchText, setSearchText ] = useState("")
@@ -59,7 +59,7 @@ export default function WorkoutIndex({detailURL}) {
 
 	useEffect(fetchWorkouts, [dates.from, dates.to, filterFavorites, searchText, token, userId, cache, cacheActions, tags])
 	return (
-		<div id="workout-page-content" className="container p-0 col-lg-8 col-md-10 col-sm-12 align-content-center">
+		<>
 			<div id="search-area">
 				<center>
 					<h1>Pass</h1>
@@ -75,15 +75,15 @@ export default function WorkoutIndex({detailURL}) {
 					/>
 					<FilterContainer >
 						<div id="filter-container" className="container">
-							<div className="row row-cols-2 align-items-center filter-row">
+							<div className="row align-items-center">
 								<p className="m-0 col text-left">Från</p>
 								<DatePicker className="col" selectedDate={dates.from} onChange={handleFromDateChange}/>
 							</div>
-							<div className="row row-cols-2 align-items-center filter-row">
+							<div className="row align-items-center filter-row">
 								<p className="m-0 col text-left">Till</p>
 								<DatePicker className="col" selectedDate={dates.to} onChange={handleToDateChange}/>
 							</div>
-							<div className="row row-cols-2 align-items-center filter-row">
+							<div className="row align-items-center filter-row">
 								<p className="m-0 col text-left">Favoriter</p>
 								<div className="col" id="filter-favorites" style={{ maxWidth: "60px" }}>
 									<StarButton toggled={filterFavorites} onClick={toggleFilterFavorite}/>
@@ -94,11 +94,21 @@ export default function WorkoutIndex({detailURL}) {
 				</center>
 			</div>
 			{workouts && 
-				<ActivityList id="workout-list" activities={workouts} apiPath={"workouts"} detailURL={detailURL} favoriteCallback={toggleIsFavorite}/>}
-			<RoundButton linkTo={"/workout/create"}>
+				<div className="grid-striped mt-3">
+					{workouts.map((workout, index) => {
+						return (
+							<WorkoutListItem
+								key={index}
+								workout={workout}
+								favoriteCallback={toggleIsFavorite}
+							/>)
+					})}
+				</div>
+			}
+			<RoundButton linkTo="/workout/create">
 				<Plus />
 			</RoundButton>
-		</div>
+		</>
 	)
 
 	function handleFromDateChange(date) {

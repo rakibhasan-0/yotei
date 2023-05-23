@@ -66,12 +66,16 @@ export default function Popup({ title, id, isOpen, setIsOpen, children, width, h
 		if (height) {
 			popupStyle.height = `${height}%`
 		}
-
+		if(!maxHeight) {
+			popupStyle.maxWidth = getComputedStyle(document.documentElement)
+				.getPropertyValue("--layout-max-width")
+		}
+		
 	}
 
 	return (
 		<>
-			<div className={background} onClick={() => setIsOpen(false)} />
+			<div className={background} style={{}} onClick={() => setIsOpen(false)} />
 			<div
 				className={`popup ${isNested && "popup-nested"}`}
 				id={id}

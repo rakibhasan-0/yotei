@@ -3,19 +3,6 @@
 * @edited 2023 - Cyclops (Group 5) dv21adt
 */
 
-@media  (max-width: 540px) {
-    .grid-striped{
-        width: auto;
-    }
-}
-
-
-@media (min-width: 540px) {
-    .grid-striped{
-        width: 540px;
-    }
-}
-
 /*
 * Changes the background color of every other listitem.
 */
