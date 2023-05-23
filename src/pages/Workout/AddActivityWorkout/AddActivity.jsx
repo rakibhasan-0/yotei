@@ -7,13 +7,14 @@ import useMap from "../../../hooks/useMap"
 import SearchBar from "../../../components/Common/SearchBar/SearchBar"
 import { getTechniques, getExercises } from "../../../components/Common/SearchBar/SearchBarUtils"
 import TechniqueFilter from "../../../components/Common/Filter/TechniqueFilter"
-import style from "./AddActivity.module.css"
 import CheckBox from "../../../components/Common/CheckBox/CheckBox"
 import TechniqueCard from "../../../components/Common/Technique/TechniqueCard/TechniqueCard"
 import ExerciseListItem from "../../../components/Common/ExerciseCard/ExerciseListItem"
 import RoundButton from "../../../components/Common/RoundButton/RoundButton"
 import { ChevronRight } from "react-bootstrap-icons"
 import ErrorStateSearch from "../../../components/Common/ErrorState/ErrorStateSearch"
+import style from "./AddActivity.module.css"
+
 
 /**
  * This component is used to add activities to a workout. It contains two tabs, 
@@ -187,7 +188,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 		<div id={id}>
 			<Modal.Body style={{padding: "0"}}>
 				<Tabs defaultActiveKey="technique" className={style.tabs}>
-					<Tab eventKey="technique" title="Tekniker" tabClassName="tab">
+					<Tab eventKey="technique" title="Tekniker" tabClassName={`nav-link ${style.tab}`}>
 						<div className={style.searchBar}>
 							<SearchBar
 								id="technique-search-bar"
@@ -225,7 +226,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 							<ErrorStateSearch id="add-activity-no-technique" message="Kunde inte hitta tekniker" />
 						}
 					</Tab>
-					<Tab eventKey="exercise" title="Övningar" tabClassName="tab">
+					<Tab eventKey="exercise" title="Övningar" tabClassName={style.tab}>
 						<div className={style.searchBar}>
 							<SearchBar
 								id="exercise-search-bar"
