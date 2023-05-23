@@ -3,6 +3,25 @@ import mkdocs.plugins
 
 regex = re.compile(r'<api>([\s\S]*?)<\/api>', re.MULTILINE)
 
+def get_http_response_name(code):
+    code = str(code)
+    codes = {
+        "200": "OK",
+        "201": "Created",
+        "204": "No Content",
+        "400": "Bad Request",
+        "401": "Unauthorized",
+        "403": "Forbidden",
+        "404": "Not Found",
+        "500": "Internal Server Error"
+    }
+    
+    if code in codes:
+        return codes[code]
+    else:
+        return None
+
+
 def table(dict):
   builder = ""
   builder += "| Field | Description | Example |\n|--|--|--|\n"
@@ -61,11 +80,14 @@ def generateHtml(content):
 
     if "examples" in desc:
         for e in desc["examples"]:
-            builder += f"<details class=\"example\" markdown=\"1\"><summary><strong>Example</strong> <code>{e['name']}</code></summary>\n"
+            code = e['name']
+            name = get_http_response_name(code)
+            full_name = f"{code} - {name}" if name else code
+            builder += f"<details class=\"example\" markdown=\"1\"><summary><strong>Example</strong> <code>{full_name}</code></summary>\n"
             builder += f"```\n{e['request']}\n```\n\n"
             builder += f"**Response** _type_: `{e['response']['content-type']}`\n"
             builder += f"```\n{e['response']['body']}\n```\n"
-            builder += "</details>\n"
+            builder += "</details>\n\n"
 
     return builder
 

@@ -6,7 +6,7 @@ and understood the documentation, please sign-off by adding your name and date b
 
 | Name          | Date            |
 |--|--|
-| Minotaur      | 15th May 2023   |
+| Minotaur      | 23th May 2023   |
 <!-- sign-off-sheet:end -->
 
 
@@ -45,6 +45,16 @@ examples:
         content-type: text/plain
         body: |
             eyJ0eXAiOiJKV1Qi...OYQbtZnoWHo7pKs
+  - name: 406
+    request: |
+        POST /user/verify
+
+        {
+            "username": "admin"
+        }
+    response:
+        content-type: text/plain
+        body: <empty>
 </api>
 
 <api>
@@ -237,39 +247,49 @@ examples:
 
 <api>
 name: Remove user
-path: DELETE /user/remove/:username
+path: DELETE /user/remove/:id
 locked: true
 text: |
-    Removes a user with the username `:username`.
+    Removes a user with the id `:id`.
 
 path-params:
     parameters:
-        username: The username of the user to delete. | admin
+        id: The id of the user to delete. | 1
 
 examples:
   - name: 200
-    request: DELETE /user/changerole/admin
+    request: DELETE /user/remove/1
     response:
         content-type: text/plain
         body: <empty>
+  - name: 400
+    request: DELETE /user/remove/-1000
+    response:
+      content-type: text/plain
+      body: Användaren finns inte
 </api>
 
 <api>
 name: Change role for user
-path: POST /user/changerole/:username
+path: POST /user/:id/role/:id
 locked: true
 text: |
-  Changes the role on a user with username `:username`.
-  The endpoint is a toggle between `USER` and `ADMIN` roles.
+  Changes the role on a user with id `:id` to role id `:role`.
 
 path-params:
   parameters:
-    username: The username of the user to change role. | admin
+    id: The id of the user to change role. | 1
+    role: The role to change to. | 0,1,2
 
 examples:
   - name: 200
-    request: DELETE /user/changerole/admin
+    request: POST /user/1/role/1
     response:
       content-type: text/plain
       body: <empty>
+  - name: 400
+    request: POST /user/-1000/role/0
+    response:
+      content-type: text/plain
+      body: Användaren finns inte
 </api>
