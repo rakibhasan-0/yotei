@@ -255,12 +255,11 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 				/>
 				<div className={"checkboxes-container"}>
 					<div className={"add-checkbox"}>
-						<p className={"checkbox-text"}>Lägg till fler övningar</p>
-						<CheckBox id="EC-AddMultipleChk" disabled={false} checked={addBoxChecked} onClick={addCheckboxClicked}/>
+						<CheckBox id="EC-AddMultipleChk" disabled={false} checked={addBoxChecked} onClick={addCheckboxClicked} label={"Lägg till fler övningar"}/>
 					</div>
+					<div style={{height: "1rem"}}/>
 					<div className={"add-checkbox"}>
-						<p className={addBoxChecked ? "checkbox-text" : "checkbox-inactive"}>Rensa text</p>
-						<CheckBox id="EC-ClearMultipleChk" disabled={!addBoxChecked} checked={eraseBoxChecked} onClick={setEraseBoxChecked}/>
+						<CheckBox id="EC-ClearMultipleChk" disabled={!addBoxChecked} checked={eraseBoxChecked} onClick={setEraseBoxChecked} label={"Rensa text"}/>
 					</div>
 				</div>
 				<div className="create-exercise-btn-container">
