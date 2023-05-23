@@ -184,7 +184,7 @@ export default function ExerciseDetailsPage() {
 						}} id={`${ex_id}-cs`} userId={userId} comments={comments} />
 					</div>
 	
-					<Button outlined={true} onClick={() => navigate(-1)}>Tillbaka</Button>
+					<Button outlined={true} onClick={() => navigate(-1)}><p>Tillbaka</p></Button>
 					
 				</div>
 			</div>

@@ -270,7 +270,7 @@ export default function ExerciseEdit({setShowPopup}) {
 						outlined={"button-back"}
 						onClick={() => setShowPopup(false)}
 						width={150}>
-						Tillbaka
+						<p>Tillbaka</p>
 					</Button>
 					<Button
 						id={"addBtn"}
