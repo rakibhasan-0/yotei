@@ -77,6 +77,8 @@ export default function TechniqueIndex() {
 				</Popup>
 			</div>
 
+			<h1>Tekniker</h1>
+
 			<div>
 				<SearchBar
 					id="searchbar-technique"
