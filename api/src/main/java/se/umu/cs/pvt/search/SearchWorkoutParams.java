@@ -1,5 +1,8 @@
 package se.umu.cs.pvt.search;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +24,17 @@ public class SearchWorkoutParams {
     private String user_id;
 
     public SearchWorkoutParams(Map<String, String> urlQuery) {
-        name = urlQuery.get("name");
+
+        try {
+			if(urlQuery.get("name") != null)
+			{
+				name = new String(URLDecoder.decode(urlQuery.get("name"), StandardCharsets.UTF_8.toString()));
+			}	
+		} catch (UnsupportedEncodingException e) {
+			// Failed to decode string use uncoded string.
+			name = urlQuery.get("name");
+		}
+
         user_id = urlQuery.get("id");
 
         if(urlQuery.containsKey("from")) from = parseDateString(urlQuery.get("from"));

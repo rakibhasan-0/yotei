@@ -1,5 +1,8 @@
 package se.umu.cs.pvt.search;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +19,15 @@ public class SearchTagsParams {
     private List<String> tags;
 
     public SearchTagsParams(Map<String, String> urlQuery){
-        name = urlQuery.get("name");
+        try {
+			if(urlQuery.get("name") != null)
+			{
+				name = new String(URLDecoder.decode(urlQuery.get("name"), StandardCharsets.UTF_8.toString()));
+			}	
+		} catch (UnsupportedEncodingException e) {
+			// Failed to decode string use uncoded string.
+			name = urlQuery.get("name");
+		}
 
         if (urlQuery.get("tagAmount") != null) {
             amount = Integer.parseInt(urlQuery.get("tagAmount"));

@@ -1,5 +1,8 @@
 package se.umu.cs.pvt.search;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import se.umu.cs.pvt.user.User.Role;
 
@@ -14,7 +17,15 @@ public class SearchUserParams {
     private String role;
 
     public SearchUserParams(Map<String, String> urlQuery){
-        name = urlQuery.get("name");
+        try {
+			if(urlQuery.get("name") != null)
+			{
+				name = new String(URLDecoder.decode(urlQuery.get("name"), StandardCharsets.UTF_8.toString()));
+			}	
+		} catch (UnsupportedEncodingException e) {
+			// Failed to decode string use uncoded string.
+			name = urlQuery.get("name");
+		}
         id = urlQuery.get("id");
         String inputRole = urlQuery.get("role");
         if (inputRole != null) {
