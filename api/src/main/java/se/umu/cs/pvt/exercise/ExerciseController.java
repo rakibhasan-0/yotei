@@ -18,7 +18,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.text.Collator;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Class to get, insert, update, and remove exercise.
@@ -81,6 +84,44 @@ public class ExerciseController {
 
         return exerciseList;
     }
+
+
+@GetMapping("/all2")
+public Object getExercises2(@RequestParam(value = "sort", defaultValue = "nameAsc") String sort) {
+    List<Exercise> exerciseList;
+    Comparator<Exercise> exerciseComparator;
+
+    switch (sort) {
+        case "nameDesc":
+            exerciseComparator = Comparator.comparing(Exercise::getName, getCollator().reversed());
+            break;
+        case "durationAsc":
+            exerciseComparator = Comparator.comparing(Exercise::getDuration);
+            break;
+        case "durationDesc":
+            exerciseComparator = Comparator.comparing(Exercise::getDuration).reversed();
+            break;
+        default:
+            exerciseComparator = Comparator.comparing(Exercise::getName, getCollator());
+    }
+
+    exerciseList = exerciseRepository.findAll();
+    exerciseList.sort(exerciseComparator);
+
+    if (exerciseList == null) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    return exerciseList;
+}
+
+private Collator getCollator() {
+    Locale swedishLocale = new Locale("sv", "SE");
+    Collator collator = Collator.getInstance(swedishLocale);
+    collator.setStrength(Collator.SECONDARY); // Adjust the collation strength if needed
+    return collator;
+}
+
 
 
     
