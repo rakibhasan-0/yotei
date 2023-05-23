@@ -251,6 +251,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 									/>
 								}
 								key={key}
+								index={key}
 							/>
 						))}
 						{(exercises.length === 0 && fetchedExer) &&

@@ -27,14 +27,18 @@ function TechniqueFilter({id, belts, onBeltChange, kihon, onKihonChange}){
 	return (
 		<div id={id} className={style.filterPos}>
 			<FilterContainer id={"technique-filter-container"}>
-				<BeltPicker id={"techniqueFilter-BeltPicker"} onToggle={onBeltChange} states={belts} />
-				{/** If no belts have been picked, hide the "Valda bälten" text. */}
-				<p className={style.selectedText}>{!(belts.length > 0) ? "" : "Valda bälten"}</p>
-				<div className={style.selectedGroup}>
+				<div className={style.techniqueBeltPicker}>
+					<BeltPicker id={"techniqueFilter-BeltPicker"} onToggle={onBeltChange} states={belts} />
+				</div>
+				<p className={(belts.length > 0) ? style.selectedTextVis : style.selectedTextHid }>
+					{(belts.length > 0) ? "Valda bälten" : ""}
+				</p>
+				<div className={(belts.length > 0) ? style.selectedGroupVis : style.selectedGroupHid}>
 					{belts?.map((belt, index) => (
 						<BeltIcon key={index} belt={belt}/>
 					))}
 				</div>
+				
 				<div className={style.kihonGroup}>
 					<CheckBox id={"techniqueFilter-KihonCheck"} checked={kihon} onClick={()=> onKihonChange(!kihon)}/>
 					<p className={style.kihonText}>Kihon</p>
