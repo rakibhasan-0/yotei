@@ -35,7 +35,7 @@ import Popup from "../Popup/Popup"
 export default function MiniPopup({ title, id, isOpen, setIsOpen, children }) {
 
 	return (
-		<Popup id={id} isOpen={isOpen} setIsOpen={setIsOpen} maxWidth={350} maxHeight={250}>
+		<Popup id={id} isOpen={isOpen} setIsOpen={setIsOpen} style={{maxWidth: "350px", maxHeight: "250px"}}>
 			<h1>{title}</h1>
 			{children}
 		</Popup>

@@ -145,8 +145,6 @@ function ExerciseIndex() {
 				id={"create-exercise-popup"}
 				isOpen={popupVisible}
 				setIsOpen={setPopupVisible}
-				width={90}
-				height={95}
 				noBackground={false}
 			>
 				<ExerciseCreate setShowPopup={setPopupVisible} onClose={handleClosePopup}/>

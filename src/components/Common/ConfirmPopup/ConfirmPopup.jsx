@@ -10,8 +10,6 @@ import Button from "../Button/Button"
  *     id @type {string} - Sets the id of the popup window
  * 	   showPopup @type {boolean} - Sets if popup should be visible or not
  *     setShowPopup @type {useState} - Sets the state of the popup window
- * 	   maxWidth @type {pixels} - Max width of the popup window
- * 	   maxHeight @type {pixels} - Max width of the popup window
  *     onClick @type {function} - For the delete button to do something
  * 	   popupText @type {string} - Text to be displayed in the popup
  *
@@ -42,10 +40,12 @@ export default function ConfirmPopup({ onClick, id, showPopup, setShowPopup, pop
 			id={id}
 			isOpen={showPopup}
 			setIsOpen={setShowPopup}
-			useNoHeightWidth={true}
-			maxHeight={231}
-			maxWidth={333}>
-			<div id={`${id}-text`} style={{textAlign:"center"}}>
+			style={{
+				maxHeight: "300px",
+				maxWidth: "333px"
+			}}
+		>
+			<div id={`${id}-text`}>
 				<p className={styles.font}>{ popupText }</p>
 			</div>	
 			<div className={styles.outerButtonpanel}>

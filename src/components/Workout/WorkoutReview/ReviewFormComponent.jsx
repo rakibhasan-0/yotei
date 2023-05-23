@@ -113,7 +113,7 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 	}
 
 	return (
-		<Popup title={"Utvärderingar"} id={"review-popup"} isOpen={isOpen} setIsOpen={setIsOpen} width={90} height={95} noBackground={false} isNested={false}>
+		<Popup title={"Utvärderingar"} id={"review-popup"} isOpen={isOpen} setIsOpen={setIsOpen}>
 			<div className="d-flex flex-column align-items-center">
 				<h2 style={{marginBottom: "20px"}}>Lägg till utvärdering</h2>
 				<div className="d-flex flex-row">

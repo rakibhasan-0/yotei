@@ -68,14 +68,13 @@ export default function TechniqueIndex() {
 
 	return (
 		<>
-			<div>
-				<Popup
-					title="Skapa teknik"
-					isOpen={showPopup}
-					setIsOpen={setShowPopup}>
-					<CreateTechnique setIsOpen={setShowPopup} />
-				</Popup>
-			</div>
+			<Popup
+				title="Skapa teknik"
+				isOpen={showPopup}
+				setIsOpen={setShowPopup}
+			>
+				<CreateTechnique setIsOpen={setShowPopup} />
+			</Popup>
 
 			<h1>Tekniker</h1>
 

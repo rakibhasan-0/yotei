@@ -150,7 +150,6 @@ export default function ExerciseDetailsPage() {
 					</div>
 				}
 			</div>
-
 			<div className="d-flex flex-row" style={{ gap: "10px" }}>
 				<Clock />
 				<p>{exercise?.duration} min</p>
@@ -184,7 +183,8 @@ export default function ExerciseDetailsPage() {
 			</div>
 
 			<Button outlined={true} onClick={() => navigate(-1)}><p>Tillbaka</p></Button>
-			<Popup isOpen={isAddingComment} title={"Lägg till kommentar"} height={"50"} setIsOpen={setAddComment}>
+			<Popup isOpen={isAddingComment} title={"Lägg till kommentar"} style={{height: "fit-content"}} setIsOpen={setAddComment}>
+
 				<TextArea errorMessage={commentError} onInput={e => setCommentText(e.target.value)} />
 				<Button onClick={onAddComment}>Skicka</Button>
 			</Popup>
