@@ -52,10 +52,12 @@ public class Technique implements Serializable {
     }
 
     /**
-     * Creates a technique
+     * Creates a technique (Used in testing)
      * @param id id of technique
      * @param name name of technique
      * @param description of technique
+     * @param belts a set of belts for technique
+     * @param tags a set of tags for the technique
      */
     public Technique(Long id, String name, String description, Set<Belt> belts, Set<Tag> tags) {
         this.id = id;
@@ -63,6 +65,20 @@ public class Technique implements Serializable {
         this.description = description;
         this.belts = belts;
         this.tags = tags;
+
+        this.trimText();
+    }
+
+    /**
+     * Creates a technique
+     * @param id id of technique
+     * @param name name of technique
+     * @param description of technique
+     */
+    public Technique(Long id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
 
         this.trimText();
     }

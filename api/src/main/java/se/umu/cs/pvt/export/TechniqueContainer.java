@@ -15,6 +15,10 @@ public class TechniqueContainer {
         this.techniques = techniques;
     }
 
+    public TechniqueContainer() {
+
+    }
+
     public List<TechniqueExportResponse> getTechniques() {
         return techniques;
     }

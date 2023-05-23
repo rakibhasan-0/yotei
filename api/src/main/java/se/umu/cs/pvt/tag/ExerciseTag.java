@@ -40,6 +40,11 @@ public class ExerciseTag implements Serializable {
         this.exerciseId = exerciseId;
     }
 
+    public ExerciseTag(Long exerciseId, Tag tag) {
+        this.exerciseId = exerciseId;
+        this.tag = tag;
+    }
+
 
     public Long getExerciseId() {
         return exerciseId;

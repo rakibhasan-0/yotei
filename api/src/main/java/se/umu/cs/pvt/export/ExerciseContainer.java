@@ -11,6 +11,9 @@ import java.util.List;
 public class ExerciseContainer {
     private List<ExerciseExportResponse> exercises;
 
+    public ExerciseContainer() {
+    }
+
     public ExerciseContainer(List<ExerciseExportResponse> exercises) {
         this.exercises = exercises;
     }

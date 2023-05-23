@@ -38,6 +38,11 @@ public class TechniqueTag implements Serializable {
      * 
      * @param   techId      ID of the Technique.
      */
+    public TechniqueTag(Long techId, Tag tag) {
+        this.techId = techId;
+        this.tag = tag;
+    }
+    
     public TechniqueTag(Long techId) {
         this.techId = techId;
     }

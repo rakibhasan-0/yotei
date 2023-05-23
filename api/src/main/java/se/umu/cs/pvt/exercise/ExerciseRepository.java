@@ -13,6 +13,8 @@ import java.util.Optional;
 public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
     <T> List<T> findAllProjectedBy(Class<T> type);
 
+    Optional<Exercise> getByNameIgnoreCase(String name);
+
     Exercise findByName(String name);
     /* The function findByNameIgnoreCase is used when adding an exercise to the database to make sure that
      * no duplicates are added. */
