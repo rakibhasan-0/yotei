@@ -1,21 +1,36 @@
-.tabs {
-    padding-top: 1rem;
-}
-
 .tabs > li {
     flex: 1;
 }
 
-.tabs > li button {
+.tabs button {
     width: 100%;
     height: 38px;
+    background-color: white;
+    outline: 1px solid black;
 }
+
+.tabs :global(.active) {
+    background-color: var(--red-primary) !important;
+    color: white !important;
+    border: none !important;
+}
+
+.tabs > li .active {
+    background-color: var(--red-primary);
+}
+
 
 .floatRight {
     display: flex;
     justify-content: end;
 }
 
-.tab #searchbar-workouts {
-    margin-bottom: 10rem;
+.tab :global(.activity-list) {
+    margin: 0;
+    padding: 0;
+}
+
+.tab :global(.search-bar) {
+    margin-top: 15px;
+    margin-bottom: 15px;
 }

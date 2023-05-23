@@ -3,25 +3,27 @@ import { Tab, Tabs } from "react-bootstrap"
 import { toast } from "react-toastify"
 import ActivityList from "../../components/Activity/ActivityList"
 import Button from "../../components/Common/Button/Button"
-import FilterBox from "../../components/Common/Filter/FilterBox/FilterBox"
 import SearchBar from "../../components/Common/SearchBar/SearchBar"
 import { getWorkouts } from "../../components/Common/SearchBar/SearchBarUtils"
 import { AccountContext } from "../../context"
-import useMap from "../../hooks/useMap"
 import style from "./Profile.module.css"
 import InputTextFieldBorderLabel from "../../components/Common/InputTextFieldBorderLabel/InputTextFieldBorderLabel"
 import { logOut } from "/src/utils"
+import useMap from "../../hooks/useMap"
+import Divider from "../../components/Common/Divider/Divider"
 
+/**
+ * @author Chimera (dv21aag, c20lln)
+ * @since 2023-05-23
+ * @version 1.0
+ */
 export default function Profile() {
 	const { userId, token } = useContext(AccountContext)
+
 	const [ workouts, setWorkouts ] = useState()
-	const [ favoriteWorkouts, setFavoriteWorkouts ] = useState()
-
 	const [ searchText, setSearchText ] = useState("")
-	const [ tags, setTags ] = useState([])
-	const [ suggestedTags, setSuggestedTags ] = useState([])
-	const [ cache, cacheActions ] = useMap()
 
+	const [ cache, cacheActions ] = useMap()
 	const [password, setPassword] = useState("")
 	const [newPassword, setNewPassword] = useState("")
 	const [verifyNewPassword, setVerifyNewPassword] = useState("")
@@ -32,111 +34,47 @@ export default function Profile() {
 	const [UsernamePassword, setUsernamePassword] = useState("")
 	const [verifyUsernamePassword, setVerifyUsernamePassword] = useState("")
 
-	useEffect(() => fetchWorkouts(false), [undefined, undefined, true, searchText, token, userId, cache, cacheActions, tags])
-	useEffect(() => fetchWorkouts(true), [undefined, undefined, true, searchText, token, userId, cache, cacheActions, tags])
+	/* Workout management */
 
-	return (
-		<div className="container">
-			<div className="row justify-content-center">
-				<div className="col-md-8">
-					<Tabs defaultActiveKey={"FavoriteWorkouts"} className={style.tabs}>
-						<Tab eventKey={"FavoriteWorkouts"} title={"Favoritpass"} className={style.tab}>
-							<SearchBar 
-								id="searchbar-workouts" 
-								placeholder="Sök" 
-								text={searchText} 
-								onChange={setSearchText}
-								addedTags={tags}
-								setAddedTags={setTags}
-								suggestedTags={suggestedTags}
-								setSuggestedTags={setSuggestedTags}
-							/>
-							{workouts && <ActivityList id="workout-list" activities={favoriteWorkouts} apiPath={"workouts"} favoriteCallback={toggleIsFavorite} />}
-						</Tab>
-						<Tab eventKey={"MyWorkouts"} title={"Mina Pass"} className={style.tab}>
-							<SearchBar 
-								id="searchbar-workouts" 
-								placeholder="Sök" 
-								text={searchText} 
-								onChange={setSearchText}
-								addedTags={tags}
-								setAddedTags={setTags}
-								suggestedTags={suggestedTags}
-								setSuggestedTags={setSuggestedTags}
-							/>
-							{workouts && <ActivityList id="workout-list" activities={workouts} apiPath={"workouts"} favoriteCallback={toggleIsFavorite} />}
-						</Tab>
-						<Tab eventKey={"Settings"} title={"Inställningar"} className={style.tab}>
-							<FilterBox title="Lösenord" id={"PasswordBox"} status={true} >
-								<InputTextFieldBorderLabel errorMessage={wrongPassword} onChange={e => {setPassword(e.target.value)}} id="password" type="password" label="Nuvarande lösenord" />
-								<InputTextFieldBorderLabel onChange={e => {setNewPassword(e.target.value)}} id="new-password" type="password" label="Nytt lösenord" />
-								<InputTextFieldBorderLabel errorMessage={missMatchPassword} onChange={e => {setVerifyNewPassword(e.target.value)}} id="verify-password" type="password" label="Bekräfta lösenord" />
-								<div className={style.floatRight}>
-									<Button className="btn btn-primary" onClick={changePassword}>Ändra</Button>
-								</div>
-							</FilterBox>
-							<FilterBox title="Användarnamn" id={"UsernameBox"} status={true} >
-								<InputTextFieldBorderLabel onChange={e => {setNewUsername(e.target.value)}} id="username" type="text" label="Nytt användarnamn" />
-								<InputTextFieldBorderLabel onChange={e => {setUsernamePassword(e.target.value)}} errorMessage={verifyUsernamePassword} id="Password" type="password" label="Lösenord" />
-								<div className={style.floatRight}>
-									<Button className="btn btn-primary" onClick={changeUsername}>Ändra</Button>
-								</div>
-							</FilterBox>
-							<div>
-								<Button onClick={logOut} width={"100%"} className="btn btn-primary">Logga ut</Button>
-							</div>
-						</Tab>
-					</Tabs>
-				</div>
-			</div>
-		</div>
-	)
-
-	function toggleIsFavorite(workout) {
-		workout.favourite = !workout.favourite
-		fetchWorkouts(true)
-	}
-
-	function setError(msg){
-		if (toast.isActive("search-error")) return
-		toast.error(msg, {
-			position: "top-center",
-			autoClose: 5000,
-			hideProgressBar: false,
-			closeOnClick: true,
-			pauseOnHover: true, 
-			draggable: false,
-			progress: undefined,
-			theme: "colored",
-			toastId: "search-error",
-		})
-	}
-
-	function fetchWorkouts(isFavorite) {
-		let args = {
-			from: undefined,
-			to: undefined,
-			text: searchText,
-			selectedTags: tags,
-			id: userId,
-			isFavorite
+	const WorkoutList = ({list}) => {
+		// eslint-disable-next-line no-unused-vars
+		const onFavorite = async (_, workout) => {
+			// Workaround for updating the list
+			// due to how the star button in the activity list works
+			setWorkouts(old => 
+				[...old.map(w => {
+					if (w.workoutID === workout.workoutID) {
+						w.favourite = !w.favourite
+					}
+					return w
+				})]
+			)
 		}
-
-		getWorkouts(args, token, cache, cacheActions, (response) => {
-			if(response.error) {
-				setError("Serverfel: Kunde inte ansluta till servern!")
-			} else {
-				if (isFavorite) {
-					setFavoriteWorkouts(response.results)
-				} else {
-					setWorkouts(response.results)
-				}
-				setSuggestedTags(response.tagCompletion)
-			}
-		})
+		return (
+			<>
+				<SearchBar 
+					id="searchbar-workouts" 
+					placeholder="Sök" 
+					text={searchText} 
+					onChange={setSearchText}
+				/>
+				{list && <ActivityList id="workout-list" activities={list} apiPath={"workouts"} favoriteCallback={onFavorite} />}
+			</>
+		)
 	}
 
-	async function changePassword() {
+	useEffect(() => {
+		getWorkouts({ text: searchText, isFavorite: false, id: userId, selectedTags: ""}, token, cache, cacheActions, list => {
+			if (list.error) {
+				return toast.error("Kunde inte hämta pass!")
+			}
+			setWorkouts(list.results)
+		})
+	}, [searchText, token, userId, cache, cacheActions])
+
+	/* Account management */
+
+	const changePassword = async () => {
 		if (newPassword !== verifyNewPassword) {
 			return setMissMatchPassword("Lösenorden matchar inte")
 		}
@@ -149,17 +87,13 @@ export default function Profile() {
 			body: JSON.stringify({newPassword: newPassword, verifyNewPassword: verifyNewPassword, oldPassword: password, id: userId})
 		}
 		const response = await fetch("/user/updatepassword", requestOptions)
-		verifyPasswordChange(response)
-	}
-
-	function verifyPasswordChange(response) {
 		if (!response.ok) {
 			return setWrongPassword("Lösenordet stämmer inte")
 		}
 		toast.success("Lösenordet har ändrats.")
 	}
 
-	async function changeUsername() {
+	const changeUsername = async () => {
 		setVerifyUsernamePassword(undefined)
 
 		const requestOptions = {
@@ -168,13 +102,40 @@ export default function Profile() {
 			body: JSON.stringify({newUsername: newUsername, password: UsernamePassword, id: userId})
 		}
 		const response = await fetch("/user/updatename", requestOptions)
-		verifyUsername(response)
-	}
-
-	function verifyUsername(response) {
 		if (!response.ok) {
 			return setVerifyUsernamePassword("Lösenordet stämmer inte")
 		}
 		toast.success("Användarnamnet har ändrats.")
 	}
+
+	return (
+		<Tabs defaultActiveKey={"FavoriteWorkouts"} className={style.tabs}>
+			<Tab eventKey={"FavoriteWorkouts"} title={"Favoritpass"} className={style.tab}>
+				<WorkoutList list={workouts?.filter(w => w.favourite)} />
+			</Tab>
+			<Tab eventKey={"MyWorkouts"} title={"Pass"} className={style.tab}>
+				<WorkoutList list={workouts} />
+			</Tab>
+			<Tab eventKey={"Settings"} title={"Inställningar"} className={style.tab}>
+				<Divider option={"h2_center"} title={"Lösenord"} />
+				<InputTextFieldBorderLabel errorMessage={wrongPassword} onChange={e => {setPassword(e.target.value)}} id="password" type="password" label="Nuvarande lösenord" />
+				<InputTextFieldBorderLabel onChange={e => {setNewPassword(e.target.value)}} id="new-password" type="password" label="Nytt lösenord" />
+				<InputTextFieldBorderLabel errorMessage={missMatchPassword} onChange={e => {setVerifyNewPassword(e.target.value)}} id="verify-password" type="password" label="Bekräfta lösenord" />
+				<div className={style.floatRight}>
+					<Button className="btn btn-primary" onClick={changePassword}>Ändra</Button>
+				</div>
+				<Divider option={"h2_center"} title={"Användarnamn"} />
+				<InputTextFieldBorderLabel onChange={e => {setNewUsername(e.target.value)}} id="username" type="text" label="Nytt användarnamn" />
+				<InputTextFieldBorderLabel onChange={e => {setUsernamePassword(e.target.value)}} errorMessage={verifyUsernamePassword} id="Password" type="password" label="Lösenord" />
+				<div className={style.floatRight}>
+					<Button className="btn btn-primary" onClick={changeUsername}>Ändra</Button>
+				</div>
+				<Divider option={"h2_center"} title={"Logga ut"} />
+				<div>
+					<Button onClick={logOut} width={"100%"} className="btn btn-primary">Logga ut</Button>
+				</div>
+				<br/>
+			</Tab>
+		</Tabs>
+	)
 }
