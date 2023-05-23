@@ -43,8 +43,8 @@ public class WorkoutDBBuilderTest {
     void filterAllDefaultParamsTest(){
         builder = new SearchWorkoutDBBuilder(new SearchWorkoutParams(new HashMap<>()));
 
-        String expectedQuery = "SELECT result.workout_name, result.workout_id, 1=2 AS favourite FROM ( " +
-                "SELECT workout_name, workout_id FROM workout ) AS result";
+        String expectedQuery = "SELECT result.workout_name, result.workout_id, result.workout_author, 1=2 AS favourite FROM ( " +
+                "SELECT workout_name, workout_id, workout_author FROM workout ) AS result";
 
         assertThat(builder
                 .filterByDate()
@@ -58,7 +58,7 @@ public class WorkoutDBBuilderTest {
 
     @Test
     void filterByFavoriteTest() {
-        String expectedQuery = "SELECT w.workout_name, w.workout_id " +
+        String expectedQuery = "SELECT w.workout_name, w.workout_id, w.workout_author " +
                 "FROM workout AS w, workout_favorite AS wf " +
                 "WHERE w.workout_id=wf.workout_id AND wf.user_id='" + params.getUser_id() + "'";
 
@@ -73,7 +73,7 @@ public class WorkoutDBBuilderTest {
 
     @Test
     void filterByUserId() {
-        String expectedQuery = "SELECT w.workout_name, w.workout_id " +
+        String expectedQuery = "SELECT w.workout_name, w.workout_id, w.workout_author " +
                 "FROM workout AS w WHERE w.workout_author=" + params.getUser_id();
 
         expectedQuery = createJoinFavoriteQuery(expectedQuery);
@@ -87,15 +87,15 @@ public class WorkoutDBBuilderTest {
 
     @Test
     void filterByThreeTags() {
-        String expectedQuery = "SELECT w.workout_name, w.workout_id " +
+        String expectedQuery = "SELECT w.workout_name, w.workout_id, w.workout_author " +
                 "FROM workout AS w, workout_tag AS wt, tag AS t " +
                 "WHERE wt.work_id=w.workout_id AND wt.tag_id=t.tag_id AND LOWER(t.name)=LOWER('tag1')"
                 + " INTERSECT "
-                + "SELECT w.workout_name, w.workout_id " +
+                + "SELECT w.workout_name, w.workout_id, w.workout_author " +
                 "FROM workout AS w, workout_tag AS wt, tag AS t " +
                 "WHERE wt.work_id=w.workout_id AND wt.tag_id=t.tag_id AND LOWER(t.name)=LOWER('tag2')"
                 + " INTERSECT "
-                + "SELECT w.workout_name, w.workout_id " +
+                + "SELECT w.workout_name, w.workout_id, w.workout_author " +
                 "FROM workout AS w, workout_tag AS wt, tag AS t " +
                 "WHERE wt.work_id=w.workout_id AND wt.tag_id=t.tag_id AND LOWER(t.name)=LOWER('tag3')";
 
@@ -110,9 +110,9 @@ public class WorkoutDBBuilderTest {
 
     @Test
     void filterByDate() {
-        String expectedQuery = "SELECT workout_name, workout_id FROM workout WHERE workout_date>='" + params.getFrom() + "'"
+        String expectedQuery = "SELECT workout_name, workout_id, workout_author FROM workout WHERE workout_date>='" + params.getFrom() + "'"
                 + " INTERSECT "
-                + "SELECT workout_name, workout_id FROM workout WHERE workout_date<='" + params.getTo() + "'";
+                + "SELECT workout_name, workout_id, workout_author FROM workout WHERE workout_date<='" + params.getTo() + "'";
 
         expectedQuery = createJoinFavoriteQuery(expectedQuery);
 
@@ -130,14 +130,14 @@ public class WorkoutDBBuilderTest {
         if(params.hasUser_id()){
             String user_id = params.getUser_id();
 
-            stringQuery = "SELECT result.workout_name, result.workout_id, wf.user_id IS NOT NULL AS favourite FROM ( " +
+            stringQuery = "SELECT result.workout_name, result.workout_id, result.workout_author, wf.user_id IS NOT NULL AS favourite FROM ( " +
                     resultQuery + " " +
                     ") AS result " +
                     "LEFT JOIN workout_favorite AS wf " +
                     "ON wf.workout_id=result.workout_id AND " + "wf.user_id=" + user_id;
         } else {
             // If no user_id was given we can't join with the workout_favorite table
-            stringQuery = "SELECT result.workout_name, result.workout_id, 1=2 AS favourite FROM ( " +
+            stringQuery = "SELECT result.workout_name, result.workout_id, result.workout_author, 1=2 AS favourite FROM ( " +
                     resultQuery + " " +
                     ") AS result";
         }

@@ -12,6 +12,7 @@ import java.util.List;
  * the filtering methods used.
  *
  * @author Minotaur (James Eriksson)
+ * @author Chimera (Alexander Arvidsson Örnberg)
  */
 public class SearchWorkoutDBBuilder implements SearchDBBuilderInterface {
     private SearchWorkoutParams searchWorkoutParams;
@@ -28,7 +29,7 @@ public class SearchWorkoutDBBuilder implements SearchDBBuilderInterface {
 
             DatabaseQuery createdQuery = new DatabaseQuery();
             createdQuery.setQuery(
-                    "SELECT w.workout_name, w.workout_id " +
+                    "SELECT w.workout_name, w.workout_id, w.workout_author " +
                     "FROM workout AS w, workout_favorite AS wf " +
                     "WHERE w.workout_id=wf.workout_id AND wf.user_id='" + user_id + "'"
             );
@@ -44,7 +45,7 @@ public class SearchWorkoutDBBuilder implements SearchDBBuilderInterface {
 
             DatabaseQuery createdQuery = new DatabaseQuery();
             createdQuery.setQuery(
-                    "SELECT w.workout_name, w.workout_id " +
+                    "SELECT w.workout_name, w.workout_id, w.workout_author " +
                     "FROM workout AS w WHERE w.workout_author=" + user_id
             );
             queries.add(createdQuery);
@@ -59,7 +60,7 @@ public class SearchWorkoutDBBuilder implements SearchDBBuilderInterface {
             for (String tag: tags) {
                 DatabaseQuery databaseQuery = new DatabaseQuery();
                 databaseQuery.setQuery(
-                        "SELECT w.workout_name, w.workout_id " +
+                        "SELECT w.workout_name, w.workout_id, w.workout_author " +
                         "FROM workout AS w, workout_tag AS wt, tag AS t " +
                         "WHERE wt.work_id=w.workout_id AND wt.tag_id=t.tag_id AND LOWER(t.name)=LOWER('" + tag + "')"
                 );
@@ -80,7 +81,7 @@ public class SearchWorkoutDBBuilder implements SearchDBBuilderInterface {
             String from = searchWorkoutParams.getFrom().toString();
             DatabaseQuery fromQuery = new DatabaseQuery();
             fromQuery.setQuery(
-                    "SELECT workout_name, workout_id FROM workout WHERE workout_date>='" + from + "'"
+                    "SELECT workout_name, workout_id, workout_author FROM workout WHERE workout_date>='" + from + "'"
             );
             queries.add(fromQuery);
         }
@@ -89,7 +90,7 @@ public class SearchWorkoutDBBuilder implements SearchDBBuilderInterface {
             String to = searchWorkoutParams.getTo().toString();
             DatabaseQuery toQuery = new DatabaseQuery();
             toQuery.setQuery(
-                    "SELECT workout_name, workout_id FROM workout WHERE workout_date<='" + to + "'"
+                    "SELECT workout_name, workout_id, workout_author FROM workout WHERE workout_date<='" + to + "'"
             );
             queries.add(toQuery);
         }
@@ -107,7 +108,7 @@ public class SearchWorkoutDBBuilder implements SearchDBBuilderInterface {
 
         if(queries.isEmpty()) {
             databaseQuery.setQuery(
-                    "SELECT workout_name, workout_id FROM workout"
+                    "SELECT workout_name, workout_id, workout_author FROM workout"
             );
         } else {
             List<String> queryList = new ArrayList<>();
@@ -131,14 +132,14 @@ public class SearchWorkoutDBBuilder implements SearchDBBuilderInterface {
         if(searchWorkoutParams.hasUser_id()){
             String user_id = searchWorkoutParams.getUser_id();
 
-            stringQuery = "SELECT result.workout_name, result.workout_id, wf.user_id IS NOT NULL AS favourite FROM ( " +
+            stringQuery = "SELECT result.workout_name, result.workout_id, result.workout_author, wf.user_id IS NOT NULL AS favourite FROM ( " +
                     resultQuery + " " +
                     ") AS result " +
                     "LEFT JOIN workout_favorite AS wf " +
                     "ON wf.workout_id=result.workout_id AND " + "wf.user_id=" + user_id;
         } else {
             // If no user_id was given we can't join with the workout_favorite table
-            stringQuery = "SELECT result.workout_name, result.workout_id, 1=2 AS favourite FROM ( " +
+            stringQuery = "SELECT result.workout_name, result.workout_id, result.workout_author, 1=2 AS favourite FROM ( " +
                     resultQuery + " " +
                     ") AS result";
         }

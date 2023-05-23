@@ -4,7 +4,6 @@ import se.umu.cs.pvt.search.interfaces.WorkoutDBResult;
 import se.umu.cs.pvt.search.interfaces.WorkoutSearchResponse;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -29,7 +28,8 @@ public class SearchWorkoutResponseBuilder {
                 new WorkoutSearchResponse(
                         result.getId(),
                         result.getName(),
-                        result.getFavourite()
+                        result.getFavourite(),
+                        result.getAuthor()
                 )
         ));
         return array;

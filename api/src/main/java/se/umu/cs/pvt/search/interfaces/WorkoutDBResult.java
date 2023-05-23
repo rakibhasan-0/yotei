@@ -11,6 +11,7 @@ import java.io.Serializable;
  * searching for workouts.
  *
  * @author Minotaur (James Eriksson)
+ * @author Chimera (Alexander Arvidsson Örnberg)
  */
 
 @Entity
@@ -26,11 +27,15 @@ public class WorkoutDBResult implements Serializable {
     @Column(nullable = false, name = "favourite")
     private boolean favourite;
 
+    @Column(nullable = false, name = "workout_author")
+    private int author;
+
     protected WorkoutDBResult() {}
 
-    public WorkoutDBResult(Long workoutId, String name, boolean favourite) {
+    public WorkoutDBResult(Long workoutId, String name, int author, boolean favourite) {
         this.workoutId = workoutId;
         this.name = name;
+        this.author = author;
         this.favourite = favourite;
     }
 
@@ -44,5 +49,9 @@ public class WorkoutDBResult implements Serializable {
 
     public boolean getFavourite(){
         return favourite;
+    }
+
+    public int getAuthor() {
+        return author;
     }
 }
