@@ -19,16 +19,15 @@ import style from "./TechniqueFilter.module.css"
  * 		<TechniqueFilter belts={selectedBelts} setBelts={setSelectedBelts} kihon={kihon} setKihon= {setKihon}/>
  *
  * @author Kraken (Grupp 7)
- * @version 1.0
- * @since 2023-05-17
+ * @version 1.1
+ * @since 2023-05-24
  */
-function TechniqueFilter({id, belts, onBeltChange, kihon, onKihonChange}){
-	
+export default function TechniqueFilter({id, belts, onBeltChange, kihon, onKihonChange, onClearBelts}){
 	return (
 		<div id={id} className={style.filterPos}>
 			<FilterContainer id={"technique-filter-container"}>
 				<div className={style.techniqueBeltPicker}>
-					<BeltPicker id={"techniqueFilter-BeltPicker"} onToggle={onBeltChange} states={belts} />
+					<BeltPicker id={"techniqueFilter-BeltPicker"} onToggle={onBeltChange} states={belts} onClearBelts={onClearBelts} />
 				</div>
 				<p className={(belts.length > 0) ? style.selectedTextVis : style.selectedTextHid }>
 					{(belts.length > 0) ? "Valda bälten" : ""}
@@ -47,4 +46,3 @@ function TechniqueFilter({id, belts, onBeltChange, kihon, onKihonChange}){
 		</div>	
 	)
 }
-export default TechniqueFilter

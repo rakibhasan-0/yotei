@@ -4,6 +4,7 @@ import CheckBox from "../CheckBox/CheckBox"
 import BeltIcon from "../BeltIcon/BeltIcon"
 import { useContext, useEffect, useState } from "react"
 import { AccountContext } from "../../../context"
+import { toast } from "react-toastify"
 
 /**
  * Represents a belt row with text, two checkboxes and two
@@ -93,9 +94,10 @@ const BeltRow = ({ belt, states, onToggle }) => {
  * @param onToggle A toggle function when a belt is selected (both child and adult)
  * @returns A new belt picker component
  */
-export default function BeltPicker({ id, states, onToggle, centered }) {
+export default function BeltPicker({ id, states, onToggle, centered, onClearBelts }) {
 	const { token } = useContext(AccountContext)
 	const [belts, setBelts] = useState()
+	const [rerender, setRerender] = useState(false)
 	
 	useEffect(() => {
 		fetch("/api/belts/all", {
@@ -111,17 +113,37 @@ export default function BeltPicker({ id, states, onToggle, centered }) {
 			}
 			setBelts(groups)
 		}).catch(ex => {
-			alert("Kunde inte hämta bälten")
+			toast.error("Kunde inte hämta bälten")
 			console.error(ex)
 		})
 	}, [token])
 
+	/**
+	 * Because the checkbox state is handeled inside <BeltRow /> we need to
+	 * manually rerender the <BektRow /> elements when the user clears the
+	 * selected belts.
+	 */
+	const clearBelts = async () => {
+		setRerender(true)
+		await onClearBelts()
+		setRerender(false)
+	}
+
 	return (
 		<DropdownComponent text={"Bälten"} id={id} centered={centered} autoClose={false} >
-			<input type="checkbox" style={{display: "none"}}/> {/* Do not touch this checkbox, is needed */}
-			{belts && Object.values(belts).map((belt, index) => (
-				<BeltRow onToggle={onToggle} states={states} key={index} belt={belt} />
-			))}
+			{!rerender && 
+				<>
+					<input type="checkbox" style={{display: "none"}}/> {/* Do not touch this checkbox, is needed */}
+					{belts && Object.values(belts).map((belt, index) => (
+						<BeltRow onToggle={onToggle} states={states} key={index} belt={belt} />
+					))}
+					{onClearBelts &&
+						<div className={styles.beltRow} onClick={clearBelts}>
+							<p className={`${styles.beltText} ${styles.centeredText}`}>Rensa valda bälten</p>
+						</div>
+					}
+				</>
+			}
 		</DropdownComponent>
 	)
 }

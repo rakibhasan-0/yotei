@@ -55,7 +55,7 @@ export default function TechniqueIndex() {
 		// The selected belts are transformed from an array of belts objects to an array of strings, consisting of the belt names
 		const args = {
 			text: searchBarText,
-			selectedBelts: belts.map(belt => belt.child ? belt.name + "-barn" : belt.name).join(","),
+			selectedBelts: belts?.map(belt => belt.child ? belt.name + "-barn" : belt.name).join(","),
 			kihon: kihon,
 			selectedTags: tags,
 		}
@@ -98,12 +98,13 @@ export default function TechniqueIndex() {
 						onBeltChange={handleBeltChanged}
 						kihon={kihon}
 						onKihonChange={handleKihonChanged}
-						id="test">
+						id="test"
+						onClearBelts={clearSelectedBelts}>
 					</TechniqueFilter>
 				</div>
 
 				<InfiniteScrollComponent>
-					{techniques.map((technique, key) =>
+					{techniques?.map((technique, key) =>
 						<TechniqueCard
 							key={key}
 							technique={technique}
@@ -129,6 +130,10 @@ export default function TechniqueIndex() {
 				return [...prev, belt]
 			}
 		})
+	}
+
+	function clearSelectedBelts() {
+		setBelts([])
 	}
 
 	function handleKihonChanged(newKihon) {
