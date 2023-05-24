@@ -22,13 +22,6 @@
 	border: 2px solid var(--button-press);
 }
 
-.yoteiButton:hover {
-    background-color: var(--button-hover);
-}
-
-.yoteiButton:active {
-    background-color: var(--button-press);
-}
 
 .yoteiButton:disabled {
 	background-color: var(--body);

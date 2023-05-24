@@ -35,7 +35,13 @@ function FilterContainer({ id, title ,children}) {
 	return (
 		<div id={id}>
 			<div className={style.buttonGroup}>
-				<Button id={"filter-button"} onClick={showFilter} outlined={false} isToggled={buttonToggle} width='40px'>
+				<Button
+					id={"filter-button"}
+					onClick={showFilter}
+					outlined={false}
+					isToggled={buttonToggle}
+					width='40px'
+				>
 					<Sliders/>	
 				</Button>
 			</div>
