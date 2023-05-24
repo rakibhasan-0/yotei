@@ -17,6 +17,7 @@
 .technique-detail-button-container {
     width: 10rem;
     margin-top: 1rem;
+    margin-bottom: 50px;
 }
 .technique-detail-belts-container {
     display: flex;
