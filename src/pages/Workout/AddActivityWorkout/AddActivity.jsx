@@ -194,7 +194,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 						<div className={style.searchBar}>
 							<SearchBar
 								id="technique-search-bar"
-								placeholder="Sök tekniker"
+								placeholder="Sök efter tekniker"
 								text={searchTechText}
 								onChange={setSearchTechText}
 								addedTags={selectedTechTags}
@@ -236,7 +236,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 						<div className={style.searchBar}>
 							<SearchBar
 								id="exercise-search-bar"
-								placeholder="Sök övningar"
+								placeholder="Sök efter övningar"
 								text={searchExerText}
 								onChange={setSearchExerText}
 								addedTags={selectedExerTags}

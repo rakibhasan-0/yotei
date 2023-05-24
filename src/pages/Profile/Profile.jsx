@@ -54,7 +54,7 @@ export default function Profile() {
 			<>
 				<SearchBar 
 					id="searchbar-workouts" 
-					placeholder="Sök" 
+					placeholder="Sök efter pass" 
 					text={searchText} 
 					onChange={setSearchText}
 				/>

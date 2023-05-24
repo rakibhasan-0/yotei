@@ -70,7 +70,7 @@ export default function WorkoutIndex() {
 					<h1>Pass</h1>
 					<SearchBar 
 						id={styles.searchbar-workouts} 
-						placeholder="Sök" 
+						placeholder="Sök efter pass" 
 						text={searchText} 
 						onChange={setSearchText}
 						addedTags={tags}

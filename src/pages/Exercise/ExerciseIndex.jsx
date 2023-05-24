@@ -153,6 +153,7 @@ function ExerciseIndex() {
 				
 			<SearchBar 
 				id="exercise-search-bar" 
+				placeholder="Sök efter övningar"
 				text={searchText} 
 				onChange={setSearchText}
 				addedTags={addedTags}
