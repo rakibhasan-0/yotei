@@ -8,6 +8,8 @@ package se.umu.cs.pvt.workout;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Interface for UserWorkout
  *
@@ -31,5 +33,13 @@ public interface UserWorkoutRepository extends JpaRepository<UserWorkout, Long> 
      * @param userId
      */
     void deleteByWorkoutIdAndUserId(Long workoutId, Long userId);
+
+    /**
+     *
+     * @param workoutId
+     * @return list of all users related to workout
+     */
+    List<UserWorkout> findAllByWorkoutId(Long workoutId);
+
 
 }

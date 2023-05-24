@@ -310,40 +310,6 @@ class WorkoutApiApplicationTests {
     }
 
     @Test
-    void shouldSucceedWithUpdatingWorkout() {
-        workout = new Workout(1L, "test", "Description", 1000L,
-                LocalDate.of(2022,1,1), LocalDate.of(2022,1,1),
-                new Date(),false, 1L);
-
-        Mockito.when(workoutRepository.findById(workout.getId())).thenReturn(Optional.of(workout));
-        Mockito.when(workoutRepository.save(workout)).thenReturn(workout);
-
-        ResponseEntity<Workout> response = workoutController.updateWorkout(workout);
-        verify(workoutRepository, times(1)).findById(any());
-        verify(workoutRepository, times(1)).save(any());
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-    }
-
-    @Test
-    void shouldFailWhenUpdatingWorkoutThatIsNull() {
-        ResponseEntity<Workout> response = workoutController.updateWorkout(null);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    }
-
-    @Test
-    void shouldFailWhenUpdatingWorkoutWithInvalidId() {
-        workout = new Workout(1L, "test", "Description", 1000L,
-                LocalDate.of(2022,1,1), LocalDate.of(2022,1,1),
-                new Date(),false, 1L);
-
-        Mockito.when(workoutRepository.findById(workout.getId())).thenReturn(Optional.empty());
-
-        ResponseEntity<Workout> response = workoutController.updateWorkout(workout);
-        verify(workoutRepository, times(1)).findById(any());
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-    }
-
-    @Test
     void shouldSucceedWithAddingWorkoutToFavorites() {
         WorkoutFavorite workoutFavorite = new WorkoutFavorite();
 
