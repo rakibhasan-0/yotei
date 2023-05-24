@@ -28,6 +28,8 @@ import SessionCreate from "./pages/Plan/SessionCreate"
 import SessionEdit from "./pages/Plan/SessionEdit"
 import PlanIndex from "./pages/Plan/PlanIndex"
 import BaseLayout from "./components/Common/BaseLayout/BaseLayout"
+import ErrorBoundary from "./components/ErrorHandler/ErrorBoundary"
+
 import "react-toastify/dist/ReactToastify.css"
 import { logOut } from "./utils"
 import { ToastContainer, toast } from "react-toastify"
@@ -87,41 +89,43 @@ export default function App() {
 		<>
 			<ToastContainer />
 			<AccountContext.Provider value={{ token, role: decodedToken?.role, userId: decodedToken?.userId, setToken }}>
-				<BrowserRouter>
-					<Routes>
-						{
-							// eslint-disable-next-line no-undef
-							cookie || import.meta.env.VITE_APP_LOGIN_ENABLED === "false" ? (
-								<>
-									<Route path="/" element={<BaseLayout />}>
-										<Route path="about" element={<About />} />
-										<Route path="admin" element={<Admin />} />
-										<Route path="profile" element={<Profile />} />
-										<Route path="exercise" element={<ExerciseIndex uri={exerciseURI} />} />
-										<Route path="exercise/create" element={<ExerciseCreate />} />
-										<Route path="exercise/edit/:editID" element={<ExerciseEdit />} />
-										<Route path="technique" element={<TechniqueIndex />} />
-										<Route path="upload-image" element={<ImageForm />} />
-										<Route path="workout" element={<WorkoutIndex uri={workoutURI} />} />
-										<Route path="exercise/exercise_page/:ex_id" element={<ExerciseDetailsPage />} />
-										<Route path="technique/technique_page/:techniqueId" element={<TechniqueDetail />} />
-										<Route path="workout/create" element={<WorkoutCreate />} />
-										<Route path="workout/:workoutId" element={<WorkoutView />} />
-										<Route path="workout/edit" element={<WorkoutEdit />} />
-										<Route path="plan" element={<PlanIndex uri={planURI} />} />
-										<Route path="plan/create" element={<PlanCreate />} />
-										<Route path="session/create" element={<SessionCreate />} />
-										<Route path="session/edit/:session_id" element={<SessionEdit />} />
-										<Route path="" element={<PlanIndex uri={planURI} />} />
-										<Route path="*" element={<NoPage />} />
-									</Route>
-								</>
-							) : (
-								<Route path="*" element={<Login />} />
-							)
-						}
-					</Routes>
-				</BrowserRouter>
+				<ErrorBoundary>
+					<BrowserRouter>
+						<Routes>
+							{
+								// eslint-disable-next-line no-undef
+								cookie || import.meta.env.VITE_APP_LOGIN_ENABLED === "false" ? (
+									<>
+										<Route path="/" element={<BaseLayout />}>
+											<Route path="about" element={<About />} />
+											<Route path="admin" element={<Admin />} />
+											<Route path="profile" element={<Profile />} />
+											<Route path="exercise" element={<ExerciseIndex uri={exerciseURI} />} />
+											<Route path="exercise/create" element={<ExerciseCreate />} />
+											<Route path="exercise/edit/:editID" element={<ExerciseEdit />} />
+											<Route path="technique" element={<TechniqueIndex />} />
+											<Route path="upload-image" element={<ImageForm />} />
+											<Route path="workout" element={<WorkoutIndex uri={workoutURI} />} />
+											<Route path="exercise/exercise_page/:ex_id" element={<ExerciseDetailsPage />} />
+											<Route path="technique/technique_page/:techniqueId" element={<TechniqueDetail />} />
+											<Route path="workout/create" element={<WorkoutCreate />} />
+											<Route path="workout/:workoutId" element={<WorkoutView />} />
+											<Route path="workout/edit" element={<WorkoutEdit />} />
+											<Route path="plan" element={<PlanIndex uri={planURI} />} />
+											<Route path="plan/create" element={<PlanCreate />} />
+											<Route path="session/create" element={<SessionCreate />} />
+											<Route path="session/edit/:session_id" element={<SessionEdit />} />
+											<Route path="" element={<PlanIndex uri={planURI} />} />
+											<Route path="*" element={<NoPage />} />
+										</Route>
+									</>
+								) : (
+									<Route path="*" element={<Login />} />
+								)
+							}
+						</Routes>
+					</BrowserRouter>
+				</ErrorBoundary>
 			</AccountContext.Provider>
 		</>
 	)
