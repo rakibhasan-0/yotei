@@ -176,7 +176,7 @@ function getWorkoutUsersContainer(workoutUsers) {
 			<div className="row">
 				<h2>Användare</h2>
 			</div>
-			<div className="row">
+			<div className="row" style="gap: 10px;">
 				{
 					workoutUsers.map((user, index) => {
 						return (
