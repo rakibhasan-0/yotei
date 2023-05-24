@@ -85,6 +85,38 @@ function constructDefaultBelt(color) {
 }
 
 function constructAdultBelt(technique, belt, beltLength, key) {
+	if (belt.belt_name.toLowerCase().includes("dan")) {
+		console.log(belt)
+		const num = parseInt(belt.belt_name.split(" ")[0])
+		return (
+			<div
+				key={key}
+				className={["technique-card-belt-color", belt.belt_name === "Vitt" ? "technique-card-belt-border" : ""].join(" ")}
+				style={
+					{
+						background: `#${belt.belt_color}`,
+						height: `${100 / beltLength}%`,
+						display: "flex",
+						alignItems: "center",
+						justifyContent: "center",
+						flexDirection: "column",
+						gap: "5px",
+					}
+				} >
+
+				{ [...Array(num)].map((i) =>
+					<div
+						key={`${key}-${i}-dan`}
+						className={"technique-card-belt-color"}
+						style={ { background: "gold", height: `${15 / beltLength}%` } }
+					> 
+					</div>
+				)}
+
+			</div>
+		)
+	}
+
 	return (
 		<div
 			key={key}
