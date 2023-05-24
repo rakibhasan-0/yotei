@@ -2,16 +2,12 @@
     color: #BE3B41;
 }
 
-/*
-* Column that contains the created by text
-*/
 .created-col {
     font-size: 0.8rem;
     color: #544949;
     text-align: left;
     font-style: oblique;
 }
-
 
 .textDesc {
     text-align: left;
@@ -27,7 +23,6 @@
     color:#BE3B41;
 }
 
-
 .col>a>h5{
     position: relative;
     top: 50%;
@@ -42,4 +37,3 @@
 .selectWorkout{
     padding-top: 12px;
 }
-
