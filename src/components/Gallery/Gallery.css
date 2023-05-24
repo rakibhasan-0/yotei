@@ -29,8 +29,8 @@
 .carousel .control-dots {
     position: absolute;
     bottom: 0;
-    margin: -5px 0;
     padding: 0;
+	margin: 0;
     text-align: center;
     width: 100%;
     z-index: 1;
