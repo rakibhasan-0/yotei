@@ -44,13 +44,13 @@ public class WorkoutDBBuilderTest {
         builder = new SearchWorkoutDBBuilder(new SearchWorkoutParams(new HashMap<>()));
 
         String expectedQuery = "SELECT result.workout_name, result.workout_id, result.workout_author, 1=2 AS favourite FROM ( " +
-                "SELECT workout_name, workout_id, workout_author FROM workout ) AS result";
+                "SELECT workout_name, workout_id, workout_author FROM workout WHERE workout_hidden = FALSE ) AS result";
 
         assertThat(builder
                 .filterByDate()
                 .filterByTags()
                 .filterByFavourite()
-                .filterByUserId()
+                .filterByPublic()
                 .build()
                 .getQuery()
         ).isEqualTo(expectedQuery);
@@ -72,14 +72,18 @@ public class WorkoutDBBuilderTest {
     }
 
     @Test
-    void filterByUserId() {
-        String expectedQuery = "SELECT w.workout_name, w.workout_id, w.workout_author " +
-                "FROM workout AS w WHERE w.workout_author=" + params.getUser_id();
+    void filterByPublic() {
+        String userId = params.getUser_id();
+        String expectedQuery = "SELECT workout_name, workout_id, workout_author FROM workout WHERE " +
+            "workout_hidden = FALSE OR workout_author = " + userId +
+            " OR " + userId + " IN ( SELECT user_id FROM user_table WHERE user_role = 1 )" +
+            " OR " + userId + " IN ( SELECT user_id FROM user_workout WHERE workout_id = workout.workout_id )";
+
 
         expectedQuery = createJoinFavoriteQuery(expectedQuery);
 
         assertThat(builder
-                .filterByUserId()
+                .filterByPublic()
                 .build()
                 .getQuery()
         ).isEqualTo(expectedQuery);

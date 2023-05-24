@@ -39,21 +39,6 @@ public class SearchWorkoutDBBuilder implements SearchDBBuilderInterface {
         return this;
     }
 
-    public SearchWorkoutDBBuilder filterByUserId() {
-        if(searchWorkoutParams.hasUser_id()){
-            String user_id = searchWorkoutParams.getUser_id();
-
-            DatabaseQuery createdQuery = new DatabaseQuery();
-            createdQuery.setQuery(
-                    "SELECT w.workout_name, w.workout_id, w.workout_author " +
-                    "FROM workout AS w WHERE w.workout_author=" + user_id
-            );
-            queries.add(createdQuery);
-        }
-
-        return this;
-    }
-
     public SearchWorkoutDBBuilder filterByTags() {
         if(searchWorkoutParams.hasTags()){
             List<String> tags = searchWorkoutParams.getTags();
@@ -95,6 +80,31 @@ public class SearchWorkoutDBBuilder implements SearchDBBuilderInterface {
             queries.add(toQuery);
         }
 
+        return this;
+    }
+
+    /**
+     * Only allow public workouts, or workouts that the user has created.
+     *
+     * @return Returns itself.
+     */
+    public SearchWorkoutDBBuilder filterByPublic() {
+        DatabaseQuery query = new DatabaseQuery("SELECT workout_name, workout_id, workout_author")
+            .append("FROM workout")
+            .append("WHERE workout_hidden = FALSE");
+        if (searchWorkoutParams.hasUser_id()) {
+            String userId = searchWorkoutParams.getUser_id();
+            query.append("OR workout_author = " + userId);
+            // Allow admins to see every workout
+            query.append("OR " + userId + " IN (")
+                .append("SELECT user_id FROM user_table WHERE user_role = 1")
+                .append(")"); 
+            // Show workouts where the user is added, but does not own
+            query.append("OR " + userId + " IN (")
+                .append("SELECT user_id FROM user_workout WHERE workout_id = workout.workout_id")
+                .append(")"); 
+        }
+        queries.add(query);
         return this;
     }
 

@@ -110,11 +110,11 @@ public class SearchController {
     @GetMapping("/workouts")
     public ResponseEntity<SearchResponse<WorkoutSearchResponse>> searchWorkouts(@RequestParam Map<String, String> urlQuery) {
         SearchWorkoutParams searchWorkoutParams = new SearchWorkoutParams(urlQuery);
-
+        
         DatabaseQuery createdQuery = new SearchWorkoutDBBuilder(searchWorkoutParams)
                 .filterByDate()
                 .filterByFavourite()
-                .filterByUserId()
+                .filterByPublic()
                 .filterByTags()
                 .build();
 
