@@ -111,7 +111,6 @@ function TechniqueDetail({ id }) {
 			</div>
 
 			<div className="technique-detail-container" id={id == undefined ? "technique" : id}>
-				<Gallery id={techniqueId} />
 				<h1>{technique.name}</h1>
 				{isEditor(accountRole) && <div className="technique-detail-actions-container">
 					<Pencil
@@ -159,6 +158,9 @@ function TechniqueDetail({ id }) {
 					onClick={handleDelete}
 					setShowPopup={() => setShowConfirmPopup(false)}
 				/>
+
+				<Gallery id={techniqueId} />
+
 
 				<div className="technique-detail-button-container">
 					<Button outlined={true} onClick={() => navigate(-1)}>
