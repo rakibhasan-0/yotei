@@ -27,7 +27,8 @@ public class TechniqueDBResult implements Serializable {
     @Column(name = "belt_color")
     private String belt_color;
 
-    @Column(name = "is_child")
+    @Id
+    @Column(columnDefinition = "BOOLEAN DEFAULT false",name = "is_child")
     private Boolean is_child;
 
     @Column(name = "belt_name")
