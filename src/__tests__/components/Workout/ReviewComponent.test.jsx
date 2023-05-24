@@ -30,7 +30,6 @@ test("Should only have positive comment", async() => {
 	let positive = screen.getByRole("icon", {name: /positive/i})
 	let negative = screen.queryByRole("icon", {name: /negative/i})
 
-	expect(screen.queryByTestId("comment_divider")).not.toBeInTheDocument()
 	expect(positive).toBeInTheDocument()
 	expect(negative).not.toBeInTheDocument()
 })
@@ -51,7 +50,6 @@ test("Should only have negative comment", async() => {
 	let positive = screen.queryByRole("icon", {name: /positive/i})
 	let negative = screen.getByRole("icon", {name: /negative/i})
 
-	expect(screen.queryByTestId("comment_divider")).not.toBeInTheDocument()
 	expect(positive).not.toBeInTheDocument()
 	expect(negative).toBeInTheDocument()
 })
@@ -72,7 +70,6 @@ test("Should not have any comment", async() => {
 	let positive = screen.queryByRole("icon", {name: /positive/i})
 	let negative = screen.queryByRole("icon", {name: /negative/i})
 
-	expect(screen.queryByTestId("comment_divider")).not.toBeInTheDocument()
 	expect(positive).not.toBeInTheDocument()
 	expect(negative).not.toBeInTheDocument()
 })
@@ -93,7 +90,6 @@ test("Should have both positive, negative comment and a divider", async() => {
 	let positive = screen.getByRole("icon", {name: /positive/i})
 	let negative = screen.getByRole("icon", {name: /negative/i})
 
-	expect(screen.getByTestId("comment_divider")).toBeInTheDocument()
 	expect(positive).toBeInTheDocument()
 	expect(negative).toBeInTheDocument()
 })

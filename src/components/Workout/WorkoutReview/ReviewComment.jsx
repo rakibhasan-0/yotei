@@ -137,22 +137,16 @@ export default function ReviewComponent({comment, onDelete, editable, token, get
 								comment.positive_comment?.length > 0 && <p className={styles.comment}> {comment.positive_comment}</p>
 							}
 						</div>
-						{ positiveComment?.length > 0 && comment.negative_comment?.length > 0 &&
-							<div id="comment_divider" className="horizontal-line align-self-center w-100"></div>
-						}
-						{
-							<div className="d-flex flex-row w-100 mt-4">
-								{(comment.negative_comment?.length > 0 || editMode) && <i id="negative_icon" role="icon" aria-label="negative"
-									className="bi bi-dash-circle" style={{fontSize:"20px", color:"red", marginRight:"10px"}}></i>}
-								
-								{
-									editMode ?
-										<TextArea type="text" rows={4} onChange={(e) => setNegativeComment(e.target.value)} text={negativeComment} />
-										:
-										comment.negative_comment?.length > 0 && <p className={styles.comment}> {comment.negative_comment}</p>
-								}
-							</div>
-						}
+						<div className="d-flex flex-row w-100 mt-2">
+							{(comment.negative_comment?.length > 0 || editMode) && <i id="negative_icon" role="icon" aria-label="negative"
+								className="bi bi-dash-circle" style={{fontSize:"20px", color:"red", marginRight:"10px"}}></i>}
+							
+							{editMode ?
+								<TextArea type="text" rows={4} onChange={(e) => setNegativeComment(e.target.value)} text={negativeComment} />
+								:
+								comment.negative_comment?.length > 0 && <p className={styles.comment}> {comment.negative_comment}</p>
+							}
+						</div>
 					</div>
 					{editable &&
 					<div className="d-flex align-items-center justify-content-end">

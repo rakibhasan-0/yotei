@@ -9,6 +9,7 @@ import { AccountContext } from "../../../context"
 import {HTTP_STATUS_CODES, setError, setSuccess} from "../../../utils"
 import { isAdmin } from "../../../utils"
 import TextArea from "../../Common/TextArea/TextArea"
+import Divider from "../../Common/Divider/Divider"
 
 /**
  * Review component for workout. The user can review the workout
@@ -116,7 +117,6 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 	return (
 		<Popup title={"Utvärderingar"} id={"review-popup"} isOpen={isOpen} setIsOpen={setIsOpen}>
 			<div className="d-flex flex-column align-items-center">
-				<h2 style={{marginBottom: "20px"}}>Lägg till utvärdering</h2>
 				<div className="d-flex flex-row" style={{marginBottom: "20px"}}>
 					<Ratings widgetDimensions="40px" rating={rating} widgetRatedColors="gold" changeRating={setRating}>
 						<Ratings.Widget widgetHoverColor='gold'>
@@ -146,10 +146,7 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 					<Button width={"100%"} onClick={() => addReview()}>Lägg till</Button>
 				</div>
 			</div>
-			<div className="horizontal-line align-self-center w-100" style={{marginTop: "20px"}}></div>
-			<div>
-				<h2>Tidigare utvärderingar</h2>
-			</div>
+			<Divider title={""} option={"h2_center"}/>
 			<div className="w-100  d-flex flex-column justify-content-center align-items-center">
 				{commentList.map((comment) => (
 					<ReviewComment key={comment.review_id} updateCommentList={updateCommentList} editable={isAdmin(context) || userId == comment.user_id} comment={comment} onDelete={(comment) => {setCommentList(commentList.filter(c => c.review_id != comment.review_id))}} token={token} getTodaysDate={getTodaysDate}></ReviewComment>
