@@ -5,6 +5,20 @@
 
 # Designmässiga beslut
 
+# Byta ut bältesfärgerna
+- **Datum** - 230524
+- **Beskrivning** - Vi har valt att byta ut och uppdatera färgerna för bältena som finns både i frontend och backend. 
+- **Alternativ** - Behålla dom gamla färgerna.
+- **Motivation** - Vi tycker inte dom va så fina.
+- **Påverkan** - Front-end och back-end
+
+# Placeholder snurra för inladdning av data 
+- **Datum** - 230524
+- **Beskrivning** - Använd "snurr-komponenten" som gjorts för att användas som placeholder medan data från databasen laddas in. 
+- **Alternativ** - Alla använder olika eller vi har inget alls. 
+- **Motivation** - Vi vill på ett enhetligt sätt kunna visa för användaren att infromation håller på att laddas in från databasen.
+- **Påverkan** - Front-end
+
 # Felhantering i frontend
 - **Datum** - 230515
 - **Beskrivning** - Standard för att hantera fel:
@@ -112,6 +126,12 @@
 - **Påverkan** - Minimal påverkan: Front-end, Bygg
 
 # Funktionella beslut 
+
+# Kan ej skapa nya aktiviteter medan man skapar ett pass
+- **Datum** - 230424
+- **Beskrivning** - Vi kommer inte göra det möjligt att skapa nya tekniker eller övningar medan man skapar ett pass.
+- **Motivation** - Detta skulle vara mycket omständigt att implementera och användaren kan ändå redan skapa fritext-aktiviteter vilket bör räcka som funktionalitet.
+- **Påverkan** - Front-end och back-end
 
 # Kategorier i ett pass
 - **Datum** - 230416
