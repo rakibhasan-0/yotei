@@ -115,6 +115,7 @@ function TechniqueDetail({ id }) {
 				<h1>{technique.name}</h1>
 				{isEditor(accountRole) && <div className="technique-detail-actions-container">
 					<Pencil
+						id="technique-edit-button"
 						size="24px"
 						color="var(--red-primary)"
 						style={{ cursor: "pointer" }}

@@ -7,10 +7,9 @@ import Button from "../../../components/Common/Button/Button"
 import style from "./TechniqueEdit.module.css"
 import { AccountContext } from "../../../context"
 import TagInput from "../../../components/Common/Tag/TagInput"
-import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../../utils"
+import { HTTP_STATUS_CODES, scrollToElementWithId, setError, setSuccess } from "../../../utils"
 import Popup from "../../../components/Common/Popup/Popup"
 import UploadMedia from "../../../components/Common/Upload/UploadMedia"
-import { toast } from "react-toastify"
 import EditGallery from "../../../components/Gallery/EditGallery"
 import Divider from "../../../components/Common/Divider/Divider"
 
@@ -49,34 +48,43 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 	const [addedTags, setAddedTags] = useState(technique.tags)
 
 	const [showMediaPopup, setShowMediaPopup] = useState(false)
+	const [sendMediaData, setSendMediaData] = useState(false)
 
 	const [inputErrorMessage, setInputErrorMessage] = useState("")
 
-	const [sendData, setSendData] = useState(false)
-
 	useEffect(() => {
-		if (showMediaPopup === true) {
-			return
-		}
-
 		technique.tags.map((tag) => {
-			if (tag.name === KIHON_TAG.name|| tag.id === KIHON_TAG.id) {
+			if (tag.name.toLowerCase() === KIHON_TAG.name.toLowerCase() || tag.id === KIHON_TAG.id) {
 				setKihonChecked(true)
 			}
 		})
+	}, [])
 
-	}, [showMediaPopup])
+	const handlePutTechnique = () => {
+		// Media should only be sent when the edit is successfull, but need a promise in editgallery for that.
+		// Send is set here so the requests have time to finish before closing the popup
+		setSendMediaData(true)
 
-	const handlePutTechnique = (technique) => {
 		const requestOptions = {
 			method: "PUT",
 			headers: { "Content-Type": "application/json", "token": token.token },
-			body: JSON.stringify(technique)
+			body: JSON.stringify({
+				id: technique.id,
+				name: techniqueName,
+				description: techniqueDescription,
+				belts: belts.map(belt => { return { id: belt.id } }),
+				tags: addedTags.map(tag => { return { id: tag.id } })
+			})
 		}
+
 
 		fetch("/api/techniques", requestOptions)
 			.then(res => {
 				switch(res.status) {
+				case HTTP_STATUS_CODES.SUCCESS:
+					setSuccess("Tekniken uppdaterades!")
+					setIsOpen(false)
+					return
 				case HTTP_STATUS_CODES.CONFLICT:
 					setInputErrorMessage("Tekniknamnet finns redan")
 					scrollToElementWithId("techniqueEditInputName")
@@ -86,28 +94,22 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 					scrollToElementWithId("techniqueEditInputName")
 					return
 				case HTTP_STATUS_CODES.UNAUTHORIZED:
-					toast.error("Du är inte längre inloggad och kan därför inte skapa tekniker")
+					setError("Du är inte längre inloggad och kan därför inte skapa tekniker")
 					return
 				case HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR:
-					toast.error("Gick inte att updatera tekniken!")
+					setError("Internt fel, gick inte att updatera tekniken!")
 					console.log(res)
 					return
+				default:
+					setError("Okänt fel inträffade")
+					console.log(res)
 				}
-
-				setIsOpen(false)
 			})
 			.catch((error) => {
 				console.log(error)
-				toast.error("Gick inte att updatera tekniken!")
+				setError("Gick inte att updatera tekniken!")
 			})
 
-	}
-
-	const handleClick = () => {
-		const tagIds = buildTags(addedTags, kihonChecked)
-		const beltIds = buildBelts(belts)
-		handlePutTechnique({ id: technique.id, name: techniqueName, description: techniqueDescription, belts: beltIds, tags: tagIds })
-		setSendData(true)
 	}
 
 	// Beltpicker toggle handler
@@ -173,7 +175,7 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 			</CheckBox>
 
 			<BeltPicker
-				id={style.techniqueEditBeltpicker}
+				id="techniqueEditBeltpicker"
 				onToggle={onToggle}
 				states={belts}>
 			</BeltPicker>
@@ -190,7 +192,7 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 			<Divider title="Media" option="h2_left"/>
 
 			<div className={style.mediaButtonContainer}>
-				<EditGallery id={technique.id} exerciseId={technique.id} sendData={sendData}/>
+				<EditGallery id={technique.id} exerciseId={technique.id} sendData={sendMediaData} />
 			</div>
 
 			<Popup title={"Lägg till media"} isOpen={showMediaPopup} setIsOpen={setShowMediaPopup} >
@@ -207,25 +209,12 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 
 				<Button
 					id={style.techniqueEditCreatebutton}
-					onClick={() => handleClick()}>
+					onClick={() => handlePutTechnique()}>
 					<p>Spara</p>
 				</Button>
 			</div>
 
 		</div>
 	)
-}
-
-// The build functions converts the objects to only include the id, required by the technique API
-function buildTags(tags) {
-	return tags.map(tag => { 
-		return { id: tag.id } 
-	})
-}
-
-function buildBelts(belts) {
-	return belts.map(belt => {
-		return { id: belt.id }
-	})
 }
 
