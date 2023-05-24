@@ -7,7 +7,6 @@ function Sorter ({ id, children, defaultSort ,onSortChange }) {
 	const [selectedOption, setSelectedOption] = useState(defaultSort || "")
     
 	const handleChildClick = (item) => {
-		console.log("Item: " + item)
 		setSelectedOption(item)
 	}
 

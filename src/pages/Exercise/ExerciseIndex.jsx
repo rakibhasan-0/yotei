@@ -40,20 +40,25 @@ function ExerciseIndex() {
 		const filterCookie = cookies["exercise-filter"]
 		if(filterCookie) {
 			setAddedTags(filterCookie.tags)
+			setSort(filterCookie.sort)
 		}
 	}, [])
 
-	const getAllExercises =  async () => {
-		const headers = { token }
-		const url = `/api/exercises/all?sort=${sort}`
-
-		await fetch(url, {headers})
-			.then(res => res.json())
-			.then((data) => {
-				setVisibleList("") // Need to empty list before inserting new data.
-				setVisibleList(data)
-			})            
+	const getAllExercises = async () => {
+		try {
+			const headers = { token }
+			const url = `/api/exercises/all?sort=${sort}`
+      
+			const response = await fetch(url, { headers })
+			const data = await response.json()
+      
+			setVisibleList(data)
+		} catch (error) {
+			console.error(error)
+		}
 	}
+      
+
 
 	useEffect(() => {
 		const args = {
@@ -64,9 +69,39 @@ function ExerciseIndex() {
 		getExercises(args, token, map, mapActions, (result) => {
 			setVisibleList(result.results)
 			setSuggestedTags(result.tagCompletion)
-			setCookie("exercise-filter", {tags: addedTags}, {path: "/"})
+			setCookie("exercise-filter", {tags: addedTags, sort}, {path: "/"})
 		})
 	}, [searchText, addedTags])
+
+	useEffect(() => {
+		console.log("Sort: " + sort)
+		getAllExercises()
+	}, [sort])
+
+	const handlePageLoad = () => {
+		getAllExercises()
+		console.log("handlePageLoad")
+	}
+      
+	// Call handlePageLoad on page load
+	useEffect(() => {
+		handlePageLoad()
+	}, [])
+      
+	// Call handlePageLoad when triggered by a state change
+	useEffect(() => {
+		if (triggerReload) {
+			handlePageLoad()
+			setTriggerReload(false) // Reset triggerReload state after reloading
+		}
+	}, [triggerReload])
+      
+	// Call handlePageLoad when the popup is closed
+	const handlePopupClose = () => {
+		handlePageLoad()
+		setPopupVisible(false)
+	}
+      
 
 	const handleSortChange = (selectedOption) => {
 		let newSort
@@ -89,32 +124,10 @@ function ExerciseIndex() {
 		}
 		if (newSort !== sort) {
 			setSort(newSort)
+			setCookie("exercise-sort", {sort: newSort}, {path: "/"})
 		}
 	}
     
-	useEffect(() => {
-		console.log("Sort: " + sort)
-		getAllExercises()
-	}, [sort])
-
-	useEffect(() => {
-		getAllExercises()
-		setSearchText("")
-		console.log("reloaded")
-	}, [triggerReload])
-
-	useEffect(() => {
-		const handlePopstate = () => {
-			setTriggerReload(true)
-		}
-
-		window.addEventListener("popstate", handlePopstate)
-
-		return () => {
-			window.removeEventListener("popstate", handlePopstate)
-		}
-	}, [])
-
 	function renderExercises(activities, detailURL) {
 		const exercises = activities?.map((activity, index) => {
 			return <ExerciseCard
@@ -167,10 +180,10 @@ function ExerciseIndex() {
 				title={"Skapa övning"}
 				id={"create-exercise-popup"}
 				isOpen={popupVisible}
-				setIsOpen={setPopupVisible}
+				setIsOpen={handlePopupClose}
 				noBackground={false}
 			>
-				<ExerciseCreate setShowPopup={setPopupVisible} onClose={() => setTriggerReload((prevState) => !prevState)}/>
+				<ExerciseCreate setShowPopup={setPopupVisible} onClose={() => setTriggerReload(!triggerReload)}/>
 			</Popup>
 		</>
 	)
