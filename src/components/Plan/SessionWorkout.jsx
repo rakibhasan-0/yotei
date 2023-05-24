@@ -1,7 +1,7 @@
 import React, { useContext } from "react"
 import "./SessionWorkout.css"
 import { StopwatchFill } from "react-bootstrap-icons"
-import { PencilFill } from "react-bootstrap-icons"
+import { Pencil } from "react-bootstrap-icons"
 import { Link } from "react-router-dom"
 import { AccountContext } from "../../context"
 import { isAdmin } from "../../utils"
@@ -152,7 +152,7 @@ function SessionWorkout ({ id, workout, sessionID, creatorID }) {
 					{
 						(userIsAdmin() || userIsCreator()) &&
 							<Link id ="session-workout-edit-session-button" className="sc23-session-workout-links" to = {`/session/edit/${sessionId}`}>	
-								<PencilFill aria-label="Edit Session" role ="edit" className="sc23-session-workout-svg"/>
+								<Pencil aria-label="Edit Session" role ="edit" className="sc23-session-workout-svg"/>
 							</Link>
 					}
 				</div>
