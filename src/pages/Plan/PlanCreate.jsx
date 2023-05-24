@@ -1,11 +1,8 @@
 import { React, useState, useContext } from "react"
 import { AccountContext } from "../../context"
-import PlanForm from "../../components/Forms/PlanForm.jsx"
-import GoBackButton from "../../components/Common/GoBackButton"
-import RoundButton from "../../components/Common/RoundButton/RoundButton"
-import { Check } from "react-bootstrap-icons"
 import { useNavigate } from "react-router"
-
+import PlanForm from "../../components/Forms/PlanForm.jsx"
+    
 /**
  * This is a page containing components to allow creation of 'Plan'
  * objects.
@@ -14,10 +11,10 @@ import { useNavigate } from "react-router"
  * As well as checkboxes, indicating which day of the week to
  * include.
  *
- * @author Calzone (2022-05-13), Hawaii (2022-05-13)
+ * @author Calzone (2022-05-13), Hawaii (2022-05-13), Squad 2 Griffin
  */
-function PlanCreate() {
 
+export default function PlanCreate() {
 	/**
      * Gets the token for the user
      */
@@ -31,10 +28,9 @@ function PlanCreate() {
      */
 	const [planData, setPlanData] = useState({
 		name: "",
-		color: "#000000",
 		startDate: "",
 		endDate: "",
-		weekdaysSelected: false
+		weekdaysSelected: false,
 	})
 
 	/**
@@ -50,6 +46,8 @@ function PlanCreate() {
 		{ name: "Lör", value: false, time: "" },
 		{ name: "Sön", value: false, time: "" }
 	])
+
+	const [beltsChosen, setBelts] = useState([])
 
 	/**
      * Checks if any weekdays selected
@@ -153,11 +151,10 @@ function PlanCreate() {
     * Function for api call when creating a plan
     */
 	async function addPlan() {
-
 		const requestOptions = {
 			method: "POST",
 			headers: { "Content-type": "application/json", "token": token },
-			body: JSON.stringify({ name: planData.name, color: planData.color, userId: userId })
+			body: JSON.stringify({ name: planData.name, belts: beltsChosen, userId: userId })
 		}
 
 		if (validateForm()) {
@@ -170,7 +167,6 @@ function PlanCreate() {
 				/* Success */
 				if (response.ok)
 					dateHandler(res.id)
-
 			} catch (error) {
 				console.log(error)
 				failureAlert()
@@ -182,14 +178,13 @@ function PlanCreate() {
      * Function for api call when creating a plan
      */
 	async function addSessions() {
-
 		allDatesArray = allDatesArray.map(session => {
 			let x = new Date(session.date)
 			let hoursDiff = x.getHours() - x.getTimezoneOffset() / 60
 			let minutesDiff = (x.getHours() - x.getTimezoneOffset()) % 60
 			x.setHours(hoursDiff)
 			x.setMinutes(minutesDiff)
-			x.setDate(x.getDate()+2)
+			x.setDate(x.getDate()+1)
 			return { ...session, date: new Date(x)}
 		})
 
@@ -204,12 +199,14 @@ function PlanCreate() {
 			const response = await fetch("/api/session/addList", requestOptions)
 			await response.json()
 
+			
 			if (response.ok) {
 				successAlert()
+				navigate(-1)
 			}
 
 		} catch (error) {
-			failureAlert("Tillfällen kunde inte läggas till.")
+			failureAlert("Tillfällen kunde inte	 läggas till.")
 			console.log(error)
 		}
 	}
@@ -246,7 +243,7 @@ function PlanCreate() {
 					if (weekdays[dayNr].value) {
 
 						tempDate = new Date(startDate)
-						tempTime = weekdays[dayNr].time
+						tempTime = weekdays[dayNr].time.target.value + ":00"
 
 						firstDatesArray.push({ date: tempDate, time: tempTime })
 					}
@@ -266,7 +263,6 @@ function PlanCreate() {
 						tempTime = e.time
 
 						while (tempDate <= endDate) {
-
 							allDatesArray.push({ plan: plan, date: formatDate(tempDate), time: tempTime })
 
 							tempDate.setDate(tempDate.getDate() + 7)
@@ -340,7 +336,7 @@ function PlanCreate() {
 	function successAlert() {
 		setDisplayAlert(
 			<div className="alert alert-success" role="alert">
-                Planeringen {planData.name} lades till med färg {planData.color}.
+                Planeringen {planData.name} lades till.
 			</div>
 		)
 		return true
@@ -394,19 +390,20 @@ function PlanCreate() {
 		return res
 	}
 
-
 	return (
-		<div className="container">
-			<div className="row justify-content-center">
-				<div className="col-md-8">
-					<h2 className="display-4 text-center">
-						<strong>Skapa planering</strong>
-					</h2>
+		<div className="plan-create">
+			<div className="overflow-visible">
+				<div>
+					<h3 className="display-4 text-center">
+						<strong>Skapa Grupp</strong>
+					</h3>
 
 					{/*Form to get input from user*/}
 					<PlanForm
 						planData={planData}
 						weekdays={weekdays}
+						belts={beltsChosen}
+						setBelts={setBelts}
 						onClickData={dataClickHandler}
 						onClickWeekday={weekdayClickHandler}
 						onClickDayTime={dayTimeClickHandler}
@@ -414,28 +411,16 @@ function PlanCreate() {
 						okStartDate={checkDate("startDate")}
 						okEndDate={checkDate("endDate")}
 						buttonClicked={fieldCheck.buttonClicked}
-						submitClicked={() => { addPlan().then(() => { setFieldCheck({ ...fieldCheck, buttonClicked: true }) }) }}
+						submitClicked={() => { addPlan().then(() => { 
+							setFieldCheck({ ...fieldCheck, buttonClicked: true})
+						}) 
+						}}
 						backClicked={() => navigate(-1)}
 					/>
 
-					{/*Button for the form. Retrieves the users input*/}
-					<RoundButton onClick={() => { addPlan().then(() => { setFieldCheck({ ...fieldCheck, buttonClicked: true }) }) }}>
-						<Check />
-					</RoundButton>
-
-
-					<GoBackButton confirmationNeeded={
-						!((planData.name === undefined || planData.name === "")
-                        && (planData.color === undefined || planData.color === "#000000")
-                        && (planData.startDate === undefined || planData.startDate === "")
-                        && (planData.endDate === undefined || planData.endDate === "")
-                        && (!planData.weekdaysSelected))
-					} />
 					{fieldCheck.buttonClicked ? displayAlert : ""}
 				</div>
 			</div>
 		</div>
 	)
 }
-
-export default PlanCreate

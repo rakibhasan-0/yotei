@@ -1,10 +1,13 @@
 .time-picker-li {
-    right: 0;
     float: right;
 }
 
+.weekday-text-li {
+    justify-self: center;
+}
+
 .check-box-li {
-    padding: 0 29px;
+    padding: 0 10px;
 }
 
 ul {
@@ -18,7 +21,7 @@ li {
 }
 
 .weekday-time-picker {
-    width: 50%;
+    width: 85%;
     align-items: center;
     font-size: 15p;
     font-family: "Open Sans";

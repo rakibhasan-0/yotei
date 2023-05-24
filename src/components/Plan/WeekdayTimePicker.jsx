@@ -28,14 +28,12 @@ import "./WeekdayTimePicker.css"
  */
 
 export default function WeekdayTimePicker({id, weekdays, dayName, weekdayClickHandler, dayTimeClickHandler}){
-	var timeValue
 	var currentDay
 
 	for (var i = 0; i < 7; i++) {
 		currentDay = weekdays[i]
 
 		if (currentDay.name === dayName) {
-			timeValue = currentDay.time
 			break
 		}
 	}
@@ -47,12 +45,17 @@ export default function WeekdayTimePicker({id, weekdays, dayName, weekdayClickHa
 					{/* Check box */}
 					<CheckBox id={dayName+"CheckBox"} onClick={()=> weekdayClickHandler(dayName)} checked={currentDay.value}/>
 				</li>
-				<li className="text-li">
+				<li className="week-day-text-li">
 					{dayName + "dag"}
 				</li>
 				<li className="time-picker-li">
 					{/* Time picker */}
-					{ currentDay.value && <TimePicker id={dayName+"TimePicker"} onChange={dayTimeClickHandler} selectedTime={timeValue}/>}
+					{ currentDay.value && 
+						<TimePicker 
+							id={dayName+"TimePicker"} 
+							onChange={(e) => { dayTimeClickHandler(dayName, e) }} 
+						/>
+					}
 				</li>
 			</ul>
 		</div>
