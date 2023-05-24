@@ -4,6 +4,7 @@
     user-select: none;
     overflow: auto;
     margin-top: 0.4rem;
+    display: flex;
 }
 
 .exercise-list-header {
@@ -11,10 +12,9 @@
     align-items: center;
     text-align: center;
     background-color: var(--red-secondary);
-	padding-left: 10px;
-	padding-top: 5px;
-	padding-bottom: 5px;
+	padding: 10px;
     font-weight: 400;
+    width: 100%;
     overflow:hidden;
   }
   
@@ -31,4 +31,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.href-link {
+    margin: 0 0 0 10px;
 }

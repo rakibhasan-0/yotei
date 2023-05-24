@@ -253,7 +253,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 								{exercises.map((exercise, key) => (
 									<ExerciseListItem
 										id={exercise.id}
-										text={exercise.name}
+										text={exercise.duration + " min"}
 										detailURL={"/exercise/exercise_page/"}
 										checkBox={
 											<CheckBox

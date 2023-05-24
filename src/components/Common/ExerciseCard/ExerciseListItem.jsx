@@ -1,4 +1,4 @@
-import { ChevronDown } from "react-bootstrap-icons"
+import { ChevronRight } from "react-bootstrap-icons"
 import "./ExerciseListItem.css"
 import { Link } from "react-router-dom"
 
@@ -31,27 +31,27 @@ import { Link } from "react-router-dom"
  * @since 2023-05-10
  * @version 1.0
  */
-export default function ExerciseListItem({ item, text, detailURL, id, index}) {
+export default function ExerciseListItem({ item, text, detailURL, id, index, checkBox }) {
 
 	return (
-		<Link to={detailURL + id} data-testid="ExerciseListItem-link">
-			<div className="exercise-list-container" data-testid="ExerciseListItem">
-				<div className='exercise-list-header' style={{backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)"}}>
-					<div style={{display: "flex", justifyContent: "space-between", width: "100%"}}>
-						<div className="exercise-list-item">
-							<div className="href-link" style={{wordBreak:"break-word", textAlign:"left"}} data-testid="ExerciseListItem-item">{item}</div>
+		<div className="exercise-list-container" data-testid="ExerciseListItem">
+			<div className='exercise-list-header' style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
+				{checkBox}
+				<Link to={detailURL + id} data-testid="ExerciseListItem-link" style={{width: "100%"}}>
+					<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+						<div style={{display: "flex", alignItems: "center"}}>
+							<div className="href-link" style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="ExerciseListItem-item">{item}</div>
 						</div>
-						<div className="exercise-list-duration" data-testid="ExerciseListItem-text">
-							<p>{text}</p>
+						<div style={{display: "flex", alignItems: "center"}}>
+							<div className="exercise-list-duration" data-testid="ExerciseListItem-text">
+								<p>{text}</p>
+							</div>
+							<ChevronRight size="30px"/>
 						</div>
 					</div>
-					<div>
-						<div className="technique-arrow-container">
-							<ChevronDown />
-						</div>
-					</div>
-				</div>
+
+				</Link>
 			</div>
-		</Link>
+		</div>
 	)
 }
