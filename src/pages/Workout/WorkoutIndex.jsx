@@ -5,8 +5,7 @@ import useMap from "../../hooks/useMap"
 import FilterContainer from "../../components/Common/Filter/FilterContainer/FilterContainer"
 import StarButton from "../../components/Common/StarButton/StarButton"
 import { useCookies } from "react-cookie"
-
-import "./WorkoutIndex.css"
+import styles from "./WorkoutIndex.module.css"
 import { AccountContext } from "../../context"
 import DatePicker, { getFormattedDateString } from "../../components/Common/DatePicker/DatePicker"
 import RoundButton from "../../components/Common/RoundButton/RoundButton"
@@ -70,7 +69,7 @@ export default function WorkoutIndex() {
 				<center>
 					<h1>Pass</h1>
 					<SearchBar 
-						id="searchbar-workouts" 
+						id={styles.searchbar-workouts} 
 						placeholder="Sök" 
 						text={searchText} 
 						onChange={setSearchText}
@@ -80,7 +79,7 @@ export default function WorkoutIndex() {
 						setSuggestedTags={setSuggestedTags}
 					/>
 					<FilterContainer >
-						<div id="filter-container" className="container">
+						<div className={`container ${styles.filterContainer}`}>
 							<div className="row align-items-center">
 								<p className="m-0 col text-left">Från</p>
 								<DatePicker className="col" selectedDate={dates.from} maxDate={dates.maxFrom} onChange={handleFromDateChange}/>

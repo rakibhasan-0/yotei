@@ -9,7 +9,7 @@
     margin: auto;
 }
 
-.click-icon {
+.clickIcon {
     color: var(--red-primary);
     margin-left: 2rem;
     font-size: 1.5rem;
@@ -91,16 +91,12 @@
     text-align: left;
 }
 
-.workout-detail-row-item {
-    display: flex;
-}
-
 .opened-review-area {
     margin-top: 20px;
 
 }
 
-.workout-detail-column-item {
+.workoutDetailColumnItem {
     width: 100%;
     padding: 10px 0px;
     overflow: hidden;
@@ -108,7 +104,9 @@
     text-align: left;
 }
 
-.workout-detail-column-item-right {
+
+
+.workoutDetailColumnItemRight {
     padding-left: 37px;
 }
 

@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState} from "react"
 import { AccountContext } from "../../../context"
 import WorkoutActivityList from "../../../components/Workout/WorkoutActivityList/WorkoutActivityList"
-import "./WorkoutView.css"
+
+import styles from "./WorkoutView.module.css"
 import Tag from "../../../components/Common/Tag/Tag"
 import Button from "../../../components/Common/Button/Button"
 import { useNavigate, Link} from "react-router-dom"
@@ -85,7 +86,7 @@ export default function WorkoutView({id}) {
 		loading ? <div className="mt-5"> <Spinner/> </div>
 			: !workoutData ? <ErrorState message={errorStateMsg} onBack={() => navigate("/workout")} onRecover={() => window.location.reload(false)}/>
 				:
-				<div id={id}>
+				<div id={id} className="container px-0">
 					{<ConfirmPopup popupText={"Radera pass"} id={"confirm-popup"} setShowPopup={setShowPopup} showPopup={showPopup} onClick={async () => deleteWorkout(workoutId, context, navigate, setShowPopup)}/>}
 					{getReviewContainer(showRPopup, setRShowPopup, workoutId)}
 					{getWorkoutInfoContainer(workoutData, setShowPopup)}
@@ -179,7 +180,7 @@ function getWorkoutUsersContainer(workoutUsers) {
 				{
 					workoutUsers.map((user, index) => {
 						return (
-							<div key={"wu" + index}>
+							<div key={"wu" + index} className="mr-2">
 								<Tag tagType={"default"} text={user.username}></Tag>
 							</div>
 						)
@@ -212,14 +213,14 @@ function getWorkoutInfoContainer(workoutData, setShowPopup) {
 	return (
 		<>
 			<div className="container px-0">
-				<div className={"info"}>
-					<div className="workout-detail-row-item">
-						<div className="col workout-detail-column-item">
-							<h1 className="font-weight-bold">{workoutData.name}</h1>
-						</div>
+				<div className={styles.info}>
+					<div className={`d-flex col ${styles.workoutDetailColumnItem}`}>
+						<h1 className="font-weight-bold">{workoutData.name}</h1>
 					</div>
 					<div className="d-flex justify-content-end align-items-center">
-						<PrintButton workoutData={workoutData} />
+						<div className={styles.clickIcon}>
+							<PrintButton workoutData={workoutData}/>
+						</div>
 						<Link className="ml-3" state={{workout: workoutData}} to={"/workout/edit"}>
 							<Pencil
 								size="24px"
@@ -236,30 +237,30 @@ function getWorkoutInfoContainer(workoutData, setShowPopup) {
 						/>
 					</div>
 
-					<div className="workout-detail-row-item mt-3">
-						<div className="workout-detail-column-item">
+					<div className="d-flex mt-3">
+						<div className={styles.workoutDetailColumnItem}>
 							<h2 className="font-weight-bold mb-0">Författare</h2>
 							<p>{workoutData.author.username}</p>
 						</div>
-						<div className="workout-detail-column-item workout-detail-column-item-right">
+						<div className={styles.workoutDetailColumnItem} style={{paddingLeft:"37px"}}>
 							<h2 className="font-weight-bold mb-0">Tidslängd</h2>
 							<p>{workoutData.duration} min</p>
 						</div>
 					</div>
 
-					<div className={"workout-detail-row-item"} id="no-print">
-						<div className={"workout-detail-column-item"}>
+					<div className="d-flex" id="no-print">
+						<div className={styles.workoutDetailColumnItem}>
 							<h2 className="font-weight-bold mb-0">Skapad</h2>
 							<p>{workoutData.created}</p>
 						</div>
-						<div className={"workout-detail-column-item workout-detail-column-item-right"}>
+						<div className={styles.workoutDetailColumnItem} style={{paddingLeft:"37px"}}>
 							<h2 className="font-weight-bold mb-0 text-align-left">Senast ändrad</h2>
 							<p>{workoutData.changed}</p>
 						</div>
 					</div>
 
 					<h2 className="font-weight-bold mb-0">Beskrivning</h2>
-					<p className="properties">{workoutData.description}</p>
+					<p className={styles.properties}>{workoutData.description}</p>
 				</div>
 			</div>
 		</>

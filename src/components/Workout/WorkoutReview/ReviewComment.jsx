@@ -6,6 +6,7 @@ import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
 import React from "react"
 import Button from "../../Common/Button/Button"
 import TextArea from "../../Common/TextArea/TextArea"
+import styles from "./ReviewStyles.module.css"
 
 import {HTTP_STATUS_CODES, setError, setSuccess} from "../../../utils"
 
@@ -22,24 +23,7 @@ export default function ReviewComponent({comment, onDelete, editable, token, get
 	const [positiveComment, setPositiveComment] = useState(comment.positive_comment)
 	const [negativeComment, setNegativeComment] = useState(comment.negative_comment)
 	const [rating, setRating] = useState(comment.rating)
-
-
-	const commentStyle = {
-		display: "block",
-		width: "90%",
-		wordWrap: "break-word",
-		textAlign: "left",
-		margin: "0px",
-		marginTop: "2px",
-	}
-
-	const textAreaStyle = {
-		padding: "10px",
-		border: "1px solid grey",
-		outline:"1px solid grey",
-		borderRadius: "5px",
-		width: "100%"
-	}
+	
 	async function deleteReview() {
 		const requestOptions = {
 			method: "DELETE",
@@ -131,7 +115,9 @@ export default function ReviewComponent({comment, onDelete, editable, token, get
 	return (
 		<>
 			<div className="row w-100 justify-content-center m-2">
-				<div style={{border: "1px solid #B4B4B4", borderRadius: "5px", minHeight: "auto"}} className="col-sm-12 col-md-6 col-lg-6 p-3 d-flex flex-column">
+				<div style={{border: "1px solid #B4B4B4", borderRadius: "5px", minHeight: "auto"}}
+					className="col-sm-12 col-md-6 col-lg-6 p-3 d-flex flex-column">
+					
 					<div className="d-flex justify-content-between align-items-center">
 						<div className="d-flex align-items-center">
 							<i className="bi bi-person m-0 p-0" style={{margin: "0px", padding: "0px", fontSize:"24px"}}/>
@@ -146,9 +132,9 @@ export default function ReviewComponent({comment, onDelete, editable, token, get
 						<div className="d-flex flex-row w-100">
 							{(comment.positive_comment?.length > 0 || editMode) && <i id="positive_icon" role="icon" aria-label="positive" className="bi bi-plus-circle" style={{fontSize:"20px", color:"green", marginRight:"10px"}}></i>}
 							{editMode ?
-								<TextArea type="text" style={textAreaStyle} rows={4} onChange={(e) => setPositiveComment(e.target.value)} value={positiveComment} />
+								<TextArea type="text" rows={4} onChange={(e) => setPositiveComment(e.target.value)} text={positiveComment} />
 								:
-								comment.positive_comment?.length > 0 && <p style={commentStyle}> {comment.positive_comment}</p>
+								comment.positive_comment?.length > 0 && <p style={styles.comment}> {comment.positive_comment}</p>
 							}
 						</div>
 						{ positiveComment?.length > 0 && comment.negative_comment?.length > 0 &&
@@ -156,12 +142,14 @@ export default function ReviewComponent({comment, onDelete, editable, token, get
 						}
 						{
 							<div className="d-flex flex-row w-100 mt-4">
-								{(comment.negative_comment?.length > 0 || editMode) && <i id="negative_icon" role="icon" aria-label="negative" className="bi bi-dash-circle" style={{fontSize:"20px", color:"red", marginRight:"10px"}}></i>}
+								{(comment.negative_comment?.length > 0 || editMode) && <i id="negative_icon" role="icon" aria-label="negative"
+									className="bi bi-dash-circle" style={{fontSize:"20px", color:"red", marginRight:"10px"}}></i>}
+								
 								{
 									editMode ?
-										<TextArea type="text"  style={textAreaStyle} rows={4} onChange={(e) => setNegativeComment(e.target.value)} value={negativeComment} />
+										<TextArea type="text" rows={4} onChange={(e) => setNegativeComment(e.target.value)} text={negativeComment} />
 										:
-										comment.negative_comment?.length > 0 && <p style={commentStyle}> {comment.negative_comment}</p>
+										comment.negative_comment?.length > 0 && <p className={styles.comment}> {comment.negative_comment}</p>
 								}
 							</div>
 						}

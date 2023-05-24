@@ -1,9 +1,10 @@
-#searchbar-workouts {
+.searchbarWorkouts {
 	margin-bottom: 20px;
 }
 
-#filter-container {
+.filterContainer {
 	display: flex;
+	background-color: red;
 	flex-direction: column;
 	gap: 1rem;
 }
