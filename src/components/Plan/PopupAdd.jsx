@@ -27,7 +27,7 @@ export default function PopupAdd({id, isOpen, setIsOpen}) {
 		<MiniPopup id={id} title={"Lägg till"} isOpen={isOpen} setIsOpen={setIsOpen} titleTopMargin={14}>
 			<div className="popupContainer">
 				<div className="buttonContainer">
-					<Button id="newPlan" onClick={() => navigateAndClose("/plan/create")} outlined={false}>Planering</Button>
+					<Button id="newPlan" onClick={() => navigateAndClose("/plan/create")} outlined={false}>Grupp</Button>
 					<Button id="newSession" onClick={() => navigateAndClose("/session/create")} outlined={false}>Tillfälle</Button>
 				</div>
 			</div>
