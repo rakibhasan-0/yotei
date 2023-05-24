@@ -1,4 +1,4 @@
-import { useState, useRef } from "react"
+import { useState, useEffect } from "react"
 
 import Button from "../Button/Button"
 
@@ -6,7 +6,6 @@ import { List as HamburgerIcon, X as CloseIcon } from "react-bootstrap-icons"
 
 import styles from "./Navbar.module.css"
 import { useNavigate } from "react-router"
-import useOutsideClick from "../../../hooks/useOutsideClick"
 /**
  * The navbar for the entire page.
  * 
@@ -22,35 +21,27 @@ import useOutsideClick from "../../../hooks/useOutsideClick"
  */
 function Navbar({ testId }) {
 
-	// Controls whether or not the menu is open. 
 	const [open, setOpen] = useState(false)
-
 	const navigate = useNavigate()
-
+	
 	const navigateAndClose = path => {
-		navigate(path)
 		setOpen(false)
+		navigate(path)
 	}
-
-	const navbarRef = useRef(null)
-	useOutsideClick(navbarRef, () => setOpen(false))
-
-	function disableScroll() {
-		document.body.style.overflow = "hidden"
-	}
-
-	function enableScroll() {
-		document.body.style.overflow = "scroll"
-	}
+	
+	useEffect(() => {
+		document.body.style.overflowY = open ? "hidden" : "visible"
+		document.body.style.touchAction = open ? "none" : "auto"
+	}, [open])
 
 	return (
-		<nav data-testid={testId} className={styles.commonNavbar} ref={navbarRef}>
-			<HamburgerIcon role="button" className={styles.commonNavbarIcon} onClick={() => {setOpen(true), disableScroll()}}/>
+		<nav data-testid={testId} className={styles.commonNavbar}>
+			<HamburgerIcon role="button" className={styles.commonNavbarIcon} onClick={() => {setOpen(true)}}/>
 			<img src="/ubk-logga.jpg" className={styles.budoLogo} />
 
 			<div className={`${styles.commonNavbarSidebar} p-4  ${open ? styles.open : ""}`}>
 
-				<CloseIcon role="button" className={styles.commonNavbarIconClose} onClick={() => {setOpen(false), enableScroll()}} />
+				<CloseIcon role="button" className={styles.commonNavbarIconClose} onClick={() => {setOpen(false)}} />
 
 				<Button width={"100%"} onClick={() => navigateAndClose("/plan")}>
 					<h1 className={styles.commonNavbarButton}>Grupper</h1>
@@ -77,7 +68,7 @@ function Navbar({ testId }) {
 				</Button>
 
 			</div>
-			<div className={`${styles.boxShadowBackground} ${open ? styles.boxShadowBackgroundOpen : styles.boxShadowBackgroundClosed}`} onClick={() => {setOpen(false), enableScroll()}}/>
+			<div className={`${styles.boxShadowBackground} ${open ? styles.boxShadowBackgroundOpen : styles.boxShadowBackgroundClosed}`} onClick={() => {setOpen(false)}}/>
 		</nav>
 	)
 }
