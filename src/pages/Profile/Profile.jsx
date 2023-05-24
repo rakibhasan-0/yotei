@@ -130,7 +130,7 @@ export default function Profile() {
 				<div className={style.floatRight}>
 					<Button className="btn btn-primary" onClick={changeUsername}>Ändra</Button>
 				</div>
-				<Divider option={"h2_center"} title={"Logga ut"} />
+				<Divider option={"h2_center"}/>
 				<div>
 					<Button onClick={logOut} width={"100%"} className="btn btn-primary">Logga ut</Button>
 				</div>
