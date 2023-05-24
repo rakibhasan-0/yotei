@@ -134,7 +134,7 @@ export default function ReviewComponent({comment, onDelete, editable, token, get
 							{editMode ?
 								<TextArea type="text" rows={4} onChange={(e) => setPositiveComment(e.target.value)} text={positiveComment} />
 								:
-								comment.positive_comment?.length > 0 && <p style={styles.comment}> {comment.positive_comment}</p>
+								comment.positive_comment?.length > 0 && <p className={styles.comment}> {comment.positive_comment}</p>
 							}
 						</div>
 						{ positiveComment?.length > 0 && comment.negative_comment?.length > 0 &&

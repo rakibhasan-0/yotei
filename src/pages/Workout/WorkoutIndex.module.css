@@ -4,7 +4,6 @@
 
 .filterContainer {
 	display: flex;
-	background-color: red;
 	flex-direction: column;
 	gap: 1rem;
 }
