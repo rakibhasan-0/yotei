@@ -37,6 +37,7 @@ import "./BeltBox.css"
 
 function BeltBox ( {id, belts} ) {
 	var hexReg = new RegExp("^#(?:[0-9a-fA-F]{3}){1,2}$")
+	let sortedBelts = sortBelts()
 
 
 	function checkID (id) {
@@ -48,13 +49,25 @@ function BeltBox ( {id, belts} ) {
 		return true
 	}
 
-	function checkBelt () {
+	function checkBelts () {
 		if (belts === null || belts === undefined) {
 			console.error("Invalid Belt input")
 			return false
 		}
 
 		return true
+	}
+
+
+	function sortBelts () {
+		if (checkBelts()) {
+			let sorted = belts.slice().sort(( belt1, belt2 ) => {
+				return belt1.id - belt2.id
+			})
+
+			return sorted
+		}
+		return null
 	}
 
 	function checkBeltChild (belt) {
@@ -87,14 +100,43 @@ function BeltBox ( {id, belts} ) {
 
 		return true
 	}
+
+	function checkDan(belt) {
+		if (belt.id > 13) {
+			switch (belt.id) {
+			case(14):
+				return( 
+					<div key={`${belt.id}-adult-belt`} className="sc23-beltbox-belt sc23-beltbox-belt-dan1" style={{background: adaptColorCode(belt.color)}}>
+						<div className="sc23-beltbox-belt-dan"/>
+					</div>)
+			
+			case(15):
+				return ( 
+					<div key={`${belt.id}-adult-belt`} className="sc23-beltbox-belt sc23-beltbox-belt-dan2" style={{background: adaptColorCode(belt.color)}}>
+						<div className="sc23-beltbox-belt-dan"/>
+						<div className="sc23-beltbox-belt-dan"/>
+					</div>)
+			
+			case(16):
+				return (
+					<div key={`${belt.id}-adult-belt`} className="sc23-beltbox-belt sc23-beltbox-belt-dan3" style={{background: adaptColorCode(belt.color)}}>
+						<div className="sc23-beltbox-belt-dan"/>
+						<div className="sc23-beltbox-belt-dan"/>
+						<div className="sc23-beltbox-belt-dan"/>
+					</div>)
+			}
+		} else {
+			return <div key={`${belt.id}-adult-belt`} className="sc23-beltbox-belt" style={{background: adaptColorCode(belt.color)}}/>
+		}
+	}
 	
 
 	return (
 		// Check if able to load BeltBox
-		checkID(id) && checkBelt() ?
+		checkID(id) && checkBelts() ?
 			<div id={id} className="sc23-beltbox d-flex">
 				{
-					belts.map(belt => 
+					sortedBelts.map(belt => 
 
 						// Check if color is available
 						checkColorCode(belt.color) ?
@@ -107,7 +149,9 @@ function BeltBox ( {id, belts} ) {
 											<div id={`${belt.id}-child-belt-color`} className="sc23-beltbox-belt-child" style={{background: adaptColorCode(belt.color)}}/>
 										</div>
 										:
-										<div key={`${belt.id}-adult-belt`} className="sc23-beltbox-belt" style={{background: adaptColorCode(belt.color)}}/>	
+										checkDan(belt) 
+											
+										
 								)
 								:
 								(
