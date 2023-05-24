@@ -102,7 +102,7 @@ export default function WorkoutView({id}) {
 					{getReviewContainer(showRPopup, setRShowPopup, workoutId)}
 					{getWorkoutInfoContainer(workoutData, setShowPopup, context)}
 					{sortByCategories(workoutData).map((activityCategory) => (
-						<div className="my-5" key={activityCategory.categoryOrder}>
+						<div key={activityCategory.categoryOrder}>
 							<WorkoutActivityList
 								categoryName={activityCategory.categoryName}
 								activities={activityCategory.activities}
@@ -202,12 +202,12 @@ function getWorkoutUsersContainer(workoutUsers) {
 function getButtons(navigate, setRShowPopup) {
 	return (
 		<div className="d-flex row justify-content-center">
-			<div className="d-flex col mt-3 justify-content-end">
+			<div className="d-flex col mb-3 mt-3 justify-content-start">
 				<Button onClick={() => navigate("/workout")} outlined={true}>
 					<p>Tillbaka</p>
 				</Button>
 			</div>
-			<div className="d-flex col mt-3 justify-content-start">
+			<div className="d-flex col mb-3 mt-3 justify-content-end">
 				<Button onClick={() => setRShowPopup(true)} outlined={false}>
 					<p>Utvärdering</p>
 				</Button>

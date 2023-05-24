@@ -38,7 +38,7 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 	return (
 		<div id={id}>
 			{createStripes()}
-			<div className="row align-items-center py-4" key={activity.id}
+			<div className="row align-items-center py-2" key={activity.id}
 				style={{
 					backgroundColor: bgColor
 				}}>
@@ -61,7 +61,7 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 			</div>
 			<div>
 				{isActive && 
-					<div className="row pb-3" style={{ backgroundColor: bgColor }}>
+					<div className="row pb-2" style={{ backgroundColor: bgColor }}>
 						<div className="col">
 							<div role="description-div" className="textDesc">{isFreeTextElem() ? activity.text : activity.exercise ? activity.exercise.description : activity.technique.description}</div>
 						</div>
