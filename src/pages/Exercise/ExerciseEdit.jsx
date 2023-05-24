@@ -11,6 +11,7 @@ import Divider from "../../components/Common/Divider/Divider.jsx"
 import TagInput from "../../components/Common/Tag/TagInput.jsx"
 import {toast} from "react-toastify"
 import EditGallery from "../../components/Gallery/EditGallery"
+import Popup from "../../components/Common/Popup/Popup"
 
 
 /**
@@ -22,7 +23,9 @@ import EditGallery from "../../components/Gallery/EditGallery"
  */
 export default function ExerciseEdit({setShowPopup}) {
 	const context = useContext(AccountContext)
-	const [oldName, setOldName] = useState()
+	const [oldName, setOldName] = useState("")
+	const [oldDesc, setOldDesc] = useState("")
+	const [oldTime, setOldTime] = useState(0)
 	const [name, setName] = useState("")
 	const [desc, setDesc] = useState("")
 	const [time, setTime] = useState(0)
@@ -34,6 +37,7 @@ export default function ExerciseEdit({setShowPopup}) {
 	const [tagRemoveFailed, setTagRemovedFailed] = useState(false)
 	const [exId, setExId] = useState("")
 	const [sendData, setSendData] = useState(false)
+	const [showMiniPopup, setShowMiniPopup] = useState(false)
 
 
 	useEffect(() => {
@@ -85,6 +89,8 @@ export default function ExerciseEdit({setShowPopup}) {
 		setNewTags(tagsJson)
 		setExistingTags(tagsJson)
 		setOldName(exerciseJson.name)
+		setOldDesc(exerciseJson.description)
+		setOldTime(exerciseJson.duration)
 	}
 
 	/**
@@ -93,6 +99,23 @@ export default function ExerciseEdit({setShowPopup}) {
 	 */
 	function timeCallback(id, time){
 		setTime(time)
+	}
+
+	/**
+	 * check if any changes has been done when editing before closing
+	 * exercise edit popup. Tags are sorted by id.
+	 */
+	function checkChanges() {
+
+		const newT = JSON.stringify(newTags.sort((a, b) => a.id - b.id))
+		const oldT = JSON.stringify(existingTags.sort((a, b) => a.id - b.id))
+
+		if(oldName !== name || oldDesc !== desc || oldTime != time || newT !== oldT)  {
+			console.log(newT + " aaaaa " + oldT)
+			setShowMiniPopup(true)
+		} else {
+			setShowPopup(false)
+		}
 	}
 
 	/**
@@ -282,7 +305,7 @@ export default function ExerciseEdit({setShowPopup}) {
 					<Button
 						id={"backBtn"}
 						outlined={"button-back"}
-						onClick={() => setShowPopup(false)}
+						onClick={() => checkChanges()}
 						width={150}>
 						<p>Tillbaka</p>
 					</Button>
@@ -290,10 +313,22 @@ export default function ExerciseEdit({setShowPopup}) {
 						id={"addBtn"}
 						onClick={() => {editExercise()}}
 						width={150}>
-						Spara
+						<p>Spara</p>
 					</Button>
-					
 				</div>
+				<Popup
+					id={"EC-changes-mini-popup"}
+					title={"Ändringar gjorda"}
+					isOpen={showMiniPopup}
+					setIsOpen={setShowMiniPopup}
+					style={{height: "fit-content"}}
+				>
+					<p>Är du säker att du vill lämna?</p>
+					<div className={styles.ECMiniPopupBtns}>
+						<Button id={"EC-mini-popup-leave-btn"} onClick={() => {setShowMiniPopup(false); setShowPopup(false)}} outlined={"button-back"}><p>Lämna</p></Button>
+						<Button id={"EC-mini-popup-stay-btn"} onClick={() => {setShowMiniPopup(false)}}><p>Stanna</p></Button>
+					</div>
+				</Popup>
 			</div>
 		</div>
 	)
