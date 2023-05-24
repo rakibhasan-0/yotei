@@ -151,7 +151,7 @@ export default function ExerciseDetailsPage() {
 				}
 			</div>
 			<div className="d-flex flex-row align-items-center" style={{ gap: "10px" }}>
-				<Clock />
+				<Clock/>
 				<p style={{ marginBottom: "0" }}>{exercise?.duration} min</p>
 			</div>
 			
