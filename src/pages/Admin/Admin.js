@@ -1,6 +1,6 @@
 import React from "react"
-import Export from "../../components/Admin/Export"
-import Import from "../../components/Admin/Import"
+import Export from "../../components/Admin/Export/Export"
+import Import from "../../components/Admin/Import/Import"
 import ManageUser from "../../components/Admin/ManageUser"
 import { AccountContext } from "../../context"
 import { isAdmin } from "../../utils"
