@@ -255,10 +255,8 @@ public class TechniqueController {
         //remove technique from any activity
         List<Activity> affectedActivities = findAssociatedActivities(id);
 
-        for (Activity activity : affectedActivities) {
-            activity.setTechniqueId(null);
-            activityRepository.save(activity);
-        }
+        //delete affected activities
+        activityRepository.deleteAll(affectedActivities);
 
         // remove any existing media
         List<Media> existingMedia = this.mediaRepository.findAllMediaById(id);

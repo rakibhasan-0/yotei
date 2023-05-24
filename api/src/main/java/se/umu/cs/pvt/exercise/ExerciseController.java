@@ -297,10 +297,8 @@ public class ExerciseController {
         Exercise exercise = result.get();
         List<Activity> affectedActivities = findAssociatedActivities(id);
 
-        for (Activity activity : affectedActivities) {
-            activity.setTechniqueId(null);
-            activityRepository.save(activity);
-        }
+        //delete affected activities
+        activityRepository.deleteAll(affectedActivities);
 
         //delete any existing media
         List<Media> existingMedia = mediaRepository.findAllMediaById(id);
