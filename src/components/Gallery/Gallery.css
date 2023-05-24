@@ -43,6 +43,7 @@
     height: 16px;
     opacity: 0.2;
     box-shadow: none;
+    float: none;
 }
 
 .carousel .control-arrow, .carousel.carousel-slider .control-arrow {
