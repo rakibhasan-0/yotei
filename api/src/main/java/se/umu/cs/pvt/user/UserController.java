@@ -14,11 +14,11 @@ import java.util.Optional;
 
 /**
  * Main class for handling login information and transactions with the database.
- * @author Team Hot-Pepper (G7), Quattro formaggio (G1) (Doc: Grupp 2 Griffin c17wfn)
+ * @author Team Hot-Pepper (G7), Quattro formaggio (G1), Chimera (G4) c20lln dv21oby, Griffin (G2) c17wfn
  */
 @RestController
 @CrossOrigin
-@RequestMapping(path = "/user")
+@RequestMapping(path = "/api/users")
 public class UserController {
 
     /**
@@ -38,7 +38,7 @@ public class UserController {
     }
 
     /**
-     * POST method for login verification.
+     * (POST) Method for login verification.
      * @param body HTTP body of information
      * @return HTTP status code and body.
      */
@@ -76,11 +76,11 @@ public class UserController {
     }
 
     /**
-     * PUT method for updating the username for a user
-     * @param body HTTP body of information
+     * (PUT) Method for updating the username for a user
+     * @param body HTTP body of information 
      * @return HTTP status code and body, where body could be a message or the user.
      */
-    @PutMapping("/updatename")
+    @PutMapping("/name")
     public ResponseEntity<Object> updateUsername(@RequestBody Map<String, String> body) {
         //HTTP input
         if (body.get("id").isEmpty()) {
@@ -110,7 +110,7 @@ public class UserController {
             if(!PasswordHash.validatePassword(body.get("password"), userToBeUpdated.get().getPassword())) {
                 return new ResponseEntity<>("Lösenordet stämmer inte.",HttpStatus.BAD_REQUEST);
             }
-        } catch (InvalidUserNameException e) {
+        } catch (InvalidUserNameException e) { 
             return new ResponseEntity<>("Fel vid sparandet av användarnamnet.",HttpStatus.NOT_ACCEPTABLE);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             return new ResponseEntity<>("Fel vid verifiering av lösenordet.",HttpStatus.BAD_REQUEST);
@@ -126,10 +126,10 @@ public class UserController {
     }
 
     /**
-     * Returns all the users, not including password.
+     * (GET) Returns all the users, not including password.
      * @return HTTP status code and body, where body could be a message or the users.
      */
-    @GetMapping("/all")
+    @GetMapping("")
     @ResponseBody
     public Object getUsers() {
         List<UserShort> result = repository.findAllProjectedBy();
@@ -140,13 +140,13 @@ public class UserController {
     }
 
     /**
-     * Returns a specific user.
+     * (GET) Returns a specific user.
      *
      * @param username The username to be returned.
      * @return Returned either HTTP-request or the user if it goes well.
      */
-    @GetMapping("/{username}")
-    public Object getUser(@PathVariable("username") String username) {
+    @GetMapping("/{name}")
+    public Object getUser(@PathVariable("name") String username) {
 
         if (username == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -156,14 +156,11 @@ public class UserController {
     }
 
     /**
-     * Makes a new user and saves it to the database.
-     *
-     * @param user The user to be added with username, password and role.
+     * (POST) Makes a new user and saves it to the database.
      * @return HTTP status.
      */
-    @PostMapping("/register")
+    @PostMapping("")
     public Object registerUser(@RequestBody User user) {
-
         if(user.getUsername().isEmpty()) {
             System.err.println("No username given\n");
             return new ResponseEntity<>("Inget användarnamn angivet", HttpStatus.NOT_ACCEPTABLE);
@@ -190,12 +187,11 @@ public class UserController {
     }
 
     /**
-     * Gets the Username by an id. User ID must be greater than or equal to zero.
-     *
-     * @param userId The ID of the user to get the username for.
+     * (GET) Gets the Username by an id. User ID must be greater than or equal to zero.
+     * @param id The ID of the user to get the username for.
      * @return BAD_REQUEST if userId is null or less than zero.
      */
-    @GetMapping("/getname/{id}")
+    @GetMapping("/{id}/name")
     public Object getUsername(@PathVariable("id") Long userId){
         if (userId == null || userId < 0) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -205,8 +201,7 @@ public class UserController {
     }
 
     /**
-     * Refreshes the JWT-Token from a previous JWT-Token.
-     *
+     * (PUT) Refreshes the JWT-Token from a previous JWT-Token.
      * @param token The current JWT-Token.
      * @return The previous JWT-token.
      */
@@ -218,11 +213,11 @@ public class UserController {
     }
 
     /**
-     * PUT method for updating the password for a user
+     * (PUT) Updates the password of a user.
      * @param body HTTP body of information
      * @return HTTP status code and body, where body could be a message or the user.
      */
-    @PutMapping("/updatepassword")
+    @PutMapping("/password")
     public ResponseEntity<Object> updatePassword(@RequestBody Map<String, String> body) {
         //HTTP input
 
@@ -268,11 +263,11 @@ public class UserController {
     }
 
     /**
-     * Removes one user from the program(Deletes it from the database).
+     * (DELETE) Removes user.
      * @param id The id of the user to remove
      * @return HTTP status.
      */
-    @DeleteMapping("/remove/{id}")
+    @DeleteMapping("/{id}")
     public Object removeUser(@PathVariable("id") Long id) {
         Optional<User> possibleUser = repository.findById(id);
         if (possibleUser.isEmpty()) {
@@ -290,13 +285,13 @@ public class UserController {
     }
 
     /**
-     * Changes the role on a user. If the user have admin role it gets a user
-     * role and if the user has a user role it gets an admin role.
-     * @param username the username of the user that should change role
+     * (PUT) Changes the role of the given user.
+     * @param uid the id of the user to update
+     * @param rid the id of the role to change to
      * @return HTTP status.
      */
-    @PostMapping("/{id}/role/{role_id}")
-    public Object changeRoleUser(@PathVariable("id") Long id, @PathVariable("role_id") int roleId) {
+    @PostMapping("/{uid}/role/{rid}")
+    public Object changeRoleUser(@PathVariable("uid") Long id, @PathVariable("rid") int roleId) {
         Optional<User> possibleUser = repository.findById(id);
         if (possibleUser.isEmpty()) {
             return new ResponseEntity<>("Användaren finns inte", HttpStatus.BAD_REQUEST);
