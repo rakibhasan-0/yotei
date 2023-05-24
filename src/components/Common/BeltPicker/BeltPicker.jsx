@@ -118,6 +118,7 @@ export default function BeltPicker({ id, states, onToggle, centered }) {
 
 	return (
 		<DropdownComponent text={"Bälten"} id={id} centered={centered} autoClose={false} >
+			<input type="checkbox" style={{display: "none"}}/> {/* Do not touch this checkbox, is needed */}
 			{belts && Object.values(belts).map((belt, index) => (
 				<BeltRow onToggle={onToggle} states={states} key={index} belt={belt} />
 			))}
