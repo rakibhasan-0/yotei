@@ -10,6 +10,7 @@ import Tag from "../../components/Common/Tag/Tag"
 import Gallery from "../../components/Gallery/Gallery"
 import {toast} from "react-toastify"
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
+import ActivityDelete from "../../components/Activity/ActivityDelete/ActivityDelete"
 import ErrorState from "../../components/Common/ErrorState/ErrorState"
 import ExerciseEdit from "./ExerciseEdit"
 import {isEditor} from "../../utils"
@@ -36,6 +37,7 @@ export default function ExerciseDetailsPage() {
 	const [error, setError] = useState()
 	const navigate = useNavigate()
 	const [showEditPopup, setShowEditPopup] = useState(false)
+	const [showDeletePopup, setShowDeletePopup] = useState(false)
 	const accountRole = useContext(AccountContext)
 
 	const fetchComments = () => {
@@ -140,15 +142,20 @@ export default function ExerciseDetailsPage() {
 		return <ErrorState message={error} onBack={() => navigate("/exercise")} />
 	}
 	return (
-		<div className="text-left">
-			<div className="d-flex flex-row align-items-center justify-content-between">
-				<h1 className="mt-2">{exercise?.name}</h1>
-				{isEditor(accountRole) && 
-					<div className="d-flex flex-row" style={{gap: "10px"}}>
-						<Pencil onClick={() => setShowEditPopup(true)} size="24px" style={{color: "var(--red-primary)"}} />
-						<Trash onClick={() => setShowAlert(true)} size="24px" style={{color: "var(--red-primary)"}} />
+		<div className="container">
+			<div className="row justify-content-center">
+				<div className="col-md-8 text-left">
+					<div className="d-flex flex-row align-items-center justify-content-between">
+						<h1 className="mt-2">{exercise?.name}</h1>
+						{isEditor(accountRole) && 
+							<div className="d-flex flex-row" style={{gap: "10px"}}>
+								<Pencil onClick={() => setShowEditPopup(true)} size="24px" style={{color: "var(--red-primary)"}} />
+								<Trash onClick={() => setShowDeletePopup(true)} size="24px" style={{color: "var(--red-primary)"}}/>
+							</div>
+						}
 					</div>
-				}
+				
+				</div>
 			</div>
 			<div className="d-flex flex-row align-items-center" style={{ gap: "10px" }}>
 				<Clock/>
@@ -204,6 +211,15 @@ export default function ExerciseDetailsPage() {
 				onClick={() => onDeleteComment()}
 				setShowPopup={() => setShowDeleteComment(false)}
 			/>
+
+			<div>
+				<Popup
+					title="Ta bort övning"
+					isOpen={showDeletePopup}
+					setIsOpen={setShowDeletePopup}>
+					<ActivityDelete id={ex_id} name={exercise?.name} setIsOpen={showDeletePopup} what={"Övning"}/>
+				</Popup>
+			</div>
 
 			<Popup
 				title={"Redigera Övning"}

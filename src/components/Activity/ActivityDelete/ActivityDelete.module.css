@@ -1,0 +1,27 @@
+
+.popupContainer {
+	text-align: justify;
+	align-items: center;
+	text-align: left; 
+}
+
+
+.popupContainer > p {
+	font-size: large;
+}
+
+.card {
+    border: 1px inset #6D6D6D;
+    padding: 16px;
+    text-align: left;
+    margin: 4px;
+    border-radius: var(--border-radius);
+}
+
+.buttonGroup {
+    display: flex;
+	gap: 12px;
+    flex-direction: row;
+	justify-content: space-evenly;
+	align-items: center;
+}

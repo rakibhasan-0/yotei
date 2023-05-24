@@ -18,6 +18,7 @@ import Popup from "../../../components/Common/Popup/Popup"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
 
 import TechniqueEdit from "../TechniqueEdit/TechniqueEdit"
+import ActivityDelete from "../../../components/Activity/ActivityDelete/ActivityDelete"
 
 
 /**
@@ -46,6 +47,7 @@ function TechniqueDetail({ id }) {
 	const accountRole = useContext(AccountContext)
 	const [showPopup, setShowPopup] = useState(false)
 	const [showConfirmPopup, setShowConfirmPopup] = useState(false)
+	const [showDeletePopup, setShowDeletePopup] = useState(false)
 
 	const handleGet = useCallback(() => {
 		// Fix to update the details page after an edit
@@ -110,6 +112,17 @@ function TechniqueDetail({ id }) {
 				</Popup>
 			</div>
 
+			<div>
+				<Popup
+					title="Ta bort teknik"
+					isOpen={showDeletePopup}
+					setIsOpen={setShowDeletePopup}>
+					<ActivityDelete id={"technique-workout-delete-popup"} activityID={techniqueId} name={technique.name} setIsOpen={showDeletePopup} what={"Teknik"}/>
+				</Popup>
+			</div>
+		
+
+
 			<div className="technique-detail-container" id={id == undefined ? "technique" : id}>
 				<h1>{technique.name}</h1>
 				{isEditor(accountRole) && <div className="technique-detail-actions-container">
@@ -124,7 +137,7 @@ function TechniqueDetail({ id }) {
 						size="24px"
 						color="var(--red-primary)"
 						style={{ cursor: "pointer" }}
-						onClick={() => setShowConfirmPopup(true)}
+						onClick={() => setShowDeletePopup(true)}
 					/>
 				</div>
 				}
