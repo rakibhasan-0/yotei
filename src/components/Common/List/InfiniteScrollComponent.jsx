@@ -27,6 +27,8 @@ export default function InfiniteScrollComponent({ children }) {
 
 	const [visibleTechniques, setVisibleTechniques] = useState([])
 
+	const [isLoading, setIsLoading] = useState(true)
+
 	function updateShownItems() {
 		let startIndex = shownItems.current - 20
 		let endIndex = shownItems.current 
@@ -34,6 +36,7 @@ export default function InfiniteScrollComponent({ children }) {
   
 		setVisibleTechniques(prevItems => [...prevItems, ...data])
 		shownItems.current += 20
+		setIsLoading(false)
 	}
 
 	useEffect(() => {
@@ -44,27 +47,24 @@ export default function InfiniteScrollComponent({ children }) {
   
 
 	return (
-
-		<InfiniteScroll
-			dataLength={visibleTechniques.length}
-			hasMore={children.length > visibleTechniques.length}
-			next={(updateShownItems)}
-			loader={
-				<div style={{padding: 20}}>
-					<Spinner/>
+		isLoading ? 
+			< Spinner />
+			:
+			<InfiniteScroll
+				dataLength={visibleTechniques.length}
+				hasMore={children.length > visibleTechniques.length}
+				next={(updateShownItems)}
+				loader={
+					<div style={{padding: 20}}>
+						<Spinner/>
+					</div>
+				}
+				scrollableTarget={"scrollable-content"}
+			>
+				<div>
+					{visibleTechniques}
 				</div>
-			}
-			endMessage={
-				<div style={{padding: 20}}>
-					<p>Det var allt!</p>
-				</div>
-			}
-			scrollableTarget={"scrollable-content"}
-		>
-			<div>
-				{visibleTechniques}
-			</div>
-		</InfiniteScroll>
+			</InfiniteScroll>
 	)
 
 }
