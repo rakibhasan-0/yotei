@@ -150,13 +150,17 @@ export default function ExerciseDetailsPage() {
 					</div>
 				}
 			</div>
-			<div className="d-flex flex-row" style={{ gap: "10px" }}>
+			<div className="d-flex flex-row align-items-center" style={{ gap: "10px" }}>
 				<Clock />
-				<p>{exercise?.duration} min</p>
+				<p style={{ marginBottom: "0" }}>{exercise?.duration} min</p>
 			</div>
 			
-			<h2 className="fw-bold">Beskrivning</h2>
-			<p>{exercise?.description}</p>
+			<h2 className="fw-bold" style={{ marginTop: "5px" }}>Beskrivning</h2>
+			{exercise?.description ? (
+				<p>{exercise.description}</p>
+			) : (
+				<p style={{ fontStyle: "italic", color: "var(--gray)" }}>Beskrivning saknas.</p>
+			)}
 			
 			{tags?.length > 0 && <>
 				<h2 className="fw-bold">Taggar</h2>

@@ -140,7 +140,7 @@ function TechniqueDetail({ id }) {
 				{technique.description ? (
 					<p>{technique.description}</p>
 				) : (
-					<p>Denna teknik saknar beskrivning.</p>
+					<p style={{ fontStyle: "italic", color: "var(--gray)" }}>Beskrivning saknas.</p>
 				)}
 				<h2>Taggar</h2>
 				<div className="technique-detail-tag-container">
