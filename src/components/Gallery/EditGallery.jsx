@@ -11,7 +11,7 @@ import { AccountContext } from "../../context"
 import {Plus as PlusIcon} from "react-bootstrap-icons"
 import {Trash as TrashIcon } from "react-bootstrap-icons"
 import {CameraVideoOff as NoMediaIcon } from "react-bootstrap-icons"
-import UploadMedia from "../Common/Upload/UploadMedia"
+import UploadMedia from "../Upload/UploadMedia"
 import ReactPlayer from "react-player"
 /**
  * A media component for displaying video or images.

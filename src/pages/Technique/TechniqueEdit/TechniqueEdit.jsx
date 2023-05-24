@@ -9,7 +9,7 @@ import { AccountContext } from "../../../context"
 import TagInput from "../../../components/Common/Tag/TagInput"
 import { HTTP_STATUS_CODES, scrollToElementWithId, setError, setSuccess } from "../../../utils"
 import Popup from "../../../components/Common/Popup/Popup"
-import UploadMedia from "../../../components/Common/Upload/UploadMedia"
+import UploadMedia from "../../../components/Upload/UploadMedia"
 import EditGallery from "../../../components/Gallery/EditGallery"
 import Divider from "../../../components/Common/Divider/Divider"
 

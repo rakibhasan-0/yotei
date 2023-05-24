@@ -32,9 +32,10 @@ export default function Gallery({ id }) {
 		}
 		try {
 			const response = await fetch(`/api/media/${id}`, requestOptions)
-
+			
 			if (response.ok) {
 				const data =  await response.json()
+				console.log(data)
 				setMedia(data) 
 			} 
 		} catch (error) {
