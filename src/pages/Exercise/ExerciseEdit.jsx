@@ -282,7 +282,7 @@ export default function ExerciseEdit({setShowPopup}) {
 						errorDisabled={true}
 					/>
 				</div>
-				<Divider id={"timeSelectorTitle"} option={"h1_left"} title={"Tid"} />
+				<Divider id={"timeSelectorTitle"} option={"h2_left"} title={"Tid"} />
 				<div className={styles.timeSelector} >
 					<MinutePicker
 						id={"minuteSelect"}
@@ -290,14 +290,14 @@ export default function ExerciseEdit({setShowPopup}) {
 						callback={timeCallback}
 					/>
 				</div>
-				<Divider id={"tag-title"} option={"h1_left"} title={"Taggar"} />
+				<Divider id={"tag-title"} option={"h2_left"} title={"Taggar"} />
 				<TagInput
 					id={"tagHandler"}
 					addedTags={newTags}
 					setAddedTags={setNewTags}
 					isNested={true}
 				/>
-				<Divider id={"media-title"} option={"h1_left"} title={"Media"} />
+				<Divider id={"media-title"} option={"h2_left"} title={"Media"} />
 				<EditGallery id={exId} exerciseId={exId} sendData={sendData}/>
 
 				{/*Button for the form. Calls the function addExercise. Retrieve the users input*/}

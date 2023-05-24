@@ -12,6 +12,7 @@ import Popup from "../../../components/Common/Popup/Popup"
 import UploadMedia from "../../../components/Common/Upload/UploadMedia"
 import { toast } from "react-toastify"
 import EditGallery from "../../../components/Gallery/EditGallery"
+import Divider from "../../../components/Common/Divider/Divider"
 
 const KIHON_TAG = { id: 3, name: "Kihon Waza" }
 
@@ -148,25 +149,21 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 	return (
 		<div id={id} style={{ display: "flex", gap: "16px", flexDirection: "column" }}>
 
-			<div>
-				<InputTextField
-					id="techniqueEditInputName"
-					text={techniqueName}
-					onChange={(e) => setTechniqueName(e.target.value)}
-					placeholder={"Namn"}
-					errorMessage={inputErrorMessage}
-				>
-				</InputTextField>
-			</div>
+			<InputTextField
+				id="techniqueEditInputName"
+				text={techniqueName}
+				onChange={(e) => setTechniqueName(e.target.value)}
+				placeholder={"Namn"}
+				errorMessage={inputErrorMessage}
+			>
+			</InputTextField>
 
-			<div style={{ height: "130px", minHeight: "130px" }}>
-				<TextArea
-					id={style.techniqueEditInputDescription}
-					text={techniqueDescription}
-					onChange={(e) => setTechniqueDescription(e.target.value)}
-					placeholder={"Beskrivning av teknik"}>
-				</TextArea>
-			</div>
+			<TextArea
+				id={style.techniqueEditInputDescription}
+				text={techniqueDescription}
+				onChange={(e) => setTechniqueDescription(e.target.value)}
+				placeholder={"Beskrivning av teknik"}>
+			</TextArea>
 
 			<CheckBox
 				id={style.techniqueEditCheckboxKihon}
@@ -181,11 +178,7 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 				states={belts}>
 			</BeltPicker>
 
-			<div style={{ display: "flex", marginBottom: "-10px" }}>
-				<h1 className={style.techniqueEditTitle} >Taggar</h1>
-			</div>
-
-			<div className={style.techniqueEditHorizontalLine} style={{marginBottom: "-12px"}} />
+			<Divider title="Taggar" option="h2_left"/>
 
 			<TagInput
 				id={style.techniqueEditTaginput}
@@ -194,11 +187,7 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 				isNested={true}>
 			</TagInput>	
 
-			<div style={{ display: "flex", marginBottom: "-10px" }}>
-				<h1 className={style.techniqueEditTitle}>Media</h1>
-			</div>
-
-			<div className={style.techniqueEditHorizontalLine} style={{marginBottom: "-6px"}} />
+			<Divider title="Media" option="h2_left"/>
 
 			<div className={style.mediaButtonContainer}>
 				<EditGallery id={technique.id} exerciseId={technique.id} sendData={sendData}/>

@@ -9,6 +9,7 @@ import { AccountContext } from "../../../context"
 import TagInput from "../../../components/Common/Tag/TagInput"
 import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../../utils"
 import { toast } from "react-toastify"
+import Divider from "../../../components/Common/Divider/Divider"
 
 const KIHON_TAG = { id: 1 }
 
@@ -162,8 +163,7 @@ export default function CreateTechnique({ id, setIsOpen }) {
 			/>
 			<div style={{height: "1rem"}}/>
 
-			<h1 className="create-technique-title">Taggar</h1>
-			<div className="create-technique-horizontal-line"/>
+			<Divider title="Taggar" option="h2_left"/>
 				
 			<TagInput
 				id="create-technique-taginput"

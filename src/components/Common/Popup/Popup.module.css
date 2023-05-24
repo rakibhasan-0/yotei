@@ -33,13 +33,7 @@
 
 .topbar {
     text-align: left;
-}
-
-h1.title {
-    font-size: 25px;
-    font-weight: 600;
-    margin-left: 5px;
-    margin-bottom: 0px;
+    margin-right: 25px;
 }
 
 .content {
@@ -64,11 +58,4 @@ h1.title {
     right: 14px;
     top: 13px;
     cursor: pointer;
-}
-
-.horizontalLine {
-    border-bottom: 0.1px solid #8f8f8f;
-    margin-top: 3px;
-    margin-bottom: 16px;
-    width: 82%;
 }

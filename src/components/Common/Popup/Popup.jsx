@@ -1,6 +1,7 @@
 import { X } from "react-bootstrap-icons"
 import styles from "./Popup.module.css"
 import React, { useEffect } from "react"
+import Divider from "../Divider/Divider"
 
 /**
  * Popup is a component that creates a popup window with a title and a close button.
@@ -33,7 +34,7 @@ import React, { useEffect } from "react"
  * @version 3.0
  * @since 2023-05-16
  */
-export default function Popup({ title, id, isOpen, setIsOpen, children, isNested, style}) {
+export default function Popup({ title, id, isOpen, setIsOpen, children, isNested, style, onClose}) {
 
 	// Synchronize react state with CSS-styling in browser
 	useEffect(() => {
@@ -50,21 +51,27 @@ export default function Popup({ title, id, isOpen, setIsOpen, children, isNested
 
 	return (
 		<>
-			<div className={styles.backdrop} onClick={() => setIsOpen(false)}/>
+			<div className={styles.backdrop} onClick={() => {
+				setIsOpen(false)
+				if(onClose) onClose()
+			}}
+			/>
 			<div
 				className={styles.container}
 				id={id}
 				style={style}
 			>
 				<div className={styles.topbar}>
-					{title && <h1 className={styles.title} role="title">{title}</h1>}
+					{title && <Divider title={title} option="h1_left"/>}
 					<button
 						className={styles.closebutton}
-						onClick={() => setIsOpen(false)}
+						onClick={() => {
+							setIsOpen(false)
+							if(onClose) onClose()
+						}}
 					>
 						<X width={44} height={44} color="black"/>
 					</button>
-					{title && <div className={styles.horizontalLine} />}
 				</div>
 				<div className={styles.content} id = "scrollable-content">
 					{children}

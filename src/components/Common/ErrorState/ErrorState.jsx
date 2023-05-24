@@ -27,7 +27,7 @@ function ErrorState({ message, onBack, onRecover, id }) {
 	return (
 		<div id={id ? id : "noid"} className={"error-state-container"}>
 			<div className="error-state-icon-container">
-				<EmojiFrown size="5rem" color="var(--red-primary)" />
+				<EmojiFrown size="80" color="var(--red-primary)" />
 			</div>
 			<h1>Hoppsan!</h1>
 			<h2>Det verkar som att något gick fel</h2>
