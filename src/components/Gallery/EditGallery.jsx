@@ -98,7 +98,7 @@ export default function EditGallery({ id, exerciseId, sendData }) {
 	const NoMedia = <div id={"no-media-box"}
 		className = "d-flex flex-column justify-content-center align-items-center no-media-container border">
 		<NoMediaIcon size={"20%"} ></NoMediaIcon>
-		<span>Ingen media just nu, ladda upp genom att klicka på plus</span>
+		<span className = "no-media-span">Ingen media just nu, ladda upp genom att klicka på plus</span>
 	</div>
 
 	/**

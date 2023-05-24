@@ -11,6 +11,12 @@
     max-width: 400px;
 }
 
+.no-media-span{
+	padding-right: 15px;
+	padding-left: 15px;
+	text-align: justify;
+}
+
 .btn-add-media {
     background-color: var(--red-primary);
     width: 80px;
