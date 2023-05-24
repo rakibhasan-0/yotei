@@ -20,7 +20,7 @@ export class UserApi {
 				"Content-Type": "application/json",
 			}
 		})
-		const response = await ctx.post("/user/verify", {
+		const response = await ctx.post("/api/users/verify", {
 			failOnStatusCode: true,
 			data: {
 				username: "admin",
@@ -43,7 +43,7 @@ export class UserApi {
 		const ctx = await UserApi.make_ctx()
 
 		await UserApi.remove_user(username)
-		const response = await ctx.post("/user/register", {
+		const response = await ctx.post("/api/users", {
 			data: {
 				username: username,
 				password: password,
@@ -60,6 +60,6 @@ export class UserApi {
      */
 	static async remove_user(username: string) {
 		const ctx = await UserApi.make_ctx()
-		await ctx.delete("/user/remove/" + username)
+		await ctx.delete("/api/users/" + username)
 	}
 }

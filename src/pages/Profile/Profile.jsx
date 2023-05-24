@@ -86,7 +86,7 @@ export default function Profile() {
 			method: "PUT",
 			body: JSON.stringify({newPassword: newPassword, verifyNewPassword: verifyNewPassword, oldPassword: password, id: userId})
 		}
-		const response = await fetch("/user/updatepassword", requestOptions)
+		const response = await fetch("/api/users/password", requestOptions)
 		if (!response.ok) {
 			return setWrongPassword("Lösenordet stämmer inte")
 		}
@@ -101,7 +101,7 @@ export default function Profile() {
 			method: "PUT",
 			body: JSON.stringify({newUsername: newUsername, password: UsernamePassword, id: userId})
 		}
-		const response = await fetch("/user/updatename", requestOptions)
+		const response = await fetch("/api/users/name", requestOptions)
 		if (!response.ok) {
 			return setVerifyUsernamePassword("Lösenordet stämmer inte")
 		}

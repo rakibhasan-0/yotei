@@ -61,7 +61,7 @@ export default function ChangeUsernameForm() {
 			method: "PUT",
 			body: JSON.stringify({newUsername: newUsername, password: password, id: userId})
 		}
-		const response = await fetch("/user/updatename", requestOptions)
+		const response = await fetch("/api/users/name", requestOptions)
 		verifyNameChange(response)
 	}
 

@@ -26,7 +26,7 @@ const FetchWorkoutDesc = ({workout, apiPath}) => {
 		fetch(`/api/${apiPath}/getdesc/${workout.id}`, requestOptions)
 			.then(res => res.json())
 			.then(data => {
-				fetch(`/user/getname/${workout.author}`, requestOptions)
+				fetch(`/api/users/${workout.author}/name`, requestOptions)
 					.then(res => res.json())
 					.then(data2 => {
 						data.authorName = data2.username

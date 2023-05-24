@@ -258,7 +258,7 @@ class ManageUser extends React.Component {
 		}
 		try {
 			this.userSelectionRef.current.setValue(null)
-			const response = await fetch("/user/all", requestOptions)
+			const response = await fetch("/api/users", requestOptions)
 			if (response.ok) {
 				const data = await response.json()
 				this.setState({
@@ -311,7 +311,7 @@ class ManageUser extends React.Component {
 	prepareRemove() {
 		this.currentStatusLabel = this.removeUserStatusLbl
 		this.successMessage = `${this.state.selectedUser.username} är borttagen`
-		this.confirmUserBtn.onclick = this.confirmManage.bind(this, `/user/remove/${this.state.selectedUser.userId}`, "DELETE")
+		this.confirmUserBtn.onclick = this.confirmManage.bind(this, `/api/users/${this.state.selectedUser.userId}`, "DELETE")
 		this.confirmLbl.innerHTML = "Ange användarnamnet igen"
 		this.confirmUserInput.type = "text"
 		this.overlayOpen()
@@ -329,7 +329,7 @@ class ManageUser extends React.Component {
 	prepareChangeRole() {
 		this.currentStatusLabel = this.changeRoleStatusLbl
 		this.successMessage = `${this.state.selectedUser.username} är nu ${this.state.changeUserRole.label}`
-		this.confirmUserBtn.onclick = this.confirmManage.bind(this, `/user/${this.state.selectedUser.userId}/role/${this.state.changeUserRole.value}`, "POST")
+		this.confirmUserBtn.onclick = this.confirmManage.bind(this, `/api/users/${this.state.selectedUser.userId}/role/${this.state.changeUserRole.value}`, "POST")
 		this.confirmLbl.innerHTML = "Ange användarnamnet igen"
 		this.confirmUserInput.type = "text"
 		this.overlayOpen()
@@ -363,7 +363,7 @@ class ManageUser extends React.Component {
 				headers: { "Content-Type": "application/json", token: this.context.token},
 				body: JSON.stringify(data)
 			}
-			const path = "/user/register"
+			const path = "/api/users"
 			this.sendData(path, requestOptions)
 			this.setState({
 				newUserName: "",

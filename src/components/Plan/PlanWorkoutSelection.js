@@ -28,7 +28,7 @@ function PlanWorkoutSelection({onClose, onAddClick, workout}) {
 				setWorkouts(data)
 				let allUsernames = []
 				// After the workouts are set, get the username of all the authors
-				fetch("/user/all", {headers: {token: token}})
+				fetch("/api/users", {headers: {token: token}})
 					.then(res => res.json())
 					.then((data) => {
 						allUsernames = data.map(({user_id, username}) => ({user_id, username}))

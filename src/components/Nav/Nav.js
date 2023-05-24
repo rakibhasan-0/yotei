@@ -21,7 +21,7 @@ const Nav = () => {
 	const { token, userId} = useContext(AccountContext)    
     
 	useEffect(() => {
-		fetch(`/user/getname/${userId}`, {headers: {token}, method: "GET"})
+		fetch(`/api/users/${userId}/name`, {headers: {token}, method: "GET"})
 			.then(resp => resp.json())
 			.then(data => setUserName(data.username))
 	})

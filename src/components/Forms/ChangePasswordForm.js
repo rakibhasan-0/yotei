@@ -62,7 +62,7 @@ export default function ChangePasswordForm() {
 			method: "PUT",
 			body: JSON.stringify({newPassword: newPassword, verifyNewPassword: verifyNewPassword, oldPassword: password, id: userId})
 		}
-		const response = await fetch("/user/updatepassword", requestOptions)
+		const response = await fetch("/api/users/password", requestOptions)
 		verifyPasswordChange(response)
 	}
 

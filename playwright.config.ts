@@ -12,7 +12,7 @@ const systestEnv = {
 	"USE_IMP_SERVER": "false",
 }
 const frontendURL = "http://localhost:" + process.env.FRONTEND_PORT
-const backendURL = "http://localhost:" + process.env.GATEWAY_PORT + "/user/verify"
+const backendURL = "http://localhost:" + process.env.GATEWAY_PORT + "/api/users/verify"
 
 /**
  * See https://playwright.dev/docs/test-configuration.

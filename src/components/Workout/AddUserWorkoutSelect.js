@@ -31,7 +31,7 @@ function AddUserWorkoutSelect(props) {
 			setAuthor(props.author)
 		} else {
 			try {
-				fetch(`/user/getname/${userId}`, { headers: { token }, method: "GET" })
+				fetch(`/api/users/${userId}/name`, { headers: { token }, method: "GET" })
 					.then(resp => resp.json())
 					.then(data => setAuthor(data.username))
 			} catch (error) {
@@ -46,7 +46,7 @@ function AddUserWorkoutSelect(props) {
     */
 	const fetchData = async () => {
 		try {
-			const response = await fetch("/user/all", { headers: { token } })
+			const response = await fetch("/api/users", { headers: { token } })
 			const json = await response.json()
 
 			const allUsers = json.map(user => {

@@ -76,7 +76,7 @@ function Login() {
 			method: "POST",
 			body: JSON.stringify({ username: username, password: password })
 		}
-		const response = await fetch("/user/verify", requestOptions)
+		const response = await fetch("/api/users/verify", requestOptions)
 
 		if (loginIsOk(response)) {
 			if (currentPath === "/" || currentPath === "" || currentPath === undefined) {

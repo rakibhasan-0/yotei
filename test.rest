@@ -1,7 +1,7 @@
 @authToken = {{login.response.body}}
 
 # @name login
-POST http://imp.cs.umu.se/user/verify
+POST http://imp.cs.umu.se/api/users/verify
 Content-Type: application/json
 
 {

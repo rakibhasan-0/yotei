@@ -71,7 +71,7 @@ function AddUserDropdown({addedUsers, setAddedUsers}) {
 		}
 
 		// Gör en slagning. testar med att ta bort från users
-		fetch("/user/all", {headers: { token }, method: "GET"})
+		fetch("/api/users", {headers: { token }, method: "GET"})
 			.then(resp => resp.json())
 			.then(data => setUsers(filter(data)))
 		
