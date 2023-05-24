@@ -117,7 +117,7 @@ function TechniqueDetail({ id }) {
 					title="Ta bort teknik"
 					isOpen={showDeletePopup}
 					setIsOpen={setShowDeletePopup}>
-					<ActivityDelete id={"technique-workout-delete-popup"} activityID={techniqueId} name={technique.name} setIsOpen={showDeletePopup} what={"Teknik"}/>
+					<ActivityDelete id={"technique-workout-delete-popup"} activityID={techniqueId} name={technique.name} setIsOpen={setShowDeletePopup} what={"Teknik"}/>
 				</Popup>
 			</div>
 		
