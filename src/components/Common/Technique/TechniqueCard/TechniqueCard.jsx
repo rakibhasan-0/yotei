@@ -57,13 +57,13 @@ function constructColor(technique) {
 			{
 				technique.beltColors !== undefined ?
 					technique.beltColors.length > 0 ?  	
-						technique.beltColors.map((belt) => {
+						technique.beltColors.map((belt, key) => {
 							return (belt !== undefined ?
 								belt.is_child ?
-									constructChildBelt(technique, belt, technique.beltColors.length)
+									constructChildBelt(technique, belt, technique.beltColors.length, key)
 									: 
-									constructAdultBelt(technique, belt, technique.beltColors.length) 
-								: constructAdultBelt("13c9ed", technique.beltColors.length) 
+									constructAdultBelt(technique, belt, technique.beltColors.length, key) 
+								: constructAdultBelt("13c9ed", technique.beltColors.length, key) 
 							)})
 						:	constructDefaultBelt(technique, "8e03ad") //om vi fär 0st fägerger (lila)
 
@@ -84,10 +84,10 @@ function constructDefaultBelt(color) {
 	)
 }
 
-function constructAdultBelt(technique, belt, beltLength) {
+function constructAdultBelt(technique, belt, beltLength, key) {
 	return (
 		<div
-			key={technique.techniqueID + belt.belt_name + belt.is_child}
+			key={key}
 			className={["technique-card-belt-color", belt.belt_name === "Vitt" ? "technique-card-belt-border" : ""].join(" ")}
 			style={
 				{
@@ -100,10 +100,10 @@ function constructAdultBelt(technique, belt, beltLength) {
 
 }
 
-function constructChildBelt(technique, belt, beltLength) {
+function constructChildBelt(technique, belt, beltLength, key) {
 	return (
 		<div 
-			key={technique.techniqueID  + belt.belt_name + belt.is_child}
+			key={key}
 			className={["technique-card-belt-color", "technique-card-belt-border"].join(" ")}
 			style={
 				{

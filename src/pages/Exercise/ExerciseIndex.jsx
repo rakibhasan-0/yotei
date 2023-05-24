@@ -13,6 +13,8 @@ import ExerciseCreate from "./ExerciseCreate"
 import FilterContainer from "../../components/Common/Filter/FilterContainer/FilterContainer"
 import Sorter from "../../components/Common/Sorting/Sorter"
 import ExerciseCard from "../../components/Common/ExerciseCard/ExerciseListItem"
+import InfiniteScrollComponent from "../../components/Common/List/InfiniteScrollComponent"
+
 
 /**
  * Function for the Exercise-page. Creates the searchbar and the list.
@@ -140,7 +142,9 @@ function ExerciseIndex() {
 			</ExerciseCard>
 		})
 
-		return exercises
+		return (<InfiniteScrollComponent>
+			{exercises}
+		</InfiniteScrollComponent>)
 	}
 
 	return (
@@ -168,7 +172,8 @@ function ExerciseIndex() {
 				</Sorter>
 			</FilterContainer>
 		
-			{renderExercises(visibleList, detailURL)}
+			{renderExercises(visibleList, detailURL)
+			}
 
 			<br/><br/><br/><br/>
 

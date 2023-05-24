@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react"
 import InfiniteScroll from "react-infinite-scroll-component"
+import Spinner from "../Spinner/Spinner"
 
 /**
  * This component is used to show the first couple of list items and
@@ -28,7 +29,7 @@ export default function InfiniteScrollComponent({ children }) {
 
 	function updateShownItems() {
 		let startIndex = shownItems.current - 20
-		let endIndex = shownItems.current - 1
+		let endIndex = shownItems.current 
 		let data = children.slice(startIndex, endIndex)
   
 		setVisibleTechniques(prevItems => [...prevItems, ...data])
@@ -46,10 +47,18 @@ export default function InfiniteScrollComponent({ children }) {
 
 		<InfiniteScroll
 			dataLength={visibleTechniques.length}
-			hasMore={true}
+			hasMore={children.length > visibleTechniques.length}
 			next={(updateShownItems)}
-			loader={<p>Loading...</p>}
-			endMessage={<p>No more data to load.</p>}
+			loader={
+				<div style={{padding: 20}}>
+					<Spinner/>
+				</div>
+			}
+			endMessage={
+				<div style={{padding: 20}}>
+					<p>Det var allt!</p>
+				</div>
+			}
 			scrollableTarget={"scrollable-content"}
 		>
 			<div>

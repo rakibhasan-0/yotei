@@ -77,7 +77,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 		let filtered = techniques.filter(technique => checkedActivities.includes(technique))
 		setTechniques(filtered)
 		searchTechniques()
-		
+
 	}, [searchTechText, selectedBelts, kihon, selectedTechTags])
 
 	/**
@@ -188,7 +188,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 
 	return (
 		<div id={id}>
-			<Modal.Body style={{padding: "0"}}>
+			<Modal.Body style={{ padding: "0" }}>
 				<Tabs defaultActiveKey="technique" className={style.tabs}>
 					<Tab eventKey="technique" title="Tekniker" tabClassName={`nav-link ${style.tab}`}>
 						<div className={style.searchBar}>
@@ -211,8 +211,10 @@ function AddActivity({ id, setShowActivityInfo }) {
 							id="test">
 						</TechniqueFilter>
 
-						{
-							<InfiniteScrollComponent>
+						{(techniques.length === 0 && fetchedTech) ?
+							<ErrorStateSearch id="add-activity-no-technique" message="Kunde inte hitta tekniker" />
+							:
+							(<InfiniteScrollComponent>
 								{techniques.map((technique, key) => (
 									<TechniqueCard
 										id={"technique-list-item-" + technique.id}
@@ -226,12 +228,8 @@ function AddActivity({ id, setShowActivityInfo }) {
 										key={key}
 									/>
 								))}
-								{(techniques.length === 0 && fetchedTech) &&
-							<ErrorStateSearch id="add-activity-no-technique" message="Kunde inte hitta tekniker" />
-								}
-							</ InfiniteScrollComponent>
+							</ InfiniteScrollComponent>)
 						}
-
 
 					</Tab>
 					<Tab eventKey="exercise" title="Övningar" tabClassName={style.tab}>
@@ -248,7 +246,9 @@ function AddActivity({ id, setShowActivityInfo }) {
 							/>
 						</div>
 
-						{
+						{(exercises.length === 0 && fetchedExer) ?
+							<ErrorStateSearch id="add-activity-no-exercise" message="Kunde inte hitta övningar" />
+							:
 							<InfiniteScrollComponent>
 								{exercises.map((exercise, key) => (
 									<ExerciseListItem
@@ -266,9 +266,6 @@ function AddActivity({ id, setShowActivityInfo }) {
 										index={key}
 									/>
 								))}
-								{(exercises.length === 0 && fetchedExer) &&
-							<ErrorStateSearch id="add-activity-no-exercise" message="Kunde inte hitta övningar" />
-								}
 							</InfiniteScrollComponent>
 						}
 					</Tab>
