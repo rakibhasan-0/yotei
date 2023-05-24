@@ -143,7 +143,7 @@ export default function ExerciseEdit({setShowPopup}) {
 		
 		if (name.trim() === "") {
 			setEditFailed(true)
-			setErrorMessage("Övning måste ha ett namn")
+			setErrorMessage("Övningen måste ha ett namn")
 			return
 		}
 		
@@ -256,6 +256,7 @@ export default function ExerciseEdit({setShowPopup}) {
 						required = {true}
 						id={"exerciseDescriptionInput"}
 						type="text"
+						errorDisabled={true}
 					/>
 				</div>
 				<Divider id={"timeSelectorTitle"} option={"h1_left"} title={"Tid"} />

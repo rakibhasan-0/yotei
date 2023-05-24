@@ -27,10 +27,9 @@ import styles from "./TextArea.module.css"
  * @version 4.0
  * @since 2023-04-24
  */
-export default function TextArea({ placeholder, text, onChange, required, onBlur, onInput, readOnly, id, defVal, type, errorMessage}) {
+export default function TextArea({ placeholder, text, onChange, required, onBlur, onInput, readOnly, id, defVal, type, errorMessage, errorDisabled}) {
 
 	const isErr = !(errorMessage == undefined || errorMessage == null || errorMessage == "")
-
 	return(
 		<label className={styles.label}>
 			<textarea
@@ -46,7 +45,7 @@ export default function TextArea({ placeholder, text, onChange, required, onBlur
 				id={id}
 				type={type}
 			/>
-			<p className={styles.err}>{errorMessage}</p>
+			{!errorDisabled && <p className={styles.err}>{errorMessage}</p>}
 		</label>
 	) 
 }

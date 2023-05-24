@@ -64,7 +64,7 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 				}
 			}
 		} catch (error) {
-			toast.error("övningen kunde ej läggas till")
+			toast.error("Övningen kunde ej läggas till")
 		}
 		return null
 	}
@@ -175,7 +175,7 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 			setErrorMessage("")
 			return true
 		} else {
-			setErrorMessage("En övning kräver ett godtyckligt namn")
+			setErrorMessage("Övningen måste ha ett namn")
 		}
 		return false
 	}
@@ -239,6 +239,7 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 						required = {true}
 						id="ExerciseDescriptionInput"
 						type="text"
+						errorDisabled={true}
 					/>
 				</div>
 				<Divider id={"time-selector-title"} option={"h1_left"} title={"Tid"} />
