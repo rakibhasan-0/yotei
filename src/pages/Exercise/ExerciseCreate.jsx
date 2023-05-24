@@ -26,12 +26,10 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 	const [name, setName] = useState("")
 	const [desc, setDesc] = useState("")
 	const [time, setTime] = useState(0)
-	const [insertFailed, setInsertFailed] = useState(false)
 	const [addBoxChecked, setAddBoxChecked] = useState(false)
 	const [eraseBoxChecked, setEraseBoxChecked] = useState(false)
 	const context = useContext(AccountContext)
 	const [addedTags, setAddedTags] = useState([])
-	const [clearAlternative, setClearAlternative] = useState(false)
 	const [showMiniPopup, setShowMiniPopup] = useState(false)
 	const [errorMessage, setErrorMessage] = useState("")
 
@@ -79,19 +77,11 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 	async function addTag(exId) {
 		let hasLinked = true
 		if(exId === null){
-			console.log("id was null" + insertFailed)
-			//setTagFailed(false)
 			return false
 		}
-		if (addedTags.length === 0) {
-			//setTagFailed(false)
+		if (addedTags.length === 0 || addedTags === undefined) {
 			return true
 		}
-		if (addedTags === undefined) {
-			//setTagFailed(false)
-			return true
-		}
-
 		for (let i = 0; i < addedTags.length; i++) {
 			let successResponse = await linkExerciseTag(exId, addedTags.at(i).id)
 			if(!successResponse){
@@ -138,7 +128,6 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 		if (checkInput() === true) {
 			addExercise().then((exId)  => addTag(exId)).then((linkedTags) => exitProdc(linkedTags))
 		}
-		//setInsertFailed(false)
 	}
 
 
@@ -147,15 +136,12 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 	 * @param linkedTags - result from linking tags
 	 */
 	function exitProdc(linkedTags) {
-		console.log(insertFailed)
-		setInsertFailed(!linkedTags)
 		if (linkedTags) {
 			toast.success("Övningen " + name + " lades till")
 			if (addBoxChecked === false) {
 				setShowPopup(false)
 			} else {
 				if (eraseBoxChecked === true) {
-					console.log("inne i erase")
 					setName("")
 					setTime(0)
 					setDesc("")
@@ -202,7 +188,6 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 	 * @param checked - a boolean to set if the add checkbox is clicked or not
 	 */
 	function addCheckboxClicked(checked){
-		setClearAlternative(!clearAlternative)
 		setAddBoxChecked(checked)
 		setEraseBoxChecked(false)
 	}
@@ -218,7 +203,7 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 	return (
 		<div className="row justify-content-center">
 			<div className="col-md-8">
-				{/*Form to get input from user*/}
+				{/*"Form" to get input from user*/}
 				<div className={styles.textInputField}>
 					<InputTextField
 						placeholder="Namn"
