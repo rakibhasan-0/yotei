@@ -133,7 +133,7 @@ export default function SessionCreate() {
 				</Link>
 			</div>
 
-			<div className={styles.wrapCentering} >
+			<div className={styles.wrapCentering} style={{marginBottom: "2rem"}} >
 				<Button onClick={() => navigate(-1)} id={"session-back"} outlined={true}><p>Tillbaka</p></Button> 
 				<Button onClick={addSession} id={"session-save"}><p>Spara</p></Button>
 			</div>
