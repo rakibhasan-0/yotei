@@ -68,7 +68,7 @@ export const workoutRequestArguments = {
  * 
  * @param {techniqueRequestArguments} args The arguments for the request
  * @param {*} token The session token
- * @param {*} map The cache map (please use the useMap hook for this)
+ * @param {*} map The cache map (please use the useMap hook for this). To avoid using a cache pass null.
  * @param {*} mapActions The cache map actions (please use the useMapActions hook for this)
  * @param {*} callBack The callback function to call when the data is fetched
  * @returns The results of the fetch. If the result is valid, it will simply return the data. 
@@ -79,7 +79,7 @@ export async function getTechniques(args, token, map, mapActions, callBack) {
 	let query = `/api/search/techniques?name=${args.text}&beltColors=${args.selectedBelts}&kihon=${args.kihon}&tags=${args.selectedTags}`
 
 	
-	if (mapActions.lookup(query) !== undefined) {
+	if(map && mapActions.lookup(query) !== undefined) {
 		console.log("Got from cache")
 		callBack(mapActions.lookup(query))
 		return
@@ -95,7 +95,7 @@ export async function getTechniques(args, token, map, mapActions, callBack) {
 	})
 		.then((response) => response.json())
 		.then((data) => {
-			mapActions.insert(query, data)
+			if(map) mapActions.insert(query, data)
 			console.log("Fetched")
 			callBack(data)
 			return
@@ -116,7 +116,7 @@ export async function getTechniques(args, token, map, mapActions, callBack) {
  * 
  * @param {exerciseRequestArguments} args The arguments for the request
  * @param {*} token The session token
- * @param {*} map The cache map (please use the useMap hook for this)
+ * @param {*} map The cache map (please use the useMap hook for this). To avoid using a cache pass null.
  * @param {*} mapActions The cache map actions (please use the useMapActions hook for this)
  * @param {*} callBack The callback function to call when the data is fetched.
  * @returns The results of the fetch. If the result is valid, it will simply return the data. If the result is invalid, it will return an object with an error property.
@@ -126,7 +126,7 @@ export async function getExercises(args, token, map, mapActions, callBack) {
 	
 	let query = `/api/search/exercises?name=${args.text}&tags=${args.selectedTags}`
 
-	if(mapActions.lookup(query) !== undefined) {
+	if(map && mapActions.lookup(query) !== undefined) {
 		console.log("Got from cache")
 		callBack(mapActions.lookup(query))
 		return
@@ -139,7 +139,7 @@ export async function getExercises(args, token, map, mapActions, callBack) {
 		},
 	}).then((response) => response.json())
 		.then((data) => {
-			mapActions.insert(query, data)
+			if(map) mapActions.insert(query, data)
 			console.log("Fetched")
 			callBack(data)
 			return
@@ -160,7 +160,7 @@ export async function getExercises(args, token, map, mapActions, callBack) {
  * 
  * @param {workoutRequestArguments} args The arguments for the request
  * @param {*} token The session token
- * @param {*} map The cache map (please use the useMap hook for this)
+ * @param {*} map The cache map (please use the useMap hook for this). To avoid using a cache pass null.
  * @param {*} mapActions The cache map actions (please use the useMapActions hook for this)
  * @param {*} callBack The callback function to call when the data is fetched.
  * @returns The results of the fetch. If the result is valid, it will simply return the data. 
@@ -174,7 +174,7 @@ export function getWorkouts(args, token, map, mapActions, callBack) {
 		query += `&id=${args.id}`
 	}
 	
-	if(mapActions.lookup(query) !== undefined) {
+	if(map && mapActions.lookup(query) !== undefined) {
 		callBack(mapActions.lookup(query))
 		return
 	}
@@ -186,7 +186,7 @@ export function getWorkouts(args, token, map, mapActions, callBack) {
 		},
 	}).then((response) => response.json())
 		.then((data) => {
-			mapActions.insert(query, data)
+			if(map) mapActions.insert(query, data)
 			callBack(data)
 			return
 		}).catch((error) => {

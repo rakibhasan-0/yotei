@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react"
 import SearchBar from "../../components/Common/SearchBar/SearchBar"
 import { getWorkouts } from "../../components/Common/SearchBar/SearchBarUtils"
-import useMap from "../../hooks/useMap"
 import FilterContainer from "../../components/Common/Filter/FilterContainer/FilterContainer"
 import StarButton from "../../components/Common/StarButton/StarButton"
 import { useCookies } from "react-cookie"
@@ -33,7 +32,6 @@ export default function WorkoutIndex() {
 	const [ searchText, setSearchText ] = useState("")
 	const [ tags, setTags ] = useState([])
 	const [ suggestedTags, setSuggestedTags ] = useState([])
-	const [ cache, cacheActions ] = useMap()
 	const [ cookies, setCookie ] = useCookies(["workout-filter"])
 	const [ searchErrorMessage, setSearchErrorMessage ] = useState("")
 	const [ loading, setLoading ] = useState(false)
@@ -62,7 +60,7 @@ export default function WorkoutIndex() {
 		}
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-	useEffect(fetchWorkouts, [dates.from, dates.maxFrom, dates.to, dates.minTo, filterFavorites, searchText, token, userId, cache, cacheActions, tags])
+	useEffect(fetchWorkouts, [dates.from, dates.maxFrom, dates.to, dates.minTo, filterFavorites, searchText, token, userId, tags])
 	return (
 		<>
 			<div id="search-area">
@@ -100,10 +98,10 @@ export default function WorkoutIndex() {
 			</div>
 			{workouts.length !== 0 ?
 				<div className="grid-striped mt-3">
-					{workouts.map((workout, index) => {
+					{workouts.map((workout) => {
 						return (
 							<WorkoutListItem
-								key={index}
+								key={workout.workoutID}
 								workout={workout}
 								favoriteCallback={toggleIsFavorite}
 							/>)
@@ -139,7 +137,11 @@ export default function WorkoutIndex() {
 	}
 
 	function toggleIsFavorite(event, workout) {
-		workout.favourite = !workout.favourite
+		if(filterFavorites) {
+			setWorkouts(prevState => 
+				prevState.filter(w => w.workoutID !== workout.workoutID)
+			)
+		}
 	}
 
 	function setError(msg){
@@ -188,7 +190,7 @@ export default function WorkoutIndex() {
 		}
 
 		setCookie("workout-filter", {from: args.from, to: args.to, isFavorite: args.isFavorite, tags: tags}, {path: "/"})
-		getWorkouts(args, token, cache, cacheActions, (response) => {
+		getWorkouts(args, token, null, null, (response) => {
 			if(response.error) {
 				setError("Serverfel: Kunde inte ansluta till servern!")
 			} else {
