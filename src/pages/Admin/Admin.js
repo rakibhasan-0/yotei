@@ -18,7 +18,7 @@ class Developer extends React.Component {
    */
 	render() {
 		if(!isAdmin(this.context)){
-			window.location.replace("/home")
+			window.location.replace("/404")
 			return null
 		}
 		return (
