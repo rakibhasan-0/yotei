@@ -34,7 +34,7 @@ export default function WorkoutIndex() {
 	const [ suggestedTags, setSuggestedTags ] = useState([])
 	const [ cookies, setCookie ] = useCookies(["workout-filter"])
 	const [ searchErrorMessage, setSearchErrorMessage ] = useState("")
-	const [ loading, setLoading ] = useState(false)
+	const [ loading, setLoading ] = useState(true)
 
 	// Some fucked up shit to get +/- 1 month from today.
 	const today = new Date()
