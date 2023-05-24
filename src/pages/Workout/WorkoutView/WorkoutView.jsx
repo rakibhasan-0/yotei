@@ -85,7 +85,7 @@ export default function WorkoutView({id}) {
 		loading ? <div className="mt-5"> <Spinner/> </div>
 			: !workoutData ? <ErrorState message={errorStateMsg} onBack={() => navigate("/workout")} onRecover={() => window.location.reload(false)}/>
 				:
-				<div id={id} className="container px-0 col-lg-4 col-md-4">
+				<div id={id}>
 					{<ConfirmPopup popupText={"Radera pass"} id={"confirm-popup"} setShowPopup={setShowPopup} showPopup={showPopup} onClick={async () => deleteWorkout(workoutId, context, navigate, setShowPopup)}/>}
 					{getReviewContainer(showRPopup, setRShowPopup, workoutId)}
 					{getWorkoutInfoContainer(workoutData, setShowPopup)}
