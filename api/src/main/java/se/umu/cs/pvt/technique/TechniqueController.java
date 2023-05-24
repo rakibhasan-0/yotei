@@ -8,15 +8,17 @@ import se.umu.cs.pvt.media.MediaRepository;
 import se.umu.cs.pvt.workout.Activity;
 import se.umu.cs.pvt.workout.*;
 import se.umu.cs.pvt.media.*;
+
 import java.util.*;
 
 
 /**
  * Class to get, insert, update, and remove technique.
- *
+ * <p>
  * Original by:
- * @author Quattro Formaggio, Carlskrove, Hawaii (Doc: Griffin ens19amd)
  *
+ * @author Quattro Formaggio, Carlskrove, Hawaii (Doc: Griffin ens19amd)
+ * <p>
  * Updated by:
  * @author Medusa
  */
@@ -44,6 +46,7 @@ public class TechniqueController {
     /**
      * Returns all techniques in the database, or if null is found: a
      * NOT_FOUND HttpStatus.
+     *
      * @return all techniques or HttpStatus indicating no techniques found.
      */
     @GetMapping("")
@@ -61,6 +64,7 @@ public class TechniqueController {
     /**
      * Returns a technique depending on the id, or a HttpStatus indicating if
      * there is a bad request or no technique with id found.
+     *
      * @param id the id.
      * @return a technique, or HttpStatus indicating error.
      */
@@ -84,25 +88,24 @@ public class TechniqueController {
 
     /**
      * This method adds a technique to the database.
-     *
+     * <p>
      * Returns 201 CREATED if the technique is posted.
      * Returns 409 CONFLICT if the given name is taken.
      * Returns 409 NOT ACCEPTABLE if the given name is in a illegal format. (Too short or too long).
      * Returns 500 INTERNAL SERVER ERROR if an error occurs during the database transaction.
      *
      * @param toAdd the body in json format with correct attributes
-     * Example:
-     * {
-     *     name: "cool_name",
-     *     description: "cool_desc",
-     *     belts: [{
-     *         id: 1
-     *     ]},
-     *     tags: [{
-     *         id: 1
-     *     ]}
-     * }
-     *
+     *              Example:
+     *              {
+     *              name: "cool_name",
+     *              description: "cool_desc",
+     *              belts: [{
+     *              id: 1
+     *              ]},
+     *              tags: [{
+     *              id: 1
+     *              ]}
+     *              }
      * @return responseEntity indicating the success-status of the post.
      */
     @PostMapping("")
@@ -129,18 +132,19 @@ public class TechniqueController {
      * This method updates an existing technique to the database. Technique
      * must have a name.
      * Omitting an attribute will null it. This is used to, for example, remove a tag.
+     *
      * @param toUpdate the body in json format with correct attributes example:
-     * {
-     *     id: 1,
-     *     name: "new cool_name",
-     *     description: "cool_desc",
-     *     belts: [{
-     *         id: 1
-     *     ]},
-     *     tags: [{
-     *         id: 1
-     *     ]}
-     * }
+     *                 {
+     *                 id: 1,
+     *                 name: "new cool_name",
+     *                 description: "cool_desc",
+     *                 belts: [{
+     *                 id: 1
+     *                 ]},
+     *                 tags: [{
+     *                 id: 1
+     *                 ]}
+     *                 }
      * @return HttpStatus indicating success or error.
      */
     @PutMapping("")
@@ -182,66 +186,9 @@ public class TechniqueController {
     }
 
     /**
-     * Takes forwarded content from JSON file and saves it to the database
-     * as individual JSON objects. Saves only those techniques that had valid
-     * format.
-     *
-     * @param listImport The list of JSON objects.
-     * @return response indicating if all techniques was added or if it was a
-     * bad request.
-     */
-    @PostMapping("/import")
-    public ResponseEntity<TechniqueImportResponse> postImport(@RequestBody List<Technique> listImport) {
-        if (listImport == null) {
-            TechniqueImportResponse resp = new TechniqueImportResponse("Inga tekniker listade", null);
-            return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
-        }
-
-        // The ids of the successfully added techniques.
-        List<Long> ids = new ArrayList<>();
-        boolean hasError = false;
-        int duplicates = 0;
-        int nrOfInvalidFormat = 0;
-
-        for (Technique technique : listImport) {
-            technique.trimText();
-
-            if (!technique.validFormat()) {
-                nrOfInvalidFormat++;
-                continue;
-            }
-
-            if (!techniqueRepository.findByNameIgnoreCase(technique.getName()).isEmpty()) {
-                duplicates++;
-                continue;
-            }
-
-            try {
-                ids.add(techniqueRepository.save(technique).getId());
-            } catch (Exception e) {
-                hasError = true;
-            }
-
-        }
-
-        if (nrOfInvalidFormat > 0) {
-            return new ResponseEntity<>(new TechniqueImportResponse(nrOfInvalidFormat + " tekniker har ogiltigt format (ej angivna namn / för långa namn) och lades ej till.", ids), HttpStatus.NOT_ACCEPTABLE);
-        }
-
-        if (duplicates > 0) {
-            return new ResponseEntity<>(new TechniqueImportResponse(duplicates + " tekniker av samma namn existerar redan och lades ej till.", ids), HttpStatus.CONFLICT);
-        }
-
-        if (hasError) {
-            return new ResponseEntity<>(new TechniqueImportResponse("Lyckades inte spara alla tekniker till databasen.", ids), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        return new ResponseEntity<>(new TechniqueImportResponse("Lade till tekniker", ids), HttpStatus.CREATED);
-    }
-
-    /**
      * This method removes an existing technique in the database. If the technique does not exist in the database a
      * BAD_REQUEST is returned.
+     *
      * @param id The Id of the technique to remove.
      * @return Returns OK if the technique exists in the database, else BAD_REQUEST.
      */

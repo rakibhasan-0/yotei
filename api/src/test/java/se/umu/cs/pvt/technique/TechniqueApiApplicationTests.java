@@ -139,39 +139,6 @@ public class TechniqueApiApplicationTests {
                 controller.updateTechnique(invalid).getStatusCode());
     }
 
-
-    @Test
-    void shouldSucceedWhenPostImportReturnsOkStatus() {
-        Mockito.when(repository.save(tec1)).thenReturn(tec1);
-        Mockito.when(repository.save(tec2)).thenReturn(tec2);
-        ResponseEntity response = controller.postImport(techniques);
-
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-    }
-
-
-    @Test
-    void shouldReturnUnprocessableEntityFromPostImportOnSomeInvalidFormattedTechnique() {
-        List<Technique> toAdd = new ArrayList<>();
-        Technique t1 =  createTechnique(1L, "Wihu", "Invalid");
-        Technique t2 = createTechnique(2L, "", "Invalid");
-        toAdd.add(t1);
-        toAdd.add(t2);
-
-        Mockito.when(repository.save(t2)).thenReturn(toAdd.get(1));
-
-        Assertions.assertEquals(HttpStatus.NOT_ACCEPTABLE,
-                controller.postImport(toAdd).getStatusCode());
-    }
-
-
-    @Test
-    void shouldReturnBadRequestFromPostImportOnNullInput() {
-        ResponseEntity response = controller.postImport(null);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    }
-
-
     @Test
     void shouldFailWhenRemovingNoneExistingTechnique(){
         Mockito.when(repository.findById(tec1.getId())).thenReturn(Optional.empty());

@@ -121,17 +121,6 @@ class ExerciseApiApplicationTests {
 
     }
 
-
-    @Test
-    void shouldReturnCorrectListFromPostImport() {
-        Mockito.when(repository.save(ex1)).thenReturn(ex1);
-        Mockito.when(repository.save(ex2)).thenReturn(ex2);
-
-        ResponseEntity response = (ResponseEntity) controller.postImport(exercises);
-
-        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
-    }
-
     @Test
     void shouldReturnAllExercisesSortedNameDesc() {
 
@@ -208,19 +197,6 @@ class ExerciseApiApplicationTests {
                 controller.postExercise(exerciseWithNullId).getStatusCode());
     }
 
-
-    @Test
-    void shouldFailWhenPostImportHasInvalidFormattedExercise() {
-        List<Exercise> toAdd = new ArrayList<>();
-        toAdd.add(new Exercise(1L, "Valid", " ", 2));
-        toAdd.add(new Exercise(2L, "Invalid", " ", -1));
-
-        Mockito.when(repository.findByName("Valid")).thenReturn(toAdd.get(0));
-
-        Assertions.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY,
-                controller.postImport(toAdd).getStatusCode());
-    }
-
     @Test
     void shouldFailWhenUpdatingTestToHaveNegativeDuration() {
         Exercise invalid = new Exercise(2L, "Invalid", " ", -1);
@@ -229,14 +205,6 @@ class ExerciseApiApplicationTests {
         Assertions.assertEquals(HttpStatus.BAD_REQUEST,
                 controller.updateExercise(invalid).getStatusCode());
     }
-
-
-    @Test
-    void shouldFailWhenPostImportNull() {
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST,
-                controller.postImport(null).getStatusCode());
-    }
-
 
     @Test
     void shouldReturnDescriptionFromGetDescription() {

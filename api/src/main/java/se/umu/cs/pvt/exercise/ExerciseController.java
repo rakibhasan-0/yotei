@@ -57,6 +57,7 @@ public class ExerciseController {
 
     /**
      * Returns all exercises in the database
+     *
      * @param sort boolean flag indicating whether to sort by duration or name
      * @return all exercises
      */
@@ -97,13 +98,12 @@ public class ExerciseController {
     }
 
 
-
-    
     /**
      * Retrieves a set amount of exercises from the database, starting from the specified start index.
+     *
      * @param startIndex the index of the first exercise to retrieve
      * @return a list of Exercise objects representing the items in the requested range
-    */
+     */
     @GetMapping("/from/{startIndex}")
     public Object getSetAmountOfExercises(@PathVariable("startIndex") Integer startIndex) {
         int pageSize = 20;
@@ -120,6 +120,7 @@ public class ExerciseController {
 
     /**
      * Returns an exercise depending on the id
+     *
      * @param id the id
      * @return exercise if exercise could be gotten, else a HttpStatus
      * indicating error
@@ -130,7 +131,7 @@ public class ExerciseController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        
+
         if (!exerciseRepository.existsById(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -141,7 +142,8 @@ public class ExerciseController {
 
     /**
      * Returns the description and time of specified exercise given an id
-     * @param id The id to query to the database 
+     *
+     * @param id The id to query to the database
      * @return Description and time for exercise, or if exercise could not be found:
      * response indicating error.
      */
@@ -161,6 +163,7 @@ public class ExerciseController {
 
     /**
      * Returns all exercises with only id and name
+     *
      * @return all exercises, or a response indicating if there is error.
      */
     @GetMapping("/all/idname")
@@ -176,31 +179,30 @@ public class ExerciseController {
 
     /**
      * This method adds an exercise to the database.
-     *
+     * <p>
      * Returns 409 CONFLICT if exercise name already taken
      * Returns 400 BAD_REQUEST if exercise is not valid format
      * Returns 200 OK if exercise is posted
      *
      * @param toAdd the body in json format with correct attributes example:
      *              {"name": "cool_name", "description": "cool_desc", "duration": 2}
-     *
      * @return response BAD_REQUEST if request was bad, else OK if exercise
      * was added, also returns the exercise
      */
     @PostMapping("/add")
     public ResponseEntity<Object> postExercise(@RequestBody Exercise toAdd) {
 
-        
+
         toAdd.trimText();
 
-        
+
         if (!exerciseRepository.findByNameIgnoreCase(toAdd.getName()).isEmpty()) {
-            return new ResponseEntity<>(toAdd,HttpStatus.CONFLICT);
+            return new ResponseEntity<>(toAdd, HttpStatus.CONFLICT);
         }
 
-        
+
         if (!toAdd.validFormat()) {
-            return new ResponseEntity<>("Fel format",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Fel format", HttpStatus.BAD_REQUEST);
         }
 
         try {
@@ -213,56 +215,14 @@ public class ExerciseController {
     }
 
     /**
-     * Takes forwarded content from JSON file and saves it to the databse
-     * as individual JSON objects. Saves only those exercises that have valid
-     * format.
-     *
-     * @param listImport The list of JSON objects
-     * @return response indicating if import worked or was BAD_REQUEST. Also
-     * BAD_REQUEST if some exercise has invalid format.
-     */
-    @PostMapping("/import")
-    public ResponseEntity<ExerciseImportResponse> postImport(@RequestBody List<Exercise> listImport) {
-        int duplicates = 0;
-        int i = 0;
-        List<Long> ids = new ArrayList<>();
-
-        if (listImport == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        for (Exercise exercise : listImport) {
-            i++;
-            if(exercise.validFormat()) {
-                exercise.trimText();
-                try {
-                    ids.add(exerciseRepository.save(exercise).getId());
-                } catch (Exception e) {
-                    ids.add(exerciseRepository.findByName(exercise.getName()).getId());
-                    duplicates += 1;
-                }
-            }
-            else {
-                return new ResponseEntity<>(new ExerciseImportResponse("Övningar fram till " + i +  ".\"" + exercise.getName() + "\" har importerats", ids), HttpStatus.UNPROCESSABLE_ENTITY);
-            }
-        }
-
-        if(duplicates > 0) {
-            return new ResponseEntity<>(new ExerciseImportResponse(duplicates + " övningar av samma namn existerar redan", ids), HttpStatus.CONFLICT);
-        }
-
-        return new ResponseEntity<>(new ExerciseImportResponse("", ids), HttpStatus.OK);
-    }
-
-
-    /**
      * This method updates an existing exercise in the database
+     *
      * @param toUpdate the body in json format with correct attributes example:
-     *                   {"id": 1, "name": "cool_name", "description": "cool_desc", "duration": 2}
+     *                 {"id": 1, "name": "cool_name", "description": "cool_desc", "duration": 2}
      */
     @PutMapping("/update")
     public ResponseEntity<Object> updateExercise(@RequestBody Exercise toUpdate) {
-        
+
         if (exerciseRepository.findById(toUpdate.getId()).isEmpty()) {
             return new ResponseEntity<>(toUpdate, HttpStatus.BAD_REQUEST);
         }
@@ -283,6 +243,7 @@ public class ExerciseController {
     /**
      * This method removes an existing exercise in the database. If the exercise does not exist in the database a
      * BAD_REQUEST is returned.
+     *
      * @param id The Id of the exercies to remove.
      * @return Returns OK if the exercise exists in the database, else BAD_REQUEST.
      */
@@ -329,10 +290,9 @@ public class ExerciseController {
      *
      * @param file The image to save
      * @return Returns OK if the picture could be saved, otherwise NOT_ACCEPTABLE
-     *
      * @author Per Sondell (Group 6)
      */
-    @PostMapping(value = "/image",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Object image(@RequestParam("file") MultipartFile file) {
         try {
             InputStream input = file.getInputStream();
@@ -347,7 +307,7 @@ public class ExerciseController {
         try {
             byte[] bytes = file.getBytes();
             Path path = Paths.get(folder + file.getOriginalFilename());
-            Files.write(path,bytes);
+            Files.write(path, bytes);
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
