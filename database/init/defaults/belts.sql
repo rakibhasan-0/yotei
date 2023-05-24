@@ -1,0 +1,16 @@
+INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Vitt', 'FCFCFC', False);
+INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Vitt', 'BD3B41', True);
+INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Gult', 'EDD70D', False);
+INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Gult', 'EDD70D', True);
+INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Orange', 'ED930D', False);
+INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Orange', 'ED930D', True);
+INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Grönt', '00BE08', False);
+INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Grönt', '00BE08', True);
+INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Blått', '0DB7ED', False);
+INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Blått', '0DB7ED', True);
+INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Brunt', 'BB6500', False);
+INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Brunt', 'BB6500', True);
+INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Svart', '000000', False);
+INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('1 Dan', '000000', False);
+INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('2 Dan', '000000', False);
+INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('3 Dan', '000000', False);
