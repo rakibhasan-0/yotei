@@ -5,6 +5,7 @@ import { useCookies } from "react-cookie"
 import { AccountContext } from "../../context"
 import Button from "../../components/Common/Button/Button"
 import InputTextFieldBorderLabel from "../../components/Common/InputTextFieldBorderLabel/InputTextFieldBorderLabel"
+import { toast } from "react-toastify"
 
 /**
  * This is the login page, it is the first page the user will see
@@ -15,42 +16,13 @@ import InputTextFieldBorderLabel from "../../components/Common/InputTextFieldBor
  * @author Team Verona (Group 5), Team Hot Pepper (Group 7) (28/4)
  * @version 1.0
  */
-function Login() {
-	const [errorMsg, setErrorMsg] = useState(null)
+export default function Login() {
 	const [username, setUsername] = useState("")
 	const [password, setPassword] = useState("")
 	const [cookies, setCookies] = useCookies(["token"])
 	const navigate = useNavigate()
 	const { token, setToken } = useContext(AccountContext)
 	const currentPath = window.location.pathname
-
-	/**
-	 * Checks the HTTP status code for the login credentials.
-	 * If an error occurs, the ErrorMsg is set to display an appropriate message to the user.
-	 * @param {*} response the HTTP response.
-	 * @returns true if HTTP status code is 200, otherwise false.
-	 */
-	function loginIsOk(response) {
-		if (!response.ok) {
-			if (response.status === 400) {
-				setErrorMsg("Felaktigt användarnamn eller lösenord.")
-			} else if (response.status === 406) {
-				setErrorMsg("Fyll i alla fält.")
-			} else if (response.status === 500) {
-				setErrorMsg("Internt fel.")
-			}
-			return false
-		}
-
-		if (response.status === 200) {
-			response.text().then(token => {
-				//No expiry date set for the cookie so it will be deleted when the browser is closed
-				setCookies("token", token, { secure: false, path: "/" })
-				setToken(token)
-			})
-			return true
-		}
-	}
 
 	/**
 	 * Redirects the user to the given link if the user has previously logged in.
@@ -62,7 +34,6 @@ function Login() {
 			} else {
 				navigate(currentPath)
 			}
-
 		}
 	})
 
@@ -71,20 +42,39 @@ function Login() {
 	 * If user credentials are correct, the user is redirected to the home page.
 	 */
 	async function loginClicked() {
-		const requestOptions = {
+		const controller = new AbortController()
+		const id = setTimeout(() => {
+			controller.abort()
+			toast.error("Anslutning till servern misslyckades.")
+		}, 5 * 1000)
+		const response = await fetch("/api/users/verify", {
 			headers: { "Content-type": "application/json", token },
 			method: "POST",
-			body: JSON.stringify({ username: username, password: password })
-		}
-		const response = await fetch("/api/users/verify", requestOptions)
-
-		if (loginIsOk(response)) {
-			if (currentPath === "/" || currentPath === "" || currentPath === undefined) {
-				navigate("/plan")
+			body: JSON.stringify({ username: username, password: password }),
+			signal: controller.signal
+		})
+		clearTimeout(id)
+		if (!response.ok) {
+			if (response.status === 400) {
+				toast.error("Felaktigt användarnamn eller lösenord.")
+			} else if (response.status === 406) {
+				toast.error("Fyll i alla fält")
+			} else if (response.status === 500) {
+				toast.error("Något gick fel på servern")
 			} else {
-				navigate(currentPath)
+				toast.error("Ett okänt fel har uppstått")
 			}
+			return
 		}
+		response.text().then(token => {
+			setCookies("token", token, { secure: false, path: "/" })
+			setToken(token)
+			// Redirect
+			if (currentPath === "/" || currentPath === "" || currentPath === undefined) {
+				return navigate("/plan")				
+			}
+			navigate(currentPath)
+		})
 	}
 
 	/**
@@ -118,10 +108,8 @@ function Login() {
 							</Button>
 						</div>
 					</div>
-					{errorMsg ? <p style={{ color: "red" }}>{errorMsg}</p> : null}
 				</div>
 			</div>
 		</div>
 	)
 }
-export default Login
