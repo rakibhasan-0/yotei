@@ -9,7 +9,7 @@ test("so that the component initializes properly.", async() => {
 	const name = "Hoppa runt"
 	const duration = "420 min"
 	const pageId = 69
-	const detailURL = "fakeurl.com/"
+	const detailURL = "/fakeurl.com/"
 	const index = 420
 	const description = "Hoppa riktigt hårt."
   
@@ -33,7 +33,7 @@ test("so that the component initializes properly.", async() => {
 	expect(getByTestId("ExerciseListItem")).toBeDefined()
 	expect(getByTestId("ExerciseListItem-item")).toHaveTextContent(name)
 	expect(getByTestId("ExerciseListItem-text")).toHaveTextContent(duration)
-	// exp<ect(getByTestId("ExerciseListItem-link")).toHaveAttribute("to", `${detailURL}${pageId}`)
+	expect(getByTestId("ExerciseListItem-link")).toHaveAttribute("href", `${detailURL}${pageId}`)
 })
 
 
