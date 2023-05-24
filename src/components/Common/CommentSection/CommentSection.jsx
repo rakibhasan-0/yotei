@@ -1,5 +1,5 @@
 import { Trash } from "react-bootstrap-icons"
-
+import styles from "./CommentSection.module.css"
 /**
  * A comment section, used to display comments.#$
  * 
@@ -26,6 +26,8 @@ import { Trash } from "react-bootstrap-icons"
 
 
 export default function CommentSection({ id, userId, comments, onDelete }) {
+	
+	
 	return(
 		<div id={id} className="w-100 d-flex flex-column justify-content-center align-items-center">
 			{comments?.map(comment => (
@@ -38,7 +40,7 @@ export default function CommentSection({ id, userId, comments, onDelete }) {
 						<p className="m-0 font-italic" style={{color: "#B4B4B4"}}>{comment.date}</p>
 				
 					</div>
-					<p className="mt-2" style={{textAlign: "left"}}>{comment.commentText}</p>
+					<p className={`mt-2 ${styles.text}`}>{comment.commentText}</p>
 					{userId == comment.userId && 
 					<div className="d-flex align-items-end flex-column">
 						<Trash
