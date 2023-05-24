@@ -151,19 +151,19 @@ export default function PlanIndex() {
 				onSelPlansChange={handleSelPlansChange}
 				onDatesChange={handleDatesChange}
 			</FilterPlan>
+
+			<div>
+				{
+					(plans && sessions && workouts) &&
+					<SessionList id = {"sessionlistID"} plans={plans} sessions={sessions} workouts={workouts}/>
+				}
+			</div>	
+			
 			<RoundButton onClick={() => setShowPopup(true)}>
 				<Plus />
 			</RoundButton>
 
 			<PopupAdd id={"popupAddId"} isOpen={showPopup} setIsOpen={setShowPopup}/>
-
-			<div>
-				{
-					(plans && sessions && workouts) &&
-				<SessionList id = {"sessionlistID"} plans={plans} sessions={sessions} workouts={workouts}/>
-				}
-			</div>	
-			
 		</center>
 	)
 

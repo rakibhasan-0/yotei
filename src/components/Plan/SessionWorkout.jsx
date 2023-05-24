@@ -151,7 +151,7 @@ function SessionWorkout ({ id, workout, sessionID, creatorID }) {
 
 					{
 						(userIsAdmin() || userIsCreator()) &&
-							<Link id ="session-workout-edit-session-button" className="sc23-session-workout-links" to = {`/session/${sessionId}`}>	
+							<Link id ="session-workout-edit-session-button" className="sc23-session-workout-links" to = {`/session/edit/${sessionId}`}>	
 								<PencilFill aria-label="Edit Session" role ="edit" className="sc23-session-workout-svg"/>
 							</Link>
 					}
@@ -161,7 +161,6 @@ function SessionWorkout ({ id, workout, sessionID, creatorID }) {
 			
 			<div id="SessionWorkoutError" ><p>Kunde inte ladda in passet</p></div>
 			
-         
 
 	)
 }

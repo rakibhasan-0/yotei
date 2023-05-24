@@ -36,7 +36,6 @@
 #sc23-dropdown {
 	grid-column: 5 / 6;
 	grid-row: 1 / 2;
-	z-index: 99;
 	place-self: center;
 	color: white;
 }
