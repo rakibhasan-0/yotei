@@ -147,9 +147,13 @@ export default function PlanIndex() {
 	return (
 		<center>
 			<h1>Grupplanering</h1>
-			<FilterPlan>
-				onSelPlansChange={handleSelPlansChange}
+			<FilterPlan
+				id={42}
+				setChosenGroups={handleSelPlansChange}
 				onDatesChange={handleDatesChange}
+				chosenGroups={selectedPlans}
+				dates={dates}
+			>
 			</FilterPlan>
 
 			<div>

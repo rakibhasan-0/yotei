@@ -31,7 +31,7 @@ const GroupRow = ({group, states, onToggle}) => {
 
 	function toggleGroup(state) {
 		setGroupState(state)
-		onToggle(state, group)
+		onToggle(state, group[0])
 	}
     
 	// TODO: Fixa error-hanteringen
