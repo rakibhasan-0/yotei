@@ -68,7 +68,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
     private boolean isAuthorized(String routeId, String apikey, String path) {
 
         // Always access to webserver and login api
-        if (routeId.equals("webserver") || path.equals("/user/verify") || path.startsWith("/api/media/files/")) {
+        if (routeId.equals("webserver") || path.equals("/api/users/verify") || path.startsWith("/api/media/files/")) {
             return true;
         }
 
@@ -95,7 +95,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
 
         // Protect import and export endpoints
         // Only allow admin to create users
-        return !(path.contains("import") || path.contains("export") || path.contains("user/register"));
+        return !(path.contains("import") || path.contains("export") || path.equals("/api/users"));
 
     }
 
