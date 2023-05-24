@@ -22,7 +22,7 @@ describe("SessionContainer", () => {
 				"workout_id": "1",
 				"plan_id": "1",
 				"date": "2023-04-10",
-				"time": "08:00"
+				"time": "08:00:00"
 			}
 
 			let plan = {
@@ -46,7 +46,7 @@ describe("SessionContainer", () => {
 				"workout_id": "1",
 				"plan_id": "1",
 				"date": "2023-05-16",
-				"time": "08:00"
+				"time": "08:00:00"
 			}
 
 			let plan = {
@@ -84,7 +84,7 @@ describe("SessionContainer", () => {
 				"workout_id": "1",
 				"plan_id": "1",
 				"date": "2023-05-16",
-				"time": "08:00"
+				"time": "08:00:00"
 			}
 
 			let plan = {
@@ -127,7 +127,7 @@ describe("SessionContainer", () => {
 				"workout_id": "1",
 				"plan_id": "1",
 				"date": "2023-05-16",
-				"time": "08:00"
+				"time": "08:00:00"
 			}
 			
 			render(<BrowserRouter><SessionContainer id = "testSessionContainer" session={session} plan={plan}/></BrowserRouter>)
@@ -156,7 +156,7 @@ describe("SessionContainer", () => {
 				"workout_id": "1",
 				"plan_id": "1",
 				"date": "2023-05-16",
-				"time": "08:00"
+				"time": "08:00:00"
 			}
 			
 			render(<BrowserRouter><SessionContainer id = "testSessionContainer" session={session} plan={null}/></BrowserRouter>)

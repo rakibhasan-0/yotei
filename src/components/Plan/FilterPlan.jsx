@@ -15,7 +15,7 @@ import GroupPicker from "../../components/Plan/GroupPicker"
 * @version 1.0
 * @since 2023-05-08
 */
-export default function FilterPlan({ id }) {
+export default function FilterPlan({ id}) {
 	const date = dateFormatter(new Date())
 	const [selectedStartDate, setSelectedStartDate] = useState(date)
 	const [selectedEndDate, setSelectedEndDate] = useState("")

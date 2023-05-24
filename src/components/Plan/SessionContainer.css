@@ -1,6 +1,7 @@
 
 .sc23-session-container {
     user-select: none;
+	margin-bottom: 2%;
 }
 
 .sc23-outline {
@@ -21,7 +22,7 @@
 }
 
 .sc23-session-header-clickable {
-	min-height: 20px;
+	min-height: 30px;
 	display: grid;
 	cursor: pointer;
 	grid-template-columns: repeat(5, 1fr);

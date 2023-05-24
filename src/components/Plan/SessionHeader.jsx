@@ -68,9 +68,12 @@ function SessionHeader ({ id, title, day, date, time }) {
 
 
 	function checkTime () {
-		if (!timeRegex.test(time)){
-			console.error("Invalid time format")
-			return false
+		if (time !== undefined || time != undefined) {
+			time = time.slice(0,-3)
+			if (!timeRegex.test(time)){
+				console.error("Invalid time format")
+				return false
+			}
 		}
 
 		return true
@@ -81,35 +84,35 @@ function SessionHeader ({ id, title, day, date, time }) {
 		checkID() ?
 			(
 				<div id = {`${id}-session-header`} className = "sc23-session-header d-flex justify-content-evenly">
-					<div id = {`${id}-date`} className = "sc23-session-header-day-date sc23-session-header-item">
+					<div id = {`${id}-date`} className = "sc23-session-header-day-date">
 						{
 						
 							checkDate() ?
-								<h2 className = "sc23-session-header-text">{date}</h2>
+								<p className = "sc23-session-header-text">{date}</p>
 								:
-								<h2 className = "sc23-session-header-text">{"     "}</h2>
+								<p className = "sc23-session-header-text">{"     "}</p>
 						}
 						{
 
 							checkDay() ?
-								<h2 className = "sc23-session-header-text testanuda">{day}</h2>
+								<p className = "sc23-session-header-text sc23-day">{day}</p>
 								:
-								<h2 className = "sc23-session-header-text testanuda">{"   "}</h2>
+								<p className = "sc23-session-header-text sc23-day">{"   "}</p>
 						}
 					</div>
 					{
 						checkTitle() ?
-							<div id = {`${id}-session-header-title`} className = "sc23-session-header-title sc23-session-header-item"><h2 className = "sc23-session-header-text">{title}</h2></div>
+							<div id = {`${id}-session-header-title`} className = "sc23-session-header-title"><p className = "sc23-session-header-text">{title}</p></div>
 							:
-							<div id = {`${id}-session-header-title-error`} className = "sc23-session-header-title sc23-session-header-item"><h2 className = "sc23-session-header-text">unnamed</h2></div>
+							<div id = {`${id}-session-header-title-error`} className = "sc23-session-header-title"><p className = "sc23-session-header-text">unnamed</p></div>
 					}
 
-					<div id = {`${id}-time`} className = "sc23-session-header-time sc23-session-header-item">
+					<div id = {`${id}-time`} className = "sc23-session-header-time">
 						{
 							checkTime() ?
-								<h2 className = "sc23-session-header-text">{time}</h2>
+								<p className = "sc23-session-header-text">{time}</p>
 								:
-								<h2 className = "sc23-session-header-text">{"   "}</h2>
+								<p className = "sc23-session-header-text">{"   "}</p>
 						}
 					</div> 
 					

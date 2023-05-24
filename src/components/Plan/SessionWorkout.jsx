@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 import React, { useContext } from "react"
 import "./SessionWorkout.css"
 import { StopwatchFill } from "react-bootstrap-icons"
@@ -29,13 +28,35 @@ import { isAdmin } from "../../utils"
  */
 
 function SessionWorkout ({ id, workout, sessionID, creatorID }) {
+	const workoutId = setWorkoutID()
 	const title = setWorkoutTitle()
 	const description = setWorkoutDescription()
-	const workoutId = setWorkoutID()
 	const sessionId = setSessionID()
 	const userContext = useContext(AccountContext)
 	const { userId } = userContext
 	
+
+	function setWorkoutID () {
+		if (checkWorkout() || isSpecifiedWorkoutID())
+			return workout.id
+
+		return null
+	}
+
+	function isSpecifiedWorkoutID(){
+		if(checkWorkout()){
+			return !(workout.id === null || workout.id === undefined)
+		}
+
+		return false
+	}
+
+
+	function checkWorkout(){
+		return ! (workout === null || workout === undefined)
+	}
+
+
 	function userIsCreator(){
 		if (userId == creatorID) 
 			return true
@@ -48,32 +69,16 @@ function SessionWorkout ({ id, workout, sessionID, creatorID }) {
 		return isAdmin(userContext)
 	}
 
-	function setWorkoutID () {
-		if (isSpecifiedWorkoutID()) {
-			return workout.id
-		}
-
-		console.error("Missing workout id")
-		return null
-		
-	}
 
 	function setSessionID () {
 		if (sessionID === null || sessionID === undefined) {
-			console.error("Missing workout id")
+			console.error("Missing Session ID")
 			return null
 		}
 
 		return sessionID
 	}
 
-	function isSpecifiedWorkoutID(){
-		if(checkWorkout()){
-			return !(workout.id === null || workout.id === undefined)
-		}
-
-		return false
-	}
 
 	function isSpecifiedTitle(){
 		if (checkWorkout()){
@@ -92,25 +97,18 @@ function SessionWorkout ({ id, workout, sessionID, creatorID }) {
 	}
 
 	function setWorkoutTitle(){
-		
-		if(isSpecifiedTitle()){
+		if(checkWorkout() && isSpecifiedTitle())
 			return workout.name
-		} 
 		
 		return "Ingen titel"
-		
 	}
 	
 	function setWorkoutDescription(){
 		
-		if(isSpecifiedDesc()){
+		if(checkWorkout() && isSpecifiedDesc())
 			return workout.desc
-		}
-
-		console.error("Missing description in SessionWorkout")
-		return "Passet saknar beskrivning"
-
 		
+		return "Passet saknar beskrivning"		
 	}
 
 
@@ -121,11 +119,6 @@ function SessionWorkout ({ id, workout, sessionID, creatorID }) {
 		}
 
 		return true
-	}
-
-
-	function checkWorkout(){
-		return ! (workout === null || workout === undefined)
 	}
 
 
@@ -144,7 +137,7 @@ function SessionWorkout ({ id, workout, sessionID, creatorID }) {
 
 						<div id = {`${id}-no-workout`} className = "sc23-session-workout-info">
 							<h2 className = "sc23-session-workout-text">Det finns inget pass.</h2>
-							<p className = "sc23-session-workout-text">Du kan trycka på plus-knappen för att lägga till ett.</p>
+							<p className = "sc23-session-workout-text">Du kan trycka på pennan för att lägga till ett.</p>
 						</div>
 				}
 				

@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 import "./SessionContainer.css"
 import React from "react"
 import { useState} from "react"
@@ -12,7 +11,6 @@ import SessionWorkout from "./SessionWorkout"
  * session and the connected workout if it exists.
  * 
  * @param 		@type { id }				- Id for component
- * @param		@type { autoClose }			- 
  * @paraam		@type { workout }			- The workout object connected to the session
  * @param		@type { session }			- The seesion object
  * @param		@type { plan }				- The plan object
@@ -103,12 +101,12 @@ function SessionContainer ({ id, workout, session, plan}) {
 		case(3):
 			return "Ons"
 		case(4):
-			return "Tor"
+			return "Tors"
 		case(5):
 			return "Fre"
 		case(6): 
 			return "Lör"
-		case(7):
+		case(0):
 			return "Sön"
 		}
 	}

@@ -69,17 +69,17 @@ describe("SessionHeader", () => {
 		})
 		
 		test("should render component containing given time 00:00", async() => {
-			render(<SessionHeader id = "testSessionHeader" title={test} day="Sön" date="01/01" time="00:00"/>)
+			render(<SessionHeader id = "testSessionHeader" title={test} day="Sön" date="01/01" time="00:00:00"/>)
 			expect(screen.getByTestId("testSessionHeader-session-header")).toHaveTextContent("00:00")
 		})
 
 		test("should render component containing given time 12:30", async() => {
-			render(<SessionHeader id = "testSessionHeader" title={test} day="Sön" date="01/01" time="12:30"/>)
+			render(<SessionHeader id = "testSessionHeader" title={test} day="Sön" date="01/01" time="12:30:00"/>)
 			expect(screen.getByTestId("testSessionHeader-session-header")).toHaveTextContent("12:30")
 		})
 
 		test("should render component containing given time 23:59", async() => {
-			render(<SessionHeader id = "testSessionHeader" title={test} day="Sön" date="01/01" time="23:59"/>)
+			render(<SessionHeader id = "testSessionHeader" title={test} day="Sön" date="01/01" time="23:59:00"/>)
 			expect(screen.getByTestId("testSessionHeader-session-header")).toHaveTextContent("23:59")
 		})
 	})
@@ -104,37 +104,37 @@ describe("SessionHeader", () => {
 		})
 
 		test("should render component when given invalid date input but without date-title 00/01", async() => {
-			render(<SessionHeader id = "testSessionHeader" title="testTitle" time="13:37" day="mon" date="00/01"/>)
+			render(<SessionHeader id = "testSessionHeader" title="testTitle" time="13:37:00" day="mon" date="00/01"/>)
 			expect(screen.getByTestId("testSessionHeader-session-header")).not.toHaveTextContent("00/01")
 		})
 
 		test("should render component when given invalid date input but without date-title 32/01", async() => {
-			render(<SessionHeader id = "testSessionHeader" title="testTitle" time="13:37" day="mon" date="32/01"/>)
+			render(<SessionHeader id = "testSessionHeader" title="testTitle" time="13:37:00" day="mon" date="32/01"/>)
 			expect(screen.getByTestId("testSessionHeader-session-header")).not.toHaveTextContent("32/01")
 		})
 
 		test("should render component when given invalid date input but without date-title 01/13", async() => {
-			render(<SessionHeader id = "testSessionHeader" title="testTitle" time="13:37" day="mon" date="01/13"/>)
+			render(<SessionHeader id = "testSessionHeader" title="testTitle" time="13:37:00" day="mon" date="01/13"/>)
 			expect(screen.getByTestId("testSessionHeader-session-header")).not.toHaveTextContent("01/13")
 		})
 
 		test("should render component when given invalid date input but without date-title 1/01", async() => {
-			render(<SessionHeader id = "testSessionHeader" title="testTitle" time="13:37" day="mon" date="1/01"/>)
+			render(<SessionHeader id = "testSessionHeader" title="testTitle" time="13:37:00" day="mon" date="1/01"/>)
 			expect(screen.getByTestId("testSessionHeader-session-header")).not.toHaveTextContent("1/01")
 		})
 
 		test("should render component when given invalid date input but without date-title 01/1", async() => {
-			render(<SessionHeader id = "testSessionHeader" title="testTitle" time="13:37" day="mon" date="01/1"/>)
+			render(<SessionHeader id = "testSessionHeader" title="testTitle" time="13:37:00" day="mon" date="01/1"/>)
 			expect(screen.getByTestId("testSessionHeader-session-header")).not.toHaveTextContent("01/1")
 		})
 
 		test("should render component when given invalid time input but without time-title 24:00", async() => {
-			render(<SessionHeader id = "testSessionHeader" title="testTitle" day="mon" date="01/1" time="24:00"/>)
+			render(<SessionHeader id = "testSessionHeader" title="testTitle" day="mon" date="01/1" time="24:00:00"/>)
 			expect(screen.getByTestId("testSessionHeader-session-header")).not.toHaveTextContent("24:00")
 		})
 		
 		test("should render component when given invalid time input but without time-title 23:60", async() => {
-			render(<SessionHeader id = "testSessionHeader" title="testTitle" day="mon" date="01/1" time="23:60"/>)
+			render(<SessionHeader id = "testSessionHeader" title="testTitle" day="mon" date="01/1" time="23:60:00"/>)
 			expect(screen.getByTestId("testSessionHeader-session-header")).not.toHaveTextContent("24:00")
 		})
 
