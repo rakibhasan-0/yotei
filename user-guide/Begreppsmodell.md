@@ -1,6 +1,6 @@
 # Introduktion
 
-Jotei är en applikation för Umeå Budo klubbs tränare. Applikationen är till för att skapa planeringar och träningspass för dessa.
+Yotei är en applikation för Umeå Budo klubbs tränare. Applikationen är till för att skapa planeringar och träningspass för dessa.
  
 _Snabbförklaring_
 Tränare kan skapa Grupper, som består av tillfällen (ex: onsdagar kl 17) som kan kopplas till ett pass (en planering av vilka aktiviteter som ska utföras under ett tillfälle).
