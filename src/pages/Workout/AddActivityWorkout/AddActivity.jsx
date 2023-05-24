@@ -255,13 +255,14 @@ function AddActivity({ id, setShowActivityInfo }) {
 										id={exercise.id}
 										text={exercise.name}
 										detailURL={"/exercise/exercise_page/"}
-										item={
+										checkBox={
 											<CheckBox
 												id=""
 												checked={checkedActivities.includes(exercise)}
 												onClick={() => onActivityToggle(exercise, "exercise")}
 											/>
 										}
+										item={exercise.name}
 										key={key}
 										index={key}
 									/>
