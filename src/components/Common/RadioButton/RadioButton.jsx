@@ -26,12 +26,10 @@ export default function RadioButton({onClick,toggled,id}){
 	return(
 		<div id={id} onClick={onClick} className={styles.radioContainer}>
 			{toggled
-				?   <>
-					<Record2 className={styles.radio}/>
-				</>
-				:   <>
-					<Record className={styles.radio} />
-				</>
+				?  
+				<Record2 size="1.6em" className={styles.radio}/>
+				:  
+				<Record size="1.6em" className={styles.radio} />
 			}
 		</div>
 	)

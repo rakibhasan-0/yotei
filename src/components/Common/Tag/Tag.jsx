@@ -35,21 +35,21 @@ export default function Tag({ id, tagType, onClick, text }) {
 
 	if (tagType === "default") {
 		return (
-			<button id={id} className="base-tag" onClick={onClick}>
+			<button type="button" id={id} className="base-tag" onClick={onClick}>
 				<p className="no-margin">{text}</p>
 			</button>
 
 		)
 	} else if (tagType === "suggest") {
 		return (
-			<button id={id} className="base-tag suggest" onClick={onClick}>
+			<button type="button" id={id} className="base-tag suggest" onClick={onClick}>
 				<p className="no-margin">{text}</p>
 				<PlusCircle className="ml-2" size={18} color="black"/>
 			</button>
 		)
 	} else {
 		return (
-			<button id={id} className="base-tag" onClick={onClick}>
+			<button type="button" id={id} className="base-tag" onClick={onClick}>
 				<p className="no-margin">{text}</p>
 				<XCircleFill className="ml-2" size={18} color="black"/>
 			</button>

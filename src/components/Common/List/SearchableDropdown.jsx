@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ChevronDown } from "react-bootstrap-icons"
-import styles from "./Component.module.css"
+import styles from "./Dropdown.module.css"
 
 /**
  * A searchable drop-down list
@@ -12,7 +12,7 @@ import styles from "./Component.module.css"
  * 
  * props = {
  *     item: Optional JSX element which will be displayed on the left of the text,
- *     text: Text of the component,
+ *     text: Text of the component,wg
  *     children: JSX element which will be displayed when the component is expanded
  * 	   centered: Boolean to set text as centered
  *     id: string
@@ -44,6 +44,11 @@ export default function SearchableDropdown({ query, setQuery, placeholder, child
 			setToggled(false)
 		}
 	}
+
+	useEffect(() => {
+		if (query.length > 0) setToggled(true)
+	}, [query])
+
 	return (
 		<div id={id} className={styles.listContainer}>
 			<div className={styles.listHeader}>
@@ -52,7 +57,7 @@ export default function SearchableDropdown({ query, setQuery, placeholder, child
 					<ChevronDown id={`${id}-dropdown`} size={28} onClick={() => setToggled(!toggled)} />
 				</div>
 			</div>
-			<div className={styles.listItemContainer} >
+			<div className={[styles.listItemContainer, toggled ? "" : styles.closedContainer].join(" ")} >
 				<div className={styles.listChild} onClick={onClick} style={{ margin: toggled ? "0" : "-100% 0 -100% 0" }} id={`${id}-children`}>
 					{children}
 				</div> 

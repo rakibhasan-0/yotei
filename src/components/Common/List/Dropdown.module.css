@@ -5,6 +5,11 @@
     user-select: none;
 }
 
+.closedContainer {
+    height: 0;
+    overflow: hidden;
+}
+
 .listCentered {
     justify-content: space-between;
 }
@@ -39,6 +44,10 @@
 input,
 .listText {
     width: 100%;
+}
+.listTextInput{
+    text-align: center;
+    border:none;
 }
 
 .listText::placeholder {

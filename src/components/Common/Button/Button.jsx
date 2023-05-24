@@ -13,7 +13,8 @@ import styles from "./Button.module.css"
  *     onClick: function,
  *     outlined: boolean
  *     id: string
- * 	   disabled: boolean
+ *     disabled: boolean
+ *     type: string
  * }
  * 
  * The parent container using this button must constrain its width.
@@ -22,10 +23,16 @@ import styles from "./Button.module.css"
  * @since 2023-05-02
  * @version 2.0 
  */
-export default function Button({onClick, outlined, children, width, id, disabled, isToggled}) {
+export default function Button({onClick, outlined, children, width, id, disabled, type, isToggled}) {
 	const style = width ? { width } : { width: "100%", maxWidth: "150px" }
 	return (
-		<button id={id} disabled={disabled} onClick={onClick} className={`${styles.yoteiButton} ${outlined ? styles.yoteiButtonBack : isToggled ? styles.yoteiButtonToggle : styles.yoteiButtonNormal}`} style={style}>
+		<button 
+			id={id} 
+			disabled={disabled} 
+			onClick={onClick} 
+			type={type ? type : "button"} 
+			className={`${styles.yoteiButton} ${outlined ? styles.yoteiButtonBack : isToggled ? styles.yoteiButtonToggle : styles.yoteiButtonNormal}`} 
+			style={style}>
 			{children}
 		</button>
 	)

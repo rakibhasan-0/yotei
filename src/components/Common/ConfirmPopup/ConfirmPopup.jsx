@@ -12,6 +12,8 @@ import Button from "../Button/Button"
  *     setShowPopup @type {useState} - Sets the state of the popup window
  *     onClick @type {function} - For the delete button to do something
  * 	   popupText @type {string} - Text to be displayed in the popup
+ * 	   confirmText @type {string} - Text to be displayed on confirm-button, default is: "Radera"
+ * 	   backText @type {string} - Text to be displayed on back-button, default is: "Tillbaka"
  *
  *Example usage:
  *  
@@ -30,7 +32,7 @@ import Button from "../Button/Button"
  * @since 2023-05-16
  */
 
-export default function ConfirmPopup({ onClick, id, showPopup, setShowPopup, popupText}) {
+export default function ConfirmPopup({ onClick, id, showPopup, setShowPopup, popupText, confirmText, backText}) {
 	const deleteClickHandler = () => {
 		onClick()
 		setShowPopup(false)
@@ -45,13 +47,13 @@ export default function ConfirmPopup({ onClick, id, showPopup, setShowPopup, pop
 				maxWidth: "333px"
 			}}
 		>
-			<div id={`${id}-text`}>
-				<p className={styles.font}>{ popupText }</p>
+			<div className={styles.titleContainer} id={`${id}-text`}>
+				<h2>{popupText}</h2>
 			</div>	
 			<div className={styles.outerButtonpanel}>
 				<div className={styles.innerButtonpanel} id={`${id}-buttons`}>
-					<Button width='100px'  outlined='false' onClick={() => setShowPopup(false)}><p>Tillbaka</p></Button>
-					<Button width='100px'  onClick={deleteClickHandler}>Radera</Button>
+					<Button width='110px' outlined='false' onClick={() => setShowPopup(false)}><h2>{backText ? backText : "Tillbaka"}</h2></Button>
+					<Button width='110px' onClick={deleteClickHandler}><h2>{confirmText ? confirmText : "Radera"}</h2></Button>
 				</div>
 			</div>
 		</Popup>

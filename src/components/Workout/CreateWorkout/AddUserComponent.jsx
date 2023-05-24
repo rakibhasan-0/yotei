@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import "./AddUserComponent.css"
+import styles from "./AddUserComponent.module.css"
 import { useEffect, useState, useContext } from "react"
 import { AccountContext } from "../../../context"
 import SearchableDropdown from "../../Common/List/SearchableDropdown"
@@ -19,7 +18,7 @@ function UserListItem({userObject, addedUsers, setAddedUsers}) {
 	const isChecked = () => addedUsers.find(e => e.userId == userObject.userId) != undefined
 
 	return (
-		<span className="user-list-item">
+		<span className={styles.userListItem}>
 			<h2>{userObject.username}</h2>
 			{isChecked()
 				? <CheckLg size={28} onClick={() => {
@@ -51,37 +50,33 @@ function UserListItem({userObject, addedUsers, setAddedUsers}) {
 function AddUserDropdown({addedUsers, setAddedUsers}) {
 	const [query, setQuery] = useState("")
 	const [users, setUsers] = useState([])
-	const { token, userId } = useContext(AccountContext)
+	const { token } = useContext(AccountContext)
 
 	useEffect(() => {
-		const filter = (data) => {
-			let new_data = []
-			if (!query || query.length == 0) {
-				return data
-			}
-			
-			const regex = new RegExp(`.*${query}.*`, "i")
-			for (const elem of data) {
-				if (regex.test(elem.username)) {
-					new_data.push(elem)
-				}
-			}
-
-			return new_data
-		}
-
 		// Gör en slagning. testar med att ta bort från users
-		fetch("/api/users", {headers: { token }, method: "GET"})
+		fetch("/api/search/users?name=" + query, { headers: { token }, method: "GET"})
 			.then(resp => resp.json())
-			.then(data => setUsers(filter(data)))
+			.then(data => setUsers(
+				data.results.map(u => ({ userId: u.userId, username: u.name }))
+			))
 		
 
 	}, [query, token])
 
 	return (
-		<SearchableDropdown query={query} setQuery={setQuery} placeholder={"Ge tillgång till användare"} centered={true} autoClose={false}>
+		<SearchableDropdown 
+			id="search-user-dropdown" 
+			query={query} 
+			setQuery={setQuery} 
+			placeholder={"Ge tillgång till användare"} 
+			centered={true} 
+			autoClose={false} >
 			{users && users.map((userObject) => (
-				<UserListItem key={userId} userObject={userObject} addedUsers={addedUsers} setAddedUsers={setAddedUsers} />
+				<UserListItem 
+					key={"userId-" + userObject.userId} 
+					userObject={userObject} 
+					addedUsers={addedUsers} 
+					setAddedUsers={setAddedUsers} />
 			))}
 		</SearchableDropdown>
 	)
@@ -115,8 +110,8 @@ export default function AddUserComponent({id, addedUsers, setAddedUsers}) {
 				<>
 					<h2>Tillagda användare</h2>
 
-					<div className="added-users-container">
-						{addedUsers && addedUsers.map(({userId, username, role}) => (
+					<div className={styles.addedUsersContainer}>
+						{addedUsers && addedUsers.map(({ userId, username }) => (
 							<Tag key={userId} tagType="added" text={username} onClick={() => {
 								const to_remove = addedUsers.findIndex(e => e.userId == userId)
 								setAddedUsers([

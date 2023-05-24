@@ -1,4 +1,4 @@
-.user-list-item {
+.userListItem {
     border-top: solid 1px black;
     height: 50px;
     width: 100%;
@@ -11,7 +11,7 @@
     padding: 3px 18px;
 }
 
-.added-users-container {
+.addedUsersContainer {
     display: flex;
     gap: 0.5rem;
     padding-top:0.5rem;
@@ -21,10 +21,10 @@
     margin-bottom: 1rem;
 }
 
-.user-list-item > h2 {
+.userListItem > h2 {
     margin-bottom: 0;
 }
 
-.user-list-item:nth-child(even) {
+.userListItem:nth-child(even) {
     background-color: var(--red-secondary);
 }

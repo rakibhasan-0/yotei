@@ -1,14 +1,188 @@
-import React, { useEffect, useState, useReducer } from "react"
-
-import "./ActivityInfoPopUp.css"
-import Popup from "../../Common/Popup/Popup.jsx"
-import ActivityItem from "./ActivityItem.jsx"
+import { useEffect, useContext, useState } from "react"
+import styles from "./ActivityInfoPopUp.module.css"
 import Divider from "../../Common/Divider/Divider.jsx"
-import ActivityTimes from "./ActivityTimes.jsx"
-import ActivityCategories from "./ActivityCategories.jsx"
 import Button from "../../Common/Button/Button.jsx"
 import { Plus } from "react-bootstrap-icons"
-import { ActivityInfoContext, ActivityInfoDispatchContext, activityReducer } from "./ActivityInfoContext"
+import { WorkoutCreateContext } from "./WorkoutCreateContext"
+import { WORKOUT_CREATE_TYPES } from "./WorkoutCreateReducer"
+import RadioButton from "../../Common/RadioButton/RadioButton"
+import MinutePicker from "../../Common/MinutePicker/MinutePicker"
+
+
+/**
+ * Component for setting the time for each activity connected to an exercise.
+ * 
+ * Props:
+ * 	   index @type {number} - The index of the activity in the list.
+ *     categoryName @type {string}  - The name of the category.
+ *     id @type {number} - The id of the activity.
+ *     inputDisabled @type {boolean} - Boolean that says if the input should be disabled or not.
+ *     text @type {string} - The text that is written in the text area.
+ * 
+ * Example usage:
+ *		<ActivityItem
+ *			index={0}
+ *			categoryName={"01"}
+ *			id={0}
+ *			inputDisabled={false}
+ *			text={"Namn på aktivitet"}
+ *		/>
+ */
+function ActivityItem({ index, categoryName, id, inputDisabled, text }) {
+	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(WorkoutCreateContext)
+
+	// Updates the text area height to fit the text
+	useEffect(() => {
+		const textArea = document.querySelector(`#${"activity-description-" + id} textarea`)
+		textArea.style.height = "inherit"
+		textArea.style.height =  `${textArea.scrollHeight}px`
+	}, [text, id])
+
+	return (
+		<fieldset className={styles.activityItem} id={"activity-description-" + id}>
+			{categoryName && <legend>{<h2>{categoryName}</h2>}</legend>}
+			<textarea 
+				className={styles.activityItemTextArea}
+				placeholder="Fri text ..."
+				disabled={inputDisabled} 
+				onChange={(e) => 
+					workoutCreateInfoDispatch({ 
+						type: "UPDATE_ACTIVITY_NAME", 
+						payload: { index, name: e.target.value }
+					})}
+				value={workoutCreateInfo.addedActivities[index].name}
+			/>
+		</fieldset>
+	)
+}
+
+
+/**
+ * Component for setting the time for each activity connected to an exercise.
+ * 
+ * Props:
+ *    isFreeText @type {boolean} - Boolean that says if the input should be disabled or not.
+ * 
+ * Example usage:
+ * 		<ActivityList isFreeText={true} />
+ */
+function ActivityList({ isFreeText }){
+	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(WorkoutCreateContext)
+
+	return (
+		<div className={styles.activityList}>
+			{workoutCreateInfo.addedActivities.map((activity, index) => {
+				return (
+					<ActivityItem
+						categoryName={index < 9 ? "0" + (index + 1) : index + 1}
+						key={"activity-list-item-" + index}
+						id={index}
+						index={index}
+						inputDisabled={!isFreeText}
+						text={activity.name} />)
+			})}
+			{isFreeText && 
+				<div className={styles.activityAddButton}>
+					<Button 
+						id="activity-time-add-button" 
+						width={90} 
+						onClick={() => workoutCreateInfoDispatch({
+							type: "ADD_ACTIVITY", 
+							payload: { name: "" }})} >
+						<Plus size="2em" />
+					</Button>
+				</div>}
+		</div>
+	)
+}
+
+
+/**
+ * Component for setting the time for each activity connected to an exercise.
+ * Context will handle the time update.
+ *
+ * Example usage:
+ *		<ActivityTimes />
+ */
+function ActivityTimes() {
+	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(WorkoutCreateContext)
+	const { addedActivities } = workoutCreateInfo
+
+	const minutePickerCallback = (id, time) => {
+		workoutCreateInfoDispatch({
+			type: "UPDATE_ACTIVITY_TIME", 
+			payload: { index: id, time: time ? time : 0 }
+		})
+	}
+
+	return (
+		<ul id="ActivityTimes" className={styles.activityTimesList}>
+			{addedActivities.map((activity, index) => {
+				return (
+					<li key={index} className={styles.activityTimesItem}>
+						<p className={styles.activityTimeText}>{(index+1) < 10 ? 0 :""}{index + 1} </p>
+						<i className={["bi", "bi-dash-lg", styles.activityTimeLine].join(" ")}></i>
+						<MinutePicker 
+							initialValue={activity.duration} 
+							id={index} 
+							callback={minutePickerCallback} />
+					</li>
+				)
+			})}
+		</ul>
+	)
+}
+
+
+/**
+ * Component for setting the time for each activity connected to an exercise.
+ * 
+ * Example usage:
+ * 		<ActivityTime />
+ */
+function ActivityCategories() {
+	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(WorkoutCreateContext)
+	const [inputValue, setInputValue] = useState("")
+
+	const handleEnter = (event) => {
+		if (!workoutCreateInfo.addedCategories.some((c)=>c.name===inputValue) 
+			&& inputValue.length > 0
+			&& event.key === "Enter") {
+			workoutCreateInfoDispatch({type: "ADD_CATEGORY", payload: { name: inputValue }})
+			workoutCreateInfoDispatch({type: "CHECK_CATEGORY", payload: { index: -1 }})
+			setInputValue("")
+			event.preventDefault()
+		}
+	}
+
+	return (
+		<>
+			<ul id="ActivityCategories" className={styles.categoryList}>
+				{workoutCreateInfo.addedCategories.map((category, index) =>  (
+					<li key={`activity-${index}`}>
+						<div className={styles.categoryItem}>
+							<p className={styles.categoryText}>{category.name}</p>
+							<RadioButton
+								id={"cateogry-radio-" + index}
+								onClick={() => workoutCreateInfoDispatch({
+									type: "CHECK_CATEGORY", payload: { index }})}
+								toggled={workoutCreateInfo.addedCategories[index].checked} />
+						</div>
+					</li>
+				))}
+			</ul>
+			<div className={styles.categoryListItem}>
+				<input
+					type="text"
+					value={inputValue}
+					placeholder="+ Lägg till ny"
+					className={styles.categoryInput}
+					onKeyDown={handleEnter}
+					onChange={(e) => setInputValue(e.target.value)} />
+			</div>
+		</>
+	)
+}
 
 /**
  * Component for setting the time for each activity connected to a exercise.
@@ -32,67 +206,62 @@ import { ActivityInfoContext, ActivityInfoDispatchContext, activityReducer } fro
  *
  * @author Team Minotaur
  * @version 1.0
- * @since 2023-05-04
+ * @since 2023-05-24
  */
-export default function ActivityInfoPopUp({categories, activities, addPressed, tempClose}) {
-	const [isFreeText, setIsFreeText] = useState(false)
-	const [showPopup, setShowPopup] = useState(true)
-	const [activityInfo, activityInfoDispatch] = useReducer(activityReducer, {
-		activities,
-		categories,
-		chosenCategory: ""
-	})
+export default function ActivityInfoPopUp({ isFreeText }) {
+	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(WorkoutCreateContext)
+	const { addedActivities } = workoutCreateInfo
 
+	// Add empty activity if free text and empty addedActivities
 	useEffect(() => {
-		if(activities.length === 0) setIsFreeText(true)
-	}, [])
-
-	useEffect(() => {
-		if(isFreeText && activityInfo.activities.length === 0) {
-			activityInfoDispatch({type: "ADD_ACTIVITIY", payload: ""})
+		if(addedActivities.length === 0
+			&& isFreeText) {
+			workoutCreateInfoDispatch({type: "ADD_ACTIVITY", payload: { name: "" }})
 		}
-	}, [isFreeText, activityInfo])
+	}, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+	/**
+	 * Removes empty activities from addedActivities if free text.
+	 */
+	const clearEmptyActivities = () => {
+		if(!isFreeText) return
+
+		for(let i = 0; i < addedActivities.length; i++) {
+			if(addedActivities[i].name === "") {
+				workoutCreateInfoDispatch({ 
+					type: WORKOUT_CREATE_TYPES.REMOVE_ACTIVITY, 
+					payload: { id: addedActivities[i].id }
+				})
+			}
+		}
+	}
+
+	const goBack = () => {
+		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLEAR_ADDED_ACTIVITIES })
+		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLOSE_POPUP })
+	}
+
+	const saveActivities = () => {
+		clearEmptyActivities()
+		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CREATE_ACTIVITY_ITEMS, payload: { isFreeText }})
+		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLOSE_POPUP })
+	}
 
 	return (
-		<ActivityInfoContext.Provider value={activityInfo}>
-			<ActivityInfoDispatchContext.Provider value={activityInfoDispatch}>
-				<div>
-					<Popup id={"test-popup"} title={"Aktiviteter"} isOpen={showPopup} setIsOpen={(bool) => {
-						setShowPopup(bool)
-						tempClose()
-					}} >
-						<div className="acitvity-info-activity-list">
-							{activityInfo.activities.map((activity, i) => {
-								return (
-									<ActivityItem
-										categoryName={i < 9 ? "0" + (i + 1) : i + 1}
-										key={"activity-key" + i}
-										id={i}
-										inputDisabled={!isFreeText}
-										/* TEMP FIX, WAS ACTIVITY.DESCRIPTION BEFORE */
-										text={activity.name} />)
-							})}
-							{isFreeText && 
-								<div className="activity-time-add-activity-button">
-									<Button id="activity-time-add-button" width = {90} onClick={() => activityInfoDispatch({type: "ADD_ACTIVITIY", payload: ""})}>
-										<Plus size="2em" />
-									</Button>
-								</div>}
-						</div>
-						<Divider className="heading" id="Tillagdar" option="h2_left" title="Tid" />
-						<ActivityTimes id={"activity-time-1"}></ActivityTimes>
-						<Divider className="heading" id="Tillagdar" option="h2_left" title="Kategori" />
-						<ActivityCategories id="10"></ActivityCategories>
-
-						<div className="activity-info-btns">
-							<Button onClick={() => tempClose()} outlined={true}>Tillbaka</Button>
-							<div className="acitvitiy-info-button-divider" />
-							<Button onClick={() => addPressed(activityInfo)}>Lägg till</Button>
-						</div>
-
-					</Popup>
-				</div>
-			</ActivityInfoDispatchContext.Provider>
-		</ActivityInfoContext.Provider>
+		<div className={styles.container}>
+			<div className={styles.infoContainer}>
+				<ActivityList isFreeText={isFreeText} />
+				<Divider id="ListTimeDivider" option="h2_left" title="Tid" />
+				<ActivityTimes />
+				<Divider id="TimesCategoriesDivider" option="h2_left" title="Kategori" />
+				<ActivityCategories />
+			</div>
+			
+			<div className={styles.infoButtons}>
+				<Button onClick={goBack} outlined={true}>Tillbaka</Button>
+				<div className={styles.buttonDivider} />
+				<Button onClick={saveActivities}>Lägg till</Button>
+			</div>
+		</div>
 	)
 }

@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useState}from "react"
 import "./MinutePicker.css"
 /**
  * Component for reading in minutes from user. The input area will only read in
@@ -19,18 +19,27 @@ import "./MinutePicker.css"
  * @since 2023-05-03
  */
 export default function MinutePicker({id, callback, initialValue}) {
+	const [number,setNumber] = useState( initialValue == null ? 0 : initialValue)
 	return (
 		<div className="minute-picker">
 			<input
 				id={`minute-picker-${id}`}
-				type="number"
-				pattern="[0-9]*"
-				value={initialValue}
-				placeholder="0"
-				onChange={(e) => e.target.validity.valid && callback(id, e.target.value)}
+				type="tel"
+				value={number}
+				onFocus={() => number == 0 && setNumber("")}
+				onBlur={() => number == "" && setNumber(0)}
+				onChange={(e) => {
+					if(e.target.value.match("^[0-9]+$") != null){
+						callback(id, e.target.value)
+						setNumber(e.target.value)
+					}
+					else if(e.target.value.length == 0){
+						setNumber("")
+					}
+				}}
 				min="0"
 				className={"minute-input"}/>
-			<label className="min-text">
+			<label className="min-text m-0">
 				<p>min</p>
 			</label>
 		</div>

@@ -1,0 +1,15 @@
+.addTagTitle {
+    margin-top: 1.2rem;
+}
+
+.activityButtonContainer{
+    display: flex;
+    justify-content: space-between;
+    margin: 2rem 3.5rem;
+    gap: 2rem;
+}
+.buttonContainer {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}

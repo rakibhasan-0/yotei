@@ -16,7 +16,7 @@ import PrintButton from "../../../components/Common/PrintButton/PrintButton"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
 
 /**
- * A page for creating workouts. The user can view the information
+ * A page for viewing workouts. The user can view the information
  * about a workout on this page. Activities linked to the workout
  * are displayed in lists in their respective category. Tags and
  * added user are also displayed.

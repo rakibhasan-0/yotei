@@ -75,6 +75,22 @@ export function setSuccess(msg) {
 	})
 }
 
+/**
+ * Sets the message of a toast error message and displays it.
+ */
+export function setInfo(msg) {
+	toast.info(msg, {
+		position: "top-center",
+		autoClose: 5000,
+		hideProgressBar: false,
+		closeOnClick: true,
+		pauseOnHover: true, 
+		draggable: false,
+		progress: undefined,
+		theme: "colored",
+	})
+}
+
 export const HTTP_STATUS_CODES = {
 	OK: 200,
 	SUCCESS: 201,
