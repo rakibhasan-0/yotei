@@ -113,8 +113,8 @@ export default function Profile() {
 			<Tab eventKey={"FavoriteWorkouts"} title={"Favoritpass"} className={style.tab}>
 				<WorkoutList list={workouts?.filter(w => w.favourite)} />
 			</Tab>
-			<Tab eventKey={"MyWorkouts"} title={"Pass"} className={style.tab}>
-				<WorkoutList list={workouts} />
+			<Tab eventKey={"MyWorkouts"} title={"Mina Pass"} className={style.tab}>
+				<WorkoutList list={workouts?.filter(w => w.author === userId)} />
 			</Tab>
 			<Tab eventKey={"Settings"} title={"Inställningar"} className={style.tab}>
 				<Divider option={"h2_center"} title={"Lösenord"} />
