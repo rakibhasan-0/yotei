@@ -12,24 +12,23 @@ import style from "./Divider.module.css"
 export default function Divider ({ id, option, title }) {
 	switch(option) {
 	case "h1_center":
-		return  <div id = {id} className={`${style.dividerCenter}`}>
+		return  <div id = {id} className={`${style.divider} ${style.dividerCenter}`}>
 			<h1>{title}</h1>
 		</div>
 	case "h1_left":
-		return  <div id = {id} className={`${style.dividerLeft}`}>
+		return  <div id = {id} className={`${style.divider} ${style.dividerLeft}`}>
 			<h1>{title}</h1>
 		</div>
 	case "h2_center":
-		return  <div id = {id} className={`${style.dividerCenter}`}>
+		return  <div id = {id} className={`${style.divider} ${style.dividerCenter}`}>
 			<h2>{title}</h2>
 		</div>
-
 	case "h2_left":
-		return  <div id = {id} className={`${style.dividerLeft}`}>
+		return  <div id = {id} className={`${style.divider} ${style.dividerLeft}`}>
 			<h2>{title}</h2>
 		</div>
 	case "h2_middle":
-		return	<div id = {id} className={`${style.dividerMiddle}`}>
+		return	<div id = {id} className={`${style.divider} ${style.dividerMiddle}`}>
 			<h2>{title}</h2>
 		</div> 
 	}

@@ -29,9 +29,12 @@ class Developer extends React.Component {
 					<ManageUser />
 				</div>
 				<div className="center card-admin">
+					<br/>
 					<Divider id={"import_export_activities_divider"} option={"h2_left"} title={"Importera/Exportera aktiviteter"} /> 
-					<Import />
-					<Export />
+					<div style={{padding: "1rem"}}>
+						<Import />
+						<Export />
+					</div>
 				</div>
 			</div>
 		)
