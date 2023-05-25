@@ -106,3 +106,19 @@ Tanken var att video/bild för övningar respektive tekniker skulle ha sin egna 
 
 
 
+# Beslut om visuellt gränssnit för att visa upp front end errors från error logging
+
+Datum - 25/06/23
+
+Chapters - N/A
+
+Grupp -  Dragon
+
+Beslut - Grafiskt gränssnitt (tabell och knapp) för att visa upp front end errors lagrade i databasen
+
+## Motivation
+
+Just nu finns det en knapp längst ner på Admin sidan med namnet 'Error Logs'. När man klickar på den så ska en tabell av alla error lags lagrade i databasen visas upp i formatet Error meddelande, stacktrace, datum. funktionaliteten är där, men det finns funderingar kring ifall vyn ska förbättras (dimensioner och utseende) samt att det är tänkt att finnas ett sätt att filtrera via datum (inte ännu implementerat). Detta är en produkt av att vi har rushat produktionen för att hinna till deadline inför leveransen. Vidare utveckling skulle därmed vara att implementera ett sätt att filtrera via datum, samt förbättra vyn rent visuellt. Hursomhelst är tanken att denna funktionalitet endast är reserverat för Admin användare. Så det kanske inte behöver vara extremt snyggt.
+
+
+
