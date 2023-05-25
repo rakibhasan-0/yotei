@@ -27,6 +27,6 @@ function sortActivities(activities) {
 }
 
 function setPadding(length, categoryName) {
-	const paddingY = (length != 1 ? "pt-3" : (!categoryName ? "px-0" : "pt-3"))
+	const paddingY = (length != 1 ? "pt-3" : (!categoryName ? "py-0" : "pt-3"))
 	return "container workout-activity-list " + paddingY
 }

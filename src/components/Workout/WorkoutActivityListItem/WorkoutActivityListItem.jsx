@@ -38,15 +38,14 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 	return (
 		<div id={id}>
 			{createStripes()}
-			<div className="row align-items-center py-2" key={activity.id}
+			<div className="row align-items-center py-3" key={activity.id}
 				style={{
 					backgroundColor: bgColor
 				}}>
 
 				<div className="col text-left">
-					<p className="d-flex align-items-center text-left workout-activity-name">{name}</p>
+					<p className="workout-activity-name m-0">{name}</p>
 				</div>
-
 				
 				<div className="listItemTime col text-right">{activity.duration} min</div>
 				{

@@ -6,3 +6,7 @@
 .workout-activity-name {
 	word-wrap: break-word;
 }
+
+.no-cursor {
+    pointer-events: none;
+}
