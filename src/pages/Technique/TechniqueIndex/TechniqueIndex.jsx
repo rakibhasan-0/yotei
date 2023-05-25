@@ -13,6 +13,7 @@ import { useCookies } from "react-cookie"
 import TechniqueCard from "../../../components/Common/Technique/TechniqueCard/TechniqueCard"
 import InfiniteScrollComponent from "../../../components/Common/List/InfiniteScrollComponent"
 import { isAdmin } from "../../../utils"
+import Spinner from "../../../components/Common/Spinner/Spinner"
 
 /**
  * The technique index page.
@@ -35,6 +36,7 @@ export default function TechniqueIndex() {
 	const [tags, setTags] = useState([])
 	const [suggestedTags, setSuggestedTags] = useState([])
 	const [showPopup, setShowPopup] = useState(false)
+	const [loading, setIsLoading] = useState(true)
 
 	useEffect(() => {
 		const filterCookie = cookies["technique-filter"]
@@ -70,6 +72,7 @@ export default function TechniqueIndex() {
 		getTechniques(args, context.token, map, mapActions, res => {
 			setSuggestedTags(res.tagCompletion)
 			setTechniques(res.results)
+			setIsLoading(false)
 		})
 
 
@@ -110,14 +113,14 @@ export default function TechniqueIndex() {
 					</TechniqueFilter>
 				</div>
 
-				<InfiniteScrollComponent>
+				{loading ? <Spinner /> : <InfiniteScrollComponent>
 					{techniques?.map((technique, key) =>
 						<TechniqueCard
 							key={key}
 							technique={technique}
 							checkBox={false}>
 						</TechniqueCard>)}
-				</InfiniteScrollComponent>
+				</InfiniteScrollComponent>}
 			</div>
 			
 			{isAdmin(context) &&
