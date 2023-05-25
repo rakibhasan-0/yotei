@@ -22,7 +22,7 @@ export default function Import() {
 				className="d-flex justify-content-between align-items-between"
 				type="button"
 				onClick={() => ref.current.click()}
-				width="60%">
+				width="100%">
 				<Upload className="mr-3" size={"1.4rem"}/>
 				<h2>Importera</h2>
 			</Button>

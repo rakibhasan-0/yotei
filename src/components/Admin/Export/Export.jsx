@@ -13,7 +13,7 @@ export default function Export() {
 				<Button
 					id="exercise-export"
 					type="button"
-					width={"60%"}
+					width={"100%"}
 					onClick={() => export_("/api/export/exercises", "exercises")}>
 					<h2>Exportera Övningar</h2>
 				</Button>
@@ -22,7 +22,7 @@ export default function Export() {
 				<Button
 					id="technique-export"
 					type="button"
-					width={"60%"}
+					width={"100%"}
 					onClick={async () => export_("/api/export/techniques", "techniques")}>
 					<h2>Exportera Tekniker</h2>
 				</Button>

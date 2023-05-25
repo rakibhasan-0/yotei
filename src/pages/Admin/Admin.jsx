@@ -23,7 +23,7 @@ class Developer extends React.Component {
 			return null
 		}
 		return (
-			<div className="container">
+			<div className="pb-4">
 				<h1 className="col-12 mt-4">Admin</h1>
 				<div className="center card-admin">
 					<ManageUser />

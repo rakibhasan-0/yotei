@@ -26,13 +26,10 @@ import styles from "./Button.module.css"
 export default function Button({onClick, outlined, children, width, id, disabled, type, isToggled}) {
 	const style = width ? { width } : { width: "100%", maxWidth: "150px" }
 	return (
-		<button 
-			id={id} 
-			disabled={disabled} 
+		<button id={id} disabled={disabled}
+			type={type || "button"} 
 			onClick={onClick} 
-			type={type ? type : "button"} 
-			className={`${styles.yoteiButton} ${outlined ? styles.yoteiButtonBack : isToggled ? styles.yoteiButtonToggle : styles.yoteiButtonNormal}`} 
-			style={style}>
+			className={`${styles.yoteiButton} ${outlined ? styles.yoteiButtonBack : styles.yoteiButtonNormal} ${isToggled ? styles.toggled : undefined}`} style={style}>
 			{children}
 		</button>
 	)

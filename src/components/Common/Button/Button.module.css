@@ -12,16 +12,16 @@
 
 .yoteiButtonNormal {
     background-color: var(--red-primary);
-    color: var(--background);
-	border: 2px solid var(--button-border);
+    color: whitesmoke;
 }
 
-.yoteiButtonToggle {
-	background-color: var(--button-press);
-    color: var(--background);
-	border: 2px solid var(--button-press);
+.yoteiButton:hover {
+    background-color: var(--button-hover);
 }
 
+.yoteiButton:active {
+    background-color: var(--button-press);
+}
 
 .yoteiButton:disabled {
 	background-color: var(--body);
@@ -32,7 +32,7 @@
 .yoteiButton > * {
     padding: 0;
     margin: 0;
-    color: var(--background);
+    color: whitesmoke;
     min-height: 1rem;
 }
 
@@ -48,9 +48,13 @@
 
 .yoteiButtonBack:hover,
 .yoteiButtonBack:hover > * {
-    color: var(--background);
+    color: whitesmoke;
 }
 
 .yoteiButtonBack {
-    background-color: var(--background);
+    background-color: whitesmoke;
+}
+
+.toggled {
+    background-color: var(--button-hover);
 }
