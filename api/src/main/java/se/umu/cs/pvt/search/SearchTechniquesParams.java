@@ -28,8 +28,7 @@ public class SearchTechniquesParams {
 				name = new String(URLDecoder.decode(urlQuery.get("name"), StandardCharsets.UTF_8.toString()));
 			}	
 		} catch (UnsupportedEncodingException e) {
-			// Failed to decode string use uncoded string.
-			name = urlQuery.get("name");
+			// Failed to decode string 
 		}
 
         if (urlQuery.containsKey("tags")){
@@ -84,4 +83,11 @@ public class SearchTechniquesParams {
     public boolean isKion() {
         return kion;
     }
+
+	public boolean nameIsEmpty() {
+		if (this.hasName()) {
+			return name.isEmpty();
+		}
+		return false;
+	}
 }

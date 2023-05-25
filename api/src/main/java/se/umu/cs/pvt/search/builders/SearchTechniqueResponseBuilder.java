@@ -26,17 +26,20 @@ public class SearchTechniqueResponseBuilder {
      * @return The created list of TechniqueSearchResponses.
      */
     public List<TechniqueSearchResponse> build(){
-        HashMap<Long, TechniqueSearchResponse> map = new HashMap<>();
+        HashMap<Long, Integer> map = new HashMap<>();
+		ArrayList<TechniqueSearchResponse> resultList = new ArrayList<>();
 
         techniqueDBResultList.forEach(result -> {
             Long techniqueID = result.getId();
 
             if(map.containsKey(techniqueID)){
-                map.get(techniqueID).addBeltColor(
+                resultList.get(map.get(techniqueID)).addBeltColor(
                         result.getBelt_color(), result.getBelt_name(), result.getIs_child()
                 );
             } else {
-                map.put(techniqueID, new TechniqueSearchResponse(
+				int index = resultList.size();
+				map.put(techniqueID, index);
+                resultList.add(index, new TechniqueSearchResponse(
                         result.getId(),
                         result.getName(),
                         result.getBelt_color(),
@@ -46,6 +49,6 @@ public class SearchTechniqueResponseBuilder {
             }
         });
 
-        return new ArrayList<>(map.values());
+        return resultList;
     }
 }

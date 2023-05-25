@@ -25,7 +25,9 @@ public class TechniquesDBBuilderTest {
                 query + " " +
                 ") AS result " +
                 "LEFT JOIN technique_to_belt AS ttb ON ttb.technique_id=result.technique_id " +
-                "LEFT JOIN belt AS b ON ttb.belt_id=b.belt_id";
+                "LEFT JOIN belt AS b ON ttb.belt_id=b.belt_id " + 
+				"GROUP BY result.technique_id, result.name, b.belt_name, b.belt_color, b.is_child, ttb.belt_id " +
+				"ORDER BY ttb.belt_id ASC";
     }
 
     @Test
@@ -45,7 +47,7 @@ public class TechniquesDBBuilderTest {
         params = new SearchTechniquesParams(urlQuery);
         builder = new SearchTechniquesDBBuilder(params);
 
-        String baseQuery = "SELECT technique_id, name FROM technique";
+        String baseQuery =  "SELECT technique_id, name FROM technique";
         String expectedQuery = concatJoinBeltQuery(baseQuery);
 
         assertThat(builder

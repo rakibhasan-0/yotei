@@ -78,20 +78,23 @@ public class SearchController {
     public ResponseEntity<SearchResponse<TechniqueSearchResponse>> searchTechniques(@RequestParam Map<String, String> urlQuery) {
         SearchTechniquesParams searchTechniquesParams = new SearchTechniquesParams(urlQuery);
 
-        DatabaseQuery createdQuery = new SearchTechniquesDBBuilder(searchTechniquesParams)
-                .filterByBelts()
-                .filterByTags()
-                .filterByKihon()
-                .build();
-
+		
+		DatabaseQuery createdQuery = new SearchTechniquesDBBuilder(searchTechniquesParams)
+			.filterByBelts()
+			.filterByTags()
+			.filterByKihon()
+			.build();
+		
+			
         List<TechniqueDBResult> results = searchRepository.getTechniquesFromCustomQuery(createdQuery.getQuery());
         List<TechniqueSearchResponse> techniqueSearchResponses = new SearchTechniqueResponseBuilder(results).build();
-        List<TechniqueSearchResponse> filteredResult = fuzzySearchFiltering(searchTechniquesParams.getName(), techniqueSearchResponses);
-
+		if(!searchTechniquesParams.nameIsEmpty()) {
+        		techniqueSearchResponses = fuzzySearchFiltering(searchTechniquesParams.getName(), techniqueSearchResponses);
+		}
 		// Get tag complete suggestion from search input
         List<String> tagCompletion = getTagSuggestions(searchTechniquesParams.getName(), searchTechniquesParams.getTags(), TagType.technique_tag);
 
-        SearchResponse<TechniqueSearchResponse> response = new SearchResponse<>(filteredResult, tagCompletion);
+        SearchResponse<TechniqueSearchResponse> response = new SearchResponse<>(techniqueSearchResponses, tagCompletion);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

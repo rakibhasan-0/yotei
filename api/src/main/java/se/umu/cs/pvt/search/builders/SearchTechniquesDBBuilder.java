@@ -29,7 +29,6 @@ public class SearchTechniquesDBBuilder implements SearchDBBuilderInterface {
      */
     public SearchTechniquesDBBuilder filterByTags() {
         if(!searchTechniquesParams.hasTags()) return this;
-
         List<String> tags = searchTechniquesParams.getTags();
         for (String tag: tags) {
             DatabaseQuery databaseQuery = new DatabaseQuery();
@@ -91,8 +90,8 @@ public class SearchTechniquesDBBuilder implements SearchDBBuilderInterface {
         DatabaseQuery databaseQuery = new DatabaseQuery();
 
         if(queries.isEmpty()) {
-            databaseQuery.setQuery(
-                    "SELECT technique_id, name FROM technique"
+            databaseQuery.setQuery(	
+				"SELECT technique_id, name FROM technique"
             );
         } else {
             List<String> queryList = new ArrayList<>();
@@ -125,7 +124,9 @@ public class SearchTechniquesDBBuilder implements SearchDBBuilderInterface {
                 resultQuery + " " +
                 ") AS result " +
                 "LEFT JOIN technique_to_belt AS ttb ON ttb.technique_id=result.technique_id " +
-                "LEFT JOIN belt AS b ON ttb.belt_id=b.belt_id";
+                "LEFT JOIN belt AS b ON ttb.belt_id=b.belt_id " +
+				"GROUP BY result.technique_id, result.name, b.belt_name, b.belt_color, b.is_child, ttb.belt_id " +
+				"ORDER BY ttb.belt_id ASC";
 
         DatabaseQuery createdDatabaseQuery = new DatabaseQuery();
         createdDatabaseQuery.setQuery(stringQuery);
