@@ -61,10 +61,17 @@ export default function TechniqueIndex() {
 		}
 		setCookie("technique-filter", {belts: belts, kihon: kihon, tags: tags}, {path: "/"})
 
+		if(args.selectedTags.find(tag => tag === "kihon waza") === undefined) {
+			setKihon(false)
+		} else if (!kihon && args.selectedTags.find(tag => tag === "kihon waza")) {
+			setKihon(true)
+		}
+
 		getTechniques(args, context.token, map, mapActions, res => {
 			setSuggestedTags(res.tagCompletion)
 			setTechniques(res.results)
 		})
+
 
 	}, [showPopup, searchBarText, belts, kihon, tags, context.token, map, mapActions])
 
@@ -137,6 +144,14 @@ export default function TechniqueIndex() {
 	}
 
 	function handleKihonChanged(newKihon) {
-		setKihon(newKihon)
+		if(newKihon) {
+			setKihon(newKihon)
+			if(tags.find(tag => tag === "kihon waza") === undefined) {
+				setTags(current => [...current, "kihon waza"])
+			}
+		} else {
+			setKihon(newKihon)
+			setTags(current => current.filter(tag => tag !== "kihon waza"))
+		}
 	}
 }

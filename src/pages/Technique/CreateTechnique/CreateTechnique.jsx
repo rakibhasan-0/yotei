@@ -213,7 +213,7 @@ export default function CreateTechnique({ id, setIsOpen }) {
 
 function buildTags(tags, kihonChecked) {
 
-	if (kihonChecked && tags["id"] === KIHON_TAG.id) {
+	if (kihonChecked && tags["id"] !== KIHON_TAG.id) {
 		tags.push(KIHON_TAG)
 	}
 

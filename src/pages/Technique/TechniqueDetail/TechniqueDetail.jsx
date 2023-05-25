@@ -141,7 +141,6 @@ function TechniqueDetail({ id }) {
 					/>
 				</div>
 				}
-				<p style={{ marginBottom: 0 }}>{technique.isKihon ? "Kihon" : "Ej kihon"}</p>
 				<div className="technique-detail-belts-container">
 					{technique.belts ? (
 						technique.belts.map(belt => <BeltIcon key={belt.name} belt={belt} />)
