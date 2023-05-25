@@ -1,5 +1,6 @@
 import { ChevronDown } from "react-bootstrap-icons"
 import "./TechniqueCard.css"
+import { Link } from "react-router-dom"
 
 /**
  * Technique card component.
@@ -17,36 +18,40 @@ import "./TechniqueCard.css"
 function TechniqueCard({ technique, checkBox, id }) {
 	
 	return (
-		<div className="technique-card" id={id}>
-			{constructColor(technique)}
+		<Link
+			id={"technique-card-" + technique.techniqueID}
+			to={"/technique/technique_page/" + technique.techniqueID}>
+		
+			<div className="technique-card" id={id}>
+				{constructColor(technique)}
 
-			<div className="technique-info-container">
+				<div className="technique-info-container">
 
-				{checkBox ? 
-					<div className="technique-checkbox-container">
-						{checkBox}
+					{checkBox ? 
+						<div className="technique-checkbox-container">
+							{checkBox}
+						</div>
+						:
+						null
+					}
+
+
+					<div className="technique-name-container">
+						<a href={"/technique/technique_page/" + technique.techniqueID}>
+							<h5 className="technique-name">{technique.name}</h5>	
+						</a>
 					</div>
-					:
-					null
-				}
 
-
-				<div className="technique-name-container">
-					<a href={"/technique/technique_page/" + technique.techniqueID}>
-						<h5 className="technique-name">{technique.name}</h5>	
-					</a>
-				</div>
-
-				<div className="technique-arrow-container">
-					<a href={"/technique/technique_page/" + technique.techniqueID}>
-						<ChevronDown />
-					</a>
-				</div>
+					<div className="technique-arrow-container">
+						<a href={"/technique/technique_page/" + technique.techniqueID}>
+							<ChevronDown />
+						</a>
+					</div>
 				
 
+				</div>
 			</div>
-		</div>
-
+		</Link>
 	)
 }
 
