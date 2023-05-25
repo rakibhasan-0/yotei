@@ -70,7 +70,6 @@ public class UpdateUserTest {
 
         } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             fail();
-            System.out.println("Exception thrown: " + e.getCause());
         }
     }
 
@@ -94,7 +93,6 @@ public class UpdateUserTest {
 
         } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             fail();
-            System.out.println("Exception thrown: " + e.getCause());
         }
     }
 
@@ -117,7 +115,6 @@ public class UpdateUserTest {
 
         } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             fail();
-            System.out.println("Exception thrown: " + e.getCause());
         }
     }
     @Test

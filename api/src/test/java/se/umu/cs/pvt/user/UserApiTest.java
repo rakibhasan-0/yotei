@@ -54,7 +54,6 @@ public class UserApiTest {
             }
         } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             fail();
-            System.out.println("Exception thrown: " + e.getCause());
         }
     }
 
@@ -75,7 +74,6 @@ public class UserApiTest {
             }
         } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             fail();
-            System.out.println("Exception thrown: " + e.getCause());
         }
     }
 
@@ -96,7 +94,6 @@ public class UserApiTest {
             }
         } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             fail();
-            System.out.println("Exception thrown: " + e.getCause());
         }
     }
 
@@ -112,7 +109,6 @@ public class UserApiTest {
             }
         } catch (Exception e) {
             fail();
-            System.out.println("Exception thrown: " + e.getCause());
         }
     }
 
@@ -128,7 +124,6 @@ public class UserApiTest {
                 assertEquals(HttpStatus.OK, actual);
             }
         } catch (Exception e) {
-            System.out.println("Exception thrown: " + e.getCause());
             fail();
         }
     }
@@ -145,7 +140,6 @@ public class UserApiTest {
                 assertEquals(HttpStatus.BAD_REQUEST, actual);
             }
         } catch (Exception e) {
-            System.out.println("Exception thrown: " + e.getCause());
             fail();
         }
     }
@@ -162,7 +156,6 @@ public class UserApiTest {
                 assertEquals(HttpStatus.BAD_REQUEST, actual);
             }
         } catch (Exception e) {
-            System.out.println("Exception thrown: " + e.getCause());
             fail();
         }
     }
@@ -180,7 +173,6 @@ public class UserApiTest {
                 assertEquals(HttpStatus.OK, actual);
             }
         } catch (Exception e) {
-            System.out.println("Exception thrown: " + e.getCause());
             fail();
         }
     }
@@ -198,7 +190,6 @@ public class UserApiTest {
                 assertEquals(HttpStatus.BAD_REQUEST, actual);
             }
         } catch (Exception e) {
-            System.out.println("Exception thrown: " + e.getCause());
             fail();
         }
     }
@@ -216,7 +207,6 @@ public class UserApiTest {
                 assertEquals(HttpStatus.BAD_REQUEST, actual);
             }
         } catch (Exception e) {
-            System.out.println("Exception thrown: " + e.getCause());
             e.printStackTrace();
             fail();
         }

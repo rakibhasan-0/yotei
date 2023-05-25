@@ -54,7 +54,6 @@ public class FuzzyTest {
 
         List<TestResult> searches = Fuzzy.search("KHION", databaseResult);
 
-        searches.forEach(n-> System.out.println(n.getName()));
 
         assertThat(searches.get(0).getName()).isEqualTo("KHION");
     }

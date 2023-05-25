@@ -19,7 +19,6 @@ class PasswordHashTest {
             assertTrue(PasswordHash.validatePassword("test", hashedPassword));
         } catch (NoSuchAlgorithmException | NumberFormatException | InvalidKeySpecException e) {
             fail();
-            System.out.println("Exception thrown: " + e.getCause());
         }
     }
 
@@ -32,7 +31,6 @@ class PasswordHashTest {
             assertFalse(PasswordHash.validatePassword("test", hashedPassword));
         } catch (NoSuchAlgorithmException | NumberFormatException | InvalidKeySpecException e) {
             fail();
-            System.out.println("Exception thrown: " + e.getCause());
         }
     }
 
@@ -45,7 +43,6 @@ class PasswordHashTest {
             assertTrue(PasswordHash.validatePassword("", hashedPassword));
         } catch (NoSuchAlgorithmException | NumberFormatException | InvalidKeySpecException e) {
             fail();
-            System.out.println("Exception thrown: " + e.getCause());
         }
     }
 }

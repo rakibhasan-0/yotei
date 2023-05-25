@@ -154,7 +154,6 @@ public class MediaController {
 
         //Fill response with url where media can be reached
         final String reachedOnUrl = "/api/media/files/" + file.getOriginalFilename();
-        System.out.println("Uploaded succesful. Item can be reached on: "+reachedOnUrl);
         response.put("url", reachedOnUrl);
 
         //Convert response to string and encode special characters
@@ -172,7 +171,6 @@ public class MediaController {
         } catch (IOException e) {
             return new ResponseEntity<>("Kunde inte hitta önskad resurs på server",HttpStatus.EXPECTATION_FAILED);
         }
-        System.out.println( "The file " + filename + "have been requested. File of service: "+ file.getFilename());
 
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);

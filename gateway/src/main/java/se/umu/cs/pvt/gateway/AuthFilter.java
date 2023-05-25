@@ -35,7 +35,6 @@ public class AuthFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         List<String> apiKeyHeader = exchange.getRequest().getHeaders().get("token");
-        System.out.println("Api key: " + apiKeyHeader);
 
         Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
         String routeId = route != null ? route.getId() : null;
@@ -48,7 +47,6 @@ public class AuthFilter implements GlobalFilter, Ordered {
         }
 
         if (!isAuthorized(routeId, apiKey, path)) {
-            System.out.println("Unauthorized or invalid api key");
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Please check your api key.");
         }
 

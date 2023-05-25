@@ -54,7 +54,6 @@ public class LoginTest {
             }
         } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             fail();
-            System.out.println("Exception thrown: " + e.getCause());
         }
     }
 
@@ -72,7 +71,6 @@ public class LoginTest {
             }
         } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             fail();
-            System.out.println("Exception thrown: " + e.getCause());
         }
     }
 
@@ -89,7 +87,6 @@ public class LoginTest {
             }
         } catch (InvalidUserNameException e) {
             fail();
-            System.out.println("Exception thrown: " + e.getCause());
         }
     }
 
@@ -110,7 +107,6 @@ public class LoginTest {
             }
         } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             fail();
-            System.out.println("Exception thrown: " + e.getCause());
         }
     }
 
@@ -131,7 +127,6 @@ public class LoginTest {
             }
         }  catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             fail();
-            System.out.println("Exception thrown: " + e.getCause());
         }
     }
 
@@ -153,7 +148,6 @@ public class LoginTest {
             assertNotNull(new JWTUtil().validateToken(responseToken));
         } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             fail();
-            System.out.println("Exception thrown: " + e.getCause());
         }
     }
 

@@ -55,7 +55,6 @@ public class UserTest {
             assertTrue(PasswordHash.validatePassword("admin", user.getPassword()));
         } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             fail();
-            System.out.println("Exception thrown: " + e.getCause());
         }
     }
 
@@ -66,7 +65,6 @@ public class UserTest {
             assertEquals(User.Role.USER, user.getUserRole());
         } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             fail();
-            System.out.println("Exception thrown: " + e.getCause());
         }
     }
 
@@ -78,7 +76,6 @@ public class UserTest {
             assertEquals(User.Role.ADMIN, user.getUserRole());
         } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             fail();
-            System.out.println("Exception thrown: " + e.getCause());
         }
     }
 
@@ -91,7 +88,6 @@ public class UserTest {
             assertEquals(User.Role.USER, user.getUserRole());
         } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             fail();
-            System.out.println("Exception thrown: " + e.getCause());
         }
     }
 }
