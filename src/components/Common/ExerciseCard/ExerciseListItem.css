@@ -3,7 +3,7 @@
     border: 1px solid var(--black-primary);
     user-select: none;
     overflow: auto;
-    margin-top: 0.4rem;
+    margin-top: 10px;
     display: flex;
 }
 
