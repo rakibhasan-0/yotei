@@ -94,7 +94,7 @@ const WorkoutToPrint = ({ workoutData }) => {
 									</div>
 									<div className={styles.WorkoutToPrintRowItem} style={{ marginBottom: "20px" }}>
 										<div className="WorkoutToPrint-column-item">
-											<p style={{ fontSize: "20px"}}>{workoutData?.description}</p>
+											<p style={{ fontSize: "20px", textAlign: "left"}}>{activity.exercise?.description}</p>
 										</div>
 									</div>
 								</div>
