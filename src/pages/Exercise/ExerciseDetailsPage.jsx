@@ -227,9 +227,8 @@ export default function ExerciseDetailsPage() {
 				<Popup
 					title="Ta bort övning"
 					isOpen={showDeletePopup}
-					setIsOpen={setShowDeletePopup}
-				>
-					<ActivityDelete id={ex_id} name={exercise?.name} setIsOpen={setShowDeletePopup} what={"Övning"} />
+					setIsOpen={setShowDeletePopup}>
+					<ActivityDelete id={"exercise-delete-popup"} activityID={ex_id} name={exercise?.name} setIsOpen={setShowDeletePopup} what={"Övning"}/>
 				</Popup>
 			</div>
 
