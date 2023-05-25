@@ -1,6 +1,20 @@
 # Arkitektur
 # Produktägare
 # Quality assurance
+
+## Project Management Verktyg
+
+Datum - 230516
+
+Chapters - Test/QA
+
+Grupp -  N/A
+
+Beslut - Automatiserade Systemtester avskaffas
+
+### Motivation
+På grund av polyrepo-strukturen så kommer parallell körning av systemtester vara problematiskt och därav blir testtiden mycket längre per merge. På grund av dessa problem så avskaffas automatiserade systemtester.
+
 # Backend
 ## Beslut om sparning av media-filer
 Datum - 22/05/23
