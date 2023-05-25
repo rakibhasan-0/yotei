@@ -4,6 +4,52 @@
 # Backend
 # Frontend
 
+## Beslut om slå ihop exerciseCreate och exerciseForm
+
+
+Datum - 23/05/10
+
+Chapters - N/A
+
+Grupp -  Phoenix
+
+Beslut - Slå ihop exerciseCreate och exerciseForm
+
+### Motivation
+
+Vi bestämde oss att slå ihop exerciseCreate och exerciseForm eftersom de var onödigt att dela upp till att börja med och tjorvigt att kommunicera mellan dem. Formuläret som fanns i exerciseForm fyllde ingen funktion utan lade endast till extra komplexitet.
+
+## Beslut om filtrering på se-alla-övningar-sidan
+
+
+Datum - 23/05/10
+
+Chapters - N/A
+
+Grupp -  Phoenix
+
+Beslut - Ingen filtrering på se-alla-övningar-sidan
+
+### Motivation
+
+Vi bestämde att det inte behövs någon filtrering på se övningar sidan då denna funktionalitet kan uppnås med sökfunktionaliteten som kommer med den nya sök-komponenten. 
+
+## Beslut om sortering på se-alla-övningar-sidan
+
+
+Datum - 23/05/16
+
+Chapters - N/A
+
+Grupp -  Phoenix
+
+Beslut - Sortering på se-alla-övningar-sidan
+
+### Motivation
+
+Vi bestämde oss för att implementera en sortering så att man kan sortera övningarna alfabetiskt och efter längd på övningar.
+
+
 ## Beslut om visuellt gränssnit för att visa upp front end errors från error logging
 
 Datum - 25/05/23
