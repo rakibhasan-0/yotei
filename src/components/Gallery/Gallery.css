@@ -43,7 +43,7 @@
     height: 16px;
     opacity: 0.2;
     box-shadow: none;
-    float: none;
+    float: none !important;
 }
 
 .carousel .control-arrow, .carousel.carousel-slider .control-arrow {
@@ -111,7 +111,6 @@
     left: 10px;
 }
 
-
 .carousel .slide iframe {
     display: inline-block;
     width: 100%;
@@ -138,4 +137,8 @@
     width: 70%!important;
     padding-top: 0%;
     padding-bottom: 15%;
+}
+
+.carousel ul {
+    overflow: visible !important;
 }

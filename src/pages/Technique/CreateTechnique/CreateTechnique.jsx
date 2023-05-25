@@ -9,6 +9,7 @@ import { AccountContext } from "../../../context"
 import TagInput from "../../../components/Common/Tag/TagInput"
 import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../../utils"
 import { toast } from "react-toastify"
+import EditGallery from "../../../components/Gallery/EditGallery"
 import Divider from "../../../components/Common/Divider/Divider"
 
 const KIHON_TAG = { id: 1 }
@@ -52,6 +53,10 @@ export default function CreateTechnique({ id, setIsOpen }) {
 	const [clearFields, setClearFields] = useState(false)
 	const [createButton, setCreateButton] = useState(false)
 
+	const [tempId, setTempId] = useState(-1)
+	const [sendData, setSendData] = useState(false)
+	const [undoMediaChanges, setUndoMediaChanges] = useState(false)
+
 	// Updates the belts hook array 
 	const onToggle = (checked, belt) => setBelts(() => {
 		if(!checked) {
@@ -61,6 +66,33 @@ export default function CreateTechnique({ id, setIsOpen }) {
 			return [...belts, belt]
 		}
 	})
+
+	useEffect(() => {
+		if(tempId >= 0){
+			setSendData(true)
+		}
+		console.log(tempId)
+	},[tempId])  
+
+	function done(){
+
+		if(undoMediaChanges){
+			setIsOpen(false)
+		}
+		else{
+			setSendData(false)
+
+			if (continueToCreate && clearFields) { 
+				clearStates()
+				return
+			}
+			if (continueToCreate) { 
+				setCreateButton(true)
+				return
+			}
+			setIsOpen(false)
+		}
+	}
 	
 	async function handleSubmit() {
 		const tagIds = buildTags(addedTags, kihonChecked)
@@ -68,10 +100,16 @@ export default function CreateTechnique({ id, setIsOpen }) {
 
 		postTechnique({ name: techniqueName, description: techniqueDescription, belts: beltIds, tags: tagIds }, token.token)
 			.then(handleResponse)
+			.then(await makeMediaAPICall)
 			.catch(() => toast.error("Kunde inte spara tekniken. Kontrollera din internetuppkoppling."))
+		
 	}
 
-	function handleResponse(response) {
+	async function makeMediaAPICall(data) {
+		setTempId(data.id)
+	}
+	
+	async function handleResponse(response) {
 
 		if (response.status == HTTP_STATUS_CODES.CONFLICT) {
 			setTechniqueNameErr("En teknik med detta namn finns redan")
@@ -101,16 +139,8 @@ export default function CreateTechnique({ id, setIsOpen }) {
 		}
 
 		toast.success("Tekniken " + techniqueName + " skapades")
-		
-		if (continueToCreate && clearFields) { 
-			clearStates()
-			return
-		}
-		if (continueToCreate) { 
-			setCreateButton(true)
-			return
-		}
-		setIsOpen(false)
+
+		return response.json()
 	}
 
 	function clearStates() {
@@ -171,7 +201,13 @@ export default function CreateTechnique({ id, setIsOpen }) {
 				setAddedTags={setAddedTags}
 				isNested={true}
 			/>	
+			<div style={{height: "1rem"}}/>
 
+			<h1 className="create-media-title">Media</h1>
+			<div className="create-technique-horizontal-line"/>
+
+			<EditGallery id={tempId} exerciseId={tempId} sendData={sendData} undoChanges={undoMediaChanges} done={done}/>
+	
 			<CheckBox
 				id="create-technique-checkbox-continue"
 				checked={continueToCreate}
@@ -193,7 +229,7 @@ export default function CreateTechnique({ id, setIsOpen }) {
 			<div style={{ display: "flex", gap: "27px", justifyContent: "space-evenly" }}>
 				<Button
 					id="create-technique-backbutton"
-					onClick={() => setIsOpen(false)}
+					onClick={() => setUndoMediaChanges(true)}
 					outlined={true}
 				>
 					<p>Tillbaka</p>
@@ -213,7 +249,7 @@ export default function CreateTechnique({ id, setIsOpen }) {
 
 function buildTags(tags, kihonChecked) {
 
-	if (kihonChecked && tags["id"] !== KIHON_TAG.id) {
+	if (kihonChecked && tags["id"] === KIHON_TAG.id) {
 		tags.push(KIHON_TAG)
 	}
 

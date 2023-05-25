@@ -49,6 +49,7 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 
 	const [showMediaPopup, setShowMediaPopup] = useState(false)
 	const [sendMediaData, setSendMediaData] = useState(false)
+	const [undoMediaChanges, setUndoMediaChanges] = useState(false)
 
 	const [inputErrorMessage, setInputErrorMessage] = useState("")
 
@@ -59,6 +60,12 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 			}
 		})
 	}, [])
+
+	function done(){
+		if(undoMediaChanges){
+			setIsOpen(false)
+		}
+	}
 
 	const handlePutTechnique = () => {
 		// Media should only be sent when the edit is successfull, but need a promise in editgallery for that.
@@ -98,15 +105,15 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 					return
 				case HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR:
 					setError("Internt fel, gick inte att updatera tekniken!")
-					console.error(res)
+					console.log(res)
 					return
 				default:
 					setError("Okänt fel inträffade")
-					console.error(res)
+					console.log(res)
 				}
 			})
 			.catch((error) => {
-				console.error(error)
+				console.log(error)
 				setError("Gick inte att updatera tekniken!")
 			})
 
@@ -192,7 +199,7 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 			<Divider title="Media" option="h1_left"/>
 
 			<div className={style.mediaButtonContainer}>
-				<EditGallery id={technique.id} exerciseId={technique.id} sendData={sendMediaData} />
+				<EditGallery id={technique.id} exerciseId={technique.id} sendData={sendMediaData} undoChanges={undoMediaChanges} done={done} />
 			</div>
 
 			<Popup title={"Lägg till media"} isOpen={showMediaPopup} setIsOpen={setShowMediaPopup} >
@@ -202,7 +209,7 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 			<div style={{ display: "flex", gap: "27px", justifyContent: "space-evenly" }}>
 				<Button
 					id={style.techniqueEditBackbutton}
-					onClick={() => setIsOpen(false)}
+					onClick={() => setUndoMediaChanges(true)}
 					outlined={true}>
 					<p>Avbryt</p>
 				</Button>

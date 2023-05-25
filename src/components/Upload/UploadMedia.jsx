@@ -25,7 +25,7 @@ import {toast} from "react-toastify"
  * @since 20XX-XX-XX
  */
 
-function UploadMedia({id, exerciseId}) {
+function UploadMedia({id, exerciseId, fetchMediaMetaToBeUploaded, fetchMediaFilesThatWasUploaded}) {
 	const [link, setLink] = useState("")
 	const context = useContext(AccountContext)
 	const [selectedFile, setSelectedFile] = useState()
@@ -84,8 +84,9 @@ function UploadMedia({id, exerciseId}) {
 					url: responseData.url, 
 					image: !isPlayableVideoMedia(responseData.url)
 				}
-			
-				uploadMediaMetaData(media)
+				
+				fetchMediaFilesThatWasUploaded(media)
+				fetchMediaMetaToBeUploaded(media)
 			}else{
 				setErrorToast(await errorMessageForResponse(response))
 			}
@@ -95,17 +96,6 @@ function UploadMedia({id, exerciseId}) {
 		setShowSpinner(false)
 	}
 
-	/**
-     * Is called when the link-to-media button is clicked. Uploads information of the media to server.
-     */
-	function linkMediaClicked() {
-		if (link !== "") {
-			let isImage = !isPlayableVideoMedia(link)
-			let media = {movementId : exerciseId, url : link, localStorage :false, image :isImage, description: "todo"}
-			uploadMediaMetaData(media)
-		} 
-	}
-	
 	/**
 	 * checks if media can be played on the React Player
 	 * @param {String} url 
@@ -120,40 +110,25 @@ function UploadMedia({id, exerciseId}) {
 		return isPlayable
 	}
 
+
+
 	/**
-	 * Upload a media-object to server containing meta-data of a media-url
-	 * @param {Media} media 
-	 */
-	async function uploadMediaMetaData(media){
-		const requestOptions = {
-			method: "POST",
-			headers: { "Content-type": "application/json", "token": context.token },
-			body: JSON.stringify([{
-				movementId: media.movementId,
-				url: media.url,
-				localStorage: media.localStorage,
-				image: media.image,
-				description: media.description
-			}])
-		}
-		
-		try {
-			const response = await fetch("/api/media/add", requestOptions)
-
-			if (response.ok) {
-				window.location.reload(true) // ugly autoupdate after fetch
-				setSuccessToast(await response.text())
-			}else{
-				//Something went wron
-				setErrorToast(await errorMessageForResponse(response))
+     * Is called when the link-to-media button is clicked. Uploads information of the media to server.
+     */
+	function linkMediaClicked() {	
+		if (link !== "") {
+			let media = {
+				movementId : exerciseId, 
+				localStorage :false, 
+				description: "todo", 
+				url: link, 
+				image: !isPlayableVideoMedia(link)
 			}
-			
-			
-		} catch (error) {
-			setErrorToast(error.message)
-		}
+			fetchMediaMetaToBeUploaded(media)
+		} 
 	}
-
+	
+	
 	/**
 	 * Display an error message
 	 * @param {String} text 
@@ -161,16 +136,6 @@ function UploadMedia({id, exerciseId}) {
 	const setErrorToast = (text) => {
 		if(!toast.isActive("error-toast")){
 			toast.error(text, {toastId: "error-toast"})
-		}
-	}
-	
-	/**
-	 * Display a success message
-	 * @param {String} text 
-	 */
-	const setSuccessToast = (text) => {
-		if(!toast.isActive("success-toast")){
-			toast.success(text, {toastId: "success-toast"})
 		}
 	}
 

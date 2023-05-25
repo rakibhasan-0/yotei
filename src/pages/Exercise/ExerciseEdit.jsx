@@ -39,21 +39,37 @@ export default function ExerciseEdit({setShowPopup}) {
 	const [sendData, setSendData] = useState(false)
 	const [showMiniPopup, setShowMiniPopup] = useState(false)
 
+	const [undoMediaChanges, setUndoMediaChanges] = useState(false)
 
 	useEffect(() => {
 		setExId(window.location.pathname.substring(window.location.pathname.lastIndexOf("/") + 1))
+		console.log("In useEffect 1")
 	},[])
 
 	useEffect(() => {
 		if(exId !== ""){
 			getExerciseInfo()
+			console.log("In useEffect 2")
 		}
 	},[exId])
+
+	function done(){
+		if(undoMediaChanges){
+			checkChanges()
+		}
+		else{
+			setSendData(false)
+			editExercise()
+		}
+	}
 
 	/**
      * Returns the information about the exercise and its tags with the id in the pathname.
      */
 	async function getExerciseInfo() {
+		console.log("exercise id: "+ exId)
+		console.log("inside getInfo")
+		
 		const requestOptions = {
 			method: "GET",
 			headers: {"Content-type": "application/json", token: context.token},
@@ -106,6 +122,7 @@ export default function ExerciseEdit({setShowPopup}) {
 		const oldT = JSON.stringify(existingTags.sort((a, b) => a.id - b.id))
 
 		if(oldName !== name || oldDesc !== desc || oldTime != time || newT !== oldT)  {
+			console.log(newT + " aaaaa " + oldT)
 			setShowMiniPopup(true)
 		} else {
 			setShowPopup(false)
@@ -133,8 +150,6 @@ export default function ExerciseEdit({setShowPopup}) {
      * @param {*} e The event that caused editExercise.
      */
 	async function editExercise() {
-		setSendData(true)
-
 		
 		const requestOptionsDuplicate = {
 			method: "PUT",
@@ -168,6 +183,7 @@ export default function ExerciseEdit({setShowPopup}) {
 		if (!(editFailed || tagRemoveFailed || tagLinkFailed)) {
 			//borde bytas till att stänga popupen
 			// window.location.href = "/exercise"
+			console.log("SEND DATA: ->>> " + sendData)
 			setShowPopup(false)
 			location.reload(1) // forcing reload of the page.... 
 
@@ -291,20 +307,20 @@ export default function ExerciseEdit({setShowPopup}) {
 					isNested={true}
 				/>
 				<Divider id={"media-title"} option={"h2_left"} title={"Media"} />
-				<EditGallery id={exId} exerciseId={exId} sendData={sendData}/>
+				<EditGallery id={exId} exerciseId={exId} sendData={sendData} undoChanges={undoMediaChanges} done={done}/>
 
 				{/*Button for the form. Calls the function addExercise. Retrieve the users input*/}
 				<div className={styles.createExerciseBtnContainer}>
 					<Button
 						id={"backBtn"}
 						outlined={"button-back"}
-						onClick={() => checkChanges()}
+						onClick={() => setUndoMediaChanges(true)}
 						width={150}>
 						<p>Tillbaka</p>
 					</Button>
 					<Button
 						id={"addBtn"}
-						onClick={() => {editExercise()}}
+						onClick={() => setSendData(true)}
 						width={150}>
 						<p>Spara</p>
 					</Button>

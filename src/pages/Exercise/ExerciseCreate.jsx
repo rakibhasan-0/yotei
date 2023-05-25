@@ -13,6 +13,7 @@ import Divider from "../../components/Common/Divider/Divider.jsx"
 import TagInput from "../../components/Common/Tag/TagInput.jsx"
 import Popup from "../../components/Common/Popup/Popup"
 import { toast } from "react-toastify"
+import EditGallery from "../../components/Gallery/EditGallery"
 
 /**
  * The page for creating new exercises.
@@ -32,6 +33,21 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 	const [addedTags, setAddedTags] = useState([])
 	const [showMiniPopup, setShowMiniPopup] = useState(false)
 	const [errorMessage, setErrorMessage] = useState("")
+
+	const [tempId, setTempId] = useState(-1)
+	const [sendData, setSendData] = useState(false)
+	const [undoMediaChanges, setUndoMediaChanges] = useState(false)
+	const [tags, setTags] = useState(false)
+
+	function done(){
+		if(undoMediaChanges){
+			leaveWindow()
+		}
+		else{
+			setSendData(false)
+			exitProdc(tags)
+		}
+	}
 
 	/**
 	 * Method for API call when creating an exercise.
@@ -118,7 +134,6 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 		}
 	}
 
-
 	/**
 	 * Calls the API calls in the correct order by
 	 * first creating the exercise, then linking the exercise with the chosen tags.
@@ -126,10 +141,23 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 
 	function addExerciseAndTags () {
 		if (checkInput() === true) {
-			addExercise().then((exId)  => addTag(exId)).then((linkedTags) => exitProdc(linkedTags))
+			addExercise()
+				.then((exId) => handleExId(exId))
+				.then((exId) => handleSendData(exId))
+				.then((exId)  => addTag(exId))
+				.then((linkedTags) => setTags(linkedTags))
 		}
 	}
 
+	function handleExId(exId){
+		setTempId(exId)
+		return exId
+	}
+
+	function handleSendData(exId) {
+		setSendData(true)
+		return exId
+	}
 
 	/**
 	 * Checks if insert worked, if so redirect back to exercise.
@@ -241,6 +269,11 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 					addedTags={addedTags}
 					setAddedTags={setAddedTags}
 				/>
+
+				<Divider id={"media-title"} option={"h1_left"} title={"Media"}/>
+				<EditGallery id={tempId} exerciseId={tempId} sendData={sendData} undoChanges={undoMediaChanges} done={done}/>
+
+
 				<div className={styles.checkboxesContainer}>
 					<div className={styles.addCheckbox}>
 						<p className={styles.checkboxText}>Lägg till fler övningar</p>
@@ -255,7 +288,7 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 					<Button
 						id="EC-BackBtn"
 						outlined={"button-back"}
-						onClick={() => { leaveWindow()}}>
+						onClick={() => { setUndoMediaChanges(true)}}>
 						<p>Tillbaka</p>
 					</Button>
 					<Button

@@ -12,7 +12,8 @@ import {Plus as PlusIcon} from "react-bootstrap-icons"
 import {Trash as TrashIcon } from "react-bootstrap-icons"
 import {CameraVideoOff as NoMediaIcon } from "react-bootstrap-icons"
 import UploadMedia from "../Upload/UploadMedia"
-import ReactPlayer from "react-player"
+import {toast} from "react-toastify"
+
 /**
  * A media component for displaying video or images.
  * 
@@ -26,7 +27,7 @@ import ReactPlayer from "react-player"
  * @version 1.0
  * @since 2023-05-04
  */
-export default function EditGallery({ id, exerciseId, sendData }) {
+export default function EditGallery({ id, exerciseId, sendData, undoChanges, done }) {
 	const [media, setMedia] = useState([])
 	const context = useContext(AccountContext)
 	const [showAddPopup, setShowAddPopup] = useState(false)
@@ -34,7 +35,8 @@ export default function EditGallery({ id, exerciseId, sendData }) {
 	const [selectedMedia, setSelectedMedia] = useState()
 
 	const [mediaToRemove, setMediaToRemove] = useState([])
-	const [mediaList, setMediaList] = useState([])
+	const [mediaThatWasUploaded, setMediaThatWasUploaded] = useState([])
+	const [mediaToBeAdded, setMediaToBeAdded] = useState([])
 
 	// We need to filter pictures and videos to two different arrays
 	let pictures = []
@@ -59,7 +61,7 @@ export default function EditGallery({ id, exerciseId, sendData }) {
 				setMedia([])
 			}
 		} catch (error) {
-			console.error(error)
+			console.log(error)
 		}
 	}, [context.token, exerciseId])
 
@@ -104,7 +106,11 @@ export default function EditGallery({ id, exerciseId, sendData }) {
 	 */
 	const UploadPopup = <div>
 		<Popup id={`${exerciseId}-upload-popup`} title={"Lägg Till Media"} isOpen={showAddPopup} setIsOpen={setShowAddPopup} >
-			<UploadMedia id={`${exerciseId}-upload-page`} exerciseId={exerciseId} fetchUrl={fetchUrl}/>	
+			<UploadMedia 
+				id={`${exerciseId}-upload-page`} 
+				exerciseId={exerciseId} 
+				fetchMediaMetaToBeUploaded = {fetchMediaMetaToBeUploaded}
+				fetchMediaFilesThatWasUploaded = {fetchMediaFilesThatWasUploaded}/>	
 		</Popup>
 	</div>
 
@@ -153,43 +159,46 @@ export default function EditGallery({ id, exerciseId, sendData }) {
 		setSelectedMedia(mediaObject)
 		setShowRemovePopup(true)
 	}
-
 	
 
 	/**
-     * fetches an url as a string and appends it to an array of JSON objects for API call
-     * 
-     * @param {String} media 
+     * fetches mediaData that should be added to server
+	 * 
+     * @param {Media} mediaData 
      */
-	function fetchUrl(m) {
-        
-		if (m !== "") {
-			let image = true
-            
-			if (ReactPlayer.canPlay(m)) {
-				image = false
-			} 
-
-			let body = {
-				movementId: id,
-				url: m,
-				localStorage: false,
-				image: image,
-				description: "This is a youtube"
-			}
-
-			setMediaList(mediaList => [...mediaList, body])
+	function fetchMediaMetaToBeUploaded(mediaData) { //should also have localStorage and description
+		
+		setMediaToBeAdded(mediaToBeAdded => [...mediaToBeAdded, mediaData])
 			
-			// experimental for showing in the gallery that something has been added. Only visual feedback for the user
-			setMedia(media => [...media, body])
-			setShowAddPopup(false)
-		}
+		// experimental for showing in the gallery that something has been added. Only visual feedback for the user
+		setMedia(media => [...media, mediaData])
+		setShowAddPopup(false)
+		
 	}
 
+
 	/**
-     * calls the API for storing newly added links
+     * fetches mediaData whose file was uploaded to server
+     * 
+     * @param {Media} media 
      */
+	function fetchMediaFilesThatWasUploaded(mediaData) { //should also have localStorage and description
+		
+		setMediaThatWasUploaded(mediaThatWasUploaded => [...mediaThatWasUploaded, mediaData])
+		setShowAddPopup(false)
+	}
+
+
+
+	/**
+	 * Upload a media-object to server containing meta-data of a media-url
+	 * @param {Media} media 
+	 */
 	async function postMedia(list) {
+
+		list.map((m) => {
+			m.movementId = exerciseId
+		})
 		
 		const requestOptions = {
 			method: "POST",
@@ -197,45 +206,100 @@ export default function EditGallery({ id, exerciseId, sendData }) {
 			body: JSON.stringify(list)
 		}
 		try {
-			await fetch("/api/media/add", requestOptions)
+			const response = await fetch("/api/media/add", requestOptions)
+
+			if (response.ok) {
+				//setSuccessToast(await response.text())
+			}else{
+				//Something went wrong
+				setErrorToast(await errorMessageForResponse(response))
+			}
+			
 		} catch (error) {
-			console.error(error)
+			setErrorToast(error.message)
 		}
         
 	}
 
+	/**
+	 * Display an error message
+	 * @param {String} text 
+	 */
+	const setErrorToast = (text) => {
+		if(!toast.isActive("error-toast")){
+			toast.error(text, {toastId: "error-toast"})
+		}
+	}
+	
 	async function deleteMedia(list) {
+
+		list.map((m) => {
+			m.movementId = exerciseId
+		})
+
 		const requestOptions = {
 			method: "DELETE",
 			headers: { "Content-type": "application/json", "token": context.token },
 			body: JSON.stringify(list)
 		}
 		try {
-			await fetch("/api/media/remove", requestOptions)
+			const response = await fetch("/api/media/remove", requestOptions)
+            
+			if (response.ok) {
+				console.log("remove request sent")
+			}
 		} catch (error) {
-			console.error(error)
+			console.log(error)
 		}
 	}
 
 
 	const makeAPICalls = async () => {
-		try {
-			
-			await postMedia(mediaList)
-			deleteMedia(mediaToRemove)
-		} catch {
-			deleteMedia(mediaToRemove)
-		}
+		
+		await postMedia(mediaToBeAdded)
+		await deleteMedia(mediaToRemove)
+		done()
 	}
+
 	
 	useEffect(() => {
 		
 		if (sendData) {
 			makeAPICalls()
+			setMediaToBeAdded([])
+			setMediaToRemove([])
+			setMediaThatWasUploaded([])
 		}
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sendData])
+
+
+	useEffect(() => {
+		if(undoChanges){
+			deleteFileAPICalls()
+			setMediaThatWasUploaded([])
+		}
+	}, [undoChanges])
+
+	const deleteFileAPICalls = async () => {
+		await deleteMedia(mediaThatWasUploaded)
+		done()
+	}
+
+	/**
+	 * Return a string to display to user depending on a http-response
+	 * @param {*} response a http response
+	 * @returns 
+	 */
+	async function errorMessageForResponse(response){
+		let errorText = await response.text() 
+		if(errorText == null || errorText == ""){
+			errorText = "Något gick fel! : " + response.statusText
+		}
+		return errorText
+	}
+
 
 	return (
 		
