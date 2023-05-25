@@ -5,6 +5,10 @@ import { Pencil } from "react-bootstrap-icons"
 import { Link } from "react-router-dom"
 import { AccountContext } from "../../context"
 import { isAdmin } from "../../utils"
+import MiniPopup from "../Common/MiniPopup/MiniPopup"
+import Button from "../Common/Button/Button"
+import { useNavigate } from "react-router"
+import { useState } from "react"
 
 /**
  * The SessionWorkout component is used to display information about a Sessions
@@ -27,24 +31,31 @@ import { isAdmin } from "../../utils"
  * @author Griffin DV21JJN C19HLN
  */
 
-function SessionWorkout ({ id, workout, sessionID, creatorID }) {
+function SessionWorkout({ id, workout, sessionID, creatorID, groupID }) {
 	const workoutId = setWorkoutID()
 	const title = setWorkoutTitle()
 	const description = setWorkoutDescription()
 	const sessionId = setSessionID()
+	const groupId = setGroupID()
 	const userContext = useContext(AccountContext)
 	const { userId } = userContext
-	
+	const navigate = useNavigate()
+	const [isOpenPopup, setIsOpenPopup] = useState(false)
 
-	function setWorkoutID () {
+	const navigateAndClose = async path => {
+		await setIsOpenPopup(false)
+		navigate(path)
+	}
+
+	function setWorkoutID() {
 		if (checkWorkout() || isSpecifiedWorkoutID())
 			return workout.id
 
 		return null
 	}
 
-	function isSpecifiedWorkoutID(){
-		if(checkWorkout()){
+	function isSpecifiedWorkoutID() {
+		if (checkWorkout()) {
 			return !(workout.id === null || workout.id === undefined)
 		}
 
@@ -52,25 +63,25 @@ function SessionWorkout ({ id, workout, sessionID, creatorID }) {
 	}
 
 
-	function checkWorkout(){
-		return ! (workout === null || workout === undefined)
+	function checkWorkout() {
+		return !(workout === null || workout === undefined)
 	}
 
 
-	function userIsCreator(){
-		if (userId == creatorID) 
+	function userIsCreator() {
+		if (userId == creatorID)
 			return true
-		
+
 		return false
 	}
 
 
-	function userIsAdmin () {
+	function userIsAdmin() {
 		return isAdmin(userContext)
 	}
 
 
-	function setSessionID () {
+	function setSessionID() {
 		if (sessionID === null || sessionID === undefined) {
 			console.error("Missing Session ID")
 			return null
@@ -79,41 +90,50 @@ function SessionWorkout ({ id, workout, sessionID, creatorID }) {
 		return sessionID
 	}
 
+	function setGroupID() {
+		if (groupID === null || groupID === undefined) {
+			console.error("Missing group ID")
+			return null
+		}
 
-	function isSpecifiedTitle(){
-		if (checkWorkout()){
-			return ! (workout.name === null || workout.name === undefined)
+		return groupID
+	}
+
+
+	function isSpecifiedTitle() {
+		if (checkWorkout()) {
+			return !(workout.name === null || workout.name === undefined)
 		}
 
 		return false
 	}
 
-	function isSpecifiedDesc(){
-		if(checkWorkout()){
-			return ! (workout.desc === null || workout.desc === undefined)
+	function isSpecifiedDesc() {
+		if (checkWorkout()) {
+			return !(workout.desc === null || workout.desc === undefined)
 		}
-		
+
 		return false
 	}
 
-	function setWorkoutTitle(){
-		if(checkWorkout() && isSpecifiedTitle())
+	function setWorkoutTitle() {
+		if (checkWorkout() && isSpecifiedTitle())
 			return workout.name
-		
+
 		return "Ingen titel"
 	}
-	
-	function setWorkoutDescription(){
-		
-		if(checkWorkout() && isSpecifiedDesc())
+
+	function setWorkoutDescription() {
+
+		if (checkWorkout() && isSpecifiedDesc())
 			return workout.desc
-		
-		return "Passet saknar beskrivning"		
+
+		return "Passet saknar beskrivning"
 	}
 
 
 	function checkID() {
-		if(id === null || id === undefined){
+		if (id === null || id === undefined) {
 			console.error("Missing ID in SessionWorkout")
 			return false
 		}
@@ -125,42 +145,59 @@ function SessionWorkout ({ id, workout, sessionID, creatorID }) {
 
 	return (
 		checkID() ?
-			<div id={id} className = "sc23-session-workout">
+			<div id={id} className="sc23-session-workout">
 				{
 					checkWorkout() ?
-						<div className = "sc23-session-workout-info">
-							<h2 className = "sc23-session-workout-text">{title}</h2>
-							<p className = "sc23-session-workout-text">{description}</p>
+						<div className="sc23-session-workout-info">
+							<h2 className="sc23-session-workout-text">{title}</h2>
+							<p className="sc23-session-workout-text">{description}</p>
 						</div>
-                        
+
 						:
 
-						<div id = {`${id}-no-workout`} className = "sc23-session-workout-info">
-							<h2 className = "sc23-session-workout-text">Det finns inget kopplat pass.</h2>
-							<p className = "sc23-session-workout-text">Du kan trycka på pennan för att lägga till ett.</p>
+						<div id={`${id}-no-workout`} className="sc23-session-workout-info">
+							<h2 className="sc23-session-workout-text">Det finns inget pass.</h2>
+							<p className="sc23-session-workout-text">Du kan trycka på pennan för att lägga till ett.</p>
 						</div>
 				}
-				
+
 				<div className="sc23-session-workout-buttons">
 					{
-						checkWorkout() &&
-							<Link id="session-workout-workout-button" className="sc23-session-workout-links" to = {`/workout/${workoutId}`}>
-								<StopwatchFill aria-label="Workout detail" role="details" className="sc23-session-workout-svg"/>
+						checkWorkout() ?
+							<Link id="session-workout-workout-button" className="sc23-session-workout-links" to={`/workout/${workoutId}`}>
+								<StopwatchFill aria-label="Workout detail" role="details" className="sc23-session-workout-svg" />
 							</Link>
+							: 
+							<div />
 					}
 
 					{
 						(userIsAdmin() || userIsCreator()) &&
-							<Link id ="session-workout-edit-session-button" className="sc23-session-workout-links" to = {`/session/edit/${sessionId}`}>	
-								<Pencil aria-label="Edit Session" role ="edit" className="sc23-session-workout-svg"/>
-							</Link>
+						<div>
+							<Pencil
+								aria-label="Edit Session"
+								role="edit"
+								className="sc23-session-workout-svg"
+								onClick={() => setIsOpenPopup(true)}
+							/>
+						</div>
 					}
 				</div>
+
+				<MiniPopup id="sometestid" title={"Redigera"} isOpen={isOpenPopup} setIsOpen={setIsOpenPopup} titleTopMargin={14}>
+					<div className="popupContainer">
+						<div className="buttonContainer">
+							<Button id="newPlan" onClick={() => navigateAndClose(`/plan/edit/${groupId}`)} outlined={false}>Grupp</Button>
+							<Button id="newSession" onClick={() => navigateAndClose(`/session/edit/${sessionId}`)} outlined={false}>Tillfälle</Button>
+						</div>
+					</div>
+				</MiniPopup>
+
 			</div>
 			:
-			
+
 			<div id="SessionWorkoutError" ><p>Kunde inte ladda in passet</p></div>
-			
+
 
 	)
 }
