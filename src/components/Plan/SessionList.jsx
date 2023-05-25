@@ -82,21 +82,30 @@ function SessionList ({ id, plans, sessions, workouts }) {
 		return workouts.find(workout => workout.id == session.workout)
 	}
 
+	function checkContent () {
+		return sessions.length > 0
+	}
+
 	return (
 		checkID() && checkPlans() && checkSessions() ?
 			<div id={id} className = "sc23-session-list">
 				{
-					sessions.map((session, i) => {
-						return (
-							checkNewWeek(session) ?
-								<Fragment key={i}>
-									<Divider id={`${currentWeek}-divider`} title={"Vecka " + currentWeek} option="h2_center"/>
-									<SessionContainer id={`${session.id}-session-container`} workout={getSessionWorkout(session)} session={session} plan={getSessionPlan(session)}/>
-								</Fragment>	
-								:
-								<SessionContainer key={i} id={`${session.id}-session-container`} workout={getSessionWorkout(session)} session={session} plan={getSessionPlan(session)} />
-						)
-					})
+					checkContent() ? 
+						sessions.map((session, i) => {
+							return (
+								checkNewWeek(session) ?
+									<Fragment key={i}>
+										<Divider id={`${currentWeek}-divider`} title={"Vecka " + currentWeek} option="h2_center"/>
+										<SessionContainer id={`${session.id}-session-container`} workout={getSessionWorkout(session)} session={session} plan={getSessionPlan(session)}/>
+									</Fragment>	
+									:
+									<SessionContainer key={i} id={`${session.id}-session-container`} workout={getSessionWorkout(session)} session={session} plan={getSessionPlan(session)} />
+							)
+						})
+						:
+						<div>
+							<h1>Det finns inga tillfällen att visa</h1>
+						</div>
 				}
 			</div>
 			:
