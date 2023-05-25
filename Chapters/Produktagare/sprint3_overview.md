@@ -19,11 +19,9 @@ Datum: 2023-05-15
   * **Kolla med grupp 3**
 * Göra klart gruppplaneringssidan.
   * **När man skapar grupp kan man välja från datum längre bort and till datum**
-  * **Dålig margin på botten**
-  * **Tillbakaknappen är konstig. Blå text**
+  * **Tillbakaknappen är konstig. Blå text. Standardkomponent**
   * **När man klickar man på gå vidare och det inte går att lägga till så ser man inte felmeddelandet direkt. Utan man måste scrolla automatiskt. (Trodde först att inget hände)**
     * **Felmeddelandet säger också "Planeringen...." istället för "Gruppen..."**
-  * **Dropdown pilen är dålig färg, syns knappt.**
 * Fixa designfel enligt överenskommelse på återkopplingen (se nedan)
 * Fortsätta skriva automatiska tester på komponenter och sidor
 * Få feedback på om en tag redan finns när man ska lägga till en tagg
