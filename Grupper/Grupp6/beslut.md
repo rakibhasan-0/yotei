@@ -60,7 +60,7 @@
 
   ## Beslut om att borttagande av aktivteter skall göra så att de tas bort från pass som använder dem.
 
-- Datum - 230505
+- Datum - 230522
 - Chapters - N/A
 - Grupp -  Medusa Maneaters (Grupp 6)
 - Beslut - Borttagande av aktivteter gör så att de tas bort från pass som använder dem.
