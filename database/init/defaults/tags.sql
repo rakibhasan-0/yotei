@@ -1,3 +1,7 @@
+--
+-- INSERTS FOR TAGS (DO NOT move "kihon waza" from position 1)
+--
+INSERT INTO tag (name) VALUES ('kihon waza');
 INSERT INTO tag (name) VALUES ('svart');
 INSERT INTO tag (name) VALUES ('brunt');
 INSERT INTO tag (name) VALUES ('grönt');
@@ -9,7 +13,6 @@ INSERT INTO tag (name) VALUES ('1 dan');
 INSERT INTO tag (name) VALUES ('2 dan');
 INSERT INTO tag (name) VALUES ('3 dan');
 INSERT INTO tag (name) VALUES ('atemi waza');
-INSERT INTO tag (name) VALUES ('kihon waza');
 INSERT INTO tag (name) VALUES ('kansetsu waza');
 INSERT INTO tag (name) VALUES ('nage waza');
 INSERT INTO tag (name) VALUES ('katame waza');
