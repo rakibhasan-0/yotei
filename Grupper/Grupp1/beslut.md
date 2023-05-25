@@ -44,3 +44,33 @@ Beslut - Ingen filtrering på se-alla-övningar-sidan
 
 Vi bestämde att det inte behövs någon filtrering på se övningar sidan då denna funktionalitet kan uppnås med sökfunktionaliteten som kommer med den nya sök-komponenten. 
 
+# Beslut om sortering på se-alla-övningar-sidan
+
+
+Datum - 23/05/16
+
+Chapters - N/A
+
+Grupp -  Phoenix
+
+Beslut - Sortering på se-alla-övningar-sidan
+
+## Motivation
+
+Vi bestämde oss för att implementera en sortering så att man kan sortera övningarna alfabetiskt och efter längd på övningar.
+
+
+# Beslut om parprogrammering
+
+
+Datum - 23/05/16
+
+Chapters - N/A
+
+Grupp -  Phoenix
+
+Beslut - Parprogrammering istället för mobprogrammering
+
+## Motivation
+
+Vi bestämde oss för att kör parprogrammering eller individuellt istället för att köra mobprogrammering eftersom fler är bekväm med JavaScript och React nu. På så sätt kommer v får mer gjort.
