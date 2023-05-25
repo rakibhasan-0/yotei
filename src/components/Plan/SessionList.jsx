@@ -4,9 +4,6 @@ import "./SessionList.css"
 import SessionContainer from "./SessionContainer"
 import Divider from "../Common/Divider/Divider"
 
-
-
-
 /**
  * The SessionList component is used to display a set of Sessions given by parent.
  * The components renders a SessionContainer for each given Session and handles errors
@@ -23,7 +20,6 @@ import Divider from "../Common/Divider/Divider"
 
 
 function SessionList ({ id, plans, sessions, workouts }) {
-	let sortedSessions = sortSessions()
 	let currentWeek = -1
 
 	/* ----- Input Validation ----- */
@@ -50,34 +46,6 @@ function SessionList ({ id, plans, sessions, workouts }) {
 		}
 		return true
 	}
-
-	/* ----- SORTING ----- */
-	function sortSessions () {
-		if (checkSessions()) {
-			let sorted = sessions.slice().sort((session1, session2) => { 
-				let dateTime1 = includeTimeInDate(session1)
-				let dateTime2 = includeTimeInDate(session2)
-	
-				if (new Date(dateTime1) - new Date(dateTime2) < 0)
-					return -1
-			})
-
-			return sorted
-		}
-		return null
-	}
-	
-	function includeTimeInDate (session) {
-		let date = new Date(session.date)
-		let splitTime = session.time.split(":")
-		let hour = parseInt(splitTime[0])
-		let minutes = parseInt(splitTime[1])
-		date.setHours(hour, minutes)
-		date = date.toString()
-	
-		return date
-	}
-
 
 	function checkNewWeek(session) {
 		let week = getWeekFromDate(session.date)
@@ -118,7 +86,7 @@ function SessionList ({ id, plans, sessions, workouts }) {
 		checkID() && checkPlans() && checkSessions() ?
 			<div id={id} className = "sc23-session-list">
 				{
-					sortedSessions.map((session, i) => {
+					sessions.map((session, i) => {
 						return (
 							checkNewWeek(session) ?
 								<Fragment key={i}>
