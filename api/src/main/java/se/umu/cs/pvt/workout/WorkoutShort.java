@@ -19,6 +19,12 @@ public interface WorkoutShort {
      */
     String getName();
 
+	/**
+	 * 
+	 * @return the description of the workout.
+	 */
+	String getDesc();
+
     /**
      * @return the created date of the workout.
      */

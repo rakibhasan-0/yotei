@@ -93,6 +93,11 @@ class WorkoutApiApplicationTests {
                 return "name";
             }
 
+			@Override
+			public String getDesc() {
+				return "desc";
+			}
+
             @Override
             public LocalDate getCreated() {
                 return LocalDate.of(2022,1,1);
@@ -134,6 +139,11 @@ class WorkoutApiApplicationTests {
             public String getName() {
                 return "name";
             }
+
+			@Override
+			public String getDesc() {
+				return "desc";
+			}
 
             @Override
             public LocalDate getCreated() {
@@ -243,6 +253,11 @@ class WorkoutApiApplicationTests {
             public String getName() {
                 return "name";
             }
+
+			@Override
+			public String getDesc() {
+				return "desc";
+			}
 
             public LocalDate getCreated() {
                 return  LocalDate.of(2022,1,1);
