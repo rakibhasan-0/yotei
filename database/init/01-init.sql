@@ -9,6 +9,22 @@ END;
 
 $$ LANGUAGE 'plpgsql' IMMUTABLE PARALLEL SAFE;
 
+-- "Konstant" för editor roll
+CREATE
+OR REPLACE FUNCTION editor_role_id() RETURNS INT AS $$ BEGIN RETURN 2;
+
+END;
+
+$$ LANGUAGE 'plpgsql' IMMUTABLE PARALLEL SAFE;
+
+-- "Konstant" för user roll
+CREATE
+OR REPLACE FUNCTION user_role_id() RETURNS INT AS $$ BEGIN RETURN 3;
+
+END;
+
+$$ LANGUAGE 'plpgsql' IMMUTABLE PARALLEL SAFE;
+
 -- Inställningar (justera gärna :-))
 SET
 	statement_timeout = 0;
