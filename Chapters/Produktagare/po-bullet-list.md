@@ -9,7 +9,7 @@ Bold marks the latest added points.
 
 4. We are one team, no matter the group division and we are all working towards the same goal.
 
-5. **Once the hard-limit has started regarding merging on Git, we prioritize certain commits over others, this means that the merge requests will be paused at times in order to allow high-priority tickets to be merged.**
+5. **Once the soft-limit has started regarding merging on Git, we prioritize certain commits over others, this means that the merge requests will be paused at times in order to allow high-priority tickets to be merged.**
 
 <br />
 <br />
