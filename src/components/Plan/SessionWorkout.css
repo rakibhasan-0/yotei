@@ -24,8 +24,8 @@
 .sc23-session-workout-buttons {
 	width: 100%;
 	display: flex;
-	padding-bottom: 2%;
-	padding-inline: 2%;
+	padding: 2%;
+	justify-content: space-between;
 }
 
 .sc23-session-workout-links {
@@ -42,4 +42,7 @@
 	width: 10%;
 	justify-content: right;
 	margin-left: auto;
+}
+#sometestid {
+	text-align: center;
 }

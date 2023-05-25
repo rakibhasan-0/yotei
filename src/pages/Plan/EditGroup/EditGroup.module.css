@@ -1,0 +1,14 @@
+.container {
+    position: relative;
+}
+.trashcan {
+    position: absolute;
+    top: 4px;
+    right: 0;
+    cursor: pointer;
+}
+.buttonContainer {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}

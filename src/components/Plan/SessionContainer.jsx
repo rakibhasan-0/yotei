@@ -172,12 +172,12 @@ function SessionContainer ({ id, workout, session, plan}) {
 							</div>
 							<div id = {`${id}-content`} className="sc23-session-container-content">
 								
-								<div className="sc23-session-container-child" onClick={() => setToggled(!toggled)} style={{ display: toggled ? "inherit" : "none" }} id={`${id}-children`}>
+								<div className="sc23-session-container-child" style={{ display: toggled ? "inherit" : "none" }} id={`${id}-children`}>
 									{	
 										workoutConnected() ?
-											<div><SessionWorkout id ="testSessionWorkout"  workout={workout} sessionID={sessionID} creatorID={planCreatorID}/></div>
+											<div><SessionWorkout id ="testSessionWorkout"  workout={workout} sessionID={sessionID} creatorID={planCreatorID} groupID={plan.id}/></div>
 											:
-											<div><SessionWorkout id ="testSessionWorkout"  workout={null} sessionID={sessionID} creatorID={planCreatorID}/></div>
+											<div><SessionWorkout id ="testSessionWorkout"  workout={null} sessionID={sessionID} creatorID={planCreatorID} groupID={plan.id}/></div>
 
 											
 									}

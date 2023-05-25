@@ -1,6 +1,7 @@
 import { screen, render, configure } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import SessionList from "../../../components/Plan/SessionList"
+import { MemoryRouter } from "react-router"
 //import { sortSessions } from "../../../components/Plan/SessionList"
 
 configure({testIdAttribute: "id"})
@@ -30,7 +31,7 @@ describe("SessionList", () => {
 		}]
 
 		test("should render with valid input", async() => {
-			render(<SessionList id = {testID} plans={testPlan} sessions={testSession}/>)
+			render(<MemoryRouter><SessionList id = {testID} plans={testPlan} sessions={testSession}/></MemoryRouter>)
 			expect(screen.getByTestId(testID)).toHaveAttribute("id", testID)
 		})
 

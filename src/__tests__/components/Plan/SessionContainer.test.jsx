@@ -11,7 +11,7 @@ describe("SessionContainer", () => {
 	describe("When initialized", () => {
 
 		test("should render with given id -> testSessionContainer", async() => {
-			render(<BrowserRouter><SessionContainer id = "testSessionContainer"/></BrowserRouter>)
+			render(<BrowserRouter><SessionContainer id = "testSessionContainer" plan={{id: "", belts: []}}/></BrowserRouter>)
 			expect(screen.getByTestId("testSessionContainer")).toHaveAttribute("id", "testSessionContainer")
 		})
 
@@ -159,7 +159,7 @@ describe("SessionContainer", () => {
 				"time": "08:00:00"
 			}
 			
-			render(<BrowserRouter><SessionContainer id = "testSessionContainer" session={session} plan={null}/></BrowserRouter>)
+			render(<BrowserRouter><SessionContainer id = "testSessionContainer" session={session} plan={{id: "", belts: []}}/></BrowserRouter>)
 			expect(screen.getByTestId("testSessionContainer")).toHaveTextContent("16/05")
 			expect(screen.getByTestId("testSessionContainer")).toHaveTextContent("08:00")
 		})
