@@ -194,7 +194,7 @@ export default function ExerciseDetailsPage() {
 			</div>
 
 			<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-				<h2 style={{ fontWeight: "bold", marginBottom: "0", marginTop: "1rem"}}>Kommentarer</h2>
+				<h2 style={{ fontWeight: "bold", marginBottom: "0" }}>Kommentarer</h2>
 				<Plus size={"24px"} onClick={() => setAddComment(true)} style={{ color: "var(--red-primary)", border: "2px solid var(--button-border)", borderRadius: "50%" }} />
 			</div>
 			<div style={{ width: "100%" }}>
