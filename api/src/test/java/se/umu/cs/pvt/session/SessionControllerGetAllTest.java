@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -55,7 +56,7 @@ public class SessionControllerGetAllTest {
     @Test
     void shouldReturnAllSessions() {
         // Arrange
-        Mockito.when(sessionRepository.findAll()).thenReturn(sessionList);
+        Mockito.when(sessionRepository.findAll(Sort.by("date").and(Sort.by("time")))).thenReturn(sessionList);
         ResponseEntity<List<Session>> result;
 
         // Act
