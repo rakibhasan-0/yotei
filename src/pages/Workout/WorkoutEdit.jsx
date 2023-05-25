@@ -20,7 +20,8 @@ import { setSuccess, setError } from "../../utils.js"
  * @since 2023-05-24
  */
 const WorkoutEdit = () => {
-	const [workoutCreateInfo, workoutCreateInfoDispatch] = useReducer(workoutCreateReducer, WorkoutCreateInitialState)
+	const [workoutCreateInfo, workoutCreateInfoDispatch] = useReducer(
+		workoutCreateReducer, JSON.parse(JSON.stringify(WorkoutCreateInitialState)))
 	const navigate = useNavigate()
 	const { token, userId } = useContext(AccountContext)
 	const location = useLocation()
@@ -43,7 +44,6 @@ const WorkoutEdit = () => {
 
 		navigate(`/workout/${workoutCreateInfo.data.id}`)
 	}
-
 
 	/**
 	 * Parses the data from the workoutCreateInfo state to a format that the API accepts.
@@ -134,9 +134,9 @@ const WorkoutEdit = () => {
      */
 	useEffect(() => {
 		const item = localStorage.getItem("workoutCreateInfoEdit")
-		const workoutData = location.state.workout
-		const userData = location.state.users
-	
+		const workoutData = location.state?.workout
+		const userData = location.state?.users
+
 		if (workoutData){
 			workoutCreateInfoDispatch({
 				type: WORKOUT_CREATE_TYPES.INIT_EDIT_DATA,
@@ -145,7 +145,7 @@ const WorkoutEdit = () => {
 			window.history.replaceState({}, document.title)
 		} else if (item) {
 			workoutCreateInfoDispatch({
-				type: WORKOUT_CREATE_TYPES.INIT,
+				type: WORKOUT_CREATE_TYPES.INIT_WITH_DATA,
 				payload: JSON.parse(item)
 			})
 		} else {
@@ -158,12 +158,10 @@ const WorkoutEdit = () => {
      * Or removes it if the user has submitted the form.
      */
 	useEffect(() => {
+		localStorage.setItem("workoutCreateInfoEdit", JSON.stringify(workoutCreateInfo))
+		
 		return () => {
-			if (isSubmitted) {
-				localStorage.removeItem("workoutCreateInfoEdit")
-			} else {
-				localStorage.setItem("workoutCreateInfoEdit", JSON.stringify(workoutCreateInfo))
-			}
+			if (isSubmitted) localStorage.removeItem("workoutCreateInfoEdit")
 		}
 	}, [workoutCreateInfo, isSubmitted])
 

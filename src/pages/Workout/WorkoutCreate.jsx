@@ -1,5 +1,5 @@
 import { useContext, useEffect, useReducer, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import WorkoutFormComponent from "../../components/Workout/CreateWorkout/WorkoutFormComponent.jsx"
 import { AccountContext } from "../../context.js"
 import { WorkoutCreateContext } from "../../components/Workout/CreateWorkout/WorkoutCreateContext.js"
@@ -16,15 +16,23 @@ import { setSuccess, setError, setInfo } from "../../utils.js"
 /**
  * This is the page for creating a new workout
  * 
+ * location.state.props: 
+ * 		goBackAfterCreation: @type {boolean} - If true, the user will be redirected to 
+ * 							the previous page after creating a workout.
+ * 							Otherwise the user is sent to the workoutView page.
+ * 
  * @author Team Minotaur
  * @version 2.0
  * @since 2023-05-24
  */
 const WorkoutCreate = () => {
-	const [workoutCreateInfo, workoutCreateInfoDispatch] = useReducer(workoutCreateReducer, WorkoutCreateInitialState)
+	const [workoutCreateInfo, workoutCreateInfoDispatch] = useReducer(
+		workoutCreateReducer, JSON.parse(JSON.stringify(WorkoutCreateInitialState)))
 	const { token, userId } = useContext(AccountContext)
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const navigate = useNavigate()
+
+	const location = useLocation()
 
 	/**
 	 * Submits the form data to the API.
@@ -42,6 +50,8 @@ const WorkoutCreate = () => {
 
 		if (workoutId) {
 			setSuccess("Träningspasset skapades!")
+
+			if(location.state?.goBackAfterCreation) return navigate(-1, { replace: true })
 			navigate("/workout/" + workoutId, { replace: true })
 		} else {
 			setError("Träningspasset kunde inte skapas!")
@@ -140,11 +150,11 @@ const WorkoutCreate = () => {
 	 * If the form was submitted, the data is removed from local storage.
 	 */
 	useEffect(() => {
+		localStorage.setItem("workoutCreateInfo", JSON.stringify(workoutCreateInfo))
+
 		return () => {
 			if(isSubmitted) {
 				localStorage.removeItem("workoutCreateInfo")
-			} else {
-				localStorage.setItem("workoutCreateInfo", JSON.stringify(workoutCreateInfo))
 			}
 		}
 	}, [workoutCreateInfo, isSubmitted])

@@ -12,7 +12,8 @@ export const WORKOUT_CREATE_TYPES = {
 	SET_ACTIVITIES: "SET_ACTIVITIES",
 	SET_TAGS: "SET_TAGS",
 	SET_DATE: "SET_DATE",
-	INIT: "INIT",
+	SET_INITIAL_STATE: "SET_INITIAL_STATE",
+	INIT_WITH_DATA: "INIT_WITH_DATA",
 	INIT_EDIT_DATA: "INIT_EDIT_DATA",
 	RESET: "RESET",
 	CLOSE_POPUP: "CLOSE_POPUP",
@@ -61,7 +62,7 @@ export const WorkoutCreateInitialState = {
 		}
 	},
 	addedCategories: [
-		{ id: 0, name: "Ingen kategori", checked: true }, 
+		{ id: 0, name: null, checked: true }, 
 		{ id: 1, name: "Uppvärmning", checked: false },
 		{ id: 2, name: "Stretchning", checked: false }
 	],
@@ -87,11 +88,15 @@ export function compareCurrentToOriginal(current, original){
 export function workoutCreateReducer(state, action) {
 	const tempState = {...state}
 	switch (action.type) {
-	case "INIT":
+	case "SET_INITIAL_STATE": 
+		return JSON.parse(JSON.stringify(WorkoutCreateInitialState))
+	case "INIT_WITH_DATA":
 		return action.payload
 	case "INIT_EDIT_DATA": {
 		const workoutData = action.payload.workoutData
 		const userData = action.payload.userData
+
+		console.log(workoutData)
 
 		const activityItems = workoutData.activityCategories.map(activityItem => {
 			const activities = activityItem.activities.map(activity => {
@@ -107,7 +112,7 @@ export function workoutCreateReducer(state, action) {
 
 			return {
 				id: tempState.numCategories++,
-				name: activityItem.name,
+				name: activityItem.categoryName,
 				activities,
 			}
 		})
@@ -133,13 +138,13 @@ export function workoutCreateReducer(state, action) {
 			tags: workoutData.tags,
 		}
 
-		tempState.data = data
-		tempState.originalData = {...data}
+		tempState.data = JSON.parse(JSON.stringify(data))
+		tempState.originalData = JSON.parse(JSON.stringify(data))
 
 		return tempState
 	}
 	case "RESET":
-		return WorkoutCreateInitialState
+		return JSON.parse(JSON.stringify(WorkoutCreateInitialState))
 	case "SET_NAME":
 		tempState.data.name = action.name
 		return tempState
@@ -280,5 +285,3 @@ export function workoutCreateReducer(state, action) {
 		return state
 	}
 }
-
-

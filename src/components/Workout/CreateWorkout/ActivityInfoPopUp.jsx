@@ -161,7 +161,9 @@ function ActivityCategories() {
 				{workoutCreateInfo.addedCategories.map((category, index) =>  (
 					<li key={`activity-${index}`}>
 						<div className={styles.categoryItem}>
-							<p className={styles.categoryText}>{category.name}</p>
+							<p className={styles.categoryText}>
+								{category.name || "Ingen kategori"}
+							</p>
 							<RadioButton
 								id={"cateogry-radio-" + index}
 								onClick={() => workoutCreateInfoDispatch({
