@@ -189,7 +189,7 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 				isNested={true}>
 			</TagInput>	
 
-			<Divider title="Media" option="h2_left"/>
+			<Divider title="Media" option="h1_left"/>
 
 			<div className={style.mediaButtonContainer}>
 				<EditGallery id={technique.id} exerciseId={technique.id} sendData={sendMediaData} />

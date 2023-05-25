@@ -1,4 +1,5 @@
 import Divider from "../../../../components/Common/Divider/Divider"
+import style from "./Divider.module.css"
 import React from "react"
 import { render, screen, configure } from "@testing-library/react"
 import "@testing-library/jest-dom"
@@ -26,7 +27,7 @@ test("Divider should contain class name divider_left on option=h1_left", () => {
 	render(<Divider id ='test' option= 'h1_left' title = 'vecka 24'/>)
 
 	// ASSERT
-	expect(screen.getByTestId("test").classList.contains("divider_left")).toBeTruthy()
+	expect(screen.getByTestId("test").classList.contains(style.dividerLeft)).toBeTruthy()
 })
 
 test("Divider should contain class name divider_left on option=h2_left", () => {
@@ -34,7 +35,7 @@ test("Divider should contain class name divider_left on option=h2_left", () => {
 	render(<Divider id ='test' option= 'h2_left' title = 'vecka 24'/>)
 
 	// ASSERT
-	expect(screen.getByTestId("test").classList.contains("divider_left")).toBeTruthy()
+	expect(screen.getByTestId("test").classList.contains(style.dividerLeft)).toBeTruthy()
 })
 
 test("Divider should contain class name divider_center on option=h1_center", () => {
@@ -42,7 +43,7 @@ test("Divider should contain class name divider_center on option=h1_center", () 
 	render(<Divider id ='test' option= 'h1_center' title = 'vecka 24'/>)
 
 	// ASSERT
-	expect(screen.getByTestId("test").classList.contains("divider_center")).toBeTruthy()
+	expect(screen.getByTestId("test").classList.contains(style.dividerCenter)).toBeTruthy()
 })
 
 test("Divider should contain class name divider_center on option=h2_center", () => {
@@ -50,7 +51,7 @@ test("Divider should contain class name divider_center on option=h2_center", () 
 	render(<Divider id ='test' option= 'h2_center' title = 'vecka 24'/>)
 
 	// ASSERT
-	expect(screen.getByTestId("test").classList.contains("divider_center")).toBeTruthy()
+	expect(screen.getByTestId("test").classList.contains(style.dividerCenter)).toBeTruthy()
 })
 
 test("Divider should contain class name divider_middle on option=h2_middle", () => {
@@ -58,5 +59,5 @@ test("Divider should contain class name divider_middle on option=h2_middle", () 
 	render(<Divider id ='test' option= 'h2_middle' title = 'vecka 24'/>)
 
 	// ASSERT
-	expect(screen.getByTestId("test").classList.contains("divider_middle")).toBeTruthy()
+	expect(screen.getByTestId("test").classList.contains(style.dividerMiddle)).toBeTruthy()
 })

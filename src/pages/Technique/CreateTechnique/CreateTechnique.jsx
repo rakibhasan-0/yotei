@@ -163,7 +163,7 @@ export default function CreateTechnique({ id, setIsOpen }) {
 			/>
 			<div style={{height: "1rem"}}/>
 
-			<Divider title="Taggar" option="h2_left"/>
+			<Divider title="Taggar" option="h1_left"/>
 				
 			<TagInput
 				id="create-technique-taginput"

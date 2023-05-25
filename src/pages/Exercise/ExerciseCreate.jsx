@@ -227,7 +227,7 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 						errorDisabled={true}
 					/>
 				</div>
-				<Divider id={"time-selector-title"} option={"h2_left"} title={"Tid"} />
+				<Divider id={"time-selector-title"} option={"h1_left"} title={"Tid"} />
 				<div className={styles.timeSelector} >
 					<MinutePicker
 						id={"minuteSelect"}
@@ -235,7 +235,7 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 						callback={timeCallback}
 					/>
 				</div>
-				<Divider id={"tag-title"} option={"h2_left"} title={"Taggar"} />
+				<Divider id={"tag-title"} option={"h1_left"} title={"Taggar"} />
 				<TagInput
 					id="tagHandler"
 					addedTags={addedTags}
