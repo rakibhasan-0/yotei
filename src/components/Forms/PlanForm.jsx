@@ -33,6 +33,9 @@ import InputTextField from "../Common/InputTextField/InputTextField"
 
 export default function PlanForm(props) {
 	var name = props.planData.name
+	const today = new Date()
+	const twoYearsFromNow = new Date()
+	twoYearsFromNow.setFullYear(today.getFullYear()+2)
 
 	const onToggle = (checked, belt) => props.setBelts(prev => {
 		if(!checked) {
@@ -68,7 +71,8 @@ export default function PlanForm(props) {
 					<span className="p-date-picker">
 						<DatePicker 
 							id="start-date-picker"
-							onChange={(e) => { props.onClickData("startDate", e.target.value) }}    
+							onChange={(e) => { props.onClickData("startDate", e.target.value) }} 
+							minDate={dateFormatter(today)}   
 						/>
 					</span>
 				</div>
@@ -78,6 +82,7 @@ export default function PlanForm(props) {
 						<DatePicker 
 							id="end-date-picker"
 							onChange={(e) => { props.onClickData("endDate", e.target.value) }}
+							maxDate={dateFormatter(twoYearsFromNow)}
 						/>
 					</span>
 				</div>
@@ -141,4 +146,18 @@ export default function PlanForm(props) {
 			</div>         
 		</div>
 	)
+}
+
+/**
+	 * Formats given date to a string with formatting 'YYYY-MM-DD'
+	 * 
+	 * @param { string } today - Date to be formatted.
+	 * @returns Date as a string on the correct format.
+	 */
+function dateFormatter(today) {
+	const date = today
+	const year = date.getFullYear()
+	const month = String(date.getMonth() + 1).padStart(2, "0")
+	const day = String(date.getDate()).padStart(2, "0")
+	return [year, month, day].join("-")
 }

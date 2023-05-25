@@ -23,12 +23,15 @@ export default function PlanIndex() {
 	const [ workouts, setWorkouts ] = useState()
 	const [sessions, setSessions] = useState()
 	const [showPopup, setShowPopup] = useState(false)
-	
+	const twoYears = new Date()
+	twoYears.setFullYear(twoYears.getFullYear()+2)
+
+
 	// Filtering props
 	const [ selectedPlans, setSelectedPlans ] = useState([])
 	const [ dates, setDates ] = useState({
 		from: dateFormatter(new Date()),
-		to: "9999-12-31"
+		to: dateFormatter(twoYears)
 	})
 
 	// Filtering handles
