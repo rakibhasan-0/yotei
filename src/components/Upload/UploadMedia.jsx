@@ -81,8 +81,8 @@ function UploadMedia({id, exerciseId, fetchMediaMetaToBeUploaded, fetchMediaFile
 					movementId : exerciseId, 
 					localStorage :true, 
 					description: "todo", 
-					url: responseData.url, 
-					image: !isPlayableVideoMedia(responseData.url)
+					url: "/api/media/files/"+responseData.filename, 
+					image: !isPlayableVideoMedia(responseData.filename)
 				}
 				
 				fetchMediaFilesThatWasUploaded(media)
