@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react"
 import RoundButton from "../../components/Common/RoundButton/RoundButton"
 import { Plus } from "react-bootstrap-icons"
 import { AccountContext } from "../../context"
-import FilterPlan from "../../components/Plan/FilterPlan"
+import FilterPlan from "./FilterPlan"
 import SessionList from "../../components/Plan/SessionList"
 import PopupAdd from "../../components/Plan/PopupAdd"
 
