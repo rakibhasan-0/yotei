@@ -5,6 +5,7 @@ import { AccountContext } from "../../context"
 import FilterPlan from "./FilterPlan"
 import SessionList from "../../components/Plan/SessionList"
 import PopupAdd from "../../components/Plan/PopupAdd"
+import Spinner from "../../components/Common/Spinner/Spinner"
 
 /**
  * PlanIndex is the page that displays group plannings. Contains of a 
@@ -27,6 +28,8 @@ export default function PlanIndex() {
 	twoYears.setFullYear(twoYears.getFullYear()+2)
 
 
+	const [loading, setLoading] = useState(true)
+	
 	// Filtering props
 	const [ selectedPlans, setSelectedPlans ] = useState([])
 	const [ dates, setDates ] = useState({
@@ -74,6 +77,7 @@ export default function PlanIndex() {
 			setPlans(fetchedPlans)
 			setSessions(filteredSessions)
 			setWorkouts(fetchedWorkouts)
+			setLoading(false)
 		}
 		fetchData()
 	}, [ dates, selectedPlans ])
@@ -131,6 +135,7 @@ export default function PlanIndex() {
 			.catch(function() {
 			
 			})
+			
 	}
 
 	/**
@@ -159,12 +164,12 @@ export default function PlanIndex() {
 			>
 			</FilterPlan>
 
-			<div>
+			{loading ? <Spinner /> : <div>
 				{
 					(plans && sessions && workouts) &&
 					<SessionList id = {"sessionlistID"} plans={plans} sessions={sessions} workouts={workouts}/>
 				}
-			</div>	
+			</div>}
 			
 			<RoundButton onClick={() => setShowPopup(true)}>
 				<Plus />
