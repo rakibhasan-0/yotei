@@ -2,6 +2,8 @@
 	height: 100%;
 	width: 100%;
 	text-align: left;
+	padding-inline: 2%;
+	padding-bottom: 1%;
 }
 
 .sc23-session-workout-info {
@@ -11,14 +13,19 @@
 .sc23-session-workout-text {
 	width: 100%;
 	text-align: left;
-	margin: 0;
+	margin-top: 1%;
+	margin-bottom: 2%;
 }
 
+.sc23-session-workout-svg {
+	font-size: 22px;
+}
 
 .sc23-session-workout-buttons {
 	width: 100%;
 	display: flex;
-	padding: 2%;
+	padding-bottom: 2%;
+	padding-inline: 2%;
 }
 
 .sc23-session-workout-links {

@@ -92,6 +92,28 @@ function SessionContainer ({ id, workout, session, plan}) {
 		return "99/99"
 	}
 
+	function checkColor () {
+
+		if (plan.belts.length !== 0 ) {
+			let last = plan.belts.length - 1
+			let sortedBelts = sortBelts()
+
+			if (sortedBelts[last].id === 1 || sortedBelts[last].id === 3 || sortedBelts[last].id === 4 ||
+				sortedBelts[last].id === 5 || sortedBelts[last].id === 6 ){
+				return true
+			}
+			return false
+		}
+		return true
+	}
+
+	function sortBelts () {
+		let sorted = plan.belts.slice().sort(( belt1, belt2 ) => {
+			return belt1.id - belt2.id
+		})
+		return sorted
+	}
+
 	function getDay () {
 		switch (dayDate) {
 		case(1):
@@ -141,7 +163,12 @@ function SessionContainer ({ id, workout, session, plan}) {
 										:
 										<BeltBox id ="sc23-session-container-beltbox" style={{borderTopLeftRadius:"4px"}}/>
 								}
-								<ChevronDown id="sc23-dropdown" className={["sc23-session-container-chevron-rotation-animation sc23-session-container-header-overlap", toggled ? "sc23-chevron-rotate" : ""].join(" ")} size={20}/>
+								{
+									checkPlan() && checkColor() ?
+										<ChevronDown id="sc23-dropdown" style={{color:"black"}} className={["sc23-session-container-chevron-rotation-animation sc23-session-container-header-overlap", toggled ? "sc23-chevron-rotate" : ""].join(" ")} size={20}/>
+										:
+										<ChevronDown id="sc23-dropdown" className={["sc23-session-container-chevron-rotation-animation sc23-session-container-header-overlap", toggled ? "sc23-chevron-rotate" : ""].join(" ")} size={20}/>
+								}
 							</div>
 							<div id = {`${id}-content`} className="sc23-session-container-content">
 								

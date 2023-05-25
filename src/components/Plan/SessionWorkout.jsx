@@ -136,7 +136,7 @@ function SessionWorkout ({ id, workout, sessionID, creatorID }) {
 						:
 
 						<div id = {`${id}-no-workout`} className = "sc23-session-workout-info">
-							<h2 className = "sc23-session-workout-text">Det finns inget pass.</h2>
+							<h2 className = "sc23-session-workout-text">Det finns inget kopplat pass.</h2>
 							<p className = "sc23-session-workout-text">Du kan trycka på pennan för att lägga till ett.</p>
 						</div>
 				}

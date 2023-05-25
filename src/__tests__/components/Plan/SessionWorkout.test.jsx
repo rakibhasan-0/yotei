@@ -29,7 +29,7 @@ describe("SessionWorkout", () => {
 
 		test("should render component displaying placeholder text if workoutConnected is false", () => {
 			render(<BrowserRouter><SessionWorkout id={testID}/></BrowserRouter>)
-			expect(screen.getByTestId(testID)).toHaveTextContent("Det finns inget pass.")
+			expect(screen.getByTestId(testID)).toHaveTextContent("Det finns inget kopplat pass.")
 			expect(screen.getByTestId(testID)).toHaveTextContent("Du kan trycka på pennan för att lägga till ett.")
 		})
 
