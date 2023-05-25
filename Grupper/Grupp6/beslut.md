@@ -56,4 +56,14 @@
 - Grupp -  Medusa Maneaters (Grupp 6)
 - Beslut - Bältesfärgerna för en teknik avskilj inte med en vinkel utan vertikalt
 - Motivation
-  - Implementationen för att få till vinkeln blev för komplicerad och efter samråd med andra grupper kom vi fram till att köra vertikala avdelningar istället. 
+  - Implementationen för att få till vinkeln blev för komplicerad och efter samråd med andra grupper kom vi fram till att köra vertikala avdelningar istället.
+
+  ## Beslut om att borttagande av aktivteter skall göra så att de tas bort från pass som använder dem.
+
+- Datum - 230505
+- Chapters - N/A
+- Grupp -  Medusa Maneaters (Grupp 6)
+- Beslut - Borttagande av aktivteter gör så att de tas bort från pass som använder dem.
+- Motivation
+  - Kändes som det mest rimliga. 
+ 
