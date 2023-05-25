@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
-import {Trash, Pencil, Clock, Plus} from "react-bootstrap-icons"
+import { Trash, Pencil, Clock, Plus } from "react-bootstrap-icons"
 import { AccountContext } from "../../context"
 import { useNavigate, useParams } from "react-router"
 import CommentSection from "../../components/Common/CommentSection/CommentSection"
@@ -8,12 +8,12 @@ import TextArea from "../../components/Common/TextArea/TextArea"
 import Button from "../../components/Common/Button/Button"
 import Tag from "../../components/Common/Tag/Tag"
 import Gallery from "../../components/Gallery/Gallery"
-import {toast} from "react-toastify"
+import { toast } from "react-toastify"
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 import ActivityDelete from "../../components/Activity/ActivityDelete/ActivityDelete"
 import ErrorState from "../../components/Common/ErrorState/ErrorState"
 import ExerciseEdit from "./ExerciseEdit"
-import {isEditor} from "../../utils"
+import { isEditor } from "../../utils"
 /**
  * A page for displaying details about an exercise.
  * 
@@ -23,7 +23,7 @@ import {isEditor} from "../../utils"
  */
 
 export default function ExerciseDetailsPage() {
-	const {ex_id} = useParams()
+	const { ex_id } = useParams()
 	const { token, userId } = useContext(AccountContext)
 	const [exercise, setExercise] = useState()
 	const [comments, setComments] = useState()
@@ -64,7 +64,7 @@ export default function ExerciseDetailsPage() {
 			})
 
 		fetchComments()
-		
+
 		fetch(`/api/tags/get/tag/by-exercise?exerciseId=${ex_id}`, {
 			headers: { token }
 		}).then(res => res.json())
@@ -78,7 +78,7 @@ export default function ExerciseDetailsPage() {
 	const onDelete = async () => {
 		try {
 			const response = await fetch("/api/exercises/remove/" + ex_id, {
-				headers: {token}, method: "DELETE"
+				headers: { token }, method: "DELETE"
 			})
 			if (!response.ok) {
 				throw new Error("Got a non ok status response from the API")
@@ -125,7 +125,7 @@ export default function ExerciseDetailsPage() {
 				commentText
 			})
 		})
-		if(response.status != 201){
+		if (response.status != 201) {
 			toast.error("Ett fel uppstod när kommentaren skulle läggas till")
 			return
 		}
@@ -142,60 +142,71 @@ export default function ExerciseDetailsPage() {
 		return <ErrorState message={error} onBack={() => navigate("/exercise")} />
 	}
 	return (
-		<div className="container">
-			<div className="row justify-content-center">
-				<div className="col-md-8 text-left">
-					<div className="d-flex flex-row align-items-center justify-content-between">
-						<h1 className="mt-2">{exercise?.name}</h1>
-						{isEditor(accountRole) && 
-							<div className="d-flex flex-row" style={{gap: "10px"}}>
-								<Pencil onClick={() => setShowEditPopup(true)} size="24px" style={{color: "var(--red-primary)"}} />
-								<Trash onClick={() => setShowDeletePopup(true)} size="24px" style={{color: "var(--red-primary)"}}/>
+		<div style={{ display: "flex", flexDirection: "column" }}>
+			<div style={{ display: "flex", justifyContent: "flex-start" }}>
+				<div style={{ flex: "0 0 100%" }}>
+					<div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+						<h1 style={{ marginTop: "0", textAlign: "left", marginRight: "auto" }}>
+							{exercise?.name}
+						</h1>
+						{isEditor(accountRole) && (
+							<div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
+								<Pencil
+									onClick={() => setShowEditPopup(true)}
+									size="24px"
+									style={{ color: "var(--red-primary)" }}
+								/>
+								<Trash
+									onClick={() => setShowDeletePopup(true)}
+									size="24px"
+									style={{ color: "var(--red-primary)" }}
+								/>
 							</div>
-						}
+						)}
 					</div>
-				
 				</div>
 			</div>
-			<div className="d-flex flex-row align-items-center" style={{ gap: "10px" }}>
-				<Clock/>
+			<div style={{ display: "flex", flexDirection: "row", alignItems: "left", gap: "10px" }}>
+				<Clock />
 				<p style={{ marginBottom: "0" }}>{exercise?.duration} min</p>
 			</div>
-			
-			<h2 className="fw-bold" style={{ marginTop: "5px" }}>Beskrivning</h2>
+
+			<h2 style={{ fontWeight: "bold", display: "flex", flexDirection: "row", alignItems: "left", marginTop: "5px", alignContent: "left" }}>Beskrivning</h2>
 			{exercise?.description ? (
-				<p>{exercise.description}</p>
+				<p style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", textAlign: "left" }}>{exercise.description}</p>
 			) : (
-				<p style={{ fontStyle: "italic", color: "var(--gray)" }}>Beskrivning saknas.</p>
+				<p style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", fontStyle: "italic", color: "var(--gray)", textAlign: "left" }}>Beskrivning saknas.</p>
 			)}
-			
-			{tags?.length > 0 && <>
-				<h2 className="fw-bold">Taggar</h2>
-				<div className="d-flex flex-wrap mb-4" style={{gap: "10px"}}>
-					{tags.map((tag, index) => (
-						<Tag key={index} tagType={"default"} text={tag.tagName} />
-					))}
-				</div>
-			</>}
+
+			{tags?.length > 0 && (
+				<>
+					<h2 style={{ fontWeight: "bold", display: "flex", flexDirection: "row", alignItems: "left"}}>Taggar</h2>
+					<div style={{ display: "flex", flexWrap: "wrap", marginBottom: "4px", gap: "10px" }}>
+						{tags.map((tag, index) => (
+							<Tag key={index} tagType={"default"} text={tag.tagName} />
+						))}
+					</div>
+				</>
+			)}
 
 			<div>
 				<Gallery id={ex_id} />
 			</div>
 
-			<div className="d-flex justify-content-between align-items-center">
-				<h2 className="fw-bold my-auto">Kommentarer</h2>
+			<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+				<h2 style={{ fontWeight: "bold", marginBottom: "0", marginTop: "1rem" }}>Kommentarer</h2>
 				<Plus size={"24px"} onClick={() => setAddComment(true)} style={{ color: "var(--red-primary)", border: "2px solid var(--button-border)", borderRadius: "50%" }} />
 			</div>
-			<div className="w-100">
+			<div style={{ width: "100%" }}>
 				<CommentSection onDelete={id => {
 					setSelectedComment(id)
 					setShowDeleteComment(true)
 				}} id={`${ex_id}-cs`} userId={userId} comments={comments} />
 			</div>
-			<div className="mt-4">
+			<div style={{ marginTop: "1rem" }}>
 				<Button outlined={true} onClick={() => navigate(-1)}><p>Tillbaka</p></Button>
 			</div>
-			<Popup isOpen={isAddingComment} title={"Lägg till kommentar"} style={{height: "fit-content"}} setIsOpen={setAddComment}>
+			<Popup isOpen={isAddingComment} title={"Lägg till kommentar"} style={{ height: "fit-content" }} setIsOpen={setAddComment}>
 				<TextArea errorMessage={commentError} onInput={e => setCommentText(e.target.value)} />
 				<Button onClick={onAddComment}>Skicka</Button>
 			</Popup>
@@ -216,8 +227,9 @@ export default function ExerciseDetailsPage() {
 				<Popup
 					title="Ta bort övning"
 					isOpen={showDeletePopup}
-					setIsOpen={setShowDeletePopup}>
-					<ActivityDelete id={ex_id} name={exercise?.name} setIsOpen={setShowDeletePopup} what={"Övning"}/>
+					setIsOpen={setShowDeletePopup}
+				>
+					<ActivityDelete id={ex_id} name={exercise?.name} setIsOpen={setShowDeletePopup} what={"Övning"} />
 				</Popup>
 			</div>
 
@@ -226,8 +238,9 @@ export default function ExerciseDetailsPage() {
 				id={"edit-exercise-popup"}
 				isOpen={showEditPopup}
 				setIsOpen={setShowEditPopup}
-				noBackground={false}>
-				<ExerciseEdit setShowPopup={setShowEditPopup}/>
+				noBackground={false}
+			>
+				<ExerciseEdit setShowPopup={setShowEditPopup} />
 			</Popup>
 		</div>
 	)
