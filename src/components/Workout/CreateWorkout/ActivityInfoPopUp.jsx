@@ -140,7 +140,7 @@ function ActivityTimes() {
  * Example usage:
  * 		<ActivityTime />
  */
-function ActivityCategories() {
+export function ActivityCategories() {
 	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(WorkoutCreateContext)
 	const [inputValue, setInputValue] = useState("")
 

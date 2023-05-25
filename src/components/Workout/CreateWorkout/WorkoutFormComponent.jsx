@@ -18,6 +18,7 @@ import Popup from "../../Common/Popup/Popup"
 import ActivityInfoPopUp from "./ActivityInfoPopUp"
 import AddActivity from "./AddActivity"
 import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
+import EditActivityPopup from "./EditActivityPopup"
 
 /**
  * Component for input-form to be used to create a new workout (WorkoutCreate.js)
@@ -305,6 +306,8 @@ function WorkoutFormComponent({ callback }) {
 						}}
 					/>
 				)}
+				{workoutCreateInfo.popupState.types.editActivityPopup && 
+					<EditActivityPopup isFreeText={true} />}
 			</Popup>
 		</Form>
 	)

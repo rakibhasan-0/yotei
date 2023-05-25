@@ -8,6 +8,7 @@ export const WORKOUT_CREATE_TYPES = {
 	SET_USERS: "SET_USERS",
 	ADD_ACTIVITY: "ADD_ACTIVITY",
 	REMOVE_ACTIVITY: "REMOVE_ACTIVITY",
+	REMOVE_ACTIVITY_ITEM: "REMOVE_ACTIVITY_ITEM",
 	SET_ACTIVITY_ITEMS: "SET_ACTIVITY_ITEMS",
 	SET_ACTIVITIES: "SET_ACTIVITIES",
 	SET_TAGS: "SET_TAGS",
@@ -20,8 +21,12 @@ export const WORKOUT_CREATE_TYPES = {
 	OPEN_FREE_TEXT_POPUP: "OPEN_FREE_TEXT_POPUP",
 	OPEN_ACTIVITY_POPUP: "OPEN_ACTIVITY_POPUP",
 	OPEN_CHOOSE_ACTIVITY_POPUP: "OPEN_CHOOSE_ACTIVITY_POPUP",
+	OPEN_EDIT_ACTIVITY_POPUP: "OPEN_EDIT_ACTIVITY_POPUP",
+	SET_CURRENTLY_EDITING: "SET_CURRENTLY_EDITING",
 	UPDATE_ACTIVITY_TIME: "UPDATE_ACTIVITY_TIME",
+	UPDATE_ACTIVITY: "UPDATE_ACTIVITY",
 	CHECK_CATEGORY: "CHECK_CATEGORY",
+	CHECK_CATEGORY_BY_ID: "CHECK_CATEGORY_BY_ID",
 	ADD_CATEGORY: "ADD_CATEGORY",
 	UPDATE_ACTIVITY_NAME: "UPDATE_ACTIVITY_NAME",
 	CREATE_ACTIVITY_ITEMS: "CREATE_ACTIVITY_ITEMS",
@@ -59,7 +64,9 @@ export const WorkoutCreateInitialState = {
 			freeTextPopup: false,
 			activityPopup: false,
 			chooseActivityPopup: false,
-		}
+			editActivityPopup: false,
+		},
+		currentlyEditing: null
 	},
 	addedCategories: [
 		{ id: 0, name: null, checked: true }, 
@@ -162,6 +169,17 @@ export function workoutCreateReducer(state, action) {
 		tempState.addedActivities = tempState.addedActivities.filter(activity => activity.id !== id)
 		return tempState
 	}
+	case "REMOVE_ACTIVITY_ITEM": {
+		const id = action.payload.id
+		for (let i = 0; i < tempState.data.activityItems.length; i++) {
+			tempState.data.activityItems[i].activities = tempState.data.activityItems[i].activities.filter(activity => activity.id !== id)
+			
+			if(tempState.data.activityItems[i].activities.length === 0) {
+				tempState.data.activityItems.splice(i, 1)
+			}
+		}
+		return tempState
+	}
 	case "SET_ACTIVITY_ITEMS":
 		tempState.data.activityItems = action.activityItems
 		return tempState
@@ -193,26 +211,52 @@ export function workoutCreateReducer(state, action) {
 		tempState.popupState.types.freeTextPopup = false
 		tempState.popupState.types.activityPopup = false
 		tempState.popupState.types.chooseActivityPopup = false
+		tempState.popupState.types.editActivityPopup = false
 		tempState.popupState.isOpened = false
+
+		tempState.addedCategories.forEach((category) => {
+			
+			if(category.id === 0) {
+				category.checked = true
+			}
+			else {
+				category.checked = false
+			}
+		})
 		return tempState
 	case "OPEN_FREE_TEXT_POPUP":
 		tempState.popupState.types.freeTextPopup = true
 		tempState.popupState.types.activityPopup = false
 		tempState.popupState.types.chooseActivityPopup = false
+		tempState.popupState.types.editActivityPopup = false
 		tempState.popupState.isOpened = true
 		return tempState
 	case "OPEN_ACTIVITY_POPUP":
 		tempState.popupState.types.freeTextPopup = false
 		tempState.popupState.types.activityPopup = true
 		tempState.popupState.types.chooseActivityPopup = false
+		tempState.popupState.types.editActivityPopup = false
 		tempState.popupState.isOpened = true
 		return tempState
 	case "OPEN_CHOOSE_ACTIVITY_POPUP":
 		tempState.popupState.types.freeTextPopup = false
 		tempState.popupState.types.activityPopup = false
 		tempState.popupState.types.chooseActivityPopup = true
+		tempState.popupState.types.editActivityPopup = false
 		tempState.popupState.isOpened = true
 		return tempState
+	case "OPEN_EDIT_ACTIVITY_POPUP":
+		tempState.popupState.types.freeTextPopup = false
+		tempState.popupState.types.activityPopup = false
+		tempState.popupState.types.chooseActivityPopup = false
+		tempState.popupState.types.editActivityPopup = true
+		tempState.popupState.isOpened = true
+		return tempState
+	case "SET_CURRENTLY_EDITING": {
+		const activityId = action.payload.id
+		tempState.popupState.currentlyEditing = activityId
+		return tempState
+	}
 	case "ADD_ACTIVITY": {
 		const name = action.payload.name
 		const id = tempState.numActivities++
@@ -225,12 +269,74 @@ export function workoutCreateReducer(state, action) {
 		tempState.addedActivities[index].duration = Number.parseInt(time)
 		return tempState
 	}
+	case "UPDATE_ACTIVITY": {
+		const newActivity = action.payload.activity
+		let changedCategory = true
+		let newCategory = true 
+		let categoryId 
+
+		tempState.addedCategories.forEach((category) => {
+			if(category.checked === true) {
+				categoryId = category.id
+			}
+		})
+		
+		tempState.data.activityItems.forEach((category, categoryIndex) => {
+			category.activities.forEach((activity, index) => {
+				if(activity.id === newActivity.id) {
+					
+					if(category.id === categoryId) {
+						changedCategory = false
+						newCategory = false
+						category.activities[index] = newActivity
+					}
+					else {
+						category.activities.splice(index, 1)
+						if(tempState.data.activityItems[categoryIndex].activities.length === 0) {
+							tempState.data.activityItems.splice(categoryIndex, 1)
+						}
+					}
+				}
+			})
+
+			if(changedCategory && category.id === categoryId) {
+				newCategory = false
+				tempState.data.activityItems[categoryIndex].activities.push(newActivity)
+			}
+		})
+
+		if(newCategory){
+			const category = tempState.addedCategories.find(category => category.checked)
+			const activityItem = {
+				id: category.id,
+				name: category.name,
+				activities: [newActivity],
+			}
+
+			tempState.data.activityItems.push(activityItem)
+
+		}
+		return tempState
+	}
 	case "CHECK_CATEGORY": {
 		tempState.addedCategories.forEach((category) => {
 			category.checked = false
 		})
 		const index = action.payload.index === -1 ? tempState.addedCategories.length - 1 : action.payload.index
 		tempState.addedCategories[index].checked = true
+		return tempState
+	}
+	case "CHECK_CATEGORY_BY_ID": {
+		const id = action.payload.id
+		tempState.addedCategories.forEach((category) => {
+			
+			if(category.id === id) {
+				category.checked = true
+			}
+			else {
+				category.checked = false
+			}
+		})
 		return tempState
 	}
 	case "ADD_CATEGORY":

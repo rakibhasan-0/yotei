@@ -5,9 +5,9 @@ import style from "./Divider.module.css"
  * 
  * @param id - component id
  * @param option determines the alignment and header for the divider. 
- *        Of either h1_center, h1_left, h2_center, h2_left or h2_middle
+ *        Of either h1_center, h1_left, h2_center, h2_left, h2_middle or p_left
  * @param title - text to be displayed
- * @author Griffins (2023-05-03), Chimera (2023-05-05), Phoenix (2023-05-24)
+ * @author Griffins (2023-05-03), Chimera (2023-05-05), Phoenix (2023-05-24), Minotaur (2023-05-23)
  */
 export default function Divider ({ id, option, title }) {
 	switch(option) {
@@ -31,5 +31,10 @@ export default function Divider ({ id, option, title }) {
 		return	<div id = {id} className={`${style.divider} ${style.dividerMiddle}`}>
 			<h2>{title}</h2>
 		</div> 
+
+	case "p_left":
+		return  <div id = {id} className={"divider divider_left p_tagg"}>
+			<p className="p_tagg">{title}</p>
+		</div>
 	}
 } 

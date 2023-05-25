@@ -69,6 +69,7 @@ export default function ActivityListComponent() {
 													isEditable={
 														activity.isEditable
 													}
+													id = {activity.id}
 												/>
 											</Reorder.Item>
 										)
@@ -118,6 +119,7 @@ function ActivityList({ children, categoryName }) {
  * 	   activityName @type {string} - The name of the activity.
  *     activityTime @type {string}  - The time that the activity has been given.
  *     pinkColor @type {boolean} - Boolean that says if item should be pink or white.
+ *	   id @type {num} - id of the activity.
  *
  * Example usage:
  *     <ActivityListItem
@@ -126,7 +128,8 @@ function ActivityList({ children, categoryName }) {
  *			pinkColor={true}
  *		/>
  */
-function ActivityItem({ activityName, activityTime, pinkColor }) {
+function ActivityItem({ activityName, activityTime, pinkColor , id}) {
+	const { workoutCreateInfoDispatch, } = useContext(WorkoutCreateContext)
 	return (
 		<div
 			className={[
@@ -142,8 +145,11 @@ function ActivityItem({ activityName, activityTime, pinkColor }) {
 			</div>
 			<div className={styles.minutesAndEdit}>
 				<h2 style={{ marginBottom: 0 }}>{activityTime} min</h2>
-				<i>
-					<Pencil width="24" height="24" fill="B4B4B4" />
+				<i onClick={() => {
+					workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.OPEN_EDIT_ACTIVITY_POPUP}), 
+					workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.SET_CURRENTLY_EDITING, payload: {id: id}})
+				}}>
+					<Pencil width="24" height="24" fill="B4B4B4"/>
 				</i>
 			</div>
 		</div>
