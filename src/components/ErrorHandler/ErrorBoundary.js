@@ -111,8 +111,6 @@ class ErrorBoundary extends React.Component {
 			}) // error and info
 		}
 
-		console.log("Request json: ", requestOptions.body)
-
 		// Send and save
 		try {
 			const response = await fetch("/api/errorlogs/add", requestOptions) // ErrorLogController.java
@@ -121,10 +119,10 @@ class ErrorBoundary extends React.Component {
 				this.forceUpdate()
 			}
 			else {
-				console.log("Saving errorlog failed, response did not return ok", response.status)
+				console.error("Saving errorlog failed, response did not return ok", response.status)
 			}
 		} catch (error) {
-			console.log("Error when saving errorlog")
+			console.error("Error when saving errorlog")
 			this.forceUpdate()
 		}
 	}

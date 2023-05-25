@@ -91,8 +91,7 @@ export default function ActivityDelete({ id, activityID, name, setIsOpen, what }
 		
 		await fetch(url, requestOptions)
 			.then(async data => {
-				const json = await data.json()
-				console.log(json)
+				await data.json()
 			
 			}).catch(() => 
 				setHasError(true)

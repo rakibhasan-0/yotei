@@ -35,11 +35,10 @@ export default function Gallery({ id }) {
 			
 			if (response.ok) {
 				const data =  await response.json()
-				console.log(data)
 				setMedia(data) 
 			} 
 		} catch (error) {
-			console.log(error)
+			console.error(error)
 		}
 	}, [context.token, id])
 

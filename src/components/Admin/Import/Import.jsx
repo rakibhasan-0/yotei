@@ -78,7 +78,7 @@ export default function Import() {
 				e.target.value = null
 				if(data?.length > 0) {
 					setSuccess("Import av " + endpoint + " lyckades med konflikter. Se konsolen för detaljer.")
-					console.log("följande " + endpoint + " importerades inte pga namnkonflikter: " + JSON.stringify(data))
+					console.error("följande " + endpoint + " importerades inte pga namnkonflikter: " + JSON.stringify(data))
 					return
 				}
 				setSuccess("Import av " + endpoint + " lyckades.")

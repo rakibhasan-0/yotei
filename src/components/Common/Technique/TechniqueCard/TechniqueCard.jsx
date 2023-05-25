@@ -86,7 +86,6 @@ function constructDefaultBelt(color) {
 
 function constructAdultBelt(belt, beltLength, index) {
 	if (belt.belt_name.toLowerCase().includes("dan")) {
-		console.log(belt)
 		const num = parseInt(belt.belt_name.split(" ")[0])
 		return (
 			<div

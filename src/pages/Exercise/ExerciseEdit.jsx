@@ -42,13 +42,11 @@ export default function ExerciseEdit({setShowPopup}) {
 
 	useEffect(() => {
 		setExId(window.location.pathname.substring(window.location.pathname.lastIndexOf("/") + 1))
-		console.log("In useEffect 1")
 	},[])
 
 	useEffect(() => {
 		if(exId !== ""){
 			getExerciseInfo()
-			console.log("In useEffect 2")
 		}
 	},[exId])
 
@@ -56,9 +54,6 @@ export default function ExerciseEdit({setShowPopup}) {
      * Returns the information about the exercise and its tags with the id in the pathname.
      */
 	async function getExerciseInfo() {
-		console.log("exercise id: "+ exId)
-		console.log("inside getInfo")
-		
 		const requestOptions = {
 			method: "GET",
 			headers: {"Content-type": "application/json", token: context.token},
@@ -111,7 +106,6 @@ export default function ExerciseEdit({setShowPopup}) {
 		const oldT = JSON.stringify(existingTags.sort((a, b) => a.id - b.id))
 
 		if(oldName !== name || oldDesc !== desc || oldTime != time || newT !== oldT)  {
-			console.log(newT + " aaaaa " + oldT)
 			setShowMiniPopup(true)
 		} else {
 			setShowPopup(false)
@@ -174,7 +168,6 @@ export default function ExerciseEdit({setShowPopup}) {
 		if (!(editFailed || tagRemoveFailed || tagLinkFailed)) {
 			//borde bytas till att stänga popupen
 			// window.location.href = "/exercise"
-			console.log("SEND DATA: ->>> " + sendData)
 			setShowPopup(false)
 			location.reload(1) // forcing reload of the page.... 
 

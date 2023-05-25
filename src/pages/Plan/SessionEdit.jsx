@@ -129,7 +129,7 @@ export default function SessionEdit() {
 
 			const response = await fetch(`/api/session/update?id=${params.session_id}`, requestOptions)
 			if (!response.ok) {
-				console.log(response)
+				console.error(response)
 				throw new Error("Could not update session")
 			}
 			navigate(-1)

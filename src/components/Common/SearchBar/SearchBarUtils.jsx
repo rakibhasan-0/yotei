@@ -80,7 +80,6 @@ export async function getTechniques(args, token, map, mapActions, callBack) {
 
 	
 	if(map && mapActions.lookup(query) !== undefined) {
-		console.log("Got from cache")
 		callBack(mapActions.lookup(query))
 		return
 	}
@@ -96,7 +95,6 @@ export async function getTechniques(args, token, map, mapActions, callBack) {
 		.then((response) => response.json())
 		.then((data) => {
 			if(map) mapActions.insert(query, data)
-			console.log("Fetched")
 			callBack(data)
 			return
 		}).catch((error) => {
@@ -127,7 +125,6 @@ export async function getExercises(args, token, map, mapActions, callBack) {
 	let query = `/api/search/exercises?name=${args.text}&tags=${args.selectedTags}`
 
 	if(map && mapActions.lookup(query) !== undefined) {
-		console.log("Got from cache")
 		callBack(mapActions.lookup(query))
 		return
 	}
@@ -140,7 +137,6 @@ export async function getExercises(args, token, map, mapActions, callBack) {
 	}).then((response) => response.json())
 		.then((data) => {
 			if(map) mapActions.insert(query, data)
-			console.log("Fetched")
 			callBack(data)
 			return
 		}).catch((error) => {

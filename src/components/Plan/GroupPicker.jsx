@@ -111,10 +111,8 @@ export default function GroupPicker({ id, states, testFetchMethod, onToggle}) {
 	const { token } = useContext(AccountContext)
 
 	useEffect(() => {
-		console.log("I am in useEffect")
 		if (testFetchMethod !== null && testFetchMethod !== undefined) {
 			//used for testing.
-			console.log("GroupPicker has fetchMethod.")
 			const fetch = testFetchMethod()
 			setGroups(parseJson(fetch))
 		}
@@ -123,7 +121,6 @@ export default function GroupPicker({ id, states, testFetchMethod, onToggle}) {
 				headers: { token }
 			}).then(async data => {
 				const json = await data.json()
-				console.log(json)
 				const g = {}
 				for (const group of json) {
 					if (!g[group.name]) {
@@ -132,7 +129,6 @@ export default function GroupPicker({ id, states, testFetchMethod, onToggle}) {
 					g[group.name].push(group)
 				}
 				setGroups(g)
-				console.log("fetch status = " + String(data.status))
 			}).catch(ex => {
 				alert("Kunde inte hämta grupper")
 				console.error(ex)

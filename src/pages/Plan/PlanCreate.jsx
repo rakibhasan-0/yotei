@@ -168,7 +168,7 @@ export default function PlanCreate() {
 				if (response.ok)
 					dateHandler(res.id)
 			} catch (error) {
-				console.log(error)
+				console.error(error)
 				failureAlert()
 			}
 		}
@@ -207,7 +207,7 @@ export default function PlanCreate() {
 
 		} catch (error) {
 			failureAlert("Tillfällen kunde inte	 läggas till.")
-			console.log(error)
+			console.error(error)
 		}
 	}
 

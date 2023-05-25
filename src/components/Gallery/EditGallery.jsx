@@ -40,8 +40,6 @@ export default function EditGallery({ id, exerciseId, sendData }) {
 	let pictures = []
 	let videos = []
 	
-	console.log("exID from exercise: ->>>>> " + exerciseId)
-	console.log("SEND DATA IS: ->>>> " + sendData)
 	/**
 	 * Callback for retrieving media from server
 	 */
@@ -61,7 +59,7 @@ export default function EditGallery({ id, exerciseId, sendData }) {
 				setMedia([])
 			}
 		} catch (error) {
-			console.log(error)
+			console.error(error)
 		}
 	}, [context.token, exerciseId])
 
@@ -199,35 +197,23 @@ export default function EditGallery({ id, exerciseId, sendData }) {
 			body: JSON.stringify(list)
 		}
 		try {
-			console.log("before post")
-			const response = await fetch("/api/media/add", requestOptions)
-			
-			console.log("After post")
-			if (response.ok) {
-				console.log("Post request sent")
-			} 
+			await fetch("/api/media/add", requestOptions)
 		} catch (error) {
-			console.log("ARE WE SENDING?")
-			console.log(error)
+			console.error(error)
 		}
         
 	}
 
 	async function deleteMedia(list) {
-		console.log("ARE WE DELETINIG?")
 		const requestOptions = {
 			method: "DELETE",
 			headers: { "Content-type": "application/json", "token": context.token },
 			body: JSON.stringify(list)
 		}
 		try {
-			const response = await fetch("/api/media/remove", requestOptions)
-            
-			if (response.ok) {
-				console.log("remove request sent")
-			}
+			await fetch("/api/media/remove", requestOptions)
 		} catch (error) {
-			console.log(error)
+			console.error(error)
 		}
 	}
 
@@ -236,9 +222,7 @@ export default function EditGallery({ id, exerciseId, sendData }) {
 		try {
 			
 			await postMedia(mediaList)
-			console.log("AFTER AWAIT")
 			deleteMedia(mediaToRemove)
-			console.log("AFTER DELETE")
 		} catch {
 			deleteMedia(mediaToRemove)
 		}
@@ -247,12 +231,6 @@ export default function EditGallery({ id, exerciseId, sendData }) {
 	useEffect(() => {
 		
 		if (sendData) {
-
-			console.log("exID from exercise: ->>>>> " + exerciseId)
-			console.log("SEND DATA IS: ->>>> " + sendData)
-			console.log("MEDIA: " + media)
-			console.log("MEDIALIST: " + mediaList)
-			console.log("MEDIATOREMOVE: " + mediaToRemove)
 			makeAPICalls()
 		}
 

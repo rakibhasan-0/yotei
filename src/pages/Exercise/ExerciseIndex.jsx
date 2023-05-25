@@ -76,13 +76,11 @@ function ExerciseIndex() {
 	}, [searchText, addedTags])
 
 	useEffect(() => {
-		console.log("Sort: " + sort)
 		getAllExercises()
 	}, [sort])
 
 	const handlePageLoad = () => {
 		getAllExercises()
-		console.log("handlePageLoad")
 	}
       
 	// Call handlePageLoad on page load

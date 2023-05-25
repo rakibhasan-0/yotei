@@ -62,7 +62,6 @@ function SessionList ({ id, plans, sessions, workouts }) {
 					return -1
 			})
 
-			console.log(sorted)
 			return sorted
 		}
 		return null
