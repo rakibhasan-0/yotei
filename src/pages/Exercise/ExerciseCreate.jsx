@@ -270,8 +270,7 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 						title={"Ändringar gjorda"}
 						isOpen={showMiniPopup}
 						setIsOpen={setShowMiniPopup}
-						style={{height: "fit-content"}}
-					>
+						style={{height: "300px", width: "90%"}}					>
 						<p>Är du säker att du vill lämna?</p>
 						<div className={styles.ECMiniPopupBtns}>
 							<Button id={"EC-mini-popup-leave-btn"} onClick={() => {closeAll()}} outlined={"button-back"}><p>Lämna</p></Button>
