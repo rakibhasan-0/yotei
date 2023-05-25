@@ -2,6 +2,15 @@
 # Produktägare
 # Quality assurance
 # Backend
+## Beslut om sparning av media-filer
+Datum - 22/05/23
+Chapters - N/A
+Grupp -  Dragon
+Beslut - Lagring på hostens filsystem i infra-repot i mappen media
+
+Motivation
+För tillfället sparas mediafiler genom en docker-volume som delas med host-operativsystemet och lagras under infra/media. Maximala uppladdningsstorlek är för tillfället 10MB men går mycket enkelt att höja då videor troligtvis kan vara mycket större.
+
 # Frontend
 
 ## Beslut om slå ihop exerciseCreate och exerciseForm
@@ -64,15 +73,7 @@ Beslut - Grafiskt gränssnitt (tabell och knapp) för att visa upp frontend erro
 
 Just nu finns det en knapp längst ner på Admin sidan med namnet 'Error Logs'. När man klickar på den så ska en tabell av alla error lags lagrade i databasen visas upp i formatet Error meddelande, stacktrace, datum. funktionaliteten är där, men det finns funderingar kring ifall vyn ska förbättras (dimensioner och utseende) samt att det är tänkt att finnas ett sätt att filtrera via datum (inte ännu implementerat). Detta är en produkt av att vi har rushat produktionen för att hinna till deadline inför leveransen. Vidare utveckling skulle därmed vara att implementera ett sätt att filtrera via datum, göra så att inte flera av exakt samma error kan existera samtidigt, samt förbättra vyn rent visuellt. Hursomhelst är tanken att denna funktionalitet endast är reserverat för Admin användare. Så det kanske inte behöver vara extremt snyggt. 
 
-## Beslut om att borttagande av aktivteter skall göra så att de tas bort från pass som använder dem.
 
-- Datum - 230522
-- Chapters - N/A
-- Grupp -  Medusa Maneaters (Grupp 6)
-- Beslut - Borttagande av aktivteter gör så att de tas bort från pass som använder dem.
-
-### Motivation
-  - Kändes som det mest rimliga. 
 
 
 # DevOps
