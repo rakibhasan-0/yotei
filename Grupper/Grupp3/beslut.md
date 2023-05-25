@@ -108,7 +108,7 @@ Tanken var att video/bild för övningar respektive tekniker skulle ha sin egna 
 
 # Beslut om visuellt gränssnit för att visa upp front end errors från error logging
 
-Datum - 25/06/23
+Datum - 25/05/23
 
 Chapters - N/A
 
