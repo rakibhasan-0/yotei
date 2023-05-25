@@ -1,5 +1,5 @@
 import styles from "./ActivityListComponent.module.css"
-import { Reorder } from "framer-motion"
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import { useContext } from "react"
 import { WorkoutCreateContext } from "./WorkoutCreateContext"
 import { WORKOUT_CREATE_TYPES } from "./WorkoutCreateReducer"
@@ -19,67 +19,123 @@ export default function ActivityListComponent() {
 	const { workoutCreateInfo, workoutCreateInfoDispatch } =
 		useContext(WorkoutCreateContext)
 
+	const handleDragEnd = (result) => {
+		const { source, destination } = result
+
+		if (!destination) {
+			return
+		}
+
+		const sourceType = source.droppableId.startsWith("group") ? "group" : "activity"
+		const destinationType = destination.droppableId.startsWith("group") ? "group" : "activity"
+
+		if (sourceType === "group" && destinationType === "group") {
+			const sourceIndex = source.index
+			const destinationIndex = destination.index
+			if (sourceIndex === destinationIndex) {
+				return
+			}
+
+			const groups = [...workoutCreateInfo.data.activityItems]
+			const [draggedGroup] = groups.splice(sourceIndex, 1)
+			groups.splice(destinationIndex, 0, draggedGroup)
+			const updatedGroups = groups.map((group, index) => ({
+				...group,
+				id: index.toString(), // Assign a unique ID based on the index
+			}))
+
+			workoutCreateInfoDispatch({
+				type: WORKOUT_CREATE_TYPES.SET_ACTIVITY_ITEMS,
+				activityItems: updatedGroups,
+			})
+		} else if (sourceType === "activity" && destinationType === "activity") {
+			const sourceGroupId = parseInt(source.droppableId.replace("activityGroup", ""))
+			const destinationGroupId = parseInt(destination.droppableId.replace("activityGroup", ""))
+			const sourceIndex = source.index
+			const destinationIndex = destination.index
+
+			if (sourceGroupId === destinationGroupId && sourceIndex === destinationIndex) {
+				return
+			}
+			const groups = [...workoutCreateInfo.data.activityItems]
+			const sourceGroup = groups[sourceGroupId]
+			const [draggedActivity] = sourceGroup.activities.splice(sourceIndex, 1)
+
+			const destinationGroup = groups[destinationGroupId]
+			destinationGroup.activities.splice(destinationIndex, 0, draggedActivity)
+
+			workoutCreateInfoDispatch({
+				type: WORKOUT_CREATE_TYPES.SET_ACTIVITY_ITEMS,
+				activityItems: groups,
+			})
+		}
+	}
+
 	return (
 		<div className={styles.container}>
 			<h2>Aktiviteter</h2>
-			<Reorder.Group
-				values={workoutCreateInfo.data.activityItems}
-				onReorder={(value) =>
-					workoutCreateInfoDispatch({
-						type: WORKOUT_CREATE_TYPES.SET_ACTIVITY_ITEMS,
-						activityItems: value
-					})
-				}
-			>
-				{workoutCreateInfo.data.activityItems.map(
-					(activityItem, index) => (
-						<Reorder.Item
-							key={activityItem.id}
-							value={activityItem}
-						>
-							<ActivityList
-								categoryName={
-									activityItem.name !== "Ingen kategori"
-										? activityItem.name
-										: null
-								}
-							>
-								<Reorder.Group
-									values={activityItem.activities}
-									onReorder={(value) =>
-										workoutCreateInfoDispatch({
-											type: WORKOUT_CREATE_TYPES.SET_ACTIVITIES,
-											id: index,
-											activities: value
-										})
-									}
+
+			<DragDropContext onDragEnd={handleDragEnd}>
+				<Droppable droppableId="groups" direction="vertical" type="group">
+					{(provided) => (
+						<div ref={provided.innerRef} {...provided.droppableProps}>
+							{workoutCreateInfo.data.activityItems.map((activityItem, groupIndex) => (
+								<Draggable
+									key={activityItem.id}
+									draggableId={`group${groupIndex}`}
+									index={groupIndex}
 								>
-									{activityItem.activities.map(
-										(activity, index) => (
-											<Reorder.Item
-												key={activity.id}
-												value={activity}
-											>
-												<ActivityItem
-													activityName={activity.name}
-													activityTime={
-														activity.duration
-													}
-													pinkColor={index % 2 === 0}
-													isEditable={
-														activity.isEditable
-													}
-													id = {activity.id}
-												/>
-											</Reorder.Item>
-										)
+									{(provided) => (
+										<div
+											ref={provided.innerRef}
+											{...provided.draggableProps}
+											{...provided.dragHandleProps}
+										>
+											<Droppable droppableId={`activityGroup${groupIndex}`} direction="vertical" type="activity">
+												{(provided) => (
+													<div ref={provided.innerRef} {...provided.droppableProps}>
+														<div>
+															{activityItem.activities.length > 0 && (
+																<ActivityList categoryName={activityItem.name !== "Ingen kategori" ? activityItem.name : null}>
+																	{activityItem.activities.map((activity, itemIndex) => (
+																		<Draggable
+																			key={activity.id}
+																			draggableId={`activity${activity.id}`}
+																			index={itemIndex}
+																		>
+																			{(provided) => (
+																				<div
+																					ref={provided.innerRef}
+																					{...provided.draggableProps}
+																					{...provided.dragHandleProps}
+																				>
+																					<ActivityItem
+																						activityName={activity.name}
+																						activityTime={activity.duration}
+																						pinkColor={itemIndex % 2 === 0}
+																						isEditable={activity.isEditable}
+																						id={activity.id}
+																					/>
+																				</div>
+																			)}
+																		</Draggable>
+																	))}
+																	{provided.placeholder}
+																</ActivityList>
+															)}
+														</div>
+													</div>
+												)}
+											</Droppable>
+										</div>
 									)}
-								</Reorder.Group>
-							</ActivityList>
-						</Reorder.Item>
-					)
-				)}
-			</Reorder.Group>
+								</Draggable>
+							))}
+							{provided.placeholder}
+						</div>
+					)}
+				</Droppable>
+			</DragDropContext>
 		</div>
 	)
 }
