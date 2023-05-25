@@ -19,7 +19,7 @@ $$ LANGUAGE 'plpgsql' IMMUTABLE PARALLEL SAFE;
 
 -- "Konstant" för user roll
 CREATE
-OR REPLACE FUNCTION user_role_id() RETURNS INT AS $$ BEGIN RETURN 3;
+OR REPLACE FUNCTION user_role_id() RETURNS INT AS $$ BEGIN RETURN 0;
 
 END;
 
