@@ -194,7 +194,7 @@ export default function ExerciseDetailsPage() {
 			</div>
 
 			<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-				<h2 style={{ fontWeight: "bold", marginBottom: "0", marginTop: "1rem" }}>Kommentarer</h2>
+				<h2 style={{ fontWeight: "bold", marginBottom: "0", marginTop: "1rem"}}>Kommentarer</h2>
 				<Plus size={"24px"} onClick={() => setAddComment(true)} style={{ color: "var(--red-primary)", border: "2px solid var(--button-border)", borderRadius: "50%" }} />
 			</div>
 			<div style={{ width: "100%" }}>
@@ -206,7 +206,7 @@ export default function ExerciseDetailsPage() {
 			<div style={{ marginTop: "1rem" }}>
 				<Button outlined={true} onClick={() => navigate(-1)}><p>Tillbaka</p></Button>
 			</div>
-			<Popup isOpen={isAddingComment} title={"Lägg till kommentar"} style={{ height: "fit-content" }} setIsOpen={setAddComment}>
+			<Popup isOpen={isAddingComment} title={"Lägg till kommentar"} style={{ overflow: "hidden", overflowY: "hidden", height: "50%" }} setIsOpen={setAddComment}>
 				<TextArea errorMessage={commentError} onInput={e => setCommentText(e.target.value)} />
 				<Button onClick={onAddComment}>Skicka</Button>
 			</Popup>
