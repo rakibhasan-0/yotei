@@ -6,11 +6,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -168,11 +170,13 @@ public class SessionController {
                 sessionList.addAll(sessionRepository.findAllByPlan(i));
             }
         }
-
         if (sessionList.isEmpty()) {
             return new ResponseEntity<>(sessionList, HttpStatus.NOT_FOUND);
         }
 
+        // Sort the session list by date and time
+        sessionList.sort(Comparator.comparing(Session::getDate).thenComparing(Session::getTime));
+        
         return new ResponseEntity<>(sessionList, HttpStatus.OK);
     }
 
