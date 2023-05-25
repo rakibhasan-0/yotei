@@ -46,6 +46,8 @@ services:
   api:
     image: pvt2023/api:latest
     restart: always
+    volumes:
+      - ./media:/media
     ports:
       - "8085:8085"
     links:
