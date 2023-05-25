@@ -57,17 +57,17 @@ function constructColor(technique) {
 			{
 				technique.beltColors !== undefined ?
 					technique.beltColors.length > 0 ?  	
-						technique.beltColors.map((belt, key) => {
+						technique.beltColors.map((belt, index) => {
 							return (belt !== undefined ?
 								belt.is_child ?
-									constructChildBelt(technique, belt, technique.beltColors.length, key)
+									constructChildBelt(belt, technique.beltColors.length, index)
 									: 
-									constructAdultBelt(technique, belt, technique.beltColors.length, key) 
-								: constructAdultBelt("13c9ed", technique.beltColors.length, key) 
+									constructAdultBelt(belt, technique.beltColors.length, index) 
+								: constructAdultBelt("13c9ed", technique.beltColors.length, index) 
 							)})
-						:	constructDefaultBelt(technique, "8e03ad") //om vi fär 0st fägerger (lila)
+						:	constructDefaultBelt("8e03ad") //om vi fär 0st fägerger (lila)
 
-					: constructDefaultBelt(technique, "8e03ad") //om vi inte får färger (lila)
+					: constructDefaultBelt("8e03ad") //om vi inte får färger (lila)
 					
 			}
 					
@@ -84,13 +84,13 @@ function constructDefaultBelt(color) {
 	)
 }
 
-function constructAdultBelt(technique, belt, beltLength, key) {
+function constructAdultBelt(belt, beltLength, index) {
 	if (belt.belt_name.toLowerCase().includes("dan")) {
 		console.log(belt)
 		const num = parseInt(belt.belt_name.split(" ")[0])
 		return (
 			<div
-				key={key}
+				key={index}
 				className={["technique-card-belt-color", belt.belt_name === "Vitt" ? "technique-card-belt-border" : ""].join(" ")}
 				style={
 					{
@@ -106,7 +106,7 @@ function constructAdultBelt(technique, belt, beltLength, key) {
 
 				{ [...Array(num)].map((i) =>
 					<div
-						key={`${key}-${i}-dan`}
+						key={`${index}-${i}-dan`}
 						className={"technique-card-belt-color"}
 						style={ { background: "gold", height: `${15 / beltLength}%` } }
 					> 
@@ -119,7 +119,7 @@ function constructAdultBelt(technique, belt, beltLength, key) {
 
 	return (
 		<div
-			key={key}
+			key={index}
 			className={["technique-card-belt-color", belt.belt_name === "Vitt" ? "technique-card-belt-border" : ""].join(" ")}
 			style={
 				{
@@ -132,10 +132,10 @@ function constructAdultBelt(technique, belt, beltLength, key) {
 
 }
 
-function constructChildBelt(technique, belt, beltLength, key) {
+function constructChildBelt(belt, beltLength, index) {
 	return (
 		<div 
-			key={key}
+			key={index}
 			className={["technique-card-belt-color", "technique-card-belt-border"].join(" ")}
 			style={
 				{

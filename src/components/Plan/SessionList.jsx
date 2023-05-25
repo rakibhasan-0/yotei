@@ -1,5 +1,5 @@
 /** @jest-environment jsdom */
-import React from "react"
+import React, { Fragment } from "react"
 import "./SessionList.css"
 import SessionContainer from "./SessionContainer"
 import Divider from "../Common/Divider/Divider"
@@ -119,15 +119,15 @@ function SessionList ({ id, plans, sessions, workouts }) {
 		checkID() && checkPlans() && checkSessions() ?
 			<div id={id} className = "sc23-session-list">
 				{
-					sortedSessions.map(session => {
+					sortedSessions.map((session, i) => {
 						return (
 							checkNewWeek(session) ?
-								<>
-									<Divider key={`${session.id}${currentWeek}-divider`} id={`${currentWeek}-divider`} title={"Vecka " + currentWeek} option="h2_center"/>
-									<SessionContainer key={`${session.id}`} id={`${session.id}-session-container`} workout={getSessionWorkout(session)} session={session} plan={getSessionPlan(session)}/>
-								</>	
+								<Fragment key={i}>
+									<Divider id={`${currentWeek}-divider`} title={"Vecka " + currentWeek} option="h2_center"/>
+									<SessionContainer id={`${session.id}-session-container`} workout={getSessionWorkout(session)} session={session} plan={getSessionPlan(session)}/>
+								</Fragment>	
 								:
-								<SessionContainer key={`${session.id}`} id={`${session.id}-session-container`} workout={getSessionWorkout(session)} session={session} plan={getSessionPlan(session)} />
+								<SessionContainer key={i} id={`${session.id}-session-container`} workout={getSessionWorkout(session)} session={session} plan={getSessionPlan(session)} />
 						)
 					})
 				}

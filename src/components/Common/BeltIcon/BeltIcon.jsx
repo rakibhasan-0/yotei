@@ -21,7 +21,7 @@ export default function BeltIcon({ belt }) {
 		const num = parseInt(belt.name.split(" ")[0])
 		return (
 			<div className={styles.beltIcon} style={{ backgroundColor: color }}>
-				{[...Array(num)].map((i) => <div key={i} className={styles.beltIconChild} style={{ backgroundColor: "gold" }} />)}
+				{[...Array(num)].map((_, i) => <div key={i} className={styles.beltIconChild} style={{ backgroundColor: "gold" }} />)}
 			</div>
 		)
 	}

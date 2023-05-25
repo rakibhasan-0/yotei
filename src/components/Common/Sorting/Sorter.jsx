@@ -17,12 +17,12 @@ function Sorter ({ id, children, defaultSort ,onSortChange }) {
 	return (
 		<Component
 			text={
-				<h2 style={{ display: "flex", flexDirection: "row", alignItems: "center", marginTop:"5px"}}>
+				<span style={{ display: "flex", flexDirection: "row", alignItems: "center", marginTop:"5px"}}>
                 Sortera efter:
 					<span className={style.sortText} style={{ marginLeft:"4px" }}>
 						{selectedOption ? selectedOption : children[0]}
 					</span>
-				</h2>}
+				</span>}
 			id={id}
 			onClick={() => handleChildClick(selectedOption)}
 		>
