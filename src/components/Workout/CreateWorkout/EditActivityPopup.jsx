@@ -85,11 +85,11 @@ export default function EditActivityPopup({id}) {
 					<>	
 						<div className={style.name_container}>
 							<div className={style.big_name_container}>
-								<Divider id="name_header" option="h2_left" title="Namn"/>
+								<Divider id="name_header" option="h2_left" title="Namn (kan inte redigeras)"/>
 							</div>
-							<div className={style.small_name_container}>
+							{/*<div className={style.small_name_container}>
 								<Divider id="name_header" option="p_left" title="(Kan inte redigeras)"/>
-							</div>
+							</div>*/}
 						</div>
 						<p className={style.text}>{activity.name}</p>
 					</>
