@@ -181,7 +181,7 @@ export default function SessionEdit() {
 
 			<Divider option={"h2_middle"} title={"eller"} />
 			<div className={`${styles.wrapCentering} ${styles.createButton}`} >
-				<Link to="/workout/create" style={{width: "150px"}}>
+				<Link to="/workout/create" style={{width: "150px"}} state={{goBackAfterCreation: true}}>
 					<Button id={"session-create"}><p>Skapa pass</p></Button>
 				</Link>
 			</div>
