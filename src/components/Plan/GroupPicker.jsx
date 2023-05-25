@@ -163,6 +163,7 @@ export default function GroupPicker({ id, states, testFetchMethod, onToggle}) {
 				<DropDown text={"Grupper"} id= {"gp-drop-down" + id} centered={true} autoClose={false}>
 					{ 
 						<div>
+							<input type="checkbox" style={{display: "none"}}/> {/* Do not touch this checkbox, is needed */}
 							{groups && Object.values(groups).map((group, index) => (
 								<GroupRow key={index} states={states} group={group} onToggle={onToggle} />
 							))}

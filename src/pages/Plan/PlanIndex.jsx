@@ -52,7 +52,7 @@ export default function PlanIndex() {
 			else{
 				//Fetch only sessions connected to plans selected in FilterPlan.
 				fetchedPlans = selectedPlans
-				var planIds = plans.map(obj => obj.id).flat()
+				var planIds = selectedPlans.map(obj => obj.id).flat()
 				fetchedSessions = await fetchSessionsByPlans(planIds)
 			}
 
