@@ -21,13 +21,22 @@ const GroupRow = ({group, states, onToggle}) => {
 
 	const name = group[0].name
 	const id = group[0].id
-	const belts = group[0].belts
+	const belts = sortBelts()
 
 	const [groupState, setGroupState] = useState(false)
 
 	useEffect(() => {
 		setGroupState(states?.some(g => g.id === group.id))
 	}, [])
+
+	function sortBelts () {
+		let sorted = group[0].belts.slice().sort(( belt1, belt2 ) => {
+			return belt1.id - belt2.id
+		})
+
+		return sorted
+		
+	}
 
 	function toggleGroup(state) {
 		setGroupState(state)
