@@ -27,8 +27,8 @@ export default function ExerciseIndex() {
 	const sortOptions = [
 		{label: "Namn: A-Ö", cmp: (a, b) => {return a.name.localeCompare(b.name)}},
 		{label: "Namn: Ö-A", cmp: (a, b) => {return -a.name.localeCompare(b.name)}},
-		{label: "Längd: Kortast först", cmp: (a, b) => {return a.duration - b.duration}},
-		{label: "Längd: Längst först", cmp: (a, b) => {return b.duration - a.duration}}
+		{label: "Tid: Kortast först", cmp: (a, b) => {return a.duration - b.duration}},
+		{label: "Tid: Längst först", cmp: (a, b) => {return b.duration - a.duration}}
 	]
 
 	const [cookies, setCookie] = useCookies(["exercise-filter"])

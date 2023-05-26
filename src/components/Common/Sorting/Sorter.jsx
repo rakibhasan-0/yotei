@@ -15,7 +15,7 @@ import "../BeltPicker/BeltPicker.module.css"
  * ]
  * const [sort, setSort] = useState()
  * <Sorter id="foo" onSortChange={setSort} selected={sort} options={sortOptions} />
- * @author ?, edited by Cyclops (Group 5)
+ * @author Phoenix, edited by Cyclops (Group 5)
  * @version 2.0
  * 
  * @param {*} param0 
@@ -39,7 +39,7 @@ export default function Sorter ({ id, selected, onSortChange, options }) {
 						<div role="listitem" key={index}
 							className={`
 								${style.sortItem} 
-								${selected === option ? style.currentOption : ""}
+								${selected.label === option.label ? style.sortText : ""}
 							`}
 							onClick={() => onSortChange(option)}>
 							<span>{option.label}</span>
