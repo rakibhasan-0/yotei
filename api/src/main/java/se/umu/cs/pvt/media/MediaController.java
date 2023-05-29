@@ -59,7 +59,7 @@ public class MediaController implements HandlerExceptionResolver {
      * @param toAdd the media to add
      * @return a http response, ok if successful and bad request otherwise
      */
-     @PostMapping("/add")
+     @PostMapping("/")
      public ResponseEntity<Object> addMedia(@RequestBody List<Media> toAdd) {
 
         try {
@@ -77,7 +77,7 @@ public class MediaController implements HandlerExceptionResolver {
      *
      * @return a http response, ok if successful and bad request otherwise
      */
-     @DeleteMapping("/removeAll/{id}")
+     @DeleteMapping("/remove-all/{id}")
      public ResponseEntity<Object> removeAllMedia(@PathVariable("id") Long id){
          List<Media> itemsToRemove;
          ResponseEntity<Object> response = new ResponseEntity<>(HttpStatus.OK);
@@ -114,7 +114,7 @@ public class MediaController implements HandlerExceptionResolver {
      * @param id the id of the technique or exercise
      * @return a http response, ok if successful and bad request otherwise
      */
-     @DeleteMapping("/remove/{id}")
+     @DeleteMapping("/{id}")
      public ResponseEntity<Object> removeSpecificMedia(@RequestBody Media media, @PathVariable("id") Long id) {
 
          //Delete meta-data from DB
@@ -146,7 +146,7 @@ public class MediaController implements HandlerExceptionResolver {
      * @param toRemove List of media objects to remove
      * @return a http response, ok if successful and bad request otherwise
      */
-    @DeleteMapping("/remove")
+    @DeleteMapping("/")
     @Transactional
     public ResponseEntity<Object> removeMedia(@RequestBody List<Media> toRemove) {
         ResponseEntity<Object> response = new ResponseEntity<>(HttpStatus.OK);
@@ -181,7 +181,7 @@ public class MediaController implements HandlerExceptionResolver {
      * Gets every media object in the database
      * @return A list of Media objects
      */
-    @GetMapping("/all")
+    @GetMapping("/")
     public ResponseEntity<List<Media>> getMediaAll() {
         List<Media> mediaList = mediaRepository.findAll();
 
