@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import se.umu.cs.pvt.exercise.Exercise;
 import se.umu.cs.pvt.exercise.ExerciseRepository;
+import se.umu.cs.pvt.tag.Tag;
 import se.umu.cs.pvt.technique.Technique;
 import se.umu.cs.pvt.technique.TechniqueRepository;
 import se.umu.cs.pvt.tag.TagRepository;
@@ -16,6 +19,7 @@ import se.umu.cs.pvt.workout.detail.WorkoutDetail;
 import se.umu.cs.pvt.workout.detail.WorkoutDetailRepository;
 import se.umu.cs.pvt.workout.detail.WorkoutDetailResponse;
 
+import java.sql.SQLException;
 import java.util.*;
 import java.time.LocalDate;
 import java.util.function.Predicate;
@@ -233,50 +237,39 @@ public class WorkoutController {
     @Transactional
     @PostMapping("")
     public ResponseEntity<WorkoutResponse> postWorkout(@RequestBody WorkoutDataPackage data) {
-        //Extract data from object.
         Workout workout = data.getWorkout();
         workout.setCreated(LocalDate.now());
         workout.setChanged(LocalDate.now());
         Activity[] activities = data.getActivities();
 
-        //Update information about workout.
         try {
             workout = workoutRepository.save(workout);
-        }catch (Exception e) {
-            return new ResponseEntity<>(new WorkoutResponse("Failed to create workout", workout.getId(), HttpStatus.BAD_REQUEST.value()) , HttpStatus.BAD_REQUEST);
-        }
 
-        //Links the activities to the workout id and saves them.
-        for (Activity activity : activities) {
-            activity.setWorkoutId(workout.getId());
-            try {
+            for (Activity activity : activities) {
+                activity.setWorkoutId(workout.getId());
                 activityRepository.save(activity);
-            }catch (Exception e) {
-                return new ResponseEntity<>(new WorkoutResponse("Failed to add activity", workout.getId(), HttpStatus.INTERNAL_SERVER_ERROR.value()) , HttpStatus.INTERNAL_SERVER_ERROR);
             }
-        }
 
-        //Add users to workout
-        for (Long user : data.getUsers()) {
-            try {
+            for (Long user : data.getUsers()) {
                 userWorkoutRepository.save(new UserWorkout(user, workout.getId()));
-            }catch (Exception e) {
-                return new ResponseEntity<>(new WorkoutResponse("Failed to add user", workout.getId(), HttpStatus.INTERNAL_SERVER_ERROR.value()), HttpStatus.INTERNAL_SERVER_ERROR);
             }
+
+            for (Long tagId : data.getTagIds()) {
+                Optional<Tag> tag = tagRepository.findById(tagId);
+                if (tag.isPresent()) workoutTagRepository.save(new WorkoutTag(workout.getId(), tag.get()));
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(new WorkoutResponse(e.getMessage(), workout.getId(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value()) , HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        try{
-            //Add new tags
-            addTags(workout.getId(), data.getTagIds());
-        }catch (Exception e) {
-            return new ResponseEntity<>(new WorkoutResponse("Failed to add tag to workout", workout.getId(), HttpStatus.INTERNAL_SERVER_ERROR.value()) , HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<>(new WorkoutResponse("Succeed to create workout", workout.getId(), HttpStatus.CREATED.value()), HttpStatus.CREATED);
+        return new ResponseEntity<>(new WorkoutResponse("Succeed to create workout",
+                workout.getId(), HttpStatus.CREATED.value()), HttpStatus.CREATED);
     }
 
     /**
      * Method for updating a workout.
-     * @param data Object containing data related to workout
+     * @param data Object containing data related to workouts
      * @return String containing status of operations and http response.
      */
     @Transactional
@@ -286,82 +279,45 @@ public class WorkoutController {
         Long workoutId = workout.getId();
         Activity[] activities = data.getActivities();
 
-        // Update workout information
-        if (workout == null || workoutId == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } else if (workoutRepository.findById(workoutId).isPresent()) {
-            //Update workout
+        if (workoutRepository.findById(workoutId).isEmpty()) {
+            return new ResponseEntity<>(new WorkoutResponse("The Workout entered does not exist.", workoutId,
+                    HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+        }
+
+        try {
             workout.setChanged(LocalDate.now());
             workoutRepository.save(workout);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        //Update activities related to workout
-        try {
-            //Delete old activities
+
             List<Activity> oldActivities = activityRepository.findAllByWorkoutId(workoutId);
             activityRepository.deleteAll(oldActivities);
-            //Add new activities
+            activityRepository.flush();
             for (Activity activity : activities) {
                 activity.setWorkoutId(workoutId);
                 activityRepository.save(activity);
             }
-        } catch (Exception e) {
-            return new ResponseEntity<>(new WorkoutResponse("Failed to add activity", workoutId, HttpStatus.INTERNAL_SERVER_ERROR.value()) , HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        // Update tags related to the workout
-        try{
-            List<WorkoutTag> oldTags = workoutTagRepository.findByWorkId(workoutId);
-            //Remove old tags
-            boolean oldTagExists = false;
-            for (WorkoutTag oldTag : oldTags) {
-                for(Long tagId : data.getTagIds()){
-                    if (tagId == oldTag.getTag()) {
-                        oldTagExists = true;
-                        break;
-                    }
-                }
-                // If oldtag does not exists in new tags list, remove it.
-                if (!oldTagExists) {
-                    workoutTagRepository.deleteByWorkIdAndTagId(workoutId, oldTag.getTag());
-                }
-                oldTagExists = false;
-            }
-            //Add new tags
-            boolean newTagExists = false;
-            for (Long tagId : data.getTagIds()) {
-                for(WorkoutTag oldTag : oldTags){
-                    if (tagId == oldTag.getTag()) {
-                        newTagExists = true;
-                        break;
-                    }
-                }
-                // If new tag did not exists in oldtag list, it should be added.
-                if (!newTagExists) {
-                    workoutTagRepository.save(new WorkoutTag(workoutId,
-                            tagRepository.findById(tagId).get()));
-                }
-                newTagExists = false;
-            }
-        }catch (Exception e) {
-            return new ResponseEntity<>(new WorkoutResponse("Failed to add tag to workout", workoutId, HttpStatus.INTERNAL_SERVER_ERROR.value()) , HttpStatus.INTERNAL_SERVER_ERROR);
-        }
 
-        // Update users related to workout
-        try {
-            //Delete old users
-            List<UserWorkout> oldUsers = userWorkoutRepository.findAllByWorkoutId(workoutId);
-            for (UserWorkout oldUserId : oldUsers) {
-                userWorkoutRepository.deleteByWorkoutIdAndUserId(workoutId, oldUserId.getUserId());
+            List<WorkoutTag> oldTags = workoutTagRepository.findByWorkId(workoutId);
+            workoutTagRepository.deleteAll(oldTags);
+            workoutTagRepository.flush();
+            for (Long tagId : data.getTagIds()) {
+                Optional<Tag> tag = tagRepository.findById(tagId);
+                tag.ifPresent(value -> workoutTagRepository.save(new WorkoutTag(workoutId, value)));
             }
-            //Add new
+
+            List<UserWorkout> oldUsers = userWorkoutRepository.findAllByWorkoutId(workoutId);
+            userWorkoutRepository.deleteAll(oldUsers);
+            userWorkoutRepository.flush();
             for (Long user : data.getUsers()) {
                 userWorkoutRepository.save(new UserWorkout(user, workoutId));
             }
-        }catch (Exception e) {
-            return new ResponseEntity<>(new WorkoutResponse("Failed to add user", workoutId, HttpStatus.INTERNAL_SERVER_ERROR.value()) , HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return new ResponseEntity<>(new WorkoutResponse(e.getMessage(), workoutId,
+                    HttpStatus.INTERNAL_SERVER_ERROR.value()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(new WorkoutResponse("Succeed to update workout", workoutId, HttpStatus.OK.value()), HttpStatus.OK);
+
+        return new ResponseEntity<>(new WorkoutResponse("Successfully updated the workout.",
+                workoutId, HttpStatus.OK.value()), HttpStatus.OK);
     }
 
     /**
