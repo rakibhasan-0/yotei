@@ -181,14 +181,18 @@ function UploadMedia({id, exerciseId, fetchMediaMetaToBeUploaded, fetchMediaFile
 		<div id={id}>
 			<div className="upload-media-container">
 				<div className="uppload-file-btn-wrapper">
-					<Button width={"100%"}>Välj Fil</Button>
+					<Button width={"100%"}>
+						Välj Fil
+					</Button>
 					<input className="media-file-input" type="file" onChange={onFileChange} />
 				</div>
 				<Button onClick={uploadMediaClicked}
 					width={"100%"}
-					disabled={!hasFile}
-				>
-					<div className="upload-media-btn"><UploadIcon size="15%"/> Ladda Upp Media</div>
+					disabled={!hasFile}>
+					<div className="upload-media-btn">
+						<UploadIcon size="15%"/> 
+						Ladda Upp Media
+					</div>
 				</Button>
 				{showFileData()}
 			</div>
@@ -196,8 +200,9 @@ function UploadMedia({id, exerciseId, fetchMediaMetaToBeUploaded, fetchMediaFile
 			<div className="d-flex justify-content-center link-media-container">
 				<div>
 					<InputTextField
-						placeholder={"Klistra in länk"} onChange={e => {setLink(e.target.value)}}>
-						
+						id="link-input"
+						placeholder={"Klistra in länk"} 
+						onChange={e => {setLink(e.target.value)}}>
 					</InputTextField>
 				</div>
 				<div>

@@ -206,7 +206,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 			body: JSON.stringify(list)
 		}
 		try {
-			const response = await fetch("/api/media/add", requestOptions)
+			const response = await fetch("/api/media", requestOptions)
 
 			if (response.ok) {
 				//setSuccessToast(await response.text())
@@ -243,7 +243,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 			body: JSON.stringify(list)
 		}
 		try {
-			const response = await fetch("/api/media/remove", requestOptions)
+			const response = await fetch("/api/media", requestOptions)
             
 			if (response.ok) {
 				console.log("remove request sent")
