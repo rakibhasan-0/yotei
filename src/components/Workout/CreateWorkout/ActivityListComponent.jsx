@@ -205,7 +205,7 @@ function ActivityItem({ activityName, activityTime, pinkColor , id}) {
 					workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.OPEN_EDIT_ACTIVITY_POPUP}), 
 					workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.SET_CURRENTLY_EDITING, payload: {id: id}})
 				}}>
-					<Pencil width="24" height="24" fill="B4B4B4"/>
+					<Pencil size="24px"	color="var(--red-primary)" style={{cursor: "pointer"}} />
 				</i>
 			</div>
 		</div>
