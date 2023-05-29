@@ -46,7 +46,7 @@ describe("verify that", () => {
 		]
 	}
 
-	// Some belts used to mock GET /api/belts/all
+	// Some belts used to mock GET /api/belts
 	const belts = [
 		{
 			"id": 1,
@@ -128,7 +128,7 @@ describe("verify that", () => {
 					ctx.status(201)
 				)
 			}),
-			rest.get("/api/belts/all", (req, res, ctx) => {
+			rest.get("/api/belts", (req, res, ctx) => {
 				return res(
 					ctx.json(belts)
 				)

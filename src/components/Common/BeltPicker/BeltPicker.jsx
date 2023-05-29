@@ -100,7 +100,7 @@ export default function BeltPicker({ id, states, onToggle, centered, onClearBelt
 	const [rerender, setRerender] = useState(false)
 	
 	useEffect(() => {
-		fetch("/api/belts/all", {
+		fetch("/api/belts", {
 			headers: { token }
 		}).then(async data => {
 			const json = await data.json()

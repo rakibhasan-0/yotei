@@ -16,7 +16,7 @@ configure({ testIdAttribute: "id" })
 beforeEach(() => {
 	// ARRANGE
 	server.use(
-		rest.get("http://localhost/api/belts/all", async (req, res, ctx) => {
+		rest.get("http://localhost/api/belts", async (req, res, ctx) => {
 			return res(ctx.status(200), ctx.json(
 				[
 					{
