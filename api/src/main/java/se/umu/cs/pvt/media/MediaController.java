@@ -59,7 +59,7 @@ public class MediaController implements HandlerExceptionResolver {
      * @param toAdd the media to add
      * @return a http response, ok if successful and bad request otherwise
      */
-     @PostMapping("/")
+     @PostMapping("")
      public ResponseEntity<Object> addMedia(@RequestBody List<Media> toAdd) {
 
         try {
@@ -146,7 +146,7 @@ public class MediaController implements HandlerExceptionResolver {
      * @param toRemove List of media objects to remove
      * @return a http response, ok if successful and bad request otherwise
      */
-    @DeleteMapping("/")
+    @DeleteMapping("")
     @Transactional
     public ResponseEntity<Object> removeMedia(@RequestBody List<Media> toRemove) {
         ResponseEntity<Object> response = new ResponseEntity<>(HttpStatus.OK);
@@ -181,7 +181,7 @@ public class MediaController implements HandlerExceptionResolver {
      * Gets every media object in the database
      * @return A list of Media objects
      */
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<List<Media>> getMediaAll() {
         List<Media> mediaList = mediaRepository.findAll();
 
