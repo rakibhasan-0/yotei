@@ -12,7 +12,7 @@ import "./TechniqueDetail.css"
 import ErrorState from "../../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../../components/Common/Spinner/Spinner"
 import Gallery from "../../../components/Gallery/Gallery"
-import { isEditor } from "../../../utils"
+import { isAdmin } from "../../../utils"
 
 import Popup from "../../../components/Common/Popup/Popup"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
@@ -125,7 +125,7 @@ function TechniqueDetail({ id }) {
 
 			<div className="technique-detail-container" id={id == undefined ? "technique" : id}>
 				<h1>{technique.name}</h1>
-				{isEditor(accountRole) && <div className="technique-detail-actions-container">
+				{isAdmin(accountRole) && <div className="technique-detail-actions-container">
 					<Pencil
 						id="technique-edit-button"
 						size="24px"
