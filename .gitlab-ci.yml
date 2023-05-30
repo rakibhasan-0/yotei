@@ -3,10 +3,6 @@ stages:
   - systest
   - publish
 
-workflow:
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-
 variables:
   FEATURE: $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
 
@@ -28,7 +24,7 @@ build_database_image:
     - docker push $CONTAINER_REPOSITORY/database:staging-$FEATURE
   only:
     refs:
-      - merge_requests
+      - merge-requests
     changes:
       - database/**/*
 
@@ -50,7 +46,7 @@ systest:
       systest/run-systest.sh $CI_JOB_ID
   only:
     refs:
-      - merge_requests
+      - merge-requests
     changes:
       - database/**/*
       - systest/**/*
