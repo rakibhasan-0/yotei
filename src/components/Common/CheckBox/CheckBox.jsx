@@ -1,7 +1,7 @@
-import { useEffect } from "react"
 import styles from "./CheckBox.module.css"
 import { Check } from "react-bootstrap-icons"
 import { useState } from "react"
+import { useEffect } from "react"
 
 /** 
  * A default checkbox that should be used throughout the project.
@@ -31,9 +31,15 @@ export default function CheckBox({checked, onClick, label, disabled, id}) {
 	// which happens almost everywhere where this component is used.
 	// Solution is for the user of this component to pass
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	useEffect(() => {checked && onClick(false)},[disabled])
 
+	
 	const [checkedState, setCheckedState] = useState(checked)
+	
+	useEffect(() => {checkedState && onClick(false)}, [disabled])
+	
+	useEffect(() => {
+		setCheckedState(checked)
+	}, [checked])
 	
 	return (
 		<label className={`${styles.checkboxLabel} ${styles.checkboxComponent} ${disabled ? styles.checkboxLabelDisabled : ""}`} id={id}>
