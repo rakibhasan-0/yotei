@@ -1,7 +1,12 @@
 import { Trash } from "react-bootstrap-icons"
 import styles from "./CommentSection.module.css"
+import { isAdmin } from "../../../utils"
+import { useContext} from "react"
+import { AccountContext } from "../../../context"
+
 /**
  * A comment section, used to display comments.#$
+ * User and Editors can only delete their own comment, but Admin can delete all comments.
  * 
  * comments = [
  *   {
@@ -16,8 +21,8 @@ import styles from "./CommentSection.module.css"
  * ]
  * 
  * @author Chimera (Gruoup 4) & Cyclops(Group 5)
- * @since 2023-05-17
- * @version 2.0
+ * @since 2023-05-30
+ * @version 3.0
  * @param id An id for the comment section
  * @param userId Id of the current user
  * @param comments Comment object as shown above
@@ -27,6 +32,7 @@ import styles from "./CommentSection.module.css"
 
 export default function CommentSection({ id, userId, comments, onDelete }) {
 	
+	const accountRole = useContext(AccountContext)
 	
 	return(
 		<div id={id} className="w-100 d-flex flex-column justify-content-center align-items-center">
@@ -41,7 +47,7 @@ export default function CommentSection({ id, userId, comments, onDelete }) {
 				
 					</div>
 					<p className={`mt-2 ${styles.text}`}>{comment.commentText}</p>
-					{userId == comment.userId && 
+					{(isAdmin(accountRole) || userId == comment.userId) && 
 					<div className="d-flex align-items-end flex-column">
 						<Trash
 							size="24px"
