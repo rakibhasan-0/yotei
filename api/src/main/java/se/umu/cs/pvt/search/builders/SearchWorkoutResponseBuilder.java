@@ -1,7 +1,7 @@
 package se.umu.cs.pvt.search.builders;
 
 import se.umu.cs.pvt.search.interfaces.WorkoutDBResult;
-import se.umu.cs.pvt.search.interfaces.WorkoutSearchResponse;
+import se.umu.cs.pvt.search.interfaces.responses.WorkoutSearchResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +9,9 @@ import java.util.List;
 /**
  * This class builds a list of {@link WorkoutSearchResponse WorkoutSearchResponses}
  * based on the given list of {@link WorkoutDBResult WorkoutDBResults}.
+ * 
+ * @author Minotaur (James Eriksson)
+ * 
  */
 public class SearchWorkoutResponseBuilder {
     private List<WorkoutDBResult> workoutDBResultList;

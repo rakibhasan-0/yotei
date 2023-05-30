@@ -8,9 +8,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.umu.cs.pvt.search.builders.*;
 import se.umu.cs.pvt.search.enums.TagType;
+import se.umu.cs.pvt.search.fuzzy.Fuzzy;
 import se.umu.cs.pvt.search.interfaces.*;
+import se.umu.cs.pvt.search.interfaces.responses.ExerciseSearchResponse;
+import se.umu.cs.pvt.search.interfaces.responses.PlanSearchResponse;
+import se.umu.cs.pvt.search.interfaces.responses.SearchResponseInterface;
+import se.umu.cs.pvt.search.interfaces.responses.TagSearchResponse;
+import se.umu.cs.pvt.search.interfaces.responses.TechniqueSearchResponse;
+import se.umu.cs.pvt.search.interfaces.responses.UserSearchResponse;
+import se.umu.cs.pvt.search.interfaces.responses.WorkoutSearchResponse;
+import se.umu.cs.pvt.search.params.SearchExerciseParams;
+import se.umu.cs.pvt.search.params.SearchPlanParams;
+import se.umu.cs.pvt.search.params.SearchTagsParams;
+import se.umu.cs.pvt.search.params.SearchTechniquesParams;
+import se.umu.cs.pvt.search.params.SearchUserParams;
+import se.umu.cs.pvt.search.params.SearchWorkoutParams;
 import se.umu.cs.pvt.search.persistance.SearchRepository;
-import se.umu.cs.pvt.search.persistance.TagCompleteRepository;
+import se.umu.cs.pvt.search.responses.SearchResponse;
+import se.umu.cs.pvt.search.responses.TagResponse;
 
 import java.util.*;
 
@@ -30,36 +45,13 @@ import java.util.*;
 public class SearchController {
 
     private final SearchRepository searchRepository;
-    private final TagCompleteRepository tagCompleteRepository;
 
+	// Not used, can be used in the future to log result when using search API.
     private Logger LOG = LoggerFactory.getLogger(SearchController.class);
 
     @Autowired
-    public SearchController(SearchRepository searchRepository, TagCompleteRepository tagCompleteRepository){
+    public SearchController(SearchRepository searchRepository) {
         this.searchRepository = searchRepository;
-        this.tagCompleteRepository = tagCompleteRepository;
-    }
-
-    /**
-     * API endpoint for getting the initial 15 most used techniques when
-     * technique page is first loaded. Sends OK http status if techniques
-     * are found, otherwise sends NOT_FOUND status.
-     *
-     * @return The 15 most used techniques.
-     */
-    @GetMapping("/techniques/init")
-    public ResponseEntity<SearchResponse<TechniqueSearchResponse>> getInitialTechniques() {
-        List<TechniqueDBResult> result = searchRepository.getTechniquesFromCustomQuery(
-                "SELECT t.technique_id, t.name FROM technique as t, activity as a " +
-                        "WHERE t.technique_id = a.technique_id GROUP BY t.technique_id " +
-                        "ORDER BY COUNT(a.technique_id) DESC LIMIT 15;");
-
-        if(result.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        SearchResponse<TechniqueSearchResponse> response = new SearchResponse(result, new ArrayList<>());
-        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
@@ -88,6 +80,7 @@ public class SearchController {
 			
         List<TechniqueDBResult> results = searchRepository.getTechniquesFromCustomQuery(createdQuery.getQuery());
         List<TechniqueSearchResponse> techniqueSearchResponses = new SearchTechniqueResponseBuilder(results).build();
+		// If request has no search string input, no need to do fuzzy filtering.
 		if(!searchTechniquesParams.nameIsEmpty()) {
         		techniqueSearchResponses = fuzzySearchFiltering(searchTechniquesParams.getName(), techniqueSearchResponses);
 		}
@@ -177,9 +170,9 @@ public class SearchController {
     @GetMapping("/tags")
     public ResponseEntity<TagResponse<TagSearchResponse>> searchTags(@RequestParam Map<String, String> urlQuery) {
         SearchTagsParams searchTagsParams = new SearchTagsParams(urlQuery);
-
-        DatabaseQuery createdQuery = new SearchTagsDBBuilder(searchTagsParams)
-                .filterByTags()
+		
+        DatabaseQuery createdQuery = new SearchTagsDBBuilder(searchTagsParams.getTags(), TagType.none)
+                .filterByExistingTags()
                 .build();
 
         List<TagDBResult> result = searchRepository.getTagSuggestionsFromCustomQuery(createdQuery.getQuery());
@@ -261,7 +254,7 @@ public class SearchController {
             return new ArrayList<>();
         }
 		// Take out list of tags to check against
-		DatabaseQuery createdQuery = new SearchTagSuggestionsDBBuilder(tags, tagType)
+		DatabaseQuery createdQuery = new SearchTagsDBBuilder(tags, tagType)
                 .filterByTagType()
 				.filterByExistingTags()
                 .build();

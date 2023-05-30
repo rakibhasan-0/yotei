@@ -1,9 +1,8 @@
-package se.umu.cs.pvt.search;
+package se.umu.cs.pvt.search.fuzzy;
 
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import me.xdrop.fuzzywuzzy.model.ExtractedResult;
-import se.umu.cs.pvt.search.interfaces.SearchResponseInterface;
-
+import se.umu.cs.pvt.search.interfaces.responses.SearchResponseInterface;
 
 import java.util.*;
 

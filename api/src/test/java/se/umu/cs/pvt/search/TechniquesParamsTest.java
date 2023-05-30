@@ -3,6 +3,8 @@ package se.umu.cs.pvt.search;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import se.umu.cs.pvt.search.params.SearchTechniquesParams;
+
 import java.util.HashMap;
 import java.util.Map;
 

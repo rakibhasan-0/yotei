@@ -1,4 +1,4 @@
-package se.umu.cs.pvt.search.interfaces;
+package se.umu.cs.pvt.search.interfaces.responses;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,7 @@ import java.util.List;
  * from the API.
  *
  * @author Minotaur (James Eriksson)
+ * 
  */
 public class PlanSearchResponse {
     private Long planID;
@@ -52,6 +53,11 @@ public class PlanSearchResponse {
         sessions.add(new SessionObject(sessionID, sessionDate, sessionTime, sessionText));
     }
 
+	/**
+	  * Private class representing what colour a plan is connected to.
+      *
+	  * @author Minotaur (James Eriksson)
+	 */
     private class ColorObject {
         private String beltColor;
         private String beltName;
@@ -76,6 +82,11 @@ public class PlanSearchResponse {
         }
     }
 
+	/**
+	  * Private class representing what session a plan is connected to.
+      *
+	  * @author Minotaur (James Eriksson)
+	 */
     private class SessionObject {
         private Long sessionID;
         private String sessionDate;

@@ -1,7 +1,7 @@
 package se.umu.cs.pvt.search.builders;
 
 import se.umu.cs.pvt.search.interfaces.PlanDBResult;
-import se.umu.cs.pvt.search.interfaces.PlanSearchResponse;
+import se.umu.cs.pvt.search.interfaces.responses.PlanSearchResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package se.umu.cs.pvt.search;
+package se.umu.cs.pvt.search.params;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -23,7 +23,7 @@ public class SearchUserParams {
 				name = new String(URLDecoder.decode(urlQuery.get("name"), StandardCharsets.UTF_8.toString()));
 			}	
 		} catch (UnsupportedEncodingException e) {
-			// Failed to decode string use uncoded string.
+			// Failed to decode string, instead use uncoded string.
 			name = urlQuery.get("name");
 		}
         id = urlQuery.get("id");

@@ -3,6 +3,8 @@ package se.umu.cs.pvt.search;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.umu.cs.pvt.search.builders.SearchTagsDBBuilder;
+import se.umu.cs.pvt.search.enums.TagType;
+import se.umu.cs.pvt.search.params.SearchTagsParams;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +31,7 @@ public class TagDBBuilderTest {
         query.put("tagAmount", "10");
         params = new SearchTagsParams(query);
 
-        builder = new SearchTagsDBBuilder(params);
+        builder = new SearchTagsDBBuilder(params.getTags(), TagType.none);
     }
 
     @Test
@@ -41,11 +43,11 @@ public class TagDBBuilderTest {
     void testNoParameters() {
         Map<String, String> query = new HashMap<>();
         params = new SearchTagsParams(query);
-        builder = new SearchTagsDBBuilder(params);
+        builder = new SearchTagsDBBuilder(params.getTags(), TagType.none);
 
-        String expectedQuery = "SELECT tag_id, name FROM tag";
+        String expectedQuery = "SELECT name, tag_id FROM tag";
 
-        assertThat(builder.filterByTags().build().getQuery()).isEqualTo(expectedQuery);
+        assertThat(builder.filterByExistingTags().build().getQuery()).isEqualTo(expectedQuery);
     }
 
     @Test
@@ -53,7 +55,7 @@ public class TagDBBuilderTest {
         String expectedQuery = "SELECT name, tag_id FROM tag WHERE tag.name NOT IN ('katt','kniv')";
 
         assertThat(builder
-                .filterByTags()
+                .filterByExistingTags()
                 .build().getQuery()).isEqualTo(expectedQuery);
     }
 }

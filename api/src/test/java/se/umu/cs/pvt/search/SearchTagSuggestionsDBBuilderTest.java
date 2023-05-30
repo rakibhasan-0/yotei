@@ -1,7 +1,7 @@
 package se.umu.cs.pvt.search;
 
 import org.junit.jupiter.api.Test;
-import se.umu.cs.pvt.search.builders.SearchTagSuggestionsDBBuilder;
+import se.umu.cs.pvt.search.builders.SearchTagsDBBuilder;
 import se.umu.cs.pvt.search.enums.TagType;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -16,29 +16,29 @@ import java.util.List;
  */
 
 public class SearchTagSuggestionsDBBuilderTest {
-	SearchTagSuggestionsDBBuilder builder;
+	SearchTagsDBBuilder builder;
 
 	@Test
     void isNotNullExercise(){
-        builder = new SearchTagSuggestionsDBBuilder(new ArrayList<String>(), TagType.exercise_tag);
+        builder = new SearchTagsDBBuilder(new ArrayList<String>(), TagType.exercise_tag);
         assertThat(builder).isNotNull();
     }
 
 	@Test
     void isNotNullWorkout(){
-        builder = new SearchTagSuggestionsDBBuilder(new ArrayList<String>(), TagType.workout_tag);
+        builder = new SearchTagsDBBuilder(new ArrayList<String>(), TagType.workout_tag);
         assertThat(builder).isNotNull();
     }
 
 	@Test
     void isNotNullTechniques(){
-        builder = new SearchTagSuggestionsDBBuilder(new ArrayList<String>(), TagType.technique_tag);
+        builder = new SearchTagsDBBuilder(new ArrayList<String>(), TagType.technique_tag);
         assertThat(builder).isNotNull();
     }
 
 	@Test
     void noFilter(){
-        builder = new SearchTagSuggestionsDBBuilder(new ArrayList<String>(), TagType.technique_tag);
+        builder = new SearchTagsDBBuilder(new ArrayList<String>(), TagType.technique_tag);
 
         String expectedQuery = "SELECT name, tag_id FROM tag";
 
@@ -48,7 +48,7 @@ public class SearchTagSuggestionsDBBuilderTest {
 
 	@Test
     void filterByTagTypeTechnique(){
-        builder = new SearchTagSuggestionsDBBuilder(new ArrayList<String>(), TagType.technique_tag);
+        builder = new SearchTagsDBBuilder(new ArrayList<String>(), TagType.technique_tag);
 
         String expectedQuery = "SELECT tag.name, tag.tag_id FROM tag, technique_tag WHERE tag.tag_id = technique_tag.tag_id GROUP BY tag.tag_id";
 
@@ -59,7 +59,7 @@ public class SearchTagSuggestionsDBBuilderTest {
 
 	@Test
     void filterByTagTypeWorkout(){
-        builder = new SearchTagSuggestionsDBBuilder(new ArrayList<String>(), TagType.workout_tag);
+        builder = new SearchTagsDBBuilder(new ArrayList<String>(), TagType.workout_tag);
 
         String expectedQuery = "SELECT tag.name, tag.tag_id FROM tag, workout_tag WHERE tag.tag_id = workout_tag.tag_id GROUP BY tag.tag_id";
 
@@ -70,7 +70,7 @@ public class SearchTagSuggestionsDBBuilderTest {
 
 	@Test
     void filterByTagTypeExercise(){
-        builder = new SearchTagSuggestionsDBBuilder(new ArrayList<String>(), TagType.exercise_tag);
+        builder = new SearchTagsDBBuilder(new ArrayList<String>(), TagType.exercise_tag);
 
         String expectedQuery = "SELECT tag.name, tag.tag_id FROM tag, exercise_tag WHERE tag.tag_id = exercise_tag.tag_id GROUP BY tag.tag_id";
 
@@ -85,7 +85,7 @@ public class SearchTagSuggestionsDBBuilderTest {
 		tags.add("katt");
 		tags.add("kniv");
 
-        builder = new SearchTagSuggestionsDBBuilder(tags, TagType.exercise_tag);
+        builder = new SearchTagsDBBuilder(tags, TagType.exercise_tag);
 
         String expectedQuery = "SELECT name, tag_id FROM tag WHERE tag.name NOT IN ('katt','kniv')";
 
@@ -100,7 +100,7 @@ public class SearchTagSuggestionsDBBuilderTest {
 		tags.add("katt");
 		tags.add("kniv");
 
-        builder = new SearchTagSuggestionsDBBuilder(tags, TagType.exercise_tag);
+        builder = new SearchTagsDBBuilder(tags, TagType.exercise_tag);
 
         String expectedQuery = "SELECT tag.name, tag.tag_id FROM tag, exercise_tag WHERE tag.tag_id = exercise_tag.tag_id GROUP BY tag.tag_id"+
 							   " INTERSECT " +

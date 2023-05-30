@@ -2,6 +2,8 @@ package se.umu.cs.pvt.search;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import se.umu.cs.pvt.search.params.SearchUserParams;
 import se.umu.cs.pvt.user.User;
 
 import java.util.HashMap;

@@ -1,10 +1,17 @@
-package se.umu.cs.pvt.search;
+package se.umu.cs.pvt.search.params;
 
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * This class stores the urlQuery in attributes.
+ *
+ * @author Minotaur (James Eriksson)
+ *
+ **/ 
 public class SearchPlanParams {
     private LocalDate from;
     private LocalDate to;
@@ -73,6 +80,11 @@ public class SearchPlanParams {
         return id;
     }
 
+	/**
+	 * Parses a date as a string into a LocalDate java object
+	 * @param date Date to parse
+	 * @return Date represented as a LocalDate object
+	 */
     private LocalDate parseDateString(String date){
         if(date.isEmpty()) return null;
 

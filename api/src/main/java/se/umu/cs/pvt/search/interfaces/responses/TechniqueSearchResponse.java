@@ -1,4 +1,4 @@
-package se.umu.cs.pvt.search.interfaces;
+package se.umu.cs.pvt.search.interfaces.responses;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +33,21 @@ public class TechniqueSearchResponse implements SearchResponseInterface {
         return beltColors;
     }
 
-    public void addBeltColor(String belt_color, String belt_name, Boolean is_child) {
-        if(belt_color != null) beltColors.add(new ColorObject(belt_color, belt_name, is_child));
+	/**
+	 * Adds a belt colour to the technique
+	 * @param belt_color_code Hexdecimal representation of belt colour to add
+	 * @param belt_name Name of belt to add
+	 * @param is_child If belt to add is a child belt
+	 */
+    public void addBeltColor(String belt_color_code, String belt_name, Boolean is_child) {
+        if(belt_color_code != null) beltColors.add(new ColorObject(belt_color_code, belt_name, is_child));
     }
 
+	/**
+	  * Private class representing a techniques belt colour.
+      *
+	  * @author Minotaur (James Eriksson)
+	 */
     private class ColorObject {
         private String belt_color;
         private String belt_name;

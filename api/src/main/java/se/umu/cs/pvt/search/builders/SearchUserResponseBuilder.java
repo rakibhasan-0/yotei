@@ -1,7 +1,7 @@
 package se.umu.cs.pvt.search.builders;
 
 import se.umu.cs.pvt.search.interfaces.UserDBResult;
-import se.umu.cs.pvt.search.interfaces.UserSearchResponse;
+import se.umu.cs.pvt.search.interfaces.responses.UserSearchResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +9,9 @@ import java.util.List;
 /**
  * This class builds a list of {@link UserSearchResponse UserSearchResponses}
  * based on the given list of {@link UserDBResult UserDBResults}.
+ * 
+ * @author Chimera (Ludvig Larsson)
+ * 
  */
 public class SearchUserResponseBuilder {
     private List<UserDBResult> userDBResultList;

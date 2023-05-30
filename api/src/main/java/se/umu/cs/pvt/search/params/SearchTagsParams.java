@@ -1,4 +1,4 @@
-package se.umu.cs.pvt.search;
+package se.umu.cs.pvt.search.params;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -10,11 +10,14 @@ import java.util.Map;
 /**
  * This class stores the urlQuery in attributes.
  *
- * @author Kraken (Jonas Gustavsson)
- * date: 2023-05-04
+ * @author Kraken (Jonas Gustavsson) 2023-05-04
+ * @author Kraken (Oskar Westerlund Holmgren) 2023-05-30
+ * 
+ * @version 2.0
  */
 public class SearchTagsParams {
-    private int amount;
+	// Use 3 as default number if nothing is specified in query.
+    private int amount = 3;
     private String name;
     private List<String> tags;
 
@@ -29,12 +32,9 @@ public class SearchTagsParams {
 			name = urlQuery.get("name");
 		}
 
+		// If tag amount is specified in query use it, else use deafult.
         if (urlQuery.get("tagAmount") != null) {
             amount = Integer.parseInt(urlQuery.get("tagAmount"));
-        }
-        else {
-            // Use 3 as default number if not specified
-            amount = 3;
         }
 
         if (urlQuery.containsKey("tags")){

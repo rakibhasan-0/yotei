@@ -1,4 +1,4 @@
-package se.umu.cs.pvt.search.interfaces;
+package se.umu.cs.pvt.search.interfaces.responses;
 
 /**
  * This class represents the User object returned

@@ -1,7 +1,10 @@
 package se.umu.cs.pvt.search;
 
 import org.junit.jupiter.api.Test;
-import se.umu.cs.pvt.search.interfaces.SearchResponseInterface;
+
+import se.umu.cs.pvt.search.fuzzy.Fuzzy;
+import se.umu.cs.pvt.search.interfaces.responses.SearchResponseInterface;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

@@ -1,9 +1,7 @@
 package se.umu.cs.pvt.search.builders;
 
 import se.umu.cs.pvt.search.interfaces.TechniqueDBResult;
-import se.umu.cs.pvt.search.interfaces.TechniqueSearchResponse;
-import se.umu.cs.pvt.search.interfaces.WorkoutDBResult;
-import se.umu.cs.pvt.search.interfaces.WorkoutSearchResponse;
+import se.umu.cs.pvt.search.interfaces.responses.TechniqueSearchResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +10,9 @@ import java.util.List;
 /**
  * This class builds a list of {@link TechniqueSearchResponse TechniqueSearchResponses}
  * based on the given list of {@link TechniqueDBResult TechniqueDBResults}.
+ * 
+ * @author Minotaur (James Eriksson)
+ * 
  */
 public class SearchTechniqueResponseBuilder {
     private List<TechniqueDBResult> techniqueDBResultList;

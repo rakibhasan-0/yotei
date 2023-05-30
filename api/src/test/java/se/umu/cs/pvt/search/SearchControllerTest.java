@@ -17,13 +17,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import se.umu.cs.pvt.search.builders.SearchTechniquesDBBuilder;
-import se.umu.cs.pvt.search.interfaces.ExerciseSearchResponse;
-import se.umu.cs.pvt.search.interfaces.TagSearchResponse;
-import se.umu.cs.pvt.search.interfaces.TechniqueSearchResponse;
-import se.umu.cs.pvt.search.interfaces.UserSearchResponse;
-import se.umu.cs.pvt.search.interfaces.WorkoutSearchResponse;
+import se.umu.cs.pvt.search.interfaces.responses.ExerciseSearchResponse;
+import se.umu.cs.pvt.search.interfaces.responses.TagSearchResponse;
+import se.umu.cs.pvt.search.interfaces.responses.TechniqueSearchResponse;
+import se.umu.cs.pvt.search.interfaces.responses.UserSearchResponse;
+import se.umu.cs.pvt.search.interfaces.responses.WorkoutSearchResponse;
+import se.umu.cs.pvt.search.params.SearchTechniquesParams;
 import se.umu.cs.pvt.search.persistance.SearchRepository;
-import se.umu.cs.pvt.search.persistance.TagCompleteRepository;
+import se.umu.cs.pvt.search.responses.SearchResponse;
+import se.umu.cs.pvt.search.responses.TagResponse;
 
 /**
  * Test class for SearchController endpoint
@@ -37,8 +39,6 @@ public class SearchControllerTest {
 
     @MockBean
     private SearchRepository searchRepository;
-    @MockBean
-    private TagCompleteRepository tagCompleteRepository;
 
     @Autowired
     private SearchController controller;
@@ -47,8 +47,7 @@ public class SearchControllerTest {
     void search_techniques_should_return_ok() {
         DatabaseQuery query = new SearchTechniquesDBBuilder(new SearchTechniquesParams(new HashMap<>())).build();
         when(searchRepository.getTechniquesFromCustomQuery(query.getQuery())).thenReturn(List.of());
-        when(tagCompleteRepository.completeTag("",new ArrayList<String>())).thenReturn(new ArrayList<String>());
-        SearchController searchController = new SearchController(searchRepository, tagCompleteRepository);
+        SearchController searchController = new SearchController(searchRepository);
 
         ResponseEntity<SearchResponse<TechniqueSearchResponse>> response = searchController.searchTechniques(new HashMap<>());
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);

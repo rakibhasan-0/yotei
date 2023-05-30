@@ -2,6 +2,7 @@ package se.umu.cs.pvt.search;
 
 import org.junit.jupiter.api.Test;
 import se.umu.cs.pvt.search.builders.SearchExerciseDBBuilder;
+import se.umu.cs.pvt.search.params.SearchExerciseParams;
 
 import java.util.HashMap;
 import java.util.Map;

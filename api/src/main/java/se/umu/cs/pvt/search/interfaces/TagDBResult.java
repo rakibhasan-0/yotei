@@ -3,6 +3,9 @@ package se.umu.cs.pvt.search.interfaces;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+
+import se.umu.cs.pvt.search.interfaces.responses.SearchResponseInterface;
+
 import java.io.Serializable;
 
 /**

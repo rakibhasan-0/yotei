@@ -9,6 +9,7 @@ package se.umu.cs.pvt.search.enums;
 public enum TagType {
 	workout_tag,
 	technique_tag,
-	exercise_tag
+	exercise_tag,
+	none
   }
   

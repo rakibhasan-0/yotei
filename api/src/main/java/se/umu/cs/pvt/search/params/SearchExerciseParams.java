@@ -1,4 +1,4 @@
-package se.umu.cs.pvt.search;
+package se.umu.cs.pvt.search.params;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -13,6 +13,10 @@ import java.util.Map;
  * @author Kraken (Jonas Gustavsson)
  * @author Minotaur (James Eriksson)
  * @author Kraken (Fardis Namez)
+ * @author Kraken (Oskar Westerlund Holmgren) 2023-05-30
+ * 
+ * @version 2.0
+ * 
  */
 public class SearchExerciseParams {
     private String name;

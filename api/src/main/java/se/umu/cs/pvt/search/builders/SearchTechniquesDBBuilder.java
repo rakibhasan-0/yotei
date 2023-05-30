@@ -1,8 +1,8 @@
 package se.umu.cs.pvt.search.builders;
 
 import se.umu.cs.pvt.search.DatabaseQuery;
-import se.umu.cs.pvt.search.SearchTechniquesParams;
 import se.umu.cs.pvt.search.interfaces.SearchDBBuilderInterface;
+import se.umu.cs.pvt.search.params.SearchTechniquesParams;
 
 import java.util.ArrayList;
 import java.util.List;

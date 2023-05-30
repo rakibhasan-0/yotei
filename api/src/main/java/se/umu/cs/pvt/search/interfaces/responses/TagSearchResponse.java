@@ -1,11 +1,11 @@
-package se.umu.cs.pvt.search.interfaces;
+package se.umu.cs.pvt.search.interfaces.responses;
 
 /**
  * This class represents the Exercise object returned
  * from the API.
  *
- * @author (Kraken) Jonas Gustavsson
- * date: 2023-05-04
+ * @author (Kraken) Jonas Gustavsson 2023-05-04
+ * 
  */
 public class TagSearchResponse implements SearchResponseInterface{
     private Long id;

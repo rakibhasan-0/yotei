@@ -1,9 +1,7 @@
-package se.umu.cs.pvt.search;
+package se.umu.cs.pvt.search.responses;
 
-import se.umu.cs.pvt.search.interfaces.SearchResponseInterface;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * This class bundles together a list of results and a list of tags.
