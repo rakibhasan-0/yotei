@@ -172,7 +172,7 @@ function EditGroup() {
 				setIsOpen={setConfirmationOpen}
 				style={{height: "310px", width: "90vw", maxWidth: "400px", paddingTop: "4rem"}}
 			>
-				<h1>Är du säker att du vill radera denna grupp?</h1>
+				<h1>Är du säker på att du vill ta bort denna grupp?</h1>
 				<p>Samtliga tillfällen kopplade till denna grupp kommer tas bort. Denna åtgärd går inte att ångra.</p>
 
 				<div className={styles.buttonContainer}>
@@ -188,7 +188,7 @@ function EditGroup() {
 						width="100%"
 						onClick={handleDelete}
 					>
-						<p>Radera grupp</p>
+						<p>Ta bort grupp</p>
 					</Button>
 				</div>
 			</Popup>
