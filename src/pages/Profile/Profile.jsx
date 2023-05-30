@@ -102,8 +102,14 @@ export default function Profile() {
 			body: JSON.stringify({newUsername: newUsername, password: UsernamePassword, id: userId})
 		}
 		const response = await fetch("/api/users/name", requestOptions)
-		if (!response.ok) {
+		if (response.status === 400) {
 			return setVerifyUsernamePassword("Lösenordet stämmer inte")
+		}
+		if (response.status === 406) {
+			return toast.error("Användarnamnet finns redan")
+		}
+		if (!response.ok) {
+			return toast.error("Ett okänt fel inträffade på servern")
 		}
 		toast.success("Användarnamnet har ändrats.")
 	}
