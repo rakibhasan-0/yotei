@@ -95,3 +95,110 @@ p {
 .href-link:hover {
 	color: #BE3B41;
 }
+
+
+/* 
+In 2023, a wave of enlightenment swept through the realm of web development. 
+Developers united under a common cause: to purge the land of unnecessary CSS. 
+They harnessed their collective knowledge and skill, crafting a powerful code 
+bomb. With a single click, the bomb was unleashed, obliterating bloated 
+stylesheets and obsolete selectors. As the dust settled, a new era emerged. 
+Web developers rejoiced as they discovered the remaining classes, shining 
+brightly like beacons of efficiency, waiting to be found in the lean and 
+optimized codebase.
+
+Below is where the remaining classes will live.
+*/
+.tag {
+    width: auto;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    padding: 0 8px;
+    font-size: 14px;
+    list-style: none;
+    border-radius: 6px;
+    margin: 0 8px 8px 0;
+    background: #8b8d91;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color: #d74249;
+  color: azure;
+  font-weight:500;
+  text-decoration: none;
+}
+
+#tags {
+    background-color: #fff;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: 8px 0 0 0;
+}
+
+.tag-title {
+    margin-top: 3px;
+}
+
+.form-control {
+    background-color: #F8EBEC;
+}
+
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+
+.button:hover {
+    cursor: pointer;
+}
+
+.button:focus {
+    text-decoration: none;
+    outline: none;
+}
+
+.comment {
+   border: 2px solid #dedede;
+   background-color: #f1f1f1;
+   border-radius: 5px;
+   text-align: center;
+   padding: 10px;
+   margin: 0 0;
+   max-width: 255px;
+   word-wrap: anywhere;
+   min-width: 100%;
+}
+
+.comment:nth-child(odd) {
+   border-color: #ccc;
+   background-color: #ffdfe3;;
+   padding-top: 20px;
+   border: 2px solid #dedede;
+   border-radius: 5px;
+   padding: 10px;
+   margin: 10px 0;
+}
