@@ -55,7 +55,7 @@ export default function ActivityDelete({ id, activityID, name, setIsOpen, what }
 	
 	async function fetchAssociatedWorkouts(activityID, token) {
 
-		const endpoint = isTechnique() ? "technique/" : "workouts/"
+		const endpoint = isTechnique() ? "technique/" : "exercise/"
 		const url = "/api/workouts/associated/" + endpoint + activityID
 		const requestOptions = {
 			method: "GET",
