@@ -43,7 +43,6 @@ export default function ExerciseIndex() {
 	const [map, mapActions] = useMap()
 	const [sort, setSort] = useState(sortOptions[0])
 	const [loading, setIsLoading] = useState(true)
-	const accountRole = useContext(AccountContext)
 
 	useEffect(() => {
 		const filterCookie = cookies["exercise-filter"]
@@ -57,7 +56,7 @@ export default function ExerciseIndex() {
 		setPopupVisible(false)
 	}, [])
 
-	useEffect(setExerciseList, [exercises, sort])
+	useEffect(setExerciseList, [exercises, sort, searchText])
 
 	useEffect(() => {
 		if (popupVisible === true) {
@@ -85,9 +84,13 @@ export default function ExerciseIndex() {
      */
 	function setExerciseList() {
 		setCookie("exercise-filter", {tags: addedTags, sort: sort.label}, {path: "/"})
-		if(exercises) {
+		if(exercises && searchText == "") {
 			const sortedList = [...exercises].sort(sort.cmp)
 			setVisibleList(sortedList)
+		}
+		else {
+			const temp = [...exercises ?? []]
+			setVisibleList(temp)
 		}
 	}
 	
@@ -136,7 +139,7 @@ export default function ExerciseIndex() {
 
 			<br/><br/><br/><br/>
 
-			{isEditor(accountRole) && 
+			{isEditor(context) && 
 			<RoundButton linkTo={null} onClick={() => setPopupVisible(true)} id={"exercise-round-button"}  style={{maxWidth: "5px"}}>
 				<Plus/>
 			</RoundButton>
