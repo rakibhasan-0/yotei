@@ -47,21 +47,23 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	 */
 	const getMedia = useCallback(async () => {
 		
-		const requestOptions = {
-			method: "GET",
-			headers: { "Content-type": "application/json", "token": context.token },
-		}
-		try {
-			const response = await fetch(`/api/media/${exerciseId}`, requestOptions)
-
-			if (response.ok) {
-				const data =  await response.json()
-				setMedia(data) 
-			} else {
-				setMedia([])
+		if (exerciseId !== "") {
+			const requestOptions = {
+				method: "GET",
+				headers: { "Content-type": "application/json", "token": context.token },
 			}
-		} catch (error) {
-			console.log(error)
+			try {
+				const response = await fetch(`/api/media/${exerciseId}`, requestOptions)
+
+				if (response.ok) {
+					const data =  await response.json()
+					setMedia(data) 
+				} else {
+					setMedia([])
+				}
+			} catch (error) {
+				console.log(error)
+			}
 		}
 	}, [context.token, exerciseId])
 
