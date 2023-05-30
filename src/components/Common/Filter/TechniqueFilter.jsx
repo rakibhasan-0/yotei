@@ -14,9 +14,17 @@ import style from "./TechniqueFilter.module.css"
  *		onBeltChange	@type {function} 	- Function for setting the selected belts.
  *		kihon			@type {object} 		- True/False if the kihon checkbox has been selected or not.
  *		onKihonChange 	@type {function} 	- Function for setting the kihon boolean uppon selection.
+ *		onClearBelts	@type {function}	- Function to run when the clear belts button is pressed.
  *
  * Example usage: 
- * 		<TechniqueFilter belts={selectedBelts} setBelts={setSelectedBelts} kihon={kihon} setKihon= {setKihon}/>
+ * 		<TechniqueFilter
+ *			belts={belts}
+ *			onBeltChange={handleBeltChanged}
+ *			kihon={kihon}
+ *			onKihonChange={handleKihonChanged}
+ *			id="testTechniqueFilter"
+ *			onClearBelts={clearSelectedBelts}>
+ *		</TechniqueFilter>
  *
  * @author Kraken (Grupp 7)
  * @version 1.1
@@ -37,7 +45,6 @@ export default function TechniqueFilter({id, belts, onBeltChange, kihon, onKihon
 						<BeltIcon key={index} belt={belt}/>
 					))}
 				</div>
-				
 				<div className={style.kihonGroup}>
 					<CheckBox id={"techniqueFilter-KihonCheck"} checked={kihon} onClick={()=> onKihonChange(!kihon)}/>
 					<p className={style.kihonText}>Kihon</p>

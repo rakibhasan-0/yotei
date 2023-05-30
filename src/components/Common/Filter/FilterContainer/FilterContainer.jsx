@@ -9,10 +9,11 @@ import { Sliders } from "react-bootstrap-icons"
  * 
  * Props:
  *		id 			@type {string}  	- The id of the component, mostly used for testing.
+ *		title		@type {string}		- The title of the filter box.
  *		children	@type {component}	- The components that will appear inside of the filter box.
  *
  * Example usage:
- * 		<FilterContainer id={"filter-container"}>
+ * 		<FilterContainer id={"filter-container"} title={"testFilter"}>
  *			<div className="kihon-group">
  *				<CheckBox checked={kihon} onClick={()=> onKihonChange(!kihon)}/>
  *				<p className="kihon-text">Kihon</p>
@@ -21,7 +22,7 @@ import { Sliders } from "react-bootstrap-icons"
  *
  * @author Kraken (Grupp 7)
  * @version 1.0
- * @since 2023-05-04
+ * @since 2023-05-30
  */
 function FilterContainer({ id, title ,children}) {
 	const [active, setActive] = useState(false)

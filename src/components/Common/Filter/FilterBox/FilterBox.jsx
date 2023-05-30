@@ -4,7 +4,8 @@ import React from "react"
  * The component that represent the box that will contain the filter options.
  * 
  * Props:
- *		id 			@type {string}  	- The id of the component.
+ *		id 			@type {string}  	- The id of the component
+ *		title		@type {string}		- The title of the filter box.
  *		status 		@type {object} 		- A bool if the box should be shown or not.
  *		children 	@type {component} 	- The components that will appear inside of the filter box.
 
