@@ -30,12 +30,12 @@ import style from "./TechniqueFilter.module.css"
  * @version 1.1
  * @since 2023-05-24
  */
-export default function TechniqueFilter({id, belts, onBeltChange, kihon, onKihonChange, onClearBelts}){
+export default function TechniqueFilter({id, belts, onBeltChange, kihon, onKihonChange, onClearBelts, filterWhiteBelt}){
 	return (
 		<div id={id} className={style.filterPos}>
 			<FilterContainer id={"technique-filter-container"}>
 				<div className={style.techniqueBeltPicker}>
-					<BeltPicker id={"techniqueFilter-BeltPicker"} onToggle={onBeltChange} states={belts} onClearBelts={onClearBelts} />
+					<BeltPicker id={"techniqueFilter-BeltPicker"} onToggle={onBeltChange} states={belts} onClearBelts={onClearBelts} filterWhiteBelt={filterWhiteBelt} />
 				</div>
 				<p className={(belts.length > 0) ? style.selectedTextVis : style.selectedTextHid }>
 					{(belts.length > 0) ? "Valda bälten" : ""}

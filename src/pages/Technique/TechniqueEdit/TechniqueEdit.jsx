@@ -184,7 +184,8 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 			<BeltPicker
 				id="techniqueEditBeltpicker"
 				onToggle={onToggle}
-				states={belts}>
+				states={belts}
+				filterWhiteBelt={true}>
 			</BeltPicker>
 
 			<Divider title="Taggar" option="h2_left"/>

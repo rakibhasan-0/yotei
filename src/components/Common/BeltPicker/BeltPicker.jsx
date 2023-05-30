@@ -94,7 +94,7 @@ const BeltRow = ({ belt, states, onToggle }) => {
  * @param onToggle A toggle function when a belt is selected (both child and adult)
  * @returns A new belt picker component
  */
-export default function BeltPicker({ id, states, onToggle, centered, onClearBelts }) {
+export default function BeltPicker({ id, states, onToggle, centered, onClearBelts, filterWhiteBelt }) {
 	const { token } = useContext(AccountContext)
 	const [belts, setBelts] = useState()
 	const [rerender, setRerender] = useState(false)
@@ -112,6 +112,12 @@ export default function BeltPicker({ id, states, onToggle, centered, onClearBelt
 				groups[belt.name].push(belt)
 			}
 			setBelts(groups)
+			if (filterWhiteBelt) {
+				setBelts(prev => {
+					const {Vitt, ...rest} = prev // eslint-disable-line
+					return rest
+				})
+			}
 		}).catch(ex => {
 			toast.error("Kunde inte hämta bälten")
 			console.error(ex)

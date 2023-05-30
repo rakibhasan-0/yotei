@@ -202,6 +202,7 @@ export default function CreateTechnique({ id, setIsOpen }) {
 				id="create-technique-beltpicker"
 				onToggle={onToggle}
 				states={belts}
+				filterWhiteBelt={true}
 			/>
 			<div style={{ height: "1rem" }} />
 

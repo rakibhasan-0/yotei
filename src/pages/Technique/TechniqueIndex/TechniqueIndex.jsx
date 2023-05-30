@@ -109,7 +109,8 @@ export default function TechniqueIndex() {
 						kihon={kihon}
 						onKihonChange={handleKihonChanged}
 						id="test"
-						onClearBelts={clearSelectedBelts}>
+						onClearBelts={clearSelectedBelts}
+						filterWhiteBelt={true}>
 					</TechniqueFilter>
 				</div>
 

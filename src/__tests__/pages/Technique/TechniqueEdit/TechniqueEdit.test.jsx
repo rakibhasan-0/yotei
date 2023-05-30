@@ -261,12 +261,12 @@ describe("verify that", () => {
 
 		await user.click(screen.getByTestId("technique-edit-button"))
 		await user.click(screen.getByText("Bälten"))
-		await user.click(screen.getByTestId("belt-adult-Vitt"))
+		await user.click(screen.getByTestId("belt-adult-Gult"))
 		await user.click(screen.getByText("Spara"))
 
 		await waitFor(() => {
 			// The belt "adult white" with id 1 should be found in belts
-			expect(technique.belts.find(b => b.id === 1)).toBeTruthy()
+			expect(technique.belts.find(b => b.id === 3)).toBeTruthy()
 		})
 
 	})
