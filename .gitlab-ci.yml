@@ -68,8 +68,7 @@ publish_database_image:
     - apk update && apk add jq
     - docker login -u "$DOCKER_CLIENT" -p "$DOCKER_SECRET"
   script:
-    - docker load < /images/db-$FEATURE.tar
-    - docker tag $CONTAINER_REPOSITORY/database:latest $CONTAINER_REPOSITORY/database:latest
+    - docker build -t $CONTAINER_REPOSITORY/database:latest database
     - docker tag $CONTAINER_REPOSITORY/database:latest $CONTAINER_REPOSITORY/database:$VERSION
     - docker push $CONTAINER_REPOSITORY/database:latest
     - docker push $CONTAINER_REPOSITORY/database:$VERSION
