@@ -310,7 +310,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 				<div className="col-sm-12 text-center ">
 					<Carousel showThumbs={false} showStatus={false}>                         
 						{pictures.map((image, index) => (
-							<div key={index} style={{backgroundColor : "var(--black-primary)"}}  className="d-flex flex-column justify-content-center">
+							<div key={index} style={{backgroundColor : "var(--black-primary)"}}  className="d-flex flex-column justify-content-center align-items-center">
 								<Image id={`${image.id}-image`} path={image.url} />
 								{RemoveButton(image)}
 							</div>
