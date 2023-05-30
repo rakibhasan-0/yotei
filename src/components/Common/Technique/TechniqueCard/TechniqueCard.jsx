@@ -1,5 +1,6 @@
 import { ChevronDown } from "react-bootstrap-icons"
 import "./TechniqueCard.css"
+import { Link } from "react-router-dom"
 
 /**
  * Technique card component.
@@ -21,32 +22,23 @@ function TechniqueCard({ technique, checkBox, id }) {
 			{constructColor(technique)}
 
 			<div className="technique-info-container">
-
-				{checkBox ? 
-					<div className="technique-checkbox-container">
-						{checkBox}
-					</div>
-					:
-					null
-				}
-
+				{checkBox ? (
+					<div className="technique-checkbox-container">{checkBox}</div>
+				) : null}
 
 				<div className="technique-name-container">
-					<a href={"/technique/technique_page/" + technique.techniqueID}>
-						<h5 className="technique-name">{technique.name}</h5>	
-					</a>
+					<Link to={"/technique/technique_page/" + technique.techniqueID}>
+						<h5 className="technique-name">{technique.name}</h5>
+					</Link>
 				</div>
 
 				<div className="technique-arrow-container">
-					<a href={"/technique/technique_page/" + technique.techniqueID}>
+					<Link to={"/technique/technique_page/" + technique.techniqueID}>
 						<ChevronDown />
-					</a>
+					</Link>
 				</div>
-				
-
 			</div>
 		</div>
-
 	)
 }
 

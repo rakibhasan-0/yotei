@@ -103,8 +103,6 @@ export function workoutCreateReducer(state, action) {
 		const workoutData = action.payload.workoutData
 		const userData = action.payload.userData
 
-		console.log(workoutData)
-
 		const activityItems = workoutData.activityCategories.map(activityItem => {
 			const activities = activityItem.activities.map(activity => {
 				return {
@@ -117,9 +115,21 @@ export function workoutCreateReducer(state, action) {
 				}
 			})
 
-			return {
-				id: tempState.numCategories++,
+			let category = {
 				name: activityItem.categoryName,
+				checked: false,
+			}
+			let categoryId = null
+			if(tempState.addedCategories.find(cat => cat.name === category.name)){
+				categoryId = tempState.addedCategories.find(cat => cat.name === category.name).id
+			} else {
+				categoryId = tempState.numCategories++
+				tempState.addedCategories.push({ id: categoryId, name: category.name, checked: false })
+			}
+
+			return {
+				id: categoryId,
+				name: category.name,
 				activities,
 			}
 		})
@@ -328,25 +338,26 @@ export function workoutCreateReducer(state, action) {
 	}
 	case "CHECK_CATEGORY_BY_ID": {
 		const id = action.payload.id
-		tempState.addedCategories.forEach((category) => {
-			
-			if(category.id === id) {
-				category.checked = true
-			}
-			else {
-				category.checked = false
-			}
-		})
+		tempState.addedCategories.forEach((category) => category.checked = category.id === id)
 		return tempState
 	}
-	case "ADD_CATEGORY":
-		tempState.addedCategories.push(action.payload)
+	case "ADD_CATEGORY": {
+		// Can't add a category with the same name
+		if (tempState.addedCategories.some(c => c.name === action.payload.name)) return tempState
+
+		const category = {
+			id: tempState.numCategories++,
+			...action.payload,
+		}
+
+		tempState.addedCategories.push(category)
 		tempState
 		tempState.addedCategories.forEach(category => {
 			category.checked = false
 		})
 		tempState.addedCategories[tempState.addedCategories.length - 1].checked = false
 		return tempState
+	}
 	case "UPDATE_ACTIVITY_NAME":
 		tempState.addedActivities[action.payload.index].name = action.payload.name
 		return tempState
