@@ -6,6 +6,7 @@ import {render, configure, screen} from "@testing-library/react"
 //import ExerciseCreate from "../../pages/Exercise/ExerciseCreate"
 import ExerciseIndex from "../../pages/Exercise/ExerciseIndex"
 import { MemoryRouter } from "react-router-dom"
+import { AccountContext } from "../../context"
 
 
 configure({testIdAttribute: "id"})
@@ -80,9 +81,11 @@ describe("ExerciseIndex should render with all components", () => {
 
 	beforeEach(() => {
 		render( //eslint-disable-line
-			<MemoryRouter>
-				<ExerciseIndex />
-			</MemoryRouter>
+			<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "" }}>
+				<MemoryRouter>
+					<ExerciseIndex />
+				</MemoryRouter>
+			</AccountContext.Provider>
 		)
 	})
 

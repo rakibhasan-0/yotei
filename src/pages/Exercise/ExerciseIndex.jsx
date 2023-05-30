@@ -14,6 +14,7 @@ import Sorter from "../../components/Common/Sorting/Sorter"
 import ExerciseCard from "../../components/Common/ExerciseCard/ExerciseListItem"
 import InfiniteScrollComponent from "../../components/Common/List/InfiniteScrollComponent"
 import Spinner from "../../components/Common/Spinner/Spinner"
+import { isEditor } from "../../utils"
 
 /**
  * Displays a searchbar, a sorter and a list of exercises.
@@ -42,7 +43,8 @@ export default function ExerciseIndex() {
 	const [map, mapActions] = useMap()
 	const [sort, setSort] = useState(sortOptions[0])
 	const [loading, setIsLoading] = useState(true)
-	
+	const accountRole = useContext(AccountContext)
+
 	useEffect(() => {
 		const filterCookie = cookies["exercise-filter"]
 		if(filterCookie) {
@@ -122,9 +124,11 @@ export default function ExerciseIndex() {
 
 			<br/><br/><br/><br/>
 
+			{isEditor(accountRole) && 
 			<RoundButton linkTo={null} onClick={() => setPopupVisible(true)} id={"exercise-round-button"}  style={{maxWidth: "5px"}}>
 				<Plus/>
 			</RoundButton>
+			}
 
 			<Popup
 				title={"Skapa övning"}
