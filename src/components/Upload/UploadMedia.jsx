@@ -71,7 +71,6 @@ function UploadMedia({id, exerciseId, fetchMediaMetaToBeUploaded, fetchMediaFile
 		try {
 
 			const response = await fetch("/api/media/upload", requestOptions)
-
 			if (response.ok) {
 				responseData =  await response.json()
 
@@ -134,9 +133,7 @@ function UploadMedia({id, exerciseId, fetchMediaMetaToBeUploaded, fetchMediaFile
 	 * @param {String} text 
 	 */
 	const setErrorToast = (text) => {
-		if(!toast.isActive("error-toast")){
-			toast.error(text, {toastId: "error-toast"})
-		}
+		toast.error(text, {toastId: "error-toast"})
 	}
 
 	/**
@@ -184,11 +181,13 @@ function UploadMedia({id, exerciseId, fetchMediaMetaToBeUploaded, fetchMediaFile
 					<Button width={"100%"}>
 						Välj Fil
 					</Button>
-					<input className="media-file-input" type="file" onChange={onFileChange} />
+					<input className="media-file-input" type="file" id="choose-file" onChange={onFileChange} />
 				</div>
 				<Button onClick={uploadMediaClicked}
 					width={"100%"}
-					disabled={!hasFile}>
+					disabled={!hasFile}
+					id="upload-file-button"
+				>
 					<div className="upload-media-btn">
 						<UploadIcon size="15%"/> 
 						Ladda Upp Media
