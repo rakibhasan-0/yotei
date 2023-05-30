@@ -153,8 +153,8 @@ function UploadMedia({id, exerciseId, fetchMediaMetaToBeUploaded, fetchMediaFile
 					<p className="file-detail">Namn: {selectedFile.name}</p>
 					<p className="file-detail">Typ: {selectedFile.type}</p>
 					<p className="file-detail">
-                    Senast ändrad:{" "}
-						{selectedFile.lastModifiedDate.toDateString()}
+                    Storlek:{" "}
+						{selectedFile.size > 1048576 ? Math.ceil(selectedFile.size/1048576).toString() +"mB" : Math.ceil(selectedFile.size/1924).toString() +"kB" }
 					</p>
 	
 				</div>
