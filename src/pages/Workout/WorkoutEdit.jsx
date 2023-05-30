@@ -52,6 +52,7 @@ const WorkoutEdit = () => {
 	 * @returns The parsed data.
 	 */
 	function parseData(data) {
+
 		let totDuration = 0
 		data.activityItems.forEach(category => {
 			category.activities.forEach(activity=> {
@@ -74,11 +75,18 @@ const WorkoutEdit = () => {
 					order: activityOrder,
 				}
 
-				if (activity.techniqueId) {
+				if(activity.technique) {
+					obj.techniqueId = activity.technique.id
+				} else if (activity.techniqueId) {
 					obj.techniqueId = activity.techniqueId
-				} else if (activity.exerciseId){
+				}
+
+				if(activity.exercise) {
+					obj.exerciseId = activity.exercise.id
+				} else if (activity.exerciseId) {
 					obj.exerciseId = activity.exerciseId
 				}
+
 
 				activities.push(obj)
 			})
@@ -89,7 +97,7 @@ const WorkoutEdit = () => {
 		const todaysDate = date.getFullYear() + "-" + 
 				("0" + (date.getMonth()+1)).slice(-2) + "-" + 
 				("0" + date.getDate()).slice(-2)
-
+		
 		return {
 			workout: {
 				id: data.id,

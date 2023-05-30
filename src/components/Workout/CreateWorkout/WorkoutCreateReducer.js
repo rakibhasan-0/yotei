@@ -112,6 +112,8 @@ export function workoutCreateReducer(state, action) {
 					duration: activity.duration,
 					isEditable: activity.exercise === null && activity.technique === null,
 					description: activity.description,
+					technique: activity.technique,
+					exercise: activity.exercise
 				}
 			})
 
@@ -367,6 +369,7 @@ export function workoutCreateReducer(state, action) {
 		const isFreeText = action.payload.isFreeText
 		const categoryName = tempState.addedCategories.find(category => category.checked).name
 
+
 		let activities = tempState.addedActivities.map(activity => {
 			return {
 				id: activity.id,
@@ -377,6 +380,7 @@ export function workoutCreateReducer(state, action) {
 				techniqueId: isFreeText ? null : activity.techniqueId,
 			}
 		})
+
 			
 		let activityItem
 		if (tempState.data.activityItems.some(item => item.name === categoryName)) {
@@ -391,6 +395,7 @@ export function workoutCreateReducer(state, action) {
 
 			tempState.data.activityItems.push(activityItem)
 		}
+
 
 		tempState.addedActivities = []
 		return tempState
