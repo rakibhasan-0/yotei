@@ -19,26 +19,27 @@ import styles from "./WorkoutToPrint.module.css"
 const WorkoutToPrint = ({ workoutData }) => {
 
 	/**
-	 * The sortByCategories function sorts the activity categories in the correct order.
+	 * Takes in an array, and returns 
+	 * an array of arrays according to the
+	 * specified size.
 	 * 
-	 * @param {Object} workoutData - The object containing information about the workout.
-	 * @returns {Array} - Returns the sorted activity categories.
+	 * @param {Array} list 
+	 * @param {Number} size 
 	 */
-	function sortByCategories(workoutData) {
-		const sortedCategories = workoutData.activityCategories.sort((a, b) => a.categoryOrder - b.categoryOrder)
-		return sortedCategories
+	const chunk = (list, size) => {
+		const chunkedList = []
+		for (let i = 0; i < list.length; i += size) {
+			chunkedList.push(list.slice(i, i + size))
+		}
+		return chunkedList
 	}
+
+	const sorted = workoutData.activityCategories
+		.sort((a, b) => a.categoryOrder - b.categoryOrder)
+	const chunks = chunk(sorted, 2)
 
 	return (
 		<>
-			<style>
-				{`
-			  @page {
-				margin: 2cm;
-				size: A4;
-			  }
-			`}
-			</style>
 			<div className={styles.WorkoutToPrintContainer}>
 				<div className={styles.WorkoutToPrintRowItem}>
 					<div className={styles.WorkoutToPrintColumnItem}>
@@ -72,35 +73,28 @@ const WorkoutToPrint = ({ workoutData }) => {
 						<p className={styles.WorkoutToPrintProperties} style={{ fontSize: "20px"}}>{workoutData?.description}</p>
 					</div>
 				</div>
-				{sortByCategories(workoutData).map((activityCategory) => (
-					<div className="category" key={activityCategory?.categoryOrder}>
-						<div className={styles.WorkoutToPrintRowItem}>
-							<div className={styles.WorkoutToPrintColumnItem}>
-								<h2 className="font-weight-bold mb-0" style={{ fontSize: "36px"}}>{activityCategory?.categoryName}</h2>
-							</div>
-						</div>
-						{activityCategory.activities &&
-						activityCategory.activities
-							.sort((a, b) => a.order - b.order)
-							.map((activity) => (
-								<div className="activity" key={activity.id}>
-									<div className={styles.WorkoutToPrintRowItem}>
-										<div className={styles.WorkoutToPrintColumnItem}>
-											<h4 style={{ fontSize: "32px"}}>{activity?.name}</h4>
-										</div>
-										<div className={`${styles.WorkoutToPrintColumnItem} ${styles.WorkoutToPrintColumnItemRight}`}>
-											<p style={{ fontSize: "20px"}}>{activity?.duration} min</p>
-										</div>
-									</div>
-									<div className={styles.WorkoutToPrintRowItem} style={{ marginBottom: "20px" }}>
-										<div className="WorkoutToPrint-column-item">
-											<p style={{ fontSize: "20px", textAlign: "left"}}>{activity.exercise?.description}</p>
-										</div>
+				<div className={`${styles.details} container text-left`}>
+					{chunks.map((chunk, row) => (
+						<div className="row my-4" key={`${row}-row`}>
+							{chunk.map((category, col) => (
+								<div className="position-relative col border border-secondary rounded mx-1 pb-2" key={`${row}-${col}-col`}>
+									<p className={styles.categoryTitle}>{category.categoryName}</p>
+									<div className={category.categoryName ? "mt-3" : "mt-1"}>
+										{category.activities?.map((activity, index) => (
+											<div className="mt-1 px-2" key={index} style={{backgroundColor: index % 2 ? "#F8EBEC" : "white"}}>
+												<div className="d-flex justify-content-between">
+													<p>{activity.name}</p>
+													<p>{activity.duration} min</p>
+												</div>
+												<p style={{color: "gray"}}>{activity.exercise?.description}</p>
+											</div>
+										))}
 									</div>
 								</div>
 							))}
-					</div>
-				))}
+						</div>
+					))}
+				</div>
 			</div>
 		</>
 	)
