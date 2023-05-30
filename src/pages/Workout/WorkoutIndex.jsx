@@ -97,7 +97,7 @@ export default function WorkoutIndex() {
 				</center>
 			</div>
 			{workouts.length !== 0 ?
-				<div className="grid-striped">
+				<div className="grid-striped" style={{marginBottom: "120px"}}>
 					{workouts.map((workout) => {
 						return (
 							<WorkoutListItem
@@ -110,7 +110,6 @@ export default function WorkoutIndex() {
 				: (loading ? <Spinner/> : <ErrorStateSearch id="error-search"
 					message={searchErrorMessage}/>)
 			}
-			<br/>
 			<RoundButton linkTo="/workout/create">
 				<Plus />
 			</RoundButton>

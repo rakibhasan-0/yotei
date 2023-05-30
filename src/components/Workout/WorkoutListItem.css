@@ -32,6 +32,10 @@ a:hover {
 .workout-text {
 	height: 100%;
 	padding: 20px 5px;
+	overflow-wrap: break-word;
+}
+.hoverable:hover a {
+	color: var(--button-border);
 }
 
 #workout-detail-arrow::before {

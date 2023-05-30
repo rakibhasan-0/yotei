@@ -17,12 +17,14 @@ export default function WorkoutListItem({ workout, favoriteCallback}) {
 			<div className="col-2 workout-star">
 				<FavoriteButton workout={workout} favoriteCallback={favoriteCallback}/>
 			</div>
-			<Link className="col align-items-center align-self-center workout-text fill" to={`/workout/${workout.workoutID}`}>
-				{workout.name}
-			</Link>
-			<Link className="col-2 align-items-center align-self-center workout-text fill" to={`/workout/${workout.workoutID}`}>
-				<i id="workout-detail-arrow" className="bi-chevron-right h4"/>
-			</Link>
+			<div className="row col-10 hoverable">
+				<Link className="col-11 align-items-center align-self-center workout-text fill" to={`/workout/${workout.workoutID}`}>
+					{workout.name}
+				</Link>
+				<Link className="col-1 align-items-center align-self-center workout-text fill" to={`/workout/${workout.workoutID}`}>
+					<i id="workout-detail-arrow" className="bi-chevron-right h4"/>
+				</Link>
+			</div>
 		</div>
 	)
 }
