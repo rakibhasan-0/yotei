@@ -54,70 +54,6 @@ public class ExerciseController {
         this.exerciseRepository = exerciseRepository;
     }
 
-
-    /**
-     * Returns all exercises in the database
-     *
-     * @param sort boolean flag indicating whether to sort by duration or name
-     * @return all exercises
-     */
-    @GetMapping("/all")
-    public Object getExercises(@RequestParam(value = "sort", defaultValue = "nameAsc") String sort) {
-        List<Exercise> exerciseList;
-        Comparator<Exercise> exerciseComparator;
-
-        switch (sort) {
-            case "nameDesc":
-                exerciseComparator = Comparator.comparing(Exercise::getName, getCollator().reversed());
-                break;
-            case "durationAsc":
-                exerciseComparator = Comparator.comparing(Exercise::getDuration);
-                break;
-            case "durationDesc":
-                exerciseComparator = Comparator.comparing(Exercise::getDuration).reversed();
-                break;
-            default:
-                exerciseComparator = Comparator.comparing(Exercise::getName, getCollator());
-        }
-
-        exerciseList = exerciseRepository.findAll();
-        exerciseList.sort(exerciseComparator);
-
-        if (exerciseList == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return exerciseList;
-    }
-
-    private Collator getCollator() {
-        Locale swedishLocale = new Locale("sv", "SE");
-        Collator collator = Collator.getInstance(swedishLocale);
-        collator.setStrength(Collator.SECONDARY); // Adjust the collation strength if needed
-        return collator;
-    }
-
-
-    /**
-     * Retrieves a set amount of exercises from the database, starting from the specified start index.
-     *
-     * @param startIndex the index of the first exercise to retrieve
-     * @return a list of Exercise objects representing the items in the requested range
-     */
-    @GetMapping("/from/{startIndex}")
-    public Object getSetAmountOfExercises(@PathVariable("startIndex") Integer startIndex) {
-        int pageSize = 20;
-        int pageNumber = startIndex / pageSize;
-        Pageable limit = PageRequest.of(pageNumber, pageSize);
-        List<Exercise> exerciseList = exerciseRepository.findAll(limit).toList();
-
-        if (exerciseList == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return exerciseList;
-    }
-
     /**
      * Returns an exercise depending on the id
      *
@@ -138,43 +74,6 @@ public class ExerciseController {
 
         Exercise exercise = exerciseRepository.findById(id).get();
         return exercise;
-    }
-
-    /**
-     * Returns the description and time of specified exercise given an id
-     *
-     * @param id The id to query to the database
-     * @return Description and time for exercise, or if exercise could not be found:
-     * response indicating error.
-     */
-    @GetMapping("/getdesc")
-    public Object getDescription(@RequestParam Long id) {
-        if (id == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        if (!exerciseRepository.existsById(id)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        ExerciseDropDownProjection exercise = exerciseRepository.getExerciseDropDownById(id).get();
-        return exercise;
-    }
-
-    /**
-     * Returns all exercises with only id and name
-     *
-     * @return all exercises, or a response indicating if there is error.
-     */
-    @GetMapping("/all/idname")
-    public Object getExercisesIdName() {
-        List<ExerciseShort> exerciseList = exerciseRepository.findAllProjectedBy(ExerciseShort.class);
-
-        if (exerciseList == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return exerciseList;
     }
 
     /**

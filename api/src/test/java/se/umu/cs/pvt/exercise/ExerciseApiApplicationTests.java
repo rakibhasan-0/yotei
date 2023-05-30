@@ -121,54 +121,6 @@ class ExerciseApiApplicationTests {
 
     }
 
-    @Test
-    void shouldReturnAllExercisesSortedNameDesc() {
-
-        Mockito.when(repository.findAll()).thenReturn(exercises);
-        
-        List<Exercise> result = (List<Exercise>) controller.getExercises("nameDesc");
-    
-        assertThat(result.size()).isEqualTo(2);
-        assertThat(result.get(0)).isEqualTo(ex2);
-        assertThat(result.get(1)).isEqualTo(ex1);
-    }
-
-    @Test
-    void shouldReturnAllExercisesSortedNameAsc() {
-
-        Mockito.when(repository.findAll()).thenReturn(exercises);
-        
-        List<Exercise> result = (List<Exercise>) controller.getExercises("nameAsc");
-    
-        assertThat(result.size()).isEqualTo(2);
-        assertThat(result.get(0)).isEqualTo(ex1);
-        assertThat(result.get(1)).isEqualTo(ex2);
-    }
-
-    @Test
-    void shouldReturnAllExercisesSortedNDurationDesc() {
-
-        Mockito.when(repository.findAll()).thenReturn(exercises);
-        
-        List<Exercise> result = (List<Exercise>) controller.getExercises("durationDesc");
-    
-        assertThat(result.size()).isEqualTo(2);
-        assertThat(result.get(0)).isEqualTo(ex2);
-        assertThat(result.get(1)).isEqualTo(ex1);
-    }
-
-
-    @Test
-    void shouldReturnAllExercisesSortedNDurationAsc() {
-
-        Mockito.when(repository.findAll()).thenReturn(exercises);
-        
-        List<Exercise> result = (List<Exercise>) controller.getExercises("durationAsc");
-    
-        assertThat(result.size()).isEqualTo(2);
-        assertThat(result.get(0)).isEqualTo(ex1);
-        assertThat(result.get(1)).isEqualTo(ex2);
-    }
 
     @Test
     void shouldFailWhenExerciseHasInvalidNameAndDuration() {
@@ -204,27 +156,5 @@ class ExerciseApiApplicationTests {
 
         Assertions.assertEquals(HttpStatus.BAD_REQUEST,
                 controller.updateExercise(invalid).getStatusCode());
-    }
-
-    @Test
-    void shouldReturnDescriptionFromGetDescription() {
-        Mockito.when(repository.getExerciseDropDownById(ex1.getId())).thenReturn(Optional.of(new ExerciseDropDownProjection() {
-            @Override
-            public String getDescription() {
-                return ex1.getDescription();
-            }
-
-            @Override
-            public Integer getDuration() {
-                return ex1.getDuration();
-            }
-        }));
-        Mockito.when(repository.existsById(ex1.getId())).thenReturn(true);
-
-        ExerciseDropDownProjection result = (ExerciseDropDownProjection) controller.getDescription(ex1.getId());
-
-        assertThat(result.getDescription()).isEqualTo(ex1.getDescription());
-        assertThat(result.getDuration()).isEqualTo(ex1.getDuration());
-    }
-    
+    }    
 }
