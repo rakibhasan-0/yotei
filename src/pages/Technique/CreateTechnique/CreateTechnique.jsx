@@ -234,10 +234,6 @@ export default function CreateTechnique({ id, setIsOpen }) {
 
 			<EditGallery id={tempId} exerciseId={tempId} sendData={sendData} undoChanges={undoMediaChanges} done={done} />
 
-			<h1 className="create-media-title">Media</h1>
-			<div className="create-technique-horizontal-line" />
-
-			<EditGallery id={tempId} exerciseId={tempId} sendData={sendData} undoChanges={undoMediaChanges} done={done} />
 
 			<CheckBox
 				id="create-technique-checkbox-continue"
