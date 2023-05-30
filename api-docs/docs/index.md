@@ -26,7 +26,7 @@ Remove this paragraph when documentation is done.
 | Exercise API  | In progress (take over please) |
 | Plan API      | Not started |
 | Tag API       | Not started |
-| Technique API | In progress (Medusa) |
+| Technique API | Done |
 | Workout API   | Not started |
 | Session API   | Not started |
 | Search API    | Needs verification |
