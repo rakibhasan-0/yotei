@@ -51,7 +51,7 @@ export default function Tag({ id, tagType, onClick, text }) {
 		return (
 			<button type="button" id={id} className="base-tag" onClick={onClick}>
 				<p className="no-margin">{text}</p>
-				<XCircleFill className="ml-2" size={18} color="black"/>
+				<XCircleFill className="ml-2 flex-shrink-0" size={18} color="black"/>
 			</button>
 		)
 	}

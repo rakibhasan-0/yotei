@@ -1,12 +1,11 @@
 .base-tag {
-	height: 2rem;
 	display: flex;
 	align-items: center;
 	border: none;
 	border-radius: 0.75rem;
 	padding: 0.4rem 0.75rem 0.4rem 0.75rem;
 	background-color: var(--red-secondary);
-	
+	height: fit-content;
 	max-width: 100%; 
 }
 
