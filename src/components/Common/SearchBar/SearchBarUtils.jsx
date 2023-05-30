@@ -164,8 +164,7 @@ export async function getExercises(args, token, map, mapActions, callBack) {
  */
 
 export function getWorkouts(args, token, map, mapActions, callBack) {
-
-	let query = `/api/search/workouts?name=${args.text}&from=${args.from}to=${args.to}&favourite=${args.isFavorite}&tags=${args.selectedTags}`
+	let query = `/api/search/workouts?name=${args.text}&from=${args.from}&to=${args.to}&favourite=${args.isFavorite}&tags=${args.selectedTags}`
 	if (args.id) {
 		query += `&id=${args.id}`
 	}
