@@ -4,7 +4,7 @@ import BeltPicker from "../Common/BeltPicker/BeltPicker"
 import WeekdayTimePicker from "../Plan/WeekdayTimePicker"
 import Divider from "../Common/Divider/Divider"
 import Button from "../Common/Button/Button"
-import "./PlanForm.css"
+import styles from "./PlanForm.module.css"
 import InputTextField from "../Common/InputTextField/InputTextField"
 
 /**
@@ -65,83 +65,86 @@ export default function PlanForm(props) {
 			</div>
 
 			<Divider title="Period" option="h2_left"/>
-			<div className="start-end-date">
-				<div className="p-date">
-					<p className="p-date-name">Från:</p>
-					<span className="p-date-picker">
-						<DatePicker 
-							id="start-date-picker"
-							onChange={(e) => { props.onClickData("startDate", e.target.value) }} 
-							minDate={dateFormatter(today)}   
-						/>
-					</span>
+			<div className={styles.start_end_date}>
+				<p className={styles.p_date_name}>Från:</p>
+				<div className={styles.p_date_picker}>
+					<DatePicker 
+						id="start-date-picker"
+						onChange={(e) => { props.onClickData("startDate", e.target.value) }} 
+						minDate={dateFormatter(today)}   
+					/>
 				</div>
-				<div className="p-date">
-					<p className="p-date-name">Till	:</p>
-					<span>
-						<DatePicker 
-							id="end-date-picker"
-							onChange={(e) => { props.onClickData("endDate", e.target.value) }}
-							maxDate={dateFormatter(twoYearsFromNow)}
-						/>
-					</span>
+				<p className={styles.p_date-name}>Till:</p>
+				<div className={styles.p_date_picker}>
+					<DatePicker 
+						id="end-date-picker"
+						onChange={(e) => { props.onClickData("endDate", e.target.value) }}
+						maxDate={dateFormatter(twoYearsFromNow)}
+					/>
 				</div>
 			</div>
 			<Divider title="Dagar" option="h2_left"/>
-			<div className="div-week-day-time">
-				<WeekdayTimePicker 
-					dayName="Mån" 
-					weekdays={props.weekdays}
-					weekdayClickHandler={props.onClickWeekday}
-					dayTimeClickHandler={props.onClickDayTime}
-				/>
-				<WeekdayTimePicker 
-					dayName="Tis" 
-					weekdays={props.weekdays}
-					weekdayClickHandler={props.onClickWeekday}
-					dayTimeClickHandler={props.onClickDayTime}
-				/>
-				<WeekdayTimePicker 
-					dayName="Ons" 
-					weekdays={props.weekdays}
-					weekdayClickHandler={props.onClickWeekday}
-					dayTimeClickHandler={props.onClickDayTime}
-				/>
-				<WeekdayTimePicker 
-					dayName="Tors" 
-					weekdays={props.weekdays}
-					weekdayClickHandler={props.onClickWeekday}
-					dayTimeClickHandler={props.onClickDayTime}
-				/>
-				<WeekdayTimePicker 
-					dayName="Fre" 
-					weekdays={props.weekdays}
-					weekdayClickHandler={props.onClickWeekday}
-					dayTimeClickHandler={props.onClickDayTime}
-				/>
-				<WeekdayTimePicker 
-					dayName="Lör" 
-					weekdays={props.weekdays}
-					weekdayClickHandler={props.onClickWeekday}
-					dayTimeClickHandler={props.onClickDayTime}
-				/>
-				<WeekdayTimePicker 
-					dayName="Sön"
-					weekdays={props.weekdays}
-					weekdayClickHandler={props.onClickWeekday}
-					dayTimeClickHandler={props.onClickDayTime}
-				/>
-
+			<div style={{marginTop: "20px"}}>
+				<div className={styles.weekday_container}>
+					<div className={styles.div_week_day_time}>
+						<WeekdayTimePicker 
+							dayName="Mån" 
+							weekdays={props.weekdays}
+							weekdayClickHandler={props.onClickWeekday}
+							dayTimeClickHandler={props.onClickDayTime}
+						/>
+						<WeekdayTimePicker 
+							dayName="Tis" 
+							weekdays={props.weekdays}
+							weekdayClickHandler={props.onClickWeekday}
+							dayTimeClickHandler={props.onClickDayTime}
+						/>
+						<WeekdayTimePicker 
+							dayName="Ons" 
+							weekdays={props.weekdays}
+							weekdayClickHandler={props.onClickWeekday}
+							dayTimeClickHandler={props.onClickDayTime}
+						/>
+						<WeekdayTimePicker 
+							dayName="Tors" 
+							weekdays={props.weekdays}
+							weekdayClickHandler={props.onClickWeekday}
+							dayTimeClickHandler={props.onClickDayTime}
+						/>
+						<WeekdayTimePicker 
+							dayName="Fre" 
+							weekdays={props.weekdays}
+							weekdayClickHandler={props.onClickWeekday}
+							dayTimeClickHandler={props.onClickDayTime}
+						/>
+						<WeekdayTimePicker 
+							dayName="Lör" 
+							weekdays={props.weekdays}
+							weekdayClickHandler={props.onClickWeekday}
+							dayTimeClickHandler={props.onClickDayTime}
+						/>
+						<WeekdayTimePicker 
+							dayName="Sön"
+							weekdays={props.weekdays}
+							weekdayClickHandler={props.onClickWeekday}
+							dayTimeClickHandler={props.onClickDayTime}
+						/>
+					</div>
+				</div>
 			</div>
-			<div className="wrap-centering">
+			<div className={styles.button_container}>
 				<Button 
 					onClick={props.backClicked}
 					outlined={true}
 				>
-					{"Tillbaka"}
+					<p>
+						Tillbaka
+					</p>
 				</Button>
 				<Button onClick={props.submitClicked}>
-					{"Gå vidare"}
+					<p>
+						Gå vidare
+					</p>
 				</Button>
 			</div>         
 		</div>

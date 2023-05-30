@@ -2,6 +2,8 @@ import { React, useState, useContext } from "react"
 import { AccountContext } from "../../context"
 import { useNavigate } from "react-router"
 import PlanForm from "../../components/Forms/PlanForm.jsx"
+import styles from "./PlanCreate.module.css"
+import "./PlanIndex.css"
     
 /**
  * This is a page containing components to allow creation of 'Plan'
@@ -389,14 +391,12 @@ export default function PlanCreate() {
 		setFieldCheck({ ...fieldCheck, buttonClicked: false })
 		return res
 	}
-
+	
 	return (
-		<div className="plan-create">
+		<div className={styles.plan_create}>
 			<div className="overflow-visible">
 				<div>
-					<h3 className="display-4 text-center">
-						<strong>Skapa Grupp</strong>
-					</h3>
+					<h1 className={styles.title}>Skapa grupp</h1>
 
 					{/*Form to get input from user*/}
 					<PlanForm
