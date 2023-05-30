@@ -42,7 +42,7 @@ export default function ExerciseListItem({ item, text, detailURL, id, index, che
 						<div style={{display: "flex", alignItems: "center"}}>
 							<div className="href-link" style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="ExerciseListItem-item">{item}</div>
 						</div>
-						<div style={{display: "flex", alignItems: "center"}}>
+						<div className="flex-shrink-0" style={{display: "flex", alignItems: "center"}}>
 							<div className="exercise-list-duration" data-testid="ExerciseListItem-text">
 								<p>{text}</p>
 							</div>
