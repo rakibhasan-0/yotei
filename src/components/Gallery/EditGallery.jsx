@@ -136,7 +136,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 				className="btn remove-media-button" 
 				onClick={() => {setupRemovePopup(mediaObject)}} 
 			>
-				<TrashIcon color="var(--red-primary)" size={40}></TrashIcon>
+				<TrashIcon color="var(--red-primary)" size={30}></TrashIcon>
 			</div>
 		)
 	}
