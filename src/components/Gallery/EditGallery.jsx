@@ -8,11 +8,11 @@ import ConfirmPopup from "../Common/ConfirmPopup/ConfirmPopup"
 import "../Gallery/EditGallery.css"
 import "../Gallery/Gallery.css"
 import { AccountContext } from "../../context"
-import {Plus as PlusIcon} from "react-bootstrap-icons"
 import {Trash as TrashIcon } from "react-bootstrap-icons"
 import {CameraVideoOff as NoMediaIcon } from "react-bootstrap-icons"
 import UploadMedia from "../Upload/UploadMedia"
 import {toast} from "react-toastify"
+import Button from "../Common/Button/Button"
 
 /**
  * A media component for displaying video or images.
@@ -142,16 +142,6 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 			</div>
 		)
 	}
-	
-	/**
-	 * The add-media-button
-	 */
-	const AddButton = 
-	<div id="add-media-button" 
-		onClick={() => setShowAddPopup(true)} 
-		className="btn btn-color btn-add-media d-flex justify-content-center">
-		<PlusIcon size={100} ></PlusIcon>			
-	</div>	
 
 	/**
 	 * Sets the currently requested media and shows a confirm-removal-popup
@@ -305,20 +295,20 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 
 	return (
 		
-		<div className="container" id={id}>
+		<div className="container mb-2" id={id}>
 			{ConfirmRemovePopup}
 			{UploadPopup}
-			<div className="row mt-2 mb-2">
+			<div className="row mt-2 mb-4" style={{backgroundColor : "var(--black-primary)"}}>
 				<div className="col-sm-12 text-center ">
 					<Carousel showThumbs={false} showStatus={false}>                         
 						{pictures.map((image, index) => (
-							<div key={index} style={{backgroundColor : "var(--black-primary)"}}  className="d-flex flex-column justify-content-center align-items-center">
+							<div key={index} className="d-flex flex-column justify-content-center align-items-center">
 								<Image id={`${image.id}-image`} path={image.url} />
 								{RemoveButton(image)}
 							</div>
 						))}
 						{videos.map((video, index) => (
-							<div key={index} style={{backgroundColor : "var(--black-primary)"}}>
+							<div key={index}>
 								<VideoPlayerReactPlayer id={`${video.id}-video-player`} path={video.url} editMode={true} />
 								{RemoveButton(video)}
 							</div>
@@ -327,7 +317,11 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 				</div>
 			</div>
 			{pictures.length < 1 && videos.length < 1 && NoMedia}
-			{AddButton}
+			<div className="d-flex flex-column justify-content-center align-items-center">
+				<Button id={"add-media-button"} onClick={() => setShowAddPopup(true)}>
+					<h2>+ Media</h2>
+				</Button>
+			</div>
 		</div>
 	)
 }
