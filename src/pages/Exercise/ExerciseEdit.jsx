@@ -255,7 +255,7 @@ export default function ExerciseEdit({setShowPopup}) {
 			body: JSON.stringify({"exerciseId": exId})
 		}
 		try {
-			const response = await fetch("/api/tags/add/exercise?tag=" + tag_id, requestOptions)
+			const response = await fetch("/api/tags/exercises?tag=" + tag_id, requestOptions)
 			if (response.ok) {
 				setTagLinkFailed(false)
 			} else {

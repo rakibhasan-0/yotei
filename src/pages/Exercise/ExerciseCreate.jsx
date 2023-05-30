@@ -122,7 +122,7 @@ export default function ExerciseCreate({setShowPopup}) {
 		}
 
 		try {
-			const response = await fetch("/api/tags/add/exercise?tag=" + tagId, requestOptions)
+			const response = await fetch("/api/tags/exercises?tag=" + tagId, requestOptions)
 			if (response.ok) {
 				return true
 			} else {
