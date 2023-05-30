@@ -37,7 +37,7 @@ export default function CheckBox({checked, onClick, label, disabled, id}) {
 	
 	return (
 		<label className={`${styles.checkboxLabel} ${styles.checkboxComponent} ${disabled ? styles.checkboxLabelDisabled : ""}`} id={id}>
-			{checked && <Check className={styles.checkboxIcon} />}
+			{checkedState && <Check className={styles.checkboxIcon} />}
 			<input
 				type="checkbox"
 				checked={checkedState}
