@@ -7,7 +7,9 @@ import React from "react"
 import Button from "../../Common/Button/Button"
 import TextArea from "../../Common/TextArea/TextArea"
 import styles from "./ReviewStyles.module.css"
-
+import {isAdmin} from "../../../utils"
+import {useContext} from "react"
+import {AccountContext} from "../../../context"
 import {HTTP_STATUS_CODES, setError, setSuccess} from "../../../utils"
 
 /**
@@ -17,13 +19,14 @@ import {HTTP_STATUS_CODES, setError, setSuccess} from "../../../utils"
  * @version 1.0
  */
 
-export default function ReviewComponent({comment, onDelete, editable, token, getTodaysDate, updateCommentList}) {
+export default function ReviewComponent({comment, onDelete, token, getTodaysDate, updateCommentList, testId}) {
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
 	const [editMode, setEditMode] = useState(false)
 	const [positiveComment, setPositiveComment] = useState(comment.positive_comment)
 	const [negativeComment, setNegativeComment] = useState(comment.negative_comment)
 	const [rating, setRating] = useState(comment.rating)
-	
+	const { userId, accountRole } = useContext(AccountContext)
+
 	async function deleteReview() {
 		const requestOptions = {
 			method: "DELETE",
@@ -115,13 +118,11 @@ export default function ReviewComponent({comment, onDelete, editable, token, get
 	return (
 		<>
 			<div className="row w-100 justify-content-center m-2">
-				<div style={{border: "1px solid #B4B4B4", borderRadius: "5px", minHeight: "auto"}}
-					className="col-sm-12 col-md-6 col-lg-6 p-3 d-flex flex-column">
-					
+				<div style={{border: "1px solid #B4B4B4", borderRadius: "5px", minHeight: "auto"}} className="col-sm-12 col-md-12 col-lg-12 p-3 d-flex flex-column">
 					<div className="d-flex justify-content-between align-items-center">
 						<div className="d-flex align-items-center">
 							<i className="bi bi-person m-0 p-0" style={{margin: "0px", padding: "0px", fontSize:"24px"}}/>
-							<p className="font-weight-bold m-0 ml-2">{comment.username} {editable && <span id="me" className="font-weight-light">(jag)</span>}</p>
+							<p className="font-weight-bold m-0 ml-2">{comment.username} {(userId == comment.user_id || testId == comment.user_id) && <span id="me" className="font-weight-light">(jag)</span>}</p>
 						</div>
 						<p className="m-0 font-italic" maxLength="10" style={{color: "#B4B4B4"}}>{comment.review_date.substring(0,10)}</p>
 					</div>
@@ -140,7 +141,7 @@ export default function ReviewComponent({comment, onDelete, editable, token, get
 						<div className="d-flex flex-row w-100 mt-2">
 							{(comment.negative_comment?.length > 0 || editMode) && <i id="negative_icon" role="icon" aria-label="negative"
 								className="bi bi-dash-circle" style={{fontSize:"20px", color:"red", marginRight:"10px"}}></i>}
-							
+
 							{editMode ?
 								<TextArea type="text" rows={4} onChange={(e) => setNegativeComment(e.target.value)} text={negativeComment} />
 								:
@@ -148,7 +149,7 @@ export default function ReviewComponent({comment, onDelete, editable, token, get
 							}
 						</div>
 					</div>
-					{editable &&
+					{(isAdmin(accountRole) || userId == comment.user_id) &&
 					<div className="d-flex align-items-center justify-content-end">
 						{editMode ?
 							<>

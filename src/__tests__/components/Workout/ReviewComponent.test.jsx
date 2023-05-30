@@ -9,7 +9,7 @@ configure({testIdAttribute: "id"})
 
 /**
  * Test for the review comment component.
- * 
+ *
  * @author Cyclops (Group 5) (2023-05-16)
  * @version 1.0
  */
@@ -35,7 +35,7 @@ test("Should only have positive comment", async() => {
 })
 
 test("Should only have negative comment", async() => {
-	
+
 	const review = {
 		workoutId: 1,
 		userId: 1,
@@ -55,7 +55,7 @@ test("Should only have negative comment", async() => {
 })
 
 test("Should not have any comment", async() => {
-	
+
 	const review = {
 		workoutId: 1,
 		userId: 1,
@@ -75,7 +75,7 @@ test("Should not have any comment", async() => {
 })
 
 test("Should have both positive, negative comment and a divider", async() => {
-	
+
 	const review = {
 		workoutId: 1,
 		userId: 1,
@@ -95,33 +95,33 @@ test("Should have both positive, negative comment and a divider", async() => {
 })
 
 test("Should not have (jag)", async() => {
-	
+
 	const review = {
 		workoutId: 1,
-		userId: 1337,
+		user_id: 1337,
 		rating: 0,
 		positive_comment: "tjooooo",
 		negative_comment: "breeee",
 		review_date: "2023-05-16"
 	}
 
-	render(<ReviewComment comment={review} editable={false}/>)
+	render(<ReviewComment comment={review} testId={100}/>)
 
 	expect(screen.queryByTestId("me")).not.toBeInTheDocument()
 })
 
 test("Should have (jag)", async() => {
-	
+
 	const review = {
 		workoutId: 1,
-		userId: 1337,
+		user_id: 1,
 		rating: 0,
 		positive_comment: "tjooooo",
 		negative_comment: "breeee",
 		review_date: "2023-05-16"
 	}
 
-	render(<ReviewComment comment={review} editable={true}/>)
+	render(<ReviewComment comment={review} testId={1}/>)
 
 	expect(screen.getByTestId("me")).toBeInTheDocument()
 })
