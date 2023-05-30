@@ -10,7 +10,7 @@
  * @author Cyclops    (Group 5) (2023-05-09)
  */
 import React, { useState } from "react"
-import "./WorkoutActivityListItem.css"
+import styles from "./WorkoutActivityListItem.module.css"
 import { Link } from "react-router-dom"
 import DescriptionToggle from "../../Common/DescriptionToggle"
 
@@ -23,7 +23,7 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 	}
 
 	const name = isFreeTextElem() ? (
-		<Link className="no-cursor" to={"#"} onClick={(e) => e.preventDefault()}>{activity.name}</Link>
+		<Link className={styles.noCursor} to={"#"} onClick={(e) => e.preventDefault()}>{activity.name}</Link>
 	) : (
 		activity.exercise ? (
 			<Link to={`/exercise/exercise_page/${activity.exercise.id}`}>{activity.name}</Link>
@@ -36,33 +36,34 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 	}
 
 	return (
-		<div id={id}>
+		<div id={id} className={styles.animate}>
 			{createStripes()}
-			<div className="row align-items-center py-3" key={activity.id}
+			<div className={"row align-items-center " + (isActive ? "pt-2 pb-2" : "py-2")}  key={activity.id}
 				style={{
 					backgroundColor: bgColor
 				}}>
 
 				<div className="col text-left">
-					<p className="workout-activity-name m-0">{name}</p>
+					<p className={`${styles.workoutActivityName} m-0`}>{name}</p>
 				</div>
 				
-				<div className="listItemTime col text-right">{activity.duration} min</div>
-				{
-					(!isFreeTextElem() && (activity.exercise?.description || activity.technique?.description))
-						? 
-						(<div role="optional-toggle" className="toggleIcon pr-2" onClick={() => setIsActive(!isActive)}>
-							<DescriptionToggle isActive={isActive} />
-						</div>)
-						:(<div role="optional-toggle" className="pr-5"></div>) // Empty div to align durations)
-						
-				}
+				<div className={`${styles.listItemTime} d-flex align-items-center justify-content-end col-xs-5 pl-0 text-right`}>
+					<p className="mb-0">{activity.duration} min</p>
+					{
+						(!isFreeTextElem() && (activity.exercise?.description || activity.technique?.description))
+					&&
+					(<div role="optional-toggle" className="toggleIcon ml-2" onClick={() => setIsActive(!isActive)}>
+						<DescriptionToggle isActive={isActive} />
+					</div>)	
+					}
+				</div>
+				
 			</div>
 			<div>
 				{isActive && 
 					<div className="row pb-2" style={{ backgroundColor: bgColor }}>
 						<div className="col">
-							<div role="description-div" className="textDesc">{isFreeTextElem() ? activity.text : activity.exercise ? activity.exercise.description : activity.technique.description}</div>
+							<p role="description-div" className={styles.textDesc}>{isFreeTextElem() ? activity.text : activity.exercise ? activity.exercise.description : activity.technique.description}</p>
 						</div>
 					</div>
 				}

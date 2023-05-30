@@ -83,11 +83,10 @@ test("Should not display dropdown if there is no exercise description", async ()
 	)
 
 	// Act
-	const elem = screen.getByRole("optional-toggle")
-
+	const elem = screen.queryByRole("optional-toggle")
+	
 	// Assert
-	expect(elem).not.toHaveClass("toggleIcon")
-
+	expect(elem).toBeNull()
 })
 
 test("Should not display dropdown if there is no technique description", async () => {
@@ -114,10 +113,10 @@ test("Should not display dropdown if there is no technique description", async (
 	)
 
 	// Act
-	const elem = screen.getByRole("optional-toggle")
-
+	const elem = screen.queryByRole("optional-toggle")
+	
 	// Assert
-	expect(elem).not.toHaveClass("toggleIcon")
+	expect(elem).toBeNull()
 
 })
 
@@ -140,10 +139,10 @@ test("Should not display dropdown for free text items", async () => {
 	)
 
 	// Act
-	const elem = screen.getByRole("optional-toggle")
-
+	const elem = screen.queryByRole("optional-toggle")
+	
 	// Assert
-	expect(elem).not.toHaveClass("toggleIcon")
+	expect(elem).toBeNull()
 
 })
 

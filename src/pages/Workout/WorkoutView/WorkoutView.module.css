@@ -45,6 +45,7 @@
     /*wrap text*/
     word-wrap: break-word;
     text-overflow: ellipsis;
+	margin: 0px;
 }
 
 .title {
@@ -99,7 +100,7 @@
 
 .workoutDetailColumnItem {
     width: 100%;
-    padding: 10px 0px;
+	padding-top: 10px;
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: left;

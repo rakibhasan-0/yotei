@@ -98,7 +98,7 @@ export default function WorkoutView({id}) {
 			: !workoutData ? <ErrorState message={errorStateMsg} onBack={() => navigate("/workout")} onRecover={() => window.location.reload(false)}/>
 				:
 				<div id={id} className="container px-0">
-					{<ConfirmPopup popupText={"Radera pass"} id={"confirm-popup"} setShowPopup={setShowPopup} showPopup={showPopup} onClick={async () => deleteWorkout(workoutId, context, navigate, setShowPopup)}/>}
+					{<ConfirmPopup popupText={"Är du säker att du vill radera passet \"" + workoutData.name + "\"?"} id={"confirm-popup"} setShowPopup={setShowPopup} showPopup={showPopup} onClick={async () => deleteWorkout(workoutId, context, navigate, setShowPopup)}/>}
 					{getReviewContainer(showRPopup, setRShowPopup, workoutId)}
 					{getWorkoutInfoContainer(workoutData, setShowPopup, context)}
 					{sortByCategories(workoutData).map((activityCategory) => (
@@ -222,8 +222,8 @@ function getWorkoutInfoContainer(workoutData, setShowPopup, context) {
 		<>
 			<div className="container px-0">
 				<div className={styles.info}>
-					<div className={`d-flex col ${styles.workoutDetailColumnItem}`}>
-						<h1 className="font-weight-bold">{workoutData.name}</h1>
+					<div className={`d-flex col ${styles.workoutDetailColumnItem} p-0`}>
+						<h1 className="font-weight-bold m-0">{workoutData.name}</h1>
 					</div>
 					<div className="d-flex justify-content-end align-items-center">
 						<div className={styles.clickIcon}>
@@ -249,30 +249,31 @@ function getWorkoutInfoContainer(workoutData, setShowPopup, context) {
 						}
 					</div>
 
-					<div className="d-flex mt-3">
+					<div className="d-flex">
 						<div className={styles.workoutDetailColumnItem}>
 							<h2 className="font-weight-bold mb-0">Författare</h2>
-							<p>{workoutData.author.username}</p>
+							<p className="mb-0">{workoutData.author.username}</p>
 						</div>
 						<div className={styles.workoutDetailColumnItem} style={{paddingLeft:"37px"}}>
 							<h2 className="font-weight-bold mb-0">Tidslängd</h2>
-							<p>{workoutData.duration} min</p>
+							<p className="mb-0">{workoutData.duration} min</p>
 						</div>
 					</div>
 
 					<div className="d-flex" id="no-print">
 						<div className={styles.workoutDetailColumnItem}>
 							<h2 className="font-weight-bold mb-0">Skapad</h2>
-							<p>{workoutData.created}</p>
+							<p className="mb-0">{workoutData.created}</p>
 						</div>
 						<div className={styles.workoutDetailColumnItem} style={{paddingLeft:"37px"}}>
 							<h2 className="font-weight-bold mb-0 text-align-left">Senast ändrad</h2>
-							<p>{workoutData.changed}</p>
+							<p className="mb-0">{workoutData.changed}</p>
 						</div>
 					</div>
-
-					<h2 className="font-weight-bold mb-0">Beskrivning</h2>
-					<p className={styles.properties}>{workoutData.description}</p>
+					<div className={styles.workoutDetailColumnItem}>
+						<h2 className="font-weight-bold mb-0">Beskrivning</h2>
+						<p className={styles.properties}>{workoutData.description}</p>
+					</div>
 				</div>
 			</div>
 		</>
