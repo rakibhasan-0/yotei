@@ -37,7 +37,7 @@ export default function ExerciseIndex() {
 	const [searchText, setSearchText] = useState("")
 	const [addedTags, setAddedTags] = useState([])
 	const [suggestedTags, setSuggestedTags] = useState([])
-	const { token } = useContext(AccountContext)
+	const context = useContext(AccountContext)
 	const detailURL = "/exercise/exercise_page/"
 	const [popupVisible, setPopupVisible] = useState(false)
 	const [map, mapActions] = useMap()
@@ -56,20 +56,24 @@ export default function ExerciseIndex() {
 	useEffect(setExerciseList, [exercises, sort])
 
 	useEffect(() => {
+		if (popupVisible === true) {
+			map.clear()
+			return
+		}
 		setCookie("exercise-filter", {tags: addedTags, sort: sort.label}, {path: "/"})
 		const args = {
 			text: searchText,
 			selectedTags: addedTags
 		}
 
-		getExercises(args, token, map, mapActions, result => {
+		getExercises(args, context.token, map, mapActions, result => {
 			if(!result.error) {
 				setSuggestedTags(result.tagCompletion)
 				setExercises(result.results)
 			}
 			setIsLoading(false)
 		})
-	}, [searchText, addedTags])
+	}, [searchText, addedTags, popupVisible])
 
 	function setExerciseList() {
 		setCookie("exercise-filter", {tags: addedTags, sort: sort.label}, {path: "/"})

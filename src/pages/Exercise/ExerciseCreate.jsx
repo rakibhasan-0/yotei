@@ -23,7 +23,7 @@ import EditGallery from "../../components/Gallery/EditGallery"
  * @version 1.0
  */
 
-export default function ExerciseCreate({setShowPopup, onClose}) {
+export default function ExerciseCreate({setShowPopup}) {
 	const [name, setName] = useState("")
 	const [desc, setDesc] = useState("")
 	const [time, setTime] = useState(0)
@@ -177,7 +177,6 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 				}
 			}
 		}
-		onClose()
 	}
 
 	/**
@@ -225,7 +224,6 @@ export default function ExerciseCreate({setShowPopup, onClose}) {
 	 */
 	function closeAll() {
 		setShowPopup(false)
-		onClose()
 	}
 
 	return (
