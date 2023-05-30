@@ -39,11 +39,10 @@ export default function ActivityListComponent() {
 			const groups = [...workoutCreateInfo.data.activityItems]
 			const [draggedGroup] = groups.splice(sourceIndex, 1)
 			groups.splice(destinationIndex, 0, draggedGroup)
-			const updatedGroups = groups.map((group, index) => ({
+			const updatedGroups = groups.map((group) => ({
 				...group,
-				id: index.toString(), // Assign a unique ID based on the index
+				id: group.id, // Assign a unique ID based on the index
 			}))
-
 			workoutCreateInfoDispatch({
 				type: WORKOUT_CREATE_TYPES.SET_ACTIVITY_ITEMS,
 				activityItems: updatedGroups,
@@ -81,7 +80,7 @@ export default function ActivityListComponent() {
 						<div ref={provided.innerRef} {...provided.droppableProps}>
 							{workoutCreateInfo.data.activityItems.map((activityItem, groupIndex) => (
 								<Draggable
-									key={activityItem.id}
+									key={groupIndex}
 									draggableId={`group${groupIndex}`}
 									index={groupIndex}
 								>
