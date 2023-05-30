@@ -44,6 +44,9 @@ public class PlanController {
 
         if (toAdd.hasNullAttributes() || toAdd.nameIsEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else if (this.planRepository.findByName(toAdd.getName()) != null) {
+            //checks if plan to add already exists.
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
         planRepository.save(toAdd);
