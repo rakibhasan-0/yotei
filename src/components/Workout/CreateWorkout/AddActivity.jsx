@@ -284,9 +284,13 @@ function AddActivity({ id, setShowActivityInfo }) {
 						}
 					</Tab>
 				</Tabs>
-				<RoundButton onClick={() => setShowActivityInfo(checkedActivities)}>
-					<ChevronRight width={30} />
-				</RoundButton>
+
+				{checkedActivities.length > 0 &&
+					<RoundButton onClick={() => setShowActivityInfo(checkedActivities)}>
+						<ChevronRight width={30} />
+					</RoundButton>
+				}
+				
 			</Modal.Body>
 		</div>
 	)
