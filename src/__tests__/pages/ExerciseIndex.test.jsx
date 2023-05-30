@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom"
 import { rest } from "msw"
 import { server } from "../server"
-import {render, configure, screen} from "@testing-library/react"
+import {render, configure, screen, waitFor} from "@testing-library/react"
 //import userEvent from "@testing-library/user-event"
 //import ExerciseCreate from "../../pages/Exercise/ExerciseCreate"
 import ExerciseIndex from "../../pages/Exercise/ExerciseIndex"
@@ -88,23 +88,29 @@ describe("ExerciseIndex should render with all components", () => {
 			</AccountContext.Provider>
 		)
 	})
-
+      
 	test("the title", () => {
 		expect(screen.getByTestId("exercise-title")).toHaveTextContent("Övningar")
 	})
 
-	test("the search bar", () => {
-		expect(screen.getByTestId("exercise-search-bar")).toBeInTheDocument()
+	test("the search bar", async () => {
+		await waitFor (() => {
+			expect(screen.getByTestId("exercise-search-bar")).toBeInTheDocument()
+		})
 	})
 
 	test("the round button", () => {
 		expect(screen.getByTestId("exercise-round-button")).toBeInTheDocument()
 	})
-	test("the filter button", () => {
-		expect(screen.getByTestId("ei-filter")).toBeInTheDocument()
+	test("the filter button", async () => {
+		await waitFor (() => {
+			expect(screen.getByTestId("ei-filter")).toBeInTheDocument()
+		})
 	})
-	test("the filter container", () => {
-		expect(screen.getByTestId("ei-sort")).toBeInTheDocument()
+	test("the filter container", async () => {
+		await waitFor (() => {
+			expect(screen.getByTestId("ei-sort")).toBeInTheDocument()
+		})
 	})
 
 })

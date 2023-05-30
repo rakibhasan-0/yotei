@@ -42,20 +42,20 @@ test("ConfirmPopup: When \"Tillbaka\" is clicked popup should no longer show", a
 	expect(setShowPopup).toHaveBeenCalledWith(false)
 })
 
-test("ConfirmPopup: Function should run once when \"Radera\" is clicked", async() => {
+test("ConfirmPopup: Function should run once when \"Ta bort\" is clicked", async() => {
 	// ARRANGE 
 	let clicked = false
 	render(<ConfirmPopup id={"confirmPopup"} showPopup={true} onClick={
 		()=> clicked=!clicked} setShowPopup={() => void 0} ></ConfirmPopup>)
 
 	// ACT
-	screen.getByText("Radera").click()
+	screen.getByText("Ta bort").click()
 
 	// ASSERT
 	expect(clicked).toEqual(true)
 })
 
-test("ConfirmPopup: When \"Radera\" is clicked popup should close", async() => {
+test("ConfirmPopup: When \"Ta bort\" is clicked popup should close", async() => {
 	// ARRANGE 
 	const setShowPopup = jest.fn() // Define and initialize setShowPopup
 	const useStateMock = (initialState) => [initialState, setShowPopup]
@@ -64,7 +64,7 @@ test("ConfirmPopup: When \"Radera\" is clicked popup should close", async() => {
 		()=> void 0} setShowPopup={setShowPopup} ></ConfirmPopup>)
 
 	// ACT
-	screen.getByText("Radera").click()
+	screen.getByText("Ta bort").click()
 
 	// ASSERT
 	expect(setShowPopup).toHaveBeenCalledWith(false)

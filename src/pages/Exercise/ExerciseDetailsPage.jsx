@@ -219,12 +219,12 @@ export default function ExerciseDetailsPage() {
 					setShowDeleteComment(true)
 				}} id={`${ex_id}-cs`} userId={userId} comments={comments} />
 			</div>
-			<div style={{ marginTop: "1rem" }}>
+			<div style={{ marginTop: "1rem", marginBottom:"1rem" }}>
 				<Button outlined={true} onClick={() => navigate(-1)}><p>Tillbaka</p></Button>
 			</div>
 			<Popup isOpen={isAddingComment} title={"Lägg till kommentar"} style={{ overflow: "hidden", overflowY: "hidden", height: "50%" }} setIsOpen={setAddComment}>
 				<TextArea errorMessage={commentError} onInput={e => setCommentText(e.target.value)} />
-				<Button onClick={onAddComment}>Skicka</Button>
+				<Button onClick={onAddComment}>Lägg till</Button>
 			</Popup>
 			<ConfirmPopup
 				popupText={"Är du säker på att du vill ta bort övningen?"}

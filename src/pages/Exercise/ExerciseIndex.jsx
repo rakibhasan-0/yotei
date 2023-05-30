@@ -92,34 +92,35 @@ export default function ExerciseIndex() {
 		<>
 			<h1 className="py-2" id={"exercise-title"} style={{marginBottom: "-10px"}}>Övningar</h1>
 				
-			<SearchBar 
-				id="exercise-search-bar" 
-				placeholder="Sök efter övningar"
-				text={searchText} 
-				onChange={setSearchText}
-				addedTags={addedTags}
-				setAddedTags={setAddedTags}
-				suggestedTags={suggestedTags}
-				setSuggestedTags={setSuggestedTags}
-			/>
-			
-			<FilterContainer id="ei-filter" title="Sortering">
-				<Sorter onSortChange={setSort} id="ei-sort" selected={sort} options={sortOptions} />
-			</FilterContainer>
-		
 			{ loading ? <Spinner/> :
-				<InfiniteScrollComponent>
-					{ visibleList.map((exercise, index) => {
-						return <ExerciseCard
-							item={exercise.name}
-							text={exercise.duration + " min"}
-							key={exercise.id}
-							id={exercise.id}
-							detailURL={detailURL}
-							index={index}>
-						</ExerciseCard>
-					})}
-				</InfiniteScrollComponent>
+				<div>
+					<SearchBar 
+						id="exercise-search-bar" 
+						placeholder="Sök efter övningar"
+						text={searchText} 
+						onChange={setSearchText}
+						addedTags={addedTags}
+						setAddedTags={setAddedTags}
+						suggestedTags={suggestedTags}
+						setSuggestedTags={setSuggestedTags}
+					/>
+                    
+					<FilterContainer id="ei-filter" title="Sortering">
+						<Sorter onSortChange={setSort} id="ei-sort" selected={sort} options={sortOptions} />
+					</FilterContainer>
+					<InfiniteScrollComponent>
+						{ visibleList.map((exercise, index) => {
+							return <ExerciseCard
+								item={exercise.name}
+								text={exercise.duration + " min"}
+								key={exercise.id}
+								id={exercise.id}
+								detailURL={detailURL}
+								index={index}>
+							</ExerciseCard>
+						})}
+					</InfiniteScrollComponent>
+				</div>
 			}
 
 			<br/><br/><br/><br/>
