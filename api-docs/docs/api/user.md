@@ -17,7 +17,7 @@ API for accessing and modifying users.
 
 <api>
 name: Verify user
-path: POST /user/verify
+path: POST /api/users/verify
 text: |
     Try to perform a login as a given user. Responds with the session JWT key, which should
     be stored in a `token` http header for future requests.
@@ -35,7 +35,7 @@ body:
 examples:
   - name: 200
     request: |
-        POST /user/verify
+        POST /api/users/verify
 
         {
             "username": "admin",
@@ -47,7 +47,7 @@ examples:
             eyJ0eXAiOiJKV1Qi...OYQbtZnoWHo7pKs
   - name: 406
     request: |
-        POST /user/verify
+        POST api/users/verify
 
         {
             "username": "admin"
@@ -59,7 +59,7 @@ examples:
 
 <api>
 name: Refresh token
-path: POST /user/refresh
+path: POST /api/users/refresh
 locked: true
 text: |
     Refreshes the JWT token for a logged-in user. The new token
@@ -73,7 +73,7 @@ body:
 examples:
   - name: 200
     request: |
-        POST /user/refresh
+        POST /api/users/refresh
 
         eyJ0eXAiOiJKV1Qi...OYQbtZnoWHo7pKs        
     response:
@@ -84,7 +84,7 @@ examples:
 
 <api>
 name: Update name
-path: PUT /user/updatename
+path: PUT /api/users/name
 locked: true
 text: |
     Updates the username of another user.
@@ -99,7 +99,7 @@ body:
 examples:
   - name: 200
     request: |
-        PUT /user/updatename
+        PUT /api/users/name
 
         {
             "id": 1,
@@ -117,14 +117,14 @@ examples:
 
 <api>
 name: Get users
-path: GET /user/all
+path: GET /api/users
 locked: true
 text: |
     Returns all the users.
 
 examples:
   - name: 200
-    request: GET /user/all
+    request: GET /api/users
     response:
         content-type: application/json
         body: |
@@ -142,7 +142,7 @@ examples:
 
 <api>
 name: Get user
-path: GET /user/:id
+path: GET /api/users/:id
 locked: true
 text: |
     Register a new user. The username must not
@@ -154,7 +154,7 @@ path-params:
 
 examples:
   - name: 200
-    request: GET /user/1
+    request: GET /api/users/1
     response:
         content-type: application/json
         body: |
@@ -167,7 +167,7 @@ examples:
 
 <api>
 name: Register user
-path: POST /user/register
+path: POST /api/users
 locked: true
 text: |
     Register a new user. The username must not
@@ -183,7 +183,7 @@ body:
 examples:
   - name: 200
     request: |
-        POST /user/register
+        POST /api/users
 
         {
             "username": "Björne Bjuding",
@@ -197,7 +197,7 @@ examples:
 
 <api>
 name: Get username
-path: GET /user/getname/:id
+path: GET /api/users/:id/name
 locked: true
 text: |
     Gets the username by a given id `:id`.
@@ -208,7 +208,7 @@ path-params:
 
 examples:
   - name: 200
-    request: GET /user/getname/1
+    request: GET /api/users/1/name
     response:
         content-type: text/plain
         body: admin
@@ -216,7 +216,7 @@ examples:
 
 <api>
 name: Update password
-path: PUT /user/updatepassword
+path: PUT /api/users/password
 locked: true
 text: |
     Updates the password of another user.
@@ -232,7 +232,7 @@ body:
 examples:
   - name: 200
     request: |
-        PUT /user/updatepassword
+        PUT /api/users/password
 
         {
             "id": 1,
@@ -247,7 +247,7 @@ examples:
 
 <api>
 name: Remove user
-path: DELETE /user/remove/:id
+path: DELETE /api/users/:id
 locked: true
 text: |
     Removes a user with the id `:id`.
@@ -258,12 +258,12 @@ path-params:
 
 examples:
   - name: 200
-    request: DELETE /user/remove/1
+    request: DELETE /api/users/1
     response:
         content-type: text/plain
         body: <empty>
   - name: 400
-    request: DELETE /user/remove/-1000
+    request: DELETE /api/users/-1000
     response:
       content-type: text/plain
       body: Användaren finns inte
@@ -271,10 +271,10 @@ examples:
 
 <api>
 name: Change role for user
-path: POST /user/:id/role/:id
+path: POST /api/users/:uid/role/:rid
 locked: true
 text: |
-  Changes the role on a user with id `:id` to role id `:role`.
+  Changes the role on a user with id `:uid` to role id `:rid`.
 
 path-params:
   parameters:
@@ -283,12 +283,12 @@ path-params:
 
 examples:
   - name: 200
-    request: POST /user/1/role/1
+    request: POST /api/users/1/role/1
     response:
       content-type: text/plain
       body: <empty>
   - name: 400
-    request: POST /user/-1000/role/0
+    request: POST /api/users/-1000/role/0
     response:
       content-type: text/plain
       body: Användaren finns inte
