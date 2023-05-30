@@ -24,6 +24,7 @@ import TechniqueDetail from "./pages/Technique/TechniqueDetail/TechniqueDetail"
 import Profile from "./pages/Profile/Profile"
 import PlanCreate from "./pages/Plan/PlanCreate.jsx"
 import SessionCreate from "./pages/Plan/SessionCreate"
+import GroupIndex from "./pages/Plan/GroupIndex/GroupIndex"
 import EditGroup from "./pages/Plan/EditGroup/EditGroup"
 import SessionEdit from "./pages/Plan/SessionEdit"
 import PlanIndex from "./pages/Plan/PlanIndex"
@@ -108,6 +109,7 @@ export default function App() {
 						<Route path="plan/edit/:groupID" element={<EditGroup />} />
 						<Route path="session/create" element={<SessionCreate />} />
 						<Route path="session/edit/:session_id" element={<SessionEdit />} />
+						<Route path="groups" element={<GroupIndex />} />
 						<Route path="" element={<PlanIndex uri={planURI} />} />
 						<Route path="*" element={<NoPage />} />
 					</Route>
