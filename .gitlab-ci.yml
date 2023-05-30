@@ -1,7 +1,64 @@
 stages:
+  - build
+  - systest
   - publish
 
-publish_database:
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+
+variables:
+  FEATURE: $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
+
+build_database_image:
+  image: docker:20
+  services:
+    - docker:20-dind
+  stage: build
+  variables:
+    DOCKER_DRIVER: "overlay2"
+    CONTAINER_REPOSITORY: "pvt2023"
+  before_script:
+    - apk update && apk add jq
+    - docker login -u "$DOCKER_CLIENT" -p "$DOCKER_SECRET"
+  script:
+    - docker build -t $CONTAINER_REPOSITORY/database:latest database
+    - docker save -o db-latest-override.tar $CONTAINER_REPOSITORY/database:latest
+    - docker tag $CONTAINER_REPOSITORY/database:latest $CONTAINER_REPOSITORY/database:staging-$FEATURE
+    - docker push $CONTAINER_REPOSITORY/database:staging-$FEATURE
+  artifacts:
+    paths:
+      - db-latest-override.tar
+    expire_in: 1 day
+  only:
+    refs:
+      - merge_requests
+    changes:
+      - database/**/*
+
+systest:
+  image: docker:20
+  services:
+    - docker:20-dind
+  stage: systest
+  before_script:
+    - apk update && apk add curl
+    - chmod +x systest/run-systest.sh
+    - chmod +x systest/find-version.sh
+  script:
+    - >
+      API_VERSION=$(systest/find-version.sh api "$CI_COMMIT_DESCRIPTION")
+      GATEWAY_VERSION=$(systest/find-version.sh api "$CI_COMMIT_DESCRIPTION")
+      FRONTEND_VERSION=$(systest/find-version.sh frontend "$CI_COMMIT_DESCRIPTION")
+      systest/run-systest.sh $CI_JOB_ID
+  only:
+    refs:
+      - merge_requests
+    changes:
+      - database/**/*
+      - systest/**/*
+
+publish_database_image:
   image: docker:20
   services:
     - docker:20-dind
@@ -14,9 +71,13 @@ publish_database:
     - apk update && apk add jq
     - docker login -u "$DOCKER_CLIENT" -p "$DOCKER_SECRET"
   script:
-    - docker build -t $CONTAINER_REPOSITORY/database:$VERSION database
-    - docker push $CONTAINER_REPOSITORY/database:$VERSION
-    - docker tag $CONTAINER_REPOSITORY/database:$VERSION $CONTAINER_REPOSITORY/database:latest
+    - docker load < db-latest-override.tar
+    - docker tag $CONTAINER_REPOSITORY/database:latest $CONTAINER_REPOSITORY/database:latest
+    - docker tag $CONTAINER_REPOSITORY/database:latest $CONTAINER_REPOSITORY/database:$VERSION
     - docker push $CONTAINER_REPOSITORY/database:latest
+    - docker push $CONTAINER_REPOSITORY/database:$VERSION
   only:
-    - main
+    refs:
+      - main
+    changes:
+      - database/**/*
