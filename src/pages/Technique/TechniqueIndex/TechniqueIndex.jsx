@@ -123,6 +123,9 @@ export default function TechniqueIndex() {
 						</TechniqueCard>)}
 				</InfiniteScrollComponent>}
 			</div>
+
+			{/* Spacing so the button doesn't cover a techniqueCard */}
+			<br/><br/><br/><br/><br/>
 			
 			{isAdmin(context) &&
 				<RoundButton id="technique-add-button" onClick={() => setShowPopup(true)}>

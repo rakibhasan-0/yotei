@@ -285,6 +285,9 @@ function AddActivity({ id, setShowActivityInfo }) {
 					</Tab>
 				</Tabs>
 
+				{/* Spacing so the button doesn't cover an ExerciseListItem */}
+				<br/><br/><br/>
+
 				{checkedActivities.length > 0 &&
 					<RoundButton onClick={() => setShowActivityInfo(checkedActivities)}>
 						<ChevronRight width={30} />
