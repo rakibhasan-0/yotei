@@ -1,5 +1,8 @@
 
 # Användartester
+
+Inled testet med att informera testdeltagaren att det är frivilligt att delta, hen får avbryta när som helst. Personuppgifter kommer ej att delas mer än kön och ålder. Informera om vilka som kommer att ta del av testresultaten. Ifall man spelar in, be om tillåtelse och tala om hur länge filen kommer att sparas. 
+
 Uppmana användaren att tänka högt under hela processen och ta anteckningar. Bäst är om en leder testet medan en annan person antecknar. Säg endast uppmaningarna till användaren och hjälp inte till (hur gärna vi än vill). Du kan förklara uppmaningen om testpersonen inte förstår vad hen ska göra. 
 
 ## TEST: Hitta till skriv en kommentar
