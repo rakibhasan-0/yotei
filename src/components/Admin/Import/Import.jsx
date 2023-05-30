@@ -1,7 +1,6 @@
 import React, {useRef, useContext} from "react"
 import { AccountContext } from "../../../context"
 import Button from "../../Common/Button/Button"
-import { Upload } from "react-bootstrap-icons"
 import { setError, setSuccess } from "../../../utils"
 
 import styles from "./Import.module.css"
@@ -23,7 +22,6 @@ export default function Import() {
 				type="button"
 				onClick={() => ref.current.click()}
 				width="100%">
-				<Upload className="mr-3" size={"1.4rem"}/>
 				<h2>Importera</h2>
 			</Button>
 		</div>

@@ -59,6 +59,11 @@ export default function ManageUser() {
 		if (!response.ok) {
 			return toast.error("Kunde inte lägga till användare")
 		}
+		const user = await response.json()
+		setUsers(prev => {
+			return [...prev, user]
+		})
+		setRoleInput(undefined)
 		toast.success("Användare tillagd")
 	}
 	
@@ -75,6 +80,11 @@ export default function ManageUser() {
 			return toast.error("Kunde inte ta bort användare")
 		}
 		toast.success("Användare borttagen")
+		setUsers(prev => {
+			return prev.filter(u => u.userId !== user.userId)
+		})
+		setUser(undefined)
+		setMgmConfirmUser("")
 	}
 
 	const mutateUser = async () => {
@@ -142,7 +152,7 @@ export default function ManageUser() {
 				))}
 			</Dropdown>
 			<div className="pt-4">
-				<InputTextFieldBorderLabel errorMessage={mgmError} type={"user"} label= {"Bekräfta Användarnamn"} onChange={(event) => setMgmConfirmUser(event.target.value)}/>
+				<InputTextFieldBorderLabel errorMessage={mgmError} type={"user"} label= {"Bekräfta användarnamn"} onChange={(event) => setMgmConfirmUser(event.target.value)}/>
 			</div>
 			<Dropdown 
 				centered={true} 
