@@ -19,7 +19,6 @@ import ExerciseIndex from "./pages/Exercise/ExerciseIndex"
 import ExerciseEdit from "./pages/Exercise/ExerciseEdit"
 import { AccountContext } from "./context"
 import { decodeToken } from "react-jwt"
-import ImageForm from "./components/Forms/ImageForm"
 import ExerciseDetailsPage from "./pages/Exercise/ExerciseDetailsPage"
 import TechniqueDetail from "./pages/Technique/TechniqueDetail/TechniqueDetail"
 import Profile from "./pages/Profile/Profile"
@@ -105,7 +104,6 @@ export default function App() {
 											<Route path="exercise/create" element={<ExerciseCreate />} />
 											<Route path="exercise/edit/:editID" element={<ExerciseEdit />} />
 											<Route path="technique" element={<TechniqueIndex />} />
-											<Route path="upload-image" element={<ImageForm />} />
 											<Route path="workout" element={<WorkoutIndex uri={workoutURI} />} />
 											<Route path="exercise/exercise_page/:ex_id" element={<ExerciseDetailsPage />} />
 											<Route path="technique/technique_page/:techniqueId" element={<TechniqueDetail />} />
