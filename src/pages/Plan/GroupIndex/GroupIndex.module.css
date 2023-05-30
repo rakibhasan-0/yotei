@@ -1,0 +1,19 @@
+.item {
+    overflow: hidden;
+    border-radius: 4px;
+    height: 36px;
+    width: 100%;
+    border: 1px solid #000000;
+    margin-right: 12px;
+}
+
+.label {
+    text-align: left;
+    margin: 0;
+    font-weight: bold;
+}
+
+.button {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}

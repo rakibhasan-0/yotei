@@ -4,8 +4,10 @@ import { Plus } from "react-bootstrap-icons"
 import { AccountContext } from "../../context"
 import FilterPlan from "./FilterPlan"
 import SessionList from "../../components/Plan/SessionList"
-import PopupAdd from "../../components/Plan/PopupAdd"
 import Spinner from "../../components/Common/Spinner/Spinner"
+import {People} from "react-bootstrap-icons"
+import Button from "../../components/Common/Button/Button"
+import {Link} from "react-router-dom"
 
 /**
  * PlanIndex is the page that displays group plannings. Contains of a 
@@ -23,7 +25,6 @@ export default function PlanIndex() {
 	const [ plans, setPlans ] = useState()
 	const [ workouts, setWorkouts ] = useState()
 	const [sessions, setSessions] = useState()
-	const [showPopup, setShowPopup] = useState(false)
 	const twoYears = new Date()
 	twoYears.setFullYear(twoYears.getFullYear()+2)
 
@@ -155,6 +156,14 @@ export default function PlanIndex() {
 	return (
 		<center>
 			<h1>Grupplanering</h1>
+			{/* TODO: Improve this later, its a hotfix because FilterPlan is bad */}
+			<div style={{ marginTop: "-25px", marginLeft: "auto", width: "fit-content", transform: "translateY(100%)" }}>
+				<Link to={"/groups"}>
+					<Button width="fit-content">
+						<People />
+					</Button>
+				</Link>
+			</div>
 			<FilterPlan
 				id={42}
 				setChosenGroups={handleSelPlansChange}
@@ -171,13 +180,10 @@ export default function PlanIndex() {
 				}
 			</div>}
 			
-			<RoundButton onClick={() => setShowPopup(true)}>
+			<RoundButton linkTo={"/session/create"}>
 				<Plus />
 			</RoundButton>
 
-			<PopupAdd id={"popupAddId"} isOpen={showPopup} setIsOpen={setShowPopup}/>
 		</center>
-	)
-
-	
+	)	
 }

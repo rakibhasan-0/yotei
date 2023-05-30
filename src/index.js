@@ -33,6 +33,7 @@ import ErrorBoundary from "./components/ErrorHandler/ErrorBoundary"
 import "react-toastify/dist/ReactToastify.css"
 import { logOut } from "./utils"
 import { ToastContainer, toast } from "react-toastify"
+import GroupIndex from "./pages/Plan/GroupIndex/GroupIndex"
 
 const exerciseURI = "https://jsonplaceholder.typicode.com/users"
 const workoutURI = "https://jsonplaceholder.typicode.com/users"
@@ -117,6 +118,7 @@ export default function App() {
 											<Route path="session/edit/:session_id" element={<SessionEdit />} />
 											<Route path="" element={<PlanIndex uri={planURI} />} />
 											<Route path="*" element={<NoPage />} />
+											<Route path="/groups" element={<GroupIndex />} />
 										</Route>
 									</>
 								) : (

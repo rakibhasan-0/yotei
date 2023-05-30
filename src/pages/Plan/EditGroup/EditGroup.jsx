@@ -154,7 +154,7 @@ function EditGroup() {
 				<Button
 					width="100%"
 					outlined={true}
-					onClick={() => navigate("/plan")}
+					onClick={() => navigate(-1)}
 				>
 					<p>Tillbaka</p>
 				</Button>

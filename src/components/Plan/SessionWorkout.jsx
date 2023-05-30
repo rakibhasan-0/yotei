@@ -5,10 +5,7 @@ import { Pencil } from "react-bootstrap-icons"
 import { Link } from "react-router-dom"
 import { AccountContext } from "../../context"
 import { isAdmin } from "../../utils"
-import MiniPopup from "../Common/MiniPopup/MiniPopup"
-import Button from "../Common/Button/Button"
 import { useNavigate } from "react-router"
-import { useState } from "react"
 
 /**
  * The SessionWorkout component is used to display information about a Sessions
@@ -31,19 +28,16 @@ import { useState } from "react"
  * @author Griffin DV21JJN C19HLN
  */
 
-function SessionWorkout({ id, workout, sessionID, creatorID, groupID }) {
+function SessionWorkout({ id, workout, sessionID, creatorID }) {
 	const workoutId = setWorkoutID()
 	const title = setWorkoutTitle()
 	const description = setWorkoutDescription()
 	const sessionId = setSessionID()
-	const groupId = setGroupID()
 	const userContext = useContext(AccountContext)
 	const { userId } = userContext
 	const navigate = useNavigate()
-	const [isOpenPopup, setIsOpenPopup] = useState(false)
 
 	const navigateAndClose = async path => {
-		await setIsOpenPopup(false)
 		navigate(path)
 	}
 
@@ -89,16 +83,6 @@ function SessionWorkout({ id, workout, sessionID, creatorID, groupID }) {
 
 		return sessionID
 	}
-
-	function setGroupID() {
-		if (groupID === null || groupID === undefined) {
-			console.error("Missing group ID")
-			return null
-		}
-
-		return groupID
-	}
-
 
 	function isSpecifiedTitle() {
 		if (checkWorkout()) {
@@ -178,20 +162,11 @@ function SessionWorkout({ id, workout, sessionID, creatorID, groupID }) {
 								aria-label="Edit Session"
 								role="edit"
 								className="sc23-session-workout-svg"
-								onClick={() => setIsOpenPopup(true)}
+								onClick={() => navigateAndClose(`/session/edit/${sessionId}`)}
 							/>
 						</div>
 					}
 				</div>
-
-				<MiniPopup id="sometestid" title={"Redigera"} isOpen={isOpenPopup} setIsOpen={setIsOpenPopup} titleTopMargin={14}>
-					<div className="popupContainer">
-						<div className="buttonContainer">
-							<Button id="newPlan" onClick={() => navigateAndClose(`/plan/edit/${groupId}`)} outlined={false}>Grupp</Button>
-							<Button id="newSession" onClick={() => navigateAndClose(`/session/edit/${sessionId}`)} outlined={false}>Tillfälle</Button>
-						</div>
-					</div>
-				</MiniPopup>
 
 			</div>
 			:
