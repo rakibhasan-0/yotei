@@ -14,7 +14,7 @@ import FilterContainer from "../../components/Common/Filter/FilterContainer/Filt
 import Sorter from "../../components/Common/Sorting/Sorter"
 import ExerciseCard from "../../components/Common/ExerciseCard/ExerciseListItem"
 import InfiniteScrollComponent from "../../components/Common/List/InfiniteScrollComponent"
-
+import Spinner from "../../components/Common/Spinner/Spinner"
 
 /**
  * Displays a searchbar, a sorter and a list of exercises.
@@ -42,6 +42,7 @@ export default function ExerciseIndex() {
 	const [popupVisible, setPopupVisible] = useState(false)
 	const [map, mapActions] = useMap()
 	const [sort, setSort] = useState(sortOptions[0])
+	const [loading, setIsLoading] = useState(true)
 	
 	useEffect(() => {
 		const filterCookie = cookies["exercise-filter"]
@@ -66,6 +67,7 @@ export default function ExerciseIndex() {
 				setSuggestedTags(result.tagCompletion)
 				setExercises(result.results)
 			}
+			setIsLoading(false)
 		})
 	}, [searchText, addedTags])
 
@@ -96,7 +98,7 @@ export default function ExerciseIndex() {
 				<Sorter onSortChange={setSort} id="ei-sort" selected={sort} options={sortOptions} />
 			</FilterContainer>
 		
-			{ visibleList ? 
+			{ loading ? <Spinner/> :
 				<InfiniteScrollComponent>
 					{ visibleList.map((exercise, index) => {
 						return <ExerciseCard
@@ -109,7 +111,6 @@ export default function ExerciseIndex() {
 						</ExerciseCard>
 					})}
 				</InfiniteScrollComponent>
-				: <p><br/><br/>Här var det tomt!</p>
 			}
 
 			<br/><br/><br/><br/>
