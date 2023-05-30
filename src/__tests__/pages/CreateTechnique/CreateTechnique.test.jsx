@@ -14,6 +14,8 @@ server.events.on("request:start", requestSpy)
 
 import CreateTechnique from "../../../pages/Technique/CreateTechnique/CreateTechnique"
 import Popup from "../../../components/Common/Popup/Popup"
+import { Route, RouterProvider, createMemoryRouter, createRoutesFromElements } from "react-router-dom"
+import userEvent from "@testing-library/user-event"
 
 configure({ testIdAttribute: "id" })
 
@@ -29,11 +31,16 @@ const setState = jest.fn() */
 
 describe("CreateTechnique should render", () => {
 
+
+
 	beforeEach(() => {
+		const router = createMemoryRouter(
+			createRoutesFromElements(
+				<Route path="/*" element={<Popup isOpen={true} title={"Skapa teknik"}><CreateTechnique/></Popup>}/>
+			)
+		)
 		render( //eslint-disable-line
-			<Popup title={"Skapa teknik"} isOpen={true}>
-				<CreateTechnique />
-			</Popup>
+			<RouterProvider router={router} />
 		)
 	})
 
@@ -79,6 +86,65 @@ describe("CreateTechnique should render", () => {
 
 	test("the add technique button", () => {
 		expect(screen.getByText("Lägg till")).toBeInTheDocument()
+	})
+})
+
+describe("CreateTechnique on back with unsaved values should", () => {
+	test("show confirmation popup", async () => {
+		const router = createMemoryRouter(
+			createRoutesFromElements(
+				<Route path="/*" element={<Popup isOpen={true} title={"Skapa teknik"}><CreateTechnique/></Popup>}/>
+			)
+		)
+		render( //eslint-disable-line
+			<RouterProvider router={router} />
+		)
+
+		const user = userEvent.setup()
+		await user.type(screen.getByPlaceholderText("Namn"), "Test")
+		await user.click(screen.getByRole("button", { name: "Tillbaka" }))
+
+		expect(screen.getByTestId("create-technique-confirm-popup")).toBeInTheDocument()
+	})
+
+	test("close popup when user clicks 'nej'", async () => {
+
+		const setIsOpen = jest.fn()
+
+		const router = createMemoryRouter(
+			createRoutesFromElements(
+				<Route path="/*" element={<Popup isOpen={true} setIsOpen={setIsOpen} title={"Skapa teknik"}><CreateTechnique setIsOpen={setIsOpen}/></Popup>}/>
+			)
+		)
+		render( //eslint-disable-line
+			<RouterProvider router={router} />
+		)
+		const user = userEvent.setup()
+		await user.type(screen.getByPlaceholderText("Namn"), "Test")
+		await user.click(screen.getByRole("button", { name: "Tillbaka" }))
+		await user.click(screen.getByRole("button", { name: "Avbryt" }))
+
+		expect(setIsOpen).not.toHaveBeenCalled()
+	})
+
+	test("close popup when user clicks 'ja'", async () => {
+
+		const setIsOpen = jest.fn()
+
+		const router = createMemoryRouter(
+			createRoutesFromElements(
+				<Route path="/*" element={<Popup isOpen={true} setIsOpen={setIsOpen} title={"Skapa teknik"}><CreateTechnique setIsOpen={setIsOpen}/></Popup>}/>
+			)
+		)
+		render( //eslint-disable-line
+			<RouterProvider router={router} />
+		)
+		const user = userEvent.setup()
+		await user.type(screen.getByPlaceholderText("Namn"), "Test")
+		await user.click(screen.getByRole("button", { name: "Tillbaka" }))
+		await user.click(screen.getByRole("button", { name: "Lämna" }))
+
+		expect(setIsOpen).toHaveBeenCalled()
 	})
 })
 

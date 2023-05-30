@@ -1,5 +1,5 @@
 import { createRoot } from "react-dom/client"
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from "react-router-dom"
 import { Cookies, CookiesProvider } from "react-cookie"
 import ExerciseCreate from "./pages/Exercise/ExerciseCreate"
 import WorkoutIndex from "./pages/Workout/WorkoutIndex"
@@ -33,7 +33,6 @@ import ErrorBoundary from "./components/ErrorHandler/ErrorBoundary"
 import "react-toastify/dist/ReactToastify.css"
 import { logOut } from "./utils"
 import { ToastContainer, toast } from "react-toastify"
-import GroupIndex from "./pages/Plan/GroupIndex/GroupIndex"
 
 const exerciseURI = "https://jsonplaceholder.typicode.com/users"
 const workoutURI = "https://jsonplaceholder.typicode.com/users"
@@ -86,47 +85,45 @@ export default function App() {
 		}
 	}, [sessionExpiration])
 
+	const routes = createBrowserRouter(
+		createRoutesFromElements(
+			cookie || import.meta.env.VITE_APP_LOGIN_ENABLED === "false" ? (
+				<>
+					<Route path="/" element={<BaseLayout />}>
+						<Route path="about" element={<About />} />
+						<Route path="admin" element={<Admin />} />
+						<Route path="profile" element={<Profile />} />
+						<Route path="exercise" element={<ExerciseIndex uri={exerciseURI} />} />
+						<Route path="exercise/create" element={<ExerciseCreate />} />
+						<Route path="exercise/edit/:editID" element={<ExerciseEdit />} />
+						<Route path="technique" element={<TechniqueIndex />} />
+						<Route path="workout" element={<WorkoutIndex uri={workoutURI} />} />
+						<Route path="exercise/exercise_page/:ex_id" element={<ExerciseDetailsPage />} />
+						<Route path="technique/technique_page/:techniqueId" element={<TechniqueDetail />} />
+						<Route path="workout/create" element={<WorkoutCreate />} />
+						<Route path="workout/:workoutId" element={<WorkoutView />} />
+						<Route path="workout/edit" element={<WorkoutEdit />} />
+						<Route path="plan" element={<PlanIndex uri={planURI} />} />
+						<Route path="plan/create" element={<PlanCreate />} />
+						<Route path="plan/edit/:groupID" element={<EditGroup />} />
+						<Route path="session/create" element={<SessionCreate />} />
+						<Route path="session/edit/:session_id" element={<SessionEdit />} />
+						<Route path="" element={<PlanIndex uri={planURI} />} />
+						<Route path="*" element={<NoPage />} />
+					</Route>
+				</>
+			) : (
+				<Route path="*" element={<Login />} />
+			)
+		)
+	)
+
 	return (
 		<>
 			<ToastContainer />
 			<AccountContext.Provider value={{ token, role: decodedToken?.role, userId: decodedToken?.userId, setToken }}>
 				<ErrorBoundary>
-					<BrowserRouter>
-						<Routes>
-							{
-								// eslint-disable-next-line no-undef
-								cookie || import.meta.env.VITE_APP_LOGIN_ENABLED === "false" ? (
-									<>
-										<Route path="/" element={<BaseLayout />}>
-											<Route path="about" element={<About />} />
-											<Route path="admin" element={<Admin />} />
-											<Route path="profile" element={<Profile />} />
-											<Route path="exercise" element={<ExerciseIndex uri={exerciseURI} />} />
-											<Route path="exercise/create" element={<ExerciseCreate />} />
-											<Route path="exercise/edit/:editID" element={<ExerciseEdit />} />
-											<Route path="technique" element={<TechniqueIndex />} />
-											<Route path="workout" element={<WorkoutIndex uri={workoutURI} />} />
-											<Route path="exercise/exercise_page/:ex_id" element={<ExerciseDetailsPage />} />
-											<Route path="technique/technique_page/:techniqueId" element={<TechniqueDetail />} />
-											<Route path="workout/create" element={<WorkoutCreate />} />
-											<Route path="workout/:workoutId" element={<WorkoutView />} />
-											<Route path="workout/edit" element={<WorkoutEdit />} />
-											<Route path="plan" element={<PlanIndex uri={planURI} />} />
-											<Route path="plan/create" element={<PlanCreate />} />
-											<Route path="plan/edit/:groupID" element={<EditGroup />} />
-											<Route path="session/create" element={<SessionCreate />} />
-											<Route path="session/edit/:session_id" element={<SessionEdit />} />
-											<Route path="" element={<PlanIndex uri={planURI} />} />
-											<Route path="*" element={<NoPage />} />
-											<Route path="/groups" element={<GroupIndex />} />
-										</Route>
-									</>
-								) : (
-									<Route path="*" element={<Login />} />
-								)
-							}
-						</Routes>
-					</BrowserRouter>
+					<RouterProvider router={routes} />
 				</ErrorBoundary>
 			</AccountContext.Provider>
 		</>

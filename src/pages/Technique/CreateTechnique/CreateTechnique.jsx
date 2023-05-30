@@ -12,6 +12,7 @@ import { toast } from "react-toastify"
 import EditGallery from "../../../components/Gallery/EditGallery"
 import Divider from "../../../components/Common/Divider/Divider"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
+import { unstable_useBlocker as useBlocker } from "react-router"
 
 const KIHON_TAG = { id: 1 }
 
@@ -60,6 +61,15 @@ export default function CreateTechnique({ id, setIsOpen }) {
 
 	const [showConfirmPopup, setShowConfirmPopup] = useState(false)
 
+	
+	useBlocker(() => {
+		if (unsavedChanges()) {
+			handleLeave()
+			return true
+		}
+		return false
+	})
+
 	// Updates the belts hook array 
 	const onToggle = (checked, belt) => setBelts(() => {
 		if (!checked) {
@@ -76,6 +86,10 @@ export default function CreateTechnique({ id, setIsOpen }) {
 		}
 		console.log(tempId)
 	}, [tempId])
+
+	function unsavedChanges() {
+		return techniqueName != "" || techniqueDescription != "" || addedTags.length > 0 || belts.length > 0
+	}
 
 	function done() {
 
@@ -154,8 +168,7 @@ export default function CreateTechnique({ id, setIsOpen }) {
 	}
 
 	function handleLeave() {
-		// Check if any unsaved changes have been made
-		if (techniqueName != "" || techniqueDescription != "" || addedTags.length > 0 || belts.length > 0) {
+		if (unsavedChanges()) {
 			setShowConfirmPopup(true)
 		}
 		else {
@@ -222,10 +235,10 @@ export default function CreateTechnique({ id, setIsOpen }) {
 			<EditGallery id={tempId} exerciseId={tempId} sendData={sendData} undoChanges={undoMediaChanges} done={done} />
 
 			<h1 className="create-media-title">Media</h1>
-			<div className="create-technique-horizontal-line"/>
+			<div className="create-technique-horizontal-line" />
 
-			<EditGallery id={tempId} exerciseId={tempId} sendData={sendData} undoChanges={undoMediaChanges} done={done}/>
-	
+			<EditGallery id={tempId} exerciseId={tempId} sendData={sendData} undoChanges={undoMediaChanges} done={done} />
+
 			<CheckBox
 				id="create-technique-checkbox-continue"
 				checked={continueToCreate}
@@ -266,8 +279,8 @@ export default function CreateTechnique({ id, setIsOpen }) {
 				id="create-technique-confirm-popup"
 				showPopup={showConfirmPopup}
 				setShowPopup={setShowConfirmPopup}
-				confirmText={"Ja"}
-				backText={"Nej"}
+				confirmText={"Lämna"}
+				backText={"Avbryt"}
 				popupText={"Är du säker på att du vill lämna sidan? Dina ändringar kommer inte att sparas."}
 				onClick={() => setUndoMediaChanges(true)}
 			/>
