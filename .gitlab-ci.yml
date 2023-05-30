@@ -23,13 +23,9 @@ build_database_image:
     - docker login -u "$DOCKER_CLIENT" -p "$DOCKER_SECRET"
   script:
     - docker build -t $CONTAINER_REPOSITORY/database:latest database
-    - docker save -o db-latest-override.tar $CONTAINER_REPOSITORY/database:latest
+    - docker save -o /images/db-$FEATURE.tar $CONTAINER_REPOSITORY/database:latest
     - docker tag $CONTAINER_REPOSITORY/database:latest $CONTAINER_REPOSITORY/database:staging-$FEATURE
     - docker push $CONTAINER_REPOSITORY/database:staging-$FEATURE
-  artifacts:
-    paths:
-      - db-latest-override.tar
-    expire_in: 1 day
   only:
     refs:
       - merge_requests
@@ -45,6 +41,7 @@ systest:
     - apk update && apk add curl
     - chmod +x systest/run-systest.sh
     - chmod +x systest/find-version.sh
+    - cp /images/db-$FEATURE.tar db-latest-override.tar
   script:
     - >
       API_VERSION=$(systest/find-version.sh api "$CI_COMMIT_DESCRIPTION")
@@ -71,7 +68,7 @@ publish_database_image:
     - apk update && apk add jq
     - docker login -u "$DOCKER_CLIENT" -p "$DOCKER_SECRET"
   script:
-    - docker load < db-latest-override.tar
+    - docker load < /images/db-$FEATURE.tar
     - docker tag $CONTAINER_REPOSITORY/database:latest $CONTAINER_REPOSITORY/database:latest
     - docker tag $CONTAINER_REPOSITORY/database:latest $CONTAINER_REPOSITORY/database:$VERSION
     - docker push $CONTAINER_REPOSITORY/database:latest

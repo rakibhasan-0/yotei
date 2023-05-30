@@ -30,6 +30,8 @@ function early_exit() {
 
 function curl_await() {
     trap "exit" INT
+    set +e
+
     TIMEOUT=30
     END=$(expr $(date +%s) + $TIMEOUT)
     URL="${@: -1}"
@@ -52,9 +54,8 @@ function pg_wait_container() {
     CONTAINER=$1
     USER=$2
     DB=$3
-    set +e
 
-    TIMEOUT=10
+    TIMEOUT=90
     END=$(expr $(date +%s) + $TIMEOUT)
 
     echo "awaiting postgres $CONTAINER to come online ..."
@@ -65,7 +66,9 @@ function pg_wait_container() {
         set -x;
         apk add postgresql15-client;
         while [[ \$(date +%s) -lt $END ]]; do
-            pg_isready -h $CONTAINER -t 10 -U $USER -d $DB && exit 0
+            pg_isready -h $CONTAINER -t 10 -U $USER -d $DB && {
+                exit 0
+            }
             sleep 2
         done
         exit 1
@@ -102,19 +105,23 @@ FRONTEND_VERSION=${FRONTEND_VERSION:=latest}
 echo "fetching images ..."
 
 # fetch the images for the correct image
-docker pull -q pvt2023/database:$DB_VERSION
-docker pull -q pvt2023/api:$API_VERSION
-docker pull -q pvt2023/frontend:$FRONTEND_VERSION
-docker pull -q pvt2023/gateway:$GATEWAY_VERSION
+# when running locally, you most likely have the versions you want
+# already.
+[ -z $CI ] || {
+    docker pull -q pvt2023/database:$DB_VERSION
+    docker pull -q pvt2023/api:$API_VERSION
+    docker pull -q pvt2023/frontend:$FRONTEND_VERSION
+    docker pull -q pvt2023/gateway:$GATEWAY_VERSION
 
-#   If a version is not defined, it is assumed to be latest.
-#   If we find a file `<container>-latest-override.tar`, we load it first.
-#   This is required since if we're in a gitlab CI job, we might depend on
-#   the previous image-build job.
-override_if_local_build_exists db $DB_VERSION
-override_if_local_build_exists api $API_VERSION
-override_if_local_build_exists gateway $GATEWAY_VERSION
-override_if_local_build_exists frontend $FRONTEND_VERSION
+    #   If a version is not defined, it is assumed to be latest.
+    #   If we find a file `<container>-latest-override.tar`, we load it first.
+    #   This is required since if we're in a gitlab CI job, we might depend on
+    #   the previous image-build job.
+    override_if_local_build_exists db $DB_VERSION
+    override_if_local_build_exists api $API_VERSION
+    override_if_local_build_exists gateway $GATEWAY_VERSION
+    override_if_local_build_exists frontend $FRONTEND_VERSION
+}
 
 # using the runner unique id, we pick container names and ports
 DB_NAME="systest-db-$RUID"

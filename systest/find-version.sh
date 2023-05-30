@@ -3,8 +3,8 @@
 # used for extracting versions from git commit description.
 # will append `staging-` before version is found.
 
-REPO=${1:?No repository provided.}; shift
-TEXT=${1:?No commit message provided.}; shift
+REPO=${1?No repository provided.}; shift
+TEXT=${1?No commit message provided.}; shift
 
 PATTERN="\[$REPO:\s*([^] ]*)\s*\]"
 
