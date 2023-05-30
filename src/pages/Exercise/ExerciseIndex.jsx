@@ -2,7 +2,6 @@ import React, {useState, useEffect, useContext} from "react"
 import { useCookies } from "react-cookie"
 import SearchBar from "../../components/Common/SearchBar/SearchBar"
 import "../../components/Common/SearchBar/SearchBarUtils"
-//import styles from "../../pages/Exercise/ExerciseIndex.module.css"
 import { AccountContext } from "../../context"
 import RoundButton from "../../components/Common/RoundButton/RoundButton"
 import { Plus } from "react-bootstrap-icons"
@@ -20,7 +19,7 @@ import Spinner from "../../components/Common/Spinner/Spinner"
  * Displays a searchbar, a sorter and a list of exercises.
  * 
  * @author Hawaii, Verona, Phoenix, Cyclops
- * @since 2023-05-10
+ * @since 2023-05-30
  * @version 2.0
  */
 export default function ExerciseIndex() {
@@ -75,6 +74,10 @@ export default function ExerciseIndex() {
 		})
 	}, [searchText, addedTags, popupVisible])
 
+	/**
+     * Sets the exercise list by sorting the exercises and updating the visible list state. 
+     * Also updates the exercise filter cookie.
+     */
 	function setExerciseList() {
 		setCookie("exercise-filter", {tags: addedTags, sort: sort.label}, {path: "/"})
 		if(exercises) {

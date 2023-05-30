@@ -75,6 +75,11 @@ export default function ExerciseDetailsPage() {
 			})
 	}, [token, ex_id])
 
+	/**
+     * Handles the deletion of an exercise by sending a DELETE request to the API.
+     * Navigates back to the previous page if the deletion is successful.
+     * Displays an error toast and logs the error if the deletion fails.
+     */
 	const onDelete = async () => {
 		try {
 			const response = await fetch("/api/exercises/remove/" + ex_id, {
@@ -90,6 +95,11 @@ export default function ExerciseDetailsPage() {
 		}
 	}
 
+	/**
+     * Handles the deletion of a comment by sending a DELETE request to the API.
+     * Removes the deleted comment from the comments state and clears the selectedComment state.
+     * Displays an error toast and logs the error if the deletion fails.
+     */ 
 	const onDeleteComment = async () => {
 		const id = selectedComment
 		try {
@@ -108,7 +118,13 @@ export default function ExerciseDetailsPage() {
 		setSelectedComment()
 		setShowDeleteComment(false)
 	}
-
+    
+	/**
+     * Handles the addition of a comment by sending a POST request to the API.
+     * Validates the comment text and displays an error if it is empty.
+     * Clears the comment text and sets addComment to false after a successful addition.
+     * Fetches the updated comments by calling fetchComments.
+     */
 	const onAddComment = async () => {
 		if (!commentText || commentText.length === 0) {
 			setCommentError("Kommentaren får inte vara tom")
