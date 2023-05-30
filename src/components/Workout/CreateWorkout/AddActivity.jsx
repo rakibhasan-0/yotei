@@ -214,14 +214,18 @@ function AddActivity({ id, setShowActivityInfo }) {
 						{(techniques.length === 0 && fetchedTech) ?
 							<ErrorStateSearch id="add-activity-no-technique" message="Kunde inte hitta tekniker" />
 							:
-							(<InfiniteScrollComponent>
+							(<InfiniteScrollComponent
+								activities={techniques}
+							>
 								{techniques.map((technique, key) => (
 									<TechniqueCard
 										id={"technique-list-item-" + technique.id}
 										checkBox={
 											<CheckBox
 												checked={checkedActivities.includes(technique)}
-												onClick={() => onActivityToggle(technique, "technique")}
+												onClick={() => {
+													onActivityToggle(technique, "technique")
+												}}
 											/>
 										}
 										technique={technique}

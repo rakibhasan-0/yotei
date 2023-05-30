@@ -21,7 +21,7 @@ import Spinner from "../Spinner/Spinner"
  * @since 2023-05-23
  */
 
-export default function InfiniteScrollComponent({ children }) {
+export default function InfiniteScrollComponent({ children, activities }) {
 
 	const shownItems = useRef(20)
 
@@ -43,7 +43,7 @@ export default function InfiniteScrollComponent({ children }) {
 		shownItems.current = 20
 		setVisibleTechniques([])
 		updateShownItems()
-	}, [children])
+	}, [activities ? activities : children])
   
 
 	return (
@@ -53,7 +53,7 @@ export default function InfiniteScrollComponent({ children }) {
 			<InfiniteScroll
 				dataLength={visibleTechniques.length}
 				hasMore={children.length > visibleTechniques.length}
-				next={(updateShownItems)}
+				next={updateShownItems}
 				loader={
 					<div style={{padding: 20}}>
 						<Spinner/>
