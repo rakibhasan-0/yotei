@@ -123,16 +123,14 @@ export default function Profile() {
 				<WorkoutList list={workouts?.filter(w => w.author === userId)} />
 			</Tab>
 			<Tab eventKey={"Settings"} title={"Inställningar"} className={style.tab}>
-				<Divider option={"h2_center"} title={"Lösenord"} />
-				<br/>
+				<div className={style.divider}><Divider option={"h2_center"} title={"Lösenord"} /></div>
 				<InputTextFieldBorderLabel errorMessage={wrongPassword} onChange={e => {setPassword(e.target.value)}} id="password" type="password" label="Nuvarande lösenord" />
 				<InputTextFieldBorderLabel onChange={e => {setNewPassword(e.target.value)}} id="new-password" type="password" label="Nytt lösenord" />
 				<InputTextFieldBorderLabel errorMessage={missMatchPassword} onChange={e => {setVerifyNewPassword(e.target.value)}} id="verify-password" type="password" label="Bekräfta lösenord" />
 				<div className={style.floatRight}>
 					<Button className="btn btn-primary" onClick={changePassword}>Ändra</Button>
 				</div>
-				<Divider option={"h2_center"} title={"Användarnamn"} />
-				<br/>
+				<div className={style.divider}><Divider option={"h2_center"} title={"Användarnamn"} /></div>
 				<InputTextFieldBorderLabel onChange={e => {setNewUsername(e.target.value)}} id="username" type="text" label="Nytt användarnamn" />
 				<InputTextFieldBorderLabel onChange={e => {setUsernamePassword(e.target.value)}} errorMessage={verifyUsernamePassword} id="Password" type="password" label="Lösenord" />
 				<div className={style.floatRight}>

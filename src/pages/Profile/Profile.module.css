@@ -2,11 +2,16 @@
     flex: 1;
 }
 
+.tabs > li .active {
+    background-color: var(--red-primary);
+}
+
 .tabs button {
     width: 100%;
     height: 38px;
     background-color: white;
     outline: 1px solid black;
+    white-space: nowrap;
 }
 
 .tabs :global(.active) {
@@ -14,11 +19,6 @@
     color: white !important;
     border: none !important;
 }
-
-.tabs > li .active {
-    background-color: var(--red-primary);
-}
-
 
 .floatRight {
     display: flex;
@@ -33,4 +33,9 @@
 .tab :global(.search-bar) {
     margin-top: 15px;
     margin-bottom: 15px;
+}
+
+.divider {
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
 }
