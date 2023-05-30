@@ -11,6 +11,7 @@ import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../../utils"
 import { toast } from "react-toastify"
 import EditGallery from "../../../components/Gallery/EditGallery"
 import Divider from "../../../components/Common/Divider/Divider"
+import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
 
 const KIHON_TAG = { id: 1 }
 
@@ -57,9 +58,11 @@ export default function CreateTechnique({ id, setIsOpen }) {
 	const [sendData, setSendData] = useState(false)
 	const [undoMediaChanges, setUndoMediaChanges] = useState(false)
 
+	const [showConfirmPopup, setShowConfirmPopup] = useState(false)
+
 	// Updates the belts hook array 
 	const onToggle = (checked, belt) => setBelts(() => {
-		if(!checked) {
+		if (!checked) {
 			return belts.filter(b => b.id !== belt.id)
 		}
 		else {
@@ -68,32 +71,31 @@ export default function CreateTechnique({ id, setIsOpen }) {
 	})
 
 	useEffect(() => {
-		if(tempId >= 0){
+		if (tempId >= 0) {
 			setSendData(true)
 		}
 		console.log(tempId)
-	},[tempId])  
+	}, [tempId])
 
-	function done(){
+	function done() {
 
-		if(undoMediaChanges){
+		if (undoMediaChanges) {
 			setIsOpen(false)
 		}
-		else{
+		else {
 			setSendData(false)
 
-			if (continueToCreate && clearFields) { 
+			if (continueToCreate && clearFields) {
 				clearStates()
 				return
 			}
-			if (continueToCreate) { 
+			if (continueToCreate) {
 				setCreateButton(true)
 				return
 			}
 			setIsOpen(false)
 		}
 	}
-	
 	async function handleSubmit() {
 		const tagIds = buildTags(addedTags, kihonChecked)
 		const beltIds = buildBelts(belts)
@@ -102,13 +104,13 @@ export default function CreateTechnique({ id, setIsOpen }) {
 			.then(handleResponse)
 			.then(await makeMediaAPICall)
 			.catch(() => toast.error("Kunde inte spara tekniken. Kontrollera din internetuppkoppling."))
-		
+
 	}
 
 	async function makeMediaAPICall(data) {
 		setTempId(data.id)
 	}
-	
+
 	async function handleResponse(response) {
 
 		if (response.status == HTTP_STATUS_CODES.CONFLICT) {
@@ -151,6 +153,16 @@ export default function CreateTechnique({ id, setIsOpen }) {
 		setBelts([])
 	}
 
+	function handleLeave() {
+		// Check if any unsaved changes have been made
+		if (techniqueName != "" || techniqueDescription != "" || addedTags.length > 0 || belts.length > 0) {
+			setShowConfirmPopup(true)
+		}
+		else {
+			setIsOpen(false)
+		}
+	}
+
 	// Disables the createButton until the techniqueName has changed.
 	useEffect(() => {
 		if (createButton) {
@@ -159,7 +171,7 @@ export default function CreateTechnique({ id, setIsOpen }) {
 	}, [techniqueName, createButton])
 
 	return (
-		<div id={id} style={{textAlign: "left"}}>
+		<div id={id} style={{ textAlign: "left" }}>
 			<InputTextField
 				id="create-technique-input-name"
 				text={techniqueName}
@@ -184,24 +196,29 @@ export default function CreateTechnique({ id, setIsOpen }) {
 				onClick={setKihonChecked}
 				label="Kihon"
 			/>
-			<div style={{height: "1rem"}}/>
+			<div style={{ height: "1rem" }} />
 
 			<BeltPicker
 				id="create-technique-beltpicker"
 				onToggle={onToggle}
 				states={belts}
 			/>
-			<div style={{height: "1rem"}}/>
+			<div style={{ height: "1rem" }} />
 
-			<Divider title="Taggar" option="h1_left"/>
-				
+			<Divider title="Taggar" option="h1_left" />
+
 			<TagInput
 				id="create-technique-taginput"
 				addedTags={addedTags}
 				setAddedTags={setAddedTags}
 				isNested={true}
-			/>	
-			<div style={{height: "1rem"}}/>
+			/>
+			<div style={{ height: "1rem" }} />
+
+			<h1 className="create-media-title">Media</h1>
+			<div className="create-technique-horizontal-line" />
+
+			<EditGallery id={tempId} exerciseId={tempId} sendData={sendData} undoChanges={undoMediaChanges} done={done} />
 
 			<h1 className="create-media-title">Media</h1>
 			<div className="create-technique-horizontal-line"/>
@@ -214,7 +231,7 @@ export default function CreateTechnique({ id, setIsOpen }) {
 				onClick={setContinueToCreate}
 				label="Fortsätt skapa tekniker"
 			/>
-			<div style={{height: "1rem"}}/>
+			<div style={{ height: "1rem" }} />
 
 			<CheckBox
 				id="create-technique-checkbox-clear"
@@ -223,13 +240,13 @@ export default function CreateTechnique({ id, setIsOpen }) {
 				label="Rensa fält"
 				disabled={!continueToCreate}
 			/>
-			<div style={{height: "1rem"}}/>
+			<div style={{ height: "1rem" }} />
 
 			{/* Container for back and create technique buttons */}
 			<div style={{ display: "flex", gap: "27px", justifyContent: "space-evenly" }}>
 				<Button
 					id="create-technique-backbutton"
-					onClick={() => setUndoMediaChanges(true)}
+					onClick={handleLeave}
 					outlined={true}
 				>
 					<p>Tillbaka</p>
@@ -243,6 +260,16 @@ export default function CreateTechnique({ id, setIsOpen }) {
 					<p>Lägg till</p>
 				</Button>
 			</div>
+
+			<ConfirmPopup
+				id="create-technique-confirm-popup"
+				showPopup={showConfirmPopup}
+				setShowPopup={setShowConfirmPopup}
+				confirmText={"Ja"}
+				backText={"Nej"}
+				popupText={"Är du säker på att du vill lämna sidan? Dina ändringar kommer inte att sparas."}
+				onClick={() => setUndoMediaChanges(true)}
+			/>
 		</div>
 	)
 }
@@ -253,8 +280,8 @@ function buildTags(tags, kihonChecked) {
 		tags.push(KIHON_TAG)
 	}
 
-	return tags.map(tag => { 
-		return { id: tag.id } 
+	return tags.map(tag => {
+		return { id: tag.id }
 	})
 }
 
