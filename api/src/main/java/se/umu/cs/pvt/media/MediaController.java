@@ -31,7 +31,7 @@ import java.util.Map;
 @RestController
 @CrossOrigin
 @RequestMapping(path = "/api/media")
-public class MediaController implements HandlerExceptionResolver {
+public class MediaController {
 
     private MediaRepository mediaRepository;
 
@@ -261,16 +261,5 @@ public class MediaController implements HandlerExceptionResolver {
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
-    /**
-     * Handles MaxUploadSizeExceededExceptions
-     *
-     */
-    @Override
-    public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-        ModelAndView modelAndView = new ModelAndView("file");
-        if (ex instanceof MaxUploadSizeExceededException) {
-            modelAndView.getModel().put("message", "File size exceeds limit!");
-        }
-        return modelAndView;
-    }
+
 }
