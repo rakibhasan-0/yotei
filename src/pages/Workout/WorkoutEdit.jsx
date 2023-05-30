@@ -11,7 +11,6 @@ import { WorkoutCreateContext } from "../../components/Workout/CreateWorkout/Wor
 import styles from "./WorkoutModify.module.css"
 import { setSuccess, setError } from "../../utils.js"
 
-
 /**
  * This is the page for editing a saved workout.
  * 
@@ -175,7 +174,7 @@ const WorkoutEdit = () => {
 
 	return (
 		<WorkoutCreateContext.Provider value={{workoutCreateInfo, workoutCreateInfoDispatch}} >
-			<h1 className={styles.title}>Uppdatera pass</h1>
+			<h1 className={styles.title}>Redigera pass</h1>
 			<WorkoutFormComponent callback={submitHandler} />
 		</WorkoutCreateContext.Provider>
 	)

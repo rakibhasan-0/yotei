@@ -34,6 +34,7 @@
 .listToggle {
     cursor: pointer;
     margin-left: auto;
+    margin-right: 7px;
     transition: all 0.2s ease-in;
 }
 
@@ -46,8 +47,10 @@ input,
     width: 100%;
 }
 .listTextInput{
-    text-align: center;
+    text-align: left;
     border:none;
+    outline: none;
+    padding-left: 18px;
 }
 
 .listText::placeholder {

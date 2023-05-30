@@ -8,7 +8,6 @@ import { WORKOUT_CREATE_TYPES } from "./WorkoutCreateReducer"
 import RadioButton from "../../Common/RadioButton/RadioButton"
 import MinutePicker from "../../Common/MinutePicker/MinutePicker"
 
-
 /**
  * Component for setting the time for each activity connected to an exercise.
  * 
@@ -51,6 +50,7 @@ function ActivityItem({ index, categoryName, id, inputDisabled, text }) {
 						payload: { index, name: e.target.value }
 					})}
 				value={workoutCreateInfo.addedActivities[index].name}
+				rows={1}
 			/>
 		</fieldset>
 	)
@@ -260,7 +260,7 @@ export default function ActivityInfoPopUp({ isFreeText }) {
 			</div>
 			
 			<div className={styles.infoButtons}>
-				<Button onClick={goBack} outlined={true}>Tillbaka</Button>
+				<Button onClick={goBack} outlined={true}><h2>Tillbaka</h2></Button>
 				<div className={styles.buttonDivider} />
 				<Button onClick={saveActivities}>Lägg till</Button>
 			</div>

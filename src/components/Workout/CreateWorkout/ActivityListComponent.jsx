@@ -158,7 +158,7 @@ function ActivityList({ children, categoryName }) {
 		<fieldset className={styles.listContainer}>
 			<legend>
 				<div className={styles.legend}>
-					<List />
+					<List width="24px" height="24px"/>
 					<p style={{ margin: 0 }}>{categoryName}</p>
 				</div>
 			</legend>
@@ -194,17 +194,17 @@ function ActivityItem({ activityName, activityTime, pinkColor , id}) {
 		>
 			<div className={styles.dragAndText}>
 				<i>
-					<List width="32" height="32" fill="B4B4B4" />
+					<List width="24" height="24" fill="B4B4B4" />
 				</i>
 				<p className={styles.text}>{activityName.trim()}</p>
 			</div>
 			<div className={styles.minutesAndEdit}>
-				<h2 style={{ marginBottom: 0 }}>{activityTime} min</h2>
+				<p style={{ marginBottom: 0 }}><b>{activityTime} min</b></p>
 				<i onClick={() => {
 					workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.OPEN_EDIT_ACTIVITY_POPUP}), 
 					workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.SET_CURRENTLY_EDITING, payload: {id: id}})
 				}}>
-					<Pencil size="24px"	color="var(--red-primary)" style={{cursor: "pointer"}} />
+					<Pencil size="20px"	color="var(--red-primary)" style={{cursor: "pointer"}} />
 				</i>
 			</div>
 		</div>
