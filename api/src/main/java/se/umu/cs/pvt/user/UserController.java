@@ -162,28 +162,24 @@ public class UserController {
     @PostMapping("")
     public Object registerUser(@RequestBody User user) {
         if(user.getUsername().isEmpty()) {
-            System.err.println("No username given\n");
             return new ResponseEntity<>("Inget användarnamn angivet", HttpStatus.NOT_ACCEPTABLE);
         }
         if(user.getPassword().isEmpty()) {
-            System.err.println("No password given\n");
             return new ResponseEntity<>("Inget lösenord angivet", HttpStatus.NOT_ACCEPTABLE);
         }
         if(repository.findUserByUsernameIgnoreCase(user.getUsername()).isPresent()) {
-            System.err.println("Username is already taken!\n");
             return new ResponseEntity<>("Användarnamnet används redan", HttpStatus.NOT_ACCEPTABLE);
         }
         if(user.getUserRole() == null) {
-            System.err.println("Needs to have a value of 1 or 0!\n");
             return new ResponseEntity<>("Användaren måste ha en roll", HttpStatus.NOT_ACCEPTABLE);
         }
 
         try {
-            repository.save(user);
+            User saved = repository.save(user);
+            return new ResponseEntity<>(saved, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Kunde inte spara användare i databasen", HttpStatus.NOT_ACCEPTABLE);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
