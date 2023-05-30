@@ -110,11 +110,20 @@ function AddActivity({ id, setShowActivityInfo }) {
 
 	/**
 	 * Function for handling the kihon checkbox in the TechniqueFilter.
+	 * Also adds/removes the kihon tag when the checkbox is checked/unchecked
 	 * 
 	 * @param {bool} newKihon True/False if the kihon is selected or not.
 	 */
 	function handleKihonChanged(newKihon) {
-		setKihon(newKihon)
+		if(newKihon) {
+			setKihon(newKihon)
+			if(selectedTechTags.find(tag => tag === "kihon waza") === undefined) {
+				setSelectedTechTags(current => [...current, "kihon waza"])
+			}
+		} else {
+			setKihon(newKihon)
+			setSelectedTechTags(current => current.filter(tag => tag !== "kihon waza"))
+		}
 	}
 
 	/**
