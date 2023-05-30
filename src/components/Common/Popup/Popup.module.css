@@ -42,7 +42,6 @@
     overflow-y: scroll;
     overflow-x: hidden;
     padding-right: 23px;
-    height: 110vh;
     /* Do not remove this line, fixes broken z-index for some reason. */
     -webkit-overflow-scrolling: auto !important;
 }

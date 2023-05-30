@@ -143,11 +143,11 @@ export default function ExerciseIndex() {
 			}
 
 			<Popup
-				title={"Skapa övning"}
-				id={"create-exercise-popup"}
+				title="Skapa övning"
+				id="create-exercise-popup"
 				isOpen={popupVisible}
 				setIsOpen={setPopupVisible}
-				noBackground={false}
+				style={{maxHeight: "fit-content"}}
 			>
 				<ExerciseCreate setShowPopup={setPopupVisible}/>
 			</Popup>

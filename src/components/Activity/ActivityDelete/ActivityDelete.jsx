@@ -5,7 +5,7 @@ import styles from "./ActivityDelete.module.css"
 import { useContext, useEffect, useState,} from "react"
 import { AccountContext } from "../../../context"
 import { HTTP_STATUS_CODES } from "../../../utils"
-import { Link } from "react-router-dom"
+import WorkoutListItem from "../../Workout/WorkoutListItem"
 import { useNavigate } from "react-router" 
 import ErrorState  from "../../Common/ErrorState/ErrorState"
 
@@ -34,9 +34,11 @@ import ErrorState  from "../../Common/ErrorState/ErrorState"
  *				name={technique.name} setIsOpen={showDeletePopup} what={"Teknik"}/>
  *		</Popup>
  *
+ * Changes version 2.0
+ *     Replaced custom workout card with standard workout card.
  *
  * @author Team Medusa (Grupp 6)
- * @version 1.0
+ * @version 2.0
  * @since 2023-05-24
  */
 export default function ActivityDelete({ id, activityID, name, setIsOpen, what }) {
@@ -110,6 +112,7 @@ export default function ActivityDelete({ id, activityID, name, setIsOpen, what }
 				id={"technique-delete-abort"}
 				outlined={true}
 				disabled={false}
+				width="100%"
 				onClick={() => {setIsOpen(false)}}>
 				<p>Avbryt</p></Button>
 			
@@ -117,6 +120,7 @@ export default function ActivityDelete({ id, activityID, name, setIsOpen, what }
 				id={"technique-delete-confirm"}
 				outlined={false}
 				disabled={deleteButtonDisabled}
+				width="100%"
 				onClick={async () => {
 					cascadeDelete(activityID, token)
 					isTechnique() ? await navigate("/technique") : await navigate("/exercise")
@@ -125,21 +129,15 @@ export default function ActivityDelete({ id, activityID, name, setIsOpen, what }
 		</div>
 	}
 
-	function constructWorkoutCard(workoutJSON, index) {
-		const color = index % 2 === 0 ? "#F8EBEC" : "white"
-
-		return <Link key={workoutJSON.id} id={"technique-workout-delete-" + workoutJSON.id} to={"/workout/" + workoutJSON.id} >
-			<div className={styles.card} style={{background: color}}>
-				{workoutJSON.name}
-			</div>
-		</Link>
-		
-	}
-
 	function constructWorkoutCardList() {
 		return <>
 			<p>{ hasWorkouts() ? `${what}en finns i följande pass:` : "" }</p>
-			{ workouts.map((item, index) => constructWorkoutCard(item, index)) }
+			<div className="grid-striped" style={{textAlign: "center", marginBottom: "1rem"}}>
+				{workouts.map(workout => {
+					workout.workoutID = workout.id
+					return <WorkoutListItem key={workout.id} workout={workout} showFavorite={false} />})
+				}
+			</div>
 		</>
 	}
 
@@ -161,7 +159,7 @@ export default function ActivityDelete({ id, activityID, name, setIsOpen, what }
 		
 		{ gotResponse ? constructWorkoutCardList() : <Spinner id={"technique-workout-spinner"}/> }
 		<p>
-			{ hasWorkouts() ? `${what}en kommer tas bort och passen som har ${what.toLowerCase()}en kommer att tappa den` : "" } 
+			{ hasWorkouts() && `${what}en kommmer att tas bort från samtliga pass ovan.` } 
 		</p>
 		{ constructButtons() }
 
