@@ -23,6 +23,7 @@ import Popup from "../../components/Common/Popup/Popup"
  */
 export default function ExerciseEdit({setShowPopup}) {
 	const context = useContext(AccountContext)
+	//const [pageUpdated, setPageUpdated] = useState(false)
 	const [oldName, setOldName] = useState("")
 	const [oldDesc, setOldDesc] = useState("")
 	const [oldTime, setOldTime] = useState(0)
@@ -52,6 +53,28 @@ export default function ExerciseEdit({setShowPopup}) {
 			console.log("In useEffect 2")
 		}
 	},[exId])
+
+	useEffect(() => {
+		loadSaved()
+		
+	}, [])
+	
+	
+	useEffect(() => {
+		window.localStorage.setItem("name", name)
+		window.localStorage.setItem("desc", desc) 
+		window.localStorage.setItem("time", time)
+
+		//setPageUpdated(true)
+
+	}, [name, desc, time])
+
+	function loadSaved() {
+		setName(window.localStorage.getItem("name"))
+		setDesc(window.localStorage.getItem("desc"))
+		setTime(window.localStorage.getItem("time"))
+	
+	}
 
 	function done(){
 		if(undoMediaChanges){
@@ -93,15 +116,25 @@ export default function ExerciseEdit({setShowPopup}) {
 			toast.error("Oj, det gick inte att hämta övningsinfo")
 			setShowPopup(false)
 		}
-		
-		setName(exerciseJson.name)
-		setDesc(exerciseJson.description)
-		setTime(exerciseJson.duration)
+		loadSaved()
+
+		if (0 === name.length || name === null || name === "null"){
+			setName(exerciseJson.name)
+			setDesc(exerciseJson.description)
+			setTime(exerciseJson.duration)
+			console.log("Loading real info")
+		}
+
 		setNewTags(tagsJson)
 		setExistingTags(tagsJson)
 		setOldName(exerciseJson.name)
 		setOldDesc(exerciseJson.description)
 		setOldTime(exerciseJson.duration)
+	
+		/* Ska inte ligga här utan villkor */
+		
+			
+		
 	}
 
 	/**
@@ -264,6 +297,13 @@ export default function ExerciseEdit({setShowPopup}) {
 		}
 	}
 
+	function deleteLocalStorage() {
+		window.localStorage.setItem("name", "")
+		window.localStorage.setItem("desc", "")
+		window.localStorage.setItem("time", "")
+		console.log("Clean storage")
+	}
+
 	return (
 		<div className="row justify-content-center">
 			<div className="col-md-8">
@@ -314,13 +354,19 @@ export default function ExerciseEdit({setShowPopup}) {
 					<Button
 						id={"backBtn"}
 						outlined={"button-back"}
-						onClick={() => setUndoMediaChanges(true)}
+						onClick={() => {
+							setUndoMediaChanges(true)
+							deleteLocalStorage()
+						}}
 						width={150}>
 						<p>Tillbaka</p>
 					</Button>
 					<Button
 						id={"addBtn"}
-						onClick={() => setSendData(true)}
+						onClick={() => {
+							setSendData(true)
+							deleteLocalStorage()
+						}}
 						width={150}>
 						<p>Spara</p>
 					</Button>
@@ -340,4 +386,6 @@ export default function ExerciseEdit({setShowPopup}) {
 			</div>
 		</div>
 	)
+
+
 }

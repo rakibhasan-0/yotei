@@ -52,6 +52,9 @@ export default function ExerciseIndex() {
 			let cachedSort = sortOptions.find(option => filterCookie.sort === option.label)
 			setSort(cachedSort ? cachedSort : sortOptions[0])
 		}
+		deleteLocalStorage()
+		window.localStorage.setItem("popupState", false)
+		setPopupVisible(false)
 	}, [])
 
 	useEffect(setExerciseList, [exercises, sort])
@@ -87,9 +90,17 @@ export default function ExerciseIndex() {
 			setVisibleList(sortedList)
 		}
 	}
+	
+	function deleteLocalStorage() {
+		window.localStorage.setItem("name", "")
+		window.localStorage.setItem("desc", "")
+		window.localStorage.setItem("time", "")
+		console.log("Clean storage")
+	}
 
 	return (
 		<>
+		
 			<h1 className="py-2" id={"exercise-title"} style={{marginBottom: "-10px"}}>Övningar</h1>
 				
 			{ loading ? <Spinner/> :

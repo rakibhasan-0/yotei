@@ -14,6 +14,7 @@ import ActivityDelete from "../../components/Activity/ActivityDelete/ActivityDel
 import ErrorState from "../../components/Common/ErrorState/ErrorState"
 import ExerciseEdit from "./ExerciseEdit"
 import { isEditor } from "../../utils"
+
 /**
  * A page for displaying details about an exercise.
  * 
@@ -40,6 +41,7 @@ export default function ExerciseDetailsPage() {
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
 	const accountRole = useContext(AccountContext)
 
+
 	const fetchComments = () => {
 		fetch(`/api/comment/exercise/get?id=${ex_id}`, {
 			headers: { token }
@@ -51,6 +53,10 @@ export default function ExerciseDetailsPage() {
 				console.error(ex)
 			})
 	}
+
+	useEffect(() => {
+		setShowEditPopup(JSON.parse(window.localStorage.getItem("popupState")))
+	}, [])
 
 	useEffect(() => {
 		fetch(`/api/exercises/${ex_id}`, {
@@ -168,7 +174,11 @@ export default function ExerciseDetailsPage() {
 						{isEditor(accountRole) && (
 							<div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
 								<Pencil
-									onClick={() => setShowEditPopup(true)}
+									onClick={() => {
+										setShowEditPopup(true)
+										window.localStorage.setItem("popupState", true)
+									}
+									}
 									size="24px"
 									style={{ color: "var(--red-primary)" }}
 								/>
