@@ -1,12 +1,18 @@
 ## Mall
 [mall för beslut](../../Mallar/beslut.md)
 
-[click here to jump to my anchor](###Separat UserSettings-API)
+[Arkitekt beslut VT23](### Arkitekt beslut)
+[Separat UserSettings-API](### Separat UserSettings-API)
+[Övergång från Login till User](### Övergång från Login till User)
+[Byte av kategorier till taggar](### Byte av kategorier till taggar)
+[Från Microservices till Diamond](### Från Microservices till Diamond)
+[Microservices beslut](### Microservices beslut)
 
 
 ## Beslut om arkitektur från VT23
 
 {
+### Arkitekt beslut
 * Datum - 230427
 
 * Chapters - Arkitekt.
