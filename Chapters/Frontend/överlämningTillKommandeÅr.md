@@ -5,6 +5,5 @@
         - Skapa en användare på Figma. 
         - Ladda ned filen Yotei.fig.
         - Välj "Import file" och välj den nedladdade filen
-            Skarmavbild_2023-05-31_kl._13.08.00.png
 - Vi hann genomföra ett användartest i slutet av projektet. Resultatet från det finns sammanfattat under "User tests". Vi uppmanar er att testa tidigt och mycket, det underlättar processen. 
 - Vi rekommenderar starkt att ni gör om detta till en applikation: användaren uttrycker att de endast använder hemsidan i telefonen och förväntar sig mycket beteende som skulle vara enklare att implementera i en applikation än i en hemsida. 
