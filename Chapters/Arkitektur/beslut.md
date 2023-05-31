@@ -1,6 +1,7 @@
 ## Mall
 [mall för beslut](../../Mallar/beslut.md)
-[[_TOC_]]
+
+[click here to jump to my anchor](###Separat UserSettings-API)
 
 
 ## Beslut om arkitektur från VT23
