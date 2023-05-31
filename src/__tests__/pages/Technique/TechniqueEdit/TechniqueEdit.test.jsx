@@ -5,7 +5,7 @@ import userEvent from "@testing-library/user-event"
 import TechniqueEdit from "../../../../pages/Technique/TechniqueEdit/TechniqueEdit"
 import { AccountContext } from "../../../../context"
 import "@testing-library/jest-dom"
-import { Route, Routes, MemoryRouter } from "react-router"
+import { Route, createMemoryRouter, createRoutesFromElements, RouterProvider } from "react-router"
 
 import { rest } from "msw"
 import { server } from "../../../server"
@@ -153,10 +153,20 @@ describe("verify that", () => {
 		api.mockClear()
 	})
 
-	test("checking the kihon checkbox adds and removes the kihon tag", async () => {
-		render ( //eslint-disable-line
-			<TechniqueEdit id={"technique-edit"} setIsOpen={true} technique={technique} /> 
+	const renderEditWithRouter = () => {
+		const router = createMemoryRouter(
+			createRoutesFromElements(
+				<Route path="/*" element={<TechniqueEdit id={"technique-edit"} setIsOpen={true} technique={technique} />}/>
+			)
 		)
+
+		render ( 
+			<RouterProvider router={router}/>
+		)
+	}
+
+	test("checking the kihon checkbox adds and removes the kihon tag", async () => {
+		renderEditWithRouter()
 
 		await user.click(screen.getByLabelText("Kihon"))
 
@@ -172,9 +182,7 @@ describe("verify that", () => {
 	})
 
 	test("adding/removing the kihon tag checks/unchecks the kihon checkbox", async () => {
-		render ( //eslint-disable-line
-			<TechniqueEdit id={"technique-edit"} setIsOpen={true} technique={technique} /> 
-		)
+		renderEditWithRouter()
 
 		await user.click(screen.getByText("Lägg till tagg"))
 
@@ -200,14 +208,16 @@ describe("verify that", () => {
 	// Render the technique detail page with router and account context. Also waits for it to fully render.
 	const renderWithRouter = async() => {
 		const techniqueId = 1
+		const router = createMemoryRouter(
+			createRoutesFromElements(
+				<Route path="technique/technique_page/:techniqueId" element={<TechniqueDetail />}/>
+			),
+			{initialEntries: [`/technique/technique_page/${techniqueId}`]}
+		)
 
 		render ( //eslint-disable-next-line no-dupe-keys
 			<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", undefined }}>
-				<MemoryRouter initialEntries={[`/technique/technique_page/${techniqueId}`]}>
-					<Routes> 
-						<Route path="technique/technique_page/:techniqueId" element={<TechniqueDetail />}/>
-					</Routes>
-				</MemoryRouter>
+				<RouterProvider router={router}/>
 			</AccountContext.Provider>
 		)
 
@@ -217,12 +227,30 @@ describe("verify that", () => {
 		})
 	}
 
-	test("changing the technique name and canceling does nothing", async () => {
+	test("changing the technique name and canceling shows the confirm popup", async () => {
 		await renderWithRouter()
 
 		await user.click(screen.getByTestId("technique-edit-button"))
 		await user.type(screen.getByPlaceholderText("Namn"), " med nytt namn")
 		await user.click(screen.getByText("Avbryt"))
+
+		await waitFor(() => {
+			expect(screen.getByText("Är du säker på att du vill lämna sidan? Dina ändringar kommer inte att sparas.")).toBeInTheDocument()
+		})
+
+	})
+
+	test("changing the technique name and canceling does not update the technique", async () => {
+		await renderWithRouter()
+
+		await user.click(screen.getByTestId("technique-edit-button"))
+		await user.type(screen.getByPlaceholderText("Namn"), " med nytt namn")
+		await user.click(screen.getByText("Avbryt"))
+		await user.click(screen.getByText("Lämna"))
+
+		await waitFor(() => {
+			expect(screen.getByText("Tekniknamn")).toBeInTheDocument()
+		})
 
 		await waitFor(() => {
 			expect(screen.queryByText("Tekniknamn med nytt namn")).not.toBeInTheDocument()

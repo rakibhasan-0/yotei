@@ -9,11 +9,13 @@ import { AccountContext } from "../../../context"
 import TagInput from "../../../components/Common/Tag/TagInput"
 import { HTTP_STATUS_CODES, scrollToElementWithId, setError, setSuccess } from "../../../utils"
 import Popup from "../../../components/Common/Popup/Popup"
+import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
 import UploadMedia from "../../../components/Upload/UploadMedia"
 import EditGallery from "../../../components/Gallery/EditGallery"
 import Divider from "../../../components/Common/Divider/Divider"
+import { unstable_useBlocker as useBlocker } from "react-router"
 
-const KIHON_TAG = { id: 3, name: "Kihon Waza" }
+const KIHON_TAG = { id: 1, name: "Kihon Waza" }
 
 /**
  * Edit Technique is a popup page that allows the user to edit 
@@ -52,6 +54,15 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 	const [undoMediaChanges, setUndoMediaChanges] = useState(false)
 
 	const [inputErrorMessage, setInputErrorMessage] = useState("")
+	const [showConfirmPopup, setShowConfirmPopup] = useState(false)
+
+	useBlocker(() => {
+		if (unsavedChanges()) {
+			handleLeave()
+			return true
+		}
+		return false
+	})
 
 	useEffect(() => {
 		technique.tags.map((tag) => {
@@ -60,6 +71,23 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 			}
 		})
 	}, [])
+
+	// If there's any difference to the original technique object, return true
+	const unsavedChanges = () => {
+		return techniqueName != technique.name ||
+			techniqueDescription != technique.description ||
+			addedTags.length !== technique.tags ||
+			belts.length !== technique.belts.length
+	}
+
+	const handleLeave = () => {
+		if (unsavedChanges()) {
+			setShowConfirmPopup(true)
+		}
+		else {
+			setIsOpen(false)
+		}
+	}
 
 	function done(){
 		if(undoMediaChanges){
@@ -210,7 +238,7 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 			<div style={{ display: "flex", gap: "27px", justifyContent: "space-evenly" }}>
 				<Button
 					id={style.techniqueEditBackbutton}
-					onClick={() => setUndoMediaChanges(true)}
+					onClick={handleLeave}
 					outlined={true}>
 					<p>Avbryt</p>
 				</Button>
@@ -221,6 +249,16 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 					<p>Spara</p>
 				</Button>
 			</div>
+
+			<ConfirmPopup
+				id="technique-edit-confirm-popup"
+				showPopup={showConfirmPopup}
+				setShowPopup={setShowConfirmPopup}
+				confirmText={"Lämna"}
+				backText={"Avbryt"}
+				popupText={"Är du säker på att du vill lämna sidan? Dina ändringar kommer inte att sparas."}
+				onClick={() => setUndoMediaChanges(true)}
+			/>
 
 		</div>
 	)
