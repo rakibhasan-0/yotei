@@ -3,6 +3,7 @@
 
 
 ## Överblick över beslut
+[ToC]
 [Arkitekt beslut VT23](### Arkitekt beslut)
 
 [Separat UserSettings-API](### Separat UserSettings-API)
