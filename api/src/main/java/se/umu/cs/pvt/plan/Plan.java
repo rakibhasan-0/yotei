@@ -52,8 +52,8 @@ public class Plan implements Serializable {
      *
      * @param id id for workout
      * @param name name for plan
-     * @param color color-code for plan
      * @param userId id of user responsible for plan
+     * @param belts set of belts for plan
      */
     public Plan(Long id, String name, Long userId, Set<Belt>belts) {
         this.id = id;

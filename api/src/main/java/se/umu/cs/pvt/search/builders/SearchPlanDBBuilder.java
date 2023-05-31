@@ -94,7 +94,6 @@ public class SearchPlanDBBuilder implements SearchDBBuilderInterface {
      * @return A new query joined with the given query.
      */
     private DatabaseQuery createJoinBeltsAndSessionsQuery(DatabaseQuery databaseQuery){
-        // TODO: This method is very messy, consider refactoring when possible
 
         String resultQuery = databaseQuery.getQuery();
 

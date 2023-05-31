@@ -52,8 +52,8 @@ public class BeltController {
      * Returns the belts with the corresponding IDs. If the ID is non existant in the
      * belt table the method returns a HttpStatus.NOT_FOUND response. Does not accept negative or null IDs.
      * 
-     * @param ids A list of IDs of the colors to get.
-     * @return A list of belts and a HttpStatus OK or a HttpStatus indicating an error if belts are non existent in the database.
+     * @param id A list of IDs of the colors to get.
+     * @return A list of belts and a HttpStatus OK or a HttpStatus indicating an error if belts are non-existent in the database.
      */
     @GetMapping(value = "", params = "id")
     public ResponseEntity<Object> getBelts(@RequestParam List<Long> id) {

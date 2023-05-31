@@ -30,6 +30,7 @@ public class SearchExerciseDBBuilder implements SearchDBBuilderInterface {
     public SearchExerciseDBBuilder filterByTags() {
         if(searchExerciseQuery.hasTags()){
             List<String> tags = searchExerciseQuery.getTags();
+
             for (String tag: tags) {
                 DatabaseQuery databaseQuery = new DatabaseQuery();
                 databaseQuery.setQuery(

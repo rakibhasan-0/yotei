@@ -32,6 +32,7 @@ public class SearchTechniquesDBBuilder implements SearchDBBuilderInterface {
         List<String> tags = searchTechniquesParams.getTags();
         for (String tag: tags) {
             DatabaseQuery databaseQuery = new DatabaseQuery();
+
             databaseQuery.setQuery(
                     "SELECT te.technique_id, te.name " +
                     "FROM technique AS te, technique_tag AS tt, tag AS ta " +

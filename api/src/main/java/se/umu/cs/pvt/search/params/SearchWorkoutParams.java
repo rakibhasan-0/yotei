@@ -35,19 +35,18 @@ public class SearchWorkoutParams {
 				name = new String(URLDecoder.decode(urlQuery.get("name"), StandardCharsets.UTF_8.toString()));
 			}	
 		} catch (UnsupportedEncodingException e) {
-			// Failed to decode string, instead use uncoded string.
+            System.out.println("Failed to decode name string. " + e);
 			name = urlQuery.get("name");
 		}
 
-        user_id = urlQuery.get("id");
+        if(urlQuery.containsKey("id")) user_id = urlQuery.get("id");
 
         if(urlQuery.containsKey("from")) from = parseDateString(urlQuery.get("from"));
 
         if(urlQuery.containsKey("to")) to = parseDateString(urlQuery.get("to"));
 
-        if(urlQuery.containsKey("favourite")){
-            favourite = Boolean.parseBoolean(urlQuery.get("favourite"));
-        }
+        if(urlQuery.containsKey("favourite")) favourite = Boolean.parseBoolean(urlQuery.get("favourite"));
+
 
         if(urlQuery.containsKey("tags")) {
             String tagsString = urlQuery.get("tags");
@@ -114,7 +113,7 @@ public class SearchWorkoutParams {
                     Integer.parseInt(dateObjects[2])
             );
         } catch (Exception e){
-            // Log incorrect param
+            System.out.println("Incorrect date string. " + e);
         }
 
         return localDate;

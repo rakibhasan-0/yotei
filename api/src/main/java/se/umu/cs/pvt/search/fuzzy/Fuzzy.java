@@ -13,6 +13,7 @@ import java.util.*;
  * @author Kraken (Fardis Nazem)
  */
 public class Fuzzy {
+    // Variable that determines how strict the search cutoff will be. 0 represents no cutoff, 100 represents a perfect match
     private static int cutoff = 60;
     /**
      * @param str the string to fuzzy search.

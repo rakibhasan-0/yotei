@@ -44,6 +44,7 @@ public class SearchWorkoutDBBuilder implements SearchDBBuilderInterface {
             List<String> tags = searchWorkoutParams.getTags();
             for (String tag: tags) {
                 DatabaseQuery databaseQuery = new DatabaseQuery();
+
                 databaseQuery.setQuery(
                         "SELECT w.workout_name, w.workout_id, w.workout_author " +
                         "FROM workout AS w, workout_tag AS wt, tag AS t " +
@@ -65,6 +66,7 @@ public class SearchWorkoutDBBuilder implements SearchDBBuilderInterface {
         if(searchWorkoutParams.hasFrom()){
             String from = searchWorkoutParams.getFrom().toString();
             DatabaseQuery fromQuery = new DatabaseQuery();
+
             fromQuery.setQuery(
                     "SELECT workout_name, workout_id, workout_author FROM workout WHERE workout_date>='" + from + "'"
             );
@@ -74,6 +76,7 @@ public class SearchWorkoutDBBuilder implements SearchDBBuilderInterface {
         if(searchWorkoutParams.hasTo()){
             String to = searchWorkoutParams.getTo().toString();
             DatabaseQuery toQuery = new DatabaseQuery();
+
             toQuery.setQuery(
                     "SELECT workout_name, workout_id, workout_author FROM workout WHERE workout_date<='" + to + "'"
             );

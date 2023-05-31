@@ -20,7 +20,9 @@ public class SearchPlanParams {
     private String id;
 
     public SearchPlanParams(Map<String, String> urlQuery){
-        id = urlQuery.get("id");
+        if(urlQuery.containsKey("id")){
+            id = urlQuery.get("id");
+        }
 
         if(urlQuery.containsKey("from")){
             from = parseDateString(urlQuery.get("from"));

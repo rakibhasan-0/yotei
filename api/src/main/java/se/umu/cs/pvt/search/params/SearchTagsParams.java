@@ -23,14 +23,14 @@ public class SearchTagsParams {
 
     public SearchTagsParams(Map<String, String> urlQuery){
         try {
-			if(urlQuery.get("name") != null)
-			{
-				name = new String(URLDecoder.decode(urlQuery.get("name"), StandardCharsets.UTF_8.toString()));
-			}	
-		} catch (UnsupportedEncodingException e) {
-			// Failed to decode string use uncoded string.
-			name = urlQuery.get("name");
-		}
+            if(urlQuery.get("name") != null)
+            {
+                name = new String(URLDecoder.decode(urlQuery.get("name"), StandardCharsets.UTF_8.toString()));
+            }
+        } catch (UnsupportedEncodingException e) {
+            System.out.println("Failed to decode name string." + e);
+            name = urlQuery.get("name");
+        }
 
 		// If tag amount is specified in query use it, else use deafult.
         if (urlQuery.get("tagAmount") != null) {

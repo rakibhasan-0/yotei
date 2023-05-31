@@ -1,7 +1,5 @@
 package se.umu.cs.pvt.search;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,10 +43,6 @@ import java.util.*;
 public class SearchController {
 
     private final SearchRepository searchRepository;
-
-	// Not used, can be used in the future to log result when using search API.
-    private Logger LOG = LoggerFactory.getLogger(SearchController.class);
-
     @Autowired
     public SearchController(SearchRepository searchRepository) {
         this.searchRepository = searchRepository;
@@ -70,20 +64,20 @@ public class SearchController {
     public ResponseEntity<SearchResponse<TechniqueSearchResponse>> searchTechniques(@RequestParam Map<String, String> urlQuery) {
         SearchTechniquesParams searchTechniquesParams = new SearchTechniquesParams(urlQuery);
 
-		
 		DatabaseQuery createdQuery = new SearchTechniquesDBBuilder(searchTechniquesParams)
 			.filterByBelts()
 			.filterByTags()
 			.filterByKihon()
 			.build();
-		
-			
+
         List<TechniqueDBResult> results = searchRepository.getTechniquesFromCustomQuery(createdQuery.getQuery());
         List<TechniqueSearchResponse> techniqueSearchResponses = new SearchTechniqueResponseBuilder(results).build();
+
 		// If request has no search string input, no need to do fuzzy filtering.
 		if(!searchTechniquesParams.nameIsEmpty()) {
         		techniqueSearchResponses = fuzzySearchFiltering(searchTechniquesParams.getName(), techniqueSearchResponses);
 		}
+
 		// Get tag complete suggestion from search input
         List<String> tagCompletion = getTagSuggestions(searchTechniquesParams.getName(), searchTechniquesParams.getTags(), TagType.technique_tag);
 
@@ -177,19 +171,19 @@ public class SearchController {
 
         List<TagDBResult> result = searchRepository.getTagSuggestionsFromCustomQuery(createdQuery.getQuery());
         List<TagSearchResponse> tagSearchResponses = new SearchTagsResponseBuilder(result).build();
+
 		// Set to lower case as all tags are fetched in lower case.
         List<TagSearchResponse> filteredResult = fuzzySearchFiltering(searchTagsParams.getName().toLowerCase(), tagSearchResponses);
 
+        // Make a new array with amount of tag that wishes to be sent back
         List<TagSearchResponse> finalResult = new ArrayList<>();
         for (int i = 0; i < searchTagsParams.getAmount() && i < filteredResult.size(); i++) {
             finalResult.add(filteredResult.get(i));
         }
 
         TagResponse<TagSearchResponse> response = new TagResponse(finalResult);
-
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
 
     /**
      * API endpoint for making search requests to Plans.
@@ -253,27 +247,27 @@ public class SearchController {
         if (searchInput == null || searchInput.isEmpty()) {
             return new ArrayList<>();
         }
-		// Take out list of tags to check against
+
 		DatabaseQuery createdQuery = new SearchTagsDBBuilder(tags, tagType)
                 .filterByTagType()
 				.filterByExistingTags()
                 .build();
 
         List<TagDBResult> tagResult = searchRepository.getTagSuggestionsFromCustomQuery(createdQuery.getQuery());
+
 		// Use fuzzy search to find good suggestions, search string forced to lower case as all are fetched in lowercase from DB.
 		if(searchInput != null) {
 			searchInput.toLowerCase();
 		}
         List<TagDBResult> filteredResult = Fuzzy.search(searchInput, tagResult);
 
-		// Take out first three results.
 		List<String> tagCompletion = new ArrayList<String>();
 		int tagAmount = 3;
-		// Check if tag suggestion list is less that desired tag amount.
-		// If thats the case reduce size of desired tag a
+
 		if(filteredResult.size() < tagAmount) {
 			tagAmount = filteredResult.size();
 		}
+
 		for(int i = 0; i < tagAmount; i++) {
 			tagCompletion.add(filteredResult.get(i).getName());
 		}

@@ -27,14 +27,14 @@ public class SearchTechniquesParams {
 
     public SearchTechniquesParams(Map<String, String> urlQuery){
         try {
-			if(urlQuery.get("name") != null)
-			{
-				name = new String(URLDecoder.decode(urlQuery.get("name"), StandardCharsets.UTF_8.toString()));
-			}	
-		} catch (UnsupportedEncodingException e) {
-			// Failed to decode string, instead use uncoded string.
-			name = urlQuery.get("name");
-		}
+            if(urlQuery.get("name") != null)
+            {
+                name = new String(URLDecoder.decode(urlQuery.get("name"), StandardCharsets.UTF_8.toString()));
+            }
+        } catch (UnsupportedEncodingException e) {
+            System.out.println("Failed to decode name string. " + e);
+            name = urlQuery.get("name");
+        }
 
         if (urlQuery.containsKey("tags")){
             String tagString = urlQuery.get("tags");
