@@ -38,6 +38,8 @@ När arbete utförs på backend som möjligtvis förändrar strukturen på den b
 
 Det är värt att notera att förfriska kunskaperna om hur databaser samt dess språk fungerar då detta kommer att vara till stor hjälp.
 
+Databasen hittas och ändras på följande [länk](https://drive.google.com/file/d/1f41RYjCnPTYaiUNRlPZrmHsyy15M7DXc/view?usp=sharing)
+
 ## Vid arbete med API:et i backend
 
 Mycket av arbetet i backend innefattar ändringar eller tillägg av nya resurser via API:et. Därför är det viktigt att alla endpoints uppdaterade och att de hållar samma kvalité utöver hela systemet. För att detta ska vara möjligt ska följande punkter följas:
@@ -52,6 +54,9 @@ Mycket av arbetet i backend innefattar ändringar eller tillägg av nya resurser
 När resurser hämtas från API:et kommer de att exporteras i JSON format. Dessa format kan se olika ut beroende på vad som hämtas. Dessa format har blivit sammanställda på följande hemsida och uppmanas att kolla på innan dessa används: 
 
 https://app.swaggerhub.com/apis-docs/Calzone/PvtOpenApi/1.0.0
+
+![Schema över alla endpoints i backend](Schema över Endpoints.png)
+*Schema över alla endpoints i backend*
 
 ## RESURSER:
 
