@@ -25,8 +25,8 @@ Remove this paragraph when documentation is done.
 | Belt API      | Not started |
 | Exercise API  | In progress (take over please) |
 | Plan API      | Not started |
-| Tag API       | Not started |
-| Technique API | Done |
+| Tag API       | Done        |
+| Technique API | Done        |
 | Workout API   | Not started |
 | Session API   | Not started |
 | Search API    | Needs verification |
