@@ -27,45 +27,36 @@ Om docker körts lokalt tidigare kan oanvända containers mm. att behöva rensas
 **NOTERA!**
 1. För att testköra frontend tillsammans med den lokala backend som satts upp måste **.env** i frontend mappen uppdataras genom att ändra raden `USE_IMP_SERVER="true"` till `USE_IMP_SERVER="false"`. 
 
----
+## Vid arbete med backends databas
 
-## Exportformat i JSON för övningar/tekniker
-### Format för övningar
+När arbete utförs på backend som möjligtvis förändrar strukturen på den befintliga databasen är det några viktiga saker att tänka på:
 
-```json
-{
-    "exercises": [
-      {
-        "name": "Övning #1",
-        "duration": 5,
-        "description": "En övning",
-        "tags": ["ben", "kondition"]
-      },
-      {
-        "name": "Övning #2",
-        "duration": 6,
-        "description": "En annan övning",
-        "tags": ["bröst"]
-      }
-    ]
-}
-```
+* Kolla över ER diagrammet och kolla att alla relationer inte påverkas negativt av din ändring.
+* Stämma av med någon medlem i Backend och diskutera implementationen och dess påverkan.
+* Om ytterligare relationer läggs till i databasen eller ändringar sker, se till att uppdatera detta i ER-digrammet.
+* Utför implementationen.
 
-### Format för tekniker
+Det är värt att notera att förfriska kunskaperna om hur databaser samt dess språk fungerar då detta kommer att vara till stor hjälp.
 
-```json
-{
-    "techniques": [
-        {
-          "name": "Teknik #1",
-          "description": "En teknik",
-          "tags": ["sparkar", "avancerad"]
-        },
-        {
-          "name": "Teknik #2",
-          "description": "En annan teknik",
-          "tags": ["fall", "enkel"]
-        }
-    ]
-}
-```
+## Vid arbete med API:et i backend
+
+Mycket av arbetet i backend innefattar ändringar eller tillägg av nya resurser via API:et. Därför är det viktigt att alla endpoints uppdaterade och att de hållar samma kvalité utöver hela systemet. För att detta ska vara möjligt ska följande punkter följas:
+
+* Var konsekvent med vägen till resursen (URL) för endpointen. 
+* Följ riktlinjerna för ett RESTful API, där en endpoint har hög Cohesion. 
+* Se till att inte skapa överflödiga endpoints.
+* Dokumentera varje ny endpoint med samma standard som övriga i projektet.
+* Kom ihåg att uppdatera tillagda/ändrade endpoints på Swaggerhub.
+* Uppdatera ändringarna i diagrammet för endpoints.
+
+När resurser hämtas från API:et kommer de att exporteras i JSON format. Dessa format kan se olika ut beroende på vad som hämtas. Dessa format har blivit sammanställda på följande hemsida och uppmanas att kolla på innan dessa används: 
+
+https://app.swaggerhub.com/apis-docs/Calzone/PvtOpenApi/1.0.0
+
+## RESURSER:
+
+PostgreSQL: https://www.postgresql.org/
+
+JPA: https://docs.spring.io/spring-data/jpa/docs/current/reference/html/
+
+Spring Boot: https://spring.io/projects/spring-boot
