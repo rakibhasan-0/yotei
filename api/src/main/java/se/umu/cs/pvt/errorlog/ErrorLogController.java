@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+
 
 import java.util.List;
 
@@ -55,18 +57,13 @@ public class ErrorLogController {
      *
      * @return The added error log and http status
      */
-    @PostMapping(value="/add", consumes="application/json")
+    @PostMapping(value="/add")
     public ResponseEntity<Object> addErrorLog(@RequestBody ErrorLog toAdd) {
         
         // Remove unneccesary parts from "infoMessage" (stack trace)
         String info = toAdd.getInfoMessage();
-        String[] splitStrings = info.split("\\s+");
-        String infoResult = "";
-        for (int i=0; i<7; i++){
-            infoResult = infoResult + " " + splitStrings[i];
-        }
-        infoResult += "\"}";
-        toAdd.setInfoMessage(infoResult);
+        info = formatStackTrace(info);
+        toAdd.setInfoMessage(info);
 
         // Save in database
         try{
@@ -82,5 +79,42 @@ public class ErrorLogController {
             return new ResponseEntity<Object>("Could not save to database", HttpStatus.NOT_ACCEPTABLE);
         }
         return new ResponseEntity<>(toAdd, HttpStatus.CREATED);
+    }
+
+    /**
+     * This method removes all the error log entities from the database
+     * @return Returns OK if the exercise exists in the database, else BAD_REQUEST.
+     */
+    @DeleteMapping(value="/remove", consumes="application/json")
+    public ResponseEntity<ErrorLog> removeAllErrorLogs() {
+        try { 
+            errorLogRepository.deleteAll();
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * Remove unneccesary parts from "infoMessage" (stack trace), stopping after 400 characters
+     * @param info String containing generated stack trace
+     * @return Shortened string
+     */
+    private String formatStackTrace(String info){
+
+        String[] splitStrings = info.split("\\s+");
+        int maxChars = 400; // Character limit
+        String infoResult = "";
+        for (int i=0; i<splitStrings.length; i++){
+            infoResult = infoResult + " " + splitStrings[i];
+            if (infoResult.length() > maxChars){
+                if (!infoResult.endsWith("\"}")){
+                    infoResult += "\"}";
+                }
+                break;
+            }
+        }
+
+        return infoResult;
     }
 }
