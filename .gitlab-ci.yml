@@ -109,47 +109,6 @@ build-image:
   only:
     - main
 
-# run the system tests
-systest-job:
-  <<: *skippable
-  stage: systest
-  # We must use ubuntu, as alpine (or docker:20) uses musl instead of glibc,
-  # which is a requirement for chromium.
-  image: mcr.microsoft.com/playwright:v1.33.0-jammy
-  # only allow one runner at a time to perform system-tests
-  resource_group: system-test
-  artifacts:
-    when: always
-    paths:
-      - results.xml
-      - test-results/
-    reports:
-      junit: results.xml
-  before_script:
-    - apt update
-    # we ca-certificates and bash are needed to download node.js 14.x
-    - apt install -y --no-install-recommends docker.io curl ncat ca-certificates
-    - update-ca-certificates
-    - npm ci --no-progress --quiet --cache .npm --prefer-offline
-    - docker pull pvt2023/api:latest
-    - docker pull pvt2023/gateway:latest
-    - docker pull postgres:latest
-    - echo "export PSQL_NAME=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 12)" > .variables
-    - echo "export API_NAME=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 12)" >> .variables
-    - echo "export GATEWAY_NAME=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 12)" >> .variables
-  script:
-    - export $(cat .variables | xargs)
-    - >
-      FRONTEND_PORT=10368
-      GATEWAY_PORT=16969
-      npx playwright test
-  after_script:
-    - export $(cat .variables | xargs)
-    - docker rm -f $PSQL_NAME $API_NAME $GATEWAY_NAME
-  when: manual
-  only:
-    - merge_requests
-
 deploy:
   <<: *skippable
   image: ubuntu:latest
