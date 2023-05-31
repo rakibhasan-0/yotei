@@ -30,7 +30,7 @@ Remove this paragraph when documentation is done.
 | Workout API   | Not started |
 | Session API   | Not started |
 | Search API    | Needs verification |
-| Export API    | Not started |
+| Export API    | Done        |
 | Comment API   | Not started |
 
 # Documenting endpoints
