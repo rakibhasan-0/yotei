@@ -1,4 +1,4 @@
-import React from "react"
+import {React, forwardRef} from "react"
 import "./InputTextFieldBorderLabel.css"
 import InputTextField from "../InputTextField/InputTextField"
 /**
@@ -18,11 +18,16 @@ import InputTextField from "../InputTextField/InputTextField"
  *    
  * }
  * 
+ * Is returned with forwardRef so that we are able to use the ref of the InputTextField (makes it possible to focus the component)
+ * Thereby, the textfield also has a ref parameter
+ * 
  * @author Team Dragon
  * @version 1.0
  * @since 2023-05-02
  */
-export default function InputTextFieldBorderLabel({ placeholder, text, onChange, required,type,id, onKeyUp, label, errorMessage}) {
+const InputTextFieldBorderLabel = forwardRef(function InputTextFieldBorderLabel(
+	{ placeholder, text, onChange, required,type,id, onKeyUp, label, errorMessage}, ref) {
+
 	return(
 		<div style={{position: "relative"}}>
 			<label className="input-label">{label}</label>
@@ -35,9 +40,12 @@ export default function InputTextFieldBorderLabel({ placeholder, text, onChange,
 				id={id} 
 				onKeyUp={onKeyUp}
 				label={label}
-				errorMessage={errorMessage}>
+				errorMessage={errorMessage}
+				ref={ref}
+			>
 			</InputTextField>
 		</div>
 
 	)
-}
+})
+export default InputTextFieldBorderLabel

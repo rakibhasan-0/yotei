@@ -1,5 +1,5 @@
 import React from "react"
-import { useState, useEffect, useContext } from "react"
+import { useState, useEffect, useContext,useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import { useCookies } from "react-cookie"
 import { AccountContext } from "../../context"
@@ -7,14 +7,15 @@ import Button from "../../components/Common/Button/Button"
 import InputTextFieldBorderLabel from "../../components/Common/InputTextFieldBorderLabel/InputTextFieldBorderLabel"
 import { toast } from "react-toastify"
 
+
 /**
  * This is the login page, it is the first page the user will see
  * when opening the program. Navigates to homepage
  * when user logs in. If user credentials are incorrect,
  * an appropriate error message is displayed.
  * 
- * @author Team Verona (Group 5), Team Hot Pepper (Group 7) (28/4)
- * @version 1.0
+ * @author Team Verona (Group 5), Team Hot Pepper (Group 7) (28/4), Dragon (2023-05)
+ * @version 2.0
  */
 export default function Login() {
 	const [username, setUsername] = useState("")
@@ -23,6 +24,7 @@ export default function Login() {
 	const navigate = useNavigate()
 	const { token, setToken } = useContext(AccountContext)
 	const currentPath = window.location.pathname
+	const passwordField = useRef(null)
 
 	/**
 	 * Redirects the user to the given link if the user has previously logged in.
@@ -82,20 +84,44 @@ export default function Login() {
 	 * Only works if password field is active.
 	 * @param event
 	 */
-	function handleKeyDown(event) {
+	function loginIfClickedEnter(event) {
 		if (event.key === "Enter") {
 			loginClicked().then(() => { })
 		}
 	}
+
+	/**
+	 * Focuses the Password-field if the keypress was an Enter
+	 * @param event 
+	 */
+	function focusPassword(event){
+		if (event.key === "Enter") {
+			passwordField.current.focus()
+		}
+	}
+
 
 	return (
 		<div style={{ maxWidth: 360 }} className="center2">
 			<img style={{ maxWidth: 300 }} src="/ubk-logga.jpg" alt="This is the logo for UBK" className="center mb-5" />
 			<div style={{ width: 320 }}>
 				<div>
-					<InputTextFieldBorderLabel id={"username-input"} type={"user"} label= {"Användarnamn"} onChange={e => {setUsername(e.target.value)}}></InputTextFieldBorderLabel>
+					<InputTextFieldBorderLabel 
+						id={"username-input"} 
+						type={"user"} 
+						label= {"Användarnamn"} 
+						onChange={e => {setUsername(e.target.value)}} 
+						onKeyUp={e =>{focusPassword(e)}}>
+					</InputTextFieldBorderLabel>
 					<div style={{height: "29px"}}></div>
-					<InputTextFieldBorderLabel id={"password-input"} type={"password"} label={"Lösenord"} onChange={e => {setPassword(e.target.value)}} onKeyUp={e => {handleKeyDown(e)}}></InputTextFieldBorderLabel>
+					<InputTextFieldBorderLabel 
+						id={"password-input"} 
+						ref={passwordField} //Used to be able to focus the input inside the InputTextField
+						type={"password"} 
+						label={"Lösenord"} 
+						onChange={e => {setPassword(e.target.value)}}
+						onKeyUp={e => {loginIfClickedEnter(e)}}>
+					</InputTextFieldBorderLabel>
 					<div style={{height: "29px"}}></div>
 					<div className="row">
 

@@ -1,4 +1,5 @@
 import styles from "./InputTextField.module.css"
+import { forwardRef } from "react"
 
 /**
  * This is the standard InputTextField page, used for using standard InputTextField.
@@ -28,14 +29,18 @@ import styles from "./InputTextField.module.css"
  *		required={true}
 	/>
  * 
- * @author Team Chimera & Medusa
+ * Is returned with forwardRef so that we are able to use the ref of the input-node (makes it possible to focus)
+ * Thereby, the textfield also has a ref parameter
+ * 
+ * @author Team Chimera, Medusa & Dragon
  * @version 2.0
  * @since 2023-04-24
  * @updated (unknown) Added prop errorMessage and styling for the error state, converted CSS to CSS Module
  * @updated 2023-05-30 Chimera, updated documentation
  * 
  */
-export default function InputTextField({ placeholder, text, onChange, required, type, id, onKeyUp, errorMessage}) {
+const InputTextField = forwardRef(function InputTextField(
+	{ placeholder, text, onChange, required, type, id, onKeyUp, errorMessage}, ref) {
 	
 	const isErr = !(errorMessage == undefined || errorMessage == null || errorMessage == "")
 
@@ -50,8 +55,10 @@ export default function InputTextField({ placeholder, text, onChange, required, 
 				id={id}
 				onKeyUp={onKeyUp}
 				required={required}
+				ref={ref}
 			/>
 			<p className={styles.err}>{errorMessage}</p>
 		</label>
 	)
-}
+})
+export default InputTextField
