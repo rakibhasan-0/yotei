@@ -1,6 +1,7 @@
 --
 -- Init Yotei DB
 --
+
 -- "Konstant" för admin roll
 CREATE
 OR REPLACE FUNCTION admin_role_id() RETURNS INT AS $$ BEGIN RETURN 1;

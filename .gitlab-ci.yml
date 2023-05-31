@@ -24,7 +24,7 @@ build_database_image:
     - docker push $CONTAINER_REPOSITORY/database:staging-$FEATURE
   only:
     refs:
-      - merge-requests
+      - merge_requests
     changes:
       - database/**/*
 
@@ -37,7 +37,8 @@ systest:
     - apk update && apk add curl
     - chmod +x systest/run-systest.sh
     - chmod +x systest/find-version.sh
-    - cp /images/db-$FEATURE.tar db-latest-override.tar
+    - >
+      cp /images/db-$FEATURE.tar db-latest-override.tar &>/dev/null || :
   script:
     - >
       API_VERSION=$(systest/find-version.sh api "$CI_COMMIT_DESCRIPTION")
@@ -46,7 +47,7 @@ systest:
       systest/run-systest.sh $CI_JOB_ID
   only:
     refs:
-      - merge-requests
+      - merge_requests
     changes:
       - database/**/*
       - systest/**/*
