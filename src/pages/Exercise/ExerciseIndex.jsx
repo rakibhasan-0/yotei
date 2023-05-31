@@ -137,7 +137,8 @@ export default function ExerciseIndex() {
 				</div>
 			}
 
-			<br/><br/><br/><br/>
+			{/* Spacing so the button doesn't cover a exercise card */}
+			<br/><br/><br/><br/><br/>
 
 			{isEditor(context) && 
 			<RoundButton linkTo={null} onClick={() => setPopupVisible(true)} id={"exercise-round-button"}  style={{maxWidth: "5px"}}>
