@@ -25,17 +25,22 @@
 }
 
 .name_container {
+
+    margin: 5px 0 8px 0;
+    color: black;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+
     display: flex;
     flex-direction: row;
     width: 100%;
 }
 
-.small_name_container {
-    width: 100%;
-    padding-top: 0.1%;
+.name_container h2 {
+    margin-bottom: 8px;
 }
 
-.big_name_container {
-    min-width: 3.5rem;
-    width:100%;
+.name_container p {
+    padding-left: 5px;
+    margin-bottom: 8px;
 }
