@@ -5,6 +5,8 @@ import Divider from "../../components/Common/Divider/Divider"
 import ManageUser from "../../components/Admin/ManageUser"
 import { AccountContext } from "../../context"
 import { isAdmin } from "../../utils"
+import ErrorLogsDisplay from "../../components/ErrorLogsDisplay/ErrorLogsDisplay"
+
 
 /**
  * Basic layout as page for the administrative functions. Most logic contained in ManageUser, Import and Export.
@@ -37,6 +39,7 @@ class Developer extends React.Component {
 						<Export />
 					</div>
 				</div>
+				<ErrorLogsDisplay id="errorlogdisplay-test"></ErrorLogsDisplay>
 			</div>
 		)
 	}
