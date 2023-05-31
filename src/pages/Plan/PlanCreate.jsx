@@ -3,7 +3,6 @@ import { AccountContext } from "../../context"
 import { useNavigate } from "react-router"
 import PlanForm from "../../components/Forms/PlanForm.jsx"
 import styles from "./PlanCreate.module.css"
-import "./PlanIndex.css"
     
 /**
  * This is a page containing components to allow creation of 'Plan'

@@ -1,4 +1,4 @@
-import "./SessionHeader.css"
+import styles from "./SessionHeader.module.css"
 import React from "react"
 
 
@@ -83,43 +83,43 @@ function SessionHeader ({ id, title, day, date, time }) {
 	return (
 		checkID() ?
 			(
-				<div id = {`${id}-session-header`} className = "sc23-session-header d-flex justify-content-evenly">
-					<div id = {`${id}-date`} className = "sc23-session-header-day-date">
+				<div id = {`${id}-session-header`} className = {`${styles.sc23_session_header} ${"d-flex"} ${"justify-content-evenly"}`}>
+					<div id = {`${id}-date`} className = {styles.sc23_session_header_day_date}>
 						{
 						
 							checkDate() ?
-								<p className = "sc23-session-header-text">{date}</p>
+								<p className = {styles.sc23_session_header_text}>{date}</p>
 								:
-								<p className = "sc23-session-header-text">{"     "}</p>
+								<p className = {styles.sc23_session_header_text}>{"     "}</p>
 						}
 						{
 
 							checkDay() ?
-								<p className = "sc23-session-header-text sc23-day">{day}</p>
+								<p className = {`${styles.sc23_session_header_text} ${styles.sc23_day}`}>{day}</p>
 								:
-								<p className = "sc23-session-header-text sc23-day">{"   "}</p>
+								<p className = {`${styles.sc23_session_header_text} ${styles.sc23_day}`}>{"   "}</p>
 						}
 					</div>
 					{
 						checkTitle() ?
-							<div id = {`${id}-session-header-title`} className = "sc23-session-header-title"><p className = "sc23-session-header-text">{title}</p></div>
+							<div id = {`${id}-session-header-title`} className = {styles.sc23_session_header_title}><p className = {styles.sc23_session_header_text}>{title}</p></div>
 							:
-							<div id = {`${id}-session-header-title-error`} className = "sc23-session-header-title"><p className = "sc23-session-header-text">unnamed</p></div>
+							<div id = {`${id}-session-header-title-error`} className = {styles.sc23_session_header_title}><p className = {styles.sc23_session_header_text}>unnamed</p></div>
 					}
 
-					<div id = {`${id}-time`} className = "sc23-session-header-time">
+					<div id = {`${id}-time`} className = {styles.sc23_session_header_time}>
 						{
 							checkTime() ?
-								<p className = "sc23-session-header-text">{time}</p>
+								<p className = {styles.sc23_session_header_text}>{time}</p>
 								:
-								<p className = "sc23-session-header-text">{"   "}</p>
+								<p className = {styles.sc23_session_header_text}>{"   "}</p>
 						}
 					</div> 
 					
 				</div>
 			)
 			:
-			<div id = "error-session-header" className = "sc23-session-header-session-header">Error loading component</div>
+			<div id = "error-session-header" className = {styles.sc23_session_header_session_header}>Error loading component</div>
 	)
 }
 

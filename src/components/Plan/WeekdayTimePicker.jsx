@@ -1,7 +1,7 @@
 import {React} from "react"
 import CheckBox from "../Common/CheckBox/CheckBox.jsx"
 import TimePicker from "../Common/TimePicker/TimePicker.jsx"
-import "./WeekdayTimePicker.css"
+import styles from "./WeekdayTimePicker.module.css"
 
 /**
  * A component that should be used to select days and starting time of the sessions for a group plan.
@@ -39,16 +39,16 @@ export default function WeekdayTimePicker({id, weekdays, dayName, weekdayClickHa
 	}
 
 	return(
-		<div className="weekday-time-picker" id={id}>
+		<div className={styles.weekday_time_picker} id={id}>
 			<ul>
-				<li className="check-box-li">
+				<li className={styles.check_box_li}>
 					{/* Check box */}
 					<CheckBox id={dayName+"CheckBox"} onClick={()=> weekdayClickHandler(dayName)} checked={currentDay.value}/>
 				</li>
-				<li className="week-day-text-li">
+				<li className={styles.week_day_text_li}>
 					{dayName + "dag"}
 				</li>
-				<li className="time-picker-li">
+				<li className={styles.time_picker_li}>
 					{/* Time picker */}
 					{ currentDay.value && 
 						<TimePicker 

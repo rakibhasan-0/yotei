@@ -1,6 +1,6 @@
 /** @jest-environment jsdom */
 import React, { Fragment } from "react"
-import "./SessionList.css"
+import styles from "./SessionList.module.css"
 import SessionContainer from "./SessionContainer"
 import Divider from "../Common/Divider/Divider"
 
@@ -88,7 +88,7 @@ function SessionList ({ id, plans, sessions, workouts }) {
 
 	return (
 		checkID() && checkPlans() && checkSessions() ?
-			<div id={id} className = "sc23-session-list">
+			<div id={id} className = {styles.sc23_session_list}>
 				{
 					checkContent() ? 
 						sessions.map((session, i) => {
@@ -109,7 +109,7 @@ function SessionList ({ id, plans, sessions, workouts }) {
 				}
 			</div>
 			:
-			<div id ="session-list-render-error" className = "sc23-session-list">Kunde inte ladda in tillfällen</div>
+			<div id ="session-list-render-error" className = {styles.sc23_session_list}>Kunde inte ladda in tillfällen</div>
 	)
 }
 

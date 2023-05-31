@@ -3,7 +3,7 @@ import { useState, useEffect, useContext } from "react"
 import { AccountContext } from "../../context"
 import BeltIcon from "../Common/BeltIcon/BeltIcon"
 import CheckBox from "../Common/CheckBox/CheckBox"
-import "./GroupPicker.css"
+import styles from "./GroupPicker.module.css"
 /**
  * GroupRow represents a row in the dropdown menu 
  * of the filter component on the page 'Grupper' (Plan).
@@ -45,15 +45,15 @@ const GroupRow = ({group, states, onToggle}) => {
     
 	// TODO: Fixa error-hanteringen
 	return (
-		<div className="gp23-groupRow">
-			<div className="gp23-groupRow-belt-color">
+		<div className={styles.gp23_groupRow}>
+			<div className={styles.gp23_groupRow_belt_color}>
 				{belts && Object.values(belts).map((belt, index) => (
 					<BeltIcon key={index} id={`belt-${index}`} belt={belt}/>     
 				))}
                 
 			</div>
-			<p className="gp23-GroupRow-text" id = {`groupRow-id-${id}`}>{name}</p>
-			<div className="gp23-GroupRow-check-box">
+			<p className={styles.gp23_GroupRow_text} id = {`groupRow-id-${id}`}>{name}</p>
+			<div className={styles.gp23_GroupRow_check_box}>
 				<CheckBox id={`group-${name}-text`} onClick={toggleGroup} checked={groupState}/>
 			</div>    
 		</div>
@@ -167,7 +167,7 @@ export default function GroupPicker({ id, states, testFetchMethod, onToggle}) {
 	return(
         
 		checkID(id) ?
-			<div onClick = {() => setDroppedState(!droppedState)} id = {id} className="gp23-group-picker" >
+			<div onClick = {() => setDroppedState(!droppedState)} id = {id} className={styles.gp23_group_picker} >
                 
 				<DropDown text={"Grupper"} id= {"gp-drop-down" + id} centered={true} autoClose={false}>
 					{ 
@@ -182,7 +182,7 @@ export default function GroupPicker({ id, states, testFetchMethod, onToggle}) {
 				</DropDown>
 			</div>
 			:
-			<div id = "error-load-group-picker" className="gp23-failed-to-load">
+			<div id = "error-load-group-picker" className={styles.gp23_failed_to_load}>
 				{/* TODO: Lägg in en "riktig errorhantering" */}
 				<p>Kunde inte hämta grupper.</p>
 			</div>

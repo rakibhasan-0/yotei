@@ -1,5 +1,5 @@
 /* The complete component */
-.sc23-beltbox {
+.sc23_beltbox {
 	width: 100%;
 	height: 100%;
 	justify-content: center;
@@ -8,21 +8,21 @@
 
 
 /* Each belt */
-.sc23-beltbox-belt {
+.sc23_beltbox_belt {
 	height: 100%;
 	flex: 1;
     float: left;
 	justify-content: center;
 }
 
-.sc23-beltbox-belt-child {
+.sc23_beltbox_belt_child {
 	position: relative;
 	height: 50%;
 	top: 25%;
 }
 
 
-.sc23-beltbox-belt-error {
+.sc23_beltbox_belt_error {
 	height: 100%;
 	flex: 1;
 	color: black;
@@ -34,19 +34,19 @@
 	align-items: center;
 }
 
-.sc23-beltbox-belt-dan {
+.sc23_beltbox_belt_dan {
 	height: 10%;
 	width: 100%;
 	background-color: #FFDD33;
 }
 
 
-.sc23-beltbox-belt-dan1 {
+.sc23_beltbox_belt_dan1 {
 	display: flex;
 	flex-direction: column;
 }
 
-.sc23-beltbox-belt-dan2 {
+.sc23_beltbox_belt_dan2 {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -54,7 +54,7 @@
 }
 
 
-.sc23-beltbox-belt-dan3 {
+.sc23_beltbox_belt_dan3 {
 	display: flex;
 	flex-direction: column;
 	align-items: center;

@@ -1,12 +1,12 @@
-.time-picker-li {
+.time_picker_li {
     float: right;
 }
 
-.weekday-text-li {
+.weekday_text_li {
     justify-self: center;
 }
 
-.check-box-li {
+.check_box_li {
     margin-right: 20px;
 }
 
@@ -23,7 +23,7 @@ li {
     float: left;
 }
 
-.weekday-time-picker {
+.weekday_time_picker {
     width: 100%;
     align-items: center;
     font-size: 15p;

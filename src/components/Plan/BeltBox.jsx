@@ -1,4 +1,4 @@
-import "./BeltBox.css"
+import styles from "./BeltBox.module.css"
 
 /**
  * 	BeltBox is a style component which displays belts as their colors.
@@ -106,27 +106,27 @@ function BeltBox ( {id, belts} ) {
 			switch (belt.id) {
 			case(14):
 				return( 
-					<div key={`${belt.id}-adult-belt`} className="sc23-beltbox-belt sc23-beltbox-belt-dan1" style={{background: adaptColorCode(belt.color)}}>
-						<div className="sc23-beltbox-belt-dan"/>
+					<div key={`${belt.id}-adult-belt`} className={`${styles.sc23_beltbox_belt} ${styles.sc23_beltbox_belt_dan1}`} style={{background: adaptColorCode(belt.color)}}>
+						<div className={styles.sc23_beltbox_belt_dan}/>
 					</div>)
 			
 			case(15):
 				return ( 
-					<div key={`${belt.id}-adult-belt`} className="sc23-beltbox-belt sc23-beltbox-belt-dan2" style={{background: adaptColorCode(belt.color)}}>
-						<div className="sc23-beltbox-belt-dan"/>
-						<div className="sc23-beltbox-belt-dan"/>
+					<div key={`${belt.id}-adult-belt`} className={`${styles.sc23_beltbox_belt} ${styles.sc23_beltbox_belt_dan2}`} style={{background: adaptColorCode(belt.color)}}>
+						<div className={styles.sc23_beltbox_belt_dan}/>
+						<div className={styles.sc23_beltbox_belt_dan}/>
 					</div>)
 			
 			case(16):
 				return (
-					<div key={`${belt.id}-adult-belt`} className="sc23-beltbox-belt sc23-beltbox-belt-dan3" style={{background: adaptColorCode(belt.color)}}>
-						<div className="sc23-beltbox-belt-dan"/>
-						<div className="sc23-beltbox-belt-dan"/>
-						<div className="sc23-beltbox-belt-dan"/>
+					<div key={`${belt.id}-adult-belt`} className={`${styles.sc23_beltbox_belt} ${styles.sc23_beltbox_belt_dan3}`} style={{background: adaptColorCode(belt.color)}}>
+						<div className={styles.sc23_beltbox_belt_dan}/>
+						<div className={styles.sc23_beltbox_belt_dan}/>
+						<div className={styles.sc23_beltbox_belt_dan}/>
 					</div>)
 			}
 		} else {
-			return <div key={`${belt.id}-adult-belt`} className="sc23-beltbox-belt" style={{background: adaptColorCode(belt.color)}}/>
+			return <div key={`${belt.id}-adult-belt`} className={styles.sc23_beltbox_belt} style={{background: adaptColorCode(belt.color)}}/>
 		}
 	}
 	
@@ -134,7 +134,7 @@ function BeltBox ( {id, belts} ) {
 	return (
 		// Check if able to load BeltBox
 		checkID(id) && checkBelts() ?
-			<div id={id} className="sc23-beltbox d-flex">
+			<div id={id} className={`${styles.sc23_beltbox} ${"d-flex"}`}>
 				{
 					sortedBelts.map(belt => 
 
@@ -145,8 +145,8 @@ function BeltBox ( {id, belts} ) {
 								(
 									belt.child ?
 								
-										<div key={`${belt.id}-child-belt`} className="sc23-beltbox-belt" style={{background:"white"}}>
-											<div id={`${belt.id}-child-belt-color`} className="sc23-beltbox-belt-child" style={{background: adaptColorCode(belt.color)}}/>
+										<div key={`${belt.id}-child-belt`} className={styles.sc23_beltbox_belt} style={{background:"white"}}>
+											<div id={`${belt.id}-child-belt-color`} className={styles.sc23_beltbox_belt_child} style={{background: adaptColorCode(belt.color)}}/>
 										</div>
 										:
 										checkDan(belt) 
@@ -155,21 +155,21 @@ function BeltBox ( {id, belts} ) {
 								)
 								:
 								(
-									<div key={`${belt.id}-belt-error-child`} id={`${id}-belt-error-child`} className="sc23-beltbox-belt-error" style={{background:adaptColorCode(belt.color)}}>child?</div>
+									<div key={`${belt.id}-belt-error-child`} id={`${id}-belt-error-child`} className={styles.sc23_beltbox_belt_error} style={{background:adaptColorCode(belt.color)}}>child?</div>
 								)
 							:
 							
 							// Color unavailable
 							checkBeltName(belt) ?
-								<div key={`${id}-belt-error-color`} id={`${id}-belt-error-color`} className="sc23-beltbox-belt-error">{belt.name}</div>
+								<div key={`${id}-belt-error-color`} id={`${id}-belt-error-color`} className={styles.sc23_beltbox_belt_error}>{belt.name}</div>
 								:
-								<div key={`${id}-belt-error-name`} id={`${id}-belt-error-color`} className="sc23-beltbox-belt-error">undefined</div>
+								<div key={`${id}-belt-error-name`} id={`${id}-belt-error-color`} className={styles.sc23_beltbox_belt_error}>undefined</div>
 					)
 				}
 			</div>
 			:
 			// Unable to loada BeltBox
-			<div id = "error-load-belt-box" className="sc23-beltbox-beltbox">Error loading component</div>
+			<div id = "error-load-belt-box" className={styles.sc23_beltbox_beltbox}>Error loading component</div>
 	)
 }
 

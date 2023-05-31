@@ -1,4 +1,4 @@
-.sc23-session-list {
+.sc23_session_list {
 	display: grid;
 	grid-template-columns: 1fr;
 	height: 100%;

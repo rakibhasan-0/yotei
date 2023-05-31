@@ -1,5 +1,5 @@
 import {React} from "react"
-import "./PlanIndex.css"
+import styles from "./FilterPlan.module.css"
 import FilterContainer from "../../components/Common/Filter/FilterContainer/FilterContainer"
 import DatePicker from "../../components/Common/DatePicker/DatePicker"
 import GroupPicker from "../../components/Plan/GroupPicker"
@@ -25,19 +25,19 @@ export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, o
 	})
 
 	return (
-		<div className = "FilterPlan" id = {id}>
+		<div id = {id}>
 			<FilterContainer id={"planfilter"}>
 								
-				<div className={"datePickerContainer"}>
-					<p className="datePickerTitle">Från</p>
+				<div className={styles.datePickerContainer}>
+					<p className={styles.datePickerTitle}>Från</p>
 			
-					<div className={"datePicker"}>
+					<div className={styles.datePicker}>
 						<DatePicker onChange={e => onDatesChange("from",e.target.value)} selectedDate={dates.from} id="startDatePicker"/>
 					</div>
 					
-					<p className={"datePickerTitle"}>Till</p>
+					<p className={styles.datePickerTitle}>Till</p>
 			
-					<div className={"datePicker"}>
+					<div className={styles.datePicker}>
 						<DatePicker onChange={e => onDatesChange("to",e.target.value)} selectedDate={dates.to} id="endDatePicker" minDate={dates.from}/>
 					</div>
 				</div>

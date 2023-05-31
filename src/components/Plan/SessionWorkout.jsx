@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import "./SessionWorkout.css"
+import styles from "./SessionWorkout.module.css"
 import { StopwatchFill } from "react-bootstrap-icons"
 import { Pencil } from "react-bootstrap-icons"
 import { Link } from "react-router-dom"
@@ -129,27 +129,27 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 
 	return (
 		checkID() ?
-			<div id={id} className="sc23-session-workout">
+			<div id={id} className={styles.sc23_session_workout}>
 				{
 					checkWorkout() ?
-						<div className="sc23-session-workout-info">
-							<h2 className="sc23-session-workout-text">{title}</h2>
-							<p className="sc23-session-workout-text">{description}</p>
+						<div className={styles.sc23_session_workout_info}>
+							<h2 className={styles.sc23_session_workput_text}>{title}</h2>
+							<p className={styles.sc23_session_workput_text}>{description}</p>
 						</div>
 
 						:
 
-						<div id={`${id}-no-workout`} className="sc23-session-workout-info">
-							<h2 className="sc23-session-workout-text">Det finns inget pass.</h2>
-							<p className="sc23-session-workout-text">Du kan trycka på pennan för att lägga till ett.</p>
+						<div id={`${id}-no-workout`} className={styles.sc23_session_workout_info}>
+							<h2 className={styles.sc23_session_workput_text}>Det finns inget pass.</h2>
+							<p className={styles.sc23_session_workput_text}>Du kan trycka på pennan för att lägga till ett.</p>
 						</div>
 				}
 
-				<div className="sc23-session-workout-buttons">
+				<div className={styles.sc23_session_workout_buttons}>
 					{
 						checkWorkout() ?
-							<Link id="session-workout-workout-button" className="sc23-session-workout-links" to={`/workout/${workoutId}`}>
-								<StopwatchFill aria-label="Workout detail" role="details" className="sc23-session-workout-svg" />
+							<Link id="session-workout-workout-button" className={styles.sc23_session_workout_links} to={`/workout/${workoutId}`}>
+								<StopwatchFill aria-label="Workout detail" role="details" className={styles.sc23_session_workout_svg} />
 							</Link>
 							: 
 							<div />
@@ -161,7 +161,7 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 							<Pencil
 								aria-label="Edit Session"
 								role="edit"
-								className="sc23-session-workout-svg"
+								className={styles.sc23_session_workout_svg}
 								onClick={() => navigateAndClose(`/session/edit/${sessionId}`)}
 							/>
 						</div>

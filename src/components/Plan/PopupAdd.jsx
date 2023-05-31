@@ -2,7 +2,7 @@ import {React} from "react"
 import Button from "../Common/Button/Button"
 import MiniPopup from "../Common/MiniPopup/MiniPopup"
 import { useNavigate } from "react-router"
-import "./PopupAdd.css"
+import styles from "./PopupAdd.module.css"
 
 
 /**
@@ -25,8 +25,8 @@ export default function PopupAdd({id, isOpen, setIsOpen}) {
 
 	return(
 		<MiniPopup id={id} title={"Lägg till"} isOpen={isOpen} setIsOpen={setIsOpen} titleTopMargin={14}>
-			<div className="popupContainer">
-				<div className="buttonContainer">
+			<div className={styles.popupContainer}>
+				<div className={styles.buttonContainer}>
 					<Button id="newPlan" onClick={() => navigateAndClose("/plan/create")} outlined={false}>Grupp</Button>
 					<Button id="newSession" onClick={() => navigateAndClose("/session/create")} outlined={false}>Tillfälle</Button>
 				</div>
