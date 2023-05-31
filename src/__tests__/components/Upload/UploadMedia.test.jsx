@@ -84,7 +84,7 @@ test("Uploading a file should call functions", async () => {
 	let movementId = 2
 	let filename = "chucknorris.png"
 	let file = new File(["(⌐□_□)"], filename, { type: "image/png" })
-	let mediaMeta = {description: "todo", image:true, localStorage: true, movementId: movementId, url:"/api/media/files/"+filename}
+	let mediaMeta = {description: "", image:true, localStorage: true, movementId: movementId, url:"/api/media/files/"+filename}
 	const testFnc1 = jest.fn()
 	const testFnc2 = jest.fn((data) => {val = data})
 	server.use(

@@ -12,6 +12,7 @@ import {Trash as TrashIcon } from "react-bootstrap-icons"
 import {CameraVideoOff as NoMediaIcon } from "react-bootstrap-icons"
 import UploadMedia from "../Upload/UploadMedia"
 import {toast} from "react-toastify"
+import TextArea from "../Common/TextArea/TextArea"
 import Button from "../Common/Button/Button"
 
 /**
@@ -38,9 +39,12 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	const [mediaThatWasUploaded, setMediaThatWasUploaded] = useState([])
 	const [mediaToBeAdded, setMediaToBeAdded] = useState([])
 
+	const [descMap, setDescMap] = useState(new Map())
+
 	// We need to filter pictures and videos to two different arrays
 	let pictures = []
 	let videos = []
+
 	
 	/**
 	 * Callback for retrieving media from server
@@ -235,22 +239,48 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 			body: JSON.stringify(list)
 		}
 		try {
-			const response = await fetch("/api/media", requestOptions)
-            
-			if (response.ok) {
-				console.log("remove request sent")
-			}
+			await fetch("/api/media", requestOptions)
 		} catch (error) {
-			console.log(error)
+			console.error(error)
 		}
 	}
 
 
 	const makeAPICalls = async () => {
 		
+
 		await postMedia(mediaToBeAdded)
+		await putDescription(descMap)
 		await deleteMedia(mediaToRemove)
 		done()
+	}
+
+	/**
+	 * 
+	 * @param {*} map 
+	 */
+	async function putDescription(map) {
+		
+		let payload = []
+
+		for (let [key, value] of map) {
+			const body = {
+				id: key,
+				description: value
+			}
+			payload.push(body)
+		}
+
+		const requestOptions = {
+			method: "PUT",
+			headers: { "Content-type": "application/json", "token": context.token },
+			body: JSON.stringify(payload)
+		}
+		try {
+			await fetch("/api/media", requestOptions)
+		} catch (error) {
+			console.error(error)
+		}
 	}
 
 	
@@ -292,6 +322,22 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 		return errorText
 	}
 
+	/**
+	 * Used for adding description into gallery.
+	 * @param {*} mediaObject image or video that has a description.
+	 * @returns a paragraph with description connected to mediaObject.
+	 */
+	function MediaDescription(mediaObject){
+		
+		return(	
+			<TextArea defVal={mediaObject.description} onChange={e => {
+				setDescMap(descMap.set(mediaObject.id, e.target.value))
+			}} >
+
+			</TextArea>
+		)
+	}
+
 
 	return (
 		
@@ -304,12 +350,14 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 						{pictures.map((image, index) => (
 							<div key={index} className="d-flex flex-column justify-content-center align-items-center">
 								<Image id={`${image.id}-image`} path={image.url} />
+								{MediaDescription(image)}
 								{RemoveButton(image)}
 							</div>
 						))}
 						{videos.map((video, index) => (
 							<div key={index}>
 								<VideoPlayerReactPlayer id={`${video.id}-video-player`} path={video.url} editMode={true} />
+								{MediaDescription(video)}
 								{RemoveButton(video)}
 							</div>
 						))}

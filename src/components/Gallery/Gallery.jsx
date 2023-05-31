@@ -55,16 +55,36 @@ export default function Gallery({ id }) {
 		}
 	})
 
+	/**
+	 * Used for adding description into gallery.
+	 * @param {*} mediaObject image or video that has a description.
+	 * @returns a paragraph with description connected to mediaObject.
+	 */
+	function MediaDescription(mediaObject){
+		return(
+			<p id={`${mediaObject.id}-media-description`} className="media-description">
+				{mediaObject.description}
+			</p>
+		)
+	}
+
+
 	return (
 		<div className="container gallery-container" id={id}>
 			<div className="row mt-2 mb-2">
 				<div className="col-sm-12 text-center ">
 					<Carousel showThumbs={false} showStatus={false} showArrows={true}>                         
 						{pictures.map((image, index) => (
-							<Image path={image.url} key={index} />
+							<div className="gallery-image-and-description" key={index}>
+								<Image path={image.url} key={index} />
+								{MediaDescription(image)}
+							</div>
 						))}
 						{videos.map((video, index) => (
-							<VideoPlayerReactPlayer path={video.url} key={index}/>
+							<div className="gallery-video-and-description" key={index}>
+								<VideoPlayerReactPlayer path={video.url} key={index}/>
+								{MediaDescription(video)}
+							</div>
 						))}
 					</Carousel>
 				</div>

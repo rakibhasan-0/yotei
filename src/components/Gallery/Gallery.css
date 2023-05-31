@@ -3,6 +3,7 @@
     width: auto;
     height: 300px;
     margin-top: 2%;
+    margin-bottom: 0px !important;
 }
 
 
@@ -139,9 +140,13 @@
 .w-25 {
     width: 70%!important;
     padding-top: 0%;
-    padding-bottom: 15%;
+    padding-bottom: 0%;
 }
 
 .carousel ul {
     overflow: visible !important;
+}
+
+.media-description {
+    margin-bottom: 30px;
 }

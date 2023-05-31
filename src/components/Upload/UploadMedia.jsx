@@ -1,6 +1,7 @@
 import Button from "../Common/Button/Button"
 import {Link45deg as LinkIcon} from "react-bootstrap-icons"
 import InputTextField from "../Common/InputTextField/InputTextField"
+import TextArea from "../Common/TextArea/TextArea"
 import {Upload as UploadIcon}  from "react-bootstrap-icons"
 import { useState } from "react"
 import "./UploadMedia.css"
@@ -31,6 +32,8 @@ function UploadMedia({id, exerciseId, fetchMediaMetaToBeUploaded, fetchMediaFile
 	const [selectedFile, setSelectedFile] = useState()
 	const [hasFile, setHasFile] = useState(false)
 	const [showSpinner, setShowSpinner] = useState(false)
+	const [desc, setDesc] = useState("")
+
 
 	/**
 	 * Selects file from file-event. Activates button to upload media.
@@ -79,7 +82,7 @@ function UploadMedia({id, exerciseId, fetchMediaMetaToBeUploaded, fetchMediaFile
 				let media = {
 					movementId : exerciseId, 
 					localStorage :true, 
-					description: "todo", 
+					description: desc, 
 					url: "/api/media/files/"+responseData.filename, 
 					image: !isPlayableVideoMedia(responseData.filename)
 				}
@@ -119,7 +122,7 @@ function UploadMedia({id, exerciseId, fetchMediaMetaToBeUploaded, fetchMediaFile
 			let media = {
 				movementId : exerciseId, 
 				localStorage :false, 
-				description: "todo", 
+				description: desc, 
 				url: link, 
 				image: !isPlayableVideoMedia(link)
 			}
@@ -212,8 +215,16 @@ function UploadMedia({id, exerciseId, fetchMediaMetaToBeUploaded, fetchMediaFile
 						<div className="upload-link-btn"><LinkIcon  size="15%" /> Länka Till Media</div>
 					</Button>
 				</div>
-				
 			</div>
+			<hr className="line"/>
+			<div>
+				<TextArea
+					id="description-input"
+					placeholder="Infoga beskrivning"
+					onChange={e => {setDesc(e.target.value)}}>
+				</TextArea>
+			</div>
+
 		</div>
 	)
 }
