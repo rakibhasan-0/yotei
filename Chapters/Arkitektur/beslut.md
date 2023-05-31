@@ -2,10 +2,15 @@
 [mall för beslut](../../Mallar/beslut.md)
 
 [Arkitekt beslut VT23](### Arkitekt beslut)
+
 [Separat UserSettings-API](### Separat UserSettings-API)
+
 [Övergång från Login till User](### Övergång från Login till User)
+
 [Byte av kategorier till taggar](### Byte av kategorier till taggar)
+
 [Från Microservices till Diamond](### Från Microservices till Diamond)
+
 [Microservices beslut](### Microservices beslut)
 
 
