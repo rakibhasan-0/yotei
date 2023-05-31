@@ -295,10 +295,10 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 
 	return (
 		
-		<div className="container mb-2" id={id}>
+		<div className="container mb-2 d-flex flex-column" style={{alignItems : !media.length ? "center" : "normal"}} id={id}>
 			{ConfirmRemovePopup}
 			{UploadPopup}
-			<div className="row mt-2 mb-4" style={{backgroundColor : "var(--black-primary)"}}>
+			<div className="row mt-2 mb-4"  style={{backgroundColor : media.length ? "var(--black-primary)" : "var(--background)"}}>
 				<div className="col-sm-12 text-center ">
 					<Carousel showThumbs={false} showStatus={false}>                         
 						{pictures.map((image, index) => (
@@ -317,7 +317,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 				</div>
 			</div>
 			{pictures.length < 1 && videos.length < 1 && NoMedia}
-			<div className="d-flex flex-column justify-content-center align-items-center">
+			<div className="d-flex flex-column justify-content-center align-items-center" style={{width: "100%"}}>
 				<Button id={"add-media-button"} onClick={() => setShowAddPopup(true)}>
 					<h2>+ Media</h2>
 				</Button>
