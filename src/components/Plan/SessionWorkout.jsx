@@ -4,7 +4,7 @@ import { StopwatchFill } from "react-bootstrap-icons"
 import { Pencil } from "react-bootstrap-icons"
 import { Link } from "react-router-dom"
 import { AccountContext } from "../../context"
-import { isAdmin } from "../../utils"
+import { isEditor } from "../../utils"
 import { useNavigate } from "react-router"
 
 /**
@@ -59,19 +59,6 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 
 	function checkWorkout() {
 		return !(workout === null || workout === undefined)
-	}
-
-
-	function userIsCreator() {
-		if (userId == creatorID)
-			return true
-
-		return false
-	}
-
-
-	function userIsAdmin() {
-		return isAdmin(userContext)
 	}
 
 
@@ -156,7 +143,7 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 					}
 
 					{
-						(userIsAdmin() || userIsCreator()) &&
+						(isEditor(userContext) || userId == creatorID) &&
 						<div>
 							<Pencil
 								aria-label="Edit Session"

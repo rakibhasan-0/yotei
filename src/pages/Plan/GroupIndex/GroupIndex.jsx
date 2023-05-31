@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react"
+import { isEditor } from "../../../utils"
 import { toast } from "react-toastify"
 import { AccountContext } from "../../../context"
 import style from "./GroupIndex.module.css"
@@ -20,7 +21,8 @@ import SearchBar from "../../../components/Common/SearchBar/SearchBar"
 export default function GroupIndex() {
 	const [groups, setGroups] = useState([])
 	const [searchText, setSearchText] = useState()
-	const { token } = useContext(AccountContext)
+	const context = useContext(AccountContext)
+	const { token, userId } = context
 	const navigate = useNavigate()
 
 	useEffect(() => {
@@ -59,9 +61,10 @@ export default function GroupIndex() {
 							<div className={style.item}>
 								<BeltBox id={index} belts={group.belts} />
 							</div>
-							<Link to={`/plan/edit/${group.id}`}>
+							{ (isEditor(context) || userId == group.userId)&& <Link to={`/plan/edit/${group.id}`}>
 								<Pencil size={24} color="var(--red-primary)" />
 							</Link>
+							}
 						</div>
 					</div>
 				))}

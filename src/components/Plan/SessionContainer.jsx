@@ -62,7 +62,7 @@ function SessionContainer ({ id, workout, session, plan}) {
 
 	function setPlanCreatorID(){
 		if(checkPlan())
-			return plan.user_id
+			return plan.userId
 		
 		return null
 	}
