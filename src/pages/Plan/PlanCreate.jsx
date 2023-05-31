@@ -4,6 +4,8 @@ import { useNavigate } from "react-router"
 import PlanForm from "../../components/Forms/PlanForm.jsx"
 import styles from "./PlanCreate.module.css"
     
+import {toast} from "react-toastify"
+    
 /**
  * This is a page containing components to allow creation of 'Plan'
  * objects.
@@ -20,7 +22,11 @@ export default function PlanCreate() {
      * Gets the token for the user
      */
 	const { token, userId } = useContext(AccountContext)
-
+	
+	/**
+	 * The red thing around the textinput field...
+	 */
+	const [textInputErrorMsg,setTextInputErrorMsg] = useState("")
 
 	const navigate = useNavigate()
 
@@ -35,7 +41,7 @@ export default function PlanCreate() {
 	})
 
 	/**
-     * A state representing each day of the week. The boolean values are used for deciding which days should be displayed.
+     * A state representing each day of the week. The booleafieldCheckn values are used for deciding which days should be displayed.
      * The user can choose a time for each day.
      */
 	const [weekdays, setWeekdays] = useState([
@@ -85,13 +91,7 @@ export default function PlanCreate() {
 		name: false,
 		startDate: false,
 		endDate: false,
-		buttonClicked: false
 	})
-
-	/**
-     *
-     */
-	const [displayAlert, setDisplayAlert] = useState()
 
 	/**
      * Is called when the data is modified by the form.
@@ -101,6 +101,7 @@ export default function PlanCreate() {
      * @param value         The updated value.
      */
 	const dataClickHandler = (variableName, value) => {
+		setTextInputErrorMsg("")
 		setPlanData({ ...planData, [variableName]: value })
 	}
 
@@ -152,25 +153,34 @@ export default function PlanCreate() {
     * Function for api call when creating a plan
     */
 	async function addPlan() {
-		const requestOptions = {
-			method: "POST",
-			headers: { "Content-type": "application/json", "token": token },
-			body: JSON.stringify({ name: planData.name, belts: beltsChosen, userId: userId })
-		}
-
+		
 		if (validateForm()) {
+
+			const requestOptions = {
+				method: "POST",
+				headers: { "Content-type": "application/json", "token": token },
+				body: JSON.stringify({ name: planData.name, belts: beltsChosen, userId: userId })
+			}
 
 			/* Post Plan */
 			try {
 				const response = await fetch("/api/plan/add", requestOptions)
-				const res = await response.json()
 
 				/* Success */
-				if (response.ok)
+				if (response.ok){
+					const res = await response.json()
 					dateHandler(res.id)
+
+									
+					toast.success("Gruppen "+ planData.name +" lades till")
+					navigate(-1)
+				} else {
+					if (response.status == 409) {
+						setTextInputErrorMsg("Gruppnamnet finns redan")
+					}
+				}
 			} catch (error) {
-				console.error(error)
-				failureAlert()
+				toast.error("Kunde inte skapa gruppen.")
 			}
 		}
 	}
@@ -202,13 +212,11 @@ export default function PlanCreate() {
 
 			
 			if (response.ok) {
-				successAlert()
-				navigate(-1)
+				toast.success("Tillfällen lades till.")
 			}
 
 		} catch (error) {
-			failureAlert("Tillfällen kunde inte	 läggas till.")
-			console.error(error)
+			toast.error("Tillfällen kunde inte läggas till.")
 		}
 	}
 
@@ -276,9 +284,7 @@ export default function PlanCreate() {
 					})
 
 					addSessions()
-				}
-				else
-					successAlert()
+				} 
 			}
 		}
 	}
@@ -330,38 +336,6 @@ export default function PlanCreate() {
 	}
 
 	/**
-     * A function that updates the displayAlert useState with a success message.
-     *
-     * @returns     True
-     */
-	function successAlert() {
-		setDisplayAlert(
-			<div className="alert alert-success" role="alert">
-                Planeringen {planData.name} lades till.
-			</div>
-		)
-		return true
-	}
-
-	/**
-     * A function that updates the displayAlert useState with a fail message.
-     * The message is appended by a given body.
-     *
-     * @param body  The string to append the message
-     *
-     * @returns     False
-     */
-	function failureAlert(body) {
-		setDisplayAlert(
-			<div className="alert alert-danger"
-				role="alert">
-                Planeringen {planData.name} kunde inte läggas till. {body}
-			</div>
-		)
-		return false
-	}
-
-	/**
      * A function that will validate the users input.
      * If the input is invalid it will send a signal to the form and change
      * the input style.
@@ -369,25 +343,26 @@ export default function PlanCreate() {
      * @returns Boolean
      */
 	function validateForm() {
-
-		var res = false
-
-		if (fieldCheck.startDate || fieldCheck.endDate) {
-
-			if (fieldCheck.endDate && planData.endDate < planData.startDate)
-				res = failureAlert("Det valda slut-datumet är före det valda start-datumet.")
-			else if (!fieldCheck.name || !fieldCheck.startDate || !fieldCheck.endDate)
-				res = failureAlert("Vänligen fyll i alla fält.")
-			else
-				res = true
+		var res = true
+		
+		if (!fieldCheck.name){
+			setTextInputErrorMsg("Vänligen fyll i namn.")
+			res = false
 		}
-		else {
-			if (!fieldCheck.name && fieldCheck.buttonClicked)
-				res = failureAlert("Vänligen fyll i namn.")
-			else
-				res = successAlert()
+
+		if (beltsChosen.length == 0) {
+			toast.error("Vänligen välj bälten till gruppen.")
+			res = false
 		}
-		setFieldCheck({ ...fieldCheck, buttonClicked: false })
+
+		if (!(fieldCheck.startDate && fieldCheck.endDate)) {
+			toast.error("Vänligen välj start- och slutdatum.")
+			res = false
+		} else if (planData.endDate < planData.startDate) {
+			toast.error("Det valda startdatumet är senare än det valda slutdatumet.")
+			res = false
+		}
+
 		return res
 	}
 	
@@ -409,15 +384,10 @@ export default function PlanCreate() {
 						okName={checkNotEmpty("name")}
 						okStartDate={checkDate("startDate")}
 						okEndDate={checkDate("endDate")}
-						buttonClicked={fieldCheck.buttonClicked}
-						submitClicked={() => { addPlan().then(() => { 
-							setFieldCheck({ ...fieldCheck, buttonClicked: true})
-						}) 
-						}}
+						submitClicked={addPlan}
 						backClicked={() => navigate(-1)}
+						textInputErrorMsg={textInputErrorMsg}
 					/>
-
-					{fieldCheck.buttonClicked ? displayAlert : ""}
 				</div>
 			</div>
 		</div>

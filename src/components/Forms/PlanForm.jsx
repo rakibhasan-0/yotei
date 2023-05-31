@@ -24,6 +24,7 @@ import InputTextField from "../Common/InputTextField/InputTextField"
  *	buttonClicked: the state if the button has been clicked.
  *	submitClicked: function for handling submits of the form, if the "Gå vidare" button is clicked.
  *	backClicked: function for handling if the back button is clicked
+ *	textInputErrorMsg(Optional): error message to InputTextField-component 
  * }
  * 
  * 
@@ -57,6 +58,8 @@ export default function PlanForm(props) {
 					value={name}
 					onChange={(e) => { props.onClickData("name", e.target.value) }}
 					required={true}
+					errorMessage={props.textInputErrorMsg}
+					
 				/>
 			</div>
             
