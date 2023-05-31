@@ -1,6 +1,6 @@
 ## Mall
 [mall för beslut](../../Mallar/beslut.md)
-
+[[_TOC_]]
 
 
 ## Beslut om arkitektur från VT23
