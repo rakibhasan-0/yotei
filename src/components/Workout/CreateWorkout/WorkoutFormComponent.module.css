@@ -2,12 +2,19 @@
     margin-top: 1.2rem;
 }
 
-.activityButtonContainer{
+.activityButtons {
+    display: flex;
+    align-items: center;
+    justify-content: center;   
+}
+
+.activityButtons .container {
     display: flex;
     justify-content: space-between;
-    margin: 2rem 3.5rem;
     gap: 2rem;
+    width: 270px;
 }
+
 .buttonContainer {
     display: flex;
     justify-content: space-between;

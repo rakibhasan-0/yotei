@@ -182,25 +182,27 @@ function WorkoutFormComponent({ callback }) {
 						backText="Avbryt"
 						onClick={callback}
 					/>
-					<div className={styles.activityButtonContainer}>
-						<Button
-							onClick={() =>
-								workoutCreateInfoDispatch({
-									type: WORKOUT_CREATE_TYPES.OPEN_FREE_TEXT_POPUP
-								})
-							}
-						>
-							<h2>+ Fri text</h2>
-						</Button>
-						<Button
-							onClick={() =>
-								workoutCreateInfoDispatch({
-									type: WORKOUT_CREATE_TYPES.OPEN_CHOOSE_ACTIVITY_POPUP
-								})
-							}
-						>
-							<h2>+ Aktivitet</h2>
-						</Button>
+					<div className={styles.activityButtons}>
+						<div className={styles.container}>
+							<Button
+								onClick={() =>
+									workoutCreateInfoDispatch({
+										type: WORKOUT_CREATE_TYPES.OPEN_FREE_TEXT_POPUP
+									})
+								}
+							>
+								<h2>+ Fri text</h2>
+							</Button>
+							<Button
+								onClick={() =>
+									workoutCreateInfoDispatch({
+										type: WORKOUT_CREATE_TYPES.OPEN_CHOOSE_ACTIVITY_POPUP
+									})
+								}
+							>
+								<h2>+ Aktivitet</h2>
+							</Button>
+						</div>
 					</div>
 				</Form.Group>
 

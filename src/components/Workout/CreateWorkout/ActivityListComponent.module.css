@@ -21,6 +21,10 @@
 	background-color: var(--background);
 }
 
+.itemDragging {
+	box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
 .pink {
 	background-color: var(--red-secondary);
 }
@@ -55,4 +59,14 @@
 }
 .listContainer {
 	padding: 0.5rem 0 1rem 0;
+}
+
+.listDragging {
+	background-color: var(--background);
+	box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.listDragging legend {
+	background-color: var(--background);
+	border-radius: 10px;
 }

@@ -89,7 +89,7 @@ function ActivityList({ isFreeText }){
 						onClick={() => workoutCreateInfoDispatch({
 							type: "ADD_ACTIVITY", 
 							payload: { name: "" }})} >
-						<Plus size="2em" />
+						<Plus />
 					</Button>
 				</div>}
 		</div>

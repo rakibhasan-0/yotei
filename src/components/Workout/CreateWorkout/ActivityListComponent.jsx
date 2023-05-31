@@ -43,6 +43,7 @@ export default function ActivityListComponent() {
 				...group,
 				id: group.id, // Assign a unique ID based on the index
 			}))
+
 			workoutCreateInfoDispatch({
 				type: WORKOUT_CREATE_TYPES.SET_ACTIVITY_ITEMS,
 				activityItems: updatedGroups,
@@ -53,14 +54,13 @@ export default function ActivityListComponent() {
 			const sourceIndex = source.index
 			const destinationIndex = destination.index
 
-			if (sourceGroupId === destinationGroupId && sourceIndex === destinationIndex) {
-				return
-			}
+			if (sourceGroupId === destinationGroupId && sourceIndex === destinationIndex) return
+
 			const groups = [...workoutCreateInfo.data.activityItems]
-			const sourceGroup = groups[sourceGroupId]
+			const sourceGroup = groups.find(group => group.id === sourceGroupId)
 			const [draggedActivity] = sourceGroup.activities.splice(sourceIndex, 1)
 
-			const destinationGroup = groups[destinationGroupId]
+			const destinationGroup = groups.find(group => group.id === destinationGroupId)
 			destinationGroup.activities.splice(destinationIndex, 0, draggedActivity)
 
 			workoutCreateInfoDispatch({
@@ -79,56 +79,23 @@ export default function ActivityListComponent() {
 					{(provided) => (
 						<div ref={provided.innerRef} {...provided.droppableProps}>
 							{workoutCreateInfo.data.activityItems.map((activityItem, groupIndex) => (
-								<Draggable
-									key={groupIndex}
-									draggableId={`group${groupIndex}`}
-									index={groupIndex}
-								>
-									{(provided) => (
-										<div
-											ref={provided.innerRef}
-											{...provided.draggableProps}
-											{...provided.dragHandleProps}
-										>
-											<Droppable droppableId={`activityGroup${groupIndex}`} direction="vertical" type="activity">
-												{(provided) => (
-													<div ref={provided.innerRef} {...provided.droppableProps}>
-														<div>
-															{activityItem.activities.length > 0 && (
-																<ActivityList categoryName={activityItem.name !== "Ingen kategori" ? activityItem.name : null}>
-																	{activityItem.activities.map((activity, itemIndex) => (
-																		<Draggable
-																			key={activity.id}
-																			draggableId={`activity${activity.id}`}
-																			index={itemIndex}
-																		>
-																			{(provided) => (
-																				<div
-																					ref={provided.innerRef}
-																					{...provided.draggableProps}
-																					{...provided.dragHandleProps}
-																				>
-																					<ActivityItem
-																						activityName={activity.name}
-																						activityTime={activity.duration}
-																						pinkColor={itemIndex % 2 === 0}
-																						isEditable={activity.isEditable}
-																						id={activity.id}
-																					/>
-																				</div>
-																			)}
-																		</Draggable>
-																	))}
-																	{provided.placeholder}
-																</ActivityList>
-															)}
-														</div>
-													</div>
-												)}
-											</Droppable>
-										</div>
-									)}
-								</Draggable>
+								<ActivityList 
+									categoryName={activityItem.name !== "Ingen kategori" ? activityItem.name : null}
+									key={activityItem.id}
+									id={activityItem.id}
+									groupIndex={groupIndex}>
+									{activityItem.activities.map((activity, itemIndex) => (
+										<ActivityItem
+											key={activity.id}
+											activityName={activity.name}
+											activityTime={activity.duration}
+											pinkColor={itemIndex % 2 === 0}
+											isEditable={activity.isEditable}
+											id={activity.id}
+											itemIndex={itemIndex}
+										/>
+									))}
+								</ActivityList>
 							))}
 							{provided.placeholder}
 						</div>
@@ -153,17 +120,38 @@ export default function ActivityListComponent() {
  *			/>
  *		<ActivityListItem
  */
-function ActivityList({ children, categoryName }) {
+function ActivityList({ children, categoryName, groupIndex, id }) {
 	return (
-		<fieldset className={styles.listContainer}>
-			<legend>
-				<div className={styles.legend}>
-					<List width="24px" height="24px"/>
-					<p style={{ margin: 0 }}>{categoryName}</p>
+		<Draggable
+			key={id}
+			draggableId={`group${id}`}
+			index={groupIndex} >
+			{(provided, snapshot) => (
+				<div
+					ref={provided.innerRef}
+					{...provided.draggableProps} >
+					<fieldset className={[
+						styles.listContainer,
+						snapshot.isDragging ? styles.listDragging : ""
+					].join(" ")} >
+						<legend>
+							<div className={styles.legend} {...provided.dragHandleProps}>
+								<List width="24px" height="24px"/>
+								<p style={{ margin: 0 }}>{categoryName}</p>
+							</div>
+						</legend>
+						<Droppable droppableId={`activityGroup${id}`} direction="vertical" type="activity">
+							{(provided) => (
+								<div ref={provided.innerRef} {...provided.droppableProps}>
+									{children}
+									{provided.placeholder}
+								</div>
+							)}
+						</Droppable>
+					</fieldset>
 				</div>
-			</legend>
-			{children}
-		</fieldset>
+			)}
+		</Draggable>
 	)
 }
 
@@ -183,30 +171,41 @@ function ActivityList({ children, categoryName }) {
  *			pinkColor={true}
  *		/>
  */
-function ActivityItem({ activityName, activityTime, pinkColor , id}) {
+function ActivityItem({ activityName, activityTime, pinkColor, id, itemIndex}) {
 	const { workoutCreateInfoDispatch, } = useContext(WorkoutCreateContext)
 	return (
-		<div
-			className={[
-				styles.itemContainer,
-				pinkColor ? styles.pink : ""
-			].join(" ")}
-		>
-			<div className={styles.dragAndText}>
-				<i>
-					<List width="24" height="24" fill="B4B4B4" />
-				</i>
-				<p className={styles.text}>{activityName.trim()}</p>
-			</div>
-			<div className={styles.minutesAndEdit}>
-				<p style={{ marginBottom: 0 }}><b>{activityTime} min</b></p>
-				<i onClick={() => {
-					workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.OPEN_EDIT_ACTIVITY_POPUP}), 
-					workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.SET_CURRENTLY_EDITING, payload: {id: id}})
-				}}>
-					<Pencil size="20px"	color="var(--red-primary)" style={{cursor: "pointer"}} />
-				</i>
-			</div>
-		</div>
+		<Draggable
+			key={id}
+			draggableId={`activity${id}`}
+			index={itemIndex} >
+			{(provided, snapshot) => (
+				<div
+					ref={provided.innerRef}
+					{...provided.draggableProps} >
+					<div
+						className={[
+							styles.itemContainer,
+							snapshot.isDragging ? styles.itemDragging : "",
+							pinkColor ? styles.pink : ""
+						].join(" ")} >
+						<div className={styles.dragAndText}>
+							<i {...provided.dragHandleProps}>
+								<List width="24" height="24" fill="B4B4B4" />
+							</i>
+							<p className={styles.text}>{activityName.trim()}</p>
+						</div>
+						<div className={styles.minutesAndEdit}>
+							<p style={{ marginBottom: 0 }}><b>{activityTime} min</b></p>
+							<i onClick={() => {
+								workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.OPEN_EDIT_ACTIVITY_POPUP}), 
+								workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.SET_CURRENTLY_EDITING, payload: {id: id}})
+							}}>
+								<Pencil size="20px"	color="var(--red-primary)" style={{cursor: "pointer"}} />
+							</i>
+						</div>
+					</div>
+				</div>
+			)}
+		</Draggable>
 	)
 }

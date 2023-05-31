@@ -198,7 +198,7 @@ export function workoutCreateReducer(state, action) {
 		return tempState
 	}
 	case "SET_ACTIVITY_ITEMS":
-		tempState.data.activityItems = action.activityItems
+		tempState.data.activityItems = action.activityItems.filter(item => item.activities.length > 0)
 		return tempState
 	case "SET_ACTIVITIES": {
 		tempState.data.activityItems[action.id].activities = action.activities
