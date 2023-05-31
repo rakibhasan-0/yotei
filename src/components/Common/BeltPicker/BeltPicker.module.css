@@ -32,3 +32,10 @@
 .centeredText {
     flex: 1;
 }
+
+.err {
+	color: var(--red-primary);
+	margin: 5px 0 0 1rem;
+	transition-duration: 200ms;
+	height: 21px;
+  }

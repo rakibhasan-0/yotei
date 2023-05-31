@@ -49,7 +49,10 @@ export default function CreateTechnique({ id, setIsOpen }) {
 
 	const [techniqueDescription, setTechniqueDescription] = useState("")
 	const [kihonChecked, setKihonChecked] = useState(false)
+
 	const [belts, setBelts] = useState([])
+	const [beltsErr, setBeltsErr] = useState("")
+
 	const [addedTags, setAddedTags] = useState([])
 	const [continueToCreate, setContinueToCreate] = useState(false)
 	const [clearFields, setClearFields] = useState(false)
@@ -61,7 +64,7 @@ export default function CreateTechnique({ id, setIsOpen }) {
 
 	const [showConfirmPopup, setShowConfirmPopup] = useState(false)
 
-	
+
 	useBlocker(() => {
 		if (unsavedChanges()) {
 			handleLeave()
@@ -87,6 +90,12 @@ export default function CreateTechnique({ id, setIsOpen }) {
 		console.log(tempId)
 	}, [tempId])
 
+	useEffect(() => {
+		if (belts.length > 0) {
+			setBeltsErr("")
+		}
+	}, [belts])
+
 	function unsavedChanges() {
 		return techniqueName != "" || techniqueDescription != "" || addedTags.length > 0 || belts.length > 0
 	}
@@ -110,7 +119,20 @@ export default function CreateTechnique({ id, setIsOpen }) {
 			setIsOpen(false)
 		}
 	}
+
 	async function handleSubmit() {
+
+		if (techniqueName == "") {
+			setTechniqueNameErr("En teknik måste ha ett namn")
+			scrollToElementWithId("create-technique-input-name")
+			return
+		}
+		if (belts.length === 0) {
+			setBeltsErr("En teknik måste minst ha en bältesgrad")
+			scrollToElementWithId("create-technique-beltpicker")
+			return
+		}
+
 		const tagIds = buildTags(addedTags, kihonChecked)
 		const beltIds = buildBelts(belts)
 
@@ -216,6 +238,7 @@ export default function CreateTechnique({ id, setIsOpen }) {
 				onToggle={onToggle}
 				states={belts}
 				filterWhiteBelt={true}
+				errorMessage={beltsErr}
 			/>
 			<div style={{ height: "1rem" }} />
 

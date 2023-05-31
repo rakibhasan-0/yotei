@@ -92,9 +92,10 @@ const BeltRow = ({ belt, states, onToggle }) => {
  * @param id An id for the belt picker
  * @param states A state object, as shown above
  * @param onToggle A toggle function when a belt is selected (both child and adult)
+ * @param errorMessage A toggle function when a belt is selected (both child and adult)
  * @returns A new belt picker component
  */
-export default function BeltPicker({ id, states, onToggle, centered, onClearBelts, filterWhiteBelt }) {
+export default function BeltPicker({ id, states, onToggle, centered, onClearBelts, filterWhiteBelt, errorMessage }) {
 	const { token } = useContext(AccountContext)
 	const [belts, setBelts] = useState()
 	const [rerender, setRerender] = useState(false)
@@ -136,20 +137,24 @@ export default function BeltPicker({ id, states, onToggle, centered, onClearBelt
 	}
 
 	return (
-		<DropdownComponent text={"Bälten"} id={id} centered={centered} autoClose={false} >
-			{!rerender && 
-				<>
-					<input type="checkbox" style={{display: "none"}}/> {/* Do not touch this checkbox, is needed */}
-					{belts && Object.values(belts).map((belt, index) => (
-						<BeltRow onToggle={onToggle} states={states} key={index} belt={belt} />
-					))}
-					{onClearBelts &&
-						<div className={styles.beltRow} onClick={clearBelts}>
-							<p className={`${styles.beltText} ${styles.centeredText}`}>Rensa valda bälten</p>
-						</div>
-					}
-				</>
-			}
-		</DropdownComponent>
+		<>
+			<DropdownComponent text={"Bälten"} id={id} centered={centered} autoClose={false} >
+				{!rerender && 
+					<>
+						<input type="checkbox" style={{display: "none"}}/> {/* Do not touch this checkbox, is needed */}
+						{belts && Object.values(belts).map((belt, index) => (
+							<BeltRow onToggle={onToggle} states={states} key={index} belt={belt} />
+						))}
+						{onClearBelts &&
+							<div className={styles.beltRow} onClick={clearBelts}>
+								<p className={`${styles.beltText} ${styles.centeredText}`}>Rensa valda bälten</p>
+							</div>
+						}
+					</>
+				}
+			</DropdownComponent>
+			
+			<p className={styles.err}>{errorMessage}</p>
+		</>
 	)
 }
