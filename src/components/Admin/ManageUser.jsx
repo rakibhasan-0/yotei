@@ -11,11 +11,15 @@ import { toast } from "react-toastify"
 
 /**
  * Component made for the admin page. Made to handle the add user 
- * feature on the front-end..
+ * feature on the admin page.
  *
  *  @author Chimera (Group 4)
  *  @version 2.0 (2023-05-23)
+ *  @since 2023-05-23
+ *  @version 2.0 
+ *  @returns Component for handling adding a user meant to be used on another page.
  */
+
 export default function ManageUser() {
 	const {token} = useContext(AccountContext)
 

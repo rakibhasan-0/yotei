@@ -7,7 +7,14 @@ import { AccountContext } from "../../../context"
 /**
  * A comment section, used to display comments.#$
  * User and Editors can only delete their own comment, but Admin can delete all comments.
+ *  
+ *  Props:
+ *  	userId   @type {String}   userId Id of the current user
+ *  	id 		 @type {String}   An id for the comment section
+ *  	comments @type {Object}   Comment object as shown above
+ * 		onDelete @type {Function} A delete function to be run with commentID when comment is to be deleted.
  * 
+ * Example usage:
  * comments = [
  *   {
  *       "commentId": 3,
@@ -23,11 +30,7 @@ import { AccountContext } from "../../../context"
  * @author Chimera (Gruoup 4) & Cyclops(Group 5)
  * @since 2023-05-30
  * @version 3.0
- * @param id An id for the comment section
- * @param userId Id of the current user
- * @param comments Comment object as shown above
- * @param onDelete A delete function to be when comment is to be deleted. Sends commentId
- */
+*/
 
 
 export default function CommentSection({ id, userId, comments, onDelete }) {

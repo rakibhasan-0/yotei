@@ -22,7 +22,6 @@ import EditGallery from "../../components/Gallery/EditGallery"
  * @since 2023-05-22
  * @version 1.0
  */
-
 export default function ExerciseCreate({setShowPopup}) {
 	const [name, setName] = useState("")
 	const [desc, setDesc] = useState("")
@@ -87,7 +86,7 @@ export default function ExerciseCreate({setShowPopup}) {
 	/**
 	 * Validates the list of tags and loops through it and tries to link it to the exercise.
 	 *
-	 * @param id - exercise id
+	 * @param exId - exercise id
 	 * @returns a boolean if the tags were successfully linked to the exercise
 	 */
 	async function addTag(exId) {

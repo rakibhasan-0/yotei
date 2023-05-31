@@ -8,14 +8,25 @@ import styles from "./Button.module.css"
  * Contents should be specified as a child, which can be any type 
  * of element, such as text or an icon.
  * 
- * Show the properties that can be set in the props object below:
- * props = {
- *     onClick: function,
- *     outlined: boolean
- *     id: string
- *     disabled: boolean
- *     type: string
- * }
+ *   Props:
+ *    id 		@type {String}   An id for the button
+ *    outlined 	@type {Boolean}  A boolean to choose between the two styles of button 
+ * 	  isToggled @type {Function} A toggle function when a belt is selected (both child and adult)
+ *    children  @type {JSX} 	 A jsx-element to be shown in the button 
+ *    width	   	@type {String}   A custom width to overrun default width
+ *    type 	   	@type {String}   Change type of component from default button
+ *    disabled 	@type {Boolean}  An overide to disable the button and change it's graphics
+ * 
+ * Example Usage:
+ * const [disabled, setDisabled] = useState(false)
+ * <Button
+ * 		id="hello-world-button"
+ *  	width={"200%"}
+ *  	disabled={disabled}
+ *		onClick={()=>{console.log("Hello world"), setDisabled(true)}}>
+ *		<h2>Print Hello World</h2>
+ * </Button>
+
  * 
  * The parent container using this button must constrain its width.
  * 

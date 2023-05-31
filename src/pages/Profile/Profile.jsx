@@ -13,9 +13,10 @@ import useMap from "../../hooks/useMap"
 import Divider from "../../components/Common/Divider/Divider"
 
 /**
- * @author Chimera (dv21aag, c20lln)
+ * @author Chimera
  * @since 2023-05-23
  * @version 1.0
+ * @returns a page for managing the user's account
  */
 export default function Profile() {
 	const { userId, token } = useContext(AccountContext)

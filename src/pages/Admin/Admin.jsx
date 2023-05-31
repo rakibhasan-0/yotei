@@ -7,12 +7,13 @@ import { AccountContext } from "../../context"
 import { isAdmin } from "../../utils"
 
 /**
- * Page for administrative functions.
+ * Basic layout as page for the administrative functions. Most logic contained in ManageUser, Import and Export.
  *
  *  @author Chimera (Group 4)
+ *  @since 2023-05-23
  *  @version 1.0
+ *  @returns A page for the administrative functions.
  */
-
 class Developer extends React.Component {
 	/**
    * Defines the html for the page.

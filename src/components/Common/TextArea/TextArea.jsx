@@ -5,27 +5,41 @@ import styles from "./TextArea.module.css"
  * 
  * The props object is used for holding the written text
  * from and display it on the textArea. 
- * props = {
- *    placeholder: string
- *    text: string
- *    onChange: function
- *    required: function
- *    onBlur: function
- *    onInput: function
- *    readOnly: boolean
- *    id: string
- *    defVal: string
- *    type: string
- * 	  errorMessage: string
- * }
  * 
- * Changes version 4.0
- * 		Updated CSS to use CSS modules.
- * 		Added prop errorMessage to display errors.
+ * Props = {
+ * placeholder @type {String}: Text holder until something to be shown
+ * text @type {String}: User input text
+ * onChange @type {Function} Function to run on change
+ * required @type {Boolean} Is a boolean that makes sure that user cant leave an empty text field.
+ * type @type {Type} Change type of component
+ * id @type {String} An id for the textfield
+ * onKeyUp @type {Function} Gets the input value from the user
+ * errorMessage @type {String} Shows an error message 
+ * onBlur @type {Function} Function to run when clicking away from the text area
+ * onInput @type {Function} Function to run when given input
+ * readOnly @type {Boolean} Boolean that makes the text area read only
+ * defVal @type {String} Default value
+ * 
+ *  }
+ * 
+ *  * Example usage:
+ * const [exampleText, setExampleText] = useState("")
+ * 
+ *	<TextArea
+ *		name="example-text-area"
+ *		id="example-text-area"
+ *		type="text"
+ *		placeholder="Write here"
+ *		value={exampleText}
+ *		onChange={(e) => setExampleText(e.target.value) }}
+ *		required={true}
+	/>
+ * 
  * 
  * @author Team Chimera & Medusa
- * @version 4.0
  * @since 2023-04-24
+ * @updated 2023-05-30 Chimera updated documentation
+ * @version 4.1
  */
 export default function TextArea({ placeholder, text, onChange, required, onBlur, onInput, readOnly, id, defVal, type, errorMessage, errorDisabled}) {
 

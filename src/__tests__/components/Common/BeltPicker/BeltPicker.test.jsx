@@ -10,6 +10,8 @@ server.events.on("request:start", requestSpy)
 
 configure({ testIdAttribute: "id" })
 
+/** Note: This test throws an error (controlled input to be uncontrolled) that does not show up when run in frontend, nor affects the logic. */
+
 /**
  * Set up mock server to mock the api call to get all belts
  */

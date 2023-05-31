@@ -14,10 +14,12 @@ import {toast} from "react-toastify"
 import ErrorState from "../../components/Common/ErrorState/ErrorState"
 
 /**
- * A component for editing a session.
+ * A page for editing a session.
  * 
- * @author Chimera (c19vbn, tfy17efe)
+ * @author Chimera
  * @since 2023-05-03
+ * @version 1.0
+ * @returns A page for editing a session.
  */
 export default function SessionEdit() {
 	const navigate = useNavigate()

@@ -7,20 +7,21 @@ import styles from "./StarButton.module.css"
  * toggled state has a filled star and the untoggled state
  * is an empty outlined star.
  * 
+ * props = {
+ *    toggled @type {Boolean}: Fills the starbutton when true
+ *    onClick @type {Function}: Function to run when the button is clicked
+ *    id @type {String}: ID for the component
+ * }
+ * 
  * Example usage:
  * 
  * const [isToggled, setToggled] = useState(false);
- * <StarButton toggled={isToggled} onClick={() => setToggled(!isToggled)} />
- * 
- * props = {
- *    toggled: boolean,
- *    onClick: function
- *    id: string
- * }
+ * <StarButton id="starbutton-example" toggled={isToggled} onClick={() => setToggled(!isToggled)} />
  * 
  * @author Chimera
  * @since 2023-05-02
- * @version 2.0 
+ * @update 2023-05-30 Chimera, added Documentation
+ * @version 2.1 
  */
 export default function StarButton({id, onClick, toggled}) {
 	return (

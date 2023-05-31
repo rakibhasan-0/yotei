@@ -2,22 +2,32 @@ import React from "react"
 import styles from "./DatePicker.module.css"
 
 /**
- * Defines the date picker. 
+ * A component for a default beltpicker. 
  * 
- * 
- * Show the properties that can be set in the props object below:
  * props = {
- *     	selectDate: string
- * 	   	ref: ref
- *     	onChange: function,
- *     	id: string
- * 		minDate: Earliest date one can choose. All dates before will be blocked.
- * 		maxDate: Latest date one can choose. All dates after will be blocked.
+ * selectDate @type {String}   a date to be changed with the DatePicker
+ * ref        @type {ref}      a reference to the component
+ * onChange   @type {Function} onChange function to be run by DatePicker when value is changed
+ * id 		  @type {String}   id for the component
+ * minDate 	  @type {String}   Earliest date one can choose. All dates before will be blocked.
+ * maxDate 	  @type {String}   Latest date one can choose. All dates after will be blocked. Default is 9999-12-31
  * }
+ * 
+ * Example usage:
+ * const [selectDate, setSelectedDate] = useState("")
+ * 
+ * <DatePicker 
+ *	id="start-date-picker"
+ *	onChange={(e) => { setSelectedDate(e.target.value)}} 
+ *	minDate={"2023-05-01"} 
+ *	selectedDate={selectedDate}
+ *	maxDate={"2023-05-07"}  
+ * 	/>
  * 
  * @author Chimera
  * @since 2023-05-02
- * @updated 2023-05-09 Griffin, added minDate, maxDate
+ * @updated 2023-05-09 Griffin, added minDate, maxDate, 
+ * @updated 2023-05-30 Chimera Updated Documentation
  * @version 2.1 
  */
 export default function DatePicker({onChange, ref, selectedDate, id, minDate, maxDate}) {
@@ -39,7 +49,8 @@ export default function DatePicker({onChange, ref, selectedDate, id, minDate, ma
 
 /**
  * Retrieve todays date as a string on the format "yyyy-mm-dd".
- * @returns 
+ * 
+ * @returns  todays date as a string on the format "yyyy-mm-dd" :) (I love documentation I love documentation I love documentation)
  */
 export function getFormattedDateString(date) {
 	return `${leftPad(date.getFullYear(), 4)}-${leftPad(date.getMonth() + 1, 2)}-${leftPad(date.getDate(), 2)}`

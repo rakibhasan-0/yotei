@@ -29,7 +29,8 @@ import { Link } from "react-router-dom"
  * 
  * @author Chimera, Phoenix
  * @since 2023-05-10
- * @version 1.0
+ * @updated 2023-05-30 Chimera, updated documentation
+ * @version 1.1
  */
 export default function ExerciseListItem({ item, text, detailURL, id, index, checkBox }) {
 

@@ -21,16 +21,16 @@ test("Button: function should run once on one click", async() => {
 
 test("Button: function should run twice on two(2) clicks", async() => {
 	// ARRANGE
-	let clicked = false
+	let timesClicked = 0
 	render(<div><Button onClick={
-		()=> clicked=!clicked} id={"testbutton"}></Button></div>)
+		()=> timesClicked=timesClicked+1} id={"testbutton"}></Button></div>)
 
 	// ACT
 	screen.getByTestId("testbutton").click()
 	screen.getByTestId("testbutton").click()
 
 	// ASSERT
-	expect(clicked).toEqual(false)
+	expect(timesClicked).toEqual(2)
 })
 
 test("Button: nothing should happen on no clicks", async() => {
@@ -41,6 +41,19 @@ test("Button: nothing should happen on no clicks", async() => {
 
 	// ACT
 	// *cricket sounds*
+
+	// ASSERT
+	expect(clicked).toEqual(false)
+})
+
+test("Button: nothing should happen on click when button is disabled", async() => {
+	// ARRANGE
+	let clicked = false
+	render(<div><Button onClick={
+		()=> clicked=!clicked} disabled={true} id={"testbutton"}></Button></div>)
+
+	// ACT
+	screen.getByTestId("testbutton").click()
 
 	// ASSERT
 	expect(clicked).toEqual(false)

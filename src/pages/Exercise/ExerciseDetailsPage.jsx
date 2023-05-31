@@ -16,13 +16,13 @@ import ExerciseEdit from "./ExerciseEdit"
 import { isEditor } from "../../utils"
 
 /**
- * A page for displaying details about an exercise.
+ * A component for displaying details about an exercise.
  * 
  * @author Chimera
  * @since 2023-05-16
  * @version 1.0
+ * @returns A page for displaying details about an exercise.
  */
-
 export default function ExerciseDetailsPage() {
 	const { ex_id } = useParams()
 	const { token, userId } = useContext(AccountContext)

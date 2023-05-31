@@ -3,35 +3,28 @@ import styles from "./ConfirmPopup.module.css"
 import Button from "../Button/Button"
 
 /**
- * ConfirmPopup is a component that creates a popup window with a close button a back button and a delete non functional delete button.
- * 
- * 
+ * ConfirmPopup is a component that creates a popup window with a close button a back button and a delete button that runs an inputed function.
+ *
  * Props:
- *     id @type {string} - Sets the id of the popup window
- * 	   showPopup @type {boolean} - Sets if popup should be visible or not
- *     setShowPopup @type {useState} - Sets the state of the popup window
- *     onClick @type {function} - For the delete button to do something
- * 	   popupText @type {string} - Text to be displayed in the popup
- * 	   confirmText @type {string} - Text to be displayed on confirm-button, default is: "Radera"
- * 	   backText @type {string} - Text to be displayed on back-button, default is: "Tillbaka"
- *
- *Example usage:
+ *    showPopup    @type {Boolean}  Sets if popup should be visible or not
+ *    id 		   @type {String}   Sets the id of the popup window
+ *    setShowPopup @type {useState} Sets the state of the popup window
+ * 	  onClick	   @type {Function} For the delete button to do something
+ *    popupText    @type {String}   Text to be displayed in the popup
+ *    confirmText  @type {String}   Text to be displayed on confirm-button, default is: "Radera"
+ * 	  backText     @type {String}   Text to be displayed on back-button, default is: "Tillbaka"
+ * 
+ * Example usage:
  *  
- *	const [showPopup, setShowPopup] = useState(false)
- *  const [deleteVar, setDeleteVar] = useState(false)
- *
- *	return (
- *		<div>
- *			<Popup id={"test-popup"} isOpen={showPopup} setIsOpen={setShowPopup} onClick={() => setdeleteVar(true)}/>
- *			<RoundButton onClick={() => setShowPopup(true)} />
- *		</div>
- * 	)
+ *	  const [showPopup, setShowPopup] = useState(false)
+ *    const [deleteVar, setDeleteVar] = useState(false)
  *
  * @author Team Chimera
- * @version 1.1
- * @since 2023-05-16
+ * @version 1.2
+ * @since 2023-05-17
+ * @updated 2023-05-30, updated documentation
+ * 
  */
-
 export default function ConfirmPopup({ onClick, id, showPopup, setShowPopup, popupText, confirmText, backText}) {
 	const deleteClickHandler = () => {
 		onClick()

@@ -8,16 +8,16 @@ import Divider from "../Divider/Divider"
  * 
  * 
  * Props:
- *     title @type {string}  - Sets the title of the popup window. Empty title
- * 							   omits the line under the title
- *     id @type {string} - Sets the id of the popup window
- * 	   isOpen @type {boolean} - Sets if popup should be visible or not
+ *     title     @type {string}   - Sets the title of the popup window. Empty title
+ * 							        omits the line under the title
+ *     id        @type {string}   - Sets the id of the popup window
+ * 	   isOpen    @type {boolean}  - Sets if popup should be visible or not
  *     setIsOpen @type {useState} - Sets the state of the popup window
- * 	   style @type {object} - Additional styles to add to the popup container.
- * 	   isNested @type {boolean} - disables the tinted background and fills the parent container. 
- * 								  Should be used in nested popups.
+ * 	   style     @type {object}   - Additional styles to add to the popup container.
+ * 	   isNested  @type {boolean}  - disables the tinted background and fills the parent container. 
+ * 								    Should be used in nested popups.
  *
- *Example usage:
+ * Example usage:
  *  
  *	const [showPopup, setShowPopup] = useState(false)
  *

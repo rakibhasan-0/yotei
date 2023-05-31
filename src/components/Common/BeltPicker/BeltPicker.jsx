@@ -9,13 +9,16 @@ import { toast } from "react-toastify"
 /**
  * Represents a belt row with text, two checkboxes and two
  * icons. 
+ *  
+ * Props:
+ *    belt	   @type {Object}   A const containing .name for name, a hexcode .color for color and a boolean .child for if it's a child 
+ *    states   @type {Object}   A state object, as shown above
+ * 	  onToggle @type {Function} A toggle function when a belt is selected (both child and adult
  * 
- * @param {Object} belt The belt object
- * @param {Object} states Array of selected belts
- * @param {Boolean} onToggle
  * @see BeltPicker.BELTS
  * @returns A new belt row
  */
+
 const BeltRow = ({ belt, states, onToggle }) => {
 	const name = belt[0].name
 	const child = belt.find(b => b.child)
@@ -60,7 +63,14 @@ const BeltRow = ({ belt, states, onToggle }) => {
  * A belt picker component, allowing one to pick child and adult
  * belts for all the available belts. The parent is responsible
  * for handling the selection logic, as shown in the example below:
+ *
+ * Props:
+ *    belt	   @type {Object}	A const containing .name for name, a hexcode .color for color and a boolean .child for if it's a child 
+ *    id	   @type {String}	An id for the belt picker
+ *    states   @type {Object}	A state object, as shown above
+ * 	  onToggle @type {Function} A toggle function when a belt is selected (both child and adult)
  * 
+
  * states = [
  *  {
  *   "id": 1,
@@ -89,10 +99,6 @@ const BeltRow = ({ belt, states, onToggle }) => {
  * @author Chimera (Group 4)
  * @since 2023-05-12
  * @version 2.0
- * @param id An id for the belt picker
- * @param states A state object, as shown above
- * @param onToggle A toggle function when a belt is selected (both child and adult)
- * @param errorMessage A toggle function when a belt is selected (both child and adult)
  * @returns A new belt picker component
  */
 export default function BeltPicker({ id, states, onToggle, centered, onClearBelts, filterWhiteBelt, errorMessage }) {

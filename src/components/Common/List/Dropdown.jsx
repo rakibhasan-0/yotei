@@ -10,19 +10,23 @@ import styles from "./Dropdown.module.css"
  * 
  * The width of the component will be set by the parent.
  * 
- * props = {
- *     item: Optional JSX element which will be displayed on the left of the text,
- *     text: Text of the component,
- *     children: JSX element which will be displayed when the component is expanded
- * 	   centered: Boolean to set text as centered
- *     id: string
- * }
+ * Props:
+ *	item     @type {JSX}     Optional JSX element to be displayed left of the text
+ *	text     @type {String}  Text of the component
+ *	children @type {JSX}     JSX element which will be displayed when the component is expanded
+ *	centered @type {Boolean} Boolean to set text as centered
+ *	id       @type {String}  ID of the component
  * 
- * The parent container using this button must constrain its width.
+ * Example usage:
+ * 
+ * <Dropdown id={"testList"} text="Dropdown List" centered={true} >
+ * <p>This is a list item</p>
+ * </Dropdown>
  * 
  * @author Chimera
  * @since 2023-05-02
- * @version 2.0 
+ * @updated 2023-05-30 Chimera, updated documentation
+ * @version 2.1 
  */
 export default function Component({ item, text, children, id, autoClose, errorMessage }) {
 	const [toggled, setToggled] = useState(false)

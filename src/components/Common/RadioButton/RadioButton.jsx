@@ -7,20 +7,21 @@ import styles from "./RadioButton.module.css"
  * toggled state has a filled circle and the untoggled state
  * is an empty outlined circle .
  * 
+ * Props = {
+ *    toggled @type {Boolean}: If true shows the button filled otherwise shows an unfilled button
+ *    onClick @type {Function}: Function to run when the button is clicked
+ *    id @type {String}: Id for the component
+ * }
+ * 
  * Example usage:
  * 
  * const [state, setState] = useState(false);
  * <RadioButton onClick={() => setState(!state) }toggled = {state}></RadioButton>
  * 
- * props = {
- *    toggled: boolean,
- *    onClick: function
- *    id: string
- * }
- * 
  * @author Chimera
  * @since 2023-05-02
- * @version 2.0 
+ * @updated 2023-05-30 Chimera updated documentation
+ * @version 2.1
  */
 export default function RadioButton({onClick,toggled,id}){
 	return(

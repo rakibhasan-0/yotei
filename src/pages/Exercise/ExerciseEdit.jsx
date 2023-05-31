@@ -13,13 +13,13 @@ import {toast} from "react-toastify"
 import EditGallery from "../../components/Gallery/EditGallery"
 import Popup from "../../components/Common/Popup/Popup"
 
-
 /**
- * Class for editing an exercise.
+ * Function for the page for editing an exercise.
  *
  * @author Calskrove (2022-05-19), Verona (2022-05-16) , Team Phoenix (Group 1) (2023-05-15)
  * @since 2023-05-22
  * @version 1.0
+ * @returns A page for editing an exercise.
  */
 export default function ExerciseEdit({setShowPopup}) {
 	const context = useContext(AccountContext)
@@ -39,7 +39,6 @@ export default function ExerciseEdit({setShowPopup}) {
 	const [exId, setExId] = useState("")
 	const [sendData, setSendData] = useState(false)
 	const [showMiniPopup, setShowMiniPopup] = useState(false)
-
 	const [undoMediaChanges, setUndoMediaChanges] = useState(false)
 
 	useEffect(() => {

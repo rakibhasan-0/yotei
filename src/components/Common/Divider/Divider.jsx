@@ -3,11 +3,23 @@ import style from "./Divider.module.css"
 /**
  * A component displaying a title and horizontal line
  * 
- * @param id - component id
- * @param option determines the alignment and header for the divider. 
- *        Of either h1_center, h1_left, h2_center, h2_left, h2_middle or p_left
- * @param title - text to be displayed
- * @author Griffins (2023-05-03), Chimera (2023-05-05), Phoenix (2023-05-24), Minotaur (2023-05-23)
+ * Props:
+ * 		id     @type {String} component id
+ * 		option @type {String} determines the alignment and header for the divider. 
+ *       					  Either h1_center, h1_left, h2_center, h2_left, h2_middle or p_left
+ * 		title  @type {String} text to be displayed on the divider
+ * 
+ * Example usage:
+ * 
+ * <Divider id = 'divider-example' option= 'h1_center' title = 'example divider'/>
+* 
+ * @author Griffins
+ * @since 2023-05-03
+ * @version 1.1
+ * @updated 2023-05-05 Chimera
+ * @updated 2023-05-23 Minotaur 
+ * @updated 2023-05-24 Phoenix
+ * @updated 2023-05-30 Chimera, updated documentation
  */
 export default function Divider ({ id, option, title }) {
 	switch(option) {
