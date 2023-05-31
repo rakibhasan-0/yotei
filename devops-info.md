@@ -1,3 +1,12 @@
+
+* Dockerhub
+* Gitlab runners, konfiguration för dem.
+* Beslut
+* Varför beslut tagits
+* Vad vi gjort annorlunda om vi gjorde om det
+* Hur det hänger ihop
+* Dokumentera pipelines
+
 # Terminologi
 
 - **MR**: Merge request
@@ -88,11 +97,39 @@ För att köra systemtesterna lokalt måste först alla kontainrar laddas ned. D
 ./systest/run-systest.sh 1
 ```
 
+# Konfiguration
 
-* Dockerhub
-* Gitlab runners, konfiguration för dem.
-* Beslut
-* Varför beslut tagits
-* Vad vi gjort annorlunda om vi gjorde om det
-* Hur det hänger ihop
-* Dokumentera pipelines
+## GitLab Runners
+
+För att köra GitLab CI på skolans gitlab behövs manuella runners.
+En uppdaterad guide för det kan hittas på [docs.gitlab.com](https://docs.gitlab.com/runner/install/). Efter runners har blivit tillagd på varje repo, så behöver man 
+ändra för att köra flera jobb samtidigt. Detta görs genom att öppna `/etc/gitlab-runner/config.toml` och lägga till följande under relevant del:
+
+```toml
+concurrent = 8
+```
+
+Varje runner behöver också dessa saker för att fungera korrektÖ
+
+```toml
+[[runners]]
+...
+limit = 8
+request_concurrency = 8
+...
+[runners.docker]
+    ...
+    volumes = ["/var/run/docker.sock:/var/run/docker.sock"]
+    network_mode = "host"
+    ...
+```
+
+Dessa ändringar gör att 8 jobb kan köras samtidigt (kan ändras om man vill till ett annat antal), samt att docker i docker fungerar korrekt.
+
+## DockerHub
+
+Skolans GitLab har ingen möjlighet att lagra dockerbilder, så docker
+hub bör användas. Genom att skapa ett gemensamt konto för kursen
+så kan det användas för att ladda upp till via CI. Rimligtvis
+börs ett epost konto skapas för kursen som alla har tillgång
+till som används för att skapa docker hub konto.
