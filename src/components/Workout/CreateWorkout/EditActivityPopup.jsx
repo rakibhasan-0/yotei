@@ -87,7 +87,7 @@ export default function EditActivityPopup({id}) {
 							<h2>Namn</h2>
 							<p>{"(Kan inte redigeras)"}</p>
 						</div>
-						<p className={style.text}>{activity.name}</p>
+						<p className={style.text}>{activity.technique?.name || activity.exercise?.name || activity.name}</p>
 					</>
 				}
 				<div className={style.time_header}>

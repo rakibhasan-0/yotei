@@ -26,9 +26,9 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 		<Link className={styles.noCursor} to={"#"} onClick={(e) => e.preventDefault()}>{activity.name}</Link>
 	) : (
 		activity.exercise ? (
-			<Link to={`/exercise/exercise_page/${activity.exercise.id}`}>{activity.name}</Link>
+			<Link to={`/exercise/exercise_page/${activity.exercise.id}`}>{activity.exercise.name}</Link>
 		) : (
-			<Link to={`/technique/technique_page/${activity.technique.id}`}>{activity.name}</Link>
+			<Link to={`/technique/technique_page/${activity.technique.id}`}>{activity.technique.name}</Link>
 		))
 
 	const createStripes = () => {

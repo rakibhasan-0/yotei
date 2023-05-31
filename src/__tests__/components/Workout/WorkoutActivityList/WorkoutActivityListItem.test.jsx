@@ -53,7 +53,7 @@ test("Shoud link to exercise/technique", async () => {
 		</BrowserRouter>
 	)
 	// Act
-	const elem = screen.getByText("name")
+	const elem = screen.getByText("Springa")
 
 	// Assert
 	expect(elem.pathname).toEqual("/exercise/exercise_page/285")

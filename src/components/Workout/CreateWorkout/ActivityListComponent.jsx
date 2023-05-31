@@ -87,7 +87,7 @@ export default function ActivityListComponent() {
 									{activityItem.activities.map((activity, itemIndex) => (
 										<ActivityItem
 											key={activity.id}
-											activityName={activity.name}
+											activityName={activity.technique?.name || activity.exercise?.name || activity.name}
 											activityTime={activity.duration}
 											pinkColor={itemIndex % 2 === 0}
 											isEditable={activity.isEditable}
