@@ -46,7 +46,10 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 	const [techniqueName, setTechniqueName] = useState(technique.name)
 	const [techniqueDescription, setTechniqueDescription] = useState(technique.description)
 	const [kihonChecked, setKihonChecked] = useState(false)
+
 	const [belts, setBelts] = useState(technique.belts)
+	const [beltsErr, setBeltsErr] = useState("")
+
 	const [addedTags, setAddedTags] = useState(technique.tags)
 
 	const [showMediaPopup, setShowMediaPopup] = useState(false)
@@ -96,6 +99,18 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 	}
 
 	const handlePutTechnique = () => {
+		
+		if (techniqueName == "") {
+			setInputErrorMessage("Tekniken måste ha ett namn")
+			scrollToElementWithId("techniqueEditInputName")
+			return
+		}
+		if (belts.length === 0) {
+			setBeltsErr("En teknik måste minst ha en bältesgrad")
+			scrollToElementWithId("techniqueEditBeltpicker")
+			return
+		}
+
 		// Media should only be sent when the edit is successfull, but need a promise in editgallery for that.
 		// Send is set here so the requests have time to finish before closing the popup
 		setSendMediaData(true)
@@ -213,8 +228,10 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 				id="techniqueEditBeltpicker"
 				onToggle={onToggle}
 				states={belts}
-				filterWhiteBelt={true}>
-			</BeltPicker>
+				filterWhiteBelt={true}
+				errorMessage={beltsErr}
+			/>
+
 
 			<Divider title="Taggar" option="h2_left"/>
 

@@ -25,26 +25,7 @@ configure({testIdAttribute: "id"})
 
 describe("verify that", () => {
 	let user
-
-	let technique = {
-		id: 1,
-		name: "Tekniknamn",
-		description: "Test desc",
-		belts: [
-			{
-				id: 13,
-				color: "000000",
-				child: false,
-				name: "svart"
-			}
-		],
-		tags: [
-			{
-				id: 4,
-				name: "svart"
-			}
-		]
-	}
+	let technique
 
 	// Some belts used to mock GET /api/belts
 	const belts = [
@@ -71,11 +52,37 @@ describe("verify that", () => {
 			"name": "Gult",
 			"color": "EDD70D",
 			"child": true
+		},
+		{
+			"id": 13,
+			"name": "Svart",
+			"color": "EDD70D",
+			"child": false
 		}
 	]
 
 	beforeEach(() => {
 		user = userEvent.setup()
+
+		technique = {
+			id: 1,
+			name: "Tekniknamn",
+			description: "Test desc",
+			belts: [
+				{
+					id: 13,
+					color: "000000",
+					child: false,
+					name: "svart"
+				}
+			],
+			tags: [
+				{
+					id: 4,
+					name: "svart"
+				}
+			]
+		}
 
 		server.use(
 			rest.get("/api/search/tags", (req, res, ctx) => {
@@ -208,6 +215,7 @@ describe("verify that", () => {
 	// Render the technique detail page with router and account context. Also waits for it to fully render.
 	const renderWithRouter = async() => {
 		const techniqueId = 1
+		window.HTMLElement.prototype.scrollIntoView = jest.fn
 		const router = createMemoryRouter(
 			createRoutesFromElements(
 				<Route path="technique/technique_page/:techniqueId" element={<TechniqueDetail />}/>
@@ -296,7 +304,6 @@ describe("verify that", () => {
 			// The belt "adult white" with id 1 should be found in belts
 			expect(technique.belts.find(b => b.id === 3)).toBeTruthy()
 		})
-
 	})
 
 	test("adding a tag updates the technique", async () => {
@@ -336,6 +343,20 @@ describe("verify that", () => {
 
 		await waitFor(() => {
 			expect(screen.getByText("Tekniken måste ha ett namn")).toBeInTheDocument()
+		})
+
+	})
+
+	test("a technique without belt can't be created", async () => {
+		await renderWithRouter()
+
+		await user.click(screen.getByTestId("technique-edit-button"))
+		await user.click(screen.getByText("Bälten"))
+		await user.click(screen.getByTestId("belt-adult-Svart"))
+		await user.click(screen.getByText("Spara"))
+
+		await waitFor(() => {
+			expect(screen.getByText("En teknik måste minst ha en bältesgrad")).toBeInTheDocument()
 		})
 
 	})
