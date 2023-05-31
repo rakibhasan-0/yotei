@@ -32,7 +32,8 @@ const WorkoutCreate = () => {
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const [hasLoadedData, setHasLoadedData] = useState(false)
 	const navigate = useNavigate()
-	const location = useLocation()
+
+	const { state } = useLocation()
 
 	/**
 	 * Submits the form data to the API.
@@ -42,7 +43,7 @@ const WorkoutCreate = () => {
 
 		if(compareCurrentToOriginal(workoutCreateInfo.data, workoutCreateInfo.originalData)) {
 			setInfo("Inget pass sparades.")
-			return navigate("/workout", { replace: true })
+			return navigate(-1, { replace: true, state })
 		}
 
 		const body = parseData(workoutCreateInfo.data)
@@ -51,8 +52,11 @@ const WorkoutCreate = () => {
 		if (workoutId) {
 			setSuccess("Träningspasset skapades!")
 
-			if(location.state?.goBackAfterCreation) return navigate(-1, { replace: true })
-			navigate("/workout/" + workoutId, { replace: true })
+			if (state.session) {
+				state.session.workout = body.workout
+				return navigate("/session/create", { replace: true, state })
+			}
+			navigate("/workout/" + workoutId, {})
 		} else {
 			setError("Träningspasset kunde inte skapas!")
 		}
@@ -175,7 +179,7 @@ const WorkoutCreate = () => {
 	return (
 		<WorkoutCreateContext.Provider value={{ workoutCreateInfo, workoutCreateInfoDispatch }} >
 			<h1 className={styles.title}>Skapa pass</h1>
-			<WorkoutFormComponent callback={submitHandler} />
+			<WorkoutFormComponent callback={submitHandler} state={state} />
 		</WorkoutCreateContext.Provider>
 	)
 }

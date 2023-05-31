@@ -35,7 +35,7 @@ import EditActivityPopup from "./EditActivityPopup"
  * @version 2.0
  * @since 2023-05-24
  */
-function WorkoutFormComponent({ callback }) {
+function WorkoutFormComponent({ callback, state }) {
 	const { workoutCreateInfo, workoutCreateInfoDispatch } =
 		useContext(WorkoutCreateContext)
 
@@ -101,8 +101,11 @@ function WorkoutFormComponent({ callback }) {
 		) {
 			setGoBackPopup(true)
 		} else {
+			if (state?.session) {
+				return navigate("/session/create", { replace: true, state })
+			}
 			workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.RESET })
-			navigate(-1)
+			navigate("/plan")
 		}
 	}
 

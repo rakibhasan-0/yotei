@@ -7,7 +7,7 @@ import styles from "./SessionEdit.module.css"
 import { useNavigate, useParams } from "react-router-dom"
 import { useContext, useEffect, useState } from "react"
 import { AccountContext } from "../../context"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import Divider from "../../components/Common/Divider/Divider"
 import { Trash } from "react-bootstrap-icons"
 import {toast} from "react-toastify"
@@ -22,15 +22,16 @@ import ErrorState from "../../components/Common/ErrorState/ErrorState"
  * @returns A page for editing a session.
  */
 export default function SessionEdit() {
+	const { state } = useLocation()
 	const navigate = useNavigate()
 	const {token} = useContext(AccountContext)
 	// eslint-disable-next-line no-unused-vars
-	const [date, setDate] = useState("")
-	const [time, setTime] = useState("")
+	const [date, setDate] = useState(state?.session?.date)
+	const [time, setTime] = useState(state?.session?.time)
 	const [groups, setGroups] = useState()
-	const [group, setGroup] = useState()
+	const [group, setGroup] = useState(state?.session?.group)
 	const [workouts, setWorkouts] = useState()
-	const [workout, setWorkout] = useState()
+	const [workout, setWorkout] = useState(state?.session?.workout)
 	const [showPopup, setShowPopup] = useState(false)
 	const [error, setError] = useState()
 
@@ -108,7 +109,7 @@ export default function SessionEdit() {
 			if (!response.ok) {
 				throw new Error("Could not delete session")
 			}
-			navigate(-1)
+			navigate("/plan")
 		} catch (ex) {
 			toast.error("Kunde inte radera tillfälle")
 			console.error(ex)
@@ -134,7 +135,7 @@ export default function SessionEdit() {
 				console.error(response)
 				throw new Error("Could not update session")
 			}
-			navigate(-1)
+			navigate("/plan")
 		} catch (ex) {
 			toast.error("Kunde inte spara det nya tillfället")
 			console.error(ex)
@@ -183,13 +184,20 @@ export default function SessionEdit() {
 
 			<Divider option={"h2_middle"} title={"eller"} />
 			<div className={`${styles.wrapCentering} ${styles.createButton}`} >
-				<Link to="/workout/create" style={{width: "150px"}} state={{goBackAfterCreation: true}}>
+				<Link to="/workout/create" style={{width: "150px"}} state={{
+					session: {
+						group,
+						date,
+						time,
+						workout
+					}
+				}}>
 					<Button id={"session-create"}><p>Skapa pass</p></Button>
 				</Link>
 			</div>
 
 			<div className={styles.wrapCentering} style={{marginBottom: "2rem"}} >
-				<Button onClick={() => navigate(-1)} id={"session-back"} outlined={true}><p>Tillbaka</p></Button> 
+				<Button onClick={() => navigate("/plan")} id={"session-back"} outlined={true}><p>Tillbaka</p></Button> 
 				<Button onClick={updateSession} id={"session-save"}><p>Spara</p></Button>
 			</div>
 		</>

@@ -6,9 +6,9 @@ import styles from "./SessionCreate.module.css"
 import { useNavigate } from "react-router-dom"
 import { useContext, useEffect, useState } from "react"
 import { AccountContext } from "../../context"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import Divider from "../../components/Common/Divider/Divider"
-import {toast} from "react-toastify"
+import { toast } from "react-toastify"
 
 /**
  * A component for creating a session.
@@ -17,16 +17,18 @@ import {toast} from "react-toastify"
  * @since 2023-05-03
  */
 export default function SessionCreate() {
+	const { state } = useLocation()
 	const navigate = useNavigate()
 	const {token} = useContext(AccountContext)
-	const [date, setDate] = useState()
-	const [time, setTime] = useState()
+	const [date, setDate] = useState(state?.session?.date)
+	const [time, setTime] = useState(state?.session?.time)
 	const [groups, setGroups] = useState()
-	const [group, setGroup] = useState()
+	const [group, setGroup] = useState(state?.session?.group)
 	const [workouts, setWorkouts] = useState()
-	const [workout, setWorkout] = useState()
+	const [workout, setWorkout] = useState(state?.session?.workout)
 	const [groupError, setGroupError] = useState()
 	const [timeError, setTimeError] = useState()
+
 	useEffect(() => {
 		(async () => {
 			try {
@@ -86,7 +88,7 @@ export default function SessionCreate() {
 			if (!response.ok) {
 				throw new Error("Could not save session")
 			}
-			navigate(-1)
+			navigate("/plan")
 		} catch (ex) {
 			toast.error("Kunde inte spara tillfälle")
 			console.error(ex)
@@ -110,8 +112,8 @@ export default function SessionCreate() {
 			<Divider option={"h2_left"} title={"Datum och Tid"} />
 			{timeError && <p className="error-message">{timeError}</p>}
 			<div className={styles.wrapCentering}>
-				<DatePicker onChange={e => setDate(e.target.value)} id={"session-datepicker"} />
-				<TimePicker onChange={e => setTime(e.target.value)} id={"session-timepicker"} />
+				<DatePicker onChange={e => setDate(e.target.value)} id={"session-datepicker"} selectedDate={date} />
+				<TimePicker onChange={e => setTime(e.target.value)} id={"session-timepicker"} selectedTime={time} />
 			</div>
 
 			<Divider option={"h2_left"} title={"Pass"} />
@@ -128,13 +130,20 @@ export default function SessionCreate() {
 
 			<Divider option={"h2_middle"} title={"eller"} />
 			<div className={`${styles.wrapCentering} ${styles.createButton}`} >
-				<Link to="/workout/create" style={{width: "150px"}}>
+				<Link to="/workout/create" style={{width: "150px"}} state={{
+					session: {
+						group,
+						date,
+						time,
+						workout
+					}
+				}}>
 					<Button id={"session-create"}><p>Skapa pass</p></Button>
 				</Link>
 			</div>
 
 			<div className={styles.wrapCentering} style={{marginBottom: "2rem"}} >
-				<Button onClick={() => navigate(-1)} id={"session-back"} outlined={true}><p>Tillbaka</p></Button> 
+				<Button onClick={() => navigate("/plan")} id={"session-back"} outlined={true}><p>Tillbaka</p></Button> 
 				<Button onClick={addSession} id={"session-save"}><p>Spara</p></Button>
 			</div>
 		</>
