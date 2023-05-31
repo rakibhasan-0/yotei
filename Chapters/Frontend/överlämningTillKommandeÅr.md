@@ -5,5 +5,6 @@
         - Skapa en användare på Figma. 
         - Ladda ned filen Yotei.fig.
         - Välj "Import file" och välj den nedladdade filen
+        - Nu kan du dela filen med resterande i projektet så att ni enkelt kan jobba tillsammans på designen.
 - Vi hann genomföra ett användartest i slutet av projektet. Resultatet från det finns sammanfattat under "User tests". Vi uppmanar er att testa tidigt och mycket, det underlättar processen. 
 - Vi rekommenderar starkt att ni gör om detta till en applikation: användaren uttrycker att de endast använder hemsidan i telefonen och förväntar sig mycket beteende som skulle vara enklare att implementera i en applikation än i en hemsida. 
