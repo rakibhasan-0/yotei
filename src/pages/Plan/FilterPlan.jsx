@@ -19,7 +19,7 @@ export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, o
 
 	const onToggle = (checked, chosenGroup) => setChosenGroups(prev => {
 		if(!checked) {
-			return prev.filter(g => g !== chosenGroup)
+			return prev.filter(g => g.id !== chosenGroup.id)
 		}
 		return [...prev, chosenGroup]
 	})

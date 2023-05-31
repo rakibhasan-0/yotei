@@ -22,11 +22,10 @@ const GroupRow = ({group, states, onToggle}) => {
 	const name = group[0].name
 	const id = group[0].id
 	const belts = sortBelts()
-
 	const [groupState, setGroupState] = useState(false)
 
 	useEffect(() => {
-		setGroupState(states?.some(g => g.id === group.id))
+		setGroupState(states?.some(g => g.id === id))
 	}, [])
 
 	function sortBelts () {
@@ -38,10 +37,6 @@ const GroupRow = ({group, states, onToggle}) => {
 		
 	}
 
-	function toggleGroup(state) {
-		setGroupState(state)
-		onToggle(state, group[0])
-	}
     
 	// TODO: Fixa error-hanteringen
 	return (
@@ -58,6 +53,11 @@ const GroupRow = ({group, states, onToggle}) => {
 			</div>    
 		</div>
 	)
+
+	function toggleGroup(state) {
+		setGroupState(state)
+		onToggle(state, group[0])
+	}
 }
 
 /**

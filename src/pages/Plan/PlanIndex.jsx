@@ -8,6 +8,7 @@ import Spinner from "../../components/Common/Spinner/Spinner"
 import {People} from "react-bootstrap-icons"
 import Button from "../../components/Common/Button/Button"
 import {Link} from "react-router-dom"
+import { useCookies } from "react-cookie"
 
 /**
  * PlanIndex is the page that displays group plannings. Contains of a 
@@ -25,6 +26,7 @@ export default function PlanIndex() {
 	const [ plans, setPlans ] = useState()
 	const [ workouts, setWorkouts ] = useState()
 	const [sessions, setSessions] = useState()
+	const [cookies, setCookie] = useCookies(["plan-filter"])
 	const twoYears = new Date()
 	twoYears.setFullYear(twoYears.getFullYear()+2)
 
@@ -32,7 +34,7 @@ export default function PlanIndex() {
 	const [loading, setLoading] = useState(true)
 	
 	// Filtering props
-	const [ selectedPlans, setSelectedPlans ] = useState([])
+	const [ selectedPlans, setSelectedPlans ] = useState(cookies["plan-filter"] ? cookies["plan-filter"].plans : [])
 	const [ dates, setDates ] = useState({
 		from: dateFormatter(new Date()),
 		to: dateFormatter(twoYears)
@@ -45,6 +47,15 @@ export default function PlanIndex() {
 	function handleDatesChange(variableName, value) {
 		setDates({...dates, [variableName]: value})
 	}
+
+	useEffect(() => {
+		const filterCookie = cookies["plan-filter"]
+
+		if (filterCookie) {
+			setSelectedPlans(filterCookie.plans)
+			setDates({to: filterCookie.to, from: filterCookie.from})
+		}
+	}, [])
 	
 	// Triggered on page load and when dates or selected plans change.
 	useEffect(() => {
@@ -65,23 +76,30 @@ export default function PlanIndex() {
 
 			fetchedWorkouts = await fetchAllWorkouts()
 
-			// Filter session according to selected date interval.
-			let filteredSessions = Object.values(fetchedSessions).filter(session => {
-				const sessionDate = new Date(session.date)
-				const fromDate = new Date(dates.from)
-				const toDate = new Date(dates.to)
+			let filteredSessions
+			try {
+				// Filter session according to selected date interval.
+				filteredSessions = Object.values(fetchedSessions).filter(session => {
+					const sessionDate = new Date(session.date)
+					const fromDate = new Date(dates.from)
+					const toDate = new Date(dates.to)
 			
-				return sessionDate >= fromDate && sessionDate <= toDate
-			})
-			
-			//Update state with filtered plans, sessions and workouts.
-			setPlans(fetchedPlans)
-			setSessions(filteredSessions)
-			setWorkouts(fetchedWorkouts)
-			setLoading(false)
+					return sessionDate >= fromDate && sessionDate <= toDate
+				})
+			} catch(error) {
+				filteredSessions = null
+			} finally {
+				//Update state with filtered plans, sessions and workouts.
+				setPlans(fetchedPlans)
+				setSessions(filteredSessions)
+				setWorkouts(fetchedWorkouts)
+				setLoading(false)
+			}
 		}
+		
 		fetchData()
-	}, [ dates, selectedPlans ])
+		setCookie("plan-filter", {plans: selectedPlans , from: dates.from, to: dates.to}, {path: "/"})
+	}, [ selectedPlans, dates ])
 
 	async function fetchAllPlans() {
 		return await fetch("api/plan/all", {
