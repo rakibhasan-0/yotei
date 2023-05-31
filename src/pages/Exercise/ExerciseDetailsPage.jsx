@@ -226,7 +226,7 @@ export default function ExerciseDetailsPage() {
 			<div style={{ marginTop: "1rem", marginBottom:"1rem" }}>
 				<Button outlined={true} onClick={() => navigate(-1)}><p>Tillbaka</p></Button>
 			</div>
-			<Popup isOpen={isAddingComment} title={"Lägg till kommentar"} style={{ overflow: "hidden", overflowY: "hidden", height: "50%" }} setIsOpen={setAddComment}>
+			<Popup isOpen={isAddingComment} title={"Lägg till kommentar"} style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset"}} setIsOpen={setAddComment}>
 				<TextArea errorMessage={commentError} onInput={e => setCommentText(e.target.value)} />
 				<Button onClick={onAddComment}>Lägg till</Button>
 			</Popup>
@@ -247,7 +247,8 @@ export default function ExerciseDetailsPage() {
 				<Popup
 					title="Ta bort övning"
 					isOpen={showDeletePopup}
-					setIsOpen={setShowDeletePopup}>
+					setIsOpen={setShowDeletePopup}
+					style={{height: "unset"}}>
 					<ActivityDelete id={"exercise-delete-popup"} activityID={ex_id} name={exercise?.name} setIsOpen={setShowDeletePopup} what={"Övning"}/>
 				</Popup>
 			</div>

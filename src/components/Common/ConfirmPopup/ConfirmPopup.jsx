@@ -44,7 +44,8 @@ export default function ConfirmPopup({ onClick, id, showPopup, setShowPopup, pop
 			setIsOpen={setShowPopup}
 			style={{
 				maxHeight: "300px",
-				maxWidth: "333px"
+				maxWidth: "333px",
+				height: "unset",
 			}}
 		>
 			<div className={styles.titleContainer} id={`${id}-text`}>

@@ -117,7 +117,7 @@ function TechniqueDetail({ id }) {
 					title="Ta bort teknik"
 					isOpen={showDeletePopup}
 					setIsOpen={setShowDeletePopup}
-					style={{maxHeight: "fit-content"}}
+					style={{height: "unset", maxHeight: "85vh"}}
 				>
 					<ActivityDelete id={"technique-workout-delete-popup"} activityID={techniqueId} name={technique.name} setIsOpen={setShowDeletePopup} what={"Teknik"}/>
 				</Popup>
