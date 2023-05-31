@@ -305,85 +305,81 @@ export default function ExerciseEdit({setShowPopup}) {
 	}
 
 	return (
-		<div className="row justify-content-center">
-			<div className="col-md-8">
-				{/*Form to get input from user*/}
-				<div className={styles.textInputField}>
-					<InputTextField
-						placeholder={"Namn"}
-						text={name}
-						onChange={(e) => setName(e.target.value)}
-						required = {true}
-						type="text"
-						id = {"exerciseNameInput"}
-						errorMessage={errorMessage}
-					/>
-				</div>
-				<div>
-					<TextArea
-						className={styles.standArea}
-						placeholder={"Beskrivning"}
-						text={desc}
-						onChange={(e) => setDesc(e.target.value)}
-						required = {true}
-						id={"exerciseDescriptionInput"}
-						type="text"
-						errorDisabled={true}
-					/>
-				</div>
-				<Divider id={"timeSelectorTitle"} option={"h2_left"} title={"Tid"} />
-				<div className={styles.timeSelector} >
-					<MinutePicker
-						id={"minuteSelect"}
-						initialValue={time}
-						callback={timeCallback}
-					/>
-				</div>
-				<Divider id={"tag-title"} option={"h2_left"} title={"Taggar"} />
-				<TagInput
-					id={"tagHandler"}
-					addedTags={newTags}
-					setAddedTags={setNewTags}
-					isNested={true}
+		<div style={{ display: "flex", gap: "16px", flexDirection: "column" }}>
+			{/*Form to get input from user*/}
+			<InputTextField
+				placeholder={"Namn"}
+				text={name}
+				onChange={(e) => setName(e.target.value)}
+				required = {true}
+				type="text"
+				id = {"exerciseNameInput"}
+				errorMessage={errorMessage}
+			/>
+			<div>
+				<TextArea
+					className={styles.standArea}
+					placeholder={"Beskrivning"}
+					text={desc}
+					onChange={(e) => setDesc(e.target.value)}
+					required = {true}
+					id={"exerciseDescriptionInput"}
+					type="text"
+					errorDisabled={true}
 				/>
-				<Divider id={"media-title"} option={"h2_left"} title={"Media"} />
-				<EditGallery id={exId} exerciseId={exId} sendData={sendData} undoChanges={undoMediaChanges} done={done}/>
-
-				{/*Button for the form. Calls the function addExercise. Retrieve the users input*/}
-				<div className={styles.createExerciseBtnContainer}>
-					<Button
-						id={"backBtn"}
-						outlined={"button-back"}
-						onClick={() => {
-							setUndoMediaChanges(true)
-							deleteLocalStorage()
-						}}
-						width={150}>
-						<p>Tillbaka</p>
-					</Button>
-					<Button
-						id={"addBtn"}
-						onClick={() => {
-							setSendData(true)
-							deleteLocalStorage()
-						}}
-						width={150}>
-						<p>Spara</p>
-					</Button>
-				</div>
-				<Popup
-					id={"EC-changes-mini-popup"}
-					title={"Ändringar gjorda"}
-					isOpen={showMiniPopup}
-					setIsOpen={setShowMiniPopup}
-					style={{height: "300px", width: "90%"}}				>
-					<p>Är du säker att du vill lämna?</p>
-					<div className={styles.ECMiniPopupBtns}>
-						<Button id={"EC-mini-popup-leave-btn"} onClick={() => {setShowMiniPopup(false); setShowPopup(false)}} outlined={"button-back"}><p>Lämna</p></Button>
-						<Button id={"EC-mini-popup-stay-btn"} onClick={() => {setShowMiniPopup(false)}}><p>Stanna</p></Button>
-					</div>
-				</Popup>
 			</div>
+			<Divider id={"timeSelectorTitle"} option={"h2_left"} title={"Tid"} />
+			<div className={styles.timeSelector} >
+				<MinutePicker
+					id={"minuteSelect"}
+					initialValue={time}
+					callback={timeCallback}
+				/>
+			</div>
+			<Divider id={"tag-title"} option={"h2_left"} title={"Taggar"} />
+			<TagInput
+				id={"tagHandler"}
+				addedTags={newTags}
+				setAddedTags={setNewTags}
+				isNested={true}
+			/>
+			<Divider id={"media-title"} option={"h2_left"} title={"Media"} />
+			<EditGallery id={exId} exerciseId={exId} sendData={sendData} undoChanges={undoMediaChanges} done={done}/>
+
+			{/*Button for the form. Calls the function addExercise. Retrieve the users input*/}
+			<div className={styles.createExerciseBtnContainer}>
+				<Button
+					id={"backBtn"}
+					outlined={"button-back"}
+					onClick={() => {
+						setUndoMediaChanges(true)
+						deleteLocalStorage()
+					}}
+					width={150}>
+					<p>Avbryt</p>
+				</Button>
+				<Button
+					id={"addBtn"}
+					onClick={() => {
+						setSendData(true)
+						deleteLocalStorage()
+					}}
+					width={150}>
+					<p>Spara</p>
+				</Button>
+			</div>
+			<Popup
+				id={"EC-changes-mini-popup"}
+				title={"Ändringar gjorda"}
+				isOpen={showMiniPopup}
+				setIsOpen={setShowMiniPopup}
+				style={{height: "300px", width: "90%"}}				>
+				<p>Är du säker att du vill lämna?</p>
+				<div className={styles.ECMiniPopupBtns}>
+					<Button id={"EC-mini-popup-leave-btn"} onClick={() => {setShowMiniPopup(false); setShowPopup(false)}} outlined={"button-back"}><p>Lämna</p></Button>
+					<Button id={"EC-mini-popup-stay-btn"} onClick={() => {setShowMiniPopup(false)}}><p>Stanna</p></Button>
+				</div>
+			</Popup>
 		</div>
 	)
 
