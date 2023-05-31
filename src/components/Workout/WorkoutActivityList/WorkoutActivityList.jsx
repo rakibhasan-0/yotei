@@ -9,15 +9,27 @@
  */
 import WorkoutActivityListItem from "../WorkoutActivityListItem/WorkoutActivityListItem.jsx"
 import "./WorkoutActivityList.css"
+import {useState} from "react"
 
 export default function WorkoutActivityList({categoryName, activities, id}) {
+	
+	const [isCollapsed, setIsCollapsed] = useState(false)
+	
+	const rotatedIcon = {
+		transform: "rotate(180deg)",
+		fontSize: "16px",
+		cursor: "pointer"
+	}
 	return (
-		<fieldset className={setPadding(activities.length, categoryName) + " my-3"} id={id}>
+		<fieldset className={setPadding(activities.length, categoryName) + " my-3 "} id={id}>
 			{categoryName != null && <legend className="px-2 w-auto">
-				<p className="m-0">{categoryName}</p>
+				<div className="d-flex align-items-center" onClick={() => setIsCollapsed(!isCollapsed)}>
+					<p className="m-0">{categoryName}</p>
+					<i style={isCollapsed? {fontSize: "16px"} : rotatedIcon} className=" ml-2 bi bi-chevron-down" />
+				</div>
 			</legend>}
 			{
-				sortActivities(activities).map((activity, index) => <WorkoutActivityListItem key={activity.id} activity={activity} index={index}/>)
+				!isCollapsed && sortActivities(activities).map((activity, index) => <WorkoutActivityListItem key={activity.id} activity={activity} index={index}/>)
 			}
 		</fieldset>
 	)
