@@ -29,12 +29,12 @@ describe ("ExerciseCreate should render", () => {
 		expect(screen.getByPlaceholderText("Beskrivning")).toBeInTheDocument()
 	})
 
-	test("Lägg till fler övningar checkbox", () => {
-		expect(screen.getByText("Lägg till fler övningar")).toBeInTheDocument()
+	test("Fortsätt skapa övningar checkbox", () => {
+		expect(screen.getByText("Fortsätt skapa övningar")).toBeInTheDocument()
 	})
 
-	test("Rensa text checkbox", () => {
-		expect(screen.getByText("Rensa text")).toBeInTheDocument()
+	test("Rensa fält checkbox", () => {
+		expect(screen.getByText("Rensa fält")).toBeInTheDocument()
 	})
 
 	test("Input field of minutepicker", () => {

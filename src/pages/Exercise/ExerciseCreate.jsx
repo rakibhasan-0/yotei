@@ -270,17 +270,14 @@ export default function ExerciseCreate({setShowPopup}) {
 				<Divider id={"media-title"} option={"h1_left"} title={"Media"}/>
 				<EditGallery id={tempId} exerciseId={tempId} sendData={sendData} undoChanges={undoMediaChanges} done={done}/>
 
-
-				<div className={styles.checkboxesContainer}>
-					<div className={styles.addCheckbox}>
-						<p className={styles.checkboxText}>Lägg till fler övningar</p>
-						<CheckBox id="EC-AddMultipleChk" disabled={false} checked={addBoxChecked} onClick={addCheckboxClicked}/>
-					</div>
-					<div className={styles.eraseTextCheckbox}>
-						<p className={addBoxChecked ? styles.checkboxText : styles.checkboxInactive}>Rensa text</p>
-						<CheckBox id="EC-ClearMultipleChk" disabled={!addBoxChecked} checked={eraseBoxChecked} onClick={setEraseBoxChecked}/>
-					</div>
+				<div className={styles.addCheckbox}>
+					<CheckBox id="EC-AddMultipleChk" disabled={false} checked={addBoxChecked} onClick={addCheckboxClicked} label={"Fortsätt skapa övningar"}/>
 				</div>
+				<div style={{height:"1rem"}}/>
+				<div className={styles.eraseTextCheckbox}>
+					<CheckBox id="EC-ClearMultipleChk" disabled={!addBoxChecked} checked={eraseBoxChecked} onClick={setEraseBoxChecked} label={"Rensa fält"}/>
+				</div>
+				<div style={{height:"1rem"}}/>
 				<div className={styles.createExerciseBtnContainer}>
 					<Button
 						id="EC-BackBtn"
