@@ -165,36 +165,30 @@ export default function ExerciseDetailsPage() {
 	}
 	return (
 		<div style={{ display: "flex", flexDirection: "column" }}>
-			<div style={{ display: "flex", justifyContent: "flex-start" }}>
-				<div style={{ flex: "0 0 100%" }}>
-					<div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-						<h1 style={{ marginTop: "0", textAlign: "left", marginRight: "auto" }}>
-							{exercise?.name}
-						</h1>
-						{isEditor(accountRole) && (
-							<div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
-								<Pencil
-									onClick={() => {
-										setShowEditPopup(true)
-										window.localStorage.setItem("popupState", true)
-									}
-									}
-									size="24px"
-									style={{ color: "var(--red-primary)" }}
-								/>
-								<Trash
-									onClick={() => setShowDeletePopup(true)}
-									size="24px"
-									style={{ color: "var(--red-primary)" }}
-								/>
-							</div>
-						)}
-					</div>
+			<h1 style={{textAlign: "left"}}>{exercise?.name}</h1>
+			<div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: "10px" }}>
+				<div className="d-flex align-items-center">
+					<Clock />
+					<p style={{ marginBottom: "0", marginLeft: "5px" }}>{exercise?.duration} min</p>
 				</div>
-			</div>
-			<div style={{ display: "flex", flexDirection: "row", alignItems: "left", gap: "10px" }}>
-				<Clock />
-				<p style={{ marginBottom: "0" }}>{exercise?.duration} min</p>
+				{isEditor(accountRole) && (
+					<div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
+						<Pencil
+							onClick={() => {
+								setShowEditPopup(true)
+								window.localStorage.setItem("popupState", true)
+							}
+							}
+							size="24px"
+							style={{ color: "var(--red-primary)" }}
+						/>
+						<Trash
+							onClick={() => setShowDeletePopup(true)}
+							size="24px"
+							style={{ color: "var(--red-primary)" }}
+						/>
+					</div>
+				)}
 			</div>
 
 			<h2 style={{ fontWeight: "bold", display: "flex", flexDirection: "row", alignItems: "left", marginTop: "5px", alignContent: "left" }}>Beskrivning</h2>
