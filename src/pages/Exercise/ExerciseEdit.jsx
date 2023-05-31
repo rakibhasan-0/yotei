@@ -21,7 +21,7 @@ import Popup from "../../components/Common/Popup/Popup"
  * @version 1.0
  * @returns A page for editing an exercise.
  */
-export default function ExerciseEdit({setShowPopup}) {
+export default function ExerciseEdit({setShowPopup, initialTime}) {
 	const context = useContext(AccountContext)
 	//const [pageUpdated, setPageUpdated] = useState(false)
 	const [oldName, setOldName] = useState("")
@@ -29,7 +29,7 @@ export default function ExerciseEdit({setShowPopup}) {
 	const [oldTime, setOldTime] = useState(0)
 	const [name, setName] = useState("")
 	const [desc, setDesc] = useState("")
-	const [time, setTime] = useState(0)
+	const [time, setTime] = useState(initialTime)
 	const [errorMessage, setErrorMessage] = useState("")
 	const [editFailed, setEditFailed] = useState(false)
 	const [tagLinkFailed, setTagLinkFailed] = useState(false)
@@ -43,13 +43,11 @@ export default function ExerciseEdit({setShowPopup}) {
 
 	useEffect(() => {
 		setExId(window.location.pathname.substring(window.location.pathname.lastIndexOf("/") + 1))
-		console.log("In useEffect 1")
 	},[])
 
 	useEffect(() => {
 		if(exId !== ""){
 			getExerciseInfo()
-			console.log("In useEffect 2")
 		}
 	},[exId])
 
@@ -72,7 +70,7 @@ export default function ExerciseEdit({setShowPopup}) {
 		setName(window.localStorage.getItem("name"))
 		setDesc(window.localStorage.getItem("desc"))
 		setTime(window.localStorage.getItem("time"))
-	
+		console.log("local stored time: " + window.localStorage.getItem("time"))
 	}
 
 	function done(){
@@ -88,10 +86,7 @@ export default function ExerciseEdit({setShowPopup}) {
 	/**
      * Returns the information about the exercise and its tags with the id in the pathname.
      */
-	async function getExerciseInfo() {
-		console.log("exercise id: "+ exId)
-		console.log("inside getInfo")
-		
+	async function getExerciseInfo() {		
 		const requestOptions = {
 			method: "GET",
 			headers: {"Content-type": "application/json", token: context.token},
@@ -121,7 +116,6 @@ export default function ExerciseEdit({setShowPopup}) {
 			setName(exerciseJson.name)
 			setDesc(exerciseJson.description)
 			setTime(exerciseJson.duration)
-			console.log("Loading real info")
 		}
 
 		setNewTags(tagsJson)
@@ -154,7 +148,6 @@ export default function ExerciseEdit({setShowPopup}) {
 		const oldT = JSON.stringify(existingTags.sort((a, b) => a.id - b.id))
 
 		if(oldName !== name || oldDesc !== desc || oldTime != time || newT !== oldT)  {
-			console.log(newT + " aaaaa " + oldT)
 			setShowMiniPopup(true)
 		} else {
 			setShowPopup(false)
@@ -215,7 +208,6 @@ export default function ExerciseEdit({setShowPopup}) {
 		if (!(editFailed || tagRemoveFailed || tagLinkFailed)) {
 			//borde bytas till att stänga popupen
 			// window.location.href = "/exercise"
-			console.log("SEND DATA: ->>> " + sendData)
 			setShowPopup(false)
 			location.reload(1) // forcing reload of the page.... 
 
@@ -300,7 +292,7 @@ export default function ExerciseEdit({setShowPopup}) {
 		window.localStorage.setItem("name", "")
 		window.localStorage.setItem("desc", "")
 		window.localStorage.setItem("time", "")
-		console.log("Clean storage")
+		console.log("delete")
 	}
 
 	return (
@@ -331,7 +323,7 @@ export default function ExerciseEdit({setShowPopup}) {
 			<div className={styles.timeSelector} >
 				<MinutePicker
 					id={"minuteSelect"}
-					initialValue={time}
+					initialValue={initialTime !== undefined ? initialTime : window.localStorage.getItem("time")}
 					callback={timeCallback}
 				/>
 			</div>

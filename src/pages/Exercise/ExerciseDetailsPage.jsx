@@ -260,7 +260,7 @@ export default function ExerciseDetailsPage() {
 				setIsOpen={setShowEditPopup}
 				noBackground={false}
 			>
-				<ExerciseEdit setShowPopup={setShowEditPopup} />
+				<ExerciseEdit setShowPopup={setShowEditPopup} initialTime={exercise?.duration}/>
 			</Popup>
 		</div>
 	)
