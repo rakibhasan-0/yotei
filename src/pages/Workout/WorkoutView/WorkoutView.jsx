@@ -11,7 +11,7 @@ import { Pencil, Trash} from "react-bootstrap-icons"
 import Review from "../../../components/Workout/WorkoutReview/ReviewFormComponent.jsx"
 import ErrorState from "../../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../../components/Common/Spinner/Spinner"
-import {HTTP_STATUS_CODES, setError, setSuccess, isEditor} from "../../../utils"
+import {HTTP_STATUS_CODES, setError, setSuccess, isAdmin} from "../../../utils"
 import PrintButton from "../../../components/Common/PrintButton/PrintButton"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
 
@@ -39,6 +39,7 @@ export default function WorkoutView({id}) {
 	const [showRPopup, setRShowPopup] = useState(false)
 	const [errorStateMsg, setErrorStateMsg] = useState("")
 	const [loading, setLoading] = useState(true)
+	const {userId} = useContext(AccountContext)
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -49,7 +50,7 @@ export default function WorkoutView({id}) {
 			const response = await fetch(`/api/workouts/detail/${workoutId}`, requestOptions).catch(() => {
 				setErrorStateMsg("Serverfel: Kunde inte ansluta till servern.")
 				setLoading(false)
-				return	
+				return
 			})
 
 			if(response.status != HTTP_STATUS_CODES.OK){
@@ -82,8 +83,8 @@ export default function WorkoutView({id}) {
 				setError("Passet existerar inte längre!")
 			} else if (response.status != HTTP_STATUS_CODES.OK){
 				setError("Något gick snett! Felkod: " + response.status)
-				return	
-			} 
+				return
+			}
 			const json = await response.json()
 			setWorkoutUsers(() => json)
 
@@ -100,7 +101,7 @@ export default function WorkoutView({id}) {
 				<div id={id} className="container px-0">
 					{<ConfirmPopup popupText={"Är du säker att du vill radera passet \"" + workoutData.name + "\"?"} id={"confirm-popup"} setShowPopup={setShowPopup} showPopup={showPopup} onClick={async () => deleteWorkout(workoutId, context, navigate, setShowPopup)}/>}
 					{getReviewContainer(showRPopup, setRShowPopup, workoutId)}
-					{getWorkoutInfoContainer(workoutData, setShowPopup, context)}
+					{getWorkoutInfoContainer(workoutData, setShowPopup, context, userId)}
 					{sortByCategories(workoutData).map((activityCategory) => (
 						<div key={activityCategory.categoryOrder}>
 							<WorkoutActivityList
@@ -138,7 +139,7 @@ async function deleteWorkout(workoutId, context, navigate, setShowPopup) {
 
 	const response = await fetch(`/api/workouts/delete/${workoutId}`, requestOptions).catch(() => {
 		setError("Serverfel: Kunde inte ansluta till servern.")
-		return	
+		return
 	})
 
 	if(response.status === HTTP_STATUS_CODES.NOT_FOUND){
@@ -149,7 +150,7 @@ async function deleteWorkout(workoutId, context, navigate, setShowPopup) {
 		return
 	} else if (response.status != HTTP_STATUS_CODES.OK){
 		setError("Något gick snett! Felkod: " + response.status)
-		return	
+		return
 	}
 
 	setSuccess("Pass borttagen!")
@@ -184,7 +185,7 @@ function getWorkoutUsersContainer(workoutUsers) {
 			<div className="row">
 				<h2>Användare</h2>
 			</div>
-			<div className="row"> 
+			<div className="row">
 				{
 					workoutUsers.map((user, index) => {
 						return (
@@ -217,7 +218,7 @@ function getButtons(navigate, setRShowPopup) {
 }
 
 
-function getWorkoutInfoContainer(workoutData, setShowPopup, context) {
+function getWorkoutInfoContainer(workoutData, setShowPopup, context, userId) {
 	return (
 		<>
 			<div className="container px-0">
@@ -229,7 +230,7 @@ function getWorkoutInfoContainer(workoutData, setShowPopup, context) {
 						<div className={styles.clickIcon}>
 							<PrintButton workoutData={workoutData}/>
 						</div>
-						{ isEditor(context) && 
+						{ (userId == workoutData.author.user_id || isAdmin(context)) &&
 						<>
 							<Link className="ml-3" state={{workout: workoutData}} to={"/workout/edit"}>
 								<Pencil
