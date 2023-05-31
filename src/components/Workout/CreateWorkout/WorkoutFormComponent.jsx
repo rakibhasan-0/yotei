@@ -38,6 +38,7 @@ import EditActivityPopup from "./EditActivityPopup"
 function WorkoutFormComponent({ callback }) {
 	const { workoutCreateInfo, workoutCreateInfoDispatch } =
 		useContext(WorkoutCreateContext)
+
 	const [validated, setValidated] = useState(false)
 	const [acceptActivities, setAcceptActivities] = useState(false)
 	const [goBackPopup, setGoBackPopup] = useState(false)

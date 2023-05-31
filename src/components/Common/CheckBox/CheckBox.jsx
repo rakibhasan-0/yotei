@@ -31,11 +31,9 @@ export default function CheckBox({checked, onClick, label, disabled, id}) {
 	// which happens almost everywhere where this component is used.
 	// Solution is for the user of this component to pass
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-
-	
 	const [checkedState, setCheckedState] = useState(checked)
 	
-	useEffect(() => {checkedState && onClick(false)}, [disabled])
+	useEffect(() => { disabled && setCheckedState(false) }, [disabled])
 	
 	useEffect(() => {
 		setCheckedState(checked)
@@ -48,8 +46,8 @@ export default function CheckBox({checked, onClick, label, disabled, id}) {
 				type="checkbox"
 				checked={checkedState}
 				onChange={() =>  {
-					onClick(!checkedState)
 					setCheckedState(!checkedState)
+					onClick(!checkedState)
 				}}
 				disabled={disabled}
 			/>

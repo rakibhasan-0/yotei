@@ -41,7 +41,7 @@ const WorkoutEdit = () => {
 			setError("Träningen kunde inte uppdateras.")
 		}
 
-		navigate(`/workout/${workoutCreateInfo.data.id}`)
+		navigate(-1)
 	}
 
 	/**

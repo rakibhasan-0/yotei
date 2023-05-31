@@ -149,7 +149,6 @@ export function ActivityCategories() {
 			&& inputValue.length > 0
 			&& event.key === "Enter") {
 			workoutCreateInfoDispatch({type: "ADD_CATEGORY", payload: { name: inputValue }})
-			workoutCreateInfoDispatch({type: "CHECK_CATEGORY", payload: { index: -1 }})
 			setInputValue("")
 			event.preventDefault()
 		}
@@ -216,8 +215,7 @@ export default function ActivityInfoPopUp({ isFreeText }) {
 
 	// Add empty activity if free text and empty addedActivities
 	useEffect(() => {
-		if(addedActivities.length === 0
-			&& isFreeText) {
+		if(addedActivities.length === 0 && isFreeText) {
 			workoutCreateInfoDispatch({type: "ADD_ACTIVITY", payload: { name: "" }})
 		}
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -226,8 +224,6 @@ export default function ActivityInfoPopUp({ isFreeText }) {
 	 * Removes empty activities from addedActivities if free text.
 	 */
 	const clearEmptyActivities = () => {
-		if(!isFreeText) return
-
 		for(let i = 0; i < addedActivities.length; i++) {
 			if(addedActivities[i].name === "") {
 				workoutCreateInfoDispatch({ 
@@ -239,12 +235,16 @@ export default function ActivityInfoPopUp({ isFreeText }) {
 	}
 
 	const goBack = () => {
-		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLEAR_ADDED_ACTIVITIES })
-		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLOSE_POPUP })
+		if (isFreeText){
+			workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLEAR_ADDED_ACTIVITIES })
+			workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLOSE_POPUP })
+		} else {
+			workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLOSE_ACIVITY_POPUP })
+		}
 	}
 
 	const saveActivities = () => {
-		clearEmptyActivities()
+		if(isFreeText) clearEmptyActivities()
 		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CREATE_ACTIVITY_ITEMS, payload: { isFreeText }})
 		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLOSE_POPUP })
 	}

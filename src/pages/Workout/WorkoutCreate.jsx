@@ -30,8 +30,8 @@ const WorkoutCreate = () => {
 		workoutCreateReducer, JSON.parse(JSON.stringify(WorkoutCreateInitialState)))
 	const { token, userId } = useContext(AccountContext)
 	const [isSubmitted, setIsSubmitted] = useState(false)
+	const [hasLoadedData, setHasLoadedData] = useState(false)
 	const navigate = useNavigate()
-
 	const location = useLocation()
 
 	/**
@@ -56,7 +56,6 @@ const WorkoutCreate = () => {
 		} else {
 			setError("Träningspasset kunde inte skapas!")
 		}
-
 	}
 
 	/**
@@ -151,14 +150,12 @@ const WorkoutCreate = () => {
 	 * If the form was submitted, the data is removed from local storage.
 	 */
 	useEffect(() => {
-		localStorage.setItem("workoutCreateInfo", JSON.stringify(workoutCreateInfo))
+		if (hasLoadedData) localStorage.setItem("workoutCreateInfo", JSON.stringify(workoutCreateInfo))
 
 		return () => {
-			if(isSubmitted) {
-				localStorage.removeItem("workoutCreateInfo")
-			}
+			if(isSubmitted) localStorage.removeItem("workoutCreateInfo")
 		}
-	}, [workoutCreateInfo, isSubmitted])
+	}, [workoutCreateInfo, isSubmitted, hasLoadedData])
 
 	/**
 	 * Loads the workoutCreateInfo state from local storage when the component mounts.
@@ -166,10 +163,13 @@ const WorkoutCreate = () => {
 	useEffect(() => {
 		const item = localStorage.getItem("workoutCreateInfo")
 
-		workoutCreateInfoDispatch({
-			type: WORKOUT_CREATE_TYPES.INIT, 
-			payload: item ? JSON.parse(item) : WorkoutCreateInitialState
-		})
+		if(item) {
+			workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.INIT_WITH_DATA, payload: JSON.parse(item) })
+		} else {
+			workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.SET_INITIAL_STATE })
+		}
+
+		setHasLoadedData(true)
 	}, [])
 
 	return (

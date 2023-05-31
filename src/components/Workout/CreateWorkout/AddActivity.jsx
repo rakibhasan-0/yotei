@@ -14,7 +14,8 @@ import RoundButton from "../../Common/RoundButton/RoundButton"
 import { ChevronRight } from "react-bootstrap-icons"
 import ErrorStateSearch from "../../Common/ErrorState/ErrorStateSearch"
 import style from "./AddActivity.module.css"
-
+import { WorkoutCreateContext } from "./WorkoutCreateContext"
+import { WORKOUT_CREATE_TYPES } from "./WorkoutCreateReducer"
 import InfiniteScrollComponent from "../../Common/List/InfiniteScrollComponent"
 
 /**
@@ -32,6 +33,8 @@ import InfiniteScrollComponent from "../../Common/List/InfiniteScrollComponent"
 function AddActivity({ id, setShowActivityInfo }) {
 
 	const { token } = useContext(AccountContext)
+	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(WorkoutCreateContext)
+	const { checkedActivities } = workoutCreateInfo
 
 	/**
 	 * Used to cache techniques and exercises that are fetched from the backend.
@@ -66,29 +69,59 @@ function AddActivity({ id, setShowActivityInfo }) {
 	/**
 	 * Keeps track of which activities that are checked/selected by the user.
 	 */
-	const [checkedActivities, setCheckedActivities] = useState([])
+	// const [checkedActivities, setCheckedActivities] = useState([])
+
+	const [hasLoadedData, setHasLoadedData] = useState(false)
+	useEffect(() => {
+		if(hasLoadedData) return
+
+		const tempTechniques = []
+		const tempExercises = []
+
+		checkedActivities.forEach(checkedActivity => {
+			if(checkedActivity.type === "technique") {
+				tempTechniques.push(checkedActivity)
+			} else {
+				tempExercises.push(checkedActivity)
+			}
+		})
+
+		setTechniques(tempTechniques)
+		setExercises(tempExercises)
+		setHasLoadedData(true)
+	}, [hasLoadedData, checkedActivities])
 
 	/**
 	 * Fetches techniques when the component is mounted or when the 
 	 * search text, selected belts, kihon value or selected tags are changed.
 	 */
 	useEffect(() => {
-		setFetchedTech(false)
-		let filtered = techniques.filter(technique => checkedActivities.includes(technique))
-		setTechniques(filtered)
-		searchTechniques()
+		if(!hasLoadedData) return
 
-	}, [searchTechText, selectedBelts, kihon, selectedTechTags])
+		setFetchedTech(false)
+		setTechniques(techniques.filter(
+			technique => checkedActivities.some(
+				checkedActivity => checkedActivity.techniqueID === technique.techniqueID
+			)
+		))
+		searchTechniques()
+	}, [searchTechText, selectedBelts, kihon, selectedTechTags, hasLoadedData])
 
 	/**
 	 * Fetches exercises when the component is mounted or when the
 	 * search text or selected tags are changed.
 	 */
 	useEffect(() => {
+		if(!hasLoadedData) return
+
 		setFetchedExer(false)
-		setExercises(exercises.filter(exercise => checkedActivities.includes(exercise)))
+		setExercises(exercises.filter(
+			exercise => checkedActivities.some(
+				checkedActivity => checkedActivity.id === exercise.id
+			)
+		))
 		searchExercises()
-	}, [searchExerText, selectedExerTags])
+	}, [searchExerText, selectedExerTags, hasLoadedData])
 
 	/**
 	 * Function for handling when a belt has been picked from the BeltPicker.
@@ -129,14 +162,10 @@ function AddActivity({ id, setShowActivityInfo }) {
 	/**
 	 * Handles selecting or deselecting a checkbox for an activity.
 	 */
-	const onActivityToggle = (activity, type) => setCheckedActivities(prev => {
-		if (prev.includes(activity)) {
-			return prev.filter(a => a !== activity)
-		}
+	const onActivityToggle = (activity, type) => {
 		activity.type = type
-		return [...prev, activity]
-	})
-
+		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.TOGGLE_CHECKED_ACTIVITY, payload: activity })
+	}
 
 	/**
 	 * Fetches techniques from the backend. But first, the selected belts 
@@ -147,7 +176,6 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 * kept in the state to be displayed.
 	 */
 	const searchTechniques = () => {
-
 		const filteredBelts = []
 
 		selectedBelts.forEach(function (arrayItem) {
@@ -166,7 +194,9 @@ function AddActivity({ id, setShowActivityInfo }) {
 		}
 
 		getTechniques(args, token, map, mapActions, (result) => {
-			const res = result.results.filter((technique) => !checkedActivities.includes(technique))
+			if(!result.results) return
+
+			const res = result.results.filter((technique) => !checkedActivities.some(a => a.type === "technique" && a.techniqueID === technique.techniqueID))
 			setTechniques((techniques) => [...techniques, ...res])
 			setSuggestedTechTags(result.tagCompletion)
 			setFetchedTech(true)
@@ -181,15 +211,16 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 * kept in the state to be displayed.
 	 */
 	const searchExercises = () => {
-
 		const args = {
 			text: searchExerText,
 			selectedTags: selectedExerTags,
 		}
 
 		getExercises(args, token, map, mapActions, (result) => {
-			result.results = result.results.filter(exercise => !checkedActivities.includes(exercise))
-			setExercises((exercises) => [...exercises, ...result.results])
+			if(!result.results) return
+
+			const res = result.results.filter(exercise => !checkedActivities.some(a => a.type === "exercise" && a.id === exercise.id))
+			setExercises((exercises) => [...exercises, ...res])
 			setSuggestedExerTags(result.tagCompletion)
 			setFetchedExer(true)
 		})
@@ -228,13 +259,11 @@ function AddActivity({ id, setShowActivityInfo }) {
 							>
 								{techniques.map((technique, key) => (
 									<TechniqueCard
-										id={"technique-list-item-" + technique.id}
+										id={"technique-list-item-" + technique.techniqueID}
 										checkBox={
 											<CheckBox
-												checked={checkedActivities.includes(technique)}
-												onClick={() => {
-													onActivityToggle(technique, "technique")
-												}}
+												checked={checkedActivities.some(a => a.techniqueID === technique.techniqueID)}
+												onClick={() => onActivityToggle(technique, "technique")}
 											/>
 										}
 										technique={technique}
@@ -270,8 +299,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 										detailURL={"/exercise/exercise_page/"}
 										checkBox={
 											<CheckBox
-												id=""
-												checked={checkedActivities.includes(exercise)}
+												checked={checkedActivities.some(a => a.id === exercise.id)}
 												onClick={() => onActivityToggle(exercise, "exercise")}
 											/>
 										}

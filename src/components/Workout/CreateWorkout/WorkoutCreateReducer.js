@@ -18,6 +18,7 @@ export const WORKOUT_CREATE_TYPES = {
 	INIT_EDIT_DATA: "INIT_EDIT_DATA",
 	RESET: "RESET",
 	CLOSE_POPUP: "CLOSE_POPUP",
+	CLOSE_ACIVITY_POPUP: "CLOSE_ACIVITY_POPUP",
 	OPEN_FREE_TEXT_POPUP: "OPEN_FREE_TEXT_POPUP",
 	OPEN_ACTIVITY_POPUP: "OPEN_ACTIVITY_POPUP",
 	OPEN_CHOOSE_ACTIVITY_POPUP: "OPEN_CHOOSE_ACTIVITY_POPUP",
@@ -32,6 +33,9 @@ export const WORKOUT_CREATE_TYPES = {
 	CREATE_ACTIVITY_ITEMS: "CREATE_ACTIVITY_ITEMS",
 	CLEAR_ADDED_ACTIVITIES: "CLEAR_ADDED_ACTIVITIES",
 	SET_ACTIVITIES_WITH_PARSING: "SET_ACTIVITIES_WITH_PARSING",
+	SET_CHECKED_ACTIVITIES: "SET_CHECKED_ACTIVITIES",
+	CLEAR_CHECKED_ACTIVITIES: "CLEAR_CHECKED_ACTIVITIES",
+	TOGGLE_CHECKED_ACTIVITY: "TOGGLE_CHECKED_ACTIVITY",
 }
 
 /**
@@ -69,11 +73,12 @@ export const WorkoutCreateInitialState = {
 		currentlyEditing: null
 	},
 	addedCategories: [
-		{ id: 0, name: null, checked: true }, 
+		{ id: 0, name: null, checked: false }, 
 		{ id: 1, name: "Uppvärmning", checked: false },
 		{ id: 2, name: "Stretchning", checked: false }
 	],
 	addedActivities: [],
+	checkedActivities: [],
 	numActivities: 0,
 	numCategories: 3,
 }
@@ -187,7 +192,7 @@ export function workoutCreateReducer(state, action) {
 			tempState.data.activityItems[i].activities = tempState.data.activityItems[i].activities.filter(activity => activity.id !== id)
 			
 			if(tempState.data.activityItems[i].activities.length === 0) {
-				tempState.data.activityItems.splice(i, 1)
+				tempState.data.activityItems = tempState.data.activityItems.filter(item => item.id !== tempState.data.activityItems[i].id)
 			}
 		}
 		return tempState
@@ -226,29 +231,36 @@ export function workoutCreateReducer(state, action) {
 		tempState.popupState.types.editActivityPopup = false
 		tempState.popupState.isOpened = false
 
-		tempState.addedCategories.forEach((category) => {
-			
-			if(category.id === 0) {
-				category.checked = true
-			}
-			else {
-				category.checked = false
-			}
-		})
+		tempState.addedCategories.forEach((category) => category.checked = false)
+		tempState.checkedActivities = []
+		return tempState
+	case "CLOSE_ACIVITY_POPUP":
+		tempState.popupState.types.freeTextPopup = false
+		tempState.popupState.types.activityPopup = false
+		tempState.popupState.types.chooseActivityPopup = true
+		tempState.popupState.types.editActivityPopup = false
+		tempState.popupState.isOpened = true
 		return tempState
 	case "OPEN_FREE_TEXT_POPUP":
+		tempState.addedCategories[0].checked = true
+
 		tempState.popupState.types.freeTextPopup = true
 		tempState.popupState.types.activityPopup = false
 		tempState.popupState.types.chooseActivityPopup = false
 		tempState.popupState.types.editActivityPopup = false
 		tempState.popupState.isOpened = true
+
 		return tempState
 	case "OPEN_ACTIVITY_POPUP":
+		tempState.addedCategories[0].checked = true
+
 		tempState.popupState.types.freeTextPopup = false
 		tempState.popupState.types.activityPopup = true
 		tempState.popupState.types.chooseActivityPopup = false
 		tempState.popupState.types.editActivityPopup = false
 		tempState.popupState.isOpened = true
+
+		tempState.addedCategories[0].checked = true
 		return tempState
 	case "OPEN_CHOOSE_ACTIVITY_POPUP":
 		tempState.popupState.types.freeTextPopup = false
@@ -331,16 +343,13 @@ export function workoutCreateReducer(state, action) {
 		return tempState
 	}
 	case "CHECK_CATEGORY": {
-		tempState.addedCategories.forEach((category) => {
-			category.checked = false
-		})
+		tempState.addedCategories.forEach((category) => category.checked = false)
 		const index = action.payload.index === -1 ? tempState.addedCategories.length - 1 : action.payload.index
 		tempState.addedCategories[index].checked = true
 		return tempState
 	}
 	case "CHECK_CATEGORY_BY_ID": {
-		const id = action.payload.id
-		tempState.addedCategories.forEach((category) => category.checked = category.id === id)
+		tempState.addedCategories.forEach((category) => category.checked = category.id === action.payload.id)
 		return tempState
 	}
 	case "ADD_CATEGORY": {
@@ -353,21 +362,21 @@ export function workoutCreateReducer(state, action) {
 		}
 
 		tempState.addedCategories.push(category)
-		tempState
-		tempState.addedCategories.forEach(category => {
-			category.checked = false
-		})
-		tempState.addedCategories[tempState.addedCategories.length - 1].checked = false
+		tempState.addedCategories.forEach(category => category.checked = false)
+		tempState.addedCategories[tempState.addedCategories.length - 1].checked = true
 		return tempState
 	}
 	case "UPDATE_ACTIVITY_NAME":
 		tempState.addedActivities[action.payload.index].name = action.payload.name
 		return tempState
 	case "CREATE_ACTIVITY_ITEMS": {
-		if(state.addedActivities.length === 0) return state
+		if(state.addedActivities.length === 0) return tempState
 
 		const isFreeText = action.payload.isFreeText
-		const categoryName = tempState.addedCategories.find(category => category.checked).name
+		const category = tempState.addedCategories.find(category => category.checked)
+
+		// No checked category?
+		if(!category) return tempState
 
 
 		let activities = tempState.addedActivities.map(activity => {
@@ -383,13 +392,13 @@ export function workoutCreateReducer(state, action) {
 
 			
 		let activityItem
-		if (tempState.data.activityItems.some(item => item.name === categoryName)) {
-			activityItem = tempState.data.activityItems.find(item => item.name === categoryName)
+		if (tempState.data.activityItems.some(item => item.name === category.name)) {
+			activityItem = tempState.data.activityItems.find(item => item.name === category.name)
 			activityItem.activities = [...activityItem.activities, ...activities]
 		} else {
 			activityItem = {
 				id: tempState.addedCategories.find(category => category.checked).id,
-				name: categoryName,
+				name: category.name,
 				activities: activities,
 			}
 
@@ -403,6 +412,34 @@ export function workoutCreateReducer(state, action) {
 	case "CLEAR_ADDED_ACTIVITIES":
 		tempState.addedActivities = []
 		return tempState
+	case "SET_CHECKED_ACTIVITIES": 
+		tempState.checkedActivities = action.payload
+		return tempState
+	case "CLEAR_CHECKED_ACTIVITIES":
+		tempState.checkedActivities = []
+		return tempState
+	case "TOGGLE_CHECKED_ACTIVITY": {
+		const type = action.payload.type
+		const id = type === "technique" ? action.payload.techniqueID : action.payload.id
+
+		if (type === "technique") {
+			const index = tempState.checkedActivities.findIndex(activity => activity.techniqueID === id)
+			if (index === -1) {
+				tempState.checkedActivities = [...tempState.checkedActivities, action.payload]
+			} else {
+				tempState.checkedActivities = tempState.checkedActivities.filter(activity => activity.techniqueID !== id)
+			}
+		} else {
+			const index = tempState.checkedActivities.findIndex(activity => activity.id === id)
+			if (index === -1) {
+				tempState.checkedActivities = [...tempState.checkedActivities, action.payload]
+			} else {
+				tempState.checkedActivities = tempState.checkedActivities.filter(activity => activity.id !== id)
+			}
+		}
+
+		return tempState
+	}
 	default:
 		return state
 	}
