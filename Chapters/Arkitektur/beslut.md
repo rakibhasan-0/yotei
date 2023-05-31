@@ -6,9 +6,13 @@
 Arkitekt beslut VT23
 
 Separat UserSettings-API
+
 Övergång från Login till User
+
 Byte av kategorier till taggar
+
 Från Microservices till Diamond
+
 Microservices beslut
 
 
