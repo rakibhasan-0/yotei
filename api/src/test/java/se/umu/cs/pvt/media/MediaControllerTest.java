@@ -192,7 +192,7 @@ class MediaControllerTest {
         Mockito.when(mediaRepository.findAll()).thenReturn(emptyMedia);
         ResponseEntity<List<Media>> response = mediaController.getMediaAll();
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
@@ -217,7 +217,7 @@ class MediaControllerTest {
 
         ResponseEntity<Object> response = mediaController.getTechniqueURLs(anyLong());
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test

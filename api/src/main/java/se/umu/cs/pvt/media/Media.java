@@ -27,10 +27,10 @@ public class Media implements Serializable {
     @Column(nullable = false, name ="url")
     private String url;
 
-    @Column(nullable = true, name="local_storage")
+    @Column(nullable = false, name="local_storage")
     private Boolean localStorage;
 
-    @Column(nullable = true, name="image")
+    @Column(nullable = false, name="image")
     private Boolean image;
 
     @Column(nullable = true, name="description")

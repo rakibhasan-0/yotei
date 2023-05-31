@@ -25,4 +25,7 @@ public interface MediaRepository extends JpaRepository<Media, Long> {
     @Query("delete from Media as m where m.movementId = :id and m.url = :url")
     void deleteListOfMedia(Long id, String url);
 
+    @Modifying
+    @Query("update Media as m set m.description = :description where m.id = :id ")
+    void updateDescription(Long id, String description);
 }

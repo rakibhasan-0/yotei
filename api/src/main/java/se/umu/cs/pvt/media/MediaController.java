@@ -186,7 +186,7 @@ public class MediaController {
         List<Media> mediaList = mediaRepository.findAll();
 
         if (mediaList.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
 
         return new ResponseEntity<>(mediaList, HttpStatus.OK);
@@ -204,10 +204,6 @@ public class MediaController {
          }
 
         List<Media> mediaList = mediaRepository.findAllMediaById(id);
-
-        if (mediaList.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
 
         return new ResponseEntity<>(mediaList, HttpStatus.OK);
 
@@ -261,5 +257,24 @@ public class MediaController {
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
+    /**
+     * Edits the description of one or several media objects
+     *
+     * @param toEdit list of Description objects holding the id and new description belonging to a media.
+     * @return a responsentity
+     */
+    @PutMapping("")
+    @Transactional
+    public ResponseEntity<Object> updateDescriptions(@RequestBody List<Description> toEdit) {
+        for(Description desc : toEdit) {
+            try {
+                System.out.println("ID: " + desc.getId() + " desc: " + desc.getDescription());
 
+                mediaRepository.updateDescription(desc.getId(), desc.getDescription());
+            } catch (Exception e) {
+                return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+            }
+        }
+        return  new ResponseEntity<>("Update done", HttpStatus.OK);
+    }
 }
