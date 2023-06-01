@@ -200,6 +200,7 @@ const WorkoutEdit = () => {
 			<ConfirmPopup
 				id="TillbakaMiniPopup"
 				showPopup={goBackPopup}
+				zIndex={1000}
 				setShowPopup={setGoBackPopup}
 				popupText="Är du säker på att du vill gå tillbaka? Dina ändringar kommer inte att sparas."
 				confirmText="Ja"

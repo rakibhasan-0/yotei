@@ -208,6 +208,7 @@ const WorkoutCreate = () => {
 				setShowPopup={setGoBackPopup}
 				popupText="Är du säker på att du vill gå tillbaka?"
 				confirmText="Ja"
+				zIndex={1000}
 				backText="Avbryt"
 				onClick={async () => {
 					await workoutCreateInfoDispatch({

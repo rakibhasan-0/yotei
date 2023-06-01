@@ -306,6 +306,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 				popupText="Är du säker på att du vill avbryta?"
 				confirmText="Ja"
 				backText="Avbryt"
+				zIndex={1000}
 				onClick={() => {
 					workoutCreateInfoDispatch({
 						type: WORKOUT_CREATE_TYPES.CLEAR_ADDED_ACTIVITIES

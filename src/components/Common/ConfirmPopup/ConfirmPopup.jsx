@@ -25,7 +25,7 @@ import Button from "../Button/Button"
  * @updated 2023-05-30, updated documentation
  * 
  */
-export default function ConfirmPopup({ onClick, id, showPopup, setShowPopup, popupText, confirmText, backText}) {
+export default function ConfirmPopup({ onClick, id, showPopup, setShowPopup, popupText, confirmText, backText, zIndex }) {
 	const deleteClickHandler = () => {
 		onClick()
 		setShowPopup(false)
@@ -33,12 +33,14 @@ export default function ConfirmPopup({ onClick, id, showPopup, setShowPopup, pop
 	return (
 		<Popup
 			id={id}
+			zIndex={zIndex}
 			isOpen={showPopup}
 			setIsOpen={setShowPopup}
 			style={{
 				maxHeight: "300px",
 				maxWidth: "333px",
 				height: "unset",
+				zIndex: zIndex ? zIndex : "100"
 			}}
 		>
 			<div className={styles.titleContainer} id={`${id}-text`}>

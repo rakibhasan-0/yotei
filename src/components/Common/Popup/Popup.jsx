@@ -34,7 +34,7 @@ import Divider from "../Divider/Divider"
  * @version 3.0
  * @since 2023-05-16
  */
-export default function Popup({ title, id, isOpen, setIsOpen, children, isNested, style, onClose}) {
+export default function Popup({ title, id, isOpen, setIsOpen, children, isNested, style, onClose, zIndex }) {
 
 	// Synchronize react state with CSS-styling in browser
 	useEffect(() => {
@@ -51,7 +51,7 @@ export default function Popup({ title, id, isOpen, setIsOpen, children, isNested
 
 	return (
 		<>
-			<div className={styles.backdrop} onClick={() => {
+			<div className={styles.backdrop} style={{zIndex: zIndex ? zIndex - 10 : 90}} onClick={() => {
 				setIsOpen(false)
 				if(onClose) onClose()
 			}}
