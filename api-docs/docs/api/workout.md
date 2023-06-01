@@ -33,29 +33,23 @@ body:
 
 examples:
   - name: 200
-  
-      request: |
+    request: |
 
-        POST /api/workouts/favorites
-        {
-            "userId": 1,
-            "workoutId": 2
-        }
-
+      POST /api/workouts/favorites
+      {
+          "userId": 1,
+          "workoutId": 2
+      }
     response:
-
       content-type: text/plain
       body: <empty>
 
   - name: 400
-
     request: |
-
       POST /api/workouts/favorites
       {}
 
     response: 
-
       content-type: text/plain
       body: <empty>
 </api>
@@ -79,17 +73,14 @@ body:
 
 examples:
   - name: 200
-  
-      request: |
-
-        DELETE /api/workouts/favorites
-        {
-            "userId": 1,
-            "workoutId": 2
-        }
+    request: |
+      DELETE /api/workouts/favorites
+      {
+          "userId": 1,
+          "workoutId": 2
+      }
 
     response:
-
       content-type: text/plain
       body: <empty>
 
@@ -101,7 +92,6 @@ examples:
         {}
 
     response: 
-
         content-type: text/plain
         body: <empty>
 </api>
@@ -124,11 +114,8 @@ body:
 
 examples:
   - name: 200
-
     request: GET /api/workouts/favorites/1
-
     response:
-
         content-type: application/json
         body: |
             [
@@ -176,11 +163,8 @@ body:
 
 examples:
   - name: 200
-
     request: GET /api/workouts/favorites/1/162
-
     response:
-
         content-type: application/json
         body: |
             true
@@ -199,13 +183,9 @@ text: |
 
 examples:
   - name: 200
-  
-    request:
-
+    request: |
         GET /detail/166
-
     response:
-
         content-type: application/json
         body: |
           {
@@ -262,7 +242,7 @@ examples:
                     "name": "En fin tagg"
                 }
             ]
-        }
+          }
 
 </api>
 
@@ -285,13 +265,9 @@ body:
 
 examples:
   - name: 200
-
-    request:
-
+    request: |
         GET /detail/166
-
     response:
-
         content-type: application/json
         body: <empty>
 
@@ -309,12 +285,9 @@ text: |
 
 examples:
   - name: 200
-
-    request:
-
+    request: |
         GET /all
     response:
-
         content-type: application/json
         body: |
           [
@@ -338,7 +311,7 @@ text: |
 
 examples:
   - name: 200
-    request:
+    request: |
       GET /all/1
     response:
       content-type: application/json
@@ -363,7 +336,7 @@ text: |
 
 examples:
   - name: 200
-    request:
+    request: |
       GET /all/166
     response:
       content-type: application/json
@@ -385,7 +358,7 @@ text: |
 
 examples:
   - name: 200
-    request:
+    request: |
       GET /workout/166
     response:
       content-type: application/json
@@ -412,7 +385,7 @@ text: |
 
 examples:
   - name: 200
-    request:
+    request: |
       GET /created/1
     response:
       content-type: application/json
@@ -448,7 +421,7 @@ body: |
 
 examples:
   - name: 200
-    request:
+    request: |
       POST /add_full_workout
     response:
       content-type: application/json
@@ -482,7 +455,7 @@ body: |
 
 examples:
   - name: 200
-    request:
+    request: |
       POST /
     response:
       content-type: application/json
@@ -516,7 +489,7 @@ body: |
 
 examples:
   - name: 200
-    request:
+    request: |
       PUT /
     response:
       content-type: application/json
@@ -543,8 +516,11 @@ text: |
 
 examples:
   - name: 200
-    request:
+    request: |
       DELETE /delete/166
+    response:
+      content-type: FIXA_DETTA
+      body: FIXA_DETTA
 </api>
 
 <api>
@@ -558,6 +534,9 @@ examples:
   - name: 200
     request:
       DELETE /delete_full_workout/166
+    response:
+      content-type: FIXA_DETTA
+      body: FIXA_DETTA
 </api>
 
 <api>
@@ -633,9 +612,9 @@ body: |
 
 examples:
   - name: 200
-    request:
+    request: |
       POST /reviews
-      body: |
+
       {"workoutId":"166","userId":1,"rating":0,"positiveComment":"Ser bra ut","negativeComment":"","date":"2023-06-01"}
     response:
       content-type: application/json
@@ -663,8 +642,11 @@ text: |
 
 examples:
   - name: 200
-    request:
+    request: |
       DELETE /reviews?id=166
+    response:
+      content-type: FIXA_DETTA
+      body: FIXA_DETTA
 </api>
 
 <api>
@@ -680,7 +662,7 @@ examples:
   - name: 200
     request:
       PUT /reviews
-      body: |
+
       {"workoutId":"166","userId":1,"rating":0,"positiveComment":"Ser bra ut","negativeComment":"","date":"2023-06-01"}
     response:
       content-type: application/json
@@ -708,7 +690,7 @@ text: |
 
 examples:
   - name: 200
-    request:
+    request: |
       GET /associated/technique/166
     response:
       content-type: application/json

@@ -24,7 +24,7 @@ text: |
     the id of the exercise or technique, description to the media)
 body:
     type: application/json
-    parameters: |
+    parameters:
         movementId: The id of the technique or exercise that the media is added to | 10
         url: Url where the media-resource can be accessed | "https://www.youtube.com/watch?v=GIhcL8K4shg"
         localStorage: true if the media is stored on server. False if stored on other place. | false
@@ -89,7 +89,7 @@ text: |
     Removes a list of media-objects and. If media is stored locally, removes the file.
 body:
     type: application/json
-    parameters: |
+    parameters:
         movementId: The id of the technique or exercise that the media is added to | 10
         url: Url where the media-resource can be accessed | "https://www.youtube.com/watch?v=GIhcL8K4shg"
         localStorage: true if the media is stored on server. False if stored on other place. | false

@@ -35,7 +35,6 @@ examples:
     request: GET /api/session/get?id=1
 
     response:
-
         content-type: application/json
         body: |
             {
@@ -64,7 +63,6 @@ examples:
     request: GET /api/session/all
 
     response:
-
         content-type: application/json
         body: |
             [
@@ -108,9 +106,7 @@ body:
 
 examples:
   - name: 200
-  
-      request: |
-
+    request: |
         POST /api/session/add
         {
             "date": "2023-06-01T08:07:00+000Z",
@@ -118,9 +114,7 @@ examples:
             "workout": 1,
             "time": "08:07"
         }
-
     response:
-
         content-type: text/plain
         body: <empty>
 </api>
@@ -154,11 +148,8 @@ path-params:
 
 examples:
   - name: 200
-
     request: DELETE /api/session/delete?id=1
-
     response:
-
         content-type: text/plain
         body: <empty>
   - name: 404
@@ -166,7 +157,7 @@ examples:
     request: DELETE /api/session/delete?id=-1000
 
     response:
-
+        content-type: text/plain
         body: <empty>
 </api>
 
@@ -190,7 +181,6 @@ examples:
     request: DELETE /api/session/deleteByPlan?id=1
 
     response:
-
         content-type: text/plain
         body: <empty>
   - name: 404
@@ -198,7 +188,7 @@ examples:
     request: DELETE /api/session/deleteByPlan?id=-1000
 
     response:
-
+        content-type: text/plain
         body: <empty>
 </api>
 
@@ -221,9 +211,7 @@ body:
 examples:
   - name: 200
     request: GET /api/session/getByPlan?id=1
-    
     response:
-
         content-type: application/json
         body: |
             [
@@ -259,7 +247,6 @@ examples:
     request: GET /api/session/getByPlans?id=1&id=2
     
     response:
-
         content-type: application/json
         body: |
             [
@@ -286,10 +273,10 @@ text: |
 
 
 body:
-
     type: application/json
+    text: |
+        "hejsan"
     parameters:
-        text: | "hejsan"
         time: Time of session | "08:07"
         workout: Id of linked workout | 1
         plan: Id of linked plan | 1
@@ -308,7 +295,6 @@ examples:
             "date": "2023-06-01T08:07:00+000Z"
         }
     response:
-
         content-type: text/plain
         body: <empty>
 </api>
