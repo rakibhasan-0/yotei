@@ -6,6 +6,7 @@ Denna fil innehåller följande:
 * Hur och varför vi använder Dockerhub.
 * Hur Gitlab runners konfigurerats.
 * Våra beslut, varför vi tagit besluten och vad vi borde gjort annorlunda/tips till nästa år.
+* Vårt arbetssätt
 
 Dokumentation kring konfiguration på gitlab gäller GitLab Community Edition 15.11.4. 
 
@@ -164,6 +165,32 @@ QA ville att minst två personer skulle review:a koden innan merge. Detta gick i
 
 ### Deployment
 Vi fick två servrar till projektet och valde att ha en som host:ade utveckling(imp) och en för produktion(apollo). Ny kod integrerades automatiskt till imp under sprints, och vid leverans deploy:ades applikationen manuellt till apollo, så att kund skulle kunna testa produkten. Det fungerade bra. 
+
+### Arbetssätt
+
+<p>Det beslutades att projektet skulle använda sig av [Github Flow](https://docs.gitlab.com/ee/topics/gitlab_flow.html#github-flow-as-a-simpler-alternative) som ett uniformt arbetsätt. Detta för att man ansåg att struktur var viktigt i ett så här stort projekt.</p>
+
+<p>Detta innebar att man arbetade genom att skapa utvecklingsgrenar utifrån main, för varje ticket. Under utveckling uppmuntrades det att kontinurerligt köra Rebase mot main för att hålla sin untvecklings gren uppdaterad och undvika enorma och komplicerade merges mot slutet. Detta innebor även att main på både Front-end och Back-end var skyddad och ej gick att uppdatera utan att arbeta via utvecklingsgrenar.</p>
+
+<p>Vid en merge begärde vi även att minst en person skulle gå igenom utvecklingsgrenens förändrigar för att minimera antalet merge-problem och hålla en god kodkvalitet. Vi valde även att endbart personer i bygg kunde godkända en merge, för att återigen försäkra oss om att inga problem och buggar tog sig in på main.</p>
+
+<p>Vi valde även att alla commits på utvecklingsgrenen skulle squashas vid en merge med main. Detta innebär att alla Commits på en utvecklinggren slås ihop till ett enda Squash Commit. Detta Squash Commit följer följande mall:</p>
+
+	%{title}
+
+	Merge branch '%{source_branch}' into '%{target_branch}'
+
+	Reviewed by %{reviewed_by}
+	Approved by %{approved_by}
+
+	Description
+	%{description}
+
+	Branch commits
+	%{all_commits}
+
+Där "title" är titeln på hopslagningen och "description" är beskrivningen som man angett i hopslagningen.
+
 
 ### Tips till nästkommande år/vad vi hade kunnat göra annorlunda
 
