@@ -22,7 +22,7 @@ export default function WorkoutActivityList({categoryName, activities, id}) {
 	}
 	return (
 		<fieldset className={setPadding(activities.length, categoryName) + " my-3 "} id={id}>
-			<legend className="px-2 w-auto">
+			<legend style={{textAlign: "left"}}>
 				<div className="d-flex align-items-center justify-content-center" onClick={() => setIsCollapsed(!isCollapsed)}>
 					{categoryName != null && <p className="m-0">{categoryName}</p> }
 					<i style={isCollapsed? {fontSize: "16px"} : rotatedIcon} 

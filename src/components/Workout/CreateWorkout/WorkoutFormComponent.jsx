@@ -11,7 +11,6 @@ import CheckBox from "../../Common/CheckBox/CheckBox"
 import { WorkoutCreateContext } from "./WorkoutCreateContext"
 import {
 	WORKOUT_CREATE_TYPES,
-	compareCurrentToOriginal
 } from "./WorkoutCreateReducer"
 import { useNavigate } from "react-router"
 import Popup from "../../Common/Popup/Popup"
@@ -42,7 +41,6 @@ function WorkoutFormComponent({ callback, state }) {
 
 	const [validated, setValidated] = useState(false)
 	const [acceptActivities, setAcceptActivities] = useState(false)
-	const [goBackPopup, setGoBackPopup] = useState(false)
 	const navigate = useNavigate()
 
 	/**
@@ -94,20 +92,10 @@ function WorkoutFormComponent({ callback, state }) {
 	 *
 	 */
 	function handleGoBack() {
-		if (
-			!compareCurrentToOriginal(
-				workoutCreateInfo.data,
-				workoutCreateInfo.originalData
-			)
-		) {
-			setGoBackPopup(true)
-		} else {
-			if (state?.fromSession) {
-				return navigate("/session/create", { replace: true, state })
-			}
-			workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.RESET })
-			navigate("/workout")
+		if (state?.fromSession) {
+			return navigate("/session/create", { replace: true, state })
 		}
+		navigate("/workout")
 	}
 
 	return (
@@ -254,26 +242,15 @@ function WorkoutFormComponent({ callback, state }) {
 
 				<Form.Group as={Col} md="9" className={styles.buttonContainer}>
 					<Button
-						onClick={handleGoBack}
+						onClick={() => {
+							handleGoBack()
+							navigate
+						}}
 						outlined={true}
 						id="workout-create-back-button"
 					>
 						<h2>Tillbaka</h2>
 					</Button>
-					<ConfirmPopup
-						id="TillbakaMiniPopup"
-						showPopup={goBackPopup}
-						setShowPopup={setGoBackPopup}
-						popupText="Är du säker på att du vill gå tillbaka?"
-						confirmText="Ja"
-						backText="Avbryt"
-						onClick={() => {
-							workoutCreateInfoDispatch({
-								type: WORKOUT_CREATE_TYPES.RESET
-							})
-							navigate(-1)
-						}}
-					/>
 					<Button type="submit" id="workout-create-back-button">
 						<h2>Spara</h2>
 					</Button>

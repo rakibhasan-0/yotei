@@ -248,8 +248,7 @@ export default function CreateTechnique({ id }) {
 			/>
 			<div style={{ height: "1rem" }} />
 
-			<h1 className="create-media-title">Media</h1>
-			<div className="create-technique-horizontal-line" />
+			<Divider title="Media" option="h1_left"/>
 
 			<EditGallery id={tempId} exerciseId={tempId} sendData={sendData} undoChanges={undoMediaChanges} done={done} />
 
@@ -272,9 +271,10 @@ export default function CreateTechnique({ id }) {
 			<div style={{ height: "1rem" }} />
 
 			{/* Container for back and create technique buttons */}
-			<div style={{ display: "flex", gap: "27px", justifyContent: "space-evenly" }}>
+			<div style={{ display: "flex", gap: "27px", justifyContent: "space-between" }}>
 				<Button
 					id="create-technique-backbutton"
+					width="100%"
 					onClick={() => navigate("/technique")}
 					outlined={true}
 				>
@@ -283,6 +283,7 @@ export default function CreateTechnique({ id }) {
 
 				<Button
 					id="create-technique-createbutton"
+					width="100%"
 					onClick={handleSubmit}
 					disabled={createButton}
 				>

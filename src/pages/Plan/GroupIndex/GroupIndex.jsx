@@ -5,9 +5,8 @@ import { AccountContext } from "../../../context"
 import style from "./GroupIndex.module.css"
 import BeltBox from "../../../components/Plan/BeltBox"
 import { Pencil, Plus } from "react-bootstrap-icons"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import RoundButton from "../../../components/Common/RoundButton/RoundButton"
-import Button from "../../../components/Common/Button/Button"
 import SearchBar from "../../../components/Common/SearchBar/SearchBar"
 
 /**
@@ -23,7 +22,6 @@ export default function GroupIndex() {
 	const [searchText, setSearchText] = useState()
 	const context = useContext(AccountContext)
 	const { token, userId } = context
-	const navigate = useNavigate()
 
 	useEffect(() => {
 		(async () => {
@@ -71,11 +69,6 @@ export default function GroupIndex() {
 				<RoundButton linkTo={"/plan/create"}>
 					<Plus className="plus-icon" />
 				</RoundButton>
-			</div>
-			<div className={style.button}>
-				<Button onClick={() => navigate(-1)} outlined={true}>
-					<p>Tillbaka</p>
-				</Button>
 			</div>
 		</div>
 	)

@@ -178,7 +178,7 @@ export default function PlanIndex() {
 
 	return (
 		<center>
-			<h1>Grupplanering</h1>
+			<h1>Planering</h1>
 			{/* TODO: Improve this later, its a hotfix because FilterPlan is bad */}
 			<div style={{ marginTop: "-25px", marginLeft: "auto", width: "fit-content", transform: "translateY(100%)" }}>
 				<Link to={"/groups"}>

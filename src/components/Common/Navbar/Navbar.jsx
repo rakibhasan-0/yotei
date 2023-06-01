@@ -45,6 +45,10 @@ function Navbar({ testId }) {
 				<CloseIcon role="button" className={styles.commonNavbarIconClose} onClick={() => {setOpen(false)}} />
 
 				<Button width={"100%"} onClick={() => navigateAndClose("/plan")}>
+					<h1 className={styles.commonNavbarButton}>Planering</h1>
+				</Button>
+
+				<Button width={"100%"} onClick={() => navigateAndClose("/groups")}>
 					<h1 className={styles.commonNavbarButton}>Grupper</h1>
 				</Button>
 

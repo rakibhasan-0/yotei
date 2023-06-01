@@ -17,7 +17,7 @@ jest.mock("react-router-dom", () => ({
 
 test("Should render title on init", async () => {
 	render(<PlanIndex/>)
-	expect(screen.getByText("Grupplanering")).toBeInTheDocument()
+	expect(screen.getByText("Planering")).toBeInTheDocument()
 })
 
 test("should render data from the plan api", async () => {

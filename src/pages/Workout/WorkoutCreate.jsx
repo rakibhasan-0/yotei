@@ -3,14 +3,16 @@ import { useLocation, useNavigate } from "react-router-dom"
 import WorkoutFormComponent from "../../components/Workout/CreateWorkout/WorkoutFormComponent.jsx"
 import { AccountContext } from "../../context.js"
 import { WorkoutCreateContext } from "../../components/Workout/CreateWorkout/WorkoutCreateContext.js"
-import { 
-	WorkoutCreateInitialState, 
-	workoutCreateReducer, 
-	WORKOUT_CREATE_TYPES, 
-	compareCurrentToOriginal 
+import {
+	WorkoutCreateInitialState,
+	workoutCreateReducer,
+	WORKOUT_CREATE_TYPES,
+	compareCurrentToOriginal
 } from "../../components/Workout/CreateWorkout/WorkoutCreateReducer.js"
 import styles from "./WorkoutModify.module.css"
 import { setSuccess, setError, setInfo } from "../../utils.js"
+import { unstable_useBlocker as useBlocker } from "react-router-dom"
+import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup.jsx"
 
 
 /**
@@ -31,17 +33,27 @@ const WorkoutCreate = () => {
 	const { token, userId } = useContext(AccountContext)
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const [hasLoadedData, setHasLoadedData] = useState(false)
+	const [goBackPopup, setGoBackPopup] = useState(false)
+
 	const navigate = useNavigate()
 
 	const { state } = useLocation()
 
+	const blocker = useBlocker(() => {
+		if (!compareCurrentToOriginal(workoutCreateInfo.data, workoutCreateInfo.originalData)) {
+			setGoBackPopup(true)
+			return true
+		}
+		return false
+	})
+
 	/**
 	 * Submits the form data to the API.
 	 */
-	async function submitHandler(){
+	async function submitHandler() {
 		setIsSubmitted(true)
 
-		if(compareCurrentToOriginal(workoutCreateInfo.data, workoutCreateInfo.originalData)) {
+		if (compareCurrentToOriginal(workoutCreateInfo.data, workoutCreateInfo.originalData)) {
 			setInfo("Inget pass sparades.")
 			return navigate(-1, { replace: true, state })
 		}
@@ -52,7 +64,7 @@ const WorkoutCreate = () => {
 		if (workoutId) {
 			setSuccess("Träningspasset skapades!")
 
-			if (state.session) {
+			if (state?.session) {
 				state.session.workout = body.workout
 				return navigate("/session/create", { replace: true, state })
 			}
@@ -71,7 +83,7 @@ const WorkoutCreate = () => {
 	function parseData(data) {
 		let totalDuration = 0
 		data.activityItems.forEach(category => {
-			category.activities.forEach(activity=> {
+			category.activities.forEach(activity => {
 				totalDuration += activity.duration
 			})
 		})
@@ -93,7 +105,7 @@ const WorkoutCreate = () => {
 
 				if (activity.techniqueId) {
 					obj.techniqueId = activity.techniqueId
-				} else if (activity.exerciseId){
+				} else if (activity.exerciseId) {
 					obj.exerciseId = activity.exerciseId
 				}
 
@@ -103,9 +115,9 @@ const WorkoutCreate = () => {
 
 		// Temp solution
 		const date = new Date()
-		const todaysDate = date.getFullYear() + "-" + 
-				("0" + (date.getMonth()+1)).slice(-2) + "-" + 
-				("0" + date.getDate()).slice(-2)
+		const todaysDate = date.getFullYear() + "-" +
+			("0" + (date.getMonth() + 1)).slice(-2) + "-" +
+			("0" + date.getDate()).slice(-2)
 
 
 		return {
@@ -140,8 +152,8 @@ const WorkoutCreate = () => {
 		}
 
 		const response = await fetch("/api/workouts", requestOptions)
-		
-		if(response.status !== 201) {
+
+		if (response.status !== 201) {
 			return null
 		} else {
 			const jsonResp = await response.json()
@@ -157,7 +169,7 @@ const WorkoutCreate = () => {
 		if (hasLoadedData) localStorage.setItem("workoutCreateInfo", JSON.stringify(workoutCreateInfo))
 
 		return () => {
-			if(isSubmitted) localStorage.removeItem("workoutCreateInfo")
+			if (isSubmitted) localStorage.removeItem("workoutCreateInfo")
 		}
 	}, [workoutCreateInfo, isSubmitted, hasLoadedData])
 
@@ -167,7 +179,7 @@ const WorkoutCreate = () => {
 	useEffect(() => {
 		const item = localStorage.getItem("workoutCreateInfo")
 
-		if(item) {
+		if (item) {
 			workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.INIT_WITH_DATA, payload: JSON.parse(item) })
 		} else {
 			workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.SET_INITIAL_STATE })
@@ -180,6 +192,20 @@ const WorkoutCreate = () => {
 		<WorkoutCreateContext.Provider value={{ workoutCreateInfo, workoutCreateInfoDispatch }} >
 			<h1 className={styles.title}>Skapa pass</h1>
 			<WorkoutFormComponent callback={submitHandler} state={state} />
+			<ConfirmPopup
+				id="TillbakaMiniPopup"
+				showPopup={goBackPopup}
+				setShowPopup={setGoBackPopup}
+				popupText="Är du säker på att du vill gå tillbaka?"
+				confirmText="Ja"
+				backText="Avbryt"
+				onClick={async () => {
+					await workoutCreateInfoDispatch({
+						type: WORKOUT_CREATE_TYPES.RESET
+					})
+					blocker.proceed()
+				}}
+			/>
 		</WorkoutCreateContext.Provider>
 	)
 }

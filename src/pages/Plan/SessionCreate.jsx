@@ -6,9 +6,11 @@ import styles from "./SessionCreate.module.css"
 import { useNavigate } from "react-router-dom"
 import { useContext, useEffect, useState } from "react"
 import { AccountContext } from "../../context"
-import { Link, useLocation } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import Divider from "../../components/Common/Divider/Divider"
-import {setError as setErrorToast} from "../../utils"
+import { setError as setErrorToast } from "../../utils"
+import { unstable_useBlocker as useBlocker } from "react-router"
+import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 
 /**
  * A component for creating a session.
@@ -19,7 +21,7 @@ import {setError as setErrorToast} from "../../utils"
 export default function SessionCreate() {
 	const { state } = useLocation()
 	const navigate = useNavigate()
-	const {token} = useContext(AccountContext)
+	const { token } = useContext(AccountContext)
 	const [date, setDate] = useState(state?.session?.date)
 	const [time, setTime] = useState(state?.session?.time)
 	const [groups, setGroups] = useState()
@@ -28,6 +30,21 @@ export default function SessionCreate() {
 	const [workout, setWorkout] = useState(state?.session?.workout)
 	const [groupError, setGroupError] = useState()
 	const [timeError, setTimeError] = useState()
+	const [goBackPopup, setGoBackPopup] = useState(false)
+	const [isBlocking, setIsBlocking] = useState(false)
+
+	const blocker = useBlocker(() => {
+		if (isBlocking) {
+			setGoBackPopup(true)
+			return true
+		}
+		return false
+	})
+
+	useEffect(() => {
+		// Check if any of the fields are filled
+		setIsBlocking(date?.length > 0 || time?.length > 0 || group || workout)
+	}, [date, time, group, workout])
 
 	useEffect(() => {
 		(async () => {
@@ -97,7 +114,16 @@ export default function SessionCreate() {
 
 	return (
 		<>
-			<h1 style={{marginTop: "2rem"}}>Tillfälle</h1>
+			<ConfirmPopup
+				confirmText={"Lämna"}
+				backText={"Avbryt"}
+				id={"session-create-leave-page-popup"}
+				showPopup={goBackPopup}
+				onClick={blocker.proceed}
+				setShowPopup={setGoBackPopup}
+				popupText={"Är du säker på att du vill lämna sidan? Dina ändringar kommer inte att sparas."}
+			/>
+			<h1 style={{ marginTop: "2rem" }}>Tillfälle</h1>
 			<Divider option={"h2_left"} title={"Grupp"} />
 			<Dropdown errorMessage={groupError} id={"session-dropdown"} text={group?.name || "Grupp"} centered={true}>
 				{groups?.length > 0 ? groups.map((plan, index) => (
@@ -108,7 +134,7 @@ export default function SessionCreate() {
 					<p className={styles.dropdownRowText}>Kunde inte hitta några grupper</p>
 				</div>}
 			</Dropdown>
-			
+
 			<Divider option={"h2_left"} title={"Datum och Tid"} />
 			{timeError && <p className="error-message">{timeError}</p>}
 			<div className={styles.wrapCentering}>
@@ -130,23 +156,31 @@ export default function SessionCreate() {
 
 			<Divider option={"h2_middle"} title={"eller"} />
 			<div className={`${styles.wrapCentering} ${styles.createButton}`} >
-				<Link to="/workout/create" style={{width: "150px"}} state={{
-					session: {
-						group,
-						date,
-						time,
-						workout
-					},
-					fromSession: true
-				}}>
-					<Button id={"session-create"}><p>Skapa pass</p></Button>
-				</Link>
+				<Button onClick={async() => {
+					await setIsBlocking(false)
+					createWorkout()
+				}} id={"session-create"}><p>Skapa pass</p></Button>
+
 			</div>
 
-			<div className={styles.wrapCentering} style={{marginBottom: "2rem"}} >
-				<Button onClick={() => navigate("/plan")} id={"session-back"} outlined={true}><p>Tillbaka</p></Button> 
-				<Button onClick={addSession} id={"session-save"}><p>Spara</p></Button>
+			<div className={styles.wrapCentering} style={{ marginBottom: "2rem" }} >
+				<Button onClick={() => navigate("/plan")} id={"session-back"} outlined={true}><p>Tillbaka</p></Button>
+				<Button onClick={() => { setIsBlocking(false); addSession() }} id={"session-save"}><p>Spara</p></Button>
 			</div>
 		</>
 	)
+
+	async function createWorkout() {
+		navigate("/workout/create", {
+			state: {
+				session: {
+					group,
+					date,
+					time,
+					workout
+				},
+				fromSession: true
+			}
+		})
+	}
 }
