@@ -71,10 +71,12 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 		}
 	}, [context.token, exerciseId])
 
+
 	/**
 	 * Call rerender as soon as new media is fetched
 	 */
 	useEffect(() => {getMedia()}, [getMedia])
+
 
 	//Divide media objects into pictures- and videos- array
 	media.map((m) => {
@@ -84,6 +86,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 			videos.push(m)
 		}
 	})
+
 
 	/**
 	 * Sends a remove request for the currently selected MediaObject to server
@@ -98,6 +101,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 		setMedia(temp)
 	}
 
+
 	/**
 	 * Is displayed if no media is avaliable
 	 */
@@ -106,6 +110,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 		<NoMediaIcon size={"20%"} ></NoMediaIcon>
 		<span className = "no-media-span">Ingen media just nu, ladda upp genom att klicka på plus</span>
 	</div>
+
 
 	/**
 	 * Popup for uploading new media
@@ -120,6 +125,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 		</Popup>
 	</div>
 
+
 	/**
 	 * Popup for confirming the removal of current media
 	 */
@@ -129,6 +135,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 			setShowPopup={setShowRemovePopup} 
 			onClick={removeMedia}
 			popupText="Är du säker?"/>
+
 
 	/**
 	 * Button for requesting removal of a media-object
@@ -147,6 +154,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 		)
 	}
 
+	
 	/**
 	 * Sets the currently requested media and shows a confirm-removal-popup
 	 * @param {Media} mediaObject the object that should be removed
@@ -185,7 +193,6 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	}
 
 
-
 	/**
 	 * Upload a media-object to server containing meta-data of a media-url
 	 * @param {Media} media 
@@ -217,6 +224,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
         
 	}
 
+
 	/**
 	 * Display an error message
 	 * @param {String} text 
@@ -227,6 +235,11 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 		}
 	}
 	
+	
+	/**
+	 * API call for removing media objects.
+	 * @param {*} list of media objects to remove
+	 */
 	async function deleteMedia(list) {
 
 		list.map((m) => {
@@ -246,6 +259,9 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	}
 
 
+	/**
+	 * Makes all the nessesary API calls: POST, PUT and DELETE
+	 */
 	const makeAPICalls = async () => {
 		
 
@@ -255,9 +271,11 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 		done()
 	}
 
+
 	/**
-	 * 
-	 * @param {*} map 
+	 * Edits the description of different media objects when changed 
+	 * in the edit view.
+	 * @param {*} map a hashmap containing the key value pair: media_id, description
 	 */
 	async function putDescription(map) {
 		
@@ -284,6 +302,10 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	}
 
 	
+	/**
+	 * Triggered when the sendData boolean is changed to true in the parent 
+	 * component. This change triggers the api call and resets the cache.
+	 */
 	useEffect(() => {
 		
 		if (sendData) {
@@ -297,6 +319,12 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	}, [sendData])
 
 
+	/**
+	 * Triggered when the undoChanges boolean is changed by the parent 
+	 * component, indicating that no data should be saved. Since the file upload
+	 * starts immediately in the background increase performance a delete API 
+	 * call is needed.
+	 */
 	useEffect(() => {
 		if(undoChanges){
 			deleteFileAPICalls()
@@ -304,10 +332,15 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 		}
 	}, [undoChanges])
 
+
+	/**
+	 * API call for deleting upploaded files.
+	 */
 	const deleteFileAPICalls = async () => {
 		await deleteMedia(mediaThatWasUploaded)
 		done()
 	}
+
 
 	/**
 	 * Return a string to display to user depending on a http-response
@@ -321,6 +354,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 		}
 		return errorText
 	}
+
 
 	/**
 	 * Used for adding description into gallery.
