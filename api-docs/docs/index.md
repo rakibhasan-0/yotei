@@ -27,8 +27,8 @@ Remove this paragraph when documentation is done.
 | Plan API      | Not started |
 | Tag API       | Done        |
 | Technique API | Done        |
-| Workout API   | Not started |
-| Session API   | Not started |
+| Workout API   | In progress |
+| Session API   | In progress |
 | Search API    | Needs verification |
 | Export API    | Done        |
 | Import API    | Done        |
