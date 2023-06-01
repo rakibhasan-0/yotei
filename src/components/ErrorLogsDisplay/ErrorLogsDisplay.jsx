@@ -118,7 +118,7 @@ function ErrorLogsDisplay() {
 				setDataExists(true)
 			}
 		} catch (error) {
-			console.log(error)
+			console.error(error)
 		}
 	}, [])
 
@@ -142,7 +142,7 @@ function ErrorLogsDisplay() {
 				setDateErrors([])
 			}
 		} catch (error) {
-			console.log(error)
+			console.error(error)
 		}
 	}, [])
 

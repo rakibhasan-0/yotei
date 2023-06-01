@@ -148,15 +148,13 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 					return
 				case HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR:
 					setError("Internt fel, gick inte att updatera tekniken!")
-					console.log(res)
 					return
 				default:
 					setError("Okänt fel inträffade")
-					console.log(res)
 				}
 			})
 			.catch((error) => {
-				console.log(error)
+				console.error(error)
 				setError("Gick inte att updatera tekniken!")
 			})
 

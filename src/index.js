@@ -72,7 +72,7 @@ export default function App() {
 
 	useEffect(() => {
 		if (sessionExpiration > 0) {
-			console.log(`Session will expire in ${(sessionExpiration / 1000 / 60).toFixed(2)} minutes`)
+			console.debug(`Session will expire in ${(sessionExpiration / 1000 / 60).toFixed(2)} minutes`)
 			const delta = sessionExpiration - 1000 * 60 * 2
 			const warning = setTimeout(() => {
 				toast.warn("Du kommer snart loggas ut")

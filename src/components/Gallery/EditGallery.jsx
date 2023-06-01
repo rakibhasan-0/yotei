@@ -66,7 +66,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 					setMedia([])
 				}
 			} catch (error) {
-				console.log(error)
+				console.error(error)
 			}
 		}
 	}, [context.token, exerciseId])

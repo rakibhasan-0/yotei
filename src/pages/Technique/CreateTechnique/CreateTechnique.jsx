@@ -91,8 +91,6 @@ export default function CreateTechnique({ id }) {
 		if (tempId >= 0) {
 			setSendData(true)
 		}
-		console.log(tempId)
-		console.log(sendData)
 	}, [tempId])
 
 	useEffect(() => {
