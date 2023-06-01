@@ -44,7 +44,6 @@ export default function InfiniteScrollComponent({ children, activities }) {
 		setVisibleTechniques([])
 		updateShownItems()
 	}, [activities ? activities : children])
-  
 
 	return (
 		isLoading ? 

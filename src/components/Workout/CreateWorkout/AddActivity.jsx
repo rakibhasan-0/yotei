@@ -336,7 +336,9 @@ function AddActivity({ id, setShowActivityInfo }) {
 						{(exercises.length === 0 && fetchedExer) ?
 							<ErrorStateSearch id="add-activity-no-exercise" message="Kunde inte hitta övningar" />
 							:
-							<InfiniteScrollComponent>
+							<InfiniteScrollComponent
+								activities={visibleExercises}
+							>
 								{visibleExercises.map((exercise, key) => (
 									<ExerciseListItem
 										id={exercise.id}
