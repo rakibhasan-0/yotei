@@ -32,12 +32,11 @@ export default function ExerciseCreate({setShowPopup}) {
 	const [addedTags, setAddedTags] = useState([])
 	const [showMiniPopup, setShowMiniPopup] = useState(false)
 	const [errorMessage, setErrorMessage] = useState("")
-
 	const [tempId, setTempId] = useState(-1)
 	const [sendData, setSendData] = useState(false)
 	const [undoMediaChanges, setUndoMediaChanges] = useState(false)
 	const [tags, setTags] = useState(false)
-
+	
 	function done(){
 		if(undoMediaChanges){
 			leaveWindow()

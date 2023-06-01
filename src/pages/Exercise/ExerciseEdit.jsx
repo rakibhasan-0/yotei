@@ -16,9 +16,9 @@ import Popup from "../../components/Common/Popup/Popup"
 /**
  * Function for the page for editing an exercise.
  *
- * @author Calskrove (2022-05-19), Verona (2022-05-16) , Team Phoenix (Group 1) (2023-05-15)
- * @since 2023-05-22
- * @version 1.0
+ * @author Calskrove (2022-05-19), Verona (2022-05-16) , Team Phoenix (Group 1) 
+ * @since 2023-06-01
+ * @version 2.0
  * @returns A page for editing an exercise.
  */
 export default function ExerciseEdit({setShowPopup, initialTime}) {
@@ -61,8 +61,6 @@ export default function ExerciseEdit({setShowPopup, initialTime}) {
 		window.localStorage.setItem("name", name)
 		window.localStorage.setItem("desc", desc) 
 		window.localStorage.setItem("time", time)
-
-		//setPageUpdated(true)
 
 	}, [name, desc, time])
 
@@ -116,17 +114,11 @@ export default function ExerciseEdit({setShowPopup, initialTime}) {
 			setDesc(exerciseJson.description)
 			setTime(exerciseJson.duration)
 		}
-
 		setNewTags(tagsJson)
 		setExistingTags(tagsJson)
 		setOldName(exerciseJson.name)
 		setOldDesc(exerciseJson.description)
-		setOldTime(exerciseJson.duration)
-	
-		/* Ska inte ligga här utan villkor */
-		
-			
-		
+		setOldTime(exerciseJson.duration)			
 	}
 
 	/**
@@ -205,14 +197,9 @@ export default function ExerciseEdit({setShowPopup, initialTime}) {
 		
 		await checkTags()
 		if (!(editFailed || tagRemoveFailed || tagLinkFailed)) {
-			//borde bytas till att stänga popupen
-			// window.location.href = "/exercise"
 			setShowPopup(false)
 			location.reload(1) // forcing reload of the page.... 
-
 		}
-
-
 	}
 
 	/**
@@ -221,12 +208,12 @@ export default function ExerciseEdit({setShowPopup, initialTime}) {
      */
 	async function checkTags() {
 		for (var i = 0; i < newTags.length; i++) {
-			
 			//Link only if it's a tag that already didn't get linked
 			if (!existingTags.includes(newTags[i])) {
 				await linkExerciseTag(exId, newTags.at(i).id, newTags.at(i).name)
 			}
-		} // Remove tags that are not present anymore
+		} 
+		// Remove tags that are not present anymore
 		for (i = 0; i < existingTags.length; i++) {
 			if (!newTags.includes(existingTags[i])) {
 				await removeTag(exId, existingTags[i].id, existingTags[i].name)
@@ -352,6 +339,7 @@ export default function ExerciseEdit({setShowPopup, initialTime}) {
 					onClick={() => {
 						setSendData(true)
 						deleteLocalStorage()
+						setShowPopup(false)
 					}}
 					width={150}>
 					<p>Spara</p>

@@ -18,9 +18,9 @@ import {setError as setErrorToast} from "../../utils"
 /**
  * A component for displaying details about an exercise.
  * 
- * @author Chimera
- * @since 2023-05-16
- * @version 1.0
+ * @author Chimera, Phoenix
+ * @since 2023-06-01
+ * @version 2.0
  * @returns A page for displaying details about an exercise.
  */
 export default function ExerciseDetailsPage() {
@@ -81,6 +81,11 @@ export default function ExerciseDetailsPage() {
 			})
 	}, [token, ex_id])
 
+	function deleteLocalStorage() {
+		window.localStorage.setItem("name", "")
+		window.localStorage.setItem("desc", "")
+		window.localStorage.setItem("time", "")
+	}
 	/**
      * Handles the deletion of an exercise by sending a DELETE request to the API.
      * Navigates back to the previous page if the deletion is successful.
@@ -259,6 +264,7 @@ export default function ExerciseDetailsPage() {
 				isOpen={showEditPopup}
 				setIsOpen={setShowEditPopup}
 				noBackground={false}
+				onClose={deleteLocalStorage}
 			>
 				<ExerciseEdit setShowPopup={setShowEditPopup} initialTime={exercise?.duration}/>
 			</Popup>

@@ -53,7 +53,6 @@ export default function Popup({ title, id, isOpen, setIsOpen, children, isNested
 		<>
 			<div className={styles.backdrop} onClick={() => {
 				setIsOpen(false)
-				deleteLocalStorage()
 				if(onClose) onClose()
 			}}
 			/>
@@ -68,7 +67,6 @@ export default function Popup({ title, id, isOpen, setIsOpen, children, isNested
 						className={styles.closebutton}
 						onClick={() => {
 							setIsOpen(false)
-							deleteLocalStorage()
 							if(onClose) onClose()
 
 						}}
@@ -88,8 +86,4 @@ export default function Popup({ title, id, isOpen, setIsOpen, children, isNested
 	)
 }
 
-function deleteLocalStorage() {
-	window.localStorage.setItem("name", "")
-	window.localStorage.setItem("desc", "")
-	window.localStorage.setItem("time", "")
-}
+
