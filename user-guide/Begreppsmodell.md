@@ -44,7 +44,7 @@ I Jotei finns det 3 olika roller som en användare kan ha
 
 - Admin kan skapa och hantera användare. Välja/ändra roll. Utöver detta kan admin skapa, redigera och ta bort pass, övningar samt tekniker. Det måste alltid finnas minst en admin-användare. 
 
-- Utökad användare kan skapa och redigera sina egna skapade pass samt övningar. En utökad användare kan inte redigera alla övningar, och kan heller inte redigera eller skapa tekniker. 
+- Utökad användare kan skapa och redigera sina egna skapade pass. En utökad användare kan redigera och skapa övningar men kan inte redigera eller skapa tekniker. 
 
 - Vanlig användare kan skapa och redigera sina egna skapade pass. En vanlig användare kan inte skapa eller redigera varken övningar eller tekniker. 
 
