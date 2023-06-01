@@ -132,14 +132,19 @@ export default function Profile() {
 			<Tab eventKey={"Settings"} title={"Inställningar"} className={style.tab}>
 				<div className={style.divider}><Divider option={"h2_center"} title={"Lösenord"} /></div>
 				<InputTextFieldBorderLabel errorMessage={wrongPassword} onChange={e => {setPassword(e.target.value)}} id="password" type="password" label="Nuvarande lösenord" />
+				<div className='mb-2' />
 				<InputTextFieldBorderLabel onChange={e => {setNewPassword(e.target.value)}} id="new-password" type="password" label="Nytt lösenord" />
+				<div className='mb-2' />
 				<InputTextFieldBorderLabel errorMessage={missMatchPassword} onChange={e => {setVerifyNewPassword(e.target.value)}} id="verify-password" type="password" label="Bekräfta lösenord" />
+				<div className='mb-2' />
 				<div className={style.floatRight}>
 					<Button className="btn btn-primary" onClick={changePassword}>Ändra</Button>
 				</div>
 				<div className={style.divider}><Divider option={"h2_center"} title={"Användarnamn"} /></div>
 				<InputTextFieldBorderLabel onChange={e => {setNewUsername(e.target.value)}} id="username" type="text" label="Nytt användarnamn" />
+				<div className='mb-2' />
 				<InputTextFieldBorderLabel onChange={e => {setUsernamePassword(e.target.value)}} errorMessage={verifyUsernamePassword} id="Password" type="password" label="Lösenord" />
+				<div className='mb-2' />
 				<div className={style.floatRight}>
 					<Button className="btn btn-primary" onClick={changeUsername}>Ändra</Button>
 				</div>
