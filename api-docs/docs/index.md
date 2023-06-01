@@ -23,7 +23,7 @@ Remove this paragraph when documentation is done.
 |--|--|
 | User API      | Done & needs verification |
 | Belt API      | Done |
-| Exercise API  | done        |
+| Exercise API  | Done        |
 | Plan API      | In progress |
 | Tag API       | Done        |
 | Technique API | Done        |
