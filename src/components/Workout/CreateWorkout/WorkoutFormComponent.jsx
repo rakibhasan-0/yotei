@@ -32,8 +32,9 @@ import EditActivityPopup from "./EditActivityPopup"
  *		<WorkoutFormComponent callback={submitHandler} />
  *
  * @author Team Minotaur
- * @version 2.0
+ * @version 2.1
  * @since 2023-05-24
+ * @updated 2023-06-01 Chimera, updated pathing when pressing return to create session
  */
 function WorkoutFormComponent({ callback, state }) {
 	const { workoutCreateInfo, workoutCreateInfoDispatch } =
@@ -101,11 +102,11 @@ function WorkoutFormComponent({ callback, state }) {
 		) {
 			setGoBackPopup(true)
 		} else {
-			if (state?.session) {
+			if (state?.fromSession) {
 				return navigate("/session/create", { replace: true, state })
 			}
 			workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.RESET })
-			navigate("/plan")
+			navigate("/workout")
 		}
 	}
 

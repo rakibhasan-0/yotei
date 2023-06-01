@@ -136,7 +136,8 @@ export default function SessionCreate() {
 						date,
 						time,
 						workout
-					}
+					},
+					fromSession: true
 				}}>
 					<Button id={"session-create"}><p>Skapa pass</p></Button>
 				</Link>
