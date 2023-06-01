@@ -22,7 +22,7 @@ Remove this paragraph when documentation is done.
 | API Name | Progress |
 |--|--|
 | User API      | Done & needs verification |
-| Belt API      | Not started |
+| Belt API      | In progress |
 | Exercise API  | In progress (take over please) |
 | Plan API      | Not started |
 | Tag API       | Done        |
