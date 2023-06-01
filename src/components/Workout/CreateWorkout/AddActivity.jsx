@@ -17,6 +17,9 @@ import style from "./AddActivity.module.css"
 import { WorkoutCreateContext } from "./WorkoutCreateContext"
 import { WORKOUT_CREATE_TYPES } from "./WorkoutCreateReducer"
 import InfiniteScrollComponent from "../../Common/List/InfiniteScrollComponent"
+import FilterContainer from "../../Common/Filter/FilterContainer/FilterContainer"
+import Sorter from "../../Common/Sorting/Sorter"
+import { useCookies } from "react-cookie"
 
 /**
  * This component is used to add activities to a workout. It contains two tabs, 
@@ -72,14 +75,38 @@ function AddActivity({ id, setShowActivityInfo }) {
 	// const [checkedActivities, setCheckedActivities] = useState([])
 
 	const [hasLoadedData, setHasLoadedData] = useState(false)
+
+	const sortOptions = [
+		{ label: "Namn: A-Ö", cmp: (a, b) => { return a.name.localeCompare(b.name) } },
+		{ label: "Namn: Ö-A", cmp: (a, b) => { return -a.name.localeCompare(b.name) } },
+		{ label: "Tid: Kortast först", cmp: (a, b) => { return a.duration - b.duration } },
+		{ label: "Tid: Längst först", cmp: (a, b) => { return b.duration - a.duration } }
+	]
+	const [sort, setSort] = useState(sortOptions[0])
+	const [cookies, setCookies] = useCookies(["exercise-filter"])
+	const [visibleExercises, setVisibleExercises] = useState([])
+
+
 	useEffect(() => {
-		if(hasLoadedData) return
+		const filterCookie = cookies["exercise-filter"]
+		if (filterCookie) {
+			setSelectedExerTags(filterCookie.tags)
+			let cachedSort = sortOptions.find(option => filterCookie.sort === option.label)
+			setSort(cachedSort ? cachedSort : sortOptions[0])
+		}
+	}, [])
+
+	useEffect(setExerciseList, [exercises, sort, searchExerText])
+
+
+	useEffect(() => {
+		if (hasLoadedData) return
 
 		const tempTechniques = []
 		const tempExercises = []
 
 		checkedActivities.forEach(checkedActivity => {
-			if(checkedActivity.type === "technique") {
+			if (checkedActivity.type === "technique") {
 				tempTechniques.push(checkedActivity)
 			} else {
 				tempExercises.push(checkedActivity)
@@ -96,7 +123,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 * search text, selected belts, kihon value or selected tags are changed.
 	 */
 	useEffect(() => {
-		if(!hasLoadedData) return
+		if (!hasLoadedData) return
 
 		setFetchedTech(false)
 		setTechniques(techniques.filter(
@@ -112,7 +139,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 * search text or selected tags are changed.
 	 */
 	useEffect(() => {
-		if(!hasLoadedData) return
+		if (!hasLoadedData) return
 
 		setFetchedExer(false)
 		setExercises(exercises.filter(
@@ -148,9 +175,9 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 * @param {bool} newKihon True/False if the kihon is selected or not.
 	 */
 	function handleKihonChanged(newKihon) {
-		if(newKihon) {
+		if (newKihon) {
 			setKihon(newKihon)
-			if(selectedTechTags.find(tag => tag === "kihon waza") === undefined) {
+			if (selectedTechTags.find(tag => tag === "kihon waza") === undefined) {
 				setSelectedTechTags(current => [...current, "kihon waza"])
 			}
 		} else {
@@ -194,7 +221,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 		}
 
 		getTechniques(args, token, map, mapActions, (result) => {
-			if(!result.results) return
+			if (!result.results) return
 
 			const res = result.results.filter((technique) => !checkedActivities.some(a => a.type === "technique" && a.techniqueID === technique.techniqueID))
 			setTechniques((techniques) => [...techniques, ...res])
@@ -211,19 +238,35 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 * kept in the state to be displayed.
 	 */
 	const searchExercises = () => {
+		setCookies("exercise-filter", { tags: selectedExerTags, sort: sort.label }, { path: "/" })
 		const args = {
 			text: searchExerText,
 			selectedTags: selectedExerTags,
 		}
-
 		getExercises(args, token, map, mapActions, (result) => {
-			if(!result.results) return
+			if (!result.results) return
 
 			const res = result.results.filter(exercise => !checkedActivities.some(a => a.type === "exercise" && a.id === exercise.id))
 			setExercises((exercises) => [...exercises, ...res])
 			setSuggestedExerTags(result.tagCompletion)
 			setFetchedExer(true)
 		})
+	}
+
+	/**
+	 * Sets the exercise list by sorting the exercises and updating the visible list state. 
+	 * Also updates the exercise filter cookie.
+	 */
+	function setExerciseList() {
+		setCookies("exercise-filter", { tags: selectedExerTags, sort: sort.label }, { path: "/" })
+		if (exercises && searchExerText === "") {
+			const sortedList = [...exercises].sort(sort.cmp)
+			setVisibleExercises(sortedList)
+		}
+		else {
+			const temp = [...exercises ?? []]
+			setVisibleExercises(temp)
+		}
 	}
 
 	return (
@@ -287,12 +330,14 @@ function AddActivity({ id, setShowActivityInfo }) {
 								setSuggestedTags={setSuggestedExerTags}
 							/>
 						</div>
-
+						<FilterContainer id="ei-filter" title="Sortering">
+							<Sorter onSortChange={setSort} id="ei-sort" selected={sort} options={sortOptions} />
+						</FilterContainer>
 						{(exercises.length === 0 && fetchedExer) ?
 							<ErrorStateSearch id="add-activity-no-exercise" message="Kunde inte hitta övningar" />
 							:
 							<InfiniteScrollComponent>
-								{exercises.map((exercise, key) => (
+								{visibleExercises.map((exercise, key) => (
 									<ExerciseListItem
 										id={exercise.id}
 										text={exercise.duration + " min"}
@@ -314,14 +359,14 @@ function AddActivity({ id, setShowActivityInfo }) {
 				</Tabs>
 
 				{/* Spacing so the button doesn't cover an ExerciseListItem */}
-				<br/><br/><br/>
+				<br /><br /><br />
 
 				{checkedActivities.length > 0 &&
 					<RoundButton onClick={() => setShowActivityInfo(checkedActivities)}>
 						<ChevronRight width={30} />
 					</RoundButton>
 				}
-				
+
 			</Modal.Body>
 		</div>
 	)
