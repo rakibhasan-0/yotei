@@ -26,6 +26,25 @@ Pipeline i docs-repot deploy:ar api-dokumentationen på utvecklingsservern(imp).
 
 Efter deployment, givet att allt är uppe, ska dokumentationen nås på följande länk: https://imp.cs.umu.se:2443/api-docs/
 
+# Infra-repot
+Innehåller konfiguration för:
+* Databasen
+* Proxyn (nginx)
+
+Viktigaste filen är docker-compose.yml. Det är den filen som definierar vilka images som ska användas i applikationen och på vilka portar respektive container ska nås. Det är den filen som möjliggör att alla containers som behövs för applikationen kan startas upp på ett kommando. Används under deployment.
+
+Systest-mappen innehåller script som körs under systest-steget i pipeline.
+
+## Pipeline
+Pipeline i infra-repot har tre stadier:
+* build 
+* systest 
+* publish
+
+build- och systest-stadierna körs vid merge-requests. Under build-steget ges en FEATURE-tag som pushas till dockerhub så att systest-steget kan testa på den imagen. Det gör att om någon av de stegen inte går igenom så kommer inte LATEST-imagen skrivas över.
+
+Endast när både build- och systest-steget går igenom och koden kan merge:as till main branch körs publish-steget, som kommer bygga om imagen, tagga med LATEST och push:a till dockerhub.
+
 
 # Backend-repot
 I detta repo finns all kod relaterad till backend, bash-skript för lokal utveckling, information hur man utvecklar lokalt och en `.gitlab-ci.yml`-fil som specifierar hur pipelinen ser ut.  
