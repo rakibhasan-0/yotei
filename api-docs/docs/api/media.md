@@ -223,4 +223,10 @@ examples:
         content-type: text/plain
         body: |
             The file-data
+    - name: 417
+    request: GET /api/media/files/fileThatDoesNotExist.tmp
+    response:
+        content-type: text/plain
+        body: |
+            Kunde inte hitta önskad resurs på server
 </api>
