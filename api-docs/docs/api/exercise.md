@@ -5,6 +5,7 @@ This is the Sign-Off page for the documentation in this repository. Once you hav
 and understood the documentation, please sign-off by adding your name and date below.
 
 | Name          | Date            |
+|--|--|
 | Grupp 5 Cyclops | 1 June 2023 |
 <!-- sign-off-sheet:end -->
 
