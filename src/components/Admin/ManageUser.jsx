@@ -123,8 +123,11 @@ export default function ManageUser() {
 			<Divider option={"h2_left"} title={"Lägg till användare"} /> 
 			<br/>
 			<InputTextFieldBorderLabel errorMessage={usernameError} id={"register-user-username-input"} type={"user"} label= {"Användarnamn"} onChange={(event) => setUserName(event.target.value)}/>
+			<div className='mb-2' />
 			<InputTextFieldBorderLabel errorMessage={passwordError} id={"register-user-password-input"} type={"password"} label={"Lösenord"} onChange={(event) => setPasswordInput(event.target.value)}/>
+			<div className='mb-2' />
 			<InputTextFieldBorderLabel id={"register-user-password-confirm-input"} type={"password"} label={"Bekräfta lösenord"} onChange={(event) => setConfirmPasswordInput(event.target.value)}/>
+			<div className='mb-2' />
 			<Dropdown 
 				id={"admin-new-user-pick-role"} centered={true} 
 				text={roleInput?.role || "Välj roll"}>

@@ -39,7 +39,7 @@ export default function Admin() {
 				</div>
 			</div>
 			<Divider id={"errorlogdisplay_divider"} option={"h2_left"} title={"Övrigt"} />
-			<ErrorLogsDisplay id="errorlogdisplay-test"></ErrorLogsDisplay>
+			<ErrorLogsDisplay id="errorlogdisplay-test" />
 		</div>
 	)
 }
