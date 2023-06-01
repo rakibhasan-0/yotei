@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useContext } from "react"
 import Export from "../../components/Admin/Export/Export"
 import Import from "../../components/Admin/Import/Import"
 import Divider from "../../components/Common/Divider/Divider"
@@ -16,35 +16,30 @@ import ErrorLogsDisplay from "../../components/ErrorLogsDisplay/ErrorLogsDisplay
  *  @version 1.0
  *  @returns A page for the administrative functions.
  */
-class Developer extends React.Component {
-	/**
-   * Defines the html for the page.
-   */
-	render() {
-		if(!isAdmin(this.context)){
-			window.location.replace("/404")
-			return null
-		}
-		return (
-			<div className="pb-4">
-				<h1 className="col-12 mt-4">Admin</h1>
-				<div className="center card-admin">
-					<ManageUser />
-				</div>
-				<div className="center card-admin">
-					<br/>
-					<Divider id={"import_export_activities_divider"} option={"h2_left"} title={"Importera/Exportera aktiviteter"} /> 
-					<div style={{padding: "1rem"}}>
-						<Import />
-						<Export />
-					</div>
-				</div>
-				<ErrorLogsDisplay id="errorlogdisplay-test"></ErrorLogsDisplay>
-			</div>
-		)
+export default function Admin() {
+	const context = useContext(AccountContext)
+
+	if(!isAdmin(context)){
+		window.location.replace("/404")
+		return null
 	}
+
+	return(
+		<div className="pb-4">
+			<h1 className="col-12 mt-4">Admin</h1>
+			<div className="center card-admin">
+				<ManageUser />
+			</div>
+			<div className="center card-admin">
+				<br/>
+				<Divider id={"import_export_activities_divider"} option={"h2_left"} title={"Importera/Exportera aktiviteter"} /> 
+				<div style={{padding: "1rem"}}>
+					<Import />
+					<Export />
+				</div>
+			</div>
+			<Divider id={"errorlogdisplay_divider"} option={"h2_left"} title={"Övrigt"} />
+			<ErrorLogsDisplay id="errorlogdisplay-test"></ErrorLogsDisplay>
+		</div>
+	)
 }
-
-Developer.contextType = AccountContext
-
-export default Developer

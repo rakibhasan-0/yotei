@@ -217,8 +217,8 @@ function ErrorLogsDisplay() {
 			className="div-1"
 			style={{ marginTop: 10, marginRight: "auto", marginLeft: "auto" }}
 		>
-			<Button id="errorlogsdisplay-button" onClick={() => setShowPopup(true)}>
-        Error-loggar
+			<Button id="errorlogsdisplay-button" width="100%" onClick={() => setShowPopup(true)}>
+				Error-loggar
 			</Button>
 			<PopupContent isOpen={showPopup} setIsOpen={setShowPopup} />
 			<ConfirmPopup
