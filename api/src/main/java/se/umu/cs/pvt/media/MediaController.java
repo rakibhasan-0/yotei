@@ -9,13 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.HandlerExceptionResolver;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -109,39 +103,6 @@ public class MediaController {
      }
 
     /**
-     * Removes a particular media belonging to a technique or exercise
-     * @param media the media object to remove
-     * @param id the id of the technique or exercise
-     * @return a http response, ok if successful and bad request otherwise
-     */
-     @DeleteMapping("/{id}")
-     public ResponseEntity<Object> removeSpecificMedia(@RequestBody Media media, @PathVariable("id") Long id) {
-
-         //Delete meta-data from DB
-         try {
-             mediaRepository.delete(media);
-         } catch (Exception e) {
-             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-         }
-
-         //If stored with StorageService, delete the file
-         if(media.getLocalStorage()){
-             try {
-                 String[] splittedUrl = media.getUrl().split("\\/");
-                 String filename = splittedUrl[splittedUrl.length -1];
-                 mediaStorageService.delete(filename);
-             } catch (IOException e) {
-                 return new ResponseEntity<>(e.toString(),HttpStatus.BAD_REQUEST);
-             }
-         }
-
-
-
-         return new ResponseEntity<>(HttpStatus.OK);
-     }
-
-
-    /**
      * Removes every media object in a given list of media objects
      * @param toRemove List of media objects to remove
      * @return a http response, ok if successful and bad request otherwise
@@ -176,29 +137,13 @@ public class MediaController {
         return response;
     }
 
-
-    /**
-     * Gets every media object in the database
-     * @return A list of Media objects
-     */
-    @GetMapping("")
-    public ResponseEntity<List<Media>> getMediaAll() {
-        List<Media> mediaList = mediaRepository.findAll();
-
-        if (mediaList.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-
-        return new ResponseEntity<>(mediaList, HttpStatus.OK);
-    }
-
     /**
      * Gets the Media object for a given ID of a movement
      * @param id id of the movement
      * @return A Media object
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getTechniqueURLs(@PathVariable("id") Long id) {
+    public ResponseEntity<Object> getMovementMedia(@PathVariable("id") Long id) {
          if (id == null) {
              return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
          }

@@ -1,21 +1,14 @@
 package se.umu.cs.pvt.media;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.commons.io.FileUtils;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
@@ -23,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,14 +23,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.when;
-
 
 
 /**
@@ -162,51 +151,17 @@ class MediaControllerTest {
     }
 
     @Test
-    void shouldSucceedWhenRemovingSpecificMedia() {
-        ResponseEntity<Object> response = mediaController.removeSpecificMedia(mediaToRemove1, mediaToRemove1.getMovementId());
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-    }
-
-    @Test
-    void shouldFailWhenRemovingSpecificMediaThatIsInvalid() {
-        Mockito.doThrow(DataIntegrityViolationException.class).when(mediaRepository).delete(invalidMedia);
-
-        ResponseEntity<Object> response = mediaController.removeSpecificMedia(invalidMedia, invalidMedia.getMovementId());
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-    }
-
-    @Test
-    void shouldSucceedWhenGettingAllMedia() {
-        Mockito.when(mediaRepository.findAll()).thenReturn(media);
-        ResponseEntity<List<Media>> response = mediaController.getMediaAll();
-        List<Media> result = response.getBody();
-
-        assertThat(result.size()).isEqualTo(media.size());
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-    }
-
-    @Test
-    void shouldFailWhenGettingAllMediaFromEmpty() {
-        Mockito.when(mediaRepository.findAll()).thenReturn(emptyMedia);
-        ResponseEntity<List<Media>> response = mediaController.getMediaAll();
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-    }
-
-    @Test
     void shouldSucceedWhenGettingTechniqueURLs() {
         Mockito.when(mediaRepository.findAllMediaById(validMedia.getMovementId())).thenReturn(media);
 
-        ResponseEntity<Object> response = mediaController.getTechniqueURLs(validMedia.getMovementId());
+        ResponseEntity<Object> response = mediaController.getMovementMedia(validMedia.getMovementId());
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
     void shouldFailWhenGettingTechniqueURLsOfNull(){
-        ResponseEntity<Object> response = mediaController.getTechniqueURLs(invalidMedia.getMovementId());
+        ResponseEntity<Object> response = mediaController.getMovementMedia(invalidMedia.getMovementId());
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
@@ -215,7 +170,7 @@ class MediaControllerTest {
     void shouldFailWhenGettingTechniqueURLsOfEmpty() {
         Mockito.when(mediaRepository.findAllMediaById(anyLong())).thenReturn(emptyMedia);
 
-        ResponseEntity<Object> response = mediaController.getTechniqueURLs(anyLong());
+        ResponseEntity<Object> response = mediaController.getMovementMedia(anyLong());
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
