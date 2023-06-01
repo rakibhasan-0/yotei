@@ -11,3 +11,7 @@
 .datePicker:focus {
     outline: var(--red-primary) 2px solid;
 }
+
+.invalid {
+	color: var(--red-primary);
+}

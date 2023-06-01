@@ -18,11 +18,20 @@ import GroupPicker from "../../components/Plan/GroupPicker"
 export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, onDatesChange}) {
 
 	const onToggle = (checked, chosenGroup) => setChosenGroups(prev => {
-		if(!checked) {
-			return prev.filter(g => g.id !== chosenGroup.id)
+		if(prev) {
+			if(!checked) {
+				return prev.filter(g => g !== chosenGroup)
+			}
+			return [...prev, chosenGroup]
 		}
-		return [...prev, chosenGroup]
 	})
+
+	const toChanged = (event) => {
+		onDatesChange("to", event.target.value)
+	}
+	const fromChanged = (event) => {
+		onDatesChange("from", event.target.value)
+	}
 
 	return (
 		<div id = {id}>
@@ -32,17 +41,17 @@ export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, o
 					<p className={styles.datePickerTitle}>Från</p>
 			
 					<div className={styles.datePicker}>
-						<DatePicker onChange={e => onDatesChange("from",e.target.value)} selectedDate={dates.from} id="startDatePicker"/>
+						<DatePicker onChange={fromChanged} selectedDate={dates.from} id="startDatePicker"/>
 					</div>
 					
 					<p className={styles.datePickerTitle}>Till</p>
 			
 					<div className={styles.datePicker}>
-						<DatePicker onChange={e => onDatesChange("to",e.target.value)} selectedDate={dates.to} id="endDatePicker" minDate={dates.from}/>
+						<DatePicker onChange={toChanged} selectedDate={dates.to} id="endDatePicker" minDate={dates.from}/>
 					</div>
 				</div>
 
-				<GroupPicker id={42} onToggle={onToggle} states={chosenGroups}/>
+				<GroupPicker id={42} onToggle={(c, g) => {onToggle(c, g)}} states={chosenGroups}/>
 
 			</ FilterContainer>
 		</div>

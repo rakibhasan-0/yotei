@@ -9,6 +9,7 @@ import {People} from "react-bootstrap-icons"
 import Button from "../../components/Common/Button/Button"
 import {Link} from "react-router-dom"
 import { useCookies } from "react-cookie"
+import { HTTP_STATUS_CODES, setError } from "../../utils"
 
 /**
  * PlanIndex is the page that displays group plannings. Contains of a 
@@ -23,15 +24,16 @@ import { useCookies } from "react-cookie"
  */
 export default function PlanIndex() {
 	const { token } = useContext(AccountContext)
+	const [ cookies, setCookie ] = useCookies("plan-filter")
+
 	const [ plans, setPlans ] = useState()
 	const [ workouts, setWorkouts ] = useState()
-	const [sessions, setSessions] = useState()
-	const [cookies, setCookie] = useCookies(["plan-filter"])
+	const [ sessions, setSessions ] = useState()
 	const twoYears = new Date()
 	twoYears.setFullYear(twoYears.getFullYear()+2)
 
 
-	const [loading, setLoading] = useState(true)
+	const [ loading, setLoading ] = useState(true)
 	
 	// Filtering props
 	const [ selectedPlans, setSelectedPlans ] = useState(cookies["plan-filter"] ? cookies["plan-filter"].plans : [])
@@ -40,12 +42,29 @@ export default function PlanIndex() {
 		to: dateFormatter(twoYears)
 	})
 
-	// Filtering handles
-	function handleSelPlansChange(newSelectedPlans) {
-		setSelectedPlans(newSelectedPlans)
-	}
+	useEffect(() => {
+		const filterCookie = cookies["plan-filter"]
+		if(filterCookie) {
+			if(filterCookie.from)
+				setDates({...dates, from: filterCookie.from})
+
+			if(filterCookie.to)
+				setDates({...dates, to: filterCookie.to})
+		}
+		loadWorkouts()
+		loadPlans()
+	}, [])
+
 	function handleDatesChange(variableName, value) {
-		setDates({...dates, [variableName]: value})
+		let newD = new Date(value)
+		let from = new Date(dates.from)
+		let to = new Date(dates.to)
+		if(variableName == "from") {
+			setDates(newD > to ? {from: value, to: value} : {...dates, from: value})
+		}
+		else if(newD >= from) {
+			setDates({...dates, [variableName]: value})
+		}
 	}
 
 	useEffect(() => {
@@ -59,102 +78,88 @@ export default function PlanIndex() {
 	
 	// Triggered on page load and when dates or selected plans change.
 	useEffect(() => {
-		const fetchData = async () => {
-			var fetchedPlans, fetchedSessions, fetchedWorkouts
-			
-			if (selectedPlans.length === 0) {
-				//Fetch all if no selected plans was returned from FilterPlan.
-				fetchedPlans = await fetchAllPlans()
-				fetchedSessions = await fetchAllSessions()
-			} 
-			else{
-				//Fetch only sessions connected to plans selected in FilterPlan.
-				fetchedPlans = selectedPlans
-				var planIds = selectedPlans.map(obj => obj.id).flat()
-				fetchedSessions = await fetchSessionsByPlans(planIds)
-			}
-
-			fetchedWorkouts = await fetchAllWorkouts()
-
-			let filteredSessions
-			try {
-				// Filter session according to selected date interval.
-				filteredSessions = Object.values(fetchedSessions).filter(session => {
-					const sessionDate = new Date(session.date)
-					const fromDate = new Date(dates.from)
-					const toDate = new Date(dates.to)
-			
-					return sessionDate >= fromDate && sessionDate <= toDate
-				})
-			} catch(error) {
-				filteredSessions = null
-			} finally {
-				//Update state with filtered plans, sessions and workouts.
-				setPlans(fetchedPlans)
-				setSessions(filteredSessions)
-				setWorkouts(fetchedWorkouts)
-				setLoading(false)
-			}
+		let args = {
+			from: dates.from, 
+			to: dates.to,
+			plans: selectedPlans 
 		}
-		
-		fetchData()
-		setCookie("plan-filter", {plans: selectedPlans , from: dates.from, to: dates.to}, {path: "/"})
-	}, [ selectedPlans, dates ])
+		setCookie("plan-filter", args, { path: "/" })
+		let fetchSessionPath = "api/session/all"
+		if (selectedPlans && selectedPlans.length > 0) {
+			//Fetch only sessions connected to plans selected in FilterPlan.
+			var planIds = selectedPlans.join("&id=")
+			fetchSessionPath = "api/session/getByPlans?id="+ planIds
+		}
 
-	async function fetchAllPlans() {
-		return await fetch("api/plan/all", {
+		fetch(fetchSessionPath, {
+			method: "GET",
 			headers: { token }
 		})
-			.then(async data => {
-				const plans = await data.json()
-				return plans
+			.then(response => {
+				if(!response.ok && !HTTP_STATUS_CODES.NOT_FOUND) {
+					setError("Kunde inte hämta tillfällen.")
+				}
+				return response.json()
 			})
-			.catch(function() {
-				
+			.then(sessions => setSessions(filterSessions(sessions, args)))
+			.catch(() => {
+				setError("Kunde inte ansluta till servern.")
+			})
+
+		setLoading(false)
+
+		function filterSessions(sessions, args) {
+			return sessions.filter(session => {
+				const sessionDate = new Date(session.date).getTime()
+				const fromDate = new Date(args.from).getTime()
+				const toDate = new Date(args.to).getTime()
+			
+				return sessionDate >= fromDate && sessionDate <= toDate
+			})
+		}
+	}, [ dates.to, dates.from, selectedPlans ])
+
+	
+
+	function loadWorkouts() {
+		fetch("api/workouts/all", {
+			method: "GET",
+			headers: { token }
+		})
+			.then(response => {
+				if(!response.ok) {
+					setError("Kunde inte hämta övningar")
+				}
+				return response.json()
+			})
+			.then(workouts => setWorkouts(workouts))
+			.catch(() => {
+				setError("Kunde inte ansluta till servern.")
 			})
 	}
 
-	async function fetchAllWorkouts(){
-		return await fetch("api/workouts/all", {
+	function loadPlans() {
+		fetch("api/plan/all", {
+			method: "GET",
 			headers: { token }
 		})
-			.then(async data => {
-				const workouts = await data.json()
-				return workouts
+			.then(response => {
+				if(!response.ok) {
+					setError("Kunde inte hämta övningar")
+				}
+				return response.json()
 			})
-			.catch(function() {
-			
-			})
-	}
+			.then(plans => {
+				setPlans(plans)
 
-	async function fetchAllSessions(){
-		
-		return await fetch("api/session/all", {
-			headers: { token }
-		})
-			.then(async data => {
-				const sessions = await data.json()
-				return sessions
+				const filterCookie = cookies["plan-filter"]
+				if(filterCookie && filterCookie.plans) {
+					setSelectedPlans(plans.filter(plan => filterCookie.plans.includes(plan.id)).map(p => p.id))
+				}
 			})
-			.catch(function() {
-			
+			.catch(() => {
+				setError("Kunde inte ansluta till servern.")
 			})
-	}
-
-	async function fetchSessionsByPlans(planIds){
-		
-		let ids = planIds.join("&id=")
-		return await fetch("api/session/getByPlans?id="+ids, {
-			headers: { token }
-		})
-			.then(async data => {
-				const sessions = await data.json()
-				return sessions
-			})
-			.catch(function() {
-			
-			})
-			
 	}
 
 	/**
@@ -184,7 +189,7 @@ export default function PlanIndex() {
 			</div>
 			<FilterPlan
 				id={42}
-				setChosenGroups={handleSelPlansChange}
+				setChosenGroups={setSelectedPlans}
 				onDatesChange={handleDatesChange}
 				chosenGroups={selectedPlans}
 				dates={dates}

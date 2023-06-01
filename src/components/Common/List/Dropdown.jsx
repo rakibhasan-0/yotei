@@ -31,6 +31,7 @@ import styles from "./Dropdown.module.css"
 export default function Component({ item, text, children, id, autoClose, errorMessage }) {
 	const [toggled, setToggled] = useState(false)
 	const onClick = () => {
+		
 		if (autoClose !== false) {
 			setToggled(false)
 		}
@@ -39,7 +40,7 @@ export default function Component({ item, text, children, id, autoClose, errorMe
 	return (
 		<label className={styles.listLabel}>
 			<div id={id} className={styles.listContainer} style={style}>
-				<div className={styles.listHeader} onClick={() => setToggled(!toggled)} id={`${id}-header`}>
+				<div className={styles.listHeader} onClick={(e) => {setToggled(!toggled); e.preventDefault()}} id={`${id}-header`}>
 					<div className={styles.listItem}>
 						{item}
 					</div>

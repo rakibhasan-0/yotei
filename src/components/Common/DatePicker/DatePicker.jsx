@@ -1,5 +1,6 @@
-import React from "react"
+import React, { useState } from "react"
 import styles from "./DatePicker.module.css"
+import { setError } from "../../../utils"
 
 /**
  * A component for a default beltpicker. 
@@ -31,16 +32,29 @@ import styles from "./DatePicker.module.css"
  * @version 2.1 
  */
 export default function DatePicker({onChange, ref, selectedDate, id, minDate, maxDate}) {
+	const [invalid, setInvalid] = useState(false)
+
+	function handleChange(event) {
+		if(!event.target.value) {
+			setError("Felaktigt datum.", "datepicker-error")
+			setInvalid(true)
+		}
+		else {
+			setInvalid(false)
+			onChange(event)
+		}
+	}
+
 	return (
 		<input 
 			id={id}
 			type="date" 
 			value={selectedDate} 
-			onChange={onChange}
-			className={styles.datePicker}
+			onChange={handleChange}
+			className={`${invalid && styles.invalid} ${styles.datePicker}`}
 			ref={ref}
 			min={minDate}
-			max={maxDate ? maxDate : "9999-12-31"}
+			max={maxDate ? maxDate : "6969-04-20"}
 		/>
 	)
 

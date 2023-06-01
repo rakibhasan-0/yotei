@@ -46,7 +46,8 @@ export function logOut() {
 /**
  * Sets the message of a toast error message and displays it.
  */
-export function setError(msg) {
+export function setError(msg, name) {
+	if(name && toast.isActive(name)) return
 	toast.error(msg, {
 		position: "top-center",
 		autoClose: 5000,
@@ -56,13 +57,15 @@ export function setError(msg) {
 		draggable: false,
 		progress: undefined,
 		theme: "colored",
+		toastId: name
 	})
 }
 
 /**
  * Sets the message of a toast success message and displays it.
  */
-export function setSuccess(msg) {
+export function setSuccess(msg, name) {
+	if(name && toast.isActive(name)) return
 	toast.success(msg, {
 		position: "top-center",
 		autoClose: 5000,
@@ -72,13 +75,15 @@ export function setSuccess(msg) {
 		draggable: true,
 		progress: undefined,
 		theme: "colored",
+		toastId: name
 	})
 }
 
 /**
  * Sets the message of a toast error message and displays it.
  */
-export function setInfo(msg) {
+export function setInfo(msg, name) {
+	if(name && toast.isActive(name)) return
 	toast.info(msg, {
 		position: "top-center",
 		autoClose: 5000,
@@ -88,6 +93,7 @@ export function setInfo(msg) {
 		draggable: false,
 		progress: undefined,
 		theme: "colored",
+		toastId: name
 	})
 }
 
