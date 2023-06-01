@@ -58,3 +58,44 @@ När man skriver /edit i ett pass så kommer man till det senast redigerade pass
 - Här kan du nu redigera det senaste passet igen och spara ändringarna.
 **Ev förslag på lösning:**
 En eventuell lösning hade varit att rensa allt i edit sidan när man sparar/avbryter alla ändringar alternativt ta bort /edit och lägga upp redigera sidan som en popup.
+
+# Planering, Grupper, Pass, Tekniker, Övningar
+## Filtrering sparas inte efter användare
+**Beskrivning:**
+Just nu sparas filtrering efter cookies och inte användare så som kunden önskat. Detta innebär attnär cookien invalideras eller man loggar ut så rensas filtreringen.
+
+**Hur man återskapar bugg:**
+- Gå in på en av sidorna med filtrering.
+- Filtrera innehållet.
+- Logga ut.
+- Logga in på samma användare.
+- Se hur filtreringen inte sparats.
+
+**Ev förslag på lösning:**
+Spara filtreringen för användaren.
+
+# Planering, Grupper
+## Filtreringsval visas inte när filtreringsrutan är stängd.
+**Beskrivning:**
+När man har filtrerat på sidorna soom nämnts syns inte den aktiva filtreringen om filtreringsrutan är stängd.
+
+**Hur man återskapar bugg:**
+- Gå in på en av sidorna.
+- Filtrera innehållet.
+- Stäng filtreringrutan.
+- Se hur man inte kan avgöra vad som filtreringsvillkoren är.
+
+**Ev förslag på lösning:**
+Lägg till element som visar filtreringsvillkoren även när filtreringsrutan är stängd.
+
+# Global CSS
+## CSS moduler används inte i hela projektet
+**Beskrivning:**
+Just nu används inte moduler för all CSS vilket kan orsaka CSS krockar.
+
+**Hur man återskapar bugg:**
+- Skapa eller ändra en .css fil.
+- Se hur komponenter som man inte trodde skulle påverkas, påverkas av ändringen.
+
+**Ev förslag på lösning:**
+Övergå från .css till .module.se
