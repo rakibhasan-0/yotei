@@ -110,10 +110,19 @@ while true; do
     esac
 done
 
-# Build and deploy containers.
-
-docker compose down -v 
-docker build --no-cache -t pvt2023/gateway:latest ../backend/gateway
-docker build --no-cache -t pvt2023/api:latest ../backend/api 
-docker build --no-cache -t pvt2023/frontend:latest ../frontend
-docker compose up 
+# Build and deploy containers. 
+# The if-statement checks if the current version of docker uses compose V1 or V2
+if command -v docker-compose
+then    
+    docker-compose down -v
+    docker build --no-cache -t pvt2023/gateway:latest ../backend/gateway
+    docker build --no-cache -t pvt2023/api:latest ../backend/api 
+    docker build --no-cache -t pvt2023/frontend:latest ../frontend
+    docker-compose up 
+else 
+    docker compose down -v
+    docker build --no-cache -t pvt2023/gateway:latest ../backend/gateway
+    docker build --no-cache -t pvt2023/api:latest ../backend/api 
+    docker build --no-cache -t pvt2023/frontend:latest ../frontend
+    docker compose up 
+fi
