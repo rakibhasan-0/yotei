@@ -27,13 +27,13 @@ function TechniqueCard({ technique, checkBox, id }) {
 				) : null}
 
 				<div className="technique-name-container">
-					<Link to={"/technique/technique_page/" + technique.techniqueID}>
+					<Link to={"/technique/" + technique.techniqueID}>
 						<h5 className="technique-name">{technique.name}</h5>
 					</Link>
 				</div>
 
 				<div className="technique-arrow-container">
-					<Link to={"/technique/technique_page/" + technique.techniqueID}>
+					<Link to={"/technique/" + technique.techniqueID}>
 						<ChevronDown />
 					</Link>
 				</div>

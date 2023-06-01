@@ -20,6 +20,7 @@ import { AccountContext } from "./context"
 import { decodeToken } from "react-jwt"
 import ExerciseDetailsPage from "./pages/Exercise/ExerciseDetailsPage"
 import TechniqueDetail from "./pages/Technique/TechniqueDetail/TechniqueDetail"
+import TechniqueEdit from "./pages/Technique/TechniqueEdit/TechniqueEdit"
 import Profile from "./pages/Profile/Profile"
 import PlanCreate from "./pages/Plan/PlanCreate.jsx"
 import SessionCreate from "./pages/Plan/SessionCreate"
@@ -98,10 +99,12 @@ export default function App() {
 						<Route path="exercise" element={<ExerciseIndex uri={exerciseURI} />} />
 						<Route path="exercise/create" element={<ExerciseCreate />} />
 						<Route path="exercise/edit/:editID" element={<ExerciseEdit />} />
-						<Route path="technique" element={<TechniqueIndex />} />
 						<Route path="workout" element={<WorkoutIndex uri={workoutURI} />} />
 						<Route path="exercise/exercise_page/:ex_id" element={<ExerciseDetailsPage />} />
-						<Route path="technique/technique_page/:techniqueId" element={<TechniqueDetail />} />
+						<Route path="technique" element={<TechniqueIndex />} />
+						<Route path="technique/create" element={<AdminRoute><CreateTechnique /></AdminRoute> } />
+						<Route path="technique/:techniqueId" element={<TechniqueDetail />} />
+						<Route path="technique/:techniqueId/edit" element={<AdminRoute><TechniqueEdit/></AdminRoute>} />
 						<Route path="workout/create" element={<WorkoutCreate />} />
 						<Route path="workout/:workoutId" element={<WorkoutView />} />
 						<Route path="workout/edit" element={<WorkoutEdit />} />
@@ -111,7 +114,6 @@ export default function App() {
 						<Route path="session/create" element={<SessionCreate />} />
 						<Route path="session/edit/:session_id" element={<SessionEdit />} />
 						<Route path="groups" element={<GroupIndex />} />
-						<Route path="technique/create" element={<AdminRoute><CreateTechnique /></AdminRoute> } />
 						<Route path="" element={<PlanIndex uri={planURI} />} />
 						<Route path="*" element={<NoPage />} />
 					</Route>

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState, useCallback } from "react"
 import CheckBox from "../../../components/Common/CheckBox/CheckBox"
 import InputTextField from "../../../components/Common/InputTextField/InputTextField"
 import TextArea from "../../../components/Common/TextArea/TextArea"
@@ -13,44 +13,41 @@ import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
 import UploadMedia from "../../../components/Upload/UploadMedia"
 import EditGallery from "../../../components/Gallery/EditGallery"
 import Divider from "../../../components/Common/Divider/Divider"
-import { unstable_useBlocker as useBlocker } from "react-router"
+import { unstable_useBlocker as useBlocker, useNavigate, useParams } from "react-router"
 
 const KIHON_TAG = { id: 1, name: "Kihon Waza" }
 
 /**
- * Edit Technique is a popup page that allows the user to edit 
+ * Edit Technique is the page that allows the user to edit 
  * a technique. 
  * 
  * Based on the CreateTechnique component.
  * 
  * Props:
  *     id @type {string} - Should be set to a unique id to identify the component
- *     setIsOpen @type {useState} - Must be passed by parent to allow the popup to close itself
  *     technique @type {object} - The technique to edit
  *
- * Example usage:
- * 
- *		const [showPopup, setShowPopup] = useState(false)
- * 
- *		<Popup title="Redigera teknik" isOpen={showPopup} setIsOpen={setShowPopup}>
- * 			<TechniqueEdit setIsOpen={setShowPopup}/>
- *		</Popup>
+ * Version 2.0:
+ *	   Converted from pop up to a dedicated page.
  *
  * @author Team Medusa
- * @version 1.0
+ * @version 2.0
  * @since 2023-05-16
  */
-export default function EditTechnique({ id, setIsOpen, technique }) {
+export default function TechniqueEdit({ id }) {
 	const token = useContext(AccountContext)
 
-	const [techniqueName, setTechniqueName] = useState(technique.name)
-	const [techniqueDescription, setTechniqueDescription] = useState(technique.description)
+	const { techniqueId } = useParams()
+	const [technique, setTechnique] = useState()
+
+	const [techniqueName, setTechniqueName] = useState()
+	const [techniqueDescription, setTechniqueDescription] = useState()
 	const [kihonChecked, setKihonChecked] = useState(false)
 
-	const [belts, setBelts] = useState(technique.belts)
+	const [belts, setBelts] = useState()
 	const [beltsErr, setBeltsErr] = useState("")
 
-	const [addedTags, setAddedTags] = useState(technique.tags)
+	const [addedTags, setAddedTags] = useState()
 
 	const [showMediaPopup, setShowMediaPopup] = useState(false)
 	const [sendMediaData, setSendMediaData] = useState(false)
@@ -58,53 +55,75 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 
 	const [inputErrorMessage, setInputErrorMessage] = useState("")
 	const [showConfirmPopup, setShowConfirmPopup] = useState(false)
+	const [isBlocking, setIsBlocking] = useState(false)
 
-	useBlocker(() => {
-		if (unsavedChanges()) {
-			handleLeave()
+	const navigate = useNavigate()
+
+	const blocker = useBlocker(() => {
+		if (isBlocking) {
+			setShowConfirmPopup(true)
 			return true
 		}
 		return false
 	})
 
-	useEffect(() => {
-		technique.tags.map((tag) => {
+	const updateTechnique = (tmpTech) => {
+		setTechnique(tmpTech)
+		setTechniqueName(tmpTech.name)
+		setTechniqueDescription(tmpTech.description)
+		setBelts(tmpTech.belts)
+		setAddedTags(tmpTech.tags)
+		tmpTech.tags.map((tag) => {
 			if (tag.name.toLowerCase() === KIHON_TAG.name.toLowerCase() || tag.id === KIHON_TAG.id) {
 				setKihonChecked(true)
 			}
 		})
-	}, [])
+	}
 
-	// If there's any difference to the original technique object, return true
-	const unsavedChanges = () => {
-		return techniqueName != technique.name ||
-			techniqueDescription != technique.description ||
-			addedTags.length !== technique.tags ||
+	const handleGet = useCallback(() => {
+		fetch(`/api/techniques/${techniqueId}`, { headers: { "Content-Type": "application/json", "token": token.token } })
+			.then(async res => {
+				if (res.status === HTTP_STATUS_CODES.OK) {
+					const tmpTech = await res.json()
+					updateTechnique(tmpTech)
+				}
+			})
+			.catch((err) => {
+				console.error(err)
+			})
+	}, [techniqueId, token])
+
+	useEffect(() => handleGet(), [handleGet, techniqueId, token])
+
+	// If there's any difference to the original technique object, set blocking to true
+	useEffect(() => {
+		if (technique === undefined) {
+			return
+		}
+
+		setIsBlocking(
+			techniqueName !== technique.name ||
+			techniqueDescription !== technique.description ||
+			addedTags.length !== technique.tags.length ||
 			belts.length !== technique.belts.length
-	}
+		)
 
-	const handleLeave = () => {
-		if (unsavedChanges()) {
-			setShowConfirmPopup(true)
-		}
-		else {
-			setIsOpen(false)
-		}
-	}
+	}, [techniqueName, techniqueDescription, belts, addedTags, kihonChecked])
 
 	function done(){
 		if(undoMediaChanges){
-			setIsOpen(false)
+			blocker.proceed
 		}
 	}
 
 	const handlePutTechnique = () => {
-		
+
 		if (techniqueName == "") {
 			setInputErrorMessage("Tekniken måste ha ett namn")
 			scrollToElementWithId("techniqueEditInputName")
 			return
 		}
+
 		if (belts.length === 0) {
 			setBeltsErr("En teknik måste minst ha en bältesgrad")
 			scrollToElementWithId("techniqueEditBeltpicker")
@@ -114,6 +133,8 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 		// Media should only be sent when the edit is successfull, but need a promise in editgallery for that.
 		// Send is set here so the requests have time to finish before closing the popup
 		setSendMediaData(true)
+		// Should also only be set on success, but async issues causes tests to fail, so need to set it here
+		setIsBlocking(false)
 
 		const requestOptions = {
 			method: "PUT",
@@ -133,7 +154,7 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 				switch(res.status) {
 				case HTTP_STATUS_CODES.SUCCESS:
 					setSuccess("Tekniken uppdaterades!")
-					setIsOpen(false)
+					navigate(-1)
 					return
 				case HTTP_STATUS_CODES.CONFLICT:
 					setInputErrorMessage("Tekniknamnet finns redan")
@@ -157,7 +178,6 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 				console.error(error)
 				setError("Gick inte att updatera tekniken!")
 			})
-
 	}
 
 	// Beltpicker toggle handler
@@ -172,6 +192,10 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 
 	// Keeps the kihon checkbox and added tags in sync
 	const setKihonCheckedAndUpdateTag = () => {
+		if (addedTags === undefined) {
+			return
+		}
+
 		// Checks the kihon checkbox before it's updated to prevent async issues, old value is checked
 		if (addedTags.find(t => t.name.toLowerCase() === KIHON_TAG.name.toLowerCase()) && kihonChecked) {
 			const newTags = addedTags.filter((t) => {
@@ -233,27 +257,31 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 
 			<Divider title="Taggar" option="h2_left"/>
 
-			<TagInput
-				id={style.techniqueEditTaginput}
-				addedTags={addedTags}
-				setAddedTags={setAddedTagsAndUpdateKihon}
-				isNested={true}>
-			</TagInput>	
+			{addedTags ? 
+				<TagInput
+					id={style.techniqueEditTaginput}
+					addedTags={addedTags}
+					setAddedTags={setAddedTagsAndUpdateKihon}
+					isNested={true}>
+				</TagInput>	
+				:
+				null
+			}
 
 			<Divider title="Media" option="h1_left"/>
 
 			<div className={style.mediaButtonContainer}>
-				<EditGallery id={technique.id} exerciseId={technique.id} sendData={sendMediaData} undoChanges={undoMediaChanges} done={done} />
+				<EditGallery id={techniqueId} exerciseId={techniqueId} sendData={sendMediaData} undoChanges={undoMediaChanges} done={done} />
 			</div>
 
 			<Popup title={"Lägg till media"} isOpen={showMediaPopup} setIsOpen={setShowMediaPopup} >
-				<UploadMedia id={technique.id} exerciseId={technique.id}/>	
+				<UploadMedia id={techniqueId} exerciseId={techniqueId}/>	
 			</Popup>
 
 			<div style={{ display: "flex", gap: "27px", justifyContent: "space-evenly" }}>
 				<Button
 					id={style.techniqueEditBackbutton}
-					onClick={handleLeave}
+					onClick={() => navigate(-1)}
 					outlined={true}>
 					<p>Avbryt</p>
 				</Button>
@@ -272,7 +300,10 @@ export default function EditTechnique({ id, setIsOpen, technique }) {
 				confirmText={"Lämna"}
 				backText={"Avbryt"}
 				popupText={"Är du säker på att du vill lämna sidan? Dina ändringar kommer inte att sparas."}
-				onClick={() => setUndoMediaChanges(true)}
+				onClick={async () => {
+					setUndoMediaChanges(true)
+					blocker.proceed()
+				}}
 			/>
 
 		</div>

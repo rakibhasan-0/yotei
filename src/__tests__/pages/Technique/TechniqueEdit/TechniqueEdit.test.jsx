@@ -2,7 +2,6 @@
 import React from "react"
 import { render, screen, configure, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import TechniqueEdit from "../../../../pages/Technique/TechniqueEdit/TechniqueEdit"
 import { AccountContext } from "../../../../context"
 import "@testing-library/jest-dom"
 import { Route, createMemoryRouter, createRoutesFromElements, RouterProvider } from "react-router"
@@ -10,6 +9,7 @@ import { Route, createMemoryRouter, createRoutesFromElements, RouterProvider } f
 import { rest } from "msw"
 import { server } from "../../../server"
 import TechniqueDetail from "../../../../pages/Technique/TechniqueDetail/TechniqueDetail"
+import TechniqueEdit from "../../../../pages/Technique/TechniqueEdit/TechniqueEdit"
 
 /**
  * Tests for the technique edit page
@@ -160,20 +160,35 @@ describe("verify that", () => {
 		api.mockClear()
 	})
 
-	const renderEditWithRouter = () => {
+	// Render the technique detail page with router and account context. Also waits for it to fully render.
+	const renderWithRouter = async() => {
+		const techniqueId = 1
+		window.HTMLElement.prototype.scrollIntoView = jest.fn
 		const router = createMemoryRouter(
-			createRoutesFromElements(
-				<Route path="/*" element={<TechniqueEdit id={"technique-edit"} setIsOpen={true} technique={technique} />}/>
-			)
+			createRoutesFromElements( [
+				<Route key={"key1"} path="technique/:techniqueId" element={<TechniqueDetail />}/> ,
+				<Route key={"key2"} path="technique/:techniqueId/edit" element={<TechniqueEdit/>}/>
+			]
+			),
+			{initialEntries: [`/technique/${techniqueId}`]}
 		)
 
-		render ( 
-			<RouterProvider router={router}/>
+		render ( //eslint-disable-next-line no-dupe-keys
+			<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", undefined }}>
+				<RouterProvider router={router}/>
+			</AccountContext.Provider>
 		)
+
+		await waitFor(() => {
+			// The mock api is called 2 times before everything is fully rendered
+			expect(api).toHaveBeenCalledTimes(2)
+		})
 	}
 
 	test("checking the kihon checkbox adds and removes the kihon tag", async () => {
-		renderEditWithRouter()
+		await renderWithRouter()
+
+		await user.click(screen.getByTestId("technique-edit-button"))
 
 		await user.click(screen.getByLabelText("Kihon"))
 
@@ -189,7 +204,9 @@ describe("verify that", () => {
 	})
 
 	test("adding/removing the kihon tag checks/unchecks the kihon checkbox", async () => {
-		renderEditWithRouter()
+		await renderWithRouter()
+
+		await user.click(screen.getByTestId("technique-edit-button"))
 
 		await user.click(screen.getByText("Lägg till tagg"))
 
@@ -211,29 +228,6 @@ describe("verify that", () => {
 		})
 
 	})
-
-	// Render the technique detail page with router and account context. Also waits for it to fully render.
-	const renderWithRouter = async() => {
-		const techniqueId = 1
-		window.HTMLElement.prototype.scrollIntoView = jest.fn
-		const router = createMemoryRouter(
-			createRoutesFromElements(
-				<Route path="technique/technique_page/:techniqueId" element={<TechniqueDetail />}/>
-			),
-			{initialEntries: [`/technique/technique_page/${techniqueId}`]}
-		)
-
-		render ( //eslint-disable-next-line no-dupe-keys
-			<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", undefined }}>
-				<RouterProvider router={router}/>
-			</AccountContext.Provider>
-		)
-
-		await waitFor(() => {
-			// The mock api is called 2 times before everything is fully rendered
-			expect(api).toHaveBeenCalledTimes(2)
-		})
-	}
 
 	test("changing the technique name and canceling shows the confirm popup", async () => {
 		await renderWithRouter()

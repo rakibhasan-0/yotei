@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext, useCallback } from "react"
 import { useNavigate, useParams } from "react-router"
+import { Link } from "react-router-dom"
 import { AccountContext } from "../../../context"
 
 import Tag from "../../../components/Common/Tag/Tag"
@@ -17,7 +18,6 @@ import { isAdmin } from "../../../utils"
 import Popup from "../../../components/Common/Popup/Popup"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
 
-import TechniqueEdit from "../TechniqueEdit/TechniqueEdit"
 import ActivityDelete from "../../../components/Activity/ActivityDelete/ActivityDelete"
 
 
@@ -45,16 +45,10 @@ function TechniqueDetail({ id }) {
 	const [loading, setLoading] = useState(true)
 
 	const accountRole = useContext(AccountContext)
-	const [showPopup, setShowPopup] = useState(false)
 	const [showConfirmPopup, setShowConfirmPopup] = useState(false)
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
 
 	const handleGet = useCallback(() => {
-		// Fix to update the details page after an edit
-		if (showPopup !== false) {
-			return
-		}
-
 		setLoading(true)
 		setError("")
 		fetch(`/api/techniques/${techniqueId}`, { headers: { token } })
@@ -73,7 +67,7 @@ function TechniqueDetail({ id }) {
 				setError("Ett nätverksfel inträffade. Kontrollera din internetuppkoppling.")
 				setLoading(false)
 			})
-	}, [showPopup, techniqueId, token])
+	}, [techniqueId, token])
 
 	useEffect(() => handleGet(), [handleGet, techniqueId, token])
 
@@ -107,12 +101,6 @@ function TechniqueDetail({ id }) {
 	return (
 		<>
 			<div>
-				<Popup title="Redigera teknik" isOpen={showPopup} setIsOpen={setShowPopup}>
-					<TechniqueEdit setIsOpen={setShowPopup} technique={technique} />
-				</Popup>
-			</div>
-
-			<div>
 				<Popup
 					title="Ta bort teknik"
 					isOpen={showDeletePopup}
@@ -122,19 +110,18 @@ function TechniqueDetail({ id }) {
 					<ActivityDelete id={"technique-workout-delete-popup"} activityID={techniqueId} name={technique.name} setIsOpen={setShowDeletePopup} what={"Teknik"}/>
 				</Popup>
 			</div>
-		
-
 
 			<div className="technique-detail-container" id={id == undefined ? "technique" : id}>
 				<h1>{technique.name}</h1>
 				{isAdmin(accountRole) && <div className="technique-detail-actions-container">
-					<Pencil
-						id="technique-edit-button"
-						size="24px"
-						color="var(--red-primary)"
-						style={{ cursor: "pointer" }}
-						onClick={() => setShowPopup(true)}
-					/>
+					<Link to={"edit"}>
+						<Pencil
+							id="technique-edit-button"
+							size="24px"
+							color="var(--red-primary)"
+							style={{ cursor: "pointer" }}
+						/>
+					</Link>
 					<Trash
 						size="24px"
 						color="var(--red-primary)"
