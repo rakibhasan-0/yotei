@@ -14,6 +14,7 @@ import TechniqueCard from "../../../components/Common/Technique/TechniqueCard/Te
 import InfiniteScrollComponent from "../../../components/Common/List/InfiniteScrollComponent"
 import { isAdmin } from "../../../utils"
 import Spinner from "../../../components/Common/Spinner/Spinner"
+import { Link } from "react-router-dom"
 
 /**
  * The technique index page.
@@ -128,9 +129,11 @@ export default function TechniqueIndex() {
 			<br/><br/><br/><br/><br/>
 			
 			{isAdmin(context) &&
-				<RoundButton id="technique-add-button" onClick={() => setShowPopup(true)}>
-					<Plus className="plus-icon" />
-				</RoundButton>
+				<Link to={"create"}>
+					<RoundButton id="technique-add-button">
+						<Plus className="plus-icon" />
+					</RoundButton>
+				</Link>
 			}
 		</>
 	)

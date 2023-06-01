@@ -6,16 +6,17 @@ import { render, screen, configure } from "@testing-library/react"
 import "@testing-library/jest-dom"
 //import { HTTP_STATUS_CODES } from "../../../utils"
 
+
 // Required for MSW mocking of API responses.
-//import { rest } from "msw"
+import { rest } from "msw"
 import { server } from "../../server"
 const requestSpy = jest.fn()
 server.events.on("request:start", requestSpy)
 
 import CreateTechnique from "../../../pages/Technique/CreateTechnique/CreateTechnique"
-import Popup from "../../../components/Common/Popup/Popup"
 import { Route, RouterProvider, createMemoryRouter, createRoutesFromElements } from "react-router-dom"
 import userEvent from "@testing-library/user-event"
+import TechniqueIndex from "../../../pages/Technique/TechniqueIndex/TechniqueIndex"
 
 configure({ testIdAttribute: "id" })
 
@@ -36,7 +37,7 @@ describe("CreateTechnique should render", () => {
 	beforeEach(() => {
 		const router = createMemoryRouter(
 			createRoutesFromElements(
-				<Route path="/*" element={<Popup isOpen={true} title={"Skapa teknik"}><CreateTechnique/></Popup>}/>
+				<Route path="/*" element={<CreateTechnique/>} />
 			)
 		)
 		render( //eslint-disable-line
@@ -90,10 +91,11 @@ describe("CreateTechnique should render", () => {
 })
 
 describe("CreateTechnique on back with unsaved values should", () => {
+
 	test("show confirmation popup", async () => {
 		const router = createMemoryRouter(
 			createRoutesFromElements(
-				<Route path="/*" element={<Popup isOpen={true} title={"Skapa teknik"}><CreateTechnique/></Popup>}/>
+				<Route path="/*" element={<CreateTechnique/>}/>
 			)
 		)
 		render( //eslint-disable-line
@@ -109,42 +111,99 @@ describe("CreateTechnique on back with unsaved values should", () => {
 
 	test("close popup when user clicks 'nej'", async () => {
 
-		const setIsOpen = jest.fn()
+
+		//Mock technique in order to make infinite scroller happy
+		let techniques = {
+			results: [
+				{
+					techniqueID: 1,
+					name: "Testteknik",
+					beltColors: [
+						{
+							belt_color: "ED930D",
+							belt_name: "Orange",
+							is_child: false
+						}
+					]
+				}
+			]
+		}
+
+		server.use(
+			rest.get("/api/search/techniques", (req, res, ctx) => {
+				return res(
+					ctx.json(techniques)
+				)
+			}))
 
 		const router = createMemoryRouter(
 			createRoutesFromElements(
-				<Route path="/*" element={<Popup isOpen={true} setIsOpen={setIsOpen} title={"Skapa teknik"}><CreateTechnique setIsOpen={setIsOpen}/></Popup>}/>
-			)
+				<>
+					<Route path="technique" element={<TechniqueIndex/>} />
+					<Route path="technique/create" element={<CreateTechnique/>} />
+				</>
+			),
+			{initialIndex: 1, initialEntries: ["technique", "/technique/create"]}
 		)
+
 		render( //eslint-disable-line
 			<RouterProvider router={router} />
 		)
+
 		const user = userEvent.setup()
 		await user.type(screen.getByPlaceholderText("Namn"), "Test")
 		await user.click(screen.getByRole("button", { name: "Tillbaka" }))
 		await user.click(screen.getByRole("button", { name: "Avbryt" }))
 
-		expect(setIsOpen).not.toHaveBeenCalled()
+		expect(screen.getByText("Skapa teknik")).toBeInTheDocument()
 	})
 
 	test("close popup when user clicks 'ja'", async () => {
 
-		const setIsOpen = jest.fn()
+		let techniques = {
+			results: [
+				{
+					techniqueID: 1,
+					name: "Testteknik",
+					beltColors: [
+						{
+							belt_color: "ED930D",
+							belt_name: "Orange",
+							is_child: false
+						}
+					]
+				}
+			]
+		}
+
+		server.use(
+			rest.get("/api/search/techniques", (req, res, ctx) => {
+				return res(
+					ctx.json(techniques)
+				)
+			}))
 
 		const router = createMemoryRouter(
 			createRoutesFromElements(
-				<Route path="/*" element={<Popup isOpen={true} setIsOpen={setIsOpen} title={"Skapa teknik"}><CreateTechnique setIsOpen={setIsOpen}/></Popup>}/>
-			)
+				<>
+					<Route path="technique" element={<TechniqueIndex/>} />
+					<Route path="technique/create" element={<CreateTechnique/>} />
+				</>
+			),
+			{initialIndex: 1, initialEntries: ["technique", "/technique/create"]}
 		)
+
 		render( //eslint-disable-line
 			<RouterProvider router={router} />
 		)
+
 		const user = userEvent.setup()
 		await user.type(screen.getByPlaceholderText("Namn"), "Test")
 		await user.click(screen.getByRole("button", { name: "Tillbaka" }))
 		await user.click(screen.getByRole("button", { name: "Lämna" }))
 
-		expect(setIsOpen).toHaveBeenCalled()
+		expect(screen.getByText("Tekniker")).toBeInTheDocument()
+
 	})
 })
 

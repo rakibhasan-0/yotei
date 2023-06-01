@@ -33,6 +33,8 @@ import ErrorBoundary from "./components/ErrorHandler/ErrorBoundary"
 import "react-toastify/dist/ReactToastify.css"
 import { logOut } from "./utils"
 import { ToastContainer, toast } from "react-toastify"
+import CreateTechnique from "./pages/Technique/CreateTechnique/CreateTechnique"
+import AdminRoute from "./AdminRoute"
 
 const exerciseURI = "https://jsonplaceholder.typicode.com/users"
 const workoutURI = "https://jsonplaceholder.typicode.com/users"
@@ -109,6 +111,7 @@ export default function App() {
 						<Route path="session/create" element={<SessionCreate />} />
 						<Route path="session/edit/:session_id" element={<SessionEdit />} />
 						<Route path="groups" element={<GroupIndex />} />
+						<Route path="technique/create" element={<AdminRoute><CreateTechnique /></AdminRoute> } />
 						<Route path="" element={<PlanIndex uri={planURI} />} />
 						<Route path="*" element={<NoPage />} />
 					</Route>

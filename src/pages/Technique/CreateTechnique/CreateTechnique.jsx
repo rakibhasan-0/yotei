@@ -12,7 +12,7 @@ import { toast } from "react-toastify"
 import EditGallery from "../../../components/Gallery/EditGallery"
 import Divider from "../../../components/Common/Divider/Divider"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
-import { unstable_useBlocker as useBlocker } from "react-router"
+import { unstable_useBlocker as useBlocker, useNavigate } from "react-router"
 
 const KIHON_TAG = { id: 1 }
 
@@ -40,7 +40,7 @@ const KIHON_TAG = { id: 1 }
  * @version 2.0
  * @since 2023-05-10
  */
-export default function CreateTechnique({ id, setIsOpen }) {
+export default function CreateTechnique({ id }) {
 
 	const token = useContext(AccountContext)
 
@@ -64,10 +64,14 @@ export default function CreateTechnique({ id, setIsOpen }) {
 
 	const [showConfirmPopup, setShowConfirmPopup] = useState(false)
 
+	const [isBlocking, setIsBlocking] = useState(false)
 
-	useBlocker(() => {
-		if (unsavedChanges()) {
-			handleLeave()
+	const navigate = useNavigate()
+
+
+	const blocker = useBlocker(() => {
+		if (isBlocking) {
+			setShowConfirmPopup(true)
 			return true
 		}
 		return false
@@ -88,6 +92,7 @@ export default function CreateTechnique({ id, setIsOpen }) {
 			setSendData(true)
 		}
 		console.log(tempId)
+		console.log(sendData)
 	}, [tempId])
 
 	useEffect(() => {
@@ -96,18 +101,16 @@ export default function CreateTechnique({ id, setIsOpen }) {
 		}
 	}, [belts])
 
-	function unsavedChanges() {
-		return techniqueName != "" || techniqueDescription != "" || addedTags.length > 0 || belts.length > 0
-	}
+	useEffect(() => {
+		setIsBlocking(techniqueName != "" || techniqueDescription != "" || addedTags.length > 0 || belts.length > 0)
+	}, [techniqueName, techniqueDescription, belts, addedTags, kihonChecked])
+
 
 	function done() {
-
 		if (undoMediaChanges) {
-			setIsOpen(false)
+			navigate("/technique")
 		}
 		else {
-			setSendData(false)
-
 			if (continueToCreate && clearFields) {
 				clearStates()
 				return
@@ -116,12 +119,11 @@ export default function CreateTechnique({ id, setIsOpen }) {
 				setCreateButton(true)
 				return
 			}
-			setIsOpen(false)
+			navigate("/technique")
 		}
 	}
 
 	async function handleSubmit() {
-
 		if (techniqueName == "") {
 			setTechniqueNameErr("En teknik måste ha ett namn")
 			scrollToElementWithId("create-technique-input-name")
@@ -138,12 +140,12 @@ export default function CreateTechnique({ id, setIsOpen }) {
 
 		postTechnique({ name: techniqueName, description: techniqueDescription, belts: beltIds, tags: tagIds }, token.token)
 			.then(handleResponse)
-			.then(await makeMediaAPICall)
+			.then(makeMediaAPICall)
 			.catch(() => toast.error("Kunde inte spara tekniken. Kontrollera din internetuppkoppling."))
 
 	}
 
-	async function makeMediaAPICall(data) {
+	function makeMediaAPICall(data) {
 		setTempId(data.id)
 	}
 
@@ -177,6 +179,7 @@ export default function CreateTechnique({ id, setIsOpen }) {
 		}
 
 		toast.success("Tekniken " + techniqueName + " skapades")
+		setIsBlocking(false)
 
 		return response.json()
 	}
@@ -187,15 +190,7 @@ export default function CreateTechnique({ id, setIsOpen }) {
 		setKihonChecked(false)
 		setAddedTags([])
 		setBelts([])
-	}
-
-	function handleLeave() {
-		if (unsavedChanges()) {
-			setShowConfirmPopup(true)
-		}
-		else {
-			setIsOpen(false)
-		}
+		setSendData(false)
 	}
 
 	// Disables the createButton until the techniqueName has changed.
@@ -206,7 +201,8 @@ export default function CreateTechnique({ id, setIsOpen }) {
 	}, [techniqueName, createButton])
 
 	return (
-		<div id={id} style={{ textAlign: "left" }}>
+		<div id={id} style={{ textAlign: "left", paddingBottom: "1.5rem" }}>
+			<h1 style={{ textAlign: "center" }}>Skapa teknik</h1>
 			<InputTextField
 				id="create-technique-input-name"
 				text={techniqueName}
@@ -279,7 +275,7 @@ export default function CreateTechnique({ id, setIsOpen }) {
 			<div style={{ display: "flex", gap: "27px", justifyContent: "space-evenly" }}>
 				<Button
 					id="create-technique-backbutton"
-					onClick={handleLeave}
+					onClick={() => navigate("/technique")}
 					outlined={true}
 				>
 					<p>Tillbaka</p>
@@ -301,10 +297,14 @@ export default function CreateTechnique({ id, setIsOpen }) {
 				confirmText={"Lämna"}
 				backText={"Avbryt"}
 				popupText={"Är du säker på att du vill lämna sidan? Dina ändringar kommer inte att sparas."}
-				onClick={() => setUndoMediaChanges(true)}
+				onClick={async () => {
+					setUndoMediaChanges(true)
+					blocker.proceed()
+				}}
 			/>
 		</div>
 	)
+
 }
 
 function buildTags(tags, kihonChecked) {
@@ -335,3 +335,4 @@ async function postTechnique(technique, token) {
 		.then(response => { return response })
 		.catch(error => { alert(error.message) })
 }
+
