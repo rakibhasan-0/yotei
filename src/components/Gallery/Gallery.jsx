@@ -5,6 +5,7 @@ import VideoPlayerReactPlayer from "../VideoPlayer/VideoPlayerReactPlayer"
 import Image from "../Image/Image"
 import "../Gallery/Gallery.css"
 import { AccountContext } from "../../context"
+import TextArea from "../Common/TextArea/TextArea"
 
 /**
  * A media component for displaying video or images.
@@ -18,10 +19,7 @@ import { AccountContext } from "../../context"
  * @version 1.0
  * @since 2023-05-04
  */
-export default function Gallery({ id }) {
-	// api call to get links for media is done "HERE" and save it to var dummy. 
-	// We need to filter pictures and videos to two different arrays
-	
+export default function Gallery({ id }) {	
 	const [media, setMedia] = useState([])
 	const context = useContext(AccountContext)
 
@@ -58,14 +56,15 @@ export default function Gallery({ id }) {
 	/**
 	 * Used for adding description into gallery.
 	 * @param {*} mediaObject image or video that has a description.
-	 * @returns a paragraph with description connected to mediaObject.
+	 * @returns a textarea with description connected to mediaObject.
 	 */
 	function MediaDescription(mediaObject){
-		return(
-			<p id={`${mediaObject.id}-media-description`} className="media-description">
-				{mediaObject.description}
-			</p>
+		return(	
+			<TextArea id={`${mediaObject.id}-media-description`} 
+				text={mediaObject.description} 
+				readOnly={true}/>
 		)
+	
 	}
 
 

@@ -332,9 +332,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 		return(	
 			<TextArea defVal={mediaObject.description} onChange={e => {
 				setDescMap(descMap.set(mediaObject.id, e.target.value))
-			}} >
-
-			</TextArea>
+			}} />
 		)
 	}
 
