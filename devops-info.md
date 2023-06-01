@@ -1,15 +1,30 @@
-* Dockerhub
-* Gitlab runners, konfiguration för dem.
-* Beslut
-* Varför beslut tagits
-* Vad vi gjort annorlunda om vi gjorde om det
-* Hur det hänger ihop
-* Dokumentera pipelines
+Denna fil innehåller följande: 
+
+* Hur det hänger ihop på gitlab, vilka repos som finns och vad som finns i respektive repo.
+* Hur pipeline fungerar i respektive repo.
+* Hur systemtesterna är uppsatta i pipeline.
+* Hur och varför vi använder Dockerhub.
+* Hur Gitlab runners konfigurerats.
+* Våra beslut, varför vi tagit besluten och vad vi borde gjort annorlunda/tips till nästa år.
+
+Dokumentation kring konfiguration på gitlab gäller GitLab Community Edition 15.11.4. 
 
 # Terminologi
 
 - **MR**: Merge request
 - **CD**: Continous deployment
+
+# Docs-repot
+Samlingspunkt för all dokumentation. Filer relaterade till DevOps-chapter är:
+* git-guideline.md - Guideline till för projektmedlemmarna på kursen.
+* Chapters/DevOps/beslut.md - beslut som tagits under perioden med motiveringar.
+* .gitlab-ci.yml - konfigurationsfil för pipeline på docs.
+
+## Pipeline
+Pipeline i docs-repot deploy:ar api-dokumentationen på utvecklingsservern(imp). Vi använder [mkdocs](https://www.mkdocs.org/) för autogenererad dokumentation. 
+
+Efter deployment, givet att allt är uppe, ska dokumentationen nås på följande länk: https://imp.cs.umu.se:2443/api-docs/
+
 
 # Backend-repot
 I detta repo finns all kod relaterad till backend, bash-skript för lokal utveckling, information hur man utvecklar lokalt och en `.gitlab-ci.yml`-fil som specifierar hur pipelinen ser ut.  
@@ -108,7 +123,7 @@ En uppdaterad guide för det kan hittas på [docs.gitlab.com](https://docs.gitla
 concurrent = 8
 ```
 
-Varje runner behöver också dessa saker för att fungera korrektÖ
+Varje runner behöver också dessa saker för att fungera korrekt
 
 ```toml
 [[runners]]
