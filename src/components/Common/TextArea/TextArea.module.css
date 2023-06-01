@@ -35,3 +35,7 @@
   opacity: 0;
 }
   
+.limitText {
+  margin-bottom: 2px;
+  text-align: right;
+}

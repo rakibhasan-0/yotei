@@ -15,7 +15,7 @@ import InputTextField from "../InputTextField/InputTextField"
  *    id: string
  *    onKeyUp: function
  *    label: string
- *    
+ *    maxLength: number
  * }
  * 
  * Is returned with forwardRef so that we are able to use the ref of the InputTextField (makes it possible to focus the component)
@@ -26,7 +26,7 @@ import InputTextField from "../InputTextField/InputTextField"
  * @since 2023-05-02
  */
 const InputTextFieldBorderLabel = forwardRef(function InputTextFieldBorderLabel(
-	{ placeholder, text, onChange, required,type,id, onKeyUp, label, errorMessage}, ref) {
+	{ placeholder, text, onChange, required,type,id, onKeyUp, label, errorMessage, maxLength}, ref) {
 
 	return(
 		<div style={{position: "relative"}}>
@@ -42,6 +42,8 @@ const InputTextFieldBorderLabel = forwardRef(function InputTextFieldBorderLabel(
 				label={label}
 				errorMessage={errorMessage}
 				ref={ref}
+				maxLength={maxLength}
+				hideLength={true}
 			>
 			</InputTextField>
 		</div>

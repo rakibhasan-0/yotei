@@ -19,6 +19,7 @@ import styles from "./TextArea.module.css"
  * onInput @type {Function} Function to run when given input
  * readOnly @type {Boolean} Boolean that makes the text area read only
  * defVal @type {String} Default value
+ * maxLength    @type {Number}   Max input length, defaults to 800 characters
  * 
  *  }
  * 
@@ -41,11 +42,13 @@ import styles from "./TextArea.module.css"
  * @updated 2023-05-30 Chimera updated documentation
  * @version 4.1
  */
-export default function TextArea({ placeholder, text, onChange, required, onBlur, onInput, readOnly, id, defVal, type, errorMessage, errorDisabled}) {
+export default function TextArea({ placeholder, text, onChange, required, onBlur, onInput, readOnly, id, defVal, type, errorMessage, errorDisabled, maxLength}) {
 
+	const defaultLimit = 800
 	const isErr = !(errorMessage == undefined || errorMessage == null || errorMessage == "")
 	return(
 		<label className={styles.label}>
+			<p className={styles.limitText}>{text?.length || 0}/{maxLength || defaultLimit}</p>
 			<textarea
 				className={isErr ? `${styles.textarea} ${styles.textareaErr}` : `${styles.textarea}`}
 				placeholder={placeholder}
@@ -58,6 +61,7 @@ export default function TextArea({ placeholder, text, onChange, required, onBlur
 				readOnly={readOnly}
 				id={id}
 				type={type}
+				maxLength={maxLength || defaultLimit}
 			/>
 			{!errorDisabled && <p className={styles.err}>{errorMessage}</p>}
 		</label>

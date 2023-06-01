@@ -15,6 +15,8 @@ import { forwardRef } from "react"
  * id           @type {String}   An id for the textfield
  * onKeyUp      @type {Function} Gets the input value from the user
  * errorMessage @type {String}   Shows an error message
+ * maxLength    @type {Number}   Max input length, defaults to 180 characters
+ * hideLength	@type {Boolean}  Hides the input length display, defaults to false
  * 
  * Example usage:
  * const [exampleText, setExampleText] = useState("")
@@ -40,12 +42,14 @@ import { forwardRef } from "react"
  * 
  */
 const InputTextField = forwardRef(function InputTextField(
-	{ placeholder, text, onChange, required, type, id, onKeyUp, errorMessage}, ref) {
+	{ placeholder, text, onChange, required, type, id, onKeyUp, errorMessage, maxLength, hideLength}, ref) {
 	
+	const defaultLimit = 180
 	const isErr = !(errorMessage == undefined || errorMessage == null || errorMessage == "")
 
 	return(
 		<label className={styles.label}>
+			{!hideLength && <p className={styles.limitText}>{text?.length || 0}/{maxLength || defaultLimit}</p> }
 			<input
 				className={isErr ? `${styles.input} ${styles.inputErr}` : `${styles.input}`}
 				placeholder={placeholder}
@@ -56,6 +60,7 @@ const InputTextField = forwardRef(function InputTextField(
 				onKeyUp={onKeyUp}
 				required={required}
 				ref={ref}
+				maxLength={maxLength || defaultLimit}
 			/>
 			<p className={styles.err}>{errorMessage}</p>
 		</label>
