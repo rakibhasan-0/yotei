@@ -16,7 +16,6 @@ API for handling media. Both files and meta-data.
 <!-- write documentation here! -->
 
 <api>
-
 name: Add media 
 path: POST /api/media/
 locked: true
@@ -25,17 +24,18 @@ text: |
     the id of the exercise or technique, description to the media)
 body:
     type: application/json
-    parameters: | a list of media objects
-        movementId: The id of the technique or exercise that the media is added to 
-        url: Url where the media-resource can be accessed 
-        localStorage: true if the media is stored on server. False if stored on other place.
-        image: true if media is an image, false otherwise
-        description: a description to the media
+    parameters: |
+        movementId: The id of the technique or exercise that the media is added to | 10
+        url: Url where the media-resource can be accessed | "https://www.youtube.com/watch?v=GIhcL8K4shg"
+        localStorage: true if the media is stored on server. False if stored on other place. | false
+        image: true if media is an image, false otherwise | false
+        description: a description to the media | "Jocke spelar wow"
         
 examples:
   - name: 200
     request: |
         POST /api/media
+        
         [
             {
                 "movementId":10,
@@ -45,10 +45,11 @@ examples:
                 "description":"Jocke spelar wow"
             }
         ]
+        
     response:
         content-type: text/plain
         body: "Media-uppladdning lyckades!"
-<api>
+</api>
 
 
 <api>
@@ -59,20 +60,24 @@ text: |
     Removes all existing media belonging to a technique/exercise in the database. If media is stored locally, removes the file.
 path-params:
     parameters:
-        id: The id of the exercise/technique's media to delete. 
+        id: The id of the exercise/technique's media to delete. | 1
+
 examples:
   - name: 200
-    request:|
+    request: |
         DELETE /api/media/remove-all/1
+
     response:
         content-type: text/plain
-        body: <empty>
+        body: 
+
   - name: 400
-    request:|
+    request: |
         DELETE /api/media/remove-all/-100
+
     response:
       content-type: text/plain
-      body: <empty>
+      body:
 </api>
 
 
@@ -84,16 +89,17 @@ text: |
     Removes a list of media-objects and. If media is stored locally, removes the file.
 body:
     type: application/json
-    parameters: | a list of media objects
-        movementId: The id of the technique or exercise that the media is added to 
-        url: Url where the media-resource can be accessed 
-        localStorage: true if the media is stored on server. False if stored on other place.
-        image: true if media is an image, false otherwise
-        description: a description to the media
+    parameters: |
+        movementId: The id of the technique or exercise that the media is added to | 10
+        url: Url where the media-resource can be accessed | "https://www.youtube.com/watch?v=GIhcL8K4shg"
+        localStorage: true if the media is stored on server. False if stored on other place. | false
+        image: true if media is an image, false otherwise | false
+        description: a description to the media | "Jocke spelar wow"
 examples:
   - name: 200
-        request:|
+    request: |
         DELETE /api/media
+
         {
             "movementId":10,
             "url":"https://www.youtube.com/watch?v=GIhcL8K4shg",
@@ -101,12 +107,15 @@ examples:
             "image":false,
             "description":"Jocke spelar wow"
         }
+
     response:
         content-type: text/plain
-        body: <empty>
+        body: 
+  
   - name: 400
-    request:|
+    request: |
         DELETE /api/media/
+
         {
             "movementId":-100,
             "url":"https://www.youtube.com/watch?v=GIhcL8K4shg",
@@ -114,9 +123,10 @@ examples:
             "image":false,
             "description":"Jocke spelar wow"
         }
+
     response:
       content-type: text/plain
-      body: <empty>
+      body:
 </api>
 
 
@@ -128,12 +138,13 @@ text: |
     Returns all media-meta-data as a list.
 examples:
   - name: 200
-    request: GET /api/media
+    request: | 
+        GET /api/media
+
     response:
         content-type: application/json
         body: |
-            [
-               {
+            [{
                     "movementId":1,
                     "url":"https://www.youtube.com/watch?v=GIhcL8K4shg",
                     "localStorage":false,
@@ -147,7 +158,6 @@ examples:
                     "image":true,
                     "description":"When you fail to rank up to black belt"
                }
-               
             ]
 </api>
 
@@ -160,24 +170,26 @@ text: |
     Returns all media-meta-data belonging to a exercise/technique as a list.
 path-params:
     parameters:
-        id: The id of the exercise/technique. 
+        id: The id of the exercise/technique. | 1
 examples:
   - name: 200
-    request: GET /api/media/1
+    request: |
+        GET /api/media/1
+
     response:
         content-type: application/json
         body: |
             [
                {
-                    "movementId":1,
-                    "url":"https://www.youtube.com/watch?v=GIhcL8K4shg",
+                    "movementId": 1,
+                    "url": "https://www.youtube.com/watch?v=GIhcL8K4shg",
                     "localStorage":false,
                     "image":false,
                     "description":"Jocke spelar wow"
                },
                {
                     "movementId":1,
-                    "url":"https://i.kym-cdn.com/entries/icons/mobile/000/031/003/cover3.jpg",
+                    "url": "https://i.kym-cdn.com/entries/icons/mobile/000/031/003/cover3.jpg",
                     "localStorage":false,
                     "image":true,
                     "description":"When you fail to rank up to black belt"
@@ -197,7 +209,10 @@ body:
 examples:
   - name: 200
     request: |
+        POST /api/media/upload
+
         text: A file with name 'cat.png' is insterted in the form-data
+
     response:
         content-type: application/json
         body: |
@@ -215,16 +230,20 @@ text: |
     Returns media-file as a resource if file with name 'filename' exists
 path-params:
     parameters:
-        filename: The name of the file that is requested. 
+        filename: The name of the file that is requested. | "cat(1).png"
 examples:
   - name: 200
-    request: GET /api/media/files/cat(1).png
+    request: | 
+        GET /api/media/files/cat(1).png
+
     response:
         content-type: text/plain
         body: |
             The file-data
-    - name: 417
-    request: GET /api/media/files/fileThatDoesNotExist.tmp
+  - name: 417
+    request: | 
+        GET /api/media/files/fileThatDoesNotExist.tmp
+
     response:
         content-type: text/plain
         body: |
