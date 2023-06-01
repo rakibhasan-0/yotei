@@ -15,7 +15,7 @@ import ConfirmPopup from "../Common/ConfirmPopup/ConfirmPopup"
  *
  * Example usage:
  *
- * <ErrorLogsDisplay id={1} />
+ * <ErrorLogsDisplay />
  *
  * @author Team Dragon (Grupp 3)
  * @version 1.0
@@ -45,7 +45,7 @@ function ErrorLogsDisplay() {
 					id={"test-datepicker"}
 				/>
 			</div>
-			<Trash style={{marginLeft: "250px", fontSize: "45px", color: "var(--red-primary)"} }onClick={() => setShowConfirmPopup(true)} />
+			<Trash id={"trash-test"} style={{marginLeft: "250px", fontSize: "45px", color: "var(--red-primary)"} }onClick={() => setShowConfirmPopup(true)} />
 		</React.Fragment>
 	)
 
@@ -118,7 +118,7 @@ function ErrorLogsDisplay() {
 				setDataExists(true)
 			}
 		} catch (error) {
-			console.error(error)
+			console.log(error)
 		}
 	}, [])
 
@@ -142,7 +142,7 @@ function ErrorLogsDisplay() {
 				setDateErrors([])
 			}
 		} catch (error) {
-			console.error(error)
+			console.log(error)
 		}
 	}, [])
 
@@ -181,7 +181,6 @@ function ErrorLogsDisplay() {
 										<tr key={index}>
 											<td className="td">{log.errorMessage}</td>
 											<td className="td">
-												{/* {JSON.parse(log.infoMessage).componentStack} */}
 												{log.infoMessage}
 											</td>
 											<td className="td">
@@ -193,7 +192,6 @@ function ErrorLogsDisplay() {
 										<tr key={index}>
 											<td className="td">{log.errorMessage}</td>
 											<td className="td">
-												{/* {JSON.parse(log.infoMessage).componentStack} */}
 												{log.infoMessage}
 											</td>
 											<td className="td">
@@ -217,11 +215,12 @@ function ErrorLogsDisplay() {
 			className="div-1"
 			style={{ marginTop: 10, marginRight: "auto", marginLeft: "auto" }}
 		>
-			<Button id="errorlogsdisplay-button" width="100%" onClick={() => setShowPopup(true)}>
-				<h2>Error-loggar</h2>
+			<Button id="errorlogsdisplay-button" onClick={() => setShowPopup(true)}>
+        Error-loggar
 			</Button>
 			<PopupContent isOpen={showPopup} setIsOpen={setShowPopup} />
 			<ConfirmPopup
+				id="test-confirm-popup"
 				showPopup={showConfirmPopup}
 				popupText={"Är du säker på att du vill ta bort alla error-loggar?"}
 				setShowPopup={setShowConfirmPopup}

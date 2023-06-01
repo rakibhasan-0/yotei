@@ -92,7 +92,14 @@ export default function App() {
 		createRoutesFromElements(
 			cookie || import.meta.env.VITE_APP_LOGIN_ENABLED === "false" ? (
 				<>
-					<Route path="/" element={<BaseLayout />}>
+					<Route 
+						path="/" 
+						element={
+							<ErrorBoundary>
+								<BaseLayout />
+							</ErrorBoundary>
+						}
+					>
 						<Route path="about" element={<About />} />
 						<Route path="admin" element={<Admin />} />
 						<Route path="profile" element={<Profile />} />
@@ -130,9 +137,7 @@ export default function App() {
 		<>
 			<ToastContainer />
 			<AccountContext.Provider value={{ token, role: decodedToken?.role, userId: decodedToken?.userId, setToken }}>
-				<ErrorBoundary>
-					<RouterProvider router={routes} />
-				</ErrorBoundary>
+				<RouterProvider router={routes} />
 			</AccountContext.Provider>
 		</>
 	)

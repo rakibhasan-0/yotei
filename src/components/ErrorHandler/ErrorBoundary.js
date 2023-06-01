@@ -72,7 +72,7 @@ class ErrorBoundary extends React.Component {
 		if(this.state.hasError) {
 			return(
 				<div>
-					<ErrorState message={""}/>
+					<ErrorState message={this.state.error.message + JSON.stringify(this.state.info)}/>
 				</div>
 			)       
 		}
