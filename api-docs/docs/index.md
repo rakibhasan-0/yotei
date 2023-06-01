@@ -22,9 +22,9 @@ Remove this paragraph when documentation is done.
 | API Name | Progress |
 |--|--|
 | User API      | Done & needs verification |
-| Belt API      | In progress |
-| Exercise API  | In progress (take over please) |
-| Plan API      | Not started |
+| Belt API      | Done |
+| Exercise API  | done        |
+| Plan API      | In progress |
 | Tag API       | Done        |
 | Technique API | Done        |
 | Workout API   | In progress |
@@ -32,7 +32,7 @@ Remove this paragraph when documentation is done.
 | Search API    | Needs verification |
 | Export API    | Done        |
 | Import API    | Done        |
-| Comment API   | Not started |
+| Comment API   | In progress |
 
 # Documenting endpoints
 

@@ -1,4 +1,3 @@
-
 * Dockerhub
 * Gitlab runners, konfiguration för dem.
 * Beslut
@@ -133,3 +132,36 @@ hub bör användas. Genom att skapa ett gemensamt konto för kursen
 så kan det användas för att ladda upp till via CI. Rimligtvis
 börs ett epost konto skapas för kursen som alla har tillgång
 till som används för att skapa docker hub konto.
+
+# Beslut
+Denna sektion innehåller en översiktlig beskrivning om besluten som togs i bygg-chaptret utifrån de förutsättningarna som fanns. Alla beslut har loggats under Chapters/DevOps/Beslut.md, men här kommer vi även ta upp eventuella problem som kommit upp och hur de löstes, samt vad vi gjort annorlunda om vi gjorde om det.
+
+### Versionshanteringsystem
+Första beslutet som togs i bygg var att behålla gitlab som plattform för projektet då tidigare år redan hade valt att använda det och för att det känns mest familijärt för folk. Det fungerade bra att sätta upp pipeline och runners, finns bra dokumentation och är i princip samma funktionalitet finns både på github och gitlab.
+
+Största förändring som gjordes var att gå över från att ha ett repo till att ha fyra olika: frontend, backend, infrastruktur och documentation. Det gjorde det mer effektivt under utveckling, eftersom en mindre ändring i frontend inte skulle leda till att backend behövde testas eller byggas om. Framförallt i början när backend var uppdelat i micro services och runners i pipelinen behövde bygga 8 containers bara för backend. Svårigheterna med att dela upp frontend och backend i olika repos var att det försvårade att sätta upp systemtester. 
+
+### Workflow
+
+Gitlab-flow valdes som arbetssätt. Några grupper hade problem i början med att lösa konflikter för varje rebase innan merge request, men det löste sig när vi uppdaterade git-guidelines. I efterhand kanske det skulle vara bra att ha en workshop för hur projektet ska jobba med versionshanteringen. [Learn git branching](https://learngitbranching.js.org/) hjälpte för några grupper, men långt från alla hann göra den.
+
+QA ville att minst två personer skulle review:a koden innan merge. Detta gick inte att sätta upp som krav i gitlabs inställningar för versionen som kördes och därför satte vi att minst en person ska review:a koden och endast personer från DevOps-chapter skulle få merge:a till main branch. För att koden skulle få merge:as måste merge-requesten vara godkänd. Det fungerade bra.
+
+### Deployment
+Vi fick två servrar till projektet och valde att ha en som host:ade utveckling(imp) och en för produktion(apollo). Ny kod integrerades automatiskt till imp under sprints, och vid leverans deploy:ades applikationen manuellt till apollo, så att kund skulle kunna testa produkten. Det fungerade bra. 
+
+### Tips till nästkommande år/vad vi hade kunnat göra annorlunda
+
+* Sätt upp en tydlig strategi för hur projektmedlemmarna ska jobba med git och testa strategin innan. Ha överseende med att alla inte är lika insatt i att jobba med git och att det kan ta ett tag innan projektmedlemmarna kommer in i erat workflow.
+* Relaterat till ovanstående punkt är det bra att se till att projektmedlemmarna läser igenom eventuella guidelines innan de börjar. Samt läsa dem igen om de uppdateras.
+* Kommunicera med andra chapters om arbetssättet i början innan ni sätter upp allt. Hade vi vetat QA planerade att sätta upp systemtester kanske vi valt att inte dela upp repos från början, men eftersom förra året inte satt upp systemtester var detta inte något vi tänkte på. 
+
+Material som varit bra:
+
+* [Docker](https://www.youtube.com/watch?v=eGz9DS-aIeY)
+* [Docker compose](https://www.youtube.com/watch?v=DM65_JyGxCo)
+* [Gitlab CI/CD](https://www.youtube.com/watch?v=qP8kir2GUgo)
+* [Yaml-validator](https://codebeautify.org/yaml-validator/cbccd63a)
+
+
+
