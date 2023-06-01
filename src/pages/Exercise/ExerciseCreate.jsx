@@ -12,7 +12,7 @@ import TextArea from "../../components/Common/TextArea/TextArea.jsx"
 import Divider from "../../components/Common/Divider/Divider.jsx"
 import TagInput from "../../components/Common/Tag/TagInput.jsx"
 import Popup from "../../components/Common/Popup/Popup"
-import { toast } from "react-toastify"
+import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../utils"
 import EditGallery from "../../components/Gallery/EditGallery"
 
 /**
@@ -77,7 +77,7 @@ export default function ExerciseCreate({setShowPopup}) {
 				}
 			}
 		} catch (error) {
-			toast.error("Övningen kunde ej läggas till")
+			setErrorToast("Övningen kunde ej läggas till")
 		}
 		return null
 	}
@@ -128,7 +128,7 @@ export default function ExerciseCreate({setShowPopup}) {
 				return false
 			}
 		} catch (error) {
-			toast.error("Taggar kunde ej kopplas till övningen")
+			setErrorToast("Taggar kunde ej kopplas till övningen")
 			return false
 		}
 	}
@@ -164,7 +164,7 @@ export default function ExerciseCreate({setShowPopup}) {
 	 */
 	function exitProdc(linkedTags) {
 		if (linkedTags) {
-			toast.success("Övningen " + name + " lades till")
+			setSuccessToast("Övningen " + name + " lades till")
 			if (addBoxChecked === false) {
 				setShowPopup(false)
 			} else {

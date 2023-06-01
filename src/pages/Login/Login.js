@@ -5,7 +5,7 @@ import { useCookies } from "react-cookie"
 import { AccountContext } from "../../context"
 import Button from "../../components/Common/Button/Button"
 import InputTextFieldBorderLabel from "../../components/Common/InputTextFieldBorderLabel/InputTextFieldBorderLabel"
-import { toast } from "react-toastify"
+import {setError as setErrorToast} from "../../utils"
 
 
 /**
@@ -47,7 +47,7 @@ export default function Login() {
 		const controller = new AbortController()
 		const id = setTimeout(() => {
 			controller.abort()
-			toast.error("Anslutning till servern misslyckades.")
+			setErrorToast("Anslutning till servern misslyckades.")
 		}, 5 * 1000)
 		const response = await fetch("/api/users/verify", {
 			headers: { "Content-type": "application/json", token },
@@ -58,13 +58,13 @@ export default function Login() {
 		clearTimeout(id)
 		if (!response.ok) {
 			if (response.status === 400) {
-				toast.error("Felaktigt användarnamn eller lösenord.")
+				setErrorToast("Felaktigt användarnamn eller lösenord.")
 			} else if (response.status === 406) {
-				toast.error("Fyll i alla fält")
+				setErrorToast("Fyll i alla fält")
 			} else if (response.status === 500) {
-				toast.error("Något gick fel på servern")
+				setErrorToast("Något gick fel på servern")
 			} else {
-				toast.error("Ett okänt fel har uppstått")
+				setErrorToast("Ett okänt fel har uppstått")
 			}
 			return
 		}

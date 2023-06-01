@@ -9,7 +9,7 @@ import InputTextField from "../../components/Common/InputTextField/InputTextFiel
 import TextArea from "../../components/Common/TextArea/TextArea.jsx"
 import Divider from "../../components/Common/Divider/Divider.jsx"
 import TagInput from "../../components/Common/Tag/TagInput.jsx"
-import {toast} from "react-toastify"
+import {setError as setErrorToast} from "../../utils"
 import EditGallery from "../../components/Gallery/EditGallery"
 import Popup from "../../components/Common/Popup/Popup"
 
@@ -102,12 +102,12 @@ export default function ExerciseEdit({setShowPopup, initialTime}) {
 				tagsJson = await response.json()
 				tagsJson = convertJsonString(tagsJson)
 			} catch{
-				toast.error("Oj, det gick inte att hämta taggar")
+				setErrorToast("Det gick inte att hämta taggar")
 				console.error(errorMessage)
 			}
 
 		} catch (error) {
-			toast.error("Oj, det gick inte att hämta övningsinfo")
+			setErrorToast("Det gick inte att hämta övningsinfo")
 			setShowPopup(false)
 		}
 		loadSaved()
@@ -195,7 +195,7 @@ export default function ExerciseEdit({setShowPopup, initialTime}) {
 			}
 		}
 		catch (error) {
-			toast.error("Oj, ett fel har uppstått med att nå servern")
+			setErrorToast("Ett internt fel inträffade")
 		}
 		
 		if (name.trim() === "") {
@@ -254,7 +254,7 @@ export default function ExerciseEdit({setShowPopup, initialTime}) {
 				setErrorMessage(tag_name)
 			}
 		} catch (error) {
-			toast.error("Oj, ett fel har uppstått med tag länken")
+			setErrorToast("Det gick inte att skapa en tagg")
 			setTagLinkFailed(true)
 			setErrorMessage(tag_name)
 		}
@@ -279,10 +279,10 @@ export default function ExerciseEdit({setShowPopup, initialTime}) {
 			} else {
 				setTagRemovedFailed(true)			
 				setErrorMessage(tag_name)
-				toast.error("Oj, det gick inte att ta bort taggen")
+				setErrorToast("Det gick inte att ta bort taggen")
 			}
 		} catch (error) {
-			toast.error("Oj, ett fel har uppstått med att ta bort taggen")
+			setErrorToast("Ett internt fel uppstod")
 			setTagRemovedFailed(true)			
 			setErrorMessage(tag_name)
 		}

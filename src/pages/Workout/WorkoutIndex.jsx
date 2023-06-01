@@ -13,6 +13,7 @@ import {toast} from "react-toastify"
 import WorkoutListItem from "../../components/Workout/WorkoutListItem"
 import ErrorStateSearch from "../../components/Common/ErrorState/ErrorStateSearch.jsx"
 import Spinner from "../../components/Common/Spinner/Spinner.jsx"
+import {setError as setErrorToast} from "../../utils"
 
 /**
  * Workout class. 
@@ -146,7 +147,7 @@ export default function WorkoutIndex() {
 
 	function setError(msg){
 		if (toast.isActive("search-error")) return
-		toast.error(msg, {
+		setErrorToast(msg, {
 			position: "top-center",
 			autoClose: 5000,
 			hideProgressBar: false,

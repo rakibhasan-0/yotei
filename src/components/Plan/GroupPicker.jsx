@@ -4,6 +4,8 @@ import { AccountContext } from "../../context"
 import BeltIcon from "../Common/BeltIcon/BeltIcon"
 import CheckBox from "../Common/CheckBox/CheckBox"
 import styles from "./GroupPicker.module.css"
+import {setError as setErrorToast} from "../../utils"
+
 /**
  * GroupRow represents a row in the dropdown menu 
  * of the filter component on the page 'Grupper' (Plan).
@@ -139,7 +141,7 @@ export default function GroupPicker({ id, states, testFetchMethod, onToggle}) {
 				}
 				setGroups(g)
 			}).catch(ex => {
-				alert("Kunde inte hämta grupper")
+				setErrorToast("Kunde inte hämta grupper")
 				console.error(ex)
 			})
 		}

@@ -223,7 +223,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	 */
 	const setErrorToast = (text) => {
 		if(!toast.isActive("error-toast")){
-			toast.error(text, {toastId: "error-toast"})
+			setErrorToast(text, {toastId: "error-toast"})
 		}
 	}
 	

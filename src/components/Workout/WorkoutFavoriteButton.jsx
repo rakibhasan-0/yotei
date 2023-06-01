@@ -2,6 +2,8 @@ import React, { useState, useContext } from "react"
 import { AccountContext } from "../../context"
 import StarButton from "../Common/StarButton/StarButton.jsx"
 import {toast} from "react-toastify"
+import {setError as setErrorToast} from "../../utils"
+
 
 /**
  * This component is an extension of the star button which includes
@@ -36,7 +38,7 @@ export default function WorkoutFavoriteButton({id, workout, favoriteCallback = (
 		}).catch(() => {
 			setIsFavorite(prev)
 			if (toast.isActive("server-error")) return
-			toast.error("Serverfel: Kunde inte lägga till som favorit!", {
+			setErrorToast("Serverfel: Kunde inte lägga till som favorit!", {
 				position: "top-center",
 				autoClose: 5000,
 				hideProgressBar: false,

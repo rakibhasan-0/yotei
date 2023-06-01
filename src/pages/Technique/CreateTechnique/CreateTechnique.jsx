@@ -8,7 +8,7 @@ import { useContext, useEffect, useState } from "react"
 import { AccountContext } from "../../../context"
 import TagInput from "../../../components/Common/Tag/TagInput"
 import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../../utils"
-import { toast } from "react-toastify"
+import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../../utils"
 import EditGallery from "../../../components/Gallery/EditGallery"
 import Divider from "../../../components/Common/Divider/Divider"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
@@ -141,7 +141,7 @@ export default function CreateTechnique({ id }) {
 		postTechnique({ name: techniqueName, description: techniqueDescription, belts: beltIds, tags: tagIds }, token.token)
 			.then(handleResponse)
 			.then(makeMediaAPICall)
-			.catch(() => toast.error("Kunde inte spara tekniken. Kontrollera din internetuppkoppling."))
+			.catch(() => setErrorToast("Kunde inte spara tekniken. Kontrollera din internetuppkoppling."))
 
 	}
 
@@ -164,21 +164,21 @@ export default function CreateTechnique({ id }) {
 		}
 
 		if (response.status == HTTP_STATUS_CODES.UNAUTHORIZED) {
-			toast.error("Du är inte längre inloggad och kan därför inte skapa tekniken")
+			setErrorToast("Du är inte längre inloggad och kan därför inte skapa tekniken")
 			return
 		}
 
 		if (response.status == HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
-			toast.error("Det har uppstått ett problem med servern, kunde inte skapa tekniken")
+			setErrorToast("Det har uppstått ett problem med servern, kunde inte skapa tekniken")
 			return
 		}
 
 		if (response.status != HTTP_STATUS_CODES.SUCCESS && response.status != HTTP_STATUS_CODES.OK) {
-			toast.error("Det har uppstått ett oväntat problem")
+			setErrorToast("Det har uppstått ett oväntat problem")
 			return
 		}
 
-		toast.success("Tekniken " + techniqueName + " skapades")
+		setSuccessToast("Tekniken " + techniqueName + " skapades")
 		setIsBlocking(false)
 
 		return response.json()

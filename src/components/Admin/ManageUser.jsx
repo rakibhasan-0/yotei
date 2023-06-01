@@ -6,7 +6,7 @@ import { AccountContext } from "../../context"
 import Divider from "../Common/Divider/Divider"
 import InputTextFieldBorderLabel from "../../components/Common/InputTextFieldBorderLabel/InputTextFieldBorderLabel"
 import Dropdown from "../../components/Common/List/Dropdown"
-import { toast } from "react-toastify"
+import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../utils"
 
 
 /**
@@ -61,14 +61,14 @@ export default function ManageUser() {
 			})
 		})
 		if (!response.ok) {
-			return toast.error("Kunde inte lägga till användare")
+			return setErrorToast("Kunde inte lägga till användare")
 		}
 		const user = await response.json()
 		setUsers(prev => {
 			return [...prev, user]
 		})
 		setRoleInput(undefined)
-		toast.success("Användare tillagd")
+		setSuccessToast("Användare tillagd")
 	}
 	
 	const removeUser = async () => {
@@ -81,9 +81,9 @@ export default function ManageUser() {
 			headers: { "Content-Type": "application/json", token }	
 		})
 		if (!response.ok) {
-			return toast.error("Kunde inte ta bort användare")
+			return setErrorToast("Kunde inte ta bort användare")
 		}
-		toast.success("Användare borttagen")
+		setSuccessToast("Användare borttagen")
 		setUsers(prev => {
 			return prev.filter(u => u.userId !== user.userId)
 		})
@@ -101,9 +101,9 @@ export default function ManageUser() {
 			headers: { "Content-Type": "application/json", token }	
 		})
 		if (!response.ok) {
-			return toast.error("Kunde inte ändra roll för användare")
+			return setErrorToast("Kunde inte ändra roll för användare")
 		}
-		toast.success("Användarroll ändrad")
+		setSuccessToast("Användarroll ändrad")
 	}
 
 	useEffect(() => {
@@ -111,7 +111,7 @@ export default function ManageUser() {
 			headers: { "Content-Type": "application/json", token }
 		}).then(async response => {
 			if (!response.ok) {
-				return toast.error("Kunde inte hämta användare")
+				return setErrorToast("Kunde inte hämta användare")
 			}
 			const json = await response.json()
 			setUsers(json)

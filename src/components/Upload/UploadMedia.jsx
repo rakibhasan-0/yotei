@@ -9,7 +9,7 @@ import { AccountContext } from "../../context"
 import React, { useContext } from "react"
 import ReactPlayer from "react-player"
 import Spinner from "../Common/Spinner/Spinner"
-import {toast} from "react-toastify"
+import {setError as setErrorToast} from "../../utils"
 
 /**
  * Handles uploading media to the server, both URLs only aswell as complete media files.
@@ -128,15 +128,6 @@ function UploadMedia({id, exerciseId, fetchMediaMetaToBeUploaded, fetchMediaFile
 			}
 			fetchMediaMetaToBeUploaded(media)
 		} 
-	}
-	
-	
-	/**
-	 * Display an error message
-	 * @param {String} text 
-	 */
-	const setErrorToast = (text) => {
-		toast.error(text, {toastId: "error-toast"})
 	}
 
 	/**

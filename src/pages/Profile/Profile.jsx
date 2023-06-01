@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react"
 import { Tab, Tabs } from "react-bootstrap"
-import { toast } from "react-toastify"
+import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../utils"
 import ActivityList from "../../components/Activity/ActivityList"
 import Button from "../../components/Common/Button/Button"
 import SearchBar from "../../components/Common/SearchBar/SearchBar"
@@ -67,7 +67,7 @@ export default function Profile() {
 	useEffect(() => {
 		getWorkouts({ text: searchText, isFavorite: false, id: userId, selectedTags: ""}, token, cache, cacheActions, list => {
 			if (list.error) {
-				return toast.error("Kunde inte hämta pass!")
+				return setErrorToast("Kunde inte hämta pass!")
 			}
 			setWorkouts(list.results)
 		})
@@ -91,7 +91,7 @@ export default function Profile() {
 		if (!response.ok) {
 			return setWrongPassword("Lösenordet stämmer inte")
 		}
-		toast.success("Lösenordet har ändrats.")
+		setSuccessToast("Lösenordet har ändrats.")
 	}
 
 	const changeUsername = async () => {
@@ -107,12 +107,12 @@ export default function Profile() {
 			return setVerifyUsernamePassword("Lösenordet stämmer inte")
 		}
 		if (response.status === 406) {
-			return toast.error("Användarnamnet finns redan")
+			return setErrorToast("Användarnamnet finns redan")
 		}
 		if (!response.ok) {
-			return toast.error("Ett okänt fel inträffade på servern")
+			return setErrorToast("Ett okänt fel inträffade på servern")
 		}
-		toast.success("Användarnamnet har ändrats.")
+		setSuccessToast("Användarnamnet har ändrats.")
 	}
 
 	return (

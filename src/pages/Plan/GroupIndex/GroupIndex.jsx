@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react"
 import { isEditor } from "../../../utils"
-import { toast } from "react-toastify"
+import {setError as setErrorToast} from "../../../utils"
 import { AccountContext } from "../../../context"
 import style from "./GroupIndex.module.css"
 import BeltBox from "../../../components/Plan/BeltBox"
@@ -38,7 +38,7 @@ export default function GroupIndex() {
 				const json = await response.json()
 				setGroups(json)
 			} catch (ex) {
-				toast.error("Kunde inte hämta grupper")
+				setErrorToast("Kunde inte hämta grupper")
 				console.error(ex)
 			}
 		})()

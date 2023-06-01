@@ -3,8 +3,7 @@ import { AccountContext } from "../../context"
 import { useNavigate } from "react-router"
 import PlanForm from "../../components/Forms/PlanForm.jsx"
 import styles from "./PlanCreate.module.css"
-    
-import {toast} from "react-toastify"
+import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../utils"
     
 /**
  * This is a page containing components to allow creation of 'Plan'
@@ -172,7 +171,7 @@ export default function PlanCreate() {
 					dateHandler(res.id)
 
 									
-					toast.success("Gruppen "+ planData.name +" lades till")
+					setSuccessToast("Gruppen "+ planData.name +" lades till")
 					navigate(-1)
 				} else {
 					if (response.status == 409) {
@@ -180,7 +179,7 @@ export default function PlanCreate() {
 					}
 				}
 			} catch (error) {
-				toast.error("Kunde inte skapa gruppen.")
+				setErrorToast("Kunde inte skapa gruppen.")
 			}
 		}
 	}
@@ -212,11 +211,11 @@ export default function PlanCreate() {
 
 			
 			if (response.ok) {
-				toast.success("Tillfällen lades till.")
+				setSuccessToast("Tillfällen lades till.")
 			}
 
 		} catch (error) {
-			toast.error("Tillfällen kunde inte läggas till.")
+			setErrorToast("Tillfällen kunde inte läggas till.")
 		}
 	}
 
@@ -351,15 +350,15 @@ export default function PlanCreate() {
 		}
 
 		if (beltsChosen.length == 0) {
-			toast.error("Vänligen välj bälten till gruppen.")
+			setErrorToast("Vänligen välj bälten till gruppen.")
 			res = false
 		}
 
 		if (!(fieldCheck.startDate && fieldCheck.endDate)) {
-			toast.error("Vänligen välj start- och slutdatum.")
+			setErrorToast("Vänligen välj start- och slutdatum.")
 			res = false
 		} else if (planData.endDate < planData.startDate) {
-			toast.error("Det valda startdatumet är senare än det valda slutdatumet.")
+			setErrorToast("Det valda startdatumet är senare än det valda slutdatumet.")
 			res = false
 		}
 

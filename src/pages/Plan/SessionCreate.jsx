@@ -8,7 +8,7 @@ import { useContext, useEffect, useState } from "react"
 import { AccountContext } from "../../context"
 import { Link, useLocation } from "react-router-dom"
 import Divider from "../../components/Common/Divider/Divider"
-import { toast } from "react-toastify"
+import {setError as setErrorToast} from "../../utils"
 
 /**
  * A component for creating a session.
@@ -41,7 +41,7 @@ export default function SessionCreate() {
 				}
 				setGroups(await response.json())
 			} catch (ex) {
-				toast.error("Kunde inte hämta alla grupper")
+				setErrorToast("Kunde inte hämta alla grupper")
 				console.error(ex)
 			}
 		})()
@@ -59,7 +59,7 @@ export default function SessionCreate() {
 				}
 				setWorkouts(await response.json())
 			} catch (ex) {
-				toast.error("Kunde inte hämta alla pass")
+				setErrorToast("Kunde inte hämta alla pass")
 				console.error(ex)
 			}
 		})()
@@ -90,7 +90,7 @@ export default function SessionCreate() {
 			}
 			navigate("/plan")
 		} catch (ex) {
-			toast.error("Kunde inte spara tillfälle")
+			setErrorToast("Kunde inte spara tillfälle")
 			console.error(ex)
 		}
 	}

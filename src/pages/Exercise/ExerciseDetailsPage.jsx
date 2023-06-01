@@ -8,12 +8,12 @@ import TextArea from "../../components/Common/TextArea/TextArea"
 import Button from "../../components/Common/Button/Button"
 import Tag from "../../components/Common/Tag/Tag"
 import Gallery from "../../components/Gallery/Gallery"
-import { toast } from "react-toastify"
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 import ActivityDelete from "../../components/Activity/ActivityDelete/ActivityDelete"
 import ErrorState from "../../components/Common/ErrorState/ErrorState"
 import ExerciseEdit from "./ExerciseEdit"
 import { isEditor } from "../../utils"
+import {setError as setErrorToast} from "../../utils"
 
 /**
  * A component for displaying details about an exercise.
@@ -49,7 +49,7 @@ export default function ExerciseDetailsPage() {
 			.then(res => res.json())
 			.then(data => setComments(data))
 			.catch(ex => {
-				toast.error("Kunde inte hämta kommentarer")
+				setErrorToast("Kunde inte hämta kommentarer")
 				console.error(ex)
 			})
 	}
@@ -76,7 +76,7 @@ export default function ExerciseDetailsPage() {
 		}).then(res => res.json())
 			.then(data => setTags(data))
 			.catch(ex => {
-				toast.error("Kunde inte hämta taggar")
+				setErrorToast("Kunde inte hämta taggar")
 				console.error(ex)
 			})
 	}, [token, ex_id])
@@ -96,7 +96,7 @@ export default function ExerciseDetailsPage() {
 			}
 			navigate(-1)
 		} catch (error) {
-			toast.error("Kunde inte ta bort övningen!")
+			setErrorToast("Kunde inte ta bort övningen!")
 			console.error(error)
 		}
 	}
@@ -116,7 +116,7 @@ export default function ExerciseDetailsPage() {
 				throw new Error("Got a non ok status response from the API")
 			}
 		} catch (error) {
-			toast.error("Kunde inte ta bort kommentaren")
+			setErrorToast("Kunde inte ta bort kommentaren")
 			console.error(error)
 			return
 		}
@@ -148,7 +148,7 @@ export default function ExerciseDetailsPage() {
 			})
 		})
 		if (response.status != 201) {
-			toast.error("Ett fel uppstod när kommentaren skulle läggas till")
+			setErrorToast("Ett fel uppstod när kommentaren skulle läggas till")
 			return
 		}
 		setCommentText("")

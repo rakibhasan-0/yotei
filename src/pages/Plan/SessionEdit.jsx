@@ -10,7 +10,7 @@ import { AccountContext } from "../../context"
 import { Link, useLocation } from "react-router-dom"
 import Divider from "../../components/Common/Divider/Divider"
 import { Trash } from "react-bootstrap-icons"
-import {toast} from "react-toastify"
+import {setError as setErrorToast} from "../../utils"
 import ErrorState from "../../components/Common/ErrorState/ErrorState"
 
 /**
@@ -50,7 +50,7 @@ export default function SessionEdit() {
 				}
 				setGroups(await response.json())
 			} catch (ex) {
-				toast.error("Kunde inte hämta alla grupper")
+				setErrorToast("Kunde inte hämta alla grupper")
 				console.error(ex)
 			}
 		})()
@@ -68,7 +68,7 @@ export default function SessionEdit() {
 				}
 				setWorkouts(await response.json())
 			} catch (ex) {
-				toast.error("Kunde inte hämta alla pass")
+				setErrorToast("Kunde inte hämta alla pass")
 				console.error(ex)
 			}
 		})()
@@ -111,7 +111,7 @@ export default function SessionEdit() {
 			}
 			navigate("/plan")
 		} catch (ex) {
-			toast.error("Kunde inte radera tillfälle")
+			setErrorToast("Kunde inte radera tillfälle")
 			console.error(ex)
 		}
 	}
@@ -137,7 +137,7 @@ export default function SessionEdit() {
 			}
 			navigate("/plan")
 		} catch (ex) {
-			toast.error("Kunde inte spara det nya tillfället")
+			setErrorToast("Kunde inte spara det nya tillfället")
 			console.error(ex)
 		}
 	}

@@ -4,7 +4,7 @@ import CheckBox from "../CheckBox/CheckBox"
 import BeltIcon from "../BeltIcon/BeltIcon"
 import { useContext, useEffect, useState } from "react"
 import { AccountContext } from "../../../context"
-import { toast } from "react-toastify"
+import {setError as setErrorToast} from "../../../utils"
 
 /**
  * Represents a belt row with text, two checkboxes and two
@@ -126,7 +126,7 @@ export default function BeltPicker({ id, states, onToggle, centered, onClearBelt
 				})
 			}
 		}).catch(ex => {
-			toast.error("Kunde inte hämta bälten")
+			setErrorToast("Kunde inte hämta bälten")
 			console.error(ex)
 		})
 	}, [token])

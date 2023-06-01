@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useContext } from "react"
 import { useNavigate, useParams } from "react-router"
-import { toast } from "react-toastify"
+import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../../utils"
 
 import BeltPicker from "../../../components/Common/BeltPicker/BeltPicker"
 import { Trash } from "react-bootstrap-icons"
@@ -93,10 +93,10 @@ function EditGroup() {
 			})
 
 		if(!res.ok) {
-			toast.error(await res.text())
+			setErrorToast(await res.text())
 			return
 		}
-		toast.success("Ändringar sparade.")
+		setSuccessToast("Ändringar sparade.")
 		navigate("/plan")
 	}
 
@@ -112,10 +112,10 @@ function EditGroup() {
 			})
 
 		if(!res.ok) {
-			toast.error(await res.text())
+			setErrorToast(await res.text())
 			return
 		}
-		toast.success("Ändringar sparade.")
+		setSuccessToast("Ändringar sparade.")
 		navigate("/plan")
 	}
 
