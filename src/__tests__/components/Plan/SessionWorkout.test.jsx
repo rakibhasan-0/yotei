@@ -3,6 +3,7 @@ import "@testing-library/jest-dom"
 import SessionWorkout from  "../../../components/Plan/SessionWorkout"
 import { BrowserRouter } from "react-router-dom"
 import React from "react"
+import { AccountContext } from "../../../context"
 
 configure({testIdAttribute: "id"})
 
@@ -28,7 +29,11 @@ describe("SessionWorkout", () => {
 		})
 
 		test("should render component displaying placeholder text if workoutConnected is false", () => {
-			render(<BrowserRouter><SessionWorkout id={testID}/></BrowserRouter>)
+			render(<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: ""}}>
+				<BrowserRouter>
+					<SessionWorkout id={testID}/>
+				</BrowserRouter>
+			</AccountContext.Provider>)
 			expect(screen.getByTestId(testID)).toHaveTextContent("Du kan trycka på pennan för att lägga till ett.")
 		})
 
