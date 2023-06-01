@@ -158,7 +158,7 @@ export default function ExerciseDetailsPage() {
 	}
 	return (
 		<div style={{ display: "flex", flexDirection: "column" }}>
-			<h1 style={{textAlign: "left"}}>{exercise?.name}</h1>
+			<h1 style={{textAlign: "left", wordWrap:"break-word"}}>{exercise?.name}</h1>
 			<div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: "10px" }}>
 				<div className="d-flex align-items-center">
 					<Clock />
