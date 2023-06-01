@@ -32,7 +32,7 @@ Remove this paragraph when documentation is done.
 | Search API    | Needs verification |
 | Export API    | Done        |
 | Import API    | Done        |
-| Comment API   | Not started |
+| Comment API   | In progress |
 
 # Documenting endpoints
 
