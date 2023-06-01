@@ -53,12 +53,6 @@ export default function Profile() {
 		}
 		return (
 			<>
-				<SearchBar 
-					id="searchbar-workouts" 
-					placeholder="Sök efter pass" 
-					text={searchText} 
-					onChange={setSearchText}
-				/>
 				{list && <ActivityList id="workout-list" activities={list} apiPath={"workouts"} favoriteCallback={onFavorite} />}
 			</>
 		)
@@ -118,9 +112,21 @@ export default function Profile() {
 	return (
 		<Tabs defaultActiveKey={"FavoriteWorkouts"} className={style.tabs}>
 			<Tab eventKey={"FavoriteWorkouts"} title={"Favoritpass"} className={style.tab}>
+				<SearchBar 
+					id="searchbar-workouts-1" 
+					placeholder="Sök efter pass" 
+					text={searchText} 
+					onChange={setSearchText}
+				/>
 				<WorkoutList list={workouts?.filter(w => w.favourite)} />
 			</Tab>
 			<Tab eventKey={"MyWorkouts"} title={"Mina Pass"} className={style.tab}>
+				<SearchBar 
+					id="searchbar-workouts-2" 
+					placeholder="Sök efter pass" 
+					text={searchText} 
+					onChange={setSearchText}
+				/>
 				<WorkoutList list={workouts?.filter(w => w.author === userId)} />
 			</Tab>
 			<Tab eventKey={"Settings"} title={"Inställningar"} className={style.tab}>
