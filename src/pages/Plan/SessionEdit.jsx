@@ -12,6 +12,7 @@ import Divider from "../../components/Common/Divider/Divider"
 import { Trash } from "react-bootstrap-icons"
 import {setError as setErrorToast} from "../../utils"
 import ErrorState from "../../components/Common/ErrorState/ErrorState"
+import { unstable_useBlocker as useBlocker } from "react-router-dom"
 
 /**
  * A page for editing a session.
@@ -34,6 +35,28 @@ export default function SessionEdit() {
 	const [workout, setWorkout] = useState(state?.session?.workout)
 	const [showPopup, setShowPopup] = useState(false)
 	const [error, setError] = useState()
+
+	const [originalDate, setOriginalDate] = useState()
+	const [originalTime, setOriginalTime] = useState()
+	const [originalGroup, setOriginalGroup] = useState()
+	const [originalWorkout, setOriginalWorkout] = useState()
+
+
+	const [goBackPopup, setGoBackPopup] = useState(false)
+	const [isBlocking, setIsBlocking] = useState(false)
+
+	const blocker = useBlocker(() => {
+		if (isBlocking) {
+			setGoBackPopup(true)
+			return true
+		}
+		return false
+	})
+
+	useEffect(() => {
+		// Check if any of the fields are filled
+		setIsBlocking(date != originalDate || time != originalTime || group !== originalGroup || workout != originalWorkout)
+	}, [date, time, group, workout])
 
 	const params = useParams()
 
@@ -90,6 +113,10 @@ export default function SessionEdit() {
 					setWorkout(workouts.find(workout => workout.id === session.workout))
 					setDate(session.date)
 					setTime(session.time)
+					setOriginalDate(session.date)
+					setOriginalTime(session.time)
+					setOriginalGroup(groups.find(group => group.id === session.plan))
+					setOriginalWorkout(workouts.find(workout => workout.id === session.workout))
 				}
 		
 			} catch (ex) {
@@ -117,6 +144,7 @@ export default function SessionEdit() {
 	}
 
 	const updateSession = async () => {
+		setIsBlocking(false)
 		try {
 			const requestOptions = {
 				method: "PUT",
@@ -201,6 +229,16 @@ export default function SessionEdit() {
 				<Button onClick={() => navigate("/plan")} id={"session-back"} outlined={true}><p>Tillbaka</p></Button> 
 				<Button onClick={updateSession} id={"session-save"}><p>Spara</p></Button>
 			</div>
+			<ConfirmPopup
+				showPopup={goBackPopup}
+				setShowPopup={setGoBackPopup}
+				popupText={"Är du säker på att du vill lämna sidan? Dina ändringar kommer inte att sparas."}
+				confirmText="Lämna"
+				backText="Avbryt"
+				onClick={async () => {
+					blocker.proceed()
+				}}
+			/>
 		</>
 	)
 }

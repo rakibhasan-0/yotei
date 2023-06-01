@@ -13,6 +13,10 @@ import {setError as setErrorToast} from "../../utils"
 import EditGallery from "../../components/Gallery/EditGallery"
 import { useNavigate, useParams } from "react-router"
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
+import { isAdmin, isEditor } from "../../utils"
+import { unstable_useBlocker as useBlocker } from "react-router"
+
+
 
 /**
  * The edit excercise page (Redigera övning).
@@ -42,6 +46,7 @@ export default function ExerciseEdit() {
 	const [sendData, setSendData] = useState(false)
 	const [showMiniPopup, setShowMiniPopup] = useState(false)
 	const [undoMediaChanges, setUndoMediaChanges] = useState(false)
+	const [isBlocking, setIsBlocking] = useState(false)
 
 	const navigate = useNavigate()
 	const { excerciseId } = useParams()
@@ -56,6 +61,24 @@ export default function ExerciseEdit() {
 			editExercise()
 		}
 	}
+
+	const blocker = useBlocker(() => {
+		if (isBlocking) {
+			setShowMiniPopup(true)
+			return true
+		}
+		return false
+	})
+
+	useEffect(() => {
+		setIsBlocking(name != oldName || desc != oldDesc)
+	}, [name, desc, oldName, oldDesc])
+
+	useEffect(() => {
+		if(!isAdmin(context) || !isEditor(context)) {
+			navigate(-1)
+		}
+	}, [context, navigate])
 
 	/**
      * Returns the information about the exercise and its tags with the id in the pathname.
@@ -316,6 +339,7 @@ export default function ExerciseEdit() {
 
 				<Button
 					onClick={() => {
+						setIsBlocking(false)
 						setSendData(true)
 						navigate(-1)
 					}}
@@ -326,7 +350,7 @@ export default function ExerciseEdit() {
 			</div>
 
 			<ConfirmPopup
-				onClick={() => navigate(-1)}
+				onClick={blocker.proceed}
 				showPopup={showMiniPopup}
 				setShowPopup={setShowMiniPopup}
 				popupText="Du har osparade ändringar. Är du säker att du vill lämna?"

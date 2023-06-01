@@ -1,9 +1,11 @@
-import { React, useState, useContext } from "react"
+import { React, useState, useContext, useEffect } from "react"
 import { AccountContext } from "../../context"
 import { useNavigate } from "react-router"
 import PlanForm from "../../components/Forms/PlanForm.jsx"
 import styles from "./PlanCreate.module.css"
 import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../utils"
+import { unstable_useBlocker as useBlocker } from "react-router"
+import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
     
 /**
  * This is a page containing components to allow creation of 'Plan'
@@ -17,6 +19,30 @@ import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../ut
  */
 
 export default function PlanCreate() {
+
+
+	/**
+	 * Blocking state for the page. 
+	 */
+	const [isBlocking, setIsBlocking] = useState(false)
+
+
+	/**
+	 * A state for the popup that appears when the user tries to navigate away from the page.
+	 */
+	const [goBackPopup, setGoBackPopup] = useState(false)
+
+	/**
+	 * Blocks navigation away from the page if the user has unsaved changes.
+	 */
+	const blocker = useBlocker(() => {
+		if (isBlocking) {
+			setGoBackPopup(true)
+			return true
+		}
+		return false
+	})
+
 	/**
      * Gets the token for the user
      */
@@ -152,7 +178,7 @@ export default function PlanCreate() {
     * Function for api call when creating a plan
     */
 	async function addPlan() {
-		
+		setIsBlocking(false)
 		if (validateForm()) {
 
 			const requestOptions = {
@@ -364,6 +390,13 @@ export default function PlanCreate() {
 
 		return res
 	}
+
+	/**
+	 * Side effect that blocks navigation if any of the form states have been changed.
+	 */
+	useEffect(() => {
+		setIsBlocking(planData.name != "" || planData.startDate != "" || planData.endDate != "" || beltsChosen.length != 0)
+	}, [planData, weekdays, beltsChosen, fieldCheck])
 	
 	return (
 		<div className={styles.plan_create}>
@@ -386,6 +419,16 @@ export default function PlanCreate() {
 						submitClicked={addPlan}
 						backClicked={() => navigate(-1)}
 						textInputErrorMsg={textInputErrorMsg}
+					/>
+					<ConfirmPopup 
+						showPopup={goBackPopup}
+						setShowPopup={setGoBackPopup}
+						popupText={"Är du säker på att du vill lämna sidan? Dina ändringar kommer inte att sparas."}
+						confirmText="Lämna"
+						backText="Avbryt"
+						onClick={async () => {
+							blocker.proceed()
+						}}
 					/>
 				</div>
 			</div>

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import styles from "./ExerciseCreate.module.css"
 import { AccountContext } from "../../context"
 import Button from "../../components/Common/Button/Button"
@@ -15,6 +15,7 @@ import { toast } from "react-toastify"
 import EditGallery from "../../components/Gallery/EditGallery"
 import { useNavigate } from "react-router"
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
+import { unstable_useBlocker as useBlocker } from "react-router"
 
 /**
  * The page for creating new exercises.
@@ -48,18 +49,31 @@ export default function ExerciseCreate() {
 	const [sendData, setSendData] = useState(false)
 	const [undoMediaChanges, setUndoMediaChanges] = useState(false)
 	const [tags, setTags] = useState(false)
+	const [isBlocking, setIsBlocking] = useState(false)
 
 	const navigate = useNavigate()
 
 	function done() {
 		if (undoMediaChanges) {
-			leaveWindow()
+			navigate(-1)
 		}
 		else {
 			setSendData(false)
 			exitProdc(tags)
 		}
 	}
+
+	const blocker = useBlocker(() => {
+		if (isBlocking) {
+			setShowMiniPopup(true)
+			return true
+		}
+		return false
+	})
+
+	useEffect(() => {
+		setIsBlocking(name != "" || desc != "")
+	}, [name, desc])
 
 	/**
 	 * Method for API call when creating an exercise.
@@ -153,6 +167,7 @@ export default function ExerciseCreate() {
 
 	function addExerciseAndTags() {
 		if (checkInput() === true) {
+			setIsBlocking(false)
 			addExercise()
 				.then((exId) => handleExId(exId))
 				.then((exId) => handleSendData(exId))
@@ -207,18 +222,6 @@ export default function ExerciseCreate() {
 
 	function timeCallback(id, time) {
 		setTime(time)
-	}
-
-	/**
-	 * A function that shows the user a popup where they can confirm if they want to stay and keep their 
-	 * changes or actually leave the page and discard the changes.
-	 */
-	function leaveWindow() {
-		if (name !== "" || desc !== "") {
-			setShowMiniPopup(true)
-		} else {
-			navigate(-1)
-		}
 	}
 
 	/**
@@ -327,7 +330,7 @@ export default function ExerciseCreate() {
 				setShowPopup={setShowMiniPopup}
 				confirmText="Lämna"
 				backText="Avbryt"
-				onClick={() => navigate(-1)}
+				onClick={blocker.proceed}
 			/>
 		</>
 	)

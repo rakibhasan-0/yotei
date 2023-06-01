@@ -254,7 +254,6 @@ export default function WorkoutFormComponent({ callback, state }) {
 						<Button
 							onClick={() => {
 								handleGoBack()
-								navigate
 							}}
 							outlined={true}
 							id="workout-create-back-button"

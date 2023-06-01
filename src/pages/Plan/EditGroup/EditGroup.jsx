@@ -1,10 +1,8 @@
 import { useState, useEffect, useCallback, useContext } from "react"
 import { useNavigate, useParams } from "react-router"
-import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../../utils"
-
+import { setError as setErrorToast, setSuccess as setSuccessToast } from "../../../utils"
 import BeltPicker from "../../../components/Common/BeltPicker/BeltPicker"
 import { Trash } from "react-bootstrap-icons"
-
 import styles from "./EditGroup.module.css"
 import Button from "../../../components/Common/Button/Button"
 import ErrorState from "../../../components/Common/ErrorState/ErrorState"
@@ -12,6 +10,8 @@ import { Spinner } from "react-bootstrap"
 import { AccountContext } from "../../../context"
 import Popup from "../../../components/Common/Popup/Popup"
 import InputTextFieldBorderLabel from "../../../components/Common/InputTextFieldBorderLabel/InputTextFieldBorderLabel"
+import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
+import { unstable_useBlocker as useBlocker } from "react-router"
 
 /**
  * Edit page for Groups.
@@ -30,27 +30,41 @@ function EditGroup() {
 	const navigate = useNavigate()
 	const { groupID } = useParams()
 
-	const {token} = useContext(AccountContext)
+	const { token } = useContext(AccountContext)
 
 	// Form state
 	const [name, setName] = useState("")
 	const [belts, setBelts] = useState([])
 	const [userId, setUserId] = useState(null)
+	
+	const [originalName, setOriginalName] = useState("")
+	const [originalBelts, setOriginalBelts] = useState([])
+
 
 	// Error and loading handling
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState(false)
 	const [confirmationOpen, setConfirmationOpen] = useState(false)
+	const [isBlocking, setIsBlocking] = useState(false)
+	const [goBackPopup, setGoBackPopup] = useState(false)
 
-	if(groupID === undefined) setError("blää")
+	if (groupID === undefined) setError("blää")
+
+	const blocker = useBlocker(() => {
+		if (isBlocking) {
+			setGoBackPopup(true)
+			return true
+		}
+		return false
+	})
 
 	const fetchGroup = useCallback(async () => {
 		setLoading(true)
 		setError(false)
 
-		const res = await fetch("/api/plan/all", {headers: {token: token}})
+		const res = await fetch("/api/plan/all", { headers: { token: token } })
 
-		if(!res.ok) {
+		if (!res.ok) {
 			setError(await res.text())
 			setLoading(false)
 			return
@@ -61,17 +75,19 @@ function EditGroup() {
 		setName(group.name)
 		setBelts(group.belts)
 		setUserId(group.userId)
+		setOriginalName(group.name)
+		setOriginalBelts(group.belts)
 
 		setError(false)
 		setLoading(false)
 	}, [groupID])
 
 	// On first render, fetch the group.
-	useEffect(() => {fetchGroup()}, [fetchGroup])
+	useEffect(() => { fetchGroup() }, [fetchGroup])
 
 	const handleBeltChanged = (checked, belt) => {
 		setBelts(prev => {
-			if(!checked) {
+			if (!checked) {
 				return prev.filter(b => b.id !== belt.id)
 			}
 			else {
@@ -79,39 +95,44 @@ function EditGroup() {
 			}
 		})
 	}
-	
+
+	useEffect(() => {
+		setIsBlocking(name != originalName || belts != originalBelts)
+	},[name, belts, originalName,originalBelts])
+
 	const handleSubmit = async () => {
+		setIsBlocking(false)
 		const res = await fetch("/api/plan/update/",
 			{
 				method: "PUT",
-				body: JSON.stringify({id: groupID, name, belts, userId}),
-				headers: 
-					{
-						token,
-						"Content-Type": "application/json"
-					}
+				body: JSON.stringify({ id: groupID, name, belts, userId }),
+				headers:
+				{
+					token,
+					"Content-Type": "application/json"
+				}
 			})
 
-		if(!res.ok) {
+		if (!res.ok) {
 			setErrorToast(await res.text())
 			return
 		}
 		setSuccessToast("Ändringar sparade.")
-		navigate("/plan")
+		navigate(-1)
 	}
 
 	const handleDelete = async () => {
 		const res = await fetch("/api/plan/remove?id=" + groupID,
 			{
 				method: "DELETE",
-				headers: 
-					{
-						token,
-						"Content-Type": "application/json"
-					}
+				headers:
+				{
+					token,
+					"Content-Type": "application/json"
+				}
 			})
 
-		if(!res.ok) {
+		if (!res.ok) {
 			setErrorToast(await res.text())
 			return
 		}
@@ -119,9 +140,9 @@ function EditGroup() {
 		navigate("/plan")
 	}
 
-	if(loading) return <Spinner/>
+	if (loading) return <Spinner />
 
-	if(error) return (
+	if (error) return (
 		<ErrorState
 			message={error}
 			onBack={() => navigate("/plan")}
@@ -170,7 +191,7 @@ function EditGroup() {
 			<Popup
 				isOpen={confirmationOpen}
 				setIsOpen={setConfirmationOpen}
-				style={{height: "310px", width: "90vw", maxWidth: "400px", paddingTop: "4rem"}}
+				style={{ height: "310px", width: "90vw", maxWidth: "400px", paddingTop: "4rem" }}
 			>
 				<h1>Är du säker på att du vill ta bort denna grupp?</h1>
 				<p>Samtliga tillfällen kopplade till denna grupp kommer tas bort. Denna åtgärd går inte att ångra.</p>
@@ -192,6 +213,16 @@ function EditGroup() {
 					</Button>
 				</div>
 			</Popup>
+			<ConfirmPopup
+				showPopup={goBackPopup}
+				setShowPopup={setGoBackPopup}
+				popupText={"Är du säker på att du vill lämna sidan? Dina ändringar kommer inte att sparas."}
+				confirmText="Lämna"
+				backText="Avbryt"
+				onClick={async () => {
+					blocker.proceed()
+				}}
+			/>
 		</div>
 	)
 }
