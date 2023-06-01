@@ -1,5 +1,5 @@
 import { useState, useContext, useCallback } from "react"
-import { Col, Row, Form } from "react-bootstrap"
+import { Form } from "react-bootstrap"
 import styles from "./WorkoutFormComponent.module.css"
 import InputTextField from "../../Common/InputTextField/InputTextField"
 import ActivityListComponent from "./ActivityListComponent"
@@ -11,6 +11,7 @@ import CheckBox from "../../Common/CheckBox/CheckBox"
 import { WorkoutCreateContext } from "./WorkoutCreateContext"
 import {
 	WORKOUT_CREATE_TYPES,
+	checkIfActivityInfoPoupChangesMade
 } from "./WorkoutCreateReducer"
 import { useNavigate } from "react-router"
 import Popup from "../../Common/Popup/Popup"
@@ -35,10 +36,10 @@ import EditActivityPopup from "./EditActivityPopup"
  * @since 2023-05-24
  * @updated 2023-06-01 Chimera, updated pathing when pressing return to create session
  */
-function WorkoutFormComponent({ callback, state }) {
+export default function WorkoutFormComponent({ callback, state }) {
 	const { workoutCreateInfo, workoutCreateInfoDispatch } =
 		useContext(WorkoutCreateContext)
-
+	const [leaveActivityPickerPopup, setLeaveActivityPickerPopup] = useState(false)
 	const [validated, setValidated] = useState(false)
 	const [acceptActivities, setAcceptActivities] = useState(false)
 	const navigate = useNavigate()
@@ -98,176 +99,180 @@ function WorkoutFormComponent({ callback, state }) {
 		navigate("/workout")
 	}
 
+	function handlePopupClose() {
+		let  shouldClose = false
+
+		if (workoutCreateInfo.popupState.types.activityPopup) {
+			shouldClose = workoutCreateInfo.addedActivities.length === 0
+		} else if (workoutCreateInfo.popupState.types.editActivityPopup) {
+			shouldClose = false
+			shouldClose = !checkIfActivityInfoPoupChangesMade(workoutCreateInfo)
+			console.log(shouldClose)
+		} else if (workoutCreateInfo.popupState.types.chooseActivityPopup) {
+			shouldClose = workoutCreateInfo.checkedActivities.length === 0
+		} else if (workoutCreateInfo.popupState.types.freeTextPopup) {
+			shouldClose = !workoutCreateInfo.addedActivities.some(activity => activity.name.length > 0)
+		}
+			
+		if(shouldClose) {
+			workoutCreateInfoDispatch({
+				type: WORKOUT_CREATE_TYPES.CLEAR_ADDED_ACTIVITIES
+			})
+			workoutCreateInfoDispatch({
+				type: WORKOUT_CREATE_TYPES.CLOSE_POPUP
+			})
+		} else {
+			setLeaveActivityPickerPopup(true)
+		}
+	}
+
 	return (
-		<Form noValidate validated={validated} onSubmit={handleSubmit}>
-			<Row
-				style={{
-					display: "flex",
-					flexDirection: "column",
-					alignItems: "center",
-					justifyContent: "space-between",
-					height: "100%"
-				}}
-				className="Test"
-			>
-				<Form.Group
-					as={Col}
-					md="9"
-					controlId="validationCustom01"
-					className="mb-1"
-				>
-					<Form.Control
-						type="text"
-						placeholder="Namn"
-						errorMessage={
-							validated && workoutCreateInfo.data.name.length == 0
-								? "Fyll i namn på passet"
-								: ""
-						}
-						as={InputTextField}
-						text={workoutCreateInfo.data.name}
-						value={workoutCreateInfo.data.name}
-						required
-						onChange={(e) =>
-							workoutCreateInfoDispatch({
-								type: WORKOUT_CREATE_TYPES.SET_NAME,
-								name: e.target.value
-							})
-						}
-					/>
-				</Form.Group>
+		<>
+			<Form noValidate validated={validated} onSubmit={handleSubmit}>
+				<div className={styles.row}>
+					<Form.Group controlId="validationCustom0" className="mb-1">
+						<Form.Control
+							type="text"
+							placeholder="Namn"
+							errorMessage={
+								validated && workoutCreateInfo.data.name.length == 0
+									? "Fyll i namn på passet"
+									: ""
+							}
+							as={InputTextField}
+							text={workoutCreateInfo.data.name}
+							value={workoutCreateInfo.data.name}
+							required
+							onChange={(e) =>
+								workoutCreateInfoDispatch({
+									type: WORKOUT_CREATE_TYPES.SET_NAME,
+									name: e.target.value
+								})
+							}
+						/>
+					</Form.Group>
 
-				<Form.Group
-					as={Col}
-					md="9"
-					controlId="validationCustom03"
-					className="mb-1"
-				>
-					<Form.Control
-						value={workoutCreateInfo.data.description}
-						text={workoutCreateInfo.data.description}
-						as={TextArea}
-						errorDisabled={true}
-						rows={3}
-						placeholder="Beskrivning av pass"
-						onChange={(e) =>
-							workoutCreateInfoDispatch({
-								type: WORKOUT_CREATE_TYPES.SET_DESCRIPTION,
-								description: e.target.value
-							})
-						}
-					/>
-				</Form.Group>
+					<Form.Group className="mb-1" controlId="validationCustom03" >
+						<Form.Control
+							value={workoutCreateInfo.data.description}
+							text={workoutCreateInfo.data.description}
+							as={TextArea}
+							errorDisabled={true}
+							rows={3}
+							placeholder="Beskrivning av pass"
+							onChange={(e) =>
+								workoutCreateInfoDispatch({
+									type: WORKOUT_CREATE_TYPES.SET_DESCRIPTION,
+									description: e.target.value
+								})
+							}
+						/>
+					</Form.Group>
 
-				<Form.Group as={Col} md="9" className="mb-3">
-					<ActivityListComponent />
-					<ConfirmPopup
-						id="NoActivitiesConfirm"
-						showPopup={
-							validated &&
-							workoutCreateInfo.data.activityItems.length == 0 &&
-							acceptActivities
-						}
-						setShowPopup={setAcceptActivities}
-						popupText="Är du säker på att du vill skapa ett pass utan aktiviteter?"
-						confirmText="Ja"
-						backText="Avbryt"
-						onClick={callback}
-					/>
-					<div className={styles.activityButtons}>
-						<div className={styles.container}>
-							<Button
-								onClick={() =>
-									workoutCreateInfoDispatch({
-										type: WORKOUT_CREATE_TYPES.OPEN_FREE_TEXT_POPUP
-									})
-								}
-							>
-								<h2>+ Fri text</h2>
-							</Button>
-							<Button
-								onClick={() =>
-									workoutCreateInfoDispatch({
-										type: WORKOUT_CREATE_TYPES.OPEN_CHOOSE_ACTIVITY_POPUP
-									})
-								}
-							>
-								<h2>+ Aktivitet</h2>
-							</Button>
+					<Form.Group className="mb-3">
+						<ActivityListComponent />
+						<ConfirmPopup
+							id="NoActivitiesConfirm"
+							showPopup={
+								validated &&
+								workoutCreateInfo.data.activityItems.length == 0 &&
+								acceptActivities
+							}
+							setShowPopup={setAcceptActivities}
+							popupText="Är du säker på att du vill skapa ett pass utan aktiviteter?"
+							confirmText="Ja"
+							backText="Avbryt"
+							onClick={callback}
+						/>
+						<div className={styles.activityButtons}>
+							<div className={styles.container}>
+								<Button
+									onClick={() =>
+										workoutCreateInfoDispatch({
+											type: WORKOUT_CREATE_TYPES.OPEN_FREE_TEXT_POPUP
+										})
+									}
+								>
+									<h2>+ Fri text</h2>
+								</Button>
+								<Button
+									onClick={() =>
+										workoutCreateInfoDispatch({
+											type: WORKOUT_CREATE_TYPES.OPEN_CHOOSE_ACTIVITY_POPUP
+										})
+									}
+								>
+									<h2>+ Aktivitet</h2>
+								</Button>
+							</div>
 						</div>
-					</div>
-				</Form.Group>
+					</Form.Group>
 
-				<Form.Group as={Col} md="9" className="mb-3">
-					<CheckBox
-						id="workout-create-checkbox"
-						label="Privat pass"
-						onClick={() =>
-							workoutCreateInfoDispatch({
-								type: WORKOUT_CREATE_TYPES.SET_IS_PRIVATE,
-								isPrivate: !workoutCreateInfo.data.isPrivate
-							})
-						}
-						checked={workoutCreateInfo.data.isPrivate}
-					/>
-				</Form.Group>
+					<Form.Group className="mb-3">
+						<CheckBox
+							id="workout-create-checkbox"
+							label="Privat pass"
+							onClick={() =>
+								workoutCreateInfoDispatch({
+									type: WORKOUT_CREATE_TYPES.SET_IS_PRIVATE,
+									isPrivate: !workoutCreateInfo.data.isPrivate
+								})
+							}
+							checked={workoutCreateInfo.data.isPrivate}
+						/>
+					</Form.Group>
 
-				<Form.Group as={Col} md="9" className="mb-3">
-					<AddUserComponent
-						id="workout-create-add-users"
-						addedUsers={workoutCreateInfo.data.users}
-						setAddedUsers={(users) =>
-							workoutCreateInfoDispatch({
-								type: WORKOUT_CREATE_TYPES.SET_USERS,
-								users
-							})
-						}
-					/>
-				</Form.Group>
+					<Form.Group>
+						<AddUserComponent
+							id="workout-create-add-users"
+							addedUsers={workoutCreateInfo.data.users}
+							setAddedUsers={(users) =>
+								workoutCreateInfoDispatch({
+									type: WORKOUT_CREATE_TYPES.SET_USERS,
+									users
+								})
+							}
+						/>
+					</Form.Group>
 
-				<Form.Group as={Col} md="9" className="mb-3">
-					<h2 className={styles.addTagTitle}>Taggar</h2>
-					<TagInput
-						id="workout-create-add-tag"
-						isNested={false}
-						addedTags={workoutCreateInfo.data.tags}
-						setAddedTags={(tags) =>
-							workoutCreateInfoDispatch({
-								type: WORKOUT_CREATE_TYPES.SET_TAGS,
-								tags
-							})
-						}
-					/>
-				</Form.Group>
+					<Form.Group className="mb-3">
+						<h2 className={styles.addTagTitle}>Taggar</h2>
+						<TagInput
+							id="workout-create-add-tag"
+							isNested={false}
+							addedTags={workoutCreateInfo.data.tags}
+							setAddedTags={(tags) =>
+								workoutCreateInfoDispatch({
+									type: WORKOUT_CREATE_TYPES.SET_TAGS,
+									tags
+								})
+							}
+						/>
+					</Form.Group>
 
-				<Form.Group as={Col} md="9" className={styles.buttonContainer}>
-					<Button
-						onClick={() => {
-							handleGoBack()
-							navigate
-						}}
-						outlined={true}
-						id="workout-create-back-button"
-					>
-						<h2>Tillbaka</h2>
-					</Button>
-					<Button type="submit" id="workout-create-back-button">
-						<h2>Spara</h2>
-					</Button>
-				</Form.Group>
-			</Row>
+					<Form.Group className={styles.buttonContainer}>
+						<Button
+							onClick={() => {
+								handleGoBack()
+								navigate
+							}}
+							outlined={true}
+							id="workout-create-back-button"
+						>
+							<h2>Tillbaka</h2>
+						</Button>
+						<Button type="submit" id="workout-create-back-button">
+							<h2>Spara</h2>
+						</Button>
+					</Form.Group>
+				</div>
+			</Form>
 
+			{/* Popups */}
 			<Popup
 				id="workout-create-popup"
 				isOpen={workoutCreateInfo.popupState.isOpened}
-				setIsOpen={() => {
-					workoutCreateInfoDispatch({
-						type: WORKOUT_CREATE_TYPES.CLEAR_ADDED_ACTIVITIES
-					})
-					workoutCreateInfoDispatch({
-						type: WORKOUT_CREATE_TYPES.CLOSE_POPUP
-					})
-				}}
+				setIsOpen={handlePopupClose}
 				title={getPopupTitle()}
 			>
 				{workoutCreateInfo.popupState.types.freeTextPopup && (
@@ -293,8 +298,23 @@ function WorkoutFormComponent({ callback, state }) {
 				{workoutCreateInfo.popupState.types.editActivityPopup && 
 					<EditActivityPopup isFreeText={true} />}
 			</Popup>
-		</Form>
+
+			<ConfirmPopup
+				id="ConfirmLeaveChooseActivityPopup"
+				showPopup={leaveActivityPickerPopup}
+				setShowPopup={setLeaveActivityPickerPopup}
+				popupText="Är du säker på att du vill avbryta?"
+				confirmText="Ja"
+				backText="Avbryt"
+				onClick={() => {
+					workoutCreateInfoDispatch({
+						type: WORKOUT_CREATE_TYPES.CLEAR_ADDED_ACTIVITIES
+					})
+					workoutCreateInfoDispatch({
+						type: WORKOUT_CREATE_TYPES.CLOSE_POPUP
+					})
+				}}
+			/>
+		</>
 	)
 }
-
-export default WorkoutFormComponent

@@ -24,7 +24,12 @@ import { WORKOUT_CREATE_TYPES } from "./WorkoutCreateReducer.js"
  */
 export default function EditActivityPopup({id}) {
 	const [newName, setNewName] = useState(null)
+	const [activity, setActivity] = useState(null)
 	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(WorkoutCreateContext)
+
+	useEffect(() => {
+		if (activity) workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.UPDATE_EDITING_ACTIVITY, payload: activity})
+	}, [activity, workoutCreateInfoDispatch])
 
 	/**
 	 * Sets the new name to the text entered in the TextArea.
@@ -32,22 +37,19 @@ export default function EditActivityPopup({id}) {
 	 * @param {event} e Event for change in the TextArea.
 	 */
 	const handleTextChange = (e) => {
-		activity.name = e.target.value
-		setActivity(activity)
+		setActivity(prev => ({...prev, name: e.target.value}))
 		setNewName(e.target.value)
 	}
 
 	const minutePickerCallback = (id, time) => {
-		activity.duration = time
-		setActivity(activity)
+		setActivity(prev => ({...prev, duration: time}))
 	}
 	
 	const handleRemoveActivity = () => {
-		workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.REMOVE_ACTIVITY_ITEM, payload: {id: workoutCreateInfo.popupState.currentlyEditing}})
+		workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.REMOVE_ACTIVITY_ITEM, payload: {id: workoutCreateInfo.popupState.currentlyEditing.id}})
 		workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.CLOSE_POPUP})
 	}
 
-	const [activity, setActivity] = useState(null)
 
 	useEffect(() => {
 		let currentCategoryId = 0
@@ -55,7 +57,7 @@ export default function EditActivityPopup({id}) {
 			for (let j = 0; j < workoutCreateInfo.data.activityItems[i].activities.length; j++) {
 				const element = workoutCreateInfo.data.activityItems[i].activities[j]
 				
-				if(element.id === workoutCreateInfo.popupState.currentlyEditing) {
+				if(element.id === workoutCreateInfo.popupState.currentlyEditing.id) {
 					currentCategoryId = workoutCreateInfo.data.activityItems[i].id
 					setActivity({...element})
 				}
@@ -94,7 +96,7 @@ export default function EditActivityPopup({id}) {
 					<Divider id="time_header" option="h2_left" title="Tid"/>
 				</div>
 				<div className={style.minute_picker}>
-					<MinutePicker initialValue={activity.duration} callback={minutePickerCallback} id={workoutCreateInfo.popupState.currentlyEditing}></MinutePicker>
+					<MinutePicker initialValue={activity.duration} callback={minutePickerCallback} id={workoutCreateInfo.popupState.currentlyEditing.id} />
 				</div>
 				
 				<Divider id="category_header" option="h2_left" title="Kategori"/>
@@ -116,9 +118,7 @@ export default function EditActivityPopup({id}) {
 				<Button 
 					id="popup_save_button" 
 					outlined={false} 
-					onClick={()=> {
-						handleSaveChanges()
-					}}>
+					onClick={()=> handleSaveChanges()}>
 					<h2>Spara</h2>
 				</Button>
 			</div>	

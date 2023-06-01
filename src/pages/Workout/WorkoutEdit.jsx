@@ -5,11 +5,14 @@ import { AccountContext } from "../../context.js"
 import { 
 	workoutCreateReducer, 
 	WorkoutCreateInitialState, 
-	WORKOUT_CREATE_TYPES, 
+	WORKOUT_CREATE_TYPES,
+	checkIfChangesMade, 
 } from "../../components/Workout/CreateWorkout/WorkoutCreateReducer.js"
 import { WorkoutCreateContext } from "../../components/Workout/CreateWorkout/WorkoutCreateContext.js"
 import styles from "./WorkoutModify.module.css"
 import { setSuccess, setError } from "../../utils.js"
+import { unstable_useBlocker as useBlocker } from "react-router-dom"
+import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup.jsx"
 
 /**
  * This is the page for editing a saved workout.
@@ -26,11 +29,29 @@ const WorkoutEdit = () => {
 	const location = useLocation()
 	const [isSubmitted, setIsSubmitted] = useState(false)
 
+	const [goBackPopup, setGoBackPopup] = useState(false)
+
+	const [isBlocking, setIsBlocking] = useState(false)
+
+
+	const blocker = useBlocker(() => {
+		if (isBlocking) {
+			setGoBackPopup(true)
+			return true
+		}
+		return false
+	})
+
+	useEffect(() => {	
+		setIsBlocking(checkIfChangesMade(workoutCreateInfo))
+	}, [workoutCreateInfo])
+
 	/**
 	 * Submits the form data to the API.
 	 */
 	async function submitHandler() {
 		setIsSubmitted(true)
+		setIsBlocking(false)
 
 		const data = parseData(workoutCreateInfo.data)
 		const workoutId = await updateWorkout(data)
@@ -176,6 +197,16 @@ const WorkoutEdit = () => {
 		<WorkoutCreateContext.Provider value={{workoutCreateInfo, workoutCreateInfoDispatch}} >
 			<h1 className={styles.title}>Redigera pass</h1>
 			<WorkoutFormComponent callback={submitHandler} />
+			<ConfirmPopup
+				id="TillbakaMiniPopup"
+				showPopup={goBackPopup}
+				setShowPopup={setGoBackPopup}
+				popupText="Är du säker på att du vill gå tillbaka? Dina ändringar kommer inte att sparas."
+				confirmText="Ja"
+				backText="Avbryt"
+				onClick={blocker.proceed}
+			/>
+			
 		</WorkoutCreateContext.Provider>
 	)
 }

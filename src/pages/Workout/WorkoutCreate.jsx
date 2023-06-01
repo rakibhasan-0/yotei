@@ -7,7 +7,7 @@ import {
 	WorkoutCreateInitialState,
 	workoutCreateReducer,
 	WORKOUT_CREATE_TYPES,
-	compareCurrentToOriginal
+	checkIfChangesMade,
 } from "../../components/Workout/CreateWorkout/WorkoutCreateReducer.js"
 import styles from "./WorkoutModify.module.css"
 import { setSuccess, setError, setInfo } from "../../utils.js"
@@ -33,6 +33,8 @@ const WorkoutCreate = () => {
 	const { token, userId } = useContext(AccountContext)
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const [hasLoadedData, setHasLoadedData] = useState(false)
+
+	const [isBlocking, setIsBlocking] = useState(false)
 	const [goBackPopup, setGoBackPopup] = useState(false)
 
 	const navigate = useNavigate()
@@ -40,20 +42,24 @@ const WorkoutCreate = () => {
 	const { state } = useLocation()
 
 	const blocker = useBlocker(() => {
-		if (!compareCurrentToOriginal(workoutCreateInfo.data, workoutCreateInfo.originalData)) {
+		if (isBlocking) {
 			setGoBackPopup(true)
 			return true
 		}
 		return false
 	})
 
+	useEffect(() => {	
+		setIsBlocking(checkIfChangesMade(workoutCreateInfo))
+	}, [workoutCreateInfo])
+
 	/**
 	 * Submits the form data to the API.
 	 */
 	async function submitHandler() {
 		setIsSubmitted(true)
-
-		if (compareCurrentToOriginal(workoutCreateInfo.data, workoutCreateInfo.originalData)) {
+		setIsBlocking(false)
+		if (!checkIfChangesMade(workoutCreateInfo)) {
 			setInfo("Inget pass sparades.")
 			return navigate(-1, { replace: true, state })
 		}
@@ -68,12 +74,16 @@ const WorkoutCreate = () => {
 				state.session.workout = body.workout
 				return navigate("/session/create", { replace: true, state })
 			}
+			
+			//blocker.proceed()
 			navigate("/workout/" + workoutId, {})
 		} else {
 			setError("Träningspasset kunde inte skapas!")
 		}
-	}
+		blocker.state = "unblocked"
 
+	}
+	
 	/**
 	 * Parses the data from the workoutCreateInfo state to a format that the API accepts.
 	 * 

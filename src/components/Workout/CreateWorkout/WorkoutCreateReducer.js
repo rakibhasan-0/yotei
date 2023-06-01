@@ -36,6 +36,7 @@ export const WORKOUT_CREATE_TYPES = {
 	SET_CHECKED_ACTIVITIES: "SET_CHECKED_ACTIVITIES",
 	CLEAR_CHECKED_ACTIVITIES: "CLEAR_CHECKED_ACTIVITIES",
 	TOGGLE_CHECKED_ACTIVITY: "TOGGLE_CHECKED_ACTIVITY",
+	UPDATE_EDITING_ACTIVITY: "UPDATE_EDITING_ACTIVITY",
 }
 
 /**
@@ -70,7 +71,10 @@ export const WorkoutCreateInitialState = {
 			chooseActivityPopup: false,
 			editActivityPopup: false,
 		},
-		currentlyEditing: null
+		currentlyEditing: {
+			id: null,
+			date: null,
+		}
 	},
 	addedCategories: [
 		{ id: 0, name: null, checked: false }, 
@@ -92,6 +96,26 @@ export const WorkoutCreateInitialState = {
  */
 export function compareCurrentToOriginal(current, original){
 	return JSON.stringify(original) === JSON.stringify(current)
+}
+
+export function checkIfActivityInfoPoupChangesMade(info) {
+	if (info.popupState.types.chooseActivityPopup && 
+		info.checkedActivities.length > 0) {
+		return true
+	} else {
+		if(info.popupState.types.activityPopup && info.addedActivities.length > 0) return true
+		if(info.popupState.types.isFreeText &&
+			info.addedActivities.some(a => a.name.length > 0)) return true
+	}
+
+	return false
+}
+
+export function checkIfChangesMade(info) {
+	if (!compareCurrentToOriginal(info.data, info.originalData)) return true
+	if (checkIfActivityInfoPoupChangesMade(info)) return true
+
+	return false
 }
 
 /**
@@ -278,7 +302,23 @@ export function workoutCreateReducer(state, action) {
 		return tempState
 	case "SET_CURRENTLY_EDITING": {
 		const activityId = action.payload.id
-		tempState.popupState.currentlyEditing = activityId
+		tempState.popupState.currentlyEditing.id = activityId
+
+		let activity = null
+
+		tempState.data.activityItems.forEach((item) => {
+			item.activities.forEach((act) => {
+				if(act.id === activityId) activity = act
+			})
+		})
+
+		if (activity === null) return tempState
+			
+		tempState.popupState.currentlyEditing = {
+			id: activityId,
+			data: {...activity}
+		}
+
 		return tempState
 	}
 	case "ADD_ACTIVITY": {
@@ -440,6 +480,9 @@ export function workoutCreateReducer(state, action) {
 
 		return tempState
 	}
+	case "UPDATE_EDITING_ACTIVITY": 
+		tempState.popupState.currentlyEditing.data = action.payload
+		return tempState
 	default:
 		return state
 	}
