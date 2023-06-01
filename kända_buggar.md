@@ -46,3 +46,15 @@ _________________________________________________________________________
 - Fyll i namnet på gruppen i textfältet.
 - Se hur teckenräknaren inte ökar (0/180)
 
+# Pass/redigera pass
+## Navigering direkt till /edit skapar konstiga beteenden
+**Beskrivning:**
+När man skriver /edit i ett pass så kommer man till det senast redigerade passet och kan uppdatera det.
+**Hur man återskapar bugg:**
+- Logga in på sidan som valfri användare.
+- Navigera till passidan.
+- Välj ett pass.
+- I url:en för passet byt ut id till edit (http://localhost:3000/workout/512 -> http://localhost:3000/workout/edit).
+- Här kan du nu redigera det senaste passet igen och spara ändringarna.
+**Ev förslag på lösning:**
+En eventuell lösning hade varit att rensa allt i edit sidan när man sparar/avbryter alla ändringar alternativt ta bort /edit och lägga upp redigera sidan som en popup.
