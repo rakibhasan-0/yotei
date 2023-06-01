@@ -45,6 +45,24 @@ build- och systest-stadierna körs vid merge-requests. Under build-steget ges en
 
 Endast när både build- och systest-steget går igenom och koden kan merge:as till main branch körs publish-steget, som kommer bygga om imagen, tagga med LATEST och push:a till dockerhub.
 
+# Frontend-repot
+I detta repo finns all kod relaterad till frontend, bash-script för lokal utveckling och systemtester, information om hur man jobbar i frontend samt hur man kör och testar lokalt. I frontend-repot är main-branch protected, vilket innebär att ingen kan push:a till main. För att göra ändringar skapas alltså en feature-branch och vid merge-request som gått igenom pipeline kan någon på DevOps merge:a branchen till main.
+
+## Pipeline
+Pipelinen har 6 stadier:
+
+  - build
+  - test
+  - docker
+  - systest
+  - coverage
+  - deploy
+
+Under merge-requests körs build och test-steget. build har ett jobb, som bygger applikationen men bygger inte någon docker-image. Om bygg-jobbet lyckas körs test-steget, där körs ett lint-jobb, om lint-jobbet lyckas körs enhetstesterna i ett separat jobb.
+För att en merge-request ska få merge:as till main måste både build och test-steget lyckas. När feature branchen sedan integreras till main körs docker, systest, coverage och deploy.
+
+I docker-steget byggs och publiceras nya frontend-image:n till dockerhub. Coverage beräknar en procentuell mätning på testade exekveringsvägar. Slutligen i deploy-steget deploy:as allt till utvecklingsservern (imp).
+
 
 # Backend-repot
 I detta repo finns all kod relaterad till backend, bash-skript för lokal utveckling, information hur man utvecklar lokalt och en `.gitlab-ci.yml`-fil som specifierar hur pipelinen ser ut.  
