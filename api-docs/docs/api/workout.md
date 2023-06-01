@@ -32,7 +32,7 @@ body:
         workoutId: Id of the workout | 1
 
 examples:
-  - status: 200
+  - name: 200
   
       request: |
 
@@ -47,7 +47,7 @@ examples:
       content-type: text/plain
       body: <empty>
 
-  - status: 400
+  - name: 400
 
     request: |
 
@@ -78,7 +78,7 @@ body:
         workoutId: Id of the workout | 1
 
 examples:
-  - status: 200
+  - name: 200
   
       request: |
 
@@ -93,7 +93,7 @@ examples:
       content-type: text/plain
       body: <empty>
 
-  - status: 400
+  - name: 400
 
     request: |
       
@@ -123,7 +123,7 @@ body:
         userId: The id of the user | 1
 
 examples:
-  - status: 200
+  - name: 200
 
     request: GET /api/workouts/favorites/1
 
@@ -175,7 +175,7 @@ body:
         workoutId: The if of the workout | 1
 
 examples:
-  - status: 200
+  - name: 200
 
     request: GET /api/workouts/favorites/1/162
 
@@ -198,7 +198,7 @@ text: |
     Api endpoint for getting details about a detail
 
 examples:
-  - status: 200
+  - name: 200
   
     request:
 
@@ -284,7 +284,7 @@ body:
         tagIds: List of tag ids. | 1,2
 
 examples:
-  - status: 200
+  - name: 200
 
     request:
 
@@ -308,7 +308,7 @@ text: |
     Api endpoint for getting all workouts
 
 examples:
-  - status: 200
+  - name: 200
 
     request:
 
@@ -337,7 +337,7 @@ text: |
     by a specific user
 
 examples:
-  - status: 200
+  - name: 200
     request:
       GET /all/1
     response:
@@ -362,7 +362,7 @@ text: |
     Gets the description of a workout
 
 examples:
-  - status: 200
+  - name: 200
     request:
       GET /all/166
     response:
@@ -384,7 +384,7 @@ text: |
     Gets a complete workout
 
 examples:
-  - status: 200
+  - name: 200
     request:
       GET /workout/166
     response:
@@ -411,7 +411,7 @@ text: |
     Gets all workouts created by a user
 
 examples:
-  - status: 200
+  - name: 200
     request:
       GET /created/1
     response:
@@ -447,7 +447,7 @@ body: |
   }
 
 examples:
-  - status: 200
+  - name: 200
     request:
       POST /add_full_workout
     response:
@@ -481,7 +481,7 @@ body: |
   }
 
 examples:
-  - status: 200
+  - name: 200
     request:
       POST /
     response:
@@ -515,7 +515,7 @@ body: |
   }
 
 examples:
-  - status: 200
+  - name: 200
     request:
       PUT /
     response:
@@ -542,7 +542,7 @@ text: |
     Removes a workout, without deleting activities related to it
 
 examples:
-  - status: 200
+  - name: 200
     request:
       DELETE /delete/166
 </api>
@@ -555,7 +555,7 @@ text: |
     Removes a workout
 
 examples:
-  - status: 200
+  - name: 200
     request:
       DELETE /delete_full_workout/166
 </api>
@@ -575,7 +575,7 @@ body: |
   }
 
 examples:
-  - status: 200
+  - name: 200
     request:
       PUT /update_full_workout
     response:
@@ -602,7 +602,7 @@ text: |
   Returns a list of all reviews for a workout
 
 examples:
-  - status: 200
+  - name: 200
     request:
       GET /reviews?id=166
     response:
@@ -632,7 +632,7 @@ body: |
   {"workoutId":"166","userId":1,"rating":0,"positiveComment":"Ser bra ut","negativeComment":"","date":"2023-06-01"}
 
 examples:
-  - status: 200
+  - name: 200
     request:
       POST /reviews
       body: |
@@ -662,7 +662,7 @@ text: |
   Removes a review in a workout
 
 examples:
-  - status: 200
+  - name: 200
     request:
       DELETE /reviews?id=166
 </api>
@@ -677,7 +677,7 @@ body: |
   {"workoutId":"166","userId":1,"rating":0,"positiveComment":"Ser bra ut","negativeComment":"","date":"2023-06-01"}
 
 examples:
-  - status: 200
+  - name: 200
     request:
       PUT /reviews
       body: |
@@ -707,7 +707,7 @@ text: |
   Gets associated techniques for a workout
 
 examples:
-  - status: 200
+  - name: 200
     request:
       GET /associated/technique/166
     response:
@@ -752,7 +752,7 @@ text: |
   Gets associated exercises for a workout
 
 examples:
-  - status: 200
+  - name: 200
     request:
       GET /associated/exercise/166
     response:

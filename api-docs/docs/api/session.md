@@ -13,8 +13,6 @@ and understood the documentation, please sign-off by adding your name and date b
 
 API for sessions.
 
----
-
 <api>
 name: Get session from id
 
@@ -32,7 +30,7 @@ body:
         id: The id of the session | 1
 
 examples:
-  - status: 200
+  - name: 200
 
     request: GET /api/session/get?id=1
 
@@ -50,8 +48,6 @@ examples:
             }
 </api>
 
----
-
 <api>
 name: Get sessions
 
@@ -63,7 +59,7 @@ text: |
     Returns all sessions.
 
 examples:
-  - status: 200
+  - name: 200
 
     request: GET /api/session/all
 
@@ -91,8 +87,6 @@ examples:
             ]
 </api>
 
----
-
 <api>
 name: Register session
 
@@ -113,7 +107,7 @@ body:
         time: time of workout | 08:07
 
 examples:
-  - status: 200
+  - name: 200
   
       request: |
 
@@ -131,8 +125,6 @@ examples:
         body: <empty>
 </api>
 
----
-
 <api>
 name: Post addList
 
@@ -144,8 +136,6 @@ text: |
     Adds a list of sessions into the database.
 
 </api>
-
----
 
 <api>
 name: Remove session
@@ -163,7 +153,7 @@ path-params:
         id: The id of the session to delete. | 1
 
 examples:
-  - status: 200
+  - name: 200
 
     request: DELETE /api/session/delete?id=1
 
@@ -171,7 +161,7 @@ examples:
 
         content-type: text/plain
         body: <empty>
-  - status: 404
+  - name: 404
 
     request: DELETE /api/session/delete?id=-1000
 
@@ -179,8 +169,6 @@ examples:
 
         body: <empty>
 </api>
-
----
 
 <api>
 name: Remove session from plan
@@ -197,7 +185,7 @@ path-params:
         id: The id of the plan to delete session from. | 1
 
 examples:
-  - status: 200
+  - name: 200
 
     request: DELETE /api/session/deleteByPlan?id=1
 
@@ -205,7 +193,7 @@ examples:
 
         content-type: text/plain
         body: <empty>
-  - status: 404
+  - name: 404
 
     request: DELETE /api/session/deleteByPlan?id=-1000
 
@@ -213,8 +201,6 @@ examples:
 
         body: <empty>
 </api>
-
----
 
 <api>
 name: Get session from plan
@@ -233,7 +219,7 @@ body:
         id: Plan id to get sessions from | 1
 
 examples:
-  - status: 200
+  - name: 200
     request: GET /api/session/getByPlan?id=1
     
     response:
@@ -252,8 +238,6 @@ examples:
             ]
 </api>
 
----
-
 <api>
 name: Get session from plans
 
@@ -271,7 +255,7 @@ body:
         id: list of plan id:s to get sessions from | 1, 2
 
 examples:
-  - status: 200
+  - name: 200
     request: GET /api/session/getByPlans?id=1&id=2
     
     response:
@@ -289,8 +273,6 @@ examples:
                 }
             ]
 </api>
-
----
 
 <api>
 name: Update session
@@ -314,7 +296,7 @@ body:
         date: Date of session | "2023-06-01T08:07:00+000Z"
   
 examples:
-  - status: 200
+  - name: 200
     request: |
         PUT /api/session/update?id=1
 
