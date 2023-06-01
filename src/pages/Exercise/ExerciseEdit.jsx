@@ -70,7 +70,6 @@ export default function ExerciseEdit({setShowPopup, initialTime}) {
 		setName(window.localStorage.getItem("name"))
 		setDesc(window.localStorage.getItem("desc"))
 		setTime(window.localStorage.getItem("time"))
-		console.log("local stored time: " + window.localStorage.getItem("time"))
 	}
 
 	function done(){
@@ -292,7 +291,6 @@ export default function ExerciseEdit({setShowPopup, initialTime}) {
 		window.localStorage.setItem("name", "")
 		window.localStorage.setItem("desc", "")
 		window.localStorage.setItem("time", "")
-		console.log("delete")
 	}
 
 	return (

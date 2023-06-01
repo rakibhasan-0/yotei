@@ -17,7 +17,7 @@
     background-color: var(--red-primary);
   }
   
-  .sortText {
+  .sortText > p{
     color: var(--gray);
   }
   

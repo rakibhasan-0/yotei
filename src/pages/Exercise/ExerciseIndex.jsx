@@ -98,7 +98,6 @@ export default function ExerciseIndex() {
 		window.localStorage.setItem("name", "")
 		window.localStorage.setItem("desc", "")
 		window.localStorage.setItem("time", "")
-		console.log("Clean storage")
 	}
 
 	return (

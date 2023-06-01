@@ -25,12 +25,12 @@ export default function Sorter ({ id, selected, onSortChange, options }) {
 	return (
 		<Component
 			text={
-				<span style={{ display: "flex", flexDirection: "row", alignItems: "center", marginTop:"5px"}}>
+				<p className={style.sortText} style={{ display: "flex", flexDirection: "row", margin:"0"}}>
                 Sortera efter:
-					<span className={style.sortText} style={{ marginLeft:"4px" }}>
+					<p style={{ margin:"0", marginLeft:"4px", alignSelf:"center"}}>
 						{selected && selected.label}
-					</span>
-				</span>}
+					</p>
+				</p>}
 			id={id}
 		>
 			<div role="list" className={style.sort}>
@@ -42,7 +42,7 @@ export default function Sorter ({ id, selected, onSortChange, options }) {
 								${selected.label === option.label ? style.sortText : ""}
 							`}
 							onClick={() => onSortChange(option)}>
-							<span>{option.label}</span>
+							<p style={{margin:"0", alignSelf:"center"}}>{option.label}</p>
 						</div>
 					)
 				})}
