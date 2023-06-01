@@ -48,16 +48,6 @@ public class CommentController {
      }
 
      /**
-      * Add a comment to a workout.
-      * @param workoutId the id of the workout
-      * @param toAdd the comment to add
-      */
-     @PostMapping("/workout/add")
-     public ResponseEntity<String> addWorkoutComment(@RequestParam(name = "id") Long workoutId, @RequestBody Comment toAdd) {
-          toAdd.setWorkoutId(workoutId);
-          return addCommentToDB(toAdd);
-     }
-     /**
       * Get all comments for an exercise.
       * @param exerciseId the id of the exercise
       * @return the comments for the exercise
@@ -66,19 +56,6 @@ public class CommentController {
      public ResponseEntity<List<Comment>> getExerciseComments(@RequestParam(name = "id") Long exerciseId) {
           try {
                return new ResponseEntity<>(commentRepository.findALLProjectedByExerciseId(exerciseId), HttpStatus.OK);
-          } catch (Exception e) {
-               return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-          }
-     }
-     /**
-      * Get all comments for a workout.
-      * @param workoutId the id of the workout
-      * @return the comments
-      */
-     @GetMapping("/workout/get")
-     public ResponseEntity<List<CommentShort>> getWorkoutComments(@RequestParam(name = "id") Long workoutId) {
-          try {
-               return new ResponseEntity<>(commentRepository.findALLProjectedByWorkoutId(workoutId), HttpStatus.OK);
           } catch (Exception e) {
                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
           }

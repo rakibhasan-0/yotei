@@ -128,22 +128,4 @@ public class PlanController {
         return new ResponseEntity<>(planList, HttpStatus.OK);
     }
 
-    /**
-     * Gets plan(s) from user id
-     * Example call: /get-by-user?id=1
-     *
-     * @param id user id to get from
-     * @return HTTP response status:
-     *         * 400: No plans with the provided user id exist.
-     *         * 200: A list of plans corresponding to the provided user id is returned
-     */
-    @GetMapping("/get-by-user")
-    public ResponseEntity<List<Plan>> getPlanByUserID(@RequestParam("id") Long id) {
-
-        if (planRepository.findByUserId(id).isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        return new ResponseEntity<>(planRepository.findByUserId(id), HttpStatus.OK);
-    }
 }

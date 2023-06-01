@@ -124,12 +124,6 @@ class PlanApiApplicationTests {
     }
 
     @Test
-    void shouldFailWhenGettingNonExistingPlanFromUserID() {
-        ResponseEntity response = controller.getPlanByUserID(3L);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    }
-
-    @Test
     void shouldFailWhenAddNothing() {
         ResponseEntity<Plan> response = controller.postPlan(new Plan());
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
