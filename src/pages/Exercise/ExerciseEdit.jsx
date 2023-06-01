@@ -72,7 +72,8 @@ export default function ExerciseEdit({setShowPopup, initialTime}) {
 
 	function done(){
 		if(undoMediaChanges){
-			checkChanges()
+			setShowMiniPopup(false)
+			setShowPopup(false)
 		}
 		else{
 			setSendData(false)
@@ -328,7 +329,7 @@ export default function ExerciseEdit({setShowPopup, initialTime}) {
 					id={"backBtn"}
 					outlined={"button-back"}
 					onClick={() => {
-						setUndoMediaChanges(true)
+						checkChanges()
 						deleteLocalStorage()
 					}}
 					width={150}>
@@ -353,7 +354,7 @@ export default function ExerciseEdit({setShowPopup, initialTime}) {
 				style={{height: "300px", width: "90%"}}				>
 				<p>Är du säker att du vill lämna?</p>
 				<div className={styles.ECMiniPopupBtns}>
-					<Button id={"EC-mini-popup-leave-btn"} onClick={() => {setShowMiniPopup(false); setShowPopup(false)}} outlined={"button-back"}><p>Lämna</p></Button>
+					<Button id={"EC-mini-popup-leave-btn"} onClick={() => {setUndoMediaChanges(true)}} outlined={"button-back"}><p>Lämna</p></Button>
 					<Button id={"EC-mini-popup-stay-btn"} onClick={() => {setShowMiniPopup(false)}}><p>Stanna</p></Button>
 				</div>
 			</Popup>

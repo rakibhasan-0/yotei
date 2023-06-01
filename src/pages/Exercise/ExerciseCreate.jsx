@@ -39,7 +39,7 @@ export default function ExerciseCreate({setShowPopup}) {
 	
 	function done(){
 		if(undoMediaChanges){
-			leaveWindow()
+			closeAll()
 		}
 		else{
 			setSendData(false)
@@ -195,7 +195,6 @@ export default function ExerciseCreate({setShowPopup}) {
 		setTime(time)
 	}
 
-
 	/**
 	 * A function that shows the user a popup where they can confirm if they want to stay and keep their 
 	 * changes or actually leave the page and discard the changes.
@@ -281,7 +280,7 @@ export default function ExerciseCreate({setShowPopup}) {
 					<Button
 						id="EC-BackBtn"
 						outlined={"button-back"}
-						onClick={() => { setUndoMediaChanges(true)}}>
+						onClick={() => { leaveWindow()}}>
 						<p>Tillbaka</p>
 					</Button>
 					<Button
@@ -299,7 +298,7 @@ export default function ExerciseCreate({setShowPopup}) {
 						style={{height: "300px", width: "90%"}}					>
 						<p>Är du säker att du vill lämna?</p>
 						<div className={styles.ECMiniPopupBtns}>
-							<Button id={"EC-mini-popup-leave-btn"} onClick={() => {closeAll()}} outlined={"button-back"}><p>Lämna</p></Button>
+							<Button id={"EC-mini-popup-leave-btn"} onClick={() => {setUndoMediaChanges(true)}} outlined={"button-back"}><p>Lämna</p></Button>
 							<Button id={"EC-mini-popup-stay-btn"} onClick={() => {setShowMiniPopup(false)}}><p>Stanna</p></Button>
 						</div>
 					</Popup>
