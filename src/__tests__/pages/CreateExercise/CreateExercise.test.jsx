@@ -3,17 +3,17 @@ import "@testing-library/jest-dom"
 import { server } from "../../server"
 const requestSpy = jest.fn()
 server.events.on("request:start", requestSpy)
-import Popup from "../../../components/Common/Popup/Popup"
 import ExerciseCreate from "../../../pages/Exercise/ExerciseCreate"
+import { MemoryRouter } from "react-router"
 configure({ testIdAttribute: "id" })
 
-describe ("ExerciseCreate should render", () => {
+describe("ExerciseCreate should render", () => {
 
 	beforeEach(() => {
-        render(//eslint-disable-line
-			<Popup title={"Skapa övning"} isOpen={true}>
+		render(//eslint-disable-line
+			<MemoryRouter>
 				<ExerciseCreate />
-			</Popup>
+			</MemoryRouter>
 		)
 	})
 
@@ -36,17 +36,4 @@ describe ("ExerciseCreate should render", () => {
 	test("Rensa fält checkbox", () => {
 		expect(screen.getByText("Rensa fält")).toBeInTheDocument()
 	})
-
-	test("Input field of minutepicker", () => {
-		expect(screen.getByTestId("minute-picker-minuteSelect")).toBeInTheDocument()
-	})
-
-	test("Back button", () => {
-		expect(screen.getByTestId("EC-BackBtn")).toBeInTheDocument()
-	})
-
-	test("Add button", () => {
-		expect(screen.getByTestId("EC-AddBtn")).toBeInTheDocument()
-	})
-
 })

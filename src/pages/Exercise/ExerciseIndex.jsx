@@ -7,8 +7,6 @@ import RoundButton from "../../components/Common/RoundButton/RoundButton"
 import { Plus } from "react-bootstrap-icons"
 import { getExercises } from "../../components/Common/SearchBar/SearchBarUtils"
 import useMap from "../../hooks/useMap"
-import Popup from "../../components/Common/Popup/Popup"
-import ExerciseCreate from "./ExerciseCreate"
 import FilterContainer from "../../components/Common/Filter/FilterContainer/FilterContainer"
 import Sorter from "../../components/Common/Sorting/Sorter"
 import ExerciseCard from "../../components/Common/ExerciseCard/ExerciseListItem"
@@ -140,20 +138,10 @@ export default function ExerciseIndex() {
 			<br/><br/><br/><br/><br/>
 
 			{isEditor(context) && 
-			<RoundButton linkTo={null} onClick={() => setPopupVisible(true)} id={"exercise-round-button"}  style={{maxWidth: "5px"}}>
+			<RoundButton linkTo={"create"} id={"exercise-round-button"}  style={{maxWidth: "5px"}}>
 				<Plus/>
 			</RoundButton>
 			}
-
-			<Popup
-				title="Skapa övning"
-				id="create-exercise-popup"
-				isOpen={popupVisible}
-				setIsOpen={setPopupVisible}
-				style={{maxHeight: "fit-content"}}
-			>
-				<ExerciseCreate setShowPopup={setPopupVisible}/>
-			</Popup>
 		</>
 	)
 }

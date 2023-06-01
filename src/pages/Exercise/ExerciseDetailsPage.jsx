@@ -11,7 +11,6 @@ import Gallery from "../../components/Gallery/Gallery"
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 import ActivityDelete from "../../components/Activity/ActivityDelete/ActivityDelete"
 import ErrorState from "../../components/Common/ErrorState/ErrorState"
-import ExerciseEdit from "./ExerciseEdit"
 import { isEditor } from "../../utils"
 import {setError as setErrorToast} from "../../utils"
 
@@ -37,7 +36,6 @@ export default function ExerciseDetailsPage() {
 	const [showDeleteComment, setShowDeleteComment] = useState(false)
 	const [error, setError] = useState()
 	const navigate = useNavigate()
-	const [showEditPopup, setShowEditPopup] = useState(false)
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
 	const accountRole = useContext(AccountContext)
 
@@ -53,10 +51,6 @@ export default function ExerciseDetailsPage() {
 				console.error(ex)
 			})
 	}
-
-	useEffect(() => {
-		setShowEditPopup(JSON.parse(window.localStorage.getItem("popupState")))
-	}, [])
 
 	useEffect(() => {
 		fetch(`/api/exercises/${ex_id}`, {
@@ -80,12 +74,6 @@ export default function ExerciseDetailsPage() {
 				console.error(ex)
 			})
 	}, [token, ex_id])
-
-	function deleteLocalStorage() {
-		window.localStorage.setItem("name", "")
-		window.localStorage.setItem("desc", "")
-		window.localStorage.setItem("time", "")
-	}
 	/**
      * Handles the deletion of an exercise by sending a DELETE request to the API.
      * Navigates back to the previous page if the deletion is successful.
@@ -180,8 +168,8 @@ export default function ExerciseDetailsPage() {
 					<div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
 						<Pencil
 							onClick={() => {
-								setShowEditPopup(true)
 								window.localStorage.setItem("popupState", true)
+								navigate("/excercise/edit/" + ex_id)
 							}
 							}
 							size="24px"
@@ -257,17 +245,6 @@ export default function ExerciseDetailsPage() {
 					<ActivityDelete id={"exercise-delete-popup"} activityID={ex_id} name={exercise?.name} setIsOpen={setShowDeletePopup} what={"Övning"}/>
 				</Popup>
 			</div>
-
-			<Popup
-				title={"Redigera Övning"}
-				id={"edit-exercise-popup"}
-				isOpen={showEditPopup}
-				setIsOpen={setShowEditPopup}
-				noBackground={false}
-				onClose={deleteLocalStorage}
-			>
-				<ExerciseEdit setShowPopup={setShowEditPopup} initialTime={exercise?.duration}/>
-			</Popup>
 		</div>
 	)
 }

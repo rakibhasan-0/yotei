@@ -1,87 +1,10 @@
-.stay-box{
-    margin-top: 3%;
-}
-
-.desc-form{
-    height: 200px;
-}
-
-.alert{
-    width: 40%;
-    margin-top: 10%;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-@media (max-width: 600px) {
-    .alert {
-        width: 60%;
-        margin-top: 15%;
-    }
-}
-
-@media (max-width: 400px) {
-    .alert {
-        width: 40%;
-        margin-top: 15%;
-    }
-}
-
-.createExerciseBtnContainer {
-    display: flex;
-    gap: 27px;
-    justify-content: space-evenly;
-    margin-top: 0;
-}
-
-.checkboxInactive{
-    color: var(--gray);
-    margin-left: 1rem;
-    padding-top: 1rem;
-}
-
-.addCheckbox,
-.eraseTextCheckbox {
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: flex-end;
-    align-items: center;
-}
-
-.checkboxText {
-    margin-left: 1rem;
-    padding-top: 1rem;
-}
-
-.input-area {
-    width: 100%;
-    height: 100%;
-    border: 2px solid var(--black-primary);
-    border-radius: 0.3rem;
-    padding: 1rem;
-}
-
-.standArea {
-    width: 100%;
-    height: 100%;
-    border: 2px solid var(--black-primary);
-    border-radius: 0.3rem;
-    padding: 1rem;
-}
-
 .timeSelector {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-
-.checkboxesContainer {
-    margin-top: 2rem;
-}
-
-.ECMiniPopupBtns {
+.buttonContainer {
     display: flex;
-    justify-content: space-evenly;
-    gap: 14px;
-    margin-top: 2rem;
+    gap: 1rem;
+    margin: 0 0 1rem 0;
 }

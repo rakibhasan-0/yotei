@@ -106,6 +106,8 @@ export default function App() {
 						<Route path="technique/:techniqueId" element={<TechniqueDetail />} />
 						<Route path="technique/:techniqueId/edit" element={<AdminRoute><TechniqueEdit/></AdminRoute>} />
 						<Route path="workout/create" element={<WorkoutCreate />} />
+						<Route path="excercise/create" element={<ExerciseCreate />} />
+						<Route path="excercise/edit/:excerciseId" element={<ExerciseEdit/>} />
 						<Route path="workout/:workoutId" element={<WorkoutView />} />
 						<Route path="workout/edit" element={<WorkoutEdit />} />
 						<Route path="plan" element={<PlanIndex uri={planURI} />} />

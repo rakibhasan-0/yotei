@@ -1,9 +1,9 @@
-import React, {useContext, useState} from "react"
+import React, { useContext, useState } from "react"
 import styles from "./ExerciseCreate.module.css"
-import {AccountContext} from "../../context"
+import { AccountContext } from "../../context"
 import Button from "../../components/Common/Button/Button"
-import  "../../components/Common/InputTextField/InputTextField"
-import  "../../components/Common/TextArea/TextArea"
+import "../../components/Common/InputTextField/InputTextField"
+import "../../components/Common/TextArea/TextArea"
 import CheckBox from "../../components/Common/CheckBox/CheckBox"
 import "../../components/Common/MinutePicker/MinutePicker.jsx"
 import MinutePicker from "../../components/Common/MinutePicker/MinutePicker.jsx"
@@ -11,18 +11,30 @@ import InputTextField from "../../components/Common/InputTextField/InputTextFiel
 import TextArea from "../../components/Common/TextArea/TextArea.jsx"
 import Divider from "../../components/Common/Divider/Divider.jsx"
 import TagInput from "../../components/Common/Tag/TagInput.jsx"
-import Popup from "../../components/Common/Popup/Popup"
-import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../utils"
+import { toast } from "react-toastify"
 import EditGallery from "../../components/Gallery/EditGallery"
+import { useNavigate } from "react-router"
+import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 
 /**
  * The page for creating new exercises.
+ * 
+ * Changes version 2.0:
+ *     Removed extraneuos css.
+ *     Removed uneccesary containers.
+ *     Adapted to work as a standalone page.
  *
- * @author Calskrove (2022-05-19), Hawaii (no date), Verona (2022-05-04), Team Phoenix (Group 1) (2023-05-04)
+ * @author
+ *     Calskrove (2022-05-19)
+ *     Hawaii (no date)
+ *     Verona (2022-05-04)
+ *     Phoenix (Group 1) (2023-05-04)
+ *     Medusa (Group 6) (2023-06-01)
+ * 
  * @since 2023-05-22
- * @version 1.0
+ * @version 2.0
  */
-export default function ExerciseCreate({setShowPopup}) {
+export default function ExerciseCreate() {
 	const [name, setName] = useState("")
 	const [desc, setDesc] = useState("")
 	const [time, setTime] = useState(0)
@@ -36,12 +48,14 @@ export default function ExerciseCreate({setShowPopup}) {
 	const [sendData, setSendData] = useState(false)
 	const [undoMediaChanges, setUndoMediaChanges] = useState(false)
 	const [tags, setTags] = useState(false)
-	
-	function done(){
-		if(undoMediaChanges){
-			closeAll()
+
+	const navigate = useNavigate()
+
+	function done() {
+		if (undoMediaChanges) {
+			leaveWindow()
 		}
-		else{
+		else {
 			setSendData(false)
 			exitProdc(tags)
 		}
@@ -58,8 +72,8 @@ export default function ExerciseCreate({setShowPopup}) {
 
 		const requestOptions = {
 			method: "POST",
-			headers: {"Content-type": "application/json", "token": context.token},
-			body: JSON.stringify({name: name, description: desc, duration: time})
+			headers: { "Content-type": "application/json", "token": context.token },
+			body: JSON.stringify({ name: name, description: desc, duration: time })
 		}
 		try {
 			const response = await fetch("/api/exercises/add", requestOptions)
@@ -76,7 +90,7 @@ export default function ExerciseCreate({setShowPopup}) {
 				}
 			}
 		} catch (error) {
-			setErrorToast("Övningen kunde ej läggas till")
+			toast.error("Övningen kunde ej läggas till")
 		}
 		return null
 	}
@@ -90,7 +104,7 @@ export default function ExerciseCreate({setShowPopup}) {
 	 */
 	async function addTag(exId) {
 		let hasLinked = true
-		if(exId === null){
+		if (exId === null) {
 			return false
 		}
 		if (addedTags.length === 0 || addedTags === undefined) {
@@ -98,7 +112,7 @@ export default function ExerciseCreate({setShowPopup}) {
 		}
 		for (let i = 0; i < addedTags.length; i++) {
 			let successResponse = await linkExerciseTag(exId, addedTags.at(i).id)
-			if(!successResponse){
+			if (!successResponse) {
 				hasLinked = false
 			}
 		}
@@ -115,8 +129,8 @@ export default function ExerciseCreate({setShowPopup}) {
 	async function linkExerciseTag(exId, tagId) {
 		const requestOptions = {
 			method: "POST",
-			headers: {"Content-type": "application/json", "token": context.token},
-			body: JSON.stringify({"exerciseId": exId})
+			headers: { "Content-type": "application/json", "token": context.token },
+			body: JSON.stringify({ "exerciseId": exId })
 		}
 
 		try {
@@ -127,7 +141,7 @@ export default function ExerciseCreate({setShowPopup}) {
 				return false
 			}
 		} catch (error) {
-			setErrorToast("Taggar kunde ej kopplas till övningen")
+			toast.error("Taggar kunde ej kopplas till övningen")
 			return false
 		}
 	}
@@ -137,17 +151,17 @@ export default function ExerciseCreate({setShowPopup}) {
 	 * first creating the exercise, then linking the exercise with the chosen tags.
 	 */
 
-	function addExerciseAndTags () {
+	function addExerciseAndTags() {
 		if (checkInput() === true) {
 			addExercise()
 				.then((exId) => handleExId(exId))
 				.then((exId) => handleSendData(exId))
-				.then((exId)  => addTag(exId))
+				.then((exId) => addTag(exId))
 				.then((linkedTags) => setTags(linkedTags))
 		}
 	}
 
-	function handleExId(exId){
+	function handleExId(exId) {
 		setTempId(exId)
 		return exId
 	}
@@ -163,9 +177,9 @@ export default function ExerciseCreate({setShowPopup}) {
 	 */
 	function exitProdc(linkedTags) {
 		if (linkedTags) {
-			setSuccessToast("Övningen " + name + " lades till")
+			toast.success("Övningen " + name + " lades till")
 			if (addBoxChecked === false) {
-				setShowPopup(false)
+				navigate(-1)
 			} else {
 				if (eraseBoxChecked === true) {
 					setName("")
@@ -191,7 +205,7 @@ export default function ExerciseCreate({setShowPopup}) {
 		return false
 	}
 
-	function timeCallback(id, time){
+	function timeCallback(id, time) {
 		setTime(time)
 	}
 
@@ -200,10 +214,10 @@ export default function ExerciseCreate({setShowPopup}) {
 	 * changes or actually leave the page and discard the changes.
 	 */
 	function leaveWindow() {
-		if(name !== "" || desc !== "") {
+		if (name !== "" || desc !== "") {
 			setShowMiniPopup(true)
 		} else {
-			closeAll()
+			navigate(-1)
 		}
 	}
 
@@ -211,99 +225,110 @@ export default function ExerciseCreate({setShowPopup}) {
 	 * Handles logic when add more exercises checkbox is clicked. 
 	 * @param checked - a boolean to set if the add checkbox is clicked or not
 	 */
-	function addCheckboxClicked(checked){
+	function addCheckboxClicked(checked) {
 		setAddBoxChecked(checked)
 		setEraseBoxChecked(false)
 	}
 
-	/**
-	 * Closes the popup that this component is apart of
-	 */
-	function closeAll() {
-		setShowPopup(false)
-	}
-
 	return (
-		<div className="row justify-content-center">
-			<div className="col-md-8">
-				{/*"Form" to get input from user*/}
-				<div className={styles.textInputField}>
-					<InputTextField
-						placeholder="Namn"
-						text={name}
-						onChange={(e) => setName(e.target.value)}
-						required = {true}
-						type="text"
-						id = "ExerciseNameInput"
-						errorMessage={errorMessage}
-					/>
-				</div>
-				<div>
-					<TextArea
-						className={styles.standArea}
-						placeholder="Beskrivning"
-						text={desc}
-						onChange={(e) => setDesc(e.target.value)}
-						required = {true}
-						id="ExerciseDescriptionInput"
-						type="text"
-						errorDisabled={true}
-					/>
-				</div>
-				<Divider id={"time-selector-title"} option={"h1_left"} title={"Tid"} />
-				<div className={styles.timeSelector} >
-					<MinutePicker
-						id={"minuteSelect"}
-						initialValue={time}
-						callback={timeCallback}
-					/>
-				</div>
-				<Divider id={"tag-title"} option={"h1_left"} title={"Taggar"} />
-				<TagInput
-					id="tagHandler"
-					addedTags={addedTags}
-					setAddedTags={setAddedTags}
+		<>
+			<h1>Skapa övning</h1>
+
+			<div style={{ height: "1rem" }} />
+
+			<InputTextField
+				placeholder="Namn"
+				text={name}
+				onChange={(e) => setName(e.target.value)}
+				required={true}
+				type="text"
+				id="ExerciseNameInput"
+				errorMessage={errorMessage}
+			/>
+			<TextArea
+				className={styles.standArea}
+				placeholder="Beskrivning"
+				text={desc}
+				onChange={(e) => setDesc(e.target.value)}
+				required={true}
+				type="text"
+				errorDisabled={true}
+			/>
+
+			<Divider option={"h1_left"} title={"Tid"} />
+
+			<div className={styles.timeSelector} >
+				<MinutePicker
+					initialValue={time}
+					callback={timeCallback}
 				/>
-
-				<Divider id={"media-title"} option={"h1_left"} title={"Media"}/>
-				<EditGallery id={tempId} exerciseId={tempId} sendData={sendData} undoChanges={undoMediaChanges} done={done}/>
-
-				<div className={styles.addCheckbox}>
-					<CheckBox id="EC-AddMultipleChk" disabled={false} checked={addBoxChecked} onClick={addCheckboxClicked} label={"Fortsätt skapa övningar"}/>
-				</div>
-				<div style={{height:"1rem"}}/>
-				<div className={styles.eraseTextCheckbox}>
-					<CheckBox id="EC-ClearMultipleChk" disabled={!addBoxChecked} checked={eraseBoxChecked} onClick={setEraseBoxChecked} label={"Rensa fält"}/>
-				</div>
-				<div style={{height:"1rem"}}/>
-				<div className={styles.createExerciseBtnContainer}>
-					<Button
-						id="EC-BackBtn"
-						outlined={"button-back"}
-						onClick={() => { leaveWindow()}}>
-						<p>Tillbaka</p>
-					</Button>
-					<Button
-						id="EC-AddBtn"
-						onClick={() => { addExerciseAndTags()}}>
-						<p>Lägg till</p>
-					</Button>
-				</div>
-				<div>
-					<Popup
-						id={"EC-changes-mini-popup"}
-						title={"Ändringar gjorda"}
-						isOpen={showMiniPopup}
-						setIsOpen={setShowMiniPopup}
-						style={{height: "300px", width: "90%"}}					>
-						<p>Är du säker att du vill lämna?</p>
-						<div className={styles.ECMiniPopupBtns}>
-							<Button id={"EC-mini-popup-leave-btn"} onClick={() => {setUndoMediaChanges(true)}} outlined={"button-back"}><p>Lämna</p></Button>
-							<Button id={"EC-mini-popup-stay-btn"} onClick={() => {setShowMiniPopup(false)}}><p>Stanna</p></Button>
-						</div>
-					</Popup>
-				</div>
 			</div>
-		</div>
+
+			<Divider option={"h1_left"} title={"Taggar"} />
+
+			<TagInput
+				addedTags={addedTags}
+				setAddedTags={setAddedTags}
+			/>
+
+			<Divider option={"h1_left"} title={"Media"} />
+
+			<EditGallery
+				id={tempId}
+				exerciseId={tempId}
+				sendData={sendData}
+				undoChanges={undoMediaChanges}
+				done={done}
+			/>
+
+			<CheckBox
+				label={"Fortsätt skapa övningar"}
+				disabled={false}
+				checked={addBoxChecked}
+				onClick={addCheckboxClicked}
+			/>
+
+			<div style={{ height: "1rem" }} />
+
+			<CheckBox
+				label={"Rensa fält"}
+				disabled={!addBoxChecked}
+				checked={eraseBoxChecked}
+				onClick={setEraseBoxChecked}
+			/>
+
+			<div style={{ height: "1rem" }} />
+
+			<div className={styles.buttonContainer}>
+				<Button
+					width="100%"
+					outlined={true}
+					onClick={() => {
+						setUndoMediaChanges(true) 
+						exitProdc()
+					}}
+				>
+					<p>Tillbaka</p>
+				</Button>
+				<Button
+					width="100%"
+					onClick={() => {
+						addExerciseAndTags()
+						exitProdc(tags)
+					}}
+				>
+					<p>Lägg till</p>
+				</Button>
+			</div>
+
+			<ConfirmPopup
+				popupText="Du har osparade ändringar. Är du säker att du lämna?"
+				showPopup={showMiniPopup}
+				setShowPopup={setShowMiniPopup}
+				confirmText="Lämna"
+				backText="Avbryt"
+				onClick={() => navigate(-1)}
+			/>
+		</>
 	)
 }
