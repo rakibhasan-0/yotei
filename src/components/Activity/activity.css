@@ -1,0 +1,76 @@
+/**
+* @author Melinda Vestberg (dv20mvg), Gustaf Söderlund (et14gsd)
+* @edited 2023 - Cyclops (Group 5) dv21adt
+*/
+
+/*
+* Changes the background color of every other listitem.
+*/
+.grid-striped .row:nth-child(odd) {
+    background: var(--red-secondary);
+}
+
+
+/* 
+* Search components.
+*/
+
+.search {
+    padding-left: 10px;
+    width: 300px;
+}
+
+.svg-search {
+    width: 2.5em;
+    padding-top: 3px;
+    height: 2.5em;
+}
+
+
+
+.name-col:hover>* {
+    color: #BE3B41;
+}
+
+
+
+/*
+* Column that contains the created by text
+*/
+.created-col {
+    font-size: 0.8rem;
+    color: #544949;
+    text-align: left;
+    font-style: oblique;
+}
+
+
+.textDesc {
+    text-align: left;
+    color: #1e1e1e;
+}
+
+.activity-list {
+    padding-top: 20px;
+}
+
+.toggleIcon{
+    padding-top: 5px;
+    color:#BE3B41;
+}
+
+
+.col>a>h5{
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.workout-name{
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.selectWorkout{
+    padding-top: 12px;
+}

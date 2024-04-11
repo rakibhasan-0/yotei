@@ -1,0 +1,57 @@
+.wrapCentering {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 15px;
+}
+
+.createButton {
+    margin-bottom: 30px;
+}
+
+.dropdownRow {
+    border-top: solid 1px black;
+    height: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    padding: 3px 10px 3px 10px;
+    transition: all 0.2s ease-in;
+}
+
+.dropdownRow:nth-child(even) {
+    background-color: var(--red-secondary);
+}
+
+.dropdownRow:last-child {
+    border-radius: 0 0 4px 4px;
+}
+
+.dropdownRow-text {
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: left;
+}
+
+.dropdownRow:hover {
+    cursor: pointer;
+    background-color: #eac2c2;
+}
+
+.headerContainer {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 2rem;
+}
+
+.trashcanIcon {
+    width:  35px;
+    height: 35px;
+    color: var(--red-primary);
+}

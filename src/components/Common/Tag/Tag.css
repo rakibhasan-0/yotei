@@ -1,0 +1,23 @@
+.base-tag {
+	display: flex;
+	align-items: center;
+	border: none;
+	border-radius: 0.75rem;
+	padding: 0.4rem 0.75rem 0.4rem 0.75rem;
+	background-color: var(--red-secondary);
+	height: fit-content;
+	max-width: 100%; 
+}
+
+.no-margin {
+	margin: 0;
+	max-width: 100%; 
+}
+
+.suggest {
+	background-color: var(--gray);
+}
+
+button:focus {
+	outline-color: rgba(255, 0, 0, 0.1);
+}

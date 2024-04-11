@@ -1,0 +1,18 @@
+.create-technique-checkbox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+}
+
+.create-technique-success {
+	margin-top: -5px;
+	margin-bottom: -5px;
+	color: #4bb543;
+}
+
+.create-technique-error {
+	margin-top: -15px;
+	margin-bottom: 0;
+	color: var(--red-primary);
+}

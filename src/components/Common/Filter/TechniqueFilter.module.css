@@ -1,0 +1,47 @@
+body {
+    font-family: Arial;
+}
+
+.kihonText {
+	text-align: center;
+    margin: 10px;
+}
+
+.techniqueBeltPicker {
+	padding: 0px;
+}
+
+.filterPos {
+    width: 100%;
+}
+
+.selectedTextVis {
+    display: flex;
+    margin: 10px 0px 0px 0px;
+}
+
+.selectedTextHid {
+    display: flex;
+	height: 0;
+}
+
+.selectedGroupVis {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+	padding: 10px;
+	padding-left: 0;
+}
+
+.selectedGroupHid {
+    gap: 0px;
+	padding: 0px;
+}
+
+.kihonGroup {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}

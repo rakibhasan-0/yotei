@@ -1,0 +1,30 @@
+.userListItem {
+    border-top: solid 1px black;
+    height: 50px;
+    width: 100%;
+    display: flex;
+    gap: 20px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    padding: 3px 18px;
+}
+
+.addedUsersContainer {
+    display: flex;
+    gap: 0.5rem;
+    padding-top:0.5rem;
+    padding-bottom: 0.5rem;
+    max-width: 100%;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.userListItem > h2 {
+    margin-bottom: 0;
+}
+
+.userListItem:nth-child(even) {
+    background-color: var(--red-secondary);
+}

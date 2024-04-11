@@ -1,0 +1,7 @@
+.sc23_session_list {
+	display: grid;
+	grid-template-columns: 1fr;
+	height: 100%;
+	width: 100%;
+	margin-bottom: 200px;
+}

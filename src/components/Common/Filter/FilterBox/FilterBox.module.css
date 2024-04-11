@@ -1,0 +1,34 @@
+body {
+	font-family: Arial;
+}
+
+legend {
+	background: #FFFFFF none repeat scroll 0 0;
+	display: inline-block;
+	width: auto;
+	padding: 0px 7px 0px 7px;
+	margin: auto;
+	margin-left: 10px;
+}
+
+fieldset {
+	border: 2px solid var(--black-primary);
+	border-radius: 0.3rem;
+	box-sizing: border-box;
+	padding: 20px;
+	padding-top: 5px;
+	margin: auto;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.filterBoxPressed {
+	visibility: visible;
+	opacity: 1;
+}
+
+.filterBox {
+	visibility: hidden;
+	opacity: 0;
+	height: 0;
+}

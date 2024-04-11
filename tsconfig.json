@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"baseUrl": "./sys-test/",
+		"paths": {
+			"@fixtures/*": ["fixtures/*"]
+		},
+		"module": "commonjs"
+	}
+}
