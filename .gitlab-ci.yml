@@ -1,0 +1,76 @@
+stages:
+  - build
+  - systest
+  - publish
+
+variables:
+  FEATURE: $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
+
+build_database_image:
+  image: docker:20
+  services:
+    - docker:20-dind
+  stage: build
+  variables:
+    DOCKER_DRIVER: "overlay2"
+    CONTAINER_REPOSITORY: "pvt2023"
+  before_script:
+    - apk update && apk add jq
+    - docker login -u "$DOCKER_CLIENT" -p "$DOCKER_SECRET"
+  script:
+    - docker build -t $CONTAINER_REPOSITORY/database:latest database
+    - docker save -o /images/db-$FEATURE.tar $CONTAINER_REPOSITORY/database:latest
+    - docker tag $CONTAINER_REPOSITORY/database:latest $CONTAINER_REPOSITORY/database:staging-$FEATURE
+    - docker push $CONTAINER_REPOSITORY/database:staging-$FEATURE
+  only:
+    refs:
+      - merge_requests
+    changes:
+      - database/**/*
+
+systest:
+  image: docker:20
+  services:
+    - docker:20-dind
+  stage: systest
+  before_script:
+    - apk update && apk add curl
+    - chmod +x systest/run-systest.sh
+    - chmod +x systest/find-version.sh
+    - >
+      cp /images/db-$FEATURE.tar db-latest-override.tar &>/dev/null || :
+  script:
+    - >
+      API_VERSION=$(systest/find-version.sh api "$CI_COMMIT_DESCRIPTION")
+      GATEWAY_VERSION=$(systest/find-version.sh api "$CI_COMMIT_DESCRIPTION")
+      FRONTEND_VERSION=$(systest/find-version.sh frontend "$CI_COMMIT_DESCRIPTION")
+      systest/run-systest.sh $CI_JOB_ID
+  only:
+    refs:
+      - merge_requests
+    changes:
+      - database/**/*
+      - systest/**/*
+
+publish_database_image:
+  image: docker:20
+  services:
+    - docker:20-dind
+  stage: publish
+  variables:
+    DOCKER_DRIVER: "overlay2"
+    CONTAINER_REPOSITORY: "pvt2023"
+    VERSION: "1.0"
+  before_script:
+    - apk update && apk add jq
+    - docker login -u "$DOCKER_CLIENT" -p "$DOCKER_SECRET"
+  script:
+    - docker build -t $CONTAINER_REPOSITORY/database:latest database
+    - docker tag $CONTAINER_REPOSITORY/database:latest $CONTAINER_REPOSITORY/database:$VERSION
+    - docker push $CONTAINER_REPOSITORY/database:latest
+    - docker push $CONTAINER_REPOSITORY/database:$VERSION
+  only:
+    refs:
+      - main
+    changes:
+      - database/**/*
