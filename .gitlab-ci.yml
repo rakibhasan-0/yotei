@@ -13,6 +13,5 @@ test-backend:
 test-linter-frontend:
   stage: linter
   script:
-      - npm ci --no-progress --quiet --cache .npm --prefer-offline
       - cd frontend
       - npm run lint:ci
