@@ -3,8 +3,14 @@ stages:
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-test:
+test-backend:
   stage: test
   script:
     - cd backend
     - mvn -q test
+    
+test-linter-frontend:
+  stage: test
+  script:
+    - cd frontend
+    - npm run lint:ci
