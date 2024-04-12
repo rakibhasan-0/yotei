@@ -12,6 +12,14 @@ test-backend:
     
 test-linter-frontend:
   stage: linter
-  script:
+  before_script:
+  - npm ci --no-progress --quiet --cache .npm --prefer-offline
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - .npm/
+    script:
     - cd frontend
-    - npx eslint .
+    - npm run lint:ci
