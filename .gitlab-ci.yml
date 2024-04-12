@@ -8,4 +8,4 @@ test:
   stage: test
   script:
     - cd backend
-    - mvn -q test >> /dev/null
+    - mvn -q test
