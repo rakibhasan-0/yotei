@@ -4,6 +4,7 @@ workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 test:
+  image: maven:3.8.3-openjdk-17
   stage: test
   script:
     - cd backend
