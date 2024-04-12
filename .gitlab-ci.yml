@@ -1,7 +1,10 @@
+stages:
+  - test
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-build-job:
-  stage: build
+test:
+  stage: test
   script:
-    - echo "Hello, $GITLAB_USER_LOGIN"
+    cd backend
+    - mvn -q test
