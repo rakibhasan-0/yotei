@@ -14,4 +14,4 @@ test-linter-frontend:
   stage: linter
   script:
     - cd frontend
-    - npm run lint
+    - npx eslint .
