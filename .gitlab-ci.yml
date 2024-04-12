@@ -11,6 +11,7 @@ test-backend:
     
 test-linter-frontend:
   stage: test
+  image: node:19
   script:
     - cd frontend
     - npm run lint:ci
