@@ -1,4 +1,5 @@
 stages:
+  - linter
   - test
 workflow:
   rules:
@@ -10,7 +11,7 @@ test-backend:
     - mvn -q test
     
 test-linter-frontend:
-  stage: test
+  stage: linter
   script:
     - cd frontend
-    - npm run lint:ci
+    - npm run lint
