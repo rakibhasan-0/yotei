@@ -6,5 +6,5 @@ workflow:
 test:
   stage: test
   script:
-    cd backend
+    - cd backend
     - mvn -q test
