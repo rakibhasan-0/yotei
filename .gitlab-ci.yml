@@ -1,9 +1,9 @@
 stages:
  - test
- - build
- - systest
- - publish
- - deploy
+# - build
+# - systest
+# - publish
+# - deploy
 
 variables:
   FEATURE: $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
@@ -12,11 +12,11 @@ variables:
 .only-maven: &only-maven
   only:
     changes:
-      - pom.xml
-      - lint_check.xml
-      - checkstyle-supressions.xml
-      - api/**/*
-      - gateway/**/*
+      - backend/pom.xml
+      - backend/lint_check.xml
+      - backend/checkstyle-supressions.xml
+      - backend/api/**/*
+      - backend/gateway/**/*
 
 .skippable: &skippable
   except:
@@ -33,12 +33,13 @@ tests:
   stage: test
   image: maven:3.8.3-openjdk-17
   variables:
-    MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+    MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/backend/.m2/repository"
   cache:
     paths:
-      - .m2/repository
+      - backend/.m2/repository
     policy: pull-push
   script:
+    cd backend
     - mvn -q test
 
 build_gateway_image:
