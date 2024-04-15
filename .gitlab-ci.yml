@@ -4,18 +4,7 @@ stages:
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-test-backend:
-  stage: test
-  image: maven:3.8.3-openjdk-17
-#  variables:
-#    MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
-#  cache:
-#    paths:
-#      - .m2/repository
-  script:
-    - cd backend
-    - mvn -q test
-    
+
 test-linter-frontend:
   image: node:19
   before_script:
@@ -30,5 +19,31 @@ test-linter-frontend:
   stage: linter
   script:
       - npm run lint:ci
-
+      
+test-backend:
+  stage: test
+  image: maven:3.8.3-openjdk-17
+#  variables:
+#    MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+#  cache:
+#    paths:
+#      - .m2/repository
+  script:
+    - cd backend
+    - mvn -q test
+  
+test-frontend:
+  stage: test
+  image: node:19
+  before_script:
+    - cd frontend
+    - npm ci --no-progress --quiet --cache .npm --prefer-offline
+  cache:
+    key:
+      files:
+        - frontend/package-lock.json
+    paths:
+      - frontend/.npm/
+  script:
+    - npm run test  
       
