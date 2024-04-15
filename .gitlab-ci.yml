@@ -30,3 +30,5 @@ test-linter-frontend:
   script:
       - cd frontend
       - npm run lint:ci
+
+      
