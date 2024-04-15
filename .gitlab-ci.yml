@@ -29,6 +29,7 @@ test-linter-frontend:
   stage: linter
   script:
       - cd frontend
+      - npm i eslint
       - npm run lint:ci
 
       
