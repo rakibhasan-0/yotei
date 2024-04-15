@@ -18,14 +18,14 @@ test-backend:
     
 test-linter-frontend:
   image: node:19
-  before_script:
-    - npm ci --no-progress --quiet --cache .npm --prefer-offline
-  cache:
-    key:
-      files:
-        - package-lock.json
-    paths:
-      - .npm/
+  #before_script:
+  #  - npm ci --no-progress --quiet --cache .npm --prefer-offline
+  #cache:
+  #  key:
+  #    files:
+  #      - package-lock.json
+  #  paths:
+  #    - .npm/
   stage: linter
   script:
       - cd frontend
