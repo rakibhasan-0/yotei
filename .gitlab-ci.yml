@@ -1,5 +1,6 @@
 stages:
   - linter
+  - build
   - test
 workflow:
   rules:
@@ -45,5 +46,20 @@ test-frontend:
     paths:
       - frontend/.npm/
   script:
-    - npm run test  
+    - npm run test
+
+build-frontend:
+  stage: build
+  image: node:19
+  before_script:
+    - cd frontend
+    - npm ci --no-progress --quiet --cache .npm --prefer-offline
+  cache:
+    key:
+      files:
+        - frontend/package-lock.json
+    paths:
+      - frontend/.npm/
+  script:
+    - npm run build
       
