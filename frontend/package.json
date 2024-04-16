@@ -28,7 +28,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "host": "vite --host",
-    "test": "jest --watchAll --ci --no-watchAll --passWithNoTests",
+    "test": "jest --watchAll --ci --no-watchAll --passWithNoTests --silent --maxWorkers=8",
     "test:coverage": "npm test -- --coverage --collectCoverageFrom='./src/**'",
     "test:watch": "npm test -- --watchAll",
     "lint": "eslint --fix --ext js,jsx,ts src --ignore-path .gitignore",
@@ -36,7 +36,7 @@
     "systest": "npx playwright test --reporter list",
     "systest:fast": "npx playwright test --reporter list --project 'Mobile Chrome'",
     "systest:ui": "npx playwright test --ui",
-    "prepare": "husky install"
+    "prepare": "cd .. && husky install frontend/.husky"
   },
   "jest": {
     "setupFilesAfterEnv": [
