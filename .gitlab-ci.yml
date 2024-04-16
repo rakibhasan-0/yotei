@@ -29,6 +29,7 @@ test-backend:
 #  cache:
 #    paths:
 #      - .m2/repository
+# :-)
   script:
     - cd backend
     - mvn -q test
