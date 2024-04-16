@@ -2,10 +2,10 @@
 
 # GitLab server URL and project ID
 GITLAB_URL="https://git.cs.umu.se"
-PROJECT_ID=""
+PROJECT_ID="10668"
 
 # Access token for GitLab API
-ACCESS_TOKEN=""
+ACCESS_TOKEN="TgniYd2mE587TipJfpK9"
 
 # List of usernames to add as developers
 usernames=(
