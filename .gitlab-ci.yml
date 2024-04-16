@@ -20,21 +20,6 @@ test-linter-frontend:
   stage: linter
   script:
       - npm run lint:ci
-
-build-frontend:
-  stage: build
-  image: node:19
-  before_script:
-    - cd frontend
-    - npm ci --no-progress --quiet --cache .npm --prefer-offline
-  cache:
-    key:
-      files:
-        - frontend/package-lock.json
-    paths:
-      - frontend/.npm/
-  script:
-    - npm run build
       
 test-backend:
   stage: test
@@ -62,3 +47,20 @@ test-frontend:
       - frontend/.npm/
   script:
     - npm run test
+
+build-frontend:
+  stage: build
+  image: node:19
+  before_script:
+    - cd frontend
+    - npm ci --no-progress --quiet --cache .npm --prefer-offline
+  cache:
+    key:
+      files:
+        - frontend/package-lock.json
+    paths:
+      - frontend/.npm/
+  script:
+    - npm run build
+      
+
