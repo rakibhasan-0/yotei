@@ -29,13 +29,14 @@ test-backend:
 #  cache:
 #    paths:
 #      - .m2/repository
+# :-)
   script:
     - cd backend
     - mvn -q test
   
 test-frontend:
   stage: test
-  image: node:19
+  image: node:20
   before_script:
     - cd frontend
     - npm ci --no-progress --quiet --cache .npm --prefer-offline
