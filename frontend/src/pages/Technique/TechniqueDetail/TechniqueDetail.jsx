@@ -139,7 +139,7 @@ function TechniqueDetail({ id }) {
 				</div>
 				<h2>Beskrivning</h2>
 				{technique.description ? (
-					<p>{technique.description}</p>
+					<pre>{technique.description}</pre>
 				) : (
 					<p style={{ fontStyle: "italic", color: "var(--gray)" }}>Beskrivning saknas.</p>
 				)}
