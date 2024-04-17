@@ -27,9 +27,9 @@ import Tag from "../Tag/Tag"
  * 			setSuggestedTags={setSuggestedTags}
  * 		/>
  *
- * @author Team Minotaur Mavericks & Team Kraken (Group 8,Group 7)
- * @since 2023-05-02
- * @version 2.0 
+ * @author Team Minotaur Mavericks & Team Kraken & Team Mango (Group 8,Group 7, Group 4)
+ * @since 2024-04-17
+ * @version 3.0 
  */
 
 export default function SearchBar({ id, placeholder, text, onChange, addedTags, setAddedTags, suggestedTags, setSuggestedTags }) {
