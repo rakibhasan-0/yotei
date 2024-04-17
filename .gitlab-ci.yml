@@ -67,9 +67,9 @@ build-frontend:
       
 
 generate-javadoc:
-  tags:
-	- system
   stage: doc
+  tags:	
+  	- system
   script:
     - pwd
     - cd docs/api-docs && mkdocs build -d deploy
