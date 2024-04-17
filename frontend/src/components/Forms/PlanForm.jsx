@@ -53,6 +53,7 @@ export default function PlanForm(props) {
 				<InputTextField
 					name="name"
 					id="name"
+					text={name}
 					type="text"
 					placeholder="Namn"
 					value={name}
