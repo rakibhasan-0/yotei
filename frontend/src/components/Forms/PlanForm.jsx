@@ -28,8 +28,8 @@ import InputTextField from "../Common/InputTextField/InputTextField"
  * }
  * 
  * 
- * @author Squad 2 Griffins
- * @since 2023-05-10
+ * @author Squad 2 Griffins, Squad 3 Durian
+ * @since 2023-05-10, 2024-04-17
  */
 
 export default function PlanForm(props) {
@@ -53,6 +53,7 @@ export default function PlanForm(props) {
 				<InputTextField
 					name="name"
 					id="name"
+					text={name}
 					type="text"
 					placeholder="Namn"
 					value={name}
