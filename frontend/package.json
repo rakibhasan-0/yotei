@@ -36,7 +36,7 @@
     "lint:ci": "eslint --ext js,jsx,ts src --ignore-path ../.gitignore",
     "systest": "npx playwright test --reporter list",
     "systest:fast": "npx playwright test --reporter list --project 'Mobile Chrome'",
-    "systest:ui": "npx playwright test --ui",
+    "systest:ui": "npx playwright test --ui"
   },
   "jest": {
     "setupFilesAfterEnv": [
