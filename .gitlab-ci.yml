@@ -71,5 +71,6 @@ generate-javadoc:
   tags:
     - system
   script:
+    - whoami
     - rm -rf /var/www/html/api-docs
     - cd docs/api-docs && mkdocs build -d /var/www/html/api-docs
