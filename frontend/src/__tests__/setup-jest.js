@@ -16,7 +16,6 @@ beforeAll(() => server.listen())
 // so they don't affect other tests.
 afterEach(() => {
 	server.resetHandlers()
-	server.close()
 })
 // Clean up after the tests are finished.
 afterAll(() => server.close())
