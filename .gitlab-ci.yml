@@ -82,5 +82,3 @@ generate-javadoc:
   script:
     - cd api-docs && mkdocs build -d deploy
     - rsync -avzhuP ./deploy/* pvt@imp.cs.umu.se:/home/pvt/pvt-web/api-docs/
-  only:
-    - main
