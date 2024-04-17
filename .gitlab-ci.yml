@@ -47,7 +47,7 @@ test-frontend:
     paths:
       - frontend/.npm/
   script:
-    - npm run test
+    - npm run test:ci
 
 build-frontend:
   stage: build
