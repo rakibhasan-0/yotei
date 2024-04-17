@@ -20,9 +20,9 @@ import { Link } from "react-router-dom"
  * The technique index page.
  * Fetches and displays the techniques.
  * 
- * @author Medusa
- * @version 1.0
- * @since 2023-05-03
+ * @author Medusa, Tomato (group 6)
+ * @version 2.0
+ * @since 2024-04-17
  */
 export default function TechniqueIndex() {
 	const [techniques, setTechniques] = useState([])
