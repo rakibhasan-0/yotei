@@ -49,7 +49,7 @@ export default function GroupIndex() {
 			<div>
 				{groups?.filter(group => {
 					if (searchText?.length > 0) {
-						return group.name.includes(searchText)
+						return group.name.toLowerCase().includes(searchText.toLowerCase())
 					}
 					return true
 				}).map((group, index) => (
