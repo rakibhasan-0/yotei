@@ -58,6 +58,7 @@ services:
       - POSTGRES_PASSWORD=yotei123
       - POSTGRES_DB=yotei
       - POSTGRES_HOST=psql:5432
+      - ENABLE_SWAGGER=false
 
 volumes:
   pgdata:

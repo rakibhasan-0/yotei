@@ -99,6 +99,11 @@
       <version>3.3.4</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+     <groupId>org.springdoc</groupId>
+     <artifactId>springdoc-openapi-ui</artifactId>
+     <version>1.7.0</version>
+    </dependency>
   </dependencies>
 
   <build>
