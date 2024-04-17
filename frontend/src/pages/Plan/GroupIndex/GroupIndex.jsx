@@ -12,9 +12,9 @@ import SearchBar from "../../../components/Common/SearchBar/SearchBar"
 /**
  * Page for showing all groups.
  * 
- * @author Chimera 
- * @version 1.0
- * @since 2023-05-30
+ * @author Chimera, Team Mango
+ * @version 2.0
+ * @since 2024-04-17
  * @returns A group index page
  */
 export default function GroupIndex() {
