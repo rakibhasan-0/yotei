@@ -37,7 +37,6 @@
     "systest": "npx playwright test --reporter list",
     "systest:fast": "npx playwright test --reporter list --project 'Mobile Chrome'",
     "systest:ui": "npx playwright test --ui",
-    "prepare": "cd .. && husky install frontend/.husky"
   },
   "jest": {
     "setupFilesAfterEnv": [
