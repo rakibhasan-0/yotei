@@ -30,9 +30,9 @@ import ActivityDelete from "../../../components/Activity/ActivityDelete/Activity
  * Example usage:
  * 	   <TechniqueDetail id="test-id"/>
  * 
- * @author Team Medusa (Grupp 6) & Cyclops (Group 5)
- * @version 2.0
- * @since 2023-05-17
+ * @author Team Medusa (Grupp 6) & Cyclops (Group 5) & Tomato (Group 6)
+ * @version 3.0
+ * @since 2024-04-17
  */
 function TechniqueDetail({ id }) {
 
