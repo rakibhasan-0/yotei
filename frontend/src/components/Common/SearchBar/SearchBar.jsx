@@ -37,6 +37,7 @@ export default function SearchBar({ id, placeholder, text, onChange, addedTags, 
 	const handleAddTag = (tag) => {
 		// if tag is already added, don't add it
 		for (const tagInList of addedTags) {
+			
 			if (tag === tagInList) return
 		}
 		setAddedTags([...addedTags, tag])
@@ -44,6 +45,8 @@ export default function SearchBar({ id, placeholder, text, onChange, addedTags, 
 		const copy = [...suggestedTags]
 		const newSuggested = copy.filter(tagInCopy => tagInCopy !== tag)
 		setSuggestedTags(newSuggested)
+		//Set the searchbar to be empty when new tag is added.
+		onChange?.("")
 	}
 
 	const handleRemoveTag = (tag) => {

@@ -81,6 +81,7 @@ export default function ExerciseIndex() {
      * Also updates the exercise filter cookie.
      */
 	function setExerciseList() {
+		
 		setCookie("exercise-filter", {tags: addedTags, sort: sort.label}, {path: "/"})
 		if(exercises && searchText == "") {
 			const sortedList = [...exercises].sort(sort.cmp)
