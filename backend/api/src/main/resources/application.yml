@@ -16,3 +16,9 @@ spring:
       max-request-size: 1GB
       resolve-lazily: true
 
+springdoc:
+  api-docs:
+    enabled: ${ENABLE_SWAGGER}
+    path: /v3/api-docs  
+  swagger-ui:
+    enabled: ${ENABLE_SWAGGER}
