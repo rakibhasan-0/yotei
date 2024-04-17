@@ -2,6 +2,7 @@ stages:
   - linter
   - build
   - test
+  - doc
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
@@ -65,3 +66,21 @@ build-frontend:
     - npm run build
       
 
+generate-javadoc:
+  image: python:3.8-alpine3.17
+  rules:
+    - if: $CI_MERGE_REQUEST_STATE == 'merged'
+  before_script:
+    - apk add rsync openssh-client
+    - python -m pip install --upgrade pip
+    - pip install mkdocs mkdocs-material
+    - mkdir -p ~/.ssh
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_PRIVATE_KEY" | tr -d '\r')
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+  stage: doc
+  script:
+    - cd api-docs && mkdocs build -d deploy
+    - rsync -avzhuP ./deploy/* pvt@imp.cs.umu.se:/home/pvt/pvt-web/api-docs/
+  only:
+    - main
