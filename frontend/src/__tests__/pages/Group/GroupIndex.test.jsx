@@ -31,64 +31,71 @@ test("Should render title on init", async () => {
 
 // This test should make sure that the group search bar is working as intended (is case insensitive)
 test("Should render a group when searching for it", async () => {
-    render(<GroupIndex/>)
+	render(<GroupIndex/>)
 	
-    server.use(
-        rest.get("api/plan/all", async (req, res, ctx) => {
-            return res(
-                ctx.status(200),
-                ctx.json([
-                    {
-                        "id": 1,
-                        "name": "Grönt bälte träning",
-                        "userId": 1,
-                        "belts": [
-                          {
-                            "id": 7,
-                            "name": "Grönt",
-                            "color": "0C7D2B",
-                            "child": false
-                          }
-                        ]
-                    },
-                    {
-                        "id": 2,
-                        "name": "Orange och Gult bälte träning",
-                        "userId": 1,
-                        "belts": [
-                          {
-                            "id": 5,
-                            "name": "Orange",
-                            "color": "FFA133",
-                            "child": false
-                          },
-                          {
-                            "id": 9,
-                            "name": "Blått",
-                            "color": "1E9CE3",
-                            "child": false
-                          }
-                        ]
-                    },
-                ])
+	server.use(
+		rest.get("api/plan/all", async (req, res, ctx) => {
+			return res(
+				ctx.status(200),
+				ctx.json([
+					{
+						"id": 1,
+						"name": "Grönt bälte träning",
+						"userId": 1,
+						"belts": [
+							{
+								"id": 7,
+								"name": "Grönt",
+								"color": "0C7D2B",
+								"child": false
+							}
+						]
+					},
+					{
+						"id": 2,
+						"name": "Orange och Gult bälte träning",
+						"userId": 1,
+						"belts": [
+							{
+								"id": 5,
+								"name": "Orange",
+								"color": "FFA133",
+								"child": false
+							},
+							{
+								"id": 9,
+								"name": "Blått",
+								"color": "1E9CE3",
+								"child": false
+							}
+						]
+					},
+				])
                 
-            )
-        })
-    )
+			)
+		})
+	)
 
-    /*After rendering screen and fetching info, 
-    the test finds the searchbar and gives it the input "grönt" */
-    await screen.findByTestId("searchbar-groups")
-    const searchInput = screen.getByTestId("searchbar-groups").querySelector("input")
-    fireEvent.change(searchInput, { target: { value: "grönt" } })
+	/*After rendering screen and fetching info, 
+    the test finds the searchbar and gives it the input "grönt" 
+    */
 
-    //Test 1: Should only one of the belts.
-    expect(screen.getByText("Grönt bälte träning")).toBeInTheDocument()
-    expect(screen.queryByText("Orange och Gult bälte träning")).not.toBeInTheDocument()
+    /* Technical sidenote: Had good solution for test using queryselector("input"),
+    however linter complained resulting in a much more ugly solution.
+    Also test does not work if placeholder text changes. (fix ASAP if possible)
+    */ 
+	await screen.findByTestId("searchbar-groups")
+	const searchInput = screen.getByPlaceholderText("Sök efter grupp")
+    
+	fireEvent.change(searchInput, { target: { value: "grönt" } })
 
-    //Test 2: Change input which makes it so both belts should be found.
-    fireEvent.change(searchInput, {target: {value: "g"}})
+	//Test 1: Should only one of the belts.
+	expect(screen.getByText("Grönt bälte träning")).toBeInTheDocument()
+	expect(screen.queryByText("Orange och Gult bälte träning")).not.toBeInTheDocument()
 
-    expect(screen.getByText("Grönt bälte träning")).toBeInTheDocument()
-    expect(screen.getByText("Orange och Gult bälte träning")).toBeInTheDocument()
+	fireEvent.change(searchInput, { target: { value: "g" } })
+
+	//Test 2: Change input which makes it so both belts should be found.
+	expect(screen.getByText("Grönt bälte träning")).toBeInTheDocument()
+	expect(screen.getByText("Orange och Gult bälte träning")).toBeInTheDocument()
 })
