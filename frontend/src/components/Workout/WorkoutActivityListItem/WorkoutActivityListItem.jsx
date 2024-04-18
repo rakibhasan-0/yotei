@@ -8,6 +8,7 @@
  *
  * @author KEBABPIZZA (Group 8)
  * @author Cyclops    (Group 5) (2023-05-09)
+ * @author Durian     (Group 3) (2024-04-18)
  */
 import React, { useState } from "react"
 import styles from "./WorkoutActivityListItem.module.css"
@@ -48,7 +49,12 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 				</div>
 				
 				<div className={`${styles.listItemTime} d-flex align-items-center justify-content-end col-xs-5 pl-0 text-right`}>
-					<p className="mb-0">{activity.duration} min</p>
+					{activity.duration > 1? (
+                            <p className="mb-0">{activity.duration} min </p>
+                            ) : ( 
+                                <p className="mb-0"> - </p>
+                            )
+                        }
 					{
 						(!isFreeTextElem() && (activity.exercise?.description || activity.technique?.description))
 					&&
