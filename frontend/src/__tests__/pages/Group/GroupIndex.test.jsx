@@ -80,7 +80,7 @@ test("Should render a group when searching for it", async () => {
     the test finds the searchbar and gives it the input "grönt" 
     */
 
-    /* Technical sidenote: Had good solution for test using queryselector("input"),
+	/* Technical sidenote: Had good solution for test using queryselector("input"),
     however linter complained resulting in a much more ugly solution.
     Also test does not work if placeholder text changes. (fix ASAP if possible)
     */ 
