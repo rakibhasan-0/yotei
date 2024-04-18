@@ -2,18 +2,10 @@ stages:
   - test_system
   - linter
   - build
-  - test
+
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
-
-test-system:
-  tags:
-    - system
-  stage: test_system
-  script:
-    - echo "Hello world!"
-
 
 test-linter-frontend:
   image: node:19
@@ -77,8 +69,6 @@ build-frontend:
 deploy-test-server:
   tags:
     - system
-  rules:
-    - if: $CI_MERGE_REQUEST_STATE == 'merged'
   before_script:
     # do this without certificate
     - sed "s/5dv214vt24-test.cs.umu.se/" nginx/prod.conf > nginx/kund.conf
