@@ -9,7 +9,7 @@ import BeltIcon from "../../../components/Common/BeltIcon/BeltIcon"
 
 import { Pencil, Trash } from "react-bootstrap-icons"
 
-import "./TechniqueDetail.css"
+import "./TechniqueDetail.module.css"
 import ErrorState from "../../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../../components/Common/Spinner/Spinner"
 import Gallery from "../../../components/Gallery/Gallery"
