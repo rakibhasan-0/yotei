@@ -185,11 +185,10 @@ export default function ExerciseDetailsPage() {
 			</div>
 
 			<h2 style={{ fontWeight: "bold", display: "flex", flexDirection: "row", alignItems: "left", marginTop: "5px", alignContent: "left" }}>Beskrivning</h2>
-			{exercise?.description ? (
-				<p style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", textAlign: "left" }}>{exercise.description}</p>
-			) : (
-				<p style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", fontStyle: "italic", color: "var(--gray)", textAlign: "left" }}>Beskrivning saknas.</p>
-			)}
+			<p style={{ textAlign: "left", whiteSpace: exercise?.description ? "pre-line" : "normal", fontStyle: !exercise?.description ? "italic" : "normal", color: !exercise?.description ? "var(--gray)" : "inherit" }}>
+				{exercise?.description || "Beskrivning saknas."}
+			</p>
+
 
 			{tags?.length > 0 && (
 				<>
