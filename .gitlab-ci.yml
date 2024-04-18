@@ -1,7 +1,7 @@
 stages:
-  - test_system
   - linter
   - build
+  - test
   - deploy_test_server
 
 workflow:
