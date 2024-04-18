@@ -68,15 +68,19 @@ build-frontend:
       
 deploy-test-server:
   stage: deploy_test_server
+  if: 
   tags:
     - system
   script:
   # - rm -rf /var/www/html/ 
-  #  - cd ./infra && docker compose down -v
+  #  - cd /var/www/html/ && docker compose down -v
+
+    - docker build --no-cache -t pvt2024/database:latest ./infra/database
     - docker build --no-cache -t pvt2024/gateway:latest ./backend/gateway
     - docker build --no-cache -t pvt2024/api:latest ./backend/api 
     - docker build --no-cache -t pvt2024/frontend:latest ./frontend
 
+    - docker save -o /var/www/html/database_latest.tar pvt2024/database:latest
     - docker save -o /var/www/html/gateway_latest.tar pvt2024/gateway:latest
     - docker save -o /var/www/html/api_latest.tar pvt2024/api:latest
     - docker save -o /var/www/html/frontend_latest.tar pvt2024/frontend:latest
