@@ -98,6 +98,9 @@ function TechniqueDetail({ id }) {
 
 	if (loading) return <div className='technique-detail-center-spinner'><Spinner /></div>
 
+	const handleBackClick = () => {
+
+	}
 	return (
 		<>
 			<div>

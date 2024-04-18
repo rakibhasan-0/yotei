@@ -45,6 +45,7 @@ export default function TechniqueIndex() {
 			setBelts(filterCookie.belts)
 			setKihon(filterCookie.kihon)
 			setTags(filterCookie.tags)
+			setSearchBarText(filterCookie.searchText)
 		}
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -62,7 +63,7 @@ export default function TechniqueIndex() {
 			kihon: kihon,
 			selectedTags: tags,
 		}
-		setCookie("technique-filter-userId-"+context.userId, {belts: belts, kihon: kihon, tags: tags}, {path: "/"})
+		setCookie("technique-filter", {belts: belts, kihon: kihon, tags: tags, searchText: searchBarText}, {path: "/"})
 
 		if(args.selectedTags.find(tag => tag === "kihon waza") === undefined) {
 			setKihon(false)
