@@ -16,16 +16,16 @@ import FavoriteButton from "./WorkoutFavoriteButton"
 
 export default function WorkoutListItem({ workout, favoriteCallback, showFavorite = true}) {
 	return (
-		<div className={styles["row align-items-center font-weight-bold workout-item-row"]} style={{marginRight: 0, marginLeft: 0}}>
+		<div className={`${styles["workout-item-row"]}"row align-items-center font-weight-bold`} style={{marginRight: 0, marginLeft: 0}}>
 			{showFavorite ? (
 				<div className={styles["col-2 workout-star"]}>
 					<FavoriteButton workout={workout} favoriteCallback={favoriteCallback}/>
 				</div>
 			) : <div className={styles["workout-star col-2"]}/>}
-			<Link className={styles["col align-items-center align-self-center workout-text fill"]} to={`/workout/${workout.workoutID}`}>
+			<Link className={`${styles["workout-text"]} col align-items-center align-self-center fill`} to={`/workout/${workout.workoutID}`}>
 				{workout.name}
 			</Link>
-			<Link className={styles["col-2 align-items-center align-self-center workout-text fill"]} to={`/workout/${workout.workoutID}`}>
+			<Link className={`${styles["workout-text"]} col-2 align-items-center align-self-center fill`} to={`/workout/${workout.workoutID}`}>
 				<i id={styles["workout-detail-arrow"]} className={styles["bi-chevron-right h4"]}/>
 			</Link>
 		</div>
