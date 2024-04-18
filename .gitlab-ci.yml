@@ -3,7 +3,6 @@ stages:
   - linter
   - build
   - test
-# - doc
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
@@ -73,3 +72,16 @@ build-frontend:
       - frontend/.npm/
   script:
     - npm run build
+      
+
+deploy-test-server:
+  tags:
+    - system
+  rules:
+    - if: $CI_MERGE_REQUEST_STATE == 'merged'
+  before_script:
+    # do this without certificate
+    - sed "s/5dv214vt24-test.cs.umu.se/" nginx/prod.conf > nginx/kund.conf
+    - sed -i.bak 's/development.conf/kund.conf/g' docker-compose.yml 
+    - sed -i '/letsencrypt/s/# //' docker-compose.yml
+    - sed -i '/USE_IMP_SERVER/s/true/false/' ../frontend/.env
