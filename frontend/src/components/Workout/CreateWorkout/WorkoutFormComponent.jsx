@@ -94,7 +94,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 	 */
 	function handleGoBack() {
 		if (state?.fromSession) {
-			return navigate("/session/create", { replace: true, state })
+			return navigate(`/session/edit/${state.session.sessionId}`, { replace: true, state });
 		}
 		navigate("/workout")
 	}

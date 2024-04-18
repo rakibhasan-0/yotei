@@ -32,6 +32,7 @@ export default function SessionEdit() {
 	const [groups, setGroups] = useState()
 	const [group, setGroup] = useState(state?.session?.group)
 	const [workouts, setWorkouts] = useState()
+	const [sessionId, setSessionId] = useState()
 	const [workout, setWorkout] = useState(state?.session?.workout)
 	const [showPopup, setShowPopup] = useState(false)
 	const [error, setError] = useState()
@@ -80,6 +81,7 @@ export default function SessionEdit() {
 	}, [token])
 
 	useEffect(() => {
+		setSessionId(21);
 		(async () => {
 			try {
 				const response = await fetch("/api/workouts/all", { headers: { token } })
@@ -217,7 +219,8 @@ export default function SessionEdit() {
 						group,
 						date,
 						time,
-						workout
+						workout,
+						sessionId
 					},
 					fromSession: true	
 				}}>

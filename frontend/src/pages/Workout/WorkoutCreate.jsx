@@ -70,6 +70,11 @@ const WorkoutCreate = () => {
 		if (workoutId) {
 			setSuccess("Träningspasset skapades!")
 
+			if(state.fromSession) {
+				state.session.workout = body.workout
+				return navigate(`/session/edit/${state.session.sessionId}`, { replace: true, state });
+			}
+
 			if (state?.session) {
 				state.session.workout = body.workout
 				return navigate("/session/create", { replace: true, state })
