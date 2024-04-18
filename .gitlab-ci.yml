@@ -2,6 +2,7 @@ stages:
   - test_system
   - linter
   - build
+  - deploy_test_server
 
 workflow:
   rules:
@@ -65,13 +66,13 @@ build-frontend:
   script:
     - npm run build
       
-
 deploy-test-server:
+  stage: deploy_test_server
   tags:
     - system
   before_script:
-    # do this without certificate
-    - sed "s/5dv214vt24-test.cs.umu.se/" nginx/prod.conf > nginx/kund.conf
-    - sed -i.bak 's/development.conf/kund.conf/g' docker-compose.yml 
-    - sed -i '/letsencrypt/s/# //' docker-compose.yml
-    - sed -i '/USE_IMP_SERVER/s/true/false/' ../frontend/.env
+    - echo "Hello world!"
+#    - sed "s/5dv214vt24-test.cs.umu.se/" nginx/prod.conf > nginx/kund.conf
+#    - sed -i.bak 's/development.conf/kund.conf/g' docker-compose.yml 
+#    - sed -i '/letsencrypt/s/# //' docker-compose.yml
+#    - sed -i '/USE_IMP_SERVER/s/true/false/' ../frontend/.env
