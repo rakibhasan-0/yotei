@@ -27,9 +27,9 @@ import Tag from "../Tag/Tag"
  * 			setSuggestedTags={setSuggestedTags}
  * 		/>
  *
- * @author Team Minotaur Mavericks & Team Kraken (Group 8,Group 7)
- * @since 2023-05-02
- * @version 2.0 
+ * @author Team Minotaur Mavericks & Team Kraken & Team Mango (Group 8,Group 7, Group 4)
+ * @since 2024-04-17
+ * @version 3.0 
  */
 
 export default function SearchBar({ id, placeholder, text, onChange, addedTags, setAddedTags, suggestedTags, setSuggestedTags }) {
@@ -37,6 +37,7 @@ export default function SearchBar({ id, placeholder, text, onChange, addedTags, 
 	const handleAddTag = (tag) => {
 		// if tag is already added, don't add it
 		for (const tagInList of addedTags) {
+			
 			if (tag === tagInList) return
 		}
 		setAddedTags([...addedTags, tag])
@@ -44,6 +45,8 @@ export default function SearchBar({ id, placeholder, text, onChange, addedTags, 
 		const copy = [...suggestedTags]
 		const newSuggested = copy.filter(tagInCopy => tagInCopy !== tag)
 		setSuggestedTags(newSuggested)
+		//Set the searchbar to be empty when new tag is added.
+		onChange?.("")
 	}
 
 	const handleRemoveTag = (tag) => {

@@ -20,14 +20,14 @@ import { Link } from "react-router-dom"
  * The technique index page.
  * Fetches and displays the techniques.
  * 
- * @author Medusa
- * @version 1.0
- * @since 2023-05-03
+ * @author Medusa, Tomato (group 6)
+ * @version 2.0
+ * @since 2024-04-17
  */
 export default function TechniqueIndex() {
 	const [techniques, setTechniques] = useState([])
 	const context = useContext(AccountContext)
-	const [cookies, setCookie] = useCookies(["technique-filter"])
+	const [cookies, setCookie] = useCookies(["technique-filter-userId-"+context.userId])
 
 	const [kihon, setKihon] = useState(false)
 	const [belts, setBelts] = useState([])// eslint-disable-line
@@ -40,7 +40,7 @@ export default function TechniqueIndex() {
 	const [loading, setIsLoading] = useState(true)
 
 	useEffect(() => {
-		const filterCookie = cookies["technique-filter"]
+		const filterCookie = cookies["technique-filter-userId-"+context.userId]
 		if(filterCookie) {
 			setBelts(filterCookie.belts)
 			setKihon(filterCookie.kihon)
@@ -62,7 +62,7 @@ export default function TechniqueIndex() {
 			kihon: kihon,
 			selectedTags: tags,
 		}
-		setCookie("technique-filter", {belts: belts, kihon: kihon, tags: tags}, {path: "/"})
+		setCookie("technique-filter-userId-"+context.userId, {belts: belts, kihon: kihon, tags: tags}, {path: "/"})
 
 		if(args.selectedTags.find(tag => tag === "kihon waza") === undefined) {
 			setKihon(false)
