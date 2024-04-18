@@ -10,7 +10,7 @@
  * @since May 9, 2023
  * @version 3.0
  */
-import "./WorkoutListItem.css"
+import "./WorkoutListItem.module.css"
 import { Link } from "react-router-dom"
 import FavoriteButton from "./WorkoutFavoriteButton"
 
