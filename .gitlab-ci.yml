@@ -2,6 +2,7 @@ stages:
   - linter
   - build
   - test
+  - doc
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
@@ -65,3 +66,10 @@ build-frontend:
     - npm run build
       
 
+generate-javadoc:
+  stage: doc
+  tags:
+    - system
+  script:
+    - rm -rf /var/www/html/api-docs
+    - cd docs/api-docs && mkdocs build -d /var/www/html/api-docs
