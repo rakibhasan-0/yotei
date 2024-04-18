@@ -72,7 +72,7 @@ deploy-test-server:
   tags:
     - system
   script:
-    - cd /var/www/html/ && docker compose down -v
+#   - cd /var/www/html/ && docker compose down -v
     - rm -rf /var/www/html/*.tar
     - rm -rf /var/www/html/nginx
     - rm -rf /var/www/html/*.yml
