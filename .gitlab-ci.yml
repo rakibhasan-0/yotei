@@ -1,4 +1,5 @@
 stages:
+  - test_system
   - linter
   - build
   - test
@@ -7,10 +8,16 @@ workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
 
-test-linter-frontend:
-  image: node:19
+test-system:
   tags:
     - system
+  stage: test_system
+  script:
+    - echo "Hello world!"
+
+
+test-linter-frontend:
+  image: node:19
   before_script:
     - cd frontend
     - npm ci --no-progress --quiet --cache .npm --prefer-offline
@@ -67,3 +74,49 @@ build-frontend:
   script:
     - npm run build
       
+
+deploy-test-server:
+  tags:
+    - system
+  rules:
+    - if: $CI_MERGE_REQUEST_STATE == 'merged'
+  before_script:
+    # do this without certificate
+    - sed "s/5dv214vt24-test.cs.umu.se/" nginx/prod.conf > nginx/kund.conf
+    - sed -i.bak 's/development.conf/kund.conf/g' docker-compose.yml 
+    - sed -i '/letsencrypt/s/# //' docker-compose.yml
+    - sed -i '/USE_IMP_SERVER/s/true/false/' ../frontend/.env 
+
+
+deploy-prod-server:
+  tags:
+    - system
+    - prod_version # check how this will work
+  rules:
+    - if: $CI_MERGE_REQUEST_STATE == 'merged'
+  before_script:
+    - apt install snapd &> /dev/null
+    - snap install core &> /dev/null
+    - snap refresh core &> /dev/null
+    - snap install --classic certbot &> /dev/null
+    - ln -s /snap/bin/certbot /usr/bin/certbot &> /dev/null
+
+generate-javadoc:
+  tags:
+    - system
+  rules:
+    - if: $CI_MERGE_REQUEST_STATE == 'merged'
+  before_script:
+    - apk add rsync openssh-client
+    - python -m pip install --upgrade pip
+    - pip install mkdocs mkdocs-material
+    - mkdir -p ~/.ssh
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_PRIVATE_KEY" | tr -d '\r')
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+  stage: doc
+  script:
+    - cd api-docs && mkdocs build -d deploy
+    - rsync -avzhuP ./deploy/* pvt@imp.cs.umu.se:/home/pvt/pvt-web/api-docs/
+  only:
+    - main
