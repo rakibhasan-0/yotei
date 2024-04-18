@@ -9,7 +9,7 @@ import BeltIcon from "../../../components/Common/BeltIcon/BeltIcon"
 
 import { Pencil, Trash } from "react-bootstrap-icons"
 
-import "./TechniqueDetail.css"
+import "./TechniqueDetail.module.css"
 import ErrorState from "../../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../../components/Common/Spinner/Spinner"
 import Gallery from "../../../components/Gallery/Gallery"
@@ -31,7 +31,7 @@ import ActivityDelete from "../../../components/Activity/ActivityDelete/Activity
  * 	   <TechniqueDetail id="test-id"/>
  * 
  * @author Team Medusa (Grupp 6) & Cyclops (Group 5) & Tomato (Group 6)
- * @version 3.0
+ * @version 4.0
  * @since 2024-04-18
  */
 function TechniqueDetail({ id }) {
@@ -47,6 +47,18 @@ function TechniqueDetail({ id }) {
 	const accountRole = useContext(AccountContext)
 	const [showConfirmPopup, setShowConfirmPopup] = useState(false)
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
+
+	// Belt sorting order, Adult easiest -> Adult hardest -> Child easiest -> Child hardest
+	const order = [3, 5, 7, 9, 11, 13, 14, 15, 16, 4, 6, 8, 10, 12]
+	const beltSort = (a, b) => {
+		const indexA = order.indexOf(a.id)
+		const indexB = order.indexOf(b.id)
+
+		if (indexA === -1) return 1
+		if (indexB === -1) return -1
+
+		return indexA - indexB
+	}
 
 	const handleGet = useCallback(() => {
 		setLoading(true)
@@ -131,12 +143,18 @@ function TechniqueDetail({ id }) {
 				</div>
 				}
 				<div className="technique-detail-belts-container">
-					{technique.belts ? (
-						technique.belts.map(belt => <BeltIcon key={belt.name} belt={belt} />)
+					{technique.belts ? ( 
+						technique.belts.filter(belt => !belt.child).sort(beltSort).map(belt => <BeltIcon key={belt.name} belt={belt} />)
 					) : (
 						<p>Inga bälten kunde hittas för denna teknik.</p>
 					)}
 				</div>
+				<div className="technique-detail-belts-container">
+					{(
+						technique.belts.filter(belt => belt.child).sort(beltSort).map(belt => <BeltIcon key={belt.name} belt={belt} />)
+					)}
+				</div> 
+				
 				<h2>Beskrivning</h2>
 				{technique.description ? (
 					<pre>{technique.description}</pre>

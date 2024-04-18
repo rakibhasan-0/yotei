@@ -1,5 +1,5 @@
 import { ChevronRight } from "react-bootstrap-icons"
-import "./ExerciseListItem.css"
+import "./ExerciseListItem.module.css"
 import { Link } from "react-router-dom"
 
 /**

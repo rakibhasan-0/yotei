@@ -17,9 +17,9 @@ import {setError as setErrorToast} from "../../utils"
 /**
  * A component for displaying details about an exercise.
  * 
- * @author Chimera, Phoenix
- * @since 2023-06-01
- * @version 2.0
+ * @author Chimera, Phoenix, Team Coconut
+ * @since 2024-04-18
+ * @version 2.1
  * @returns A page for displaying details about an exercise.
  */
 export default function ExerciseDetailsPage() {
@@ -185,11 +185,10 @@ export default function ExerciseDetailsPage() {
 			</div>
 
 			<h2 style={{ fontWeight: "bold", display: "flex", flexDirection: "row", alignItems: "left", marginTop: "5px", alignContent: "left" }}>Beskrivning</h2>
-			{exercise?.description ? (
-				<p style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", textAlign: "left" }}>{exercise.description}</p>
-			) : (
-				<p style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", fontStyle: "italic", color: "var(--gray)", textAlign: "left" }}>Beskrivning saknas.</p>
-			)}
+			<p style={{ textAlign: "left", whiteSpace: exercise?.description ? "pre-line" : "normal", fontStyle: !exercise?.description ? "italic" : "normal", color: !exercise?.description ? "var(--gray)" : "inherit" }}>
+				{exercise?.description || "Beskrivning saknas."}
+			</p>
+
 
 			{tags?.length > 0 && (
 				<>

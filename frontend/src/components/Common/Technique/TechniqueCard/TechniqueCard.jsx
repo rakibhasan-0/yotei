@@ -1,6 +1,6 @@
 import { ChevronDown } from "react-bootstrap-icons"
-import "./TechniqueCard.css"
 import { Link, useNavigate } from "react-router-dom"
+import "./TechniqueCard.module.css"
 
 /**
  * Technique card component.
