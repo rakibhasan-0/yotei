@@ -68,7 +68,7 @@ build-frontend:
       
 deploy-test-server:
   stage: deploy_test_server
-  if: 
+  # if: merge
   tags:
     - system
   script:
