@@ -71,8 +71,19 @@ deploy-test-server:
   tags:
     - system
   script:
-    - echo "Hello world!"
-#    - sed "s/5dv214vt24-test.cs.umu.se/" nginx/prod.conf > nginx/kund.conf
-#    - sed -i.bak 's/development.conf/kund.conf/g' docker-compose.yml 
-#    - sed -i '/letsencrypt/s/# //' docker-compose.yml
-#    - sed -i '/USE_IMP_SERVER/s/true/false/' ../frontend/.env
+  # - rm -rf /var/www/html/ 
+    - docker compose down -v
+    - docker build --no-cache -t pvt2024/gateway:latest ./backend/gateway
+    - docker build --no-cache -t pvt2024/api:latest ./backend/api 
+    - docker build --no-cache -t pvt2024/frontend:latest ./frontend
+
+    - docker save -o /var/www/html/gateway_latest.tar pvt2024/gateway:latest
+    - docker save -o /var/www/html/api_latest.tar pvt2024/api:latest
+    - docker save -o /var/www/html/frontend_latest.tar pvt2024/frontend:latest
+
+    - cp ./infra/docker-compose.yml /var/www/html/
+    - cp -r ./infra/nginx /var/www/html/
+
+    - cd /var/www/html/
+    - docker compose up
+    
