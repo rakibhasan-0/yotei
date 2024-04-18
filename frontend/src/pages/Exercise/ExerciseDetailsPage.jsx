@@ -17,9 +17,9 @@ import {setError as setErrorToast} from "../../utils"
 /**
  * A component for displaying details about an exercise.
  * 
- * @author Chimera, Phoenix
- * @since 2023-06-01
- * @version 2.0
+ * @author Chimera, Phoenix, Team Coconut
+ * @since 2024-04-18
+ * @version 2.1
  * @returns A page for displaying details about an exercise.
  */
 export default function ExerciseDetailsPage() {
