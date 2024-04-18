@@ -1,5 +1,5 @@
 import React from "react"
-import "./Tag.module.css"
+import styles from "./Tag.module.css"
 import { PlusCircle, XCircleFill } from "react-bootstrap-icons"
 
 /**
@@ -35,23 +35,23 @@ export default function Tag({ id, tagType, onClick, text }) {
 
 	if (tagType === "default") {
 		return (
-			<button type="button" id={id} className="base-tag" onClick={onClick}>
-				<p className="no-margin">{text}</p>
+			<button type="button" id={id} className={styles["base-tag"]} onClick={onClick}>
+				<p className={styles["no-margin"]}>{text}</p>
 			</button>
 
 		)
 	} else if (tagType === "suggest") {
 		return (
-			<button type="button" id={id} className="base-tag suggest" onClick={onClick}>
-				<p className="no-margin">{text}</p>
-				<PlusCircle className="ml-2" size={18} color="black"/>
+			<button type="button" id={id} className={styles["base-tag suggest"]} onClick={onClick}>
+				<p className={styles["no-margin"]}>{text}</p>
+				<PlusCircle className={styles["ml-2"]} size={18} color="black"/>
 			</button>
 		)
 	} else {
 		return (
-			<button type="button" id={id} className="base-tag" onClick={onClick}>
-				<p className="no-margin">{text}</p>
-				<XCircleFill className="ml-2 flex-shrink-0" size={18} color="black"/>
+			<button type="button" id={id} className={styles["base-tag"]} onClick={onClick}>
+				<p className={styles["no-margin"]}>{text}</p>
+				<XCircleFill className={styles["ml-2 flex-shrink-0"]} size={18} color="black"/>
 			</button>
 		)
 	}

@@ -1,4 +1,4 @@
-import "./Spinner.module.css"
+import styles from "./Spinner.module.css"
 
 /**
  * An indicator for the loading state.
@@ -16,7 +16,7 @@ import "./Spinner.module.css"
 function Spinner({ id }) {
 	return (
 		<svg
-			className="spinner-spinner"
+			className={styles["spinner-spinner"]}
 			width="45"
 			height="45"
 			viewBox="0 0 45 45"

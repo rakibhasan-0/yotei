@@ -1,5 +1,5 @@
 import { ChevronRight } from "react-bootstrap-icons"
-import "./ExerciseListItem.module.css"
+import styles from "./ExerciseListItem.module.css"
 import { Link } from "react-router-dom"
 
 /**
@@ -35,16 +35,16 @@ import { Link } from "react-router-dom"
 export default function ExerciseListItem({ item, text, detailURL, id, index, checkBox }) {
 
 	return (
-		<div className="exercise-list-container" data-testid="ExerciseListItem">
-			<div className='exercise-list-header' style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
+		<div className={styles["exercise-list-container"]} data-testid="ExerciseListItem">
+			<div className={styles['exercise-list-header']} style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
 				{checkBox}
 				<Link to={detailURL + id} data-testid="ExerciseListItem-link" style={{width: "100%"}}>
 					<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
 						<div style={{display: "flex", alignItems: "center"}}>
-							<div className="href-link" style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="ExerciseListItem-item">{item}</div>
+							<div className={styles["href-link"]} style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="ExerciseListItem-item">{item}</div>
 						</div>
-						<div className="flex-shrink-0" style={{display: "flex", alignItems: "center"}}>
-							<div className="exercise-list-duration" data-testid="ExerciseListItem-text">
+						<div className={styles["flex-shrink-0"]} style={{display: "flex", alignItems: "center"}}>
+							<div className={styles["exercise-list-duration"]} data-testid="ExerciseListItem-text">
 								<p>{text}</p>
 							</div>
 							<ChevronRight size="30px"/>

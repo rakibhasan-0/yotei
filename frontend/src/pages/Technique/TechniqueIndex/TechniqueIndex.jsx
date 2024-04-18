@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react"
 import RoundButton from "../../../components/Common/RoundButton/RoundButton"
 import { AccountContext } from "../../../context"
-import "./TechniqueIndex.module.css"
+import styles from "./TechniqueIndex.module.css"
 import { Plus } from "react-bootstrap-icons"
 import SearchBar from "../../../components/Common/SearchBar/SearchBar"
 import { getTechniques } from "../../../components/Common/SearchBar/SearchBarUtils"
@@ -93,7 +93,7 @@ export default function TechniqueIndex() {
 
 			<div>
 				<SearchBar
-					id="searchbar-technique"
+					id={styles["searchbar-technique"]}
 					placeholder="Sök efter tekniker"
 					text={searchBarText}
 					onChange={setSearchBarText}
@@ -109,7 +109,7 @@ export default function TechniqueIndex() {
 						onBeltChange={handleBeltChanged}
 						kihon={kihon}
 						onKihonChange={handleKihonChanged}
-						id="test"
+						id={styles["test"]}
 						onClearBelts={clearSelectedBelts}
 						filterWhiteBelt={true}>
 					</TechniqueFilter>
@@ -130,8 +130,8 @@ export default function TechniqueIndex() {
 			
 			{isAdmin(context) &&
 				<Link to={"create"}>
-					<RoundButton id="technique-add-button">
-						<Plus className="plus-icon" />
+					<RoundButton id={styles["technique-add-button"]}>
+						<Plus className={styles["plus-icon"]} />
 					</RoundButton>
 				</Link>
 			}

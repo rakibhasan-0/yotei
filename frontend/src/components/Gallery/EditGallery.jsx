@@ -5,8 +5,7 @@ import VideoPlayerReactPlayer from "../VideoPlayer/VideoPlayerReactPlayer"
 import Image from "../Image/Image"
 import Popup from "../Common/Popup/Popup"
 import ConfirmPopup from "../Common/ConfirmPopup/ConfirmPopup"
-import "../Gallery/EditGallery.module.css"
-import "../Gallery/Gallery.module.css"
+import styles from "../Gallery/Gallery.module.css"
 import { AccountContext } from "../../context"
 import {Trash as TrashIcon } from "react-bootstrap-icons"
 import {CameraVideoOff as NoMediaIcon } from "react-bootstrap-icons"
@@ -106,9 +105,9 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	 * Is displayed if no media is avaliable
 	 */
 	const NoMedia = <div id={"no-media-box"}
-		className = "d-flex flex-column justify-content-center align-items-center no-media-container border">
+		className = {styles["d-flex flex-column justify-content-center align-items-center no-media-container border"]}>
 		<NoMediaIcon size={"20%"} ></NoMediaIcon>
-		<span className = "no-media-span">Ingen media just nu, ladda upp genom att klicka på plus</span>
+		<span className = {styles["no-media-span"]}>Ingen media just nu, ladda upp genom att klicka på plus</span>
 	</div>
 
 
@@ -146,7 +145,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	function RemoveButton(mediaObject){
 		return(
 			<div id={`${mediaObject.id}-removal-button`}  
-				className="btn remove-media-button" 
+				className={styles["btn remove-media-button"]} 
 				onClick={() => {setupRemovePopup(mediaObject)}} 
 			>
 				<TrashIcon color="var(--red-primary)" size={30}></TrashIcon>
@@ -373,14 +372,14 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 
 	return (
 		
-		<div className="container mb-2 d-flex flex-column" style={{alignItems : !media.length ? "center" : "normal"}} id={id}>
+		<div className={styles["container mb-2 d-flex flex-column"]} style={{alignItems : !media.length ? "center" : "normal"}} id={id}>
 			{ConfirmRemovePopup}
 			{UploadPopup}
-			<div className="row mt-2 mb-4"  style={{backgroundColor : media.length ? "var(--black-primary)" : "var(--background)"}}>
-				<div className="col-sm-12 text-center ">
+			<div className={styles["row mt-2 mb-4"]}  style={{backgroundColor : media.length ? "var(--black-primary)" : "var(--background)"}}>
+				<div className={styles["col-sm-12 text-center "]}>
 					<Carousel showThumbs={false} showStatus={false}>                         
 						{pictures.map((image, index) => (
-							<div key={index} className="d-flex flex-column justify-content-center align-items-center">
+							<div key={index} className={styles["d-flex flex-column justify-content-center align-items-center"]}>
 								<Image id={`${image.id}-image`} path={image.url} />
 								{MediaDescription(image)}
 								{RemoveButton(image)}
@@ -397,7 +396,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 				</div>
 			</div>
 			{pictures.length < 1 && videos.length < 1 && NoMedia}
-			<div className="d-flex flex-column justify-content-center align-items-center" style={{width: "100%"}}>
+			<div className={styles["d-flex flex-column justify-content-center align-items-center"]} style={{width: "100%"}}>
 				<Button id={"add-media-button"} onClick={() => setShowAddPopup(true)}>
 					<h2>+ Media</h2>
 				</Button>

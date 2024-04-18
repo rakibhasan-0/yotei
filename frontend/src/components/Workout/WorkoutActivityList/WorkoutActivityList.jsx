@@ -8,7 +8,7 @@
  * @author G5 Cyclops (2023-05-04)
  */
 import WorkoutActivityListItem from "../WorkoutActivityListItem/WorkoutActivityListItem.jsx"
-import "./WorkoutActivityList.module.css"
+import styles from "./WorkoutActivityList.module.css"
 import {useState} from "react"
 
 export default function WorkoutActivityList({categoryName, activities, id}) {
@@ -23,7 +23,7 @@ export default function WorkoutActivityList({categoryName, activities, id}) {
 	return (
 		<fieldset className={setPadding(activities.length, categoryName) + " my-3 "} id={id}>
 			<legend style={{textAlign: "left"}}>
-				<div className="d-flex align-items-center justify-content-center" onClick={() => setIsCollapsed(!isCollapsed)}>
+				<div className={styles["d-flex align-items-center justify-content-center"]} onClick={() => setIsCollapsed(!isCollapsed)}>
 					{categoryName != null && <p className="m-0">{categoryName}</p> }
 					<i style={isCollapsed? {fontSize: "16px"} : rotatedIcon} 
 						className={categoryName != null ? "ml-2 bi bi-chevron-down" : "bi bi-chevron-down"}/>

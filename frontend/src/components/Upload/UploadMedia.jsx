@@ -4,7 +4,7 @@ import InputTextField from "../Common/InputTextField/InputTextField"
 import TextArea from "../Common/TextArea/TextArea"
 import {Upload as UploadIcon}  from "react-bootstrap-icons"
 import { useState } from "react"
-import "./UploadMedia.module.css"
+import styles from "./UploadMedia.module.css"
 import { AccountContext } from "../../context"
 import React, { useContext } from "react"
 import ReactPlayer from "react-player"
@@ -141,9 +141,9 @@ function UploadMedia({id, exerciseId, fetchMediaMetaToBeUploaded, fetchMediaFile
 				<div style={{marginTop: 20}}>
 					{showSpinner && <div><p>Laddar upp...</p>  <Spinner id="test-id"/></div>}
 					<h2 style={{marginTop : 10}}>Fil-Detaljer:</h2>
-					<p className="file-detail">Namn: {selectedFile.name}</p>
-					<p className="file-detail">Typ: {selectedFile.type}</p>
-					<p className="file-detail">
+					<p className={styles["file-detail"]}>Namn: {selectedFile.name}</p>
+					<p className={styles["file-detail"]}>Typ: {selectedFile.type}</p>
+					<p className={styles["file-detail"]}>
                     Storlek:{" "}
 						{selectedFile.size > 1048576 ? Math.ceil(selectedFile.size/1048576).toString() +"mB" : Math.ceil(selectedFile.size/1924).toString() +"kB" }
 					</p>
@@ -170,8 +170,8 @@ function UploadMedia({id, exerciseId, fetchMediaMetaToBeUploaded, fetchMediaFile
 
 	return (
 		<div id={id}>
-			<div className="upload-media-container">
-				<div className="uppload-file-btn-wrapper">
+			<div className={styles["upload-media-container"]}>
+				<div className={styles["uppload-file-btn-wrapper"]}>
 					<Button width={"100%"}>
 						Välj Fil
 					</Button>
@@ -182,15 +182,15 @@ function UploadMedia({id, exerciseId, fetchMediaMetaToBeUploaded, fetchMediaFile
 					disabled={!hasFile}
 					id="upload-file-button"
 				>
-					<div className="upload-media-btn">
+					<div className={styles["upload-media-btn"]}>
 						<UploadIcon size="15%"/> 
 						Ladda Upp Media
 					</div>
 				</Button>
 				{showFileData()}
 			</div>
-			<hr className="line"/>
-			<div className="d-flex justify-content-center link-media-container">
+			<hr className={styles["line"]}/>
+			<div className={styles["d-flex justify-content-center link-media-container"]}>
 				<div>
 					<InputTextField
 						id="link-input"
@@ -203,11 +203,11 @@ function UploadMedia({id, exerciseId, fetchMediaMetaToBeUploaded, fetchMediaFile
 						width={"100%"}
 						disabled={link.length == 0}
 					>
-						<div className="upload-link-btn"><LinkIcon  size="15%" /> Länka Till Media</div>
+						<div className={styles["upload-link-btn"]}><LinkIcon  size="15%" /> Länka Till Media</div>
 					</Button>
 				</div>
 			</div>
-			<hr className="line"/>
+			<hr className={styles["line"]}/>
 			<div>
 				<TextArea
 					id="description-input"

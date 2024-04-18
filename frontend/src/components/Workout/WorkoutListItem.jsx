@@ -10,23 +10,23 @@
  * @since May 9, 2023
  * @version 3.0
  */
-import "./WorkoutListItem.module.css"
+import styles from "./WorkoutListItem.module.css"
 import { Link } from "react-router-dom"
 import FavoriteButton from "./WorkoutFavoriteButton"
 
 export default function WorkoutListItem({ workout, favoriteCallback, showFavorite = true}) {
 	return (
-		<div className="row align-items-center font-weight-bold workout-item-row" style={{marginRight: 0, marginLeft: 0}}>
+		<div className={styles["row align-items-center font-weight-bold workout-item-row"]} style={{marginRight: 0, marginLeft: 0}}>
 			{showFavorite ? (
-				<div className="col-2 workout-star">
+				<div className={styles["col-2 workout-star"]}>
 					<FavoriteButton workout={workout} favoriteCallback={favoriteCallback}/>
 				</div>
-			) : <div className="workout-star col-2"/>}
-			<Link className="col align-items-center align-self-center workout-text fill" to={`/workout/${workout.workoutID}`}>
+			) : <div className={styles["workout-star col-2"]}/>}
+			<Link className={styles["col align-items-center align-self-center workout-text fill"]} to={`/workout/${workout.workoutID}`}>
 				{workout.name}
 			</Link>
-			<Link className="col-2 align-items-center align-self-center workout-text fill" to={`/workout/${workout.workoutID}`}>
-				<i id="workout-detail-arrow" className="bi-chevron-right h4"/>
+			<Link className={styles["col-2 align-items-center align-self-center workout-text fill"]} to={`/workout/${workout.workoutID}`}>
+				<i id={styles["workout-detail-arrow"]} className={styles["bi-chevron-right h4"]}/>
 			</Link>
 		</div>
 	)
