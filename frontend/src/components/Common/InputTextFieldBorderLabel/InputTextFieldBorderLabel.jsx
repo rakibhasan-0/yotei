@@ -1,5 +1,5 @@
 import {React, forwardRef} from "react"
-import "./InputTextFieldBorderLabel.css"
+import "./InputTextFieldBorderLabel.module.css"
 import InputTextField from "../InputTextField/InputTextField"
 /**
  * This is a version of the standard InputTextField page, used for using standard InputTextField but with a "border-label".

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react"
-import "./AddTagPopup.css"
+import "./AddTagPopup.module.css"
 import Tag from "./Tag"
 import { Search } from "react-bootstrap-icons"
 import Button from "../Button/Button"

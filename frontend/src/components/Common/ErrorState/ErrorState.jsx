@@ -2,7 +2,7 @@ import Button from "../Button/Button"
 
 import { EmojiFrown } from "react-bootstrap-icons"
 
-import "./ErrorState.css"
+import "./ErrorState.module.css"
 /**
  * A placeholder for content when an error has occured.
  * 
