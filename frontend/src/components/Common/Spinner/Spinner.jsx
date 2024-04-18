@@ -1,4 +1,4 @@
-import "./Spinner.css"
+import "./Spinner.module.css"
 
 /**
  * An indicator for the loading state.
