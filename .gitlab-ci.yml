@@ -68,7 +68,7 @@ build-frontend:
       
 deploy-test-server:
   stage: deploy_test_server
-  # if: merge
+  # if: merge $CI_COMMIT_BRANCH && $CI_PIPELINE_SORUCE == "push"
   tags:
     - system
   script:
