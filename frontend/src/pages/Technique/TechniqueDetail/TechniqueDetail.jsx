@@ -32,7 +32,7 @@ import ActivityDelete from "../../../components/Activity/ActivityDelete/Activity
  * 
  * @author Team Medusa (Grupp 6) & Cyclops (Group 5) & Tomato (Group 6)
  * @version 3.0
- * @since 2024-04-17
+ * @since 2024-04-18
  */
 function TechniqueDetail({ id }) {
 
@@ -98,9 +98,6 @@ function TechniqueDetail({ id }) {
 
 	if (loading) return <div className='technique-detail-center-spinner'><Spinner /></div>
 
-	const handleBackClick = () => {
-
-	}
 	return (
 		<>
 			<div>
@@ -167,7 +164,7 @@ function TechniqueDetail({ id }) {
 
 
 				<div className="technique-detail-button-container">
-					<Button outlined={true} onClick={() => navigate(-1)}>
+					<Button outlined={true} onClick={() => navigate("/technique", {state: {restoreSearchText: true}})}>
 						<p>Tillbaka</p>
 					</Button>
 				</div>

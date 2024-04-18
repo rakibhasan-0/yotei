@@ -14,6 +14,7 @@ import Tag from "../Tag/Tag"
  *	   setAddedTags @type {function} - Setter for addedTags
  *     suggestedTags @type {Array} - List of suggested tags
  *     setSuggestedTags @type {function} - Setter for suggestedTags
+ * 	   onBlur @type {function} - Called when the user leaves the input field
  *
  * Example usage:
  *     <SearchBar 
@@ -27,12 +28,12 @@ import Tag from "../Tag/Tag"
  * 			setSuggestedTags={setSuggestedTags}
  * 		/>
  *
- * @author Team Minotaur Mavericks & Team Kraken & Team Mango (Group 8,Group 7, Group 4)
+ * @author Team Minotaur Mavericks & Team Kraken & Team Mango & Team Tomato (Group 8,Group 7, Group 4, Group 6)
  * @since 2024-04-17
  * @version 3.0 
  */
 
-export default function SearchBar({ id, placeholder, text, onChange, addedTags, setAddedTags, suggestedTags, setSuggestedTags }) {
+export default function SearchBar({ id, placeholder, text, onChange, addedTags, setAddedTags, suggestedTags, setSuggestedTags, onBlur }) {
 
 	const handleAddTag = (tag) => {
 		// if tag is already added, don't add it
@@ -59,6 +60,7 @@ export default function SearchBar({ id, placeholder, text, onChange, addedTags, 
 	return (
 		<div id={id} className={style.searchBar}>
 			<input
+				onBlur={onBlur}
 				className={style.searchBarInputArea}
 				placeholder={placeholder}
 				value={text}
