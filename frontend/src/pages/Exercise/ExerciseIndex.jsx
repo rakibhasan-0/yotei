@@ -115,7 +115,7 @@ export default function ExerciseIndex() {
 				setSuggestedTags={setSuggestedTags}
 			/>
 
-			<FilterContainer id="ei-search-results" title="Sortering">
+			<FilterContainer id="ei-filter" title="Sortering">
 				<Sorter onSortChange={setSort} id="ei-sort" selected={sort} options={sortOptions} />
 			</FilterContainer>
 			{ loading ? <Spinner/> :
