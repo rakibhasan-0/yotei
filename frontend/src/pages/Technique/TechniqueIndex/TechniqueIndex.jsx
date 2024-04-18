@@ -14,7 +14,7 @@ import TechniqueCard from "../../../components/Common/Technique/TechniqueCard/Te
 import InfiniteScrollComponent from "../../../components/Common/List/InfiniteScrollComponent"
 import { isAdmin } from "../../../utils"
 import Spinner from "../../../components/Common/Spinner/Spinner"
-import { Link, useLocation} from "react-router-dom"
+import { Link, useLocation, useNavigate} from "react-router-dom"
 
 /**
  * The technique index page.
@@ -37,8 +37,8 @@ export default function TechniqueIndex() {
 	const [showPopup, setShowPopup] = useState(false)
 	const [loading, setIsLoading] = useState(true)
 	const location = useLocation()
-	const restoreSearchText = location.state && location.state.restoreSearchText
-	
+	const clearSearchText = location.state && location.state.clearSearchText
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		const filterCookie = cookies["technique-filter-userId-"+context.userId]
@@ -46,7 +46,6 @@ export default function TechniqueIndex() {
 			setBelts(filterCookie.belts)
 			setKihon(filterCookie.kihon)
 			setTags(filterCookie.tags)
-			setSearchBarText(filterCookie.searchText)
 		}
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -64,7 +63,7 @@ export default function TechniqueIndex() {
 			kihon: kihon,
 			selectedTags: tags,
 		}
-		setCookie("technique-filter", {belts: belts, kihon: kihon, tags: tags, searchText: searchBarText}, {path: "/"})
+		setCookie("technique-filter-userId-"+context.userId, {belts: belts, kihon: kihon, tags: tags, searchText: searchBarText}, {path: "/"})
 
 		if(args.selectedTags.find(tag => tag === "kihon waza") === undefined) {
 			setKihon(false)
@@ -81,18 +80,24 @@ export default function TechniqueIndex() {
 
 	}, [showPopup, searchBarText, belts, kihon, tags, context.token, map, mapActions])
 
-	// Sets the searchTextBar to its previous state if the user navigates back from Technique detail
 	useEffect(() => {
-		const saveSearchTextBar = localStorage.getItem("searchText")
-		if (saveSearchTextBar && restoreSearchText) {
-			setSearchBarText(saveSearchTextBar)
+		navigate(location.pathname, {})
+	}, [location.pathname, navigate])
+
+	useEffect(() => {
+		const searchText = localStorage.getItem("searchText")
+		if(searchText) {
+			if (clearSearchText) {
+				localStorage.removeItem("searchText")
+			}
+			else{
+				setSearchBarText(searchText)
+			}
 		}
-		else{
-			localStorage.removeItem("searchText")
-		}
-	}, [restoreSearchText])
+		
+	}, [clearSearchText])
 	
-	const saveSearchText = async () => {
+	const saveSearchText = () => {
 		localStorage.setItem("searchText", searchBarText)
 	}
 

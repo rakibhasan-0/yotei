@@ -162,9 +162,8 @@ function TechniqueDetail({ id }) {
 
 				<Gallery id={techniqueId} />
 
-
 				<div className="technique-detail-button-container">
-					<Button outlined={true} onClick={() => navigate("/technique", {state: {restoreSearchText: true}})}>
+					<Button outlined={true} onClick={() => navigate("/technique")}>
 						<p>Tillbaka</p>
 					</Button>
 				</div>
