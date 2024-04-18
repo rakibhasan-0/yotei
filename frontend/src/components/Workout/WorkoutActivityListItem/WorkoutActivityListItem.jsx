@@ -49,12 +49,9 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 				</div>
 				
 				<div className={`${styles.listItemTime} d-flex align-items-center justify-content-end col-xs-5 pl-0 text-right`}>
-					{activity.duration > 1? (
-                            <p className="mb-0">{activity.duration} min </p>
-                            ) : ( 
-                                <p className="mb-0"> - </p>
-                            )
-                        }
+					{activity.duration > 1? (<p className="mb-0">{activity.duration} min </p>
+					) : ( <p className="mb-0"> - </p>)
+					}
 					{
 						(!isFreeTextElem() && (activity.exercise?.description || activity.technique?.description))
 					&&

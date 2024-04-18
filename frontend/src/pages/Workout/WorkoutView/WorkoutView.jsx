@@ -260,11 +260,10 @@ function getWorkoutInfoContainer(workoutData, setShowPopup, context, userId) {
 						<div className={styles.workoutDetailColumnItem} style={{paddingLeft:"37px"}}>
 							<h2 className="font-weight-bold mb-0">Tidslängd</h2>
 							{workoutData.duration > 1? (
-							<p className="mb-0">{workoutData.duration} min</p>
-                            ):( 
-							<p className="mb-0">-</p>
-						)
-                        }
+								<p className="mb-0">{workoutData.duration} min</p> ):( 
+								<p className="mb-0">-</p>
+							)
+							}
 						</div>
 					</div>
 
