@@ -17,9 +17,9 @@ import { isEditor } from "../../utils"
 /**
  * Displays a searchbar, a sorter and a list of exercises.
  * 
- * @author Hawaii, Verona, Phoenix, Cyclops
- * @since 2023-05-30
- * @version 2.0
+ * @author Hawaii, Verona, Phoenix, Cyclops, Team Mango
+ * @since 2024-04-17
+ * @version 3.0
  */
 export default function ExerciseIndex() {
 	const sortOptions = [
