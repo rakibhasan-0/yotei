@@ -49,16 +49,16 @@ function TechniqueDetail({ id }) {
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
 
 	// Belt sorting order, Adult easiest -> Adult hardest -> Child easiest -> Child hardest
-	const order = [3, 5, 7, 9, 11, 13, 14, 15, 16, 4, 6, 8, 10, 12];
+	const order = [3, 5, 7, 9, 11, 13, 14, 15, 16, 4, 6, 8, 10, 12]
 	const beltSort = (a, b) => {
-		const indexA = order.indexOf(a.id);
-		const indexB = order.indexOf(b.id);
+		const indexA = order.indexOf(a.id)
+		const indexB = order.indexOf(b.id)
 
 		if (indexA === -1) return 1
 		if (indexB === -1) return -1
 
-		return indexA - indexB;
-	};	
+		return indexA - indexB
+	}
 
 	const handleGet = useCallback(() => {
 		setLoading(true)
