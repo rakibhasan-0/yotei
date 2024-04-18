@@ -12,7 +12,7 @@ services:
     links:
       - gateway
   psql:
-    build: ./database
+    build: ./database:5432
     restart: always
     environment:
       - POSTGRES_USER=psql
@@ -23,14 +23,14 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
   frontend:
-    image: pvt2023/frontend:latest
+    image: pvt2024/frontend:latest
     restart: always
     ports:
       - "3000:3000"
     links:
       - psql
   gateway:
-    image: pvt2023/gateway:latest
+    image: pvt2024/gateway:latest
     restart: always
     ports:
       - "8080:8080"
@@ -44,7 +44,7 @@ services:
     links:
       - api
   api:
-    image: pvt2023/api:latest
+    image: pvt2024/api:latest
     restart: always
     volumes:
       - ./media:/media

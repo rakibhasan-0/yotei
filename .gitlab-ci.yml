@@ -92,6 +92,6 @@ deploy-test-server:
     - cp ./infra/docker-compose.yml /var/www/html/
     - cp -r ./infra/nginx /var/www/html/
 
-    - cd /var/www/html/database
+    - cd /var/www/html/
     - docker compose up
     
