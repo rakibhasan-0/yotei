@@ -72,7 +72,7 @@ const WorkoutCreate = () => {
 
 			if(state.fromSession) {
 				state.session.workout = body.workout
-				return navigate(`/session/edit/${state.session.sessionId}`, { replace: true, state });
+				return navigate(`/session/edit/${state.session.sessionId}`, { replace: true, state })
 			}
 
 			if (state?.session) {

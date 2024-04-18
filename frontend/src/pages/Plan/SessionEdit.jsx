@@ -33,6 +33,7 @@ export default function SessionEdit() {
 	const [group, setGroup] = useState(state?.session?.group)
 	const [workouts, setWorkouts] = useState()
 	const [sessionId, setSessionId] = useState()
+	const location = useLocation()
 	const [workout, setWorkout] = useState(state?.session?.workout)
 	const [showPopup, setShowPopup] = useState(false)
 	const [error, setError] = useState()
@@ -81,7 +82,13 @@ export default function SessionEdit() {
 	}, [token])
 
 	useEffect(() => {
-		setSessionId(21);
+		const currentPath = location.pathname
+		const parts = currentPath.split("/")
+		const id = parts[parts.length - 1]
+		setSessionId(id)
+	}, [])
+
+	useEffect(() => {
 		(async () => {
 			try {
 				const response = await fetch("/api/workouts/all", { headers: { token } })
