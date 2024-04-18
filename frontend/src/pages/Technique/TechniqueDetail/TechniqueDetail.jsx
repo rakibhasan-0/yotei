@@ -9,7 +9,7 @@ import BeltIcon from "../../../components/Common/BeltIcon/BeltIcon"
 
 import { Pencil, Trash } from "react-bootstrap-icons"
 
-import "./TechniqueDetail.css"
+import "./TechniqueDetail.module.css"
 import ErrorState from "../../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../../components/Common/Spinner/Spinner"
 import Gallery from "../../../components/Gallery/Gallery"
@@ -31,7 +31,7 @@ import ActivityDelete from "../../../components/Activity/ActivityDelete/Activity
  * 	   <TechniqueDetail id="test-id"/>
  * 
  * @author Team Medusa (Grupp 6) & Cyclops (Group 5) & Tomato (Group 6)
- * @version 3.0
+ * @version 4.0
  * @since 2024-04-18
  */
 function TechniqueDetail({ id }) {
@@ -143,12 +143,18 @@ function TechniqueDetail({ id }) {
 				</div>
 				}
 				<div className="technique-detail-belts-container">
-					{technique.belts ? (
-						technique.belts.sort(beltSort).map(belt => <BeltIcon key={belt.name} belt={belt} />)
+					{technique.belts ? ( 
+						technique.belts.filter(belt => !belt.child).sort(beltSort).map(belt => <BeltIcon key={belt.name} belt={belt} />)
 					) : (
 						<p>Inga bälten kunde hittas för denna teknik.</p>
 					)}
 				</div>
+				<div className="technique-detail-belts-container">
+					{(
+						technique.belts.filter(belt => belt.child).sort(beltSort).map(belt => <BeltIcon key={belt.name} belt={belt} />)
+					)}
+				</div> 
+				
 				<h2>Beskrivning</h2>
 				{technique.description ? (
 					<pre>{technique.description}</pre>

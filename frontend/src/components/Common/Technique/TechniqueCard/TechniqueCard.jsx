@@ -1,5 +1,5 @@
 import { ChevronDown } from "react-bootstrap-icons"
-import "./TechniqueCard.css"
+import "./TechniqueCard.module.css"
 import { Link } from "react-router-dom"
 
 /**
