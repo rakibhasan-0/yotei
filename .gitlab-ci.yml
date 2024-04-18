@@ -2,13 +2,15 @@ stages:
   - linter
   - build
   - test
-  - doc
+# - doc
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
 
 test-linter-frontend:
   image: node:19
+  tags:
+    - system
   before_script:
     - cd frontend
     - npm ci --no-progress --quiet --cache .npm --prefer-offline
