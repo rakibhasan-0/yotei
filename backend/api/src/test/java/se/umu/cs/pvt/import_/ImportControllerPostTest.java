@@ -17,7 +17,8 @@ import static org.mockito.Mockito.*;
  * Test class for Import Controller endpoint.
  *
  * @author Andre Byström
- * date: 2023-05-23
+ * @since 2024-04-18
+ * @version 2.0
  */
 @WebMvcTest(controllers = ImportController.class)
 @ExtendWith(MockitoExtension.class)
@@ -35,6 +36,7 @@ public class ImportControllerPostTest {
                 "ex",
                 "desc",
                 10,
+                "url testing", 
                 new ArrayList<>()));
         ExerciseContainer container = new ExerciseContainer(responses);
 

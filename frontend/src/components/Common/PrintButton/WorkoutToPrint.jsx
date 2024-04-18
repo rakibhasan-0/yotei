@@ -13,6 +13,7 @@ import styles from "./WorkoutToPrint.module.css"
  * 			<WorkoutToPrint workoutData={workoutData} />
  * 
  * @author Chimera (Grupp 4)
+ * @author Durian  (Grupp 3) (2024-04-18)
  * @since 2023-05-16
  * @version 1.0 
  */
@@ -43,33 +44,33 @@ const WorkoutToPrint = ({ workoutData }) => {
 			<div className={styles.WorkoutToPrintContainer}>
 				<div className={styles.WorkoutToPrintRowItem}>
 					<div className={styles.WorkoutToPrintColumnItem}>
-						<h1 className="font-weight-bold text-truncate" style={{ marginBottom: "40px", fontSize: "42px" }}>{workoutData?.name}</h1>
+						<h1 className="font-weight-bold text-truncate" style={{ marginBottom: "40px", fontSize: "38px" }}>{workoutData?.name}</h1>
 					</div>			
 				</div>
 				<div className={styles.WorkoutToPrintRowItem}>
 					<div className={styles.WorkoutToPrintColumnItem}>
-						<h4 className="font-weight-bold mb-0" style={{ fontSize: "32px"}}>Författare</h4>
+						<h4 className="font-weight-bold mb-0" style={{ fontSize: "22px"}}>Författare</h4>
 						<p style={{ fontSize: "20px"}}>{workoutData.author?.username}</p>
 					</div>
 					<div className={`${styles.WorkoutToPrintColumnItem} ${styles.WorkoutToPrintColumnItemRight}`}>
-						<h4 className="font-weight-bold mb-0" style={{ fontSize: "32px"}}>Tidslängd</h4>
+						<h4 className="font-weight-bold mb-0" style={{ fontSize: "22px"}}>Tidslängd</h4>
 						<p style={{ fontSize: "20px"}}>{workoutData?.duration} min</p>
 					</div>
 				</div>
 
 				<div className={styles.WorkoutToPrintRowItem}>
 					<div className={styles.WorkoutToPrintColumnItem}>
-						<h4 className="font-weight-bold mb-0" style={{ fontSize: "32px"}}>Skapad</h4>
+						<h4 className="font-weight-bold mb-0" style={{ fontSize: "22px"}}>Skapad</h4>
 						<p style={{ fontSize: "20px"}}>{workoutData?.created}</p>
 					</div>
 					<div className={`${styles.WorkoutToPrintColumnItem} ${styles.WorkoutToPrintColumnItemRight}`}>
-						<h4 className="font-weight-bold mb-0 text-align-left" style={{ fontSize: "32px"}}>Senast ändrad</h4>
+						<h4 className="font-weight-bold mb-0 text-align-left" style={{ fontSize: "22px"}}>Senast ändrad</h4>
 						<p style={{ fontSize: "20px"}}>{workoutData?.changed}</p>
 					</div>
 				</div>
 				<div className={styles.WorkoutToPrintRowItem} style={{ marginBottom: "20px" }}>
 					<div className={styles.WorkoutToPrintColumnItem}>
-						<h4 className="font-weight-bold mb-0" style={{ fontSize: "32px"}}>Beskrivning</h4>
+						<h4 className="font-weight-bold mb-0" style={{ fontSize: "22px"}}>Beskrivning</h4>
 						<p className={styles.WorkoutToPrintProperties} style={{ fontSize: "20px"}}>{workoutData?.description}</p>
 					</div>
 				</div>
