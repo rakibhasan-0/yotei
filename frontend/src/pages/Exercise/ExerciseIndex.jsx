@@ -17,132 +17,132 @@ import { isEditor } from "../../utils"
 /**
  * Displays a searchbar, a sorter and a list of exercises.
  * 
- * @author Hawaii, Verona, Phoenix, Cyclops, Team Mango
- * @since 2024-04-17
- * @version 3.0
+ * @author Hawaii, Verona, Phoenix, Cyclops, Team Mango, Team Coconut
+ * @since 2024-04-18
+ * @version 3.1
  */
 export default function ExerciseIndex() {
-	const sortOptions = [
-		{label: "Namn: A-Ö", cmp: (a, b) => {return a.name.localeCompare(b.name)}},
-		{label: "Namn: Ö-A", cmp: (a, b) => {return -a.name.localeCompare(b.name)}},
-		{label: "Tid: Kortast först", cmp: (a, b) => {return a.duration - b.duration}},
-		{label: "Tid: Längst först", cmp: (a, b) => {return b.duration - a.duration}}
-	]
+    const sortOptions = [
+        {label: "Namn: A-Ö", cmp: (a, b) => {return a.name.localeCompare(b.name)}},
+        {label: "Namn: Ö-A", cmp: (a, b) => {return -a.name.localeCompare(b.name)}},
+        {label: "Tid: Kortast först", cmp: (a, b) => {return a.duration - b.duration}},
+        {label: "Tid: Längst först", cmp: (a, b) => {return b.duration - a.duration}}
+    ]
+    const context = useContext(AccountContext)
+    const cookieID = "exercise-search-results-userId-"+context.userId
+    const [cookies, setCookie] = useCookies([cookieID])
+    const [exercises, setExercises] = useState([])
+    const [visibleList, setVisibleList] = useState([])
+    
+    //Restore info from cookie here to avoid empty load
+    const filterCookie = cookies[cookieID]
+    const [searchText, setSearchText] = useState(filterCookie ? filterCookie.searchText : "")
+    const [addedTags, setAddedTags] = useState(filterCookie ? filterCookie.tags : [])
+    const [suggestedTags, setSuggestedTags] = useState([])
+    const detailURL = "/exercise/exercise_page/"
+    const [popupVisible, setPopupVisible] = useState(false)
+    const [map, mapActions] = useMap()
+    const [sort, setSort] = useState(sortOptions[0])
+    const [loading, setIsLoading] = useState(true)
 
-	const [cookies, setCookie] = useCookies(["exercise-filter"])
-	const [exercises, setExercises] = useState([])
-	const [visibleList, setVisibleList] = useState([])
-	const [searchText, setSearchText] = useState("")
-	const [addedTags, setAddedTags] = useState([])
-	const [suggestedTags, setSuggestedTags] = useState([])
-	const context = useContext(AccountContext)
-	const detailURL = "/exercise/exercise_page/"
-	const [popupVisible, setPopupVisible] = useState(false)
-	const [map, mapActions] = useMap()
-	const [sort, setSort] = useState(sortOptions[0])
-	const [loading, setIsLoading] = useState(true)
+    useEffect(() => {
+        if(filterCookie) {
+            let cachedSort = sortOptions.find(option => filterCookie.sort === option.label)
+            setSort(cachedSort ? cachedSort : sortOptions[0])
+        }
+        deleteLocalStorage()
+        window.localStorage.setItem("popupState", false)
+        setPopupVisible(false)
+    }, [])
 
-	useEffect(() => {
-		const filterCookie = cookies["exercise-filter"]
-		if(filterCookie) {
-			setAddedTags(filterCookie.tags)
-			let cachedSort = sortOptions.find(option => filterCookie.sort === option.label)
-			setSort(cachedSort ? cachedSort : sortOptions[0])
-		}
-		deleteLocalStorage()
-		window.localStorage.setItem("popupState", false)
-		setPopupVisible(false)
-	}, [])
+    useEffect(setExerciseList, [exercises, sort, searchText])
 
-	useEffect(setExerciseList, [exercises, sort, searchText])
+    useEffect(() => {
+        if (popupVisible === true) {
+            map.clear()
+            return
+        }
+        setCookie(cookieID, {tags: addedTags, sort: sort.label, searchText: searchText}, {path: "/"})
+        const args = {
+            text: searchText,
+            selectedTags: addedTags
+        }   
 
-	useEffect(() => {
-		if (popupVisible === true) {
-			map.clear()
-			return
-		}
-		setCookie("exercise-filter", {tags: addedTags, sort: sort.label}, {path: "/"})
-		const args = {
-			text: searchText,
-			selectedTags: addedTags
-		}
+        getExercises(args, context.token, map, mapActions, result => {
+            if(!result.error) {
+                setSuggestedTags(result.tagCompletion)
+                setExercises(result.results)
+            }
+            setIsLoading(false)
+        })
+    }, [searchText, addedTags, popupVisible])
 
-		getExercises(args, context.token, map, mapActions, result => {
-			if(!result.error) {
-				setSuggestedTags(result.tagCompletion)
-				setExercises(result.results)
-			}
-			setIsLoading(false)
-		})
-	}, [searchText, addedTags, popupVisible])
-
-	/**
+    /**
      * Sets the exercise list by sorting the exercises and updating the visible list state. 
-     * Also updates the exercise filter cookie.
+     * Also updates the exercise search-results cookie.
      */
-	function setExerciseList() {
-		
-		setCookie("exercise-filter", {tags: addedTags, sort: sort.label}, {path: "/"})
-		if(exercises && searchText == "") {
-			const sortedList = [...exercises].sort(sort.cmp)
-			setVisibleList(sortedList)
-		}
-		else {
-			const temp = [...exercises ?? []]
-			setVisibleList(temp)
-		}
-	}
-	
-	function deleteLocalStorage() {
-		window.localStorage.setItem("name", "")
-		window.localStorage.setItem("desc", "")
-		window.localStorage.setItem("time", "")
-	}
+    function setExerciseList() {
+        setCookie(cookieID, {tags: addedTags, sort: sort.label, searchText: searchText}, {path: "/"})
+        if(exercises && searchText == "") {
+            const sortedList = [...exercises].sort(sort.cmp)
+            setVisibleList(sortedList)
+        }
+        else {
+            const temp = [...exercises ?? []]
+            setVisibleList(temp)
+        }
+    }
+    
+    function deleteLocalStorage() {
+        window.localStorage.setItem("name", "")
+        window.localStorage.setItem("desc", "")
+        window.localStorage.setItem("time", "")
+    }
 
-	return (
-		<>
-		
-			<h1 className="py-2" id={"exercise-title"} style={{marginBottom: "-10px"}}>Övningar</h1>
-				
-			<SearchBar 
-				id="exercise-search-bar" 
-				placeholder="Sök efter övningar"
-				text={searchText} 
-				onChange={setSearchText}
-				addedTags={addedTags}
-				setAddedTags={setAddedTags}
-				suggestedTags={suggestedTags}
-				setSuggestedTags={setSuggestedTags}
-			/>
+    return (
+        <>
+        
+            <h1 className="py-2" id={"exercise-title"} style={{marginBottom: "-10px"}}>Övningar</h1>
+                
+            <SearchBar 
+                id="exercise-search-bar" 
+                placeholder="Sök efter övningar"
+                text={searchText} 
+                onChange={setSearchText}
+                addedTags={addedTags}
+                setAddedTags={setAddedTags}
+                suggestedTags={suggestedTags}
+                setSuggestedTags={setSuggestedTags}
+            />
             
-			<FilterContainer id="ei-filter" title="Sortering">
-				<Sorter onSortChange={setSort} id="ei-sort" selected={sort} options={sortOptions} />
-			</FilterContainer>
-			{ loading ? <Spinner/> :
-				<div>
-					<InfiniteScrollComponent>
-						{ visibleList.map((exercise, index) => {
-							return <ExerciseCard
-								item={exercise.name}
-								text={exercise.duration + " min"}
-								key={exercise.id}
-								id={exercise.id}
-								detailURL={detailURL}
-								index={index}>
-							</ExerciseCard>
-						})}
-					</InfiniteScrollComponent>
-				</div>
-			}
+            <FilterContainer id="ei-search-results" title="Sortering">
+                <Sorter onSortChange={setSort} id="ei-sort" selected={sort} options={sortOptions} />
+            </FilterContainer>
+            { loading ? <Spinner/> :
+                <div>
+                    <InfiniteScrollComponent>
+                        { visibleList.map((exercise, index) => {
+                            return <ExerciseCard
+                                item={exercise.name}
+                                text={exercise.duration + " min"}
+                                key={exercise.id}
+                                id={exercise.id}
+                                detailURL={detailURL}
+                                index={index}>
+                            </ExerciseCard>
+                        })}
+                    </InfiniteScrollComponent>
+                </div>
+            }
 
-			{/* Spacing so the button doesn't cover a exercise card */}
-			<br/><br/><br/><br/><br/>
+            {/* Spacing so the button doesn't cover a exercise card */}
+            <br/><br/><br/><br/><br/>
 
-			{isEditor(context) && 
-			<RoundButton linkTo={"create"} id={"exercise-round-button"}  style={{maxWidth: "5px"}}>
-				<Plus/>
-			</RoundButton>
-			}
-		</>
-	)
+            {isEditor(context) && 
+            <RoundButton linkTo={"create"} id={"exercise-round-button"}  style={{maxWidth: "5px"}}>
+                <Plus/>
+            </RoundButton>
+            }
+        </>
+    )
 }
