@@ -72,7 +72,7 @@ deploy-test-server:
     - system
   script:
   # - rm -rf /var/www/html/ 
-    - docker compose down -v
+    - cd ./infra && docker compose down -v
     - docker build --no-cache -t pvt2024/gateway:latest ./backend/gateway
     - docker build --no-cache -t pvt2024/api:latest ./backend/api 
     - docker build --no-cache -t pvt2024/frontend:latest ./frontend
