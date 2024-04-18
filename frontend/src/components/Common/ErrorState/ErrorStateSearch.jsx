@@ -1,6 +1,6 @@
 import React from "react"
 import { EmojiFrown } from "react-bootstrap-icons"
-import "./ErrorState.css"
+import "./ErrorState.module.css"
 
 /**
  * A placeholder for an error message when searching for something

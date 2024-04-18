@@ -3,7 +3,7 @@ import Button from "../Common/Button/Button"
 import Popup from "../Common/Popup/Popup"
 import { AccountContext } from "../../context"
 import DatePicker from "../Common/DatePicker/DatePicker"
-import "./ErrorLogsDisplay.css"
+import "./ErrorLogsDisplay.module.css"
 import {Trash} from "react-bootstrap-icons"
 import ConfirmPopup from "../Common/ConfirmPopup/ConfirmPopup"
 

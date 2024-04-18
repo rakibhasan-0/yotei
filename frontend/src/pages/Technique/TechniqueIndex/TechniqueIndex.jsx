@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react"
 import RoundButton from "../../../components/Common/RoundButton/RoundButton"
 import { AccountContext } from "../../../context"
-import "./TechniqueIndex.css"
+import "./TechniqueIndex.module.css"
 import { Plus } from "react-bootstrap-icons"
 import SearchBar from "../../../components/Common/SearchBar/SearchBar"
 import { getTechniques } from "../../../components/Common/SearchBar/SearchBarUtils"

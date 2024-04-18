@@ -1,7 +1,7 @@
 import React from "react"
 import { useState} from "react"
 import Tag from "./Tag"
-import "./TagInput.css"
+import "./TagInput.module.css"
 import Popup from "../Popup/Popup"
 import AddTagPopup from "./AddTagPopup"
 /**

@@ -8,7 +8,7 @@
  * @author G5 Cyclops (2023-05-04)
  */
 import WorkoutActivityListItem from "../WorkoutActivityListItem/WorkoutActivityListItem.jsx"
-import "./WorkoutActivityList.css"
+import "./WorkoutActivityList.module.css"
 import {useState} from "react"
 
 export default function WorkoutActivityList({categoryName, activities, id}) {
