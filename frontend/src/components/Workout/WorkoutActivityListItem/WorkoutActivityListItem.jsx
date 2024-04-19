@@ -37,25 +37,25 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 	}
 
 	return (
-		<div id={id} className={styles["animate"]}>
+		<div id={id} className="animate">
 			{createStripes()}
-			<div className={styles["row align-items-center " + (isActive ? "pt-2 pb-2" : "py-2")]}  key={activity.id}
+			<div className={"row align-items-center " + (isActive ? "pt-2 pb-2" : "py-2")}  key={activity.id}
 				style={{
 					backgroundColor: bgColor
 				}}>
 
-				<div className={styles["col text-left"]}>
-					<p className={styles["styles.workoutActivityName m-0"]}>{name}</p>
+				<div className="col text-left">
+					<p className={`${styles["workoutActivityName"]} m-0`}>{name}</p>
 				</div>
 				
-				<div className={styles["listItemTime d-flex align-items-center justify-content-end col-xs-5 pl-0 text-right"]}>
-					{activity.duration > 1? (<p className={styles["mb-0"]}>{activity.duration} min </p>
-					) : ( <p className={styles["mb-0"]}> - </p>)
+				<div className={`${styles["listItemTime"]} d-flex align-items-center justify-content-end col-xs-5 pl-0 text-right`}>
+					{activity.duration > 1? (<p className="mb-0">{activity.duration} min </p>
+					) : ( <p className="mb-0"> - </p>)
 					}
 					{
 						(!isFreeTextElem() && (activity.exercise?.description || activity.technique?.description))
 					&&
-					(<div role="optional-toggle" className={styles["toggleIcon ml-2"]} onClick={() => setIsActive(!isActive)}>
+					(<div role="optional-toggle" className="toggleIcon ml-2" onClick={() => setIsActive(!isActive)}>
 						<DescriptionToggle isActive={isActive} />
 					</div>)	
 					}
@@ -64,8 +64,8 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 			</div>
 			<div>
 				{isActive && 
-					<div className={styles["row pb-2"]} style={{ backgroundColor: bgColor }}>
-						<div className={styles["col"]}>
+					<div className="row pb-2" style={{ backgroundColor: bgColor }}>
+						<div className="col">
 							<p role="description-div" className={styles["textDesc"]}>{isFreeTextElem() ? activity.text : activity.exercise ? activity.exercise.description : activity.technique.description}</p>
 						</div>
 					</div>

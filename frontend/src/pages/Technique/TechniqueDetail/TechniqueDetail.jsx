@@ -125,7 +125,7 @@ function TechniqueDetail({ id }) {
 
 			<div className={styles["technique-detail-container"]} id={id == undefined ? "technique" : id}>
 				<h1>{technique.name}</h1>
-				{isAdmin(accountRole) && <div className="technique-detail-actions-container">
+				{isAdmin(accountRole) && <div className={styles["technique-detail-actions-container"]}>
 					<Link to={"edit"}>
 						<Pencil
 							id="technique-edit-button"

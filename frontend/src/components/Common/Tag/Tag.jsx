@@ -42,16 +42,16 @@ export default function Tag({ id, tagType, onClick, text }) {
 		)
 	} else if (tagType === "suggest") {
 		return (
-			<button type="button" id={id} className={styles["base-tag suggest"]} onClick={onClick}>
+			<button type="button" id={id} className={`${styles["base-tag"]} ${styles["suggest"]}`} onClick={onClick}>
 				<p className={styles["no-margin"]}>{text}</p>
-				<PlusCircle className={styles["ml-2"]} size={18} color="black"/>
+				<PlusCircle className="ml-2" size={18} color="black"/>
 			</button>
 		)
 	} else {
 		return (
 			<button type="button" id={id} className={styles["base-tag"]} onClick={onClick}>
 				<p className={styles["no-margin"]}>{text}</p>
-				<XCircleFill className={styles["ml-2 flex-shrink-0"]} size={18} color="black"/>
+				<XCircleFill className="ml-2 flex-shrink-0" size={18} color="black"/>
 			</button>
 		)
 	}

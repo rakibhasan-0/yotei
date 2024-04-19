@@ -175,7 +175,7 @@ function UploadMedia({id, exerciseId, fetchMediaMetaToBeUploaded, fetchMediaFile
 					<Button width={"100%"}>
 						Välj Fil
 					</Button>
-					<input className="media-file-input" type="file" id="choose-file" onChange={onFileChange} />
+					<input className={styles["media-file-input"]} type="file" id="choose-file" onChange={onFileChange} />
 				</div>
 				<Button onClick={uploadMediaClicked}
 					width={"100%"}
@@ -190,7 +190,7 @@ function UploadMedia({id, exerciseId, fetchMediaMetaToBeUploaded, fetchMediaFile
 				{showFileData()}
 			</div>
 			<hr className={styles["line"]}/>
-			<div className={styles["d-flex justify-content-center link-media-container"]}>
+			<div className={`d-flex justify-content-center ${styles["link-media-container"]}`}>
 				<div>
 					<InputTextField
 						id="link-input"
