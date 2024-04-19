@@ -2,7 +2,9 @@ stages:
   - linter
   - build
   - test
-  # - doc
+#  - doc
+  - deploy_test_server
+
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
@@ -66,10 +68,36 @@ build-frontend:
     - npm run build
       
 
-# generate-javadoc:
-#   stage: doc
-#   tags:
-#     - system
-#   script:
-#     - rm -rf /var/www/html/api-docs
-#     - cd docs/api-docs && mkdocs build -d /var/www/html/api-docs
+#generate-javadoc:
+#  stage: doc
+#  tags:
+#    - system
+#  script:
+#    - rm -rf /var/www/html/api-docs
+#    - cd docs/api-docs && mkdocs build -d /var/www/html/api-docs
+
+deploy-test-server:
+  stage: deploy_test_server
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "main" #merge $CI_COMMIT_BRANCH && $CI_PIPELINE_SOURCE == "push"
+  tags:
+    - system
+  script:
+    - docker system prune -a -f
+
+    - rm -rf /var/www/html/*.tar
+    - rm -rf /var/www/html/nginx
+    - rm -rf /var/www/html/*.yml
+    - rm -rf /var/www/html/api-docs
+
+    - docker build --no-cache -t pvt2024/database:latest ./infra/database
+    - docker build --no-cache -t pvt2024/gateway:latest ./backend/gateway
+    - docker build --no-cache -t pvt2024/api:latest ./backend/api 
+    - docker build --no-cache -t pvt2024/frontend:latest ./frontend
+
+    - cp ./infra/docker-compose.yml /var/www/html/
+    - cp -r ./infra/nginx /var/www/html/
+
+    - cd /var/www/html/
+    - docker compose up -d
+    

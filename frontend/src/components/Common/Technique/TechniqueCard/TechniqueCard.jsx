@@ -1,6 +1,6 @@
 import { ChevronDown } from "react-bootstrap-icons"
 import styles from "./TechniqueCard.module.css"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 /**
  * Technique card component.
@@ -15,7 +15,14 @@ import { Link } from "react-router-dom"
  * @version 1.0
  * @since 2023-05-15
  */
-function TechniqueCard({ technique, checkBox, id }) {
+function TechniqueCard({ technique, checkBox, id}) {
+	const navigate = useNavigate()
+
+	const handleClick = () => {
+		// Save in cookie
+		navigate("/technique/" + technique.techniqueID)
+
+	}
 	
 	return (
 		<div className={styles["technique-card"]} id={id}>

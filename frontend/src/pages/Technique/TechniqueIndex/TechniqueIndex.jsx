@@ -14,30 +14,31 @@ import TechniqueCard from "../../../components/Common/Technique/TechniqueCard/Te
 import InfiniteScrollComponent from "../../../components/Common/List/InfiniteScrollComponent"
 import { isAdmin } from "../../../utils"
 import Spinner from "../../../components/Common/Spinner/Spinner"
-import { Link } from "react-router-dom"
+import { Link, useLocation, useNavigate} from "react-router-dom"
 
 /**
  * The technique index page.
  * Fetches and displays the techniques.
  * 
- * @author Medusa, Tomato (group 6)
+ * @author Medusa, Team Tomato (group 6)
  * @version 2.0
- * @since 2024-04-17
+ * @since 2024-04-18
  */
 export default function TechniqueIndex() {
 	const [techniques, setTechniques] = useState([])
 	const context = useContext(AccountContext)
 	const [cookies, setCookie] = useCookies(["technique-filter-userId-"+context.userId])
-
 	const [kihon, setKihon] = useState(false)
 	const [belts, setBelts] = useState([])// eslint-disable-line
-
 	const [searchBarText, setSearchBarText] = useState("")
 	const [map, mapActions] = useMap()
 	const [tags, setTags] = useState([])
 	const [suggestedTags, setSuggestedTags] = useState([])
 	const [showPopup, setShowPopup] = useState(false)
 	const [loading, setIsLoading] = useState(true)
+	const location = useLocation()
+	const clearSearchText = location.state && location.state.clearSearchText
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		const filterCookie = cookies["technique-filter-userId-"+context.userId]
@@ -62,7 +63,7 @@ export default function TechniqueIndex() {
 			kihon: kihon,
 			selectedTags: tags,
 		}
-		setCookie("technique-filter-userId-"+context.userId, {belts: belts, kihon: kihon, tags: tags}, {path: "/"})
+		setCookie("technique-filter-userId-"+context.userId, {belts: belts, kihon: kihon, tags: tags, searchText: searchBarText}, {path: "/"})
 
 		if(args.selectedTags.find(tag => tag === "kihon waza") === undefined) {
 			setKihon(false)
@@ -79,64 +80,26 @@ export default function TechniqueIndex() {
 
 	}, [showPopup, searchBarText, belts, kihon, tags, context.token, map, mapActions])
 
-	return (
-		<>
-			<Popup
-				title="Skapa teknik"
-				isOpen={showPopup}
-				setIsOpen={setShowPopup}
-			>
-				<CreateTechnique setIsOpen={setShowPopup} />
-			</Popup>
+	useEffect(() => {
+		navigate(location.pathname, {})
+	}, [location.pathname, navigate])
 
-			<h1>Tekniker</h1>
-
-			<div>
-				<SearchBar
-					id={styles["searchbar-technique"]}
-					placeholder="Sök efter tekniker"
-					text={searchBarText}
-					onChange={setSearchBarText}
-					addedTags={tags}
-					setAddedTags={setTags}
-					suggestedTags={suggestedTags}
-					setSuggestedTags={setSuggestedTags}>
-				</SearchBar>
-
-				<div>
-					<TechniqueFilter
-						belts={belts}
-						onBeltChange={handleBeltChanged}
-						kihon={kihon}
-						onKihonChange={handleKihonChanged}
-						id={styles["test"]}
-						onClearBelts={clearSelectedBelts}
-						filterWhiteBelt={true}>
-					</TechniqueFilter>
-				</div>
-
-				{loading ? <Spinner /> : <InfiniteScrollComponent>
-					{techniques?.map((technique, key) =>
-						<TechniqueCard
-							key={key}
-							technique={technique}
-							checkBox={false}>
-						</TechniqueCard>)}
-				</InfiniteScrollComponent>}
-			</div>
-
-			{/* Spacing so the button doesn't cover a techniqueCard */}
-			<br/><br/><br/><br/><br/>
-			
-			{isAdmin(context) &&
-				<Link to={"create"}>
-					<RoundButton id={styles["technique-add-button"]}>
-						<Plus className={styles["plus-icon"]} />
-					</RoundButton>
-				</Link>
+	useEffect(() => {
+		const searchText = localStorage.getItem("searchText")
+		if(searchText) {
+			if (clearSearchText) {
+				localStorage.removeItem("searchText")
 			}
-		</>
-	)
+			else{
+				setSearchBarText(searchText)
+			}
+		}
+		
+	}, [clearSearchText])
+	
+	const saveSearchText = () => {
+		localStorage.setItem("searchText", searchBarText)
+	}
 
 	function handleBeltChanged(checked, belt) {
 		setBelts(prev => {
@@ -164,4 +127,65 @@ export default function TechniqueIndex() {
 			setTags(current => current.filter(tag => tag !== "kihon waza"))
 		}
 	}
+
+	return (
+		<>
+			<Popup
+				title="Skapa teknik"
+				isOpen={showPopup}
+				setIsOpen={setShowPopup}
+			>
+				<CreateTechnique setIsOpen={setShowPopup} />
+			</Popup>
+
+			<h1>Tekniker</h1>
+
+			<div>
+				<SearchBar
+					onBlur={saveSearchText}
+					id="searchbar-technique"
+					placeholder="Sök efter tekniker"
+					text={searchBarText}
+					onChange={setSearchBarText}
+					addedTags={tags}
+					setAddedTags={setTags}
+					suggestedTags={suggestedTags}
+					setSuggestedTags={setSuggestedTags}>
+				</SearchBar>
+
+				<div>
+					<TechniqueFilter
+						belts={belts}
+						onBeltChange={handleBeltChanged}
+						kihon={kihon}
+						onKihonChange={handleKihonChanged}
+						id="test"
+						onClearBelts={clearSelectedBelts}
+						filterWhiteBelt={true}>
+					</TechniqueFilter>
+				</div>
+
+				{loading ? <Spinner /> : <InfiniteScrollComponent>
+					{techniques?.map((technique, key) =>
+						<TechniqueCard
+
+							key={key}
+							technique={technique}
+							checkBox={false}>
+						</TechniqueCard>)}
+				</InfiniteScrollComponent>}
+			</div>
+
+			{/* Spacing so the button doesn't cover a techniqueCard */}
+			<br/><br/><br/><br/><br/>
+			
+			{isAdmin(context) &&
+				<Link to={"create"}>
+					<RoundButton id="technique-add-button">
+						<Plus className={styles["plus-icon"]} />
+					</RoundButton>
+				</Link>
+			}
+		</>
+	)
 }

@@ -7,6 +7,7 @@ and understood the documentation, please sign-off by adding your name and date b
 | Name          | Date            |
 |--|--|
 | Grupp 5 Cyclops | 31 May 2023 |
+| Grupp 7 Coconut | 19 May 2024 |
 <!-- sign-off-sheet:end -->
 
 # Export API
@@ -35,6 +36,9 @@ examples:
                     {
                         "description" : "",
                         "name" : "Empi uchi, jodan och chudan (1 Kyu)",
+                        "videoUrls": [
+                            "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                        ],
                         "tags" : [
                             "grent",
                             "rarelsetekniker",
@@ -71,6 +75,9 @@ examples:
                         "description" : "Hoppa upp och brett isar benen samtidigt som du tar armarna upp ovanfer huvudet, hoppa sedan tillbaka till startpositionen!",
                         "duration" : 20,
                         "name" : "Jumping Jacks",
+                        "videoUrls": [
+                            "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                        ],
                         "tags" : [
                             "blatt",
                             "utbyte och sammanfaring av tekniker",
