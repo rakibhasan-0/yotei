@@ -89,7 +89,7 @@ function constructAdultBelt(belt, beltLength, index) {
 		return (
 			<div
 				key={index}
-				className={styles["technique-card-belt-color", belt.belt_name === "Vitt" ? "technique-card-belt-border" : ""].join(" ")}
+				className={styles[["technique-card-belt-color", belt.belt_name === "Vitt" ? "technique-card-belt-border" : ""].join(" ")]}
 				style={
 					{
 						background: `#${belt.belt_color}`,
@@ -118,7 +118,7 @@ function constructAdultBelt(belt, beltLength, index) {
 	return (
 		<div
 			key={index}
-			className={styles["technique-card-belt-color", belt.belt_name === "Vitt" ? "technique-card-belt-border" : ""].join(" ")}
+			className={styles[["technique-card-belt-color", belt.belt_name === "Vitt" ? "technique-card-belt-border" : ""].join(" ")]}
 			style={
 				{
 					background: `#${belt.belt_color}`,
