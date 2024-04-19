@@ -84,7 +84,7 @@ build-frontend:
 deploy-test-server:
   stage: deploy_test_server
   rules:
-  - if: $CI_COMMIT_BRANCH == "main"
+  - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
   tags:
     - system
   script:
