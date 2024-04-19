@@ -138,11 +138,11 @@ export default function Review({isOpen, setIsOpen, technique_id}) {
 				</div>
 				<div className="w-100">
 					<TextArea  type="text" text={positiveComment} onChange={handleChangePos} className="col-md-6 col-md-offset-3" 
-					style={{marginTop: "30px", marginBottom: "20px", height: "80px", borderRadius: "5px", minHeight: "80px"}} placeholder="Det positiva med denna teknik"/>
+						style={{marginTop: "30px", marginBottom: "20px", height: "80px", borderRadius: "5px", minHeight: "80px"}} placeholder="Det positiva med denna teknik"/>
 				</div>
 				<div className="w-100">
 					<TextArea  type="text" text={negativeComment} onChange={handleChangeNeg} className="col-md-6 col-md-offset-3" 
-					style={{marginBottom: "40px", height: "80px", borderRadius: "5px", minHeight: "80px"}} placeholder="Det negativa med denna teknik"/>
+						style={{marginBottom: "40px", height: "80px", borderRadius: "5px", minHeight: "80px"}} placeholder="Det negativa med denna teknik"/>
 				</div>
 				<div className="col-md-6 p-0">
 					<Button width={"100%"} onClick={() => addReview()}>Lägg till</Button>
@@ -152,7 +152,7 @@ export default function Review({isOpen, setIsOpen, technique_id}) {
 			<div className="w-100  d-flex flex-column justify-content-center align-items-center">
 				{commentList.map((comment) => (
 					<ReviewComment key={comment.review_id} updateCommentList={updateCommentList} editable={isAdmin(context) || userId == comment.user_id} comment={comment} onDelete={(comment) =>
-						 {setCommentList(commentList.filter(c => c.review_id != comment.review_id))}} token={token} getTodaysDate={getTodaysDate}></ReviewComment>
+						{setCommentList(commentList.filter(c => c.review_id != comment.review_id))}} token={token} getTodaysDate={getTodaysDate}></ReviewComment>
 				))}
 			</div>
 		</Popup>
