@@ -84,7 +84,7 @@ build-frontend:
 deploy-test-server:
   stage: deploy_test_server
   rules:
-  - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED #$CI_COMMIT_BRANCH == "main"
+  - if: $CI_COMMIT_BRANCH == "main"
   tags:
     - system
   script:
@@ -100,9 +100,9 @@ deploy-test-server:
     - docker build --no-cache -t pvt2024/api:latest ./backend/api 
     - docker build --no-cache -t pvt2024/frontend:latest ./frontend
 
-    - cp ./docker-compose.yml /var/www/html/
-    - cp -r ./nginx /var/www/html/
+#    - cp ./docker-compose.yml /var/www/html/
+#    - cp -r ./nginx /var/www/html/
 
-    - cd /var/www/html/
+#    - cd /var/www/html/
     - docker compose up -d
     
