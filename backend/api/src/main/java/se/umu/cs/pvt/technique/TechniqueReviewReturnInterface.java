@@ -8,7 +8,7 @@ import java.util.Date;
  * NOTE: The names contain keywords, DO NOT CHANGE NAMES OF METHODS unless you know
  * what you're doing.
  *
- * @author Team Granatäpple (Group 1)
+ * @author Team Granatäpple (Group 1) (2024-4-19)
  */
 public interface TechniqueReviewReturnInterface {
 

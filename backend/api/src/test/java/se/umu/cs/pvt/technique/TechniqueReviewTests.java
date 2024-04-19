@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 public class TechniqueReviewTests {
 
     /**
-     * @author  Team Granatäpple (Group 1)
+     * @author  Team Granatäpple (Group 1) (2024-4-19)
      */
     @Test
     void shouldGetIdOfReview() {

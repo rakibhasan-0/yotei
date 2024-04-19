@@ -15,7 +15,7 @@ import java.util.Date;
  *  TechniqueReviewRepository.java (Interface) - JPARepository file.
  *  TechniqueReviewReturnInterface.java - Interface for returning information about reviews.
  *
- * @author Team Granatäpple (Group 1)
+ * @author Team Granatäpple (Group 1) (2024-4-19)
  */
 @Entity
 public class techniqueReview implements Serializable {

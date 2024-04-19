@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Interface for technique reviews.
  *
- * @author Team Granatäpple (Group 1)
+ * @author Team Granatäpple (Group 1) (2024-4-19)
  */
 public interface TechniqueReviewRepository extends JpaRepository<TechniqueReview,Long> {
     
