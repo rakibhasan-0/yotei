@@ -305,7 +305,8 @@ function AddActivity({ id, setShowActivityInfo }) {
 							onBeltChange={handleBeltChanged}
 							kihon={kihon}
 							onKihonChange={handleKihonChanged}
-							id="test">
+							id="test"
+							filterWhiteBelt={true}>
 						</TechniqueFilter>
 
 						{(techniques.length === 0 && fetchedTech) ?
