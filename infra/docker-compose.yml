@@ -1,18 +1,17 @@
 version: "3.7"
 services:
 
-#  nginx:
-#    image: nginx:latest
-#    restart: always
-#    volumes:
-#      - ./nginx/development.conf:/etc/nginx/nginx.conf
+  nginx:
+    image: nginx:latest
+    restart: always
+    volumes:
+      - ./nginx/development.conf:/etc/nginx/nginx.conf
       # - /etc/letsencrypt/:/etc/letsencrypt/
-#    ports:
-#      - 80:80
-#      - 443:443
-#    links:
-#      - gateway
-
+    ports:
+      - 80:80
+      - 443:443
+    links:
+      - gateway
 
 # Database need to be created first, check if depends_on is needed
   psql:
