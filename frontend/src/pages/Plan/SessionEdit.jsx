@@ -17,9 +17,9 @@ import { unstable_useBlocker as useBlocker } from "react-router-dom"
 /**
  * A page for editing a session.
  * 
- * @author Chimera
- * @since 2023-05-03
- * @version 1.0
+ * @author Chimera, Team 3 Durian
+ * @since 2023-05-03, 2024-04-19
+ * @version 2.0
  * @returns A page for editing a session.
  */
 export default function SessionEdit() {
@@ -119,7 +119,12 @@ export default function SessionEdit() {
 				let session = await response.json()
 				if (groups && workouts) {
 					setGroup(groups.find(group => group.id === session.plan))
-					setWorkout(workouts.find(workout => workout.id === session.workout))
+					//if you come from create new during edit
+					if(state == null){
+						setWorkout(workouts.find(workout => workout.id === session.workout))
+					}else {
+						setWorkout(workouts.find(workout => workout.id === state.session.workout.id))
+					}
 					setDate(session.date)
 					setTime(session.time)
 					setOriginalDate(session.date)
