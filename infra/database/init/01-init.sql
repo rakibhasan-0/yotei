@@ -98,6 +98,9 @@ DROP TABLE IF EXISTS comments CASCADE;
 
 DROP TABLE IF EXISTS plan CASCADE;
 
+DROP TABLE IF EXISTS session_review;
+DROP TABLE IF EXISTS session_review_exercises;
+
 DROP TABLE IF EXISTS session CASCADE;
 
 DROP TABLE IF EXISTS workout_favorite CASCADE;
@@ -117,6 +120,8 @@ DROP TABLE IF EXISTS technique_to_belt CASCADE;
 DROP TABLE IF EXISTS error_log CASCADE;
 
 DROP TABLE IF EXISTS media CASCADE;
+
+
 
 DROP SEQUENCE IF EXISTS serial;
 
@@ -399,6 +404,31 @@ CREATE TABLE workout_review(
 	CONSTRAINT wr_fk_workout_id FOREIGN KEY(workout_id) REFERENCES workout(workout_id) ON
 	DELETE CASCADE,
 	CONSTRAINT wr_fk_user_id FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON
+	DELETE CASCADE
+);
+
+CREATE TABLE session_review(
+	review_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	session_id INT CHECK(session_id IS NOT NULL),
+	user_id INT CHECK(user_id IS NOT NULL),
+	rating INT CHECK(rating IS NOT NULL),
+	positive_comment TEXT,
+	negative_comment TEXT,
+	review_date TIMESTAMP NOT NULL,
+	CONSTRAINT wr_fk_session_id FOREIGN KEY(session_id) REFERENCES session(session_id) ON
+	DELETE CASCADE,
+	CONSTRAINT wr_fk_user_id FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON
+	DELETE CASCADE
+);
+
+
+CREATE TABLE session_review_exercises(
+	session_review_exercise_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	session_review_id INT CHECK(session_review_id IS NOT NULL),
+	exercise_id INT CHECK(exercise_id IS NOT NULL),
+	CONSTRAINT wr_fk_session_review_id FOREIGN KEY(session_review_id) REFERENCES session_review(review_id) ON
+	DELETE CASCADE,
+	CONSTRAINT wr_fk_exercise_id FOREIGN KEY (exercise_id) REFERENCES exercise(exercise_id) ON
 	DELETE CASCADE
 );
 
