@@ -40,7 +40,7 @@ import styles from "./TextArea.module.css"
  * 
  * @author Team Chimera & Medusa & Team Tomato
  * @since 2023-04-24
- * @updated 2024-04-19 Chimera updated documentation
+ * @updated 2024-04-19 Tomato fixed bug
  * @version 4.1
  */
 export default function TextArea({
