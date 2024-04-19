@@ -1,5 +1,6 @@
 version: "3.7"
 services:
+
   nginx:
     image: nginx:latest
     restart: always
@@ -11,8 +12,10 @@ services:
       - 443:443
     links:
       - gateway
+
+# Database need to be created first, check if depends_on is needed
   psql:
-    build: ./database
+    image: pvt2024/database:latest
     restart: always
     environment:
       - POSTGRES_USER=psql
@@ -23,14 +26,14 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
   frontend:
-    image: pvt2023/frontend:latest
+    image: pvt2024/frontend:latest
     restart: always
     ports:
       - "3000:3000"
     links:
-      - psql
+      - psql # Weird, maybe should be gateway/api ?? 
   gateway:
-    image: pvt2023/gateway:latest
+    image: pvt2024/gateway:latest
     restart: always
     ports:
       - "8080:8080"
@@ -44,7 +47,7 @@ services:
     links:
       - api
   api:
-    image: pvt2023/api:latest
+    image: pvt2024/api:latest
     restart: always
     volumes:
       - ./media:/media
