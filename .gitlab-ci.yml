@@ -12,6 +12,7 @@ deploy-test-server:
     - system
   script:
     - docker system prune -a
+    - y
 
     - rm -rf /var/www/html/*.tar
     - rm -rf /var/www/html/nginx
