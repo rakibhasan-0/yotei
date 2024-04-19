@@ -11,7 +11,8 @@ import java.util.List;
  * This class builds a {@link DatabaseQuery DatabaseQuery} based on
  * the filtering methods used.
  *
- * @author Minotaur (James Eriksson)
+ * @author Minotaur (James Eriksson), (TOMATO) Anton Bergmark
+ * @since 2024-04-18
  */
 public class SearchTechniquesDBBuilder implements SearchDBBuilderInterface {
     private SearchTechniquesParams searchTechniquesParams;
@@ -66,7 +67,7 @@ public class SearchTechniquesDBBuilder implements SearchDBBuilderInterface {
         DatabaseQuery databaseQuery = new DatabaseQuery();
 
         databaseQuery.setQuery(
-                String.join(" UNION ", queryList)
+            "(" + String.join(" UNION ", queryList) + ")"
         );
 
         queries.add(databaseQuery);

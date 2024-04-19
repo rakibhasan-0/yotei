@@ -76,7 +76,7 @@ const WorkoutEdit = () => {
 		let totDuration = 0
 		data.activityItems.forEach(category => {
 			category.activities.forEach(activity=> {
-				totDuration += activity.duration
+				totDuration += +activity.duration
 			})
 		})
 

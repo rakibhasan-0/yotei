@@ -14,7 +14,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
  *
  * @author Jonas Gustavsson (Kraken)
  * @author James Eriksson (Minotaur)
+ * @author Anton Bergmark (TOMATO)
  * date: 2023-05-15 (Oskar's birthday)
+ * @since 2024-04-18
  */
 public class TechniquesDBBuilderTest {
 
@@ -95,7 +97,7 @@ public class TechniquesDBBuilderTest {
         params = new SearchTechniquesParams(urlQuery);
         builder = new SearchTechniquesDBBuilder(params);
 
-        String baseQuery = "SELECT te.technique_id, te.name " +
+        String baseQuery = "(SELECT te.technique_id, te.name " +
                 "FROM technique AS te, belt AS b, technique_to_belt AS ttb " +
                 "WHERE te.technique_id=ttb.technique_id AND b.belt_id=ttb.belt_id AND " +
                 "LOWER(b.belt_name)=LOWER('gul') AND b.is_child=false" +
@@ -103,7 +105,7 @@ public class TechniquesDBBuilderTest {
                 "SELECT te.technique_id, te.name " +
                 "FROM technique AS te, belt AS b, technique_to_belt AS ttb " +
                 "WHERE te.technique_id=ttb.technique_id AND b.belt_id=ttb.belt_id AND " +
-                "LOWER(b.belt_name)=LOWER('Svart') AND b.is_child=false";
+                "LOWER(b.belt_name)=LOWER('Svart') AND b.is_child=false)";
 
         String expectedQuery = concatJoinBeltQuery(baseQuery);
 
