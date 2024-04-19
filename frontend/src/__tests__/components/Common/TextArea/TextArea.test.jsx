@@ -4,12 +4,25 @@ import TextArea from "../../../../components/Common/TextArea/TextArea"
 import "@testing-library/jest-dom"
 import userEvent from "@testing-library/user-event"
 
-configure({testIdAttribute: "id"})
+/**
+ * Test for the TextArea.jsx component.
+ *
+ * @author unknown & Team Tomato
+ * @version 1.0
+ * @since -
+ * @updated 2024-04-19 Tomato added test for character count
+ */
 
-test("TextArea: typed text should be returnable", async() => {
+configure({ testIdAttribute: "id" })
+
+test("TextArea: typed text should be returnable", async () => {
 	// ARRANGE
 	let text = "Hello world!"
-	render(<div><TextArea id={"testArea"} ></TextArea></div>)
+	render(
+		<div>
+			<TextArea id={"testArea"}></TextArea>
+		</div>
+	)
 	const textArea = screen.getByTestId("testArea")
 
 	// ACT
@@ -19,9 +32,13 @@ test("TextArea: typed text should be returnable", async() => {
 	expect(textArea).toHaveValue(text)
 })
 
-test("TextArea: setting default text should return default text", async() => {
+test("TextArea: setting default text should return default text", async () => {
 	// ARRANGE
-	render(<div><TextArea defVal={"Default text"} id={"testArea"} ></TextArea></div>)
+	render(
+		<div>
+			<TextArea defVal={"Default text"} id={"testArea"}></TextArea>
+		</div>
+	)
 	const textArea = screen.getByTestId("testArea")
 
 	// ACT
@@ -31,9 +48,13 @@ test("TextArea: setting default text should return default text", async() => {
 	expect(textArea).toHaveValue("Default text")
 })
 
-test("TextArea: default text should be changeable", async() => {
+test("TextArea: default text should be changeable", async () => {
 	// ARRANGE
-	render(<div><TextArea defVal={"Default text"} id={"testArea"} ></TextArea></div>)
+	render(
+		<div>
+			<TextArea defVal={"Default text"} id={"testArea"}></TextArea>
+		</div>
+	)
 	const textArea = screen.getByTestId("testArea")
 
 	// ACT
@@ -43,9 +64,13 @@ test("TextArea: default text should be changeable", async() => {
 	expect(textArea).toHaveValue("Default text!!!")
 })
 
-test("TextArea: placeholder should not change value", async() => {
+test("TextArea: placeholder should not change value", async () => {
 	// ARRANGE
-	render(<div><TextArea placeholder={"Enter text here"} defVal={"Default text"} id={"testArea"} ></TextArea></div>)
+	render(
+		<div>
+			<TextArea placeholder={"Enter text here"} defVal={"Default text"} id={"testArea"}></TextArea>
+		</div>
+	)
 	const textArea = screen.getByTestId("testArea")
 
 	// ACT
@@ -55,26 +80,35 @@ test("TextArea: placeholder should not change value", async() => {
 	expect(textArea).toHaveValue("Default text")
 })
 
-test("TextArea: should display error message", async() => {
-	render(<TextArea id="testField" errorMessage="Something went wrong"/>)
+test("TextArea: should display error message", async () => {
+	render(<TextArea id="testField" errorMessage="Something went wrong" />)
 
-	expect(screen.getByRole("textbox", {name: /something went wrong/i})).toBeInTheDocument()
+	expect(screen.getByRole("textbox", { name: /something went wrong/i })).toBeInTheDocument()
 })
 
-test("TextArea: should not display error message, empty string", async() => {
-	render(<TextArea id="testField" errorMessage=""/>)
+test("TextArea: should not display error message, empty string", async () => {
+	render(<TextArea id="testField" errorMessage="" />)
 
-	expect(screen.queryByRole("textbox", {name: /something went wrong/i})).not.toBeInTheDocument()
+	expect(screen.queryByRole("textbox", { name: /something went wrong/i })).not.toBeInTheDocument()
 })
 
-test("TextArea: should not display error message, null", async() => {
-	render(<TextArea id="testField" errorMessage={null}/>)
+test("TextArea: should not display error message, null", async () => {
+	render(<TextArea id="testField" errorMessage={null} />)
 
-	expect(screen.queryByRole("textbox", {name: /something went wrong/i})).not.toBeInTheDocument()
+	expect(screen.queryByRole("textbox", { name: /something went wrong/i })).not.toBeInTheDocument()
 })
 
-test("TextArea: should not display error message, undefined", async() => {
-	render(<TextArea id="testField" errorMessage={undefined}/>)
+test("TextArea: should not display error message, undefined", async () => {
+	render(<TextArea id="testField" errorMessage={undefined} />)
 
-	expect(screen.queryByRole("textbox", {name: /something went wrong/i})).not.toBeInTheDocument()
+	expect(screen.queryByRole("textbox", { name: /something went wrong/i })).not.toBeInTheDocument()
+})
+
+test("characterCount updates correctly with text 'Hello World!'", () => {
+	const text = "Hello  World!"
+	render(<TextArea text={text} />)
+
+	const characterCountElement = screen.getByText(`${text.length}/800`)
+	console.log(characterCountElement)
+	expect(characterCountElement).toBeInTheDocument()
 })

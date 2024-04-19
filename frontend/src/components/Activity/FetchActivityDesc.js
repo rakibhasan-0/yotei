@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from "react"
-import "./activity.module.css"
+import "./activity.css"
 import {AccountContext} from "../../context"
 
 /**

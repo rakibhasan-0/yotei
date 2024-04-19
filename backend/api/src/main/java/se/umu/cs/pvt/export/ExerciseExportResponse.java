@@ -13,14 +13,14 @@ public class ExerciseExportResponse {
     private String name;
     private String description;
     private int duration;
-    private String videoUrl;
+    private List<String> videoUrls;
     private List<String> tags;
 
-    public ExerciseExportResponse(String name, String description, int duration,String videoUrl, List<String> tags) {
+    public ExerciseExportResponse(String name, String description, int duration, List<String> videoUrls, List<String> tags) {
         this.name = name;
         this.description = description;
         this.duration = duration;
-        this.videoUrl = videoUrl;
+        this.videoUrls = videoUrls;
         this.tags = tags;
     }
 
@@ -36,8 +36,8 @@ public class ExerciseExportResponse {
         return duration;
     }
 
-    public String getVideoUrl() {
-        return videoUrl;
+    public List<String> getVideoUrls() {
+        return videoUrls;
     }
 
     public List<String> getTags() {

@@ -31,9 +31,9 @@ import EditActivityPopup from "./EditActivityPopup"
  * Example usage:
  *		<WorkoutFormComponent callback={submitHandler} />
  *
- * @author Team Minotaur
+ * @author Team Minotaur, Team 3 Durian
  * @version 2.1
- * @since 2023-05-24
+ * @since 2023-05-24, 2024-04-18
  * @updated 2023-06-01 Chimera, updated pathing when pressing return to create session
  */
 export default function WorkoutFormComponent({ callback, state }) {
@@ -94,7 +94,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 	 */
 	function handleGoBack() {
 		if (state?.fromSession) {
-			return navigate("/session/create", { replace: true, state })
+			return navigate(`/session/edit/${state.session.sessionId}`, { replace: true, state })
 		}
 		navigate("/workout")
 	}
