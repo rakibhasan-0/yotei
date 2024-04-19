@@ -36,7 +36,7 @@ export default function ExerciseListItem({ item, text, detailURL, id, index, che
 
 	return (
 		<div className={styles["exercise-list-container"]} data-testid="ExerciseListItem">
-			<div className={styles['exercise-list-header']} style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
+			<div className={styles["exercise-list-header"]} style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
 				{checkBox}
 				<Link to={detailURL + id} data-testid="ExerciseListItem-link" style={{width: "100%"}}>
 					<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>

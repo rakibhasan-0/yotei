@@ -30,8 +30,8 @@ const FetchActivityDesc =  ({activity, apiPath}) => {
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
-		<div className={col}>
-			<div className={textDesc}>{out.description}</div>
+		<div className="col">
+			<div className="textDesc">{out.description}</div>
 		</div>
 	)
 }

@@ -1,6 +1,6 @@
 import { ChevronDown } from "react-bootstrap-icons"
-import styles from "./TechniqueCard.module.css"
 import { Link, useNavigate } from "react-router-dom"
+import styles from "./TechniqueCard.module.css"
 
 /**
  * Technique card component.
@@ -34,7 +34,7 @@ function TechniqueCard({ technique, checkBox, id}) {
 				) : null}
 
 				<div className={styles["technique-name-container"]}>
-					<Link to={"/technique/" + technique.techniqueID}>
+					<Link onClick={handleClick} >
 						<h5 className={styles["technique-name"]}>{technique.name}</h5>
 					</Link>
 				</div>
@@ -89,7 +89,7 @@ function constructAdultBelt(belt, beltLength, index) {
 		return (
 			<div
 				key={index}
-				className={styles[["technique-card-belt-color", belt.belt_name === "Vitt" ? "technique-card-belt-border" : ""].join(" ")]}
+				className={styles["technique-card-belt-color", belt.belt_name === "Vitt" ? "technique-card-belt-border" : ""].join(" ")}
 				style={
 					{
 						background: `#${belt.belt_color}`,
@@ -118,7 +118,7 @@ function constructAdultBelt(belt, beltLength, index) {
 	return (
 		<div
 			key={index}
-			className={styles[["technique-card-belt-color", belt.belt_name === "Vitt" ? "technique-card-belt-border" : ""].join(" ")]}
+			className={styles["technique-card-belt-color", belt.belt_name === "Vitt" ? "technique-card-belt-border" : ""].join(" ")}
 			style={
 				{
 					background: `#${belt.belt_color}`,
@@ -134,7 +134,7 @@ function constructChildBelt(belt, beltLength, index) {
 	return (
 		<div 
 			key={index}
-			className={styles[["technique-card-belt-color", "technique-card-belt-border"].join(" ")]}
+			className={styles["technique-card-belt-color", "technique-card-belt-border"].join(" ")}
 			style={
 				{
 					// background: `radial-gradient(circle, rgba(0,0,0,1) 20%, rgba(0,0,0,1) 70%, rgba(255,255,255,1) 70%`, 

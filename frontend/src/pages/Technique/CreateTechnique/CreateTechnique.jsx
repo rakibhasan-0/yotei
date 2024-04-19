@@ -3,7 +3,6 @@ import InputTextField from "../../../components/Common/InputTextField/InputTextF
 import TextArea from "../../../components/Common/TextArea/TextArea"
 import BeltPicker from "../../../components/Common/BeltPicker/BeltPicker"
 import Button from "../../../components/Common/Button/Button"
-import styles from "./CreateTechnique.module.css"
 import { useContext, useEffect, useState } from "react"
 import { AccountContext } from "../../../context"
 import TagInput from "../../../components/Common/Tag/TagInput"

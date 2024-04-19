@@ -108,7 +108,7 @@ function TechniqueDetail({ id }) {
 		onRecover={handleGet}
 	/>
 
-	if (loading) return <div className={styles['technique-detail-center-spinner']}><Spinner /></div>
+	if (loading) return <div className={styles["technique-detail-center-spinner"]}><Spinner /></div>
 
 	return (
 		<>
