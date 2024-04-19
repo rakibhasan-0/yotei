@@ -38,11 +38,10 @@ export default function Tag({ id, tagType, onClick, text }) {
 			<button type="button" id={id} className={styles["base-tag"]} onClick={onClick}>
 				<p className={styles["no-margin"]}>{text}</p>
 			</button>
-
 		)
 	} else if (tagType === "suggest") {
 		return (
-			<button type="button" id={id} className={`${styles["base-tag"]} ${styles["suggest"]}`} onClick={onClick}>
+			<button type="button" id={id} className={`${styles["base-tag"]} ${styles["suggest"]} suggest`} onClick={onClick}>
 				<p className={styles["no-margin"]}>{text}</p>
 				<PlusCircle className="ml-2" size={18} color="black"/>
 			</button>
