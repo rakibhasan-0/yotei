@@ -388,6 +388,15 @@ export default function PlanCreate() {
 			res = false
 		}
 
+		for (let i = 0; i < 7; i++) {
+            const day = weekdays[i]
+            if (day.value && day.time == "") {
+                setErrorToast("Du måste ge tid till varje aktiv dag")
+                res = false
+                break
+            }
+        }
+
 		return res
 	}
 
