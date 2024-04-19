@@ -41,6 +41,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 
 	const handleRemoveTag = (tag) => {
 		setError("")
+		setSuggested([...suggested, tag])
 		const copy = [...addedTags]
 		const newAdded = copy.filter(tagInCopy => tagInCopy.id !== tag.id)
 		setAddedTags(newAdded)

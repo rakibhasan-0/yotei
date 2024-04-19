@@ -5,12 +5,11 @@ stages:
 #  - doc
   - deploy_test_server
 
-workflow:
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
 
 test-linter-frontend:
-  image: node:19
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
+  image: node:20
   before_script:
     - cd frontend
     - npm ci --no-progress --quiet --cache .npm --prefer-offline
@@ -25,6 +24,8 @@ test-linter-frontend:
       - npm run lint:ci
       
 test-backend:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
   stage: test
   image: maven:3.8.3-openjdk-17
 #  variables:
@@ -38,6 +39,8 @@ test-backend:
     - mvn -q test
   
 test-frontend:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
   stage: test
   image: node:20
   before_script:
@@ -53,8 +56,10 @@ test-frontend:
     - npm run test:ci
 
 build-frontend:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
   stage: build
-  image: node:19
+  image: node:20
   before_script:
     - cd frontend
     - npm ci --no-progress --quiet --cache .npm --prefer-offline
@@ -79,7 +84,7 @@ build-frontend:
 deploy-test-server:
   stage: deploy_test_server
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "main" #merge $CI_COMMIT_BRANCH && $CI_PIPELINE_SOURCE == "push"
+  - if: $CI_COMMIT_BRANCH == "main"
   tags:
     - system
   script:
