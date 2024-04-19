@@ -47,36 +47,36 @@ export default function GroupIndex() {
 		})()
 	}, [token, searchText])
 
-	if (loading) return <div className='groups-center-spinner'><Spinner /></div>
-
-	return (
-		<div className={style.container}>
+	return (	
+		<div className={style.container}>	
 			<h1>Grupper</h1>
 			<SearchBar id="searchbar-groups" placeholder="Sök efter grupp" text={searchText} onChange={setSearchText} /> 
-			<div>
-				{groups?.filter(group => {
-					if (searchText?.length > 0) {
-						return group.name.toLowerCase().includes(searchText.toLowerCase())
-					}
-					return true
-				}).map((group, index) => (
-					<div className="mb-2" key={index}>
-						<p className={style.label}>{group.name}</p>
-						<div className="d-flex align-items-center">
-							<div className={style.item}>
-								<BeltBox id={index} belts={group.belts} />
+			{loading ? <Spinner /> : (
+				<div>
+					{groups?.filter(group => {
+						if (searchText?.length > 0) {
+							return group.name.toLowerCase().includes(searchText.toLowerCase())
+						}
+						return true
+					}).map((group, index) => (
+						<div className="mb-2" key={index}>
+							<p className={style.label}>{group.name}</p>
+							<div className="d-flex align-items-center">
+								<div className={style.item}>
+									<BeltBox id={index} belts={group.belts} />
+								</div>
+								{ (isEditor(context) || userId == group.userId) && <Link to={`/plan/edit/${group.id}`}>
+									<Pencil size={24} color="var(--red-primary)" />
+								</Link>
+								}
 							</div>
-							{ (isEditor(context) || userId == group.userId)&& <Link to={`/plan/edit/${group.id}`}>
-								<Pencil size={24} color="var(--red-primary)" />
-							</Link>
-							}
 						</div>
-					</div>
-				))}
-				<RoundButton linkTo={"/plan/create"}>
-					<Plus className="plus-icon" />
-				</RoundButton>
-			</div>
+					))}
+					<RoundButton linkTo={"/plan/create"}>
+						<Plus className="plus-icon" />
+					</RoundButton>
+				</div>
+			)}
 		</div>
 	)
 }
