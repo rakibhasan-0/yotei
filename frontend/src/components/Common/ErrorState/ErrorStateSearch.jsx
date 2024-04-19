@@ -1,6 +1,6 @@
 import React from "react"
 import { EmojiFrown } from "react-bootstrap-icons"
-import "./ErrorState.module.css"
+import styles from "./ErrorState.module.css"
 
 /**
  * A placeholder for an error message when searching for something
@@ -22,8 +22,8 @@ import "./ErrorState.module.css"
 
 export default function ErrorStateSearch({ id, message }) {
 	return (
-		<div id={id} className={"error-state-container"} >
-			<div className={"error-state-icon-container"}>
+		<div id={id} className={styles["error-state-container"]} >
+			<div className={styles["error-state-icon-container"]}>
 				<EmojiFrown size="5rem" color="var(--red-primary)" />
 			</div>
 			<h2>{message}</h2>

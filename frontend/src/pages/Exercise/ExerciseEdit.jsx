@@ -1,22 +1,21 @@
 import React, { useContext, useEffect, useState, useCallback } from "react"
 import styles from "./ExerciseCreate.module.css"
-import {AccountContext} from "../../context"
+import { AccountContext } from "../../context"
 import Button from "../../components/Common/Button/Button"
-import  "../../components/Common/InputTextField/InputTextField"
-import  "../../components/Common/TextArea/TextArea"
+import "../../components/Common/InputTextField/InputTextField"
+import "../../components/Common/TextArea/TextArea"
 import MinutePicker from "../../components/Common/MinutePicker/MinutePicker.jsx"
 import InputTextField from "../../components/Common/InputTextField/InputTextField.jsx"
 import TextArea from "../../components/Common/TextArea/TextArea.jsx"
 import Divider from "../../components/Common/Divider/Divider.jsx"
 import TagInput from "../../components/Common/Tag/TagInput.jsx"
-import {setError as setErrorToast} from "../../utils"
+import { setError as setErrorToast } from "../../utils"
 import EditGallery from "../../components/Gallery/EditGallery"
 import { useNavigate, useParams } from "react-router"
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 import { isAdmin, isEditor } from "../../utils"
 import { unstable_useBlocker as useBlocker } from "react-router"
-
-
+import Spinner from "../../components/Common/Spinner/Spinner.jsx"
 
 /**
  * The edit excercise page (Redigera övning).
@@ -47,16 +46,16 @@ export default function ExerciseEdit() {
 	const [showMiniPopup, setShowMiniPopup] = useState(false)
 	const [undoMediaChanges, setUndoMediaChanges] = useState(false)
 	const [isBlocking, setIsBlocking] = useState(false)
+	const [isLoading, setIsLoading] = useState(true)
 
 	const navigate = useNavigate()
 	const { excerciseId } = useParams()
 
-	function done(){
-		if(undoMediaChanges){
+	function done() {
+		if (undoMediaChanges) {
 			setShowMiniPopup(false)
 			navigate(-1)
-		}
-		else{
+		} else {
 			setSendData(false)
 			editExercise()
 		}
@@ -75,39 +74,39 @@ export default function ExerciseEdit() {
 	}, [name, desc, oldName, oldDesc])
 
 	useEffect(() => {
-		if(!isAdmin(context) || !isEditor(context)) {
+		if (!isAdmin(context) || !isEditor(context)) {
 			navigate(-1)
 		}
 	}, [context, navigate])
 
 	/**
-     * Returns the information about the exercise and its tags with the id in the pathname.
-     */
-	const getExerciseInfo = useCallback( async () => {		
+	 * Returns the information about the exercise and its tags with the id in the pathname.
+	 */
+	const getExerciseInfo = useCallback(async () => {
+		setIsLoading(true)
 		const requestOptions = {
 			method: "GET",
-			headers: {"Content-type": "application/json", token: context.token},
+			headers: { "Content-type": "application/json", token: context.token },
 		}
 		let exerciseJson
 		let tagsJson
 		try {
 			const response = await fetch(`/api/exercises/${excerciseId}`, requestOptions)
 			exerciseJson = await response.json()
-			
-			try{
+
+			try {
 				const response = await fetch(`/api/tags/get/tag/by-exercise?exerciseId=${excerciseId}`, requestOptions)
 				tagsJson = await response.json()
 				tagsJson = convertJsonString(tagsJson)
-			} catch{
+			} catch {
 				setErrorToast("Det gick inte att hämta taggar")
 				console.error(errorMessage)
 			}
-
 		} catch (error) {
 			setErrorToast("Det gick inte att hämta övningsinfo")
 		}
 
-		if (0 === name.length || name === null || name === "null"){
+		if (0 === name.length || name === null || name === "null") {
 			setName(exerciseJson.name)
 			setDesc(exerciseJson.description)
 			setTime(exerciseJson.duration)
@@ -117,17 +116,19 @@ export default function ExerciseEdit() {
 		setOldName(exerciseJson.name)
 		setOldDesc(exerciseJson.description)
 		setOldTime(exerciseJson.duration)
-	
+		setIsLoading(false)
 		/* Ska inte ligga här utan villkor */
 	}, [])
 
-	useEffect(() => {getExerciseInfo()}, [getExerciseInfo])
+	useEffect(() => {
+		getExerciseInfo()
+	}, [getExerciseInfo])
 
 	/**
-	 * Used to pass 2 parameters to setTime 
+	 * Used to pass 2 parameters to setTime
 	 * to avoid errors with different number props
 	 */
-	function timeCallback(id, time){
+	function timeCallback(id, time) {
 		setTime(time)
 	}
 
@@ -137,11 +138,10 @@ export default function ExerciseEdit() {
 	 */
 	// eslint-disable-next-line no-unused-vars
 	function checkChanges() {
-
 		const newT = JSON.stringify(newTags.sort((a, b) => a.id - b.id))
 		const oldT = JSON.stringify(existingTags.sort((a, b) => a.id - b.id))
 
-		if(oldName !== name || oldDesc !== desc || oldTime != time || newT !== oldT)  {
+		if (oldName !== name || oldDesc !== desc || oldTime != time || newT !== oldT) {
 			setShowMiniPopup(true)
 		} else {
 			navigate(-1)
@@ -149,55 +149,53 @@ export default function ExerciseEdit() {
 	}
 
 	/**
-     * Create a new array with updated property names
-     *
-     * @param originalData json string with tagdata to be converted
+	 * Create a new array with updated property names
+	 *
+	 * @param originalData json string with tagdata to be converted
 	 * @returns newData - json object with correct format
-     */
-	function convertJsonString(originalData){
+	 */
+	function convertJsonString(originalData) {
 		const newData = originalData.map(({ tagId, tagName }) => ({
 			id: tagId,
-			name: tagName
+			name: tagName,
 		}))
 
 		return newData
 	}
 
 	/**
-     * Is called when an edit request (PUT) is sent to the API.
-     *
-     * @param {*} e The event that caused editExercise.
-     */
+	 * Is called when an edit request (PUT) is sent to the API.
+	 *
+	 * @param {*} e The event that caused editExercise.
+	 */
 	async function editExercise() {
-		
 		const requestOptionsDuplicate = {
 			method: "PUT",
-			headers: {"Content-type": "application/json", "token": context.token},
+			headers: { "Content-type": "application/json", token: context.token },
 			body: JSON.stringify({
 				id: excerciseId,
 				name: name.trim(),
 				description: desc,
 				duration: time,
-			})
+			}),
 		}
 		try {
 			const response = await fetch("/api/exercises/update", requestOptionsDuplicate)
-			
+
 			if (response.status === 406 && name != oldName) {
 				setErrorMessage("Detta namn är redan taget")
 				return
 			}
-		}
-		catch (error) {
+		} catch (error) {
 			setErrorToast("Ett internt fel inträffade")
 		}
-		
+
 		if (name.trim() === "") {
 			setEditFailed(true)
 			setErrorMessage("Övningen måste ha ett namn")
 			return
 		}
-		
+
 		await checkTags()
 		if (!(editFailed || tagRemoveFailed || tagLinkFailed)) {
 			navigate(-1)
@@ -205,16 +203,16 @@ export default function ExerciseEdit() {
 	}
 
 	/**
-     * Method for checking which tags to be removed from the exercise and which to add as new
-	 * tags connected to the exercise. 
-     */
+	 * Method for checking which tags to be removed from the exercise and which to add as new
+	 * tags connected to the exercise.
+	 */
 	async function checkTags() {
 		for (var i = 0; i < newTags.length; i++) {
 			//Link only if it's a tag that already didn't get linked
 			if (!existingTags.includes(newTags[i])) {
 				await linkExerciseTag(excerciseId, newTags.at(i).id, newTags.at(i).name)
 			}
-		} 
+		}
 		// Remove tags that are not present anymore
 		for (i = 0; i < existingTags.length; i++) {
 			if (!newTags.includes(existingTags[i])) {
@@ -224,14 +222,14 @@ export default function ExerciseEdit() {
 	}
 
 	/**
-     * Method for API-call when creating a tag.
-     * @returns the id of the exercise that has been created
-     */
+	 * Method for API-call when creating a tag.
+	 * @returns the id of the exercise that has been created
+	 */
 	async function linkExerciseTag(exId, tag_id, tag_name) {
 		const requestOptions = {
 			method: "POST",
-			headers: {"Content-type": "application/json", "token": context.token},
-			body: JSON.stringify({"exerciseId": exId})
+			headers: { "Content-type": "application/json", token: context.token },
+			body: JSON.stringify({ exerciseId: exId }),
 		}
 		try {
 			const response = await fetch("/api/tags/exercises?tag=" + tag_id, requestOptions)
@@ -249,33 +247,35 @@ export default function ExerciseEdit() {
 	}
 
 	/** Method to remove a tag from an exercise (does not remove the tag itself).
-     *
-     * @param {Exercise id} exId
-     * @param {tag id} tag_id
-     */
+	 *
+	 * @param {Exercise id} exId
+	 * @param {tag id} tag_id
+	 */
 	async function removeTag(exId, tag_id, tag_name) {
 		const requestOptions = {
 			method: "DELETE",
-			headers: {"Content-type": "application/json", "token": context.token},
-			body: JSON.stringify({"exerciseId": exId})
+			headers: { "Content-type": "application/json", token: context.token },
+			body: JSON.stringify({ exerciseId: exId }),
 		}
 		try {
 			const response = await fetch(`/api/tags/remove/exercise?tag=${tag_id}`, requestOptions)
 			if (response.ok) {
 				setTagRemovedFailed(false)
 			} else {
-				setTagRemovedFailed(true)			
+				setTagRemovedFailed(true)
 				setErrorMessage(tag_name)
 				setErrorToast("Det gick inte att ta bort taggen")
 			}
 		} catch (error) {
 			setErrorToast("Ett internt fel uppstod")
-			setTagRemovedFailed(true)			
+			setTagRemovedFailed(true)
 			setErrorMessage(tag_name)
 		}
 	}
 
-	return (
+	return isLoading ? (
+		<Spinner />
+	) : (
 		<>
 			<h1>Redigera övning</h1>
 
@@ -283,9 +283,9 @@ export default function ExerciseEdit() {
 				placeholder={"Namn"}
 				text={name}
 				onChange={(e) => setName(e.target.value)}
-				required = {true}
+				required={true}
 				type="text"
-				id = {"exerciseNameInput"}
+				id={"exerciseNameInput"}
 				errorMessage={errorMessage}
 			/>
 			<TextArea
@@ -293,7 +293,7 @@ export default function ExerciseEdit() {
 				placeholder={"Beskrivning"}
 				text={desc}
 				onChange={(e) => setDesc(e.target.value)}
-				required = {true}
+				required={true}
 				id={"exerciseDescriptionInput"}
 				type="text"
 				errorDisabled={true}
@@ -301,7 +301,7 @@ export default function ExerciseEdit() {
 
 			<Divider option={"h2_left"} title={"Tid"} />
 
-			<div className={styles.timeSelector} >
+			<div className={styles.timeSelector}>
 				<MinutePicker
 					id={"minuteSelect"}
 					initialValue={window.localStorage.getItem("time")}
@@ -311,19 +311,11 @@ export default function ExerciseEdit() {
 
 			<Divider option={"h2_left"} title={"Taggar"} />
 
-			<TagInput
-				addedTags={newTags}
-				setAddedTags={setNewTags}
-			/>
+			<TagInput addedTags={newTags} setAddedTags={setNewTags} />
 
 			<Divider option={"h2_left"} title={"Media"} />
 
-			<EditGallery
-				exerciseId={excerciseId}
-				sendData={sendData}
-				undoChanges={undoMediaChanges}
-				done={done}
-			/>
+			<EditGallery exerciseId={excerciseId} sendData={sendData} undoChanges={undoMediaChanges} done={done} />
 
 			<div className={styles.buttonContainer}>
 				<Button
@@ -359,6 +351,4 @@ export default function ExerciseEdit() {
 			/>
 		</>
 	)
-
-
 }
