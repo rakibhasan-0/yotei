@@ -3,7 +3,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css" // requires a loa
 import { Carousel } from "react-responsive-carousel"
 import VideoPlayerReactPlayer from "../VideoPlayer/VideoPlayerReactPlayer"
 import Image from "../Image/Image"
-import "../Gallery/Gallery.css"
+import "../Gallery/Gallery.module.css"
 import { AccountContext } from "../../context"
 
 /**

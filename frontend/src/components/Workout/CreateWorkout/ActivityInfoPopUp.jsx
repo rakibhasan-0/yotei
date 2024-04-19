@@ -74,7 +74,7 @@ function ActivityList({ isFreeText }){
 			{workoutCreateInfo.addedActivities.map((activity, index) => {
 				return (
 					<ActivityItem
-						categoryName={index < 9 ? "0" + (index + 1) : index + 1}
+						categoryName={"Aktivitet " + (index + 1)}
 						key={"activity-list-item-" + index}
 						id={index}
 						index={index}
@@ -120,7 +120,7 @@ function ActivityTimes() {
 			{addedActivities.map((activity, index) => {
 				return (
 					<li key={index} className={styles.activityTimesItem}>
-						<p className={styles.activityTimeText}>{(index+1) < 10 ? 0 :""}{index + 1} </p>
+						<p className={styles.activityTimeText}>{"Aktivitet " + (index + 1)} </p>
 						<i className={["bi", "bi-dash-lg", styles.activityTimeLine].join(" ")}></i>
 						<MinutePicker 
 							initialValue={activity.duration} 

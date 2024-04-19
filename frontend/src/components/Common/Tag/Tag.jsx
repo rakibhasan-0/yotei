@@ -1,5 +1,5 @@
 import React from "react"
-import "./Tag.css"
+import "./Tag.module.css"
 import { PlusCircle, XCircleFill } from "react-bootstrap-icons"
 
 /**

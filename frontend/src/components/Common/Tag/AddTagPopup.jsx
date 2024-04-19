@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react"
-import "./AddTagPopup.css"
+import "./AddTagPopup.module.css"
 import Tag from "./Tag"
 import { Search } from "react-bootstrap-icons"
 import Button from "../Button/Button"
@@ -41,6 +41,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 
 	const handleRemoveTag = (tag) => {
 		setError("")
+		setSuggested([...suggested, tag])
 		const copy = [...addedTags]
 		const newAdded = copy.filter(tagInCopy => tagInCopy.id !== tag.id)
 		setAddedTags(newAdded)
