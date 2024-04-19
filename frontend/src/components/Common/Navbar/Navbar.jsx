@@ -15,9 +15,9 @@ import { AccountContext } from "../../../context"
  * Example usage:
  * 		<Navbar testId="test-id"/>
  *
- * @author Team Medusa & Team Cyclops 
+ * @author Team Medusa & Team Cyclops & Team Tomato
  * @version 2.0
- * @since 2023-05-23
+ * @since 2024-04-18
  */
 function Navbar({ testId }) {
 
@@ -25,9 +25,9 @@ function Navbar({ testId }) {
 	const navigate = useNavigate()
 	const context = useContext(AccountContext)
 
-	const navigateAndClose = path => {
+	const navigateAndClose = (path, data) => {
 		setOpen(false)
-		navigate(path)
+		navigate(path, data)
 	}
 	
 	useEffect(() => {
@@ -60,7 +60,7 @@ function Navbar({ testId }) {
 					<h1 className={styles.commonNavbarButton}>Övningar</h1>
 				</Button>
 
-				<Button width={"100%"} onClick={() => navigateAndClose("/technique")}>
+				<Button width={"100%"} onClick={() => navigateAndClose("/technique",  {state: {clearSearchText: true}})}>
 					<h1 className={styles.commonNavbarButton}>Tekniker</h1>
 				</Button>
 
