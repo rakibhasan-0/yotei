@@ -30,8 +30,8 @@ import { useCookies } from "react-cookie"
  * @param {string} id A unique id of the component (Testing purposes)
  * @param {function} setShowActivityInfo Callback function to report selected activities
  *  
- * @author Kraken (Grupp 7)
- * @since 2023-05-23
+ * @author Kraken (Grupp 7), Team Coconut
+ * @since 2024-04-19
  */
 function AddActivity({ id, setShowActivityInfo }) {
 
@@ -45,6 +45,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 */
 	const [map, mapActions] = useMap()
 	const [key, setKey] = useState("technique");
+	const [cookiesData, setCookie] = useCookies(["active-tab"]);
 
 	/**
 	 * States related to keeping track of which techniques
@@ -101,7 +102,18 @@ function AddActivity({ id, setShowActivityInfo }) {
 	useEffect(setExerciseList, [exercises, sort, searchExerText])
 	
 	useEffect(() => {
-		console.log(key);
+        const activeTab = cookiesData["active-tab"];
+        if (activeTab) {
+            setKey(activeTab);
+        }
+    }, []);
+
+	useEffect(() => {
+        setCookie("active-tab", key, { path: '/' });
+    }, [key]);
+
+	useEffect(() => {
+		console.log(key + "hello");
 
 	}, [key])
 
