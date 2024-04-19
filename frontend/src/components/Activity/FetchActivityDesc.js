@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from "react"
-import styles from "./activity.module.css"
+import "./activity.css"
 import {AccountContext} from "../../context"
 
 /**
@@ -30,8 +30,8 @@ const FetchActivityDesc =  ({activity, apiPath}) => {
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
-		<div className={styles.col}>
-			<div className={styles.textDesc}>{out.description}</div>
+		<div className={col}>
+			<div className={textDesc}>{out.description}</div>
 		</div>
 	)
 }

@@ -1,4 +1,4 @@
-import "./SessionContainer.css"
+import styles from "./SessionContainer.module.css"
 import React from "react"
 import { useState} from "react"
 import { ChevronDown } from "react-bootstrap-icons"
@@ -137,8 +137,8 @@ function SessionContainer ({ id, workout, session, plan}) {
 
 		checkID(id) ?
 			(
-				<div id = {id} className="sc23-session-container">
-					<div id = {`${id}-header`} className="sc23-session-container-header">
+				<div id = {id} className={styles["sc23-session-container"]}>
+					<div id = {`${id}-header`} className={styles["sc23-session-container-header"]}>
 						<div id = "session-information">
 							{
 								checkSession() ?
@@ -155,8 +155,8 @@ function SessionContainer ({ id, workout, session, plan}) {
 										<div id><h2 id = "error-session-header">Kunde inte ladda in datum och tid</h2></div>
 							}
 						</div>
-						<div className = "sc23-outline">
-							<div className = "sc23-session-header-clickable" role="button" onClick={() => setToggled(!toggled)}>
+						<div className = {styles["sc23-outline"]}>
+							<div className = {styles["sc23-session-header-clickable"]} role="button" onClick={() => setToggled(!toggled)}>
 								{
 									checkPlan() ?
 										<BeltBox id ="sc23-session-container-beltbox" belts={plan.belts} style={{borderTopLeftRadius:"4px"}}/>
@@ -165,14 +165,14 @@ function SessionContainer ({ id, workout, session, plan}) {
 								}
 								{
 									checkPlan() && checkColor() ?
-										<ChevronDown id="sc23-dropdown" style={{color:"black"}} className={["sc23-session-container-chevron-rotation-animation sc23-session-container-header-overlap", toggled ? "sc23-chevron-rotate" : ""].join(" ")} size={20}/>
+										<ChevronDown id="sc23-dropdown" style={{color:"black"}} className={styles[["sc23-session-container-chevron-rotation-animation sc23-session-container-header-overlap", toggled ? "sc23-chevron-rotate" : ""].join(" ")]} size={20}/>
 										:
-										<ChevronDown id="sc23-dropdown" className={["sc23-session-container-chevron-rotation-animation sc23-session-container-header-overlap", toggled ? "sc23-chevron-rotate" : ""].join(" ")} size={20}/>
+										<ChevronDown id="sc23-dropdown" className={styles[["sc23-session-container-chevron-rotation-animation sc23-session-container-header-overlap", toggled ? "sc23-chevron-rotate" : ""].join(" ")]} size={20}/>
 								}
 							</div>
-							<div id = {`${id}-content`} className="sc23-session-container-content">
+							<div id = {`${id}-content`} className={styles["sc23-session-container-content"]}>
 								
-								<div className="sc23-session-container-child" style={{ display: toggled ? "inherit" : "none" }} id={`${id}-children`}>
+								<div className={styles["sc23-session-container-child"]} style={{ display: toggled ? "inherit" : "none" }} id={`${id}-children`}>
 									{	
 										workoutConnected() ?
 											<div><SessionWorkout id ="testSessionWorkout"  workout={workout} sessionID={sessionID} creatorID={planCreatorID} groupID={plan.id}/></div>

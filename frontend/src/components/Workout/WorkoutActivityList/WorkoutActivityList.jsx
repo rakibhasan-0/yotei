@@ -23,10 +23,10 @@ export default function WorkoutActivityList({categoryName, activities, id}) {
 	return (
 		<fieldset className={styles[setPadding(activities.length, categoryName) + " my-3 "]} id={id}>
 			<legend style={{textAlign: "left"}}>
-				<div className={"d-flex align-items-center justify-content-center"} onClick={() => setIsCollapsed(!isCollapsed)}>
-					{categoryName != null && <p className="m-0">{categoryName}</p> }
+				<div className={styles["d-flex align-items-center justify-content-center"]} onClick={() => setIsCollapsed(!isCollapsed)}>
+					{categoryName != null && <p className={styles["m-0"]}>{categoryName}</p> }
 					<i style={isCollapsed? {fontSize: "16px"} : rotatedIcon} 
-						className={categoryName != null ? "ml-2 bi bi-chevron-down" : "bi bi-chevron-down"}/>
+						className={styles[categoryName != null ? "ml-2 bi bi-chevron-down" : "bi bi-chevron-down"]}/>
 				</div>
 			</legend>
 			{!isCollapsed && sortActivities(activities).map((activity, index) =>
@@ -43,5 +43,5 @@ function sortActivities(activities) {
 
 function setPadding(length, categoryName) {
 	const paddingY = !categoryName ? "py-0" : "pb-3"
-	return ["container workout-activity-list "] + paddingY
+	return "container workout-activity-list " + paddingY
 }
