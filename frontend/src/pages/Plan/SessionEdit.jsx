@@ -47,9 +47,9 @@ export default function SessionEdit() {
 	const [isBlocking, setIsBlocking] = useState(false)
 	
 	//Blockers that stops the page from loading the edit functionalities until all data is loaded
-	const [isLoadingGroups, setIsLoadingGroups] = useState([false]);
-	const [isLoadingWorkouts, setIsLoadingWorkouts] = useState([false]);
-	const [isLoadingSession, setIsLoadingSession] = useState([false]);
+	const [isLoadingGroups, setIsLoadingGroups] = useState([false])
+	const [isLoadingWorkouts, setIsLoadingWorkouts] = useState([false])
+	const [isLoadingSession, setIsLoadingSession] = useState([false])
 
 
 	const blocker = useBlocker(() => {
@@ -74,17 +74,17 @@ export default function SessionEdit() {
 			try {
 				const response = await fetch("/api/plan/all", { headers: { token } })
 				if (response.status === 404) {
-					setIsLoadingGroups(false);
+					setIsLoadingGroups(false)
 					return
 				}
 				if (!response.ok) {
-					setIsLoadingGroups(false);
+					setIsLoadingGroups(false)
 					throw new Error("Could not fetch groups")
 				}
 				setGroups(await response.json())
-				setIsLoadingGroups(false);
+				setIsLoadingGroups(false)
 			} catch (ex) {
-				setIsLoadingGroups(false);
+				setIsLoadingGroups(false)
 				setErrorToast("Kunde inte hämta alla grupper")
 				console.error(ex)
 			}
@@ -94,20 +94,20 @@ export default function SessionEdit() {
 	useEffect(() => {
 		(async () => {
 			try {
-				setIsLoadingWorkouts(true);
+				setIsLoadingWorkouts(true)
 				const response = await fetch("/api/workouts/all", { headers: { token } })
 				if (response.status === 204) {
-					setIsLoadingWorkouts(false);
+					setIsLoadingWorkouts(false)
 					return
 				}
 				if (!response.ok) {
-					setIsLoadingWorkouts(false);
+					setIsLoadingWorkouts(false)
 					throw new Error("Could not fetch workouts")
 				}
 				setWorkouts(await response.json())
-				setIsLoadingWorkouts(false);
+				setIsLoadingWorkouts(false)
 			} catch (ex) {
-				setIsLoadingWorkouts(false);
+				setIsLoadingWorkouts(false)
 				setErrorToast("Kunde inte hämta alla pass")
 				console.error(ex)
 			}
@@ -116,15 +116,15 @@ export default function SessionEdit() {
 
 	useEffect(() => {
 		(async () => {
-			setIsLoadingSession(true);
+			setIsLoadingSession(true)
 			try {
 				const response = await fetch("/api/session/get?id=" + params.session_id, { headers: { token } })
 				if (response.status === 204) {
-					setIsLoadingSession(false);
+					setIsLoadingSession(false)
 					return
 				}
 				if (!response.ok) {
-					setIsLoadingSession(false);
+					setIsLoadingSession(false)
 					throw new Error("Could not fetch session")
 				}
 				let session = await response.json()
@@ -138,9 +138,9 @@ export default function SessionEdit() {
 					setOriginalGroup(groups.find(group => group.id === session.plan))
 					setOriginalWorkout(workouts.find(workout => workout.id === session.workout))
 				}
-				setIsLoadingSession(false);
+				setIsLoadingSession(false)
 			} catch (ex) {
-				setIsLoadingSession(false);
+				setIsLoadingSession(false)
 				setError("Kunde inte hämta tillfälle")
 				console.error(ex)
 			}
