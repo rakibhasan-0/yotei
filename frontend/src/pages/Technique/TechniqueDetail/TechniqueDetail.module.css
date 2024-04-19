@@ -1,5 +1,6 @@
 .technique-detail-container {
     text-align: left;
+    word-break: break-all;
 }
 
 .technique-detail-actions-container {
