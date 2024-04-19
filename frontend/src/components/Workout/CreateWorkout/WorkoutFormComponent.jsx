@@ -1,4 +1,4 @@
-import { useState, useContext, useCallback, useEffect } from "react"
+import { useState, useContext, useCallback } from "react"
 import { Form } from "react-bootstrap"
 import styles from "./WorkoutFormComponent.module.css"
 import InputTextField from "../../Common/InputTextField/InputTextField"
