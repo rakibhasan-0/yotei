@@ -45,7 +45,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 */
 	const [map, mapActions] = useMap()
 	const [key, setKey] = useState("technique");
-	const [cookiesData, setCookie] = useCookies(["active-tab"]);
+	const [tabCookie, setCookie] = useCookies(["active-tab"]);
 
 	/**
 	 * States related to keeping track of which techniques
@@ -102,7 +102,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	useEffect(setExerciseList, [exercises, sort, searchExerText])
 	
 	useEffect(() => {
-        const activeTab = cookiesData["active-tab"];
+        const activeTab = tabCookie["active-tab"];
         if (activeTab) {
             setKey(activeTab);
         }
@@ -111,11 +111,6 @@ function AddActivity({ id, setShowActivityInfo }) {
 	useEffect(() => {
         setCookie("active-tab", key, { path: '/' });
     }, [key]);
-
-	useEffect(() => {
-		console.log(key + "hello");
-
-	}, [key])
 
 	useEffect(() => {
 		if (hasLoadedData) return
