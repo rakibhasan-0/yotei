@@ -31,7 +31,7 @@ import { unstable_useBlocker as useBlocker } from "react-router"
  *     Verona (2022-05-04)
  *     Phoenix (Group 1) (2023-05-04)
  *     Medusa (Group 6) (2023-06-01)
- *     Coconut (Grupp 7) (2024-04-19)
+ *     Coconut (Group 7) (2024-04-19)
  *
  * @since 2023-05-22
  * @version 2.0
@@ -64,10 +64,10 @@ export default function ExerciseCreate() {
 	const [time, setTime] = useState(() => {
 		return exerciseCreateInput.time
 	})
-	const [addBoxChecked, setAddBoxChecked] = useState(() => {
+	const [addBoxChecked] = useState(() => {
 		return exerciseCreateInput.addBoxChecked
 	})
-	const [eraseBoxChecked, setEraseBoxChecked] = useState(() => {
+	const [eraseBoxChecked] = useState(() => {
 		return exerciseCreateInput.eraseBoxChecked
 	})
 	const context = useContext(AccountContext)
@@ -243,7 +243,6 @@ export default function ExerciseCreate() {
 	 * Calls the API calls in the correct order by
 	 * first creating the exercise, then linking the exercise with the chosen tags.
 	 */
-
 	function addExerciseAndTags() {
 		if (checkInput() === true) {
 			setIsBlocking(false)
