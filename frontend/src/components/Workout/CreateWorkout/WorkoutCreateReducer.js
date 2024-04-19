@@ -79,7 +79,7 @@ export const WorkoutCreateInitialState = {
 	addedCategories: [
 		{ id: 0, name: null, checked: false }, 
 		{ id: 1, name: "Uppvärmning", checked: false },
-		{ id: 2, name: "Stretchning", checked: false }
+		{ id: 2, name: "Tekniker", checked: false }
 	],
 	addedActivities: [],
 	checkedActivities: [],
@@ -338,7 +338,7 @@ export function workoutCreateReducer(state, action) {
 		let changedCategory = true
 		let newCategory = true 
 		let categoryId 
-
+		let removIds = []
 		tempState.addedCategories.forEach((category) => {
 			if(category.checked === true) {
 				categoryId = category.id
@@ -357,7 +357,7 @@ export function workoutCreateReducer(state, action) {
 					else {
 						category.activities.splice(index, 1)
 						if(tempState.data.activityItems[categoryIndex].activities.length === 0) {
-							tempState.data.activityItems.splice(categoryIndex, 1)
+							removIds.push(categoryIndex)
 						}
 					}
 				}
@@ -380,6 +380,9 @@ export function workoutCreateReducer(state, action) {
 			tempState.data.activityItems.push(activityItem)
 
 		}
+		removIds.forEach((number) =>{
+			tempState.data.activityItems.splice(number,1);
+		})
 		return tempState
 	}
 	case "CHECK_CATEGORY": {
