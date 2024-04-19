@@ -10,13 +10,14 @@ import se.umu.cs.pvt.media.MediaRepository;
 import se.umu.cs.pvt.media.Media;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
  * Handles export requests for techniques and exercises.
  *
  * @author Andre Byström, Team Coconut
- * @since: 2024-04-18
+ * @since: 2024-04-19
  * @version 2.0
  */
 @RestController
@@ -44,6 +45,7 @@ public class ExportController {
                             return new TechniqueExportResponse(
                                     t.getName(),
                                     t.getDescription(),
+                                    getVideoUrls(t.getId()),
                                     getTagNames(t.getTags()),
                                     getBelts(t.getBelts()));
                         })
@@ -59,7 +61,7 @@ public class ExportController {
                                     e.getName(),
                                     e.getDescription(),
                                     e.getDuration(),
-                                    getVideoUrl(e.getId()),
+                                    getVideoUrls(e.getId()),
                                     getTagNames(e.getTags())
                                     );
                         })
@@ -78,15 +80,11 @@ public class ExportController {
                 .toList();
     }
 
-    private String getVideoUrl(Long id) {
+    private List<String> getVideoUrls(Long id) {
         List<Media> media = mediaRepository.findAllMediaById(id);
-
-        if (media.isEmpty()) {
-            return "";
-
-        } else {
-            return media.get(0).getUrl();
-        }
-
+        
+        return media.stream()
+                .map(Media::getUrl)
+                .toList();
     }
 }
