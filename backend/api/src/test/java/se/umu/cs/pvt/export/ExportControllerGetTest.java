@@ -1,6 +1,8 @@
 package se.umu.cs.pvt.export;
 
 import lombok.experimental.WithBy;
+import se.umu.cs.pvt.media.MediaRepository;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +33,9 @@ public class ExportControllerGetTest {
 
     @MockBean
     private ExerciseExportRepository exerciseExportRepository;
+
+    @MockBean
+    private MediaRepository mediaRepository;
 
     @Autowired
     private ExportController exportController;
