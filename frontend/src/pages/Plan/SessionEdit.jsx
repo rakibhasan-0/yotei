@@ -18,9 +18,12 @@ import { Spinner } from "react-bootstrap"
 /**
  * A page for editing a session.
  * 
- * @author Chimera
+ * Version 1.1
+ *     Edit forms can not be accessed until all session data is fetched
+ * 
+ * @author Chimera, Tomtato
  * @since 2023-05-03
- * @version 1.0
+ * @version 1.1
  * @returns A page for editing a session.
  */
 export default function SessionEdit() {
