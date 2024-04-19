@@ -381,7 +381,7 @@ export function workoutCreateReducer(state, action) {
 
 		}
 		removIds.forEach((number) =>{
-			tempState.data.activityItems.splice(number,1);
+			tempState.data.activityItems.splice(number,1)
 		})
 		return tempState
 	}
