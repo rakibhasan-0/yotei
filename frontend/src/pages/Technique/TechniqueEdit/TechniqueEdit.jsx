@@ -14,6 +14,7 @@ import UploadMedia from "../../../components/Upload/UploadMedia"
 import EditGallery from "../../../components/Gallery/EditGallery"
 import Divider from "../../../components/Common/Divider/Divider"
 import { unstable_useBlocker as useBlocker, useNavigate, useParams } from "react-router"
+import { Spinner } from "react-bootstrap"
 
 const KIHON_TAG = { id: 1, name: "Kihon Waza" }
 
@@ -46,6 +47,7 @@ export default function TechniqueEdit({ id }) {
 
 	const [belts, setBelts] = useState()
 	const [beltsErr, setBeltsErr] = useState("")
+	const [loading, setLoading] = useState(true)
 
 	const [addedTags, setAddedTags] = useState()
 
@@ -81,14 +83,17 @@ export default function TechniqueEdit({ id }) {
 	}
 
 	const handleGet = useCallback(() => {
+		setLoading(true)
 		fetch(`/api/techniques/${techniqueId}`, { headers: { "Content-Type": "application/json", "token": token.token } })
 			.then(async res => {
 				if (res.status === HTTP_STATUS_CODES.OK) {
 					const tmpTech = await res.json()
 					updateTechnique(tmpTech)
+					setLoading(false)
 				}
 			})
 			.catch((err) => {
+				setLoading(false)
 				console.error(err)
 			})
 	}, [techniqueId, token])
@@ -220,6 +225,7 @@ export default function TechniqueEdit({ id }) {
 
 	}
 
+	if(loading) return <Spinner/>
 	return (
 		<div id={id} style={{ display: "flex", gap: "16px", flexDirection: "column" }}>
 
