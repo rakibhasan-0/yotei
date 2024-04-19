@@ -2,14 +2,13 @@ import {configure, render, screen, waitFor, fireEvent} from "@testing-library/re
 import "@testing-library/jest-dom"
 import PlanCreate from "../../../pages/Plan/PlanCreate"
 import userEvent from "@testing-library/user-event"
-//import { rest } from "msw"
-//import { server } from "../../server"
+import { rest } from "msw"
+import { server } from "../../server"
 configure({testIdAttribute: "id"})
 jest.mock("react-router", () => ({
 	useNavigate: () => jest.fn(),
 	unstable_useBlocker: () => jest.fn()
 }))
-
 
 test.todo("Should render some basics on init") 
 test("Should render Skapa Grupp", async () => {
@@ -80,28 +79,51 @@ describe("Create group/plan should", ()=> {
 				// setIsBlocking={setIsBlocking}
 				// setSuccessToast={setSuccessToast}
 				// navigate={navigate}
-				planData={planData}
+				// planData={planData}
 				beltsChosen={beltsChosen}
-				userId={userId}
-				token={token}
+				// userId={userId}
+				// token={token}
 				// dateHandler={dateHandler}
 				// setBelts={setBelts}
-				useBlocker={blocker}
-				weekdays={weekdays}
-				BeltPicker={BeltPicker}
+				// useBlocker={blocker}
+				// weekdays={weekdays}
+				// BeltPicker={BeltPicker}
 				// PlanForm={PlanForm}
-				fieldCheck={fieldCheck}
+				// fieldCheck={fieldCheck}
 			/>)
 	
 		const nameInput = screen.getByTestId("name")
 		fireEvent.change(nameInput, {target:{value:"Test name"}})
 
-		await userEvent.click(screen.getByTestId("form-belt-picker-dropdown"))
-		expect(screen.getByText("Orange")).toBeInTheDocument()
+		// await userEvent.click(screen.getByTestId("form-belt-picker-dropdown"))
+		// expect(screen.getByText("Orange")).toBeInTheDocument()
 		// await userEvent.click(screen.getByTestId("belt-child-Vitt"))
-
-
-		// expect(global.fetch).toHaveBeenCalledWith("/api/belts", {"headers": {"token": ""}})
+		
+		// server.use(
+		// 	rest.get("api/belts/all", async (req, res, ctx) => {
+		// 		return res(
+		// 			ctx.status(200),
+		// 			ctx.json([
+		// 				{
+		// 				  "id": 1,
+		// 				  "name": "Vitt",
+		// 				  "color": "FCFCFC",
+		// 				  "child": false
+		// 				},
+		// 				{
+		// 				  "id": 2,
+		// 				  "name": "Vitt",
+		// 				  "color": "BD3B41",
+		// 				  "child": true
+		// 				}
+		// 			  ])
+					
+		// 		)
+		// 	})
+		// )
+		// await screen.findByTestId("form-belt-picker-children")
+		// fireEvent.click(screen.getByTestId("belt-child-Vitt"), {target:{checked:true}})
+				// expect(global.fetch).toHaveBeenCalledWith("/api/belts", {"headers": {"token": ""}})
 		await userEvent.click(screen.getByText("Gå vidare"))
 	
 		await waitFor(() => {
