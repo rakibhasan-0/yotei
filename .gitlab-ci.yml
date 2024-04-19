@@ -76,10 +76,12 @@ build-frontend:
 #    - rm -rf /var/www/html/api-docs
 #    - cd docs/api-docs && mkdocs build -d /var/www/html/api-docs
 
-deploy-test-server:
-  stage: deploy_test_server
+workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "main" #merge $CI_COMMIT_BRANCH && $CI_PIPELINE_SOURCE == "push"
+
+deploy-test-server:
+  stage: deploy_test_server
   tags:
     - system
   script:
