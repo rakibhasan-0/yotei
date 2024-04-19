@@ -1,5 +1,3 @@
-[Go back](home/vt24/api-docs)
-
 <!-- sign-off-sheet:start -->
 <!-- sign-off-cadence:1 month -->
 
