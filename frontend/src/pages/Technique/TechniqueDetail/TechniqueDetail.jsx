@@ -8,6 +8,7 @@ import Button from "../../../components/Common/Button/Button"
 import BeltIcon from "../../../components/Common/BeltIcon/BeltIcon"
 
 import { Pencil, Trash } from "react-bootstrap-icons"
+import Review from "../../../components/Common/Technique/TechniqueReview/ReviewFormComponent.jsx"
 
 import "./TechniqueDetail.module.css"
 import ErrorState from "../../../components/Common/ErrorState/ErrorState"
@@ -39,7 +40,7 @@ function TechniqueDetail({ id }) {
 	const { techniqueId } = useParams()
 	const { token } = useContext(AccountContext)
 	const navigate = useNavigate()
-
+	const [showRPopup, setRShowPopup] = useState(false)
 	const [technique, setTechnique] = useState()
 	const [error, setError] = useState("")
 	const [loading, setLoading] = useState(true)
@@ -177,17 +178,33 @@ function TechniqueDetail({ id }) {
 					onClick={handleDelete}
 					setShowPopup={() => setShowConfirmPopup(false)}
 				/>
-
+		
 				<Gallery id={techniqueId} />
-
-				<div className="technique-detail-button-container">
-					<Button outlined={true} onClick={() => navigate("/technique")}>
-						<p>Tillbaka</p>
-					</Button>
-				</div>
-
+				{getReviewContainer(showRPopup, setRShowPopup, techniqueId)}
+				{getButtons(navigate, setRShowPopup)}
 			</div>
 		</>
+	)
+}
+
+function getReviewContainer(showRPopup, setRShowPopup, techniqueId){
+	return (<Review isOpen={showRPopup} setIsOpen={setRShowPopup} technique_id={techniqueId}/>)
+}
+
+function getButtons(navigate, setRShowPopup) {
+	return (
+		<div className="d-flex row justify-content-center">
+			<div className="d-flex col mb-3 mt-3 justify-content-start">
+				<Button onClick={() => navigate(-1)} outlined={true}>
+					<p>Tillbaka</p>
+				</Button>
+			</div>
+			<div className="d-flex col mb-3 mt-3 justify-content-end">
+				<Button onClick={() => setRShowPopup(true)} outlined={false}>
+					<p>Utvärdering</p>
+				</Button>
+			</div>
+		</div>
 	)
 }
 
