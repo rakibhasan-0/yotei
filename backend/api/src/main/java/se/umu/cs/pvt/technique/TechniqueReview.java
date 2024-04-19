@@ -18,7 +18,7 @@ import java.util.Date;
  * @author Team Granatäpple (Group 1) (2024-4-19)
  */
 @Entity
-public class techniqueReview implements Serializable {
+public class TechniqueReview implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "review_id")
@@ -45,7 +45,7 @@ public class techniqueReview implements Serializable {
      *
      * Required by JPA.
      */
-    protected techniqueReview() {
+    protected TechniqueReview() {
 
     }
 
@@ -60,7 +60,7 @@ public class techniqueReview implements Serializable {
      * @param negativeComment Comment about the negatives in review.
      * @param date Date that review was created.
      */
-    public techniqueReview(Long id, int rating, int userId, int techniqueId, String positiveComment, String negativeComment, Date date) {
+    public TechniqueReview(Long id, int rating, int userId, int techniqueId, String positiveComment, String negativeComment, Date date) {
         this.id = id;
         this.rating = rating;
         this.userId = userId;
