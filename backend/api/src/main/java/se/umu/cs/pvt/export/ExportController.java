@@ -86,13 +86,5 @@ public class ExportController {
         return media.stream()
                 .map(Media::getUrl)
                 .toList();
-        // return media.map(x -> x.url);
-        // if (media.isEmpty()) {
-        //     return "";
-
-        // } else {
-        //     return media.get(0).getUrl();
-        // }
-
     }
 }
