@@ -22,8 +22,9 @@ import static org.mockito.Mockito.when;
 /**
  * Test class for Belt Controller endpoint.
  *
- * @author Andre Byström 
- * date: 2023-04-25
+ * @author Andre Byström, Team Coconut
+ * @since: 2024-04-19
+ * @version 2.0
  */
 @WebMvcTest(controllers = ExportController.class)
 @ExtendWith(MockitoExtension.class)

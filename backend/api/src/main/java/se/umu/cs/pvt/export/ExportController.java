@@ -17,7 +17,7 @@ import java.util.Set;
  * Handles export requests for techniques and exercises.
  *
  * @author Andre Byström, Team Coconut
- * @since: 2024-04-18
+ * @since: 2024-04-19
  * @version 2.0
  */
 @RestController

@@ -5,8 +5,9 @@ import java.util.List;
 /**
  * Response class for techniques. Used to conform to the expected response format.
  *
- * @author Andre Byström
- * date: 2023-04-25
+ * @author Andre Byström, Team Coconut
+ * @since: 2024-04-19
+ * @version 2.0
  */
 public class TechniqueExportResponse {
     private String name;

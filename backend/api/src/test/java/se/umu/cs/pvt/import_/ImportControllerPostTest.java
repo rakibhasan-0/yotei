@@ -16,8 +16,8 @@ import static org.mockito.Mockito.*;
 /**
  * Test class for Import Controller endpoint.
  *
- * @author Andre Byström
- * @since 2024-04-18
+ * @author Andre Byström, Team Coconut
+ * @since: 2024-04-19
  * @version 2.0
  */
 @WebMvcTest(controllers = ImportController.class)
