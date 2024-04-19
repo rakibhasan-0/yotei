@@ -19,8 +19,9 @@ import java.util.Map;
 /**
  * Controller for fetching media.
  *
- * @author Dragon Dynasty 
- * date: 2023-05-03
+ * @author Dragon Dynasty, Team Coconut
+ * @since 2024-04-18
+ * @version 2.0
  */
 @RestController
 @CrossOrigin
@@ -149,6 +150,7 @@ public class MediaController {
          }
 
         List<Media> mediaList = mediaRepository.findAllMediaById(id);
+        
 
         return new ResponseEntity<>(mediaList, HttpStatus.OK);
 

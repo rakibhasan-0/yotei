@@ -100,7 +100,7 @@ const WorkoutCreate = () => {
 		let totalDuration = 0
 		data.activityItems.forEach(category => {
 			category.activities.forEach(activity => {
-				totalDuration += activity.duration
+				totalDuration += +activity.duration
 			})
 		})
 

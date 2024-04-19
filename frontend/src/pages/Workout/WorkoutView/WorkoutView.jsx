@@ -26,7 +26,9 @@ import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
  *      id        @type {int/string} - the id of the component
  *
  * @author Cyclops (Group 5) (2023-05-22)
+ * @author Durian  (Group 3) (2024-04-18)
  * @version 1.6
+ * 
  */
 
 export default function WorkoutView({id}) {
@@ -257,7 +259,11 @@ function getWorkoutInfoContainer(workoutData, setShowPopup, context, userId) {
 						</div>
 						<div className={styles.workoutDetailColumnItem} style={{paddingLeft:"37px"}}>
 							<h2 className="font-weight-bold mb-0">Tidslängd</h2>
-							<p className="mb-0">{workoutData.duration} min</p>
+							{workoutData.duration > 1? (
+								<p className="mb-0">{workoutData.duration} min</p> ):( 
+								<p className="mb-0">-</p>
+							)
+							}
 						</div>
 					</div>
 
