@@ -78,7 +78,8 @@ build-frontend:
 
 deploy-test-server:
   stage: deploy_test_server
-  - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "main"' #merge $CI_COMMIT_BRANCH && $CI_PIPELINE_SOURCE == "push"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "main"' #merge $CI_COMMIT_BRANCH && $CI_PIPELINE_SOURCE == "push"
   tags:
     - system
   script:
