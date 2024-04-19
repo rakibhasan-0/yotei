@@ -5,7 +5,7 @@ services:
     image: nginx:latest
     restart: always
     volumes:
-      - ./infra/nginx/development.conf:/etc/nginx/nginx.conf
+      - ./nginx/development.conf:/etc/nginx/nginx.conf
       # - /etc/letsencrypt/:/etc/letsencrypt/
     ports:
       - 80:80
