@@ -95,6 +95,8 @@ deploy-test-server:
   - if: $CI_COMMIT_BRANCH == "main"
   tags:
     - system
+  before_script:
+    - docker login pvt2024 123yotei123
   script:
     - docker system prune -a -f
 
