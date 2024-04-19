@@ -3,7 +3,7 @@ import Button from "../Common/Button/Button"
 import Popup from "../Common/Popup/Popup"
 import { AccountContext } from "../../context"
 import DatePicker from "../Common/DatePicker/DatePicker"
-import "./ErrorLogsDisplay.module.css"
+import styles from "./ErrorLogsDisplay.module.css"
 import {Trash} from "react-bootstrap-icons"
 import ConfirmPopup from "../Common/ConfirmPopup/ConfirmPopup"
 
@@ -36,8 +36,8 @@ function ErrorLogsDisplay() {
 
 	const popupTitle = (
 		<React.Fragment>
-			<div className="error-title">Error-loggar</div>
-			<div className="datepicker-wrapper">
+			<div className={styles["error-title"]}>Error-loggar</div>
+			<div className={styles["datepicker-wrapper"]}>
 				<DatePicker
 					style={{ marginLeft: "100px"}}
 					selectedDate={date}
@@ -167,34 +167,34 @@ function ErrorLogsDisplay() {
 			>
 				{dataExists ? (
 					<div>
-						<table className="errorlog-table">
+						<table className={styles["errorlog-table"]}>
 							<thead>
 								<tr>
-									<th className="th">Error Message</th>
-									<th className="th">Info Message</th>
-									<th className="th">Date</th>
+									<th className={styles["th"]}>Error Message</th>
+									<th className={styles["th"]}>Info Message</th>
+									<th className={styles["th"]}>Date</th>
 								</tr>
 							</thead>
 							<tbody>
 								{date
 									? dateErrors.map((log, index) => (
 										<tr key={index}>
-											<td className="td">{log.errorMessage}</td>
-											<td className="td">
+											<td className={styles["td"]}>{log.errorMessage}</td>
+											<td className={styles["td"]}>
 												{log.infoMessage}
 											</td>
-											<td className="td">
+											<td className={styles["td"]}>
 												{ISOdateToYearMonthDayDate(log.errorDateTime)}
 											</td>
 										</tr>
 									))
 									: errors.map((log, index) => (
 										<tr key={index}>
-											<td className="td">{log.errorMessage}</td>
-											<td className="td">
+											<td className={styles["td"]}>{log.errorMessage}</td>
+											<td className={styles["td"]}>
 												{log.infoMessage}
 											</td>
-											<td className="td">
+											<td className={styles["td"]}>
 												{ISOdateToYearMonthDayDate(log.errorDateTime)}
 											</td>
 										</tr>
@@ -212,7 +212,7 @@ function ErrorLogsDisplay() {
 
 	return (
 		<div
-			className="div-1"
+			className={styles["div-1"]}
 			style={{ marginTop: 10, marginRight: "auto", marginLeft: "auto" }}
 		>
 			<Button id="errorlogsdisplay-button" onClick={() => setShowPopup(true)}>
