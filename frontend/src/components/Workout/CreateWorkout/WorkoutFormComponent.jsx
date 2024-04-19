@@ -93,6 +93,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 	 *
 	 */
 	function handleGoBack() {
+		localStorage.removeItem("workoutCreateInfo")
 		if (state?.fromSession) {
 			return navigate(`/session/edit/${state.session.sessionId}`, { replace: true, state })
 		}

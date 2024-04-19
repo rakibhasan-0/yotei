@@ -217,7 +217,7 @@ const WorkoutCreate = () => {
 				zIndex={1000}
 				backText="Avbryt"
 				onClick={async () => {
-					await workoutCreateInfoDispatch({
+					workoutCreateInfoDispatch({
 						type: WORKOUT_CREATE_TYPES.RESET
 					})
 					blocker.proceed()

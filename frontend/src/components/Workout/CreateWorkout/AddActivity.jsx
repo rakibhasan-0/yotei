@@ -67,6 +67,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	const [suggestedExerTags, setSuggestedExerTags] = useState([])
 	const [fetchedTech, setFetchedTech] = useState(false)
 	const [fetchedExer, setFetchedExer] = useState(false)
+	const [activeTab, setActiveTab] = useState("")
 
 
 	/**
@@ -85,6 +86,31 @@ function AddActivity({ id, setShowActivityInfo }) {
 	const [sort, setSort] = useState(sortOptions[0])
 	const [cookies, setCookies] = useCookies(["exercise-filter"])
 	const [visibleExercises, setVisibleExercises] = useState([])
+
+
+	/**
+     * Makes sure the data in the search bar is stored when choosing between techniques and exercises
+     * also when redirected to and from info on techniques and exercises.
+     * Also makes sure we return to the tab we where on before, either excerises or techniques
+     */
+	useEffect(() => {
+		setSearchTechText(localStorage.getItem("searchTechText") || "")
+		setSearchExerText(localStorage.getItem("searchExerText") || "")
+		setActiveTab(localStorage.getItem("activeTab") || "technique")
+	}, [])
+
+	useEffect(() => {
+		localStorage.setItem("activeTab", activeTab)
+	}, [activeTab])
+
+	useEffect(() => {
+		localStorage.setItem("searchTechText", searchTechText)
+	}, [searchTechText])
+    
+	useEffect(() => {
+		localStorage.setItem("searchExerText", searchExerText)
+	}, [searchExerText])
+    
 
 
 	useEffect(() => {
@@ -272,7 +298,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	return (
 		<div id={id}>
 			<Modal.Body style={{ padding: "0" }}>
-				<Tabs defaultActiveKey="technique" className={style.tabs}>
+				<Tabs defaultActiveKey="technique" activeKey = {activeTab} onSelect={setActiveTab}  className={style.tabs}>
 					<Tab eventKey="technique" title="Tekniker" tabClassName={`nav-link ${style.tab}`}>
 						<div className={style.searchBar}>
 							<SearchBar
