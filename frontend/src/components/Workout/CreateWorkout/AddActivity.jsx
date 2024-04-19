@@ -44,6 +44,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 * This map is used as a parameter when using getTechniques method.
 	 */
 	const [map, mapActions] = useMap()
+	const [key, setKey] = useState("technique");
 
 	/**
 	 * States related to keeping track of which techniques
@@ -67,6 +68,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	const [suggestedExerTags, setSuggestedExerTags] = useState([])
 	const [fetchedTech, setFetchedTech] = useState(false)
 	const [fetchedExer, setFetchedExer] = useState(false)
+
 
 
 	/**
@@ -97,7 +99,11 @@ function AddActivity({ id, setShowActivityInfo }) {
 	}, [])
 
 	useEffect(setExerciseList, [exercises, sort, searchExerText])
+	
+	useEffect(() => {
+		console.log(key);
 
+	}, [key])
 
 	useEffect(() => {
 		if (hasLoadedData) return
@@ -269,10 +275,11 @@ function AddActivity({ id, setShowActivityInfo }) {
 		}
 	}
 
+
 	return (
 		<div id={id}>
 			<Modal.Body style={{ padding: "0" }}>
-				<Tabs defaultActiveKey="technique" className={style.tabs}>
+				<Tabs activeKey={key} onSelect={(k) => setKey(k)} className={style.tabs}>
 					<Tab eventKey="technique" title="Tekniker" tabClassName={`nav-link ${style.tab}`}>
 						<div className={style.searchBar}>
 							<SearchBar
