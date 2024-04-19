@@ -134,7 +134,7 @@ function constructChildBelt(belt, beltLength, index) {
 	return (
 		<div 
 			key={index}
-			className={styles["technique-card-belt-color", "technique-card-belt-border"].join(" ")}
+			className={styles[["technique-card-belt-color", "technique-card-belt-border"]].join(" ")}
 			style={
 				{
 					// background: `radial-gradient(circle, rgba(0,0,0,1) 20%, rgba(0,0,0,1) 70%, rgba(255,255,255,1) 70%`, 
