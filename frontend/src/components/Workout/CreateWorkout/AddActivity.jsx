@@ -102,15 +102,15 @@ function AddActivity({ id, setShowActivityInfo }) {
 	useEffect(setExerciseList, [exercises, sort, searchExerText])
 	
 	useEffect(() => {
-        const activeTab = tabCookie["active-tab"]
-        if (activeTab) {
+		const activeTab = tabCookie["active-tab"]
+		if (activeTab) {
 			setKey(activeTab)
-        }
-    }, [])
+		}
+	}, [])
 
 	useEffect(() => {
-        setCookie("active-tab", key, { path: '/' })
-    }, [key])
+		setCookie("active-tab", key, { path: "/" })
+	}, [key])
 
 	useEffect(() => {
 		if (hasLoadedData) return
