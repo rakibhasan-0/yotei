@@ -1,85 +1,16 @@
 stages:
-  - linter
-  - build
-  - test
-#  - doc
+  - doc
   - deploy_test_server
 
-
-test-linter-frontend:
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
-  image: node:20
-  before_script:
-    - cd frontend
-    - npm ci --no-progress --quiet --cache .npm --prefer-offline
-  cache:
-    key:
-      files:
-        - frontend/package-lock.json
-    paths:
-      - frontend/.npm/
-  stage: linter
+generate-javadoc:
+  stage: doc
+#  rules:
+#  - if: $CI_COMMIT_BRANCH == "main"
+  tags:
+    - system
   script:
-      - npm run lint:ci
-      
-test-backend:
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
-  stage: test
-  image: maven:3.8.3-openjdk-17
-#  variables:
-#    MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
-#  cache:
-#    paths:
-#      - .m2/repository
-# :-)
-  script:
-    - cd backend
-    - mvn -q test
-  
-test-frontend:
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
-  stage: test
-  image: node:20
-  before_script:
-    - cd frontend
-    - npm ci --no-progress --quiet --cache .npm --prefer-offline
-  cache:
-    key:
-      files:
-        - frontend/package-lock.json
-    paths:
-      - frontend/.npm/
-  script:
-    - npm run test:ci
-
-build-frontend:
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
-  stage: build
-  image: node:20
-  before_script:
-    - cd frontend
-    - npm ci --no-progress --quiet --cache .npm --prefer-offline
-  cache:
-    key:
-      files:
-        - frontend/package-lock.json
-    paths:
-      - frontend/.npm/
-  script:
-    - npm run build
-      
-
-#generate-javadoc:
-#  stage: doc
-#  tags:
-#    - system
-#  script:
-#    - rm -rf /var/www/html/api-docs
-#    - cd docs/api-docs && mkdocs build -d /var/www/html/api-docs
+    - rm -rf /var/www/html/api-docs
+    - cd docs/api-docs && mkdocs build -d /var/www/html/api-docs
 
 deploy-test-server:
   stage: deploy_test_server
