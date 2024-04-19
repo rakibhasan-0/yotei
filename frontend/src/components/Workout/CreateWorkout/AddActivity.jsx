@@ -44,8 +44,8 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 * This map is used as a parameter when using getTechniques method.
 	 */
 	const [map, mapActions] = useMap()
-	const [key, setKey] = useState("technique");
-	const [tabCookie, setCookie] = useCookies(["active-tab"]);
+	const [key, setKey] = useState("technique")
+	const [tabCookie, setCookie] = useCookies(["active-tab"])
 
 	/**
 	 * States related to keeping track of which techniques
@@ -102,15 +102,15 @@ function AddActivity({ id, setShowActivityInfo }) {
 	useEffect(setExerciseList, [exercises, sort, searchExerText])
 	
 	useEffect(() => {
-        const activeTab = tabCookie["active-tab"];
+        const activeTab = tabCookie["active-tab"]
         if (activeTab) {
-            setKey(activeTab);
+			setKey(activeTab)
         }
-    }, []);
+    }, [])
 
 	useEffect(() => {
-        setCookie("active-tab", key, { path: '/' });
-    }, [key]);
+        setCookie("active-tab", key, { path: '/' })
+    }, [key])
 
 	useEffect(() => {
 		if (hasLoadedData) return
