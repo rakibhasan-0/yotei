@@ -11,12 +11,14 @@ import java.util.List;
 public class TechniqueExportResponse {
     private String name;
     private String description;
+    private List<String> videoUrls;
     private List<String> tags;
     private List<Long> belts;
 
-    public TechniqueExportResponse(String name, String description, List<String> tags, List<Long> belts) {
+    public TechniqueExportResponse(String name, String description, List<String> videoUrls, List<String> tags, List<Long> belts) {
         this.name = name;
         this.description = description;
+        this.videoUrls = videoUrls;
         this.tags = tags;
         this.belts = belts;
     }
@@ -27,6 +29,10 @@ public class TechniqueExportResponse {
 
     public String getDescription() {
         return description;
+    }
+
+    public List<String> getVideoUrls() {
+        return videoUrls;
     }
 
     public List<String> getTags() {

@@ -36,7 +36,7 @@ public class ImportControllerPostTest {
                 "ex",
                 "desc",
                 10,
-                "url testing", 
+                new ArrayList<>(), 
                 new ArrayList<>()));
         ExerciseContainer container = new ExerciseContainer(responses);
 
@@ -53,6 +53,7 @@ public class ImportControllerPostTest {
         List<TechniqueExportResponse> responses = List.of(new TechniqueExportResponse(
                 "tech",
                 "desc",
+                new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>()
         ));
@@ -71,6 +72,7 @@ public class ImportControllerPostTest {
         List<TechniqueExportResponse> responses = List.of(new TechniqueExportResponse(
                 "tech",
                 "desc",
+                new ArrayList<>(),
                 new ArrayList<>(),
                 null
         ));
