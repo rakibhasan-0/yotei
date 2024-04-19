@@ -1,8 +1,5 @@
 stages:
-  - linter
-  - build
-  - test
-#  - doc
+  - doc
   - deploy_test_server
 
 
@@ -73,13 +70,15 @@ build-frontend:
     - npm run build
       
 
-#generate-javadoc:
-#  stage: doc
-#  tags:
-#    - system
-#  script:
-#    - rm -rf /var/www/html/api-docs
-#    - cd docs/api-docs && mkdocs build -d /var/www/html/api-docs
+generate-javadoc:
+  stage: doc
+#  rules:
+#  - if: $CI_COMMIT_BRANCH == "main"
+  tags:
+    - system
+  script:
+    - rm -rf /var/www/html/api-docs
+    - cd docs/api-docs && mkdocs build -d /var/www/html/api-docs
 
 deploy-test-server:
   stage: deploy_test_server
