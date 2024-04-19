@@ -97,7 +97,13 @@ function AddActivity({ id, setShowActivityInfo }) {
 		setSearchTechText(localStorage.getItem("searchTechText") || "")
 		setSearchExerText(localStorage.getItem("searchExerText") || "")
 		setActiveTab(localStorage.getItem("activeTab") || "technique")
+		//setSelectedBelts(localStorage.getItem([selectedBelts]) || "")
 	}, [])
+
+	
+	useEffect(() => {
+		localStorage.setItem("selectedBelts", JSON.stringify(selectedBelts))
+	}, [selectedBelts])
 
 	useEffect(() => {
 		localStorage.setItem("activeTab", activeTab)
