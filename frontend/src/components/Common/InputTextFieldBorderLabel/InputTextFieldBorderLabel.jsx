@@ -1,5 +1,5 @@
 import {React, forwardRef} from "react"
-import "./InputTextFieldBorderLabel.module.css"
+import styles from "./InputTextFieldBorderLabel.module.css"
 import InputTextField from "../InputTextField/InputTextField"
 /**
  * This is a version of the standard InputTextField page, used for using standard InputTextField but with a "border-label".
@@ -30,7 +30,7 @@ const InputTextFieldBorderLabel = forwardRef(function InputTextFieldBorderLabel(
 
 	return(
 		<div style={{position: "relative"}}>
-			<label className="input-label">{label}</label>
+			<label className={styles["input-label"]}>{label}</label>
 			<InputTextField 
 				placeholder={placeholder} 
 				text={text} 

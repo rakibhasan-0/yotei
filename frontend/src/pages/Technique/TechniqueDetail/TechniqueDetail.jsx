@@ -10,7 +10,7 @@ import BeltIcon from "../../../components/Common/BeltIcon/BeltIcon"
 import { Pencil, Trash } from "react-bootstrap-icons"
 import Review from "../../../components/Common/Technique/TechniqueReview/ReviewFormComponent.jsx"
 
-import "./TechniqueDetail.module.css"
+import styles from "./TechniqueDetail.module.css"
 import ErrorState from "../../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../../components/Common/Spinner/Spinner"
 import Gallery from "../../../components/Gallery/Gallery"
@@ -109,7 +109,7 @@ function TechniqueDetail({ id }) {
 		onRecover={handleGet}
 	/>
 
-	if (loading) return <div className='technique-detail-center-spinner'><Spinner /></div>
+	if (loading) return <div className={styles["technique-detail-center-spinner"]}><Spinner /></div>
 
 	return (
 		<>
@@ -124,9 +124,9 @@ function TechniqueDetail({ id }) {
 				</Popup>
 			</div>
 
-			<div className="technique-detail-container" id={id == undefined ? "technique" : id}>
+			<div className={styles["technique-detail-container"]} id={id == undefined ? "technique" : id}>
 				<h1>{technique.name}</h1>
-				{isAdmin(accountRole) && <div className="technique-detail-actions-container">
+				{isAdmin(accountRole) && <div className={styles["technique-detail-actions-container"]}>
 					<Link to={"edit"}>
 						<Pencil
 							id="technique-edit-button"
@@ -143,14 +143,14 @@ function TechniqueDetail({ id }) {
 					/>
 				</div>
 				}
-				<div className="technique-detail-belts-container">
+				<div className={styles["technique-detail-belts-container"]}>
 					{technique.belts ? ( 
 						technique.belts.filter(belt => !belt.child).sort(beltSort).map(belt => <BeltIcon key={belt.name} belt={belt} />)
 					) : (
 						<p>Inga bälten kunde hittas för denna teknik.</p>
 					)}
 				</div>
-				<div className="technique-detail-belts-container">
+				<div className={styles["technique-detail-belts-container"]}>
 					{(
 						technique.belts.filter(belt => belt.child).sort(beltSort).map(belt => <BeltIcon key={belt.name} belt={belt} />)
 					)}
@@ -163,7 +163,7 @@ function TechniqueDetail({ id }) {
 					<p style={{ fontStyle: "italic", color: "var(--gray)" }}>Beskrivning saknas.</p>
 				)}
 				<h2>Taggar</h2>
-				<div className="technique-detail-tag-container">
+				<div className={styles["technique-detail-tag-container"]}>
 					{technique.tags ? (
 						technique.tags.map(tag => <Tag key={tag.id} text={tag.name} tagType="default" />)
 					) : (
