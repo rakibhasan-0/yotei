@@ -21,6 +21,8 @@
     padding: 10px;
     padding-left: 0px;
     gap: 2px;
+    overflow: hidden;
+    word-wrap: break-word;
 }
 
 .listCentered > .listToggle {
@@ -40,6 +42,7 @@
 
 .listText {
     font-size: large;
+    overflow: hidden;
 }
 
 input,

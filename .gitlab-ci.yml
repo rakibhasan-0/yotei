@@ -95,6 +95,8 @@ deploy-test-server:
   - if: $CI_COMMIT_BRANCH == "main"
   tags:
     - system
+  before_script:
+    - docker login --username pvt2024 --password $DOCKER_PASS # DOCKER_PASS defined in GitLab CI/CD settings as a secure variable.
   script:
     - docker system prune -a -f
 
