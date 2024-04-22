@@ -85,7 +85,7 @@ test("Should render a group when searching for it", async () => {
     Also test does not work if placeholder text changes. (fix ASAP if possible)
     */ 
 	await screen.findByTestId("searchbar-groups")
-	const searchInput = screen.getByPlaceholderText("Sök efter grupp")
+	const searchInput = screen.getByTestId("searchbar-input")
     
 	fireEvent.change(searchInput, { target: { value: "grönt" } })
 
