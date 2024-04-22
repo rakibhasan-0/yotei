@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react"
-import "./AddTagPopup.module.css"
+import styles from "./AddTagPopup.module.css"
 import Tag from "./Tag"
 import { Search } from "react-bootstrap-icons"
 import Button from "../Button/Button"
@@ -28,9 +28,9 @@ import Divider from "../Divider/Divider"
 			</Popup>
  *		)
  *
- * @author Team Minotaur
- * @version 1.0
- * @since 2023-05-04
+ * @author Team Minotaur, Team Mango (Group 4)
+ * @version 2.0
+ * @since 2024-04-22
  */
 export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	const [suggested, setSuggested] = useState([])
@@ -121,22 +121,23 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	}
 
 	return (
-		<div className="popup-wrapper" id = {id}>
+		<div className={styles["popup-wrapper"]} id = {id}>
 			<div>
 				{error !== "" &&
-					<p className="error-message">{error}</p>
+					<p className={styles["error-message"]}>{error}</p>
 				}
-				<div className="search-bar">
+				<div className={styles["search-bar"]}>
 					<input
-						className="input-area"
+						className={styles["input-area"]}
 						placeholder="Sök efter taggar"
 						value={searchText}
+						id = "tag-search-bar"
 						onChange={e => {searchForTags(e.target.value)}}
 					>
 					</input>
-					<i className="search-icon"><Search/></i>
+					<i className={styles["search-icon"]}><Search/></i>
 				</div>
-				<div className="popup-tag-container">
+				<div className={styles["popup-tag-container"]}>
 					{suggested.map(tag => <Tag
 						tagType="suggest"
 						key={tag.id}
@@ -146,8 +147,8 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 				</div>
 				{searchText !== "" &&
 					<>
-						<h2 className="heading">Skapa ny tagg</h2>
-						<div className="popup-tag-container" id="Tagg att skapa">
+						<h2 className={styles["heading"]}>Skapa ny tagg</h2>
+						<div className={styles["popup-tag-container"]} id="Tagg att skapa">
 							<Tag
 								tagType="suggest"
 								text={searchText}
@@ -156,8 +157,8 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 						</div>
 					</>
 				}
-				<Divider className="heading" id="Tillagda taggar" option="h2_left" title="Tillagda taggar"/>
-				<div className="popup-tag-container">
+				<Divider className={styles["heading"]} id="Tillagda taggar" option="h2_left" title="Tillagda taggar"/>
+				<div className={styles["popup-tag-container"]}>
 					{addedTags.map(tag => <Tag
 						tagType="added"
 						key={tag.id}
@@ -166,7 +167,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 					/>)}
 				</div>
 			</div>
-			<div className="popup-button-container">
+			<div className={styles["popup-button-container"]}>
 				<Button id="popup-close-button" outlined={true} onClick={()=> setIsOpen(false)}><h2>Stäng</h2></Button>
 			</div>
 		</div>

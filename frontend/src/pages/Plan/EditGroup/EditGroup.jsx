@@ -137,7 +137,7 @@ function EditGroup() {
 			return
 		}
 		setSuccessToast("Ändringar sparade.")
-		navigate("/plan")
+		navigate("/groups")
 	}
 
 	if (loading) return <Spinner />
