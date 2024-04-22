@@ -3,7 +3,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css" // requires a loa
 import { Carousel } from "react-responsive-carousel"
 import VideoPlayerReactPlayer from "../VideoPlayer/VideoPlayerReactPlayer"
 import Image from "../Image/Image"
-import "../Gallery/Gallery.module.css"
+import styles from "../Gallery/Gallery.module.css"
 import { AccountContext } from "../../context"
 
 /**
@@ -60,7 +60,7 @@ export default function Gallery({ id }) {
 	function MediaDescription(mediaObject){
 		return(
 			<p id={`${mediaObject.id}-media-description`} 
-				className="media-description" 
+				className={styles["media-description"]} 
 				style={{border : mediaObject.description == "" ? "none" : "solid black 1px"}}>
 				{mediaObject.description}
 			</p>
@@ -70,18 +70,18 @@ export default function Gallery({ id }) {
 
 
 	return (
-		<div className="container gallery-container" id={id}>
-			<div className="row mt-2 mb-2">
-				<div className="col-sm-12 text-center ">
+		<div className={styles["container gallery-container"]} id={id}>
+			<div className={styles["row mt-2 mb-2"]}>
+				<div className={styles["col-sm-12 text-center "]}>
 					<Carousel showThumbs={false} showStatus={false} showArrows={true} >                         
 						{pictures.map((image, index) => (
-							<div className="gallery-image-and-description" key={index}>
+							<div className={styles["gallery-image-and-description"]} key={index}>
 								<Image path={image.url} key={index} />
 								{MediaDescription(image)}
 							</div>
 						))}
 						{videos.map((video, index) => (
-							<div className="gallery-video-and-description" key={index}>
+							<div className={styles["gallery-video-and-description"]} key={index}>
 								<VideoPlayerReactPlayer path={video.url} key={index}/>
 								{MediaDescription(video)}
 							</div>

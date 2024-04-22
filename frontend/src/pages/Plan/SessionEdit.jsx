@@ -18,12 +18,12 @@ import { Spinner } from "react-bootstrap"
 /**
  * A page for editing a session.
  * 
- * Version 1.1
+ * Version 2.1
  *     Edit forms can not be accessed until all session data is fetched
  * 
- * @author Chimera, Tomtato
+ * @author Chimera, Team 3 Durian, Tomtato
  * @since 2023-05-03
- * @version 1.1
+ * @version 2.1
  * @returns A page for editing a session.
  */
 export default function SessionEdit() {
@@ -36,6 +36,8 @@ export default function SessionEdit() {
 	const [groups, setGroups] = useState()
 	const [group, setGroup] = useState(state?.session?.group)
 	const [workouts, setWorkouts] = useState()
+	const [sessionId, setSessionId] = useState()
+	const location = useLocation()
 	const [workout, setWorkout] = useState(state?.session?.workout)
 	const [showPopup, setShowPopup] = useState(false)
 	const [error, setError] = useState()
@@ -95,6 +97,13 @@ export default function SessionEdit() {
 	}, [token])
 
 	useEffect(() => {
+		const currentPath = location.pathname
+		const parts = currentPath.split("/")
+		const id = parts[parts.length - 1]
+		setSessionId(id)
+	}, [])
+
+	useEffect(() => {
 		(async () => {
 			try {
 				setIsLoadingWorkouts(true)
@@ -133,7 +142,12 @@ export default function SessionEdit() {
 				let session = await response.json()
 				if (groups && workouts) {
 					setGroup(groups.find(group => group.id === session.plan))
-					setWorkout(workouts.find(workout => workout.id === session.workout))
+					//if you come from create new during edit
+					if(state == null){
+						setWorkout(workouts.find(workout => workout.id === session.workout))
+					}else {
+						setWorkout(workouts.find(workout => workout.id === state.session.workout.id))
+					}
 					setDate(session.date)
 					setTime(session.time)
 					setOriginalDate(session.date)
