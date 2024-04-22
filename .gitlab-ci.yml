@@ -82,7 +82,7 @@ build-frontend:
 generate-api-docs:
   stage: docs
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
   tags:
     - system
   script:
@@ -92,7 +92,7 @@ generate-api-docs:
 generate-javadocs:
   stage: docs
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
   tags:
     - system
   script:
@@ -105,7 +105,7 @@ generate-javadocs:
 deploy-test-server:
   stage: deploy_test_server
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED #$CI_COMMIT_BRANCH == "main"
   tags:
     - system
   before_script:
@@ -117,7 +117,7 @@ deploy-test-server:
     - rm -rf /var/www/html/nginx
     - rm -rf /var/www/html/*.yml
 
-    - docker build --no-cache -t pvt2024/database:latest ./infra/database
+    - docker build -t pvt2024/database:latest ./infra/database
     - docker build --no-cache -t pvt2024/gateway:latest ./backend/gateway
     - docker build --no-cache -t pvt2024/api:latest ./backend/api 
     - docker build --no-cache -t pvt2024/frontend:latest ./frontend
