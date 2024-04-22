@@ -62,6 +62,7 @@ export default function SearchBar({ id, placeholder, text, onChange, addedTags, 
 			<input
 				onBlur={onBlur}
 				className={style.searchBarInputArea}
+				id = "searchbar-input"
 				placeholder={placeholder}
 				value={text}
 				onChange={e => {

@@ -2,13 +2,16 @@ stages:
   - linter
   - build
   - test
-  # - doc
-workflow:
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
+#  - doc
+  - deploy_test_server
+
 
 test-linter-frontend:
-  image: node:19
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
+  image: node:20
+  tags:
+    - chappie
   before_script:
     - cd frontend
     - npm ci --no-progress --quiet --cache .npm --prefer-offline
@@ -23,7 +26,11 @@ test-linter-frontend:
       - npm run lint:ci
       
 test-backend:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
   stage: test
+  tags:
+    - chappie
   image: maven:3.8.3-openjdk-17
 #  variables:
 #    MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
@@ -36,7 +43,11 @@ test-backend:
     - mvn -q test
   
 test-frontend:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
   stage: test
+  tags:
+    - chappie
   image: node:20
   before_script:
     - cd frontend
@@ -51,8 +62,12 @@ test-frontend:
     - npm run test:ci
 
 build-frontend:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
   stage: build
-  image: node:19
+  tags:
+    - chappie
+  image: node:20
   before_script:
     - cd frontend
     - npm ci --no-progress --quiet --cache .npm --prefer-offline
@@ -66,10 +81,38 @@ build-frontend:
     - npm run build
       
 
-# generate-javadoc:
-#   stage: doc
-#   tags:
-#     - system
-#   script:
-#     - rm -rf /var/www/html/api-docs
-#     - cd docs/api-docs && mkdocs build -d /var/www/html/api-docs
+#generate-javadoc:
+#  stage: doc
+#  tags:
+#    - system
+#  script:
+#    - rm -rf /var/www/html/api-docs
+#    - cd docs/api-docs && mkdocs build -d /var/www/html/api-docs
+
+deploy-test-server:
+  stage: deploy_test_server
+  rules:
+  - if: $CI_COMMIT_BRANCH == "main"
+  tags:
+    - system
+  before_script:
+    - docker login --username pvt2024 --password $DOCKER_PASS # DOCKER_PASS defined in GitLab CI/CD settings as a secure variable.
+  script:
+    - docker system prune -a -f
+
+    - rm -rf /var/www/html/*.tar
+    - rm -rf /var/www/html/nginx
+    - rm -rf /var/www/html/*.yml
+    - rm -rf /var/www/html/api-docs
+
+    - docker build --no-cache -t pvt2024/database:latest ./infra/database
+    - docker build --no-cache -t pvt2024/gateway:latest ./backend/gateway
+    - docker build --no-cache -t pvt2024/api:latest ./backend/api 
+    - docker build --no-cache -t pvt2024/frontend:latest ./frontend
+
+    - cp ./docker-compose.yml /var/www/html/
+    - cp -r ./nginx /var/www/html/
+
+    - cd /var/www/html/
+    - docker compose up -d
+    

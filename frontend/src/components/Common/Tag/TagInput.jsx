@@ -1,7 +1,7 @@
 import React from "react"
 import { useState} from "react"
 import Tag from "./Tag"
-import "./TagInput.module.css"
+import styles from "./TagInput.module.css"
 import Popup from "../Popup/Popup"
 import AddTagPopup from "./AddTagPopup"
 /**
@@ -34,14 +34,14 @@ export default function TagInput({id, addedTags, setAddedTags, isNested}) {
 	}
 
 	return (
-		<div id = {id} className="add-tag-container">
+		<div id = {id} className={styles["add-tag-container"]}>
 			<Tag 
 				tagType="suggest"
 				key ="addMoreTags"
 				text ="Lägg till tagg"
 				onClick={() => setShowPopup(true)}
 			/>
-			<div className="added-tag-container">
+			<div className={styles["added-tag-container"]}>
 				{addedTags.map(tag => <Tag
 					tagType="added"
 					key={tag.id}

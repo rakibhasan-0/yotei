@@ -8,7 +8,7 @@
  * @author G5 Cyclops (2023-05-04)
  */
 import WorkoutActivityListItem from "../WorkoutActivityListItem/WorkoutActivityListItem.jsx"
-import "./WorkoutActivityList.module.css"
+import styles from "./WorkoutActivityList.module.css"
 import {useState} from "react"
 
 export default function WorkoutActivityList({categoryName, activities, id}) {
@@ -43,5 +43,5 @@ function sortActivities(activities) {
 
 function setPadding(length, categoryName) {
 	const paddingY = !categoryName ? "py-0" : "pb-3"
-	return "container workout-activity-list " + paddingY
+	return `container ${styles["workout-activity-list"]} ` + paddingY
 }
