@@ -48,12 +48,7 @@ public class SessionReview implements Serializable{
     private Date date;
 
 
-    @ManyToMany()
-    @JoinTable(
-            name = "session_review_exercises",
-            joinColumns = @JoinColumn(name = "review_id"),
-            inverseJoinColumns = @JoinColumn(name = "session_review_id")
-    )
+    @OneToMany
     private List<SessionReviewExercise> exercises;
 
     /**
@@ -73,7 +68,7 @@ public class SessionReview implements Serializable{
      * @param negativeComment Negative feedback of a session
      * @param date Date of when the review was made
      */
-    public SessionReview(Long id, Long session_id, int userId, int rating, String positiveComment, String negativeComment, Date date) {
+    public SessionReview(Long id, Long session_id, int userId, int rating, String positiveComment, String negativeComment, Date date, List<SessionReviewExercise> exercises) {
         this.id = id;
         this.session_id = session_id;
         this.userId = userId;
@@ -81,6 +76,7 @@ public class SessionReview implements Serializable{
         this.positiveComment = positiveComment;
         this.negativeComment = negativeComment;
         this.date = date;
+        this.exercises = exercises;
     }
 
     public Long getId() {
@@ -137,5 +133,13 @@ public class SessionReview implements Serializable{
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public List<SessionReviewExercise> getReviewExercises() {
+        return exercises;
+    }
+
+    public void setReviewExercises(List<SessionReviewExercise> exercises) {
+        this.exercises = exercises;
     }
 }
