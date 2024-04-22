@@ -4,6 +4,7 @@ stages:
   - test
   - docs
   - deploy_test_server
+  - systest
 
 
 test-linter-frontend:
@@ -127,4 +128,14 @@ deploy-test-server:
 
     - cd /var/www/html/
     - docker compose up -d
+
+run-systests:
+  stage: systest
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  tags:
+    - system
+  script:
+    - cd infra/systest
+    - ./run-new-systests.sh
     
