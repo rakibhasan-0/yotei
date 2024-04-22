@@ -137,5 +137,6 @@ run-systests:
     - system
   script:
     - cd infra/systest
+    - chmod u+x run-new-systests.sh
     - ./run-new-systests.sh
     
