@@ -2,7 +2,7 @@ stages:
   - linter
   - build
   - test
-#  - doc
+  - docs
   - deploy_test_server
 
 
@@ -32,12 +32,11 @@ test-backend:
   tags:
     - chappie
   image: maven:3.8.3-openjdk-17
-#  variables:
-#    MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
-#  cache:
-#    paths:
-#      - .m2/repository
-# :-)
+  variables:
+    MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/backend/.m2/repository"
+  cache:
+    paths:
+      - backend/.m2/repository
   script:
     - cd backend
     - mvn -q test
@@ -80,19 +79,33 @@ build-frontend:
   script:
     - npm run build
       
+generate-api-docs:
+  stage: docs
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  tags:
+    - system
+  script:
+    - rm -rf /var/www/html/api-docs
+    - cd docs/api-docs && mkdocs build -d /var/www/html/api-docs
 
-#generate-javadoc:
-#  stage: doc
-#  tags:
-#    - system
-#  script:
-#    - rm -rf /var/www/html/api-docs
-#    - cd docs/api-docs && mkdocs build -d /var/www/html/api-docs
+generate-javadocs:
+  stage: docs
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  tags:
+    - system
+  script:
+    - rm -rf /var/www/html/javadocs
+    - cd backend
+    - mvn javadoc:aggregate
+    - mkdir /var/www/html/javadocs
+    - cp -r target/site/apidocs/* /var/www/html/javadocs
 
 deploy-test-server:
   stage: deploy_test_server
   rules:
-  - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "main"
   tags:
     - system
   before_script:
@@ -103,7 +116,6 @@ deploy-test-server:
     - rm -rf /var/www/html/*.tar
     - rm -rf /var/www/html/nginx
     - rm -rf /var/www/html/*.yml
-    - rm -rf /var/www/html/api-docs
 
     - docker build --no-cache -t pvt2024/database:latest ./infra/database
     - docker build --no-cache -t pvt2024/gateway:latest ./backend/gateway
