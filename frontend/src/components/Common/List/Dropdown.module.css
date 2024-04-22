@@ -28,7 +28,16 @@
 }
 
 .listHeader > p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: .5rem;
     margin: 0;
+}
+
+* > p {
+    width: 95%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .listToggle {
@@ -46,6 +55,7 @@ input,
 .listText {
     width: 100%;
 }
+
 .listTextInput{
     text-align: left;
     border:none;
