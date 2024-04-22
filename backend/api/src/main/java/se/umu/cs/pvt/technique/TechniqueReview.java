@@ -129,7 +129,7 @@ public class TechniqueReview implements Serializable {
      *
      * @return techniqueId.
      */
-    public int gettechniqueId() {
+    public int getTechniqueId() {
         return techniqueId;
     }
 
