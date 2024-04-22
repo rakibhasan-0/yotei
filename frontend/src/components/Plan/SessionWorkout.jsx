@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useState } from "react"
 import styles from "./SessionWorkout.module.css"
 import { StopwatchFill } from "react-bootstrap-icons"
 import { Pencil } from "react-bootstrap-icons"
@@ -6,6 +6,8 @@ import { Link } from "react-router-dom"
 import { AccountContext } from "../../context"
 import { isEditor } from "../../utils"
 import { useNavigate } from "react-router"
+import Button from "../../components/Common/Button/Button"
+import Review from "../../components/Plan/SessionReview/SessionReviewComponent.jsx"
 
 /**
  * The SessionWorkout component is used to display information about a Sessions
@@ -36,7 +38,7 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 	const userContext = useContext(AccountContext)
 	const { userId } = userContext
 	const navigate = useNavigate()
-
+	const [showRPopup, setRShowPopup] = useState(false)
 	const navigateAndClose = async path => {
 		navigate(path)
 	}
@@ -112,11 +114,14 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 		return true
 	}
 
-
+	function getReviewContainer(showRPopup, setRShowPopup, workoutId){
+		return (<Review isOpen={showRPopup} setIsOpen={setRShowPopup} workout_id={workoutId}/>)
+	}
 
 	return (
 		checkID() ?
 			<div id={id} className={styles.sc23_session_workout}>
+				{getReviewContainer(showRPopup, setRShowPopup, workoutId)}
 				{
 					checkWorkout() ?
 						<div className={styles.sc23_session_workout_info}>
@@ -143,7 +148,13 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 							: 
 							<div />
 					}
-
+					{
+						<Button onClick={() => {
+							setRShowPopup(true)
+						}} outlined={false}>
+							<p>Utvärdering</p>
+						</Button>
+					}
 					{
 						(isEditor(userContext) || userId == creatorID) &&
 						<div>
@@ -155,6 +166,7 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 							/>
 						</div>
 					}
+
 				</div>
 
 			</div>
