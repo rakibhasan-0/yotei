@@ -12,7 +12,7 @@ import styles from "./TechniqueCard.module.css"
  *		id: Id used for testing.
  * 
  * @author Medusa
- * @version 1.0
+ * @version 2.0
  * @since 2023-05-15
  * 
  * Converted to css module 2024-04-19, Hannes (group 1)
