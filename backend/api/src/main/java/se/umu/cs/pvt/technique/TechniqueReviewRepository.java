@@ -17,5 +17,5 @@ public interface TechniqueReviewRepository extends JpaRepository<TechniqueReview
             "FROM technique_review AS tr, user_table AS u " +
             "WHERE u.user_id = tr.user_id AND tr.technique_id = :id " +
             "ORDER BY tr.review_date DESC, tr.review_id DESC", nativeQuery = true)
-    List<TechniqueReviewReturnInterface> findReviewsForTechnique(int id);
+    List<TechniqueReviewReturnInterface> findReviewsForTechnique(Long id);
 }

@@ -36,11 +36,15 @@ public class TechniqueController {
     private final TechniqueRepository techniqueRepository;
 
     @Autowired
+    private final TechniqueReviewRepository techniqueReviewRepository;
+
+    @Autowired
     private MediaRepository mediaRepository;
 
     @Autowired
-    public TechniqueController(TechniqueRepository techniqueRepository) {
+    public TechniqueController(TechniqueRepository techniqueRepository, TechniqueReviewRepository techniqueReviewRepository) {
         this.techniqueRepository = techniqueRepository;
+        this.techniqueReviewRepository = techniqueReviewRepository;
     }
 
     /**
@@ -227,6 +231,19 @@ public class TechniqueController {
             }
         }
         return associatedActivities;
+    }
+
+
+    @GetMapping("/{id}/reviews")
+    public ResponseEntity<List<TechniqueReviewReturnInterface>> getTechniqueReviews(@PathVariable("id") Long id) {
+        List<TechniqueReviewReturnInterface> reviews = techniqueReviewRepository.findReviewsForTechnique(id);
+        return new ResponseEntity<>(reviews, HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}/reviews")
+    public ResponseEntity<List<TechniqueReviewReturnInterface>> createTechniqueReview(@PathVariable("id") Long id, @RequestBody TechniqueReview toUpdate) {
+        techniqueReviewRepository.save(toUpdate);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
