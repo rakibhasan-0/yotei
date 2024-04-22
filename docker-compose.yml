@@ -7,6 +7,7 @@ services:
     volumes:
       - ./nginx/development.conf:/etc/nginx/nginx.conf
       - ./api-docs:/var/www/html/api-docs
+      - ./javadocs:/var/www/html/javadocs
       # - /etc/letsencrypt/:/etc/letsencrypt/
     ports:
       - 80:80
