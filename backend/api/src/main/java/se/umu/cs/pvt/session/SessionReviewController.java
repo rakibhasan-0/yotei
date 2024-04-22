@@ -1,6 +1,5 @@
 package se.umu.cs.pvt.session;
 
-import static org.mockito.Mockito.times;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +25,6 @@ public class SessionReviewController {
         this.sessionReviewExerciseRepository = sessionReviewExerciseRepository;
     }
 
-
     @GetMapping("all")
     public ResponseEntity<List<SessionReview>> all(
     @PathVariable("id") long id) {
@@ -46,13 +44,6 @@ public class SessionReviewController {
 
     @PostMapping("{review_id}/exercise")
     public ResponseEntity<Object> createSessionReviewExercise(@PathVariable("review_id") long review_id, @RequestBody SessionReviewExercise exercise) {
-        exercise.setSession_review_id(review_id);
-        sessionReviewExerciseRepository.save(exercise);
-        return new ResponseEntity<>(exercise, HttpStatus.OK);
-    }
-
-    @PostMapping("{review_id}/exercise")
-    public ResponseEntity<Object> getAllSessionReviewExercises(@PathVariable("review_id") long review_id, @RequestBody SessionReviewExercise exercise) {
         exercise.setSession_review_id(review_id);
         sessionReviewExerciseRepository.save(exercise);
         return new ResponseEntity<>(exercise, HttpStatus.OK);

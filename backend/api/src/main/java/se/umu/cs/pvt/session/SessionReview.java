@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Set;
 
 /**
  * Session.java - Model for session data that is used in the database. 
@@ -44,6 +45,15 @@ public class SessionReview implements Serializable{
 
     @Column(nullable = false, name = "review_date")
     private Date date;
+
+
+    @OneToMany()
+    @JoinTable(
+            name = "session_review_to_session_review_exercises",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "session_review_id")
+    )
+    private Set<SessionReviewExercise> exercises;
 
     /**
      * No-args constructor required by JPA spec.
