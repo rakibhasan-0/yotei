@@ -15,9 +15,9 @@ import { AccountContext } from "../../../context"
  * Example usage:
  * 		<Navbar testId="test-id"/>
  *
- * @author Team Medusa & Team Cyclops & Team Tomato
- * @version 2.0
- * @since 2024-04-18
+ * @author Team Medusa & Team Cyclops & Team Tomato & Team Coconut
+ * @version 3.0
+ * @since 2024-04-24
  */
 function Navbar({ testId }) {
 
