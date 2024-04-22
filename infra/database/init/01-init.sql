@@ -409,7 +409,7 @@ ALTER TABLE
 
 
 --
--- Name: technique_reviewType: TABLE; Schema: public; Owner: psql
+-- Name: technique_reviewType: TABLE; Schema: public; Owner: psql 
 --
 CREATE TABLE technique_review(
 	review_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
