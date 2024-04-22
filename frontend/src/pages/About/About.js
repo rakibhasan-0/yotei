@@ -1,5 +1,5 @@
 import React from "react"
-import "./About.module.css"
+import styles from "./About.module.css"
 import about from "./About.txt"
 
 /**
@@ -32,7 +32,7 @@ class About extends React.Component{
 	render() {
 		return (
 			<div>
-				<div className="container about-container">
+				<div className={styles["container about-container"]}>
 					<h1><u>Om Yotei</u></h1>
 					{this.state.fileData}
 				</div>
