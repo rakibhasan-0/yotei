@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -47,13 +48,13 @@ public class SessionReview implements Serializable{
     private Date date;
 
 
-    @OneToMany()
+    @ManyToMany()
     @JoinTable(
-            name = "session_review_to_session_review_exercises",
-            joinColumns = @JoinColumn(name = "id"),
+            name = "session_review_exercises",
+            joinColumns = @JoinColumn(name = "review_id"),
             inverseJoinColumns = @JoinColumn(name = "session_review_id")
     )
-    private Set<SessionReviewExercise> exercises;
+    private List<SessionReviewExercise> exercises;
 
     /**
      * No-args constructor required by JPA spec.
