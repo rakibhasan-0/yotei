@@ -27,23 +27,23 @@ import java.util.*;
 @RequestMapping(path = "/api/techniques")
 public class TechniqueController {
     @Autowired
-    private WorkoutRepository workoutRepository;
-
-    @Autowired
     private ActivityRepository activityRepository;
 
     @Autowired
-    private final TechniqueRepository techniqueRepository;
+    private TechniqueRepository techniqueRepository;
 
     @Autowired
-    private final TechniqueReviewRepository techniqueReviewRepository;
+    private TechniqueReviewRepository techniqueReviewRepository;
 
     @Autowired
     private MediaRepository mediaRepository;
 
     @Autowired
-    public TechniqueController(TechniqueRepository techniqueRepository, TechniqueReviewRepository techniqueReviewRepository) {
+    public TechniqueController(TechniqueRepository techniqueRepository) {
         this.techniqueRepository = techniqueRepository;
+    }
+
+    public TechniqueController(TechniqueReviewRepository techniqueReviewRepository) {
         this.techniqueReviewRepository = techniqueReviewRepository;
     }
 
