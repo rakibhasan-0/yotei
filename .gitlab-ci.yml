@@ -96,7 +96,7 @@ deploy-test-server:
   tags:
     - system
   before_script:
-    - docker login pvt2024 123yotei123
+    - docker login --username pvt2024 --password $DOCKER_PASS # DOCKER_PASS defined in GitLab CI/CD settings as a secure variable.
   script:
     - docker system prune -a -f
 
