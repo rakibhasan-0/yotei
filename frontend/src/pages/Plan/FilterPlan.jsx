@@ -11,8 +11,8 @@ import GroupPicker from "../../components/Plan/GroupPicker"
  *     prop1 @type {number}  - An id to identify the component
  *     prop2 @type {object}  - A props object containing state for the filter.
 *
-* @author Griffin
-* @version 2.0
+* @author Griffin, Tomato (Group 6) 
+* @version 2.1
 * @since 2023-05-08
 */
 export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, onDatesChange}) {
@@ -35,7 +35,7 @@ export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, o
 
 	return (
 		<div id = {id}>
-			<FilterContainer id={"planfilter"}>
+			<FilterContainer id={"planfilter"} numFilters={0}>
 								
 				<div className={styles.datePickerContainer}>
 					<p className={styles.datePickerTitle}>Från</p>
