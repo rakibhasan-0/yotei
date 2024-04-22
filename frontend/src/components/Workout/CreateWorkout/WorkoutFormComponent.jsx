@@ -43,6 +43,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 	const [validated, setValidated] = useState(false)
 	const [acceptActivities, setAcceptActivities] = useState(false)
 	const navigate = useNavigate()
+	const [showPopup, setShowPopup] = useState(false)
 
 	/**
 	 * Sets the title of the page.
@@ -93,12 +94,18 @@ export default function WorkoutFormComponent({ callback, state }) {
 	 *
 	 */
 	function handleGoBack() {
-		localStorage.removeItem("workoutCreateInfo")
-		
+
+		setShowPopup(true)
+	}
+
+	function confirmGoBack() {
+		localStorage.removeItem("workoutCreateInfo") // Clear local storage as confirmed
+
 		if (state?.fromSession) {
-			return navigate(`/session/edit/${state.session.sessionId}`, { replace: true, state })
+			navigate(`/session/edit/${state.session.sessionId}`, { replace: true, state })
+		} else {
+			navigate("/workout")
 		}
-		navigate("/workout")
 	}
 
 	function handlePopupClose() {
@@ -110,13 +117,16 @@ export default function WorkoutFormComponent({ callback, state }) {
 			shouldClose = false
 			shouldClose = !checkIfActivityInfoPoupChangesMade(workoutCreateInfo)
 			console.log(shouldClose)
-		} else if (workoutCreateInfo.popupState.types.chooseActivityPopup) {
+			
+		} /*else if (workoutCreateInfo.popupState.types.chooseActivityPopup) {
 			shouldClose = workoutCreateInfo.checkedActivities.length === 0
-		} else if (workoutCreateInfo.popupState.types.freeTextPopup) {
+		} */ else if (workoutCreateInfo.popupState.types.freeTextPopup) {
 			shouldClose = !workoutCreateInfo.addedActivities.some(activity => activity.name.length > 0)
 		}
 			
 		if(shouldClose) {
+			console.log("close")
+			//tar inte alltid bort serachfield eller taggar
 			workoutCreateInfoDispatch({
 				type: WORKOUT_CREATE_TYPES.CLEAR_ADDED_ACTIVITIES
 			})
@@ -125,7 +135,9 @@ export default function WorkoutFormComponent({ callback, state }) {
 			})
 		} else {
 			setLeaveActivityPickerPopup(true)
+			localStorage.clear() 
 		}
+		
 	}
 
 	return (
@@ -262,6 +274,16 @@ export default function WorkoutFormComponent({ callback, state }) {
 						>
 							<h2>Tillbaka</h2>
 						</Button>
+						<ConfirmPopup
+							id = "confirm-pop-up-go-back"
+							showPopup={showPopup}
+							setShowPopup={setShowPopup}
+							onClick={confirmGoBack}
+							popupText="Är du säker på att du vill gå tillbaka?"
+							confirmText="Ja"
+							backText="Avbryt"
+							zIndex={1000} 
+						/>
 						<Button type="submit" id="workout-create-back-button">
 							<h2>Spara</h2>
 						</Button>
