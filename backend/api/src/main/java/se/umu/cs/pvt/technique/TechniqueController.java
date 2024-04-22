@@ -234,16 +234,71 @@ public class TechniqueController {
     }
 
 
-    @GetMapping("/{id}/reviews")
-    public ResponseEntity<List<TechniqueReviewReturnInterface>> getTechniqueReviews(@PathVariable("id") Long id) {
-        List<TechniqueReviewReturnInterface> reviews = techniqueReviewRepository.findReviewsForTechnique(id);
-        return new ResponseEntity<>(reviews, HttpStatus.OK);
+    /**
+     * A method that is used to retrieve reviews for a technique from the database.
+     *
+     * @param id The id of the technique to retrieve reviews for.
+     * @return ResponseEntity with the review information and HttpStatus OK.
+     */
+    @GetMapping("/reviews")
+    public ResponseEntity<Object> getReviewsForTechnique(@RequestParam int id) {
+        List<TechniqueReviewReturnInterface> list = techniqueReviewRepository.findReviewsForTechnique(id);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @PostMapping("/{id}/reviews")
-    public ResponseEntity<List<TechniqueReviewReturnInterface>> createTechniqueReview(@PathVariable("id") Long id, @RequestBody TechniqueReview toUpdate) {
-        techniqueReviewRepository.save(toUpdate);
-        return new ResponseEntity<>(HttpStatus.OK);
+    /**
+     * A method for inserting a review for a technique into the database.
+     *
+     * @param review The review to insert.
+     * @return The inserted review.
+     */
+    @PostMapping("/reviews")
+    public ResponseEntity<Object> insertReviewForTechnique(@RequestBody TechniqueReview review) {
+        techniqueReviewRepository.save(review);
+        return new ResponseEntity<>(review, HttpStatus.OK);
     }
 
+    /**
+     * A method for deleting a review for a technique from the database
+     *
+     * @param id The id for the review to delete
+     * @return the id
+     * HttpStatus
+     * OK if technique with id exists
+     * BAD_REQUEST if id is not valid
+     * NOT FOUND if id is valid but not found
+     */
+    @DeleteMapping("/reviews")
+    public ResponseEntity<Long> deleteReview(@RequestParam("id") Long id) {
+        if (id == null) {
+            return new ResponseEntity<>(id, HttpStatus.BAD_REQUEST);
+        } else if (techniqueReviewRepository.findById(id).isPresent()) {
+            techniqueReviewRepository.deleteById(id);
+            return new ResponseEntity<>(id, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(id, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    /**
+     * A method for updating a review for a technique in the database
+     *
+     * @param review The review to update
+     * @return the id
+     * HttpStatus
+     * OK if technique with id exists
+     * BAD_REQUEST if id is not valid
+     * NOT FOUND if id is valid but not found
+     */
+    @PutMapping("/reviews")
+    public ResponseEntity<Object> updateReview(@RequestBody TechniqueReview review) {
+        if (review == null || review.getId() == null) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        } else if (techniqueReviewRepository.findById(review.getId()).isPresent()) {
+            techniqueReviewRepository.save(review);
+            return new ResponseEntity<>(review, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(review, HttpStatus.NOT_FOUND);
+        }
+    }
 }
