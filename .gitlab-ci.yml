@@ -82,7 +82,7 @@ build-frontend:
 generate-api-docs:
   stage: docs
   rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
+    - if: $CI_COMMIT_BRANCH == "main"
   tags:
     - system
   script:
@@ -92,7 +92,7 @@ generate-api-docs:
 generate-javadocs:
   stage: docs
   rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
+    - if: $CI_COMMIT_BRANCH == "main"
   tags:
     - system
   script:
@@ -105,7 +105,7 @@ generate-javadocs:
 deploy-test-server:
   stage: deploy_test_server
   rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED #$CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "main"
   tags:
     - system
   before_script:
