@@ -26,14 +26,16 @@ import style from "./TechniqueFilter.module.css"
  *			onClearBelts={clearSelectedBelts}>
  *		</TechniqueFilter>
  *
- * @author Kraken (Grupp 7)
+ * @author Kraken (Grupp 7), Tomato (Group 6)
  * @version 1.1
  * @since 2023-05-24
  */
 export default function TechniqueFilter({id, belts, onBeltChange, kihon, onKihonChange, onClearBelts, filterWhiteBelt}){
+	
 	return (
 		<div id={id} className={style.filterPos}>
-			<FilterContainer id={"technique-filter-container"}>
+			<FilterContainer id={"technique-filter-container"}
+							 numFilters={kihon ? 1 + belts.length : belts.length}>
 				<div className={style.techniqueBeltPicker}>
 					<BeltPicker id={"techniqueFilter-BeltPicker"} onToggle={onBeltChange} states={belts} onClearBelts={onClearBelts} filterWhiteBelt={filterWhiteBelt} />
 				</div>
