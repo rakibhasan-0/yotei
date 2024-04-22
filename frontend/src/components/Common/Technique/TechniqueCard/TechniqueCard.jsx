@@ -14,6 +14,9 @@ import styles from "./TechniqueCard.module.css"
  * @author Medusa
  * @version 1.0
  * @since 2023-05-15
+ * 
+ * Converted to css module 2024-04-19, Hannes (group 1)
+ * 
  */
 function TechniqueCard({ technique, checkBox, id}) {
 	const navigate = useNavigate()
