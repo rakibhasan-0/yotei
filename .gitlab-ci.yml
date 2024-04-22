@@ -2,6 +2,7 @@ stages:
   - linter
   - build
   - test
+  - docs
   - deploy_test_server
 
 
@@ -79,7 +80,7 @@ build-frontend:
     - npm run build
       
 generate-api-docs:
-  stage: deploy_test_server
+  stage: docs
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED #$CI_COMMIT_BRANCH == "main"
   tags:
@@ -87,6 +88,19 @@ generate-api-docs:
   script:
     - rm -rf /var/www/html/api-docs
     - cd docs/api-docs && mkdocs build -d /var/www/html/api-docs
+
+generate-javadocs:
+  stage: docs
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED #$CI_COMMIT_BRANCH == "main"
+  tags:
+    - system
+  script:
+    - rm -rf /var/www/html/javadocs
+    - cd backend
+    - mvn javadoc:aggregate
+    - mkdir /var/www/html/javadocs
+    - cp -r target/site/apidocs/* /var/www/html/javadocs
 
 deploy-test-server:
   stage: deploy_test_server
