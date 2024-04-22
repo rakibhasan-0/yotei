@@ -35,7 +35,7 @@ export default function TechniqueFilter({id, belts, onBeltChange, kihon, onKihon
 	return (
 		<div id={id} className={style.filterPos}>
 			<FilterContainer id={"technique-filter-container"}
-							 numFilters={kihon ? 1 + belts.length : belts.length}>
+							numFilters={kihon ? 1 + belts.length : belts.length}>
 				<div className={style.techniqueBeltPicker}>
 					<BeltPicker id={"techniqueFilter-BeltPicker"} onToggle={onBeltChange} states={belts} onClearBelts={onClearBelts} filterWhiteBelt={filterWhiteBelt} />
 				</div>

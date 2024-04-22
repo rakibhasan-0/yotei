@@ -1,6 +1,6 @@
-import Button from './../../Button/Button.jsx'
+import Button from "./../../Button/Button.jsx"
 import { Sliders } from "react-bootstrap-icons"
-import FilterCounter from './FilterCounter.jsx'
+import FilterCounter from "./FilterCounter.jsx"
 
 
 /**
@@ -46,5 +46,5 @@ export default function FilterButton({showFilter, buttonToggle, numFilters}) {
 				<Sliders/>	
 			</Button>
 		</div>
-	);
+	)
 }

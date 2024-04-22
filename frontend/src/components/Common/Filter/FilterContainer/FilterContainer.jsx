@@ -41,7 +41,7 @@ function FilterContainer({ id, title ,numFilters, children}) {
 					showFilter = {showFilter}
 					buttonToggle = {buttonToggle}
 					numFilters = {numFilters}
-					/>
+				/>
 			</div>
 			<FilterBox id={"filter-box"} className={style.filterBox} status={active} title={title}>
 				{children}

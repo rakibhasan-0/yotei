@@ -26,15 +26,15 @@ import style from "./FilterCounter.module.css"
  * @version 1.0
  * @since 2024-04-22
  */
- export default function FilterCounter({numFilters}) {
+export default function FilterCounter({numFilters}) {
 	
 	return(
 		<div className={style.outerCircle}>
 			<div className={style.innerCircle}>
 				<p className=	{numFilters <= 9 ? style.textLessThanNine : style.textMoreThanNine}>
-								{numFilters <= 9 ? numFilters : "9+"}</p>
+					{numFilters <= 9 ? numFilters : "9+"}</p>
 			</div>
 		</div>
-	);
+	)
 }
 
