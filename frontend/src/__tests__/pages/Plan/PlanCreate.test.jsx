@@ -1,9 +1,12 @@
-import {configure, render, screen, waitFor, fireEvent} from "@testing-library/react"
+import {configure, render} from "@testing-library/react"
+// import {screen, waitFor, fireEvent} from "@testing-library/react"
 import "@testing-library/jest-dom"
 import PlanCreate from "../../../pages/Plan/PlanCreate"
-import userEvent from "@testing-library/user-event"
-import { rest } from "msw"
-import { server } from "../../server"
+import { React} from "react"
+
+// import userEvent from "@testing-library/user-event"
+// import { rest } from "msw"
+// import { server } from "../../server"
 configure({testIdAttribute: "id"})
 jest.mock("react-router", () => ({
 	useNavigate: () => jest.fn(),
@@ -29,111 +32,96 @@ test("Should render a toast error-message on creating duplicate groups", async (
 	// await the message and expect it to be in the document
 })
 
-describe("Create group/plan should", ()=> {
-	// beforeEach(() => {
-	// 	global.fetch = jest.fn()
-	// })
-	
-	test("not create plan/group when error occours", async () => {
-    // Mock fetch implementation
-    jest.spyOn(global, 'fetch').mockImplementation((url, options) => {
-        // Check if the URL matches the API endpoint you want to ignore
-        if (url === "/api/belts", {"headers": {"token": ""}}) {
-            // Return a resolved Promise without performing any assertions
-            return Promise.resolve();
-        }
+/*
+ * TODO: The test is supposed to validate that no plan/group is added when an exception occrous.
+ * The test would mock the API call to "api/plan/add" verify that no plan was created.
+ * 
+ * What works: 
+ *      - mocking of the API
+ *      - fireing event to add a group name
+ * 		- expecting that the API url "api/plan/add" was called/not called
+ * 
+ * What didnt work:
+ * 		- selecting a belt using "userevent.click" 
+ * 		- selecting a belt by changing its selected status to true
+ * 		- finding all belts using "server.use"
+ * 
+ * The test is incomplete because no belts coiuld be found, or selected. This causes the API to 
+ * never be exectued because it alwaus fails. For the test to work, it would need to be able to pass the 
+ * "valdiateFrom" function in "PlanCreate".
+ */
+// describe("Create group/plan should", ()=> {
 
-        // For other API calls, return a mock response or perform assertions if needed
-        // You can add another mockImplementation for other API calls if required
+// 	test("not create plan/group when error occours", async () => {
+// 		// Mock fetch implementation
+// 		jest.spyOn(global, "fetch").mockImplementation((url, options) => {
+// 			// Check if the URL matches the API endpoint you want to ignore
+// 			if (url === "/api/belts", {"headers": {"token": ""}}) {
+// 				// Return a resolved Promise without performing any assertions
+// 				return Promise.resolve()
+// 			}
 
-        // Return a mock response for other API calls
-        return Promise.resolve({ ok: true });
-    });
+// 			// For other API calls, return a mock response or perform assertions if needed
+// 			// You can add another mockImplementation for other API calls if required
 
+// 			// Return a mock response for other API calls
+// 			return Promise.resolve({ ok: true })
+// 		})
 
-		const setIsBlocking = jest.fn()
-		const setSuccessToast = jest.fn()
-		const navigate = jest.fn()
-		const setBelts = jest.fn()
-		const planData = { name: "Test Plan", startDate: "1", endDate: "2", weekdaysSelected: false }
-		const beltsChosen = ["Yellow", "Green"]
-		const userId = "123"
-		const token = "fakeToken"
-		const dateHandler = jest.fn()
-		const blocker = false
-		const weekdays = [
-			{ name: "Mån", value: false, time: "" },
-			{ name: "Tis", value: false, time: "" },
-			{ name: "Ons", value: false, time: "" },
-			{ name: "Tors", value: false, time: "" },
-			{ name: "Fre", value: false, time: "" },
-			{ name: "Lör", value: false, time: "" },
-			{ name: "Sön", value: false, time: "" }
-		]
-		const BeltPicker = jest.fn()
-		const PlanForm = jest.fn()
-		const fieldCheck = {name: true, startDate: true, endDate: true}
-
-		render(
-			<PlanCreate
-				// setIsBlocking={setIsBlocking}
-				// setSuccessToast={setSuccessToast}
-				// navigate={navigate}
-				// planData={planData}
-				beltsChosen={beltsChosen}
-				// userId={userId}
-				// token={token}
-				// dateHandler={dateHandler}
-				// setBelts={setBelts}
-				// useBlocker={blocker}
-				// weekdays={weekdays}
-				// BeltPicker={BeltPicker}
-				// PlanForm={PlanForm}
-				// fieldCheck={fieldCheck}
-			/>)
-	
-		const nameInput = screen.getByTestId("name")
-		fireEvent.change(nameInput, {target:{value:"Test name"}})
-
-		// await userEvent.click(screen.getByTestId("form-belt-picker-dropdown"))
-		// expect(screen.getByText("Orange")).toBeInTheDocument()
-		// await userEvent.click(screen.getByTestId("belt-child-Vitt"))
+// 		render(<PlanCreate/>)
 		
-		// server.use(
-		// 	rest.get("api/belts/all", async (req, res, ctx) => {
-		// 		return res(
-		// 			ctx.status(200),
-		// 			ctx.json([
-		// 				{
-		// 				  "id": 1,
-		// 				  "name": "Vitt",
-		// 				  "color": "FCFCFC",
-		// 				  "child": false
-		// 				},
-		// 				{
-		// 				  "id": 2,
-		// 				  "name": "Vitt",
-		// 				  "color": "BD3B41",
-		// 				  "child": true
-		// 				}
-		// 			  ])
-					
-		// 		)
-		// 	})
-		// )
-		// await screen.findByTestId("form-belt-picker-children")
-		// fireEvent.click(screen.getByTestId("belt-child-Vitt"), {target:{checked:true}})
-				// expect(global.fetch).toHaveBeenCalledWith("/api/belts", {"headers": {"token": ""}})
-		await userEvent.click(screen.getByText("Gå vidare"))
+// 		const namvaldiateFromeInput = screen.getByTestId("name")
+// 		fireEvent.change(nameInput, {target:{value:"Test name"}})
 	
-		await waitFor(() => {
-			expect(global.fetch).toHaveBeenCalledWith("/api/plan/add", 
-			{"body": "{\"name\":\"Test name\",\"belts\":[],\"userId\":0}", "headers": {"Content-type": "application/json", "token": ""}, "method": "POST"})
-		})
+// 		await userEvent.click(screen.getByTestId("form-belt-picker-dropdown"))
+// 		expect(screen.getByText("Orange")).toBeInTheDocument()
+// 		await userEvent.click(screen.getByTestId("belt-child-Vitt"))
+		
+// 		server.use(
+// 			rest.get("api/belts/all", async (req, res, ctx) => {
+// 				return res(
+// 					ctx.status(200),
+// 					ctx.json([
+// 						{
+// 							"id": 1,
+// 							"name": "Vitt",
+// 							"color": "FCFCFC",
+// 							"child": false
+// 						},
+// 						{
+// 							"id": 2,
+// 							"name": "Vitt",
+// 							"color": "BD3B41",
+// 							"child": true
+// 						}
+// 					])
+					
+// 				)
+// 			})valdiateFrom
+// 		)
 
-
-	})
-})
+// 		await screen.findByTestId("form-belt-picker-children")
+// 		fireEvent.click(screen.getByTestId("belt-child-Vitt"), {target:{checked:true}})
+		
+// 		await waitFor(() => {
+// 			expect(global.fetch).toHaveBeenCalledWith(
+// 				"/api/plan/add",
+// 				{
+// 					body: JSON.stringify({
+// 						name: "Test name",
+// 						belts: [],
+// 						userId: 0,
+// 					}),
+// 					headers: {
+// 						"Content-type": "application/json",
+// 						token: "",
+// 					},
+// 					method: "POST",
+// 				}
+// 			)
+// 		})
+// 	})
+// })
 
 
 

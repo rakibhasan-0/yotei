@@ -380,23 +380,23 @@ export default function PlanCreate() {
 			res = false
 		}
 
-		// if (!(fieldCheck.startDate && fieldCheck.endDate)) {
-		// 	setErrorToast("Vänligen välj start- och slutdatum.")
-		// 	res = false
-		// } 
-		// else if (planData.endDate < planData.startDate) {
-		// 	setErrorToast("Det valda startdatumet är senare än det valda slutdatumet.")
-		// 	res = false
-		// }
+		if (!(fieldCheck.startDate && fieldCheck.endDate)) {
+			setErrorToast("Vänligen välj start- och slutdatum.")
+			res = false
+		} 
+		else if (planData.endDate < planData.startDate) {
+			setErrorToast("Det valda startdatumet är senare än det valda slutdatumet.")
+			res = false
+		}
 
 		for (let i = 0; i < 7; i++) {
-            const day = weekdays[i]
-            if (day.value && day.time == "") {
-                setErrorToast("Du måste ge tid till varje aktiv dag")
-                res = false
-                break
-            }
-        }
+			const day = weekdays[i]
+			if (day.value && day.time == "") {
+				setErrorToast("Du måste ge tid till varje aktiv dag")
+				res = false
+				break
+			}
+		}
 
 		return res
 	}
