@@ -6,6 +6,7 @@ services:
     restart: always
     volumes:
       - ./nginx/development.conf:/etc/nginx/nginx.conf
+      - ./api-docs:/var/www/html/api-docs
       # - /etc/letsencrypt/:/etc/letsencrypt/
     ports:
       - 80:80
