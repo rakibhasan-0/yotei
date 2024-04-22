@@ -149,6 +149,7 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 							<div />
 					}
 					{
+						isEditor(userContext) &&
 						<Button onClick={() => {
 							setRShowPopup(true)
 						}} outlined={false}>
