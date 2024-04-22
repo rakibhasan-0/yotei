@@ -28,9 +28,9 @@ import Divider from "../Divider/Divider"
 			</Popup>
  *		)
  *
- * @author Team Minotaur
- * @version 1.0
- * @since 2023-05-04
+ * @author Team Minotaur, Team Mango (Group 4)
+ * @version 2.0
+ * @since 2024-04-22
  */
 export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	const [suggested, setSuggested] = useState([])
@@ -131,6 +131,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 						className={styles["input-area"]}
 						placeholder="Sök efter taggar"
 						value={searchText}
+						id = "tag-search-bar"
 						onChange={e => {searchForTags(e.target.value)}}
 					>
 					</input>
