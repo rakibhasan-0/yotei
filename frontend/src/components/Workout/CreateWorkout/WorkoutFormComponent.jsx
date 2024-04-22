@@ -93,8 +93,10 @@ export default function WorkoutFormComponent({ callback, state }) {
 	 *
 	 */
 	function handleGoBack() {
-		if (state?.fromSession) {
+		if (state?.fromSession && !state?.fromCreate) {
 			return navigate(`/session/edit/${state.session.sessionId}`, { replace: true, state })
+		} else if(state?.fromCreate) {
+			return navigate("/session/create", { replace: true, state })
 		}
 		navigate("/workout")
 	}
@@ -107,7 +109,6 @@ export default function WorkoutFormComponent({ callback, state }) {
 		} else if (workoutCreateInfo.popupState.types.editActivityPopup) {
 			shouldClose = false
 			shouldClose = !checkIfActivityInfoPoupChangesMade(workoutCreateInfo)
-			console.log(shouldClose)
 		} else if (workoutCreateInfo.popupState.types.chooseActivityPopup) {
 			shouldClose = workoutCreateInfo.checkedActivities.length === 0
 		} else if (workoutCreateInfo.popupState.types.freeTextPopup) {
