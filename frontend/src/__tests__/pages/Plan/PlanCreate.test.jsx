@@ -7,6 +7,15 @@ import { React} from "react"
 // import userEvent from "@testing-library/user-event"
 // import { rest } from "msw"
 // import { server } from "../../server"
+
+
+/**
+ * Unit-test for the PlanCreate page, 
+ *
+ * @author Team Mango (Group 4)
+ * @since 2024-04-22
+ * @version 1.0 
+ */
 configure({testIdAttribute: "id"})
 jest.mock("react-router", () => ({
 	useNavigate: () => jest.fn(),

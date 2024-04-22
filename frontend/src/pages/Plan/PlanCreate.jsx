@@ -15,7 +15,7 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
  * As well as checkboxes, indicating which day of the week to
  * include.
  *
- * @author Calzone (2022-05-13), Hawaii (2022-05-13), Squad 2 Griffin
+ * @author Calzone (2022-05-13), Hawaii (2022-05-13), Squad 2 Griffin, Team Mango (2024-04-22)
  */
 
 export default function PlanCreate() {
