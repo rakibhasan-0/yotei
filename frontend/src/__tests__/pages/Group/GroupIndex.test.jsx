@@ -79,13 +79,9 @@ test("Should render a group when searching for it", async () => {
 	/*After rendering screen and fetching info, 
     the test finds the searchbar and gives it the input "grönt" 
     */
-
-	/* Technical sidenote: Had good solution for test using queryselector("input"),
-    however linter complained resulting in a much more ugly solution.
-    Also test does not work if placeholder text changes. (fix ASAP if possible)
-    */ 
+   
 	await screen.findByTestId("searchbar-groups")
-	const searchInput = screen.getByPlaceholderText("Sök efter grupp")
+	const searchInput = screen.getByTestId("searchbar-input")
     
 	fireEvent.change(searchInput, { target: { value: "grönt" } })
 

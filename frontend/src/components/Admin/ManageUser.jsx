@@ -13,10 +13,9 @@ import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../ut
  * Component made for the admin page. Made to handle the add user 
  * feature on the admin page.
  *
- *  @author Chimera (Group 4)
- *  @version 2.0 (2023-05-23)
- *  @since 2023-05-23
- *  @version 2.0 
+ *  @author Chimera (Group 4), Team Mango (Group 4)
+ *  @version 3.0
+ *  @since 2024-04-22
  *  @returns Component for handling adding a user meant to be used on another page.
  */
 
@@ -159,7 +158,7 @@ export default function ManageUser() {
 				))}
 			</Dropdown>
 			<div className="pt-4">
-				<InputTextFieldBorderLabel errorMessage={mgmError} type={"user"} label= {"Bekräfta användarnamn"} onChange={(event) => setMgmConfirmUser(event.target.value)}/>
+				<InputTextFieldBorderLabel errorMessage={mgmError} id = {"confirm-username-input"} type={"user"} label= {"Bekräfta användarnamn"} onChange={(event) => setMgmConfirmUser(event.target.value)}/>
 			</div>
 			<Dropdown 
 				centered={true} 
