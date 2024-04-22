@@ -37,7 +37,6 @@ const WorkoutCreate = () => {
 	const [hasLoadedData, setHasLoadedData] = useState(false)
 
 	//const [isBlocking, setIsBlocking] = useState(false)
-	const [goBackPopup, setGoBackPopup] = useState(false)
 
 	const navigate = useNavigate()
 

@@ -99,13 +99,15 @@ export default function WorkoutFormComponent({ callback, state }) {
 	}
 
 	function confirmGoBack() {
+
 		localStorage.removeItem("workoutCreateInfo") // Clear local storage as confirmed
 
-		if (state?.fromSession) {
+		if (state?.fromSession && !state?.fromCreate) {
 			navigate(`/session/edit/${state.session.sessionId}`, { replace: true, state })
-		} else {
-			navigate("/workout")
+		} else if(state?.fromCreate) {
+			return navigate("/session/create", { replace: true, state })
 		}
+		navigate("/workout")
 	}
 
 	function handlePopupClose() {
