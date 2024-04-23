@@ -28,10 +28,10 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 /**
  * A test-class for testing the methods inside TechniqueController, API.
  *
- * @author Quattro Formaggio, Calrkskrove, Phoenix (25-04-2023)
+ * @author Quattro Formaggio, Calrkskrove, Phoenix (25-04-2023), Team Granatäpple (Grupp 1) (23-04-2024)
  */
 
-@ExtendWith(MockitoExtension.class)
+ @ExtendWith(MockitoExtension.class)
 @WebMvcTest(controllers = TechniqueController.class)
 public class TechniqueApiApplicationTests {
 

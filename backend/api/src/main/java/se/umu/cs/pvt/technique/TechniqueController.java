@@ -17,7 +17,7 @@ import java.util.*;
  * <p>
  * Original by:
  *
- * @author Quattro Formaggio, Carlskrove, Hawaii (Doc: Griffin ens19amd)
+ * @author Quattro Formaggio, Carlskrove, Hawaii (Doc: Griffin ens19amd), Team Granatäpple (Grupp 1) (23-04-2024)
  * <p>
  * Updated by:
  * @author Medusa
