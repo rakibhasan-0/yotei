@@ -8,39 +8,37 @@ configure({testIdAttribute: "id"})
 //implement before each
 
 test("Should render to page", async() => {
-    const dateChangeHandler = (event) => {
-		setDate(event.target.value)
-	}
+	const dateChangeHandler = jest.fn()
 	// ARRANGE
-    let date = Date.parse("2019-01-01");
+	let date = Date.parse("2019-01-01")
 	render(<DatePicker
-					style={{ marginLeft: "100px"}}
-					selectedDate={date}
-					onChange={dateChangeHandler}
-					id={"test-datepicker"}
-				/>)
+		style={{ marginLeft: "100px"}}
+		selectedDate={date}
+		onChange={dateChangeHandler}
+		id={"test-datepicker"}
+	/>)
 
-    expect(screen.getByTestId("test-datepicker")).toBeInTheDocument()
+	expect(screen.getByTestId("test-datepicker")).toBeInTheDocument()
 })
 
 test("Should change date", async() => {
-    // ARRANGE
-    const dateChangeHandler = jest.fn();
-    const initialDate = "2019-01-01";
+	// ARRANGE
+	const dateChangeHandler = jest.fn()
+	const initialDate = "2019-01-01"
 
-    render(
-        <DatePicker
-            style={{ marginLeft: "100px"}}
-            selectedDate={initialDate}
-            onChange={dateChangeHandler}
-            id={"test-datepicker"}
-        />
-    );
+	render(
+		<DatePicker
+			style={{ marginLeft: "100px"}}
+			selectedDate={initialDate}
+			onChange={dateChangeHandler}
+			id={"test-datepicker"}
+		/>
+	)
 
-    // ACT
-    const datePickerInput = screen.getByTestId('test-datepicker'); // Get the input field by role
-    fireEvent.change(datePickerInput, { target: { value: '2015-12-10' } });
+	// ACT
+	const datePickerInput = screen.getByTestId("test-datepicker") // Get the input field by role
+	fireEvent.change(datePickerInput, { target: { value: "2015-12-10" } })
 
-    //ASSERT
-    expect(dateChangeHandler).toHaveBeenCalledWith(expect.any(Object));
+	//ASSERT
+	expect(dateChangeHandler).toHaveBeenCalledWith(expect.any(Object))
 })
