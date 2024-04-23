@@ -30,7 +30,7 @@ import ActivityDelete from "../../../components/Activity/ActivityDelete/Activity
  * Example usage:
  * 	   <TechniqueDetail id="test-id"/>
  * 
- * @author Team Medusa (Grupp 6) & Cyclops (Group 5) & Tomato (Group 6)
+ * @author Team Medusa (Grupp 6) & Cyclops (Group 5) & Tomato (Group 6) & Team Durian (Group 3) (2024-04-23)
  * @version 4.0
  * @since 2024-04-18
  */
@@ -124,6 +124,7 @@ function TechniqueDetail({ id }) {
 			</div>
 
 			<div className={styles["technique-detail-container"]} id={id == undefined ? "technique" : id}>
+				<title>Tekniker</title>
 				<h1>{technique.name}</h1>
 				{isAdmin(accountRole) && <div className={styles["technique-detail-actions-container"]}>
 					<Link to={"edit"}>

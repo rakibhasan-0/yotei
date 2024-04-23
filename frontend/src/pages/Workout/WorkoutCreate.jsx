@@ -23,7 +23,7 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup.jsx"
  * 							the previous page after creating a workout.
  * 							Otherwise the user is sent to the workoutView page.
  * 
- * @author Team Minotaur, Team 3 Durian
+ * @author Team Minotaur, Team Durian (Group 3) (2024-04-23)
  * @version 2.1
  * @since 2023-05-24, 2024-04-19
  */
@@ -207,6 +207,7 @@ const WorkoutCreate = () => {
 
 	return (
 		<WorkoutCreateContext.Provider value={{ workoutCreateInfo, workoutCreateInfoDispatch }} >
+			<title>Skapa pass</title>
 			<h1 className={styles.title}>Skapa pass</h1>
 			<WorkoutFormComponent callback={submitHandler} state={state} />
 			<ConfirmPopup

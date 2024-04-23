@@ -17,7 +17,7 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup.jsx"
 /**
  * This is the page for editing a saved workout.
  * 
- * @author Team Minotaur
+ * @author Team Minotaur, Team Durian (Group 3) (2024-04-23)
  * @version 2.0
  * @since 2023-05-24
  */
@@ -195,6 +195,7 @@ const WorkoutEdit = () => {
 
 	return (
 		<WorkoutCreateContext.Provider value={{workoutCreateInfo, workoutCreateInfoDispatch}} >
+			<title>Redigera pass</title>
 			<h1 className={styles.title}>Redigera pass</h1>
 			<WorkoutFormComponent callback={submitHandler} />
 			<ConfirmPopup

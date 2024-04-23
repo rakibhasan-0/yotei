@@ -14,7 +14,7 @@ import {setError as setErrorToast} from "../../utils"
  * when user logs in. If user credentials are incorrect,
  * an appropriate error message is displayed.
  * 
- * @author Team Verona (Group 5), Team Hot Pepper (Group 7) (28/4), Dragon (2023-05)
+ * @author Team Verona (Group 5), Team Hot Pepper (Group 7) (28/4), Dragon (2023-05), Team Durian (Group 3) (2024-04-23)
  * @version 2.0
  */
 export default function Login() {
@@ -102,10 +102,12 @@ export default function Login() {
 
 
 	return (
+		
 		<div style={{ maxWidth: 360 }} className="center2">
 			<img style={{ maxWidth: 300 }} src="/ubk-logga.jpg" alt="This is the logo for UBK" className="center mb-5" />
 			<div style={{ width: 320 }}>
 				<div>
+				<title>Logga in</title>
 					<InputTextFieldBorderLabel 
 						id={"username-input"} 
 						type={"user"} 
