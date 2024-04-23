@@ -33,7 +33,7 @@ export default function ReviewComponent({comment, onDelete, token, getTodaysDate
 			headers: {"token": token}
 		}
 
-		const response = await fetch(`/api/technique/reviews?id=${comment.review_id}`, requestOptions).catch(() => {
+		const response = await fetch("/api/techniques/reviews?id=" + comment.review_id, requestOptions).catch(() => {
 			setError("Serverfel: Kunde inte ansluta till servern.")
 			return
 		})
