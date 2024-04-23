@@ -424,6 +424,7 @@ export default function ExerciseCreate() {
 					width="100%"
 					onClick={() => {
 						addExerciseAndTags()
+						console.log(tags)
 						exitProdc(tags)
 					}}
 				>
