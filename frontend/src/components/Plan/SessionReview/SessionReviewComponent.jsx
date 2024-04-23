@@ -30,6 +30,8 @@ export default function Review({isOpen, setIsOpen, session_id}) {
     const[positiveComment, setPositiveComment] = useState("")
     const[negativeComment, setNegativeComment] = useState("");
 
+	const [errorStateMsg, setErrorStateMsg] = useState("")
+
 	const [loading, setLoading] = useState(true)
 
 	const context = useContext(AccountContext)
@@ -40,18 +42,19 @@ export default function Review({isOpen, setIsOpen, session_id}) {
 				headers: {"Content-type": "application/json", token: context.token}
 			}
 
-			const response = await fetch(`/api/workouts/detail/${workoutId}`, requestOptions).catch(() => {
+			const response = await fetch(`/api/workouts/detail/${session_id}`, requestOptions).catch(() => {
 				setErrorStateMsg("Serverfel: Kunde inte ansluta till servern.")
 				setLoading(false)
 				return
 			})
 
 			if(response.status != HTTP_STATUS_CODES.OK){
-				setErrorStateMsg("Pass med ID '" + workoutId + "' existerar inte. Felkod: " + response.status)
+				setErrorStateMsg("Pass med ID '" + session_id + "' existerar inte. Felkod: " + response.status)
 				setLoading(false)
 			} else {
 				const json = await response.json()
 				setWorkoutData(() => json)
+				console.log(sessionData)
 				setLoading(false)
 				setErrorStateMsg("")
 			}
@@ -195,17 +198,13 @@ export default function Review({isOpen, setIsOpen, session_id}) {
 
                 <div className = {styles["activity_checker"]}>
 				<ul>
-					{sessionData.map((item, index) => (
-						<React.Fragment key={index}>
 						<li className={styles["check_box_li"]}>
 							{/* Check box */}
-							<CheckBox id={`CheckBox-${index}`} onClick={() => {}} checked={true} />
+							<CheckBox id={`CheckBox`} onClick={() => {}} checked={true} />
 						</li>
 						<li className={styles["activity_text_li"]}>
-							{item}
+							<p>"Test"</p>
 						</li>
-						</React.Fragment>
-					))}
 					</ul>
                 </div>
 

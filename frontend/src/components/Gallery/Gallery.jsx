@@ -3,7 +3,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css" // requires a loa
 import { Carousel } from "react-responsive-carousel"
 import VideoPlayerReactPlayer from "../VideoPlayer/VideoPlayerReactPlayer"
 import Image from "../Image/Image"
-import styles from "../Gallery/Gallery.module.css"
+import styles from "./Gallery.module.css"
 import { AccountContext } from "../../context"
 
 /**
@@ -70,10 +70,10 @@ export default function Gallery({ id }) {
 
 
 	return (
-		<div className={styles["container gallery-container"]} id={id}>
+		<div className={`container ${styles["gallery-container"]}`} id={id}>
 			<div className={styles["row mt-2 mb-2"]}>
 				<div className={styles["col-sm-12 text-center "]}>
-					<Carousel showThumbs={false} showStatus={false} showArrows={true} >                         
+					<Carousel className={styles["carousel"]} showThumbs={false} showStatus={false} showArrows={true} >                         
 						{pictures.map((image, index) => (
 							<div className={styles["gallery-image-and-description"]} key={index}>
 								<Image path={image.url} key={index} />
@@ -82,7 +82,7 @@ export default function Gallery({ id }) {
 						))}
 						{videos.map((video, index) => (
 							<div className={styles["gallery-video-and-description"]} key={index}>
-								<VideoPlayerReactPlayer path={video.url} key={index}/>
+								<VideoPlayerReactPlayer className={styles["react-player"]} path={video.url} key={index}/>
 								{MediaDescription(video)}
 							</div>
 						))}

@@ -282,7 +282,6 @@ export default function TechniqueEdit({ id }) {
 			<div className={style.mediaButtonContainer}>
 				<EditGallery id={techniqueId} exerciseId={techniqueId} sendData={sendMediaData} undoChanges={undoMediaChanges} done={done} />
 			</div>
-
 			<Popup title={"Lägg till media"} isOpen={showMediaPopup} setIsOpen={setShowMediaPopup} >
 				<UploadMedia id={techniqueId} exerciseId={techniqueId}/>	
 			</Popup>
