@@ -18,6 +18,10 @@ import { Route, RouterProvider, createMemoryRouter, createRoutesFromElements } f
 import userEvent from "@testing-library/user-event"
 import TechniqueIndex from "../../../pages/Technique/TechniqueIndex/TechniqueIndex"
 
+/**
+ * @author Team Durian (Group 3) (2024-04-23) 
+ */
+
 configure({ testIdAttribute: "id" })
 
 /* jest.mock("react", () => ({
@@ -46,7 +50,8 @@ describe("CreateTechnique should render", () => {
 	})
 
 	test("the title", () => {
-		expect(screen.getByText("Skapa teknik")).toBeInTheDocument()
+		//Gets the first "Skapa teknik" so there can exist a header and a tab title with the same name.
+		expect(screen.getAllByText("Skapa teknik")[0]).toBeInTheDocument()
 	})
 
 	test("the name input", () => {
@@ -155,7 +160,7 @@ describe("CreateTechnique on back with unsaved values should", () => {
 		await user.click(screen.getByRole("button", { name: "Tillbaka" }))
 		await user.click(screen.getByRole("button", { name: "Avbryt" }))
 
-		expect(screen.getByText("Skapa teknik")).toBeInTheDocument()
+		expect(screen.getAllByText("Skapa teknik")[0]).toBeInTheDocument()
 	})
 
 	test("close popup when user clicks 'ja'", async () => {
@@ -202,7 +207,7 @@ describe("CreateTechnique on back with unsaved values should", () => {
 		await user.click(screen.getByRole("button", { name: "Tillbaka" }))
 		await user.click(screen.getByRole("button", { name: "Lämna" }))
 
-		expect(screen.getByText("Tekniker")).toBeInTheDocument()
+		expect(screen.getAllByText("Tekniker")[0]).toBeInTheDocument()
 
 	})
 })

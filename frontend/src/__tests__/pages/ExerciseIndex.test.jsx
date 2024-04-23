@@ -8,7 +8,6 @@ import ExerciseIndex from "../../pages/Exercise/ExerciseIndex"
 import { MemoryRouter } from "react-router-dom"
 import { AccountContext } from "../../context"
 
-
 configure({testIdAttribute: "id"})
 const requestSpy = jest.fn()
 server.events.on("request:start", requestSpy)
