@@ -30,8 +30,9 @@ import { useCookies } from "react-cookie"
  * @param {string} id A unique id of the component (Testing purposes)
  * @param {function} setShowActivityInfo Callback function to report selected activities
  *  
- * @author Kraken (Grupp 7), Team Coconut
+ * @author Kraken (Grupp 7), Team Coconut, Team Kiwi
  * @since 2024-04-19
+ * @updated 2024-04-22 Kiwi, Fixed so searchbar is not cleared unless component is closed, also so the active tab will show
  */
 function AddActivity({ id, setShowActivityInfo }) {
 
@@ -46,6 +47,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	const [map, mapActions] = useMap()
 	const [key, setKey] = useState("technique")
 	const [tabCookie, setCookie] = useCookies(["active-tab"])
+
 
 	/**
 	 * States related to keeping track of which techniques
@@ -69,8 +71,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	const [suggestedExerTags, setSuggestedExerTags] = useState([])
 	const [fetchedTech, setFetchedTech] = useState(false)
 	const [fetchedExer, setFetchedExer] = useState(false)
-
-
+	const [activeTab, setActiveTab] = useState("")
 
 	/**
 	 * Keeps track of which activities that are checked/selected by the user.
@@ -87,7 +88,44 @@ function AddActivity({ id, setShowActivityInfo }) {
 	]
 	const [sort, setSort] = useState(sortOptions[0])
 	const [cookies, setCookies] = useCookies(["exercise-filter"])
+	const [cookiesExer, setCookiesExer] = useCookies(["techniques-filter"])
 	const [visibleExercises, setVisibleExercises] = useState([])
+
+
+	/**
+     * Makes sure the data in the search bar is stored when choosing between techniques and exercises
+     * also when redirected to and from info on techniques and exercises.
+     * Also makes sure we return to the tab we where on before, either excerises or techniques
+	 * (2024-04-22)
+     */
+	useEffect(() => {
+		setSearchTechText(localStorage.getItem("searchTechText") || "")
+		setSearchExerText(localStorage.getItem("searchExerText") || "")
+		setActiveTab(localStorage.getItem("activeTab") || "technique")
+	}, [])
+
+	useEffect(() => {
+		localStorage.setItem("activeTab", activeTab)
+	}, [activeTab])
+
+	useEffect(() => {
+		localStorage.setItem("searchTechText", searchTechText)
+	}, [searchTechText])
+    
+	useEffect(() => {
+		localStorage.setItem("searchExerText", searchExerText)
+	}, [searchExerText])
+    
+
+	// NEW
+	useEffect(() => {
+		const filterCookie = cookiesExer["techniques-filter"]
+		if (filterCookie) {
+			setSelectedTechTags(filterCookie.tags)
+			let cachedSort = sortOptions.find(option => filterCookie.sort === option.label)
+			setSort(cachedSort ? cachedSort : sortOptions[0])
+		}
+	}, [])
 
 
 	useEffect(() => {
@@ -225,6 +263,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 			}
 			filteredBelts.push(x)
 		})
+		setCookiesExer("techniques-filter", { tags: selectedTechTags, sort: sort.label }, { path: "/" })
 
 		const args = {
 			text: searchTechText,
