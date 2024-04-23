@@ -1,26 +1,21 @@
 package se.umu.cs.pvt.workout;
 
-import org.hibernate.procedure.spi.ParameterRegistrationImplementor;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import se.umu.cs.pvt.exercise.Exercise;
 import se.umu.cs.pvt.exercise.ExerciseRepository;
 import se.umu.cs.pvt.technique.TechniqueRepository;
+import se.umu.cs.pvt.user.JWTUtil;
 import se.umu.cs.pvt.tag.TagRepository;
 import se.umu.cs.pvt.tag.WorkoutTagRepository;
 import se.umu.cs.pvt.workout.detail.WorkoutDetailRepository;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,10 +26,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 /**
- * As of (18/05-2022) this testclass only tests each individual return statement from each method in the
+ * As of (18/05-2022) this testclass only tests each individual return statement
+ * from each method in the
  * WorkoutController class.
  *
- * @author  Phoenix (25-04-2023)
+ * @author Phoenix (25-04-2023) & Team Tomato
+ * @updated 2024-04-23 by Team Tomato
  */
 
 @WebMvcTest(controllers = WorkoutController.class)
@@ -70,6 +67,9 @@ class WorkoutApiApplicationTests {
     @Autowired
     private WorkoutController workoutController;
 
+    @MockBean
+    private JWTUtil jwtUtil;
+
     @Test
     void shouldFailWhenGettingEmptyWorkout() {
         Mockito.when(workoutRepository.findAllProjectedBy()).thenReturn(new ArrayList<>());
@@ -93,14 +93,14 @@ class WorkoutApiApplicationTests {
                 return "name";
             }
 
-			@Override
-			public String getDesc() {
-				return "desc";
-			}
+            @Override
+            public String getDesc() {
+                return "desc";
+            }
 
             @Override
             public LocalDate getCreated() {
-                return LocalDate.of(2022,1,1);
+                return LocalDate.of(2022, 1, 1);
             }
 
             @Override
@@ -140,14 +140,14 @@ class WorkoutApiApplicationTests {
                 return "name";
             }
 
-			@Override
-			public String getDesc() {
-				return "desc";
-			}
+            @Override
+            public String getDesc() {
+                return "desc";
+            }
 
             @Override
             public LocalDate getCreated() {
-                return LocalDate.of(2022,1,1);
+                return LocalDate.of(2022, 1, 1);
             }
 
             @Override
@@ -167,31 +167,31 @@ class WorkoutApiApplicationTests {
     @Test
     void shouldSucceedWithGetWorkoutDescription() {
         Mockito.when(workoutRepository.findById(1L)).thenReturn(Optional.of(new Workout(1L, "test",
-                "Description", 1000L, LocalDate.of(2022,1,1),
-                LocalDate.of(2022,1,1), new Date(),false, 1L)));
+                "Description", 1000L, LocalDate.of(2022, 1, 1),
+                LocalDate.of(2022, 1, 1), new Date(), false, 1L)));
 
-        Mockito.when(workoutRepository.getWorkoutDropDownById(1L)).
-                thenReturn(Optional.of(new WorkoutDropDownProjection() {
-            @Override
-            public String getDesc() {
-                return "test";
-            }
+        Mockito.when(workoutRepository.getWorkoutDropDownById(1L))
+                .thenReturn(Optional.of(new WorkoutDropDownProjection() {
+                    @Override
+                    public String getDesc() {
+                        return "test";
+                    }
 
-            @Override
-            public Integer getDuration() {
-                return 1;
-            }
+                    @Override
+                    public Integer getDuration() {
+                        return 1;
+                    }
 
-            @Override
-            public LocalDate getCreated() {
-                return LocalDate.of(2022,1,1);
-            }
+                    @Override
+                    public LocalDate getCreated() {
+                        return LocalDate.of(2022, 1, 1);
+                    }
 
-            @Override
-            public Long getAuthor() {
-                return 1L;
-            }
-        }));
+                    @Override
+                    public Long getAuthor() {
+                        return 1L;
+                    }
+                }));
 
         ResponseEntity<WorkoutDropDownProjection> response = workoutController.getDescription(1L);
         verify(workoutRepository, times(1)).findById(any());
@@ -217,8 +217,8 @@ class WorkoutApiApplicationTests {
     @Test
     void shouldSucceedWithGetWorkoutById() {
         workout = new Workout(1L, "test", "Description", 1000L,
-                LocalDate.of(2022,1,1), LocalDate.of(2022,1,1),
-                new Date(),false, 1L);
+                LocalDate.of(2022, 1, 1), LocalDate.of(2022, 1, 1),
+                new Date(), false, 1L);
 
         Mockito.when(workoutRepository.findById(1L)).thenReturn(Optional.of(workout));
 
@@ -254,13 +254,13 @@ class WorkoutApiApplicationTests {
                 return "name";
             }
 
-			@Override
-			public String getDesc() {
-				return "desc";
-			}
+            @Override
+            public String getDesc() {
+                return "desc";
+            }
 
             public LocalDate getCreated() {
-                return  LocalDate.of(2022,1,1);
+                return LocalDate.of(2022, 1, 1);
             }
 
             @Override
@@ -297,8 +297,8 @@ class WorkoutApiApplicationTests {
     @Test
     void shouldSucceedWithDeletingWorkout() {
         workout = new Workout(1L, "test", "Description", 1000L,
-                LocalDate.of(2022,1,1), LocalDate.of(2022,1,1),
-                new Date(),false, 1L);
+                LocalDate.of(2022, 1, 1), LocalDate.of(2022, 1, 1),
+                new Date(), false, 1L);
 
         Mockito.when(workoutRepository.findById(1L)).thenReturn(Optional.of(workout));
         doAnswer(invocationOnMock -> null).when(workoutRepository).deleteById(any());
@@ -343,15 +343,15 @@ class WorkoutApiApplicationTests {
 
     @Test
     void shouldSucceedWithRemovingWorkoutFromFavorites() {
-       WorkoutFavorite workoutFavorite = new WorkoutFavorite();
+        WorkoutFavorite workoutFavorite = new WorkoutFavorite();
 
-       Mockito.when(workoutFavoriteRepository.findById(workoutFavorite)).thenReturn(Optional.of(workoutFavorite));
-       doAnswer(invocationOnMock -> null).when(workoutFavoriteRepository).deleteById(any());
+        Mockito.when(workoutFavoriteRepository.findById(workoutFavorite)).thenReturn(Optional.of(workoutFavorite));
+        doAnswer(invocationOnMock -> null).when(workoutFavoriteRepository).deleteById(any());
 
-       ResponseEntity<WorkoutFavorite> response = workoutController.removeFavorite(workoutFavorite);
-       verify(workoutFavoriteRepository, times(1)).findById(any());
-       verify(workoutFavoriteRepository, times(1)).deleteById(any());
-       assertEquals(HttpStatus.OK, response.getStatusCode());
+        ResponseEntity<WorkoutFavorite> response = workoutController.removeFavorite(workoutFavorite);
+        verify(workoutFavoriteRepository, times(1)).findById(any());
+        verify(workoutFavoriteRepository, times(1)).deleteById(any());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
@@ -385,8 +385,8 @@ class WorkoutApiApplicationTests {
     void shouldReturnAListFromGetFavorites() {
         int id = 1;
         workout = new Workout(1L, "test", "Description", 1000L,
-                LocalDate.of(2022,1,1), LocalDate.of(2022,1,1),
-                new Date(),false, 1L);
+                LocalDate.of(2022, 1, 1), LocalDate.of(2022, 1, 1),
+                new Date(), false, 1L);
         List<Workout> workoutList = new ArrayList<>();
         workoutList.add(workout);
 
@@ -402,8 +402,8 @@ class WorkoutApiApplicationTests {
         int user_id = 1;
         int workout_id = 1;
         workout = new Workout(1L, "test", "Description", 1000L,
-                LocalDate.of(2022,1,1), LocalDate.of(2022,1,1),
-                new Date(),false, 1L);
+                LocalDate.of(2022, 1, 1), LocalDate.of(2022, 1, 1),
+                new Date(), false, 1L);
         List<Workout> workoutList = new ArrayList<>();
         workoutList.add(workout);
 
@@ -426,7 +426,6 @@ class WorkoutApiApplicationTests {
         Assertions.assertFalse(response);
     }
 
-
     @Test
     void shouldSucceedWithGetReview() {
         Mockito.when(repository.findReviewsForWorkout(1)).thenReturn(new ArrayList<WorkoutReviewReturnInterface>());
@@ -435,7 +434,8 @@ class WorkoutApiApplicationTests {
 
     @Test
     void shouldSucceedWithInsertReview() {
-        WorkoutReview review = new WorkoutReview((long)1,3,4,5,"Snyggt byggt","fräsig kärra",new Date(1648930522000L));
+        WorkoutReview review = new WorkoutReview((long) 1, 3, 4, 5, "Snyggt byggt", "fräsig kärra",
+                new Date(1648930522000L));
         Mockito.when(repository.save(review)).thenReturn(review);
         assertEquals(HttpStatus.OK, workoutController.insertReviewForWorkout(review).getStatusCode());
     }
@@ -443,7 +443,8 @@ class WorkoutApiApplicationTests {
     @Test
     void shouldSucceedWithUpdateReview() {
 
-        WorkoutReview review = new WorkoutReview((long)1,3,4,5,"Snyggt byggt","fräsig kärra",new Date(1648930522000L));
+        WorkoutReview review = new WorkoutReview((long) 1, 3, 4, 5, "Snyggt byggt", "fräsig kärra",
+                new Date(1648930522000L));
         Mockito.when(repository.save(review)).thenReturn(review);
         Mockito.when(repository.findById(review.getId())).thenReturn(Optional.of(review));
         assertEquals(HttpStatus.OK, workoutController.updateReview(review).getStatusCode());
