@@ -23,12 +23,12 @@ public class SessionReviewExercise implements Serializable{
     @Column(nullable = false, name = "session_review_exercise_id")
     private Long session_review_exercise_id;
 
-
     @Column(nullable = false, name = "session_review_id")
     private Long session_review_id;
 
     @Column(nullable = false, name = "exercise_id")
     private int exercise_id;
+
 
     /**
      * Data constructor for SessionReviewExercise.

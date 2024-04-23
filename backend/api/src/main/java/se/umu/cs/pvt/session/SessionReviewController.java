@@ -29,11 +29,7 @@ public class SessionReviewController {
     public ResponseEntity<List<SessionReview>> all(
     @PathVariable("id") long id) {
         
-        List<SessionReview> results = sessionReviewRepository.findAllBySessionId(id);
-        for (SessionReview sessionReview : results) {
-            List<SessionReviewExercise> exercises = sessionReviewExerciseRepository.findAllByReviewId(sessionReview.getId());
-            sessionReview.setReviewExercises(exercises);
-        }
+        List<SessionReview> results = sessionReviewRepository.findAll();
 
         return new ResponseEntity<>(results, HttpStatus.OK);
     }
@@ -61,6 +57,16 @@ public class SessionReviewController {
         }
         
         sessionReviewExerciseRepository.deleteById(exercise_id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("{review_id}")
+    public ResponseEntity<Object> deleteSessionReview(@PathVariable("review_id") long review_id) {
+        if(sessionReviewRepository.findById(review_id).isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);    
+        }
+        
+        sessionReviewRepository.deleteById(review_id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
