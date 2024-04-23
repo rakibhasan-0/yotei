@@ -25,6 +25,7 @@ import Spinner from "../../components/Common/Spinner/Spinner.jsx"
  *     Verona                 (2022-05-16)
  *     Team Phoenix (Group 1) (2023-05-15)
  *     Team Medusa  (Group 6) (2023-06-01)
+ * 	   Team Durian  (Group 3) (2024-04-23)
  * @since 2023-05-22
  * @version 2.0
  */
@@ -277,6 +278,7 @@ export default function ExerciseEdit() {
 		<Spinner />
 	) : (
 		<>
+			<title>Redigera övning</title>
 			<h1>Redigera övning</h1>
 
 			<InputTextField

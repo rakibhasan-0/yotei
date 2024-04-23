@@ -33,6 +33,7 @@ import { useCookies } from "react-cookie"
  * @author Kraken (Grupp 7), Team Coconut, Team Kiwi
  * @since 2024-04-19
  * @updated 2024-04-22 Kiwi, Fixed so searchbar is not cleared unless component is closed, also so the active tab will show
+ * @updated 2024-04-23 Kiwi, Kihon checkbox is now saved when clicking and redirecting to a technique.
  */
 function AddActivity({ id, setShowActivityInfo }) {
 
@@ -122,8 +123,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 		const filterCookie = cookiesExer["techniques-filter"]
 		if (filterCookie) {
 			setSelectedTechTags(filterCookie.tags)
-			let cachedSort = sortOptions.find(option => filterCookie.sort === option.label)
-			setSort(cachedSort ? cachedSort : sortOptions[0])
+			setKihon(filterCookie.kihon)
 		}
 	}, [])
 
@@ -263,7 +263,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 			}
 			filteredBelts.push(x)
 		})
-		setCookiesExer("techniques-filter", { tags: selectedTechTags, sort: sort.label }, { path: "/" })
+		setCookiesExer("techniques-filter", { tags: selectedTechTags, kihon: kihon,sort: sort.label }, { path: "/" })
 
 		const args = {
 			text: searchTechText,
