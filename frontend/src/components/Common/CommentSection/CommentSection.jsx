@@ -27,9 +27,9 @@ import { AccountContext } from "../../../context"
  *   }
  * ]
  * 
- * @author Chimera (Gruoup 4) & Cyclops(Group 5)
- * @since 2023-05-30
- * @version 3.0
+ * @author Chimera (Gruoup 4) & Cyclops(Group 5) & Durian(Group 3)
+ * @since 2024-04-23
+ * @version 3.1
 */
 
 
@@ -49,7 +49,7 @@ export default function CommentSection({ id, userId, comments, onDelete }) {
 						<p className="m-0 font-italic" style={{color: "#B4B4B4"}}>{comment.date}</p>
 				
 					</div>
-					<p className={`mt-2 ${styles.text}`}>{comment.commentText}</p>
+					<p className={`mt-2 ${styles.text}`} style={{whiteSpace: "pre-line"}}>{comment.commentText}</p>
 					{(isAdmin(accountRole) || userId == comment.userId) && 
 					<div className="d-flex align-items-end flex-column">
 						<Trash
