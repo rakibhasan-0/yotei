@@ -5,6 +5,7 @@ stages:
   - docs
   - deploy_test_server
   - systest
+  - deploy_prod_server
 
 
 test-linter-frontend:
@@ -12,7 +13,7 @@ test-linter-frontend:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
   image: node:20
   tags:
-    - chappie
+    - chappie #Runner-namn
   before_script:
     - cd frontend
     - npm ci --no-progress --quiet --cache .npm --prefer-offline
@@ -31,7 +32,7 @@ test-backend:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
   stage: test
   tags:
-    - chappie
+    - chappie #Runner-namn
   image: maven:3.8.3-openjdk-17
   variables:
     MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/backend/.m2/repository"
@@ -47,7 +48,7 @@ test-frontend:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
   stage: test
   tags:
-    - chappie
+    - chappie #Runner-namn
   image: node:20
   before_script:
     - cd frontend
@@ -66,7 +67,7 @@ build-frontend:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
   stage: build
   tags:
-    - chappie
+    - chappie #Runner-namn
   image: node:20
   before_script:
     - cd frontend
@@ -118,15 +119,24 @@ deploy-test-server:
     - rm -rf /var/www/html/nginx
     - rm -rf /var/www/html/*.yml
 
+    #- För att istället deploya som en feature skulle vi kunna göra såhär (för varje image):
+    #- docker build --no-cache -t pvt2024/gateway:feature -f ./backend/gateway                           # BYGGER MED FEATURE TAG
+    #- docker push -t pvt2024/gateway:feature                                                            # PUSHAR TILL FEATURE
+
     - docker build -t pvt2024/database:latest ./infra/database
+    - docker push pvt2024/database:latest
     - docker build --no-cache -t pvt2024/gateway:latest ./backend/gateway
-    - docker build --no-cache -t pvt2024/api:latest ./backend/api 
+    - docker push pvt2024/gateway:latest
+    - docker build --no-cache -t pvt2024/api:latest ./backend/api
+    - docker push pvt2024/api:latest
     - docker build --no-cache -t pvt2024/frontend:latest ./frontend
+    - docker push pvt2024/frontend:latest
 
     - cp ./docker-compose.yml /var/www/html/
     - cp -r ./nginx /var/www/html/
 
     - cd /var/www/html/
+    #- ändra till typ docker compose -f docker-compose.feature.yml up
     - docker compose up -d
 
 run-systests:
@@ -139,4 +149,32 @@ run-systests:
     - cd infra/systest
     - chmod u+x run-new-systests.sh
     - ./run-new-systests.sh
+    #- if success 
+    #- docker tag pvt2024/database:feature pvt2024/database:latest
+    #- docker push -t pvt2024/database:latest
+    #- else (För alla images)
+    #- docker compose -f docker-compose.feature.yml down
+    #- docker build --no-cache -t pvt2024/gateway:latest ./backend/gateway
+    #- docker compose -f docker-compose.latest.yml up
+
+deploy-prod-server:
+  stage: deploy_prod_server
+  rules:
+    - if: $CI_COMMIT_TAG
+  tags:
+    - system
+  script: #Docker pull + docker build?
+    - ssh pvt@5dv214vt24-prod.cs.umu.se
+    - cd /home/pvt/prod/ 
+    - docker compose down
+    - docker system prune -a -f
+    - docker pull pvt2024/gateway:latest
+    - docker pull pvt2024/api:latest
+    - docker pull pvt2024/database:latest
+    - docker pull pvt2024/frontend:latest
+    - docker compose up -d
+    - exit
+  release: 
+    tag_name: '$CI_COMMIT_TAG'
+    description: '$CI_COMMIT_TAG'
     
