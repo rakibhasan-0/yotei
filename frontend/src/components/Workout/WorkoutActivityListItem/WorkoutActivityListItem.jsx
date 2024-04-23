@@ -9,6 +9,7 @@
  * @author KEBABPIZZA (Group 8)
  * @author Cyclops    (Group 5) (2023-05-09)
  * @author Durian     (Group 3) (2024-04-18)
+ * @author Tomato	  (Group 6) (2024-04-23)
  */
 import React, { useState } from "react"
 import styles from "./WorkoutActivityListItem.module.css"
