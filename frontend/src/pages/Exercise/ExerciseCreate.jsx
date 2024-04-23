@@ -56,6 +56,16 @@ export default function ExerciseCreate() {
 		}
 	})
 
+	const clearExerciseCreateInput = (addBoxChecked, eraseBoxChecked) => {
+		setExerciseCreateInput({
+			name: "",
+			desc: "",
+			time: 0,
+			addBoxChecked: addBoxChecked,
+			eraseBoxChecked: eraseBoxChecked,
+			addedTags: []
+		})
+	}
 
 	const [name, setName] = useState(() => {
 		return exerciseCreateInput.name
@@ -94,7 +104,7 @@ export default function ExerciseCreate() {
 		}
 		else {
 			setSendData(false)
-			exitProdc(tags)
+
 		}
 	}
 
@@ -105,6 +115,12 @@ export default function ExerciseCreate() {
 		}
 		return false
 	})
+
+	useEffect(() => {
+		if (isSubmitted) {
+			exitProdc()
+		}
+	}, [isSubmitted])
 
 	useEffect(() => {
 		storeInputChange("addedTags", addedTags)
@@ -179,6 +195,7 @@ export default function ExerciseCreate() {
 			if (response.ok) {
 				data = await response.json()
 				setErrorMessage("")
+				toast.success("Övningen " + name + " lades till")
 				setIsSubmitted(true)
 				return data.id
 			} else {
@@ -259,7 +276,6 @@ export default function ExerciseCreate() {
 				.then((exId) => addTag(exId))
 				.then((linkedTags) => setTags(linkedTags))
 		}
-	
 	}
 
 	function handleExId(exId) {
@@ -277,19 +293,21 @@ export default function ExerciseCreate() {
 	 * @param linkedTags - result from linking tags
 	 */
 	function exitProdc(linkedTags) {
-		if (linkedTags) {
-			toast.success("Övningen " + name + " lades till")
-			if (addBoxChecked === false) {
-				navigate(-1)
-			} else {
-				if (eraseBoxChecked === true) {
-					setName("")
-					setTime(0)
-					setDesc("")
-					setAddedTags([])
-				}
+		
+		if (exerciseCreateInput.addBoxChecked == false) {
+			navigate(-1)
+			console.log("")
+			clearExerciseCreateInput(exerciseCreateInput.addBoxChecked, exerciseCreateInput.eraseBoxChecked);
+		} else {
+			if (exerciseCreateInput.eraseBoxChecked == true) {
+				setName("")
+				setTime(0)
+				setDesc("")
+				setAddedTags([])
+				clearExerciseCreateInput(exerciseCreateInput.addBoxChecked, exerciseCreateInput.eraseBoxChecked);
 			}
 		}
+		setIsSubmitted(false)
 	}
 
 	/**
@@ -415,7 +433,6 @@ export default function ExerciseCreate() {
 					outlined={true}
 					onClick={() => {
 						setUndoMediaChanges(true)
-						exitProdc()
 					}}
 				>
 					<p>Tillbaka</p>
@@ -424,8 +441,6 @@ export default function ExerciseCreate() {
 					width="100%"
 					onClick={() => {
 						addExerciseAndTags()
-						console.log(tags)
-						exitProdc(tags)
 					}}
 				>
 					<p>Lägg till</p>
