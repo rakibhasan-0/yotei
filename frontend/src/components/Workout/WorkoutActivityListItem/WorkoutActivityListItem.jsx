@@ -29,7 +29,7 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 		activity.exercise ? (
 			<Link to={`/exercise/exercise_page/${activity.exercise.id}`}>{activity.exercise.name}</Link>
 		) : (
-			<Link to={`/technique/technique_page/${activity.technique.id}`}>{activity.technique.name}</Link>
+			<Link to={`/technique/${activity.technique.id}`}>{activity.technique.name}</Link>
 		))
 
 	const createStripes = () => {
