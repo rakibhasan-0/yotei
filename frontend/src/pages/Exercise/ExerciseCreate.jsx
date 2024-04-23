@@ -76,12 +76,7 @@ export default function ExerciseCreate() {
 	const [time, setTime] = useState(() => {
 		return exerciseCreateInput.time
 	})
-	const [addBoxChecked] = useState(() => {
-		return exerciseCreateInput.addBoxChecked
-	})
-	const [eraseBoxChecked] = useState(() => {
-		return exerciseCreateInput.eraseBoxChecked
-	})
+
 	const context = useContext(AccountContext)
 	const [addedTags, setAddedTags] = useState(() => {
 		return exerciseCreateInput.addedTags
@@ -91,7 +86,6 @@ export default function ExerciseCreate() {
 	const [tempId, setTempId] = useState(-1)
 	const [sendData, setSendData] = useState(false)
 	const [undoMediaChanges, setUndoMediaChanges] = useState(false)
-	const [tags, setTags] = useState(false)
 	const [isBlocking, setIsBlocking] = useState(false)
 
 
@@ -136,9 +130,6 @@ export default function ExerciseCreate() {
 		localStorage.setItem("exerciseCreateLocalStorageKey", JSON.stringify(exerciseCreateInput))
 	}, [exerciseCreateInput])
 
-/*		return () => {
-			if (isSubmitted && exerciseCreateInput.eraseBoxChecked) localStorage.removeItem("exerciseCreateLocalStorageKey")
-		}*/
 
 	/**
 	 * Loads an exerciseCreateInput object from local storage or initializes one if non was found.
@@ -273,7 +264,7 @@ export default function ExerciseCreate() {
 				.then((exId) => handleExId(exId))
 				.then((exId) => handleSendData(exId))
 				.then((exId) => addTag(exId))
-				.then((linkedTags) => setTags(linkedTags))
+
 		}
 	}
 
@@ -289,21 +280,20 @@ export default function ExerciseCreate() {
 
 	/**
 	 * Checks if insert worked, if so redirect back to exercise.
-	 * @param linkedTags - result from linking tags
 	 */
-	function exitProdc(linkedTags) {
+	function exitProdc() {
 		
 		if (exerciseCreateInput.addBoxChecked == false) {
 			navigate(-1)
 			console.log("")
-			clearExerciseCreateInput(exerciseCreateInput.addBoxChecked, exerciseCreateInput.eraseBoxChecked);
+			clearExerciseCreateInput(exerciseCreateInput.addBoxChecked, exerciseCreateInput.eraseBoxChecked)
 		} else {
 			if (exerciseCreateInput.eraseBoxChecked == true) {
 				setName("")
 				setTime(0)
 				setDesc("")
 				setAddedTags([])
-				clearExerciseCreateInput(exerciseCreateInput.addBoxChecked, exerciseCreateInput.eraseBoxChecked);
+				clearExerciseCreateInput(exerciseCreateInput.addBoxChecked, exerciseCreateInput.eraseBoxChecked)
 			}
 		}
 		setIsSubmitted(false)
