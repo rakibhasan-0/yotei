@@ -24,11 +24,7 @@ export default function MinutePicker({id, callback, initialValue}) {
 
 	//Update the minute field when the initial value is updated.
 	useEffect(() => {
-		if (initialValue == 0) {
-			setNumber("")
-		} else {
-			setNumber(initialValue)
-		}
+		setNumber(initialValue)
 	}, [initialValue])
 
 	return (
