@@ -104,7 +104,6 @@ export default function ExerciseCreate() {
 		}
 		else {
 			setSendData(false)
-
 		}
 	}
 
@@ -387,7 +386,7 @@ export default function ExerciseCreate() {
 
 			<div className={styles.timeSelector} >
 				<MinutePicker
-					initialValue={exerciseCreateInput.time}
+					initialValue={time}
 					callback={timeCallback}
 				/>
 			</div>

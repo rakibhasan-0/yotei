@@ -1,4 +1,5 @@
 import React, {useState}from "react"
+import { useEffect } from "react"
 import styles from "./MinutePicker.module.css"
 /**
  * Component for reading in minutes from user. The input area will only read in
@@ -14,12 +15,22 @@ import styles from "./MinutePicker.module.css"
  *		<MinutePicker id="10" updateTime={updateTime1} initialValue={5}></MinutePicker>
  *
  *
- * @author Team Minotaur, Squad Phoenix
- * @version 2.0
- * @since 2023-05-03
+ * @author Team Minotaur, Squad Phoenix, Team Coconut
+ * @version 3.0
+ * @since 2024-04-24
  */
 export default function MinutePicker({id, callback, initialValue}) {
 	const [number,setNumber] = useState( initialValue == null ? 0 : initialValue)
+
+	//Update the minute field when the initial value is updated.
+	useEffect(() => {
+		if (initialValue == 0) {
+			setNumber("")
+		} else {
+			setNumber(initialValue)
+		}
+	}, [initialValue])
+
 	return (
 		<div className={styles.minutePicker}>
 			<input
