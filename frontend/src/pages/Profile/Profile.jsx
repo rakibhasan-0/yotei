@@ -15,9 +15,9 @@ import Spinner from "../../components/Common/Spinner/Spinner"
 
 
 /**
- * @author Chimera, Team Mango (Group 4)
- * @since 2024-04-22
- * @version 2.0
+ * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1)
+ * @since 2024-04-23
+ * @version 3.0
  * @returns a page for managing the user's account
  */
 export default function Profile() {
