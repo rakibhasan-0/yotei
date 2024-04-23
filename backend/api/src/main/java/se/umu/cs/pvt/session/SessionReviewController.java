@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -45,6 +46,10 @@ public class SessionReviewController {
 
     @PostMapping("{review_id}/exercise")
     public ResponseEntity<Object> createSessionReviewExercise(@PathVariable("review_id") long review_id, @RequestBody SessionReviewExercise exercise) {
+        if(sessionReviewRepository.findById(review_id).isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
         exercise.setSession_review_id(review_id);
         sessionReviewExerciseRepository.save(exercise);
         return new ResponseEntity<>(exercise, HttpStatus.OK);
@@ -67,6 +72,15 @@ public class SessionReviewController {
         }
         
         sessionReviewRepository.deleteById(review_id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @PutMapping("")
+    public ResponseEntity<Object> updateSessionReview( @RequestBody SessionReview new_review) {
+
+        sessionReviewRepository.save(new_review);
+    
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
