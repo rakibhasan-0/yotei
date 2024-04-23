@@ -121,8 +121,6 @@ export default function WorkoutFormComponent({ callback, state }) {
 		}
 			
 		if(shouldClose) {
-			console.log("close")
-			//tar inte alltid bort serachfield eller taggar
 			workoutCreateInfoDispatch({
 				type: WORKOUT_CREATE_TYPES.CLEAR_ADDED_ACTIVITIES
 			})
