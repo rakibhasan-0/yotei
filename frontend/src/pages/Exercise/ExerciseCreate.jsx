@@ -237,7 +237,7 @@ export default function ExerciseCreate() {
 
 	return (
 		<>
-		<title>Skapa övning</title>
+			<title>Skapa övning</title>
 			<h1>Skapa övning</h1>
 
 			<div style={{ height: "1rem" }} />
