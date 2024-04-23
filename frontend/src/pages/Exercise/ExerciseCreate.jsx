@@ -31,7 +31,7 @@ import { unstable_useBlocker as useBlocker } from "react-router"
  *     Verona (2022-05-04)
  *     Phoenix (Group 1) (2023-05-04)
  *     Medusa (Group 6) (2023-06-01)
- *     Coconut (Group 7) (2024-04-19)
+ *     Coconut (Group 7) (2024-04-22)
  *     Team Mango (Group 4) (2024-04-22)
  * 
  * @since 2024-04-22
