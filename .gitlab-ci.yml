@@ -164,7 +164,7 @@ deploy-prod-server:
   tags:
     - system
   script: #Docker pull + docker build?
-    - ssh pvt@5dv214vt24-prod.cs.umu.se
+    - ssh -tt pvt@5dv214vt24-prod.cs.umu.se
     - cd /home/pvt/prod/ 
     - docker compose down
     - docker system prune -a -f
