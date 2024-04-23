@@ -118,8 +118,6 @@ export default function WorkoutFormComponent({ callback, state }) {
 		} else if (workoutCreateInfo.popupState.types.editActivityPopup) {
 			shouldClose = false
 			shouldClose = !checkIfActivityInfoPoupChangesMade(workoutCreateInfo)
-			console.log(shouldClose)
-			
 		} /*else if (workoutCreateInfo.popupState.types.chooseActivityPopup) {
 			shouldClose = workoutCreateInfo.checkedActivities.length === 0
 		} */ else if (workoutCreateInfo.popupState.types.freeTextPopup) {

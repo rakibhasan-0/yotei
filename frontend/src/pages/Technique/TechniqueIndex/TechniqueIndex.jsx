@@ -168,7 +168,6 @@ export default function TechniqueIndex() {
 				{loading ? <Spinner /> : <InfiniteScrollComponent>
 					{techniques?.map((technique, key) =>
 						<TechniqueCard
-
 							key={key}
 							technique={technique}
 							checkBox={false}>

@@ -15,7 +15,7 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
  * As well as checkboxes, indicating which day of the week to
  * include.
  *
- * @author Calzone (2022-05-13), Hawaii (2022-05-13), Squad 2 Griffin
+ * @author Calzone (2022-05-13), Hawaii (2022-05-13), Squad 2 Griffin, Team Mango (2024-04-22)
  */
 
 export default function PlanCreate() {
@@ -383,9 +383,19 @@ export default function PlanCreate() {
 		if (!(fieldCheck.startDate && fieldCheck.endDate)) {
 			setErrorToast("Vänligen välj start- och slutdatum.")
 			res = false
-		} else if (planData.endDate < planData.startDate) {
+		} 
+		else if (planData.endDate < planData.startDate) {
 			setErrorToast("Det valda startdatumet är senare än det valda slutdatumet.")
 			res = false
+		}
+
+		for (let i = 0; i < 7; i++) {
+			const day = weekdays[i]
+			if (day.value && day.time == "") {
+				setErrorToast("Du måste ge tid till varje aktiv dag")
+				res = false
+				break
+			}
 		}
 
 		return res
