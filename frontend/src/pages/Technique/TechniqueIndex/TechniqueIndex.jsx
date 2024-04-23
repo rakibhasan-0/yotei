@@ -20,7 +20,7 @@ import { Link, useLocation, useNavigate} from "react-router-dom"
  * The technique index page.
  * Fetches and displays the techniques.
  * 
- * @author Medusa, Team Tomato (group 6)
+ * @author Medusa, Team Tomato (group 6), Team Durian (Group 3) (2024-04-23)
  * @version 2.0
  * @since 2024-04-18
  */
@@ -138,6 +138,7 @@ export default function TechniqueIndex() {
 				<CreateTechnique setIsOpen={setShowPopup} />
 			</Popup>
 
+			<title>Tekniker</title>
 			<h1>Tekniker</h1>
 
 			<div>

@@ -15,7 +15,7 @@ import { setSuccess, setError } from "../../utils.js"
 /**
  * This is the page for editing a saved workout.
  * 
- * @author Team Minotaur, Team Kiwi
+ * @author Team Minotaur, Team Kiwi, Team Durian (Group 3) (2024-04-23)
  * @version 2.0
  * @since 2023-05-24
  * @updated 2024-04-23 Team Kiwi, Removed blockers and Pop-up for redirecting to technique descriptions
@@ -176,6 +176,7 @@ const WorkoutEdit = () => {
 
 	return (
 		<WorkoutCreateContext.Provider value={{workoutCreateInfo, workoutCreateInfoDispatch}} >
+			<title>Redigera pass</title>
 			<h1 className={styles.title}>Redigera pass</h1>
 			<WorkoutFormComponent callback={submitHandler} />	
 		</WorkoutCreateContext.Provider>

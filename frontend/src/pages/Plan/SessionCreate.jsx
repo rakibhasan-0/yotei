@@ -15,7 +15,7 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 /**
  * A component for creating a session.
  * 
- * @author Chimera (dv21aag, c20lln)
+ * @author Chimera (dv21aag, c20lln), Team Durian (Group 3) (2024-04-23)
  * @since 2023-05-03
  */
 export default function SessionCreate() {
@@ -123,6 +123,7 @@ export default function SessionCreate() {
 				setShowPopup={setGoBackPopup}
 				popupText={"Är du säker på att du vill lämna sidan? Dina ändringar kommer inte att sparas."}
 			/>
+			<title>Skapa tillfälle</title>
 			<h1 style={{ marginTop: "2rem" }}>Tillfälle</h1>
 			<Divider option={"h2_left"} title={"Grupp"} />
 			<Dropdown errorMessage={groupError} id={"session-dropdown"} text={group?.name || "Grupp"} centered={true}>

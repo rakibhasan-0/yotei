@@ -49,6 +49,7 @@ export default function GroupIndex() {
 
 	return (	
 		<div className={style.container}>	
+			<title>Grupper</title>
 			<h1>Grupper</h1>
 			<SearchBar id="searchbar-groups" placeholder="Sök efter grupp" text={searchText} onChange={setSearchText} /> 
 			{loading ? <Spinner /> : (

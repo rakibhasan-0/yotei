@@ -15,7 +15,7 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
  * As well as checkboxes, indicating which day of the week to
  * include.
  *
- * @author Calzone (2022-05-13), Hawaii (2022-05-13), Squad 2 Griffin, Team Mango (2024-04-22)
+ * @author Calzone (2022-05-13), Hawaii (2022-05-13), Squad 2 Griffin, Team Mango (2024-04-22), Team Durian (Group 3) (2024-04-23)
  */
 
 export default function PlanCreate() {
@@ -412,6 +412,7 @@ export default function PlanCreate() {
 		<div className={styles.plan_create}>
 			<div className="overflow-visible">
 				<div>
+					<title>Skapa grupp</title>
 					<h1 className={styles.title}>Skapa grupp</h1>
 
 					{/*Form to get input from user*/}
