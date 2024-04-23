@@ -162,7 +162,7 @@ deploy-prod-server:
   rules:
     - if: $CI_COMMIT_TAG
   tags:
-    - chappie
+    - system
   script: #Docker pull + docker build?
     - ssh pvt@5dv214vt24-prod.cs.umu.se
     - cd /home/pvt/prod/ 
