@@ -11,6 +11,8 @@ import InputTextFieldBorderLabel from "../../components/Common/InputTextFieldBor
 import { logOut } from "/src/utils"
 import useMap from "../../hooks/useMap"
 import Divider from "../../components/Common/Divider/Divider"
+import Spinner from "../../components/Common/Spinner/Spinner"
+
 
 /**
  * @author Chimera, Team Mango (Group 4)
@@ -30,7 +32,7 @@ export default function Profile() {
 	const [verifyNewPassword, setVerifyNewPassword] = useState("")
 	const [wrongPassword, setWrongPassword] = useState()
 	const [missMatchPassword, setMissMatchPassword] = useState()
-
+	const [loading, setIsLoading] = useState(true)
 	const [newUsername, setNewUsername] = useState("")
 	const [UsernamePassword, setUsernamePassword] = useState("")
 	const [verifyUsernamePassword, setVerifyUsernamePassword] = useState("")
@@ -64,6 +66,7 @@ export default function Profile() {
 				return setErrorToast("Kunde inte hämta pass!")
 			}
 			setWorkouts(list.results)
+			setIsLoading(false)
 		})
 	}, [searchText, token, userId, cache, cacheActions])
 
@@ -118,7 +121,7 @@ export default function Profile() {
 					text={searchText} 
 					onChange={setSearchText}
 				/>
-				<WorkoutList list={workouts?.filter(w => w.favourite)} />
+				{loading ? <Spinner /> : <WorkoutList list={workouts?.filter(w => w.favourite)} />}
 			</Tab>
 			<Tab eventKey={"MyWorkouts"} title={"Mina Pass"} className={style.tab}>
 				<SearchBar 
@@ -127,7 +130,7 @@ export default function Profile() {
 					text={searchText} 
 					onChange={setSearchText}
 				/>
-				<WorkoutList list={workouts?.filter(w => w.author === userId)} />
+				{loading ? <Spinner /> :<WorkoutList list={workouts?.filter(w => w.author === userId)} />}
 			</Tab>
 			<Tab eventKey={"Settings"} title={"Inställningar"} className={style.tab}>
 				<div className={style.divider}><Divider option={"h2_center"} title={"Lösenord"} /></div>
