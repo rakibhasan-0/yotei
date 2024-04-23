@@ -15,9 +15,9 @@ import { AccountContext } from "../../../context"
  * Example usage:
  * 		<Navbar testId="test-id"/>
  *
- * @author Team Medusa & Team Cyclops & Team Tomato
- * @version 2.0
- * @since 2024-04-18
+ * @author Team Medusa & Team Cyclops & Team Tomato & Team Coconut
+ * @version 3.0
+ * @since 2024-04-24
  */
 function Navbar({ testId }) {
 
@@ -38,7 +38,7 @@ function Navbar({ testId }) {
 	return (
 		<nav data-testid={testId} className={styles.commonNavbar}>
 			<HamburgerIcon role="button" className={styles.commonNavbarIcon} onClick={() => {setOpen(true)}}/>
-			<img src="/ubk-logga.jpg" className={styles.budoLogo} />
+			<img src="/ubk-logga.jpg" className={styles.budoLogo} onClick={() => navigateAndClose("/")} />
 
 			<div className={`${styles.commonNavbarSidebar} p-4  ${open ? styles.open : ""}`}>
 

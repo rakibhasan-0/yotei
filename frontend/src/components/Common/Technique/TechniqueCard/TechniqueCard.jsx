@@ -1,6 +1,6 @@
 import { ChevronDown } from "react-bootstrap-icons"
 import { Link, useNavigate } from "react-router-dom"
-import "./TechniqueCard.module.css"
+import styles from "./TechniqueCard.module.css"
 
 /**
  * Technique card component.
@@ -12,8 +12,11 @@ import "./TechniqueCard.module.css"
  *		id: Id used for testing.
  * 
  * @author Medusa
- * @version 1.0
+ * @version 2.0
  * @since 2023-05-15
+ * 
+ * Converted to css module 2024-04-19, Hannes (group 1)
+ * 
  */
 function TechniqueCard({ technique, checkBox, id}) {
 	const navigate = useNavigate()
@@ -25,21 +28,21 @@ function TechniqueCard({ technique, checkBox, id}) {
 	}
 	
 	return (
-		<div className="technique-card" id={id}>
+		<div className={styles["technique-card"]} id={id}>
 			{constructColor(technique)}
 
-			<div className="technique-info-container">
+			<div className={styles["technique-info-container"]}>
 				{checkBox ? (
-					<div className="technique-checkbox-container">{checkBox}</div>
+					<div className={styles["technique-checkbox-container"]}>{checkBox}</div>
 				) : null}
 
-				<div className="technique-name-container">
+				<div className={styles["technique-name-container"]}>
 					<Link onClick={handleClick} >
-						<h5 className="technique-name">{technique.name}</h5>
+						<h5 className={styles["technique-name"]}>{technique.name}</h5>
 					</Link>
 				</div>
 
-				<div className="technique-arrow-container">
+				<div className={styles["technique-arrow-container"]}>
 					<Link to={"/technique/" + technique.techniqueID}>
 						<ChevronDown />
 					</Link>
@@ -52,7 +55,7 @@ function TechniqueCard({ technique, checkBox, id}) {
 
 function constructColor(technique) {
 	return (
-		<div className="technique-card-belt-color-container">
+		<div className={styles["technique-card-belt-color-container"]}>
 			{
 				technique.beltColors !== undefined ?
 					technique.beltColors.length > 0 ?  	
@@ -77,7 +80,7 @@ function constructColor(technique) {
 function constructDefaultBelt(color) {
 	return (
 		<div
-			className={"technique-card-belt-color"}
+			className={styles["technique-card-belt-color"]}
 			style={{background: `#${color}`}}
 		/>
 	)
@@ -89,7 +92,7 @@ function constructAdultBelt(belt, beltLength, index) {
 		return (
 			<div
 				key={index}
-				className={["technique-card-belt-color", belt.belt_name === "Vitt" ? "technique-card-belt-border" : ""].join(" ")}
+				className={styles[["technique-card-belt-color", belt.belt_name === "Vitt" ? "technique-card-belt-border" : ""].join(" ")]}
 				style={
 					{
 						background: `#${belt.belt_color}`,
@@ -105,7 +108,7 @@ function constructAdultBelt(belt, beltLength, index) {
 				{ [...Array(num)].map((i) =>
 					<div
 						key={`${index}-${i}-dan`}
-						className={"technique-card-belt-color"}
+						className={styles["technique-card-belt-color"]}
 						style={ { background: "gold", height: `${15 / beltLength}%` } }
 					> 
 					</div>
@@ -118,7 +121,7 @@ function constructAdultBelt(belt, beltLength, index) {
 	return (
 		<div
 			key={index}
-			className={["technique-card-belt-color", belt.belt_name === "Vitt" ? "technique-card-belt-border" : ""].join(" ")}
+			className={styles[["technique-card-belt-color", belt.belt_name === "Vitt" ? "technique-card-belt-border" : ""].join(" ")]}
 			style={
 				{
 					background: `#${belt.belt_color}`,
@@ -134,7 +137,7 @@ function constructChildBelt(belt, beltLength, index) {
 	return (
 		<div 
 			key={index}
-			className={["technique-card-belt-color", "technique-card-belt-border"].join(" ")}
+			className={styles[["technique-card-belt-color", "technique-card-belt-border"]].join(" ")}
 			style={
 				{
 					// background: `radial-gradient(circle, rgba(0,0,0,1) 20%, rgba(0,0,0,1) 70%, rgba(255,255,255,1) 70%`, 

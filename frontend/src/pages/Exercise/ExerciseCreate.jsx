@@ -32,9 +32,10 @@ import { unstable_useBlocker as useBlocker } from "react-router"
  *     Phoenix (Group 1) (2023-05-04)
  *     Medusa (Group 6) (2023-06-01)
  *     Coconut (Group 7) (2024-04-19)
- *
- * @since 2023-05-22
- * @version 2.0
+ *     Team Mango (Group 4) (2024-04-22)
+ * 
+ * @since 2024-04-22
+ * @version 3.0
  */
 export default function ExerciseCreate() {
 
@@ -353,6 +354,7 @@ export default function ExerciseCreate() {
 				}}
 				required={true}
 				type="text"
+				id = "exercise-description-input"
 				errorDisabled={true}
 			/>
 

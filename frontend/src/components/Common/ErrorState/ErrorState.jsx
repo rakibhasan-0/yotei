@@ -2,7 +2,7 @@ import Button from "../Button/Button"
 
 import { EmojiFrown } from "react-bootstrap-icons"
 
-import "./ErrorState.module.css"
+import styles from "./ErrorState.module.css"
 /**
  * A placeholder for content when an error has occured.
  * 
@@ -25,14 +25,14 @@ import "./ErrorState.module.css"
  */
 function ErrorState({ message, onBack, onRecover, id }) {
 	return (
-		<div id={id ? id : "noid"} className={"error-state-container"}>
-			<div className="error-state-icon-container">
+		<div id={id ? id : "noid"} className={styles["error-state-container"]}>
+			<div className={styles["error-state-icon-container"]}>
 				<EmojiFrown size="80" color="var(--red-primary)" />
 			</div>
 			<h1>Hoppsan!</h1>
 			<h2>Det verkar som att något gick fel</h2>
 			<h2 style={{color: "var(--red-primary)", marginTop: "2rem"}}>{message}</h2>
-			<div className="error-state-button-container">
+			<div className={styles["error-state-button-container"]}>
 				<Button onClick={onBack} outlined={true}>
 					<p>Tillbaka</p>
 				</Button>

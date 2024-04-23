@@ -179,7 +179,8 @@ export default function SessionCreate() {
 					time,
 					workout
 				},
-				fromSession: true
+				fromSession: true,
+				fromCreate: true
 			}
 		})
 	}
