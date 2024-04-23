@@ -91,11 +91,8 @@ export default function WorkoutFormComponent({ callback, state }) {
 	 * This function is called when the "go back" button is pressed.
 	 * Checks if any changes are made to the workout-form, if so a confirm-popup is shown.
 	 * If no changes to the workout are made, then it navigates back.
-	 *
 	 */
 	function handleGoBack() {
-<<<<<<< HEAD
-
 		setShowPopup(true)
 	}
 
@@ -105,10 +102,6 @@ export default function WorkoutFormComponent({ callback, state }) {
 
 		if (state?.fromSession && !state?.fromCreate) {
 			navigate(`/session/edit/${state.session.sessionId}`, { replace: true, state })
-=======
-		if (state?.fromSession && !state?.fromCreate) {
-			return navigate(`/session/edit/${state.session.sessionId}`, { replace: true, state })
->>>>>>> main
 		} else if(state?.fromCreate) {
 			return navigate("/session/create", { replace: true, state })
 		}
@@ -123,13 +116,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 		} else if (workoutCreateInfo.popupState.types.editActivityPopup) {
 			shouldClose = false
 			shouldClose = !checkIfActivityInfoPoupChangesMade(workoutCreateInfo)
-<<<<<<< HEAD
-		} /*else if (workoutCreateInfo.popupState.types.chooseActivityPopup) {
-=======
-		} else if (workoutCreateInfo.popupState.types.chooseActivityPopup) {
->>>>>>> main
-			shouldClose = workoutCreateInfo.checkedActivities.length === 0
-		} */ else if (workoutCreateInfo.popupState.types.freeTextPopup) {
+		} else if (workoutCreateInfo.popupState.types.freeTextPopup) {
 			shouldClose = !workoutCreateInfo.addedActivities.some(activity => activity.name.length > 0)
 		}
 			
