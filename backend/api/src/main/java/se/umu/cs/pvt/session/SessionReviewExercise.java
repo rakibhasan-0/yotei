@@ -4,20 +4,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * Session.java - Model for session data that is used in the database. 
- * AddListInput.java - Is depricated, only used in tests.
- * DateAndTime.java - Should be depricated, is only used in tests and other depricated methods.
- * SessionController.java - Class for handling requests to the session api.
- * SessionRepositiory.java - JpaRepository for the session api. 
- * SessionTimeConverter.java - Converts time from Time to LocalTime but is never used.
- * SessionUpdateInfo.java - Projection interface for information used when updating a session.
- * 
- * @author Granatäpple
+ * SessionReviewExercise - Entity class for the session_review_exercises table
+ * @author Team granatäpple (c21man)
  */
 @Entity
 @Table(name = "session_review_exercises")
-public class SessionReviewExercise implements Serializable{
-
+public class SessionReviewExercise implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "session_review_exercise_id")
@@ -28,7 +20,6 @@ public class SessionReviewExercise implements Serializable{
 
     @Column(nullable = false, name = "exercise_id")
     private int exercise_id;
-
 
     /**
      * Data constructor for SessionReviewExercise.
@@ -73,6 +64,4 @@ public class SessionReviewExercise implements Serializable{
     public void setExercise_id(int exercise_id) {
         this.exercise_id = exercise_id;
     }
-
-
 }

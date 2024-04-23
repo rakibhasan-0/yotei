@@ -9,20 +9,12 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Session.java - Model for session data that is used in the database. 
- * AddListInput.java - Is depricated, only used in tests.
- * DateAndTime.java - Should be depricated, is only used in tests and other depricated methods.
- * SessionController.java - Class for handling requests to the session api.
- * SessionRepositiory.java - JpaRepository for the session api. 
- * SessionTimeConverter.java - Converts time from Time to LocalTime but is never used.
- * SessionUpdateInfo.java - Projection interface for information used when updating a session.
- * 
- * @author Granatäpple
+ * SessionReview - Entity class for the session_review table
+ * @author Team granatäpple (c21man)
  */
 @Entity
 @Table(name = "session_review")
-public class SessionReview implements Serializable{
-
+public class SessionReview implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "review_id")
@@ -70,6 +62,7 @@ public class SessionReview implements Serializable{
      * @param positiveComment Positive feedback of a session
      * @param negativeComment Negative feedback of a session
      * @param date Date of when the review was made
+     * @param exercises List of completed exercises
      */
     public SessionReview(Long id, Long session_id, int userId, int rating, String positiveComment, String negativeComment, Date date, Set<SessionReviewExercise> exercises) {
         this.id = id;
