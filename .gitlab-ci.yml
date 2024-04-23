@@ -83,8 +83,6 @@ build-frontend:
       
 generate-api-docs:
   stage: docs
-  tags:
-  - chappie #Runner-namn
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
   tags:
@@ -95,8 +93,6 @@ generate-api-docs:
 
 generate-javadocs:
   stage: docs
-  tags:
-  - chappie #Runner-namn
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
   tags:
