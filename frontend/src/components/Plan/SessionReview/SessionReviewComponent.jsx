@@ -9,6 +9,7 @@ import Divider from "../../Common/Divider/Divider"
 import CheckBox from "../../Common/CheckBox/CheckBox"
 import styles from "./SessionReviewComponent.module.css"
 import {HTTP_STATUS_CODES, setError, setSuccess} from "../../../utils"
+import { AccountContext } from "../../../context"
 
 /**
  * Review component for an individual session. 
@@ -21,16 +22,43 @@ import {HTTP_STATUS_CODES, setError, setSuccess} from "../../../utils"
  */
 
 export default function Review({isOpen, setIsOpen, session_id}) {
-    const[initialRating, loadRating] = useState(0) //Loaded rating from the database
-    const[initialDoneList, loadDone] = useState([]) //Loaded information about performed activities for this session
-    const[initialPositiveComment, loadPositiveComment] = useState("") //Loaded comment for this session
-    const[initialNegativeComment, loadNegativeComment] = useState("");
+
+	const [sessionData, setWorkoutData] = useState(null)
 
     const[rating, setRating] = useState(0)
     const[doneList, setDone] = useState([])
     const[positiveComment, setPositiveComment] = useState("")
     const[negativeComment, setNegativeComment] = useState("");
 
+	const [loading, setLoading] = useState(true)
+
+	const context = useContext(AccountContext)
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const requestOptions = {
+				headers: {"Content-type": "application/json", token: context.token}
+			}
+
+			const response = await fetch(`/api/workouts/detail/${workoutId}`, requestOptions).catch(() => {
+				setErrorStateMsg("Serverfel: Kunde inte ansluta till servern.")
+				setLoading(false)
+				return
+			})
+
+			if(response.status != HTTP_STATUS_CODES.OK){
+				setErrorStateMsg("Pass med ID '" + workoutId + "' existerar inte. Felkod: " + response.status)
+				setLoading(false)
+			} else {
+				const json = await response.json()
+				setWorkoutData(() => json)
+				setLoading(false)
+				setErrorStateMsg("")
+			}
+		}
+
+		fetchData()
+	}, [])
 
 
     function handleChangePositive(event){
@@ -94,7 +122,7 @@ export default function Review({isOpen, setIsOpen, session_id}) {
 		}
 
 		const data = await response.json()
-		loadRating(data)
+		setRating(data['rating'])
 	}
 
     async function fetchDoneList() {
@@ -109,10 +137,10 @@ export default function Review({isOpen, setIsOpen, session_id}) {
 		}
 
 		const data = await response.json()
-		loadDone(data)
+		setDone(data)
     }
 
-    async function fetchComment() {
+    async function fetchPositiveComment() {
         const response = await fetch("/api/sessions/" + session_id + "/review/all").catch(() => {
             setError("Serverfel: Kunde inte hämta kommentar för det valda tillfället.")
 			return
@@ -124,7 +152,22 @@ export default function Review({isOpen, setIsOpen, session_id}) {
 		}
 
         const data = await response.json()
-		loadComment(data)
+		setPositiveComment(data)
+    }
+
+	async function fetchNegativeComment() {
+        const response = await fetch("/api/sessions/" + session_id + "/review/all").catch(() => {
+            setError("Serverfel: Kunde inte hämta kommentar för det valda tillfället.")
+			return
+        })
+
+        if(response.status != HTTP_STATUS_CODES.OK) {
+			setError("Serverfel: Något gick snett! Felkod: " + response.status)
+			return
+		}
+
+        const data = await response.json()
+		setNegativeComment(data)
     }
 
     return (
@@ -151,15 +194,19 @@ export default function Review({isOpen, setIsOpen, session_id}) {
 				</div>
 
                 <div className = {styles["activity_checker"]}>
-                    <ul>
-                        <li className={styles["check_box_li"]}>
-                            {/* Check box */}
-                            <CheckBox id={"CheckBox"} onClick={()=> {}} checked={true}/>
-                        </li>
-                        <li className={styles["activity_text_li"]}>
-                            {"Aktivitet"}
-                        </li>
-                    </ul>
+				<ul>
+					{sessionData.map((item, index) => (
+						<React.Fragment key={index}>
+						<li className={styles["check_box_li"]}>
+							{/* Check box */}
+							<CheckBox id={`CheckBox-${index}`} onClick={() => {}} checked={true} />
+						</li>
+						<li className={styles["activity_text_li"]}>
+							{item}
+						</li>
+						</React.Fragment>
+					))}
+					</ul>
                 </div>
 
                 <div className="w-100">
