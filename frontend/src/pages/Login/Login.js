@@ -107,7 +107,7 @@ export default function Login() {
 			<img style={{ maxWidth: 300 }} src="/ubk-logga.jpg" alt="This is the logo for UBK" className="center mb-5" />
 			<div style={{ width: 320 }}>
 				<div>
-				<title>Logga in</title>
+					<title>Logga in</title>
 					<InputTextFieldBorderLabel 
 						id={"username-input"} 
 						type={"user"} 
