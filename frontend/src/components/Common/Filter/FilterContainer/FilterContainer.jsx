@@ -33,7 +33,7 @@ function FilterContainer({ id, title ,numFilters, children}) {
 		setToggle(!buttonToggle)
 		setActive(!active)
 	}
-	console.log(numFilters)
+
 	return (
 		<div id={id}>
 			<div className={style.buttonGroup}>

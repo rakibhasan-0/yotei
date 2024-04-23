@@ -384,7 +384,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 								setSuggestedTags={setSuggestedExerTags}
 							/>
 						</div>
-						<FilterContainer id="ei-filter" title="Sortering">
+						<FilterContainer id="ei-filter" title="Sortering" numFilters={0}>
 							<Sorter onSortChange={setSort} id="ei-sort" selected={sort} options={sortOptions} />
 						</FilterContainer>
 						{(exercises.length === 0 && fetchedExer) ?
