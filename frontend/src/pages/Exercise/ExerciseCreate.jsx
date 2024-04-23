@@ -32,6 +32,7 @@ import { unstable_useBlocker as useBlocker } from "react-router"
  *     Phoenix (Group 1) (2023-05-04)
  *     Medusa (Group 6) (2023-06-01)
  *     Team Mango (Group 4) (2024-04-22)
+ *	   Tomato (Group 6) (2024-04-23)
  * 
  * @since 2024-04-22
  * @version 3.0
@@ -311,6 +312,7 @@ export default function ExerciseCreate() {
 					onClick={() => {
 						setUndoMediaChanges(true) 
 						exitProdc()
+						navigate(-1)
 					}}
 				>
 					<p>Tillbaka</p>
