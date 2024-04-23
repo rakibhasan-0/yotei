@@ -25,13 +25,12 @@ import AddTagPopup from "./AddTagPopup"
  * @version 1.0
  * @since 2023-05-04
  */
-export default function TagInput({id, addedTags, setAddedTags, isNested, onTagChange}) {
+export default function TagInput({id, addedTags, setAddedTags, isNested}) {
 	const [showPopup, setShowPopup] = useState(false)
 	const handleRemoveTag = (tag) => {
 		const copy = [...addedTags]
 		const newAdded = copy.filter(tagInCopy => tagInCopy.id !== tag.id)
 		setAddedTags(newAdded)
-		if(onTagChange) onTagChange(newAdded)
 	}
 
 	return (

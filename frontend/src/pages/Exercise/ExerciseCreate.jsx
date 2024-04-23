@@ -56,6 +56,7 @@ export default function ExerciseCreate() {
 		}
 	})
 
+
 	const [name, setName] = useState(() => {
 		return exerciseCreateInput.name
 	})
@@ -106,6 +107,10 @@ export default function ExerciseCreate() {
 	})
 
 	useEffect(() => {
+		storeInputChange("addedTags", addedTags)
+	}, [addedTags])
+
+	useEffect(() => {
 		setIsBlocking(name != "" || desc != "")
 	}, [name, desc])
 
@@ -114,10 +119,11 @@ export default function ExerciseCreate() {
 	 */
 	useEffect(() => {
 		localStorage.setItem("exerciseCreateLocalStorageKey", JSON.stringify(exerciseCreateInput))
-		return () => {
+	}, [exerciseCreateInput])
+
+/*		return () => {
 			if (isSubmitted && exerciseCreateInput.eraseBoxChecked) localStorage.removeItem("exerciseCreateLocalStorageKey")
-		}
-	}, [exerciseCreateInput, isSubmitted])
+		}*/
 
 	/**
 	 * Loads an exerciseCreateInput object from local storage or initializes one if non was found.
@@ -253,6 +259,7 @@ export default function ExerciseCreate() {
 				.then((exId) => addTag(exId))
 				.then((linkedTags) => setTags(linkedTags))
 		}
+	
 	}
 
 	function handleExId(exId) {
@@ -370,9 +377,8 @@ export default function ExerciseCreate() {
 			<Divider option={"h1_left"} title={"Taggar"} />
 
 			<TagInput
-				addedTags={exerciseCreateInput.addedTags}
+				addedTags={addedTags}
 				setAddedTags={setAddedTags}
-				onTagChange={(newTags) => storeInputChange("addedTags", newTags)}
 			/>
 
 			<Divider option={"h1_left"} title={"Media"} />
