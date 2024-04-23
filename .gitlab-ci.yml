@@ -180,16 +180,15 @@ deploy-prod-server:
   tags:
     - system
   script: #Docker pull + docker build?
-    - ssh pvt@5dv214vt24-prod.cs.umu.se
-    - cd /home/pvt/prod/ 
-    - docker compose down
-    - docker system prune -a -f
-    - docker pull pvt2024/gateway:latest
-    - docker pull pvt2024/api:latest
-    - docker pull pvt2024/database:latest
-    - docker pull pvt2024/frontend:latest
-    - docker compose up -d
-    - exit
+    - ssh pvt@5dv214vt24-prod.cs.umu.se 'cd /home/pvt/prod/ && ./build.sh'
+  #  - cd /home/pvt/prod/ 
+   # - docker compose down
+    #- docker system prune -a -f
+    #- docker pull pvt2024/gateway:latest
+    #- docker pull pvt2024/api:latest
+    #- docker pull pvt2024/database:latest
+    #- docker pull pvt2024/frontend:latest
+    #- docker compose up -d
   release: 
     tag_name: '$CI_COMMIT_TAG'
     description: '$CI_COMMIT_TAG'
