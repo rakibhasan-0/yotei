@@ -124,13 +124,13 @@ deploy-test-server:
     #- docker push -t pvt2024/gateway:feature                                                            # PUSHAR TILL FEATURE
 
     - docker build -t pvt2024/database:latest ./infra/database
-    - docker push -t pvt2024/database:latest
+    - docker push pvt2024/database:latest
     - docker build --no-cache -t pvt2024/gateway:latest ./backend/gateway
-    - docker push -t pvt2024/gateway:latest
+    - docker push pvt2024/gateway:latest
     - docker build --no-cache -t pvt2024/api:latest ./backend/api
-    - docker push -t pvt2024/api:latest
+    - docker push pvt2024/api:latest
     - docker build --no-cache -t pvt2024/frontend:latest ./frontend
-    - docker push -t pvt2024/frontend:latest
+    - docker push pvt2024/frontend:latest
 
     - cp ./docker-compose.yml /var/www/html/
     - cp -r ./nginx /var/www/html/
