@@ -278,7 +278,7 @@ export default function ExerciseEdit() {
 		<Spinner />
 	) : (
 		<>
-		<title>Redigera övning</title>
+			<title>Redigera övning</title>
 			<h1>Redigera övning</h1>
 
 			<InputTextField
