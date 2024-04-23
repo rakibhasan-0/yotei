@@ -5,7 +5,7 @@ services:
     image: nginx:latest
     restart: always
     volumes:
-      - nginx/prod.conf:/etc/nginx/nginx.conf
+      - ./nginx/prod.conf:/etc/nginx/nginx.conf
       - ./api-docs:/var/www/html/api-docs
       - ./javadocs:/var/www/html/javadocs
       # - /etc/letsencrypt/:/etc/letsencrypt/
