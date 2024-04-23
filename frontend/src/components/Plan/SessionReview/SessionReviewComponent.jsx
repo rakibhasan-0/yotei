@@ -23,7 +23,7 @@ import { AccountContext } from "../../../context"
 
 export default function Review({isOpen, setIsOpen, session_id}) {
 
-	const [sessionData, setWorkoutData] = useState(null)
+	const [sessionData, setSessionData] = useState(null)
 
     const[rating, setRating] = useState(0)
     const[doneList, setDone] = useState([])
@@ -35,6 +35,8 @@ export default function Review({isOpen, setIsOpen, session_id}) {
 	const [loading, setLoading] = useState(true)
 
 	const context = useContext(AccountContext)
+
+	const {token, userId} = context
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -53,8 +55,7 @@ export default function Review({isOpen, setIsOpen, session_id}) {
 				setLoading(false)
 			} else {
 				const json = await response.json()
-				setWorkoutData(() => json)
-				console.log(sessionData)
+				setSessionData(() => json)
 				setLoading(false)
 				setErrorStateMsg("")
 			}
@@ -173,6 +174,29 @@ export default function Review({isOpen, setIsOpen, session_id}) {
 		setNegativeComment(data)
     }
 
+	function getActivityContainer(sessionData) {
+		return sessionData !== null && 
+		(
+			<div className="container">
+				<div className="row">
+					<h2>Aktiviteter</h2>
+				</div>
+				<div className="row">
+					{
+						sessionData.tags.map((tag, index) => {
+							return (
+								<div key={"tag" + index} className="mr-2">
+									<Tag tagType={"default"} text={tag.name}></Tag>
+									<CheckBox id={`CheckBox-${index}`} ></CheckBox>
+								</div>
+							)
+						})
+					}
+				</div>
+			</div>
+		)
+	}
+
     return (
         <Popup title={"Utvärdering av tillfälle"} id={"review-popup"} isOpen={isOpen} setIsOpen={setIsOpen}>
             <div className="d-flex flex-column align-items-center">
@@ -195,18 +219,10 @@ export default function Review({isOpen, setIsOpen, session_id}) {
 						</Ratings.Widget>
 					</Ratings>
 				</div>
+				{
+                	getActivityContainer(sessionData)
+				}
 
-                <div className = {styles["activity_checker"]}>
-				<ul>
-						<li className={styles["check_box_li"]}>
-							{/* Check box */}
-							<CheckBox id={`CheckBox`} onClick={() => {}} checked={true} />
-						</li>
-						<li className={styles["activity_text_li"]}>
-							<p>"Test"</p>
-						</li>
-					</ul>
-                </div>
 
                 <div className="w-100">
 					<TextArea  type="text" text={positiveComment} onChange={handleChangePositive} className="col-md-6 col-md-offset-3" style={{marginTop: "30px", marginBottom: "20px", height: "80px", borderRadius: "5px", minHeight: "80px"}} placeholder="Vad var bra med passet?"/>
