@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useState, useRef } from "react"
 import styles from "./ExerciseCreate.module.css"
 import { AccountContext } from "../../context"
 import Button from "../../components/Common/Button/Button"
@@ -78,10 +78,11 @@ export default function ExerciseCreate() {
 		return exerciseCreateInput.time
 	})
 
-	const context = useContext(AccountContext)
 	const [addedTags, setAddedTags] = useState(() => {
 		return exerciseCreateInput.addedTags
 	})
+
+	const context = useContext(AccountContext)
 	const [showMiniPopup, setShowMiniPopup] = useState(false)
 	const [errorMessage, setErrorMessage] = useState("")
 	const [tempId, setTempId] = useState(-1)
@@ -92,6 +93,8 @@ export default function ExerciseCreate() {
 
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const navigate = useNavigate()
+
+	const hasRendered = useRef({"tagEffect":false, "inputEffect":false})
 
 	function done() {
 		if (undoMediaChanges) {
@@ -117,40 +120,31 @@ export default function ExerciseCreate() {
 	}, [isSubmitted])
 
 	useEffect(() => {
-		storeInputChange("addedTags", addedTags)
+		if (hasRendered.current["tagEffect"]) {
+			storeInputChange("addedTags", addedTags)
+
+		}
+		hasRendered.current["tagEffect"] = true
 	}, [addedTags])
 
-	useEffect(() => {
-		setIsBlocking(name != "" || desc != "")
-	}, [name, desc])
 
 	/**
 	 * Saves an exerciseCreateInput object in local storage
 	 */
 	useEffect(() => {
-		localStorage.setItem("exerciseCreateLocalStorageKey", JSON.stringify(exerciseCreateInput))
+		if (hasRendered.current["inputEffect"]) {
+			localStorage.setItem("exerciseCreateLocalStorageKey", JSON.stringify(exerciseCreateInput))
+			setIsBlocking(true)
+
+			//Remove block if no information in fields.
+			if (name == "" && desc == "" && time == 0 && addedTags.length == 0) {
+				setIsBlocking(false)
+			}
+		}
+
+		hasRendered.current["inputEffect"] = true
 	}, [exerciseCreateInput])
 
-
-	/**
-	 * Loads an exerciseCreateInput object from local storage or initializes one if non was found.
-	 */
-	useEffect(() => {
-		const item = localStorage.getItem("exerciseCreateLocalStorageKey")
-		if (item) {
-			setExerciseCreateInput(JSON.parse(item))
-		} else {
-			// Initialize state only if localStorage data is not available
-			setExerciseCreateInput({
-				name: "",
-				desc: "",
-				time: 0,
-				addBoxChecked: false,
-				eraseBoxChecked: false,
-				addedTags: []
-			})
-		}
-	}, [])
 
 	/**
 	 * Updates the exerciseCreateInput object when new input is added
@@ -240,7 +234,6 @@ export default function ExerciseCreate() {
 			headers: { "Content-type": "application/json", "token": context.token },
 			body: JSON.stringify({ "exerciseId": exId })
 		}
-
 		try {
 			const response = await fetch("/api/tags/exercises?tag=" + tagId, requestOptions)
 			if (response.ok) {
