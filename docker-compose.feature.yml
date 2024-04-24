@@ -2,7 +2,7 @@ version: "3.7"
 services:
 
   nginx:
-    image: nginx:feature
+    image: nginx:latest
     restart: always
     volumes:
       - ./nginx/development.conf:/etc/nginx/nginx.conf
