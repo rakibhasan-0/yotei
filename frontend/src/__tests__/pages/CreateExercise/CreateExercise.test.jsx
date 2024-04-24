@@ -18,7 +18,7 @@ describe("CreateTechnique should render", () => {
 				<Route path="/*" element={<ExerciseCreate/>} />
 			)
 		)
-		render(
+		render( //eslint-disable-line
 			<RouterProvider router={router} />
 		)
 	})
