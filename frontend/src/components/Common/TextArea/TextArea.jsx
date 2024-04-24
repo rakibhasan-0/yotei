@@ -38,9 +38,9 @@ import styles from "./TextArea.module.css"
 	/>
  * 
  * 
- * @author Team Chimera & Medusa & Team Tomato
+ * @author Team Chimera & Medusa & Team Tomato & Team Durian
  * @since 2023-04-24
- * @updated 2024-04-19 Tomato fixed bug
+ * @updated 2024-04-24 Durian fixed bug
  * @version 4.1
  */
 export default function TextArea({
