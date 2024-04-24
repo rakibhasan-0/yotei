@@ -7,6 +7,15 @@ import { rest } from "msw"
 import { server } from "../../server"
 configure({ testIdAttribute: "id" })
 
+/**
+ * Unit-test for the ExerciseEdit page, 
+ * init tests
+ *
+ * @author Team Mango (Group 4) (2024-04-24)
+ * @since 2024-04-18
+ * @version 1.0 
+ */
+
 const requestSpy = jest.fn()
 server.events.on("request:start", requestSpy)
 
