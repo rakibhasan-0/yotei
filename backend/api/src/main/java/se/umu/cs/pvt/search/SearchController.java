@@ -43,6 +43,7 @@ import java.util.*;
 public class SearchController {
 
     private final SearchRepository searchRepository;
+
     @Autowired
     public SearchController(SearchRepository searchRepository) {
         this.searchRepository = searchRepository;
@@ -53,7 +54,8 @@ public class SearchController {
      * It filters the techniques based on the given query.
      *
      * Example query:
-     * (GET) /api/search/techniques?name=lm+ao&beltColors=grön,grön-barn&kihon=false&tags=kniv,spark
+     * (GET)
+     * /api/search/techniques?name=lm+ao&beltColors=grön,grön-barn&kihon=false&tags=kniv,spark
      *
      * Note that the query can be empty, or contain any or all of the entries.
      *
@@ -61,27 +63,30 @@ public class SearchController {
      * @return A SearchResponseInterface.
      */
     @GetMapping("/techniques")
-    public ResponseEntity<SearchResponse<TechniqueSearchResponse>> searchTechniques(@RequestParam Map<String, String> urlQuery) {
+    public ResponseEntity<SearchResponse<TechniqueSearchResponse>> searchTechniques(
+            @RequestParam Map<String, String> urlQuery) {
         SearchTechniquesParams searchTechniquesParams = new SearchTechniquesParams(urlQuery);
 
-		DatabaseQuery createdQuery = new SearchTechniquesDBBuilder(searchTechniquesParams)
-			.filterByBelts()
-			.filterByTags()
-			.filterByKihon()
-			.build();
+        DatabaseQuery createdQuery = new SearchTechniquesDBBuilder(searchTechniquesParams)
+                .filterByBelts()
+                .filterByTags()
+                .filterByKihon()
+                .build();
 
         List<TechniqueDBResult> results = searchRepository.getTechniquesFromCustomQuery(createdQuery.getQuery());
         List<TechniqueSearchResponse> techniqueSearchResponses = new SearchTechniqueResponseBuilder(results).build();
 
-		// If request has no search string input, no need to do fuzzy filtering.
-		if(!searchTechniquesParams.nameIsEmpty()) {
-        		techniqueSearchResponses = fuzzySearchFiltering(searchTechniquesParams.getName(), techniqueSearchResponses);
-		}
+        // If request has no search string input, no need to do fuzzy filtering.
+        if (!searchTechniquesParams.nameIsEmpty()) {
+            techniqueSearchResponses = fuzzySearchFiltering(searchTechniquesParams.getName(), techniqueSearchResponses);
+        }
 
-		// Get tag complete suggestion from search input
-        List<String> tagCompletion = getTagSuggestions(searchTechniquesParams.getName(), searchTechniquesParams.getTags(), TagType.technique_tag);
+        // Get tag complete suggestion from search input
+        List<String> tagCompletion = getTagSuggestions(searchTechniquesParams.getName(),
+                searchTechniquesParams.getTags(), TagType.technique_tag);
 
-        SearchResponse<TechniqueSearchResponse> response = new SearchResponse<>(techniqueSearchResponses, tagCompletion);
+        SearchResponse<TechniqueSearchResponse> response = new SearchResponse<>(techniqueSearchResponses,
+                tagCompletion);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -90,7 +95,8 @@ public class SearchController {
      * It filters the workouts based on the given query.
      *
      * Example query:
-     * (GET) /api/search/workouts?name=lmao&from=2023-04-20&to=2023-04-20&favourite=false&tags=kniv,spark&id=1
+     * (GET)
+     * /api/search/workouts?name=lmao&from=2023-04-20&to=2023-04-20&favourite=false&tags=kniv,spark&id=1
      *
      * Note that the query can be empty, or contain any or all of the entries.
      *
@@ -98,9 +104,10 @@ public class SearchController {
      * @return A SearchResponseInterface.
      */
     @GetMapping("/workouts")
-    public ResponseEntity<SearchResponse<WorkoutSearchResponse>> searchWorkouts(@RequestParam Map<String, String> urlQuery) {
+    public ResponseEntity<SearchResponse<WorkoutSearchResponse>> searchWorkouts(
+            @RequestParam Map<String, String> urlQuery) {
         SearchWorkoutParams searchWorkoutParams = new SearchWorkoutParams(urlQuery);
-        
+
         DatabaseQuery createdQuery = new SearchWorkoutDBBuilder(searchWorkoutParams)
                 .filterByDate()
                 .filterByFavourite()
@@ -110,10 +117,12 @@ public class SearchController {
 
         List<WorkoutDBResult> result = searchRepository.getWorkoutsFromCustomQuery(createdQuery.getQuery());
         List<WorkoutSearchResponse> workoutSearchResponses = new SearchWorkoutResponseBuilder(result).build();
-        List<WorkoutSearchResponse> filteredResult = fuzzySearchFiltering(searchWorkoutParams.getName(), workoutSearchResponses);
+        List<WorkoutSearchResponse> filteredResult = fuzzySearchFiltering(searchWorkoutParams.getName(),
+                workoutSearchResponses);
 
-		// Get tag complete suggestion from search input
-        List<String> tagCompletion = getTagSuggestions(searchWorkoutParams.getName(), searchWorkoutParams.getTags(), TagType.workout_tag);
+        // Get tag complete suggestion from search input
+        List<String> tagCompletion = getTagSuggestions(searchWorkoutParams.getName(), searchWorkoutParams.getTags(),
+                TagType.workout_tag);
 
         SearchResponse<WorkoutSearchResponse> response = new SearchResponse<>(filteredResult, tagCompletion);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -132,7 +141,8 @@ public class SearchController {
      * @return A SearchResponseInterface.
      */
     @GetMapping("/exercises")
-    public ResponseEntity<SearchResponse<ExerciseSearchResponse>> searchExercises(@RequestParam Map<String, String> urlQuery) {
+    public ResponseEntity<SearchResponse<ExerciseSearchResponse>> searchExercises(
+            @RequestParam Map<String, String> urlQuery) {
         SearchExerciseParams searchExerciseParams = new SearchExerciseParams(urlQuery);
 
         DatabaseQuery createdQuery = new SearchExerciseDBBuilder(searchExerciseParams)
@@ -141,14 +151,17 @@ public class SearchController {
 
         List<ExerciseDBResult> result = searchRepository.getExercisesFromCustomQuery(createdQuery.getQuery());
         List<ExerciseSearchResponse> exerciseSearchResponses = new SearchExerciseResponseBuilder(result).build();
-        List<ExerciseSearchResponse> filteredResult = fuzzySearchFiltering(searchExerciseParams.getName(), exerciseSearchResponses);
+        List<ExerciseSearchResponse> filteredResult = fuzzySearchFiltering(searchExerciseParams.getName(),
+                exerciseSearchResponses);
 
-		// Get tag complete suggestion from search input
-        List<String> tagCompletion = getTagSuggestions(searchExerciseParams.getName(), searchExerciseParams.getTags(), TagType.exercise_tag);
+        // Get tag complete suggestion from search input
+        List<String> tagCompletion = getTagSuggestions(searchExerciseParams.getName(), searchExerciseParams.getTags(),
+                TagType.exercise_tag);
 
         SearchResponse<ExerciseSearchResponse> response = new SearchResponse(filteredResult, tagCompletion);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
     /**
      * API endpoint for getting suggestions for tags.
      * It filters the tags based on the given query.
@@ -164,7 +177,7 @@ public class SearchController {
     @GetMapping("/tags")
     public ResponseEntity<TagResponse<TagSearchResponse>> searchTags(@RequestParam Map<String, String> urlQuery) {
         SearchTagsParams searchTagsParams = new SearchTagsParams(urlQuery);
-		
+
         DatabaseQuery createdQuery = new SearchTagsDBBuilder(searchTagsParams.getTags(), TagType.none)
                 .filterByExistingTags()
                 .build();
@@ -172,8 +185,9 @@ public class SearchController {
         List<TagDBResult> result = searchRepository.getTagSuggestionsFromCustomQuery(createdQuery.getQuery());
         List<TagSearchResponse> tagSearchResponses = new SearchTagsResponseBuilder(result).build();
 
-		// Set to lower case as all tags are fetched in lower case.
-        List<TagSearchResponse> filteredResult = fuzzySearchFiltering(searchTagsParams.getName().toLowerCase(), tagSearchResponses);
+        // Set to lower case as all tags are fetched in lower case.
+        List<TagSearchResponse> filteredResult = fuzzySearchFiltering(searchTagsParams.getName().toLowerCase(),
+                tagSearchResponses);
 
         // Make a new array with amount of tag that wishes to be sent back
         List<TagSearchResponse> finalResult = new ArrayList<>();
@@ -236,50 +250,47 @@ public class SearchController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-	/**
-	 * Gets best tag suggstions based on search.
-	 * @param searchInput Search string.
-	 * @param tags Already chossen tags, will be omitted in the suggestion.
-	 * @param tagType Type of tag, workout technique eg.
-	 * @return List of suggested tags.
-	 */
-	private List<String> getTagSuggestions(String searchInput, List<String> tags, TagType tagType) {
+    /**
+     * Gets best tag suggstions based on search.
+     * 
+     * @param searchInput Search string.
+     * @param tags        Already chossen tags, will be omitted in the suggestion.
+     * @param tagType     Type of tag, workout technique eg.
+     * @return List of suggested tags.
+     */
+    private List<String> getTagSuggestions(String searchInput, List<String> tags, TagType tagType) {
         if (searchInput == null || searchInput.isEmpty()) {
             return new ArrayList<>();
         }
 
-		DatabaseQuery createdQuery = new SearchTagsDBBuilder(tags, tagType)
+        DatabaseQuery createdQuery = new SearchTagsDBBuilder(tags, tagType)
                 .filterByTagType()
-				.filterByExistingTags()
+                .filterByExistingTags()
                 .build();
 
         List<TagDBResult> tagResult = searchRepository.getTagSuggestionsFromCustomQuery(createdQuery.getQuery());
 
-		// Use fuzzy search to find good suggestions, search string forced to lower case as all are fetched in lowercase from DB.
-		if(searchInput != null) {
-			searchInput.toLowerCase();
-		}
+        // Use fuzzy search to find good suggestions, search string forced to lower case
+        // as all are fetched in lowercase from DB.
+        if (searchInput != null) {
+            searchInput.toLowerCase();
+        }
         List<TagDBResult> filteredResult = Fuzzy.search(searchInput, tagResult);
 
-		List<String> tagCompletion = new ArrayList<String>();
-		int tagAmount = 3;
+        List<String> tagCompletion = new ArrayList<String>();
 
-		if(filteredResult.size() < tagAmount) {
-			tagAmount = filteredResult.size();
-		}
+        for (int i = 0; i < filteredResult.size(); i++) {
+            tagCompletion.add(filteredResult.get(i).getName());
+        }
 
-		for(int i = 0; i < tagAmount; i++) {
-			tagCompletion.add(filteredResult.get(i).getName());
-		}
-
-		return tagCompletion;
-	}
+        return tagCompletion;
+    }
 
     /**
      *
-     * @param str The string being used to search the list with.
+     * @param str      The string being used to search the list with.
      * @param response The list of responses being filtered.
-     * @param <T> The type of SearchResponse being filtered.
+     * @param <T>      The type of SearchResponse being filtered.
      * @return The list of the filtered SearchResponse.
      */
     private <T extends SearchResponseInterface> List<T> fuzzySearchFiltering(String str, List<T> response) {
