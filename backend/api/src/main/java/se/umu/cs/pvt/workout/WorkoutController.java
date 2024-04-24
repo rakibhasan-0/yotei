@@ -6,20 +6,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import se.umu.cs.pvt.exercise.Exercise;
 import se.umu.cs.pvt.exercise.ExerciseRepository;
 import se.umu.cs.pvt.tag.Tag;
 import se.umu.cs.pvt.technique.Technique;
 import se.umu.cs.pvt.technique.TechniqueRepository;
+import se.umu.cs.pvt.user.JWTUtil;
 import se.umu.cs.pvt.tag.TagRepository;
 import se.umu.cs.pvt.tag.WorkoutTag;
 import se.umu.cs.pvt.tag.WorkoutTagRepository;
 import se.umu.cs.pvt.workout.detail.WorkoutDetail;
 import se.umu.cs.pvt.workout.detail.WorkoutDetailRepository;
 import se.umu.cs.pvt.workout.detail.WorkoutDetailResponse;
-
-import java.sql.SQLException;
 import java.util.*;
 import java.time.LocalDate;
 import java.util.function.Predicate;
@@ -30,6 +28,8 @@ import java.util.stream.Collectors;
  *
  * @author Grupp 8 Kebabpizza (Doc: Griffin ens19amd)
  *         Group 8 Minotaur, new post method.
+ *         Team Tomato
+ * @updated 2024-04-23 by Team Tomato
  */
 @RestController
 @CrossOrigin
@@ -66,11 +66,17 @@ public class WorkoutController {
     private WorkoutTagRepository workoutTagRepository;
 
     @Autowired
-    public WorkoutController(WorkoutRepository wc) { this.workoutRepository = wc;}
+    private JWTUtil jwtUtil;
 
-    public WorkoutController(WorkoutDetailRepository wc){
+    @Autowired
+    public WorkoutController(WorkoutRepository wc) {
+        this.workoutRepository = wc;
+    }
+
+    public WorkoutController(WorkoutDetailRepository wc) {
         this.workoutDetailRepository = wc;
     }
+
     public WorkoutController(WorkoutFavoriteRepository wc) {
         this.favoriteRepository = wc;
     }
@@ -80,12 +86,37 @@ public class WorkoutController {
     }
 
     @GetMapping("/detail/{id}")
-    public ResponseEntity<WorkoutDetailResponse> getWorkoutDetails(@PathVariable Long id) {
+    public ResponseEntity<WorkoutDetailResponse> getWorkoutDetails(@RequestHeader(value = "token") String token,
+            @PathVariable Long id) {
+
+        if (token == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        int userId;
+        Long userIdL;
+        try {
+            userId = jwtUtil.getUserIdFromToken(token);
+            userIdL = Long.valueOf(userId);
+            System.out.println("userId: " + userId);
+
+            System.out.println("token" + token);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         Optional<WorkoutDetail> workoutOpt = workoutDetailRepository.findById(id);
         if (workoutOpt.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         WorkoutDetail workout = workoutOpt.get();
+        UserWorkout userWorkout = userWorkoutRepository.findByWorkoutIdAndUserId(id, userIdL);
+
+        // TODO: skippa om admin
+        // Check if the user has access to the workout
+
+        if (workout.getHidden() == true && (workout.getAuthor().getUserId() != userId && userWorkout == null)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         return new ResponseEntity<>(new WorkoutDetailResponse(workout), HttpStatus.OK);
     }
 
@@ -93,9 +124,9 @@ public class WorkoutController {
      * Returns the id and name of all workouts in the database.
      *
      * @return a list of all workouts
-     * HttpStatus
-     * NO_CONTENT if there are no workouts
-     * OK if there are workouts
+     *         HttpStatus
+     *         NO_CONTENT if there are no workouts
+     *         OK if there are workouts
      */
     @GetMapping("/all")
     public ResponseEntity<List<WorkoutShort>> getWorkouts() {
@@ -112,9 +143,9 @@ public class WorkoutController {
      *
      * @param user_id The id of the user.
      * @return a list of all filtered workouts
-     * HttpStatus
-     * NO_CONTENT if there are no workouts
-     * OK if there are workouts
+     *         HttpStatus
+     *         NO_CONTENT if there are no workouts
+     *         OK if there are workouts
      * @author c19agi, Alban Gashi
      */
     @GetMapping("/all/{user_id}")
@@ -127,14 +158,15 @@ public class WorkoutController {
     }
 
     /**
-     * Returns the description, duration and date created of a workout depending on the id.
+     * Returns the description, duration and date created of a workout depending on
+     * the id.
      *
      * @param id the id
      * @return the workout's attributes if found.
-     * HttpStatus
-     * OK if workout with id was found
-     * BAD_REQUEST if invalid id
-     * NOT_FOUND if id is valid but no workout with id exists
+     *         HttpStatus
+     *         OK if workout with id was found
+     *         BAD_REQUEST if invalid id
+     *         NOT_FOUND if id is valid but no workout with id exists
      */
     @GetMapping("/getdesc/{id}")
     public ResponseEntity<WorkoutDropDownProjection> getDescription(@PathVariable("id") Long id) {
@@ -151,19 +183,21 @@ public class WorkoutController {
      *
      * @param id the id
      * @return the workout if found.
-     * HttpStatus
-     * OK if workout with id was found
-     * BAD_REQUEST if invalid id
-     * NOT_FOUND if id is valid but no workout with id exists
+     *         HttpStatus
+     *         OK if workout with id was found
+     *         BAD_REQUEST if invalid id
+     *         NOT_FOUND if id is valid but no workout with id exists
      */
     @GetMapping("/workout/{id}")
     public ResponseEntity<Workout> getWorkout(@PathVariable("id") Long id) {
+
         if (id == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         else if (workoutRepository.findById(id).isPresent())
             return new ResponseEntity<>(workoutRepository.findById(id).get(), HttpStatus.OK);
         else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
     }
 
     /**
@@ -171,10 +205,10 @@ public class WorkoutController {
      *
      * @param userId the user id
      * @return the workout if found.
-     * HttpStatus
-     * OK if workout with id was found
-     * BAD_REQUEST if invalid id
-     * NOT_FOUND if id is valid but no workout with id exists
+     *         HttpStatus
+     *         OK if workout with id was found
+     *         BAD_REQUEST if invalid id
+     *         NOT_FOUND if id is valid but no workout with id exists
      */
     @GetMapping("/created/{userId}")
     public ResponseEntity<List<WorkoutShort>> getCreatedWorkouts(@PathVariable Long userId) {
@@ -194,15 +228,17 @@ public class WorkoutController {
      *
      * @param data WorkoutDataPackage containing the relevant data.
      *             {
-     *             "workout":{"name": "cool_name", "desc": "cool_desc", duration: 2},
+     *             "workout":{"name": "cool_name", "desc": "cool_desc", duration:
+     *             2},
      *             <p>
-     *             "activeties":[{"exerciseId": 2, "techniqueId": null, "name": "name",
+     *             "activeties":[{"exerciseId": 2, "techniqueId": null, "name":
+     *             "name",
      *             "desc": "desc", "duration": 1, "order": 0}]
      *             }
      * @return the added workout
-     * HttpStatus
-     * BAD_REQUEST if invalid workout
-     * CREATED if the workout was added
+     *         HttpStatus
+     *         BAD_REQUEST if invalid workout
+     *         CREATED if the workout was added
      */
     @PostMapping("/add_full_workout")
     public ResponseEntity<Workout> postFullWorkout(@RequestBody WorkoutDataPackage data) {
@@ -215,7 +251,7 @@ public class WorkoutController {
 
         workout = workoutRepository.save(workout);
 
-        //Links the activities to the workout id and saves them.
+        // Links the activities to the workout id and saves them.
         for (Activity activity : activities) {
             activity.setWorkoutId(workout.getId());
             activityRepository.save(activity);
@@ -226,10 +262,10 @@ public class WorkoutController {
 
     /**
      * Method for creating a workout. Will handle
-     *  Adding the workout
-     *  Adding the Activities
-     *  Adding the users related to the workout.
-     *  Adding tags related to the workout
+     * Adding the workout
+     * Adding the Activities
+     * Adding the users related to the workout.
+     * Adding tags related to the workout
      *
      * @param data
      * @return String with status on operations and https response.
@@ -256,11 +292,12 @@ public class WorkoutController {
 
             for (Long tagId : data.getTagIds()) {
                 Optional<Tag> tag = tagRepository.findById(tagId);
-                if (tag.isPresent()) workoutTagRepository.save(new WorkoutTag(workout.getId(), tag.get()));
+                if (tag.isPresent())
+                    workoutTagRepository.save(new WorkoutTag(workout.getId(), tag.get()));
             }
         } catch (Exception e) {
             return new ResponseEntity<>(new WorkoutResponse(e.getMessage(), workout.getId(),
-                    HttpStatus.INTERNAL_SERVER_ERROR.value()) , HttpStatus.INTERNAL_SERVER_ERROR);
+                    HttpStatus.INTERNAL_SERVER_ERROR.value()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return new ResponseEntity<>(new WorkoutResponse("Succeed to create workout",
@@ -269,6 +306,7 @@ public class WorkoutController {
 
     /**
      * Method for updating a workout.
+     * 
      * @param data Object containing data related to workouts
      * @return String containing status of operations and http response.
      */
@@ -325,10 +363,10 @@ public class WorkoutController {
      *
      * @param id the id
      * @return the id
-     * HttpStatus
-     * OK if workout with id exists
-     * BAD_REQUEST if id is not valid
-     * NOT FOUND if id is valid but not found
+     *         HttpStatus
+     *         OK if workout with id exists
+     *         BAD_REQUEST if id is not valid
+     *         NOT FOUND if id is valid but not found
      */
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Long> deleteWorkout(@PathVariable("id") Long id) {
@@ -347,20 +385,20 @@ public class WorkoutController {
      *
      * @param id the id
      * @return the id
-     * HttpStatus
-     * OK if workout with id exists
-     * BAD_REQUEST if id is not valid
-     * NOT FOUND if id is valid but not found
+     *         HttpStatus
+     *         OK if workout with id exists
+     *         BAD_REQUEST if id is not valid
+     *         NOT FOUND if id is valid but not found
      */
     @DeleteMapping("/delete_full_workout/{id}")
     public ResponseEntity<Long> deleteFullWorkout(@PathVariable("id") Long id) {
         if (id == null) {
             return new ResponseEntity<>(id, HttpStatus.BAD_REQUEST);
         } else if (workoutRepository.findById(id).isPresent()) {
-            //Delete old activities
+            // Delete old activities
             List<Activity> activities = activityRepository.findAllByWorkoutId(id);
             activityRepository.deleteAll(activities);
-            //Delete workout
+            // Delete workout
             workoutRepository.deleteById(id);
 
             return new ResponseEntity<>(id, HttpStatus.OK);
@@ -374,16 +412,18 @@ public class WorkoutController {
      *
      * @param data WorkoutDataPackage containing the relevant data.
      *             {
-     *             "workout":{"id" : 1, "name": "cool_name", "desc": "cool_desc", duration: 2},
+     *             "workout":{"id" : 1, "name": "cool_name", "desc": "cool_desc",
+     *             duration: 2},
      *             <p>
-     *             "activeties":[{"id": 10, "workoutId": 1, "exerciseId": 2, "techniqueId": null,
+     *             "activeties":[{"id": 10, "workoutId": 1, "exerciseId": 2,
+     *             "techniqueId": null,
      *             "name": "name", "desc": "desc", "duration": 1, "order": 0}]
      *             }
      * @return the updated workout.
-     * HttpStatus
-     * OK if workout with id exists
-     * BAD_REQUEST if workout has invalid id
-     * NOT_FOUND if workout has valid id but could not be found
+     *         HttpStatus
+     *         OK if workout with id exists
+     *         BAD_REQUEST if workout has invalid id
+     *         NOT_FOUND if workout has valid id but could not be found
      */
     @PutMapping("/update_full_workout")
     public ResponseEntity<Workout> updateFullWorkout(@RequestBody WorkoutDataPackage data) {
@@ -393,14 +433,14 @@ public class WorkoutController {
         if (workout == null || workout.getId() == null) {
             return new ResponseEntity<>(workout, HttpStatus.BAD_REQUEST);
         } else if (workoutRepository.findById(workout.getId()).isPresent()) {
-            //Delete old activities
+            // Delete old activities
             List<Activity> oldActivities = activityRepository.findAllByWorkoutId(workout.getId());
             activityRepository.deleteAll(oldActivities);
 
-            //Update workout
+            // Update workout
             workoutRepository.save(workout);
 
-            //Add new activities
+            // Add new activities
             activityRepository.saveAll(Arrays.asList(activities));
 
             return new ResponseEntity<>(workout, HttpStatus.OK);
@@ -416,9 +456,11 @@ public class WorkoutController {
      * @param favorite the favorite entity:
      *                 {"userId": 1, "workoutId": 2}
      * @return the favorite entity.
-     * HttpStatus
-     * BAD_REQUEST if workout could not be added to the table with favorite workouts
-     * CREATED if the workout is successfully added to the table with favorite workouts
+     *         HttpStatus
+     *         BAD_REQUEST if workout could not be added to the table with favorite
+     *         workouts
+     *         CREATED if the workout is successfully added to the table with
+     *         favorite workouts
      */
     @PostMapping("/favorites")
     public ResponseEntity<WorkoutFavorite> markAsFavorite(@RequestBody WorkoutFavorite favorite) {
@@ -436,9 +478,11 @@ public class WorkoutController {
      * @param favorite the favorite entity
      *                 {"userId": 1, "workoutId": 2}
      * @return the favorite entity.
-     * HttpStatus
-     * BAD_REQUEST if the workout could not be found in the table with favorite workouts
-     * OK if the workout is successfully removed from the table with favorite workouts
+     *         HttpStatus
+     *         BAD_REQUEST if the workout could not be found in the table with
+     *         favorite workouts
+     *         OK if the workout is successfully removed from the table with
+     *         favorite workouts
      */
     @DeleteMapping("/favorites")
     public ResponseEntity<WorkoutFavorite> removeFavorite(@RequestBody WorkoutFavorite favorite) {
@@ -470,10 +514,10 @@ public class WorkoutController {
     @GetMapping("/favorites/{userId}/{workoutId}")
     public boolean getFavoriteById(@PathVariable int userId, @PathVariable int workoutId) {
         Predicate<Workout> filterByWorkoutId = workout -> workout.getId() == workoutId;
-        List<Workout> result = workoutRepository.findAllFavorites(userId).stream().filter(filterByWorkoutId).collect(Collectors.toList());
+        List<Workout> result = workoutRepository.findAllFavorites(userId).stream().filter(filterByWorkoutId)
+                .collect(Collectors.toList());
         return !result.isEmpty();
     }
-
 
     /**
      * A method that is used to retrieve reviews from the database.
@@ -504,10 +548,10 @@ public class WorkoutController {
      *
      * @param id The id for the review to delete
      * @return the id
-     * HttpStatus
-     * OK if workout with id exists
-     * BAD_REQUEST if id is not valid
-     * NOT FOUND if id is valid but not found
+     *         HttpStatus
+     *         OK if workout with id exists
+     *         BAD_REQUEST if id is not valid
+     *         NOT FOUND if id is valid but not found
      */
     @DeleteMapping("/reviews")
     public ResponseEntity<Long> deleteReview(@RequestParam("id") Long id) {
@@ -526,10 +570,10 @@ public class WorkoutController {
      *
      * @param review The review to update
      * @return the id
-     * HttpStatus
-     * OK if workout with id exists
-     * BAD_REQUEST if id is not valid
-     * NOT FOUND if id is valid but not found
+     *         HttpStatus
+     *         OK if workout with id exists
+     *         BAD_REQUEST if id is not valid
+     *         NOT FOUND if id is valid but not found
      */
     @PutMapping("/reviews")
     public ResponseEntity<Object> updateReview(@RequestBody WorkoutReview review) {
@@ -547,12 +591,15 @@ public class WorkoutController {
      * This method returns a list of all workout containing a specific technique
      *
      * Returns 200 OK if the technique is posted.
-     * Returns 404 NOT FOUND if the given technique ID was not found or if no workouts were found.
-     * Returns 500 INTERNAL SERVER ERROR if an error occurs during the database transaction.
+     * Returns 404 NOT FOUND if the given technique ID was not found or if no
+     * workouts were found.
+     * Returns 500 INTERNAL SERVER ERROR if an error occurs during the database
+     * transaction.
      *
      * @param id of the technique
-     * @return responseEntity indicating the success-status of the post as well as a JSON list
-     * of all techniques.
+     * @return responseEntity indicating the success-status of the post as well as a
+     *         JSON list
+     *         of all techniques.
      */
     @GetMapping("/associated/technique/{id}")
     public ResponseEntity<Object> associatedTechniques(@PathVariable("id") Long id) {
@@ -563,7 +610,8 @@ public class WorkoutController {
         List<Workout> foundWorkouts = findWorkouts(id, Technique.class);
 
         if (foundWorkouts.isEmpty()) {
-            return new ResponseEntity<>("Tekniken med id " + id + " finns inte inlagt i några pass.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Tekniken med id " + id + " finns inte inlagt i några pass.",
+                    HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>(foundWorkouts, HttpStatus.OK);
@@ -571,7 +619,8 @@ public class WorkoutController {
 
     /**
      * Find all workouts associated with a technique or exercise
-     * @param id the id of what you want to find workouts for
+     * 
+     * @param id     the id of what you want to find workouts for
      * @param object Class objectt. Must be either Technique.class or Exercise.class
      * @return
      * @throws IllegalArgumentException
@@ -588,9 +637,12 @@ public class WorkoutController {
 
         for (Activity activity : activities) {
             long temp_id = -1337L; // was chosen by dev team as a default error-value
-            if (isTechnique && activity.getTechniqueId() != null) temp_id = activity.getTechniqueId();
-            if (isExercise && activity.getExerciseId() != null)  temp_id = activity.getExerciseId();
-            if (temp_id == -1337L) continue;
+            if (isTechnique && activity.getTechniqueId() != null)
+                temp_id = activity.getTechniqueId();
+            if (isExercise && activity.getExerciseId() != null)
+                temp_id = activity.getExerciseId();
+            if (temp_id == -1337L)
+                continue;
 
             if (id.equals(temp_id)) {
                 Optional<Workout> result = workoutRepository.findById(activity.getWorkoutId());
@@ -600,17 +652,19 @@ public class WorkoutController {
         return foundWorkouts.stream().distinct().toList();
     }
 
-
     /**
      * This method returns a list of all workout containing a specific technique
      *
      * Returns 200 OK if the technique is posted.
-     * Returns 404 NOT FOUND if the given technique ID was not found or if no workouts were found.
-     * Returns 500 INTERNAL SERVER ERROR if an error occurs during the database transaction.
+     * Returns 404 NOT FOUND if the given technique ID was not found or if no
+     * workouts were found.
+     * Returns 500 INTERNAL SERVER ERROR if an error occurs during the database
+     * transaction.
      *
      * @param id of the technique
-     * @return responseEntity indicating the success-status of the post as well as a JSON list
-     * of all techniques.
+     * @return responseEntity indicating the success-status of the post as well as a
+     *         JSON list
+     *         of all techniques.
      */
     @GetMapping("/associated/exercise/{id}")
     public ResponseEntity<Object> associatedExercises(@PathVariable("id") Long id) {
@@ -619,16 +673,18 @@ public class WorkoutController {
         }
         List<Workout> foundWorkouts = findWorkouts(id, Exercise.class);
         if (foundWorkouts.isEmpty()) {
-            return new ResponseEntity<>("Övningen med id " + id + " finns inte inlagt i några pass.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Övningen med id " + id + " finns inte inlagt i några pass.",
+                    HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(foundWorkouts, HttpStatus.OK);
     }
-    private void addTags(Long workoutID, Long[] tagIds) throws Exception{
-        //Add tags related to workout
+
+    private void addTags(Long workoutID, Long[] tagIds) throws Exception {
+        // Add tags related to workout
         for (Long tagId : tagIds) {
-                WorkoutTag toAddWorkoutTag = new WorkoutTag(workoutID,
-                        tagRepository.findById(tagId).get());
-                workoutTagRepository.save(toAddWorkoutTag);
+            WorkoutTag toAddWorkoutTag = new WorkoutTag(workoutID,
+                    tagRepository.findById(tagId).get());
+            workoutTagRepository.save(toAddWorkoutTag);
         }
 
     }
