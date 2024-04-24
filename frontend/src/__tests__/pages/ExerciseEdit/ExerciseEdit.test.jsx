@@ -2,9 +2,7 @@
 import { render, configure, screen, waitFor } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import ExerciseEdit from "../../../pages/Exercise/ExerciseEdit"
-import GroupIndex from "../../../pages/Plan/GroupIndex/GroupIndex"
-import { MemoryRouter } from "react-router"
-import { JustifyLeft } from "react-bootstrap-icons"
+import { Route, RouterProvider, createMemoryRouter, createRoutesFromElements } from "react-router-dom"
 import { rest } from "msw"
 import { server } from "../../server"
 configure({ testIdAttribute: "id" })
@@ -24,8 +22,14 @@ jest.mock("react-router", () => ({
 describe("ExerciseEdit should render", () => {
 
 	beforeEach(async () => {
-		render(<ExerciseEdit/>)
-
+		const router = createMemoryRouter(
+			createRoutesFromElements(
+				<Route path="/*" element={<ExerciseEdit/>} />
+			)
+		)
+		render( //eslint-disable-line
+			<RouterProvider router={router} />
+		)
 		// Used to wait for the page to fully load, otherwise it will just render the loading spinner
 		await waitFor(() => {
 			expect(document.title).toBe("Redigera övning")
