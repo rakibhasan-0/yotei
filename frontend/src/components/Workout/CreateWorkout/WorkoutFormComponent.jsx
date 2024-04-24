@@ -130,6 +130,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 		} else {
 			setLeaveActivityPickerPopup(true)
 			sessionStorage.clear()
+			localStorage.clear()
 		}
 		
 	}

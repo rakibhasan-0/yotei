@@ -100,7 +100,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	]
 	const [sort, setSort] = useState(sortOptions[0])
 	const [cookies, setCookies] = useCookies(["exercise-filter"])
-	const [cookiesExer, setCookiesExer] = useCookies(["techniques-filter"])
+	//const [cookiesExer, setCookiesExer] = useCookies(["techniques-filter"])
 	const [visibleExercises, setVisibleExercises] = useState([])
 
 
@@ -111,28 +111,33 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 * (2024-04-22)
      */
 	useEffect(() => {
-		setSearchTechText(getJSONSession("searchTechText")|| "")
+		setSearchTechText(sessionStorage.getItem("searchTechText")|| "")
 		setSearchExerText(getJSONSession("searchExerText") || "")
 		setActiveTab(getJSONSession("activeTab")|| "technique")
-		setKihon(getJSONSession("kihon")|| false)
-		setSort(sessionStorage.getItem("sort") || sortOptions[0])
+		setKihon(sessionStorage.getItem("kihon")|| false)
+		setSort(getJSONSession("sort") || sortOptions[0])
 	}, [])
+
 
 	useEffect(() =>
 		sessionStorage.setItem("sort", JSON.stringify(sort))
 	)
 
+
 	useEffect(() => {
 		setJSONSession("selectedBelts", selectedBelts)
 	},[selectedBelts])
 
+
 	useEffect(() => {
-		setJSONSession("kihon", kihon)
+		sessionStorage.setItem("kihon", kihon)
 	},[kihon])
+
 
 	useEffect(() => {
 		setJSONSession("selectedTechTags", selectedTechTags)
 	},[selectedTechTags])
+
 
 	useEffect(() => {
 		setJSONSession("selectedExerTags", selectedExerTags)
@@ -143,9 +148,11 @@ function AddActivity({ id, setShowActivityInfo }) {
 		setJSONSession("activeTab", activeTab)
 	},[activeTab])
 
+
 	useEffect(() => {
-		setJSONSession("searchTechText", searchTechText)
+		sessionStorage.setItem("searchTechText", searchTechText)
 	},[searchTechText])
+
 
 	useEffect(() => {
 		setJSONSession("searchExerText", searchExerText)
