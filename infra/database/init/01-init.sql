@@ -407,7 +407,7 @@ CREATE TABLE workout_review(
 	DELETE CASCADE
 );
 
-CREATE TABLE session_review(
+CREATE TABLE session_review (
 	review_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	session_id INT CHECK(session_id IS NOT NULL),
 	user_id INT CHECK(user_id IS NOT NULL),
@@ -421,6 +421,10 @@ CREATE TABLE session_review(
 	DELETE CASCADE
 );
 
+ALTER TABLE
+	session_review OWNER TO psql;
+
+
 
 CREATE TABLE session_review_exercises(
 	session_review_exercise_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -431,6 +435,10 @@ CREATE TABLE session_review_exercises(
 	CONSTRAINT wr_fk_exercise_id FOREIGN KEY (exercise_id) REFERENCES exercise(exercise_id) ON
 	DELETE CASCADE
 );
+
+ALTER TABLE
+	session_review_exercises OWNER TO psql;
+
 
 ALTER TABLE
 	workout_review OWNER TO psql;
