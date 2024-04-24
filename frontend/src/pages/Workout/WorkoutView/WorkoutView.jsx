@@ -240,6 +240,7 @@ function getWorkoutInfoContainer(workoutData, setShowPopup, context, userId) {
 									size="24px"
 									color="var(--red-primary)"
 									style={{cursor: "pointer"}}
+									id={"edit_pencil"}
 								/>
 							</Link>
 							<Trash

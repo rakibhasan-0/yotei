@@ -62,7 +62,6 @@ replay_pid*
 *.swp
 
 # GLOBAL IGNORES
-
 # Visual Studio Code
 .vscode
 .vscode/*
@@ -71,6 +70,16 @@ replay_pid*
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/*.code-snippets
+backend/api/target
+docs/api-docs/__pycache__
+
+frontend/.env
+frontend/node_modules
+
+
+launch.json
+
+backend/api/target/classes/
 
 # Local History for Visual Studio Code
 .history/
@@ -306,3 +315,4 @@ $RECYCLE.BIN/
 .Trash-*
 
 # .nfs files are created when an open file is removed but is still being accessed
+.nfs*
