@@ -1,19 +1,30 @@
 //import React from "react"
-import { configure } from "@testing-library/react"
+import { render, configure, screen, waitFor } from "@testing-library/react"
 import "@testing-library/jest-dom"
-//import ExerciseEdit from "../../../pages/Exercise/ExerciseEdit"
-//import { MemoryRouter } from "react-router"
+import ExerciseEdit from "../../../pages/Exercise/ExerciseEdit"
+import GroupIndex from "../../../pages/Plan/GroupIndex/GroupIndex"
+import { MemoryRouter } from "react-router"
+import { JustifyLeft } from "react-bootstrap-icons"
 configure({ testIdAttribute: "id" })
 
-test("ExerciseEdit should render", () => {})
-/*describe("ExerciseEdit should render", () => {
+jest.mock("react-router", () => ({
+	...jest.requireActual('react-router'),
+	useNavigate: () => jest.fn(),
+	unstable_useBlocker: () => jest.fn(),
+	useParams: () => ({
+		"excerciseId": "290"
+	})
+}))
 
-	beforeEach(() => {
-		render( //eslint-disable-line
-			<MemoryRouter>
-				<ExerciseEdit/>         
-			</MemoryRouter>
-		)
+describe("ExerciseEdit should render", () => {
+
+	beforeEach(async () => {
+		render(<ExerciseEdit/>)
+
+		// Used to wait for the page to fully load, otherwise it will just render the loading spinner
+		await waitFor(() => {
+			expect(document.title).toBe("Redigera övning")
+		})
 	})
 
 	test("Input field of name", () => {
@@ -27,12 +38,4 @@ test("ExerciseEdit should render", () => {})
 	test("Input field of minutepicker", () => {
 		expect(screen.getByTestId("minute-picker-minuteSelect")).toBeInTheDocument()
 	})
-
-
-	//todo: kolla att tagkomponenten finns
-
-
-
-
-
-})*/
+})
