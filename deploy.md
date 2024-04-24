@@ -10,7 +10,7 @@ If you don't run the script as root follow this guide:
 
 [docker post install](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user)
 
-If you want to have a domain name and want to use a https certificate then install.
+If you want to have a domain name and want to use a https certificate then install. Choose Ngnix as software and then choose the os you are running.
 
 [certbot](https://certbot.eff.org/instructions)
 
