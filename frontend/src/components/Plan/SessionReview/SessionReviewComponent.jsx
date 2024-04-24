@@ -28,7 +28,8 @@ export default function Review({isOpen, setIsOpen, session_id}) {
     const[rating, setRating] = useState(0)
     const[doneList, setDone] = useState([])
     const[positiveComment, setPositiveComment] = useState("")
-    const[negativeComment, setNegativeComment] = useState("");
+    const[negativeComment, setNegativeComment] = useState("")
+	const[savedDate, setSavedDate] = useState("")
 
 	const [errorStateMsg, setErrorStateMsg] = useState("")
 
@@ -61,7 +62,34 @@ export default function Review({isOpen, setIsOpen, session_id}) {
 			}
 		}
 
+		const fetchLoadedData = async() => {
+			const requestOptions = {
+				headers: {"Content-type": "application/json", token: context.token}
+			}
+
+			const loadedResponse = await fetch(`/api/session/${session_id}/review/all`, requestOptions).catch(() => {
+				setErrorStateMsg("Serverfel: Kunde inte ansluta till servern.")
+				setLoading(false)
+				return
+			})
+
+			if(loadedResponse.status != HTTP_STATUS_CODES.OK){
+				setErrorStateMsg("Pass med ID '" + session_id + "' existerar inte. Felkod: " + loadedResponse.status)
+				setLoading(false)
+			} else {
+				const json = await loadedResponse.json();
+				if(json[0] !== null) {
+					setRating(json[`rating`])
+					setPositiveComment(json[`positiveComment`])
+					setNegativeComment(json[`negativeComment`])
+					updateSavedDateDisplay(json[`date`])
+				}
+			}
+		}
+
+
 		fetchData()
+		//fetchLoadedData() <- Does not currently work
 	}, [])
 
 
@@ -109,7 +137,7 @@ export default function Review({isOpen, setIsOpen, session_id}) {
 			return
 		}
 
-
+		updateSavedDateDisplay(ts)
         setSuccess("Utvärdering sparad")
     }
 
@@ -122,65 +150,11 @@ export default function Review({isOpen, setIsOpen, session_id}) {
 		return yyyy + "-" + mm + "-" + dd
 	}
 
-    async function fetchRating() {
-		const response = await fetch("/api/sessions/" + session_id + "/review/all").catch(() => {
-			setError("Serverfel: Kunde inte hämta betyg för det valda tillfället.")
-			return
-		})
-
-		if(response.status != HTTP_STATUS_CODES.OK) {
-			setError("Serverfel: Något gick snett! Felkod: " + response.status)
-			return
-		}
-
-		const data = await response.json()
-		setRating(data['rating'])
+	function updateSavedDateDisplay(date) {
+		setSavedDate(date)
+		savedDateValue.textContent = date === "" ? "Aldrig" : date;
 	}
 
-    async function fetchDoneList() {
-        const response = await fetch("/api/sessions/" + session_id + "/review/all").catch(() => {
-			setError("Serverfel: Kunde inte hämta information om aktiviteter för det valda tillfället.")
-			return
-		})
-
-		if(response.status != HTTP_STATUS_CODES.OK) {
-			setError("Serverfel: Något gick snett! Felkod: " + response.status)
-			return
-		}
-
-		const data = await response.json()
-		setDone(data)
-    }
-
-    async function fetchPositiveComment() {
-        const response = await fetch("/api/sessions/" + session_id + "/review/all").catch(() => {
-            setError("Serverfel: Kunde inte hämta kommentar för det valda tillfället.")
-			return
-        })
-
-        if(response.status != HTTP_STATUS_CODES.OK) {
-			setError("Serverfel: Något gick snett! Felkod: " + response.status)
-			return
-		}
-
-        const data = await response.json()
-		setPositiveComment(data)
-    }
-
-	async function fetchNegativeComment() {
-        const response = await fetch("/api/sessions/" + session_id + "/review/all").catch(() => {
-            setError("Serverfel: Kunde inte hämta kommentar för det valda tillfället.")
-			return
-        })
-
-        if(response.status != HTTP_STATUS_CODES.OK) {
-			setError("Serverfel: Något gick snett! Felkod: " + response.status)
-			return
-		}
-
-        const data = await response.json()
-		setNegativeComment(data)
-    }
 
 	function getActivityContainer(sessionData) {
 		//console.log(sessionData)
@@ -245,6 +219,7 @@ export default function Review({isOpen, setIsOpen, session_id}) {
 				</div>
                 <div className="col-md-6 p-0">
 					<Button width={"100%"} onClick={() => saveReview()}>Spara</Button>
+					<p id="savedDateDisplay">Senast sparad: <span id="savedDateValue"></span></p>
 				</div>
 			</div>
 		</Popup>
