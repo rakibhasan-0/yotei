@@ -133,7 +133,7 @@ deploy-test-server:
     - rm -rf /var/www/html/nginx
     - rm -rf /var/www/html/*.yml
 
-    - docker build -t pvt2024/database:feature ./infra/database
+    - docker build --no-cache -t pvt2024/database:feature ./infra/database
     - docker push pvt2024/database:feature
     - docker build --no-cache -t pvt2024/gateway:feature ./backend/gateway
     - docker push pvt2024/gateway:feature
