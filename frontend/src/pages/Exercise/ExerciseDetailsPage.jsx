@@ -17,8 +17,8 @@ import {setError as setErrorToast} from "../../utils"
 /**
  * A component for displaying details about an exercise.
  * 
- * @author Chimera, Phoenix, Team Coconut, Team Durian
- * @since 2024-04-18
+ * @author Chimera, Phoenix, Team Coconut, Team Durian, Team Orange
+ * @since 2024-04-23
  * @version 2.2
  * @returns A page for displaying details about an exercise.
  */
@@ -127,7 +127,7 @@ export default function ExerciseDetailsPage() {
      * Fetches the updated comments by calling fetchComments.
      */
 	const onAddComment = async () => {
-		if (!commentText || commentText.trim().length === 0) {
+		if (!commentText || !commentText.trim() || commentText.length === 0) {
 			setCommentError("Kommentaren får inte vara tom")
 			return
 		}
@@ -241,8 +241,9 @@ export default function ExerciseDetailsPage() {
 			<div style={{ marginTop: "1rem", marginBottom:"1rem" }}>
 				<Button outlined={true} onClick={() => navigate(-1)}><p>Tillbaka</p></Button>
 			</div>
-			<Popup isOpen={isAddingComment} title={"Lägg till kommentar"} style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset"}} setIsOpen={toggleAddComment}>
-				<TextArea errorMessage={commentError} onInput={e => setCommentText(e.target.value)} autoFocus={true} />
+
+			<Popup isOpen={isAddingComment} title={"Lägg till kommentar"} style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset"}} setIsOpen={toggleAddComment} onClose={() => setCommentError(false)} >
+				<TextArea errorMessage={commentError} onInput={e => {setCommentText(e.target.value); setCommentError(false)}} autoFocus={true} />
 				<Button onClick={onAddComment}>Lägg till</Button>
 			</Popup>
 			<ConfirmPopup
