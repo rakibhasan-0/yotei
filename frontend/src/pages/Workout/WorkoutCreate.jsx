@@ -211,6 +211,7 @@ const WorkoutCreate = () => {
 
 	return (
 		<WorkoutCreateContext.Provider value={{ workoutCreateInfo, workoutCreateInfoDispatch }} >
+			<title>Skapa pass</title>
 			<h1 className={styles.title}>Skapa pass</h1>
 			<WorkoutFormComponent callback={submitHandler} state={state}/>
 			{ 

@@ -34,7 +34,7 @@ const KIHON_TAG = { id: 1, name: "Kihon Waza" }
  * Version 2.1:
  * 	   Selected belts for a technique now appears selected in the BeltPicker
  * 
- * @author Team Medusa, Team Tomato
+ * @author Team Medusa, Team Tomato, Team Durian (Group 3) (2024-04-23)
  * @version 2.1
  * @since 2023-05-16
  */
@@ -231,6 +231,7 @@ export default function TechniqueEdit({ id }) {
 	if(loading) return <Spinner/>
 	return (
 		<div id={id} style={{ display: "flex", gap: "16px", flexDirection: "column" }}>
+			<title>Redigera teknik</title>
 
 			<InputTextField
 				id="techniqueEditInputName"

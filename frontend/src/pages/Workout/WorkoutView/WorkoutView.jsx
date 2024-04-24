@@ -26,7 +26,7 @@ import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
  *      id        @type {int/string} - the id of the component
  *
  * @author Cyclops (Group 5) (2023-05-22)
- * @author Durian  (Group 3) (2024-04-18)
+ * @author Durian  (Group 3) (2024-04-23)
  * @version 1.6
  * 
  */
@@ -226,6 +226,7 @@ function getWorkoutInfoContainer(workoutData, setShowPopup, context, userId) {
 			<div className="container px-0">
 				<div className={styles.info}>
 					<div className={`d-flex col ${styles.workoutDetailColumnItem} p-0`}>
+						<title>Pass</title>
 						<h1 className="font-weight-bold m-0">{workoutData.name}</h1>
 					</div>
 					<div className="d-flex justify-content-end align-items-center">
@@ -239,6 +240,7 @@ function getWorkoutInfoContainer(workoutData, setShowPopup, context, userId) {
 									size="24px"
 									color="var(--red-primary)"
 									style={{cursor: "pointer"}}
+									id={"edit_pencil"}
 								/>
 							</Link>
 							<Trash
