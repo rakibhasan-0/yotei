@@ -35,7 +35,7 @@ const KIHON_TAG = { id: 1 }
  * 		Refactored some code. 
  *      Moved error handling to InputTextFields and toasts.
  *
- * @author Team Medusa
+ * @author Team Medusa, Team Durian (Group 3) (2024-04-23)
  * @version 2.0
  * @since 2023-05-10
  */
@@ -199,6 +199,7 @@ export default function CreateTechnique({ id }) {
 
 	return (
 		<div id={id} style={{ textAlign: "left", paddingBottom: "1.5rem" }}>
+			<title>Skapa teknik</title>
 			<h1 style={{ textAlign: "center" }}>Skapa teknik</h1>
 			<InputTextField
 				id="create-technique-input-name"
