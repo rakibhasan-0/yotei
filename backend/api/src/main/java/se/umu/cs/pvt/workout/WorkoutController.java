@@ -6,6 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
+
+import com.auth0.jwt.interfaces.DecodedJWT;
+
 import se.umu.cs.pvt.exercise.Exercise;
 import se.umu.cs.pvt.exercise.ExerciseRepository;
 import se.umu.cs.pvt.tag.Tag;
@@ -94,29 +97,21 @@ public class WorkoutController {
         }
         int userId;
         Long userIdL;
-        try {
-            userId = jwtUtil.getUserIdFromToken(token);
-            userIdL = Long.valueOf(userId);
-            System.out.println("userId: " + userId);
 
-            System.out.println("token" + token);
+        try {
+            DecodedJWT jwt = jwtUtil.validateToken(token);
+            userId = jwt.getClaim("userId").asInt();
+            userIdL = Long.valueOf(userId);
 
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        Optional<WorkoutDetail> workoutOpt = workoutDetailRepository.findById(id);
+        Optional<WorkoutDetail> workoutOpt = workoutDetailRepository.findWorkoutByIdAndUserAccess(id, userIdL);
+
         if (workoutOpt.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         WorkoutDetail workout = workoutOpt.get();
-        UserWorkout userWorkout = userWorkoutRepository.findByWorkoutIdAndUserId(id, userIdL);
-
-        // TODO: skippa om admin
-        // Check if the user has access to the workout
-
-        if (workout.getHidden() == true && (workout.getAuthor().getUserId() != userId && userWorkout == null)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
         return new ResponseEntity<>(new WorkoutDetailResponse(workout), HttpStatus.OK);
     }
 
