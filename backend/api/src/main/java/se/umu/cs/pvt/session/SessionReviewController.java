@@ -20,7 +20,7 @@ public class SessionReviewController {
 
 
     /**
-     * Constructir for the session review controller.
+     * Constructor for the session review controller.
      * @param planRepository
      * @param sessionReviewExerciseRepository
      */
