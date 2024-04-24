@@ -7,7 +7,7 @@
     height: 64px;
     border-bottom: 3px solid var(--black-primary);
     justify-content: space-between;
-    z-index: 1000;
+    z-index: 10;
     background-color: var(--background);
 }
 .commonNavbarSidebar {
