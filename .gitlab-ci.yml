@@ -142,7 +142,7 @@ deploy-test-server:
     - docker build --no-cache -t pvt2024/frontend:feature ./frontend
     - docker push pvt2024/frontend:feature
 
-    - cp ./docker-compose.yml /var/www/html/
+    - cp ./docker-compose.feature.yml /var/www/html/
     - cp -r ./nginx /var/www/html/
 
     - cd /var/www/html/
