@@ -306,7 +306,7 @@ export default function ExerciseEdit() {
 			<div className={styles.timeSelector}>
 				<MinutePicker
 					id={"minuteSelect"}
-					initialValue={window.localStorage.getItem("time")}
+					initialValue={time}
 					callback={timeCallback}
 				/>
 			</div>
