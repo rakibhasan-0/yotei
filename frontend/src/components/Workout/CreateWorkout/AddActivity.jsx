@@ -291,6 +291,9 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 * kept in the state to be displayed.
 	 */
 	const searchTechniques = () => {
+		if (selectedTechTags.find(tag => tag === "kihon waza") === undefined){
+			setKihon(false)
+		}
 		const filteredBelts = []
 
 		selectedBelts.forEach(function (arrayItem) {
