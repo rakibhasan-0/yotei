@@ -11,7 +11,7 @@ import ErrorLogsDisplay from "../../components/ErrorLogsDisplay/ErrorLogsDisplay
 /**
  * Basic layout as page for the administrative functions. Most logic contained in ManageUser, Import and Export.
  *
- *  @author Chimera (Group 4)
+ *  @author Chimera (Group 4), Team Durian (Group 3) (2024-04-23)
  *  @since 2023-05-23
  *  @version 1.0
  *  @returns A page for the administrative functions.
@@ -26,6 +26,7 @@ export default function Admin() {
 
 	return(
 		<div className="pb-4">
+			<title>Admin</title>
 			<h1 className="col-12 mt-4">Admin</h1>
 			<div className="center card-admin">
 				<ManageUser />

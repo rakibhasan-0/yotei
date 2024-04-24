@@ -24,6 +24,7 @@ import {setError as setErrorToast} from "../../utils"
  *
  * @author Team Cyclops (Group 5)
  * @author Team Tomato (Group 6)
+ * @author Team Durian (Group 3) (2024-04-23)
  * @since May 9, 2023
  * @version 1.1
  */
@@ -67,6 +68,7 @@ export default function WorkoutIndex() {
 		<>
 			<div id="search-area">
 				<center>
+					<title>Pass</title>
 					<h1>Pass</h1>
 					<SearchBar 
 						id="WorkoutIndexSearchBar"

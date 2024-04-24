@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useContext, useEffect, useReducer, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import WorkoutFormComponent from "../../components/Workout/CreateWorkout/WorkoutFormComponent.jsx"
@@ -11,7 +12,7 @@ import {
 } from "../../components/Workout/CreateWorkout/WorkoutCreateReducer.js"
 import styles from "./WorkoutModify.module.css"
 import { setSuccess, setError, setInfo } from "../../utils.js"
-import { unstable_useBlocker as useBlocker } from "react-router-dom"
+//import { unstable_useBlocker as useBlocker } from "react-router-dom"
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup.jsx"
 
 
@@ -23,9 +24,10 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup.jsx"
  * 							the previous page after creating a workout.
  * 							Otherwise the user is sent to the workoutView page.
  * 
- * @author Team Minotaur, Team 3 Durian
+ * @author Team Minotaur, Team 3 Durian, Team Kiwi
  * @version 2.1
- * @since 2023-05-24, 2024-04-19
+ * @since 2023-05-24
+ * @updated 2024-04-22 Removed blockers and pop-up window from this component. They are only commented out for now
  */
 const WorkoutCreate = () => {
 	const [workoutCreateInfo, workoutCreateInfoDispatch] = useReducer(
@@ -34,31 +36,33 @@ const WorkoutCreate = () => {
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const [hasLoadedData, setHasLoadedData] = useState(false)
 
-	const [isBlocking, setIsBlocking] = useState(false)
-	const [goBackPopup, setGoBackPopup] = useState(false)
+	//const [isBlocking, setIsBlocking] = useState(false)
 
 	const navigate = useNavigate()
 
 	const { state } = useLocation()
 
+	/*
 	const blocker = useBlocker(() => {
 		if (isBlocking) {
 			setGoBackPopup(true)
-			return true
+			return false
 		}
 		return false
 	})
+	
 
 	useEffect(() => {	
 		setIsBlocking(checkIfChangesMade(workoutCreateInfo))
 	}, [workoutCreateInfo])
+	*/
 
 	/**
 	 * Submits the form data to the API.
 	 */
 	async function submitHandler() {
 		setIsSubmitted(true)
-		setIsBlocking(false)
+		//setIsBlocking(false)
 		if (!checkIfChangesMade(workoutCreateInfo)) {
 			setInfo("Inget pass sparades.")
 			return navigate(-1, { replace: true, state })
@@ -87,7 +91,7 @@ const WorkoutCreate = () => {
 		} else {
 			setError("Träningspasset kunde inte skapas!")
 		}
-		blocker.state = "unblocked"
+		//blocker.state = "unblocked"
 
 	}
 	
@@ -207,8 +211,11 @@ const WorkoutCreate = () => {
 
 	return (
 		<WorkoutCreateContext.Provider value={{ workoutCreateInfo, workoutCreateInfoDispatch }} >
+			<title>Skapa pass</title>
 			<h1 className={styles.title}>Skapa pass</h1>
-			<WorkoutFormComponent callback={submitHandler} state={state} />
+			<WorkoutFormComponent callback={submitHandler} state={state}/>
+			{ 
+			/* Old pop-up window from 2023 
 			<ConfirmPopup
 				id="TillbakaMiniPopup"
 				showPopup={goBackPopup}
@@ -223,7 +230,7 @@ const WorkoutCreate = () => {
 					})
 					blocker.proceed()
 				}}
-			/>
+			/>*/}
 		</WorkoutCreateContext.Provider>
 	)
 }

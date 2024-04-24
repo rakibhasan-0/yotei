@@ -218,6 +218,7 @@ export default function SessionEdit() {
 			<ConfirmPopup onClick={deleteSesssion} showPopup={showPopup} setShowPopup={setShowPopup} popupText={"Är du säker?"}></ConfirmPopup>
 			<div className={styles.headerContainer}>
 				<Trash className={styles.trashcanIcon} style={{opacity:"0%"} /*Exists for proper spacing*/}></Trash> 
+				<title>Redigera tillfälle</title>
 				<h1 >Redigera Tillfälle</h1>
 				<Trash className={styles.trashcanIcon} onClick={() => setShowPopup(true)}></Trash>
 			</div>

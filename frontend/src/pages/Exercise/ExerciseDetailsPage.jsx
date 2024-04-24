@@ -17,7 +17,7 @@ import {setError as setErrorToast} from "../../utils"
 /**
  * A component for displaying details about an exercise.
  * 
- * @author Chimera, Phoenix, Team Coconut
+ * @author Chimera, Phoenix, Team Coconut, Team Durian
  * @since 2024-04-18
  * @version 2.1
  * @returns A page for displaying details about an exercise.
@@ -158,6 +158,7 @@ export default function ExerciseDetailsPage() {
 	}
 	return (
 		<div style={{ display: "flex", flexDirection: "column" }}>
+			<title>Övningar</title>
 			<h1 style={{textAlign: "left", wordWrap:"break-word"}}>{exercise?.name}</h1>
 			<div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: "10px" }}>
 				<div className="d-flex align-items-center">
