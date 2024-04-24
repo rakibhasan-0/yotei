@@ -12,7 +12,7 @@ import Tag from "../../Common/Tag/Tag"
  * @param addedUsers The getter for the state of added users.
  * @param setAddedUsers The setter for the state of added users.
  * 
- * @author: Olle Lögdahl (Minotaur)
+ * @author: Olle Lögdahl (Minotaur), Team Tomato (6)
  */
 function UserListItem({userObject, addedUsers, setAddedUsers}) {
 	const isChecked = () => addedUsers.find(e => e.userId == userObject.userId) != undefined
