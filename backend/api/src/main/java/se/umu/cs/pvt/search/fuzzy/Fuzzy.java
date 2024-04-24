@@ -16,7 +16,8 @@ import java.util.*;
 public class Fuzzy {
     // Variable that determines how strict the search cutoff will be. 0 represents
     // no cutoff, 100 represents a perfect match
-    private static int cutoff = 90;
+    private static int cutoff = 60; // represent the cutoff for exerecies, techniques etc
+    private static int extendedCutoff = 90; // represent the cutoff for tags. 
 
     /**
      * @param str      the string to fuzzy search.
@@ -24,7 +25,7 @@ public class Fuzzy {
      *
      * @return a sorted list based on string matching.
      */
-    public static <T extends SearchResponseInterface> List<T> search(String str, List<T> response) {
+    public static <T extends SearchResponseInterface> List<T> search(String str, List<T> response, Boolean useExtendedCutoff) {
 
         if (response == null || response.isEmpty() || str == null || str.isEmpty())
             return response;
@@ -33,7 +34,7 @@ public class Fuzzy {
 
         dataBaseRes = dataBaseRes.stream().filter(s -> !s.isEmpty()).toList();
 
-        List<ExtractedResult> list = FuzzySearch.extractSorted(str, dataBaseRes, getCutoff());
+        List<ExtractedResult> list = FuzzySearch.extractSorted(str, dataBaseRes, useExtendedCutoff ? getExtendedCutoff() : getCutoff());
 
         List<T> map = new ArrayList<>();
         for (ExtractedResult extractedResult : list) {
@@ -42,6 +43,10 @@ public class Fuzzy {
 
         return map;
 
+    }
+
+    public static <T extends SearchResponseInterface> List<T> search(String str, List<T> response) {
+      return search(str, response, false);
     }
 
     /**
@@ -59,4 +64,17 @@ public class Fuzzy {
     public static int getCutoff() {
         return cutoff;
     }
+
+    /**
+     * Sets the extendedCutoff that determines how good matches
+     * the fuzzy algorithm returns.
+     *
+     * @param extendedCutoff is set to 90% to achive a closly perfect match. 
+     *                       This procent is hardcoded in the class Fuzzy
+     */
+    public static int getExtendedCutoff() {
+        return extendedCutoff;
+    }
+
+
 }

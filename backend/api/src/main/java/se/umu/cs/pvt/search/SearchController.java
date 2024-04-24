@@ -275,7 +275,7 @@ public class SearchController {
         if (searchInput != null) {
             searchInput.toLowerCase();
         }
-        List<TagDBResult> filteredResult = Fuzzy.search(searchInput, tagResult);
+        List<TagDBResult> filteredResult = Fuzzy.search(searchInput, tagResult, true);
 
         List<String> tagCompletion = new ArrayList<String>();
 
