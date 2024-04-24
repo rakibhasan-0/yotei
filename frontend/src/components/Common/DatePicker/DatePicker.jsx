@@ -25,32 +25,46 @@ import { setError } from "../../../utils"
  *	maxDate={"2023-05-07"}  
  * 	/>
  * 
- * @author Chimera
+ * @author Chimera, Kiwi
  * @since 2023-05-02
  * @updated 2023-05-09 Griffin, added minDate, maxDate, 
  * @updated 2023-05-30 Chimera Updated Documentation
+ * @updated 2023-04-22 Kiwi, Added better UX for niche mobiles and desktop input.
  * @version 2.1 
  */
 export default function DatePicker({onChange, ref, selectedDate, id, minDate, maxDate}) {
 	const [invalid, setInvalid] = useState(false)
+	let countErrors = 0
+	let pressedKey
 
 	function handleChange(event) {
+		console.log("Value: " + event.target.value)
 		if(!event.target.value) {
-			setError("Felaktigt datum.", "datepicker-error")
-			setInvalid(true)
+			if(countErrors == 2 || pressedKey != 48){
+				setError("Felaktigt datum.", "datepicker-error")
+				setInvalid(true)
+				countErrors = 0
+			}
 		}
 		else {
+			countErrors = 0
 			setInvalid(false)
 			onChange(event)
 		}
 	}
 
+	function handleKeyDown(event){
+		pressedKey = event.keyCode
+	}
+
 	return (
 		<input 
 			id={id}
+			data-testid="date-picker-input"
 			type="date" 
 			value={selectedDate} 
 			onChange={handleChange}
+			onKeyDown={handleKeyDown}
 			className={`${invalid && styles.invalid} ${styles.datePicker}`}
 			ref={ref}
 			min={minDate}

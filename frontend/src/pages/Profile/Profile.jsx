@@ -11,11 +11,13 @@ import InputTextFieldBorderLabel from "../../components/Common/InputTextFieldBor
 import { logOut } from "/src/utils"
 import useMap from "../../hooks/useMap"
 import Divider from "../../components/Common/Divider/Divider"
+import Spinner from "../../components/Common/Spinner/Spinner"
+
 
 /**
- * @author Chimera
- * @since 2023-05-23
- * @version 1.0
+ * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3) (2024-04-23)
+ * @since 2024-04-23
+ * @version 3.0
  * @returns a page for managing the user's account
  */
 export default function Profile() {
@@ -30,7 +32,7 @@ export default function Profile() {
 	const [verifyNewPassword, setVerifyNewPassword] = useState("")
 	const [wrongPassword, setWrongPassword] = useState()
 	const [missMatchPassword, setMissMatchPassword] = useState()
-
+	const [loading, setIsLoading] = useState(true)
 	const [newUsername, setNewUsername] = useState("")
 	const [UsernamePassword, setUsernamePassword] = useState("")
 	const [verifyUsernamePassword, setVerifyUsernamePassword] = useState("")
@@ -64,6 +66,7 @@ export default function Profile() {
 				return setErrorToast("Kunde inte hämta pass!")
 			}
 			setWorkouts(list.results)
+			setIsLoading(false)
 		})
 	}, [searchText, token, userId, cache, cacheActions])
 
@@ -111,6 +114,7 @@ export default function Profile() {
 
 	return (
 		<Tabs defaultActiveKey={"FavoriteWorkouts"} className={style.tabs}>
+			
 			<Tab eventKey={"FavoriteWorkouts"} title={"Favoritpass"} className={style.tab}>
 				<SearchBar 
 					id="searchbar-workouts-1" 
@@ -118,7 +122,7 @@ export default function Profile() {
 					text={searchText} 
 					onChange={setSearchText}
 				/>
-				<WorkoutList list={workouts?.filter(w => w.favourite)} />
+				{loading ? <Spinner /> : <WorkoutList list={workouts?.filter(w => w.favourite)} />}
 			</Tab>
 			<Tab eventKey={"MyWorkouts"} title={"Mina Pass"} className={style.tab}>
 				<SearchBar 
@@ -127,11 +131,12 @@ export default function Profile() {
 					text={searchText} 
 					onChange={setSearchText}
 				/>
-				<WorkoutList list={workouts?.filter(w => w.author === userId)} />
+				{loading ? <Spinner /> :<WorkoutList list={workouts?.filter(w => w.author === userId)} />}
 			</Tab>
 			<Tab eventKey={"Settings"} title={"Inställningar"} className={style.tab}>
 				<div className={style.divider}><Divider option={"h2_center"} title={"Lösenord"} /></div>
-				<InputTextFieldBorderLabel errorMessage={wrongPassword} onChange={e => {setPassword(e.target.value)}} id="password" type="password" label="Nuvarande lösenord" />
+				<title>Min sida</title>
+				<InputTextFieldBorderLabel errorMessage={wrongPassword} onChange={e => {setPassword(e.target.value)}} id="current-password" type="password" label="Nuvarande lösenord" />
 				<div className='mb-2' />
 				<InputTextFieldBorderLabel onChange={e => {setNewPassword(e.target.value)}} id="new-password" type="password" label="Nytt lösenord" />
 				<div className='mb-2' />
@@ -143,7 +148,7 @@ export default function Profile() {
 				<div className={style.divider}><Divider option={"h2_center"} title={"Användarnamn"} /></div>
 				<InputTextFieldBorderLabel onChange={e => {setNewUsername(e.target.value)}} id="username" type="text" label="Nytt användarnamn" />
 				<div className='mb-2' />
-				<InputTextFieldBorderLabel onChange={e => {setUsernamePassword(e.target.value)}} errorMessage={verifyUsernamePassword} id="Password" type="password" label="Lösenord" />
+				<InputTextFieldBorderLabel onChange={e => {setUsernamePassword(e.target.value)}} errorMessage={verifyUsernamePassword} id="change-username-password" type="password" label="Lösenord" />
 				<div className='mb-2' />
 				<div className={style.floatRight}>
 					<Button className="btn btn-primary" onClick={changeUsername}>Ändra</Button>

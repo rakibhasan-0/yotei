@@ -2,6 +2,7 @@
 .sc23-session-container {
     user-select: none;
 	margin-bottom: 3%;
+	overflow: hidden;
 }
 
 .sc23-outline {

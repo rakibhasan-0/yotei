@@ -40,6 +40,7 @@ export function checkRole(context, role) {
  */
 export function logOut() {
 	new Cookies().remove("token")
+	new Cookies().remove("active-tab")
 	document.location.replace("/")
 }
 

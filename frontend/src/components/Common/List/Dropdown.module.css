@@ -21,6 +21,8 @@
     padding: 10px;
     padding-left: 0px;
     gap: 2px;
+    overflow: hidden;
+    word-wrap: break-word;
 }
 
 .listCentered > .listToggle {
@@ -28,7 +30,16 @@
 }
 
 .listHeader > p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: .5rem;
     margin: 0;
+}
+
+* > p {
+    width: 95%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .listToggle {
@@ -40,12 +51,14 @@
 
 .listText {
     font-size: large;
+    overflow: hidden;
 }
 
 input,
 .listText {
     width: 100%;
 }
+
 .listTextInput{
     text-align: left;
     border:none;

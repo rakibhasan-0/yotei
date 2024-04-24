@@ -20,19 +20,21 @@ import { Link, useLocation, useNavigate} from "react-router-dom"
  * The technique index page.
  * Fetches and displays the techniques.
  * 
- * @author Medusa, Team Tomato (group 6)
+ * @author Medusa, Team Tomato (group 6), Team Durian (Group 3) (2024-04-23)
  * @version 2.0
  * @since 2024-04-18
  */
 export default function TechniqueIndex() {
 	const [techniques, setTechniques] = useState([])
 	const context = useContext(AccountContext)
-	const [cookies, setCookie] = useCookies(["technique-filter-userId-"+context.userId])
+	const cookieID = "technique-filter-userId-"+context.userId
+	const [cookies, setCookie] = useCookies([cookieID])
+	const filterCookie = cookies[cookieID]
 	const [kihon, setKihon] = useState(false)
 	const [belts, setBelts] = useState([])// eslint-disable-line
-	const [searchBarText, setSearchBarText] = useState("")
+	const [searchBarText, setSearchBarText] = useState(filterCookie ? filterCookie.searchText : "")
 	const [map, mapActions] = useMap()
-	const [tags, setTags] = useState([])
+	const [tags, setTags] = useState(filterCookie ? filterCookie.tags : [])
 	const [suggestedTags, setSuggestedTags] = useState([])
 	const [showPopup, setShowPopup] = useState(false)
 	const [loading, setIsLoading] = useState(true)
@@ -41,7 +43,6 @@ export default function TechniqueIndex() {
 	const navigate = useNavigate()
 
 	useEffect(() => {
-		const filterCookie = cookies["technique-filter-userId-"+context.userId]
 		if(filterCookie) {
 			setBelts(filterCookie.belts)
 			setKihon(filterCookie.kihon)
@@ -55,6 +56,7 @@ export default function TechniqueIndex() {
 			map.clear()
 			return
 		}
+		setCookie(cookieID, {belts: belts, kihon: kihon, tags: tags, searchText: searchBarText}, {path: "/"})
 
 		// The selected belts are transformed from an array of belts objects to an array of strings, consisting of the belt names
 		const args = {
@@ -63,7 +65,6 @@ export default function TechniqueIndex() {
 			kihon: kihon,
 			selectedTags: tags,
 		}
-		setCookie("technique-filter-userId-"+context.userId, {belts: belts, kihon: kihon, tags: tags, searchText: searchBarText}, {path: "/"})
 
 		if(args.selectedTags.find(tag => tag === "kihon waza") === undefined) {
 			setKihon(false)
@@ -72,8 +73,10 @@ export default function TechniqueIndex() {
 		}
 
 		getTechniques(args, context.token, map, mapActions, res => {
-			setSuggestedTags(res.tagCompletion)
-			setTechniques(res.results)
+			if(!res.error) {
+				setSuggestedTags(res.tagCompletion)
+				setTechniques(res.results)
+			}
 			setIsLoading(false)
 		})
 
@@ -96,10 +99,6 @@ export default function TechniqueIndex() {
 		}
 		
 	}, [clearSearchText])
-	
-	const saveSearchText = () => {
-		localStorage.setItem("searchText", searchBarText)
-	}
 
 	function handleBeltChanged(checked, belt) {
 		setBelts(prev => {
@@ -138,11 +137,11 @@ export default function TechniqueIndex() {
 				<CreateTechnique setIsOpen={setShowPopup} />
 			</Popup>
 
+			<title>Tekniker</title>
 			<h1>Tekniker</h1>
 
 			<div>
 				<SearchBar
-					onBlur={saveSearchText}
 					id="searchbar-technique"
 					placeholder="Sök efter tekniker"
 					text={searchBarText}
@@ -168,7 +167,6 @@ export default function TechniqueIndex() {
 				{loading ? <Spinner /> : <InfiniteScrollComponent>
 					{techniques?.map((technique, key) =>
 						<TechniqueCard
-
 							key={key}
 							technique={technique}
 							checkBox={false}>

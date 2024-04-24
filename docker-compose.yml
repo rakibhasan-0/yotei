@@ -6,6 +6,8 @@ services:
     restart: always
     volumes:
       - ./nginx/development.conf:/etc/nginx/nginx.conf
+      - ./api-docs:/var/www/html/api-docs
+      - ./javadocs:/var/www/html/javadocs
       # - /etc/letsencrypt/:/etc/letsencrypt/
     ports:
       - 80:80
@@ -13,14 +15,14 @@ services:
     links:
       - gateway
 
-# Database need to be created first, check if depends_on is needed
+  # Database need to be created first, check if depends_on is needed
   psql:
     image: pvt2024/database:latest
     restart: always
     environment:
-      - POSTGRES_USER=psql
-      - POSTGRES_PASSWORD=yotei123
-      - POSTGRES_DB=yotei
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     ports:
       - "5432:5432"
     volumes:
@@ -31,7 +33,7 @@ services:
     ports:
       - "3000:3000"
     links:
-      - psql # Weird, maybe should be gateway/api ?? 
+      - psql
   gateway:
     image: pvt2024/gateway:latest
     restart: always
@@ -39,9 +41,9 @@ services:
       - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - POSTGRES_USER=psql
-      - POSTGRES_PASSWORD=yotei123
-      - POSTGRES_DB=yotei
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
       - BACKEND_HOST=http://api:8085
       - WEBSERVER_HOST=http://frontend:3000
     links:
@@ -57,21 +59,21 @@ services:
       - psql
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - POSTGRES_USER=psql
-      - POSTGRES_PASSWORD=yotei123
-      - POSTGRES_DB=yotei
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_HOST=psql:5432
       - ENABLE_SWAGGER=false
 
 volumes:
   pgdata:
 
-#                 O  O  O
-#                        O
-#                  ._, __|__.
-#                  || ||_____\
-#                  || ||    |
-#            .---------------------------.
-#             \   O   O   O   O -YOTEI- /
-#        ~ ~ ~ ~ ~ ~ ~ ~  ~ ~ ~ ~ ~ ~ ~ ~
-#      ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+    #                 O  O  O
+    #                        O
+    #                  ._, __|__.
+    #                  || ||_____\
+    #                  || ||    |
+    #            .---------------------------.
+    #             \   O   O   O   O -YOTEI- /
+    #        ~ ~ ~ ~ ~ ~ ~ ~  ~ ~ ~ ~ ~ ~ ~ ~
+    #      ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
