@@ -275,15 +275,23 @@ public class SearchController {
             searchInput.toLowerCase();
         }
 
-        List<String> tagCompletion = new ArrayList<String>();
+        Map<Integer, String> tagNameByIndex = new HashMap<>();
 
         for (int i = 0; i < tagResult.size(); i++) {
-            if(tagResult.get(i).getName().contains(searchInput)) {
-              tagCompletion.add(tagResult.get(i).getName());
+            String tagName = tagResult.get(i).getName();
+            int index = tagResult.get(i).getName().indexOf(searchInput);
+            if (index != -1) {
+                tagNameByIndex.put(index, tagName);
             }
         }
 
-        Collections.sort(tagCompletion);
+        ArrayList<Integer> sortedKeys = new ArrayList<Integer>(tagNameByIndex.keySet());
+        Collections.sort(sortedKeys);
+
+        ArrayList<String> tagCompletion = new ArrayList<>();
+        for(Integer index : sortedKeys) {
+          tagCompletion.add(tagNameByIndex.get(index));
+        }
 
         return tagCompletion;
     }
