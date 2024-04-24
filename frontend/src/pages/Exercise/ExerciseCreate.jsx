@@ -97,10 +97,7 @@ export default function ExerciseCreate() {
 	const hasRendered = useRef({"tagEffect":false, "inputEffect":false})
 
 	function done() {
-		if (undoMediaChanges) {
-			navigate(-1)
-		}
-		else {
+		if (!undoMediaChanges) {
 			setSendData(false)
 		}
 	}
@@ -253,7 +250,6 @@ export default function ExerciseCreate() {
 	 */
 	function addExerciseAndTags() {
 		if (checkInput() === true) {
-			setIsBlocking(false)
 			addExercise()
 				.then((exId) => handleExId(exId))
 				.then((exId) => handleSendData(exId))
@@ -279,7 +275,6 @@ export default function ExerciseCreate() {
 		
 		if (exerciseCreateInput.addBoxChecked == false) {
 			navigate(-1)
-			console.log("")
 			clearExerciseCreateInput(exerciseCreateInput.addBoxChecked, exerciseCreateInput.eraseBoxChecked)
 		} else {
 			if (exerciseCreateInput.eraseBoxChecked == true) {
