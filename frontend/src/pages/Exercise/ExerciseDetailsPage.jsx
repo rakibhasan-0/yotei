@@ -219,7 +219,7 @@ export default function ExerciseDetailsPage() {
 			<div style={{ marginTop: "1rem", marginBottom:"1rem" }}>
 				<Button outlined={true} onClick={() => navigate(-1)}><p>Tillbaka</p></Button>
 			</div>
-			<Popup isOpen={isAddingComment} title={"Lägg till kommentar"} style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset"}} setIsOpen={setAddComment} onClose={e => setCommentError(false)}>
+			<Popup isOpen={isAddingComment} title={"Lägg till kommentar"} style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset"}} setIsOpen={setAddComment} onClose={() => setCommentError(false)}>
 				<TextArea errorMessage={commentError} onInput={e => {setCommentText(e.target.value); setCommentError(false)}} />
 				<Button onClick={onAddComment}>Lägg till</Button>
 			</Popup>
