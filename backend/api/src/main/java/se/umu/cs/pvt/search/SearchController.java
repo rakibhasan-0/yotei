@@ -270,18 +270,20 @@ public class SearchController {
 
         List<TagDBResult> tagResult = searchRepository.getTagSuggestionsFromCustomQuery(createdQuery.getQuery());
 
-        // Use fuzzy search to find good suggestions, search string forced to lower case
-        // as all are fetched in lowercase from DB.
+        // All tags are in lowercase, serach input need to be it aswell
         if (searchInput != null) {
             searchInput.toLowerCase();
         }
-        List<TagDBResult> filteredResult = Fuzzy.search(searchInput, tagResult, true);
 
         List<String> tagCompletion = new ArrayList<String>();
 
-        for (int i = 0; i < filteredResult.size(); i++) {
-            tagCompletion.add(filteredResult.get(i).getName());
+        for (int i = 0; i < tagResult.size(); i++) {
+            if(tagResult.get(i).getName().contains(searchInput)) {
+              tagCompletion.add(tagResult.get(i).getName());
+            }
         }
+
+        Collections.sort(tagCompletion);
 
         return tagCompletion;
     }
