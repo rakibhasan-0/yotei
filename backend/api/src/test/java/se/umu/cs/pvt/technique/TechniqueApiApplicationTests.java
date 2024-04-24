@@ -28,10 +28,10 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 /**
  * A test-class for testing the methods inside TechniqueController, API.
  *
- * @author Quattro Formaggio, Calrkskrove, Phoenix (25-04-2023), Team Granatäpple (Grupp 1) (23-04-2024)
+ * @author Quattro Formaggio, Calrkskrove, Phoenix (25-04-2023)
  */
 
- @ExtendWith(MockitoExtension.class)
+@ExtendWith(MockitoExtension.class)
 @WebMvcTest(controllers = TechniqueController.class)
 public class TechniqueApiApplicationTests {
 
@@ -42,19 +42,16 @@ public class TechniqueApiApplicationTests {
     private WorkoutRepository workoutRepository;
 
     @MockBean
-    private TechniqueReviewRepository techniqueReviewRepository;
-
-    @MockBean
     private ActivityRepository activityRepository;
 
     @MockBean
     private MediaRepository mediaRepository;
 
     @Autowired
-    private TechniqueController techniqueController;
+    private TechniqueController controller;
     @Test
     void contextLoads() {
-        assertThat(techniqueController).isNotNull();
+        assertThat(controller).isNotNull();
     }
 
     private final Tag tag1 = new Tag(1L, "tag1");
@@ -94,23 +91,23 @@ public class TechniqueApiApplicationTests {
     void shouldFailWhenPostingTechniqueWithNoName() {
         Technique invalid = createTechnique(32L, "", "No name");
         Assertions.assertEquals(HttpStatus.NOT_ACCEPTABLE,
-                techniqueController.postTechnique(invalid).getStatusCode());
+                controller.postTechnique(invalid).getStatusCode());
     }
 
 
     @Test
     void shouldFailWhenUpdatingNonExistingTechnique() {
         Mockito.when(repository.findById(tec1.getId())).thenReturn(Optional.empty());
-        techniqueController.updateTechnique(tec1);
-        assertEquals(HttpStatus.NOT_FOUND, techniqueController.updateTechnique(tec1).getStatusCode());
+        controller.updateTechnique(tec1);
+        assertEquals(HttpStatus.NOT_FOUND, controller.updateTechnique(tec1).getStatusCode());
     }
 
 
     @Test
     void shouldSuceedWhenUpdatingExistingTechnique() {
         Mockito.when(repository.findById(tec1.getId())).thenReturn(Optional.empty());
-        techniqueController.updateTechnique(tec1);
-        assertNotEquals(HttpStatus.OK, techniqueController.updateTechnique(tec1).getStatusCode());
+        controller.updateTechnique(tec1);
+        assertNotEquals(HttpStatus.OK, controller.updateTechnique(tec1).getStatusCode());
     }
 
 
@@ -119,7 +116,7 @@ public class TechniqueApiApplicationTests {
         Technique technique = createTechnique(1L, "", "teknik 1");
         Mockito.when(repository.findById(technique.getId())).thenReturn(Optional.of(technique));
 
-        ResponseEntity<Object> response = techniqueController.updateTechnique(technique);
+        ResponseEntity<Object> response = controller.updateTechnique(technique);
 
         assertEquals(HttpStatus.NOT_ACCEPTABLE, response.getStatusCode());
     }
@@ -129,7 +126,7 @@ public class TechniqueApiApplicationTests {
     void shouldSucceedWhenUpdatingExistingTechnique() {
         Mockito.when(repository.findById(tec1.getId())).thenReturn(Optional.ofNullable(tec1));
 
-        assertEquals(HttpStatus.CREATED, techniqueController.updateTechnique(tec1).getStatusCode());
+        assertEquals(HttpStatus.CREATED, controller.updateTechnique(tec1).getStatusCode());
     }
 
 
@@ -139,14 +136,14 @@ public class TechniqueApiApplicationTests {
 
         Mockito.when(repository.findById(1L)).thenReturn(Optional.of(invalid));
         Assertions.assertEquals(HttpStatus.NOT_ACCEPTABLE,
-                techniqueController.updateTechnique(invalid).getStatusCode());
+                controller.updateTechnique(invalid).getStatusCode());
     }
 
     @Test
     void shouldFailWhenRemovingNoneExistingTechnique(){
         Mockito.when(repository.findById(tec1.getId())).thenReturn(Optional.empty());
 
-        assertEquals(HttpStatus.NOT_FOUND, techniqueController.removeTechnique(tec1.getId()).getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, controller.removeTechnique(tec1.getId()).getStatusCode());
     }
 
 
@@ -154,7 +151,7 @@ public class TechniqueApiApplicationTests {
     void shouldReturnAllExercisesFromGetExercises() {
         Mockito.when(repository.findAll()).thenReturn(techniques);
 
-        ResponseEntity<Object> response = techniqueController.getTechniques();
+        ResponseEntity<Object> response = controller.getTechniques();
         List<Technique> result = (List<Technique>) response.getBody();
 
 
@@ -169,30 +166,9 @@ public class TechniqueApiApplicationTests {
         Mockito.when(repository.findById(tec1.getId())).thenReturn(Optional.ofNullable(tec1));
         Mockito.when(repository.existsById(tec1.getId())).thenReturn(true);
 
-        ResponseEntity<Object> response = techniqueController.getTechniques(tec1.getId());
+        ResponseEntity<Object> response = controller.getTechniques(tec1.getId());
         Technique result = (Technique) response.getBody();
         assertThat(result).isEqualTo(tec1);
     }
 
-    @Test
-    void shouldSucceedWithGetReview() {
-        Mockito.when(techniqueReviewRepository.findReviewsForTechnique(1)).thenReturn(new ArrayList<TechniqueReviewReturnInterface>());
-        assertEquals(HttpStatus.OK, techniqueController.getReviewsForTechnique(1).getStatusCode());
-    }
-
-    @Test
-    void shouldSucceedWithInsertReview() {
-        TechniqueReview review = new TechniqueReview((long)1,3,4,5,"Snyggt byggt","fräsig kärra",new Date(1648930522000L));
-        Mockito.when(techniqueReviewRepository.save(review)).thenReturn(review);
-        assertEquals(HttpStatus.OK, techniqueController.insertReviewForTechnique(review).getStatusCode());
-    }
-
-    @Test
-    void shouldSucceedWithUpdateReview() {
-
-        TechniqueReview review = new TechniqueReview((long)1,3,4,5,"Snyggt byggt","fräsig kärra",new Date(1648930522000L));
-        Mockito.when(techniqueReviewRepository.save(review)).thenReturn(review);
-        Mockito.when(techniqueReviewRepository.findById(review.getId())).thenReturn(Optional.of(review));
-        assertEquals(HttpStatus.OK, techniqueController.updateReview(review).getStatusCode());
-    }
 }
