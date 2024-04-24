@@ -12,29 +12,31 @@ import Tag from "../../Common/Tag/Tag"
  * @param addedUsers The getter for the state of added users.
  * @param setAddedUsers The setter for the state of added users.
  * 
- * @author: Olle Lögdahl (Minotaur)
+ * @author: Olle Lögdahl (Minotaur), Team Tomato (6)
  */
 function UserListItem({userObject, addedUsers, setAddedUsers}) {
 	const isChecked = () => addedUsers.find(e => e.userId == userObject.userId) != undefined
 
+	// Helper function that removes a given user from addedUsers
+	const handleRemoveUser = () => {
+		const to_remove = addedUsers.findIndex(e => e.userId == userObject.userId)
+		setAddedUsers([
+			...addedUsers.slice(0, to_remove),
+			...addedUsers.slice(to_remove + 1)
+		])  
+	}
+	// Helper function that adds a given user to addedUsers
+	const handleAddUser = () => {
+		setAddedUsers([
+			...addedUsers,
+			userObject
+		])
+	}
+
 	return (
-		<span className={styles.userListItem}>
+		<span className={styles.userListItem} onClick={isChecked() ? handleRemoveUser : handleAddUser}>
 			<h2>{userObject.username}</h2>
-			{isChecked()
-				? <CheckLg size={28} onClick={() => {
-					const to_remove = addedUsers.findIndex(e => e.userId == userObject.userId)
-					setAddedUsers([
-						...addedUsers.slice(0, to_remove),
-						...addedUsers.slice(to_remove + 1)
-					])
-				}}/>
-				: <PlusLg size={28} onClick={() => {
-					setAddedUsers([
-						...addedUsers,
-						userObject
-					])
-				}}/>
-			}
+			{isChecked() ? <CheckLg size={28} /> : <PlusLg size={28} />}
 		</span>
 	)
 }
