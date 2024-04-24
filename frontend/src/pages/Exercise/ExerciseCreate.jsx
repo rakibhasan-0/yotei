@@ -58,8 +58,7 @@ export default function ExerciseCreate() {
 	})
 
 	const clearExerciseCreateInput = (addBoxChecked, eraseBoxChecked) => {
-		setExerciseCreateInput(
-		{
+		setExerciseCreateInput({
 			name: "",
 			desc: "",
 			time: 0,
