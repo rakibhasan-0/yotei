@@ -5,7 +5,6 @@ import Button from "../../Common/Button/Button"
 import Ratings from "react-ratings-declarative"
 import Star from "../../Common/StarButton/StarButton"
 import TextArea from "../../Common/TextArea/TextArea"
-import Tag from "../../../components/Common/Tag/Tag"
 import Divider from "../../Common/Divider/Divider"
 import CheckBox from "../../Common/CheckBox/CheckBox"
 import styles from "./SessionReviewComponent.module.css"
@@ -65,6 +64,14 @@ export default function Review({isOpen, setIsOpen, session_id}) {
 		fetchData()
 	}, [])
 
+
+	function handleCheckBoxChange (state, id) {
+		if(state) {
+			setDone([...doneList,id])
+		} else {
+			setDone(doneList.filter(doneId=>doneId !== id))
+		}
+	}
 
     function handleChangePositive(event){
 		setPositiveComment(event.target.value)
@@ -176,21 +183,19 @@ export default function Review({isOpen, setIsOpen, session_id}) {
     }
 
 	function getActivityContainer(sessionData) {
-		console.log(sessionData)
+		//console.log(sessionData)
 		return sessionData !== null &&
 		(
 			sessionData.activityCategories[0] !== undefined && (
 				<div className="container">
-					<div className="row">
-						<h2>Aktiviteter</h2>
-					</div>
+					<Divider option={"h2_center"} title={"Aktiviteter"} />
 					
 					<div className="row">
 					<ul>
 						{sessionData.activityCategories[0].activities.map((activity, index) => (
 							<div key={index} className={styles["activity_wrapper"]}>
 								<li className={styles["check_box_li"]}>
-									<CheckBox id={"CheckBox"} onClick={() => {}} checked={true}/>
+									<CheckBox id={"CheckBox" + activity.index} value = {activity.id} onClick={() => handleCheckBoxChange(!doneList.includes(activity.id), activity.id)} checked={doneList.includes(activity.id)}/>
 								</li>
 								<li className={styles["activity_text_li"]}>
 									{activity.name}
@@ -207,6 +212,7 @@ export default function Review({isOpen, setIsOpen, session_id}) {
     return (
         <Popup title={"Utvärdering av tillfälle"} id={"review-popup"} isOpen={isOpen} setIsOpen={setIsOpen}>
             <div className="d-flex flex-column align-items-center">
+				<Divider option={"h2_center"} title={"Betyg"} />
 				<div className="d-flex flex-row" style={{marginBottom: "20px"}}>
 					<Ratings widgetDimensions="40px" rating={rating} widgetRatedColors="gold" changeRating={setRating}>
 						<Ratings.Widget widgetHoverColor='gold'>
@@ -230,7 +236,7 @@ export default function Review({isOpen, setIsOpen, session_id}) {
                 	getActivityContainer(sessionData)
 				}
 
-
+				<Divider option={"h2_center"} title={"Kommentarer"} />
                 <div className="w-100">
 					<TextArea  type="text" text={positiveComment} onChange={handleChangePositive} className="col-md-6 col-md-offset-3" style={{marginTop: "30px", marginBottom: "20px", height: "80px", borderRadius: "5px", minHeight: "80px"}} placeholder="Vad var bra med passet?"/>
 				</div>
