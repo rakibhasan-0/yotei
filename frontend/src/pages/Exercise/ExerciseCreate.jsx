@@ -250,6 +250,7 @@ export default function ExerciseCreate() {
 	 */
 	function addExerciseAndTags() {
 		if (checkInput() === true) {
+			setIsBlocking(false)
 			addExercise()
 				.then((exId) => handleExId(exId))
 				.then((exId) => handleSendData(exId))
@@ -285,6 +286,7 @@ export default function ExerciseCreate() {
 				clearExerciseCreateInput(exerciseCreateInput.addBoxChecked, exerciseCreateInput.eraseBoxChecked)
 			}
 		}
+		hasRendered.current["inputEffect"] = false
 		setIsSubmitted(false)
 	}
 
