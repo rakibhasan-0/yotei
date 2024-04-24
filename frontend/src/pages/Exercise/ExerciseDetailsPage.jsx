@@ -19,7 +19,7 @@ import {setError as setErrorToast} from "../../utils"
  * 
  * @author Chimera, Phoenix, Team Coconut, Team Durian
  * @since 2024-04-18
- * @version 2.1
+ * @version 2.2
  * @returns A page for displaying details about an exercise.
  */
 export default function ExerciseDetailsPage() {
@@ -125,7 +125,7 @@ export default function ExerciseDetailsPage() {
      * Fetches the updated comments by calling fetchComments.
      */
 	const onAddComment = async () => {
-		if (!commentText || commentText.length === 0) {
+		if (!commentText || commentText.trim().length === 0) {
 			setCommentError("Kommentaren får inte vara tom")
 			return
 		}
