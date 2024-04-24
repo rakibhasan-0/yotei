@@ -5,6 +5,7 @@ import Button from "../../Common/Button/Button"
 import Ratings from "react-ratings-declarative"
 import Star from "../../Common/StarButton/StarButton"
 import TextArea from "../../Common/TextArea/TextArea"
+import Tag from "../../../components/Common/Tag/Tag"
 import Divider from "../../Common/Divider/Divider"
 import CheckBox from "../../Common/CheckBox/CheckBox"
 import styles from "./SessionReviewComponent.module.css"
@@ -175,25 +176,31 @@ export default function Review({isOpen, setIsOpen, session_id}) {
     }
 
 	function getActivityContainer(sessionData) {
-		return sessionData !== null && 
+		console.log(sessionData)
+		return sessionData !== null &&
 		(
-			<div className="container">
-				<div className="row">
-					<h2>Aktiviteter</h2>
+			sessionData.activityCategories[0] !== undefined && (
+				<div className="container">
+					<div className="row">
+						<h2>Aktiviteter</h2>
+					</div>
+					
+					<div className="row">
+					<ul>
+						{sessionData.activityCategories[0].activities.map((activity, index) => (
+							<div key={index} className={styles["activity_wrapper"]}>
+								<li className={styles["check_box_li"]}>
+									<CheckBox id={"CheckBox"} onClick={() => {}} checked={true}/>
+								</li>
+								<li className={styles["activity_text_li"]}>
+									{activity.name}
+								</li>
+							</div>
+						))}
+					</ul>
 				</div>
-				<div className="row">
-					{
-						sessionData.tags.map((tag, index) => {
-							return (
-								<div key={"tag" + index} className="mr-2">
-									<Tag tagType={"default"} text={tag.name}></Tag>
-									<CheckBox id={`CheckBox-${index}`} ></CheckBox>
-								</div>
-							)
-						})
-					}
 				</div>
-			</div>
+			)
 		)
 	}
 
