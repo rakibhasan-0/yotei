@@ -1,16 +1,15 @@
 /** @jest-environment jsdom */
 import React from "react"
-import { render, screen, configure, waitFor, /*fireEvent*/ } from "@testing-library/react"
-// import userEvent from "@testing-library/user-event"
+import { render, screen, configure, waitFor, fireEvent } from "@testing-library/react"
 import TechniqueIndex from "../../../../pages/Technique/TechniqueIndex/TechniqueIndex"
-//import CreateTechnique from "../../../../pages/Technique/CreateTechnique/CreateTechnique"
+import CreateTechnique from "../../../../pages/Technique/CreateTechnique/CreateTechnique"
 //import GroupIndex from "../../../../pages/Plan/GroupIndex/GroupIndex"
 //import Button from "../../../../components/Common/Button/Button"
 import "@testing-library/jest-dom"
 import { MemoryRouter } from "react-router-dom"
 import { AccountContext } from "../../../../context"
-//import userEvent from "@testing-library/user-event"
-//import { createMemoryRouter, RouterProvider, createRoutesFromElements, Route } from "react-router-dom"
+import userEvent from "@testing-library/user-event"
+import { createMemoryRouter, RouterProvider, createRoutesFromElements, Route } from "react-router-dom"
 //import { useNavigate } from "react-router-dom"
 
 
@@ -169,98 +168,101 @@ describe("should update", () => {
 
 	})
 
-	/**
-	 * Currently this test doesnt work due to the way the TechniqueIndex filtering is working,
-	 * this will be fixed ASAP in a different branch by (cs21don David Olofsson)
-	 */
+	test("should filter correctly, when leaving site and returnisearch-bar should be empty", async () => {
+		// const {rerender} = render (
+		// 	// eslint-disable-next-line no-dupe-keys
+		// 	<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", undefined }}>
+		// 		<MemoryRouter>
+		// 			<TechniqueIndex/>
+		// 		</MemoryRouter>
+		// 	</AccountContext.Provider>
+		// )
+		render(
+			// eslint-disable-next-line no-dupe-keys
+			<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", undefined }}>
+				<MemoryRouter>
+					<TechniqueIndex/>
+				</MemoryRouter>
+			</AccountContext.Provider>
+		)
 
-	// test("should create a technique", async () => {
-	// 	const {rerender} = render (
-	// 		// eslint-disable-next-line no-dupe-keys
-	// 		<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", undefined }}>
-	// 			<MemoryRouter>
-	// 				<TechniqueIndex/>
-	// 			</MemoryRouter>
-	// 		</AccountContext.Provider>
-	// 	)
+		expect(screen.getByText("Tekniker")).toBeInTheDocument()
 
-	// 	expect(screen.getByText("Tekniker")).toBeInTheDocument()
-
-	// 	const searchInput = screen.getByTestId("searchbar-input")
+		const searchInput = screen.getByTestId("searchbar-input")
     
-	// 	fireEvent.change(searchInput, { target: { value: "blå" } })
+		fireEvent.change(searchInput, { target: { value: "blå" } })
 
-	// 	await waitFor(() => { 
-	// 		expect(screen.getByText("Blå Testteknik nr 3")).toBeInTheDocument()
-	// 	})
+		await waitFor(() => { 
+			expect(screen.getByText("Blå Testteknik nr 3")).toBeInTheDocument()
+		})
 
-	// 	await waitFor(() => { 
-	// 		expect(screen.queryByText("Grönt Testteknik")).not.toBeInTheDocument()
-	// 	})
+		await waitFor(() => { 
+			expect(screen.queryByText("Grönt Testteknik")).not.toBeInTheDocument()
+		})
 
-	// 	await waitFor(() => {
-	// 		expect(screen.queryByText("Grått Testteknik nr 2")).not.toBeInTheDocument()
-	// 	})
-	// 	//userEvent.type(nameInput, "Testteknik nr 2")
+		await waitFor(() => {
+			expect(screen.queryByText("Grått Testteknik nr 2")).not.toBeInTheDocument()
+		})
+		//userEvent.type(nameInput, "Testteknik nr 2")
 
-	// 	await userEvent.click(screen.getByTestId("technique-add-button"))
+		await userEvent.click(screen.getByTestId("technique-add-button"))
 
-	// 	const router = createMemoryRouter(
-	// 		createRoutesFromElements(
-	// 			<Route path="/*" element={<CreateTechnique/>} />
-	// 		)
-	// 	)
-	// 	render( //eslint-disable-line
-	// 		<RouterProvider router={router} />
-	// 	)
+		const router = createMemoryRouter(
+			createRoutesFromElements(
+				<Route path="/*" element={<CreateTechnique/>} />
+			)
+		)
+		render( //eslint-disable-line
+			<RouterProvider router={router} />
+		)
 
-	// 	expect(screen.getByTestId("create-technique-input-name")).toBeVisible()
+		expect(screen.getByTestId("create-technique-input-name")).toBeVisible()
 
-	// 	await userEvent.click(screen.getByTestId("create-technique-backbutton"))
+		await userEvent.click(screen.getByTestId("create-technique-backbutton"))
 
-	// 	rerender(<MemoryRouter><TechniqueIndex/></MemoryRouter>)
+		//rerender(<MemoryRouter><TechniqueIndex/></MemoryRouter>)
 
-	// 	expect(screen.getByTestId("searchbar-input")).toHaveValue("")
+		expect(screen.getByTestId("searchbar-input")).toHaveValue("blå")
 
-	// 	await waitFor(() => { 
-	// 		expect(screen.getByText("Blå Testteknik nr 3")).toBeInTheDocument()
-	// 	})
+		await waitFor(() => { 
+			expect(screen.getByText("Blå Testteknik nr 3")).toBeInTheDocument()
+		})
 
-	// 	await waitFor(() => { 
-	// 		expect(screen.getByText("Grönt Testteknik")).toBeInTheDocument()
-	// 	})
+		await waitFor(() => { 
+			expect(screen.queryByText("Grönt Testteknik")).not.toBeInTheDocument()
+		})
 
-	// 	await waitFor(() => {
-	// 		expect(screen.getByText("Grått Testteknik nr 2")).toBeInTheDocument()
-	// 	})
+		await waitFor(() => {
+			expect(screen.queryByText("Grått Testteknik nr 2")).not.toBeInTheDocument()
+		})
 
-	// 	//await userEvent.click(screen.getByTestId("technique-add-button"))
+		// 	//await userEvent.click(screen.getByTestId("technique-add-button"))
 
-	// 	//const router = createMemoryRouter(routes, {initialEntries: ["/","/technique/create"], initialIndex: 1})
-	// 	// render(
-	// 	// 	<CreateTechnique/>, {wrapper: router}
-	// 	// )
+		// 	//const router = createMemoryRouter(routes, {initialEntries: ["/","/technique/create"], initialIndex: 1})
+		// 	// render(
+		// 	// 	<CreateTechnique/>, {wrapper: router}
+		// 	// )
 
-	// 	// render(
-	// 	// 	<CreateTechnique/>, {wrapper: HashRouter}
-	// 	// )
+		// 	// render(
+		// 	// 	<CreateTechnique/>, {wrapper: HashRouter}
+		// 	// )
 
-	// 	//await userEvent.type(screen.getByTestId("create-technique-input-name"), "Testteknik nr 2")
-	// 	//await userEvent.click(screen.getByText("Lägg till"))
+		// 	//await userEvent.type(screen.getByTestId("create-technique-input-name"), "Testteknik nr 2")
+		// 	//await userEvent.click(screen.getByText("Lägg till"))
 
-	// 	// await waitFor(() => {
-	// 	// 	expect(requestSpy).toHaveBeenCalled()
-	// 	// })
+		// 	// await waitFor(() => {
+		// 	// 	expect(requestSpy).toHaveBeenCalled()
+		// 	// })
 
-	// 	// await waitFor(() => {
-	// 	// 	expect(screen.getByText("Testteknik")).toBeInTheDocument()
-	// 	// })
+		// 	// await waitFor(() => {
+		// 	// 	expect(screen.getByText("Testteknik")).toBeInTheDocument()
+		// 	// })
 
-	// 	// await waitFor(() => {
-	// 	// 	expect(screen.getByText("Testteknik nr 2")).toBeInTheDocument()
-	// 	// })
+		// 	// await waitFor(() => {
+		// 	// 	expect(screen.getByText("Testteknik nr 2")).toBeInTheDocument()
+		// 	// })
 
-	// })
+	})
 
 
 	// The initial technique and the added technique should be in the document
