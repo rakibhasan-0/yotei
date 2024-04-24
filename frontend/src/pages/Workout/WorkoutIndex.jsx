@@ -23,8 +23,10 @@ import {setError as setErrorToast} from "../../utils"
  * activitylist after the current search term.
  *
  * @author Team Cyclops (Group 5)
+ * @author Team Tomato (Group 6)
+ * @author Team Durian (Group 3) (2024-04-23)
  * @since May 9, 2023
- * @version 1.0
+ * @version 1.1
  */
 
 export default function WorkoutIndex() {
@@ -66,6 +68,7 @@ export default function WorkoutIndex() {
 		<>
 			<div id="search-area">
 				<center>
+					<title>Pass</title>
 					<h1>Pass</h1>
 					<SearchBar 
 						id="WorkoutIndexSearchBar"
@@ -77,8 +80,8 @@ export default function WorkoutIndex() {
 						suggestedTags={suggestedTags}
 						setSuggestedTags={setSuggestedTags}
 					/>
-					<FilterContainer >
-						<div className={`container ${styles.filterContainer}`}>
+					<FilterContainer numFilters={0}>
+						<div className={`container ${styles.filterContainer}` }>
 							<div className="row align-items-center">
 								<p className="m-0 col text-left">Från</p>
 								<DatePicker className="col" selectedDate={dates.from} maxDate={dates.maxFrom} onChange={handleFromDateChange}/>

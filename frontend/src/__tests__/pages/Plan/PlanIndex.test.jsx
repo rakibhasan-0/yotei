@@ -4,6 +4,11 @@ import PlanIndex from "../../../pages/Plan/PlanIndex"
 import { rest } from "msw"
 import { server } from "../../server"
 
+
+/**
+ * @author Team Durian (Group 3) (2024-04-23) 
+ */
+
 configure({testIdAttribute: "id"})
 jest.mock("react-router", () => ({
 	useNavigate: () => jest.fn()
@@ -17,7 +22,8 @@ jest.mock("react-router-dom", () => ({
 
 test("Should render title on init", async () => {
 	render(<PlanIndex/>)
-	expect(screen.getByText("Planering")).toBeInTheDocument()
+	//Gets the first "Planering" so there can exist a header and a tab title with the same name. 
+	expect(screen.getAllByText("Planering")[0]).toBeInTheDocument()
 })
 
 test("should render data from the plan api", async () => {

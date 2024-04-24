@@ -17,9 +17,9 @@ import { isEditor } from "../../utils"
 /**
  * Displays a searchbar, a sorter and a list of exercises.
  * 
- * @author Hawaii, Verona, Phoenix, Cyclops, Team Mango, Team Coconut
+ * @author Hawaii, Verona, Phoenix, Cyclops, Team Mango, Team Coconut, Team Tomato, Team Durian
  * @since 2024-04-18
- * @version 3.1
+ * @version 3.2
  */
 export default function ExerciseIndex() {
 	const sortOptions = [
@@ -115,11 +115,12 @@ export default function ExerciseIndex() {
 				setSuggestedTags={setSuggestedTags}
 			/>
 
-			<FilterContainer id="ei-filter" title="Sortering">
+			<FilterContainer id="ei-filter" title="Sortering" numFilters={0}>
 				<Sorter onSortChange={setSort} id="ei-sort" selected={sort} options={sortOptions} />
 			</FilterContainer>
 			{ loading ? <Spinner/> :
 				<div>
+					<title>Övningar</title>
 					<InfiniteScrollComponent>
 						{ visibleList.map((exercise, index) => {
 							return <ExerciseCard

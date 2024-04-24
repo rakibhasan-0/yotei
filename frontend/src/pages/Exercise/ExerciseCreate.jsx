@@ -19,7 +19,7 @@ import { unstable_useBlocker as useBlocker } from "react-router"
 
 /**
  * The page for creating new exercises.
- * 
+ *
  * Changes version 2.0:
  *     Removed extraneuos css.
  *     Removed uneccesary containers.
@@ -31,26 +31,66 @@ import { unstable_useBlocker as useBlocker } from "react-router"
  *     Verona (2022-05-04)
  *     Phoenix (Group 1) (2023-05-04)
  *     Medusa (Group 6) (2023-06-01)
+ *     Coconut (Group 7) (2024-04-22)
+ *     Team Mango (Group 4) (2024-04-22)
+ * 	   Team Durian (Group 3) (2024-04-23)
  * 
- * @since 2023-05-22
- * @version 2.0
+ * @since 2024-04-22
+ * @version 3.0
  */
 export default function ExerciseCreate() {
-	const [name, setName] = useState("")
-	const [desc, setDesc] = useState("")
-	const [time, setTime] = useState(0)
-	const [addBoxChecked, setAddBoxChecked] = useState(false)
-	const [eraseBoxChecked, setEraseBoxChecked] = useState(false)
+
+	// true when data has been saved, when unmounting and rebuilding view.
+	const [exerciseCreateInput, setExerciseCreateInput] = useState(() => {
+		const retExerciseCreateInput = JSON.parse(localStorage.getItem("exerciseCreateLocalStorageKey"))
+		if (retExerciseCreateInput) {
+			return retExerciseCreateInput
+		} else {
+			return {
+				name: "",
+				desc: "",
+				time: 0,
+				addBoxChecked: false,
+				eraseBoxChecked: false,
+				addedTags: []
+			}
+		}
+	})
+
+	const clearExerciseCreateInput = (addBoxChecked, eraseBoxChecked) => {
+		setExerciseCreateInput({
+			name: "",
+			desc: "",
+			time: 0,
+			addBoxChecked: addBoxChecked,
+			eraseBoxChecked: eraseBoxChecked,
+			addedTags: []
+		})
+	}
+
+	const [name, setName] = useState(() => {
+		return exerciseCreateInput.name
+	})
+	const [desc, setDesc] = useState(() => {
+		return exerciseCreateInput.desc
+	})
+	const [time, setTime] = useState(() => {
+		return exerciseCreateInput.time
+	})
+
 	const context = useContext(AccountContext)
-	const [addedTags, setAddedTags] = useState([])
+	const [addedTags, setAddedTags] = useState(() => {
+		return exerciseCreateInput.addedTags
+	})
 	const [showMiniPopup, setShowMiniPopup] = useState(false)
 	const [errorMessage, setErrorMessage] = useState("")
 	const [tempId, setTempId] = useState(-1)
 	const [sendData, setSendData] = useState(false)
 	const [undoMediaChanges, setUndoMediaChanges] = useState(false)
-	const [tags, setTags] = useState(false)
 	const [isBlocking, setIsBlocking] = useState(false)
 
+
+	const [isSubmitted, setIsSubmitted] = useState(false)
 	const navigate = useNavigate()
 
 	function done() {
@@ -59,7 +99,6 @@ export default function ExerciseCreate() {
 		}
 		else {
 			setSendData(false)
-			exitProdc(tags)
 		}
 	}
 
@@ -72,8 +111,58 @@ export default function ExerciseCreate() {
 	})
 
 	useEffect(() => {
+		if (isSubmitted) {
+			exitProdc()
+		}
+	}, [isSubmitted])
+
+	useEffect(() => {
+		storeInputChange("addedTags", addedTags)
+	}, [addedTags])
+
+	useEffect(() => {
 		setIsBlocking(name != "" || desc != "")
 	}, [name, desc])
+
+	/**
+	 * Saves an exerciseCreateInput object in local storage
+	 */
+	useEffect(() => {
+		localStorage.setItem("exerciseCreateLocalStorageKey", JSON.stringify(exerciseCreateInput))
+	}, [exerciseCreateInput])
+
+
+	/**
+	 * Loads an exerciseCreateInput object from local storage or initializes one if non was found.
+	 */
+	useEffect(() => {
+		const item = localStorage.getItem("exerciseCreateLocalStorageKey")
+		if (item) {
+			setExerciseCreateInput(JSON.parse(item))
+		} else {
+			// Initialize state only if localStorage data is not available
+			setExerciseCreateInput({
+				name: "",
+				desc: "",
+				time: 0,
+				addBoxChecked: false,
+				eraseBoxChecked: false,
+				addedTags: []
+			})
+		}
+	}, [])
+
+	/**
+	 * Updates the exerciseCreateInput object when new input is added
+	 * @param fieldName The exerciseCreateInput objects attribute to be changed
+	 * @param value The new value
+	 */
+	const storeInputChange = (fieldName, value) => {
+		setExerciseCreateInput(prevState => ({
+			...prevState,
+			[fieldName]: value
+		}))
+	}
 
 	/**
 	 * Method for API call when creating an exercise.
@@ -83,6 +172,9 @@ export default function ExerciseCreate() {
 	 */
 	async function addExercise() {
 		let data = null
+
+		const item = localStorage.getItem("exerciseCreateLocalStorageKey")
+		if(item) console.log("ADD EXERCISE:", item)
 
 		const requestOptions = {
 			method: "POST",
@@ -94,6 +186,8 @@ export default function ExerciseCreate() {
 			if (response.ok) {
 				data = await response.json()
 				setErrorMessage("")
+				toast.success("Övningen " + name + " lades till")
+				setIsSubmitted(true)
 				return data.id
 			} else {
 				if (response.status === 409) {
@@ -164,7 +258,6 @@ export default function ExerciseCreate() {
 	 * Calls the API calls in the correct order by
 	 * first creating the exercise, then linking the exercise with the chosen tags.
 	 */
-
 	function addExerciseAndTags() {
 		if (checkInput() === true) {
 			setIsBlocking(false)
@@ -172,7 +265,7 @@ export default function ExerciseCreate() {
 				.then((exId) => handleExId(exId))
 				.then((exId) => handleSendData(exId))
 				.then((exId) => addTag(exId))
-				.then((linkedTags) => setTags(linkedTags))
+
 		}
 	}
 
@@ -188,22 +281,23 @@ export default function ExerciseCreate() {
 
 	/**
 	 * Checks if insert worked, if so redirect back to exercise.
-	 * @param linkedTags - result from linking tags
 	 */
-	function exitProdc(linkedTags) {
-		if (linkedTags) {
-			toast.success("Övningen " + name + " lades till")
-			if (addBoxChecked === false) {
-				navigate(-1)
-			} else {
-				if (eraseBoxChecked === true) {
-					setName("")
-					setTime(0)
-					setDesc("")
-					setAddedTags([])
-				}
+	function exitProdc() {
+		
+		if (exerciseCreateInput.addBoxChecked == false) {
+			navigate(-1)
+			console.log("")
+			clearExerciseCreateInput(exerciseCreateInput.addBoxChecked, exerciseCreateInput.eraseBoxChecked)
+		} else {
+			if (exerciseCreateInput.eraseBoxChecked == true) {
+				setName("")
+				setTime(0)
+				setDesc("")
+				setAddedTags([])
+				clearExerciseCreateInput(exerciseCreateInput.addBoxChecked, exerciseCreateInput.eraseBoxChecked)
 			}
 		}
+		setIsSubmitted(false)
 	}
 
 	/**
@@ -211,7 +305,7 @@ export default function ExerciseCreate() {
 	 * @returns Boolean if the name is ok or not
 	 */
 	function checkInput() {
-		if (name !== "" && name !== undefined) {
+		if (exerciseCreateInput.name !== "" && exerciseCreateInput.name !== undefined) {
 			setErrorMessage("")
 			return true
 		} else {
@@ -220,29 +314,47 @@ export default function ExerciseCreate() {
 		return false
 	}
 
+	/**
+	 * Handles logic when exercise duration is changed.
+	 * @param id - component id
+	 * @param time - a number that denotes the exercise duration (time)
+	 */
 	function timeCallback(id, time) {
 		setTime(time)
+		storeInputChange("time", time)
 	}
 
 	/**
-	 * Handles logic when add more exercises checkbox is clicked. 
+	 * Handles logic when add more exercises checkbox is clicked.
 	 * @param checked - a boolean to set if the add checkbox is clicked or not
 	 */
 	function addCheckboxClicked(checked) {
-		setAddBoxChecked(checked)
-		setEraseBoxChecked(false)
+		storeInputChange("addBoxChecked", checked)
+		storeInputChange("eraseBoxChecked", false)
+	}
+
+	/**
+	 * Handles logic when erase exercises checkbox is clicked.
+	 * @param checked - a boolean to set if the erase checkbox is clicked or not
+	 */
+	function eraseBoxClicked(checked) {
+		storeInputChange("eraseBoxChecked", checked)
 	}
 
 	return (
 		<>
+			<title>Skapa övning</title>
 			<h1>Skapa övning</h1>
 
 			<div style={{ height: "1rem" }} />
 
 			<InputTextField
 				placeholder="Namn"
-				text={name}
-				onChange={(e) => setName(e.target.value)}
+				text={exerciseCreateInput.name}
+				onChange={(e) => {
+					setName(e.target.value)
+					storeInputChange("name", e.target.value)
+				}}
 				required={true}
 				type="text"
 				id="ExerciseNameInput"
@@ -251,10 +363,14 @@ export default function ExerciseCreate() {
 			<TextArea
 				className={styles.standArea}
 				placeholder="Beskrivning"
-				text={desc}
-				onChange={(e) => setDesc(e.target.value)}
+				text={exerciseCreateInput.desc}
+				onChange={(e) => {
+					setDesc(e.target.value)
+					storeInputChange("desc", e.target.value)
+				}}
 				required={true}
 				type="text"
+				id = "exercise-description-input"
 				errorDisabled={true}
 			/>
 
@@ -287,7 +403,7 @@ export default function ExerciseCreate() {
 			<CheckBox
 				label={"Fortsätt skapa övningar"}
 				disabled={false}
-				checked={addBoxChecked}
+				checked={exerciseCreateInput.addBoxChecked}
 				onClick={addCheckboxClicked}
 			/>
 
@@ -295,9 +411,9 @@ export default function ExerciseCreate() {
 
 			<CheckBox
 				label={"Rensa fält"}
-				disabled={!addBoxChecked}
-				checked={eraseBoxChecked}
-				onClick={setEraseBoxChecked}
+				disabled={!exerciseCreateInput.addBoxChecked}
+				checked={exerciseCreateInput.eraseBoxChecked}
+				onClick={eraseBoxClicked}
 			/>
 
 			<div style={{ height: "1rem" }} />
@@ -307,8 +423,7 @@ export default function ExerciseCreate() {
 					width="100%"
 					outlined={true}
 					onClick={() => {
-						setUndoMediaChanges(true) 
-						exitProdc()
+						setUndoMediaChanges(true)
 					}}
 				>
 					<p>Tillbaka</p>
@@ -317,7 +432,6 @@ export default function ExerciseCreate() {
 					width="100%"
 					onClick={() => {
 						addExerciseAndTags()
-						exitProdc(tags)
 					}}
 				>
 					<p>Lägg till</p>

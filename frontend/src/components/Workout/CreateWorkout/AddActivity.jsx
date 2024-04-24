@@ -30,8 +30,10 @@ import { useCookies } from "react-cookie"
  * @param {string} id A unique id of the component (Testing purposes)
  * @param {function} setShowActivityInfo Callback function to report selected activities
  *  
- * @author Kraken (Grupp 7)
- * @since 2023-05-23
+ * @author Kraken (Grupp 7), Team Coconut, Team Kiwi
+ * @since 2024-04-19
+ * @updated 2024-04-22 Kiwi, Fixed so searchbar is not cleared unless component is closed, also so the active tab will show
+ * @updated 2024-04-23 Kiwi, Kihon checkbox is now saved when clicking and redirecting to a technique.
  */
 function AddActivity({ id, setShowActivityInfo }) {
 
@@ -44,6 +46,9 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 * This map is used as a parameter when using getTechniques method.
 	 */
 	const [map, mapActions] = useMap()
+	const [key, setKey] = useState("technique")
+	const [tabCookie, setCookie] = useCookies(["active-tab"])
+
 
 	/**
 	 * States related to keeping track of which techniques
@@ -67,7 +72,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	const [suggestedExerTags, setSuggestedExerTags] = useState([])
 	const [fetchedTech, setFetchedTech] = useState(false)
 	const [fetchedExer, setFetchedExer] = useState(false)
-
+	const [activeTab, setActiveTab] = useState("")
 
 	/**
 	 * Keeps track of which activities that are checked/selected by the user.
@@ -84,7 +89,43 @@ function AddActivity({ id, setShowActivityInfo }) {
 	]
 	const [sort, setSort] = useState(sortOptions[0])
 	const [cookies, setCookies] = useCookies(["exercise-filter"])
+	const [cookiesExer, setCookiesExer] = useCookies(["techniques-filter"])
 	const [visibleExercises, setVisibleExercises] = useState([])
+
+
+	/**
+     * Makes sure the data in the search bar is stored when choosing between techniques and exercises
+     * also when redirected to and from info on techniques and exercises.
+     * Also makes sure we return to the tab we where on before, either excerises or techniques
+	 * (2024-04-22)
+     */
+	useEffect(() => {
+		setSearchTechText(localStorage.getItem("searchTechText") || "")
+		setSearchExerText(localStorage.getItem("searchExerText") || "")
+		setActiveTab(localStorage.getItem("activeTab") || "technique")
+	}, [])
+
+	useEffect(() => {
+		localStorage.setItem("activeTab", activeTab)
+	}, [activeTab])
+
+	useEffect(() => {
+		localStorage.setItem("searchTechText", searchTechText)
+	}, [searchTechText])
+    
+	useEffect(() => {
+		localStorage.setItem("searchExerText", searchExerText)
+	}, [searchExerText])
+    
+
+	// NEW
+	useEffect(() => {
+		const filterCookie = cookiesExer["techniques-filter"]
+		if (filterCookie) {
+			setSelectedTechTags(filterCookie.tags)
+			setKihon(filterCookie.kihon)
+		}
+	}, [])
 
 
 	useEffect(() => {
@@ -97,7 +138,17 @@ function AddActivity({ id, setShowActivityInfo }) {
 	}, [])
 
 	useEffect(setExerciseList, [exercises, sort, searchExerText])
+	
+	useEffect(() => {
+		const activeTab = tabCookie["active-tab"]
+		if (activeTab) {
+			setKey(activeTab)
+		}
+	}, [])
 
+	useEffect(() => {
+		setCookie("active-tab", key, { path: "/" })
+	}, [key])
 
 	useEffect(() => {
 		if (hasLoadedData) return
@@ -212,6 +263,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 			}
 			filteredBelts.push(x)
 		})
+		setCookiesExer("techniques-filter", { tags: selectedTechTags, kihon: kihon,sort: sort.label }, { path: "/" })
 
 		const args = {
 			text: searchTechText,
@@ -269,10 +321,11 @@ function AddActivity({ id, setShowActivityInfo }) {
 		}
 	}
 
+
 	return (
 		<div id={id}>
 			<Modal.Body style={{ padding: "0" }}>
-				<Tabs defaultActiveKey="technique" className={style.tabs}>
+				<Tabs activeKey={key} onSelect={(k) => setKey(k)} className={style.tabs}>
 					<Tab eventKey="technique" title="Tekniker" tabClassName={`nav-link ${style.tab}`}>
 						<div className={style.searchBar}>
 							<SearchBar
@@ -331,7 +384,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 								setSuggestedTags={setSuggestedExerTags}
 							/>
 						</div>
-						<FilterContainer id="ei-filter" title="Sortering">
+						<FilterContainer id="ei-filter" title="Sortering" numFilters={0}>
 							<Sorter onSortChange={setSort} id="ei-sort" selected={sort} options={sortOptions} />
 						</FilterContainer>
 						{(exercises.length === 0 && fetchedExer) ?

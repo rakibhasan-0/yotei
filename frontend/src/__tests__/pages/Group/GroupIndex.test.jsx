@@ -8,7 +8,7 @@ import { server } from "../../server"
  * Unit-test for the GroupIndex page, 
  * init as well as making sure search button is case insensitive
  *
- * @author Team Mango (Group 4)
+ * @author Team Mango (Group 4), Team Durian (Group 3) (2024-04-23)
  * @since 2024-04-18
  * @version 1.0 
  */
@@ -26,7 +26,8 @@ jest.mock("react-router-dom", () => ({
 
 test("Should render title on init", async () => {
 	render(<GroupIndex/>)
-	expect(screen.getByText("Grupper")).toBeInTheDocument()
+	//Gets the first "Grupper" so there can exist a header and a tab title with the same name.
+	expect(screen.getAllByText("Grupper")[0]).toBeInTheDocument()
 })
 
 // This test should make sure that the group search bar is working as intended (is case insensitive)
@@ -79,13 +80,9 @@ test("Should render a group when searching for it", async () => {
 	/*After rendering screen and fetching info, 
     the test finds the searchbar and gives it the input "grönt" 
     */
-
-	/* Technical sidenote: Had good solution for test using queryselector("input"),
-    however linter complained resulting in a much more ugly solution.
-    Also test does not work if placeholder text changes. (fix ASAP if possible)
-    */ 
+   
 	await screen.findByTestId("searchbar-groups")
-	const searchInput = screen.getByPlaceholderText("Sök efter grupp")
+	const searchInput = screen.getByTestId("searchbar-input")
     
 	fireEvent.change(searchInput, { target: { value: "grönt" } })
 
