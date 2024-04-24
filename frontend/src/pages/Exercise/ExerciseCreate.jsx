@@ -58,7 +58,8 @@ export default function ExerciseCreate() {
 	})
 
 	const clearExerciseCreateInput = (addBoxChecked, eraseBoxChecked) => {
-		setExerciseCreateInput({
+		setExerciseCreateInput(
+		{
 			name: "",
 			desc: "",
 			time: 0,
@@ -66,6 +67,8 @@ export default function ExerciseCreate() {
 			eraseBoxChecked: eraseBoxChecked,
 			addedTags: []
 		})
+
+		localStorage.removeItem("exerciseCreateLocalStorageKey")
 	}
 
 	const [name, setName] = useState(() => {
@@ -132,7 +135,6 @@ export default function ExerciseCreate() {
 		if (hasRendered.current["inputEffect"]) {
 			localStorage.setItem("exerciseCreateLocalStorageKey", JSON.stringify(exerciseCreateInput))
 			setIsBlocking(true)
-
 			//Remove block if no information in fields.
 			if (name == "" && desc == "" && time == 0 && addedTags.length == 0) {
 				setIsBlocking(false)
@@ -277,6 +279,7 @@ export default function ExerciseCreate() {
 		if (exerciseCreateInput.addBoxChecked == false) {
 			navigate(-1)
 			clearExerciseCreateInput(exerciseCreateInput.addBoxChecked, exerciseCreateInput.eraseBoxChecked)
+			
 		} else {
 			if (exerciseCreateInput.eraseBoxChecked == true) {
 				setName("")
