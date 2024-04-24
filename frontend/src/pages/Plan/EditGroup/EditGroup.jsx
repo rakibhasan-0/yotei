@@ -19,7 +19,7 @@ import { unstable_useBlocker as useBlocker } from "react-router"
  * Example usage:
  *     <EditGroup />
  *
- * @author Medusa (Grupp 6)
+ * @author Medusa (Grupp 6), Team Durian (Group 3) (2024-04-23)
  * @version 1.0
  * @since 2023-05-25
  */
@@ -152,6 +152,7 @@ function EditGroup() {
 
 	return (
 		<div className={styles.container}>
+			<title>Redigera grupp</title>
 			<h1 className="mb-4">Redigera grupp</h1>
 			<Trash
 				size="32px"

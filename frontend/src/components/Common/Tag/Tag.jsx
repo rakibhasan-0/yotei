@@ -24,7 +24,7 @@ import { PlusCircle, XCircleFill } from "react-bootstrap-icons"
  * 		/>
  * 
  * 
- * @author: Team Kraken (Group 7)
+ * @author: Team Kraken (Group 7), Team Mango (2024-04-23)
  * @version: 2.0
  */
 
@@ -36,20 +36,20 @@ export default function Tag({ id, tagType, onClick, text }) {
 	if (tagType === "default") {
 		return (
 			<button type="button" id={id} className={styles["base-tag"]} onClick={onClick}>
-				<p className={styles["no-margin"]}>{text}</p>
+				<p className={`${styles["no-margin"]} w-100`}>{text}</p>
 			</button>
 		)
 	} else if (tagType === "suggest") {
 		return (
 			<button type="button" id={id} className={`${styles["base-tag"]} ${styles["suggest"]} suggest`} onClick={onClick}>
-				<p className={styles["no-margin"]}>{text}</p>
+				<p className={`${styles["no-margin"]} w-100`}>{text}</p>
 				<PlusCircle className="ml-2" size={18} color="black"/>
 			</button>
 		)
 	} else {
 		return (
 			<button type="button" id={id} className={styles["base-tag"]} onClick={onClick}>
-				<p className={styles["no-margin"]}>{text}</p>
+				<p className={`${styles["no-margin"]} w-100`}>{text}</p>
 				<XCircleFill className="ml-2 flex-shrink-0" size={18} color="black"/>
 			</button>
 		)
