@@ -43,6 +43,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 	const [validated, setValidated] = useState(false)
 	const [acceptActivities, setAcceptActivities] = useState(false)
 	const navigate = useNavigate()
+	const [showPopup, setShowPopup] = useState(false)
 
 	/**
 	 * Sets the title of the page.
@@ -90,11 +91,19 @@ export default function WorkoutFormComponent({ callback, state }) {
 	 * This function is called when the "go back" button is pressed.
 	 * Checks if any changes are made to the workout-form, if so a confirm-popup is shown.
 	 * If no changes to the workout are made, then it navigates back.
-	 *
 	 */
 	function handleGoBack() {
-		if (state?.fromSession) {
-			return navigate(`/session/edit/${state.session.sessionId}`, { replace: true, state })
+		setShowPopup(true)
+	}
+
+	function confirmGoBack() {
+
+		localStorage.removeItem("workoutCreateInfo") // Clear local storage as confirmed
+
+		if (state?.fromSession && !state?.fromCreate) {
+			navigate(`/session/edit/${state.session.sessionId}`, { replace: true, state })
+		} else if(state?.fromCreate) {
+			return navigate("/session/create", { replace: true, state })
 		}
 		navigate("/workout")
 	}
@@ -107,9 +116,6 @@ export default function WorkoutFormComponent({ callback, state }) {
 		} else if (workoutCreateInfo.popupState.types.editActivityPopup) {
 			shouldClose = false
 			shouldClose = !checkIfActivityInfoPoupChangesMade(workoutCreateInfo)
-			console.log(shouldClose)
-		} else if (workoutCreateInfo.popupState.types.chooseActivityPopup) {
-			shouldClose = workoutCreateInfo.checkedActivities.length === 0
 		} else if (workoutCreateInfo.popupState.types.freeTextPopup) {
 			shouldClose = !workoutCreateInfo.addedActivities.some(activity => activity.name.length > 0)
 		}
@@ -123,7 +129,9 @@ export default function WorkoutFormComponent({ callback, state }) {
 			})
 		} else {
 			setLeaveActivityPickerPopup(true)
+			localStorage.clear() 
 		}
+		
 	}
 
 	return (
@@ -260,6 +268,16 @@ export default function WorkoutFormComponent({ callback, state }) {
 						>
 							<h2>Tillbaka</h2>
 						</Button>
+						<ConfirmPopup
+							id = "confirm-pop-up-go-back"
+							showPopup={showPopup}
+							setShowPopup={setShowPopup}
+							onClick={confirmGoBack}
+							popupText="Är du säker på att du vill gå tillbaka?"
+							confirmText="Ja"
+							backText="Avbryt"
+							zIndex={1000} 
+						/>
 						<Button type="submit" id="workout-create-back-button">
 							<h2>Spara</h2>
 						</Button>
