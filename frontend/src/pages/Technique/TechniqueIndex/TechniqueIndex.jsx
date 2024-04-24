@@ -16,11 +16,12 @@ import { isAdmin } from "../../../utils"
 import Spinner from "../../../components/Common/Spinner/Spinner"
 import { Link, useLocation, useNavigate} from "react-router-dom"
 
+
 /**
  * The technique index page.
  * Fetches and displays the techniques.
  * 
- * @author Medusa, Team Tomato (group 6), Team Durian (Group 3) (2024-04-23)
+ * @author Medusa, Team Tomato (group 6), Team Mango (Group 4)
  * @version 2.0
  * @since 2024-04-18
  */
@@ -76,6 +77,7 @@ export default function TechniqueIndex() {
 			if(!res.error) {
 				setSuggestedTags(res.tagCompletion)
 				setTechniques(res.results)
+				localStorage.removeItem("searchText", searchBarText)
 			}
 			setIsLoading(false)
 		})
@@ -99,6 +101,10 @@ export default function TechniqueIndex() {
 		}
 		
 	}, [clearSearchText])
+
+	const saveSearchText = () => {
+		localStorage.setItem("searchText", searchBarText)
+	}
 
 	function handleBeltChanged(checked, belt) {
 		setBelts(prev => {
@@ -137,11 +143,11 @@ export default function TechniqueIndex() {
 				<CreateTechnique setIsOpen={setShowPopup} />
 			</Popup>
 
-			<title>Tekniker</title>
 			<h1>Tekniker</h1>
 
 			<div>
 				<SearchBar
+					onBlur={saveSearchText}
 					id="searchbar-technique"
 					placeholder="Sök efter tekniker"
 					text={searchBarText}
@@ -165,12 +171,19 @@ export default function TechniqueIndex() {
 				</div>
 
 				{loading ? <Spinner /> : <InfiniteScrollComponent>
-					{techniques?.map((technique, key) =>
+					{techniques?.filter(technique => {
+						if (searchBarText?.length > 0) {
+							return technique.name.toLowerCase().includes(searchBarText.toLowerCase())
+						}
+						return true
+					}).map((technique, key) =>
 						<TechniqueCard
 							key={key}
 							technique={technique}
 							checkBox={false}>
-						</TechniqueCard>)}
+						</TechniqueCard>)
+					}
+					
 				</InfiniteScrollComponent>}
 			</div>
 
