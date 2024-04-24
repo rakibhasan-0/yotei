@@ -18,7 +18,7 @@ import { HTTP_STATUS_CODES, setError } from "../../utils"
  * If nothing is selected, the default is from todays date until inf.
  * TODO: PlanIndex is error handling on fetches(react toast).
  * 
- * @author Griffin
+ * @author Griffin, Team Durian (Group 3) (2024-04-23)
  * @version 1.0
  * @since 2023-05-24
  */
@@ -178,6 +178,7 @@ export default function PlanIndex() {
 
 	return (
 		<center>
+			<title>Planering</title>
 			<h1>Planering</h1>
 			{/* TODO: Improve this later, its a hotfix because FilterPlan is bad */}
 			<div style={{ marginTop: "-25px", marginLeft: "auto", width: "fit-content", transform: "translateY(100%)" }}>

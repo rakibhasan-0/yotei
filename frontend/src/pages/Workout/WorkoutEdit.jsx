@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useContext, useEffect, useReducer, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import WorkoutFormComponent from "../../components/Workout/CreateWorkout/WorkoutFormComponent.jsx"
@@ -6,20 +7,18 @@ import {
 	workoutCreateReducer, 
 	WorkoutCreateInitialState, 
 	WORKOUT_CREATE_TYPES,
-	checkIfChangesMade, 
 } from "../../components/Workout/CreateWorkout/WorkoutCreateReducer.js"
 import { WorkoutCreateContext } from "../../components/Workout/CreateWorkout/WorkoutCreateContext.js"
 import styles from "./WorkoutModify.module.css"
 import { setSuccess, setError } from "../../utils.js"
-import { unstable_useBlocker as useBlocker } from "react-router-dom"
-import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup.jsx"
 
 /**
  * This is the page for editing a saved workout.
  * 
- * @author Team Minotaur
+ * @author Team Minotaur, Team Kiwi, Team Durian (Group 3) (2024-04-23)
  * @version 2.0
  * @since 2023-05-24
+ * @updated 2024-04-23 Team Kiwi, Removed blockers and Pop-up for redirecting to technique descriptions
  */
 const WorkoutEdit = () => {
 	const [workoutCreateInfo, workoutCreateInfoDispatch] = useReducer(
@@ -29,29 +28,11 @@ const WorkoutEdit = () => {
 	const location = useLocation()
 	const [isSubmitted, setIsSubmitted] = useState(false)
 
-	const [goBackPopup, setGoBackPopup] = useState(false)
-
-	const [isBlocking, setIsBlocking] = useState(false)
-
-
-	const blocker = useBlocker(() => {
-		if (isBlocking) {
-			setGoBackPopup(true)
-			return true
-		}
-		return false
-	})
-
-	useEffect(() => {	
-		setIsBlocking(checkIfChangesMade(workoutCreateInfo))
-	}, [workoutCreateInfo])
-
 	/**
 	 * Submits the form data to the API.
 	 */
 	async function submitHandler() {
 		setIsSubmitted(true)
-		setIsBlocking(false)
 
 		const data = parseData(workoutCreateInfo.data)
 		const workoutId = await updateWorkout(data)
@@ -195,19 +176,9 @@ const WorkoutEdit = () => {
 
 	return (
 		<WorkoutCreateContext.Provider value={{workoutCreateInfo, workoutCreateInfoDispatch}} >
+			<title>Redigera pass</title>
 			<h1 className={styles.title}>Redigera pass</h1>
-			<WorkoutFormComponent callback={submitHandler} />
-			<ConfirmPopup
-				id="TillbakaMiniPopup"
-				showPopup={goBackPopup}
-				zIndex={1000}
-				setShowPopup={setGoBackPopup}
-				popupText="Är du säker på att du vill gå tillbaka? Dina ändringar kommer inte att sparas."
-				confirmText="Ja"
-				backText="Avbryt"
-				onClick={blocker.proceed}
-			/>
-			
+			<WorkoutFormComponent callback={submitHandler} />	
 		</WorkoutCreateContext.Provider>
 	)
 }
