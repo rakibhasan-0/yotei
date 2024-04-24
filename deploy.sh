@@ -6,8 +6,7 @@ while true; do
         [yY] ) 
 	    read -rp "Whats your domain name: " domain
 	    export DOMAIN_NAME="$domain"
-	    export NGINX_CONF="nginx/prod.conf"
-
+	    sed -i 's/#-/-/g' docker-compose.release.yml
 	    envsubst '${DOMAIN_NAME}' < nginx/prod.conf.template > nginx/prod.conf
 	    break;;
 	[nN] )
@@ -21,14 +20,14 @@ done
 if command -v docker-compose
 then    
     docker-compose down -v
-    docker build --no-cache -t pvt2024/gateway:latest backend/gateway
-    docker build --no-cache -t pvt2024/api:latest backend/api 
-    docker build --no-cache -t pvt2024/frontend:latest frontend
-    docker-compose up -d
+    docker build --no-cache -t pvt2024/gateway:3.1 backend/gateway
+    docker build --no-cache -t pvt2024/api:3.1 backend/api
+    docker build --no-cache -t pvt2024/frontend:3.1 frontend
+    docker-compose -f docker-compose.release.yml up -d
 else 
     docker compose down -v
-    docker build --no-cache -t pvt2024/gateway:latest backend/gateway
-    docker build --no-cache -t pvt2024/api:latest backend/api 
-    docker build --no-cache -t pvt2024/frontend:latest frontend
-    docker compose up -d
+    docker build --no-cache -t pvt2024/gateway:3.1 backend/gateway
+    docker build --no-cache -t pvt2024/api:3.1 backend/api 
+    docker build --no-cache -t pvt2024/frontend:3.1 frontend
+    docker compose -f docker-compose.release.yml up -d
 fi
