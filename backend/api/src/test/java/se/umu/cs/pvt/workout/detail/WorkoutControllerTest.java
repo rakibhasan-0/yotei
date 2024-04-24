@@ -8,6 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.Mockito.*;
+
 import se.umu.cs.pvt.exercise.Exercise;
 import se.umu.cs.pvt.exercise.ExerciseRepository;
 import se.umu.cs.pvt.tag.TagRepository;
@@ -16,15 +21,18 @@ import se.umu.cs.pvt.technique.Technique;
 import se.umu.cs.pvt.technique.TechniqueRepository;
 import se.umu.cs.pvt.user.InvalidPasswordException;
 import se.umu.cs.pvt.user.InvalidUserNameException;
+import se.umu.cs.pvt.user.JWTUtil;
 import se.umu.cs.pvt.user.User;
+import se.umu.cs.pvt.user.User.Role;
 import se.umu.cs.pvt.workout.*;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,9 +71,15 @@ public class WorkoutControllerTest {
     @Autowired
     private WorkoutController controller;
 
+    @MockBean
+    private JWTUtil jwtUtil;
+
+    @Autowired
+    private MockMvc mockMvc;
 
     @Test
-    public void shouldGetWorkoutDetails() throws InvalidPasswordException, InvalidUserNameException, NoSuchAlgorithmException, InvalidKeySpecException {
+    public void shouldGetWorkoutDetails() throws InvalidPasswordException, InvalidUserNameException,
+            NoSuchAlgorithmException, InvalidKeySpecException {
         // Arrange
         List<ActivityDetail> activityDetails = List.of(
                 new ActivityDetail(
@@ -100,11 +114,14 @@ public class WorkoutControllerTest {
                         1,
                         10,
                         new Technique(2L, "ex2", "desc2", null, null),
-                        null)
-        );
+                        null));
         User author = new User("hej", "hejsan123!");
         author.setUserId(1L);
-        
+        author.setUserRole(Role.ADMIN);
+
+        when(jwtUtil.generateToken(author.getUsername(), author.getUserRole().toString(), 1))
+                .thenReturn("testToken123");
+
         when(workoutDetailRepository.findById(1L))
                 .thenReturn(Optional.of(new WorkoutDetail(
                         1L,
@@ -117,11 +134,12 @@ public class WorkoutControllerTest {
                         false,
                         author,
                         activityDetails,
-                        new ArrayList<>()
-                )));
+                        new ArrayList<>())));
 
         // Act
-        WorkoutDetailResponse response = controller.getWorkoutDetails(1L).getBody();
+        WorkoutDetailResponse response = controller.getWorkoutDetails(
+                jwtUtil.generateToken(author.getUsername(), author.getUserRole().toString(), 1),
+                1L).getBody();
         List<WorkoutDetailResponse.ActivityResponseContainer> activityCategories = response.getActivityCategories();
 
         // Assert
@@ -143,20 +161,20 @@ public class WorkoutControllerTest {
 
     @Test
     public void shouldReturn404WhenAssociatedTechniqueIsNotFound() {
-        ResponseEntity<Object> response =  controller.associatedTechniques(1L);
+        ResponseEntity<Object> response = controller.associatedTechniques(1L);
         assertThat(response.getStatusCodeValue()).isEqualTo(404);
     }
 
     @Test
     public void shouldReturn404WhenAssociatedExerciseIsNotFound() {
-        ResponseEntity<Object> response =  controller.associatedExercises(1L);
+        ResponseEntity<Object> response = controller.associatedExercises(1L);
         assertThat(response.getStatusCodeValue()).isEqualTo(404);
     }
 
     @Test
     public void shouldReturnListOfWorkoutsWhenAnAcitivityHasATechnique() {
         LocalDate dateStart = LocalDate.of(2020, 3, 3);
-        Date dateEnd = new Date(2020, 3, 4);
+        Date dateEnd = new GregorianCalendar(2020, Calendar.MARCH, 4).getTime();
 
         Technique technique = new Technique(1L, "One really hard technique", "Some description", null, null);
         Activity activity = new Activity(2L, "Some good activity", "maybe one descrption?", 40, 2);
@@ -174,7 +192,6 @@ public class WorkoutControllerTest {
         Mockito.when(activityRepository.findAll()).thenReturn(activityList);
         Mockito.when(workoutRepository.findById(3L)).thenReturn(Optional.of(workout));
 
-
         ResponseEntity<Object> response = controller.associatedTechniques(technique.getId());
 
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
@@ -184,7 +201,7 @@ public class WorkoutControllerTest {
     @Test
     public void shouldReturnListOfWorkoutsWhenAnAcitivityHasAnExercise() {
         LocalDate dateStart = LocalDate.of(2020, 3, 3);
-        Date dateEnd = new Date(2020, 3, 4);
+        Date dateEnd = new GregorianCalendar(2020, Calendar.MARCH, 4).getTime();
 
         Exercise exercise = new Exercise(1L, "some exercise", "", 10);
 
@@ -203,9 +220,73 @@ public class WorkoutControllerTest {
         Mockito.when(activityRepository.findAll()).thenReturn(activityList);
         Mockito.when(workoutRepository.findById(3L)).thenReturn(Optional.of(workout));
 
-
         ResponseEntity<Object> response = controller.associatedExercises(exercise.getId());
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
         assertThat(response.getBody()).isEqualTo(expected);
+    }
+
+    @Test
+    public void shouldReturn403WhenExcericeIsPrivateAndUserDoesNotHaveAccessToIt() throws Exception {
+        User author = new User("author", "password123");
+        author.setUserRole(Role.ADMIN);
+        author.setUserId(1L);
+
+        User nonAuthor = new User("userName", "password!");
+        nonAuthor.setUserId(2L);
+        nonAuthor.setUserRole(Role.USER);
+
+        String token = "testToken123";
+        when(jwtUtil.getUserIdFromToken(token)).thenReturn(2);
+        WorkoutDetail privateWorkout = new WorkoutDetail(
+                1L,
+                "Private Workout",
+                "This is a private workout",
+                10,
+                null,
+                null,
+                null,
+                true,
+                author,
+                null,
+                new ArrayList<>());
+        when(workoutDetailRepository.findById(1L)).thenReturn(Optional.of(privateWorkout));
+        when(userWorkoutRepository.findByWorkoutIdAndUserId(1L, 2L)).thenReturn(null); // no access record
+
+        mockMvc.perform(get("/api/workouts/detail/{id}", 1L)
+                .header("token", token))
+                .andExpect(status().isForbidden());
+
+    }
+
+    @Test
+    public void shouldReturnWorkoutDetailWhenUserIsAddedToPrivateWorkout() throws Exception {
+        User author = new User("author", "password123");
+        author.setUserRole(Role.ADMIN);
+        author.setUserId(1L);
+
+        User nonAuthor = new User("userName", "password!");
+        nonAuthor.setUserId(2L);
+        nonAuthor.setUserRole(Role.USER);
+
+        String token = "testToken123";
+        when(jwtUtil.getUserIdFromToken(token)).thenReturn(2);
+        WorkoutDetail privateWorkout = new WorkoutDetail(
+                1L,
+                "Private Workout",
+                "This is a private workout",
+                10,
+                null,
+                null,
+                null,
+                true,
+                author,
+                null,
+                new ArrayList<>());
+
+        when(workoutDetailRepository.findById(1L)).thenReturn(Optional.of(privateWorkout));
+
+        WorkoutDetailResponse response = controller.getWorkoutDetails(
+                token, 1L).getBody();
+        assertThat(response.getName()).isEqualTo("Private Workout");
     }
 }
