@@ -11,7 +11,7 @@ const requestSpy = jest.fn()
 server.events.on("request:start", requestSpy)
 
 jest.mock("react-router", () => ({
-	...jest.requireActual('react-router'),
+	...jest.requireActual("react-router"),
 	useNavigate: () => jest.fn(),
 	unstable_useBlocker: () => jest.fn(),
 	useParams: () => ({
