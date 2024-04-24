@@ -48,6 +48,7 @@ export default function TextArea({
 	text,
 	onChange,
 	required,
+	autoFocus,
 	onBlur,
 	onInput,
 	readOnly,
@@ -72,6 +73,7 @@ export default function TextArea({
 				{characterCount}/{maxLength || defaultLimit}
 			</p>
 			<textarea
+				autoFocus={autoFocus}
 				className={isErr ? `${styles.textarea} ${styles.textareaErr}` : `${styles.textarea}`}
 				placeholder={placeholder}
 				value={text}
