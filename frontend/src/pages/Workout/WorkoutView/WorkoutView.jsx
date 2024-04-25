@@ -75,12 +75,10 @@ export default function WorkoutView({id}) {
 			const requestOptions = {
 				headers: {"Content-type": "application/json", token: context.token}
 			}
-
 			const response = await fetch(`/api/workouts/get/userworkout/${workoutId}`, requestOptions).catch(() => {
 				setError("Serverfel: Gick inte att hämta användare för passet. Felkod: " + response.status)
 				return
 			})
-
 			if(response.status === HTTP_STATUS_CODES.NOT_FOUND) {
 				setError("Passet existerar inte längre!")
 				
@@ -91,8 +89,6 @@ export default function WorkoutView({id}) {
 			const json = await response.json()
 			setWorkoutUsers(() => json)
 			setLoadingUser(false)
-
-
 		}
 
 		fetchData()
