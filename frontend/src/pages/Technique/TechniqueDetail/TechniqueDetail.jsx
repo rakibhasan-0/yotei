@@ -32,7 +32,7 @@ import ActivityDelete from "../../../components/Activity/ActivityDelete/Activity
  * 
  * @author Team Medusa (Grupp 6) & Cyclops (Group 5) & Tomato (Group 6) & Team Durian (Group 3) (2024-04-23)
  * @version 4.0
- * @since 2024-04-18
+ * @since 2024-04-25
  */
 function TechniqueDetail({ id }) {
 
