@@ -250,6 +250,12 @@ public class SearchController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+
+    /**
+     * Define a record representing a tag item with an index and a name
+     */
+    private record IndexdTag (Integer index, String name) {}
+
     /**
      * Gets best tag suggstions based on search.
      * 
@@ -269,28 +275,28 @@ public class SearchController {
                 .build();
 
         List<TagDBResult> tagResult = searchRepository.getTagSuggestionsFromCustomQuery(createdQuery.getQuery());
-
+        
         // All tags are in lowercase, serach input need to be it aswell
         if (searchInput != null) {
             searchInput.toLowerCase();
         }
 
-        Map<Integer, String> tagNameByIndex = new HashMap<>();
+        ArrayList<IndexdTag> tagNameByIndex = new ArrayList<IndexdTag>();
 
         for (int i = 0; i < tagResult.size(); i++) {
             String tagName = tagResult.get(i).getName();
             int index = tagResult.get(i).getName().indexOf(searchInput);
-            if (index != -1) {
-                tagNameByIndex.put(index, tagName);
+            if (index != -1) { // -1 indicates that the searchInput was not found in the tag name
+                tagNameByIndex.add(new IndexdTag(index, tagName));
             }
         }
 
-        ArrayList<Integer> sortedKeys = new ArrayList<Integer>(tagNameByIndex.keySet());
-        Collections.sort(sortedKeys);
+        // sort the list by the index. 
+        Collections.sort(tagNameByIndex, Comparator.comparingInt(t -> t.index));
 
         ArrayList<String> tagCompletion = new ArrayList<>();
-        for(Integer index : sortedKeys) {
-          tagCompletion.add(tagNameByIndex.get(index));
+        for (IndexdTag indexdTag : tagNameByIndex) {
+          tagCompletion.add(indexdTag.name);
         }
 
         return tagCompletion;
