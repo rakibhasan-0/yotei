@@ -180,16 +180,16 @@ const WorkoutEdit = () => {
 
 	return (
 		<>
-		{isLoading ? <Spinner/> :
+			{isLoading ? <Spinner/> :
 
-		<WorkoutCreateContext.Provider value={{workoutCreateInfo, workoutCreateInfoDispatch}} >
-			<title>Redigera pass</title>
-			<h1 className={styles.title}>Redigera pass</h1>
+				<WorkoutCreateContext.Provider value={{workoutCreateInfo, workoutCreateInfoDispatch}} >
+					<title>Redigera pass</title>
+					<h1 className={styles.title}>Redigera pass</h1>
 		
-			<WorkoutFormComponent callback={submitHandler} />	
-		</WorkoutCreateContext.Provider> 
-		}
+					<WorkoutFormComponent callback={submitHandler} />	
+				</WorkoutCreateContext.Provider> 
+			}
 		</>
-	);
+	)
 }
 export default WorkoutEdit
