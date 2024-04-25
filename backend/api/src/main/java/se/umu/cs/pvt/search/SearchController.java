@@ -292,8 +292,12 @@ public class SearchController {
 
         for (int i = 0; i < tagResult.size(); i++) {
             String tagName = tagResult.get(i).getName();
-            int index = tagResult.get(i).getName().indexOf(searchInput);
+            int index = tagName.indexOf(searchInput);
             if (index != -1) { // -1 indicates that the searchInput was not found in the tag name
+                // Is the index the beginning of a word? If so, prioritze it.
+                if (index > 0 && !Character.isLetter(tagName.charAt(index-1))) {
+                    index = 1;
+                }
                 tagNameByIndex.add(new IndexedTag(index, tagName));
             }
         }
