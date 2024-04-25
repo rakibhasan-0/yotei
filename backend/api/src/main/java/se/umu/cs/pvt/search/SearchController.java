@@ -254,7 +254,14 @@ public class SearchController {
     /**
      * Define a record representing a tag item with an index and a name
      */
-    private record IndexdTag (Integer index, String name) {}
+    private record IndexedTag (int index, String name) implements Comparable<IndexedTag> {
+        @Override public int compareTo(IndexedTag other) {
+            if (this.index == other.index) {
+                return this.name.compareTo(other.name);
+            }
+            return Integer.compare(this.index, other.index);
+        }
+    }
 
     /**
      * Gets best tag suggstions based on search.
@@ -281,21 +288,21 @@ public class SearchController {
             searchInput.toLowerCase();
         }
 
-        ArrayList<IndexdTag> tagNameByIndex = new ArrayList<IndexdTag>();
+        ArrayList<IndexedTag> tagNameByIndex = new ArrayList<IndexedTag>();
 
         for (int i = 0; i < tagResult.size(); i++) {
             String tagName = tagResult.get(i).getName();
             int index = tagResult.get(i).getName().indexOf(searchInput);
             if (index != -1) { // -1 indicates that the searchInput was not found in the tag name
-                tagNameByIndex.add(new IndexdTag(index, tagName));
+                tagNameByIndex.add(new IndexedTag(index, tagName));
             }
         }
 
         // sort the list by the index. 
-        Collections.sort(tagNameByIndex, Comparator.comparingInt(t -> t.index));
+        Collections.sort(tagNameByIndex);
 
         ArrayList<String> tagCompletion = new ArrayList<>();
-        for (IndexdTag indexdTag : tagNameByIndex) {
+        for (IndexedTag indexdTag : tagNameByIndex) {
           tagCompletion.add(indexdTag.name);
         }
 
