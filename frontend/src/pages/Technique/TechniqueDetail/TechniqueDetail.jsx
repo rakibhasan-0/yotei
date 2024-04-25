@@ -158,7 +158,7 @@ function TechniqueDetail({ id }) {
 				
 				<h2>Beskrivning</h2>
 				{technique.description ? (
-					<pre>{technique.description}</pre>
+					<p style={{whiteSpace: "pre-wrap", wordBreak: "break-word"}}>{technique.description}</p>
 				) : (
 					<p style={{ fontStyle: "italic", color: "var(--gray)" }}>Beskrivning saknas.</p>
 				)}
