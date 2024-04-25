@@ -28,7 +28,7 @@ const WorkoutEdit = () => {
 	const { token, userId } = useContext(AccountContext)
 	const location = useLocation()
 	const [isSubmitted, setIsSubmitted] = useState(false)
-	const [loading, setLoading] = useState(true)
+	const [isLoading, setIsLoading] = useState(true)
 
 	/**
 	 * Submits the form data to the API.
@@ -143,7 +143,7 @@ const WorkoutEdit = () => {
      * Fetches the data from the local storage and context.
      */
 	useEffect(() => {
-		setLoading(true)
+		setIsLoading(true)
 		const item = localStorage.getItem("workoutCreateInfoEdit")
 		const workoutData = location.state?.workout
 		const userData = location.state?.users
@@ -163,7 +163,7 @@ const WorkoutEdit = () => {
 		} else {
 			navigate(-1, {replace: true})
 		}
-		setLoading(false)
+		setIsLoading(false)
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 	
 	/**
@@ -178,21 +178,18 @@ const WorkoutEdit = () => {
 		}
 	}, [workoutCreateInfo, isSubmitted])
 
-
-	if(loading) {
-		return <Spinner/>
-	} 
-
 	return (
+		<>
+		{isLoading ? <Spinner/> :
 
 		<WorkoutCreateContext.Provider value={{workoutCreateInfo, workoutCreateInfoDispatch}} >
 			<title>Redigera pass</title>
 			<h1 className={styles.title}>Redigera pass</h1>
-			
+		
 			<WorkoutFormComponent callback={submitHandler} />	
-		</WorkoutCreateContext.Provider>
-	)
+		</WorkoutCreateContext.Provider> 
+		}
+		</>
+	);
 }
-
-
 export default WorkoutEdit
