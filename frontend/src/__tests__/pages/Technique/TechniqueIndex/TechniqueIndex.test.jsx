@@ -1,6 +1,6 @@
 /** @jest-environment jsdom */
 import React from "react"
-import { render, screen, configure, waitFor, fireEvent } from "@testing-library/react"
+import { render, screen, configure, waitFor, fireEvent, findByTestId } from "@testing-library/react"
 import TechniqueIndex from "../../../../pages/Technique/TechniqueIndex/TechniqueIndex"
 import CreateTechnique from "../../../../pages/Technique/CreateTechnique/CreateTechnique"
 //import GroupIndex from "../../../../pages/Plan/GroupIndex/GroupIndex"
@@ -11,8 +11,6 @@ import { AccountContext } from "../../../../context"
 import userEvent from "@testing-library/user-event"
 import { createMemoryRouter, RouterProvider, createRoutesFromElements, Route } from "react-router-dom"
 //import { useNavigate } from "react-router-dom"
-
-
 import { rest } from "msw"
 import { server } from "../../../server"
 const requestSpy = jest.fn()
@@ -137,6 +135,17 @@ describe("should update", () => {
 									is_child: false
 								}
 							]
+						},
+						{
+							techniqueID: 4,
+							name: "asd",
+							beltColors: [
+								{
+									belt_color: "201E1F",
+									belt_name: "Svart",
+									is_child: false
+								}
+							]
 						}
 					]
 				} 
@@ -144,6 +153,28 @@ describe("should update", () => {
 					ctx.json(req.json())
 				)
 			})
+
+		)
+
+		server.use(
+			rest.get("http://localhost/api/belts", (req, res, ctx) => {
+				return res(ctx.status(200), ctx.json(
+					[
+						{
+							id: 1,
+							name: "Vitt",
+							color: "FCFCFC",
+							child: false
+						},
+						{
+							id: 13,
+							name: "Svart",
+							color: "201E1F",
+							child: false
+						}
+					]
+				))
+			}),
 		)
 
 	})
@@ -168,7 +199,7 @@ describe("should update", () => {
 
 	})
 
-	test("should filter correctly, when leaving site and returnisearch-bar should be empty", async () => {
+	test("should filter correctly, when leaving site and returning search-bar should have been saved", async () => {
 		// const {rerender} = render (
 		// 	// eslint-disable-next-line no-dupe-keys
 		// 	<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", undefined }}>
@@ -189,7 +220,7 @@ describe("should update", () => {
 		expect(screen.getByText("Tekniker")).toBeInTheDocument()
 
 		const searchInput = screen.getByTestId("searchbar-input")
-    
+
 		fireEvent.change(searchInput, { target: { value: "blå" } })
 
 		await waitFor(() => { 
@@ -236,31 +267,67 @@ describe("should update", () => {
 			expect(screen.queryByText("Grått Testteknik nr 2")).not.toBeInTheDocument()
 		})
 
-		// 	//await userEvent.click(screen.getByTestId("technique-add-button"))
+		fireEvent.change(searchInput, { target: { value: "" } })
 
-		// 	//const router = createMemoryRouter(routes, {initialEntries: ["/","/technique/create"], initialIndex: 1})
-		// 	// render(
-		// 	// 	<CreateTechnique/>, {wrapper: router}
-		// 	// )
+	})
 
-		// 	// render(
-		// 	// 	<CreateTechnique/>, {wrapper: HashRouter}
-		// 	// )
+	test("should create a technique", async () => {
+		// const {rerender} = render (
+		// 	// eslint-disable-next-line no-dupe-keys
+		// 	<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", undefined }}>
+		// 		<MemoryRouter>
+		// 			<TechniqueIndex/>
+		// 		</MemoryRouter>
+		// 	</AccountContext.Provider>
+		// )
 
-		// 	//await userEvent.type(screen.getByTestId("create-technique-input-name"), "Testteknik nr 2")
-		// 	//await userEvent.click(screen.getByText("Lägg till"))
+		render (
+			// eslint-disable-next-line no-dupe-keys
+			<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", undefined }}>
+				<MemoryRouter>
+					<TechniqueIndex/>
+				</MemoryRouter>
+			</AccountContext.Provider>
+		)
 
-		// 	// await waitFor(() => {
-		// 	// 	expect(requestSpy).toHaveBeenCalled()
-		// 	// })
+		expect(screen.getByText("Tekniker")).toBeInTheDocument()
 
-		// 	// await waitFor(() => {
-		// 	// 	expect(screen.getByText("Testteknik")).toBeInTheDocument()
-		// 	// })
+		await userEvent.click(screen.getByTestId("technique-add-button"))
 
-		// 	// await waitFor(() => {
-		// 	// 	expect(screen.getByText("Testteknik nr 2")).toBeInTheDocument()
-		// 	// })
+		const router = createMemoryRouter(
+			createRoutesFromElements(
+				<Route path="/*" element={<CreateTechnique/>} />
+			)
+		)
+		render( //eslint-disable-line
+			<RouterProvider router={router} />
+		)
+
+		//render( <BeltPicker/>)
+
+		// const router2 = createMemoryRouter(
+		// 	createRoutesFromElements(
+		// 		<Route path="/*" element={<CreateTechnique/>} />
+		// 	)
+		// )
+		// render( //eslint-disable-line
+		// 	<RouterProvider router={router2} />
+		// )
+
+		expect(screen.getByTestId("belt-text-Svart")).toBeInTheDocument()
+
+		await userEvent.type(screen.getByTestId("create-technique-input-name"), "asd")
+
+		await userEvent.click(screen.getAllByTestId("belt-adult-Svart-checkbox")[1])
+
+		await userEvent.click(screen.getByTestId("create-technique-createbutton"))
+
+		await waitFor(() => {
+			expect(requestSpy).toHaveBeenCalled()
+		})
+
+
+		expect(screen.getByText("asd")).toBeInTheDocument()
 
 	})
 
