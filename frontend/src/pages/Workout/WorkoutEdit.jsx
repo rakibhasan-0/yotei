@@ -11,6 +11,7 @@ import {
 import { WorkoutCreateContext } from "../../components/Workout/CreateWorkout/WorkoutCreateContext.js"
 import styles from "./WorkoutModify.module.css"
 import { setSuccess, setError } from "../../utils.js"
+import { Spinner } from "react-bootstrap"
 
 /**
  * This is the page for editing a saved workout.
@@ -27,6 +28,7 @@ const WorkoutEdit = () => {
 	const { token, userId } = useContext(AccountContext)
 	const location = useLocation()
 	const [isSubmitted, setIsSubmitted] = useState(false)
+	const [loading, setLoading] = useState(true)
 
 	/**
 	 * Submits the form data to the API.
@@ -42,7 +44,6 @@ const WorkoutEdit = () => {
 		} else {
 			setError("Träningen kunde inte uppdateras.")
 		}
-
 		navigate(-1)
 	}
 
@@ -142,6 +143,7 @@ const WorkoutEdit = () => {
      * Fetches the data from the API and sets the states.
      */
 	useEffect(() => {
+		setLoading(true)
 		const item = localStorage.getItem("workoutCreateInfoEdit")
 		const workoutData = location.state?.workout
 		const userData = location.state?.users
@@ -151,6 +153,7 @@ const WorkoutEdit = () => {
 				type: WORKOUT_CREATE_TYPES.INIT_EDIT_DATA,
 				payload: { workoutData, userData: userData ? userData : [] }
 			})
+			
 			window.history.replaceState({}, document.title)
 		} else if (item) {
 			workoutCreateInfoDispatch({
@@ -160,6 +163,7 @@ const WorkoutEdit = () => {
 		} else {
 			navigate(-1, {replace: true})
 		}
+		setLoading(false)
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 	
 	/**
@@ -174,13 +178,21 @@ const WorkoutEdit = () => {
 		}
 	}, [workoutCreateInfo, isSubmitted])
 
+
+	if(loading) {
+		return <Spinner/>
+	} 
+
 	return (
+
 		<WorkoutCreateContext.Provider value={{workoutCreateInfo, workoutCreateInfoDispatch}} >
 			<title>Redigera pass</title>
 			<h1 className={styles.title}>Redigera pass</h1>
+			
 			<WorkoutFormComponent callback={submitHandler} />	
 		</WorkoutCreateContext.Provider>
 	)
 }
+
 
 export default WorkoutEdit

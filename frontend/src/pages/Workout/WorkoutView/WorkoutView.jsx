@@ -41,6 +41,7 @@ export default function WorkoutView({id}) {
 	const [showRPopup, setRShowPopup] = useState(false)
 	const [errorStateMsg, setErrorStateMsg] = useState("")
 	const [loading, setLoading] = useState(true)
+	const [loadingUser, setLoadingUser] = useState(true)
 	const {userId} = useContext(AccountContext)
 
 	useEffect(() => {
@@ -77,18 +78,19 @@ export default function WorkoutView({id}) {
 
 			const response = await fetch(`/api/workouts/get/userworkout/${workoutId}`, requestOptions).catch(() => {
 				setError("Serverfel: Gick inte att hämta användare för passet. Felkod: " + response.status)
-				setLoading(false)
 				return
 			})
 
 			if(response.status === HTTP_STATUS_CODES.NOT_FOUND) {
 				setError("Passet existerar inte längre!")
+				
 			} else if (response.status != HTTP_STATUS_CODES.OK){
 				setError("Något gick snett! Felkod: " + response.status)
 				return
 			}
 			const json = await response.json()
 			setWorkoutUsers(() => json)
+			setLoadingUser(false)
 
 
 		}
@@ -97,13 +99,13 @@ export default function WorkoutView({id}) {
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
-		loading ? <div className="mt-5"> <Spinner/> </div>
+		loading || loadingUser? <div className="mt-5"> <Spinner/> </div>
 			: !workoutData ? <ErrorState message={errorStateMsg} onBack={() => navigate("/workout")} onRecover={() => window.location.reload(false)}/>
 				:
 				<div id={id} className="container px-0">
 					{<ConfirmPopup popupText={"Är du säker att du vill radera passet \"" + workoutData.name + "\"?"} id={"confirm-popup"} setShowPopup={setShowPopup} showPopup={showPopup} onClick={async () => deleteWorkout(workoutId, context, navigate, setShowPopup)}/>}
 					{getReviewContainer(showRPopup, setRShowPopup, workoutId)}
-					{getWorkoutInfoContainer(workoutData, setShowPopup, context, userId)}
+					{getWorkoutInfoContainer(workoutData, setShowPopup, context, userId, workoutUsers)}
 					{sortByCategories(workoutData).map((activityCategory) => (
 						<div key={activityCategory.categoryOrder}>
 							<WorkoutActivityList
@@ -220,7 +222,7 @@ function getButtons(navigate, setRShowPopup) {
 }
 
 
-function getWorkoutInfoContainer(workoutData, setShowPopup, context, userId) {
+function getWorkoutInfoContainer(workoutData, setShowPopup, context, userId, workoutUsers) {
 	return (
 		<>
 			<div className="container px-0">
@@ -235,7 +237,7 @@ function getWorkoutInfoContainer(workoutData, setShowPopup, context, userId) {
 						</div>
 						{ (userId == workoutData.author.user_id || isAdmin(context)) &&
 						<>
-							<Link className="ml-3" state={{workout: workoutData}} to={"/workout/edit"}>
+							<Link className="ml-3" state={{workout: workoutData, users: workoutUsers}} to={"/workout/edit"}>
 								<Pencil
 									size="24px"
 									color="var(--red-primary)"
