@@ -140,7 +140,7 @@ const WorkoutEdit = () => {
 	}
 
 	/**
-     * Fetches the data from the API and sets the states.
+     * Fetches the data from the local storage and context.
      */
 	useEffect(() => {
 		setLoading(true)
