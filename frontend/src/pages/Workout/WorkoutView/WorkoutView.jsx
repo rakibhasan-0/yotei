@@ -113,7 +113,7 @@ export default function WorkoutView({ id }) {
 		<div id={id} className="container px-0">
 			{
 				<ConfirmPopup
-					popupText={'Är du säker att du vill radera passet "' + workoutData.name + '"?'}
+					popupText={"Är du säker att du vill radera passet \"" + workoutData.name + "\"?"}
 					id={"confirm-popup"}
 					setShowPopup={setShowPopup}
 					showPopup={showPopup}
