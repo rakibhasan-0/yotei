@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.*;
 import se.umu.cs.pvt.exercise.Exercise;
 import se.umu.cs.pvt.exercise.ExerciseRepository;
 import se.umu.cs.pvt.tag.Tag;
@@ -88,13 +90,15 @@ public class WorkoutController {
         this.reviewRepository = repository;
     }
 
+    @Operation(summary = "Returns the workout with the specified id", description = "The workout must be public or the user needs to be an admin or been assigned access to it")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK - Successfully retrieved"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - Token does not exist or is not valid"),
+            @ApiResponse(responseCode = "404", description = "Not found - if workout with id does not exist or user does not have permission")
+    })
     @GetMapping("/detail/{id}")
     public ResponseEntity<WorkoutDetailResponse> getWorkoutDetails(@RequestHeader(value = "token") String token,
             @PathVariable Long id) {
-
-        if (token == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
         int userId;
         Long userIdL;
 
