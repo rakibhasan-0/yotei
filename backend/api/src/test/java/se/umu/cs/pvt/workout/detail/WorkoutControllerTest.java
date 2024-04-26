@@ -127,12 +127,16 @@ public class WorkoutControllerTest {
                 String token = "testToken123";
                 DecodedJWT mockJwt = Mockito.mock(DecodedJWT.class);
                 Claim mockClaim = Mockito.mock(Claim.class);
+                UserWorkout mockUserWorkout = Mockito.mock(UserWorkout.class);
 
+                when(userWorkoutRepository.findByWorkoutIdAndUserId(1L, 1L)).thenReturn(mockUserWorkout);
                 when(mockClaim.asInt()).thenReturn(1);
+                when(mockClaim.asString()).thenReturn("ADMIN");
                 when(mockJwt.getClaim("userId")).thenReturn(mockClaim);
+                when(mockJwt.getClaim("role")).thenReturn(mockClaim);
                 when(jwtUtil.validateToken("testToken123")).thenReturn(mockJwt);
 
-                when(workoutDetailRepository.findWorkoutByIdAndUserAccess(1L, 1L))
+                when(workoutDetailRepository.findById(1L))
                                 .thenReturn(Optional.of(new WorkoutDetail(
                                                 1L,
                                                 "test",
@@ -238,22 +242,74 @@ public class WorkoutControllerTest {
         }
 
         @Test
-        public void shouldReturn404WhenExcericeIsPrivateAndUserDoesNotHaveAccessToIt() throws Exception {
-                User nonAuthor = new User("userName", "password!");
+        public void shouldReturn403WhenWorkoutIsPrivateAndUserDoesNotHaveAccessToIt() throws Exception {
+                User author = new User("author", "password123");
+                author.setUserRole(Role.ADMIN);
+                author.setUserId(1L);
+
+                User nonAuthor = new User("nonAuthor", "password!");
                 nonAuthor.setUserId(2L);
                 nonAuthor.setUserRole(Role.USER);
 
                 String token = "testToken123";
-                when(jwtUtil.getUserIdFromToken(token)).thenReturn(2);
-
                 DecodedJWT mockJwt = Mockito.mock(DecodedJWT.class);
                 Claim mockClaim = Mockito.mock(Claim.class);
-
                 when(mockClaim.asInt()).thenReturn(2);
+                when(mockClaim.asString()).thenReturn("USER");
                 when(mockJwt.getClaim("userId")).thenReturn(mockClaim);
+                when(mockJwt.getClaim("role")).thenReturn(mockClaim);
                 when(jwtUtil.validateToken("testToken123")).thenReturn(mockJwt);
-                when(workoutDetailRepository.findWorkoutByIdAndUserAccess(1L, 2L))
+                when(workoutDetailRepository.findById(1L))
+                                .thenReturn(Optional.of(new WorkoutDetail(
+                                                1L,
+                                                "test",
+                                                "desc",
+                                                10,
+                                                null,
+                                                null,
+                                                null,
+                                                true,
+                                                author,
+                                                List.of(new ActivityDetail(
+                                                                2L,
+                                                                1L,
+                                                                "uppvarmning",
+                                                                2,
+                                                                "test2",
+                                                                "desc2",
+                                                                1,
+                                                                10,
+                                                                new Technique(2L, "ex2", "desc2", null, null),
+                                                                null)),
+                                                new ArrayList<>())));
+
+                mockMvc.perform(get("/api/workouts/detail/{id}", 1L)
+                                .header("token", token))
+                                .andExpect(status().isForbidden());
+
+        }
+
+        @Test
+        public void shouldReturn404WhenWorkoutDoesNotExist() throws Exception {
+                User author = new User("author", "password123");
+                author.setUserRole(Role.ADMIN);
+                author.setUserId(1L);
+
+                User nonAuthor = new User("nonAuthor", "password!");
+                nonAuthor.setUserId(2L);
+                nonAuthor.setUserRole(Role.USER);
+
+                String token = "testToken123";
+                DecodedJWT mockJwt = Mockito.mock(DecodedJWT.class);
+                Claim mockClaim = Mockito.mock(Claim.class);
+                when(mockClaim.asInt()).thenReturn(2);
+                when(mockClaim.asString()).thenReturn("USER");
+                when(mockJwt.getClaim("userId")).thenReturn(mockClaim);
+                when(mockJwt.getClaim("role")).thenReturn(mockClaim);
+                when(jwtUtil.validateToken("testToken123")).thenReturn(mockJwt);
+                when(workoutDetailRepository.findById(1L))
                                 .thenReturn(Optional.empty());
+
                 mockMvc.perform(get("/api/workouts/detail/{id}", 1L)
                                 .header("token", token))
                                 .andExpect(status().isNotFound());
@@ -298,14 +354,19 @@ public class WorkoutControllerTest {
                 String token = "testToken123";
                 DecodedJWT mockJwt = Mockito.mock(DecodedJWT.class);
                 Claim mockClaim = Mockito.mock(Claim.class);
+                UserWorkout mockUserWorkout = Mockito.mock(UserWorkout.class);
 
+                when(userWorkoutRepository.findByWorkoutIdAndUserId(1L, 2L)).thenReturn(mockUserWorkout);
                 when(mockClaim.asInt()).thenReturn(2);
+                when(mockClaim.asString()).thenReturn("USER");
                 when(mockJwt.getClaim("userId")).thenReturn(mockClaim);
+                when(mockJwt.getClaim("role")).thenReturn(mockClaim);
                 when(jwtUtil.validateToken("testToken123")).thenReturn(mockJwt);
                 when(jwtUtil.generateToken(nonAuthor.getUsername(), nonAuthor.getUserRole().toString(), 2))
                                 .thenReturn("testToken123");
-                when(workoutDetailRepository.findWorkoutByIdAndUserAccess(1L, 2L))
+                when(workoutDetailRepository.findById(1L))
                                 .thenReturn(Optional.of(privateWorkout));
+
                 mockMvc.perform(get("/api/workouts/detail/{id}", 1L)
                                 .header("token", token))
                                 .andExpect(status().isOk())
