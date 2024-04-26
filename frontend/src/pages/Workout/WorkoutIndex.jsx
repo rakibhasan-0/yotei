@@ -25,8 +25,9 @@ import {setError as setErrorToast} from "../../utils"
  * @author Team Cyclops (Group 5)
  * @author Team Tomato (Group 6)
  * @author Team Durian (Group 3) (2024-04-23)
+ * @author Team Tomato (Group 6)
  * @since May 9, 2023
- * @version 1.1
+ * @version 1.2
  */
 
 export default function WorkoutIndex() {
@@ -53,16 +54,6 @@ export default function WorkoutIndex() {
 		to: getFormattedDateString(nextMonth),
 		minTo: getFormattedDateString(lastMonth)
 	})
-
-	useEffect(() => {
-		const filterCookie = cookies["workout-filter"] 
-		if(filterCookie) {
-			setDates({from: filterCookie.from, maxFrom: filterCookie.to, to: filterCookie.to, minTo: filterCookie.from})
-			setFilterFavorites(filterCookie.isFavorite)
-			setTags(filterCookie.tags)
-		}
-	}, []) // eslint-disable-line react-hooks/exhaustive-deps
-
 	useEffect(fetchWorkouts, [dates.from, dates.maxFrom, dates.to, dates.minTo, filterFavorites, searchText, token, userId, tags])
 	return (
 		<>
@@ -185,16 +176,29 @@ export default function WorkoutIndex() {
 
 	function fetchWorkouts() {
 		setLoading(true)
-		let args = {
-			from: dates.from,
-			to: dates.to,
-			text: searchText,
-			selectedTags: tags,
-			id: userId,
-			isFavorite: filterFavorites
+		const filterCookie = cookies["workout-filter"]
+		let args
+		if(filterCookie){
+			args = {
+				from: filterCookie.from,
+				to: filterCookie.to,
+				text: searchText,
+				selectedTags: tags,
+				id: userId,
+				isFavorite: filterCookie.isFavorite
+			}
 		}
-
-		setCookie("workout-filter", {from: args.from, to: args.to, isFavorite: args.isFavorite, tags: tags}, {path: "/"})
+		else{
+			args = {
+				from: dates.from,
+				to: dates.to,
+				text: searchText,
+				selectedTags: tags,
+				id: userId,
+				isFavorite: filterFavorites
+			}
+			setCookie("workout-filter", {from: args.from, to: args.to, isFavorite: args.isFavorite, tags: tags}, {path: "/"})
+		}
 		getWorkouts(args, token, null, null, (response) => {
 			if(response.error) {
 				setError("Serverfel: Kunde inte ansluta till servern!")

@@ -42,6 +42,7 @@ export default function WorkoutView({ id }) {
 	const [showRPopup, setRShowPopup] = useState(false)
 	const [errorStateMsg, setErrorStateMsg] = useState("")
 	const [loading, setLoading] = useState(true)
+	const [loadingUser, setLoadingUser] = useState(true)
 	const { userId } = useContext(AccountContext)
 
 	useEffect(() => {
@@ -78,10 +79,8 @@ export default function WorkoutView({ id }) {
 			const requestOptions = {
 				headers: { "Content-type": "application/json", token: context.token },
 			}
-
 			const response = await fetch(`/api/workouts/get/userworkout/${workoutId}`, requestOptions).catch(() => {
 				setError("Serverfel: Gick inte att hämta användare för passet. Felkod: " + response.status)
-				setLoading(false)
 				return
 			})
 
@@ -93,49 +92,34 @@ export default function WorkoutView({ id }) {
 			}
 			const json = await response.json()
 			setWorkoutUsers(() => json)
+			setLoadingUser(false)
 		}
 
 		fetchData()
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-	return loading ? (
-		<div className="mt-5">
-			{" "}
-			<Spinner />{" "}
-		</div>
-	) : !workoutData ? (
-		<ErrorState
-			message={errorStateMsg}
-			onBack={() => navigate("/workout")}
-			onRecover={() => window.location.reload(false)}
-		/>
-	) : (
-		<div id={id} className="container px-0">
-			{
-				<ConfirmPopup
-					popupText={"Är du säker att du vill radera passet \"" + workoutData.name + "\"?"}
-					id={"confirm-popup"}
-					setShowPopup={setShowPopup}
-					showPopup={showPopup}
-					onClick={async () => deleteWorkout(workoutId, context, navigate, setShowPopup)}
-				/>
-			}
-			{getReviewContainer(showRPopup, setRShowPopup, workoutId)}
-			{getWorkoutInfoContainer(workoutData, setShowPopup, context, userId)}
-			{sortByCategories(workoutData).map((activityCategory) => (
-				<div key={activityCategory.categoryOrder}>
-					<WorkoutActivityList
-						categoryName={activityCategory.categoryName}
-						activities={activityCategory.activities}
-						navigate={navigate}
-						id={"WorkoutActivityList-" + activityCategory.categoryOrder}
-					></WorkoutActivityList>
+	return (
+		loading || loadingUser? <div className="mt-5"> <Spinner/> </div>
+			: !workoutData ? <ErrorState message={errorStateMsg} onBack={() => navigate("/workout")} onRecover={() => window.location.reload(false)}/>
+				:
+				<div id={id} className="container px-0">
+					{<ConfirmPopup popupText={"Är du säker att du vill radera passet \"" + workoutData.name + "\"?"} id={"confirm-popup"} setShowPopup={setShowPopup} showPopup={showPopup} onClick={async () => deleteWorkout(workoutId, context, navigate, setShowPopup)}/>}
+					{getReviewContainer(showRPopup, setRShowPopup, workoutId)}
+					{getWorkoutInfoContainer(workoutData, setShowPopup, context, userId, workoutUsers)}
+					{sortByCategories(workoutData).map((activityCategory) => (
+						<div key={activityCategory.categoryOrder}>
+							<WorkoutActivityList
+								categoryName={activityCategory.categoryName}
+								activities={activityCategory.activities}
+								navigate={navigate}
+								id={"WorkoutActivityList-" + activityCategory.categoryOrder}>
+							</WorkoutActivityList>
+						</div>
+					))}
+					{workoutData.tags.length != 0 && getTagContainer(workoutData)}
+					{(workoutUsers !== null && workoutUsers.length > 0) && getWorkoutUsersContainer(workoutUsers)}
+					{getButtons(navigate, setRShowPopup)}
 				</div>
-			))}
-			{workoutData.tags.length != 0 && getTagContainer(workoutData)}
-			{workoutUsers !== null && workoutUsers.length > 0 && getWorkoutUsersContainer(workoutUsers)}
-			{getButtons(navigate, setRShowPopup)}
-		</div>
 	)
 }
 
@@ -231,7 +215,8 @@ function getButtons(navigate, setRShowPopup) {
 	)
 }
 
-function getWorkoutInfoContainer(workoutData, setShowPopup, context, userId) {
+
+function getWorkoutInfoContainer(workoutData, setShowPopup, context, userId, workoutUsers) {
 	return (
 		<>
 			<div className="container px-0">
@@ -244,20 +229,25 @@ function getWorkoutInfoContainer(workoutData, setShowPopup, context, userId) {
 						<div className={styles.clickIcon}>
 							<PrintButton workoutData={workoutData} />
 						</div>
-						{(userId == workoutData.author.user_id || isAdmin(context)) && (
-							<>
-								<Link className="ml-3" state={{ workout: workoutData }} to={"/workout/edit"}>
-									<Pencil size="24px" color="var(--red-primary)" style={{ cursor: "pointer" }} />
-								</Link>
-								<Trash
-									className="ml-3 mr-3"
+						{ (userId == workoutData.author.user_id || isAdmin(context)) &&
+						<>
+							<Link className="ml-3" state={{workout: workoutData, users: workoutUsers}} to={"/workout/edit"}>
+								<Pencil
 									size="24px"
 									color="var(--red-primary)"
-									style={{ cursor: "pointer" }}
-									onClick={() => setShowPopup(true)}
+									style={{cursor: "pointer"}}
+									id={"edit_pencil"}
 								/>
-							</>
-						)}
+							</Link>
+							<Trash
+								className="ml-3 mr-3"
+								size="24px"
+								color="var(--red-primary)"
+								style={{cursor: "pointer"}}
+								onClick={() => setShowPopup(true)}
+							/>
+						</>
+						}
 					</div>
 
 					<div className="d-flex">

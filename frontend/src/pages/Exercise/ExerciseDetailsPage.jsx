@@ -17,9 +17,9 @@ import {setError as setErrorToast} from "../../utils"
 /**
  * A component for displaying details about an exercise.
  * 
- * @author Chimera, Phoenix, Team Coconut, Team Durian
- * @since 2024-04-18
- * @version 2.1
+ * @author Chimera, Phoenix, Team Coconut, Team Durian, Team Orange
+ * @since 2024-04-23
+ * @version 2.2
  * @returns A page for displaying details about an exercise.
  */
 export default function ExerciseDetailsPage() {
@@ -34,6 +34,7 @@ export default function ExerciseDetailsPage() {
 	const [commentError, setCommentError] = useState()
 	const [showAlert, setShowAlert] = useState(false)
 	const [showDeleteComment, setShowDeleteComment] = useState(false)
+	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [error, setError] = useState()
 	const navigate = useNavigate()
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
@@ -74,6 +75,7 @@ export default function ExerciseDetailsPage() {
 				console.error(ex)
 			})
 	}, [token, ex_id])
+
 	/**
      * Handles the deletion of an exercise by sending a DELETE request to the API.
      * Navigates back to the previous page if the deletion is successful.
@@ -125,7 +127,7 @@ export default function ExerciseDetailsPage() {
      * Fetches the updated comments by calling fetchComments.
      */
 	const onAddComment = async () => {
-		if (!commentText || commentText.length === 0) {
+		if (!commentText || !commentText.trim() || commentText.length === 0) {
 			setCommentError("Kommentaren får inte vara tom")
 			return
 		}
@@ -144,13 +146,33 @@ export default function ExerciseDetailsPage() {
 			setErrorToast("Ett fel uppstod när kommentaren skulle läggas till")
 			return
 		}
-		setCommentText("")
-		setAddComment(false)
+		onDiscardComment()
 		// TODO: The comments add method does not
 		// return the comment id, so we have to
 		// refetch the comments after adding one.
 		// This should probably be fixed in the API
 		fetchComments()
+	}
+
+	/**
+	 * Closes the addComment popup, unless it contains text in which case it shows
+	 * a warning that the user input will be lost.
+	 * @param {bool} show Whether the add comment popup should be shown.
+	 */
+	const toggleAddComment = async (show) => {
+		if (!show && commentText && commentText.trim().length > 0) {
+			setShowDiscardComment(true)
+			return
+		}
+		setAddComment(show)
+	}
+
+	/**
+	 * Discards the current comment draft and closes the comment input popup.
+	 */
+	const onDiscardComment = async () => {
+		setCommentText("")
+		setAddComment(false)
 	}
 
 	if (error) {
@@ -219,8 +241,9 @@ export default function ExerciseDetailsPage() {
 			<div style={{ marginTop: "1rem", marginBottom:"1rem" }}>
 				<Button outlined={true} onClick={() => navigate(-1)}><p>Tillbaka</p></Button>
 			</div>
-			<Popup isOpen={isAddingComment} title={"Lägg till kommentar"} style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset"}} setIsOpen={setAddComment}>
-				<TextArea errorMessage={commentError} onInput={e => setCommentText(e.target.value)} />
+
+			<Popup isOpen={isAddingComment} title={"Lägg till kommentar"} style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset"}} setIsOpen={toggleAddComment} onClose={() => setCommentError(false)} >
+				<TextArea errorMessage={commentError} onInput={e => {setCommentText(e.target.value); setCommentError(false)}} autoFocus={true} />
 				<Button onClick={onAddComment}>Lägg till</Button>
 			</Popup>
 			<ConfirmPopup
@@ -234,6 +257,13 @@ export default function ExerciseDetailsPage() {
 				showPopup={showDeleteComment}
 				onClick={() => onDeleteComment()}
 				setShowPopup={() => setShowDeleteComment(false)}
+			/>
+			<ConfirmPopup
+				popupText={"Är du säker på att du vill ta bort kommentarsutkastet?"}
+				showPopup={showDiscardComment}
+				onClick={() => onDiscardComment()}
+				setShowPopup={() => setShowDiscardComment(false)}
+				zIndex={200} // Above the comment popup.
 			/>
 
 			<div>

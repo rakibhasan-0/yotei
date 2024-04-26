@@ -32,7 +32,7 @@ import ActivityDelete from "../../../components/Activity/ActivityDelete/Activity
  * 
  * @author Team Medusa (Grupp 6) & Cyclops (Group 5) & Tomato (Group 6) & Team Durian (Group 3) (2024-04-23)
  * @version 4.0
- * @since 2024-04-18
+ * @since 2024-04-25
  */
 function TechniqueDetail({ id }) {
 
@@ -158,7 +158,7 @@ function TechniqueDetail({ id }) {
 				
 				<h2>Beskrivning</h2>
 				{technique.description ? (
-					<pre>{technique.description}</pre>
+					<p style={{whiteSpace: "pre-wrap", wordBreak: "break-word"}}>{technique.description}</p>
 				) : (
 					<p style={{ fontStyle: "italic", color: "var(--gray)" }}>Beskrivning saknas.</p>
 				)}
