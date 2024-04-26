@@ -25,8 +25,9 @@ import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
  *      workoutId @type {int} - The ID of the workout.
  *      id        @type {int/string} - the id of the component
  *
- * @author Cyclops (Group 5) (2023-05-22)
- * @author Durian  (Group 3) (2024-04-23)
+ * @author Cyclops (Group 5) (2023-05-22) &  Durian (Group 3) (2024-04-23) & Team Tomato
+ * @updated 2024-04-26 by Tomato
+ *
  * @version 1.6
  *
  */

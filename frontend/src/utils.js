@@ -3,6 +3,11 @@ import { Roles } from "./context"
 import { toast } from "react-toastify"
 
 /**
+ * @author UNKNOWN & Team Tomato
+ * @updated 2024-04-26  by Tomato
+ */
+
+/**
  * Use:
  * const context = useContext(AccountContext)
  * isAdmin(context)
