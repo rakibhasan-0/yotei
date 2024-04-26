@@ -21,8 +21,6 @@
     padding: 10px;
     padding-left: 0px;
     gap: 2px;
-    overflow: hidden;
-    word-wrap: break-word;
 }
 
 .listCentered > .listToggle {
@@ -36,8 +34,7 @@
     margin: 0;
 }
 
-* > p {
-    width: 95%;
+p {
     overflow: hidden;
     text-overflow: ellipsis;
 }
