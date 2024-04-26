@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
  * @author Grupp 8 Kebabpizza (Doc: Griffin ens19amd)
  *         Group 8 Minotaur, new post method.
  *         Team Tomato
- * @updated 2024-04-23 by Team Tomato
+ * @updated 2024-04-26 by Team Tomato
  */
 @RestController
 @CrossOrigin
@@ -94,28 +94,40 @@ public class WorkoutController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK - Successfully retrieved"),
             @ApiResponse(responseCode = "401", description = "Unauthorized - Token does not exist or is not valid"),
-            @ApiResponse(responseCode = "404", description = "Not found - if workout with id does not exist or user does not have permission")
+            @ApiResponse(responseCode = "404", description = "Not found - Workout with id does not exist"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - User has no access to workout")
+
     })
     @GetMapping("/detail/{id}")
     public ResponseEntity<WorkoutDetailResponse> getWorkoutDetails(@RequestHeader(value = "token") String token,
             @PathVariable Long id) {
         int userId;
         Long userIdL;
+        String userRole;
 
         try {
             DecodedJWT jwt = jwtUtil.validateToken(token);
             userId = jwt.getClaim("userId").asInt();
             userIdL = Long.valueOf(userId);
+            userRole = jwt.getClaim("role").asString();
 
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        Optional<WorkoutDetail> workoutOpt = workoutDetailRepository.findWorkoutByIdAndUserAccess(id, userIdL);
 
+        Optional<WorkoutDetail> workoutOpt = workoutDetailRepository.findById(id);
         if (workoutOpt.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         WorkoutDetail workout = workoutOpt.get();
+
+        if (!userRole.equals("ADMIN")) {
+            UserWorkout userWorkout = userWorkoutRepository.findByWorkoutIdAndUserId(id, userIdL);
+            if (workout.getHidden() == true && (workout.getAuthor().getUserId() != userId && userWorkout == null)) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+        }
+
         return new ResponseEntity<>(new WorkoutDetailResponse(workout), HttpStatus.OK);
     }
 
