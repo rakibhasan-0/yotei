@@ -112,7 +112,7 @@ function AddActivity({ id, setShowActivityInfo }) {
      */
 	useEffect(() => {
 		setSearchTechText(sessionStorage.getItem("searchTechText")|| "")
-		setSearchExerText(getJSONSession("searchExerText") || "")
+		setSearchExerText(sessionStorage.getItem("searchExerText") || "")
 		setActiveTab(getJSONSession("activeTab")|| "technique")
 		setKihon(sessionStorage.getItem("kihon")|| false)
 		setSort(getJSONSession("sort") || sortOptions[0])
@@ -155,7 +155,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 
 
 	useEffect(() => {
-		setJSONSession("searchExerText", searchExerText)
+		sessionStorage.setItem("searchExerText", searchExerText)
 	},[searchExerText])
 
 
@@ -171,7 +171,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	
 
 	useEffect(() => {
-		sessionStorage.getItem(sort)
+		//sessionStorage.getItem(sort)
 
 		const filterCookie = cookies["exercise-filter"]
 		if (filterCookie) {
