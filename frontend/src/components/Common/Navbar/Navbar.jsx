@@ -56,12 +56,8 @@ function Navbar({ testId }) {
 					<h1 className={styles.commonNavbarButton}>Pass</h1>
 				</Button>
 
-				<Button width={"100%"} onClick={() => navigateAndClose("/exercise")}>
-					<h1 className={styles.commonNavbarButton}>Övningar</h1>
-				</Button>
-
-				<Button width={"100%"} onClick={() => navigateAndClose("/technique",  {state: {clearSearchText: true}})}>
-					<h1 className={styles.commonNavbarButton}>Tekniker</h1>
+				<Button width={"100%"} onClick={() => navigateAndClose("/activity",  {state: {clearSearchText: true}})}>
+					<h1 className={styles.commonNavbarButton}>Tekniker & Övningar</h1>
 				</Button>
 
 				{ isAdmin(context) ? 

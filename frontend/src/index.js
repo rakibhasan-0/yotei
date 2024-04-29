@@ -36,6 +36,7 @@ import { logOut } from "./utils"
 import { ToastContainer, toast } from "react-toastify"
 import CreateTechnique from "./pages/Technique/CreateTechnique/CreateTechnique"
 import AdminRoute from "./AdminRoute"
+import ActivityIndex from "./pages/Activity/ActivityIndex.jsx"
 
 const exerciseURI = "https://jsonplaceholder.typicode.com/users"
 const workoutURI = "https://jsonplaceholder.typicode.com/users"
@@ -103,13 +104,14 @@ export default function App() {
 						<Route path="about" element={<About />} />
 						<Route path="admin" element={<Admin />} />
 						<Route path="profile" element={<Profile />} />
+						<Route path="activity" element={<ActivityIndex />} />
 						<Route path="exercise" element={<ExerciseIndex uri={exerciseURI} />} />
-						<Route path="exercise/create" element={<ExerciseCreate />} />
+						<Route path="activity/exercise/create" element={<ExerciseCreate />} />
 						<Route path="exercise/edit/:editID" element={<ExerciseEdit />} />
 						<Route path="workout" element={<WorkoutIndex uri={workoutURI} />} />
 						<Route path="exercise/exercise_page/:ex_id" element={<ExerciseDetailsPage />} />
 						<Route path="technique" element={<TechniqueIndex />} />
-						<Route path="technique/create" element={<AdminRoute><CreateTechnique /></AdminRoute> } />
+						<Route path="activity/technique/create" element={<AdminRoute><CreateTechnique /></AdminRoute> } />
 						<Route path="technique/:techniqueId" element={<TechniqueDetail />} />
 						<Route path="technique/:techniqueId/edit" element={<AdminRoute><TechniqueEdit/></AdminRoute>} />
 						<Route path="workout/create" element={<WorkoutCreate />} />
