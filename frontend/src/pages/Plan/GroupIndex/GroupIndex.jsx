@@ -67,16 +67,16 @@ export default function GroupIndex() {
 									<BeltBox id={index} belts={group.belts} />
 								</div>
 								<div style = {{marginLeft: "5px", display: "flex"}}> { (isEditor(context) || userId == group.userId) && (
-                                    <>
-									<Link to={`/plan/edit/${group.id}`}>
-										<Pencil size={24} color="var(--red-primary)"/>
-									</Link>
-									<div style={{ width: "20px" }} />
-									<Link to={`./statistics/${group.id}`}>
-										<img src="../../../PieChart.svg" />
-									</Link>
-									</>
-							) } </div>
+										<>
+										<Link to={`/plan/edit/${group.id}`}>
+											<Pencil size={24} color="var(--red-primary)"/>
+										</Link>
+										<div style={{ width: "20px" }} />
+										<Link to={`./statistics/${group.id}`}>
+											<img src="../../../PieChart.svg" />
+										</Link>
+										</>
+								) } </div>
 							</div>
 						</div>
 					))}
