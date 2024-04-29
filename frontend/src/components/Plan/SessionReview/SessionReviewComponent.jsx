@@ -21,7 +21,7 @@ import { AccountContext } from "../../../context"
  * @version 1.0
  */
 
-export default function Review({isOpen, setIsOpen, session_id}) {
+export default function Review({isOpen, setIsOpen, session_id, workout_id}) {
 
 	const [sessionData, setSessionData] = useState(null)
 
@@ -30,6 +30,7 @@ export default function Review({isOpen, setIsOpen, session_id}) {
     const[positiveComment, setPositiveComment] = useState("")
     const[negativeComment, setNegativeComment] = useState("")
 	const[savedDate, setSavedDate] = useState("")
+	const[reviewId, setReviewId] = useState(-1)
 
 	const [errorStateMsg, setErrorStateMsg] = useState("")
 
@@ -45,14 +46,14 @@ export default function Review({isOpen, setIsOpen, session_id}) {
 				headers: {"Content-type": "application/json", token: context.token}
 			}
 
-			const response = await fetch(`/api/workouts/detail/${session_id}`, requestOptions).catch(() => {
+			const response = await fetch(`/api/workouts/detail/${workout_id}`, requestOptions).catch(() => {
 				setErrorStateMsg("Serverfel: Kunde inte ansluta till servern.")
 				setLoading(false)
 				return
 			})
 
 			if(response.status != HTTP_STATUS_CODES.OK){
-				setErrorStateMsg("Pass med ID '" + session_id + "' existerar inte. Felkod: " + response.status)
+				setErrorStateMsg("Pass med ID '" + workout_id + "' existerar inte. Felkod: " + response.status)
 				setLoading(false)
 			} else {
 				const json = await response.json()
@@ -67,29 +68,32 @@ export default function Review({isOpen, setIsOpen, session_id}) {
 				headers: {"Content-type": "application/json", token: context.token}
 			}
 
-			const loadedResponse = await fetch(`/api/session/${session_id}/review/all`, requestOptions).catch(() => {
+			const loadedResponse = await fetch("/api/session/" + session_id + "/review/all", requestOptions).catch(() => {
 				setErrorStateMsg("Serverfel: Kunde inte ansluta till servern.")
 				setLoading(false)
 				return
 			})
 
 			if(loadedResponse.status != HTTP_STATUS_CODES.OK){
-				setErrorStateMsg("Pass med ID '" + session_id + "' existerar inte. Felkod: " + loadedResponse.status)
+				setErrorStateMsg("Session med ID '" + session_id + "' existerar inte. Felkod: " + loadedResponse.status)
 				setLoading(false)
 			} else {
 				const json = await loadedResponse.json();
+				console.log(session_id)
+				console.log(json);
 				if(json[0] !== null) {
-					setRating(json[`rating`])
-					setPositiveComment(json[`positiveComment`])
-					setNegativeComment(json[`negativeComment`])
-					updateSavedDateDisplay(json[`date`])
+					setRating(json[0][`rating`])
+					setPositiveComment(json[0][`positiveComment`])
+					setNegativeComment(json[0][`negativeComment`])
+					updateSavedDateDisplay(json[0][`date`])
+					setReviewId(json[0]['id'])
 				}
 			}
 		}
 
 
 		fetchData()
-		//fetchLoadedData() <- Does not currently work
+		fetchLoadedData()
 	}, [])
 
 
@@ -109,12 +113,19 @@ export default function Review({isOpen, setIsOpen, session_id}) {
         setNegativeComment(event.target.value)
     }
 
-    async function saveReview() {
-        if(rating === 0) {
-            setError("Kunde inte spara utvärdering, vänligen sätt ett betyg")
+	async function saveReview() {
+		if(rating === 0) {
+			setError("Kunde inte spara utvärdering, vänligen sätt ett betyg")
 			return
 		}
+		if(reviewId < 0) {
+			addReview()
+		} else {
+			updateReview()
+		}
+	}
 
+    async function addReview() {
         let ts = getTodaysDate()
         const requestOptions = {
 			method: "POST",
@@ -141,8 +152,36 @@ export default function Review({isOpen, setIsOpen, session_id}) {
 		//Save performed exercises
 
 		updateSavedDateDisplay(ts)
-        setSuccess("Utvärdering sparad")
+        setSuccess("Utvärdering skapad")
     }
+
+	async function updateReview() {
+		let ts = getTodaysDate()
+        const requestOptions = {
+			method: "PUT",
+			headers: {"Content-type": "application/json", "token": token},
+			body: JSON.stringify({
+				"id": reviewId,
+				"session_id": session_id,
+				"rating": rating,
+				"userId": userId,
+				"positiveComment": positiveComment,
+				"negativeComment": negativeComment,
+				"date": ts,
+				"exercises": []
+			})
+		}
+		const postResponse = await fetch("/api/session/" + session_id + "/review" , requestOptions).catch(() => {
+			setError("Serverfel: Kunde ansluta till servern.")
+			return
+		})
+		if(postResponse.status != HTTP_STATUS_CODES.OK) {
+			setError("Serverfel: Något gick snett! Felkod: " + postResponse.status)
+			return
+		}
+		updateSavedDateDisplay(ts)
+        setSuccess("Utvärdering sparad")
+	}
 
     function getTodaysDate() {
 		var today = new Date()
@@ -155,7 +194,7 @@ export default function Review({isOpen, setIsOpen, session_id}) {
 
 	function updateSavedDateDisplay(date) {
 		setSavedDate(date)
-		savedDateValue.textContent = date === "" ? "Aldrig" : date;
+		//savedDateValue.textContent = date === "" ? "Aldrig" : date;
 	}
 
 
