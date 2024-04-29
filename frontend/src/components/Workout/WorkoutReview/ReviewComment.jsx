@@ -15,7 +15,7 @@ import {HTTP_STATUS_CODES, setError, setSuccess} from "../../../utils"
 /**
  *  Component for review comment. Includes name, positive comment, negative comment, date.
  *
- * @author Cyclops (Group 5) (2023-05-16)
+ * @author Cyclops (Group 5) (2023-05-16) Group Granatäpple (Team 1)
  * @version 1.0
  */
 
@@ -25,7 +25,9 @@ export default function ReviewComponent({comment, onDelete, token, getTodaysDate
 	const [positiveComment, setPositiveComment] = useState(comment.positive_comment)
 	const [negativeComment, setNegativeComment] = useState(comment.negative_comment)
 	const [rating, setRating] = useState(comment.rating)
-	const { userId, accountRole } = useContext(AccountContext)
+	const { userId } = useContext(AccountContext)
+
+	const context = useContext(AccountContext)
 
 	async function deleteReview() {
 		const requestOptions = {
@@ -149,7 +151,7 @@ export default function ReviewComponent({comment, onDelete, token, getTodaysDate
 							}
 						</div>
 					</div>
-					{(isAdmin(accountRole) || userId == comment.user_id) &&
+					{(isAdmin(context) || userId == comment.user_id) &&
 					<div className="d-flex align-items-center justify-content-end">
 						{editMode ?
 							<>
@@ -162,12 +164,14 @@ export default function ReviewComponent({comment, onDelete, token, getTodaysDate
 							</>
 							:
 							<div style={{marginTop:"10px"}}>
-								<Pencil
-									size="24px"
-									color="var(--red-primary)"
-									style={{cursor: "pointer", marginRight: "20px" }}
-									onClick={() => setEditMode(!editMode)}
-								/>
+								{userId === comment.user_id &&
+									<Pencil
+										size="24px"
+										color="var(--red-primary)"
+										style={{cursor: "pointer", marginRight: "20px" }}
+										onClick={() => setEditMode(!editMode)}
+									/>
+								}
 								<Trash
 									size="24px"
 									color="var(--red-primary)"

@@ -1,11 +1,16 @@
 /** @jest-environment jsdom */
 import React from "react"
-import { render, screen, configure, waitFor } from "@testing-library/react"
-// import userEvent from "@testing-library/user-event"
+import { render, screen, configure, waitFor, fireEvent } from "@testing-library/react"
 import TechniqueIndex from "../../../../pages/Technique/TechniqueIndex/TechniqueIndex"
+import CreateTechnique from "../../../../pages/Technique/CreateTechnique/CreateTechnique"
+//import GroupIndex from "../../../../pages/Plan/GroupIndex/GroupIndex"
+//import Button from "../../../../components/Common/Button/Button"
 import "@testing-library/jest-dom"
 import { MemoryRouter } from "react-router-dom"
 import { AccountContext } from "../../../../context"
+import userEvent from "@testing-library/user-event"
+import { createMemoryRouter, RouterProvider, createRoutesFromElements, Route } from "react-router-dom"
+//import { useNavigate } from "react-router-dom"
 
 
 import { rest } from "msw"
@@ -56,7 +61,29 @@ describe("should update", () => {
 		results: [
 			{
 				techniqueID: 1,
-				name: "Testteknik",
+				name: "Grönt Testteknik",
+				beltColors: [
+					{
+						belt_color: "ED930D",
+						belt_name: "Orange",
+						is_child: false
+					}
+				]
+			},
+			{
+				techniqueID: 2,
+				name: "Grått Testteknik nr 2",
+				beltColors: [
+					{
+						belt_color: "ED930D",
+						belt_name: "Orange",
+						is_child: false
+					}
+				]
+			},
+			{
+				techniqueID: 3,
+				name: "Blå Testteknik nr 3",
 				beltColors: [
 					{
 						belt_color: "ED930D",
@@ -80,7 +107,7 @@ describe("should update", () => {
 					results: [
 						{
 							techniqueID: 1,
-							name: "Testteknik",
+							name: "Grönt Testteknik",
 							beltColors: [
 								{
 									belt_color: "ED930D",
@@ -91,7 +118,18 @@ describe("should update", () => {
 						},
 						{
 							techniqueID: 2,
-							name: "Testteknik nr 2",
+							name: "Grått Testteknik nr 2",
+							beltColors: [
+								{
+									belt_color: "ED930D",
+									belt_name: "Orange",
+									is_child: false
+								}
+							]
+						},
+						{
+							techniqueID: 3,
+							name: "Blå Testteknik nr 3",
 							beltColors: [
 								{
 									belt_color: "ED930D",
@@ -122,13 +160,110 @@ describe("should update", () => {
 			expect(requestSpy).toHaveBeenCalled()
 		})
 		await waitFor(() => {
-			expect(screen.getByText("Testteknik")).toBeInTheDocument()
+			expect(screen.getByText("Grönt Testteknik")).toBeInTheDocument()
 		})
 		await waitFor(() => {
-			expect(screen.queryByText("Testteknik nr 2")).not.toBeInTheDocument()
+			expect(screen.getByText("Grått Testteknik nr 2")).toBeInTheDocument()
 		})
 
 	})
+
+	test("should filter correctly, when leaving site and returnisearch-bar should be empty", async () => {
+		// const {rerender} = render (
+		// 	// eslint-disable-next-line no-dupe-keys
+		// 	<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", undefined }}>
+		// 		<MemoryRouter>
+		// 			<TechniqueIndex/>
+		// 		</MemoryRouter>
+		// 	</AccountContext.Provider>
+		// )
+		render(
+			// eslint-disable-next-line no-dupe-keys
+			<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", undefined }}>
+				<MemoryRouter>
+					<TechniqueIndex/>
+				</MemoryRouter>
+			</AccountContext.Provider>
+		)
+
+		expect(screen.getByText("Tekniker")).toBeInTheDocument()
+
+		const searchInput = screen.getByTestId("searchbar-input")
+    
+		fireEvent.change(searchInput, { target: { value: "blå" } })
+
+		await waitFor(() => { 
+			expect(screen.getByText("Blå Testteknik nr 3")).toBeInTheDocument()
+		})
+
+		await waitFor(() => { 
+			expect(screen.queryByText("Grönt Testteknik")).not.toBeInTheDocument()
+		})
+
+		await waitFor(() => {
+			expect(screen.queryByText("Grått Testteknik nr 2")).not.toBeInTheDocument()
+		})
+		//userEvent.type(nameInput, "Testteknik nr 2")
+
+		await userEvent.click(screen.getByTestId("technique-add-button"))
+
+		const router = createMemoryRouter(
+			createRoutesFromElements(
+				<Route path="/*" element={<CreateTechnique/>} />
+			)
+		)
+		render( //eslint-disable-line
+			<RouterProvider router={router} />
+		)
+
+		expect(screen.getByTestId("create-technique-input-name")).toBeVisible()
+
+		await userEvent.click(screen.getByTestId("create-technique-backbutton"))
+
+		//rerender(<MemoryRouter><TechniqueIndex/></MemoryRouter>)
+
+		expect(screen.getByTestId("searchbar-input")).toHaveValue("blå")
+
+		await waitFor(() => { 
+			expect(screen.getByText("Blå Testteknik nr 3")).toBeInTheDocument()
+		})
+
+		await waitFor(() => { 
+			expect(screen.queryByText("Grönt Testteknik")).not.toBeInTheDocument()
+		})
+
+		await waitFor(() => {
+			expect(screen.queryByText("Grått Testteknik nr 2")).not.toBeInTheDocument()
+		})
+
+		// 	//await userEvent.click(screen.getByTestId("technique-add-button"))
+
+		// 	//const router = createMemoryRouter(routes, {initialEntries: ["/","/technique/create"], initialIndex: 1})
+		// 	// render(
+		// 	// 	<CreateTechnique/>, {wrapper: router}
+		// 	// )
+
+		// 	// render(
+		// 	// 	<CreateTechnique/>, {wrapper: HashRouter}
+		// 	// )
+
+		// 	//await userEvent.type(screen.getByTestId("create-technique-input-name"), "Testteknik nr 2")
+		// 	//await userEvent.click(screen.getByText("Lägg till"))
+
+		// 	// await waitFor(() => {
+		// 	// 	expect(requestSpy).toHaveBeenCalled()
+		// 	// })
+
+		// 	// await waitFor(() => {
+		// 	// 	expect(screen.getByText("Testteknik")).toBeInTheDocument()
+		// 	// })
+
+		// 	// await waitFor(() => {
+		// 	// 	expect(screen.getByText("Testteknik nr 2")).toBeInTheDocument()
+		// 	// })
+
+	})
+
 
 	// The initial technique and the added technique should be in the document
 	// test("when a technique is created", async () => {

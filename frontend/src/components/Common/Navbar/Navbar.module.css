@@ -1,10 +1,14 @@
 .commonNavbar {
+    position: sticky;
+    top: 0; 
     display: flex;
     padding-bottom: 1rem;
     margin: 1.5rem;
     height: 64px;
     border-bottom: 3px solid var(--black-primary);
     justify-content: space-between;
+    z-index: 10;
+    background-color: var(--background);
 }
 .commonNavbarSidebar {
     position: fixed;
