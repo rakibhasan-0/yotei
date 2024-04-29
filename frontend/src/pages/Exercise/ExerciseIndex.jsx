@@ -102,7 +102,6 @@ export default function ExerciseIndex() {
 	return (
 		<>
 
-			<h1 className="py-2" id={"exercise-title"} style={{marginBottom: "-10px"}}>Övningar</h1>
 
 			<SearchBar 
 				id="exercise-search-bar" 
@@ -140,7 +139,7 @@ export default function ExerciseIndex() {
 			<br/><br/><br/><br/><br/>
 
 			{isEditor(context) && 
-			<RoundButton linkTo={"create"} id={"exercise-round-button"}  style={{maxWidth: "5px"}}>
+			<RoundButton linkTo={"exercise/create"} id={"exercise-round-button"}  style={{maxWidth: "5px"}}>
 				<Plus/>
 			</RoundButton>
 			}

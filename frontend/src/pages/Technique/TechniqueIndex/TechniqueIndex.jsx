@@ -143,8 +143,6 @@ export default function TechniqueIndex() {
 				<CreateTechnique setIsOpen={setShowPopup} />
 			</Popup>
 
-			<h1>Tekniker</h1>
-
 			<div>
 				<SearchBar
 					onBlur={saveSearchText}
@@ -191,7 +189,7 @@ export default function TechniqueIndex() {
 			<br/><br/><br/><br/><br/>
 			
 			{isAdmin(context) &&
-				<Link to={"create"}>
+				<Link to={"technique/create"}>
 					<RoundButton id="technique-add-button">
 						<Plus className={styles["plus-icon"]} />
 					</RoundButton>
