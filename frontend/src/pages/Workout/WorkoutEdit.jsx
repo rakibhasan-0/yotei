@@ -11,6 +11,7 @@ import {
 import { WorkoutCreateContext } from "../../components/Workout/CreateWorkout/WorkoutCreateContext.js"
 import styles from "./WorkoutModify.module.css"
 import { setSuccess, setError } from "../../utils.js"
+import { Spinner } from "react-bootstrap"
 
 /**
  * This is the page for editing a saved workout.
@@ -27,6 +28,7 @@ const WorkoutEdit = () => {
 	const { token, userId } = useContext(AccountContext)
 	const location = useLocation()
 	const [isSubmitted, setIsSubmitted] = useState(false)
+	const [isLoading, setIsLoading] = useState(true)
 
 	/**
 	 * Submits the form data to the API.
@@ -42,7 +44,6 @@ const WorkoutEdit = () => {
 		} else {
 			setError("Träningen kunde inte uppdateras.")
 		}
-
 		navigate(-1)
 	}
 
@@ -139,9 +140,10 @@ const WorkoutEdit = () => {
 	}
 
 	/**
-     * Fetches the data from the API and sets the states.
+     * Fetches the data from the local storage and context.
      */
 	useEffect(() => {
+		setIsLoading(true)
 		const item = localStorage.getItem("workoutCreateInfoEdit")
 		const workoutData = location.state?.workout
 		const userData = location.state?.users
@@ -151,6 +153,7 @@ const WorkoutEdit = () => {
 				type: WORKOUT_CREATE_TYPES.INIT_EDIT_DATA,
 				payload: { workoutData, userData: userData ? userData : [] }
 			})
+			
 			window.history.replaceState({}, document.title)
 		} else if (item) {
 			workoutCreateInfoDispatch({
@@ -160,6 +163,7 @@ const WorkoutEdit = () => {
 		} else {
 			navigate(-1, {replace: true})
 		}
+		setIsLoading(false)
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 	
 	/**
@@ -175,12 +179,17 @@ const WorkoutEdit = () => {
 	}, [workoutCreateInfo, isSubmitted])
 
 	return (
-		<WorkoutCreateContext.Provider value={{workoutCreateInfo, workoutCreateInfoDispatch}} >
-			<title>Redigera pass</title>
-			<h1 className={styles.title}>Redigera pass</h1>
-			<WorkoutFormComponent callback={submitHandler} />	
-		</WorkoutCreateContext.Provider>
+		<>
+			{isLoading ? <Spinner/> :
+
+				<WorkoutCreateContext.Provider value={{workoutCreateInfo, workoutCreateInfoDispatch}} >
+					<title>Redigera pass</title>
+					<h1 className={styles.title}>Redigera pass</h1>
+		
+					<WorkoutFormComponent callback={submitHandler} />	
+				</WorkoutCreateContext.Provider> 
+			}
+		</>
 	)
 }
-
 export default WorkoutEdit
