@@ -105,7 +105,7 @@ export default function CreateTechnique({ id }) {
 
 	function done() {
 		if (undoMediaChanges) {
-			navigate("/technique")
+			navigate(-1)
 		}
 		else {
 			if (continueToCreate && clearFields) {
@@ -116,7 +116,7 @@ export default function CreateTechnique({ id }) {
 				setCreateButton(true)
 				return
 			}
-			navigate("/technique")
+			navigate(-1)
 		}
 	}
 
@@ -273,7 +273,7 @@ export default function CreateTechnique({ id }) {
 				<Button
 					id="create-technique-backbutton"
 					width="100%"
-					onClick={() => navigate("/technique")}
+					onClick={() => navigate(-1)}
 					outlined={true}
 				>
 					<p>Tillbaka</p>
