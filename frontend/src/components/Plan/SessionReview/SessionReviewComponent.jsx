@@ -137,6 +137,9 @@ export default function Review({isOpen, setIsOpen, session_id}) {
 			return
 		}
 
+		//Get review id
+		//Save performed exercises
+
 		updateSavedDateDisplay(ts)
         setSuccess("Utvärdering sparad")
     }
