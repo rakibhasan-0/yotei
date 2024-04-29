@@ -1,5 +1,10 @@
+.body {
+    overflow-y: auto !important; /* Override the existing CSS */
+}
+
 .name-col:hover>* {
     color: #BE3B41;
+    overflow-y: scroll;
 }
 
 .created-col {
@@ -7,6 +12,7 @@
     color: #544949;
     text-align: left;
     font-style: oblique;
+    overflow-y: scroll;
 }
 
 .textDesc {
@@ -16,6 +22,7 @@
 
 .activity-list {
     padding-top: 20px;
+    overflow-y: scroll;
 }
 
 .toggleIcon{
@@ -32,8 +39,10 @@
 .workout-name{
     margin-bottom: 0;
     margin-top: 0;
+    overflow-y: scroll;
 }
 
 .selectWorkout{
     padding-top: 12px;
+    overflow-y: scroll;
 }
