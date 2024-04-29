@@ -57,9 +57,16 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 */
 	const [techniques, setTechniques] = useState([])
 	const [searchTechText, setSearchTechText] = useState("")
-	const [selectedBelts, setSelectedBelts] = useState([])
+	const [selectedBelts, setSelectedBelts] = useState(() => {
+		const savedBelts = sessionStorage.getItem("selectedBelts")
+		return savedBelts ? JSON.parse(savedBelts) : []
+	})
+
 	const [kihon, setKihon] = useState(false)
-	const [selectedTechTags, setSelectedTechTags] = useState([])
+	const [selectedTechTags, setSelectedTechTags] = useState(() => {
+		const savedTags = sessionStorage.getItem("selectedTechTags")
+		return savedTags ? JSON.parse(savedTags) : []
+	})
 	const [suggestedTechTags, setSuggestedTechTags] = useState([])
 
 	/**
@@ -68,10 +75,14 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 */
 	const [exercises, setExercises] = useState([])
 	const [searchExerText, setSearchExerText] = useState("")
-	const [selectedExerTags, setSelectedExerTags] = useState([])
+	const [selectedExerTags, setSelectedExerTags] = useState(() => {
+		const savedExerTags = sessionStorage.getItem("selectedExerTags")
+		return savedExerTags ? JSON.parse(savedExerTags) : []
+	})
 	const [suggestedExerTags, setSuggestedExerTags] = useState([])
 	const [fetchedTech, setFetchedTech] = useState(false)
 	const [fetchedExer, setFetchedExer] = useState(false)
+
 	const [activeTab, setActiveTab] = useState("")
 
 	/**
@@ -89,7 +100,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	]
 	const [sort, setSort] = useState(sortOptions[0])
 	const [cookies, setCookies] = useCookies(["exercise-filter"])
-	const [cookiesExer, setCookiesExer] = useCookies(["techniques-filter"])
+	//const [cookiesExer, setCookiesExer] = useCookies(["techniques-filter"])
 	const [visibleExercises, setVisibleExercises] = useState([])
 
 
@@ -100,35 +111,68 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 * (2024-04-22)
      */
 	useEffect(() => {
-		setSearchTechText(localStorage.getItem("searchTechText") || "")
-		setSearchExerText(localStorage.getItem("searchExerText") || "")
-		setActiveTab(localStorage.getItem("activeTab") || "technique")
-	}, [])
-
-	useEffect(() => {
-		localStorage.setItem("activeTab", activeTab)
-	}, [activeTab])
-
-	useEffect(() => {
-		localStorage.setItem("searchTechText", searchTechText)
-	}, [searchTechText])
-    
-	useEffect(() => {
-		localStorage.setItem("searchExerText", searchExerText)
-	}, [searchExerText])
-    
-
-	// NEW
-	useEffect(() => {
-		const filterCookie = cookiesExer["techniques-filter"]
-		if (filterCookie) {
-			setSelectedTechTags(filterCookie.tags)
-			setKihon(filterCookie.kihon)
-		}
+		setSearchTechText(sessionStorage.getItem("searchTechText")|| "")
+		setSearchExerText(sessionStorage.getItem("searchExerText") || "")
+		setActiveTab(getJSONSession("activeTab")|| "technique")
+		setKihon(sessionStorage.getItem("kihon")|| false)
+		setSort(getJSONSession("sort") || sortOptions[0])
 	}, [])
 
 
+	useEffect(() =>
+		sessionStorage.setItem("sort", JSON.stringify(sort))
+	)
+
+
 	useEffect(() => {
+		setJSONSession("selectedBelts", selectedBelts)
+	},[selectedBelts])
+
+
+	useEffect(() => {
+		sessionStorage.setItem("kihon", kihon)
+	},[kihon])
+
+
+	useEffect(() => {
+		setJSONSession("selectedTechTags", selectedTechTags)
+	},[selectedTechTags])
+
+
+	useEffect(() => {
+		setJSONSession("selectedExerTags", selectedExerTags)
+	},[selectedExerTags])
+
+
+	useEffect(() => {
+		setJSONSession("activeTab", activeTab)
+	},[activeTab])
+
+
+	useEffect(() => {
+		sessionStorage.setItem("searchTechText", searchTechText)
+	},[searchTechText])
+
+
+	useEffect(() => {
+		sessionStorage.setItem("searchExerText", searchExerText)
+	},[searchExerText])
+
+
+	function setJSONSession(key, value) {
+
+		sessionStorage.setItem(key, JSON.stringify(value))
+	}
+
+	function getJSONSession(key) {
+
+		JSON.parse(sessionStorage.getItem(key))
+	}
+	
+
+	useEffect(() => {
+		//sessionStorage.getItem(sort)
+
 		const filterCookie = cookies["exercise-filter"]
 		if (filterCookie) {
 			setSelectedExerTags(filterCookie.tags)
@@ -266,7 +310,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 			}
 			filteredBelts.push(x)
 		})
-		setCookiesExer("techniques-filter", { tags: selectedTechTags, kihon: kihon,sort: sort.label }, { path: "/" })
+		//setCookiesExer("techniques-filter", { sort: sort.label }, { path: "/" })
 
 		const args = {
 			text: searchTechText,
@@ -324,6 +368,9 @@ function AddActivity({ id, setShowActivityInfo }) {
 		}
 	}
 
+	function clearSelectedBelts() {
+		setSelectedBelts([])
+	}
 
 	return (
 		<div id={id}>
@@ -347,6 +394,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 							onBeltChange={handleBeltChanged}
 							kihon={kihon}
 							onKihonChange={handleKihonChanged}
+							onClearBelts = {clearSelectedBelts}
 							id="test"
 							filterWhiteBelt={true}>
 						</TechniqueFilter>

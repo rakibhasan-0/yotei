@@ -98,7 +98,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 
 	function confirmGoBack() {
 
-		localStorage.removeItem("workoutCreateInfo") // Clear local storage as confirmed
+		localStorage.removeItem("workoutCreateInfo")// Clear local storage as confirmed
 
 		if (state?.fromSession && !state?.fromCreate) {
 			navigate(`/session/edit/${state.session.sessionId}`, { replace: true, state })
@@ -129,7 +129,8 @@ export default function WorkoutFormComponent({ callback, state }) {
 			})
 		} else {
 			setLeaveActivityPickerPopup(true)
-			localStorage.clear() 
+			sessionStorage.clear()
+			localStorage.clear()
 		}
 		
 	}
