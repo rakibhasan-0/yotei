@@ -156,18 +156,10 @@ run-systests:
     - if: $CI_COMMIT_BRANCH == "main"
   tags:
     - system
-  image: node:20
-  before_script:
-    - cd frontend
-    - npm ci --no-progress --quiet --cache .npm --prefer-offline
-  cache:
-    key:
-      files:
-        - frontend/package-lock.json
-    paths:
-      - frontend/.npm/
   script:
-    - npm run systest
+    - cd infra/systest
+    - chmod u+x run-new-systests.sh
+    - ./run-new-systests.sh
   after_script:
     - >
       if [ $CI_JOB_STATUS == 'success' ]; then
