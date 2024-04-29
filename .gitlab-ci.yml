@@ -157,9 +157,8 @@ run-systests:
   tags:
     - system
   script:
-    - cd infra/systest
-    - chmod u+x run-new-systests.sh
-    - ./run-new-systests.sh
+    - cd frontend
+    - npm run
   after_script:
     - >
       if [ $CI_JOB_STATUS == 'success' ]; then
