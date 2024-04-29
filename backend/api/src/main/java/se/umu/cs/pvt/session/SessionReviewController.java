@@ -40,7 +40,7 @@ public class SessionReviewController {
     public ResponseEntity<List<SessionReview>> all(
     @PathVariable("id") long id) {
         
-        List<SessionReview> results = sessionReviewRepository.findAll();
+        List<SessionReview> results = sessionReviewRepository.findAllBySessionId(id);
 
         return new ResponseEntity<>(results, HttpStatus.OK);
     }
