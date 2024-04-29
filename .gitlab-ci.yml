@@ -158,7 +158,7 @@ run-systests:
     - system
   script:
     - cd frontend
-    - npm run
+    - npm run systest
   after_script:
     - >
       if [ $CI_JOB_STATUS == 'success' ]; then
