@@ -156,8 +156,10 @@ run-systests:
     - if: $CI_COMMIT_BRANCH == "main"
   tags:
     - system
-  script:
+  before_script:
     - cd frontend
+    - npm ci --no-progress --quiet --cache .npm --prefer-offline
+  script:
     - npm run systest
   after_script:
     - >
