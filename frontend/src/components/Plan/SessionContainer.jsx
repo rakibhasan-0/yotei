@@ -85,7 +85,9 @@ function SessionContainer ({ id, workout, session, plan}) {
 					let date = givenDate.split("-")
 					let day = date[2]
 					let month = date[1]
-					return day + "/" + month
+					let year = date[0]
+					year = year.toString().slice(-2)
+					return day + "/" + month + " - "+year
 				}
 			}
 		}
