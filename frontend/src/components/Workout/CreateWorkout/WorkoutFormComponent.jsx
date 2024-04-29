@@ -105,7 +105,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 		} else if(state?.fromCreate) {
 			return navigate("/session/create", { replace: true, state })
 		}
-		navigate("/workout")
+		navigate(-1)
 	}
 
 	function handlePopupClose() {
