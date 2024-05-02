@@ -61,6 +61,8 @@ export default function GroupIndex() {
 						}
 						return true
 					}).map((group, index) => (
+
+						
 						<div className="mb-2" key={index}>
 							<p className={style.label}>{group.name}</p>
 							<div className="d-flex align-items-center">
@@ -88,6 +90,7 @@ export default function GroupIndex() {
 								) } </div>
 							</div>
 						</div>
+
 					))}
 					<RoundButton linkTo={"/plan/create"}>
 						<Plus className="plus-icon" />
