@@ -24,7 +24,7 @@ function curl_await() {
 echo "system running! running tests ..."
 function tests_failed() {
     echo -e "\e[31mtests failed\e[0m"
-    early_exit
+    exit 1
 }
 trap tests_failed EXIT
 
