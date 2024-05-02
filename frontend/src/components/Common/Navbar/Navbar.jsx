@@ -65,7 +65,7 @@ function Navbar({ testId }) {
 				</Button>
 
 				<Button width={"100%"} onClick={() => {}}>
-					<h1 className={styles.commonNavbarButton}>Utvärdering</h1>
+					<h1 className={styles.commonNavbarButton}>Gradering</h1>
 				</Button>
 
 				{ isAdmin(context) ? 
