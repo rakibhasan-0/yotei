@@ -64,6 +64,10 @@ function Navbar({ testId }) {
 					<h1 className={styles.commonNavbarButton}>Tekniker</h1>
 				</Button>
 
+				<Button width={"100%"} onClick={() => {}}>
+					<h1 className={styles.commonNavbarButton}>Utvärdering</h1>
+				</Button>
+
 				{ isAdmin(context) ? 
 					<Button width={"100%"} onClick={() => navigateAndClose("/admin")}>
 						<h1 className={styles.commonNavbarButton}>Admin</h1>
