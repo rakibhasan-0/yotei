@@ -1,34 +1,14 @@
-import React, {useContext} from "react"
+import React, {useContext, useEffect, useState} from "react"
 import { AccountContext } from "../../../context"
 import { setError, setSuccess } from "../../../utils"
 import Button from "../../Common/Button/Button"
+
 import style from "./Export.module.css"
 
-export default function Export() {
-	const context = useContext(AccountContext)
+import Popup from "../../Common/Popup/Popup"
 
-	return (
-		<>
-			<div className={`row ${style.exportButtonContainer}`}>
-				<Button
-					id="exercise-export"
-					type="button"
-					width={"100%"}
-					onClick={() => export_("/api/export/exercises", "exercises")}>
-					<h2>Exportera Övningar</h2>
-				</Button>
-			</div>
-			<div className={`row ${style.exportButtonContainer}`}>
-				<Button
-					id="technique-export"
-					type="button"
-					width={"100%"}
-					onClick={async () => export_("/api/export/techniques", "techniques")}>
-					<h2>Exportera Tekniker</h2>
-				</Button>
-			</div>
-		</>
-	)
+const WarningPopup = ({type,show,setShow}) => {
+	const context = useContext(AccountContext)
 
 	async function export_(url, name) {
 		const requestOptions = {
@@ -60,5 +40,105 @@ export default function Export() {
 
 		name === "techniques" ? setSuccess("Export av tekniker lyckades!") : setSuccess("Export av övningar lyckades!") 
 	}
+
+	const initialPopupStateTechniques = {
+		id : 'warning-exercise',
+		onClick : () => export_("/api/export/exercises", "exercises"),
+		popupText : 'Du kommer nu ladda ned alla övningar i JSON format',
+		confirmText : 'Okej laddar ned övningar som JSON',
+		backText : 'återvänder'
+	}
+	
+	const initialPopupStateExercises = {
+		id : 'warning-technique',
+		onClick : () => export_("/api/export/techniques", "techniques"),
+		popupText : 'Du kommer nu ladda ned alla tekniker i JSON format',
+		confirmText : 'Okej laddar ned tekniker som JSON',
+		backText : 'återvänder'
+	}
+
+	const [popupState, setPopupState] = useState(
+		(type == 'technique') ? initialPopupStateTechniques : initialPopupStateExercises)
+	
+	return(
+		<>
+		<Popup
+			title={'Är du säker?'}
+			id={popupState.id}
+			isOpen={show}
+			setIsOpen={setShow}
+			children={null}	
+			isNested={true}
+			style={{
+				width: 'auto',
+				height: 'auto'
+			}}
+			onClose={() => setShow(false)}
+			zIndex={100}
+		>
+		<p>{popupState.popupText}</p>
+		
+		<div className={style.warningBtnContainer}>
+		<Button
+			className={style.warningBtn}
+			onClick={() => {
+			popupState.onClick()
+			setShow(false)
+			}}>
+			Exportera
+		</Button>
+		<Button 
+			className={style.warningBtn}
+			onClick={() => setShow(false)}>
+			Avbryt
+		</Button>
+		</div>
+		
+		</Popup>
+		</>
+	)
 }
+
+export default function Export() {
+    const [exportData, setExportData] = useState({ showWarning: false })
+
+    return (
+        <>
+            {exportData.showWarning && exportData.exportType !== undefined ?
+                <WarningPopup
+                    type={exportData.exportType}
+                    show={exportData.showWarning}
+                    setShow={(show) => setExportData({ ...exportData, showWarning: show })}
+                /> : <></>
+            }
+            <div className={`row ${style.exportButtonContainer}`}>
+                <Button
+                    id="exercise-export"
+                    outlined={true}
+					isToggled={false}
+                    width={"100%"}
+					type="button"
+					disabled={false}
+                    onClick={() => setExportData({ showWarning: true, exportType: 'exercise' })}
+                >
+                    <h2>Exportera Övningar</h2>
+                </Button>
+            </div>
+            <div className={`row ${style.exportButtonContainer}`}>
+                <Button
+                    id="technique-export"
+                    outlined={true}
+					isToggled={false}
+                    width={"100%"}
+					type="button"
+					disabled={false}
+                    onClick={() => setExportData({ showWarning: true, exportType: 'technique' })}
+                >
+                    <h2>Exportera Tekniker</h2>
+                </Button>
+            </div>
+        </>
+    )
+}
+
 
