@@ -177,13 +177,8 @@ run-systests:
   image: mcr.microsoft.com/playwright:v1.39.0-jammy
   script:
     - cd frontend/
-    - npm ci # Install project dependencies
-    - npm run systest:ci # Run your Playwright tests 
-    - echo "https://$CI_PROJECT_NAMESPACE.gitlab.io/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/playwright-report/index.html" # print the URL to view the results
-    - cd ../infra/systest
-    - chmod u+x run-new-systests.sh
-    - ./run-new-systests.sh
-  allow_failure: true
+    - npm ci
+    - npm run systest:ci
   after_script:
     - >
       if [ $CI_JOB_STATUS == 'success' ]; then
