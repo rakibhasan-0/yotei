@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react"
+import React, {useContext, useState} from "react"
 import { AccountContext } from "../../../context"
 import { setError, setSuccess } from "../../../utils"
 import Button from "../../Common/Button/Button"
@@ -42,103 +42,100 @@ const WarningPopup = ({type,show,setShow}) => {
 	}
 
 	const initialPopupStateTechniques = {
-		id : 'warning-exercise',
+		id : "warning-exercise",
 		onClick : () => export_("/api/export/exercises", "exercises"),
-		popupText : 'Du kommer nu ladda ned alla övningar i JSON format',
-		confirmText : 'Okej laddar ned övningar som JSON',
-		backText : 'återvänder'
+		popupText : "Du kommer nu ladda ned alla övningar i JSON format",
+		confirmText : "Okej laddar ned övningar som JSON",
+		backText : "återvänder"
 	}
 	
 	const initialPopupStateExercises = {
-		id : 'warning-technique',
+		id : "warning-technique",
 		onClick : () => export_("/api/export/techniques", "techniques"),
-		popupText : 'Du kommer nu ladda ned alla tekniker i JSON format',
-		confirmText : 'Okej laddar ned tekniker som JSON',
-		backText : 'återvänder'
+		popupText : "Du kommer nu ladda ned alla tekniker i JSON format",
+		confirmText : "Okej laddar ned tekniker som JSON",
+		backText : "återvänder"
 	}
 
-	const [popupState, setPopupState] = useState(
-		(type == 'technique') ? initialPopupStateTechniques : initialPopupStateExercises)
-	
+	const popupState = (type == "technique") ? initialPopupStateTechniques : initialPopupStateExercises
 	return(
 		<>
-		<Popup
-			title={'Är du säker?'}
-			id={popupState.id}
-			isOpen={show}
-			setIsOpen={setShow}
-			children={null}	
-			isNested={true}
-			style={{
-				width: 'auto',
-				height: 'auto'
-			}}
-			onClose={() => setShow(false)}
-			zIndex={100}
-		>
-		<p>{popupState.popupText}</p>
+			<Popup
+				title={"Är du säker?"}
+				id={popupState.id}
+				isOpen={show}
+				setIsOpen={setShow}
+				isNested={true}
+				style={{
+					width: "auto",
+					height: "auto"
+				}}
+				onClose={() => setShow(false)}
+				zIndex={100}
+			>
+				<p>{popupState.popupText}</p>
 		
-		<div className={style.warningBtnContainer}>
-		<Button
-			className={style.warningBtn}
-			onClick={() => {
-			popupState.onClick()
-			setShow(false)
-			}}>
+				<div className={style.warningBtnContainer}>
+					<Button
+						className={style.warningBtn}
+						onClick={() => {
+							popupState.onClick()
+							setShow(false)
+						}}>
 			Exportera
-		</Button>
-		<Button 
-			className={style.warningBtn}
-			onClick={() => setShow(false)}>
+					</Button>
+					<Button 
+						className={style.warningBtn}
+						onClick={() => setShow(false)}>
 			Avbryt
-		</Button>
-		</div>
+					</Button>
+				</div>
 		
-		</Popup>
+			</Popup>
 		</>
 	)
 }
 
 export default function Export() {
-    const [exportData, setExportData] = useState({ showWarning: false })
+	const [exportData, setExportData] = useState({ showWarning: false })
 
-    return (
-        <>
-            {exportData.showWarning && exportData.exportType !== undefined ?
-                <WarningPopup
-                    type={exportData.exportType}
-                    show={exportData.showWarning}
-                    setShow={(show) => setExportData({ ...exportData, showWarning: show })}
-                /> : <></>
-            }
-            <div className={`row ${style.exportButtonContainer}`}>
-                <Button
-                    id="exercise-export"
-                    outlined={true}
+	return (
+		<>
+			{exportData.showWarning && exportData.exportType !== undefined ?
+				<WarningPopup
+					type={exportData.exportType}
+					show={exportData.showWarning}
+					setShow={(show) => setExportData({ ...exportData, showWarning: show })}
+				/> : <></>
+			}
+			<div className={`row ${style.exportButtonContainer}`}>
+				<Button
+					id="exercise-export"
+					outlined={true}
 					isToggled={false}
-                    width={"100%"}
+					width={"100%"}
 					type="button"
 					disabled={false}
-                    onClick={() => setExportData({ showWarning: true, exportType: 'exercise' })}
-                >
-                    <h2>Exportera Övningar</h2>
-                </Button>
-            </div>
-            <div className={`row ${style.exportButtonContainer}`}>
-                <Button
-                    id="technique-export"
-                    outlined={true}
+					onClick={() => setExportData({ showWarning: true, exportType: "exercise" })}
+				>
+					<h2>Exportera Övningar</h2>
+				</Button>
+			</div>
+			<div className={`row ${style.exportButtonContainer}`}>
+				<Button
+					id="technique-export"
+					outlined={true}
 					isToggled={false}
-                    width={"100%"}
+					width={"100%"}
 					type="button"
 					disabled={false}
-                    onClick={() => setExportData({ showWarning: true, exportType: 'technique' })}
-                >
-                    <h2>Exportera Tekniker</h2>
-                </Button>
-            </div>
-        </>
-    )
+					onClick={() => setExportData({ showWarning: true, exportType: "technique" })}
+				>
+					<h2>Exportera Tekniker</h2>
+				</Button>
+			</div>
+		</>
+	)
 }
 
 
