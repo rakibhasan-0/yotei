@@ -29,6 +29,7 @@ import EditGroup from "./pages/Plan/EditGroup/EditGroup"
 import SessionEdit from "./pages/Plan/SessionEdit"
 import PlanIndex from "./pages/Plan/PlanIndex"
 import GradingCreate from "./pages/Grading/GradingCreate.jsx"
+import GradingBefore from "./pages/Grading/GradingBefore.jsx"
 import BaseLayout from "./components/Common/BaseLayout/BaseLayout"
 import ErrorBoundary from "./components/ErrorHandler/ErrorBoundary"
 
@@ -126,6 +127,7 @@ export default function App() {
 						<Route path="groups" element={<GroupIndex />} />
 						<Route path="groups/statistics/:groupID" element={<NoPage />} />
             <Route path="grading/create" element={<GradingCreate/>} />
+            <Route path="grading/:gradingId/1" element={<GradingBefore/>} />
 						<Route path="" element={<PlanIndex uri={planURI} />} />
 						<Route path="*" element={<NoPage />} />
 					</Route>
