@@ -132,7 +132,7 @@ rebuild-database:
   script:
     - docker stop html-psql-1
     - docker rm html-psql-1
-    - docker volume rm html-pgdata
+    - docker volume rm html_pgdata
 
 deploy-test-server:
   stage: deploy_test_server
