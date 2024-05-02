@@ -64,7 +64,7 @@ function Navbar({ testId }) {
 					<h1 className={styles.commonNavbarButton}>Tekniker</h1>
 				</Button>
 
-				<Button width={"100%"} onClick={() => {}}>
+				<Button width={"100%"} onClick={() => {"/grading/create"}}>
 					<h1 className={styles.commonNavbarButton}>Gradering</h1>
 				</Button>
 
