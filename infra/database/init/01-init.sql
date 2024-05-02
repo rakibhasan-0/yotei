@@ -78,6 +78,8 @@ DROP TABLE IF EXISTS technique_tag CASCADE;
 
 DROP TABLE IF EXISTS workout_tag CASCADE;
 
+DROP TABLE IF EXISTS examination_grading;
+
 DROP TABLE IF EXISTS activity CASCADE;
 
 DROP TABLE IF EXISTS tag CASCADE;
@@ -250,6 +252,18 @@ CREATE TABLE IF NOT EXISTS exercise_tag (
 	CONSTRAINT et_fk_tag FOREIGN KEY (tag_id) REFERENCES tag(tag_id) ON
 	DELETE CASCADE,
 	UNIQUE (ex_id, tag_id)
+    );
+
+CREATE TABLE IF NOT EXISTS examination_grading (
+    grading_id SERIAL PRIMARY KEY,
+    creator_id INT NOT NULL,
+    belt_id INT NOT NULL,
+    step INT NOT NULL,
+    technique_step_num INT NOT NULL,
+    created_at DATE NOT NULL,
+
+    CONSTRAINT grading_fk_belt FOREIGN KEY(belt_id) REFERENCES belt(belt_id) ON
+    DELETE CASCADE
 );
 
 --
