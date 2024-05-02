@@ -24,7 +24,7 @@ export default function GroupIndex() {
 	const context = useContext(AccountContext)
 	const { token, userId } = context
 	const [loading, setLoading] = useState(true)
-	const [isStatisticsEnabled] = useState(true) //FEATURE TOGGLE
+	const [isStatisticsEnabled] = useState(false) //FEATURE TOGGLE
 
 	useEffect(() => {
 		(async () => {
@@ -75,8 +75,10 @@ export default function GroupIndex() {
 											<Pencil size={24} color="var(--red-primary)"/>
 										</Link>
 										
-										<div style={{ width: "20px" }} />
+										
 										{ isStatisticsEnabled && (	//FEATURE TOGGLE
+										<>
+											<div style={{ width: "20px" }}/>
 											<Link to={`./statistics/${group.id}`}>
 												<GraphUp
 													id="statistics-page-button"
@@ -85,6 +87,7 @@ export default function GroupIndex() {
 													style={{ cursor: "pointer" }}
 												/>
 											</Link>
+										</>
 										)}
 									</>
 								) } </div>
