@@ -1,58 +1,10 @@
-.dateContainer {
-	display: flex;
-	text-align: center;
-	margin-bottom: 4%;
-}
-
-<<<<<<< HEAD
-.checkboxContainer{
-	display: flex;
-	justify-content: center;
-	margin-bottom: 2%;
-=======
-.checkboxContainer {
-	display: flex;
-	justify-content: center;
-	margin-left: 2%;
->>>>>>> 58309dc50199d80ce65c8299ae55ff30ab7101d6
-}
-
-.dateContainer h2 {
-	margin-top: 4%;
-}
-
-<<<<<<< HEAD
-.dateContainer > div {
-	width: 75%;
-}
 
 .buttonContainer{
 	margin-top: 60%;
-}
-
-.checkboxContainer > h2 {
-	margin-right: 10%;
-	white-space: nowrap;
-}
-
-.checkboxContainer > div {
-	width: 100%;
 }
 
 
 .FilterAndSortContainer {
 	position: relative;
 	margin-top: 4%;
-=======
-.dateContainer>div {
-	width: 75%;
-}
-
-.checkboxContainer>div {
-	width: 75%;
-}
-
-.buttonContainer {
-	margin-top: 60%;
->>>>>>> 58309dc50199d80ce65c8299ae55ff30ab7101d6
 }
