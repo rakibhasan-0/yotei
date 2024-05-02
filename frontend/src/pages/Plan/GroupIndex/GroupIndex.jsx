@@ -24,7 +24,7 @@ export default function GroupIndex() {
 	const context = useContext(AccountContext)
 	const { token, userId } = context
 	const [loading, setLoading] = useState(true)
-	const [isStatisticsEnabled] = useState(true) //FEATURE TOGGLE
+	const [isStatisticsEnabled] = useState(false) //FEATURE TOGGLE
 
 	useEffect(() => {
 		(async () => {

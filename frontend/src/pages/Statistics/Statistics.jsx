@@ -16,31 +16,14 @@ export default function Statistics() {
 	const { token } = useContext(AccountContext);
 
 
-  const techniqueObjects = [
-	{
-		id: 1,
-		name: "Technique 1",
-	},
-
-	{
-		id: 2,
-		name: "Technique 2",
-	},
-	{
-		id: 3,
-		name: "Technique 3",
-	},
-	{
-		id: 4,
-		name: "Technique 4",
-	}
-  ]
 
   useEffect(() => {
     async function fetchGroupData() {
+
+		
       try {
         console.log("Fetching group data for ID:", groupID);
-        const response = await fetch("/api/statistics/${groupID}", {
+        const response = await fetch(`/api/statistics/${groupID}`, {
           headers: { token },
         });
 
@@ -78,11 +61,12 @@ export default function Statistics() {
 			</div>
 
 	  <div>
-		{
-			techniqueObjects.map((technique, key) => 
-				<TechniqueCard key={key} technique={technique} checkBox={false} />
-			)
-		}
+			{/*here we will show the technique, exercise and color of the belts, number of the exercise 	
+				we will use the TechniqueCard component to show the data
+			*/}
+
+
+			
 	  </div>
 
 	
