@@ -1,10 +1,7 @@
 package se.umu.cs.pvt.examination;
-
-import org.springframework.http.ResponseEntity;
-
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+
 
 @Entity()
 @Table(name = "examination_grading")

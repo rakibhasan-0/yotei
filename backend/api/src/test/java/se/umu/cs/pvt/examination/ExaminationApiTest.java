@@ -10,15 +10,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import se.umu.cs.pvt.session.SessionController;
+
+import se.umu.cs.pvt.belt.BeltRepository;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 
 @WebMvcTest(controllers = ExaminationController.class)
 @ExtendWith(MockitoExtension.class)
@@ -26,8 +25,20 @@ public class ExaminationApiTest {
 
     @MockBean
     private GradingRepository gradingRepository;
+    @MockBean
+    private BeltRepository beltRepository;
+    @MockBean
+    private ExamineePairRepository examineePairRepository;
+    @MockBean
+    private ExamineeRepository examineeRepository;
+    @MockBean
+    private ExaminationResultTechniqueRepository examinationResultTechniqueRepository;
+    @MockBean
+    private ExaminationCommentRepository examinationCommentRepository;
 
+    @Autowired
     private ExaminationController examinationController;
+    
     List<Grading> gradingList;
 
     @BeforeEach
@@ -36,10 +47,10 @@ public class ExaminationApiTest {
         this.gradingList.add(new Grading(1L, 1L, 1, new Date(), 1L, 1));
         this.gradingList.add(new Grading(2L, 1L, 1, new Date(), 1L, 1));
         this.gradingList.add(new Grading(3L, 1L, 1, new Date(), 1L, 1));
-        examinationController = new ExaminationController(gradingRepository);
-
-
+        //examinationController = new ExaminationController(gradingRepository);
         Mockito.when(gradingRepository.findAll()).thenReturn(gradingList);
+
+        // Mockito.when(gradingRepository.findAll()).thenReturn(gradingList);
     }
 
     /**
