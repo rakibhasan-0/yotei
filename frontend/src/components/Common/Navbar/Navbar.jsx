@@ -14,10 +14,14 @@ import { AccountContext } from "../../../context"
  *
  * Example usage:
  * 		<Navbar testId="test-id"/>
+ * 
+ * Changes version 4.0:
+ *     	merged techniques and exercise buttons, 
+ * 		this new button routs to activity page.
  *
- * @author Team Medusa & Team Cyclops & Team Tomato & Team Coconut
- * @version 3.0
- * @since 2024-04-24
+ * @author Team Medusa & Team Cyclops & Team Tomato & Team Coconut & Team Kiwi
+ * @version 4.0
+ * @since 2024-05-02
  */
 function Navbar({ testId }) {
 

@@ -13,14 +13,14 @@ import Admin from "./pages/Admin/Admin"
 import About from "./pages/About/About"
 import WorkoutView from "./pages/Workout/WorkoutView/WorkoutView"
 import WorkoutEdit from "./pages/Workout/WorkoutEdit"
-import TechniqueIndex from "./pages/Technique/TechniqueIndex/TechniqueIndex"
+import TechniqueIndex from "./pages/Activity/Technique/TechniqueIndex/TechniqueIndex.jsx"
 import ExerciseIndex from "./pages/Exercise/ExerciseIndex"
 import ExerciseEdit from "./pages/Exercise/ExerciseEdit"
 import { AccountContext } from "./context"
 import { decodeToken } from "react-jwt"
 import ExerciseDetailsPage from "./pages/Exercise/ExerciseDetailsPage"
-import TechniqueDetail from "./pages/Technique/TechniqueDetail/TechniqueDetail"
-import TechniqueEdit from "./pages/Technique/TechniqueEdit/TechniqueEdit"
+import TechniqueDetail from "./pages/Activity/Technique/TechniqueDetail/TechniqueDetail.js"
+import TechniqueEdit from "./pages/Activity/Technique/TechniqueEdit/TechniqueEdit.js"
 import Profile from "./pages/Profile/Profile"
 import PlanCreate from "./pages/Plan/PlanCreate.jsx"
 import SessionCreate from "./pages/Plan/SessionCreate"
@@ -34,7 +34,7 @@ import ErrorBoundary from "./components/ErrorHandler/ErrorBoundary"
 import "react-toastify/dist/ReactToastify.css"
 import { logOut } from "./utils"
 import { ToastContainer, toast } from "react-toastify"
-import CreateTechnique from "./pages/Technique/CreateTechnique/CreateTechnique"
+import CreateTechnique from "./pages/Activity/Technique/CreateTechnique/CreateTechnique.jsx"
 import AdminRoute from "./AdminRoute"
 import ActivityIndex from "./pages/Activity/ActivityIndex.jsx"
 
@@ -44,7 +44,14 @@ const planURI = "https://jsonplaceholder.typicode.com/users"
 
 /**
  *
- * @version 1.0
+  * Changes version 2.0:
+ *     	made path for activity page.
+ * 		Activities now contain techniques and exercises.
+ *
+ * @author
+ * 		Unknown authors
+ *     	Team Kiwi
+ * @version 2.0
  */
 export default function App() {
 	const cookie = new Cookies().get("token")
