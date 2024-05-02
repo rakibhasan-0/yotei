@@ -17,6 +17,16 @@ import { HTTP_STATUS_CODES } from "../../../../utils"
 const requestSpy = jest.fn()
 server.events.on("request:start", requestSpy)
 
+/**
+ * Unit-test for the TechniqueIndex page, 
+ * few simple tests making sure components are rendered correctly,
+ * that the search bar works as intended (filtering)
+ * and that the user can create a new technique.
+ *
+ * @author ???, Team Mango (Group 4)
+ * @since 2024-04-24
+ * @version 2.0 
+ */
 
 configure({testIdAttribute: "id"})
 
@@ -90,6 +100,44 @@ describe("should update", () => {
 						is_child: false
 					}
 				]
+			}
+		]
+	}
+
+	let tags = {
+		results: [
+			{
+
+				"id": 1,
+				"name": "kihon waza"
+			},
+			{
+				"id": 2,
+				"name": "svart"
+			},
+			{
+				"id": 3,
+				"name": "brunt"
+			},
+			{
+				"id": 4,
+				"name": "grönt"
+			},
+			{
+				"id": 5,
+				"name": "blått"
+			},
+			{
+				"id": 6,
+				"name": "gult"
+			},
+			{
+				"id": 7,
+				"name": "orange"
+			},
+			{
+				"id": 8,
+				"name": "vitt"
 			}
 		]
 	}
@@ -177,7 +225,56 @@ describe("should update", () => {
 				))
 			}),
 		)
-		
+
+		server.use(
+			rest.get("http://localhost/api/tags/all", (req, res, ctx) => {
+				return res(
+					ctx.json(tags)
+				)
+			}),
+			rest.post("http://localhost/api/tags/add", (req, res, ctx) => {
+				tags = {
+					results: [
+						{
+							"id": 1,
+							"name": "kihon waza"
+						},
+						{
+							"id": 2,
+							"name": "svart"
+						},
+						{
+							"id": 3,
+							"name": "brunt"
+						},
+						{
+							"id": 4,
+							"name": "grönt"
+						},
+						{
+							"id": 5,
+							"name": "blått"
+						},
+						{
+							"id": 6,
+							"name": "gult"
+						},
+						{
+							"id": 7,
+							"name": "orange"
+						},
+						{
+							"id": 8,
+							"name": "vitt"
+						}
+					]
+				}
+				return res(
+					ctx.json(req.json())
+				)
+			})
+			
+		)
 
 	})
 
@@ -202,14 +299,6 @@ describe("should update", () => {
 	})
 
 	test("should filter correctly, when leaving site and returning search-bar should have been saved", async () => {
-		// const {rerender} = render (
-		// 	// eslint-disable-next-line no-dupe-keys
-		// 	<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", undefined }}>
-		// 		<MemoryRouter>
-		// 			<TechniqueIndex/>
-		// 		</MemoryRouter>
-		// 	</AccountContext.Provider>
-		// )
 		render(
 			// eslint-disable-next-line no-dupe-keys
 			<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", undefined }}>
@@ -236,7 +325,6 @@ describe("should update", () => {
 		await waitFor(() => {
 			expect(screen.queryByText("Grått Testteknik nr 2")).not.toBeInTheDocument()
 		})
-		//userEvent.type(nameInput, "Testteknik nr 2")
 
 		await userEvent.click(screen.getByTestId("technique-add-button"))
 
@@ -252,8 +340,6 @@ describe("should update", () => {
 		expect(screen.getByTestId("create-technique-input-name")).toBeVisible()
 
 		await userEvent.click(screen.getByTestId("create-technique-backbutton"))
-
-		//rerender(<MemoryRouter><TechniqueIndex/></MemoryRouter>)
 
 		expect(screen.getByTestId("searchbar-input")).toHaveValue("blå")
 
@@ -328,14 +414,18 @@ describe("should update", () => {
 
 	})
 
+	/**
+	 * Plan is to have a test that confirms the serachText is saved when leaving the page and returning, 
+	 * but also remains cleared in case a tag is selected first before the user leaves and returns.
+	 * 
+	 * TODO: Currently found no way of getting tags to show up when writing in the searchbar,
+	 * might be a problem with how the api is called in the code but not sure.
+	 * 
+	 */
 
-	test("should keep the search bar text cleared when leaving the page after selectin a tag", async () => {
-		expect(true).toBe(true)
-	})
-
-	// The initial technique and the added technique should be in the document
-	// test("when a technique is created", async () => {
-	// 	render (
+	// test("should keep the search bar text cleared when leaving the page after selecting a tag", async () => {
+	
+	// 	render(
 	// 		// eslint-disable-next-line no-dupe-keys
 	// 		<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", undefined }}>
 	// 			<MemoryRouter>
@@ -344,34 +434,23 @@ describe("should update", () => {
 	// 		</AccountContext.Provider>
 	// 	)
 
-	// 	const user = userEvent.setup() 
-	// 	jest.setTimeout(10000)
+	// 	expect(screen.getByText("Tekniker")).toBeInTheDocument()
 
-	// 	// Add a technique
-	// 	await user.click(screen.getByTestId("technique-add-button"))
-	// 	await user.type(screen.getByPlaceholderText("Namn"), "Testteknik nr 2")
-	// 	await user.click(screen.getByText("Lägg till"))
+	// 	const searchInput = screen.getByTestId("searchbar-input")
+
+	// 	fireEvent.change(searchInput, { target: { value: "gr" } })
 
 	// 	await waitFor(() => {
-	// 		expect(requestSpy).toHaveBeenCalled()
+	// 		expect(screen.getByText("Grönt Testteknik")).toBeInTheDocument()
 	// 	})
 
-	// 	await waitFor(() => {
-	// 		expect(screen.getByText("Testteknik")).toBeInTheDocument()
-	// 	})
+	// 	await new Promise((r) => setTimeout(r, 2000))
 
-	// 	await waitFor(() => {
-	// 		expect(screen.getByText("Testteknik nr 2")).toBeInTheDocument()
-	// 	})
+	// 	expect(screen.getByTestId("tag-in-searchbar-grönt")).toBeInTheDocument()
 
-	// const {rerender} = render (
-	// 	// eslint-disable-next-line no-dupe-keys
-	// 	<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", undefined }}>
-	// 		<MemoryRouter>
-	// 			<TechniqueIndex/>
-	// 		</MemoryRouter>
-	// 	</AccountContext.Provider>
-	// )
+	// 	await userEvent.click(screen.getByTestId("tag-in-searchbar-grönt"))
 
+	// 	expect(screen.getByTestId("searchbar-input")).toHaveValue("")
 	// })
+
 })
