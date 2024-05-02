@@ -8,6 +8,7 @@ import Button from "../../../../components/Common/Button/Button"
 import BeltIcon from "../../../../components/Common/BeltIcon/BeltIcon"
 
 import { Pencil, Trash } from "react-bootstrap-icons"
+import Review from "../../../../components/Common/Technique/TechniqueReview/ReviewFormComponent.jsx"
 
 import styles from "./TechniqueDetail.module.css"
 import ErrorState from "../../../../components/Common/ErrorState/ErrorState"
