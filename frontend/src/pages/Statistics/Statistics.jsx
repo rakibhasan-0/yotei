@@ -23,7 +23,7 @@ export default function Statistics() {
 			try {
 				console.log("Fetching group data for ID:", groupID)
 
-				const response = await fetch("/api/plan/all", {headers: { token }});
+				const response = await fetch("/api/plan/all", {headers: { token }})
 
 				if (!response.ok) {
 					throw new Error("Failed to fetch group data")
@@ -46,29 +46,27 @@ export default function Statistics() {
 	}, [groupID, token])
 
 	return (
-    <div>
-      {loading ? (
-        <Spinner />
-      ) : (
-        <h1 style={{ fontSize: "35px" }}>
-          {group ? `${group.name}` : "Gruppen hittades inte"}
-        </h1>
-      )}
+		<div>
+			{loading ? (<Spinner />) : 
+				(<h1 style={{ fontSize: "35px" }}>
+					{group ? `${group.name}` : "Gruppen hittades inte"}
+				</h1>)
+			}
 
-      <div className={style.FilterAndSortContainer}>
-        <FilterStatistics />
-        <StatisticsPopUp />
-      </div>
-		{/*here we will show the technique, exercise and color of the belts, number of the exercise 	
-			we will use the TechniqueCard component to show the data ..../api/statistics/${groupID}
-		*/}
+			<div className={style.FilterAndSortContainer}>
+				<FilterStatistics />
+				<StatisticsPopUp />
+			</div>
+			{/*here we will show the technique, exercise and color of the belts, number of the exercise 	
+				we will use the TechniqueCard component to show the data ..../api/statistics/${groupID}
+			*/}
 
-      <div className={style.buttonContainer}>
-        <Button width="25%" outlined={true} onClick={() => navigate(-1)}>
-          <p>Tillbaka</p>
-        </Button>
-      </div>
-    </div>
-  );
+			<div className={style.buttonContainer}>
+				<Button width="25%" outlined={true} onClick={() => navigate(-1)}>
+					<p>Tillbaka</p>
+				</Button>
+			</div>
+		</div>
+	)
 
 }
