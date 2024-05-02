@@ -21,7 +21,7 @@ import { AccountContext } from "../../../context"
  * @version 1.0
  */
 
-export default function Review({isOpen, setIsOpen, session_id, workout_id}) {
+export default function Review({id, isOpen, setIsOpen, session_id, workout_id, shouldLoad}) {
 
 	const [sessionData, setSessionData] = useState(null)
 
@@ -57,6 +57,7 @@ export default function Review({isOpen, setIsOpen, session_id, workout_id}) {
 				setLoading(false)
 			} else {
 				const json = await response.json()
+				console.log(json)
 				setSessionData(() => json)
 				setLoading(false)
 				setErrorStateMsg("")
@@ -81,7 +82,7 @@ export default function Review({isOpen, setIsOpen, session_id, workout_id}) {
 				const json = await loadedResponse.json();
 				console.log(session_id)
 				console.log(json);
-				if(json[0] !== null) {
+				if(json[0] !== null && json[0] != undefined) {
 					setRating(json[0][`rating`])
 					setPositiveComment(json[0][`positiveComment`])
 					setNegativeComment(json[0][`negativeComment`])
@@ -91,9 +92,10 @@ export default function Review({isOpen, setIsOpen, session_id, workout_id}) {
 			}
 		}
 
-
-		fetchData()
-		fetchLoadedData()
+		if(shouldLoad) {
+			fetchData()
+			fetchLoadedData()
+		}
 	}, [])
 
 
@@ -211,7 +213,7 @@ export default function Review({isOpen, setIsOpen, session_id, workout_id}) {
 						{sessionData.activityCategories[0].activities.map((activity, index) => (
 							<div key={index} className={styles["activity_wrapper"]}>
 								<li className={styles["check_box_li"]}>
-									<CheckBox id={"CheckBox" + activity.index} value = {activity.id} onClick={() => handleCheckBoxChange(!doneList.includes(activity.id), activity.id)} checked={doneList.includes(activity.id)}/>
+									<CheckBox id={"CheckBox" + (activity.exercise !== null ? activity.exercise.id : activity.id)} value = {activity.id} onClick={() => handleCheckBoxChange(!doneList.includes((activity.exercise !== null ? activity.exercise.id : activity.id)), (activity.exercise !== null ? activity.exercise.id : activity.id))} checked={doneList.includes((activity.exercise !== null ? activity.exercise.id : activity.id))}/>
 								</li>
 								<li className={styles["activity_text_li"]}>
 									{activity.name}
@@ -226,7 +228,7 @@ export default function Review({isOpen, setIsOpen, session_id, workout_id}) {
 	}
 
     return (
-        <Popup title={"Utvärdering av tillfälle"} id={"review-popup"} isOpen={isOpen} setIsOpen={setIsOpen}>
+        <Popup title={"Utvärdering av tillfälle"} id={id} isOpen={isOpen} setIsOpen={setIsOpen}>
             <div className="d-flex flex-column align-items-center">
 				<Divider option={"h2_center"} title={"Betyg"} />
 				<div className="d-flex flex-row" style={{marginBottom: "20px"}}>

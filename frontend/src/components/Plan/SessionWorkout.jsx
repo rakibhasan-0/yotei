@@ -115,7 +115,7 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 	}
 
 	function getReviewContainer(showRPopup, setRShowPopup){
-		return (<Review isOpen={showRPopup} setIsOpen={setRShowPopup} session_id={sessionId} workout_id={workoutId}/>)
+		return (<Review id={"sessionReview"} isOpen={showRPopup} setIsOpen={setRShowPopup} session_id={sessionId} workout_id={workoutId} shouldLoad={true}/>)
 	}
 
 	return (
