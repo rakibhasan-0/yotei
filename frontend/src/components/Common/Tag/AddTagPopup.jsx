@@ -1,10 +1,12 @@
 import React, { useState, useContext, useEffect } from "react"
-import styles from "./AddTagPopup.module.css"
+import styles from "./AddTagPopup.module.css" 
 import Tag from "./Tag"
 import { Search } from "react-bootstrap-icons"
 import Button from "../Button/Button"
 import { AccountContext } from "../../../context"
 import Divider from "../Divider/Divider"
+import { PlusCircle, XCircleFill } from "react-bootstrap-icons"
+import { toast } from "react-toastify"
 
 /**
  * OBSERVE! This component is used inside the TagInput-component and should not be used by itself. 
@@ -118,6 +120,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 		} catch (error) {
 			setError("Något gick fel vid skapandet av tagg")
 		}
+		toast.error("Hej")
 	}
 
 	return (
@@ -129,42 +132,23 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 				<div className={styles["search-bar"]}>
 					<input
 						className={styles["input-area"]}
-						placeholder="Sök efter taggar"
+						placeholder="Sök eller skapa tagg"
 						value={searchText}
 						id = "tag-search-bar"
 						onChange={e => {searchForTags(e.target.value)}}
 					>
+						
 					</input>
 					<i className={styles["search-icon"]}><Search/></i>
-				</div>
-				<div className={styles["popup-tag-container"]}>
-					{suggested.map(tag => <Tag
-						tagType="suggest"
-						key={tag.id}
-						text={tag.name}
-						onClick={() => handleAddTag(tag)}
-					/>)}
-				</div>
-				{searchText !== "" &&
+					{searchText !== "" &&
 					<>
-						<h2 className={styles["heading"]}>Skapa ny tagg</h2>
-						<div className={styles["popup-tag-container"]} id="Tagg att skapa">
-							<Tag
-								tagType="suggest"
-								text={searchText}
-								onClick={() => createNewTag(searchText)}
-							/>
-						</div>
+						<button className ={styles["addButton"]} onClick={() => createNewTag(searchText)} >
+							<PlusCircle> </PlusCircle>
+						</button>
 					</>
-				}
-				<Divider className={styles["heading"]} id="Tillagda taggar" option="h2_left" title="Tillagda taggar"/>
-				<div className={styles["popup-tag-container"]}>
-					{addedTags.map(tag => <Tag
-						tagType="added"
-						key={tag.id}
-						text={tag.name}
-						onClick={() => handleRemoveTag(tag)}
-					/>)}
+						
+					}
+					
 				</div>
 			</div>
 			<div className={styles["popup-button-container"]}>

@@ -58,3 +58,13 @@
 	color: red;
 	text-align: left;
 }
+
+.addButton{
+	position: absolute;
+	right: 0;
+	height: 100%;
+	border: none;
+	width: 10%;
+	background-color: transparent;
+	font-size: 1.5rem;
+}
