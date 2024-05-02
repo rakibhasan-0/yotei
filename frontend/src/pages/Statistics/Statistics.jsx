@@ -17,35 +17,35 @@ export default function Statistics() {
 
 
 
-  useEffect(() => {
-    async function fetchGroupData() {
-	
-		try {
-			console.log("Fetching group data for ID:", groupID);
+	useEffect(() => {
+		async function fetchGroupData() {
+		
+			try {
+				console.log("Fetching group data for ID:", groupID)
 
-			const response = await fetch(`/api/statistics/${groupID}`, {
-				headers: { token },
-			});
+				const response = await fetch(`/api/statistics/${groupID}`, {
+					headers: { token },
+				});
 
-			if (!response.ok) {
-				throw new Error("Failed to fetch group data");
+				if (!response.ok) {
+					throw new Error("Failed to fetch group data")
+				}
+				const data = await response.json()
+				console.log("Group data:", data)
+				const groupData = data.find((group) => group.id === parseInt(groupID))
+				setGroup(groupData)
+			} 
+			catch (error) {
+				console.error("Fetching error:", error) // proper handling of error should be implemented
+			} 
+			finally {
+				setLoading(false)
 			}
-			const data = await response.json();
-			console.log("Group data:", data);
-			const groupData = data.find((group) => group.id === parseInt(groupID));
-			setGroup(groupData);
-		} 
-		catch (error) {
-			console.error("Fetching error:", error); // proper handling of error should be implemented
-		} 
-		finally {
-			setLoading(false);
 		}
-	}
 
-	fetchGroupData();
+		fetchGroupData()
 
-	}, [groupID, token]);
+	}, [groupID, token])
 
 	return (
 		<div>
@@ -70,11 +70,11 @@ export default function Statistics() {
 
 	
 			<div className={style.buttonContainer}>
-        		<Button width="25%" outlined={true} onClick={() => navigate(-1)}>
-          			<p>Tillbaka</p>
-        		</Button>
-      		</div>
-    	</div>
+				<Button width="25%" outlined={true} onClick={() => navigate(-1)}>
+		  			<p>Tillbaka</p>
+				</Button>
+	  		</div>
+		</div>
 	);
 
 }
