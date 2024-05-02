@@ -181,7 +181,7 @@ describe("verify that", () => {
 
 		await waitFor(() => {
 			// The mock api is called 2 times before everything is fully rendered
-			expect(api).toHaveBeenCalledTimes(3)
+			expect(api).toHaveBeenCalledTimes(2)
 		})
 	}
 
