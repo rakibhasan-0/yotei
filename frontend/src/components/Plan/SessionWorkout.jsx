@@ -43,6 +43,8 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 		navigate(path)
 	}
 
+	const [isReviewEnabled] = useState(true) //FEATURE TOGGLE
+
 	function setWorkoutID() {
 		if (checkWorkout() || isSpecifiedWorkoutID())
 			return workout.id
@@ -115,7 +117,7 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 	}
 
 	function getReviewContainer(showRPopup, setRShowPopup){
-		return (<Review id={"sessionReview"} isOpen={showRPopup} setIsOpen={setRShowPopup} session_id={sessionId} workout_id={workoutId} shouldLoad={true}/>)
+		return (<Review id={"sessionReview"} isOpen={showRPopup} setIsOpen={setRShowPopup} session_id={sessionId} workout_id={workoutId}/>)
 	}
 
 	return (
@@ -149,7 +151,7 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 							<div />
 					}
 					{
-						isEditor(userContext) &&
+						isEditor(userContext) && isReviewEnabled && 
 						<Button onClick={() => {
 							setRShowPopup(true)
 						}} outlined={false}>

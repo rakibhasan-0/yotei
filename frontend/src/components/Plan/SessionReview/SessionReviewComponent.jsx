@@ -21,7 +21,7 @@ import { AccountContext } from "../../../context"
  * @version 1.0
  */
 
-export default function Review({id, isOpen, setIsOpen, session_id, workout_id, shouldLoad}) {
+export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) {
 
 	const [sessionData, setSessionData] = useState(null)
 
@@ -92,10 +92,8 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id, s
 			}
 		}
 
-		if(shouldLoad) {
-			fetchData()
-			fetchLoadedData()
-		}
+		fetchData()
+		fetchLoadedData()
 	}, [])
 
 
@@ -262,7 +260,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id, s
 					<TextArea  type="text" text={negativeComment} onChange={handleChangeNegative} className="col-md-6 col-md-offset-3" style={{marginTop: "30px", marginBottom: "20px", height: "80px", borderRadius: "5px", minHeight: "80px"}} placeholder="Vad var dåligt med passet?"/>
 				</div>
                 <div className="col-md-6 p-0">
-					<Button width={"100%"} onClick={() => saveReview()}>Spara</Button>
+					<Button id="saveButton" width={"100%"} onClick={() => saveReview()}>Spara</Button>
 					<p id="savedDateDisplay">Senast sparad: <span id="savedDateValue"></span></p>
 				</div>
 			</div>
