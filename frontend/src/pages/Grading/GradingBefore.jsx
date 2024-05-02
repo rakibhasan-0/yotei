@@ -26,7 +26,7 @@ export default function GradingCreate() {
     <div>
       <div className = {style.beltButtonStyle}> 
         <div style={{ backgroundColor: "#FFD700", borderRadius: "0.3rem", padding: "0px" }}>
-          <h1>Kihon waza</h1>
+          <h2>KIHON WAZA</h2>
         </div>
       </div>
 
