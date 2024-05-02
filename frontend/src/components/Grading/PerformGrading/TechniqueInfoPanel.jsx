@@ -6,14 +6,16 @@ import CommentButton from "../PerformGrading/CommentButton"
  *
  * @author Team Apelsin (Group 5)
  * @version 1.0
+ * @since 2024-05-02
 */
 /**
  *
- * @param techniqueId
+ * @param id
  * @param categoryTitle
  * @param currentTechniqueTitle
  * @param nextTechniqueTitle
  * @param mainCategoryTitle
+ * @param beltColor
  * @returns {Element}
  * @constructor
  */

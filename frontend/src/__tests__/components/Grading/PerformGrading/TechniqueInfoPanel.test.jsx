@@ -2,7 +2,10 @@ import React from "react"
 import {cleanup, render, screen} from "@testing-library/react"
 import "@testing-library/jest-dom"
 import TechniqueInfoPanel from "../../../../components/Grading/PerformGrading/TechniqueInfoPanel.jsx"
-
+/**
+ * @author Team Apelsin (Group 5)
+ * @since 2024-05-02
+ */
 afterEach(() => {
 	cleanup()
 })

@@ -6,6 +6,7 @@ import {Sliders} from "react-bootstrap-icons"
  *
  * @author Team Apelsin (Group 5)
  * @version 1.0
+ * @since 2024-05-02
  */
 
 /**
