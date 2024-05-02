@@ -130,9 +130,9 @@ rebuild-database:
   before_script:
     - docker login --username pvt2024 --password $DOCKER_PASS # DOCKER_PASS defined in GitLab CI/CD settings as a secure variable.
   script:
-    - docker stop html-psql-1
-    - docker rm html-psql-1
-    - docker volume rm html_pgdata
+    - docker stop html-psql-1 || true
+    - docker rm html-psql-1 || true
+    - docker volume rm html_pgdata || true
 
 deploy-test-server:
   stage: deploy_test_server
