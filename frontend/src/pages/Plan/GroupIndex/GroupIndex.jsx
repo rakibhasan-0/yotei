@@ -17,6 +17,7 @@ import Spinner from "../../../components/Common/Spinner/Spinner"
  * @version 2.1
  * @since 2024-04-29
  * @returns A group index page
+ * Updated: 2024-05-02
  */
 export default function GroupIndex() {
 	const [groups, setGroups] = useState([])
@@ -24,6 +25,7 @@ export default function GroupIndex() {
 	const context = useContext(AccountContext)
 	const { token, userId } = context
 	const [loading, setLoading] = useState(true)
+	const [groupsEmpty, setGroupsEmpty] = useState(true) //Boolean to check if there are no groups.
 	const [isStatisticsEnabled] = useState(false) //FEATURE TOGGLE
 
 	useEffect(() => {
@@ -31,22 +33,28 @@ export default function GroupIndex() {
 			try {
 				const response = await fetch("/api/plan/all", { headers: { token } })
 				if (response.status === 404) {
+					//This code runs if there are no groups.
+					setLoading(false) //Stop the page from loading.
+					setGroupsEmpty(true) //Set a flag for the groups being empty.
 					return
 				}
 				if (!response.ok) {
 					setLoading(false)
 					throw new Error("Kunde inte hämta grupper")
 				}
+				setGroupsEmpty(false) //There is at least one group.
 				const json = await response.json()
 				setLoading(false)
 				setGroups(json)
 			} catch (ex) {
+				setGroupsEmpty(true) //There are no groups.
 				setErrorToast("Kunde inte hämta grupper")
 				setLoading(false)
 				console.error(ex)
 			}
 		})()
 	}, [token, searchText])
+
 
 	return (	
 		<div className={style.container}>	
@@ -84,6 +92,13 @@ export default function GroupIndex() {
 							</div>
 						</div>
 					))}
+
+					{groupsEmpty ? (<div>
+						<h1>Det finns inga grupper att visa</h1>
+					</div>)
+					: <></> //Default is nothing.
+					 }
+
 					<RoundButton linkTo={"/plan/create"}>
 						<Plus className="plus-icon" />
 					</RoundButton>
