@@ -51,7 +51,7 @@ export default defineConfig({
 			env: systestEnv,
 			url: process.env.CI ? testServer : frontendURL,
 			timeout: 60 * 1000,
-			reuseExistingServer: !process.env.CI,
+			reuseExistingServer: true,
 		}
 	],
 })

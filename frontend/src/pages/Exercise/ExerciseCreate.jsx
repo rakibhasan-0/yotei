@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useState, useRef } from "react"
 import styles from "./ExerciseCreate.module.css"
 import { AccountContext } from "../../context"
 import Button from "../../components/Common/Button/Button"
@@ -33,7 +33,7 @@ import { unstable_useBlocker as useBlocker } from "react-router"
  *     Medusa (Group 6) (2023-06-01)
  *     Coconut (Group 7) (2024-04-22)
  *     Team Mango (Group 4) (2024-04-22)
- *	   Team Durian (Group 3), Tomato (Group 6) (2024-04-23)
+ *	   Team Durian (Group 3), Tomato (Group 6) (2024-04-24)
  * 
  * @since 2024-04-22
  * @version 3.0
@@ -66,6 +66,8 @@ export default function ExerciseCreate() {
 			eraseBoxChecked: eraseBoxChecked,
 			addedTags: []
 		})
+
+		localStorage.removeItem("exerciseCreateLocalStorageKey")
 	}
 
 	const [name, setName] = useState(() => {
@@ -78,10 +80,11 @@ export default function ExerciseCreate() {
 		return exerciseCreateInput.time
 	})
 
-	const context = useContext(AccountContext)
 	const [addedTags, setAddedTags] = useState(() => {
 		return exerciseCreateInput.addedTags
 	})
+
+	const context = useContext(AccountContext)
 	const [showMiniPopup, setShowMiniPopup] = useState(false)
 	const [errorMessage, setErrorMessage] = useState("")
 	const [tempId, setTempId] = useState(-1)
@@ -93,11 +96,10 @@ export default function ExerciseCreate() {
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const navigate = useNavigate()
 
+	const hasRendered = useRef({"tagEffect":false, "inputEffect":false})
+
 	function done() {
-		if (undoMediaChanges) {
-			navigate(-1)
-		}
-		else {
+		if (!undoMediaChanges) {
 			setSendData(false)
 		}
 	}
@@ -117,40 +119,30 @@ export default function ExerciseCreate() {
 	}, [isSubmitted])
 
 	useEffect(() => {
-		storeInputChange("addedTags", addedTags)
+		if (hasRendered.current["tagEffect"]) {
+			storeInputChange("addedTags", addedTags)
+
+		}
+		hasRendered.current["tagEffect"] = true
 	}, [addedTags])
 
-	useEffect(() => {
-		setIsBlocking(name != "" || desc != "")
-	}, [name, desc])
 
 	/**
 	 * Saves an exerciseCreateInput object in local storage
 	 */
 	useEffect(() => {
-		localStorage.setItem("exerciseCreateLocalStorageKey", JSON.stringify(exerciseCreateInput))
+		if (hasRendered.current["inputEffect"]) {
+			localStorage.setItem("exerciseCreateLocalStorageKey", JSON.stringify(exerciseCreateInput))
+			setIsBlocking(true)
+			//Remove block if no information in fields.
+			if (name == "" && desc == "" && time == 0 && addedTags.length == 0) {
+				setIsBlocking(false)
+			}
+		}
+
+		hasRendered.current["inputEffect"] = true
 	}, [exerciseCreateInput])
 
-
-	/**
-	 * Loads an exerciseCreateInput object from local storage or initializes one if non was found.
-	 */
-	useEffect(() => {
-		const item = localStorage.getItem("exerciseCreateLocalStorageKey")
-		if (item) {
-			setExerciseCreateInput(JSON.parse(item))
-		} else {
-			// Initialize state only if localStorage data is not available
-			setExerciseCreateInput({
-				name: "",
-				desc: "",
-				time: 0,
-				addBoxChecked: false,
-				eraseBoxChecked: false,
-				addedTags: []
-			})
-		}
-	}, [])
 
 	/**
 	 * Updates the exerciseCreateInput object when new input is added
@@ -240,7 +232,6 @@ export default function ExerciseCreate() {
 			headers: { "Content-type": "application/json", "token": context.token },
 			body: JSON.stringify({ "exerciseId": exId })
 		}
-
 		try {
 			const response = await fetch("/api/tags/exercises?tag=" + tagId, requestOptions)
 			if (response.ok) {
@@ -286,8 +277,8 @@ export default function ExerciseCreate() {
 		
 		if (exerciseCreateInput.addBoxChecked == false) {
 			navigate(-1)
-			console.log("")
 			clearExerciseCreateInput(exerciseCreateInput.addBoxChecked, exerciseCreateInput.eraseBoxChecked)
+			
 		} else {
 			if (exerciseCreateInput.eraseBoxChecked == true) {
 				setName("")
@@ -297,6 +288,7 @@ export default function ExerciseCreate() {
 				clearExerciseCreateInput(exerciseCreateInput.addBoxChecked, exerciseCreateInput.eraseBoxChecked)
 			}
 		}
+		hasRendered.current["inputEffect"] = false
 		setIsSubmitted(false)
 	}
 

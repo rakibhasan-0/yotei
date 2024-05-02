@@ -107,6 +107,8 @@ DROP TABLE IF EXISTS workout_favorite CASCADE;
 
 DROP TABLE IF EXISTS workout_review CASCADE;
 
+DROP TABLE IF EXISTS technique_review CASCADE;
+
 DROP TABLE IF EXISTS user_settings CASCADE;
 
 DROP TABLE IF EXISTS user_to_plan CASCADE;
@@ -443,6 +445,26 @@ ALTER TABLE
 ALTER TABLE
 	workout_review OWNER TO psql;
 
+
+--
+-- Name: technique_reviewType: TABLE; Schema: public; Owner: psql 
+--
+CREATE TABLE technique_review(
+	review_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	technique_id INT CHECK(technique_id IS NOT NULL),
+	user_id INT CHECK(user_id IS NOT NULL),
+	rating INT CHECK(rating IS NOT NULL),
+	positive_comment TEXT,
+	negative_comment TEXT,
+	review_date TIMESTAMP NOT NULL,
+	CONSTRAINT tr_fk_technique_id FOREIGN KEY(technique_id) REFERENCES technique(technique_id) ON
+	DELETE CASCADE,
+	CONSTRAINT tr_fk_user_id FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON
+	DELETE CASCADE
+);
+
+ALTER TABLE
+	technique_review OWNER TO psql;
 --
 -- Name: belt; Type: TABLE; Schema: public; Owner: psql
 --

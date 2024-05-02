@@ -1,21 +1,21 @@
 import {Trash, Pencil } from "react-bootstrap-icons"
 import Ratings from "react-ratings-declarative"
-import Star from "../../Common/StarButton/StarButton"
+import Star from "../../../Common/StarButton/StarButton"
 import { useState } from "react"
-import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
+import ConfirmPopup from "../../../Common/ConfirmPopup/ConfirmPopup"
 import React from "react"
-import Button from "../../Common/Button/Button"
-import TextArea from "../../Common/TextArea/TextArea"
+import Button from "../../../Common/Button/Button"
+import TextArea from "../../../Common/TextArea/TextArea"
 import styles from "./ReviewStyles.module.css"
-import {isAdmin} from "../../../utils"
+import {isAdmin} from "../../../../utils"
 import {useContext} from "react"
-import {AccountContext} from "../../../context"
-import {HTTP_STATUS_CODES, setError, setSuccess} from "../../../utils"
+import {AccountContext} from "../../../../context"
+import {HTTP_STATUS_CODES, setError, setSuccess} from "../../../../utils"
 
 /**
  *  Component for review comment. Includes name, positive comment, negative comment, date.
  *
- * @author Cyclops (Group 5) (2023-05-16) Group Granatäpple (Team 1)
+ * @author Cyclops (Group 5) (2023-05-16) & Granatäpple (Group 1) (2024-04-19)
  * @version 1.0
  */
 
@@ -25,9 +25,7 @@ export default function ReviewComponent({comment, onDelete, token, getTodaysDate
 	const [positiveComment, setPositiveComment] = useState(comment.positive_comment)
 	const [negativeComment, setNegativeComment] = useState(comment.negative_comment)
 	const [rating, setRating] = useState(comment.rating)
-	const { userId } = useContext(AccountContext)
-
-	const context = useContext(AccountContext)
+	const { userId, accountRole } = useContext(AccountContext)
 
 	async function deleteReview() {
 		const requestOptions = {
@@ -35,7 +33,7 @@ export default function ReviewComponent({comment, onDelete, token, getTodaysDate
 			headers: {"token": token}
 		}
 
-		const response = await fetch(`/api/workouts/reviews?id=${comment.review_id}`, requestOptions).catch(() => {
+		const response = await fetch("/api/techniques/reviews?id=" + comment.review_id, requestOptions).catch(() => {
 			setError("Serverfel: Kunde inte ansluta till servern.")
 			return
 		})
@@ -59,14 +57,14 @@ export default function ReviewComponent({comment, onDelete, token, getTodaysDate
 				"id": comment.review_id,
 				"rating": rating,
 				"userId": comment.user_id,
-				"workoutId": comment.workout_id,
+				"techniqueId": comment.technique_id,
 				"positiveComment": positiveComment,
 				"negativeComment": negativeComment,
 				"date": ts
 			})
 		}
 
-		const postResponse = await fetch("/api/workouts/reviews", requestOptions).catch(() => {
+		const postResponse = await fetch("/api/techniques/reviews", requestOptions).catch(() => {
 			setError("Serverfel: Kunde ansluta till servern.")
 			return
 		})
@@ -79,7 +77,7 @@ export default function ReviewComponent({comment, onDelete, token, getTodaysDate
 			review_id: comment.review_id,
 			rating: rating,
 			user_id: comment.user_id,
-			workout_id: comment.workout_id,
+			technique_id: comment.technique_id,
 			positive_comment: positiveComment,
 			negative_comment: negativeComment,
 			review_date: ts
@@ -151,7 +149,7 @@ export default function ReviewComponent({comment, onDelete, token, getTodaysDate
 							}
 						</div>
 					</div>
-					{(isAdmin(context) || userId == comment.user_id) &&
+					{(isAdmin(accountRole) || userId == comment.user_id) &&
 					<div className="d-flex align-items-center justify-content-end">
 						{editMode ?
 							<>
@@ -164,17 +162,13 @@ export default function ReviewComponent({comment, onDelete, token, getTodaysDate
 							</>
 							:
 							<div style={{marginTop:"10px"}}>
-								{userId === comment.user_id &&
-									<Pencil
-										id = "pencil_icon"
-										size="24px"
-										color="var(--red-primary)"
-										style={{cursor: "pointer", marginRight: "20px" }}
-										onClick={() => setEditMode(!editMode)}
-									/>
-								}
+								<Pencil
+									size="24px"
+									color="var(--red-primary)"
+									style={{cursor: "pointer", marginRight: "20px" }}
+									onClick={() => setEditMode(!editMode)}
+								/>
 								<Trash
-									id = "trash_icon"
 									size="24px"
 									color="var(--red-primary)"
 									style={{cursor: "pointer"}}

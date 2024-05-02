@@ -41,7 +41,8 @@ export default function MinutePicker({id, callback, initialValue}) {
 						setNumber(e.target.value)
 					}
 					else if(e.target.value.length == 0){
-						setNumber("")
+						callback(id, 0)
+						setNumber(0)
 					}
 				}}
 				min="0"
