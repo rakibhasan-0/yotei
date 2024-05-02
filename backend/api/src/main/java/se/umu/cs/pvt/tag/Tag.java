@@ -35,7 +35,8 @@
  * WorkoutTagShortId        - Projection of the WorkoutTag entity that only returns the ID of the Tag from the
  *                            workout-tag pair.
  *
- * @Author Team 5 Verona (Doc: Griffin dv21jjn)
+ * @Author Team 5 Verona (Doc: Griffin dv21jjn), Team 3 (Durian)
+ * @since 2024-05-02
  */
 package se.umu.cs.pvt.tag;
 
@@ -94,7 +95,9 @@ public class Tag implements Serializable{
     public String getName() {
         return name;
     }
-
+    public void setName(String name) {
+        this.name = name;
+    }
 	/*
 	 * Set Tag name to lowercase.
 	 */
@@ -102,4 +105,8 @@ public class Tag implements Serializable{
 	{
 		name = name.toLowerCase();
 	}
+    @Override
+    public String toString() {
+        return "Tag{id=" + id + ", name='" + name + "'}";
+    }
 }
