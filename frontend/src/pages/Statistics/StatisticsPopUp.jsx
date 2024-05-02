@@ -10,23 +10,23 @@ import Popup from '../../components/Common/Popup/Popup'
  * 
  */
 function StatisticsPopUp() {
-  const [showPopup, setShowPopup] = useState(false)
+	const [showPopup, setShowPopup] = useState(false)
 
-  const togglePopup = () => {
-    setShowPopup(!showPopup)
-  }
+	const togglePopup = () => {
+		setShowPopup(!showPopup)
+	}
 
-  return (
-    <div className={style.statisticsButtonContainer}>
-      <button onClick={togglePopup}>
-        <img src="../../../public/Statistics.svg" alt="Statistics Icon" />
-      </button>
+	return (
+		<div className={style.statisticsButtonContainer}>
+			<button onClick={togglePopup}>
+				<img src="../../../public/Statistics.svg" alt="Statistics Icon" />
+			</button>
 
-      <Popup title={"Statistics"} id="statistics-popup" isOpen={showPopup} setIsOpen={setShowPopup}>
-        <p>Statistics Will be shown here </p>
-      </Popup>
-    </div>
-  )
+			<Popup title={"Statistics"} id="statistics-popup" isOpen={showPopup} setIsOpen={setShowPopup}>
+				<p>Statistics Will be shown here </p>
+			</Popup>
+		</div>
+	)
 }
 
 export default StatisticsPopUp;
