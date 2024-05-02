@@ -1,0 +1,30 @@
+.dateContainer {
+  display: flex;
+  text-align: center;
+  margin-bottom: 4%;
+}
+
+.checkboxContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2%;
+}
+
+.dateContainer h2 {
+  margin-top: 4%;
+}
+
+.dateContainer>div {
+  width: 75%;
+}
+
+
+.checkboxContainer>h2 {
+  margin-right: 10%;
+  white-space: nowrap;
+}
+
+.checkboxContainer>div {
+  width: 100%;
+}
+
