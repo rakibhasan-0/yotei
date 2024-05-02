@@ -6,7 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
+import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
 
@@ -29,7 +31,13 @@ public class StatisticsController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<StatisticsResponse>> getTechniquesStats(@PathVariable Long id) {
+    public ResponseEntity<List<StatisticsResponse>> getTechniquesStats(@PathVariable Long id, @RequestParam Optional<Date> startdate, @RequestParam Optional<Date> enddate) {
+
+
+        if (startdate.isPresent() && enddate.isPresent()) {
+            System.out.println("filter between dates: " + startdate.get() + " - " + enddate.get());
+        }
+
         List<StatisticsResponse> exercises = statisticsRepository.getSampleExercisesQuery(id);
         List<StatisticsResponse> techniques = statisticsRepository.getSampleTechniquesQuery(id);
 

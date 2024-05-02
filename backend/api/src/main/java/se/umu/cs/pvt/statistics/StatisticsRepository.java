@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.util.List;
 import se.umu.cs.pvt.session.Session;
 
@@ -36,7 +37,7 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
     WHERE
       s.plan = :id
     AND
-      t.id != NULL
+      t.id IS NOT NULL
     GROUP BY
       t.id,
       t.name,
@@ -60,7 +61,7 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
     WHERE
       s.plan = :id
     AND
-      e.id != NULL
+      e.id IS NOT NULL
     GROUP BY
       e.id,
       e.name
