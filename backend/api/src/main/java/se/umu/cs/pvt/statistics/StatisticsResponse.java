@@ -3,6 +3,7 @@ package se.umu.cs.pvt.statistics;
 import java.io.Serializable;
 
 import se.umu.cs.pvt.belt.Belt;
+import java.util.List;
 
 /**
  * Class representing the response entity for the statistics API. 
@@ -23,43 +24,25 @@ public class StatisticsResponse implements Serializable {
   private Long activity_id;
   private String name;
   private String type;
-  private Belt belt;
+  private List<Belt> belts;
   private Long count;
 
   /**
-   * Create a new instance of StatisticsResponse representing a technique.
+   * Create a new instance of StatisticsResponse.
    * @param id id of the technique
    * @param name name of the technique
-   * @oaram belt_id id of the belt of the technique
    * @param cnt number of occurrences of technique in sessions.
+   * @param type the type of activity to represent exercise/techniques
    * @return new StatisticsRespnse
    */
-  public StatisticsResponse(Long id, String name, Long belt_id, String belt_name, String belt_color, boolean belt_isChild, Long cnt) {
+  public StatisticsResponse(Long id, String name, String type, Long cnt) {
     this.activity_id = id;
     this.name = name;
-    this.type = "techqniue";
-    this.belt = new Belt(belt_id, belt_name, belt_color, belt_isChild);
+    this.type = type;
     this.count  = cnt;
-  
   }
 
-  /**
-   * Create a new instance of StatisticsResponse representing an exercise
-   * @param id id of the exercise
-   * @param name name of the exercise
-   * @param cnt number of occurrences of technique in sessions.
-   * 
-   * Note: Exercises have no associated belt and belt is therefore set to null.
-   * 
-   * @return new StatisticsRespnse
-   */
-  public StatisticsResponse(Long id, String name, Long cnt) {
-    this.activity_id = id;
-    this.name = name;
-    this.type = "exercise";
-    this.belt = null;
-    this.count  = cnt;
-  }
+
   /**
    * Public getter for private property activity_id
    */
@@ -82,10 +65,18 @@ public class StatisticsResponse implements Serializable {
   }
 
   /**
-   * Public getter for private property belt
+   * Public getter for private property belts
    */
-  public Belt getBelt() {
-      return belt;
+  public List<Belt> getBelts() {
+      return belts;
+  }
+
+  /**
+   * Public setter for private property belts
+   * @param belts
+   */
+  public void setBelts(List<Belt> belts) {
+      this.belts = belts;
   }
 
   /**
