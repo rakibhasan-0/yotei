@@ -81,7 +81,7 @@ export default function GroupIndex() {
 													size="24px"
 													color="var(--red-primary)"
 													style={{ cursor: "pointer" }}
-      											/>
+												/>
 											</Link>
 										)}
 									</>
