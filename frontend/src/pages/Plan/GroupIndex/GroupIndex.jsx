@@ -24,6 +24,7 @@ export default function GroupIndex() {
 	const context = useContext(AccountContext)
 	const { token, userId } = context
 	const [loading, setLoading] = useState(true)
+	const [isStatisticsEnabled] = useState(true) //FEATURE TOGGLE
 
 	useEffect(() => {
 		(async () => {
@@ -71,10 +72,13 @@ export default function GroupIndex() {
 										<Link to={`/plan/edit/${group.id}`}>
 											<Pencil size={24} color="var(--red-primary)"/>
 										</Link>
+										
 										<div style={{ width: "20px" }} />
-										<Link to={`./statistics/${group.id}`}>
-											<img src="../../../PieChart.svg" />
-										</Link>
+										{ isStatisticsEnabled && (	//FEATURE TOGGLE
+											<Link to={`./statistics/${group.id}`}>
+												<img src="../../../PieChart.svg" />
+											</Link>
+										)}
 									</>
 								) } </div>
 							</div>
