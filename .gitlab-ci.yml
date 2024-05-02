@@ -126,15 +126,19 @@ rebuild-database:
       when: never
     - if: $CI_COMMIT_BRANCH == "main"
       changes:
-        - infra/database/init
+        - infra/database/init/**/*
   tags:
     - system
   before_script:
     - docker login --username pvt2024 --password $DOCKER_PASS # DOCKER_PASS defined in GitLab CI/CD settings as a secure variable.
   script:
+    - cd infra/database
+    - ./backup_db.sh db.dump
     - docker stop html-psql-1 || true
     - docker rm html-psql-1 || true
     - docker volume rm html_pgdata || true
+    - ./restore_db.sh db.dump
+
 
 deploy-test-server:
   stage: deploy_test_server
