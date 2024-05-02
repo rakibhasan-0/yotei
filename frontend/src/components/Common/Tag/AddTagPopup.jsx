@@ -7,6 +7,11 @@ import { AccountContext } from "../../../context"
 import Divider from "../Divider/Divider"
 import { PlusCircle, XCircleFill } from "react-bootstrap-icons"
 import { toast } from "react-toastify"
+import FilterContainer from "../Filter/FilterContainer/FilterContainer"
+import Sorter from "../Sorting/Sorter"
+import RoundButton from "../RoundButton/RoundButton"
+import { ChevronRight } from "react-bootstrap-icons"
+import TagContainer from "./Taglist.jsx"
 
 /**
  * OBSERVE! This component is used inside the TagInput-component and should not be used by itself. 
@@ -30,7 +35,7 @@ import { toast } from "react-toastify"
 			</Popup>
  *		)
  *
- * @author Team Minotaur, Team Mango (Group 4)
+ * @author Team Minotaur, Team Mango (Group 4), Team Durian (Group 3) (2024-05-02)
  * @version 2.0
  * @since 2024-04-22
  */
@@ -120,7 +125,6 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 		} catch (error) {
 			setError("Något gick fel vid skapandet av tagg")
 		}
-		toast.error("Hej")
 	}
 
 	return (
@@ -151,9 +155,98 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 					
 				</div>
 			</div>
-			<div className={styles["popup-button-container"]}>
-				<Button id="popup-close-button" outlined={true} onClick={()=> setIsOpen(false)}><h2>Stäng</h2></Button>
+			<div style={{overflow:scroll}}>
+				<TagContainer>
+				
+				</TagContainer>
+
+				<TagContainer>
+				
+				</TagContainer>
+
+				<TagContainer>
+				
+				</TagContainer>
+				
+				<TagContainer>
+				
+				</TagContainer>
+
+				<TagContainer>
+				
+				</TagContainer>
+				
+				<TagContainer>
+				
+				</TagContainer>
+
+				<TagContainer>
+				
+				</TagContainer>
+				
+				<TagContainer>
+				
+				</TagContainer>
+
+				<TagContainer>
+				
+				</TagContainer>
+				
+				<TagContainer>
+				
+				</TagContainer>
+
+				<TagContainer>
+				
+				</TagContainer>
+				
+				<TagContainer>
+				
+				</TagContainer>
+
+				<TagContainer>
+				
+				</TagContainer>
+				
+				<TagContainer>
+				
+				</TagContainer>
+
+				<TagContainer>
+				
+				</TagContainer>
+				
+				<TagContainer>
+				
+				</TagContainer>
+
+				<TagContainer>
+				
+				</TagContainer>
+				
+				<TagContainer>
+				
+				</TagContainer>
+
+				<TagContainer>
+				
+				</TagContainer>
+				
+				<TagContainer>
+				
+				</TagContainer>
+
+				<TagContainer>
+				
+				</TagContainer>
+				
+				<TagContainer>
+				
+				</TagContainer>
 			</div>
+			<RoundButton onClick={() => setIsOpen(false)}>
+				<ChevronRight width={30} />
+			</RoundButton>
 		</div>
 	)
 }

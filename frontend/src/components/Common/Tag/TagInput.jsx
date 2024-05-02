@@ -21,7 +21,7 @@ import AddTagPopup from "./AddTagPopup"
  *			</div>
  *		)
  *
- * @author Team Minotaur
+ * @author Team Minotaur, Team Durian (Group 3) (2024-05-02)
  * @version 1.0
  * @since 2023-05-04
  */
