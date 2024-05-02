@@ -11,7 +11,7 @@ import FilterContainer from "../Filter/FilterContainer/FilterContainer"
 import Sorter from "../Sorting/Sorter"
 import RoundButton from "../RoundButton/RoundButton"
 import { ChevronRight } from "react-bootstrap-icons"
-import TagContainer from "./Taglist.jsx"
+import TagList from "./TagList.jsx"
 
 /**
  * OBSERVE! This component is used inside the TagInput-component and should not be used by itself. 
@@ -156,93 +156,93 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 				</div>
 			</div>
 			<div style={{overflow:scroll}}>
-				<TagContainer>
-				
-				</TagContainer>
+				<TagList>
 
-				<TagContainer>
-				
-				</TagContainer>
+				</TagList>
 
-				<TagContainer>
-				
-				</TagContainer>
-				
-				<TagContainer>
-				
-				</TagContainer>
+				<TagList>
 
-				<TagContainer>
-				
-				</TagContainer>
-				
-				<TagContainer>
-				
-				</TagContainer>
+				</TagList>
 
-				<TagContainer>
-				
-				</TagContainer>
-				
-				<TagContainer>
-				
-				</TagContainer>
+				<TagList>
 
-				<TagContainer>
-				
-				</TagContainer>
-				
-				<TagContainer>
-				
-				</TagContainer>
+				</TagList>
 
-				<TagContainer>
-				
-				</TagContainer>
-				
-				<TagContainer>
-				
-				</TagContainer>
+				<TagList>
+					
+				</TagList>
 
-				<TagContainer>
-				
-				</TagContainer>
-				
-				<TagContainer>
-				
-				</TagContainer>
+				<TagList>
 
-				<TagContainer>
-				
-				</TagContainer>
-				
-				<TagContainer>
-				
-				</TagContainer>
+				</TagList>
 
-				<TagContainer>
-				
-				</TagContainer>
-				
-				<TagContainer>
-				
-				</TagContainer>
+				<TagList>
+					
+				</TagList>
 
-				<TagContainer>
-				
-				</TagContainer>
-				
-				<TagContainer>
-				
-				</TagContainer>
+				<TagList>
 
-				<TagContainer>
-				
-				</TagContainer>
-				
-				<TagContainer>
-				
-				</TagContainer>
+				</TagList>
+
+				<TagList>
+					
+				</TagList>
+
+				<TagList>
+
+				</TagList>
+
+				<TagList>
+					
+				</TagList>
+
+				<TagList>
+
+				</TagList>
+
+				<TagList>
+					
+				</TagList>
+
+				<TagList>
+
+				</TagList>
+
+				<TagList>
+					
+				</TagList>
+
+				<TagList>
+
+				</TagList>
+
+				<TagList>
+					
+				</TagList>
+
+				<TagList>
+
+				</TagList>
+
+				<TagList>
+					
+				</TagList>
+
+				<TagList>
+
+				</TagList>
+
+				<TagList>
+					
+				</TagList>
+
+				<TagList>
+
+				</TagList>
+
+				<TagList>
+					
+				</TagList>
 			</div>
 			<RoundButton onClick={() => setIsOpen(false)}>
 				<ChevronRight width={30} />

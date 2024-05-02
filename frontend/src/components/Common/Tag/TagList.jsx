@@ -7,7 +7,7 @@ import { ChevronRight } from "react-bootstrap-icons"
 import { Trash } from "react-bootstrap-icons"
 import CheckBox from "../CheckBox/CheckBox"
 
-export default function TagContainer({ item, text, detailURL, id, index}) {
+export default function TagList({ item, text, detailURL, id, index}) {
 	return (
 		<div className={styles["exercise-list-container"]} data-testid="ExerciseListItem">
 		<div className={styles["exercise-list-header"]} style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
