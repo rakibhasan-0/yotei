@@ -23,9 +23,12 @@ import Button from "../Common/Button/Button"
  *
  * Example usage:
  *
- * @author Team Dragon (Grupp 3)
- * @version 1.0
+ * @author Team Dragon (Group 3), Team Mango (Group 4)
+ * @version 2.0
  * @since 2023-05-04
+ * 
+ * Modifications:
+ * 2024-04-29: Added placeholder text and id to media description textbox.
  */
 export default function EditGallery({ id, exerciseId, sendData, undoChanges, done }) {
 	const [media, setMedia] = useState([])
@@ -365,7 +368,12 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 		return(	
 			<TextArea defVal={mediaObject.description} onChange={e => {
 				setDescMap(descMap.set(mediaObject.id, e.target.value))
-			}} />
+				
+			}}
+			id = "media-description-textbox"
+			placeholder = "Beskrivning av media"
+			/>
+
 		)
 	}
 

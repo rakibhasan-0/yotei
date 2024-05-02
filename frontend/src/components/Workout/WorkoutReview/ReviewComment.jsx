@@ -166,6 +166,7 @@ export default function ReviewComponent({comment, onDelete, token, getTodaysDate
 							<div style={{marginTop:"10px"}}>
 								{userId === comment.user_id &&
 									<Pencil
+										id = "pencil_icon"
 										size="24px"
 										color="var(--red-primary)"
 										style={{cursor: "pointer", marginRight: "20px" }}
@@ -173,6 +174,7 @@ export default function ReviewComponent({comment, onDelete, token, getTodaysDate
 									/>
 								}
 								<Trash
+									id = "trash_icon"
 									size="24px"
 									color="var(--red-primary)"
 									style={{cursor: "pointer"}}
