@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from './PassFailExamineeButton.module.css';
 
 /**
- * A pass or fail button that should be used during the grading.
+ * A button that should be used on an examinee during the grading.
  * 
  * The props object accepts an onClick handler for button presses.
  * Contents should be specified as a child, which can be any type 
@@ -17,13 +17,13 @@ import styles from './PassFailExamineeButton.module.css';
  *    children  @type {JSX} 	   A jsx-element to be shown in the button 
  * 
  * Example Usage:
- * <PassExamineeButton 
+ * <ExamineeButton 
  *     id="pass-button"
  *     type="green"
  *     onClick={() => console.log("Pressed pass button")}
  *     width="50%">
  *     <p>G</p>
- * </PassExamineeButton>
+ * </ExamineeButton>
  * 
  * The parent container using this button must constrain its width.
  * 
@@ -32,7 +32,7 @@ import styles from './PassFailExamineeButton.module.css';
  * @version 1.0 
  */
 
-const PassExamineeButton = ({ id, type, onClick, width, children }) => {
+const ExamineeButton = ({ id, type, onClick, width, children }) => {
   const [hasColor, setColor] = useState(false);
 
   const toggleColor = () => {
@@ -69,4 +69,4 @@ const PassExamineeButton = ({ id, type, onClick, width, children }) => {
   );
 };
 
-export default PassExamineeButton;
+export default ExamineeButton;
