@@ -6,26 +6,34 @@
 }
 
 .checkboxContainer{
-  display: flex;
-  justify-content: center;
-  margin-left: 2%;
+	display: flex;
+	justify-content: center;
+	margin-bottom: 2%;
 }
 
 .dateContainer h2 {
-  margin-top: 4%;
+	margin-top: 4%;
 }
 
 .dateContainer > div {
-  width: 75%;
-}
-
-.checkboxContainer > div {
-  width: 75%;
+	width: 75%;
 }
 
 .buttonContainer{
-  margin-top: 60%;
+	margin-top: 60%;
+}
+
+.checkboxContainer > h2 {
+	margin-right: 10%;
+	white-space: nowrap;
+}
+
+.checkboxContainer > div {
+	width: 100%;
 }
 
 
-
+.FilterAndSortContainer {
+	position: relative;
+	margin-top: 4%;
+}
