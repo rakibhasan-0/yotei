@@ -9,7 +9,7 @@ import { useEffect, useState} from "react"
 const exerciseURI = "https://jsonplaceholder.typicode.com/users"
 
 export default function ActivityIndex(){
-    const [key, setKey] = useState(sessionStorage.getItem("active-tab") || "default-key")
+    const [key, setKey] = useState(sessionStorage.getItem("active-tab") || "technique")
 
     useEffect(()=>{
         sessionStorage.setItem("active-tab", key)
