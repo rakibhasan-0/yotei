@@ -10,7 +10,9 @@ import se.umu.cs.pvt.session.Session;
 /**
  * JPA repository for statistics api. 
  * 
- * @author Hawaii (Doc: Griffins c20jjs)
+ * @author Cocount 
+ * @version 1.0
+ * @since 2024-04-29
  */
 public interface StatisticsRepository extends JpaRepository<Session, Long>{
   

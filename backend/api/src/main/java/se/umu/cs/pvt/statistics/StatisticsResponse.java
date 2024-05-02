@@ -12,6 +12,14 @@ import java.io.Serializable;
   }
 
  */
+
+/**
+ * Class representing the response entity for the statistics API.
+ * 
+ * @author Cocount 
+ * @version 1.0
+ * @since 2024-04-29
+ */
 public class StatisticsResponse implements Serializable {
   private Long activity_id;
   private String name;
