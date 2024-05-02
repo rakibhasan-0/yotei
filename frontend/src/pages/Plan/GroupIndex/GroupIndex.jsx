@@ -13,9 +13,9 @@ import Spinner from "../../../components/Common/Spinner/Spinner"
 /**
  * Page for showing all groups.
  *
- * @author Chimera, Team Mango, Team Durian
- * @version 2.0
- * @since 2024-04-19
+ * @author Chimera, Team Mango, Team Durian, Team Coconut
+ * @version 2.1
+ * @since 2024-04-29
  * @returns A group index page
  */
 export default function GroupIndex() {
@@ -66,10 +66,17 @@ export default function GroupIndex() {
 								<div className={style.item}>
 									<BeltBox id={index} belts={group.belts} />
 								</div>
-								{ (isEditor(context) || userId == group.userId) && <Link to={`/plan/edit/${group.id}`}>
-									<Pencil size={24} color="var(--red-primary)" />
-								</Link>
-								}
+								<div style = {{marginLeft: "5px", display: "flex"}}> { (isEditor(context) || userId == group.userId) && (
+									<>
+										<Link to={`/plan/edit/${group.id}`}>
+											<Pencil size={24} color="var(--red-primary)"/>
+										</Link>
+										<div style={{ width: "20px" }} />
+										<Link to={`./statistics/${group.id}`}>
+											<img src="../../../PieChart.svg" />
+										</Link>
+									</>
+								) } </div>
 							</div>
 						</div>
 					))}
