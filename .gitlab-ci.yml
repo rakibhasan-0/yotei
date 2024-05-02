@@ -126,7 +126,7 @@ rebuild-database:
       when: never
     - if: $CI_COMMIT_BRANCH == "main"
       changes:
-        - infra/database/init
+        - infra/database/init/**/*
   tags:
     - system
   before_script:
