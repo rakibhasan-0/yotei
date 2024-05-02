@@ -80,7 +80,7 @@ export default function SearchBar({ id, placeholder, text, onChange, addedTags, 
 						onClick={() => handleRemoveTag(tag)}
 					/>)}
 					{suggestedTags.map((tag, key) => <Tag
-						id={"tag-in-searchbar"}
+						id={"tag-in-searchbar-" + tag.replace(" ", "-")}
 						tagType="suggest"
 						key={key}
 						text={tag}

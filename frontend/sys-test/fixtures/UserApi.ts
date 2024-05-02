@@ -41,8 +41,6 @@ export class UserApi {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	static async register_user(username: string, password: string, is_admin: boolean) {
 		const ctx = await UserApi.make_ctx()
-
-		await UserApi.remove_user(username)
 		const response = await ctx.post("/api/users", {
 			data: {
 				username: username,
@@ -50,7 +48,8 @@ export class UserApi {
 				userRole: 0,
 			},
 		})
-		expect(response.status()).toBeLessThan(400)
+		const returnObject = await response.json()
+		return returnObject
 	}
 
 	/**
