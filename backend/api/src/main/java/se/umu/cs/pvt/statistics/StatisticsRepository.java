@@ -41,8 +41,6 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
       t.id,
       t.name,
       tb.beltId
-    ORDER BY COUNT(t.id)
-    DESC
       """)
   List<StatisticsResponse> getSampleTechniquesQuery(Long id);
 
@@ -66,8 +64,6 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
     GROUP BY
       e.id,
       e.name
-    ORDER BY COUNT(e.id)
-    DESC
       """)
   List<StatisticsResponse> getSampleExercisesQuery(Long id);
 
