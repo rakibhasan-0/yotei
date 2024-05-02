@@ -30,6 +30,10 @@ public class ExaminationController {
         this.beltRepository = beltRepository;
     }
 
+    public ExaminationController(GradingRepository gradingRepository) {
+        this.gradingRepository = gradingRepository;
+    }
+
     @GetMapping("all")
     public ResponseEntity<List<Grading>> getAll() {
         return new ResponseEntity<>(gradingRepository.findAll(), HttpStatus.OK);
