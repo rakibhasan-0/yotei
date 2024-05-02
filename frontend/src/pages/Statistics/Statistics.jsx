@@ -6,7 +6,7 @@ import style from "./Statistics.module.css"
 import Button from "../../components/Common/Button/Button"
 import StatisticsPopUp from "./StatisticsPopUp"
 import FilterStatistics from "./FilterStatistics"
-import TechniqueCard from "../../components/Common/Technique/TechniqueCard/TechniqueCard"
+
 
 export default function Statistics() {
 	const navigate = useNavigate()
@@ -25,7 +25,7 @@ export default function Statistics() {
 
 				const response = await fetch(`/api/statistics/${groupID}`, {
 					headers: { token },
-				});
+				})
 
 				if (!response.ok) {
 					throw new Error("Failed to fetch group data")
@@ -69,7 +69,7 @@ export default function Statistics() {
 	
 			<div className={style.buttonContainer}>
 				<Button width="25%" outlined={true} onClick={() => navigate(-1)}>
-		  			<p>Tillbaka</p>
+					<p>Tillbaka</p>
 				</Button>
 			</div>
 		</div>

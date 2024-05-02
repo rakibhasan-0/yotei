@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import style from './StatisticsButton.module.css'
-import Popup from '../../components/Common/Popup/Popup'
+import React, { useState } from "react"
+import style from "./StatisticsButton.module.css"
+import Popup from "../../components/Common/Popup/Popup"
 
 /**
  * 
@@ -20,9 +20,9 @@ function StatisticsPopUp() {
 		<div className={style.statisticsButtonContainer}>
 			<button onClick={togglePopup}>
 				<img src="/Statistics.svg" />
-	    	</button>
+			</button>
 
-    		<Popup title={"Statistics"} id="statistics-popup" isOpen={showPopup} setIsOpen={setShowPopup}>
+			<Popup title={"Statistics"} id="statistics-popup" isOpen={showPopup} setIsOpen={setShowPopup}>
 				<p>Statistics Will be shown here </p>
 			</Popup>
 
@@ -31,4 +31,4 @@ function StatisticsPopUp() {
 	)
 }
 
-export default StatisticsPopUp;
+export default StatisticsPopUp
