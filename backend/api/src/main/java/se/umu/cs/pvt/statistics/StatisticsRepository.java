@@ -19,7 +19,7 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
   
   @Query("""
     SELECT
-      new se.umu.cs.pvt.statistics.StatisticsResponse(t.id, t.name, tb.beltId, COUNT(t.id))
+      new se.umu.cs.pvt.statistics.StatisticsResponse(t.id, t.name, b.id, b.name, b.color, b.isChild, COUNT(t.id))
     FROM
       Session s
     JOIN
@@ -34,6 +34,10 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
       TechniqueBelt tb
     ON
       tb.techniqueId = t.id
+    JOIN
+      Belt b
+    ON
+      b.id = tb.beltId
     WHERE
       s.plan = :id
     AND
@@ -41,7 +45,11 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
     GROUP BY
       t.id,
       t.name,
-      tb.beltId
+      tb.beltId,
+      b.id,
+      b.name,
+      b.color,
+      b.isChild
       """)
   List<StatisticsResponse> getSampleTechniquesQuery(Long id);
 

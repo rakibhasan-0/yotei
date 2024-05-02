@@ -2,6 +2,8 @@ package se.umu.cs.pvt.statistics;
 
 import java.io.Serializable;
 
+import se.umu.cs.pvt.belt.Belt;
+
 /**
  * Class representing the response entity for the statistics API. 
  * Example serialized object:
@@ -21,7 +23,7 @@ public class StatisticsResponse implements Serializable {
   private Long activity_id;
   private String name;
   private String type;
-  private Long belt_id;
+  private Belt belt;
   private Long count;
 
   /**
@@ -32,11 +34,11 @@ public class StatisticsResponse implements Serializable {
    * @param cnt number of occurrences of technique in sessions.
    * @return new StatisticsRespnse
    */
-  public StatisticsResponse(Long id, String name, Long belt_id, Long cnt) {
+  public StatisticsResponse(Long id, String name, Long belt_id, String belt_name, String belt_color, boolean belt_isChild, Long cnt) {
     this.activity_id = id;
     this.name = name;
     this.type = "techqniue";
-    this.belt_id = belt_id;
+    this.belt = new Belt(belt_id, belt_name, belt_color, belt_isChild);
     this.count  = cnt;
   
   }
@@ -47,7 +49,7 @@ public class StatisticsResponse implements Serializable {
    * @param name name of the exercise
    * @param cnt number of occurrences of technique in sessions.
    * 
-   * Note: Exercises have no associated belt and belt_id if therefore set to null.
+   * Note: Exercises have no associated belt and belt is therefore set to null.
    * 
    * @return new StatisticsRespnse
    */
@@ -55,7 +57,7 @@ public class StatisticsResponse implements Serializable {
     this.activity_id = id;
     this.name = name;
     this.type = "exercise";
-    this.belt_id = null;
+    this.belt = null;
     this.count  = cnt;
   }
   /**
@@ -80,10 +82,10 @@ public class StatisticsResponse implements Serializable {
   }
 
   /**
-   * Public getter for private property belt_id
+   * Public getter for private property belt
    */
-  public Long getBelt_id() {
-      return belt_id;
+  public Belt getBelt() {
+      return belt;
   }
 
   /**
