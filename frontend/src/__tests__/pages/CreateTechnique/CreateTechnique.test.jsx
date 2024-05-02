@@ -13,10 +13,10 @@ import { server } from "../../server"
 const requestSpy = jest.fn()
 server.events.on("request:start", requestSpy)
 
-import CreateTechnique from "../../../pages/Technique/CreateTechnique/CreateTechnique"
+import CreateTechnique from "../../../pages/Activity/Technique/CreateTechnique/CreateTechnique"
 import { Route, RouterProvider, createMemoryRouter, createRoutesFromElements } from "react-router-dom"
 import userEvent from "@testing-library/user-event"
-import TechniqueIndex from "../../../pages/Technique/TechniqueIndex/TechniqueIndex"
+import TechniqueIndex from "../../../pages/Activity/Technique/TechniqueIndex/TechniqueIndex"
 
 /**
  * @author Team Durian (Group 3) (2024-05-02) 

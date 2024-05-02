@@ -1,8 +1,8 @@
 /** @jest-environment jsdom */
 import React from "react"
 import { render, screen, configure, waitFor, fireEvent } from "@testing-library/react"
-import TechniqueIndex from "../../../../pages/Technique/TechniqueIndex/TechniqueIndex"
-import CreateTechnique from "../../../../pages/Technique/CreateTechnique/CreateTechnique"
+import TechniqueIndex from "../../../../pages/Activity/Technique/TechniqueIndex/TechniqueIndex"
+import CreateTechnique from "../../../../pages/Activity/Technique/CreateTechnique/CreateTechnique"
 //import GroupIndex from "../../../../pages/Plan/GroupIndex/GroupIndex"
 //import Button from "../../../../components/Common/Button/Button"
 import "@testing-library/jest-dom"
