@@ -55,7 +55,7 @@ export default function ExerciseEdit() {
 	function done() {
 		if (undoMediaChanges) {
 			setShowMiniPopup(false)
-			navigate(-1)
+			navigate(-1)				//riktigt knas kod, MÅSTE FIXAS!
 		} else {
 			setSendData(false)
 			editExercise()
@@ -76,7 +76,7 @@ export default function ExerciseEdit() {
 
 	useEffect(() => {
 		if (!isAdmin(context) || !isEditor(context)) {
-			navigate(-1)
+			navigate(-1)			//riktigt knas kod, MÅSTE FIXAS!
 		}
 	}, [context, navigate])
 
@@ -145,7 +145,7 @@ export default function ExerciseEdit() {
 		if (oldName !== name || oldDesc !== desc || oldTime != time || newT !== oldT) {
 			setShowMiniPopup(true)
 		} else {
-			navigate(-1)
+			navigate(-1)			//riktigt knas kod, MÅSTE FIXAS!
 		}
 	}
 
