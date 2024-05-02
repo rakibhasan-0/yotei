@@ -33,6 +33,20 @@ describe("Initialization tests", () => {
         expect(screen.getByTestId("savedDateDisplay")).not.toBeNull()
     })
 
+    test("Should have positive comment field", async() => {
+        act(() => {
+            render(<BrowserRouter><Review id={componentId} isOpen={true} setIsOpen={true} session_id={sessionId} workout_id={workoutId}/></BrowserRouter>)
+        })
+        expect(screen.getByTestId("positiveComment")).not.toBeNull()
+    })
+
+    test("Should have negative comment field", async() => {
+        act(() => {
+            render(<BrowserRouter><Review id={componentId} isOpen={true} setIsOpen={true} session_id={sessionId} workout_id={workoutId}/></BrowserRouter>)
+        })
+        expect(screen.getByTestId("negativeComment")).not.toBeNull()
+    })
+
     /*test("Should throw error when negative workoutID", async() => {
         expect(() => {
             act(() => {

@@ -140,7 +140,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		}
 
         const postResponse = await fetch("/api/session/" + session_id + "/review", requestOptions).catch(() => {
-			setError("Serverfel: Kunde ansluta till servern.")
+			setError("Serverfel: Kunde inte ansluta till servern.")
 			return
 		})
 		if(postResponse.status != HTTP_STATUS_CODES.OK) {
@@ -172,7 +172,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			})
 		}
 		const postResponse = await fetch("/api/session/" + session_id + "/review" , requestOptions).catch(() => {
-			setError("Serverfel: Kunde ansluta till servern.")
+			setError("Serverfel: Kunde inte ansluta till servern.")
 			return
 		})
 		if(postResponse.status != HTTP_STATUS_CODES.OK) {
@@ -194,7 +194,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 	function updateSavedDateDisplay(date) {
 		setSavedDate(date)
-		//savedDateValue.textContent = date === "" ? "Aldrig" : date;
+		savedDateValue.textContent = date;
 	}
 
 
@@ -254,14 +254,14 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 				<Divider option={"h2_center"} title={"Kommentarer"} />
                 <div className="w-100">
-					<TextArea  type="text" text={positiveComment} onChange={handleChangePositive} className="col-md-6 col-md-offset-3" style={{marginTop: "30px", marginBottom: "20px", height: "80px", borderRadius: "5px", minHeight: "80px"}} placeholder="Vad var bra med passet?"/>
+					<TextArea  type="text" id={"positiveComment"} text={positiveComment} onChange={handleChangePositive} className="col-md-6 col-md-offset-3" style={{marginTop: "30px", marginBottom: "20px", height: "80px", borderRadius: "5px", minHeight: "80px"}} placeholder="Vad var bra med passet?"/>
 				</div>
                 <div className="w-100">
-					<TextArea  type="text" text={negativeComment} onChange={handleChangeNegative} className="col-md-6 col-md-offset-3" style={{marginTop: "30px", marginBottom: "20px", height: "80px", borderRadius: "5px", minHeight: "80px"}} placeholder="Vad var dåligt med passet?"/>
+					<TextArea  type="text" id={"negativeComment"} text={negativeComment} onChange={handleChangeNegative} className="col-md-6 col-md-offset-3" style={{marginTop: "30px", marginBottom: "20px", height: "80px", borderRadius: "5px", minHeight: "80px"}} placeholder="Vad var dåligt med passet?"/>
 				</div>
                 <div className="col-md-6 p-0">
 					<Button id="saveButton" width={"100%"} onClick={() => saveReview()}>Spara</Button>
-					<p id="savedDateDisplay">Senast sparad: <span id="savedDateValue"></span></p>
+					<p id="savedDateDisplay">Senast sparad: <span id="savedDateValue" textContent={savedDate}></span></p>
 				</div>
 			</div>
 		</Popup>
