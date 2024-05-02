@@ -18,23 +18,23 @@ const exerciseURI = "https://jsonplaceholder.typicode.com/users"
  * @since 2024-05-02
  */
 export default function ActivityIndex(){
-    // Sets technique as default tab otherwise active tab from session storage 
-    const [key, setKey] = useState(sessionStorage.getItem("active-tab") || "technique")
+	// Sets technique as default tab otherwise active tab from session storage 
+	const [key, setKey] = useState(sessionStorage.getItem("active-tab") || "technique")
 
-    useEffect(()=>{
-        sessionStorage.setItem("active-tab", key)
-    }, [key]) 
+	useEffect(()=>{
+		sessionStorage.setItem("active-tab", key)
+	}, [key]) 
 
-    return (
-        <Modal.Body style={{ padding: "0" }}>
-            <Tabs activeKey={key} onSelect={(tab) => setKey(tab)} className={styles.tabs}>
-                <Tab eventKey="technique" title="Tekniker" tabClassName={`nav-link ${styles.tab}`}>
-                    <TechniqueIndex />
-                </Tab>
-                <Tab  eventKey="exercise" title="Övningar" tabClassName={`nav-link ${styles.tab}`}>
-                <ExerciseIndex uri={exerciseURI} />
-                </Tab>
-            </Tabs>
-        </Modal.Body>
-    )
+	return (
+		<Modal.Body style={{ padding: "0" }}>
+			<Tabs activeKey={key} onSelect={(tab) => setKey(tab)} className={styles.tabs}>
+				<Tab eventKey="technique" title="Tekniker" tabClassName={`nav-link ${styles.tab}`}>
+					<TechniqueIndex />
+				</Tab>
+				<Tab  eventKey="exercise" title="Övningar" tabClassName={`nav-link ${styles.tab}`}>
+					<ExerciseIndex uri={exerciseURI} />
+				</Tab>
+			</Tabs>
+		</Modal.Body>
+	)
 } 
