@@ -9,6 +9,7 @@ import Popup from '../../components/Common/Popup/Popup'
  * 
  */
 function StatisticsPopUp() {
+
 	const [showPopup, setShowPopup] = useState(false)
 
 	const togglePopup = () => {
@@ -19,12 +20,14 @@ function StatisticsPopUp() {
 		<div className={style.statisticsButtonContainer}>
 			<button onClick={togglePopup}>
 				<img src="/Statistics.svg" />
-			</button>
+	    	</button>
 
-			<Popup title={"Statistics"} id="statistics-popup" isOpen={showPopup} setIsOpen={setShowPopup}>
+    		<Popup title={"Statistics"} id="statistics-popup" isOpen={showPopup} setIsOpen={setShowPopup}>
 				<p>Statistics Will be shown here </p>
 			</Popup>
+
 		</div>
+
 	)
 }
 
