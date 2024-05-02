@@ -84,15 +84,22 @@ test("Should render a group when searching for it", async () => {
 	await screen.findByTestId("searchbar-groups")
 	const searchInput = screen.getByTestId("searchbar-input")
     
-	fireEvent.change(searchInput, { target: { value: "grönt" } })
+	fireEvent.change(searchInput, { target: { value: "gRöNt" } })
 
-	//Test 1: Should only one of the belts.
+	//Test 2: Should only one of the belts, this time with uppercase letters.
 	expect(screen.getByText("Grönt bälte träning")).toBeInTheDocument()
 	expect(screen.queryByText("Orange och Gult bälte träning")).not.toBeInTheDocument()
 
 	fireEvent.change(searchInput, { target: { value: "g" } })
 
-	//Test 2: Change input which makes it so both belts should be found.
+	//Test 3: Should find both belts.
+	expect(screen.getByText("Grönt bälte träning")).toBeInTheDocument()
+	expect(screen.getByText("Orange och Gult bälte träning")).toBeInTheDocument()
+
+	fireEvent.change(searchInput, { target: { value: "G" } })
+
+	//Test 4: Should find both belts, this time with uppercase letters again.
+
 	expect(screen.getByText("Grönt bälte träning")).toBeInTheDocument()
 	expect(screen.getByText("Orange och Gult bälte träning")).toBeInTheDocument()
 })
