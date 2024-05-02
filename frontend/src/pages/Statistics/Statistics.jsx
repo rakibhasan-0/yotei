@@ -44,12 +44,14 @@ export default function Statistics() {
           headers: { token },
         });
 
-				if (!response.ok) {
-					throw new Error("Failed to fetch group data");
-				}
-				const data = await response.json();
-				const groupData = data.find((group) => group.id === parseInt(groupID));
-				setGroup(groupData);
+			if (!response.ok) {
+				throw new Error("Failed to fetch group data");
+			}
+			const data = await response.json();
+			console.log("Group data:", data);
+			const groupData = data.find((group) => group.id === parseInt(groupID));
+			setGroup(groupData);
+			
 			} catch (error) {
 				console.error("Fetching error:", error); // proper handling of error should be implemented
 			} finally {
