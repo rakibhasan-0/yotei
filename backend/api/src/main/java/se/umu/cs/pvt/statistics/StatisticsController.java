@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import se.umu.cs.pvt.session.Session;
+import java.util.stream.Stream;
+import java.util.stream.Collectors;
+import java.util.Collections;
 
 import javax.swing.text.html.HTML;
 
@@ -40,8 +43,14 @@ public class StatisticsController {
 
     @GetMapping("/{id}")
     public ResponseEntity<List<StatisticsResponse>> getTechniquesStats(@PathVariable Long id) {
-        List<StatisticsResponse> ls = statisticsRepository.getTechniquesStats(id);
-        return new ResponseEntity<>(ls, HttpStatus.OK);
+        List<StatisticsResponse> exercises = statisticsRepository.getSampleExercisesQuery(id);
+        List<StatisticsResponse> techniques = statisticsRepository.getSampleTechniquesQuery(id);
+
+        List<StatisticsResponse> union = Stream.concat( exercises.stream(), techniques.stream())
+            .sorted(Comparator.comparingLong(StatisticsResponse::getCount).reversed())
+            .collect( Collectors.toList());
+
+        return new ResponseEntity<>(union, HttpStatus.OK);
     }
 
 

@@ -14,10 +14,9 @@ import se.umu.cs.pvt.session.Session;
  */
 public interface StatisticsRepository extends JpaRepository<Session, Long>{
   
-
   @Query("""
     SELECT
-      new se.umu.cs.pvt.statistics.StatisticsResponse(t.id, COUNT(t.id))
+      new se.umu.cs.pvt.statistics.StatisticsResponse(t.id, t.name, tb.beltId, COUNT(t.id))
     FROM
       Session s
     JOIN
@@ -28,15 +27,46 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
       Technique t
     ON 
       t.id = a.techniqueId
+    JOIN
+      TechniqueBelt tb
+    ON
+      tb.techniqueId = t.id
     WHERE
       s.plan = :id
     AND
       t.id != NULL
     GROUP BY
-      t.id
+      t.id,
+      t.name,
+      tb.beltId
     ORDER BY COUNT(t.id)
     DESC
-    """)
-  List<StatisticsResponse> getTechniquesStats(Long id);
+      """)
+  List<StatisticsResponse> getSampleTechniquesQuery(Long id);
+
+  @Query("""
+    SELECT
+      new se.umu.cs.pvt.statistics.StatisticsResponse(e.id, e.name, COUNT(e.id))
+    FROM
+      Session s
+    JOIN
+      Activity a
+    ON 
+      a.workoutId = s.workout
+    JOIN 
+      Exercise e
+    ON 
+      e.id = a.exerciseId
+    WHERE
+      s.plan = :id
+    AND
+      e.id != NULL
+    GROUP BY
+      e.id,
+      e.name
+    ORDER BY COUNT(e.id)
+    DESC
+      """)
+  List<StatisticsResponse> getSampleExercisesQuery(Long id);
 
 }
