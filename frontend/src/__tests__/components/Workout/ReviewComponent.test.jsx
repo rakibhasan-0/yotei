@@ -4,7 +4,7 @@ import React from "react"
 import { render, screen, configure} from "@testing-library/react"
 import "@testing-library/jest-dom"
 import ReviewComment from "../../../components/Workout/WorkoutReview/ReviewComment.jsx"
-
+import { AccountContext } from "../../../context"
 configure({testIdAttribute: "id"})
 
 /**
@@ -124,4 +124,95 @@ test("Should have (jag)", async() => {
 	render(<ReviewComment comment={review} testId={1}/>)
 
 	expect(screen.getByTestId("me")).toBeInTheDocument()
+})
+
+test("Admin can see icon to remove user comment", async () => {
+	const review = {
+		workoutId: 1,
+		user_id: 2,
+		rating: 0,
+		positive_comment: "tjooooo",
+		negative_comment: "breeee",
+		review_date: "2023-05-16"
+	}
+
+	render(
+		<AccountContext.Provider value={{ userId: 1, role: "ADMIN" }}>
+			<ReviewComment comment={review} testId={1}/>
+		</AccountContext.Provider>
+	)
+	expect(screen.getByTestId("trash_icon")).toBeInTheDocument()
+})
+
+test("Admin can not see pencil icon for user comment", async () => {
+	const review = {
+		workoutId: 1,
+		user_id: 2,
+		rating: 0,
+		positive_comment: "tjooooo",
+		negative_comment: "breeee",
+		review_date: "2023-05-16"
+	}
+
+	render(
+		<AccountContext.Provider value={{ userId: 1, role: "ADMIN" }}>
+			<ReviewComment comment={review} testId={1}/>
+		</AccountContext.Provider>
+	)
+	expect(screen.queryByTestId("pencil_icon")).not.toBeInTheDocument()
+})
+
+test("User can't see pencil icon for other user comment", async () => {
+	const review = {
+		workoutId: 1,
+		user_id: 2,
+		rating: 0,
+		positive_comment: "tjooooo",
+		negative_comment: "breeee",
+		review_date: "2023-05-16"
+	}
+
+	render(
+		<AccountContext.Provider value={{ userId: 1, role: "USER" }}>
+			<ReviewComment comment={review} testId={1}/>
+		</AccountContext.Provider>
+	)
+	expect(screen.queryByTestId("pencil_icon")).not.toBeInTheDocument()
+})
+
+test("User can't see trash icon for other user comment", async () => {
+	const review = {
+		workoutId: 1,
+		user_id: 2,
+		rating: 0,
+		positive_comment: "tjooooo",
+		negative_comment: "breeee",
+		review_date: "2023-05-16"
+	}
+
+	render(
+		<AccountContext.Provider value={{ userId: 1, role: "USER" }}>
+			<ReviewComment comment={review} testId={1}/>
+		</AccountContext.Provider>
+	)
+	expect(screen.queryByTestId("trash_icon")).not.toBeInTheDocument()
+})
+
+test("User can see both pencil and trash icon on own comment", async () => {
+	const review = {
+		workoutId: 1,
+		user_id: 1,
+		rating: 0,
+		positive_comment: "tjooooo",
+		negative_comment: "breeee",
+		review_date: "2023-05-16"
+	}
+
+	render(
+		<AccountContext.Provider value={{ userId: 1, role: "USER" }}>
+			<ReviewComment comment={review} testId={1}/>
+		</AccountContext.Provider>
+	)
+	expect(screen.getByTestId("pencil_icon")).toBeInTheDocument()
+	expect(screen.getByTestId("trash_icon")).toBeInTheDocument()
 })
