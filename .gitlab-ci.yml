@@ -1,4 +1,5 @@
 stages:
+  - dummy
   - linter
   - build
   - test
@@ -8,6 +9,13 @@ stages:
   - systest
   - deploy_prod_server
 
+dummy-job:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
+  tags:
+   - system
+  script:
+  - echo "GitLab vibecheck"
 
 test-linter-frontend:
   rules:
