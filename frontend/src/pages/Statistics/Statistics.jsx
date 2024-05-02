@@ -63,10 +63,10 @@ export default function Statistics() {
 
 			<div className={style.buttonContainer}>
 				<Button width="25%" outlined={true} onClick={() => navigate(-1)}>
-				<p>Tillbaka</p>
+					<p>Tillbaka</p>
 				</Button>
 			</div>
-    	</div>
+		</div>
 	)
 
 }
