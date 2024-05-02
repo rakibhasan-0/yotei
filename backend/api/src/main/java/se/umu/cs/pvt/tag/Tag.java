@@ -105,8 +105,5 @@ public class Tag implements Serializable{
 	{
 		name = name.toLowerCase();
 	}
-    @Override
-    public String toString() {
-        return "Tag{id=" + id + ", name='" + name + "'}";
-    }
+
 }
