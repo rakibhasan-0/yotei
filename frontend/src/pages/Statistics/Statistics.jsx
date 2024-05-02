@@ -6,14 +6,14 @@ import style from "./Statistics.module.css"
 import Button from "../../components/Common/Button/Button"
 import StatisticsPopUp from "./StatisticsPopUp"
 import FilterStatistics from "./FilterStatistics"
-import TechniqueCard from "../../components/Common/Technique/TechniqueCard/TechniqueCard";
+import TechniqueCard from "../../components/Common/Technique/TechniqueCard/TechniqueCard"
 
 export default function Statistics() {
-	const navigate = useNavigate();
-	const { groupID } = useParams();
-	const [group, setGroup] = useState(null);
-	const [loading, setLoading] = useState(true);
-	const { token } = useContext(AccountContext);
+	const navigate = useNavigate()
+	const { groupID } = useParams()
+	const [group, setGroup] = useState(null)
+	const [loading, setLoading] = useState(true)
+	const { token } = useContext(AccountContext)
 
 
 
@@ -61,8 +61,6 @@ export default function Statistics() {
 				<FilterStatistics />
 				<StatisticsPopUp />
 			</div>
-
-	  	
 			{/*here we will show the technique, exercise and color of the belts, number of the exercise 	
 				we will use the TechniqueCard component to show the data
 			*/}
@@ -73,8 +71,8 @@ export default function Statistics() {
 				<Button width="25%" outlined={true} onClick={() => navigate(-1)}>
 		  			<p>Tillbaka</p>
 				</Button>
-	  		</div>
+			</div>
 		</div>
-	);
+	)
 
 }
