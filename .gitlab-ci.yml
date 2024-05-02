@@ -160,7 +160,7 @@ run-systests:
   script:
     - cd frontend/
     - npm ci # Install project dependencies
-    # - npx playwright install ?
+    - npx playwright install --with-deps
     - npm run systest:ci # Run your Playwright tests 
     - echo "https://$CI_PROJECT_NAMESPACE.gitlab.io/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/playwright-report/index.html" # print the URL to view the results
     - cd ../infra/systest
