@@ -8,7 +8,6 @@ import Button from "../../../../components/Common/Button/Button"
 import BeltIcon from "../../../../components/Common/BeltIcon/BeltIcon"
 
 import { Pencil, Trash } from "react-bootstrap-icons"
-import Review from "../../../components/Common/Technique/TechniqueReview/ReviewFormComponent.jsx"
 
 import styles from "./TechniqueDetail.module.css"
 import ErrorState from "../../../../components/Common/ErrorState/ErrorState"
@@ -20,6 +19,7 @@ import Popup from "../../../../components/Common/Popup/Popup"
 import ConfirmPopup from "../../../../components/Common/ConfirmPopup/ConfirmPopup"
 
 import ActivityDelete from "../../../../components/Activity/ActivityDelete/ActivityDelete"
+
 
 
 /**

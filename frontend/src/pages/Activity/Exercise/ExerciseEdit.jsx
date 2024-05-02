@@ -16,6 +16,7 @@ import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
 import { isAdmin, isEditor } from "../../../utils"
 import { unstable_useBlocker as useBlocker } from "react-router"
 import Spinner from "../../../components/Common/Spinner/Spinner.jsx"
+
 /**
  * The edit excercise page (Redigera övning).
  *

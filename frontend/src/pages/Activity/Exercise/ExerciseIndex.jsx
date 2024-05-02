@@ -15,6 +15,7 @@ import Spinner from "../../../components/Common/Spinner/Spinner"
 import { isEditor } from "../../../utils"
 
 
+
 /**
  * Displays a searchbar, a sorter and a list of exercises.
  * 

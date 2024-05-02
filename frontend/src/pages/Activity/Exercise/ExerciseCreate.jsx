@@ -1,4 +1,3 @@
-
 import React, { useContext, useEffect, useState, useRef } from "react"
 import styles from "./ExerciseCreate.module.css"
 import { AccountContext } from "../../../context"
@@ -17,6 +16,7 @@ import EditGallery from "../../../components/Gallery/EditGallery"
 import { useNavigate } from "react-router"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
 import { unstable_useBlocker as useBlocker } from "react-router"
+
 /**
  * The page for creating new exercises.
  *
