@@ -14,9 +14,9 @@ import TechniqueEdit from "../../../../pages/Technique/TechniqueEdit/TechniqueEd
 /**
  * Tests for the technique edit page
  * 
- * @author Team Medusa (Grupp 6)
+ * @author Team Medusa (Grupp 6), Team Durian (Grupp 3)
  * @version 1.0
- * @since 2023-05-23
+ * @since 2024-05-02
  */
 const api = jest.fn()
 server.events.on("request:start", api)
@@ -208,7 +208,7 @@ describe("verify that", () => {
 
 		await user.click(screen.getByTestId("technique-edit-button"))
 
-		await user.click(screen.getByText("Lägg till tagg"))
+		await user.click(screen.getByText("Hantera tagg"))
 
 		await user.type(screen.getByPlaceholderText("Sök efter taggar"), "kihon waza")
 
@@ -309,7 +309,7 @@ describe("verify that", () => {
 
 		// Add the tag
 		await user.click(screen.getByTestId("technique-edit-button"))
-		await user.click(screen.getByText("Lägg till tagg"))
+		await user.click(screen.getByText("Hantera tagg"))
 
 		await user.type(screen.getByPlaceholderText("Sök efter taggar"), "ny tagg")
 
