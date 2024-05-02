@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import style from './StatisticsButton.module.css'
 import Popup from '../../components/Common/Popup/Popup'
 
-
 /**
  * 
  * prop with data will be passed here so that data will be processed and will be shown in the popup
@@ -19,7 +18,7 @@ function StatisticsPopUp() {
 	return (
 		<div className={style.statisticsButtonContainer}>
 			<button onClick={togglePopup}>
-				<img src="../../../public/Statistics.svg" alt="Statistics Icon" />
+				<img src="/Statistics.svg" />
 			</button>
 
 			<Popup title={"Statistics"} id="statistics-popup" isOpen={showPopup} setIsOpen={setShowPopup}>
