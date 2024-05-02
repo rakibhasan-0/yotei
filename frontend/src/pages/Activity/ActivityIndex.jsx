@@ -1,7 +1,7 @@
 import { Modal } from "react-bootstrap"
 import Tab from "react-bootstrap/Tab"
 import Tabs from "react-bootstrap/Tabs"
-import ExerciseIndex from "../Exercise/ExerciseIndex"
+import ExerciseIndex from "./Exercise/ExerciseIndex"
 import TechniqueIndex from "./Technique/TechniqueIndex/TechniqueIndex"
 import styles from "./ActivityIndex.module.css"
 import { useEffect, useState} from "react"
