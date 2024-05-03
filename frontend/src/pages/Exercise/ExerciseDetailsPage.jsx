@@ -181,7 +181,7 @@ export default function ExerciseDetailsPage() {
 		return <ErrorState message={error} onBack={() => navigate("/exercise")} />
 	}
 
-	const handleClick = () => {
+	const handleNavigation = () => {
 		if (hasPreviousState) {
 		  	navigate(-1)
 		} else {
@@ -250,7 +250,7 @@ export default function ExerciseDetailsPage() {
 				}} id={`${ex_id}-cs`} userId={userId} comments={comments} />
 			</div>
 			<div style={{ marginTop: "1rem", marginBottom:"1rem" }}>
-				<Button outlined={true} onClick={handleClick}><p>Tillbaka</p></Button>
+				<Button outlined={true} onClick={handleNavigation}><p>Tillbaka</p></Button>
 			</div>
 
 			<Popup isOpen={isAddingComment} title={"Lägg till kommentar"} style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset"}} setIsOpen={toggleAddComment} onClose={() => setCommentError(false)} >

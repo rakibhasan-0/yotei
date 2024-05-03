@@ -139,22 +139,6 @@ export default function ExerciseEdit() {
 	}
 
 	/**
-	 * check if any changes has been done when editing before closing
-	 * exercise edit popup. Tags are sorted by id.
-	 */
-	// eslint-disable-next-line no-unused-vars
-	function checkChanges() {
-		const newT = JSON.stringify(newTags.sort((a, b) => a.id - b.id))
-		const oldT = JSON.stringify(existingTags.sort((a, b) => a.id - b.id))
-
-		if (oldName !== name || oldDesc !== desc || oldTime != time || newT !== oldT) {
-			setShowMiniPopup(true)
-		} else {
-			navigate(-1)
-		}
-	}
-
-	/**
 	 * Create a new array with updated property names
 	 *
 	 * @param originalData json string with tagdata to be converted
@@ -281,6 +265,19 @@ export default function ExerciseEdit() {
 		}
 	}
 
+	async function handleClickSave() {	
+		setIsBlocking(false)
+		setSendData(true)
+	}
+
+	const handleNavigation = () => {
+		if (hasPreviousState) {
+			navigate(-1)
+		} else {
+			navigate("/exercise")
+		}
+	}
+
 	return isLoading ? (
 		<Spinner />
 	) : (
@@ -331,7 +328,7 @@ export default function ExerciseEdit() {
 					outlined
 					onClick={() => {
 						setUndoMediaChanges(true)
-						navigate(-1)
+						handleNavigation()
 					}}
 					width="100%"
 				>
@@ -339,10 +336,10 @@ export default function ExerciseEdit() {
 				</Button>
 
 				<Button
-					onClick={() => {
-						setIsBlocking(false)
-						setSendData(true)
-						navigate(-1)
+					onClick={async () => {
+						await handleClickSave()
+						await editExercise()
+						handleNavigation()
 					}}
 					width="100%"
 				>

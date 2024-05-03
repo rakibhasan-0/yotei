@@ -339,8 +339,7 @@ export default function ExerciseCreate() {
 		storeInputChange("eraseBoxChecked", checked)
 	}
 
-	const handleClick = () => {
-		setUndoMediaChanges(true)
+	const handleNavigation = () => {
 		if (hasPreviousState) {
 		  	navigate(-1)
 		} else {
@@ -429,7 +428,10 @@ export default function ExerciseCreate() {
 				<Button
 					width="100%"
 					outlined={true}
-					onClick={handleClick}
+					onClick={async () => {
+						setUndoMediaChanges(true)
+						handleNavigation()
+					}}
 				>
 					<p>Tillbaka</p>
 				</Button>
