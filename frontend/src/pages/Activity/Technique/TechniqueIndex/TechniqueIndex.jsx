@@ -1,19 +1,19 @@
 import { useState, useEffect, useContext } from "react"
-import RoundButton from "../../../components/Common/RoundButton/RoundButton"
-import { AccountContext } from "../../../context"
+import RoundButton from "../../../../components/Common/RoundButton/RoundButton"
+import { AccountContext } from "../../../../context"
 import styles from "./TechniqueIndex.module.css"
 import { Plus } from "react-bootstrap-icons"
-import SearchBar from "../../../components/Common/SearchBar/SearchBar"
-import { getTechniques } from "../../../components/Common/SearchBar/SearchBarUtils"
-import useMap from "../../../hooks/useMap"
-import TechniqueFilter from "../../../components/Common/Filter/TechniqueFilter"
-import Popup from "../../../components/Common/Popup/Popup"
+import SearchBar from "../../../../components/Common/SearchBar/SearchBar"
+import { getTechniques } from "../../../../components/Common/SearchBar/SearchBarUtils"
+import useMap from "../../../../hooks/useMap"
+import TechniqueFilter from "../../../../components/Common/Filter/TechniqueFilter"
+import Popup from "../../../../components/Common/Popup/Popup"
 import CreateTechnique from "../CreateTechnique/CreateTechnique"
 import { useCookies } from "react-cookie"
-import TechniqueCard from "../../../components/Common/Technique/TechniqueCard/TechniqueCard"
-import InfiniteScrollComponent from "../../../components/Common/List/InfiniteScrollComponent"
-import { isAdmin } from "../../../utils"
-import Spinner from "../../../components/Common/Spinner/Spinner"
+import TechniqueCard from "../../../../components/Common/Technique/TechniqueCard/TechniqueCard"
+import InfiniteScrollComponent from "../../../../components/Common/List/InfiniteScrollComponent"
+import { isAdmin } from "../../../../utils"
+import Spinner from "../../../../components/Common/Spinner/Spinner"
 import { Link, useLocation, useNavigate} from "react-router-dom"
 
 
@@ -21,9 +21,10 @@ import { Link, useLocation, useNavigate} from "react-router-dom"
  * The technique index page.
  * Fetches and displays the techniques.
  * 
- * @author Medusa, Team Tomato (group 6), Team Mango (Group 4)
- * @version 2.0
+ * @author Medusa, Team Tomato (group 6), Team Mango (Group 4), Team Kiwi
+ * @version 3.0
  * @since 2024-04-18
+ * @update v3 (2024-05-02 Team Kiwi) removed header from html, also rerouted button from ./create to ./exercise/create
  */
 export default function TechniqueIndex() {
 	const [techniques, setTechniques] = useState([])
@@ -142,9 +143,7 @@ export default function TechniqueIndex() {
 			>
 				<CreateTechnique setIsOpen={setShowPopup} />
 			</Popup>
-
-			<h1>Tekniker</h1>
-
+			<h1 id ={"teknik-header"}></h1>
 			<div>
 				<SearchBar
 					onBlur={saveSearchText}
@@ -191,7 +190,7 @@ export default function TechniqueIndex() {
 			<br/><br/><br/><br/><br/>
 			
 			{isAdmin(context) &&
-				<Link to={"create"}>
+				<Link to={"technique/create"}>
 					<RoundButton id="technique-add-button">
 						<Plus className={styles["plus-icon"]} />
 					</RoundButton>

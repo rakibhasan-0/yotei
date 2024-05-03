@@ -37,7 +37,7 @@ export default function Gallery({ id }) {
 		} catch (error) {
 			console.error(error)
 		}
-	}, [context.token, id])
+	}, [context.token, id, media])
 
 	useEffect(() => {getMedia()}, [getMedia])
 
