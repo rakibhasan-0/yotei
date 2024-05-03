@@ -17,7 +17,7 @@ import {setError as setErrorToast} from "../../../utils"
 /**
  * A component for displaying details about an exercise.
  * 
- * @author Chimera, Phoenix, Team Coconut, Team Durian, Team Orange
+ * @author Chimera, Phoenix, Team Coconut, Team Durian, Team Orange, Team Kiwi
  * @since 2024-04-23
  * @version 2.2
  * @returns A page for displaying details about an exercise.
