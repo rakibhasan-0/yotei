@@ -44,13 +44,17 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
       )
     )
     AND
-        (:alldates IS TRUE)
-      OR
+      (
+        (
+          :alldates IS TRUE
+        )
+        OR
         (
             s.date >= :startdate
           AND 
             s.date <= :enddate
         )
+      )
     GROUP BY
       t.id,
       t.name
@@ -76,13 +80,17 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
     AND
       e.id IS NOT NULL
     AND
-        (:alldates IS TRUE)
-      OR
+      (
+        (
+          :alldates IS TRUE
+        )
+        OR
         (
             s.date >= :startdate
           AND 
             s.date <= :enddate
         )
+      )
     GROUP BY
       e.id,
       e.name
@@ -103,4 +111,25 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
       tb.techniqueId = :id
       """)
   List<Belt> getBeltsForTechnique(Long id);
+
+  @Query("""
+    SELECT
+      COUNT(s)
+    FROM
+      Session s
+    WHERE
+      s.plan IS :id
+    AND
+        (
+          (:alldates IS TRUE)
+        OR
+          (
+              s.date >= :startdate
+            AND 
+              s.date <= :enddate
+          )
+        )
+      """)
+  Integer getNumberOfSessions(Long id, boolean alldates, LocalDate startdate, LocalDate enddate);
+
 }

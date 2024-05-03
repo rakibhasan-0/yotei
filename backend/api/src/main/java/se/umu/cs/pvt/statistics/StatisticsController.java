@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -32,7 +34,8 @@ public class StatisticsController {
         this.statisticsRepository = statisticsRepository;
     }
 
-    
+    @Operation(summary = "Returns the techniques and exercises done for a group sorted from highest to lowest occurence.", 
+               description = "Must include a group id as path variable. All other request parameters are optional they default to false. If not valid date interval is set, all session reviews are included in the statistics.")
     @GetMapping("/{id}")
     public ResponseEntity<List<StatisticsResponse>> getTechniquesStats(@PathVariable Long id, 
                                                                        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<LocalDate> startdate , 
@@ -45,7 +48,7 @@ public class StatisticsController {
         if (kihon.isPresent() && kihon.get()) {
             filterKihon = true;
         }
-                                                                
+                                                       
         // Check if date filter is present
         boolean showAllDates = true;
         LocalDate sdate = null;
@@ -53,19 +56,19 @@ public class StatisticsController {
         if (startdate.isPresent() && enddate.isPresent()) {
             sdate = startdate.get();
             edate = enddate.get();
-            showAllDates = false;
+            showAllDates = false;  
         }
 
         // Check if showexercises parameter is set and show exercises if it is.
-        // Set to empty ArrayList if not to allow stream.
         List<StatisticsResponse> exercises;
         if (showexercises.isPresent() && showexercises.get()) {
             exercises = statisticsRepository.getSampleExercisesQuery(id, showAllDates, sdate, edate);
         } else {
+            // Set to empty ArrayList if not to allow stream.
             exercises = new ArrayList<>();
         }
 
-        
+        // Get techniques with filters applied
         List<StatisticsResponse> techniques = statisticsRepository.getSampleTechniquesQuery(id, filterKihon, showAllDates, sdate, edate);
 
         // Combine the two lists and sort them.
@@ -79,6 +82,8 @@ public class StatisticsController {
                 sr.setBelts(statisticsRepository.getBeltsForTechnique(sr.getActivity_id()));
             }
         }
+        
+        System.out.println(statisticsRepository.getNumberOfSessions(id, showAllDates, sdate, edate));
 
         return new ResponseEntity<>(union, HttpStatus.OK);
     }
