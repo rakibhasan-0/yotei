@@ -32,12 +32,14 @@ public class StatisticsController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<StatisticsResponse>> getTechniquesStats(@PathVariable Long id, @RequestParam Optional<Date> startdate, @RequestParam Optional<Date> enddate) {
-
+    public ResponseEntity<List<StatisticsResponse>> getTechniquesStats(@PathVariable Long id, @RequestParam Optional<Date> startdate, @RequestParam Optional<Date> enddate, @RequestParam Optional<Boolean> kihon) {
+        
 
         if (startdate.isPresent() && enddate.isPresent()) {
             System.out.println("filter between dates: " + startdate.get() + " - " + enddate.get());
         }
+
+        
 
         List<StatisticsResponse> exercises = statisticsRepository.getSampleExercisesQuery(id);
         List<StatisticsResponse> techniques = statisticsRepository.getSampleTechniquesQuery(id);
@@ -47,7 +49,6 @@ public class StatisticsController {
             .collect( Collectors.toList());
 
         for (StatisticsResponse sr : union) {
-            
             if (sr.getType().equals("technique")) {
                 sr.setBelts(statisticsRepository.getBeltsForTechnique(sr.getActivity_id()));
             }
