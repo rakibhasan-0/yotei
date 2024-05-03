@@ -8,12 +8,22 @@ stages:
   - systest
   - deploy_prod_server
 
+dummy-job:
+  stage: test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
+  tags:
+   - system
+  script:
+  - echo "Hello World!"
 
 test-linter-frontend:
   rules:
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
+      changes:
+        - frontend/**/*
   image: node:20
   tags:
     - chappie #Runner-namn
@@ -35,6 +45,8 @@ test-backend:
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
+      changes:
+        - backend/**/*
   stage: test
   tags:
     - chappie #Runner-namn
@@ -53,6 +65,8 @@ test-frontend:
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
+      changes:
+        - frontend/**/*
   stage: test
   tags:
     - chappie #Runner-namn
@@ -74,6 +88,8 @@ build-frontend:
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
+      changes:
+        - frontend/**/*
   stage: build
   tags:
     - chappie #Runner-namn
@@ -126,15 +142,19 @@ rebuild-database:
       when: never
     - if: $CI_COMMIT_BRANCH == "main"
       changes:
-        - infra/database/init
+        - infra/database/init/**/*
   tags:
     - system
   before_script:
     - docker login --username pvt2024 --password $DOCKER_PASS # DOCKER_PASS defined in GitLab CI/CD settings as a secure variable.
   script:
+    - cd infra/database
+    - ./backup_db.sh db.dump
     - docker stop html-psql-1 || true
     - docker rm html-psql-1 || true
     - docker volume rm html_pgdata || true
+    - ./restore_db.sh db.dump
+
 
 deploy-test-server:
   stage: deploy_test_server

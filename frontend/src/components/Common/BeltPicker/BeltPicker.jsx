@@ -100,8 +100,9 @@ const BeltRow = ({ belt, states, onToggle }) => {
  * @since 2023-05-12
  * @version 2.0
  * @returns A new belt picker component
+ * @update 2024-04-29, Team Kiwi : Added a filter for Basic Techniques 
  */
-export default function BeltPicker({ id, states, onToggle, centered, onClearBelts, filterWhiteBelt, errorMessage }) {
+export default function BeltPicker({ id, states, onToggle, centered, onClearBelts, filterWhiteBelt, filterBasicTechniques, errorMessage }) {
 	const { token } = useContext(AccountContext)
 	const [belts, setBelts] = useState()
 	const [rerender, setRerender] = useState(false)
@@ -118,13 +119,17 @@ export default function BeltPicker({ id, states, onToggle, centered, onClearBelt
 				}
 				groups[belt.name].push(belt)
 			}
-			setBelts(groups)
+			let newBelts = groups
 			if (filterWhiteBelt) {
-				setBelts(prev => {
-					const {Vitt, ...rest} = prev // eslint-disable-line
-					return rest
-				})
+				const {Vitt, ...rest} = newBelts // eslint-disable-line
+				newBelts = rest
 			}
+			if(filterBasicTechniques) {
+				// eslint-disable-next-line no-unused-vars
+				const {["Grundläggande Tekniker"]: removed, ...rest} = newBelts
+				newBelts = rest
+			}
+			setBelts(newBelts)
 		}).catch(ex => {
 			setErrorToast("Kunde inte hämta bälten")
 			console.error(ex)

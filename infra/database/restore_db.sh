@@ -9,7 +9,7 @@ SCRIPT_PATH=$(dirname "$0")         # Find path of this script
 OLD_PGPASS=$PGPASSFILE              # Save old path
 export PGPASSFILE=$SCRIPT_PATH/pgpass.conf # Remember to edit this file!
 
-docker exec -t infra-psql-1 \
+docker exec -t html-psql-1 \
 pg_restore \
    --clean \
    -d "$DATABASE" \
