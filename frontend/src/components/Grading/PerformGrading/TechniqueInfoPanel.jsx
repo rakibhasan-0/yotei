@@ -31,21 +31,21 @@ export default function TechniqueInfoPanel( {
 
 	return (
 		
-		<div data-testid={id}>
-			<fieldset role="test" style={{ height: "30px", width: "100%", marginBottom: "10px", backgroundColor: beltColor}}>
+		<div>
+			<fieldset role="fieldsetBelt" style={{ height: "30px", width: "100%", marginBottom: "10px", backgroundColor: beltColor}}>
 				<div>
-					<h2>{mainCategoryTitle}</h2>
+					<h2 role="mainCategoryTitle">{mainCategoryTitle}</h2>
 				</div>
 			</fieldset>
 			<fieldset style={{ height: "auto", width: "100%", marginBottom: "5px" }}>
 				<div>
-					<h3>{categoryTitle}</h3>
+					<h3 role="categoryTitle">{categoryTitle}</h3>
 				</div>
 				<div>
-					<h1>{currentTechniqueTitle}</h1>
+					<h1 role="currentTechniqueTitle">{currentTechniqueTitle}</h1>
 				</div>
 				<div style={{width: "70%", float: "left"}}>
-					<h3><b>Nästa:</b>{nextTechniqueTitle}</h3>
+					<h3 role="nextTechniqueTitle"><b>Nästa:</b>{nextTechniqueTitle}</h3>
 				</div>
 				<div style={{ display: "flex", justifyContent: "flex-end"}}>
 					<CommentButton />
