@@ -54,7 +54,6 @@ export default function ExerciseDetailsPage() {
 	}
 
 	useEffect(() => {
-		console.log(token)
 		fetch(`/api/exercises/${ex_id}`, {
 			headers: { token }
 		})
