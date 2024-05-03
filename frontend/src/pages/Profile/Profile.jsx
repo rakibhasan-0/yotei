@@ -177,7 +177,7 @@ export default function Profile() {
 				</div>
 				<Divider option={"h2_center"}/>
 				<div>
-					<Button onClick={logOut} width={"100%"} className="btn btn-primary">Logga ut</Button>
+					<Button id={"logoutButton"} onClick={logOut} width={"100%"} className="btn btn-primary">Logga ut</Button>
 				</div>
 				<br/>
 			</Tab>
