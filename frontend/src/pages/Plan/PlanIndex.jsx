@@ -10,6 +10,7 @@ import Button from "../../components/Common/Button/Button"
 import {Link} from "react-router-dom"
 import { useCookies } from "react-cookie"
 import { HTTP_STATUS_CODES, setError } from "../../utils"
+import Popup from "../../components/Common/Popup/Popup"
 
 /**
  * PlanIndex is the page that displays group plannings. Contains of a 
@@ -176,6 +177,8 @@ export default function PlanIndex() {
 		return [year, month, day].join("-")
 	}
 
+    const [showPopup, setShowPopup] = useState(false)
+
 	return (
 		<center>
 			<title>Planering</title>
@@ -188,6 +191,20 @@ export default function PlanIndex() {
 					</Button>
 				</Link>
 			</div>
+
+            <div>
+                <Popup id={"test-popup"} title={"Navigering"} isOpen={showPopup} setIsOpen={setShowPopup}>
+                    <Button><p>Teknik1</p></Button>
+                    <Button><p>Teknik2</p></Button>
+                    <Button><p>Teknik3</p></Button>
+                    <Button><p>Teknik4</p></Button>  
+                </Popup>
+            </div>
+            <RoundButton  onClick={() => setShowPopup(true)} />
+
+            <Button children={<p>Tekniker</p>} onClick={() => setShowPopup(true)}></Button>
+            
+
 			<FilterPlan
 				id={42}
 				setChosenGroups={setSelectedPlans}
