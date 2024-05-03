@@ -2,13 +2,10 @@ package se.umu.cs.pvt.statistics;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import se.umu.cs.pvt.session.Session;
-import se.umu.cs.pvt.technique.Technique;
 import se.umu.cs.pvt.belt.Belt;
 
 /**
@@ -38,22 +35,27 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
     AND
       t.id IS NOT NULL
     AND 
-      (:kihon IS FALSE
-      OR
+      (
+      :kihon IS FALSE
+        OR
       t.id IN (
         SELECT tt.techId
         FROM TechniqueTag tt
         WHERE tt.tag = 1
+        )
       )
-    )
     AND
-        (:alldates IS TRUE)
-      OR
+      (
+        (
+          :alldates IS TRUE
+        )
+        OR
         (
             s.date >= :startdate
           AND 
             s.date <= :enddate
         )
+      )
     GROUP BY
       t.id,
       t.name
@@ -79,13 +81,17 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
     AND
       e.id IS NOT NULL
     AND
-        (:alldates IS TRUE)
-      OR
+      (
+        (
+          :alldates IS TRUE
+        )
+        OR
         (
             s.date >= :startdate
           AND 
             s.date <= :enddate
         )
+      )
     GROUP BY
       e.id,
       e.name
@@ -106,4 +112,45 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
       tb.techniqueId = :id
       """)
   List<Belt> getBeltsForTechnique(Long id);
+
+  @Query("""
+    SELECT
+      COUNT(DISTINCT s.id)
+    FROM
+      Session s
+      JOIN
+      Activity a
+    ON 
+      a.workoutId = s.workout
+    JOIN 
+      Technique t
+    ON 
+      t.id = a.techniqueId
+    WHERE
+      s.plan = :id
+    AND
+      t.id IS NOT NULL
+    AND 
+      (
+        :kihon IS FALSE
+      OR
+        t.id IN (
+          SELECT tt.techId
+          FROM TechniqueTag tt
+          WHERE tt.tag = 1
+          )
+      )
+    AND
+        (
+          (:alldates IS TRUE)
+        OR
+          (
+              s.date >= :startdate
+            AND 
+              s.date <= :enddate
+          )
+        )
+      """)
+  Integer getNumberOfSessions(Long id, boolean kihon, boolean alldates, LocalDate startdate, LocalDate enddate);
+
 }
