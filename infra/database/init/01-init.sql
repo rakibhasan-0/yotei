@@ -649,7 +649,7 @@ CREATE TRIGGER check_order BEFORE INSERT ON activity
 --
 CREATE OR REPLACE FUNCTION tag_to_lowercase() RETURNS TRIGGER AS $$ 
 BEGIN 
-	NEW.name = LOWER(NEW.name);
+	NEW.name = LOWER(BTRIM(NEW.name));
 	RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';

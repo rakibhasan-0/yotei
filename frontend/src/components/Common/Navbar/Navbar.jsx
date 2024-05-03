@@ -22,8 +22,9 @@ import { AccountContext } from "../../../context"
 function Navbar({ testId }) {
 
 	const [open, setOpen] = useState(false)
+	const [isExaminationEnabled] = useState(false) // FEATURE TOGGLE
 	const navigate = useNavigate()
-	const context = useContext(AccountContext)
+	const context = useContext(AccountContext) 
 
 	const navigateAndClose = (path, data) => {
 		setOpen(false)
@@ -63,6 +64,14 @@ function Navbar({ testId }) {
 				<Button width={"100%"} onClick={() => navigateAndClose("/technique",  {state: {clearSearchText: true}})}>
 					<h1 className={styles.commonNavbarButton}>Tekniker</h1>
 				</Button>
+
+				{isExaminationEnabled ? (
+					<Button width={"100%"} onClick={() => {}}>
+						<h1 className={styles.commonNavbarButton}>Gradering</h1>
+					</Button>
+				) : (
+					null
+				)}
 
 				{ isAdmin(context) ? 
 					<Button width={"100%"} onClick={() => navigateAndClose("/admin")}>
