@@ -4,8 +4,7 @@ import Tabs from "react-bootstrap/Tabs"
 import styles from "./SessionCreateIndex.module.css"
 import { useEffect, useState} from "react"
 import SessionCreate from "./SessionCreate"
-
-
+import SessionsCreate from "./SessionsCreate"
 
 /**
  * Index compontent for the sessionCreate page
@@ -21,10 +20,10 @@ import SessionCreate from "./SessionCreate"
 export default function SessionCreateIndex(){
 
 
-    const [key, setKey] = useState(sessionStorage.getItem("active-tab") || "session")
+    const [key, setKey] = useState(sessionStorage.getItem("active_tab") || "session")
 
 	useEffect(()=>{
-		sessionStorage.setItem("active-tab", key)
+		sessionStorage.setItem("active_tab", key)
 	}, [key]) 
 
 
@@ -36,7 +35,7 @@ export default function SessionCreateIndex(){
                     <SessionCreate/>
                 </Tab>
                 <Tab  eventKey="sessions" title="Skapa flera tillfällen" tabClassName={`nav-link ${styles.tab}`}>
-
+                    <SessionsCreate/>
                 </Tab>
 
             </Tabs>
