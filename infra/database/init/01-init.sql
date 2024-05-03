@@ -428,13 +428,13 @@ ALTER TABLE
 
 
 
-CREATE TABLE session_review_exercises(
+CREATE TABLE session_review_activities(
 	session_review_exercise_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	session_review_id INT CHECK(session_review_id IS NOT NULL),
-	exercise_id INT CHECK(exercise_id IS NOT NULL),
+	activity_id INT CHECK(activity_id IS NOT NULL),
 	CONSTRAINT wr_fk_session_review_id FOREIGN KEY(session_review_id) REFERENCES session_review(review_id) ON
 	DELETE CASCADE,
-	CONSTRAINT wr_fk_exercise_id FOREIGN KEY (exercise_id) REFERENCES exercise(exercise_id) ON
+	CONSTRAINT wr_fk_activity_id FOREIGN KEY (activity_id) REFERENCES activity(activity_id) ON
 	DELETE CASCADE
 );
 
