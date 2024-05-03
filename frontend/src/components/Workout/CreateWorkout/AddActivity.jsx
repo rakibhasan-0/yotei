@@ -104,6 +104,12 @@ function AddActivity({ id, setShowActivityInfo }) {
 	//const [cookiesExer, setCookiesExer] = useCookies(["techniques-filter"])
 	const [visibleExercises, setVisibleExercises] = useState([])
 
+	const [pressedTechnique, setPressedTechnique] = useState(null)
+	const [element , setElement] = useState(null)
+	const [fetchedElementNum, setFetchedElementNum] = useState(19)
+	const [fetchedElement, setFetchedElement] = useState(null)
+	const [elementFound, setElementFound] = useState(false)
+
 
 	/**
      * Makes sure the data in the search bar is stored when choosing between techniques and exercises
@@ -149,7 +155,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 		setJSONSession("activeTab", activeTab)
 	},[activeTab])
 
-
+<
 	useEffect(() => {
 		sessionStorage.setItem("searchTechText", searchTechText)
 	},[searchTechText])
@@ -244,6 +250,53 @@ function AddActivity({ id, setShowActivityInfo }) {
 		))
 		searchExercises()
 	}, [searchExerText, selectedExerTags, hasLoadedData])
+
+	useEffect(() => {
+		if (!hasLoadedData || !fetchedTech) return
+		
+		const storedTechnique = localStorage.getItem("storedTechnique")
+		setPressedTechnique(storedTechnique)
+	
+		setElement(document.getElementById(storedTechnique))
+		
+		if(!elementFound && storedTechnique != null){
+			waitForItemToLoad()
+		}
+		
+		if(storedTechnique != null && element == null && fetchedElement != null && !elementFound && fetchedElementNum <= techniques.length){
+			fetchedElement.scrollIntoView()
+			setElement(document.getElementById(storedTechnique))
+			setFetchedElementNum(fetchedElementNum + 1)
+		}
+
+		if (element != null) {
+			element.scrollIntoView({ behavior: "smooth" })
+			setElementFound(true)
+		}
+	}, [hasLoadedData, fetchedTech, fetchedElement, fetchedElementNum])
+
+	//TODO sätter inte dit den ska då jag klickar på länken?
+	function waitForItemToLoad() {
+		if (hasLoadedData && fetchedTech && fetchedElementNum <= techniques.length) {
+			const interval = setInterval(() => {
+				const element = document.getElementById("technique-list-item-" + techniques[fetchedElementNum].techniqueID)
+				if(elementFound){
+					return
+				}
+				if (element != null) {
+					clearInterval(interval)
+					setFetchedElement(element)
+				}
+			}, 500) // adjust the interval as needed
+		}
+	}
+
+	useEffect(() => {
+		if (pressedTechnique != null) {
+			console.log("saved: " + pressedTechnique)
+			localStorage.setItem("storedTechnique", pressedTechnique)
+		}
+	}, [pressedTechnique])
 
 	/**
 	 * Function for handling when a belt has been picked from the BeltPicker.
@@ -372,6 +425,10 @@ function AddActivity({ id, setShowActivityInfo }) {
 		setSelectedBelts([])
 	}
 
+	const printLog = (id) => {
+		setPressedTechnique(id)
+	}
+
 	return (
 		<div id={id}>
 			<Modal.Body style={{ padding: "0" }}>
@@ -408,6 +465,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 								{techniques.map((technique, key) => (
 									<TechniqueCard
 										id={"technique-list-item-" + technique.techniqueID}
+										onClick={printLog}
 										checkBox={
 											<CheckBox
 												checked={checkedActivities.some(a => a.techniqueID === technique.techniqueID)}

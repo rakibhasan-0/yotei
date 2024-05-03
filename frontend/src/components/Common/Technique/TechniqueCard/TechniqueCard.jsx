@@ -18,17 +18,21 @@ import styles from "./TechniqueCard.module.css"
  * Converted to css module 2024-04-19, Hannes (group 1)
  * 
  */
-function TechniqueCard({ technique, checkBox, id}) {
+function TechniqueCard({ technique, checkBox, id, onClick}) {
 	const navigate = useNavigate()
 
 	const handleClick = () => {
 		// Save in cookie
 		navigate("/technique/" + technique.techniqueID)
+		clickUpstream(event)
+	}
 
+	const clickUpstream = (event) => {
+		onClick(id, event)
 	}
 	
 	return (
-		<div className={styles["technique-card"]} id={id}>
+		<div className={styles["technique-card"]} id={id} onClick={clickUpstream}>
 			{constructColor(technique)}
 
 			<div className={styles["technique-info-container"]}>
@@ -43,7 +47,7 @@ function TechniqueCard({ technique, checkBox, id}) {
 				</div>
 
 				<div className={styles["technique-arrow-container"]}>
-					<Link to={"/technique/" + technique.techniqueID}>
+					<Link onClick={handleClick} >
 						<ChevronDown />
 					</Link>
 				</div>
