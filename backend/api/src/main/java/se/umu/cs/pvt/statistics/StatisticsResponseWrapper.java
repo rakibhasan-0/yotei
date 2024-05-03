@@ -3,6 +3,11 @@ package se.umu.cs.pvt.statistics;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+  * @author Cocount 
+  * @version 1.0
+  * @since 2024-05-03
+  */
 public class StatisticsResponseWrapper implements Serializable {
 
     private Integer numberOfSessions;

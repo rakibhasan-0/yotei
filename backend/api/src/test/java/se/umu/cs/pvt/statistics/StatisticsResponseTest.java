@@ -9,6 +9,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 
+
+/**
+  * @author Cocount 
+  * @version 1.0
+  * @since 2024-05-03
+  */
 public class StatisticsResponseTest {
 
     BeltResponse beltResponse;

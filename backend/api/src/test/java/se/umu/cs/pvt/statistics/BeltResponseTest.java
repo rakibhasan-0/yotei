@@ -7,6 +7,12 @@ import se.umu.cs.pvt.belt.Belt;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+
+/**
+  * @author Cocount 
+  * @version 1.0
+  * @since 2024-05-03
+  */
 public class BeltResponseTest {
     
         
