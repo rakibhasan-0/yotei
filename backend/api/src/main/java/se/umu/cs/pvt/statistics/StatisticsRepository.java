@@ -2,13 +2,10 @@ package se.umu.cs.pvt.statistics;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import se.umu.cs.pvt.session.Session;
-import se.umu.cs.pvt.technique.Technique;
 import se.umu.cs.pvt.belt.Belt;
 
 /**
