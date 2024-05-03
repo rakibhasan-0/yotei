@@ -11,7 +11,7 @@ import Divider from "../../components/Common/Divider/Divider.jsx"
 import TagInput from "../../components/Common/Tag/TagInput.jsx"
 import { setError as setErrorToast } from "../../utils"
 import EditGallery from "../../components/Gallery/EditGallery"
-import { useNavigate, useParams } from "react-router"
+import { useLocation, useNavigate, useParams } from "react-router"
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 import { isAdmin, isEditor } from "../../utils"
 import { unstable_useBlocker as useBlocker } from "react-router"
@@ -51,6 +51,8 @@ export default function ExerciseEdit() {
 	const [isLoading, setIsLoading] = useState(true)
 
 	const navigate = useNavigate()
+	const location = useLocation()
+	const hasPreviousState = location.key !== "default"
 	const { excerciseId } = useParams()
 
 	function done() {

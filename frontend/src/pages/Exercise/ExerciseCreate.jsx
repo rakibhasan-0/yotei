@@ -13,7 +13,7 @@ import Divider from "../../components/Common/Divider/Divider.jsx"
 import TagInput from "../../components/Common/Tag/TagInput.jsx"
 import { toast } from "react-toastify"
 import EditGallery from "../../components/Gallery/EditGallery"
-import { useNavigate } from "react-router"
+import { useLocation, useNavigate } from "react-router"
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 import { unstable_useBlocker as useBlocker } from "react-router"
 
@@ -95,6 +95,8 @@ export default function ExerciseCreate() {
 
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const navigate = useNavigate()
+	const location = useLocation()
+	const hasPreviousState = location.key !== "default";
 
 	const hasRendered = useRef({"tagEffect":false, "inputEffect":false})
 
@@ -276,7 +278,11 @@ export default function ExerciseCreate() {
 	function exitProdc() {
 		
 		if (exerciseCreateInput.addBoxChecked == false) {
-			navigate(-1)
+			if (hasPreviousState) {
+				navigate(-1)
+			} else {
+				navigate("/exercise")
+			}
 			clearExerciseCreateInput(exerciseCreateInput.addBoxChecked, exerciseCreateInput.eraseBoxChecked)
 			
 		} else {
@@ -331,6 +337,15 @@ export default function ExerciseCreate() {
 	 */
 	function eraseBoxClicked(checked) {
 		storeInputChange("eraseBoxChecked", checked)
+	}
+
+	const handleClick = () => {
+		setUndoMediaChanges(true)
+		if (hasPreviousState) {
+		  	navigate(-1)
+		} else {
+		  	navigate("/exercise")
+		}
 	}
 
 	return (
@@ -414,10 +429,7 @@ export default function ExerciseCreate() {
 				<Button
 					width="100%"
 					outlined={true}
-					onClick={() => {
-						setUndoMediaChanges(true) 
-						navigate(-1)
-					}}
+					onClick={handleClick}
 				>
 					<p>Tillbaka</p>
 				</Button>

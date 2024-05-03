@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { Trash, Pencil, Clock, Plus } from "react-bootstrap-icons"
 import { AccountContext } from "../../context"
-import { useNavigate, useParams } from "react-router"
+import { useLocation, useNavigate, useParams } from "react-router"
 import CommentSection from "../../components/Common/CommentSection/CommentSection"
 import Popup from "../../components/Common/Popup/Popup"
 import TextArea from "../../components/Common/TextArea/TextArea"
@@ -37,6 +37,8 @@ export default function ExerciseDetailsPage() {
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [error, setError] = useState()
 	const navigate = useNavigate()
+	const location = useLocation()
+	const hasPreviousState = location.key !== "default"
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
 	const accountRole = useContext(AccountContext)
 
@@ -178,6 +180,15 @@ export default function ExerciseDetailsPage() {
 	if (error) {
 		return <ErrorState message={error} onBack={() => navigate("/exercise")} />
 	}
+
+	const handleClick = () => {
+		if (hasPreviousState) {
+		  	navigate(-1)
+		} else {
+		  	navigate("/exercise")
+		}
+	}
+
 	return (
 		<div style={{ display: "flex", flexDirection: "column" }}>
 			<title>Övningar</title>
@@ -239,7 +250,7 @@ export default function ExerciseDetailsPage() {
 				}} id={`${ex_id}-cs`} userId={userId} comments={comments} />
 			</div>
 			<div style={{ marginTop: "1rem", marginBottom:"1rem" }}>
-				<Button outlined={true} onClick={() => navigate(-1)}><p>Tillbaka</p></Button>
+				<Button outlined={true} onClick={handleClick}><p>Tillbaka</p></Button>
 			</div>
 
 			<Popup isOpen={isAddingComment} title={"Lägg till kommentar"} style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset"}} setIsOpen={toggleAddComment} onClose={() => setCommentError(false)} >
