@@ -108,7 +108,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	 * Is displayed if no media is avaliable
 	 */
 	const NoMedia = <div id={"no-media-box"}
-		className = {`d-flex flex-column justify-content-center align-items-center no-media-container border`}>
+		className = {"d-flex flex-column justify-content-center align-items-center no-media-container border"}>
 		<NoMediaIcon size={"20%"} ></NoMediaIcon>
 		<span className = "no-media-span">Ingen media just nu, ladda upp genom att klicka på plus</span>
 	</div>
@@ -148,7 +148,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	function RemoveButton(mediaObject){
 		return(
 			<div id={`${mediaObject.id}-removal-button`}  
-				className={`btn remove-media-button`} 
+				className={"btn remove-media-button"} 
 				onClick={() => {setupRemovePopup(mediaObject)}} 
 			>
 				<TrashIcon color="var(--red-primary)" size={30}></TrashIcon>

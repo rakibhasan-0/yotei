@@ -9,7 +9,7 @@ export default function VideoPlayerReactPlayer({id, path, editMode}) {
 	return (
 		<div className="player-wrapper" style={style} id={id}>
 			<ReactPlayer
-				className={`react-player fixed-bottom`}
+				className={"react-player fixed-bottom"}
 				url={path}
 				width="100%"
 				height="100%"

@@ -70,9 +70,9 @@ export default function Gallery({ id }) {
 
 
 	return (
-		<div className={`container gallery-container `} id={id}>
+		<div className={"container gallery-container "} id={id}>
 			<div className="row mt-2 mb-2">
-				<div className={`col-sm-12 text-center `}>
+				<div className={"col-sm-12 text-center "}>
 					<Carousel className="carousel" showThumbs={false} showStatus={false} showArrows={true} >                         
 						{pictures.map((image, index) => (
 							<div className="gallery-image-and-description" key={index}>
