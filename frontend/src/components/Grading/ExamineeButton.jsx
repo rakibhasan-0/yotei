@@ -33,7 +33,7 @@ import styles from "./ExamineeButton.module.css"
  */
 
 const ExamineeButton = ({ id, type, onClick, width, children }) => {
-  const [hasColor, setColor] = useState(false)
+	const [hasColor, setColor] = useState(false)
 
 	const toggleColor = () => {
 		setColor(!hasColor)
