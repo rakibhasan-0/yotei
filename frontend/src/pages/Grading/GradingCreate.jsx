@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react"
-import { Link, useLocation, useNavigate} from "react-router-dom"
+import { useNavigate} from "react-router-dom"
 import BeltButton from "../../components/Common/Button/BeltButton"
 import style from "./GradingCreate.module.css"
 import Spinner from "../../components/Common/Spinner/Spinner"
@@ -16,10 +16,13 @@ import { AccountContext } from "../../context"
 export default function GradingCreate() {
 
 	const [beltColors] = useState(["Gult", "Orange", "Grönt", "Blått", "Brunt"])
-  const [belts, setBelts] = useState({}) 
-  const [loading, setLoading] = useState(true)
-  const context = useContext(AccountContext)
-  const { token, userId } = context
+	const [belts, setBelts] = useState({}) 
+	const [loading, setLoading] = useState(true)
+	const context = useContext(AccountContext)
+	const { token, userId } = context
+	const navigate = useNavigate()
+
+
 
 	useEffect(() => {
 		(async () => {
@@ -35,12 +38,13 @@ export default function GradingCreate() {
 				const json = await response.json()
 				setLoading(false)
 
-				const filteredColors = json.filter(item => beltColors.includes(item.name));
-        const colorMaps = {}
-        filteredColors.forEach(element => {
-          colorMaps[element.name] = `#${element.color}`;
-        });
-        setBelts(colorMaps);
+				const filteredColors = json.filter(item => beltColors.includes(item.name))
+				const colorMaps = {}
+				filteredColors.forEach(element => {
+					colorMaps[element.name] = `#${element.color}`
+				})
+				setBelts(colorMaps)
+				console.log(colorMaps)
 
         
 			} catch (ex) {
@@ -49,24 +53,27 @@ export default function GradingCreate() {
 				console.error(ex)
 			}
 		})()
-  }, [token])
+	}, [token])
 
 	return (
-     <div className = {style.beltButtonStyle}> 
-      {loading ? <Spinner /> : ( 
-        <div>
-          {beltColors.map((color, index) => (
-                        <BeltButton
-                            key={color}
-                            width={"100%"}
-                            onClick={() => ""}
-                            color={belts[color]}
-                        >
-                            <h2>{`${5 - index} KYU ${color.toUpperCase()} BÄLTE`}</h2>
-                        </BeltButton>
-                    ))}
-        </div>
-      )}
-      </div>
+		<div> 
+			<div className = {style.titleStyle}> 
+			  <h1>Välj graderingsprotokoll</h1>
+			</div>
+			{loading ? <Spinner /> : ( 
+				<div>
+					{beltColors.map((color, index) => (
+						<BeltButton
+							key={color}
+							width={"100%"}
+							onClick={() => ""}
+							color={belts[color]}
+						>
+							<h2>{`${5 - index} KYU ${color.toUpperCase()} BÄLTE`} </h2>
+						</BeltButton>
+					))}
+				</div>
+			)}
+		</div>
 	)
 }
