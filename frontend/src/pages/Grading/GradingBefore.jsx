@@ -6,6 +6,8 @@ import styles from "./GradingBefore.module.css"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import { AccountContext } from "../../context"
 import { Draggable } from "react-drag-reorder"
+import AddExaminee from "../../components/Common/AddExaminee/AddExaminee"
+
 
 /**
  * The grading create page.
@@ -22,7 +24,9 @@ export default function GradingCreate() {
 	const [loading, setLoading] = useState(true)
 	const context = useContext(AccountContext)
 	const { token, userId } = context
-	const navigate = useNavigate()
+
+	const [numExaminees, setNumExaminee] = useState(8)
+	const [numPairs, setNumPairs] = useState(0)
 
 
 	// För att hålla koll på examinee-element och deras ordning
@@ -30,29 +34,45 @@ export default function GradingCreate() {
 		["hi"],
 		["hello"],
 		["cool"],
-		["how are you"]
+		["zup"],
+		["Anton"],
+		["Malin"],
+		["Hannes"],
+		["Linus"]
 	])
 
 	const handleDrag = (startIndex, endIndex) => {
-		let data = [...examinee]
 
-		// Get the dragged and landed
-		let dragged = data[startIndex]
-		let landed = data[endIndex]
+		console.log(startIndex, endIndex)
 
-		// If both dragged and landed have only one element
-		if (dragged.length === 1 && landed.length === 1) {
-			// Move the dragged element to the landed array
-			landed.push(dragged[0])
-			dragged.pop()
-
-			// Remove the dragged element from its original position
-			data[startIndex] = dragged
-			data[endIndex] = landed
-
+		if(numPairs > 0) {
+			startIndex = startIndex === 0 ? startIndex : startIndex - numPairs
+			endIndex = endIndex === 0 ? endIndex : endIndex - numPairs
 		}
 
-		// Remove empty arrays from the data array
+		let data = [...examinee]
+    
+		// Get the dragged and landed
+		let start = data[startIndex]
+		let end = data[endIndex]
+    
+
+		// If both dragged and landed have only one element
+		if (start.length === 1 && end.length === 1) {
+
+			// Move the dragged element to the landed array
+			end.push(start[0])
+			start.pop()
+
+			// Remove the dragged element from its original position
+			data[startIndex] = []
+			setNumPairs(numPairs+1)
+
+		} else {
+			data[endIndex] = start
+      
+		}
+
 		data = data.filter(item => item.length > 0)
 
 		// Update the state with the modified data array
@@ -84,6 +104,14 @@ export default function GradingCreate() {
 			</div>
      
 
+       	<AddExaminee
+				name="example-input-text-field"
+				id="example-input-text-field"
+				type="text"
+				placeholder="Write here"
+				value={"as"}
+				required={true}
+	      />
 
 			<div className={styles.buttonContainer}>
 				<Button
