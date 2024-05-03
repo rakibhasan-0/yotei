@@ -13,7 +13,7 @@ import Divider from "../../../components/Common/Divider/Divider.jsx"
 import TagInput from "../../../components/Common/Tag/TagInput.jsx"
 import { toast } from "react-toastify"
 import EditGallery from "../../../components/Gallery/EditGallery"
-import { useNavigate } from "react-router"
+import { useLocation, useNavigate } from "react-router"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
 import { unstable_useBlocker as useBlocker } from "react-router"
 

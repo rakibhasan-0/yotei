@@ -1,22 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { Trash, Pencil, Clock, Plus } from "react-bootstrap-icons"
-<<<<<<< HEAD:frontend/src/pages/Exercise/ExerciseDetailsPage.jsx
-import { AccountContext } from "../../context"
-import { useLocation, useNavigate, useParams } from "react-router"
-import CommentSection from "../../components/Common/CommentSection/CommentSection"
-import Popup from "../../components/Common/Popup/Popup"
-import TextArea from "../../components/Common/TextArea/TextArea"
-import Button from "../../components/Common/Button/Button"
-import Tag from "../../components/Common/Tag/Tag"
-import Gallery from "../../components/Gallery/Gallery"
-import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
-import ActivityDelete from "../../components/Activity/ActivityDelete/ActivityDelete"
-import ErrorState from "../../components/Common/ErrorState/ErrorState"
-import { isEditor } from "../../utils"
-import {setError as setErrorToast} from "../../utils"
-=======
 import { AccountContext } from "../../../context"
-import { useNavigate, useParams } from "react-router"
+import { useLocation, useNavigate, useParams } from "react-router"
 import CommentSection from "../../../components/Common/CommentSection/CommentSection"
 import Popup from "../../../components/Common/Popup/Popup"
 import TextArea from "../../../components/Common/TextArea/TextArea"
@@ -28,7 +13,6 @@ import ActivityDelete from "../../../components/Activity/ActivityDelete/Activity
 import ErrorState from "../../../components/Common/ErrorState/ErrorState"
 import { isEditor } from "../../../utils"
 import {setError as setErrorToast} from "../../../utils" 
->>>>>>> main:frontend/src/pages/Activity/Exercise/ExerciseDetailsPage.jsx
 
 /**
  * A component for displaying details about an exercise.
