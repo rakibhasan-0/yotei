@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Date;
 import java.util.List;
 import se.umu.cs.pvt.session.Session;
+import se.umu.cs.pvt.technique.Technique;
 import se.umu.cs.pvt.belt.Belt;
 
 /**
@@ -35,11 +36,21 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
       s.plan = :id
     AND
       t.id IS NOT NULL
+    AND 
+      (:kihon IS FALSE
+      OR
+      t.id IN (
+        SELECT tt.techId
+        FROM TechniqueTag tt
+        WHERE tt.tag = 1
+      )
+    )
     GROUP BY
       t.id,
       t.name
       """)
-  List<StatisticsResponse> getSampleTechniquesQuery(Long id);
+  List<StatisticsResponse> getSampleTechniquesQuery(Long id, boolean kihon);
+
 
   @Query("""
     SELECT
