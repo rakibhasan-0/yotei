@@ -283,7 +283,7 @@ CREATE TABLE IF NOT EXISTS examination_examinee_pair (
 	CONSTRAINT examinee_pair_fk_examinee_2 FOREIGN KEY(examinee_2_id) REFERENCES examination_examinee(examinee_id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS examination_result_technique(
+CREATE TABLE IF NOT EXISTS examination_result(
 	examination_result_technique_id SERIAL PRIMARY KEY,
 	examinee_id INT NOT NULL,
 	technique_id_JSON VARCHAR(255) NOT NULL, -- KAN DETTA VARA ETT PROBLEM ? STRÄNGMATCHA FÖR ATT HITTA RÄTT TEKNIK I DUNNO.

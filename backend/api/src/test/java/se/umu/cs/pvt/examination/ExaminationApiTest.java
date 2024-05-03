@@ -31,10 +31,6 @@ public class ExaminationApiTest {
     private ExamineePairRepository examineePairRepository;
     @MockBean
     private ExamineeRepository examineeRepository;
-    @MockBean
-    private ExaminationResultTechniqueRepository examinationResultTechniqueRepository;
-    @MockBean
-    private ExaminationCommentRepository examinationCommentRepository;
 
     @Autowired
     private ExaminationController examinationController;
@@ -44,9 +40,9 @@ public class ExaminationApiTest {
     @BeforeEach
     void init() {
         this.gradingList = new ArrayList<>();
-        this.gradingList.add(new Grading(1L, 1L, 1, new Date(), 1L, 1));
-        this.gradingList.add(new Grading(2L, 1L, 1, new Date(), 1L, 1));
-        this.gradingList.add(new Grading(3L, 1L, 1, new Date(), 1L, 1));
+        this.gradingList.add(new Grading(1L, 1L, 1L, 1, 1, new Date()));
+        this.gradingList.add(new Grading(2L, 1L, 1L, 1, 1, new Date()));
+        this.gradingList.add(new Grading(3L, 1L, 1L, 1, 1, new Date()));
         //examinationController = new ExaminationController(gradingRepository);
         Mockito.when(gradingRepository.findAll()).thenReturn(gradingList);
 
