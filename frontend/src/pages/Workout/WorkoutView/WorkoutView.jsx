@@ -25,10 +25,11 @@ import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
  *      workoutId @type {int} - The ID of the workout.
  *      id        @type {int/string} - the id of the component
  *
- * @author Cyclops (Group 5) (2023-05-22) &  Durian (Group 3) (2024-04-23) & Team Tomato
+ * @author Cyclops (Group 5) (2023-05-22) &  Durian (Group 3) (2024-04-23) & Team Tomato, Team Kiwi (Group 2) 
  * @updated 2024-04-26 by Tomato
+ * @updated 2024-05-03 Team Kiwi, fixed navigation from other websites
  *
- * @version 1.6
+ * @version 1.7
  *
  */
 
@@ -199,10 +200,11 @@ function getWorkoutUsersContainer(workoutUsers) {
 }
 
 function getButtons(navigate, setRShowPopup) {
+
 	return (
 		<div className="d-flex row justify-content-center">
 			<div className="d-flex col mb-3 mt-3 justify-content-start">
-				<Button onClick={() => navigate(-1)} outlined={true}>
+				<Button onClick={() => navigate("/workout")} outlined={true}>
 					<p>Tillbaka</p>
 				</Button>
 			</div>

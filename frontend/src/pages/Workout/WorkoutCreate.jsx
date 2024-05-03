@@ -12,7 +12,7 @@ import {
 } from "../../components/Workout/CreateWorkout/WorkoutCreateReducer.js"
 import styles from "./WorkoutModify.module.css"
 import { setSuccess, setError, setInfo } from "../../utils.js"
-//import { unstable_useBlocker as useBlocker } from "react-router-dom"
+import { unstable_useBlocker as useBlocker } from "react-router-dom"
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup.jsx"
 
 
@@ -35,14 +35,15 @@ const WorkoutCreate = () => {
 	const { token, userId } = useContext(AccountContext)
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const [hasLoadedData, setHasLoadedData] = useState(false)
+	const [goBackPopup, setGoBackPopup] = useState(false)
 
-	//const [isBlocking, setIsBlocking] = useState(false)
+	const [isBlocking, setIsBlocking] = useState(false)
 
 	const navigate = useNavigate()
 
 	const { state } = useLocation()
 
-	/*
+	
 	const blocker = useBlocker(() => {
 		if (isBlocking) {
 			setGoBackPopup(true)
@@ -55,7 +56,7 @@ const WorkoutCreate = () => {
 	useEffect(() => {	
 		setIsBlocking(checkIfChangesMade(workoutCreateInfo))
 	}, [workoutCreateInfo])
-	*/
+	
 
 	/**
 	 * Submits the form data to the API.
@@ -65,6 +66,7 @@ const WorkoutCreate = () => {
 		//setIsBlocking(false)
 		if (!checkIfChangesMade(workoutCreateInfo)) {
 			setInfo("Inget pass sparades.")
+			console.log("check")
 			return navigate(-1, { replace: true, state })
 		}
 
@@ -214,8 +216,9 @@ const WorkoutCreate = () => {
 			<title>Skapa pass</title>
 			<h1 className={styles.title}>Skapa pass</h1>
 			<WorkoutFormComponent callback={submitHandler} state={state}/>
-			{ 
-			/* Old pop-up window from 2023 
+			
+			{ // Old pop-up window from 2023 
+			}
 			<ConfirmPopup
 				id="TillbakaMiniPopup"
 				showPopup={goBackPopup}
@@ -230,8 +233,8 @@ const WorkoutCreate = () => {
 					})
 					blocker.proceed()
 				}}
-			/>*/}
-		</WorkoutCreateContext.Provider>
+			/>
+		</ WorkoutCreateContext.Provider>
 	)
 }
 
