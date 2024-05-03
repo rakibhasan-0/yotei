@@ -5,6 +5,7 @@ import style from "./GradingCreate.module.css"
 import styles from "./GradingBefore.module.css"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import { AccountContext } from "../../context"
+import { Draggable } from "react-drag-reorder";
 
 /**
  * The grading create page.
@@ -22,6 +23,8 @@ export default function GradingCreate() {
   const context = useContext(AccountContext)
   const { token, userId } = context
 
+  const [state] = useState(["Hello", "Hi", "How are you", "Cool"]);
+
 	return (
     <div>
       <div className = {style.beltButtonStyle}> 
@@ -30,7 +33,20 @@ export default function GradingCreate() {
         </div>
       </div>
 
-      
+      <div className="flexContainer">
+        <div className="row">
+          <Draggable>
+            {state.map((word, idx) => {
+              return (
+                <div key={idx} className="flexItem">
+                  {word}
+                </div>
+              );
+            })}
+          </Draggable>
+        </div>
+      </div>
+
 
       <div className={styles.buttonContainer}>
         <Button
