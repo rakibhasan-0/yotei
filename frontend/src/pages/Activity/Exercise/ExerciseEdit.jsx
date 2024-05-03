@@ -1,21 +1,22 @@
 import React, { useContext, useEffect, useState, useCallback } from "react"
 import styles from "./ExerciseCreate.module.css"
-import { AccountContext } from "../../context"
-import Button from "../../components/Common/Button/Button"
-import "../../components/Common/InputTextField/InputTextField"
-import "../../components/Common/TextArea/TextArea"
-import MinutePicker from "../../components/Common/MinutePicker/MinutePicker.jsx"
-import InputTextField from "../../components/Common/InputTextField/InputTextField.jsx"
-import TextArea from "../../components/Common/TextArea/TextArea.jsx"
-import Divider from "../../components/Common/Divider/Divider.jsx"
-import TagInput from "../../components/Common/Tag/TagInput.jsx"
-import { setError as setErrorToast } from "../../utils"
-import EditGallery from "../../components/Gallery/EditGallery"
+import { AccountContext } from "../../../context"
+import Button from "../../../components/Common/Button/Button"
+import "../../../components/Common/InputTextField/InputTextField"
+import "../../../components/Common/TextArea/TextArea"
+import MinutePicker from "../../../components/Common/MinutePicker/MinutePicker.jsx"
+import InputTextField from "../../../components/Common/InputTextField/InputTextField.jsx"
+import TextArea from "../../../components/Common/TextArea/TextArea.jsx"
+import Divider from "../../../components/Common/Divider/Divider.jsx"
+import TagInput from "../../../components/Common/Tag/TagInput.jsx"
+import { setError as setErrorToast } from "../../../utils"
+import EditGallery from "../../../components/Gallery/EditGallery"
 import { useNavigate, useParams } from "react-router"
-import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
-import { isAdmin, isEditor } from "../../utils"
+import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
+import { isAdmin, isEditor } from "../../../utils"
 import { unstable_useBlocker as useBlocker } from "react-router"
-import Spinner from "../../components/Common/Spinner/Spinner.jsx"
+import Spinner from "../../../components/Common/Spinner/Spinner.jsx"
+
 
 /**
  * The edit excercise page (Redigera övning).
@@ -26,6 +27,7 @@ import Spinner from "../../components/Common/Spinner/Spinner.jsx"
  *     Team Phoenix (Group 1) (2023-05-15)
  *     Team Medusa  (Group 6) (2023-06-01)
  * 	   Team Durian  (Group 3) (2024-04-23)
+ * 	   Team Kiwi    (Group 2) (2024-05-02) removed some navigate(-1) 
  * @since 2023-05-22
  * @version 2.0
  */
@@ -54,8 +56,9 @@ export default function ExerciseEdit() {
 
 	function done() {
 		if (undoMediaChanges) {
-			setShowMiniPopup(false)
-			navigate(-1)
+			blocker.proceed
+			//setShowMiniPopup(true)
+			//navigate(-1)
 		} else {
 			setSendData(false)
 			editExercise()
@@ -74,12 +77,13 @@ export default function ExerciseEdit() {
 		setIsBlocking(name != oldName || desc != oldDesc)
 	}, [name, desc, oldName, oldDesc])
 
+	
 	useEffect(() => {
 		if (!isAdmin(context) || !isEditor(context)) {
 			navigate(-1)
 		}
 	}, [context, navigate])
-
+	
 	/**
 	 * Returns the information about the exercise and its tags with the id in the pathname.
 	 */
@@ -198,8 +202,10 @@ export default function ExerciseEdit() {
 		}
 
 		await checkTags()
+		// Removed the navigate(-1) as it navigated back twice because of this.
+		// Maybe add a proper fail message instead if it's not working
 		if (!(editFailed || tagRemoveFailed || tagLinkFailed)) {
-			navigate(-1)
+			//navigate(-1)
 		}
 	}
 
@@ -344,12 +350,15 @@ export default function ExerciseEdit() {
 			</div>
 
 			<ConfirmPopup
-				onClick={blocker.proceed}
 				showPopup={showMiniPopup}
 				setShowPopup={setShowMiniPopup}
 				popupText="Du har osparade ändringar. Är du säker att du vill lämna?"
 				confirmText="Lämna"
 				backText="Avbryt"
+				onClick={async () => {
+					setUndoMediaChanges(true)
+					blocker.proceed()
+				}}
 			/>
 		</>
 	)

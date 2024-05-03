@@ -13,13 +13,13 @@ import { server } from "../../server"
 const requestSpy = jest.fn()
 server.events.on("request:start", requestSpy)
 
-import CreateTechnique from "../../../pages/Technique/CreateTechnique/CreateTechnique"
+import CreateTechnique from "../../../pages/Activity/Technique/CreateTechnique/CreateTechnique"
 import { Route, RouterProvider, createMemoryRouter, createRoutesFromElements } from "react-router-dom"
 import userEvent from "@testing-library/user-event"
-import TechniqueIndex from "../../../pages/Technique/TechniqueIndex/TechniqueIndex"
+import TechniqueIndex from "../../../pages/Activity/Technique/TechniqueIndex/TechniqueIndex"
 
 /**
- * @author Team Durian (Group 3) (2024-04-23) 
+ * @author Team Durian (Group 3) (2024-05-02) 
  */
 
 configure({ testIdAttribute: "id" })
@@ -75,7 +75,7 @@ describe("CreateTechnique should render", () => {
 	})
 
 	test("the add tags", () => {
-		expect(screen.getByText("Lägg till tagg")).toBeInTheDocument()
+		expect(screen.getByText("Hantera tagg")).toBeInTheDocument()
 	})
 
 	test("the continue to create technique checkbox", () => {
@@ -144,11 +144,11 @@ describe("CreateTechnique on back with unsaved values should", () => {
 		const router = createMemoryRouter(
 			createRoutesFromElements(
 				<>
-					<Route path="technique" element={<TechniqueIndex/>} />
+					<Route path="/*" element={<TechniqueIndex/>} />
 					<Route path="technique/create" element={<CreateTechnique/>} />
 				</>
 			),
-			{initialIndex: 1, initialEntries: ["technique", "/technique/create"]}
+			{initialIndex: 1, initialEntries: ["/*", "/technique/create"]}
 		)
 
 		render( //eslint-disable-line
@@ -191,11 +191,11 @@ describe("CreateTechnique on back with unsaved values should", () => {
 		const router = createMemoryRouter(
 			createRoutesFromElements(
 				<>
-					<Route path="technique" element={<TechniqueIndex/>} />
+					<Route path="/*" element={<TechniqueIndex/>} />
 					<Route path="technique/create" element={<CreateTechnique/>} />
 				</>
 			),
-			{initialIndex: 1, initialEntries: ["technique", "/technique/create"]}
+			{initialIndex: 1, initialEntries: ["/*", "/technique/create"]}
 		)
 
 		render( //eslint-disable-line
@@ -207,7 +207,7 @@ describe("CreateTechnique on back with unsaved values should", () => {
 		await user.click(screen.getByRole("button", { name: "Tillbaka" }))
 		await user.click(screen.getByRole("button", { name: "Lämna" }))
 
-		expect(screen.getAllByText("Tekniker")[0]).toBeInTheDocument()
+		expect(screen.getByTestId("teknik-header")).toBeInTheDocument()
 
 	})
 })
