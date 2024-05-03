@@ -15,6 +15,7 @@ import { AccountContext } from "../../context"
  * Example usage:
  *
  * @author Team Dragon (Grupp 3)
+ * @author Team Durian (Grupp 3) 2024-05-03
  * @version 1.0
  * @since 2023-05-04
  */
@@ -37,7 +38,7 @@ export default function Gallery({ id }) {
 		} catch (error) {
 			console.error(error)
 		}
-	}, [context.token, id, media])
+	}, [context.token, id])
 
 	useEffect(() => {getMedia()}, [getMedia])
 
