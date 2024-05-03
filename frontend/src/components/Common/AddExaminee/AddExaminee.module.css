@@ -9,25 +9,27 @@
   outline: none;
 }
 .inputErr {
-  border: 2px solid var(--red-primary);
+  border: 1px solid var(--red-primary);
   background: var(--red-secondary);
 }
 .inputErr:focus {
-  border: 2px solid var(--red-primary);
+  border: 1px solid var(--red-primary);
 }
 
-.submitButton {
-  right: 10px;
+.plusIcon {
+  right: 12px;
   position: absolute;
+  color: var(--red-primary);
+  font-size: 24px;
 }
 
 .inputContainer:focus {
-  border: 2px solid var(--textField-active);
+  border: 1px solid var(--textField-active);
   border-radius: 0.3rem;
 }
 
 .inputContainer {
-  border: 2px solid var(--black-primary);
+  border: 1px solid var(--black-primary);
   border-radius: 0.3rem;
   display: flex;
   align-items: center;

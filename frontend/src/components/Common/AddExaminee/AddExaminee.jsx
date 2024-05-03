@@ -46,27 +46,31 @@ const AddExaminee = forwardRef(function AddExaminee(
 	const defaultLimit = 180
 	const isErr = !(errorMessage == undefined || errorMessage == null || errorMessage == "")
 
+	const handleClick = () => {
+		console.log("Ikonen klickades på!")
+	}
+
 	return(
-    <form onSubmit={onSubmit}>
-      <label className={styles.label}>
-        {!hideLength && <p className={styles.limitText}>{text?.length || 0}/{maxLength || defaultLimit}</p> }
-        <div className={styles.inputContainer}>
-          <input
-            className={isErr ? `${styles.input} ${styles.inputErr}` : `${styles.input}`}
-            placeholder={placeholder}
-            value={text}
-            type={type}
-            id={id}
-            onKeyUp={onKeyUp}
-            required={required}
-            ref={ref}
-            maxLength={maxLength || defaultLimit}
-          />
-        					<Plus onClick={onSubmit} className={styles.submitButton} /> 
-        </div>
-        <p className={styles.err}>{errorMessage}</p>
+		<form onSubmit={onSubmit}>
+			<label className={styles.label}>
+				{!hideLength && <p className={styles.limitText}>{text?.length || 0}/{maxLength || defaultLimit}</p> }
+				<div className={styles.inputContainer}>
+					<input
+						className={isErr ? `${styles.input} ${styles.inputErr}` : `${styles.input}`}
+						placeholder={"Lägg till ny deltagare"}
+						value={text}
+						type={type}
+						id={id}
+						onKeyUp={onKeyUp}
+						required={required}
+						ref={ref}
+						maxLength={maxLength || defaultLimit}
+					/>
+        					<Plus onClick={handleClick} className={styles.plusIcon} /> 
+				</div>
+				<p className={styles.err}>{errorMessage}</p>
 		  </label>
-    </form>
+		</form>
 		
 	)
 })

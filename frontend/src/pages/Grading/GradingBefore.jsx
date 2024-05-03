@@ -27,6 +27,8 @@ export default function GradingCreate() {
 
 	const [numExaminees, setNumExaminee] = useState(8)
 	const [numPairs, setNumPairs] = useState(0)
+	const navigate = useNavigate()
+
 
 
 	// För att hålla koll på examinee-element och deras ordning
