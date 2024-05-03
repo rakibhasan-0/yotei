@@ -35,7 +35,7 @@ export default function ExerciseEdit() {
 	const context = useContext(AccountContext)
 	const [oldName, setOldName] = useState("")
 	const [oldDesc, setOldDesc] = useState("")
-	const [oldTime, setOldTime] = useState(0)
+	// const [oldTime, setOldTime] = useState(0)
 	const [name, setName] = useState("")
 	const [desc, setDesc] = useState("")
 	const [time, setTime] = useState("")
@@ -122,7 +122,7 @@ export default function ExerciseEdit() {
 		setExistingTags(tagsJson)
 		setOldName(exerciseJson.name)
 		setOldDesc(exerciseJson.description)
-		setOldTime(exerciseJson.duration)
+		// setOldTime(exerciseJson.duration)
 		setIsLoading(false)
 		/* Ska inte ligga här utan villkor */
 	}, [])

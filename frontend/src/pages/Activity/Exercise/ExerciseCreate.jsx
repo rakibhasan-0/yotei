@@ -96,7 +96,7 @@ export default function ExerciseCreate() {
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const navigate = useNavigate()
 	const location = useLocation()
-	const hasPreviousState = location.key !== "default";
+	const hasPreviousState = location.key !== "default"
 
 	const hasRendered = useRef({"tagEffect":false, "inputEffect":false})
 
@@ -341,9 +341,9 @@ export default function ExerciseCreate() {
 
 	const handleNavigation = () => {
 		if (hasPreviousState) {
-		  	navigate(-1)
+			navigate(-1)
 		} else {
-		  	navigate("/exercise")
+			navigate("/exercise")
 		}
 	}
 
