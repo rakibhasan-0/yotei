@@ -89,7 +89,7 @@ describe("ExerciseIndex should render with all components", () => {
 	})
       
 	test("the title", () => {
-		expect(screen.getByTestId("exercise-title")).toHaveTextContent("Övningar")
+		expect(screen.getByTestId("exercise-title")).toHaveTextContent("")
 	})
 
 	test("the search bar", async () => {

@@ -14,10 +14,9 @@ const requestSpy = jest.fn()
 server.events.on("request:start", requestSpy)
 
 import CreateTechnique from "../../../pages/Activity/Technique/CreateTechnique/CreateTechnique"
-import { Route, RouterProvider, createMemoryRouter, createRoutesFromElements, MemoryRouter } from "react-router-dom"
+import { Route, RouterProvider, createMemoryRouter, createRoutesFromElements } from "react-router-dom"
 import userEvent from "@testing-library/user-event"
 import TechniqueIndex from "../../../pages/Activity/Technique/TechniqueIndex/TechniqueIndex"
-import { AccountContext } from "../../../context"
 
 /**
  * @author Team Durian (Group 3) (2024-05-02) 
@@ -145,11 +144,11 @@ describe("CreateTechnique on back with unsaved values should", () => {
 		const router = createMemoryRouter(
 			createRoutesFromElements(
 				<>
-					<Route path="technique" element={<TechniqueIndex/>} />
+					<Route path="/*" element={<TechniqueIndex/>} />
 					<Route path="technique/create" element={<CreateTechnique/>} />
 				</>
 			),
-			{initialIndex: 1, initialEntries: ["technique", "/technique/create"]}
+			{initialIndex: 1, initialEntries: ["/*", "/technique/create"]}
 		)
 
 		render( //eslint-disable-line
@@ -192,30 +191,23 @@ describe("CreateTechnique on back with unsaved values should", () => {
 		const router = createMemoryRouter(
 			createRoutesFromElements(
 				<>
-					<Route path="activity/technique" element={<TechniqueIndex/>} />
-					<Route path="activity/technique/create" element={<CreateTechnique/>} />
+					<Route path="/*" element={<TechniqueIndex/>} />
+					<Route path="technique/create" element={<CreateTechnique/>} />
 				</>
 			),
-			{initialIndex: 1, initialEntries: ["activity/technique", "/activity/technique/create"]}
+			{initialIndex: 1, initialEntries: ["/*", "/technique/create"]}
 		)
 
 		render( //eslint-disable-line
 			<RouterProvider router={router} />
 		)
-		/*
-		render(
-			<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", undefined }}>
-				<MemoryRouter>
-					<TechniqueIndex/>
-				</MemoryRouter>
-			</AccountContext.Provider>
-		)*/
+
 		const user = userEvent.setup()
 		await user.type(screen.getByPlaceholderText("Namn"), "Test")
 		await user.click(screen.getByRole("button", { name: "Tillbaka" }))
 		await user.click(screen.getByRole("button", { name: "Lämna" }))
 
-		expect(screen.getByTestId("technique-add-button")).toBeInTheDocument()
+		expect(screen.getByTestId("teknik-header")).toBeInTheDocument()
 
 	})
 })

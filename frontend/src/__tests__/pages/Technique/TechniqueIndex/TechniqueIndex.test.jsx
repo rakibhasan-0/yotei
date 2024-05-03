@@ -308,7 +308,7 @@ describe("should update", () => {
 			</AccountContext.Provider>
 		)
 
-		expect(screen.getByText("Tekniker")).toBeInTheDocument()
+		expect(screen.getByTestId("teknik-header")).toBeInTheDocument()
 
 		const searchInput = screen.getByTestId("searchbar-input")
 
@@ -377,7 +377,7 @@ describe("should update", () => {
 			</AccountContext.Provider>
 		)
 
-		expect(screen.getByText("Tekniker")).toBeInTheDocument()
+		expect(screen.getByTestId("teknik-header")).toBeInTheDocument()
 
 		await userEvent.click(screen.getByTestId("technique-add-button"))
 
