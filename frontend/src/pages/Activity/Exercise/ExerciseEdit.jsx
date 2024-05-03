@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState, useCallback } from "react"
 import styles from "./ExerciseCreate.module.css"
+<<<<<<< HEAD:frontend/src/pages/Exercise/ExerciseEdit.jsx
 import { AccountContext } from "../../context"
 import Button from "../../components/Common/Button/Button"
 import "../../components/Common/InputTextField/InputTextField"
@@ -14,8 +15,25 @@ import EditGallery from "../../components/Gallery/EditGallery"
 import { useLocation, useNavigate, useParams } from "react-router"
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 import { isAdmin, isEditor } from "../../utils"
+=======
+import { AccountContext } from "../../../context"
+import Button from "../../../components/Common/Button/Button"
+import "../../../components/Common/InputTextField/InputTextField"
+import "../../../components/Common/TextArea/TextArea"
+import MinutePicker from "../../../components/Common/MinutePicker/MinutePicker.jsx"
+import InputTextField from "../../../components/Common/InputTextField/InputTextField.jsx"
+import TextArea from "../../../components/Common/TextArea/TextArea.jsx"
+import Divider from "../../../components/Common/Divider/Divider.jsx"
+import TagInput from "../../../components/Common/Tag/TagInput.jsx"
+import { setError as setErrorToast } from "../../../utils"
+import EditGallery from "../../../components/Gallery/EditGallery"
+import { useNavigate, useParams } from "react-router"
+import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
+import { isAdmin, isEditor } from "../../../utils"
+>>>>>>> main:frontend/src/pages/Activity/Exercise/ExerciseEdit.jsx
 import { unstable_useBlocker as useBlocker } from "react-router"
-import Spinner from "../../components/Common/Spinner/Spinner.jsx"
+import Spinner from "../../../components/Common/Spinner/Spinner.jsx"
+
 
 /**
  * The edit excercise page (Redigera övning).

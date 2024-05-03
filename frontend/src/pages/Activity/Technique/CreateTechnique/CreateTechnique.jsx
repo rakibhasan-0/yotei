@@ -1,16 +1,16 @@
-import CheckBox from "../../../components/Common/CheckBox/CheckBox"
-import InputTextField from "../../../components/Common/InputTextField/InputTextField"
-import TextArea from "../../../components/Common/TextArea/TextArea"
-import BeltPicker from "../../../components/Common/BeltPicker/BeltPicker"
-import Button from "../../../components/Common/Button/Button"
+import CheckBox from "../../../../components/Common/CheckBox/CheckBox"
+import InputTextField from "../../../../components/Common/InputTextField/InputTextField"
+import TextArea from "../../../../components/Common/TextArea/TextArea"
+import BeltPicker from "../../../../components/Common/BeltPicker/BeltPicker"
+import Button from "../../../../components/Common/Button/Button"
 import { useContext, useEffect, useState } from "react"
-import { AccountContext } from "../../../context"
-import TagInput from "../../../components/Common/Tag/TagInput"
-import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../../utils"
-import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../../utils"
-import EditGallery from "../../../components/Gallery/EditGallery"
-import Divider from "../../../components/Common/Divider/Divider"
-import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
+import { AccountContext } from "../../../../context"
+import TagInput from "../../../../components/Common/Tag/TagInput"
+import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../../../utils"
+import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../../../utils"
+import EditGallery from "../../../../components/Gallery/EditGallery"
+import Divider from "../../../../components/Common/Divider/Divider"
+import ConfirmPopup from "../../../../components/Common/ConfirmPopup/ConfirmPopup"
 import { unstable_useBlocker as useBlocker, useNavigate } from "react-router"
 
 const KIHON_TAG = { id: 1 }
@@ -105,7 +105,7 @@ export default function CreateTechnique({ id }) {
 
 	function done() {
 		if (undoMediaChanges) {
-			navigate("/technique")
+			navigate(-1)
 		}
 		else {
 			if (continueToCreate && clearFields) {
@@ -116,7 +116,7 @@ export default function CreateTechnique({ id }) {
 				setCreateButton(true)
 				return
 			}
-			navigate("/technique")
+			navigate(-1)
 		}
 	}
 
@@ -273,7 +273,7 @@ export default function CreateTechnique({ id }) {
 				<Button
 					id="create-technique-backbutton"
 					width="100%"
-					onClick={() => navigate("/technique")}
+					onClick={() => navigate(-1)}
 					outlined={true}
 				>
 					<p>Tillbaka</p>
