@@ -200,7 +200,7 @@ function getButtons(navigate,location, setRShowPopup) {
 	
 	const hasPreviousState = location.key !== "default"
 
-	const handleClick = () => {
+	const handleNavigation = () => {
 		if(hasPreviousState) {
 			navigate(-1)
 		}
@@ -213,7 +213,7 @@ function getButtons(navigate,location, setRShowPopup) {
 	return (
 		<div className="d-flex row justify-content-center">
 			<div className="d-flex col mb-3 mt-3 justify-content-start">
-				<Button onClick={handleClick} outlined={true}>
+				<Button onClick={handleNavigation} outlined={true}>
 					<p>Tillbaka</p>
 				</Button>
 			</div>

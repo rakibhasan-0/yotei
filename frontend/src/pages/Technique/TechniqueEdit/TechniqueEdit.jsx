@@ -167,7 +167,7 @@ export default function TechniqueEdit({ id }) {
 				switch(res.status) {
 				case HTTP_STATUS_CODES.SUCCESS:
 					setSuccess("Tekniken uppdaterades!")
-					handleClick()
+					handleNavigation()
 					return
 				case HTTP_STATUS_CODES.CONFLICT:
 					setInputErrorMessage("Tekniknamnet finns redan")
@@ -233,7 +233,7 @@ export default function TechniqueEdit({ id }) {
 
 	}
 
-	const handleClick = () => {
+	const handleNavigation = () => {
 		if(hasPreviousState) {
 			navigate(-1)
 		}
@@ -304,7 +304,7 @@ export default function TechniqueEdit({ id }) {
 			<div style={{ display: "flex", gap: "27px", justifyContent: "space-evenly" }}>
 				<Button
 					id={style.techniqueEditBackbutton}
-					onClick={handleClick}
+					onClick={handleNavigation}
 					outlined={true}>
 					<p>Avbryt</p>
 				</Button>
