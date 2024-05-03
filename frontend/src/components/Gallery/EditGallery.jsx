@@ -7,7 +7,7 @@ import Popup from "../Common/Popup/Popup"
 import ConfirmPopup from "../Common/ConfirmPopup/ConfirmPopup"
 import styles from "../Gallery/Gallery.module.css"
 import { AccountContext } from "../../context"
-import {CodeSlash, Trash as TrashIcon } from "react-bootstrap-icons"
+import { Trash as TrashIcon } from "react-bootstrap-icons" // kanske använder CodeSlash
 import {CameraVideoOff as NoMediaIcon } from "react-bootstrap-icons"
 import UploadMedia from "../Upload/UploadMedia"
 import {toast} from "react-toastify"
@@ -97,17 +97,16 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	async function removeMedia(){
 
 		console.log(selectedMedia)
-		console.log(mediaToBeAdded[0])
-		if(mediaToBeAdded.some(item => item.url === selectedMedia.url && item.description === selectedMedia.description)) {
+		console.log(mediaToBeAdded)
+		if(mediaToBeAdded.some(item => item.url === selectedMedia.url && item.description === selectedMedia.description && selectedMedia.id === undefined)) {
 			console.log("inne i if")
 			const index = mediaToBeAdded.findIndex(item => item.url === selectedMedia.url && item.description === selectedMedia.description)
 			if(index !== -1) {
 				console.log(index)
 				console.log(mediaToBeAdded)
-				const tmp = mediaToBeAdded.splice(index, 1)
-				console.log(tmp)
-				setMediaToBeAdded(tmp)
-				setMedia(tmp)
+				mediaToBeAdded.splice(index, 1)
+				
+				setMedia(mediaToBeAdded)
 			}
 			console.log(media)
 		}else {
@@ -115,7 +114,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 			let temp = [... media]
 			var index = temp.indexOf(selectedMedia)
 			temp.splice(index, 1)
-
+			
 			setMedia(temp)
 			console.log(mediaToRemove)
 			console.log("inne i else")
