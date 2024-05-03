@@ -167,7 +167,7 @@ export default function TechniqueEdit({ id }) {
 				switch(res.status) {
 				case HTTP_STATUS_CODES.SUCCESS:
 					setSuccess("Tekniken uppdaterades!")
-					navigate(-1)
+					handleClick()
 					return
 				case HTTP_STATUS_CODES.CONFLICT:
 					setInputErrorMessage("Tekniknamnet finns redan")
