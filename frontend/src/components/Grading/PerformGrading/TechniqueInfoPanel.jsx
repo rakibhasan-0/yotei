@@ -1,5 +1,7 @@
 import {React} from "react"
 import CommentButton from "../PerformGrading/CommentButton"
+import { FileText } from "react-bootstrap-icons"
+import styles from "./TechniqueInfoPanel.module.css"
 
 /**
  * This is a WORK IN PROGRESS.
@@ -25,7 +27,8 @@ export default function TechniqueInfoPanel( {
 	categoryTitle = "Test Kategori",
 	currentTechniqueTitle = "1. Grepp i två handleder framifrån och svingslag Frigöring – Ju morote jodan uke",
 	nextTechniqueTitle = " 2. Stryptag framifrån och svingslag, backhand Frigöring – Ju morote jodan uke, ude osae, ude osae gatame",
-	mainCategoryTitle = "Huvudkategori"
+	mainCategoryTitle = "Huvudkategori",
+	onButtonClicked
 }) {
 
 	return (
@@ -47,7 +50,7 @@ export default function TechniqueInfoPanel( {
 					<h3 role="nextTechniqueTitle"><b>Nästa:</b>{nextTechniqueTitle}</h3>
 				</div>
 				<div style={{ display: "flex", justifyContent: "flex-end"}}>
-					<CommentButton />
+				<CommentButton onClick={onButtonClicked} />
 				</div>
 			</fieldset>
 		</div>
