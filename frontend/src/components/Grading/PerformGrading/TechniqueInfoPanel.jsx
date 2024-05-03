@@ -22,7 +22,6 @@ import CommentButton from "../PerformGrading/CommentButton"
 
 export default function TechniqueInfoPanel( {
 	beltColor = "#FFDD33",
-	id,
 	categoryTitle = "Test Kategori",
 	currentTechniqueTitle = "1. Grepp i två handleder framifrån och svingslag Frigöring – Ju morote jodan uke",
 	nextTechniqueTitle = " 2. Stryptag framifrån och svingslag, backhand Frigöring – Ju morote jodan uke, ude osae, ude osae gatame",

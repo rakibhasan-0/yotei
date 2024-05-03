@@ -5,6 +5,7 @@ import TechniqueInfoPanel from "../../../../components/Grading/PerformGrading/Te
 /**
  * @author Team Apelsin (Group 5)
  * @since 2024-05-02
+ * @version 1.0
  */
 afterEach(() => {
 	cleanup()
