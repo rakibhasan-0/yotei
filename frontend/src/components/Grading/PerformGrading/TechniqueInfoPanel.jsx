@@ -1,6 +1,5 @@
 import {React} from "react"
 import CommentButton from "../PerformGrading/CommentButton"
-import { FileText } from "react-bootstrap-icons"
 import styles from "./TechniqueInfoPanel.module.css"
 
 /**
@@ -33,7 +32,7 @@ export default function TechniqueInfoPanel( {
 
 	return (
 		
-		<div>
+		<div style={styles}>
 			<fieldset role="fieldsetBelt" style={{ height: "30px", width: "100%", marginBottom: "10px", backgroundColor: beltColor}}>
 				<div>
 					<h2 role="mainCategoryTitle">{mainCategoryTitle}</h2>
@@ -50,7 +49,7 @@ export default function TechniqueInfoPanel( {
 					<h3 role="nextTechniqueTitle"><b>Nästa:</b>{nextTechniqueTitle}</h3>
 				</div>
 				<div style={{ display: "flex", justifyContent: "flex-end"}}>
-				<CommentButton onClick={onButtonClicked} />
+					<CommentButton onClick={onButtonClicked} />
 				</div>
 			</fieldset>
 		</div>
