@@ -33,8 +33,8 @@ export default function GradingCreate() {
         </div>
       </div>
 
-      <div className="flexContainer">
-        <div className="row">
+      
+        <div className="column">
           <Draggable>
             {state.map((word, idx) => {
               return (
@@ -45,7 +45,7 @@ export default function GradingCreate() {
             })}
           </Draggable>
         </div>
-      </div>
+     
 
 
       <div className={styles.buttonContainer}>
