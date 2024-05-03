@@ -165,7 +165,7 @@ export default function Profile() {
 				<InputTextFieldBorderLabel errorMessage={missMatchPassword} onChange={e => {setVerifyNewPassword(e.target.value)}} id="verify-password" type="password" label="Bekräfta lösenord" />
 				<div className='mb-2' />
 				<div className={style.floatRight}>
-					<Button id ={"change-password-button"} className="btn btn-primary" onClick={changePassword} disabled={passwordButtonState}>Ändra</Button>
+					<Button id ={"change-password-button"} className="btn btn-primary" onClick={changePassword} disabled={passwordButtonState}>Ändra Lösenord</Button>
 				</div>
 				<div className={style.divider}><Divider option={"h2_center"} title={"Användarnamn"} /></div>
 				<InputTextFieldBorderLabel onChange={e => {setNewUsername(e.target.value)}} id="username" type="text" label="Nytt användarnamn"/>
@@ -173,7 +173,7 @@ export default function Profile() {
 				<InputTextFieldBorderLabel errorMessage={wrongUsernamePassword} onChange={e => {setUsernamePassword(e.target.value)}} id="change-username-password" type="password" label="Lösenord" />
 				<div className='mb-2' />
 				<div className={style.floatRight}>
-					<Button id = {"change-username-button"} className = "btn btn-primary" onClick = {changeUsername} disabled={usernameButtonState}>Ändra</Button>
+					<Button id = {"change-username-button"} className = "btn btn-primary" onClick = {changeUsername} disabled={usernameButtonState}>Ändra Användarnamn</Button>
 				</div>
 				<Divider option={"h2_center"}/>
 				<div>

@@ -131,8 +131,8 @@ describe("should update", () => {
 		const newPassword = screen.getByTestId("new-password")
 		const confirmPassword = screen.getByTestId("verify-password")
 		
-		fireEvent.change(currPassword, { target: { value: "" } })
-		fireEvent.change(newPassword, { target: { value: "" } })
+		fireEvent.change(currPassword, { target: { value: "yy	" } })
+		fireEvent.change(newPassword, { target: { value: "s" } })
 		fireEvent.change(confirmPassword, { target: { value: "" } })
 
 		await userEvent.click(screen.getByTestId("change-password-button"))
@@ -142,12 +142,57 @@ describe("should update", () => {
 		const usernameInput = screen.getByTestId("username")
 		const passwordInput = screen.getByTestId("change-username-password")
 	
-		fireEvent.change(usernameInput, { target: { value: "test" } })
+		fireEvent.change(usernameInput, { target: { value: "a" } })
 		fireEvent.change(passwordInput, { target: { value: "" } })
 	
 		await userEvent.click(screen.getByTestId("change-username-button"))
 	
-		expect(toast.success).not.dtoHaveBeenCalled()
+		expect(toast.success).not.toHaveBeenCalled()
 	})
+
+	/**
+	 * TODO: This test is not working as intended, currently could not simulate adding users in the system
+	 * With this there is no way of knowing if the toasts work,
+	 * this is due to the fact that no passwords or usernames are stored in the system.
+	 */
+
+	/*
+	test("should produce the correct toast or error message depending on what is wrong with the form", async () => {
+		render(<Profile />)
+
+		expect(screen.getByText("Inställningar")).toBeInTheDocument()
+
+
+		const currPassword = screen.getByTestId("current-password")
+		const newPassword = screen.getByTestId("new-password")
+		const confirmPassword = screen.getByTestId("verify-password")
+
+		fireEvent.change(currPassword, { target: { value: "12" } })
+		fireEvent.change(newPassword, { target: { value: "1" } })
+		fireEvent.change(confirmPassword, { target: { value: "1" } })
+
+		expect(screen.getByText("Lösenordet stämmer inte")).toBeInTheDocument()
+
+		fireEvent.change(currPassword, { target: { value: "123" } })
+		fireEvent.change(newPassword, { target: { value: "1" } })
+		fireEvent.change(confirmPassword, { target: { value: "2" } })
+
+		expect(screen.getByText("Lösenorden matchar inte")).toBeInTheDocument()
+
+
+		const usernameInput = screen.getByTestId("username")
+		const passwordInput = screen.getByTestId("change-username-password")
+
+		fireEvent.change(usernameInput, { target: { value: "123" } })
+		fireEvent.change(passwordInput, { target: { value: "123" } })
+
+		expect(toast.error).toHaveBeenCalled() // Maybe you can search for the text in toast as well
+
+		fireEvent.change(usernameInput, { target: { value: "1234" } })
+		fireEvent.change(passwordInput, { target: { value: "123" } })
+
+		expect(toast.success).toHaveBeenCalled() // Same thought as line 182
+
+	}) */
 
 })
