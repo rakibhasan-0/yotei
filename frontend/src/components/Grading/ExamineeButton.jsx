@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './PassFailExamineeButton.module.css';
+import styles from './ExamineeButton.module.css';
 
 /**
  * A button that should be used on an examinee during the grading.
@@ -28,7 +28,7 @@ import styles from './PassFailExamineeButton.module.css';
  * The parent container using this button must constrain its width.
  * 
  * @author Apelsin
- * @since 2024-05-02
+ * @since 2024-05-03
  * @version 1.0 
  */
 

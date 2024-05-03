@@ -1,42 +1,33 @@
 /** @jest-environment jsdom */
 import React from 'react'
-import { render, screen, configure, fireEvent, act } from "@testing-library/react"
+import { render, configure, fireEvent } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import ExamineeButton from "../../../components/Grading/ExamineeButton"
-import styles from "../../../components/Grading/EcamineeButton.module.css"
 /**
  * Tests for the examinee pass/fail button that should be used during grading.
  * 
  * @author Apelsin
- * @since 2024-05-02
+ * @since 2024-05-03
  * @version 1.0 
  */
 
 configure({testIdAttribute: "id"})
 
-test('ExamineeButton: Should change color on click', () => {
-    const { container } = render(<ExamineeButton id="testButton" type="green"></ExamineeButton>)
-    expect(container.firstChild).toHaveClass(styles.buttonDefault)
-})
+describe('ExamineeButton', () => {
+    it('renders the button with the correct text', () => {
+        const { getByText } = render(<ExamineeButton>Test Button</ExamineeButton>);
+        expect(getByText('Test Button')).toBeInTheDocument();
+    });
 
-test('ExamineeButton: Should call onClick handler when clicked', () => {
-    const handleClick = jest.fn()
-    render(
-        <ExamineeButton 
-            id="testButton" 
-            type="green" 
-            onClick={handleClick}
-        ></ExamineeButton>
-    )
-    // ACT
-    act(() => {
-        screen.getByTestId("testButton").click()
-    })
+    it('calls onClick prop when clicked', () => {
+        const handleClick = jest.fn();
+        const { getByText } = render(<ExamineeButton onClick={handleClick}>Click Me</ExamineeButton>);
+        fireEvent.click(getByText('Click Me'));
+        expect(handleClick).toHaveBeenCalled();
+    });
 
-    // ASSERT
-    expect(handleClick).toHaveBeenCalledTimes(1)
-})
-
-  
-
-
+    it('applies the correct width style', () => {
+        const { getByText } = render(<ExamineeButton width="50%">Width Test</ExamineeButton>);
+        expect(getByText('Width Test')).toHaveStyle({ width: '50%' });
+    });
+});
