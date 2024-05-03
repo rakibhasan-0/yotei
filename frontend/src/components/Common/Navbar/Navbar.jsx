@@ -22,7 +22,7 @@ import { AccountContext } from "../../../context"
 function Navbar({ testId }) {
 
 	const [open, setOpen] = useState(false)
-  const [isExaminationEnabled] = useState(false) // FEATURE TOGGLE
+	const [isExaminationEnabled] = useState(false) // FEATURE TOGGLE
 	const navigate = useNavigate()
 	const context = useContext(AccountContext) 
 
@@ -65,20 +65,20 @@ function Navbar({ testId }) {
 					<h1 className={styles.commonNavbarButton}>Tekniker</h1>
 				</Button>
 
-        {isExaminationEnabled ? (
-          <Button width={"100%"} onClick={() => {}}>
-					  <h1 className={styles.commonNavbarButton}>Gradering</h1>
-				  </Button>
-        ) : (
-          null
-        )}
+				{isExaminationEnabled ? (
+					<Button width={"100%"} onClick={() => {}}>
+						<h1 className={styles.commonNavbarButton}>Gradering</h1>
+					</Button>
+				) : (
+					null
+				)}
 
-        { isAdmin(context) ? 
-          <Button width={"100%"} onClick={() => navigateAndClose("/admin")}>
-            <h1 className={styles.commonNavbarButton}>Admin</h1>
-          </Button>
-          :<></>
-        }
+				{ isAdmin(context) ? 
+					<Button width={"100%"} onClick={() => navigateAndClose("/admin")}>
+						<h1 className={styles.commonNavbarButton}>Admin</h1>
+					</Button>
+					:<></>
+				}
 
 				<Button width={"100%"} onClick={() => navigateAndClose("/profile")}>
 					<h1 className={styles.commonNavbarButton}>Min sida</h1>
