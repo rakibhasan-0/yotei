@@ -22,6 +22,7 @@ import { unstable_useBlocker as useBlocker } from "react-router"
  * @author Medusa (Grupp 6), Team Durian (Group 3) (2024-04-24)
  * @version 1.0
  * @since 2023-05-25
+ * @updated Team Kiwi (group 2): added a true for filtering basic techniques (2024-04-29)
  */
 
 function EditGroup() {
@@ -171,6 +172,7 @@ function EditGroup() {
 			<BeltPicker
 				states={belts}
 				onToggle={handleBeltChanged}
+				filterBasicTechniques = {true}
 			/>
 
 			<div className={styles.buttonContainer}>

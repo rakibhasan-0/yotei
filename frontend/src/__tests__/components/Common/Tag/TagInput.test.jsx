@@ -9,9 +9,9 @@ import { fireEvent } from "@testing-library/react"
 /**
  * Test for the TagInput component.
  *
- * @author Team Minotaur
+ * @author Team Minotaur, Team Durian
  * @version 1.0
- * @since 2023-05-08
+ * @since 2024-05-02
  */
 configure({testIdAttribute: "id"})
 
@@ -41,7 +41,7 @@ test("Tag: Should show popup onclick", async() => {
 		()=> <AddTagPopup id ="addTagPopupDiv" addedTags={addedTags}/>} id ="tagChooser" addedTags={addedTags}></TagInput></div>)
 
 	// ACT
-	const button = getByText("Lägg till tagg")
+	const button = getByText("Hantera tagg")
 
 	fireEvent.click(button)
 

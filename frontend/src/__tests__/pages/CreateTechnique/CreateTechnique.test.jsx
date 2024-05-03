@@ -19,7 +19,7 @@ import userEvent from "@testing-library/user-event"
 import TechniqueIndex from "../../../pages/Technique/TechniqueIndex/TechniqueIndex"
 
 /**
- * @author Team Durian (Group 3) (2024-04-23) 
+ * @author Team Durian (Group 3) (2024-05-02) 
  */
 
 configure({ testIdAttribute: "id" })
@@ -75,7 +75,7 @@ describe("CreateTechnique should render", () => {
 	})
 
 	test("the add tags", () => {
-		expect(screen.getByText("Lägg till tagg")).toBeInTheDocument()
+		expect(screen.getByText("Hantera tagg")).toBeInTheDocument()
 	})
 
 	test("the continue to create technique checkbox", () => {
