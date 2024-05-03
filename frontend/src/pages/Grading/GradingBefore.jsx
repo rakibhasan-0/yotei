@@ -23,7 +23,44 @@ export default function GradingCreate() {
   const context = useContext(AccountContext)
   const { token, userId } = context
 
-  const [state] = useState(["Hello", "Hi", "How are you", "Cool"]);
+
+  // För att hålla koll på examinee-element och deras ordning
+  const [examinee, setExaminee] = useState([
+    ["hi"],
+    ["hello"],
+    ["cool"],
+    ["how are you"]
+  ]);
+
+  const handleDrag = (startIndex, endIndex) => {
+    let data = [...examinee];
+
+    // Get the dragged and landed
+    let dragged = data[startIndex];
+    let landed = data[endIndex];
+
+    // If both dragged and landed have only one element
+    if (dragged.length === 1 && landed.length === 1) {
+      // Move the dragged element to the landed array
+      landed.push(dragged[0]);
+      dragged.pop();
+
+      // Remove the dragged element from its original position
+      data[startIndex] = dragged;
+      data[endIndex] = landed;
+
+    }
+
+    // Remove empty arrays from the data array
+    data = data.filter(item => item.length > 0);
+
+    // Update the state with the modified data array
+    setExaminee(data);
+  };
+
+    useEffect(() => {
+    console.log(examinee); // Log examinee after it has been updated
+  }, [examinee]); // Run this effect whenever examinee changes
 
 	return (
     <div>
@@ -33,18 +70,17 @@ export default function GradingCreate() {
         </div>
       </div>
 
-      
-        <div className="column">
-          <Draggable>
-            {state.map((word, idx) => {
-              return (
-                <div key={idx} className="flexItem">
-                  {word}
-                </div>
-              );
-            })}
-          </Draggable>
-        </div>
+      <div className="column">
+        <Draggable onPosChange={handleDrag}>
+          {examinee.map((innerExaminee, innerIdx) => {
+            return (
+              <div key={innerIdx} className="flexItem">
+                {innerExaminee}
+              </div>
+            );
+          })}
+        </Draggable>
+      </div>
      
 
 
