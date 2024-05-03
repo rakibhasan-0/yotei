@@ -73,12 +73,12 @@ function Navbar({ testId }) {
           null
         )}
 
-				{ isAdmin(context) ? 
-					<Button width={"100%"} onClick={() => navigateAndClose("/admin")}>
-						<h1 className={styles.commonNavbarButton}>Admin</h1>
-					</Button>
-					:<></>
-				}
+        { isAdmin(context) ? 
+          <Button width={"100%"} onClick={() => navigateAndClose("/admin")}>
+            <h1 className={styles.commonNavbarButton}>Admin</h1>
+          </Button>
+          :<></>
+        }
 
 				<Button width={"100%"} onClick={() => navigateAndClose("/profile")}>
 					<h1 className={styles.commonNavbarButton}>Min sida</h1>
