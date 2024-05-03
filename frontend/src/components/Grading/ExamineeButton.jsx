@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import styles from './ExamineeButton.module.css';
+import React, { useState } from "react"
+import styles from "./ExamineeButton.module.css"
 
 /**
  * A button that should be used on an examinee during the grading.
@@ -33,40 +33,40 @@ import styles from './ExamineeButton.module.css';
  */
 
 const ExamineeButton = ({ id, type, onClick, width, children }) => {
-  const [hasColor, setColor] = useState(false);
+  const [hasColor, setColor] = useState(false)
 
-  const toggleColor = () => {
-    setColor(!hasColor);
-  };
+	const toggleColor = () => {
+		setColor(!hasColor)
+	}
 
-  const style = width ? { width } : { width: "100%" };
+	const style = width ? { width } : { width: "100%" }
 
-  const buttonType = () => {
-    switch (type) {
-      case "red":
-        return hasColor ? styles.buttonRed : styles.buttonWhite;
-      case "green":
-        return hasColor ? styles.buttonGreen : styles.buttonWhite;
-      default:
-        return hasColor ? styles.buttonWhite : styles.buttonWhite;
-    }
-  };
+	const buttonType = () => {
+		switch (type) {
+		case "red":
+			return hasColor ? styles.buttonRed : styles.buttonWhite
+		case "green":
+			return hasColor ? styles.buttonGreen : styles.buttonWhite
+		default:
+			return hasColor ? styles.buttonWhite : styles.buttonWhite
+		}
+	}
 
-  return (
-    <button
-      id={id}
-      className={`${styles.buttonDefault} ${buttonType()}`}
-      onClick={() => {
-        toggleColor();
-        if (onClick) {
-          onClick();
-        }
-      }}
-      style={style}
-    >
-      {children}
-    </button>
-  );
-};
+	return (
+		<button
+			id={id}
+			className={`${styles.buttonDefault} ${buttonType()}`}
+			onClick={() => {
+				toggleColor()
+				if (onClick) {
+					onClick()
+				}
+			}}
+			style={style}
+		>
+			{children}
+		</button>
+	)
+}
 
-export default ExamineeButton;
+export default ExamineeButton
