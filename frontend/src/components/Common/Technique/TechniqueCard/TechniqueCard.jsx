@@ -22,7 +22,7 @@ function TechniqueCard({ technique, checkBox, id }) {
 	const navigate = useNavigate()
 
 	const handleClick = () => {
-		// Save in cookie
+
 		if (technique.activity_id && technique.type === "technique") {
 			navigate("/technique/" + technique.activity_id)
 		} else if (technique.type === "exercise" && technique.activity_id) {
