@@ -54,12 +54,22 @@ public class ExaminationController {
      */
     public ExaminationController() {}
 
-
+    /**
+     * Returns a list of all gradings.
+     * @return All of the created gradings.
+     * @return HTTP-status code.
+     */
     @GetMapping("/all")
     public ResponseEntity<List<Grading>> getAll() {
         return new ResponseEntity<>(gradingRepository.findAll(), HttpStatus.OK);
     }
-
+    
+    /**
+     * Creates a grading.
+     * @param grading Given grading id.
+     * @return The created grading.
+     * @return HTTP-status code.
+     */
     @PostMapping("/grading")
     public ResponseEntity<Grading> createGrading(@RequestBody Grading grading) {
         if(beltRepository.findById(grading.getBelt_id()).isEmpty()) {
@@ -68,7 +78,12 @@ public class ExaminationController {
         Grading new_grading = gradingRepository.save(grading);
         return new ResponseEntity<>(new_grading, HttpStatus.OK);
     }
-
+    
+    /**
+     * Deletes a given grading.
+     * @param grading_id Given grading id.
+     * @return HTTP-status code.
+    */
     @DeleteMapping("/grading/{grading_id}")
     public ResponseEntity<Grading> deleteGrading(@PathVariable("grading_id") long grading_id) {
         if(gradingRepository.findById(grading_id).isEmpty()) {
@@ -78,6 +93,11 @@ public class ExaminationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     
+    /**
+     * Updates a given grading.
+     * @param grading Object mapped grading from request body.
+     * @return HTTP-status code.
+    */
     @PutMapping("/grading")
     public ResponseEntity<Object> updateSessionReview( @RequestBody Grading grading) {
         if(gradingRepository.findById(grading.getGrading_id()).isEmpty()) {
@@ -87,6 +107,12 @@ public class ExaminationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     
+    /**
+     * Creates a examinee.
+     * @param examinee Object mapped examinee from request body.
+     * @return The created examinee.
+     * @return HTTP-status code.
+    */
     @PostMapping("/examinee")
     public ResponseEntity<Examinee> create(@RequestBody Examinee examinee) {
         if(gradingRepository.findById(examinee.getGrading_id()).isEmpty()) {
@@ -96,6 +122,11 @@ public class ExaminationController {
         return new ResponseEntity<>(new_examinee, HttpStatus.OK);
     }
     
+    /**
+     * Delets a given examinee.
+     * @param examinee_id Given examinee id.
+     * @return HTTP-status code.
+    */
     @DeleteMapping("/examinee/{examinee_id}")
     public ResponseEntity<Examinee> deleteExaminee(@PathVariable("examinee_id") long examinee_id) {
         if(examineeRepository.findById(examinee_id).isEmpty()) {
@@ -105,8 +136,11 @@ public class ExaminationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    
-
+    /**
+     * Updates a given examinee.
+     * @param examinee Object mapped examinee from request body.
+     * @return HTTP-status code.
+    */
     @PutMapping("/examinee")
     public ResponseEntity<Object> updateExaminee( @RequestBody Examinee examinee) {
         if(examineeRepository.findById(examinee.getExaminee_id()).isEmpty() || gradingRepository.findById(examinee.getGrading_id()).isEmpty()) {
@@ -117,7 +151,7 @@ public class ExaminationController {
     }
     
     /**
-     * creates a examinee pair.
+     * Creates a examinee pair.
      * @param examinee_pair Object mapped examinee pair from request body.
      * @return The created examinee pair.
      * @return HTTP-status code.
@@ -130,22 +164,21 @@ public class ExaminationController {
     
     /**
      * Deletes a examinee pair.
-     * @param examinee_pair Object mapped examinee pair from request body.
+     * @param examinee_pair_id Given examinee pair id.
      * @return HTTP-status code.
      */
-    @DeleteMapping("/pair")
-    public ResponseEntity<ExamineePair> deleteExamineePair(@RequestBody ExamineePair examinee_pair) {
-        if(examineePairRepository.findById(examinee_pair.getExaminee_pair_id()).isEmpty()) {
+    @DeleteMapping("/pair/{examinee_pair_id}")
+    public ResponseEntity<ExamineePair> deleteExamineePair(@PathVariable("examinee_pair_id") long examinee_pair_id) {
+        if(examineePairRepository.findById(examinee_pair_id).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        examineePairRepository.deleteById(examinee_pair.getExaminee_pair_id());
+        examineePairRepository.deleteById(examinee_pair_id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
-     * Update a session review.
-     * 
-     * @return All examinees.  
+     * Returns all examinee pairs.
+     * @return All examinee pairs.  
      * @return HTTP-status code.
      */
     @GetMapping("/pair/all")
@@ -154,10 +187,8 @@ public class ExaminationController {
     }
     
     /**
-     * Update a session review.
-     * 
-     * @param review_id The session review id.
-     * @param session Object mapped session review from request body.
+     * Returns all examinees.
+     * @return All examinee pairs.  
      * @return HTTP-status code.
      */
     @GetMapping("/examinee/all")
