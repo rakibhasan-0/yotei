@@ -5,8 +5,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import se.umu.cs.pvt.session.Session;
+import se.umu.cs.pvt.technique.Technique;
 import se.umu.cs.pvt.belt.Belt;
 
 /**
@@ -35,11 +37,29 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
       s.plan = :id
     AND
       t.id IS NOT NULL
+    AND 
+      (:kihon IS FALSE
+      OR
+      t.id IN (
+        SELECT tt.techId
+        FROM TechniqueTag tt
+        WHERE tt.tag = 1
+      )
+    )
+    AND
+        (:alldates IS TRUE)
+      OR
+        (
+            s.date >= :startdate
+          AND 
+            s.date <= :enddate
+        )
     GROUP BY
       t.id,
       t.name
       """)
-  List<StatisticsResponse> getSampleTechniquesQuery(Long id);
+  List<StatisticsResponse> getSampleTechniquesQuery(Long id, boolean kihon, boolean alldates, LocalDate startdate, LocalDate enddate);
+
 
   @Query("""
     SELECT
@@ -58,12 +78,21 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
       s.plan = :id
     AND
       e.id IS NOT NULL
+    AND
+        (:alldates IS TRUE)
+      OR
+        (
+            s.date >= :startdate
+          AND 
+            s.date <= :enddate
+        )
     GROUP BY
       e.id,
       e.name
       """)
-  List<StatisticsResponse> getSampleExercisesQuery(Long id);
+  List<StatisticsResponse> getSampleExercisesQuery(Long id, boolean alldates, LocalDate startdate, LocalDate enddate);
 
+  // Get a list of belts associated with a technique.
   @Query("""
     SELECT 
       new se.umu.cs.pvt.belt.Belt(b.id, b.name, b.color, b.isChild)

@@ -32,7 +32,7 @@ public class BeltResponse implements Serializable {
         return belt.getName();
     }
 
-    public boolean getIs_Child() {
+    public boolean getIs_child() {
         return belt.isChild();
     }
 }
