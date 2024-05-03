@@ -19,16 +19,16 @@ import styles from "./BeltButton.module.css"
  * <BeltButton
  * 		id="hello-world-button"
  *  	width={"200%"}
- *		onClick={()=>{console.log("Hello world"), setDisabled(true)}}>
+ *		color="#FFFFFF"
  *		<h2>Print Hello World</h2>
  * </BeltButton>
 
  * 
  * The parent container using this button must constrain its width.
  * 
- * @author Chimera
- * @since 2023-05-02
- * @version 2.0 
+ * @author Team 1
+ * @since 2024-05-02
+ * @version 1.0 
  */
 export default function Button({onClick, children, width, id, disabled, isToggled, color}) {
 	const style = width ? { width, "backgroundColor": color, "borderColor": color } : { width: "100%", maxWidth: "150px", "background-color": color }
