@@ -37,7 +37,7 @@ public class StatisticsController {
     @Operation(summary = "Returns the techniques and exercises done for a group sorted from highest to lowest occurence.", 
                description = "Must include a group id as path variable. All other request parameters are optional they default to false. If not valid date interval is set, all session reviews are included in the statistics.")
     @GetMapping("/{id}")
-    public ResponseEntity<List<StatisticsResponse>> getTechniquesStats(@PathVariable Long id, 
+    public ResponseEntity<StatisticsResponseWrapper> getTechniquesStats(@PathVariable Long id, 
                                                                        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<LocalDate> startdate , 
                                                                        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<LocalDate> enddate, 
                                                                        @RequestParam Optional<Boolean> kihon, 
@@ -83,13 +83,10 @@ public class StatisticsController {
             }
         }
         
-        int numSessions = statisticsRepository.getNumberOfSessions(id, showAllDates, sdate, edate);
+        int numSessions = statisticsRepository.getNumberOfSessions(id, filterKihon, showAllDates, sdate, edate);
         double averageRating = 4.5; //TODO: get average rating when session review is implemented
-        System.out.println("{");
-        System.out.println("    numSessions: " + numSessions);
-        System.out.println("    averageRating: " + averageRating);
-        System.out.println("}");
+        StatisticsResponseWrapper response = new StatisticsResponseWrapper(numSessions, averageRating, union);
 
-        return new ResponseEntity<>(union, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

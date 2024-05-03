@@ -35,14 +35,15 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
     AND
       t.id IS NOT NULL
     AND 
-      (:kihon IS FALSE
-      OR
+      (
+      :kihon IS FALSE
+        OR
       t.id IN (
         SELECT tt.techId
         FROM TechniqueTag tt
         WHERE tt.tag = 1
+        )
       )
-    )
     AND
       (
         (
@@ -114,11 +115,31 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
 
   @Query("""
     SELECT
-      COUNT(s)
+      COUNT(DISTINCT s.id)
     FROM
       Session s
+      JOIN
+      Activity a
+    ON 
+      a.workoutId = s.workout
+    JOIN 
+      Technique t
+    ON 
+      t.id = a.techniqueId
     WHERE
-      s.plan IS :id
+      s.plan = :id
+    AND
+      t.id IS NOT NULL
+    AND 
+      (
+        :kihon IS FALSE
+      OR
+        t.id IN (
+          SELECT tt.techId
+          FROM TechniqueTag tt
+          WHERE tt.tag = 1
+          )
+      )
     AND
         (
           (:alldates IS TRUE)
@@ -130,6 +151,6 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
           )
         )
       """)
-  Integer getNumberOfSessions(Long id, boolean alldates, LocalDate startdate, LocalDate enddate);
+  Integer getNumberOfSessions(Long id, boolean kihon, boolean alldates, LocalDate startdate, LocalDate enddate);
 
 }
