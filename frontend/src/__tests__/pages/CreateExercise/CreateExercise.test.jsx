@@ -3,7 +3,7 @@ import "@testing-library/jest-dom"
 import { server } from "../../server"
 const requestSpy = jest.fn()
 server.events.on("request:start", requestSpy)
-import ExerciseCreate from "../../../pages/Exercise/ExerciseCreate"
+import ExerciseCreate from "../../../pages/Activity/Exercise/ExerciseCreate"
 import { Route, RouterProvider, createMemoryRouter, createRoutesFromElements } from "react-router-dom"
 configure({ testIdAttribute: "id" })
 
