@@ -104,7 +104,7 @@ export default function ExerciseIndex() {
 
 	return (
 		<>
-
+			<h1 className="py-2" id={"exercise-title"} style={{marginBottom: "-10px"}}>Övningar</h1>
 
 			<SearchBar 
 				id="exercise-search-bar" 

@@ -143,7 +143,7 @@ export default function TechniqueIndex() {
 			>
 				<CreateTechnique setIsOpen={setShowPopup} />
 			</Popup>
-
+			<h1>Tekniker</h1>
 			<div>
 				<SearchBar
 					onBlur={saveSearchText}
