@@ -96,19 +96,12 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	 */
 	async function removeMedia(){
 
-		console.log(selectedMedia)
-		console.log(mediaToBeAdded)
 		if(mediaToBeAdded.some(item => item.url === selectedMedia.url && item.description === selectedMedia.description && selectedMedia.id === undefined)) {
-			console.log("inne i if")
 			const index = mediaToBeAdded.findIndex(item => item.url === selectedMedia.url && item.description === selectedMedia.description)
 			if(index !== -1) {
-				console.log(index)
-				console.log(mediaToBeAdded)
 				mediaToBeAdded.splice(index, 1)
-				
 				setMedia(mediaToBeAdded)
 			}
-			console.log(media)
 		}else {
 			setMediaToRemove(mediaToRemove => [...mediaToRemove, selectedMedia])
 			let temp = [... media]
@@ -116,10 +109,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 			temp.splice(index, 1)
 			
 			setMedia(temp)
-			console.log(mediaToRemove)
-			console.log("inne i else")
 		}
-		console.log(mediaToBeAdded)
 	}
 
 
@@ -222,8 +212,6 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 		list.map((m) => {
 			m.movementId = exerciseId
 		})
-		
-		console.log(list)
 
 		const requestOptions = {
 			method: "POST",
@@ -268,7 +256,6 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 			m.movementId = exerciseId
 		})
 
-		console.log(list)
 		const requestOptions = {
 			method: "DELETE",
 			headers: { "Content-type": "application/json", "token": context.token },
