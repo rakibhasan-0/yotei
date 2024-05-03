@@ -66,7 +66,7 @@ export default function GradingCreate() {
 						<BeltButton
 							key={color}
 							width={"100%"}
-							onClick={() => ""}
+							onClick={() => navigate("grading/:gradingId/1")}
 							color={belts[color]}
 						>
 							<h2>{`${5 - index} KYU ${color.toUpperCase()} BÄLTE`} </h2>
