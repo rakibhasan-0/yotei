@@ -55,12 +55,12 @@ public class ExaminationController {
     public ExaminationController() {}
 
 
-    @GetMapping("all")
+    @GetMapping("/all")
     public ResponseEntity<List<Grading>> getAll() {
         return new ResponseEntity<>(gradingRepository.findAll(), HttpStatus.OK);
     }
 
-    @PostMapping("/create_grading")
+    @PostMapping("/grading")
     public ResponseEntity<Grading> createGrading(@RequestBody Grading grading) {
         if(beltRepository.findById(grading.getBelt_id()).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -69,16 +69,16 @@ public class ExaminationController {
         return new ResponseEntity<>(new_grading, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete_grading")
-    public ResponseEntity<Grading> deleteGrading(@RequestBody Grading grading) {
-        if(beltRepository.findById(grading.getBelt_id()).isEmpty() || gradingRepository.findById(grading.getGrading_id()).isEmpty()) {
+    @DeleteMapping("/grading/{grading_id}")
+    public ResponseEntity<Grading> deleteGrading(@PathVariable("grading_id") long grading_id) {
+        if(gradingRepository.findById(grading_id).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        gradingRepository.deleteById(grading.getGrading_id());
+        gradingRepository.deleteById(grading_id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     
-    @PutMapping("/update_grading")
+    @PutMapping("/grading")
     public ResponseEntity<Object> updateSessionReview( @RequestBody Grading grading) {
         if(gradingRepository.findById(grading.getGrading_id()).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -87,7 +87,7 @@ public class ExaminationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     
-    @PostMapping("/create_examinee")
+    @PostMapping("/examinee")
     public ResponseEntity<Examinee> create(@RequestBody Examinee examinee) {
         if(gradingRepository.findById(examinee.getGrading_id()).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -96,18 +96,18 @@ public class ExaminationController {
         return new ResponseEntity<>(new_examinee, HttpStatus.OK);
     }
     
-    @DeleteMapping("/delete_examinee")
-    public ResponseEntity<Examinee> deleteExaminee(@RequestBody Examinee examinee) {
-        if(examineeRepository.findById(examinee.getExaminee_id()).isEmpty() || gradingRepository.findById(examinee.getGrading_id()).isEmpty()) {
+    @DeleteMapping("/examinee/{examinee_id}")
+    public ResponseEntity<Examinee> deleteExaminee(@PathVariable("examinee_id") long examinee_id) {
+        if(examineeRepository.findById(examinee_id).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        examineeRepository.deleteById(examinee.getExaminee_id());
+        examineeRepository.deleteById(examinee_id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     
 
-    @PutMapping("/update_examinee")
+    @PutMapping("/examinee")
     public ResponseEntity<Object> updateExaminee( @RequestBody Examinee examinee) {
         if(examineeRepository.findById(examinee.getExaminee_id()).isEmpty() || gradingRepository.findById(examinee.getGrading_id()).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -122,7 +122,7 @@ public class ExaminationController {
      * @return The created examinee pair.
      * @return HTTP-status code.
     */
-    @PostMapping("/createExamineePair")
+    @PostMapping("/pair")
     public ResponseEntity<ExamineePair> createExamineePair(@RequestBody ExamineePair examinee_pair) {
         ExamineePair new_examinee_pair = examineePairRepository.save(examinee_pair);
         return new ResponseEntity<>(new_examinee_pair, HttpStatus.OK);
@@ -133,7 +133,7 @@ public class ExaminationController {
      * @param examinee_pair Object mapped examinee pair from request body.
      * @return HTTP-status code.
      */
-    @DeleteMapping("/deleteExamineePair")
+    @DeleteMapping("/pair")
     public ResponseEntity<ExamineePair> deleteExamineePair(@RequestBody ExamineePair examinee_pair) {
         if(examineePairRepository.findById(examinee_pair.getExaminee_pair_id()).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -148,7 +148,7 @@ public class ExaminationController {
      * @return All examinees.  
      * @return HTTP-status code.
      */
-    @GetMapping("getAllExamineePairs")
+    @GetMapping("/pair/all")
     public ResponseEntity<List<ExamineePair>> getAllExamineePairs() {
         return new ResponseEntity<>(examineePairRepository.findAll(), HttpStatus.OK);
     }
@@ -160,7 +160,7 @@ public class ExaminationController {
      * @param session Object mapped session review from request body.
      * @return HTTP-status code.
      */
-    @GetMapping("getAllExaminees")
+    @GetMapping("/examinee/all")
     public ResponseEntity<List<Examinee>> getAllExaminees() {
         return new ResponseEntity<>(examineeRepository.findAll(), HttpStatus.OK);
     }
