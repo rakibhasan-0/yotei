@@ -32,41 +32,31 @@ import styles from "./ExamineeButton.module.css"
  * @version 1.0 
  */
 
-const ExamineeButton = ({ id, type, onClick, width, children }) => {
-	const [hasColor, setColor] = useState(false)
+// ExamineeButton.jsx
+const ExamineeButton = ({ id, type, onClick, isSelected, width, children }) => {
+    const style = { width: width || "50%" };
 
-	const toggleColor = () => {
-		setColor(!hasColor)
-	}
+    const buttonType = () => {
+        switch (type) {
+            case "red":
+                return isSelected ? styles.buttonRed : styles.buttonWhite;
+            case "green":
+                return isSelected ? styles.buttonGreen : styles.buttonWhite;
+            default:
+                return styles.buttonWhite;
+        }
+    };
 
-	const style = width ? { width } : { width: "100%" }
-
-	const buttonType = () => {
-		switch (type) {
-		case "red":
-			return hasColor ? styles.buttonRed : styles.buttonWhite
-		case "green":
-			return hasColor ? styles.buttonGreen : styles.buttonWhite
-		default:
-			return hasColor ? styles.buttonWhite : styles.buttonWhite
-		}
-	}
-
-	return (
-		<button
-			id={id}
-			className={`${styles.buttonDefault} ${buttonType()}`}
-			onClick={() => {
-				toggleColor()
-				if (onClick) {
-					onClick()
-				}
-			}}
-			style={style}
-		>
-			{children}
-		</button>
-	)
-}
+    return (
+        <button
+            id={id}
+            className={`${styles.buttonDefault} ${buttonType()}`}
+            onClick={onClick}
+            style={style}
+        >
+            {children}
+        </button>
+    );
+};
 
 export default ExamineeButton
