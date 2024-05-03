@@ -83,7 +83,12 @@ public class StatisticsController {
             }
         }
         
-        System.out.println(statisticsRepository.getNumberOfSessions(id, showAllDates, sdate, edate));
+        int numSessions = statisticsRepository.getNumberOfSessions(id, showAllDates, sdate, edate);
+        double averageRating = 4.5; //TODO: get average rating when session review is implemented
+        System.out.println("{");
+        System.out.println("    numSessions: " + numSessions);
+        System.out.println("    averageRating: " + averageRating);
+        System.out.println("}");
 
         return new ResponseEntity<>(union, HttpStatus.OK);
     }
