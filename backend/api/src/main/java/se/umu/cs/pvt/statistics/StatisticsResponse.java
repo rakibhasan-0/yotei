@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import se.umu.cs.pvt.belt.Belt;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Class representing the response entity for the statistics API. 
@@ -24,7 +25,7 @@ public class StatisticsResponse implements Serializable {
   private Long activity_id;
   private String name;
   private String type;
-  private List<Belt> belts;
+  private List<BeltResponse> belts;
   private Long count;
 
   /**
@@ -67,7 +68,7 @@ public class StatisticsResponse implements Serializable {
   /**
    * Public getter for private property belts
    */
-  public List<Belt> getBelts() {
+  public List<BeltResponse> getBeltColors() {
       return belts;
   }
 
@@ -76,7 +77,10 @@ public class StatisticsResponse implements Serializable {
    * @param belts
    */
   public void setBelts(List<Belt> belts) {
-      this.belts = belts;
+      this.belts = new ArrayList<>();
+      for (Belt b : belts) {
+        this.belts.add(new BeltResponse(b));
+      }
   }
 
   /**
