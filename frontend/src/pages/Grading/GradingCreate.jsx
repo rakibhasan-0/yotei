@@ -49,7 +49,6 @@ export default function GradingCreate() {
 				setLoading(false)
 
 				const filteredColors = json.filter(item => beltColors.includes(item.name))
-				console.log(filteredColors)
 				const colorMaps = {}
 				filteredColors.forEach(element => {
 					if(element.child === false) {
