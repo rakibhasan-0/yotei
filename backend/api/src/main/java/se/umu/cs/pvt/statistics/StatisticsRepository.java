@@ -4,8 +4,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import se.umu.cs.pvt.session.Session;
+import se.umu.cs.pvt.technique.Technique;
+import se.umu.cs.pvt.belt.Belt;
 
 /**
  * JPA repository for statistics api. 
@@ -18,7 +22,7 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
   
   @Query("""
     SELECT
-      new se.umu.cs.pvt.statistics.StatisticsResponse(t.id, t.name, tb.beltId, COUNT(t.id))
+      new se.umu.cs.pvt.statistics.StatisticsResponse(t.id, t.name, 'technique', COUNT(t.id))
     FROM
       Session s
     JOIN
@@ -29,26 +33,37 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
       Technique t
     ON 
       t.id = a.techniqueId
-    JOIN
-      TechniqueBelt tb
-    ON
-      tb.techniqueId = t.id
     WHERE
       s.plan = :id
     AND
-      t.id != NULL
+      t.id IS NOT NULL
+    AND 
+      (:kihon IS FALSE
+      OR
+      t.id IN (
+        SELECT tt.techId
+        FROM TechniqueTag tt
+        WHERE tt.tag = 1
+      )
+    )
+    AND
+        (:alldates IS TRUE)
+      OR
+        (
+            s.date >= :startdate
+          AND 
+            s.date <= :enddate
+        )
     GROUP BY
       t.id,
-      t.name,
-      tb.beltId
-    ORDER BY COUNT(t.id)
-    DESC
+      t.name
       """)
-  List<StatisticsResponse> getSampleTechniquesQuery(Long id);
+  List<StatisticsResponse> getSampleTechniquesQuery(Long id, boolean kihon, boolean alldates, LocalDate startdate, LocalDate enddate);
+
 
   @Query("""
     SELECT
-      new se.umu.cs.pvt.statistics.StatisticsResponse(e.id, e.name, COUNT(e.id))
+      new se.umu.cs.pvt.statistics.StatisticsResponse(e.id, e.name, 'exercise', COUNT(e.id))
     FROM
       Session s
     JOIN
@@ -62,13 +77,33 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
     WHERE
       s.plan = :id
     AND
-      e.id != NULL
+      e.id IS NOT NULL
+    AND
+        (:alldates IS TRUE)
+      OR
+        (
+            s.date >= :startdate
+          AND 
+            s.date <= :enddate
+        )
     GROUP BY
       e.id,
       e.name
-    ORDER BY COUNT(e.id)
-    DESC
       """)
-  List<StatisticsResponse> getSampleExercisesQuery(Long id);
+  List<StatisticsResponse> getSampleExercisesQuery(Long id, boolean alldates, LocalDate startdate, LocalDate enddate);
 
+  // Get a list of belts associated with a technique.
+  @Query("""
+    SELECT 
+      new se.umu.cs.pvt.belt.Belt(b.id, b.name, b.color, b.isChild)
+    FROM
+      TechniqueBelt tb
+    JOIN
+      Belt b
+    ON
+      tb.beltId = b.id
+    WHERE
+      tb.techniqueId = :id
+      """)
+  List<Belt> getBeltsForTechnique(Long id);
 }

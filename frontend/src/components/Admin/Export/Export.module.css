@@ -10,3 +10,9 @@
 	margin-top: 1.5rem;
 	justify-content: center;
 }
+
+.warningBtnContainer {
+	display: flex;
+	justify-content: center;
+	gap : 45px
+}

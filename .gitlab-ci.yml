@@ -3,16 +3,27 @@ stages:
   - build
   - test
   - docs
+  - rebuild_database
   - deploy_test_server
   - systest
   - deploy_prod_server
 
+dummy-job:
+  stage: test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
+  tags:
+   - system
+  script:
+  - echo "Hello World!"
 
 test-linter-frontend:
   rules:
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
+      changes:
+        - frontend/**/*
   image: node:20
   tags:
     - chappie #Runner-namn
@@ -34,6 +45,8 @@ test-backend:
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
+      changes:
+        - backend/**/*
   stage: test
   tags:
     - chappie #Runner-namn
@@ -52,6 +65,8 @@ test-frontend:
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
+      changes:
+        - frontend/**/*
   stage: test
   tags:
     - chappie #Runner-namn
@@ -73,6 +88,8 @@ build-frontend:
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
+      changes:
+        - frontend/**/*
   stage: build
   tags:
     - chappie #Runner-namn
@@ -91,6 +108,7 @@ build-frontend:
       
 generate-api-docs:
   stage: docs
+  resource_group: deploy
   rules:
     - if: $CI_COMMIT_TAG
       when: never
@@ -103,6 +121,7 @@ generate-api-docs:
 
 generate-javadocs:
   stage: docs
+  resource_group: deploy
   rules:
     - if: $CI_COMMIT_TAG
       when: never
@@ -116,8 +135,30 @@ generate-javadocs:
     - mkdir /var/www/html/javadocs
     - cp -r target/site/apidocs/* /var/www/html/javadocs
 
+rebuild-database:
+  stage: rebuild_database
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_COMMIT_BRANCH == "main"
+      changes:
+        - infra/database/init/**/*
+  tags:
+    - system
+  before_script:
+    - docker login --username pvt2024 --password $DOCKER_PASS # DOCKER_PASS defined in GitLab CI/CD settings as a secure variable.
+  script:
+    - cd infra/database
+    - ./backup_db.sh db.dump
+    - docker stop html-psql-1 || true
+    - docker rm html-psql-1 || true
+    - docker volume rm html_pgdata || true
+    - ./restore_db.sh db.dump
+
+
 deploy-test-server:
   stage: deploy_test_server
+  resource_group: deploy
   rules:
     - if: $CI_COMMIT_TAG
       when: never
@@ -150,6 +191,7 @@ deploy-test-server:
 
 run-systests:
   stage: systest
+  resource_group: deploy
   rules:
     - if: $CI_COMMIT_TAG
       when: never
@@ -159,14 +201,8 @@ run-systests:
   image: mcr.microsoft.com/playwright:v1.39.0-jammy
   script:
     - cd frontend/
-    - npm ci # Install project dependencies
-    # - npx playwright install ?
-    - npm run systest:ci # Run your Playwright tests 
-    - echo "https://$CI_PROJECT_NAMESPACE.gitlab.io/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/playwright-report/index.html" # print the URL to view the results
-    - cd ../infra/systest
-    - chmod u+x run-new-systests.sh
-    - ./run-new-systests.sh
-  allow_failure: true
+    - npm ci
+    - npm run systest:ci
   after_script:
     - >
       if [ $CI_JOB_STATUS == 'success' ]; then
@@ -195,6 +231,7 @@ run-systests:
 
 deploy-prod-server:
   stage: deploy_prod_server
+  resource_group: deploy
   rules:
     - if: $CI_COMMIT_TAG
   tags:
