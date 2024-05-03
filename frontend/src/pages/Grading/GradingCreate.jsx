@@ -16,12 +16,22 @@ import { AccountContext } from "../../context"
 export default function GradingCreate() {
 
 	const [beltColors] = useState(["Gult", "Orange", "Grönt", "Blått", "Brunt"])
-	const [belts, setBelts] = useState({}) 
+	const [belts, setBelts] = useState([]) 
 	const [loading, setLoading] = useState(true)
 	const context = useContext(AccountContext)
 	const { token, userId } = context
 	const navigate = useNavigate()
 
+	const handleNavigation = (beltId)  => {
+		// skapa Grading i databasen
+		// för att skapa Grading måste vi ha BeltID
+
+		// Hämta ID av Gradingen vi skapade
+		// "/grading/ID/1"
+		console.log("id:", beltId)
+
+		navigate("/grading/:gradingId/1")
+	}
 
 
 	useEffect(() => {
@@ -39,12 +49,17 @@ export default function GradingCreate() {
 				setLoading(false)
 
 				const filteredColors = json.filter(item => beltColors.includes(item.name))
+				console.log(filteredColors)
 				const colorMaps = {}
 				filteredColors.forEach(element => {
-					colorMaps[element.name] = `#${element.color}`
+					if(element.child === false) {
+						colorMaps[element.name] = {
+							id: element.id,
+							hex: `#${element.color}`,
+						}
+					}
 				})
 				setBelts(colorMaps)
-				console.log(colorMaps)
 
         
 			} catch (ex) {
@@ -66,8 +81,9 @@ export default function GradingCreate() {
 						<BeltButton
 							key={color}
 							width={"100%"}
-							onClick={() => navigate("grading/:gradingId/1")}
-							color={belts[color]}
+							onClick={() => handleNavigation(belts[color].id)}
+							color={belts[color].hex}
+						
 						>
 							<h2>{`${5 - index} KYU ${color.toUpperCase()} BÄLTE`} </h2>
 						</BeltButton>
