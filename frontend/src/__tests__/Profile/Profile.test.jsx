@@ -34,6 +34,7 @@ test("Should render titles on init", async () => {
 
 describe("should update", () => {
 	beforeEach(() => {
+		jest.resetAllMocks()
 		server.use(
 			rest.get("api/users", async (req, res, ctx) => {
 				return res(
@@ -87,8 +88,12 @@ describe("should update", () => {
 			})
 		)
 	})
+
+	afterEach(() => {
+		window.history.pushState(null, document.title, "/")
+	})
 	
-	test("should d", async () => {
+	test("should call a success toast when all input-fields are filled", async () => {
 		render(<Profile />)
 	
 		expect(screen.getByText("Inställningar")).toBeInTheDocument()
@@ -96,7 +101,7 @@ describe("should update", () => {
 		const usernameInput = screen.getByTestId("username")
 		const passwordInput = screen.getByTestId("change-username-password")
 	
-		fireEvent.change(usernameInput, { target: { value: "" } })
+		fireEvent.change(usernameInput, { target: { value: "test" } })
 		fireEvent.change(passwordInput, { target: { value: "test" } })
 	
 		await userEvent.click(screen.getByTestId("change-username-button"))
@@ -107,16 +112,42 @@ describe("should update", () => {
 		const newPassword = screen.getByTestId("new-password")
 		const confirmPassword = screen.getByTestId("verify-password")
 		
-		fireEvent.change(currPassword, { target: { value: "admi" } })
+		fireEvent.change(currPassword, { target: { value: "123" } })
+		fireEvent.change(newPassword, { target: { value: "1" } })
+		fireEvent.change(confirmPassword, { target: { value: "1" } })
+
+		await userEvent.click(screen.getByTestId("change-password-button"))
+
+		expect(toast.success).toHaveBeenCalled()
+
+	})
+
+	test("should not call a success toast when all input-fields are not filled", async () => {
+		render(<Profile />)
+
+		expect(screen.getByText("Inställningar")).toBeInTheDocument()
+
+		const currPassword = screen.getByTestId("current-password")
+		const newPassword = screen.getByTestId("new-password")
+		const confirmPassword = screen.getByTestId("verify-password")
+		
+		fireEvent.change(currPassword, { target: { value: "" } })
 		fireEvent.change(newPassword, { target: { value: "" } })
 		fireEvent.change(confirmPassword, { target: { value: "" } })
 
 		await userEvent.click(screen.getByTestId("change-password-button"))
 
-		expect(toast.success).toHaveBeenCalled()
+		expect(toast.success).not.toHaveBeenCalled()
+
+		const usernameInput = screen.getByTestId("username")
+		const passwordInput = screen.getByTestId("change-username-password")
 	
-		expect(screen.getByText("Iställningar")).toBeInTheDocument()
-		
+		fireEvent.change(usernameInput, { target: { value: "test" } })
+		fireEvent.change(passwordInput, { target: { value: "" } })
+	
+		await userEvent.click(screen.getByTestId("change-username-button"))
+	
+		expect(toast.success).not.dtoHaveBeenCalled()
 	})
 
 })
