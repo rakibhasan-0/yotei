@@ -8,66 +8,176 @@ import TechniqueCard from "../../components/Common/Technique/TechniqueCard/Techn
 import StatisticsPopUp from "./StatisticsPopUp"
 import FilterStatistics from "./FilterStatistics"
 
+/**
+ * 
+ *  The work is on progress for the statistics page.
+ * 
+ */
+
 export default function Statistics() {
+
 	const navigate = useNavigate()
 	const { groupID } = useParams()
 	const [groupName, setGroupName] = useState(null)
 	const [loading, setLoading] = useState(true)
 	const { token } = useContext(AccountContext)
-
 	const [groupActivities, setGroupActivities] = useState([])
+	const [selectedBelts, setSelectedBelts] = useState([])
+
+	//console.log("From Dates:", dateFormatter(twoYearsAfterFromNow))
+
+
+
+	function handleBeltToggle(belt, isSelected) {
+  		setSelectedBelts(prevSelected => {
+			if (isSelected) {
+				return [...prevSelected, belt]
+			} else {
+				return prevSelected.filter(b => b.id !== belt.id)
+			}
+		})
+	}
+
+	function onBeltsClear() {
+		setSelectedBelts([])
+	}
+	
+
+	const [filter, setFilter] = useState({
+		showExercises: false,
+		showKihon: false,
+		startDate: null,
+		endDate: null, // by deafult it will be today's date.
+	})
+
+
+	function dateFormatter(date) {
+		const dateInput = new Date(date);
+		console.log("DateInput:___", dateInput);
+		const year = dateInput.getFullYear();
+		const month = String(dateInput.getMonth() + 1).padStart(2, "0");
+		const day = String(dateInput.getDate()).padStart(2, "0");
+		return `${year}-${month}-${day}`;
+	}
+
 
 	useEffect(() => {
-		async function fetchGroupData() {
+		async function fetchGroupActivitiesData() {
+			
+			console.log("Filter: startDate", filter.startDate)
+			console.log("Filter: endDate", filter.endDate)
+			const param = new URLSearchParams({
+				kihon: filter.showKihon ? "true" : "false",
+				showexercises: filter.showExercises ? "true" : "false",
+				startdate: filter.startDate? filter.startDate : "",
+				enddate: filter.endDate? filter.endDate : ""
+			})
+
+			console.log("Param:", param.toString())
+
 			try {
-				console.log("Fetching group data for ID:", groupID)
+				setLoading(true)
+				const responseFromGroupNameAPI= await fetch("/api/plan/all", { headers: { token } })
+				const responseFromGroupDetailsAPI = await fetch(`/api/statistics/${groupID}?${param}`, {headers: { token }})
 
-				const response = await fetch("/api/plan/all", { headers: { token } })
-				const responseFromGroupActivities = await fetch(
-					`/api/statistics/${groupID}`,
-					{ headers: { token } }
-				)
-
-				if (!response.ok || !responseFromGroupActivities.ok) {
+				if (!responseFromGroupDetailsAPI.ok || !responseFromGroupNameAPI.ok) {
 					throw new Error("Failed to fetch group data")
 				}
 
-				const data = await response.json()
-				const activities = await responseFromGroupActivities.json()
+				const data = await responseFromGroupDetailsAPI.json()
+				const groups = await responseFromGroupNameAPI.json()
+				
+				const name = groups.find((group) => group.id === parseInt(groupID))
 
-				console.log("Group data:", data)
+				setGroupName(name)
 
-				const groupData = data.find((group) => group.id === parseInt(groupID))
-				setGroupName(groupData)
-				setGroupActivities(activities)
-				console.log("Group Activities:", activities)
-			} catch (error) {
-				console.error("Fetching error:", error) // proper handling of error should be implemented
-			} finally {
-				setLoading(false)
+				console.log("Group Name:", name)
+				setGroupActivities(data.activities)
+				console.log("Group Activities:", data)
+			}
+			catch (error) {
+				console.error("Fetching error:", error) 
+			}
+			finally {
+				setLoading(false);
 			}
 		}
+	
+		fetchGroupActivitiesData()
 
-		fetchGroupData()
-	}, [groupID, token])
+	}, [groupID, token, filter])
+
+
+	function handleDateChanges(variableName, value) {
+
+		const newDate = value
+		console.log("New Date Selected:", newDate); 
+		const isValidDate = /^[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(value) && !isNaN(new Date(value).getTime());
+
+
+		console.log("VariableName:", variableName)
+		console.log("Value:", value)
+
+	
+		const startDate = new Date(filter.startDate)
+		console.log("Start Date:", startDate)
+
+		const endDate = new Date(filter.endDate)
+		console.log("End Date:", endDate)
+
+		if(variableName === "from") {
+			console.log("hello from is clicked")
+			
+			if(isValidDate) {
+				setFilter(newDate > endDate ? {startDate: dateFormatter(value), endDate: dateFormatter(value)} :
+												{...filter, startDate: dateFormatter(value)})
+			}
+			// if the value is not correct YYYY-MM-DD format then it will not update the state			
+		}
+
+		if(variableName === "to") {
+			console.log("hello to is clicked")
+			if(isValidDate){
+				setFilter(newDate < startDate ? {startDate: dateFormatter(value), endDate: dateFormatter(value)} : 
+												{...filter, endDate: dateFormatter(value)})	
+			}
+
+		}
+
+	}
+
+
+	function handleChanges(variableName, value) {
+		setFilter({ ...filter, [variableName]: value })
+	}
 
 	return (
 		<div>
+			<title>Statistik</title>
 			{loading ? (
 				<Spinner />
 			) : (
 				<h1 style={{ fontSize: "35px" }}>
-					{groupName ? `${groupName.name}` : "Gruppen hittades inte"}
+				{groupName ? `${groupName.name}` : "Gruppen hittades inte"}
 				</h1>
 			)}
 
 			<div className={style.FilterAndSortContainer}>
-				<FilterStatistics />
+				<FilterStatistics
+					onToggleExercise={(value) => handleChanges("showExercises", value)}
+					onToggleKihon={(value) => handleChanges("showKihon", value)}
+					onDateChanges ={handleDateChanges}
+					date={filter}
+					onToggleBelts = {handleBeltToggle}
+					onClearBelts = {onBeltsClear}
+					belts={selectedBelts}
+				/>
+
 				<StatisticsPopUp />
 			</div>
 			{/*here we will show the technique, exercise and color of the belts, number of the exercise 	
-				we will use the TechniqueCard component to show the data ..../api/statistics/${groupID}
-			*/}
+						we will use the TechniqueCard component to show the data ..../api/statistics/${groupID}
+					*/}
 			<div className="activitiesContainer">
 				{groupActivities.map((activity, index) => (
 					<TechniqueCard

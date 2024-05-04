@@ -7,6 +7,8 @@ import Popup from "../../components/Common/Popup/Popup"
  * prop with data will be passed here so that data will be processed and will be shown in the popup
  * however there is some concerning with position of the css in that case.
  * 
+ * The work is on progress for the statistics page.
+ * 
  */
 function StatisticsPopUp() {
 
