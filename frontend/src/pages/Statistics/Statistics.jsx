@@ -28,7 +28,7 @@ export default function Statistics() {
 
 
 	const activities = selectedBelts.length > 0 ? groupActivities.filter((activity) =>
-		activity.beltColors.some((belt) =>
+		activity.beltColors?.some((belt) =>
 			selectedBelts.some(
 				(selectedBelt) => selectedBelt.name === belt.belt_name
 			)))
@@ -74,7 +74,7 @@ export default function Statistics() {
 			//console.log("Filter: startDate", filter.startDate)
 			//console.log("Filter: endDate", filter.endDate)
 			console.log("Selected belts tags: ", selectedBelts)
-			console.log("Group activities: ", groupActivities)
+			
 
 			const param = new URLSearchParams({
 				kihon: filter.showKihon ? "true" : "false",
@@ -103,6 +103,7 @@ export default function Statistics() {
 
 				//console.log("Group Name:", name)
 				setGroupActivities(data.activities)
+				console.log("Group activities: ", groupActivities)
 				//console.log("Group Activities:", data)
 			}
 			catch (error) {
