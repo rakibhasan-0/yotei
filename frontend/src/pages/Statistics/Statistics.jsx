@@ -27,8 +27,15 @@ export default function Statistics() {
 	//console.log("From Dates:", dateFormatter(twoYearsAfterFromNow))
 
 
+	const activities = selectedBelts.length > 0 ? groupActivities.filter((activity) =>
+		activity.beltColors.some((belt) =>
+			selectedBelts.some(
+				(selectedBelt) => selectedBelt.name === belt.belt_name
+			)))
+		: groupActivities
 
-	function handleBeltToggle(belt, isSelected) {
+
+	function handleBeltToggle(isSelected, belt) {
   		setSelectedBelts(prevSelected => {
 			if (isSelected) {
 				return [...prevSelected, belt]
@@ -64,8 +71,11 @@ export default function Statistics() {
 	useEffect(() => {
 		async function fetchGroupActivitiesData() {
 			
-			console.log("Filter: startDate", filter.startDate)
-			console.log("Filter: endDate", filter.endDate)
+			//console.log("Filter: startDate", filter.startDate)
+			//console.log("Filter: endDate", filter.endDate)
+			console.log("Selected belts tags: ", selectedBelts)
+			console.log("Group activities: ", groupActivities)
+
 			const param = new URLSearchParams({
 				kihon: filter.showKihon ? "true" : "false",
 				showexercises: filter.showExercises ? "true" : "false",
@@ -91,12 +101,12 @@ export default function Statistics() {
 
 				setGroupName(name)
 
-				console.log("Group Name:", name)
+				//console.log("Group Name:", name)
 				setGroupActivities(data.activities)
-				console.log("Group Activities:", data)
+				//console.log("Group Activities:", data)
 			}
 			catch (error) {
-				console.error("Fetching error:", error) 
+				console.error("Fetching error:", error) // proper error handling will be added later
 			}
 			finally {
 				setLoading(false);
@@ -111,19 +121,17 @@ export default function Statistics() {
 	function handleDateChanges(variableName, value) {
 
 		const newDate = value
-		console.log("New Date Selected:", newDate); 
+		//console.log("New Date Selected:", newDate); 
 		const isValidDate = /^[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(value) && !isNaN(new Date(value).getTime());
 
-
-		console.log("VariableName:", variableName)
-		console.log("Value:", value)
-
+		//console.log("VariableName:", variableName)
+		//console.log("Value:", value)
 	
 		const startDate = new Date(filter.startDate)
-		console.log("Start Date:", startDate)
+		//console.log("Start Date:", startDate)
 
 		const endDate = new Date(filter.endDate)
-		console.log("End Date:", endDate)
+		//console.log("End Date:", endDate)
 
 		if(variableName === "from") {
 			console.log("hello from is clicked")
@@ -164,36 +172,32 @@ export default function Statistics() {
 
 			<div className={style.FilterAndSortContainer}>
 				<FilterStatistics
-					onToggleExercise={(value) => handleChanges("showExercises", value)}
-					onToggleKihon={(value) => handleChanges("showKihon", value)}
-					onDateChanges ={handleDateChanges}
-					date={filter}
-					onToggleBelts = {handleBeltToggle}
-					onClearBelts = {onBeltsClear}
-					belts={selectedBelts}
+				onToggleExercise={(value) => handleChanges("showExercises", value)}
+				onToggleKihon={(value) => handleChanges("showKihon", value)}
+				onDateChanges={handleDateChanges}
+				date={filter}
+				onToggleBelts={handleBeltToggle}
+				onClearBelts={onBeltsClear}
+				belts={selectedBelts}
 				/>
 
 				<StatisticsPopUp />
 			</div>
-			{/*here we will show the technique, exercise and color of the belts, number of the exercise 	
-						we will use the TechniqueCard component to show the data ..../api/statistics/${groupID}
-					*/}
-			<div className="activitiesContainer">
-				{groupActivities.map((activity, index) => (
-					<TechniqueCard
-						key={index}
-						technique={activity} // Passing the whole activity object
-						checkBox={false}
-						id={activity.activity_id}
-					/>
-				))}
-			</div>
+
+				<div className="activitiesContainer">
+					{
+						activities.map((activity, index) => (
+							<TechniqueCard key={index} technique={activity} checkBox={false} id={activity.activity_id} />
+						))
+					}
+
+				</div>
 
 			<div className={style.buttonContainer}>
 				<Button width="25%" outlined={true} onClick={() => navigate(-1)}>
-					<p>Tillbaka</p>
+				<p>Tillbaka</p>
 				</Button>
 			</div>
 		</div>
-	)
+  	)
 }

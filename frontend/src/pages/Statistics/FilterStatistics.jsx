@@ -43,7 +43,7 @@ export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDa
         <BeltPicker
           id={"techniqueFilter-BeltPicker"}
           onToggle={onToggleBelts}
-          states={[]}
+          states={belts}
           onClearBelts={onClearBelts}
           filterWhiteBelt={false}
         />
