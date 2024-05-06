@@ -18,7 +18,6 @@ services:
   # Database need to be created first, check if depends_on is needed
   psql:
     image: pvt2024/database:latest
-
       
   frontend:
     image: pvt2024/frontend:latest
