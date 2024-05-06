@@ -78,6 +78,11 @@ DROP TABLE IF EXISTS technique_tag CASCADE;
 
 DROP TABLE IF EXISTS workout_tag CASCADE;
 
+DROP TABLE IF EXISTS examination_grading;
+DROP TABLE IF EXISTS examination_examinee;
+DROP TABLE IF EXISTS examination_examinee_pair;
+DROP TABLE IF EXISTS examination_result_technique;
+DROP TABLE IF EXISTS examination_comment;
 DROP TABLE IF EXISTS activity CASCADE;
 
 DROP TABLE IF EXISTS tag CASCADE;
@@ -99,13 +104,15 @@ DROP TABLE IF EXISTS comments CASCADE;
 DROP TABLE IF EXISTS plan CASCADE;
 
 DROP TABLE IF EXISTS session_review;
-DROP TABLE IF EXISTS session_review_exercises;
+DROP TABLE IF EXISTS session_review_activity;
 
 DROP TABLE IF EXISTS session CASCADE;
 
 DROP TABLE IF EXISTS workout_favorite CASCADE;
 
 DROP TABLE IF EXISTS workout_review CASCADE;
+
+DROP TABLE IF EXISTS technique_review CASCADE;
 
 DROP TABLE IF EXISTS user_settings CASCADE;
 
@@ -250,6 +257,48 @@ CREATE TABLE IF NOT EXISTS exercise_tag (
 	CONSTRAINT et_fk_tag FOREIGN KEY (tag_id) REFERENCES tag(tag_id) ON
 	DELETE CASCADE,
 	UNIQUE (ex_id, tag_id)
+    );
+
+CREATE TABLE IF NOT EXISTS examination_grading (
+    grading_id SERIAL PRIMARY KEY,
+    creator_id INT NOT NULL,
+    belt_id INT NOT NULL,
+    step INT NOT NULL,
+    technique_step_num INT NOT NULL,
+    created_at DATE NOT NULL,
+    CONSTRAINT grading_fk_belt FOREIGN KEY(belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS examination_examinee (
+    examinee_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    grading_id INT NOT NULL,
+    CONSTRAINT examinee_fk_grading FOREIGN KEY(grading_id) REFERENCES examination_grading(grading_id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE IF NOT EXISTS examination_examinee_pair (
+	examinee_pair_id SERIAL PRIMARY KEY,
+	examinee_1_id INT NOT NULL,
+	examinee_2_id INT NOT NULL,
+	CONSTRAINT examinee_pair_fk_examinee_1 FOREIGN KEY(examinee_1_id) REFERENCES examination_examinee(examinee_id) ON DELETE CASCADE,
+	CONSTRAINT examinee_pair_fk_examinee_2 FOREIGN KEY(examinee_2_id) REFERENCES examination_examinee(examinee_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS examination_result(
+	examination_result_technique_id SERIAL PRIMARY KEY,
+	examinee_id INT NOT NULL,
+	technique_id_JSON VARCHAR(255) NOT NULL, -- KAN DETTA VARA ETT PROBLEM ? STRÄNGMATCHA FÖR ATT HITTA RÄTT TEKNIK I DUNNO.
+	pass INT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS examination_comment(
+	comment_id SERIAL PRIMARY KEY,
+	grading_id INT NOT NULL,
+	examinee_id INT NOT NULL,
+	examinee_pair_id INT NOT NULL,
+	technique_id VARCHAR(255) NOT NULL,
+	comment VARCHAR(255) NOT NULL --Kanske öka?
 );
 
 --
@@ -426,13 +475,13 @@ ALTER TABLE
 
 
 
-CREATE TABLE session_review_exercises(
-	session_review_exercise_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+CREATE TABLE session_review_activity(
+	session_review_activity_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	session_review_id INT CHECK(session_review_id IS NOT NULL),
-	exercise_id INT CHECK(exercise_id IS NOT NULL),
+	activity_id INT CHECK(activity_id IS NOT NULL),
 	CONSTRAINT wr_fk_session_review_id FOREIGN KEY(session_review_id) REFERENCES session_review(review_id) ON
 	DELETE CASCADE,
-	CONSTRAINT wr_fk_exercise_id FOREIGN KEY (exercise_id) REFERENCES exercise(exercise_id) ON
+	CONSTRAINT wr_fk_activity_id FOREIGN KEY (activity_id) REFERENCES activity(activity_id) ON
 	DELETE CASCADE
 );
 
@@ -443,6 +492,26 @@ ALTER TABLE
 ALTER TABLE
 	workout_review OWNER TO psql;
 
+
+--
+-- Name: technique_reviewType: TABLE; Schema: public; Owner: psql 
+--
+CREATE TABLE technique_review(
+	review_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	technique_id INT CHECK(technique_id IS NOT NULL),
+	user_id INT CHECK(user_id IS NOT NULL),
+	rating INT CHECK(rating IS NOT NULL),
+	positive_comment TEXT,
+	negative_comment TEXT,
+	review_date TIMESTAMP NOT NULL,
+	CONSTRAINT tr_fk_technique_id FOREIGN KEY(technique_id) REFERENCES technique(technique_id) ON
+	DELETE CASCADE,
+	CONSTRAINT tr_fk_user_id FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON
+	DELETE CASCADE
+);
+
+ALTER TABLE
+	technique_review OWNER TO psql;
 --
 -- Name: belt; Type: TABLE; Schema: public; Owner: psql
 --
@@ -627,7 +696,7 @@ CREATE TRIGGER check_order BEFORE INSERT ON activity
 --
 CREATE OR REPLACE FUNCTION tag_to_lowercase() RETURNS TRIGGER AS $$ 
 BEGIN 
-	NEW.name = LOWER(NEW.name);
+	NEW.name = LOWER(BTRIM(NEW.name));
 	RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';

@@ -19,9 +19,10 @@ import { unstable_useBlocker as useBlocker } from "react-router"
  * Example usage:
  *     <EditGroup />
  *
- * @author Medusa (Grupp 6), Team Durian (Group 3) (2024-04-23)
+ * @author Medusa (Grupp 6), Team Durian (Group 3) (2024-04-24)
  * @version 1.0
  * @since 2023-05-25
+ * @updated Team Kiwi (group 2): added a true for filtering basic techniques (2024-04-29)
  */
 
 function EditGroup() {
@@ -122,6 +123,7 @@ function EditGroup() {
 	}
 
 	const handleDelete = async () => {
+		setIsBlocking(false)
 		const res = await fetch("/api/plan/remove?id=" + groupID,
 			{
 				method: "DELETE",
@@ -170,6 +172,7 @@ function EditGroup() {
 			<BeltPicker
 				states={belts}
 				onToggle={handleBeltChanged}
+				filterBasicTechniques = {true}
 			/>
 
 			<div className={styles.buttonContainer}>

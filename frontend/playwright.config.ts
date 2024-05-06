@@ -13,6 +13,7 @@ const systestEnv = {
 }
 const frontendURL = "http://localhost:" + process.env.FRONTEND_PORT
 const backendURL = "http://localhost:" + process.env.GATEWAY_PORT + "/api/users/verify"
+const testServer = "http://5dv214vt24-test.cs.umu.se"
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -31,7 +32,7 @@ export default defineConfig({
 	retries: process.env.CI ? 2 : 0,
 	reporter: process.env.CI ? [ ["list"], ["junit", { outputFile: "results.xml" }] ] : "list",
 	use: {
-		baseURL: frontendURL,
+		baseURL: process.env.CI ? testServer : frontendURL,
 		trace: "on-first-retry",
 	},
 
@@ -46,18 +47,11 @@ export default defineConfig({
 	/* Start frontend & backend before tests */
 	webServer: [
 		{
-			command: "./run-system.sh",
-			env: systestEnv,
-			url: backendURL,
-			timeout: 60 * 1000,
-			reuseExistingServer: !process.env.CI,
-		},
-		{
 			command: "npm start",
 			env: systestEnv,
-			url: frontendURL,
+			url: process.env.CI ? testServer : frontendURL,
 			timeout: 60 * 1000,
-			reuseExistingServer: !process.env.CI,
+			reuseExistingServer: true,
 		}
 	],
 })

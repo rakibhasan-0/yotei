@@ -7,7 +7,7 @@ import Popup from "../Common/Popup/Popup"
 import ConfirmPopup from "../Common/ConfirmPopup/ConfirmPopup"
 import styles from "../Gallery/Gallery.module.css"
 import { AccountContext } from "../../context"
-import {Trash as TrashIcon } from "react-bootstrap-icons"
+import { Trash as TrashIcon } from "react-bootstrap-icons" // kanske använder CodeSlash
 import {CameraVideoOff as NoMediaIcon } from "react-bootstrap-icons"
 import UploadMedia from "../Upload/UploadMedia"
 import {toast} from "react-toastify"
@@ -23,9 +23,12 @@ import Button from "../Common/Button/Button"
  *
  * Example usage:
  *
- * @author Team Dragon (Grupp 3)
- * @version 1.0
+ * @author Team Dragon (Group 3), Team Mango (Group 4)
+ * @version 2.0
  * @since 2023-05-04
+ * 
+ * Modifications:
+ * 2024-04-29: Added placeholder text and id to media description textbox.
  */
 export default function EditGallery({ id, exerciseId, sendData, undoChanges, done }) {
 	const [media, setMedia] = useState([])
@@ -60,7 +63,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 
 				if (response.ok) {
 					const data =  await response.json()
-					setMedia(data) 
+					setMedia(data)
 				} else {
 					setMedia([])
 				}
@@ -92,12 +95,21 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	 * 
 	 */
 	async function removeMedia(){
-		setMediaToRemove(mediaToRemove => [...mediaToRemove, selectedMedia])
-		let temp = [... media]
-		var index = temp.indexOf(selectedMedia)
-		temp.splice(index, 1)
 
-		setMedia(temp)
+		if(mediaToBeAdded.some(item => item.url === selectedMedia.url && item.description === selectedMedia.description && selectedMedia.id === undefined)) {
+			const index = mediaToBeAdded.findIndex(item => item.url === selectedMedia.url && item.description === selectedMedia.description)
+			if(index !== -1) {
+				mediaToBeAdded.splice(index, 1)
+				setMedia(mediaToBeAdded)
+			}
+		}else {
+			setMediaToRemove(mediaToRemove => [...mediaToRemove, selectedMedia])
+			let temp = [... media]
+			var index = temp.indexOf(selectedMedia)
+			temp.splice(index, 1)
+			
+			setMedia(temp)
+		}
 	}
 
 
@@ -172,7 +184,6 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	function fetchMediaMetaToBeUploaded(mediaData) { //should also have localStorage and description
 		
 		setMediaToBeAdded(mediaToBeAdded => [...mediaToBeAdded, mediaData])
-			
 		// experimental for showing in the gallery that something has been added. Only visual feedback for the user
 		setMedia(media => [...media, mediaData])
 		setShowAddPopup(false)
@@ -201,7 +212,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 		list.map((m) => {
 			m.movementId = exerciseId
 		})
-		
+
 		const requestOptions = {
 			method: "POST",
 			headers: { "Content-type": "application/json", "token": context.token },
@@ -365,7 +376,12 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 		return(	
 			<TextArea defVal={mediaObject.description} onChange={e => {
 				setDescMap(descMap.set(mediaObject.id, e.target.value))
-			}} />
+				
+			}}
+			id = "media-description-textbox"
+			placeholder = "Beskrivning av media"
+			/>
+
 		)
 	}
 

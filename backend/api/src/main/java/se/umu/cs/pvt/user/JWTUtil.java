@@ -6,15 +6,18 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 /**
  * Utility class for creating and verifying Json Web Tokens.
- * @author Team Hot-Pepper (G7) (Doc: Grupp 2 Griffin c17wfn)
+ * 
+ * @author Team Hot-Pepper (G7) (Doc: Grupp 2 Griffin c17wfn) & Team Tomato
+ * @updated 2024-04-23 by Team Tomato
  */
+@Component
 public class JWTUtil {
-
 
     /**
      * The SECRET salt for generating and validating Json Web Tokens.
@@ -28,14 +31,17 @@ public class JWTUtil {
 
     /**
      * Generates a Json Web Token with the given username as the payload claim.
+     * 
      * @param username Username to be put in payload.
-     * @param role Role of the user
-     * @param userId the id of the user
+     * @param role     Role of the user
+     * @param userId   the id of the user
      * @return The Json Web Token.
      * @throws IllegalArgumentException Bad argument.
-     * @throws JWTCreationException Something went wrong during the signing process.
+     * @throws JWTCreationException     Something went wrong during the signing
+     *                                  process.
      */
-    public String generateToken(String username, String role, int userId) throws IllegalArgumentException, JWTCreationException {
+    public String generateToken(String username, String role, int userId)
+            throws IllegalArgumentException, JWTCreationException {
         return JWT.create()
                 .withSubject("User Details")
                 .withClaim("username", username)
@@ -49,6 +55,7 @@ public class JWTUtil {
 
     /**
      * Verifies the validity of the given Json Web Token.
+     * 
      * @param token The Json Web Token.
      * @return The decoded Json Web Token.
      * @throws JWTVerificationException The Json Web Token was not valid.
@@ -59,6 +66,18 @@ public class JWTUtil {
                 .withIssuer("PVT/User")
                 .build();
         return verifier.verify(token);
+    }
+
+    /**
+     * Validates the token and returns the userId
+     * 
+     * @param token The JSON Web Token
+     * @return The userId of the user that the token belongs to
+     * @throws JWTVerificationException The JSON Web token was not vaild.
+     */
+    public int getUserIdFromToken(String token) throws JWTVerificationException {
+        DecodedJWT jwt = validateToken(token);
+        return jwt.getClaim("userId").asInt();
     }
 
 }

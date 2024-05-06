@@ -1,7 +1,3 @@
-/**
- * The Tag entity.
- * @Author Team 5 Verona
- */
 package se.umu.cs.pvt.export;
 
 import javax.persistence.*;
@@ -10,6 +6,7 @@ import java.io.Serializable;
 /**
  * Represents a tag export entity.
  *
+ * @author Team 5 Verona
  * @author Andre Byström
  * date: 2023-04-25
  */
