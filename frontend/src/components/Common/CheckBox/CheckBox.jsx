@@ -44,6 +44,7 @@ export default function CheckBox({checked, onClick, label, disabled, id}) {
 			{checkedState && <Check className={styles.checkboxIcon} />}
 			<input
 				type="checkbox"
+				id = {id+"-checkbox"}
 				checked={checkedState}
 				onChange={() =>  {
 					setCheckedState(!checkedState)
