@@ -51,3 +51,8 @@
 .close-icon {
   cursor: pointer;
 }
+
+.name-container {
+  display: flex;
+  justify-content: space-between;
+}

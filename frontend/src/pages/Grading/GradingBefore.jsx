@@ -26,6 +26,23 @@ export default function GradingCreate() {
 
 	const [examinees, setExaminees] = useState([])
 	const navigate = useNavigate()
+  
+  const [pairs, setPair] = useState([[]]) 
+  const [checkedExaminee, setCheckedExaminee] = useState(0)
+
+  function createPair() {
+    if(checkedExaminee == 2) {
+
+    } 
+  }
+
+  function onCheck(isChecked) {
+    if(isChecked) {
+      setCheckedExaminee(checkedExaminee + 1)
+    } else if(!isChecked && checkedExaminee > 0){
+      setCheckedExaminee(checkedExaminee - 1)
+    }
+  }
 
   function addExaminee(examinee) {
     const examineeId = examinees.length + 1
@@ -62,6 +79,7 @@ export default function GradingCreate() {
               item={innerExaminee.name}
               onRemove={removeExaminee}
               onEdit={editExaminee}
+              onCheck={onCheck}
             />
         ))}
       </div>

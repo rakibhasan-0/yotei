@@ -33,7 +33,7 @@ import CheckBox from "../CheckBox/CheckBox"
  * @author Team 1
  * @since 2024-05-06
  */
-export default function Examinee({ item, text, id, index, onRemove, onEdit, pairNumber }) {
+export default function Examinee({ item, text, id, index, onRemove, onEdit, pairNumber, onCheck }) {
 
   const [isEditing, setIsEditing] = useState(false); // State to manage edit mode
   const [editedText, setEditedText] = useState(item); // State to store edited text
@@ -55,42 +55,38 @@ export default function Examinee({ item, text, id, index, onRemove, onEdit, pair
   };
 
 	return (
-    <div className={styles["examinee-container"]}>
-      <p>{}</p>
-      <div className={styles["examinee-list-container"]} data-testid="ExamineeListItem">
-        <div className={styles["examinee-list-header"]} style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
-          <div data-testid="ExamineeListItem-link" style={{width: "100%"}}>
-            <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
-              <CheckBox
-                checked={checked}
-                onClick={setChecked}
-                label="Hello"
-                disabled
-                id="test-id"
-              />
-              <div style={{display: "flex", alignItems: "center"}}>
-                {isEditing ? ( // Render input field if in edit mode
-                  <input
-                    className={`${styles["input"]}`}
-                    type="text"
-                    value={currentName}
-                    onChange={handleInputChange}
-                    onBlur={handleEditSubmit}
-                    autoFocus // Auto focus on input field when editing starts
-                  />
-                ) : (
-                  <div className={styles["href-link"]} style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="ExamineeListItem-item">{currentName}</div>
-                )}
-              </div>
-              <div className={styles["flex-shrink-0"]} style={{display: "flex", alignItems: "center"}}>
+  <div className={styles["examinee-container"]}>
+    <div className={styles["examinee-list-container"]} data-testid="ExamineeListItem">
+      <div className={styles["examinee-list-header"]} style={{ backgroundColor: index % 2 === 0 ? "var(--red-secondary)" : "var(--background)" }}>
+        <div data-testid="ExamineeListItem-link" style={{ width: "100%" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+            <CheckBox
+              onClick={(checked) => onCheck(checked)}
+              enabled
+              id="test-id"
+            />
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flex: 1 }}>
+              {isEditing ? (
+                <input
+                  className={`${styles["input"]}`}
+                  type="text"
+                  value={currentName}
+                  onChange={handleInputChange}
+                  onBlur={handleEditSubmit}
+                  autoFocus
+                />
+              ) : (
+                <div className={styles["href-link"]} style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="ExamineeListItem-item">{currentName}</div>
+              )}
+              <div className={styles["flex-shrink-0"]} style={{ display: "flex", alignItems: "center" }}>
                 <div className={styles["examinee-list-duration"]} data-testid="ExamineeListItem-text">
                   <p>{text}</p>
                 </div>
                 {isEditing ? (
-                    <Key onClick={handleEditSubmit} size="24px" style={{ color: "var(--red-primary)", cursor: "pointer", marginRight: "10px" }} />
-                  ) : (
-                    <Pencil onClick={handleEdit} size="24px" style={{ color: "var(--red-primary)", cursor: "pointer", marginRight: "10px" }} />
-                  )}
+                  <Key onClick={handleEditSubmit} size="24px" style={{ color: "var(--red-primary)", cursor: "pointer", marginRight: "10px" }} />
+                ) : (
+                  <Pencil onClick={handleEdit} size="24px" style={{ color: "var(--red-primary)", cursor: "pointer", marginRight: "10px" }} />
+                )}
                 <CloseIcon
                   className={styles["close-icon"]}
                   onClick={() => onRemove(id)}
@@ -103,5 +99,5 @@ export default function Examinee({ item, text, id, index, onRemove, onEdit, pair
         </div>
       </div>
     </div>
-	)
+  </div>)
 }
