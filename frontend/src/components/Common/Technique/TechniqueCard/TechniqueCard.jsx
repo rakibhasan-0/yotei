@@ -33,7 +33,9 @@ function TechniqueCard({ technique, checkBox, id, onClick}) {
 	}
 
 	const clickUpstream = (event) => {
-		onClick(id, event)
+		if(onClick){
+			onClick(id, event)
+		}
 	}
 
 	return (

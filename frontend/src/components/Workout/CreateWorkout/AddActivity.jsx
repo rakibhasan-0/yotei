@@ -262,41 +262,36 @@ function AddActivity({ id, setShowActivityInfo }) {
 		if(!elementFound && storedTechnique != null){
 			waitForItemToLoad()
 		}
-		
+
 		if(storedTechnique != null && element == null && fetchedElement != null && !elementFound && fetchedElementNum <= techniques.length){
+			console.log("Scrolling to: " + fetchedElement.id)
 			fetchedElement.scrollIntoView()
 			setElement(document.getElementById(storedTechnique))
-			setFetchedElementNum(fetchedElementNum + 1)
 		}
 
 		if (element != null) {
 			element.scrollIntoView({ behavior: "smooth" })
 			setElementFound(true)
 		}
-	}, [hasLoadedData, fetchedTech, fetchedElement, fetchedElementNum])
+	}, [hasLoadedData, fetchedTech, fetchedElement, fetchedElementNum])//fetchedElementNum är problem child
 
-	//TODO sätter inte dit den ska då jag klickar på länken?
 	function waitForItemToLoad() {
 		if (hasLoadedData && fetchedTech && fetchedElementNum <= techniques.length) {
 			const interval = setInterval(() => {
-				const element = document.getElementById("technique-list-item-" + techniques[fetchedElementNum].techniqueID)
+				const elementTemp = document.getElementById("technique-list-item-" + techniques[fetchedElementNum].techniqueID)
 				if(elementFound){
 					return
 				}
-				if (element != null) {
+
+				if (elementTemp != null) {
 					clearInterval(interval)
-					setFetchedElement(element)
+					setFetchedElement(elementTemp)
+					
+					setFetchedElementNum(fetchedElementNum + 10)
 				}
-			}, 500) // adjust the interval as needed
+			}, 100)
 		}
 	}
-
-	useEffect(() => {
-		if (pressedTechnique != null) {
-			console.log("saved: " + pressedTechnique)
-			localStorage.setItem("storedTechnique", pressedTechnique)
-		}
-	}, [pressedTechnique])
 
 	/**
 	 * Function for handling when a belt has been picked from the BeltPicker.
@@ -425,8 +420,8 @@ function AddActivity({ id, setShowActivityInfo }) {
 		setSelectedBelts([])
 	}
 
-	const printLog = (id) => {
-		setPressedTechnique(id)
+	const printLog = (id, event) => {
+		localStorage.setItem("storedTechnique", id)
 	}
 
 	return (
