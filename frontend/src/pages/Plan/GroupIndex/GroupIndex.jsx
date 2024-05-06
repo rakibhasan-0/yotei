@@ -33,6 +33,7 @@ export default function GroupIndex() {
 			try {
 				const response = await fetch("/api/plan/all", { headers: { token } })
 				if (response.status === 404) {
+					//TODO should change this to be the case for code 200 or 204.
 					//This code runs if there are no groups.
 					setGroupsEmpty(true) //Set a flag for the groups being empty.
 					setLoading(false) //Stop the page from loading.
