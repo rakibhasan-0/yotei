@@ -41,6 +41,7 @@
   flex-direction: column;
   width: 100%;
   text-align: left;
+  margin-top: 20px;
 }
 .err {
   color: var(--red-primary);

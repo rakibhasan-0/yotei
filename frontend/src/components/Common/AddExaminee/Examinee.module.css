@@ -1,0 +1,38 @@
+.examinee-list-container{
+    border-radius: 5px;
+    border: 1px solid var(--black-primary);
+    user-select: none;
+    overflow: auto;
+    margin-top: 10px;
+    display: flex;
+}
+
+.examinee-list-header {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    background-color: var(--red-secondary);
+	padding: 10px;
+    font-weight: 400;
+    width: 100%;
+    overflow:hidden;
+  }
+  
+.examinee-list-header p { /* Duration */
+
+    margin: 0;
+    align-items: end;
+    font-weight: 600;
+
+}
+    
+.examinee-list-duration {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.href-link {
+    margin: 0 0 0 10px;
+}

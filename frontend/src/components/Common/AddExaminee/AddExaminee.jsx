@@ -1,6 +1,7 @@
 import styles from "./AddExaminee.module.css"
 import { forwardRef } from "react"
 import { Plus } from "react-bootstrap-icons"
+import { useState, useEffect, useContext } from "react"
 
 /**
  * This is AddExaminee component
@@ -46,27 +47,45 @@ const AddExaminee = forwardRef(function AddExaminee(
 	const defaultLimit = 180
 	const isErr = !(errorMessage == undefined || errorMessage == null || errorMessage == "")
 
-	const handleClick = () => {
-		console.log("Ikonen klickades på!")
-	}
+  const [inputValue, setInputValue] = useState("");
+
+  const handleChange = (event) => {
+    setInputValue(event.target.value);
+  };
+
+  const handleClick = () => {
+    if (inputValue.trim() !== "") {
+      onSubmit(inputValue.trim());
+      setInputValue("");
+    }
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleClick();
+    }
+  };
 
 	return(
-		<form onSubmit={onSubmit}>
+		<form onSubmit={handleClick}>
 			<label className={styles.label}>
 				{!hideLength && <p className={styles.limitText}>{text?.length || 0}/{maxLength || defaultLimit}</p> }
 				<div className={styles.inputContainer}>
 					<input
 						className={isErr ? `${styles.input} ${styles.inputErr}` : `${styles.input}`}
-						placeholder={"Lägg till ny deltagare"}
-						value={text}
+            placeholder={placeholder}
+						value={inputValue}
 						type={type}
 						id={id}
 						onKeyUp={onKeyUp}
 						required={required}
 						ref={ref}
 						maxLength={maxLength || defaultLimit}
+            onChange={handleChange}
+            onKeyDown={handleKeyPress}
 					/>
-        					<Plus onClick={handleClick} className={styles.plusIcon} /> 
+          <Plus onClick={handleClick} className={styles.plusIcon} /> 
 				</div>
 				<p className={styles.err}>{errorMessage}</p>
 		  </label>
