@@ -78,11 +78,11 @@ DROP TABLE IF EXISTS technique_tag CASCADE;
 
 DROP TABLE IF EXISTS workout_tag CASCADE;
 
-DROP TABLE IF EXISTS examination_grading;
-DROP TABLE IF EXISTS examination_examinee;
-DROP TABLE IF EXISTS examination_examinee_pair;
-DROP TABLE IF EXISTS examination_result_technique;
-DROP TABLE IF EXISTS examination_comment;
+DROP TABLE IF EXISTS examination_grading CASCADE;
+DROP TABLE IF EXISTS examination_examinee CASCADE;
+DROP TABLE IF EXISTS examination_examinee_pair CASCADE;
+DROP TABLE IF EXISTS examination_result_technique CASCADE;
+DROP TABLE IF EXISTS examination_comment CASCADE;
 DROP TABLE IF EXISTS activity CASCADE;
 
 DROP TABLE IF EXISTS tag CASCADE;
@@ -257,49 +257,8 @@ CREATE TABLE IF NOT EXISTS exercise_tag (
 	CONSTRAINT et_fk_tag FOREIGN KEY (tag_id) REFERENCES tag(tag_id) ON
 	DELETE CASCADE,
 	UNIQUE (ex_id, tag_id)
-    );
+	);
 
-CREATE TABLE IF NOT EXISTS examination_grading (
-    grading_id SERIAL PRIMARY KEY,
-    creator_id INT NOT NULL,
-    belt_id INT NOT NULL,
-    step INT NOT NULL,
-    technique_step_num INT NOT NULL,
-    created_at DATE NOT NULL,
-    CONSTRAINT grading_fk_belt FOREIGN KEY(belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS examination_examinee (
-    examinee_id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    grading_id INT NOT NULL,
-    CONSTRAINT examinee_fk_grading FOREIGN KEY(grading_id) REFERENCES examination_grading(grading_id) ON DELETE CASCADE
-);
-
-
-CREATE TABLE IF NOT EXISTS examination_examinee_pair (
-	examinee_pair_id SERIAL PRIMARY KEY,
-	examinee_1_id INT NOT NULL,
-	examinee_2_id INT NOT NULL,
-	CONSTRAINT examinee_pair_fk_examinee_1 FOREIGN KEY(examinee_1_id) REFERENCES examination_examinee(examinee_id) ON DELETE CASCADE,
-	CONSTRAINT examinee_pair_fk_examinee_2 FOREIGN KEY(examinee_2_id) REFERENCES examination_examinee(examinee_id) ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS examination_result(
-	examination_result_technique_id SERIAL PRIMARY KEY,
-	examinee_id INT NOT NULL,
-	technique_id_JSON VARCHAR(255) NOT NULL, -- KAN DETTA VARA ETT PROBLEM ? STRÄNGMATCHA FÖR ATT HITTA RÄTT TEKNIK I DUNNO.
-	pass INT NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS examination_comment(
-	comment_id SERIAL PRIMARY KEY,
-	grading_id INT NOT NULL,
-	examinee_id INT NOT NULL,
-	examinee_pair_id INT NOT NULL,
-	technique_id VARCHAR(255) NOT NULL,
-	comment VARCHAR(255) NOT NULL --Kanske öka?
-);
 
 --
 -- Name: technique_tag (Mapping table); Type: TABLE; Schema: public; Owner: psql
@@ -559,10 +518,10 @@ ALTER TABLE
 
 -- Logging tables; Type: TABLE; Schema: public; Owner: psql
 CREATE TABLE error_log (
-       log_id SERIAL PRIMARY KEY,
-       error_message TEXT NOT NULL,
-       info_message TEXT  NOT NULL,
-       error_date_time TIMESTAMP NOT NULL
+	   log_id SERIAL PRIMARY KEY,
+	   error_message TEXT NOT NULL,
+	   info_message TEXT  NOT NULL,
+	   error_date_time TIMESTAMP NOT NULL
 );
 
 ALTER TABLE
@@ -582,6 +541,49 @@ CREATE TABLE media (
 
 ALTER TABLE
 	media OWNER TO psql;
+
+CREATE TABLE IF NOT EXISTS examination_grading (
+	grading_id SERIAL PRIMARY KEY,
+	creator_id INT NOT NULL,
+	belt_id INT NOT NULL,
+	step INT NOT NULL,
+	technique_step_num INT NOT NULL,
+	created_at DATE NOT NULL,
+	CONSTRAINT grading_fk_belt FOREIGN KEY(belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS examination_examinee (
+	examinee_id SERIAL PRIMARY KEY,
+	name VARCHAR(255) NOT NULL,
+	grading_id INT NOT NULL,
+	CONSTRAINT examinee_fk_grading FOREIGN KEY(grading_id) REFERENCES examination_grading(grading_id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE IF NOT EXISTS examination_examinee_pair (
+	examinee_pair_id SERIAL PRIMARY KEY,
+	examinee_1_id INT NOT NULL,
+	examinee_2_id INT NOT NULL,
+	CONSTRAINT examinee_pair_fk_examinee_1 FOREIGN KEY(examinee_1_id) REFERENCES examination_examinee(examinee_id) ON DELETE CASCADE,
+	CONSTRAINT examinee_pair_fk_examinee_2 FOREIGN KEY(examinee_2_id) REFERENCES examination_examinee(examinee_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS examination_result(
+	examination_result_technique_id SERIAL PRIMARY KEY,
+	examinee_id INT NOT NULL,
+	technique_id_JSON VARCHAR(255) NOT NULL, -- KAN DETTA VARA ETT PROBLEM ? STRÄNGMATCHA FÖR ATT HITTA RÄTT TEKNIK I DUNNO.
+	pass INT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS examination_comment(
+	comment_id SERIAL PRIMARY KEY,
+	grading_id INT NOT NULL,
+	examinee_id INT NOT NULL,
+	examinee_pair_id INT NOT NULL,
+	technique_id VARCHAR(255) NOT NULL,
+	comment VARCHAR(255) NOT NULL --Kanske öka?
+);
+
 
 --
 -- Default Inserts
