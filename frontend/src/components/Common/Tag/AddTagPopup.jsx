@@ -11,7 +11,7 @@ import FilterContainer from "../Filter/FilterContainer/FilterContainer"
 import Sorter from "../Sorting/Sorter"
 import RoundButton from "../RoundButton/RoundButton"
 import { ChevronRight } from "react-bootstrap-icons"
-import TagList from "./TagList.jsx"
+import TagList from "./Taglist.jsx"
 
 /**
  * OBSERVE! This component is used inside the TagInput-component and should not be used by itself. 

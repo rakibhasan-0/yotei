@@ -1,5 +1,5 @@
 import React from "react"
-import { List, Pencil } from "react-bootstrap-icons"
+import { Pencil } from "react-bootstrap-icons"
 import styles from "./TagList.module.css"
 import Tag from "./Tag"
 import { Link } from "react-router-dom"
