@@ -1,42 +1,46 @@
-# Systemtest
+# System Test
 
-Här dokumenteras systemtest.
+This document outlines system testing. As per the [decision](https://git.cs.umu.se/courses-project/5dv214vt23/docs/-/blob/main/Chapters/QA/beslut.md), [playwright](https://playwright.dev/) is used for system testing. System tests exist to provide comprehensive testing of the entire system, ensuring that everything functions as intended. Playwright simulates a browser and can be scripted. 
 
-Enligt [beslutet](https://git.cs.umu.se/courses-project/5dv214vt23/docs/-/blob/main/Chapters/QA/beslut.md) används [playwright](https://playwright.dev/) för systemtest. Systemtesten finns för att få översiktliga
-tester på hela systemet, och hjälper oss att garantera att allt fungerar som det ska. Playwright simulerar en
-webbläsare vilket kan skriptas.
+Learn more about system testing with playwright here: [Playwright Documentation](https://playwright.dev/docs/intro)
 
-När en brytande ändring eller en större förändring är gjord **måste** systemtester
-köras för att minska risken att projektet slutar fungera. För tillfället är testerna relativt enkla, men utvecklare **bör** skriva tester när större ändringar sker.
+## Run system tests
+Whenever a breaking change or a significant modification is made, system tests must be run to minimize the risk of project failure. This can be done manually locally. 
 
-## Körning av systemtest
-
-För att köra systemtesterna lokalt måste du först starta upp hela systemet:
+1. Run all docker containers either in the Docker Desktop ui or with this command:
 
 ```sh
-cd infra
 docker compose up -d
 ```
 
-Därefter kan systemtesterna köras på två olika vis:
+2. Ensure that the frontend container isn't running, as it will occupy port 3000, which is required for system tests. Stop running that container. 
+
+3. Run system tests:
 
 ```sh
 cd frontend
 npm run systest
+```
+
+You can also run the tests with the following command, which runs the tests in UI mode for a better developer experience with time travel debugging, watch mode and more. 
+```sh
 npm run systest:ui
 ```
 
-Att köra med `:ui` versionen öppnar ett nytt fönster där enskilda test
-kan triggas och där man kan se grafiskt vad som händer.
+## System tests in pipeline
+TODO write about it.
 
-## Körning på pipeline
+## Write system tests
+TODO specify who and when system tests should be written.
 
-För att köra på pipelinen klickar du in på den och triggar `systest`-jobbet
-manuellt.
+### Structure & Naming
+All tests should reside in `sys-test` and have names like `*.spec.ts`. If making direct calls to the API, the code should be placed in a separate file `sys-test/fixtures/<api-namn>Api.ts`. 
 
-## Skrivning av systemtest
+Specify tests in steps. For example, `// Setup. Create a user`, `// 1. Log in`, `// Cleanup. Remove the new user.`
 
-Tester har följande allmäna struktur:
+Unlike unit tests, AAA (Arrange, Act, Assert) does not need to be followed; tests can be fairly long and mix assertions and actions
+
+Tests follow this general structure:
 
 ```ts
 import { expect, test } from '@playwright/test';
@@ -44,7 +48,7 @@ import { UserApi } from './fixtures/UserApi';
 
 test.describe('ST-<suite-nr> <namn på test>', () => {
     /**
-     * Dokumentation om vad testet gör
+     * Documentation related to the test.
      */
     test('.<test-nr> <beskrivning av test>', async ({ page }) => {
         // Setup.
@@ -55,27 +59,38 @@ test.describe('ST-<suite-nr> <namn på test>', () => {
         // Cleanup.
     });
 });
+``` 
+
+### Generate tests with Codegen
+Codegen will open two windows, a browser window where you interact with the website you wish to test and the Playwright Inspector window where you can record your tests, copy the tests, clear your tests as well as change the language of your tests. This can be done by the following steps:
+
+1. Run frontend
+```sh
+cd frontend
+npm run start
 ```
 
-Utöver manuell skrivning av tester kan man generera test-kod med
-[Playwrights VSCode extension](https://marketplace.visualstudio.com/items?itemName=ms-playwright.playwright). Verktyget öppnar då en ny webbläsare, och
-genererar kod för alla handlingar.
+2. Run codegen in another terminal 
+```sh
+cd frontend
+npm run systest:codegen
+```
 
-### Struktur & namngivning
+3. Add the URL, the one you want to test, directly into the browser window
 
-Alla test ska ligga i `sys-test` och heta `*.spec.ts`. Om man vill göra
-direkta slagningar till api:et, skall koden ligga i en egen fil
-`sys-test/fixtures/<api-namn>Api.ts`. 
+4. Perform actions that you want to test on the website. 
 
-### Fixturer
+5. Copy the generated code and add it to your test file. **Note that you should replace the goto-command to the following command, so tests can run both locally and in pipeline.**
+```ts
+await page.goto('/');
+```
 
-Fixturerna är 'helpers' för att förenkla slagningar mot backend. Detta kan
-vara setup/teardown på test.
+[Read more about generating tests with Codegen](https://playwright.dev/docs/codegen-intro)
 
-### Riktlinjer
+### Fixtures
 
-- Inte testa hur *gränssnittet* ser ut, utan hur *systemet* det fungerar.
-- Specificera tester i steg. T.ex. `// Setup. Skapa en användare`, `// 1. Logga in`,
-    `// Cleanup. Ta bort ny användare`.
-- Till skillnad från enhetstest behöver inte AAA följas, utan tester får vara
-    ganska långa och blanda assertions och handlingar.
+Fixtures are helpers to simplify calls to the backend. This can involve setup/teardown for tests.
+
+## Tools
+This extension by Microsoft gives support for Playwright testing in VSCode:
+[Playwright Test for VSCode](https://marketplace.visualstudio.com/items?itemName=ms-playwright.playwright) 
