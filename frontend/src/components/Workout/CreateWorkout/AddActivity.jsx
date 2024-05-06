@@ -104,7 +104,6 @@ function AddActivity({ id, setShowActivityInfo }) {
 	//const [cookiesExer, setCookiesExer] = useCookies(["techniques-filter"])
 	const [visibleExercises, setVisibleExercises] = useState([])
 
-	const [pressedTechnique, setPressedTechnique] = useState(null)
 	const [element , setElement] = useState(null)
 	const [fetchedElementNum, setFetchedElementNum] = useState(19)
 	const [fetchedElement, setFetchedElement] = useState(null)
@@ -255,7 +254,6 @@ function AddActivity({ id, setShowActivityInfo }) {
 		if (!hasLoadedData || !fetchedTech) return
 		
 		const storedTechnique = localStorage.getItem("storedTechnique")
-		setPressedTechnique(storedTechnique)
 	
 		setElement(document.getElementById(storedTechnique))
 		
@@ -420,7 +418,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 		setSelectedBelts([])
 	}
 
-	const printLog = (id, event) => {
+	const printLog = (id) => {
 		localStorage.setItem("storedTechnique", id)
 	}
 
