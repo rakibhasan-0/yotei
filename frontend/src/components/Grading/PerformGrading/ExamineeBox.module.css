@@ -1,5 +1,5 @@
 .examineeContainer {
-    width: 40%;
+    width: 35%;
     height: 20%;
     margin: 0;
     padding: 0;
@@ -11,6 +11,7 @@
     height: 15%;
     margin: 0;
     padding: 0;
+    padding-top: 5px;
     min-height: 1rem;
 }
 
@@ -20,9 +21,10 @@
     align-items: left;
     width: fit-content;
     float: left;
+    margin-left: 5px;
     width: 70%;
+    text-align: left;
     padding-top: 5px;
-    
     padding: 0;
     min-height: 1rem;
 }
