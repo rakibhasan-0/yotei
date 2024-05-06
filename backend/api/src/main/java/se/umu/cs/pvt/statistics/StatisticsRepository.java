@@ -2,9 +2,8 @@ package se.umu.cs.pvt.statistics;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import se.umu.cs.pvt.session.Session;
 import se.umu.cs.pvt.belt.Belt;
@@ -20,7 +19,19 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
   
   @Query("""
     SELECT
-      new se.umu.cs.pvt.statistics.StatisticsResponse(t.id, t.name, 'technique', COUNT(t.id))
+      new se.umu.cs.pvt.statistics.StatisticsResponse(s.id,
+                                                      t.id, 
+                                                      t.name,
+                                                      'technique', 
+                                                      COUNT(t.id), 
+                                                      (t.id IN (
+                                                        SELECT tt.techId
+                                                        FROM TechniqueTag tt
+                                                        WHERE tt.tag = 1
+                                                      ))
+                                                      ,s.date
+                                                      )
+                                                                                         
     FROM
       Session s
     JOIN
@@ -36,14 +47,28 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
     AND
       t.id IS NOT NULL
     GROUP BY
+      s.id,
       t.id,
-      t.name
+      t.name,
+      s.date
       """)
-  List<StatisticsResponse> getSampleTechniquesQuery(Long id);
+  List<StatisticsResponse> getAllSampleTechniquesQuery(Long id);
+
 
   @Query("""
     SELECT
-      new se.umu.cs.pvt.statistics.StatisticsResponse(e.id, e.name, 'exercise', COUNT(e.id))
+      new se.umu.cs.pvt.statistics.StatisticsResponse(s.id, 
+                                                      e.id, 
+                                                      e.name, 
+                                                      'exercise', 
+                                                      COUNT(e.id),
+                                                      (e.id IN (
+                                                        SELECT et.exerciseId
+                                                        FROM ExerciseTag et
+                                                        WHERE et.tag = 1
+                                                      )),
+                                                      s.date
+                                                      ) 
     FROM
       Session s
     JOIN
@@ -59,11 +84,14 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
     AND
       e.id IS NOT NULL
     GROUP BY
+      s.id,
       e.id,
-      e.name
+      e.name,
+      s.date
       """)
-  List<StatisticsResponse> getSampleExercisesQuery(Long id);
+  List<StatisticsResponse> getAllSampleExercisesQuery(Long id);
 
+  // Get a list of belts associated with a technique.
   @Query("""
     SELECT 
       new se.umu.cs.pvt.belt.Belt(b.id, b.name, b.color, b.isChild)
@@ -77,4 +105,6 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
       tb.techniqueId = :id
       """)
   List<Belt> getBeltsForTechnique(Long id);
+
+
 }

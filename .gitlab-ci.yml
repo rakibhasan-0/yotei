@@ -1,5 +1,4 @@
 stages:
-  - dummy
   - linter
   - build
   - test
@@ -10,12 +9,13 @@ stages:
   - deploy_prod_server
 
 dummy-job:
+  stage: test
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
   tags:
    - system
   script:
-  - echo "GitLab vibecheck"
+  - echo "Hello World!"
 
 test-linter-frontend:
   rules:
@@ -149,12 +149,9 @@ rebuild-database:
     - docker login --username pvt2024 --password $DOCKER_PASS # DOCKER_PASS defined in GitLab CI/CD settings as a secure variable.
   script:
     - cd infra/database
-    - ./backup_db.sh db.dump
     - docker stop html-psql-1 || true
     - docker rm html-psql-1 || true
     - docker volume rm html_pgdata || true
-    - ./restore_db.sh db.dump
-
 
 deploy-test-server:
   stage: deploy_test_server
@@ -174,14 +171,14 @@ deploy-test-server:
     - rm -rf /var/www/html/nginx
     - rm -rf /var/www/html/*.yml
 
-    - docker build --no-cache -t pvt2024/database:feature ./infra/database
-    - docker push pvt2024/database:feature
-    - docker build --no-cache -t pvt2024/gateway:feature ./backend/gateway
-    - docker push pvt2024/gateway:feature
-    - docker build --no-cache -t pvt2024/api:feature ./backend/api
-    - docker push pvt2024/api:feature
-    - docker build --no-cache -t pvt2024/frontend:feature ./frontend
-    - docker push pvt2024/frontend:feature
+    - docker build --no-cache -t pvt2024/database:latest ./infra/database
+    - docker push pvt2024/database:latest
+    - docker build --no-cache -t pvt2024/gateway:latest ./backend/gateway
+    - docker push pvt2024/gateway:latest
+    - docker build --no-cache -t pvt2024/api:latest ./backend/api
+    - docker push pvt2024/api:latest
+    - docker build --no-cache -t pvt2024/frontend:latest ./frontend
+    - docker push pvt2024/frontend:latest
 
     - cp ./docker-compose.feature.yml /var/www/html/
     - cp -r ./nginx /var/www/html/
@@ -203,32 +200,7 @@ run-systests:
     - cd frontend/
     - npm ci
     - npm run systest:ci
-  after_script:
-    - >
-      if [ $CI_JOB_STATUS == 'success' ]; then
-        docker tag pvt2024/database:feature pvt2024/database:latest
-        docker push pvt2024/database:latest
-        docker tag pvt2024/api:feature pvt2024/api:latest
-        docker push pvt2024/api:latest
-        docker tag pvt2024/gateway:feature pvt2024/gateway:latest
-        docker push pvt2024/gateway:latest
-        docker tag pvt2024/frontend:feature pvt2024/frontend:latest
-        docker push pvt2024/frontend:latest
-      else
-        docker system prune -a -f
-        rm -rf /var/www/html/*.tar
-        rm -rf /var/www/html/nginx
-        rm -rf /var/www/html/*.yml
-        docker build -t pvt2024/database:latest ./infra/database
-        docker build --no-cache -t pvt2024/gateway:latest ./backend/gateway
-        docker build --no-cache -t pvt2024/api:latest ./backend/api
-        docker build --no-cache -t pvt2024/frontend:latest ./frontend
-        cp ./docker-compose.yml /var/www/html/
-        cp -r ./nginx /var/www/html/
-        cd /var/www/html/
-        docker compose up -d
-      fi
-
+    
 deploy-prod-server:
   stage: deploy_prod_server
   resource_group: deploy

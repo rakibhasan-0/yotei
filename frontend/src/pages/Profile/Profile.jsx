@@ -8,7 +8,7 @@ import { getWorkouts } from "../../components/Common/SearchBar/SearchBarUtils"
 import { AccountContext } from "../../context"
 import style from "./Profile.module.css"
 import InputTextFieldBorderLabel from "../../components/Common/InputTextFieldBorderLabel/InputTextFieldBorderLabel"
-import { logOut } from "/src/utils"
+import { logOut } from "../../utils"
 import useMap from "../../hooks/useMap"
 import Divider from "../../components/Common/Divider/Divider"
 import Spinner from "../../components/Common/Spinner/Spinner"
@@ -30,12 +30,14 @@ export default function Profile() {
 	const [password, setPassword] = useState("")
 	const [newPassword, setNewPassword] = useState("")
 	const [verifyNewPassword, setVerifyNewPassword] = useState("")
+	const [wrongUsernamePassword, setWrongUsernamePassword] = useState()
 	const [wrongPassword, setWrongPassword] = useState()
 	const [missMatchPassword, setMissMatchPassword] = useState()
 	const [loading, setIsLoading] = useState(true)
 	const [newUsername, setNewUsername] = useState("")
-	const [UsernamePassword, setUsernamePassword] = useState("")
-	const [verifyUsernamePassword, setVerifyUsernamePassword] = useState("")
+	const [usernamePassword, setUsernamePassword] = useState("")
+	const [passwordButtonState,setPasswordButtonDisabled] = useState(false)
+	const [usernameButtonState,setUsernameButtonDisabled] = useState(false)
 
 	/* Workout management */
 
@@ -70,14 +72,33 @@ export default function Profile() {
 		})
 	}, [searchText, token, userId, cache, cacheActions])
 
+	useEffect(() => {
+		if (password === "" || newPassword === "" || verifyNewPassword === "") {
+			setPasswordButtonDisabled(true)
+		} else {
+			setPasswordButtonDisabled(false)
+		}
+
+		if (newUsername === "" || usernamePassword === "") {
+			setUsernameButtonDisabled(true)
+		} else {
+			setUsernameButtonDisabled(false)
+		}
+	
+	}, [password, newPassword, verifyNewPassword, newUsername, usernamePassword])
+
+
 	/* Account management */
 
 	const changePassword = async () => {
+		setWrongPassword(null)
+		setWrongUsernamePassword
+
 		if (newPassword !== verifyNewPassword) {
 			return setMissMatchPassword("Lösenorden matchar inte")
 		}
-		setMissMatchPassword(undefined)
-		setWrongPassword(undefined)
+
+		setMissMatchPassword(null)
 
 		const requestOptions = {
 			headers: {"Content-Type": "application/json", token},
@@ -92,19 +113,20 @@ export default function Profile() {
 	}
 
 	const changeUsername = async () => {
-		setVerifyUsernamePassword(undefined)
-
+		setWrongPassword(null)
+		setMissMatchPassword(null)
+		setWrongUsernamePassword(null)
 		const requestOptions = {
 			headers: {"Content-Type": "application/json", token},
 			method: "PUT",
-			body: JSON.stringify({newUsername: newUsername, password: UsernamePassword, id: userId})
+			body: JSON.stringify({newUsername: newUsername, password: usernamePassword, id: userId})
 		}
 		const response = await fetch("/api/users/name", requestOptions)
 		if (response.status === 400) {
-			return setVerifyUsernamePassword("Lösenordet stämmer inte")
+			return setWrongUsernamePassword("Lösenordet stämmer inte")
 		}
 		if (response.status === 406) {
-			return setErrorToast("Användarnamnet finns redan")
+			return setErrorToast("Användarnamnet finns redan")	
 		}
 		if (!response.ok) {
 			return setErrorToast("Ett okänt fel inträffade på servern")
@@ -136,26 +158,26 @@ export default function Profile() {
 			<Tab eventKey={"Settings"} title={"Inställningar"} className={style.tab}>
 				<div className={style.divider}><Divider option={"h2_center"} title={"Lösenord"} /></div>
 				<title>Min sida</title>
-				<InputTextFieldBorderLabel errorMessage={wrongPassword} onChange={e => {setPassword(e.target.value)}} id="current-password" type="password" label="Nuvarande lösenord" />
+				<InputTextFieldBorderLabel errorMessage={wrongPassword} onChange={e => {setPassword(e.target.value)}} id="current-password" type="text" label="Nuvarande lösenord" />
 				<div className='mb-2' />
 				<InputTextFieldBorderLabel onChange={e => {setNewPassword(e.target.value)}} id="new-password" type="password" label="Nytt lösenord" />
 				<div className='mb-2' />
 				<InputTextFieldBorderLabel errorMessage={missMatchPassword} onChange={e => {setVerifyNewPassword(e.target.value)}} id="verify-password" type="password" label="Bekräfta lösenord" />
 				<div className='mb-2' />
 				<div className={style.floatRight}>
-					<Button className="btn btn-primary" onClick={changePassword}>Ändra</Button>
+					<Button id ={"change-password-button"} className="btn btn-primary" onClick={changePassword} disabled={passwordButtonState}>Ändra Lösenord</Button>
 				</div>
 				<div className={style.divider}><Divider option={"h2_center"} title={"Användarnamn"} /></div>
-				<InputTextFieldBorderLabel onChange={e => {setNewUsername(e.target.value)}} id="username" type="text" label="Nytt användarnamn" />
+				<InputTextFieldBorderLabel onChange={e => {setNewUsername(e.target.value)}} id="username" type="text" label="Nytt användarnamn"/>
 				<div className='mb-2' />
-				<InputTextFieldBorderLabel onChange={e => {setUsernamePassword(e.target.value)}} errorMessage={verifyUsernamePassword} id="change-username-password" type="password" label="Lösenord" />
+				<InputTextFieldBorderLabel errorMessage={wrongUsernamePassword} onChange={e => {setUsernamePassword(e.target.value)}} id="change-username-password" type="password" label="Lösenord" />
 				<div className='mb-2' />
 				<div className={style.floatRight}>
-					<Button className="btn btn-primary" onClick={changeUsername}>Ändra</Button>
+					<Button id = {"change-username-button"} className = "btn btn-primary" onClick = {changeUsername} disabled={usernameButtonState}>Ändra Användarnamn</Button>
 				</div>
 				<Divider option={"h2_center"}/>
 				<div>
-					<Button onClick={logOut} width={"100%"} className="btn btn-primary">Logga ut</Button>
+					<Button id={"logoutButton"} onClick={logOut} width={"100%"} className="btn btn-primary">Logga ut</Button>
 				</div>
 				<br/>
 			</Tab>

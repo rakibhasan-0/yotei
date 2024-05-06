@@ -112,10 +112,9 @@ public class MediaController {
     @Transactional
     public ResponseEntity<Object> removeMedia(@RequestBody List<Media> toRemove) {
         ResponseEntity<Object> response = new ResponseEntity<>(HttpStatus.OK);
-
         try {
             for (Media m: toRemove) {
-                mediaRepository.deleteListOfMedia(m.getMovementId(), m.getUrl());
+                mediaRepository.deleteById(m.getId());
             }
         } catch (Exception e) {
             return new ResponseEntity<>(toRemove, HttpStatus.BAD_REQUEST);
