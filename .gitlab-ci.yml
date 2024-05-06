@@ -187,7 +187,7 @@ deploy-test-server:
     - cp -r ./nginx /var/www/html/
 
     - cd /var/www/html/
-    - docker compose -f docker-compose.yml -f docker-compose-feature.yml up -d --pull
+    - docker compose -f docker-compose.yml -f docker-compose-feature.yml up -d --pull always
 
 run-systests:
   stage: systest
