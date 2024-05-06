@@ -28,10 +28,11 @@ export default function BeltColorChart({ beltColorsData }) {
 
 	const colors = labels.map((color) => {
 		const colorMap = {
-			"White": "rgba(255, 255, 255, 1)",
-			"Yellow": "rgba(255, 255, 0, 1)",
+			"Vitt": "rgba(255, 255, 255, 1)",
+			"Gul": "rgba(255, 255, 0, 1)",
 			"Orange": "rgba(255, 165, 0, 1)",
-			"Green": "rgba(0, 128, 0, 1)"
+			"Grön": "rgba(0, 128, 0, 1)"
+
 			// Add more colors to the color map as needed
 		}
 		return colorMap[color]

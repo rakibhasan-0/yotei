@@ -16,8 +16,8 @@ export default function StatisticsPopUp() {
 	const endDate = "2021-01-02" //mock data
 	
 	const beltColorsData = {	//mock data
-		"White": 10,
-		"Yellow": 8,
+		"Vitt": 10,
+		"Gul": 8,
 		"Orange": 6,
 	}
 
@@ -38,12 +38,14 @@ export default function StatisticsPopUp() {
 				<p style={{ fontSize: "40px", fontFamily: "Arial, sans-serif" }}>
 					{averageRating}/5
 				</p>
-				<StarRatings rating={averageRating} starRatedColor="#ffa500" numberOfStars={5} name='rating' starDimension="50px" starSpacing="4px" />
+				<StarRatings rating={averageRating} starRatedColor="#ffcc00" numberOfStars={5} name='rating' starDimension="50px" starSpacing="4px" />
 				<p style = {{color: "#808080"}}>
 					Genomsnittligt betyg för {numberOfSessions} tillfällen från {<br />} datum {startDate} till {endDate}
 				</p>
 				
-				<p>Belt-tekniker</p>
+				<p style = {{fontSize: "40px"}}>
+					Belt-tekniker
+				</p>
 				<BeltColorChart beltColorsData={beltColorsData} /> 
 			</Popup>
 
