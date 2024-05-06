@@ -1,15 +1,13 @@
 /**
- * List item for an activity part of a workout. Either exercise/technique or free text element.
+ * List item for an activity part of a list. Either exercise/technique or free text element.
  * 
  * Props:
  *		activity @type {Activity Object} - The activity to be displayed within the item.
  *		index @type {int} - The index (order) of the list item.
  *		id @type {int} - The id of the list item.
  *
- * @author KEBABPIZZA (Group 8)
- * @author Cyclops    (Group 5) (2023-05-09)
- * @author Durian     (Group 3) (2024-04-18)
- * @author Tomato	  (Group 6) (2024-04-23)
+ * @author Tomato (Group 6) 
+ * @since 2024-05-07
  */
 import React, { useState } from "react"
 import styles from "./SavedListItemComponent.module.css"

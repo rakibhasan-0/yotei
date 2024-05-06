@@ -92,7 +92,7 @@ export default function ListInfo({ id }) {
                     /*
 					{workoutData.tags.length != 0 && getTagContainer(workoutData)}
                     */}
-                    <SavedActivityList categoryName={"Placeholder"} activities={workoutData} id={-1}/>
+                    <SavedActivityList activities={workoutData}/>
 					{(workoutUsers !== null && workoutUsers.length > 0) && getWorkoutUsersContainer(workoutUsers)}
 					{getButtons(navigate, setRShowPopup)}
                     
