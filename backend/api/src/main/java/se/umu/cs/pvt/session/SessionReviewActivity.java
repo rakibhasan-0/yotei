@@ -18,7 +18,7 @@ public class SessionReviewActivity implements Serializable {
     @Column(nullable = false, name = "session_review_id")
     private Long session_review_id;
 
-    @Column(nullable = false, name = "activity")
+    @Column(nullable = false, name = "activity_id")
     private int activity_id;
 
     /**
@@ -52,5 +52,9 @@ public class SessionReviewActivity implements Serializable {
 
     public int getActivity_id() {
         return activity_id;
+    }
+
+    public void setSession_review_id(Long review_id) {
+        this.session_review_id = review_id;
     }
 }

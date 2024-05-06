@@ -99,7 +99,7 @@ DROP TABLE IF EXISTS comments CASCADE;
 DROP TABLE IF EXISTS plan CASCADE;
 
 DROP TABLE IF EXISTS session_review;
-DROP TABLE IF EXISTS session_review_exercises;
+DROP TABLE IF EXISTS session_review_activity;
 
 DROP TABLE IF EXISTS session CASCADE;
 
@@ -428,8 +428,8 @@ ALTER TABLE
 
 
 
-CREATE TABLE session_review_activities(
-	session_review_exercise_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+CREATE TABLE session_review_activity(
+	session_review_activity_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	session_review_id INT CHECK(session_review_id IS NOT NULL),
 	activity_id INT CHECK(activity_id IS NOT NULL),
 	CONSTRAINT wr_fk_session_review_id FOREIGN KEY(session_review_id) REFERENCES session_review(review_id) ON

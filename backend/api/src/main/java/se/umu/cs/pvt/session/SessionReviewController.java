@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping(path = "/api/session/{id}/review")
 public class SessionReviewController {
     private SessionReviewRepository sessionReviewRepository;
-    private SessionReviewExerciseRepository sessionReviewExerciseRepository;
+    private SessionReviewActivityRepository sessionReviewActivityRepository;
 
 
     /**
@@ -25,9 +25,12 @@ public class SessionReviewController {
      * @param sessionReviewExerciseRepository
      */
     @Autowired
-    public SessionReviewController(SessionReviewRepository planRepository, SessionReviewExerciseRepository sessionReviewExerciseRepository) {
+    public SessionReviewController(SessionReviewRepository planRepository, SessionReviewActivityRepository sessionReviewExerciseRepository) {
         this.sessionReviewRepository = planRepository;
-        this.sessionReviewExerciseRepository = sessionReviewExerciseRepository;
+        this.sessionReviewActivityRepository = sessionReviewExerciseRepository;
+    }
+
+    public SessionReviewController() {
     }
 
     /**
@@ -65,18 +68,18 @@ public class SessionReviewController {
      * Add a completed excersise to a session review.
      * 
      * @param review_id The session review id.
-     * @param exercise Object mapped session review exercise from request body.
+     * @param activity Object mapped session review activity from request body.
      * @return HTTP-status code and the created session review exercise.
      */
-    @PostMapping("{review_id}/exercise")
-    public ResponseEntity<Object> createSessionReviewExercise(@PathVariable("review_id") long review_id, @RequestBody SessionReviewExercise exercise) {
+    @PostMapping("{review_id}/activity")
+    public ResponseEntity<Object> createSessionReviewActivity(@PathVariable("review_id") long review_id, @RequestBody SessionReviewActivity activity) {
         if(sessionReviewRepository.findById(review_id).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        exercise.setSession_review_id(review_id);
-        sessionReviewExerciseRepository.save(exercise);
-        return new ResponseEntity<>(exercise, HttpStatus.OK);
+        activity.setSession_review_id(review_id);
+        sessionReviewActivityRepository.save(activity);
+        return new ResponseEntity<>(activity, HttpStatus.OK);
     }
 
     /**
@@ -89,11 +92,11 @@ public class SessionReviewController {
      */
     @DeleteMapping("{review_id}/exercise/{exercise_id}")
     public ResponseEntity<Object> deleteSessionReviewExercise(@PathVariable("review_id") long review_id, @PathVariable("exercise_id") long exercise_id) {
-        if(sessionReviewExerciseRepository.findById(exercise_id).isEmpty()) {
+        if(sessionReviewActivityRepository.findById(exercise_id).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);    
         }
         
-        sessionReviewExerciseRepository.deleteById(exercise_id);
+        sessionReviewActivityRepository.deleteById(exercise_id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
