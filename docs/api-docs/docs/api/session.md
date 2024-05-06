@@ -351,7 +351,7 @@ path: POST /api/session/:session_id/review
 locked: true
 
 text: |
-    Create a new review for
+    Create a new review for a session.
 
 body:
 
