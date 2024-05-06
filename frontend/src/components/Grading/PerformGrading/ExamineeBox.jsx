@@ -17,13 +17,12 @@ import styles from "./ExamineeBox.module.css"
  *  examineeName = "test person"/>
  *  onClickComment = console.log("button clicked")
  * 
- * 
  * @author Apelsin
  * @since 2024-05-03
  * @version 1.0 
  */
 
-export default function ExamineeBox({ id, examineeName = "Max Värsting", onClickComment}) {
+export default function ExamineeBox({ id, examineeName, onClickComment}) {
 	const [selectedButton, setSelectedButton] = useState(null)
 
 	const handleButtonClick = (buttonId) => {
@@ -35,7 +34,7 @@ export default function ExamineeBox({ id, examineeName = "Max Värsting", onClic
 		<div id={id} className={styles.examineeContainer}>
 			<fieldset className={styles.examineeFieldset}>
 				<div className={styles.examineeName}>
-					<p role="ExamineeName">{examineeName}</p>
+					<p id="ExamineeName">{examineeName}</p>
 				</div>
 				<CommentButton onClick={onClickComment} className={styles.commentButtonContainer}/>
 				<div className={styles.buttonContainer}>
