@@ -34,29 +34,29 @@ import styles from "./ExamineeButton.module.css"
 
 // ExamineeButton.jsx
 const ExamineeButton = ({ id, type, onClick, isSelected, width, children }) => {
-    const style = { width: width || "50%" };
+	const style = { width: width || "50%" }
 
-    const buttonType = () => {
-        switch (type) {
-            case "red":
-                return isSelected ? styles.buttonRed : styles.buttonWhite;
-            case "green":
-                return isSelected ? styles.buttonGreen : styles.buttonWhite;
-            default:
-                return styles.buttonWhite;
-        }
-    };
+	const buttonType = () => {
+		switch (type) {
+		case "red":
+			return isSelected ? styles.buttonRed : styles.buttonWhite
+		case "green":
+			return isSelected ? styles.buttonGreen : styles.buttonWhite
+		default:
+			return styles.buttonWhite
+		}
+	}
 
-    return (
-        <button
-            id={id}
-            className={`${styles.buttonDefault} ${buttonType()}`}
-            onClick={onClick}
-            style={style}
-        >
-            {children}
-        </button>
-    );
-};
+	return (
+		<button
+			id={id}
+			className={`${styles.buttonDefault} ${buttonType()}`}
+			onClick={onClick}
+			style={style}
+		>
+			{children}
+		</button>
+	)
+}
 
 export default ExamineeButton
