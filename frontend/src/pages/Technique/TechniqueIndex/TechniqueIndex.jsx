@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react"
 import RoundButton from "../../../components/Common/RoundButton/RoundButton"
 import { AccountContext } from "../../../context"
 import styles from "./TechniqueIndex.module.css"
-import { Display, Plus } from "react-bootstrap-icons"
+import { Plus } from "react-bootstrap-icons"
 import SearchBar from "../../../components/Common/SearchBar/SearchBar"
 import { getTechniques } from "../../../components/Common/SearchBar/SearchBarUtils"
 import useMap from "../../../hooks/useMap"
@@ -15,8 +15,6 @@ import InfiniteScrollComponent from "../../../components/Common/List/InfiniteScr
 import { isAdmin } from "../../../utils"
 import Spinner from "../../../components/Common/Spinner/Spinner"
 import { Link, useLocation, useNavigate} from "react-router-dom"
-import ExamineeBox from "../../../components/Grading/PerformGrading/ExamineeBox"
-import TechniqueInfoPanel from "../../../components/Grading/PerformGrading/TechniqueInfoPanel"
 
 
 /**
@@ -137,9 +135,6 @@ export default function TechniqueIndex() {
 
 	return (
 		<>
-		<ExamineeBox/>
-		
-		<TechniqueInfoPanel/>
 			<Popup
 				title="Skapa teknik"
 				isOpen={showPopup}
