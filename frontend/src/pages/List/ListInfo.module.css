@@ -1,0 +1,157 @@
+
+
+/*
+ * @author Team Capricciosa (Group 2)
+ * @version 1.0
+ */
+ .workout {
+    padding-top: 10px;
+    margin: auto;
+}
+
+.clickIcon {
+    color: var(--red-primary);
+    margin-left: 2rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-top: 4px;
+}
+
+.toggle {
+    background: white;
+}
+
+.button-menu {
+    width: 10px;
+}
+
+.item {
+    text-align: center;
+}
+
+
+.desc {
+    padding-left: 2vw;
+    padding-right: 2vw;
+}
+
+
+.header {
+    display: flex;
+    align-items: center;
+}
+
+.properties {
+    /*wrap text*/
+    word-wrap: break-word;
+    text-overflow: ellipsis;
+	margin: 0px;
+}
+
+.title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: bolder;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}
+
+.tags {
+    margin-top: 10px;
+}
+
+.tag {
+    color: white;
+    background-color: #BE3B41;
+    border-radius: 20%;
+    display: inline-block;
+}
+
+.left-box {
+    /*padding is the same size as the dropdown menu button*/
+    padding-left: 30px;
+    float: left;
+    width: 25%;
+}
+
+.middle-box {
+    float: left;
+    width: 50%;
+    justify-content: center;
+    display: flex;
+}
+
+.right-box {
+    text-align: right;
+    width: 25%;
+    float: right;
+}
+
+.info {
+    text-align: left;
+}
+
+.opened-review-area {
+    margin-top: 20px;
+
+}
+
+.workoutDetailColumnItem {
+    width: 100%;
+	padding-top: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+}
+
+
+
+.workoutDetailColumnItemRight {
+    padding-left: 37px;
+}
+
+.review-button {
+    width: 100%;
+    margin-top: 20px;
+    font-weight: bolder;
+    display: inline-block;
+    text-align: center;
+    font-size: 14px;
+    overflow: hidden;
+    padding: .4em 1em .5em 1em;
+}
+
+@media print {
+    #no-print {
+        display: none;
+    }
+
+    .workout {
+        float: left;
+    }
+
+    .title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: bolder;
+        font-size: 34pt;
+    }
+
+    .print-workout-style {
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 10px;
+        text-align: left;
+    }
+
+    .print-font-s {
+        font-size: 20pt;
+    }
+
+    .print-font-l {
+        font-size: 24pt;
+    }
+}

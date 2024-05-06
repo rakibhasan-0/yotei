@@ -12,6 +12,9 @@ import { logOut } from "/src/utils"
 import useMap from "../../hooks/useMap"
 import Divider from "../../components/Common/Divider/Divider"
 import Spinner from "../../components/Common/Spinner/Spinner"
+import ProfileListItem from "./ProfileListItem"
+import {Lock,Unlock, Eye,StarFill} from "react-bootstrap-icons"
+import StarButton from "../../components/Common/StarButton/StarButton"
 
 
 /**
@@ -37,6 +40,15 @@ export default function Profile() {
 	const [UsernamePassword, setUsernamePassword] = useState("")
 	const [verifyUsernamePassword, setVerifyUsernamePassword] = useState("")
 
+	const MockList = {
+		"list_id": -1,
+		"list_name": "TestList",
+		"state": "Favourite",
+		"amountOfWorkouts": 3,
+		"author": "Oliver"
+		//Locked
+		//Public
+	}
 	/* Workout management */
 
 	const WorkoutList = ({list}) => {
@@ -112,6 +124,30 @@ export default function Profile() {
 		setSuccessToast("Användarnamnet har ändrats.")
 	}
 
+	const getIconFromState = (state) =>{
+		switch(state){
+			case "Locked":
+				console.log("Locked")
+				return <Lock/>
+			case "Shared":
+				console.log("Shared")
+				return <Unlock/>
+			case "Public":
+				console.log("Public")
+				return <Eye/>
+			case "Favourite":
+				console.log("Favourite!")
+				//Här borde jag fixa en route till favoritsidans grej :)
+				return <StarButton id="starbutton-example" toggled={true} onClick={null} />
+				//return StarFill
+			default:
+				console.log("Default")
+				return <Lock/>
+		}
+	}
+
+	let icon = getIconFromState(MockList.state);
+
 	return (
 		<Tabs defaultActiveKey={"FavoriteWorkouts"} className={style.tabs}>
 			
@@ -122,7 +158,7 @@ export default function Profile() {
 					text={searchText} 
 					onChange={setSearchText}
 				/>
-				{loading ? <Spinner /> : <WorkoutList list={workouts?.filter(w => w.favourite)} />}
+				{loading ? <Spinner /> : <ProfileListItem item={MockList} Icon={icon} />}
 			</Tab>
 			<Tab eventKey={"MyWorkouts"} title={"Mina Pass"} className={style.tab}>
 				<SearchBar 

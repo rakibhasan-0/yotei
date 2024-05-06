@@ -1,0 +1,52 @@
+/*
+* @author Team Capricciosa (Group 2), Team Cyclops (Group 5)
+* @version 2.0
+*/
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css");
+a {
+	overflow: hidden;
+	color: var(--black-primary);
+}
+a:hover {
+	color: var(--button-border);
+	text-decoration: none;
+}
+
+.profile-star .star-container {
+	width: 75%;
+}
+/*
+.workout-name {
+	word-wrap: break-word;
+	width: 100%;
+	display: inline-block;
+	vertical-align: middle;
+	padding-top: 3px;
+}*/
+
+.profile-item-row {
+	border: 1px var(--black-primary) solid;
+	border-radius: 3px;
+	margin-top: 10px;
+}
+
+.profile-text {
+	height: 100%;
+	padding: 20px 5px 0px 5px;
+	overflow-wrap: break-word;
+}
+.hoverable:hover a {
+	color: var(--button-border);
+}
+
+#profile-detail-arrow::before {
+	vertical-align: middle;
+}
+.listItemDiv{
+    padding: 0;
+    margin: 0;
+}
+.listItemInfoDiv{
+    padding: 0;
+    margin: 0;
+}
