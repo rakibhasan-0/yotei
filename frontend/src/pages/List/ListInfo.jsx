@@ -45,41 +45,72 @@ export default function ListInfo({ id }) {
 
 	useEffect(() => {
 		const MockList = {
-			"list_id": 1,
-			"list_name": "TestList",
-			"state": "Private",
-			"amountOfWorkouts": 3,
-			"author": "Oliver",
-			"author_id": 1,
-			"description": "Behövs ens detta",
-			"created_date": "2024-04-13",
-			"changed_date": "2024-05-03",
-			"list_users": ["1", "Hugo","Willy"],
-			"list": [
-				{"id": 1, "type": "technique", "duration":5, "technique": {"name": "Kniv i magen! Mycket ont","description": "Beskv1"}},
-				{"id": 2, "type": "exercise", "duration":10,"exercise":{"name": "Kniv i foten! Mycket ont","description": "Beskv2"}},
-				{"id": 3, "type": "technique", "duration":15, "technique": {"name": "Knip i magen! Mycket ont", "description":""}} //Har inte description!
-			]
+			list_id: 1,
+			list_name: "TestList",
+			state: "Private",
+			amountOfWorkouts: 3,
+			author: "Oliver",
+			author_id: 1,
+			description: "Behövs ens detta",
+			created_date: "2024-04-13",
+			changed_date: "2024-05-03",
+			list_users: ["1", "Hugo", "Willy"],
+			list: [
+				{
+					id: 1,
+					type: "technique",
+					duration: 5,
+					technique: { name: "Kniv i magen! Mycket ont", description: "Beskv1" },
+				},
+				{
+					id: 2,
+					type: "exercise",
+					duration: 10,
+					exercise: {
+						name: "Kniv i foten! Mycket ont",
+						description: "Beskv2 kdlfjad lalkdsflkd fjldksfjldfkslsdkjlsdkfjdlskjdfls",
+					},
+				},
+				{
+					id: 3,
+					type: "technique",
+					duration: 15,
+					technique: { name: "Knip i magen! Mycket ont", description: "" },
+				}, //Har inte description!
+			],
 		}
-        setWorkoutData(() => MockList)
-        setWorkoutUsers(() => MockList.list_users)
-        setLoading(false)
-        setLoadingUser(false)
-    },[])
-    //{console.log(workoutData)}
+		setWorkoutData(() => MockList)
+		setWorkoutUsers(() => MockList.list_users)
+		setLoading(false)
+		setLoadingUser(false)
+	}, [])
+	//{console.log(workoutData)}
 
-	return (
-        
-		loading || loadingUser? <div className="mt-5"> <Spinner/> </div>
-        
-			: !workoutData ? <ErrorState message={errorStateMsg} onBack={() => navigate("/workout")} onRecover={() => window.location.reload(false)}/>
-				:
-                
-				<div id={id} className="container px-0">
-                
-					{<ConfirmPopup popupText={"Är du säker att du vill radera passet \"" + workoutData.name + "\"?"} id={"confirm-popup"} setShowPopup={setShowPopup} showPopup={showPopup} onClick={async () => deleteWorkout(workoutId, context, navigate, setShowPopup)}/>}
-					{getListInfoContainer(workoutData, null, context, userId, workoutUsers)}
-					{/*sortByCategories(workoutData).map((activityCategory) => (
+	return loading || loadingUser ? (
+		<div className="mt-5">
+			{" "}
+			<Spinner />{" "}
+		</div>
+	) : !workoutData ? (
+		<ErrorState
+			message={errorStateMsg}
+			onBack={() => navigate("/workout")}
+			onRecover={() => window.location.reload(false)}
+		/>
+	) : (
+		<div id={id} className="container px-0">
+			{
+				<ConfirmPopup
+					popupText={'Är du säker att du vill radera passet "' + workoutData.name + '"?'}
+					id={"confirm-popup"}
+					setShowPopup={setShowPopup}
+					showPopup={showPopup}
+					onClick={async () => deleteWorkout(workoutId, context, navigate, setShowPopup)}
+				/>
+			}
+			{getListInfoContainer(workoutData, null, context, userId, workoutUsers)}
+			{
+				/*sortByCategories(workoutData).map((activityCategory) => (
 						<div key={activityCategory.categoryOrder}>
 							<WorkoutActivityList
 								categoryName={activityCategory.categoryName}
@@ -88,24 +119,22 @@ export default function ListInfo({ id }) {
 								id={"WorkoutActivityList-" + activityCategory.categoryOrder}>
 							</WorkoutActivityList>
 						</div>
-                    ))*///}
-                    /*
+                    ))*/
+				//}
+				/*
 					{workoutData.tags.length != 0 && getTagContainer(workoutData)}
-                    */}
-                    <SavedActivityList activities={workoutData}/>
-					{(workoutUsers !== null && workoutUsers.length > 0) && getWorkoutUsersContainer(workoutUsers)}
-					{getButtons(navigate, setRShowPopup)}
-                    
-				</div>
+                    */
+			}
+			<h2 className="font-weight-bold mb-0 mt-5 text-left">Aktiviteter</h2>
+			<SavedActivityList activities={workoutData} />
+			{workoutUsers !== null && workoutUsers.length > 0 && getWorkoutUsersContainer(workoutUsers)}
+			{getButtons(navigate, setRShowPopup)}
+		</div>
 	)
 }
 
-
-
-
-
 async function deleteWorkout(workoutId, context, navigate, setShowPopup) {
-    //Kolla från WorkoutView
+	//Kolla från WorkoutView
 }
 
 function getTagContainer(workoutData) {
@@ -128,7 +157,7 @@ function getTagContainer(workoutData) {
 }
 
 function getWorkoutUsersContainer(workoutUsers) {
-    return (
+	return (
 		<div className="container mt-3">
 			<div className="row">
 				<h2>Användare</h2>
@@ -137,7 +166,7 @@ function getWorkoutUsersContainer(workoutUsers) {
 				{workoutUsers.map((user, index) => {
 					return (
 						<div key={"wu" + index} className="mr-2">
-                            {/* Här kommer vi behöva ändra om så att en user blir ett objekt :)  */}
+							{/* Här kommer vi behöva ändra om så att en user blir ett objekt :)  */}
 							<Tag tagType={"default"} text={user}></Tag>
 						</div>
 					)
@@ -145,7 +174,6 @@ function getWorkoutUsersContainer(workoutUsers) {
 			</div>
 		</div>
 	)
-
 }
 
 function getButtons(navigate, setRShowPopup) {
@@ -160,7 +188,6 @@ function getButtons(navigate, setRShowPopup) {
 	)
 }
 
-
 function getListInfoContainer(workoutData, setShowPopup, context) {
 	return (
 		<>
@@ -171,28 +198,30 @@ function getListInfoContainer(workoutData, setShowPopup, context) {
 						<h1 className="font-weight-bold m-0">{workoutData.list_name}</h1>
 					</div>
 					<div className="d-flex justify-content-end align-items-center">
-						<div className={styles.clickIcon}>
-							{/*<PrintButton workoutData={workoutData} />*/}
-						</div>
-						{ (context.userId == workoutData.author.user_id || isAdmin(context)) &&
-						<>
-							<Link className="ml-3" state={{workout: workoutData, users: workoutData.list_users}} to={"/workout/edit"}>
-								<Pencil
+						<div className={styles.clickIcon}>{/*<PrintButton workoutData={workoutData} />*/}</div>
+						{(context.userId == workoutData.author.user_id || isAdmin(context)) && (
+							<>
+								<Link
+									className="ml-3"
+									state={{ workout: workoutData, users: workoutData.list_users }}
+									to={"/workout/edit"}
+								>
+									<Pencil
+										size="24px"
+										color="var(--red-primary)"
+										style={{ cursor: "pointer" }}
+										id={"edit_pencil"}
+									/>
+								</Link>
+								<Trash
+									className="ml-3 mr-3"
 									size="24px"
 									color="var(--red-primary)"
-									style={{cursor: "pointer"}}
-									id={"edit_pencil"}
+									style={{ cursor: "pointer" }}
+									onClick={() => setShowPopup(true)}
 								/>
-							</Link>
-							<Trash
-								className="ml-3 mr-3"
-								size="24px"
-								color="var(--red-primary)"
-								style={{cursor: "pointer"}}
-								onClick={() => setShowPopup(true)}
-							/>
-						</>
-						}
+							</>
+						)}
 					</div>
 
 					<div className="d-flex">
@@ -202,9 +231,7 @@ function getListInfoContainer(workoutData, setShowPopup, context) {
 						</div>
 						<div className={styles.workoutDetailColumnItem} style={{ paddingLeft: "37px" }}>
 							<h2 className="font-weight-bold mb-0">Författare</h2>
-							{
-								<p className="mb-0">{workoutData.author}</p>
-							}
+							{<p className="mb-0">{workoutData.author}</p>}
 						</div>
 					</div>
 
