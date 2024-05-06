@@ -21,6 +21,7 @@
   position: absolute;
   color: var(--red-primary);
   font-size: 24px;
+  cursor: pointer;
 }
 
 .inputContainer:focus {

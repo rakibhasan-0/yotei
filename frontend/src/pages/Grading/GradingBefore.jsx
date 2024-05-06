@@ -36,6 +36,14 @@ export default function GradingCreate() {
     setExaminees(examinees.filter((examinee) => examinee.id !== examineeId));
   }
 
+  function editExaminee(examineeId, name) {
+    setExaminees(
+      examinees.map((examinee) =>
+        examinee.id === examineeId ? { ...examinee, name: name } : examinee
+      )
+    );
+  }
+
 	return (
 		<div>
 			<div className = {style.beltButtonStyle}> 
@@ -48,8 +56,10 @@ export default function GradingCreate() {
         {examinees.map((innerExaminee, innerIdx) => (
           <Examinee
             key={innerExaminee.id}
+            id={innerExaminee.id}
             item={innerExaminee.name}
-            onRemove={() => removeExaminee(innerExaminee.id)}
+            onRemove={removeExaminee}
+            onEdit={editExaminee}
           />
         ))}
       </div>
