@@ -58,7 +58,7 @@ export default function ListInfo({ id }) {
 			"list": [
 				{"id": 1, "type": "technique", "duration":5, "technique": {"name": "Kniv i magen! Mycket ont","description": "Beskv1"}},
 				{"id": 2, "type": "exercise", "duration":10,"exercise":{"name": "Kniv i foten! Mycket ont","description": "Beskv2"}},
-				{"id": 3, "type": "technique", "duration":15, "technique": {"name": "Knip i magen! Mycket ont","description": "Beskv3"}}
+				{"id": 3, "type": "technique", "duration":15, "technique": {"name": "Knip i magen! Mycket ont", "description":""}} //Har inte description!
 			]
 		}
         setWorkoutData(() => MockList)
