@@ -45,7 +45,6 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	const [error, setError] = useState("")
 	const [searchText,setSearchText] = useState("")
 	const { token } = useContext(AccountContext)
-	const tagSuggestionAmount = 5
 
 	const handleRemoveTag = (tag) => {
 		setError("")
@@ -80,12 +79,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 		setError("")
 		setSearchText(searchText)
 
-		const tagList = []
-		addedTags.forEach ((tag) => {
-			tagList.push(tag.name)
-		}) 
-
-		const url = "/api/search/tags?name=" + searchText +"&tagAmount="+ tagSuggestionAmount +"&tags="+ tagList
+		const url = "/api/tags/filter?sort-by=use-desc&contains=" + searchText
 		const requestOptions = {
 			method: "GET",
 			headers: {"Content-type": "application/json",token }
