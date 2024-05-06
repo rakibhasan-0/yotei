@@ -44,20 +44,23 @@ export default function ListInfo({ id }) {
 	const { userId } = useContext(AccountContext)
 
 	useEffect(() => {
-        const MockList = {
-            "list_id": 1,
-            "list_name": "TestList",
-            "state": "Private",
-            "amountOfWorkouts": 3,
-            "author": "Oliver",
-            "author_id": 1,
-            "description": "Behövs ens detta",
-            "created_date": "2024-04-13",
-            "changed_date": "2024-05-03",
-            "list_users": ["1", "Hugo","Willy"]
-            //Locked
-            //Public
-        }
+		const MockList = {
+			"list_id": 1,
+			"list_name": "TestList",
+			"state": "Private",
+			"amountOfWorkouts": 3,
+			"author": "Oliver",
+			"author_id": 1,
+			"description": "Behövs ens detta",
+			"created_date": "2024-04-13",
+			"changed_date": "2024-05-03",
+			"list_users": ["1", "Hugo","Willy"],
+			"list": [
+				{"id": 1, "type": "technique", "duration":5, "technique": {"name": "Kniv i magen! Mycket ont","description": "Beskv1"}},
+				{"id": 2, "type": "exercise", "duration":10,"exercise":{"name": "Kniv i foten! Mycket ont","description": "Beskv2"}},
+				{"id": 3, "type": "technique", "duration":15, "technique": {"name": "Knip i magen! Mycket ont","description": "Beskv3"}}
+			]
+		}
         setWorkoutData(() => MockList)
         setWorkoutUsers(() => MockList.list_users)
         setLoading(false)
@@ -89,7 +92,7 @@ export default function ListInfo({ id }) {
                     /*
 					{workoutData.tags.length != 0 && getTagContainer(workoutData)}
                     */}
-                    <SavedActivityList/>
+                    <SavedActivityList categoryName={"Placeholder"} activities={workoutData} id={-1}/>
 					{(workoutUsers !== null && workoutUsers.length > 0) && getWorkoutUsersContainer(workoutUsers)}
 					{getButtons(navigate, setRShowPopup)}
                     

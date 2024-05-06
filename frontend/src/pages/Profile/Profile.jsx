@@ -43,11 +43,9 @@ export default function Profile() {
 	const MockList = {
 		"list_id": -1,
 		"list_name": "TestList",
-		"state": "Favourite",
+		"state": "Private",
 		"amountOfWorkouts": 3,
 		"author": "Oliver"
-		//Locked
-		//Public
 	}
 	/* Workout management */
 

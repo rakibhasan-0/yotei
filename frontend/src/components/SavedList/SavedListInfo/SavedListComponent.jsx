@@ -17,26 +17,7 @@ export default function WorkoutActivityList({categoryName, activities, id}) {
 	const [Loading, setLoading] = useState(true)
 
 	useEffect(() => {
-		const MockList = {
-			"list_id": 1,
-			"list_name": "TestList",
-			"state": "Private",
-			"amountOfWorkouts": 3,
-			"author": "Oliver",
-			"author_id": 1,
-			"description": "Behövs ens detta",
-			"created_date": "2024-04-13",
-			"changed_date": "2024-05-03",
-			"list_users": ["1", "Hugo","Willy"],
-			"list": [
-				{"id": 1, "type": "technique", "duration":5, "technique": {"name": "Kniv i magen! Mycket ont","description": "Beskv1"}},
-				{"id": 2, "type": "exercise", "duration":10,"exercise":{"name": "Kniv i foten! Mycket ont","description": "Beskv2"}},
-				{"id": 3, "type": "technique", "duration":15, "technique": {"name": "Knip i magen! Mycket ont","description": "Beskv3"}}
-			]
-			//Locked
-			//Public
-		}
-		setListData(() => MockList)
+		setListData(() => activities)
 		setLoading(false)
 	},[])
 	
