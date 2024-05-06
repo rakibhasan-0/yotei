@@ -8,14 +8,12 @@ services:
       - ./nginx/development.conf:/etc/nginx/nginx.conf
       - ./api-docs:/var/www/html/api-docs
       - ./javadocs:/var/www/html/javadocs
-      # - /etc/letsencrypt/:/etc/letsencrypt/
     ports:
       - 80:80
       - 443:443
     links:
       - gateway
 
-  # Database need to be created first, check if depends_on is needed
   psql:
     image: pvt2024/database:latest
       
@@ -24,9 +22,7 @@ services:
       
   gateway:
     image: pvt2024/gateway:latest
-    ports:
-      - "8080:8080"
-      
+    
   api:
     image: pvt2024/api:latest
 
