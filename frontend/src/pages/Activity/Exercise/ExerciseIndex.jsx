@@ -1,25 +1,28 @@
 import React, {useState, useEffect, useContext} from "react"
 import { useCookies } from "react-cookie"
-import SearchBar from "../../components/Common/SearchBar/SearchBar"
-import "../../components/Common/SearchBar/SearchBarUtils"
-import { AccountContext } from "../../context"
-import RoundButton from "../../components/Common/RoundButton/RoundButton"
+import SearchBar from "../../../components/Common/SearchBar/SearchBar"
+import "../../../components/Common/SearchBar/SearchBarUtils"
+import { AccountContext } from "../../../context"
+import RoundButton from "../../../components/Common/RoundButton/RoundButton"
 import { Plus } from "react-bootstrap-icons"
-import { getExercises } from "../../components/Common/SearchBar/SearchBarUtils"
-import useMap from "../../hooks/useMap"
-import FilterContainer from "../../components/Common/Filter/FilterContainer/FilterContainer"
-import Sorter from "../../components/Common/Sorting/Sorter"
-import ExerciseCard from "../../components/Common/ExerciseCard/ExerciseListItem"
-import InfiniteScrollComponent from "../../components/Common/List/InfiniteScrollComponent"
-import Spinner from "../../components/Common/Spinner/Spinner"
-import { isEditor } from "../../utils"
+import { getExercises } from "../../../components/Common/SearchBar/SearchBarUtils"
+import useMap from "../../../hooks/useMap"
+import FilterContainer from "../../../components/Common/Filter/FilterContainer/FilterContainer"
+import Sorter from "../../../components/Common/Sorting/Sorter"
+import ExerciseCard from "../../../components/Common/ExerciseCard/ExerciseListItem"
+import InfiniteScrollComponent from "../../../components/Common/List/InfiniteScrollComponent"
+import Spinner from "../../../components/Common/Spinner/Spinner"
+import { isEditor } from "../../../utils"
+
+
 
 /**
  * Displays a searchbar, a sorter and a list of exercises.
  * 
- * @author Hawaii, Verona, Phoenix, Cyclops, Team Mango, Team Coconut, Team Tomato, Team Durian
+ * @author Hawaii, Verona, Phoenix, Cyclops, Team Mango, Team Coconut, Team Tomato, Team Durian, Team Kiwi
  * @since 2024-04-18
- * @version 3.2
+ * @version 3.3
+ * @update v3.3 (2024-05-02 Team Kiwi) removed header from html, also rerouted button from ./create to ./exercise/create
  */
 export default function ExerciseIndex() {
 	const sortOptions = [
@@ -101,8 +104,7 @@ export default function ExerciseIndex() {
 
 	return (
 		<>
-
-			<h1 className="py-2" id={"exercise-title"} style={{marginBottom: "-10px"}}>Övningar</h1>
+			<h1 className="py-2" id={"exercise-title"} style={{marginBottom: "-10px"}}></h1>
 
 			<SearchBar 
 				id="exercise-search-bar" 
@@ -140,7 +142,7 @@ export default function ExerciseIndex() {
 			<br/><br/><br/><br/><br/>
 
 			{isEditor(context) && 
-			<RoundButton linkTo={"create"} id={"exercise-round-button"}  style={{maxWidth: "5px"}}>
+			<RoundButton linkTo={"exercise/create"} id={"exercise-round-button"}  style={{maxWidth: "5px"}}>
 				<Plus/>
 			</RoundButton>
 			}
