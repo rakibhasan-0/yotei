@@ -1,15 +1,14 @@
-/**
- * The WorkoutTagRepository for WorkoutTags.
- *
- * @Author Team 5 Verona (Doc: Griffin dv21jjn)
- */
 package se.umu.cs.pvt.tag;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
-
+/**
+ * The WorkoutTagRepository for WorkoutTags.
+ *
+ * @Author Team 5 Verona (Doc: Griffin dv21jjn)
+ */
 @Repository
 public interface WorkoutTagRepository extends JpaRepository<WorkoutTag, Long>{
 

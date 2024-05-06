@@ -17,7 +17,7 @@ services:
 
   # Database need to be created first, check if depends_on is needed
   psql:
-    image: pvt2024/database:feature
+    image: pvt2024/database:latest
     restart: always
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
@@ -28,14 +28,14 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
   frontend:
-    image: pvt2024/frontend:feature
+    image: pvt2024/frontend:latest
     restart: always
     ports:
       - "3000:3000"
     links:
       - psql
   gateway:
-    image: pvt2024/gateway:feature
+    image: pvt2024/gateway:latest
     restart: always
     ports:
       - "8080:8080"
@@ -49,7 +49,7 @@ services:
     links:
       - api
   api:
-    image: pvt2024/api:feature
+    image: pvt2024/api:latest
     restart: always
     volumes:
       - ./media:/media

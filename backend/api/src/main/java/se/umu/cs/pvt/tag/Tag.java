@@ -1,3 +1,9 @@
+package se.umu.cs.pvt.tag;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
+
 /**
  * The Tag entity.
  *
@@ -38,13 +44,6 @@
  * @Author Team 5 Verona (Doc: Griffin dv21jjn), Team 3 (Durian)
  * @since 2024-05-02
  */
-package se.umu.cs.pvt.tag;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.List;
-
-
 @Entity
 @Table(name = "tag")
 public class Tag implements Serializable{
