@@ -1,0 +1,11 @@
+.popupContent {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.summaryLink {
+    text-decoration: none; /* Remove underline from link */
+}
