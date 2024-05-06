@@ -7,6 +7,7 @@ import styles from "./ExamineeBox.module.css"
  * this is a box containing the Examinee's information
  * 
  *   Props:
+ *    id				@type {any} 	 the id of the component.
  *    examineeName      @type {String}   the name of the examinee
  *    onClickComment    @type {onClick}	 the action that the buttons is
  * 										 supposed to perform
