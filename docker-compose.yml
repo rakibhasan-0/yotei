@@ -14,10 +14,6 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-
-
-
-      
   frontend:
     build: frontend/
     restart: always
@@ -26,10 +22,6 @@ services:
     links:
       - psql
 
-
-
-
-      
   gateway:
     build: backend/gateway
     restart: always

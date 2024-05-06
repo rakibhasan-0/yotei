@@ -17,20 +17,19 @@ services:
 
   # Database need to be created first, check if depends_on is needed
   psql:
-    image: pvt2024/database:feature
+    image: pvt2024/database:latest
 
       
   frontend:
-    image: pvt2024/frontend:feature
+    image: pvt2024/frontend:latest
       
   gateway:
-    image: pvt2024/gateway:feature
+    image: pvt2024/gateway:latest
     ports:
       - "8080:8080"
       
   api:
-    image: pvt2024/api:feature
-    restart: always
+    image: pvt2024/api:latest
 
 
     #                 O  O  O
