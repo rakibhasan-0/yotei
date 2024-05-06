@@ -92,13 +92,15 @@ public class StatisticsController {
 
         // Sort remaining response entities
         uniqueActivities = uniqueActivities.stream()
+            //.sorted(Comparator.comparing(StatisticsResponse::getName)) // Uncomment this line with preferred sort order to sort activities with the same count.
             .sorted(Comparator.comparingLong(StatisticsResponse::getCount).reversed())
             .collect( Collectors.toList());
- 
-        
-        
-        StatisticsResponseWrapper response = new StatisticsResponseWrapper(uniqueSessionIds.size(), averageRating, uniqueActivities);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        if (uniqueActivities.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            StatisticsResponseWrapper response = new StatisticsResponseWrapper(uniqueSessionIds.size(), averageRating, uniqueActivities);  
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
     }
 }
