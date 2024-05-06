@@ -88,7 +88,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 			const response = await fetch(url, requestOptions)
 			if (response.ok) {
 				const data = await response.json()
-				setSuggested(data.results)
+				setSuggested(data)
 			} else {
 				setError("Något gick fel vid hämtning av taggförslag")
 			}
@@ -153,12 +153,11 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 				</div>
 			</div>
 			<div style={{overflow:scroll}}>
-				{addedTags.map(tag => <TagList 
-					tagType="added"
+				{suggested.map(tag => <TagList
+					tagType="default"
 					key={tag.id}
 					text={tag.name}
-					/>
-					
+				/>
 				)}
 					
 				
