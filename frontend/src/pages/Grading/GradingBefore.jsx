@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { useState, useEffect, useContext } from "react"
 import { Link, useLocation, useNavigate} from "react-router-dom"
 import Button from "../../components/Common/Button/Button"
@@ -5,7 +6,7 @@ import style from "./GradingCreate.module.css"
 import styles from "./GradingBefore.module.css"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import { AccountContext } from "../../context"
-import { Draggable } from "react-drag-reorder"
+//import { Draggable } from "react-drag-reorder"
 import AddExaminee from "../../components/Common/AddExaminee/AddExaminee"
 import Examinee from "../../components/Common/AddExaminee/Examinee"
 
@@ -89,7 +90,8 @@ export default function GradingCreate() {
 				<Button
 					width="100%"
 					onClick={() => {
-						addExerciseAndTags()
+						//addExerciseAndTags()
+						navigate("/grading/GradingAfter")
 					}}
 				>
 					<p>Forsätt</p>
