@@ -18,7 +18,7 @@ import styles from "./TechniqueCard.module.css"
  * Converted to css module 2024-04-19, Hannes (group 1)
  *
  */
-function TechniqueCard({ technique, checkBox, id }) {
+function TechniqueCard({ technique, checkBox, id, onClick}) {
 	const navigate = useNavigate()
 
 	const handleClick = () => {
