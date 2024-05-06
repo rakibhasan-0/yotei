@@ -1,6 +1,7 @@
 package se.umu.cs.pvt.statistics;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 import se.umu.cs.pvt.belt.Belt;
 import java.util.List;
@@ -8,13 +9,20 @@ import java.util.ArrayList;
 
 /**
  * Class representing the response entity for the statistics API. 
+ * 
  * Example serialized object:
  * {
- *   id: 1,
- *   name: "Armhävningar"
- *   type: "technique"/"exercise"
- *   belt: id (OR null)
- *   count: 10
+ *   "activity_id": 0,
+ *   "name": "string",
+ *   "type": "string",
+ *   "count": 0,
+ *   "beltColors": [
+ *     {
+ *       "belt_color": "string",
+ *       "belt_name": "string",
+ *       "is_child": true
+ *     }
+ *   ]
  * }
  * 
  * @author Cocount 
@@ -22,26 +30,41 @@ import java.util.ArrayList;
  * @since 2024-04-29
  */
 public class StatisticsResponse implements Serializable {
+  private Long session_id;
   private Long activity_id;
   private String name;
   private String type;
   private List<BeltResponse> belts;
   private Long count;
+  private Boolean kihon;
+  private LocalDate date;
 
   /**
    * Create a new instance of StatisticsResponse.
+   * @param sid id of the session
    * @param id id of the technique
    * @param name name of the technique
    * @param cnt number of occurrences of technique in sessions.
    * @param type the type of activity to represent exercise/techniques
+   * @param date the date of the session
    * @return new StatisticsRespnse
    */
-  public StatisticsResponse(Long id, String name, String type, Long cnt) {
+  public StatisticsResponse(Long sid, Long id, String name, String type, Long cnt, Boolean kihon, LocalDate date) {
+    this.session_id = sid;
     this.activity_id = id;
     this.name = name;
     this.type = type;
     this.count  = cnt;
+    this.kihon = kihon;
+    this.date = date;
   }
+
+  /**
+   * Public getter for private property session_id
+   */
+  public Long getSession_id() {
+    return session_id;
+}
 
 
   /**
@@ -88,5 +111,19 @@ public class StatisticsResponse implements Serializable {
    */
   public Long getCount() {
       return count;
+  }
+
+  /**
+   * Public getter for private property kihon
+   */
+  public Boolean getKihon() {
+    return kihon;
+  }
+
+  /**
+   * Public getter for private property date
+   */
+  public LocalDate getDate() {
+    return date;
   }
 }

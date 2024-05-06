@@ -104,7 +104,7 @@ class MediaControllerTest {
 
     @Test
     void shouldFailWhenRemovingMediaForInvalidMovement() {
-        Mockito.doThrow(DataIntegrityViolationException.class).when(mediaRepository).deleteListOfMedia(invalidMedia.getMovementId(), invalidMedia.getUrl());
+        Mockito.doThrow(DataIntegrityViolationException.class).when(mediaRepository).deleteById(invalidMedia.getId());
 
         ResponseEntity<Object> response = mediaController.removeMedia(invalidMediaList);
 
@@ -113,7 +113,7 @@ class MediaControllerTest {
 
     @Test
     void shouldSuccedWhenRemovingMediaStoredLocally() {
-        Mockito.doThrow(DataIntegrityViolationException.class).when(mediaRepository).deleteListOfMedia(invalidMedia.getMovementId(), invalidMedia.getUrl());
+        Mockito.doThrow(DataIntegrityViolationException.class).when(mediaRepository).deleteById(invalidMedia.getId());
 
         ResponseEntity<Object> response = mediaController.removeMedia(invalidMediaList);
 
