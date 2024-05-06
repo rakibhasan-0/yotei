@@ -16,6 +16,15 @@ import se.umu.cs.pvt.belt.Belt;
  */
 public interface StatisticsRepository extends JpaRepository<Session, Long>{
   
+/*
+SELECT * FROM session_review AS sr 
+JOIN session AS s ON s.session_id = sr.session_id 
+JOIN session_review_activity AS sra ON sra.session_review_id = sr.review_id 
+JOIN activity AS a ON sra.activity_id = a.activity_id
+WHERE plan_id = 1;
+ * 
+ */
+
   @Query("""
     SELECT
       new se.umu.cs.pvt.statistics.StatisticsActivity(s.id,
@@ -28,15 +37,23 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
                                                         FROM TechniqueTag tt
                                                         WHERE tt.tag = 1
                                                       ))
-                                                      ,s.date
-                                                      )
-                                                                                         
+                                                      ,s.date,
+                                                      sr.rating
+                                                      )                             
     FROM
+      SessionReview sr
+    JOIN
       Session s
+    ON 
+      s.id = sr.session_id
+    JOIN 
+      SessionReviewActivity sra
+    ON
+      sra.session_review_id = sr.id
     JOIN
       Activity a
     ON 
-      a.workoutId = s.workout
+      a.id = sra.activity_id
     JOIN 
       Technique t
     ON 
@@ -49,7 +66,8 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
       s.id,
       t.id,
       t.name,
-      s.date
+      s.date,
+      sr.rating
       """)
   List<StatisticsActivity> getAllSampleTechniquesQuery(Long id);
 
@@ -66,14 +84,23 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
                                                         FROM ExerciseTag et
                                                         WHERE et.tag = 1
                                                       )),
-                                                      s.date
+                                                      s.date,
+                                                      sr.rating
                                                       ) 
     FROM
+      SessionReview sr
+    JOIN
       Session s
+    ON 
+      s.id = sr.session_id
+    JOIN 
+      SessionReviewActivity sra
+    ON
+      sra.session_review_id = sr.id
     JOIN
       Activity a
     ON 
-      a.workoutId = s.workout
+      a.id = sra.activity_id
     JOIN 
       Exercise e
     ON 
@@ -86,7 +113,8 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
       s.id,
       e.id,
       e.name,
-      s.date
+      s.date,
+      sr.rating
       """)
   List<StatisticsActivity> getAllSampleExercisesQuery(Long id);
 

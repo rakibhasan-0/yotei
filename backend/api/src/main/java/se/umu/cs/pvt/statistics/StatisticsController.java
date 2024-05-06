@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -76,12 +77,14 @@ public class StatisticsController {
 
         // Get belts for techniques and count distinct sessions
         // TODO: calculate average rating
-        double averageRating = 4.5;
+        double averageRating = 0;
         Set<Long> uniqueSessionIds = new HashSet<>();
+        HashMap<Long,Integer> ratings = new HashMap<>();
         for (StatisticsActivity sa : union) {
             StatisticsResponse sr = new StatisticsResponse(sa.getActivity_id(), sa.getName(), sa.getType(), sa.getCount());
             
             uniqueSessionIds.add(sa.getSession_id());
+            ratings.put(sa.getSession_id(), sa.getRating());
             if (sr.getType().equals("technique")) {
                 sr.setBelts(statisticsRepository.getBeltsForTechnique(sr.getActivity_id()));
             }
@@ -89,6 +92,12 @@ public class StatisticsController {
                 uniqueActivities.add(sr);
             }
         }
+
+        for (Long sid : uniqueSessionIds) {
+            averageRating += ratings.get(sid);
+        }
+
+        averageRating /= uniqueSessionIds.size();
 
         // Sort remaining response entities
         uniqueActivities = uniqueActivities.stream()

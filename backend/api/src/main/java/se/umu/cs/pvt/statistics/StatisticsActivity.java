@@ -38,6 +38,7 @@ public class StatisticsActivity implements Serializable {
   private Long count;
   private Boolean kihon;
   private LocalDate date;
+  private Integer session_rating;
 
   /**
    * Create a new instance of StatisticsResponse.
@@ -47,9 +48,10 @@ public class StatisticsActivity implements Serializable {
    * @param cnt number of occurrences of technique in sessions.
    * @param type the type of activity to represent exercise/techniques
    * @param date the date of the session
+   * @param rating the rating of the session
    * @return new StatisticsActivity
    */
-  public StatisticsActivity(Long sid, Long id, String name, String type, Long cnt, Boolean kihon, LocalDate date) {
+  public StatisticsActivity(Long sid, Long id, String name, String type, Long cnt, Boolean kihon, LocalDate date, Integer rating) {
     this.session_id = sid;
     this.activity_id = id;
     this.name = name;
@@ -57,6 +59,7 @@ public class StatisticsActivity implements Serializable {
     this.count  = cnt;
     this.kihon = kihon;
     this.date = date;
+    this.session_rating = rating;
   }
 
   /**
@@ -124,5 +127,12 @@ public class StatisticsActivity implements Serializable {
    */
   public LocalDate getDate() {
     return date;
+  }
+
+  /**
+   * Public getter for private property session_rating
+   */
+  public Integer getRating() {
+    return session_rating;
   }
 }
