@@ -38,7 +38,8 @@
     "systest:ci": "npx playwright test --quiet --reporter dot",
     "systest:fast": "npx playwright test --reporter list --project 'Mobile Chrome'",
     "systest:ui": "npx playwright test --ui",
-    "systest:codegen": "npx playwright codegen localhost:3000"
+    "systest:codegen": "npx playwright codegen localhost:3000",
+    "systest:report": "npx playwright test --reporter=html"
   },
   "jest": {
     "setupFilesAfterEnv": [
