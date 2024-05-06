@@ -81,13 +81,12 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			} else {
 				const json = await loadedResponse.json();
 				//console.log(session_id)
-				//console.log(json);
-				if(json[0] !== null && json[0] != undefined) {
+				if(json[0] !== null && json[0] !== undefined) {
 					setRating(json[0][`rating`])
 					setPositiveComment(json[0][`positiveComment`])
 					setNegativeComment(json[0][`negativeComment`])
+					setReviewId(json[0][`id`])
 					updateSavedDateDisplay(json[0][`date`])
-					setReviewId(json[0]['id'])
 				}
 			}
 		}
@@ -118,6 +117,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			setError("Kunde inte spara utvärdering, vänligen sätt ett betyg")
 			return
 		}
+		console.log("Review id: " + reviewId)
 		if(reviewId < 0) {
 			addReview()
 		} else {
@@ -180,7 +180,49 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			return
 		}
 		updateSavedDateDisplay(ts)
+		clearActivities(reviewId, session_id)
+		for(let i = 0; i < doneList.length; i++) {
+			submitActivity(reviewId, session_id, doneList[i])
+		}
         setSuccess("Utvärdering sparad")
+	}
+
+	async function clearActivities(review_id, session_id) {
+		console.log("Clearing activities")
+		const requestOptions = {
+			method: "DELETE",
+			headers: {"Content-type": "application/json", "token": token},
+			body: JSON.stringify({
+				"review_id": review_id
+			})
+		}
+		const deleteResponse = await fetch("/api/session/" + session_id + "/review/" + review_id + "/activity", requestOptions).catch(() => {
+			setError("Serverfel: Kunde inte ansluta till servern")
+			return
+		})
+		if(deleteResponse.status != HTTP_STATUS_CODES.OK) {
+			setError("Serverfel: Något gick snett! Felkod: " + deleteResponse.status)
+			return
+		}
+	}
+
+	async function submitActivity(review_id, session_id, activity_id) {
+		console.log("Submitting activity: " + activity_id)
+		const requestOptions = {
+			method: "POST",
+			headers: {"Content-type": "application/json", "token": token},
+			body: JSON.stringify({
+				"activity_id": activity_id
+			})
+		}
+		const postResponse = await fetch("/api/session/" + session_id + "/review/" + review_id + "/activity", requestOptions).catch(() => {
+			setError("Serverfel: Kunde inte ansluta till servern")
+			return
+		})
+		if(postResponse.status != HTTP_STATUS_CODES.OK) {
+			setError("Serverfel: Något gick snett! Felkod: " + postResponse.status)
+			return
+		}
 	}
 
     function getTodaysDate() {
@@ -199,7 +241,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 
 	function getActivityContainer(sessionData) {
-		console.log(sessionData)
+		//console.log(sessionData)
 		return sessionData !== null && (
 			<div className="container">
 				<Divider option={"h2_center"} title={"Aktiviteter"} />
