@@ -29,7 +29,6 @@ export default function GradingCreate() {
   function addExaminee(examinee) {
     const examineeId = examinees.length + 1
     setExaminees([...examinees, { id: examineeId, name: examinee }]);
-    console.log(examinees)
   }
 
   function removeExaminee(examineeId) {
@@ -46,21 +45,23 @@ export default function GradingCreate() {
 
 	return (
 		<div>
-			<div className = {style.beltButtonStyle}> 
+			<div> 
 				<div style={{ backgroundColor: "#FFD700", borderRadius: "0.3rem", padding: "0px" }}>
 					<h2>KIHON WAZA</h2>
 				</div>
 			</div>
 
 			<div className="column">
-        {examinees.map((innerExaminee, innerIdx) => (
-          <Examinee
-            key={innerExaminee.id}
-            id={innerExaminee.id}
-            item={innerExaminee.name}
-            onRemove={removeExaminee}
-            onEdit={editExaminee}
-          />
+        {examinees.map((innerExaminee, index) => (
+
+            <Examinee
+              pairNumber={index}
+              key={innerExaminee.id}
+              id={innerExaminee.id}
+              item={innerExaminee.name}
+              onRemove={removeExaminee}
+              onEdit={editExaminee}
+            />
         ))}
       </div>
 
