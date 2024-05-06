@@ -31,16 +31,17 @@ export default function GradingCreate() {
   const [checkedExamineeIds, setCheckedExamineeIds] = useState([])
 
   function createPair() {
-    
+    setPair([...pairs, checkedExamineeIds]);
+    setCheckedExamineeIds([]);
   }
 
-function onCheck(isChecked, examineeId) {
-  if (isChecked) {
-    setCheckedExamineeIds([...checkedExamineeIds, examineeId]);
-  } else {
-    setCheckedExamineeIds(checkedExamineeIds.filter((id) => id !== examineeId));
+  function onCheck(isChecked, examineeId) {
+    if (isChecked) {
+      setCheckedExamineeIds([...checkedExamineeIds, examineeId]);
+    } else {
+      setCheckedExamineeIds(checkedExamineeIds.filter((id) => id !== examineeId));
+    }
   }
-}
 
   function addExaminee(examinee) {
     const examineeId = examinees.length + 1
@@ -48,6 +49,7 @@ function onCheck(isChecked, examineeId) {
   }
 
   function removeExaminee(examineeId) {
+    setCheckedExamineeIds(checkedExamineeIds.filter((id) => id !== examineeId));
     setExaminees(examinees.filter((examinee) => examinee.id !== examineeId));
   }
 
@@ -97,9 +99,7 @@ function onCheck(isChecked, examineeId) {
 				<Button
 					width="100%"
 					outlined={true}
-					onClick={() => {
-						createPair
-					}}
+					onClick={createPair}
 				>
 					<p>Skapa par</p>
 				</Button> </div>)  
