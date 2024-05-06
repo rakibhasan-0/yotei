@@ -9,7 +9,7 @@ import InputTextField from "../../../components/Common/InputTextField/InputTextF
 import TextArea from "../../../components/Common/TextArea/TextArea.jsx"
 import Divider from "../../../components/Common/Divider/Divider.jsx"
 import TagInput from "../../../components/Common/Tag/TagInput.jsx"
-import { setError as setErrorToast } from "../../../utils"
+import { setError as setErrorToast, setSuccess} from "../../../utils"
 import EditGallery from "../../../components/Gallery/EditGallery"
 import { useNavigate, useParams } from "react-router"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
@@ -80,7 +80,7 @@ export default function ExerciseEdit() {
 	
 	useEffect(() => {
 		if (!isAdmin(context) || !isEditor(context)) {
-			navigate(-1)
+			navigate(-1)			//riktigt knas kod, MÅSTE FIXAS!
 		}
 	}, [context, navigate])
 	
@@ -149,7 +149,7 @@ export default function ExerciseEdit() {
 		if (oldName !== name || oldDesc !== desc || oldTime != time || newT !== oldT) {
 			setShowMiniPopup(true)
 		} else {
-			navigate(-1)
+			navigate(-1)			//riktigt knas kod, MÅSTE FIXAS!
 		}
 	}
 
@@ -341,6 +341,7 @@ export default function ExerciseEdit() {
 					onClick={() => {
 						setIsBlocking(false)
 						setSendData(true)
+						setSuccess("övningen Uppdaterades!")
 						navigate(-1)
 					}}
 					width="100%"

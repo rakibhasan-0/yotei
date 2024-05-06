@@ -1,14 +1,14 @@
+package se.umu.cs.pvt.tag;
+
+import javax.persistence.*;
+import java.io.Serializable;
+
 /**
  * The TechniqueTag entity.
  * Model for technique_tag data in database.
  *
  * @Author Team 5 Verona (Doc: Griffin dv21jjn)
  */
-package se.umu.cs.pvt.tag;
-
-import javax.persistence.*;
-import java.io.Serializable;
-
 @Entity
 @Table(name = "technique_tag")
 public class TechniqueTag implements Serializable { 
