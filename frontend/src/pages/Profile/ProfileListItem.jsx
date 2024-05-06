@@ -19,7 +19,7 @@ export default function ProfileListItem({ item, Icon }) {
 
 	return (
 		<div className={`${styles["profile-item-row"]}`}>
-			<Link to={`/profile/list/${item.list_id}`}>
+			<Link to={item.list_id==-1?('/profile/favouriteWorkouts'): (`/profile/list/${item.list_id}`)}>
 				<div className={"row align-items-center font-weight-bold px-3 py-2"}>
 					<div className={"col-2 "}>
 						{/* Handles both Icons and JSX elements */}
