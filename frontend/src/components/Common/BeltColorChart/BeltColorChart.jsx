@@ -1,4 +1,5 @@
 import React from "react"
+import styles from "./BeltColorChart.module.css"
 
 import {
 	Chart as ChartJS,
@@ -31,8 +32,10 @@ export default function BeltColorChart({ beltColorsData }) {
 			"Vitt": "rgba(255, 255, 255, 1)",
 			"Gul": "rgba(255, 255, 0, 1)",
 			"Orange": "rgba(255, 165, 0, 1)",
-			"Grön": "rgba(0, 128, 0, 1)"
-
+			"Grönt": "rgba(0, 128, 0, 1)",
+			"Blå": "rgba(0, 0, 255, 1)",
+			"Brunt" : "rgba(139, 69, 19, 1)",
+			"Svart" : "rgba(0, 0, 0, 1)",
 			// Add more colors to the color map as needed
 		}
 		return colorMap[color]
@@ -63,7 +66,7 @@ export default function BeltColorChart({ beltColorsData }) {
 	}
 
 	return (
-		<div>
+		<div className = {styles.chart}>
 			<Bar data={chartData} options={chartOptions} />
 		</div>
 	)

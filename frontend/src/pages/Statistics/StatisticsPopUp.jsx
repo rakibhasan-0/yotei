@@ -34,7 +34,7 @@ export default function StatisticsPopUp() {
 				<img src="/Statistics.svg" />
 			</button>
 
-			<Popup title={"Statistics"} id="statistics-popup" isOpen={showPopup} setIsOpen={setShowPopup}>
+			<Popup title={"Statistik"} id="statistics-popup" isOpen={showPopup} setIsOpen={setShowPopup}>
 				<p style={{ fontSize: "40px", fontFamily: "Arial, sans-serif" }}>
 					{averageRating}/5
 				</p>
