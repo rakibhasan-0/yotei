@@ -13,7 +13,7 @@ import ConfirmPopup from "../../../../components/Common/ConfirmPopup/ConfirmPopu
 import UploadMedia from "../../../../components/Upload/UploadMedia"
 import EditGallery from "../../../../components/Gallery/EditGallery"
 import Divider from "../../../../components/Common/Divider/Divider"
-import { unstable_useBlocker as useBlocker, useNavigate, useParams } from "react-router"
+import { unstable_useBlocker as useBlocker, useNavigate, useLocation, useParams } from "react-router"
 import { Spinner } from "react-bootstrap"
 
 
