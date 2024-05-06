@@ -42,9 +42,9 @@ export default function Profile() {
 	const lists = [
 		{
 			list_id: -1,
-			list_name: "TestList",
+			list_name: "Favoritpass",
 			state: "Favourite",
-			amountOfWorkouts: 3,
+			amountOfWorkouts: 7,
 			author: "Oliver",
 		},
 		{
@@ -179,7 +179,7 @@ export default function Profile() {
 
 	return (
 		<Tabs defaultActiveKey={"FavoriteWorkouts"} className={style.tabs}>
-			<Tab eventKey={"FavoriteWorkouts"} title={"Favoritpass"} className={style.tab}>
+			<Tab eventKey={"FavoriteWorkouts"} title={"Mina listor"} className={style.tab}>
 				<SearchBar
 					id="searchbar-workouts-1"
 					placeholder="Sök efter pass"

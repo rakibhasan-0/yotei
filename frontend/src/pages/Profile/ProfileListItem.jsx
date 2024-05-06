@@ -19,7 +19,7 @@ export default function ProfileListItem({ item, Icon }) {
 
 	return (
 		<div className={`${styles["profile-item-row"]}`}>
-			<Link to={`/profile/${item.list_id}`}>
+			<Link to={`/profile/list/${item.list_id}`}>
 				<div className={"row align-items-center font-weight-bold px-3 py-2"}>
 					<div className={"col-2 "}>
 						{/* Handles both Icons and JSX elements */}
@@ -36,7 +36,7 @@ export default function ProfileListItem({ item, Icon }) {
 								<p className="mb-0">{item.amountOfWorkouts} pass</p>
 							) : (
 								<p className="mb-0">
-									av {item.author} <Dot /> {item.amountOfWorkouts} aktiviterer
+									av {item.author} <Dot /> {item.amountOfWorkouts} aktiviter
 								</p>
 							)}
 						</div>
