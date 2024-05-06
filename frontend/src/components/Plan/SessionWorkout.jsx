@@ -1,6 +1,6 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import styles from "./SessionWorkout.module.css"
-import { StopwatchFill } from "react-bootstrap-icons"
+import { StopwatchFill, ExclamationCircleFill   } from "react-bootstrap-icons"
 import { Pencil } from "react-bootstrap-icons"
 import { Link } from "react-router-dom"
 import { AccountContext } from "../../context"
@@ -8,6 +8,7 @@ import { isEditor } from "../../utils"
 import { useNavigate } from "react-router"
 import Button from "../../components/Common/Button/Button"
 import Review from "../../components/Plan/SessionReview/SessionReviewComponent.jsx"
+import {HTTP_STATUS_CODES} from "../../utils"
 
 /**
  * The SessionWorkout component is used to display information about a Sessions
@@ -42,8 +43,37 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 	const navigateAndClose = async path => {
 		navigate(path)
 	}
+	const[reviewId, setReviewId] = useState(-1)
+
+	const context = useContext(AccountContext)
+	//const {token} = context
 
 	const [isReviewEnabled] = useState(true) //FEATURE TOGGLE
+
+	useEffect(() => {
+		const fetchLoadedData = async() => {
+			const requestOptions = {
+				headers: {"Content-type": "application/json", token: context.token}
+			}
+
+			const loadedResponse = await fetch("/api/session/" + sessionID + "/review/all", requestOptions).catch(() => {
+				setErrorStateMsg("Serverfel: Kunde inte ansluta till servern.")
+				setLoading(false)
+				return
+			})
+
+			if(loadedResponse.status != HTTP_STATUS_CODES.OK){
+				setErrorStateMsg("Session med ID '" + sessionID + "' existerar inte. Felkod: " + loadedResponse.status)
+				setLoading(false)
+			} else {
+				const json = await loadedResponse.json();
+				if(json[0] !== null && json[0] != undefined) {
+					setReviewId(json[0]['id'])
+				}
+			}
+		}
+		fetchLoadedData()
+	})
 
 	function setWorkoutID() {
 		if (checkWorkout() || isSpecifiedWorkoutID())
@@ -152,10 +182,13 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 					}
 					{
 						isEditor(userContext) && isReviewEnabled && 
-						<Button onClick={() => {
+						<Button className = {styles.review_button} onClick={ () => {
 							setRShowPopup(true)
 						}} outlined={false}>
-							<p>Utvärdering</p>
+							<p className = {styles.review_text}>Utvärdering</p>
+							{
+								(reviewId < 0) && <ExclamationCircleFill className = {styles.no_review_alert}/>
+							}
 						</Button>
 					}
 					{
