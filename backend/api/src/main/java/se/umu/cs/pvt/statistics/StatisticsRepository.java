@@ -3,7 +3,6 @@ package se.umu.cs.pvt.statistics;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.time.LocalDate;
 import java.util.List;
 import se.umu.cs.pvt.session.Session;
 import se.umu.cs.pvt.belt.Belt;
@@ -19,7 +18,7 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
   
   @Query("""
     SELECT
-      new se.umu.cs.pvt.statistics.StatisticsResponse(s.id,
+      new se.umu.cs.pvt.statistics.StatisticsActivity(s.id,
                                                       t.id, 
                                                       t.name,
                                                       'technique', 
@@ -52,12 +51,12 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
       t.name,
       s.date
       """)
-  List<StatisticsResponse> getAllSampleTechniquesQuery(Long id);
+  List<StatisticsActivity> getAllSampleTechniquesQuery(Long id);
 
 
   @Query("""
     SELECT
-      new se.umu.cs.pvt.statistics.StatisticsResponse(s.id, 
+      new se.umu.cs.pvt.statistics.StatisticsActivity(s.id, 
                                                       e.id, 
                                                       e.name, 
                                                       'exercise', 
@@ -89,7 +88,7 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
       e.name,
       s.date
       """)
-  List<StatisticsResponse> getAllSampleExercisesQuery(Long id);
+  List<StatisticsActivity> getAllSampleExercisesQuery(Long id);
 
   // Get a list of belts associated with a technique.
   @Query("""

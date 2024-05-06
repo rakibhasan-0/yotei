@@ -45,8 +45,8 @@ public class StatisticsController {
                                                                        @RequestParam Optional<Boolean> kihon, 
                                                                        @RequestParam Optional<Boolean> showexercises){
     
-        List<StatisticsResponse> techniques = statisticsRepository.getAllSampleTechniquesQuery(id);
-        List<StatisticsResponse> exercises;
+        List<StatisticsActivity> techniques = statisticsRepository.getAllSampleTechniquesQuery(id);
+        List<StatisticsActivity> exercises;
         
         // Check if showexercises parameter is set and show exercises if it is.
         if (showexercises.isPresent() && showexercises.get()) {
@@ -57,7 +57,7 @@ public class StatisticsController {
         }
 
         // Combine techniques and exericises
-        List<StatisticsResponse> union = Stream.concat( exercises.stream(), techniques.stream())
+        List<StatisticsActivity> union = Stream.concat( exercises.stream(), techniques.stream())
             .collect( Collectors.toList());
             
         // Check if kihon parameter is set and show only kihon techniques if it is.
@@ -71,25 +71,33 @@ public class StatisticsController {
             union.removeIf(item -> item.getDate().isAfter(enddate.get()));
         }
 
+        // Store unique activities
+        List<StatisticsResponse> uniqueActivities = new ArrayList<>();
+
         // Get belts for techniques and count distinct sessions
         // TODO: calculate average rating
         double averageRating = 4.5;
         Set<Long> uniqueSessionIds = new HashSet<>();
-        for (StatisticsResponse sr : union) {
-            uniqueSessionIds.add(sr.getSession_id());
+        for (StatisticsActivity sa : union) {
+            StatisticsResponse sr = new StatisticsResponse(sa.getActivity_id(), sa.getName(), sa.getType(), sa.getCount());
+            
+            uniqueSessionIds.add(sa.getSession_id());
             if (sr.getType().equals("technique")) {
                 sr.setBelts(statisticsRepository.getBeltsForTechnique(sr.getActivity_id()));
+            }
+            if (!uniqueActivities.contains(sr)) {
+                uniqueActivities.add(sr);
             }
         }
 
         // Sort remaining response entities
-        union = union.stream()
+        uniqueActivities = uniqueActivities.stream()
             .sorted(Comparator.comparingLong(StatisticsResponse::getCount).reversed())
             .collect( Collectors.toList());
  
         
         
-        StatisticsResponseWrapper response = new StatisticsResponseWrapper(uniqueSessionIds.size(), averageRating, union);
+        StatisticsResponseWrapper response = new StatisticsResponseWrapper(uniqueSessionIds.size(), averageRating, uniqueActivities);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
