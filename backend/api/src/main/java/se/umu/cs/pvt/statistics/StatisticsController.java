@@ -73,6 +73,7 @@ public class StatisticsController {
 
         // Get belts for techniques and count distinct sessions
         // TODO: calculate average rating
+        double averageRating = 4.5;
         Set<Long> uniqueSessionIds = new HashSet<>();
         for (StatisticsResponse sr : union) {
             uniqueSessionIds.add(sr.getSession_id());
@@ -87,8 +88,7 @@ public class StatisticsController {
             .collect( Collectors.toList());
  
         
-        //int numSessions = statisticsRepository.getNumberOfSessions(id, filterKihon, showAllDates, sdate, edate);
-        double averageRating = 4.5; //TODO: get average rating when session review is implemented
+        
         StatisticsResponseWrapper response = new StatisticsResponseWrapper(uniqueSessionIds.size(), averageRating, union);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
