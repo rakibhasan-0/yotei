@@ -12,6 +12,7 @@ import Sorter from "../Sorting/Sorter"
 import RoundButton from "../RoundButton/RoundButton"
 import { ChevronRight } from "react-bootstrap-icons"
 import TagList from "./Taglist.jsx"
+import CheckBox from "../CheckBox/CheckBox"
 
 /**
  * OBSERVE! This component is used inside the TagInput-component and should not be used by itself. 
@@ -127,6 +128,8 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 		}
 	}
 
+
+
 	return (
 		<div className={styles["popup-wrapper"]} id = {id}>
 			<div>
@@ -156,93 +159,15 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 				</div>
 			</div>
 			<div style={{overflow:scroll}}>
-				<TagList>
-
-				</TagList>
-
-				<TagList>
-
-				</TagList>
-
-				<TagList>
-
-				</TagList>
-
-				<TagList>
+				{addedTags.map(tag => <TagList 
+					tagType="added"
+					key={tag.id}
+					text={tag.name}
+					/>
 					
-				</TagList>
-
-				<TagList>
-
-				</TagList>
-
-				<TagList>
+				)}
 					
-				</TagList>
-
-				<TagList>
-
-				</TagList>
-
-				<TagList>
-					
-				</TagList>
-
-				<TagList>
-
-				</TagList>
-
-				<TagList>
-					
-				</TagList>
-
-				<TagList>
-
-				</TagList>
-
-				<TagList>
-					
-				</TagList>
-
-				<TagList>
-
-				</TagList>
-
-				<TagList>
-					
-				</TagList>
-
-				<TagList>
-
-				</TagList>
-
-				<TagList>
-					
-				</TagList>
-
-				<TagList>
-
-				</TagList>
-
-				<TagList>
-					
-				</TagList>
-
-				<TagList>
-
-				</TagList>
-
-				<TagList>
-					
-				</TagList>
-
-				<TagList>
-
-				</TagList>
-
-				<TagList>
-					
-				</TagList>
+				
 			</div>
 			<RoundButton onClick={() => setIsOpen(false)}>
 				<ChevronRight width={30} />
