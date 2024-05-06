@@ -37,9 +37,6 @@ services:
     links:
       - api
 
-
-
-      
   api:
     build: backend/api
     restart: always
