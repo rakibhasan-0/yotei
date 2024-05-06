@@ -2,6 +2,9 @@
 import React, { useState, useContext } from "react"
 import { AccountContext } from "../../context"
 import GradingAfterComp from "./GradingAfterComp"
+import Button from "../../components/Common/Button/Button"
+import styles from "./GradingBefore.module.css"
+import { Printer } from "react-bootstrap-icons"
 
 export default function GradingAfter() {
 	const context = useContext(AccountContext)
@@ -70,16 +73,59 @@ export default function GradingAfter() {
     ])
 
     return (
-        <div>
-            <div> 
-                <div style={{ backgroundColor: "#FFD700", borderRadius: "0.3rem", padding: "0px" }}>
-                    <h2>GULT BÄLTE                         14:00</h2>
+        <div className={styles.container}>
+                
+            <div className={styles.topContainer}>
+                <div className={styles.content}>  
+                    <div style={{ backgroundColor: "#FFD700", borderRadius: "0.3rem", padding: "0px" }}>
+                        <h2>GULT BÄLTE                         14:00</h2>
+                    </div>
                 </div>
+                <h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "10px", paddingBottom: "10px" }}>Summering</h1>
             </div>
-            <h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "20px", paddingBottom: "20px" }}>Summering</h1>
-            {examinees.map((examinee) => (
-                <GradingAfterComp key={examinee.id} person={examinee.person} />
-            ))}
+            
+            <div className={styles.scrollableContainer}>
+                {examinees.map((examinee) => (
+                    <GradingAfterComp key={examinee.id} person={examinee.person} />
+                ))}
+            </div>
+        
+        <div className={styles.bottomContainer}>
+            <div style={{ display: "flex", justifyContent: "flex-end",paddingTop: "10px" }}>
+            <Button 
+        style = {{
+                    backgroundColor: "#FFD700",
+                    borderRadius: "0.1rem",
+                    padding: "0px",
+                    height: "50px"
+        }}
+        width={"60px"}
+        >
+            <Printer size={30} color="white" />
+            </Button> 
+            </div>
+            
+            <div className={styles.buttonContainer} style= {{paddingTop: "10px"}}>
+                    <Button
+                        width="100%"
+                        outlined={true}
+                        onClick={() => {
+                            console.log("Tillbaka")
+                        }}
+                    >
+                        <p>Tillbaka</p>
+                    </Button>
+                    <Button
+                        width="100%"
+                        onClick={() => {
+                            console.log("Fortsätt")
+                        }}
+                    >
+                        <p>Spara och avsluta</p>
+                    </Button>
+                        
+                </div>        
+            </div>
         </div>
     )
 }
