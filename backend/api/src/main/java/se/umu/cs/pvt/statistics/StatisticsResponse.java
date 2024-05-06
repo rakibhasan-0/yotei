@@ -8,13 +8,20 @@ import java.util.ArrayList;
 
 /**
  * Class representing the response entity for the statistics API. 
+ * 
  * Example serialized object:
  * {
- *   id: 1,
- *   name: "Armhävningar"
- *   type: "technique"/"exercise"
- *   belt: id (OR null)
- *   count: 10
+ *   "activity_id": 0,
+ *   "name": "string",
+ *   "type": "string",
+ *   "count": 0,
+ *   "beltColors": [
+ *     {
+ *       "belt_color": "string",
+ *       "belt_name": "string",
+ *       "is_child": true
+ *     }
+ *   ]
  * }
  * 
  * @author Cocount 

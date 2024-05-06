@@ -2,7 +2,9 @@
  * The Tag API controller.
  * Class for managing tag API calls.
  *
- * @Author Team 5 Verona (Doc: Griffin dv21jjn), Team Durian
+ * @Author Team 5 Verona (Doc: Griffin dv21jjn)
+ * @Author Team 3 (Durian)
+ * @since 2024-05-02
  */
 package se.umu.cs.pvt.tag;
 
@@ -11,9 +13,9 @@ import org.springframework.data.jpa.repository.query.EscapeCharacter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.Optional;
 
 import java.util.List;
-
 
 @RestController
 @CrossOrigin
@@ -31,14 +33,13 @@ public class TagController {
         this.tagRepository = tagRepository;
     }
 
-
     /**
      * Returns all Tags from the database.
      *
      * @return All tags.
      * @deprecated the /all endpoint.
      */
-    @GetMapping(value = {"", "/all"})
+    @GetMapping(value = { "", "/all" })
     public ResponseEntity<List<Tag>> getTags() {
         List<Tag> tags = tagRepository.findAll();
         if (tags.isEmpty()) {
@@ -140,7 +141,7 @@ public class TagController {
      * @return The newly added Tag.
      * @deprecated the /add endpoint.
      */
-    @PostMapping(value = {"", "/add"})
+    @PostMapping(value = { "", "/add" })
     public ResponseEntity<Tag> postTag(@RequestBody Tag toAdd) {
         if (toAdd.getName().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -149,5 +150,29 @@ public class TagController {
         toAdd.nameToLowerCase();
         tagRepository.save(toAdd);
         return new ResponseEntity<>(tagRepository.getTagByName(toAdd.getName()), HttpStatus.CREATED);
+    }
+
+    /**
+     * Edits a Tag.
+     *
+     * @param id         The tag to be updated/edited.
+     * @param updatedTag The updated data.
+     * @return ResponseEntity with the updated tag or an error message.
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<TagResponse> updateTag(@PathVariable Long id, @RequestBody Tag updatedTag) {
+        Optional<Tag> firstTag = tagRepository.findById(id);
+        if (!firstTag.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Tag tagToUpdate = firstTag.get();
+        tagToUpdate.setName(updatedTag.getName());
+        tagToUpdate.nameToLowerCase();
+
+        tagRepository.save(tagToUpdate);
+
+        TagResponse response = new TagResponse(tagToUpdate.getId(), tagToUpdate.getName());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
