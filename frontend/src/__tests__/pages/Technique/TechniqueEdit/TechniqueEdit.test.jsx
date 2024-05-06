@@ -8,8 +8,8 @@ import { Route, createMemoryRouter, createRoutesFromElements, RouterProvider } f
 
 import { rest } from "msw"
 import { server } from "../../../server"
-import TechniqueDetail from "../../../../pages/Technique/TechniqueDetail/TechniqueDetail"
-import TechniqueEdit from "../../../../pages/Technique/TechniqueEdit/TechniqueEdit"
+import TechniqueDetail from "../../../../pages/Activity/Technique/TechniqueDetail/TechniqueDetail"
+import TechniqueEdit from "../../../../pages/Activity/Technique/TechniqueEdit/TechniqueEdit"
 
 /**
  * Tests for the technique edit page
