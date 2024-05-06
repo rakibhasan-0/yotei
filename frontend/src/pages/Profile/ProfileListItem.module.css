@@ -26,13 +26,13 @@ a:hover {
 
 .profile-item-row {
 	border: 1px var(--black-primary) solid;
-	border-radius: 3px;
-	margin-top: 10px;
+	border-radius: 6px;
+	margin: 10px 0px 0px 0px;
 }
 
 .profile-text {
 	height: 100%;
-	padding: 20px 5px 0px 5px;
+	font-size: 1.1rem;
 	overflow-wrap: break-word;
 }
 .hoverable:hover a {
@@ -42,11 +42,11 @@ a:hover {
 #profile-detail-arrow::before {
 	vertical-align: middle;
 }
-.listItemDiv{
-    padding: 0;
-    margin: 0;
+.listItemDiv {
+	padding: 0;
+	margin: 0;
 }
-.listItemInfoDiv{
-    padding: 0;
-    margin: 0;
+.listItemInfoDiv {
+	padding: 0;
+	margin: 0;
 }
