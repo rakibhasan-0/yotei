@@ -17,7 +17,7 @@ import Spinner from "../../../components/Common/Spinner/Spinner"
  * @version 2.1
  * @since 2024-04-29
  * @returns A group index page
- * Updated: 2024-05-02
+ * Updated: 2024-05-06
  */
 export default function GroupIndex() {
 	const [groups, setGroups] = useState([])
@@ -106,10 +106,10 @@ export default function GroupIndex() {
 
 					))}
 
-					{groupsEmpty ? (<div>
+					{groupsEmpty ? (<div id = {"No-groups-visible-text"}>
 						<h1>Det finns inga grupper att visa</h1>
 					</div>)
-						: <></> //Default is nothing.
+						: <div id = {"Groups-are-visible"}></div> //Default is nothing. This div is for testing!
 					}
 
 					<RoundButton linkTo={"/plan/create"}>

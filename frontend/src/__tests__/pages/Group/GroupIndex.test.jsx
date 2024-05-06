@@ -8,7 +8,7 @@ import { server } from "../../server"
  * Unit-test for the GroupIndex page, 
  * init as well as making sure search button is case insensitive
  *
- * @author Team Mango (Group 4) (2024-05-02), Team Durian (Group 3) (2024-04-23)
+ * @author Team Mango (Group 4) (2024-05-06), Team Durian (Group 3) (2024-04-23)
  * @since 2024-04-18
  * @version 1.0 
  */
@@ -120,11 +120,8 @@ test("Should display proper message when there are no groups", async () => {
 		})
 	)
 
-	await screen.findByTestId("searchbar-groups") //This is needed for the test to work.
-	//const searchInput = screen.getByTestId("searchbar-input")
-	//act( () => fireEvent.change(searchInput, { target: { value: "g" } }) )
-	expect(screen.getByText("Det finns inga grupper att visa")).toBeInTheDocument() // This line should be changed to the updated error message if the test fails. Or this should not be tested in this way...
-	//If the line is updated then make sure to fix the test below for when there are groups.
+	await screen.findByTestId("No-groups-visible-text") //This is needed for the test to work.
+	expect(screen.getByTestId("No-groups-visible-text")).toBeInTheDocument()
 })
 
 
@@ -156,10 +153,11 @@ test("Should not display groups missing message when there are groups", async ()
 		})
 	)
 
-	await screen.findByTestId("searchbar-groups") //This is needed for the test to work.
+	await screen.findByTestId("Groups-are-visible") //This is needed for the test to work.
+	expect(screen.getByTestId("Groups-are-visible")).toBeInTheDocument()
+	//The code below would also work, but we want fast tests, so we instead opt for the unnecessary div solution.
+	//await new Promise((r) => setTimeout(r, 2000))
+	//expect(screen.queryByTestId("No-groups-visible-text")).not.toBeInTheDocument()
 
-	//Test that the text does not exist on the page.
-	const testText = screen.queryByText("Det finns inga grupper att visa") //This text needs to be updated in the test too if it is changed.
-	expect(testText).toBeNull()
 })
 
