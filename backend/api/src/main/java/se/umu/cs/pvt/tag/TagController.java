@@ -1,11 +1,3 @@
-/**
- * The Tag API controller.
- * Class for managing tag API calls.
- *
- * @Author Team 5 Verona (Doc: Griffin dv21jjn)
- * @Author Team 3 (Durian)
- * @since 2024-05-02
- */
 package se.umu.cs.pvt.tag;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +9,14 @@ import java.util.Optional;
 
 import java.util.List;
 
+/**
+ * The Tag API controller.
+ * Class for managing tag API calls.
+ *
+ * @Author Team 5 Verona (Doc: Griffin dv21jjn)
+ * @Author Team 3 (Durian)
+ * @since 2024-05-02
+ */
 @RestController
 @CrossOrigin
 @RequestMapping(path = "/api/tags")
