@@ -13,8 +13,8 @@ import useMap from "../../hooks/useMap"
 import Divider from "../../components/Common/Divider/Divider"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import ProfileListItem from "./ProfileListItem"
-import { Lock, Unlock, Eye, StarFill } from "react-bootstrap-icons"
-import StarButton from "../../components/Common/StarButton/StarButton"
+import { Lock, Unlock, Eye } from "react-bootstrap-icons"
+import starFill from "../../../assets/images/starFill.svg"
 
 /**
  * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3) (2024-04-23)
@@ -39,15 +39,30 @@ export default function Profile() {
 	const [UsernamePassword, setUsernamePassword] = useState("")
 	const [verifyUsernamePassword, setVerifyUsernamePassword] = useState("")
 
-	const MockList = {
-		list_id: 1,
-		list_name: "TestList",
-		state: "Locked",
-		amountOfWorkouts: 3,
-		author: "Oliver",
-		//Locked
-		//Public
-	}
+	const lists = [
+		{
+			list_id: -1,
+			list_name: "TestList",
+			state: "Favourite",
+			amountOfWorkouts: 3,
+			author: "Oliver",
+		},
+		{
+			list_id: 1,
+			list_name: "TestList",
+			state: "Locked",
+			amountOfWorkouts: 3,
+			author: "Oliver",
+		},
+		{
+			list_id: 2,
+			list_name: "Lees lista",
+			state: "Public",
+			amountOfWorkouts: 3,
+			author: "Lee",
+		},
+	]
+
 	/* Workout management */
 
 	const WorkoutList = ({ list }) => {
@@ -155,15 +170,12 @@ export default function Profile() {
 			case "Favourite":
 				console.log("Favourite!")
 				//Här borde jag fixa en route till favoritsidans grej :)
-				return <StarButton id="starbutton-example" toggled={true} onClick={null} />
-			//return StarFill
+				return <img src={starFill} />
 			default:
 				console.log("Default")
 				return <Lock />
 		}
 	}
-
-	let icon = getIconFromState(MockList.state)
 
 	return (
 		<Tabs defaultActiveKey={"FavoriteWorkouts"} className={style.tabs}>
@@ -174,7 +186,13 @@ export default function Profile() {
 					text={searchText}
 					onChange={setSearchText}
 				/>
-				{loading ? <Spinner /> : <ProfileListItem item={MockList} Icon={icon} />}
+				{loading ? (
+					<Spinner />
+				) : (
+					lists.map((list) => (
+						<ProfileListItem key={list.list_id} item={list} Icon={getIconFromState(list.state)} />
+					))
+				)}
 			</Tab>
 			<Tab eventKey={"MyWorkouts"} title={"Mina Pass"} className={style.tab}>
 				<SearchBar
