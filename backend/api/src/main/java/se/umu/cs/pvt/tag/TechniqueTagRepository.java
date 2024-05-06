@@ -1,15 +1,15 @@
-/**
- * The repository used for the TechniqueTags.
- * @Author Team 5 Verona (Doc: Griffin dv21jjn)
- */
 package se.umu.cs.pvt.tag;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
+/**
+ * The repository used for the TechniqueTags.
+ * @Author Team 5 Verona (Doc: Griffin dv21jjn)
+ */
 @Repository
-public interface TechniqueTagRepository extends JpaRepository<TechniqueTag, Long>{
+public interface TechniqueTagRepository extends JpaRepository<TechniqueTag, Long> {
 
    /**
     * Finds all Techniques for a specific Tag.
