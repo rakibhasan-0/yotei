@@ -4,7 +4,7 @@ import {Link} from "react-router-dom"
 import Popup from "../../components/Common/Popup/Popup"
 import styles from "./TechniqueNavigation.module.css"
 
-function TechniqueNavigation({}) {
+function TechniqueNavigation({ id }) {
     const [showPopup, setShowPopup] = useState(false)
     {/* Should instead be sent as a prop to the component since the techniques have been fetched in the parent component. */}
     const headers = ["Teknik1", "Teknik2", "Teknik3", "Teknik4", "Teknik5", "Teknik6", "Teknik7", "Teknik8", "Teknik9"]; // Example array of headers
@@ -12,8 +12,8 @@ function TechniqueNavigation({}) {
 
     return(
         <div>
-            <Button children={<p>Tekniker</p>} onClick={() => setShowPopup(true)}></Button>
-            <Popup id={"test-popup"} title={"Navigering"} isOpen={showPopup} setIsOpen={setShowPopup}>
+            <Button id={id} children={<p>Tekniker</p>} onClick={() => setShowPopup(true)}></Button>
+            <Popup id={"navigation-popup"} title={"Navigering"} isOpen={showPopup} setIsOpen={setShowPopup}>
                 <div className={styles.popupContent}>
                     {/* Should link to the respective technique grading page. */}
                     {headers.map((techniqueName, index) => (
@@ -21,7 +21,7 @@ function TechniqueNavigation({}) {
                     ))}
                     {/* Should link to the "after" part of the grading as well as save the changes to the database. */}
                     <Link to="/groups" className={styles.summaryLink}>
-                        <Button onClick={() => setShowPopup(false)}><p>Fortsätt till summering</p></Button>
+                        <Button id={"summering-button"} onClick={() => setShowPopup(false)}><p>Fortsätt till summering</p></Button>
                     </Link>
                 </div>
             </Popup>
