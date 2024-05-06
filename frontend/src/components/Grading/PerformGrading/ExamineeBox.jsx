@@ -22,7 +22,7 @@ import styles from "./ExamineeBox.module.css"
  * @version 1.0 
  */
 
-export default function ExamineeBox({ examineeName = "Max Värsting", onClickComment}) {
+export default function ExamineeBox({ id, examineeName = "Max Värsting", onClickComment}) {
 	const [selectedButton, setSelectedButton] = useState(null)
 
 	const handleButtonClick = (buttonId) => {
@@ -31,10 +31,10 @@ export default function ExamineeBox({ examineeName = "Max Värsting", onClickCom
 	}
 
 	return (
-		<div className={styles.examineeContainer}>
+		<div id={id} className={styles.examineeContainer}>
 			<fieldset className={styles.examineeFieldset}>
 				<div className={styles.examineeName}>
-					<p>{examineeName}</p>
+					<p role="ExamineeName">{examineeName}</p>
 				</div>
 				<CommentButton onClick={onClickComment} className={styles.commentButtonContainer}/>
 				<div className={styles.buttonContainer}>
