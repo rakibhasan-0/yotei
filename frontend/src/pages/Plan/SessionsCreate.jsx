@@ -47,13 +47,7 @@ export default function SessionsCreate(){
     const [goBackPopup, setGoBackPopup] = useState(false)
 	const [isBlocking, setIsBlocking] = useState(false)
 
-	const blocker = useBlocker(() => {
-		if (isBlocking) {
-			setGoBackPopup(true)
-			return true
-		}
-		return false
-	})
+	
 
 
     useEffect(() => {
@@ -79,7 +73,7 @@ export default function SessionsCreate(){
      * Local model of a plan.
      */
 	const [planData, setPlanData] = useState({
-		name: "",
+		group: "",
 		startDate: "",
 		endDate: "",
 		weekdaysSelected: false,
@@ -104,7 +98,7 @@ export default function SessionsCreate(){
      * Model of what fields are correctly modeled.
      */
 	const [fieldCheck, setFieldCheck] = useState({
-		name: false,
+		group: false,
 		startDate: false,
 		endDate: false,
 	})
@@ -117,8 +111,8 @@ export default function SessionsCreate(){
      * @param value         The updated value.
      */
 	const dataClickHandler = (variableName, value) => {
-		setTextInputErrorMsg("")
 		setPlanData({ ...planData, [variableName]: value })
+		console.log(planData)
 	}
 
 
@@ -255,65 +249,74 @@ export default function SessionsCreate(){
      */
 	function dateHandler(plan) {
 
-		/* Format Date to ISO standard (YYYY-MM-DD) */
-		const formatDate = (date) => {
-			const [dateStr] = new Date(date).toISOString().split("T")
-			return dateStr
-		}
 
-		/* Check for start and end date */
-		if (fieldCheck.startDate) {
-			if (fieldCheck.endDate) {
+		checkNotEmpty("name") 
+		checkDate("startDate") 
+		checkDate("EndDate")
+	
 
-
-				let startDate = new Date(planData.startDate)
-				let endDate = new Date(planData.endDate)
-				let dayNr = startDate.getDay()
-
-				var tempDate
-				var tempTime
-				console.log("Inside DateHandler")
-				/* Find first date occurences of chosen weekdays */
-				for (var i = 0; i < 7; i++) {
-
-					if (weekdays[dayNr].value) {
-
-						tempDate = new Date(startDate)
-						tempTime = weekdays[dayNr].time.target.value + ":00"
-
-						firstDatesArray.push({ date: tempDate, time: tempTime })
-					}
-
-					/* Update loop variables */
-					dayNr = (dayNr + 1) % 7
-					startDate.setDate(startDate.getDate() + 1)
-				}
-
-				/* If days chosen */
-				if (firstDatesArray.length !== 0) {
-
-					/* Find all date occurences of chosen weekdays */
-					firstDatesArray.forEach((e) => {
-
-						tempDate = new Date(e.date)
-						tempTime = e.time
-
-						while (tempDate <= endDate) {
-							allDatesArray.push({ plan: plan, date: formatDate(tempDate), time: tempTime })
-
-							tempDate.setDate(tempDate.getDate() + 7)
-						}
-					})
-
-					/* Add plan id to each object in array */
-					allDatesArray = allDatesArray.map(session => {
-						return { plan: plan, ...session }
-					})
-
-					addSessions()
-				} 
+		if(validateForm()){
+			const formatDate = (date) => {
+				const [dateStr] = new Date(date).toISOString().split("T")
+				return dateStr
 			}
+	
+			/* Check for start and end date */
+			if (fieldCheck.startDate) {
+				if (fieldCheck.endDate) {
+	
+	
+					let startDate = new Date(planData.startDate)
+					let endDate = new Date(planData.endDate)
+					let dayNr = startDate.getDay()
+	
+					var tempDate
+					var tempTime
+					console.log("Inside DateHandler")
+					/* Find first date occurences of chosen weekdays */
+					for (var i = 0; i < 7; i++) {
+	
+						if (weekdays[dayNr].value) {
+	
+							tempDate = new Date(startDate)
+							tempTime = weekdays[dayNr].time.target.value + ":00"
+	
+							firstDatesArray.push({ date: tempDate, time: tempTime })
+						}
+	
+						/* Update loop variables */
+						dayNr = (dayNr + 1) % 7
+						startDate.setDate(startDate.getDate() + 1)
+					}
+	
+					/* If days chosen */
+					if (firstDatesArray.length !== 0) {
+	
+						/* Find all date occurences of chosen weekdays */
+						firstDatesArray.forEach((e) => {
+	
+							tempDate = new Date(e.date)
+							tempTime = e.time
+	
+							while (tempDate <= endDate) {
+								allDatesArray.push({ plan: plan, date: formatDate(tempDate), time: tempTime })
+	
+								tempDate.setDate(tempDate.getDate() + 7)
+							}
+						})
+	
+						/* Add plan id to each object in array */
+						allDatesArray = allDatesArray.map(session => {
+							return { plan: plan.id, ...session }
+						})
+	
+						addSessions()
+					} 
+				}
+			}
+
 		}
+		/* Format Date to ISO standard (YYYY-MM-DD) */
 	}
 
 	/**
@@ -329,7 +332,10 @@ export default function SessionsCreate(){
 			x.setDate(x.getDate()+1)
 			return { ...session, date: new Date(x)}
 		})
-		console.log("Inside ADDSESSION")
+		allDatesArray.forEach((session) =>{
+			session.plan = group.id
+		})
+		console.log(allDatesArray)
 		const requestOptions = {
 			method: "POST",
 			headers: { "Content-type": "application/json", "token": token },
@@ -344,6 +350,7 @@ export default function SessionsCreate(){
 			
 			if (response.ok) {
 				setSuccessToast("Tillfällen lades till.")
+				navigate(-1)
 			}
 
 		} catch (error) {
@@ -351,10 +358,49 @@ export default function SessionsCreate(){
 		}
 	}
 
+	/**
+     * A function that will validate the users input.
+     * If the input is invalid it will send a signal to the form and change
+     * the input style.
+     *
+     * @returns Boolean
+     */
+	function validateForm() {
+		var res = true
+		
 
+		if(!group){
+			setErrorToast("Vänligen välj en grupp")
+			res = false;
+		}
+		else if (!(fieldCheck.startDate && fieldCheck.endDate)) {
+			setErrorToast("Vänligen välj start- och slutdatum.")
+			res = false
+		} 
+		else if (planData.endDate < planData.startDate) {
+			setErrorToast("Det valda startdatumet är senare än det valda slutdatumet.")
+			res = false
+		}
+
+		for (let i = 0; i < 7; i++) {
+			const day = weekdays[i]
+			if (day.value && day.time == "") {
+				setErrorToast("Du måste ge tid till varje aktiv dag")
+				res = false
+				break
+			}
+		}
+
+		return res
+	}
 	
 
-
+	/**
+	 * Side effect that blocks navigation if any of the form states have been changed.
+	 */
+	useEffect(() => {
+		setIsBlocking(group != "" || planData.startDate != "" || planData.endDate != "")
+	}, [group, weekdays, fieldCheck])
 	
 
 
@@ -363,7 +409,7 @@ export default function SessionsCreate(){
 
     return (
         <>
-            <ConfirmPopup
+            {/* <ConfirmPopup
 				confirmText={"Lämna"}
 				backText={"Avbryt"}
 				id={"session-create-leave-page-popup"}
@@ -371,14 +417,16 @@ export default function SessionsCreate(){
 				onClick={blocker.proceed}
 				setShowPopup={setGoBackPopup}
 				popupText={"Är du säker på att du vill lämna sidan? Dina ändringar kommer inte att sparas."}
-			/>
+			/> */}
 			<title>Skapa flera tillfällen</title>
 			<h1 style={{ marginTop: "2rem" }}>Skapa flera tillfällen</h1>
 			<Divider option={"h2_left"} title={"Grupp"} />
             <Dropdown errorMessage={groupError} id={"session-dropdown"} text={group?.name || "Grupp"} centered={true}>
-				{groups?.length > 0 ? groups.map((group, index) => (
-					<div className={styles.dropdownRow} key={index} onClick={() => setGroup(group)}>
-						<p className={styles.dropdownRowText}>{group.name}</p>
+				{groups?.length > 0 ? groups.map((plan, index) => (
+					<div className={styles.dropdownRow} key={index} onClick={() =>{ 
+						setGroup(plan)
+						}}>
+						<p className={styles.dropdownRowText}>{plan.name}</p>
 					</div>
 				)) : <div className={styles.dropdownRow}>
 					<p className={styles.dropdownRowText}>Kunde inte hitta några grupper</p>
@@ -391,7 +439,7 @@ export default function SessionsCreate(){
 				<div className={styles.p_date_picker}>
 					<DatePicker 
 						id="start-date-picker"
-						onChange={(e) => {onClickData("startDate", e.target.value) }} 
+						onChange={(e) => {dataClickHandler("startDate", e.target.value) }} 
 						minDate={dateFormatter(today)}   
 					/>
 				</div>
@@ -399,7 +447,7 @@ export default function SessionsCreate(){
 				<div className={styles.p_date_picker}>
 					<DatePicker 
 						id="end-date-picker"
-						onChange={(e) => {onClickData("endDate", e.target.value) }}
+						onChange={(e) => {dataClickHandler("endDate", e.target.value) }}
 						maxDate={dateFormatter(twoYearsFromNow)}
 					/>
 				</div>
@@ -462,7 +510,9 @@ export default function SessionsCreate(){
 						Tillbaka
 					</p>
 				</Button>
-				<Button onClick={dateHandler(group)}>
+				<Button onClick = {() => { 
+							dateHandler(planData)}}
+				>
 					<p>
 						Gå vidare
 					</p>
