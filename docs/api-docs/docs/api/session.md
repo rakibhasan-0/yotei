@@ -332,11 +332,11 @@ examples:
                     "positiveComment": "hejsan2",
                     "negativeComment": "svejsan2",
                     "date": "2024-04-19",
-                    "exercises": [
+                    "activities": [
                         {
-                            "session_review_exercise_id": 4,
+                            "session_review_activity_id": 4,
                             "session_review_id": 5,
-                            "exercise_id": 293
+                            "activity_id": 1
                         }
                     ]
                 }
@@ -380,11 +380,11 @@ examples:
                     "positiveComment": "hejsan2",
                     "negativeComment": "svejsan2",
                     "date": "2024-04-19",
-                    "exercises": [
+                    "activivities": [
                         {
-                            "session_review_exercise_id": 4,
+                            "session_review_activity_id": 4,
                             "session_review_id": 5,
-                            "exercise_id": 293
+                            "activity": 1
                         }
                     ]
                 }
@@ -392,25 +392,25 @@ examples:
 </api>
 
 <api>
-name: Create a new session review exercise
+name: Create a new session review activity
 
-path: POST /api/session/:session_id/review/:review_id/exercise
+path: POST /api/session/:session_id/review/:review_id/activity
 
 locked: true
 
 text: |
-    Create a new completed exercise for a session review
+    Create a new completed activity for a session review
 
 body:
 
     type: application/json
     parameters:
-        exercise_id: The id of a completed exercise for a review. | 288
+        activity_id: The id of a completed activity for a review. | 288
 
 examples:
   - name: 200
 
-    request: /api/session/1/review/1/exercise
+    request: /api/session/1/review/1/activity
 
     response:
         content-type: application/json
@@ -419,24 +419,50 @@ examples:
 </api>
 
 <api>
-name: Delete a session review exercise
+name: Delete a session review activity
 
-path: DELTE /api/session/:session_id/review/:review_id/exercise/:exercise_id
+path: DELETE /api/session/:session_id/review/:review_id/activity/:activity_id
 
 locked: true
 
 text: |
-    Delete a completed exercise for a session review
+    Delete a completed activity for a session review
 
 body:
     type: application/json
     parameters:
-        exercise_id: The id of a completed exercise for a review. | 288
+        activity_id: The id of a completed activity for a review. | 288
 
 examples:
   - name: 200
 
-    request: /api/session/1/review/1/exercise
+    request: /api/session/1/review/1/activity
+
+    response:
+        content-type: application/json
+        body: |
+        
+</api>
+
+<api>
+name: Delete all session review activities
+
+path: DELETE /api/session/:session_id/review/:review_id/activity
+
+locked: true
+
+text: |
+    Delete all completed activities for a session review
+
+body:
+    type: application/json
+    parameters:
+        review_id: The id of a session review | 1
+
+examples:
+  - name: 200
+
+    request: /api/session/1/review/1/activity
 
     response:
         content-type: application/json
@@ -447,7 +473,7 @@ examples:
 <api>
 name: Delete a session review 
 
-path: DELTE /api/session/:session_id/review/:review_id
+path: DELETE /api/session/:session_id/review/:review_id
 locked: true
 
 text: |
