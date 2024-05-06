@@ -36,3 +36,18 @@
 .href-link {
     margin: 0 0 0 10px;
 }
+
+.input {
+  user-select: none;
+  overflow: auto;
+  display: flex;
+  align-items: center; /* Align items vertically center */
+  padding: 5px; /* Same padding */
+  font-weight: 400;
+  width: 100%;
+  outline: none;
+}
+
+.close-icon {
+  cursor: pointer;
+}
