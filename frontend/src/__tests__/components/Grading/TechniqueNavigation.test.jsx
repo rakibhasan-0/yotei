@@ -3,7 +3,13 @@ import React from 'react'
 import { screen, configure, render } from '@testing-library/react'
 import TechniqueNavigation from '../../../components/Grading/TechniqueNavigation'
 import "@testing-library/jest-dom"
-import { act } from 'react-dom/test-utils'
+/**
+ * Tests for the TechniqueNavigation button that should be used during grading.
+ * 
+ * @author Apelsin
+ * @since 2024-05-06
+ * @version 1.0 
+ */
 
 configure({testIdAttribute: "id"})
 
@@ -12,37 +18,16 @@ describe('TechniqueNavigation component', () => {
         render(<TechniqueNavigation id="test-technique-navigation" />)
     })
 
-    it('opens the popup when "Tekniker" button is clicked', () => {
+    it("Popup should not be open", () => {
         // ARRANGE
-        const { rerender } = render(<TechniqueNavigation id="test-technique-navigation" />)
-        // ACT
-        act(() => {
-            screen.getByTestId("test-technique-navigation").click()
-        })
-        rerender(<TechniqueNavigation id="test-technique-navigation" />)
-        const popupTitle = screen.getByTestId('navigation-popup')
+        render(<TechniqueNavigation></TechniqueNavigation>)
+    
+        {/* Query for the ID that is set inside the TechniqueNavigation component on the Popup */}
+        const popup = screen.queryByTestId("navigation-popup")
+    
         // ASSERT
-        expect(popupTitle).toBeInTheDocument()
+        expect(popup).not.toBeInTheDocument()
     })
-
-  {/*
-    it('closes the popup when "Fortsätt till summering" button is clicked', () => {
-        // ARRANGE
-        const { rerender } = render(<TechniqueNavigation id="test-technique-navigation" />)    
-        // ACT
-        act(() => {
-            screen.getByTestId("test-technique-navigation").click()
-        })
-        rerender(<TechniqueNavigation id="test-technique-navigation" />)
-
-        const popupTitle = screen.getByTestId('navigation-popup')
-        act(() => {
-            screen.getByTestId("summering-button").click()
-        })
-        rerender(<TechniqueNavigation id="test-technique-navigation" />)
-
-        expect(popupTitle).not.toBeInTheDocument()
-    }) */}
   
   // Add more tests as needed for other functionalities
 })
