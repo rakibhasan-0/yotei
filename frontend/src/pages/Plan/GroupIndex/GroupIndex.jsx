@@ -17,7 +17,7 @@ import Spinner from "../../../components/Common/Spinner/Spinner"
  * @version 2.1
  * @since 2024-04-29
  * @returns A group index page
- * Updated: 2024-05-06
+ * Updated: 2024-05-02
  */
 export default function GroupIndex() {
 	const [groups, setGroups] = useState([])
