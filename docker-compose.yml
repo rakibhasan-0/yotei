@@ -11,6 +11,13 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
     ports:
       - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+
+
+
+      
   frontend:
     build: frontend/
     restart: always
@@ -18,11 +25,16 @@ services:
       - "3000:3000"
     links:
       - psql
+
+
+
+
+      
   gateway:
     build: backend/gateway
     restart: always
     ports:
-      - "8080:8080"
+      - "80:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - POSTGRES_USER=${POSTGRES_USER}
@@ -32,6 +44,10 @@ services:
       - WEBSERVER_HOST=http://frontend:3000
     links:
       - api
+
+
+
+      
   api:
     build: backend/api
     restart: always
@@ -50,6 +66,9 @@ services:
       - ENABLE_SWAGGER=true
 
 
+      
+volumes:
+  pgdata:
     #                 O  O  O
     #                        O
     #                  ._, __|__.
