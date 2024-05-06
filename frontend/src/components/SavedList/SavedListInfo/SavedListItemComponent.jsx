@@ -1,15 +1,13 @@
 /**
- * List item for an activity part of a workout. Either exercise/technique or free text element.
+ * List item for an activity part of a list. Either exercise/technique or free text element.
  * 
  * Props:
  *		activity @type {Activity Object} - The activity to be displayed within the item.
  *		index @type {int} - The index (order) of the list item.
  *		id @type {int} - The id of the list item.
  *
- * @author KEBABPIZZA (Group 8)
- * @author Cyclops    (Group 5) (2023-05-09)
- * @author Durian     (Group 3) (2024-04-18)
- * @author Tomato	  (Group 6) (2024-04-23)
+ * @author Tomato (Group 6) 
+ * @since 2024-05-07
  */
 import React, { useState } from "react"
 import styles from "./SavedListItemComponent.module.css"
@@ -35,7 +33,11 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 	}
 
 	return (
-		<div id={id} className="animate" onClick={() => setIsActive(!isActive)}>
+		<div id={id} className="animate" onClick={() => {
+			if(!isFreeTextElem() && (activity.exercise?.description || activity.technique?.description)){
+				setIsActive(!isActive)
+			}
+		}}>
 			{createStripes()}
 			<div className={"row align-items-center " + (isActive ? "pt-2 pb-2" : "py-2")}  key={activity.id}
 				style={{
@@ -57,8 +59,8 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 					}
 					{
 						(!isFreeTextElem() && (activity.exercise?.description || activity.technique?.description))
-					&&
-					(<div role="optional-toggle" className="toggleIcon ml-2" onClick={() => setIsActive(!isActive)}>
+					&&			
+					(<div role="optional-toggle" className="toggleIcon ml-2">
 						<DescriptionToggle isActive={isActive} />
 					</div>)	
 					}
