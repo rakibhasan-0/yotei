@@ -34,11 +34,12 @@ export default function GroupIndex() {
 				const response = await fetch("/api/plan/all", { headers: { token } })
 				if (response.status === 404) {
 					//This code runs if there are no groups.
-					setLoading(false) //Stop the page from loading.
 					setGroupsEmpty(true) //Set a flag for the groups being empty.
+					setLoading(false) //Stop the page from loading.
 					return
 				}
 				if (!response.ok) {
+					setGroupsEmpty(true) //Set a flag for the groups being empty.
 					setLoading(false)
 					throw new Error("Kunde inte hämta grupper")
 				}
@@ -107,8 +108,8 @@ export default function GroupIndex() {
 					{groupsEmpty ? (<div>
 						<h1>Det finns inga grupper att visa</h1>
 					</div>)
-					: <></> //Default is nothing.
-					 }
+						: <></> //Default is nothing.
+					}
 
 					<RoundButton linkTo={"/plan/create"}>
 						<Plus className="plus-icon" />
