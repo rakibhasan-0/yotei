@@ -257,7 +257,7 @@ CREATE TABLE IF NOT EXISTS exercise_tag (
 	CONSTRAINT et_fk_tag FOREIGN KEY (tag_id) REFERENCES tag(tag_id) ON
 	DELETE CASCADE,
 	UNIQUE (ex_id, tag_id)
-    );
+	);
 
 
 --
@@ -518,10 +518,10 @@ ALTER TABLE
 
 -- Logging tables; Type: TABLE; Schema: public; Owner: psql
 CREATE TABLE error_log (
-       log_id SERIAL PRIMARY KEY,
-       error_message TEXT NOT NULL,
-       info_message TEXT  NOT NULL,
-       error_date_time TIMESTAMP NOT NULL
+	   log_id SERIAL PRIMARY KEY,
+	   error_message TEXT NOT NULL,
+	   info_message TEXT  NOT NULL,
+	   error_date_time TIMESTAMP NOT NULL
 );
 
 ALTER TABLE
@@ -543,20 +543,20 @@ ALTER TABLE
 	media OWNER TO psql;
 
 CREATE TABLE IF NOT EXISTS examination_grading (
-    grading_id SERIAL PRIMARY KEY,
-    creator_id INT NOT NULL,
-    belt_id INT NOT NULL,
-    step INT NOT NULL,
-    technique_step_num INT NOT NULL,
-    created_at DATE NOT NULL,
-    CONSTRAINT grading_fk_belt FOREIGN KEY(belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE
+	grading_id SERIAL PRIMARY KEY,
+	creator_id INT NOT NULL,
+	belt_id INT NOT NULL,
+	step INT NOT NULL,
+	technique_step_num INT NOT NULL,
+	created_at DATE NOT NULL,
+	CONSTRAINT grading_fk_belt FOREIGN KEY(belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS examination_examinee (
-    examinee_id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    grading_id INT NOT NULL,
-    CONSTRAINT examinee_fk_grading FOREIGN KEY(grading_id) REFERENCES examination_grading(grading_id) ON DELETE CASCADE
+	examinee_id SERIAL PRIMARY KEY,
+	name VARCHAR(255) NOT NULL,
+	grading_id INT NOT NULL,
+	CONSTRAINT examinee_fk_grading FOREIGN KEY(grading_id) REFERENCES examination_grading(grading_id) ON DELETE CASCADE
 );
 
 
