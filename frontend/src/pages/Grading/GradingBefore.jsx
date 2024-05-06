@@ -28,21 +28,19 @@ export default function GradingCreate() {
 	const navigate = useNavigate()
   
   const [pairs, setPair] = useState([[]]) 
-  const [checkedExaminee, setCheckedExaminee] = useState(0)
+  const [checkedExamineeIds, setCheckedExamineeIds] = useState([])
 
   function createPair() {
-    if(checkedExaminee == 2) {
-
-    } 
+    
   }
 
-  function onCheck(isChecked) {
-    if(isChecked) {
-      setCheckedExaminee(checkedExaminee + 1)
-    } else if(!isChecked && checkedExaminee > 0){
-      setCheckedExaminee(checkedExaminee - 1)
-    }
+function onCheck(isChecked, examineeId) {
+  if (isChecked) {
+    setCheckedExamineeIds([...checkedExamineeIds, examineeId]);
+  } else {
+    setCheckedExamineeIds(checkedExamineeIds.filter((id) => id !== examineeId));
   }
+}
 
   function addExaminee(examinee) {
     const examineeId = examinees.length + 1
@@ -94,7 +92,18 @@ export default function GradingCreate() {
       onSubmit={(value) => addExaminee(value)}
 
       />
-
+      {checkedExamineeIds.length === 2 && ( 
+      <div className={styles.buttonContainer}>
+				<Button
+					width="100%"
+					outlined={true}
+					onClick={() => {
+						createPair
+					}}
+				>
+					<p>Skapa par</p>
+				</Button> </div>)  
+      }
 			<div className={styles.buttonContainer}>
 				<Button
 					width="100%"

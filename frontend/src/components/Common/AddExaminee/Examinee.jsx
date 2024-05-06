@@ -61,7 +61,7 @@ export default function Examinee({ item, text, id, index, onRemove, onEdit, pair
         <div data-testid="ExamineeListItem-link" style={{ width: "100%" }}>
           <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
             <CheckBox
-              onClick={(checked) => onCheck(checked)}
+              onClick={(checked) => onCheck(checked, id)}
               enabled
               id="test-id"
             />
