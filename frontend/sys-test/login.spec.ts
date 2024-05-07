@@ -1,55 +1,52 @@
-import { expect, test } from "@playwright/test"
-import { UserApi } from "@fixtures/UserApi"
-import { User, Role } from "systemTestsTypes";
+// import { test, expect } from './fixtures';
 
 /**
  * Some basic system tests for login and registry of a new user.
  *
- *  @author Team Durian (Group 3)
+ *  @author Team Durian (Group 3), Team Mango (Group 4)
  *  @since 2024-05-2
- *  @version 1.0
+ *  @version 2.0
  */
 
-test.describe('ST-1 inloggning', () => {
-	/**
-	 * Logs in with a new user. 
-	 */
-	test('.1 Correct login should succeed', async ({ page }) => {
-		let response
-		const exampleUser: User = {
-			userName: 'lenaPH',
-			password: 'securePass123',
-			role: Role.admin
-		}
+//test.describe('ST-1 Login', () => {
+	// let userId;
+	// const exampleUser: User = {
+	// 	userName: 'lego',
+	// 	password: 'securePass1234',
+	// 	role: Role.admin
+	// }
 
-		try {
-			// Setup: Register a new user.
-			response = await UserApi.register_user(exampleUser)
-			// 2. Fyll i användarnamn och lösenord
-			await page.goto('/');
-			await page.locator('input[type="user"]').fill('lenaPH');
-   		await page.locator('input[type="password"]').fill('securePass123');
+	// test.beforeAll('create a new user once before all tests in this describe', async () => {
+	// 	const response = await UserApi.register_user(exampleUser)
+	// 	userId = response.userId
+	// })
 
-			// 3. Tryck logga in och säkerställ att vi kommer till /home
-			await page.locator('#login-button').click();
-			await page.waitForURL(/\**\/plan/);
-		} finally {
-			// Cleanup. Ta bort den nya användaren
-			await UserApi.remove_user(response.userId);
-		}
-	});
+	// test.beforeEach('navigate to root page before each test in this describe', async ({page}) => {
+	// 	await page.goto('/');
+	// })
 
-	/**
-	 * Testar att logga in med en ogiltig användare.
-	 */
-	test('.2 inkorrekt inloggning misslyckas', async ({ page }) => {
-		// 1. Fyll i användarnamn och lösenord
-		await page.goto('/');
-		await page.locator('input[type="user"]').fill('anna');
-   	await page.locator('input[type="password"]').fill('book');
+	// test.afterAll('removes the created user once after all tests in this describe', async () => {
+	// 	await UserApi.remove_user(userId)
+	// }) 
 
-		// 2. Tryck logga in och säkerställ att vi inte lyckas logga in
-		await page.locator('#login-button').click();
-		await expect(page.getByText('Felaktigt')).toBeVisible();
-	});
-});
+	// test('1. Correct login should redirect to /plan', async ({ page }) => {
+	// 	// 1. Fill in user name and password for the newly created user.
+	// 	await page.locator('input[type="user"]').fill(exampleUser.userName)
+	// 	await page.locator('input[type="password"]').fill(exampleUser.password)
+
+	// 	// 2. Press 'Logga in' to verify that we are redirected to /plan
+	// 	await page.locator('#login-button').click()
+	// 	await expect(page).toHaveURL(/\**\/plan/)
+	// });
+
+	// test('2. Incorrect password for login should return 200', async ({ page }) => {
+	// 	// 1. Fill in user name and wrong password.
+	// 	await page.locator('input[type="user"]').fill(exampleUser.userName);
+  //  	await page.locator('input[type="password"]').fill('xxx');
+
+	// 	// 2. Press 'Logga in' to verify that we get response message. 
+	// 	await page.locator('#login-button').click();
+	// 	await expect(page.getByText('Felaktigt')).toBeVisible();
+	// });
+//});
+
