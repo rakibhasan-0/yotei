@@ -50,12 +50,13 @@ export default function GradingCreate() {
 
 			const responseData = await response.json()
 			const gradingId = responseData.grading_id
-			console.log(gradingId)
+			
+      navigate(`/grading/${gradingId}/1`);
+
 		} catch (error) {
 			console.error("Misslyckades skapa gradering:", error)
 		}
 
-		navigate("/grading/:${gradingId}/1")
 	}
 
 
