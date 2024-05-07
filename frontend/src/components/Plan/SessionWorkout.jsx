@@ -46,6 +46,7 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 	const[reviewId, setReviewId] = useState(-1)
 
 	const context = useContext(AccountContext)
+	const [, setErrorStateMsg] = useState("")
 	//const {token} = context
 
 	useEffect(() => {
@@ -56,17 +57,17 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 
 			const loadedResponse = await fetch("/api/session/" + sessionID + "/review/all", requestOptions).catch(() => {
 				setErrorStateMsg("Serverfel: Kunde inte ansluta till servern.")
-				setLoading(false)
+				//setLoading(false)
 				return
 			})
 
 			if(loadedResponse.status != HTTP_STATUS_CODES.OK){
 				setErrorStateMsg("Session med ID '" + sessionID + "' existerar inte. Felkod: " + loadedResponse.status)
-				setLoading(false)
+				//setLoading(false)
 			} else {
-				const json = await loadedResponse.json();
+				const json = await loadedResponse.json()
 				if(json[0] !== null && json[0] != undefined) {
-					setReviewId(json[0]['id'])
+					setReviewId(json[0]["id"])
 				}
 			}
 		}

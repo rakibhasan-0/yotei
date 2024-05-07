@@ -25,16 +25,16 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 	const [sessionData, setSessionData] = useState(null)
 
-    const[rating, setRating] = useState(0)
-    const[doneList, setDone] = useState([])
-    const[positiveComment, setPositiveComment] = useState("")
-    const[negativeComment, setNegativeComment] = useState("")
+	const[rating, setRating] = useState(0)
+	const[doneList, setDone] = useState([])
+	const[positiveComment, setPositiveComment] = useState("")
+	const[negativeComment, setNegativeComment] = useState("")
 	const[savedDate, setSavedDate] = useState("")
 	const[reviewId, setReviewId] = useState(-1)
 
-	const [errorStateMsg, setErrorStateMsg] = useState("")
+	const [, setErrorStateMsg] = useState("")
 
-	const [loading, setLoading] = useState(true)
+	//const [loading, setLoading] = useState(true)
 
 	const context = useContext(AccountContext)
 
@@ -48,18 +48,18 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 			const response = await fetch(`/api/workouts/detail/${workout_id}`, requestOptions).catch(() => {
 				setErrorStateMsg("Serverfel: Kunde inte ansluta till servern.")
-				setLoading(false)
+				//setLoading(false)
 				return
 			})
 
 			if(response.status != HTTP_STATUS_CODES.OK){
 				setErrorStateMsg("Pass med ID '" + workout_id + "' existerar inte. Felkod: " + response.status)
-				setLoading(false)
+				//setLoading(false)
 			} else {
 				const json = await response.json()
 				//console.log(json)
 				setSessionData(() => json)
-				setLoading(false)
+				//setLoading(false)
 				setErrorStateMsg("")
 			}
 		}
@@ -71,24 +71,24 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 			const loadedResponse = await fetch("/api/session/" + session_id + "/review/all", requestOptions).catch(() => {
 				setErrorStateMsg("Serverfel: Kunde inte ansluta till servern.")
-				setLoading(false)
+				//setLoading(false)
 				return
 			})
 
 			if(loadedResponse.status != HTTP_STATUS_CODES.OK){
 				setErrorStateMsg("Session med ID '" + session_id + "' existerar inte. Felkod: " + loadedResponse.status)
-				setLoading(false)
+				//setLoading(false)
 			} else {
-				const json = await loadedResponse.json();
+				const json = await loadedResponse.json()
 				//console.log(session_id)
 				if(json[0] !== null && json[0] !== undefined) {
 					//console.log(json[0])
-					setDoneActivities(json[0][`activities`])
-					setRating(json[0][`rating`])
-					setPositiveComment(json[0][`positiveComment`])
-					setNegativeComment(json[0][`negativeComment`])
-					setReviewId(json[0][`id`])
-					setSavedDate(json[0][`date`])
+					setDoneActivities(json[0]["activities"])
+					setRating(json[0]["rating"])
+					setPositiveComment(json[0]["positiveComment"])
+					setNegativeComment(json[0]["negativeComment"])
+					setReviewId(json[0]["id"])
+					setSavedDate(json[0]["date"])
 				}
 			}
 		}
@@ -99,12 +99,12 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 	function setDoneActivities(activities) {
 		setDone(prevDoneList => {
-			const updatedDoneList = [...prevDoneList];
+			const updatedDoneList = [...prevDoneList]
 			for (let i = 0; i < activities.length; i++) {
-				updatedDoneList.push(activities[i][`activity_id`]);
+				updatedDoneList.push(activities[i]["activity_id"])
 			}
-			return updatedDoneList;
-		});
+			return updatedDoneList
+		})
 	}
 	
 
@@ -117,13 +117,13 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		}
 	}
 
-    function handleChangePositive(event){
+	function handleChangePositive(event){
 		setPositiveComment(event.target.value)
 	}
 
-    function handleChangeNegative(event){
-        setNegativeComment(event.target.value)
-    }
+	function handleChangeNegative(event){
+		setNegativeComment(event.target.value)
+	}
 
 	async function saveReview() {
 		if(rating === 0) {
@@ -139,9 +139,9 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		}
 	}
 
-    async function addReview() {
-        let ts = getTodaysDate()
-        const requestOptions = {
+	async function addReview() {
+		let ts = getTodaysDate()
+		const requestOptions = {
 			method: "POST",
 			headers: {"Content-type": "application/json", "token": token},
 			body: JSON.stringify({
@@ -153,7 +153,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			})
 		}
 
-        const postResponse = await fetch("/api/session/" + session_id + "/review", requestOptions).catch(() => {
+		const postResponse = await fetch("/api/session/" + session_id + "/review", requestOptions).catch(() => {
 			setError("Serverfel: Kunde inte ansluta till servern.")
 			return
 		})
@@ -168,31 +168,31 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 		const loadedResponse = await fetch("/api/session/" + session_id + "/review/all", requestOptions2).catch(() => {
 			setErrorStateMsg("Serverfel: Kunde inte ansluta till servern.")
-			setLoading(false)
+			//setLoading(false)
 			return
 		})
 
 		if(loadedResponse.status != HTTP_STATUS_CODES.OK){
 			setErrorStateMsg("Session med ID '" + session_id + "' existerar inte. Felkod: " + loadedResponse.status)
-			setLoading(false)
+			//setLoading(false)
 		} else {
-			const json = await loadedResponse.json();
+			const json = await loadedResponse.json()
 			if(json[0] !== null && json[0] !== undefined) {
-				setReviewId(json[0][`id`])
-				clearActivities(json[0][`id`], session_id)
+				setReviewId(json[0]["id"])
+				clearActivities(json[0]["id"], session_id)
 				for(let i = 0; i < doneList.length; i++) {
-					submitActivity(json[0][`id`], session_id, doneList[i])
+					submitActivity(json[0]["id"], session_id, doneList[i])
 				}
 			}
 		}
 
 		updateSavedDateDisplay(ts)
-        setSuccess("Utvärdering skapad")
-    }
+		setSuccess("Utvärdering skapad")
+	}
 
 	async function updateReview() {
 		let ts = getTodaysDate()
-        const requestOptions = {
+		const requestOptions = {
 			method: "PUT",
 			headers: {"Content-type": "application/json", "token": token},
 			body: JSON.stringify({
@@ -219,7 +219,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		for(let i = 0; i < doneList.length; i++) {
 			submitActivity(reviewId, session_id, doneList[i])
 		}
-        setSuccess("Utvärdering sparad")
+		setSuccess("Utvärdering sparad")
 	}
 
 	async function clearActivities(review_id, session_id) {
@@ -260,7 +260,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		}
 	}
 
-    function getTodaysDate() {
+	function getTodaysDate() {
 		var today = new Date()
 		var dd = String(today.getDate()).padStart(2, "0")
 		var mm = String(today.getMonth() + 1).padStart(2, "0")
@@ -271,12 +271,12 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 	function updateSavedDateDisplay(date) {
 		setSavedDate(date)
-		savedDateValue.textContent = date;
+		//savedDateValue.textContent = date
 	}
 
 	function markAll(sessionData) {
-		const allActivityIds = sessionData.activityCategories.flatMap(category => category.activities.map(activity => activity.id));
-		setDone(allActivityIds);
+		const allActivityIds = sessionData.activityCategories.flatMap(category => category.activities.map(activity => activity.id))
+		setDone(allActivityIds)
 	}
 	
 
@@ -306,12 +306,12 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 				</div>
 				<Button id="allButton" width={"100%"} onClick={() => markAll(sessionData)}>Markera alla</Button>
 			</div>
-		);
+		)
 	}
 
-    return (
-        <Popup title={"Utvärdering av tillfälle"} id={id} isOpen={isOpen} setIsOpen={setIsOpen}>
-            <div className="d-flex flex-column align-items-center">
+	return (
+		<Popup title={"Utvärdering av tillfälle"} id={id} isOpen={isOpen} setIsOpen={setIsOpen}>
+			<div className="d-flex flex-column align-items-center">
 				<Divider option={"h2_center"} title={"Betyg"} />
 				<div className="d-flex flex-row" style={{marginBottom: "20px"}}>
 					<Ratings widgetDimensions="40px" rating={rating} widgetRatedColors="gold" changeRating={setRating}>
@@ -333,22 +333,22 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 					</Ratings>
 				</div>
 				{
-                	getActivityContainer(sessionData)
+					getActivityContainer(sessionData)
 				}
 
 				<Divider option={"h2_center"} title={"Kommentarer"} />
-                <div className="w-100">
+				<div className="w-100">
 					<TextArea  type="text" id={"positiveComment"} text={positiveComment} onChange={handleChangePositive} className="col-md-6 col-md-offset-3" style={{marginTop: "30px", marginBottom: "20px", height: "80px", borderRadius: "5px", minHeight: "80px"}} placeholder="Vad var bra med passet?"/>
 				</div>
-                <div className="w-100">
+				<div className="w-100">
 					<TextArea  type="text" id={"negativeComment"} text={negativeComment} onChange={handleChangeNegative} className="col-md-6 col-md-offset-3" style={{marginTop: "30px", marginBottom: "20px", height: "80px", borderRadius: "5px", minHeight: "80px"}} placeholder="Vad var dåligt med passet?"/>
 				</div>
-                <div className="col-md-6 p-0">
+				<div className="col-md-6 p-0">
 					<Button id="saveButton" width={"100%"} onClick={() => saveReview()}>Spara</Button>
 					<p id="savedDateDisplay">Senast sparad: <span id="savedDateValue">{savedDate}</span></p>
 
 				</div>
 			</div>
 		</Popup>
-    )
+	)
 }
