@@ -37,9 +37,10 @@ import ErrorState  from "../../Common/ErrorState/ErrorState"
  * Changes version 2.0
  *     Replaced custom workout card with standard workout card.
  *
- * @author Team Medusa (Grupp 6)
- * @version 2.0
+ * @author Team Medusa (Grupp 6), Team Kiwi (Group 2)
+ * @version 2.1
  * @since 2023-05-24
+ * @updated 2024-05-07 Fixed so navigation goes back to activity page instead of technique pr exrecise page, as those are gone
  */
 export default function ActivityDelete({ id, activityID, name, setIsOpen, what }) {
 	
@@ -123,7 +124,7 @@ export default function ActivityDelete({ id, activityID, name, setIsOpen, what }
 				width="100%"
 				onClick={async () => {
 					cascadeDelete(activityID, token)
-					isTechnique() ? await navigate("/technique") : await navigate("/exercise")
+					navigate("/activity")
 				}}>
 				<p>Ta bort</p></Button>
 		</div>
@@ -146,10 +147,9 @@ export default function ActivityDelete({ id, activityID, name, setIsOpen, what }
 	}
 
 	if (hasError) {
-		const destination = isTechnique() ? "/technique" : "/exercise"
 		return <ErrorState 
 			message={"Ett nätverksfel inträffade. Kontrollera din anslutning"}
-			onBack={() => {navigate(destination)}}
+			onBack={() => {navigate("/activity")}}
 			id={"activity-delete-errorstate"}
 		/>
 	}
