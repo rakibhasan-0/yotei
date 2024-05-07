@@ -44,10 +44,10 @@ import MiniPopup from "../MiniPopup/MiniPopup.jsx"
  */
 export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	const sortOptions = [
-		{label: "Namn: A-Ö", },
-		{label: "Namn: Ö-A", },
-		{label: "Mest använda",},
-		{label: "Minst använda", }
+		{label: "Namn: A-Ö", sortBy: "name-asc"},
+		{label: "Namn: Ö-A", sortBy: "name-desc"},
+		{label: "Mest använda", sortBy: "use-desc"},
+		{label: "Minst använda", sortBy: "use-asc"}
 	]
 
 	const [suggested, setSuggested] = useState([])
@@ -59,11 +59,13 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	const [showPopup, setShowPopup] = useState(false)
 	const [sort, setSort] = useState(sortOptions[0])
 
-	
+	useEffect(() => {
+		searchForTags(searchText, sort.sortBy)
+	}, [sort])	
 
 	// Fetches tag suggestions on first render
 	useEffect(() => {
-		searchForTags("")
+		searchForTags("", "use-desc")
 	}, [])
 
 	/**
@@ -72,13 +74,15 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	 * 
 	 * @param {String} searchText Text in searchbar.
 	 */
-	const searchForTags = async (searchText) => {
+	const searchForTags = async (searchText, sortBy) => {
 		setError("")
 		setSearchText(searchText)
 
-		const url = new URL("/api/tags/filter")
-		url.searchParams.append("sort-by", "use-desc")
+		const url = "/api/tags/filter?sort-by=" + sortBy + "&contains=" + searchText
+		//const url = new URL("/api/tags/filter")
+		/*url.searchParams.append("sort-by", sortBy)
 		url.searchParams.append("contains", searchText)
+		console.log(url.toString())*/
 		
 		const requestOptions = {
 			method: "GET",
@@ -204,7 +208,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 			
 			<div>
 				<FilterContainer title={"Sortering"} numFilters={0}>
-					<Sorter onSortChange={setSort} id="tag-sort" selected={sort} options={sortOptions}/>
+					<Sorter id={"tag-sort"} selected={sort} onSortChange={setSort} options={sortOptions}/>
 				</FilterContainer>
 			</div>
 			<div style={{overflow:scroll}}>
