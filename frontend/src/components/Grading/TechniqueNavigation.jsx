@@ -23,34 +23,32 @@ import styles from "./TechniqueNavigation.module.css"
 
 /* Should take props that are related to what route the summary/techniques button should lead to.*/
 function TechniqueNavigation({ id }) {
-    const [showPopup, setShowPopup] = useState(false)
-    {/* Should instead be sent as a prop to the component since the techniques have been fetched in the parent component. */}
-    const headers = ["Teknik1", "Teknik2", "Teknik3", "Teknik4", "Teknik5", "Teknik6", "Teknik7", "Teknik8", "Teknik9"]; // Example array of headers
+	const [showPopup, setShowPopup] = useState(false)
+	{/* Should instead be sent as a prop to the component since the techniques have been fetched in the parent component. */}
+	const headers = ["Teknik1", "Teknik2", "Teknik3", "Teknik4", "Teknik5", "Teknik6", "Teknik7", "Teknik8", "Teknik9"] // Example array of headers
 
 
-    return(
-        <div>
-            <Button id={id} children={<p>Tekniker</p>} onClick={() => setShowPopup(true)}></Button>
-            <Popup 
-                id={"navigation-popup"} 
-                title={"Navigering"} 
-                isOpen={showPopup} 
-                setIsOpen={setShowPopup}
-                children={
-                    <div className={styles.popupContent}>
-                        {/* Should link to the respective technique grading page. */}
-                        {headers.map((techniqueName, index) => (
-                            <Button key={index}><p>{techniqueName}</p></Button>
-                        ))}
-                        {/* Should link to the "after" part of the grading as well as save the changes to the database. */}
-                        <Link to="/groups">
-                            <Button id={"summering-button"} onClick={() => setShowPopup(false)}><p>Fortsätt till summering</p></Button>
-                        </Link>
-                    </div>
-                }> 
-            </Popup>
-        </div>
-    )
+	return(
+		<div>
+			<Button id={id} onClick={() => setShowPopup(true)}><p>Tekniker</p></Button>
+			<Popup 
+				id={"navigation-popup"} 
+				title={"Navigering"} 
+				isOpen={showPopup} 
+				setIsOpen={setShowPopup}> 
+				<div className={styles.popupContent}>
+					{/* Should link to the respective technique grading page. */}
+					{headers.map((techniqueName, index) => (
+						<Button key={index}><p>{techniqueName}</p></Button>
+					))}
+					{/* Should link to the "after" part of the grading as well as save the changes to the database. */}
+					<Link to="/groups">
+						<Button id={"summering-button"} onClick={() => setShowPopup(false)}><p>Fortsätt till summering</p></Button>
+					</Link>
+				</div>
+			</Popup>
+		</div>
+	)
 }
 
 export default TechniqueNavigation
