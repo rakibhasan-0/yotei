@@ -103,7 +103,11 @@ function TechniqueDetail({ id }) {
 				setError(msg + " ")
 				return
 			}
-			navigate("/technique")
+			if (hasPreviousState) {
+				navigate(-1)
+			} else {
+				navigate("/activity")
+			}
 		} catch (err) {
 			setError("Ett nätverksfel inträffade. Kontrollera din internetuppkoppling.")
 		}
@@ -111,7 +115,7 @@ function TechniqueDetail({ id }) {
 
 	if (error != "") return <ErrorState
 		message={error}
-		onBack={() => navigate("/technique")}
+		onBack={() => navigate("/activity")}
 		onRecover={handleGet}
 	/>
 
@@ -207,7 +211,7 @@ function getButtons(navigate,location, setRShowPopup) {
 			navigate(-1)
 		}
 		else{
-			navigate("/technique")
+			navigate("/activity")
 		}
 
 	}
