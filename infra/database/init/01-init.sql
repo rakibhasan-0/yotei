@@ -245,8 +245,8 @@ CREATE TABLE activity(
 ALTER TABLE
 	activity OWNER TO psql;
 
---
--- Name: exercise_tag (Mapping table); Type: TABLE; Schema: public; Owner: psql
+---- Name: exercise_tag (Mapping table); Type: TABLE; Schema: public; Owner: psql
+
 --
 CREATE TABLE IF NOT EXISTS exercise_tag (
 	exertag_id SERIAL PRIMARY KEY,
@@ -445,7 +445,7 @@ CREATE TABLE session_review_activity(
 );
 
 ALTER TABLE
-	session_review_exercises OWNER TO psql;
+	session_review_activity OWNER TO psql;
 
 
 ALTER TABLE
