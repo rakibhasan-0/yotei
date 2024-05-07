@@ -70,19 +70,31 @@ export default function GradingCreate() {
 			</div>
 
 			<div className="column">
-        {examinees.map((innerExaminee, index) => (
+        {examinees.map((innerExaminee, index) => {
+          // Check if the examinee's id is in any pair
+          const isInPair = pairs.some(pair => pair.includes(innerExaminee.id));
 
-            <Examinee
-              pairNumber={index}
-              key={innerExaminee.id}
-              id={innerExaminee.id}
-              item={innerExaminee.name}
-              onRemove={removeExaminee}
-              onEdit={editExaminee}
-              onCheck={onCheck}
-            />
-        ))}
+          
+
+          // Render the Examinee component only if it's not in any pair
+          if (!isInPair) {
+            return (
+              <Examinee
+                pairNumber={index}
+                key={innerExaminee.id}
+                id={innerExaminee.id}
+                item={innerExaminee.name}
+                onRemove={removeExaminee}
+                onEdit={editExaminee}
+                onCheck={onCheck}
+              />
+            );
+          }
+          // Return null if the examinee is already in a pair
+          return null;
+        })}
       </div>
+
 
       <AddExaminee
       name="add-examinee"
