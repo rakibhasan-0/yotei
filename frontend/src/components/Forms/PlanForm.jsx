@@ -30,6 +30,7 @@ import InputTextField from "../Common/InputTextField/InputTextField"
  * 
  * @author Squad 2 Griffins, Squad 3 Durian
  * @since 2023-05-10, 2024-04-17
+ * @update 2024-04-29, Team Kiwi : Added true for filtering basic techniques in BeltPicker 
  */
 
 export default function PlanForm(props) {
@@ -65,7 +66,7 @@ export default function PlanForm(props) {
 			</div>
             
 			<div className="belt-picker">
-				<BeltPicker id="form-belt-picker" onToggle={onToggle} states={props.belts}/>
+				<BeltPicker id="form-belt-picker" onToggle={onToggle} states={props.belts} filterBasicTechniques = {true} />
 			</div>
 
 			<Divider title="Period" option="h2_left"/>

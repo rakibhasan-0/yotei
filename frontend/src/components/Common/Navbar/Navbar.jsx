@@ -14,16 +14,21 @@ import { AccountContext } from "../../../context"
  *
  * Example usage:
  * 		<Navbar testId="test-id"/>
+ * 
+ * Changes version 4.0:
+ *     	merged techniques and exercise buttons, 
+ * 		this new button routs to activity page.
  *
- * @author Team Medusa & Team Cyclops & Team Tomato & Team Coconut
- * @version 3.0
- * @since 2024-04-24
+ * @author Team Medusa & Team Cyclops & Team Tomato & Team Coconut & Team Kiwi
+ * @version 4.0
+ * @since 2024-05-02
  */
 function Navbar({ testId }) {
 
 	const [open, setOpen] = useState(false)
+	const [isExaminationEnabled] = useState(false) // FEATURE TOGGLE
 	const navigate = useNavigate()
-	const context = useContext(AccountContext)
+	const context = useContext(AccountContext) 
 
 	const navigateAndClose = (path, data) => {
 		setOpen(false)
@@ -56,13 +61,17 @@ function Navbar({ testId }) {
 					<h1 className={styles.commonNavbarButton}>Pass</h1>
 				</Button>
 
-				<Button width={"100%"} onClick={() => navigateAndClose("/exercise")}>
-					<h1 className={styles.commonNavbarButton}>Övningar</h1>
+				<Button width={"100%"} onClick={() => navigateAndClose("/activity",  {state: {clearSearchText: true}})}>
+					<h1 className={styles.commonNavbarButton}>Tekniker & Övningar</h1>
 				</Button>
 
-				<Button width={"100%"} onClick={() => navigateAndClose("/technique",  {state: {clearSearchText: true}})}>
-					<h1 className={styles.commonNavbarButton}>Tekniker</h1>
-				</Button>
+				{isExaminationEnabled ? (
+					<Button width={"100%"} onClick={() => {}}>
+						<h1 className={styles.commonNavbarButton}>Gradering</h1>
+					</Button>
+				) : (
+					null
+				)}
 
 				{ isAdmin(context) ? 
 					<Button width={"100%"} onClick={() => navigateAndClose("/admin")}>

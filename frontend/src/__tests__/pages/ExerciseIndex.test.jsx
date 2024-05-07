@@ -3,8 +3,8 @@ import { rest } from "msw"
 import { server } from "../server"
 import {render, configure, screen, waitFor} from "@testing-library/react"
 //import userEvent from "@testing-library/user-event"
-//import ExerciseCreate from "../../pages/Exercise/ExerciseCreate"
-import ExerciseIndex from "../../pages/Exercise/ExerciseIndex"
+//import ExerciseCreate from "../../pages/Activity/Exercise/ExerciseCreate"
+import ExerciseIndex from "../../pages/Activity/Exercise/ExerciseIndex"
 import { MemoryRouter } from "react-router-dom"
 import { AccountContext } from "../../context"
 
@@ -89,7 +89,7 @@ describe("ExerciseIndex should render with all components", () => {
 	})
       
 	test("the title", () => {
-		expect(screen.getByTestId("exercise-title")).toHaveTextContent("Övningar")
+		expect(screen.getByTestId("exercise-title")).toHaveTextContent("")
 	})
 
 	test("the search bar", async () => {

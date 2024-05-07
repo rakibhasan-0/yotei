@@ -1,0 +1,11 @@
+/* Style for the container div */
+.chart-container {
+    width: 200%;
+  }
+  
+/* Style for the chart itself */
+.chart {
+border: 1px solid #ccc;
+border-radius: 5px;
+padding: 20px;
+}
