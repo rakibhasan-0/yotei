@@ -6,11 +6,11 @@ import { Trash } from "react-bootstrap-icons"
 import CheckBox from "../CheckBox/CheckBox"
 
 
-export default function TagList({ tag, index, onChecked }) {
+export default function TagList({ tag, index, onChecked, added }) {
 	return (
 		<div className={styles["exercise-list-container"]} data-testid="ExerciseListItem">
 			<div className={styles["exercise-list-header"]} style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
-				<CheckBox checked={tag.tagType=="added"} onClick={onChecked}/>
+				<CheckBox checked={added} onClick={onChecked}/>
 			
 				<Link to={tag.id} data-testid="ExerciseListItem-link" style={{width: "100%"}}>
 					<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>

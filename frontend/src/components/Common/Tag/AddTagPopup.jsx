@@ -99,7 +99,11 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 			const response = await fetch("/api/tags/add", requestOptions)
 			if (response.ok) {
 				const data = await response.json()
-				setAddedTags([...addedTags, {id:data.id,name:data.name}])
+				const newTag = {id:data.id,name:data.name}
+				//Checked by default
+				setNewAddedTags([newTag, ...newAddedTags])
+				setSuggested([newTag, ...suggested])
+			
 			} else {
 				setError("Något gick fel vid skapandet av tagg")
 			}
@@ -109,10 +113,12 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	}
 
 	/**
-	 * Creates a TagList component for each existing tag on first render
+	 * Creates a TagList component for each existing tag on first render and saves each
+	 * TagList component in a list. 
 	 */
 	useEffect(() => {
 
+		//Handle when a tag is removed from something (Not deleted)
 		const handleRemoveTag = (tag) => {
 			setError("")
 			const copy = [...newAddedTags]
@@ -120,13 +126,17 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 			setNewAddedTags(newAdded)
 		}
 
+		//Handles when tag is added to something.
 		const handleAddTag = (tag) => {
 			setError("")
 			setNewAddedTags([...newAddedTags, tag])
 		}
 
 		const tempTagListArray = suggested.map(tag =>
-			<TagList tag={tag} key={tag.id} onChecked={checked => checked ? handleAddTag(tag) : handleRemoveTag(tag)}/>
+			<TagList tag={tag} key={tag.id} 
+				onChecked={checked => checked ? handleAddTag(tag) : handleRemoveTag(tag)}
+				added={newAddedTags.some(a => a.id == tag.id)}	
+			/>
 		)
 		setTagListArray(tempTagListArray)
 	}, [newAddedTags, suggested])
