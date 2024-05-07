@@ -39,14 +39,6 @@ export default function SessionCreateIndex(){
                 </Tab>
 
             </Tabs>
-        
-        
-        
-        
-        
-        
-        
-        
         </Modal.Body>
     )
 }

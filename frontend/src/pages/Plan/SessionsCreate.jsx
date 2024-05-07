@@ -47,7 +47,13 @@ export default function SessionsCreate(){
     const [goBackPopup, setGoBackPopup] = useState(false)
 	const [isBlocking, setIsBlocking] = useState(false)
 
-	
+	const blocker = useBlocker(() => {
+		if (isBlocking) {
+			setGoBackPopup(true)
+			return true
+		}
+		return false
+	})
 
 
     useEffect(() => {
@@ -69,11 +75,10 @@ export default function SessionsCreate(){
 	}, [token])
 
 
-/**
+	/**
      * Local model of a plan.
      */
 	const [planData, setPlanData] = useState({
-		group: "",
 		startDate: "",
 		endDate: "",
 		weekdaysSelected: false,
@@ -95,15 +100,6 @@ export default function SessionsCreate(){
 	var allDatesArray = []
 
 	/**
-     * Model of what fields are correctly modeled.
-     */
-	const [fieldCheck, setFieldCheck] = useState({
-		group: false,
-		startDate: false,
-		endDate: false,
-	})
-
-	/**
      * Is called when the data is modified.
      * Updates the local data.
      *
@@ -112,7 +108,6 @@ export default function SessionsCreate(){
      */
 	const dataClickHandler = (variableName, value) => {
 		setPlanData({ ...planData, [variableName]: value })
-		console.log(planData)
 	}
 
 
@@ -162,51 +157,6 @@ export default function SessionsCreate(){
 	}
 
 
-	/**
-     * A function that checks that a given field in the form is not empty.
-     * Updates the fieldCheck useState.
-     *
-     * @param fieldName     The name of the field being checked
-     * @returns             If the field is not empty.
-     */
-	function checkNotEmpty(fieldName) {
-
-		const value = planData[fieldName]
-		const isEmpty = value === undefined || value === null || value === ""
-
-		if (!fieldCheck[fieldName]) {
-			if (!isEmpty)
-				setFieldCheck({ ...fieldCheck, [fieldName]: true })
-		}
-		else {
-			if (isEmpty)
-				setFieldCheck({ ...fieldCheck, [fieldName]: false })
-		}
-
-		return fieldCheck[fieldName]
-	}
-
-	/**
-     * A function that checks if both date-fields are empty, or a given
-     * date-field in the form is not empty.
-     *
-     * @param dateFieldName The name of the date-field being checked
-     * @returns             True if both date fields are empty.
-     *                      Else returns whether the field is not empty.
-     */
-	function checkDate(dateFieldName) {
-
-		checkNotEmpty("startDate")
-		checkNotEmpty("endDate")
-
-		if (!fieldCheck.startDate && !fieldCheck.endDate)
-			return true
-
-		else
-			checkNotEmpty(dateFieldName)
-
-		return fieldCheck[dateFieldName]
-	}
 
 
 	
@@ -247,73 +197,59 @@ export default function SessionsCreate(){
      *
      * @param plan  the id of group
      */
-	function dateHandler(plan) {
+	async function dateHandler(plan) {
+		setIsBlocking(false)
 
-
-		checkNotEmpty("name") 
-		checkDate("startDate") 
-		checkDate("EndDate")
-	
-
+		
 		if(validateForm()){
 			const formatDate = (date) => {
 				const [dateStr] = new Date(date).toISOString().split("T")
 				return dateStr
 			}
-	
-			/* Check for start and end date */
-			if (fieldCheck.startDate) {
-				if (fieldCheck.endDate) {
-	
-	
-					let startDate = new Date(planData.startDate)
-					let endDate = new Date(planData.endDate)
-					let dayNr = startDate.getDay()
-	
-					var tempDate
-					var tempTime
-					console.log("Inside DateHandler")
-					/* Find first date occurences of chosen weekdays */
-					for (var i = 0; i < 7; i++) {
-	
-						if (weekdays[dayNr].value) {
-	
-							tempDate = new Date(startDate)
-							tempTime = weekdays[dayNr].time.target.value + ":00"
-	
-							firstDatesArray.push({ date: tempDate, time: tempTime })
-						}
-	
-						/* Update loop variables */
-						dayNr = (dayNr + 1) % 7
-						startDate.setDate(startDate.getDate() + 1)
-					}
-	
-					/* If days chosen */
-					if (firstDatesArray.length !== 0) {
-	
-						/* Find all date occurences of chosen weekdays */
-						firstDatesArray.forEach((e) => {
-	
-							tempDate = new Date(e.date)
-							tempTime = e.time
-	
-							while (tempDate <= endDate) {
-								allDatesArray.push({ plan: plan, date: formatDate(tempDate), time: tempTime })
-	
-								tempDate.setDate(tempDate.getDate() + 7)
-							}
-						})
-	
-						/* Add plan id to each object in array */
-						allDatesArray = allDatesArray.map(session => {
-							return { plan: plan.id, ...session }
-						})
-	
-						addSessions()
-					} 
+
+			let startDate = new Date(planData.startDate)
+			let endDate = new Date(planData.endDate)
+			let dayNr = startDate.getDay()
+
+			var tempDate
+			var tempTime
+			/* Find first date occurences of chosen weekdays */
+			for (var i = 0; i < 7; i++) {
+
+				if (weekdays[dayNr].value) {
+
+					tempDate = new Date(startDate)
+					tempTime = weekdays[dayNr].time.target.value + ":00"
+
+					firstDatesArray.push({ date: tempDate, time: tempTime })
 				}
+
+				/* Update loop variables */
+				dayNr = (dayNr + 1) % 7
+				startDate.setDate(startDate.getDate() + 1)
 			}
+
+			/* If days chosen */
+			if (firstDatesArray.length !== 0) {
+
+				/* Find all date occurences of chosen weekdays */
+				firstDatesArray.forEach((e) => {
+
+					tempDate = new Date(e.date)
+					tempTime = e.time
+
+					while (tempDate <= endDate) {
+						allDatesArray.push({ plan: plan, date: formatDate(tempDate), time: tempTime })
+
+						tempDate.setDate(tempDate.getDate() + 7)
+					}
+				})
+
+
+				addSessions()
+			} 
+				
+			
 
 		}
 		/* Format Date to ISO standard (YYYY-MM-DD) */
@@ -332,10 +268,10 @@ export default function SessionsCreate(){
 			x.setDate(x.getDate()+1)
 			return { ...session, date: new Date(x)}
 		})
+		/* Add group id to each object in array */
 		allDatesArray.forEach((session) =>{
 			session.plan = group.id
 		})
-		console.log(allDatesArray)
 		const requestOptions = {
 			method: "POST",
 			headers: { "Content-type": "application/json", "token": token },
@@ -368,12 +304,11 @@ export default function SessionsCreate(){
 	function validateForm() {
 		var res = true
 		
-
 		if(!group){
 			setErrorToast("Vänligen välj en grupp")
 			res = false;
 		}
-		else if (!(fieldCheck.startDate && fieldCheck.endDate)) {
+		else if (!(planData.startDate && planData.endDate)) {
 			setErrorToast("Vänligen välj start- och slutdatum.")
 			res = false
 		} 
@@ -400,7 +335,8 @@ export default function SessionsCreate(){
 	 */
 	useEffect(() => {
 		setIsBlocking(group != "" || planData.startDate != "" || planData.endDate != "")
-	}, [group, weekdays, fieldCheck])
+	}, [group, weekdays])
+	
 	
 
 
@@ -409,19 +345,10 @@ export default function SessionsCreate(){
 
     return (
         <>
-            {/* <ConfirmPopup
-				confirmText={"Lämna"}
-				backText={"Avbryt"}
-				id={"session-create-leave-page-popup"}
-				showPopup={goBackPopup}
-				onClick={blocker.proceed}
-				setShowPopup={setGoBackPopup}
-				popupText={"Är du säker på att du vill lämna sidan? Dina ändringar kommer inte att sparas."}
-			/> */}
 			<title>Skapa flera tillfällen</title>
 			<h1 style={{ marginTop: "2rem" }}>Skapa flera tillfällen</h1>
 			<Divider option={"h2_left"} title={"Grupp"} />
-            <Dropdown errorMessage={groupError} id={"session-dropdown"} text={group?.name || "Grupp"} centered={true}>
+            <Dropdown id={"session-dropdown"} text={group?.name || "Grupp"} centered={true}>
 				{groups?.length > 0 ? groups.map((plan, index) => (
 					<div className={styles.dropdownRow} key={index} onClick={() =>{ 
 						setGroup(plan)
@@ -501,24 +428,26 @@ export default function SessionsCreate(){
 					</div>
 				</div>
 			</div>
-			<div className={styles.button_container}>
+			<ConfirmPopup
+				confirmText={"Lämna"}
+				backText={"Avbryt"}
+				id={"session-create-leave-page-popup"}
+				showPopup={goBackPopup}
+				onClick={blocker.proceed}
+				setShowPopup={setGoBackPopup}
+				popupText={"Är du säker på att du vill lämna sidan? Dina ändringar kommer inte att sparas."}
+			/>
+			<div className={styles.wrapCentering} style={{ marginBottom: "2rem" }} >
 				<Button 
-					//onClick={navigate(-1)}
-					outlined={true}
-				>
-					<p>
-						Tillbaka
-					</p>
+					//onClick={navigate(-1)} 
+					outlined={true}>
+					<p>Tillbaka</p>
 				</Button>
-				<Button onClick = {() => { 
-							dateHandler(planData)}}
-				>
-					<p>
-						Gå vidare
-					</p>
+				<Button onClick = {() => { dateHandler(planData)}}>
+					<p>Spara</p>
 				</Button>
-			</div> 
-        
+			</div>
+			
         </>
     )
 }
