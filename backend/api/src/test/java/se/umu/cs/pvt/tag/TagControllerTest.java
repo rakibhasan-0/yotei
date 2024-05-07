@@ -1,8 +1,3 @@
-/**
- * The tests for the Tag part of the Tag API.
- * @Author Team 5 Verona, Team 3 (Durian)
- * @since 2024-05-02
- */
 package se.umu.cs.pvt.tag;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -23,12 +18,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * @author Phoenix (25-04-2023)
+ * The tests for the Tag part of the Tag API.
+ * @Author Team 5 Verona
+ * @Author Phoenix (25-04-2023)
+ * @Author Team 3 (Durian)
+ * @since 2024-05-02
  */
 @ExtendWith(MockitoExtension.class)
 class TagControllerTest {
