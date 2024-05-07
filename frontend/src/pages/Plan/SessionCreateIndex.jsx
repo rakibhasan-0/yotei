@@ -43,7 +43,7 @@ export default function SessionCreateIndex(){
 	return (
 		<Modal.Body style={{padding: "0"}}>
 			<Tabs activeKey={key} onSelect={(tab) => setKey(tab)} className={styles.tabs}>
-				<Tab eventKey="session" title="Tillfälle" tabClassName={`nav-link ${styles.tab}`}>
+				<Tab eventKey="session" title="Skapa tillfälle" tabClassName={`nav-link ${styles.tab}`}>
 					<SessionCreate setIsBlocking={setIsBlocking}/>
 				</Tab>
 				<Tab  eventKey="sessions" title="Skapa flera tillfällen" tabClassName={`nav-link ${styles.tab}`}>
