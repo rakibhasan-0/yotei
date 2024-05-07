@@ -5,9 +5,9 @@ import { Link } from "react-router-dom"
 import { ChevronDown } from "react-bootstrap-icons"
 import styles from "./GradingAfterComp.module.css"
 
-const GradingAfterComp = ({ person }) => {
+const GradingAfterComp = ({ person, max_point }) => {
 	return (
-		<div>
+		<div style={{ background: person.points >= max_point ? "#C9EEC3" : "#F8EBEC"}}>
             <div className={styles["technique-card"]} id={person.id}>
                 <div className={styles["technique-info-container"]}>
                     <div className={styles["technique-name-container"]}>

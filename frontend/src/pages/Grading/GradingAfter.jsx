@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import React, { useState, useContext } from "react"
+import React, { useState, useContext, useEffect } from "react"
 import { AccountContext } from "../../context"
 import GradingAfterComp from "./GradingAfterComp"
 import Button from "../../components/Common/Button/Button"
@@ -10,14 +10,15 @@ export default function GradingAfter() {
 	const context = useContext(AccountContext)
 	const { token, userId } = context
 
-	// Sample examinees
+    
+	
 	const [examinees, setExaminees] = useState([
 		{
 			id: 1,
 			person: {
 				name: "Bob Dylan",
 				url: "https://example.com/bob_dylan_profile",
-				points: 12 
+				points: 52 
 			}
 		},
 		{
@@ -42,7 +43,7 @@ export default function GradingAfter() {
             person: {
                 name: "Kalle Anka",
                 url: "https://example.com/kalle_anka_profile",
-                points: 30
+                points: 52
             }
         },
         {
@@ -50,7 +51,7 @@ export default function GradingAfter() {
             person: {
                 name: "Batman",
                 url: "https://example.com/kalle_anka_profile",
-                points: 30
+                points: 52
             }
         },
         {
@@ -66,7 +67,7 @@ export default function GradingAfter() {
             person: {
                 name : "Hulk",
                 url: "https://example.com/kalle_anka_profile",
-                points: "42"
+                points: "52"
             }   
         },
 
@@ -86,7 +87,7 @@ export default function GradingAfter() {
             
             <div className={styles.scrollableContainer}>
                 {examinees.map((examinee) => (
-                    <GradingAfterComp key={examinee.id} person={examinee.person} />
+                    <GradingAfterComp key={examinee.id} person={examinee.person} max_point={52} />
                 ))}
             </div>
         
