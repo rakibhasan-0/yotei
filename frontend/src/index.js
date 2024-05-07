@@ -33,6 +33,8 @@ import ErrorBoundary from "./components/ErrorHandler/ErrorBoundary"
 
 import ListInfo from "./pages/List/ListInfo"
 import FavouriteWorkoutsList from "./pages/List/FavouriteWorkoutList"
+import ListEdit from "./pages/List/ListEdit"
+
 import "react-toastify/dist/ReactToastify.css"
 import { logOut } from "./utils"
 import { ToastContainer, toast } from "react-toastify"
@@ -139,8 +141,11 @@ export default function App() {
 						<Route path="session/create" element={<SessionCreate />} />
 						<Route path="session/edit/:session_id" element={<SessionEdit />} />
 						<Route path="groups" element={<GroupIndex />} />
+						<Route path="list/editList" element={<ListEdit/>} />
+
 						<Route path="profile/list/:list_id" element={<ListInfo />} />
 						<Route path="profile/favouriteWorkouts" element={<FavouriteWorkoutsList/>} />
+
 
 						<Route path="groups/statistics/:groupID" element={<NoPage />} />
 						<Route path="" element={<PlanIndex uri={planURI} />} />

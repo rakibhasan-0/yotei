@@ -1,7 +1,6 @@
 import styles from "./SavedActivityListComponent.module.css"
 import { useContext } from "react"
-import { WorkoutCreateContext } from "./WorkoutCreateContext"
-import { WORKOUT_CREATE_TYPES } from "./WorkoutCreateReducer"
+import { WorkoutCreateContext,WORKOUT_CREATE_TYPES } from "../../components/Common/List/ListCreateContext.js"
 import { List, Pencil } from "react-bootstrap-icons"
 
 /**

@@ -102,9 +102,6 @@ export default function FavouriteWorkoutsList() {
 				<Button outlined={true} onClick={() => navigate(-1)}><p>Tillbaka</p></Button>
 			</div>
 			<br/>
-			<RoundButton linkTo="/workout/create">
-				<Plus />
-			</RoundButton>
 		</>
 	)
 

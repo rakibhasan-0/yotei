@@ -94,7 +94,7 @@ export default function ListInfo({ id }) {
 	) : !workoutData ? (
 		<ErrorState
 			message={errorStateMsg}
-			onBack={() => navigate("/workout")}
+			onBack={() => navigate("/profile")}
 			onRecover={() => window.location.reload(false)}
 		/>
 	) : (
@@ -203,8 +203,10 @@ function getListInfoContainer(workoutData, setShowPopup, context) {
 							<>
 								<Link
 									className="ml-3"
+                                    {...console.log("Workout data that is sent:")}
+                                    {...console.log(workoutData)}
 									state={{ workout: workoutData, users: workoutData.list_users }}
-									to={"/workout/edit"}
+									to={"/list/editList"}
 								>
 									<Pencil
 										size="24px"

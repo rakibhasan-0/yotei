@@ -16,6 +16,8 @@ export default function WorkoutActivityList({activities}) {
 	const [Loading, setLoading] = useState(true)
 
 	useEffect(() => {
+		console.log("SetListData:")
+		console.log(activities)
 		setListData(() => activities)
 		setLoading(false)
 	},[])
