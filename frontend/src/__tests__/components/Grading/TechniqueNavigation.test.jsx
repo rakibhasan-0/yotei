@@ -6,6 +6,8 @@ import "@testing-library/jest-dom"
 /**
  * Tests for the TechniqueNavigation button that should be used during grading.
  * 
+ * Unsure if the component is necessary, and most of the functionallity is tested in Popup component 
+ * 
  * @author Apelsin
  * @since 2024-05-06
  * @version 1.0 
@@ -29,5 +31,5 @@ describe('TechniqueNavigation component', () => {
         expect(popup).not.toBeInTheDocument()
     })
   
-  // Add more tests as needed for other functionalities
+    // Add more tests as needed for other functionalities
 })

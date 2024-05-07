@@ -40,10 +40,10 @@ function TechniqueNavigation({ id }) {
                     <div className={styles.popupContent}>
                         {/* Should link to the respective technique grading page. */}
                         {headers.map((techniqueName, index) => (
-                            <Button key={index} width={"25rem"}><p>{techniqueName}</p></Button>
+                            <Button key={index}><p>{techniqueName}</p></Button>
                         ))}
                         {/* Should link to the "after" part of the grading as well as save the changes to the database. */}
-                        <Link to="/groups" className={styles.summaryLink}>
+                        <Link to="/groups">
                             <Button id={"summering-button"} onClick={() => setShowPopup(false)}><p>Fortsätt till summering</p></Button>
                         </Link>
                     </div>
