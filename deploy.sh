@@ -43,7 +43,6 @@ while true; do
         [yY] ) 
 	    read -rp "Whats your domain name: " domain
 	    export DOMAIN_NAME="$domain"
-	    sed -i 's/#-/-/g' docker-compose.release.yml
 	    envsubst '${DOMAIN_NAME}' < nginx/prod.conf.template > nginx/prod.conf
 	    
 	    docker compose -f docker-compose.yml -f docker-compose-domain-release.yml up --build -d
