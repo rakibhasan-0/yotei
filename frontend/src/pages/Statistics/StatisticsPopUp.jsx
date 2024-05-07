@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState,useEffect } from "react"
 import style from "./StatisticsButton.module.css"
 import Popup from "../../components/Common/Popup/Popup"
 import StarRatings from "react-star-ratings"
@@ -12,8 +12,6 @@ import BeltColorChart from "../../components/Common/BeltColorChart/BeltColorChar
  * 
  */
 export default function StatisticsPopUp({data,filteredActivities,dates,averageRating,numberOfSessions}) {
-	const statNumberOfSessions = numberOfSessions 
-	const statAverageRating = averageRating
 	const startDate = dates.from
 	const endDate = dates.to
 	
@@ -22,11 +20,26 @@ export default function StatisticsPopUp({data,filteredActivities,dates,averageRa
 	console.log(filteredActivities)
 	
 
-	const beltColorsData = {	//mock data
-		"Vitt": 10,
-		"Gul": 8,
-		"Orange": 6,
-	}
+	
+
+	const [beltColorsData, setBeltColorsData] = useState({});
+
+	useEffect(() => {
+		// Function to calculate the amount of techniques by belt color
+		const calculateBeltColorsData = () => {
+		  const colorsCount = {};
+		  filteredActivities.forEach(activity => {
+			activity.beltColors.forEach(beltColor => {
+			  const color = beltColor.belt_name;
+			  colorsCount[color] = (colorsCount[color] || 0) + activity.count;
+			});
+		  });
+		  setBeltColorsData(colorsCount);
+		};
+	
+		// Call the function to calculate belt colors data when filteredActivities change
+		calculateBeltColorsData();
+	  }, [filteredActivities]);
 
 
 	const [showPopup, setShowPopup] = useState(false)
