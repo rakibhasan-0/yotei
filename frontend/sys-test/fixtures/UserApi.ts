@@ -1,5 +1,5 @@
 import { expect, request } from "@playwright/test"
-import { User } from "../types/systemTestsTypes"
+import { Account } from "../types/systemTestsTypes"
 
 /**
  * Fixtures related to handling creation and deletion of a user. 
@@ -46,18 +46,18 @@ export class UserApi {
      * @param password Lösenord för ny användare
      * @param is_admin Sant om användaren ska bli admin
      */
-	static async register_user(user: User) {
-		console.log("role: ", user.role)
+	static async register_user(user: Account) {
 		const ctx = await UserApi.make_ctx()
 		const response = await ctx.post("/api/users", {
 			data: {
-				username: user.userName,
+				username: user.username,
 				password: user.password,
 				userRole: user.role,
 			},
 		})
-		const returnObject = await response.json()
-		return returnObject
+
+		expect(response.status()).toBe(200)
+		return response.json()
 	}
 
 	/**

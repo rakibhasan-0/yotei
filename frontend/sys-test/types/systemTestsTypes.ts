@@ -8,11 +8,12 @@
 			role: Role.admin
 		}
  */
-export type User = {
-  userName: string,
+export type Account = {
+  username: string,
   password: string,
-  role: Role
-}
+  role: Role,
+  userId?: string,
+};
 
 /**
  * Enum for the different types of roles. 
