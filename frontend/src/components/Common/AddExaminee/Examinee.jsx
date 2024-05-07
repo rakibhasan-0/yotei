@@ -33,7 +33,7 @@ import CheckBox from "../CheckBox/CheckBox"
  * @author Team 1
  * @since 2024-05-06
  */
-export default function Examinee({ item, text, id, index, onRemove, onEdit, pairNumber, onCheck }) {
+export default function Examinee({ item, text, id, index, onRemove, onEdit, pairNumber, onCheck, showCheckbox }) {
 
   const [isEditing, setIsEditing] = useState(false); // State to manage edit mode
   const [editedText, setEditedText] = useState(item); // State to store edited text
@@ -60,11 +60,11 @@ export default function Examinee({ item, text, id, index, onRemove, onEdit, pair
       <div className={styles["examinee-list-header"]} style={{ backgroundColor: index % 2 === 0 ? "var(--red-secondary)" : "var(--background)" }}>
         <div data-testid="ExamineeListItem-link" style={{ width: "100%" }}>
           <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
-            <CheckBox
+            {showCheckbox && <CheckBox
               onClick={(checked) => onCheck(checked, id)}
               enabled
               id="test-id"
-            />
+            />}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flex: 1 }}>
               {isEditing ? (
                 <input

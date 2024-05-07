@@ -42,4 +42,14 @@
     overflow: auto; /* Allows scrolling within the content area if needed */
 }
 
+.pair-row {
+  display: flex;
+  width: 100%;
+  justify-content: space-between; /* To evenly distribute items */
+}
 
+.trashcan {
+    top: 4px;
+    right: 0;
+    cursor: pointer;
+}

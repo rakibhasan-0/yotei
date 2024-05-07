@@ -1,3 +1,7 @@
+.examinee-container {
+  width: 100%;
+}
+
 .examinee-list-container{
     border-radius: 5px;
     border: 1px solid var(--black-primary);
@@ -5,6 +9,7 @@
     overflow: auto;
     margin-top: 10px;
     display: flex;
+    width: 100%;
 }
 
 .examinee-list-header {
