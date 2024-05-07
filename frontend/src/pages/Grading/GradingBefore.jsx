@@ -23,15 +23,10 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
  * @version 1.0
  * @since 2024-05-02
  */
-<<<<<<< HEAD
-export default function GradingCreate( {id} ) {
 
-  console.log(id)
-=======
 export default function GradingCreate({id}) {
 
   const { gradingId } = useParams()
->>>>>>> afefe36477c79883fd40a084f08282de758fdd7a
 	const context = useContext(AccountContext)
 	const { token, userId } = context
 
