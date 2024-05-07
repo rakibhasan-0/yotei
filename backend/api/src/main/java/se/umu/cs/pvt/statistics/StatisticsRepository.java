@@ -16,14 +16,6 @@ import se.umu.cs.pvt.belt.Belt;
  */
 public interface StatisticsRepository extends JpaRepository<Session, Long>{
   
-/*
-SELECT * FROM session_review AS sr 
-JOIN session AS s ON s.session_id = sr.session_id 
-JOIN session_review_activity AS sra ON sra.session_review_id = sr.review_id 
-JOIN activity AS a ON sra.activity_id = a.activity_id
-WHERE plan_id = 1;
- * 
- */
 
   @Query("""
     SELECT
