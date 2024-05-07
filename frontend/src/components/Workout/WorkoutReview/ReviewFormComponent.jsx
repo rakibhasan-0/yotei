@@ -118,20 +118,20 @@ export default function Review({isOpen, setIsOpen, workout_id}) {
 		<Popup title={"Utvärderingar"} id={"review-popup"} isOpen={isOpen} setIsOpen={setIsOpen}>
 			<div className="d-flex flex-column align-items-center">
 				<div className="d-flex flex-row" style={{marginBottom: "20px"}}>
-					<Ratings widgetDimensions="40px" rating={rating} widgetRatedColors="gold" changeRating={setRating}>
-						<Ratings.Widget widgetHoverColor='gold'>
+					<Ratings widgetDimensions="40px" rating={rating} widgetRatedColors="#ffcc00" changeRating={setRating}>
+						<Ratings.Widget widgetHoverColor='#ffcc00'>
 							<Star/>
 						</Ratings.Widget>
-						<Ratings.Widget widgetHoverColor='gold'>
+						<Ratings.Widget widgetHoverColor='#ffcc00'>
 							<Star/>
 						</Ratings.Widget>
-						<Ratings.Widget widgetHoverColor='gold'>
+						<Ratings.Widget widgetHoverColor='#ffcc00'>
 							<Star/>
 						</Ratings.Widget>
-						<Ratings.Widget widgetHoverColor='gold'>
+						<Ratings.Widget widgetHoverColor='#ffcc00'>
 							<Star/>
 						</Ratings.Widget>
-						<Ratings.Widget widgetHoverColor='gold'>
+						<Ratings.Widget widgetHoverColor='#ffcc00'>
 							<Star/>
 						</Ratings.Widget>
 					</Ratings>

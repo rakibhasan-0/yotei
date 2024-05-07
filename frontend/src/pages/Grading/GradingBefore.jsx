@@ -26,6 +26,22 @@ export default function GradingCreate() {
 
 	const [examinees, setExaminees] = useState([])
 	const navigate = useNavigate()
+  
+  const [pairs, setPair] = useState([[]]) 
+  const [checkedExamineeIds, setCheckedExamineeIds] = useState([])
+
+  function createPair() {
+    setPair([...pairs, checkedExamineeIds]);
+    setCheckedExamineeIds([]);
+  }
+
+  function onCheck(isChecked, examineeId) {
+    if (isChecked) {
+      setCheckedExamineeIds([...checkedExamineeIds, examineeId]);
+    } else {
+      setCheckedExamineeIds(checkedExamineeIds.filter((id) => id !== examineeId));
+    }
+  }
 
   function addExaminee(examinee) {
     const examineeId = examinees.length + 1
@@ -33,6 +49,7 @@ export default function GradingCreate() {
   }
 
   function removeExaminee(examineeId) {
+    setCheckedExamineeIds(checkedExamineeIds.filter((id) => id !== examineeId));
     setExaminees(examinees.filter((examinee) => examinee.id !== examineeId));
   }
 
@@ -53,18 +70,31 @@ export default function GradingCreate() {
 			</div>
 
 			<div className="column">
-        {examinees.map((innerExaminee, index) => (
+        {examinees.map((innerExaminee, index) => {
+          // Check if the examinee's id is in any pair
+          const isInPair = pairs.some(pair => pair.includes(innerExaminee.id));
 
-            <Examinee
-              pairNumber={index}
-              key={innerExaminee.id}
-              id={innerExaminee.id}
-              item={innerExaminee.name}
-              onRemove={removeExaminee}
-              onEdit={editExaminee}
-            />
-        ))}
+          
+
+          // Render the Examinee component only if it's not in any pair
+          if (!isInPair) {
+            return (
+              <Examinee
+                pairNumber={index}
+                key={innerExaminee.id}
+                id={innerExaminee.id}
+                item={innerExaminee.name}
+                onRemove={removeExaminee}
+                onEdit={editExaminee}
+                onCheck={onCheck}
+              />
+            );
+          }
+          // Return null if the examinee is already in a pair
+          return null;
+        })}
       </div>
+
 
       <AddExaminee
       name="add-examinee"
@@ -76,7 +106,16 @@ export default function GradingCreate() {
       onSubmit={(value) => addExaminee(value)}
 
       />
-
+      {checkedExamineeIds.length === 2 && ( 
+      <div className={styles.buttonContainer}>
+				<Button
+					width="100%"
+					outlined={true}
+					onClick={createPair}
+				>
+					<p>Skapa par</p>
+				</Button> </div>)  
+      }
 			<div className={styles.buttonContainer}>
 				<Button
 					width="100%"

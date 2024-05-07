@@ -1,8 +1,3 @@
-/**
- * The repo used for UserWorkout
- * @author Grupp 2 Capricciosa
- */
-
 package se.umu.cs.pvt.workout;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,7 +10,6 @@ import java.util.List;
  *
  * @author Grupp 2 Cappriciosa (DOCS griffin ens19amd)
  */
-
 @Repository
 public interface UserWorkoutRepository extends JpaRepository<UserWorkout, Long> {
 
