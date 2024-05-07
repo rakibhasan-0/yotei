@@ -1,5 +1,13 @@
 import { expect, request } from "@playwright/test"
+import { User } from "../types/systemTestsTypes"
 
+/**
+ * Fixtures related to handling creation and deletion of a user. 
+ *
+ *  @author Team Mango (Group 4)
+ *  @since 2024-05-6
+ *  @version 2.0
+ */
 export class UserApi {
 
 	private static async make_ctx() {
@@ -38,14 +46,14 @@ export class UserApi {
      * @param password Lösenord för ny användare
      * @param is_admin Sant om användaren ska bli admin
      */
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	static async register_user(username: string, password: string, is_admin: boolean) {
+	static async register_user(user: User) {
+		console.log("role: ", user.role)
 		const ctx = await UserApi.make_ctx()
 		const response = await ctx.post("/api/users", {
 			data: {
-				username: username,
-				password: password,
-				userRole: 0,
+				username: user.userName,
+				password: user.password,
+				userRole: user.role,
 			},
 		})
 		const returnObject = await response.json()
