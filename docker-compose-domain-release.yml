@@ -1,0 +1,35 @@
+sevices:
+  nginx:
+    build: ./nginx/
+    image: pvt2024/nginx:latest
+    restart: always
+    volumes:
+      - certificate:/etc/letsencrypt/
+      - certbotwww:/var/www/certbot/
+    ports:
+      - 80:80
+      - 443:443
+    links:
+      - gateway
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - certificate:/etc/letsencrypt/
+      - certbotwww:/var/www/certbot/
+      
+  psql:
+    image: pvt2024/database:latest
+      
+  frontend:
+    image: pvt2024/frontend:latest
+      
+  gateway:
+    image: pvt2024/gateway:latest
+    
+  api:
+    image: pvt2024/api:latest
+    
+volumes:
+  certificate:
+  certbotwww:
