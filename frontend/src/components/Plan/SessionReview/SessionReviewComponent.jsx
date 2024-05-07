@@ -82,11 +82,13 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 				const json = await loadedResponse.json();
 				//console.log(session_id)
 				if(json[0] !== null && json[0] !== undefined) {
+					//console.log(json[0])
+					setDoneActivities(json[0][`activities`])
 					setRating(json[0][`rating`])
 					setPositiveComment(json[0][`positiveComment`])
 					setNegativeComment(json[0][`negativeComment`])
 					setReviewId(json[0][`id`])
-					updateSavedDateDisplay(json[0][`date`])
+					setSavedDate(json[0][`date`])
 				}
 			}
 		}
@@ -94,6 +96,17 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		fetchData()
 		fetchLoadedData()
 	}, [])
+
+	function setDoneActivities(activities) {
+		setDone(prevDoneList => {
+			const updatedDoneList = [...prevDoneList];
+			for (let i = 0; i < activities.length; i++) {
+				updatedDoneList.push(activities[i][`activity_id`]);
+			}
+			return updatedDoneList;
+		});
+	}
+	
 
 
 	function handleCheckBoxChange (state, id) {
@@ -117,7 +130,8 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			setError("Kunde inte spara utvärdering, vänligen sätt ett betyg")
 			return
 		}
-		console.log("Review id: " + reviewId)
+		console.log(doneList)
+		//console.log("Review id: " + reviewId)
 		if(reviewId < 0) {
 			addReview()
 		} else {
@@ -148,8 +162,29 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			return
 		}
 
-		//Get review id
-		//Save performed exercises
+		const requestOptions2 = {
+			headers: {"Content-type": "application/json", token: context.token}
+		}
+
+		const loadedResponse = await fetch("/api/session/" + session_id + "/review/all", requestOptions2).catch(() => {
+			setErrorStateMsg("Serverfel: Kunde inte ansluta till servern.")
+			setLoading(false)
+			return
+		})
+
+		if(loadedResponse.status != HTTP_STATUS_CODES.OK){
+			setErrorStateMsg("Session med ID '" + session_id + "' existerar inte. Felkod: " + loadedResponse.status)
+			setLoading(false)
+		} else {
+			const json = await loadedResponse.json();
+			if(json[0] !== null && json[0] !== undefined) {
+				setReviewId(json[0][`id`])
+				clearActivities(json[0][`id`], session_id)
+				for(let i = 0; i < doneList.length; i++) {
+					submitActivity(json[0][`id`], session_id, doneList[i])
+				}
+			}
+		}
 
 		updateSavedDateDisplay(ts)
         setSuccess("Utvärdering skapad")
@@ -188,7 +223,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	}
 
 	async function clearActivities(review_id, session_id) {
-		console.log("Clearing activities")
+		//console.log("Clearing activities")
 		const requestOptions = {
 			method: "DELETE",
 			headers: {"Content-type": "application/json", "token": token},
@@ -207,7 +242,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	}
 
 	async function submitActivity(review_id, session_id, activity_id) {
-		console.log("Submitting activity: " + activity_id)
+		//console.log("Submitting activity: " + activity_id)
 		const requestOptions = {
 			method: "POST",
 			headers: {"Content-type": "application/json", "token": token},
@@ -239,6 +274,12 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		savedDateValue.textContent = date;
 	}
 
+	function markAll(sessionData) {
+		const allActivityIds = sessionData.activityCategories.flatMap(category => category.activities.map(activity => activity.id));
+		setDone(allActivityIds);
+	}
+	
+
 
 	function getActivityContainer(sessionData) {
 		//console.log(sessionData)
@@ -263,6 +304,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 						))}
 					</ul>
 				</div>
+				<Button id="allButton" width={"100%"} onClick={() => markAll(sessionData)}>Markera alla</Button>
 			</div>
 		);
 	}
@@ -303,7 +345,8 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 				</div>
                 <div className="col-md-6 p-0">
 					<Button id="saveButton" width={"100%"} onClick={() => saveReview()}>Spara</Button>
-					<p id="savedDateDisplay">Senast sparad: <span id="savedDateValue" textContent={savedDate}></span></p>
+					<p id="savedDateDisplay">Senast sparad: <span id="savedDateValue">{savedDate}</span></p>
+
 				</div>
 			</div>
 		</Popup>
