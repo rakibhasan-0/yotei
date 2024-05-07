@@ -21,10 +21,8 @@ path: GET /api/statistics/{id}
 locked: true
 
 text: |
-    Get activity statistics by group id. Number of sessions shows the number of sessions 
+    Get activity statistics by group id. NumberOfSessions is the number of session reviews that the returned activities occur in. NOTE: This may not be all session reviews that exist. AverageRating is the average rating of those session reviews.
 
-body:
-    type: application/json
 
 
 path-params:
