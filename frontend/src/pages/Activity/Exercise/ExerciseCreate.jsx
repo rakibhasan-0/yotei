@@ -13,7 +13,7 @@ import Divider from "../../../components/Common/Divider/Divider.jsx"
 import TagInput from "../../../components/Common/Tag/TagInput.jsx"
 import { toast } from "react-toastify"
 import EditGallery from "../../../components/Gallery/EditGallery"
-import { useNavigate } from "react-router"
+import { useLocation, useNavigate } from "react-router"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
 import { unstable_useBlocker as useBlocker } from "react-router"
 
@@ -33,7 +33,8 @@ import { unstable_useBlocker as useBlocker } from "react-router"
  *     Medusa (Group 6) (2023-06-01)
  *     Coconut (Group 7) (2024-04-22)
  *     Team Mango (Group 4) (2024-04-22)
- *	   Team Durian (Group 3), Tomato (Group 6) (2024-04-24)
+ *	   Team Durian (Group 3) (2024-05-07), Tomato (Group 6) (2024-04-24)
+ *     Team Kiwi (Group 2) (2024-05-03)
  * 
  * @since 2024-04-22
  * @version 3.0
@@ -95,6 +96,8 @@ export default function ExerciseCreate() {
 
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const navigate = useNavigate()
+	const location = useLocation()
+	const hasPreviousState = location.key !== "default"
 
 	const hasRendered = useRef({"tagEffect":false, "inputEffect":false})
 
@@ -276,7 +279,11 @@ export default function ExerciseCreate() {
 	function exitProdc() {
 		
 		if (exerciseCreateInput.addBoxChecked == false) {
-			navigate(-1)
+			if (hasPreviousState) {
+				navigate(-1)
+			} else {
+				navigate("/exercise")
+			}
 			clearExerciseCreateInput(exerciseCreateInput.addBoxChecked, exerciseCreateInput.eraseBoxChecked)
 			
 		} else {
@@ -333,6 +340,14 @@ export default function ExerciseCreate() {
 		storeInputChange("eraseBoxChecked", checked)
 	}
 
+	const handleNavigation = () => {
+		if (hasPreviousState) {
+			navigate(-1)
+		} else {
+			navigate("/exercise")
+		}
+	}
+
 	return (
 		<>
 			<title>Skapa övning</title>
@@ -380,6 +395,7 @@ export default function ExerciseCreate() {
 			<TagInput
 				addedTags={addedTags}
 				setAddedTags={setAddedTags}
+				itemName={name}
 			/>
 
 			<Divider option={"h1_left"} title={"Media"} />
@@ -414,9 +430,9 @@ export default function ExerciseCreate() {
 				<Button
 					width="100%"
 					outlined={true}
-					onClick={() => {
-						setUndoMediaChanges(true) 
-						navigate(-1)
+					onClick={async () => {
+						setUndoMediaChanges(true)
+						handleNavigation()
 					}}
 				>
 					<p>Tillbaka</p>

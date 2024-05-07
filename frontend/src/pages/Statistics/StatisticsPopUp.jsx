@@ -8,6 +8,8 @@ import BeltColorChart from "../../components/Common/BeltColorChart/BeltColorChar
  * prop with data will be passed here so that data will be processed and will be shown in the popup
  * however there is some concerning with position of the css in that case.
  * 
+ * The work is on progress for the statistics page.
+ * 
  */
 export default function StatisticsPopUp({groupActivities,filteredActivities,dates  }) {
 	const numberOfSessions = 5 //mock data

@@ -97,7 +97,7 @@ const GroupRow = ({group, onToggle}) => {
     } 
  * 
  * 
- * @author Griffin (Group 2)
+ * @author Griffin (Group 2), Team Mango (Group 4) (2024-05-06) 
  * @since 2023-05-17
  * @version 1.0
  * @param id An id for group picker
@@ -126,7 +126,8 @@ export default function GroupPicker({ id, states, testFetchMethod, onToggle}) {
 					return {...group, selected: states && states.includes(group.id)}
 				}))
 			}).catch(() => {
-				setErrorToast("Kunde inte hämta grupper")
+				setErrorToast("Kunde inte hämta grupper") //TODO this error handling here seems problematic.
+				//Potential solutions: Return 200 or 204 in the backend when there are no groups (instead of 404), or change just the code here.
 			})
 		}
 	}
