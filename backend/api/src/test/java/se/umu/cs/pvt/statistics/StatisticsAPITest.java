@@ -220,7 +220,7 @@ public class StatisticsAPITest {
             .andExpect(MockMvcResultMatchers.jsonPath("$.activities.length()").value(5)) // Ensure the length is 5
             .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].activity_id").value(8)) // Check first activity ID
             .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].name").value("Armhävning")) // Check name with unicode
-            .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].type").value("technique")) // First activity's type
+            .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].typ").value("technique")) // First activity's type
             .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].count").value(1)) // First activity's count
             .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].beltColors").isArray()) // Check beltColors is an array
             .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].activity_id").value(9)) // Second activity ID
