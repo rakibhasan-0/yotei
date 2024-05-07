@@ -2,7 +2,7 @@
 import React from "react"
 import { render, configure, fireEvent } from "@testing-library/react"
 import "@testing-library/jest-dom"
-import ExamineeButton from "../../../components/Grading/ExamineeButton"
+import ExamineeButton from "../../../../components/Grading/PerformGrading/ExamineeButton.jsx"
 /**
  * Tests for the examinee pass/fail button that should be used during grading.
  * 
