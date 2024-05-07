@@ -1,4 +1,4 @@
-sevices:
+services:
   nginx:
     build: ./nginx/
     image: pvt2024/nginx:latest
