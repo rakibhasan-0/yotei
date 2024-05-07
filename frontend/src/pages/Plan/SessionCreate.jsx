@@ -8,17 +8,14 @@ import { useContext, useEffect, useState } from "react"
 import { AccountContext } from "../../context"
 import { useLocation } from "react-router-dom"
 import Divider from "../../components/Common/Divider/Divider"
-import { setError as setErrorToast } from "../../utils"
-import { unstable_useBlocker as useBlocker } from "react-router"
-import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
-
+import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../utils"
 /**
  * A component for creating a session.
  * 
  * @author Chimera (dv21aag, c20lln), Team Durian (Group 3) (2024-04-23)
  * @since 2023-05-03
  */
-export default function SessionCreate() {
+export default function SessionCreate({setIsBlocking}) {
 	const { state } = useLocation()
 	const navigate = useNavigate()
 	const { token } = useContext(AccountContext)
@@ -30,17 +27,8 @@ export default function SessionCreate() {
 	const [workout, setWorkout] = useState(state?.session?.workout)
 	const [groupError, setGroupError] = useState()
 	const [timeError, setTimeError] = useState()
-	const [goBackPopup, setGoBackPopup] = useState(false)
-	const [isBlocking, setIsBlocking] = useState(false)
 
-	const blocker = useBlocker(() => {
-		if (isBlocking) {
-			setGoBackPopup(true)
-			return true
-		}
-		return false
-	})
-
+	
 	useEffect(() => {
 		// Check if any of the fields are filled
 		setIsBlocking(date?.length > 0 || time?.length > 0 || group || workout)
@@ -102,10 +90,11 @@ export default function SessionCreate() {
 					time
 				})
 			})
-			if (!response.ok) {
-				throw new Error("Could not save session")
+			if (response.ok) {
+				setSuccessToast("Tillfället lades till.")
+				navigate("/plan")
 			}
-			navigate("/plan")
+			
 		} catch (ex) {
 			setErrorToast("Kunde inte spara tillfälle")
 			console.error(ex)
@@ -114,15 +103,6 @@ export default function SessionCreate() {
 
 	return (
 		<>
-			<ConfirmPopup
-				confirmText={"Lämna"}
-				backText={"Avbryt"}
-				id={"session-create-leave-page-popup"}
-				showPopup={goBackPopup}
-				onClick={blocker.proceed}
-				setShowPopup={setGoBackPopup}
-				popupText={"Är du säker på att du vill lämna sidan? Dina ändringar kommer inte att sparas."}
-			/>
 			<title>Skapa tillfälle</title>
 			<h1 style={{ marginTop: "2rem" }}>Tillfälle</h1>
 			<Divider option={"h2_left"} title={"Grupp"} />

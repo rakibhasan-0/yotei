@@ -5,6 +5,8 @@ import styles from "./SessionCreateIndex.module.css"
 import { useEffect, useState} from "react"
 import SessionCreate from "./SessionCreate"
 import SessionsCreate from "./SessionsCreate"
+import { unstable_useBlocker as useBlocker } from "react-router"
+import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 
 /**
  * Index compontent for the sessionCreate page
@@ -19,26 +21,47 @@ import SessionsCreate from "./SessionsCreate"
 
 export default function SessionCreateIndex(){
 
-
-    const [key, setKey] = useState(sessionStorage.getItem("active_tab") || "session")
+	const [isBlocking, setIsBlocking] = useState(false)
+	const [goBackPopup, setGoBackPopup] = useState(false)
+	const [key, setKey] = useState(sessionStorage.getItem("active_tab") || "session")
 
 	useEffect(()=>{
 		sessionStorage.setItem("active_tab", key)
 	}, [key]) 
+	
+	const blocker = useBlocker(() => {
+		if (isBlocking) {
+			setGoBackPopup(true)
+			return true
+		}
+		return false
+	})
+
+	useEffect(()=>{
+
+	}, [])
 
 
 
-    return (
-        <Modal.Body style={{padding: "0"}}>
-            <Tabs activeKey={key} onSelect={(tab) => setKey(tab)} className={styles.tabs}>
-                <Tab eventKey="session" title="Tillfälle" tabClassName={`nav-link ${styles.tab}`}>
-                    <SessionCreate/>
-                </Tab>
-                <Tab  eventKey="sessions" title="Skapa flera tillfällen" tabClassName={`nav-link ${styles.tab}`}>
-                    <SessionsCreate/>
-                </Tab>
-
-            </Tabs>
-        </Modal.Body>
-    )
+	return (
+		<Modal.Body style={{padding: "0"}}>
+			<Tabs activeKey={key} onSelect={(tab) => setKey(tab)} className={styles.tabs}>
+				<Tab eventKey="session" title="Tillfälle" tabClassName={`nav-link ${styles.tab}`}>
+					<SessionCreate setIsBlocking={setIsBlocking}/>
+				</Tab>
+				<Tab  eventKey="sessions" title="Skapa flera tillfällen" tabClassName={`nav-link ${styles.tab}`}>
+					<SessionsCreate setIsBlocking={setIsBlocking}/>
+				</Tab>
+			</Tabs>
+			<ConfirmPopup
+				confirmText={"Lämna"}
+				backText={"Avbryt"}
+				id={"session-create-leave-page-popup"}
+				showPopup={goBackPopup}
+				onClick={blocker.proceed}
+				setShowPopup={setGoBackPopup}
+				popupText={"Är du säker på att du vill lämna sidan? Dina ändringar kommer inte att sparas."}
+			/>
+		</Modal.Body>
+	)
 }

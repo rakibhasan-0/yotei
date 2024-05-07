@@ -1,11 +1,8 @@
 import { React, useState, useContext, useEffect } from "react"
 import { AccountContext } from "../../context"
 import { useNavigate } from "react-router"
-import PlanForm from "../../components/Forms/PlanForm.jsx"
 import styles from "./SessionsCreate.module.css"
 import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../utils"
-import { unstable_useBlocker as useBlocker } from "react-router"
-import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 import { useLocation } from "react-router-dom"
 import Dropdown from "../../components/Common/List/Dropdown"
 import Divider from "../../components/Common/Divider/Divider.jsx"
@@ -27,7 +24,7 @@ import Button from "../../components/Common/Button/Button.jsx"
  */
 
 
-export default function SessionsCreate(){
+export default function SessionsCreate({setIsBlocking}){
 
 	
 
@@ -36,27 +33,18 @@ export default function SessionsCreate(){
 	const twoYearsFromNow = new Date()
 	twoYearsFromNow.setFullYear(today.getFullYear()+2)
 
-    const { state } = useLocation()
-    const navigate = useNavigate()
-    const { token } = useContext(AccountContext)
+	const { state } = useLocation()
+	const navigate = useNavigate()
+	const { token } = useContext(AccountContext)
 
-    const [groups, setGroups] = useState()
-    const [group, setGroup] = useState(state?.session?.group)
-    const [groupError, setGroupError] = useState()
+	const [groups, setGroups] = useState()
+	const [group, setGroup] = useState(state?.session?.group)
     
-    const [goBackPopup, setGoBackPopup] = useState(false)
-	const [isBlocking, setIsBlocking] = useState(false)
 
-	const blocker = useBlocker(() => {
-		if (isBlocking) {
-			setGoBackPopup(true)
-			return true
-		}
-		return false
-	})
+	
 
 
-    useEffect(() => {
+	useEffect(() => {
 		(async () => {
 			try {
 				const response = await fetch("/api/plan/all", { headers: { token } })
@@ -286,7 +274,7 @@ export default function SessionsCreate(){
 			
 			if (response.ok) {
 				setSuccessToast("Tillfällen lades till.")
-				navigate(-1)
+				navigate("/plan")
 			}
 
 		} catch (error) {
@@ -306,7 +294,7 @@ export default function SessionsCreate(){
 		
 		if(!group){
 			setErrorToast("Vänligen välj en grupp")
-			res = false;
+			res = false
 		}
 		else if (!(planData.startDate && planData.endDate)) {
 			setErrorToast("Vänligen välj start- och slutdatum.")
@@ -335,7 +323,7 @@ export default function SessionsCreate(){
 	 */
 	useEffect(() => {
 		setIsBlocking(group != "" || planData.startDate != "" || planData.endDate != "")
-	}, [group, weekdays])
+	}, [group,planData, weekdays])
 	
 	
 
@@ -343,16 +331,16 @@ export default function SessionsCreate(){
 
 
 
-    return (
-        <>
+	return (
+		<>
 			<title>Skapa flera tillfällen</title>
 			<h1 style={{ marginTop: "2rem" }}>Skapa flera tillfällen</h1>
 			<Divider option={"h2_left"} title={"Grupp"} />
-            <Dropdown id={"session-dropdown"} text={group?.name || "Grupp"} centered={true}>
+			<Dropdown id={"session-dropdown"} text={group?.name || "Grupp"} centered={true}>
 				{groups?.length > 0 ? groups.map((plan, index) => (
 					<div className={styles.dropdownRow} key={index} onClick={() =>{ 
 						setGroup(plan)
-						}}>
+					}}>
 						<p className={styles.dropdownRowText}>{plan.name}</p>
 					</div>
 				)) : <div className={styles.dropdownRow}>
@@ -428,28 +416,12 @@ export default function SessionsCreate(){
 					</div>
 				</div>
 			</div>
-			<ConfirmPopup
-				confirmText={"Lämna"}
-				backText={"Avbryt"}
-				id={"session-create-leave-page-popup"}
-				showPopup={goBackPopup}
-				onClick={blocker.proceed}
-				setShowPopup={setGoBackPopup}
-				popupText={"Är du säker på att du vill lämna sidan? Dina ändringar kommer inte att sparas."}
-			/>
 			<div className={styles.wrapCentering} style={{ marginBottom: "2rem" }} >
-				<Button 
-					//onClick={navigate(-1)} 
-					outlined={true}>
-					<p>Tillbaka</p>
-				</Button>
-				<Button onClick = {() => { dateHandler(planData)}}>
-					<p>Spara</p>
-				</Button>
-			</div>
-			
-        </>
-    )
+				<Button onClick= {() => navigate("/plan")} id = {"sessions-back"}outlined={true}><p>Tillbaka</p></Button>
+				<Button onClick = {() => { dateHandler(planData)}}><p>Spara</p></Button>
+			</div>		
+		</>
+	)
 }
 
 /**
