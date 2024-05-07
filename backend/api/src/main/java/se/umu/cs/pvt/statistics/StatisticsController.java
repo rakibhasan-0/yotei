@@ -6,19 +6,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import net.bytebuddy.asm.Advice.Local;
-import se.umu.cs.pvt.technique.Technique;
+import io.swagger.v3.oas.annotations.Operation;
 
-import java.io.Console;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
-import se.umu.cs.pvt.tag.TechniqueTag;
 
 /**
  * Class for handling requests to the statistics API.
@@ -38,54 +37,87 @@ public class StatisticsController {
         this.statisticsRepository = statisticsRepository;
     }
 
-    
+    @Operation(summary = "Returns the techniques and exercises done for a group sorted from highest to lowest occurence.", 
+               description = "Must include a group id as path variable. All other request parameters are optional they default to false. If not valid date interval is set, all session reviews are included in the statistics.")
     @GetMapping("/{id}")
-    public ResponseEntity<List<StatisticsResponse>> getTechniquesStats(@PathVariable Long id, 
-                                                                       @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<LocalDate> startdate , 
-                                                                       @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<LocalDate> enddate, 
-                                                                       @RequestParam Optional<Boolean> kihon, 
-                                                                       @RequestParam Optional<Boolean> showexercises){
+    public ResponseEntity<StatisticsResponseWrapper> getSessionReviewStatistics(@PathVariable Long id, 
+                                                                        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<LocalDate> startdate , 
+                                                                        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<LocalDate> enddate, 
+                                                                        @RequestParam Optional<Boolean> kihon, 
+                                                                        @RequestParam Optional<Boolean> showexercises){
+    
+        List<StatisticsActivity> techniques = statisticsRepository.getAllSessionReviewTechniques(id);
+        List<StatisticsActivity> exercises;
         
-        // Check if kihon paramter is set and show only kihon techniques if it is.
-        boolean filterKihon = false;
-        if (kihon.isPresent() && kihon.get()) {
-            filterKihon = true;
-        }
-                                                                
-        // Check if date filter is present
-        boolean showAllDates = true;
-        LocalDate sdate = null;
-        LocalDate edate = null;
-        if (startdate.isPresent() && enddate.isPresent()) {
-            sdate = startdate.get();
-            edate = enddate.get();
-            showAllDates = false;
-        }
-
         // Check if showexercises parameter is set and show exercises if it is.
-        // Set to empty ArrayList if not to allow stream.
-        List<StatisticsResponse> exercises;
         if (showexercises.isPresent() && showexercises.get()) {
-            exercises = statisticsRepository.getSampleExercisesQuery(id, showAllDates, sdate, edate);
+            exercises = statisticsRepository.getAllSessionReviewExercises(id);
         } else {
+            // Set to empty ArrayList if not to allow stream.
             exercises = new ArrayList<>();
         }
 
-        
-        List<StatisticsResponse> techniques = statisticsRepository.getSampleTechniquesQuery(id, filterKihon, showAllDates, sdate, edate);
-
-        // Combine the two lists and sort them.
-        List<StatisticsResponse> union = Stream.concat( exercises.stream(), techniques.stream())
-            .sorted(Comparator.comparingLong(StatisticsResponse::getCount).reversed())
+        // Combine techniques and exericises
+        List<StatisticsActivity> union = Stream.concat( exercises.stream(), techniques.stream())
             .collect( Collectors.toList());
+            
+        // Check if kihon parameter is set and show only kihon techniques if it is.
+        if (kihon.isPresent() && kihon.get()) {
+            union.removeIf(item -> item.getKihon() != kihon.get());
+        }
+        
+        // Check if date filter is present
+        if (startdate.isPresent() && enddate.isPresent()) {
+            union.removeIf(item -> item.getDate().isBefore(startdate.get()));
+            union.removeIf(item -> item.getDate().isAfter(enddate.get()));
+        }
 
-        // Get the list of belts for every technique and add them to the response entity.
-        for (StatisticsResponse sr : union) {
+        // Guard against empty result
+        if (union.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } 
+
+        // Store unique activities
+        List<StatisticsResponse> uniqueActivities = new ArrayList<>();
+
+        // Initialize variable for storing average rating
+        double averageRating = 0;
+
+        // Hashset to store unique session IDs to prevent double counting.
+        Set<Long> uniqueSessionIds = new HashSet<>();
+
+        // Hashmap to store ratings for each session to prevent double counting.
+        HashMap<Long,Integer> ratings = new HashMap<>();
+
+        // Iterate through the StatisticsActivities to retrieve the relevant information.
+        for (StatisticsActivity sa : union) {
+            StatisticsResponse sr = new StatisticsResponse(sa.getActivity_id(), sa.getName(), sa.getType(), sa.getCount());
+            
+            uniqueSessionIds.add(sa.getSession_id());
+            ratings.put(sa.getSession_id(), sa.getRating());
             if (sr.getType().equals("technique")) {
                 sr.setBelts(statisticsRepository.getBeltsForTechnique(sr.getActivity_id()));
             }
+            if (!uniqueActivities.contains(sr)) {
+                uniqueActivities.add(sr);
+            }
         }
 
-        return new ResponseEntity<>(union, HttpStatus.OK);
+        // Calculate average rating
+        for (Long sid : uniqueSessionIds) {
+            averageRating += ratings.get(sid);
+        }
+        averageRating /= uniqueSessionIds.size();
+        averageRating = Math.round(averageRating * 100.0) / 100.0;
+
+        // Sort remaining response entities
+        uniqueActivities = uniqueActivities.stream()
+            //.sorted(Comparator.comparing(StatisticsResponse::getName)) // Uncomment this line with preferred sort order to sort activities with the same count.
+            .sorted(Comparator.comparingLong(StatisticsResponse::getCount).reversed())
+            .collect( Collectors.toList());
+
+        
+        StatisticsResponseWrapper response = new StatisticsResponseWrapper(uniqueSessionIds.size(), averageRating, uniqueActivities);  
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

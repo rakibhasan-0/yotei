@@ -38,7 +38,7 @@ export default function DatePicker({onChange, ref, selectedDate, id, minDate, ma
 	let pressedKey
 
 	function handleChange(event) {
-		console.log("Value: " + event.target.value)
+		
 		if(!event.target.value) {
 			if(countErrors == 2 || pressedKey != 48){
 				setError("Felaktigt datum.", "datepicker-error")
