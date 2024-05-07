@@ -80,9 +80,6 @@ export default function Statistics() {
 	useEffect(() => {
 
 		async function fetchGroupActivitiesData() {	
-			//console.log("Filter: startDate", filter.startDate)
-			//console.log("Filter: endDate", filter.endDate)
-			//console.log("Selected belts tags: ", selectedBelts)
 			if(!checkIfDateIsValid(dates.from) || !checkIfDateIsValid(dates.to)) {
 				return
 			}
@@ -94,7 +91,7 @@ export default function Statistics() {
 				enddate: dates.to ? dates.to : ""
 			})
 
-			console.log("Param:", param.toString())
+			//console.log("Param:", param.toString())
 
 			try {
 				setLoading(true)

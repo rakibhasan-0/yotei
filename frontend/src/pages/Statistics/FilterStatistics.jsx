@@ -59,7 +59,6 @@ export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDa
 						id={"techniqueFilter-VisaÖvningar"}
 						checked={false}
 						onClick={(isChecked) => {
-							console.log("Checkbox exercise clicked", isChecked)
 							onToggleExercise(isChecked)
 						}}
 					/>
@@ -72,7 +71,6 @@ export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDa
 						id={"techniqueFilter-KihonCheck"}
 						checked={false}
 						onClick={(isChecked) => {
-							console.log("Checkbox kihon clicked", isChecked)
 							onToggleKihon(isChecked)
 						}}
 					/>
