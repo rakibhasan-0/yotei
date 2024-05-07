@@ -9,12 +9,16 @@ import BeltColorChart from "../../components/Common/BeltColorChart/BeltColorChar
  * however there is some concerning with position of the css in that case.
  * 
  */
-export default function StatisticsPopUp() {
+export default function StatisticsPopUp({groupActivities,filteredActivities,dates  }) {
 	const numberOfSessions = 5 //mock data
 	const averageRating = 2.1 //mock data
 	const startDate = "2021-01-01" //mock data
 	const endDate = "2021-01-02" //mock data
 	
+	console.log(groupActivities)
+	console.log(filteredActivities)
+	
+
 	const beltColorsData = {	//mock data
 		"Vitt": 10,
 		"Gul": 8,
@@ -39,12 +43,12 @@ export default function StatisticsPopUp() {
 					{averageRating}/5
 				</p>
 				<StarRatings rating={averageRating} starRatedColor="#ffcc00" numberOfStars={5} name='rating' starDimension="50px" starSpacing="4px" />
-				<p style = {{color: "#808080"}}>
+				<p style = {{color: "#b9b0b0"}}>
 					Genomsnittligt betyg för {numberOfSessions} tillfällen från {<br />} datum {startDate} till {endDate}
 				</p>
 				
 				<p style = {{fontSize: "40px"}}>
-					Belt-tekniker
+					Bält-tekniker
 				</p>
 				<BeltColorChart beltColorsData={beltColorsData} /> 
 			</Popup>
