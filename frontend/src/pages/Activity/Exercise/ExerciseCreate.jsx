@@ -33,7 +33,7 @@ import { unstable_useBlocker as useBlocker } from "react-router"
  *     Medusa (Group 6) (2023-06-01)
  *     Coconut (Group 7) (2024-04-22)
  *     Team Mango (Group 4) (2024-04-22)
- *	   Team Durian (Group 3), Tomato (Group 6) (2024-04-24)
+ *	   Team Durian (Group 3), Tomato (Group 6) (2024-05-07)
  * 
  * @since 2024-04-22
  * @version 3.0
@@ -380,6 +380,7 @@ export default function ExerciseCreate() {
 			<TagInput
 				addedTags={addedTags}
 				setAddedTags={setAddedTags}
+				itemName={name}
 			/>
 
 			<Divider option={"h1_left"} title={"Media"} />

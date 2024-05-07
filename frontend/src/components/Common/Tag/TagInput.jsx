@@ -23,9 +23,9 @@ import AddTagPopup from "./AddTagPopup"
  *
  * @author Team Minotaur, Team Durian
  * @version 1.0
- * @since 2024-05-02
+ * @since 2024-05-07
  */
-export default function TagInput({id, addedTags, setAddedTags, isNested}) {
+export default function TagInput({id, addedTags, setAddedTags, isNested, itemName}) {
 	const [showPopup, setShowPopup] = useState(false)
 	const handleRemoveTag = (tag) => {
 		const copy = [...addedTags]
@@ -49,7 +49,7 @@ export default function TagInput({id, addedTags, setAddedTags, isNested}) {
 					onClick={() => handleRemoveTag(tag)}
 				/>)}
 			</div>
-			<Popup title="Lägg till tagg" id= "addTagPopUp" isOpen={showPopup} setIsOpen={setShowPopup} isNested={isNested}>
+			<Popup title={`Lägg till tagg - ${itemName ? itemName : "X"}`} id= "addTagPopUp" isOpen={showPopup} setIsOpen={setShowPopup} isNested={isNested}>
 				<AddTagPopup id ="addTagPopupDiv" addedTags={addedTags} setAddedTags={setAddedTags} setIsOpen={setShowPopup}/>
 			</Popup>
 		</div>

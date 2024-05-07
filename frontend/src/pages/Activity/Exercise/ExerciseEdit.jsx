@@ -26,7 +26,7 @@ import Spinner from "../../../components/Common/Spinner/Spinner.jsx"
  *     Verona                 (2022-05-16)
  *     Team Phoenix (Group 1) (2023-05-15)
  *     Team Medusa  (Group 6) (2023-06-01)
- * 	   Team Durian  (Group 3) (2024-04-23)
+ * 	   Team Durian  (Group 3) (2024-05-07)
  * 	   Team Kiwi    (Group 2) (2024-05-02) removed some navigate(-1) 
  * @since 2023-05-22
  * @version 2.0
@@ -319,7 +319,7 @@ export default function ExerciseEdit() {
 
 			<Divider option={"h2_left"} title={"Taggar"} />
 
-			<TagInput addedTags={newTags} setAddedTags={setNewTags} />
+			<TagInput addedTags={newTags} setAddedTags={setNewTags} itemName={name} />
 
 			<Divider option={"h2_left"} title={"Media"} />
 
