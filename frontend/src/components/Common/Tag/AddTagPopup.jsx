@@ -13,6 +13,7 @@ import RoundButton from "../RoundButton/RoundButton"
 import { ChevronRight } from "react-bootstrap-icons"
 import TagList from "./Taglist.jsx"
 import CheckBox from "../CheckBox/CheckBox"
+import MiniPopup from "../MiniPopup/MiniPopup.jsx"
 
 /**
  * OBSERVE! This component is used inside the TagInput-component and should not be used by itself. 
@@ -47,6 +48,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	const [tagListArray, setTagListArray] = useState([])
 	const { token } = useContext(AccountContext)
 	const [newAddedTags, setNewAddedTags] = useState(addedTags)
+	const [showPopup, setShowPopup] = useState(false)
 
 	
 
@@ -136,12 +138,15 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 			<TagList tag={tag} key={tag.id} 
 				onChecked={checked => checked ? handleAddTag(tag) : handleRemoveTag(tag)}
 				added={newAddedTags.some(a => a.id == tag.id)}	
+				onTrashClicked={handleDelete}
 			/>
 		)
 		setTagListArray(tempTagListArray)
 	}, [newAddedTags, suggested])
 
-
+	const handleDelete = () => {
+		setShowPopup(true)
+	}
 
 	const saveAndClose = () => {
 		setAddedTags(newAddedTags)
@@ -178,6 +183,12 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 			</div>
 			<div style={{overflow:scroll}}>
 				{tagListArray}
+
+				<MiniPopup title={"Test"} isOpen={showPopup} setIsOpen={setShowPopup} >
+					<div >
+						Denna tagg används på x övningar x tekniker och x pass
+					</div>
+				</MiniPopup>
 			</div>
 			<RoundButton onClick={saveAndClose} > 
 				<ChevronRight width={30} />
