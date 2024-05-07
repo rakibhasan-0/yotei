@@ -20,18 +20,37 @@ public class BeltResponse implements Serializable {
 
     private Belt belt;
 
+    /**
+     * Constructor for BeltResponse entity.
+     *
+     * @param Belt belt to wrap
+     * @return new BeltResponse
+     */
     public BeltResponse(Belt belt) {
         this.belt = belt;
     }
 
+       
+    /**
+     * Public getter for private property belt_color
+     * @return color of the belt
+     */
     public String getBelt_color() {
         return belt.getColor();
     }
 
+    /**
+     * Public getter for private property belt_name
+     * @return name of the belt
+     */
     public String getBelt_name() {
         return belt.getName();
     }
 
+    /**
+     * Public getter for private property is_child
+     * @return true if belt is a child belt, otherwise false.
+     */
     public boolean getIs_child() {
         return belt.isChild();
     }
