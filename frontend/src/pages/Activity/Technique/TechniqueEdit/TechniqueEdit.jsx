@@ -239,7 +239,7 @@ export default function TechniqueEdit({ id }) {
 			navigate(-1)
 		}
 		else{
-			navigate("/technique")
+			navigate("/activity")
 		}
 	}
 	if(loading) return <Spinner/>
