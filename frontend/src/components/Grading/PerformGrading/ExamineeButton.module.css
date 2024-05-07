@@ -1,9 +1,9 @@
 .buttonDefault {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: left;
     width: fit-content;
-    padding: 0.6rem;
+    
     transition: all ease-in-out;
     user-select: none;
     border-radius: var(--border-radius);
