@@ -69,7 +69,7 @@ export default function GradingCreate() {
       examinees.map((examinee) =>
         examinee.id === examineeId ? { ...examinee, name: name } : examinee
       )
-    );
+    )
   }
 
 	return (
@@ -135,10 +135,10 @@ export default function GradingCreate() {
                 onCheck={onCheck}
                 showCheckbox={true}
               />
-            );
+            )
           }
           // Return null if the examinee is already in a pair
-          return null;
+          return null
         })}
       </div>
 
