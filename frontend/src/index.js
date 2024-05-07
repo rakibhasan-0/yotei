@@ -44,7 +44,7 @@ const planURI = "https://jsonplaceholder.typicode.com/users"
 
 /**
  *
-  * Changes version 2.0:
+ * Changes version 2.0:
  *     	made path for activity page.
  * 		Activities now contain techniques and exercises.
  *
@@ -100,8 +100,8 @@ export default function App() {
 		createRoutesFromElements(
 			cookie || import.meta.env.VITE_APP_LOGIN_ENABLED === "false" ? (
 				<>
-					<Route 
-						path="/" 
+					<Route
+						path="/"
 						element={
 							<ErrorBoundary>
 								<BaseLayout />
@@ -118,12 +118,26 @@ export default function App() {
 						<Route path="workout" element={<WorkoutIndex uri={workoutURI} />} />
 						<Route path="exercise/exercise_page/:ex_id" element={<ExerciseDetailsPage />} />
 						<Route path="technique" element={<TechniqueIndex />} />
-						<Route path="activity/technique/create" element={<AdminRoute><CreateTechnique /></AdminRoute> } />
+						<Route
+							path="activity/technique/create"
+							element={
+								<AdminRoute>
+									<CreateTechnique />
+								</AdminRoute>
+							}
+						/>
 						<Route path="technique/:techniqueId" element={<TechniqueDetail />} />
-						<Route path="technique/:techniqueId/edit" element={<AdminRoute><TechniqueEdit/></AdminRoute>} />
+						<Route
+							path="technique/:techniqueId/edit"
+							element={
+								<AdminRoute>
+									<TechniqueEdit />
+								</AdminRoute>
+							}
+						/>
 						<Route path="workout/create" element={<WorkoutCreate />} />
 						<Route path="excercise/create" element={<ExerciseCreate />} />
-						<Route path="excercise/edit/:excerciseId" element={<ExerciseEdit/>} />
+						<Route path="excercise/edit/:excerciseId" element={<ExerciseEdit />} />
 						<Route path="workout/:workoutId" element={<WorkoutView />} />
 						<Route path="workout/edit" element={<WorkoutEdit />} />
 						<Route path="plan" element={<PlanIndex uri={planURI} />} />
@@ -146,7 +160,9 @@ export default function App() {
 	return (
 		<>
 			<ToastContainer />
-			<AccountContext.Provider value={{ token, role: decodedToken?.role, userId: decodedToken?.userId, setToken }}>
+			<AccountContext.Provider
+				value={{ token, role: decodedToken?.role, userId: decodedToken?.userId, setToken }}
+			>
 				<RouterProvider router={routes} />
 			</AccountContext.Provider>
 		</>
@@ -155,4 +171,8 @@ export default function App() {
 
 const container = document.getElementById("root")
 const root = createRoot(container)
-root.render(<CookiesProvider><App /></CookiesProvider>)
+root.render(
+	<CookiesProvider>
+		<App />
+	</CookiesProvider>
+)

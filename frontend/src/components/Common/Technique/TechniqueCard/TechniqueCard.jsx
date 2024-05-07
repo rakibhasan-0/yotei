@@ -22,7 +22,6 @@ function TechniqueCard({ technique, checkBox, id }) {
 	const navigate = useNavigate()
 
 	const handleClick = () => {
-
 		if (technique.activity_id && technique.type === "technique") {
 			navigate("/technique/" + technique.activity_id)
 		} else if (technique.type === "exercise" && technique.activity_id) {
@@ -37,11 +36,7 @@ function TechniqueCard({ technique, checkBox, id }) {
 			{technique.type === "exercise" ? null : constructColor(technique)}
 
 			<div className={styles["technique-info-container"]}>
-				{checkBox ? (
-					<div className={styles["technique-checkbox-container"]}>
-						{checkBox}
-					</div>
-				) : null}
+				{checkBox ? <div className={styles["technique-checkbox-container"]}>{checkBox}</div> : null}
 
 				<div className={styles["technique-name-container"]}>
 					<Link onClick={handleClick}>
@@ -60,9 +55,7 @@ function TechniqueCard({ technique, checkBox, id }) {
 
 				{/* we are about to count the number of occurrence */}
 
-				<div className={styles.countContainer}>
-					{technique.count ? <p>x{technique.count}</p> : null}
-				</div>
+				<div className={styles.countContainer}>{technique.count ? <p>x{technique.count}</p> : null}</div>
 			</div>
 		</div>
 	)
@@ -75,24 +68,12 @@ function constructColor(technique) {
 				technique.beltColors !== undefined && technique.beltColors !== null
 					? technique.beltColors.length > 0
 						? technique.beltColors.map((belt, index) => {
-							return belt !== undefined
-								? belt.is_child
-									? constructChildBelt(
-										belt,
-										technique.beltColors.length,
-										index
-									)
-									: constructAdultBelt(
-										belt,
-										technique.beltColors.length,
-										index
-									)
-								: constructAdultBelt(
-									"13c9ed",
-									technique.beltColors.length,
-									index
-								)
-						})
+								return belt !== undefined
+									? belt.is_child
+										? constructChildBelt(belt, technique.beltColors.length, index)
+										: constructAdultBelt(belt, technique.beltColors.length, index)
+									: constructAdultBelt("13c9ed", technique.beltColors.length, index)
+						  })
 						: constructDefaultBelt("8e03ad") //om vi fär 0st fägerger (lila)
 					: constructDefaultBelt("8e03ad") //om vi inte får färger (lila)
 			}
@@ -101,12 +82,7 @@ function constructColor(technique) {
 }
 
 function constructDefaultBelt(color) {
-	return (
-		<div
-			className={styles["technique-card-belt-color"]}
-			style={{ background: `#${color}` }}
-		/>
-	)
+	return <div className={styles["technique-card-belt-color"]} style={{ background: `#${color}` }} />
 }
 
 function constructAdultBelt(belt, beltLength, index) {
@@ -149,10 +125,9 @@ function constructAdultBelt(belt, beltLength, index) {
 			key={index}
 			className={
 				styles[
-					[
-						"technique-card-belt-color",
-						belt.belt_name === "Vitt" ? "technique-card-belt-border" : "",
-					].join(" ")
+					["technique-card-belt-color", belt.belt_name === "Vitt" ? "technique-card-belt-border" : ""].join(
+						" "
+					)
 				]
 			}
 			style={{
@@ -167,11 +142,7 @@ function constructChildBelt(belt, beltLength, index) {
 	return (
 		<div
 			key={index}
-			className={
-				styles[
-					["technique-card-belt-color", "technique-card-belt-border"].join(" ")
-				]
-			}
+			className={styles[["technique-card-belt-color", "technique-card-belt-border"].join(" ")]}
 			style={{
 				// background: `radial-gradient(circle, rgba(0,0,0,1) 20%, rgba(0,0,0,1) 70%, rgba(255,255,255,1) 70%`,
 				background: `linear-gradient(90deg, #fff 25%, #${belt.belt_color} 25%, #${belt.belt_color} 75%, #fff 75%)`,
