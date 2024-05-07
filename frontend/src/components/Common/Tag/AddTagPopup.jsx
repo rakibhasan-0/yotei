@@ -154,9 +154,8 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 			</div>
 			<div style={{overflow:scroll}}>
 				{suggested.map(tag => <TagList
-					tagType="default"
+					tag={tag}
 					key={tag.id}
-					text={tag.name}
 				/>
 				)}
 					

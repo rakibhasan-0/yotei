@@ -6,18 +6,18 @@ import { Trash } from "react-bootstrap-icons"
 import CheckBox from "../CheckBox/CheckBox"
 import MiniPopup from "../MiniPopup/MiniPopup.jsx"
 
-export default function TagList({ text, id, index, tagType }) {
+export default function TagList({ tag, index }) {
 	return (
 		<div className={styles["exercise-list-container"]} data-testid="ExerciseListItem">
 			<div className={styles["exercise-list-header"]} style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
-				{tagType=="added" ? <CheckBox checked={true}/> : <CheckBox checked={false}/>}
+				{tag.tagType=="added" ? <CheckBox checked={true}/> : <CheckBox checked={false}/>}
 			
-				<Link to={id} data-testid="ExerciseListItem-link" style={{width: "100%"}}>
+				<Link to={tag.id} data-testid="ExerciseListItem-link" style={{width: "100%"}}>
 					<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
 						<div style={{display: "flex", alignItems: "center"}}>
 							<div style={{width: "10px"}}></div>
 							<div className={styles["exercise-list-duration"]} data-testid="ExerciseListItem-text" >
-								<p>{text}</p>
+								<p>{tag.name}</p>
 							</div>
 						</div>
 						<div className={styles["flex-shrink-0"]} style={{display: "flex", alignItems: "center"}}>
@@ -28,7 +28,6 @@ export default function TagList({ text, id, index, tagType }) {
 								size="25px"
 								color="var(--red-primary)"
 								style={{cursor: "pointer"}}
-								onClick={<MiniPopup title={"Test"} isOpen={true}></MiniPopup>}
 							/>	
 						</div>
 					</div>
