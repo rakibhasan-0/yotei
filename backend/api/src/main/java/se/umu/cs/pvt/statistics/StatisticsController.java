@@ -41,10 +41,10 @@ public class StatisticsController {
                description = "Must include a group id as path variable. All other request parameters are optional they default to false. If not valid date interval is set, all session reviews are included in the statistics.")
     @GetMapping("/{id}")
     public ResponseEntity<StatisticsResponseWrapper> getTechniquesStats(@PathVariable Long id, 
-                                                                       @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<LocalDate> startdate , 
-                                                                       @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<LocalDate> enddate, 
-                                                                       @RequestParam Optional<Boolean> kihon, 
-                                                                       @RequestParam Optional<Boolean> showexercises){
+                                                                        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<LocalDate> startdate , 
+                                                                        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<LocalDate> enddate, 
+                                                                        @RequestParam Optional<Boolean> kihon, 
+                                                                        @RequestParam Optional<Boolean> showexercises){
     
         List<StatisticsActivity> techniques = statisticsRepository.getAllSampleTechniquesQuery(id);
         List<StatisticsActivity> exercises;
@@ -108,6 +108,7 @@ public class StatisticsController {
             averageRating += ratings.get(sid);
         }
         averageRating /= uniqueSessionIds.size();
+        averageRating = Math.round(averageRating * 100.0) / 100.0;
 
         // Sort remaining response entities
         uniqueActivities = uniqueActivities.stream()

@@ -8,7 +8,6 @@ import se.umu.cs.pvt.belt.Belt;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
-import java.time.LocalDate;
 
 
 /**
