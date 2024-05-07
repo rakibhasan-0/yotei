@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { Trash, Pencil, Clock, Plus } from "react-bootstrap-icons"
 import { AccountContext } from "../../../context"
-import { useNavigate, useParams } from "react-router"
+import { useLocation, useNavigate, useParams } from "react-router"
 import CommentSection from "../../../components/Common/CommentSection/CommentSection"
 import Popup from "../../../components/Common/Popup/Popup"
 import TextArea from "../../../components/Common/TextArea/TextArea"
@@ -39,6 +39,7 @@ export default function ExerciseDetailsPage() {
 	const navigate = useNavigate()
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
 	const accountRole = useContext(AccountContext)
+	const location = useLocation()
 
 
 	const fetchComments = () => {

@@ -13,12 +13,13 @@ import {
 	WORKOUT_CREATE_TYPES,
 	checkIfActivityInfoPoupChangesMade
 } from "./WorkoutCreateReducer"
-import { useNavigate } from "react-router"
+import {  useLocation, useNavigate } from "react-router"
 import Popup from "../../Common/Popup/Popup"
 import ActivityInfoPopUp from "./ActivityInfoPopUp"
 import AddActivity from "./AddActivity"
 import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
 import EditActivityPopup from "./EditActivityPopup"
+import { AccountContext } from "../../context.js"
 
 /**
  * Component for input-form to be used to create a new workout (WorkoutCreate.js)
@@ -43,8 +44,13 @@ export default function WorkoutFormComponent({ callback, state }) {
 	const [validated, setValidated] = useState(false)
 	const [acceptActivities, setAcceptActivities] = useState(false)
 	const navigate = useNavigate()
+	const location = useLocation()
+	const hasPreviousState = location.key !== "default"
 	const [showPopup, setShowPopup] = useState(false)
+	const { token } = useContext(AccountContext)
+	//const { workoutId } = useParams()
 
+	
 	/**
 	 * Sets the title of the page.
 	 */
@@ -96,16 +102,44 @@ export default function WorkoutFormComponent({ callback, state }) {
 		setShowPopup(true)
 	}
 
+	/**
+	 * Updates the workout in the database.
+	 * 
+	 * @param {*} body
+	 * @returns The id of the updated workout if successfull, otherwise null.
+	 */
+	async function updateWorkout() {
+		const requestOptions = {
+			method: "PUT",
+			headers: {
+				"Accept": "application/json",
+				"Content-type": "application/json", token
+			}
+		}
+    
+		const response = await fetch("/api/workouts", requestOptions)
+		const jsonResp = await response.json()
+
+		return jsonResp.workoutId
+	}
+
 	function confirmGoBack() {
 
 		localStorage.removeItem("workoutCreateInfo")// Clear local storage as confirmed
 
 		if (state?.fromSession && !state?.fromCreate) {
-			navigate(`/session/edit/${state.session.sessionId}`, { replace: true, state })
+			return navigate(`/session/edit/${state.session.sessionId}`, { replace: true, state })
 		} else if(state?.fromCreate) {
 			return navigate("/session/create", { replace: true, state })
 		}
-		navigate("/workout")
+		else if (state?.fromWorkoutView) {
+			return navigate("/workout/" + state.workoutId)
+		}
+		else {
+			const workout_id = updateWorkout()
+			return navigate("/workout/" + workout_id)
+		}
+		
 	}
 
 	function handlePopupClose() {
