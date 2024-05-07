@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import { useState, useEffect, useContext } from "react"
-import { Link, useLocation, useNavigate} from "react-router-dom"
+import { Link, useLocation, useNavigate, useParams} from "react-router-dom"
 import Button from "../../components/Common/Button/Button"
 import style from "./GradingCreate.module.css"
 import styles from "./GradingBefore.module.css"
@@ -23,9 +23,15 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
  * @version 1.0
  * @since 2024-05-02
  */
+<<<<<<< HEAD
 export default function GradingCreate( {id} ) {
 
   console.log(id)
+=======
+export default function GradingCreate({id}) {
+
+  const { gradingId } = useParams()
+>>>>>>> afefe36477c79883fd40a084f08282de758fdd7a
 	const context = useContext(AccountContext)
 	const { token, userId } = context
 
@@ -36,6 +42,7 @@ export default function GradingCreate( {id} ) {
   const [checkedExamineeIds, setCheckedExamineeIds] = useState([])
 
   const [techniqueNameErr, setTechniqueNameErr] = useState("")
+
 
   function createPair() {
     setPair([...pairs, checkedExamineeIds])
@@ -51,12 +58,10 @@ export default function GradingCreate( {id} ) {
   }
 
   async function addExaminee(examinee) {
-
-    const data = await postExaminee({ name: examinee, grading_id: 1 }, token)
-			.then(handleResponse, examinee)
+    const data = await postExaminee({ name: examinee, grading_id: gradingId }, token)
+			.then(response => handleResponse(response, examinee))
 			.catch(() => setErrorToast("Kunde inte lägga till personen. Kontrollera din internetuppkoppling."))
     
-
     setExaminees([...examinees, { id: data["id"], name: data["name"] }])
   }
 

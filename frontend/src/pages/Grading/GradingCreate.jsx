@@ -53,6 +53,7 @@ export default function GradingCreate() {
 
 			const responseData = await response.json()
 			const gradingId = responseData.grading_id
+<<<<<<< HEAD
 
 			if(response.ok) {
 				navigate("/grading/:${gradingId}/1")
@@ -61,6 +62,15 @@ export default function GradingCreate() {
 			console.error("Misslyckades skapa gradering:", error)
 		}
 		
+=======
+			
+      navigate(`/grading/${gradingId}/1`);
+
+		} catch (error) {
+			console.error("Misslyckades skapa gradering:", error)
+		}
+
+>>>>>>> afefe36477c79883fd40a084f08282de758fdd7a
 	}
 
 
