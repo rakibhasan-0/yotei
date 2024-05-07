@@ -92,7 +92,7 @@ export default function Statistics() {
 			})
 
 			
-			console.log("param", param.toString())
+		
 			try {
 				setLoading(true)
 				const responseFromGroupNameAPI= await fetch("/api/plan/all", { headers: { token } })
