@@ -2,9 +2,7 @@ stages:
   - linter
   - build
   - test
-  - docs
   - undeploy_test_server
-  - rebuild_database
   - deploy_test_server
   - systest
   - deploy_prod_server
@@ -40,7 +38,7 @@ test-linter-frontend:
   stage: linter
   script:
       - npm run lint:ci
-      
+
 test-backend:
   rules:
     - if: $CI_COMMIT_TAG
@@ -60,7 +58,7 @@ test-backend:
   script:
     - cd backend
     - mvn -q test
-  
+
 test-frontend:
   rules:
     - if: $CI_COMMIT_TAG
@@ -106,61 +104,21 @@ build-frontend:
       - frontend/.npm/
   script:
     - npm run build
-      
-generate-api-docs:
-  stage: docs
-  resource_group: deploy
-  rules:
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_COMMIT_BRANCH == "main"
-  tags:
-    - system
-  script:
-    - rm -rf /var/www/html/api-docs
-    - cd docs/api-docs && mkdocs build -d /var/www/html/api-docs
-
-generate-javadocs:
-  stage: docs
-  resource_group: deploy
-  rules:
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_COMMIT_BRANCH == "main"
-  tags:
-    - system
-  script:
-    - rm -rf /var/www/html/javadocs
-    - cd backend
-    - mvn javadoc:aggregate
-    - mkdir /var/www/html/javadocs
-    - cp -r target/site/apidocs/* /var/www/html/javadocs
 
 undeploy-test-server:
   stage: undeploy_test_server
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
   tags:
     - system
   script:
     - docker compose -f docker-compose.yml -f docker-compose-feature.yml down || true
-    
-rebuild-database:
-  stage: rebuild_database
-  rules:
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_COMMIT_BRANCH == "main"
-      changes:
-        - infra/database/init/**/*
-  tags:
-    - system
-  before_script:
-    - docker login --username pvt2024 --password $DOCKER_PASS # DOCKER_PASS defined in GitLab CI/CD settings as a secure variable.
-  script:
-    - docker volume rm html_pgdata || true
+
 
 deploy-test-server:
   stage: deploy_test_server
-  resource_group: deploy
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
   tags:
     - system
   before_script:
@@ -183,7 +141,8 @@ deploy-test-server:
 
 run-systests:
   stage: systest
-  resource_group: deploy
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
   tags:
     - system
   image: mcr.microsoft.com/playwright:v1.39.0-jammy
@@ -201,7 +160,6 @@ deploy-prod-server:
     - system
   script:
     - ssh pvt@5dv214vt24-prod.cs.umu.se 'cd /home/pvt/prod/ && ./build.sh '$CI_COMMIT_TAG' && exit'
-  release: 
+  release:
     tag_name: '$CI_COMMIT_TAG'
     description: '$CI_COMMIT_TAG'
-    
