@@ -610,8 +610,8 @@ CREATE TABLE IF NOT EXISTS activity_list_entry(
        list_entry_id SERIAL PRIMARY KEY,
        list_id INT NOT NULL,
        exercise_id INT,
-       technique_id INT
-       CONSTRAINT ale_list_id_fk FOREIGN KEY (list_id) REFERENCES activity_list(list_id) ON DELETE CASCADE
+       technique_id INT,
+       CONSTRAINT ale_list_id_fk FOREIGN KEY (list_id) REFERENCES activity_list(id) ON DELETE CASCADE
 );
 
 ALTER TABLE
@@ -621,7 +621,7 @@ CREATE TABLE IF NOT EXISTS user_to_activity_list(
        user_id INT CHECK (user_id IS NOT NULL),
        list_id INT CHECK (list_id IS NOT NULL),
        CONSTRAINT user_id_fk FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE,
-       CONSTRAINT list_id_fk FOREIGN KEY (list_id) REFERENCES activity_list(list_id) ON DELETE CASCADE
+       CONSTRAINT list_id_fk FOREIGN KEY (list_id) REFERENCES activity_list(id) ON DELETE CASCADE
 );
 
 ALTER TABLE
