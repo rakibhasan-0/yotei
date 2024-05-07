@@ -97,7 +97,6 @@ export default function Statistics() {
 				setLoading(true)
 				const responseFromGroupNameAPI= await fetch("/api/plan/all", { headers: { token } })
 				const responseFromGroupDetailsAPI = await fetch(`/api/statistics/${groupID}?${param}`, {headers: { token }})
-				console.log(groupActivities)
 
 				// later we will fix if the response is 200 or 204. 200 represents it is successful and 204 represents no content.
 				if (!responseFromGroupDetailsAPI.ok || !responseFromGroupNameAPI.ok) {
