@@ -6,7 +6,13 @@ import BeltPicker from "../../components/Common/BeltPicker/BeltPicker"
 import style from "./FilterStatistics.module.css"
 
 
-export default function FilterStatistics() {
+/**
+ * 
+ * The work is on progress for the statistics page.
+ */
+
+export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDateChanges, onToggleBelts, onClearBelts, belts, dates}) {
+
 	return (
 		<div>
 			<FilterContainer id="filter-container" title="Filtering" numFilters={0}>
@@ -15,26 +21,34 @@ export default function FilterStatistics() {
 					<div></div>
 					<DatePicker
 						id="start-date-picker"
-						minDate={"2023-05-11"}
-						maxDate={"2026-05-07"}
+						selectedDate={dates.from} // two years before from today
+						minDate={"1999-01-01"}
+						maxDate={"2050-01-01"}
+						onChange={(e) => {
+							onDateChanges("from", e.target.value)
+						}}
 					/>
 				</div>
-				
+
 				<div className={style.dateContainer}>
 					<h2>Till</h2>
 					<div></div>
 					<DatePicker
 						id="end-date-picker"
-						minDate={"2023-05-11"}
-						maxDate={"2026-05-07"}
+						selectedDate={dates.to} // today's date
+						onChange={(e) => {
+							onDateChanges("to", e.target.value)
+						}}
+						minDate={"1999-01-01"}
+						maxDate={dates.from}
 					/>
 				</div>
 
 				<BeltPicker
 					id={"techniqueFilter-BeltPicker"}
-					onToggle={() => {}}
-					states={[]}
-					onClearBelts={() => {}}
+					onToggle={onToggleBelts}
+					states={belts}
+					onClearBelts={onClearBelts}
 					filterWhiteBelt={false}
 				/>
 
@@ -44,7 +58,9 @@ export default function FilterStatistics() {
 					<CheckBox
 						id={"techniqueFilter-VisaÖvningar"}
 						checked={false}
-						onClick={() => {}}
+						onClick={(isChecked) => {
+							onToggleExercise(isChecked)
+						}}
 					/>
 				</div>
 
@@ -54,12 +70,12 @@ export default function FilterStatistics() {
 					<CheckBox
 						id={"techniqueFilter-KihonCheck"}
 						checked={false}
-						onClick={() => {}}
+						onClick={(isChecked) => {
+							onToggleKihon(isChecked)
+						}}
 					/>
 				</div>
-
 			</FilterContainer>
-
 		</div>
 	)
 }
