@@ -48,8 +48,6 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 	const context = useContext(AccountContext)
 	//const {token} = context
 
-	const [isReviewEnabled] = useState(true) //FEATURE TOGGLE
-
 	useEffect(() => {
 		const fetchLoadedData = async() => {
 			const requestOptions = {
@@ -181,7 +179,7 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 							<div />
 					}
 					{
-						isEditor(userContext) && isReviewEnabled && 
+						isEditor(userContext) && 
 						<Button className = {styles.review_button} onClick={ () => {
 							setRShowPopup(true)
 						}} outlined={false}>
