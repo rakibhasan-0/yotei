@@ -13,7 +13,7 @@ import ConfirmPopup from "../../../../components/Common/ConfirmPopup/ConfirmPopu
 import UploadMedia from "../../../../components/Upload/UploadMedia"
 import EditGallery from "../../../../components/Gallery/EditGallery"
 import Divider from "../../../../components/Common/Divider/Divider"
-import { unstable_useBlocker as useBlocker, useNavigate, useParams } from "react-router"
+import { unstable_useBlocker as useBlocker, useNavigate, useLocation, useParams } from "react-router"
 import { Spinner } from "react-bootstrap"
 
 
@@ -35,8 +35,11 @@ const KIHON_TAG = { id: 1, name: "Kihon Waza" }
  * Version 2.1:
  * 	   Selected belts for a technique now appears selected in the BeltPicker
  * 
- * @author Team Medusa, Team Tomato, Team Durian (Group 3) (2024-04-23)
- * @version 2.1
+ * Version 2.2:
+ * 	   Fixed navigation from pages outside the website 
+ * 
+ * @author Team Medusa, Team Tomato, Team Durian (Group 3) (2024-04-23), Team Kiwi (Group 2) (2024-05-03)
+ * @version 2.2
  * @since 2023-05-16
  */
 export default function TechniqueEdit({ id }) {
@@ -64,6 +67,8 @@ export default function TechniqueEdit({ id }) {
 	const [isBlocking, setIsBlocking] = useState(false)
 
 	const navigate = useNavigate()
+	const location = useLocation()
+	const hasPreviousState = location.key !== "default"
 
 	const blocker = useBlocker(() => {
 		if (isBlocking) {
@@ -163,7 +168,7 @@ export default function TechniqueEdit({ id }) {
 				switch(res.status) {
 				case HTTP_STATUS_CODES.SUCCESS:
 					setSuccess("Tekniken uppdaterades!")
-					navigate(-1)
+					handleNavigation()
 					return
 				case HTTP_STATUS_CODES.CONFLICT:
 					setInputErrorMessage("Tekniknamnet finns redan")
@@ -229,6 +234,14 @@ export default function TechniqueEdit({ id }) {
 
 	}
 
+	const handleNavigation = () => {
+		if(hasPreviousState) {
+			navigate(-1)
+		}
+		else{
+			navigate("/technique")
+		}
+	}
 	if(loading) return <Spinner/>
 	return (
 		<div id={id} style={{ display: "flex", gap: "16px", flexDirection: "column" }}>
@@ -291,7 +304,7 @@ export default function TechniqueEdit({ id }) {
 			<div style={{ display: "flex", gap: "27px", justifyContent: "space-evenly" }}>
 				<Button
 					id={style.techniqueEditBackbutton}
-					onClick={() => navigate(-1)}
+					onClick={handleNavigation}
 					outlined={true}>
 					<p>Avbryt</p>
 				</Button>
