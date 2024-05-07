@@ -1,16 +1,16 @@
-import React from "react"
+import React, { useState } from "react"
 import { Pencil } from "react-bootstrap-icons"
 import styles from "./TagList.module.css"
 import { Link } from "react-router-dom"
 import { Trash } from "react-bootstrap-icons"
 import CheckBox from "../CheckBox/CheckBox"
-import MiniPopup from "../MiniPopup/MiniPopup.jsx"
 
-export default function TagList({ tag, index }) {
+
+export default function TagList({ tag, index, onChecked }) {
 	return (
 		<div className={styles["exercise-list-container"]} data-testid="ExerciseListItem">
 			<div className={styles["exercise-list-header"]} style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
-				{tag.tagType=="added" ? <CheckBox checked={true}/> : <CheckBox checked={false}/>}
+				<CheckBox checked={tag.tagType=="added"} onClick={onChecked}/>
 			
 				<Link to={tag.id} data-testid="ExerciseListItem-link" style={{width: "100%"}}>
 					<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>

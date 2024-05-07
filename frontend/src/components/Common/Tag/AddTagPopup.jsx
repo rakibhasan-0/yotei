@@ -44,25 +44,11 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	const [suggested, setSuggested] = useState([])
 	const [error, setError] = useState("")
 	const [searchText,setSearchText] = useState("")
+	const [tagListArray, setTagListArray] = useState([])
 	const { token } = useContext(AccountContext)
+	const [newAddedTags, setNewAddedTags] = useState(addedTags)
 
-	const handleRemoveTag = (tag) => {
-		setError("")
-		setSuggested([...suggested, tag])
-		const copy = [...addedTags]
-		const newAdded = copy.filter(tagInCopy => tagInCopy.id !== tag.id)
-		setAddedTags(newAdded)
-	}
-
-	const handleAddTag = (tag) => {
-		setError("")
-		setAddedTags([...addedTags, tag])
-		
-		// removes the added tag from suggestions
-		const copy = [...suggested]
-		const newSuggested = copy.filter(tagInCopy => tagInCopy.id !== tag.id)
-		setSuggested(newSuggested)
-	}
+	
 
 	// Fetches tag suggestions on first render
 	useEffect(() => {
@@ -122,7 +108,35 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 		}
 	}
 
+	/**
+	 * Creates a TagList component for each existing tag on first render
+	 */
+	useEffect(() => {
 
+		const handleRemoveTag = (tag) => {
+			setError("")
+			const copy = [...newAddedTags]
+			const newAdded = copy.filter(tagInCopy => tagInCopy.id !== tag.id)
+			setNewAddedTags(newAdded)
+		}
+
+		const handleAddTag = (tag) => {
+			setError("")
+			setNewAddedTags([...newAddedTags, tag])
+		}
+
+		const tempTagListArray = suggested.map(tag =>
+			<TagList tag={tag} key={tag.id} onChecked={checked => checked ? handleAddTag(tag) : handleRemoveTag(tag)}/>
+		)
+		setTagListArray(tempTagListArray)
+	}, [newAddedTags, suggested])
+
+
+
+	const saveAndClose = () => {
+		setAddedTags(newAddedTags)
+		setIsOpen(false)
+	}
 
 	return (
 		<div className={styles["popup-wrapper"]} id = {id}>
@@ -153,15 +167,9 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 				</div>
 			</div>
 			<div style={{overflow:scroll}}>
-				{suggested.map(tag => <TagList
-					tag={tag}
-					key={tag.id}
-				/>
-				)}
-					
-				
+				{tagListArray}
 			</div>
-			<RoundButton onClick={() => setIsOpen(false)}>
+			<RoundButton onClick={saveAndClose} > 
 				<ChevronRight width={30} />
 			</RoundButton>
 		</div>
