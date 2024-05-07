@@ -177,13 +177,13 @@ ALTER TABLE
 --
 -- Name: role; Type: TABLE; Schema: public; Owner: psql
 --
-CREATE TABLE roles(
+CREATE TABLE role(
 	role_id INT NOT NULL GENERATED ALWAYS AS IDENTITY UNIQUE,
 	role_name VARCHAR(255) NOT NULL
 );
 
 ALTER TABLE
-	roles OWNER TO psql;
+	role OWNER TO psql;
 
 --
 -- Name: exercise; Type: TABLE; Schema: public; Owner: psql
@@ -624,7 +624,7 @@ CREATE TABLE IF NOT EXISTS grading_protocol(
 \ir defaults/sessions.sql 
 \ir defaults/sessionreviews.sql
 \ir defaults/sessionreviewactivities.sql
-\ir defaults/roles.sql
+\ir defaults/role.sql
 -- Triggers for user
 --
 CREATE OR REPLACE FUNCTION remove_user_references() RETURNS TRIGGER AS $$ 

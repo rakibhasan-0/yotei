@@ -1,8 +1,6 @@
-package se.umu.cs.pvt.roles;
+package se.umu.cs.pvt.role;
 
 import java.io.Serializable;
-import java.util.concurrent.ExecutionException;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,7 +15,7 @@ import javax.persistence.Table;
  * @author Team Mango (Grupp 4) - 2024-05-07
  */
 @Entity
-@Table(name = "roles")
+@Table(name = "role")
 public class Role implements Serializable{
     
     /**
@@ -31,7 +29,7 @@ public class Role implements Serializable{
     /**
      * The name for the role.
      */
-    @Column(nullable = false, name = "username")
+    @Column(nullable = false, name = "role_name")
     private String role_name;
 
     /**
