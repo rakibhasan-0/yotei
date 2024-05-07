@@ -7,7 +7,7 @@ import Button from "../../components/Common/Button/Button"
 import TechniqueCard from "../../components/Common/Technique/TechniqueCard/TechniqueCard"
 import StatisticsPopUp from "./StatisticsPopUp"
 import FilterStatistics from "./FilterStatistics"
-import DatePicker, {getFormattedDateString} from "../../components/Common/DatePicker/DatePicker"
+import {getFormattedDateString} from "../../components/Common/DatePicker/DatePicker"
 
 /**
  * 
@@ -39,26 +39,26 @@ export default function Statistics() {
 	const [dates, setDates] = useState({
 		from: getFormattedDateString(twoYearsBeforeFromNow),
 		to: getFormattedDateString(today),
-  	});
+	})
 
 	// filtering the group activities based on the selected belts. 
-	const activities =
-    selectedBelts.length > 0
-      ? groupActivities.filter((activity) =>
-          activity.beltColors?.some((belt) =>
-            selectedBelts.some((selectedBelt) =>
-              selectedBelt.child
-                ? belt.is_child == true && selectedBelt.name === belt.belt_name
-                : selectedBelt.name === belt.belt_name && belt.is_child == false
-            )
-          )
-        )
-      : groupActivities
+	const activities =	
+	selectedBelts.length > 0	
+		? groupActivities.filter((activity) =>
+			activity.beltColors?.some((belt) =>	
+				selectedBelts.some((selectedBelt) =>	
+					selectedBelt.child	
+						? belt.is_child == true && selectedBelt.name === belt.belt_name
+						:	selectedBelt.name === belt.belt_name && belt.is_child == false
+				)
+			)
+		)
+		: groupActivities
 
 
 
 	function handleBeltToggle(isSelected, belt) {
-  		setSelectedBelts(prevSelected => {
+		setSelectedBelts(prevSelected => {
 			if (isSelected) {
 				return [...prevSelected, belt]
 			} else {
@@ -116,7 +116,7 @@ export default function Statistics() {
 				console.error("Fetching error:", error) // proper error handling will be added later
 			}
 			finally {
-				setLoading(false);
+				setLoading(false)
 			}
 		}
 	
@@ -135,7 +135,7 @@ export default function Statistics() {
 		}
 
 		else if(variableName === "to") {
-			setDates({ ...dates, [variableName]: value });			
+			setDates({ ...dates, [variableName]: value })			
 		}
 
 	}
@@ -184,5 +184,5 @@ export default function Statistics() {
 				</Button>
 			</div>
 		</div>
-  	)
+	)
 }	
