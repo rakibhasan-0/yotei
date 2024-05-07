@@ -32,9 +32,9 @@ class GradingExportController
     }
 
     @RequestMapping("/{grading_id}")
-    public ResponseEntity<String> exportGradingToPdf(@PathVariable("grading_id") long grading_id) {
+    public ResponseEntity<String> exportGradingToPdf(@PathVariable("grading_id") long grading_id) throws IOException {
 
-        ExportGradingPdf pdfExport = new ExportGradingPdf(examineeRepository.findAll());
+        ExportGradingPdf pdfExport = new ExportGradingPdf(1L, examineeRepository.findAll());
 
         try {
             pdfExport.generate();
