@@ -76,7 +76,10 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 		setError("")
 		setSearchText(searchText)
 
-		const url = "/api/tags/filter?sort-by=use-desc&contains=" + searchText
+		const url = new URL("/api/tags/filter")
+		url.searchParams.append("sort-by", "use-desc")
+		url.searchParams.append("contains", searchText)
+		
 		const requestOptions = {
 			method: "GET",
 			headers: {"Content-type": "application/json",token }
