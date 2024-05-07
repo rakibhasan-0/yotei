@@ -13,13 +13,13 @@ import {
 	WORKOUT_CREATE_TYPES,
 	checkIfActivityInfoPoupChangesMade
 } from "./WorkoutCreateReducer"
-import {  useLocation, useNavigate } from "react-router"
+import {  useNavigate } from "react-router"
 import Popup from "../../Common/Popup/Popup"
 import ActivityInfoPopUp from "./ActivityInfoPopUp"
 import AddActivity from "./AddActivity"
 import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
 import EditActivityPopup from "./EditActivityPopup"
-import { AccountContext } from "../../context.js"
+import { useParams } from "react-router"
 
 /**
  * Component for input-form to be used to create a new workout (WorkoutCreate.js)
@@ -44,11 +44,11 @@ export default function WorkoutFormComponent({ callback, state }) {
 	const [validated, setValidated] = useState(false)
 	const [acceptActivities, setAcceptActivities] = useState(false)
 	const navigate = useNavigate()
-	const location = useLocation()
-	const hasPreviousState = location.key !== "default"
+	//const location = useLocation()
+	//const hasPreviousState = location.key !== "default"
 	const [showPopup, setShowPopup] = useState(false)
-	const { token } = useContext(AccountContext)
-	//const { workoutId } = useParams()
+
+	const { workoutId } = useParams()
 
 	
 	/**
@@ -102,26 +102,6 @@ export default function WorkoutFormComponent({ callback, state }) {
 		setShowPopup(true)
 	}
 
-	/**
-	 * Updates the workout in the database.
-	 * 
-	 * @param {*} body
-	 * @returns The id of the updated workout if successfull, otherwise null.
-	 */
-	async function updateWorkout() {
-		const requestOptions = {
-			method: "PUT",
-			headers: {
-				"Accept": "application/json",
-				"Content-type": "application/json", token
-			}
-		}
-    
-		const response = await fetch("/api/workouts", requestOptions)
-		const jsonResp = await response.json()
-
-		return jsonResp.workoutId
-	}
 
 	function confirmGoBack() {
 
@@ -136,8 +116,8 @@ export default function WorkoutFormComponent({ callback, state }) {
 			return navigate("/workout/" + state.workoutId)
 		}
 		else {
-			const workout_id = updateWorkout()
-			return navigate("/workout/" + workout_id)
+		
+			return navigate("/workout")
 		}
 		
 	}
