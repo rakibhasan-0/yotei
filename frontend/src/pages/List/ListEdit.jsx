@@ -184,7 +184,7 @@ const ListEdit = () => {
 					<title>Redigera pass</title>
 					<h1 className={styles.title}>Redigera pass</h1>
 		
-					<WorkoutFormComponent callback={submitHandler} />	
+					<WorkoutFormComponent callback={submitHandler} edit={true} />	
 				</WorkoutCreateContext.Provider> 
 			}
 		</>

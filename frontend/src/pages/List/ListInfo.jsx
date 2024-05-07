@@ -126,7 +126,7 @@ export default function ListInfo({ id }) {
                     */
 			}
 			<h2 className="font-weight-bold mb-0 mt-5 text-left">Aktiviteter</h2>
-			<SavedActivityList activities={workoutData} />
+			<SavedActivityList activities={workoutData} edit={false} />
 			{workoutUsers !== null && workoutUsers.length > 0 && getWorkoutUsersContainer(workoutUsers)}
 			{getButtons(navigate, setRShowPopup)}
 		</div>

@@ -37,7 +37,7 @@ import SavedActivityList from "../../SavedList/SavedListInfo/SavedListComponent"
  * @since 2023-05-24, 2024-04-18
  * @updated 2023-06-01 Chimera, updated pathing when pressing return to create session
  */
-export default function WorkoutFormComponent({ callback, state }) {
+export default function WorkoutFormComponent({ callback, state,edit}) {
 	const { workoutCreateInfo, workoutCreateInfoDispatch } =
 		useContext(WorkoutCreateContext)
 	const [leaveActivityPickerPopup, setLeaveActivityPickerPopup] = useState(false)
@@ -180,7 +180,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 					</Form.Group>
 
 					<Form.Group className="mb-3">
-						{/*<ActivityListComponent />*/}
+						{/*<ActivityListComponent /> {/* Tror denna kraschar grejor :=) */}
 						<ConfirmPopup
 							id="NoActivitiesConfirm"
 							showPopup={
@@ -194,7 +194,8 @@ export default function WorkoutFormComponent({ callback, state }) {
 							backText="Avbryt"
 							onClick={callback}
 						/>
-													<SavedActivityList activities={workoutCreateInfo.data} />
+						{console.log("Editerz: "+edit)}
+						<SavedActivityList activities={workoutCreateInfo.data} edit={edit} />
 
 						<div className={styles.activityButtons}>
 						{console.log("Tihi")}
@@ -203,7 +204,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 
 								<Button
 									onClick={() =>
-										workoutCreateInfoDispatch({
+								 		workoutCreateInfoDispatch({
 											type: WORKOUT_CREATE_TYPES.OPEN_CHOOSE_ACTIVITY_POPUP
 										})
 									}

@@ -8,10 +8,14 @@
  */
 import WorkoutActivityListItem from "./SavedListItemComponent.jsx"
 import styles from "./SavedListComponent.module.css"
-import {useState, useEffect} from "react"
+import {useState, useEffect,useContext} from "react"
 import Spinner from "../../../components/Common/Spinner/Spinner"
+import { AccountContext } from "../../../context"
 
-export default function WorkoutActivityList({activities}) {
+
+export default function WorkoutActivityList({activities,edit}) {
+	const context = useContext(AccountContext)
+	const {token, userId} = context
 	const [ListData, setListData] = useState(null)
 	const [Loading, setLoading] = useState(true)
 
@@ -39,10 +43,12 @@ export default function WorkoutActivityList({activities}) {
 				<div className="d-flex align-items-center justify-content-center" onClick={() => setIsCollapsed(!isCollapsed)}>
 					<i style={isCollapsed? {fontSize: "16px"} : rotatedIcon} 
 						className={"bi bi-chevron-down"}/>
+
+
 				</div>
 			</legend>
 			{!isCollapsed && ListData.list.map((activity, index) =>
-				<WorkoutActivityListItem key={activity.id} activity={activity} index={index}/>)}
+				<WorkoutActivityListItem key={activity.id} activity={activity} index={index} edit={edit}/>)}
 		</fieldset>
 	)
 }

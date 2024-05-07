@@ -12,8 +12,9 @@
 import React, { useState } from "react"
 import styles from "./SavedListItemComponent.module.css"
 import DescriptionToggle from "../../Common/DescriptionToggle"
+import { Trash } from "react-bootstrap-icons"
 
-const WorkoutActivityListItem = ({ activity, index, id }) => {
+const WorkoutActivityListItem = ({ activity, index, id,edit}) => {
 	const [isActive, setIsActive] = useState(false)
 	let bgColor = "#ffdfe3"
 
@@ -67,6 +68,17 @@ const WorkoutActivityListItem = ({ activity, index, id }) => {
 							<DescriptionToggle isActive={isActive} />
 						</div>
 					)}
+					{console.log("Edit: "+edit)}
+					{edit==true?
+					<div className="pl-3">
+						<i onClick={() => {
+							workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.OPEN_EDIT_ACTIVITY_POPUP}), 
+							workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.SET_CURRENTLY_EDITING, payload: {id: activity.id}})/* Borde detta vara userId? */
+						}}>
+						<Trash size="20px"	color="var(--red-primary)" id={`edit_pencil_${activity.id}`} style={{cursor: "pointer"}} />
+						</i>
+					</div>
+					: <></>}
 				</div>
 			</div>
 			<div>
