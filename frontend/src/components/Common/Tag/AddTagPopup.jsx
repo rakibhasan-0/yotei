@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react"
+import React, { useState, useContext, useEffect, useCallback } from "react"
 import styles from "./AddTagPopup.module.css" 
 import Tag from "./Tag"
 import { Search } from "react-bootstrap-icons"
@@ -60,13 +60,10 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	const [sort, setSort] = useState(sortOptions[0])
 
 	useEffect(() => {
+		
 		searchForTags(searchText, sort.sortBy)
-	}, [sort])	
+	}, [searchText, sort])	
 
-	// Fetches tag suggestions on first render
-	useEffect(() => {
-		searchForTags("", "use-desc")
-	}, [])
 
 	/**
 	 * Send request to API for tag suggestion matching the search text.
@@ -187,7 +184,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 						placeholder="Sök eller skapa tagg"
 						value={searchText}
 						id = "tag-search-bar"
-						onChange={e => {searchForTags(e.target.value)}}
+						onChange={e => {searchForTags(e.target.value, sort.sortBy)}}
 					>
 						
 					</input>
