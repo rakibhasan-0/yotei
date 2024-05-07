@@ -4,6 +4,7 @@ import { AccountContext } from "../../../context"
 
 // Temp
 import ProtocolYellow from "./yellowProtocolTemp.json"
+import TechniqueInfoPanel from "../../../components/Grading/PerformGrading/TechniqueInfoPanel";
 
 /* Achive:
 -- Take out 
@@ -72,11 +73,11 @@ export default function DuringGrading() {
 
 	return (
 		<div>
-			<h1>During Examination</h1>
-            <h2>JSON-file: </h2>
-			<p>{techniqueNameList[currentIndex].categoryName}</p>
-			<p>Current: {techniqueNameList[currentIndex].technique.text}</p>
-			<p>Next: {techniqueNameList[currentIndex].nextTechnique.text}</p>
+			<TechniqueInfoPanel 
+				categoryTitle=""
+				currentTechniqueTitle = {techniqueNameList[currentIndex].technique.text}
+				nextTechniqueTitle = {techniqueNameList[currentIndex].nextTechnique.text}
+				mainCategoryTitle = {techniqueNameList[currentIndex].categoryName}></TechniqueInfoPanel>
 			<button onClick={goToNextTechnique}>Next</button>
 		</div>
 	)
