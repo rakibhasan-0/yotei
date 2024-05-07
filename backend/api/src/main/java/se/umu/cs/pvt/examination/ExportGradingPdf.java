@@ -56,8 +56,10 @@ public class ExportGradingPdf {
 
     public Map<String, Object> parseJson(String json) {
         org.springframework.boot.json.JsonParser parser = JsonParserFactory.getJsonParser();
+        Map<String, Object> protocol = parseJson(grading_protocol);
         return parser.parseMap(json);
     }
+
 
     public void createTable(int onPage) throws IOException {
         PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
@@ -137,8 +139,8 @@ public class ExportGradingPdf {
     }
 
     public void generate() throws IOException {
-       
-
+        parseJson(grading_protocol);
+        
         for(int i = 0; i < numPages; i++) {
             this.createTable(i);
         }
