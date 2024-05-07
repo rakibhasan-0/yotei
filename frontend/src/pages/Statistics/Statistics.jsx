@@ -91,23 +91,26 @@ export default function Statistics() {
 				enddate: dates.to ? dates.to : ""
 			})
 
-
-
+			
+		
 			try {
 				setLoading(true)
 				const responseFromGroupNameAPI= await fetch("/api/plan/all", { headers: { token } })
 				const responseFromGroupDetailsAPI = await fetch(`/api/statistics/${groupID}?${param}`, {headers: { token }})
 
-				// later we will fix if the response is 200 or 204. 200 represents it is successful and 204 represents no content.
+				if(responseFromGroupDetailsAPI.status === 200) {
+					const data = await responseFromGroupDetailsAPI.json()
+					setGroupActivities(data.activities)
+				}
+
 				if (!responseFromGroupDetailsAPI.ok || !responseFromGroupNameAPI.ok) {
 					throw new Error("Failed to fetch group data")
 				}
-
-				const data = await responseFromGroupDetailsAPI.json()
+				
 				const groups = await responseFromGroupNameAPI.json()	
 				const name = groups.find((group) => group.id === parseInt(groupID))
 				setGroupName(name)
-				setGroupActivities(data.activities)
+				
 			}
 			catch (error) {
 				console.error("Fetching error:", error) // proper error handling will be added later
