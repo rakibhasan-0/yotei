@@ -7,6 +7,7 @@ import Button from "../../components/Common/Button/Button"
 import TechniqueCard from "../../components/Common/Technique/TechniqueCard/TechniqueCard"
 import StatisticsPopUp from "./StatisticsPopUp"
 import FilterStatistics from "./FilterStatistics"
+import DatePicker, {getFormattedDateString} from "../../components/Common/DatePicker/DatePicker"
 
 /**
  * 
@@ -23,16 +24,37 @@ export default function Statistics() {
 	const { token } = useContext(AccountContext)
 	const [groupActivities, setGroupActivities] = useState([])
 	const [selectedBelts, setSelectedBelts] = useState([])
+	const [filter, setFilter] = useState({
+		showExercises: false,
+		showKihon: false,
+	})
 
-	//console.log("From Dates:", dateFormatter(twoYearsAfterFromNow))
 
+	// creating a date object for two years before from now and today's date
+	const twoYearsBeforeFromNow = new Date()
+	twoYearsBeforeFromNow.setFullYear(twoYearsBeforeFromNow.getFullYear() - 2)
+	const today = new Date()
 
-	const activities = selectedBelts.length > 0 ? groupActivities.filter((activity) =>
-		activity.beltColors?.some((belt) =>
-			selectedBelts.some(
-				(selectedBelt) => selectedBelt.name === belt.belt_name
-			)))
-		: groupActivities
+	// state for storing the dates
+	const [dates, setDates] = useState({
+		from: getFormattedDateString(twoYearsBeforeFromNow),
+		to: getFormattedDateString(today),
+  	});
+
+	// filtering the group activities based on the selected belts. 
+	const activities =
+    selectedBelts.length > 0
+      ? groupActivities.filter((activity) =>
+          activity.beltColors?.some((belt) =>
+            selectedBelts.some((selectedBelt) =>
+              selectedBelt.child
+                ? belt.is_child == true && selectedBelt.name === belt.belt_name
+                : selectedBelt.name === belt.belt_name && belt.is_child == false
+            )
+          )
+        )
+      : groupActivities
+
 
 
 	function handleBeltToggle(isSelected, belt) {
@@ -45,42 +67,31 @@ export default function Statistics() {
 		})
 	}
 
+
 	function onBeltsClear() {
 		setSelectedBelts([])
 	}
 	
 
-	const [filter, setFilter] = useState({
-		showExercises: false,
-		showKihon: false,
-		startDate: null,
-		endDate: null, // by deafult it will be today's date.
-	})
-
-
-	function dateFormatter(date) {
-		const dateInput = new Date(date);
-		console.log("DateInput:___", dateInput);
-		const year = dateInput.getFullYear();
-		const month = String(dateInput.getMonth() + 1).padStart(2, "0");
-		const day = String(dateInput.getDate()).padStart(2, "0");
-		return `${year}-${month}-${day}`;
+	function checkIfDateIsValid(date) {
+		return /^[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(date) && !isNaN(new Date(date).getTime())
 	}
 
-
 	useEffect(() => {
-		async function fetchGroupActivitiesData() {
-			
+
+		async function fetchGroupActivitiesData() {	
 			//console.log("Filter: startDate", filter.startDate)
 			//console.log("Filter: endDate", filter.endDate)
-			console.log("Selected belts tags: ", selectedBelts)
+			//console.log("Selected belts tags: ", selectedBelts)
+			if(!checkIfDateIsValid(dates.from) || !checkIfDateIsValid(dates.to)) {
+				return
+			}
 			
-
 			const param = new URLSearchParams({
 				kihon: filter.showKihon ? "true" : "false",
 				showexercises: filter.showExercises ? "true" : "false",
-				startdate: filter.startDate? filter.startDate : "",
-				enddate: filter.endDate? filter.endDate : ""
+				startdate: dates.from ? dates.from : "",
+				enddate: dates.to ? dates.to : ""
 			})
 
 			console.log("Param:", param.toString())
@@ -90,21 +101,16 @@ export default function Statistics() {
 				const responseFromGroupNameAPI= await fetch("/api/plan/all", { headers: { token } })
 				const responseFromGroupDetailsAPI = await fetch(`/api/statistics/${groupID}?${param}`, {headers: { token }})
 
+				// later we will fix if the response is 200 or 204. 200 represents it is successful and 204 represents no content.
 				if (!responseFromGroupDetailsAPI.ok || !responseFromGroupNameAPI.ok) {
 					throw new Error("Failed to fetch group data")
 				}
 
 				const data = await responseFromGroupDetailsAPI.json()
-				const groups = await responseFromGroupNameAPI.json()
-				
+				const groups = await responseFromGroupNameAPI.json()	
 				const name = groups.find((group) => group.id === parseInt(groupID))
-
 				setGroupName(name)
-
-				//console.log("Group Name:", name)
 				setGroupActivities(data.activities)
-				console.log("Group activities: ", groupActivities)
-				//console.log("Group Activities:", data)
 			}
 			catch (error) {
 				console.error("Fetching error:", error) // proper error handling will be added later
@@ -116,41 +122,20 @@ export default function Statistics() {
 	
 		fetchGroupActivitiesData()
 
-	}, [groupID, token, filter])
+	}, [groupID, token, filter, dates])
 
 
 	function handleDateChanges(variableName, value) {
 
-		const newDate = value
-		//console.log("New Date Selected:", newDate); 
-		const isValidDate = /^[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(value) && !isNaN(new Date(value).getTime());
-
-		//console.log("VariableName:", variableName)
-		//console.log("Value:", value)
-	
-		const startDate = new Date(filter.startDate)
-		//console.log("Start Date:", startDate)
-
-		const endDate = new Date(filter.endDate)
-		//console.log("End Date:", endDate)
-
-		if(variableName === "from") {
-			console.log("hello from is clicked")
-			
-			if(isValidDate) {
-				setFilter(newDate > endDate ? {startDate: dateFormatter(value), endDate: dateFormatter(value)} :
-												{...filter, startDate: dateFormatter(value)})
-			}
-			// if the value is not correct YYYY-MM-DD format then it will not update the state			
+		const newDate = new Date(value)	
+		const endDate = new Date(dates.to)
+		
+		if(variableName === "from"){
+			setDates(newDate > endDate ? {from: dates.from, to: dates.to} : {...dates, from: value})
 		}
 
-		if(variableName === "to") {
-			console.log("hello to is clicked")
-			if(isValidDate){
-				setFilter(newDate < startDate ? {startDate: dateFormatter(value), endDate: dateFormatter(value)} : 
-												{...filter, endDate: dateFormatter(value)})	
-			}
-
+		else if(variableName === "to") {
+			setDates({ ...dates, [variableName]: value });			
 		}
 
 	}
@@ -167,38 +152,37 @@ export default function Statistics() {
 				<Spinner />
 			) : (
 				<h1 style={{ fontSize: "35px" }}>
-				{groupName ? `${groupName.name}` : "Gruppen hittades inte"}
+					{groupName ? `${groupName.name}` : "Gruppen hittades inte"}
 				</h1>
 			)}
 
 			<div className={style.FilterAndSortContainer}>
 				<FilterStatistics
-				onToggleExercise={(value) => handleChanges("showExercises", value)}
-				onToggleKihon={(value) => handleChanges("showKihon", value)}
-				onDateChanges={handleDateChanges}
-				date={filter}
-				onToggleBelts={handleBeltToggle}
-				onClearBelts={onBeltsClear}
-				belts={selectedBelts}
+					onToggleExercise={(value) => handleChanges("showExercises", value)}
+					onToggleKihon={(value) => handleChanges("showKihon", value)}
+					onDateChanges={handleDateChanges}
+					onToggleBelts={handleBeltToggle}
+					onClearBelts={onBeltsClear}
+					belts={selectedBelts}
+					dates={dates}
 				/>
 
-				<StatisticsPopUp />
+				<StatisticsPopUp groupActivities ={groupActivities} filteredActivities = {activities} dates ={dates} />
 			</div>
 
-				<div className="activitiesContainer">
-					{
-						activities.map((activity, index) => (
-							<TechniqueCard key={index} technique={activity} checkBox={false} id={activity.activity_id} />
-						))
-					}
-
-				</div>
+			<div className="activitiesContainer">
+				{	activities.length === 0 ? <h5 style={{ fontSize: "25px" }}>Inga aktiviteter hittades</h5> :
+					activities.map((activity, index) => (
+						<TechniqueCard key={index} technique={activity} checkBox={false} id={activity.activity_id} />
+					))
+				}
+			</div>
 
 			<div className={style.buttonContainer}>
 				<Button width="25%" outlined={true} onClick={() => navigate(-1)}>
-				<p>Tillbaka</p>
+					<p>Tillbaka</p>
 				</Button>
 			</div>
 		</div>
   	)
-}
+}	

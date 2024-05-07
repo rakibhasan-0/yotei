@@ -1,7 +1,7 @@
 import React, { useContext } from "react"
 import FilterContainer from "../../components/Common/Filter/FilterContainer/FilterContainer"
 import CheckBox from "../../components/Common/CheckBox/CheckBox"
-import DatePicker from "../../components/Common/DatePicker/DatePicker"
+import DatePicker, {getFormattedDateString} from "../../components/Common/DatePicker/DatePicker"
 import BeltPicker from "../../components/Common/BeltPicker/BeltPicker"
 import style from "./FilterStatistics.module.css"
 
@@ -11,8 +11,9 @@ import style from "./FilterStatistics.module.css"
  * The work is on progress for the statistics page.
  */
 
-export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDateChanges, onToggleBelts, onClearBelts, belts}) {
-  return (
+export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDateChanges, onToggleBelts, onClearBelts, belts, dates}) {
+
+	return (
     <div>
       <FilterContainer id="filter-container" title="Filtering" numFilters={0}>
         <div className={style.dateContainer}>
@@ -20,8 +21,9 @@ export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDa
           <div></div>
           <DatePicker
             id="start-date-picker"
-            //selectedDate={date.startDate}
-			//minDate={}
+            selectedDate={dates.from} // two years before from today
+            minDate={"1999-01-01"}
+            maxDate={"2050-01-01"}
             onChange={(e) => {
               onDateChanges("from", e.target.value);
             }}
@@ -33,10 +35,12 @@ export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDa
           <div></div>
           <DatePicker
             id="end-date-picker"
-            //selectedDate={getFormattedDateString(new Date())}
+            selectedDate={dates.to} // today's date
             onChange={(e) => {
               onDateChanges("to", e.target.value);
             }}
+            minDate={"1999-01-01"}
+            maxDate={dates.from}
           />
         </div>
 
@@ -75,5 +79,5 @@ export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDa
         </div>
       </FilterContainer>
     </div>
-  );
+  )
 }
