@@ -207,8 +207,13 @@ public class ExaminationController {
      * @return HTTP-status code.
      */
     @PostMapping("/comment")
+<<<<<<< HEAD
     public ResponseEntity<ExaminationComment> createExaminationComment(@RequestBody ExaminationComment examination_Comment){
         ExaminationComment new_examination_comment = examinationCommentRepository.save(examination_Comment);
+=======
+    public ResponseEntity<ExaminationComment> createExaminationComment(@RequestBody ExaminationComment examination_comment){
+        ExaminationComment new_examination_comment = examinationCommentRepository.save(examination_comment);
+>>>>>>> b20f27cbc3d0130bb944e3ddc883c80fee9f7363
         return new ResponseEntity<>(new_examination_comment,HttpStatus.OK);
     }
 
@@ -218,12 +223,12 @@ public class ExaminationController {
      * @return HTTP-status code.
      */
     @PutMapping("/comment")
-    public ResponseEntity<Object> updateExaminationComment(@RequestBody ExaminationComment examination_Comment){
+    public ResponseEntity<Object> updateExaminationComment(@RequestBody ExaminationComment examination_comment){
 
-        if(examinationCommentRepository.findById(examination_Comment.get_comment_id()).isEmpty()){
+        if(examinationCommentRepository.findById(examination_comment.get_comment_id()).isEmpty()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        examinationCommentRepository.save(examination_Comment);
+        examinationCommentRepository.save(examination_comment);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     
