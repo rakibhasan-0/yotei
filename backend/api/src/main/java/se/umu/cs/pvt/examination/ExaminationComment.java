@@ -11,7 +11,7 @@ import javax.persistence.Table;
  * ExaminationComment - Entity class for the examination_comment table
  * @author Team Orange (oi22nlg)
  */
-@Entity
+@Entity()
 @Table(name = "examination_comment")
 public class ExaminationComment {
     @Id
@@ -19,17 +19,17 @@ public class ExaminationComment {
     @Column(nullable = false, name = "comment_id")
     private Long comment_id;
 
-    @Column(nullable = true, name = "grading_id")
+    @Column(name = "grading_id")
     private Long grading_id;
 
-    @Column(nullable = true, name = "examinee_id")
+    @Column(name = "examinee_id")
     private Long examinee_id;
 
-    @Column(nullable = true, name = "examinee_pair_id")
+    @Column(name = "examinee_pair_id")
     private Long examinee_pair_id;
 
     @Column(nullable = false, name = "technique_id")
-    private Long technique_id;
+    private String technique_id;
 
     @Column(nullable = false, name = "comment")
     private String comment;
@@ -44,7 +44,7 @@ public class ExaminationComment {
      * @param technique_id The id of the technique the comment is written on.
      * @param comment The comment text.
      */
-    public ExaminationComment(Long comment_id, Long grading_id, Long examinee_id, Long examinee_pair_id, Long technique_id, String comment) {
+    public ExaminationComment(Long comment_id, Long grading_id, Long examinee_id, Long examinee_pair_id, String technique_id, String comment) {
         this.comment_id = comment_id;
         this.grading_id = grading_id;
         this.examinee_id = examinee_id;
@@ -75,7 +75,7 @@ public class ExaminationComment {
         return examinee_pair_id;
     }
 
-    public Long get_technique_id() {
+    public String get_technique_id() {
         return technique_id;
     }
 
