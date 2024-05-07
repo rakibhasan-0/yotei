@@ -569,19 +569,28 @@ CREATE TABLE IF NOT EXISTS examination_examinee_pair (
 );
 
 CREATE TABLE IF NOT EXISTS examination_result(
-	examination_result_technique_id SERIAL PRIMARY KEY,
 	examinee_id INT NOT NULL,
-	technique_id_JSON VARCHAR(255) NOT NULL, -- KAN DETTA VARA ETT PROBLEM ? STRÄNGMATCHA FÖR ATT HITTA RÄTT TEKNIK I DUNNO.
-	pass INT NOT NULL
+	technique_name VARCHAR(255) NOT NULL, -- Should be string with technique_name in grading protocol
+	pass BOOLEAN,
+	CONSTRAINT examinee_id_fk FOREIGN KEY(examinee_id) REFERENCES examination_examinee(examinee_id) ON DELETE CASCADE,
+	CONSTRAINT examination_result_pk PRIMARY KEY (examinee_id, technique_name)
 );
 
-CREATE TABLE IF NOT EXISTS examination_comment(
+
+CREATE TABLE IF NOT EXISTS examination_comment( 
 	comment_id SERIAL PRIMARY KEY,
-	grading_id INT NOT NULL,
-	examinee_id INT NOT NULL,
-	examinee_pair_id INT NOT NULL,
-	technique_id VARCHAR(255) NOT NULL,
-	comment VARCHAR(255) NOT NULL --Kanske öka?
+	grading_id INT, 
+	examinee_id INT, 
+	examinee_pair_id INT, 
+	technique_name VARCHAR(255) NOT NULL, 
+	comment VARCHAR NOT NULL 
+);
+
+CREATE TABLE IF NOT EXISTS grading_protocol(
+	grading_protocol_id SERIAL PRIMARY KEY,
+	belt_id INT NOT NULL,
+	grading_protocol JSON NOT NULL,
+	CONSTRAINT fk_belt_id FOREIGN KEY (belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE
 );
 
 
@@ -602,7 +611,8 @@ CREATE TABLE IF NOT EXISTS examination_comment(
 \ir defaults/reviews.sql
 \ir defaults/activities.sql
 \ir defaults/sessions.sql 
---
+\ir defaults/sessionreviews.sql
+\ir defaults/sessionreviewactivities.sql
 -- Triggers for user
 --
 CREATE OR REPLACE FUNCTION remove_user_references() RETURNS TRIGGER AS $$ 
