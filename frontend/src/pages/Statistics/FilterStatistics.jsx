@@ -11,7 +11,7 @@ import style from "./FilterStatistics.module.css"
  * The work is on progress for the statistics page.
  */
 
-export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDateChanges, onToggleBelts, onClearBelts, belts, dates}) {
+export default function FilterStatistics({ id, onToggleExercise, onToggleKihon, onDateChanges, onToggleBelts, onClearBelts, belts, dates}) {
 
 	return (
 		<div>

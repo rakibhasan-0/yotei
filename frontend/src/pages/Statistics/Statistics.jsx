@@ -91,12 +91,13 @@ export default function Statistics() {
 				enddate: dates.to ? dates.to : ""
 			})
 
-			//console.log("Param:", param.toString())
+
 
 			try {
 				setLoading(true)
 				const responseFromGroupNameAPI= await fetch("/api/plan/all", { headers: { token } })
 				const responseFromGroupDetailsAPI = await fetch(`/api/statistics/${groupID}?${param}`, {headers: { token }})
+				console.log(groupActivities)
 
 				// later we will fix if the response is 200 or 204. 200 represents it is successful and 204 represents no content.
 				if (!responseFromGroupDetailsAPI.ok || !responseFromGroupNameAPI.ok) {
@@ -148,13 +149,14 @@ export default function Statistics() {
 			{loading ? (
 				<Spinner />
 			) : (
-				<h1 style={{ fontSize: "35px" }}>
+				<h1 style={{ fontSize: "35px" }} id = "statistics-header" >
 					{groupName ? `${groupName.name}` : "Gruppen hittades inte"}
 				</h1>
 			)}
 
 			<div className={style.FilterAndSortContainer}>
 				<FilterStatistics
+					id="statistics-filter-container"
 					onToggleExercise={(value) => handleChanges("showExercises", value)}
 					onToggleKihon={(value) => handleChanges("showKihon", value)}
 					onDateChanges={handleDateChanges}
@@ -167,7 +169,7 @@ export default function Statistics() {
 				<StatisticsPopUp groupActivities ={groupActivities} filteredActivities = {activities} dates ={dates} />
 			</div>
 
-			<div className="activitiesContainer">
+			<div className="activitiesContainer" id="technique-exercise-list">
 				{	activities.length === 0 ? <h5 style={{ fontSize: "25px" }}>Inga aktiviteter hittades</h5> :
 					activities.map((activity, index) => (
 						<TechniqueCard key={index} technique={activity} checkBox={false} id={activity.activity_id} />
@@ -176,7 +178,7 @@ export default function Statistics() {
 			</div>
 
 			<div className={style.buttonContainer}>
-				<Button width="25%" outlined={true} onClick={() => navigate(-1)}>
+				<Button width="25%" outlined={true} onClick={() => navigate(-1) } id ="statistics-back-button">
 					<p>Tillbaka</p>
 				</Button>
 			</div>
