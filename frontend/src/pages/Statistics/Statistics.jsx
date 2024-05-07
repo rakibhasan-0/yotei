@@ -107,8 +107,7 @@ export default function Statistics() {
 				if (!responseFromGroupDetailsAPI.ok || !responseFromGroupNameAPI.ok) {
 					throw new Error("Failed to fetch group data")
 				}
-
-				const data = await responseFromGroupDetailsAPI.json()
+				
 				const groups = await responseFromGroupNameAPI.json()	
 				const name = groups.find((group) => group.id === parseInt(groupID))
 				setGroupName(name)
