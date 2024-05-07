@@ -207,13 +207,8 @@ public class ExaminationController {
      * @return HTTP-status code.
      */
     @PostMapping("/comment")
-<<<<<<< HEAD
-    public ResponseEntity<ExaminationComment> createExaminationComment(@RequestBody ExaminationComment examination_Comment){
-        ExaminationComment new_examination_comment = examinationCommentRepository.save(examination_Comment);
-=======
     public ResponseEntity<ExaminationComment> createExaminationComment(@RequestBody ExaminationComment examination_comment){
         ExaminationComment new_examination_comment = examinationCommentRepository.save(examination_comment);
->>>>>>> b20f27cbc3d0130bb944e3ddc883c80fee9f7363
         return new ResponseEntity<>(new_examination_comment,HttpStatus.OK);
     }
 
