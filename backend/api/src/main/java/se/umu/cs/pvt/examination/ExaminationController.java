@@ -14,7 +14,8 @@ import java.util.Optional;
 /**
  * Class for handling requests to the examination api.
  * 
- * @author Pomegranate (c21man && ens20lpn)
+ * @author Team Pomegranate (c21man && ens20lpn)
+ * @author Team Orange (dv22rfg)
  */
 @RestController
 @RequestMapping(path = "/api/examination")
@@ -39,6 +40,7 @@ public class ExaminationController {
      * @param beltRepository Repository for the belt entity.
      * @param examineePairRepository Repository for the examinee pair entity.
      * @param examineeRepository Repository for the examinee entity.
+     * @param examinationCommentRepository Repository for the examination comment entity.
      */
     @Autowired
     public ExaminationController(GradingRepository gradingRepository, BeltRepository beltRepository, ExamineePairRepository examineePairRepository, 
@@ -200,19 +202,19 @@ public class ExaminationController {
 
     /**
      * Creates an examination comment.
-     * @param comment_string The string of the comment.
+     * @param examination_comment Object mapped examination comment from request body.
      * @return The created examination comment
      * @return HTTP-status code.
      */
     @PostMapping("/comment")
     public ResponseEntity<ExaminationComment> createExaminationComment(@RequestBody ExaminationComment examination_Comment){
-        ExaminationComment new_examination_Comment = examinationCommentRepository.save(examination_Comment);
-        return new ResponseEntity<>(new_examination_Comment,HttpStatus.OK);
+        ExaminationComment new_examination_comment = examinationCommentRepository.save(examination_Comment);
+        return new ResponseEntity<>(new_examination_comment,HttpStatus.OK);
     }
 
     /**
      * Updates an examination comment.
-     * @param examination_Coment Object mapped examination comment from request body.
+     * @param examination_comment Object mapped examination comment from request body.
      * @return HTTP-status code.
      */
     @PutMapping("/comment")
