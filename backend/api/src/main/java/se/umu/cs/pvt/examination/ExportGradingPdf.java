@@ -9,6 +9,7 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import java.awt.*;
 import java.io.File;
@@ -38,6 +39,11 @@ public class ExportGradingPdf {
         document = new PDDocument();
     }
 
+    public void drawImage(String path, int x, int y, PDPageContentStream contentStream) throws IOException {
+        PDImageXObject pdImage = PDImageXObject.createFromFile(path, document);
+        contentStream.drawImage(pdImage, x, y, 100, 50);
+    }
+
     public void createTable(int onPage) throws IOException {
         PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
         document.addPage(page);
@@ -63,6 +69,8 @@ public class ExportGradingPdf {
         contentStream.newLineAtOffset(0, -15);
         contentStream.showText("Kihon waza, jigo waza, renraku waza, randori");
         contentStream.endText();
+
+        drawImage(System.getProperty("user.dir") + "/frontend/public/ubk-logga.jpg", (int)page.getMediaBox().getWidth() - 150, pageHeight-60, contentStream);
 
         contentStream.addRect(initX,initY,CELL_WIDTH+30, -CELL_HEIGHT);
         contentStream.beginText();
