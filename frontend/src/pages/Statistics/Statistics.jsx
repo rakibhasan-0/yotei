@@ -24,6 +24,8 @@ export default function Statistics() {
 	const { token } = useContext(AccountContext)
 	const [groupActivities, setGroupActivities] = useState([])
 	const [selectedBelts, setSelectedBelts] = useState([])
+	const [numberofSessions, setNumberOfSessions] = useState()
+	const [averageRating, setAverageRating] = useState()
 	const [filter, setFilter] = useState({
 		showExercises: false,
 		showKihon: false,
@@ -100,6 +102,8 @@ export default function Statistics() {
 
 				if(responseFromGroupDetailsAPI.status === 200) {
 					const data = await responseFromGroupDetailsAPI.json()
+					setNumberOfSessions(data.numberOfSessions)
+					setAverageRating(data.averageRating)
 					setGroupActivities(data.activities)
 				}
 
@@ -168,7 +172,8 @@ export default function Statistics() {
 					dates={dates}
 				/>
 
-				<StatisticsPopUp groupActivities ={groupActivities} filteredActivities = {activities} dates ={dates} />
+				<StatisticsPopUp filteredActivities = {activities} dates ={dates} averageRating = {averageRating} 
+				numberOfSessions = {numberofSessions} />
 			</div>
 
 			<div className="activitiesContainer" id="technique-exercise-list">

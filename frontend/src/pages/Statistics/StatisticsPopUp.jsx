@@ -11,13 +11,14 @@ import BeltColorChart from "../../components/Common/BeltColorChart/BeltColorChar
  * The work is on progress for the statistics page.
  * 
  */
-export default function StatisticsPopUp({groupActivities,filteredActivities,dates  }) {
-	const numberOfSessions = 5 //mock data
-	const averageRating = 2.1 //mock data
-	const startDate = "2021-01-01" //mock data
-	const endDate = "2021-01-02" //mock data
+export default function StatisticsPopUp({data,filteredActivities,dates,averageRating,numberOfSessions}) {
+	const statNumberOfSessions = numberOfSessions 
+	const statAverageRating = averageRating
+	const startDate = dates.from
+	const endDate = dates.to
 	
-	console.log(groupActivities)
+	console.log(data)
+	console.log("Filter --------------------")
 	console.log(filteredActivities)
 	
 
