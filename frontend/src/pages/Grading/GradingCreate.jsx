@@ -4,6 +4,8 @@ import BeltButton from "../../components/Common/Button/BeltButton"
 import style from "./GradingCreate.module.css"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import { AccountContext } from "../../context"
+import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../utils"
+import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../utils"
 
 /**
  * The grading create page.
@@ -26,13 +28,12 @@ export default function GradingCreate() {
 
 	const handleNavigation = async (beltId) => {
 		try {
-			console.log("id:", beltId)
 
 			const gradingData = {
-				creator_id: parseInt(userId),
-				belt_id: parseInt(beltId),
-				step: parseInt(1),
-				technique_step_num: parseInt(0),
+				creator_id: userId,
+				belt_id: beltId,
+				step: 1,
+				technique_step_num: 0,
 				created_at: formattedDateTime
 			}
 
@@ -45,17 +46,21 @@ export default function GradingCreate() {
 			})
 
 			if (!response.ok) {
-				throw new Error("Kunde inte genomföra gradering")
+				setErrorToast("Det har uppstått ett oväntat problem")
+				throw new Error("Serverfel")
+
 			}
 
 			const responseData = await response.json()
 			const gradingId = responseData.grading_id
-			console.log(gradingId)
+
+			if(response.ok) {
+				navigate("/grading/:${gradingId}/1")
+			}		
 		} catch (error) {
 			console.error("Misslyckades skapa gradering:", error)
 		}
-
-		navigate("/grading/:${gradingId}/1")
+		
 	}
 
 

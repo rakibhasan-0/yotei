@@ -23,8 +23,9 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
  * @version 1.0
  * @since 2024-05-02
  */
-export default function GradingCreate() {
+export default function GradingCreate( {id} ) {
 
+  console.log(id)
 	const context = useContext(AccountContext)
 	const { token, userId } = context
 
@@ -112,7 +113,7 @@ export default function GradingCreate() {
                   onClick={() => setConfirmationOpen(true)}
                 />
               </div>
-            );}
+            )}
         })}
       </div>
 
