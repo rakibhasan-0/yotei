@@ -12,7 +12,7 @@ import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../ut
 /**
  * A component for creating a session.
  * 
- * @author Chimera (dv21aag, c20lln), Team Durian (Group 3) (2024-04-23)
+ * @author Chimera (dv21aag, c20lln), Team Durian (Group 3) (2024-04-23), Team Kiwi (2024-05-07)
  * @since 2023-05-03
  */
 export default function SessionCreate({setIsBlocking}) {

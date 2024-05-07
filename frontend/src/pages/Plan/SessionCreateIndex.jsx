@@ -28,7 +28,10 @@ export default function SessionCreateIndex(){
 	useEffect(()=>{
 		sessionStorage.setItem("active_tab", key)
 	}, [key]) 
-	
+
+	/**
+     * Blocker is defined here and used as a paremeter to the SessionCreate and SessionsCreate tabs.
+     */
 	const blocker = useBlocker(() => {
 		if (isBlocking) {
 			setGoBackPopup(true)
@@ -36,12 +39,6 @@ export default function SessionCreateIndex(){
 		}
 		return false
 	})
-
-	useEffect(()=>{
-
-	}, [])
-
-
 
 	return (
 		<Modal.Body style={{padding: "0"}}>

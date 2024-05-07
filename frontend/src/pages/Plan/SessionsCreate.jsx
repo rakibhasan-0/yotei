@@ -17,7 +17,8 @@ import Button from "../../components/Common/Button/Button.jsx"
  * 
  * 
  * Contains a form for collecting the group selected, start & end dates.
- * As well as checkboxses indicating which day of the week to include
+ * As well as checkboxses indicating which day of the week to include, reused components from both SessionCreate and PlanCreate to
+ * implement this page.
  * 
  * @author Team Kiwi
  * @since 2024-05-03
@@ -64,7 +65,8 @@ export default function SessionsCreate({setIsBlocking}){
 
 
 	/**
-     * Local model of a plan.
+     * Local model containing start and end dates as well as a boolean to see if a
+	 * weekday has been seleceted.
      */
 	const [planData, setPlanData] = useState({
 		startDate: "",
