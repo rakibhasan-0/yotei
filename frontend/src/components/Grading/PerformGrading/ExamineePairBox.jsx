@@ -13,9 +13,10 @@ import CommentButton from "./CommentButton"
  *    rowColor          @type {String} 	 the color of the row.
  * 
  * Example Usage:
- * <ExamineeBox 
- *  examineeName = "test person"/>
- *  onClickComment = console.log("button clicked")
+ * Example Usage:
+ * <ExamineePairBox rowColor={"#F8EBEC"}
+ *  examineeLeftName={"garga mel"} 
+ *  examineeRightName={"mel garga"} pairNumber={3}/>
  * 
  * @author Apelsin
  * @since 2024-05-07
