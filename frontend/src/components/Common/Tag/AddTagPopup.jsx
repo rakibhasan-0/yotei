@@ -74,12 +74,9 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	const searchForTags = async (searchText, sortBy) => {
 		setError("")
 		setSearchText(searchText)
-
-		const url = "/api/tags/filter?sort-by=" + sortBy + "&contains=" + searchText
-		//const url = new URL("/api/tags/filter")
-		/*url.searchParams.append("sort-by", sortBy)
+		const url = new URL("/api/tags/filter", window.location.origin)
+		url.searchParams.append("sort-by", sortBy)
 		url.searchParams.append("contains", searchText)
-		console.log(url.toString())*/
 		
 		const requestOptions = {
 			method: "GET",
@@ -152,7 +149,6 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 				onChecked={checked => checked ? handleAddTag(tag) : handleRemoveTag(tag)}
 				added={newAddedTags.some(a => a.id == tag.id)}	
 				onTrashClicked={handleDelete}
-				onPencilClicked={true}
 			/>
 		)
 		setTagListArray(tempTagListArray)
