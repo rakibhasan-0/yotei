@@ -63,6 +63,8 @@ public class StatisticsController {
             exercises = new ArrayList<>();
         }
 
+        
+
         // Combine techniques and exericises
         List<StatisticsActivity> union = Stream.concat( exercises.stream(), techniques.stream())
             .collect( Collectors.toList());
@@ -106,6 +108,8 @@ public class StatisticsController {
             }
             if (!uniqueActivities.contains(sr)) {
                 uniqueActivities.add(sr);
+            } else {
+                uniqueActivities.get(uniqueActivities.indexOf(sr)).addToCount(sa.getCount());
             }
         }
 

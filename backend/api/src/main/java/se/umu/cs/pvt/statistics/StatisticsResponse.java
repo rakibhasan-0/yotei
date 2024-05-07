@@ -103,6 +103,13 @@ public class StatisticsResponse implements Serializable {
       return count;
   }
 
+  /**
+   * Public getter for private property count
+   */
+  public void addToCount(Long count) {
+    this.count += count;
+}
+
   // Consider two StatisticsACtivity equal if the share the same activity_id 
   // to remove duplicates from output.
   @Override
