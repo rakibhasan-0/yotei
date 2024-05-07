@@ -72,14 +72,24 @@ public class StatisticsController {
             union.removeIf(item -> item.getDate().isAfter(enddate.get()));
         }
 
+        // Guard against empty result
+        if (union.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } 
+
         // Store unique activities
         List<StatisticsResponse> uniqueActivities = new ArrayList<>();
 
-        // Get belts for techniques and count distinct sessions
-        // TODO: calculate average rating
+        // Initialize variable for storing average rating
         double averageRating = 0;
+
+        // Hashset to store unique session IDs to prevent double counting.
         Set<Long> uniqueSessionIds = new HashSet<>();
+
+        // Hashmap to store ratings for each session to prevent double counting.
         HashMap<Long,Integer> ratings = new HashMap<>();
+
+        // Iterate through the StatisticsActivities to retrieve the relevant information.
         for (StatisticsActivity sa : union) {
             StatisticsResponse sr = new StatisticsResponse(sa.getActivity_id(), sa.getName(), sa.getType(), sa.getCount());
             
@@ -93,10 +103,10 @@ public class StatisticsController {
             }
         }
 
+        // Calculate average rating
         for (Long sid : uniqueSessionIds) {
             averageRating += ratings.get(sid);
         }
-
         averageRating /= uniqueSessionIds.size();
 
         // Sort remaining response entities
@@ -105,11 +115,8 @@ public class StatisticsController {
             .sorted(Comparator.comparingLong(StatisticsResponse::getCount).reversed())
             .collect( Collectors.toList());
 
-        if (uniqueActivities.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            StatisticsResponseWrapper response = new StatisticsResponseWrapper(uniqueSessionIds.size(), averageRating, uniqueActivities);  
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }
+        
+        StatisticsResponseWrapper response = new StatisticsResponseWrapper(uniqueSessionIds.size(), averageRating, uniqueActivities);  
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

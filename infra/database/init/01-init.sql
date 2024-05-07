@@ -602,7 +602,8 @@ CREATE TABLE IF NOT EXISTS examination_comment(
 \ir defaults/reviews.sql
 \ir defaults/activities.sql
 \ir defaults/sessions.sql 
---
+\ir defaults/sessionreviews.sql
+\ir defaults/sessionreviewactivities.sql
 -- Triggers for user
 --
 CREATE OR REPLACE FUNCTION remove_user_references() RETURNS TRIGGER AS $$ 
