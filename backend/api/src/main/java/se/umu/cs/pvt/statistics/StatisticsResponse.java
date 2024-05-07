@@ -1,8 +1,6 @@
 package se.umu.cs.pvt.statistics;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-
 import se.umu.cs.pvt.belt.Belt;
 import java.util.List;
 import java.util.ArrayList;

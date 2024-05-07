@@ -40,18 +40,18 @@ public class StatisticsController {
     @Operation(summary = "Returns the techniques and exercises done for a group sorted from highest to lowest occurence.", 
                description = "Must include a group id as path variable. All other request parameters are optional they default to false. If not valid date interval is set, all session reviews are included in the statistics.")
     @GetMapping("/{id}")
-    public ResponseEntity<StatisticsResponseWrapper> getTechniquesStats(@PathVariable Long id, 
+    public ResponseEntity<StatisticsResponseWrapper> getSessionReviewStatistics(@PathVariable Long id, 
                                                                         @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<LocalDate> startdate , 
                                                                         @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<LocalDate> enddate, 
                                                                         @RequestParam Optional<Boolean> kihon, 
                                                                         @RequestParam Optional<Boolean> showexercises){
     
-        List<StatisticsActivity> techniques = statisticsRepository.getAllSampleTechniquesQuery(id);
+        List<StatisticsActivity> techniques = statisticsRepository.getAllSessionReviewTechniques(id);
         List<StatisticsActivity> exercises;
         
         // Check if showexercises parameter is set and show exercises if it is.
         if (showexercises.isPresent() && showexercises.get()) {
-            exercises = statisticsRepository.getAllSampleExercisesQuery(id);
+            exercises = statisticsRepository.getAllSessionReviewExercises(id);
         } else {
             // Set to empty ArrayList if not to allow stream.
             exercises = new ArrayList<>();

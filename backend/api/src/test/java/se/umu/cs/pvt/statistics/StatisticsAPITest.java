@@ -38,7 +38,7 @@ public class StatisticsAPITest {
     void shouldReturn204WhenemptyResults() throws Exception {
         Long groupId = 1L;
 
-        Mockito.when(statisticsRepository.getAllSampleTechniquesQuery(groupId)).thenReturn(new ArrayList<>());
+        Mockito.when(statisticsRepository.getAllSessionReviewTechniques(groupId)).thenReturn(new ArrayList<>());
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/statistics/{id}", groupId) 
@@ -63,8 +63,8 @@ public class StatisticsAPITest {
         Long groupId = 1L;
         Boolean showExercises = true; 
 
-        Mockito.when(statisticsRepository.getAllSampleTechniquesQuery(groupId)).thenReturn(techniqueList);  
-        Mockito.when(statisticsRepository.getAllSampleExercisesQuery(groupId)).thenReturn(exerciseList);  
+        Mockito.when(statisticsRepository.getAllSessionReviewTechniques(groupId)).thenReturn(techniqueList);  
+        Mockito.when(statisticsRepository.getAllSessionReviewExercises(groupId)).thenReturn(exerciseList);  
 
 
         mockMvc.perform(
@@ -127,8 +127,8 @@ public class StatisticsAPITest {
         String endDate = "2023-12-31"; 
         Boolean showExercises = true; 
 
-        Mockito.when(statisticsRepository.getAllSampleTechniquesQuery(groupId)).thenReturn(techniqueList);  
-        Mockito.when(statisticsRepository.getAllSampleExercisesQuery(groupId)).thenReturn(exerciseList);  
+        Mockito.when(statisticsRepository.getAllSessionReviewTechniques(groupId)).thenReturn(techniqueList);  
+        Mockito.when(statisticsRepository.getAllSessionReviewExercises(groupId)).thenReturn(exerciseList);  
 
 
         mockMvc.perform(
@@ -159,8 +159,8 @@ public class StatisticsAPITest {
         Boolean kihon = true;
         Boolean showExercises = true; 
 
-        Mockito.when(statisticsRepository.getAllSampleTechniquesQuery(groupId)).thenReturn(techniqueList);  
-        Mockito.when(statisticsRepository.getAllSampleExercisesQuery(groupId)).thenReturn(exerciseList);  
+        Mockito.when(statisticsRepository.getAllSessionReviewTechniques(groupId)).thenReturn(techniqueList);  
+        Mockito.when(statisticsRepository.getAllSessionReviewExercises(groupId)).thenReturn(exerciseList);  
 
 
         mockMvc.perform(
@@ -202,8 +202,8 @@ public class StatisticsAPITest {
         Boolean kihon = false; // Example optional parameter
         Boolean showExercises = true; 
 
-        Mockito.when(statisticsRepository.getAllSampleTechniquesQuery(groupId)).thenReturn(techniqueList);  
-        Mockito.when(statisticsRepository.getAllSampleExercisesQuery(groupId)).thenReturn(exerciseList);  
+        Mockito.when(statisticsRepository.getAllSessionReviewTechniques(groupId)).thenReturn(techniqueList);  
+        Mockito.when(statisticsRepository.getAllSessionReviewExercises(groupId)).thenReturn(exerciseList);  
 
 
         mockMvc.perform(

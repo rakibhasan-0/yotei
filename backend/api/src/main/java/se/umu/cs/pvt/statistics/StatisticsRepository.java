@@ -61,7 +61,7 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
       s.date,
       sr.rating
       """)
-  List<StatisticsActivity> getAllSampleTechniquesQuery(Long id);
+  List<StatisticsActivity> getAllSessionReviewTechniques(Long id);
 
 
   @Query("""
@@ -108,7 +108,7 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
       s.date,
       sr.rating
       """)
-  List<StatisticsActivity> getAllSampleExercisesQuery(Long id);
+  List<StatisticsActivity> getAllSessionReviewExercises(Long id);
 
   // Get a list of belts associated with a technique.
   @Query("""
