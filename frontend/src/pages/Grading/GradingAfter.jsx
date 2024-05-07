@@ -9,86 +9,68 @@ import { Printer } from "react-bootstrap-icons"
 export default function GradingAfter() {
 	const context = useContext(AccountContext)
 	const { token, userId } = context
+    const [grading, setGrading] = useState([])
+    const [beltInfo, setBeltInfo] = useState({
+        belt_name: "",
+        color: "" // Assuming color is directly usabl
+    })
+    const grading_id = 7
 
+    useEffect(() => {
+        (async () => {
+            try {
+                // First fetch request to get grading information
+                const response = await fetch(`/api/examination/grading/${grading_id}`, {
+                    method: "GET",
+                    headers: { token }
+                })
     
-	
-	const [examinees, setExaminees] = useState([
-		{
-			id: 1,
-			person: {
-				name: "Bob Dylan",
-				url: "https://example.com/bob_dylan_profile",
-				points: 52 
-			}
-		},
-		{
-			id: 2,
-			person: {
-				name: "Abdulla Rashim",
-				url: "https://example.com/regina_spector_profile",
-				points: 10
+                if (!response.ok) {
+                    throw new Error("Network response was not ok")
+                }
+    
+                const data = await response.json()
+                setGrading(data)
+                console.log(data)
+                const response2 = await fetch("/api/belts/all", {
+                    headers: { token },
+                    method: "GET"
+                })
+                if (!response2.ok) {
+                    throw new Error("Network response was not ok on second request")
+                }
+                const data2 = await response2.json()
                 
-			}
-		},
-		{
-			id: 3,
-			person: {
-				name: "Nils Karlsson",
-				url: "https://example.com/nils_karlsson_profile",
-				points: 50
-			}
-		},
-        {
-            id: 4,
-            person: {
-                name: "Kalle Anka",
-                url: "https://example.com/kalle_anka_profile",
-                points: 52
+                const matchingBelt = data2.find(belt => belt.id === grading.belt_id)
+                if (matchingBelt) {
+                    setBeltInfo({
+                        belt_name: matchingBelt.name,
+                        color: "#" + matchingBelt.color
+                    })
+                }
+            } catch (error) {
+                console.error("Error:", error)
             }
-        },
-        {
-            id: 5,
-            person: {
-                name: "Batman",
-                url: "https://example.com/kalle_anka_profile",
-                points: 52
-            }
-        },
-        {
-            id: 6,
-            person: {
-                name: "Superman",
-                url: "https://example.com/kalle_anka_profile",
-                points: 30
-            }
-        },
-        {
-            id: 7,
-            person: {
-                name : "Hulk",
-                url: "https://example.com/kalle_anka_profile",
-                points: "52"
-            }   
-        },
-
-    ])
+            console.log(grading.examinees)
+        })()
+    }, [])
 
     return (
         <div className={styles.container}>
                 
             <div className={styles.topContainer}>
                 <div className={styles.content}>  
-                    <div style={{ backgroundColor: "#FFD700", borderRadius: "0.3rem", padding: "0px" }}>
-                        <h2>GULT BÄLTE                         14:00</h2>
+                    <div style={{ backgroundColor: beltInfo.color, borderRadius: "0.3rem", padding: "0px" }}>
+                        <h2>{beltInfo.belt_name} bälte                         14:00</h2>
                     </div>
                 </div>
                 <h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "10px", paddingBottom: "10px" }}>Summering</h1>
             </div>
             
             <div className={styles.scrollableContainer}>
-                {examinees.map((examinee) => (
-                    <GradingAfterComp key={examinee.id} person={examinee.person} max_point={52} />
-                ))}
+                {grading.examinees && grading.examinees.map((examinee) => (
+                        <GradingAfterComp key={examinee.examinee_id} name={examinee.name} />
+                    ))}
             </div>
         
         <div className={styles.bottomContainer}>
