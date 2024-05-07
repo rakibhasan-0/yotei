@@ -15,6 +15,7 @@ import TagList from "./Taglist.jsx"
 import CheckBox from "../CheckBox/CheckBox"
 import MiniPopup from "../MiniPopup/MiniPopup.jsx"
 
+
 /**
  * OBSERVE! This component is used inside the TagInput-component and should not be used by itself. 
  * Popup is a component that can be put inside a popup window, where you can search for tags to add and
@@ -42,6 +43,13 @@ import MiniPopup from "../MiniPopup/MiniPopup.jsx"
  * @since 2024-04-22
  */
 export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
+	const sortOptions = [
+		{label: "Namn: A-Ö", },
+		{label: "Namn: Ö-A", },
+		{label: "Mest använda",},
+		{label: "Minst använda", }
+	]
+
 	const [suggested, setSuggested] = useState([])
 	const [error, setError] = useState("")
 	const [searchText,setSearchText] = useState("")
@@ -49,6 +57,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	const { token } = useContext(AccountContext)
 	const [newAddedTags, setNewAddedTags] = useState(addedTags)
 	const [showPopup, setShowPopup] = useState(false)
+	const [sort, setSort] = useState(sortOptions[0])
 
 	
 
@@ -139,6 +148,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 				onChecked={checked => checked ? handleAddTag(tag) : handleRemoveTag(tag)}
 				added={newAddedTags.some(a => a.id == tag.id)}	
 				onTrashClicked={handleDelete}
+				onPencilClicked={true}
 			/>
 		)
 		setTagListArray(tempTagListArray)
@@ -146,6 +156,10 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 
 	const handleDelete = () => {
 		setShowPopup(true)
+	}
+
+	const handleEditText = () => {
+
 	}
 
 	const saveAndClose = () => {
@@ -160,6 +174,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 					<p className={styles["error-message"]}>{error}</p>
 				}
 				<div className={styles["search-bar"]}>
+					
 					<input
 						className={styles["input-area"]}
 						placeholder="Sök eller skapa tagg"
@@ -179,17 +194,26 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 						
 					}
 					
+					
 				</div>
+				<div style={{height: "10px"}}></div>
+			</div>
+			
+			<div>
+				<FilterContainer title={"Sortering"} numFilters={0}>
+					<Sorter onSortChange={setSort} id="tag-sort" selected={sort} options={sortOptions}/>
+				</FilterContainer>
 			</div>
 			<div style={{overflow:scroll}}>
 				{tagListArray}
 
-				<MiniPopup title={"Test"} isOpen={showPopup} setIsOpen={setShowPopup} >
+				<MiniPopup title={"Taggen kunde ej tas bort"} isOpen={showPopup} setIsOpen={setShowPopup} >
 					<div >
 						Denna tagg används på x övningar x tekniker och x pass
 					</div>
 				</MiniPopup>
 			</div>
+			
 			<RoundButton onClick={saveAndClose} > 
 				<ChevronRight width={30} />
 			</RoundButton>

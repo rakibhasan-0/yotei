@@ -6,7 +6,7 @@ import { Trash } from "react-bootstrap-icons"
 import CheckBox from "../CheckBox/CheckBox"
 
 
-export default function TagList({ tag, index, onChecked, added, onTrashClicked }) {
+export default function TagList({ tag, index, onChecked, added, onTrashClicked, onPencilClicked }) {
 	return (
 		<div className={styles["exercise-list-container"]} data-testid="ExerciseListItem">
 			<div className={styles["exercise-list-header"]} style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
@@ -22,7 +22,7 @@ export default function TagList({ tag, index, onChecked, added, onTrashClicked }
 						</div>
 						<div className={styles["flex-shrink-0"]} style={{display: "flex", alignItems: "center"}}>
 						
-							<Pencil size="25px" color="#BE3B41"/>
+							<Pencil size="25px" color="#BE3B41" onClick={onPencilClicked}/>
 							<div style={{width: "10px"}}></div>
 							<Trash
 								size="25px"
