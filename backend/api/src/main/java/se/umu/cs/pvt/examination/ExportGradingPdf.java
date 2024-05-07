@@ -123,20 +123,22 @@ public class ExportGradingPdf {
 
             for(int j = 0; j < examinationTechniqueCategories.get(i).getTechniques().size(); j++) {
                 contentStream.addRect(initX, initY, CELL_WIDTH, -CELL_HEIGHT);
-
+                
+                //funktion korta ner teknik strängen och dela upp i två å skriva den på två rader
                 contentStream.beginText();
                 contentStream.newLineAtOffset(initX+10,initY-CELL_HEIGHT+10);
                 contentStream.setFont(font,10);
                 contentStream.showText(examinationTechniqueCategories.get(i).getTechniques().get(j).toString());
                 contentStream.endText();
-
+                //Skriv in Godkänt sen #1, #2 på raden under för kommentarer... 
+                
                 initX+=CELL_WIDTH;
             }
 
             initX = TABLE_START_X_POS;
             initY -=CELL_HEIGHT;
         }
-
+        
         contentStream.stroke();
         contentStream.close();
     }
@@ -172,6 +174,8 @@ public class ExportGradingPdf {
 
             for(int j = 0; j < techniques.size(); j++) {
                 category.addTechnique(techniques.get(j).get("text").toString());
+
+
             }
             examinationTechniqueCategories.add(category);
         }
@@ -179,7 +183,7 @@ public class ExportGradingPdf {
         for(int i = 0; i < numPages; i++) {
             this.createTable(i);
         }
-
+        //Här skapar vi sidorna för kommentarerna där de står t.ex. #1 Bra jobbat\n #2 du suger
         document.save("/home/marcus/school/yotei/test.pdf");
         document.close();
         System.out.println("table pdf created");
