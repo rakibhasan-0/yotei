@@ -31,26 +31,26 @@ export default function GradingCreate() {
   const [checkedExamineeIds, setCheckedExamineeIds] = useState([])
 
   function createPair() {
-    setPair([...pairs, checkedExamineeIds]);
-    setCheckedExamineeIds([]);
+    setPair([...pairs, checkedExamineeIds])
+    setCheckedExamineeIds([])
   }
 
   function onCheck(isChecked, examineeId) {
     if (isChecked) {
-      setCheckedExamineeIds([...checkedExamineeIds, examineeId]);
+      setCheckedExamineeIds([...checkedExamineeIds, examineeId])
     } else {
-      setCheckedExamineeIds(checkedExamineeIds.filter((id) => id !== examineeId));
+      setCheckedExamineeIds(checkedExamineeIds.filter((id) => id !== examineeId))
     }
   }
 
   function addExaminee(examinee) {
     const examineeId = examinees.length + 1
-    setExaminees([...examinees, { id: examineeId, name: examinee }]);
+    setExaminees([...examinees, { id: examineeId, name: examinee }])
   }
 
   function removeExaminee(examineeId) {
-    setCheckedExamineeIds(checkedExamineeIds.filter((id) => id !== examineeId));
-    setExaminees(examinees.filter((examinee) => examinee.id !== examineeId));
+    setCheckedExamineeIds(checkedExamineeIds.filter((id) => id !== examineeId))
+    setExaminees(examinees.filter((examinee) => examinee.id !== examineeId))
   }
 
   function editExaminee(examineeId, name) {
@@ -58,7 +58,7 @@ export default function GradingCreate() {
       examinees.map((examinee) =>
         examinee.id === examineeId ? { ...examinee, name: name } : examinee
       )
-    );
+    )
   }
 
 	return (
@@ -72,7 +72,7 @@ export default function GradingCreate() {
 			<div className="column">
         {examinees.map((innerExaminee, index) => {
           // Check if the examinee's id is in any pair
-          const isInPair = pairs.some(pair => pair.includes(innerExaminee.id));
+          const isInPair = pairs.some(pair => pair.includes(innerExaminee.id))
 
           
 
@@ -88,10 +88,10 @@ export default function GradingCreate() {
                 onEdit={editExaminee}
                 onCheck={onCheck}
               />
-            );
+            )
           }
           // Return null if the examinee is already in a pair
-          return null;
+          return null
         })}
       </div>
 
