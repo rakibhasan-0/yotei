@@ -38,7 +38,7 @@ const KIHON_TAG = { id: 1, name: "Kihon Waza" }
  * Version 2.2:
  * 	   Fixed navigation from pages outside the website 
  * 
- * @author Team Medusa, Team Tomato, Team Durian (Group 3) (2024-04-23), Team Kiwi (Group 2) (2024-05-03)
+ * @author Team Medusa, Team Tomato, Team Durian (Group 3) (2024-05-07), Team Kiwi (Group 2) (2024-05-03)
  * @version 2.2
  * @since 2023-05-16
  */
@@ -239,7 +239,7 @@ export default function TechniqueEdit({ id }) {
 			navigate(-1)
 		}
 		else{
-			navigate("/technique")
+			navigate("/activity")
 		}
 	}
 	if(loading) return <Spinner/>
@@ -286,8 +286,9 @@ export default function TechniqueEdit({ id }) {
 					id={style.techniqueEditTaginput}
 					addedTags={addedTags}
 					setAddedTags={setAddedTagsAndUpdateKihon}
-					isNested={true}>
-				</TagInput>	
+					isNested={true}
+					itemName={techniqueName}>
+				</TagInput>
 				:
 				null
 			}
