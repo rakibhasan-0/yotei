@@ -61,7 +61,10 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	const [showPopup, setShowPopup] = useState(false)
 	const [sort, setSort] = useState(sortOptions[2])
 	const [usage, setUsage] = useState([]) 
-	const containsSpecialChars = str => /[^\w\d\s-]/.test(str)
+	const containsSpecialChars = str => /[^\w\d\säöåÅÄÖ-]/.test(str)
+
+
+
 
 	useEffect(() => {
 		
@@ -266,6 +269,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 			<div>
 				{error !== "" &&
 					<p className={styles["error-message"]}>{error}</p>
+
 				}
 				<div className={styles["search-bar"]}>
 					
