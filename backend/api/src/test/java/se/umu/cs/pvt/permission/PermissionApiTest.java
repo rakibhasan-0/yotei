@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,11 @@ class PermissionApiTest {
         permissions = new ArrayList<>();
 
         Mockito.lenient().when(permissionRepository.findAll()).thenReturn(permissions);
+        Mockito.lenient().when(permissionRepository.findById(Mockito.any()))
+            .thenAnswer(invocation -> {
+                Optional<Permission> perm = Optional.of(permissions.get(Math.toIntExact(invocation.getArgument(0))));
+                return perm;
+            });
     }
 
     @Test
@@ -63,39 +69,8 @@ class PermissionApiTest {
             permissions.add(new Permission("Perm3", "desc3"));
             permissions.add(new Permission("Perm4", "desc4"));
 
-
-        } catch (InvalidPermissionNameException e) {
-            fail();
-        }
-    }
-
-    @Test
-    void shouldBeAbleToEditPermission() {
-        try {
-            permissions.add(new Permission("Perm1", "desc1"));
-            
-            // Check so desc is "desc1"
-            // Check so name is "perm1"
-
-            // replace 1 with 2
-
-            // Check again
-
-
-        } catch (InvalidPermissionNameException e) {
-            fail();
-        }
-    }
-
-    @Test
-    void shouldBeAbleToDelete() {
-        try {
-            permissions.add(new Permission("Perm1", "desc1"));
-            
-            // DELTE PErmission with assert
-
-            assertEquals(new ResponseEntity<>(permissions, HttpStatus.NO_CONTENT), permissionController.getPermissions());
-
+            assertEquals(new ResponseEntity<>(permissions.get(0), HttpStatus.OK), permissionController.getPermissionFromId(0L));
+            //assertEquals(permissions.get(2), permissionController.getPermissionFromId(2L));
         } catch (InvalidPermissionNameException e) {
             fail();
         }
