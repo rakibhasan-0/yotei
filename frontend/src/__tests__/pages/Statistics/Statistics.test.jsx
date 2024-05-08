@@ -3,7 +3,6 @@ import { render, screen, fireEvent, configure, waitFor } from "@testing-library/
 import { BrowserRouter } from "react-router-dom"
 import Statistics from "../../../pages/Statistics/Statistics"
 import StatisticsPopUp from "../../../pages/Statistics/StatisticsPopUp"
-import FilterStatistics from "../../../pages/Statistics/FilterStatistics"
 configure({ testIdAttribute: "id" })
 
 /**
