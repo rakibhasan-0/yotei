@@ -2,25 +2,24 @@ package se.umu.cs.pvt.examination;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
  * ExaminationResult- Entity class for the examination_result table
  * @author Orange (dv22rfg)
  */
-@Entity
+@Entity()
 @Table(name = "examination_result")
 public class ExaminationResult {
 
-    @Column(name = "examinee_id")
-    private long examineeId;
+    @Column(nullable = false, name = "examinee_id")
+    private Long examineeId;
 
-    @Column(name = "technique_name")
+    @Column(nullable = false, name = "technique_name")
     private String techniqueName;
 
-    @Column(name = "pass")
-    private boolean pass;
+    @Column(nullable = false, name = "pass")
+    private Boolean pass;
     
     /**
      * Data constructor for ExaminationResult.
@@ -29,7 +28,7 @@ public class ExaminationResult {
      * @param techniqueName The name of the technique.
      * @param pass Pass or fail of performing the technique.
      */
-    public ExaminationResult(long examineeId, String techniqueName, boolean pass){
+    public ExaminationResult(Long examineeId, String techniqueName, Boolean pass){
         this.examineeId = examineeId;
         this.techniqueName = techniqueName;
         this.pass = pass;
@@ -53,5 +52,3 @@ public class ExaminationResult {
         return pass;
     }
 }
-
-
