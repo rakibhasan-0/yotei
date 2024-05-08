@@ -13,14 +13,11 @@ import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
  *   Props:
  *    id				@type {any} 	 the id of the component.
  *    examineeName      @type {String}   the name of the examinee
- *    onClickComment    @type {onClick}	 the action that the buttons is
- * 										 supposed to perform
  * 
  * Example Usage:
  * <ExamineeBox 
  *  examineeName = "test person"/>
- *  onClickComment = console.log("button clicked")
- * 
+ *
  * @author Apelsin
  * @since 2024-05-03
  * @version 1.0 
@@ -116,27 +113,27 @@ export default function ExamineeBox({ id, examineeName}) {
 					</ExamineeButton>
 				</div>
 				<Popup 
-				id={"examinee-comment-popup"} 
-				title={"Lägg kommentar till: " + examineeName} 
-				isOpen={isAddingComment} 
-				setIsOpen={toggleAddComment}
-				onClose={() => setCommentError(false)}
-				style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset"}}
-			>
-				<TextArea 
-					autoFocus={true}
-					onInput={e => {setCommentText(e.target.value); setCommentError(false)}}
-					errorMessage={commentError}
+					id={"examinee-comment-popup"} 
+					title={"Lägg kommentar till: " + examineeName} 
+					isOpen={isAddingComment} 
+					setIsOpen={toggleAddComment}
+					onClose={() => setCommentError(false)}
+					style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset"}}
+				>
+					<TextArea 
+						autoFocus={true}
+						onInput={e => {setCommentText(e.target.value); setCommentError(false)}}
+						errorMessage={commentError}
+					/>
+					<Button onClick={onAddComment}>Lägg till</Button>
+				</Popup>
+				<ConfirmPopup
+					popupText={"Är du säker på att du vill ta bort kommentarsutkastet?"}
+					showPopup={showDiscardComment}
+					onClick={() => onDiscardComment()}
+					setShowPopup={() => setShowDiscardComment(false)}
+					zIndex={200} // Above the comment popup.
 				/>
-				<Button onClick={onAddComment}>Lägg till</Button>
-			</Popup>
-			<ConfirmPopup
-				popupText={"Är du säker på att du vill ta bort kommentarsutkastet?"}
-				showPopup={showDiscardComment}
-				onClick={() => onDiscardComment()}
-				setShowPopup={() => setShowDiscardComment(false)}
-				zIndex={200} // Above the comment popup.
-			/>
 			</fieldset>
 		</div>
 	)

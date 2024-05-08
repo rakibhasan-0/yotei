@@ -19,8 +19,6 @@ import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
  * 	  nextTechniqueTitle	@type {String}	 the next technique
  *    mainCategoryTitle		@type {String}	 the category title
  *    beltColor				@type {String}	 the color of the belt
- * 	  onButtonClicked		@type {onClick}	 the action that the buttons is
- * 											 supposed to perform
  * 
  * Example Usage:
  * <TechniqueInfoPanel 
@@ -29,7 +27,6 @@ import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
  *	currentTechniqueTitle = "1. Grepp i två handleder framifrån och svingslag Frigöring – Ju morote jodan uke",
  *	nextTechniqueTitle = " 2. Stryptag framifrån och svingslag, backhand Frigöring – Ju morote jodan uke, ude osae, ude osae gatame",
  *	mainCategoryTitle = "Huvudkategori",
- *	onButtonClicked = onClick()/>
  *
  * 
  * @author Apelsin
