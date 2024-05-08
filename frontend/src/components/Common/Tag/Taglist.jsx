@@ -7,6 +7,26 @@ import CheckBox from "../CheckBox/CheckBox"
 
 
 export default function TagList({ tag, index, onChecked, added, onTrashClicked, onPencilClicked }) {
+	const [isEditing, setIsEditing] = useState(false); // State to manage edit mode
+	const [editedText, setEditedText] = useState(item); // State to store edited text
+	const [currentName, setCurrentName] = useState(item);
+
+	const handleEdit = () => {
+		setIsEditing(true);
+	};
+
+	const handleInputChange = (event) => {
+		setEditedText(event.target.value);
+		setCurrentName(event.target.value);
+	};
+
+	const handleEditSubmit = () => {
+		if(currentName != "") {
+			setIsEditing(false);
+			setCurrentName(editedText);
+			onEdit(id, editedText);
+		}
+	};
 	return (
 		<div className={styles["exercise-list-container"]} data-testid="ExerciseListItem">
 			<div className={styles["exercise-list-header"]} style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
@@ -21,7 +41,7 @@ export default function TagList({ tag, index, onChecked, added, onTrashClicked, 
 							</div>
 						</div>
 						<div className={styles["flex-shrink-0"]} style={{display: "flex", alignItems: "center"}}>
-						
+							
 							<Pencil size="25px" color="#BE3B41" onClick={onPencilClicked}/>
 							<div style={{width: "10px"}}></div>
 							<Trash

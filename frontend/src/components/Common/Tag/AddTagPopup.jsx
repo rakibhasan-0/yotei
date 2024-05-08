@@ -15,6 +15,7 @@ import TagList from "./Taglist.jsx"
 import CheckBox from "../CheckBox/CheckBox"
 import MiniPopup from "../MiniPopup/MiniPopup.jsx"
 import TagUsagePopup from "./TagUsagePopup.jsx"
+import Examinee from "./Examinee.jsx"
 
 
 /**
@@ -60,6 +61,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	const [showPopup, setShowPopup] = useState(false)
 	const [sort, setSort] = useState(sortOptions[0])
 	const [usage, setUsage] = useState([]) 
+	const containsSpecialChars = str => /[^\w\d\s-]/.test(str)
 
 	useEffect(() => {
 		
@@ -147,10 +149,15 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 		}
 
 		const tempTagListArray = suggested.map(tag =>
-			<TagList tag={tag} key={tag.id} 
-				onChecked={checked => checked ? handleAddTag(tag) : handleRemoveTag(tag)}
-				added={newAddedTags.some(a => a.id == tag.id)}	
-				onTrashClicked={() => handleDelete(tag.id)}
+			<Examinee item={tag.name} 
+				key={tag.id}
+				id={tag.id} 
+				showCheckbox={true}
+				onRemove={() => handleDelete(tag.id)}
+				onCheck={checked => checked ? handleAddTag(tag) : handleRemoveTag(tag)}
+				checked={newAddedTags.some(a => a.id == tag.id)}	
+				onEdit={handleEditText}
+				validateTagName={validateTagName}
 			/>
 		)
 		setTagListArray(tempTagListArray)
@@ -162,8 +169,47 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 		setShowPopup(true)
 	}
 
-	const handleEditText = () => {
+	const handleEditText = async (id, text) => {
+		const url = new URL("/api/tags/" + id, window.location.origin)
+		const requestOptions = {
+			method: "PUT",
+			headers: {"Content-type": "application/json",token },
+			body: JSON.stringify({
+				"id": id,
+				"name": text
+			})
+		}
+	
+		try {
+			const response = await fetch(url, requestOptions)
+			if (!response.ok) {
+				setError("Något gick fel vid hämtning av tagganvändning")
+			}
+			
 
+		} catch (error) {
+			setError("Något gick fel vid hämtning av tagganvändning")
+		}
+
+		
+		suggested.find(tag => tag.id == id).name = text
+		newAddedTags.find(tag => tag.id == id).name = text
+		addedTags.find(tag => tag.id == id).name = text
+		
+		
+	}
+
+	const validateTagName = (name) => {
+		if (name == "") {
+			return "Taggnamnet kan inte vara tomt"
+		}
+		else if (containsSpecialChars(name)) {
+			return "Endast tecken A-Ö, 0-9 tillåts"
+		}
+		else if (suggested.find(tag => tag.name == name)) {
+			return "Taggen finns redan"
+		}
+		return ""
 	}
 
 	const saveAndClose = () => {
