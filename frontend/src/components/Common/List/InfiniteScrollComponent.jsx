@@ -78,7 +78,8 @@ export default function InfiniteScrollComponent({ children, activities, activeKe
 	 * showFetchedItems. Otherwise load items noramlly using updateShownItems.
 	 */
 	useEffect(() => {
-		if(+fetchedTech.current > 0 && visibleTechniques.length == 0){
+		if(+fetchedTech.current > 0){
+			setVisibleTechniques([])
 			showFetchedItems()
 
 			if (activeKey == "technique") {
@@ -102,8 +103,7 @@ export default function InfiniteScrollComponent({ children, activities, activeKe
 			}
 		}
 
-		else if(visibleTechniques.length == 0 || fetchedTech.current <= 0){
-			console.log("huh")
+		else{
 			shownItems.current = 20
 			setVisibleTechniques([])
 			updateShownItems()
