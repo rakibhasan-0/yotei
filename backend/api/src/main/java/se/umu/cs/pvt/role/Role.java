@@ -38,10 +38,15 @@ public class Role implements Serializable{
     public Role() {
     }
 
-    // TODO: create custom exception(s)
-    public Role(String name) throws Exception {
+    /**
+     * Creates a role using arguments
+     * 
+     * @param name The role name
+     * @throws InvalidRoleNameException Thrown when role_name is empty
+     */
+    public Role(String name) throws InvalidRoleNameException {
         if (name.isEmpty()) {
-            throw new Exception("Can't be empty");
+            throw new InvalidRoleNameException("Role name can not be empty!");
         }
 
         this.role_name = name;
