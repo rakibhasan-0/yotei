@@ -152,7 +152,7 @@ export default function Statistics() {
 			{loading ? (
 				<Spinner />
 			) : (
-				<h1 style={{ fontSize: "35px" }} id = "statistics-header" >
+				<h1 id = "statistics-header" >
 					{groupName ? `${groupName.name}` : "Gruppen hittades inte"}
 				</h1>
 			)}
