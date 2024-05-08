@@ -59,6 +59,9 @@
 					<p style = {{color: "#b9b0b0"}}>
 						Genomsnittligt betyg {averageRating}/5 för {numberOfSessions} tillfällen från {<br />} datum {startDate} till {endDate}
 					</p>
+					<p style = {{ fontSize: "25px" }}>
+						Bält-tekniker
+					</p>
 					<div style={{ overflowY: "auto" }}>
 						<BeltColorChart beltColorsData={beltColorsData} /> 
 					</div>
