@@ -402,7 +402,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 							<ErrorStateSearch id="add-activity-no-technique" message="Kunde inte hitta tekniker" />
 							:
 							(<InfiniteScrollComponent
-								activities={techniques}
+								activities={techniques} activeKey={key}
 							>
 								{techniques.map((technique, key) => (
 									<TechniqueCard
@@ -441,7 +441,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 							<ErrorStateSearch id="add-activity-no-exercise" message="Kunde inte hitta övningar" />
 							:
 							<InfiniteScrollComponent
-								activities={visibleExercises}
+								activities={visibleExercises} activeKey={key}
 							>
 								{visibleExercises.map((exercise, key) => (
 									<ExerciseListItem
