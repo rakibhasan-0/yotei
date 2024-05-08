@@ -126,7 +126,7 @@ export default function Statistics() {
 
 	function handleDateChanges(variableName, value) {
 		const newD = new Date(value)
-		const from = new Date(dates.from)
+		//const from = new Date(dates.from)
 		const to = new Date(dates.to)
 
 		if (variableName == "from") {
