@@ -5,10 +5,10 @@ import { Link } from "react-router-dom"
 import { ChevronDown } from "react-bootstrap-icons"
 import styles from "./GradingAfterComp.module.css"
 
-const GradingAfterComp = ({ key, name }) => {
+const GradingAfterComp = ({ id, name }) => {
 	return (
 		<div style={{ background: "#C9EEC3"}}>
-            <div className={styles["technique-card"]} id={key}>
+            <div className={styles["technique-card"]} id={id}>
                 <div className={styles["technique-info-container"]}>
                     <div className={styles["technique-name-container"]}>
                         <h5 className={styles["technique-name"]}>{name}</h5>
