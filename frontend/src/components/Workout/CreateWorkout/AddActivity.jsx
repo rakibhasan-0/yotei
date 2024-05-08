@@ -196,7 +196,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 
 	useEffect(() => {
 		if (hasLoadedData) return
-
+		
 		const tempTechniques = []
 		const tempExercises = []
 
@@ -208,10 +208,10 @@ function AddActivity({ id, setShowActivityInfo }) {
 			}
 		})
 
-		setTechniques(tempTechniques)
+		//setTechniques(tempTechniques)
 		setExercises(tempExercises)
 		setHasLoadedData(true)
-	}, [hasLoadedData, checkedActivities])
+	}, [hasLoadedData])
 
 	/**
 	 * Fetches techniques when the component is mounted or when the 
@@ -226,7 +226,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 			)
 		))
 		searchTechniques()
-	}, [searchTechText, selectedBelts, kihon, selectedTechTags, hasLoadedData])
+	}, [searchTechText, selectedBelts, kihon, selectedTechTags, hasLoadedData, checkedActivities])
 
 	/**
 	 * Fetches exercises when the component is mounted or when the
@@ -321,7 +321,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 		getTechniques(args, token, map, mapActions, (result) => {
 			if (!result.results) return
 
-			const res = result.results.filter((technique) => !checkedActivities.some(a => a.type === "technique" && a.techniqueID === technique.techniqueID))
+			const res = result.results//.filter((technique) => !checkedActivities.some(a => a.type === "technique" && a.techniqueID === technique.techniqueID))
 			setTechniques([...res])
 			setSuggestedTechTags(result.tagCompletion)
 			setFetchedTech(true)

@@ -2,6 +2,7 @@ import { useEffect, useContext, useState } from "react"
 import styles from "./ActivityInfoPopUp.module.css"
 import Divider from "../../Common/Divider/Divider.jsx"
 import Button from "../../Common/Button/Button.jsx"
+import { TrashFill } from "react-bootstrap-icons"
 import { Plus } from "react-bootstrap-icons"
 import { WorkoutCreateContext } from "./WorkoutCreateContext"
 import { WORKOUT_CREATE_TYPES } from "./WorkoutCreateReducer"
@@ -38,6 +39,7 @@ function ActivityItem({ index, categoryName, id, inputDisabled, text }) {
 	}, [text, id])
 
 	return (
+		<div>
 		<fieldset className={styles.activityItem} id={"activity-description-" + id}>
 			{categoryName && <legend>{<h2>{categoryName}</h2>}</legend>}
 			<textarea 
@@ -53,6 +55,10 @@ function ActivityItem({ index, categoryName, id, inputDisabled, text }) {
 				rows={1}
 			/>
 		</fieldset>
+		<Button>
+			
+		</Button>
+		</div>
 	)
 }
 
@@ -79,7 +85,8 @@ function ActivityList({ isFreeText }){
 						id={index}
 						index={index}
 						inputDisabled={!isFreeText}
-						text={activity.name} />)
+						text={activity.name} />
+					)
 			})}
 			{isFreeText && 
 				<div className={styles.activityAddButton}>
