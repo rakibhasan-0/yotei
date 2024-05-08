@@ -111,21 +111,29 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 			headers: {"Content-type": "application/json",token },
 			body: JSON.stringify({name: tagName}),
 		}
-		try {
-			const response = await fetch("/api/tags/add", requestOptions)
-			if (response.ok) {
-				const data = await response.json()
-				const newTag = {id:data.id,name:data.name}
-				//Checked by default
-				setNewAddedTags([newTag, ...newAddedTags])
-				setSuggested([newTag, ...suggested])
-			
-			} else {
+		const returnErrorMessage = validateTagName(tagName)
+		//Checked by default
+		if (returnErrorMessage != "") {
+			setError(returnErrorMessage)
+		}
+		else {
+			try {
+				const response = await fetch("/api/tags/add", requestOptions)
+				if (response.ok) {
+					const data = await response.json()
+					const newTag = {id:data.id,name:data.name}
+					setNewAddedTags([newTag, ...newAddedTags])
+					setSuggested([newTag, ...suggested])
+					
+				} else {
+					setError("Något gick fel vid skapandet av tagg")
+				}
+			} catch (error) {
 				setError("Något gick fel vid skapandet av tagg")
 			}
-		} catch (error) {
-			setError("Något gick fel vid skapandet av tagg")
 		}
+
+		
 	}
 
 	/**
