@@ -1,8 +1,8 @@
 package se.umu.cs.pvt.role;
 
 /**
- * An exception that can be thrown when an invalid username is given.
- * @author Team Hot-Pepper (G7)
+ * An exception that can be thrown when an invalid rolename is given.
+ * @author Team Mango (Grupp 4) - 2024-05-08
  */
 public class InvalidRoleNameException extends Exception {
 
