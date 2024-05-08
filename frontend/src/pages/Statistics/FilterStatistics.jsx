@@ -8,7 +8,19 @@ import style from "./FilterStatistics.module.css"
 
 /**
  * 
- * The work is on progress for the statistics page.
+ * A component for filtering statistics.
+ * @param {function} onToggleExercise - Function to toggle exercises.
+ * @param {function} onToggleKihon - Function to toggle kihon.
+ * @param {function} onDateChanges - Function to change dates.
+ * @param {function} onToggleBelts - Function to toggle belts.
+ * @param {function} onClearBelts - Function to clear belts.
+ * @param {object} belts - Object containing belts.
+ * @param {object} dates - Object containing dates.
+ * @returns A filter for statistics.
+ * @version 1.0
+ * @since 2024-05-08
+ * @author Team Coconut
+ * 
  */
 
 export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDateChanges, onToggleBelts, onClearBelts, belts, dates}) {
