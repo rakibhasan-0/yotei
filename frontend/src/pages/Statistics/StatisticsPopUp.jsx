@@ -25,19 +25,19 @@ export default function StatisticsPopUp({groupActivities,dates,averageRating,num
 	useEffect(() => {
 		// Function to calculate the amount of techniques by belt color
 		const calculateBeltColorsData = () => {
-		  const colorsCount = {};
-		  groupActivities.forEach(activity => {
-			activity.beltColors.forEach(beltColor => {
-			  const color = beltColor.belt_name;
-			  colorsCount[color] = (colorsCount[color] || 0) + activity.count;
-			});
-		  });
-		  setBeltColorsData(colorsCount);
-		};
+			const colorsCount = {}
+			groupActivities.forEach(activity => {
+				activity.beltColors.forEach(beltColor => {
+					const color = beltColor.belt_name
+					colorsCount[color] = (colorsCount[color] || 0) + activity.count
+				})
+			})
+			setBeltColorsData(colorsCount)
+		}
 	
 		// Call the function to calculate belt colors data when groupActivities change
-		calculateBeltColorsData();
-	  }, [groupActivities]);
+		calculateBeltColorsData()
+	}, [groupActivities])
 
 
 	const [showPopup, setShowPopup] = useState(false)
