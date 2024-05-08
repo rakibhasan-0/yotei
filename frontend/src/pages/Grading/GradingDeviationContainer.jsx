@@ -33,7 +33,9 @@ function GradingDeviationContainer ({ id, name, comment, passed}) {
 						<div className = {styles["sc23-outline"]}>
 
 							<div className = {styles["sc23-session-header-clickable"]} role="button" onClick={() => setToggled(!toggled)}>
-                            <h2 className= {styles["techniqueName"]}>{name}</h2>
+                            <h2 id = "nameDisplay" className= {styles["techniqueName"]}>
+								{name}
+							</h2>
 								{
 									<ChevronDown id={styles["sc23-dropdown"]} style={{color:"black"}} className={styles[["sc23-session-container-chevron-rotation-animation sc23-session-container-header-overlap", toggled ? "sc23-chevron-rotate" : ""].join(" ")]} size={20}/>
 								}
@@ -43,7 +45,9 @@ function GradingDeviationContainer ({ id, name, comment, passed}) {
 								<div className={styles["sc23-session-container-child"]} style={{ display: toggled ? "inherit" : "none" }} id={`${id}-children`}>
                                     <h2 className= {styles["commentStyle2"]}>Kommentar:</h2>
 									{	
-										<h2 className= {styles["commentStyle"]}>sadsa{comment}</h2>
+										<h2 id = "commentDisplay" className= {styles["commentStyle"]}>
+											{comment}
+										</h2>
 									}
 								</div> 
 							</div>

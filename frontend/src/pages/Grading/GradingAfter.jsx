@@ -10,11 +10,10 @@ export default function GradingAfter() {
 	const context = useContext(AccountContext)
 	const { token, userId } = context
     const [grading, setGrading] = useState([])
-    const[dateCreated, setDateCreated] = useState("") // [hours, minutes
-    const[isBusy, setIsBusy] = useState(true);
+    const[dateCreated, setDateCreated] = useState("")
     const [beltInfo, setBeltInfo] = useState({
         belt_name: "",
-        color: "" // Assuming color is directly usabl
+        color: "" 
     })
     const grading_id = 7
 
@@ -29,34 +28,46 @@ export default function GradingAfter() {
         const timeString = formattedHours + ":" + formattedMinutes
         setDateCreated(timeString)
     }
-    useEffect(() => {
-        async function fetchData() {
-            setIsBusy(false)
-            try{
-                console.log("we are here bitchhh")
-                const grading_response = await fetch(`/api/examination/grading/${grading_id}`, {
-                    method: "GET",
-                    headers: { token }
-                })
-                
-                if (!grading_response.ok) {
-                    throw new Error("Network response was not ok")
-                }    
-                const grading_data = await grading_response.json() // <-----
-                setGrading(grading_data)
-                updateDate(grading.created_at)
+
+    const fetchGrading = () => {
+        return fetch(`/api/examination/grading/${grading_id}`, {
+            method: "GET",
+            headers: { token }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok")
+            }
+            return response.json()
+        })
+    }
     
-                const belt_response = await fetch("/api/belts/all", {
-                    method: "GET",
-                    headers: { token }
-                })
-                
-                if (!belt_response.ok) {
-                    throw new Error("Network response was not ok")
-                }
-                const belt_data = await belt_response.json() // <----
-                console.log("Belt data:", belt_data)
-                const matchingBelt = belt_data.find(belt => belt.id === grading.belt_id)
+    const fetchBelts = () => {
+        return fetch("/api/belts/all", {
+            method: "GET",
+            headers: { token }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok")
+            }
+            return response.json()
+        })
+    }
+
+    const downloadPdf  =   () => {}
+    
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [grading_data, belt_data] = await Promise.all([
+                    fetchGrading(),
+                    fetchBelts()
+                ])
+                setGrading(grading_data)
+                updateDate(grading_data.created_at)
+                const matchingBelt = belt_data.find(belt => belt.id === grading_data.belt_id)
                 if (matchingBelt) {
                     setBeltInfo({
                         belt_name: matchingBelt.name,
@@ -64,13 +75,11 @@ export default function GradingAfter() {
                     })
                 }
             } catch (error) {
-                console.error("There was a problem with the fetch operation:", error)
+                console.error("There was a problem with the fetch operation:", error);
             }
-            setIsBusy(true)
         }
         fetchData()
-    },[])
-
+    }, [])
 
     return (
         <div className={styles.container}>
