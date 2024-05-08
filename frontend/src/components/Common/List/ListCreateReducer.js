@@ -44,24 +44,26 @@ export const WORKOUT_CREATE_TYPES = {
  */
 export const WorkoutCreateInitialState = {
 	data: {
-		name: "",
-		description: "",
-		isPrivate: false,
-		users: [],
+		activities: [],
 		author: null,
-		activityItems: [],
-		tags: [],
-		date: "",
+		changed_date: "",
+		created_date: "",
+		description: "",
+		duration: 0,
+		id: 0,
+		isPrivate: false,
+		name: "",
 	},
 	originalData: {
-		name: "",
-		description: "",
-		isPrivate: false,
-		users: [],
+		activities: [],
 		author: null,
-		activityItems: [],
-		tags: [],
-		date: "",
+		changed_date: "",
+		created_date: "",
+		description: "",
+		duration: 0,
+		id: 0,
+		isPrivate: false,
+		name: "",
 	},
 	popupState: {
 		isOpened: false,
@@ -132,9 +134,8 @@ export function workoutCreateReducer(state, action) {
 		return action.payload
 	case "INIT_EDIT_DATA": {
 		const workoutData = action.payload.workoutData;
-		
 		// Map activities
-		const activities = workoutData.list.map(activity => {
+		const activities = workoutData.data.activities.map(activity => {
 			return {
 			id: activity.id,
 			type: activity.type,
@@ -145,7 +146,7 @@ export function workoutCreateReducer(state, action) {
 		});
 		
 		// Map users
-		const users = workoutData.list_users.map((user, index) => {
+		const users = workoutData.data.users.map((user, index) => {
 			return {
 			userId: index + 1,
 			username: user,
@@ -156,7 +157,7 @@ export function workoutCreateReducer(state, action) {
 		const categoryId = workoutData.list_id; // Using list_id as categoryId
 		const categoryName = workoutData.list_name;
 		
-		let category = tempState.addedCategories.find(cat => cat.name === categoryName);
+		/*let category = tempState.addedCategories.find(cat => cat.name === categoryName);
 		if (!category) {
 			category = {
 			id: categoryId,
@@ -165,34 +166,30 @@ export function workoutCreateReducer(state, action) {
 			};
 			tempState.addedCategories.push(category);
 		}
-		
+
 		// Return the category object with its activities
 		const categoryObject = {
 			id: categoryId,
 			name: categoryName,
 			workoutData,//KAAEFT
 		};
-		
+*/
 		// Prepare data object
 		const data = {
-			id: workoutData.list_id,
-			name: workoutData.list_name,
-			description: workoutData.description,
-			isPrivate: workoutData.state === "Private",
-			author: workoutData.author_id,
-			date: workoutData.changed_date.split("T")[0],
-			created: workoutData.created_date.split("T")[0],
-			duration: workoutData.amountOfWorkouts,
-			users,
-			activityItems: [categoryObject],
-			list: activities, // Array with a single category 
-			tags: [], // Assuming no tags in MockList
+			id: workoutData.data.id,
+			name: workoutData.data.name,
+			description: workoutData.data.description,
+			isPrivate: workoutData.data.isPrivate,// === "Private",
+			author: workoutData.data.author,//.author_id,
+			date: workoutData.data.changed_date.split("T")[0],
+			created: workoutData.data.created_date.split("T")[0],
+			duration: workoutData.numActivities,
+			users: users,
+			activities: activities,
 		};
-		
 		// Update tempState
 		tempState.data = JSON.parse(JSON.stringify(data));
 		tempState.originalData = JSON.parse(JSON.stringify(data));
-		
 		return tempState;
 	}
 	case "RESET":

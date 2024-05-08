@@ -194,12 +194,11 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 							backText="Avbryt"
 							onClick={callback}
 						/>
-						{console.log("Editerz: "+edit)}
-						<SavedActivityList activities={workoutCreateInfo.data} edit={edit} />
+							{console.log("ListEdit: ")}
+							{console.log(workoutData)}
+						<SavedActivityList activities={workoutCreateInfo} edit={edit} />
 
 						<div className={styles.activityButtons}>
-						{console.log("Tihi")}
-						{console.log(workoutCreateInfo)}
 							<div className={"align-center" +styles.container}>
 
 								<Button
@@ -231,9 +230,10 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 					</Form.Group>
 
 					<Form.Group>
+						{/* Note till framtida hugo och oliver: Denna kanske ej fungerar  (users.id)*/}
 						<AddUserComponent
 							id="workout-create-add-users"
-							addedUsers={workoutCreateInfo.data.users}
+							addedUsers={workoutCreateInfo.data.users.id}
 							setAddedUsers={(users) =>
 								workoutCreateInfoDispatch({
 									type: WORKOUT_CREATE_TYPES.SET_USERS,
@@ -321,5 +321,6 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 				}}
 			/>
 		</>
+		
 	)
 }

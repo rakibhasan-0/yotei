@@ -22,9 +22,18 @@ export default function WorkoutActivityList({activities,edit}) {
 	useEffect(() => {
 		console.log("SetListData:")
 		console.log(activities)
-		setListData(() => activities)
-		setLoading(false)
-	},[])
+		setListData( activities)
+		//setLoading(false)
+		
+	}, [])
+	useEffect(() => {
+		console.log("ListDataDone")
+		console.log(ListData)
+		if(ListData!=null){
+			setLoading(false)
+		}
+		
+	}, [ListData])
 	
 	const [isCollapsed, setIsCollapsed] = useState(false)
 	
@@ -33,11 +42,10 @@ export default function WorkoutActivityList({activities,edit}) {
 		fontSize: "16px",
 		cursor: "pointer"
 	}
-	if(Loading){
-		return <Spinner/>
-	}
-
-	return (
+	return (Loading==true) ?
+		<><Spinner/></>
+	:
+	<>
 		<fieldset className={setPadding() + " my-3 "} >
 			<legend style={{textAlign: "left"}}>
 				<div className="d-flex align-items-center justify-content-center" onClick={() => setIsCollapsed(!isCollapsed)}>
@@ -47,16 +55,15 @@ export default function WorkoutActivityList({activities,edit}) {
 
 				</div>
 			</legend>
-			{!isCollapsed && ListData.list.map((activity, index) =>
+			
+			{console.log("Testy:)")}
+			{console.log(ListData.data)}
+			{!isCollapsed && ListData.data.activities.map((activity, index) =>
 				<WorkoutActivityListItem key={activity.id} activity={activity} index={index} edit={edit}/>)}
 		</fieldset>
-	)
+	</>
 }
 
-function sortActivities(activities) {
-	const  sortedActivites = activities.sort((a, b) => a.order - b.order)
-	return sortedActivites
-}
 
 function setPadding() {
 	const paddingY = "pb-2"

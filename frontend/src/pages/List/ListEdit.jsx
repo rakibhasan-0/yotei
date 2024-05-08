@@ -23,7 +23,7 @@ import { Spinner } from "react-bootstrap"
  */
 const ListEdit = () => {
 	const [workoutCreateInfo, workoutCreateInfoDispatch] = useReducer(
-		workoutCreateReducer, JSON.parse(JSON.stringify(WorkoutCreateInitialState)))
+		workoutCreateReducer)//,JSON.parse(JSON.stringify(WorkoutCreateInitialState)))
 	const navigate = useNavigate()
 	const { token, userId } = useContext(AccountContext)
 	const location = useLocation()
@@ -54,7 +54,6 @@ const ListEdit = () => {
 	 * @returns The parsed data.
 	 */
 	function parseData(data) {
-
 		let totDuration = 0
 		data.activityItems.forEach(category => {
 			category.activities.forEach(activity=> {
@@ -175,16 +174,15 @@ const ListEdit = () => {
 			if (isSubmitted) localStorage.removeItem("workoutCreateInfoEdit")
 		}
 	}, [workoutCreateInfo, isSubmitted])
-
 	return (
 		<>
 			{isLoading ? <Spinner/> :
-
 				<WorkoutCreateContext.Provider value={{workoutCreateInfo, workoutCreateInfoDispatch}} >
-					<title>Redigera pass</title>
+					<title>Redigera lista</title>
 					<h1 className={styles.title}>Redigera pass</h1>
-		
+
 					<WorkoutFormComponent callback={submitHandler} edit={true} />	
+
 				</WorkoutCreateContext.Provider> 
 			}
 		</>
