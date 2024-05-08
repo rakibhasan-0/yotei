@@ -57,7 +57,7 @@ describe("Statistics Popup", () => {
 
         // Wait for the popup to appear
         await waitFor(() => {
-            expect(screen.getByText("Statistik")).toBeInTheDocument()
+            expect(screen.getByText("Sammanställning av tillfällen")).toBeInTheDocument()
         })
     })
 })
