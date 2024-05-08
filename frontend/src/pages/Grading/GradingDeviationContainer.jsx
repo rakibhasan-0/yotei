@@ -1,6 +1,6 @@
 import styles from "./GradingDeviations.module.css"
 import React from "react"
-import { useState} from "react"
+import { useState } from "react"
 import { ChevronDown } from "react-bootstrap-icons"
 
 
@@ -12,10 +12,10 @@ import { ChevronDown } from "react-bootstrap-icons"
  * @since 2024-05-07
  */
 
-function GradingDeviationContainer ({ id, name, comment, passed}) {
+function GradingDeviationContainer({ id, name, comment, passed }) {
 	const [toggled, setToggled] = useState(false)
 
-	function checkID (id) {
+	function checkID(id) {
 		if (id === null || id === undefined) {
 			console.error("ID is invalid")
 			return false
@@ -28,30 +28,30 @@ function GradingDeviationContainer ({ id, name, comment, passed}) {
 
 		checkID(id) ?
 			(
-				<div id = {id} className={styles["sc23-session-container"]}>
+				<div id={id} className={styles["sc23-session-container"]}>
 					<div id={`${id}-header`} className={passed ? styles["sc23-session-container-header-passed"] : styles["sc23-session-container-header-failed"]}>
-						<div className = {styles["sc23-outline"]}>
+						<div className={styles["sc23-outline-sub"]}>
 
-							<div id ={`${id}-clickable`} className = {styles["sc23-session-header-clickable"]} role="button" onClick={() => setToggled(!toggled)}>
-                            <h2 id = "nameDisplay" className= {styles["techniqueName"]}>
-								{name}
-							</h2>
-								{
-									<ChevronDown id={styles["sc23-dropdown"]} style={{color:"black"}} className={styles[["sc23-session-container-chevron-rotation-animation sc23-session-container-header-overlap", toggled ? "sc23-chevron-rotate" : ""].join(" ")]} size={20}/>
-								}
+							<div id={`${id}-clickable`} className={styles["sc23-session-header-clickable"]} role="button" onClick={() => setToggled(!toggled)}>
+								<h2 id="nameDisplay" className={styles["techniqueName"]}>
+									{name}
+								</h2>
+								<div className={[styles.listToggle, toggled ? styles.listRotate : ""].join(" ")} id={`${id}-toggle-dropdown`}>
+									<ChevronDown id={`${id}-dropdown`} size={28} />
+								</div>
 							</div>
-							<div id = {`${id}-content`} className={styles["sc23-session-container-content"]}>
-								
+							<div id={`${id}-content`} className={styles["sc23-session-container-content"]}>
+
 								<div className={styles["sc23-session-container-child"]} style={{ display: toggled ? "inherit" : "none" }} id={`${id}-children`}>
-                                    <h2 className= {styles["commentStyle2"]}>Kommentar:</h2>
-									{	
-										<h2 id = "commentDisplay" className= {styles["commentStyle"]}>
+									<h2 className={styles["commentStyle2"]}>Kommentar:</h2>
+									{
+										<h2 id="commentDisplay" className={styles["commentStyle"]}>
 											Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet porta ex.
 											Donec laoreet urna in hendrerit venenatis. Sed sem ligula, aliquet at odio id, varius rutrum dolor.
 											Sed elementum at magna nec tincidunt.{comment}
 										</h2>
 									}
-								</div> 
+								</div>
 							</div>
 						</div>
 					</div>
@@ -59,7 +59,7 @@ function GradingDeviationContainer ({ id, name, comment, passed}) {
 			)
 			:
 			(
-				<div id = "session-container-error">Kunde inte ladda in tillfället</div>
+				<div id="session-container-error">Kunde inte ladda in tillfället</div>
 			)
 	)
 }
