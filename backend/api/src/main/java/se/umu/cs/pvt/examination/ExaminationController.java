@@ -4,12 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.umu.cs.pvt.belt.Belt;
 import se.umu.cs.pvt.belt.BeltRepository;
-import se.umu.cs.pvt.comment.Comment;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Class for handling requests to the examination api.
@@ -208,19 +205,28 @@ public class ExaminationController {
      */
     @PostMapping("/comment")
     public ResponseEntity<ExaminationComment> createExaminationComment(@RequestBody ExaminationComment examination_comment){
-        ExaminationComment new_examination_comment = examinationCommentRepository.save(examination_comment);
-        return new ResponseEntity<>(new_examination_comment,HttpStatus.OK);
+        if(gradingRepository.findById(examination_comment.getGradingId()).isEmpty() || examination_comment == null){
+            System.out.println("Grading not found");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        
+        if(examineeRepository.findById(examination_comment.getExamineeId()).isEmpty() || examination_comment == null){
+            System.out.println("Examinee not found");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        ExaminationComment savedComment = examinationCommentRepository.save(examination_comment);
+        return new ResponseEntity<>(savedComment, HttpStatus.OK);
     }
-
+    
     /**
      * Updates an examination comment.
      * @param examination_comment Object mapped examination comment from request body.
      * @return HTTP-status code.
      */
     @PutMapping("/comment")
-    public ResponseEntity<Object> updateExaminationComment(@RequestBody ExaminationComment examination_comment){
+    public ResponseEntity<ExaminationComment> updateExaminationComment(@RequestBody ExaminationComment examination_comment){
 
-        if(examinationCommentRepository.findById(examination_comment.get_comment_id()).isEmpty()){
+        if(examinationCommentRepository.findById(examination_comment.getCommentId()).isEmpty()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         examinationCommentRepository.save(examination_comment);
