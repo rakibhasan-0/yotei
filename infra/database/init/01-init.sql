@@ -582,8 +582,8 @@ CREATE TABLE IF NOT EXISTS examination_comment(
 	grading_id INT, 
 	examinee_id INT, 
 	examinee_pair_id INT, 
-	technique_name VARCHAR(255) NOT NULL, 
-	comment VARCHAR NOT NULL 
+	technique_name VARCHAR(255), 
+	comment VARCHAR
 );
 
 CREATE TABLE IF NOT EXISTS grading_protocol(

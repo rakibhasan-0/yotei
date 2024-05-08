@@ -19,37 +19,37 @@ public class ExaminationComment {
     @Column(nullable = false, name = "comment_id")
     private Long comment_id;
 
-    @Column(name = "grading_id")
+    @Column(nullable = true, name = "grading_id")
     private Long grading_id;
 
-    @Column(name = "examinee_id")
+    @Column(nullable = true, name = "examinee_id")
     private Long examinee_id;
 
-    @Column(name = "examinee_pair_id")
+    @Column(nullable = true, name = "examinee_pair_id")
     private Long examinee_pair_id;
 
-    @Column(nullable = false, name = "technique_id")
-    private String technique_id;
+    @Column(nullable = true, name = "technique_name")
+    private String technique_name;
 
-    @Column(nullable = false, name = "comment")
+    @Column(nullable = true, name = "comment")
     private String comment;
 
     /**
-     * Data constructor for ExaminationComment.
+     * Data constructor for ExaminationComment.l
      * 
      * @param comment_id The id of the created comment.
      * @param grading_id The id of the grading (for group comments).
      * @param examinee_id The id of the examinee (comments for specific examinees).
      * @param examinee_pair_id The id of the examinee pair (pair comments).
-     * @param technique_id The id of the technique the comment is written on.
+     * @param technique_name The id of the technique the comment is written on.
      * @param comment The comment text.
      */
-    public ExaminationComment(Long comment_id, Long grading_id, Long examinee_id, Long examinee_pair_id, String technique_id, String comment) {
+    public ExaminationComment(Long comment_id, Long grading_id, Long examinee_id, Long examinee_pair_id, String technique_name, String comment) {
         this.comment_id = comment_id;
         this.grading_id = grading_id;
         this.examinee_id = examinee_id;
         this.examinee_pair_id = examinee_pair_id;
-        this.technique_id = technique_id;
+        this.technique_name = technique_name;
         this.comment = comment;
     }
 
@@ -75,8 +75,8 @@ public class ExaminationComment {
         return examinee_pair_id;
     }
 
-    public String get_technique_id() {
-        return technique_id;
+    public String get_technique_name() {
+        return technique_name;
     }
 
     public String get_comment() {
