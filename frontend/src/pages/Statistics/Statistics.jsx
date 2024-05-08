@@ -11,10 +11,12 @@ import {getFormattedDateString} from "../../components/Common/DatePicker/DatePic
 
 /**
  * 
- *  The work is on progress for the statistics page.
- * 
+ * Statistics page for a group.
+ * @returns A page with statistics for a group.
+ * @author Team Coconut 
+ * @since 2024-05-08
+ * @version 1.0
  */
-
 export default function Statistics() {
 
 	const navigate = useNavigate()
@@ -24,6 +26,8 @@ export default function Statistics() {
 	const { token } = useContext(AccountContext)
 	const [groupActivities, setGroupActivities] = useState([])
 	const [selectedBelts, setSelectedBelts] = useState([])
+	const [numberofSessions, setNumberOfSessions] = useState()
+	const [averageRating, setAverageRating] = useState()
 	const [filter, setFilter] = useState({
 		showExercises: false,
 		showKihon: false,
@@ -98,6 +102,8 @@ export default function Statistics() {
 
 				if(responseFromGroupDetailsAPI.status === 200) {
 					const data = await responseFromGroupDetailsAPI.json()
+					setNumberOfSessions(data.numberOfSessions)
+					setAverageRating(data.averageRating)
 					setGroupActivities(data.activities)
 				}else if (responseFromGroupDetailsAPI.status === 204) {
 					setGroupActivities([])
@@ -163,7 +169,8 @@ export default function Statistics() {
 					dates={dates}
 				/>
 
-				<StatisticsPopUp groupActivities ={groupActivities} filteredActivities = {activities} dates ={dates} />
+				<StatisticsPopUp groupActivities = {activities} dates ={dates} averageRating = {averageRating} 
+					numberOfSessions = {numberofSessions} />
 			</div>
 
 			<div className="activitiesContainer" id="technique-exercise-list">

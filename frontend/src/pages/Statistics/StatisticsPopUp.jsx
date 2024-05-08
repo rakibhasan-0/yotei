@@ -1,33 +1,50 @@
-import React, { useState } from "react"
+import React, { useState,useEffect } from "react"
 import style from "./StatisticsButton.module.css"
 import Popup from "../../components/Common/Popup/Popup"
 import StarRatings from "react-star-ratings"
 import BeltColorChart from "../../components/Common/BeltColorChart/BeltColorChart"
+
 /**
+ * Statistics pop-up component.
+ * @input groupActivities - The activities to be displayed in the pop-up.
+ * @input dates - The date interval of the sessions
+ * @input averageRating - The average rating of the sessions
+ * @input numberOfSessions - The number of sessions done in the interval
+ * @returns A pop-up with statistics.
  * 
- * prop with data will be passed here so that data will be processed and will be shown in the popup
- * however there is some concerning with position of the css in that case.
- * 
- * The work is on progress for the statistics page.
- * 
+ * @author Team Coconut (Gabriel Morberg)
+ * @since 2024-05-08
+ * @version 1.0
  */
-export default function StatisticsPopUp() {
-	const numberOfSessions = 5 //mock data
-	const averageRating = 2.1 //mock data
-	const startDate = "2021-01-01" //mock data
-	const endDate = "2021-01-02" //mock data
+export default function StatisticsPopUp({groupActivities,dates,averageRating,numberOfSessions}) {
+	const startDate = dates.from
+	const endDate = dates.to
+
+	const [beltColorsData, setBeltColorsData] = useState({})
+
+	useEffect(() => {
+		// Function to calculate the amount of techniques by belt color
+		const calculateBeltColorsData = () => {
+			const colorsCount = {}
+			groupActivities.forEach(activity => {
+				activity.beltColors.forEach(beltColor => {
+					const color = beltColor.belt_name
+					colorsCount[color] = (colorsCount[color] || 0) + activity.count
+				})
+			})
+			setBeltColorsData(colorsCount)
+		}
 	
-	const beltColorsData = {	//mock data
-		"Vitt": 10,
-		"Gul": 8,
-		"Orange": 6,
-	}
+		// Call the function to calculate belt colors data when groupActivities change
+		calculateBeltColorsData()
+	}, [groupActivities])
 
 
 	const [showPopup, setShowPopup] = useState(false)
 
 	const togglePopup = () => {
 		setShowPopup(!showPopup)
+
 	}
 
 	return (
@@ -41,12 +58,12 @@ export default function StatisticsPopUp() {
 					{averageRating}/5
 				</p>
 				<StarRatings rating={averageRating} starRatedColor="#ffcc00" numberOfStars={5} name='rating' starDimension="50px" starSpacing="4px" />
-				<p style = {{color: "#808080"}}>
+				<p style = {{color: "#b9b0b0"}}>
 					Genomsnittligt betyg för {numberOfSessions} tillfällen från {<br />} datum {startDate} till {endDate}
 				</p>
 				
 				<p style = {{fontSize: "40px"}}>
-					Belt-tekniker
+					Bält-tekniker
 				</p>
 				<BeltColorChart beltColorsData={beltColorsData} /> 
 			</Popup>

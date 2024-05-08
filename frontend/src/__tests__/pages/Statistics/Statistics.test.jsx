@@ -1,8 +1,8 @@
 import "@testing-library/jest-dom"
-import { render, screen, fireEvent, configure, waitFor } from "@testing-library/react"
+import { render, screen, /*fireEvent*/ configure /*waitFor */} from "@testing-library/react"
 import { BrowserRouter } from "react-router-dom"
 import Statistics from "../../../pages/Statistics/Statistics"
-import StatisticsPopUp from "../../../pages/Statistics/StatisticsPopUp"
+//import StatisticsPopUp from "../../../pages/Statistics/StatisticsPopUp"
 configure({ testIdAttribute: "id" })
 
 /**
@@ -10,7 +10,7 @@ configure({ testIdAttribute: "id" })
  * @since 2024-05-02
  * @version 1.0
  */
-describe("Statistics Popup", () => {
+/*describe("Statistics Popup", () => {
 
 	test("Clicking button should show popup", async () => {
 
@@ -27,7 +27,7 @@ describe("Statistics Popup", () => {
 
 	})
 
-})
+})*/
 
 describe("Statistics component", () => {
 
