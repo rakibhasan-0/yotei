@@ -6,7 +6,7 @@ import { useContext, useEffect, useState,} from "react"
 import { AccountContext } from "../../../context"
 import { HTTP_STATUS_CODES } from "../../../utils"
 import WorkoutListItem from "../../Workout/WorkoutListItem"
-import { useNavigate } from "react-router" 
+import { useLocation, useNavigate } from "react-router" 
 import ErrorState  from "../../Common/ErrorState/ErrorState"
 
 /**
@@ -37,9 +37,10 @@ import ErrorState  from "../../Common/ErrorState/ErrorState"
  * Changes version 2.0
  *     Replaced custom workout card with standard workout card.
  *
- * @author Team Medusa (Grupp 6)
- * @version 2.0
+ * @author Team Medusa (Grupp 6), Team Kiwi (Group 2)
+ * @version 2.1
  * @since 2023-05-24
+ * @updated 2024-05-07 Fixed so navigation goes back to activity page instead of technique pr exrecise page, as those are gone
  */
 export default function ActivityDelete({ id, activityID, name, setIsOpen, what }) {
 	
@@ -49,6 +50,8 @@ export default function ActivityDelete({ id, activityID, name, setIsOpen, what }
 	const [deleteButtonDisabled, setDeleteButtonDisabled] = useState(true)
 	const [hasError, setHasError] = useState(false)
 	const navigate = useNavigate()
+	const location = useLocation()
+	const hasPreviousState = location.key !== "default"
 
 
 	useEffect(() => {
@@ -99,7 +102,6 @@ export default function ActivityDelete({ id, activityID, name, setIsOpen, what }
 				setHasError(true)
 			)
 
-		
 	}
 
 	function isTechnique() {
@@ -123,7 +125,7 @@ export default function ActivityDelete({ id, activityID, name, setIsOpen, what }
 				width="100%"
 				onClick={async () => {
 					cascadeDelete(activityID, token)
-					isTechnique() ? await navigate("/technique") : await navigate("/exercise")
+					handleNavigation()
 				}}>
 				<p>Ta bort</p></Button>
 		</div>
@@ -146,12 +148,26 @@ export default function ActivityDelete({ id, activityID, name, setIsOpen, what }
 	}
 
 	if (hasError) {
-		const destination = isTechnique() ? "/technique" : "/exercise"
 		return <ErrorState 
 			message={"Ett nätverksfel inträffade. Kontrollera din anslutning"}
-			onBack={() => {navigate(destination)}}
+			onBack={handleNavigation}
 			id={"activity-delete-errorstate"}
 		/>
+	}
+
+
+	/**
+	 * Handles navigation in the page
+	 * Makes sure the page navigate back to default activity page if 
+	 * navigate(-1) is not a page on our website
+	 */
+	const handleNavigation = () => {
+		if(hasPreviousState) {
+			navigate(-1)
+		}
+		else{
+			navigate("/activity")
+		}
 	}
 
 	return <div className={styles.popupContainer} id={id}>

@@ -587,12 +587,44 @@ CREATE TABLE IF NOT EXISTS examination_comment(
 );
 
 CREATE TABLE IF NOT EXISTS grading_protocol(
-	grading_protocol_id SERIAL PRIMARY KEY,
-	belt_id INT NOT NULL,
+	belt_id INT PRIMARY KEY,
 	grading_protocol JSON NOT NULL,
 	CONSTRAINT fk_belt_id FOREIGN KEY (belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS activity_list(
+       id SERIAL PRIMARY KEY,
+       author INT,
+       name VARCHAR(255) NOT NULL,
+       description VARCHAR(255),
+       private bool,
+       created_date DATE NOT NULL,
+       CONSTRAINT al_author_fk FOREIGN KEY (author) REFERENCES user_table(user_id)
+);
+
+ALTER TABLE
+      activity_list OWNER to psql;
+
+CREATE TABLE IF NOT EXISTS activity_list_entry(
+       list_entry_id SERIAL PRIMARY KEY,
+       list_id INT NOT NULL,
+       exercise_id INT,
+       technique_id INT,
+       CONSTRAINT ale_list_id_fk FOREIGN KEY (list_id) REFERENCES activity_list(id) ON DELETE CASCADE
+);
+
+ALTER TABLE
+      activity_list_entry OWNER to psql;
+
+CREATE TABLE IF NOT EXISTS user_to_activity_list(
+       user_id INT CHECK (user_id IS NOT NULL),
+       list_id INT CHECK (list_id IS NOT NULL),
+       CONSTRAINT user_id_fk FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE,
+       CONSTRAINT list_id_fk FOREIGN KEY (list_id) REFERENCES activity_list(id) ON DELETE CASCADE
+);
+
+ALTER TABLE
+      user_to_activity_list OWNER to psql;
 
 --
 -- Default Inserts
@@ -613,6 +645,8 @@ CREATE TABLE IF NOT EXISTS grading_protocol(
 \ir defaults/sessions.sql 
 \ir defaults/sessionreviews.sql
 \ir defaults/sessionreviewactivities.sql
+\ir defaults/activitylists.sql
+\ir defaults/grading_protocols.sql
 -- Triggers for user
 --
 CREATE OR REPLACE FUNCTION remove_user_references() RETURNS TRIGGER AS $$ 

@@ -188,6 +188,7 @@ export default function PlanIndex() {
 					</Button>
 				</Link>
 			</div>
+
 			<FilterPlan
 				id={42}
 				setChosenGroups={setSelectedPlans}
