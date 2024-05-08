@@ -104,7 +104,7 @@ public class RoleController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    /**
+        /**
      * Edits a role.
      *
      * @param roleId The role to be updated/edited.
@@ -127,5 +127,4 @@ public class RoleController {
 
         return new ResponseEntity<>(roleToUpdate, HttpStatus.OK);
     }
-
 }
