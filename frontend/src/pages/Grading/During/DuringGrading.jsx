@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 
 import TechniqueInfoPanel from "../../../components/Grading/PerformGrading/TechniqueInfoPanel"
 
@@ -76,10 +76,66 @@ export default function DuringGrading() {
 	//const { examinationID } = useParams()
 	//const { token } = useContext(AccountContext)
 	const [currentIndex, setCurrentIndex] = useState(0)
+	const [examinees, setExaminees] = useState()
 
 	const goToNextTechnique = () => {
 		setCurrentIndex(currentIndex + 1)
 	}
+
+	useEffect(() => {
+		(async () => {
+			//setIsLoadingGroups(true)
+			try {
+				const response = await fetch("/api/examination/examinee/all", {})
+				if (response.status === 404) {
+					console.log("404")
+					//setIsLoadingGroups(false)
+					return
+				}
+				if (!response.ok) {
+					//setIsLoadingGroups(false)
+					console.log("could not fetch examinees")
+					throw new Error("Could not fetch examinees")
+				}
+				console.log("Success fetch groups", response)
+				setExaminees(await response.json())
+				//setIsLoadingGroups(false)
+			} catch (ex) {
+				//setIsLoadingGroups(false)
+				setErrorToast("Kunde inte hämta alla grupper")
+				console.error(ex)
+			}
+		})()
+	}, [])
+
+	useEffect(() => {
+		/*
+		(async () => {
+			try {
+				//setIsLoadingWorkouts(true)
+				
+				const response = await fetch("/api/workouts/all", { headers: { token } })
+				if (response.status === 204) {
+					setIsLoadingWorkouts(false)
+					return
+				}
+				if (!response.ok) {
+					setIsLoadingWorkouts(false)
+					throw new Error("Could not fetch workouts")
+				}
+				setWorkouts(await response.json())
+				setIsLoadingWorkouts(false)
+			} catch (ex) {
+				setIsLoadingWorkouts(false)
+				setErrorToast("Kunde inte hämta alla pass")
+				console.error(ex)
+			}
+		})()
+		*/
+		console.log(examinees)
+	}, [examinees])
+
+
 	// TODO: Loads everytime the button is pressed. Should only happen once at start. useEffect?
 	const techniqueNameList = getTechniqueNameList(ProtocolYellow)
 	const categoryIndexMap = getCategoryIndices(techniqueNameList)
