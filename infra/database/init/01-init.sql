@@ -581,11 +581,11 @@ CREATE TABLE IF NOT EXISTS examination_examinee_pair (
 );
 
 CREATE TABLE IF NOT EXISTS examination_result(
+    result_id SERIAL PRIMARY KEY,
 	examinee_id INT NOT NULL,
 	technique_name VARCHAR(255) NOT NULL, -- Should be string with technique_name in grading protocol
 	pass BOOLEAN,
-	CONSTRAINT examinee_id_fk FOREIGN KEY(examinee_id) REFERENCES examination_examinee(examinee_id) ON DELETE CASCADE,
-	CONSTRAINT examination_result_pk PRIMARY KEY (examinee_id, technique_name)
+	CONSTRAINT examinee_id_fk FOREIGN KEY(examinee_id) REFERENCES examination_examinee(examinee_id) ON DELETE CASCADE
 );
 
 
