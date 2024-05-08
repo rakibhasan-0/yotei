@@ -55,21 +55,17 @@ const ListEdit = () => {
 	 */
 	function parseData(data) {
 		let totDuration = 0
-		data.activityItems.forEach(category => {
-			category.activities.forEach(activity=> {
-				totDuration += +activity.duration
-			})
-		})
+
 
 		let activities = []
+		console.log("Oliver kompis")
+		console.logI(data)
 		data.activityItems.forEach((category, index) => {
 			let categoryOrder = index + 1
 			category.activities.forEach((activity, index) => {
 				const activityOrder = index + 1
 
 				const obj = {
-					categoryName: category.name,
-					categoryOrder: categoryOrder,
 					name: activity.name,
 					desc: activity.description,
 					duration: activity.duration,
