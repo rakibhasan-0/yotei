@@ -7,11 +7,12 @@ import {
 	CategoryScale,
 	LinearScale,
 	Tooltip,
+	Title,
 } from "chart.js"
 
 import { Bar } from "react-chartjs-2"
 
-ChartJS.register(BarElement,CategoryScale, LinearScale, Tooltip)
+ChartJS.register(BarElement,CategoryScale, LinearScale, Tooltip,Title)
 
 
 /** 
@@ -56,7 +57,7 @@ export default function BeltColorChart({ beltColorsData }) {
 	const chartOptions = {
 		indexAxis: "x",
 		responsive: true,
-		maintainAspectRatio: true,
+		maintainAspectRatio: false,
 		scales: {
 			x: {
 				beginAtZero: true,
