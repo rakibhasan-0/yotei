@@ -12,7 +12,7 @@ import javax.persistence.Table;
 @Entity()
 @Table(name = "examination_result")
 public class ExaminationResult {
-    @Id
+    @Id 
     @Column(nullable = false, name = "examinee_id")
     private Long examinee_id;
 

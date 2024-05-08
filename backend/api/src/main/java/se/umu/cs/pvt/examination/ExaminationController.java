@@ -215,7 +215,7 @@ public class ExaminationController {
      * Updates a given examination result.
      * @param examination_result Object mapped examimnation result from request body.
      * @return HTTP-status code.
-    */ 
+    */  
     @PutMapping("/examresult")
     public ResponseEntity<Object> updateExaminationResult(@RequestBody ExaminationResult examination_result){
 
