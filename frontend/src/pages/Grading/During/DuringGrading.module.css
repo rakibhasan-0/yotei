@@ -32,11 +32,10 @@
     display: flex; /* Use flexbox to create a row layout */
     justify-content: center; /* Center items horizontally within the container */
     align-items: center; /* Center items vertically within the container */
-    position: fixed; /* Fix the container at the bottom of the viewport */
     left: 0;
     right: 0;
     bottom: 0;
-    padding: 20px; /* Add padding for spacing */
+    padding: 10px; /* Add padding for spacing */
     background-color: #fff; /* Optional: Add a background color */
     border-top: 1px solid #ddd; /* Optional: Add a border at the top */
 }
