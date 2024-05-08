@@ -20,7 +20,7 @@ export default function StatisticsPopUp({groupActivities,dates,averageRating,num
 	const startDate = dates.from
 	const endDate = dates.to
 
-	const [beltColorsData, setBeltColorsData] = useState({});
+	const [beltColorsData, setBeltColorsData] = useState({})
 
 	useEffect(() => {
 		// Function to calculate the amount of techniques by belt color

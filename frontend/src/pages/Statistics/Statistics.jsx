@@ -170,7 +170,7 @@ export default function Statistics() {
 				/>
 
 				<StatisticsPopUp groupActivities = {activities} dates ={dates} averageRating = {averageRating} 
-				numberOfSessions = {numberofSessions} />
+					numberOfSessions = {numberofSessions} />
 			</div>
 
 			<div className="activitiesContainer" id="technique-exercise-list">
