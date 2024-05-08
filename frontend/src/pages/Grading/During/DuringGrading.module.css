@@ -18,3 +18,55 @@
     flex-direction: column;
     /*height: 100vh;*/  
 }
+
+.btnNextActivity {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    font-size:xx-large;
+    text-align: center;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--red-primary);
+}
+
+.btnNextActivity > * {
+    font-size: 3rem;
+    filter: brightness(0) invert(1);
+    padding: 0;
+}
+
+.btnPrevActivity {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    font-size:xx-large;
+    text-align: center;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--red-primary);
+}
+
+.btnPrevActivity > * {
+    font-size: 3rem;
+    filter: brightness(0) invert(1);
+    padding: 0;
+}
+
+.popupContent {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}

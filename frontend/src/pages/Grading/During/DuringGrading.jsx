@@ -1,9 +1,15 @@
 import React, { useState } from "react"
 
 import TechniqueInfoPanel from "../../../components/Grading/PerformGrading/TechniqueInfoPanel"
+import Button from "../../../components/Common/Button/Button"
+import Popup from "../../../components/Common/Popup/Popup"
 import ExamineePairBox from "../../../components/Grading/PerformGrading/ExamineePairBox"
 
 import styles from "./DuringGrading.module.css"
+import RoundButton from "../../../components/Common/RoundButton/RoundButton"
+import { ArrowRight, ArrowLeft } from "react-bootstrap-icons"
+import {Link} from "react-router-dom"
+
 // Temp
 import ProtocolYellow from "./yellowProtocolTemp.json"
 //import InfiniteScrollComponent from "../../../components/Common/List/InfiniteScrollComponent"
@@ -81,9 +87,16 @@ export default function DuringGrading() {
 	//const { examinationID } = useParams()
 	//const { token } = useContext(AccountContext)
 	const [currentIndex, setCurrentIndex] = useState(0)
+	const [showPopup, setShowPopup] = useState(false)
+	const headers = ["Teknik1", "Teknik2", "Teknik3", "Teknik4", "Teknik5", "Teknik6", "Teknik7", "Teknik8", "Teknik9"] // Example array of headers
 
+
+	// Go to summary when the index is equal to length. Maybe change the look of the buttons.
 	const goToNextTechnique = () => {
-		setCurrentIndex(currentIndex + 1)
+		setCurrentIndex(currentIndex === techniqueNameList.length - 1 ? currentIndex = currentIndex : currentIndex + 1)
+	}
+	const goToPrevTechnique = () => {
+		setCurrentIndex(currentIndex === 0 ? currentIndex = 0 : currentIndex - 1)
 	}
 	// TODO: Loads everytime the button is pressed. Should only happen once at start. useEffect?
 	const techniqueNameList = getTechniqueNameList(ProtocolYellow)
@@ -112,7 +125,28 @@ export default function DuringGrading() {
 					</ExamineePairBox>
 				))}
 			</div>
-			<button onClick={goToNextTechnique}>Next</button>
+			<RoundButton onClick={goToNextTechnique} id={"next_technique"} className={`$styles.btnNextActivity`}>{<ArrowRight/>}</RoundButton>
+			
+			<Button id={"techniques-button"} onClick={() => setShowPopup(true)}><p>Tekniker</p></Button>
+			<Popup 
+				id={"navigation-popup"} 
+				title={"Navigering"} 
+				isOpen={showPopup} 
+				setIsOpen={setShowPopup}> 
+				<div className={styles.popupContent}>
+					{/* Should link to the respective technique grading page. */}
+					{headers.map((techniqueName, index) => (
+						<Button key={index}><p>{techniqueName}</p></Button>
+					))}
+					{/* Should link to the "after" part of the grading as well as save the changes to the database. */}
+					<Link to="/groups">
+						<Button id={"summary-button"} onClick={() => setShowPopup(false)}><p>Fortsätt till summering</p></Button>
+					</Link>
+				</div>
+			</Popup>
+			<div id={"prev_technique"} onClick={goToPrevTechnique} className={`${styles.btnPrevActivity}`}>
+				{<ArrowLeft/>}
+			</div>
 		</div>
 	)
 }
