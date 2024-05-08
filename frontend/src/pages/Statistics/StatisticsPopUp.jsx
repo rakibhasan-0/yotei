@@ -3,19 +3,22 @@ import style from "./StatisticsButton.module.css"
 import Popup from "../../components/Common/Popup/Popup"
 import StarRatings from "react-star-ratings"
 import BeltColorChart from "../../components/Common/BeltColorChart/BeltColorChart"
+
 /**
+ * Statistics pop-up component.
+ * @input groupActivities - The activities to be displayed in the pop-up.
+ * @input dates - The date interval of the sessions
+ * @input averageRating - The average rating of the sessions
+ * @input numberOfSessions - The number of sessions done in the interval
+ * @returns A pop-up with statistics.
  * 
- * prop with data will be passed here so that data will be processed and will be shown in the popup
- * however there is some concerning with position of the css in that case.
- * 
- * The work is on progress for the statistics page.
- * 
+ * @author Team Coconut (Gabriel Morberg)
+ * @since 2024-05-08
+ * @version 1.0
  */
-export default function StatisticsPopUp({data,filteredActivities,dates,averageRating,numberOfSessions}) {
+export default function StatisticsPopUp({groupActivities,dates,averageRating,numberOfSessions}) {
 	const startDate = dates.from
 	const endDate = dates.to
-	console.log(averageRating)
-	console.log(filteredActivities)
 
 	const [beltColorsData, setBeltColorsData] = useState({});
 
@@ -23,7 +26,7 @@ export default function StatisticsPopUp({data,filteredActivities,dates,averageRa
 		// Function to calculate the amount of techniques by belt color
 		const calculateBeltColorsData = () => {
 		  const colorsCount = {};
-		  filteredActivities.forEach(activity => {
+		  groupActivities.forEach(activity => {
 			activity.beltColors.forEach(beltColor => {
 			  const color = beltColor.belt_name;
 			  colorsCount[color] = (colorsCount[color] || 0) + activity.count;
@@ -32,9 +35,9 @@ export default function StatisticsPopUp({data,filteredActivities,dates,averageRa
 		  setBeltColorsData(colorsCount);
 		};
 	
-		// Call the function to calculate belt colors data when filteredActivities change
+		// Call the function to calculate belt colors data when groupActivities change
 		calculateBeltColorsData();
-	  }, [filteredActivities]);
+	  }, [groupActivities]);
 
 
 	const [showPopup, setShowPopup] = useState(false)
