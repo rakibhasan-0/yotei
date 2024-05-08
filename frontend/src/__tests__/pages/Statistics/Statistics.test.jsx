@@ -11,52 +11,57 @@ configure({ testIdAttribute: "id" })
  * @version 1.0
  */
 describe("Statistics Popup", () => {
+    test("Clicking button should show popup", async () => {
+        // Mock data
+        const mockData = {
+            groupActivities: [{
+                activity_id: 1,
+                beltColors: [{
+                    belt_color: "0C7D2B",
+                    belt_name: "Grönt",
+                    is_child: false
+                }],
+                count: 6,
+                name: "Sample Group",
+                type: "technique",
+            }],
+            dates: {
+                from: new Date("2022-05-08").toISOString(),
+                to: new Date("2024-05-08").toISOString(),
+            },
+            averageRating: 4,
+            numberOfSessions: 10,
+        }
 
-	test("Clicking button should show popup", async () => {
+        // Mock the fetch function
+        global.fetch = jest.fn(() =>
+            Promise.resolve({
+                ok: true,
+                json: () => Promise.resolve(mockData),
+            })
+        )
 
-		// eslint-disable-next-line no-undef
-		global.fetch = jest.fn(() =>
-			Promise.resolve({
-				ok: true,
-				json: () =>
-					Promise.resolve([
-						{
-							activity_id: 1,
-							beltColors: [{
-								belt_color: "0C7D2B",
-								belt_name: "Grönt",
-								is_child: false
-							}],
-							count: 6,
-							name: "Sample Group",
-							type: "technique",
-						},
-						{
-							id: 1,
-							name: "Sample Group",
-							color: "0C7D2B",
-							child: false
-						}
-					]),
-			})
+        // Render the StatisticsPopup component with mock data
+        render(
+			<BrowserRouter> 
+				<StatisticsPopUp 
+					groupActivities={mockData.groupActivities} 
+					dates={mockData.dates} 
+					averageRating={mockData.averageRating} 
+					numberOfSessions={mockData.numberOfSessions} />
+			</BrowserRouter>
 		)
 
-		render(<BrowserRouter> <Statistics /> </BrowserRouter>)
+        // Simulate a click on the button
+        fireEvent.click(screen.getByRole("button"))
 
-		// Render the StatisticsPopup component
-		render(<StatisticsPopUp />)
-
-		// Simulate a click on the button
-		fireEvent.click(screen.getByRole("button"))
-
-		// Wait for the popup to appear
-		await waitFor(() => {
-			expect(screen.getByText("Statistik")).toBeInTheDocument()
-		})
-
-	})
-
+        // Wait for the popup to appear
+        await waitFor(() => {
+            expect(screen.getByText("Statistik")).toBeInTheDocument()
+        })
+    })
 })
+
 
 describe("Statistics component", () => {
 
