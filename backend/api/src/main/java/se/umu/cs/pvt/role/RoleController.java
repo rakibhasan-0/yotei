@@ -86,4 +86,46 @@ public class RoleController {
         return new ResponseEntity<>(roleToAdd, HttpStatus.OK);
     }
 
+    /**
+     * Deletes a role by id.
+     *
+     * @param roleId the id of the role to delete.
+     * @return response, 200 OK on success.
+     */
+    @DeleteMapping("/{role_id}")
+    public ResponseEntity<Object> deleteTag(@PathVariable Long roleId) {
+        if (repository.findById(roleId).isEmpty()) {
+            return new ResponseEntity<>(
+                "Role with ID: " + roleId +  "does not exist", HttpStatus.BAD_REQUEST);
+        }
+
+        repository.deleteById(roleId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * Edits a role.
+     *
+     * @param roleId The role to be updated/edited.
+     * @param updatedRole The updated data.
+     * @return ResponseEntity with the updated tag or an error message.
+     */
+    @PutMapping("/{role_id}")
+    public ResponseEntity<Role> updateTag(
+        @PathVariable Long roleId, @RequestBody Role updatedRole) {
+        
+        Optional<Role> firstRole = repository.findById(roleId);
+        if (!firstRole.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Role roleToUpdate = firstRole.get();
+        roleToUpdate.setRoleName(updatedRole.getRoleName());
+
+        repository.save(roleToUpdate);
+
+        return new ResponseEntity<>(roleToUpdate, HttpStatus.OK);
+    }
+
 }
