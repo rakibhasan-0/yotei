@@ -18,7 +18,7 @@ import styles from "./TechniqueCard.module.css"
  * Converted to css module 2024-04-19, Hannes (group 1)
  *
  */
-function TechniqueCard({ technique, checkBox, id, onClick}) {
+function TechniqueCard({ technique, checkBox, id}) {
 	const navigate = useNavigate()
 
 	const handleClick = () => {
@@ -32,14 +32,8 @@ function TechniqueCard({ technique, checkBox, id, onClick}) {
 		}
 	}
 
-	const clickUpstream = (event) => {
-		if(onClick){
-			onClick(id, event)
-		}
-	}
-
 	return (
-		<div className={styles["technique-card"]} id={id} onClick={clickUpstream}>
+		<div className={styles["technique-card"]} id={id}>
 			{technique.type === "exercise" ? null : constructColor(technique)}
 
 			<div className={styles["technique-info-container"]}>

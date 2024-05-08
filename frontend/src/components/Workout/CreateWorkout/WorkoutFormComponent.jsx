@@ -327,7 +327,6 @@ export default function WorkoutFormComponent({ callback, state }) {
 				backText="Avbryt"
 				zIndex={1000}
 				onClick={() => {
-					localStorage.removeItem("storedTechnique")
 					workoutCreateInfoDispatch({
 						type: WORKOUT_CREATE_TYPES.CLEAR_ADDED_ACTIVITIES
 					})

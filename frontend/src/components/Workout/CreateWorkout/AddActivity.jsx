@@ -104,12 +104,6 @@ function AddActivity({ id, setShowActivityInfo }) {
 	//const [cookiesExer, setCookiesExer] = useCookies(["techniques-filter"])
 	const [visibleExercises, setVisibleExercises] = useState([])
 
-	const [element , setElement] = useState(null)
-	const [fetchedElementNum, setFetchedElementNum] = useState(19)
-	const [fetchedElement, setFetchedElement] = useState(null)
-	const [elementFound, setElementFound] = useState(false)
-
-
 	/**
      * Makes sure the data in the search bar is stored when choosing between techniques and exercises
      * also when redirected to and from info on techniques and exercises.
@@ -250,47 +244,6 @@ function AddActivity({ id, setShowActivityInfo }) {
 		searchExercises()
 	}, [searchExerText, selectedExerTags, hasLoadedData])
 
-	useEffect(() => {
-		if (!hasLoadedData || !fetchedTech) return
-		
-		const storedTechnique = localStorage.getItem("storedTechnique")
-	
-		setElement(document.getElementById(storedTechnique))
-		
-		if(!elementFound && storedTechnique != null){
-			waitForItemToLoad()
-		}
-
-		if(storedTechnique != null && element == null && fetchedElement != null && !elementFound && fetchedElementNum <= techniques.length){
-			console.log("Scrolling to: " + fetchedElement.id)
-			fetchedElement.scrollIntoView()
-			setElement(document.getElementById(storedTechnique))
-		}
-
-		if (element != null) {
-			element.scrollIntoView({ behavior: "smooth" })
-			setElementFound(true)
-		}
-	}, [hasLoadedData, fetchedTech, fetchedElement, fetchedElementNum])//fetchedElementNum är problem child
-
-	function waitForItemToLoad() {
-		if (hasLoadedData && fetchedTech && fetchedElementNum <= techniques.length) {
-			const interval = setInterval(() => {
-				const elementTemp = document.getElementById("technique-list-item-" + techniques[fetchedElementNum].techniqueID)
-				if(elementFound){
-					return
-				}
-
-				if (elementTemp != null) {
-					clearInterval(interval)
-					setFetchedElement(elementTemp)
-					
-					setFetchedElementNum(fetchedElementNum + 10)
-				}
-			}, 100)
-		}
-	}
-
 	/**
 	 * Function for handling when a belt has been picked from the BeltPicker.
 	 * Returns an object that is a list of the selected belts.
@@ -418,10 +371,6 @@ function AddActivity({ id, setShowActivityInfo }) {
 		setSelectedBelts([])
 	}
 
-	const printLog = (id) => {
-		localStorage.setItem("storedTechnique", id)
-	}
-
 	return (
 		<div id={id}>
 			<Modal.Body style={{ padding: "0" }}>
@@ -458,7 +407,6 @@ function AddActivity({ id, setShowActivityInfo }) {
 								{techniques.map((technique, key) => (
 									<TechniqueCard
 										id={"technique-list-item-" + technique.techniqueID}
-										onClick={printLog}
 										checkBox={
 											<CheckBox
 												checked={checkedActivities.some(a => a.techniqueID === technique.techniqueID)}

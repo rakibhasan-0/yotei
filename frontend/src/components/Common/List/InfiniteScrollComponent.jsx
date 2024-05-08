@@ -27,22 +27,53 @@ export default function InfiniteScrollComponent({ children, activities }) {
 
 	const [visibleTechniques, setVisibleTechniques] = useState([])
 
+	const fetchedTech = useRef(localStorage.getItem("storedTech"))
+
 	const [isLoading, setIsLoading] = useState(true)
 
 	function updateShownItems() {
 		let startIndex = shownItems.current - 20
 		let endIndex = shownItems.current 
 		let data = children.slice(startIndex, endIndex)
-  
+
 		setVisibleTechniques(prevItems => [...prevItems, ...data])
+		fetchedUpdate()
+
 		shownItems.current += 20
 		setIsLoading(false)
 	}
 
+	function fetchedShownItems(){
+		let startIndex = 0
+		let endIndex = +fetchedTech.current
+		let data = children.slice(startIndex, endIndex)
+
+		setVisibleTechniques(prevItems => [...prevItems, ...data])
+		fetchedUpdate()
+		shownItems.current = +fetchedTech.current + 20
+		console.log(+fetchedTech.current)
+		setIsLoading(false)
+	}
+
+	function fetchedUpdate(){
+		if(visibleTechniques.length > 0){
+			localStorage.setItem("storedTech", visibleTechniques.length)
+			fetchedTech.current = +visibleTechniques.length
+		}
+	}
+
 	useEffect(() => {
-		shownItems.current = 20
-		setVisibleTechniques([])
-		updateShownItems()
+		if(+fetchedTech.current > 0 && visibleTechniques.length == 0){
+			console.log("hejfje")
+			fetchedShownItems()
+		}
+
+		else if(visibleTechniques.length == 0){
+			console.log("hje")
+			shownItems.current = 20
+			setVisibleTechniques([])
+			updateShownItems()
+		}
 	}, [activities ? activities : children])
 
 	return (
