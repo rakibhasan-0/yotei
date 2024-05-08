@@ -221,4 +221,19 @@ public class ExaminationController {
     ResponseEntity<List<ExaminationResult>> getAllExaminationResults(){
         return new ResponseEntity<>(examinationResultRepository.findAll(), HttpStatus.OK);
     }
+
+    /**
+     * Deletes a given examinee result.
+     * @param examinee_id Given examinee id.
+     * @return HTTP-status code.
+    */
+    @DeleteMapping("/examresult/{examinee_id}")
+    public ResponseEntity<ExaminationResult> deleteExaminationResult(@PathVariable("examinee_id") long examinee_id) {
+        if(examinationResultRepository.findById(examinee_id).isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        examinationResultRepository.deleteById(examinee_id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
