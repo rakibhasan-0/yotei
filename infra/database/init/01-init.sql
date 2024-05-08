@@ -598,9 +598,9 @@ CREATE TABLE IF NOT EXISTS examination_comment(
 	comment VARCHAR NOT NULL 
 );
 
-CREATE TABLE IF NOT EXISTS grading_protocol(
+CREATE TABLE IF NOT EXISTS examination_protocol(
 	belt_id INT PRIMARY KEY,
-	grading_protocol JSON NOT NULL,
+	examination_protocol JSON NOT NULL,
 	CONSTRAINT fk_belt_id FOREIGN KEY (belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE
 );
 
