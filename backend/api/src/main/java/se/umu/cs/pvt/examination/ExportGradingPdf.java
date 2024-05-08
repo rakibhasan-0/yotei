@@ -84,35 +84,37 @@ public class ExportGradingPdf {
         String code = (String) gradingProtocolObj.get("code");
         String color = (String) gradingProtocolObj.get("color");
 
-        createHeader(code + " " + color, "test, test2, test3", "2024-05-07", contentStream);
+
+        createHeader(code + " " + color, "2024-05-07", contentStream);
 
         drawImage(System.getProperty("user.dir") + "/frontend/public/ubk-logga.jpg", (int)page.getMediaBox().getWidth() - 163, pageHeight-60, contentStream);
-
+        contentStream.addRect(initX, initY, CELL_WIDTH+30, -CELL_HEIGHT);
         writeToCell(initX, initY, contentStream, "Namn", font);
         int count = 1;
-        for(int i = 1; i<=1;i++) {
-            initX+=CELL_WIDTH+30;
-            for(int j = (onPage*MAX_NUM_COLUMNS); j<(onPage*MAX_NUM_COLUMNS)+MAX_NUM_COLUMNS && j < examinees.size();j++){
-                contentStream.addRect(initX,initY,CELL_WIDTH,-CELL_HEIGHT);
 
-                writeToCell(initX, initY, contentStream, examinees.get(j).getName(), font);
+        initX+=CELL_WIDTH+30;
+        for(int j = (onPage*MAX_NUM_COLUMNS); j<(onPage*MAX_NUM_COLUMNS)+MAX_NUM_COLUMNS && j < examinees.size();j++){
+            contentStream.addRect(initX,initY,CELL_WIDTH,-CELL_HEIGHT);
 
-                initX+=CELL_WIDTH;
-                count++;
-            }
-            initX = TABLE_START_X_POS;
-            initY -=CELL_HEIGHT;
+            writeToCell(initX, initY, contentStream, examinees.get(j).getName(), font);
+
+            initX+=CELL_WIDTH;
+            count++;
         }
-
-
+        initX = TABLE_START_X_POS;
+        initY -=CELL_HEIGHT;
+    
+        int row_count = 0;
         for(int i = 0; i < examinationTechniqueCategories.size(); i++) {
                 
             contentStream.addRect(initX, initY, CELL_WIDTH*count+30, -CELL_HEIGHT);
+            row_count++;
             writeToCell(initX, initY, contentStream, examinationTechniqueCategories.get(i).getCategoryName(), font);
 
             for(int j = 0; j < examinationTechniqueCategories.get(i).getTechniques().size(); j++) {
                 initY -=CELL_HEIGHT;
                 contentStream.addRect(initX, initY, CELL_WIDTH+30, -CELL_HEIGHT);
+                row_count++;
                 
                 //funktion korta ner teknik strängen och dela upp i två å skriva den på två rader
                 String name = examinationTechniqueCategories.get(i).getTechniques().get(j).toString();
@@ -129,8 +131,6 @@ public class ExportGradingPdf {
                     }
 
                     writeToCell(initX, initY+10, contentStream, name.substring(0, splitOnIndex), font);
-
-
                     writeToCell(initX, initY, contentStream, name.substring(splitOnIndex, name.length()), font);
                 } else  {
                     writeToCell(initX, initY, contentStream, examinationTechniqueCategories.get(i).getTechniques().get(j).toString(), font);
@@ -145,6 +145,34 @@ public class ExportGradingPdf {
                 }
 
                 initX = TABLE_START_X_POS;
+
+                if(row_count > MAX_NUM_ROWS) {
+                    contentStream.stroke();
+                    contentStream.close();
+                    PDPage page2 = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
+                    initX = TABLE_START_X_POS;
+                    initY = pageHeight -75;
+                    document.addPage(page2);
+
+                    row_count = 0;
+                    contentStream = new PDPageContentStream(document,page2);
+                    createHeader(code + " " + color, "2024-05-07", contentStream);
+                    drawImage(System.getProperty("user.dir") + "/frontend/public/ubk-logga.jpg", (int)page.getMediaBox().getWidth() - 163, pageHeight-60, contentStream);
+                    contentStream.addRect(initX, initY, CELL_WIDTH+30, -CELL_HEIGHT);
+                    writeToCell(initX, initY, contentStream, "Namn", font);
+                    int count2 = 1;
+                    
+                    initX+=CELL_WIDTH+30;
+                    for(int j2 = (onPage*MAX_NUM_COLUMNS); j2<(onPage*MAX_NUM_COLUMNS)+MAX_NUM_COLUMNS && j2 < examinees.size();j2++){
+                        contentStream.addRect(initX,initY,CELL_WIDTH,-CELL_HEIGHT);
+        
+                        writeToCell(initX, initY, contentStream, examinees.get(j2).getName(), font);
+        
+                        initX+=CELL_WIDTH;
+                        count2++;
+                    }
+                    initX = TABLE_START_X_POS;
+                }
             }
 
             initY -=CELL_HEIGHT;
@@ -164,20 +192,18 @@ public class ExportGradingPdf {
     }
 
 
-    private void createHeader(String belt_name, String categories, String date, PDPageContentStream contentStream) throws IOException {
+    private void createHeader(String belt_name, String date, PDPageContentStream contentStream) throws IOException {
         PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/noto/NotoSans-Regular.ttf"));
         int initX = TABLE_START_X_POS;
         int initY = pageHeight-75;
 
         //Set header data
         contentStream.beginText();
-        contentStream.setFont(font, 12);
+        contentStream.setFont(font, 10);
         contentStream.newLineAtOffset(initX, initY + 50);
         contentStream.showText("Graderingprotokoll");
         contentStream.newLineAtOffset(0, -15);
         contentStream.showText(belt_name);
-        contentStream.newLineAtOffset(0, -15);
-        contentStream.showText(categories);
         contentStream.newLineAtOffset(0, -15);
         contentStream.showText(date);
         contentStream.endText();
