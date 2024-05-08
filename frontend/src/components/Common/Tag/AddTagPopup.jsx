@@ -14,6 +14,7 @@ import { ChevronRight } from "react-bootstrap-icons"
 import TagList from "./Taglist.jsx"
 import CheckBox from "../CheckBox/CheckBox"
 import MiniPopup from "../MiniPopup/MiniPopup.jsx"
+import TagUsagePopup from "./TagUsagePopup.jsx"
 
 
 /**
@@ -58,6 +59,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	const [newAddedTags, setNewAddedTags] = useState(addedTags)
 	const [showPopup, setShowPopup] = useState(false)
 	const [sort, setSort] = useState(sortOptions[0])
+	const [usage, setUsage] = useState([]) 
 
 	useEffect(() => {
 		
@@ -148,13 +150,15 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 			<TagList tag={tag} key={tag.id} 
 				onChecked={checked => checked ? handleAddTag(tag) : handleRemoveTag(tag)}
 				added={newAddedTags.some(a => a.id == tag.id)}	
-				onTrashClicked={handleDelete}
+				onTrashClicked={() => handleDelete(tag.id)}
 			/>
 		)
 		setTagListArray(tempTagListArray)
 	}, [newAddedTags, suggested])
 
-	const handleDelete = () => {
+	const handleDelete = (tagid) => {
+		getPopupContents(tagid)
+		
 		setShowPopup(true)
 	}
 
@@ -165,6 +169,34 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	const saveAndClose = () => {
 		setAddedTags(newAddedTags)
 		setIsOpen(false)
+	}
+
+	const getPopupContents = async (tagId) => {
+		const url = new URL("/api/tags/usage", window.location.origin)
+		url.searchParams.append("tag-id", tagId)
+		const requestOptions = {
+			method: "GET",
+			headers: {"Content-type": "application/json",token }
+		}
+	
+		try {
+			const response = await fetch(url, requestOptions)
+			if (!response.ok) {
+				setError("Något gick fel vid hämtning av tagganvändning")
+			}
+			const usage = await response.json()
+			setUsage(usage)
+	
+		} catch (error) {
+			setError("Något gick fel vid hämtning av tagganvändning")
+		}
+	}
+
+	const hideShowPopup = (show) => {
+		if (!show) {
+			setUsage("")
+		}
+		setShowPopup(show)
 	}
 
 	return (
@@ -204,19 +236,22 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 					<Sorter id={"tag-sort"} selected={sort} onSortChange={setSort} options={sortOptions}/>
 				</FilterContainer>
 			</div>
-			<div style={{overflow:scroll}}>
+			<div >
 				{tagListArray}
 
-				<MiniPopup title={"Taggen kunde ej tas bort"} isOpen={showPopup} setIsOpen={setShowPopup} >
-					<div >
-						Denna tagg används på x övningar x tekniker och x pass
-					</div>
-				</MiniPopup>
+				
 			</div>
+			
+			<MiniPopup title={"Taggen kunde ej tas bort"} isOpen={showPopup} setIsOpen={hideShowPopup} >
+				<TagUsagePopup usage={usage}>  </TagUsagePopup>
+			</MiniPopup>
+			
 			
 			<RoundButton onClick={saveAndClose} > 
 				<ChevronRight width={30} />
 			</RoundButton>
 		</div>
+
+		
 	)
 }
