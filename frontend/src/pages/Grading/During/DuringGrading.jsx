@@ -125,9 +125,9 @@ export default function DuringGrading() {
 					</ExamineePairBox>
 				))}
 			</div>
-			<RoundButton onClick={goToNextTechnique} id={"next_technique"} className={`$styles.btnNextActivity`}>{<ArrowRight/>}</RoundButton>
+			<RoundButton onClick={goToNextTechnique} id={"next_technique"} >{<ArrowRight/>}</RoundButton>
 			
-			<Button id={"techniques-button"} onClick={() => setShowPopup(true)}><p>Tekniker</p></Button>
+			<Button id={"techniques-button"} onClick={() => setShowPopup(true)} className={`${styles.btnTechniques}`}><p>Tekniker</p></Button>
 			<Popup 
 				id={"navigation-popup"} 
 				title={"Navigering"} 
