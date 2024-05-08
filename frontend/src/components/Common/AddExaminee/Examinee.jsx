@@ -49,9 +49,11 @@ export default function Examinee({ item, text, id, index, onRemove, onEdit, pair
   };
 
   const handleEditSubmit = () => {
-    setIsEditing(false);
-    setCurrentName(editedText);
-    onEdit(id, editedText);
+    if(currentName != "") {
+      setIsEditing(false);
+      setCurrentName(editedText);
+      onEdit(id, editedText);
+    }
   };
 
 	return (
@@ -72,7 +74,11 @@ export default function Examinee({ item, text, id, index, onRemove, onEdit, pair
                   type="text"
                   value={currentName}
                   onChange={handleInputChange}
-                  onBlur={handleEditSubmit}
+                  onBlur={() => {
+                    if (currentName != "") {
+                      handleEditSubmit
+                    }
+                  }}
                   autoFocus
                 />
               ) : (

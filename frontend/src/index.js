@@ -31,6 +31,7 @@ import PlanIndex from "./pages/Plan/PlanIndex"
 import Grading from "./pages/Grading/GradingIndex.jsx"
 import GradingCreate from "./pages/Grading/GradingCreate.jsx"
 import GradingBefore from "./pages/Grading/GradingBefore.jsx"
+import GradingDeviations from "./pages/Grading/GradingDeviations.jsx"
 import BaseLayout from "./components/Common/BaseLayout/BaseLayout"
 import ErrorBoundary from "./components/ErrorHandler/ErrorBoundary"
 import Statistics from "./pages/Statistics/Statistics.jsx"
@@ -41,6 +42,7 @@ import CreateTechnique from "./pages/Activity/Technique/CreateTechnique/CreateTe
 import AdminRoute from "./AdminRoute"
 import ActivityIndex from "./pages/Activity/ActivityIndex.jsx"
 import GradingAfter from "./pages/Grading/GradingAfter.jsx"
+
 
 const exerciseURI = "https://jsonplaceholder.typicode.com/users"
 const workoutURI = "https://jsonplaceholder.typicode.com/users"
@@ -140,6 +142,7 @@ export default function App() {
 						<Route path="grading/create" element={<GradingCreate/>} />
 						<Route path="grading/:gradingId/1" element={<GradingBefore/>} />
 						<Route path = "grading/:gradingId/3" element={<GradingAfter/>} />
+						<Route path = "grading/:gradingId/4" element={<GradingDeviations/>} />
 						<Route path="groups/statistics/:groupID" element={<Statistics />} />
 						<Route path="" element={<PlanIndex uri={planURI} />} />
 						<Route path="*" element={<NoPage />} />

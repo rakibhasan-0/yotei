@@ -8,7 +8,6 @@ import se.umu.cs.pvt.belt.Belt;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
-import java.time.LocalDate;
 
 
 /**
@@ -23,7 +22,7 @@ public class StatisticsResponseTest {
 
     @BeforeEach
     void init() {
-        sr = new StatisticsResponse(1L,1L, "Armhävningar", "exercise", 1L, false, LocalDate.now());
+        sr = new StatisticsResponse(1L, "Armhävningar", "exercise", 1L);
     }
 
     @Test
