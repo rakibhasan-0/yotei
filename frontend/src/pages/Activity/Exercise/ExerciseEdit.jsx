@@ -35,7 +35,7 @@ export default function ExerciseEdit() {
 	const context = useContext(AccountContext)
 	const [oldName, setOldName] = useState("")
 	const [oldDesc, setOldDesc] = useState("")
-	// const [oldTime, setOldTime] = useState(0)
+	const [oldTime, setOldTime] = useState(0)
 	const [name, setName] = useState("")
 	const [desc, setDesc] = useState("")
 	const [time, setTime] = useState("")
@@ -57,7 +57,7 @@ export default function ExerciseEdit() {
 	function done() {
 		if (!undoMediaChanges && !editFailed) {
 			setSuccess("Övningen uppdaterades!")
-			navigate(-1)	//knas		
+			handleNavigation()		
 		}
 		setSendData(false)
 	}
@@ -67,7 +67,7 @@ export default function ExerciseEdit() {
 		if(undoMediaChanges) {
 			blocker.proceed
 			setUndoMediaChanges(false)
-			navigate(-1)	//knas
+			handleNavigation()
 		}
 	}, [undoMediaChanges])
 
@@ -100,7 +100,7 @@ export default function ExerciseEdit() {
 	
 	useEffect(() => {
 		if (!isAdmin(context) || !isEditor(context)) {
-			navigate(-1)			//riktigt knas kod, MÅSTE FIXAS!
+			handleNavigation()
 		}
 	}, [context, navigate])
 	
@@ -140,7 +140,7 @@ export default function ExerciseEdit() {
 		setExistingTags(tagsJson)
 		setOldName(exerciseJson.name)
 		setOldDesc(exerciseJson.description)
-		// setOldTime(exerciseJson.duration)
+		setOldTime(exerciseJson.duration)
 		setIsLoading(false)
 		localStorage.setItem("askToLeave", false)
 		/* Ska inte ligga här utan villkor */
