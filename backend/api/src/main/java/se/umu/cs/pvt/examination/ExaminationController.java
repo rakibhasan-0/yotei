@@ -26,6 +26,7 @@ public class ExaminationController {
     private BeltRepository beltRepository;
     private ExamineePairRepository examineePairRepository;
     private ExamineeRepository examineeRepository;
+    private ExaminationResultRepository examinationResultRepository;
 
     public ResponseEntity<String> example() {
         return new ResponseEntity<>("hello", HttpStatus.OK);
@@ -38,14 +39,16 @@ public class ExaminationController {
      * @param beltRepository Repository for the belt entity.
      * @param examineePairRepository Repository for the examinee pair entity.
      * @param examineeRepository Repository for the examinee entity.
+     * @param examinationResultRepository Repository for the examination result entity.
      */
     @Autowired
     public ExaminationController(GradingRepository gradingRepository, BeltRepository beltRepository, ExamineePairRepository examineePairRepository, 
-    ExamineeRepository examineeRepository) {
+    ExamineeRepository examineeRepository, ExaminationResultRepository examinationResultRepository) {
         this.gradingRepository = gradingRepository;
         this.beltRepository = beltRepository;
         this.examineePairRepository = examineePairRepository;
         this.examineeRepository = examineeRepository;
+        this.examinationResultRepository = examinationResultRepository;
     }
 
     /**
@@ -195,4 +198,12 @@ public class ExaminationController {
     public ResponseEntity<List<Examinee>> getAllExaminees() {
         return new ResponseEntity<>(examineeRepository.findAll(), HttpStatus.OK);
     }
+
+    @PostMapping("/examresult")
+    public ResponseEntity<ExaminationResult> createExaminationResult(@RequestBody ExaminationResult examination_result){
+        ExaminationResult new_examination_result = examinationResultRepository.save(examination_result);
+        return new ResponseEntity<>(new_examination_result, HttpStatus.OK);
+    }
+    
+    
 }
