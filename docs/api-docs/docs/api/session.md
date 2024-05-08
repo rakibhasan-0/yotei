@@ -298,3 +298,230 @@ examples:
         content-type: text/plain
         body: <empty>
 </api>
+
+
+<api>
+name: Get all session reviews of a session
+
+path: GET /api/session/:session_id/all
+
+locked: true
+
+text: |
+    Get session reviews by session id
+
+body:
+
+    type: application/json
+
+
+examples:
+  - name: 200
+
+    request: /api/session/1/review/all
+
+    response:
+        content-type: application/json
+        body: |
+            [
+                {
+                    "id": 5,
+                    "session_id": 1,
+                    "userId": 1,
+                    "rating": 3,
+                    "positiveComment": "hejsan2",
+                    "negativeComment": "svejsan2",
+                    "date": "2024-04-19",
+                    "activities": [
+                        {
+                            "session_review_activity_id": 4,
+                            "session_review_id": 5,
+                            "activity_id": 1
+                        }
+                    ]
+                }
+            ]
+</api>
+
+<api>
+name: Create a new session review
+
+path: POST /api/session/:session_id/review
+
+locked: true
+
+text: |
+    Create a new review for a session.
+
+body:
+
+    type: application/json
+    parameters:
+        rating: The given rating of a session (between 1-5) | 3
+        userId: Id of user that created the review  | 1
+        positiveComment: The provided positive review comment  | Good stuff!
+        negativeComment: The provided positive review comment  | Bad stuff!
+        date: Date of when the review was created. | 2024-04-24 
+
+examples:
+  - name: 200
+
+    request: /api/session/1/review/all
+
+    response:
+        content-type: application/json
+        body: |
+            [
+                {
+                    "id": 5,
+                    "session_id": 1,
+                    "userId": 1,
+                    "rating": 3,
+                    "positiveComment": "hejsan2",
+                    "negativeComment": "svejsan2",
+                    "date": "2024-04-19",
+                    "activivities": [
+                        {
+                            "session_review_activity_id": 4,
+                            "session_review_id": 5,
+                            "activity": 1
+                        }
+                    ]
+                }
+            ]
+</api>
+
+<api>
+name: Create a new session review activity
+
+path: POST /api/session/:session_id/review/:review_id/activity
+
+locked: true
+
+text: |
+    Create a new completed activity for a session review
+
+body:
+
+    type: application/json
+    parameters:
+        activity_id: The id of a completed activity for a review. | 288
+
+examples:
+  - name: 200
+
+    request: /api/session/1/review/1/activity
+
+    response:
+        content-type: application/json
+        body: |
+        
+</api>
+
+<api>
+name: Delete a session review activity
+
+path: DELETE /api/session/:session_id/review/:review_id/activity/:activity_id
+
+locked: true
+
+text: |
+    Delete a completed activity for a session review
+
+body:
+    type: application/json
+    parameters:
+        activity_id: The id of a completed activity for a review. | 288
+
+examples:
+  - name: 200
+
+    request: /api/session/1/review/1/activity
+
+    response:
+        content-type: application/json
+        body: |
+        
+</api>
+
+<api>
+name: Delete all session review activities
+
+path: DELETE /api/session/:session_id/review/:review_id/activity
+
+locked: true
+
+text: |
+    Delete all completed activities for a session review
+
+body:
+    type: application/json
+    parameters:
+        review_id: The id of a session review | 1
+
+examples:
+  - name: 200
+
+    request: /api/session/1/review/1/activity
+
+    response:
+        content-type: application/json
+        body: |
+        
+</api>
+
+<api>
+name: Delete a session review 
+
+path: DELETE /api/session/:session_id/review/:review_id
+locked: true
+
+text: |
+    Delete session review
+
+body:
+    type: application/json
+
+examples:
+  - name: 200
+
+    request: /api/session/1/review/1
+
+    response:
+        content-type: application/json
+        body: |
+        
+</api>
+
+<api>
+name: Update a session review
+
+
+path: PUT /api/session/:session_id/review/:review_id
+
+locked: true
+
+text: |
+    Update an existing session review
+
+body:
+
+    type: application/json
+    parameters:
+        id: The id of a session review | 1
+        rating: The given rating of a session (between 1-5) | 3
+        userId: Id of user that created the review  | 1
+        positiveComment: The provided positive review comment  | Good stuff!
+        negativeComment: The provided positive review comment  | Bad stuff!
+        date: Date of when the review was created. | 2024-04-24 
+
+examples:
+  - name: 200
+
+    request: /api/session/1/review/1
+
+    response:
+        content-type: application/json
+        body: |
+        
+</api>
