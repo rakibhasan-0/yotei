@@ -8,7 +8,7 @@ import { server } from "../../server"
  * Unit-test for the GroupIndex page, 
  * init as well as making sure search button is case insensitive
  *
- * @author Team Mango (Group 4), Team Durian (Group 3) (2024-04-23)
+ * @author Team Mango (Group 4) (2024-05-06), Team Durian (Group 3) (2024-04-23)
  * @since 2024-04-18
  * @version 1.0 
  */
@@ -16,6 +16,7 @@ import { server } from "../../server"
 configure({testIdAttribute: "id"})
 jest.mock("react-router", () => ({
 	useNavigate: () => jest.fn()
+	
 }))
 
 // Mock the Link component
@@ -33,7 +34,7 @@ test("Should render title on init", async () => {
 // This test should make sure that the group search bar is working as intended (is case insensitive)
 test("Should render a group when searching for it", async () => {
 	render(<GroupIndex/>)
-	
+
 	server.use(
 		rest.get("api/plan/all", async (req, res, ctx) => {
 			return res(
@@ -72,7 +73,7 @@ test("Should render a group when searching for it", async () => {
 						]
 					},
 				])
-                
+			
 			)
 		})
 	)
@@ -103,3 +104,60 @@ test("Should render a group when searching for it", async () => {
 	expect(screen.getByText("Grönt bälte träning")).toBeInTheDocument()
 	expect(screen.getByText("Orange och Gult bälte träning")).toBeInTheDocument()
 })
+
+
+
+//This tests the edge case of there being no groups (previously caused a bug).
+test("Should display proper message when there are no groups", async () => {
+	render(<GroupIndex/>)
+
+	server.use(
+		rest.get("api/plan/all", async (req, res, ctx) => {
+			return res(
+				ctx.status(200),
+				//ctx.json([{},]) //This needs to be commented out/removed. Leaving it empty still counts as a group being made.
+			)
+		})
+	)
+
+	await screen.findByTestId("No-groups-visible-text") //This is needed for the test to work.
+	expect(screen.getByTestId("No-groups-visible-text")).toBeInTheDocument()
+})
+
+
+//This tests the edge case of there being no groups (previously caused a bug).
+test("Should not display groups missing message when there are groups", async () => {
+
+	render(<GroupIndex/>)
+
+	server.use(
+		rest.get("api/plan/all", async (req, res, ctx) => {
+			return res(
+				ctx.status(200),
+				ctx.json([
+					{
+						"id": 1,
+						"name": "Grönt bälte träning",
+						"userId": 1,
+						"belts": [
+							{
+								"id": 7,
+								"name": "Grönt",
+								"color": "0C7D2B",
+								"child": false
+							}
+						]
+					},
+				])
+			) 
+		})
+	)
+
+	await screen.findByTestId("Groups-are-visible") //This is needed for the test to work.
+	expect(screen.getByTestId("Groups-are-visible")).toBeInTheDocument()
+	//The code below would also work, but we want fast tests, so we instead opt for the unnecessary div solution.
+	//await new Promise((r) => setTimeout(r, 2000))
+	//expect(screen.queryByTestId("No-groups-visible-text")).not.toBeInTheDocument()
+
+})
+

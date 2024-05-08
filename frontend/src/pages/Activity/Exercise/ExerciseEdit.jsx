@@ -11,7 +11,7 @@ import Divider from "../../../components/Common/Divider/Divider.jsx"
 import TagInput from "../../../components/Common/Tag/TagInput.jsx"
 import { setError as setErrorToast, setSuccess} from "../../../utils"
 import EditGallery from "../../../components/Gallery/EditGallery"
-import { useNavigate, useParams } from "react-router"
+import { useLocation, useNavigate, useParams } from "react-router"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
 import { isAdmin, isEditor, scrollToElementWithId } from "../../../utils"
 import { unstable_useBlocker as useBlocker } from "react-router"
@@ -26,8 +26,8 @@ import Spinner from "../../../components/Common/Spinner/Spinner.jsx"
  *     Verona                 (2022-05-16)
  *     Team Phoenix (Group 1) (2023-05-15)
  *     Team Medusa  (Group 6) (2023-06-01)
- * 	   Team Durian  (Group 3) (2024-04-23)
- * 	   Team Kiwi    (Group 2) (2024-05-02) removed some navigate(-1) 
+ * 	   Team Durian  (Group 3) (2024-05-07)
+ * 	   Team Kiwi    (Group 2) (2024-05-03)
  * @since 2023-05-22
  * @version 2.0
  */
@@ -35,7 +35,7 @@ export default function ExerciseEdit() {
 	const context = useContext(AccountContext)
 	const [oldName, setOldName] = useState("")
 	const [oldDesc, setOldDesc] = useState("")
-	const [oldTime, setOldTime] = useState(0)
+	// const [oldTime, setOldTime] = useState(0)
 	const [name, setName] = useState("")
 	const [desc, setDesc] = useState("")
 	const [time, setTime] = useState("")
@@ -50,6 +50,8 @@ export default function ExerciseEdit() {
 	const [isLoading, setIsLoading] = useState(true)
 
 	const navigate = useNavigate()
+	const location = useLocation()
+	const hasPreviousState = location.key !== "default"
 	const { excerciseId } = useParams()
 
 	function done() {
@@ -138,7 +140,7 @@ export default function ExerciseEdit() {
 		setExistingTags(tagsJson)
 		setOldName(exerciseJson.name)
 		setOldDesc(exerciseJson.description)
-		setOldTime(exerciseJson.duration)
+		// setOldTime(exerciseJson.duration)
 		setIsLoading(false)
 		localStorage.setItem("askToLeave", false)
 		/* Ska inte ligga här utan villkor */
@@ -154,22 +156,6 @@ export default function ExerciseEdit() {
 	 */
 	function timeCallback(id, time) {
 		setTime(time)
-	}
-
-	/**
-	 * check if any changes has been done when editing before closing
-	 * exercise edit popup. Tags are sorted by id.
-	 */
-	// eslint-disable-next-line no-unused-vars
-	function checkChanges() {
-		const newT = JSON.stringify(newTags.sort((a, b) => a.id - b.id))
-		const oldT = JSON.stringify(existingTags.sort((a, b) => a.id - b.id))
-
-		if (oldName !== name || oldDesc !== desc || oldTime != time || newT !== oldT) {
-			setShowMiniPopup(true)
-		} else {
-			navigate(-1)			//riktigt knas kod, MÅSTE FIXAS!
-		}
 	}
 
 	/**
@@ -289,6 +275,20 @@ export default function ExerciseEdit() {
 		}
 	}
 
+	async function handleClickSave() {	
+		setIsBlocking(false)
+		setSendData(true)
+		setSuccess("Övningen Uppdaterades!")
+	}
+
+	const handleNavigation = () => {
+		if (hasPreviousState) {
+			navigate(-1)
+		} else {
+			navigate("/exercise")
+		}
+	}
+
 	return isLoading ? (
 		<Spinner />
 	) : (
@@ -328,7 +328,7 @@ export default function ExerciseEdit() {
 
 			<Divider option={"h2_left"} title={"Taggar"} />
 
-			<TagInput addedTags={newTags} setAddedTags={setNewTags} />
+			<TagInput addedTags={newTags} setAddedTags={setNewTags} itemName={name} />
 
 			<Divider option={"h2_left"} title={"Media"} />
 
