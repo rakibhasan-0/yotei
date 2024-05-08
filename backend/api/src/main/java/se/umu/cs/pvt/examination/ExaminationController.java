@@ -199,13 +199,23 @@ public class ExaminationController {
         return new ResponseEntity<>(examineeRepository.findAll(), HttpStatus.OK);
     }
 
+    /**
+     * Creates a examination result.
+     * @param examination_result Object mapped examimnation result from request body.
+     * @return The created examination result.
+     * @return HTTP-status code.
+    */ 
     @PostMapping("/examresult")
     public ResponseEntity<ExaminationResult> createExaminationResult(@RequestBody ExaminationResult examination_result){
         ExaminationResult new_examination_result = examinationResultRepository.save(examination_result);
         return new ResponseEntity<>(new_examination_result, HttpStatus.OK);
     }
     
-    
+   /**
+     * Updates a given examination result.
+     * @param examination_result Object mapped examimnation result from request body.
+     * @return HTTP-status code.
+    */ 
     @PutMapping("/examresult")
     public ResponseEntity<Object> updateExaminationResult(@RequestBody ExaminationResult examination_result){
 
@@ -217,6 +227,11 @@ public class ExaminationController {
 
     }
 
+    /**
+     * Returns all examination results.
+     * @return All examination results.  
+     * @return HTTP-status code.
+     */
     @GetMapping("/examresult/all")
     ResponseEntity<List<ExaminationResult>> getAllExaminationResults(){
         return new ResponseEntity<>(examinationResultRepository.findAll(), HttpStatus.OK);
