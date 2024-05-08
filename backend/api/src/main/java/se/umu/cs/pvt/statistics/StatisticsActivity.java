@@ -1,6 +1,8 @@
 package se.umu.cs.pvt.statistics;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+
 import se.umu.cs.pvt.belt.Belt;
 import java.util.List;
 import java.util.ArrayList;
@@ -27,29 +29,45 @@ import java.util.ArrayList;
  * @version 1.0
  * @since 2024-04-29
  */
-public class StatisticsResponse implements Serializable {
+public class StatisticsActivity implements Serializable {
+  private Long session_id;
   private Long activity_id;
   private String name;
   private String type;
   private List<BeltResponse> belts;
   private Long count;
-
+  private Boolean kihon;
+  private LocalDate date;
+  private Integer session_rating;
 
   /**
    * Create a new instance of StatisticsResponse.
+   * @param sid id of the session
    * @param id id of the technique
    * @param name name of the technique
    * @param cnt number of occurrences of technique in sessions.
    * @param type the type of activity to represent exercise/techniques
-   * @return new StatisticsRespnse
+   * @param date the date of the session
+   * @param rating the rating of the session
+   * @return new StatisticsActivity
    */
-  public StatisticsResponse(Long id, String name, String type, Long cnt) {
+  public StatisticsActivity(Long sid, Long id, String name, String type, Long cnt, Boolean kihon, LocalDate date, Integer rating) {
+    this.session_id = sid;
     this.activity_id = id;
     this.name = name;
     this.type = type;
     this.count  = cnt;
+    this.kihon = kihon;
+    this.date = date;
+    this.session_rating = rating;
   }
 
+  /**
+   * Public getter for private property session_id
+   */
+  public Long getSession_id() {
+    return session_id;
+}
 
   /**
    * Public getter for private property activity_id
@@ -97,23 +115,24 @@ public class StatisticsResponse implements Serializable {
       return count;
   }
 
-  // Consider two StatisticsACtivity equal if the share the same activity_id 
-  // to remove duplicates from output.
-  @Override
-  public boolean equals(Object obj) {
-
-    if (obj == this) {
-        return true;
-    }
-    if (!(obj instanceof StatisticsResponse)) {
-        return false;
-    }
-    StatisticsResponse sr = (StatisticsResponse) obj;
-    return this.activity_id.equals(sr.getActivity_id());
+  /**
+   * Public getter for private property kihon
+   */
+  public Boolean getKihon() {
+    return kihon;
   }
 
-  @Override
-  public String toString() {
-      return Long.toString(this.activity_id) + " - " + this.name;
+  /**
+   * Public getter for private property date
+   */
+  public LocalDate getDate() {
+    return date;
+  }
+
+  /**
+   * Public getter for private property session_rating
+   */
+  public Integer getRating() {
+    return session_rating;
   }
 }
