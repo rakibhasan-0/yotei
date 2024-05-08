@@ -54,4 +54,50 @@ class PermissionApiTest {
     void shouldGetNoContentCodeWhenEmpty() {
         assertEquals(new ResponseEntity<>(permissions, HttpStatus.NO_CONTENT), permissionController.getPermissions());
     }
+
+    @Test
+    void shouldGetSpecificPermissionWithId() {
+        try {
+            permissions.add(new Permission("Perm1", "desc1"));
+            permissions.add(new Permission("Perm2", "desc2"));
+            permissions.add(new Permission("Perm3", "desc3"));
+            permissions.add(new Permission("Perm4", "desc4"));
+
+
+        } catch (InvalidPermissionNameException e) {
+            fail();
+        }
+    }
+
+    @Test
+    void shouldBeAbleToEditPermission() {
+        try {
+            permissions.add(new Permission("Perm1", "desc1"));
+            
+            // Check so desc is "desc1"
+            // Check so name is "perm1"
+
+            // replace 1 with 2
+
+            // Check again
+
+
+        } catch (InvalidPermissionNameException e) {
+            fail();
+        }
+    }
+
+    @Test
+    void shouldBeAbleToDelete() {
+        try {
+            permissions.add(new Permission("Perm1", "desc1"));
+            
+            // DELTE PErmission with assert
+
+            assertEquals(new ResponseEntity<>(permissions, HttpStatus.NO_CONTENT), permissionController.getPermissions());
+
+        } catch (InvalidPermissionNameException e) {
+            fail();
+        }
+    }
 }
