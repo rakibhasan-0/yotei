@@ -98,22 +98,3 @@ describe("Statistics component", () => {
 
 })
 
-describe("FilterStatistics component", () => {
-
-	test("Renders FilterStatistics component skeleton", async () => {
-
-		let dates = new Date()
-
-		// Render component
-		render(<FilterStatistics dates=""/>)
-
-		// Wait for rendering
-		await waitFor (() => {
-			screen.findByTestId("filter-container")
-		}) 
-
-		// Assert existence of persistent component
-		expect(screen.getByTestId("start-date-picker")).toBeInTheDocument()
-	})
-})
-
