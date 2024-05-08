@@ -1,8 +1,10 @@
 import {configure, render} from "@testing-library/react"
-// import {screen, waitFor, fireEvent} from "@testing-library/react"
+import {screen, waitFor, fireEvent} from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import "@testing-library/jest-dom"
 import PlanCreate from "../../../pages/Plan/PlanCreate"
 import { React} from "react"
+import { Route, createMemoryRouter, createRoutesFromElements, RouterProvider } from "react-router-dom"
 
 // import userEvent from "@testing-library/user-event"
 // import { rest } from "msw"
@@ -13,21 +15,17 @@ import { React} from "react"
  * Unit-test for the PlanCreate page, 
  *
  * @author Team Mango (Group 4)
- * @since 2024-04-22
+ * @since 2024-05-02
  * @version 1.0 
  */
 configure({testIdAttribute: "id"})
-jest.mock("react-router", () => ({
-	useNavigate: () => jest.fn(),
-	unstable_useBlocker: () => jest.fn()
-}))
 
 test.todo("Should render some basics on init") 
-test("Should render Skapa Grupp", async () => {
-	render(<PlanCreate/>)
+// test("Should render Skapa Grupp", async () => {
+// 	render(<PlanCreate/>)
 
-	//expect(screen.getByText("Skapa grupp")).toBeInTheDocument()
-})
+// expect(screen.getByText("Skapa grupp")).toBeInTheDocument()
+// })
 
 
 // test.todo("Should render a fail popup-isch to user on creating a plan that already exists")
@@ -41,13 +39,33 @@ test("Should render a toast error-message on creating duplicate groups", async (
 	// await the message and expect it to be in the document
 })
 
+test("Should display a popup after a name is entered and 'Gå vidare' is pressed followed by 'Tillbaka'", async () => {
+	const router = createMemoryRouter(
+		createRoutesFromElements(
+			<Route path="/*" element={<PlanCreate />}/>
+		))
+		
+	render(<RouterProvider router={router}/> )
+
+	const nameInput = screen.getByTestId("name")
+	fireEvent.change(nameInput, {target:{value:"Test name"}})
+
+	await userEvent.click(screen.getByText("Gå vidare"))
+	await userEvent.click(screen.getByText("Tillbaka"))
+	
+	await waitFor(() => {
+		expect(screen.getByTestId("confirm-popup-button")).toBeInTheDocument()
+	})
+})
+
+
 /*
  * TODO: The test is supposed to validate that no plan/group is added when an exception occrous.
  * The test would mock the API call to "api/plan/add" verify that no plan was created.
  * 
  * What works: 
  *      - mocking of the API
- *      - fireing event to add a group name
+ *      - fireing event to add a group namePlanCreate
  * 		- expecting that the API url "api/plan/add" was called/not called
  * 
  * What didnt work:
