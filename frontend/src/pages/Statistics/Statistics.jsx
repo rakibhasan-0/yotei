@@ -91,8 +91,6 @@ export default function Statistics() {
 				enddate: dates.to ? dates.to : ""
 			})
 
-
-
 			try {
 				setLoading(true)
 				const responseFromGroupNameAPI= await fetch("/api/plan/all", { headers: { token } })
@@ -101,9 +99,10 @@ export default function Statistics() {
 				if(responseFromGroupDetailsAPI.status === 200) {
 					const data = await responseFromGroupDetailsAPI.json()
 					setGroupActivities(data.activities)
+				}else if (responseFromGroupDetailsAPI.status === 204) {
+					setGroupActivities([])
 				}
 
-				// later we will fix if the response is 200 or 204. 200 represents it is successful and 204 represents no content.
 				if (!responseFromGroupDetailsAPI.ok || !responseFromGroupNameAPI.ok) {
 					throw new Error("Failed to fetch group data")
 				}
@@ -126,18 +125,14 @@ export default function Statistics() {
 
 
 	function handleDateChanges(variableName, value) {
+		const selectedDate = new Date(value)
+		const toDate = new Date(dates.to)
 
-		const newDate = new Date(value)	
-		const endDate = new Date(dates.to)
-		
-		if(variableName === "from"){
-			setDates(newDate > endDate ? {from: dates.from, to: dates.to} : {...dates, from: value})
+		if (variableName == "from") {
+			setDates( selectedDate > toDate ? { from: value, to: value } : { ...dates, from: value })
+		} else {
+			setDates({ ...dates, [variableName]: value })
 		}
-
-		else if(variableName === "to") {
-			setDates({ ...dates, [variableName]: value })			
-		}
-
 	}
 
 
