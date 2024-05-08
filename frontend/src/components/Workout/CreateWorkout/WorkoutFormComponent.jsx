@@ -116,8 +116,12 @@ export default function WorkoutFormComponent({ callback, state }) {
 			return navigate("/workout/" + state.workoutId)
 		}
 		else {
-		
-			return navigate("/workout/" + workoutId)
+			if (workoutId != null){
+				return navigate("/workout/" + workoutId)
+			}
+			else{
+				return navigate("/workout")
+			}
 		}
 		
 	}
