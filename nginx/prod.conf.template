@@ -15,35 +15,24 @@ server {
         return 301 https://${DOMAIN_NAME}$request_uri;
     }
 }
-#     # PVT webserver
-#     server {
-#         listen 80;
-#         server_name ${DOMAIN_NAME};
-#         return 301 https://${DOMAIN_NAME}$request_uri;
-#     }
-#     server {
-#         listen 443 ssl http2;
-#         server_name ${DOMAIN_NAME};
 
-#         ssl_certificate /etc/letsencrypt/live/${DOMAIN_NAME}/fullchain.pem;
-#         ssl_certificate_key /etc/letsencrypt/live/${DOMAIN_NAME}/privkey.pem;
+server {
+    listen 443 default_server ssl http2;
+    listen [::]:443 ssl http2;
 
-#         ssl_protocols TLSv1.3 TLSv1.2;
-#         ssl_session_cache shared:SSL:10m;
+    server_name ${DOMAIN_NAME};
 
-#         proxy_buffering off;
-#         proxy_buffer_size 16k;
-#         proxy_busy_buffers_size 24k;
-#         proxy_buffers 64 4k;
-
-#         location / {
-#             proxy_pass http://gateway:8080;
-#             proxy_set_header Upgrade $http_upgrade;
-#             proxy_set_header Connection 'upgrade';
-#             proxy_set_header Host $host;
-#             proxy_set_header X-Real-IP $remote_addr;
-#             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-#             proxy_cache_bypass $http_upgrade;
-#         }
-#     }
-#}
+    ssl_certificate /etc/nginx/ssl/live/${DOMAIN_NAME}/fullchain.pem;
+    ssl_certificate_key /etc/nginx/ssl/live/${DOMAIN_NAME}/privkey.pem;
+    
+    location / {
+    	proxy_pass http://${DOMAIN_NAME};
+	proxy_pass http://gateway:8080;
+	proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
