@@ -1,7 +1,3 @@
-/**
- * The tests for the exercise Tag part of the Tag API.
- * @Author Team 5 Verona
- */
 package se.umu.cs.pvt.tag;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -9,11 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
-import org.springframework.data.projection.ProjectionFactory;
-import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -21,19 +14,19 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 
 /**
- * @author  Phoenix (25-04-2023)
+ * The tests for the exercise Tag part of the Tag API.
+ * @Author Team 5 Verona
+ * @Author Phoenix (25-04-2023)
+ * @Author Team Durian
  */
-
 @ExtendWith(MockitoExtension.class)
 public class ExerTagControllerTest {
     
     private ExerciseTagController exerController;
     private ArrayList<ExerciseTag> exerciseTags;
-    private ArrayList<Tag> tagList;
 
     @Mock
     private final ExerciseTagRepository exerRepository = Mockito.mock(ExerciseTagRepository.class);
@@ -44,7 +37,6 @@ public class ExerTagControllerTest {
     void init() {
         exerController = new ExerciseTagController(exerRepository, tagRepository);
         exerciseTags = new ArrayList<>();
-        tagList = new ArrayList<>();
     }
 
     @Test

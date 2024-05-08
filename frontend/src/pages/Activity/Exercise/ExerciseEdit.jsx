@@ -9,11 +9,11 @@ import InputTextField from "../../../components/Common/InputTextField/InputTextF
 import TextArea from "../../../components/Common/TextArea/TextArea.jsx"
 import Divider from "../../../components/Common/Divider/Divider.jsx"
 import TagInput from "../../../components/Common/Tag/TagInput.jsx"
-import { setError as setErrorToast } from "../../../utils"
+import { setError as setErrorToast, setSuccess} from "../../../utils"
 import EditGallery from "../../../components/Gallery/EditGallery"
-import { useNavigate, useParams } from "react-router"
+import { useLocation, useNavigate, useParams } from "react-router"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
-import { isAdmin, isEditor } from "../../../utils"
+import { isAdmin, isEditor, scrollToElementWithId } from "../../../utils"
 import { unstable_useBlocker as useBlocker } from "react-router"
 import Spinner from "../../../components/Common/Spinner/Spinner.jsx"
 
@@ -26,8 +26,8 @@ import Spinner from "../../../components/Common/Spinner/Spinner.jsx"
  *     Verona                 (2022-05-16)
  *     Team Phoenix (Group 1) (2023-05-15)
  *     Team Medusa  (Group 6) (2023-06-01)
- * 	   Team Durian  (Group 3) (2024-04-23)
- * 	   Team Kiwi    (Group 2) (2024-05-02) removed some navigate(-1) 
+ * 	   Team Durian  (Group 3) (2024-05-07)
+ * 	   Team Kiwi    (Group 2) (2024-05-03)
  * @since 2023-05-22
  * @version 2.0
  */
@@ -40,11 +40,9 @@ export default function ExerciseEdit() {
 	const [desc, setDesc] = useState("")
 	const [time, setTime] = useState("")
 	const [errorMessage, setErrorMessage] = useState("")
-	const [editFailed, setEditFailed] = useState(false)
-	const [tagLinkFailed, setTagLinkFailed] = useState(false)
+	const [editFailed, setEditFailed] = useState(true)
 	const [existingTags, setExistingTags] = useState([])
 	const [newTags, setNewTags] = useState([])
-	const [tagRemoveFailed, setTagRemovedFailed] = useState(false)
 	const [sendData, setSendData] = useState(false)
 	const [showMiniPopup, setShowMiniPopup] = useState(false)
 	const [undoMediaChanges, setUndoMediaChanges] = useState(false)
@@ -52,18 +50,34 @@ export default function ExerciseEdit() {
 	const [isLoading, setIsLoading] = useState(true)
 
 	const navigate = useNavigate()
+	const location = useLocation()
+	const hasPreviousState = location.key !== "default"
 	const { excerciseId } = useParams()
 
 	function done() {
-		if (undoMediaChanges) {
-			blocker.proceed
-			//setShowMiniPopup(true)
-			//navigate(-1)
-		} else {
-			setSendData(false)
-			editExercise()
+		if (!undoMediaChanges && !editFailed) {
+			setSuccess("Övningen uppdaterades!")
+			handleNavigation()		
 		}
+		setSendData(false)
 	}
+
+	//is activated when "avbryt" is pressed
+	useEffect(() => {
+		if(undoMediaChanges) {
+			blocker.proceed
+			setUndoMediaChanges(false)
+			handleNavigation()
+		}
+	}, [undoMediaChanges])
+
+	//when all the data (name, desc, time, taggar) is updated and the name is ok then the media is updated
+	useEffect(() => {
+		if(!editFailed){
+			setSendData(true)
+		}
+	}, [editFailed])
+
 
 	const blocker = useBlocker(() => {
 		if (isBlocking) {
@@ -73,14 +87,20 @@ export default function ExerciseEdit() {
 		return false
 	})
 
+	function checkBlocking() {
+		let tmp = localStorage.getItem("askToLeave")
+		tmp = (tmp === "true")
+		setIsBlocking((name != oldName || desc != oldDesc || time != oldTime || tmp))
+	}
+
 	useEffect(() => {
-		setIsBlocking(name != oldName || desc != oldDesc)
-	}, [name, desc, oldName, oldDesc])
+		checkBlocking()
+	}, [name, desc, oldName, oldDesc, time, oldTime])
 
 	
 	useEffect(() => {
 		if (!isAdmin(context) || !isEditor(context)) {
-			navigate(-1)
+			handleNavigation()
 		}
 	}, [context, navigate])
 	
@@ -122,6 +142,7 @@ export default function ExerciseEdit() {
 		setOldDesc(exerciseJson.description)
 		setOldTime(exerciseJson.duration)
 		setIsLoading(false)
+		localStorage.setItem("askToLeave", false)
 		/* Ska inte ligga här utan villkor */
 	}, [])
 
@@ -135,22 +156,6 @@ export default function ExerciseEdit() {
 	 */
 	function timeCallback(id, time) {
 		setTime(time)
-	}
-
-	/**
-	 * check if any changes has been done when editing before closing
-	 * exercise edit popup. Tags are sorted by id.
-	 */
-	// eslint-disable-next-line no-unused-vars
-	function checkChanges() {
-		const newT = JSON.stringify(newTags.sort((a, b) => a.id - b.id))
-		const oldT = JSON.stringify(existingTags.sort((a, b) => a.id - b.id))
-
-		if (oldName !== name || oldDesc !== desc || oldTime != time || newT !== oldT) {
-			setShowMiniPopup(true)
-		} else {
-			navigate(-1)
-		}
 	}
 
 	/**
@@ -173,7 +178,7 @@ export default function ExerciseEdit() {
 	 *
 	 * @param {*} e The event that caused editExercise.
 	 */
-	async function editExercise() {
+	function editExercise() {
 		const requestOptionsDuplicate = {
 			method: "PUT",
 			headers: { "Content-type": "application/json", token: context.token },
@@ -184,29 +189,27 @@ export default function ExerciseEdit() {
 				duration: time,
 			}),
 		}
-		try {
-			const response = await fetch("/api/exercises/update", requestOptionsDuplicate)
-
-			if (response.status === 406 && name != oldName) {
-				setErrorMessage("Detta namn är redan taget")
-				return
-			}
-		} catch (error) {
-			setErrorToast("Ett internt fel inträffade")
-		}
-
-		if (name.trim() === "") {
-			setEditFailed(true)
-			setErrorMessage("Övningen måste ha ett namn")
-			return
-		}
-
-		await checkTags()
-		// Removed the navigate(-1) as it navigated back twice because of this.
-		// Maybe add a proper fail message instead if it's not working
-		if (!(editFailed || tagRemoveFailed || tagLinkFailed)) {
-			//navigate(-1)
-		}
+		checkTags()
+		fetch("/api/exercises/update", requestOptionsDuplicate)
+			.then( async res => {
+				
+				if (res.status === 406 && name != oldName) {
+					setEditFailed(true)
+					setErrorMessage("Detta namn är redan taget")
+					scrollToElementWithId("exerciseNameInput")
+					return
+				} else if (name.trim() === "") {
+					setEditFailed(true)
+					setErrorMessage("Övningen måste ha ett namn")
+					scrollToElementWithId("exerciseNameInput")					
+					return
+				}else {
+					setEditFailed(false)
+				}
+			})
+			.catch((err) => {
+				console.error(err)
+			})
 	}
 
 	/**
@@ -240,15 +243,11 @@ export default function ExerciseEdit() {
 		}
 		try {
 			const response = await fetch("/api/tags/exercises?tag=" + tag_id, requestOptions)
-			if (response.ok) {
-				setTagLinkFailed(false)
-			} else {
-				setTagLinkFailed(true)
+			if (!response.ok) {
 				setErrorMessage(tag_name)
 			}
 		} catch (error) {
 			setErrorToast("Det gick inte att skapa en tagg")
-			setTagLinkFailed(true)
 			setErrorMessage(tag_name)
 		}
 	}
@@ -266,17 +265,21 @@ export default function ExerciseEdit() {
 		}
 		try {
 			const response = await fetch(`/api/tags/remove/exercise?tag=${tag_id}`, requestOptions)
-			if (response.ok) {
-				setTagRemovedFailed(false)
-			} else {
-				setTagRemovedFailed(true)
+			if (!response.ok) {
 				setErrorMessage(tag_name)
 				setErrorToast("Det gick inte att ta bort taggen")
 			}
 		} catch (error) {
 			setErrorToast("Ett internt fel uppstod")
-			setTagRemovedFailed(true)
 			setErrorMessage(tag_name)
+		}
+	}
+
+	const handleNavigation = () => {
+		if (hasPreviousState) {
+			navigate(-1)
+		} else {
+			navigate("/exercise")
 		}
 	}
 
@@ -319,7 +322,7 @@ export default function ExerciseEdit() {
 
 			<Divider option={"h2_left"} title={"Taggar"} />
 
-			<TagInput addedTags={newTags} setAddedTags={setNewTags} />
+			<TagInput addedTags={newTags} setAddedTags={setNewTags} itemName={name} />
 
 			<Divider option={"h2_left"} title={"Media"} />
 
@@ -330,7 +333,8 @@ export default function ExerciseEdit() {
 					outlined
 					onClick={() => {
 						setUndoMediaChanges(true)
-						navigate(-1)
+						checkBlocking()
+						done()
 					}}
 					width="100%"
 				>
@@ -339,9 +343,9 @@ export default function ExerciseEdit() {
 
 				<Button
 					onClick={() => {
+						setUndoMediaChanges(false)
 						setIsBlocking(false)
-						setSendData(true)
-						navigate(-1)
+						editExercise()
 					}}
 					width="100%"
 				>

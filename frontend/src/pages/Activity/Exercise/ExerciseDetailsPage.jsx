@@ -17,7 +17,7 @@ import {setError as setErrorToast} from "../../../utils"
 /**
  * A component for displaying details about an exercise.
  * 
- * @author Chimera, Phoenix, Team Coconut, Team Durian, Team Orange
+ * @author Chimera, Phoenix, Team Coconut, Team Durian, Team Orange, Team Kiwi
  * @since 2024-04-23
  * @version 2.2
  * @returns A page for displaying details about an exercise.
@@ -37,6 +37,8 @@ export default function ExerciseDetailsPage() {
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [error, setError] = useState()
 	const navigate = useNavigate()
+	const location = useLocation()
+	const hasPreviousState = location.key !== "default"
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
 	const accountRole = useContext(AccountContext)
 	const location = useLocation()
@@ -54,7 +56,7 @@ export default function ExerciseDetailsPage() {
 			})
 	}
 
-	useEffect(() => {
+	async function fetchData() {
 		fetch(`/api/exercises/${ex_id}`, {
 			headers: { token }
 		})
@@ -75,13 +77,17 @@ export default function ExerciseDetailsPage() {
 				setErrorToast("Kunde inte hämta taggar")
 				console.error(ex)
 			})
-	}, [token, ex_id])
+	}
+
+	useEffect(() => {
+		fetchData()
+	},[token, ex_id])
 
 	/**
-     * Handles the deletion of an exercise by sending a DELETE request to the API.
-     * Navigates back to the previous page if the deletion is successful.
-     * Displays an error toast and logs the error if the deletion fails.
-     */
+	 * Handles the deletion of an exercise by sending a DELETE request to the API.
+	 * Navigates back to the previous page if the deletion is successful.
+	 * Displays an error toast and logs the error if the deletion fails.
+	 */
 	const onDelete = async () => {
 		try {
 			const response = await fetch("/api/exercises/remove/" + ex_id, {
@@ -98,10 +104,10 @@ export default function ExerciseDetailsPage() {
 	}
 
 	/**
-     * Handles the deletion of a comment by sending a DELETE request to the API.
-     * Removes the deleted comment from the comments state and clears the selectedComment state.
-     * Displays an error toast and logs the error if the deletion fails.
-     */ 
+	 * Handles the deletion of a comment by sending a DELETE request to the API.
+	 * Removes the deleted comment from the comments state and clears the selectedComment state.
+	 * Displays an error toast and logs the error if the deletion fails.
+	 */ 
 	const onDeleteComment = async () => {
 		const id = selectedComment
 		try {
@@ -120,13 +126,13 @@ export default function ExerciseDetailsPage() {
 		setSelectedComment()
 		setShowDeleteComment(false)
 	}
-    
+	
 	/**
-     * Handles the addition of a comment by sending a POST request to the API.
-     * Validates the comment text and displays an error if it is empty.
-     * Clears the comment text and sets addComment to false after a successful addition.
-     * Fetches the updated comments by calling fetchComments.
-     */
+	 * Handles the addition of a comment by sending a POST request to the API.
+	 * Validates the comment text and displays an error if it is empty.
+	 * Clears the comment text and sets addComment to false after a successful addition.
+	 * Fetches the updated comments by calling fetchComments.
+	 */
 	const onAddComment = async () => {
 		if (!commentText || !commentText.trim() || commentText.length === 0) {
 			setCommentError("Kommentaren får inte vara tom")
@@ -179,6 +185,15 @@ export default function ExerciseDetailsPage() {
 	if (error) {
 		return <ErrorState message={error} onBack={() => navigate("/exercise")} />
 	}
+
+	const handleNavigation = () => {
+		if (hasPreviousState) {
+			navigate(-1)
+		} else {
+			navigate("/exercise")
+		}
+	}
+
 	return (
 		<div style={{ display: "flex", flexDirection: "column" }}>
 			<title>Övningar</title>
@@ -240,7 +255,7 @@ export default function ExerciseDetailsPage() {
 				}} id={`${ex_id}-cs`} userId={userId} comments={comments} />
 			</div>
 			<div style={{ marginTop: "1rem", marginBottom:"1rem" }}>
-				<Button outlined={true} onClick={() => navigate(-1)}><p>Tillbaka</p></Button>
+				<Button outlined={true} onClick={handleNavigation}><p>Tillbaka</p></Button>
 			</div>
 
 			<Popup isOpen={isAddingComment} title={"Lägg till kommentar"} style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset"}} setIsOpen={toggleAddComment} onClose={() => setCommentError(false)} >

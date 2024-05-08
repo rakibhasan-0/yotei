@@ -26,7 +26,7 @@ import styles from "./StarButton.module.css"
 export default function StarButton({id, onClick, toggled}) {
 	return (
 		<div id={id} onClick={onClick} className={styles.starContainer}>
-			<StarFill className={`${styles.star} ${toggled ? "" : styles.starHidden}`} color='yellow' />
+			<StarFill className={`${styles.star} ${toggled ? "" : styles.starHidden}`} color='#ffcc00' />
 			<Star size={"100%"} className={`${toggled ? styles.starOverlay : styles.star}`} />
 		</div>
 	)

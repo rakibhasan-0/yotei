@@ -21,18 +21,19 @@ Remove this paragraph when documentation is done.
 
 | API Name | Progress |
 |--|--|
-| User API      | Done & needs verification |
-| Belt API      | Done |
-| Exercise API  | Done        |
-| Plan API      | Done |
-| Tag API       | Done        |
-| Technique API | Done        |
-| Workout API   | In progress |
-| Session API   | In progress |
-| Search API    | Needs verification |
-| Export API    | Done        |
-| Import API    | Done        |
-| Comment API   | Done        |
+| User API        | Done & needs verification |
+| Belt API        | Done |
+| Exercise API    | Done        |
+| Plan API        | Done |
+| Tag API         | Done        |
+| Technique API   | Done        |
+| Workout API     | In progress |
+| Session API     | In progress |
+| Search API      | Needs verification |
+| Export API      | Done        |
+| Import API      | Done        |
+| Comment API     | Done        |
+| Statistics API  | Done        |
 
 # Documenting endpoints
 

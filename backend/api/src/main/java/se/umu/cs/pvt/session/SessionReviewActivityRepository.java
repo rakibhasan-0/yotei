@@ -10,8 +10,8 @@ import org.springframework.data.jpa.repository.Query;
  * 
  * @author Granatäppke (Doc: Griffins c20jjs)
  */
-public interface SessionReviewExerciseRepository extends JpaRepository<SessionReviewExercise, Long> {
-    @Query("SELECT swe FROM SessionReviewExercise as swe where  swe.session_review_id = :review_id")
-    List<SessionReviewExercise> findAllByReviewId(Long review_id);
+public interface SessionReviewActivityRepository extends JpaRepository<SessionReviewActivity, Long> {
+    @Query("SELECT swe FROM SessionReviewActivity as swe where  swe.session_review_id = :review_id")
+    List<SessionReviewActivity> findAllByReviewId(Long review_id);
 }
 
