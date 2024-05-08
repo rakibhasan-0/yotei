@@ -25,6 +25,11 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
  */
 
 export default function GradingCreate({id}) {
+	
+	const location = useLocation()
+  const state = location.state
+
+
 
 	const { gradingId } = useParams()
 	const context = useContext(AccountContext)
@@ -49,7 +54,7 @@ export default function GradingCreate({id}) {
 			})
 			
 			navigate(`/grading/${gradingId}/2`)
-			
+
 		} catch (error) {
 			console.error("Misslyckades skicka vidare till nästa steg i gradering:", error)
 		}
@@ -59,9 +64,9 @@ export default function GradingCreate({id}) {
 	async function createPair() {
 			
 		let selectedExaminees = checkedExamineeIds.map(id => {
-				const examinee = examinees.find(examinee => examinee.id === id);
-				return { id: examinee.id, name: examinee.name };
-		});
+				const examinee = examinees.find(examinee => examinee.id === id)
+				return { id: examinee.id, name: examinee.name }
+		})
 
 		const data = await postPair({examinee_1_id: selectedExaminees[0].id, examinee_2_id: selectedExaminees[1].id}, token)
 			.then(response => handleResponse(response))
@@ -72,8 +77,8 @@ export default function GradingCreate({id}) {
 			return {id: examinee.id, name: examinee.name, pairId: data.examinee_pair_id}
 		})
 
-		const remainingExaminees = examinees.filter(examinee => !checkedExamineeIds.includes(examinee.id));
-		setExaminees(remainingExaminees);
+		const remainingExaminees = examinees.filter(examinee => !checkedExamineeIds.includes(examinee.id))
+		setExaminees(remainingExaminees)
 		setPair([...pairs, selectedExaminees])
 		setCheckedExamineeIds([])
 
@@ -87,10 +92,10 @@ export default function GradingCreate({id}) {
 			if(pair.length === 2) {
 				if (pair[0].id === examinee1Id && pair[1].id === examinee2Id) {
 					return [{ id: pair[0].id, name: pair[0].name },
-									{ id: pair[1].id, name: pair[1].name }];
+									{ id: pair[1].id, name: pair[1].name }]
 				}
 			}
-		}).filter(Boolean);
+		}).filter(Boolean)
 
 		const examinee = [...examinees, ...newExaminees[0]]
 		setExaminees(examinee)
@@ -102,7 +107,7 @@ export default function GradingCreate({id}) {
 								{id: pair[1].id, name: pair[1].name, pairId: pair[1].pairId}]
 			}
 		}).filter(Boolean)
-		setPair(newPairs);
+		setPair(newPairs)
 	}
 
 	useEffect(() => {
@@ -185,7 +190,7 @@ export default function GradingCreate({id}) {
 	return (
 		<div>
 			<div> 
-				<div style={{ backgroundColor: "#FFD700", borderRadius: "0.3rem", padding: "0px" }}>
+				<div style={{ backgroundColor: state.ColorParam, borderRadius: "0.3rem", padding: "0px" }}>
 					<h2>KIHON WAZA</h2>
 				</div>
 			</div>

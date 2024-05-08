@@ -26,7 +26,7 @@ export default function GradingCreate() {
 	const today = new Date()
 	const formattedDateTime = today.toISOString()
 
-	const handleNavigation = async (beltId) => {
+	const handleNavigation = async (beltId, color) => {
 		try {
 
 			const gradingData = {
@@ -53,8 +53,12 @@ export default function GradingCreate() {
 
 			const responseData = await response.json()
 			const gradingId = responseData.grading_id
+
+			const params = {
+				ColorParam: color,
+			}
 			
-      navigate(`/grading/${gradingId}/1`);
+			navigate(`/grading/${gradingId}/1`, { state: params })
 
 		} catch (error) {
 			console.error("Misslyckades skapa gradering:", error)
@@ -111,7 +115,7 @@ export default function GradingCreate() {
 						<BeltButton
 							key={color}
 							width={"100%"}
-							onClick={() => handleNavigation(belts[color].id)}
+							onClick={() => handleNavigation(belts[color].id, belts[color].hex)}
 							color={belts[color].hex}
 						
 						>
