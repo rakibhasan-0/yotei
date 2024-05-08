@@ -29,12 +29,11 @@ export default function ExamineeBox({ id, examineeName, onClickComment}) {
 		setSelectedButton(prev => prev === buttonId ? null : buttonId)
 		console.log(`Pressed ${buttonId} button`)
 	}
-
 	return (
-		<div id={id} className={styles.examineeContainer}>
+		<div id={id} className={styles.examineeContainer} style={{backgroundColor: "#FFFFFF"}}>
 			<fieldset className={styles.examineeFieldset}>
 				<div className={styles.examineeName}>
-					<p id="ExamineeName">{examineeName}</p>
+					<p id="ExamineeName" style={{height:"52px", margin:"0"}}>{examineeName}</p>
 				</div>
 				<CommentButton onClick={onClickComment} className={styles.commentButtonContainer}/>
 				<div className={styles.buttonContainer}>
