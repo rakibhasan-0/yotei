@@ -11,10 +11,8 @@ import {getFormattedDateString} from "../../components/Common/DatePicker/DatePic
 
 /**
  * 
- *  The work is on progress for the statistics page.
- * 
+ * @author Team Coconut 
  */
-
 export default function Statistics() {
 
 	const navigate = useNavigate()
@@ -172,7 +170,7 @@ export default function Statistics() {
 					dates={dates}
 				/>
 
-				<StatisticsPopUp filteredActivities = {activities} dates ={dates} averageRating = {averageRating} 
+				<StatisticsPopUp groupActivities = {activities} dates ={dates} averageRating = {averageRating} 
 				numberOfSessions = {numberofSessions} />
 			</div>
 

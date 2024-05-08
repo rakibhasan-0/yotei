@@ -14,13 +14,8 @@ import BeltColorChart from "../../components/Common/BeltColorChart/BeltColorChar
 export default function StatisticsPopUp({data,filteredActivities,dates,averageRating,numberOfSessions}) {
 	const startDate = dates.from
 	const endDate = dates.to
-	
-	console.log(data)
-	console.log("Filter --------------------")
+	console.log(averageRating)
 	console.log(filteredActivities)
-	
-
-	
 
 	const [beltColorsData, setBeltColorsData] = useState({});
 
@@ -46,6 +41,7 @@ export default function StatisticsPopUp({data,filteredActivities,dates,averageRa
 
 	const togglePopup = () => {
 		setShowPopup(!showPopup)
+
 	}
 
 	return (
