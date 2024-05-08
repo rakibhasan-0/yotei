@@ -6,7 +6,6 @@ import StarButton from "../../components/Common/StarButton/StarButton"
 import { useCookies } from "react-cookie"
 import styles from "./WorkoutIndex.module.css"
 import { AccountContext } from "../../context"
-import DatePicker, { getFormattedDateString } from "../../components/Common/DatePicker/DatePicker"
 import RoundButton from "../../components/Common/RoundButton/RoundButton"
 import { Plus } from "react-bootstrap-icons"
 import {toast} from "react-toastify"
@@ -26,6 +25,8 @@ import {setError as setErrorToast} from "../../utils"
  * @author Team Tomato (Group 6)
  * @author Team Durian (Group 3) (2024-04-23)
  * @author Team Tomato (Group 6)
+ * @author Team Kiwi (Group 2) (2024-05-08)
+ * Removed option to filter by date created
  * @since May 9, 2023
  * @version 1.2
  */
@@ -40,21 +41,9 @@ export default function WorkoutIndex() {
 	const [ searchErrorMessage, setSearchErrorMessage ] = useState("")
 	const [ loading, setLoading ] = useState(true)
 
-	// Some fucked up shit to get +/- 1 month from today.
-	const today = new Date()
-	const lastMonth = new Date(today)
-	lastMonth.setMonth(today.getMonth() - 1)
-	const nextMonth = new Date(today)
-	nextMonth.setMonth(today.getMonth() + 1)
 
 	const [ filterFavorites, setFilterFavorites ] = useState(false)
-	const [ dates, setDates ] = useState({
-		from: getFormattedDateString(lastMonth), 
-		maxFrom: getFormattedDateString(nextMonth),
-		to: getFormattedDateString(nextMonth),
-		minTo: getFormattedDateString(lastMonth)
-	})
-	useEffect(fetchWorkouts, [dates.from, dates.maxFrom, dates.to, dates.minTo, filterFavorites, searchText, token, userId, tags])
+	useEffect(fetchWorkouts, [filterFavorites, searchText, token, userId, tags])
 	return (
 		<>
 			<div id="search-area">
@@ -73,14 +62,6 @@ export default function WorkoutIndex() {
 					/>
 					<FilterContainer numFilters={0}>
 						<div className={`container ${styles.filterContainer}` }>
-							<div className="row align-items-center">
-								<p className="m-0 col text-left">Från</p>
-								<DatePicker className="col" selectedDate={dates.from} maxDate={dates.maxFrom} onChange={handleFromDateChange}/>
-							</div>
-							<div className="row align-items-center filter-row">
-								<p className="m-0 col text-left">Till</p>
-								<DatePicker className="col" selectedDate={dates.to} minDate={dates.minTo} onChange={handleToDateChange}/>
-							</div>
 							<div className="row align-items-center filter-row">
 								<p className="m-0 col text-left">Favoriter</p>
 								<div className="col" id="filter-favorites" style={{ maxWidth: "60px" }}>
@@ -112,21 +93,6 @@ export default function WorkoutIndex() {
 		</>
 	)
 
-	function handleFromDateChange(date) {
-		setDates({
-			...dates,
-			from: `${date.target.value}`,
-			minTo: `${date.target.value}`
-		})
-	}
-
-	function handleToDateChange(date) {
-		setDates({
-			...dates,
-			to: `${date.target.value}`,
-			maxFrom: `${date.target.value}`
-		})
-	}
 
 	function toggleFilterFavorite() {
 		setFilterFavorites(!filterFavorites)
@@ -180,24 +146,21 @@ export default function WorkoutIndex() {
 		let args
 		if(filterCookie){
 			args = {
-				from: filterCookie.from,
-				to: filterCookie.to,
 				text: searchText,
 				selectedTags: tags,
 				id: userId,
 				isFavorite: filterCookie.isFavorite
 			}
+			
 		}
 		else{
 			args = {
-				from: dates.from,
-				to: dates.to,
 				text: searchText,
 				selectedTags: tags,
 				id: userId,
 				isFavorite: filterFavorites
 			}
-			setCookie("workout-filter", {from: args.from, to: args.to, isFavorite: args.isFavorite, tags: tags}, {path: "/"})
+			setCookie("workout-filter", {isFavorite: args.isFavorite, tags: tags}, {path: "/"})
 		}
 		getWorkouts(args, token, null, null, (response) => {
 			if(response.error) {

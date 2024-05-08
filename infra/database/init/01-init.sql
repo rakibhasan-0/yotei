@@ -175,6 +175,18 @@ ALTER TABLE
 	user_table OWNER TO psql;
 
 --
+-- Name: permission; Type: TABLE; Schema: public; Owner: psql
+--
+CREATE TABLE permission(
+	permission_id INT NOT NULL GENERATED ALWAYS AS IDENTITY UNIQUE,
+	permission_name VARCHAR(255) NOT NULL UNIQUE,
+	permission_desc VARCHAR(255)
+);
+
+ALTER TABLE
+	permission OWNER TO psql;
+
+--
 -- Name: exercise; Type: TABLE; Schema: public; Owner: psql
 --
 CREATE TABLE exercise(
@@ -647,6 +659,7 @@ ALTER TABLE
 \ir defaults/sessionreviewactivities.sql
 \ir defaults/activitylists.sql
 \ir defaults/grading_protocols.sql
+\ir defaults/permissions.sql
 -- Triggers for user
 --
 CREATE OR REPLACE FUNCTION remove_user_references() RETURNS TRIGGER AS $$ 
