@@ -42,7 +42,7 @@ public class RoleApiTest {
     }
 
 	@Test
-	void shouldReturnAllRoles() {
+	void shouldReturnAllRolesWithHttpResponeOK() {
 		List<Role> roleList = new ArrayList<>();
 
 		try {
@@ -52,13 +52,12 @@ public class RoleApiTest {
 
 			Mockito.when(roleRepository.findAll()).thenReturn(roleList);
 
-			List<Role> actualList = roleRepository.findAll();
+			ResponseEntity<List<Role>> result = roleController.getRoles();
 			
-			assertTrue(actualList.equals(roleList));
+			assertTrue(result.equals(new ResponseEntity<>(roleList, HttpStatus.OK)));
 
 		} catch (Exception e) {
 			fail();
 		}
-
 	}
 }
