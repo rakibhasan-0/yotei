@@ -11,7 +11,11 @@ import {getFormattedDateString} from "../../components/Common/DatePicker/DatePic
 
 /**
  * 
+ * Statistics page for a group.
+ * @returns A page with statistics for a group.
  * @author Team Coconut 
+ * @since 2024-05-08
+ * @version 1.0
  */
 export default function Statistics() {
 
