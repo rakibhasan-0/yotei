@@ -28,7 +28,7 @@ export default function Admin() {
 	const detailURL = "/admin/role_page/"
 	const [searchText, setSearchText] = useState("")
 	const [key, setKey] = useState(window.localStorage.getItem("active-tab") || "HandleUsers")
-	const [isRoleTabEnabled] = useState(true) //FEATURE TOGGLE
+	const [isRoleTabEnabled] = useState(false) //FEATURE TOGGLE
 
 	useEffect(()=>{
 		window.localStorage.setItem("active-tab", key)
