@@ -219,7 +219,7 @@ public class ExaminationController {
     @PutMapping("/examresult")
     public ResponseEntity<Object> updateExaminationResult(@RequestBody ExaminationResult examination_result){
 
-        if(examinationResultRepository.findById(examination_result.getExaminee_id()).isEmpty()) {
+        if(examinationResultRepository.findById(examination_result.getResult_id()).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         examinationResultRepository.save(examination_result);
@@ -238,16 +238,16 @@ public class ExaminationController {
     }
 
     /**
-     * Deletes a given examinee result.
-     * @param examinee_id Given examinee id.
+     * Deletes a given examination result.
+     * @param result_id Given examinee id.
      * @return HTTP-status code.
     */
-    @DeleteMapping("/examresult/{examinee_id}")
-    public ResponseEntity<ExaminationResult> deleteExaminationResult(@PathVariable("examinee_id") long examinee_id) {
-        if(examinationResultRepository.findById(examinee_id).isEmpty()) {
+    @DeleteMapping("/examresult/{result_id}")
+    public ResponseEntity<ExaminationResult> deleteExaminationResult(@PathVariable("result_id") Long result_id) {
+        if(examinationResultRepository.findById(result_id).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        examinationResultRepository.deleteById(examinee_id);
+        examinationResultRepository.deleteById(result_id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

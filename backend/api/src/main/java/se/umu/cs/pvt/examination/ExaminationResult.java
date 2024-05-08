@@ -2,6 +2,8 @@ package se.umu.cs.pvt.examination;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -13,23 +15,29 @@ import javax.persistence.Table;
 @Table(name = "examination_result")
 public class ExaminationResult {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, name = "result_id")
+    private Long result_id;
+
     @Column(nullable = false, name = "examinee_id")
     private Long examinee_id;
 
     @Column(nullable = false, name = "technique_name")
     private String technique_name;
 
-    @Column(nullable = false, name = "pass")
+    @Column(nullable = true, name = "pass")
     private Boolean pass;
     
     /**
      * Data constructor for ExaminationResult.
      * 
+     * @param result_id The id of the examination result.
      * @param examinee_id The id of the examinee.
      * @param technique_name The name of the technique.
      * @param pass Pass or fail of performing the technique.
      */
-    public ExaminationResult(Long examinee_id, String technique_name, Boolean pass){
+    public ExaminationResult(Long result_id, Long examinee_id, String technique_name, Boolean pass){
+        this.result_id = result_id;
         this.examinee_id = examinee_id;
         this.technique_name = technique_name;
         this.pass = pass;
@@ -41,7 +49,11 @@ public class ExaminationResult {
      */
     protected ExaminationResult() {}
 
-    public long getExaminee_id(){
+    public Long getResult_id(){
+        return result_id;
+    }
+
+    public Long getExaminee_id(){
         return examinee_id;
     }
 
@@ -51,5 +63,9 @@ public class ExaminationResult {
 
     public boolean getPass(){
         return pass;
+    }
+
+    public void setPass(Boolean status) {
+        pass = status;
     }
 }
