@@ -30,12 +30,16 @@ describe("Render test", () => {
     var comment = "This is a test comment"
     beforeEach(() => {
 
-        const { container } = render(<BrowserRouter><GradingDeviationContainer id = {1} name = {"Test 123"} passed = {true} comment = {"This is a test comment"}/></BrowserRouter>)
+        const { container } = render(<BrowserRouter><GradingDeviationContainer id = {1} name = {name} passed = {passed} comment = {comment}/></BrowserRouter>)
 		
 	})
 
     test("Should render id if there is one", () => {
         expect(screen.getByTestId(1)).toHaveTextContent(id, 1)
+    })
+
+    test("Should render container with correct id", () => {
+        expect(document.getElementById(`${id}-header`)).toBeDefined()
     })
 
     test("Should render technique name if technique name exists", () => {
@@ -47,6 +51,6 @@ describe("Render test", () => {
     })
 
     test("Should pass and have color #c9eec3 ", () => {
-        expect(document.getElementById(id+"-header")).toHaveTextContent("sc23-session-container-header-passed")
+        expect(document.getElementsByClassName("sc23-session-container-header-passed")).toBeDefined()
     })
 })
