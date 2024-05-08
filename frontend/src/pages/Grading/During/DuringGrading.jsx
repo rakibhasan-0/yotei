@@ -3,9 +3,10 @@ import React, { useState } from "react"
 import TechniqueInfoPanel from "../../../components/Grading/PerformGrading/TechniqueInfoPanel"
 import ExamineePairBox from "../../../components/Grading/PerformGrading/ExamineePairBox"
 
+import styles from "./DuringGrading.module.css"
 // Temp
 import ProtocolYellow from "./yellowProtocolTemp.json"
-import InfiniteScrollComponent from "../../../components/Common/List/InfiniteScrollComponent"
+//import InfiniteScrollComponent from "../../../components/Common/List/InfiniteScrollComponent"
 
 const listOfPairs = [{first: "Isak", second: "Teodor"},  {first: "Isak2", second: "Teodor2"},  {first: "Isak3", second: "Teodor3"},{first: "Isak", second: "Teodor"},  {first: "Isak2", second: "Teodor2"},  {first: "Isak3", second: "Teodor3"}, {first: "Isak", second: "Teodor"},  {first: "Isak2", second: "Teodor2"},  {first: "Isak3", second: "Teodor3"}]
 
@@ -94,24 +95,22 @@ export default function DuringGrading() {
 	console.log(listOfPairs)
 
 	return (
-		<div>
+		<div className={styles.container}>
 			<TechniqueInfoPanel
 				categoryTitle=""
 				currentTechniqueTitle={techniqueNameList[currentIndex].technique.text}
 				nextTechniqueTitle={techniqueNameList[currentIndex].nextTechnique.text}
 				mainCategoryTitle={techniqueNameList[currentIndex].categoryName}>
 
-			</TechniqueInfoPanel>
-			<div>
-				<InfiniteScrollComponent>
-					{listOfPairs.map((item, index) => (
-						<ExamineePairBox 
-							rowColor={"#F8EBEC"}
-							examineeLeftName={item.first} 
-							examineeRightName={item.second} pairNumber={index+1}>
-						</ExamineePairBox>
-					))}
-				</InfiniteScrollComponent>
+			</TechniqueInfoPanel>			
+			<div className={styles.scrollableContainer}>
+				{listOfPairs.map((item, index) => (
+					<ExamineePairBox 
+						rowColor={index % 2 == 0 ? "#FFFFFF" : "#F8EBEC"}
+						examineeLeftName={item.second} 
+						examineeRightName={item.second} pairNumber={index+1}>
+					</ExamineePairBox>
+				))}
 			</div>
 			<button onClick={goToNextTechnique}>Next</button>
 		</div>
