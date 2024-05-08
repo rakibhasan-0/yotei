@@ -5,7 +5,7 @@ import VideoPlayerReactPlayer from "../VideoPlayer/VideoPlayerReactPlayer"
 import Image from "../Image/Image"
 import Popup from "../Common/Popup/Popup"
 import ConfirmPopup from "../Common/ConfirmPopup/ConfirmPopup"
-import styles from "../Gallery/Gallery.module.css"
+import "../Gallery/Gallery.css"
 import { AccountContext } from "../../context"
 import { Trash as TrashIcon } from "react-bootstrap-icons" // kanske använder CodeSlash
 import {CameraVideoOff as NoMediaIcon } from "react-bootstrap-icons"
@@ -119,9 +119,9 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	 * Is displayed if no media is avaliable
 	 */
 	const NoMedia = <div id={"no-media-box"}
-		className = {`d-flex flex-column justify-content-center align-items-center ${styles["no-media-container"]} border`}>
+		className = {"d-flex flex-column justify-content-center align-items-center no-media-container border"}>
 		<NoMediaIcon size={"20%"} ></NoMediaIcon>
-		<span className = {styles["no-media-span"]}>Ingen media just nu, ladda upp genom att klicka på plus</span>
+		<span className = "no-media-span">Ingen media just nu, ladda upp genom att klicka på plus</span>
 	</div>
 
 
@@ -159,7 +159,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	function RemoveButton(mediaObject){
 		return(
 			<div id={`${mediaObject.id}-removal-button`}  
-				className={`btn ${styles["remove-media-button"]}`} 
+				className={"btn remove-media-button"} 
 				onClick={() => {setupRemovePopup(mediaObject)}} 
 			>
 				<TrashIcon color="var(--red-primary)" size={30}></TrashIcon>

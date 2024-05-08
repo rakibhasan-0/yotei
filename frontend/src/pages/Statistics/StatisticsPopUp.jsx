@@ -29,6 +29,7 @@ export default function StatisticsPopUp({groupActivities,dates,averageRating,num
 			groupActivities.forEach(activity => {
 				activity.beltColors.forEach(beltColor => {
 					const color = beltColor.belt_name
+					
 					colorsCount[color] = (colorsCount[color] || 0) + activity.count
 				})
 			})
@@ -53,16 +54,12 @@ export default function StatisticsPopUp({groupActivities,dates,averageRating,num
 				<img src="/Statistics.svg" />
 			</button>
 
-			<Popup title={"Statistik"} id="statistics-popup" isOpen={showPopup} setIsOpen={setShowPopup}>
-				<p style={{ fontSize: "40px", fontFamily: "Arial, sans-serif" }}>
-					{averageRating}/5
-				</p>
+			<Popup title={"Sammanställning av tillfällen"} id="statistics-popup" isOpen={showPopup} setIsOpen={setShowPopup}>
 				<StarRatings rating={averageRating} starRatedColor="#ffcc00" numberOfStars={5} name='rating' starDimension="50px" starSpacing="4px" />
 				<p style = {{color: "#b9b0b0"}}>
-					Genomsnittligt betyg för {numberOfSessions} tillfällen från {<br />} datum {startDate} till {endDate}
+					Genomsnittligt betyg {averageRating}/5 för {numberOfSessions} tillfällen från {<br />} datum {startDate} till {endDate}
 				</p>
-				
-				<p style = {{fontSize: "40px"}}>
+				<p style={{"text-align":"left"}}>
 					Bält-tekniker
 				</p>
 				<BeltColorChart beltColorsData={beltColorsData} /> 
