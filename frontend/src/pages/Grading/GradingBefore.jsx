@@ -38,6 +38,23 @@ export default function GradingCreate({id}) {
 
 	const [techniqueNameErr, setTechniqueNameErr] = useState("")
 
+	function handleNavigation() {
+		try {
+
+			examinees.map(examinee => async () => {
+						await postPair({examinee_1_id: examinee.id}, token)
+				.then(response => handleResponse(response))
+				.catch(() => setErrorToast("Kunde inte lägga till paret. Kontrollera din internetuppkoppling."))
+
+			})
+			
+			navigate(`/grading/${gradingId}/2`);
+
+		} catch (error) {
+			console.error("Misslyckades skicka vidare till nästa steg i gradering:", error)
+		}
+
+	}
 
 	async function createPair() {
 			
@@ -260,8 +277,7 @@ export default function GradingCreate({id}) {
 				<Button
 					width="100%"
 					onClick={() => {
-						//addExerciseAndTags()
-						navigate("/grading/GradingAfter")
+						handleNavigation()
 					}}
 				>
 					<p>Forsätt</p>
