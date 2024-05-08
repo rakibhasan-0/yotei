@@ -5,6 +5,46 @@ import Statistics from "../../../pages/Statistics/Statistics"
 import StatisticsPopUp from "../../../pages/Statistics/StatisticsPopUp"
 configure({ testIdAttribute: "id" })
 
+const mockedGroup = [{
+	id: 1,
+	name: "Sample Group",
+	color: "0C7D2B",
+	child: false
+}]
+
+const mockedGroupActivities = [
+	{
+		activity_id: 1,
+		beltColors: [{
+			belt_color: "0C7D2B",
+			belt_name: "Grönt",
+			is_child: false
+		}],
+		count: 6,
+		name: "One punch",
+		type: "technique",
+	}, {
+		activity_id: 2,
+		beltColors: [{
+			belt_color: "0C7D2B",
+			belt_name: "Grönt",
+			is_child: false
+		}],
+		count: 3,
+		name: "Two punch",
+		type: "technique",
+	}, {
+		activity_id: 3,
+		beltColors: [{
+			belt_color: "83530C",
+			belt_name: "Brunt",
+			is_child: false
+		}],
+		count: 1,
+		name: "Hook mot lever",
+		type: "technique",
+	}]
+
 /**
  * @author Team Coconut
  * @since 2024-05-02
@@ -14,17 +54,7 @@ describe("Statistics Popup", () => {
     test("Clicking button should show popup", async () => {
         // Mock data
         const mockData = {
-            groupActivities: [{
-                activity_id: 1,
-                beltColors: [{
-                    belt_color: "0C7D2B",
-                    belt_name: "Grönt",
-                    is_child: false
-                }],
-                count: 6,
-                name: "Sample Group",
-                type: "technique",
-            }],
+            groupActivities: mockedGroupActivities,
             dates: {
                 from: new Date("2022-05-08").toISOString(),
                 to: new Date("2024-05-08").toISOString(),
@@ -65,45 +95,38 @@ describe("Statistics Popup", () => {
 
 describe("Statistics component", () => {
 
-	test("renders group when data is fetched successfully", async () => {
+	test("renders groups statistic page when data is fetched successfully", async () => {
 		// Mock fetch API to return sample data
-		// eslint-disable-next-line no-undef
 		global.fetch = jest.fn(() =>
 			Promise.resolve({
 				ok: true,
 				json: () =>
 					Promise.resolve([
-						{
-							activity_id: 1,
-							beltColors: [{
-								belt_color: "0C7D2B",
-								belt_name: "Grönt",
-								is_child: false
-							}],
-							count: 6,
-							name: "Sample Group",
-							type: "technique",
-						},
-						{
-							id: 1,
-							name: "Sample Group",
-							color: "0C7D2B",
-							child: false
-						}
+						...mockedGroupActivities,
+						...mockedGroup
 					]),
 			})
 		)
 
+		// Render Statistics page
 		render(<BrowserRouter> <Statistics /> </BrowserRouter>)
 
-		// Wait for group name to be rendered
-		await screen.findAllByText("Sample Group")
+		// Wait for groups statistic page to be rendered
+		await screen.findByText("Sample Group")
 
 		// Ensure "Sample Group" text is rendered
-		expect(screen.getAllByText("Sample Group")[0]).toBeInTheDocument()
+		expect(screen.getByText("Sample Group")).toBeInTheDocument()
+
+		// Retrieves mocked list of group activities
+		const techniqueList = screen.getByTestId("technique-exercise-list")
 
 		// Assert if list of techniques is displayed 
-		expect(screen.getByTestId("technique-exercise-list")).toBeInTheDocument()
+		expect(techniqueList).toBeInTheDocument()
+
+		// Assert if mocked techniques are displayed in list
+		mockedGroupActivities.forEach(technique => {
+			expect(screen.getByText(technique.name)).toBeInTheDocument();
+		});
 
 	})
 
@@ -134,65 +157,6 @@ describe("Statistics component", () => {
 describe("FilterStatistics component", () => {
 
 	test("FilterStatistics renders correctly within Statistics component", async () => {
-		
-		const mockGroupActivities = [{
-			activity_id: 1,
-			beltColors: [{
-				belt_color: "0C7D2B",
-				belt_name: "Grönt",
-				is_child: false
-			}],
-			count: 6,
-			name: "Sample Group",
-			type: "technique",
-		}]
-
-		const mockActivities = [{
-			id: 1,
-			name: "Sample Group",
-			color: "0C7D2B",
-			child: false
-		}]
-
-		const mockTechniques = [
-			{
-				id: 1,
-				name: "Kebabkast, Henkes och grills (1 Kyu)",
-				description: "Slöseri med mat",
-				belts: [{
-					id: 1,
-					name: "Grönt",
-					color: "0C7D2B",
-					child: false
-				}],
-				tags: [{
-					id: 1,
-					name: "throws"
-				}, {
-					id: 2,
-					name: "matkrig"
-				}, {
-					id: 3,
-					name: "vuxenaktivitet"
-				}]
-			}, {
-				id: 2,
-				name: "Kurragömma (2 Kyu)",
-				description: "Stealth technique",
-				belts: [{
-					id: 1,
-					name: "Brunt",
-					color: "83530C",
-					child: false
-				}],
-				tags: [{
-					id: 4,
-					name: "tyst"
-				}, {
-					id: 3,
-					name: "vuxenaktivitet"
-				}]
-			}]
 
 		// eslint-disable-next-line no-undef
 		global.fetch = jest.fn(() =>
@@ -200,20 +164,28 @@ describe("FilterStatistics component", () => {
 				ok: true,
 				json: () =>
 					Promise.resolve([
-						...mockGroupActivities,
-						...mockActivities,
-						...mockTechniques
+						...mockedGroupActivities,
+						...mockedGroup,
 					]),
 			})
 		)
 
+		// Render statistics page
 		render(	<BrowserRouter>	<Statistics	/> </BrowserRouter> )
 
+		// Wait for rendering
 		await screen.findAllByText("Sample Group")
 
+		// Simulate clicking the filter button to open the filter container
 		fireEvent.click(screen.getByTestId("filter-button"))
 
+		// Assert existence of filter container
 		expect(screen.getByTestId("filter-container")).toBeInTheDocument()
+
+		// Try to assert existence of input mock techniques
+		const filterContainer = screen.getByTestId("filter-container")
+		// const filteredTechniqueList = screen.getByTestId("technique-exercise-list")
+		console.log(filterContainer.innerHTML)
 	})
 })
 	
