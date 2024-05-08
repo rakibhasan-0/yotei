@@ -39,7 +39,6 @@ function ActivityItem({ index, categoryName, id, inputDisabled, text }) {
 	}, [text, id])
 
 	return (
-		<div>
 		<fieldset className={styles.activityItem} id={"activity-description-" + id}>
 			{categoryName && <legend>{<h2>{categoryName}</h2>}</legend>}
 			<textarea 
@@ -55,10 +54,6 @@ function ActivityItem({ index, categoryName, id, inputDisabled, text }) {
 				rows={1}
 			/>
 		</fieldset>
-		<Button>
-			
-		</Button>
-		</div>
 	)
 }
 

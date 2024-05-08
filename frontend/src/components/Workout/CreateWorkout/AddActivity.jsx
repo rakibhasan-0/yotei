@@ -208,10 +208,10 @@ function AddActivity({ id, setShowActivityInfo }) {
 			}
 		})
 
-		//setTechniques(tempTechniques)
+		setTechniques(tempTechniques)
 		setExercises(tempExercises)
 		setHasLoadedData(true)
-	}, [hasLoadedData])
+	}, [hasLoadedData, checkedActivities])
 
 	/**
 	 * Fetches techniques when the component is mounted or when the 
@@ -226,7 +226,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 			)
 		))
 		searchTechniques()
-	}, [searchTechText, selectedBelts, kihon, selectedTechTags, hasLoadedData, checkedActivities])
+	}, [searchTechText, selectedBelts, kihon, selectedTechTags, hasLoadedData])
 
 	/**
 	 * Fetches exercises when the component is mounted or when the

@@ -102,7 +102,8 @@ export default function InfiniteScrollComponent({ children, activities, activeKe
 			}
 		}
 
-		else if(visibleTechniques.length == 0){
+		else if(visibleTechniques.length == 0 || fetchedTech.current <= 0){
+			console.log("huh")
 			shownItems.current = 20
 			setVisibleTechniques([])
 			updateShownItems()
