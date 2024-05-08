@@ -15,7 +15,7 @@ describe("Statistics Popup", () => {
 	test("Clicking button should show popup", async () => {
 
 		// Render the StatisticsPopup component
-		render(<StatisticsPopUp />)
+		//render(<StatisticsPopUp />)
 
 		// Simulate a click on the button
 		fireEvent.click(screen.getByRole("button"))
