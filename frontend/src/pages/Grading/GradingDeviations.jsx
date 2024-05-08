@@ -64,7 +64,7 @@ export default function GradingDeviations() {
                         width="100%"
                         outlined={true}
                         onClick={() => {
-                            navigate("/grading/create")
+                            navigate("/grading/create/3/3")
                         }}
                     >
                         <p>Tillbaka</p>

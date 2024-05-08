@@ -12,7 +12,7 @@ import { ChevronDown } from "react-bootstrap-icons"
  * @since 2024-05-07
  */
 
-function GradingDeviationContainer({ id, name, comment, passed }) {
+function GradingDeviationContainer({ id, name, comment, pairComment, generalComment, passed }) {
 	const [toggled, setToggled] = useState(false)
 
 	function checkID(id) {
@@ -49,6 +49,14 @@ function GradingDeviationContainer({ id, name, comment, passed }) {
 											Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet porta ex.
 											Donec laoreet urna in hendrerit venenatis. Sed sem ligula, aliquet at odio id, varius rutrum dolor.
 											Sed elementum at magna nec tincidunt.{comment}
+										</h2>
+									}{
+										<h2 id="commentPairDisplay" className={styles["commentStyle"]}>
+											{pairComment}
+										</h2>
+									}{
+										<h2 id="commentGeneralDisplay" className={styles["commentStyle"]}>
+											{generalComment}
 										</h2>
 									}
 								</div>
