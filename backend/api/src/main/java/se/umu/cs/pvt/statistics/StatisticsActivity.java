@@ -64,6 +64,7 @@ public class StatisticsActivity implements Serializable {
 
   /**
    * Public getter for private property session_id
+   * @return session id of the session that the activity was in.
    */
   public Long getSession_id() {
     return session_id;
@@ -71,6 +72,7 @@ public class StatisticsActivity implements Serializable {
 
   /**
    * Public getter for private property activity_id
+   * @return activity id
    */
   public Long getActivity_id() {
       return activity_id;
@@ -78,6 +80,7 @@ public class StatisticsActivity implements Serializable {
 
   /**
    * Public getter for private property name
+   * @return activity name
    */
   public String getName() {
       return this.name;
@@ -85,6 +88,7 @@ public class StatisticsActivity implements Serializable {
 
   /**
    * Public getter for private property type
+   * @return activity type
    */
   public String getType() {
       return type;
@@ -92,6 +96,7 @@ public class StatisticsActivity implements Serializable {
 
   /**
    * Public getter for private property belts
+   * @return belt colors of belts associated with activity
    */
   public List<BeltResponse> getBeltColors() {
       return belts;
@@ -110,6 +115,7 @@ public class StatisticsActivity implements Serializable {
 
   /**
    * Public getter for private property count
+   * @return amount of time that the activity has been done.
    */
   public Long getCount() {
       return count;
@@ -117,6 +123,7 @@ public class StatisticsActivity implements Serializable {
 
   /**
    * Public getter for private property kihon
+   * @return true if activity is associated with the "kihon" tag, otherwise false
    */
   public Boolean getKihon() {
     return kihon;
@@ -124,6 +131,7 @@ public class StatisticsActivity implements Serializable {
 
   /**
    * Public getter for private property date
+   * @return date of the session review
    */
   public LocalDate getDate() {
     return date;
@@ -131,6 +139,7 @@ public class StatisticsActivity implements Serializable {
 
   /**
    * Public getter for private property session_rating
+   * @return rating of the session that the activity was done in.
    */
   public Integer getRating() {
     return session_rating;

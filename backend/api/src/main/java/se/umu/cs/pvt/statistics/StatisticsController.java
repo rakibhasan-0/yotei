@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -37,9 +38,14 @@ public class StatisticsController {
         this.statisticsRepository = statisticsRepository;
     }
 
+
     @Operation(summary = "Returns the techniques and exercises done for a group sorted from highest to lowest occurence.", 
-               description = "Must include a group id as path variable. All other request parameters are optional they default to false. If not valid date interval is set, all session reviews are included in the statistics.")
-    @GetMapping("/{id}")
+               description = "Must include a group id as path variable. All other request parameters are optional and default to false. If no valid date interval is set, all session reviews are included in the statistics.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "OK - Successfully retrieved"),
+        @ApiResponse(responseCode = "204", description = "No content - No activities found for the group.")
+    })
+    @GetMapping("{id}")
     public ResponseEntity<StatisticsResponseWrapper> getSessionReviewStatistics(@PathVariable Long id, 
                                                                         @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<LocalDate> startdate , 
                                                                         @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<LocalDate> enddate, 
@@ -56,6 +62,8 @@ public class StatisticsController {
             // Set to empty ArrayList if not to allow stream.
             exercises = new ArrayList<>();
         }
+
+        
 
         // Combine techniques and exericises
         List<StatisticsActivity> union = Stream.concat( exercises.stream(), techniques.stream())
@@ -100,6 +108,8 @@ public class StatisticsController {
             }
             if (!uniqueActivities.contains(sr)) {
                 uniqueActivities.add(sr);
+            } else {
+                uniqueActivities.get(uniqueActivities.indexOf(sr)).addToCount(sa.getCount());
             }
         }
 
