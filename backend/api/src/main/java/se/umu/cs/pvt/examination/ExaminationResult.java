@@ -2,6 +2,7 @@ package se.umu.cs.pvt.examination;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
@@ -11,12 +12,12 @@ import javax.persistence.Table;
 @Entity()
 @Table(name = "examination_result")
 public class ExaminationResult {
-
+    @Id
     @Column(nullable = false, name = "examinee_id")
-    private Long examineeId;
+    private Long examinee_id;
 
     @Column(nullable = false, name = "technique_name")
-    private String techniqueName;
+    private String technique_name;
 
     @Column(nullable = false, name = "pass")
     private Boolean pass;
@@ -24,13 +25,13 @@ public class ExaminationResult {
     /**
      * Data constructor for ExaminationResult.
      * 
-     * @param examineeId The id of the examinee.
-     * @param techniqueName The name of the technique.
+     * @param examinee_id The id of the examinee.
+     * @param technique_name The name of the technique.
      * @param pass Pass or fail of performing the technique.
      */
-    public ExaminationResult(Long examineeId, String techniqueName, Boolean pass){
-        this.examineeId = examineeId;
-        this.techniqueName = techniqueName;
+    public ExaminationResult(Long examinee_id, String technique_name, Boolean pass){
+        this.examinee_id = examinee_id;
+        this.technique_name = technique_name;
         this.pass = pass;
     }
 
@@ -41,11 +42,11 @@ public class ExaminationResult {
     protected ExaminationResult() {}
 
     public long getExaminee_id(){
-        return examineeId;
+        return examinee_id;
     }
 
-    public String getTechniqueName(){
-        return techniqueName;
+    public String getTechnique_name(){
+        return technique_name;
     }
 
     public boolean getPass(){
