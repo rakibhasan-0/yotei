@@ -29,6 +29,7 @@ export default function StatisticsPopUp({groupActivities,dates,averageRating,num
 			groupActivities.forEach(activity => {
 				activity.beltColors.forEach(beltColor => {
 					const color = beltColor.belt_name
+					
 					colorsCount[color] = (colorsCount[color] || 0) + activity.count
 				})
 			})
