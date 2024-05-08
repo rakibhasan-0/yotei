@@ -99,24 +99,120 @@ describe("Statistics component", () => {
 
 describe("FilterStatistics component", () => {
 
-	test('FilterStatistics renders correctly within Statistics component', () => {
+	test('FilterStatistics renders correctly within Statistics component', async () => {
 
-		const startDate = 
-		const mockActivities = [...]
-		const mockDates = [...]
-	  
-		const { getByTestId } = render(
-		  <Statistics
-			groupActivities={mockActivities}
-			activities={mockActivities}
-			dates={mockDates}
-		  />
+		const fromDate = new Date("2022-05-08")
+		const toDate = new Date("2024-05-08")
+		const mockDates = [fromDate, toDate]		
+		
+		const mockGroupActivities = [{
+			activity_id: 1,
+			beltColors: [{
+				belt_color: "0C7D2B",
+				belt_name: "Grönt",
+				is_child: false
+			}],
+			count: 6,
+			name: "Sample Group",
+			type: "technique",
+		}]
+		 
+		const mockActivities = [{
+			id: 1,
+			name: "Sample Group",
+			color: "0C7D2B",
+			child: false
+		}]
+
+		const mockTechniques = [
+			{
+				id: 1,
+				name: "Kebabkast, Henkes och grills (1 Kyu)",
+				description: "Slöseri med mat",
+				belts: [{
+					id: 1,
+					name: "Grönt",
+					color: "0C7D2B",
+					child: false
+				}],
+				tags: [{
+					id: 1,
+					name: "throws"
+				}, {
+					id: 2,
+					name: "matkrig"
+				}, {
+					id: 3,
+					name: "vuxenaktivitet"
+				}]
+			}, {
+				id: 2,
+				name: "Kurragömma (2 Kyu)",
+				description: "Stealth technique",
+				belts: [{
+					id: 1,
+					name: "Brunt",
+					color: "83530C",
+					child: false
+				}],
+				tags: [{
+					id: 4,
+					name: "tyst"
+				}, {
+					id: 3,
+					name: "vuxenaktivitet"
+				}]
+			}]
+
+			// global.fetch = jest.fn(() =>
+			// 	Promise.resolve({
+			// 		ok: true,
+			// 		json: () =>
+			// 			Promise.resolve([
+			// 				mockGroupActivities,
+			// 				mockActivities,
+			// 				// mockTechniques
+			// 			]),
+			// 	})
+			// )
+
+			global.fetch = jest.fn(() =>
+			Promise.resolve({
+				ok: true,
+				json: () =>
+					Promise.resolve([
+						{
+							activity_id: 1,
+							beltColors: [{
+								belt_color: "0C7D2B",
+								belt_name: "Grönt",
+								is_child: false
+							}],
+							count: 6,
+							name: "Sample Group",
+							type: "technique",
+						},
+						{
+							id: 1,
+							name: "Sample Group",
+							color: "0C7D2B",
+							child: false
+						}
+					]),
+			})
 		)
 	  
-		const filterStatisticsElement = getByTestId('statistics-filter-container')
-	  
-		// Add assertions specific to FilterStatistics within Statistics component...
+		render(	<BrowserRouter>	<Statistics	/> </BrowserRouter> )
+
+		await screen.findAllByText("Sample Group")
+		
+		fireEvent.click(screen.getByTestId("filter-button"))
+
+		expect(screen.getByTestId("statistics-filter-container")).toBeInTheDocument()
 	  })
 
 })
+	
+
+
 
