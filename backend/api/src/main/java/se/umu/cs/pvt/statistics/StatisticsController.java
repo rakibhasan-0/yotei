@@ -40,7 +40,7 @@ public class StatisticsController {
 
 
     @Operation(summary = "Returns the techniques and exercises done for a group sorted from highest to lowest occurence.", 
-               description = "Must include a group id as path variable. All other request parameters are optional they default to false. If not valid date interval is set, all session reviews are included in the statistics.")
+               description = "Must include a group id as path variable. All other request parameters are optional and default to false. If no valid date interval is set, all session reviews are included in the statistics.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "OK - Successfully retrieved"),
         @ApiResponse(responseCode = "204", description = "No content - No activities found for the group.")

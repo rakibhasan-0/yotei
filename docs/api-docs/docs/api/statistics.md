@@ -14,7 +14,7 @@ and understood the documentation, please sign-off by adding your name and date b
 API for statistics of techniques and exercises done in session reviews.
 
 <api>
-name: Get the annotated activites done in a groups session review.
+name: Get the annotated activites done in a group's session reviews.
 
 path: GET /api/statistics/{id}
 
@@ -112,4 +112,12 @@ examples:
                     }
                 ]
             }
-</api>
+  - name: 204
+
+    request: GET /api/session/get?id=10
+    
+    response:
+        content-type: application/json
+        body: |
+
+    </api>
