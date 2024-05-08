@@ -84,13 +84,8 @@ function getCategoryIndices(dataArray) {
 }
 
 export default function DuringGrading() {
-	//const navigate = useNavigate()
-	//const { examinationID } = useParams()
-	//const { token } = useContext(AccountContext)
 	const [currentIndex, setCurrentIndex] = useState(0)
 	const [showPopup, setShowPopup] = useState(false)
-	const headers = ["Teknik1", "Teknik2", "Teknik3", "Teknik4", "Teknik5", "Teknik6", "Teknik7", "Teknik8", "Teknik9"] // Example array of headers
-
 
 	// Go to summary when the index is equal to length. Maybe change the look of the buttons.
 	const goToNextTechnique = () => {
