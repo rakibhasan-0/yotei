@@ -26,7 +26,7 @@ export default function GroupIndex() {
 	const { token, userId } = context
 	const [loading, setLoading] = useState(true)
 	const [groupsEmpty, setGroupsEmpty] = useState(true) //Boolean to check if there are no groups.
-	const [isStatisticsEnabled] = useState(false) //FEATURE TOGGLE
+	const [isStatisticsEnabled] = useState(true) //FEATURE TOGGLE
 
 	useEffect(() => {
 		(async () => {
