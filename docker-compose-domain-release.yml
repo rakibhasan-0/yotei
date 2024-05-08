@@ -5,7 +5,7 @@ services:
     restart: always
     volumes:
       - certificate:/etc/letsencrypt/
-      - certbotwww:/var/www/certbot/
+      - certbotwww:/var/www/certbot/ # Add this path to prod.conf
     ports:
       - 80:80
       - 443:443
