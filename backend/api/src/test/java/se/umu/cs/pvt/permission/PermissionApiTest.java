@@ -49,4 +49,9 @@ class PermissionApiTest {
             fail();
         }
     }
+
+    @Test
+    void shouldGetNoContentCodeWhenEmpty() {
+        assertEquals(new ResponseEntity<>(permissions, HttpStatus.NO_CONTENT), permissionController.getPermissions());
+    }
 }
