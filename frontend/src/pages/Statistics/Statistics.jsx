@@ -7,83 +7,185 @@ import Button from "../../components/Common/Button/Button"
 import TechniqueCard from "../../components/Common/Technique/TechniqueCard/TechniqueCard"
 import StatisticsPopUp from "./StatisticsPopUp"
 import FilterStatistics from "./FilterStatistics"
+import {getFormattedDateString} from "../../components/Common/DatePicker/DatePicker"
 
+/**
+ * 
+ * Statistics page for a group.
+ * @returns A page with statistics for a group.
+ * @author Team Coconut 
+ * @since 2024-05-08
+ * @version 1.0
+ */
 export default function Statistics() {
+
 	const navigate = useNavigate()
 	const { groupID } = useParams()
 	const [groupName, setGroupName] = useState(null)
 	const [loading, setLoading] = useState(true)
 	const { token } = useContext(AccountContext)
-
 	const [groupActivities, setGroupActivities] = useState([])
+	const [selectedBelts, setSelectedBelts] = useState([])
+	const [numberofSessions, setNumberOfSessions] = useState()
+	const [averageRating, setAverageRating] = useState()
+	const [filter, setFilter] = useState({
+		showExercises: false,
+		showKihon: false,
+	})
+
+
+	// creating a date object for two years before from now and today's date
+	const twoYearsBeforeFromNow = new Date()
+	twoYearsBeforeFromNow.setFullYear(twoYearsBeforeFromNow.getFullYear() - 2)
+	const today = new Date()
+
+	// state for storing the dates
+	const [dates, setDates] = useState({
+		from: getFormattedDateString(twoYearsBeforeFromNow),
+		to: getFormattedDateString(today),
+	})
+
+	// filtering the group activities based on the selected belts. 
+	const activities =	
+	selectedBelts.length > 0	
+		? groupActivities.filter((activity) =>
+			activity.beltColors?.some((belt) =>	
+				selectedBelts.some((selectedBelt) =>	
+					selectedBelt.child	
+						? belt.is_child == true && selectedBelt.name === belt.belt_name
+						:	selectedBelt.name === belt.belt_name && belt.is_child == false
+				)
+			)
+		)
+		: groupActivities
+
+
+
+	function handleBeltToggle(isSelected, belt) {
+		setSelectedBelts(prevSelected => {
+			if (isSelected) {
+				return [...prevSelected, belt]
+			} else {
+				return prevSelected.filter(b => b.id !== belt.id)
+			}
+		})
+	}
+
+
+	function onBeltsClear() {
+		setSelectedBelts([])
+	}
+	
+
+	function checkIfDateIsValid(date) {
+		return /^[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(date) && !isNaN(new Date(date).getTime())
+	}
 
 	useEffect(() => {
-		async function fetchGroupData() {
+
+		async function fetchGroupActivitiesData() {	
+			if(!checkIfDateIsValid(dates.from) || !checkIfDateIsValid(dates.to)) {
+				return
+			}
+			
+			const param = new URLSearchParams({
+				kihon: filter.showKihon ? "true" : "false",
+				showexercises: filter.showExercises ? "true" : "false",
+				startdate: dates.from ? dates.from : "",
+				enddate: dates.to ? dates.to : ""
+			})
+
 			try {
-				console.log("Fetching group data for ID:", groupID)
+				setLoading(true)
+				const responseFromGroupNameAPI= await fetch("/api/plan/all", { headers: { token } })
+				const responseFromGroupDetailsAPI = await fetch(`/api/statistics/${groupID}?${param}`, {headers: { token }})
 
-				const response = await fetch("/api/plan/all", { headers: { token } })
-				const responseFromGroupActivities = await fetch(
-					`/api/statistics/${groupID}`,
-					{ headers: { token } }
-				)
-
-				if (!response.ok || !responseFromGroupActivities.ok) {
-					throw new Error("Failed to fetch group data")
+				if(responseFromGroupDetailsAPI.status === 200) {
+					const data = await responseFromGroupDetailsAPI.json()
+					setNumberOfSessions(data.numberOfSessions)
+					setAverageRating(data.averageRating)
+					setGroupActivities(data.activities)
+				}else if (responseFromGroupDetailsAPI.status === 204) {
+					setGroupActivities([])
 				}
 
-				const data = await response.json()
-				const activities = await responseFromGroupActivities.json()
-
-				console.log("Group data:", data)
-
-				const groupData = data.find((group) => group.id === parseInt(groupID))
-				setGroupName(groupData)
-				setGroupActivities(activities)
-				console.log("Group Activities:", activities)
-			} catch (error) {
-				console.error("Fetching error:", error) // proper handling of error should be implemented
-			} finally {
+				if (!responseFromGroupDetailsAPI.ok || !responseFromGroupNameAPI.ok) {
+					throw new Error("Failed to fetch group data")
+				}
+				
+				const groups = await responseFromGroupNameAPI.json()	
+				const name = groups.find((group) => group.id === parseInt(groupID))
+				setGroupName(name)
+			}
+			catch (error) {
+				console.error("Fetching error:", error) // proper error handling will be added later
+			}
+			finally {
 				setLoading(false)
 			}
 		}
+	
+		fetchGroupActivitiesData()
 
-		fetchGroupData()
-	}, [groupID, token])
+	}, [groupID, token, filter, dates])
+
+
+	function handleDateChanges(variableName, value) {
+		const selectedDate = new Date(value)
+		const toDate = new Date(dates.to)
+
+		if (variableName == "from") {
+			setDates( selectedDate > toDate ? { from: value, to: value } : { ...dates, from: value })
+		} else {
+			setDates({ ...dates, [variableName]: value })
+		}
+	}
+
+
+	function handleChanges(variableName, value) {
+		setFilter({ ...filter, [variableName]: value })
+	}
 
 	return (
 		<div>
+			<title>Statistik</title>
 			{loading ? (
 				<Spinner />
 			) : (
-				<h1 style={{ fontSize: "35px" }}>
+				<h1 id = "statistics-header" >
 					{groupName ? `${groupName.name}` : "Gruppen hittades inte"}
 				</h1>
 			)}
 
 			<div className={style.FilterAndSortContainer}>
-				<FilterStatistics />
-				<StatisticsPopUp />
+				<FilterStatistics
+					id="statistics-filter-container"
+					onToggleExercise={(value) => handleChanges("showExercises", value)}
+					onToggleKihon={(value) => handleChanges("showKihon", value)}
+					onDateChanges={handleDateChanges}
+					onToggleBelts={handleBeltToggle}
+					onClearBelts={onBeltsClear}
+					belts={selectedBelts}
+					dates={dates}
+				/>
+
+				<StatisticsPopUp groupActivities = {activities} dates ={dates} averageRating = {averageRating} 
+					numberOfSessions = {numberofSessions} />
 			</div>
-			{/*here we will show the technique, exercise and color of the belts, number of the exercise 	
-				we will use the TechniqueCard component to show the data ..../api/statistics/${groupID}
-			*/}
-			<div className="activitiesContainer">
-				{groupActivities.map((activity, index) => (
-					<TechniqueCard
-						key={index}
-						technique={activity} // Passing the whole activity object
-						checkBox={false}
-						id={activity.activity_id}
-					/>
-				))}
+
+			<div className="activitiesContainer" id="technique-exercise-list">
+				{	activities.length === 0 ? <h5 style={{ fontSize: "25px" }}>Inga aktiviteter hittades</h5> :
+					activities.map((activity, index) => (
+						<TechniqueCard key={index} technique={activity} checkBox={false} id={activity.activity_id} />
+					))
+				}
 			</div>
 
 			<div className={style.buttonContainer}>
-				<Button width="25%" outlined={true} onClick={() => navigate(-1)}>
+				<Button width="25%" outlined={true} onClick={() => navigate(-1) } id ="statistics-back-button">
 					<p>Tillbaka</p>
 				</Button>
 			</div>
 		</div>
 	)
-}
+}	

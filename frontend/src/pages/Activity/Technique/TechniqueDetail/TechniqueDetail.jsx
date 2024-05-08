@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext, useCallback } from "react"
-import { useNavigate, useParams } from "react-router"
+import { useLocation, useNavigate, useParams } from "react-router"
 import { Link } from "react-router-dom"
 import { AccountContext } from "../../../../context"
 
@@ -33,8 +33,11 @@ import ActivityDelete from "../../../../components/Activity/ActivityDelete/Activ
  * Example usage:
  * 	   <TechniqueDetail id="test-id"/>
  * 
- * @author Team Medusa (Grupp 6) & Cyclops (Group 5) & Tomato (Group 6) & Team Durian (Group 3) (2024-04-23)
- * @version 4.0
+ * Version 4.1:
+ * 		Fixed navigation from pages outside the website 
+ * 
+ * @author Team Medusa (Grupp 6) & Cyclops (Group 5) & Tomato (Group 6) & Team Durian (Group 3) (2024-04-23), Team Kiwi (Group 2) (2024-05-03)
+ * @version 4.1
  * @since 2024-04-25
  */
 function TechniqueDetail({ id }) {
@@ -42,6 +45,8 @@ function TechniqueDetail({ id }) {
 	const { techniqueId } = useParams()
 	const { token } = useContext(AccountContext)
 	const navigate = useNavigate()
+	const location = useLocation()
+	const hasPreviousState = location.key !== "default"
 	const [showRPopup, setRShowPopup] = useState(false)
 	const [technique, setTechnique] = useState()
 	const [error, setError] = useState("")
@@ -99,7 +104,11 @@ function TechniqueDetail({ id }) {
 				setError(msg + " ")
 				return
 			}
-			navigate("/technique")
+			if (hasPreviousState) {
+				navigate(-1)
+			} else {
+				navigate("/activity")
+			}
 		} catch (err) {
 			setError("Ett nätverksfel inträffade. Kontrollera din internetuppkoppling.")
 		}
@@ -107,7 +116,7 @@ function TechniqueDetail({ id }) {
 
 	if (error != "") return <ErrorState
 		message={error}
-		onBack={() => navigate("/technique")}
+		onBack={() => navigate("/activity")}
 		onRecover={handleGet}
 	/>
 
@@ -184,7 +193,7 @@ function TechniqueDetail({ id }) {
 		
 				<Gallery id={techniqueId} />
 				{getReviewContainer(showRPopup, setRShowPopup, techniqueId)}
-				{getButtons(navigate, setRShowPopup)}
+				{getButtons(navigate, hasPreviousState, setRShowPopup)}
 			</div>
 		</>
 	)
@@ -194,11 +203,21 @@ function getReviewContainer(showRPopup, setRShowPopup, techniqueId){
 	return (<Review isOpen={showRPopup} setIsOpen={setRShowPopup} technique_id={techniqueId}/>)
 }
 
-function getButtons(navigate, setRShowPopup) {
+function getButtons(navigate, hasPreviousState, setRShowPopup) {
+
+	const handleNavigation = () => {
+		if(hasPreviousState) {
+			navigate(-1)
+		}
+		else{
+			navigate("/activity")
+		}
+	}
+
 	return (
 		<div className="d-flex row justify-content-center">
 			<div className="d-flex col mb-3 mt-3 justify-content-start">
-				<Button onClick={() => navigate(-1)} outlined={true}>
+				<Button onClick={handleNavigation} outlined={true}>
 					<p>Tillbaka</p>
 				</Button>
 			</div>

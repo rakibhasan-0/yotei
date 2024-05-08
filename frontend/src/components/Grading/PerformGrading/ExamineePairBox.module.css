@@ -1,0 +1,28 @@
+.pairbox{
+  display:inline;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 5px;
+}
+
+.pairinfo{
+    width: 10%;
+    float:left;
+}
+.pair{
+    width: 88%; 
+    float:right;
+}
+
+.pairleft{
+   float: left;
+    width: 48%;
+    margin-right: 2px;
+}
+
+.pairright{
+    float: right;
+    width: 48%;
+    
+}

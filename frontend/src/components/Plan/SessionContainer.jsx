@@ -17,7 +17,8 @@ import SessionWorkout from "./SessionWorkout"
  * 
  * @returns 
  * 
- * @author Griffin DV21JJN
+ * @author Griffin DV21JJN, Team Durian (Group 3)
+ * @since 2024-05-07
  */
 function SessionContainer ({ id, workout, session, plan}) {
 	const [toggled, setToggled] = useState(false)
@@ -146,13 +147,13 @@ function SessionContainer ({ id, workout, session, plan}) {
 								checkSession() ?
 									
 									checkPlan() ?
-										<SessionHeader id="session-container-header" date={checkDate()} day={getDay()} title={plan.name} time={session.time}/>
+										<SessionHeader id="session-container-header" date={checkDate()} day={getDay()} title={`${plan.name || "unnamed"} - ${workout?.name ?? "No Workout"}`}time={session.time}/>
 										:
 										<SessionHeader id="session-container-header" date={checkDate()} day={getDay()} title="invalid" time={session.time}/>
 									:
 									checkPlan() ?
 									
-										<SessionHeader id="session-container-header" date="invalid" day="invalid" title={plan.name} time="invalid"/>
+										<SessionHeader id="session-container-header" date="invalid" day="invalid" title={`${plan.name || "unnamed"} - ${workout?.name ?? "No Workout"}`}time="invalid"/>
 										:
 										<div id><h2 id = "error-session-header">Kunde inte ladda in datum och tid</h2></div>
 							}
