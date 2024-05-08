@@ -14,6 +14,8 @@ services:
 
   certbot:
     image: certbot/certbot:latest
+    depends_on:
+      - nginx
     volumes:
       - certificate:/etc/letsencrypt/
       - certbotwww:/var/www/certbot/
