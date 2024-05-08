@@ -125,7 +125,7 @@ export default function App() {
 						<Route path="excercise/create" element={<ExerciseCreate />} />
 						<Route path="excercise/edit/:excerciseId" element={<ExerciseEdit/>} />
 						<Route path="workout/:workoutId" element={<WorkoutView />} />
-						<Route path="workout/edit" element={<WorkoutEdit />} />
+						<Route path="workout/edit/:workoutId" element={<WorkoutEdit />} />
 						<Route path="plan" element={<PlanIndex uri={planURI} />} />
 						<Route path="plan/create" element={<PlanCreate />} />
 						<Route path="plan/edit/:groupID" element={<EditGroup />} />

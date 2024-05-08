@@ -105,7 +105,7 @@ export default function WorkoutView({ id }) {
 				<div id={id} className="container px-0">
 					{<ConfirmPopup popupText={"Är du säker att du vill radera passet \"" + workoutData.name + "\"?"} id={"confirm-popup"} setShowPopup={setShowPopup} showPopup={showPopup} onClick={async () => deleteWorkout(workoutId, context, navigate, setShowPopup)}/>}
 					{getReviewContainer(showRPopup, setRShowPopup, workoutId)}
-					{getWorkoutInfoContainer(workoutData, setShowPopup, context, userId, workoutUsers)}
+					{getWorkoutInfoContainer(workoutData, setShowPopup, context, userId, workoutUsers, workoutId)}
 					{sortByCategories(workoutData).map((activityCategory) => (
 						<div key={activityCategory.categoryOrder}>
 							<WorkoutActivityList
@@ -216,7 +216,7 @@ function getButtons(navigate, setRShowPopup) {
 }
 
 
-function getWorkoutInfoContainer(workoutData, setShowPopup, context, userId, workoutUsers) {
+function getWorkoutInfoContainer(workoutData, setShowPopup, context, userId, workoutUsers, workoutId) {
 	return (
 		<>
 			<div className="container px-0">
@@ -231,7 +231,7 @@ function getWorkoutInfoContainer(workoutData, setShowPopup, context, userId, wor
 						</div>
 						{ (userId == workoutData.author.user_id || isAdmin(context)) &&
 						<>
-							<Link className="ml-3" state={{workout: workoutData, users: workoutUsers}} to={"/workout/edit"}>
+							<Link className="ml-3" state={{workout: workoutData, users: workoutUsers}} to={"/workout/edit/" + workoutId}>
 								<Pencil
 									size="24px"
 									color="var(--red-primary)"
