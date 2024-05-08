@@ -1,77 +1,22 @@
-version: "3.7"
 services:
-
   nginx:
-    image: nginx:latest
+    build: ./nginx/local/
+    image: pvt2024/nginx:latest
     restart: always
-    volumes:
-      - ./nginx/prod.conf:/etc/nginx/nginx.conf
-      #- /etc/letsencrypt/:/etc/letsencrypt/
     ports:
       - 80:80
-      - 443:443
     links:
       - gateway
 
-  # Database need to be created first, check if depends_on is needed
   psql:
     image: pvt2024/database:latest
-    restart: always
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+      
   frontend:
     image: pvt2024/frontend:latest
-    restart: always
-    ports:
-      - "3000:3000"
-    links:
-      - psql
+      
   gateway:
     image: pvt2024/gateway:latest
-    restart: always
-    ports:
-      - "8080:8080"
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - BACKEND_HOST=http://api:8085
-      - WEBSERVER_HOST=http://frontend:3000
-    links:
-      - api
+    
   api:
     image: pvt2024/api:latest
-    restart: always
-    volumes:
-      - ./media:/media
-    ports:
-      - "8085:8085"
-    links:
-      - psql
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_HOST=psql:5432
-      - ENABLE_SWAGGER=false
-
-volumes:
-  pgdata:
-
-    #                 O  O  O
-    #                        O
-    #                  ._, __|__.
-    #                  || ||_____\
-    #                  || ||    |
-    #            .---------------------------.
-    #             \   O   O   O   O -YOTEI- /
-    #        ~ ~ ~ ~ ~ ~ ~ ~  ~ ~ ~ ~ ~ ~ ~ ~
-    #      ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+    

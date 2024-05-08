@@ -52,6 +52,7 @@ while true; do
 	    break;;
 	[nN] )
 	    echo "Deploying production server"
+	    docker compose -f docker-compose.yml -f docker-compose-release.yml up --build -d
 	    break;;
 	* )
 	    echo "Invalid response" ;;
