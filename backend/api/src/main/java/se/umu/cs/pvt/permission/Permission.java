@@ -2,7 +2,6 @@ package se.umu.cs.pvt.permission;
 
 import java.io.Serializable;
 
-import javax.naming.InvalidNameException;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
