@@ -5,6 +5,7 @@ services:
     restart: always
     volumes:
       - certbotwww:/var/www/certbot/:ro
+      - certificate:/etc/letsencrypt/:ro
     ports:
       - 80:80
       - 443:443

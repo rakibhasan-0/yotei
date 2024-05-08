@@ -46,8 +46,9 @@ while true; do
 	    
 	    docker compose -f docker-compose.yml -f docker-compose-domain-release.yml build --build-arg DOMAIN_NAME=$DOMAIN_NAME
 	    docker compose -f docker-compose.yml -f docker-compose-domain-release.yml up -d
-	    docker compose -f docker-compose.yml -f docker-compose-domain-release.yml run --rm certbot certonly --webroot --webroot-path /var/www/certbot/ --register-unsafely-without-email --dry-run -d $DOMAIN_NAME
-	    
+	    docker compose -f docker-compose.yml -f docker-compose-domain-release.yml run --rm certbot certonly -v --webroot --webroot-path /var/www/certbot/ --register-unsafely-without-email -d $DOMAIN_NAME
+	    docker exec -it yotei-nginx-1 sed -i 's/#//g' /etc/nginx/conf.d/prod.conf
+	    docker compose -f docker-compose.yml -f docker-compose-domain-release.yml restart
 	    break;;
 	[nN] )
 	    echo "Deploying production server"
