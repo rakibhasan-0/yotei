@@ -70,13 +70,13 @@ export default function PlanCreate() {
      * The user can choose a time for each day.
      */
 	const [weekdays, setWeekdays] = useState([
+		{ name: "Sön", value: false, time: "" },
 		{ name: "Mån", value: false, time: "" },
 		{ name: "Tis", value: false, time: "" },
 		{ name: "Ons", value: false, time: "" },
 		{ name: "Tors", value: false, time: "" },
 		{ name: "Fre", value: false, time: "" },
-		{ name: "Lör", value: false, time: "" },
-		{ name: "Sön", value: false, time: "" }
+		{ name: "Lör", value: false, time: "" }
 	])
 
 	const [beltsChosen, setBelts] = useState([])
@@ -220,7 +220,7 @@ export default function PlanCreate() {
 			let minutesDiff = (x.getHours() - x.getTimezoneOffset()) % 60
 			x.setHours(hoursDiff)
 			x.setMinutes(minutesDiff)
-			x.setDate(x.getDate()+1)
+			x.setDate(x.getDate())
 			return { ...session, date: new Date(x)}
 		})
 
