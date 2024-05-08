@@ -12,7 +12,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "examination_result")
 public class ExaminationResult {
-
+    
+    @Id
     @Column(name = "examinee_id")
     private long examineeId;
 
