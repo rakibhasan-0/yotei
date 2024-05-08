@@ -70,7 +70,7 @@ class PermissionApiTest {
             permissions.add(new Permission("Perm4", "desc4"));
 
             assertEquals(new ResponseEntity<>(permissions.get(0), HttpStatus.OK), permissionController.getPermissionFromId(0L));
-            //assertEquals(permissions.get(2), permissionController.getPermissionFromId(2L));
+            assertEquals(new ResponseEntity<>(permissions.get(2), HttpStatus.OK), permissionController.getPermissionFromId(2L));
         } catch (InvalidPermissionNameException e) {
             fail();
         }
