@@ -3,6 +3,7 @@ import { render, screen, fireEvent, configure, waitFor } from "@testing-library/
 import { BrowserRouter } from "react-router-dom"
 import Statistics from "../../../pages/Statistics/Statistics"
 import StatisticsPopUp from "../../../pages/Statistics/StatisticsPopUp"
+import FilterStatistics from "../../../pages/Statistics/FilterStatistics"
 configure({ testIdAttribute: "id" })
 
 /**
@@ -95,5 +96,24 @@ describe("Statistics component", () => {
 		jest.restoreAllMocks()
 	})
 
+})
+
+describe("FilterStatistics component", () => {
+
+	test("Renders FilterStatistics component skeleton", async () => {
+
+		let dates = new Date()
+
+		// Render component
+		render(<FilterStatistics dates=""/>)
+
+		// Wait for rendering
+		await waitFor (() => {
+			screen.findByTestId("filter-container")
+		}) 
+
+		// Assert existence of persistent component
+		expect(screen.getByTestId("start-date-picker")).toBeInTheDocument()
+	})
 })
 
