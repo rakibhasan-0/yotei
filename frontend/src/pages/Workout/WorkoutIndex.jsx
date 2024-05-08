@@ -6,7 +6,6 @@ import StarButton from "../../components/Common/StarButton/StarButton"
 import { useCookies } from "react-cookie"
 import styles from "./WorkoutIndex.module.css"
 import { AccountContext } from "../../context"
-import DatePicker, { getFormattedDateString } from "../../components/Common/DatePicker/DatePicker"
 import RoundButton from "../../components/Common/RoundButton/RoundButton"
 import { Plus } from "react-bootstrap-icons"
 import {toast} from "react-toastify"
@@ -26,6 +25,8 @@ import {setError as setErrorToast} from "../../utils"
  * @author Team Tomato (Group 6)
  * @author Team Durian (Group 3) (2024-04-23)
  * @author Team Tomato (Group 6)
+ * @author Team Kiwi (Group 2) (2024-05-08)
+ * Removed option to filter by date created
  * @since May 9, 2023
  * @version 1.2
  */
