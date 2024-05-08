@@ -1,5 +1,3 @@
-.gradingBox {
-    border: 3px black solid;
-    width: 100%;
-    height: 400px;
+.finishedGradings {
+    margin-top: 1rem;
 }
