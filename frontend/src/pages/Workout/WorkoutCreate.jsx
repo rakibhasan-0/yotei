@@ -65,6 +65,7 @@ const WorkoutCreate = () => {
 		//setIsBlocking(false)
 		if (!checkIfChangesMade(workoutCreateInfo)) {
 			setInfo("Inget pass sparades.")
+			
 			return navigate(-1, { replace: true, state })
 		}
 
