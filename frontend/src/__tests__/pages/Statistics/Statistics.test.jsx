@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom"
-import { render, screen, fireEvent, configure, waitFor } from "@testing-library/react"
+import {render, screen, fireEvent, configure, waitFor, getByLabelText} from "@testing-library/react"
 import { BrowserRouter } from "react-router-dom"
 import Statistics from "../../../pages/Statistics/Statistics"
 import StatisticsPopUp from "../../../pages/Statistics/StatisticsPopUp"
@@ -14,33 +14,34 @@ describe("Statistics Popup", () => {
 
 	test("Clicking button should show popup", async () => {
 
+		// eslint-disable-next-line no-undef
 		global.fetch = jest.fn(() =>
-		Promise.resolve({
-			ok: true,
-			json: () =>
-				Promise.resolve([
-					{
-						activity_id: 1,
-						beltColors: [{
-							belt_color: "0C7D2B",
-							belt_name: "Grönt",
-							is_child: false
-						}],
-						count: 6,
-						name: "Sample Group",
-						type: "technique",
-					},
-					{
-						id: 1,
-						name: "Sample Group",
-						color: "0C7D2B",
-						child: false
-					}
-				]),
-		})
-	)
+			Promise.resolve({
+				ok: true,
+				json: () =>
+					Promise.resolve([
+						{
+							activity_id: 1,
+							beltColors: [{
+								belt_color: "0C7D2B",
+								belt_name: "Grönt",
+								is_child: false
+							}],
+							count: 6,
+							name: "Sample Group",
+							type: "technique",
+						},
+						{
+							id: 1,
+							name: "Sample Group",
+							color: "0C7D2B",
+							child: false
+						}
+					]),
+			})
+		)
 
-	render(<BrowserRouter> <Statistics /> </BrowserRouter>)
+		render(<BrowserRouter> <Statistics /> </BrowserRouter>)
 
 		// Render the StatisticsPopup component
 		render(<StatisticsPopUp />)
@@ -127,11 +128,7 @@ describe("Statistics component", () => {
 
 describe("FilterStatistics component", () => {
 
-	test('FilterStatistics renders correctly within Statistics component', async () => {
-
-		const fromDate = new Date("2022-05-08")
-		const toDate = new Date("2024-05-08")
-		const mockDates = [fromDate, toDate]		
+	test("FilterStatistics renders correctly within Statistics component", async () => {
 		
 		const mockGroupActivities = [{
 			activity_id: 1,
@@ -144,7 +141,7 @@ describe("FilterStatistics component", () => {
 			name: "Sample Group",
 			type: "technique",
 		}]
-		 
+
 		const mockActivities = [{
 			id: 1,
 			name: "Sample Group",
@@ -190,39 +187,29 @@ describe("FilterStatistics component", () => {
 					id: 3,
 					name: "vuxenaktivitet"
 				}]
-		}]
+			}]
 
+		// eslint-disable-next-line no-undef
 		global.fetch = jest.fn(() =>
 			Promise.resolve({
 				ok: true,
 				json: () =>
 					Promise.resolve([
-						mockGroupActivities,
-						mockActivities,
-						mockTechniques
+						...mockGroupActivities,
+						...mockActivities,
+						...mockTechniques
 					]),
 			})
 		)
 
-		global.fetch = jest.fn(() =>
-			Promise.resolve({
-				ok: true,
-				json: () =>
-					Promise.resolve([
-
-					]),
-			})
-		)
-	  
 		render(	<BrowserRouter>	<Statistics	/> </BrowserRouter> )
 
 		await screen.findAllByText("Sample Group")
-		
+
 		fireEvent.click(screen.getByTestId("filter-button"))
 
 		expect(screen.getByTestId("filter-container")).toBeInTheDocument()
-	  })
-
+	})
 })
 	
 
