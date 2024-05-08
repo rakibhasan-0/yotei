@@ -1,9 +1,13 @@
 import React, { useState } from "react"
 
 import TechniqueInfoPanel from "../../../components/Grading/PerformGrading/TechniqueInfoPanel"
+import ExamineePairBox from "../../../components/Grading/PerformGrading/ExamineePairBox"
 
 // Temp
 import ProtocolYellow from "./yellowProtocolTemp.json"
+import InfiniteScrollComponent from "../../../components/Common/List/InfiniteScrollComponent"
+
+const listOfPairs = [{first: "Isak", second: "Teodor"},  {first: "Isak2", second: "Teodor2"},  {first: "Isak3", second: "Teodor3"},{first: "Isak", second: "Teodor"},  {first: "Isak2", second: "Teodor2"},  {first: "Isak3", second: "Teodor3"}, {first: "Isak", second: "Teodor"},  {first: "Isak2", second: "Teodor2"},  {first: "Isak3", second: "Teodor3"}]
 
 
 /**
@@ -85,6 +89,9 @@ export default function DuringGrading() {
 	const categoryIndexMap = getCategoryIndices(techniqueNameList)
 
 	console.log(categoryIndexMap)
+	let pairNum = 0
+
+	console.log(listOfPairs)
 
 	return (
 		<div>
@@ -92,7 +99,20 @@ export default function DuringGrading() {
 				categoryTitle=""
 				currentTechniqueTitle={techniqueNameList[currentIndex].technique.text}
 				nextTechniqueTitle={techniqueNameList[currentIndex].nextTechnique.text}
-				mainCategoryTitle={techniqueNameList[currentIndex].categoryName}></TechniqueInfoPanel>
+				mainCategoryTitle={techniqueNameList[currentIndex].categoryName}>
+
+			</TechniqueInfoPanel>
+			<div>
+				<InfiniteScrollComponent>
+					{listOfPairs.map((item, index) => (
+						<ExamineePairBox 
+							rowColor={"#F8EBEC"}
+							examineeLeftName={item.first} 
+							examineeRightName={item.second} pairNumber={index+1}>
+						</ExamineePairBox>
+					))}
+				</InfiniteScrollComponent>
+			</div>
 			<button onClick={goToNextTechnique}>Next</button>
 		</div>
 	)
