@@ -579,11 +579,11 @@ CREATE TABLE IF NOT EXISTS examination_result(
 
 CREATE TABLE IF NOT EXISTS examination_comment( 
 	comment_id SERIAL PRIMARY KEY,
-	grading_id INT, 
-	examinee_id INT, 
+	grading_id INT NOT NULL, 
+	examinee_id INT NOT NULL, 
 	examinee_pair_id INT, 
 	technique_name VARCHAR(255), 
-	comment VARCHAR
+	comment VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS grading_protocol(

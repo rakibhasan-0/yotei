@@ -19,10 +19,10 @@ public class ExaminationComment {
     @Column(nullable = false, name = "comment_id")
     private Long comment_id;
 
-    @Column(nullable = true, name = "grading_id")
+    @Column(nullable = false, name = "grading_id")
     private Long grading_id;
 
-    @Column(nullable = true, name = "examinee_id")
+    @Column(nullable = false, name = "examinee_id")
     private Long examinee_id;
 
     @Column(nullable = true, name = "examinee_pair_id")
@@ -57,7 +57,8 @@ public class ExaminationComment {
     * no-args constructor required by JPA spec
     * this one is protected since it shouldn't be used directly
     */
-    protected ExaminationComment() {}
+    protected ExaminationComment() {
+    }
 
     public Long get_comment_id() {
         return comment_id;
