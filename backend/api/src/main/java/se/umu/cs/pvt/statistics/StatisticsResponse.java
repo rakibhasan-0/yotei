@@ -53,6 +53,7 @@ public class StatisticsResponse implements Serializable {
 
   /**
    * Public getter for private property activity_id
+   * @return activity id
    */
   public Long getActivity_id() {
       return activity_id;
@@ -60,6 +61,7 @@ public class StatisticsResponse implements Serializable {
 
   /**
    * Public getter for private property name
+   * @return activity name
    */
   public String getName() {
       return this.name;
@@ -67,6 +69,7 @@ public class StatisticsResponse implements Serializable {
 
   /**
    * Public getter for private property type
+   * @return activity type
    */
   public String getType() {
       return type;
@@ -74,6 +77,8 @@ public class StatisticsResponse implements Serializable {
 
   /**
    * Public getter for private property belts
+   * See BeltRepsonse
+   * @return wrapped belts associated with activity.
    */
   public List<BeltResponse> getBeltColors() {
       return belts;
@@ -92,10 +97,18 @@ public class StatisticsResponse implements Serializable {
 
   /**
    * Public getter for private property count
+   * @return amount of times that the activity has been done.
    */
   public Long getCount() {
       return count;
   }
+
+  /**
+   * Public getter for private property count
+   */
+  public void addToCount(Long count) {
+    this.count += count;
+}
 
   // Consider two StatisticsACtivity equal if the share the same activity_id 
   // to remove duplicates from output.
