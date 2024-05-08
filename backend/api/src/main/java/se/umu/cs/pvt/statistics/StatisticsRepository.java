@@ -28,8 +28,8 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
                                                         SELECT tt.techId
                                                         FROM TechniqueTag tt
                                                         WHERE tt.tag = 1
-                                                      ))
-                                                      ,s.date,
+                                                      )),
+                                                      s.date,
                                                       sr.rating
                                                       )                             
     FROM
