@@ -41,7 +41,6 @@ export default function ExerciseDetailsPage() {
 	const hasPreviousState = location.key !== "default"
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
 	const accountRole = useContext(AccountContext)
-	const location = useLocation()
 
 
 	const fetchComments = () => {

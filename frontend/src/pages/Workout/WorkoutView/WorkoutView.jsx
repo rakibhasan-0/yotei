@@ -233,11 +233,7 @@ function getWorkoutInfoContainer(workoutData, setShowPopup, context, userId, wor
 						</div>
 						{ (userId == workoutData.author.user_id || isAdmin(context)) &&
 						<>
-<<<<<<< HEAD
-							<Link className="ml-3" state={{workout: workoutData, workoutId: workoutId, users: workoutUsers, fromWorkoutView : true}} to={"/workout/edit"}>
-=======
-							<Link className="ml-3" state={{workout: workoutData, users: workoutUsers}} to={"/workout/edit/" + workoutId}>
->>>>>>> main
+							<Link className="ml-3" state={{workout: workoutData, workoutId: workoutId, users: workoutUsers}} to={"/workout/edit/" + workoutId}>
 								<Pencil
 									size="24px"
 									color="var(--red-primary)"
