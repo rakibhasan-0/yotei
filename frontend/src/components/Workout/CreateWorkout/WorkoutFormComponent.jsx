@@ -117,7 +117,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 		}
 		else {
 		
-			return navigate("/workout")
+			return navigate("/workout/" + workoutId)
 		}
 		
 	}
