@@ -34,8 +34,6 @@ export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDa
 					<DatePicker
 						id="start-date-picker"
 						selectedDate={dates.from} // two years before from today
-						minDate={"1999-01-01"}
-						maxDate={"2050-01-01"}
 						onChange={(e) => {
 							onDateChanges("from", e.target.value)
 						}}
@@ -51,8 +49,6 @@ export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDa
 						onChange={(e) => {
 							onDateChanges("to", e.target.value)
 						}}
-						minDate={"1999-01-01"}
-						maxDate={dates.from}
 					/>
 				</div>
 

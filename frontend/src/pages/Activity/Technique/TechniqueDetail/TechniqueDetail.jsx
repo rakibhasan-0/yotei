@@ -46,6 +46,7 @@ function TechniqueDetail({ id }) {
 	const { token } = useContext(AccountContext)
 	const navigate = useNavigate()
 	const location = useLocation()
+	const hasPreviousState = location.key !== "default"
 	const [showRPopup, setRShowPopup] = useState(false)
 	const [technique, setTechnique] = useState()
 	const [error, setError] = useState("")
@@ -103,7 +104,11 @@ function TechniqueDetail({ id }) {
 				setError(msg + " ")
 				return
 			}
-			navigate("/technique")
+			if (hasPreviousState) {
+				navigate(-1)
+			} else {
+				navigate("/activity")
+			}
 		} catch (err) {
 			setError("Ett nätverksfel inträffade. Kontrollera din internetuppkoppling.")
 		}
@@ -111,7 +116,7 @@ function TechniqueDetail({ id }) {
 
 	if (error != "") return <ErrorState
 		message={error}
-		onBack={() => navigate("/technique")}
+		onBack={() => navigate("/activity")}
 		onRecover={handleGet}
 	/>
 
@@ -188,7 +193,7 @@ function TechniqueDetail({ id }) {
 		
 				<Gallery id={techniqueId} />
 				{getReviewContainer(showRPopup, setRShowPopup, techniqueId)}
-				{getButtons(navigate, location, setRShowPopup)}
+				{getButtons(navigate, hasPreviousState, setRShowPopup)}
 			</div>
 		</>
 	)
@@ -198,18 +203,15 @@ function getReviewContainer(showRPopup, setRShowPopup, techniqueId){
 	return (<Review isOpen={showRPopup} setIsOpen={setRShowPopup} technique_id={techniqueId}/>)
 }
 
-function getButtons(navigate,location, setRShowPopup) {
-	
-	const hasPreviousState = location.key !== "default"
+function getButtons(navigate, hasPreviousState, setRShowPopup) {
 
 	const handleNavigation = () => {
 		if(hasPreviousState) {
 			navigate(-1)
 		}
 		else{
-			navigate("/technique")
+			navigate("/activity")
 		}
-
 	}
 
 	return (
