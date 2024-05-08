@@ -1,10 +1,16 @@
-import React, { useContext } from "react"
+import React, { useContext, useState } from "react"
 import Export from "../../components/Admin/Export/Export"
 import Import from "../../components/Admin/Import/Import"
 import Divider from "../../components/Common/Divider/Divider"
 import ManageUser from "../../components/Admin/ManageUser"
+import SearchBar from "../../components/Common/SearchBar/SearchBar"
+import InfiniteScrollComponent from "../../components/Common/List/InfiniteScrollComponent"
+import ToggleButton from "../../components/Common/ToggleButton/ToggleButton"
+import RoleCard from "../../components/Common/RoleCard/RoleListItem"
+import Form from "react-bootstrap/Form"
+import FormCheck from "react-bootstrap/FormCheck"
 import style from "./Admin.module.css"
-import { AccountContext } from "../../context"
+import { AccountContext, Roles } from "../../context"
 import { isAdmin } from "../../utils"
 import { Tab, Tabs } from "react-bootstrap"
 import ErrorLogsDisplay from "../../components/ErrorLogsDisplay/ErrorLogsDisplay"
@@ -20,11 +26,13 @@ import ErrorLogsDisplay from "../../components/ErrorLogsDisplay/ErrorLogsDisplay
  */
 export default function Admin() {
 	const context = useContext(AccountContext)
+	const detailURL = "/admin/role_page/"
+	const [searchText, setSearchText] = useState("")
 
 	if(!isAdmin(context)){
 		window.location.replace("/404")
 		return null
-	}
+	}	
 
 	return(
 		<Tabs defaultActiveKey={"HandleUsers"} className={style.tabs}>
@@ -34,6 +42,29 @@ export default function Admin() {
 				<div className="center card-admin">
 					<ManageUser />
 				</div>
+			</Tab>
+			<Tab eventKey={"Roles"} title={"Roller"}>
+				<SearchBar 
+					id="searchbar-roles" 
+					placeholder="Sök efter en roll" 
+					text={searchText} 
+					onChange={setSearchText}
+				/>
+				<InfiniteScrollComponent
+
+					id={"admin-view-roles"}>
+					<RoleCard
+						item={"exercise.name"}
+						key={"exercise.id"}
+						id={"exercise.id"}
+						detailURL={detailURL}>
+					</RoleCard>
+					<RoleCard
+						item={"exercise.n1ame"}
+						key={"exercise1.id"}
+						id={"exercise.1id"}>
+					</RoleCard>
+				</InfiniteScrollComponent>
 			</Tab>
 			<Tab eventKey={"ImportExport"} title={"Importera/Exportera"}>
 				<div className="center card-admin">
