@@ -48,8 +48,8 @@ export default function GradingCreate({id}) {
 
 			})
 			
-			navigate(`/grading/${gradingId}/2`);
-
+			navigate(`/grading/${gradingId}/2`)
+			
 		} catch (error) {
 			console.error("Misslyckades skicka vidare till nästa steg i gradering:", error)
 		}
