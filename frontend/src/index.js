@@ -23,7 +23,6 @@ import TechniqueDetail from "./pages/Activity/Technique/TechniqueDetail/Techniqu
 import TechniqueEdit from "./pages/Activity/Technique/TechniqueEdit/TechniqueEdit"
 import Profile from "./pages/Profile/Profile"
 import PlanCreate from "./pages/Plan/PlanCreate.jsx"
-import SessionCreate from "./pages/Plan/SessionCreate"
 import GroupIndex from "./pages/Plan/GroupIndex/GroupIndex"
 import EditGroup from "./pages/Plan/EditGroup/EditGroup"
 import SessionEdit from "./pages/Plan/SessionEdit"
