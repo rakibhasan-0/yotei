@@ -37,6 +37,7 @@ import { ToastContainer, toast } from "react-toastify"
 import CreateTechnique from "./pages/Activity/Technique/CreateTechnique/CreateTechnique.jsx"
 import AdminRoute from "./AdminRoute"
 import ActivityIndex from "./pages/Activity/ActivityIndex.jsx"
+import RoleDetailPage from "./pages/Admin/RoleDetailPage.jsx"
 
 const exerciseURI = "https://jsonplaceholder.typicode.com/users"
 const workoutURI = "https://jsonplaceholder.typicode.com/users"
@@ -51,6 +52,7 @@ const planURI = "https://jsonplaceholder.typicode.com/users"
  * @author
  * 		Unknown authors
  *     	Team Kiwi
+ * 		Team Mango
  * @version 2.0
  */
 export default function App() {
@@ -110,6 +112,7 @@ export default function App() {
 					>
 						<Route path="about" element={<About />} />
 						<Route path="admin" element={<Admin />} />
+						<Route path="admin/role_page/" element={<RoleDetailPage />} /> {/*:role_id*/}
 						<Route path="profile" element={<Profile />} />
 						<Route path="activity" element={<ActivityIndex />} />
 						<Route path="exercise" element={<ExerciseIndex uri={exerciseURI} />} />
