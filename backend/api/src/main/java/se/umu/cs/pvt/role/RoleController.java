@@ -1,18 +1,11 @@
 package se.umu.cs.pvt.role;
 
-import com.auth0.jwt.interfaces.Claim;
-
-import se.umu.cs.pvt.examination.Grading;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 /**
  * Main class for handling login information and transactions with the database.
@@ -63,19 +56,34 @@ public class RoleController {
      * @return Returned either HTTP-request or the role if it goes well.
      */
     @GetMapping("/{role_id}")
-    public ResponseEntity<Role> getRole(@PathVariable("role_id") int roleId) {
+    public ResponseEntity<Role> getRole(@PathVariable("role_id") Long roleId) {
 
-        if (userId == null) {
+        if (roleId == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Role role = repository.findById(roleId);
-
-        if (role == null) {
+        Optional<Role> role = repository.findById(roleId);
+        if (role.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+        }
 
-        return new ResponseEntity(role, HttpStatus.OK);
+        return new ResponseEntity<>(role.get(), HttpStatus.OK);
+    }
+
+    /**
+     * (POST) Method for creating a new role.
+     * @param roleToAdd Body with role info to be added
+     * @return A response with either the newly created role or an error message.
+     */
+    @PostMapping("")
+    public ResponseEntity<Role> createNewRole(@RequestBody Role roleToAdd) {
+        if (roleToAdd.getRoleName().isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        repository.save(roleToAdd);
+
+        return new ResponseEntity<>(roleToAdd, HttpStatus.OK);
     }
 
 }
