@@ -186,6 +186,18 @@ ALTER TABLE
 	role OWNER TO psql;
 
 --
+-- Name: permission; Type: TABLE; Schema: public; Owner: psql
+--
+CREATE TABLE permission(
+	permission_id INT NOT NULL GENERATED ALWAYS AS IDENTITY UNIQUE,
+	permission_name VARCHAR(255) NOT NULL UNIQUE,
+	permission_desc VARCHAR(255)
+);
+
+ALTER TABLE
+	permission OWNER TO psql;
+
+--
 -- Name: exercise; Type: TABLE; Schema: public; Owner: psql
 --
 CREATE TABLE exercise(
@@ -598,8 +610,7 @@ CREATE TABLE IF NOT EXISTS examination_comment(
 );
 
 CREATE TABLE IF NOT EXISTS grading_protocol(
-	grading_protocol_id SERIAL PRIMARY KEY,
-	belt_id INT NOT NULL,
+	belt_id INT PRIMARY KEY,
 	grading_protocol JSON NOT NULL,
 	CONSTRAINT fk_belt_id FOREIGN KEY (belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE
 );
@@ -658,7 +669,6 @@ ALTER TABLE
 \ir defaults/sessionreviews.sql
 \ir defaults/sessionreviewactivities.sql
 \ir defaults/activitylists.sql
-\ir defaults/role.sql
 -- Triggers for user
 --
 CREATE OR REPLACE FUNCTION remove_user_references() RETURNS TRIGGER AS $$ 
