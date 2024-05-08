@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "@testing-library/user-event": "^14.4.3",
+    "chart.js": "^4.4.2",
     "dotenv": "^16.0.3",
     "http-proxy-middleware": "^2.0.6",
     "node-fetch": "^2.6.9",
@@ -12,6 +13,7 @@
     "react-beautiful-dnd": "^13.1.1",
     "react-bootstrap": "^2.7.4",
     "react-bootstrap-icons": "^1.10.3",
+    "react-chartjs-2": "^5.2.0",
     "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0",
     "react-infinite-scroll-component": "^6.1.0",
@@ -20,6 +22,7 @@
     "react-ratings-declarative": "^3.4.1",
     "react-responsive-carousel": "^3.2.23",
     "react-router": "^6.10.0",
+    "react-star-ratings": "^2.3.0",
     "react-to-print": "^2.14.12",
     "react-toastify": "^9.1.2"
   },
@@ -30,11 +33,12 @@
     "host": "vite --host",
     "test:local": "jest --watchAll --passWithNoTests --detectOpenHandles",
     "test:ci": "jest --ci --passWithNoTests --silent --maxWorkers=50% --forceExit",
-    "test:coverage": "npm test -- --coverage --collectCoverageFrom='./src/**'",
-    "test:watch": "npm test -- --watchAll",
+    "test:coverage": "jest --coverage --collectCoverageFrom='./src/**'",
+    "test:watch": "jest --watchAll",
     "lint": "eslint --fix --ext js,jsx,ts src --ignore-path ../.gitignore",
     "lint:ci": "eslint --ext js,jsx,ts src --ignore-path ../.gitignore",
     "systest": "npx playwright test --reporter list",
+    "systest:ci": "npx playwright test --quiet --reporter dot",
     "systest:fast": "npx playwright test --reporter list --project 'Mobile Chrome'",
     "systest:ui": "npx playwright test --ui"
   },
@@ -92,7 +96,7 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.21.3",
     "@imaginary-cloud/prettier-config": "^1.0.0",
-    "@playwright/test": "^1.32.3",
+    "@playwright/test": "^1.43.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",

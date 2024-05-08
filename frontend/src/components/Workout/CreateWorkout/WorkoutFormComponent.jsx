@@ -33,7 +33,7 @@ import EditActivityPopup from "./EditActivityPopup"
  *
  * @author Team Minotaur, Team 3 Durian
  * @version 2.1
- * @since 2023-05-24, 2024-04-18
+ * @since 2023-05-24, 2024-05-07
  * @updated 2023-06-01 Chimera, updated pathing when pressing return to create session
  */
 export default function WorkoutFormComponent({ callback, state }) {
@@ -98,14 +98,14 @@ export default function WorkoutFormComponent({ callback, state }) {
 
 	function confirmGoBack() {
 
-		localStorage.removeItem("workoutCreateInfo") // Clear local storage as confirmed
+		localStorage.removeItem("workoutCreateInfo")// Clear local storage as confirmed
 
 		if (state?.fromSession && !state?.fromCreate) {
 			navigate(`/session/edit/${state.session.sessionId}`, { replace: true, state })
 		} else if(state?.fromCreate) {
 			return navigate("/session/create", { replace: true, state })
 		}
-		navigate("/workout")
+		navigate(-1)
 	}
 
 	function handlePopupClose() {
@@ -129,7 +129,8 @@ export default function WorkoutFormComponent({ callback, state }) {
 			})
 		} else {
 			setLeaveActivityPickerPopup(true)
-			localStorage.clear() 
+			sessionStorage.clear()
+			localStorage.clear()
 		}
 		
 	}
@@ -255,6 +256,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 									tags
 								})
 							}
+							itemName={workoutCreateInfo.data.name}
 						/>
 					</Form.Group>
 

@@ -40,10 +40,10 @@ public class SessionReview implements Serializable {
     private Date date;
 
     @OneToMany(fetch=FetchType.LAZY, mappedBy = "session_review_id")
-    private Set<SessionReviewExercise> exercises;
+    private Set<SessionReviewActivity> activities;
 
-    public Set<SessionReviewExercise> getExercises() {
-        return exercises;
+    public Set<SessionReviewActivity> getActivities() {
+        return activities;
     }
 
     /**
@@ -62,9 +62,9 @@ public class SessionReview implements Serializable {
      * @param positiveComment Positive feedback of a session
      * @param negativeComment Negative feedback of a session
      * @param date Date of when the review was made
-     * @param exercises List of completed exercises
+     * @param activities List of completed exercises
      */
-    public SessionReview(Long id, Long session_id, int userId, int rating, String positiveComment, String negativeComment, Date date, Set<SessionReviewExercise> exercises) {
+    public SessionReview(Long id, Long session_id, int userId, int rating, String positiveComment, String negativeComment, Date date, Set<SessionReviewActivity> activities) {
         this.id = id;
         this.session_id = session_id;
         this.userId = userId;
@@ -72,7 +72,7 @@ public class SessionReview implements Serializable {
         this.positiveComment = positiveComment;
         this.negativeComment = negativeComment;
         this.date = date;
-        this.exercises = exercises;
+        this.activities = activities;
     }
 
     public Long getId() {
