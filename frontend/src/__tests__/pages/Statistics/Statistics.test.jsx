@@ -14,6 +14,34 @@ describe("Statistics Popup", () => {
 
 	test("Clicking button should show popup", async () => {
 
+		global.fetch = jest.fn(() =>
+		Promise.resolve({
+			ok: true,
+			json: () =>
+				Promise.resolve([
+					{
+						activity_id: 1,
+						beltColors: [{
+							belt_color: "0C7D2B",
+							belt_name: "Grönt",
+							is_child: false
+						}],
+						count: 6,
+						name: "Sample Group",
+						type: "technique",
+					},
+					{
+						id: 1,
+						name: "Sample Group",
+						color: "0C7D2B",
+						child: false
+					}
+				]),
+		})
+	)
+
+	render(<BrowserRouter> <Statistics /> </BrowserRouter>)
+
 		// Render the StatisticsPopup component
 		render(<StatisticsPopUp />)
 
@@ -162,42 +190,26 @@ describe("FilterStatistics component", () => {
 					id: 3,
 					name: "vuxenaktivitet"
 				}]
-			}]
+		}]
 
-			// global.fetch = jest.fn(() =>
-			// 	Promise.resolve({
-			// 		ok: true,
-			// 		json: () =>
-			// 			Promise.resolve([
-			// 				mockGroupActivities,
-			// 				mockActivities,
-			// 				// mockTechniques
-			// 			]),
-			// 	})
-			// )
-
-			global.fetch = jest.fn(() =>
+		global.fetch = jest.fn(() =>
 			Promise.resolve({
 				ok: true,
 				json: () =>
 					Promise.resolve([
-						{
-							activity_id: 1,
-							beltColors: [{
-								belt_color: "0C7D2B",
-								belt_name: "Grönt",
-								is_child: false
-							}],
-							count: 6,
-							name: "Sample Group",
-							type: "technique",
-						},
-						{
-							id: 1,
-							name: "Sample Group",
-							color: "0C7D2B",
-							child: false
-						}
+						mockGroupActivities,
+						mockActivities,
+						mockTechniques
+					]),
+			})
+		)
+
+		global.fetch = jest.fn(() =>
+			Promise.resolve({
+				ok: true,
+				json: () =>
+					Promise.resolve([
+
 					]),
 			})
 		)
@@ -208,7 +220,7 @@ describe("FilterStatistics component", () => {
 		
 		fireEvent.click(screen.getByTestId("filter-button"))
 
-		expect(screen.getByTestId("statistics-filter-container")).toBeInTheDocument()
+		expect(screen.getByTestId("filter-container")).toBeInTheDocument()
 	  })
 
 })

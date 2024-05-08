@@ -11,10 +11,12 @@ import {getFormattedDateString} from "../../components/Common/DatePicker/DatePic
 
 /**
  * 
- *  The work is on progress for the statistics page.
- * 
+ * Statistics page for a group.
+ * @returns A page with statistics for a group.
+ * @author Team Coconut 
+ * @since 2024-05-08
+ * @version 1.0
  */
-
 export default function Statistics() {
 
 	const navigate = useNavigate()
@@ -24,6 +26,8 @@ export default function Statistics() {
 	const { token } = useContext(AccountContext)
 	const [groupActivities, setGroupActivities] = useState([])
 	const [selectedBelts, setSelectedBelts] = useState([])
+	const [numberofSessions, setNumberOfSessions] = useState()
+	const [averageRating, setAverageRating] = useState()
 	const [filter, setFilter] = useState({
 		showExercises: false,
 		showKihon: false,
@@ -91,8 +95,6 @@ export default function Statistics() {
 				enddate: dates.to ? dates.to : ""
 			})
 
-			
-		
 			try {
 				setLoading(true)
 				const responseFromGroupNameAPI= await fetch("/api/plan/all", { headers: { token } })
@@ -100,7 +102,11 @@ export default function Statistics() {
 
 				if(responseFromGroupDetailsAPI.status === 200) {
 					const data = await responseFromGroupDetailsAPI.json()
+					setNumberOfSessions(data.numberOfSessions)
+					setAverageRating(data.averageRating)
 					setGroupActivities(data.activities)
+				}else if (responseFromGroupDetailsAPI.status === 204) {
+					setGroupActivities([])
 				}
 
 				if (!responseFromGroupDetailsAPI.ok || !responseFromGroupNameAPI.ok) {
@@ -110,7 +116,6 @@ export default function Statistics() {
 				const groups = await responseFromGroupNameAPI.json()	
 				const name = groups.find((group) => group.id === parseInt(groupID))
 				setGroupName(name)
-				
 			}
 			catch (error) {
 				console.error("Fetching error:", error) // proper error handling will be added later
@@ -126,18 +131,14 @@ export default function Statistics() {
 
 
 	function handleDateChanges(variableName, value) {
+		const selectedDate = new Date(value)
+		const toDate = new Date(dates.to)
 
-		const newDate = new Date(value)	
-		const endDate = new Date(dates.to)
-		
-		if(variableName === "from"){
-			setDates(newDate > endDate ? {from: dates.from, to: dates.to} : {...dates, from: value})
+		if (variableName == "from") {
+			setDates( selectedDate > toDate ? { from: value, to: value } : { ...dates, from: value })
+		} else {
+			setDates({ ...dates, [variableName]: value })
 		}
-
-		else if(variableName === "to") {
-			setDates({ ...dates, [variableName]: value })			
-		}
-
 	}
 
 
@@ -168,7 +169,8 @@ export default function Statistics() {
 					dates={dates}
 				/>
 
-				<StatisticsPopUp groupActivities ={groupActivities} filteredActivities = {activities} dates ={dates} />
+				<StatisticsPopUp groupActivities = {activities} dates ={dates} averageRating = {averageRating} 
+					numberOfSessions = {numberofSessions} />
 			</div>
 
 			<div className="activitiesContainer" id="technique-exercise-list">

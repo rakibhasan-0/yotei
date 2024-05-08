@@ -85,14 +85,12 @@ const WorkoutCreate = () => {
 				state.session.workout.id = workoutId
 				return navigate("/session/create", { replace: true, state })
 			}
+
+			navigate("/workout/" + workoutId, { replace: true, state })
 			
-			//blocker.proceed()
-			navigate("/workout/" + workoutId, {})
 		} else {
 			setError("Träningspasset kunde inte skapas!")
 		}
-		//blocker.state = "unblocked"
-
 	}
 	
 	/**
