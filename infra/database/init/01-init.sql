@@ -622,6 +622,7 @@ CREATE TABLE IF NOT EXISTS activity_list_entry(
        list_id INT NOT NULL,
        exercise_id INT,
        technique_id INT,
+       duration INT,
        CONSTRAINT ale_list_id_fk FOREIGN KEY (list_id) REFERENCES activity_list(id) ON DELETE CASCADE
 );
 
