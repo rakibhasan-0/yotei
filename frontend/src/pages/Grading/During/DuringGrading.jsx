@@ -52,6 +52,7 @@ function getTechniqueNameList(gradingProtocolJSON) {
 		// Check if element's nextTechnique is null and index is the last element
 		else if (element.nextTechnique === null && index === chronologicalData.length - 1) {
 			element.nextTechnique = "---"
+            console.log(element.nextTechnique)
 		}
 	})
 	return chronologicalData
@@ -71,10 +72,10 @@ function getCategoryIndices(dataArray) {
 	const res = []
 	const seenCategories = new Set() // To keep track of seen categories
 
-	dataArray.forEach((element, index) => {
+	dataArray.forEach((element, categoryIndex) => {
 		const category = element.categoryName
 		if (category && !seenCategories.has(category)) {
-			res.push({ category, index })
+			res.push({ category, categoryIndex })
 			seenCategories.add(category) // Add category to the set
 		}
 	})
@@ -93,18 +94,17 @@ export default function DuringGrading() {
 
 	// Go to summary when the index is equal to length. Maybe change the look of the buttons.
 	const goToNextTechnique = () => {
-		setCurrentIndex(currentIndex === techniqueNameList.length - 1 ? currentIndex = currentIndex : currentIndex + 1)
+		setCurrentIndex(currentIndex === techniqueNameList.length - 1 ? currentIndex : currentIndex + 1)
 	}
 	const goToPrevTechnique = () => {
-		setCurrentIndex(currentIndex === 0 ? currentIndex = 0 : currentIndex - 1)
+		setCurrentIndex(currentIndex === 0 ? currentIndex : currentIndex - 1)
 	}
+
 	// TODO: Loads everytime the button is pressed. Should only happen once at start. useEffect?
 	const techniqueNameList = getTechniqueNameList(ProtocolYellow)
 	const categoryIndexMap = getCategoryIndices(techniqueNameList)
 
 	console.log(categoryIndexMap)
-	let pairNum = 0
-
 	console.log(listOfPairs)
 
 	return (
@@ -119,24 +119,41 @@ export default function DuringGrading() {
 			<div className={styles.scrollableContainer}>
 				{listOfPairs.map((item, index) => (
 					<ExamineePairBox 
+                        key={index}
 						rowColor={index % 2 == 0 ? "#FFFFFF" : "#F8EBEC"}
 						examineeLeftName={item.second} 
 						examineeRightName={item.second} pairNumber={index+1}>
 					</ExamineePairBox>
 				))}
 			</div>
-			<RoundButton onClick={goToNextTechnique} id={"next_technique"} >{<ArrowRight/>}</RoundButton>
-			
-			<Button id={"techniques-button"} onClick={() => setShowPopup(true)} className={`${styles.btnTechniques}`}><p>Tekniker</p></Button>
+
+            <div className={styles.bottomRowContainer}>
+                {/* Prev technique button */}
+                <div id={"prev_technique"} onClick={goToPrevTechnique} className={styles.btnPrevActivity}>
+                    {<ArrowLeft/>}
+                </div>
+                { /*Techniques button*/ }
+                <Button id={"techniques-button"} onClick={() => setShowPopup(true)}><p>Tekniker</p></Button>
+                { /* Next technique button */ }
+                <div id={"next_technique"} onClick={goToNextTechnique} className={styles.btnNextActivity}>
+                    {<ArrowRight/>}
+                </div>
+            </div>
+
 			<Popup 
 				id={"navigation-popup"} 
-				title={"Navigering"} 
+				title={"Tekniker"} 
 				isOpen={showPopup} 
 				setIsOpen={setShowPopup}> 
 				<div className={styles.popupContent}>
 					{/* Should link to the respective technique grading page. */}
-					{headers.map((techniqueName, index) => (
-						<Button key={index}><p>{techniqueName}</p></Button>
+					{categoryIndexMap.map((techniqueName, index) => (
+						<Button 
+                            key={index}
+                            onClick={() => {
+                                setCurrentIndex(techniqueName.categoryIndex)
+                                setShowPopup(false)}}>
+                            <p>{techniqueName.category}</p></Button>
 					))}
 					{/* Should link to the "after" part of the grading as well as save the changes to the database. */}
 					<Link to="/groups">
@@ -144,9 +161,6 @@ export default function DuringGrading() {
 					</Link>
 				</div>
 			</Popup>
-			<div id={"prev_technique"} onClick={goToPrevTechnique} className={`${styles.btnPrevActivity}`}>
-				{<ArrowLeft/>}
-			</div>
 		</div>
 	)
 }
