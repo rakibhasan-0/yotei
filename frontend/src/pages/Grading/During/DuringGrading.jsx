@@ -114,7 +114,7 @@ export default function DuringGrading() {
 				{listOfPairs.map((item, index) => (
 					<ExamineePairBox 
 						key={index}
-						rowColor={index % 2 == 0 ? "#FFFFFF" : "#F8EBEC"}
+						rowColor={index % 2 === 0 ? "#FFFFFF" : "#F8EBEC"}
 						examineeLeftName={item.second} 
 						examineeRightName={item.second} pairNumber={index+1}>
 					</ExamineePairBox>
