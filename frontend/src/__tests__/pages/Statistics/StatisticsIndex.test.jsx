@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom"
 import { render, screen, /*fireEvent*/ configure /*waitFor */} from "@testing-library/react"
 import { BrowserRouter } from "react-router-dom"
-import Statistics from "../../../pages/Statistics/Statistics"
+import Statistics from "../../../pages/Statistics/StatisticsIndex"
 //import StatisticsPopUp from "../../../pages/Statistics/StatisticsPopUp"
 configure({ testIdAttribute: "id" })
 
