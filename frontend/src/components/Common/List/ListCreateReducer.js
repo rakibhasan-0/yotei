@@ -26,9 +26,9 @@ export const WORKOUT_CREATE_TYPES = {
 	SET_CURRENTLY_EDITING: "SET_CURRENTLY_EDITING",
 	UPDATE_ACTIVITY_TIME: "UPDATE_ACTIVITY_TIME",
 	UPDATE_ACTIVITY: "UPDATE_ACTIVITY",
-	CHECK_CATEGORY: "CHECK_CATEGORY",
+	/*CHECK_CATEGORY: "CHECK_CATEGORY",
 	CHECK_CATEGORY_BY_ID: "CHECK_CATEGORY_BY_ID",
-	ADD_CATEGORY: "ADD_CATEGORY",
+	ADD_CATEGORY: "ADD_CATEGORY",*/
 	UPDATE_ACTIVITY_NAME: "UPDATE_ACTIVITY_NAME",
 	CREATE_ACTIVITY_ITEMS: "CREATE_ACTIVITY_ITEMS",
 	CLEAR_ADDED_ACTIVITIES: "CLEAR_ADDED_ACTIVITIES",
@@ -76,15 +76,16 @@ export const WorkoutCreateInitialState = {
 			date: null,
 		}
 	},
+	/*
 	addedCategories: [
 		{ id: 0, name: null, checked: false }, 
 		{ id: 1, name: "Uppvärmning", checked: false },
 		{ id: 2, name: "Tekniker", checked: false }
-	],
+	],*/
 	addedActivities: [],
 	checkedActivities: [],
 	numActivities: 0,
-	numCategories: 3,
+	//numCategories: 3,
 }
 
 /**
@@ -154,7 +155,7 @@ export function workoutCreateReducer(state, action) {
 		
 		// Prepare category object
 		const categoryId = workoutData.list_id; // Using list_id as categoryId
-		const categoryName = workoutData.list_name;
+		/*const categoryName = workoutData.list_name;
 		
 		let category = tempState.addedCategories.find(cat => cat.name === categoryName);
 		if (!category) {
@@ -171,7 +172,7 @@ export function workoutCreateReducer(state, action) {
 			id: categoryId,
 			name: categoryName,
 			workoutData,//KAAEFT
-		};
+		};*/
 		
 		// Prepare data object
 		const data = {
@@ -184,7 +185,7 @@ export function workoutCreateReducer(state, action) {
 			created: workoutData.created_date.split("T")[0],
 			duration: workoutData.amountOfWorkouts,
 			users,
-			activityItems: [categoryObject],
+			//activityItems: [categoryObject],
 			list: activities, // Array with a single category 
 			tags: [], // Assuming no tags in MockList
 		};
@@ -389,7 +390,7 @@ export function workoutCreateReducer(state, action) {
 		})
 		return tempState
 	}
-	case "CHECK_CATEGORY": {
+	/*case "CHECK_CATEGORY": {
 		tempState.addedCategories.forEach((category) => category.checked = false)
 		const index = action.payload.index === -1 ? tempState.addedCategories.length - 1 : action.payload.index
 		tempState.addedCategories[index].checked = true
@@ -412,7 +413,7 @@ export function workoutCreateReducer(state, action) {
 		tempState.addedCategories.forEach(category => category.checked = false)
 		tempState.addedCategories[tempState.addedCategories.length - 1].checked = true
 		return tempState
-	}
+	}*/
 	case "UPDATE_ACTIVITY_NAME":
 		tempState.addedActivities[action.payload.index].name = action.payload.name
 		return tempState

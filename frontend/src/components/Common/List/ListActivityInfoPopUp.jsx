@@ -135,41 +135,6 @@ function ActivityTimes() {
 
 
 /**
- * Component for setting the time for each activity connected to an exercise.
- * 
- * Example usage:
- * 		<ActivityTime />
- */
-export function ActivityCategories() {
-	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(WorkoutCreateContext)
-	const [inputValue, setInputValue] = useState("")
-
-	const handleEnter = (event) => {
-		if (!workoutCreateInfo.addedCategories.some((c)=>c.name===inputValue) 
-			&& inputValue.length > 0
-			&& event.key === "Enter") {
-			workoutCreateInfoDispatch({type: "ADD_CATEGORY", payload: { name: inputValue }})
-			setInputValue("")
-			event.preventDefault()
-		}
-	}
-
-	return (
-		<>
-			<div className={styles.categoryListItem}>
-				<input
-					type="text"
-					value={inputValue}
-					placeholder="+ Lägg till ny"
-					className={styles.categoryInput}
-					onKeyDown={handleEnter}
-					onChange={(e) => setInputValue(e.target.value)} />
-			</div>
-		</>
-	)
-}
-
-/**
  * Component for setting the time for each activity connected to a exercise.
  *
  *
