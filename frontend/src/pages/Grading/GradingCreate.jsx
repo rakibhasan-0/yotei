@@ -4,6 +4,8 @@ import BeltButton from "../../components/Common/Button/BeltButton"
 import style from "./GradingCreate.module.css"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import { AccountContext } from "../../context"
+import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../utils"
+import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../utils"
 
 /**
  * The grading create page.
@@ -21,17 +23,46 @@ export default function GradingCreate() {
 	const context = useContext(AccountContext)
 	const { token, userId } = context
 	const navigate = useNavigate()
+	const today = new Date()
+	const formattedDateTime = today.toISOString()
 
-	const handleNavigation = (beltId)  => {
-		// skapa Grading i databasen
-		// för att skapa Grading måste vi ha BeltID
+	const handleNavigation = async (beltId) => {
+		try {
 
-		// Hämta ID av Gradingen vi skapade
-		// "/grading/ID/1"
-		console.log("id:", beltId)
+			const gradingData = {
+				creator_id: userId,
+				belt_id: beltId,
+				step: 1,
+				technique_step_num: 0,
+				created_at: formattedDateTime
+			}
 
-		navigate("/grading/:gradingId/1")
+			const response = await fetch("/api/examination/grading", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify(gradingData)
+			})
+
+			if (!response.ok) {
+				setErrorToast("Det har uppstått ett oväntat problem")
+				throw new Error("Serverfel")
+
+			}
+
+			const responseData = await response.json()
+			const gradingId = responseData.grading_id
+			
+      navigate(`/grading/${gradingId}/1`);
+
+		} catch (error) {
+			console.error("Misslyckades skapa gradering:", error)
+		}
+
 	}
+
+
 
 
 	useEffect(() => {
@@ -72,7 +103,7 @@ export default function GradingCreate() {
 	return (
 		<div> 
 			<div className = {style.titleStyle}> 
-			  <h1>Välj graderingsprotokoll</h1>
+				<h1>Välj graderingsprotokoll</h1>
 			</div>
 			{loading ? <Spinner /> : ( 
 				<div>

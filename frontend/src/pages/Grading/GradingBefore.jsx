@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import { useState, useEffect, useContext } from "react"
-import { Link, useLocation, useNavigate} from "react-router-dom"
+import { Link, useLocation, useNavigate, useParams} from "react-router-dom"
 import Button from "../../components/Common/Button/Button"
 import style from "./GradingCreate.module.css"
 import styles from "./GradingBefore.module.css"
@@ -9,7 +9,11 @@ import { AccountContext } from "../../context"
 //import { Draggable } from "react-drag-reorder"
 import AddExaminee from "../../components/Common/AddExaminee/AddExaminee"
 import Examinee from "../../components/Common/AddExaminee/Examinee"
+import { Display, Trash } from "react-bootstrap-icons"
 
+import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../utils"
+import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../utils"
+import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 
 /**
  * The grading create page.
@@ -19,8 +23,10 @@ import Examinee from "../../components/Common/AddExaminee/Examinee"
  * @version 1.0
  * @since 2024-05-02
  */
-export default function GradingCreate() {
 
+export default function GradingCreate({id}) {
+
+  const { gradingId } = useParams()
 	const context = useContext(AccountContext)
 	const { token, userId } = context
 
@@ -30,35 +36,87 @@ export default function GradingCreate() {
   const [pairs, setPair] = useState([[]]) 
   const [checkedExamineeIds, setCheckedExamineeIds] = useState([])
 
-  function createPair() {
-    setPair([...pairs, checkedExamineeIds]);
-    setCheckedExamineeIds([]);
+  const [techniqueNameErr, setTechniqueNameErr] = useState("")
+
+
+  async function createPair() {
+      
+    let selectedExaminees = checkedExamineeIds.map(id => {
+        const examinee = examinees.find(examinee => examinee.id === id);
+        return { id: examinee.id, name: examinee.name };
+    });
+
+    const data = await postPair({examinee_1_id: parseInt(selectedExaminees[0].id), examinee_2_id: parseInt(selectedExaminees[1].id)}, token)
+			.then(response => handleResponse(response))
+			.catch(() => setErrorToast("Kunde inte lägga till paret. Kontrollera din internetuppkoppling."))
+
+
+    selectedExaminees = selectedExaminees.map(examinee => {
+      return {id: examinee.id, name: examinee.name, pairId: data.examinee_pair_id}
+    })
+
+    const remainingExaminees = examinees.filter(examinee => !checkedExamineeIds.includes(examinee.id));
+    setExaminees(remainingExaminees);
+    setPair([...pairs, selectedExaminees])
+    setCheckedExamineeIds([])
+
+  }
+
+  async function removePair(examinee1Id, examinee2Id, pairId) {
+    const data = await deletePair(pairId, token)
+			.catch(() => setErrorToast("Kunde inte tabort paret. Kontrollera din internetuppkoppling."))
+
+    const newExaminees = pairs.map(pair => {
+      if(pair.length === 2) {
+        if (pair[0].id === examinee1Id && pair[1].id === examinee2Id) {
+          return [{ id: pair[0].id, name: pair[0].name },
+                  { id: pair[1].id, name: pair[1].name }];
+        }
+      }
+    }).filter(Boolean);
+
+    const examinee = [...examinees, ...newExaminees[0]]
+    setExaminees(examinee)
+
+    setPair(pairs.filter(pair => {
+      pair[0] !== undefined
+    }).filter(pair => {
+      pair[0].pairId !== pairId
+    }));
   }
 
   function onCheck(isChecked, examineeId) {
     if (isChecked) {
-      setCheckedExamineeIds([...checkedExamineeIds, examineeId]);
+      setCheckedExamineeIds([...checkedExamineeIds, examineeId])
     } else {
-      setCheckedExamineeIds(checkedExamineeIds.filter((id) => id !== examineeId));
+      setCheckedExamineeIds(checkedExamineeIds.filter((id) => id !== examineeId))
     }
   }
 
-  function addExaminee(examinee) {
-    const examineeId = examinees.length + 1
-    setExaminees([...examinees, { id: examineeId, name: examinee }]);
+  async function addExaminee(examinee) {
+    const data = await postExaminee({ name: examinee, grading_id: gradingId }, token)
+			.then(response => handleResponse(response))
+			.catch(() => setErrorToast("Kunde inte lägga till personen. Kontrollera din internetuppkoppling."))
+    
+    setExaminees([...examinees, { id: data["examinee_id"], name: data["name"] }])
   }
 
-  function removeExaminee(examineeId) {
-    setCheckedExamineeIds(checkedExamineeIds.filter((id) => id !== examineeId));
-    setExaminees(examinees.filter((examinee) => examinee.id !== examineeId));
+  async function removeExaminee(examineeId) {
+    const data = await deleteExaminee(examineeId, token)
+			.catch(() => setErrorToast("Kunde inte tabort personen. Kontrollera din internetuppkoppling."))
+    
+    setExaminees(examinees.filter((examinee) => examinee.id !== examineeId))
   }
 
-  function editExaminee(examineeId, name) {
+  async function editExaminee(examineeId, name) {
     setExaminees(
       examinees.map((examinee) =>
         examinee.id === examineeId ? { ...examinee, name: name } : examinee
       )
-    );
+    )
+    
+    const data = await putExaminee({name: name, examinee_id: examineeId, grading_id: gradingId}, token)
+			.catch(() => setErrorToast("Kunde inte updatera personen. Kontrollera din internetuppkoppling."))
   }
 
 	return (
@@ -69,30 +127,58 @@ export default function GradingCreate() {
 				</div>
 			</div>
 
+      <div className="column">
+        {pairs.map((pair, index) => {
+            if (pair.length === 2) {
+              return (
+              <div style={{display: "flex", width: "100%", justifyContent: "center"}}> 
+                <Examinee
+                  pairNumber={index}
+                  key={pair[0].id}
+                  id={pair[0].id}
+                  item={pair[0].name}
+                  onRemove={removeExaminee}
+                  onEdit={editExaminee}
+                  onCheck={onCheck}
+                />
+                <div style={{width: "10px"}}></div>
+                <Examinee
+                  pairNumber={index}
+                  key={pair[1].id}
+                  id={pair[1].id}
+                  item={pair[1].name}
+                  onRemove={removeExaminee}
+                  onEdit={editExaminee}
+                  onCheck={onCheck}
+                />
+                <Trash
+                  size="64px"
+                  color="var(--red-primary)"
+                  className={styles.trashcan}
+                  onClick={() => removePair(pair[0].id, pair[1].id, pair[1].pairId)}
+                />
+              </div>
+            )}
+            }
+          )}
+      </div>
+        
+
 			<div className="column">
-        {examinees.map((innerExaminee, index) => {
-          // Check if the examinee's id is in any pair
-          const isInPair = pairs.some(pair => pair.includes(innerExaminee.id));
-
-          
-
-          // Render the Examinee component only if it's not in any pair
-          if (!isInPair) {
+        {examinees.map((examinee, index) => {
             return (
               <Examinee
                 pairNumber={index}
-                key={innerExaminee.id}
-                id={innerExaminee.id}
-                item={innerExaminee.name}
+                key={examinee.id}
+                id={examinee.id}
+                item={examinee.name}
                 onRemove={removeExaminee}
                 onEdit={editExaminee}
                 onCheck={onCheck}
+                showCheckbox={true}
               />
-            );
-          }
-          // Return null if the examinee is already in a pair
-          return null;
-        })}
+            )
+          })}
       </div>
 
 
@@ -103,7 +189,9 @@ export default function GradingCreate() {
       placeholder="Lägg till ny deltagare"
       required={true}
       hideLength={true}
-      onSubmit={(value) => addExaminee(value)}
+      onSubmit={(value) => {
+        setTechniqueNameErr(null)
+        addExaminee(value)}}
 
       />
       {checkedExamineeIds.length === 2 && ( 
@@ -139,3 +227,87 @@ export default function GradingCreate() {
 		</div>
 	)
 }
+
+async function deletePair(pairId, token) {
+	const requestOptions = {
+		method: "DELETE",
+		headers: { "Content-Type": "application/json", "token": token },
+	}
+
+	return fetch(`/api/examination/pair/${pairId}`, requestOptions)
+		.then(response => { return response })
+		.catch(error => { alert(error.message) })
+}
+
+async function postPair(pair, token) {
+	const requestOptions = {
+		method: "POST",
+		headers: { "Content-Type": "application/json", "token": token },
+		body: JSON.stringify(pair)
+	}
+
+	return fetch("/api/examination/pair", requestOptions)
+		.then(response => { return response })
+		.catch(error => { alert(error.message) })
+}
+
+async function deleteExaminee(examineeId, token) {
+	const requestOptions = {
+		method: "DELETE",
+		headers: { "Content-Type": "application/json", "token": token },
+	}
+
+	return fetch(`/api/examination/examinee/${examineeId}`, requestOptions)
+		.then(response => { return response })
+		.catch(error => { alert(error.message) })
+}
+
+async function postExaminee(examinee, token) {
+	const requestOptions = {
+		method: "POST",
+		headers: { "Content-Type": "application/json", "token": token },
+		body: JSON.stringify(examinee)
+	}
+
+	return fetch("/api/examination/examinee", requestOptions)
+		.then(response => { return response })
+		.catch(error => { alert(error.message) })
+}
+
+async function putExaminee(examinee, token) {
+	const requestOptions = {
+		method: "PUT",
+		headers: { "Content-Type": "application/json", "token": token },
+		body: JSON.stringify(examinee)
+	}
+
+	return fetch("/api/examination/examinee", requestOptions)
+		.then(response => { return response })
+		.catch(error => { alert(error.message) })
+}
+
+async function handleResponse(response) {
+
+		if (response.status == HTTP_STATUS_CODES.NOT_ACCEPTABLE) {
+			setTechniqueNameErr("En person måste ha ett namn")
+			scrollToElementWithId("create-technique-input-name")
+			return
+		}
+
+		if (response.status == HTTP_STATUS_CODES.UNAUTHORIZED) {
+			setErrorToast("Du är inte längre inloggad och kan därför inte lägga till en person")
+			return
+		}
+
+		if (response.status == HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+			setErrorToast("Det har uppstått ett problem med servern, kunde inte lägga till en person")
+			return
+		}
+
+		if (response.status != HTTP_STATUS_CODES.SUCCESS && response.status != HTTP_STATUS_CODES.OK) {
+			setErrorToast("Det har uppstått ett oväntat problem")
+			return
+		}
+
+		return await response.json()
+	}
