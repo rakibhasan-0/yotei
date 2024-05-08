@@ -206,4 +206,19 @@ public class ExaminationController {
     }
     
     
+    @PutMapping("/examresult")
+    public ResponseEntity<Object> updateExaminationResult(@RequestBody ExaminationResult examination_result){
+
+        if(examinationResultRepository.findById(examination_result.getExaminee_id()).isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        examinationResultRepository.save(examination_result);
+        return new ResponseEntity<>(HttpStatus.OK);
+
+    }
+
+    @GetMapping("/examresult/all")
+    ResponseEntity<List<ExaminationResult>> getAllExaminationResults(){
+        return new ResponseEntity<>(examinationResultRepository.findAll(), HttpStatus.OK);
+    }
 }
