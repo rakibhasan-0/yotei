@@ -117,7 +117,7 @@ export default function ExamineeBox({ id, examineeName}) {
 				</div>
 				<Popup 
 				id={"examinee-comment-popup"} 
-				title={"Lägg till kommentar till: " + examineeName} 
+				title={"Lägg kommentar till: " + examineeName} 
 				isOpen={isAddingComment} 
 				setIsOpen={toggleAddComment}
 				onClose={() => setCommentError(false)}
