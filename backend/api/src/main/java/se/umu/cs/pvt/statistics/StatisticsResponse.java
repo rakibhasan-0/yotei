@@ -1,7 +1,6 @@
 package se.umu.cs.pvt.statistics;
 
 import java.io.Serializable;
-
 import se.umu.cs.pvt.belt.Belt;
 import java.util.List;
 import java.util.ArrayList;
@@ -34,6 +33,7 @@ public class StatisticsResponse implements Serializable {
   private String type;
   private List<BeltResponse> belts;
   private Long count;
+
 
   /**
    * Create a new instance of StatisticsResponse.
@@ -95,5 +95,25 @@ public class StatisticsResponse implements Serializable {
    */
   public Long getCount() {
       return count;
+  }
+
+  // Consider two StatisticsACtivity equal if the share the same activity_id 
+  // to remove duplicates from output.
+  @Override
+  public boolean equals(Object obj) {
+
+    if (obj == this) {
+        return true;
+    }
+    if (!(obj instanceof StatisticsResponse)) {
+        return false;
+    }
+    StatisticsResponse sr = (StatisticsResponse) obj;
+    return this.activity_id.equals(sr.getActivity_id());
+  }
+
+  @Override
+  public String toString() {
+      return Long.toString(this.activity_id) + " - " + this.name;
   }
 }

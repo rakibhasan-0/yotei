@@ -1,0 +1,40 @@
+.tabs > li {
+    flex: 1;
+}
+
+.tabs > li .active {
+    background-color: var(--red-primary);
+}
+
+.tabs button {
+    width: 100%;
+    height: 38px;
+    background-color: white;
+    white-space: nowrap;
+}
+
+.tabs :global(.active) {
+    background-color: var(--red-primary) !important;
+    color: white !important;
+    border: none !important;
+}
+
+.floatRight {
+    display: flex;
+    justify-content: end;
+}
+
+.tab :global(.activity-list) {
+    margin: 0;
+    padding: 0;
+}
+
+.tab :global(.search-bar) {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.divider {
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+}
