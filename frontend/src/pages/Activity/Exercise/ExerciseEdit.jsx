@@ -275,12 +275,6 @@ export default function ExerciseEdit() {
 		}
 	}
 
-	async function handleClickSave() {	
-		setIsBlocking(false)
-		setSendData(true)
-		setSuccess("Övningen Uppdaterades!")
-	}
-
 	const handleNavigation = () => {
 		if (hasPreviousState) {
 			navigate(-1)
