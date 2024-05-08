@@ -1,5 +1,6 @@
 /* eslint-disable indent */
-import React, { useState, useContext, useEffect } from "react"
+import React, { useState, useContext, useEffect} from "react"
+import { useNavigate } from "react-router-dom"
 import { AccountContext } from "../../context"
 import GradingAfterComp from "./GradingAfterComp"
 import Button from "../../components/Common/Button/Button"
@@ -9,22 +10,21 @@ import { Printer } from "react-bootstrap-icons"
 export default function GradingAfter() {
 	const context = useContext(AccountContext)
 	const { token, userId } = context
+    const navigate = useNavigate()
     const [grading, setGrading] = useState([])
     const[dateCreated, setDateCreated] = useState("")
     const [beltInfo, setBeltInfo] = useState({
         belt_name: "",
         color: "" 
     })
-    const grading_id = 7
+    const grading_id = 2
 
     const updateDate = (dateString) => {
         const date = new Date(dateString)
         const hours = date.getHours()
         const minutes = date.getMinutes()
-
         const formattedHours = (hours < 10 ? "0" : "") + hours
         const formattedMinutes = (minutes < 10 ? "0" : "") + minutes
-
         const timeString = formattedHours + ":" + formattedMinutes
         setDateCreated(timeString)
     }
@@ -55,7 +55,12 @@ export default function GradingAfter() {
         })
     }
 
-    const downloadPdf  =   () => {}
+    const downloadPdf  =   () => {
+        fetch(´"api/export/grading/{grading_id}´, {
+            method: "GET",
+            headers: { token }
+        })
+    }
     
 
     useEffect(() => {
@@ -75,7 +80,7 @@ export default function GradingAfter() {
                     })
                 }
             } catch (error) {
-                console.error("There was a problem with the fetch operation:", error);
+                console.error("There was a problem with the fetch operation:", error)
             }
         }
         fetchData()
@@ -129,9 +134,7 @@ export default function GradingAfter() {
                             </Button>
                             <Button
                                 width="100%"
-                                onClick={() => {
-                                    console.log("Fortsätt")
-                                }}
+                                onClick={downloadPdf}
                             >
                                 <p>Spara och avsluta</p>
                             </Button>
