@@ -43,9 +43,10 @@ while true; do
         [yY] ) 
 	    read -rp "Whats your domain name: " domain
 	    export DOMAIN_NAME="$domain"
-	    envsubst '${DOMAIN_NAME}' < nginx/prod.conf.template > nginx/prod.conf
 	    
-	    docker compose -f docker-compose.yml -f docker-compose-domain-release.yml up --build -d
+	    docker compose -f docker-compose.yml -f docker-compose-domain-release.yml build --build-arg DOMAIN_NAME=$DOMAIN_NAME
+	    docker compose -f docker-compose.yml -f docker-compose-domain-release.yml up -d
+	    docker compose -f docker-compose.yml -f docker-compose-domain-release.yml run --rm certbot certonly --webroot --webroot-path /var/www/certbot/ --register-unsafely-without-email --dry-run -d $DOMAIN_NAME
 	    
 	    break;;
 	[nN] )

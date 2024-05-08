@@ -22,7 +22,7 @@ http {
 
         location ^~ /.well-known/acme-challenge/ {
             allow all;
-            root /var/www/letsencrypt;
+            root /var/www/certbot;
             default_type "text/plain";
         }
     }
