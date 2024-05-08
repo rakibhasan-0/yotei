@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect, useCallback } from "react"
 import styles from "./AddTagPopup.module.css" 
 import Tag from "./Tag"
-import { Search } from "react-bootstrap-icons"
+import { Search, Trash } from "react-bootstrap-icons"
 import Button from "../Button/Button"
 import { AccountContext } from "../../../context"
 import Divider from "../Divider/Divider"
