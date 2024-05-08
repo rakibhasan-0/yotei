@@ -6,11 +6,8 @@ import { AccountContext } from "../../context"
 import { Plus } from "react-bootstrap-icons"
 import styles from "./GradingIndex.module.css"
 import containerStyles from "./GradingBefore.module.css"
-
-import InfiniteScrollComponent from "../../components/Common/List/InfiniteScrollComponent"
 import BeltButton from "../../components/Common/Button/BeltButton"
 import Spinner from "../../components/Common/Spinner/Spinner"
-import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../utils"
 
 
 /**
@@ -34,31 +31,45 @@ export default function GradingIndex() {
 
 	const { token, userId } = context
 
-	const handleNavigationCurrentGradings = async (gradingId, gradingStep) => {
+	const handleNavigation = async (gradingId, gradingStep) => {
 		navigate(`/grading/${gradingId}/${gradingStep}`)
 	}
 
-	const handleNavigationFinishedGradings = async (gradingId, gradingStep) => {
-		navigate(`/grading/${gradingId}/${gradingStep}`)
+	const fetchBelts = () => {
+		return fetch("/api/belts/all", {
+			method: "GET",
+			headers: { token }
+		})
+			.then(response => {
+				if (!response.ok) {
+					throw new Error("Network response was not ok")
+				}
+				return response.json()
+			})
+	}
+
+	const fetchGradings = () => {
+		return fetch("/api/examination/all", {
+			method: "GET",
+			headers: { token }
+		})
+			.then(response => {
+				if (!response.ok) {
+					throw new Error("Network response was not ok")
+				}
+				return response.json()
+			})
 	}
 
 	useEffect(() => {
-    
-		(async () => {
-      
-			try {
-				const beltResponse = await fetch("/api/belts/all", { headers: { token } })
-				if (beltResponse.status === 404) {
-					return
-				}
-				if (!beltResponse.ok) {
-					setLoading(false)
-					throw new Error("Kunde inte hämta bälten")
-				}
-				const beltJson = await beltResponse.json()
-				setLoading(false)
 
-				const filteredColors = beltJson.filter(item => beltColors.includes(item.name))
+		const fetchData = async () => {
+			try {
+				const [belt_data, gradings_data] = await Promise.all([
+					fetchBelts(),
+					fetchGradings()
+				])
+				const filteredColors = belt_data.filter(item => beltColors.includes(item.name))
 				const colorMaps = {}
 				filteredColors.forEach(element => {
 					if(element.child === false) {
@@ -69,20 +80,9 @@ export default function GradingIndex() {
 					}
 				})
 				setBelts(colorMaps)
-				console.log("färger", belts)
-
-				const response = await fetch("/api/examination/all", { headers: { token } })
-				if (response.status === 404) {
-					return
-				}
-				if (!response.ok) {
-					setLoading(false)
-					throw new Error("Kunde inte hämta bälten")
-				}
-				const json = await response.json()
 				setLoading(false)
 
-				json.forEach(item => {
+				gradings_data.forEach(item => {
 
 					if(item.creator_id === userId) {
 						const isCreatorInFinished = finishedGradings.some(grading => grading.creator_id === userId)
@@ -97,17 +97,12 @@ export default function GradingIndex() {
 						}
 					}
 				})
-
-				console.log("Avslutade", JSON.stringify(finishedGradings))
-				console.log("pågående", currentGradings)
-        
-			} catch (ex) {
-				setErrorToast("Kunde inte hämta tidigare graderingar")
-				setLoading(false)
-				console.error(ex)
+			} catch (error) {
+				console.error("There was a problem with the fetch operation:", error)
 			}
-		})()
-	}, [token])
+		}
+		fetchData()
+	}, [])
 
 	return (
 		<center>
@@ -119,7 +114,7 @@ export default function GradingIndex() {
 							<BeltButton
 								key={index}
 								width={"100%"}
-								onClick={() => handleNavigationCurrentGradings(grading.grading_id, grading.step)}
+								onClick={() => handleNavigation(grading.grading_id, grading.step)}
 								color={belts[grading.belt_id]?.hex}
 							>
 								<h2>{`${belts[grading.belt_id]?.name} bälte`} </h2>
@@ -130,7 +125,8 @@ export default function GradingIndex() {
 				)}
 			</div>
 
-			<h1>Avslutade graderingar</h1>
+			<h1 className={styles.finishedGradings}>Avslutade graderingar</h1>
+
 			<div className={containerStyles.scrollableContainer}>
 				{loading ? <Spinner /> : ( 
 					<div>
@@ -138,7 +134,7 @@ export default function GradingIndex() {
 							<BeltButton
 								key={index}
 								width={"100%"}
-								onClick={() => handleNavigationFinishedGradings(grading.grading_id, grading.step)}
+								onClick={() => handleNavigation(grading.grading_id, grading.step)}
 								color={belts[grading.belt_id]?.hex}
 							>
 								<h2>{`${belts[grading.belt_id]?.name} bälte`} </h2>
