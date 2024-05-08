@@ -17,6 +17,8 @@ import org.springframework.boot.json.JsonParserFactory;
 
 import com.fasterxml.jackson.core.JsonParser;
 
+import se.umu.cs.pvt.technique.Technique;
+
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -72,7 +74,7 @@ public class ExportGradingPdf {
         int initX = TABLE_START_X_POS;
         int initY = pageHeight-75;
 
-        PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/truetype/freefont/FreeSerif.ttf"));
+        PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/noto/NotoSans-Regular.ttf"));
         PDPageContentStream contentStream = new PDPageContentStream(document,page);
         contentStream.setStrokingColor(Color.DARK_GRAY);
         contentStream.setLineWidth(1);
@@ -87,7 +89,7 @@ public class ExportGradingPdf {
         drawImage(System.getProperty("user.dir") + "/frontend/public/ubk-logga.jpg", (int)page.getMediaBox().getWidth() - 163, pageHeight-60, contentStream);
 
         writeToCell(initX, initY, contentStream, "Namn", font);
-
+        int count = 1;
         for(int i = 1; i<=1;i++) {
             initX+=CELL_WIDTH+30;
             for(int j = (onPage*MAX_NUM_COLUMNS); j<(onPage*MAX_NUM_COLUMNS)+MAX_NUM_COLUMNS && j < examinees.size();j++){
@@ -96,14 +98,16 @@ public class ExportGradingPdf {
                 writeToCell(initX, initY, contentStream, examinees.get(j).getName(), font);
 
                 initX+=CELL_WIDTH;
-
+                count++;
             }
             initX = TABLE_START_X_POS;
             initY -=CELL_HEIGHT;
         }
 
+
         for(int i = 0; i < examinationTechniqueCategories.size(); i++) {
-            contentStream.addRect(initX, initY, CELL_WIDTH*7+30, -CELL_HEIGHT);
+                
+            contentStream.addRect(initX, initY, CELL_WIDTH*count+30, -CELL_HEIGHT);
             writeToCell(initX, initY, contentStream, examinationTechniqueCategories.get(i).getCategoryName(), font);
 
             for(int j = 0; j < examinationTechniqueCategories.get(i).getTechniques().size(); j++) {
@@ -111,11 +115,30 @@ public class ExportGradingPdf {
                 contentStream.addRect(initX, initY, CELL_WIDTH+30, -CELL_HEIGHT);
                 
                 //funktion korta ner teknik strängen och dela upp i två å skriva den på två rader
-                writeToCell(initX, initY, contentStream, examinationTechniqueCategories.get(i).getTechniques().get(j).toString(), font);
+                String name = examinationTechniqueCategories.get(i).getTechniques().get(j).toString();
+                if(name.length() > 63)
+                    name = name.substring(0, 60) + "...";
+
+                System.out.println(name);
+
+                int splitOnIndex = 35;
+                if(name.length() > 35) {
+                    for(int k = 0; k < 35; k++) {
+                        if(name.charAt(k) == ' ')
+                            splitOnIndex = k;
+                    }
+
+                    writeToCell(initX, initY+10, contentStream, name.substring(0, splitOnIndex), font);
+
+
+                    writeToCell(initX, initY, contentStream, name.substring(splitOnIndex, name.length()), font);
+                } else  {
+                    writeToCell(initX, initY, contentStream, examinationTechniqueCategories.get(i).getTechniques().get(j).toString(), font);
+                }
 
                 initX+=CELL_WIDTH+30;
 
-                for (int k = 0 ; k < MAX_NUM_COLUMNS ; k++) {
+                for (int k = 0 ; k < count-1 ; k++) {
                     contentStream.addRect(initX, initY, CELL_WIDTH, -CELL_HEIGHT);
                     writeToCell(initX, initY, contentStream, "G", font);
                     initX+=CELL_WIDTH;
@@ -131,17 +154,18 @@ public class ExportGradingPdf {
         contentStream.close();
     }
 
+
     private void writeToCell(int initX, int initY, PDPageContentStream contentStream, String cellText, PDType0Font font) throws IOException {
         contentStream.beginText();
         contentStream.newLineAtOffset(initX+10,initY-CELL_HEIGHT+10);
-        contentStream.setFont(font,10);
+        contentStream.setFont(font,7);
         contentStream.showText(cellText);
         contentStream.endText();
     }
 
 
     private void createHeader(String belt_name, String categories, String date, PDPageContentStream contentStream) throws IOException {
-        PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/truetype/freefont/FreeSerif.ttf"));
+        PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/noto/NotoSans-Regular.ttf"));
         int initX = TABLE_START_X_POS;
         int initY = pageHeight-75;
 
@@ -174,12 +198,14 @@ public class ExportGradingPdf {
             examinationTechniqueCategories.add(category);
         }
 
-        for(int i = 0; i < numPages; i++) 
+        for(int i = 0; i < numPages; i++)  {
             this.createTable(i);
+        }
+
         System.out.println("table pdf created");
 
         //Här skapar vi sidorna för kommentarerna där de står t.ex. #1 Bra jobbat\n #2 du suger
-        document.save("/home/adam/Programming/yotei/test.pdf");
+        document.save("/home/marcus/school/yotei/test.pdf");
         document.close();
     }
 
