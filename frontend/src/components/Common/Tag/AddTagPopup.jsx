@@ -90,6 +90,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 			const response = await fetch(url, requestOptions)
 			if (response.ok) {
 				const data = await response.json()
+				console.log(data)
 				setSuggested(data)
 			} else {
 				setError("Något gick fel vid hämtning av taggförslag")
@@ -166,16 +167,21 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 				checked={newAddedTags.some(a => a.id == tag.id)}	
 				onEdit={handleEditText}
 				validateTagName={validateTagName}
+				grayTrash={tag.exercises + tag.workouts + tag.techniques > 0}
 			/>
 		)
 		setTagListArray(tempTagListArray)
 	}, [newAddedTags, suggested])
 
-	const handleDelete = (tagid) => {
-		getPopupContents(tagid)
+	const handleDelete = (tagid, grayTrash) => {
+		if (grayTrash) {
+			
+			getPopupContents(tagid)	
+		}
 		
 		setShowPopup(true)
 	}
+
 
 	const handleEditText = async (id, text) => {
 		const url = new URL("/api/tags/" + id, window.location.origin)
@@ -225,8 +231,9 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 		setIsOpen(false)
 	}
 
-	const getPopupContents = async (tagId) => {
-		const url = new URL("/api/tags/usage", window.location.origin)
+	const getPopupContents = async (tagid) => {
+
+		/*const url = new URL("/api/tags/usage", window.location.origin)
 		url.searchParams.append("tag-id", tagId)
 		const requestOptions = {
 			method: "GET",
@@ -243,7 +250,8 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	
 		} catch (error) {
 			setError("Något gick fel vid hämtning av tagganvändning")
-		}
+		}*/
+
 	}
 
 	const hideShowPopup = (show) => {

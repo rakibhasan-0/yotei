@@ -33,7 +33,7 @@ import CheckBox from "../CheckBox/CheckBox"
  * @author Team 1
  * @since 2024-05-06
  */
-export default function Examinee({ item, text, id, index, onRemove, onEdit, onCheck, showCheckbox, checked, validateTagName }) {
+export default function Examinee({ item, text, id, index, onRemove, onEdit, onCheck, showCheckbox, checked, validateTagName, grayTrash }) {
 
 	const [isEditing, setIsEditing] = useState(false); // State to manage edit mode
 	const [editedText, setEditedText] = useState(item); // State to store edited text
@@ -100,9 +100,9 @@ export default function Examinee({ item, text, id, index, onRemove, onEdit, onCh
 									)}
 									<Trash
 										className={styles["close-icon"]}
-										onClick={() => onRemove(id)}
+										onClick={() => onRemove(id, grayTrash)}
 										size="24px"
-										style={{ color: "var(--red-primary)" }}
+										style={grayTrash ? {color: "var(--gray)"} : { color: "var(--red-primary)" } }
 									/>
 								</div>
 							</div>
