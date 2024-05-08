@@ -55,7 +55,7 @@ export default function ExerciseDetailsPage() {
 			})
 	}
 
-	useEffect(() => {
+	async function fetchData() {
 		fetch(`/api/exercises/${ex_id}`, {
 			headers: { token }
 		})
@@ -76,7 +76,11 @@ export default function ExerciseDetailsPage() {
 				setErrorToast("Kunde inte hämta taggar")
 				console.error(ex)
 			})
-	}, [token, ex_id])
+	}
+
+	useEffect(() => {
+		fetchData()
+	},[token, ex_id])
 
 	/**
 	 * Handles the deletion of an exercise by sending a DELETE request to the API.
