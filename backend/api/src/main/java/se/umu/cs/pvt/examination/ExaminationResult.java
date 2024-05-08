@@ -9,30 +9,29 @@ import javax.persistence.Table;
  * ExaminationResult- Entity class for the examination_result table
  * @author Orange (dv22rfg)
  */
-@Entity
+@Entity()
 @Table(name = "examination_result")
 public class ExaminationResult {
-    
     @Id
-    @Column(name = "examinee_id")
-    private long examineeId;
+    @Column(nullable = false, name = "examinee_id")
+    private Long examinee_id;
 
-    @Column(name = "technique_name")
-    private String techniqueName;
+    @Column(nullable = false, name = "technique_name")
+    private String technique_name;
 
-    @Column(name = "pass")
-    private boolean pass;
+    @Column(nullable = false, name = "pass")
+    private Boolean pass;
     
     /**
      * Data constructor for ExaminationResult.
      * 
-     * @param examineeId The id of the examinee.
-     * @param techniqueName The name of the technique.
+     * @param examinee_id The id of the examinee.
+     * @param technique_name The name of the technique.
      * @param pass Pass or fail of performing the technique.
      */
-    public ExaminationResult(long examineeId, String techniqueName, boolean pass){
-        this.examineeId = examineeId;
-        this.techniqueName = techniqueName;
+    public ExaminationResult(Long examinee_id, String technique_name, Boolean pass){
+        this.examinee_id = examinee_id;
+        this.technique_name = technique_name;
         this.pass = pass;
     }
 
@@ -43,16 +42,14 @@ public class ExaminationResult {
     protected ExaminationResult() {}
 
     public long getExaminee_id(){
-        return examineeId;
+        return examinee_id;
     }
 
-    public String getTechniqueName(){
-        return techniqueName;
+    public String getTechnique_name(){
+        return technique_name;
     }
 
     public boolean getPass(){
         return pass;
     }
 }
-
-
