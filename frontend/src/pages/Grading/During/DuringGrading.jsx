@@ -6,7 +6,6 @@ import Popup from "../../../components/Common/Popup/Popup"
 import ExamineePairBox from "../../../components/Grading/PerformGrading/ExamineePairBox"
 
 import styles from "./DuringGrading.module.css"
-import RoundButton from "../../../components/Common/RoundButton/RoundButton"
 import { ArrowRight, ArrowLeft } from "react-bootstrap-icons"
 import {Link} from "react-router-dom"
 
@@ -52,7 +51,7 @@ function getTechniqueNameList(gradingProtocolJSON) {
 		// Check if element's nextTechnique is null and index is the last element
 		else if (element.nextTechnique === null && index === chronologicalData.length - 1) {
 			element.nextTechnique = "---"
-            console.log(element.nextTechnique)
+			console.log(element.nextTechnique)
 		}
 	})
 	return chronologicalData
@@ -114,7 +113,7 @@ export default function DuringGrading() {
 			<div className={styles.scrollableContainer}>
 				{listOfPairs.map((item, index) => (
 					<ExamineePairBox 
-                        key={index}
+						key={index}
 						rowColor={index % 2 == 0 ? "#FFFFFF" : "#F8EBEC"}
 						examineeLeftName={item.second} 
 						examineeRightName={item.second} pairNumber={index+1}>
@@ -122,18 +121,18 @@ export default function DuringGrading() {
 				))}
 			</div>
 
-            <div className={styles.bottomRowContainer}>
-                {/* Prev technique button */}
-                <div id={"prev_technique"} onClick={goToPrevTechnique} className={styles.btnPrevActivity}>
-                    {<ArrowLeft/>}
-                </div>
-                { /*Techniques button*/ }
-                <Button id={"techniques-button"} onClick={() => setShowPopup(true)}><p>Tekniker</p></Button>
-                { /* Next technique button */ }
-                <div id={"next_technique"} onClick={goToNextTechnique} className={styles.btnNextActivity}>
-                    {<ArrowRight/>}
-                </div>
-            </div>
+			<div className={styles.bottomRowContainer}>
+				{/* Prev technique button */}
+				<div id={"prev_technique"} onClick={goToPrevTechnique} className={styles.btnPrevActivity}>
+					{<ArrowLeft/>}
+				</div>
+				{ /*Techniques button*/ }
+				<Button id={"techniques-button"} onClick={() => setShowPopup(true)}><p>Tekniker</p></Button>
+				{ /* Next technique button */ }
+				<div id={"next_technique"} onClick={goToNextTechnique} className={styles.btnNextActivity}>
+					{<ArrowRight/>}
+				</div>
+			</div>
 
 			<Popup 
 				id={"navigation-popup"} 
@@ -144,11 +143,11 @@ export default function DuringGrading() {
 					{/* Should link to the respective technique grading page. */}
 					{categoryIndexMap.map((techniqueName, index) => (
 						<Button 
-                            key={index}
-                            onClick={() => {
-                                setCurrentIndex(techniqueName.categoryIndex)
-                                setShowPopup(false)}}>
-                            <p>{techniqueName.category}</p></Button>
+							key={index}
+							onClick={() => {
+								setCurrentIndex(techniqueName.categoryIndex)
+								setShowPopup(false)}}>
+							<p>{techniqueName.category}</p></Button>
 					))}
 					{/* Should link to the "after" part of the grading as well as save the changes to the database. */}
 					<Link to="/groups">
