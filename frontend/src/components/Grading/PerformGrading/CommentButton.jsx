@@ -1,7 +1,7 @@
 import  "react-bootstrap-icons"
 
 /**
- * This component is representing a commentbutton during
+ * This component is representing a comment button during
  * grading an examination
  *
  * @author Team Apelsin (Group 5)

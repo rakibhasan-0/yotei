@@ -1,4 +1,4 @@
-import {React,useState} from "react"
+import React, { useState } from "react"
 import CommentButton from "../PerformGrading/CommentButton"
 import styles from "./TechniqueInfoPanel.module.css"
 import Popup from "../../Common/Popup/Popup"
@@ -40,7 +40,6 @@ export default function TechniqueInfoPanel( {
 	currentTechniqueTitle = "1. Grepp i två handleder framifrån och svingslag Frigöring – Ju morote jodan uke",
 	nextTechniqueTitle = " 2. Stryptag framifrån och svingslag, backhand Frigöring – Ju morote jodan uke, ude osae, ude osae gatame",
 	mainCategoryTitle = "Huvudkategori"
-	//onButtonClicked
 }) {
 
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
@@ -48,8 +47,12 @@ export default function TechniqueInfoPanel( {
 	const [commentText, setCommentText] = useState()
 	const [commentError, setCommentError] = useState()
 
-
-	const onDiscardComment = async () => {
+	/**
+	 * Is used when discarding a comment,
+	 * i.e. when saving a comment is unwanted.
+	 * @returns {Promise<void>}
+	 */
+	const onDiscardGroupComment = async () => {
 		setCommentText("")
 		setAddComment(false)
 	}
@@ -58,7 +61,7 @@ export default function TechniqueInfoPanel( {
 	 * a warning that the user input will be lost.
 	 * @param {bool} show Whether the add comment popup should be shown.
 	 */
-	const toggleAddComment = async (show) => {
+	const toggleAddGroupComment = async (show) => {
 		if (!show && commentText && commentText.trim().length > 0) {
 			setShowDiscardComment(true)
 			return
@@ -70,9 +73,8 @@ export default function TechniqueInfoPanel( {
 	 * Handles the addition of a comment by sending a POST request to the API.
 	 * Validates the comment text and displays an error if it is empty.
 	 * Clears the comment text and sets addComment to false after a successful addition.
-	 * Fetches the updated comments by calling fetchComments.
 	 */
-	const onAddComment = async () => {
+	const onAddGroupComment = async () => {
 		if (!commentText || !commentText.trim() || commentText.length === 0) {
 			setCommentError("Kommentaren får inte vara tom")
 			return
@@ -95,12 +97,11 @@ export default function TechniqueInfoPanel( {
 			return
 		}
 		*/
-		onDiscardComment()
+		await onDiscardGroupComment()
 	}
 
 
 	return (
-		
 		<div style={styles}>
 			<fieldset role="fieldsetBelt" style={{ height: "30px", width: "100%", marginBottom: "10px", backgroundColor: beltColor}}>
 				<div>
@@ -125,7 +126,7 @@ export default function TechniqueInfoPanel( {
 				id={"group-comment-popup"} 
 				title={"Lägg till grupp kommentar"} 
 				isOpen={isAddingComment} 
-				setIsOpen={toggleAddComment}
+				setIsOpen={toggleAddGroupComment}
 				onClose={() => setCommentError(false)}
 				style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset"}}
 			>
@@ -134,17 +135,16 @@ export default function TechniqueInfoPanel( {
 					onInput={e => {setCommentText(e.target.value); setCommentError(false)}}
 					errorMessage={commentError}
 				/>
-				<Button onClick={onAddComment}>Lägg till</Button>
+				<Button onClick={onAddGroupComment}>Lägg till</Button>
 			</Popup>
 			<ConfirmPopup
 				popupText={"Är du säker på att du vill ta bort kommentarsutkastet?"}
 				showPopup={showDiscardComment}
-				onClick={() => onDiscardComment()}
+				onClick={() => onDiscardGroupComment()}
 				setShowPopup={() => setShowDiscardComment(false)}
 				zIndex={200} // Above the comment popup.
 			/>
 		</div>
-		
 	)
 
 }

@@ -8,7 +8,7 @@ import Button from "../../Common/Button/Button"
 import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
 
 /**
- * this is a box containing the Examinee's information
+ * This is a box containing the Examinee's name.
  * 
  *   Props:
  *    id				@type {any} 	 the id of the component.
@@ -31,21 +31,31 @@ export default function ExamineeBox({ id, examineeName}) {
 	const [commentError, setCommentError] = useState()
 
 
+	/**
+	 * Keeps track of which button that has been pressed.
+	 * @param buttonId
+	 */
 	const handleButtonClick = (buttonId) => {
 		setSelectedButton(prev => prev === buttonId ? null : buttonId)
 		console.log(`Pressed ${buttonId} button`)
 	}
 
-	const onDiscardComment = async () => {
+	/**
+	 * Is used when discarding a comment,
+	 * i.e. when saving a comment is unwanted.
+	 * @returns {Promise<void>}
+	 */
+	const onDiscardPersonalComment = async () => {
 		setCommentText("")
 		setAddComment(false)
 	}
+
 	/**
 	 * Closes the addComment popup, unless it contains text in which case it shows
 	 * a warning that the user input will be lost.
 	 * @param {bool} show Whether the add comment popup should be shown.
 	 */
-	const toggleAddComment = async (show) => {
+	const toggleAddPersonalComment = async (show) => {
 		if (!show && commentText && commentText.trim().length > 0) {
 			setShowDiscardComment(true)
 			return
@@ -57,9 +67,8 @@ export default function ExamineeBox({ id, examineeName}) {
 	 * Handles the addition of a comment by sending a POST request to the API.
 	 * Validates the comment text and displays an error if it is empty.
 	 * Clears the comment text and sets addComment to false after a successful addition.
-	 * Fetches the updated comments by calling fetchComments.
 	 */
-	const onAddComment = async () => {
+	const onAddPersonalComment = async () => {
 		if (!commentText || !commentText.trim() || commentText.length === 0) {
 			setCommentError("Kommentaren får inte vara tom")
 			return
@@ -82,7 +91,7 @@ export default function ExamineeBox({ id, examineeName}) {
 			return
 		}
 		*/
-		onDiscardComment()
+		await onDiscardPersonalComment()
 	}
 
 	return (
@@ -116,7 +125,7 @@ export default function ExamineeBox({ id, examineeName}) {
 					id={"examinee-comment-popup"} 
 					title={"Lägg kommentar till: " + examineeName} 
 					isOpen={isAddingComment} 
-					setIsOpen={toggleAddComment}
+					setIsOpen={toggleAddPersonalComment}
 					onClose={() => setCommentError(false)}
 					style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset"}}
 				>
@@ -125,12 +134,12 @@ export default function ExamineeBox({ id, examineeName}) {
 						onInput={e => {setCommentText(e.target.value); setCommentError(false)}}
 						errorMessage={commentError}
 					/>
-					<Button onClick={onAddComment}>Lägg till</Button>
+					<Button onClick={onAddPersonalComment}>Lägg till</Button>
 				</Popup>
 				<ConfirmPopup
 					popupText={"Är du säker på att du vill ta bort kommentarsutkastet?"}
 					showPopup={showDiscardComment}
-					onClick={() => onDiscardComment()}
+					onClick={() => onDiscardPersonalComment()}
 					setShowPopup={() => setShowDiscardComment(false)}
 					zIndex={200} // Above the comment popup.
 				/>
