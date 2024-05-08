@@ -46,7 +46,9 @@ function GradingDeviationContainer ({ id, name, comment, passed}) {
                                     <h2 className= {styles["commentStyle2"]}>Kommentar:</h2>
 									{	
 										<h2 id = "commentDisplay" className= {styles["commentStyle"]}>
-											{comment}
+											Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet porta ex.
+											Donec laoreet urna in hendrerit venenatis. Sed sem ligula, aliquet at odio id, varius rutrum dolor.
+											Sed elementum at magna nec tincidunt.{comment}
 										</h2>
 									}
 								</div> 
