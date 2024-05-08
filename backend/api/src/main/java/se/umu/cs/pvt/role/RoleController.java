@@ -55,4 +55,27 @@ public class RoleController {
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+    /**
+     * (GET) Returns a specific role.
+     *
+     * @param roleId The id of the role to be returned.
+     * @return Returned either HTTP-request or the role if it goes well.
+     */
+    @GetMapping("/{role_id}")
+    public ResponseEntity<Role> getRole(@PathVariable("role_id") int roleId) {
+
+        if (userId == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Role role = repository.findById(roleId);
+
+        if (role == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+
+        return new ResponseEntity(role, HttpStatus.OK);
+    }
+
 }
