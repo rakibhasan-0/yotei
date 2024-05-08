@@ -1,6 +1,6 @@
 package se.umu.cs.pvt.role;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
  * @author Team Mango (Grupp 4) - 2024-05-08
  */
 @Repository
-public interface RoleRepository extends CrudRepository<Role, Long>{
+public interface RoleRepository extends JpaRepository<Role, Long>{
     
 }
