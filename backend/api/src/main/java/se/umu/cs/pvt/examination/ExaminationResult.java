@@ -14,11 +14,15 @@ import javax.persistence.Table;
 @Entity()
 @Table(name = "examination_result")
 public class ExaminationResult {
+<<<<<<< HEAD
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "result_id")
     private Long result_id;
 
+=======
+    @Id 
+>>>>>>> 04cb9d8fb2d3efdc41aba673340b667de94121b8
     @Column(nullable = false, name = "examinee_id")
     private Long examinee_id;
 
