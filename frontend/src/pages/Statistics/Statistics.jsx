@@ -125,12 +125,11 @@ export default function Statistics() {
 
 
 	function handleDateChanges(variableName, value) {
-		const newD = new Date(value)
-		//const from = new Date(dates.from)
-		const to = new Date(dates.to)
+		const selectedDate = new Date(value)
+		const toDate = new Date(dates.to)
 
 		if (variableName == "from") {
-			setDates(newD > to ? { from: value, to: value } : { ...dates, from: value })
+			setDates( selectedDate > toDate ? { from: value, to: value } : { ...dates, from: value })
 		} else {
 			setDates({ ...dates, [variableName]: value })
 		}
