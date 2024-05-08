@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import se.umu.cs.pvt.examination.ExamineeRepository;
 import se.umu.cs.pvt.examination.ExportGradingPdf;
-import se.umu.cs.pvt.session.SessionReviewExerciseRepository;
+import se.umu.cs.pvt.examination.GradingRepository;
 import se.umu.cs.pvt.session.SessionReviewRepository;
 
 import java.io.IOException;
@@ -21,9 +21,13 @@ class GradingExportController
 {
     @Autowired
     ExamineeRepository examineeRepository;
+    
+    @Autowired
+    GradingRepository gradingRepository;
 
-    public GradingExportController(ExamineeRepository examineeRepository) {
+    public GradingExportController(ExamineeRepository examineeRepository, GradingRepository gradingRepository) {
         this.examineeRepository = examineeRepository;
+        this.gradingRepository = gradingRepository;
     }
 
     @Autowired
@@ -34,7 +38,11 @@ class GradingExportController
     @RequestMapping("/{grading_id}")
     public ResponseEntity<String> exportGradingToPdf(@PathVariable("grading_id") long grading_id) throws IOException {
 
-        ExportGradingPdf pdfExport = new ExportGradingPdf(1L, examineeRepository.findAll());
+        if(gradingRepository.findById(grading_id).isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        ExportGradingPdf pdfExport = new ExportGradingPdf(gradingRepository.findById(grading_id).get(), examineeRepository.findAll());
 
         try {
             pdfExport.generate();
