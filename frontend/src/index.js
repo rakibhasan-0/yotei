@@ -36,6 +36,7 @@ import { ToastContainer, toast } from "react-toastify"
 import CreateTechnique from "./pages/Activity/Technique/CreateTechnique/CreateTechnique.jsx"
 import AdminRoute from "./AdminRoute"
 import ActivityIndex from "./pages/Activity/ActivityIndex.jsx"
+import DuringGrading from "./pages/Grading/During/DuringGrading.jsx"
 import SessionCreateIndex from "./pages/Plan/SessionCreateIndex.jsx"
 
 const exerciseURI = "https://jsonplaceholder.typicode.com/users"
@@ -133,6 +134,7 @@ export default function App() {
 						<Route path="session/edit/:session_id" element={<SessionEdit />} />
 						<Route path="groups" element={<GroupIndex />} />
 						<Route path="groups/statistics/:groupID" element={<Statistics />} />
+						<Route path="grading/during" element={<DuringGrading />} />
 						<Route path="" element={<PlanIndex uri={planURI} />} />
 						<Route path="*" element={<NoPage />} />
 					</Route>
