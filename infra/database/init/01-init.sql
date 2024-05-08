@@ -587,8 +587,7 @@ CREATE TABLE IF NOT EXISTS examination_comment(
 );
 
 CREATE TABLE IF NOT EXISTS grading_protocol(
-	grading_protocol_id SERIAL PRIMARY KEY,
-	belt_id INT NOT NULL,
+	belt_id INT PRIMARY KEY,
 	grading_protocol JSON NOT NULL,
 	CONSTRAINT fk_belt_id FOREIGN KEY (belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE
 );
@@ -647,6 +646,7 @@ ALTER TABLE
 \ir defaults/sessionreviews.sql
 \ir defaults/sessionreviewactivities.sql
 \ir defaults/activitylists.sql
+\ir defaults/grading_protocols.sql
 -- Triggers for user
 --
 CREATE OR REPLACE FUNCTION remove_user_references() RETURNS TRIGGER AS $$ 
