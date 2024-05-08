@@ -39,9 +39,50 @@ export default function GradingCreate({id}) {
   const [techniqueNameErr, setTechniqueNameErr] = useState("")
 
 
-  function createPair() {
-    setPair([...pairs, checkedExamineeIds])
+  async function createPair() {
+      
+    let selectedExaminees = checkedExamineeIds.map(id => {
+        const examinee = examinees.find(examinee => examinee.id === id);
+        return { id: examinee.id, name: examinee.name };
+    });
+
+    const data = await postPair({examinee_1_id: parseInt(selectedExaminees[0].id), examinee_2_id: parseInt(selectedExaminees[1].id)}, token)
+			.then(response => handleResponse(response))
+			.catch(() => setErrorToast("Kunde inte lägga till paret. Kontrollera din internetuppkoppling."))
+
+
+    selectedExaminees = selectedExaminees.map(examinee => {
+      return {id: examinee.id, name: examinee.name, pairId: data.examinee_pair_id}
+    })
+
+    const remainingExaminees = examinees.filter(examinee => !checkedExamineeIds.includes(examinee.id));
+    setExaminees(remainingExaminees);
+    setPair([...pairs, selectedExaminees])
     setCheckedExamineeIds([])
+
+  }
+
+  async function removePair(examinee1Id, examinee2Id, pairId) {
+    const data = await deletePair(pairId, token)
+			.catch(() => setErrorToast("Kunde inte tabort paret. Kontrollera din internetuppkoppling."))
+
+    const newExaminees = pairs.map(pair => {
+      if(pair.length === 2) {
+        if (pair[0].id === examinee1Id && pair[1].id === examinee2Id) {
+          return [{ id: pair[0].id, name: pair[0].name },
+                  { id: pair[1].id, name: pair[1].name }];
+        }
+      }
+    }).filter(Boolean);
+
+    const examinee = [...examinees, ...newExaminees[0]]
+    setExaminees(examinee)
+
+    setPair(pairs.filter(pair => {
+      pair[0] !== undefined
+    }).filter(pair => {
+      pair[0].pairId !== pairId
+    }));
   }
 
   function onCheck(isChecked, examineeId) {
@@ -54,23 +95,28 @@ export default function GradingCreate({id}) {
 
   async function addExaminee(examinee) {
     const data = await postExaminee({ name: examinee, grading_id: gradingId }, token)
-			.then(response => handleResponse(response, examinee))
+			.then(response => handleResponse(response))
 			.catch(() => setErrorToast("Kunde inte lägga till personen. Kontrollera din internetuppkoppling."))
     
-    setExaminees([...examinees, { id: data["id"], name: data["name"] }])
+    setExaminees([...examinees, { id: data["examinee_id"], name: data["name"] }])
   }
 
-  function removeExaminee(examineeId) {
-    setCheckedExamineeIds(checkedExamineeIds.filter((id) => id !== examineeId))
+  async function removeExaminee(examineeId) {
+    const data = await deleteExaminee(examineeId, token)
+			.catch(() => setErrorToast("Kunde inte tabort personen. Kontrollera din internetuppkoppling."))
+    
     setExaminees(examinees.filter((examinee) => examinee.id !== examineeId))
   }
 
-  function editExaminee(examineeId, name) {
+  async function editExaminee(examineeId, name) {
     setExaminees(
       examinees.map((examinee) =>
         examinee.id === examineeId ? { ...examinee, name: name } : examinee
       )
     )
+    
+    const data = await putExaminee({name: name, examinee_id: examineeId, grading_id: gradingId}, token)
+			.catch(() => setErrorToast("Kunde inte updatera personen. Kontrollera din internetuppkoppling."))
   }
 
 	return (
@@ -81,17 +127,16 @@ export default function GradingCreate({id}) {
 				</div>
 			</div>
 
-
       <div className="column">
-        {pairs.map(([p1, p2], index) => {
-          {
-            return (
+        {pairs.map((pair, index) => {
+            if (pair.length === 2) {
+              return (
               <div style={{display: "flex", width: "100%", justifyContent: "center"}}> 
                 <Examinee
                   pairNumber={index}
-                  key={p1}
-                  id={p1}
-                  item={"då"}
+                  key={pair[0].id}
+                  id={pair[0].id}
+                  item={pair[0].name}
                   onRemove={removeExaminee}
                   onEdit={editExaminee}
                   onCheck={onCheck}
@@ -99,9 +144,9 @@ export default function GradingCreate({id}) {
                 <div style={{width: "10px"}}></div>
                 <Examinee
                   pairNumber={index}
-                  key={p2}
-                  id={p2}
-                  item={"hej"}
+                  key={pair[1].id}
+                  id={pair[1].id}
+                  item={pair[1].name}
                   onRemove={removeExaminee}
                   onEdit={editExaminee}
                   onCheck={onCheck}
@@ -110,37 +155,30 @@ export default function GradingCreate({id}) {
                   size="64px"
                   color="var(--red-primary)"
                   className={styles.trashcan}
-                  onClick={() => setConfirmationOpen(true)}
+                  onClick={() => removePair(pair[0].id, pair[1].id, pair[1].pairId)}
                 />
               </div>
             )}
-        })}
+            }
+          )}
       </div>
-
+        
 
 			<div className="column">
-        {examinees.map((innerExaminee, index) => {
-          // Check if the examinee's id is in any pair
-          const isInPair = pairs.some(pair => pair.includes(innerExaminee.id))
-
-          // Render the Examinee component only if it's not in any pair
-          if (!isInPair) {
+        {examinees.map((examinee, index) => {
             return (
               <Examinee
                 pairNumber={index}
-                key={innerExaminee.id}
-                id={innerExaminee.id}
-                item={innerExaminee.name}
+                key={examinee.id}
+                id={examinee.id}
+                item={examinee.name}
                 onRemove={removeExaminee}
                 onEdit={editExaminee}
                 onCheck={onCheck}
                 showCheckbox={true}
               />
             )
-          }
-          // Return null if the examinee is already in a pair
-          return null
-        })}
+          })}
       </div>
 
 
@@ -190,6 +228,39 @@ export default function GradingCreate({id}) {
 	)
 }
 
+async function deletePair(pairId, token) {
+	const requestOptions = {
+		method: "DELETE",
+		headers: { "Content-Type": "application/json", "token": token },
+	}
+
+	return fetch(`/api/examination/pair/${pairId}`, requestOptions)
+		.then(response => { return response })
+		.catch(error => { alert(error.message) })
+}
+
+async function postPair(pair, token) {
+	const requestOptions = {
+		method: "POST",
+		headers: { "Content-Type": "application/json", "token": token },
+		body: JSON.stringify(pair)
+	}
+
+	return fetch("/api/examination/pair", requestOptions)
+		.then(response => { return response })
+		.catch(error => { alert(error.message) })
+}
+
+async function deleteExaminee(examineeId, token) {
+	const requestOptions = {
+		method: "DELETE",
+		headers: { "Content-Type": "application/json", "token": token },
+	}
+
+	return fetch(`/api/examination/examinee/${examineeId}`, requestOptions)
+		.then(response => { return response })
+		.catch(error => { alert(error.message) })
+}
 
 async function postExaminee(examinee, token) {
 	const requestOptions = {
@@ -203,7 +274,19 @@ async function postExaminee(examinee, token) {
 		.catch(error => { alert(error.message) })
 }
 
-async function handleResponse(response, name) {
+async function putExaminee(examinee, token) {
+	const requestOptions = {
+		method: "PUT",
+		headers: { "Content-Type": "application/json", "token": token },
+		body: JSON.stringify(examinee)
+	}
+
+	return fetch("/api/examination/examinee", requestOptions)
+		.then(response => { return response })
+		.catch(error => { alert(error.message) })
+}
+
+async function handleResponse(response) {
 
 		if (response.status == HTTP_STATUS_CODES.NOT_ACCEPTABLE) {
 			setTechniqueNameErr("En person måste ha ett namn")
@@ -225,8 +308,6 @@ async function handleResponse(response, name) {
 			setErrorToast("Det har uppstått ett oväntat problem")
 			return
 		}
-
-		setSuccessToast(name + " är tillagd")
 
 		return await response.json()
 	}
