@@ -45,11 +45,11 @@ export default function Examinee({ item, text, id, index, onRemove, onEdit, onCh
 
 	const handleInputChange = (event) => {
 		const text = event.target.value
-		const errorMessage = validateTagName(text)
-		console.log(errorMessage)
+		const textareaErr = validateTagName(text)
+		console.log(textareaErr)
 		setEditedText(text);
 		
-		setError(errorMessage)
+		setError(textareaErr)
 		
 		
 	};
@@ -85,7 +85,7 @@ export default function Examinee({ item, text, id, index, onRemove, onEdit, onCh
 											}
 										}}
 										autoFocus
-									/>
+									/> 
 								) : (
 									<div className={styles["href-link"]} style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="ExamineeListItem-item">{editedText}</div>
 								)}
@@ -108,7 +108,11 @@ export default function Examinee({ item, text, id, index, onRemove, onEdit, onCh
 							</div>
 						</div>
 					</div>
+
 				</div>
+
 			</div>
+			<div className={styles["input"]} style={{ color: "red" , display: error == "" ? "none" : "block"}} >{error}</div>
+
 		</div>)
 }
