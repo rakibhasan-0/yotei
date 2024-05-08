@@ -59,7 +59,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	const { token } = useContext(AccountContext)
 	const [newAddedTags, setNewAddedTags] = useState(addedTags)
 	const [showPopup, setShowPopup] = useState(false)
-	const [sort, setSort] = useState(sortOptions[0])
+	const [sort, setSort] = useState(sortOptions[2])
 	const [usage, setUsage] = useState([]) 
 	const containsSpecialChars = str => /[^\w\d\s-]/.test(str)
 
