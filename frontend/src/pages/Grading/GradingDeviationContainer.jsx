@@ -32,7 +32,7 @@ function GradingDeviationContainer ({ id, name, comment, passed}) {
 					<div id={`${id}-header`} className={passed ? styles["sc23-session-container-header-passed"] : styles["sc23-session-container-header-failed"]}>
 						<div className = {styles["sc23-outline"]}>
 
-							<div className = {styles["sc23-session-header-clickable"]} role="button" onClick={() => setToggled(!toggled)}>
+							<div id ={`${id}-clickable`} className = {styles["sc23-session-header-clickable"]} role="button" onClick={() => setToggled(!toggled)}>
                             <h2 id = "nameDisplay" className= {styles["techniqueName"]}>
 								{name}
 							</h2>
