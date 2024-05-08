@@ -266,7 +266,7 @@ export default function PlanCreate() {
 
 				let startDate = new Date(planData.startDate)
 				let endDate = new Date(planData.endDate)
-				let dayNr = startDate.getDay()
+				let dayNr = startDate.getDay() -1
 
 				var tempDate
 				var tempTime
