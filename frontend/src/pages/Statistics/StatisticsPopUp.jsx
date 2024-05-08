@@ -19,7 +19,6 @@ import BeltColorChart from "../../components/Common/BeltColorChart/BeltColorChar
 export default function StatisticsPopUp({groupActivities,dates,averageRating,numberOfSessions}) {
 	const startDate = dates.from
 	const endDate = dates.to
-
 	const [beltColorsData, setBeltColorsData] = useState({})
 
 	useEffect(() => {
@@ -27,11 +26,12 @@ export default function StatisticsPopUp({groupActivities,dates,averageRating,num
 		const calculateBeltColorsData = () => {
 			const colorsCount = {}
 			groupActivities.forEach(activity => {
-				activity.beltColors.forEach(beltColor => {
-					const color = beltColor.belt_name
-					
-					colorsCount[color] = (colorsCount[color] || 0) + activity.count
-				})
+				if(activity.type == "technique") {
+					activity.beltColors.forEach(beltColor => {
+						const color = beltColor.belt_name
+						colorsCount[color] = (colorsCount[color] || 0) + activity.count
+					})
+				}
 			})
 			setBeltColorsData(colorsCount)
 		}
