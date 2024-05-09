@@ -9,6 +9,7 @@ export const WORKOUT_CREATE_TYPES = {
 	ADD_ACTIVITY: "ADD_ACTIVITY",
 	REMOVE_ACTIVITY: "REMOVE_ACTIVITY",
 	REMOVE_ACTIVITY_ITEM: "REMOVE_ACTIVITY_ITEM",
+	REMOVE_FROM_LIST: "REMOVE_FROM_LIST",
 	SET_ACTIVITY_ITEMS: "SET_ACTIVITY_ITEMS",
 	SET_ACTIVITIES: "SET_ACTIVITIES",
 	SET_TAGS: "SET_TAGS",
@@ -196,6 +197,12 @@ export function workoutCreateReducer(state, action) {
 		
 		return tempState
 	}
+	case "REMOVE_FROM_LIST":
+		console.log("Hewwo! :3")
+		return tempState.data.filter(function (el) {
+			return el.id != activity.id
+		})
+	
 	case "RESET":
 		return JSON.parse(JSON.stringify(WorkoutCreateInitialState))
 	case "SET_NAME":

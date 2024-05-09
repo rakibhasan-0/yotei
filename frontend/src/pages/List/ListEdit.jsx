@@ -172,9 +172,10 @@ const ListEdit = () => {
 		<>
 			{isLoading ? <Spinner/> :
 			<>
+			{console.log("Ritar upp passredigeringssidan")}
 				<WorkoutCreateContext.Provider value={{workoutCreateInfo, workoutCreateInfoDispatch}} >
 					<title>Redigera lista</title>
-					<h1 className={styles.title}>Redigera pass</h1>
+					<h1 className={styles.title}>Redigera lista</h1>
 					
 					<WorkoutFormComponent callback={submitHandler} edit={true} />	
 				</WorkoutCreateContext.Provider> 

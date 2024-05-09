@@ -37,10 +37,10 @@ import { useCookies } from "react-cookie"
  * @updated 2024-05-02 Kiwi, Fixed search so that current response won't be concatenated with previous.
  */
 function AddActivity({ id, setShowActivityInfo }) {
-
 	const { token } = useContext(AccountContext)
 	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(WorkoutCreateContext)
 	const { checkedActivities } = workoutCreateInfo
+
 
 	/**
 	 * Used to cache techniques and exercises that are fetched from the backend.
@@ -200,7 +200,8 @@ function AddActivity({ id, setShowActivityInfo }) {
 
 		const tempTechniques = []
 		const tempExercises = []
-
+		console.log("checkedActivities:")
+		console.log(checkedActivities)
 		checkedActivities.forEach(checkedActivity => {
 			if (checkedActivity.type === "technique") {
 				tempTechniques.push(checkedActivity)

@@ -9,12 +9,15 @@
  * @author Tomato (Group 6)
  * @since 2024-05-07
  */
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import styles from "./SavedListItemComponent.module.css"
+import { WorkoutCreateContext } from "../../Common/List/ListCreateContext"
+import { WORKOUT_CREATE_TYPES } from "../../Common/List/ListCreateReducer"
 import DescriptionToggle from "../../Common/DescriptionToggle"
 import { Trash } from "react-bootstrap-icons"
 
 const WorkoutActivityListItem = ({ activity, index, id,edit}) => {
+	const { workoutCreateInfoDispatch, } = useContext(WorkoutCreateContext)
 	const [isActive, setIsActive] = useState(false)
 	let bgColor = "#ffdfe3"
 
@@ -35,11 +38,6 @@ const WorkoutActivityListItem = ({ activity, index, id,edit}) => {
 		<div
 			id={id}
 			className="animate"
-			onClick={() => {
-				if (!isFreeTextElem() && (activity.exercise?.description || activity.technique?.description)) {
-					setIsActive(!isActive)
-				}
-			}}
 		>
 			{createStripes()}
 			<div
@@ -47,6 +45,11 @@ const WorkoutActivityListItem = ({ activity, index, id,edit}) => {
 				key={activity.id}
 				style={{
 					backgroundColor: bgColor,
+				}}
+				onClick={() => {
+					if (!isFreeTextElem() && (activity.exercise?.description || activity.technique?.description)) {
+						setIsActive(!isActive)
+					}
 				}}
 			>
 				<div className="col text-left">
@@ -70,8 +73,9 @@ const WorkoutActivityListItem = ({ activity, index, id,edit}) => {
 					{edit==true?
 					<div className="pl-3">
 						<i onClick={() => {
-							workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.OPEN_EDIT_ACTIVITY_POPUP}), 
-							workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.SET_CURRENTLY_EDITING, payload: {id: activity.id}})/* Borde detta vara userId? */
+							console.log("activity:")
+							console.log(activity)
+							workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.REMOVE_ACTIVITY_ITEM, payload: {id: activity.exercise?.id || activity.technique?.id}})
 						}}>
 						<Trash size="20px"	color="var(--red-primary)" id={`edit_pencil_${activity.id}`} style={{cursor: "pointer"}} />
 						</i>

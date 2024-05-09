@@ -50,19 +50,19 @@ export default function ListInfo({ id }) {
             data: {
                 activities: [
                     {
-                        duration: 200,
+                        duration: 20,
 						type: "exercise",
                         exercise:{
-                            description: "En övning",
+                            description: "Börja i en plankposition och sänk kroppen genom att böja armarna, pressa sedan upp igen!",
                             duration: 20,
-                            id: 1,
-                            name: "ÖvningEx",
+                            id: 289,
+                            name: "Armhävningar",
                         },
                         technique: null,
                         isEditable: false,
                     },
                     {
-                        duration: 2,
+                        duration: 0,
 						type: "technique",
                         exercise:null,
                         technique:{
@@ -73,15 +73,28 @@ export default function ListInfo({ id }) {
                                     color: "1E9CE3",
                                     child: false,
                                 },
+								{
+                                    id: 3,
+                                    name: "Gult",
+                                    color: "FFDD33",
+                                    child: false,
+                                },
                             ],
                             description: "",
                             id: 138,
                             name: "Kamae, neutral (5 Kyu)",
                             tags:[
                                 {
-                                    id: 67,
-                                    name: "nybörjare",
+                                    id: 54,
+                                    name: "grundtekniker för kamp",
                                 },
+								{
+									id: 11,
+                                    name: "3 dan",
+								},{
+									id: 67,
+                                    name: "nybörjare",
+								}
                             ],
                         },
                         isEditable: false,
