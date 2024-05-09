@@ -22,11 +22,14 @@ const WorkoutActivityListItem = ({ activity, index, id,edit}) => {
 		return activity.exercise == null && activity.technique == null
 	}
 
+	console.log("hej")
+	console.log(activity)
 	const name = activity.exercise ? (
 		<p className={`${styles["workoutActivityName"]} m-0`}>{activity.exercise.name}</p>
 	) : (
 		<p className={`${styles["workoutActivityName"]} m-0`}>{activity.technique.name}</p>
 	)
+	console.log("då")
 
 	const createStripes = () => {
 		index % 2 == 0 ? (bgColor = "#F8EBEC") : (bgColor = "#FFFFFF")
@@ -96,8 +99,10 @@ const WorkoutActivityListItem = ({ activity, index, id,edit}) => {
 					</div>
 				)}
 			</div>
+			{console.log("epoic win 🥸")}
+
 		</div>
 	)
-}
 
+}
 export default WorkoutActivityListItem

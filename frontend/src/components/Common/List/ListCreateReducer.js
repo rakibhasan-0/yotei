@@ -136,6 +136,7 @@ export function workoutCreateReducer(state, action) {
 	case "INIT_EDIT_DATA": {
 		const workoutData = action.payload.workoutData;
 		// Map activities
+		console.log("[ListCreateReducer] Breakpoint 1")
 		const activities = workoutData.data.activities.map(activity => {
 			return {
 			id: activity.id,
@@ -145,15 +146,15 @@ export function workoutCreateReducer(state, action) {
 			exercise: activity.type === "exercise" ? activity.exercise : null,
 			};
 		});
-		
+		console.log("[ListCreateReducer] Breakpoint 2")
 		// Map users
 		const users = workoutData.data.users.map((user, index) => {
 			return {
 			userId: index + 1,
-			username: user,
+			username: user.username,
 			};
 		});
-		
+		console.log("[ListCreateReducer] Breakpoint 3")
 		// Prepare category object
 		const categoryId = workoutData.list_id; // Using list_id as categoryId
 		/*const categoryName = workoutData.list_name;
@@ -176,22 +177,32 @@ export function workoutCreateReducer(state, action) {
 		};
 */
 		// Prepare data object
+		console.log("Reducer, workoutdata print: ")
+		console.log(workoutData)
 		const data = {
-			id: workoutData.data.id,
-			name: workoutData.data.name,
-			description: workoutData.data.description,
-			isPrivate: workoutData.data.isPrivate,// === "Private",
-			author: workoutData.data.author,//.author_id,
-			date: workoutData.data.changed_date.split("T")[0],
-			created: workoutData.data.created_date.split("T")[0],
-			duration: workoutData.numActivities,
-			users: users,
-			activities: activities,
+				id: workoutData.data.id,
+				name: workoutData.data.name,
+				description: workoutData.data.description,
+				isPrivate: workoutData.data.isPrivate,// === "Private",
+				author: workoutData.data.author,//.author_id,
+				date: workoutData.data.changed_date.split("T")[0],
+				created: workoutData.data.created_date.split("T")[0],
+				duration: workoutData.numActivities,
+				users: users,
+				activities: activities,
 		};
-		// Update tempState
-		tempState.data = JSON.parse(JSON.stringify(data));
-		tempState.originalData = JSON.parse(JSON.stringify(data));
-		return tempState;
+		const listCreateInfo = {
+			popupState: workoutData.popUpState,
+			numActivities: workoutData.numActivities,
+			data: data,
+			originalData: data,
+		}
+		tempState.data = JSON.parse(JSON.stringify(listCreateInfo.data))
+		tempState.originalData = JSON.parse(JSON.stringify(listCreateInfo.data))
+		console.log("[ListCreateReducer] tempState:")
+		console.log(tempState)
+
+		return tempState
 	}
 	case "RESET":
 		return JSON.parse(JSON.stringify(WorkoutCreateInitialState))

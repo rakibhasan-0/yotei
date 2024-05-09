@@ -45,12 +45,13 @@ export default function ListInfo({ id }) {
 
 	useEffect(() => {
 		const MockList = {
-            addedActivities:{},
-            checkedActivities:{},
+            addedActivities:[],
+            checkedActivities:[],
             data: {
                 activities: [
                     {
                         duration: 200,
+						type: "exercise",
                         exercise:{
                             description: "En övning",
                             duration: 20,
@@ -62,6 +63,7 @@ export default function ListInfo({ id }) {
                     },
                     {
                         duration: 2,
+						type: "technique",
                         exercise:null,
                         technique:{
                             belts:[
@@ -95,10 +97,10 @@ export default function ListInfo({ id }) {
                 name:" Olivers nice list ",
                 users:[
                     {
-                        userId: 1, username:"Jerk",
+                        userId: 1, username:"Admin",
                     },
                     {
-                        userId: 2, username:" Huge ",
+                        userId: 2, username:"Editor",
                     },
                 ],
             },

@@ -57,13 +57,14 @@ export default function WorkoutActivityList({activities,edit}) {
 			</legend>
 			
 			{console.log("Testy:)")}
-			{console.log(ListData.data)}
+			{console.log(ListData)}
 			{!isCollapsed && ListData.data.activities.map((activity, index) =>
 				<WorkoutActivityListItem key={activity.id} activity={activity} index={index} edit={edit}/>)}
+				{console.log("Testy done:)")}
+
 		</fieldset>
 	</>
 }
-
 
 function setPadding() {
 	const paddingY = "pb-2"

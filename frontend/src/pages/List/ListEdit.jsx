@@ -23,7 +23,7 @@ import { Spinner } from "react-bootstrap"
  */
 const ListEdit = () => {
 	const [workoutCreateInfo, workoutCreateInfoDispatch] = useReducer(
-		workoutCreateReducer)//,JSON.parse(JSON.stringify(WorkoutCreateInitialState)))
+		workoutCreateReducer,JSON.parse(JSON.stringify(WorkoutCreateInitialState)))
 	const navigate = useNavigate()
 	const { token, userId } = useContext(AccountContext)
 	const location = useLocation()
@@ -138,6 +138,7 @@ const ListEdit = () => {
      * Fetches the data from the local storage and context.
      */
 	useEffect(() => {
+		console.log("LISTEDIT USEEFFECT 1")
 		setIsLoading(true)
 		const item = localStorage.getItem("workoutCreateInfoEdit")
 		const workoutData = location.state?.workout
@@ -167,20 +168,27 @@ const ListEdit = () => {
 		localStorage.setItem("workoutCreateInfoEdit", JSON.stringify(workoutCreateInfo))
 		
 		return () => {
+			{console.log("Slut:), workoutCreateInfo:")}
+			{console.log(workoutCreateInfo)}
 			if (isSubmitted) localStorage.removeItem("workoutCreateInfoEdit")
 		}
 	}, [workoutCreateInfo, isSubmitted])
 	return (
 		<>
 			{isLoading ? <Spinner/> :
+			<>
+				{console.log("[ListEdit]")}
+				{console.log(workoutCreateInfo)}
 				<WorkoutCreateContext.Provider value={{workoutCreateInfo, workoutCreateInfoDispatch}} >
 					<title>Redigera lista</title>
 					<h1 className={styles.title}>Redigera pass</h1>
-
+					
 					<WorkoutFormComponent callback={submitHandler} edit={true} />	
-
+					{console.log("ListEditPt2")}
 				</WorkoutCreateContext.Provider> 
+				</>
 			}
+			
 		</>
 	)
 }
