@@ -50,7 +50,6 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 	 * Sets the title of the page.
 	 */
 	const getPopupTitle = useCallback(() => {
-		console.log("[ListFormComponent] getPopUpTitle")
 		if (
 			workoutCreateInfo.popupState.types.activityPopup ||
 			workoutCreateInfo.popupState.types.freeTextPopup
@@ -72,8 +71,6 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 	 * @param {*} event
 	 */
 	function handleSubmit(event) {
-		console.log("[ListFormComponent] handleSubmit:")
-		console.log(event)
 		const form = event.currentTarget
 		event.preventDefault()
 
@@ -97,12 +94,10 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 	 * If no changes to the workout are made, then it navigates back.
 	 */
 	function handleGoBack() {
-		console.log("[ListFormComponent] handleGoBack")
 		setShowPopup(true)
 	}
 
 	function confirmGoBack() {
-		console.log("[ListFormComponent] confirmGoBack")
 		localStorage.removeItem("workoutCreateInfo")// Clear local storage as confirmed
 
 		if (state?.fromSession && !state?.fromCreate) {
@@ -114,7 +109,6 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 	}
 
 	function handlePopupClose() {
-		console.log("[ListFormComponent] handlePopupClose")
 		let  shouldClose = false
 
 		if (workoutCreateInfo.popupState.types.activityPopup) {
@@ -143,7 +137,6 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 
 	return (
 		<>
-		{console.log("[ListFormComponent] Beginning of return")}
 			<Form noValidate validated={validated} onSubmit={handleSubmit}>
 				<div className={styles.row}>
 					<Form.Group controlId="validationCustom0" className="mb-1">
@@ -167,8 +160,6 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 							}
 						/>
 					</Form.Group>
-					{console.log("ListEdit(2): ")}
-					{console.log(workoutCreateInfo)}
 					<Form.Group className="mb-1" controlId="validationCustom03" >
 						<Form.Control
 							value={workoutCreateInfo.data.description}
@@ -185,8 +176,6 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 							}
 						/>
 					</Form.Group>
-					{console.log("ListEdit(3): ")}
-					{console.log(workoutCreateInfo)}
 					<Form.Group className="mb-3">
 						{/*<ActivityListComponent /> {/* Tror denna kraschar grejor :=) */}
 						<ConfirmPopup
@@ -202,8 +191,6 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 							backText="Avbryt"
 							onClick={callback}
 						/>
-							{console.log("ListEdit: ")}
-							{console.log(workoutCreateInfo)}
 						<SavedActivityList activities={workoutCreateInfo} edit={edit} />
 						<div className={styles.activityButtons}>
 							<div className={"align-center" +styles.container}>
@@ -238,11 +225,8 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 
 					<Form.Group>
 						{/* Note till framtida hugo och oliver: Denna kanske ej fungerar  (users.id)*/}
-						{console.log("Note till framtida hugo och oliver")}
-						{console.log(workoutCreateInfo.data.users)}
 						<AddUserComponent
 							id="workout-create-add-users"
-							{...console.log(workoutCreateInfo)}
 							addedUsers={workoutCreateInfo.data.users}
 							setAddedUsers={(users) =>
 								workoutCreateInfoDispatch({

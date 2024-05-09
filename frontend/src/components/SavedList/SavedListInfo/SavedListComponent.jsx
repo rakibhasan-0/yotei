@@ -20,17 +20,13 @@ export default function WorkoutActivityList({activities,edit}) {
 	const [Loading, setLoading] = useState(true)
 
 	useEffect(() => {
-		console.log("SetListData:")
-		console.log(activities)
 		setListData( activities)
 		//setLoading(false)
 		
 	}, [])
 	useEffect(() => {
-		console.log("ListDataDone")
-		console.log(ListData)
 		if(ListData!=null){
-			setLoading(false)
+		setLoading(false)
 		}
 		
 	}, [ListData])
@@ -56,11 +52,8 @@ export default function WorkoutActivityList({activities,edit}) {
 				</div>
 			</legend>
 			
-			{console.log("Testy:)")}
-			{console.log(ListData)}
 			{!isCollapsed && ListData.data.activities.map((activity, index) =>
 				<WorkoutActivityListItem key={activity.id} activity={activity} index={index} edit={edit}/>)}
-				{console.log("Testy done:)")}
 
 		</fieldset>
 	</>

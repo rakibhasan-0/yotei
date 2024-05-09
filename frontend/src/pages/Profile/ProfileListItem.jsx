@@ -14,8 +14,6 @@ import { Dot } from "react-bootstrap-icons"
 import { ChevronRight } from "react-bootstrap-icons"
 
 export default function ProfileListItem({ item, Icon }) {
-	//{console.log(list)
-	console.log("Test")
 
 	return (
 		<div className={`${styles["profile-item-row"]}`}>

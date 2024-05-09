@@ -121,8 +121,6 @@ export default function ListInfo({ id }) {
 		setLoading(false)
 		setLoadingUser(false)
 	}, [])
-	//{console.log(workoutData)}
-
 	return loading || loadingUser ? (
 		<div className="mt-5">
 			{" "}
@@ -204,15 +202,12 @@ function getListInfoContainer(workoutData, setShowPopup, context) {
 					</div>
 					<div className="d-flex justify-content-end align-items-center">
 						<div className={styles.clickIcon}>{/*<PrintButton workoutData={workoutData} />*/}</div>
-                        {console.log(workoutData.data)}
-
+                        
 						{(context.userId == workoutData.data.author.id || isAdmin(context)) && (
 							<>
 								<Link
 									className="ml-3"
-                                    {...console.log("Workout data that is sent:")}
-                                    {...console.log(workoutData)}
-									state={{ workout: workoutData, users: workoutData.data.users }}
+                                    					state={{ workout: workoutData, users: workoutData.data.users }}
 									to={"/list/editList"}
 								>
 									<Pencil

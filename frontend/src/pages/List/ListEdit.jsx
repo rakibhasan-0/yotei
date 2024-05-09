@@ -58,8 +58,6 @@ const ListEdit = () => {
 
 
 		let activities = []
-		console.log("Oliver kompis")
-		console.logI(data)
 		data.activityItems.forEach((category, index) => {
 			let categoryOrder = index + 1
 			category.activities.forEach((activity, index) => {
@@ -138,7 +136,6 @@ const ListEdit = () => {
      * Fetches the data from the local storage and context.
      */
 	useEffect(() => {
-		console.log("LISTEDIT USEEFFECT 1")
 		setIsLoading(true)
 		const item = localStorage.getItem("workoutCreateInfoEdit")
 		const workoutData = location.state?.workout
@@ -168,8 +165,6 @@ const ListEdit = () => {
 		localStorage.setItem("workoutCreateInfoEdit", JSON.stringify(workoutCreateInfo))
 		
 		return () => {
-			{console.log("Slut:), workoutCreateInfo:")}
-			{console.log(workoutCreateInfo)}
 			if (isSubmitted) localStorage.removeItem("workoutCreateInfoEdit")
 		}
 	}, [workoutCreateInfo, isSubmitted])
@@ -177,14 +172,11 @@ const ListEdit = () => {
 		<>
 			{isLoading ? <Spinner/> :
 			<>
-				{console.log("[ListEdit]")}
-				{console.log(workoutCreateInfo)}
 				<WorkoutCreateContext.Provider value={{workoutCreateInfo, workoutCreateInfoDispatch}} >
 					<title>Redigera lista</title>
 					<h1 className={styles.title}>Redigera pass</h1>
 					
 					<WorkoutFormComponent callback={submitHandler} edit={true} />	
-					{console.log("ListEditPt2")}
 				</WorkoutCreateContext.Provider> 
 				</>
 			}

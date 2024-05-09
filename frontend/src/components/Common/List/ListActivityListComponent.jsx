@@ -18,7 +18,6 @@ import { List, Pencil } from "react-bootstrap-icons"
 export default function ActivityListComponent() {
 	const { workoutCreateInfo, workoutCreateInfoDispatch } =
 		useContext(WorkoutCreateContext)
-		console.log(useContext(WorkoutCreateContext))
 
 	const handleDragEnd = (result) => {
 		const { source, destination } = result

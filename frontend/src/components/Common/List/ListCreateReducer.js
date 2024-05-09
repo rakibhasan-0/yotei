@@ -125,8 +125,7 @@ export function checkIfChangesMade(info) {
  * Workout create reducer
  */
 export function workoutCreateReducer(state, action) {
-	console.log("Type: "+action.type)
-
+	
 	const tempState = {...state}
 	switch (action.type) {
 	case "SET_INITIAL_STATE": 
@@ -136,7 +135,6 @@ export function workoutCreateReducer(state, action) {
 	case "INIT_EDIT_DATA": {
 		const workoutData = action.payload.workoutData;
 		// Map activities
-		console.log("[ListCreateReducer] Breakpoint 1")
 		const activities = workoutData.data.activities.map(activity => {
 			return {
 			id: activity.id,
@@ -146,7 +144,6 @@ export function workoutCreateReducer(state, action) {
 			exercise: activity.type === "exercise" ? activity.exercise : null,
 			};
 		});
-		console.log("[ListCreateReducer] Breakpoint 2")
 		// Map users
 		const users = workoutData.data.users.map((user, index) => {
 			return {
@@ -154,7 +151,6 @@ export function workoutCreateReducer(state, action) {
 			username: user.username,
 			};
 		});
-		console.log("[ListCreateReducer] Breakpoint 3")
 		// Prepare category object
 		const categoryId = workoutData.list_id; // Using list_id as categoryId
 		/*const categoryName = workoutData.list_name;
@@ -177,8 +173,6 @@ export function workoutCreateReducer(state, action) {
 		};
 */
 		// Prepare data object
-		console.log("Reducer, workoutdata print: ")
-		console.log(workoutData)
 		const data = {
 				id: workoutData.data.id,
 				name: workoutData.data.name,
@@ -199,9 +193,7 @@ export function workoutCreateReducer(state, action) {
 		}
 		tempState.data = JSON.parse(JSON.stringify(listCreateInfo.data))
 		tempState.originalData = JSON.parse(JSON.stringify(listCreateInfo.data))
-		console.log("[ListCreateReducer] tempState:")
-		console.log(tempState)
-
+		
 		return tempState
 	}
 	case "RESET":
