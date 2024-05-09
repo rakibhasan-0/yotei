@@ -15,7 +15,7 @@ const GradingAfterComp = ({ id, name }) => {
                     </div>
                     {/* if the technique object has count attribute then we will not render ChevronDown sign */}
                     <div className={styles["technique-arrow-container"]}>
-                        <span>/52</span> {/* Points are now to the left of the icon */}
+                        {/*<span>/52</span> {/* Points are now to the left of the icon */}
                             <Link to={"google.com"}>
                                 <ChevronDown />
                             </Link>

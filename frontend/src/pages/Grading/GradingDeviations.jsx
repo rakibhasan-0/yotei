@@ -52,7 +52,7 @@ export default function GradingDeviations() {
         <div className={styles.scrollableContainer}>
             <div>
                 <div className={styles.topContainer}>
-                    <h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "10px", paddingBottom: "5px" }}>Skriv in name här sen</h1>
+                    <h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "10px", paddingBottom: "5px" }}>Linus</h1>
                     <h4 style={{ fontFamily: "Open Sans", fontSize: "15px", paddingTop: "0px", paddingBottom: "10px" }}>Kommentarer</h4>
                 </div>
 

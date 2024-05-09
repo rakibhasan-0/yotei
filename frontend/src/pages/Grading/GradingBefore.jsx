@@ -2,18 +2,14 @@
 import { useState, useEffect, useContext } from "react"
 import { Link, useLocation, useNavigate, useParams} from "react-router-dom"
 import Button from "../../components/Common/Button/Button"
-import style from "./GradingCreate.module.css"
 import styles from "./GradingBefore.module.css"
-import Spinner from "../../components/Common/Spinner/Spinner"
 import { AccountContext } from "../../context"
-//import { Draggable } from "react-drag-reorder"
 import AddExaminee from "../../components/Common/AddExaminee/AddExaminee"
 import Examinee from "../../components/Common/AddExaminee/Examinee"
-import { Display, Trash } from "react-bootstrap-icons"
+import { Trash } from "react-bootstrap-icons"
 
 import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../utils"
 import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../utils"
-import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 
 /**
  * The grading create page.
@@ -29,8 +25,6 @@ export default function GradingCreate({id}) {
 	const location = useLocation()
   const state = location.state
 
-
-
 	const { gradingId } = useParams()
 	const context = useContext(AccountContext)
 	const { token, userId } = context
@@ -40,26 +34,32 @@ export default function GradingCreate({id}) {
 	
 	const [pairs, setPair] = useState([]) 
 	const [checkedExamineeIds, setCheckedExamineeIds] = useState([])
+  const [redirect, setRedirect] = useState(false)
 
-	const [techniqueNameErr, setTechniqueNameErr] = useState("")
+  let numberOfPairs = 0
 
-	function handleNavigation() {
-		try {
+  function startRedirection() {
+    setRedirect(true)
+  }
 
-			examinees.map(examinee => async () => {
-						await postPair({examinee_1_id: examinee.id}, token)
-				.then(response => handleResponse(response))
-				.catch(() => setErrorToast("Kunde inte lägga till paret. Kontrollera din internetuppkoppling."))
+  useEffect(() => {
+    if (redirect != false) {
+      try {
+        const exec = async () => {
+          await Promise.all(examinees.map(examinee => {
+                postPair({examinee_1_id: examinee.id}, token)
+                  .catch(() => setErrorToast("Kunde inte lägga till paret. Kontrollera din internetuppkoppling."))
+          }))
+          navigate(`/grading/${gradingId}/2`)
+        };
 
-			})
-			
-			navigate(`/grading/${gradingId}/2`)
-
-		} catch (error) {
-			console.error("Misslyckades skicka vidare till nästa steg i gradering:", error)
-		}
-
-	}
+        exec();
+        
+      } catch (error) {
+        console.error("Misslyckades skicka vidare till nästa steg i gradering:", error)
+      }
+    }
+  }, [redirect])
 
 	async function createPair() {
 			
@@ -110,10 +110,6 @@ export default function GradingCreate({id}) {
 		setPair(newPairs)
 	}
 
-	useEffect(() => {
-		console.log(checkedExamineeIds)
-	}, [checkedExamineeIds])
-
 	function onCheck(isChecked, examineeId) {
 		if (isChecked) {
 			setCheckedExamineeIds([...checkedExamineeIds, examineeId])
@@ -134,6 +130,10 @@ export default function GradingCreate({id}) {
 		const data = await deleteExaminee(examineeId, token)
 			.catch(() => setErrorToast("Kunde inte tabort personen. Kontrollera din internetuppkoppling."))
 		
+    if(checkedExamineeIds.includes(examineeId)) {
+      setCheckedExamineeIds(checkedExamineeIds.filter((id) => id !== examineeId))
+    }
+
 		setExaminees(examinees.filter((examinee) => examinee.id !== examineeId))
 	}
 
@@ -190,7 +190,7 @@ export default function GradingCreate({id}) {
 	return (
 		<div>
 			<div> 
-				<div style={{ backgroundColor: state.ColorParam, borderRadius: "0.3rem", padding: "0px" }}>
+				<div style={{ backgroundColor: "yellow", borderRadius: "0.3rem", padding: "0px" }}>
 					<h2>KIHON WAZA</h2>
 				</div>
 			</div>
@@ -199,8 +199,10 @@ export default function GradingCreate({id}) {
 				{pairs.map((pair, index) => {
 						if (pair.length === 2) {
 							return (
-							<div style={{display: "flex", width: "100%", justifyContent: "center"}}> 
+							<div style={{display: "flex", width: "100%", justifyContent: "center"}} key={pair[0].pairId}> 
+                <div className={styles.number}>{index+1}</div>
 								<Examinee
+                  key={pair[0].id}
 									pairNumber={index}
 									id={pair[0].id}
 									item={pair[0].name}
@@ -210,6 +212,7 @@ export default function GradingCreate({id}) {
 								/>
 								<div style={{width: "10px"}}></div>
 								<Examinee
+                  key={pair[1].id}
 									pairNumber={index}
 									id={pair[1].id}
 									item={pair[1].name}
@@ -218,6 +221,7 @@ export default function GradingCreate({id}) {
 									onCheck={onCheck}
 								/>
 								<Trash
+                  key={toString(pair[0].id) + toString(pair[1].id)}
 									size="64px"
 									color="var(--red-primary)"
 									className={styles.trashcan}
@@ -227,35 +231,41 @@ export default function GradingCreate({id}) {
 						)}
 						}
 					)}
+          <div style={{display: "none"}}>
+            {numberOfPairs = pairs.length}
+          </div>
 			</div>
 				
 
 			<div className="column">
 				{examinees.map((examinee, index) => {
 						return (
-							<Examinee
-								pairNumber={index}
-								id={examinee.id}
-								item={examinee.name}
-								onRemove={removeExaminee}
-								onEdit={editExaminee}
-								onCheck={onCheck}
-								showCheckbox={true}
-							/>
+              <div style={{display: "flex", width: "100%", justifyContent: "center"}} key={"single-pair-" + toString(examinee.id)}>
+                <div className={styles.number}>{numberOfPairs + index + 1}</div>
+                <Examinee
+                  key={examinee.id}
+                  pairNumber={index}
+                  id={examinee.id}
+                  item={examinee.name}
+                  onRemove={removeExaminee}
+                  onEdit={editExaminee}
+                  onCheck={onCheck}
+                  showCheckbox={true}
+                />
+              </div>
 						)
 					})}
 			</div>
 
-
 			<AddExaminee
 			name="add-examinee"
 			id="add-examinee"
+      key={"add-examinee-before"}
 			type="text"
 			placeholder="Lägg till ny deltagare"
 			required={true}
 			hideLength={true}
 			onSubmit={(value) => {
-				setTechniqueNameErr(null)
 				addExaminee(value)}}
 
 			/>
@@ -281,9 +291,7 @@ export default function GradingCreate({id}) {
 				</Button>
 				<Button
 					width="100%"
-					onClick={() => {
-						handleNavigation()
-					}}
+					onClick={startRedirection}
 				>
 					<p>Forsätt</p>
 				</Button>
@@ -353,7 +361,6 @@ async function putExaminee(examinee, token) {
 async function handleResponse(response) {
 
 		if (response.status == HTTP_STATUS_CODES.NOT_ACCEPTABLE) {
-			setTechniqueNameErr("En person måste ha ett namn")
 			scrollToElementWithId("create-technique-input-name")
 			return
 		}
