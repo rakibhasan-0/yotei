@@ -56,9 +56,9 @@ export default function GradingAfter() {
     }
 
     const downloadPdf  =   () => {
-        fetch(´"api/export/grading/{grading_id}´, {
+        fetch(`api/export/grading/${grading_id}`, {
             method: "GET",
-            headers: { token }
+            headers: { "Authorization": `Bearer ${token}` }  // Assuming the token is a bearer token
         })
     }
     
