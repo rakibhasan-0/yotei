@@ -26,21 +26,12 @@ export default function BeltColorChart({ beltColorsData }) {
 	// Assuming beltColorsData is an object containing belt colors as keys and their counts as values
 	
 	const labels = Object.keys(beltColorsData).map((name) => {
-		switch (name) {
-		// Add specific cases here if needed
-		case "Gult_c":
-			return "Gult"
-		case "Orange_c":
-			return "Orange"
-		case "Grönt_c":
-			return "Grönt"
-		case "Blått_c":
-			return "Blått"
-		case "Brunt_c":
-			return "Brunt"
-		default:
-			return name // Default case when no other case matches
-		}
+		if (name.endsWith("_c")) {
+			//Remove child belt identifier
+			return name.substring(0, name.length-2)
+		} 
+
+		return name // Default case when no other case matches
 	})
 	const data = Object.values(beltColorsData).map((obj) => {
 		return obj.count
