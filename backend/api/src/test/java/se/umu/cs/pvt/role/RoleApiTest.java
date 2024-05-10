@@ -7,27 +7,19 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import se.umu.cs.pvt.permission.InvalidPermissionNameException;
-import se.umu.cs.pvt.role.RoleRepository;
-import se.umu.cs.pvt.user.UserController;
-
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 
 
 /**
  * Test class for ROLE-API methods.
  *
- * @author Team Mango - 2024-05-08
+ * @author Team Mango - 2024-05-10
  */
 @ExtendWith(MockitoExtension.class)
 public class RoleApiTest {
@@ -46,12 +38,18 @@ public class RoleApiTest {
         roleController = new RoleController(roleRepository);
 		roleList = new ArrayList<>();
 
-
 		Mockito.lenient().when(roleRepository.findById(Mockito.any()))
 		.thenAnswer(invocation -> {
 			Optional<Role> perm = Optional.of(roleList.get(Math.toIntExact(invocation.getArgument(0))));
 			return perm;
 		});
+
+		Mockito.lenient().when(roleRepository.save(Mockito.any())).thenAnswer(invocation -> {
+			roleList.add((Role) invocation.getArgument(0));
+			return null;
+		});
+
+		Mockito.lenient().when(roleRepository.findAll()).thenReturn(roleList);
     }
 
 	@Test
@@ -60,8 +58,6 @@ public class RoleApiTest {
 			roleList.add(new Role("role1"));
 			roleList.add(new Role("role2"));
 			roleList.add(new Role("role3"));
-
-			Mockito.when(roleRepository.findAll()).thenReturn(roleList);
 
 			ResponseEntity<List<Role>> result = roleController.getRoles();
 			
@@ -79,12 +75,6 @@ public class RoleApiTest {
 			roleList.add(new Role("role2"));
 			roleList.add(new Role("role3"));
 
-			Mockito.lenient().when(roleRepository.findById(Mockito.any()))
-            .thenAnswer(invocation -> {
-                Optional<Role> perm = Optional.of(roleList.get(Math.toIntExact(invocation.getArgument(0))));
-                return perm;
-            });
-
             assertEquals(new ResponseEntity<>(roleList.get(0), HttpStatus.OK), 
 				roleController.getRole(0L));
             assertEquals(new ResponseEntity<>(roleList.get(2), HttpStatus.OK), 
@@ -99,11 +89,6 @@ public class RoleApiTest {
     void shouldSucceedWhenAddingRole() {
         try {
 			Role role = new Role("role1");
-
-			Mockito.when(roleRepository.save(Mockito.any())).thenAnswer(invocation -> {
-				roleList.add((Role) invocation.getArgument(0));
-				return null;
-			});
 	
 			assertEquals(new ResponseEntity<>(role, HttpStatus.OK), 
 				roleController.createNewRole(role));
@@ -123,6 +108,25 @@ public class RoleApiTest {
 
 			assertEquals(new ResponseEntity<>(HttpStatus.OK), roleController.deleteRole(0L));
 
+		} catch (InvalidRoleNameException e) {
+			fail();
+		}
+	}
+
+	@Test
+	void shouldSucceedWhenUpdatingRole() {
+		try {
+			String roleName = "firstRoleName";
+			String updatedName = "updatedRoleName";
+
+			Role originalRole = new Role(roleName);
+			Role newRole = new Role(updatedName);
+
+			roleList.add(originalRole);
+			
+			roleController.updateRole(0L, newRole);
+
+			assertTrue(roleList.get(0).getRoleName().equals(updatedName));
 		} catch (InvalidRoleNameException e) {
 			fail();
 		}
