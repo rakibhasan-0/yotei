@@ -660,6 +660,9 @@ ALTER TABLE
 \ir defaults/users.sql
 \ir defaults/belts.sql 
 \ir defaults/tags.sql 
+\ir defaults/grading_protocols.sql
+\ir defaults/permissions.sql
+\ir defaults/roles.sql
 \ir defaults/techniques.sql
 \ir defaults/workouts.sql
 \ir defaults/exercises.sql
