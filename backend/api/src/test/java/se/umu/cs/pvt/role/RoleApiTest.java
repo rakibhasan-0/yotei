@@ -112,4 +112,19 @@ public class RoleApiTest {
             fail();
         }
     }
+
+	@Test
+	void shouldSucceedWhenRemovingRole() {
+		try {
+			Role role = new Role("role1");
+			roleList.add(role);
+			
+			doNothing().when(roleRepository).deleteById(Mockito.any());
+
+			assertEquals(new ResponseEntity<>(HttpStatus.OK), roleController.deleteRole(0L));
+
+		} catch (InvalidRoleNameException e) {
+			fail();
+		}
+	}
 }
