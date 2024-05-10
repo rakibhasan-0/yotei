@@ -38,6 +38,7 @@ import AdminRoute from "./AdminRoute"
 import ActivityIndex from "./pages/Activity/ActivityIndex.jsx"
 import DuringGrading from "./pages/Grading/During/DuringGrading.jsx"
 import SessionCreateIndex from "./pages/Plan/SessionCreateIndex.jsx"
+import RoleDetailPage from "./pages/Admin/RoleDetailPage.jsx"
 
 const exerciseURI = "https://jsonplaceholder.typicode.com/users"
 const workoutURI = "https://jsonplaceholder.typicode.com/users"
@@ -51,7 +52,7 @@ const planURI = "https://jsonplaceholder.typicode.com/users"
  *
  * @author
  * 		Unknown authors
- *     	Team Kiwi
+ *     	Team Kiwi, Team Mango
  * @version 2.1
  * @updated 2024-05-08 Changed so workout/edit url also have the workout id in it
  */
@@ -112,6 +113,7 @@ export default function App() {
 					>
 						<Route path="about" element={<About />} />
 						<Route path="admin" element={<Admin />} />
+						<Route path="admin/role_page/" element={<RoleDetailPage />} /> {/*:role_id*/}
 						<Route path="profile" element={<Profile />} />
 						<Route path="activity" element={<ActivityIndex />} />
 						<Route path="exercise" element={<ExerciseIndex uri={exerciseURI} />} />
