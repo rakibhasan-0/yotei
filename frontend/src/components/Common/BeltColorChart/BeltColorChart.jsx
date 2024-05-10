@@ -126,7 +126,7 @@ export default function BeltColorChart({ beltColorsData }) {
 		id: "horizontalLinePlugin",
 		afterDraw: (chart, args, options) => {
 			const ctx = chart.ctx
-			const childBeltIndicies = options.childBeltIndicies || [];
+			const childBeltIndicies = options.childBeltIndicies
 			chart.data.datasets.forEach((dataset, datasetIndex) => {
 				const meta = chart.getDatasetMeta(datasetIndex)
 
