@@ -26,10 +26,16 @@ export default function StatisticsPopUp({groupActivities,dates,averageRating,num
 		const calculateBeltColorsData = () => {
 			const colorsCount = {}
 			groupActivities.forEach(activity => {
+				
 				if(activity.type == "technique") {
 					activity.beltColors.forEach(beltColor => {
-						const color = beltColor.belt_name
-						colorsCount[color] = (colorsCount[color] || 0) + activity.count
+						const identifier = beltColor.belt_name + (beltColor.is_child ? "_c" : "")
+						if (colorsCount[identifier]) {
+							colorsCount[identifier]["count"] += activity.count
+						} else {
+							colorsCount[identifier] = {"count":activity.count,
+												  		"color":beltColor.belt_color}
+						}
 					})
 				}
 			})
@@ -62,8 +68,8 @@ export default function StatisticsPopUp({groupActivities,dates,averageRating,num
 				<p style = {{ fontSize: "25px" }}>
 						Bält-tekniker
 				</p>
-				<div style={{ overflowY: "auto" }}>
-					<BeltColorChart beltColorsData={beltColorsData} /> 
+				<div style={{ overflowY: "scroll" }}>
+					<BeltColorChart beltColorsData={beltColorsData}/> 
 				</div>
 					
 			</Popup>

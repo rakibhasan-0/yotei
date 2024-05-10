@@ -24,29 +24,47 @@ ChartJS.register(BarElement,CategoryScale, LinearScale, Tooltip,Title)
 
 export default function BeltColorChart({ beltColorsData }) {
 	// Assuming beltColorsData is an object containing belt colors as keys and their counts as values
-	const labels = Object.keys(beltColorsData)
-	const data = Object.values(beltColorsData)
-	console.log(beltColorsData)
-	const colors = labels.map((color) => {
-		const colorMap = {
-			"Grundläggande" : "rgba(255, 255, 255, 1)",
-			"Vitt": "rgba(255, 255, 255, 1)",
-			"Gult": "rgba(255, 255, 0, 1)",
-			"Gult_barn" : "rgba(255, 255, 0, 1)",
-			"Orange": "rgba(255, 165, 0, 1)",
-			"Orange_barn" : "rgba(255, 165, 0, 1)",
-			"Grönt": "rgba(0, 128, 0, 1)",
-			"Grönt_barn" : "rgba(0, 128, 0, 1)",
-			"Blått": "rgba(0, 0, 255, 1)",
-			"Blått_barn" : "rgba(0, 0, 255, 1)",
-			"Brunt" : "rgba(139, 69, 19, 1)",
-			"Brunt_barn" : "rgba(139, 69, 19, 1)",
-			"Svart" : "rgba(0, 0, 0, 1)",
-			"1_Dan" : "rgba(255, 215, 0, 1)",
-			"2_Dan" : "rgba(255, 215, 0, 1)",
-			"3_Dan" : "rgba(255, 215, 0, 1)",
+	
+	const labels = Object.keys(beltColorsData).map((name) => {
+		switch (name) {
+			// Add specific cases here if needed
+			case 'Gult_c':
+				return 'Gult '
+			case 'Orange_c':
+				return 'Orange '
+			case 'Grönt_c':
+				return 'Grönt '
+			case 'Blått_c':
+				return 'Blått '
+			case 'Brunt_c':
+				return 'Brunt '
+			default:
+				return name // Default case when no other case matches
 		}
-		return colorMap[color]
+	})
+	const data = Object.values(beltColorsData).map((obj) => {
+		return obj.count
+	})
+
+	const hexToRGBstring = (hex) => {
+		// Ensure the hex code is exactly 6 characters
+		if (hex.length !== 6) {
+			// Default to black if the hex length is not correct
+			return "rgba(0, 0, 0, 1)"
+		} else {
+			// Parse the hex string to extract RGB components
+			const r = parseInt(hex.substring(0, 2), 16) // Extract and convert the red component
+			const g = parseInt(hex.substring(2, 4), 16) // Extract and convert the green component
+			const b = parseInt(hex.substring(4, 6), 16) // Extract and convert the blue component
+	
+			// Return the RGBA string with full opacity
+			return `rgba(${r}, ${g}, ${b}, 1)`
+		}
+	}
+
+
+	const colors = Object.values(beltColorsData).map((obj) => {
+		return hexToRGBstring(obj.color)	
 	})
 
 	const chartData = {
@@ -76,56 +94,64 @@ export default function BeltColorChart({ beltColorsData }) {
 
 	}
 
+
+	const drawBeltLine = (ctx, bar, model, color, offset) => {
+		ctx.save()
+		ctx.strokeStyle = color
+		ctx.lineWidth = bar.height/8
+		ctx.beginPath()
+		ctx.moveTo(bar.x, model.y+(offset*ctx.lineWidth)) 
+		ctx.lineTo(bar.base, model.y+(offset*ctx.lineWidth))
+		ctx.stroke()
+		ctx.restore()
+	}
+
+	const drawChildBelt = (ctx, bar, model) => {
+		ctx.save()
+		ctx.strokeStyle = "white"
+		const barWidth = bar.height/5
+		ctx.lineWidth = bar.height/2 - (1 + barWidth/2)
+		ctx.beginPath()
+		ctx.moveTo(bar.x-1, model.y - (ctx.lineWidth/2)-barWidth/2) 
+		ctx.lineTo(bar.base, model.y - (ctx.lineWidth/2)-barWidth/2)
+		ctx.stroke()
+
+		ctx.beginPath()
+		ctx.moveTo(bar.x-1, model.y + (ctx.lineWidth/2)+barWidth/2) 
+		ctx.lineTo(bar.base, model.y + (ctx.lineWidth/2)+barWidth/2)
+		ctx.stroke()
+		ctx.restore()
+	}
+
 	const horizontalLinePlugin = {
 		id: "horizontalLine",
 		afterDraw: (chart) => {
 			const ctx = chart.ctx
-			console.log(chart)
+			//console.log(chart)
 			chart.data.datasets.forEach((dataset, datasetIndex) => {
 				const meta = chart.getDatasetMeta(datasetIndex)
 
 				meta.data.forEach((bar, index) => {
 			  		const model = bar.tooltipPosition()
 					switch (dataset.barColors[index]) {
-						case "Grundläggande":
-							ctx.fillStyle = "black"
+						case "Gult ":
+						case "Orange ":
+						case "Grönt ":
+						case "Blått ":
+						case "Brunt ":
+							drawChildBelt(ctx, bar, model)
 							break
-						case "Vitt":
-							ctx.fillStyle = "white"
+						case "1 Dan":
+							drawBeltLine(ctx, bar, model, "gold", 0)
 							break
-						case "Gult":
-							ctx.fillStyle = "yellow"
+						case "2 Dan":
+							drawBeltLine(ctx, bar, model, "gold", -1)
+							drawBeltLine(ctx, bar, model, "gold", 1)
 							break
-						case "Orange":
-							ctx.fillStyle = "orange"
-							break
-						case "Grönt":
-							ctx.fillStyle = "green"
-							break
-						case "Blått":
-							ctx.fillStyle = "blue"
-							break
-						case "Brunt":
-							ctx.save()
-							ctx.strokeStyle = "yellow"
-							ctx.lineWidth = 15 
-							ctx.beginPath()
-							ctx.moveTo(bar.x, model.y) 
-							ctx.lineTo(bar.base, model.y)
-							ctx.stroke()
-							ctx.restore()
-							break
-						case "Svart":
-							ctx.fillStyle = "black"
-							break
-						case "1_Dan":
-							ctx.fillStyle = "gold"
-							break
-						case "2_Dan":
-							ctx.fillStyle = "gold"
-							break
-						case "3_Dan":
-							ctx.fillStyle = "gold"
+						case "3 Dan":
+							drawBeltLine(ctx, bar, model, "gold", -2)
+							drawBeltLine(ctx, bar, model, "gold", 0)
+							drawBeltLine(ctx, bar, model, "gold", 2)
 							break
 						default:
 							ctx.fillStyle = "black"
@@ -137,7 +163,7 @@ export default function BeltColorChart({ beltColorsData }) {
 	}
 	return (
 		<div className = {styles.chart}>
-			<Bar data={chartData} options={chartOptions} plugins={[horizontalLinePlugin]}/>
+			<Bar height={300} data={chartData} options={chartOptions} plugins={[horizontalLinePlugin]}/>
 		</div>
 	)
 }
