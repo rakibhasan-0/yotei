@@ -83,14 +83,14 @@ export default function GroupIndex() {
 										<Link to={`/plan/edit/${group.id}`}>
 											<Pencil size={24} color="var(--red-primary)"/>
 										</Link>
-											<div style={{ width: "20px" }}/>
-											<Link to={`./statistics/${group.id}`}>
-												<GraphUp
-													id="statistics-page-button"
-													size="24px"
-													color="var(--red-primary)"
-													style={{ cursor: "pointer" }}
-												/>
+										<div style={{ width: "20px" }}/>
+										<Link to={`./statistics/${group.id}`}>
+											<GraphUp
+												id="statistics-page-button"
+												size="24px"
+												color="var(--red-primary)"
+												style={{ cursor: "pointer" }}
+											/>
 										</Link>
 									</>
 								) } </div>
