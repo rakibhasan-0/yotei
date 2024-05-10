@@ -41,13 +41,9 @@ export default function StatisticsPopUp({groupActivities,dates,averageRating,num
 				}
 			})
 
-			const entries = Object.entries(beltColors);
-
-			// Step 2: Sort the array by the `count` property in descending order
-			entries.sort((a, b) => b[1].count - a[1].count); // Sort based on `count`
-
-			// Step 3: Convert back to object (optional)
-			const sortedBeltColors = Object.fromEntries(entries);
+			const entries = Object.entries(beltColors)
+			entries.sort((a, b) => b[1].count - a[1].count)
+			const sortedBeltColors = Object.fromEntries(entries)
 			setBeltColorsData(sortedBeltColors)
 		}
 		
