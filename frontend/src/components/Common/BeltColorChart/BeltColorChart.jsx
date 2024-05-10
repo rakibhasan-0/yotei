@@ -29,15 +29,15 @@ export default function BeltColorChart({ beltColorsData }) {
 		switch (name) {
 		// Add specific cases here if needed
 		case "Gult_c":
-			return "Gult "
+			return "Gult"
 		case "Orange_c":
-			return "Orange "
+			return "Orange"
 		case "Grönt_c":
-			return "Grönt "
+			return "Grönt"
 		case "Blått_c":
-			return "Blått "
+			return "Blått"
 		case "Brunt_c":
-			return "Brunt "
+			return "Brunt"
 		default:
 			return name // Default case when no other case matches
 		}
@@ -82,6 +82,10 @@ export default function BeltColorChart({ beltColorsData }) {
 		],
 	}
 
+	const childBeltIndicies = Object.values(beltColorsData).map((obj) => {
+		return obj.isChild
+	})
+
 	const chartOptions = {
 		indexAxis: "y",
 		responsive: true,
@@ -91,7 +95,11 @@ export default function BeltColorChart({ beltColorsData }) {
 				beginAtZero: true,
 			},
 		},
-
+		plugins: {
+			horizontalLinePlugin: {
+				childBeltIndicies:  childBeltIndicies,
+			},
+		},
 	}
 
 
@@ -124,23 +132,20 @@ export default function BeltColorChart({ beltColorsData }) {
 	}
 
 	const horizontalLinePlugin = {
-		id: "horizontalLine",
-		afterDraw: (chart) => {
+		id: "horizontalLinePlugin",
+		afterDraw: (chart, args, options) => {
 			const ctx = chart.ctx
-			//console.log(chart)
+			const childBeltIndicies = options.childBeltIndicies || [];
 			chart.data.datasets.forEach((dataset, datasetIndex) => {
 				const meta = chart.getDatasetMeta(datasetIndex)
 
 				meta.data.forEach((bar, index) => {
 					const model = bar.tooltipPosition()
-					switch (dataset.barColors[index]) {
-					case "Gult ":
-					case "Orange ":
-					case "Grönt ":
-					case "Blått ":
-					case "Brunt ":
+					
+					if (childBeltIndicies[index]) {
 						drawChildBelt(ctx, bar, model)
-						break
+					}
+					switch (dataset.barColors[index]) {
 					case "1 Dan":
 						drawBeltLine(ctx, bar, model, "gold", 0)
 						break
