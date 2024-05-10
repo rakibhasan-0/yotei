@@ -175,6 +175,17 @@ ALTER TABLE
 	user_table OWNER TO psql;
 
 --
+-- Name: role; Type: TABLE; Schema: public; Owner: psql
+--
+CREATE TABLE role(
+	role_id INT NOT NULL GENERATED ALWAYS AS IDENTITY UNIQUE,
+	role_name VARCHAR(255) NOT NULL
+);
+
+ALTER TABLE
+	role OWNER TO psql;
+
+--
 -- Name: permission; Type: TABLE; Schema: public; Owner: psql
 --
 CREATE TABLE permission(
@@ -649,6 +660,9 @@ ALTER TABLE
 \ir defaults/users.sql
 \ir defaults/belts.sql 
 \ir defaults/tags.sql 
+\ir defaults/grading_protocols.sql
+\ir defaults/permissions.sql
+\ir defaults/roles.sql
 \ir defaults/techniques.sql
 \ir defaults/workouts.sql
 \ir defaults/exercises.sql
@@ -659,8 +673,6 @@ ALTER TABLE
 \ir defaults/sessionreviews.sql
 \ir defaults/sessionreviewactivities.sql
 \ir defaults/activitylists.sql
-\ir defaults/grading_protocols.sql
-\ir defaults/permissions.sql
 -- Triggers for user
 --
 CREATE OR REPLACE FUNCTION remove_user_references() RETURNS TRIGGER AS $$ 
