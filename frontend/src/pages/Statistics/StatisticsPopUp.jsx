@@ -34,7 +34,7 @@ export default function StatisticsPopUp({groupActivities,dates,averageRating,num
 							colorsCount[identifier]["count"] += activity.count
 						} else {
 							colorsCount[identifier] = {"count":activity.count,
-												  		"color":beltColor.belt_color}
+								"color":beltColor.belt_color}
 						}
 					})
 				}

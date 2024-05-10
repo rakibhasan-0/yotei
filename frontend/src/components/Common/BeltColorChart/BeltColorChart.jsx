@@ -27,19 +27,19 @@ export default function BeltColorChart({ beltColorsData }) {
 	
 	const labels = Object.keys(beltColorsData).map((name) => {
 		switch (name) {
-			// Add specific cases here if needed
-			case 'Gult_c':
-				return 'Gult '
-			case 'Orange_c':
-				return 'Orange '
-			case 'Grönt_c':
-				return 'Grönt '
-			case 'Blått_c':
-				return 'Blått '
-			case 'Brunt_c':
-				return 'Brunt '
-			default:
-				return name // Default case when no other case matches
+		// Add specific cases here if needed
+		case "Gult_c":
+			return "Gult "
+		case "Orange_c":
+			return "Orange "
+		case "Grönt_c":
+			return "Grönt "
+		case "Blått_c":
+			return "Blått "
+		case "Brunt_c":
+			return "Brunt "
+		default:
+			return name // Default case when no other case matches
 		}
 	})
 	const data = Object.values(beltColorsData).map((obj) => {
@@ -76,7 +76,7 @@ export default function BeltColorChart({ beltColorsData }) {
 				borderWidth: 1,
 				data: data,
 				barColors : labels.map((color) => {
-					return color;
+					return color
 				}),
 			},
 		],
@@ -132,29 +132,29 @@ export default function BeltColorChart({ beltColorsData }) {
 				const meta = chart.getDatasetMeta(datasetIndex)
 
 				meta.data.forEach((bar, index) => {
-			  		const model = bar.tooltipPosition()
+					const model = bar.tooltipPosition()
 					switch (dataset.barColors[index]) {
-						case "Gult ":
-						case "Orange ":
-						case "Grönt ":
-						case "Blått ":
-						case "Brunt ":
-							drawChildBelt(ctx, bar, model)
-							break
-						case "1 Dan":
-							drawBeltLine(ctx, bar, model, "gold", 0)
-							break
-						case "2 Dan":
-							drawBeltLine(ctx, bar, model, "gold", -1)
-							drawBeltLine(ctx, bar, model, "gold", 1)
-							break
-						case "3 Dan":
-							drawBeltLine(ctx, bar, model, "gold", -2)
-							drawBeltLine(ctx, bar, model, "gold", 0)
-							drawBeltLine(ctx, bar, model, "gold", 2)
-							break
-						default:
-							ctx.fillStyle = "black"
+					case "Gult ":
+					case "Orange ":
+					case "Grönt ":
+					case "Blått ":
+					case "Brunt ":
+						drawChildBelt(ctx, bar, model)
+						break
+					case "1 Dan":
+						drawBeltLine(ctx, bar, model, "gold", 0)
+						break
+					case "2 Dan":
+						drawBeltLine(ctx, bar, model, "gold", -1)
+						drawBeltLine(ctx, bar, model, "gold", 1)
+						break
+					case "3 Dan":
+						drawBeltLine(ctx, bar, model, "gold", -2)
+						drawBeltLine(ctx, bar, model, "gold", 0)
+						drawBeltLine(ctx, bar, model, "gold", 2)
+						break
+					default:
+						ctx.fillStyle = "black"
 					}
 					
 				})
