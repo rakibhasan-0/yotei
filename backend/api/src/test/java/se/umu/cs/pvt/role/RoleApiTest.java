@@ -124,8 +124,11 @@ public class RoleApiTest {
 
 			roleList.add(originalRole);
 			
-			roleController.updateRole(0L, newRole);
+			
 
+			assertEquals(new ResponseEntity<>(
+				originalRole, HttpStatus.OK), 
+				roleController.updateRole(0L, newRole));
 			assertTrue(roleList.get(0).getRoleName().equals(updatedName));
 		} catch (InvalidRoleNameException e) {
 			fail();
