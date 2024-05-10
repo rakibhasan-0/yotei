@@ -57,7 +57,7 @@ const GroupRow = ({group, onToggle}) => {
  * Parent handles logic.
  * 
  * If testFetchMethod is used, group picker will instead try to display 
- * what testFetchMethod returns. To fetch from the database dont 
+ * what testFetchMethod returns. To fetch from the database don't 
  * declare testFetchMethod when creating GroupPicker.
  * 
  * Example of using testFetchMehtod.
@@ -97,7 +97,7 @@ const GroupRow = ({group, onToggle}) => {
     } 
  * 
  * 
- * @author Griffin (Group 2), Team Mango (Group 4) (2024-05-06) 
+ * @author Griffin (Group 2), Team Mango (Group 4) (2024-05-10) 
  * @since 2023-05-17
  * @version 1.0
  * @param id An id for group picker

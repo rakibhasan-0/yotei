@@ -1,21 +1,34 @@
-import {React} from "react"
+import {React, useState} from "react"
 import styles from "./FilterPlan.module.css"
 import FilterContainer from "../../components/Common/Filter/FilterContainer/FilterContainer"
 import DatePicker from "../../components/Common/DatePicker/DatePicker"
 import GroupPicker from "../../components/Plan/GroupPicker"
+import CheckBox from "../../components/Common/CheckBox/CheckBox"
 
 /** THIS IS STILL A WORK IN PROGESS, ALL TESTS AND FUNCTIONALITY IS NOT IMPLEMENTED.
  * Filter component for plans.
  * 
  * Props:
  *     prop1 @type {number}  - An id to identify the component
- *     prop2 @type {object}  - A props object containing state for the filter.
-*
-* @author Griffin, Tomato (Group 6) 
+ *     prop2 @type {object}  - A props object containing state for the filter. 
+ *
+ * TODO explain the parameters for the components better.
+ * @param 		@type { Int? } 	      id				A unique ID for the component. ?
+ * @param		@type { Array? }      chosenGroups		???
+ * @param		@type { Array? } 	  setChosenGroups	Callback function for updating the selectedPlans variable in PlanIndex.jsx.
+ * @paraam		@type { Date Array? } dates				???
+ * @param		@type { Date? }		  onDatesChange		???
+ * @param		@type { Date? }		  callbackFunction	A function that will be called for each press of the checkbox.
+ * (Currently the callbackFunction is used to toggle filtering by only "my groups" or by "all groups".)
+ * 
+* @author Griffin, Tomato (Group 6) , Team Mango (Group 4) (2024-05-10)
 * @version 2.1
 * @since 2023-05-08
+* Updates: 2024-05-10: Added a checkbox (with a feature toggle, since it does not work currently) for filtering by only my groups or all groups.
 */
-export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, onDatesChange}) {
+export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, onDatesChange, callbackFunction}) {
+
+	const [checkBoxIsEnabled] = useState(false) //FEATURE TOGGLE
 
 	const onToggle = (checked, chosenGroup) => setChosenGroups(prev => {
 		if(prev) {
@@ -50,6 +63,16 @@ export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, o
 						<DatePicker onChange={toChanged} selectedDate={dates.to} id="endDatePicker" minDate={dates.from}/>
 					</div>
 				</div>
+
+				{/* Checkbox for only showing this user's groups. */}
+				{ checkBoxIsEnabled && ( //FEATURE TOGGLE
+				<div className={styles.checkBoxSpace} >
+					<CheckBox id={"seeOnlyMyGroups"} onClick={() => {callbackFunction()}} label={"Visa bara mina grupper"} checked={true} />
+					{/* The callbackFunction() call here toggles a boolean variable stored in PlanIndex.jsx. */}
+					{/* TODO: In order to filter properly, this part here and probably GroupPicker.jsx must be updated, as well as PlanIndex.jsx.*/}
+				</div>
+				)
+				}
 
 				<GroupPicker id={42} onToggle={(c, g) => {onToggle(c, g)}} states={chosenGroups}/>
 

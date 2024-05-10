@@ -12,15 +12,16 @@ import { useCookies } from "react-cookie"
 import { HTTP_STATUS_CODES, setError } from "../../utils"
 
 /**
- * PlanIndex is the page that displays group plannings. Contains of a 
+ * PlanIndex is the page that displays group plannings. Contains a 
  * FilterPlan-component and a SessionList. Fetches and filters sessions 
  * depending on what is selected as selected plans(groups) in the FilterPlan-component.
  * If nothing is selected, the default is from todays date until inf.
  * TODO: PlanIndex is error handling on fetches(react toast).
  * 
- * @author Griffin, Team Durian (Group 3) (2024-04-23)
+ * @author Griffin, Team Durian (Group 3) (2024-04-23), Team Mango (Group 4) (2024-05-10)
  * @version 1.0
  * @since 2023-05-24
+ * Updates: 2024-05-10: Added a toggle for a new checkbox. The filtering part does not work yet.
  */
 export default function PlanIndex() {
 	const { token } = useContext(AccountContext)
@@ -32,8 +33,22 @@ export default function PlanIndex() {
 	const twoYears = new Date()
 	twoYears.setFullYear(twoYears.getFullYear()+2)
 
+	const [ onlyMyGroups, setOnlyMyGroups ] = useState(true) //Variable for if to filter by only this user's groups.
 
 	const [ loading, setLoading ] = useState(true)
+
+	//This function needs to be high up in the code or it will be called all the time instead of only once when you press the checkbox on the screen.
+	/**
+	 * toggleOnlyMyGroups() - Toggles the boolean variable 'onlyMyGroups'.
+	 * If the variable is true, it gets set to false, and if it is false it gets set to true.
+	 */
+	function toggleOnlyMyGroups() {
+		if (onlyMyGroups) {
+			setOnlyMyGroups(false)
+		} else {
+			setOnlyMyGroups(true)
+		}
+	}
 	
 	// Filtering props
 	const [ selectedPlans, setSelectedPlans ] = useState(cookies["plan-filter"] ? cookies["plan-filter"].plans : [])
@@ -108,7 +123,9 @@ export default function PlanIndex() {
 
 		setLoading(false)
 
-		function filterSessions(sessions, args) {
+		function filterSessions(sessions, args) { //TODO this is spammed.
+			//console.log(sessions[0]) //TODO this is the wrong part of the code to do the filtering in it seems.
+			//TODO: We need to filter in FilterPlan or GroupPicker instead most likely. Sessions is too late.
 			return sessions.filter(session => {
 				const sessionDate = new Date(session.date).getTime()
 				const fromDate = new Date(args.from).getTime()
@@ -117,7 +134,7 @@ export default function PlanIndex() {
 				return sessionDate >= fromDate && sessionDate <= toDate
 			})
 		}
-	}, [ dates.to, dates.from, selectedPlans ])
+	}, [ dates.to, dates.from, selectedPlans ]) //TODO we could also register the checkbox by usestate here...
 
 	
 
@@ -195,8 +212,12 @@ export default function PlanIndex() {
 				onDatesChange={handleDatesChange}
 				chosenGroups={selectedPlans}
 				dates={dates}
+				callbackFunction={toggleOnlyMyGroups} //Register callback function.
 			>
 			</FilterPlan>
+
+			{//onlyMyGroups ? <div> true </div> : <div> false </div> //TEST TODO REMOVE!
+			}
 
 			{loading ? <Spinner /> : <div>
 				{
