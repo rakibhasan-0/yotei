@@ -50,11 +50,11 @@
         {
             "category_name": "RENRAKU WAZA",
             "techniques": [
-                { "text": "1. Försök till stryptag framifrån - Försök till kravattgrepp från sidan \tJodan soto uke - Jodan chikai uke, kawashi, koshi otoshi, ude henkan gatame" }
+                { "text": "1. Försök till stryptag framifrån - Försök till kravattgrepp från sidan \n\nJodan soto uke - Jodan chikai uke, kawashi, koshi otoshi, ude henkan gatame" }
             ]
         },
         {
-            "category_name": "YAKUSOKU GEIKO_OR_RANDORI",
+            "category_name": "YAKUSOKU GEIKO OR RANDORI",
             "techniques": [
                 { "text": "1. Försvar mot en motståndare" }
             ]
