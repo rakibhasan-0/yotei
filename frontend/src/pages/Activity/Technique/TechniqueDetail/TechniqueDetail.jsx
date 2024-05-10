@@ -148,6 +148,7 @@ function TechniqueDetail({ id }) {
 						/>
 					</Link>
 					<Trash
+						id="technique-delete-button"
 						size="24px"
 						color="var(--red-primary)"
 						style={{ cursor: "pointer" }}
