@@ -49,7 +49,6 @@ function getTechniqueNameList(gradingProtocolJSON) {
 		// Check if element's nextTechnique is null and index is the last element
 		else if (element.nextTechnique === null && index === chronologicalData.length - 1) {
 			element.nextTechnique = "---"
-			console.log(element.nextTechnique)
 		}
 	})
 	return chronologicalData
@@ -84,8 +83,13 @@ export default function DuringGrading() {
 	const [currentIndex, setCurrentIndex] = useState(0)
 	const [showPopup, setShowPopup] = useState(false)
 	const [examinees, setExaminees] = useState(undefined)
-	const [pairs, setPairs] = useState()
-	const grading_id = 1 // temp, should be collected from url
+	const [pairs, setPairs] = useState([])
+	const grading_id = 3 // temp, should be collected from url
+
+	// Get info about grading
+	// TODO: Loads everytime the button is pressed. Should only happen once at start. useEffect?
+	const techniqueNameList = getTechniqueNameList(ProtocolYellow)
+	const categoryIndexMap = getCategoryIndices(techniqueNameList)
 
 	// Go to summary when the index is equal to length. Maybe change the look of the buttons.
 	const goToNextTechnique = () => {
@@ -95,18 +99,16 @@ export default function DuringGrading() {
 		setCurrentIndex(currentIndex === 0 ? currentIndex : currentIndex - 1)
 	}
 
+	// Run first time and fetch all examinees in this grading
 	useEffect(() => {
 		(async () => {
-			//setIsLoadingGroups(true)
 			try {
 				const response = await fetch("/api/examination/examinee/all", {})
 				if (response.status === 404) {
 					console.log("404")
-					//setIsLoadingGroups(false)
 					return
 				}
 				if (!response.ok) {
-					//setIsLoadingGroups(false)
 					console.log("could not fetch examinees")
 					throw new Error("Could not fetch examinees")
 				}
@@ -114,29 +116,24 @@ export default function DuringGrading() {
 				
 				const current_grading_examinees = getExamineesCurrentGrading(all_examinees)
 				setExaminees(current_grading_examinees)
-				console.log("Examinees in this grading: ", current_grading_examinees)
-				
-				//setIsLoadingGroups(false)
+				console.log("Fetched examinees in this grading: ", current_grading_examinees)
 			} catch (ex) {
-				//setIsLoadingGroups(false)
 				setErrorToast("Kunde inte hämta alla utövare")
 				console.error(ex)
 			}
 		})()
 	}, [] )
 
+	// Run after examinees is fetched and match pairs 
 	useEffect(() => {
 		if(examinees !== undefined){ // To prevent running first time. Is there a better way to chain api calls?
 			(async () => {
 				try {
-					//setIsLoadingWorkouts(true)
 					const response = await fetch("/api/examination/pair/all", {})
 					if (response.status === 204) {
-						//setIsLoadingWorkouts(false)
 						return
 					}
 					if (!response.ok) {
-						//setIsLoadingWorkouts(false)
 						throw new Error("Could not fetch pairs")
 					}
 					const pairs_json = await response.json()
@@ -144,10 +141,8 @@ export default function DuringGrading() {
 					// Get only pairs in this grading
 					const pair_names_current_grading = getPairsInCurrrentGrading(pairs_json)
 					setPairs(pair_names_current_grading)
-					console.log("Pairs in this examination: ", pair_names_current_grading)
-					//setIsLoadingWorkouts(false)
+					console.log("Fetched pairs in this examination: ", pair_names_current_grading)
 				} catch (ex) {
-					//setIsLoadingWorkouts(false)
 					setErrorToast("Kunde inte hämta alla par")
 					console.error(ex)
 				}
@@ -158,12 +153,7 @@ export default function DuringGrading() {
 	}, [examinees])
 
 
-	// TODO: Loads everytime the button is pressed. Should only happen once at start. useEffect?
-	const techniqueNameList = getTechniqueNameList(ProtocolYellow)
-	const categoryIndexMap = getCategoryIndices(techniqueNameList)
 
-	console.log(categoryIndexMap)
-	console.log(pairs)
 
 	return (
 		<div className={styles.container}>
@@ -173,14 +163,15 @@ export default function DuringGrading() {
 				nextTechniqueTitle={techniqueNameList[currentIndex].nextTechnique.text}
 				mainCategoryTitle={techniqueNameList[currentIndex].categoryName}>
 
-			</TechniqueInfoPanel>			
+			</TechniqueInfoPanel>
+			{/* All pairs */}			
 			<div className={styles.scrollableContainer}>
 				{pairs.map((item, index) => (
 					<ExamineePairBox 
 						key={index}
 						rowColor={index % 2 === 0 ? "#FFFFFF" : "#F8EBEC"}
-						examineeLeftName={item.second} 
-						examineeRightName={item.second} pairNumber={index+1}>
+						examineeLeftName={item.nameLeft} 
+						examineeRightName={item.nameRight} pairNumber={index+1}>
 					</ExamineePairBox>
 				))}
 			</div>
@@ -240,7 +231,9 @@ export default function DuringGrading() {
 	/**
 	 * 
 	 * @param {Array} pairs_json Array with all pairs in all gradings
-	 * @returns Array with all pairs in this grading, presented by name, ie {name1, name2}
+	 * @returns Array with all pairs in this grading, presented by name, ie {nameLeft, nameRight}
+	 * 
+	 * TODO: Does not handle single examinee, ie an examinee not included in a pair
 	 */
 	function getPairsInCurrrentGrading(pairs_json) {
 		const pair_names_current_grading = []
@@ -250,7 +243,7 @@ export default function DuringGrading() {
 			if (examinee1 !== undefined || examinee2 !== undefined) { // Only add if something is found
 				const name1 = examinee1 ? examinee1.name : '' // If only one name found
 				const name2 = examinee2 ? examinee2.name : ''
-				pair_names_current_grading.push({ name1, name2 })
+				pair_names_current_grading.push({ nameLeft: name1, nameRight: name2 })
 			}
 		})
 		return pair_names_current_grading
