@@ -6,6 +6,7 @@ import TechniqueInfoPanel from "../../../components/Grading/PerformGrading/Techn
 import ProtocolYellow from "./yellowProtocolTemp.json"
 
 
+
 /**
  * Get all techniques from grading protocol and 
  * returns array that could be iterated in order
@@ -76,7 +77,9 @@ export default function DuringGrading() {
 	//const { examinationID } = useParams()
 	//const { token } = useContext(AccountContext)
 	const [currentIndex, setCurrentIndex] = useState(0)
-	const [examinees, setExaminees] = useState()
+	const [examinees, setExaminees] = useState(undefined)
+	const [pairs, setPairs] = useState()
+	const grading_id = 1 // temp, should be collected from url
 
 	const goToNextTechnique = () => {
 		setCurrentIndex(currentIndex + 1)
@@ -97,42 +100,51 @@ export default function DuringGrading() {
 					console.log("could not fetch examinees")
 					throw new Error("Could not fetch examinees")
 				}
-				console.log("Success fetch groups", response)
-				setExaminees(await response.json())
+				const all_examinees = await response.json()
+				
+				const current_grading_examinees = getExamineesCurrentGrading(all_examinees)
+				setExaminees(current_grading_examinees)
+				console.log("Examinees in this grading: ", current_grading_examinees)
+				
 				//setIsLoadingGroups(false)
 			} catch (ex) {
 				//setIsLoadingGroups(false)
-				setErrorToast("Kunde inte hämta alla grupper")
+				setErrorToast("Kunde inte hämta alla utövare")
 				console.error(ex)
 			}
 		})()
-	}, [])
+	}, [] )
 
 	useEffect(() => {
-		/*
-		(async () => {
-			try {
-				//setIsLoadingWorkouts(true)
-				
-				const response = await fetch("/api/workouts/all", { headers: { token } })
-				if (response.status === 204) {
-					setIsLoadingWorkouts(false)
-					return
+		if(examinees !== undefined){ // To prevent running first time. Is there a better way to chain api calls?
+			(async () => {
+				try {
+					//setIsLoadingWorkouts(true)
+					const response = await fetch("/api/examination/pair/all", {})
+					if (response.status === 204) {
+						//setIsLoadingWorkouts(false)
+						return
+					}
+					if (!response.ok) {
+						//setIsLoadingWorkouts(false)
+						throw new Error("Could not fetch pairs")
+					}
+					const pairs_json = await response.json()
+
+					// Get only pairs in this grading
+					const pair_names_current_grading = getPairsInCurrrentGrading(pairs_json)
+					setPairs(pair_names_current_grading)
+					console.log("Pairs in this examination: ", pair_names_current_grading)
+					//setIsLoadingWorkouts(false)
+				} catch (ex) {
+					//setIsLoadingWorkouts(false)
+					setErrorToast("Kunde inte hämta alla par")
+					console.error(ex)
 				}
-				if (!response.ok) {
-					setIsLoadingWorkouts(false)
-					throw new Error("Could not fetch workouts")
-				}
-				setWorkouts(await response.json())
-				setIsLoadingWorkouts(false)
-			} catch (ex) {
-				setIsLoadingWorkouts(false)
-				setErrorToast("Kunde inte hämta alla pass")
-				console.error(ex)
-			}
-		})()
-		*/
-		console.log(examinees)
+			})()
+		}
+		
+		
 	}, [examinees])
 
 
@@ -140,7 +152,7 @@ export default function DuringGrading() {
 	const techniqueNameList = getTechniqueNameList(ProtocolYellow)
 	const categoryIndexMap = getCategoryIndices(techniqueNameList)
 
-	console.log(categoryIndexMap)
+	//console.log(categoryIndexMap)
 
 	return (
 		<div>
@@ -152,4 +164,38 @@ export default function DuringGrading() {
 			<button onClick={goToNextTechnique}>Next</button>
 		</div>
 	)
+
+	/**
+	 * 
+	 * @param {Array} all_examinees All examinees from all gradings
+	 * @returns {Array} All examiees in this grading
+	 */
+	function getExamineesCurrentGrading(all_examinees) {
+		const current_grading_examinees = []
+		all_examinees.forEach((examinee) => {
+			if (examinee.grading_id == grading_id) {
+				current_grading_examinees.push(examinee)
+			}
+		})
+		return current_grading_examinees
+	}
+
+	/**
+	 * 
+	 * @param {Array} pairs_json Array with all pairs in all gradings
+	 * @returns Array with all pairs in this grading, presented by name, ie {name1, name2}
+	 */
+	function getPairsInCurrrentGrading(pairs_json) {
+		const pair_names_current_grading = []
+		pairs_json.forEach((pair) => {
+			const examinee1 = examinees.find(item => item.examinee_id === pair.examinee_1_id)
+			const examinee2 = examinees.find(item => item.examinee_id === pair.examinee_2_id)
+			if (examinee1 !== undefined || examinee2 !== undefined) { // Only add if something is found
+				const name1 = examinee1 ? examinee1.name : '' // If only one name found
+				const name2 = examinee2 ? examinee2.name : ''
+				pair_names_current_grading.push({ name1, name2 })
+			}
+		})
+		return pair_names_current_grading
+	}
 }
