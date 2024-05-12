@@ -8,6 +8,7 @@ import ExamineePairBox from "../../../components/Grading/PerformGrading/Examinee
 import styles from "./DuringGrading.module.css"
 import { ArrowRight, ArrowLeft } from "react-bootstrap-icons"
 import {Link} from "react-router-dom"
+import {setError as setErrorToast} from "../../../utils" 
 
 // Temp
 import ProtocolYellow from "./yellowProtocolTemp.json"
@@ -79,6 +80,11 @@ function getCategoryIndices(dataArray) {
 	return res
 }
 
+/**
+ * Main function that is rendered for during grading
+ * 
+ *  @author Team Apelsin (2024-05-12)
+ */
 export default function DuringGrading() {
 	const [currentIndex, setCurrentIndex] = useState(0)
 	const [showPopup, setShowPopup] = useState(false)
@@ -152,9 +158,6 @@ export default function DuringGrading() {
 		
 	}, [examinees])
 
-
-
-
 	return (
 		<div className={styles.container}>
 			<TechniqueInfoPanel
@@ -217,6 +220,8 @@ export default function DuringGrading() {
 	 * 
 	 * @param {Array} all_examinees All examinees from all gradings
 	 * @returns {Array} All examiees in this grading
+	 * 
+	 *  @author Team Apelsin (2024-05-12)
 	 */
 	function getExamineesCurrentGrading(all_examinees) {
 		const current_grading_examinees = []
@@ -233,6 +238,8 @@ export default function DuringGrading() {
 	 * @param {Array} pairs_json Array with all pairs in all gradings
 	 * @returns Array with all pairs in this grading, presented by name, ie {nameLeft, nameRight}
 	 * 
+	 * @author Team Apelsin (2024-05-12)
+	 * 
 	 * TODO: Does not handle single examinee, ie an examinee not included in a pair
 	 */
 	function getPairsInCurrrentGrading(pairs_json) {
@@ -241,8 +248,8 @@ export default function DuringGrading() {
 			const examinee1 = examinees.find(item => item.examinee_id === pair.examinee_1_id)
 			const examinee2 = examinees.find(item => item.examinee_id === pair.examinee_2_id)
 			if (examinee1 !== undefined || examinee2 !== undefined) { // Only add if something is found
-				const name1 = examinee1 ? examinee1.name : '' // If only one name found
-				const name2 = examinee2 ? examinee2.name : ''
+				const name1 = examinee1 ? examinee1.name : "" // If only one name found
+				const name2 = examinee2 ? examinee2.name : ""
 				pair_names_current_grading.push({ nameLeft: name1, nameRight: name2 })
 			}
 		})
