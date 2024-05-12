@@ -31,6 +31,8 @@ public class ExaminationApiTest {
     private ExamineePairRepository examineePairRepository;
     @MockBean
     private ExamineeRepository examineeRepository;
+    @MockBean
+    private ExaminationResultRepository resultRepository;
 
     @Autowired
     private ExaminationController examinationController;
@@ -38,12 +40,14 @@ public class ExaminationApiTest {
     List<Grading> gradingList;
     List<Examinee> examineeList;
     List<ExamineePair> examineePairList;
+    List<ExaminationResult> resultList;
 
     @BeforeEach
     void init() {
         this.gradingList = new ArrayList<>();
         this.examineeList = new ArrayList<>();
         this.examineePairList = new ArrayList<>();
+        this.resultList = new ArrayList<>();
 
         this.gradingList.add(new Grading(1L, 1L, 1L, 1, 1, new Date()));
         this.gradingList.add(new Grading(2L, 1L, 1L, 1, 1, new Date()));
@@ -53,14 +57,18 @@ public class ExaminationApiTest {
         this.examineeList.add(new Examinee(2L, "Test Testman", 1L));
         this.examineeList.add(new Examinee(3L, "Hannes Testsson", 3L));
 
-
         this.examineePairList.add(new ExamineePair(1L, 1L, 2L));
         this.examineePairList.add(new ExamineePair(2L, 2L, 1L));
         this.examineePairList.add(new ExamineePair(3L, 3L, 3L));
 
+        this.resultList.add(new ExaminationResult(1L, 1L, "Test Class", null));
+        this.resultList.add(new ExaminationResult(2L, 2L, "Testing Classing", true));
+        this.resultList.add(new ExaminationResult(3L, 3L, "Class Testing", false));
+
         Mockito.when(gradingRepository.findAll()).thenReturn(gradingList);
         Mockito.when(examineeRepository.findAll()).thenReturn(examineeList);
         Mockito.when(examineePairRepository.findAll()).thenReturn(examineePairList);
+        Mockito.when(resultRepository.findAll()).thenReturn(resultList);
     }
 
     /**
@@ -92,6 +100,12 @@ public class ExaminationApiTest {
     @Test
     void testGetAllExamineePairs() {
         int actual = examineePairRepository.findAll().size();
+        assertEquals(3, actual);
+    }
+
+    @Test
+    void testGetAllResults() {
+        int actual = resultRepository.findAll().size();
         assertEquals(3, actual);
     }
 }

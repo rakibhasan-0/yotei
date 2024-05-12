@@ -27,6 +27,7 @@ import {setError as setErrorToast} from "../../utils"
  * @author Team Tomato (Group 6)
  * @author Team Kiwi (Group 2) (2024-05-08)
  * Removed option to filter by date created
+ * Fixed so that search text is set and saved 
  * @since May 9, 2023
  * @version 1.2
  */
@@ -40,10 +41,19 @@ export default function WorkoutIndex() {
 	const [ cookies, setCookie ] = useCookies(["workout-filter"])
 	const [ searchErrorMessage, setSearchErrorMessage ] = useState("")
 	const [ loading, setLoading ] = useState(true)
-
-
 	const [ filterFavorites, setFilterFavorites ] = useState(false)
-	useEffect(fetchWorkouts, [filterFavorites, searchText, token, userId, tags])
+
+	// store search text
+	useEffect(() =>{
+		setSearchText(sessionStorage.getItem("searchText") || "")
+	},[])
+
+	useEffect(() => {
+		sessionStorage.setItem("searchText", searchText)
+	},[searchText])
+
+
+	useEffect(fetchWorkouts, [filterFavorites, searchText, token, userId, tags, cookies, setCookie])
 	return (
 		<>
 			<div id="search-area">
