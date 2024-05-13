@@ -81,7 +81,7 @@ DROP TABLE IF EXISTS workout_tag CASCADE;
 DROP TABLE IF EXISTS examination_grading CASCADE;
 DROP TABLE IF EXISTS examination_examinee CASCADE;
 DROP TABLE IF EXISTS examination_examinee_pair CASCADE;
-DROP TABLE IF EXISTS examination_result_technique CASCADE;
+DROP TABLE IF EXISTS examination_result CASCADE;
 DROP TABLE IF EXISTS examination_comment CASCADE;
 DROP TABLE IF EXISTS grading_protocol CASCADE;
 
