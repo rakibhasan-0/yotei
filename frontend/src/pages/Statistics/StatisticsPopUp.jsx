@@ -65,23 +65,26 @@ export default function StatisticsPopUp({groupActivities,dates,averageRating,num
 				<img src="/Statistics.svg" />
 			</button>
 
-			<Popup title={"Sammanställning av tillfällen"} id="statistics-popup" isOpen={showPopup} setIsOpen={setShowPopup}>
-				<StarRatings rating={averageRating} starRatedColor="#ffcc00" numberOfStars={5} name='rating' starDimension="50px" starSpacing="4px" />
-				<p style = {{color: "#b9b0b0"}}>
-						Genomsnittligt betyg {averageRating}/5 för {numberOfSessions} tillfällen från {<br />} datum {startDate} till {endDate}
-				</p>
-				<p style = {{ fontSize: "25px" }}>
-						Bält-tekniker
-				</p>
-				<div style={{ overflowY: "scroll" }}>
-					<BeltColorChart beltColorsData={beltColorsData}/> 
+			<Popup title={"Sammanställning av tillfällen"} id="statistics-popup" isOpen={showPopup} setIsOpen={setShowPopup} >
+				<div className={style.statisticsPopupContainer}>
+					<StarRatings
+						rating={averageRating}
+						starRatedColor="#ffcc00"
+						numberOfStars={5}
+						name="rating"
+						starDimension="50px"
+						starSpacing="4px"
+					/>
+					<p style={{ color: "#b9b0b0" }}>
+						Genomsnittligt betyg {averageRating}/5 för {numberOfSessions}{" "}
+						tillfällen från {<br />} datum {startDate} till {endDate}
+					</p>
+					<p style={{ fontSize: "25px" }}>Bält-tekniker</p>
+					<div style={{ overflowY: "auto" }}>
+						<BeltColorChart beltColorsData={beltColorsData} />
+					</div>
 				</div>
-					
 			</Popup>
-
-
 		</div>
-
 	)
 }
-

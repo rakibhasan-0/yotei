@@ -29,9 +29,9 @@ public class ExamineePair {
     /**
      * Data constructor for ExamineePair.
      * 
-     * @param examinee_pair_id Id of the grading.
-     * @param examinee_1_id Id of the creator of the grading.
-     * @param examinee_2_id Id of the belt to grade.
+     * @param examinee_pair_id Id of the examinee pair.
+     * @param examinee_1_id Id of the first examinee.
+     * @param examinee_2_id Id of the second examinee.
      */
     public ExamineePair(Long examinee_pair_id, Long examinee_1_id, Long examinee_2_id){
         this.examinee_pair_id = examinee_pair_id;
