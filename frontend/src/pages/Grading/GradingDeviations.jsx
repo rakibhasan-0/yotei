@@ -6,6 +6,9 @@ import styles from "./GradingDeviations.module.css"
 import Divider from "../../components/Common/Divider/Divider"
 import testData from "./yellowProtocolTemp.json";
 import Container from "./GradingDeviationContainer"
+import { useParams } from "react-router-dom"
+import {HTTP_STATUS_CODES, setError, setSuccess} from "../../utils"
+import { AccountContext } from "../../context"
 
 
 /**
@@ -22,9 +25,34 @@ import Container from "./GradingDeviationContainer"
 export default function GradingDeviations() {
     const [toggled, setToggled] = useState(false);
     const [data, setData] = useState([]);
+    const { userId } = useParams()
+
+    const [errorStateMsg, setErrorStateMsg] = useState("")
+
+    const context = useContext(AccountContext)
+
+	const {token} = context
 
     useEffect(() => {
         setData(testData.categories);
+        const fetchData = async() => {
+            const requestOptions = {
+				headers: {"Content-type": "application/json", token: context.token}
+			}
+
+            const response = await fetch(`/api/examination/examinee/all`, requestOptions).catch(() => {
+				setErrorStateMsg("Serverfel: Kunde inte ansluta till servern.")
+				return
+			})
+
+            if(response.status != HTTP_STATUS_CODES.OK){
+				setErrorStateMsg("Kunde inte hämta examinee's. Felkod: " + response.status)
+			} else {
+				const json = await response.json()
+				console.log(json)
+			}
+        }
+        fetchData()
     }, []);
 
     function getActivityContainer(exercises) {
