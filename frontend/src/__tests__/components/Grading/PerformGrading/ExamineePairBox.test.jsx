@@ -12,8 +12,8 @@ describe("ExamineePairBox Testing", () => {
 		render(
 			<ExamineePairBox 
 				id={"ExamineePairBox"}
-				examineeLeftName={testTextLeft}
-				examineeRightName={testTextRight}
+				leftExaminee={testTextLeft}
+				rightExaminee={testTextRight}
 			/>
 		)
 		expect(screen.getByTestId("ExamineeLeftNameId")).toHaveTextContent(testTextLeft)
@@ -51,8 +51,8 @@ describe("ExamineePairBox Testing", () => {
 			<ExamineePairBox
 				id={"ExamineePairBox"}
 				pairNumber={testPairNumber}
-				examineeLeftName={testTextLeft}
-				examineeRightName={testTextRight}
+				leftExaminee={testTextLeft}
+				rightExaminee={testTextRight}
 				rowColor={testColorHexColor}
 			/>
 		)

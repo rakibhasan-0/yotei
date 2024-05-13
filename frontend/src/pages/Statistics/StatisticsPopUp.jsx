@@ -24,16 +24,27 @@ export default function StatisticsPopUp({groupActivities,dates,averageRating,num
 	useEffect(() => {
 		// Function to calculate the amount of techniques by belt color
 		const calculateBeltColorsData = () => {
-			const colorsCount = {}
+			const beltColors = {}
 			groupActivities.forEach(activity => {
+				
 				if(activity.type == "technique") {
 					activity.beltColors.forEach(beltColor => {
-						const color = beltColor.belt_name
-						colorsCount[color] = (colorsCount[color] || 0) + activity.count
+						const identifier = beltColor.belt_name + (beltColor.is_child ? "_c" : "")
+						if (beltColors[identifier]) {
+							beltColors[identifier]["count"] += activity.count
+						} else {
+							beltColors[identifier] = {"count":activity.count,
+								"color":beltColor.belt_color,
+								"isChild":beltColor.is_child}
+						}
 					})
 				}
 			})
-			setBeltColorsData(colorsCount)
+
+			const entries = Object.entries(beltColors)
+			entries.sort((a, b) => b[1].count - a[1].count)
+			const sortedBeltColors = Object.fromEntries(entries)
+			setBeltColorsData(sortedBeltColors)
 		}
 		
 		// Call the function to calculate belt colors data when groupActivities change
@@ -54,23 +65,26 @@ export default function StatisticsPopUp({groupActivities,dates,averageRating,num
 				<img src="/Statistics.svg" />
 			</button>
 
-			<Popup title={"Sammanställning av tillfällen"} id="statistics-popup" isOpen={showPopup} setIsOpen={setShowPopup}>
-				<StarRatings rating={averageRating} starRatedColor="#ffcc00" numberOfStars={5} name='rating' starDimension="50px" starSpacing="4px" />
-				<p style = {{color: "#b9b0b0"}}>
-						Genomsnittligt betyg {averageRating}/5 för {numberOfSessions} tillfällen från {<br />} datum {startDate} till {endDate}
-				</p>
-				<p style = {{ fontSize: "25px" }}>
-						Bält-tekniker
-				</p>
-				<div style={{ overflowY: "auto" }}>
-					<BeltColorChart beltColorsData={beltColorsData} /> 
+			<Popup title={"Sammanställning av tillfällen"} id="statistics-popup" isOpen={showPopup} setIsOpen={setShowPopup} >
+				<div className={style.statisticsPopupContainer}>
+					<StarRatings
+						rating={averageRating}
+						starRatedColor="#ffcc00"
+						numberOfStars={5}
+						name="rating"
+						starDimension="50px"
+						starSpacing="4px"
+					/>
+					<p style={{ color: "#b9b0b0" }}>
+						Genomsnittligt betyg {averageRating}/5 för {numberOfSessions}{" "}
+						tillfällen från {<br />} datum {startDate} till {endDate}
+					</p>
+					<p style={{ fontSize: "25px" }}>Bält-tekniker</p>
+					<div style={{ overflowY: "auto" }}>
+						<BeltColorChart beltColorsData={beltColorsData} />
+					</div>
 				</div>
-					
 			</Popup>
-
-
 		</div>
-
 	)
 }
-

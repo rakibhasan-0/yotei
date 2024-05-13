@@ -8,14 +8,28 @@ import style from "./FilterStatistics.module.css"
 
 /**
  * 
- * A component for filtering statistics.
+ * A component for filtering statistics.It contains filters for dates, belts, exercises and kihon.
+ * 
+ * Example usage:
+ * 
+ * <FilterStatistics 
+ * 		onToggleExercise={onToggleExercise}
+ * 		onToggleKihon={onToggleKihon}
+ * 		onDateChanges={onDateChanges}
+ * 		onToggleBelts={onToggleBelts}
+ * 		onClearBelts={onClearBelts}
+ * 		belts={belts}
+ * 		dates={dates}
+ * />
+ * 
  * @param {function} onToggleExercise - Function to toggle exercises.
  * @param {function} onToggleKihon - Function to toggle kihon.
  * @param {function} onDateChanges - Function to change dates.
  * @param {function} onToggleBelts - Function to toggle belts.
  * @param {function} onClearBelts - Function to clear belts.
- * @param {object} belts - Object containing belts.
- * @param {object} dates - Object containing dates.
+ * @param {object} belts - Object containing selected belts.
+ * @param {object} dates - Object containing selected dates.
+ * 
  * @returns A filter for statistics.
  * @version 1.0
  * @since 2024-05-08
