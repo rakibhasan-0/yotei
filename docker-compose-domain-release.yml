@@ -13,7 +13,7 @@ services:
       - gateway
 
   certbot:
-    image: certbot/certbot:$TAG
+    image: certbot/certbot:latest
     volumes:
       - certificate:/etc/letsencrypt/:rw
       - certbotwww:/var/www/certbot/:rw

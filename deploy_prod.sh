@@ -6,4 +6,4 @@ y
 5dv214vt24-prod.cs.umu.se
 1
 EOF
-docker compose -f docker-compose.yml -f docker-compose-domain-release.yml push
+TAG=$1 docker compose -f docker-compose.yml -f docker-compose-domain-release.yml push --ignore-push-failures
