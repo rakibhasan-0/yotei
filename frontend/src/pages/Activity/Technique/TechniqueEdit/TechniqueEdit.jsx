@@ -17,7 +17,7 @@ import { unstable_useBlocker as useBlocker, useNavigate, useLocation, useParams 
 import { Spinner } from "react-bootstrap"
 
 
-const KIHON_TAG = { id: 1, name: "Kihon Waza" }
+const KIHON_TAG = { id: 1, name: "kihon waza" }
 
 /**
  * Edit Technique is the page that allows the user to edit 
