@@ -109,10 +109,10 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	
 
 
-	function handleCheckBoxChange (state, id) {
-		if(state) {
+	function handleCheckBoxChange (checked, id) {
+		if(checked) { //Add exercise
 			setDone([...doneList,id])
-		} else {
+		} else { //Remove exercise
 			setDone(doneList.filter(doneId=>doneId !== id))
 		}
 	}
