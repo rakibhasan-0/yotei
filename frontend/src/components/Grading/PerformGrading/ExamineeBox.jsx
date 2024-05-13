@@ -23,7 +23,13 @@ import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
  * @version 1.0 
  */
 
-export default function ExamineeBox({ id, examineeName}) {
+export default function ExamineeBox({ 
+	id, 
+	examineeName, 
+	examineeId, 
+	gradingId,
+	currentTechniqueTitle
+}) {
 	const [selectedButton, setSelectedButton] = useState(null)
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [isAddingComment, setAddComment] = useState(false)
@@ -73,9 +79,9 @@ export default function ExamineeBox({ id, examineeName}) {
 			setCommentError("Kommentaren får inte vara tom")
 			return
 		}
-		console.log("API ANROP SOM INTE FINNS ÄNNU. Detta skulle läggas in: " + commentText)
+		console.log("API ANROP SOM INTE FINNS ÄNNU. Detta skulle läggas in: " + commentText + " Till person: " + examineeId)
 		/* API ANROP HÄR...
-		const response = await fetch(`/api/comment/exercise/add?id=${ex_id}`, {
+		const response = await fetch(`/api/grading/${gradingId}/2/${examineeId}/${currentTechniqueTitle}`, {
 			method: "POST",
 			headers: {
 				"Content-type": "application/json",

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect , useContext } from "react"
+import { /*useLocation, useNavigate,*/ useParams } from "react-router"
 
 import TechniqueInfoPanel from "../../../components/Grading/PerformGrading/TechniqueInfoPanel"
 import Button from "../../../components/Common/Button/Button"
@@ -9,6 +10,8 @@ import styles from "./DuringGrading.module.css"
 import { ArrowRight, ArrowLeft } from "react-bootstrap-icons"
 import {Link} from "react-router-dom"
 import {setError as setErrorToast} from "../../../utils" 
+
+import { AccountContext } from "../../../context"
 
 // Temp
 import ProtocolYellow from "./yellowProtocolTemp.json"
@@ -90,7 +93,9 @@ export default function DuringGrading() {
 	const [showPopup, setShowPopup] = useState(false)
 	const [examinees, setExaminees] = useState(undefined)
 	const [pairs, setPairs] = useState([])
-	const grading_id = 3 // temp, should be collected from url
+	const { gradingId } = useParams()
+	const { token } = useContext(AccountContext)
+
 
 	// Get info about grading
 	// TODO: Loads everytime the button is pressed. Should only happen once at start. useEffect?
@@ -109,7 +114,10 @@ export default function DuringGrading() {
 	useEffect(() => {
 		(async () => {
 			try {
-				const response = await fetch("/api/examination/examinee/all", {})
+				const response = await fetch("/api/examination/examinee/all", {
+					method: "GET",
+					headers: { token }
+				}) // TODO kolla denna
 				if (response.status === 404) {
 					console.log("404")
 					return
@@ -119,7 +127,6 @@ export default function DuringGrading() {
 					throw new Error("Could not fetch examinees")
 				}
 				const all_examinees = await response.json()
-				
 				const current_grading_examinees = getExamineesCurrentGrading(all_examinees)
 				setExaminees(current_grading_examinees)
 				console.log("Fetched examinees in this grading: ", current_grading_examinees)
@@ -135,7 +142,10 @@ export default function DuringGrading() {
 		if(examinees !== undefined){ // To prevent running first time. Is there a better way to chain api calls?
 			(async () => {
 				try {
-					const response = await fetch("/api/examination/pair/all", {})
+					const response = await fetch("/api/examination/pair/all", {
+						method: "GET",
+						headers: { token }
+					})
 					if (response.status === 204) {
 						return
 					}
@@ -164,7 +174,8 @@ export default function DuringGrading() {
 				categoryTitle=""
 				currentTechniqueTitle={techniqueNameList[currentIndex].technique.text}
 				nextTechniqueTitle={techniqueNameList[currentIndex].nextTechnique.text}
-				mainCategoryTitle={techniqueNameList[currentIndex].categoryName}>
+				mainCategoryTitle={techniqueNameList[currentIndex].categoryName}
+				gradingId={gradingId}>
 
 			</TechniqueInfoPanel>
 			{/* All pairs */}			
@@ -174,7 +185,12 @@ export default function DuringGrading() {
 						key={index}
 						rowColor={index % 2 === 0 ? "#FFFFFF" : "#F8EBEC"}
 						examineeLeftName={item.nameLeft} 
-						examineeRightName={item.nameRight} pairNumber={index+1}>
+						examineeLeftId={item.leftId}
+						examineeRightId={item.rightId}
+						examineeRightName={item.nameRight} 
+						pairNumber={index+1}
+						gradingId={gradingId}
+						currentTechniqueId={item.cu}>
 					</ExamineePairBox>
 				))}
 			</div>
@@ -226,7 +242,7 @@ export default function DuringGrading() {
 	function getExamineesCurrentGrading(all_examinees) {
 		const current_grading_examinees = []
 		all_examinees.forEach((examinee) => {
-			if (examinee.grading_id == grading_id) {
+			if (examinee.grading_id == gradingId) {
 				current_grading_examinees.push(examinee)
 			}
 		})
@@ -250,7 +266,14 @@ export default function DuringGrading() {
 			if (examinee1 !== undefined || examinee2 !== undefined) { // Only add if something is found
 				const name1 = examinee1 ? examinee1.name : "" // If only one name found
 				const name2 = examinee2 ? examinee2.name : ""
-				pair_names_current_grading.push({ nameLeft: name1, nameRight: name2 })
+				const id1 = examinee1 ? examinee1.examinee_id : ""
+				const id2 = examinee2 ? examinee2.examinee_id : ""
+				pair_names_current_grading.push({ 
+					nameLeft: name1, 
+					nameRight: name2, 
+					leftId: id1, 
+					rightId: id2
+				})
 			}
 		})
 		return pair_names_current_grading

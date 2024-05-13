@@ -33,7 +33,11 @@ export default function ExamineePairBox({
 	pairNumber,
 	examineeLeftName,
 	examineeRightName,
-	rowColor
+	rowColor,
+	examineeLeftId,
+	examineeRightId,
+	gradingId,
+	currentTechniqueTitle
 }) {
 	
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
@@ -75,9 +79,9 @@ export default function ExamineePairBox({
 			setCommentError("Kommentaren får inte vara tom")
 			return
 		}
-		console.log("API ANROP SOM INTE FINNS ÄNNU. Detta skulle läggas in: " + commentText)
+		console.log("API ANROP SOM INTE FINNS ÄNNU. Detta skulle läggas in: " + commentText + " Till par: " + pairNumber)
 		/* API ANROP HÄR...
-		const response = await fetch(`/api/comment/exercise/add?id=${ex_id}`, {
+		const response = await fetch(`/api/grading/${gradingId}/2/${examineeId}/${currentTechniqueTitle}`, {
 			method: "POST",
 			headers: {
 				"Content-type": "application/json",
@@ -105,10 +109,10 @@ export default function ExamineePairBox({
 			</div>
 			<div className={styles.pair}>
 				<div id="ExamineeLeftNameId" className={styles.pairleft}>
-					<ExamineeBox examineeName={examineeLeftName}/>
+					<ExamineeBox examineeName={examineeLeftName} examineeId={examineeLeftId}/>
 				</div>
 				<div id="ExamineeRightNameId" className={styles.pairright}>
-					<ExamineeBox examineeName={examineeRightName}/>
+					<ExamineeBox examineeName={examineeRightName} examineeId={examineeRightId}/>
 				</div>
 			</div>
 			<Popup 
