@@ -35,6 +35,7 @@ import { useCookies } from "react-cookie"
  * @updated 2024-04-22 Kiwi, Fixed so searchbar is not cleared unless component is closed, also so the active tab will show
  * @updated 2024-04-23 Kiwi, Kihon checkbox is now saved when clicking and redirecting to a technique.
  * @updated 2024-05-02 Kiwi, Fixed search so that current response won't be concatenated with previous.
+ * @updated 2024-05-13 Kiwi, Added Automatic scrolling and Removal of activities from popup
  */
 function AddActivity({ id, setShowActivityInfo }) {
 

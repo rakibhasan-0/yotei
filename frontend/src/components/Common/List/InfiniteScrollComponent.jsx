@@ -78,8 +78,7 @@ export default function InfiniteScrollComponent({ children, activities, activeKe
 	 * showFetchedItems. Otherwise load items noramlly using updateShownItems.
 	 */
 	useEffect(() => {
-		if(+fetchedTech.current > 0 && +searchCount < 4){//TODOD HWHEWHHEHWHEHWHE
-			console.log("scroll")
+		if(+fetchedTech.current > 0 && +searchCount < 4){
 			setVisibleTechniques([])
 			showFetchedItems()
 
@@ -105,7 +104,6 @@ export default function InfiniteScrollComponent({ children, activities, activeKe
 		}
 
 		else{
-			console.log("hej")
 			shownItems.current = 20
 			setVisibleTechniques([])
 			updateShownItems()

@@ -42,25 +42,29 @@ function ActivityItem({ index, categoryName, id, inputDisabled, text }) {
 		<fieldset className={styles.activityItem} id={"activity-description-" + id}>
 			{categoryName && <legend>{<h2>{categoryName}</h2>}</legend>}
 			<div className={styles.activityItemContainer}>
-            <textarea
-                className={styles.activityItemTextArea}
-                placeholder="Fri text ..."
-                disabled={inputDisabled}
-                onChange={(e) =>
-                    workoutCreateInfoDispatch({
-                        type: "UPDATE_ACTIVITY_NAME",
-                        payload: { index, name: e.target.value }
-                    })}
-                value={workoutCreateInfo.addedActivities[index].name}
-                rows={1}
-            />
-            <Trash
-                className={styles.trashIcon}
-                size="24px"
-                color="var(--red-primary)"
-                style={{ cursor: "pointer" }}
-            />
-        </div>
+				<textarea
+					className={styles.activityItemTextArea}
+					placeholder="Fri text ..."
+					disabled={inputDisabled}
+					onChange={(e) =>
+						workoutCreateInfoDispatch({
+							type: "UPDATE_ACTIVITY_NAME",
+							payload: { index, name: e.target.value }
+						})}
+					value={workoutCreateInfo.addedActivities[index].name}
+					rows={1}
+				/>
+				<Trash
+					className={styles.trashIcon}
+					size="24px"
+					color="var(--red-primary)"
+					style={{ cursor: "pointer" }}
+					onClick={() => workoutCreateInfoDispatch({
+						type: "REMOVE_ACTIVITY_ADDED_CHECKED",
+						payload: {id: workoutCreateInfo.addedActivities[index].id, index: index}
+					})}
+				/>
+			</div>
 		</fieldset>
 	)
 }
@@ -75,9 +79,10 @@ function ActivityItem({ index, categoryName, id, inputDisabled, text }) {
  * Example usage:
  * 		<ActivityList isFreeText={true} />
  */
+
+
 function ActivityList({ isFreeText }){
 	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(WorkoutCreateContext)
-
 	return (
 		<div className={styles.activityList}>
 			{workoutCreateInfo.addedActivities.map((activity, index) => {
@@ -88,8 +93,9 @@ function ActivityList({ isFreeText }){
 						id={index}
 						index={index}
 						inputDisabled={!isFreeText}
-						text={activity.name} />
-					)
+						text={activity.name} 
+					/>
+				)
 			})}
 			{isFreeText && 
 				<div className={styles.activityAddButton}>
