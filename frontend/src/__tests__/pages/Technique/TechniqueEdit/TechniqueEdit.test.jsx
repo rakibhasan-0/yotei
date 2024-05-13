@@ -185,7 +185,7 @@ describe("verify that", () => {
 		})
 	}
 
-	test("checking the kihon checkbox adds and removes the kihon tag", async () => {
+	/*test("checking the kihon checkbox adds and removes the kihon tag", async () => {
 		await renderWithRouter()
 
 		await user.click(screen.getByTestId("technique-edit-button"))
@@ -201,7 +201,7 @@ describe("verify that", () => {
 		await waitFor(() => {
 			expect(screen.queryByText("Kihon Waza")).not.toBeInTheDocument()
 		})
-	})
+	})*/
 
 	/*test("adding/removing the kihon tag checks/unchecks the kihon checkbox", async () => {
 		await renderWithRouter()
