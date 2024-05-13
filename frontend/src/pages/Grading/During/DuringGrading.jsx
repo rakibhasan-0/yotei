@@ -9,7 +9,7 @@ import ExamineeButton from "../../../components/Grading/PerformGrading/ExamineeB
 
 import styles from "./DuringGrading.module.css"
 import { ArrowRight, ArrowLeft } from "react-bootstrap-icons"
-import { useParams, useNavigate } from "react-router-dom"
+import { useParams, useNavigate, useContext } from "react-router-dom"
 import {setError as setErrorToast} from "../../../utils" 
 
 // Temp
@@ -98,7 +98,7 @@ export default function DuringGrading() {
 	const { gradingId } = useParams()
 	const navigate = useNavigate()
 
-  const context = useContext(AccountContext)
+	const context = useContext(AccountContext)
 	const { token } = context
 
 	// Get info about grading
