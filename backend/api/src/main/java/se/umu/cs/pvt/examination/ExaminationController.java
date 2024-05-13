@@ -26,6 +26,7 @@ public class ExaminationController {
     private BeltRepository beltRepository;
     private ExamineePairRepository examineePairRepository;
     private ExamineeRepository examineeRepository;
+    private ExaminationProtocolRepository examinationProtocolRepository;
 
     public ResponseEntity<String> example() {
         return new ResponseEntity<>("hello", HttpStatus.OK);
@@ -41,11 +42,13 @@ public class ExaminationController {
      */
     @Autowired
     public ExaminationController(GradingRepository gradingRepository, BeltRepository beltRepository, ExamineePairRepository examineePairRepository, 
-    ExamineeRepository examineeRepository) {
+    ExamineeRepository examineeRepository, ExaminationProtocolRepository examinationProtocolRepository) {
+
         this.gradingRepository = gradingRepository;
         this.beltRepository = beltRepository;
         this.examineePairRepository = examineePairRepository;
         this.examineeRepository = examineeRepository;
+        this.examinationProtocolRepository = examinationProtocolRepository;
     }
 
     /**
@@ -195,4 +198,37 @@ public class ExaminationController {
     public ResponseEntity<List<Examinee>> getAllExaminees() {
         return new ResponseEntity<>(examineeRepository.findAll(), HttpStatus.OK);
     }
+
+    @PostMapping("/examinationprotocol")
+    public ResponseEntity<ExaminationProtocol> createExaminationProtocol(@RequestBody ExaminationProtocol examination_protocol) {
+        ExaminationProtocol new_examination_protocol = examinationProtocolRepository.save(examination_protocol);
+        return new ResponseEntity<>(new_examination_protocol, HttpStatus.OK);
+    }
+
+    @PutMapping("/examinationprotocol")
+    public ResponseEntity<Object> updateExaminationProtocol(@RequestBody ExaminationProtocol examination_protocol) {
+
+        if(gradingRepository.findById(examination_protocol.getBeltId()).isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        ExaminationProtocol new_examination_protocol = examinationProtocolRepository.save(examination_protocol);
+        return new ResponseEntity<>(new_examination_protocol, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/examinationprotocol/{belt_id}")
+    public ResponseEntity<Object> deleteExaminationProtocol(@PathVariable("belt_id") long belt_id) {
+
+        if(gradingRepository.findById(belt_id).isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        examinationProtocolRepository.deleteById(belt_id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/examinationprotocol/all")
+    public ResponseEntity<List<ExaminationProtocol>> getAllExaminationProtocol() {
+        return new ResponseEntity<>(examinationProtocolRepository.findAll(), HttpStatus.OK);
+    }
+
+
 }

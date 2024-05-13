@@ -11,7 +11,7 @@ public class ExaminationProtocol {
 
     @Id
     @Column(nullable = false, name = "belt_id")
-    private int belt_id;
+    private long belt_id;
 
     @Column(nullable = false, name = "examination_protocol")
     private String examination_protocol;
@@ -27,7 +27,7 @@ public class ExaminationProtocol {
      */
     protected ExaminationProtocol() {}
 
-    public int getBeltId() {
+    public long getBeltId() {
         return belt_id;
     }
 
