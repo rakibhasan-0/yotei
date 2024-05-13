@@ -26,7 +26,6 @@ export default function GroupIndex() {
 	const { token, userId } = context
 	const [loading, setLoading] = useState(true)
 	const [groupsEmpty, setGroupsEmpty] = useState(true) //Boolean to check if there are no groups.
-	const [isStatisticsEnabled] = useState(false) //FEATURE TOGGLE
 
 	useEffect(() => {
 		(async () => {
@@ -84,21 +83,15 @@ export default function GroupIndex() {
 										<Link to={`/plan/edit/${group.id}`}>
 											<Pencil size={24} color="var(--red-primary)"/>
 										</Link>
-										
-										
-										{ isStatisticsEnabled && (	//FEATURE TOGGLE
-											<>
-												<div style={{ width: "20px" }}/>
-												<Link to={`./statistics/${group.id}`}>
-													<GraphUp
-														id="statistics-page-button"
-														size="24px"
-														color="var(--red-primary)"
-														style={{ cursor: "pointer" }}
-													/>
-												</Link>
-											</>
-										)}
+										<div style={{ width: "20px" }}/>
+										<Link to={`./statistics/${group.id}`}>
+											<GraphUp
+												id="statistics-page-button"
+												size="24px"
+												color="var(--red-primary)"
+												style={{ cursor: "pointer" }}
+											/>
+										</Link>
 									</>
 								) } </div>
 							</div>

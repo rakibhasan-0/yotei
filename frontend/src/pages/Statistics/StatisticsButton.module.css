@@ -9,3 +9,8 @@
 	border: none;
 	background: none;
 }
+
+.statisticsPopupContainer{
+	display: flex;
+	flex-direction: column;
+}

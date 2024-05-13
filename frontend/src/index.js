@@ -23,20 +23,22 @@ import TechniqueDetail from "./pages/Activity/Technique/TechniqueDetail/Techniqu
 import TechniqueEdit from "./pages/Activity/Technique/TechniqueEdit/TechniqueEdit"
 import Profile from "./pages/Profile/Profile"
 import PlanCreate from "./pages/Plan/PlanCreate.jsx"
-import SessionCreate from "./pages/Plan/SessionCreate"
 import GroupIndex from "./pages/Plan/GroupIndex/GroupIndex"
 import EditGroup from "./pages/Plan/EditGroup/EditGroup"
 import SessionEdit from "./pages/Plan/SessionEdit"
 import PlanIndex from "./pages/Plan/PlanIndex"
 import BaseLayout from "./components/Common/BaseLayout/BaseLayout"
 import ErrorBoundary from "./components/ErrorHandler/ErrorBoundary"
-import Statistics from "./pages/Statistics/Statistics.jsx"
+import Statistics from "./pages/Statistics/StatisticsIndex.jsx"
 import "react-toastify/dist/ReactToastify.css"
 import { logOut } from "./utils"
 import { ToastContainer, toast } from "react-toastify"
 import CreateTechnique from "./pages/Activity/Technique/CreateTechnique/CreateTechnique.jsx"
 import AdminRoute from "./AdminRoute"
 import ActivityIndex from "./pages/Activity/ActivityIndex.jsx"
+import DuringGrading from "./pages/Grading/During/DuringGrading.jsx"
+import SessionCreateIndex from "./pages/Plan/SessionCreateIndex.jsx"
+import RoleDetailPage from "./pages/Admin/RoleDetailPage.jsx"
 
 const exerciseURI = "https://jsonplaceholder.typicode.com/users"
 const workoutURI = "https://jsonplaceholder.typicode.com/users"
@@ -50,8 +52,9 @@ const planURI = "https://jsonplaceholder.typicode.com/users"
  *
  * @author
  * 		Unknown authors
- *     	Team Kiwi
- * @version 2.0
+ *     	Team Kiwi, Team Mango
+ * @version 2.1
+ * @updated 2024-05-08 Changed so workout/edit url also have the workout id in it
  */
 export default function App() {
 	const cookie = new Cookies().get("token")
@@ -110,6 +113,7 @@ export default function App() {
 					>
 						<Route path="about" element={<About />} />
 						<Route path="admin" element={<Admin />} />
+						<Route path="admin/role_page/" element={<RoleDetailPage />} /> {/*:role_id*/}
 						<Route path="profile" element={<Profile />} />
 						<Route path="activity" element={<ActivityIndex />} />
 						<Route path="exercise" element={<ExerciseIndex uri={exerciseURI} />} />
@@ -125,14 +129,15 @@ export default function App() {
 						<Route path="excercise/create" element={<ExerciseCreate />} />
 						<Route path="excercise/edit/:excerciseId" element={<ExerciseEdit/>} />
 						<Route path="workout/:workoutId" element={<WorkoutView />} />
-						<Route path="workout/edit" element={<WorkoutEdit />} />
+						<Route path="workout/edit/:workoutId" element={<WorkoutEdit />} />
 						<Route path="plan" element={<PlanIndex uri={planURI} />} />
 						<Route path="plan/create" element={<PlanCreate />} />
 						<Route path="plan/edit/:groupID" element={<EditGroup />} />
-						<Route path="session/create" element={<SessionCreate />} />
+						<Route path="session/create" element={<SessionCreateIndex />} />
 						<Route path="session/edit/:session_id" element={<SessionEdit />} />
 						<Route path="groups" element={<GroupIndex />} />
 						<Route path="groups/statistics/:groupID" element={<Statistics />} />
+						<Route path="grading/during" element={<DuringGrading />} />
 						<Route path="" element={<PlanIndex uri={planURI} />} />
 						<Route path="*" element={<NoPage />} />
 					</Route>
