@@ -93,8 +93,8 @@ export default function Admin() {
 							}).map((role, index) => (
 								<RoleCard
 									item={role.roleName}
-									key={role.id}
-									id={role.id}
+									key={role.roleId}
+									id={role.roleId}
 									detailURL={detailURL}
 									index={index}>
 								</RoleCard>
@@ -122,7 +122,7 @@ export default function Admin() {
 						</RoleCard>
 					</InfiniteScrollComponent>
 
-					<RoundButton linkTo={"exercise/create"} id={"exercise-round-button"}  style={{maxWidth: "5px"}}>
+					<RoundButton linkTo={"role/create"} id={"role-round-button"}  style={{maxWidth: "5px"}}>
 						<Plus/>
 					</RoundButton>
 

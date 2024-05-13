@@ -39,6 +39,7 @@ import ActivityIndex from "./pages/Activity/ActivityIndex.jsx"
 import DuringGrading from "./pages/Grading/During/DuringGrading.jsx"
 import SessionCreateIndex from "./pages/Plan/SessionCreateIndex.jsx"
 import RoleDetailPage from "./pages/Admin/RoleDetailPage.jsx"
+import RoleCreate from "./pages/Admin/RoleCreate.jsx"
 
 const exerciseURI = "https://jsonplaceholder.typicode.com/users"
 const workoutURI = "https://jsonplaceholder.typicode.com/users"
@@ -113,7 +114,8 @@ export default function App() {
 					>
 						<Route path="about" element={<About />} />
 						<Route path="admin" element={<Admin />} />
-						<Route path="admin/role_page/" element={<RoleDetailPage />} /> {/*:role_id*/}
+						<Route path="admin/role/create" element={<RoleCreate />} />
+						<Route path="admin/role_page/:role_id" element={<RoleDetailPage />} />
 						<Route path="profile" element={<Profile />} />
 						<Route path="activity" element={<ActivityIndex />} />
 						<Route path="exercise" element={<ExerciseIndex uri={exerciseURI} />} />

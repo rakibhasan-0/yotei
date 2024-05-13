@@ -1,17 +1,16 @@
-import { useParams, useNavigate } from "react-router"
+import { useNavigate, unstable_useBlocker as useBlocker } from "react-router"
 import { useEffect, useState, useContext } from "react"
-import { Trash } from "react-bootstrap-icons"
 import { AccountContext } from "../../context"
 import { setError as setErrorToast } from "../../utils"
+import { toast } from "react-toastify"
 
 
 import Divider from "../../components/Common/Divider/Divider"
 import InputTextFieldBorderLabel from "../../components/Common/InputTextFieldBorderLabel/InputTextFieldBorderLabel"
 import PermissionCard from "../../components/Common/RoleCard/PermissionListItem"
 import Button from "../../components/Common/Button/Button"
-import ErrorState from "../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../components/Common/Spinner/Spinner"
-import Popup from "../../components/Common/Popup/Popup"
+import ConfirmPopup from "../../components/Common/Popup/Popup"
 
 
 /**
@@ -22,34 +21,18 @@ import Popup from "../../components/Common/Popup/Popup"
  * @version 1.0
  */
 
-export default function RoleDetailPage() {
+export default function RoleCreate() {
 	const hasPreviousState = location.key !== "default"
-	const { role_id } = useParams()
 	const { token } = useContext(AccountContext)
 
-	//const [roleName, setRoleName] = useState("")
+	const [roleName, setRoleName] = useState("")
 	const navigate = useNavigate()
-	const [role, setRole] = useState()
 	const [permissions, setPermissions] = useState([])
-	const [error, setError] = useState()
 	const [loading, setIsLoading] = useState(true)
-	const [showDeletePopup, setShowDeletePopup] = useState(false)
+	const [showMiniPopup, setShowMiniPopup] = useState(false)
+	const [isBlocking, setIsBlocking] = useState(false)
+	const [errorMessage, setErrorMessage] = useState("")
 	
-
-
-	useEffect(() => {
-		fetch(`/api/roles/${role_id}`, {
-			headers: { token }
-		})
-			.then(response => response.json())
-			.then(data => {
-				setRole(data)
-			})
-			.catch(ex => {
-				setError("Kunde inte hämta roll")
-				console.error(ex)
-			})
-	}, [role_id, token])
 
 	useEffect(() => {
 		(async () => {
@@ -70,10 +53,7 @@ export default function RoleDetailPage() {
 			}
 		})()
 	}, [token])
-	
-	if (error) {
-		return <ErrorState message={error} onBack={() => navigate("/admin")} />
-	}
+
 
 	const handleNavigation = () => {
 		if (hasPreviousState) {
@@ -83,21 +63,70 @@ export default function RoleDetailPage() {
 		}
 	}
 
+	const blocker = useBlocker(() => {
+		if (isBlocking) {
+			setShowMiniPopup(true)
+			return true
+		}
+		return false
+	})
+
+
+	const handleRoleAdd = () => {
+		if (checkInput() === true) {
+			setIsBlocking(false)
+			addRole()
+			console.log("Role added")
+		}
+	}
+
+	const checkInput = () => {
+		if (roleName === "") {
+			setErrorMessage("Rollen måste ha ett namn")
+			return false
+		} else {
+			setErrorMessage("")
+		}
+		return true
+	}
+
+	async function addRole() {
+		const response = await fetch("/api/roles", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				token
+			},
+			body: JSON.stringify({
+				roleName: roleName,
+				permissions: permissions
+			})
+		})
+		if (!response.ok) {
+			setErrorMessage("Kunde inte skapa roll")
+			console.error("Kunde inte skapa roll")
+		} else {
+			toast.success("Rollen har skapats")
+			navigate("/admin")
+		}
+	}
+
+
 	return (
 		<div>
-			<Trash
-				onClick={() => setShowDeletePopup(true)}
-				size="24px"
-				style={{ color: "var(--red-primary)", position: "absolute", right: "2rem", top: "rem"}}
-			/>	
-			<Divider option={"h2_left"} title={"Redigera roll"} /> 
+			<Divider option={"h2_left"} title={"Skapa roll"} /> 
 			<br/>
 			<InputTextFieldBorderLabel 
 				id={"register-user-username-input"} 
-				text={role?.roleName || ""}
+				text={roleName}
 				type={"role"} 
 				label= {"Namn på roll"} 
-				onChange={console.log("Hello") /*(event) => setUserName(event.target.value)*/}
+				onChange={(event) => {
+					setRoleName(event.target.value)
+					setIsBlocking(true)
+					
+				}}
+				errorMessage={errorMessage}
 			/>
 
 			{loading ? <Spinner /> : (
@@ -133,10 +162,35 @@ export default function RoleDetailPage() {
 			/>
 
 			<div style={{ marginTop: "1rem", display: "flex", justifyContent: "space-between", width: "100%" }}>
-				<Button outlined={true} onClick={handleNavigation}><p>Tillbaka</p></Button>
-				<Button onClick={console.log("hello")}><p>Spara</p></Button>
+				<Button 
+					outlined={true} 
+					onClick={() => {
+						handleNavigation()
+
+					}}>
+					<p>Tillbaka</p>
+				</Button>
+				<Button 
+					onClick={() => {
+						setIsBlocking(false)
+						handleRoleAdd()
+					}}
+				>
+					<p>Lägg till</p>
+				</Button>
 			</div>
+
+			<ConfirmPopup
+				popupText="Du har osparade ändringar. Är du säker att du lämna?"
+				showPopup={showMiniPopup}
+				setShowPopup={setShowMiniPopup}
+				confirmText="Lämna"
+				backText="Avbryt"
+				onClick={blocker.proceed}
+			/>
+
 		</div>
+        
         
 	)
 }
