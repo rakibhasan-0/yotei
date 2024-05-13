@@ -20,6 +20,15 @@ public interface UserToPermissionRepository extends JpaRepository<UserToPermissi
     List<Permission> findAllByUserId(Long userId);
 
     /**
+     * Finds a permission for a specific user.
+     *
+     * @param userId      	ID of the User.
+     * @param permissionId  ID of the permission.
+     * @return				List of permissions IDs.
+     */
+    UserToPermission findByUserIdAndPermissionId(Long userId, Long permissionId);
+
+    /**
      * Deletes a User Permission pair.
      *
      * @param userId          The Id of the User.
