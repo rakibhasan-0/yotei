@@ -39,7 +39,8 @@ export default function GradingCreate() {
 			const response = await fetch("/api/examination/grading", {
 				method: "POST",
 				headers: {
-					"Content-Type": "application/json"
+					"Content-Type": "application/json",
+          "token": token
 				},
 				body: JSON.stringify(gradingData)
 			})
@@ -71,7 +72,7 @@ export default function GradingCreate() {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const response = await fetch("/api/belts/all", { headers: { token } })
+				const response = await fetch("/api/belts/all", { headers: { "token": token } })
 				if (response.status === 404) {
 					return
 				}
