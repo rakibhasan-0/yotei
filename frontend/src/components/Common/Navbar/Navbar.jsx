@@ -64,9 +64,9 @@ function Navbar({ testId }) {
 					<h1 className={styles.commonNavbarButton}>Tekniker & Övningar</h1>
 				</Button>
 
-        <Button width={"100%"} onClick={() => navigateAndClose("/grading")}>
-          <h1 className={styles.commonNavbarButton}>Gradering</h1>
-        </Button>
+				<Button width={"100%"} onClick={() => navigateAndClose("/grading")}>
+					<h1 className={styles.commonNavbarButton}>Gradering</h1>
+				</Button>
 				
         
 				{ isAdmin(context) ? 
