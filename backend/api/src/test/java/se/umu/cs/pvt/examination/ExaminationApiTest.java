@@ -1,5 +1,5 @@
 package se.umu.cs.pvt.examination;
-/* 
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +31,8 @@ public class ExaminationApiTest {
     private ExamineePairRepository examineePairRepository;
     @MockBean
     private ExamineeRepository examineeRepository;
+    @MockBean
+    private ExaminationProtocolRepository examinationProtocolRepository;
 
     @Autowired
     private ExaminationController examinationController;
@@ -38,12 +40,14 @@ public class ExaminationApiTest {
     List<Grading> gradingList;
     List<Examinee> examineeList;
     List<ExamineePair> examineePairList;
+    List<ExaminationProtocol> protocolList;
 
     @BeforeEach
     void init() {
         this.gradingList = new ArrayList<>();
         this.examineeList = new ArrayList<>();
         this.examineePairList = new ArrayList<>();
+        this.protocolList = new ArrayList<>();
 
         this.gradingList.add(new Grading(1L, 1L, 1L, 1, 1, new Date()));
         this.gradingList.add(new Grading(2L, 1L, 1L, 1, 1, new Date()));
@@ -58,14 +62,20 @@ public class ExaminationApiTest {
         this.examineePairList.add(new ExamineePair(2L, 2L, 1L));
         this.examineePairList.add(new ExamineePair(3L, 3L, 3L));
 
+        this.protocolList.add(new ExaminationProtocol(1L, "Test String"));
+        this.protocolList.add(new ExaminationProtocol(2L, "Test String"));
+        this.protocolList.add(new ExaminationProtocol(3L, "Test String"));
+
+
         Mockito.when(gradingRepository.findAll()).thenReturn(gradingList);
         Mockito.when(examineeRepository.findAll()).thenReturn(examineeList);
         Mockito.when(examineePairRepository.findAll()).thenReturn(examineePairList);
+        Mockito.when(examinationProtocolRepository.findAll()).thenReturn(protocolList);
     }
 
     /**
      * Standard Spring test
-    
+    */
     @Test
     void contextLoads() {
     }
@@ -94,5 +104,12 @@ public class ExaminationApiTest {
         int actual = examineePairRepository.findAll().size();
         assertEquals(3, actual);
     }
+
+    @Test
+    void testGetAllExaminationProtocols() {
+        int actual = examinationProtocolRepository.findAll().size();
+        assertEquals(3, actual);
+    }
+    
+
 }
-*/
