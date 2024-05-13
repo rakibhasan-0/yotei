@@ -1,13 +1,18 @@
-h1 {
-    text-align: left;
-}
-h2 {
+.mainCategoryTitle{
     text-align: center;
     font-size: 16px;
 }
-h3 {
+
+.categoryTitle{
     text-align: left;
     font-size: 12px;
 }
 
+.currentTechnique{
+    text-align: left;
+}
 
+.nextTechnique{
+    text-align: left;
+    font-size: 12px;
+}

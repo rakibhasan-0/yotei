@@ -290,7 +290,7 @@ describe("WorkoutEdit", () => {
 		const router = createMemoryRouter(
 			createRoutesFromElements( [
 				<Route key={"key1"} path="workout/:workoutId" element={<WorkoutView />} />,
-				<Route key={"key2"} path="workout/edit" element={<WorkoutEdit />} />
+				<Route key={"key2"} path="workout/edit/:workoutId" element={<WorkoutEdit />} />
 			]
 			),
 			{initialEntries: [`/workout/${workoutId}`]}

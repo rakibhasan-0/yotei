@@ -238,5 +238,114 @@ public class StatisticsAPITest {
             .andExpect(MockMvcResultMatchers.jsonPath("$.activities[4].count").value(1)); // Fifth activity's count
 
  }
+
+    @Test
+    void shouldReturnCorrectCountedActivities() throws Exception {
+        List<StatisticsActivity> techniqueList = new ArrayList<>();
+        techniqueList.add(new StatisticsActivity(1L, 138L, "Kamae, neutral (5 Kyu)", "technique", 3L, true, LocalDate.of(2024, 5, 7), 4));
+        techniqueList.add(new StatisticsActivity(2L, 138L, "Kamae, neutral (5 Kyu)", "technique", 1L, true, LocalDate.of(2024, 5, 7), 4));
+        techniqueList.add(new StatisticsActivity(3L, 138L, "Kamae, neutral (5 Kyu)", "technique", 2L, true, LocalDate.of(2024, 5, 7), 4));
+        techniqueList.add(new StatisticsActivity(4L, 138L, "Kamae, neutral (5 Kyu)", "technique", 3L, true, LocalDate.of(2024, 5, 7), 4));
+        techniqueList.add(new StatisticsActivity(5L, 138L, "Kamae, neutral (5 Kyu)", "technique", 5L, true, LocalDate.of(2024, 5, 7), 4));
+        techniqueList.add(new StatisticsActivity(6L, 138L, "Kamae, neutral (5 Kyu)", "technique", 2L, true, LocalDate.of(2024, 5, 7), 4));
+
+
+        List<StatisticsActivity> exerciseList = new ArrayList<>();
+        exerciseList.add(new StatisticsActivity(1L, 8L, "Armhävning", "exercise", 6L, false, LocalDate.of(2024, 5, 7), 4));
+        exerciseList.add(new StatisticsActivity(2L, 8L, "Armhävning", "exercise", 1L, false, LocalDate.of(2024, 5, 7), 4));
+        exerciseList.add(new StatisticsActivity(3L, 8L, "Armhävning", "exercise", 2L, false, LocalDate.of(2024, 5, 7), 4));
+        exerciseList.add(new StatisticsActivity(4L, 8L, "Armhävning", "exercise", 3L, false, LocalDate.of(2024, 5, 7), 4));
+        exerciseList.add(new StatisticsActivity(5L, 8L, "Armhävning", "exercise", 1L, false, LocalDate.of(2024, 5, 7), 4));
+        exerciseList.add(new StatisticsActivity(7L, 8L, "Armhävning", "exercise", 2L, false, LocalDate.of(2024, 5, 7), 4));
+
+
+
+        Long groupId = 1L;
+        String startDate = "2023-01-01"; // Example start date
+        String endDate = "2025-12-31"; // Example end date
+        Boolean kihon = false; // Example optional parameter
+        Boolean showExercises = true; 
+
+        Mockito.when(statisticsRepository.getAllSessionReviewTechniques(groupId)).thenReturn(techniqueList);  
+        Mockito.when(statisticsRepository.getAllSessionReviewExercises(groupId)).thenReturn(exerciseList);  
+
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/api/statistics/{id}", groupId)
+                .param("startdate", startDate)
+                .param("enddate", endDate)
+                .param("kihon", kihon.toString())
+                .param("showexercises", showExercises.toString())
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk()) // Status 200 OK
+        .andExpect(MockMvcResultMatchers.jsonPath("$.numberOfSessions").value(7)) // Check number of sessions
+        .andExpect(MockMvcResultMatchers.jsonPath("$.averageRating").value(4.0)) // Check average rating
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities").isArray()) // Ensure activities is an array
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities.length()").value(2)) // Ensure the length is 5
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].activity_id").value(138)) // Check first activity ID
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].name").value("Kamae, neutral (5 Kyu)")) // Check name with unicode
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].type").value("technique")) // First activity's type
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].count").value(16)) // First activity's count
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].beltColors").isArray()) // Check beltColors is an array
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].activity_id").value(8)) // Second activity ID
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].name").value("Armhävning")) // Second activity name
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].type").value("exercise")) // Second activity's type
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].count").value(15)); // Second activity's count
+
+    }
+
+    @Test
+    void shouldCalculateCorrectCountWhenFilterIsApplied() throws Exception {
+        List<StatisticsActivity> techniqueList = new ArrayList<>();
+        techniqueList.add(new StatisticsActivity(1L, 138L, "Kamae, neutral (5 Kyu)", "technique", 3L, true, LocalDate.of(2020, 5, 7), 4));
+        techniqueList.add(new StatisticsActivity(2L, 138L, "Kamae, neutral (5 Kyu)", "technique", 1L, true, LocalDate.of(2021, 5, 7), 4));
+        techniqueList.add(new StatisticsActivity(3L, 138L, "Kamae, neutral (5 Kyu)", "technique", 2L, true, LocalDate.of(2024, 5, 7), 4));
+        techniqueList.add(new StatisticsActivity(4L, 138L, "Kamae, neutral (5 Kyu)", "technique", 3L, true, LocalDate.of(2024, 5, 7), 4));
+        techniqueList.add(new StatisticsActivity(5L, 138L, "Kamae, neutral (5 Kyu)", "technique", 5L, true, LocalDate.of(2024, 5, 7), 4));
+        techniqueList.add(new StatisticsActivity(6L, 138L, "Kamae, neutral (5 Kyu)", "technique", 2L, true, LocalDate.of(2024, 5, 7), 4));
+
+
+        List<StatisticsActivity> exerciseList = new ArrayList<>();
+        exerciseList.add(new StatisticsActivity(1L, 8L, "Armhävning", "exercise", 6L, false, LocalDate.of(2020, 5, 7), 4));
+        exerciseList.add(new StatisticsActivity(2L, 8L, "Armhävning", "exercise", 1L, false, LocalDate.of(2021, 5, 7), 4));
+        exerciseList.add(new StatisticsActivity(3L, 8L, "Armhävning", "exercise", 2L, false, LocalDate.of(2024, 5, 7), 4));
+        exerciseList.add(new StatisticsActivity(4L, 8L, "Armhävning", "exercise", 3L, false, LocalDate.of(2024, 5, 7), 4));
+        exerciseList.add(new StatisticsActivity(5L, 8L, "Armhävning", "exercise", 1L, false, LocalDate.of(2024, 5, 7), 4));
+        exerciseList.add(new StatisticsActivity(7L, 8L, "Armhävning", "exercise", 2L, false, LocalDate.of(2024, 5, 7), 4));
+
+
+
+        Long groupId = 1L;
+        String startDate = "2023-01-01"; // Example start date
+        String endDate = "2025-12-31"; // Example end date
+        Boolean kihon = false; // Example optional parameter
+        Boolean showExercises = true; 
+
+        Mockito.when(statisticsRepository.getAllSessionReviewTechniques(groupId)).thenReturn(techniqueList);  
+        Mockito.when(statisticsRepository.getAllSessionReviewExercises(groupId)).thenReturn(exerciseList);  
+
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/api/statistics/{id}", groupId)
+                .param("startdate", startDate)
+                .param("enddate", endDate)
+                .param("kihon", kihon.toString())
+                .param("showexercises", showExercises.toString())
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk()) // Status 200 OK
+        .andExpect(MockMvcResultMatchers.jsonPath("$.numberOfSessions").value(5)) // Check number of sessions
+        .andExpect(MockMvcResultMatchers.jsonPath("$.averageRating").value(4.0)) // Check average rating
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities").isArray()) // Ensure activities is an array
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities.length()").value(2)) // Ensure the length is 5
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].activity_id").value(138)) // Check first activity ID
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].name").value("Kamae, neutral (5 Kyu)")) // Check name with unicode
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].type").value("technique")) // First activity's type
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].count").value(12)) // First activity's count
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].beltColors").isArray()) // Check beltColors is an array
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].activity_id").value(8)) // Second activity ID
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].name").value("Armhävning")) // Second activity name
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].type").value("exercise")) // Second activity's type
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].count").value(8)); // Second activity's count
+    }
 }
 

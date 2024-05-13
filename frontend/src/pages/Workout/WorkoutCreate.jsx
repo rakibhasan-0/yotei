@@ -65,6 +65,7 @@ const WorkoutCreate = () => {
 		//setIsBlocking(false)
 		if (!checkIfChangesMade(workoutCreateInfo)) {
 			setInfo("Inget pass sparades.")
+			
 			return navigate(-1, { replace: true, state })
 		}
 
@@ -85,14 +86,12 @@ const WorkoutCreate = () => {
 				state.session.workout.id = workoutId
 				return navigate("/session/create", { replace: true, state })
 			}
+
+			navigate("/workout/" + workoutId, { replace: true, state })
 			
-			//blocker.proceed()
-			navigate("/workout/" + workoutId, {})
 		} else {
 			setError("Träningspasset kunde inte skapas!")
 		}
-		//blocker.state = "unblocked"
-
 	}
 	
 	/**
