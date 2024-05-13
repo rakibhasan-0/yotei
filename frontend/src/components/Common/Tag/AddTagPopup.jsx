@@ -312,12 +312,9 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 					</input>
 					<i className={styles["search-icon"]}><Search/></i>
 					{searchText !== "" &&
-					<>
 						<button className ={styles["addButton"]} onClick={() => createNewTag(searchText)} id="tag-add-button" >
-							<PlusCircle> </PlusCircle>
+							<PlusCircle style={{cursor: "pointer"}}> </PlusCircle>
 						</button>
-					</>
-						
 					}
 					
 					
