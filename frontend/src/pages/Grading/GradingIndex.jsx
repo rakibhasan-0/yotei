@@ -31,8 +31,12 @@ export default function GradingIndex() {
 
 	const { token, userId } = context
 
-	const handleNavigation = async (gradingId, gradingStep) => {
-		navigate(`/grading/${gradingId}/${gradingStep}`)
+	const handleNavigation = async (gradingId, gradingStep, color) => {
+		const params = {
+			ColorParam: color,
+		}
+
+		navigate(`/grading/${gradingId}/${gradingStep}`, { state: params })
 	}
 
 	const fetchBelts = () => {
@@ -107,42 +111,48 @@ export default function GradingIndex() {
 	return (
 		<center>
 			<h1>Pågående graderingar</h1>
-			<div className={containerStyles.scrollableContainer}>
-				{loading ? <Spinner /> : ( 
-					<div>
-						{currentGradings.map((grading, index) => (
-							<BeltButton
-								key={index}
-								width={"100%"}
-								onClick={() => handleNavigation(grading.grading_id, grading.step)}
-								color={belts[grading.belt_id]?.hex}
-							>
-								<h2>{`${belts[grading.belt_id]?.name} bälte`} </h2>
-							</BeltButton>
-						))}
+			<div className={containerStyles.container}>
+				<div className={containerStyles.scrollableContainer}>
+					{loading ? <Spinner /> : ( 
+						<div>
+							{currentGradings.map((grading, index) => (
+								<BeltButton
+									key={index}
+									width={"100%"}
+									onClick={() => handleNavigation(grading.grading_id, grading.step, belts[grading.belt_id]?.hex)}
+									color={belts[grading.belt_id]?.hex}
+								>
+									<h2>{`${belts[grading.belt_id]?.name} bälte`} </h2>
+								</BeltButton>
+							))}
 
-					</div>
-				)}
+						</div>
+					)}
+				</div>
 			</div>
 
+
 			<h1 className={styles.finishedGradings}>Avslutade graderingar</h1>
+			<div className={containerStyles.container}>
+				<div className={containerStyles.scrollableContainer}>
+					{loading ? <Spinner /> : ( 
+						<div>
+							{finishedGradings.map((grading, index) => (
+								<BeltButton
+									key={index}
+									width={"100%"}
+									onClick={() => handleNavigation(grading.grading_id, grading.step, belts[grading.belt_id]?.hex)}
+									color={belts[grading.belt_id]?.hex}
+								>
+									<h2>{`${belts[grading.belt_id]?.name} bälte`} </h2>
+								</BeltButton>
+							))}
 
-			<div className={containerStyles.scrollableContainer}>
-				{loading ? <Spinner /> : ( 
-					<div>
-						{finishedGradings.map((grading, index) => (
-							<BeltButton
-								key={index}
-								width={"100%"}
-								onClick={() => handleNavigation(grading.grading_id, grading.step)}
-								color={belts[grading.belt_id]?.hex}
-							>
-								<h2>{`${belts[grading.belt_id]?.name} bälte`} </h2>
-							</BeltButton>
-						))}
+						</div>
 
-					</div>
-				)}
+					)}
+				</div>
+
                 
 			</div>
 

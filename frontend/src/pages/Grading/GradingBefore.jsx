@@ -23,7 +23,7 @@ import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../ut
 export default function GradingBefore({id}) {
 	
 	const location = useLocation()
-  const state = location.state
+	const { ColorParam } = location.state ? location.state : {}
 
 	const { gradingId } = useParams()
 	const context = useContext(AccountContext)
@@ -51,9 +51,9 @@ export default function GradingBefore({id}) {
                   .catch(() => setErrorToast("Kunde inte lägga till paret. Kontrollera din internetuppkoppling."))
           }))
           navigate(`/grading/${gradingId}/2`)
-        };
+        }
 
-        exec();
+        exec()
         
       } catch (error) {
         console.error("Misslyckades skicka vidare till nästa steg i gradering:", error)
@@ -190,7 +190,7 @@ export default function GradingBefore({id}) {
 	return (
 		<div>
 			<div> 
-				<div style={{ backgroundColor: "yellow", borderRadius: "0.3rem", padding: "0px" }}>
+				<div style={{ backgroundColor: ColorParam, borderRadius: "0.3rem", padding: "0px" }}>
 					<h2>KIHON WAZA</h2>
 				</div>
 			</div>
