@@ -30,16 +30,16 @@ import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
  *
  * 
  * @author Apelsin
- * @since 2024-05-02
- * @version 1.0 
+ * @since 2024-05-13
+ * @version 2.0 
  */
 
 export default function TechniqueInfoPanel( {
-	beltColor = "#FFDD33",
-	categoryTitle = "Test Kategori",
-	currentTechniqueTitle = "1. Grepp i två handleder framifrån och svingslag Frigöring – Ju morote jodan uke",
-	nextTechniqueTitle = " 2. Stryptag framifrån och svingslag, backhand Frigöring – Ju morote jodan uke, ude osae, ude osae gatame",
-	mainCategoryTitle = "Huvudkategori"
+	beltColor,
+	categoryTitle,
+	currentTechniqueTitle,
+	nextTechniqueTitle,
+	mainCategoryTitle
 }) {
 
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
