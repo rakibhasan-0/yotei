@@ -96,15 +96,16 @@ export default function DuringGrading() {
 	const [examinees, setExaminees] = useState(undefined)
 	const [pairs, setPairs] = useState([])
 	const grading_id = 3 // temp, should be collected from url
-	const context = useContext(AccountContext)
-	const {token, userId} = context
-
+	const {token, userId} = useContext(AccountContext)
+	// Handle the G and U buttons of each examinee
+	const [selectedButtons, setSelectedButtons] = useState({})
+	
 	// Get info about grading
 	// TODO: Loads everytime the button is pressed. Should only happen once at start. useEffect?
 	const techniqueNameList = getTechniqueNameList(ProtocolYellow)
 	const categoryIndexMap = getCategoryIndices(techniqueNameList)
 
-	// Go to summary when the index is equal to length. Maybe change the look of the buttons.
+	// Go to summary when the index is equal to length. Maybe change the look of the buttons?
 	const goToNextTechnique = () => {
 		setCurrentIndex(prevIndex => Math.min(prevIndex + 1, techniqueNameList.length - 1))
 		// reset the button colors
@@ -172,15 +173,14 @@ export default function DuringGrading() {
 		
 	}, [examinees])
 
-	// Handle the G and U buttons of each examinee
-	const [selectedButtons, setSelectedButtons] = useState({})
 	// Usage:
-	// handleButtonClick(technique, pairIndex, buttonId, 'left')
-	// handleButtonClick(technique, pairIndex, buttonId, 'right')
+	// handleButtonClick(technique, examinee_id, pairIndex, buttonId, 'left')
+	// handleButtonClick(technique, examinee_id, pairIndex, buttonId, 'right')
 	const handleButtonClick = (technique, examinee_id, pairIndex, buttonId, side) => {
+		// To handle the other button status when a button is pressed, 
+		// ie when 'G' is pressed should 'U' be unmarked
 		const buttonType = buttonId.includes("pass") ? "pass" : "fail"
 		const oppositeButtonType = buttonType === "pass" ? "fail" : "pass"
-
 		setSelectedButtons(prev => ({
 			...prev,
 			[pairIndex]: {
@@ -190,19 +190,28 @@ export default function DuringGrading() {
 			}
 		}))
 		console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}`)
+
 		// Update backend
 		let buttonTypeData = (buttonType === "pass" ? true : false)
 		addExamineeResult(examinee_id, technique, buttonTypeData)
-
 	}
 
+	/**
+	 * Adds a status update to backend for an athlete
+	 * TODO: Must have option to update status, call a put from this code
+	 * 
+	 * @author Team Apelsin (2024-05-13)
+	 */
 	async function addExamineeResult(examineeId, techniqueName, passStatus) {
 		const data = await postExamineeResult({ examinee_id: examineeId, technique_name: techniqueName, pass: passStatus }, token)
-			.catch(() => setErrorToast("Kunde inte lägga till resultat. KOlla internetuppkoppling."))
-		
-		//setExaminees([...examinees, { id: data["examinee_id"], name: data["name"] }])
+			.catch(() => setErrorToast("Kunde inte lägga till resultat. Kolla internetuppkoppling."))
 	}
 
+	/**
+	 * Perform a post to backend for status for an athlete
+	 * 
+	 * @author Team Apelsin (2024-05-13)
+	 */
 	async function postExamineeResult(result, token) {
 		console.log("Result posted: ", result)
 		const requestOptions = {
@@ -215,10 +224,9 @@ export default function DuringGrading() {
 			.then(response => { return response })
 			.catch(error => { alert(error.message) })
 	}
-	console.log("One pair: ", pairs[0])
 
 	// Extracted Examinee component to remove duplicate code.
-	const Examinee = ({ examinee, index, side }) => ( // TODO: this makes it work
+	const Examinee = ({ examinee, index, side }) => ( 
 		<ExamineeBox examineeName={examinee.name} onClickComment={() => console.log("CommentButton clicked")}>
 			<ExamineeButton
 				id={`pass-button-${index}-${side}`}
@@ -242,7 +250,6 @@ export default function DuringGrading() {
 
 	// Scroll to the top of the examinees list after navigation
 	const scrollableContainerRef = useRef(null)
-	// className={boxStyles.examineeButton}
 
 	return (
 		<div className={styles.container}>
@@ -353,7 +360,4 @@ export default function DuringGrading() {
 		})
 		return pair_names_current_grading
 	}
-
-
-
 }
