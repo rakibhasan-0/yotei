@@ -202,8 +202,8 @@ export default function DuringGrading() {
 	// Extracted Examinee component to remove duplicate code.
 	const Examinee = ({ examineeName, index, side, examineeId}) => (
 		<ExamineeBox 
-		examineeName={examineeName} 
-		examineeId={examineeId}>
+			examineeName={examineeName} 
+			examineeId={examineeId}>
 			<ExamineeButton
 				id={`pass-button-${index}-${side}`}
 				type="green"
