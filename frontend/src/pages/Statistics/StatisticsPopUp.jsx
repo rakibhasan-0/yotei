@@ -80,7 +80,7 @@ export default function StatisticsPopUp({groupActivities,dates,averageRating,num
 						tillfällen från {<br />} datum {startDate} till {endDate}
 					</p>
 					<p style={{ fontSize: "25px" }}>Bält-tekniker</p>
-					<div style={{ overflowY: "scroll" }}>
+					<div style={{ overflowY: "auto" }}>
 						<BeltColorChart beltColorsData={beltColorsData} />
 					</div>
 				</div>
