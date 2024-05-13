@@ -92,6 +92,7 @@ describe("Statistics Popup", () => {
 		}
 
 		// Mock the fetch function
+		// eslint-disable-next-line no-undef
 		global.fetch = jest.fn(() =>
 			Promise.resolve({
 				ok: true,
@@ -125,7 +126,9 @@ describe("Statistics component", () => {
 
 	// Test is incomplete, see bottom of test for in-depth description
 	test("renders groups statistic page when data is fetched successfully", async () => {
+
 		// Mock fetch API to return sample data
+		// eslint-disable-next-line no-undef
 		global.fetch = jest.fn(() =>
 			Promise.resolve({
 				ok: true,
