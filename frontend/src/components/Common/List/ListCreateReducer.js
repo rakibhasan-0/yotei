@@ -275,8 +275,6 @@ export function workoutCreateReducer(state, action) {
 		tempState.popupState.types.chooseActivityPopup = false
 		tempState.popupState.types.editActivityPopup = false
 		tempState.popupState.isOpened = false
-
-		tempState.addedCategories.forEach((category) => category.checked = false)
 		tempState.checkedActivities = []
 		return tempState
 	case "CLOSE_ACIVITY_POPUP":
