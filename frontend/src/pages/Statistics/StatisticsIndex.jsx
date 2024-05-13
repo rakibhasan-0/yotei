@@ -52,7 +52,9 @@ export default function Statistics() {
 		to: getFormattedDateString(today),
 	})
 
-	// filtering the group activities based on the selected belts. 
+	// filtering the group activities based on the selected belts.
+	// first it checks if the selectedBelts is not empty, then it filters the groupActivities based on the selected belts.
+	// if the selectedBelts is empty, it will show all the groupActivities. 
 	const activities =	
 	selectedBelts.length > 0	
 		? groupActivities.filter((activity) =>
