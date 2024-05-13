@@ -66,12 +66,23 @@ public class UserToPermissionController {
     @PostMapping("/{user_id}/permission")
     public ResponseEntity<UserToPermission> postUserPermissionPair(
         @RequestBody Permission permission, @PathVariable("user_id") Long userId) {
-            if (repository.findAllByUserId(userId) == null) {
+            List<Permission> userPermissions = repository.findAllByUserId(userId);
+            if (userPermissions == null) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            
+            } else {
+                for (Permission userPermission : userPermissions) {
+                    if (userPermission.equals(permission)) {
+                        return new ResponseEntity<>(HttpStatus.OK);
+                    }
+                }
             }
+            
+            UserToPermission userPermissionToAdd = new UserToPermission(
+                userId ,permission.getPermissionId());
 
-            UserToPermission userPermissionToAdd = new UserToPermission(permission.get)
+            repository.save(userPermissionToAdd);
 
-            repository.save()
+            return new ResponseEntity<>(userPermissionToAdd, HttpStatus.OK);
         }
 }
