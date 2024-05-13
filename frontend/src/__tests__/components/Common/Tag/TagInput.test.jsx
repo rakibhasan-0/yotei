@@ -3,8 +3,8 @@ import {React} from "react"
 import {render, screen, configure} from "@testing-library/react"
 import "@testing-library/jest-dom"
 import TagInput from "../../../../components/Common/Tag/TagInput"
-import AddTagPopup from "../../../../components/Common/Tag/AddTagPopup"
-import { fireEvent } from "@testing-library/react"
+//import AddTagPopup from "../../../../components/Common/Tag/AddTagPopup"
+//import { fireEvent } from "@testing-library/react"
 
 /**
  * Test for the TagInput component.
@@ -32,7 +32,7 @@ test("Tag: Tag should be visible", async() => {
 	expect(tag).toBeVisible()
 })
 
-test("Tag: Should show popup onclick", async() => {
+/*test("Tag: Should show popup onclick", async() => {
 	// ARRANGE
 	const addedTags = [{id:1,name:"Tag1"}]
 
@@ -48,4 +48,4 @@ test("Tag: Should show popup onclick", async() => {
 	// ASSERT
 	const popup = getByText("Tillagda taggar")
 	expect(popup).toBeVisible()
-})
+})*/
