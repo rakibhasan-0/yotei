@@ -12,6 +12,7 @@ import Button from "../../components/Common/Button/Button"
 import ErrorState from "../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import Popup from "../../components/Common/Popup/Popup"
+import RoleDelete from "../../components/Admin/Delete/RoleDelete"
 
 
 /**
@@ -135,6 +136,17 @@ export default function RoleDetailPage() {
 			<div style={{ marginTop: "1rem", display: "flex", justifyContent: "space-between", width: "100%" }}>
 				<Button outlined={true} onClick={handleNavigation}><p>Tillbaka</p></Button>
 				<Button onClick={console.log("hello")}><p>Spara</p></Button>
+			</div>
+
+			<div>
+				<Popup
+					title="Ta bort roll"
+					isOpen={showDeletePopup}
+					setIsOpen={setShowDeletePopup}
+					style={{height: "unset"}}>
+					<RoleDelete id={"role-delete-popup"} roleID={role_id} name={role?.roleName} setIsOpen={setShowDeletePopup} what={"Rollen"}/>
+					{/* <ActivityDelete id={"exercise-delete-popup"} activityID={ex_id} name={exercise?.name} setIsOpen={setShowDeletePopup} what={"Övning"}/> */}
+				</Popup>
 			</div>
 		</div>
         

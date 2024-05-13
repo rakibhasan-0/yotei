@@ -93,7 +93,7 @@ public class RoleController {
      * @return response, 200 OK on success.
      */
     @DeleteMapping("/{role_id}")
-    public ResponseEntity<Object> deleteRole(@PathVariable Long roleId) {
+    public ResponseEntity<Object> deleteRole(@PathVariable("role_id") Long roleId) {
         if (repository.findById(roleId).isEmpty()) {
             return new ResponseEntity<>(
                 "Role with ID: " + roleId +  "does not exist", HttpStatus.BAD_REQUEST);
@@ -113,7 +113,7 @@ public class RoleController {
      */
     @PutMapping("/{role_id}")
     public ResponseEntity<Role> updateRole(
-        @PathVariable Long roleId, @RequestBody Role updatedRole) {
+        @PathVariable("role_id") Long roleId, @RequestBody Role updatedRole) {
         
         Optional<Role> firstRole = repository.findById(roleId);
         if (!firstRole.isPresent()) {
