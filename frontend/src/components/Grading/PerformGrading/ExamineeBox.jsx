@@ -1,5 +1,4 @@
 import React, { useState } from "react"
-import ExamineeButton from "./ExamineeButton"
 import CommentButton from "./CommentButton"
 import styles from "./ExamineeBox.module.css"
 import Popup from "../../Common/Popup/Popup"
@@ -19,26 +18,15 @@ import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
  *  examineeName = "test person"/>
  *
  * @author Apelsin
- * @since 2024-05-03
- * @version 1.0 
+ * @since 2024-05-13
+ * @version 2.0 
  */
 
-export default function ExamineeBox({ id, examineeName}) {
-	const [selectedButton, setSelectedButton] = useState(null)
+export default function ExamineeBox({ id, examineeName, children}) {
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [isAddingComment, setAddComment] = useState(false)
 	const [commentText, setCommentText] = useState()
 	const [commentError, setCommentError] = useState()
-
-
-	/**
-	 * Keeps track of which button that has been pressed.
-	 * @param buttonId
-	 */
-	const handleButtonClick = (buttonId) => {
-		setSelectedButton(prev => prev === buttonId ? null : buttonId)
-		console.log(`Pressed ${buttonId} button`)
-	}
 
 	/**
 	 * Is used when discarding a comment,
@@ -102,24 +90,7 @@ export default function ExamineeBox({ id, examineeName}) {
 				</div>
 				<CommentButton onClick={() => setAddComment(true)} className={styles.commentButtonContainer}/>
 				<div className={styles.buttonContainer}>
-					<ExamineeButton
-						id="pass-button"
-						type="green"
-						onClick={() => handleButtonClick("pass-button")}
-						isSelected={selectedButton === "pass-button"}
-						className={styles.examineeButton}
-					>
-						<p>G</p>
-					</ExamineeButton>
-					<ExamineeButton 
-						id="fail-button"
-						type="red"
-						onClick={() => handleButtonClick("fail-button")}
-						isSelected={selectedButton === "fail-button"}
-						className={styles.examineeButton}
-					>
-						<p>U</p>
-					</ExamineeButton>
+					{children}
 				</div>
 				<Popup 
 					id={"examinee-comment-popup"} 
