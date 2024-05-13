@@ -33,31 +33,31 @@ import CheckBox from "../CheckBox/CheckBox"
  */
 export default function Examinee({ item, text, id, index, onRemove, onEdit, onCheck, showCheckbox, checked, validateTagName, grayTrash }) {
 
-	const [isEditing, setIsEditing] = useState(false); // State to manage edit mode
-	const [editedText, setEditedText] = useState(item); // State to store edited text
+	const [isEditing, setIsEditing] = useState(false) // State to manage edit mode
+	const [editedText, setEditedText] = useState(item) // State to store edited text
 	const [error, setError] = useState("")
 
 	const handleEdit = () => {
-		setIsEditing(true);
-	};
+		setIsEditing(true)
+	}
 
 	const handleInputChange = (event) => {
 		const text = event.target.value
 		const textareaErr = validateTagName(text)
 		console.log(textareaErr)
-		setEditedText(text);
+		setEditedText(text)
 		
 		setError(textareaErr)
 		
 		
-	};
+	}
 
 	const handleEditSubmit = () => {
 		if(error == "") {
-			setIsEditing(false);
-			onEdit(id, editedText);
+			setIsEditing(false)
+			onEdit(id, editedText)
 		}
-	};
+	}
 
 	return (
 		<div className={styles["examinee-container"]}>
