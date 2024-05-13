@@ -61,7 +61,7 @@ export default function GradingIndex() {
 			})
 	}
 
-	useEffect(() => {
+	useEffect(async () => {
 
 		const fetchData = async () => {
 			try {
@@ -97,11 +97,16 @@ export default function GradingIndex() {
 						}
 					}
 				})
+
+        
+
 			} catch (error) {
 				console.error("There was a problem with the fetch operation:", error)
 			}
 		}
+
 		fetchData()
+
 	}, [])
 
 	return (

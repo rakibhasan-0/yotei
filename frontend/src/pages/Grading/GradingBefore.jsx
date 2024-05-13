@@ -24,6 +24,7 @@ export default function GradingBefore({id}) {
 	
 	const location = useLocation()
   const state = location.state
+  const hasPreviousState = location.key !== "default"
 
 	const { gradingId } = useParams()
 	const context = useContext(AccountContext)
@@ -31,7 +32,7 @@ export default function GradingBefore({id}) {
 
 	const [examinees, setExaminees] = useState([])
 	const navigate = useNavigate()
-	
+
 	const [pairs, setPair] = useState([]) 
 	const [checkedExamineeIds, setCheckedExamineeIds] = useState([])
   const [redirect, setRedirect] = useState(false)
@@ -40,6 +41,14 @@ export default function GradingBefore({id}) {
 
   function startRedirection() {
     setRedirect(true)
+  }
+
+  function handleNavigation() {
+    if (hasPreviousState) {
+      navigate(-1)
+    } else {
+      navigate("/grading")
+    }
   }
 
   useEffect(() => {
@@ -118,6 +127,10 @@ export default function GradingBefore({id}) {
 		}
 	}
 
+  /**
+   * 
+   * @param {*} examinee 
+   */
 	async function addExaminee(examinee) {
 		const data = await postExaminee({ name: examinee, grading_id: gradingId }, token)
 			.then(response => handleResponse(response))
@@ -126,6 +139,10 @@ export default function GradingBefore({id}) {
 		setExaminees([...examinees, { id: data["examinee_id"], name: data["name"] }])
 	}
 
+  /**
+   * Remove and examinee.
+   * @param {Integer} examineeId 
+   */
 	async function removeExaminee(examineeId) {
 		const data = await deleteExaminee(examineeId, token)
 			.catch(() => setErrorToast("Kunde inte tabort personen. Kontrollera din internetuppkoppling."))
@@ -137,20 +154,28 @@ export default function GradingBefore({id}) {
 		setExaminees(examinees.filter((examinee) => examinee.id !== examineeId))
 	}
 
+  /**
+   * Remove an examinee pair. This functions removes it from the database and also locally in the array.
+   * @param {Integer} examineeId 
+   */
 	async function removeExamineeInPair(examineeId) {
 
 		let pairId
+
+    // gets the pair id. this can be done by checking both examinee in the same pair
 		pairs.map(pair => {
 			if(pair[0].id === examineeId || pair[1].id === examineeId) {
 				pairId = pair[0].pairId
 		}})
 
+    // gets the pair that will be modified
 		let modifyPair = pairs.find(pair => {
 			if (pair[0].pairId === pairId) {
 				return pair[0].id === examineeId ? {id: pair[1].id, name: pair[1].name} : {id: pair[0].id, name: pair[0].name}
 			}
 		})
 
+    // saves the remaining examinee from the deleted pair
 		modifyPair = modifyPair.map(examinee => {
 			if (examinee.id !== examineeId) {
 				return examinee
@@ -164,6 +189,7 @@ export default function GradingBefore({id}) {
 		await deleteExaminee(examineeId, token)
 			.catch(() => setErrorToast("Kunde inte tabort personen. Kontrollera din internetuppkoppling."))
 		
+    // create a new array with the remaining pairs
 		const newPairs = pairs.map(pair => {
 			if(pair[0].id !== examineeId && pair[1].id !== examineeId) {
 				return [{id: pair[0].id, name: pair[0].name, pairId: pair[0].pairId},
@@ -175,7 +201,13 @@ export default function GradingBefore({id}) {
 		setExaminees([...examinees, modifyPair[0]])
 
 	}
-
+  
+  /**
+   * Change the name of an already exsisting examinee.
+   * This functions call putExaminee so it gets updated in the database aswell
+   * @param {Integer} examineeId 
+   * @param {any} name 
+   */
 	async function editExaminee(examineeId, name) {
 		setExaminees(
 			examinees.map((examinee) =>
@@ -285,9 +317,7 @@ export default function GradingBefore({id}) {
           id="back-button"
 					width="100%"
 					outlined={true}
-					onClick={() => {
-						navigate("/grading/create")
-					}}
+					onClick={handleNavigation}
 				>
 					<p>Tillbaka</p>
 				</Button>
@@ -303,6 +333,12 @@ export default function GradingBefore({id}) {
 	)
 }
 
+/**
+ * Delete an exsisting pair in the database
+ * @param {Integer} pairId 
+ * @param {any} token 
+ * @returns The response code 
+ */
 async function deletePair(pairId, token) {
 	const requestOptions = {
 		method: "DELETE",
@@ -314,6 +350,12 @@ async function deletePair(pairId, token) {
 		.catch(error => { alert(error.message) })
 }
 
+/**
+ * Add an pair to the database
+ * @param {Map} pair 
+ * @param {any} token 
+ * @returns The response code
+ */
 async function postPair(pair, token) {
 	const requestOptions = {
 		method: "POST",
@@ -326,6 +368,12 @@ async function postPair(pair, token) {
 		.catch(error => { alert(error.message) })
 }
 
+/**
+ * Delete an examinee from the database
+ * @param {Integer} examineeId 
+ * @param {any} token 
+ * @returns The response code
+ */
 async function deleteExaminee(examineeId, token) {
 	const requestOptions = {
 		method: "DELETE",
@@ -337,6 +385,12 @@ async function deleteExaminee(examineeId, token) {
 		.catch(error => { alert(error.message) })
 }
 
+/**
+ * Add an examinee to the database
+ * @param {Map} examinee 
+ * @param {any} token 
+ * @returns The response code
+ */
 async function postExaminee(examinee, token) {
 	const requestOptions = {
 		method: "POST",
@@ -349,6 +403,13 @@ async function postExaminee(examinee, token) {
 		.catch(error => { alert(error.message) })
 }
 
+
+/**
+ * Update an already exsisting examinee in the database
+ * @param {Map} examinee 
+ * @param {any} token 
+ * @returns The response code
+ */
 async function putExaminee(examinee, token) {
 	const requestOptions = {
 		method: "PUT",
@@ -361,6 +422,12 @@ async function putExaminee(examinee, token) {
 		.catch(error => { alert(error.message) })
 }
 
+
+/**
+ * To handle the response from a fetch
+ * @param {Map} response 
+ * @returns Parsed data in a map
+ */
 async function handleResponse(response) {
 
 		if (response.status == HTTP_STATUS_CODES.NOT_ACCEPTABLE) {

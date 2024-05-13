@@ -148,7 +148,7 @@ export default function App() {
 						<Route path = "grading/:gradingId/3" element={<GradingAfter/>} />
 						<Route path = "grading/:gradingId/4" element={<GradingDeviations/>} />
 						<Route path="groups/statistics/:groupID" element={<Statistics />} />
-						<Route path="grading/during" element={<DuringGrading />} />
+						<Route path="grading/:gradingId/2" element={<DuringGrading />} />
 						<Route path="" element={<PlanIndex uri={planURI} />} />
 						<Route path="*" element={<NoPage />} />
 					</Route>
