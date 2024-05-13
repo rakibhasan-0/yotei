@@ -218,7 +218,7 @@ export default function DuringGrading() {
 	console.log("One pair: ", pairs[0])
 
 	// Extracted Examinee component to remove duplicate code.
-	const Examinee = ({ examinee={name: "test", examinee_id: 13}, index, side }) => ( // TODO: this makes it work
+	const Examinee = ({ examinee, index, side }) => ( // TODO: this makes it work
 		<ExamineeBox examineeName={examinee.name} onClickComment={() => console.log("CommentButton clicked")}>
 			<ExamineeButton
 				id={`pass-button-${index}-${side}`}
@@ -259,8 +259,8 @@ export default function DuringGrading() {
 					<ExamineePairBox 
 						key={index}
 						rowColor={index % 2 === 0 ? "#FFFFFF" : "#F8EBEC"}
-						leftExaminee={<Examinee examineeName={item.examineeLeft} index={index} side='left' />}
-						rightExaminee={<Examinee examineeName={item.examineeRight} index={index} side='right' />}
+						leftExaminee={<Examinee examinee={item.examineeLeft} index={index} side='left' />}
+						rightExaminee={<Examinee examinee={item.examineeRight} index={index} side='right' />}
 						pairNumber={index+1}>
 					</ExamineePairBox>
 				))}
