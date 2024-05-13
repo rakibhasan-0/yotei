@@ -26,11 +26,10 @@ export default function ExamineeBox({
 	id, 
 	examineeName, 
 	examineeId, 
-	gradingId,
-	currentTechniqueTitle,
+	//gradingId,
+	//currentTechniqueTitle,
 	children
 }) {
-	const [selectedButton, setSelectedButton] = useState(null)
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [isAddingComment, setAddComment] = useState(false)
 	const [commentText, setCommentText] = useState()

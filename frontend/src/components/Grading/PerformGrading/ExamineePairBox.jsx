@@ -33,8 +33,8 @@ export default function ExamineePairBox({
 	leftExaminee,
 	rightExaminee,
 	rowColor, 
-	gradingId,
-	currentTechniqueTitle
+	//gradingId,
+	//currentTechniqueTitle
 }) {
 	
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
