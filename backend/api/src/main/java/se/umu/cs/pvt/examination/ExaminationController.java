@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import se.umu.cs.pvt.belt.BeltRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Class for handling requests to the examination api.
