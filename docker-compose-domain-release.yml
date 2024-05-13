@@ -1,7 +1,7 @@
 services:
   nginx:
     build: ./nginx/
-    image: pvt2024/nginx:${TAG}
+    image: pvt2024/nginx:latest
     restart: always
     volumes:
       - certbotwww:/var/www/certbot/:ro
@@ -13,24 +13,22 @@ services:
       - gateway
 
   certbot:
-    image: certbot/certbot:${TAG}
-    depends_on:
-      - nginx
+    image: certbot/certbot:latest
     volumes:
       - certificate:/etc/letsencrypt/:rw
       - certbotwww:/var/www/certbot/:rw
       
   psql:
-    image: pvt2024/database:${TAG}
+    image: pvt2024/database:latest
       
   frontend:
-    image: pvt2024/frontend:${TAG}
+    image: pvt2024/frontend:latest
       
   gateway:
-    image: pvt2024/gateway:${TAG}
+    image: pvt2024/gateway:latest
     
   api:
-    image: pvt2024/api:${TAG}
+    image: pvt2024/api:latest
     
 volumes:
   certificate:
