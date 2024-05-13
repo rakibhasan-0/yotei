@@ -5,6 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * ExaminationProtocol - Entity class for the examination_protocol table
+ * @author Team Orange
+ */
 @Entity()
 @Table(name = "examination_protocol")
 public class ExaminationProtocol {
@@ -16,6 +20,12 @@ public class ExaminationProtocol {
     @Column(nullable = false, name = "examination_protocol")
     private String examination_protocol;
 
+    /**
+     * Data constructor for ExaminationProtocol
+     * 
+     * @param belt_id The belt id for the examination protocol.
+     * @param examination_protocol The json for the String of the examination protocol.  
+     */
     public ExaminationProtocol(long belt_id, String examination_protocol) {
         this.belt_id = belt_id;
         this.examination_protocol = examination_protocol;

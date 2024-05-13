@@ -199,22 +199,11 @@ public class ExaminationController {
         return new ResponseEntity<>(examineeRepository.findAll(), HttpStatus.OK);
     }
 
-    @PostMapping("/examinationprotocol")
-    public ResponseEntity<ExaminationProtocol> createExaminationProtocol(@RequestBody ExaminationProtocol examination_protocol) {
-        ExaminationProtocol new_examination_protocol = examinationProtocolRepository.save(examination_protocol);
-        return new ResponseEntity<>(new_examination_protocol, HttpStatus.OK);
-    }
-
-    @PutMapping("/examinationprotocol")
-    public ResponseEntity<Object> updateExaminationProtocol(@RequestBody ExaminationProtocol examination_protocol) {
-
-        if(examinationProtocolRepository.findById(examination_protocol.getBeltId()).isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        ExaminationProtocol new_examination_protocol = examinationProtocolRepository.save(examination_protocol);
-        return new ResponseEntity<>(new_examination_protocol, HttpStatus.OK);
-    }
-
+    /**
+     * Deletes a examination protocol.
+     * @param belt_id Given belt id.
+     * @return HTTP-status code.
+     */
     @DeleteMapping("/examinationprotocol/{belt_id}")
     public ResponseEntity<Object> deleteExaminationProtocol(@PathVariable("belt_id") long belt_id) {
 
@@ -225,6 +214,11 @@ public class ExaminationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /**
+     * Returns all examination protocols.
+     * @return All examination protocols.  
+     * @return HTTP-status code.
+     */
     @GetMapping("/examinationprotocol/all")
     public ResponseEntity<List<ExaminationProtocol>> getAllExaminationProtocol() {
         return new ResponseEntity<>(examinationProtocolRepository.findAll(), HttpStatus.OK);
