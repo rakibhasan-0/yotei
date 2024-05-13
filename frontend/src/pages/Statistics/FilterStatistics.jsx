@@ -8,7 +8,33 @@ import style from "./FilterStatistics.module.css"
 
 /**
  * 
- * The work is on progress for the statistics page.
+ * A component for filtering statistics.It contains filters for dates, belts, exercises and kihon.
+ * 
+ * Example usage:
+ * 
+ * <FilterStatistics 
+ * 		onToggleExercise={onToggleExercise}
+ * 		onToggleKihon={onToggleKihon}
+ * 		onDateChanges={onDateChanges}
+ * 		onToggleBelts={onToggleBelts}
+ * 		onClearBelts={onClearBelts}
+ * 		belts={belts}
+ * 		dates={dates}
+ * />
+ * 
+ * @param {function} onToggleExercise - Function to toggle exercises.
+ * @param {function} onToggleKihon - Function to toggle kihon.
+ * @param {function} onDateChanges - Function to change dates.
+ * @param {function} onToggleBelts - Function to toggle belts.
+ * @param {function} onClearBelts - Function to clear belts.
+ * @param {object} belts - Object containing selected belts.
+ * @param {object} dates - Object containing selected dates.
+ * 
+ * @returns A filter for statistics.
+ * @version 1.0
+ * @since 2024-05-08
+ * @author Team Coconut
+ * 
  */
 
 export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDateChanges, onToggleBelts, onClearBelts, belts, dates}) {
@@ -22,8 +48,6 @@ export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDa
 					<DatePicker
 						id="start-date-picker"
 						selectedDate={dates.from} // two years before from today
-						minDate={"1999-01-01"}
-						maxDate={"2050-01-01"}
 						onChange={(e) => {
 							onDateChanges("from", e.target.value)
 						}}
@@ -39,8 +63,6 @@ export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDa
 						onChange={(e) => {
 							onDateChanges("to", e.target.value)
 						}}
-						minDate={"1999-01-01"}
-						maxDate={dates.from}
 					/>
 				</div>
 
