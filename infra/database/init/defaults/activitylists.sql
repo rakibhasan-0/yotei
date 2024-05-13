@@ -10,9 +10,9 @@ INSERT INTO activity_list_entry(list_id, exercise_id) VALUES (1, 1);
 INSERT INTO activity_list_entry(list_id, exercise_id) VALUES (1, 2);
 INSERT INTO activity_list_entry(list_id, technique_id) VALUES (1, 1);
 
-INSERT INTO activity_list_entry(list_id, exercise_id) VALUES (2, 1);
-INSERT INTO activity_list_entry(list_id, exercise_id) VALUES (2, 2);
-INSERT INTO activity_list_entry(list_id, technique_id) VALUES (2, 1);
+INSERT INTO activity_list_entry(list_id, exercise_id, duration) VALUES (2, 1, 13);
+INSERT INTO activity_list_entry(list_id, exercise_id, duration) VALUES (2, 2, 37);
+INSERT INTO activity_list_entry(list_id, technique_id, duration) VALUES (2, 1, 69);
 
 INSERT INTO user_to_activity_list(user_id, list_id) VALUES (1, 1);
 INSERT INTO user_to_activity_list(user_id, list_id) VALUES (2, 1);
