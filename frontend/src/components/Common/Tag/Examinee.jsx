@@ -30,7 +30,7 @@ import CheckBox from "../CheckBox/CheckBox"
  * 			"Description"
  * 		</Examinee>
  * 
- * @author Team 1
+ * @author Team 1, Team Durian (Group 3) (2024-05-13)
  * @since 2024-05-06
  */
 export default function Examinee({ item, text, id, index, onRemove, onEdit, onCheck, showCheckbox, checked, validateTagName, grayTrash }) {
