@@ -1,8 +1,6 @@
-import { ChevronRight, Key } from "react-bootstrap-icons"
 import styles from "./Examinee.module.css"
-import { Link } from "react-router-dom"
-import { Trash, Pencil, X as CloseIcon, Check  } from "react-bootstrap-icons"
-import { useState, useEffect, useContext } from "react"
+import { Trash, Pencil, X as Check  } from "react-bootstrap-icons"
+import { useState } from "react"
 import CheckBox from "../CheckBox/CheckBox"
 
 /**
