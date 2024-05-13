@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useContext, useEffect, useReducer, useState } from "react"
+import {useParams} from "react-router"
 import { useLocation, useNavigate } from "react-router-dom"
 import WorkoutFormComponent from "../../components/Workout/CreateWorkout/WorkoutFormComponent.jsx"
 import { AccountContext } from "../../context.js"
@@ -27,8 +28,10 @@ const WorkoutEdit = () => {
 	const navigate = useNavigate()
 	const { token, userId } = useContext(AccountContext)
 	const location = useLocation()
+	const { state } = useLocation()
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const [isLoading, setIsLoading] = useState(true)
+
 
 	/**
 	 * Submits the form data to the API.
@@ -39,12 +42,14 @@ const WorkoutEdit = () => {
 		const data = parseData(workoutCreateInfo.data)
 		const workoutId = await updateWorkout(data)
 
+
 		if(workoutId) {
 			setSuccess("Träningen uppdaterades!")
 		} else {
 			setError("Träningen kunde inte uppdateras.")
 		}
-		navigate(-1)
+		navigate("/workout/" + workoutId)
+		
 	}
 
 	/**
@@ -148,6 +153,7 @@ const WorkoutEdit = () => {
 		const workoutData = location.state?.workout
 		const userData = location.state?.users
 
+
 		if (workoutData){
 			workoutCreateInfoDispatch({
 				type: WORKOUT_CREATE_TYPES.INIT_EDIT_DATA,
@@ -161,7 +167,7 @@ const WorkoutEdit = () => {
 				payload: JSON.parse(item)
 			})
 		} else {
-			navigate(-1, {replace: true})
+			navigate("/workout" , {replace: true})
 		}
 		setIsLoading(false)
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -186,7 +192,7 @@ const WorkoutEdit = () => {
 					<title>Redigera pass</title>
 					<h1 className={styles.title}>Redigera pass</h1>
 		
-					<WorkoutFormComponent callback={submitHandler} />	
+					<WorkoutFormComponent callback={submitHandler} state = {state}/>	
 				</WorkoutCreateContext.Provider> 
 			}
 		</>

@@ -1,12 +1,16 @@
 import "@testing-library/jest-dom"
 import {render, screen, fireEvent, configure, waitFor} from "@testing-library/react"
 import { BrowserRouter } from "react-router-dom"
-import Statistics from "../../../pages/Statistics/Statistics"
+import Statistics from "../../../pages/Statistics/StatisticsIndex"
 import StatisticsPopUp from "../../../pages/Statistics/StatisticsPopUp"
 import FilterStatistics from "../../../pages/Statistics/FilterStatistics"
-
 configure({ testIdAttribute: "id" })
 
+/**
+ * @author Team Coconut
+ * @since 2024-05-02
+ * @version 1.0
+ */
 const mockedGroup = [{
 	id: 1,
 	name: "Sample Group",
@@ -17,12 +21,12 @@ const mockedGroup = [{
 const mockedBelts = [{
 	id: 5,
 	name: "Svart",
-	color: "FCFCFC",
+	color: "000000",
 	child: false
 }, {
 	id: 2,
 	name: "Vitt",
-	color: "FCFCFC",
+	color: "FFFFFF",
 	child: false
 }, {
 	id: 3,
