@@ -99,6 +99,8 @@ DROP TABLE IF EXISTS exercise CASCADE;
 
 DROP TABLE IF EXISTS user_table CASCADE;
 
+DROP TABLE IF EXISTS user_to_permission CASCADE;
+
 DROP TABLE IF EXISTS comments CASCADE;
 
 DROP TABLE IF EXISTS plan CASCADE;
@@ -196,6 +198,24 @@ CREATE TABLE permission(
 
 ALTER TABLE
 	permission OWNER TO psql;
+
+--
+-- Name: user_to_permission (Mapping table); Type: TABLE; Schema: public; Owner: psql
+--
+
+CREATE TABLE user_to_permission(
+	pair_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	user_id INT NOT NULL,
+	permission_id INT NOT NULL,
+	CONSTRAINT up_fk_user_table FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON
+	DELETE CASCADE,
+	CONSTRAINT up_fk_permission FOREIGN KEY (permission_id) REFERENCES permission(permission_id) ON
+	DELETE CASCADE,
+	UNIQUE(user_id, permission_id)
+);
+
+ALTER TABLE
+	user_to_permission OWNER TO psql;
 
 --
 -- Name: exercise; Type: TABLE; Schema: public; Owner: psql
