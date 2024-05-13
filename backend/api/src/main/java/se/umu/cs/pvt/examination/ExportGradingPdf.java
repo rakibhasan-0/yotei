@@ -80,7 +80,7 @@ public class ExportGradingPdf {
         int initX = TABLE_START_X_POS;
         int initY = pageHeight-75;
 
-        PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/noto/NotoSans-Regular.ttf"));
+        PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/truetype/freefont/FreeSerif.ttf"));
         PDPageContentStream contentStream = new PDPageContentStream(document,page);
         contentStream.setStrokingColor(Color.DARK_GRAY);
         contentStream.setLineWidth(1);
@@ -102,7 +102,7 @@ public class ExportGradingPdf {
         for(int j = (onPage*MAX_NUM_COLUMNS); j<(onPage*MAX_NUM_COLUMNS)+MAX_NUM_COLUMNS && j < examinees.size();j++){
             contentStream.addRect(initX,initY,CELL_WIDTH,-CELL_HEIGHT);
 
-            writeToCell(initX, initY, contentStream, examinees.get(j).getName(), font);
+            writeToCell(initX, initY, contentStream, stripName(examinees.get(j).getName()), font);
 
             initX+=CELL_WIDTH;
             count++;
@@ -172,7 +172,7 @@ public class ExportGradingPdf {
                     for(int j2 = (onPage*MAX_NUM_COLUMNS); j2<(onPage*MAX_NUM_COLUMNS)+MAX_NUM_COLUMNS && j2 < examinees.size();j2++){
                         contentStream.addRect(initX,initY,CELL_WIDTH,-CELL_HEIGHT);
         
-                        writeToCell(initX, initY, contentStream, examinees.get(j2).getName(), font);
+                        writeToCell(initX, initY, contentStream, stripName(examinees.get(j2).getName()), font);
         
                         initX+=CELL_WIDTH;
                         count2++;
@@ -198,21 +198,44 @@ public class ExportGradingPdf {
     }
 
 
-    private void createHeader(String belt_name, String date, PDPageContentStream contentStream) throws IOException {
-        PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/noto/NotoSans-Regular.ttf"));
+    private void createHeader(String beltName, String date, PDPageContentStream contentStream) throws IOException {
+        PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/truetype/freefont/FreeSerif.ttf"));
         int initX = TABLE_START_X_POS;
         int initY = pageHeight-75;
-
         //Set header data
+        Color beltColor = getHighlightColor(beltName);
+        contentStream.addRect(initX, initY + 30, 120, 15);
+        contentStream.setStrokingColor(beltColor);
+        contentStream.setNonStrokingColor(beltColor);
+        contentStream.fill();
+        contentStream.stroke();
+
+        contentStream.setStrokingColor(0f,0f,0f);
+        contentStream.setNonStrokingColor(0f,0f,0f);
         contentStream.beginText();
         contentStream.setFont(font, 10);
         contentStream.newLineAtOffset(initX, initY + 50);
         contentStream.showText("Graderingprotokoll");
         contentStream.newLineAtOffset(0, -15);
-        contentStream.showText(belt_name);
+        contentStream.showText(beltName);
         contentStream.newLineAtOffset(0, -15);
         contentStream.showText(date);
         contentStream.endText();
+    }
+
+    private Color getHighlightColor(String beltName) {
+        String split[] = beltName.split(" ");
+        if (split[2].equals("GULT"))
+            return Color.decode("#FFDD33");
+        if (split[2].equals("BRUNT"))
+            return Color.decode("#83530C");
+        if (split[2].equals("ORANGE"))
+            return Color.decode("#FFA133");
+        if (split[2].equals("GRÖNT"))
+            return Color.decode("#0C7D2B");
+        if (split[2].equals("BLÅTT"))
+            return Color.decode("#1E9CE3");
+        return new Color(1f,1f,1f);
     }
 
     public void generate() throws IOException {
@@ -236,102 +259,160 @@ public class ExportGradingPdf {
 
         //Här skapar vi sidorna för kommentarerna där de står t.ex. #1 Bra jobbat\n #2 du suger
         createGroupCommentPage();
-        document.save("/home/marcus/school/yotei/test.pdf");
+        createPairCommentPage();
+        document.save("/home/adam/Programming/yotei/test.pdf");
         document.close();
     }
 
+    
     private void createGroupCommentPage() throws IOException {
         PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
         document.addPage(page);
-
+        
         pageWidth = (int)page.getMediaBox().getWidth(); //get width of the page
         pageHeight = (int)page.getMediaBox().getHeight(); //get height of the page
-
+        
         int initX = TABLE_START_X_POS;
         int initY = pageHeight-75;
-
-        PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/noto/NotoSans-Regular.ttf"));
+        
+        PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/truetype/freefont/FreeSerif.ttf"));
         PDPageContentStream contentStream = new PDPageContentStream(document,page);
         contentStream.setStrokingColor(Color.DARK_GRAY);
         contentStream.setLineWidth(1);
         Map<String, Object> protocol = parseJson(gradingProtocol);
         Map<String, Object> gradingProtocolObj = (Map<String, Object>) protocol.get("grading_protocol");
-
+        
         String code = (String) gradingProtocolObj.get("code");
         String color = (String) gradingProtocolObj.get("color");
-
+        
         createHeader(code + " " + color, "2024-05-07", contentStream);
         drawImage(page, contentStream);
-
+        
         String groupComment = """                
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ultrices nibh ac nibh tempor sagittis. Proin non eleifend diam. Aliquam eget egestas neque. Sed tortor dui, tincidunt eu venenatis in, sollicitudin sit amet risus. Mauris pharetra turpis in lectus euismod, ac lobortis urna tincidunt. Vestibulum tincidunt luctus sapien ut rhoncus. Curabitur sit amet orci purus. Praesent consectetur, ante vitae pharetra euismod, sapien lorem interdum dolor, vitae fringilla orci tellus et sem.
-
-Proin eu orci eu dolor dapibus consectetur. Nunc mollis augue felis. Vestibulum vitae suscipit massa, consectetur suscipit mauris. Interdum et malesuada fames ac ante ipsum primis in faucibus. Praesent finibus blandit placerat. Nullam imperdiet eleifend maximus. Pellentesque tempus vel mauris euismod scelerisque. Vivamus nisi leo, accumsan a ex non, molestie molestie libero. Phasellus sit amet tincidunt nibh. Nulla vel pretium nisi, ac varius elit. Praesent molestie sem velit, et scelerisque sapien mollis at. Proin tempus aliquam neque, vel sagittis orci condimentum at.
-
-Suspendisse eget scelerisque tortor. Cras at ornare felis, ut varius nibh. Nunc nec odio velit. Morbi non placerat urna. Proin augue nunc, tempor ut nisl consequat, tincidunt consequat dolor. Aliquam elementum scelerisque lectus, vitae elementum sapien condimentum eu. Fusce eget augue sit amet arcu pellentesque rutrum. Nullam lacinia non massa id pulvinar. Sed hendrerit velit sapien, sed porttitor nulla fermentum eu. Proin a ullamcorper ante, in sodales dolor. Pellentesque in suscipit arcu. Fusce vitae neque orci.
-
-Nunc eget blandit leo. Nulla non pretium nulla. Sed id placerat ligula. Vestibulum risus sem, egestas non dolor eu, gravida eleifend purus. Mauris tempor quam id nulla molestie, ut euismod purus sagittis. Suspendisse varius diam venenatis tortor facilisis mollis. Vivamus at elit sit amet mi gravida vestibulum vitae posuere enim. Sed finibus rhoncus neque eget feugiat. Phasellus semper ligula nulla, porta rhoncus dui commodo non. Proin eget dapibus lacus. Nam fermentum dui a velit pellentesque porttitor. Maecenas bibendum eros nulla, id tempus elit rhoncus nec. Mauris mattis malesuada felis malesuada volutpat. Sed nec sem quis leo volutpat pellentesque. Nullam consectetur faucibus mauris eu facilisis.
-
-Praesent enim risus, facilisis vitae varius ut, convallis vel arcu. Maecenas vestibulum fermentum felis eu consequat. Maecenas vitae libero venenatis, volutpat est nec, aliquet metus. Sed tincidunt massa a turpis maximus, quis tristique orci congue. Proin vitae felis est. Aenean sodales purus dui. Nullam nec risus lectus. Integer egestas diam velit, at congue ex rutrum non. Phasellus vitae condimentum massa. Nunc in lacus et tellus rutrum tempor ut at dui. Mauris eleifend leo id lectus pharetra, ultrices rutrum justo condimentum. Nullam pharetra volutpat leo, nec dapibus tortor sagittis vitae. Nunc congue nec ante et ultricies. Cras vel imperdiet velit, sed tempus risus. Ut pellentesque nibh in tellus scelerisque posuere ut vitae felis. Sed eu lacus consectetur, gravida lectus sed, porttitor augue.
-
-Ut orci ligula, ornare at quam ut, ultrices euismod orci. Aenean et pretium libero. Integer tempor ultrices magna, vitae malesuada ipsum faucibus non. Duis vel aliquam nunc. Nulla lacinia mi eget eros tristique, non faucibus est eleifend. Cras fringilla ligula nec augue molestie convallis. Mauris auctor. 
-                """;
-
-        List<String> rows = new ArrayList<>();
-
-        if(groupComment.length() > 120) {
-
-            int numRows = (int)Math.ceil((double)groupComment.length() / 120);
-
-            int startIndex = 0;
-            int stopIndex = 120;
-
-            for(int i = 0; i < numRows; i++) {
-                System.out.println("Stopindex start: " + stopIndex);
-
-                int lastSpaceIndex = groupComment.substring(startIndex, stopIndex).lastIndexOf(' ');
-
-                if(lastSpaceIndex > 0) {
-                    stopIndex = lastSpaceIndex + startIndex +1;
-                }
-
-                System.out.println(startIndex);
-                System.out.println(stopIndex);
-                System.out.println("====================");
-
-                rows.add(groupComment.substring(startIndex, stopIndex).replaceAll("\\u000a", ""));
-
-                startIndex = stopIndex;
-                if(stopIndex + 120 <= groupComment.length())
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ultrices nibh ac nibh tempor sagittis. Proin non eleifend diam. Aliquam eget egestas neque. Sed tortor dui, tincidunt eu venenatis in, sollicitudin sit amet risus. Mauris pharetra turpis in lectus euismod, ac lobortis urna tincidunt. Vestibulum tincidunt luctus sapien ut rhoncus. Curabitur sit amet orci purus. Praesent consectetur, ante vitae pharetra euismod, sapien lorem interdum dolor, vitae fringilla orci tellus et sem.
+            
+            Proin eu orci eu dolor dapibus consectetur. Nunc mollis augue felis. Vestibulum vitae suscipit massa, consectetur suscipit mauris. Interdum et malesuada fames ac ante ipsum primis in faucibus. Praesent finibus blandit placerat. Nullam imperdiet eleifend maximus. Pellentesque tempus vel mauris euismod scelerisque. Vivamus nisi leo, accumsan a ex non, molestie molestie libero. Phasellus sit amet tincidunt nibh. Nulla vel pretium nisi, ac varius elit. Praesent molestie sem velit, et scelerisque sapien mollis at. Proin tempus aliquam neque, vel sagittis orci condimentum at.
+            
+            Suspendisse eget scelerisque tortor. Cras at ornare felis, ut varius nibh. Nunc nec odio velit. Morbi non placerat urna. Proin augue nunc, tempor ut nisl consequat, tincidunt consequat dolor. Aliquam elementum scelerisque lectus, vitae elementum sapien condimentum eu. Fusce eget augue sit amet arcu pellentesque rutrum. Nullam lacinia non massa id pulvinar. Sed hendrerit velit sapien, sed porttitor nulla fermentum eu. Proin a ullamcorper ante, in sodales dolor. Pellentesque in suscipit arcu. Fusce vitae neque orci.
+            
+            Nunc eget blandit leo. Nulla non pretium nulla. Sed id placerat ligula. Vestibulum risus sem, egestas non dolor eu, gravida eleifend purus. Mauris tempor quam id nulla molestie, ut euismod purus sagittis. Suspendisse varius diam venenatis tortor facilisis mollis. Vivamus at elit sit amet mi gravida vestibulum vitae posuere enim. Sed finibus rhoncus neque eget feugiat. Phasellus semper ligula nulla, porta rhoncus dui commodo non. Proin eget dapibus lacus. Nam fermentum dui a velit pellentesque porttitor. Maecenas bibendum eros nulla, id tempus elit rhoncus nec. Mauris mattis malesuada felis malesuada volutpat. Sed nec sem quis leo volutpat pellentesque. Nullam consectetur faucibus mauris eu facilisis.
+            
+            Praesent enim risus, facilisis vitae varius ut, convallis vel arcu. Maecenas vestibulum fermentum felis eu consequat. Maecenas vitae libero venenatis, volutpat est nec, aliquet metus. Sed tincidunt massa a turpis maximus, quis tristique orci congue. Proin vitae felis est. Aenean sodales purus dui. Nullam nec risus lectus. Integer egestas diam velit, at congue ex rutrum non. Phasellus vitae condimentum massa. Nunc in lacus et tellus rutrum tempor ut at dui. Mauris eleifend leo id lectus pharetra, ultrices rutrum justo condimentum. Nullam pharetra volutpat leo, nec dapibus tortor sagittis vitae. Nunc congue nec ante et ultricies. Cras vel imperdiet velit, sed tempus risus. Ut pellentesque nibh in tellus scelerisque posuere ut vitae felis. Sed eu lacus consectetur, gravida lectus sed, porttitor augue.
+            
+            Ut orci ligula, ornare at quam ut, ultrices euismod orci. Aenean et pretium libero. Integer tempor ultrices magna, vitae malesuada ipsum faucibus non. Duis vel aliquam nunc. Nulla lacinia mi eget eros tristique, non faucibus est eleifend. Cras fringilla ligula nec augue molestie convallis. Mauris auctor. 
+            """;
+            
+            List<String> rows = new ArrayList<>();
+            
+            if(groupComment.length() > 120) {
+                
+                int numRows = (int)Math.ceil((double)groupComment.length() / 120);
+                
+                int startIndex = 0;
+                int stopIndex = 120;
+                
+                for(int i = 0; i < numRows; i++) {
+                    System.out.println("Stopindex start: " + stopIndex);
+                    
+                    int lastSpaceIndex = groupComment.substring(startIndex, stopIndex).lastIndexOf(' ');
+                    
+                    if(lastSpaceIndex > 0) {
+                        stopIndex = lastSpaceIndex + startIndex +1;
+                    }
+                    
+                    System.out.println(startIndex);
+                    System.out.println(stopIndex);
+                    System.out.println("====================");
+                    
+                    rows.add(groupComment.substring(startIndex, stopIndex).replaceAll("\\u000a", ""));
+                    
+                    startIndex = stopIndex;
+                    if(stopIndex + 120 <= groupComment.length())
                     stopIndex = stopIndex + 120;
-                else
+                    else
                     stopIndex = groupComment.length();
-
+                    
+                }
             }
+            
+            contentStream.beginText();
+            contentStream.setFont(font, 14);
+            contentStream.newLineAtOffset(initX, initY-30);
+            contentStream.showText("Gruppkommentar");
+            contentStream.setFont(font, 10);
+            contentStream.newLineAtOffset(0, -20);
+            
+            for(int i = 0; i < rows.size(); i++) {
+                contentStream.showText(rows.get(i));
+                contentStream.newLineAtOffset(0, -15);
+            }
+            
+            contentStream.endText();
+            contentStream.stroke();
+            contentStream.close();
+        }
+
+        private void createPairCommentPage() throws IOException {
+            PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
+            document.addPage(page);
+    
+            pageWidth = (int)page.getMediaBox().getWidth(); //get width of the page
+            pageHeight = (int)page.getMediaBox().getHeight(); //get height of the page
+    
+            int initX = TABLE_START_X_POS;
+            int initY = pageHeight-75;
+    
+            PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/truetype/freefont/FreeSerif.ttf"));
+            PDPageContentStream contentStream = new PDPageContentStream(document,page);
+            contentStream.setStrokingColor(Color.DARK_GRAY);
+            contentStream.setLineWidth(1);
+            Map<String, Object> protocol = parseJson(gradingProtocol);
+            Map<String, Object> gradingProtocolObj = (Map<String, Object>) protocol.get("grading_protocol");
+    
+            String code = (String) gradingProtocolObj.get("code");
+            String color = (String) gradingProtocolObj.get("color");
+    
+            createHeader(code + " " + color, "2024-05-07", contentStream);
+            drawImage(page, contentStream);
+            
+            contentStream.stroke();
+            contentStream.close();
+        }
+
+        private void createExamineeCommentPage() throws IOException {
+            PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
+            document.addPage(page);
+    
+            pageWidth = (int)page.getMediaBox().getWidth(); //get width of the page
+            pageHeight = (int)page.getMediaBox().getHeight(); //get height of the page
+    
+            int initX = TABLE_START_X_POS;
+            int initY = pageHeight-75;
+    
+            PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/truetype/freefont/FreeSerif.ttf"));
+            PDPageContentStream contentStream = new PDPageContentStream(document,page);
+            contentStream.setStrokingColor(Color.DARK_GRAY);
+            contentStream.setLineWidth(1);
+            Map<String, Object> protocol = parseJson(gradingProtocol);
+            Map<String, Object> gradingProtocolObj = (Map<String, Object>) protocol.get("grading_protocol");
+    
+            String code = (String) gradingProtocolObj.get("code");
+            String color = (String) gradingProtocolObj.get("color");
+    
+            createHeader(code + " " + color, "2024-05-07", contentStream);
+            drawImage(page, contentStream);
+            
+            contentStream.stroke();
+            contentStream.close();
         }
         
-        contentStream.beginText();
-        contentStream.setFont(font, 14);
-        contentStream.newLineAtOffset(initX, initY-30);
-        contentStream.showText("Gruppkommentar");
-        contentStream.setFont(font, 10);
-        contentStream.newLineAtOffset(0, -20);
-
-        for(int i = 0; i < rows.size(); i++) {
-            contentStream.showText(rows.get(i));
-            contentStream.newLineAtOffset(0, -15);
+        private String stripName(String name) {
+            if(name.length() > 30) {
+                name = name.substring(0, 27);
+                name = name + "...";
+            }
+            System.out.println(name);
+            return name;
         }
-        
-        contentStream.endText();
-        contentStream.stroke();
-        contentStream.close();
     }
-
-    private String stripName(String name) {
-        if(name.length() > 15) {
-            name = name.substring(0, 12);
-            name = name + "...";
-        }
-        return name;
-    }
-}
+    
