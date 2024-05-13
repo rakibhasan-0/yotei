@@ -12,7 +12,7 @@ import javax.persistence.Table;
 /**
  * A role class representing roles that users can have.
  * 
- * @author Team Mango (Grupp 4) - 2024-05-07
+ * @author Team Mango (Grupp 4) - 2024-05-13
  */
 @Entity
 @Table(name = "role")
