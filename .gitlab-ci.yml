@@ -210,9 +210,9 @@ deploy-prod-server:
   rules:
     - if: $CI_COMMIT_TAG
   tags:
-    - system
+    - prod
   script:
-    - ssh pvt@5dv214vt24-prod.cs.umu.se 'cd /home/pvt/prod/ && ./build.sh '$CI_COMMIT_TAG' && exit'
+    - ./deploy_prod.sh '$CI_COMMIT_TAG'
   release: 
     tag_name: '$CI_COMMIT_TAG'
     description: '$CI_COMMIT_TAG'
