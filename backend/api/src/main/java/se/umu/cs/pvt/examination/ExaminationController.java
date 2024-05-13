@@ -26,6 +26,8 @@ public class ExaminationController {
     private ExamineePairRepository examineePairRepository;
     private ExamineeRepository examineeRepository;
     private ExaminationCommentRepository examinationCommentRepository;
+    private ExaminationResultRepository examinationResultRepository;
+
     public ResponseEntity<String> example() {
         return new ResponseEntity<>("hello", HttpStatus.OK);
     }
@@ -38,15 +40,18 @@ public class ExaminationController {
      * @param examineePairRepository Repository for the examinee pair entity.
      * @param examineeRepository Repository for the examinee entity.
      * @param examinationCommentRepository Repository for the examination comment entity.
+     * @param examinationResultRepository Repository for the examination result entity.
      */
     @Autowired
     public ExaminationController(GradingRepository gradingRepository, BeltRepository beltRepository, ExamineePairRepository examineePairRepository, 
-    ExamineeRepository examineeRepository, ExaminationCommentRepository examinationCommentRepository) {
+    ExamineeRepository examineeRepository, ExaminationCommentRepository examinationCommentRepository,  ExaminationResultRepository examinationResultRepository) {
+     
         this.gradingRepository = gradingRepository;
         this.beltRepository = beltRepository;
         this.examineePairRepository = examineePairRepository;
         this.examineeRepository = examineeRepository;
         this.examinationCommentRepository = examinationCommentRepository;
+        this.examinationResultRepository = examinationResultRepository;
     }
 
     /**
@@ -259,5 +264,56 @@ public class ExaminationController {
 
         return new ResponseEntity<>(examinationCommentRepository.findAll(), HttpStatus.OK);
     }
+    /**
+     * Creates a examination result.
+     * @param examination_result Object mapped examimnation result from request body.
+     * @return The created examination result.
+     * @return HTTP-status code.
+    */ 
+    @PostMapping("/examresult")
+    public ResponseEntity<ExaminationResult> createExaminationResult(@RequestBody ExaminationResult examination_result){
+        ExaminationResult new_examination_result = examinationResultRepository.save(examination_result);
+        return new ResponseEntity<>(new_examination_result, HttpStatus.OK);
+    }
     
+   /**
+     * Updates a given examination result.
+     * @param examination_result Object mapped examimnation result from request body.
+     * @return HTTP-status code.
+    */  
+    @PutMapping("/examresult")
+    public ResponseEntity<Object> updateExaminationResult(@RequestBody ExaminationResult examination_result){
+
+        if(examinationResultRepository.findById(examination_result.getResult_id()).isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        examinationResultRepository.save(examination_result);
+        return new ResponseEntity<>(HttpStatus.OK);
+
+    }
+
+    /**
+     * Returns all examination results.
+     * @return All examination results.  
+     * @return HTTP-status code.
+     */
+    @GetMapping("/examresult/all")
+    ResponseEntity<List<ExaminationResult>> getAllExaminationResults(){
+        return new ResponseEntity<>(examinationResultRepository.findAll(), HttpStatus.OK);
+    }
+
+    /**
+     * Deletes a given examination result.
+     * @param result_id Given examinee id.
+     * @return HTTP-status code.
+    */
+    @DeleteMapping("/examresult/{result_id}")
+    public ResponseEntity<ExaminationResult> deleteExaminationResult(@PathVariable("result_id") Long result_id) {
+        if(examinationResultRepository.findById(result_id).isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        examinationResultRepository.deleteById(result_id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

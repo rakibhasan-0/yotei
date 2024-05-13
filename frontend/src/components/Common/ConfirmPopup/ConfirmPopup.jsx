@@ -48,8 +48,8 @@ export default function ConfirmPopup({ onClick, id, showPopup, setShowPopup, pop
 			</div>	
 			<div className={styles.outerButtonpanel}>
 				<div className={styles.innerButtonpanel} id={`${id}-buttons`}>
-					<Button width='110px' outlined='false' onClick={() => setShowPopup(false)}><h2>{backText ? backText : "Tillbaka"}</h2></Button>
-					<Button width='110px' onClick={deleteClickHandler}><h2>{confirmText ? confirmText : "Ta bort"}</h2></Button>
+					<Button id='cancel-popup-button' width='110px' outlined='false' onClick={() => setShowPopup(false)}><h2>{backText ? backText : "Tillbaka"}</h2></Button>
+					<Button id='confirm-popup-button' width='110px' onClick={deleteClickHandler}><h2>{confirmText ? confirmText : "Ta bort"}</h2></Button>
 				</div>
 			</div>
 		</Popup>
