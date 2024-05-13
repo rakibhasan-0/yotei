@@ -5,17 +5,17 @@ import { UserApi } from '@fixtures/UserApi';
 // Note that we pass worker fixture types as a second template parameter.
 export const test = base.extend<{}, { account: Account }>({
   account: [async ({ browser }, use, workerInfo) => {
-    // Unique username.
-    const username = 'account' + workerInfo.workerIndex;
-    const password = 'verysecure';
-    const role = Role.admin;
+		const username = Math.random().toString(36).slice(2, 7) + workerInfo.workerIndex // Will generate a random string of 5 characters
+    const password = 'verysecure'
+    const role = Role.admin
+    // TODO fix so you can login for all roles
 
     // Create the account with userApi.
 		const response = await UserApi.register_user({username: username, password: password, role: role})
 		const userId = response.userId
 
     // Use the account value.
-    await use({ username, password, role, userId });
+    await use({ username, password, role, userId })
   }, { scope: 'worker' }],
 
   page: async ({ page, account }, use) => {
