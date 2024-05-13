@@ -658,7 +658,7 @@ ALTER TABLE
 \ir defaults/sessionreviews.sql
 \ir defaults/sessionreviewactivities.sql
 \ir defaults/activitylists.sql
-\ir defaults/grading_protocols.sql
+\ir defaults/examination_protocols.sql
 \ir defaults/permissions.sql
 -- Triggers for user
 --
