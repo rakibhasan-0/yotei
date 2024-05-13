@@ -1,5 +1,5 @@
 import styles from "./Examinee.module.css"
-import { Trash, Pencil, X as Check  } from "react-bootstrap-icons"
+import { Trash, Pencil, Check2 as Check, X } from "react-bootstrap-icons"
 import { useState } from "react"
 import CheckBox from "../CheckBox/CheckBox"
 
@@ -35,7 +35,9 @@ export default function Examinee({ item, text, id, index, onRemove, onEdit, onCh
 
 	const [isEditing, setIsEditing] = useState(false) // State to manage edit mode
 	const [editedText, setEditedText] = useState(item) // State to store edited text
+	const [savedText, setSavedText] = useState(item)
 	const [error, setError] = useState("")
+	const [grayEdit, setGrayEdit] = useState(true)
 
 	const handleEdit = () => {
 		setIsEditing(true)
@@ -44,19 +46,25 @@ export default function Examinee({ item, text, id, index, onRemove, onEdit, onCh
 	const handleInputChange = (event) => {
 		const text = event.target.value
 		const textareaErr = validateTagName(text)
-		console.log(textareaErr)
+		// Update the gray check
+		setGrayEdit(textareaErr != "" || text === savedText)
 		setEditedText(text)
-		
 		setError(textareaErr)
-		
-		
 	}
 
 	const handleEditSubmit = () => {
-		if(error == "") {
+		if(error == "" && !grayEdit) {
 			setIsEditing(false)
+			setSavedText(editedText)
 			onEdit(id, editedText)
 		}
+	}
+
+	const handleEditAbort = () => {
+		setIsEditing(false)
+		setError("")
+		setEditedText(savedText)
+		setGrayEdit(true) // Reset
 	}
 
 	return (
@@ -91,17 +99,31 @@ export default function Examinee({ item, text, id, index, onRemove, onEdit, onCh
 									<div className={styles["examinee-list-duration"]} data-testid="ExamineeListItem-text">
 										<p>{text}</p>
 									</div>
-									{isEditing ? (
-										<Check onClick={handleEditSubmit} size="36px" style={{ color: "var(--red-primary)", cursor: "pointer", marginRight: "10px" }} />
-									) : (
-										<Pencil onClick={handleEdit} size="24px" style={{ color: "var(--red-primary)", cursor: "pointer", marginRight: "10px" }} />
-									)}
-									<Trash
-										className={styles["close-icon"]}
-										onClick={() => onRemove(id, grayTrash)}
-										size="24px"
-										style={grayTrash ? {color: "var(--gray)"} : { color: "var(--red-primary)" } }
-									/>
+									{isEditing ?
+										<>
+											<Check onClick={handleEditSubmit} size="24px" 
+												style={grayEdit ? 
+													{color: "var(--gray)", cursor: "not-allowed", marginRight: "10px"} : 
+													{color: "var(--red-primary)", cursor: "pointer", marginRight: "10px"}}
+											/>
+											<X
+												className={styles["close-icon"]}
+												onClick={handleEditAbort}
+												size="24px"
+												style={{ color: "var(--red-primary)" }}
+											/>
+										</>
+										: 
+										<>
+											<Pencil onClick={handleEdit} size="24px" style={{ color: "var(--red-primary)", cursor: "pointer", marginRight: "10px" }} />
+											<Trash
+												className={styles["close-icon"]}
+												onClick={() => onRemove(id, grayTrash)}
+												size="24px"
+												style={grayTrash ? {color: "var(--gray)"} : { color: "var(--red-primary)" } }
+											/>
+										</>
+									}
 								</div>
 							</div>
 						</div>
