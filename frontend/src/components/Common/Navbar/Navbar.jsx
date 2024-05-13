@@ -71,7 +71,7 @@ function Navbar({ testId }) {
 				</Button>
 
 				{isExaminationEnabled ? (
-					<Button width={"100%"} onClick={() => navigateAndClose("/grading/create")}>
+					<Button width={"100%"} onClick={() => navigateAndClose("/grading")}>
 						<h1 className={styles.commonNavbarButton}>Gradering</h1>
 					</Button>
 				) : (

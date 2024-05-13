@@ -70,7 +70,7 @@ export default function GradingCreate() {
 
 
 	useEffect(() => {
-		(async () => {
+		const fetchData = async () => {
 			try {
 				const response = await fetch("/api/belts/all", { headers: { token } })
 				if (response.status === 404) {
@@ -101,7 +101,8 @@ export default function GradingCreate() {
 				setLoading(false)
 				console.error(ex)
 			}
-		})()
+		}
+    fetchData()
 	}, [token])
 
 	return (

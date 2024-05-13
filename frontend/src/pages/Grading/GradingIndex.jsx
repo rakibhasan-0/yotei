@@ -61,7 +61,7 @@ export default function GradingIndex() {
 			})
 	}
 
-	useEffect(async () => {
+	useEffect(() => {
 
 		const fetchData = async () => {
 			try {
@@ -109,6 +109,10 @@ export default function GradingIndex() {
 
 	}, [])
 
+  function navigateTo() {
+    navigate("/grading/create")
+  }
+
 	return (
 		<center>
 			<h1>Pågående graderingar</h1>
@@ -151,7 +155,7 @@ export default function GradingIndex() {
                 
 			</div>
 
-			<RoundButton linkTo={"/grading/create"}>
+			<RoundButton onClick={navigateTo}>
 				<Plus />
 			</RoundButton>
 		</center>
