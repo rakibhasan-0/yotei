@@ -61,16 +61,11 @@ export default function StatisticsPopUp({groupActivities,dates,averageRating,num
 
 	return (
 		<div className={style.statisticsButtonContainer}>
-		<button onClick={togglePopup}>
-			<img src="/Statistics.svg" />
-		</button>
+			<button onClick={togglePopup}>
+				<img src="/Statistics.svg" />
+			</button>
 
-			<Popup
-			title={"Sammanställning av tillfällen"}
-			id="statistics-popup"
-			isOpen={showPopup}
-			setIsOpen={setShowPopup}
-			>
+			<Popup title={"Sammanställning av tillfällen"} id="statistics-popup" isOpen={showPopup} setIsOpen={setShowPopup} >
 				<div className={style.statisticsPopupContainer}>
 					<StarRatings
 						rating={averageRating}
@@ -91,6 +86,5 @@ export default function StatisticsPopUp({groupActivities,dates,averageRating,num
 				</div>
 			</Popup>
 		</div>
-	);
+	)
 }
-
