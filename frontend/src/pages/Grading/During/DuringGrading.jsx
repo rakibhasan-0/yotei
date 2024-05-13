@@ -100,9 +100,83 @@ export default function DuringGrading() {
 	// Go to summary when the index is equal to length. Maybe change the look of the buttons.
 	const goToNextTechnique = () => {
 		setCurrentIndex(currentIndex === techniqueNameList.length - 1 ? currentIndex : currentIndex + 1)
+		//saveExamineeResults()
+		const examinationResult = {
+			"examinee_id": 1,
+			"technique_name": "kihon waza",
+			"pass": false
+		};
+		(async () => {
+			try {
+				const response = await fetch('/examresult', {
+				method: 'POST',
+				body: JSON.stringify({
+					"examinee_id": 1,
+					"technique_name": "kihon waza",
+					"pass": false
+				})
+				});
+			
+				if (!response.ok) {
+				throw new Error('Failed to create examination result');
+				}
+			
+				const newExaminationResult = await response.json();
+				return newExaminationResult;
+			} catch (error) {
+				console.error('Error creating examination result:', error);
+				throw error; // You might handle errors differently depending on your application's requirements
+			}
+		})()
+		
+		  
+		/*
+		if (examinees) {
+			examinees.forEach((examinee) => {
+				// Your existing code for processing examinees
+			  	//console.log("This examinee: ", examinee) // Prints whole exmainee
+				//const cur_examinee_id = examinee.examinee_id
+				//const cur_technique_name = techniqueNameList[currentIndex].technique.text
+				//const pass = true // TODO: Check in this examinee if it has passed
+				//const examResult = {
+				//	"examinee_id": 8,
+				//	"technique_name": "10. Livtag under armarna framifrån \tTate hishigi, ude henkan gatame",
+				//	"pass": true
+				//}
+				//console.log("examResult: ", JSON.stringify(examResult) )
+				
+				(async () => {
+					try {
+
+						const response = await fetch('/examresult', {
+							method: 'POST',
+							body: JSON.stringify({
+								"examinee_id": 8,
+								"technique_name": "10. Livtag under armarna framifrån \tTate hishigi, ude henkan gatame",
+								"pass": true
+							}),
+						});
+						if (!response.ok) {
+							console.log("could not post examresult")
+							throw new Error("Could not post examresult")
+						}
+						const res = await response.json()
+						console.log("Result from exam result: ", res)
+					} catch (ex) {
+						setErrorToast("Kunde inte hämta alla utövare")
+						console.error(ex)
+					}
+				})()
+			});
+		  } else {
+			console.log('Examinees array is undefined');
+		  }
+		  */
+		
 	}
 	const goToPrevTechnique = () => {
 		setCurrentIndex(currentIndex === 0 ? currentIndex : currentIndex - 1)
+		//loadExamineeResults()
 	}
 
 	// Run first time and fetch all examinees in this grading
