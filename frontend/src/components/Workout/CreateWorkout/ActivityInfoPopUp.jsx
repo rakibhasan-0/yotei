@@ -2,7 +2,7 @@ import { useEffect, useContext, useState } from "react"
 import styles from "./ActivityInfoPopUp.module.css"
 import Divider from "../../Common/Divider/Divider.jsx"
 import Button from "../../Common/Button/Button.jsx"
-import { TrashFill } from "react-bootstrap-icons"
+import { Trash } from "react-bootstrap-icons"
 import { Plus } from "react-bootstrap-icons"
 import { WorkoutCreateContext } from "./WorkoutCreateContext"
 import { WORKOUT_CREATE_TYPES } from "./WorkoutCreateReducer"
@@ -41,18 +41,26 @@ function ActivityItem({ index, categoryName, id, inputDisabled, text }) {
 	return (
 		<fieldset className={styles.activityItem} id={"activity-description-" + id}>
 			{categoryName && <legend>{<h2>{categoryName}</h2>}</legend>}
-			<textarea 
-				className={styles.activityItemTextArea}
-				placeholder="Fri text ..."
-				disabled={inputDisabled} 
-				onChange={(e) => 
-					workoutCreateInfoDispatch({ 
-						type: "UPDATE_ACTIVITY_NAME", 
-						payload: { index, name: e.target.value }
-					})}
-				value={workoutCreateInfo.addedActivities[index].name}
-				rows={1}
-			/>
+			<div className={styles.activityItemContainer}>
+            <textarea
+                className={styles.activityItemTextArea}
+                placeholder="Fri text ..."
+                disabled={inputDisabled}
+                onChange={(e) =>
+                    workoutCreateInfoDispatch({
+                        type: "UPDATE_ACTIVITY_NAME",
+                        payload: { index, name: e.target.value }
+                    })}
+                value={workoutCreateInfo.addedActivities[index].name}
+                rows={1}
+            />
+            <Trash
+                className={styles.trashIcon}
+                size="24px"
+                color="var(--red-primary)"
+                style={{ cursor: "pointer" }}
+            />
+        </div>
 		</fieldset>
 	)
 }

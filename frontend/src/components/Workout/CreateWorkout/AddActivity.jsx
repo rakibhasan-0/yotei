@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useContext } from "react"
+import { React, useState, useEffect, useContext, useRef } from "react"
 import { AccountContext } from "../../../context"
 import Tab from "react-bootstrap/Tab"
 import Tabs from "react-bootstrap/Tabs"
@@ -104,6 +104,8 @@ function AddActivity({ id, setShowActivityInfo }) {
 	//const [cookiesExer, setCookiesExer] = useCookies(["techniques-filter"])
 	const [visibleExercises, setVisibleExercises] = useState([])
 
+	const searchCount = useRef(0)
+
 	/**
      * Makes sure the data in the search bar is stored when choosing between techniques and exercises
      * also when redirected to and from info on techniques and exercises.
@@ -208,8 +210,8 @@ function AddActivity({ id, setShowActivityInfo }) {
 			}
 		})
 
-		setTechniques(tempTechniques)
-		setExercises(tempExercises)
+		//setTechniques(tempTechniques)//TODO THIS IS A PROBLEM CHILD MAN
+		//setExercises(tempExercises)
 		setHasLoadedData(true)
 	}, [hasLoadedData, checkedActivities])
 
@@ -297,6 +299,8 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 * kept in the state to be displayed.
 	 */
 	const searchTechniques = () => {
+		searchCount.current++
+
 		if (selectedTechTags.find(tag => tag === "kihon waza") === undefined){
 			setKihon(false)
 		}
@@ -336,6 +340,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 * kept in the state to be displayed.
 	 */
 	const searchExercises = () => {
+		searchCount.current++
 		setCookies("exercise-filter", { tags: selectedExerTags, sort: sort.label }, { path: "/" })
 		const args = {
 			text: searchExerText,
@@ -344,7 +349,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 		getExercises(args, token, map, mapActions, (result) => {
 			if (!result.results) return
 
-			const res = result.results.filter(exercise => !checkedActivities.some(a => a.type === "exercise" && a.id === exercise.id))
+			const res = result.results//.filter(exercise => !checkedActivities.some(a => a.type === "exercise" && a.id === exercise.id))
 			setExercises([...res])
 			setSuggestedExerTags(result.tagCompletion)
 			setFetchedExer(true)
@@ -402,7 +407,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 							<ErrorStateSearch id="add-activity-no-technique" message="Kunde inte hitta tekniker" />
 							:
 							(<InfiniteScrollComponent
-								activities={techniques} activeKey={key}
+								activities={techniques} activeKey={key} searchCount={searchCount.current}
 							>
 								{techniques.map((technique, key) => (
 									<TechniqueCard
@@ -441,7 +446,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 							<ErrorStateSearch id="add-activity-no-exercise" message="Kunde inte hitta övningar" />
 							:
 							<InfiniteScrollComponent
-								activities={visibleExercises} activeKey={key}
+								activities={visibleExercises} activeKey={key} searchCount={searchCount.current}
 							>
 								{visibleExercises.map((exercise, key) => (
 									<ExerciseListItem

@@ -21,7 +21,7 @@ import Spinner from "../Spinner/Spinner"
  * @since 2024-05-08
  */
 
-export default function InfiniteScrollComponent({ children, activities, activeKey }) {
+export default function InfiniteScrollComponent({ children, activities, activeKey, searchCount }) {
 
 	const shownItems = useRef(20)
 
@@ -78,7 +78,8 @@ export default function InfiniteScrollComponent({ children, activities, activeKe
 	 * showFetchedItems. Otherwise load items noramlly using updateShownItems.
 	 */
 	useEffect(() => {
-		if(+fetchedTech.current > 0){
+		if(+fetchedTech.current > 0 && +searchCount < 4){//TODOD HWHEWHHEHWHEHWHE
+			console.log("scroll")
 			setVisibleTechniques([])
 			showFetchedItems()
 
@@ -104,6 +105,7 @@ export default function InfiniteScrollComponent({ children, activities, activeKe
 		}
 
 		else{
+			console.log("hej")
 			shownItems.current = 20
 			setVisibleTechniques([])
 			updateShownItems()
