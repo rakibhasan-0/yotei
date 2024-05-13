@@ -15,11 +15,19 @@ export const AddToListPopupContent = () => {
 			id: 1,
 			name: "Lista 1",
 			numberOfActivities: 3,
+			author: {
+				username: "Admin",
+				id: 1,
+			},
 		},
 		{
 			id: 1,
 			name: "Lista 2",
 			numberOfActivities: 4,
+			author: {
+				username: "Editor",
+				id: 2,
+			},
 		},
 	]
 	useEffect(() => {
@@ -38,8 +46,13 @@ export const AddToListPopupContent = () => {
 			</div>
 			<SearchBar placeholder={"Sök efter lista"} />
 			<InfiniteScrollComponent>
-				{lists.map((list) => (
-					<AddToListItem key={list.id} item={list} />
+				{lists.map((item, index) => (
+					<AddToListItem
+						name={item.name}
+						numberOfActivities={item.numberOfActivities}
+						author={item.author}
+						key={index}
+					/>
 				))}
 			</InfiniteScrollComponent>
 
