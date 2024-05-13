@@ -147,13 +147,13 @@ function SessionContainer ({ id, workout, session, plan}) {
 								checkSession() ?
 									
 									checkPlan() ?
-										<SessionHeader id="session-container-header" date={checkDate()} day={getDay()} title={`${plan.name || "unnamed"} - ${workout?.name ?? "No Workout"}`}time={session.time}/>
+										<SessionHeader id="session-container-header" date={checkDate()} day={getDay()} title={`${plan.name || "unnamed"} - ${workout?.name ?? "Inget pass tillagt"}`}time={session.time}/>
 										:
 										<SessionHeader id="session-container-header" date={checkDate()} day={getDay()} title="invalid" time={session.time}/>
 									:
 									checkPlan() ?
 									
-										<SessionHeader id="session-container-header" date="invalid" day="invalid" title={`${plan.name || "unnamed"} - ${workout?.name ?? "No Workout"}`}time="invalid"/>
+										<SessionHeader id="session-container-header" date="invalid" day="invalid" title={`${plan.name || "unnamed"} - ${workout?.name ?? "Inget pass tillagt"}`}time="invalid"/>
 										:
 										<div id><h2 id = "error-session-header">Kunde inte ladda in datum och tid</h2></div>
 							}
