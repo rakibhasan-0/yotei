@@ -37,12 +37,11 @@ while true; do
     case $yn in 
         [yY] ) 
 	    read -rp "Whats your domain name: " domain
-	    
 	    docker compose -f docker-compose.yml -f docker-compose-domain-release.yml build
 	    docker compose -f docker-compose.yml -f docker-compose-domain-release.yml up -d
-	    docker exec -it -e DOMAIN_NAME=$domain yotei-nginx-1 /root/install.sh
+	    docker exec -e DOMAIN_NAME=$domain yotei-nginx-1 /root/install.sh
 	    docker compose -f docker-compose.yml -f docker-compose-domain-release.yml run --rm certbot certonly -v --webroot --webroot-path /var/www/certbot/ --register-unsafely-without-email -d $domain
-	    docker exec -it yotei-nginx-1 sed -i 's/#//g' /etc/nginx/conf.d/prod.conf
+	    docker exec yotei-nginx-1 sed -i 's/#//g' /etc/nginx/conf.d/prod.conf
 	    docker compose -f docker-compose.yml -f docker-compose-domain-release.yml restart
 	    break;;
 	[nN] )

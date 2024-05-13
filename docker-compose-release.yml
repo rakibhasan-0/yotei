@@ -1,7 +1,7 @@
 services:
   nginx:
     build: ./nginx/local/
-    image: pvt2024/nginx:latest
+    image: pvt2024/nginx_local:latest
     restart: always
     ports:
       - 80:80
