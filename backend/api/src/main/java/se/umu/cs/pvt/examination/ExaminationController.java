@@ -4,16 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.umu.cs.pvt.belt.Belt;
 import se.umu.cs.pvt.belt.BeltRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Class for handling requests to the examination api.
  * 
- * @author Pomegranate (c21man && ens20lpn)
+ * @author Team Pomegranate (c21man && ens20lpn)
+ * @author Team Orange (dv22rfg)
  */
 @RestController
 @RequestMapping(path = "/api/examination")
@@ -26,6 +25,7 @@ public class ExaminationController {
     private BeltRepository beltRepository;
     private ExamineePairRepository examineePairRepository;
     private ExamineeRepository examineeRepository;
+    private ExaminationCommentRepository examinationCommentRepository;
     private ExaminationResultRepository examinationResultRepository;
 
     public ResponseEntity<String> example() {
@@ -39,15 +39,18 @@ public class ExaminationController {
      * @param beltRepository Repository for the belt entity.
      * @param examineePairRepository Repository for the examinee pair entity.
      * @param examineeRepository Repository for the examinee entity.
+     * @param examinationCommentRepository Repository for the examination comment entity.
      * @param examinationResultRepository Repository for the examination result entity.
      */
     @Autowired
     public ExaminationController(GradingRepository gradingRepository, BeltRepository beltRepository, ExamineePairRepository examineePairRepository, 
-    ExamineeRepository examineeRepository, ExaminationResultRepository examinationResultRepository) {
+    ExamineeRepository examineeRepository, ExaminationCommentRepository examinationCommentRepository,  ExaminationResultRepository examinationResultRepository) {
+     
         this.gradingRepository = gradingRepository;
         this.beltRepository = beltRepository;
         this.examineePairRepository = examineePairRepository;
         this.examineeRepository = examineeRepository;
+        this.examinationCommentRepository = examinationCommentRepository;
         this.examinationResultRepository = examinationResultRepository;
     }
 
@@ -199,6 +202,68 @@ public class ExaminationController {
         return new ResponseEntity<>(examineeRepository.findAll(), HttpStatus.OK);
     }
 
+    /**
+     * Creates an examination comment.
+     * @param examination_comment Object mapped examination comment from request body.
+     * @return The created examination comment
+     * @return HTTP-status code.
+     */
+    @PostMapping("/comment")
+    public ResponseEntity<ExaminationComment> createExaminationComment(@RequestBody ExaminationComment examination_comment){
+        if(gradingRepository.findById(examination_comment.getGradingId()).isEmpty() || examination_comment == null){
+            System.out.println("Grading not found");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        
+        if(examineeRepository.findById(examination_comment.getExamineeId()).isEmpty() || examination_comment == null){
+            System.out.println("Examinee not found");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        ExaminationComment savedComment = examinationCommentRepository.save(examination_comment);
+        return new ResponseEntity<>(savedComment, HttpStatus.OK);
+    }
+    
+    /**
+     * Updates an examination comment.
+     * @param examination_comment Object mapped examination comment from request body.
+     * @return HTTP-status code.
+     */
+    @PutMapping("/comment")
+    public ResponseEntity<ExaminationComment> updateExaminationComment(@RequestBody ExaminationComment examination_comment){
+
+        if(examinationCommentRepository.findById(examination_comment.getCommentId()).isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        examinationCommentRepository.save(examination_comment);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+    /**
+     * Deletes a examination comment
+     * @param examination_comment_id Given examination comment id.
+     * @return HTTP-status code.
+     */
+    @DeleteMapping("/comment/{examination_comment_id}")
+    public ResponseEntity<ExaminationComment> deleteExaminationComment(@PathVariable("examination_comment_id")long examination_comment_id){
+
+        if(examinationCommentRepository.findById(examination_comment_id).isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        examinationCommentRepository.deleteById(examination_comment_id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    /**
+     * Returns all examination comments.
+     * @return All examination comments. 
+     * @return HTTP-status code.
+     */
+    @GetMapping("/comment/all")
+    public ResponseEntity<List<ExaminationComment>> getAllGradingComments(){
+
+        return new ResponseEntity<>(examinationCommentRepository.findAll(), HttpStatus.OK);
+    }
     /**
      * Creates a examination result.
      * @param examination_result Object mapped examimnation result from request body.
