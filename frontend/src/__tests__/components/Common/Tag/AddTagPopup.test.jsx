@@ -1,8 +1,8 @@
 /** @jest-environment jsdom */
-import {React} from "react"
-import {render, screen, configure} from "@testing-library/react"
+//import {React} from "react"
+//import {render, screen, configure} from "@testing-library/react"
 import "@testing-library/jest-dom"
-import AddTagPopup from "../../../../components/Common/Tag/AddTagPopup"
+//import AddTagPopup from "../../../../components/Common/Tag/AddTagPopup"
 
 /**
  * Test for the AddTagPopup component.
@@ -12,7 +12,7 @@ import AddTagPopup from "../../../../components/Common/Tag/AddTagPopup"
  * @since 2023-05-08
  */
 
-configure({testIdAttribute: "id"})
+//configure({testIdAttribute: "id"})
 
 /*test("Tag: Added tags should be visible", async() => {
 	// ARRANGE

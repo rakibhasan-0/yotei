@@ -3,8 +3,8 @@ import {React} from "react"
 import {render, screen, configure} from "@testing-library/react"
 import "@testing-library/jest-dom"
 import TagInput from "../../../../components/Common/Tag/TagInput"
-import AddTagPopup from "../../../../components/Common/Tag/AddTagPopup"
-import { fireEvent } from "@testing-library/react"
+//import AddTagPopup from "../../../../components/Common/Tag/AddTagPopup"
+//import { fireEvent } from "@testing-library/react"
 
 /**
  * Test for the TagInput component.
