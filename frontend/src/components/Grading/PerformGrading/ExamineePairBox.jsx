@@ -30,11 +30,9 @@ import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
 export default function ExamineePairBox({
 	id,
 	pairNumber,
-	examineeLeftName,
-	examineeRightName,
-	rowColor,
-	examineeLeftId,
-	examineeRightId,
+	leftExaminee,
+	rightExaminee,
+	rowColor, 
 	gradingId,
 	currentTechniqueTitle
 }) {
@@ -108,10 +106,10 @@ export default function ExamineePairBox({
 			</div>
 			<div className={styles.pair}>
 				<div id="ExamineeLeftNameId" className={styles.pairleft}>
-					<ExamineeBox examineeName={examineeLeftName} examineeId={examineeLeftId}/>
+					{leftExaminee}
 				</div>
 				<div id="ExamineeRightNameId" className={styles.pairright}>
-					<ExamineeBox examineeName={examineeRightName} examineeId={examineeRightId}/>
+					{rightExaminee}
 				</div>
 			</div>
 			<Popup 

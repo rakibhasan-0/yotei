@@ -1,4 +1,4 @@
-import React, { useState, useEffect , useContext } from "react"
+import React, { useState, useEffect , useContext, useRef } from "react"
 import { /*useLocation, useNavigate,*/ useParams } from "react-router"
 
 import TechniqueInfoPanel from "../../../components/Grading/PerformGrading/TechniqueInfoPanel"
@@ -200,8 +200,10 @@ export default function DuringGrading() {
 	}
 
 	// Extracted Examinee component to remove duplicate code.
-	const Examinee = ({ examineeName, index, side }) => (
-		<ExamineeBox examineeName={examineeName} onClickComment={() => console.log("CommentButton clicked")}>
+	const Examinee = ({ examineeName, index, side, examineeId}) => (
+		<ExamineeBox 
+		examineeName={examineeName} 
+		examineeId={examineeId}>
 			<ExamineeButton
 				id={`pass-button-${index}-${side}`}
 				type="green"
@@ -240,15 +242,27 @@ export default function DuringGrading() {
 			<div ref={scrollableContainerRef} className={styles.scrollableContainer}>
 				{pairs.map((item, index) => (
 					<ExamineePairBox 
+						leftExaminee={
+							<Examinee 
+								examineeName={item.nameLeft} 
+								index={index} 
+								side={"left"} 
+								examineeLeftId={item.leftId}
+							/>
+						}
+						rightExaminee={
+							<Examinee 
+								examineeName={item.nameRight} 
+								index={index} 
+								side={"right"} 
+								examineeRightId={item.rightId}
+							/>
+						}
 						key={index}
 						rowColor={index % 2 === 0 ? "#FFFFFF" : "#F8EBEC"}
-						examineeLeftName={item.nameLeft} 
-						examineeLeftId={item.leftId}
-						examineeRightId={item.rightId}
-						examineeRightName={item.nameRight} 
 						pairNumber={index+1}
 						gradingId={gradingId}
-						currentTechniqueId={item.cu}>
+						currentTechniqueId={techniqueNameList[currentIndex].technique.text}>
 					</ExamineePairBox>
 				))}
 			</div>
