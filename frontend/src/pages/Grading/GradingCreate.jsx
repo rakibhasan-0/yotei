@@ -4,8 +4,7 @@ import BeltButton from "../../components/Common/Button/BeltButton"
 import style from "./GradingCreate.module.css"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import { AccountContext } from "../../context"
-import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../utils"
-import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../utils"
+import {setError as setErrorToast} from "../../utils"
 
 /**
  * The grading create page.
@@ -102,7 +101,7 @@ export default function GradingCreate() {
 				console.error(ex)
 			}
 		}
-    fetchData()
+		fetchData()
 	}, [token])
 
 	return (

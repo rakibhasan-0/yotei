@@ -113,9 +113,9 @@ export default function GradingIndex() {
 
 	}, [])
 
-  function navigateTo() {
-    navigate("/grading/create")
-  }
+	function navigateTo() {
+		navigate("/grading/create")
+	}
 
 	return (
 		<center>

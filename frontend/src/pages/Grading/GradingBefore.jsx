@@ -9,7 +9,7 @@ import Examinee from "../../components/Common/AddExaminee/Examinee"
 import { Trash } from "react-bootstrap-icons"
 
 import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../utils"
-import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../utils"
+import {setError as setErrorToast } from "../../utils"
 
 /**
  * The grading create page.
@@ -20,17 +20,16 @@ import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../ut
  * @since 2024-05-02
  */
 
-export default function GradingBefore({id}) {
+export default function GradingBefore() {
 	
 	const location = useLocation()
-  const state = location.state
   const hasPreviousState = location.key !== "default"
 	const { ColorParam } = location.state ? location.state : {}
 
 
 	const { gradingId } = useParams()
 	const context = useContext(AccountContext)
-	const { token, userId } = context
+	const { token } = context
 
 	const [examinees, setExaminees] = useState([])
 	const navigate = useNavigate()
@@ -96,7 +95,7 @@ export default function GradingBefore({id}) {
 	}
 
 	async function removePair(examinee1Id, examinee2Id, pairId) {
-		const data = await deletePair(pairId, token)
+		await deletePair(pairId, token)
 			.catch(() => setErrorToast("Kunde inte tabort paret. Kontrollera din internetuppkoppling."))
 
 		const newExaminees = pairs.map(pair => {
@@ -146,7 +145,7 @@ export default function GradingBefore({id}) {
    * @param {Integer} examineeId 
    */
 	async function removeExaminee(examineeId) {
-		const data = await deleteExaminee(examineeId, token)
+		await deleteExaminee(examineeId, token)
 			.catch(() => setErrorToast("Kunde inte tabort personen. Kontrollera din internetuppkoppling."))
 		
     if(checkedExamineeIds.includes(examineeId)) {
@@ -217,7 +216,7 @@ export default function GradingBefore({id}) {
 			)
 		)
 		
-		const data = await putExaminee({name: name, examinee_id: examineeId, grading_id: gradingId}, token)
+		await putExaminee({name: name, examinee_id: examineeId, grading_id: gradingId}, token)
 			.catch(() => setErrorToast("Kunde inte updatera personen. Kontrollera din internetuppkoppling."))
 	}
 

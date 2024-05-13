@@ -1,11 +1,8 @@
 //import React from "react"
-import { render, configure, screen, waitFor, fireEvent } from "@testing-library/react"
+import { render, configure, screen, } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import GradingBefore from "../../../pages/Grading/GradingBefore"
 import { Route, RouterProvider, createMemoryRouter, createRoutesFromElements } from "react-router-dom"
-import { rest } from "msw"
-import { server } from "../../server"
-import userEvent from "@testing-library/user-event"
 configure({ testIdAttribute: "id" })
 
 /**
@@ -19,37 +16,36 @@ configure({ testIdAttribute: "id" })
 
 // Render the technique detail page with router and account context. Also waits for it to fully render.
 const renderWithRouter = async() => {
-  const gradingId = 1
-  window.HTMLElement.prototype.scrollIntoView = jest.fn
-  const router = createMemoryRouter(
-    createRoutesFromElements( [
-      <Route key={"key1"} path="grading/:gradingId/1" element={<GradingBefore />}/> ,
-    ]
-    ),
-    {initialEntries: [`/grading/${gradingId}/1`]}
-  )
+	const gradingId = 1
+	window.HTMLElement.prototype.scrollIntoView = jest.fn
+	const router = createMemoryRouter(
+		createRoutesFromElements( [
+			<Route key={"key1"} path="grading/:gradingId/1" element={<GradingBefore />}/> ,
+		]
+		),
+		{initialEntries: [`/grading/${gradingId}/1`]}
+	)
 
-  render (
-    <RouterProvider router={router}/>
-  )
+	render (
+		<RouterProvider router={router}/>
+	)
 }
 
 describe("Expected HTML elements exsists", () => {
 
-  beforeEach(async () => {
-    await renderWithRouter()
-  });
+	test("Add examine component", async () => {
+		renderWithRouter()
+		expect(screen.getByTestId("add-examinee")).toBeInTheDocument()
+	})
 
-  test("Add examine component", async () => {
-    expect(screen.getByTestId("add-examinee")).toBeInTheDocument()
-  })
+	test("Back button", async () => {
+		renderWithRouter()
+		expect(screen.getByTestId("back-button")).toBeInTheDocument()
+	})
 
-  test("Back button", async () => {
-    expect(screen.getByTestId("back-button")).toBeInTheDocument()
-  })
-
-  test("Continue button", async () => {
-    expect(screen.getByTestId("continue-button")).toBeInTheDocument()
-  })
+	test("Continue button", async () => {
+		renderWithRouter()
+		expect(screen.getByTestId("continue-button")).toBeInTheDocument()
+	})
 
 })

@@ -1,7 +1,7 @@
 import styles from "./AddExaminee.module.css"
 import { forwardRef } from "react"
 import { Plus } from "react-bootstrap-icons"
-import { useState, useEffect, useContext } from "react"
+import { useState } from "react"
 
 /**
  * This is AddExaminee component
@@ -47,25 +47,25 @@ const AddExaminee = forwardRef(function AddExaminee(
 	const defaultLimit = 180
 	const isErr = !(errorMessage == undefined || errorMessage == null || errorMessage == "")
 
-  const [inputValue, setInputValue] = useState("");
+	const [inputValue, setInputValue] = useState("")
 
-  const handleChange = (event) => {
-    setInputValue(event.target.value);
-  };
+	const handleChange = (event) => {
+		setInputValue(event.target.value)
+	}
 
-  const handleClick = () => {
-    if (inputValue.trim() !== "") {
-      onSubmit(inputValue.trim());
-      setInputValue("");
-    }
-  };
+	const handleClick = () => {
+		if (inputValue.trim() !== "") {
+			onSubmit(inputValue.trim())
+			setInputValue("")
+		}
+	}
 
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      handleClick();
-    }
-  };
+	const handleKeyPress = (event) => {
+		if (event.key === "Enter") {
+			event.preventDefault()
+			handleClick()
+		}
+	}
 
 	return(
 		<form onSubmit={handleClick}>
@@ -74,7 +74,7 @@ const AddExaminee = forwardRef(function AddExaminee(
 				<div className={styles.inputContainer}>
 					<input
 						className={isErr ? `${styles.input} ${styles.inputErr}` : `${styles.input}`}
-            placeholder={placeholder}
+						placeholder={placeholder}
 						value={inputValue}
 						type={type}
 						id={id}
@@ -82,13 +82,13 @@ const AddExaminee = forwardRef(function AddExaminee(
 						required={required}
 						ref={ref}
 						maxLength={maxLength || defaultLimit}
-            onChange={handleChange}
-            onKeyDown={handleKeyPress}
+						onChange={handleChange}
+						onKeyDown={handleKeyPress}
 					/>
-          <Plus id="plus-icon" onClick={handleClick} className={styles.plusIcon} /> 
+					<Plus id="plus-icon" onClick={handleClick} className={styles.plusIcon} /> 
 				</div>
 				<p className={styles.err}>{errorMessage}</p>
-		  </label>
+			</label>
 		</form>
 		
 	)
