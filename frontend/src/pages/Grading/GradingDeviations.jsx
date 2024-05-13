@@ -28,6 +28,7 @@ export default function GradingDeviations() {
 		const [name, setName] = useState("")
 		const [, setGradingId] = useState(-1)
 		const [, setBeltId] = useState(-1)
+		const { gradingId } = useParams()
 
     const context = useContext(AccountContext)
 
@@ -39,7 +40,7 @@ export default function GradingDeviations() {
                 headers: {"Content-type": "application/json", token: context.token}
 			}
             
-            const response = await fetch(`/api/examination/examinee/all`, requestOptions).catch(() => {
+            const response = await fetch("/api/examination/examinee/all", requestOptions).catch(() => {
                 setError("Serverfel: Kunde inte ansluta till servern.")
 				return
 			})
@@ -50,12 +51,12 @@ export default function GradingDeviations() {
                 const json = await response.json()
                 for(let i = 0; i < json.length; i++) { //Replace when the API is changed to allow for fetching individual examinees
                     if(json[i] !== null) {
-                        var exId = json[i][`examinee_id`]
+                        var exId = json[i]["examinee_id"]
                         if(exId == userId) {
-                            setGradingId(json[i][`grading_id`])
-                            setName(json[i][`name`])
-                            console.log("Set id to " + json[i][`grading_id`])
-                            const response2 = await fetch(`/api/examination/grading/` + json[i][`grading_id`], requestOptions).catch(() => {
+                            setGradingId(json[i]["grading_id"])
+                            setName(json[i]["name"])
+                            console.log("Set id to " + json[i]["grading_id"])
+                            const response2 = await fetch("/api/examination/grading/" + json[i]["grading_id"], requestOptions).catch(() => {
                                 setError("Serverfel: Kunde inte ansluta till servern.")
                                 return
                             })
@@ -64,7 +65,7 @@ export default function GradingDeviations() {
                             } else {
                                 const json = await response2.json()
                                 console.log(json)
-                                setBeltId(json[`belt_id`])
+                                setBeltId(json["belt_id"])
                             }
                         }
                     }
@@ -75,7 +76,7 @@ export default function GradingDeviations() {
         setData(testData.categories)
         fetchData()
 		}, [])
-    function hasPassed(techniqueName) {
+    function hasPassed() {
         return true //PLACEHOLDER
     }
 
@@ -85,13 +86,13 @@ export default function GradingDeviations() {
             <div className="container">
                 <div className="row">
                     <ul>
-                        {exercises.map((category, index) => (
+                        {exercises.map((category) => (
                             
-                            <div className = {styles["sc23-outline"]}>
-                                <Divider id = 'divider-example' option= 'h2_left' title = {category.category_name}/>
+                            <div className = {styles["sc23-outline"]} id={category} key={category}>
+                                <Divider id = 'divider-example' option= 'h2_left' title = {category.category_name} key={category.category_name}/>
                                 {category.techniques.map((technique, index) => (
 
-                                    <Container id = {index} name = {technique.text} passed={hasPassed(technique.text)} ></Container>
+                                    <Container id = {index} name = {technique.text} passed={hasPassed(technique.text)} key={index} ></Container>
                                 ))}
                             </div>
                         ))}
