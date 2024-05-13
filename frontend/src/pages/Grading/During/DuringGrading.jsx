@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef, useContext } from "react"
 
 import TechniqueInfoPanel from "../../../components/Grading/PerformGrading/TechniqueInfoPanel"
 import Button from "../../../components/Common/Button/Button"
@@ -14,6 +14,7 @@ import {setError as setErrorToast} from "../../../utils"
 
 // Temp
 import ProtocolYellow from "./yellowProtocolTemp.json"
+import { AccountContext } from "../../../context"
 
 
 /**
@@ -95,6 +96,8 @@ export default function DuringGrading() {
 	const [examinees, setExaminees] = useState(undefined)
 	const [pairs, setPairs] = useState([])
 	const grading_id = 3 // temp, should be collected from url
+	const context = useContext(AccountContext)
+	const {token, userId} = context
 
 	// Get info about grading
 	// TODO: Loads everytime the button is pressed. Should only happen once at start. useEffect?
@@ -156,9 +159,9 @@ export default function DuringGrading() {
 					const pairs_json = await response.json()
 
 					// Get only pairs in this grading
-					const pair_names_current_grading = getPairsInCurrrentGrading(pairs_json)
-					setPairs(pair_names_current_grading)
-					console.log("Fetched pairs in this examination: ", pair_names_current_grading)
+					const pair_examinees_current_grading = getPairsInCurrrentGrading(pairs_json)
+					setPairs(pair_examinees_current_grading)
+					console.log("Fetched pairs in this examination: ", pair_examinees_current_grading)
 				} catch (ex) {
 					setErrorToast("Kunde inte hämta alla par")
 					console.error(ex)
@@ -174,7 +177,7 @@ export default function DuringGrading() {
 	// Usage:
 	// handleButtonClick(technique, pairIndex, buttonId, 'left')
 	// handleButtonClick(technique, pairIndex, buttonId, 'right')
-	const handleButtonClick = (technique, pairIndex, buttonId, side) => {
+	const handleButtonClick = (technique, examinee_id, pairIndex, buttonId, side) => {
 		const buttonType = buttonId.includes("pass") ? "pass" : "fail"
 		const oppositeButtonType = buttonType === "pass" ? "fail" : "pass"
 
@@ -187,15 +190,40 @@ export default function DuringGrading() {
 			}
 		}))
 		console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}`)
+		// Update backend
+		let buttonTypeData = (buttonType === "pass" ? true : false)
+		addExamineeResult(examinee_id, technique, buttonTypeData)
+
 	}
 
+	async function addExamineeResult(examineeId, techniqueName, passStatus) {
+		const data = await postExamineeResult({ examinee_id: examineeId, technique_name: techniqueName, pass: passStatus }, token)
+			.catch(() => setErrorToast("Kunde inte lägga till resultat. KOlla internetuppkoppling."))
+		
+		//setExaminees([...examinees, { id: data["examinee_id"], name: data["name"] }])
+	}
+
+	async function postExamineeResult(result, token) {
+		console.log("Result posted: ", result)
+		const requestOptions = {
+			method: "POST",
+			headers: { "Content-Type": "application/json", "token": token },
+			body: JSON.stringify(result)
+		}
+	
+		return fetch("/api/examination/examresult", requestOptions)
+			.then(response => { return response })
+			.catch(error => { alert(error.message) })
+	}
+	console.log("One pair: ", pairs[0])
+
 	// Extracted Examinee component to remove duplicate code.
-	const Examinee = ({ examineeName, index, side }) => (
-		<ExamineeBox examineeName={examineeName} onClickComment={() => console.log("CommentButton clicked")}>
+	const Examinee = ({ examinee={name: "test", examinee_id: 13}, index, side }) => ( // TODO: this makes it work
+		<ExamineeBox examineeName={examinee.name} onClickComment={() => console.log("CommentButton clicked")}>
 			<ExamineeButton
 				id={`pass-button-${index}-${side}`}
 				type="green"
-				onClick={() => handleButtonClick(techniqueNameList[currentIndex].technique.text, index, `pass-button-${index}-${side}`, side)}
+				onClick={() => handleButtonClick(techniqueNameList[currentIndex].technique.text, examinee.examinee_id, index, `pass-button-${index}-${side}`, side)}
 				isSelected={selectedButtons[index]?.[`pass-button-${index}-${side}`] === `pass-button-${index}-${side}`}
 			>
 				<p>G</p>
@@ -203,7 +231,7 @@ export default function DuringGrading() {
 			<ExamineeButton 
 				id={`fail-button-${index}-${side}`}
 				type="red"
-				onClick={() => handleButtonClick(techniqueNameList[currentIndex].technique.text, index, `fail-button-${index}-${side}`, side)}
+				onClick={() => handleButtonClick(techniqueNameList[currentIndex].technique.text, examinee.examinee_id, index, `fail-button-${index}-${side}`, side)}
 				isSelected={selectedButtons[index]?.[`fail-button-${index}-${side}`] === `fail-button-${index}-${side}`}
                 
 			>
@@ -231,8 +259,8 @@ export default function DuringGrading() {
 					<ExamineePairBox 
 						key={index}
 						rowColor={index % 2 === 0 ? "#FFFFFF" : "#F8EBEC"}
-						leftExaminee={<Examinee examineeName={item.nameLeft} index={index} side='left' />}
-						rightExaminee={<Examinee examineeName={item.nameRight} index={index} side='right' />}
+						leftExaminee={<Examinee examineeName={item.examineeLeft} index={index} side='left' />}
+						rightExaminee={<Examinee examineeName={item.examineeRight} index={index} side='right' />}
 						pairNumber={index+1}>
 					</ExamineePairBox>
 				))}
@@ -320,11 +348,12 @@ export default function DuringGrading() {
 			const examinee1 = examinees.find(item => item.examinee_id === pair.examinee_1_id)
 			const examinee2 = examinees.find(item => item.examinee_id === pair.examinee_2_id)
 			if (examinee1 !== undefined || examinee2 !== undefined) { // Only add if something is found
-				const name1 = examinee1 ? examinee1.name : "" // If only one name found
-				const name2 = examinee2 ? examinee2.name : ""
-				pair_names_current_grading.push({ nameLeft: name1, nameRight: name2 })
+				pair_names_current_grading.push({ examineeLeft: examinee1, examineeRight: examinee2 })
 			}
 		})
 		return pair_names_current_grading
 	}
+
+
+
 }
