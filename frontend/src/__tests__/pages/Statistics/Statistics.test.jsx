@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom"
-import {render, screen, fireEvent, configure, waitFor, within} from "@testing-library/react"
+import {render, screen, fireEvent, configure, waitFor} from "@testing-library/react"
 import { BrowserRouter } from "react-router-dom"
 import Statistics from "../../../pages/Statistics/Statistics"
 import StatisticsPopUp from "../../../pages/Statistics/StatisticsPopUp"
@@ -75,28 +75,28 @@ const mockedGroupActivities = [
  * @version 1.0
  */
 describe("Statistics Popup", () => {
-    test("Clicking button should show popup", async () => {
-        // Mock data
-        const mockData = {
-            groupActivities: mockedGroupActivities,
-            dates: {
-                from: new Date("2022-05-08").toISOString(),
-                to: new Date("2024-05-08").toISOString(),
-            },
-            averageRating: 4,
-            numberOfSessions: 10,
-        }
+	test("Clicking button should show popup", async () => {
+		// Mock data
+		const mockData = {
+			groupActivities: mockedGroupActivities,
+			dates: {
+				from: new Date("2022-05-08").toISOString(),
+				to: new Date("2024-05-08").toISOString(),
+			},
+			averageRating: 4,
+			numberOfSessions: 10,
+		}
 
-        // Mock the fetch function
-        global.fetch = jest.fn(() =>
-            Promise.resolve({
-                ok: true,
-                json: () => Promise.resolve(mockData),
-            })
-        )
+		// Mock the fetch function
+		global.fetch = jest.fn(() =>
+			Promise.resolve({
+				ok: true,
+				json: () => Promise.resolve(mockData),
+			})
+		)
 
-        // Render the StatisticsPopup component with mock data
-        render(
+		// Render the StatisticsPopup component with mock data
+		render(
 			<BrowserRouter> 
 				<StatisticsPopUp 
 					groupActivities={mockData.groupActivities} 
@@ -106,14 +106,14 @@ describe("Statistics Popup", () => {
 			</BrowserRouter>
 		)
 
-        // Simulate a click on the button
-        fireEvent.click(screen.getByRole("button"))
+		// Simulate a click on the button
+		fireEvent.click(screen.getByRole("button"))
 
-        // Wait for the popup to appear
-        await waitFor(() => {
-            expect(screen.getByText("Sammanställning av tillfällen")).toBeInTheDocument()
-        })
-    })
+		// Wait for the popup to appear
+		await waitFor(() => {
+			expect(screen.getByText("Sammanställning av tillfällen")).toBeInTheDocument()
+		})
+	})
 })
 
 
@@ -226,13 +226,13 @@ describe("FilterStatistics component", () => {
 		render(	
 			<BrowserRouter>	
 				<FilterStatistics 
-				onToggleExercise={jest.fn()}
-				onToggleKihon={jest.fn()}
-				onDateChanges={jest.fn()}
-				onToggleBelts={jest.fn()}
-				onClearBelts={jest.fn()}
-				belts={mockedBelts}
-				dates={mockedDates} /> 
+					onToggleExercise={jest.fn()}
+					onToggleKihon={jest.fn()}
+					onDateChanges={jest.fn()}
+					onToggleBelts={jest.fn()}
+					onClearBelts={jest.fn()}
+					belts={mockedBelts}
+					dates={mockedDates} /> 
 			</BrowserRouter> )
 
 		// Simulate clicking the filter button to open the filter container
