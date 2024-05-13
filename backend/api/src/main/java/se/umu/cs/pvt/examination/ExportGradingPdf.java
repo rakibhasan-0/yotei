@@ -29,7 +29,9 @@ import java.util.List;
 
 public class ExportGradingPdf {
 
-
+    /*
+     * koden behöver grov refaktorisering 
+     */
     private List<Examinee> examinees;
     private Grading grading;
     private ExaminationResult examinationResult;
@@ -225,6 +227,7 @@ public class ExportGradingPdf {
     }
 
     private Color getHighlightColor(String beltName) {
+        //skicka in "color" kanske så man kan hämta den lättare
         String split[] = beltName.split(" ");
         if (split[2].equals("GULT"))
             return Color.decode("#FFDD33");
@@ -346,25 +349,90 @@ public class ExportGradingPdf {
     
             int initX = TABLE_START_X_POS;
             int initY = pageHeight-75;
-    
+            
             PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/truetype/freefont/FreeSerif.ttf"));
             PDPageContentStream contentStream = new PDPageContentStream(document,page);
             contentStream.setStrokingColor(Color.DARK_GRAY);
             contentStream.setLineWidth(1);
             Map<String, Object> protocol = parseJson(gradingProtocol);
             Map<String, Object> gradingProtocolObj = (Map<String, Object>) protocol.get("grading_protocol");
-    
+            
             String code = (String) gradingProtocolObj.get("code");
             String color = (String) gradingProtocolObj.get("color");
-    
-            createHeader(code + " " + color, "2024-05-07", contentStream);
+            
             drawImage(page, contentStream);
+            createHeader(code + " " + color, "2024-05-07", contentStream);
             contentStream.beginText();
             contentStream.setFont(font, 14);
             contentStream.newLineAtOffset(initX, initY-30);
             contentStream.showText("Par Kommentarer");
             contentStream.endText();
-            contentStream.stroke();
+            initY -= 60;
+            for (int i = 0 ; i < examinees.size() ; i+=2) { 
+                //lägg till "teknik: kommentar" till rows, sen kanske en tom rad ifall en ny teknik följer och sen upprepa 
+                String examineeComment = "2. Shotei uchi, chudan, rak stöt med främre och bakre handen: Bra form!                                                 9. Grepp i ärmen med drag O soto osae, ude henkan gatame: Bra form! ";
+                List<String> rows = new ArrayList<>();
+                if(examineeComment.length() > 120) {
+                    
+                    int numRows = (int)Math.ceil((double)examineeComment.length() / 120);
+                    
+                    int startIndex = 0;
+                    int stopIndex = 120;
+                    
+                    for(int j = 0; j < numRows; j++) {
+                        System.out.println("Stopindex start: " + stopIndex);
+                        
+                        int lastSpaceIndex = examineeComment.substring(startIndex, stopIndex).lastIndexOf(' ');
+                        
+                        if(lastSpaceIndex > 0) 
+                        stopIndex = lastSpaceIndex + startIndex +1;
+                        
+                        System.out.println(startIndex);
+                        System.out.println(stopIndex);
+                        System.out.println("====================");
+                        
+                        rows.add(examineeComment.substring(startIndex, stopIndex).replaceAll("\\u000a", ""));
+                        
+                        startIndex = stopIndex;
+                        if(stopIndex + 120 <= examineeComment.length())
+                        stopIndex = stopIndex + 120;
+                        else
+                        stopIndex = examineeComment.length();
+                        
+                    }
+                }
+                else
+                rows.add(examineeComment);
+                
+                if (initY - rows.size() * 15 + 30 <= 0) {
+                    contentStream.close();
+                    page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
+                    document.addPage(page);        
+                    contentStream = new PDPageContentStream(document,page);
+                    drawImage(page, contentStream);
+                    createHeader(code + " " + color, "2024-05-07", contentStream);
+                    initY = pageHeight-75;
+                    contentStream.beginText();
+                    contentStream.setFont(font, 14);
+                    contentStream.newLineAtOffset(initX, initY-30);
+                    contentStream.showText("Par Kommentarer");
+                    contentStream.endText();
+                    initY -= 60;
+                }
+                contentStream.beginText();
+                contentStream.newLineAtOffset(initX + 5, initY);
+                contentStream.setFont(font, 12);
+                contentStream.showText(examinees.get(i).getName() + " & " + examinees.get(i+1).getName());
+                contentStream.setFont(font, 10);
+                for(int j = 0; j < rows.size(); j++) {
+                    contentStream.newLineAtOffset(0, -15);
+                    contentStream.showText(rows.get(j));
+                }
+                contentStream.endText();
+                contentStream.addRect(initX, initY - (5 + rows.size()*15), CELL_WIDTH * 7 + 30, rows.size() * 15);
+                contentStream.stroke();
+                initY -= rows.size() * 15 + 30;
+            }        
             contentStream.close();
         }
 
@@ -431,6 +499,7 @@ public class ExportGradingPdf {
                 else
                 rows.add(examineeComment);
                 
+                //kollar ifall nästa kommentar block för en person blir på en ny sida
                 if (initY - rows.size() * 15 + 30 <= 0) {
                     contentStream.close();
                     page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
@@ -448,8 +517,9 @@ public class ExportGradingPdf {
                 }
                 contentStream.beginText();
                 contentStream.newLineAtOffset(initX + 5, initY);
-                contentStream.setFont(font, 10);
+                contentStream.setFont(font, 12);
                 contentStream.showText(examinees.get(i).getName());
+                contentStream.setFont(font, 10);
                 for(int j = 0; j < rows.size(); j++) {
                     contentStream.newLineAtOffset(0, -15);
                     contentStream.showText(rows.get(j));
