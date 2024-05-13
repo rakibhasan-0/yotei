@@ -1,21 +1,12 @@
 /* eslint-disable indent */
 import { useState, useEffect, useContext } from "react"
-<<<<<<< Updated upstream
-import { useNavigate} from "react-router-dom"
-=======
->>>>>>> Stashed changes
 import Button from "../../components/Common/Button/Button"
 import styles from "./GradingDeviations.module.css"
 import Divider from "../../components/Common/Divider/Divider"
 import testData from "./yellowProtocolTemp.json"
 import Container from "./GradingDeviationContainer"
-<<<<<<< Updated upstream
-import { useParams } from "react-router-dom"
-import {HTTP_STATUS_CODES } from "../../utils"
-=======
 import { useNavigate, useParams } from "react-router-dom"
 import {HTTP_STATUS_CODES, setError} from "../../utils"
->>>>>>> Stashed changes
 import { AccountContext } from "../../context"
 
 
