@@ -30,8 +30,8 @@ import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
  *
  * 
  * @author Apelsin
- * @since 2024-05-02
- * @version 1.0 
+ * @since 2024-05-13
+ * @version 2.0 
  */
 
 export default function TechniqueInfoPanel( {

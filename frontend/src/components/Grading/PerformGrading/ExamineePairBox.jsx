@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import styles from "./ExamineePairBox.module.css"
-import ExamineeBox from "./ExamineeBox"
 import CommentButton from "./CommentButton"
 import Popup from "../../Common/Popup/Popup"
 import TextArea from "../../Common/TextArea/TextArea"
@@ -24,8 +23,8 @@ import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
  *  examineeRightName={"mel garga"} pairNumber={3}/>
  * 
  * @author Apelsin
- * @since 2024-05-07
- * @version 1.0 
+ * @since 2024-05-13
+ * @version 2.0 
  */
 
 export default function ExamineePairBox({
@@ -140,4 +139,3 @@ export default function ExamineePairBox({
 		</fieldset>
 	)
 }
-
