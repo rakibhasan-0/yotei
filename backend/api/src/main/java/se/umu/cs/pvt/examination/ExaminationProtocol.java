@@ -16,7 +16,7 @@ public class ExaminationProtocol {
     @Column(nullable = false, name = "examination_protocol")
     private String examination_protocol;
 
-    public ExaminationProtocol(int belt_id, String examination_protocol) {
+    public ExaminationProtocol(long belt_id, String examination_protocol) {
         this.belt_id = belt_id;
         this.examination_protocol = examination_protocol;
     }
