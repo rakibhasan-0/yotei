@@ -212,7 +212,7 @@ deploy-prod-server:
   tags:
     - prod
   script:
-    - docker compose -f docker-compose.yml -f docker-compose-release.yml up --build -d
+    - ./deploy_prod.sh '$CI_COMMIT_TAG'
   release: 
     tag_name: '$CI_COMMIT_TAG'
     description: '$CI_COMMIT_TAG'
