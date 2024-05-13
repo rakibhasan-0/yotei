@@ -586,7 +586,7 @@ CREATE TABLE IF NOT EXISTS examination_examinee (
 CREATE TABLE IF NOT EXISTS examination_examinee_pair (
 	examinee_pair_id SERIAL PRIMARY KEY,
 	examinee_1_id INT NOT NULL,
-	examinee_2_id INT NOT NULL,
+	examinee_2_id INT,
 	CONSTRAINT examinee_pair_fk_examinee_1 FOREIGN KEY(examinee_1_id) REFERENCES examination_examinee(examinee_id) ON DELETE CASCADE,
 	CONSTRAINT examinee_pair_fk_examinee_2 FOREIGN KEY(examinee_2_id) REFERENCES examination_examinee(examinee_id) ON DELETE CASCADE
 );

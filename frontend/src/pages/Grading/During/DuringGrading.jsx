@@ -9,7 +9,7 @@ import ExamineeButton from "../../../components/Grading/PerformGrading/ExamineeB
 
 import styles from "./DuringGrading.module.css"
 import { ArrowRight, ArrowLeft } from "react-bootstrap-icons"
-import {Link} from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import {setError as setErrorToast} from "../../../utils" 
 
 // Temp
@@ -94,7 +94,8 @@ export default function DuringGrading() {
 	const [showPopup, setShowPopup] = useState(false)
 	const [examinees, setExaminees] = useState(undefined)
 	const [pairs, setPairs] = useState([])
-	const grading_id = 3 // temp, should be collected from url
+	const { gradingId } = useParams()
+	const navigate = useNavigate()
 
 	// Get info about grading
 	// TODO: Loads everytime the button is pressed. Should only happen once at start. useEffect?
@@ -280,13 +281,19 @@ export default function DuringGrading() {
 							<p>{techniqueName.category}</p></Button>
 					))}
 					{/* Should link to the "after" part of the grading as well as save the changes to the database. */}
-					<Link to="/groups">
-						<Button id={"summary-button"} onClick={() => setShowPopup(false)}><p>Fortsätt till summering</p></Button>
-					</Link>
+					<Button id={"summary-button"} onClick={gotoSummary}><p>Fortsätt till summering</p></Button>
 				</div>
 			</Popup>
 		</div>
 	)
+
+	/**
+   * @author Team Pomagrade (2024-05-13)
+   */
+	function gotoSummary() {
+		//TODO: setShowPopup(false)
+		navigate(`/grading/${gradingId}/3`)
+	}
 
 	/**
 	 * 
@@ -298,7 +305,7 @@ export default function DuringGrading() {
 	function getExamineesCurrentGrading(all_examinees) {
 		const current_grading_examinees = []
 		all_examinees.forEach((examinee) => {
-			if (examinee.grading_id == grading_id) {
+			if (examinee.grading_id == gradingId) {
 				current_grading_examinees.push(examinee)
 			}
 		})

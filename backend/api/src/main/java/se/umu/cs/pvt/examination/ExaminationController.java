@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import se.umu.cs.pvt.belt.BeltRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Class for handling requests to the examination api.
@@ -113,6 +114,20 @@ public class ExaminationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     
+    /**
+     * Returns a grading with a given grading id.
+     * @param grading_id Given grading id.
+     * @return The grading with the given grading id.
+     */
+    @GetMapping("/grading/{grading_id}")
+    public ResponseEntity<Grading> getGrading(@PathVariable("grading_id") long grading_id) {
+        Optional<Grading> grading = gradingRepository.findById(grading_id);
+        if(grading.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(grading.get(), HttpStatus.OK);
+    }
+
     /**
      * Creates a examinee.
      * @param examinee Object mapped examinee from request body.
