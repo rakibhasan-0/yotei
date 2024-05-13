@@ -26,7 +26,7 @@ import { AccountContext } from "../../../context"
 function Navbar({ testId }) {
 
 	const [open, setOpen] = useState(false)
-	const [isExaminationEnabled] = useState(true) // FEATURE TOGGLE
+	const [isExaminationEnabled] = useState(false) // FEATURE TOGGLE
 	const navigate = useNavigate()
 	const context = useContext(AccountContext) 
 
