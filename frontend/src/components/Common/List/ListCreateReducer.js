@@ -224,7 +224,7 @@ export function workoutCreateReducer(state, action) {
 	}
 	case "REMOVE_ACTIVITY_ITEM": {
 		const id = action.payload.id;
-	  
+		console.log("Trying to remove activity with id: "+id)
 		// Remove the activity with the given ID from the list
 		tempState.data.activities = tempState.data.activities.filter(activity => {
 		  if (activity.exercise && activity.exercise.id === id) {
@@ -232,6 +232,9 @@ export function workoutCreateReducer(state, action) {
 		  }
 		  if (activity.technique && activity.technique.id === id) {
 			return false; // Exclude this activity from the list
+		  }
+		  if(activity.id===id){
+			  return false // Exclude this activity from the list (*** KOLLA PÅ DENNA)
 		  }
 		  return true; // Include other activities in the list
 		});
@@ -261,6 +264,8 @@ export function workoutCreateReducer(state, action) {
 				techniqueId: Object.prototype.hasOwnProperty.call(result,"type") && result.type === "technique" ? result.techniqueID : null,
 			}
 		})
+		console.log("AddedActivities:")
+		console.log(tempState)
 		return tempState
 	}
 	case "SET_TAGS":
@@ -295,7 +300,6 @@ export function workoutCreateReducer(state, action) {
 
 		return tempState
 	case "OPEN_ACTIVITY_POPUP":
-		tempState.addedCategories[0].checked = true
 
 		tempState.popupState.types.freeTextPopup = false
 		tempState.popupState.types.activityPopup = true
@@ -303,7 +307,6 @@ export function workoutCreateReducer(state, action) {
 		tempState.popupState.types.editActivityPopup = false
 		tempState.popupState.isOpened = true
 
-		tempState.addedCategories[0].checked = true
 		return tempState
 	case "OPEN_CHOOSE_ACTIVITY_POPUP":
 		tempState.popupState.types.freeTextPopup = false
@@ -358,11 +361,11 @@ export function workoutCreateReducer(state, action) {
 		let newCategory = true 
 		let categoryId 
 		let removIds = []
-		tempState.addedCategories.forEach((category) => {
+		/*tempState.addedCategories.forEach((category) => {
 			if(category.checked === true) {
 				categoryId = category.id
 			}
-		})
+		})*/
 		
 		tempState.data.activityItems.forEach((category, categoryIndex) => {
 			category.activities.forEach((activity, index) => {
@@ -387,9 +390,9 @@ export function workoutCreateReducer(state, action) {
 				tempState.data.activityItems[categoryIndex].activities.push(newActivity)
 			}
 		})
-
+		/*
 		if(newCategory){
-			const category = tempState.addedCategories.find(category => category.checked)
+			//const category = tempState.addedCategories.find(category => category.checked)
 			const activityItem = {
 				id: category.id,
 				name: category.name,
@@ -398,7 +401,7 @@ export function workoutCreateReducer(state, action) {
 
 			tempState.data.activityItems.push(activityItem)
 
-		}
+		}*/
 		removIds.forEach((number) =>{
 			tempState.data.activityItems.splice(number,1)
 		})
@@ -433,28 +436,33 @@ export function workoutCreateReducer(state, action) {
 		return tempState
 	case "CREATE_ACTIVITY_ITEMS": {
 		if(state.addedActivities.length === 0) return tempState
-
-		const isFreeText = action.payload.isFreeText
-		const category = tempState.addedCategories.find(category => category.checked)
+		console.log("TEMPstate.AddedActivities:")
+		console.log(tempState)
+		
+		//const category = tempState.addedCategories.find(category => category.checked)
 
 		// No checked category?
-		if(!category) return tempState
-
-
+		//if(!category) return tempState
+		console.log("(Tempstate)addedACtibvities")
+		console.log(tempState)
+//		let activities = tempState.addedActivities.map(activity => {
+		//Köra addedACtivities istället?
+		let counter =-1
 		let activities = tempState.addedActivities.map(activity => {
+			counter++
+			console.log("Activity("+counter+"):")
+			console.log(activity)
 			return {
-				id: activity.id,
+				id: tempState.data.activities.length+counter, //activity.id,
 				name: activity.name,
-				isEditable: isFreeText,
 				duration: activity.duration,
-				exerciseId: isFreeText ? null : activity.exerciseId,
-				techniqueId: isFreeText ? null : activity.techniqueId,
+				exerciseId: activity.exerciseId,
+				techniqueId: activity.techniqueId,
 			}
 		})
-
-			
+		/*	
 		let activityItem
-		if (tempState.data.activityItems.some(item => item.name === category.name)) {
+		if (false &&tempState.data.activityItems.some(item => item.name === category.name)) {
 			activityItem = tempState.data.activityItems.find(item => item.name === category.name)
 			activityItem.activities = [...activityItem.activities, ...activities]
 		} else {
@@ -463,9 +471,19 @@ export function workoutCreateReducer(state, action) {
 				name: category.name,
 				activities: activities,
 			}
-
-			tempState.data.activityItems.push(activityItem)
-		}
+	
+*/		
+		let i = 0;
+		activities.forEach((activity) => {
+			console.log("Activity "+i+":")
+			console.log(activity)
+			i++;
+			tempState.data.activities.push(activity)
+		})
+			//tempState.data.activities.push(activities)
+			console.log("TempState:")
+			console.log(tempState)
+		//}
 
 
 		tempState.addedActivities = []

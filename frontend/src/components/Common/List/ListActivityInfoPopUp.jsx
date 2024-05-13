@@ -195,6 +195,7 @@ export default function ActivityInfoPopUp({ isFreeText }) {
 	const saveActivities = () => {
 		if(isFreeText) clearEmptyActivities()
 		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CREATE_ACTIVITY_ITEMS, payload: { isFreeText }})
+		{console.log("Breakpoint 1")}
 		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLOSE_POPUP })
 	}
 

@@ -71,6 +71,7 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 	 * @param {*} event
 	 */
 	function handleSubmit(event) {
+		console.log("Sparaknappen har tryckts")
 		const form = event.currentTarget
 		event.preventDefault()
 
@@ -134,7 +135,6 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 		}
 		
 	}
-
 	return (
 		<>
 			<Form noValidate validated={validated} onSubmit={handleSubmit}>
@@ -274,7 +274,7 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 				setIsOpen={handlePopupClose}
 				title={getPopupTitle()}
 			>
-				{workoutCreateInfo.popupState.types.freeTextPopup && (
+				{workoutCreateInfo.popupState.types.freeTextPopup && (		
 					<ActivityInfoPopUp isFreeText={true} />
 				)}
 				{workoutCreateInfo.popupState.types.activityPopup && (

@@ -25,6 +25,7 @@ const WorkoutActivityListItem = ({ activity, index, id,edit}) => {
 		workoutCreateInfo=info;
 		workoutCreateInfoDispatch=dispatch
 	}
+
 	//console.log("Testy2")
 	//console.log(workoutCreateInfo)
 	const [isActive, setIsActive] = useState(false)
@@ -33,11 +34,15 @@ const WorkoutActivityListItem = ({ activity, index, id,edit}) => {
 	const isFreeTextElem = () => {
 		return activity.exercise == null && activity.technique == null
 	}
-	const name = activity.exercise ? (
+	//In case it is a newly added activity which has not had its technique/excercise info loaded
+	const name = activity.name?(
+		<p className={`${styles["workoutActivityName"]} m-0`}>{activity.name}</p>
+	):
+	(activity.exercise ? (
 		<p className={`${styles["workoutActivityName"]} m-0`}>{activity.exercise.name}</p>
 	) : (
 		<p className={`${styles["workoutActivityName"]} m-0`}>{activity.technique.name}</p>
-	)
+	))
 	
 	const createStripes = () => {
 		index % 2 == 0 ? (bgColor = "#F8EBEC") : (bgColor = "#FFFFFF")
@@ -84,7 +89,7 @@ const WorkoutActivityListItem = ({ activity, index, id,edit}) => {
 						<i onClick={() => {
 							console.log("activity:")
 							console.log(activity)
-							workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.REMOVE_ACTIVITY_ITEM, payload: {id: activity.exercise?.id || activity.technique?.id}})
+							workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.REMOVE_ACTIVITY_ITEM, payload: {id: activity.exercise?.id || activity.technique?.id || activity.id}})
 						}}>
 						<Trash size="20px"	color="var(--red-primary)" id={`edit_pencil_${activity.id}`} style={{cursor: "pointer"}} />
 						</i>
