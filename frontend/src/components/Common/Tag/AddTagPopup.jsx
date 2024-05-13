@@ -267,7 +267,6 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	 * Deletes a tag from the database. 
 	 */
 	const deleteTag = async () => {
-		console.log(tagIdToBeDeleted)
 		const url = new URL("/api/tags/remove", window.location.origin)
 		url.searchParams.append("id", tagIdToBeDeleted)
 		
