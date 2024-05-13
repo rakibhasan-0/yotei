@@ -61,6 +61,10 @@ public class Permission implements Serializable{
         this.permission_desc = desc;
     }
 
+    public Long getPermissionId() {
+        return this.permission_id;
+    }
+
     public void setPermissionName(String name) {
         this.permission_name = name;
     }
