@@ -314,7 +314,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 					<i className={styles["search-icon"]}><Search/></i>
 					{searchText !== "" &&
 					<>
-						<button className ={styles["addButton"]} onClick={() => createNewTag(searchText)} >
+						<button className ={styles["addButton"]} onClick={() => createNewTag(searchText)} id="tag-add-button" >
 							<PlusCircle> </PlusCircle>
 						</button>
 					</>
@@ -327,7 +327,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 			</div>
 			
 			<div>
-				<FilterContainer title={"Sortering"} numFilters={0}>
+				<FilterContainer id={"tag-filter"} title={"Sortering"} numFilters={0}>
 					<Sorter id={"tag-sort"} selected={sort} onSortChange={setSort} options={sortOptions}/>
 				</FilterContainer>
 			</div>
@@ -345,7 +345,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 
 			</ConfirmPopup>
 			
-			<RoundButton onClick={saveAndClose} > 
+			<RoundButton onClick={saveAndClose} id={"save-and-close-button"} > 
 				<ChevronRight width={30} />
 			</RoundButton>
 		</div>
