@@ -17,7 +17,7 @@ public interface UserPermissionRepository extends JpaRepository<UserPermission, 
      * @param userId      	ID of the User.
      * @return				List of permissions IDs.
      */
-    List<UserPermission> findAllProjectedByUserId(Long userId);
+    List<UserPermission> findAllByUserId(Long userId);
 
     /**
      * Deletes a User Permission pair.
