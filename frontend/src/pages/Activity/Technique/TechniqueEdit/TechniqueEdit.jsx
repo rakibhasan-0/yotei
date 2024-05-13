@@ -246,6 +246,7 @@ export default function TechniqueEdit({ id }) {
 	return (
 		<div id={id} style={{ display: "flex", gap: "16px", flexDirection: "column" }}>
 			<title>Redigera teknik</title>
+			<h1>Redigera Teknik</h1>
 
 			<InputTextField
 				id="techniqueEditInputName"
