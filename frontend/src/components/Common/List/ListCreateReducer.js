@@ -223,16 +223,25 @@ export function workoutCreateReducer(state, action) {
 		return tempState
 	}
 	case "REMOVE_ACTIVITY_ITEM": {
-		const id = action.payload.id
-		for (let i = 0; i < tempState.data.activityItems.length; i++) {
-			tempState.data.activityItems[i].activities = tempState.data.activityItems[i].activities.filter(activity => activity.id !== id)
-			
-			if(tempState.data.activityItems[i].activities.length === 0) {
-				tempState.data.activityItems = tempState.data.activityItems.filter(item => item.id !== tempState.data.activityItems[i].id)
-			}
-		}
-		return tempState
-	}
+		const id = action.payload.id;
+	  
+		// Remove the activity with the given ID from the list
+		tempState.data.activities = tempState.data.activities.filter(activity => {
+		  if (activity.exercise && activity.exercise.id === id) {
+			return false; // Exclude this activity from the list
+		  }
+		  if (activity.technique && activity.technique.id === id) {
+			return false; // Exclude this activity from the list
+		  }
+		  return true; // Include other activities in the list
+		});
+	  
+		// Update the numActivities count
+		tempState.numActivities = tempState.data.activities.length;
+	  
+		return tempState;
+	  }
+	  
 	case "SET_ACTIVITY_ITEMS":
 		tempState.data.activityItems = action.activityItems.filter(item => item.activities.length > 0)
 		return tempState

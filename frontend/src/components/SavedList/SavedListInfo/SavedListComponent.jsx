@@ -11,22 +11,29 @@ import styles from "./SavedListComponent.module.css"
 import {useState, useEffect,useContext} from "react"
 import Spinner from "../../../components/Common/Spinner/Spinner"
 import { AccountContext } from "../../../context"
+import { WorkoutCreateContext } from "../../Common/List/ListCreateContext"
 
 
 export default function WorkoutActivityList({activities,edit}) {
 	const context = useContext(AccountContext)
+	/*const { workoutCreateInfo, workoutCreateInfoDispatch } =
+	useContext(WorkoutCreateContext)*/
 	const {token, userId} = context
 	const [ListData, setListData] = useState(null)
 	const [Loading, setLoading] = useState(true)
 
 	useEffect(() => {
+		console.log("SetListData:")
+		console.log(activities)
 		setListData( activities)
 		//setLoading(false)
 		
 	}, [])
 	useEffect(() => {
+		console.log("ListDataDone")
+		console.log(ListData)
 		if(ListData!=null){
-		setLoading(false)
+			setLoading(false)
 		}
 		
 	}, [ListData])
@@ -51,10 +58,8 @@ export default function WorkoutActivityList({activities,edit}) {
 
 				</div>
 			</legend>
-			
 			{!isCollapsed && ListData.data.activities.map((activity, index) =>
 				<WorkoutActivityListItem key={activity.id} activity={activity} index={index} edit={edit}/>)}
-
 		</fieldset>
 	</>
 }
