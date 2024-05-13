@@ -42,7 +42,7 @@ function Navbar({ testId }) {
 
 	return (
 		<nav data-testid={testId} className={styles.commonNavbar}>
-			<HamburgerIcon role="button" className={styles.commonNavbarIcon} onClick={() => {setOpen(true)}}/>
+			<HamburgerIcon id="hamburger-button" role="button" className={styles.commonNavbarIcon} onClick={() => {setOpen(true)}}/>
 			<img src="/ubk-logga.jpg" className={styles.budoLogo} onClick={() => navigateAndClose("/")} />
 
 			<div className={`${styles.commonNavbarSidebar} p-4  ${open ? styles.open : ""}`}>

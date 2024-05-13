@@ -1,6 +1,6 @@
 /* eslint-disable indent */
-import { useState, useEffect, useContext } from "react"
-import { Link, useLocation, useNavigate, useParams} from "react-router-dom"
+import React, { useState, useEffect, useContext } from "react"
+import { useNavigate, useParams, useLocation} from "react-router-dom"
 import Button from "../../components/Common/Button/Button"
 import styles from "./GradingBefore.module.css"
 import { AccountContext } from "../../context"
@@ -20,7 +20,7 @@ import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../ut
  * @since 2024-05-02
  */
 
-export default function GradingCreate({id}) {
+export default function GradingBefore({id}) {
 	
 	const location = useLocation()
   const state = location.state
@@ -240,7 +240,7 @@ export default function GradingCreate({id}) {
 			<div className="column">
 				{examinees.map((examinee, index) => {
 						return (
-              <div style={{display: "flex", width: "100%", justifyContent: "center"}} key={"single-pair-" + toString(examinee.id)}>
+              <div style={{display: "flex", width: "100%", justifyContent: "center"}} key={"single-pair-" + toString(examinee.id)} id={"single-pair-" + toString(examinee.id)}>
                 <div className={styles.number}>{numberOfPairs + index + 1}</div>
                 <Examinee
                   key={examinee.id}
@@ -272,6 +272,7 @@ export default function GradingCreate({id}) {
 			{checkedExamineeIds.length === 2 && ( 
 			<div className={styles.buttonContainer}>
 				<Button
+          id="create-pair-button"
 					width="100%"
 					outlined={true}
 					onClick={createPair}
@@ -281,6 +282,7 @@ export default function GradingCreate({id}) {
 			}
 			<div className={styles.buttonContainer}>
 				<Button
+          id="back-button"
 					width="100%"
 					outlined={true}
 					onClick={() => {
@@ -290,6 +292,7 @@ export default function GradingCreate({id}) {
 					<p>Tillbaka</p>
 				</Button>
 				<Button
+          id="continue-button"
 					width="100%"
 					onClick={startRedirection}
 				>

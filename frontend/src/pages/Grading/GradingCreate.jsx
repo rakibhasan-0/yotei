@@ -113,6 +113,7 @@ export default function GradingCreate() {
 				<div>
 					{beltColors.map((color, index) => (
 						<BeltButton
+              id={color}
 							key={color}
 							width={"100%"}
 							onClick={() => handleNavigation(belts[color].id, belts[color].hex)}

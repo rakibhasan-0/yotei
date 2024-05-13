@@ -66,11 +66,12 @@ export default function Examinee({ item, text, id, index, onRemove, onEdit, pair
               checked={false}
               onClick={(checked) => onCheck(checked, id)}
               enabled
-              id="test-id"
+              id="checkbox-element"
             />}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flex: 1 }}>
               {isEditing ? (
                 <input
+                  id="edit-element"
                   className={`${styles["input"]}`}
                   type="text"
                   value={currentName}
@@ -90,11 +91,12 @@ export default function Examinee({ item, text, id, index, onRemove, onEdit, pair
                   <p>{text}</p>
                 </div>
                 {isEditing ? (
-                  <Key onClick={handleEditSubmit} size="24px" style={{ color: "var(--red-primary)", cursor: "pointer", marginRight: "10px" }} />
+                  <Key id="key-icon" onClick={handleEditSubmit} size="24px" style={{ color: "var(--red-primary)", cursor: "pointer", marginRight: "10px" }} />
                 ) : (
-                  <Pencil onClick={handleEdit} size="24px" style={{ color: "var(--red-primary)", cursor: "pointer", marginRight: "10px" }} />
+                  <Pencil id="pencil-icon" onClick={handleEdit} size="24px" style={{ color: "var(--red-primary)", cursor: "pointer", marginRight: "10px" }} />
                 )}
                 <CloseIcon
+                  id="close-icon"
                   className={styles["close-icon"]}
                   onClick={() => onRemove(id)}
                   size="24px"
