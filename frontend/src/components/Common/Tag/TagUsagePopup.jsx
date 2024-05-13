@@ -4,7 +4,7 @@ import styles from "./TagUsagePopup.module.css"
 export default function TagUsagePopup (usage) {
 	usage = usage.usage
 	return <div className={styles["usage-text"]}>
-        Denna tagg används på:
+        Taggen används på:
 		<br/>
 
 		{usage.exercises > 0 ? <> <span className={styles["usage-number"]}>{usage.exercises}</span> övning{usage.exercises > 1 ? "ar" : ""}

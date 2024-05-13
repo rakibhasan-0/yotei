@@ -337,7 +337,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 				
 			</div>
 			
-			<MiniPopup title={"Taggen kunde ej tas bort"} isOpen={showUsagePopup} setIsOpen={hideShowPopup} >
+			<MiniPopup title={"Taggen kan inte tas bort"} isOpen={showUsagePopup} setIsOpen={hideShowPopup} >
 				<TagUsagePopup usage={usage}>  </TagUsagePopup>
 			</MiniPopup>
 
