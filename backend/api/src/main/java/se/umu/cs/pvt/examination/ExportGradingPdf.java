@@ -78,12 +78,15 @@ public class ExportGradingPdf {
 
         pageWidth = (int)page.getMediaBox().getWidth(); //get width of the page
         pageHeight = (int)page.getMediaBox().getHeight(); //get height of the page
+
+        //Get number of examinees that will be on the page
         int numExamineesOnPage = examinees.size() - (onPage * MAX_NUM_COLUMNS);
         if (numExamineesOnPage > MAX_NUM_COLUMNS)
             numExamineesOnPage = MAX_NUM_COLUMNS;
-        System.out.println("pw" + pageWidth);
+        
+        //Calculate where starting x position will be depending on number of examinees on the page
         int tableStartXPos = (pageWidth/2) - ((numExamineesOnPage + 1)* CELL_WIDTH + 30)/2;
-        System.out.println("mnc + 1 * cw + 30 /2" + ((MAX_NUM_COLUMNS + 1)* CELL_WIDTH + 30)/2);
+
         int initX = tableStartXPos; //kom på nå bättre namn
         int initY = pageHeight-75;
 
