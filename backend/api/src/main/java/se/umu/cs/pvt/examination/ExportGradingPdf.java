@@ -44,7 +44,7 @@ public class ExportGradingPdf {
     private List<ExaminationTechniqueCategory> examinationTechniqueCategories;
     private final int   MAX_NUM_COLUMNS = 6,
                         MAX_NUM_ROWS = 15,
-                        TABLE_START_X_POS = 50,
+                        TABLE_START_X_POS = 55, //behöver bättre namn
                         CELL_HEIGHT = 30,
                         CELL_WIDTH = 100;
 
@@ -60,7 +60,7 @@ public class ExportGradingPdf {
 
     private void drawImage(PDPage page, PDPageContentStream contentStream) throws IOException {
         String path = System.getProperty("user.dir") + "/frontend/public/ubk-logga.jpg";
-        int x = (int)page.getMediaBox().getWidth() - 163;
+        int x = (int)page.getMediaBox().getWidth() - 155;
         int y = pageHeight-60;
         PDImageXObject pdImage = PDImageXObject.createFromFile(path, document);
         contentStream.drawImage(pdImage, x, y, 100, 50);
@@ -78,8 +78,13 @@ public class ExportGradingPdf {
 
         pageWidth = (int)page.getMediaBox().getWidth(); //get width of the page
         pageHeight = (int)page.getMediaBox().getHeight(); //get height of the page
-
-        int initX = TABLE_START_X_POS;
+        int numExamineesOnPage = examinees.size() - (onPage * MAX_NUM_COLUMNS);
+        if (numExamineesOnPage > MAX_NUM_COLUMNS)
+            numExamineesOnPage = MAX_NUM_COLUMNS;
+        System.out.println("pw" + pageWidth);
+        int tableStartXPos = (pageWidth/2) - ((numExamineesOnPage + 1)* CELL_WIDTH + 30)/2;
+        System.out.println("mnc + 1 * cw + 30 /2" + ((MAX_NUM_COLUMNS + 1)* CELL_WIDTH + 30)/2);
+        int initX = tableStartXPos; //kom på nå bättre namn
         int initY = pageHeight-75;
 
         PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/truetype/freefont/FreeSerif.ttf"));
@@ -107,7 +112,7 @@ public class ExportGradingPdf {
             initX+=CELL_WIDTH;
             count++;
         }
-        initX = TABLE_START_X_POS;
+        initX = tableStartXPos;
         initY -=CELL_HEIGHT;
     
         int row_count = 0;
@@ -150,13 +155,13 @@ public class ExportGradingPdf {
                     initX+=CELL_WIDTH;
                 }
 
-                initX = TABLE_START_X_POS;
+                initX = tableStartXPos;
 
                 if(row_count > MAX_NUM_ROWS) {
                     contentStream.stroke();
                     contentStream.close();
                     PDPage page2 = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
-                    initX = TABLE_START_X_POS;
+                    initX = tableStartXPos;
                     initY = pageHeight -75;
                     document.addPage(page2);
 
@@ -175,7 +180,7 @@ public class ExportGradingPdf {
         
                         initX+=CELL_WIDTH;
                     }
-                    initX = TABLE_START_X_POS;
+                    initX = tableStartXPos;
                 }
             }
 
@@ -371,7 +376,8 @@ public class ExportGradingPdf {
                 contentStream.beginText();
                 contentStream.newLineAtOffset(initX + 5, initY);
                 contentStream.setFont(font, 12);
-                contentStream.showText(examinees.get(i).getName() + " & " + examinees.get(i+1).getName());
+
+                contentStream.showText(examinees.get(i).getName() + " & " + examinees.get(i+1).getName()); // går ej att ha udda antal examinees
                 contentStream.setFont(font, 10);
                 for(int j = 0; j < rows.size(); j++) {
                     //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
@@ -385,6 +391,7 @@ public class ExportGradingPdf {
                 contentStream.stroke();
                 //Calculates the distance between the comments
                 initY -= rows.size() * 15 + 30;
+                
             }        
             contentStream.close();
         }
@@ -421,7 +428,7 @@ public class ExportGradingPdf {
             initY -= 30;
 
             for (int i = 0 ; i < examinees.size() ; i++) {
-                String examineeComment = "Lorem ipsum dolor sit ame ipsum dolor sit amet, consectetur adipiscing elit.coLorem ipsum dolor sit amet, consectetur adipiscing elit.coLorem ipsum dolor sit amet, consectetur adipiscing elit.cosectetur adipiscing elit.consectetur adipiscing eLorem ipsum dolor sit amet, consectetur adipiscing elit.consectetur adipiscing elit.consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.consectetur adipiscing elit.consectetur adipiscing elit.lit.";
+                String examineeComment = "2. Shotei uchi, chudan, rak stöt med främre och bakre handen: Bra form!                                                 3. Gedan geri, rak spark med främre och bakre benet: Snyggt sparkat!                                                   9. Grepp i ärmen med drag O soto osae, ude henkan gatame: Bra form! ";
                 List<String> rows = getRows(examineeComment);
                 
                 //Checks if the next comment block will fit on the page, if not a new page is created
