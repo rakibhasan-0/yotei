@@ -184,6 +184,7 @@ export default function Profile() {
 			console.log("Public")
 			return <Eye size={36} />
 		}
+		console.log("Ospecat fall, borde ej kunna nå listor som publika men inte delade med oss!")
 		return <Lock />
 	}
 

@@ -443,8 +443,6 @@ export function workoutCreateReducer(state, action) {
 
 		// No checked category?
 		//if(!category) return tempState
-		console.log("(Tempstate)addedACtibvities")
-		console.log(tempState)
 //		let activities = tempState.addedActivities.map(activity => {
 		//Köra addedACtivities istället?
 		let counter =-1
