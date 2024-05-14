@@ -23,7 +23,7 @@ public class ExamineePair {
     @Column(nullable = false, name = "examinee_1_id")
     private Long examinee_1_id;
 
-    @Column(nullable = false, name = "examinee_2_id")
+    @Column(name = "examinee_2_id")
     private Long examinee_2_id;
 
     /**
