@@ -34,7 +34,7 @@ public class ExportGradingPdf {
      */
     private List<Examinee> examinees;
     private Grading grading;
-    private ExaminationResult examinationResult;
+    private List<ExaminationResult> examinationResults;
     private final int totalNumColumns;
     private final int numPages;
     private PDDocument document;
@@ -56,7 +56,6 @@ public class ExportGradingPdf {
         this.gradingProtocol = Files.readString(Paths.get(System.getProperty("user.dir") + "/frontend/public/grading_protocol_yellow_1.json"));
         this.examinationTechniqueCategories = new ArrayList<>();
         this.grading = grading;
-
     }
 
     private void drawImage(PDPage page, PDPageContentStream contentStream) throws IOException {
@@ -94,7 +93,8 @@ public class ExportGradingPdf {
         String color = (String) gradingProtocolObj.get("color");
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm");
-        createHeader(code + " " + color, sdf.format(grading.getCreated_at()).toString(), contentStream);
+        
+        createHeader(code, color, sdf.format(grading.getCreated_at()).toString(), contentStream);
 
         drawImage(page, contentStream);
         contentStream.addRect(initX, initY, CELL_WIDTH+30, -CELL_HEIGHT);
@@ -125,13 +125,12 @@ public class ExportGradingPdf {
                 contentStream.addRect(initX, initY, CELL_WIDTH+30, -CELL_HEIGHT);
                 row_count++;
                 
-                //funktion korta ner teknik strängen och dela upp i två å skriva den på två rader
                 String name = examinationTechniqueCategories.get(i).getTechniques().get(j).toString();
+                //Shorten technique name so it fits in the cell
                 if(name.length() > 63)
                     name = name.substring(0, 60) + "...";
 
-                System.out.println(name);
-
+                //Splits the string at the nearest space char and writes the rest on the next line in the cell
                 int splitOnIndex = 35;
                 if(name.length() > 35) {
                     for(int k = 0; k < 35; k++) {
@@ -141,9 +140,10 @@ public class ExportGradingPdf {
 
                     writeToCell(initX, initY+10, contentStream, name.substring(0, splitOnIndex), font);
                     writeToCell(initX, initY, contentStream, name.substring(splitOnIndex, name.length()), font);
-                } else  {
+                } 
+                else  
                     writeToCell(initX, initY, contentStream, examinationTechniqueCategories.get(i).getTechniques().get(j).toString(), font);
-                }
+                
 
                 initX+=CELL_WIDTH+30;
 
@@ -165,20 +165,18 @@ public class ExportGradingPdf {
 
                     row_count = 0;
                     contentStream = new PDPageContentStream(document,page2);
-                    createHeader(code + " " + color, sdf.format(grading.getCreated_at()).toString(), contentStream);
+                    createHeader(code, color, sdf.format(grading.getCreated_at()).toString(), contentStream);
                     drawImage(page, contentStream);
                     contentStream.addRect(initX, initY, CELL_WIDTH+30, -CELL_HEIGHT);
                     writeToCell(initX, initY, contentStream, "Namn", font);
-                    int count2 = 1;
                     
                     initX+=CELL_WIDTH+30;
-                    for(int j2 = (onPage*MAX_NUM_COLUMNS); j2<(onPage*MAX_NUM_COLUMNS)+MAX_NUM_COLUMNS && j2 < examinees.size();j2++){
+                    for(int j2 = (onPage*MAX_NUM_COLUMNS); j2<(onPage*MAX_NUM_COLUMNS)+MAX_NUM_COLUMNS && j2 < examinees.size() ; j2++){
                         contentStream.addRect(initX,initY,CELL_WIDTH,-CELL_HEIGHT);
         
                         writeToCell(initX, initY, contentStream, stripName(examinees.get(j2).getName()), font);
         
                         initX+=CELL_WIDTH;
-                        count2++;
                     }
                     initX = TABLE_START_X_POS;
                 }
@@ -201,43 +199,46 @@ public class ExportGradingPdf {
     }
 
 
-    private void createHeader(String beltName, String date, PDPageContentStream contentStream) throws IOException {
+    private void createHeader(String code, String color, String date, PDPageContentStream contentStream) throws IOException {
         PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/truetype/freefont/FreeSerif.ttf"));
         int initX = TABLE_START_X_POS;
         int initY = pageHeight-75;
-        //Set header data
-        Color beltColor = getHighlightColor(beltName);
+        
+        //Draws colored rectangle over belt name
+        Color beltColor = getHighlightColor(color);
         contentStream.addRect(initX, initY + 30, 120, 15);
         contentStream.setStrokingColor(beltColor);
         contentStream.setNonStrokingColor(beltColor);
         contentStream.fill();
         contentStream.stroke();
 
+        //Resets rectangle colors
         contentStream.setStrokingColor(0f,0f,0f);
         contentStream.setNonStrokingColor(0f,0f,0f);
+        
+        //Set header text
         contentStream.beginText();
         contentStream.setFont(font, 10);
         contentStream.newLineAtOffset(initX, initY + 50);
         contentStream.showText("Graderingprotokoll");
         contentStream.newLineAtOffset(0, -15);
-        contentStream.showText(beltName);
+        contentStream.showText(code + " " + color);
         contentStream.newLineAtOffset(0, -15);
         contentStream.showText(date);
         contentStream.endText();
     }
 
-    private Color getHighlightColor(String beltName) {
-        //skicka in "color" kanske så man kan hämta den lättare
-        String split[] = beltName.split(" ");
-        if (split[2].equals("GULT"))
+    private Color getHighlightColor(String color) {
+        String split[] = color.split(" ");
+        if (split[0].equals("GULT"))
             return Color.decode("#FFDD33");
-        if (split[2].equals("BRUNT"))
+        if (split[0].equals("BRUNT"))
             return Color.decode("#83530C");
-        if (split[2].equals("ORANGE"))
+        if (split[0].equals("ORANGE"))
             return Color.decode("#FFA133");
-        if (split[2].equals("GRÖNT"))
+        if (split[0].equals("GRÖNT"))
             return Color.decode("#0C7D2B");
-        if (split[2].equals("BLÅTT"))
+        if (split[0].equals("BLÅTT"))
             return Color.decode("#1E9CE3");
         return new Color(1f,1f,1f);
     }
@@ -250,21 +251,20 @@ public class ExportGradingPdf {
         for(int i = 0; i < categories.size(); i++) {
             ExaminationTechniqueCategory category = new ExaminationTechniqueCategory(categories.get(i).get("category_name").toString());
             List<Map<String, Object>> techniques = (List<Map<String, Object>>)categories.get(i).get("techniques");
-
-            for(int j = 0; j < techniques.size(); j++) {
+            
+            //Replaces tab character from technique name
+            for(int j = 0; j < techniques.size(); j++) 
                 category.addTechnique(techniques.get(j).get("text").toString().replaceAll("\\u0009", ""));
-            }
             examinationTechniqueCategories.add(category);
         }
 
-        for(int i = 0; i < numPages; i++)  {
+        for(int i = 0; i < numPages; i++)  
             this.createTable(i);
-        }
 
-        //Här skapar vi sidorna för kommentarerna där de står t.ex. #1 Bra jobbat\n #2 du suger
         createGroupCommentPage();
         createPairCommentPage();
         createExamineeCommentPage();
+
         document.save("/home/adam/Programming/yotei/test.pdf");
         document.close();
     }
@@ -290,38 +290,14 @@ public class ExportGradingPdf {
         String code = (String) gradingProtocolObj.get("code");
         String color = (String) gradingProtocolObj.get("color");
         
-        createHeader(code + " " + color, "2024-05-07", contentStream);
+        createHeader(code, color, "2024-05-07", contentStream);
         drawImage(page, contentStream);
         
         String groupComment = """                
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ultrices nibh ac nibh tempor sagittis. Proin non eleifend diam. Aliquam eget egestas neque. Sed tortor dui, tincidunt eu venenatis in, sollicitudin sit amet risus. Mauris pharetra turpis in lectus euismod, ac lobortis urna tincidunt. Vestibulum tincidunt luctus sapien ut rhoncus. Curabitur sit amet orci purus. Praesent consectetur, ante vitae pharetra euismod, sapien lorem interdum dolor, vitae fringilla orci tellus et sem.
             """;
             
-            List<String> rows = new ArrayList<>();
-            
-            if(groupComment.length() > 120) {
-                
-                int numRows = (int)Math.ceil((double)groupComment.length() / 120);
-                
-                int startIndex = 0;
-                int stopIndex = 120;
-                
-                for(int i = 0; i < numRows; i++) {                    
-                    int lastSpaceIndex = groupComment.substring(startIndex, stopIndex).lastIndexOf(' ');
-                    
-                    if(lastSpaceIndex > 0) 
-                        stopIndex = lastSpaceIndex + startIndex +1;
-                    
-                    rows.add(groupComment.substring(startIndex, stopIndex).replaceAll("\\u000a", ""));
-                    
-                    startIndex = stopIndex;
-                    if(stopIndex + 120 <= groupComment.length())
-                    stopIndex = stopIndex + 120;
-                    else
-                    stopIndex = groupComment.length();
-                    
-                }
-            }
+            List<String> rows = getRows(groupComment);
             
             contentStream.beginText();
             contentStream.setFont(font, 14);
@@ -361,7 +337,7 @@ public class ExportGradingPdf {
             String color = (String) gradingProtocolObj.get("color");
             
             drawImage(page, contentStream);
-            createHeader(code + " " + color, "2024-05-07", contentStream);
+            createHeader(code, color, "2024-05-07", contentStream);
             contentStream.beginText();
             contentStream.setFont(font, 14);
             contentStream.newLineAtOffset(initX, initY-30);
@@ -371,38 +347,7 @@ public class ExportGradingPdf {
             for (int i = 0 ; i < examinees.size() ; i+=2) { 
                 //lägg till "teknik: kommentar" till rows, sen kanske en tom rad ifall en ny teknik följer och sen upprepa 
                 String examineeComment = "2. Shotei uchi, chudan, rak stöt med främre och bakre handen: Bra form!                                                 9. Grepp i ärmen med drag O soto osae, ude henkan gatame: Bra form! ";
-                List<String> rows = new ArrayList<>();
-                if(examineeComment.length() > 120) {
-                    
-                    int numRows = (int)Math.ceil((double)examineeComment.length() / 120);
-                    
-                    int startIndex = 0;
-                    int stopIndex = 120;
-                    
-                    for(int j = 0; j < numRows; j++) {
-                        System.out.println("Stopindex start: " + stopIndex);
-                        
-                        int lastSpaceIndex = examineeComment.substring(startIndex, stopIndex).lastIndexOf(' ');
-                        
-                        if(lastSpaceIndex > 0) 
-                        stopIndex = lastSpaceIndex + startIndex +1;
-                        
-                        System.out.println(startIndex);
-                        System.out.println(stopIndex);
-                        System.out.println("====================");
-                        
-                        rows.add(examineeComment.substring(startIndex, stopIndex).replaceAll("\\u000a", ""));
-                        
-                        startIndex = stopIndex;
-                        if(stopIndex + 120 <= examineeComment.length())
-                        stopIndex = stopIndex + 120;
-                        else
-                        stopIndex = examineeComment.length();
-                        
-                    }
-                }
-                else
-                rows.add(examineeComment);
+                List<String> rows = getRows(examineeComment);
                 
                 if (initY - rows.size() * 15 + 30 <= 0) {
                     contentStream.close();
@@ -410,7 +355,7 @@ public class ExportGradingPdf {
                     document.addPage(page);        
                     contentStream = new PDPageContentStream(document,page);
                     drawImage(page, contentStream);
-                    createHeader(code + " " + color, "2024-05-07", contentStream);
+                    createHeader(code, color, "2024-05-07", contentStream);
                     initY = pageHeight-75;
                     contentStream.beginText();
                     contentStream.setFont(font, 14);
@@ -457,56 +402,26 @@ public class ExportGradingPdf {
             String color = (String) gradingProtocolObj.get("color");
             
             drawImage(page, contentStream);
-            createHeader(code + " " + color, "2024-05-07", contentStream);
+            createHeader(code, color, "2024-05-07", contentStream);
             contentStream.beginText();
             contentStream.setFont(font, 14);
             contentStream.newLineAtOffset(initX, initY-30);
             contentStream.showText("Personliga Kommentarer");
             contentStream.endText();
             initY -= 60;
+
             for (int i = 0 ; i < examinees.size() ; i++) {
                 String examineeComment = "Lorem ipsum dolor sit ame ipsum dolor sit amet, consectetur adipiscing elit.coLorem ipsum dolor sit amet, consectetur adipiscing elit.coLorem ipsum dolor sit amet, consectetur adipiscing elit.cosectetur adipiscing elit.consectetur adipiscing eLorem ipsum dolor sit amet, consectetur adipiscing elit.consectetur adipiscing elit.consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.consectetur adipiscing elit.consectetur adipiscing elit.lit.";
-                List<String> rows = new ArrayList<>();
-                if(examineeComment.length() > 120) {
-                    
-                    int numRows = (int)Math.ceil((double)examineeComment.length() / 120);
-                    
-                    int startIndex = 0;
-                    int stopIndex = 120;
-                    
-                    for(int j = 0; j < numRows; j++) {
-                        System.out.println("Stopindex start: " + stopIndex);
-                        
-                        int lastSpaceIndex = examineeComment.substring(startIndex, stopIndex).lastIndexOf(' ');
-                        
-                        if(lastSpaceIndex > 0) 
-                        stopIndex = lastSpaceIndex + startIndex +1;
-                        
-                        System.out.println(startIndex);
-                        System.out.println(stopIndex);
-                        System.out.println("====================");
-                        
-                        rows.add(examineeComment.substring(startIndex, stopIndex).replaceAll("\\u000a", ""));
-                        
-                        startIndex = stopIndex;
-                        if(stopIndex + 120 <= examineeComment.length())
-                        stopIndex = stopIndex + 120;
-                        else
-                        stopIndex = examineeComment.length();
-                        
-                    }
-                }
-                else
-                rows.add(examineeComment);
+                List<String> rows = getRows(examineeComment);
                 
-                //kollar ifall nästa kommentar block för en person blir på en ny sida
+                //Checks if the next comment block will fit on the page, if not a new page is created
                 if (initY - rows.size() * 15 + 30 <= 0) {
                     contentStream.close();
                     page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
                     document.addPage(page);        
                     contentStream = new PDPageContentStream(document,page);
                     drawImage(page, contentStream);
-                    createHeader(code + " " + color, "2024-05-07", contentStream);
+                    createHeader(code, color, "2024-05-07", contentStream);
                     initY = pageHeight-75;
                     contentStream.beginText();
                     contentStream.setFont(font, 14);
@@ -521,6 +436,7 @@ public class ExportGradingPdf {
                 contentStream.showText(examinees.get(i).getName());
                 contentStream.setFont(font, 10);
                 for(int j = 0; j < rows.size(); j++) {
+                    //-15 is relative to the previous call of newLineAtOffset
                     contentStream.newLineAtOffset(0, -15);
                     contentStream.showText(rows.get(j));
                 }
@@ -530,6 +446,34 @@ public class ExportGradingPdf {
                 initY -= rows.size() * 15 + 30;
             }        
             contentStream.close();
+        }
+
+        private List<String> getRows(String examineeComment) {
+            List<String> rows = new ArrayList<>();
+            if(examineeComment.length() > 120) {
+                int numRows = (int)Math.ceil((double)examineeComment.length() / 120);
+                
+                int startIndex = 0;
+                int stopIndex = 120;
+                
+                for(int j = 0; j < numRows; j++) {                        
+                    int lastSpaceIndex = examineeComment.substring(startIndex, stopIndex).lastIndexOf(' ');
+                    
+                    if(lastSpaceIndex > 0) 
+                        stopIndex = lastSpaceIndex + startIndex +1;
+
+                    rows.add(examineeComment.substring(startIndex, stopIndex).replaceAll("\\u000a", ""));
+                    
+                    startIndex = stopIndex;
+                    if(stopIndex + 120 <= examineeComment.length())
+                        stopIndex = stopIndex + 120;
+                    else
+                        stopIndex = examineeComment.length();
+                }
+            }
+            else
+                rows.add(examineeComment);
+            return rows;
         }
         
         private String stripName(String name) {
