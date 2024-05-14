@@ -15,7 +15,7 @@ import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.boot.json.JsonParserFactory;
-
+import se.umu.cs.pvt.examination.ExaminationController;
 import com.fasterxml.jackson.core.JsonParser;
 
 import se.umu.cs.pvt.technique.Technique;
@@ -30,7 +30,7 @@ import java.util.List;
 public class ExportGradingPdf {
 
     /*
-     * koden behöver grov refaktorisering 
+     * koden behöver lite refaktorisering, kanske nytt namn på inity å x?
      */
     private List<Examinee> examinees;
     private Grading grading;
@@ -90,10 +90,7 @@ public class ExportGradingPdf {
         Map<String, Object> gradingProtocolObj = (Map<String, Object>) protocol.get("grading_protocol");
 
         String code = (String) gradingProtocolObj.get("code");
-        String color = (String) gradingProtocolObj.get("color");
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm");
-        
+        String color = (String) gradingProtocolObj.get("color");        
         createHeader(code, color, contentStream);
 
         drawImage(page, contentStream);
@@ -204,11 +201,11 @@ public class ExportGradingPdf {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String date = sdf.format(grading.getCreated_at()).toString();
         int initX = TABLE_START_X_POS;
-        int initY = pageHeight-75;
+        int initY = pageHeight-25;
         
         //Draws colored rectangle over belt name
         Color beltColor = getHighlightColor(color);
-        contentStream.addRect(initX, initY + 30, 120, 15);
+        contentStream.addRect(initX - 2, initY - 20, 120, 15);
         contentStream.setStrokingColor(beltColor);
         contentStream.setNonStrokingColor(beltColor);
         contentStream.fill();
@@ -221,7 +218,7 @@ public class ExportGradingPdf {
         //Set header text
         contentStream.beginText();
         contentStream.setFont(font, 10);
-        contentStream.newLineAtOffset(initX, initY + 50);
+        contentStream.newLineAtOffset(initX, initY);
         contentStream.showText("Graderingprotokoll");
         contentStream.newLineAtOffset(0, -15);
         contentStream.showText(code + " " + color);
@@ -254,9 +251,9 @@ public class ExportGradingPdf {
             ExaminationTechniqueCategory category = new ExaminationTechniqueCategory(categories.get(i).get("category_name").toString());
             List<Map<String, Object>> techniques = (List<Map<String, Object>>)categories.get(i).get("techniques");
             
-            //Replaces tab character from technique name
+            //Removes tab character from technique name and adds it
             for(int j = 0; j < techniques.size(); j++) 
-                category.addTechnique(techniques.get(j).get("text").toString().replaceAll("\\u0009", ""));
+                category.addTechnique(techniques.get(j).get("text").toString().replaceAll("\\u0009", "")); // Vi kan lägga till här att vi tar bort alla common unicode characters som inte supportas av fonter
             examinationTechniqueCategories.add(category);
         }
 
@@ -303,7 +300,7 @@ public class ExportGradingPdf {
             
             contentStream.beginText();
             contentStream.setFont(font, 14);
-            contentStream.newLineAtOffset(initX, initY-30);
+            contentStream.newLineAtOffset(initX, initY -= 30);
             contentStream.showText("Gruppkommentar");
             contentStream.setFont(font, 10);
             contentStream.newLineAtOffset(0, -20);
@@ -342,11 +339,12 @@ public class ExportGradingPdf {
             createHeader(code, color, contentStream);
             contentStream.beginText();
             contentStream.setFont(font, 14);
-            contentStream.newLineAtOffset(initX, initY-30);
+            initY -= 30;
+            contentStream.newLineAtOffset(initX, initY);
             contentStream.showText("Par Kommentarer");
             contentStream.endText();
-            //-60 is the distance between the title and where the comments begin
-            initY -= 60;
+            //30 pixels is the distance between the title and where the comments section begin
+            initY -= 30;
             for (int i = 0 ; i < examinees.size() ; i+=2) { 
                 //lägg till "teknik: kommentar" till rows, sen kanske en tom rad ifall en ny teknik följer och sen upprepa 
                 String examineeComment = "2. Shotei uchi, chudan, rak stöt med främre och bakre handen: Bra form!                                                 9. Grepp i ärmen med drag O soto osae, ude henkan gatame: Bra form! ";
@@ -363,24 +361,29 @@ public class ExportGradingPdf {
                     initY = pageHeight-75;
                     contentStream.beginText();
                     contentStream.setFont(font, 14);
-                    contentStream.newLineAtOffset(initX, initY-30);
+                    initY -= 30;
+                    contentStream.newLineAtOffset(initX, initY);
                     contentStream.showText("Par Kommentarer");
                     contentStream.endText();
-                    initY -= 60;
+                    initY -= 30;
                 }
+                
                 contentStream.beginText();
                 contentStream.newLineAtOffset(initX + 5, initY);
                 contentStream.setFont(font, 12);
                 contentStream.showText(examinees.get(i).getName() + " & " + examinees.get(i+1).getName());
                 contentStream.setFont(font, 10);
                 for(int j = 0; j < rows.size(); j++) {
+                    //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
                     contentStream.newLineAtOffset(0, -15);
                     contentStream.showText(rows.get(j));
                 }
                 contentStream.endText();
-                //Calculates the size of the rectangle to enclose the comment
+
+                //Calculates the size of the rectangle which encapsulates the comment
                 contentStream.addRect(initX, initY - (5 + rows.size()*15), CELL_WIDTH * 7 + 30, rows.size() * 15);
                 contentStream.stroke();
+                //Calculates the distance between the comments
                 initY -= rows.size() * 15 + 30;
             }        
             contentStream.close();
@@ -410,11 +413,12 @@ public class ExportGradingPdf {
             createHeader(code, color, contentStream);
             contentStream.beginText();
             contentStream.setFont(font, 14);
-            contentStream.newLineAtOffset(initX, initY-30);
+            initY -= 30;
+            contentStream.newLineAtOffset(initX, initY);
             contentStream.showText("Personliga Kommentarer");
             contentStream.endText();
-            //-60 is the distance between the title and where the comments begin
-            initY -= 60;
+            //30 pixels is the distance between the title and where the comments section begin
+            initY -= 30;
 
             for (int i = 0 ; i < examinees.size() ; i++) {
                 String examineeComment = "Lorem ipsum dolor sit ame ipsum dolor sit amet, consectetur adipiscing elit.coLorem ipsum dolor sit amet, consectetur adipiscing elit.coLorem ipsum dolor sit amet, consectetur adipiscing elit.cosectetur adipiscing elit.consectetur adipiscing eLorem ipsum dolor sit amet, consectetur adipiscing elit.consectetur adipiscing elit.consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.consectetur adipiscing elit.consectetur adipiscing elit.lit.";
@@ -431,22 +435,25 @@ public class ExportGradingPdf {
                     initY = pageHeight-75;
                     contentStream.beginText();
                     contentStream.setFont(font, 14);
-                    contentStream.newLineAtOffset(initX, initY-30);
+                    initY -= 30;
+                    contentStream.newLineAtOffset(initX, initY);
                     contentStream.showText("Personliga Kommentarer");
                     contentStream.endText();
-                    initY -= 60;
+                    initY -= 30;
                 }
+
                 contentStream.beginText();
                 contentStream.newLineAtOffset(initX + 5, initY);
                 contentStream.setFont(font, 12);
                 contentStream.showText(examinees.get(i).getName());
                 contentStream.setFont(font, 10);
                 for(int j = 0; j < rows.size(); j++) {
-                    //-15 is relative to the previous call of newLineAtOffset
+                    //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
                     contentStream.newLineAtOffset(0, -15);
                     contentStream.showText(rows.get(j));
                 }
                 contentStream.endText();
+
                 //Calculates the size of the rectangle to enclose the comment
                 contentStream.addRect(initX, initY - (5 + rows.size()*15), CELL_WIDTH * 7 + 30, rows.size() * 15);
                 contentStream.stroke();
