@@ -32,6 +32,8 @@ public class ExaminationApiTest {
     @MockBean
     private ExamineeRepository examineeRepository;
     @MockBean
+    private ExaminationCommentRepository examinationCommentRepository;
+    @MockBean
     private ExaminationResultRepository resultRepository;
 
     @Autowired
@@ -40,6 +42,7 @@ public class ExaminationApiTest {
     List<Grading> gradingList;
     List<Examinee> examineeList;
     List<ExamineePair> examineePairList;
+    List<ExaminationComment> examineeCommentList;
     List<ExaminationResult> resultList;
 
     @BeforeEach
@@ -47,6 +50,7 @@ public class ExaminationApiTest {
         this.gradingList = new ArrayList<>();
         this.examineeList = new ArrayList<>();
         this.examineePairList = new ArrayList<>();
+        this.examineeCommentList = new ArrayList<>();
         this.resultList = new ArrayList<>();
 
         this.gradingList.add(new Grading(1L, 1L, 1L, 1, 1, new Date()));
@@ -61,6 +65,10 @@ public class ExaminationApiTest {
         this.examineePairList.add(new ExamineePair(2L, 2L, 1L));
         this.examineePairList.add(new ExamineePair(3L, 3L, 3L));
 
+        this.examineeCommentList.add(new ExaminationComment(1L,1L,1L,1L,"wasasasasa","Lörimupsum"));
+        this.examineeCommentList.add(new ExaminationComment(2L,2L,2L,2L,"lasasasasa","TestTest"));
+        this.examineeCommentList.add(new ExaminationComment(3L,3L,3L,3L,"kasasasasa","WestWest"));
+        
         this.resultList.add(new ExaminationResult(1L, 1L, "Test Class", null));
         this.resultList.add(new ExaminationResult(2L, 2L, "Testing Classing", true));
         this.resultList.add(new ExaminationResult(3L, 3L, "Class Testing", false));
@@ -68,6 +76,7 @@ public class ExaminationApiTest {
         Mockito.when(gradingRepository.findAll()).thenReturn(gradingList);
         Mockito.when(examineeRepository.findAll()).thenReturn(examineeList);
         Mockito.when(examineePairRepository.findAll()).thenReturn(examineePairList);
+        Mockito.when(examinationCommentRepository.findAll()).thenReturn(examineeCommentList);
         Mockito.when(resultRepository.findAll()).thenReturn(resultList);
     }
 
@@ -103,6 +112,11 @@ public class ExaminationApiTest {
         assertEquals(3, actual);
     }
 
+    @Test
+    void testGetAllExamineeComments() {
+        int actual = examinationCommentRepository.findAll().size();
+        assertEquals(3, actual);
+    }
     @Test
     void testGetAllResults() {
         int actual = resultRepository.findAll().size();
