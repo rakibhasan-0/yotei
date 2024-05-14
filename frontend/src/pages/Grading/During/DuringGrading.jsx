@@ -1,5 +1,4 @@
 import React, { useState, useEffect , useContext, useRef } from "react"
-import { /*useLocation, useNavigate,*/ useParams } from "react-router"
 
 import TechniqueInfoPanel from "../../../components/Grading/PerformGrading/TechniqueInfoPanel"
 import Button from "../../../components/Common/Button/Button"
@@ -12,12 +11,10 @@ import styles from "./DuringGrading.module.css"
 import { ArrowRight, ArrowLeft } from "react-bootstrap-icons"
 import { useParams, useNavigate } from "react-router-dom"
 import {setError as setErrorToast} from "../../../utils" 
-
 import { AccountContext } from "../../../context"
 
 // Temp
 import ProtocolYellow from "./yellowProtocolTemp.json"
-import { AccountContext } from "../../../context"
 
 
 /**
