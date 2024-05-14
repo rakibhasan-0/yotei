@@ -94,7 +94,7 @@ public class ExportGradingPdf {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm");
         
-        createHeader(code, color, sdf.format(grading.getCreated_at()).toString(), contentStream);
+        createHeader(code, color, contentStream);
 
         drawImage(page, contentStream);
         contentStream.addRect(initX, initY, CELL_WIDTH+30, -CELL_HEIGHT);
@@ -165,7 +165,7 @@ public class ExportGradingPdf {
 
                     row_count = 0;
                     contentStream = new PDPageContentStream(document,page2);
-                    createHeader(code, color, sdf.format(grading.getCreated_at()).toString(), contentStream);
+                    createHeader(code, color, contentStream);
                     drawImage(page, contentStream);
                     contentStream.addRect(initX, initY, CELL_WIDTH+30, -CELL_HEIGHT);
                     writeToCell(initX, initY, contentStream, "Namn", font);
@@ -199,8 +199,10 @@ public class ExportGradingPdf {
     }
 
 
-    private void createHeader(String code, String color, String date, PDPageContentStream contentStream) throws IOException {
+    private void createHeader(String code, String color, PDPageContentStream contentStream) throws IOException {
         PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/truetype/freefont/FreeSerif.ttf"));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String date = sdf.format(grading.getCreated_at()).toString();
         int initX = TABLE_START_X_POS;
         int initY = pageHeight-75;
         
@@ -290,7 +292,7 @@ public class ExportGradingPdf {
         String code = (String) gradingProtocolObj.get("code");
         String color = (String) gradingProtocolObj.get("color");
         
-        createHeader(code, color, "2024-05-07", contentStream);
+        createHeader(code, color, contentStream);
         drawImage(page, contentStream);
         
         String groupComment = """                
@@ -337,25 +339,27 @@ public class ExportGradingPdf {
             String color = (String) gradingProtocolObj.get("color");
             
             drawImage(page, contentStream);
-            createHeader(code, color, "2024-05-07", contentStream);
+            createHeader(code, color, contentStream);
             contentStream.beginText();
             contentStream.setFont(font, 14);
             contentStream.newLineAtOffset(initX, initY-30);
             contentStream.showText("Par Kommentarer");
             contentStream.endText();
+            //-60 is the distance between the title and where the comments begin
             initY -= 60;
             for (int i = 0 ; i < examinees.size() ; i+=2) { 
                 //lägg till "teknik: kommentar" till rows, sen kanske en tom rad ifall en ny teknik följer och sen upprepa 
                 String examineeComment = "2. Shotei uchi, chudan, rak stöt med främre och bakre handen: Bra form!                                                 9. Grepp i ärmen med drag O soto osae, ude henkan gatame: Bra form! ";
                 List<String> rows = getRows(examineeComment);
-                
+
+                //Checks if the next comment block will fit on the page, if not a new page is created
                 if (initY - rows.size() * 15 + 30 <= 0) {
                     contentStream.close();
                     page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
                     document.addPage(page);        
                     contentStream = new PDPageContentStream(document,page);
                     drawImage(page, contentStream);
-                    createHeader(code, color, "2024-05-07", contentStream);
+                    createHeader(code, color, contentStream);
                     initY = pageHeight-75;
                     contentStream.beginText();
                     contentStream.setFont(font, 14);
@@ -374,6 +378,7 @@ public class ExportGradingPdf {
                     contentStream.showText(rows.get(j));
                 }
                 contentStream.endText();
+                //Calculates the size of the rectangle to enclose the comment
                 contentStream.addRect(initX, initY - (5 + rows.size()*15), CELL_WIDTH * 7 + 30, rows.size() * 15);
                 contentStream.stroke();
                 initY -= rows.size() * 15 + 30;
@@ -402,12 +407,13 @@ public class ExportGradingPdf {
             String color = (String) gradingProtocolObj.get("color");
             
             drawImage(page, contentStream);
-            createHeader(code, color, "2024-05-07", contentStream);
+            createHeader(code, color, contentStream);
             contentStream.beginText();
             contentStream.setFont(font, 14);
             contentStream.newLineAtOffset(initX, initY-30);
             contentStream.showText("Personliga Kommentarer");
             contentStream.endText();
+            //-60 is the distance between the title and where the comments begin
             initY -= 60;
 
             for (int i = 0 ; i < examinees.size() ; i++) {
@@ -421,7 +427,7 @@ public class ExportGradingPdf {
                     document.addPage(page);        
                     contentStream = new PDPageContentStream(document,page);
                     drawImage(page, contentStream);
-                    createHeader(code, color, "2024-05-07", contentStream);
+                    createHeader(code, color, contentStream);
                     initY = pageHeight-75;
                     contentStream.beginText();
                     contentStream.setFont(font, 14);
@@ -441,6 +447,7 @@ public class ExportGradingPdf {
                     contentStream.showText(rows.get(j));
                 }
                 contentStream.endText();
+                //Calculates the size of the rectangle to enclose the comment
                 contentStream.addRect(initX, initY - (5 + rows.size()*15), CELL_WIDTH * 7 + 30, rows.size() * 15);
                 contentStream.stroke();
                 initY -= rows.size() * 15 + 30;
