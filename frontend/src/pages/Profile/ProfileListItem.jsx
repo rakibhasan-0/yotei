@@ -12,12 +12,16 @@ import styles from "./ProfileListItem.module.css"
 import { Link } from "react-router-dom"
 import { Dot } from "react-bootstrap-icons"
 import { ChevronRight } from "react-bootstrap-icons"
+import { AccountContext } from "../../context"
+import { useContext} from "react"
+
 
 export default function ProfileListItem({ item, Icon }) {
+	const { userId, token } = useContext(AccountContext)
 
 	return (
 		<div className={`${styles["profile-item-row"]}`}>
-			<Link to={item.list_id==-1?('/profile/favouriteWorkouts'): (`/profile/list/${item.list_id}`)}>
+			<Link to={item.id==-1?('/profile/favouriteWorkouts'): (`/profile/list/${item.id}`)}>
 				<div className={"row align-items-center font-weight-bold px-3 py-2"}>
 					<div className={"col-2 "}>
 						{/* Handles both Icons and JSX elements */}
@@ -29,12 +33,16 @@ export default function ProfileListItem({ item, Icon }) {
 					</div>
 					<div className={`col-8 ${styles["profile-text"]}`}>
 						<div className="text-left">
-							{item.list_name}
-							{item.list_id == -1 ? (
-								<p className="mb-0">{item.amountOfWorkouts} pass</p>
+							{item.name}
+							{item.id == -1 ? (
+								<p className="mb-0">{item.size} pass</p>
 							) : (
 								<p className="mb-0">
-									av {item.author} <Dot /> {item.amountOfWorkouts} aktiviter
+								{item.author.userId === userId ? (
+									<>av mig <Dot /> {item.size} aktiviter</>
+								) : (
+									<>av {item.author.username} <Dot /> {item.size} aktiviter</>
+								)}
 								</p>
 							)}
 						</div>

@@ -41,25 +41,34 @@ export default function Profile() {
 
 	const lists = [
 		{
-			list_id: -1,
-			list_name: "Favoritpass",
-			state: "Favourite",
-			amountOfWorkouts: 7,
-			author: "Oliver",
+			id: -1,
+			name: "Favoritpass",
+			size: 7,
+			author:{
+				userId: 1,
+				username: "Admin",
+			},
+			hidden: false,
 		},
 		{
-			list_id: 1,
-			list_name: "TestList",
-			state: "Locked",
-			amountOfWorkouts: 3,
-			author: "Oliver",
+			id: 1,
+			name: "TestList",
+			size: 3,
+			author:{
+				userId: 2,
+				username: "Editor",
+			},
+			hidden: true,
 		},
 		{
-			list_id: 2,
-			list_name: "Lees lista",
-			state: "Public",
-			amountOfWorkouts: 3,
-			author: "Lee",
+			id: 2,
+			name: "Lees lista",
+			size: 2,
+			author:{
+				userId: 1,
+				username: "Admin",
+			},
+			hidden: true,
 		},
 	]
 
@@ -157,24 +166,25 @@ export default function Profile() {
 	}
 
 	const getIconFromState = (state) => {
-		switch (state) {
-			case "Locked":
-				console.log("Locked")
-				return <Lock size={36} />
-			case "Shared":
-				console.log("Shared")
-				return <Unlock size={36} />
-			case "Public":
-				console.log("Public")
-				return <Eye size={36} />
-			case "Favourite":
-				console.log("Favourite!")
-				//Här borde jag fixa en route till favoritsidans grej :)
-				return <img src={starFill} />
-			default:
-				console.log("Default")
-				return <Lock />
+		console.log("authorId:"+state.author.userId+"\nuserId:"+userId)
+		if(state.id==-1){
+			console.log("Favourite!")
+			//Här borde jag fixa en route till favoritsidans grej :)
+			return <img src={starFill} />
 		}
+		if(state.hidden===true && state.author.userId==userId){
+			console.log("Locked")
+			return <Lock size={36} />
+		}
+		if(state.hidden===true && state.author.userId!=userId){
+			console.log("Shared")
+			return <Unlock size={36} />
+		}
+		if(state.hidden===false && state.author.userId==userId){
+			console.log("Public")
+			return <Eye size={36} />
+		}
+		return <Lock />
 	}
 
 	return (
@@ -190,7 +200,7 @@ export default function Profile() {
 					<Spinner />
 				) : (
 					lists.map((list) => (
-						<ProfileListItem key={list.list_id} item={list} Icon={getIconFromState(list.state)} />
+						<ProfileListItem key={list.id} item={list} Icon={getIconFromState(list)} />
 					))
 				)}
 			</Tab>
