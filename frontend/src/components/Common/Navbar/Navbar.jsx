@@ -14,16 +14,20 @@ import { AccountContext } from "../../../context"
  *
  * Example usage:
  * 		<Navbar testId="test-id"/>
+ * 
+ * Changes version 4.0:
+ *     	merged techniques and exercise buttons, 
+ * 		this new button routs to activity page.
  *
- * @author Team Medusa & Team Cyclops & Team Tomato & Team Coconut
- * @version 3.0
- * @since 2024-04-24
+ * @author Team Medusa & Team Cyclops & Team Tomato & Team Coconut & Team Kiwi
+ * @version 4.0
+ * @since 2024-05-02
  */
 function Navbar({ testId }) {
 
 	const [open, setOpen] = useState(false)
 	const navigate = useNavigate()
-	const context = useContext(AccountContext)
+	const context = useContext(AccountContext) 
 
 	const navigateAndClose = (path, data) => {
 		setOpen(false)
@@ -37,7 +41,7 @@ function Navbar({ testId }) {
 
 	return (
 		<nav data-testid={testId} className={styles.commonNavbar}>
-			<HamburgerIcon role="button" className={styles.commonNavbarIcon} onClick={() => {setOpen(true)}}/>
+			<HamburgerIcon id="hamburger-button" role="button" className={styles.commonNavbarIcon} onClick={() => {setOpen(true)}}/>
 			<img src="/ubk-logga.jpg" className={styles.budoLogo} onClick={() => navigateAndClose("/")} />
 
 			<div className={`${styles.commonNavbarSidebar} p-4  ${open ? styles.open : ""}`}>
@@ -56,18 +60,15 @@ function Navbar({ testId }) {
 					<h1 className={styles.commonNavbarButton}>Pass</h1>
 				</Button>
 
-				<Button width={"100%"} onClick={() => navigateAndClose("/exercise")}>
-					<h1 className={styles.commonNavbarButton}>Övningar</h1>
+				<Button width={"100%"} onClick={() => navigateAndClose("/activity",  {state: {clearSearchText: true}})}>
+					<h1 className={styles.commonNavbarButton}>Tekniker & Övningar</h1>
 				</Button>
 
-				<Button width={"100%"} onClick={() => navigateAndClose("/technique",  {state: {clearSearchText: true}})}>
-					<h1 className={styles.commonNavbarButton}>Tekniker</h1>
-				</Button>
-
-				<Button width={"100%"} onClick={() => {}}>
+				<Button width={"100%"} onClick={() => navigateAndClose("/grading")}>
 					<h1 className={styles.commonNavbarButton}>Gradering</h1>
 				</Button>
-
+				
+        
 				{ isAdmin(context) ? 
 					<Button width={"100%"} onClick={() => navigateAndClose("/admin")}>
 						<h1 className={styles.commonNavbarButton}>Admin</h1>

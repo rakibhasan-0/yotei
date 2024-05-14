@@ -1,14 +1,13 @@
-/**
- * The Tag API ExcerciseTag Entity, model for exercise_tag data in database.
- *
- * @Author Team 5 Verona (Doc: Griffin dv21jjn)
- */
 package se.umu.cs.pvt.tag;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
-
+/**
+ * The Tag API ExcerciseTag Entity, model for exercise_tag data in database.
+ *
+ * @Author Team 5 Verona (Doc: Griffin dv21jjn)
+ */
 @Entity
 @Table(name = "exercise_tag")
 public class ExerciseTag implements Serializable { 

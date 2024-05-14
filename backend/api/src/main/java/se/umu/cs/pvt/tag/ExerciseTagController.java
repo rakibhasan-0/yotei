@@ -1,8 +1,3 @@
-/**
- * The controller for the ExerciseTag entities. Includes informaton for all of the API calls for exerciseTag.
- *
- * @Author Team 5 Verona (Doc: Griffin dv21jjn)
- */
 package se.umu.cs.pvt.tag;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+/**
+ * The controller for the ExerciseTag entities. Includes informaton for all of the API calls for exerciseTag.
+ *
+ * @Author Team 5 Verona (Doc: Griffin dv21jjn)
+ */
 @RestController
 @RequestMapping("/api/tags")
 public class ExerciseTagController {

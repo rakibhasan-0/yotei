@@ -5,9 +5,9 @@ import VideoPlayerReactPlayer from "../VideoPlayer/VideoPlayerReactPlayer"
 import Image from "../Image/Image"
 import Popup from "../Common/Popup/Popup"
 import ConfirmPopup from "../Common/ConfirmPopup/ConfirmPopup"
-import styles from "../Gallery/Gallery.module.css"
+import "../Gallery/Gallery.css"
 import { AccountContext } from "../../context"
-import {Trash as TrashIcon } from "react-bootstrap-icons"
+import { Trash as TrashIcon } from "react-bootstrap-icons" // kanske använder CodeSlash
 import {CameraVideoOff as NoMediaIcon } from "react-bootstrap-icons"
 import UploadMedia from "../Upload/UploadMedia"
 import {toast} from "react-toastify"
@@ -23,9 +23,9 @@ import Button from "../Common/Button/Button"
  *
  * Example usage:
  *
- * @author Team Dragon (Group 3), Team Mango (Group 4)
+ * @author Team Dragon (Group 3), Team Mango (Group 4), Team Durian (group 3)
  * @version 2.0
- * @since 2023-05-04
+ * @since 2023-05-04, 2024-05-07
  * 
  * Modifications:
  * 2024-04-29: Added placeholder text and id to media description textbox.
@@ -63,7 +63,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 
 				if (response.ok) {
 					const data =  await response.json()
-					setMedia(data) 
+					setMedia(data)
 				} else {
 					setMedia([])
 				}
@@ -95,12 +95,23 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	 * 
 	 */
 	async function removeMedia(){
-		setMediaToRemove(mediaToRemove => [...mediaToRemove, selectedMedia])
-		let temp = [... media]
-		var index = temp.indexOf(selectedMedia)
-		temp.splice(index, 1)
 
-		setMedia(temp)
+		//sets a variable so that the tillbaka popup window apperes when media is change to
+		localStorage.setItem("askToLeave", true)
+		if(mediaToBeAdded.some(item => item.url === selectedMedia.url && item.description === selectedMedia.description && selectedMedia.id === undefined)) {
+			const index = mediaToBeAdded.findIndex(item => item.url === selectedMedia.url && item.description === selectedMedia.description)
+			if(index !== -1) {
+				mediaToBeAdded.splice(index, 1)
+				setMedia(mediaToBeAdded)
+			}
+		}else {
+			setMediaToRemove(mediaToRemove => [...mediaToRemove, selectedMedia])
+			let temp = [... media]
+			var index = temp.indexOf(selectedMedia)
+			temp.splice(index, 1)
+			
+			setMedia(temp)
+		}
 	}
 
 
@@ -108,9 +119,9 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	 * Is displayed if no media is avaliable
 	 */
 	const NoMedia = <div id={"no-media-box"}
-		className = {`d-flex flex-column justify-content-center align-items-center ${styles["no-media-container"]} border`}>
+		className = {"d-flex flex-column justify-content-center align-items-center no-media-container border"}>
 		<NoMediaIcon size={"20%"} ></NoMediaIcon>
-		<span className = {styles["no-media-span"]}>Ingen media just nu, ladda upp genom att klicka på plus</span>
+		<span className = "no-media-span">Ingen media just nu, ladda upp genom att klicka på plus</span>
 	</div>
 
 
@@ -148,7 +159,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	function RemoveButton(mediaObject){
 		return(
 			<div id={`${mediaObject.id}-removal-button`}  
-				className={`btn ${styles["remove-media-button"]}`} 
+				className={"btn remove-media-button"} 
 				onClick={() => {setupRemovePopup(mediaObject)}} 
 			>
 				<TrashIcon color="var(--red-primary)" size={30}></TrashIcon>
@@ -172,10 +183,11 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	 * 
      * @param {Media} mediaData 
      */
-	function fetchMediaMetaToBeUploaded(mediaData) { //should also have localStorage and description
+	function fetchMediaMetaToBeUploaded(mediaData) { //should also have description
 		
+		//sets a variable so that the tillbaka popup window apperes when media is change to
+		localStorage.setItem("askToLeave", true)
 		setMediaToBeAdded(mediaToBeAdded => [...mediaToBeAdded, mediaData])
-			
 		// experimental for showing in the gallery that something has been added. Only visual feedback for the user
 		setMedia(media => [...media, mediaData])
 		setShowAddPopup(false)
@@ -204,7 +216,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 		list.map((m) => {
 			m.movementId = exerciseId
 		})
-		
+
 		const requestOptions = {
 			method: "POST",
 			headers: { "Content-type": "application/json", "token": context.token },
@@ -242,7 +254,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	 * API call for removing media objects.
 	 * @param {*} list of media objects to remove
 	 */
-	async function deleteMedia(list) {
+	function deleteMedia(list) {
 
 		list.map((m) => {
 			m.movementId = exerciseId
@@ -253,24 +265,25 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 			headers: { "Content-type": "application/json", "token": context.token },
 			body: JSON.stringify(list)
 		}
-		try {
-			await fetch("/api/media", requestOptions)
-		} catch (error) {
-			console.error(error)
-		}
+	
+		fetch("/api/media", requestOptions)
+			.then(res => {
+				if(!res.ok) {
+					console.error("Something whent wrong with the deletion of the Media!")
+				}
+				done()
+			})
 	}
 
 
 	/**
 	 * Makes all the nessesary API calls: POST, PUT and DELETE
 	 */
-	const makeAPICalls = async () => {
+	const makeAPICalls = () => {
 		
-
-		await postMedia(mediaToBeAdded)
-		await putDescription(descMap)
-		await deleteMedia(mediaToRemove)
-		done()
+		postMedia(mediaToBeAdded)
+		putDescription(descMap)
+		deleteMedia(mediaToRemove)
 	}
 
 
@@ -316,8 +329,6 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 			setMediaToRemove([])
 			setMediaThatWasUploaded([])
 		}
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sendData])
 
 
@@ -340,7 +351,6 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	 */
 	const deleteFileAPICalls = async () => {
 		await deleteMedia(mediaThatWasUploaded)
-		done()
 	}
 
 
