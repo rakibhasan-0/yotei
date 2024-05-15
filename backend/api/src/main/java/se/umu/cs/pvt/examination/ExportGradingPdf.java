@@ -51,13 +51,20 @@ public class ExportGradingPdf {
     public ExportGradingPdf(Grading grading, List<Examinee> examinees) throws IOException {
         this.examinees = examinees;
         this.totalNumColumns = examinees.size() + 1;
-        this.numPages = (int)Math.ceil((double)examinees.size() / MAX_NUM_COLUMNS);
+        this.numPages = (int)Math.ceil((double)examinees.size() / MAX_NUM_COLUMNS); //byt namn på numPages
         document = new PDDocument();
         this.gradingProtocol = Files.readString(Paths.get(System.getProperty("user.dir") + "/frontend/public/grading_protocol_yellow_1.json"));
         this.examinationTechniqueCategories = new ArrayList<>();
         this.grading = grading;
     }
 
+    /**
+     * Draws the ubk logo in the top right corner. 
+     * 
+     * @param page, PDPage (Page for PDF)
+     * @param contentStream, PDPageContentstream
+     * @throws IOException
+     */
     private void drawImage(PDPage page, PDPageContentStream contentStream) throws IOException {
         String path = System.getProperty("user.dir") + "/frontend/public/ubk-logga.jpg";
         int x = (int)page.getMediaBox().getWidth() - 155;
@@ -66,18 +73,29 @@ public class ExportGradingPdf {
         contentStream.drawImage(pdImage, x, y, 100, 50);
     }
 
+    /**
+     * Parses the json String and returns a Map containing the json elements.
+     *
+     * @param json, a String containing the json contents.
+     * @return A Map<String, Object> is returned containing the json elements.
+     */
     private Map<String, Object> parseJson(String json) {
         org.springframework.boot.json.JsonParser parser = JsonParserFactory.getJsonParser();
         return parser.parseMap(json);
     }
 
 
-    private void createTable(int onPage) throws IOException {
+    /**
+     * Creates the pages which contains the table for which examinee has passed or not on each technique.
+     * 
+     * @param onPage, an int, to keep track which page is being written to... //might need to be changed due to bad variable name...
+     * @throws IOException
+     */
+    private void createTablePage(int onPage) throws IOException {
         PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
         document.addPage(page);
-
-        pageWidth = (int)page.getMediaBox().getWidth(); //get width of the page
-        pageHeight = (int)page.getMediaBox().getHeight(); //get height of the page
+        pageWidth = (int)page.getMediaBox().getWidth(); 
+        pageHeight = (int)page.getMediaBox().getHeight(); 
 
         //Get number of examinees that will be on the page
         int numExamineesOnPage = examinees.size() - (onPage * MAX_NUM_COLUMNS);
@@ -195,6 +213,16 @@ public class ExportGradingPdf {
     }
 
 
+    /**
+     * Writes to the cell at a given position the given text.
+     * 
+     * @param initX, the X position of the cell?
+     * @param initY, the Y position of the cell?
+     * @param contentStream, the PDPageContentStream
+     * @param cellText, the String containing the text that will be written to the cell.
+     * @param font, the PDType0Font that will be used.
+     * @throws IOException
+     */
     private void writeToCell(int initX, int initY, PDPageContentStream contentStream, String cellText, PDType0Font font) throws IOException {
         contentStream.beginText();
         contentStream.newLineAtOffset(initX+10,initY-CELL_HEIGHT+10);
@@ -204,6 +232,14 @@ public class ExportGradingPdf {
     }
 
 
+    /**
+     * Writes the header text to the pdf page.
+     * 
+     * @param code, a String containing the belt code.
+     * @param color, a String containing the belt color.
+     * @param contentStream, the PDPageContentStream.
+     * @throws IOException
+     */
     private void createHeader(String code, String color, PDPageContentStream contentStream) throws IOException {
         PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/truetype/freefont/FreeSerif.ttf"));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -235,6 +271,11 @@ public class ExportGradingPdf {
         contentStream.endText();
     }
 
+    /**
+     * Gets which color will be used to highlight the belt name in the header.
+     * @param color, a String containing the color.
+     * @return Color, the color which will be used to highlight the belt name in the header.
+     */
     private Color getHighlightColor(String color) {
         String split[] = color.split(" ");
         if (split[0].equals("GULT"))
@@ -250,6 +291,11 @@ public class ExportGradingPdf {
         return new Color(1f,1f,1f);
     }
 
+    /**
+     * The main method for the program which generates the entire PDF by calling private methods.
+     * 
+     * @throws IOException
+     */
     public void generate() throws IOException {
         Map<String, Object> parsedProtocol = parseJson(gradingProtocol);
 
@@ -266,7 +312,7 @@ public class ExportGradingPdf {
         }
 
         for(int i = 0; i < numPages; i++)  
-            this.createTable(i);
+            this.createTablePage(i);
 
         createGroupCommentPage();
         createPairCommentPage();
@@ -276,14 +322,17 @@ public class ExportGradingPdf {
         document.close();
     }
 
-    
+    /**
+     * Creates the group comment pdf page and writes the group comment to the pdf page.
+     * 
+     * @throws IOException
+     */
     private void createGroupCommentPage() throws IOException {
         PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
         document.addPage(page);
         
-        pageWidth = (int)page.getMediaBox().getWidth(); //get width of the page
-        pageHeight = (int)page.getMediaBox().getHeight(); //get height of the page
-        
+        pageWidth = (int)page.getMediaBox().getWidth(); 
+        pageHeight = (int)page.getMediaBox().getHeight();         
         int initX = TABLE_START_X_POS;
         int initY = pageHeight-75;
         
@@ -323,13 +372,17 @@ public class ExportGradingPdf {
             contentStream.close();
         }
 
+        /**
+         * Creates the pair comment pdf page and writes the group comment to the pdf page.
+         * 
+         * @throws IOException
+         */
         private void createPairCommentPage() throws IOException {
             PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
             document.addPage(page);
     
-            pageWidth = (int)page.getMediaBox().getWidth(); //get width of the page
-            pageHeight = (int)page.getMediaBox().getHeight(); //get height of the page
-    
+            pageWidth = (int)page.getMediaBox().getWidth(); 
+            pageHeight = (int)page.getMediaBox().getHeight();     
             int initX = TABLE_START_X_POS;
             int initY = pageHeight-75;
             
@@ -399,13 +452,17 @@ public class ExportGradingPdf {
             contentStream.close();
         }
 
+        /**
+         * Creates the examinee comment pdf page and writes the group comment to the pdf page.
+         * 
+         * @throws IOException
+         */
         private void createExamineeCommentPage() throws IOException {
             PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
             document.addPage(page);
     
-            pageWidth = (int)page.getMediaBox().getWidth(); //get width of the page
-            pageHeight = (int)page.getMediaBox().getHeight(); //get height of the page
-    
+            pageWidth = (int)page.getMediaBox().getWidth(); 
+            pageHeight = (int)page.getMediaBox().getHeight();     
             int initX = TABLE_START_X_POS;
             int initY = pageHeight-75;
             
@@ -472,6 +529,13 @@ public class ExportGradingPdf {
             contentStream.close();
         }
 
+        /**
+         * The the comment split up into section so that the text wont exceed the page width. In
+         * other words, newline is added.
+         * 
+         * @param examineeComment, the String that will be split up in to sections
+         * @return a List of Strings which contains the split up sections of the comment.
+         */
         private List<String> getRows(String examineeComment) {
             List<String> rows = new ArrayList<>();
             if(examineeComment.length() > 120) {
@@ -500,6 +564,12 @@ public class ExportGradingPdf {
             return rows;
         }
         
+        /**
+         * Cuts of the String containing a name if it is to long and adds ... to the end.
+         * 
+         * @param name, the String containing the name
+         * @return, the String containing the name, if it is to long, the shortened name.
+         */
         private String stripName(String name) {
             if(name.length() > 30) {
                 name = name.substring(0, 27);
