@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import DropDown from "../../Common/List/Dropdown";
-import styles from "./ListPicker.module.css";
+import React, { useState } from "react"
+import DropDown from "../../Common/List/Dropdown"
+import styles from "./ListPicker.module.css"
 
 
 /**
@@ -18,8 +18,8 @@ export default function ListPicker() {
 		{ label: "Alla" },
 		{ label: "Mina listor" },
 		{ label: "Publika listor" }
-	];
-	const [filter, setFilter] = useState(filterOptions[0]);
+	]
+	const [filter, setFilter] = useState(filterOptions[0])
 
 	const onSelect = (option) => {
 		// Here things will happen when selecting an option.
@@ -32,25 +32,23 @@ export default function ListPicker() {
 				text={filter.label}
 				className={styles.filterText}
 				id="list-filter-workout" centered={true}
-                autoClose={true}
+				autoClose={true}
 			>
-				
+
 				<div className={styles.filterBorder}>
 					{filterOptions.map((option, index) => (
-						
+
 						<div className={styles.filterItems} id={"listFilterItem"}
-						key={index}
-						onClick={() => {
-							onSelect(option);
-						}}>
-						<p className={styles.listItemText}>{option.label}</p>
+							key={index}
+							onClick={() => {
+								onSelect(option)
+							}}>
+							<p className={styles.listItemText}>{option.label}</p>
 						</div>
 					))}
 				</div>
 
 			</DropDown>
 		</div>
-	);
-};
-
-
+	)
+}
