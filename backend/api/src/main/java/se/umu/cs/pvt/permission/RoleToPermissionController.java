@@ -77,7 +77,7 @@ public class RoleToPermissionController {
         }
         
         // Returns an OK code if the pair already exists
-        if (!roleToPermissionRepository.findByRoleIdAndPermissionId(role_id, permission_id).isEmpty()) {
+        if (roleToPermissionRepository.findByRoleIdAndPermissionId(role_id, permission_id) != null) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
 
@@ -97,7 +97,7 @@ public class RoleToPermissionController {
         Long role_id = roleToPermissionToDelete.get("role_id");
         Long permission_id = roleToPermissionToDelete.get("permission_id");
 
-        if (roleToPermissionRepository.findByRoleIdAndPermissionId(role_id, permission_id).isEmpty()) {
+        if (roleToPermissionRepository.findByRoleIdAndPermissionId(role_id, permission_id) == null) {
             return new ResponseEntity<>("Role with id " + role_id + " does not have permission with id " + permission_id + ".", HttpStatus.BAD_REQUEST);
         }
 

@@ -32,5 +32,5 @@ public interface RoleToPermissionRepository extends JpaRepository<RoleToPermissi
      * @param permissionId
      * @return
      */
-    List<Permission> findByRoleIdAndPermissionId(Long roleId, Long permissionId);
+    Permission findByRoleIdAndPermissionId(Long roleId, Long permissionId);
 }
