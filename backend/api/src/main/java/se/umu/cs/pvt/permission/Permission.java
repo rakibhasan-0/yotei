@@ -13,7 +13,7 @@ import javax.persistence.Table;
 /**
  * A permission class representing permissions that users and roles can have.
  * 
- * @author Team Mango (Grupp 4) - 2024-05-13
+ * @author Team Mango (Grupp 4) - 2024-05-15
  */
 @Entity
 @Table(name = "permission")

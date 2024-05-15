@@ -3,7 +3,6 @@ package se.umu.cs.pvt.permission;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,7 @@ import se.umu.cs.pvt.role.RoleRepository;
 /**
  * RoleToPermission api for mapping permissions to roles.
  * 
- * @author Team Mango (Grupp 4) - 2024-05-13
+ * @author Team Mango (Grupp 4) - 2024-05-15
  */
 @RestController
 @CrossOrigin
