@@ -271,7 +271,7 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 				title={getPopupTitle()}
 			>
 				{listCreateInfo.popupState.types.activityPopup && (
-					<ActivityInfoPopUp isFreeText={false} />
+					<ActivityInfoPopUp />
 				)}
 				{listCreateInfo.popupState.types.chooseActivityPopup && (
 					<AddActivity
@@ -288,7 +288,7 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 					/>
 				)}
 				{listCreateInfo.popupState.types.editActivityPopup && 
-					<EditActivityPopup isFreeText={true} />}
+					<EditActivityPopup/>}
 			</Popup>
 			<ConfirmPopup
 				id="ConfirmLeaveChooseActivityPopup"
