@@ -26,8 +26,8 @@ import { AccountContext } from "../../../context"
  * @returns Array with techniques that is in order. 
  * 			Each item contains {categoryName, current_technique and next_technique } for a specific JSON-file  
  * 
- * @author Team Apelsin (2024-05-07)
- * @version 1.0
+ * @author Team Apelsin (2024-05-15)
+ * @version 2.0
  */
 function getTechniqueNameList(gradingProtocolJSON) {
 	// Store data in an array for chronological traversal
@@ -174,48 +174,13 @@ export default function DuringGrading() {
 		
 	}, [examinees])
 
-	// Handle the G and U buttons of each examinee
-	const [selectedButtons, setSelectedButtons] = useState({})
-	// Usage:
-	// handleButtonClick(technique, pairIndex, buttonId, 'left')
-	// handleButtonClick(technique, pairIndex, buttonId, 'right')
-	const handleButtonClick = (technique, pairIndex, buttonId, side) => {
-		const buttonType = buttonId.includes("pass") ? "pass" : "fail"
-		const oppositeButtonType = buttonType === "pass" ? "fail" : "pass"
-
-		setSelectedButtons(prev => ({
-			...prev,
-			[pairIndex]: {
-				...prev[pairIndex],
-				[`${buttonType}-button-${pairIndex}-${side}`]: buttonId,
-				[`${oppositeButtonType}-button-${pairIndex}-${side}`]: null,
-			}
-		}))
-		console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}`)
-	}
-
-	// Extracted Examinee component to remove duplicate code.
-	const Examinee = ({ examineeName, index, side }) => (
-		<ExamineeBox examineeName={examineeName} onClickComment={() => console.log("CommentButton clicked")}>
-			<ExamineeButton
-				id={`pass-button-${index}-${side}`}
-				type="green"
-				onClick={() => handleButtonClick(techniqueNameList[currentIndex].technique.text, index, `pass-button-${index}-${side}`, side)}
-				isSelected={selectedButtons[index]?.[`pass-button-${index}-${side}`] === `pass-button-${index}-${side}`}
-			>
-				<p>G</p>
-			</ExamineeButton>
-			<ExamineeButton 
-				id={`fail-button-${index}-${side}`}
-				type="red"
-				onClick={() => handleButtonClick(techniqueNameList[currentIndex].technique.text, index, `fail-button-${index}-${side}`, side)}
-				isSelected={selectedButtons[index]?.[`fail-button-${index}-${side}`] === `fail-button-${index}-${side}`}
-                
-			>
-				<p>U</p>
-			</ExamineeButton>
-		</ExamineeBox>
-	)
+    const [leftExamineeState, setLeftExamineeState] = useState('default');
+    const [rightExamineeState, setRightExamineeState] = useState('default');
+    // Will handle the api call that will update the database with the result. 
+    const examineeClick = (newState, technique, pairIndex, buttonId) => {
+        console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}, with new state ${newState}`)
+        // Check what state the button is in and send the proper information to DB.
+    }
 
 	// Scroll to the top of the examinees list after navigation
 	const scrollableContainerRef = useRef(null)
@@ -236,8 +201,22 @@ export default function DuringGrading() {
 					<ExamineePairBox 
 						key={index}
 						rowColor={index % 2 === 0 ? "#FFFFFF" : "#F8EBEC"}
-						leftExaminee={<Examinee examineeName={item.nameLeft} index={index} side='left' />}
-						rightExaminee={<Examinee examineeName={item.nameRight} index={index} side='right' />}
+						leftExaminee={
+                            <ExamineeBox 
+                                examineeName={item.nameLeft} 
+                                onClick={(newState) => examineeClick(newState, techniqueNameList[currentIndex].technique.text, index, `${index}-left`)}
+                                buttonState={leftExamineeState}
+                                setButtonState={setLeftExamineeState}>
+		                    </ExamineeBox>
+                        }
+						rightExaminee={
+                            <ExamineeBox 
+                                examineeName={item.nameRight}
+                                onClick={(newState) => examineeClick(newState, techniqueNameList[currentIndex].technique.text, index, `${index}-right`)}
+                                buttonState={rightExamineeState}
+                                setButtonState={setRightExamineeState}>
+                            </ExamineeBox>
+                        }
 						pairNumber={index+1}>
 					</ExamineePairBox>
 				))}

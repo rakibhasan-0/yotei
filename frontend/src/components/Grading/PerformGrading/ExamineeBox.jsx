@@ -12,21 +12,26 @@ import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
  *   Props:
  *    id				@type {any} 	 the id of the component.
  *    examineeName      @type {String}   the name of the examinee
+ *    onCLick           @type {function} onClick function when component is pressed.
+    
+ }}
  * 
  * Example Usage:
  * <ExamineeBox 
- *  examineeName = "test person"/>
+ *  examineeName = "test person"
+ *  onClick={() => console.log("Clicked")}}/>
  *
  * @author Apelsin
- * @since 2024-05-13
- * @version 2.0 
+ * @since 2024-05-15
+ * @version 3.0 
  */
 
-export default function ExamineeBox({ id, examineeName, children}) {
+export default function ExamineeBox({ id, examineeName, onClick, buttonState, setButtonState}) {
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [isAddingComment, setAddComment] = useState(false)
 	const [commentText, setCommentText] = useState()
 	const [commentError, setCommentError] = useState()
+    const colors = ['white', 'lightgreen', 'lightcoral']
 
 	/**
 	 * Is used when discarding a comment,
@@ -82,16 +87,39 @@ export default function ExamineeBox({ id, examineeName, children}) {
 		await onDiscardPersonalComment()
 	}
 
+    // Function and state to change the color of the ExamineeBox
+    const [colorIndex, setColorIndex] = useState(0)
+
+    const handleClick = () => {
+        setColorIndex((colorIndex + 1) % colors.length)
+        
+        // Update buttonState based on current state
+        let nextState;
+        if (buttonState === 'default') {
+          nextState = 'pass';
+        } else if (buttonState === 'pass') {
+          nextState = 'fail';
+        } else if (buttonState === 'fail') {
+          nextState = 'default';
+        }
+        setButtonState(nextState);
+      
+        // Api call will be handled here and update the DB according to state
+        onClick(nextState); // Pass the new state as a parameter
+      }
+
+
+
 	return (
-		<div id={id} className={styles.examineeContainer} style={{backgroundColor: "#FFFFFF"}}>
+		<div id={id} className={styles.examineeContainer} style={{backgroundColor: colors[colorIndex]}}>
 			<fieldset className={styles.examineeFieldset}>
-				<div className={styles.examineeName}>
+				<div 
+                    className={styles.examineeName}
+                    onClick={() => {handleClick()}}>
 					<p id="ExamineeName" style={{height:"52px", margin:"0"}}>{examineeName}</p>
 				</div>
 				<CommentButton onClick={() => setAddComment(true)} className={styles.commentButtonContainer}/>
-				<div className={styles.buttonContainer}>
-					{children}
-				</div>
+
 				<Popup 
 					id={"examinee-comment-popup"} 
 					title={"Lägg kommentar till: " + examineeName} 
