@@ -65,6 +65,11 @@ public class Permission implements Serializable{
         return this.permission_id;
     }
 
+    // Used for testing
+    public void setPermissionId(Long newId) {
+        this.permission_id = newId;
+    }
+
     public void setPermissionName(String name) {
         this.permission_name = name;
     }
