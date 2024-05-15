@@ -1,6 +1,6 @@
 /** @jest-environment jsdom */
 import React from "react"
-import { render, screen, configure, waitFor } from "@testing-library/react"
+import { render, screen, configure, waitFor, fireEvent } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { AccountContext } from "../../../../context"
 import "@testing-library/jest-dom"
@@ -185,7 +185,7 @@ describe("verify that", () => {
 		})
 	}
 
-	/*test("checking the kihon checkbox adds and removes the kihon tag", async () => {
+	test("checking the kihon checkbox adds and removes the kihon tag", async () => {
 		await renderWithRouter()
 
 		await user.click(screen.getByTestId("technique-edit-button"))
@@ -193,15 +193,16 @@ describe("verify that", () => {
 		await user.click(screen.getByLabelText("Kihon"))
 
 		await waitFor(() => {
-			expect(screen.getByText("Kihon Waza")).toBeInTheDocument()
+			expect(screen.getByText("kihon waza")).toBeInTheDocument()
 		})
 
 		await user.click(screen.getByLabelText("Kihon"))
 
 		await waitFor(() => {
-			expect(screen.queryByText("Kihon Waza")).not.toBeInTheDocument()
+			expect(screen.queryByText("kihon waza")).not.toBeInTheDocument()
 		})
-	})*/
+		
+	})
 
 	/*test("adding/removing the kihon tag checks/unchecks the kihon checkbox", async () => {
 		await renderWithRouter()
@@ -214,16 +215,12 @@ describe("verify that", () => {
 
 		await user.click(screen.getByTestId("tag-add-button"))
 
-		// The tag suggestion and the create tag elements are identical, clicks the first one on the page.
-		const allTags = screen.getAllByText("kihon waza")
-		await user.click(allTags[0])
-
 		await user.click(screen.getByTestId("save-and-close-button"))
 
-				await waitFor(() => {
+		await waitFor(() => {
 			expect(screen.getByLabelText("Kihon")).toBeChecked()
 		}) 
-		/*await user.click(screen.getByText("kihon waza"))
+		await user.click(screen.getByText("kihon waza"))
 
 		await waitFor(() => {
 			expect(screen.getByLabelText("Kihon")).not.toBeChecked()
