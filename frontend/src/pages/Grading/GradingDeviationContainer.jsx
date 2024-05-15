@@ -5,15 +5,29 @@ import { ChevronDown } from "react-bootstrap-icons"
 
 
 /**
- * The grading deviation container page.
+ * This file contains the GradingDeviationContainer component which is used to display grading deviations.
  * 
  * @author Team Pomegranate
  * @version 1.0
  * @since 2024-05-07
  */
 
+
+/**
+ * 
+* @param
+*  - id: The unique identifier for the grading deviation.
+*  - name: The name of the technique.
+*  - comment: The comment for the grading.
+*  - pairComment: The pair comment for the grading deviation.
+*  - generalComment: The general comment for the whole groups grading.
+*  - passed: A boolean indicating whether the grading has been passed.
+* @returns A site where the user can check the examinees grading and if there are any deviations and comments etc.
+*/
+
 function GradingDeviationContainer({ id, name, comment, pairComment, generalComment, passed }) {
 	const [toggled, setToggled] = useState(false)
+
 
 	function checkID(id) {
 		if (id === null || id === undefined) {
