@@ -102,22 +102,22 @@ function BeltBox ( {id, belts} ) {
 	}
 
 	function checkDan(belt) {
-		if (belt.id > 13) {
+		if (belt.id > 14) {
 			switch (belt.id) {
-			case(14):
+			case(15):
 				return( 
 					<div key={`${belt.id}-adult-belt`} className={`${styles.sc23_beltbox_belt} ${styles.sc23_beltbox_belt_dan1}`} style={{background: adaptColorCode(belt.color)}}>
 						<div className={styles.sc23_beltbox_belt_dan}/>
 					</div>)
 			
-			case(15):
+			case(16):
 				return ( 
 					<div key={`${belt.id}-adult-belt`} className={`${styles.sc23_beltbox_belt} ${styles.sc23_beltbox_belt_dan2}`} style={{background: adaptColorCode(belt.color)}}>
 						<div className={styles.sc23_beltbox_belt_dan}/>
 						<div className={styles.sc23_beltbox_belt_dan}/>
 					</div>)
 			
-			case(16):
+			case(17):
 				return (
 					<div key={`${belt.id}-adult-belt`} className={`${styles.sc23_beltbox_belt} ${styles.sc23_beltbox_belt_dan3}`} style={{background: adaptColorCode(belt.color)}}>
 						<div className={styles.sc23_beltbox_belt_dan}/>
