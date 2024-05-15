@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import se.umu.cs.pvt.activitylist.Dtos.*;
 import se.umu.cs.pvt.user.JWTUtil;
 import se.umu.cs.pvt.user.User;
 import se.umu.cs.pvt.user.User.Role;

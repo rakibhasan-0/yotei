@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import se.umu.cs.pvt.technique.Technique;
+import se.umu.cs.pvt.exercise.Exercise;
 import se.umu.cs.pvt.workout.UserShort;
 
 /**
@@ -61,6 +63,15 @@ public class ActivityList implements Serializable {
 
     public ActivityList(Long id, Long author, String name, String desc, Boolean hidden, LocalDate date) {
         this.id = id;
+        this.author = author;
+        this.name = name;
+        this.desc = desc;
+        this.hidden = hidden;
+        this.date = date;
+    }
+
+    // Constructor without id, used when saving a new ActivityList
+    public ActivityList(Long author, String name, String desc, Boolean hidden, LocalDate date) {
         this.author = author;
         this.name = name;
         this.desc = desc;
@@ -140,6 +151,18 @@ public class ActivityList implements Serializable {
 
     public void setEntries(Set<ActivityListEntry> activityEntries) {
         this.activityEntries = activityEntries;
+    }
+
+    // Method to add exercise to the activity list
+    public void addExercise(Long exerciseId) {
+        ActivityListEntry entry = new ActivityListEntry(this.id, exerciseId, null);
+        activityEntries.add(entry);
+    }
+
+    // Method to add technique to the activity list
+    public void addTechnique(Long techniqueId) {
+        ActivityListEntry entry = new ActivityListEntry(this.id, null, techniqueId);
+        activityEntries.add(entry);
     }
 
 }

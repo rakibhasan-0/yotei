@@ -1,10 +1,13 @@
-package se.umu.cs.pvt.activitylist;
+package se.umu.cs.pvt.activitylist.Dtos;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import se.umu.cs.pvt.activitylist.ActivityList;
+import se.umu.cs.pvt.activitylist.ActivityListEntry;
 
 /**
  * Dto for an activity list that holds complete information about the list.

@@ -1,5 +1,6 @@
 package se.umu.cs.pvt.activitylist;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +24,9 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.web.bind.annotation.RequestBody;
+
+import se.umu.cs.pvt.activitylist.Dtos.*;
+
 import se.umu.cs.pvt.user.JWTUtil;
 
 /**
@@ -57,7 +61,7 @@ public class ActivityListController {
      * Adds an activity list.
      * 
      * @param listToAdd example body:
-     *                  {"id":1,"author":1,"name":"xx","desc":"king","hidden":true,"date":[2024,5,3],"userId":2}
+     *                  {"id":1,"author":1,"name":"xx","desc":"king","hidden":true,"date":[2024,5,3]}
      * @param token     token of the user requesting to add a list
      * @return the added activity list if successful
      *         Unauthorized if token is invalid
@@ -66,9 +70,10 @@ public class ActivityListController {
      *         Forbidden if the token does not match the author of the list to add
      */
     @PostMapping("/add")
-    public ResponseEntity<ActivityList> addList(@RequestBody ActivityList listToAdd,
+    public ResponseEntity<ActivityList> addList(@RequestBody AddActivityListRequest listToAdd,
             @RequestHeader(value = "token") String token) {
         try {
+
             jwt = jwtUtil.validateToken(token);
             userIdL = jwt.getClaim("userId").asLong();
             userRole = jwt.getClaim("role").asString();
@@ -91,8 +96,11 @@ public class ActivityListController {
         if (userIdL != listToAdd.getAuthor() && !userRole.equals("ADMIN")) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        listRepository.save(listToAdd);
-        return new ResponseEntity<>(listToAdd, HttpStatus.CREATED);
+
+        ActivityList newList = new ActivityList(listToAdd.getAuthor(), listToAdd.getName(), listToAdd.getDesc(),
+                listToAdd.getHidden(), LocalDate.now());
+        listRepository.save(newList);
+        return new ResponseEntity<>(newList, HttpStatus.CREATED);
     }
 
     /**

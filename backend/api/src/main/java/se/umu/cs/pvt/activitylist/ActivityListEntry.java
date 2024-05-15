@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -49,6 +48,12 @@ public class ActivityListEntry implements Serializable {
 
     public ActivityListEntry(Long id, Long activityListId, Long exerciseId, Long techniqueId) {
         this.id = id;
+        this.activityListId = activityListId;
+        this.exerciseId = exerciseId;
+        this.techniqueId = techniqueId;
+    }
+
+    public ActivityListEntry(Long activityListId, Long exerciseId, Long techniqueId) {
         this.activityListId = activityListId;
         this.exerciseId = exerciseId;
         this.techniqueId = techniqueId;

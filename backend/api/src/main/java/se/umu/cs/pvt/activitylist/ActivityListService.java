@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import se.umu.cs.pvt.activitylist.Dtos.ActivityListDTO;
+import se.umu.cs.pvt.activitylist.Dtos.ActivityListShortDTO;
+import se.umu.cs.pvt.activitylist.Dtos.UserShortDTO;
 import se.umu.cs.pvt.workout.UserShort;
 import se.umu.cs.pvt.workout.UserShortRepository;
 
