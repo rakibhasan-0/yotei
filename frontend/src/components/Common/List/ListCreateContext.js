@@ -1,6 +1,6 @@
 import { createContext } from "react"
 
 /**
- * Context for the Create and Edit workout component
+ * Context for the Create and Edit list component
  */
-export const WorkoutCreateContext = createContext(null)
+export const ListCreateContext = createContext(null)

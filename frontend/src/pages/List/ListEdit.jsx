@@ -8,7 +8,7 @@ import {
 	WorkoutCreateInitialState, 
 	WORKOUT_CREATE_TYPES,
 } from "../../components/Common/List/ListCreateReducer.js"
-import { WorkoutCreateContext } from "../../components/Common/List/ListCreateContext.js"
+import { ListCreateContext } from "../../components/Common/List/ListCreateContext.js"
 import styles from "./WorkoutModify.module.css"
 import { setSuccess, setError } from "../../utils.js"
 import { Spinner } from "react-bootstrap"
@@ -173,12 +173,12 @@ const ListEdit = () => {
 			{isLoading ? <Spinner/> :
 			<>
 			{console.log("Ritar upp passredigeringssidan")}
-				<WorkoutCreateContext.Provider value={{workoutCreateInfo, workoutCreateInfoDispatch}} >
+				<ListCreateContext.Provider value={{workoutCreateInfo, workoutCreateInfoDispatch}} >
 					<title>Redigera lista</title>
 					<h1 className={styles.title}>Redigera lista</h1>
 					
 					<WorkoutFormComponent callback={submitHandler} edit={true} />	
-				</WorkoutCreateContext.Provider> 
+				</ListCreateContext.Provider> 
 				</>
 			}
 			

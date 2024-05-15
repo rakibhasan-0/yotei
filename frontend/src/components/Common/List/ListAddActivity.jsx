@@ -14,7 +14,7 @@ import RoundButton from "../../Common/RoundButton/RoundButton"
 import { ChevronRight } from "react-bootstrap-icons"
 import ErrorStateSearch from "../../Common/ErrorState/ErrorStateSearch"
 import style from "./ListAddActivity.module.css"
-import { WorkoutCreateContext } from "./ListCreateContext"
+import { ListCreateContext } from "./ListCreateContext"
 import { WORKOUT_CREATE_TYPES } from "./ListCreateReducer"
 import InfiniteScrollComponent from "../../Common/List/InfiniteScrollComponent"
 import FilterContainer from "../../Common/Filter/FilterContainer/FilterContainer"
@@ -38,7 +38,7 @@ import { useCookies } from "react-cookie"
  */
 function AddActivity({ id, setShowActivityInfo }) {
 	const { token } = useContext(AccountContext)
-	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(WorkoutCreateContext)
+	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(ListCreateContext)
 	const { checkedActivities } = workoutCreateInfo
 
 

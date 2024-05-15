@@ -1,6 +1,6 @@
 import styles from "./SavedActivityListComponent.module.css"
 import { useContext } from "react"
-import { WorkoutCreateContext,WORKOUT_CREATE_TYPES } from "../../components/Common/List/ListCreateContext.js"
+import { ListCreateContext,WORKOUT_CREATE_TYPES } from "../../components/Common/List/ListCreateContext.js"
 import { List, Pencil } from "react-bootstrap-icons"
 
 /**
@@ -39,7 +39,7 @@ export default function ActivityListComponent() {
     },[])
 
 	const { workoutCreateInfo, workoutCreateInfoDispatch } =
-		useContext(WorkoutCreateContext)
+		useContext(ListCreateContext)
 
 	const handleDragEnd = (result) => {
 		const { source, destination } = result
@@ -194,7 +194,7 @@ function SavedActivityList({ children, categoryName, groupIndex, id }) {
  *		/>
  */
 function ActivityItem({ activityName, activityTime, pinkColor, id, itemIndex}) {
-	const { workoutCreateInfoDispatch, } = useContext(WorkoutCreateContext)
+	const { workoutCreateInfoDispatch, } = useContext(ListCreateContext)
 	return (
 		<Draggable
 			key={id}

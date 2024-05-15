@@ -3,7 +3,7 @@ import styles from "./ListActivityInfoPopUp.module.css"
 import Divider from "../../Common/Divider/Divider.jsx"
 import Button from "../../Common/Button/Button.jsx"
 import { Plus } from "react-bootstrap-icons"
-import { WorkoutCreateContext } from "./ListCreateContext"
+import { ListCreateContext } from "./ListCreateContext"
 import { WORKOUT_CREATE_TYPES } from "./ListCreateReducer"
 import RadioButton from "../../Common/RadioButton/RadioButton"
 import MinutePicker from "../../Common/MinutePicker/MinutePicker"
@@ -15,7 +15,6 @@ import MinutePicker from "../../Common/MinutePicker/MinutePicker"
  * 	   index @type {number} - The index of the activity in the list.
  *     categoryName @type {string}  - The name of the category.
  *     id @type {number} - The id of the activity.
- *     inputDisabled @type {boolean} - Boolean that says if the input should be disabled or not.
  *     text @type {string} - The text that is written in the text area.
  * 
  * Example usage:
@@ -23,12 +22,11 @@ import MinutePicker from "../../Common/MinutePicker/MinutePicker"
  *			index={0}
  *			categoryName={"01"}
  *			id={0}
- *			inputDisabled={false}
  *			text={"Namn på aktivitet"}
  *		/>
  */
-function ActivityItem({ index, categoryName, id, inputDisabled, text }) {
-	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(WorkoutCreateContext)
+function ActivityItem({ index, categoryName, id, text }) {
+	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(ListCreateContext)
 
 	// Updates the text area height to fit the text
 	useEffect(() => {
@@ -43,7 +41,6 @@ function ActivityItem({ index, categoryName, id, inputDisabled, text }) {
 			<textarea 
 				className={styles.activityItemTextArea}
 				placeholder="Fri text ..."
-				disabled={inputDisabled} 
 				onChange={(e) => 
 					workoutCreateInfoDispatch({ 
 						type: "UPDATE_ACTIVITY_NAME", 
@@ -60,14 +57,11 @@ function ActivityItem({ index, categoryName, id, inputDisabled, text }) {
 /**
  * Component for setting the time for each activity connected to an exercise.
  * 
- * Props:
- *    isFreeText @type {boolean} - Boolean that says if the input should be disabled or not.
- * 
  * Example usage:
- * 		<ActivityList isFreeText={true} />
+ * 		<ActivityList/>
  */
-function ActivityList({ isFreeText }){
-	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(WorkoutCreateContext)
+function ActivityList(){
+	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(ListCreateContext)
 
 	return (
 		<div className={styles.activityList}>
@@ -78,20 +72,8 @@ function ActivityList({ isFreeText }){
 						key={"activity-list-item-" + index}
 						id={index}
 						index={index}
-						inputDisabled={!isFreeText}
 						text={activity.name} />)
 			})}
-			{isFreeText && 
-				<div className={styles.activityAddButton}>
-					<Button 
-						id="activity-time-add-button" 
-						width={90} 
-						onClick={() => workoutCreateInfoDispatch({
-							type: "ADD_ACTIVITY", 
-							payload: { name: "" }})} >
-						<Plus />
-					</Button>
-				</div>}
 		</div>
 	)
 }
@@ -105,7 +87,7 @@ function ActivityList({ isFreeText }){
  *		<ActivityTimes />
  */
 function ActivityTimes() {
-	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(WorkoutCreateContext)
+	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(ListCreateContext)
 	const { addedActivities } = workoutCreateInfo
 
 	const minutePickerCallback = (id, time) => {
@@ -158,16 +140,9 @@ function ActivityTimes() {
  * @version 1.0
  * @since 2023-05-24
  */
-export default function ActivityInfoPopUp({ isFreeText }) {
-	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(WorkoutCreateContext)
+export default function ActivityInfoPopUp() {
+	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(ListCreateContext)
 	const { addedActivities } = workoutCreateInfo
-
-	// Add empty activity if free text and empty addedActivities
-	useEffect(() => {
-		if(addedActivities.length === 0 && isFreeText) {
-			workoutCreateInfoDispatch({type: "ADD_ACTIVITY", payload: { name: "" }})
-		}
-	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 	/**
 	 * Removes empty activities from addedActivities if free text.
@@ -184,17 +159,11 @@ export default function ActivityInfoPopUp({ isFreeText }) {
 	}
 
 	const goBack = () => {
-		if (isFreeText){
-			workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLEAR_ADDED_ACTIVITIES })
-			workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLOSE_POPUP })
-		} else {
-			workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLOSE_ACIVITY_POPUP })
-		}
+		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLOSE_ACIVITY_POPUP })
 	}
 
 	const saveActivities = () => {
-		if(isFreeText) clearEmptyActivities()
-		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CREATE_ACTIVITY_ITEMS, payload: { isFreeText }})
+		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CREATE_ACTIVITY_ITEMS, payload: {}})
 		{console.log("Breakpoint 1")}
 		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLOSE_POPUP })
 	}
@@ -202,7 +171,7 @@ export default function ActivityInfoPopUp({ isFreeText }) {
 	return (
 		<div className={styles.container}>
 			<div className={styles.infoContainer}>
-				<ActivityList isFreeText={isFreeText} />
+				<ActivityList/>
 				<Divider id="ListTimeDivider" option="h2_left" title="Tid" />
 				<ActivityTimes />
 			</div>

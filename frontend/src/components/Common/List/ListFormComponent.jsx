@@ -8,7 +8,7 @@ import TagInput from "../../Common/Tag/TagInput"
 import AddUserComponent from "../../Workout/CreateWorkout/AddUserComponent"
 import Button from "../../Common/Button/Button"
 import CheckBox from "../../Common/CheckBox/CheckBox"
-import { WorkoutCreateContext } from "./ListCreateContext"
+import { ListCreateContext } from "./ListCreateContext"
 import {
 	WORKOUT_CREATE_TYPES,
 	checkIfActivityInfoPoupChangesMade
@@ -24,7 +24,7 @@ import SavedActivityList from "../../SavedList/SavedListInfo/SavedListComponent"
 /**
  * Component for input-form to be used to create a new workout (WorkoutCreate.js)
  *
- * This component requires the WorkoutCreateContext to be used.
+ * This component requires the ListCreateContext to be used.
  *
  * Props:
  *     callback @id {function}  - Function to call when form is filled and to be sent.
@@ -39,7 +39,7 @@ import SavedActivityList from "../../SavedList/SavedListInfo/SavedListComponent"
  */
 export default function WorkoutFormComponent({ callback, state,edit}) {
 	const { workoutCreateInfo, workoutCreateInfoDispatch } =
-		useContext(WorkoutCreateContext)
+		useContext(ListCreateContext)
 	const [leaveActivityPickerPopup, setLeaveActivityPickerPopup] = useState(false)
 	const [validated, setValidated] = useState(false)
 	const [acceptActivities, setAcceptActivities] = useState(false)

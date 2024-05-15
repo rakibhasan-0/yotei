@@ -1,7 +1,7 @@
 import styles from "./ListActivityListComponent.module.css"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import { useContext } from "react"
-import { WorkoutCreateContext } from "./ListCreateContext"
+import { ListCreateContext } from "./ListCreateContext"
 import { WORKOUT_CREATE_TYPES } from "./ListCreateReducer"
 import { List, Pencil } from "react-bootstrap-icons"
 
@@ -17,7 +17,7 @@ import { List, Pencil } from "react-bootstrap-icons"
  */
 export default function ActivityListComponent() {
 	const { workoutCreateInfo, workoutCreateInfoDispatch } =
-		useContext(WorkoutCreateContext)
+		useContext(ListCreateContext)
 
 	const handleDragEnd = (result) => {
 		const { source, destination } = result
@@ -171,7 +171,7 @@ function ActivityList({ children, categoryName, groupIndex, id }) {
  *		/>
  */
 function ActivityItem({ activityName, activityTime, pinkColor, id, itemIndex}) {
-	const { workoutCreateInfoDispatch, } = useContext(WorkoutCreateContext)
+	const { workoutCreateInfoDispatch, } = useContext(ListCreateContext)
 	return (
 		<Draggable
 			key={id}

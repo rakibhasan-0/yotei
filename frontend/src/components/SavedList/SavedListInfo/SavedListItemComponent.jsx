@@ -12,7 +12,7 @@
 import React, { useState, useContext } from "react"
 import styles from "./SavedListItemComponent.module.css"
 //Fanns ej i WorkoutActivityListItem.jsx 
-import { WorkoutCreateContext } from "../../Common/List/ListCreateContext"
+import { ListCreateContext } from "../../Common/List/ListCreateContext"
 import { WORKOUT_CREATE_TYPES } from "../../Common/List/ListCreateReducer"
 import DescriptionToggle from "../../Common/DescriptionToggle"
 import { Trash } from "react-bootstrap-icons"
@@ -21,7 +21,7 @@ const WorkoutActivityListItem = ({ activity, index, id,edit}) => {
 	//Fanns ej i WorkoutActivityList.jsx
 	let workoutCreateInfo,workoutCreateInfoDispatch
 	if(edit){
-		const {workoutCreateInfo:info, workoutCreateInfoDispatch:dispatch} = useContext(WorkoutCreateContext)
+		const {workoutCreateInfo:info, workoutCreateInfoDispatch:dispatch} = useContext(ListCreateContext)
 		workoutCreateInfo=info;
 		workoutCreateInfoDispatch=dispatch
 	}

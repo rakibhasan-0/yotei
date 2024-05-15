@@ -11,13 +11,13 @@ import styles from "./SavedListComponent.module.css"
 import {useState, useEffect,useContext} from "react"
 import Spinner from "../../../components/Common/Spinner/Spinner"
 import { AccountContext } from "../../../context"
-import { WorkoutCreateContext } from "../../Common/List/ListCreateContext"
+import { ListCreateContext } from "../../Common/List/ListCreateContext"
 
 
 export default function WorkoutActivityList({activities,edit}) {
 	const context = useContext(AccountContext)
 	/*const { workoutCreateInfo, workoutCreateInfoDispatch } =
-	useContext(WorkoutCreateContext)*/
+	useContext(ListCreateContext)*/
 	const {token, userId} = context
 	const [ListData, setListData] = useState(null)
 	const [Loading, setLoading] = useState(true)
