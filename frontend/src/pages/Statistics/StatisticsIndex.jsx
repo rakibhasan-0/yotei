@@ -166,11 +166,11 @@ export default function Statistics() {
 		<div>
 			<title>Statistik</title>
 			{loading ? (
-			<Spinner />
+				<Spinner />
 			) : (
-			<h1 id="statistics-header">
-				{groupName ? `${groupName.name}` : "Gruppen hittades inte"}
-			</h1>
+				<h1 id="statistics-header">
+					{groupName ? `${groupName.name}` : "Gruppen hittades inte"}
+				</h1>
 			)}
 
 			<div className={style.FilterAndSortContainer}>
@@ -197,16 +197,16 @@ export default function Statistics() {
 
 			<div className="activitiesContainer" id="technique-exercise-list">
 				{activities.length === 0 ? (
-				<h5 style={{ fontSize: "25px" }}>Inga aktiviteter hittades</h5>
+					<h5 style={{ fontSize: "25px" }}>Inga aktiviteter hittades</h5>
 				) : (
-				activities.map((activity, index) => (
-					<TechniqueCard
-						key={index}
-						technique={activity}
-						checkBox={false}
-						id={activity.activity_id}
-					/>
-				))
+					activities.map((activity, index) => (
+						<TechniqueCard
+							key={index}
+							technique={activity}
+							checkBox={false}
+							id={activity.activity_id}
+						/>
+					))
 				)}
 			</div>
 
