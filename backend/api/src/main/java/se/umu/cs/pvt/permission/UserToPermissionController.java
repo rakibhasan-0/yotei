@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Main class for handling login information and transactions with the database.
+ * UserToPermissionController API for mapping permissions to users.
  * @author Team Mango (2024-05-15)
  */
 
