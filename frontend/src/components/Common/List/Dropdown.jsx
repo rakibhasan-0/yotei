@@ -38,7 +38,7 @@ export default function Component({ item, text, children, id, autoClose, errorMe
 	}
 	const style = errorMessage?.length > 0 ? { border: "2px solid var(--red-primary)" } : {}
 	return (
-		<label className={styles.listLabel}>
+		<div className={styles.listLabel}>
 			<div id={id} className={styles.listContainer} style={style}>
 				<div className={styles.listHeader} onClick={(e) => {setToggled(!toggled); e.preventDefault()}} id={`${id}-header`}>
 					<div className={styles.listItem}>
@@ -56,6 +56,6 @@ export default function Component({ item, text, children, id, autoClose, errorMe
 				</div>
 			</div>
 			<p className={styles.listErr}>{errorMessage}</p>
-		</label>
+		</div>
 	)
 }
