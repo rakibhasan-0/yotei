@@ -9,7 +9,7 @@ import RoundButton from "../RoundButton/RoundButton"
 import { ChevronRight } from "react-bootstrap-icons"
 import MiniPopup from "../MiniPopup/MiniPopup.jsx"
 import TagUsagePopup from "./TagUsagePopup.jsx"
-import Examinee from "./Examinee.jsx"
+import EditableListItem from "../EditableListItem/EditableListItem.jsx"
 import ConfirmPopup from "../ConfirmPopup/ConfirmPopup.jsx"
 
 
@@ -111,7 +111,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 			headers: {"Content-type": "application/json",token },
 			body: JSON.stringify({name: tagName}),
 		}
-		const returnErrorMessage = validateTagName(tagName)
+		const returnErrorMessage = validateInput(tagName)
 		//Checked by default
 		if (returnErrorMessage != "") {
 			setError(returnErrorMessage)
@@ -157,14 +157,14 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 		}
 
 		const tempTagListArray = suggested.map(tag =>
-			<Examinee item={tag.name} 
+			<EditableListItem item={tag.name} 
 				key={tag.id}
 				id={tag.id} 
 				showCheckbox={true}
 				onCheck={checked => checked ? handleAddTag(tag) : handleRemoveTag(tag)}
 				checked={newAddedTags.some(a => a.id == tag.id)}	
 				onEdit={handleEditText}
-				validateTagName={validateTagName}
+				validateInput={validateInput}
 				grayTrash={tag.exercises + tag.workouts + tag.techniques > 0}
 				onRemove={() => handleDelete(tag)}
 			/>
@@ -231,7 +231,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	 * @param {String} name The name of the tag to be validated. 
 	 * @returns Nothing if the name is valid, otherwise, the errortext. 
 	 */
-	const validateTagName = (name) => {
+	const validateInput = (name) => {
 		if (name == "") {
 			return "Taggnamnet kan inte vara tomt"
 		}

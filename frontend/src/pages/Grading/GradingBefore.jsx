@@ -5,8 +5,8 @@ import Button from "../../components/Common/Button/Button"
 import styles from "./GradingBefore.module.css"
 import { AccountContext } from "../../context"
 import AddExaminee from "../../components/Common/AddExaminee/AddExaminee"
-import Examinee from "../../components/Common/AddExaminee/Examinee"
-import { Trash } from "react-bootstrap-icons"
+import EditableListItem from "../../components/Common/EditableListItem/EditableListItem"
+import { X as CloseIcon } from "react-bootstrap-icons"
 
 import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../utils"
 import {setError as setErrorToast } from "../../utils"
@@ -36,8 +36,25 @@ export default function GradingBefore() {
 	const [pairs, setPair] = useState([]) 
 	const [checkedExamineeIds, setCheckedExamineeIds] = useState([])
   const [redirect, setRedirect] = useState(false)
+  const containsSpecialChars = str => /[^\w äöåÅÄÖ-]/.test(str)
 
   let numberOfPairs = 0
+
+  /**
+   * Validets so the name of tag is not containing any illegal characters 
+   * or if the name is empty or if the name of the tag already exists. 
+   * @param {String} name The name of the tag to be validated. 
+   * @returns Nothing if the name is valid, otherwise, the errortext. 
+   */
+  const validateInput = (name) => {
+		if (name == "") {
+			return "Ange ett namn, det får inte vara tomt"
+		}
+		else if (containsSpecialChars(name)) {
+			return "Endast tecken A-Ö, 0-9 tillåts"
+		}
+		return ""
+	}
 
   /**
    * Help function to activate the useEffect function to start the navigation
@@ -260,26 +277,30 @@ export default function GradingBefore() {
 							return (
 							<div style={{display: "flex", width: "100%", justifyContent: "center"}} key={pair[0].pairId}> 
                 <div className={styles.number}>{index+1}</div>
-								<Examinee
+								<EditableListItem
                   key={pair[0].id}
-									pairNumber={index}
 									id={pair[0].id}
 									item={pair[0].name}
 									onRemove={removeExamineeInPair}
 									onEdit={editExaminee}
 									onCheck={onCheck}
+                  validateInput={validateInput}
+                  showCheckbox={false}
+                  checked={false}
 								/>
 								<div style={{width: "10px"}}></div>
-								<Examinee
+								<EditableListItem
                   key={pair[1].id}
-									pairNumber={index}
 									id={pair[1].id}
 									item={pair[1].name}
 									onRemove={removeExamineeInPair}
 									onEdit={editExaminee}
 									onCheck={onCheck}
+                  validateInput={validateInput}
+                  showCheckbox={false}
+                  checked={false}
 								/>
-								<Trash
+								<CloseIcon
                   key={toString(pair[0].id) + toString(pair[1].id)}
 									size="64px"
 									color="var(--red-primary)"
@@ -299,18 +320,20 @@ export default function GradingBefore() {
 			<div className="column">
 				{examinees.map((examinee, index) => {
 						return (
-              <div style={{display: "flex", width: "100%", justifyContent: "center"}} key={"single-pair-" + toString(examinee.id)} id={"single-pair-" + toString(examinee.id)}>
+              <div style={{display: "flex", width: "100%", justifyContent: "center"}} key={"single-pair-" + examinee.id} id={"single-pair-" + examinee.id}>
                 <div className={styles.number}>{numberOfPairs + index + 1}</div>
-                <Examinee
+                <EditableListItem
                   key={examinee.id}
-                  pairNumber={index}
                   id={examinee.id}
                   item={examinee.name}
                   onRemove={removeExaminee}
                   onEdit={editExaminee}
                   onCheck={onCheck}
+                  validateInput={validateInput}
                   showCheckbox={true}
+                  checked={false}
                 />
+
               </div>
 						)
 					})}
@@ -358,9 +381,8 @@ export default function GradingBefore() {
 			</div>
 		</div>
 	)
-}
 
-/**
+  /**
  * Delete an exsisting pair in the database
  * @param {Integer} pairId 
  * @param {any} token 
@@ -479,3 +501,5 @@ async function handleResponse(response) {
 
 		return await response.json()
 	}
+}
+
