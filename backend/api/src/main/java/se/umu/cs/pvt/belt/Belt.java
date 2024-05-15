@@ -53,6 +53,14 @@ public class Belt implements Serializable {
         this.isInverted = isInverted;
     }
 
+    public Belt(Long id, String name, String color, boolean isChild) {
+        this.id = id;
+        this.name = name;
+        this.color = color;
+        this.isChild = isChild;
+        this.isInverted = false;
+    }
+
     public Long getId() {
         return id;
     }
