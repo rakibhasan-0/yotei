@@ -32,7 +32,11 @@ public class ExaminationApiTest {
     @MockBean
     private ExamineeRepository examineeRepository;
     @MockBean
+    private ExaminationCommentRepository examinationCommentRepository;
+    @MockBean
     private ExaminationResultRepository resultRepository;
+    @MockBean
+    private ExaminationProtocolRepository examinationProtocolRepository;
 
     @Autowired
     private ExaminationController examinationController;
@@ -40,14 +44,18 @@ public class ExaminationApiTest {
     List<Grading> gradingList;
     List<Examinee> examineeList;
     List<ExamineePair> examineePairList;
+    List<ExaminationComment> examineeCommentList;
     List<ExaminationResult> resultList;
+    List<ExaminationProtocol> protocolList;
 
     @BeforeEach
     void init() {
         this.gradingList = new ArrayList<>();
         this.examineeList = new ArrayList<>();
         this.examineePairList = new ArrayList<>();
+        this.examineeCommentList = new ArrayList<>();
         this.resultList = new ArrayList<>();
+        this.protocolList = new ArrayList<>();
 
         this.gradingList.add(new Grading(1L, 1L, 1L, 1, 1, new Date()));
         this.gradingList.add(new Grading(2L, 1L, 1L, 1, 1, new Date()));
@@ -61,19 +69,30 @@ public class ExaminationApiTest {
         this.examineePairList.add(new ExamineePair(2L, 2L, 1L));
         this.examineePairList.add(new ExamineePair(3L, 3L, 3L));
 
+        this.examineeCommentList.add(new ExaminationComment(1L,1L,1L,1L,"wasasasasa","Lörimupsum"));
+        this.examineeCommentList.add(new ExaminationComment(2L,2L,2L,2L,"lasasasasa","TestTest"));
+        this.examineeCommentList.add(new ExaminationComment(3L,3L,3L,3L,"kasasasasa","WestWest"));
+        
         this.resultList.add(new ExaminationResult(1L, 1L, "Test Class", null));
         this.resultList.add(new ExaminationResult(2L, 2L, "Testing Classing", true));
         this.resultList.add(new ExaminationResult(3L, 3L, "Class Testing", false));
 
+        this.protocolList.add(new ExaminationProtocol(1L, "Test String"));
+        this.protocolList.add(new ExaminationProtocol(2L, "Test String"));
+        this.protocolList.add(new ExaminationProtocol(3L, "Test String"));
+
+
         Mockito.when(gradingRepository.findAll()).thenReturn(gradingList);
         Mockito.when(examineeRepository.findAll()).thenReturn(examineeList);
         Mockito.when(examineePairRepository.findAll()).thenReturn(examineePairList);
+        Mockito.when(examinationCommentRepository.findAll()).thenReturn(examineeCommentList);
         Mockito.when(resultRepository.findAll()).thenReturn(resultList);
+        Mockito.when(examinationProtocolRepository.findAll()).thenReturn(protocolList);
     }
 
     /**
      * Standard Spring test
-     */
+    */
     @Test
     void contextLoads() {
     }
@@ -104,8 +123,22 @@ public class ExaminationApiTest {
     }
 
     @Test
+    void testGetAllExamineeComments() {
+        int actual = examinationCommentRepository.findAll().size();
+        assertEquals(3, actual);
+    }
+    @Test
     void testGetAllResults() {
         int actual = resultRepository.findAll().size();
         assertEquals(3, actual);
     }
+
+    @Test
+    void testGetAllExaminationProtocols() {
+        int actual = examinationProtocolRepository.findAll().size();
+        assertEquals(3, actual);
+    }
+    
+
+
 }

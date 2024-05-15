@@ -3,7 +3,6 @@ import SearchBar from "../../components/Common/SearchBar/SearchBar"
 import { getWorkouts } from "../../components/Common/SearchBar/SearchBarUtils"
 import FilterContainer from "../../components/Common/Filter/FilterContainer/FilterContainer"
 import StarButton from "../../components/Common/StarButton/StarButton"
-import { useCookies } from "react-cookie"
 import styles from "./WorkoutIndex.module.css"
 import { AccountContext } from "../../context"
 import RoundButton from "../../components/Common/RoundButton/RoundButton"
@@ -38,7 +37,6 @@ export default function WorkoutIndex() {
 	const [ searchText, setSearchText ] = useState("")
 	const [ tags, setTags ] = useState([])
 	const [ suggestedTags, setSuggestedTags ] = useState([])
-	const [ cookies, setCookie ] = useCookies(["workout-filter"])
 	const [ searchErrorMessage, setSearchErrorMessage ] = useState("")
 	const [ loading, setLoading ] = useState(true)
 	const [ filterFavorites, setFilterFavorites ] = useState(false)
@@ -53,7 +51,7 @@ export default function WorkoutIndex() {
 	},[searchText])
 
 
-	useEffect(fetchWorkouts, [filterFavorites, searchText, token, userId, tags, cookies, setCookie])
+	useEffect(fetchWorkouts, [filterFavorites, searchText, token, userId, tags])
 	return (
 		<>
 			<div id="search-area">
@@ -152,25 +150,11 @@ export default function WorkoutIndex() {
 
 	function fetchWorkouts() {
 		setLoading(true)
-		const filterCookie = cookies["workout-filter"]
-		let args
-		if(filterCookie){
-			args = {
-				text: searchText,
-				selectedTags: tags,
-				id: userId,
-				isFavorite: filterCookie.isFavorite
-			}
-			
-		}
-		else{
-			args = {
-				text: searchText,
-				selectedTags: tags,
-				id: userId,
-				isFavorite: filterFavorites
-			}
-			setCookie("workout-filter", {isFavorite: args.isFavorite, tags: tags}, {path: "/"})
+		let args = {
+			text: searchText,
+			selectedTags: tags,
+			id: userId,
+			isFavorite: filterFavorites
 		}
 		getWorkouts(args, token, null, null, (response) => {
 			if(response.error) {

@@ -8,10 +8,18 @@ import TechniqueCard from "../../components/Common/Technique/TechniqueCard/Techn
 import StatisticsPopUp from "./StatisticsPopUp"
 import FilterStatistics from "./FilterStatistics"
 import {getFormattedDateString} from "../../components/Common/DatePicker/DatePicker"
+import GradingStatisticsPopup from "./GradingStatisticsPopup"
 
 /**
  * 
- * Statistics page for a group.
+ * That component is responsible for the visualization of the statistics for a group.
+ * It shows the techniques and statistics for the selected group. The user will be able to filter
+ * the list of techniques and exercise based on the selected belts, dates, kihon. 
+ * 
+ * 
+ * example usage:
+ *  <Statistics />
+ * 
  * @returns A page with statistics for a group.
  * @author Team Coconut 
  * @since 2024-05-08
@@ -45,7 +53,9 @@ export default function Statistics() {
 		to: getFormattedDateString(today),
 	})
 
-	// filtering the group activities based on the selected belts. 
+	// filtering the group activities based on the selected belts.
+	// first it checks if the selectedBelts is not empty, then it filters the groupActivities based on the selected belts.
+	// if the selectedBelts is empty, it will show all the groupActivities. 
 	const activities =	
 	selectedBelts.length > 0	
 		? groupActivities.filter((activity) =>
@@ -60,7 +70,7 @@ export default function Statistics() {
 		: groupActivities
 
 
-
+	// that function store the selected belts data. 	
 	function handleBeltToggle(isSelected, belt) {
 		setSelectedBelts(prevSelected => {
 			if (isSelected) {
@@ -71,23 +81,26 @@ export default function Statistics() {
 		})
 	}
 
-
+	// it clears the selected belts when user decide to clear the belts in the belts filter.
 	function onBeltsClear() {
 		setSelectedBelts([])
 	}
 	
 
+	// it is a regex function to check if the format of the date is correct or not.
 	function checkIfDateIsValid(date) {
 		return /^[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(date) && !isNaN(new Date(date).getTime())
 	}
 
 	useEffect(() => {
 
+		// that function is responsible for fetching the group activities and group name.
 		async function fetchGroupActivitiesData() {	
 			if(!checkIfDateIsValid(dates.from) || !checkIfDateIsValid(dates.to)) {
 				return
 			}
 			
+			// by utilizing the URLSearchParams, we can easily create a query string for the API.
 			const param = new URLSearchParams({
 				kihon: filter.showKihon ? "true" : "false",
 				showexercises: filter.showExercises ? "true" : "false",
@@ -106,6 +119,7 @@ export default function Statistics() {
 					setAverageRating(data.averageRating)
 					setGroupActivities(data.activities)
 				}else if (responseFromGroupDetailsAPI.status === 204) {
+					// if the response is 204, it means that there is no data to show for the selected filters.
 					setGroupActivities([])
 				}
 
@@ -118,7 +132,7 @@ export default function Statistics() {
 				setGroupName(name)
 			}
 			catch (error) {
-				console.error("Fetching error:", error) // proper error handling will be added later
+				console.error("Fetching error:", error)
 			}
 			finally {
 				setLoading(false)
@@ -130,6 +144,7 @@ export default function Statistics() {
 	}, [groupID, token, filter, dates])
 
 
+	// that function is responsible for handling the date changes and storing the dates state.
 	function handleDateChanges(variableName, value) {
 		const selectedDate = new Date(value)
 		const toDate = new Date(dates.to)
@@ -141,7 +156,8 @@ export default function Statistics() {
 		}
 	}
 
-
+	// when the user selects the checkbox for the showing exercises and kihon, that function will be called 
+	// and it will update the filter state.
 	function handleChanges(variableName, value) {
 		setFilter({ ...filter, [variableName]: value })
 	}
@@ -152,7 +168,7 @@ export default function Statistics() {
 			{loading ? (
 				<Spinner />
 			) : (
-				<h1 id = "statistics-header" >
+				<h1 id="statistics-header">
 					{groupName ? `${groupName.name}` : "Gruppen hittades inte"}
 				</h1>
 			)}
@@ -169,20 +185,38 @@ export default function Statistics() {
 					dates={dates}
 				/>
 
-				<StatisticsPopUp groupActivities = {activities} dates ={dates} averageRating = {averageRating} 
-					numberOfSessions = {numberofSessions} />
+				<GradingStatisticsPopup id={"grading-statistics-container"} />
+
+				<StatisticsPopUp
+					groupActivities={activities}
+					dates={dates}
+					averageRating={averageRating}
+					numberOfSessions={numberofSessions}
+				/>
 			</div>
 
 			<div className="activitiesContainer" id="technique-exercise-list">
-				{	activities.length === 0 ? <h5 style={{ fontSize: "25px" }}>Inga aktiviteter hittades</h5> :
+				{activities.length === 0 ? (
+					<h5 style={{ fontSize: "25px" }}>Inga aktiviteter hittades</h5>
+				) : (
 					activities.map((activity, index) => (
-						<TechniqueCard key={index} technique={activity} checkBox={false} id={activity.activity_id} />
+						<TechniqueCard
+							key={index}
+							technique={activity}
+							checkBox={false}
+							id={activity.activity_id}
+						/>
 					))
-				}
+				)}
 			</div>
 
 			<div className={style.buttonContainer}>
-				<Button width="25%" outlined={true} onClick={() => navigate(-1) } id ="statistics-back-button">
+				<Button
+					width="25%"
+					outlined={true}
+					onClick={() => navigate(-1)}
+					id="statistics-back-button"
+				>
 					<p>Tillbaka</p>
 				</Button>
 			</div>

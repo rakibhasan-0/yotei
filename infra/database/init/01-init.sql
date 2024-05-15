@@ -81,8 +81,10 @@ DROP TABLE IF EXISTS workout_tag CASCADE;
 DROP TABLE IF EXISTS examination_grading CASCADE;
 DROP TABLE IF EXISTS examination_examinee CASCADE;
 DROP TABLE IF EXISTS examination_examinee_pair CASCADE;
-DROP TABLE IF EXISTS examination_result_technique CASCADE;
+DROP TABLE IF EXISTS examination_result CASCADE;
 DROP TABLE IF EXISTS examination_comment CASCADE;
+DROP TABLE IF EXISTS grading_protocol CASCADE;
+
 DROP TABLE IF EXISTS activity CASCADE;
 
 DROP TABLE IF EXISTS tag CASCADE;
@@ -109,7 +111,6 @@ DROP TABLE IF EXISTS comments CASCADE;
 
 DROP TABLE IF EXISTS plan CASCADE;
 
-DROP TABLE IF EXISTS session_review;
 DROP TABLE IF EXISTS session_review_activity;
 
 DROP TABLE IF EXISTS session CASCADE;
@@ -133,8 +134,7 @@ DROP TABLE IF EXISTS technique_to_belt CASCADE;
 DROP TABLE IF EXISTS error_log CASCADE;
 
 DROP TABLE IF EXISTS media CASCADE;
-
-
+DROP TABLE IF EXISTS session_review;
 
 DROP SEQUENCE IF EXISTS serial;
 
@@ -609,7 +609,7 @@ CREATE TABLE IF NOT EXISTS examination_examinee (
 CREATE TABLE IF NOT EXISTS examination_examinee_pair (
 	examinee_pair_id SERIAL PRIMARY KEY,
 	examinee_1_id INT NOT NULL,
-	examinee_2_id INT NOT NULL,
+	examinee_2_id INT,
 	CONSTRAINT examinee_pair_fk_examinee_1 FOREIGN KEY(examinee_1_id) REFERENCES examination_examinee(examinee_id) ON DELETE CASCADE,
 	CONSTRAINT examinee_pair_fk_examinee_2 FOREIGN KEY(examinee_2_id) REFERENCES examination_examinee(examinee_id) ON DELETE CASCADE
 );
@@ -625,16 +625,16 @@ CREATE TABLE IF NOT EXISTS examination_result(
 
 CREATE TABLE IF NOT EXISTS examination_comment( 
 	comment_id SERIAL PRIMARY KEY,
-	grading_id INT, 
-	examinee_id INT, 
+	grading_id INT NOT NULL, 
+	examinee_id INT NOT NULL, 
 	examinee_pair_id INT, 
-	technique_name VARCHAR(255) NOT NULL, 
-	comment VARCHAR NOT NULL 
+	technique_name VARCHAR(255), 
+	comment VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS grading_protocol(
+CREATE TABLE IF NOT EXISTS examination_protocol(
 	belt_id INT PRIMARY KEY,
-	grading_protocol JSON NOT NULL,
+	examination_protocol JSON NOT NULL,
 	CONSTRAINT fk_belt_id FOREIGN KEY (belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE
 );
 
@@ -684,6 +684,7 @@ ALTER TABLE
 \ir defaults/belts.sql 
 \ir defaults/tags.sql 
 \ir defaults/grading_protocols.sql
+\ir defaults/permissions.sql
 \ir defaults/roles.sql
 \ir defaults/permissions.sql
 \ir defaults/techniques.sql
@@ -696,6 +697,7 @@ ALTER TABLE
 \ir defaults/sessionreviews.sql
 \ir defaults/sessionreviewactivities.sql
 \ir defaults/activitylists.sql
+\ir defaults/examination_protocols.sql
 -- Triggers for user
 --
 CREATE OR REPLACE FUNCTION remove_user_references() RETURNS TRIGGER AS $$ 

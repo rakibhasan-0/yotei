@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useContext } from "react"
+import { React, useState, useEffect, useContext, useRef } from "react"
 import { AccountContext } from "../../../context"
 import Tab from "react-bootstrap/Tab"
 import Tabs from "react-bootstrap/Tabs"
@@ -35,6 +35,7 @@ import { useCookies } from "react-cookie"
  * @updated 2024-04-22 Kiwi, Fixed so searchbar is not cleared unless component is closed, also so the active tab will show
  * @updated 2024-04-23 Kiwi, Kihon checkbox is now saved when clicking and redirecting to a technique.
  * @updated 2024-05-02 Kiwi, Fixed search so that current response won't be concatenated with previous.
+ * @updated 2024-05-13 Kiwi, Added Automatic scrolling and Removal of activities from popup
  */
 function AddActivity({ id, setShowActivityInfo }) {
 
@@ -104,6 +105,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	//const [cookiesExer, setCookiesExer] = useCookies(["techniques-filter"])
 	const [visibleExercises, setVisibleExercises] = useState([])
 
+	const searchCount = useRef(0)
 
 	/**
      * Makes sure the data in the search bar is stored when choosing between techniques and exercises
@@ -149,7 +151,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 		setJSONSession("activeTab", activeTab)
 	},[activeTab])
 
-
+<
 	useEffect(() => {
 		sessionStorage.setItem("searchTechText", searchTechText)
 	},[searchTechText])
@@ -197,7 +199,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 
 	useEffect(() => {
 		if (hasLoadedData) return
-
+		
 		const tempTechniques = []
 		const tempExercises = []
 
@@ -209,8 +211,8 @@ function AddActivity({ id, setShowActivityInfo }) {
 			}
 		})
 
-		setTechniques(tempTechniques)
-		setExercises(tempExercises)
+		//setTechniques(tempTechniques)//TODO THIS IS A PROBLEM CHILD MAN
+		//setExercises(tempExercises)
 		setHasLoadedData(true)
 	}, [hasLoadedData, checkedActivities])
 
@@ -298,6 +300,8 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 * kept in the state to be displayed.
 	 */
 	const searchTechniques = () => {
+		searchCount.current++
+
 		if (selectedTechTags.find(tag => tag === "kihon waza") === undefined){
 			setKihon(false)
 		}
@@ -322,7 +326,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 		getTechniques(args, token, map, mapActions, (result) => {
 			if (!result.results) return
 
-			const res = result.results.filter((technique) => !checkedActivities.some(a => a.type === "technique" && a.techniqueID === technique.techniqueID))
+			const res = result.results//.filter((technique) => !checkedActivities.some(a => a.type === "technique" && a.techniqueID === technique.techniqueID))
 			setTechniques([...res])
 			setSuggestedTechTags(result.tagCompletion)
 			setFetchedTech(true)
@@ -337,6 +341,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 * kept in the state to be displayed.
 	 */
 	const searchExercises = () => {
+		searchCount.current++
 		setCookies("exercise-filter", { tags: selectedExerTags, sort: sort.label }, { path: "/" })
 		const args = {
 			text: searchExerText,
@@ -345,7 +350,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 		getExercises(args, token, map, mapActions, (result) => {
 			if (!result.results) return
 
-			const res = result.results.filter(exercise => !checkedActivities.some(a => a.type === "exercise" && a.id === exercise.id))
+			const res = result.results//.filter(exercise => !checkedActivities.some(a => a.type === "exercise" && a.id === exercise.id))
 			setExercises([...res])
 			setSuggestedExerTags(result.tagCompletion)
 			setFetchedExer(true)
@@ -403,7 +408,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 							<ErrorStateSearch id="add-activity-no-technique" message="Kunde inte hitta tekniker" />
 							:
 							(<InfiniteScrollComponent
-								activities={techniques}
+								activities={techniques} activeKey={key} searchCount={searchCount.current}
 							>
 								{techniques.map((technique, key) => (
 									<TechniqueCard
@@ -442,7 +447,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 							<ErrorStateSearch id="add-activity-no-exercise" message="Kunde inte hitta övningar" />
 							:
 							<InfiniteScrollComponent
-								activities={visibleExercises}
+								activities={visibleExercises} activeKey={key} searchCount={searchCount.current}
 							>
 								{visibleExercises.map((exercise, key) => (
 									<ExerciseListItem
