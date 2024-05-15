@@ -5,7 +5,7 @@ import Tabs from "react-bootstrap/Tabs"
 import Modal from "react-bootstrap/Modal"
 import useMap from "../../../hooks/useMap"
 import SearchBar from "../../Common/SearchBar/SearchBar"
-import { getTechniques, getExercises } from "../../Common/SearchBar/SearchBarUtils"
+import { getTechniques, getExercises, getLists, getListContent } from "../../Common/SearchBar/SearchBarUtils"
 import TechniqueFilter from "../../Common/Filter/TechniqueFilter"
 import CheckBox from "../../Common/CheckBox/CheckBox"
 import TechniqueCard from "../../Common/Technique/TechniqueCard/TechniqueCard"
@@ -20,10 +20,12 @@ import InfiniteScrollComponent from "../../Common/List/InfiniteScrollComponent"
 import FilterContainer from "../../Common/Filter/FilterContainer/FilterContainer"
 import Sorter from "../../Common/Sorting/Sorter"
 import { useCookies } from "react-cookie"
+import ListPicker from "./ListPicker.jsx"
+import DropDown from "../../Common/List/Dropdown"
 
 /**
- * This component is used to add activities to a workout. It contains two tabs, 
- * one for techniques and one for exercises.
+ * This component is used to add activities to a workout. It contains three tabs, 
+ * one for techniques, one for exercises and one for lists.
  * 
  * What is an activity? In this case an activity is either a technique or an exercise.
  * 
@@ -59,6 +61,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 */
 	const [techniques, setTechniques] = useState([])
 	const [searchTechText, setSearchTechText] = useState("")
+	const [fetchedTech, setFetchedTech] = useState(false)
 	const [selectedBelts, setSelectedBelts] = useState(() => {
 		const savedBelts = sessionStorage.getItem("selectedBelts")
 		return savedBelts ? JSON.parse(savedBelts) : []
@@ -82,16 +85,26 @@ function AddActivity({ id, setShowActivityInfo }) {
 		return savedExerTags ? JSON.parse(savedExerTags) : []
 	})
 	const [suggestedExerTags, setSuggestedExerTags] = useState([])
-	const [fetchedTech, setFetchedTech] = useState(false)
 	const [fetchedExer, setFetchedExer] = useState(false)
 
 	const [activeTab, setActiveTab] = useState("")
 
 	/**
+	 * States related to keeping track of which lists
+	 * to display, and the search text.
+	 */
+	const [lists, setLists] = useState([])
+	const [fetchedLists, setFetchedLists] = useState(false)
+	const [searchListText, setSearchListText] = useState("")
+	const [listContent, setListContent] = useState([])
+	const [listUpdate, setListUpdate] = useState(0);
+	const [isSearchBarEnabled, setIsSearchBarEnabled] = useState(false) // TODO: feature toggle
+	const [isFilterEnabled, setIsFilterEnabled] = useState(false)
+
+
+	/**
 	 * Keeps track of which activities that are checked/selected by the user.
 	 */
-	// const [checkedActivities, setCheckedActivities] = useState([])
-
 	const [hasLoadedData, setHasLoadedData] = useState(false)
 
 	const sortOptions = [
@@ -102,22 +115,21 @@ function AddActivity({ id, setShowActivityInfo }) {
 	]
 	const [sort, setSort] = useState(sortOptions[0])
 	const [cookies, setCookies] = useCookies(["exercise-filter"])
-	//const [cookiesExer, setCookiesExer] = useCookies(["techniques-filter"])
 	const [visibleExercises, setVisibleExercises] = useState([])
 
 	const searchCount = useRef(0)
 
 	/**
-     * Makes sure the data in the search bar is stored when choosing between techniques and exercises
-     * also when redirected to and from info on techniques and exercises.
-     * Also makes sure we return to the tab we where on before, either excerises or techniques
-	 * (2024-04-22)
-     */
+	 * Makes sure the data in the search bar is stored when choosing between techniques and exercises
+	 * also when redirected to and from info on techniques and exercises.
+	 * Also makes sure we return to the tab we where on before, either excerises or techniques
+	 */
 	useEffect(() => {
-		setSearchTechText(sessionStorage.getItem("searchTechText")|| "")
+		setSearchTechText(sessionStorage.getItem("searchTechText") || "")
 		setSearchExerText(sessionStorage.getItem("searchExerText") || "")
-		setActiveTab(getJSONSession("activeTab")|| "technique")
-		setKihon(sessionStorage.getItem("kihon")|| false)
+		setSearchListText(sessionStorage.getItem("searchListText") || "")
+		setActiveTab(getJSONSession("activeTab") || "technique")
+		setKihon(sessionStorage.getItem("kihon") || false)
 		setSort(getJSONSession("sort") || sortOptions[0])
 	}, [])
 
@@ -151,7 +163,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 		setJSONSession("activeTab", activeTab)
 	},[activeTab])
 
-<
+
 	useEffect(() => {
 		sessionStorage.setItem("searchTechText", searchTechText)
 	},[searchTechText])
@@ -159,7 +171,11 @@ function AddActivity({ id, setShowActivityInfo }) {
 
 	useEffect(() => {
 		sessionStorage.setItem("searchExerText", searchExerText)
-	},[searchExerText])
+	}, [searchExerText])
+
+	useEffect(() => {
+		sessionStorage.setItem("searchListText", searchListText)
+	}, [searchListText])
 
 
 	function setJSONSession(key, value) {
@@ -171,10 +187,10 @@ function AddActivity({ id, setShowActivityInfo }) {
 
 		JSON.parse(sessionStorage.getItem(key))
 	}
-	
+
 
 	useEffect(() => {
-		//sessionStorage.getItem(sort)
+		//sessionStorage.getItem(sort) // A work in progress to go from Cookies to sessionStorage!
 
 		const filterCookie = cookies["exercise-filter"]
 		if (filterCookie) {
@@ -185,7 +201,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	}, [])
 
 	useEffect(setExerciseList, [exercises, sort, searchExerText])
-	
+
 	useEffect(() => {
 		const activeTab = tabCookie["active-tab"]
 		if (activeTab) {
@@ -199,7 +215,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 
 	useEffect(() => {
 		if (hasLoadedData) return
-		
+
 		const tempTechniques = []
 		const tempExercises = []
 
@@ -215,6 +231,20 @@ function AddActivity({ id, setShowActivityInfo }) {
 		//setExercises(tempExercises)
 		setHasLoadedData(true)
 	}, [hasLoadedData, checkedActivities])
+
+
+	/**
+	 * Fetches lists when the component is mounted or when the
+	 * search text are changed.
+	 */
+	useEffect(() =>{
+		if (!hasLoadedData) return
+		
+		setFetchedLists(false)
+		setLists(lists)
+		fetchingList()
+	}, [searchListText, hasLoadedData, listUpdate])
+
 
 	/**
 	 * Fetches techniques when the component is mounted or when the 
@@ -246,6 +276,9 @@ function AddActivity({ id, setShowActivityInfo }) {
 		))
 		searchExercises()
 	}, [searchExerText, selectedExerTags, hasLoadedData])
+
+
+
 
 	/**
 	 * Function for handling when a belt has been picked from the BeltPicker.
@@ -292,8 +325,8 @@ function AddActivity({ id, setShowActivityInfo }) {
 	}
 
 	/**
-	 * Fetches techniques from the backend. But first, the selected belts 
-	 * are filtered and parsed to be used in the request. 
+	 * Fetches techniques from the backend, either from cache or by a new API-call. 
+	 * But first, the selected belts are filtered and parsed to be used in the request. 
 	 * 
 	 * When new techniques are fetched, the results are filtered to not include
 	 * techniques that are checked/selected by the user. Those techniques are
@@ -334,7 +367,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	}
 
 	/**
-	 * Fetches exercises from the backend.
+	 * Fetches exercises from the backend, either from cache or by a new API-call.
 	 * 
 	 * When new exercises are fetched, the results are filtered to not include
 	 * exercises that are checked/selected by the user. Those exercises are
@@ -377,6 +410,71 @@ function AddActivity({ id, setShowActivityInfo }) {
 		setSelectedBelts([])
 	}
 
+
+	/**
+	 * Fetches the lists from the backend, either from cache or by a new API-call.
+	 */
+	function fetchingList() {
+
+		const args = {
+			text: searchListText
+		  }
+
+		getLists(args, token, map, mapActions, (result) =>  {
+		  if(result.error) return
+		
+		  // Extract the 'id' and 'name' fields from each item in the result used in displaying the list.
+		  const lists = result.map(item => ({ id: item.id, name: item.name }));
+	  
+		  setLists(lists);
+		  setFetchedLists(true); 			
+		})
+	}
+
+	/**
+	 * Fetches the content from a list given the ID of the same list. 
+	 * @param {Integer} listID 
+	 */
+	function fetchingListContent(listID) {
+		const args = {
+			id: listID
+		}
+
+		getListContent(args, token, map, mapActions, (result) => {
+			if (result.error) return;
+			
+			const listContent = result.map(item => {
+				if (item.technique) {
+				  	return {
+						techniqueID: item.technique.id,
+						name: item.technique.name,
+						type: 'technique',
+						description: item.technique.description,
+						beltColors: [{
+							belt_color: item.technique.belts[0].color,
+							belt_name: item.technique.belts[0].name,
+							is_child: item.technique.belts[0].child
+						
+						}],
+						tags: item.technique.tags
+				  	};
+				}
+				if (item.exercise) {
+				  	return {
+						id: item.exercise.id,
+						name: item.exercise.name,
+						type: 'exercise',
+						description: item.exercise.description,
+						duration: item.exercise.duration
+				  	};
+				}
+			});
+
+			setListContent(listContent);
+			setListUpdate(listUpdate + 1);
+		});
+	}
+
 	return (
 		<div id={id}>
 			<Modal.Body style={{ padding: "0" }}>
@@ -399,7 +497,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 							onBeltChange={handleBeltChanged}
 							kihon={kihon}
 							onKihonChange={handleKihonChanged}
-							onClearBelts = {clearSelectedBelts}
+							onClearBelts={clearSelectedBelts}
 							id="test"
 							filterWhiteBelt={true}>
 						</TechniqueFilter>
@@ -467,6 +565,86 @@ function AddActivity({ id, setShowActivityInfo }) {
 								))}
 							</InfiniteScrollComponent>
 						}
+					</Tab>
+					<Tab eventKey="lists" title="Listor" tabClassName={`nav-link ${style.tab}`}>
+						<div className={style.searchBar}>
+							{ isSearchBarEnabled && ( // TODO: feature toggle.
+								<SearchBar
+								id="lists-search-bar"
+								placeholder="Sök efter listor"
+								text={searchListText}
+								onChange={setSearchListText}
+							/>
+							)}
+							{ isFilterEnabled && ( // TODO: feature toggle.
+								<FilterContainer id="ei-filter" title="Filtrering" numFilters={0}>
+									<ListPicker />
+								</FilterContainer>
+							)}
+
+
+							<div className={style.scrollComponentOuterDiv}>
+								{(lists.length === 0 && fetchedLists) ?
+									<ErrorStateSearch id="add-activity-no-list" message="Kunde inte hitta någon lista" />
+									:
+									(<InfiniteScrollComponent activities={lists}>
+										{lists.map((list) => (
+												<DropDown
+													text={list.name}
+													autoClose={false}
+													id={list.id}
+													onClick={() => fetchingListContent(list.id)}
+													key={list.id}
+													>
+
+													<div style={{ borderTop: "1px solid black" }}>
+													<p className={style.listTitleText}>Tekniker</p>
+													<div className={style.innerListDiv}>
+														{listContent.map((item) => (
+														item.type === "technique" ? (
+															<TechniqueCard
+															id={"technique-list-item-" + item.techniqueID}
+															checkBox={
+																<CheckBox
+																checked={checkedActivities.some(a => a.techniqueID === item.techniqueID)}
+																onClick={() => onActivityToggle(item, "technique")}
+																/>
+															}
+															technique={item}
+															key={item.techniqueID}
+															/>
+														) : null
+														))}
+													</div>
+													</div>
+													<p className={style.listTitleText}>Övningar</p>
+													<div className={style.innerListDiv}>
+														{listContent.map((item) => (
+															item.type === "exercise" ? (
+															<ExerciseListItem
+																id={item.id}
+																text={item.duration + " min"}
+																detailURL={"/exercise/exercise_page/"}
+																checkBox={
+																	<CheckBox
+																		checked={checkedActivities.some(a => a.id === item.id)}
+																		onClick={() => onActivityToggle(item, "exercise")}
+																	/>
+																}
+																item={item.name}
+																key={item.id}
+																index={key}
+															/>
+															) : null
+														))}
+													</div>
+												</DropDown>
+										))}
+
+									</InfiniteScrollComponent>)
+								}
+							</div>
+						</div>
 					</Tab>
 				</Tabs>
 
