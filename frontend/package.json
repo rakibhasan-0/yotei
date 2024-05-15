@@ -98,7 +98,7 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.21.3",
     "@imaginary-cloud/prettier-config": "^1.0.0",
-    "@playwright/test": "^1.43.1",
+    "@playwright/test": "^1.44.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
