@@ -4,7 +4,7 @@ import Divider from "../../Common/Divider/Divider.jsx"
 import Button from "../../Common/Button/Button.jsx"
 import { Plus } from "react-bootstrap-icons"
 import { ListCreateContext } from "./ListCreateContext"
-import { WORKOUT_CREATE_TYPES } from "./ListCreateReducer"
+import { LIST_CREATE_TYPES } from "./ListCreateReducer"
 import RadioButton from "../../Common/RadioButton/RadioButton"
 import MinutePicker from "../../Common/MinutePicker/MinutePicker"
 
@@ -153,7 +153,7 @@ export default function ActivityInfoPopUp() {
 		for(let i = 0; i < addedActivities.length; i++) {
 			if(addedActivities[i].name === "") {
 				listCreateInfoDispatch({ 
-					type: WORKOUT_CREATE_TYPES.REMOVE_ACTIVITY, 
+					type: LIST_CREATE_TYPES.REMOVE_ACTIVITY, 
 					payload: { id: addedActivities[i].id }
 				})
 			}
@@ -161,13 +161,13 @@ export default function ActivityInfoPopUp() {
 	}
 
 	const goBack = () => {
-		listCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLOSE_ACIVITY_POPUP })
+		listCreateInfoDispatch({ type: LIST_CREATE_TYPES.CLOSE_ACIVITY_POPUP })
 	}
 
 	const saveActivities = () => {
-		listCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CREATE_ACTIVITY_ITEMS, payload: {}})
+		listCreateInfoDispatch({ type: LIST_CREATE_TYPES.CREATE_ACTIVITY_ITEMS, payload: {}})
 		{console.log("Breakpoint 1")}
-		listCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLOSE_POPUP })
+		listCreateInfoDispatch({ type: LIST_CREATE_TYPES.CLOSE_POPUP })
 	}
 
 	return (

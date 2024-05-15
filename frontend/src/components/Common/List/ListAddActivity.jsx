@@ -15,7 +15,7 @@ import { ChevronRight } from "react-bootstrap-icons"
 import ErrorStateSearch from "../../Common/ErrorState/ErrorStateSearch"
 import style from "./ListAddActivity.module.css"
 import { ListCreateContext } from "./ListCreateContext"
-import { WORKOUT_CREATE_TYPES } from "./ListCreateReducer"
+import { LIST_CREATE_TYPES } from "./ListCreateReducer"
 import InfiniteScrollComponent from "../../Common/List/InfiniteScrollComponent"
 import FilterContainer from "../../Common/Filter/FilterContainer/FilterContainer"
 import Sorter from "../../Common/Sorting/Sorter"
@@ -287,7 +287,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 */
 	const onActivityToggle = (activity, type) => {
 		activity.type = type
-		listCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.TOGGLE_CHECKED_ACTIVITY, payload: activity })
+		listCreateInfoDispatch({ type: LIST_CREATE_TYPES.TOGGLE_CHECKED_ACTIVITY, payload: activity })
 	}
 
 	/**

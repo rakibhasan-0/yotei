@@ -10,7 +10,7 @@ import Button from "../../Common/Button/Button"
 import CheckBox from "../../Common/CheckBox/CheckBox"
 import { ListCreateContext } from "./ListCreateContext"
 import {
-	WORKOUT_CREATE_TYPES,
+	LIST_CREATE_TYPES,
 	checkIfActivityInfoPoupChangesMade
 } from "./ListCreateReducer"
 import { useNavigate } from "react-router"
@@ -123,10 +123,10 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 			
 		if(shouldClose) {
 			listCreateInfoDispatch({
-				type: WORKOUT_CREATE_TYPES.CLEAR_ADDED_ACTIVITIES
+				type: LIST_CREATE_TYPES.CLEAR_ADDED_ACTIVITIES
 			})
 			listCreateInfoDispatch({
-				type: WORKOUT_CREATE_TYPES.CLOSE_POPUP
+				type: LIST_CREATE_TYPES.CLOSE_POPUP
 			})
 		} else {
 			setLeaveActivityPickerPopup(true)
@@ -154,7 +154,7 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 							required
 							onChange={(e) =>
 								listCreateInfoDispatch({
-									type: WORKOUT_CREATE_TYPES.SET_NAME,
+									type: LIST_CREATE_TYPES.SET_NAME,
 									name: e.target.value
 								})
 							}
@@ -170,7 +170,7 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 							placeholder="Beskrivning av lista"
 							onChange={(e) =>
 								listCreateInfoDispatch({
-									type: WORKOUT_CREATE_TYPES.SET_DESCRIPTION,
+									type: LIST_CREATE_TYPES.SET_DESCRIPTION,
 									description: e.target.value
 								})
 							}
@@ -198,7 +198,7 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 								<Button
 									onClick={() =>
 								 		listCreateInfoDispatch({
-											type: WORKOUT_CREATE_TYPES.OPEN_CHOOSE_ACTIVITY_POPUP
+											type: LIST_CREATE_TYPES.OPEN_CHOOSE_ACTIVITY_POPUP
 										})
 									}
 								>
@@ -215,7 +215,7 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 							label="Privat pass"
 							onClick={() =>
 								listCreateInfoDispatch({
-									type: WORKOUT_CREATE_TYPES.SET_IS_PRIVATE,
+									type: LIST_CREATE_TYPES.SET_IS_PRIVATE,
 									isPrivate: !listCreateInfo.data.isPrivate
 								})
 							}
@@ -230,7 +230,7 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 							addedUsers={listCreateInfo.data.users}
 							setAddedUsers={(users) =>
 								listCreateInfoDispatch({
-									type: WORKOUT_CREATE_TYPES.SET_USERS,
+									type: LIST_CREATE_TYPES.SET_USERS,
 									users
 								})
 							}
@@ -285,11 +285,11 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 						id="add-activity-popup"
 						setShowActivityInfo={(activities) => {
 							listCreateInfoDispatch({
-								type: WORKOUT_CREATE_TYPES.SET_ACTIVITIES_WITH_PARSING,
+								type: LIST_CREATE_TYPES.SET_ACTIVITIES_WITH_PARSING,
 								payload: { result: activities }
 							})
 							listCreateInfoDispatch({
-								type: WORKOUT_CREATE_TYPES.OPEN_ACTIVITY_POPUP
+								type: LIST_CREATE_TYPES.OPEN_ACTIVITY_POPUP
 							})
 						}}
 					/>
@@ -307,10 +307,10 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 				zIndex={1000}
 				onClick={() => {
 					listCreateInfoDispatch({
-						type: WORKOUT_CREATE_TYPES.CLEAR_ADDED_ACTIVITIES
+						type: LIST_CREATE_TYPES.CLEAR_ADDED_ACTIVITIES
 					})
 					listCreateInfoDispatch({
-						type: WORKOUT_CREATE_TYPES.CLOSE_POPUP
+						type: LIST_CREATE_TYPES.CLOSE_POPUP
 					})
 				}}
 			/>

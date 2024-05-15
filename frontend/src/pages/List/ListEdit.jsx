@@ -6,7 +6,7 @@ import { AccountContext } from "../../context.js"
 import { 
 	workoutCreateReducer, 
 	WorkoutCreateInitialState, 
-	WORKOUT_CREATE_TYPES,
+	LIST_CREATE_TYPES,
 } from "../../components/Common/List/ListCreateReducer.js"
 import { ListCreateContext } from "../../components/Common/List/ListCreateContext.js"
 import styles from "./WorkoutModify.module.css"
@@ -142,13 +142,13 @@ const ListEdit = () => {
 		const userData = location.state?.users
 		if (workoutData){
 			listCreateInfoDispatch({
-				type: WORKOUT_CREATE_TYPES.INIT_EDIT_DATA,
+				type: LIST_CREATE_TYPES.INIT_EDIT_DATA,
 				payload: { workoutData, userData: userData ? userData : [] }
 			})
 			window.history.replaceState({}, document.title)
 		} else if (item) {
 			listCreateInfoDispatch({
-				type: WORKOUT_CREATE_TYPES.INIT_WITH_DATA,
+				type: LIST_CREATE_TYPES.INIT_WITH_DATA,
 				payload: JSON.parse(item)
 			})
 		} else {

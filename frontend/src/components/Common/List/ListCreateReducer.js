@@ -1,7 +1,7 @@
 /**
  * Workout create types
  */
-export const WORKOUT_CREATE_TYPES = {
+export const LIST_CREATE_TYPES = {
 	SET_NAME: "SET_NAME",
 	SET_DESCRIPTION: "SET_DESCRIPTION",
 	SET_IS_PRIVATE: "SET_IS_PRIVATE",

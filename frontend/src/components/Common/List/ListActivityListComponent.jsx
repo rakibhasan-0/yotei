@@ -2,7 +2,7 @@ import styles from "./ListActivityListComponent.module.css"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import { useContext } from "react"
 import { ListCreateContext } from "./ListCreateContext"
-import { WORKOUT_CREATE_TYPES } from "./ListCreateReducer"
+import { LIST_CREATE_TYPES } from "./ListCreateReducer"
 import { List, Pencil } from "react-bootstrap-icons"
 
 /**
@@ -45,7 +45,7 @@ export default function ActivityListComponent() {
 			}))
 
 			listCreateInfoDispatch({
-				type: WORKOUT_CREATE_TYPES.SET_ACTIVITY_ITEMS,
+				type: LIST_CREATE_TYPES.SET_ACTIVITY_ITEMS,
 				activityItems: updatedGroups,
 			})
 		} else if (sourceType === "activity" && destinationType === "activity") {
@@ -63,7 +63,7 @@ export default function ActivityListComponent() {
 			destinationGroup.activities.splice(destinationIndex, 0, draggedActivity)
 
 			listCreateInfoDispatch({
-				type: WORKOUT_CREATE_TYPES.SET_ACTIVITY_ITEMS,
+				type: LIST_CREATE_TYPES.SET_ACTIVITY_ITEMS,
 				activityItems: groups,
 			})
 		}
@@ -196,8 +196,8 @@ function ActivityItem({ activityName, activityTime, pinkColor, id, itemIndex}) {
 						<div className={styles.minutesAndEdit}>
 							<p style={{ marginBottom: 0 }}><b>{activityTime} min</b></p>
 							<i onClick={() => {
-								listCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.OPEN_EDIT_ACTIVITY_POPUP}), 
-								listCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.SET_CURRENTLY_EDITING, payload: {id: id}})
+								listCreateInfoDispatch({type: LIST_CREATE_TYPES.OPEN_EDIT_ACTIVITY_POPUP}), 
+								listCreateInfoDispatch({type: LIST_CREATE_TYPES.SET_CURRENTLY_EDITING, payload: {id: id}})
 							}}>
 								<Pencil size="20px"	color="var(--red-primary)" id={`edit_pencil_${id}`} style={{cursor: "pointer"}} />
 							</i>

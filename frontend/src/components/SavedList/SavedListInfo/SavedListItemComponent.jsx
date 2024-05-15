@@ -13,7 +13,7 @@ import React, { useState, useContext } from "react"
 import styles from "./SavedListItemComponent.module.css"
 //Fanns ej i WorkoutActivityListItem.jsx 
 import { ListCreateContext } from "../../Common/List/ListCreateContext"
-import { WORKOUT_CREATE_TYPES } from "../../Common/List/ListCreateReducer"
+import { LIST_CREATE_TYPES } from "../../Common/List/ListCreateReducer"
 import DescriptionToggle from "../../Common/DescriptionToggle"
 import { Trash } from "react-bootstrap-icons"
 
@@ -89,7 +89,7 @@ const WorkoutActivityListItem = ({ activity, index, id,edit}) => {
 						<i onClick={() => {
 							console.log("activity:")
 							console.log(activity)
-							listCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.REMOVE_ACTIVITY_ITEM, payload: {id: activity.exercise?.id || activity.technique?.id || activity.id}})
+							listCreateInfoDispatch({type: LIST_CREATE_TYPES.REMOVE_ACTIVITY_ITEM, payload: {id: activity.exercise?.id || activity.technique?.id || activity.id}})
 						}}>
 						<Trash size="20px"	color="var(--red-primary)" id={`edit_pencil_${activity.id}`} style={{cursor: "pointer"}} />
 						</i>
