@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef, useContext } from "react"
 
 import TechniqueInfoPanel from "../../../components/Grading/PerformGrading/TechniqueInfoPanel"
 import Button from "../../../components/Common/Button/Button"
@@ -9,11 +9,12 @@ import ExamineeButton from "../../../components/Grading/PerformGrading/ExamineeB
 
 import styles from "./DuringGrading.module.css"
 import { ArrowRight, ArrowLeft } from "react-bootstrap-icons"
-import {Link} from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import {setError as setErrorToast} from "../../../utils" 
 
 // Temp
 import ProtocolYellow from "./yellowProtocolTemp.json"
+import { AccountContext } from "../../../context"
 
 
 /**
@@ -94,7 +95,11 @@ export default function DuringGrading() {
 	const [showPopup, setShowPopup] = useState(false)
 	const [examinees, setExaminees] = useState(undefined)
 	const [pairs, setPairs] = useState([])
-	const grading_id = 3 // temp, should be collected from url
+	const { gradingId } = useParams()
+	const navigate = useNavigate()
+
+	const context = useContext(AccountContext)
+	const { token } = context
 
 	// Get info about grading
 	// TODO: Loads everytime the button is pressed. Should only happen once at start. useEffect?
@@ -120,7 +125,7 @@ export default function DuringGrading() {
 	useEffect(() => {
 		(async () => {
 			try {
-				const response = await fetch("/api/examination/examinee/all", {})
+				const response = await fetch("/api/examination/examinee/all", {headers: {"token": token}})
 				if (response.status === 404) {
 					console.log("404")
 					return
@@ -146,7 +151,7 @@ export default function DuringGrading() {
 		if(examinees !== undefined){ // To prevent running first time. Is there a better way to chain api calls?
 			(async () => {
 				try {
-					const response = await fetch("/api/examination/pair/all", {})
+					const response = await fetch("/api/examination/pair/all", {headers: {"token": token}})
 					if (response.status === 204) {
 						return
 					}
@@ -280,13 +285,19 @@ export default function DuringGrading() {
 							<p>{techniqueName.category}</p></Button>
 					))}
 					{/* Should link to the "after" part of the grading as well as save the changes to the database. */}
-					<Link to="/groups">
-						<Button id={"summary-button"} onClick={() => setShowPopup(false)}><p>Fortsätt till summering</p></Button>
-					</Link>
+					<Button id={"summary-button"} onClick={gotoSummary}><p>Fortsätt till summering</p></Button>
 				</div>
 			</Popup>
 		</div>
 	)
+
+	/**
+   * @author Team Pomagrade (2024-05-13)
+   */
+	function gotoSummary() {
+		//TODO: setShowPopup(false)
+		navigate(`/grading/${gradingId}/3`)
+	}
 
 	/**
 	 * 
@@ -298,7 +309,7 @@ export default function DuringGrading() {
 	function getExamineesCurrentGrading(all_examinees) {
 		const current_grading_examinees = []
 		all_examinees.forEach((examinee) => {
-			if (examinee.grading_id == grading_id) {
+			if (examinee.grading_id == gradingId) {
 				current_grading_examinees.push(examinee)
 			}
 		})

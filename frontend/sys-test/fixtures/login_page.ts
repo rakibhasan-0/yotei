@@ -9,11 +9,11 @@ class LoginPage {
 
 	async login_admin() {
 		await this.page.goto("/")
-		await this.page.getByPlaceholder("Användarnamn").fill("admin")
-		await this.page.getByPlaceholder("Lösenord").fill("admin")
+		await this.page.locator('input[type="user"]').fill("admin")
+		await this.page.locator('input[type="password"]').fill("admin")
 
-		await this.page.getByRole("button", {name: "Logga in"}).click()
-		await this.page.waitForURL(/\**\/plan/)
+    await this.page.locator('#login-button').click();
+    await this.page.waitForURL(/\**\/plan/);
 	}
 }
 
