@@ -18,7 +18,14 @@ public interface IActivityListService {
     List<ActivityListShortDTO> getAllAccessibleActivityListsDTO(DecodedJWT token, Boolean hidden,
             Boolean createdByUser);
 
-    ActivityListDTO getDetails(DecodedJWT token, Long id);
+    ActivityListDTO getActivityListDetails(Long id, String token);
 
     Long addActivityList(AddActivityListRequest lsitToAdd, String token);
+
+    void removeActivityList(Long id, String token);
+
+    List<ActivityListDTO> getUserActivityLists(String token);
+
+    public List<ActivityListShortDTO> getAllActivityLists(Boolean hidden, Boolean isAuthor, String token);
+
 }

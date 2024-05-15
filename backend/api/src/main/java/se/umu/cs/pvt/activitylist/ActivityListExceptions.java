@@ -23,3 +23,9 @@ class BadRequestException extends RuntimeException {
         super(message);
     }
 }
+
+class ForbiddenException extends RuntimeException {
+    public ForbiddenException(String message) {
+        super(message);
+    }
+}

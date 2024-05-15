@@ -25,7 +25,7 @@ import se.umu.cs.pvt.workout.UserShort;
  * information about a list in a structured way.
  * 
  * @author Team Tomato
- * @since 2024-05-12
+ * @since 2024-05-15
  * @version 1.0
  */
 @Entity
@@ -153,13 +153,11 @@ public class ActivityList implements Serializable {
         this.activityEntries = activityEntries;
     }
 
-    // Method to add exercise to the activity list
     public void addExercise(Long exerciseId) {
         ActivityListEntry entry = new ActivityListEntry(this.id, exerciseId, null);
         activityEntries.add(entry);
     }
 
-    // Method to add technique to the activity list
     public void addTechnique(Long techniqueId) {
         ActivityListEntry entry = new ActivityListEntry(this.id, null, techniqueId);
         activityEntries.add(entry);

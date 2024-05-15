@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -106,25 +107,15 @@ public class ActivityListController {
     @DeleteMapping("/remove")
     public ResponseEntity<Void> removeList(@RequestParam("id") Long id, @RequestHeader(value = "token") String token) {
         try {
-            jwt = jwtUtil.validateToken(token);
-            userIdL = jwt.getClaim("userId").asLong();
-            userRole = jwt.getClaim("role").asString();
-        } catch (Exception e) {
+            activityListService.removeActivityList(id, token);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (UnauthorizedAccessException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
-        Optional<ActivityList> result = listRepository.findById(id);
-        if (result.isPresent()) {
-            ActivityList list = result.get();
-            if (list.getAuthor() == userIdL || userRole.equals("ADMIN")) {
-                listRepository.delete(list);
-                return new ResponseEntity<>(HttpStatus.OK);
-            }
+        } catch (ForbiddenException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        } else {
+        } catch (ResourceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
     }
 
     /**
@@ -185,21 +176,14 @@ public class ActivityListController {
     public ResponseEntity<List<ActivityListDTO>> getUserLists(
             @RequestHeader(value = "token") String token) {
         try {
-            jwt = jwtUtil.validateToken(token);
-            userIdL = jwt.getClaim("userId").asLong();
-            userRole = jwt.getClaim("role").asString();
-        } catch (Exception e) {
+            List<ActivityListDTO> dtos = activityListService.getUserActivityLists(token);
+            if (dtos.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(dtos, HttpStatus.OK);
+        } catch (UnauthorizedAccessException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-
-        List<ActivityList> results = listRepository.findAllByAuthor(userIdL);
-        if (results.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        List<ActivityListDTO> dtos = results.stream()
-                .map(ActivityListDTO::new)
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
     /**
@@ -217,19 +201,15 @@ public class ActivityListController {
             @RequestParam(required = false) Boolean isAuthor,
             @RequestHeader(value = "token") String token) {
 
-        List<ActivityListShortDTO> results = new ArrayList<>();
         try {
-            jwt = jwtUtil.validateToken(token);
-
-        } catch (Exception e) {
+            List<ActivityListShortDTO> dtos = activityListService.getAllActivityLists(hidden, isAuthor, token);
+            if (dtos.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(dtos, HttpStatus.OK);
+        } catch (UnauthorizedAccessException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        results = activityListService.getAllAccessibleActivityListsDTO(jwt, hidden, isAuthor);
-
-        if (results.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(results, HttpStatus.OK);
     }
 
     /**
@@ -246,22 +226,19 @@ public class ActivityListController {
             @RequestHeader(value = "token") String token) {
 
         try {
-            DecodedJWT jwt = jwtUtil.validateToken(token);
-            ActivityListDTO dto = activityListService.getDetails(jwt, id);
-
+            ActivityListDTO dto = activityListService.getActivityListDetails(id, token);
             if (dto == null) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             return new ResponseEntity<>(dto, HttpStatus.OK);
-
-        } catch (JWTVerificationException e) {
-            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
         } catch (UnauthorizedAccessException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>("Bad request", HttpStatus.BAD_REQUEST);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>("Activity list not found", HttpStatus.GONE);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.GONE);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
