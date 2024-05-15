@@ -27,7 +27,7 @@ import java.util.*;
 import java.util.List;
 
 /**
- * This class uses the help of PDF-Box to generate a PDF-file
+ * This class uses the help of PDFBox to generate a PDF-file which contains the contents of a completed examination.
  * 
  * @author Team Pomegranate
  * @version 1.0
@@ -89,7 +89,6 @@ public class ExportGradingPdf {
         org.springframework.boot.json.JsonParser parser = JsonParserFactory.getJsonParser();
         return parser.parseMap(json);
     }
-
 
     /**
      * Creates the pages which contains the table for which examinee has passed or not on each technique.
@@ -237,7 +236,6 @@ public class ExportGradingPdf {
         contentStream.endText();
     }
 
-
     /**
      * Writes the header text to the pdf page.
      * 
@@ -359,230 +357,229 @@ public class ExportGradingPdf {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ultrices nibh ac nibh tempor sagittis. Proin non eleifend diam. Aliquam eget egestas neque. Sed tortor dui, tincidunt eu venenatis in, sollicitudin sit amet risus. Mauris pharetra turpis in lectus euismod, ac lobortis urna tincidunt. Vestibulum tincidunt luctus sapien ut rhoncus. Curabitur sit amet orci purus. Praesent consectetur, ante vitae pharetra euismod, sapien lorem interdum dolor, vitae fringilla orci tellus et sem.
             """;
             
-            List<String> rows = getRows(groupComment);
-            
-            contentStream.beginText();
-            contentStream.setFont(font, 14);
-            contentStream.newLineAtOffset(initX, initY -= 30);
-            contentStream.showText("Gruppkommentar");
-            contentStream.setFont(font, 10);
-            contentStream.newLineAtOffset(0, -20);
-            
-            for(int i = 0; i < rows.size(); i++) {
-                contentStream.showText(rows.get(i));
-                contentStream.newLineAtOffset(0, -15);
-            }
-            
-            contentStream.endText();
-            contentStream.stroke();
-            contentStream.close();
-        }
-
-        /**
-         * Creates the pair comment pdf page and writes the group comment to the pdf page.
-         * 
-         * @throws IOException
-         */
-        private void createPairCommentPage() throws IOException {
-            PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
-            document.addPage(page);
-    
-            pageWidth = (int)page.getMediaBox().getWidth(); 
-            pageHeight = (int)page.getMediaBox().getHeight();     
-            int initX = TABLE_START_X_POS;
-            int initY = pageHeight-75;
-            
-            PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/truetype/freefont/FreeSerif.ttf"));
-            PDPageContentStream contentStream = new PDPageContentStream(document,page);
-            contentStream.setStrokingColor(Color.DARK_GRAY);
-            contentStream.setLineWidth(1);
-            Map<String, Object> protocol = parseJson(gradingProtocol);
-            Map<String, Object> gradingProtocolObj = (Map<String, Object>) protocol.get("grading_protocol");
-            
-            String code = (String) gradingProtocolObj.get("code");
-            String color = (String) gradingProtocolObj.get("color");
-            
-            drawImage(page, contentStream);
-            createHeader(code, color, contentStream);
-            contentStream.beginText();
-            contentStream.setFont(font, 14);
-            initY -= 30;
-            contentStream.newLineAtOffset(initX, initY);
-            contentStream.showText("Par Kommentarer");
-            contentStream.endText();
-            //30 pixels is the distance between the title and where the comments section begin
-            initY -= 30;
-            for (int i = 0 ; i < examinees.size() ; i+=2) { 
-                //lägg till "teknik: kommentar" till rows, sen kanske en tom rad ifall en ny teknik följer och sen upprepa 
-                String examineeComment = "2. Shotei uchi, chudan, rak stöt med främre och bakre handen: Bra form!                                                 9. Grepp i ärmen med drag O soto osae, ude henkan gatame: Bra form! ";
-                List<String> rows = getRows(examineeComment);
-
-                //Checks if the next comment block will fit on the page, if not a new page is created
-                if (initY - rows.size() * 15 + 30 <= 0) {
-                    contentStream.close();
-                    page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
-                    document.addPage(page);        
-                    contentStream = new PDPageContentStream(document,page);
-                    drawImage(page, contentStream);
-                    createHeader(code, color, contentStream);
-                    initY = pageHeight-75;
-                    contentStream.beginText();
-                    contentStream.setFont(font, 14);
-                    initY -= 30;
-                    contentStream.newLineAtOffset(initX, initY);
-                    contentStream.showText("Par Kommentarer");
-                    contentStream.endText();
-                    initY -= 30;
-                }
-                
-                contentStream.beginText();
-                contentStream.newLineAtOffset(initX + 5, initY);
-                contentStream.setFont(font, 12);
-
-                contentStream.showText(examinees.get(i).getName() + " & " + examinees.get(i+1).getName()); // går ej att ha udda antal examinees
-                contentStream.setFont(font, 10);
-                for(int j = 0; j < rows.size(); j++) {
-                    //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
-                    contentStream.newLineAtOffset(0, -15);
-                    contentStream.showText(rows.get(j));
-                }
-                contentStream.endText();
-
-                //Calculates the size of the rectangle which encapsulates the comment
-                contentStream.addRect(initX, initY - (5 + rows.size()*15), CELL_WIDTH * 7 + 30, rows.size() * 15);
-                contentStream.stroke();
-                //Calculates the distance between the comments
-                initY -= rows.size() * 15 + 30;
-                
-            }        
-            contentStream.close();
-        }
-
-        /**
-         * Creates the examinee comment pdf page and writes the group comment to the pdf page.
-         * 
-         * @throws IOException
-         */
-        private void createExamineeCommentPage() throws IOException {
-            PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
-            document.addPage(page);
-    
-            pageWidth = (int)page.getMediaBox().getWidth(); 
-            pageHeight = (int)page.getMediaBox().getHeight();     
-            int initX = TABLE_START_X_POS;
-            int initY = pageHeight-75;
-            
-            PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/truetype/freefont/FreeSerif.ttf"));
-            PDPageContentStream contentStream = new PDPageContentStream(document,page);
-            contentStream.setStrokingColor(Color.DARK_GRAY);
-            contentStream.setLineWidth(1);
-            Map<String, Object> protocol = parseJson(gradingProtocol);
-            Map<String, Object> gradingProtocolObj = (Map<String, Object>) protocol.get("grading_protocol");
-            
-            String code = (String) gradingProtocolObj.get("code");
-            String color = (String) gradingProtocolObj.get("color");
-            
-            drawImage(page, contentStream);
-            createHeader(code, color, contentStream);
-            contentStream.beginText();
-            contentStream.setFont(font, 14);
-            initY -= 30;
-            contentStream.newLineAtOffset(initX, initY);
-            contentStream.showText("Personliga Kommentarer");
-            contentStream.endText();
-            //30 pixels is the distance between the title and where the comments section begin
-            initY -= 30;
-
-            for (int i = 0 ; i < examinees.size() ; i++) {
-                String examineeComment = "2. Shotei uchi, chudan, rak stöt med främre och bakre handen: Bra form!                                                 3. Gedan geri, rak spark med främre och bakre benet: Snyggt sparkat!                                                   9. Grepp i ärmen med drag O soto osae, ude henkan gatame: Bra form! ";
-                List<String> rows = getRows(examineeComment);
-                
-                //Checks if the next comment block will fit on the page, if not a new page is created
-                if (initY - rows.size() * 15 + 30 <= 0) {
-                    contentStream.close();
-                    page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
-                    document.addPage(page);        
-                    contentStream = new PDPageContentStream(document,page);
-                    drawImage(page, contentStream);
-                    createHeader(code, color, contentStream);
-                    initY = pageHeight-75;
-                    contentStream.beginText();
-                    contentStream.setFont(font, 14);
-                    initY -= 30;
-                    contentStream.newLineAtOffset(initX, initY);
-                    contentStream.showText("Personliga Kommentarer");
-                    contentStream.endText();
-                    initY -= 30;
-                }
-
-                contentStream.beginText();
-                contentStream.newLineAtOffset(initX + 5, initY);
-                contentStream.setFont(font, 12);
-                contentStream.showText(examinees.get(i).getName());
-                contentStream.setFont(font, 10);
-                for(int j = 0; j < rows.size(); j++) {
-                    //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
-                    contentStream.newLineAtOffset(0, -15);
-                    contentStream.showText(rows.get(j));
-                }
-                contentStream.endText();
-
-                //Calculates the size of the rectangle to enclose the comment
-                contentStream.addRect(initX, initY - (5 + rows.size()*15), CELL_WIDTH * 7 + 30, rows.size() * 15);
-                contentStream.stroke();
-                initY -= rows.size() * 15 + 30;
-            }        
-            contentStream.close();
-        }
-
-        /**
-         * The the comment split up into section so that the text wont exceed the page width. In
-         * other words, newline is added.
-         * 
-         * @param examineeComment, the String that will be split up in to sections
-         * @return a List of Strings which contains the split up sections of the comment.
-         */
-        private List<String> getRows(String examineeComment) {
-            List<String> rows = new ArrayList<>();
-            if(examineeComment.length() > 120) {
-                int numRows = (int)Math.ceil((double)examineeComment.length() / 120);
-                
-                int startIndex = 0;
-                int stopIndex = 120;
-                
-                for(int j = 0; j < numRows; j++) {                        
-                    int lastSpaceIndex = examineeComment.substring(startIndex, stopIndex).lastIndexOf(' ');
-                    
-                    if(lastSpaceIndex > 0) 
-                        stopIndex = lastSpaceIndex + startIndex +1;
-
-                    rows.add(examineeComment.substring(startIndex, stopIndex).replaceAll("\\u000a", ""));
-                    
-                    startIndex = stopIndex;
-                    if(stopIndex + 120 <= examineeComment.length())
-                        stopIndex = stopIndex + 120;
-                    else
-                        stopIndex = examineeComment.length();
-                }
-            }
-            else
-                rows.add(examineeComment);
-            return rows;
+        List<String> rows = getRows(groupComment);
+        
+        contentStream.beginText();
+        contentStream.setFont(font, 14);
+        contentStream.newLineAtOffset(initX, initY -= 30);
+        contentStream.showText("Gruppkommentar");
+        contentStream.setFont(font, 10);
+        contentStream.newLineAtOffset(0, -20);
+        
+        for(int i = 0; i < rows.size(); i++) {
+            contentStream.showText(rows.get(i));
+            contentStream.newLineAtOffset(0, -15);
         }
         
-        /**
-         * Cuts of the String containing a name if it is to long and adds ... to the end.
-         * 
-         * @param name, the String containing the name
-         * @return, the String containing the name, if it is to long, the shortened name.
-         */
-        private String stripName(String name) {
-            if(name.length() > 30) {
-                name = name.substring(0, 27);
-                name = name + "...";
+        contentStream.endText();
+        contentStream.stroke();
+        contentStream.close();
+    }
+
+    /**
+     * Creates the pair comment pdf page and writes the group comment to the pdf page.
+     * 
+     * @throws IOException
+     */
+    private void createPairCommentPage() throws IOException {
+        PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
+        document.addPage(page);
+
+        pageWidth = (int)page.getMediaBox().getWidth(); 
+        pageHeight = (int)page.getMediaBox().getHeight();     
+        int initX = TABLE_START_X_POS;
+        int initY = pageHeight-75;
+        
+        PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/truetype/freefont/FreeSerif.ttf"));
+        PDPageContentStream contentStream = new PDPageContentStream(document,page);
+        contentStream.setStrokingColor(Color.DARK_GRAY);
+        contentStream.setLineWidth(1);
+        Map<String, Object> protocol = parseJson(gradingProtocol);
+        Map<String, Object> gradingProtocolObj = (Map<String, Object>) protocol.get("grading_protocol");
+        
+        String code = (String) gradingProtocolObj.get("code");
+        String color = (String) gradingProtocolObj.get("color");
+        
+        drawImage(page, contentStream);
+        createHeader(code, color, contentStream);
+        contentStream.beginText();
+        contentStream.setFont(font, 14);
+        initY -= 30;
+        contentStream.newLineAtOffset(initX, initY);
+        contentStream.showText("Par Kommentarer");
+        contentStream.endText();
+        //30 pixels is the distance between the title and where the comments section begin
+        initY -= 30;
+        for (int i = 0 ; i < examinees.size() ; i+=2) { 
+            //lägg till "teknik: kommentar" till rows, sen kanske en tom rad ifall en ny teknik följer och sen upprepa 
+            String examineeComment = "2. Shotei uchi, chudan, rak stöt med främre och bakre handen: Bra form!                                                 9. Grepp i ärmen med drag O soto osae, ude henkan gatame: Bra form! ";
+            List<String> rows = getRows(examineeComment);
+
+            //Checks if the next comment block will fit on the page, if not a new page is created
+            if (initY - rows.size() * 15 + 30 <= 0) {
+                contentStream.close();
+                page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
+                document.addPage(page);        
+                contentStream = new PDPageContentStream(document,page);
+                drawImage(page, contentStream);
+                createHeader(code, color, contentStream);
+                initY = pageHeight-75;
+                contentStream.beginText();
+                contentStream.setFont(font, 14);
+                initY -= 30;
+                contentStream.newLineAtOffset(initX, initY);
+                contentStream.showText("Par Kommentarer");
+                contentStream.endText();
+                initY -= 30;
             }
-            System.out.println(name);
-            return name;
+            
+            contentStream.beginText();
+            contentStream.newLineAtOffset(initX + 5, initY);
+            contentStream.setFont(font, 12);
+
+            contentStream.showText(examinees.get(i).getName() + " & " + examinees.get(i+1).getName()); // går ej att ha udda antal examinees
+            contentStream.setFont(font, 10);
+            for(int j = 0; j < rows.size(); j++) {
+                //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
+                contentStream.newLineAtOffset(0, -15);
+                contentStream.showText(rows.get(j));
+            }
+            contentStream.endText();
+
+            //Calculates the size of the rectangle which encapsulates the comment
+            contentStream.addRect(initX, initY - (5 + rows.size()*15), CELL_WIDTH * 7 + 30, rows.size() * 15);
+            contentStream.stroke();
+            //Calculates the distance between the comments
+            initY -= rows.size() * 15 + 30;
+            
+        }        
+        contentStream.close();
+    }
+
+    /**
+     * Creates the examinee comment pdf page and writes the group comment to the pdf page.
+     * 
+     * @throws IOException
+     */
+    private void createExamineeCommentPage() throws IOException {
+        PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
+        document.addPage(page);
+
+        pageWidth = (int)page.getMediaBox().getWidth(); 
+        pageHeight = (int)page.getMediaBox().getHeight();     
+        int initX = TABLE_START_X_POS;
+        int initY = pageHeight-75;
+        
+        PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/truetype/freefont/FreeSerif.ttf"));
+        PDPageContentStream contentStream = new PDPageContentStream(document,page);
+        contentStream.setStrokingColor(Color.DARK_GRAY);
+        contentStream.setLineWidth(1);
+        Map<String, Object> protocol = parseJson(gradingProtocol);
+        Map<String, Object> gradingProtocolObj = (Map<String, Object>) protocol.get("grading_protocol");
+        
+        String code = (String) gradingProtocolObj.get("code");
+        String color = (String) gradingProtocolObj.get("color");
+        
+        drawImage(page, contentStream);
+        createHeader(code, color, contentStream);
+        contentStream.beginText();
+        contentStream.setFont(font, 14);
+        initY -= 30;
+        contentStream.newLineAtOffset(initX, initY);
+        contentStream.showText("Personliga Kommentarer");
+        contentStream.endText();
+        //30 pixels is the distance between the title and where the comments section begin
+        initY -= 30;
+
+        for (int i = 0 ; i < examinees.size() ; i++) {
+            String examineeComment = "2. Shotei uchi, chudan, rak stöt med främre och bakre handen: Bra form!                                                 3. Gedan geri, rak spark med främre och bakre benet: Snyggt sparkat!                                                   9. Grepp i ärmen med drag O soto osae, ude henkan gatame: Bra form! ";
+            List<String> rows = getRows(examineeComment);
+            
+            //Checks if the next comment block will fit on the page, if not a new page is created
+            if (initY - rows.size() * 15 + 30 <= 0) {
+                contentStream.close();
+                page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
+                document.addPage(page);        
+                contentStream = new PDPageContentStream(document,page);
+                drawImage(page, contentStream);
+                createHeader(code, color, contentStream);
+                initY = pageHeight-75;
+                contentStream.beginText();
+                contentStream.setFont(font, 14);
+                initY -= 30;
+                contentStream.newLineAtOffset(initX, initY);
+                contentStream.showText("Personliga Kommentarer");
+                contentStream.endText();
+                initY -= 30;
+            }
+
+            contentStream.beginText();
+            contentStream.newLineAtOffset(initX + 5, initY);
+            contentStream.setFont(font, 12);
+            contentStream.showText(examinees.get(i).getName());
+            contentStream.setFont(font, 10);
+            for(int j = 0; j < rows.size(); j++) {
+                //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
+                contentStream.newLineAtOffset(0, -15);
+                contentStream.showText(rows.get(j));
+            }
+            contentStream.endText();
+
+            //Calculates the size of the rectangle to enclose the comment
+            contentStream.addRect(initX, initY - (5 + rows.size()*15), CELL_WIDTH * 7 + 30, rows.size() * 15);
+            contentStream.stroke();
+            initY -= rows.size() * 15 + 30;
+        }        
+        contentStream.close();
+    }
+
+    /**
+     * The the comment split up into section so that the text wont exceed the page width. In
+     * other words, newline is added.
+     * 
+     * @param examineeComment, the String that will be split up in to sections
+     * @return a List of Strings which contains the split up sections of the comment.
+     */
+    private List<String> getRows(String examineeComment) {
+        List<String> rows = new ArrayList<>();
+        if(examineeComment.length() > 120) {
+            int numRows = (int)Math.ceil((double)examineeComment.length() / 120);
+            
+            int startIndex = 0;
+            int stopIndex = 120;
+            
+            for(int j = 0; j < numRows; j++) {                        
+                int lastSpaceIndex = examineeComment.substring(startIndex, stopIndex).lastIndexOf(' ');
+                
+                if(lastSpaceIndex > 0) 
+                    stopIndex = lastSpaceIndex + startIndex +1;
+
+                rows.add(examineeComment.substring(startIndex, stopIndex).replaceAll("\\u000a", ""));
+                
+                startIndex = stopIndex;
+                if(stopIndex + 120 <= examineeComment.length())
+                    stopIndex = stopIndex + 120;
+                else
+                    stopIndex = examineeComment.length();
+            }
         }
+        else
+            rows.add(examineeComment);
+        return rows;
     }
     
+    /**
+     * Cuts of the String containing a name if it is too long and adds ... to the end.
+     * 
+     * @param name, the String containing the name
+     * @return, the String containing the name, if it is too long, the shortened name.
+     */
+    private String stripName(String name) {
+        if(name.length() > 30) {
+            name = name.substring(0, 27);
+            name = name + "...";
+        }
+        System.out.println(name);
+        return name;
+    }
+}
