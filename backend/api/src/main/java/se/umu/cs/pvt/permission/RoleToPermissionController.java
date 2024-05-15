@@ -47,7 +47,7 @@ public class RoleToPermissionController {
      * @return The list of permissions or an error code.
      */
     @GetMapping("/{role_id}")
-    public ResponseEntity<List<Permission>> getAllPermissionsForUserWithId(@PathVariable(name = "role_id") Long roleId) {
+    public ResponseEntity<List<Permission>> getAllPermissionsForRoleWithId(@PathVariable(name = "role_id") Long roleId) {
 
         if (roleRepository.findById(roleId).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
