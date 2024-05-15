@@ -423,11 +423,11 @@ function AddActivity({ id, setShowActivityInfo }) {
 		getLists(args, token, map, mapActions, (result) =>  {
 			if(result.error) return
 		
-		  	// Extract the 'id' and 'name' fields from each item in the result used in displaying the list.
+			// Extract the 'id' and 'name' fields from each item in the result used in displaying the list.
 			const lists = result.map(item => ({ id: item.id, name: item.name }))
 
 			setLists(lists)
-		  	setFetchedLists(true)	
+			setFetchedLists(true)	
 		})
 	}
 
@@ -589,13 +589,13 @@ function AddActivity({ id, setShowActivityInfo }) {
 									:
 									(<InfiniteScrollComponent activities={lists}>
 										{lists.map((list) => (
-												<DropDown
-													text={list.name}
-													autoClose={false}
-													id={list.id}
-													onClick={() => fetchingListContent(list.id)}
-													key={list.id}
-													>
+													<DropDown
+														text={list.name}
+														autoClose={false}
+														id={list.id}
+														onClick={() => fetchingListContent(list.id)}
+														key={list.id}
+														>
 
 													<div style={{ borderTop: "1px solid black" }}>
 													<p className={style.listTitleText}>Tekniker</p>
