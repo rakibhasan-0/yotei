@@ -138,12 +138,12 @@ const ListEdit = () => {
 	useEffect(() => {
 		setIsLoading(true)
 		const item = localStorage.getItem("listCreateInfoEdit")
-		const workoutData = location.state?.workout
+		const listData = location.state?.workout
 		const userData = location.state?.users
-		if (workoutData){
+		if (listData){
 			listCreateInfoDispatch({
 				type: LIST_CREATE_TYPES.INIT_EDIT_DATA,
-				payload: { workoutData, userData: userData ? userData : [] }
+				payload: { listData, userData: userData ? userData : [] }
 			})
 			window.history.replaceState({}, document.title)
 		} else if (item) {

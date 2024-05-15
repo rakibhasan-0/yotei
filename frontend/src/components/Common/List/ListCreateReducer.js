@@ -134,9 +134,9 @@ export function listCreateReducer(state, action) {
 	case "INIT_WITH_DATA":
 		return action.payload
 	case "INIT_EDIT_DATA": {
-		const workoutData = action.payload.workoutData;
+		const listData = action.payload.listData;
 		// Map activities
-		const activities = workoutData.data.activities.map(activity => {
+		const activities = listData.data.activities.map(activity => {
 			return {
 			id: activity.id,
 			type: activity.type,
@@ -146,15 +146,15 @@ export function listCreateReducer(state, action) {
 			};
 		});
 		// Map users
-		const users = workoutData.data.users.map((user, index) => {
+		const users = listData.data.users.map((user, index) => {
 			return {
 			userId: index + 1,
 			username: user.username,
 			};
 		});
 		// Prepare category object
-		const categoryId = workoutData.list_id; // Using list_id as categoryId
-		/*const categoryName = workoutData.list_name;
+		const categoryId = listData.list_id; // Using list_id as categoryId
+		/*const categoryName = listData.list_name;
 		
 		/*let category = tempState.addedCategories.find(cat => cat.name === categoryName);
 		if (!category) {
@@ -170,25 +170,25 @@ export function listCreateReducer(state, action) {
 		const categoryObject = {
 			id: categoryId,
 			name: categoryName,
-			workoutData,//KAAEFT
+			listData,
 		};
 */
 		// Prepare data object
 		const data = {
-				id: workoutData.data.id,
-				name: workoutData.data.name,
-				description: workoutData.data.description,
-				isPrivate: workoutData.data.isPrivate,// === "Private",
-				author: workoutData.data.author,//.author_id,
-				date: workoutData.data.changed_date.split("T")[0],
-				created: workoutData.data.created_date.split("T")[0],
-				duration: workoutData.numActivities,
+				id: listData.data.id,
+				name: listData.data.name,
+				description: listData.data.description,
+				isPrivate: listData.data.isPrivate,// === "Private",
+				author: listData.data.author,//.author_id,
+				date: listData.data.changed_date.split("T")[0],
+				created: listData.data.created_date.split("T")[0],
+				duration: listData.numActivities,
 				users: users,
 				activities: activities,
 		};
 		const listCreateInfo = {
-			popupState: workoutData.popUpState,
-			numActivities: workoutData.numActivities,
+			popupState: listData.popUpState,
+			numActivities: listData.numActivities,
 			data: data,
 			originalData: data,
 		}
