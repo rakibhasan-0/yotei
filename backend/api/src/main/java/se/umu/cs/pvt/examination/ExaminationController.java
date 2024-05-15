@@ -318,22 +318,6 @@ public class ExaminationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
-    /**
-     * Deletes a examination protocol.
-     * @param belt_id Given belt id.
-     * @return HTTP-status code.
-     */
-    @DeleteMapping("/examinationprotocol/{belt_id}")
-    public ResponseEntity<Object> deleteExaminationProtocol(@PathVariable("belt_id") long belt_id) {
-
-        if(examinationProtocolRepository.findById(belt_id).isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        examinationProtocolRepository.deleteById(belt_id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     /**
      * Returns all examination protocols.
      * @return All examination protocols.  
