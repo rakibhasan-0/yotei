@@ -8,6 +8,7 @@ import TechniqueCard from "../../components/Common/Technique/TechniqueCard/Techn
 import StatisticsPopUp from "./StatisticsPopUp"
 import FilterStatistics from "./FilterStatistics"
 import {getFormattedDateString} from "../../components/Common/DatePicker/DatePicker"
+import GradingStatisticsPopup from "./GradingStatisticsPopup"
 
 /**
  * 
@@ -184,8 +185,12 @@ export default function Statistics() {
 					dates={dates}
 				/>
 
+				<GradingStatisticsPopup />
+
 				<StatisticsPopUp groupActivities = {activities} dates ={dates} averageRating = {averageRating} 
 					numberOfSessions = {numberofSessions} />
+
+
 			</div>
 
 			<div className="activitiesContainer" id="technique-exercise-list">
