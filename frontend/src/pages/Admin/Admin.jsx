@@ -83,44 +83,24 @@ export default function Admin() {
 						text={searchText} 
 						onChange={setSearchText}
 					/>
-					{loading ? <Spinner/> : (
-						<div>
-							{roles?.filter(role => {
-								if (searchText?.length > 0) {
-									return role.roleName.toLowerCase().includes(searchText.toLowerCase())
-								}
-								return true
-							}).map((role, index) => (
-								<RoleCard
-									item={role.roleName}
-									key={role.roleId}
-									id={role.roleId}
-									detailURL={detailURL}
-									index={index}>
-								</RoleCard>
-						
-		
-							))}
-						
-						</div>
+					{loading ? <Spinner/> : <InfiniteScrollComponent>
+						{roles?.filter(role => {
+							if (searchText?.length > 0) {
+								return role.roleName.toLowerCase().includes(searchText.toLowerCase())
+							}
+							return true
+						}).map((role, index) =>
+							<RoleCard
+								item={role.roleName}
+								key={role.roleId}
+								id={role.roleId}
+								detailURL={detailURL}
+								index={index}>
+							</RoleCard>)
 					
-					)}
-
-					<InfiniteScrollComponent
-
-						id={"admin-view-roles"}>
-						<RoleCard
-							item={"exercise.name"}
-							key={"exercise.id"}
-							id={"exercise.id"}
-							detailURL={detailURL}>
-						</RoleCard>
-						<RoleCard
-							item={"exercise.n1ame"}
-							key={"exercise1.id"}
-							id={"exercise.1id"}>
-						</RoleCard>
-					</InfiniteScrollComponent>
+	
+						}
+					</InfiniteScrollComponent>}
 
 					<RoundButton linkTo={"role/create"} id={"role-round-button"}  style={{maxWidth: "5px"}}>
 						<Plus/>

@@ -10,7 +10,7 @@ import InputTextFieldBorderLabel from "../../components/Common/InputTextFieldBor
 import PermissionCard from "../../components/Common/RoleCard/PermissionListItem"
 import Button from "../../components/Common/Button/Button"
 import Spinner from "../../components/Common/Spinner/Spinner"
-import ConfirmPopup from "../../components/Common/Popup/Popup"
+import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 
 
 /**
@@ -26,11 +26,13 @@ export default function RoleCreate() {
 	const { token } = useContext(AccountContext)
 
 	const [roleName, setRoleName] = useState("")
+	const [originalRoleName, setOriginalRoleName] = useState("")
 	const navigate = useNavigate()
 	const [permissions, setPermissions] = useState([])
 	const [loading, setIsLoading] = useState(true)
-	const [showMiniPopup, setShowMiniPopup] = useState(false)
+	const [goBackPopup, setGoBackPopup] = useState(false)
 	const [isBlocking, setIsBlocking] = useState(false)
+	const [isToggled, setIsToggled] = useState(false)
 	const [errorMessage, setErrorMessage] = useState("")
 	
 
@@ -52,7 +54,12 @@ export default function RoleCreate() {
 				console.error(ex)
 			}
 		})()
+		setOriginalRoleName(roleName)
 	}, [token])
+
+	useEffect(() => {
+		setIsBlocking(roleName != originalRoleName)
+	}, [roleName, originalRoleName])
 
 
 	const handleNavigation = () => {
@@ -65,7 +72,7 @@ export default function RoleCreate() {
 
 	const blocker = useBlocker(() => {
 		if (isBlocking) {
-			setShowMiniPopup(true)
+			setGoBackPopup(true)
 			return true
 		}
 		return false
@@ -91,12 +98,13 @@ export default function RoleCreate() {
 	}
 
 	async function addRole() {
+		setErrorMessage("")
+		if (!roleName.match(/^([-a-zA-Z0-9_åöäÅÄÖ]+)$/)) {
+			return setErrorMessage("Ogiligt rollnamn")
+		}
 		const response = await fetch("/api/roles", {
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				token
-			},
+			headers: { "Content-Type": "application/json", token},
 			body: JSON.stringify({
 				roleName: roleName,
 				permissions: permissions
@@ -109,6 +117,11 @@ export default function RoleCreate() {
 			toast.success("Rollen har skapats")
 			navigate("/admin")
 		}
+	}
+
+	function handleButtonToggle(newToggledState) {
+		console.log(newToggledState)
+		setIsToggled(newToggledState)
 	}
 
 
@@ -136,6 +149,8 @@ export default function RoleCreate() {
 							item={permission.permissionName}
 							key={index}
 							id={permission.permissionId}
+							isToggled={isToggled}
+							changeToggled={handleButtonToggle}
 						/>
 					))}
 				</div>
@@ -144,6 +159,8 @@ export default function RoleCreate() {
 				item={"dummy permission1"}
 				key={"exercise.id"}
 				id={"exercise.id"}
+				isToggled={isToggled}
+				changeToggled={handleButtonToggle}
 			/>
 			<PermissionCard
 				item={"dummy permission2"}
@@ -182,11 +199,16 @@ export default function RoleCreate() {
 
 			<ConfirmPopup
 				popupText="Du har osparade ändringar. Är du säker att du lämna?"
-				showPopup={showMiniPopup}
-				setShowPopup={setShowMiniPopup}
+				showPopup={goBackPopup}
+				setShowPopup={setGoBackPopup}
 				confirmText="Lämna"
 				backText="Avbryt"
-				onClick={blocker.proceed}
+				onClick={
+					async () => {
+						setIsToggled(false)
+						blocker.proceed()
+					}
+				}
 			/>
 
 		</div>

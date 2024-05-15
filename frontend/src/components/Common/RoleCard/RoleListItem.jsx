@@ -27,7 +27,7 @@ import { Link } from "react-router-dom"
 export default function RoleListItem({ item, detailURL, id, index, checkBox }) {
 
 	return (
-		<div className={styles["role-list-container"]} data-testid="RoleListItem">
+		<div className={styles["role-list-container"]} data-testid="RoleListItem" id={"RoleListItem-" + item}>
 			<div className={styles["role-list-header"]} style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
 				{checkBox}
 				<Link to={detailURL + id} data-testid="RoleListItem-link" style={{width: "100%"}}>

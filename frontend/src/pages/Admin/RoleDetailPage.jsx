@@ -1,5 +1,6 @@
-import { useParams, useNavigate } from "react-router"
-import { useEffect, useState, useContext } from "react"
+import { useParams, useNavigate,  } from "react-router"
+import { unstable_useBlocker as useBlocker } from "react-router"
+import { useEffect, useState, useContext, useCallback } from "react"
 import { Trash } from "react-bootstrap-icons"
 import { AccountContext } from "../../context"
 import { setError as setErrorToast } from "../../utils"
@@ -12,6 +13,7 @@ import Button from "../../components/Common/Button/Button"
 import ErrorState from "../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import Popup from "../../components/Common/Popup/Popup"
+import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 import RoleDelete from "../../components/Admin/Delete/RoleDelete"
 
 
@@ -28,29 +30,52 @@ export default function RoleDetailPage() {
 	const { role_id } = useParams()
 	const { token } = useContext(AccountContext)
 
-	//const [roleName, setRoleName] = useState("")
+	const [roleName, setRoleName] = useState("")
+	const [originalRoleName, setOriginalRoleName] = useState("")
 	const navigate = useNavigate()
-	const [role, setRole] = useState()
 	const [permissions, setPermissions] = useState([])
 	const [error, setError] = useState()
 	const [loading, setIsLoading] = useState(true)
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
+	const [isBlocking, setIsBlocking] = useState(false)
+	const [goBackPopup, setGoBackPopup] = useState(false)
 	
 
+	const blocker = useBlocker(() => {
+		if (isBlocking) {
+			setGoBackPopup(true)
+			return true
+		}
+		return false
+	})
 
 	useEffect(() => {
-		fetch(`/api/roles/${role_id}`, {
-			headers: { token }
-		})
-			.then(response => response.json())
-			.then(data => {
-				setRole(data)
-			})
-			.catch(ex => {
-				setError("Kunde inte hämta roll")
-				console.error(ex)
-			})
+		console.log("roleName: ", roleName, "originalRoleName: ", originalRoleName)
+		setIsBlocking(roleName !== originalRoleName)
+	}, [roleName, originalRoleName])
+
+	const fetchRole = useCallback(async () => {
+		setIsLoading(true)
+
+		const response = await fetch(`/api/roles/${role_id}`, { headers: { token } })
+
+		if (!response.ok) {
+			setError("Kunde inte hämta roll")
+			setIsLoading(false)
+			return
+		}
+
+		const role = await response.json()
+
+		setRoleName(role.roleName)
+		setOriginalRoleName(role.roleName)
+
+		setIsLoading(false)
 	}, [role_id, token])
+
+	useEffect(() => {
+		fetchRole()
+	}, [fetchRole])
 
 	useEffect(() => {
 		(async () => {
@@ -95,10 +120,10 @@ export default function RoleDetailPage() {
 			<br/>
 			<InputTextFieldBorderLabel 
 				id={"register-user-username-input"} 
-				text={role?.roleName || ""}
+				text={roleName}
 				type={"role"} 
 				label= {"Namn på roll"} 
-				onChange={console.log("Hello") /*(event) => setUserName(event.target.value)*/}
+				onChange={e => setRoleName(e.target.value)}
 			/>
 
 			{loading ? <Spinner /> : (
@@ -135,8 +160,19 @@ export default function RoleDetailPage() {
 
 			<div style={{ marginTop: "1rem", display: "flex", justifyContent: "space-between", width: "100%" }}>
 				<Button outlined={true} onClick={handleNavigation}><p>Tillbaka</p></Button>
-				<Button onClick={console.log("hello")}><p>Spara</p></Button>
+				<Button onClick={console.log("a")}><p>Spara</p></Button>
 			</div>
+
+			<ConfirmPopup
+				showPopup={goBackPopup}
+				setShowPopup={setGoBackPopup}
+				popupText={"Är du säker på att du vill lämna sidan? Dina ändringar kommer inte att sparas."}
+				confirmText="Lämna"
+				backText="Avbryt"
+				onClick={async () => {
+					blocker.proceed()
+				}}
+			/>
 
 			<div>
 				<Popup
@@ -144,8 +180,7 @@ export default function RoleDetailPage() {
 					isOpen={showDeletePopup}
 					setIsOpen={setShowDeletePopup}
 					style={{height: "unset"}}>
-					<RoleDelete id={"role-delete-popup"} roleID={role_id} name={role?.roleName} setIsOpen={setShowDeletePopup} what={"Rollen"}/>
-					{/* <ActivityDelete id={"exercise-delete-popup"} activityID={ex_id} name={exercise?.name} setIsOpen={setShowDeletePopup} what={"Övning"}/> */}
+					<RoleDelete id={"role-delete-popup"} roleID={role_id} name={roleName} setIsOpen={setShowDeletePopup} what={"Rollen"}/>
 				</Popup>
 			</div>
 		</div>
