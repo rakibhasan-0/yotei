@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import se.umu.cs.pvt.activitylist.Activity;
 import se.umu.cs.pvt.activitylist.ActivityList;
 import se.umu.cs.pvt.activitylist.ActivityListEntry;
 
@@ -24,7 +25,7 @@ public class ActivityListDTO {
     private Boolean hidden;
     private LocalDate date;
     private List<UserShortDTO> users;
-    private List<ActivityDTO> activities;
+    private List<Activity> activities;
 
     public ActivityListDTO(ActivityList activityList) {
         this.id = activityList.getId();
@@ -38,10 +39,10 @@ public class ActivityListDTO {
         this.activities = new ArrayList<>();
         for (ActivityListEntry entry : activityList.getActivityEntries()) {
             if (entry.getExercise() != null) {
-                this.activities.add(new ActivityDTO(entry.getExercise()));
+                this.activities.add(new Activity(entry.getExercise()));
             }
             if (entry.getTechnique() != null) {
-                this.activities.add(new ActivityDTO(entry.getTechnique()));
+                this.activities.add(new Activity(entry.getTechnique()));
             }
         }
 
@@ -79,7 +80,7 @@ public class ActivityListDTO {
         return users;
     }
 
-    public List<ActivityDTO> getActivities() {
+    public List<Activity> getActivities() {
         return activities;
     }
 

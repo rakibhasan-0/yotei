@@ -55,7 +55,7 @@ public class ActivityList implements Serializable {
     @JoinTable(name = "user_to_activity_list", joinColumns = @JoinColumn(name = "list_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<UserShort> users = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "activityList")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "activityList")
     private Set<ActivityListEntry> activityEntries = new HashSet<>();
 
     protected ActivityList() {

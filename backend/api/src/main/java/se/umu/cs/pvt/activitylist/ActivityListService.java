@@ -1,8 +1,11 @@
 package se.umu.cs.pvt.activitylist;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
@@ -12,6 +15,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import se.umu.cs.pvt.activitylist.Dtos.ActivityListDTO;
 import se.umu.cs.pvt.activitylist.Dtos.ActivityListShortDTO;
 import se.umu.cs.pvt.activitylist.Dtos.UserShortDTO;
+import se.umu.cs.pvt.user.JWTUtil;
 import se.umu.cs.pvt.workout.UserShort;
 import se.umu.cs.pvt.workout.UserShortRepository;
 
@@ -26,10 +30,13 @@ import se.umu.cs.pvt.workout.UserShortRepository;
 public class ActivityListService implements IActivityListService {
     private final UserShortRepository userShortRepository;
     private final ActivityListRepository activityListRepository;
+    private final JWTUtil jwtUtil;
 
-    public ActivityListService(UserShortRepository userShortRepository, ActivityListRepository activityListRepository) {
+    public ActivityListService(UserShortRepository userShortRepository, ActivityListRepository activityListRepository,
+            JWTUtil jwtUtil) {
         this.userShortRepository = userShortRepository;
         this.activityListRepository = activityListRepository;
+        this.jwtUtil = jwtUtil;
     }
 
     /**
@@ -120,6 +127,53 @@ public class ActivityListService implements IActivityListService {
 
         ActivityListDTO dto = new ActivityListDTO(list);
         return dto;
+    }
+
+    @Override
+    public Long addActivityList(AddActivityListRequest listToAdd, String token) {
+        DecodedJWT jwt;
+        Long userIdL;
+
+        try {
+            jwt = jwtUtil.validateToken(token);
+            userIdL = jwt.getClaim("userId").asLong();
+        } catch (Exception e) {
+            throw new UnauthorizedAccessException("Invalid token");
+        }
+
+        if (listToAdd.hasNullFields() || listToAdd.getName().isEmpty()) {
+            throw new BadRequestException("List has null fields or name is empty");
+        }
+
+        List<ActivityList> results = activityListRepository.findAllByName(listToAdd.getName());
+        if (results != null) {
+            for (ActivityList list : results) {
+                if (list.getAuthor().equals(userIdL)) {
+                    throw new ConflictException("List with the same name exists for the user");
+                }
+            }
+        }
+
+        ActivityList newList = new ActivityList(userIdL, listToAdd.getName(), listToAdd.getDesc(),
+                listToAdd.getHidden(), LocalDate.now());
+
+        newList = activityListRepository.save(newList);
+
+        for (AddActivityListRequest.ActivityRequest activity : listToAdd.getActivities()) {
+            if (activity.getType().equals("exercise")) {
+                newList.addExercise(activity.getId());
+            } else {
+                newList.addTechnique(activity.getId());
+            }
+        }
+
+        List<UserShort> usersList = userShortRepository.findAllById(listToAdd.getUsers());
+        Set<UserShort> usersToAdd = new HashSet<>(usersList);
+        newList.setUsers(usersToAdd);
+
+        newList = activityListRepository.save(newList);
+
+        return newList.getId();
     }
 
 }

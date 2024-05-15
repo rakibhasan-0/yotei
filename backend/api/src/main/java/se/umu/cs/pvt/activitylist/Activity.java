@@ -1,4 +1,4 @@
-package se.umu.cs.pvt.activitylist.Dtos;
+package se.umu.cs.pvt.activitylist;
 
 import java.util.Set;
 
@@ -16,7 +16,7 @@ import se.umu.cs.pvt.technique.Technique;
  * @since 2024-05-12
  * @version 1.0
  */
-public class ActivityDTO {
+public class Activity {
     private String type;
     private Long id;
     private String name;
@@ -25,7 +25,7 @@ public class ActivityDTO {
     private Set<Tag> tags; // Only set for techniques
     private Set<Belt> belts;
 
-    public ActivityDTO(Exercise exercise) {
+    public Activity(Exercise exercise) {
         this.type = "exercise";
         this.id = exercise.getId();
         this.name = exercise.getName();
@@ -33,7 +33,7 @@ public class ActivityDTO {
         this.duration = exercise.getDuration();
     }
 
-    public ActivityDTO(Technique technique) {
+    public Activity(Technique technique) {
         this.type = "technique";
         this.id = technique.getId();
         this.name = technique.getName();

@@ -2,8 +2,10 @@ package se.umu.cs.pvt.activitylist;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +27,14 @@ import org.springframework.http.HttpStatus;
 
 import org.springframework.web.bind.annotation.RequestBody;
 
+import se.umu.cs.pvt.activitylist.AddActivityListRequest.ActivityRequest;
 import se.umu.cs.pvt.activitylist.Dtos.*;
-
+import se.umu.cs.pvt.exercise.Exercise;
+import se.umu.cs.pvt.exercise.ExerciseRepository;
+import se.umu.cs.pvt.technique.TechniqueRepository;
 import se.umu.cs.pvt.user.JWTUtil;
+import se.umu.cs.pvt.workout.UserShort;
+import se.umu.cs.pvt.workout.UserShortRepository;
 
 /**
  * ActivityList API for retreiving, creating, removing and editing activityList
@@ -43,6 +50,7 @@ import se.umu.cs.pvt.user.JWTUtil;
 public class ActivityListController {
     private final ActivityListRepository listRepository;
     private final ActivityListService activityListService;
+    private final UserShortRepository userShortRepository;
 
     private DecodedJWT jwt;
     private Long userIdL;
@@ -51,10 +59,11 @@ public class ActivityListController {
     @Autowired
     private JWTUtil jwtUtil;
 
-    public ActivityListController(ActivityListRepository listRepository, ActivityListService activityListService) {
+    public ActivityListController(ActivityListRepository listRepository, ActivityListService activityListService,
+            UserShortRepository userShortRepository) {
         this.listRepository = listRepository;
         this.activityListService = activityListService;
-
+        this.userShortRepository = userShortRepository;
     }
 
     /**
@@ -63,44 +72,25 @@ public class ActivityListController {
      * @param listToAdd example body:
      *                  {"id":1,"author":1,"name":"xx","desc":"king","hidden":true,"date":[2024,5,3]}
      * @param token     token of the user requesting to add a list
-     * @return the added activity list if successful
+     * @return the created activitylists id when successfull
      *         Unauthorized if token is invalid
      *         Bad request if list json is not complete
      *         Conflict if there exists a list with the same name for that user
      *         Forbidden if the token does not match the author of the list to add
      */
     @PostMapping("/add")
-    public ResponseEntity<ActivityList> addList(@RequestBody AddActivityListRequest listToAdd,
+    public ResponseEntity<Long> addList(@RequestBody AddActivityListRequest listToAdd,
             @RequestHeader(value = "token") String token) {
         try {
-
-            jwt = jwtUtil.validateToken(token);
-            userIdL = jwt.getClaim("userId").asLong();
-            userRole = jwt.getClaim("role").asString();
-        } catch (Exception e) {
+            Long id = activityListService.addActivityList(listToAdd, token);
+            return new ResponseEntity<>(id, HttpStatus.CREATED);
+        } catch (UnauthorizedAccessException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
-        if (listToAdd.hasNullFields() || listToAdd.getName().isEmpty()) {
+        } catch (BadRequestException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (ConflictException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-        List<ActivityList> results;
-        if ((results = listRepository.findAllByName(listToAdd.getName())) != null) {
-            for (ActivityList list : results) {
-                if (list.getAuthor() == listToAdd.getAuthor()) {
-                    return new ResponseEntity<>(HttpStatus.CONFLICT);
-                }
-            }
-        }
-        // kolla author/userid här?
-        if (userIdL != listToAdd.getAuthor() && !userRole.equals("ADMIN")) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-
-        ActivityList newList = new ActivityList(listToAdd.getAuthor(), listToAdd.getName(), listToAdd.getDesc(),
-                listToAdd.getHidden(), LocalDate.now());
-        listRepository.save(newList);
-        return new ResponseEntity<>(newList, HttpStatus.CREATED);
     }
 
     /**

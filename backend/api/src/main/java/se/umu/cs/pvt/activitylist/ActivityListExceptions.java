@@ -11,3 +11,15 @@ class UnauthorizedAccessException extends RuntimeException {
         super(message);
     }
 }
+
+class ConflictException extends RuntimeException {
+    public ConflictException(String message) {
+        super(message);
+    }
+}
+
+class BadRequestException extends RuntimeException {
+    public BadRequestException(String message) {
+        super(message);
+    }
+}

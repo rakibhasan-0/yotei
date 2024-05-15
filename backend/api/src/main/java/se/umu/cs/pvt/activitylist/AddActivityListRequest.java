@@ -3,34 +3,34 @@ package se.umu.cs.pvt.activitylist;
 import java.util.Set;
 
 public class AddActivityListRequest {
-    private Long author;
     private String name;
     private String description;
     private Boolean hidden;
+    private Set<Long> users;
     private Set<ActivityRequest> activities;
 
     public boolean hasNullFields() {
-        return author == null || name == null || hidden == null;
-    }
-
-    public Long getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(Long author) {
-        this.author = author;
+        return name == null || hidden == null;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getDesc() {
         return description;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsers(Set<Long> users) {
+        this.users = users;
+    }
+
+    public Set<Long> getUsers() {
+        return users;
     }
 
     public void setDesc(String desc) {

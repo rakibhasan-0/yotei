@@ -1,4 +1,4 @@
-package se.umu.cs.pvt.activitylist;
+package se.umu.cs.pvt.activitylist.Dtos;
 
 import se.umu.cs.pvt.workout.UserShort;
 

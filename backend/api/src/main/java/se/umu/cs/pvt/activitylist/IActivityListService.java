@@ -4,6 +4,9 @@ import java.util.List;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import se.umu.cs.pvt.activitylist.Dtos.ActivityListDTO;
+import se.umu.cs.pvt.activitylist.Dtos.ActivityListShortDTO;
+
 /**
  * Interface for ActivityListService
  * 
@@ -16,4 +19,6 @@ public interface IActivityListService {
             Boolean createdByUser);
 
     ActivityListDTO getDetails(DecodedJWT token, Long id);
+
+    Long addActivityList(AddActivityListRequest lsitToAdd, String token);
 }

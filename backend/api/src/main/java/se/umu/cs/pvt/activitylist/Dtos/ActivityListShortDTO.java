@@ -1,4 +1,4 @@
-package se.umu.cs.pvt.activitylist;
+package se.umu.cs.pvt.activitylist.Dtos;
 
 /**
  * DTO model used when returning a list of ActivityList
