@@ -49,7 +49,9 @@ public class ExportGradingPdf {
     private String gradingProtocol;
     private List<ExaminationTechniqueCategory> examinationTechniqueCategories;
     private final int   MAX_NUM_COLUMNS = 6,
-                        MAX_NUM_ROWS = 15,
+                        MAX_NUM_ROWS = 15, /*måsta ändra de här eftersom de klipps av annars på första sidorna eftersom de är just lite för mycke.. om den 
+                                            *ändras till 14 så blir det en extra sida med bara namn så kanske komma på nå där vi kollar om nästa initY värde blir mindre än 0...
+                                            och då skapar vi en ny sida */
                         TABLE_START_X_POS = 55, //behöver bättre namn
                         CELL_HEIGHT = 30,
                         CELL_WIDTH = 100;
@@ -183,6 +185,7 @@ public class ExportGradingPdf {
 
                 initX = tableStartXPos;
 
+                //if initY - cellheigh < 0
                 if(row_count > MAX_NUM_ROWS) {
                     contentStream.stroke();
                     contentStream.close();
