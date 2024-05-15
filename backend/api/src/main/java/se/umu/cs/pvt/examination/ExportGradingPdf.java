@@ -26,7 +26,13 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-
+/**
+ * This class uses the help of PDF-Box to generate a PDF-file
+ * 
+ * @author Team Pomegranate
+ * @version 1.0
+ * @since YYYY-MM-DD
+ */
 public class ExportGradingPdf {
 
     /*
