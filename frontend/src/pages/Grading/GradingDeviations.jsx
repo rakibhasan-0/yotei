@@ -24,11 +24,11 @@ import { AccountContext } from "../../context"
 export default function GradingDeviations() {
 		const [toggled, setToggled] = useState(false)
 		const [data, setData] = useState([])
-		const { userId } = useParams()
-		const [name, setName] = useState("")
+		const { userId } = useParams() //The user id of the current examinee
+		const [name, setName] = useState("") //The name of the current examinee
 		const [, setGradingId] = useState(-1)
 		const [, setBeltId] = useState(-1)
-		const { gradingId } = useParams()
+		const { gradingId } = useParams() //The id of the current grading
 
     const context = useContext(AccountContext)
 
