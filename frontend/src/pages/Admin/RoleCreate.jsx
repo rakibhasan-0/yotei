@@ -32,7 +32,7 @@ export default function RoleCreate() {
 	const [loading, setIsLoading] = useState(true)
 	const [goBackPopup, setGoBackPopup] = useState(false)
 	const [isBlocking, setIsBlocking] = useState(false)
-	const [isToggled, setIsToggled] = useState(false)
+	const [isToggled, setIsToggled] = useState(true)
 	const [errorMessage, setErrorMessage] = useState("")
 	
 
@@ -149,8 +149,8 @@ export default function RoleCreate() {
 							item={permission.permissionName}
 							key={index}
 							id={permission.permissionId}
-							isToggled={isToggled}
-							changeToggled={handleButtonToggle}
+							toggled={isToggled}
+							changeToggled={handleButtonToggle(index)}
 						/>
 					))}
 				</div>
@@ -159,18 +159,22 @@ export default function RoleCreate() {
 				item={"dummy permission1"}
 				key={"exercise.id"}
 				id={"exercise.id"}
-				isToggled={isToggled}
+				toggled={isToggled}
 				changeToggled={handleButtonToggle}
 			/>
 			<PermissionCard
 				item={"dummy permission2"}
 				key={"exercise.id"}
 				id={"exercise.id"}
+				toggled={isToggled}
+				changeToggled={handleButtonToggle}
 			/>
 			<PermissionCard
 				item={"dummy permission3"}
 				key={"exercise.id"}
 				id={"exercise.id"}
+				toggled={isToggled}
+				changeToggled={handleButtonToggle}
 			/>
 			<PermissionCard
 				item={"dummy permission4"}

@@ -22,8 +22,6 @@ export default function ToggleButton({isButtonToggled, onClick, id}) {
 	
 	const [toggled, setToggled] = useState(isButtonToggled)
 
-	const [cssToggled, setCssToggled] = useState(false)
-
 	useEffect(() => {
 		setToggled(isButtonToggled)
 	}, [isButtonToggled])
@@ -32,9 +30,9 @@ export default function ToggleButton({isButtonToggled, onClick, id}) {
 		
 		<button 
 			id = {id + "-toggleButton"} 
-			className={styles.toggleButton + " " + (cssToggled ? styles.toggled : "")}
+			className={styles.toggleButton + " " + (toggled ? styles.toggled : "")}
 			onClick={() => { 
-				setCssToggled(!cssToggled)
+				setToggled(!toggled)
 				onClick(!toggled)
 			}}
 		>

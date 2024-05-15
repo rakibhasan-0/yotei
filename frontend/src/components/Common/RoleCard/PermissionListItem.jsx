@@ -34,7 +34,7 @@ export default function PermissionListItem({ item, id, index, toggled, changeTog
 					</div>
 					<div className={styles["flex-shrink-0"]} style={{display: "flex", alignItems: "center"}}>
 						<ToggleButton 
-							istoggled={toggled}
+							isButtonToggled={toggled}
 							id={item + "-toggleButton"}
 							onClick={() => changeToggled(!toggled)}
 						/>
