@@ -28,6 +28,7 @@ public class ExaminationController {
     private ExamineeRepository examineeRepository;
     private ExaminationCommentRepository examinationCommentRepository;
     private ExaminationResultRepository examinationResultRepository;
+    private ExaminationProtocolRepository examinationProtocolRepository;
 
     public ResponseEntity<String> example() {
         return new ResponseEntity<>("hello", HttpStatus.OK);
@@ -45,14 +46,15 @@ public class ExaminationController {
      */
     @Autowired
     public ExaminationController(GradingRepository gradingRepository, BeltRepository beltRepository, ExamineePairRepository examineePairRepository, 
-    ExamineeRepository examineeRepository, ExaminationCommentRepository examinationCommentRepository,  ExaminationResultRepository examinationResultRepository) {
-     
+    ExamineeRepository examineeRepository, ExaminationCommentRepository examinationCommentRepository,  
+    ExaminationResultRepository examinationResultRepository, ExaminationProtocolRepository examinationProtocolRepository) {
         this.gradingRepository = gradingRepository;
         this.beltRepository = beltRepository;
         this.examineePairRepository = examineePairRepository;
         this.examineeRepository = examineeRepository;
         this.examinationCommentRepository = examinationCommentRepository;
         this.examinationResultRepository = examinationResultRepository;
+        this.examinationProtocolRepository = examinationProtocolRepository;
     }
 
     /**
@@ -330,5 +332,16 @@ public class ExaminationController {
         examinationResultRepository.deleteById(result_id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    /**
+     * Returns all examination protocols.
+     * @return All examination protocols.  
+     * @return HTTP-status code.
+     */
+    @GetMapping("/examinationprotocol/all")
+    public ResponseEntity<List<ExaminationProtocol>> getAllExaminationProtocol() {
+        return new ResponseEntity<>(examinationProtocolRepository.findAll(), HttpStatus.OK);
+    }
+
 
 }
