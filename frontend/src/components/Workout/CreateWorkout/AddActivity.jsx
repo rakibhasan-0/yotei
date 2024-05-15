@@ -141,32 +141,32 @@ function AddActivity({ id, setShowActivityInfo }) {
 
 	useEffect(() => {
 		setJSONSession("selectedBelts", selectedBelts)
-	},[selectedBelts])
+	}, [selectedBelts])
 
 
 	useEffect(() => {
 		sessionStorage.setItem("kihon", kihon)
-	},[kihon])
+	}, [kihon])
 
 
 	useEffect(() => {
 		setJSONSession("selectedTechTags", selectedTechTags)
-	},[selectedTechTags])
+	}, [selectedTechTags])
 
 
 	useEffect(() => {
 		setJSONSession("selectedExerTags", selectedExerTags)
-	},[selectedExerTags])
+	}, [selectedExerTags])
 
 
 	useEffect(() => {
 		setJSONSession("activeTab", activeTab)
-	},[activeTab])
+	}, [activeTab])
 
 
 	useEffect(() => {
 		sessionStorage.setItem("searchTechText", searchTechText)
-	},[searchTechText])
+	}, [searchTechText])
 
 
 	useEffect(() => {
@@ -237,9 +237,9 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 * Fetches lists when the component is mounted or when the
 	 * search text are changed.
 	 */
-	useEffect(() =>{
+	useEffect(() => {
 		if (!hasLoadedData) return
-		
+
 		setFetchedLists(false)
 		setLists(lists)
 		fetchingList()
@@ -335,7 +335,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	const searchTechniques = () => {
 		searchCount.current++
 
-		if (selectedTechTags.find(tag => tag === "kihon waza") === undefined){
+		if (selectedTechTags.find(tag => tag === "kihon waza") === undefined) {
 			setKihon(false)
 		}
 		const filteredBelts = []
@@ -420,14 +420,14 @@ function AddActivity({ id, setShowActivityInfo }) {
 			text: searchListText
 		}
 
-		getLists(args, token, map, mapActions, (result) =>  {
-			if(result.error) return
-		
+		getLists(args, token, map, mapActions, (result) => {
+			if (result.error) return
+
 			// Extract the 'id' and 'name' fields from each item in the result used in displaying the list.
 			const lists = result.map(item => ({ id: item.id, name: item.name }))
 
 			setLists(lists)
-			setFetchedLists(true)	
+			setFetchedLists(true)
 		})
 	}
 
@@ -442,7 +442,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 
 		getListContent(args, token, map, mapActions, (result) => {
 			if (result.error) return
-			
+
 			const listContent = result.map(item => {
 				if (item.technique) {
 					return {
@@ -454,7 +454,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 							belt_color: item.technique.belts[0].color,
 							belt_name: item.technique.belts[0].name,
 							is_child: item.technique.belts[0].child
-						
+
 						}],
 						tags: item.technique.tags
 					}
@@ -568,7 +568,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 					</Tab>
 					<Tab eventKey="lists" title="Listor" tabClassName={`nav-link ${style.tab}`}>
 						<div className={style.searchBar}>
-							{ isSearchBarEnabled && ( // TODO: feature toggle.
+							{isSearchBarEnabled && ( // TODO: feature toggle.
 								<SearchBar
 									id="lists-search-bar"
 									placeholder="Sök efter listor"
@@ -576,7 +576,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 									onChange={setSearchListText}
 								/>
 							)}
-							{ isFilterEnabled && ( // TODO: feature toggle.
+							{isFilterEnabled && ( // TODO: feature toggle.
 								<FilterContainer id="ei-filter" title="Filtrering" numFilters={0}>
 									<ListPicker />
 								</FilterContainer>
@@ -589,38 +589,38 @@ function AddActivity({ id, setShowActivityInfo }) {
 									:
 									(<InfiniteScrollComponent activities={lists}>
 										{lists.map((list) => (
-													<DropDown
-														text={list.name}
-														autoClose={false}
-														id={list.id}
-														onClick={() => fetchingListContent(list.id)}
-														key={list.id}
-														>
+											<DropDown
+												text={list.name}
+												autoClose={false}
+												id={list.id}
+												onClick={() => fetchingListContent(list.id)}
+												key={list.id}
+											>
 
-													<div style={{ borderTop: "1px solid black" }}>
+												<div style={{ borderTop: "1px solid black" }}>
 													<p className={style.listTitleText}>Tekniker</p>
 													<div className={style.innerListDiv}>
 														{listContent.map((item) => (
-														item.type === "technique" ? (
-															<TechniqueCard
-															id={"technique-list-item-" + item.techniqueID}
-															checkBox={
-																<CheckBox
-																checked={checkedActivities.some(a => a.techniqueID === item.techniqueID)}
-																onClick={() => onActivityToggle(item, "technique")}
+															item.type === "technique" ? (
+																<TechniqueCard
+																	id={"technique-list-item-" + item.techniqueID}
+																	checkBox={
+																		<CheckBox
+																			checked={checkedActivities.some(a => a.techniqueID === item.techniqueID)}
+																			onClick={() => onActivityToggle(item, "technique")}
+																		/>
+																	}
+																	technique={item}
+																	key={item.techniqueID}
 																/>
-															}
-															technique={item}
-															key={item.techniqueID}
-															/>
-														) : null
+															) : null
 														))}
 													</div>
-													</div>
-													<p className={style.listTitleText}>Övningar</p>
-													<div className={style.innerListDiv}>
-														{listContent.map((item) => (
-															item.type === "exercise" ? (
+												</div>
+												<p className={style.listTitleText}>Övningar</p>
+												<div className={style.innerListDiv}>
+													{listContent.map((item) => (
+														item.type === "exercise" ? (
 															<ExerciseListItem
 																id={item.id}
 																text={item.duration + " min"}
@@ -635,10 +635,10 @@ function AddActivity({ id, setShowActivityInfo }) {
 																key={item.id}
 																index={key}
 															/>
-															) : null
-														))}
-													</div>
-												</DropDown>
+														) : null
+													))}
+												</div>
+											</DropDown>
 										))}
 
 									</InfiniteScrollComponent>)
