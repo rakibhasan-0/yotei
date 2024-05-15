@@ -275,7 +275,6 @@ export function listCreateReducer(state, action) {
 		tempState.data.date = action.date
 		return tempState
 	case "CLOSE_POPUP":
-		tempState.popupState.types.freeTextPopup = false
 		tempState.popupState.types.activityPopup = false
 		tempState.popupState.types.chooseActivityPopup = false
 		tempState.popupState.types.editActivityPopup = false
@@ -283,7 +282,6 @@ export function listCreateReducer(state, action) {
 		tempState.checkedActivities = []
 		return tempState
 	case "CLOSE_ACIVITY_POPUP":
-		tempState.popupState.types.freeTextPopup = false
 		tempState.popupState.types.activityPopup = false
 		tempState.popupState.types.chooseActivityPopup = true
 		tempState.popupState.types.editActivityPopup = false
@@ -291,8 +289,6 @@ export function listCreateReducer(state, action) {
 		return tempState
 	case "OPEN_FREE_TEXT_POPUP":
 		tempState.addedCategories[0].checked = true
-
-		tempState.popupState.types.freeTextPopup = true
 		tempState.popupState.types.activityPopup = false
 		tempState.popupState.types.chooseActivityPopup = false
 		tempState.popupState.types.editActivityPopup = false
@@ -301,7 +297,6 @@ export function listCreateReducer(state, action) {
 		return tempState
 	case "OPEN_ACTIVITY_POPUP":
 
-		tempState.popupState.types.freeTextPopup = false
 		tempState.popupState.types.activityPopup = true
 		tempState.popupState.types.chooseActivityPopup = false
 		tempState.popupState.types.editActivityPopup = false
@@ -309,14 +304,12 @@ export function listCreateReducer(state, action) {
 
 		return tempState
 	case "OPEN_CHOOSE_ACTIVITY_POPUP":
-		tempState.popupState.types.freeTextPopup = false
 		tempState.popupState.types.activityPopup = false
 		tempState.popupState.types.chooseActivityPopup = true
 		tempState.popupState.types.editActivityPopup = false
 		tempState.popupState.isOpened = true
 		return tempState
 	case "OPEN_EDIT_ACTIVITY_POPUP":
-		tempState.popupState.types.freeTextPopup = false
 		tempState.popupState.types.activityPopup = false
 		tempState.popupState.types.chooseActivityPopup = false
 		tempState.popupState.types.editActivityPopup = true

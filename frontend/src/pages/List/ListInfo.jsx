@@ -20,7 +20,7 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
  * are displayedy. Added user are also displayed.
  *
  * Props:
- *      workoutId @type {int} - The ID of the workout.
+ *      listId @type {int} - The ID of the workout.
  *      id        @type {int/string} - the id of the component
  *
  * @author Team Tomato (6)
@@ -31,12 +31,12 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
  */
 
 export default function ListInfo({ id }) {
-	const { workoutId } = useParams()
+	const { listId } = useParams()
 	const navigate = useNavigate()
 	const context = useContext(AccountContext)
 	const [showPopup, setShowPopup] = useState(false)
-	const [workoutData, setWorkoutData] = useState(null)
-	const [workoutUsers, setWorkoutUsers] = useState(null)
+	const [listData, setWorkoutData] = useState(null)
+	const [listUsers, setWorkoutUsers] = useState(null)
 	const [showRPopup, setRShowPopup] = useState(false)
 	const [errorStateMsg, setErrorStateMsg] = useState("")
 	const [loading, setLoading] = useState(true)
@@ -123,7 +123,7 @@ export default function ListInfo({ id }) {
                 currentlyEditing: {id: null,date:null},
                 isOpened: false,
                 types:{
-                    activityPopup: false, chooseActivityPopup: false, editActivityPopup: false, freeTextPopup: false,
+                    activityPopup: false, chooseActivityPopup: false, editActivityPopup: false,
                 },
             },
         }
@@ -139,7 +139,7 @@ export default function ListInfo({ id }) {
 			{" "}
 			<Spinner />{" "}
 		</div>
-	) : !workoutData ? (
+	) : !listData ? (
 		<ErrorState
 			message={errorStateMsg}
 			onBack={() => navigate("/profile")}
@@ -150,35 +150,35 @@ export default function ListInfo({ id }) {
 		<div id={id} className="container px-0">
 			{
 				<ConfirmPopup
-					popupText={'Är du säker att du vill radera passet "' + workoutData.data.name + '"?'}
+					popupText={'Är du säker att du vill radera passet "' + listData.data.name + '"?'}
 					id={"confirm-popup"}
 					setShowPopup={setShowPopup}
 					showPopup={showPopup}
-					onClick={async () => deleteWorkout(workoutId, context, navigate, setShowPopup)}
+					onClick={async () => deleteWorkout(listId, context, navigate, setShowPopup)}
 				/>
 			}
-			{getListInfoContainer(workoutData, null, context, userId, workoutUsers)}
+			{getListInfoContainer(listData, null, context, userId, listUsers)}
 
 			<h2 className="font-weight-bold mb-0 mt-5 text-left">Aktiviteter</h2>
-			<SavedActivityList activities={workoutData} edit={false} />
-			{workoutUsers !== null && workoutUsers.length > 0 && getWorkoutUsersContainer(workoutUsers)}
+			<SavedActivityList activities={listData} edit={false} />
+			{listUsers !== null && listUsers.length > 0 && getWorkoutUsersContainer(listUsers)}
 			{getButtons(navigate, setRShowPopup)}
 		</div>
 	)
 }
 
-async function deleteWorkout(workoutId, context, navigate, setShowPopup) {
+async function deleteWorkout(listId, context, navigate, setShowPopup) {
 	//Kolla från WorkoutView
 }
 
-function getWorkoutUsersContainer(workoutUsers) {
+function getWorkoutUsersContainer(listUsers) {
 	return (
 		<div className="container mt-3">
 			<div className="row">
 				<h2>Användare</h2>
 			</div>
 			<div className="row">
-				{workoutUsers.map((user, index) => {
+				{listUsers.map((user, index) => {
 					return (
 						<div key={"wu" + index} className="mr-2">
 							{/* Här kommer vi behöva ändra om så att en user blir ett objekt :)  */}
@@ -203,7 +203,7 @@ function getButtons(navigate, setRShowPopup) {
 	)
 }
 
-function getListInfoContainer(workoutData, setShowPopup, context) {
+function getListInfoContainer(listData, setShowPopup, context) {
 
 	return (
 		<>
@@ -211,16 +211,16 @@ function getListInfoContainer(workoutData, setShowPopup, context) {
 				<div className={styles.info}>
 					<div className={`d-flex col ${styles.workoutDetailColumnItem} p-0`}>
 						<title>Pass</title>
-						<h1 className="font-weight-bold m-0">{workoutData.data.name}</h1>
+						<h1 className="font-weight-bold m-0">{listData.data.name}</h1>
 					</div>
 					<div className="d-flex justify-content-end align-items-center">
-						<div className={styles.clickIcon}>{/*<PrintButton workoutData={workoutData} />*/}</div>
+						<div className={styles.clickIcon}>{/*<PrintButton listData={listData} />*/}</div>
                         
-						{(context.userId == workoutData.data.author.id || isAdmin(context)) && (
+						{(context.userId == listData.data.author.id || isAdmin(context)) && (
 							<>
 								<Link
 									className="ml-3"
-                                    					state={{ workout: workoutData, users: workoutData.data.users }}
+                                    					state={{ list: listData, users: listData.data.users }}
 									to={"/list/editList"}
 								>
 									<Pencil
@@ -244,26 +244,26 @@ function getListInfoContainer(workoutData, setShowPopup, context) {
 					<div className="d-flex">
 						<div className={styles.workoutDetailColumnItem}>
 							<h2 className="font-weight-bold mb-0">Synlighet</h2>
-							<p className="mb-0">{workoutData.data.isPrivate? "Privat": "Publik"}</p>
+							<p className="mb-0">{listData.data.isPrivate? "Privat": "Publik"}</p>
 						</div>
 						<div className={styles.workoutDetailColumnItem} style={{ paddingLeft: "37px" }}>
 							<h2 className="font-weight-bold mb-0">Författare</h2>
-							{<p className="mb-0">{workoutData.data.author.username}</p>}
+							{<p className="mb-0">{listData.data.author.username}</p>}
 						</div>
 					</div>
 					<div className="d-flex" id="no-print">
 						<div className={styles.workoutDetailColumnItem}>
 							<h2 className="font-weight-bold mb-0">Skapad</h2>
-							<p className="mb-0">{workoutData.data.created_date}</p>
+							<p className="mb-0">{listData.data.created_date}</p>
 						</div>
 						<div className={styles.workoutDetailColumnItem} style={{ paddingLeft: "37px" }}>
 							<h2 className="font-weight-bold mb-0 text-align-left">Senast ändrad</h2>
-							<p className="mb-0">{workoutData.data.changed_date}</p>
+							<p className="mb-0">{listData.data.changed_date}</p>
 						</div>
 					</div>
 					<div className={styles.workoutDetailColumnItem}>
 						<h2 className="font-weight-bold mb-0">Beskrivning</h2>
-						<p className={styles.properties}>{workoutData.data.description}</p>
+						<p className={styles.properties}>{listData.data.description}</p>
 					</div>
 				</div>
 			</div>

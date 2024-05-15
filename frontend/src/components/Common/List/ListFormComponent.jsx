@@ -51,9 +51,7 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 	 */
 	const getPopupTitle = useCallback(() => {
 		if (
-			listCreateInfo.popupState.types.activityPopup ||
-			listCreateInfo.popupState.types.freeTextPopup
-		) {
+			listCreateInfo.popupState.types.activityPopup) {
 			return "Aktiviteter"
 		} else if (listCreateInfo.popupState.types.chooseActivityPopup) {
 			return null
@@ -117,8 +115,6 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 		} else if (listCreateInfo.popupState.types.editActivityPopup) {
 			shouldClose = false
 			shouldClose = !checkIfActivityInfoPoupChangesMade(listCreateInfo)
-		} else if (listCreateInfo.popupState.types.freeTextPopup) {
-			shouldClose = !listCreateInfo.addedActivities.some(activity => activity.name.length > 0)
 		}
 			
 		if(shouldClose) {
@@ -274,9 +270,6 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 				setIsOpen={handlePopupClose}
 				title={getPopupTitle()}
 			>
-				{listCreateInfo.popupState.types.freeTextPopup && (		
-					<ActivityInfoPopUp isFreeText={true} />
-				)}
 				{listCreateInfo.popupState.types.activityPopup && (
 					<ActivityInfoPopUp isFreeText={false} />
 				)}

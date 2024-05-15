@@ -37,9 +37,9 @@ const ListEdit = () => {
 		setIsSubmitted(true)
 
 		const data = parseData(listCreateInfo.data)
-		const workoutId = await updateWorkout(data)
+		const listId = await updateWorkout(data)
 
-		if(workoutId) {
+		if(listId) {
 			setSuccess("Träningen uppdaterades!")
 		} else {
 			setError("Träningen kunde inte uppdateras.")
@@ -94,7 +94,7 @@ const ListEdit = () => {
 				("0" + date.getDate()).slice(-2)
 		
 		return {
-			workout: {
+			listInfo: { //KollaPåDetta
 				id: data.id,
 				name: data.name,
 				desc: data.description,
@@ -129,7 +129,7 @@ const ListEdit = () => {
 		const response = await fetch("/api/workouts", requestOptions)
 		const jsonResp = await response.json()
 
-		return jsonResp.workoutId
+		return jsonResp.listId
 	}
 
 	/**
@@ -138,7 +138,7 @@ const ListEdit = () => {
 	useEffect(() => {
 		setIsLoading(true)
 		const item = localStorage.getItem("listCreateInfoEdit")
-		const listData = location.state?.workout
+		const listData = location.state?.list
 		const userData = location.state?.users
 		if (listData){
 			listCreateInfoDispatch({
