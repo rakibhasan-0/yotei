@@ -72,14 +72,28 @@ export default function GradingDeviations() {
                 }
 			}
         }
-
+        
+        //Initialize data
         setData(testData.categories)
         fetchData()
 		}, [])
-    function hasPassed() {
+
+    /**
+     * Checks if the examinee has passed a specific technique
+     * @param {Technique} technique 
+     * @returns Boolean value
+     */
+    function hasPassed(technique) {
         return true //PLACEHOLDER
     }
 
+
+    /**
+     * Gets a holder which holds a container for each technique in the grading protocol. The container also has the comment 
+     *      and pass status for each technique
+     * @param {Array} exercises 
+     * @returns A container displaying all exercises and information about the examinees performance of them
+     */
     function getActivityContainer(exercises) {
 
         return exercises !== null && (
@@ -92,7 +106,7 @@ export default function GradingDeviations() {
                                 <Divider id = 'divider-example' option= 'h2_left' title = {category.category_name} key={category.category_name}/>
                                 {category.techniques.map((technique, index) => (
 
-                                    <Container id = {index} name = {technique.text} passed={hasPassed(technique.text)} key={index} ></Container>
+                                    <Container id = {index} name = {technique.text} passed={hasPassed(technique)} key={index} ></Container>
                                 ))}
                             </div>
                         ))}
