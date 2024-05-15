@@ -81,5 +81,27 @@
     .open {
         left: 0;
     }
-  }
-  
+}
+
+.commonNavbar .closeAndUserIconsWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: right;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.closeAndUserIconsWrapper > button {
+    width: auto !important;
+}
+
+.commonNavbar .closeIconWraper {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: right;
+}
+
+.commonNavbar .closeAndUserIconsWrapper .commonNavbarIconClose {
+    padding-right: 0px;
+    width: 80%;
+}

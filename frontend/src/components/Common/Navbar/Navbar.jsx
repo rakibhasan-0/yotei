@@ -1,6 +1,6 @@
 import { useState, useEffect ,useContext} from "react"
 import Button from "../Button/Button"
-import { List as HamburgerIcon, X as CloseIcon } from "react-bootstrap-icons"
+import { List as HamburgerIcon, X as CloseIcon , Hammer as AdminIcon, Person as UserIcon} from "react-bootstrap-icons"
 import styles from "./Navbar.module.css"
 import { useNavigate } from "react-router"
 import { isAdmin } from "../../../utils"
@@ -47,7 +47,14 @@ function Navbar({ testId }) {
 
 			<div className={`${styles.commonNavbarSidebar} p-4  ${open ? styles.open : ""}`}>
 
-				<CloseIcon role="button" className={styles.commonNavbarIconClose} onClick={() => {setOpen(false)}} />
+				<div className={styles.closeAndUserIconsWrapper}>
+					<CloseIcon role="button"  className={styles.closeIconWraper} onClick={() => {setOpen(false)}} />
+					<Button  onClick={() => navigateAndClose("/profile")}>
+						<UserIcon className={styles.commonNavbarIconClose} />
+					</Button>
+				</div>
+
+
 
 				<Button width={"100%"} onClick={() => navigateAndClose("/plan")}>
 					<h1 className={styles.commonNavbarButton}>Planering</h1>
@@ -72,18 +79,15 @@ function Navbar({ testId }) {
 				) : (
 					null
 				)}
+				
 
 				{ isAdmin(context) ? 
-					<Button width={"100%"} onClick={() => navigateAndClose("/admin")}>
-						<h1 className={styles.commonNavbarButton}>Admin</h1>
+					<Button width={"25%"}  onClick={() => navigateAndClose("/profile")}>
+						<AdminIcon role="button" className={styles.commonNavbarIconClose}  onClick={() => navigateAndClose("/admin")} />
 					</Button>
+					
 					:<></>
 				}
-
-				<Button width={"100%"} onClick={() => navigateAndClose("/profile")}>
-					<h1 className={styles.commonNavbarButton}>Min sida</h1>
-				</Button>
-
 			</div>
 			<div className={`${styles.boxShadowBackground} ${open ? styles.boxShadowBackgroundOpen : styles.boxShadowBackgroundClosed}`} onClick={() => {setOpen(false)}}/>
 		</nav>
