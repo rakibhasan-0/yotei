@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Main class for handling login information and transactions with the database.
- * @author Team Mango (2024-05-13)
+ * @author Team Mango (2024-05-15)
  */
 
 @RestController
@@ -96,9 +96,9 @@ public class UserToPermissionController {
      */
     @DeleteMapping("")
     public ResponseEntity<Object> deleteUserPermissionPair(
-        @RequestBody Map<String, String> userPermissionToDelete) {
-        Long userId = Long.parseLong(userPermissionToDelete.get("user_id"));
-        Long permissionId = Long.parseLong(userPermissionToDelete.get("permission_id"));
+        @RequestBody Map<String, Long> userPermissionToDelete) {
+        Long userId = userPermissionToDelete.get("user_id");
+        Long permissionId = userPermissionToDelete.get("permission_id");
         UserToPermission userToPermission = repository.findByUserIdAndPermissionId(
             userId, permissionId);
 
