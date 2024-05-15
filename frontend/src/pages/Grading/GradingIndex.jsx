@@ -42,7 +42,7 @@ export default function GradingIndex() {
 	const fetchBelts = () => {
 		return fetch("/api/belts/all", {
 			method: "GET",
-			headers: { token }
+			headers: { "token": token }
 		})
 			.then(response => {
 				if (!response.ok) {
@@ -55,7 +55,7 @@ export default function GradingIndex() {
 	const fetchGradings = () => {
 		return fetch("/api/examination/all", {
 			method: "GET",
-			headers: { token }
+			headers: { "token": token }
 		})
 			.then(response => {
 				if (!response.ok) {

@@ -81,8 +81,10 @@ DROP TABLE IF EXISTS workout_tag CASCADE;
 DROP TABLE IF EXISTS examination_grading CASCADE;
 DROP TABLE IF EXISTS examination_examinee CASCADE;
 DROP TABLE IF EXISTS examination_examinee_pair CASCADE;
-DROP TABLE IF EXISTS examination_result_technique CASCADE;
+DROP TABLE IF EXISTS examination_result CASCADE;
 DROP TABLE IF EXISTS examination_comment CASCADE;
+DROP TABLE IF EXISTS grading_protocol CASCADE;
+
 DROP TABLE IF EXISTS activity CASCADE;
 
 DROP TABLE IF EXISTS tag CASCADE;
@@ -103,7 +105,6 @@ DROP TABLE IF EXISTS comments CASCADE;
 
 DROP TABLE IF EXISTS plan CASCADE;
 
-DROP TABLE IF EXISTS session_review;
 DROP TABLE IF EXISTS session_review_activity;
 
 DROP TABLE IF EXISTS session CASCADE;
@@ -127,8 +128,7 @@ DROP TABLE IF EXISTS technique_to_belt CASCADE;
 DROP TABLE IF EXISTS error_log CASCADE;
 
 DROP TABLE IF EXISTS media CASCADE;
-
-
+DROP TABLE IF EXISTS session_review;
 
 DROP SEQUENCE IF EXISTS serial;
 

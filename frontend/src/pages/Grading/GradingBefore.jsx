@@ -12,38 +12,44 @@ import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../utils"
 import {setError as setErrorToast } from "../../utils"
 
 /**
- * The grading create page.
- * Creates a new grading.
+ * Page to add examinees and make pairs out of the added examinees for a grading.
  * 
  * @author Team Pomegranate
  * @version 1.0
  * @since 2024-05-02
  */
 
+
 export default function GradingBefore() {
 	
 	const location = useLocation()
+  const navigate = useNavigate()
+	const { gradingId } = useParams()
+  
   const hasPreviousState = location.key !== "default"
 	const { ColorParam } = location.state ? location.state : {}
-
-
-	const { gradingId } = useParams()
+  
 	const context = useContext(AccountContext)
 	const { token } = context
 
 	const [examinees, setExaminees] = useState([])
-	const navigate = useNavigate()
-
 	const [pairs, setPair] = useState([]) 
 	const [checkedExamineeIds, setCheckedExamineeIds] = useState([])
   const [redirect, setRedirect] = useState(false)
 
   let numberOfPairs = 0
 
+  /**
+   * Help function to activate the useEffect function to start the navigation
+   * to the next step in the grading process
+   */
   function startRedirection() {
     setRedirect(true)
   }
 
+  /**
+   * Handle the navigation back to the previous visited route
+   */
   function handleNavigation() {
     if (hasPreviousState) {
       navigate(-1)
@@ -52,6 +58,9 @@ export default function GradingBefore() {
     }
   }
 
+  /**
+   * Effect that are used to navigate to the next step in the grading process
+   */
   useEffect(() => {
     if (redirect != false) {
       try {
@@ -71,6 +80,11 @@ export default function GradingBefore() {
     }
   }, [redirect])
 
+  /**
+   * Create a new pair in the database and locally,
+   * with the help of the array "checkedExamineeIds" that keeps track of the 
+   * examinees id that are checked at theire respective checkbox
+   */
 	async function createPair() {
 			
 		let selectedExaminees = checkedExamineeIds.map(id => {
@@ -94,6 +108,12 @@ export default function GradingBefore() {
 
 	}
 
+  /**
+   * Remove an pair from the database and also remove the pair from the local array
+   * @param {Integer} examinee1Id 
+   * @param {Integer} examinee2Id 
+   * @param {Integer} pairId 
+   */
 	async function removePair(examinee1Id, examinee2Id, pairId) {
 		await deletePair(pairId, token)
 			.catch(() => setErrorToast("Kunde inte tabort paret. Kontrollera din internetuppkoppling."))
@@ -120,6 +140,12 @@ export default function GradingBefore() {
 		setPair(newPairs)
 	}
 
+  /**
+   * If the examinees checkbox have been clicked or unclicked, update the array according to the checkbox state with the examinees id.
+   * Helps to keep track of the checked examinees
+   * @param {Boolean} isChecked 
+   * @param {Integer} examineeId 
+   */
 	function onCheck(isChecked, examineeId) {
 		if (isChecked) {
 			setCheckedExamineeIds([...checkedExamineeIds, examineeId])
@@ -129,8 +155,8 @@ export default function GradingBefore() {
 	}
 
   /**
-   * 
-   * @param {*} examinee 
+   * Add an examinee to database and also update the local array with the corresponding data
+   * @param {Map} examinee 
    */
 	async function addExaminee(examinee) {
 		const data = await postExaminee({ name: examinee, grading_id: gradingId }, token)

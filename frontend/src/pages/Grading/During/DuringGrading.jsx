@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef, useContext } from "react"
 
 import TechniqueInfoPanel from "../../../components/Grading/PerformGrading/TechniqueInfoPanel"
 import Button from "../../../components/Common/Button/Button"
@@ -14,6 +14,7 @@ import {setError as setErrorToast} from "../../../utils"
 
 // Temp
 import ProtocolYellow from "./yellowProtocolTemp.json"
+import { AccountContext } from "../../../context"
 
 
 /**
@@ -97,6 +98,9 @@ export default function DuringGrading() {
 	const { gradingId } = useParams()
 	const navigate = useNavigate()
 
+	const context = useContext(AccountContext)
+	const { token } = context
+
 	// Get info about grading
 	// TODO: Loads everytime the button is pressed. Should only happen once at start. useEffect?
 	const techniqueNameList = getTechniqueNameList(ProtocolYellow)
@@ -121,7 +125,7 @@ export default function DuringGrading() {
 	useEffect(() => {
 		(async () => {
 			try {
-				const response = await fetch("/api/examination/examinee/all", {})
+				const response = await fetch("/api/examination/examinee/all", {headers: {"token": token}})
 				if (response.status === 404) {
 					console.log("404")
 					return
@@ -147,7 +151,7 @@ export default function DuringGrading() {
 		if(examinees !== undefined){ // To prevent running first time. Is there a better way to chain api calls?
 			(async () => {
 				try {
-					const response = await fetch("/api/examination/pair/all", {})
+					const response = await fetch("/api/examination/pair/all", {headers: {"token": token}})
 					if (response.status === 204) {
 						return
 					}
