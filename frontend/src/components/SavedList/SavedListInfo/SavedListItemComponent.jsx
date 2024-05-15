@@ -19,15 +19,15 @@ import { Trash } from "react-bootstrap-icons"
 
 const WorkoutActivityListItem = ({ activity, index, id,edit}) => {
 	//Fanns ej i WorkoutActivityList.jsx
-	let workoutCreateInfo,workoutCreateInfoDispatch
+	let listCreateInfo,listCreateInfoDispatch
 	if(edit){
-		const {workoutCreateInfo:info, workoutCreateInfoDispatch:dispatch} = useContext(ListCreateContext)
-		workoutCreateInfo=info;
-		workoutCreateInfoDispatch=dispatch
+		const {listCreateInfo:info, listCreateInfoDispatch:dispatch} = useContext(ListCreateContext)
+		listCreateInfo=info;
+		listCreateInfoDispatch=dispatch
 	}
 
 	//console.log("Testy2")
-	//console.log(workoutCreateInfo)
+	//console.log(listCreateInfo)
 	const [isActive, setIsActive] = useState(false)
 	let bgColor = "#ffdfe3"
 
@@ -89,7 +89,7 @@ const WorkoutActivityListItem = ({ activity, index, id,edit}) => {
 						<i onClick={() => {
 							console.log("activity:")
 							console.log(activity)
-							workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.REMOVE_ACTIVITY_ITEM, payload: {id: activity.exercise?.id || activity.technique?.id || activity.id}})
+							listCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.REMOVE_ACTIVITY_ITEM, payload: {id: activity.exercise?.id || activity.technique?.id || activity.id}})
 						}}>
 						<Trash size="20px"	color="var(--red-primary)" id={`edit_pencil_${activity.id}`} style={{cursor: "pointer"}} />
 						</i>

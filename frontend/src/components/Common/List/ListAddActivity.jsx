@@ -38,8 +38,8 @@ import { useCookies } from "react-cookie"
  */
 function AddActivity({ id, setShowActivityInfo }) {
 	const { token } = useContext(AccountContext)
-	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(ListCreateContext)
-	const { checkedActivities } = workoutCreateInfo
+	const { listCreateInfo, listCreateInfoDispatch } = useContext(ListCreateContext)
+	const { checkedActivities } = listCreateInfo
 
 
 	/**
@@ -287,7 +287,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 */
 	const onActivityToggle = (activity, type) => {
 		activity.type = type
-		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.TOGGLE_CHECKED_ACTIVITY, payload: activity })
+		listCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.TOGGLE_CHECKED_ACTIVITY, payload: activity })
 	}
 
 	/**

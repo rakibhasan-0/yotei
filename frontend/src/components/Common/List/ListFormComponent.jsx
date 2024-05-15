@@ -38,7 +38,7 @@ import SavedActivityList from "../../SavedList/SavedListInfo/SavedListComponent"
  * @updated 2023-06-01 Chimera, updated pathing when pressing return to create session
  */
 export default function WorkoutFormComponent({ callback, state,edit}) {
-	const { workoutCreateInfo, workoutCreateInfoDispatch } =
+	const { listCreateInfo, listCreateInfoDispatch } =
 		useContext(ListCreateContext)
 	const [leaveActivityPickerPopup, setLeaveActivityPickerPopup] = useState(false)
 	const [validated, setValidated] = useState(false)
@@ -51,18 +51,18 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 	 */
 	const getPopupTitle = useCallback(() => {
 		if (
-			workoutCreateInfo.popupState.types.activityPopup ||
-			workoutCreateInfo.popupState.types.freeTextPopup
+			listCreateInfo.popupState.types.activityPopup ||
+			listCreateInfo.popupState.types.freeTextPopup
 		) {
 			return "Aktiviteter"
-		} else if (workoutCreateInfo.popupState.types.chooseActivityPopup) {
+		} else if (listCreateInfo.popupState.types.chooseActivityPopup) {
 			return null
-		} else if (workoutCreateInfo.popupState.types.editActivityPopup) {
+		} else if (listCreateInfo.popupState.types.editActivityPopup) {
 			return "Redigera aktivitet"
 		} else {
 			return ""
 		}
-	}, [workoutCreateInfo.popupState.types])
+	}, [listCreateInfo.popupState.types])
 
 	/**
 	 * Handles the submission of a workout. This function is called when the
@@ -78,7 +78,7 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 		if (form.checkValidity() === false) {
 			event.stopPropagation()
 		} else if (
-			workoutCreateInfo.data.activityItems.length == 0 &&
+			listCreateInfo.data.activityItems.length == 0 &&
 			!acceptActivities
 		) {
 			setAcceptActivities(true)
@@ -99,7 +99,7 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 	}
 
 	function confirmGoBack() {
-		localStorage.removeItem("workoutCreateInfo")// Clear local storage as confirmed
+		localStorage.removeItem("listCreateInfo")// Clear local storage as confirmed
 
 		if (state?.fromSession && !state?.fromCreate) {
 			navigate(`/session/edit/${state.session.sessionId}`, { replace: true, state })
@@ -112,20 +112,20 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 	function handlePopupClose() {
 		let  shouldClose = false
 
-		if (workoutCreateInfo.popupState.types.activityPopup) {
-			shouldClose = workoutCreateInfo.addedActivities.length === 0
-		} else if (workoutCreateInfo.popupState.types.editActivityPopup) {
+		if (listCreateInfo.popupState.types.activityPopup) {
+			shouldClose = listCreateInfo.addedActivities.length === 0
+		} else if (listCreateInfo.popupState.types.editActivityPopup) {
 			shouldClose = false
-			shouldClose = !checkIfActivityInfoPoupChangesMade(workoutCreateInfo)
-		} else if (workoutCreateInfo.popupState.types.freeTextPopup) {
-			shouldClose = !workoutCreateInfo.addedActivities.some(activity => activity.name.length > 0)
+			shouldClose = !checkIfActivityInfoPoupChangesMade(listCreateInfo)
+		} else if (listCreateInfo.popupState.types.freeTextPopup) {
+			shouldClose = !listCreateInfo.addedActivities.some(activity => activity.name.length > 0)
 		}
 			
 		if(shouldClose) {
-			workoutCreateInfoDispatch({
+			listCreateInfoDispatch({
 				type: WORKOUT_CREATE_TYPES.CLEAR_ADDED_ACTIVITIES
 			})
-			workoutCreateInfoDispatch({
+			listCreateInfoDispatch({
 				type: WORKOUT_CREATE_TYPES.CLOSE_POPUP
 			})
 		} else {
@@ -144,16 +144,16 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 							type="text"
 							placeholder="Namn"
 							errorMessage={
-								validated && workoutCreateInfo.data.name.length == 0
+								validated && listCreateInfo.data.name.length == 0
 									? "Fyll i namn på passet"
 									: ""
 							}
 							as={InputTextField}
-							text={workoutCreateInfo.data.name}
-							value={workoutCreateInfo.data.name}
+							text={listCreateInfo.data.name}
+							value={listCreateInfo.data.name}
 							required
 							onChange={(e) =>
-								workoutCreateInfoDispatch({
+								listCreateInfoDispatch({
 									type: WORKOUT_CREATE_TYPES.SET_NAME,
 									name: e.target.value
 								})
@@ -162,14 +162,14 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 					</Form.Group>
 					<Form.Group className="mb-1" controlId="validationCustom03" >
 						<Form.Control
-							value={workoutCreateInfo.data.description}
-							text={workoutCreateInfo.data.description}
+							value={listCreateInfo.data.description}
+							text={listCreateInfo.data.description}
 							as={TextArea}
 							errorDisabled={true}
 							rows={3}
 							placeholder="Beskrivning av lista"
 							onChange={(e) =>
-								workoutCreateInfoDispatch({
+								listCreateInfoDispatch({
 									type: WORKOUT_CREATE_TYPES.SET_DESCRIPTION,
 									description: e.target.value
 								})
@@ -182,7 +182,7 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 							id="NoActivitiesConfirm"
 							showPopup={
 								validated &&
-								workoutCreateInfo.data.activityItems.length == 0 &&
+								listCreateInfo.data.activityItems.length == 0 &&
 								acceptActivities
 							}
 							setShowPopup={setAcceptActivities}
@@ -191,13 +191,13 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 							backText="Avbryt"
 							onClick={callback}
 						/>
-						<SavedActivityList activities={workoutCreateInfo} edit={edit} />
+						<SavedActivityList activities={listCreateInfo} edit={edit} />
 						<div className={styles.activityButtons}>
 							<div className={"align-center" +styles.container}>
 
 								<Button
 									onClick={() =>
-								 		workoutCreateInfoDispatch({
+								 		listCreateInfoDispatch({
 											type: WORKOUT_CREATE_TYPES.OPEN_CHOOSE_ACTIVITY_POPUP
 										})
 									}
@@ -214,12 +214,12 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 							id="workout-create-checkbox"
 							label="Privat pass"
 							onClick={() =>
-								workoutCreateInfoDispatch({
+								listCreateInfoDispatch({
 									type: WORKOUT_CREATE_TYPES.SET_IS_PRIVATE,
-									isPrivate: !workoutCreateInfo.data.isPrivate
+									isPrivate: !listCreateInfo.data.isPrivate
 								})
 							}
-							checked={workoutCreateInfo.data.isPrivate}
+							checked={listCreateInfo.data.isPrivate}
 						/>
 					</Form.Group>
 
@@ -227,9 +227,9 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 						{/* Note till framtida hugo och oliver: Denna kanske ej fungerar  (users.id)*/}
 						<AddUserComponent
 							id="workout-create-add-users"
-							addedUsers={workoutCreateInfo.data.users}
+							addedUsers={listCreateInfo.data.users}
 							setAddedUsers={(users) =>
-								workoutCreateInfoDispatch({
+								listCreateInfoDispatch({
 									type: WORKOUT_CREATE_TYPES.SET_USERS,
 									users
 								})
@@ -270,31 +270,31 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 			{/* Popups */}
 			<Popup
 				id="workout-create-popup"
-				isOpen={workoutCreateInfo.popupState.isOpened}
+				isOpen={listCreateInfo.popupState.isOpened}
 				setIsOpen={handlePopupClose}
 				title={getPopupTitle()}
 			>
-				{workoutCreateInfo.popupState.types.freeTextPopup && (		
+				{listCreateInfo.popupState.types.freeTextPopup && (		
 					<ActivityInfoPopUp isFreeText={true} />
 				)}
-				{workoutCreateInfo.popupState.types.activityPopup && (
+				{listCreateInfo.popupState.types.activityPopup && (
 					<ActivityInfoPopUp isFreeText={false} />
 				)}
-				{workoutCreateInfo.popupState.types.chooseActivityPopup && (
+				{listCreateInfo.popupState.types.chooseActivityPopup && (
 					<AddActivity
 						id="add-activity-popup"
 						setShowActivityInfo={(activities) => {
-							workoutCreateInfoDispatch({
+							listCreateInfoDispatch({
 								type: WORKOUT_CREATE_TYPES.SET_ACTIVITIES_WITH_PARSING,
 								payload: { result: activities }
 							})
-							workoutCreateInfoDispatch({
+							listCreateInfoDispatch({
 								type: WORKOUT_CREATE_TYPES.OPEN_ACTIVITY_POPUP
 							})
 						}}
 					/>
 				)}
-				{workoutCreateInfo.popupState.types.editActivityPopup && 
+				{listCreateInfo.popupState.types.editActivityPopup && 
 					<EditActivityPopup isFreeText={true} />}
 			</Popup>
 			<ConfirmPopup
@@ -306,10 +306,10 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 				backText="Avbryt"
 				zIndex={1000}
 				onClick={() => {
-					workoutCreateInfoDispatch({
+					listCreateInfoDispatch({
 						type: WORKOUT_CREATE_TYPES.CLEAR_ADDED_ACTIVITIES
 					})
-					workoutCreateInfoDispatch({
+					listCreateInfoDispatch({
 						type: WORKOUT_CREATE_TYPES.CLOSE_POPUP
 					})
 				}}

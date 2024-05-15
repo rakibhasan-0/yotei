@@ -16,7 +16,7 @@ import { ListCreateContext } from "../../Common/List/ListCreateContext"
 
 export default function WorkoutActivityList({activities,edit}) {
 	const context = useContext(AccountContext)
-	/*const { workoutCreateInfo, workoutCreateInfoDispatch } =
+	/*const { listCreateInfo, listCreateInfoDispatch } =
 	useContext(ListCreateContext)*/
 	const {token, userId} = context
 	const [ListData, setListData] = useState(null)

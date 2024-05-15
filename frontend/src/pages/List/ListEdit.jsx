@@ -22,7 +22,7 @@ import { Spinner } from "react-bootstrap"
  * @updated 2024-04-23 Team Kiwi, Removed blockers and Pop-up for redirecting to technique descriptions
  */
 const ListEdit = () => {
-	const [workoutCreateInfo, workoutCreateInfoDispatch] = useReducer(
+	const [listCreateInfo, listCreateInfoDispatch] = useReducer(
 		workoutCreateReducer,JSON.parse(JSON.stringify(WorkoutCreateInitialState)))
 	const navigate = useNavigate()
 	const { token, userId } = useContext(AccountContext)
@@ -36,7 +36,7 @@ const ListEdit = () => {
 	async function submitHandler() {
 		setIsSubmitted(true)
 
-		const data = parseData(workoutCreateInfo.data)
+		const data = parseData(listCreateInfo.data)
 		const workoutId = await updateWorkout(data)
 
 		if(workoutId) {
@@ -48,7 +48,7 @@ const ListEdit = () => {
 	}
 
 	/**
-	 * Parses the data from the workoutCreateInfo state to a format that the API accepts.
+	 * Parses the data from the listCreateInfo state to a format that the API accepts.
 	 * 
 	 * @param {*} data 
 	 * @returns The parsed data.
@@ -137,17 +137,17 @@ const ListEdit = () => {
      */
 	useEffect(() => {
 		setIsLoading(true)
-		const item = localStorage.getItem("workoutCreateInfoEdit")
+		const item = localStorage.getItem("listCreateInfoEdit")
 		const workoutData = location.state?.workout
 		const userData = location.state?.users
 		if (workoutData){
-			workoutCreateInfoDispatch({
+			listCreateInfoDispatch({
 				type: WORKOUT_CREATE_TYPES.INIT_EDIT_DATA,
 				payload: { workoutData, userData: userData ? userData : [] }
 			})
 			window.history.replaceState({}, document.title)
 		} else if (item) {
-			workoutCreateInfoDispatch({
+			listCreateInfoDispatch({
 				type: WORKOUT_CREATE_TYPES.INIT_WITH_DATA,
 				payload: JSON.parse(item)
 			})
@@ -162,18 +162,18 @@ const ListEdit = () => {
      * Or removes it if the user has submitted the form.
      */
 	useEffect(() => {
-		localStorage.setItem("workoutCreateInfoEdit", JSON.stringify(workoutCreateInfo))
+		localStorage.setItem("listCreateInfoEdit", JSON.stringify(listCreateInfo))
 		
 		return () => {
-			if (isSubmitted) localStorage.removeItem("workoutCreateInfoEdit")
+			if (isSubmitted) localStorage.removeItem("listCreateInfoEdit")
 		}
-	}, [workoutCreateInfo, isSubmitted])
+	}, [listCreateInfo, isSubmitted])
 	return (
 		<>
 			{isLoading ? <Spinner/> :
 			<>
 			{console.log("Ritar upp passredigeringssidan")}
-				<ListCreateContext.Provider value={{workoutCreateInfo, workoutCreateInfoDispatch}} >
+				<ListCreateContext.Provider value={{listCreateInfo, listCreateInfoDispatch}} >
 					<title>Redigera lista</title>
 					<h1 className={styles.title}>Redigera lista</h1>
 					

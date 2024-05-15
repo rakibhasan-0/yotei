@@ -26,7 +26,9 @@ import MinutePicker from "../../Common/MinutePicker/MinutePicker"
  *		/>
  */
 function ActivityItem({ index, categoryName, id, text }) {
-	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(ListCreateContext)
+	const { listCreateInfo, listCreateInfoDispatch } = useContext(ListCreateContext)
+	console.log("HATAR")
+	console.log(useContext(ListCreateContext))
 
 	// Updates the text area height to fit the text
 	useEffect(() => {
@@ -42,11 +44,11 @@ function ActivityItem({ index, categoryName, id, text }) {
 				className={styles.activityItemTextArea}
 				placeholder="Fri text ..."
 				onChange={(e) => 
-					workoutCreateInfoDispatch({ 
+					listCreateInfoDispatch({ 
 						type: "UPDATE_ACTIVITY_NAME", 
 						payload: { index, name: e.target.value }
 					})}
-				value={workoutCreateInfo.addedActivities[index].name}
+				value={listCreateInfo.addedActivities[index].name}
 				rows={1}
 			/>
 		</fieldset>
@@ -61,11 +63,11 @@ function ActivityItem({ index, categoryName, id, text }) {
  * 		<ActivityList/>
  */
 function ActivityList(){
-	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(ListCreateContext)
+	const { listCreateInfo, listCreateInfoDispatch } = useContext(ListCreateContext)
 
 	return (
 		<div className={styles.activityList}>
-			{workoutCreateInfo.addedActivities.map((activity, index) => {
+			{listCreateInfo.addedActivities.map((activity, index) => {
 				return (
 					<ActivityItem
 						categoryName={"Aktivitet " + (index + 1)}
@@ -87,11 +89,11 @@ function ActivityList(){
  *		<ActivityTimes />
  */
 function ActivityTimes() {
-	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(ListCreateContext)
-	const { addedActivities } = workoutCreateInfo
+	const { listCreateInfo, listCreateInfoDispatch } = useContext(ListCreateContext)
+	const { addedActivities } = listCreateInfo
 
 	const minutePickerCallback = (id, time) => {
-		workoutCreateInfoDispatch({
+		listCreateInfoDispatch({
 			type: "UPDATE_ACTIVITY_TIME", 
 			payload: { index: id, time: time ? time : 0 }
 		})
@@ -141,8 +143,8 @@ function ActivityTimes() {
  * @since 2023-05-24
  */
 export default function ActivityInfoPopUp() {
-	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(ListCreateContext)
-	const { addedActivities } = workoutCreateInfo
+	const { listCreateInfo, listCreateInfoDispatch } = useContext(ListCreateContext)
+	const { addedActivities } = listCreateInfo
 
 	/**
 	 * Removes empty activities from addedActivities if free text.
@@ -150,7 +152,7 @@ export default function ActivityInfoPopUp() {
 	const clearEmptyActivities = () => {
 		for(let i = 0; i < addedActivities.length; i++) {
 			if(addedActivities[i].name === "") {
-				workoutCreateInfoDispatch({ 
+				listCreateInfoDispatch({ 
 					type: WORKOUT_CREATE_TYPES.REMOVE_ACTIVITY, 
 					payload: { id: addedActivities[i].id }
 				})
@@ -159,13 +161,13 @@ export default function ActivityInfoPopUp() {
 	}
 
 	const goBack = () => {
-		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLOSE_ACIVITY_POPUP })
+		listCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLOSE_ACIVITY_POPUP })
 	}
 
 	const saveActivities = () => {
-		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CREATE_ACTIVITY_ITEMS, payload: {}})
+		listCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CREATE_ACTIVITY_ITEMS, payload: {}})
 		{console.log("Breakpoint 1")}
-		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLOSE_POPUP })
+		listCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLOSE_POPUP })
 	}
 
 	return (

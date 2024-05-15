@@ -38,7 +38,7 @@ export default function ActivityListComponent() {
         setWorkoutUsers(() => MockList.list_users)
     },[])
 
-	const { workoutCreateInfo, workoutCreateInfoDispatch } =
+	const { listCreateInfo, listCreateInfoDispatch } =
 		useContext(ListCreateContext)
 
 	const handleDragEnd = (result) => {
@@ -58,7 +58,7 @@ export default function ActivityListComponent() {
 				return
 			}
 
-			const groups = [...workoutCreateInfo.data.activityItems]
+			const groups = [...listCreateInfo.data.activityItems]
 			const [draggedGroup] = groups.splice(sourceIndex, 1)
 			groups.splice(destinationIndex, 0, draggedGroup)
 			const updatedGroups = groups.map((group) => ({
@@ -66,7 +66,7 @@ export default function ActivityListComponent() {
 				id: group.id, // Assign a unique ID based on the index
 			}))
 
-			workoutCreateInfoDispatch({
+			listCreateInfoDispatch({
 				type: WORKOUT_CREATE_TYPES.SET_ACTIVITY_ITEMS,
 				activityItems: updatedGroups,
 			})
@@ -78,14 +78,14 @@ export default function ActivityListComponent() {
 
 			if (sourceGroupId === destinationGroupId && sourceIndex === destinationIndex) return
 
-			const groups = [...workoutCreateInfo.data.activityItems]
+			const groups = [...listCreateInfo.data.activityItems]
 			const sourceGroup = groups.find(group => group.id === sourceGroupId)
 			const [draggedActivity] = sourceGroup.activities.splice(sourceIndex, 1)
 
 			const destinationGroup = groups.find(group => group.id === destinationGroupId)
 			destinationGroup.activities.splice(destinationIndex, 0, draggedActivity)
 
-			workoutCreateInfoDispatch({
+			listCreateInfoDispatch({
 				type: WORKOUT_CREATE_TYPES.SET_ACTIVITY_ITEMS,
 				activityItems: groups,
 			})
@@ -100,7 +100,7 @@ export default function ActivityListComponent() {
 				<Droppable droppableId="groups" direction="vertical" type="group">
 					{(provided) => (
 						<div ref={provided.innerRef} {...provided.droppableProps}>
-							{workoutCreateInfo.data.activityItems.map((activityItem, groupIndex) => (
+							{listCreateInfo.data.activityItems.map((activityItem, groupIndex) => (
 								<ActivityList 
 									categoryName={activityItem.name !== "Ingen kategori" ? activityItem.name : null}
 									key={activityItem.id}
@@ -194,7 +194,7 @@ function SavedActivityList({ children, categoryName, groupIndex, id }) {
  *		/>
  */
 function ActivityItem({ activityName, activityTime, pinkColor, id, itemIndex}) {
-	const { workoutCreateInfoDispatch, } = useContext(ListCreateContext)
+	const { listCreateInfoDispatch, } = useContext(ListCreateContext)
 	return (
 		<Draggable
 			key={id}
@@ -219,8 +219,8 @@ function ActivityItem({ activityName, activityTime, pinkColor, id, itemIndex}) {
 						<div className={styles.minutesAndEdit}>
 							<p style={{ marginBottom: 0 }}><b>{activityTime} min</b></p>
 							<i onClick={() => {
-								workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.OPEN_EDIT_ACTIVITY_POPUP}), 
-								workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.SET_CURRENTLY_EDITING, payload: {id: id}})
+								listCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.OPEN_EDIT_ACTIVITY_POPUP}), 
+								listCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.SET_CURRENTLY_EDITING, payload: {id: id}})
 							}}>
 								<Pencil size="20px"	color="var(--red-primary)" id={`edit_pencil_${id}`} style={{cursor: "pointer"}} />
 							</i>
