@@ -156,7 +156,7 @@ public class ExportGradingPdf {
                 String name = examinationTechniqueCategories.get(i).getTechniques().get(j).toString();
                 //Shorten technique name so it fits in the cell
                 if(name.length() > 63)
-                    name = name.substring(0, 60) + "...";
+                    name = name.substring(0, 60) + "..."; //kan lika bra va en metod som heter typ shortenString, å då skickar vi in en max storlek på antal tecken.
 
                 //Splits the string at the nearest space char and writes the rest on the next line in the cell
                 int splitOnIndex = 35;
@@ -177,7 +177,7 @@ public class ExportGradingPdf {
 
                 for (int k = 0 ; k < count-1 ; k++) {
                     contentStream.addRect(initX, initY, CELL_WIDTH, -CELL_HEIGHT);
-                    writeToCell(initX, initY, contentStream, "G", font);
+                    writeToCell(initX, initY, contentStream, "G", font); // gör om detta till en sträng som innehåller G eller U och följs med : Kommentar som rymms...
                     initX+=CELL_WIDTH;
                 }
 
