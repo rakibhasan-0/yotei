@@ -35,3 +35,23 @@
 	display: flex;
 	color: #201E1F;
 }
+
+.review_button {
+	position: relative;
+}
+
+.review_text {
+	position: absolute;
+	padding: 0%;
+}
+
+.no_review_alert {
+	width: 25px;
+	height: 25px;
+	position: relative;
+	bottom: 75%;
+	left: 60%;
+	background-color: #BD3B41;
+	border-radius: 50%;
+	border: 1px solid  #BD3B41;
+}

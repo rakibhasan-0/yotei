@@ -83,6 +83,8 @@ DROP TABLE IF EXISTS examination_examinee CASCADE;
 DROP TABLE IF EXISTS examination_examinee_pair CASCADE;
 DROP TABLE IF EXISTS examination_result_technique CASCADE;
 DROP TABLE IF EXISTS examination_comment CASCADE;
+DROP TABLE IF EXISTS grading_protocol CASCADE;
+
 DROP TABLE IF EXISTS activity CASCADE;
 
 DROP TABLE IF EXISTS tag CASCADE;
@@ -103,7 +105,6 @@ DROP TABLE IF EXISTS comments CASCADE;
 
 DROP TABLE IF EXISTS plan CASCADE;
 
-DROP TABLE IF EXISTS session_review;
 DROP TABLE IF EXISTS session_review_activity;
 
 DROP TABLE IF EXISTS session CASCADE;
@@ -127,8 +128,7 @@ DROP TABLE IF EXISTS technique_to_belt CASCADE;
 DROP TABLE IF EXISTS error_log CASCADE;
 
 DROP TABLE IF EXISTS media CASCADE;
-
-
+DROP TABLE IF EXISTS session_review;
 
 DROP SEQUENCE IF EXISTS serial;
 
@@ -173,6 +173,29 @@ CREATE TABLE user_table(
 
 ALTER TABLE
 	user_table OWNER TO psql;
+
+--
+-- Name: role; Type: TABLE; Schema: public; Owner: psql
+--
+CREATE TABLE role(
+	role_id INT NOT NULL GENERATED ALWAYS AS IDENTITY UNIQUE,
+	role_name VARCHAR(255) NOT NULL
+);
+
+ALTER TABLE
+	role OWNER TO psql;
+
+--
+-- Name: permission; Type: TABLE; Schema: public; Owner: psql
+--
+CREATE TABLE permission(
+	permission_id INT NOT NULL GENERATED ALWAYS AS IDENTITY UNIQUE,
+	permission_name VARCHAR(255) NOT NULL UNIQUE,
+	permission_desc VARCHAR(255)
+);
+
+ALTER TABLE
+	permission OWNER TO psql;
 
 --
 -- Name: exercise; Type: TABLE; Schema: public; Owner: psql
@@ -563,27 +586,27 @@ CREATE TABLE IF NOT EXISTS examination_examinee (
 CREATE TABLE IF NOT EXISTS examination_examinee_pair (
 	examinee_pair_id SERIAL PRIMARY KEY,
 	examinee_1_id INT NOT NULL,
-	examinee_2_id INT NOT NULL,
+	examinee_2_id INT,
 	CONSTRAINT examinee_pair_fk_examinee_1 FOREIGN KEY(examinee_1_id) REFERENCES examination_examinee(examinee_id) ON DELETE CASCADE,
 	CONSTRAINT examinee_pair_fk_examinee_2 FOREIGN KEY(examinee_2_id) REFERENCES examination_examinee(examinee_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS examination_result(
+    result_id SERIAL PRIMARY KEY,
 	examinee_id INT NOT NULL,
 	technique_name VARCHAR(255) NOT NULL, -- Should be string with technique_name in grading protocol
 	pass BOOLEAN,
-	CONSTRAINT examinee_id_fk FOREIGN KEY(examinee_id) REFERENCES examination_examinee(examinee_id) ON DELETE CASCADE,
-	CONSTRAINT examination_result_pk PRIMARY KEY (examinee_id, technique_name)
+	CONSTRAINT examinee_id_fk FOREIGN KEY(examinee_id) REFERENCES examination_examinee(examinee_id) ON DELETE CASCADE
 );
 
 
 CREATE TABLE IF NOT EXISTS examination_comment( 
 	comment_id SERIAL PRIMARY KEY,
-	grading_id INT, 
-	examinee_id INT, 
+	grading_id INT NOT NULL, 
+	examinee_id INT NOT NULL, 
 	examinee_pair_id INT, 
-	technique_name VARCHAR(255) NOT NULL, 
-	comment VARCHAR NOT NULL 
+	technique_name VARCHAR(255), 
+	comment VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS grading_protocol(
@@ -610,6 +633,7 @@ CREATE TABLE IF NOT EXISTS activity_list_entry(
        list_id INT NOT NULL,
        exercise_id INT,
        technique_id INT,
+       duration INT,
        CONSTRAINT ale_list_id_fk FOREIGN KEY (list_id) REFERENCES activity_list(id) ON DELETE CASCADE
 );
 
@@ -636,6 +660,9 @@ ALTER TABLE
 \ir defaults/users.sql
 \ir defaults/belts.sql 
 \ir defaults/tags.sql 
+\ir defaults/grading_protocols.sql
+\ir defaults/permissions.sql
+\ir defaults/roles.sql
 \ir defaults/techniques.sql
 \ir defaults/workouts.sql
 \ir defaults/exercises.sql
@@ -646,7 +673,6 @@ ALTER TABLE
 \ir defaults/sessionreviews.sql
 \ir defaults/sessionreviewactivities.sql
 \ir defaults/activitylists.sql
-\ir defaults/grading_protocols.sql
 -- Triggers for user
 --
 CREATE OR REPLACE FUNCTION remove_user_references() RETURNS TRIGGER AS $$ 
