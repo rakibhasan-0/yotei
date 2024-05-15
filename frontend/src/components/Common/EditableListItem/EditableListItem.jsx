@@ -54,7 +54,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 		const text = event.target.value
 		// The trimmed text is validated, since it will be trimmed when saved.
 		const trimmedText = text.trim()
-		const textareaErr = validateTagName(trimmedText)
+		const textareaErr = validateInput(trimmedText)
 		// Update the gray check
 		setGrayEdit(textareaErr != "" || trimmedText === savedText)
 		setEditedText(text)

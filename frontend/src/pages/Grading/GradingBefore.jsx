@@ -51,7 +51,7 @@ export default function GradingBefore() {
 			return "Ange ett namn, det får inte vara tomt"
 		}
 		else if (containsSpecialChars(name)) {
-			return "Endast tecken A-Ö, 0-9 tillåts"
+			return "Endast tecken A-Ö tillåts"
 		}
 		return ""
 	}
@@ -247,7 +247,7 @@ export default function GradingBefore() {
 	}
   
   /**
-   * Change the name of an already exsisting examinee.
+   * Change the name of an already exsisting examinee if it has no pair.
    * This functions call putExaminee so it gets updated in the database aswell
    * @param {Integer} examineeId 
    * @param {any} name 
@@ -262,6 +262,29 @@ export default function GradingBefore() {
 		await putExaminee({name: name, examinee_id: examineeId, grading_id: gradingId}, token)
 			.catch(() => setErrorToast("Kunde inte updatera personen. Kontrollera din internetuppkoppling."))
 	}
+
+  /**
+   * Change the name of an already exsisting examinee in a pair.
+   * This functions call putExaminee so it gets updated in the database aswell
+   * @param {Integer} examineeId 
+   * @param {any} name 
+   */
+	async function editPairExaminee(examineeId, name) {
+		setPair(
+			pairs.map((pair) => {
+        if(pair[0].id === examineeId) {
+          pair[0].name = name
+        } else if (pair[1].id === examineeId) {
+          pair[1].name = name
+        }
+				return pair
+      })
+		)
+		
+		await putExaminee({name: name, examinee_id: examineeId, grading_id: gradingId}, token)
+			.catch(() => setErrorToast("Kunde inte updatera personen. Kontrollera din internetuppkoppling."))
+	}
+
 
 	return (
 		<div>
@@ -282,7 +305,7 @@ export default function GradingBefore() {
 									id={pair[0].id}
 									item={pair[0].name}
 									onRemove={removeExamineeInPair}
-									onEdit={editExaminee}
+									onEdit={editPairExaminee}
 									onCheck={onCheck}
                   validateInput={validateInput}
                   showCheckbox={false}
@@ -294,7 +317,7 @@ export default function GradingBefore() {
 									id={pair[1].id}
 									item={pair[1].name}
 									onRemove={removeExamineeInPair}
-									onEdit={editExaminee}
+									onEdit={editPairExaminee}
 									onCheck={onCheck}
                   validateInput={validateInput}
                   showCheckbox={false}
