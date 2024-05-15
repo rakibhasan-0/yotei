@@ -5,6 +5,7 @@ import styles from "./GradingDeviations.module.css"
 import Divider from "../../components/Common/Divider/Divider"
 import testData from "./yellowProtocolTemp.json"
 import Container from "./GradingDeviationContainer"
+import CheckBox from "../../components/Common/CheckBox/CheckBox"
 import { useNavigate, useParams } from "react-router-dom"
 import {HTTP_STATUS_CODES, setError} from "../../utils"
 import { AccountContext } from "../../context"
@@ -29,6 +30,7 @@ export default function GradingDeviations() {
 		const [, setGradingId] = useState(-1)
 		const [, setBeltId] = useState(-1)
 		const { gradingId } = useParams()
+        const [showingAll, setShowingAll] = useState(false)
 
     const context = useContext(AccountContext)
 
@@ -79,6 +81,9 @@ export default function GradingDeviations() {
     function hasPassed() {
         return true //PLACEHOLDER
     }
+    function isDeviating() {
+        return false; //PLACEHOLDER
+    }
 
     function getActivityContainer(exercises) {
 
@@ -91,8 +96,9 @@ export default function GradingDeviations() {
                             <div className = {styles["sc23-outline"]} id={category} key={category}>
                                 <Divider id = 'divider-example' option= 'h2_left' title = {category.category_name} key={category.category_name}/>
                                 {category.techniques.map((technique, index) => (
-
-                                    <Container id = {index} name = {technique.text} passed={hasPassed(technique.text)} key={index} ></Container>
+                                    (isDeviating(technique) || showingAll) ?
+                                        <Container id = {index} name = {technique.text} passed={hasPassed(technique)} key={index} ></Container>
+                                        : null
                                 ))}
                             </div>
                         ))}
@@ -109,7 +115,16 @@ export default function GradingDeviations() {
 										<h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "10px", paddingBottom: "5px" }}>{name}</h1>
 										<h4 style={{ fontFamily: "Open Sans", fontSize: "15px", paddingTop: "0px", paddingBottom: "10px" }}>Kommentarer</h4>
 								</div>
-
+                <div class="d-flex justify-content-center">
+                    <CheckBox
+                        className = {styles["showAllCheckbox"]}
+                        checked={false}
+                        label = "Visa alla"
+                        onClick={(checked) => {setShowingAll(checked)}}
+                        enabled
+                        id="checkbox-element"
+                    />
+                </div>
                 <div className = {styles["sc23-session-header-clickable"]} role="button" onClick={() => setToggled(!toggled)}>
                 </div>
                 {getActivityContainer(data)}
