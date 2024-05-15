@@ -26,6 +26,7 @@ import styles from "./Dropdown.module.css"
  * @author Chimera
  * @since 2023-05-02
  * @updated 2023-05-30 Chimera, updated documentation
+ * @updated 2024-05-15 Tomato, fixed a bug with label, changed to div.
  * @version 2.1 
  */
 export default function Component({ item, text, children, id, autoClose, errorMessage }) {
