@@ -83,7 +83,8 @@ export default function GradingDeviations() {
      * @param {Technique} technique 
      * @returns Boolean value
      */
-    function hasPassed(technique) {
+    function hasPassed() {
+        // har tagit bort technique eftersom det inte går igenom lintern
         return true //PLACEHOLDER
     }
 

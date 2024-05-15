@@ -58,7 +58,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	const [sort, setSort] = useState(sortOptions[2])
 	const [usage, setUsage] = useState([]) 
 	const [tagIdToBeDeleted, setTagIdToBeDeleted] = useState([])
-	const containsSpecialChars = str => /[^\w\d\säöåÅÄÖ-]/.test(str)
+	const containsSpecialChars = str => /[^\w\d äöåÅÄÖ-]/.test(str)
 
 
 
@@ -236,7 +236,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 			return "Taggnamnet kan inte vara tomt"
 		}
 		else if (containsSpecialChars(name)) {
-			return "Endast tecken A-Ö, 0-9 tillåts"
+			return "Endast tecken A-Ö, 0-9 och - tillåts"
 		}
 		else if (suggested.find(tag => tag.name == name)) {
 			return "Taggen finns redan"
@@ -312,12 +312,9 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 					</input>
 					<i className={styles["search-icon"]}><Search/></i>
 					{searchText !== "" &&
-					<>
 						<button className ={styles["addButton"]} onClick={() => createNewTag(searchText)} id="tag-add-button" >
-							<PlusCircle> </PlusCircle>
+							<PlusCircle style={{cursor: "pointer"}}> </PlusCircle>
 						</button>
-					</>
-						
 					}
 					
 					

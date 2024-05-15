@@ -52,9 +52,11 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 
 	const handleInputChange = (event) => {
 		const text = event.target.value
-		const textareaErr = validateInput(text)
+		// The trimmed text is validated, since it will be trimmed when saved.
+		const trimmedText = text.trim()
+		const textareaErr = validateTagName(trimmedText)
 		// Update the gray check
-		setGrayEdit(textareaErr != "" || text === savedText)
+		setGrayEdit(textareaErr != "" || trimmedText === savedText)
 		setEditedText(text)
 		setError(textareaErr)
 	}
@@ -62,6 +64,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 	const handleEditSubmit = () => {
 		if(error == "" && !grayEdit) {
 			setIsEditing(false)
+			setEditedText(editedText.trim())
 			setSavedText(editedText)
 			onEdit(id, editedText)
 		}
