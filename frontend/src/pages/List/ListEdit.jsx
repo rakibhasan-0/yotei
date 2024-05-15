@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import WorkoutFormComponent from "../../components/Common/List/ListFormComponent.jsx"
 import { AccountContext } from "../../context.js"
 import { 
-	workoutCreateReducer, 
+	listCreateReducer, 
 	WorkoutCreateInitialState, 
 	LIST_CREATE_TYPES,
 } from "../../components/Common/List/ListCreateReducer.js"
@@ -23,7 +23,7 @@ import { Spinner } from "react-bootstrap"
  */
 const ListEdit = () => {
 	const [listCreateInfo, listCreateInfoDispatch] = useReducer(
-		workoutCreateReducer,JSON.parse(JSON.stringify(WorkoutCreateInitialState)))
+		listCreateReducer,JSON.parse(JSON.stringify(WorkoutCreateInitialState)))
 	const navigate = useNavigate()
 	const { token, userId } = useContext(AccountContext)
 	const location = useLocation()

@@ -123,9 +123,9 @@ export function checkIfChangesMade(info) {
 }
 
 /**
- * Workout create reducer
+ * List create reducer
  */
-export function workoutCreateReducer(state, action) {
+export function listCreateReducer(state, action) {
 	
 	const tempState = {...state}
 	switch (action.type) {

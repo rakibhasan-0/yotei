@@ -6,7 +6,7 @@ import { LIST_CREATE_TYPES } from "./ListCreateReducer"
 import { List, Pencil } from "react-bootstrap-icons"
 
 /**
- * Creates the UI for the ActivityList in create workout.
+ * Creates the UI for the ActivityList in create list.
  *
  * Example usage:
  *    <ActivityListComponent />
@@ -155,7 +155,7 @@ function ActivityList({ children, categoryName, groupIndex, id }) {
 }
 
 /**
- * Creates the UI for an item (Activity) in Activitylist in create workout.
+ * Creates the UI for an item (Activity) in Activitylist in create list.
  *
  * Props:
  * 	   activityName @type {string} - The name of the activity.

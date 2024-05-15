@@ -22,7 +22,7 @@ import Sorter from "../../Common/Sorting/Sorter"
 import { useCookies } from "react-cookie"
 
 /**
- * This component is used to add activities to a workout. It contains two tabs, 
+ * This component is used to add activities to a list. It contains two tabs, 
  * one for techniques and one for exercises.
  * 
  * What is an activity? In this case an activity is either a technique or an exercise.
