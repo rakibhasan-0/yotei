@@ -97,9 +97,9 @@ function AddActivity({ id, setShowActivityInfo }) {
 	const [fetchedLists, setFetchedLists] = useState(false)
 	const [searchListText, setSearchListText] = useState("")
 	const [listContent, setListContent] = useState([])
-	const [listUpdate, setListUpdate] = useState(0);
-	const [isSearchBarEnabled, setIsSearchBarEnabled] = useState(false) // TODO: feature toggle
-	const [isFilterEnabled, setIsFilterEnabled] = useState(false)
+	const [listUpdate, setListUpdate] = useState(0)
+	const [isSearchBarEnabled] = useState(false) // TODO: feature toggle
+	const [isFilterEnabled] = useState(false)
 
 
 	/**
@@ -418,16 +418,16 @@ function AddActivity({ id, setShowActivityInfo }) {
 
 		const args = {
 			text: searchListText
-		  }
+		}
 
 		getLists(args, token, map, mapActions, (result) =>  {
-		  if(result.error) return
+			if(result.error) return
 		
-		  // Extract the 'id' and 'name' fields from each item in the result used in displaying the list.
-		  const lists = result.map(item => ({ id: item.id, name: item.name }));
-	  
-		  setLists(lists);
-		  setFetchedLists(true); 			
+		  	// Extract the 'id' and 'name' fields from each item in the result used in displaying the list.
+			const lists = result.map(item => ({ id: item.id, name: item.name }))
+
+			setLists(lists)
+		  	setFetchedLists(true)	
 		})
 	}
 
@@ -441,14 +441,14 @@ function AddActivity({ id, setShowActivityInfo }) {
 		}
 
 		getListContent(args, token, map, mapActions, (result) => {
-			if (result.error) return;
+			if (result.error) return
 			
 			const listContent = result.map(item => {
 				if (item.technique) {
-				  	return {
+					return {
 						techniqueID: item.technique.id,
 						name: item.technique.name,
-						type: 'technique',
+						type: "technique",
 						description: item.technique.description,
 						beltColors: [{
 							belt_color: item.technique.belts[0].color,
@@ -457,22 +457,22 @@ function AddActivity({ id, setShowActivityInfo }) {
 						
 						}],
 						tags: item.technique.tags
-				  	};
+					}
 				}
 				if (item.exercise) {
-				  	return {
+					return {
 						id: item.exercise.id,
 						name: item.exercise.name,
-						type: 'exercise',
+						type: "exercise",
 						description: item.exercise.description,
 						duration: item.exercise.duration
-				  	};
+					}
 				}
-			});
+			})
 
-			setListContent(listContent);
-			setListUpdate(listUpdate + 1);
-		});
+			setListContent(listContent)
+			setListUpdate(listUpdate + 1)
+		})
 	}
 
 	return (
@@ -570,11 +570,11 @@ function AddActivity({ id, setShowActivityInfo }) {
 						<div className={style.searchBar}>
 							{ isSearchBarEnabled && ( // TODO: feature toggle.
 								<SearchBar
-								id="lists-search-bar"
-								placeholder="Sök efter listor"
-								text={searchListText}
-								onChange={setSearchListText}
-							/>
+									id="lists-search-bar"
+									placeholder="Sök efter listor"
+									text={searchListText}
+									onChange={setSearchListText}
+								/>
 							)}
 							{ isFilterEnabled && ( // TODO: feature toggle.
 								<FilterContainer id="ei-filter" title="Filtrering" numFilters={0}>
