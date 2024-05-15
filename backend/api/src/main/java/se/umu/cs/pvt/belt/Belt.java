@@ -15,6 +15,8 @@ import java.util.Set;
  * @author Max Thorén
  * @author Andre Byström
  * date: 2023-04-24
+ * Edited: 2024-05-15
+ * @author Teodor Bäckström
  */
 @Entity()
 @Table(name = "belt")
@@ -34,17 +36,21 @@ public class Belt implements Serializable {
     @Column(nullable = false, name = "is_child")
     private boolean isChild;
 
+    @Column(nullable = false, name = "is_inverted")
+    private boolean isInverted;
+
     /**
      * No-args constructor required JPA spec
      */
     protected Belt() {
     }
 
-    public Belt(Long id, String name, String color, boolean isChild) {
+    public Belt(Long id, String name, String color, boolean isChild, boolean isInverted) {
         this.id = id;
         this.name = name;
         this.color = color;
         this.isChild = isChild;
+        this.isInverted = isInverted;
     }
 
     public Long getId() {
@@ -61,5 +67,9 @@ public class Belt implements Serializable {
 
     public boolean isChild() {
         return isChild;
+    }
+    
+    public boolean isInverted(){
+        return isInverted;
     }
 }

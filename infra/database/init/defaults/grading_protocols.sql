@@ -59,7 +59,7 @@ INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (3,
         }
     ]
 }'::JSON);
-INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (5, 
+INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (6, 
 '{
     "grading_protocol": {"code": "4 KYU", "color": "ORANGE BÄLTE"},
     "categories": [
@@ -124,7 +124,7 @@ INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (5,
         }
     ]
 }'::JSON);
-INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (7, 
+INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (9, 
 '{
     "grading_protocol": {"code": "3 KYU", "color": "GRÖNT BÄLTE"},
     "categories": [
@@ -196,7 +196,7 @@ INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (7,
         }
     ]
 }'::JSON);
-INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (9, 
+INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (12, 
 '{
     "grading_protocol": {"code": "2 KYU", "color": "BLÅTT BÄLTE"},
     "categories": [
@@ -277,7 +277,7 @@ INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (9,
         }
     ]
 }'::JSON);
-INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (11, 
+INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (13, 
 '{
     "grading_protocol": {"code": "1 KYU", "color": "BRUNT BÄLTE"},
     "categories": [
