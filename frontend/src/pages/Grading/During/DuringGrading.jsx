@@ -94,6 +94,7 @@ export default function DuringGrading() {
 	const [showPopup, setShowPopup] = useState(false)
 	const [examinees, setExaminees] = useState(undefined)
 	const [pairs, setPairs] = useState([])
+    const [gradingProtocol, setProtocol] = useState()
 	const { gradingId } = useParams()
 	const navigate = useNavigate()
 
@@ -170,6 +171,43 @@ export default function DuringGrading() {
 		
 		
 	}, [examinees])
+
+    useEffect(() => {
+        async function fetchProtocolData() {
+            try {
+                const response1 = await fetch("/api/examination/all")
+                if (response1.status === 404) {
+					console.log("404")
+					return
+				}
+				if (!response1.ok) {
+					console.log("could not fetch the grading")
+					throw new Error("Could not fetch the grading")
+				}
+                const all_gradings = await response1.json()
+                const current_grading = getCurrentGrading(all_gradings)
+                console.log("Fetched grading: ", current_grading)
+
+                const response2 = await fetch("/api/examination/examinationprotocol/all", {headers: {"token": token}})
+                if (response2.status === 404) {
+					console.log("404")
+					return
+				}
+				if (!response2.ok) {
+					console.log("could not fetch examination protocols")
+					throw new Error("Could not fetch examination protocols")
+				}
+                const all_protocols = await response2.json()
+                const current_protocol = getProtocolCurrentGrading(all_protocols, current_grading)
+                setProtocol(current_protocol)
+                console.log("Fetched protcol: ", current_protocol)    
+            } catch (ex) {
+                setErrorToast("Kunde inte hämta protokollet")
+                console.error(ex)
+            }
+        }
+        fetchProtocolData();
+    }, []);
 
 	const [leftExamineeState, setLeftExamineeState] = useState("default")
 	const [rightExamineeState, setRightExamineeState] = useState("default")
@@ -313,4 +351,14 @@ export default function DuringGrading() {
 		})
 		return pair_names_current_grading
 	}
+
+    function getCurrentGrading(all_gradings) {
+        const current_grading = all_gradings.find((grading) => grading.grading_id == gradingId)
+        return current_grading
+    }
+
+    function getProtocolCurrentGrading(all_protocols, current_grading) {
+        const current_grading_protocol = all_protocols.find((protocol) => protocol.beltId === current_grading.belt_id)
+        return current_grading_protocol
+    }
 }
