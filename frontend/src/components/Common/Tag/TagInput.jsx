@@ -59,7 +59,7 @@ export default function TagInput({id, addedTags, setAddedTags, isNested, itemNam
 				tagType="suggest"
 				key ="addMoreTags"
 				text ="Hantera tagg"
-				onClick={() => {setShowPopup(true); console.log("hah")}}
+				onClick={() => setShowPopup(true)}
 			/>
 			<div className={styles["added-tag-container"]}>
 				{addedTags.map(tag => <Tag
