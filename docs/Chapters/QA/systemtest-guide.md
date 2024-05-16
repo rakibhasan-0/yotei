@@ -34,6 +34,12 @@ TODO write about it.
 TODO specify who and when system tests should be written.
 
 ### Structure & Naming
+
+=============================================================================================
+    TO DO:
+    
+    https://playwright.dev/docs/pom
+=============================================================================================
 All tests should reside in `sys-test` and have names like `*.spec.ts`. If making direct calls to the API, the code should be placed in a separate file `sys-test/fixtures/<api-namn>Api.ts`. 
 
 Specify tests in steps. For example, `// Setup. Create a user`, `// 1. Log in`, `// Cleanup. Remove the new user.`

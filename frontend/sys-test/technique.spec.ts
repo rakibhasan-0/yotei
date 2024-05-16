@@ -20,8 +20,8 @@ test.describe('ST-2 Technique', () => {
 		const name = Math.random().toString(36).slice(2, 7) // Will generate a random string of 5 characters
 		await techniquePage.createTechnique({description: 'description description description', name: name, time: 12})
 		await expect(page.getByText(`Tekniken ${name} skapades`)).toBeVisible()
-    await page.waitForURL('**/activity')
+    	await page.waitForURL('**/activity')
 		await techniquePage.deleteTechnique(name)
-    await page.getByRole('link', { name: `${name}`}).isHidden()
+    	await page.getByRole('link', { name: `${name}`}).isHidden()
   })
 })
