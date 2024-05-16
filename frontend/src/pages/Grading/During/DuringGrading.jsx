@@ -94,7 +94,8 @@ export default function DuringGrading() {
 	const [showPopup, setShowPopup] = useState(false)
 	const [examinees, setExaminees] = useState(undefined)
 	const [pairs, setPairs] = useState([])
-    const [gradingProtocol, setProtocol] = useState()
+    const [techinqueNameList, setTechniqueNameList] = useState(false)
+    const [categoryIndexMap, setCategoryIndices] = useState(false)
 	const { gradingId } = useParams()
 	const navigate = useNavigate()
 
@@ -103,8 +104,8 @@ export default function DuringGrading() {
 
 	// Get info about grading
 	// TODO: Loads everytime the button is pressed. Should only happen once at start. useEffect?
-	const techniqueNameList = getTechniqueNameList(ProtocolYellow)
-	const categoryIndexMap = getCategoryIndices(techniqueNameList)
+	// const techniqueNameList = getTechniqueNameList(ProtocolYellow)
+	// const categoryIndexMap = getCategoryIndices(techniqueNameList)
 
 	// Go to summary when the index is equal to length. Maybe change the look of the buttons.
 	const goToNextTechnique = () => {
@@ -199,8 +200,13 @@ export default function DuringGrading() {
 				}
                 const all_protocols = await response2.json()
                 const current_protocol = getProtocolCurrentGrading(all_protocols, current_grading)
-                setProtocol(current_protocol)
-                console.log("Fetched protcol: ", current_protocol)    
+                console.log("Fetched protcol: ", current_protocol)
+
+                current_protocol.examinationProtocol = JSON.parse(current_protocol.examinationProtocol)
+                const techniqueNameList = getTechniqueNameList(current_protocol.examinationProtocol)
+	            const categoryIndexMap = getCategoryIndices(techniqueNameList)
+                setTechniqueNameList(techniqueNameList)
+                setCategoryIndices(categoryIndexMap)
             } catch (ex) {
                 setErrorToast("Kunde inte hämta protokollet")
                 console.error(ex)
