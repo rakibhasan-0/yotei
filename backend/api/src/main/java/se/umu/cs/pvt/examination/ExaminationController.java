@@ -344,5 +344,22 @@ public class ExaminationController {
         return new ResponseEntity<>(examinationProtocolRepository.findAll(), HttpStatus.OK);
     }
 
+    @GetMapping("exportpdf/{grading_id}")
+    public ResponseEntity<String> exportGradingToPdf(@PathVariable("grading_id") long grading_id) throws IOException {
 
+        if(gradingRepository.findById(grading_id).isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        ExportGradingPdf pdfExport = new ExportGradingPdf(gradingRepository.findById(grading_id).get(), examineeRepository.findAll());
+
+        try {
+            pdfExport.generate();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        return new ResponseEntity<String>("hej", HttpStatus.OK);
+    }
 }
