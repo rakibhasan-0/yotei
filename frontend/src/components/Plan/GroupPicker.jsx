@@ -147,7 +147,9 @@ export default function GroupPicker({ id, states, testFetchMethod, onToggle, onl
 
 	useEffect(() => {
 		fetchPlans()
-		callbackFunction(groups)
+		if (callbackFunction) { //If the callback function is set (not true for tests).
+			callbackFunction(groups)
+		}
 	}, [states, onlyMyGroups]) //TODO changed thing here.
 
 	function checkID (id) {
