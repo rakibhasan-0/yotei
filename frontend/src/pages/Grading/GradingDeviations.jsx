@@ -47,7 +47,7 @@ export default function GradingDeviations() {
                 setError("Kunde inte hämta examinee's. Felkod: " + response.status)
 			} else {
                 const json = await response.json()
-                console.log(json)
+
                 for(let i = 0; i < json.length; i++) { //Replace when the API is changed to allow for fetching individual examinees
                     if(json[i] !== null) {
                         let exId = json[i]["examinee_id"]
@@ -94,7 +94,7 @@ export default function GradingDeviations() {
         //setData(testData.categories)
         fetchData()
 
-		}, [])
+    }, [])
     function hasPassed() {
         return true //PLACEHOLDER
     }
