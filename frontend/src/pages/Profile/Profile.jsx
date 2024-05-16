@@ -46,6 +46,8 @@ export default function Profile() {
 	const [lists, setLists] = useState([])
 	const [map, mapActions] = useMap()
 
+	//TODO feature toggle
+	const [isListsEnabled] = useState(false)
 
 
 	const workout = {
@@ -265,8 +267,8 @@ export default function Profile() {
 
 
 	return (
-		<Tabs defaultActiveKey={"FavoriteWorkouts"} className={style.tabs}>
-			<Tab eventKey={"FavoriteWorkouts"} title={"Mina listor"} className={style.tab}>
+		<Tabs defaultActiveKey={"MyWorkouts"} className={style.tabs}>
+			{isListsEnabled && (<Tab eventKey={"FavoriteWorkouts"} title={"Mina listor"} className={style.tab}>
 				<SearchBar
 					id="searchbar-workouts-1"
 					placeholder="Sök efter pass"
@@ -280,7 +282,7 @@ export default function Profile() {
 						<ProfileListItem key={list.id} item={list} Icon={getIconFromState(list)} />
 					))
 				)}
-			</Tab>
+			</Tab> )}
 			<Tab eventKey={"MyWorkouts"} title={"Mina Pass"} className={style.tab}>
 				<SearchBar
 					id="searchbar-workouts-2"
