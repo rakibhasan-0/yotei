@@ -132,7 +132,7 @@ public class ActivityListController {
      *         Not found if the list to be edited was not found
      */
     @PostMapping("/edit")
-    public ResponseEntity<ActivityList> editList(@RequestBody ActivityList listToUpdate,
+    public ResponseEntity<ActivityList> editList(@RequestBody AddActivityListRequest listToUpdate,
             @RequestHeader(value = "token") String token) {
         try {
             jwt = jwtUtil.validateToken(token);
@@ -153,7 +153,14 @@ public class ActivityListController {
                 }
 
                 list.setHidden(listToUpdate.getHidden());
+
+                List<UserShort> usersList = userShortRepository.findAllById(listToUpdate.getUsers());
+                Set<UserShort> usersToAdd = new HashSet<>(usersList);
+                list.setUsers(usersToAdd);
+
                 listRepository.save(list);
+
+                // TODO: lägg till aktiviteter
                 return new ResponseEntity<>(list, HttpStatus.OK);
             }
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);

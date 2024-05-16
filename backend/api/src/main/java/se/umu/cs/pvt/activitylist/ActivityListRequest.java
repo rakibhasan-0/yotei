@@ -65,6 +65,7 @@ public class AddActivityListRequest {
     public static class ActivityRequest {
         private String type; // Can be "exercise" or "technique"
         private Long id;
+        private Integer duration;
 
         public String getType() {
             return type;
@@ -80,6 +81,14 @@ public class AddActivityListRequest {
 
         public void setId(Long id) {
             this.id = id;
+        }
+
+        public Integer getDuration() {
+            return duration;
+        }
+
+        public void setDuration(Integer duration) {
+            this.duration = duration;
         }
     }
 }
