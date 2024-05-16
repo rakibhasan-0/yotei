@@ -38,7 +38,9 @@ const KIHON_TAG = { id: 1, name: "kihon waza" }
  * Version 2.2:
  * 	   Fixed navigation from pages outside the website 
  * 
- * @author Team Medusa, Team Tomato, Team Durian (Group 3) (2024-05-07), Team Kiwi (Group 2) (2024-05-03)
+ * @author Team Medusa, Team Tomato, Team Durian (Group 3) (2024-05-07), 
+ * @author Team Kiwi (Group 2) (2024-05-03) 
+ * @author Team Durian (Group 3) (2024-05-16)
  * @version 2.2
  * @since 2023-05-16
  */
@@ -278,7 +280,6 @@ export default function TechniqueEdit({ id }) {
 				filterWhiteBelt={true}
 				errorMessage={beltsErr}
 			/>
-
 
 			<Divider title="Taggar" option="h2_left"/>
 
