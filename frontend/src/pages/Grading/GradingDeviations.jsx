@@ -3,9 +3,8 @@ import { useState, useEffect, useContext } from "react"
 import Button from "../../components/Common/Button/Button"
 import styles from "./GradingDeviations.module.css"
 import Divider from "../../components/Common/Divider/Divider"
-import testData from "./yellowProtocolTemp.json"
 import Container from "./GradingDeviationContainer"
-import { json, useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import {HTTP_STATUS_CODES, setError} from "../../utils"
 import { AccountContext } from "../../context"
 
@@ -23,12 +22,11 @@ import { AccountContext } from "../../context"
 
 export default function GradingDeviations() {
 		const [toggled, setToggled] = useState(false)
-		const [data, setData] = useState([])
+		const [techniqueCategories, setTechniqueCategories] = useState([])
 		const { userId } = useParams()
 		const [name, setName] = useState("")
-		const [, setGradingId] = useState(-1)
+		const [gradingId, setGradingId] = useState(-1)
 		const [beltId, setBeltId] = useState(-1)
-		const { gradingId } = useParams()
 
     const context = useContext(AccountContext)
 
@@ -49,13 +47,14 @@ export default function GradingDeviations() {
                 setError("Kunde inte hämta examinee's. Felkod: " + response.status)
 			} else {
                 const json = await response.json()
+                console.log(json)
                 for(let i = 0; i < json.length; i++) { //Replace when the API is changed to allow for fetching individual examinees
                     if(json[i] !== null) {
-                        var exId = json[i]["examinee_id"]
+                        let exId = json[i]["examinee_id"]
                         if(exId == userId) {
+                            
                             setGradingId(json[i]["grading_id"])
                             setName(json[i]["name"])
-                            console.log("Set id to " + json[i]["grading_id"])
                             const response2 = await fetch("/api/examination/grading/" + json[i]["grading_id"], requestOptions).catch(() => {
                                 setError("Serverfel: Kunde inte ansluta till servern.")
                                 return
@@ -65,55 +64,48 @@ export default function GradingDeviations() {
                             } else {
                                 const json2 = await response2.json()
                                 setBeltId(json2["belt_id"])
+                                const response3 = await fetch("/api/examination/examinationprotocol/all", requestOptions).catch(() => {
+                                    setError("Serverfel: Kunde inte ansluta till servern.")
+                                    return
+                                })
+                        
+                                if(response3.status != HTTP_STATUS_CODES.OK){
+                                    setError("Kunde inte hämta graderingsprotokollen. Felkod: " + response3.status)
+                                    return
+                                }
+                                const json3 = await response3.json()
+                        
+                                for(let i = 0; i < json3.length; i++) {
+                                    if(json2["belt_id"] === json3[i]["beltId"]) {
+                                        let examinationProtocol = JSON.parse(json3[i]["examinationProtocol"])
+                                        let categories = examinationProtocol.categories
+                                        setTechniqueCategories(categories)
+                                        return
+                                    }
+                                }
                             }
                         }
                     }
                 }
 			}
         }
-        const fetchProtocol = async() => {
-            const requestOptions = {
-                headers: {"Content-type": "application/json", token: context.token}
-            }
-            
-            const response = await fetch("/api/examination/examinationprotocol/all", requestOptions).catch(() => {
-                setError("Serverfel: Kunde inte ansluta till servern.")
-                return
-            })
-
-            if(response.status != HTTP_STATUS_CODES.OK){
-                setError("Kunde inte hämta graderingsprotokollen. Felkod: " + response.status)
-                return
-            }
-            const json = await response.json()
-
-            for(let i = 0; i < json.length; i++) {
-                if(beltId === json[i]["beltId"]) {
-                    let examinationProtocol = JSON.parse(json[i]["examinationProtocol"])
-                    let categories = examinationProtocol.categories
-                    console.log(examinationProtocol)
-                    console.log(categories)
-                    setData(categories)
-                }
-            }
-        }
 
 
         //setData(testData.categories)
         fetchData()
-        fetchProtocol()
+
 		}, [])
     function hasPassed() {
         return true //PLACEHOLDER
     }
 
-    function getActivityContainer(exercises) {
+    function getActivityContainer() {
 
-        return exercises !== null && (
+        return techniqueCategories !== null && (
             <div className="container">
                 <div className="row">
                     <ul>
-                        {exercises.map((category) => (
+                        {techniqueCategories.map((category) => (
                             
                             <div className = {styles["sc23-outline"]} id={category} key={category}>
                                 <Divider id = 'divider-example' option= 'h2_left' title = {category.category_name} key={category.category_name}/>
@@ -140,7 +132,7 @@ export default function GradingDeviations() {
 
                 <div className = {styles["sc23-session-header-clickable"]} role="button" onClick={() => setToggled(!toggled)}>
                 </div>
-            {getActivityContainer(data)}
+            {getActivityContainer()}
             </div>
         </div>
         <div className={styles.buttonContainer}>
