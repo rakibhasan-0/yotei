@@ -174,76 +174,76 @@ export default function Statistics() {
 	}
 
 	return (
-    <div>
-      <title>Statistik</title>
-      {loading ? (
-        <Spinner />
-      ) : (
-        <h1 id="statistics-header">
-          {groupName ? `${groupName.name}` : "Gruppen hittades inte"}
-        </h1>
-      )}
+		<div>
+			<title>Statistik</title>
+			{loading ? (
+				<Spinner />
+			) : (
+				<h1 id="statistics-header">
+					{groupName ? `${groupName.name}` : "Gruppen hittades inte"}
+				</h1>
+			)}
 
-      <div className={style.FilterAndSortContainer}>
-        <FilterStatistics
-          id="statistics-filter-container"
-          onToggleExercise={(value) => handleChanges("showExercises", value)}
-          onToggleKihon={(value) => handleChanges("showKihon", value)}
-          onDateChanges={handleDateChanges}
-          onToggleBelts={handleBeltToggle}
-          onClearBelts={onBeltsClear}
-          belts={selectedBelts}
-          dates={dates}
-        />
+			<div className={style.FilterAndSortContainer}>
+				<FilterStatistics
+					id="statistics-filter-container"
+					onToggleExercise={(value) => handleChanges("showExercises", value)}
+					onToggleKihon={(value) => handleChanges("showKihon", value)}
+					onDateChanges={handleDateChanges}
+					onToggleBelts={handleBeltToggle}
+					onClearBelts={onBeltsClear}
+					belts={selectedBelts}
+					dates={dates}
+				/>
 
-        <div className={style.sortingContainer}>
-        	<h5>Aktiviteter</h5>
-			<div style ={{width: "70%"}}></div>
-			<p className={style.sortingText}>
-				{order ? "Hög till låg" : "Låg till hög"} ordning
-			</p>
-			<SortingArrowButton
-    			id="sorting-button"
-				changeOrder={changeOrder}
-				rotate={rotate}
-			/>
-        </div>
+				<div className={style.sortingContainer}>
+					<h5>Aktiviteter</h5>
+					<div style ={{width: "70%"}}></div>
+					<p className={style.sortingText}>
+						{order ? "Hög till låg" : "Låg till hög"} ordning
+					</p>
+					<SortingArrowButton
+						id="sorting-button"
+						changeOrder={changeOrder}
+						rotate={rotate}
+					/>
+				</div>
 
-        <GradingStatisticsPopup id={"grading-statistics-container"} />
+				<GradingStatisticsPopup id={"grading-statistics-container"} />
 
-        <StatisticsPopUp
-          groupActivities={activities}
-          dates={dates}
-          averageRating={averageRating}
-          numberOfSessions={numberofSessions}
-        />
-      </div>
+				<StatisticsPopUp
+					groupActivities={activities}
+					dates={dates}
+					averageRating={averageRating}
+					numberOfSessions={numberofSessions}
+				/>
+			</div>
 
-      <div className="activitiesContainer" id="technique-exercise-list">
-        {activities.length === 0 ? (
-          <h5 style={{ fontSize: "25px" }}>Inga aktiviteter hittades</h5>
-        ) : (
-          activities.map((activity, index) => (
-            <TechniqueCard
-              key={index}
-              technique={activity}
-              checkBox={false}
-              id={activity.activity_id}
-            />
-          ))
-        )}
-      </div>
+			<div className="activitiesContainer" id="technique-exercise-list">
+				{activities.length === 0 ? (
+					<h5 style={{ fontSize: "25px" }}>Inga aktiviteter hittades</h5>
+				) : (
+					activities.map((activity, index) => (
+						<TechniqueCard
+							key={index}
+							technique={activity}
+							checkBox={false}
+							id={activity.activity_id}
+						/>
+					))
+				)}
+			</div>
 
-      <div className={style.buttonContainer}>
-        <Button
-          width="25%"
-          outlined={true}
-          onClick={() => navigate(-1)}
-          id="statistics-back-button"
-        >
-          <p>Tillbaka</p>
-        </Button>
-      </div>
-    </div>
-  );
+			<div className={style.buttonContainer}>
+				<Button
+					width="25%"
+					outlined={true}
+					onClick={() => navigate(-1)}
+					id="statistics-back-button"
+				>
+					<p>Tillbaka</p>
+				</Button>
+			</div>
+		</div>
+	)
 }	
