@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 import org.springframework.http.HttpStatus;
 
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,6 +57,15 @@ public class ActivityListController {
      *         Conflict if there exists a list with the same name for that user
      *         Forbidden if the token does not match the author of the list to add
      */
+
+    @Operation(summary = "Adds an activity list.", description = "Adds a new activity list. Requires a valid user token and a complete activity list request body.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Created - Successfully added the activity list"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - Token is invalid"),
+            @ApiResponse(responseCode = "400", description = "Bad Request - List JSON is incomplete"),
+            @ApiResponse(responseCode = "409", description = "Conflict - List with the same name already exists for the user"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - Token does not match the author of the list")
+    })
     @PostMapping("/add")
     public ResponseEntity<Long> addList(@RequestBody ActivityListRequest listToAdd,
             @RequestHeader(value = "token") String token) {
@@ -78,6 +91,14 @@ public class ActivityListController {
      *         Forbidden if the token is not the author of the list to remove
      *         Not found if the list to be removed was not found
      */
+
+    @Operation(summary = "Removes an activity list.", description = "Removes an existing activity list. Requires a valid user token and the ID of the list to be removed.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK - Successfully removed the activity list"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - Token is invalid"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - Token does not match the author of the list"),
+            @ApiResponse(responseCode = "404", description = "Not Found - Activity list not found")
+    })
     @DeleteMapping("/remove")
     public ResponseEntity<Void> removeList(@RequestParam("id") Long id, @RequestHeader(value = "token") String token) {
         try {
@@ -106,6 +127,14 @@ public class ActivityListController {
      *         Not found if the list to be edited was not found
      *         Bad Request when the Activities type is incorrect
      */
+    @Operation(summary = "Edits an activity list.", description = "Edits an existing activity list. Requires a valid user token and the updated activity list request body.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK - Successfully updated the activity list"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - Token is invalid"),
+            @ApiResponse(responseCode = "404", description = "Not Found - Activity list not found"),
+            @ApiResponse(responseCode = "400", description = "Bad Request - List data is incorrect"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - Token does not match the author of the list")
+    })
     @PutMapping("/edit")
     public ResponseEntity<Long> editList(@RequestBody ActivityListRequest listToUpdate,
             @RequestHeader(value = "token") String token) {
@@ -133,6 +162,13 @@ public class ActivityListController {
      *         Unauthorized if token is invalid
      *         No Content if there are no lists created by the user
      */
+
+    @Operation(summary = "Returns all activity lists created by the user.", description = "Fetches all activity lists that the user has created. Requires a valid user token.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK - Successfully retrieved the activity lists"),
+            @ApiResponse(responseCode = "204", description = "No Content - No activity lists found for the user"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - Token is invalid")
+    })
     @GetMapping("/userlists")
     public ResponseEntity<List<ActivityListShortDTO>> getUserLists(
             @RequestHeader(value = "token") String token) {
@@ -157,6 +193,12 @@ public class ActivityListController {
      *         Unauthorized if token is invalid
      *         No Content if there are no lists created by the user
      */
+    @Operation(summary = "Returns all activity lists the user has access to.", description = "Fetches all activity lists that the user has access to, with optional filters. Requires a valid user token.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK - Successfully retrieved the activity lists"),
+            @ApiResponse(responseCode = "204", description = "No Content - No activity lists found"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - Token is invalid")
+    })
     @GetMapping("/")
     public ResponseEntity<List<ActivityListShortDTO>> getAllLists(@RequestParam(required = false) Boolean hidden,
             @RequestParam(required = false) Boolean isAuthor,
@@ -181,6 +223,15 @@ public class ActivityListController {
      *         Unauthorized if token is invalid
      *         No Content if there are no lists created by the user
      */
+    @Operation(summary = "Returns the details of a specific activity list.", description = "Fetches the details of an activity list by its ID. Requires a valid user token and the ID of the activity list.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK - Successfully retrieved the activity list details"),
+            @ApiResponse(responseCode = "204", description = "No Content - Activity list not found"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - Token is invalid"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - User does not have access to the list"),
+            @ApiResponse(responseCode = "400", description = "Bad Request - Invalid request parameters"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected error occurred")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<?> getDetails(
             @PathVariable Long id,
@@ -199,7 +250,7 @@ public class ActivityListController {
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>("Bad request", HttpStatus.BAD_REQUEST);
         } catch (ResourceNotFoundException e) {
-            return new ResponseEntity<>("Activity list not found", HttpStatus.GONE);
+            return new ResponseEntity<>("Activity list not found", HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
