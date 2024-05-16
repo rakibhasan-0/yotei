@@ -37,9 +37,7 @@ export default function GradingIndex() {
 	 * @param {integer} gradingStep 
 	 * @param {string} color 
 	 */
-	
 	const handleNavigation = async (gradingId, gradingStep, color) => {
-		console.log(gradingId)
 		const params = {
 			ColorParam: color,
 		}
@@ -81,8 +79,8 @@ export default function GradingIndex() {
 	}
 
 	/**
-	 * Handle belt colors and name. 
-	 * Distribution current gradings and finished gradings for userid. 
+	 *  Distribution current gradings and finished gradings for userid.  
+	 * @param {json} gradings_data 
 	 */
 	function createLists(gradings_data) {
 		gradings_data.map(async (item) => {
@@ -103,11 +101,12 @@ export default function GradingIndex() {
 	}
 
 
-
+	/**
+	 * Checks if the user has no earlier gradings started or finished. 
+	 * Otherwise sort it by dates.
+	 */
 	useEffect(() => {
 		if(isCreateListDone) {
-			console.log(currentGradings)
-			console.log(finishedGradings)
 			if(currentGradings.length === 0 && finishedGradings.length === 0) {
 				navigateTo()
 			}
@@ -125,6 +124,10 @@ export default function GradingIndex() {
  
 	
 
+	/**
+	 * Handle belt colors and name. 
+	 * 
+	 */
 	useEffect(() => {
 
 
