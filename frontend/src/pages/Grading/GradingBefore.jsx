@@ -41,8 +41,8 @@ export default function GradingBefore() {
   let numberOfPairs = 0
 
   // this is for the automatically pair creation
-  const [lastAddedExaminee, setLastAddedExaminee] = useState({});
-  const [automaticallyPairCreation, setAutomaticallyPairCreation] = useState(false);
+  const [lastAddedExaminee, setLastAddedExaminee] = useState({})
+  const [automaticallyPairCreation, setAutomaticallyPairCreation] = useState(false)
 
 
   /**
