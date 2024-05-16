@@ -5,7 +5,7 @@ import styles from "./GradingDeviations.module.css"
 import Divider from "../../components/Common/Divider/Divider"
 import testData from "./yellowProtocolTemp.json"
 import Container from "./GradingDeviationContainer"
-import { useNavigate, useParams } from "react-router-dom"
+import { json, useNavigate, useParams } from "react-router-dom"
 import {HTTP_STATUS_CODES, setError} from "../../utils"
 import { AccountContext } from "../../context"
 
@@ -27,7 +27,7 @@ export default function GradingDeviations() {
 		const { userId } = useParams()
 		const [name, setName] = useState("")
 		const [, setGradingId] = useState(-1)
-		const [, setBeltId] = useState(-1)
+		const [beltId, setBeltId] = useState(-1)
 		const { gradingId } = useParams()
 
     const context = useContext(AccountContext)
@@ -63,18 +63,45 @@ export default function GradingDeviations() {
                             if(response2.status != HTTP_STATUS_CODES.OK){
                                 setError("Kunde inte hämta gradering. Felkod: " + response2.status)
                             } else {
-                                const json = await response2.json()
-                                console.log(json)
-                                setBeltId(json["belt_id"])
+                                const json2 = await response2.json()
+                                setBeltId(json2["belt_id"])
                             }
                         }
                     }
                 }
 			}
         }
+        const fetchProtocol = async() => {
+            const requestOptions = {
+                headers: {"Content-type": "application/json", token: context.token}
+            }
+            
+            const response = await fetch("/api/examination/examinationprotocol/all", requestOptions).catch(() => {
+                setError("Serverfel: Kunde inte ansluta till servern.")
+                return
+            })
 
-        setData(testData.categories)
+            if(response.status != HTTP_STATUS_CODES.OK){
+                setError("Kunde inte hämta graderingsprotokollen. Felkod: " + response.status)
+                return
+            }
+            const json = await response.json()
+
+            for(let i = 0; i < json.length; i++) {
+                if(beltId === json[i]["beltId"]) {
+                    let examinationProtocol = JSON.parse(json[i]["examinationProtocol"])
+                    let categories = examinationProtocol.categories
+                    console.log(examinationProtocol)
+                    console.log(categories)
+                    setData(categories)
+                }
+            }
+        }
+
+
+        //setData(testData.categories)
         fetchData()
+        fetchProtocol()
 		}, [])
     function hasPassed() {
         return true //PLACEHOLDER
@@ -103,28 +130,30 @@ export default function GradingDeviations() {
     }
 
 	return (
-				<div className={styles.scrollableContainer}>
-						<div>
-								<div className={styles.topContainer}>
-										<h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "10px", paddingBottom: "5px" }}>{name}</h1>
-										<h4 style={{ fontFamily: "Open Sans", fontSize: "15px", paddingTop: "0px", paddingBottom: "10px" }}>Kommentarer</h4>
-								</div>
+        <div>
+            <div className={styles.scrollableContainer}>
+                    <div>
+                            <div className={styles.topContainer}>
+                                    <h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "10px", paddingBottom: "5px" }}>{name}</h1>
+                                    <h4 style={{ fontFamily: "Open Sans", fontSize: "15px", paddingTop: "0px", paddingBottom: "10px" }}>Kommentarer</h4>
+                            </div>
 
                 <div className = {styles["sc23-session-header-clickable"]} role="button" onClick={() => setToggled(!toggled)}>
                 </div>
-                {getActivityContainer(data)}
-                <div className={styles.buttonContainer}>
-                    <Button
-                        width="100%"
-                        outlined={true}
-                        onClick={() => {
-                            navigate("/grading/" + gradingId + "/3")
-                        }}
-                    >
-                        <p>Tillbaka</p>
-                    </Button>
-                </div>
+            {getActivityContainer(data)}
             </div>
+        </div>
+        <div className={styles.buttonContainer}>
+            <Button
+                width="100%"
+                outlined={true}
+                onClick={() => {
+                    navigate("/grading/" + gradingId + "/3")
+                }}
+            >
+                <p>Tillbaka</p>
+            </Button>
+        </div>
         </div>
 	)
 }
