@@ -11,6 +11,7 @@ import style from "./SortingArrowButton.module.css"
  * @param {changeOrder} changeOrder- The function that changes the order of the list.
  * @param {rotate} rotate- A boolean that determines if the arrow should be rotated or not.
  * 
+ * 
  *  example usage:
  *  const [order, setDescendingOrder] = useState(false)
  *  const [rotate, setRotate] = useState(false)
@@ -19,6 +20,9 @@ import style from "./SortingArrowButton.module.css"
  *      setDescendingOrder(!order)
  *      setRotate(!rotate)
  *  }
+ * 
+ *  Note: The component is used in the Statistics component and the position of that button is relative to a container.
+ *  And it rotates the button by using ScaleY(-1).
  * 
  *  <SortingArrowButton id="sorting-button" changeOrder={changeOrder} rotate ={rotate}/>
  * 

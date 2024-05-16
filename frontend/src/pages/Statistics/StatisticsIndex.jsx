@@ -196,17 +196,10 @@ export default function Statistics() {
 					dates={dates}
 				/>
 
-				<div className={style.sortingContainer}>
+				<SortingArrowButton id="sorting-button" changeOrder={changeOrder} rotate={rotate} />
+
+				<div className={style.activitiesTextContainer}>
 					<h5>Aktiviteter</h5>
-					<div style ={{width: "70%"}}></div>
-					<p className={style.sortingText}>
-						{order ? "Hög till låg" : "Låg till hög"} ordning
-					</p>
-					<SortingArrowButton
-						id="sorting-button"
-						changeOrder={changeOrder}
-						rotate={rotate}
-					/>
 				</div>
 
 				<GradingStatisticsPopup id={"grading-statistics-container"} />
