@@ -63,8 +63,7 @@ public class StatisticsResponse implements Serializable {
     this.name = name;
     this.type = type;
     this.count  = 0L;
-  }
-
+}
 
   /**
    * Public getter for private property activity_id
