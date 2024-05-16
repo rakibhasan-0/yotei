@@ -90,7 +90,7 @@ function getCategoryIndices(dataArray) {
  *  @version 2.0
  */
 export default function DuringGrading() {
-	const [currentIndex, setCurrentIndex] = useState(0)
+	const [currentTechniqueStep, setCurrentIndex] = useState(0)
 	const [showPopup, setShowPopup] = useState(false)
 	const [examinees, setExaminees] = useState(undefined)
 	const [pairs, setPairs] = useState([])
@@ -107,21 +107,26 @@ export default function DuringGrading() {
 
 	// Go to summary when the index is equal to length. Maybe change the look of the buttons.
 	const goToNextTechnique = () => {
-		setCurrentIndex(prevIndex => Math.min(prevIndex + 1, techniqueNameList.length - 1))
-		onUpdateStepToDatabase(1)
+		setCurrentIndex(nextStep => {
+			const nextTechniqueStep = Math.min(nextStep + 1, techniqueNameList.length - 1);
+			onUpdateStepToDatabase(nextTechniqueStep);
+			return nextTechniqueStep;
+		});
 		// reset the button colors
 		// Should also load any stored result
-
-	}
-    
+	};
+	//goes to previous technique if it is not the first technique.
 	const goToPrevTechnique = () => {
-		setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0))
-		onUpdateStepToDatabase(-1)
+		setCurrentIndex(prevStep => {
+			const previousTechniqueStep = Math.max(prevStep - 1, 0);
+			onUpdateStepToDatabase(previousTechniqueStep);
+			return previousTechniqueStep;
+		});
 		// reset the button colors
 		// Should also load any stored result
-	}
+	};
 	// this update the database with what techniquestep the user is on, and it works with forward and backward navigation.
-	const onUpdateStepToDatabase = async (stepValue) => {
+	const onUpdateStepToDatabase = async (currentTechniqueStep) => {
 		try {
 			const response = await fetch("/api/examination/grading/1", { headers: { "token": token } })
 			if (!response.ok) {
@@ -129,10 +134,10 @@ export default function DuringGrading() {
 				return
 			}
 			const step = await response.json();
-			step.technique_step_num += stepValue;
+			step.technique_step_num = currentTechniqueStep;
 			console.log("response grading", step.technique_step_num);
 
-			const update = await fetch("/api/examination/grading/", {
+			const update = await fetch("/api/examination/grading", {
 				method: "PUT",
 				headers: {
 					"Content-type": "application/json",
@@ -220,9 +225,9 @@ export default function DuringGrading() {
 		<div className={styles.container}>
 			<TechniqueInfoPanel
 				categoryTitle=""
-				currentTechniqueTitle={techniqueNameList[currentIndex].technique.text}
-				nextTechniqueTitle={techniqueNameList[currentIndex].nextTechnique.text}
-				mainCategoryTitle={techniqueNameList[currentIndex].categoryName}>
+				currentTechniqueTitle={techniqueNameList[currentTechniqueStep].technique.text}
+				nextTechniqueTitle={techniqueNameList[currentTechniqueStep].nextTechnique.text}
+				mainCategoryTitle={techniqueNameList[currentTechniqueStep].categoryName}>
 
 			</TechniqueInfoPanel>
 			{/* All pairs */}			
@@ -234,7 +239,7 @@ export default function DuringGrading() {
 						leftExaminee={
 							<ExamineeBox 
 								examineeName={item.nameLeft} 
-								onClick={(newState) => examineeClick(newState, techniqueNameList[currentIndex].technique.text, index, `${index}-left`)}
+								onClick={(newState) => examineeClick(newState, techniqueNameList[currentTechniqueStep].technique.text, index, `${index}-left`)}
 								buttonState={leftExamineeState}
 								setButtonState={setLeftExamineeState}>
 							</ExamineeBox>
@@ -242,7 +247,7 @@ export default function DuringGrading() {
 						rightExaminee={
 							<ExamineeBox 
 								examineeName={item.nameRight}
-								onClick={(newState) => examineeClick(newState, techniqueNameList[currentIndex].technique.text, index, `${index}-right`)}
+								onClick={(newState) => examineeClick(newState, techniqueNameList[currentTechniqueStep].technique.text, index, `${index}-right`)}
 								buttonState={rightExamineeState}
 								setButtonState={setRightExamineeState}>
 							</ExamineeBox>
@@ -287,8 +292,13 @@ export default function DuringGrading() {
 						<Button 
 							key={index}
 							onClick={() => {
-								setCurrentIndex(techniqueName.categoryIndex)
+								setCurrentIndex(() => {
+									const techniquestep = techniqueName.categoryIndex;
+									onUpdateStepToDatabase(techniquestep);
+									return techniquestep;
+								});
 								setShowPopup(false)
+								
 								// Reset the 'U'. 'G' button colors
 								scrollableContainerRef.current.scrollTop = 0}}>
 							<p>{techniqueName.category}</p></Button>
