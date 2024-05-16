@@ -23,13 +23,16 @@ const BeltRow = ({ belt, states, onToggle }) => {
 	const name = belt[0].name
 	const child = belt.find(b => b.child)
 	const adult = belt.find(b => !b.child)
+	const inverted = belt.find(b =>b.inverted)
 
 	const [childState, setChildState] = useState(false)
 	const [adultState, setAdultState] = useState(false)
+	const [invertedState,setInvertedState] = useState (false)
 
 	useEffect(() => {
 		setChildState(states?.some(b => b.id === child?.id))
 		setAdultState(states?.some(b => b.id === adult?.id))
+		setInvertedState(states?.some(b => b.id === inverted?.id))
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
@@ -38,6 +41,8 @@ const BeltRow = ({ belt, states, onToggle }) => {
 				{child ? <>
 					<CheckBox id={`belt-child-${name}`} onClick={toggleChildState} checked={childState} />
 					<BeltIcon id={`belt-child-${name}-icon`} belt={child} />
+					<CheckBox id={`belt-inverted-${name}`} onClick={toggleInvertedState} checked={invertedState}/>
+					<BeltIcon id={`belt-inverted-${name}-icon`} belt={inverted} />
 				</> : <div style={{width:"72px"}} />}
 			</div>
 			<p id={`belt-text-${name}`} className={styles.beltText}>{name}</p>
@@ -56,6 +61,11 @@ const BeltRow = ({ belt, states, onToggle }) => {
 	function toggleAdultState(state) {
 		setAdultState(state)
 		onToggle(state, adult)
+	}
+
+	function toggleInvertedState(state){
+		setInvertedState(state)
+		onToggle(state,inverted)
 	}
 }
 
