@@ -206,7 +206,8 @@ export default function DuringGrading() {
 				gradingId={gradingId}>
                 </TechniqueInfoPanel>
             )}
-			{/* All pairs */}			
+			{/* All pairs */}	
+            {techniqueNameList && (		
 			<div ref={scrollableContainerRef} className={styles.scrollableContainer}>
 				{pairs.map((item, index) => (
 					<ExamineePairBox 
@@ -237,6 +238,7 @@ export default function DuringGrading() {
 					</ExamineePairBox>
 				))}
 			</div>
+            )}
 
 			<div className={styles.bottomRowContainer}>
 				{/* Prev technique button */}
