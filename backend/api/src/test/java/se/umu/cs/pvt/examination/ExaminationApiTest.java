@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -14,10 +15,14 @@ import org.springframework.http.ResponseEntity;
 import se.umu.cs.pvt.belt.BeltRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @WebMvcTest(controllers = ExaminationController.class)
 @ExtendWith(MockitoExtension.class)
@@ -69,7 +74,7 @@ public class ExaminationApiTest {
         this.examineePairList.add(new ExamineePair(2L, 2L, 1L));
         this.examineePairList.add(new ExamineePair(3L, 3L, 3L));
 
-        this.examineeCommentList.add(new ExaminationComment(1L,1L,1L,1L,"wasasasasa","Lörimupsum"));
+        this.examineeCommentList.add(new ExaminationComment(1L,1L,1L,1L,"wasasasasa","EastEast"));
         this.examineeCommentList.add(new ExaminationComment(2L,2L,2L,2L,"lasasasasa","TestTest"));
         this.examineeCommentList.add(new ExaminationComment(3L,3L,3L,3L,"kasasasasa","WestWest"));
         
@@ -139,6 +144,39 @@ public class ExaminationApiTest {
         assertEquals(3, actual);
     }
     
+    @Test
+    void testGetExamineeCommentOnTechnique() {
 
+        Mockito.when(examinationCommentRepository.findByExamineeIdAndTechniqueName(1L, "wasasasasa")).thenReturn(examineeCommentList);
+        Mockito.when(examinationCommentRepository.findByExamineeIdAndTechniqueName(2L, "lasasasasa")).thenReturn(examineeCommentList);
+        Mockito.when(examinationCommentRepository.findByExamineeIdAndTechniqueName(3L, "kasasasasa")).thenReturn(examineeCommentList);
 
+        // Test med befintlig kommentarer
+        ResponseEntity<List<ExaminationComment>> responseWithComment1 = examinationController.getExamineeComment(1L, "wasasasasa");
+        ResponseEntity<List<ExaminationComment>> responseWithComment2 = examinationController.getExamineeComment(2L, "lasasasasa");
+        ResponseEntity<List<ExaminationComment>> responseWithComment3 = examinationController.getExamineeComment(3L, "kasasasasa");
+
+        assertEquals(HttpStatus.OK, responseWithComment1.getStatusCode());
+        assertEquals(HttpStatus.OK, responseWithComment2.getStatusCode());
+        assertEquals(HttpStatus.OK, responseWithComment3.getStatusCode());
+
+        assertNotNull(responseWithComment1.getBody());
+        assertNotNull(responseWithComment2.getBody());
+        assertNotNull(responseWithComment3.getBody());
+
+        assertEquals("EastEast", responseWithComment1.getBody().get(0).getComment());
+        assertEquals("TestTest", responseWithComment2.getBody().get(1).getComment());
+        assertEquals("WestWest", responseWithComment3.getBody().get(2).getComment());
+
+        // Test utan befintlig kommentar
+        Mockito.when(examinationCommentRepository.findByExamineeIdAndTechniqueName(1L, "nonexistentTechnique")).thenReturn(Collections.emptyList());
+        ResponseEntity<List<ExaminationComment>> responseWithoutComment = examinationController.getExamineeComment(1L, "nonexistentTechnique");
+        assertEquals(HttpStatus.NOT_FOUND, responseWithoutComment.getStatusCode());
+        assertNull(responseWithoutComment.getBody());
+
+        // Test med tom techniqueName
+        Mockito.when(examinationCommentRepository.findByExamineeIdAndTechniqueName(1L, null)).thenReturn(Collections.emptyList());
+        ResponseEntity<List<ExaminationComment>> responseWithoutTechnique = examinationController.getExamineeComment(1L, null);
+        assertEquals(HttpStatus.BAD_REQUEST, responseWithoutTechnique.getStatusCode());
+    }
 }
