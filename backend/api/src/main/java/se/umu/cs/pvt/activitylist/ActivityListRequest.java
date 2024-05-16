@@ -2,6 +2,15 @@ package se.umu.cs.pvt.activitylist;
 
 import java.util.Set;
 
+/**
+ * Data sent from client to api that holds information about an ActivityList
+ * that should be created
+ * or updated.
+ * 
+ * @author Team Tomato
+ * @since 2024-05-16
+ * @version 1.0
+ */
 public class ActivityListRequest {
     private Long id;
     private String name;

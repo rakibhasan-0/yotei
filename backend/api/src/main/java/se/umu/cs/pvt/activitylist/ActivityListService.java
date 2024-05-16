@@ -9,7 +9,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Component;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -24,7 +23,7 @@ import se.umu.cs.pvt.workout.UserShortRepository;
 /**
  * ActivityListService used in ActivityListController
  * 
- * @author Team Tomato
+ * @author Team Tomato, updated 2024-05-16
  * @since 2024-05-12
  * @version 1.0
  */

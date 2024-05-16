@@ -1,5 +1,12 @@
 package se.umu.cs.pvt.activitylist;
 
+/**
+ * Custom exceptions used in ActivityList
+ * 
+ * @author Team Tomato
+ * @since 2024-05-16
+ * @version 1.0
+ */
 class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String message) {
         super(message);

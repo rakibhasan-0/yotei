@@ -36,6 +36,13 @@ import se.umu.cs.pvt.user.User;
 import se.umu.cs.pvt.user.User.Role;
 import se.umu.cs.pvt.workout.UserShort;
 
+/**
+ * Test class for ActivityListController
+ * 
+ * @author Team Tomato, updated 2024-05-16
+ * @since 2024-05-08
+ * @version 1.0
+ */
 @WebMvcTest(controllers = ActivityListController.class)
 @ExtendWith(MockitoExtension.class)
 public class ActivityListControllerTest {
@@ -198,7 +205,7 @@ public class ActivityListControllerTest {
 
         List<ActivityListShortDTO> activityLists = new ArrayList<>();
         UserShortDTO userShortDTO = new UserShortDTO(new UserShort("USER", 3L));
-        ActivityListShortDTO testListDTO = new ActivityListShortDTO(1L, "Test list", 5, userShortDTO, false);
+        ActivityListShortDTO testListDTO = new ActivityListShortDTO(1L, "Test list", 5, userShortDTO, false, false);
 
         activityLists.add(testListDTO);
         when(listService.getAllAccessibleActivityListsDTO(mockJwt, null, null)).thenReturn(activityLists);

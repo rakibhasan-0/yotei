@@ -10,7 +10,7 @@ import se.umu.cs.pvt.activitylist.Dtos.ActivityListShortDTO;
 /**
  * Interface for ActivityListService
  * 
- * @author Team Tomato
+ * @author Team Tomato, updated 2024-05-16
  * @since 2024-05-08
  * @version 1.0
  */

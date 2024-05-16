@@ -24,8 +24,8 @@ import se.umu.cs.pvt.workout.UserShort;
  * ActivityListDTO - DTO for ActivityList to be able to provide complete
  * information about a list in a structured way.
  * 
- * @author Team Tomato
- * @since 2024-05-15
+ * @author Team Tomato, updated 2024-05-15
+ * @since 2024-05-08
  * @version 1.0
  */
 @Entity

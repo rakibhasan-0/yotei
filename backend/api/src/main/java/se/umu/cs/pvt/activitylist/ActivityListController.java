@@ -1,15 +1,8 @@
 package se.umu.cs.pvt.activitylist;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,28 +15,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import org.springframework.http.HttpStatus;
 
 import org.springframework.web.bind.annotation.RequestBody;
 
-import se.umu.cs.pvt.activitylist.ActivityListRequest.ActivityRequest;
 import se.umu.cs.pvt.activitylist.Dtos.*;
-import se.umu.cs.pvt.exercise.Exercise;
-import se.umu.cs.pvt.exercise.ExerciseRepository;
-import se.umu.cs.pvt.technique.TechniqueRepository;
 import se.umu.cs.pvt.user.JWTUtil;
-import se.umu.cs.pvt.workout.UserShort;
 import se.umu.cs.pvt.workout.UserShortRepository;
 
 /**
  * ActivityList API for retreiving, creating, removing and editing activityList
  * objects.
  * 
- * @author Team Tomato
- * @since 2024-05-14
+ * @author Team Tomato ,updated 2024-05-16
+ * @since 2024-05-08
  * @version 1.0
  */
 @RestController
