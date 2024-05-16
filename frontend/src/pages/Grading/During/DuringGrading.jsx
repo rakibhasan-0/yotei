@@ -1,20 +1,19 @@
-import React, { useState, useEffect, useRef, useContext } from "react"
+import React, { useState, useEffect , useContext, useRef } from "react"
 
 import TechniqueInfoPanel from "../../../components/Grading/PerformGrading/TechniqueInfoPanel"
 import Button from "../../../components/Common/Button/Button"
 import Popup from "../../../components/Common/Popup/Popup"
 import ExamineePairBox from "../../../components/Grading/PerformGrading/ExamineePairBox"
 import ExamineeBox from "../../../components/Grading/PerformGrading/ExamineeBox"
-import ExamineeButton from "../../../components/Grading/PerformGrading/ExamineeButton"
 
 import styles from "./DuringGrading.module.css"
 import { ArrowRight, ArrowLeft } from "react-bootstrap-icons"
 import { useParams, useNavigate } from "react-router-dom"
 import {setError as setErrorToast} from "../../../utils" 
+import { AccountContext } from "../../../context"
 
 // Temp
 import ProtocolYellow from "./yellowProtocolTemp.json"
-import { AccountContext } from "../../../context"
 
 
 /**
@@ -26,8 +25,8 @@ import { AccountContext } from "../../../context"
  * @returns Array with techniques that is in order. 
  * 			Each item contains {categoryName, current_technique and next_technique } for a specific JSON-file  
  * 
- * @author Team Apelsin (2024-05-07)
- * @version 1.0
+ * @author Team Apelsin (2024-05-15)
+ * @version 2.0
  */
 function getTechniqueNameList(gradingProtocolJSON) {
 	// Store data in an array for chronological traversal
@@ -110,14 +109,12 @@ export default function DuringGrading() {
 	const goToNextTechnique = () => {
 		setCurrentIndex(prevIndex => Math.min(prevIndex + 1, techniqueNameList.length - 1))
 		// reset the button colors
-		setSelectedButtons({})
 		// Should also load any stored result
 	}
     
 	const goToPrevTechnique = () => {
 		setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0))
 		// reset the button colors
-		setSelectedButtons({})
 		// Should also load any stored result
 	}
 
@@ -135,7 +132,6 @@ export default function DuringGrading() {
 					throw new Error("Could not fetch examinees")
 				}
 				const all_examinees = await response.json()
-				
 				const current_grading_examinees = getExamineesCurrentGrading(all_examinees)
 				setExaminees(current_grading_examinees)
 				console.log("Fetched examinees in this grading: ", current_grading_examinees)
@@ -174,48 +170,13 @@ export default function DuringGrading() {
 		
 	}, [examinees])
 
-	// Handle the G and U buttons of each examinee
-	const [selectedButtons, setSelectedButtons] = useState({})
-	// Usage:
-	// handleButtonClick(technique, pairIndex, buttonId, 'left')
-	// handleButtonClick(technique, pairIndex, buttonId, 'right')
-	const handleButtonClick = (technique, pairIndex, buttonId, side) => {
-		const buttonType = buttonId.includes("pass") ? "pass" : "fail"
-		const oppositeButtonType = buttonType === "pass" ? "fail" : "pass"
-
-		setSelectedButtons(prev => ({
-			...prev,
-			[pairIndex]: {
-				...prev[pairIndex],
-				[`${buttonType}-button-${pairIndex}-${side}`]: buttonId,
-				[`${oppositeButtonType}-button-${pairIndex}-${side}`]: null,
-			}
-		}))
-		console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}`)
+	const [leftExamineeState, setLeftExamineeState] = useState("default")
+	const [rightExamineeState, setRightExamineeState] = useState("default")
+	// Will handle the api call that will update the database with the result. 
+	const examineeClick = (newState, technique, pairIndex, buttonId) => {
+		console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}, with new state ${newState}`)
+		// Check what state the button is in and send the proper information to DB.
 	}
-
-	// Extracted Examinee component to remove duplicate code.
-	const Examinee = ({ examineeName, index, side }) => (
-		<ExamineeBox examineeName={examineeName} onClickComment={() => console.log("CommentButton clicked")}>
-			<ExamineeButton
-				id={`pass-button-${index}-${side}`}
-				type="green"
-				onClick={() => handleButtonClick(techniqueNameList[currentIndex].technique.text, index, `pass-button-${index}-${side}`, side)}
-				isSelected={selectedButtons[index]?.[`pass-button-${index}-${side}`] === `pass-button-${index}-${side}`}
-			>
-				<p>G</p>
-			</ExamineeButton>
-			<ExamineeButton 
-				id={`fail-button-${index}-${side}`}
-				type="red"
-				onClick={() => handleButtonClick(techniqueNameList[currentIndex].technique.text, index, `fail-button-${index}-${side}`, side)}
-				isSelected={selectedButtons[index]?.[`fail-button-${index}-${side}`] === `fail-button-${index}-${side}`}
-                
-			>
-				<p>U</p>
-			</ExamineeButton>
-		</ExamineeBox>
-	)
 
 	// Scroll to the top of the examinees list after navigation
 	const scrollableContainerRef = useRef(null)
@@ -227,7 +188,8 @@ export default function DuringGrading() {
 				categoryTitle=""
 				currentTechniqueTitle={techniqueNameList[currentIndex].technique.text}
 				nextTechniqueTitle={techniqueNameList[currentIndex].nextTechnique.text}
-				mainCategoryTitle={techniqueNameList[currentIndex].categoryName}>
+				mainCategoryTitle={techniqueNameList[currentIndex].categoryName}
+				gradingId={gradingId}>
 
 			</TechniqueInfoPanel>
 			{/* All pairs */}			
@@ -236,9 +198,28 @@ export default function DuringGrading() {
 					<ExamineePairBox 
 						key={index}
 						rowColor={index % 2 === 0 ? "#FFFFFF" : "#F8EBEC"}
-						leftExaminee={<Examinee examineeName={item.nameLeft} index={index} side='left' />}
-						rightExaminee={<Examinee examineeName={item.nameRight} index={index} side='right' />}
-						pairNumber={index+1}>
+						leftExaminee={
+							<ExamineeBox 
+								examineeName={item.nameLeft} 
+								onClick={(newState) => examineeClick(newState, techniqueNameList[currentIndex].technique.text, index, `${index}-left`)}
+								buttonState={leftExamineeState}
+								setButtonState={setLeftExamineeState}
+								examineeId={item.leftId}>
+							</ExamineeBox>
+						}
+						rightExaminee={
+							<ExamineeBox 
+								examineeName={item.nameRight}
+								onClick={(newState) => examineeClick(newState, techniqueNameList[currentIndex].technique.text, index, `${index}-right`)}
+								buttonState={rightExamineeState}
+								setButtonState={setRightExamineeState}
+								examineeId={item.rightId}>
+							</ExamineeBox>
+						}
+						pairNumber={index+1}
+						gradingId={gradingId}
+						currentTechniqueId={techniqueNameList[currentIndex].technique.text}>
+
 					</ExamineePairBox>
 				))}
 			</div>
@@ -280,7 +261,6 @@ export default function DuringGrading() {
 								setCurrentIndex(techniqueName.categoryIndex)
 								setShowPopup(false)
 								// Reset the 'U'. 'G' button colors
-								setSelectedButtons({})
 								scrollableContainerRef.current.scrollTop = 0}}>
 							<p>{techniqueName.category}</p></Button>
 					))}
@@ -333,7 +313,14 @@ export default function DuringGrading() {
 			if (examinee1 !== undefined || examinee2 !== undefined) { // Only add if something is found
 				const name1 = examinee1 ? examinee1.name : "" // If only one name found
 				const name2 = examinee2 ? examinee2.name : ""
-				pair_names_current_grading.push({ nameLeft: name1, nameRight: name2 })
+				const id1 = examinee1 ? examinee1.examinee_id : ""
+				const id2 = examinee2 ? examinee2.examinee_id : ""
+				pair_names_current_grading.push({ 
+					nameLeft: name1, 
+					nameRight: name2, 
+					leftId: id1, 
+					rightId: id2
+				})
 			}
 		})
 		return pair_names_current_grading
