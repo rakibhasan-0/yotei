@@ -260,7 +260,8 @@ export async function getListContent(args, token, map, mapActions, callBack) {
  * If the result is invalid, it will return an object with an error property. 
  */
 
-export function getWorkouts(args, token, map, mapActions, callBack) {
+export async function getWorkouts(args, token, map, mapActions, callBack) {
+
 	let query = `/api/search/workouts?name=${args.text}&from=${args.from}&to=${args.to}&favourite=${args.isFavorite}&tags=${args.selectedTags}`
 	if (args.id) {
 		query += `&id=${args.id}`
