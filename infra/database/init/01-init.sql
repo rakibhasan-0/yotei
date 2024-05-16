@@ -701,7 +701,6 @@ ALTER TABLE
 \ir defaults/belts.sql 
 \ir defaults/tags.sql 
 \ir defaults/grading_protocols.sql
-\ir defaults/permissions.sql
 \ir defaults/roles.sql
 \ir defaults/permissions.sql
 \ir defaults/techniques.sql
