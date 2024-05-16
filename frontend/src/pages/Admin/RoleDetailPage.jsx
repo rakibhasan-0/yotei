@@ -50,7 +50,6 @@ export default function RoleDetailPage() {
 	})
 
 	useEffect(() => {
-		console.log("roleName: ", roleName, "originalRoleName: ", originalRoleName)
 		setIsBlocking(roleName !== originalRoleName)
 	}, [roleName, originalRoleName])
 
@@ -80,7 +79,7 @@ export default function RoleDetailPage() {
 	useEffect(() => {
 		(async () => {
 			try {
-				const response = await fetch("/api/permissons", { headers: { token } })
+				const response = await fetch("/api/permissions", { headers: { token } })
 				if (!response.ok) {
 					setIsLoading(false)
 					throw new Error("Kunde inte hämta rättigheter")

@@ -32,14 +32,14 @@ export default function RoleCreate() {
 	const [loading, setIsLoading] = useState(true)
 	const [goBackPopup, setGoBackPopup] = useState(false)
 	const [isBlocking, setIsBlocking] = useState(false)
-	const [isToggled, setIsToggled] = useState(true)
+	const [isToggled, setIsToggled] = useState(false)
 	const [errorMessage, setErrorMessage] = useState("")
 	
 
 	useEffect(() => {
 		(async () => {
 			try {
-				const response = await fetch("/api/permissons", { headers: { token } })
+				const response = await fetch("/api/permissions", { headers: { token } })
 				if (!response.ok) {
 					setIsLoading(false)
 					throw new Error("Kunde inte hämta rättigheter")
@@ -120,10 +120,12 @@ export default function RoleCreate() {
 	}
 
 	function handleButtonToggle(newToggledState) {
+		if (isToggled === newToggledState) {
+			console.log("toggled")
+		}
 		console.log(newToggledState)
 		setIsToggled(newToggledState)
 	}
-
 
 	return (
 		<div>
@@ -150,36 +152,36 @@ export default function RoleCreate() {
 							key={index}
 							id={permission.permissionId}
 							toggled={isToggled}
-							changeToggled={handleButtonToggle(index)}
+							changeToggled={() => handleButtonToggle(permission.permissionId)}
 						/>
 					))}
 				</div>
 			)}
 			<PermissionCard
 				item={"dummy permission1"}
-				key={"exercise.id"}
-				id={"exercise.id"}
+				key={"exercise.id1"}
+				id={"exercise.id1"}
 				toggled={isToggled}
 				changeToggled={handleButtonToggle}
 			/>
 			<PermissionCard
 				item={"dummy permission2"}
-				key={"exercise.id"}
-				id={"exercise.id"}
+				key={"exercise.id2"}
+				id={"exercise.id2"}
 				toggled={isToggled}
 				changeToggled={handleButtonToggle}
 			/>
 			<PermissionCard
 				item={"dummy permission3"}
-				key={"exercise.id"}
-				id={"exercise.id"}
+				key={"exercise.id3"}
+				id={"exercise.i3d"}
 				toggled={isToggled}
 				changeToggled={handleButtonToggle}
 			/>
 			<PermissionCard
 				item={"dummy permission4"}
-				key={"exercise.id"}
-				id={"exercise.id"}
+				key={"exercise.id4"}
+				id={"exercise.id4"}
 			/>
 
 			<div style={{ marginTop: "1rem", display: "flex", justifyContent: "space-between", width: "100%" }}>
