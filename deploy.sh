@@ -29,27 +29,54 @@ then
     sudo systemctl enable containerd.service
     
     bash -c "./deploy.sh"
+
 else
 
+    while true; do
+        read -rp "Do you have a version running already? (y/n): " yn
+        case $yn in 
+            [yY] ) 
+            read -rp "Would you like to reset the database? (y/n): " yn
+            case $yn in 
+            [yY] ) 
+                read -rp "Would you like to reset the database? (y/n): " yn
+                
+                break;;
+            [nN] )
+                echo "Deploying production server"
+                docker compose -f docker-compose.yml -f docker-compose-release.yml up --build -d
+                break;;
+            * )
+                echo "Invalid response" ;;
+            esac
+            break;;
+        [nN] )
+            echo "Deploying production server"
+            docker compose -f docker-compose.yml -f docker-compose-release.yml up --build -d
+            break;;
+        * )
+            echo "Invalid response" ;;
+        esac
+    done
 
-while true; do
-    read -rp "Do you have a domain name (y/n): " yn
-    case $yn in 
-        [yY] ) 
-	    read -rp "Whats your domain name: " domain
-	    docker compose -f docker-compose.yml -f docker-compose-domain-release.yml up -d
-	    docker compose -f docker-compose.yml -f docker-compose-domain-release.yml exec -e DOMAIN_NAME=$domain nginx /root/install.sh
-	    docker compose -f docker-compose.yml -f docker-compose-domain-release.yml restart nginx
-	    docker compose -f docker-compose.yml -f docker-compose-domain-release.yml run --rm certbot certonly -v --webroot --webroot-path /var/www/certbot/ --register-unsafely-without-email -d $domain
-	    docker exec yotei-nginx-1 sed -i 's/#//g' /etc/nginx/conf.d/prod.conf
-	    docker compose -f docker-compose.yml -f docker-compose-domain-release.yml restart
-	    break;;
-	[nN] )
-	    echo "Deploying production server"
-	    docker compose -f docker-compose.yml -f docker-compose-release.yml up --build -d
-	    break;;
-	* )
-	    echo "Invalid response" ;;
-    esac
-done
+    while true; do
+        read -rp "Do you have a domain name (y/n): " yn
+        case $yn in 
+            [yY] ) 
+            read -rp "Whats your domain name: " domain
+            docker compose -f docker-compose.yml -f docker-compose-domain-release.yml up -d
+            docker compose -f docker-compose.yml -f docker-compose-domain-release.yml exec -e DOMAIN_NAME=$domain nginx /root/install.sh
+            docker compose -f docker-compose.yml -f docker-compose-domain-release.yml restart nginx
+            docker compose -f docker-compose.yml -f docker-compose-domain-release.yml run --rm certbot certonly -v --webroot --webroot-path /var/www/certbot/ --register-unsafely-without-email -d $domain
+            docker exec yotei-nginx-1 sed -i 's/#//g' /etc/nginx/conf.d/prod.conf
+            docker compose -f docker-compose.yml -f docker-compose-domain-release.yml restart
+            break;;
+        [nN] )
+            echo "Deploying production server"
+            docker compose -f docker-compose.yml -f docker-compose-release.yml up --build -d
+            break;;
+        * )
+            echo "Invalid response" ;;
+        esac
+    done
 fi
