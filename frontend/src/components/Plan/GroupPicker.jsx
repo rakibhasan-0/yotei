@@ -107,7 +107,6 @@ const GroupRow = ({group, onToggle}) => {
  */
 
 export default function GroupPicker({ id, states, testFetchMethod, onToggle, onlyMyGroups, callbackFunction}) { //TODO comment about last parameter. Boolean.
-	//TODO groupstransfer used in planindex.
 	const [ groups, setGroups ] = useState()
 	const { token } = useContext(AccountContext)
 
@@ -118,7 +117,7 @@ export default function GroupPicker({ id, states, testFetchMethod, onToggle, onl
 			//used for testing.
 			const fetch = testFetchMethod()
 			setGroups(fetch)
-			return //TODO added. Should work?
+			return
 		}
 		
 		//No test method used.

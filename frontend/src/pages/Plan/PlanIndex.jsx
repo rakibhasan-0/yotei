@@ -47,22 +47,18 @@ export default function PlanIndex() {
 	 */
 	function toggleOnlyMyGroups() {
 		const filterCookie = cookies["plan-filter"]
-		console.log("I toggle funktion: " + filterCookie.onlyMyGroups)
-		//setChosenGroups([]) //Reset chosen groups. TODO bad?
+		//setChosenGroups([]) //Reset chosen groups. This is not done anymore every time you press the checkbox, because that seems bad.
 		if (onlyMyGroups) {
 			setOnlyMyGroups(false)
-			//setOnlyMyGroupsPI(false) //Update the Plan Index variable too.
 		} else {
-			//We want to toggle on the variable, and then we should clear the 
-			//TODO EDIT HERE?!?
+			//We want to toggle on the variable. Here we could clear the groups that are not shown anymore, but their states are instead kept the same.
 			setOnlyMyGroups(true)
-			//setOnlyMyGroupsPI(true) //Update the Plan Index variable too.
 		}
 	}
 
-	
 	// Filtering props
 	const [ selectedPlans, setSelectedPlans ] = useState(cookies["plan-filter"] ? cookies["plan-filter"].plans : [])
+	//selectedPlans seems to be an array of numbers with the ids of the groups (= plans) to choose from.
 	const [ dates, setDates ] = useState({
 		from: dateFormatter(new Date()),
 		to: dateFormatter(twoYears)
@@ -101,6 +97,8 @@ export default function PlanIndex() {
 			setDates({to: filterCookie.to, from: filterCookie.from})
 			setOnlyMyGroups(filterCookie.onlyMyGroups)
 		}
+		toggleOnlyMyGroups()
+		toggleOnlyMyGroups()
 	}, [])
 	
 	// Triggered on page load and when dates or selected plans change.
@@ -112,57 +110,68 @@ export default function PlanIndex() {
 			onlyMyGroups: onlyMyGroups
 		}
 		setCookie("plan-filter", args, { path: "/" })
+		let planIds = selectedPlans?.join("&id=") //TODO remove the questionmark. This stopped working for some reason.
 		let fetchSessionPath = "api/session/all"
-		let planIds = selectedPlans.join("&id=")
-		console.log("DEFAULT PLANIDS: " + planIds)
-
 		if (selectedPlans && selectedPlans.length > 0) {
 			//Fetch only sessions connected to plans selected in FilterPlan.
 			// (plans = groups)
-			fetchSessionPath = "api/session/getByPlans?id="+ planIds
-			//TODO: In the future if sessions can be made without a group then maybe you need to check if planIds is empty here.
+			
+			//In the future if sessions can be made without a group then maybe you need to check if the 'planIds' variable is empty here.
 			if (onlyMyGroups) {
-				//TODO anything here?
-				//TODO yes probably want to filter out of planIds first based on the new userId...
+				//If only my groups are to be used in the filtering then we need to remove some Ids from selectedPlans.
+
+				//Filter out only my groups.
+				let myGroups = groups?.filter(group => group.userId === user.userId)
+				//Filter out the selected groups from myGroups. (Basically we have removed the other selected groups now.)
+				let mySelectedGroups = myGroups?.filter(group => selectedPlans.includes(group.id))?.map(g => g.id)
+				//(The map part just extracts the id to get an array of ids.)
+
+				if (mySelectedGroups && mySelectedGroups.length === 0) {
+					//There are no selected groups, except for "hidden" selected groups that are not mine.
+					//Then we get all of myGroups as the selected ones.
+					mySelectedGroups = myGroups?.map(p => p.id)
+				}
+				planIds = mySelectedGroups?.join("&id=")
+				fetchSessionPath = "api/session/getByPlans?id=" + planIds
+				
+				//This is needed to avoid an error message.
+				if (!planIds) {
+					setLoading(false)
+					return
+				}
+			} else {
+				fetchSessionPath = "api/session/getByPlans?id=" + planIds
 			}
 		} else {
 			//No groups are chosen.
-
-			console.log("No groups are chosen!!!")
-			//console.log(selectedPlans)
-
-			if (onlyMyGroups) { //TODO onlyMyGroups here.
-				//We still only want to fetch sessions connected to this user's groups.
 			
-				let planIds = []
+
+			if (onlyMyGroups) {
+				//We still only want to fetch sessions connected to this user's groups.
+
+				//Filter out only my groups.
+				let myGroups = groups?.filter(group => group.userId === user.userId)
+			
 				//Filter out only my groups (array of group ids used)
-				console.log("GROUPS:" + groups)
 				if (!groups) {
-					console.log("Undefined/no groups")
+					//The groups have not been fetched yet. (Or there are no groups.)
 					setLoading(false)
-				}
-				//selectedPlans?.forEach(group => {if (groups?.includes(group.id)) {selectedPlans2.push(group.id)}})
-				let groups2 = groups?.filter(group => group.userId === user.userId)
-				//groups.filter(group => group.userId === user.userId)
-				console.log("G2: " + groups2)
-				groups2?.forEach(group => {console.log(group.userId); planIds.push(group.id)})
-				console.log("PIII: " + planIds) //PLAN=GROUP
-				
-				if (planIds.length === 0) {
-					console.log("YOU HAVE NO GROUPS!!!")
-					setLoading(false)
-					fetchSessionPath = "api/session/getByPlans?id=0" //No groups have id 0???
-					return //DONE.
-				} else {
-					//console.log("ERROR???") //TODO this is never run??
-					//planIds = selectedPlans.join("&id=")
-					fetchSessionPath = "api/session/getByPlans?id="+ planIds //TODO what if there are no groups that I have?
+					return //Nothing could be done.
 				}
 
-			} //If false, then all sessions connected to all groups may be fetched.
-			console.log(fetchSessionPath)
+				//Extract the group ids into an array and form the string.
+				let groupIds = myGroups?.map(g => g.id)
+				let groupIdsStr = groupIds?.join("&id=")
+				
+				if (groupIds?.length === 0) {
+					//There are no groups.
+					setLoading(false)
+					return //Nothing could be done.
+				}
+
+				fetchSessionPath = "api/session/getByPlans?id=" + groupIdsStr
+			} //If false, then all sessions connected to all groups may be fetched (default).
 		}
-		//TODO remove: selected plans seems to be an array of numbers with the ids of the groups (= plans) to choose from.
 
 		fetch(fetchSessionPath, {
 			method: "GET",
@@ -229,7 +238,6 @@ export default function PlanIndex() {
 				const filterCookie = cookies["plan-filter"]
 				if(filterCookie && filterCookie.plans) {
 					setSelectedPlans(plans.filter(plan => filterCookie.plans.includes(plan.id)).map(p => p.id))
-					console.log("In cookie:   " + filterCookie.onlyMyGroups)
 				}
 			})
 			.catch(() => {
@@ -272,12 +280,9 @@ export default function PlanIndex() {
 				dates={dates}
 				callbackFunction={setGroups}
 				onlyMyGroups={onlyMyGroups} //Register callback for the variable here to synchronize values.
-				toggleOnlyMyGroups={toggleOnlyMyGroups} //Register callback function. TODO REMOVE.
+				toggleOnlyMyGroups={toggleOnlyMyGroups} //Register callback function.
 			>
 			</FilterPlan>
-
-			{/*onlyMyGroups ? <div> true </div> : <div> false </div>*/ //TEST TODO REMOVE!
-			}
 
 			{loading ? <Spinner /> : <div>
 				{

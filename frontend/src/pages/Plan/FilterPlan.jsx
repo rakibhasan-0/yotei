@@ -71,7 +71,7 @@ export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, o
 				{/* Checkbox for only showing this user's groups. */}
 				{ checkBoxIsEnabled && ( //FEATURE TOGGLE
 					<div className={styles.checkBoxSpace} >
-						<CheckBox id={"seeOnlyMyGroups"} onClick={() => { toggleOnlyMyGroups(); setChosenGroups([])}}  //Reset chosen groups. TODO bad?
+						<CheckBox id={"seeOnlyMyGroups"} onClick={() => { toggleOnlyMyGroups()}}
 						label={"Visa bara tillfällen för mina grupper"} checked={onlyMyGroups} />
 						{/* The callbackFunction() call here toggles a boolean variable stored in PlanIndex.jsx. */}
 						{/* TODO: In order to filter properly, this part here and probably GroupPicker.jsx must be updated, as well as PlanIndex.jsx.*/}
@@ -79,7 +79,7 @@ export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, o
 				)
 				}
 
-				<GroupPicker id={42} onToggle={(c, g) => {onToggle(c, g)}} states={chosenGroups} onlyMyGroups={onlyMyGroups} callbackFunction={callbackFunction}/> {/* TODO updated this line with boolean thing.*/}
+				<GroupPicker id={42} onToggle={(c, g) => {onToggle(c, g)}} states={chosenGroups} onlyMyGroups={onlyMyGroups} callbackFunction={callbackFunction}/>
 
 			</ FilterContainer>
 		</div>
