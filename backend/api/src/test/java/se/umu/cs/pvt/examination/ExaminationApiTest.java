@@ -151,7 +151,7 @@ public class ExaminationApiTest {
         Mockito.when(examinationCommentRepository.findByExamineeIdAndTechniqueName(2L, "lasasasasa")).thenReturn(examineeCommentList);
         Mockito.when(examinationCommentRepository.findByExamineeIdAndTechniqueName(3L, "kasasasasa")).thenReturn(examineeCommentList);
 
-        // Test med befintlig kommentarer
+        // Test with existing comments.
         ResponseEntity<List<ExaminationComment>> responseWithComment1 = examinationController.getExamineeComment(1L, "wasasasasa");
         ResponseEntity<List<ExaminationComment>> responseWithComment2 = examinationController.getExamineeComment(2L, "lasasasasa");
         ResponseEntity<List<ExaminationComment>> responseWithComment3 = examinationController.getExamineeComment(3L, "kasasasasa");
@@ -168,13 +168,13 @@ public class ExaminationApiTest {
         assertEquals("TestTest", responseWithComment2.getBody().get(1).getComment());
         assertEquals("WestWest", responseWithComment3.getBody().get(2).getComment());
 
-        // Test utan befintlig kommentar
+        // Test without existing comments.
         Mockito.when(examinationCommentRepository.findByExamineeIdAndTechniqueName(1L, "nonexistentTechnique")).thenReturn(Collections.emptyList());
         ResponseEntity<List<ExaminationComment>> responseWithoutComment = examinationController.getExamineeComment(1L, "nonexistentTechnique");
         assertEquals(HttpStatus.NOT_FOUND, responseWithoutComment.getStatusCode());
         assertNull(responseWithoutComment.getBody());
 
-        // Test med tom techniqueName
+        // Test with empty techniqueName.
         Mockito.when(examinationCommentRepository.findByExamineeIdAndTechniqueName(1L, null)).thenReturn(Collections.emptyList());
         ResponseEntity<List<ExaminationComment>> responseWithoutTechnique = examinationController.getExamineeComment(1L, null);
         assertEquals(HttpStatus.BAD_REQUEST, responseWithoutTechnique.getStatusCode());
