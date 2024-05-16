@@ -18,8 +18,8 @@ import starFill from "../../../assets/images/starFill.svg"
 
 
 /**
- * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3) (2024-04-23)
- * @since 2024-04-23
+ * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3)
+ * @since 2024-05-16
  * @version 3.0
  * @returns a page for managing the user's account
  */
@@ -303,18 +303,14 @@ export default function Profile() {
 				<div className='mb-2' />
 				<InputTextFieldBorderLabel errorMessage={missMatchPassword} onChange={e => {setVerifyNewPassword(e.target.value)}} id="verify-password" type="password" label="Bekräfta lösenord" />
 				<div className='mb-2' />
-				<div className={style.floatRight}>
-					<Button id ={"change-password-button"} className="btn btn-primary" onClick={changePassword} disabled={passwordButtonState}>Ändra Lösenord</Button>
-				</div>
+				<Button id ={"change-password-button"} className="btn btn-primary" onClick={changePassword} disabled={passwordButtonState} width={"100%"}>Ändra Lösenord</Button>
 				<div className={style.divider}><Divider option={"h2_center"} title={"Användarnamn"} /></div>
 				<InputTextFieldBorderLabel onChange={e => {setNewUsername(e.target.value)}} id="username" type="text" label="Nytt användarnamn"/>
 				<div className='mb-2' />
 				<InputTextFieldBorderLabel errorMessage={wrongUsernamePassword} onChange={e => {setUsernamePassword(e.target.value)}} id="change-username-password" type="password" label="Lösenord" />
 				<div className='mb-2' />
-				<div className={style.floatRight}>
-					<Button id = {"change-username-button"} className = "btn btn-primary" onClick = {changeUsername} disabled={usernameButtonState}>Ändra Användarnamn</Button>
-				</div>
-				<Divider option={"h2_center"} />
+				<Button id = {"change-username-button"} className = "btn btn-primary" onClick = {changeUsername} disabled={usernameButtonState} width={"100%"}>Ändra Användarnamn</Button>
+				<Divider option={"h2_center"}/>
 				<div>
 					<Button id={"logoutButton"} onClick={logOut} width={"100%"} className="btn btn-primary">Logga ut</Button>
 				</div>
