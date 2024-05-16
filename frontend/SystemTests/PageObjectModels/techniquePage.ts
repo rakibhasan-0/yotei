@@ -40,6 +40,7 @@ export class TechniquePage {
     await this.page.locator('#create-technique-beltpicker-header').click()
     await this.page.locator('#belt-adult-Gult-checkbox').check()
 
+    // TODO the commented out blocks are supposed to be added later on.
     // if(exercise.tag) {
     //   await this.page.getByRole('button', { name: 'Hantera tagg' }).click()
     //   await this.page.getByPlaceholder('Sök efter taggar').fill(exercise.tag)
@@ -53,20 +54,7 @@ export class TechniquePage {
     //   await this.page.getByPlaceholder('Klistra in länk').fill(exercise.mediaLink)
     //   await this.page.getByRole('button', { name: 'Länka Till Media' }).click()
     // }
-
-    await this.page.getByRole('button', { name: 'Lägg till' }).click();
-    // _________
-    // await this.page.waitForURL('**/activity/exercise/create')
-    // exercise.name && await this.page.getByPlaceholder('Namn').fill(exercise.name)
-    // exercise.description && await this.page.getByPlaceholder('Beskrivning').fill(exercise.description)
-    // exercise.time && await this.page.locator('#minute-picker-undefined').fill(exercise.time.toString())
-    // if(exercise.mediaLink) {
-    //   await this.page.getByRole('button', { name: '+ Media' }).click()
-    //   await this.page.getByPlaceholder('Klistra in länk').fill('https://www.youtube.com/watch?v=2ybLD6_2gKM')
-    //   await this.page.getByRole('button', { name: 'Länka Till Media' }).click()
-    // }
-    //await this.page.getByRole('button', { name: 'Lägg till' }).click()
-    // ______________
+    await this.page.getByRole('button', { name: 'Lägg till' }).click()
   }
 
   async deleteTechnique(name: string) {
