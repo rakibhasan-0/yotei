@@ -208,13 +208,15 @@ export default function DuringGrading() {
 							</ExamineeBox>
 						}
 						rightExaminee={
-							<ExamineeBox 
-								examineeName={item.nameRight}
-								onClick={(newState) => examineeClick(newState, techniqueNameList[currentIndex].technique.text, index, `${index}-right`)}
-								buttonState={rightExamineeState}
-								setButtonState={setRightExamineeState}
-								examineeId={item.rightId}>
-							</ExamineeBox>
+							item.rightId ? (
+								<ExamineeBox 
+									examineeName={item.nameRight}
+									onClick={(newState) => examineeClick(newState, techniqueNameList[currentIndex].technique.text, index, `${index}-right`)}
+									buttonState={rightExamineeState}
+									setButtonState={setRightExamineeState}
+									examineeId={item.rightId}
+								/>
+							) : null
 						}
 						pairNumber={index+1}
 						gradingId={gradingId}

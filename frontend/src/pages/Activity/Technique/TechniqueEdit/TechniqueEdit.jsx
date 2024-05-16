@@ -37,6 +37,7 @@ const KIHON_TAG = { id: 1, name: "kihon waza" }
  * 
  * Version 2.2:
  * 	   Fixed navigation from pages outside the website 
+ * 		 Removed unnecessary whitespace
  * 
  * @author Team Medusa, Team Tomato, Team Durian (Group 3) (2024-05-07), 
  * @author Team Kiwi (Group 2) (2024-05-03) 
@@ -246,7 +247,7 @@ export default function TechniqueEdit({ id }) {
 	}
 	if(loading) return <Spinner/>
 	return (
-		<div id={id} style={{ display: "flex", gap: "16px", flexDirection: "column" }}>
+		<div id={id} style={{ display: "flex",  flexDirection: "column" }}>
 			<title>Redigera teknik</title>
 			<h1>Redigera Teknik</h1>
 
