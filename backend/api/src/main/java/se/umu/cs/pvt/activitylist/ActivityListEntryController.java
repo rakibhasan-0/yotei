@@ -231,8 +231,8 @@ public class ActivityListEntryController {
      *         Unauthorized if token is invalid
      *         Forbidden if the user making the request is not the author of the
      *         activity list
-     *         Not found if the activity list was not found or it did not contain
-     *         any entries
+     *         Not found if the activity list was not found
+     *         No content if the list did not contain any entries
      */
     @GetMapping("/all/{list_id}")
     public ResponseEntity<List<EntryResponse>> getEntriesForList(
@@ -252,7 +252,7 @@ public class ActivityListEntryController {
                 List<ActivityListEntry> results = listEntryRepository.findAllByListId(listId);
 
                 if (results.isEmpty()) {
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
                 } else {
                     List<EntryResponse> response = new ArrayList<>();
                     Optional<Technique> technique;
