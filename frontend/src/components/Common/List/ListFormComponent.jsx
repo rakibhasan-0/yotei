@@ -207,7 +207,7 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 
 					<Form.Group className="mb-3">
 						<CheckBox
-							id="workout-create-checkbox"
+							id="list-create-checkbox"
 							label="Privat pass"
 							onClick={() =>
 								listCreateInfoDispatch({
@@ -222,7 +222,7 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 					<Form.Group>
 						{/* Note till framtida hugo och oliver: Denna kanske ej fungerar  (users.id)*/}
 						<AddUserComponent
-							id="workout-create-add-users"
+							id="list-create-add-users"
 							addedUsers={listCreateInfo.data.users}
 							setAddedUsers={(users) =>
 								listCreateInfoDispatch({
@@ -241,7 +241,7 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 								handleGoBack()
 							}}
 							outlined={true}
-							id="workout-create-back-button"
+							id="list-create-back-button"
 						>
 							<h2>Tillbaka</h2>
 						</Button>
@@ -255,7 +255,7 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 							backText="Avbryt"
 							zIndex={1000} 
 						/>
-						<Button type="submit" id="workout-create-back-button">
+						<Button type="submit" id="list-create-back-button">
 							<h2>Spara</h2>
 						</Button>
 					</Form.Group>
@@ -265,7 +265,7 @@ export default function WorkoutFormComponent({ callback, state,edit}) {
 
 			{/* Popups */}
 			<Popup
-				id="workout-create-popup"
+				id="list-create-popup"
 				isOpen={listCreateInfo.popupState.isOpened}
 				setIsOpen={handlePopupClose}
 				title={getPopupTitle()}

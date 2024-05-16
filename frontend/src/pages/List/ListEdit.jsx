@@ -5,7 +5,7 @@ import WorkoutFormComponent from "../../components/Common/List/ListFormComponent
 import { AccountContext } from "../../context.js"
 import { 
 	listCreateReducer, 
-	WorkoutCreateInitialState, 
+	ListCreateInitialState, 
 	LIST_CREATE_TYPES,
 } from "../../components/Common/List/ListCreateReducer.js"
 import { ListCreateContext } from "../../components/Common/List/ListCreateContext.js"
@@ -23,7 +23,7 @@ import { Spinner } from "react-bootstrap"
  */
 const ListEdit = () => {
 	const [listCreateInfo, listCreateInfoDispatch] = useReducer(
-		listCreateReducer,JSON.parse(JSON.stringify(WorkoutCreateInitialState)))
+		listCreateReducer,JSON.parse(JSON.stringify(ListCreateInitialState)))
 	const navigate = useNavigate()
 	const { token, userId } = useContext(AccountContext)
 	const location = useLocation()

@@ -43,7 +43,7 @@ export const LIST_CREATE_TYPES = {
 /**
  * Initial state for the workout create reducer
  */
-export const WorkoutCreateInitialState = {
+export const ListCreateInitialState = {
 	data: {
 		activities: [],
 		author: null,
@@ -130,7 +130,7 @@ export function listCreateReducer(state, action) {
 	const tempState = {...state}
 	switch (action.type) {
 	case "SET_INITIAL_STATE": 
-		return JSON.parse(JSON.stringify(WorkoutCreateInitialState))
+		return JSON.parse(JSON.stringify(ListCreateInitialState))
 	case "INIT_WITH_DATA":
 		return action.payload
 	case "INIT_EDIT_DATA": {
@@ -204,7 +204,7 @@ export function listCreateReducer(state, action) {
 		})
 	
 	case "RESET":
-		return JSON.parse(JSON.stringify(WorkoutCreateInitialState))
+		return JSON.parse(JSON.stringify(ListCreateInitialState))
 	case "SET_NAME":
 		tempState.data.name = action.name
 		return tempState
