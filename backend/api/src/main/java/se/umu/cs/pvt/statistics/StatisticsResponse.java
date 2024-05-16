@@ -3,6 +3,7 @@ package se.umu.cs.pvt.statistics;
 import java.io.Serializable;
 import se.umu.cs.pvt.belt.Belt;
 import java.util.List;
+import java.util.Set;
 import java.util.ArrayList;
 
 /**
@@ -50,6 +51,20 @@ public class StatisticsResponse implements Serializable {
     this.count  = cnt;
   }
 
+    /**
+   * Create a new instance of StatisticsResponse with inferred 0 count.
+   * @param id id of the technique
+   * @param name name of the technique
+   * @param type the type of activity to represent exercise/techniques
+   * @return new StatisticsRespnse
+   */
+  public StatisticsResponse(Long id, String name, String type) {
+    this.activity_id = id;
+    this.name = name;
+    this.type = type;
+    this.count  = 0L;
+  }
+
 
   /**
    * Public getter for private property activity_id
@@ -94,6 +109,7 @@ public class StatisticsResponse implements Serializable {
         this.belts.add(new BeltResponse(b));
       }
   }
+
 
   /**
    * Public getter for private property count

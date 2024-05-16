@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.*;
+import se.umu.cs.pvt.belt.Belt;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -93,6 +94,8 @@ public class StatisticsController {
 
         // Hashset to store unique session IDs to prevent double counting.
         Set<Long> uniqueSessionIds = new HashSet<>();
+        // Store unique IDs to find not performed techniques.
+        Set<Long> uniqueActivityIds = new HashSet<>();
 
         // Hashmap to store ratings for each session to prevent double counting.
         HashMap<Long,Integer> ratings = new HashMap<>();
@@ -104,6 +107,7 @@ public class StatisticsController {
             uniqueSessionIds.add(sa.getSession_id());
             ratings.put(sa.getSession_id(), sa.getRating());
             if (sr.getType().equals("technique")) {
+                uniqueActivityIds.add(sa.getActivity_id());
                 sr.setBelts(statisticsRepository.getBeltsForTechnique(sr.getActivity_id()));
             }
             if (!uniqueActivities.contains(sr)) {
@@ -113,17 +117,29 @@ public class StatisticsController {
             }
         }
 
+
         // Calculate average rating
         for (Long sid : uniqueSessionIds) {
             averageRating += ratings.get(sid);
         }
         averageRating /= uniqueSessionIds.size();
         averageRating = Math.round(averageRating * 100.0) / 100.0;
+        
 
+        List<Belt> groupBelts = statisticsRepository.getBeltsForGroup(id);
+        List<StatisticsResponse> allTechniques = statisticsRepository.getTechniquesForBelts(groupBelts);   
+        
+        for (StatisticsResponse sr : allTechniques) {
+            if (!uniqueActivityIds.contains(sr.getActivity_id())) {
+                sr.setBelts(statisticsRepository.getBeltsForTechnique(sr.getActivity_id()));
+                uniqueActivities.add(sr);
+            }
+        }
+        
         // Sort remaining response entities
         uniqueActivities = uniqueActivities.stream()
             //.sorted(Comparator.comparing(StatisticsResponse::getName)) // Uncomment this line with preferred sort order to sort activities with the same count.
-            .sorted(Comparator.comparingLong(StatisticsResponse::getCount).reversed())
+            .sorted(Comparator.comparingLong(StatisticsResponse::getCount))
             .collect( Collectors.toList());
 
         
