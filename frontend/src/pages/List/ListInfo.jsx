@@ -35,7 +35,7 @@ export default function ListInfo({ id }) {
 	const navigate = useNavigate()
 	const context = useContext(AccountContext)
 	const [showPopup, setShowPopup] = useState(false)
-	const [listData, setWorkoutData] = useState(null)
+	const [listData, setListData] = useState(null)
 	const [listUsers, setListUsers] = useState(null)
 	const [showRPopup, setRShowPopup] = useState(false)
 	const [errorStateMsg, setErrorStateMsg] = useState("")
@@ -128,7 +128,7 @@ export default function ListInfo({ id }) {
             },
         }
 
-		setWorkoutData(() => MockList)
+		setListData(() => MockList)
 		setListUsers(() => MockList.data.users)
 
 		setLoading(false)
@@ -154,7 +154,7 @@ export default function ListInfo({ id }) {
 					id={"confirm-popup"}
 					setShowPopup={setShowPopup}
 					showPopup={showPopup}
-					onClick={async () => deleteWorkout(listId, context, navigate, setShowPopup)}
+					onClick={async () => deleteList(listId, context, navigate, setShowPopup)}
 				/>
 			}
 			{getListInfoContainer(listData, null, context, userId, listUsers)}
@@ -167,8 +167,9 @@ export default function ListInfo({ id }) {
 	)
 }
 
-async function deleteWorkout(listId, context, navigate, setShowPopup) {
-	//Kolla från WorkoutView
+async function deleteList(listId, context, navigate, setShowPopup) {
+	//Kolla från WorkoutView på deras "DeleteWorkout" funktion :) 
+	// frontend/src/pages/Workout/WorkoutView
 }
 
 function getWorkoutUsersContainer(listUsers) {
