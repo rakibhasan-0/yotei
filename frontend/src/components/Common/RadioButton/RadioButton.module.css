@@ -1,8 +1,0 @@
-.radioContainer {
-    width: 3rem;
-    height: 3rem;
-    color: var(--red-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}

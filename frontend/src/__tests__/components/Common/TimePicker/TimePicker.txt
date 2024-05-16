@@ -1,3 +1,0 @@
-/*
- * TimePicker is taken from a third-party library and is as such untested by us
-*/
