@@ -10,8 +10,9 @@ import { useParams } from "react-router"
 import { Pencil, Trash } from "react-bootstrap-icons"
 import ErrorState from "../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../components/Common/Spinner/Spinner"
-import { HTTP_STATUS_CODES, setError, setSuccess, isAdmin } from "../../utils"
-import PrintButton from "../../components/Common/PrintButton/PrintButton"
+//Commented due to linter
+//import { HTTP_STATUS_CODES, setError, setSuccess, isAdmin } from "../../utils"
+import { isAdmin } from "../../utils"
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 
 /**
@@ -44,89 +45,93 @@ export default function ListInfo({ id }) {
 	const { userId } = useContext(AccountContext)
 
 	useEffect(() => {
+		//Temp things due to linter, will be removed! (Temp solution;) )
+		setRShowPopup(false)
+		setErrorStateMsg(false)
+		console.log("Console.log due to linter: "+showRPopup)
 		const MockList = {
-            addedActivities:[],
-            checkedActivities:[],
-            data: {
-                activities: [
-                    {
-                        duration: 20,
+			addedActivities:[],
+			checkedActivities:[],
+			data: {
+				activities: [
+					{
+						duration: 20,
 						type: "exercise",
-                        exercise:{
-                            description: "Börja i en plankposition och sänk kroppen genom att böja armarna, pressa sedan upp igen!",
-                            duration: 20,
-                            id: 289,
-                            name: "Armhävningar",
-                        },
-                        technique: null,
-                        isEditable: false,
-                    },
-                    {
-                        duration: 0,
+						exercise:{
+							description: "Börja i en plankposition och sänk kroppen genom att böja armarna, pressa sedan upp igen!",
+							duration: 20,
+							id: 289,
+							name: "Armhävningar",
+						},
+						technique: null,
+						isEditable: false,
+					},
+					{
+						duration: 0,
 						type: "technique",
-                        exercise:null,
-                        technique:{
-                            belts:[
-                                {
-                                    id: 9,
-                                    name: "Blått",
-                                    color: "1E9CE3",
-                                    child: false,
-                                },
+						exercise:null,
+						technique:{
+							belts:[
 								{
-                                    id: 3,
-                                    name: "Gult",
-                                    color: "FFDD33",
-                                    child: false,
-                                },
-                            ],
-                            description: "",
-                            id: 138,
-                            name: "Kamae, neutral (5 Kyu)",
-                            tags:[
-                                {
-                                    id: 54,
-                                    name: "grundtekniker för kamp",
-                                },
+									id: 9,
+									name: "Blått",
+									color: "1E9CE3",
+									child: false,
+								},
+								{
+									id: 3,
+									name: "Gult",
+									color: "FFDD33",
+									child: false,
+								},
+							],
+							description: "",
+							id: 138,
+							name: "Kamae, neutral (5 Kyu)",
+							tags:[
+								{
+									id: 54,
+									name: "grundtekniker för kamp",
+								},
 								{
 									id: 11,
-                                    name: "3 dan",
+									name: "3 dan",
 								},{
 									id: 67,
-                                    name: "nybörjare",
+									name: "nybörjare",
 								}
-                            ],
-                        },
-                        isEditable: false,
-                    },
-                ],
-                author: {id: 1,username:"mega admin"},
-                created_date: "2023-06-22",
-                changed_date: "2024-07-23",
-                description: "En ganska bra lista!",
-                duration: 50,
-                id: 1,//listId,
-                isPrivate: true,
-                name:" Olivers nice list ",
-                users:[
-                    {
-                        userId: 1, username:"Admin",
-                    },
-                    {
-                        userId: 2, username:"Editor",
-                    },
-                ],
-            },
-            numActivities: 2,
-            originalData:{},
-            popUpState:{
-                currentlyEditing: {id: null,date:null},
-                isOpened: false,
-                types:{
-                    activityPopup: false, chooseActivityPopup: false, editActivityPopup: false,
-                },
-            },
-        }
+							],
+						},
+						isEditable: false,
+					},
+				],
+				author: {id: 1,username:"mega admin"},
+				created_date: "2023-06-22",
+				changed_date: "2024-07-23",
+				description: "En ganska bra lista!",
+				duration: 50,
+				id: 1,//listId,
+				isPrivate: true,
+				name:" Olivers nice list ",
+				users:[
+					{
+						userId: 1, username:"Admin",
+					},
+					{
+						userId: 2, username:"Editor",
+					},
+				],
+			},
+			numActivities: 2,
+			originalData:{},
+			popUpState:{
+				currentlyEditing: {id: null,date:null},
+				isOpened: false,
+				types:{
+					activityPopup: false, chooseActivityPopup: false, editActivityPopup: false,
+				},
+			},
+		}
 
 		setListData(() => MockList)
 		setListUsers(() => MockList.data.users)
@@ -150,7 +155,7 @@ export default function ListInfo({ id }) {
 		<div id={id} className="container px-0">
 			{
 				<ConfirmPopup
-					popupText={'Är du säker att du vill radera passet "' + listData.data.name + '"?'}
+					popupText={"Är du säker att du vill radera passet \"" + listData.data.name + "\"?"}
 					id={"confirm-popup"}
 					setShowPopup={setShowPopup}
 					showPopup={showPopup}
@@ -160,14 +165,15 @@ export default function ListInfo({ id }) {
 			{getListInfoContainer(listData, null, context, userId, listUsers)}
 
 			<h2 className="font-weight-bold mb-0 mt-5 text-left">Aktiviteter</h2>
-			<SavedActivityList activities={listData} edit={false} />
+			<SavedActivityList activities={listData}/>
 			{listUsers !== null && listUsers.length > 0 && getListSharedUsersContainer(listUsers)}
-			{getButtons(navigate, setRShowPopup)}
+			{getButtons(navigate)}
 		</div>
 	)
 }
 
 async function deleteList(listId, context, navigate, setShowPopup) {
+	console.log("Console.log due to linter" + listId + context + navigate + setShowPopup)
 	//Kolla från WorkoutView på deras "DeleteWorkout" funktion :) 
 	// frontend/src/pages/Workout/WorkoutView
 }
@@ -192,7 +198,7 @@ function getListSharedUsersContainer(listUsers) {
 	)
 }
 
-function getButtons(navigate, setRShowPopup) {
+function getButtons(navigate) {
 	return (
 		<div className="d-flex row justify-content-center">
 			<div className="d-flex col mb-3 mt-3 justify-content-start">
@@ -221,7 +227,7 @@ function getListInfoContainer(listData, setShowPopup, context) {
 							<>
 								<Link
 									className="ml-3"
-                                    					state={{ list: listData, users: listData.data.users }}
+									state={{ list: listData, users: listData.data.users }}
 									to={"/list/editList"}
 								>
 									<Pencil

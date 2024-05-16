@@ -9,20 +9,14 @@
  * @author Tomato (Group 6)
  * @since 2024-05-07
  */
-import React, { useState, useContext } from "react"
+import React, { useState } from "react"
 import styles from "./SavedListItemComponent.module.css"
-import { ListCreateContext } from "../../Common/List/ListCreateContext"
 import { LIST_CREATE_TYPES } from "../../Common/List/ListCreateReducer"
 import DescriptionToggle from "../../Common/DescriptionToggle"
 import { Trash } from "react-bootstrap-icons"
 
-const SavedActivityListItem = ({ activity, index, id,edit}) => {
-	let listCreateInfo,listCreateInfoDispatch
-	if(edit){
-		const {listCreateInfo:info, listCreateInfoDispatch:dispatch} = useContext(ListCreateContext)
-		listCreateInfo=info;
-		listCreateInfoDispatch=dispatch
-	}
+const SavedActivityListItem = ({ activity, index, id,listCreateInfoDispatchProp}) => {
+	//let listCreateInfo,listCreateInfoDispatch
 
 	//console.log("Testy2")
 	//console.log(listCreateInfo)
@@ -36,11 +30,11 @@ const SavedActivityListItem = ({ activity, index, id,edit}) => {
 	const name = activity.name?(
 		<p className={`${styles["listActivityName"]} m-0`}>{activity.name}</p>
 	):
-	(activity.exercise ? (
-		<p className={`${styles["listActivityName"]} m-0`}>{activity.exercise.name}</p>
-	) : (
-		<p className={`${styles["listActivityName"]} m-0`}>{activity.technique.name}</p>
-	))
+		(activity.exercise ? (
+			<p className={`${styles["listActivityName"]} m-0`}>{activity.exercise.name}</p>
+		) : (
+			<p className={`${styles["listActivityName"]} m-0`}>{activity.technique.name}</p>
+		))
 	
 	const createStripes = () => {
 		index % 2 == 0 ? (bgColor = "#F8EBEC") : (bgColor = "#FFFFFF")
@@ -82,17 +76,17 @@ const SavedActivityListItem = ({ activity, index, id,edit}) => {
 							<DescriptionToggle isActive={isActive} />
 						</div>
 					)}
-					{edit==true?
-					<div className="pl-3">
-						<i onClick={() => {
-							console.log("activity:")
-							console.log(activity)
-							listCreateInfoDispatch({type: LIST_CREATE_TYPES.REMOVE_ACTIVITY_ITEM, payload: {id: activity.exercise?.id || activity.technique?.id || activity.id}})
-						}}>
-						<Trash size="20px"	color="var(--red-primary)" id={`edit_pencil_${activity.id}`} style={{cursor: "pointer"}} />
-						</i>
-					</div>
-					: <></>}
+					{listCreateInfoDispatchProp!=null?
+						<div className="pl-3">
+							<i onClick={() => {
+								console.log("activity:")
+								console.log(activity)
+								listCreateInfoDispatchProp({type: LIST_CREATE_TYPES.REMOVE_ACTIVITY_ITEM, payload: {id: activity.exercise?.id || activity.technique?.id || activity.id}})
+							}}>
+								<Trash size="20px"	color="var(--red-primary)" id={`edit_pencil_${activity.id}`} style={{cursor: "pointer"}} />
+							</i>
+						</div>
+						: <></>}
 				</div>
 			</div>
 			<div>
@@ -103,8 +97,8 @@ const SavedActivityListItem = ({ activity, index, id,edit}) => {
 								{isFreeTextElem()
 									? activity.text
 									: activity.exercise
-									? activity.exercise.description
-									: activity.technique.description}
+										? activity.exercise.description
+										: activity.technique.description}
 							</p>
 						</div>
 					</div>

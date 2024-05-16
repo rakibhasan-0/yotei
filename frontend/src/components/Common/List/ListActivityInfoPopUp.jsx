@@ -1,11 +1,11 @@
-import { useEffect, useContext, useState } from "react"
+//Commented due to linter
+//import { useEffect, useContext, useState } from "react"
+import { useEffect, useContext} from "react"
 import styles from "./ListActivityInfoPopUp.module.css"
 import Divider from "../../Common/Divider/Divider.jsx"
 import Button from "../../Common/Button/Button.jsx"
-import { Plus } from "react-bootstrap-icons"
 import { ListCreateContext } from "./ListCreateContext"
 import { LIST_CREATE_TYPES } from "./ListCreateReducer"
-import RadioButton from "../../Common/RadioButton/RadioButton"
 import MinutePicker from "../../Common/MinutePicker/MinutePicker"
 
 /**
@@ -63,7 +63,9 @@ function ActivityItem({ index, categoryName, id, text }) {
  * 		<ActivityList/>
  */
 function ActivityList(){
-	const { listCreateInfo, listCreateInfoDispatch } = useContext(ListCreateContext)
+	//Commented due to linter
+	//const { listCreateInfo, listCreateInfoDispatch } = useContext(ListCreateContext)
+	const { listCreateInfo} = useContext(ListCreateContext)
 
 	return (
 		<div className={styles.activityList}>
@@ -143,22 +145,9 @@ function ActivityTimes() {
  * @since 2023-05-24
  */
 export default function ActivityInfoPopUp() {
-	const { listCreateInfo, listCreateInfoDispatch } = useContext(ListCreateContext)
-	const { addedActivities } = listCreateInfo
-
-	/**
-	 * Removes empty activities from addedActivities if free text.
-	 */
-	const clearEmptyActivities = () => {
-		for(let i = 0; i < addedActivities.length; i++) {
-			if(addedActivities[i].name === "") {
-				listCreateInfoDispatch({ 
-					type: LIST_CREATE_TYPES.REMOVE_ACTIVITY, 
-					payload: { id: addedActivities[i].id }
-				})
-			}
-		}
-	}
+	//Commented due to linter
+	//const { listCreateInfo, listCreateInfoDispatch } = useContext(ListCreateContext)
+	const {listCreateInfoDispatch } = useContext(ListCreateContext)
 
 	const goBack = () => {
 		listCreateInfoDispatch({ type: LIST_CREATE_TYPES.CLOSE_ACIVITY_POPUP })

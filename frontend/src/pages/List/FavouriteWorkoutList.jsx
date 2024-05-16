@@ -2,20 +2,17 @@ import { useContext, useEffect, useState } from "react"
 import SearchBar from "../../components/Common/SearchBar/SearchBar"
 import { getWorkouts } from "../../components/Common/SearchBar/SearchBarUtils"
 import FilterContainer from "../../components/Common/Filter/FilterContainer/FilterContainer"
-import StarButton from "../../components/Common/StarButton/StarButton"
 import { useCookies } from "react-cookie"
 import styles from "./FavouriteWorkoutList.module.css"
 import { AccountContext } from "../../context"
 import DatePicker, { getFormattedDateString } from "../../components/Common/DatePicker/DatePicker"
-import RoundButton from "../../components/Common/RoundButton/RoundButton"
-import { Plus } from "react-bootstrap-icons"
 import {toast} from "react-toastify"
 import WorkoutListItem from "../../components/Workout/WorkoutListItem"
 import ErrorStateSearch from "../../components/Common/ErrorState/ErrorStateSearch.jsx"
 import Spinner from "../../components/Common/Spinner/Spinner.jsx"
 import {setError as setErrorToast} from "../../utils"
 import Button from "../../components/Common/Button/Button"
-import { useNavigate, useParams } from "react-router"
+import { useNavigate} from "react-router"
 
 /**
  * Workout class. 
@@ -38,7 +35,7 @@ export default function FavouriteWorkoutsList() {
 	const [ cookies, setCookie ] = useCookies(["workout-filter"])
 	const [ searchErrorMessage, setSearchErrorMessage ] = useState("")
 	const [ loading, setLoading ] = useState(true)
-    const navigate = useNavigate()
+	const navigate = useNavigate()
 	// Some fucked up shit to get +/- 1 month from today.
 	const today = new Date()
 	const lastMonth = new Date(today)
@@ -46,14 +43,13 @@ export default function FavouriteWorkoutsList() {
 	const nextMonth = new Date(today)
 	nextMonth.setMonth(today.getMonth() + 1)
 
-	const [ filterFavorites, setFilterFavorites ] = useState(false)
 	const [ dates, setDates ] = useState({
 		from: getFormattedDateString(lastMonth), 
 		maxFrom: getFormattedDateString(nextMonth),
 		to: getFormattedDateString(nextMonth),
 		minTo: getFormattedDateString(lastMonth)
 	})
-	useEffect(fetchWorkouts, [dates.from, dates.maxFrom, dates.to, dates.minTo, filterFavorites, searchText, token, userId, tags])
+	useEffect(fetchWorkouts, [dates.from, dates.maxFrom, dates.to, dates.minTo, searchText, token, userId, tags])
 	return (
 		<>
 			<div id="search-area">
@@ -98,7 +94,7 @@ export default function FavouriteWorkoutsList() {
 				: (loading ? <Spinner/> : <ErrorStateSearch id="error-search"
 					message={searchErrorMessage}/>)
 			}
-            <div style={{ marginTop: "1rem", marginBottom:"1rem" }}>
+			<div style={{ marginTop: "1rem", marginBottom:"1rem" }}>
 				<Button outlined={true} onClick={() => navigate(-1)}><p>Tillbaka</p></Button>
 			</div>
 			<br/>
@@ -121,16 +117,11 @@ export default function FavouriteWorkoutsList() {
 		})
 	}
 
-	function toggleFilterFavorite() {
-		setFilterFavorites(!filterFavorites)
-	}
-
 	function toggleIsFavorite(event, workout) {
-		if(filterFavorites) {
-			setWorkouts(prevState => 
-				prevState.filter(w => w.workoutID !== workout.workoutID)
-			)
-		}
+		//Previously if(filterFavourites)
+		setWorkouts(prevState => 
+			prevState.filter(w => w.workoutID !== workout.workoutID)
+		)
 	}
 
 	function setError(msg){

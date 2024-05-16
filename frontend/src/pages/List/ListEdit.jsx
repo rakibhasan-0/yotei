@@ -171,14 +171,14 @@ const ListEdit = () => {
 	return (
 		<>
 			{isLoading ? <Spinner/> :
-			<>
-			{console.log("Ritar upp passredigeringssidan")}
-				<ListCreateContext.Provider value={{listCreateInfo, listCreateInfoDispatch}} >
-					<title>Redigera lista</title>
-					<h1 className={styles.title}>Redigera lista</h1>
+				<>
+					{console.log("Ritar upp passredigeringssidan")}
+					<ListCreateContext.Provider value={{listCreateInfo, listCreateInfoDispatch}} >
+						<title>Redigera lista</title>
+						<h1 className={styles.title}>Redigera lista</h1>
 					
-					<ListFormComponent callback={submitHandler} edit={true} />	
-				</ListCreateContext.Provider> 
+						<ListFormComponent callback={submitHandler} listCreateInfoDispatchProp={listCreateInfoDispatch} />	
+					</ListCreateContext.Provider> 
 				</>
 			}
 			

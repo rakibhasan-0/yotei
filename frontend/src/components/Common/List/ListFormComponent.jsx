@@ -2,9 +2,9 @@ import { useState, useContext, useCallback } from "react"
 import { Form } from "react-bootstrap"
 import styles from "./ListFormComponent.module.css"
 import InputTextField from "../../Common/InputTextField/InputTextField"
-import ActivityListComponent from "./ListActivityListComponent"
+//import ActivityListComponent from "./ListActivityListComponent"
 import TextArea from "../../Common/TextArea/TextArea"
-import TagInput from "../../Common/Tag/TagInput"
+//import TagInput from "../../Common/Tag/TagInput"
 import AddUserComponent from "../../Workout/CreateWorkout/AddUserComponent"
 import Button from "../../Common/Button/Button"
 import CheckBox from "../../Common/CheckBox/CheckBox"
@@ -37,7 +37,7 @@ import SavedActivityList from "../../SavedList/SavedListInfo/SavedListComponent"
  * @since 2023-05-24, 2024-04-18
  * @updated 2023-06-01 Chimera, updated pathing when pressing return to create session
  */
-export default function ListFormComponent({ callback, state,edit}) {
+export default function ListFormComponent({ callback, state,listCreateInfoDispatchProp=null}) {
 	const { listCreateInfo, listCreateInfoDispatch } =
 		useContext(ListCreateContext)
 	const [leaveActivityPickerPopup, setLeaveActivityPickerPopup] = useState(false)
@@ -187,13 +187,13 @@ export default function ListFormComponent({ callback, state,edit}) {
 							backText="Avbryt"
 							onClick={callback}
 						/>
-						<SavedActivityList activities={listCreateInfo} edit={edit} />
+						<SavedActivityList activities={listCreateInfo} listCreateInfoDispatchProp={listCreateInfoDispatchProp} />
 						<div className={styles.activityButtons}>
 							<div className={"align-center" +styles.container}>
 
 								<Button
 									onClick={() =>
-								 		listCreateInfoDispatch({
+										listCreateInfoDispatch({
 											type: LIST_CREATE_TYPES.OPEN_CHOOSE_ACTIVITY_POPUP
 										})
 									}
@@ -220,7 +220,6 @@ export default function ListFormComponent({ callback, state,edit}) {
 					</Form.Group>
 
 					<Form.Group>
-						{/* Note till framtida hugo och oliver: Denna kanske ej fungerar  (users.id)*/}
 						<AddUserComponent
 							id="list-create-add-users"
 							addedUsers={listCreateInfo.data.users}

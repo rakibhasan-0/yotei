@@ -134,26 +134,26 @@ export function listCreateReducer(state, action) {
 	case "INIT_WITH_DATA":
 		return action.payload
 	case "INIT_EDIT_DATA": {
-		const listData = action.payload.listData;
+		const listData = action.payload.listData
 		// Map activities
 		const activities = listData.data.activities.map(activity => {
 			return {
-			id: activity.id,
-			type: activity.type,
-			duration: activity.duration,
-			technique: activity.type === "technique" ? activity.technique : null,
-			exercise: activity.type === "exercise" ? activity.exercise : null,
-			};
-		});
+				id: activity.id,
+				type: activity.type,
+				duration: activity.duration,
+				technique: activity.type === "technique" ? activity.technique : null,
+				exercise: activity.type === "exercise" ? activity.exercise : null,
+			}
+		})
 		// Map users
 		const users = listData.data.users.map((user, index) => {
 			return {
-			userId: index + 1,
-			username: user.username,
-			};
-		});
+				userId: index + 1,
+				username: user.username,
+			}
+		})
 		// Prepare category object
-		const categoryId = listData.list_id; // Using list_id as categoryId
+		//const categoryId = listData.list_id // Using list_id as categoryId
 		/*const categoryName = listData.list_name;
 		
 		/*let category = tempState.addedCategories.find(cat => cat.name === categoryName);
@@ -175,17 +175,17 @@ export function listCreateReducer(state, action) {
 */
 		// Prepare data object
 		const data = {
-				id: listData.data.id,
-				name: listData.data.name,
-				description: listData.data.description,
-				isPrivate: listData.data.isPrivate,// === "Private",
-				author: listData.data.author,//.author_id,
-				date: listData.data.changed_date.split("T")[0],
-				created: listData.data.created_date.split("T")[0],
-				duration: listData.numActivities,
-				users: users,
-				activities: activities,
-		};
+			id: listData.data.id,
+			name: listData.data.name,
+			description: listData.data.description,
+			isPrivate: listData.data.isPrivate,// === "Private",
+			author: listData.data.author,//.author_id,
+			date: listData.data.changed_date.split("T")[0],
+			created: listData.data.created_date.split("T")[0],
+			duration: listData.numActivities,
+			users: users,
+			activities: activities,
+		}
 		const listCreateInfo = {
 			popupState: listData.popUpState,
 			numActivities: listData.numActivities,
@@ -198,11 +198,11 @@ export function listCreateReducer(state, action) {
 		return tempState
 	}
 	case "REMOVE_FROM_LIST":
-		console.log("Hewwo! :3")
+		/*console.log("Hewwo! :3")
 		return tempState.data.filter(function (el) {
 			return el.id != activity.id
-		})
-	
+		})*/
+		break
 	case "RESET":
 		return JSON.parse(JSON.stringify(ListCreateInitialState))
 	case "SET_NAME":
@@ -223,28 +223,25 @@ export function listCreateReducer(state, action) {
 		return tempState
 	}
 	case "REMOVE_ACTIVITY_ITEM": {
-		const id = action.payload.id;
+		const id = action.payload.id
 		console.log("Trying to remove activity with id: "+id)
 		// Remove the activity with the given ID from the list
 		tempState.data.activities = tempState.data.activities.filter(activity => {
-		  if (activity.exercise && activity.exercise.id === id) {
-			return false; // Exclude this activity from the list
-		  }
-		  if (activity.technique && activity.technique.id === id) {
-			return false; // Exclude this activity from the list
-		  }
-		  if(activity.id===id){
-			  return false // Exclude this activity from the list (*** KOLLA PÅ DENNA)
-		  }
-		  return true; // Include other activities in the list
-		});
-	  
+			if (activity.exercise && activity.exercise.id === id) {
+				return false // Exclude this activity from the list
+			}
+			if (activity.technique && activity.technique.id === id) {
+				return false // Exclude this activity from the list
+			}
+			if(activity.id===id){
+				return false // Exclude this activity from the list (*** KOLLA PÅ DENNA)
+			}
+			return true // Include other activities in the list
+		})
 		// Update the numActivities count
-		tempState.numActivities = tempState.data.activities.length;
-	  
-		return tempState;
-	  }
-	  
+		tempState.numActivities = tempState.data.activities.length
+		return tempState
+	}
 	case "SET_ACTIVITY_ITEMS":
 		tempState.data.activityItems = action.activityItems.filter(item => item.activities.length > 0)
 		return tempState
@@ -351,7 +348,6 @@ export function listCreateReducer(state, action) {
 	case "UPDATE_ACTIVITY": {
 		const newActivity = action.payload.activity
 		let changedCategory = true
-		let newCategory = true 
 		let categoryId 
 		let removIds = []
 		/*tempState.addedCategories.forEach((category) => {
@@ -366,7 +362,6 @@ export function listCreateReducer(state, action) {
 					
 					if(category.id === categoryId) {
 						changedCategory = false
-						newCategory = false
 						category.activities[index] = newActivity
 					}
 					else {
@@ -379,7 +374,6 @@ export function listCreateReducer(state, action) {
 			})
 
 			if(changedCategory && category.id === categoryId) {
-				newCategory = false
 				tempState.data.activityItems[categoryIndex].activities.push(newActivity)
 			}
 		})
@@ -436,7 +430,7 @@ export function listCreateReducer(state, action) {
 
 		// No checked category?
 		//if(!category) return tempState
-//		let activities = tempState.addedActivities.map(activity => {
+		//		let activities = tempState.addedActivities.map(activity => {
 		//Köra addedACtivities istället?
 		let counter =-1
 		let activities = tempState.addedActivities.map(activity => {
@@ -464,16 +458,16 @@ export function listCreateReducer(state, action) {
 			}
 	
 */		
-		let i = 0;
+		let i = 0
 		activities.forEach((activity) => {
 			console.log("Activity "+i+":")
 			console.log(activity)
-			i++;
+			i++
 			tempState.data.activities.push(activity)
 		})
-			//tempState.data.activities.push(activities)
-			console.log("TempState:")
-			console.log(tempState)
+		//tempState.data.activities.push(activities)
+		console.log("TempState:")
+		console.log(tempState)
 		//}
 
 

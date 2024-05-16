@@ -2,6 +2,7 @@ import styles from "./SavedActivityListComponent.module.css"
 import { useContext } from "react"
 import { ListCreateContext,LIST_CREATE_TYPES } from "../../components/Common/List/ListCreateContext.js"
 import { List, Pencil } from "react-bootstrap-icons"
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 
 /**
  * Creates the UI for the ActivityList in create workout.
@@ -14,29 +15,6 @@ import { List, Pencil } from "react-bootstrap-icons"
  * @version 1.0
  */
 export default function ActivityListComponent() {
-
-	useEffect(() => {
-        const MockList = {
-            "list_id": 1,
-            "list_name": "TestList",
-            "state": "Private",
-            "amountOfWorkouts": 3,
-            "author": "Oliver",
-            "author_id": 1,
-            "description": "Behövs ens detta",
-            "created_date": "2024-04-13",
-            "changed_date": "2024-05-03",
-            "list_users": ["1", "Hugo","Willy"],
-			"list": [
-				{"id": 1, "name": "Kniv i magen! Mycket ont", "type": "technique"},
-				{"id": 2, "name": "Kniv i foten! Mycket ont", "type": "technique"},
-				{"id": 3, "name": "Knip i magen! Mycket ont", "type": "technique"}
-			]
-            //Locked
-            //Public
-        }
-        setListUsers(() => MockList.list_users)
-    },[])
 
 	const { listCreateInfo, listCreateInfoDispatch } =
 		useContext(ListCreateContext)
@@ -142,7 +120,7 @@ export default function ActivityListComponent() {
  *			/>
  *		<ActivityListItem
  */
-function SavedActivityList({ children, categoryName, groupIndex, id }) {
+function ActivityList({ children, categoryName, groupIndex, id }) {
 	return (
 		<Draggable
 			key={id}

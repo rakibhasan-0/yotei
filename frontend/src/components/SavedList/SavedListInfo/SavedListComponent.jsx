@@ -4,22 +4,27 @@
  * @param activities - A list of activities. 
  * 
  * @author Tomato (Group 6) 
- * @since 2024-05-06
+ * @since 2024-05-06
  */
 import SavedActivityListItem from "./SavedListItemComponent.jsx"
 import styles from "./SavedListComponent.module.css"
-import {useState, useEffect,useContext} from "react"
+//Commented due to linter
+//import {useState, useEffect,useContext} from "react"
+import {useState, useEffect} from "react"
 import Spinner from "../../../components/Common/Spinner/Spinner"
-import { AccountContext } from "../../../context"
-import { ListCreateContext } from "../../Common/List/ListCreateContext"
+//Commented due to linter
+//import { AccountContext } from "../../../context"
+//Commented due to linter
+//import { ListCreateContext } from "../../Common/List/ListCreateContext"
 
 
-export default function SavedActivityList({activities,edit}) {
-
-	const context = useContext(AccountContext)
+export default function SavedActivityList({activities,listCreateInfoDispatchProp=null}) {
+	//Commented due to linter
+	//const context = useContext(AccountContext)
 	/*const { listCreateInfo, listCreateInfoDispatch } =
 	useContext(ListCreateContext)*/
-	const {token, userId} = context
+	//Commented due to linter:
+	//const {token, userId} = context
 	const [ListData, setListData] = useState(null)
 	const [Loading, setLoading] = useState(true)
 
@@ -48,21 +53,21 @@ export default function SavedActivityList({activities,edit}) {
 	}
 	return (Loading==true) ?
 		<><Spinner/></>
-	:
-	<>
-		<fieldset className={setPadding() + " my-3 "} >
-			<legend style={{textAlign: "left"}}>
-				<div className="d-flex align-items-center justify-content-center" onClick={() => setIsCollapsed(!isCollapsed)}>
-					<i style={isCollapsed? {fontSize: "16px"} : rotatedIcon} 
-						className={"bi bi-chevron-down"}/>
+		:
+		<>
+			<fieldset className={setPadding() + " my-3 "} >
+				<legend style={{textAlign: "left"}}>
+					<div className="d-flex align-items-center justify-content-center" onClick={() => setIsCollapsed(!isCollapsed)}>
+						<i style={isCollapsed? {fontSize: "16px"} : rotatedIcon} 
+							className={"bi bi-chevron-down"}/>
 
 
-				</div>
-			</legend>
-			{!isCollapsed && ListData.data.activities.map((activity, index) =>
-				<SavedActivityListItem key={activity.id} activity={activity} index={index} edit={edit}/>)}
-		</fieldset>
-	</>
+					</div>
+				</legend>
+				{!isCollapsed && ListData.data.activities.map((activity, index) =>
+					<SavedActivityListItem key={activity.id} activity={activity} index={index} listCreateInfoDispatchProp={listCreateInfoDispatchProp}/>)}
+			</fieldset>
+		</>
 }
 
 function setPadding() {

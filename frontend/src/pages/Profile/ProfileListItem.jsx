@@ -17,11 +17,13 @@ import { useContext} from "react"
 
 
 export default function ProfileListItem({ item, Icon }) {
-	const { userId, token } = useContext(AccountContext)
+	//Commented due to linter
+	//const { userId, token } = useContext(AccountContext)
+	const { userId} = useContext(AccountContext)
 
 	return (
 		<div className={`${styles["profile-item-row"]}`}>
-			<Link to={item.id==-1?('/profile/favouriteWorkouts'): (`/profile/list/${item.id}`)}>
+			<Link to={item.id==-1?("/profile/favouriteWorkouts"): (`/profile/list/${item.id}`)}>
 				<div className={"row align-items-center font-weight-bold px-3 py-2"}>
 					<div className={"col-2 "}>
 						{/* Handles both Icons and JSX elements */}
@@ -38,11 +40,11 @@ export default function ProfileListItem({ item, Icon }) {
 								<p className="mb-0">{item.size} pass</p>
 							) : (
 								<p className="mb-0">
-								{item.author.userId === userId ? (
-									<>av mig <Dot /> {item.size} aktiviter</>
-								) : (
-									<>av {item.author.username} <Dot /> {item.size} aktiviter</>
-								)}
+									{item.author.userId === userId ? (
+										<>av mig <Dot /> {item.size} aktiviter</>
+									) : (
+										<>av {item.author.username} <Dot /> {item.size} aktiviter</>
+									)}
 								</p>
 							)}
 						</div>
