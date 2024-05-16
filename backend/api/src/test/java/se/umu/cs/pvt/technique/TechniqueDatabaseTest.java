@@ -3,10 +3,6 @@ package se.umu.cs.pvt.technique;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.sql.*;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Connection;
-import java.sql.Statement;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -110,6 +106,31 @@ public class TechniqueDatabaseTest {
             if (resultSet.next()) {
                 String belt = resultSet.getString("belt_name");
                 assertEquals("Brunt", belt);
+            }
+        }
+    }
+
+    
+    @Test
+    public void sampleTestsBelts() throws Exception {
+        String jdbcUrl = postgreSQLContainer.getJdbcUrl();
+        String username = postgreSQLContainer.getUsername();
+        String password = postgreSQLContainer.getPassword();
+
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+                Statement statement = connection.createStatement()) {
+            
+            String techName = "Empi uchi, jodan och chudan (1 Kyu)";
+            String expectedColor = "Brunt";
+            String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
+            
+            
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setString(1, techName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                String belt = resultSet.getString("belt_name");
+                assertEquals(expectedColor, belt);
             }
         }
     }
