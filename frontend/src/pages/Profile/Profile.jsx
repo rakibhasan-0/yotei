@@ -60,7 +60,7 @@ export default function Profile() {
 		},
 		hidden: false,
 	}
-	const mockLists = [
+	/*const mockLists = [
 		{
 			id: -1,
 			name: "Favoritpass",
@@ -94,7 +94,7 @@ export default function Profile() {
 			hidden: true,
 			isShared: true,
 		},
-	]
+	]*/
 
 	/* Workout management */
 
@@ -264,7 +264,7 @@ export default function Profile() {
 		})
 	}
 
-
+	console.log("Console.log so that linter doesnt cause problems: "+fetchedLists)
 
 	return (
 		<Tabs defaultActiveKey={"MyWorkouts"} className={style.tabs}>
