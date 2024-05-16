@@ -46,7 +46,6 @@ export default function PlanIndex() {
 	 * If the variable is true, it gets set to false, and if it is false it gets set to true.
 	 */
 	function toggleOnlyMyGroups() {
-		const filterCookie = cookies["plan-filter"]
 		//setChosenGroups([]) //Reset chosen groups. This is not done anymore every time you press the checkbox, because that seems bad.
 		if (onlyMyGroups) {
 			setOnlyMyGroups(false)
@@ -97,8 +96,6 @@ export default function PlanIndex() {
 			setDates({to: filterCookie.to, from: filterCookie.from})
 			setOnlyMyGroups(filterCookie.onlyMyGroups)
 		}
-		toggleOnlyMyGroups()
-		toggleOnlyMyGroups()
 	}, [])
 	
 	// Triggered on page load and when dates or selected plans change.
@@ -114,7 +111,6 @@ export default function PlanIndex() {
 		let fetchSessionPath = "api/session/all"
 		if (selectedPlans && selectedPlans.length > 0) {
 			//Fetch only sessions connected to plans selected in FilterPlan.
-			// (plans = groups)
 			
 			//In the future if sessions can be made without a group then maybe you need to check if the 'planIds' variable is empty here.
 			if (onlyMyGroups) {

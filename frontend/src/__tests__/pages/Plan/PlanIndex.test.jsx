@@ -3,6 +3,7 @@ import "@testing-library/jest-dom"
 import PlanIndex from "../../../pages/Plan/PlanIndex"
 import { rest } from "msw"
 import { server } from "../../server"
+import GroupPicker from "../../../components/Plan/GroupPicker"
 
 
 /**
@@ -27,7 +28,8 @@ test("Should render title on init", async () => {
 })
 
 test("should render data from the plan api", async () => {
-	// ARRANGE
+	// ARRANGE	
+	render(<GroupPicker id = {42}/>)
 	render(<PlanIndex />)
 	server.use(
 		rest.get("api/plan/all", async (req, res, ctx) => {
