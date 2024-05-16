@@ -82,7 +82,7 @@ export default function GradingDeviations() {
         return true //PLACEHOLDER
     }
     function isDeviating() {
-        return false; //PLACEHOLDER
+        return false //PLACEHOLDER
     }
 
     function getActivityContainer(exercises) {
@@ -115,7 +115,7 @@ export default function GradingDeviations() {
 										<h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "10px", paddingBottom: "5px" }}>{name}</h1>
 										<h4 style={{ fontFamily: "Open Sans", fontSize: "15px", paddingTop: "0px", paddingBottom: "10px" }}>Kommentarer</h4>
 								</div>
-                <div class="d-flex justify-content-center">
+                <div className="d-flex justify-content-center">
                     <CheckBox
                         className = {styles["showAllCheckbox"]}
                         checked={false}
