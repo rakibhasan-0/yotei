@@ -59,11 +59,7 @@ INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (3,
         }
     ]
 }'::JSON);
-<<<<<<< HEAD:infra/database/init/defaults/grading_protocols.sql
-INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (6, 
-=======
-INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (5, 
->>>>>>> main:infra/database/init/defaults/examination_protocols.sql
+INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (6, 
 '{
     "examination_protocol": {"code": "4 KYU", "color": "ORANGE BÄLTE"},
     "categories": [
@@ -128,11 +124,7 @@ INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (5,
         }
     ]
 }'::JSON);
-<<<<<<< HEAD:infra/database/init/defaults/grading_protocols.sql
-INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (9, 
-=======
-INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (7, 
->>>>>>> main:infra/database/init/defaults/examination_protocols.sql
+INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (9, 
 '{
     "examination_protocol": {"code": "3 KYU", "color": "GRÖNT BÄLTE"},
     "categories": [
@@ -204,11 +196,7 @@ INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (7,
         }
     ]
 }'::JSON);
-<<<<<<< HEAD:infra/database/init/defaults/grading_protocols.sql
-INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (12, 
-=======
-INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (9, 
->>>>>>> main:infra/database/init/defaults/examination_protocols.sql
+INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (12, 
 '{
     "examination_protocol": {"code": "2 KYU", "color": "BLÅTT BÄLTE"},
     "categories": [
@@ -289,11 +277,7 @@ INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (9,
         }
     ]
 }'::JSON);
-<<<<<<< HEAD:infra/database/init/defaults/grading_protocols.sql
-INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (13, 
-=======
-INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (11, 
->>>>>>> main:infra/database/init/defaults/examination_protocols.sql
+INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (13, 
 '{
     "examination_protocol": {"code": "1 KYU", "color": "BRUNT BÄLTE"},
     "categories": [
