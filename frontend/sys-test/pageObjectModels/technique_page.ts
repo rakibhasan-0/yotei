@@ -1,15 +1,15 @@
 import { type Page } from '@playwright/test';
-import { Exercise } from 'types/systemTestsTypes';
+import { Technique } from 'types/systemTestsTypes';
 
 /**
  *  
- *  Page Object Model for the exercise tab at the page with url '/activity'.
+ *  Page Object Model for the technique tab at the page with url '/activity'.
  * 
  *  @author Team Mango (Group 4)
  *  @since 2024-05-8
  *  @version 1.0
  */
-export class ExercisePage {
+export class TechniquePage {
   readonly page: Page
   readonly url: string = '/activity'
   
@@ -29,14 +29,14 @@ export class ExercisePage {
   }
 
   /**
-   * Creates an exercise based on the passed exercise data.
-   * @param exercise Can consist of name, description, time, tag and media link
+   * Creates an technique based on the passed technique data.
+   * @param technique Can consist of name, description, time, tag and media link
    */
-  async createExercise(exercise: Exercise) {
+  async createTechnique(technique: Technique) {
 		await this.page.locator('#technique-add-button').getByRole('img').click()
 
-    exercise.name && await this.page.getByPlaceholder('Namn').fill(exercise.name)
-    exercise.description && await this.page.getByPlaceholder('Beskrivning av teknik').fill(exercise.description)
+    technique.name && await this.page.getByPlaceholder('Namn').fill(technique.name)
+    technique.description && await this.page.getByPlaceholder('Beskrivning av teknik').fill(technique.description)
     await this.page.locator('#create-technique-beltpicker-header').click()
     await this.page.locator('#belt-adult-Gult-checkbox').check()
 
@@ -69,7 +69,7 @@ export class ExercisePage {
     // ______________
   }
 
-  async deleteExercise(name: string) {
+  async deleteTechnique(name: string) {
     await this.page.waitForSelector('.infinite-scroll-component__outerdiv', {timeout: 30000})
     await this.page.getByPlaceholder('Sök efter tekniker').fill(`${name}`)
     await this.page.getByRole('link', { name: `${name}`}).click()

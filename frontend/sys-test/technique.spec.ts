@@ -1,5 +1,5 @@
 import { test, expect } from './fixtures';
-import { ExercisePage } from 'pageObjectModels/exercise_page';
+import { TechniquePage } from 'pageObjectModels/technique_page';
 
 /**
  *
@@ -7,21 +7,21 @@ import { ExercisePage } from 'pageObjectModels/exercise_page';
  *  @since 2024-05-8
  *  @version 2.0
  */
-test.describe('ST-2 Exercise', () => {
-	let exercisePage
+test.describe('ST-2 Technique', () => {
+	let techniquePage
 
-	test.beforeEach('navigate to exercise section', async ({page}) => {
-		exercisePage = new ExercisePage(page)
-		await exercisePage.visit()
+	test.beforeEach('navigate to technique section', async ({page}) => {
+		techniquePage = new TechniquePage(page)
+		await techniquePage.visit()
 		await expect(page.getByPlaceholder('Sök efter tekniker')).toBeVisible()
 	})
 
-  test('1. Create exercise', async ({ page }) => {
+  test('1. Create technique', async ({ page }) => {
 		const name = Math.random().toString(36).slice(2, 7) // Will generate a random string of 5 characters
-		await exercisePage.createExercise({description: 'description description description', name: name, time: 12})
+		await techniquePage.createTechnique({description: 'description description description', name: name, time: 12})
 		await expect(page.getByText(`Tekniken ${name} skapades`)).toBeVisible()
     await page.waitForURL('**/activity')
-		await exercisePage.deleteExercise(name)
+		await techniquePage.deleteTechnique(name)
     await page.getByRole('link', { name: `${name}`}).isHidden()
   })
 })
