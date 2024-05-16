@@ -106,35 +106,49 @@ const GroupRow = ({group, onToggle}) => {
  * @returns A new group picker component.
  */
 
-export default function GroupPicker({ id, states, testFetchMethod, onToggle}) {
+export default function GroupPicker({ id, states, testFetchMethod, onToggle, onlyMyGroups, callbackFunction}) { //TODO comment about last parameter. Boolean.
+	//TODO groupstransfer used in planindex.
 	const [ groups, setGroups ] = useState()
 	const { token } = useContext(AccountContext)
+
+	const user = useContext(AccountContext) //Needed to get the userId to get only this user's groups.
 
 	async function fetchPlans() {
 		if (testFetchMethod !== null && testFetchMethod !== undefined) {
 			//used for testing.
 			const fetch = testFetchMethod()
 			setGroups(fetch)
+			return //TODO added. Should work?
 		}
-		else {
-			await fetch("/api/plan/all", {
-				method: "GET",
-				headers: { token }
-			}).then(async data => {
-				const json = await data.json()
-				setGroups(json.map(group => {
+		
+		//No test method used.
+		await fetch("/api/plan/all", {
+			method: "GET",
+			headers: { token }
+		}).then(async data => {
+			const json = await data.json()
+			//TODO COMMENT BETTER HERE!
+			if (onlyMyGroups) {
+				setGroups(json.filter(group => group.userId === user.userId).map(group => { //Was json.map before TODO remove.
+					//This is called once for each group every time you toggle a group checkbox. (You get one checkbox for each group.)
 					return {...group, selected: states && states.includes(group.id)}
 				}))
-			}).catch(() => {
-				setErrorToast("Kunde inte hämta grupper") //TODO this error handling here seems problematic.
-				//Potential solutions: Return 200 or 204 in the backend when there are no groups (instead of 404), or change just the code here.
-			})
-		}
+			}
+			else {
+				setGroups(json.map(group => { //Old code.
+					return {...group, selected: states && states.includes(group.id)}
+				}))
+			}
+		}).catch(() => {
+			setErrorToast("Kunde inte hämta grupper") //TODO this error handling here seems problematic.
+			//Potential solutions: Return 200 or 204 in the backend when there are no groups (instead of 404), or change just the code here.
+		})
 	}
 
 	useEffect(() => {
 		fetchPlans()
-	}, [states])
+		callbackFunction(groups)
+	}, [states, onlyMyGroups]) //TODO changed thing here.
 
 	function checkID (id) {
 		if (id === null || id === undefined) {
