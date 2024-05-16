@@ -209,14 +209,14 @@ public class ExaminationApiTest {
         assertEquals("WestWest", responseWithComment3.getBody().get(2).getComment());
 
         // Test without existing comments.
-        Mockito.when(examinationCommentRepository.findByExamineeIdAndTechniqueName(1L, "nonexistentTechnique")).thenReturn(Collections.emptyList());
-        ResponseEntity<List<ExaminationComment>> responseWithoutComment = examinationController.getExamineeComment(1L, "nonexistentTechnique");
+        Mockito.when(examinationCommentRepository.findByExamineePairIdAndTechniqueName(1L, "nonexistentTechnique")).thenReturn(Collections.emptyList());
+        ResponseEntity<List<ExaminationComment>> responseWithoutComment = examinationController.getExamineePairComment(1L, "nonexistentTechnique");
         assertEquals(HttpStatus.NOT_FOUND, responseWithoutComment.getStatusCode());
         assertNull(responseWithoutComment.getBody());
 
         // Test with empty techniqueName.
-        Mockito.when(examinationCommentRepository.findByExamineeIdAndTechniqueName(1L, null)).thenReturn(Collections.emptyList());
-        ResponseEntity<List<ExaminationComment>> responseWithoutTechnique = examinationController.getExamineeComment(1L, null);
+        Mockito.when(examinationCommentRepository.findByExamineePairIdAndTechniqueName(1L, null)).thenReturn(Collections.emptyList());
+        ResponseEntity<List<ExaminationComment>> responseWithoutTechnique = examinationController.getExamineePairComment(1L, null);
         assertEquals(HttpStatus.BAD_REQUEST, responseWithoutTechnique.getStatusCode());
     }
 
