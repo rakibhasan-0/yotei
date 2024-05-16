@@ -1,7 +1,10 @@
 package se.umu.cs.pvt.permission;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,13 +17,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import se.umu.cs.pvt.role.RoleRepository;
 
 /**
  * RoleToPermission api for mapping permissions to roles.
  * 
- * @author Team Mango (Grupp 4) - 2024-05-15
+ * @author Team Mango (Grupp 4) - 2024-05-16
  */
 @RestController
 @CrossOrigin
@@ -46,13 +48,16 @@ public class RoleToPermissionController {
      * @return The list of permissions or an error code.
      */
     @GetMapping("/{role_id}")
-    public ResponseEntity<List<Permission>> getAllPermissionsForRoleWithId(@PathVariable(name = "role_id") Long roleId) {
-
+    public ResponseEntity<List<Permission>> getAllPermissionsForRoleWithId(
+        @PathVariable(name = "role_id") Long roleId) {
         if (roleRepository.findById(roleId).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        List<Permission> result = roleToPermissionRepository.findAllByRoleId(roleId);
+        List<RoleToPermission> roleToPermissions = roleToPermissionRepository
+            .findAllByRoleId(roleId);
+
+        List<Permission> result = findPermissions(roleToPermissions);
 
         if (result.isEmpty()) {
             return new ResponseEntity<>(result, HttpStatus.NO_CONTENT);
@@ -61,26 +66,43 @@ public class RoleToPermissionController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    private List<Permission> findPermissions(List<RoleToPermission> roleToPermissions) {
+        List<Permission> permissions = new ArrayList<>();
+
+        for (RoleToPermission roleToPermission : roleToPermissions) {
+            Optional<Permission> permission = permissionRepository.findById(
+                roleToPermission.getPerimssionId());
+
+            if (permission.isPresent()) {
+                permissions.add(permission.get());
+            }
+        }
+
+        return permissions;
+    }
+
     /**
      * (POST) Method for creating a new pair, i.e adding a permission to a role.
      * @param roleToPermissionToAdd
      * @return The role_to_permission pair, or an error code
      */
-    @PostMapping("/add")
-    public ResponseEntity<RoleToPermission> addPermissionToRole(@RequestBody Map<String, Long> roleToPermissionToAdd) {
-        Long role_id = roleToPermissionToAdd.get("role_id");
-        Long permission_id = roleToPermissionToAdd.get("permission_id");
+    @PostMapping("/{role_id}/add/{permission_id}")
+    public ResponseEntity<RoleToPermission> addPermissionToRole(
+        @PathVariable(name = "role_id") Long roleId, 
+        @PathVariable(name = "permission_id") Long permissionId) {
 
-        if (roleRepository.findById(role_id).isEmpty() || permissionRepository.findById(permission_id).isEmpty()) {
+        if (roleRepository.findById(roleId).isEmpty() || 
+            permissionRepository.findById(permissionId).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         
         // Returns an OK code if the pair already exists
-        if (roleToPermissionRepository.findByRoleIdAndPermissionId(role_id, permission_id) != null) {
+        if (roleToPermissionRepository.findByRoleIdAndPermissionId(
+            roleId, permissionId) != null) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
 
-        RoleToPermission newPair = new RoleToPermission(role_id, permission_id);
+        RoleToPermission newPair = new RoleToPermission(roleId, permissionId);
 
         RoleToPermission result = roleToPermissionRepository.save(newPair);
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -91,16 +113,24 @@ public class RoleToPermissionController {
      * @param roleToPermissionToDelete A body containing a "role_id" and "permission_id" of the pair to remove
      * @return The removed pair or an error message.
      */
-    @DeleteMapping("")
-    public ResponseEntity<Object> deletePairFromRoleIdAndPermissionId(@RequestBody Map<String, Long> roleToPermissionToDelete) {
-        Long role_id = roleToPermissionToDelete.get("role_id");
-        Long permission_id = roleToPermissionToDelete.get("permission_id");
-
-        if (roleToPermissionRepository.findByRoleIdAndPermissionId(role_id, permission_id) == null) {
-            return new ResponseEntity<>("Role with id " + role_id + " does not have permission with id " + permission_id + ".", HttpStatus.BAD_REQUEST);
+    @DeleteMapping("/{role_id}/delete/{permission_id}")
+    public ResponseEntity<Object> deletePairFromRoleIdAndPermissionId(
+        @PathVariable(name = "role_id") Long roleId, 
+        @PathVariable(name = "permission_id") Long permissionId) {
+            
+        if (roleToPermissionRepository.findByRoleIdAndPermissionId(
+            roleId, permissionId) == null) {
+                return new ResponseEntity<>(
+                    "Role with id " + roleId + " does not have permission with id " + 
+                    permissionId + ".", HttpStatus.BAD_REQUEST);
         }
+                    
+        roleToPermissionRepository.deleteByRoleIdAndPermissionId(roleId, permissionId);
+                    
+        Map<String, Long> roleToPermissionToDelete = new HashMap<>();
+        roleToPermissionToDelete.put("role_id", roleId);
+        roleToPermissionToDelete.put("permission_id", permissionId);
 
-        roleToPermissionRepository.deleteByRoleIdAndPermissionId(role_id, permission_id);
         return new ResponseEntity<>(roleToPermissionToDelete, HttpStatus.OK);
     }
 }

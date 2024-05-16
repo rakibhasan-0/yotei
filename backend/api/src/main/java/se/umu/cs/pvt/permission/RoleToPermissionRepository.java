@@ -2,6 +2,7 @@ package se.umu.cs.pvt.permission;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public interface RoleToPermissionRepository extends JpaRepository<RoleToPermissi
      * @param roleId The role to remove from
      * @param permissionId The permission to remove
      */
+    @Transactional
     void deleteByRoleIdAndPermissionId(Long roleId, Long permissionId);
 
     /**
