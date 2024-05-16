@@ -8,6 +8,8 @@ import styles from "./BeltBox.module.css"
  * 
  * 	Constraints are to be set by the parent component.
  * 
+ *  A new type of 'inverted mon'-belt was added 16/5 -24. BeltBox was updated as a result.
+ * 
  * Example usage:
  *      var belts = [{
  * 			"id":  "1",
@@ -22,6 +24,7 @@ import styles from "./BeltBox.module.css"
  *      }]
  * 
  * @author Griffin DV21JJN C19HLN
+ * @updated Kiwi c16kvn 2024-05-16
  * 
  * @param 	id 				@type { number } 				- An ID to identify the component
  * @param   belts 			@type { arr } 		         	- An array of Belts containing belt colorcode and child. 
