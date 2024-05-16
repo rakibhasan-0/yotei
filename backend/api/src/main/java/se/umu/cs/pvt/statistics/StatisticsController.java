@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.*;
+import se.umu.cs.pvt.belt.Belt;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class StatisticsController {
 
 
     @Operation(summary = "Returns the techniques and exercises done for a group sorted from highest to lowest occurence.", 
-               description = "Must include a group id as path variable. All other request parameters are optional and default to false. If no valid date interval is set, all session reviews are included in the statistics.")
+               description = "Must include a group id as path variable. All other request parameters are optional and default to false. If no valid date interval is set, all session reviews are included in the statistics. Get activity statistics by group id. NumberOfSessions is the number of session reviews that matach the current filter and AverageRating is the average rating of those reviews. All techniques associated with the group that are not performed in any session are included with count = 0.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "OK - Successfully retrieved"),
         @ApiResponse(responseCode = "204", description = "No content - No activities found for the group.")
@@ -93,6 +94,8 @@ public class StatisticsController {
 
         // Hashset to store unique session IDs to prevent double counting.
         Set<Long> uniqueSessionIds = new HashSet<>();
+        // Store unique IDs to find not performed techniques.
+        Set<Long> uniqueActivityIds = new HashSet<>();
 
         // Hashmap to store ratings for each session to prevent double counting.
         HashMap<Long,Integer> ratings = new HashMap<>();
@@ -104,6 +107,7 @@ public class StatisticsController {
             uniqueSessionIds.add(sa.getSession_id());
             ratings.put(sa.getSession_id(), sa.getRating());
             if (sr.getType().equals("technique")) {
+                uniqueActivityIds.add(sa.getActivity_id());
                 sr.setBelts(statisticsRepository.getBeltsForTechnique(sr.getActivity_id()));
             }
             if (!uniqueActivities.contains(sr)) {
@@ -113,17 +117,31 @@ public class StatisticsController {
             }
         }
 
+
         // Calculate average rating
         for (Long sid : uniqueSessionIds) {
             averageRating += ratings.get(sid);
         }
         averageRating /= uniqueSessionIds.size();
         averageRating = Math.round(averageRating * 100.0) / 100.0;
-
+        
+        // Get all techniques associated with the groups belts
+        List<Belt> groupBelts = statisticsRepository.getBeltsForGroup(id);
+        List<StatisticsResponse> allTechniques = statisticsRepository.getTechniquesForBelts(groupBelts);   
+        
+        // Add the techniques that has not been performed by the group
+        for (StatisticsResponse sr : allTechniques) {
+            if (!uniqueActivityIds.contains(sr.getActivity_id())) {
+                // I can't get the repository method to include the belts so we have to get them once again... :(
+                sr.setBelts(statisticsRepository.getBeltsForTechnique(sr.getActivity_id()));
+                uniqueActivities.add(sr);
+            }
+        }
+        
         // Sort remaining response entities
         uniqueActivities = uniqueActivities.stream()
             //.sorted(Comparator.comparing(StatisticsResponse::getName)) // Uncomment this line with preferred sort order to sort activities with the same count.
-            .sorted(Comparator.comparingLong(StatisticsResponse::getCount).reversed())
+            .sorted(Comparator.comparingLong(StatisticsResponse::getCount))
             .collect( Collectors.toList());
 
         

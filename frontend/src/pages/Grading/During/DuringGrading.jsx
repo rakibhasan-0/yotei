@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react"
+import React, { useState, useEffect , useContext, useRef } from "react"
 
 import TechniqueInfoPanel from "../../../components/Grading/PerformGrading/TechniqueInfoPanel"
 import Button from "../../../components/Common/Button/Button"
@@ -10,10 +10,10 @@ import styles from "./DuringGrading.module.css"
 import { ArrowRight, ArrowLeft } from "react-bootstrap-icons"
 import { useParams, useNavigate } from "react-router-dom"
 import {setError as setErrorToast} from "../../../utils" 
+import { AccountContext } from "../../../context"
 
 // Temp
 import ProtocolYellow from "./yellowProtocolTemp.json"
-import { AccountContext } from "../../../context"
 
 
 /**
@@ -132,7 +132,6 @@ export default function DuringGrading() {
 					throw new Error("Could not fetch examinees")
 				}
 				const all_examinees = await response.json()
-				
 				const current_grading_examinees = getExamineesCurrentGrading(all_examinees)
 				setExaminees(current_grading_examinees)
 				console.log("Fetched examinees in this grading: ", current_grading_examinees)
@@ -189,7 +188,8 @@ export default function DuringGrading() {
 				categoryTitle=""
 				currentTechniqueTitle={techniqueNameList[currentIndex].technique.text}
 				nextTechniqueTitle={techniqueNameList[currentIndex].nextTechnique.text}
-				mainCategoryTitle={techniqueNameList[currentIndex].categoryName}>
+				mainCategoryTitle={techniqueNameList[currentIndex].categoryName}
+				gradingId={gradingId}>
 
 			</TechniqueInfoPanel>
 			{/* All pairs */}			
@@ -203,7 +203,8 @@ export default function DuringGrading() {
 								examineeName={item.nameLeft} 
 								onClick={(newState) => examineeClick(newState, techniqueNameList[currentIndex].technique.text, index, `${index}-left`)}
 								buttonState={leftExamineeState}
-								setButtonState={setLeftExamineeState}>
+								setButtonState={setLeftExamineeState}
+								examineeId={item.leftId}>
 							</ExamineeBox>
 						}
 						rightExaminee={
@@ -211,10 +212,14 @@ export default function DuringGrading() {
 								examineeName={item.nameRight}
 								onClick={(newState) => examineeClick(newState, techniqueNameList[currentIndex].technique.text, index, `${index}-right`)}
 								buttonState={rightExamineeState}
-								setButtonState={setRightExamineeState}>
+								setButtonState={setRightExamineeState}
+								examineeId={item.rightId}>
 							</ExamineeBox>
 						}
-						pairNumber={index+1}>
+						pairNumber={index+1}
+						gradingId={gradingId}
+						currentTechniqueId={techniqueNameList[currentIndex].technique.text}>
+
 					</ExamineePairBox>
 				))}
 			</div>
@@ -308,7 +313,14 @@ export default function DuringGrading() {
 			if (examinee1 !== undefined || examinee2 !== undefined) { // Only add if something is found
 				const name1 = examinee1 ? examinee1.name : "" // If only one name found
 				const name2 = examinee2 ? examinee2.name : ""
-				pair_names_current_grading.push({ nameLeft: name1, nameRight: name2 })
+				const id1 = examinee1 ? examinee1.examinee_id : ""
+				const id2 = examinee2 ? examinee2.examinee_id : ""
+				pair_names_current_grading.push({ 
+					nameLeft: name1, 
+					nameRight: name2, 
+					leftId: id1, 
+					rightId: id2
+				})
 			}
 		})
 		return pair_names_current_grading

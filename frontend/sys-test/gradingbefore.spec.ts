@@ -51,7 +51,7 @@ test.describe("GradingBefore tests", () => {
 
     await page.locator('#pencil-icon').dispatchEvent('click');
     await page.locator('#edit-element').fill('jan-åke')
-    await page.locator('#key-icon').dispatchEvent('click');
+    await page.locator('#accept-icon').dispatchEvent('click');
 
     await expect(page.getByText('jan-åke')).toHaveCount(1)
     
