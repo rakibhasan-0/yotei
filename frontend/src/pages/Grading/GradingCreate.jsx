@@ -23,7 +23,7 @@ export default function GradingCreate() {
 	const { token, userId } = context
 	const navigate = useNavigate()
 	const today = new Date()
-	const formattedDateTime = today.toISOString()
+	const formattedDateTime = today.toISOString().slice(0, 10)
 
 	const handleNavigation = async (beltId, color) => {
 		try {
@@ -35,7 +35,6 @@ export default function GradingCreate() {
 				technique_step_num: 0,
 				created_at: formattedDateTime
 			}
-
 			const response = await fetch("/api/examination/grading", {
 				method: "POST",
 				headers: {
