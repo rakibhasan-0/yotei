@@ -1,15 +1,14 @@
 import { expect, request } from "@playwright/test"
-import { Account } from "../types/systemTestsTypes"
+import { Account } from "../Types/systemTestsTypes"
 
 /**
- * Fixtures related to handling creation and deletion of a user. 
+ * API testing utilities related to handling creation and deletion of a user. 
  *
  *  @author Team Mango (Group 4)
  *  @since 2024-05-6
  *  @version 2.0
  */
 export class UserApi {
-
 	private static async make_ctx() {
 		const ctx = await request.newContext({
 			extraHTTPHeaders: {
@@ -22,6 +21,10 @@ export class UserApi {
 		return ctx
 	}
 
+	/**
+	 * Gets admin token.
+	 * @returns The response body as a string.
+	 */
 	static async get_admin_token() {
 		const ctx = await request.newContext({
 			extraHTTPHeaders: {
@@ -40,12 +43,10 @@ export class UserApi {
 	}
 
 	/**
-     * Skapar en ny användare. Går inte fel om användaren redan finns.
-     * 
-     * @param username Användarnamn för ny användare
-     * @param password Lösenord för ny användare
-     * @param is_admin Sant om användaren ska bli admin
-     */
+	 * 
+	 * @param user Account that consists of username, password and role. 
+	 * @returns Response formatted as JSON.
+	 */
 	static async register_user(user: Account) {
 		const ctx = await UserApi.make_ctx()
 		const response = await ctx.post("/api/users", {
@@ -61,9 +62,9 @@ export class UserApi {
 	}
 
 	/**
-     * Ta bort en användare.
+     * Removes a user.
      * 
-     * @param username 
+     * @param username Name for the user to be deleted. 
      */
 	static async remove_user(username: string) {
 		const ctx = await UserApi.make_ctx()

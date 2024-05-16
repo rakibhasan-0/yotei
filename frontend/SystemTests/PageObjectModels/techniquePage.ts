@@ -1,5 +1,5 @@
 import { type Page } from '@playwright/test';
-import { Technique } from 'types/systemTestsTypes';
+import { Technique } from '../Types/systemTestsTypes';
 
 /**
  *  

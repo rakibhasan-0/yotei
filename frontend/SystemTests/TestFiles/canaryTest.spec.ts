@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures';
+import { test, expect } from '../fixtures';
 
 /**
  * A canary test for testing the system test environment. Verifies that fixtures for login as an admin works.
