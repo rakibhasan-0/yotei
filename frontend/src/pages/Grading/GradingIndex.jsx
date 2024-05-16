@@ -25,9 +25,9 @@ export default function GradingIndex() {
 	const [currentGradings, setCurrentGradings] = useState([])
 	const [finishedGradings, setFinishedGradings] = useState([])
 	const [loading, setLoading] = useState(true)
+	const [isCreateListDone, setIsCreateListDone] = useState(false)
 	const context = useContext(AccountContext)
 	const navigate = useNavigate()
-
 
 	const { token, userId } = context
 
@@ -37,11 +37,12 @@ export default function GradingIndex() {
 	 * @param {integer} gradingStep 
 	 * @param {string} color 
 	 */
+	
 	const handleNavigation = async (gradingId, gradingStep, color) => {
+		console.log(gradingId)
 		const params = {
 			ColorParam: color,
 		}
-
 		navigate(`/grading/${gradingId}/${gradingStep}`, { state: params })
 	}
 
@@ -83,10 +84,54 @@ export default function GradingIndex() {
 	 * Handle belt colors and name. 
 	 * Distribution current gradings and finished gradings for userid. 
 	 */
+	function createLists(gradings_data) {
+		gradings_data.map(async (item) => {
+			if(item.creator_id === userId) {
+				const isCreatorInFinished = finishedGradings.some(grading => grading.creator_id === userId)
+				const isCreatorInCurrent = currentGradings.some(grading => grading.creator_id === userId)
+
+				if (!isCreatorInFinished && !isCreatorInCurrent) {
+					if (item.step === 3) {
+						setFinishedGradings(prevState => [...prevState, item])
+					} else {
+						setCurrentGradings(prevState => [...prevState, item])
+					}
+				}
+			}
+		})
+		setIsCreateListDone(true)
+	}
+
+
+
 	useEffect(() => {
+		if(isCreateListDone) {
+			console.log(currentGradings)
+			console.log(finishedGradings)
+			if(currentGradings.length === 0 && finishedGradings.length === 0) {
+				navigateTo()
+			}
+			setIsCreateListDone(false)
+
+			const sortedCurrentGradings = [...currentGradings].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+			setCurrentGradings(sortedCurrentGradings)
+			const sortedFinishedGradings = [...finishedGradings].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+			setFinishedGradings(sortedFinishedGradings)
+
+		}
+		
+	}, [isCreateListDone])
+
+ 
+	
+
+	useEffect(() => {
+
 
 		const fetchData = async () => {
 			try {
+				setFinishedGradings([])
+				setCurrentGradings([])
 				const [belt_data, gradings_data] = await Promise.all([
 					fetchBelts(),
 					fetchGradings()
@@ -104,32 +149,27 @@ export default function GradingIndex() {
 				setBelts(colorMaps)
 				setLoading(false)
 
-				gradings_data.forEach(item => {
+				createLists(gradings_data)
 
-					if(item.creator_id === userId) {
-						const isCreatorInFinished = finishedGradings.some(grading => grading.creator_id === userId)
-						const isCreatorInCurrent = currentGradings.some(grading => grading.creator_id === userId)
+				
+				
 
-						if (!isCreatorInFinished && !isCreatorInCurrent) {
-							if (item.step === 3) {
-								setFinishedGradings(prevState => [...prevState, item])
-							} else {
-								setCurrentGradings(prevState => [...prevState, item])
-							}
-						}
-					}
-				})
-
-        
 
 			} catch (error) {
 				console.error("There was a problem with the fetch operation:", error)
 			}
+
 		}
 
 		fetchData()
+	
+		
+
+		
 
 	}, [])
+
+
 
 	function navigateTo() {
 		navigate("/grading/create")
