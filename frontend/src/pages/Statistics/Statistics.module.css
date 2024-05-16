@@ -4,8 +4,25 @@
 	margin-bottom: 3%;
 }
 
-
 .FilterAndSortContainer {
 	position: relative;
 	margin-top: 4%;
+}
+
+.sortingContainer{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid gray;
+	margin-top: 3%;
+}
+
+.sortingContainer h5{
+	font-size: 20px;
+
+}
+
+.activitiesContainer h5{
+	font-size: 20px;
+	left: 40px;
 }

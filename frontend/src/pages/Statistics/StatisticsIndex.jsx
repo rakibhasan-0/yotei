@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react"
+import React, { useState, useEffect, useContext} from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { AccountContext } from "../../context"
 import Spinner from "../../components/Common/Spinner/Spinner"
@@ -9,6 +9,7 @@ import StatisticsPopUp from "./StatisticsPopUp"
 import FilterStatistics from "./FilterStatistics"
 import {getFormattedDateString} from "../../components/Common/DatePicker/DatePicker"
 import GradingStatisticsPopup from "./GradingStatisticsPopup"
+import SortingArrowButton from "../../components/Common/SortingArrowButton/SortingArrowButton"
 
 /**
  * 
@@ -40,7 +41,8 @@ export default function Statistics() {
 		showExercises: false,
 		showKihon: false,
 	})
-
+	const [order, setDescendingOrder] = useState(false)
+	const [rotate, setRotate] = useState(false)
 
 	// creating a date object for two years before from now and today's date
 	const twoYearsBeforeFromNow = new Date()
@@ -117,7 +119,7 @@ export default function Statistics() {
 					const data = await responseFromGroupDetailsAPI.json()
 					setNumberOfSessions(data.numberOfSessions)
 					setAverageRating(data.averageRating)
-					setGroupActivities(data.activities)
+					setGroupActivities(data.activities.reverse())
 				}else if (responseFromGroupDetailsAPI.status === 204) {
 					// if the response is 204, it means that there is no data to show for the selected filters.
 					setGroupActivities([])
@@ -162,6 +164,15 @@ export default function Statistics() {
 		setFilter({ ...filter, [variableName]: value })
 	}
 
+	// that function is responsible for changing the order of the group activities.
+	// initially, the order is increasing, when the user clicks on the button, the order will be descending.
+	function changeOrder() {
+		console.log("rotate", rotate)
+		setDescendingOrder(!order)
+		setGroupActivities(groupActivities.reverse())
+		setRotate(!rotate)
+	}
+
 	return (
 		<div>
 			<title>Statistik</title>
@@ -184,6 +195,11 @@ export default function Statistics() {
 					belts={selectedBelts}
 					dates={dates}
 				/>
+
+				<div className={style.sortingContainer}>
+					<h5>Aktiviteter</h5>
+					<SortingArrowButton id="sorting-button" changeOrder={changeOrder} rotate ={rotate} />
+				</div>
 
 				<GradingStatisticsPopup id={"grading-statistics-container"} />
 

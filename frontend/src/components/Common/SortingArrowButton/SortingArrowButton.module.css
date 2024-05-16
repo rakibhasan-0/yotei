@@ -1,0 +1,15 @@
+.sortingButtonContainer button {
+    border: 1px solid gray;
+    background: none;
+    margin-bottom: 10%;
+    border-radius: 15%;
+    padding: 0;
+}
+
+.sortingButtonContainer{
+	display: flex;
+}
+
+.rotate{
+    transform: scaleX(-1);
+}
