@@ -25,7 +25,7 @@ export default defineConfig({
 	},
 	globalTimeout: 3000000,
 	fullyParallel: false,
-	workers: 4,
+	workers: 4, // Since system computer in CI pipeline has 4 cores.
 	forbidOnly: !!process.env.CI,
 	maxFailures: process.env.CI ? 3 : undefined,
 	retries: process.env.CI ? 2 : 0,
