@@ -6,7 +6,7 @@
  * @author Tomato (Group 6) 
  * @since 2024-05-06
  */
-import WorkoutActivityListItem from "./SavedListItemComponent.jsx"
+import SavedActivityListItem from "./SavedListItemComponent.jsx"
 import styles from "./SavedListComponent.module.css"
 import {useState, useEffect,useContext} from "react"
 import Spinner from "../../../components/Common/Spinner/Spinner"
@@ -60,7 +60,7 @@ export default function SavedActivityList({activities,edit}) {
 				</div>
 			</legend>
 			{!isCollapsed && ListData.data.activities.map((activity, index) =>
-				<WorkoutActivityListItem key={activity.id} activity={activity} index={index} edit={edit}/>)}
+				<SavedActivityListItem key={activity.id} activity={activity} index={index} edit={edit}/>)}
 		</fieldset>
 	</>
 }

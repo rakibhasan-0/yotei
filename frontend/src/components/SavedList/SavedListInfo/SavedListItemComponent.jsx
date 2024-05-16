@@ -17,7 +17,7 @@ import { LIST_CREATE_TYPES } from "../../Common/List/ListCreateReducer"
 import DescriptionToggle from "../../Common/DescriptionToggle"
 import { Trash } from "react-bootstrap-icons"
 
-const WorkoutActivityListItem = ({ activity, index, id,edit}) => {
+const SavedActivityListItem = ({ activity, index, id,edit}) => {
 	//Fanns ej i WorkoutActivityList.jsx
 	let listCreateInfo,listCreateInfoDispatch
 	if(edit){
@@ -117,4 +117,4 @@ const WorkoutActivityListItem = ({ activity, index, id,edit}) => {
 	)
 
 }
-export default WorkoutActivityListItem
+export default SavedActivityListItem
