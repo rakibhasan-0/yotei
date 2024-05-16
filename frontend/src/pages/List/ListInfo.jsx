@@ -161,7 +161,7 @@ export default function ListInfo({ id }) {
 
 			<h2 className="font-weight-bold mb-0 mt-5 text-left">Aktiviteter</h2>
 			<SavedActivityList activities={listData} edit={false} />
-			{listUsers !== null && listUsers.length > 0 && getWorkoutUsersContainer(listUsers)}
+			{listUsers !== null && listUsers.length > 0 && getListSharedUsersContainer(listUsers)}
 			{getButtons(navigate, setRShowPopup)}
 		</div>
 	)
@@ -172,7 +172,7 @@ async function deleteList(listId, context, navigate, setShowPopup) {
 	// frontend/src/pages/Workout/WorkoutView
 }
 
-function getWorkoutUsersContainer(listUsers) {
+function getListSharedUsersContainer(listUsers) {
 	return (
 		<div className="container mt-3">
 			<div className="row">
@@ -210,7 +210,7 @@ function getListInfoContainer(listData, setShowPopup, context) {
 		<>
 			<div className="container px-0">
 				<div className={styles.info}>
-					<div className={`d-flex col ${styles.workoutDetailColumnItem} p-0`}>
+					<div className={`d-flex col ${styles.listDetailColumnItem} p-0`}>
 						<title>Pass</title>
 						<h1 className="font-weight-bold m-0">{listData.data.name}</h1>
 					</div>
@@ -243,26 +243,26 @@ function getListInfoContainer(listData, setShowPopup, context) {
 					</div>
 
 					<div className="d-flex">
-						<div className={styles.workoutDetailColumnItem}>
+						<div className={styles.listDetailColumnItem}>
 							<h2 className="font-weight-bold mb-0">Synlighet</h2>
 							<p className="mb-0">{listData.data.isPrivate? "Privat": "Publik"}</p>
 						</div>
-						<div className={styles.workoutDetailColumnItem} style={{ paddingLeft: "37px" }}>
+						<div className={styles.listDetailColumnItem} style={{ paddingLeft: "37px" }}>
 							<h2 className="font-weight-bold mb-0">Författare</h2>
 							{<p className="mb-0">{listData.data.author.username}</p>}
 						</div>
 					</div>
 					<div className="d-flex" id="no-print">
-						<div className={styles.workoutDetailColumnItem}>
+						<div className={styles.listDetailColumnItem}>
 							<h2 className="font-weight-bold mb-0">Skapad</h2>
 							<p className="mb-0">{listData.data.created_date}</p>
 						</div>
-						<div className={styles.workoutDetailColumnItem} style={{ paddingLeft: "37px" }}>
+						<div className={styles.listDetailColumnItem} style={{ paddingLeft: "37px" }}>
 							<h2 className="font-weight-bold mb-0 text-align-left">Senast ändrad</h2>
 							<p className="mb-0">{listData.data.changed_date}</p>
 						</div>
 					</div>
-					<div className={styles.workoutDetailColumnItem}>
+					<div className={styles.listDetailColumnItem}>
 						<h2 className="font-weight-bold mb-0">Beskrivning</h2>
 						<p className={styles.properties}>{listData.data.description}</p>
 					</div>
