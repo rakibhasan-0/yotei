@@ -11,11 +11,12 @@ import styles from "./Dropdown.module.css"
  * The width of the component will be set by the parent.
  * 
  * Props:
- *	item     @type {JSX}     Optional JSX element to be displayed left of the text
- *	text     @type {String}  Text of the component
- *	children @type {JSX}     JSX element which will be displayed when the component is expanded
- *	centered @type {Boolean} Boolean to set text as centered
- *	id       @type {String}  ID of the component
+ *	item     @type {JSX}      Optional JSX element to be displayed left of the text
+ *	text     @type {String}   Text of the component
+ *	children @type {JSX}      JSX element which will be displayed when the component is expanded
+ *	centered @type {Boolean}  Boolean to set text as centered
+ *	id       @type {String}   ID of the component
+ * 	onClick  @type {Function} Function when an item is pressed in the drop down
  * 
  * Example usage:
  * 
@@ -23,25 +24,35 @@ import styles from "./Dropdown.module.css"
  * <p>This is a list item</p>
  * </Dropdown>
  * 
- * @author Chimera
+ * @author Chimera, Tomato (Group 6)
  * @since 2023-05-02
  * @updated 2023-05-30 Chimera, updated documentation
- * @updated 2024-05-15 Tomato, fixed a bug with label, changed to div.
  * @version 2.1 
  */
-export default function Component({ item, text, children, id, autoClose, errorMessage }) {
+export default function Component({ item, text, children, id, autoClose, errorMessage, onClick}) {
 	const [toggled, setToggled] = useState(false)
-	const onClick = () => {
+	const handleToggle = () => {
 		
 		if (autoClose !== false) {
 			setToggled(false)
 		}
 	}
+
+	const handleOnClick = (e) => {
+		
+		if(onClick) {
+			onClick()
+			
+		}
+		e.preventDefault()
+	}
+
+	
 	const style = errorMessage?.length > 0 ? { border: "2px solid var(--red-primary)" } : {}
 	return (
 		<div className={styles.listLabel}>
 			<div id={id} className={styles.listContainer} style={style}>
-				<div className={styles.listHeader} onClick={(e) => {setToggled(!toggled); e.preventDefault()}} id={`${id}-header`}>
+				<div className={styles.listHeader} onClick={(e) => { setToggled(!toggled); handleOnClick(e)}} id={`${id}-header`}>
 					<div className={styles.listItem}>
 						{item}
 					</div>
@@ -51,7 +62,7 @@ export default function Component({ item, text, children, id, autoClose, errorMe
 					</div>
 				</div>
 				<div className={styles.listItemContainer} >
-					<div className={styles.listChild} onClick={onClick} style={{ display: toggled ? "inherit" : "none" }} id={`${id}-children`}>
+					<div className={styles.listChild} onClick={handleToggle} style={{ display: toggled ? "inherit" : "none" }} id={`${id}-children`}>
 						{children}
 					</div> 
 				</div>
