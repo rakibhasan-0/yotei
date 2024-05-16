@@ -9,7 +9,7 @@ import style from "./SortingArrowButton.module.css"
  * 
  * @param {id} id- The id of the button. 
  * @param {changeOrder} changeOrder- The function that changes the order of the list.
- * @param {ref} rotate- A boolean that determines if the arrow should be rotated or not.
+ * @param {rotate} rotate- A boolean that determines if the arrow should be rotated or not.
  * 
  *  example usage:
  *  const [order, setDescendingOrder] = useState(false)

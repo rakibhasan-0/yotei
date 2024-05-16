@@ -15,7 +15,19 @@
 	align-items: center;
 	border-bottom: 1px solid gray;
 	margin-top: 3%;
+	padding: 0 0 5px;
 }
+
+
+.sortingText {
+	white-space: wrap;
+	margin: 0;
+	font-size: 9px;
+	color: grey;
+	font-weight: bold;
+}
+
+
 
 .sortingContainer h5{
 	font-size: 20px;
