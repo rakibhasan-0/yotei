@@ -37,7 +37,7 @@ const ListEdit = () => {
 		setIsSubmitted(true)
 
 		const data = parseData(listCreateInfo.data)
-		const listId = await updateWorkout(data)
+		const listId = await updateList(data)
 
 		if(listId) {
 			setSuccess("Träningen uppdaterades!")
@@ -116,7 +116,7 @@ const ListEdit = () => {
 	 * @param {*} body
 	 * @returns The id of the updated workout if successfull, otherwise null.
 	 */
-	async function updateWorkout(body) {
+	async function updateList(body) {
 		const requestOptions = {
 			method: "PUT",
 			headers: {
