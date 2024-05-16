@@ -279,10 +279,10 @@ public class ExaminationController {
         try {
             if (techniqueName == null) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            } if (examinationCommentRepository.findByGradingIdAndTechniqueNameAndExamineeIdAndExamineePairId(gradingId, techniqueName, null, null).isEmpty()) {
+            } if (examinationCommentRepository.findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(gradingId, techniqueName).isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(examinationCommentRepository.findByGradingIdAndTechniqueNameAndExamineeIdAndExamineePairId(gradingId, techniqueName, null, null), HttpStatus.OK);
+            return new ResponseEntity<>(examinationCommentRepository.findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(gradingId, techniqueName), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
