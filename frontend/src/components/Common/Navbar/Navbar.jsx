@@ -48,42 +48,43 @@ function Navbar({ testId }) {
 			<div className={`${styles.commonNavbarSidebar} p-4  ${open ? styles.open : ""}`}>
 
 				<div className={styles.closeAndUserIconsWrapper}>
-					<CloseIcon role="button"  className={styles.closeIconWraper} onClick={() => {setOpen(false)}} />
+					<CloseIcon role="button"  className={styles.closeIconWrapper} onClick={() => {setOpen(false)}} />
 					<Button  onClick={() => navigateAndClose("/profile")}>
-						<UserIcon className={styles.commonNavbarIconClose} />
+						<UserIcon className={styles.commonNavbarUserIcon} />
 					</Button>
 				</div>
 
 
-
-				<Button width={"100%"} onClick={() => navigateAndClose("/plan")}>
-					<h1 className={styles.commonNavbarButton}>Planering</h1>
-				</Button>
-
-				<Button width={"100%"} onClick={() => navigateAndClose("/groups")}>
-					<h1 className={styles.commonNavbarButton}>Grupper</h1>
-				</Button>
-
-				<Button width={"100%"} onClick={() => navigateAndClose("/workout")}>
-					<h1 className={styles.commonNavbarButton}>Pass</h1>
-				</Button>
-
-				<Button width={"100%"} onClick={() => navigateAndClose("/activity",  {state: {clearSearchText: true}})}>
-					<h1 className={styles.commonNavbarButton}>Tekniker & Övningar</h1>
-				</Button>
-
-				{isExaminationEnabled ? (
-					<Button width={"100%"} onClick={() => {}}>
-						<h1 className={styles.commonNavbarButton}>Gradering</h1>
+				<div className={styles.btnWrapper}>
+					<Button width={"100%"} onClick={() => navigateAndClose("/plan")}>
+						<h1 className={styles.commonNavbarButton}>Planering</h1>
 					</Button>
-				) : (
-					null
-				)}
+
+					<Button width={"100%"} onClick={() => navigateAndClose("/groups")}>
+						<h1 className={styles.commonNavbarButton}>Grupper</h1>
+					</Button>
+
+					<Button width={"100%"} onClick={() => navigateAndClose("/workout")}>
+						<h1 className={styles.commonNavbarButton}>Pass</h1>
+					</Button>
+
+					<Button width={"100%"} onClick={() => navigateAndClose("/activity",  {state: {clearSearchText: true}})}>
+						<h1 className={styles.commonNavbarButton}>Tekniker & Övningar</h1>
+					</Button>
+
+					{isExaminationEnabled ? (
+						<Button width={"100%"} onClick={() => {}}>
+							<h1 className={styles.commonNavbarButton}>Gradering</h1>
+						</Button>
+					) : (
+						null
+					)}
+				</div>
 				
 
 				{ isAdmin(context) ? 
-					<Button width={"25%"}  onClick={() => navigateAndClose("/profile")}>
-						<AdminIcon role="button" className={styles.commonNavbarIconClose}  onClick={() => navigateAndClose("/admin")} />
+					<Button width={"min-content"} onClick={() => navigateAndClose("/profile")}>
+						<AdminIcon role="button" className={styles.commonNavbarIconAdmin}  onClick={() => navigateAndClose("/admin")} />
 					</Button>
 					
 					:<></>
