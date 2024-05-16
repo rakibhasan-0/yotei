@@ -281,6 +281,20 @@ public class ExaminationController {
 
         return new ResponseEntity<>(examinationCommentRepository.findAll(), HttpStatus.OK);
     }
+
+    @GetMapping("/comment/{examinee_id}")
+    public ResponseEntity<List<ExaminationComment>> getExamineeComment(@PathVariable("examinee_id") long examinee_id, @RequestParam(name = "technique_name") String techniqueName ) {
+
+        if (techniqueName == null) {
+            return new ResponseEntity<>(null);
+        }
+
+
+        return new ResponseEntity<>(examinationCommentRepository.findByExamineeId(examinee_id), HttpStatus.OK);
+
+    }
+
+
     /**
      * Creates a examination result.
      * @param examination_result Object mapped examimnation result from request body.
