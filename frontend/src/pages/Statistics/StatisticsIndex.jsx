@@ -167,7 +167,6 @@ export default function Statistics() {
 	// that function is responsible for changing the order of the group activities.
 	// initially, the order is increasing, when the user clicks on the button, the order will be descending.
 	function changeOrder() {
-		console.log("rotate", rotate)
 		setDescendingOrder(!order)
 		setGroupActivities(groupActivities.reverse())
 		setRotate(!rotate)
