@@ -270,6 +270,23 @@ public class ExaminationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /**
+     * 
+     * @return
+     */
+    @GetMapping("/comment/group/{grading_id}")
+    public ResponseEntity<List<ExaminationComment>> getGradingComment(@PathVariable("grading_id") long gradingId, @RequestParam(name = "technique_name") String techniqueName ) {
+        try {
+            if (techniqueName == null) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            } if (examinationCommentRepository.findByGradingIdAndTechniqueNameAndExamineeIdAndExamineePairId(gradingId, techniqueName, null, null).isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(examinationCommentRepository.findByGradingIdAndTechniqueNameAndExamineeIdAndExamineePairId(gradingId, techniqueName, null, null), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
     /**
      * Returns all examination comments.
