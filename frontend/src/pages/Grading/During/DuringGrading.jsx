@@ -94,8 +94,8 @@ export default function DuringGrading() {
 	const [showPopup, setShowPopup] = useState(false)
 	const [examinees, setExaminees] = useState(undefined)
 	const [pairs, setPairs] = useState([])
-    const [techinqueNameList, setTechniqueNameList] = useState(false)
-    const [categoryIndexMap, setCategoryIndices] = useState(false)
+    const [techniqueNameList, setTechniqueNameList] = useState(undefined)
+    const [categoryIndexMap, setCategoryIndices] = useState(undefined)
 	const { gradingId } = useParams()
 	const navigate = useNavigate()
 
@@ -229,13 +229,14 @@ export default function DuringGrading() {
 
 	return (
 		<div className={styles.container}>
-			<TechniqueInfoPanel
-				categoryTitle=""
-				currentTechniqueTitle={techniqueNameList[currentIndex].technique.text}
-				nextTechniqueTitle={techniqueNameList[currentIndex].nextTechnique.text}
-				mainCategoryTitle={techniqueNameList[currentIndex].categoryName}>
-
-			</TechniqueInfoPanel>
+            {techniqueNameList && (
+                <TechniqueInfoPanel
+                categoryTitle=""
+                currentTechniqueTitle={techniqueNameList[currentIndex].technique.text}
+                nextTechniqueTitle={techniqueNameList[currentIndex].nextTechnique.text}
+                mainCategoryTitle={techniqueNameList[currentIndex].categoryName}>
+                </TechniqueInfoPanel>
+            )}
 			{/* All pairs */}			
 			<div ref={scrollableContainerRef} className={styles.scrollableContainer}>
 				{pairs.map((item, index) => (
@@ -290,7 +291,8 @@ export default function DuringGrading() {
 				id={"navigation-popup"} 
 				title={"Tekniker"} 
 				isOpen={showPopup} 
-				setIsOpen={setShowPopup}> 
+				setIsOpen={setShowPopup}>
+                {categoryIndexMap && ( 
 				<div className={styles.popupContent}>
 					{/* Should link to the respective technique grading page. */}
 					{categoryIndexMap.map((techniqueName, index) => (
@@ -305,7 +307,8 @@ export default function DuringGrading() {
 					))}
 					{/* Should link to the "after" part of the grading as well as save the changes to the database. */}
 					<Button id={"summary-button"} onClick={gotoSummary}><p>Fortsätt till summering</p></Button>
-				</div>
+                </div>
+                )}
 			</Popup>
 		</div>
 	)
