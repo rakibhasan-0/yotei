@@ -307,7 +307,7 @@ public class ExaminationController {
      * @param techniqueName techniqueName of the desired technique.
      * @return HTTP-status code.
      */
-    @GetMapping("/comments/pair/{examinee_pair_id}")
+    @GetMapping("/comment/pair/{examinee_pair_id}")
     public ResponseEntity<List<ExaminationComment>> getExamineePairComment(@PathVariable("examinee_pair_id") long examineePairId, @RequestParam(name = "technique_name") String techniqueName ) {
         try {
             if (techniqueName == null) {
