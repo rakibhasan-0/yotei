@@ -25,8 +25,8 @@ import { AccountContext } from "../../context"
 export default function GradingDeviations() {
 		const [toggled, setToggled] = useState(false)
 		const [data, setData] = useState([])
-		const { userId } = useParams()
-		const [name, setName] = useState("")
+		const { userId } = useParams() //The user id of the current examinee
+		const [name, setName] = useState("") //The name of the current examinee
 		const [, setGradingId] = useState(-1)
 		const [, setBeltId] = useState(-1)
 		const { gradingId } = useParams()
@@ -74,17 +74,32 @@ export default function GradingDeviations() {
                 }
 			}
         }
-
+        
+        //Initialize data
         setData(testData.categories)
         fetchData()
 		}, [])
+
+    /**
+     * Checks if the examinee has passed a specific technique
+     * @param {Technique} technique 
+     * @returns Boolean value
+     */
     function hasPassed() {
+        // har tagit bort technique eftersom det inte går igenom lintern
         return true //PLACEHOLDER
     }
     function isDeviating() {
         return false //PLACEHOLDER
     }
 
+
+    /**
+     * Gets a holder which holds a container for each technique in the grading protocol. The container also has the comment 
+     *      and pass status for each technique
+     * @param {Array} exercises 
+     * @returns A container displaying all exercises and information about the examinees performance of them
+     */
     function getActivityContainer(exercises) {
 
         return exercises !== null && (
