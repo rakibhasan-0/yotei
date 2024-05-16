@@ -2,7 +2,7 @@ package se.umu.cs.pvt.activitylist;
 
 import java.util.Set;
 
-public class AddActivityListRequest {
+public class ActivityListRequest {
     private Long id;
     private String name;
     private String description;

@@ -1,7 +1,8 @@
 package se.umu.cs.pvt.activitylist.Dtos;
 
 /**
- * DTO model used when returning a list of ActivityList
+ * DTO model used when returning a list of ActivityList with the neccessary
+ * information.
  * 
  * @author Team Tomato
  * @since 2024-05-08
@@ -13,13 +14,15 @@ public class ActivityListShortDTO {
     private int size;
     private UserShortDTO author;
     private Boolean hidden;
+    private Boolean isShared;
 
-    public ActivityListShortDTO(Long id, String name, int size, UserShortDTO author, Boolean hidden) {
+    public ActivityListShortDTO(Long id, String name, int size, UserShortDTO author, Boolean hidden, Boolean isShared) {
         this.id = id;
         this.name = name;
         this.size = size;
         this.author = author;
         this.hidden = hidden;
+        this.isShared = isShared;
     }
 
     public Long getId() {
@@ -40,5 +43,13 @@ public class ActivityListShortDTO {
 
     public Boolean getHidden() {
         return hidden;
+    }
+
+    public Boolean getIsShared() {
+        return isShared;
+    }
+
+    public void setIsShared(Boolean isShared) {
+        this.isShared = isShared;
     }
 }

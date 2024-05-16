@@ -20,12 +20,13 @@ public interface IActivityListService {
 
     ActivityListDTO getActivityListDetails(Long id, String token);
 
-    Long addActivityList(AddActivityListRequest lsitToAdd, String token);
+    Long addActivityList(ActivityListRequest listToAdd, String token);
 
     void removeActivityList(Long id, String token);
 
-    List<ActivityListDTO> getUserActivityLists(String token);
+    List<ActivityListShortDTO> getUserActivityLists(String token);
 
-    public List<ActivityListShortDTO> getAllActivityLists(Boolean hidden, Boolean isAuthor, String token);
+    List<ActivityListShortDTO> getAllActivityLists(Boolean hidden, Boolean isAuthor, String token);
 
+    Long editActivityList(ActivityListRequest listToUpdate, String token);
 }

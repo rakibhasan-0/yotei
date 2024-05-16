@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,7 +29,7 @@ import org.springframework.http.HttpStatus;
 
 import org.springframework.web.bind.annotation.RequestBody;
 
-import se.umu.cs.pvt.activitylist.AddActivityListRequest.ActivityRequest;
+import se.umu.cs.pvt.activitylist.ActivityListRequest.ActivityRequest;
 import se.umu.cs.pvt.activitylist.Dtos.*;
 import se.umu.cs.pvt.exercise.Exercise;
 import se.umu.cs.pvt.exercise.ExerciseRepository;
@@ -80,7 +81,7 @@ public class ActivityListController {
      *         Forbidden if the token does not match the author of the list to add
      */
     @PostMapping("/add")
-    public ResponseEntity<Long> addList(@RequestBody AddActivityListRequest listToAdd,
+    public ResponseEntity<Long> addList(@RequestBody ActivityListRequest listToAdd,
             @RequestHeader(value = "token") String token) {
         try {
             Long id = activityListService.addActivityList(listToAdd, token);
@@ -130,42 +131,20 @@ public class ActivityListController {
      *         Unauthorized if token is invalid
      *         Forbidden if the token is not the author of the list to be edited
      *         Not found if the list to be edited was not found
+     *         Bad Request when the Activities type is incorrect
      */
-    @PostMapping("/edit")
-    public ResponseEntity<ActivityList> editList(@RequestBody AddActivityListRequest listToUpdate,
+    @PutMapping("/edit")
+    public ResponseEntity<Long> editList(@RequestBody ActivityListRequest listToUpdate,
             @RequestHeader(value = "token") String token) {
         try {
-            jwt = jwtUtil.validateToken(token);
-            userIdL = jwt.getClaim("userId").asLong();
-            userRole = jwt.getClaim("role").asString();
-        } catch (Exception e) {
+            Long updatedId = activityListService.editActivityList(listToUpdate, token);
+            return new ResponseEntity<>(updatedId, HttpStatus.OK);
+        } catch (UnauthorizedAccessException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-        Optional<ActivityList> result = listRepository.findById(listToUpdate.getId());
-        if (result.isPresent()) {
-            ActivityList list = result.get();
-            if (list.getAuthor() == userIdL || userRole.equals("ADMIN")) {
-                if (listToUpdate.getName() != null) {
-                    list.setName(listToUpdate.getName());
-                }
-                if (listToUpdate.getDesc() != null) {
-                    list.setDesc(listToUpdate.getDesc());
-                }
-
-                list.setHidden(listToUpdate.getHidden());
-
-                List<UserShort> usersList = userShortRepository.findAllById(listToUpdate.getUsers());
-                Set<UserShort> usersToAdd = new HashSet<>(usersList);
-                list.setUsers(usersToAdd);
-
-                listRepository.save(list);
-
-                // TODO: lägg till aktiviteter
-                return new ResponseEntity<>(list, HttpStatus.OK);
-            }
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        } else {
+        } catch (ResourceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -180,10 +159,10 @@ public class ActivityListController {
      *         No Content if there are no lists created by the user
      */
     @GetMapping("/userlists")
-    public ResponseEntity<List<ActivityListDTO>> getUserLists(
+    public ResponseEntity<List<ActivityListShortDTO>> getUserLists(
             @RequestHeader(value = "token") String token) {
         try {
-            List<ActivityListDTO> dtos = activityListService.getUserActivityLists(token);
+            List<ActivityListShortDTO> dtos = activityListService.getUserActivityLists(token);
             if (dtos.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
