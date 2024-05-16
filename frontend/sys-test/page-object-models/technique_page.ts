@@ -73,7 +73,7 @@ export class TechniquePage {
     await this.page.waitForSelector('.infinite-scroll-component__outerdiv', {timeout: 30000})
     await this.page.getByPlaceholder('Sök efter tekniker').fill(`${name}`)
     await this.page.getByRole('link', { name: `${name}`}).click()
-    await this.page.waitForSelector('._technique-detail-actions-container_1dw3s_11')
+    await this.page.waitForSelector('[data-testid="technique-detail-actions-container"]')
     await this.page.locator('#technique-delete-button').click()
     await this.page.getByRole('button', { name: 'Ta bort' }).click()
   }
