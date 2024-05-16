@@ -125,13 +125,14 @@ public class StatisticsController {
         averageRating /= uniqueSessionIds.size();
         averageRating = Math.round(averageRating * 100.0) / 100.0;
         
-
+        // Get all techniques associated with the groups belts
         List<Belt> groupBelts = statisticsRepository.getBeltsForGroup(id);
         List<StatisticsResponse> allTechniques = statisticsRepository.getTechniquesForBelts(groupBelts);   
         
+        // Add the techniques that has not been performed by the group
         for (StatisticsResponse sr : allTechniques) {
             if (!uniqueActivityIds.contains(sr.getActivity_id())) {
-                // I can't get the repository method to include the belts so we have to get them once again...
+                // I can't get the repository method to include the belts so we have to get them once again... :(
                 sr.setBelts(statisticsRepository.getBeltsForTechnique(sr.getActivity_id()));
                 uniqueActivities.add(sr);
             }
