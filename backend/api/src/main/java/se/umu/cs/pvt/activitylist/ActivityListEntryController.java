@@ -184,7 +184,7 @@ public class ActivityListEntryController {
      * 
      * Removes an entry from an activity list. 
      * 
-     * @param id    id of the activity list
+     * @param id    id of the entry
      * @param token token of the user making the request
      * @return OK if successful
      *         Unauthorized if token is invalid
