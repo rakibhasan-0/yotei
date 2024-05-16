@@ -20,12 +20,23 @@
 }
 
 .popupContent {
-    margin-top: 40px;
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 15px;
 }
+.popupContent > div {
+    position: fixed; 
+    bottom: 0; 
+    left: 0; 
+    width: 100%; 
+    background-color: #f9f9f9; 
+    padding: 10px 0; 
+    display: flex;
+    justify-content: space-around; 
+}
+
 
 /* Define styles for the bottom row container */
 .bottomRowContainer {

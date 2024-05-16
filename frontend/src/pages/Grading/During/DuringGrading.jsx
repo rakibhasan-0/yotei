@@ -113,7 +113,11 @@ export default function DuringGrading() {
 	}
     
 	const goToPrevTechnique = () => {
-		setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0))
+        if(currentIndex === 0) {
+            goToAddExamineePage()
+        } else {
+		    setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0))
+        }
 		// reset the button colors
 		// Should also load any stored result
 	}
@@ -244,23 +248,38 @@ export default function DuringGrading() {
 
 			<Popup 
 				id={"navigation-popup"} 
-				title={"Tekniker"} 
+				title={"Tekniker-kategorier"} 
 				isOpen={showPopup} 
 				setIsOpen={setShowPopup}> 
 				<div className={styles.popupContent}>
-					{/* Should link to the respective technique grading page. */}
-					{categoryIndexMap.map((techniqueName, index) => (
-						<Button 
-							key={index}
-							onClick={() => {
-								setCurrentIndex(techniqueName.categoryIndex)
-								setShowPopup(false)
-								// Reset the 'U'. 'G' button colors
-								scrollableContainerRef.current.scrollTop = 0}}>
-							<p>{techniqueName.category}</p></Button>
-					))}
-					{/* Should link to the "after" part of the grading as well as save the changes to the database. */}
-					<Button id={"summary-button"} onClick={gotoSummary}><p>Fortsätt till summering</p></Button>
+
+                    {categoryIndexMap.map((techniqueName, index) => (
+                        <Button 
+                            key={index}
+                            width={"100%"}
+                            onClick={() => {
+                                setCurrentIndex(techniqueName.categoryIndex)
+                                setShowPopup(false)
+                                // Fetch the correct result for each examinee conected to this technique
+                                scrollableContainerRef.current.scrollTop = 0}}>
+                            <p>{techniqueName.category}</p></Button>
+                    ))}
+                    
+                    <div>
+                        {/* Go back to the add examinee page */}
+                        <Button 
+                            id={"back-button"} 
+                            outlined={true} 
+                            onClick={goToAddExamineePage}>
+                                <p>Tillbaka till <br />'Lägg till deltagare'</p>
+                        </Button>
+                        {/* Go to the summary page */}
+                        <Button 
+                            id={"summary-button"} 
+                            onClick={gotoSummary}>
+                                <p>Fortsätt till summering</p>
+                        </Button>
+                    </div>
 				</div>
 			</Popup>
 		</div>
@@ -273,6 +292,15 @@ export default function DuringGrading() {
 		//TODO: setShowPopup(false)
 		navigate(`/grading/${gradingId}/3`)
 	}
+
+    /**
+     * Navigate back to the page where examinees are added.
+     * 
+     * @author Team Apelsin (2024-05-15)
+     */
+    function goToAddExamineePage() {
+        navigate(`/grading/${gradingId}/1`)
+    }
 
 	/**
 	 * 
