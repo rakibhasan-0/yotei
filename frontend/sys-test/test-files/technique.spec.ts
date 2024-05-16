@@ -1,5 +1,5 @@
-import { test, expect } from './fixtures';
-import { TechniquePage } from 'pageObjectModels/technique_page';
+import { test, expect } from '../fixtures';
+import { TechniquePage } from 'page-object-models/technique_page';
 
 /**
  *
