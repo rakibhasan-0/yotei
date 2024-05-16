@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Test class for USER-API methods.
  *
  * @author Quattro Formaggio (Group 1), Phoenix (25-04-2023)
+ * @author Team Mango (Grupp 4) - 2024-05-16
  */
 
 @ExtendWith(MockitoExtension.class)

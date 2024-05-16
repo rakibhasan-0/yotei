@@ -19,6 +19,7 @@ import java.util.Arrays;
  * InvalidPasswordException.java - An exception that can be thrown when an invalid password is entered.
  * 
  * @author Team Hot-Pepper (G7) (Doc: Griffin c17wfn)
+ * @author Team Mango (Grupp 4) - 2024-05-16
  */
 @Entity
 @Table(name = "user_table")

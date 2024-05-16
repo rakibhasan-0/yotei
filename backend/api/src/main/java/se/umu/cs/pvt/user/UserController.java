@@ -19,6 +19,7 @@ import java.util.Optional;
 /**
  * Main class for handling login information and transactions with the database.
  * @author Team Hot-Pepper (G7), Quattro formaggio (G1), Chimera (G4) c20lln dv21oby, Griffin (G2) c17wfn
+ * @author Team Mango (Grupp 4) - 2024-05-16
  */
 @RestController
 @CrossOrigin
@@ -310,19 +311,19 @@ public class UserController {
 
 
     @PostMapping("/{user_id}/setrole/{role_id}")
-    public Object setUserRoleThroughId(@PathVariable("user_id") Long id, @PathVariable("role_id") int roleId) {
+    public Object setUserRoleThroughId(@PathVariable("user_id") Long id, @PathVariable("role_id") Long roleId) {
         Optional<User> possibleUser = repository.findById(id);
         if (possibleUser.isEmpty()) {
             return new ResponseEntity<>("Användaren finns inte", HttpStatus.BAD_REQUEST);
         }
 
-        Optional<Role> possibleRole = roleRepository.findById(Long.valueOf(roleId));
+        Optional<Role> possibleRole = roleRepository.findById(roleId);
         if (possibleRole.isEmpty()) {
             return new ResponseEntity<>("Rollen finns inte", HttpStatus.BAD_REQUEST);
         }
 
         User user = possibleUser.get();
-        user.setRoleId(Long.valueOf(roleId));
+        user.setRoleId(roleId);
 
         try {
             repository.save(user);
