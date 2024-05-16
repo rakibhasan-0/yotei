@@ -31,10 +31,10 @@ export class WorkoutPage {
         await this.page.locator('#technique-list-item-139').getByLabel('').check();
         await this.page.locator('#technique-list-item-140').getByLabel('').check();
         await this.page.getByRole('tab', { name: 'Övningar' }).click();
-        await this.page.locator('._exercise-list-header_4ly7v_10 > ._checkboxLabel_2jy17_1 > #undefined-checkbox').first().check();
-        await this.page.locator('div:nth-child(2) > ._exercise-list-header_4ly7v_10 > ._checkboxLabel_2jy17_1 > #undefined-checkbox').check();
-        await this.page.locator('div:nth-child(3) > ._exercise-list-header_4ly7v_10 > ._checkboxLabel_2jy17_1 > #undefined-checkbox').check();
-        await this.page.locator('._btnAddActivity_1qfu5_1 > svg').click();
+        await this.page.locator('#ExerciseListItemCheckBox-289-checkbox').check();
+        await this.page.locator('#ExerciseListItemCheckBox-305-checkbox').check();
+        await this.page.locator('#ExerciseListItemCheckBox-340-checkbox').check();        
+        await this.page.locator('#AddCheckedActivitiesButton').click();
         await this.page.locator('div').filter({ hasText: /^Uppvärmning$/ }).click();
         await this.page.locator('div').filter({ hasText: /^Tekniker$/ }).click();
         await this.page.getByRole('button', { name: 'Lägg till' }).click();

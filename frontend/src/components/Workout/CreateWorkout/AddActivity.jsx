@@ -453,6 +453,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 											<CheckBox
 												checked={checkedActivities.some(a => a.id === exercise.id)}
 												onClick={() => onActivityToggle(exercise, "exercise")}
+												id={`ExerciseListItemCheckBox-${ exercise.id }`}
 											/>
 										}
 										item={exercise.name}
@@ -469,7 +470,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 				<br /><br /><br />
 
 				{checkedActivities.length > 0 &&
-					<RoundButton onClick={() => setShowActivityInfo(checkedActivities)}>
+					<RoundButton onClick={() => setShowActivityInfo(checkedActivities)} id="AddCheckedActivitiesButton">
 						<ChevronRight width={30} />
 					</RoundButton>
 				}
