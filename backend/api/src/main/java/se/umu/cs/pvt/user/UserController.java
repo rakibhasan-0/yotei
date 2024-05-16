@@ -2,6 +2,7 @@ package se.umu.cs.pvt.user;
 
 import com.auth0.jwt.interfaces.Claim;
 
+import net.bytebuddy.asm.Advice.Return;
 import se.umu.cs.pvt.role.Role;
 import se.umu.cs.pvt.role.RoleRepository;
 
@@ -310,7 +311,7 @@ public class UserController {
     }
 
 
-    @PostMapping("/{user_id}/setrole/{role_id}")
+    @PutMapping("/{user_id}/setrole/{role_id}")
     public Object setUserRoleThroughId(@PathVariable("user_id") Long id, @PathVariable("role_id") Long roleId) {
         Optional<User> possibleUser = repository.findById(id);
         if (possibleUser.isEmpty()) {
@@ -324,6 +325,25 @@ public class UserController {
 
         User user = possibleUser.get();
         user.setRoleId(roleId);
+
+        try {
+            repository.save(user);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Gick inte att ändra roll ID på användaren", HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/{user_id}/removerole")
+    public Object removeRoleFromUserWithId(@PathVariable("user_id") Long user_id) {
+        Optional<User> possibleUser = repository.findById(user_id);
+        if (possibleUser.isEmpty()) {
+            return new ResponseEntity<>("Användaren finns inte", HttpStatus.BAD_REQUEST);
+        }
+
+        User user = possibleUser.get();
+        user.setRoleId(null);
 
         try {
             repository.save(user);
