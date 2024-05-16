@@ -1,3 +1,12 @@
+.activityItemContainer {
+    display: flex;
+    align-items: center; /* Align items vertically */
+}
+
+.trashIcon {
+    margin-left: 8px; /* Adjust margin as needed */
+}
+
 .container {
     height: 85vh;
     display: flex;

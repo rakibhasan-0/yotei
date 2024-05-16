@@ -18,11 +18,11 @@ import styles from "./TechniqueCard.module.css"
  * Converted to css module 2024-04-19, Hannes (group 1)
  *
  */
-function TechniqueCard({ technique, checkBox, id }) {
+function TechniqueCard({ technique, checkBox, id}) {
 	const navigate = useNavigate()
 
 	const handleClick = () => {
-
+		setTechnique()
 		if (technique.activity_id && technique.type === "technique") {
 			navigate("/technique/" + technique.activity_id)
 		} else if (technique.type === "exercise" && technique.activity_id) {
@@ -32,8 +32,12 @@ function TechniqueCard({ technique, checkBox, id }) {
 		}
 	}
 
+	const setTechnique = () =>{
+		localStorage.setItem("stored_technique", id)
+	}
+
 	return (
-		<div className={styles["technique-card"]} id={id}>
+		<div className={styles["technique-card"]} id={id} onClick={setTechnique}>
 			{technique.type === "exercise" ? null : constructColor(technique)}
 
 			<div className={styles["technique-info-container"]}>

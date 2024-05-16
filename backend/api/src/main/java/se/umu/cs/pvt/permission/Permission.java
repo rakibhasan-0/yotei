@@ -13,7 +13,7 @@ import javax.persistence.Table;
 /**
  * A permission class representing permissions that users and roles can have.
  * 
- * @author Team Mango (Grupp 4) - 2024-05-07
+ * @author Team Mango (Grupp 4) - 2024-05-15
  */
 @Entity
 @Table(name = "permission")
@@ -59,6 +59,15 @@ public class Permission implements Serializable{
 
         this.permission_name = name;
         this.permission_desc = desc;
+    }
+
+    public Long getPermissionId() {
+        return this.permission_id;
+    }
+    
+    // Used for testing
+    public void setPermissionId(Long newId) {
+        this.permission_id = newId;
     }
 
     public void setPermissionName(String name) {

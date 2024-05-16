@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef, useContext } from "react"
 
 import TechniqueInfoPanel from "../../../components/Grading/PerformGrading/TechniqueInfoPanel"
 import Button from "../../../components/Common/Button/Button"
 import Popup from "../../../components/Common/Popup/Popup"
 import ExamineePairBox from "../../../components/Grading/PerformGrading/ExamineePairBox"
+import ExamineeBox from "../../../components/Grading/PerformGrading/ExamineeBox"
+import ExamineeButton from "../../../components/Grading/PerformGrading/ExamineeButton"
 
 import styles from "./DuringGrading.module.css"
 import { ArrowRight, ArrowLeft } from "react-bootstrap-icons"
-import {Link} from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import {setError as setErrorToast} from "../../../utils" 
 
 // Temp
 import ProtocolYellow from "./yellowProtocolTemp.json"
-
+import { AccountContext } from "../../../context"
 
 
 /**
@@ -25,6 +27,7 @@ import ProtocolYellow from "./yellowProtocolTemp.json"
  * 			Each item contains {categoryName, current_technique and next_technique } for a specific JSON-file  
  * 
  * @author Team Apelsin (2024-05-07)
+ * @version 1.0
  */
 function getTechniqueNameList(gradingProtocolJSON) {
 	// Store data in an array for chronological traversal
@@ -49,7 +52,7 @@ function getTechniqueNameList(gradingProtocolJSON) {
 		}
 		// Check if element's nextTechnique is null and index is the last element
 		else if (element.nextTechnique === null && index === chronologicalData.length - 1) {
-			element.nextTechnique = "---"
+			element.nextTechnique = {text: ""}
 		}
 	})
 	return chronologicalData
@@ -64,6 +67,7 @@ function getTechniqueNameList(gradingProtocolJSON) {
  * 			Could be used for navigation to correct technique 
  * 
  * @author Team Apelsin (2024-05-07)
+ * @version 1.0
  */
 function getCategoryIndices(dataArray) {
 	const res = []
@@ -83,14 +87,19 @@ function getCategoryIndices(dataArray) {
 /**
  * Main function that is rendered for during grading
  * 
- *  @author Team Apelsin (2024-05-12)
+ *  @author Team Apelsin (2024-05-13)
+ *  @version 2.0
  */
 export default function DuringGrading() {
 	const [currentIndex, setCurrentIndex] = useState(0)
 	const [showPopup, setShowPopup] = useState(false)
 	const [examinees, setExaminees] = useState(undefined)
 	const [pairs, setPairs] = useState([])
-	const grading_id = 3 // temp, should be collected from url
+	const { gradingId } = useParams()
+	const navigate = useNavigate()
+
+	const context = useContext(AccountContext)
+	const { token } = context
 
 	// Get info about grading
 	// TODO: Loads everytime the button is pressed. Should only happen once at start. useEffect?
@@ -99,17 +108,24 @@ export default function DuringGrading() {
 
 	// Go to summary when the index is equal to length. Maybe change the look of the buttons.
 	const goToNextTechnique = () => {
-		setCurrentIndex(currentIndex === techniqueNameList.length - 1 ? currentIndex : currentIndex + 1)
+		setCurrentIndex(prevIndex => Math.min(prevIndex + 1, techniqueNameList.length - 1))
+		// reset the button colors
+		setSelectedButtons({})
+		// Should also load any stored result
 	}
+    
 	const goToPrevTechnique = () => {
-		setCurrentIndex(currentIndex === 0 ? currentIndex : currentIndex - 1)
+		setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0))
+		// reset the button colors
+		setSelectedButtons({})
+		// Should also load any stored result
 	}
 
 	// Run first time and fetch all examinees in this grading
 	useEffect(() => {
 		(async () => {
 			try {
-				const response = await fetch("/api/examination/examinee/all", {})
+				const response = await fetch("/api/examination/examinee/all", {headers: {"token": token}})
 				if (response.status === 404) {
 					console.log("404")
 					return
@@ -135,7 +151,7 @@ export default function DuringGrading() {
 		if(examinees !== undefined){ // To prevent running first time. Is there a better way to chain api calls?
 			(async () => {
 				try {
-					const response = await fetch("/api/examination/pair/all", {})
+					const response = await fetch("/api/examination/pair/all", {headers: {"token": token}})
 					if (response.status === 204) {
 						return
 					}
@@ -158,6 +174,53 @@ export default function DuringGrading() {
 		
 	}, [examinees])
 
+	// Handle the G and U buttons of each examinee
+	const [selectedButtons, setSelectedButtons] = useState({})
+	// Usage:
+	// handleButtonClick(technique, pairIndex, buttonId, 'left')
+	// handleButtonClick(technique, pairIndex, buttonId, 'right')
+	const handleButtonClick = (technique, pairIndex, buttonId, side) => {
+		const buttonType = buttonId.includes("pass") ? "pass" : "fail"
+		const oppositeButtonType = buttonType === "pass" ? "fail" : "pass"
+
+		setSelectedButtons(prev => ({
+			...prev,
+			[pairIndex]: {
+				...prev[pairIndex],
+				[`${buttonType}-button-${pairIndex}-${side}`]: buttonId,
+				[`${oppositeButtonType}-button-${pairIndex}-${side}`]: null,
+			}
+		}))
+		console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}`)
+	}
+
+	// Extracted Examinee component to remove duplicate code.
+	const Examinee = ({ examineeName, index, side }) => (
+		<ExamineeBox examineeName={examineeName} onClickComment={() => console.log("CommentButton clicked")}>
+			<ExamineeButton
+				id={`pass-button-${index}-${side}`}
+				type="green"
+				onClick={() => handleButtonClick(techniqueNameList[currentIndex].technique.text, index, `pass-button-${index}-${side}`, side)}
+				isSelected={selectedButtons[index]?.[`pass-button-${index}-${side}`] === `pass-button-${index}-${side}`}
+			>
+				<p>G</p>
+			</ExamineeButton>
+			<ExamineeButton 
+				id={`fail-button-${index}-${side}`}
+				type="red"
+				onClick={() => handleButtonClick(techniqueNameList[currentIndex].technique.text, index, `fail-button-${index}-${side}`, side)}
+				isSelected={selectedButtons[index]?.[`fail-button-${index}-${side}`] === `fail-button-${index}-${side}`}
+                
+			>
+				<p>U</p>
+			</ExamineeButton>
+		</ExamineeBox>
+	)
+
+	// Scroll to the top of the examinees list after navigation
+	const scrollableContainerRef = useRef(null)
+	// className={boxStyles.examineeButton}
+
 	return (
 		<div className={styles.container}>
 			<TechniqueInfoPanel
@@ -168,26 +231,37 @@ export default function DuringGrading() {
 
 			</TechniqueInfoPanel>
 			{/* All pairs */}			
-			<div className={styles.scrollableContainer}>
+			<div ref={scrollableContainerRef} className={styles.scrollableContainer}>
 				{pairs.map((item, index) => (
 					<ExamineePairBox 
 						key={index}
 						rowColor={index % 2 === 0 ? "#FFFFFF" : "#F8EBEC"}
-						examineeLeftName={item.nameLeft} 
-						examineeRightName={item.nameRight} pairNumber={index+1}>
+						leftExaminee={<Examinee examineeName={item.nameLeft} index={index} side='left' />}
+						rightExaminee={<Examinee examineeName={item.nameRight} index={index} side='right' />}
+						pairNumber={index+1}>
 					</ExamineePairBox>
 				))}
 			</div>
 
 			<div className={styles.bottomRowContainer}>
 				{/* Prev technique button */}
-				<div id={"prev_technique"} onClick={goToPrevTechnique} className={styles.btnPrevActivity}>
+				<div 
+					id={"prev_technique"} 
+					onClick={() => {
+						goToPrevTechnique() 
+						scrollableContainerRef.current.scrollTop = 0}} 
+					className={styles.btnPrevActivity}>
 					{<ArrowLeft/>}
 				</div>
 				{ /*Techniques button*/ }
 				<Button id={"techniques-button"} onClick={() => setShowPopup(true)}><p>Tekniker</p></Button>
 				{ /* Next technique button */ }
-				<div id={"next_technique"} onClick={goToNextTechnique} className={styles.btnNextActivity}>
+				<div 
+					id={"next_technique"} 
+					onClick={() => {
+						goToNextTechnique()
+						scrollableContainerRef.current.scrollTop = 0}} 
+					className={styles.btnNextActivity}>
 					{<ArrowRight/>}
 				</div>
 			</div>
@@ -204,17 +278,26 @@ export default function DuringGrading() {
 							key={index}
 							onClick={() => {
 								setCurrentIndex(techniqueName.categoryIndex)
-								setShowPopup(false)}}>
+								setShowPopup(false)
+								// Reset the 'U'. 'G' button colors
+								setSelectedButtons({})
+								scrollableContainerRef.current.scrollTop = 0}}>
 							<p>{techniqueName.category}</p></Button>
 					))}
 					{/* Should link to the "after" part of the grading as well as save the changes to the database. */}
-					<Link to="/groups">
-						<Button id={"summary-button"} onClick={() => setShowPopup(false)}><p>Fortsätt till summering</p></Button>
-					</Link>
+					<Button id={"summary-button"} onClick={gotoSummary}><p>Fortsätt till summering</p></Button>
 				</div>
 			</Popup>
 		</div>
 	)
+
+	/**
+   * @author Team Pomagrade (2024-05-13)
+   */
+	function gotoSummary() {
+		//TODO: setShowPopup(false)
+		navigate(`/grading/${gradingId}/3`)
+	}
 
 	/**
 	 * 
@@ -226,7 +309,7 @@ export default function DuringGrading() {
 	function getExamineesCurrentGrading(all_examinees) {
 		const current_grading_examinees = []
 		all_examinees.forEach((examinee) => {
-			if (examinee.grading_id == grading_id) {
+			if (examinee.grading_id == gradingId) {
 				current_grading_examinees.push(examinee)
 			}
 		})
