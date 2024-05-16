@@ -218,7 +218,6 @@ deploy-prod-server:
   script:
     - docker login --username pvt2024 --password $DOCKER_PASS # DOCKER_PASS defined in GitLab CI/CD settings as a secure variable.
     - ./deploy_prod.sh $CI_COMMIT_TAG
-  # release: 
-  #   tag_name: '$CI_COMMIT_TAG'
-  #   description: '$CI_COMMIT_TAG'
-    
+  release:
+    tag_name: '$CI_COMMIT_TAG'
+    description: '$CI_COMMIT_TAG'
