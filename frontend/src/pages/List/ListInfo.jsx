@@ -36,7 +36,7 @@ export default function ListInfo({ id }) {
 	const context = useContext(AccountContext)
 	const [showPopup, setShowPopup] = useState(false)
 	const [listData, setWorkoutData] = useState(null)
-	const [listUsers, setWorkoutUsers] = useState(null)
+	const [listUsers, setListUsers] = useState(null)
 	const [showRPopup, setRShowPopup] = useState(false)
 	const [errorStateMsg, setErrorStateMsg] = useState("")
 	const [loading, setLoading] = useState(true)
@@ -129,7 +129,7 @@ export default function ListInfo({ id }) {
         }
 
 		setWorkoutData(() => MockList)
-		setWorkoutUsers(() => MockList.data.users)
+		setListUsers(() => MockList.data.users)
 
 		setLoading(false)
 		setLoadingUser(false)

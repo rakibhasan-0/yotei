@@ -35,7 +35,7 @@ export default function ActivityListComponent() {
             //Locked
             //Public
         }
-        setWorkoutUsers(() => MockList.list_users)
+        setListUsers(() => MockList.list_users)
     },[])
 
 	const { listCreateInfo, listCreateInfoDispatch } =
