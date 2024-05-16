@@ -41,10 +41,10 @@ export default function Component({ item, text, children, id, autoClose, errorMe
 	const handleOnClick = (e) => {
 		
 		if(onClick) {
-			onClick();
+			onClick()
 			
 		}
-		e.preventDefault();
+		e.preventDefault()
 	}
 
 	
@@ -52,7 +52,7 @@ export default function Component({ item, text, children, id, autoClose, errorMe
 	return (
 		<div className={styles.listLabel}>
 			<div id={id} className={styles.listContainer} style={style}>
-				<div className={styles.listHeader} onClick={(e) => { setToggled(!toggled); handleOnClick(e);}} id={`${id}-header`}>
+				<div className={styles.listHeader} onClick={(e) => { setToggled(!toggled); handleOnClick(e)}} id={`${id}-header`}>
 					<div className={styles.listItem}>
 						{item}
 					</div>
