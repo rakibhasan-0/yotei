@@ -121,7 +121,7 @@ export default function GradingDeviations() {
                                 <Divider id = 'divider-example' option= 'h2_left' title = {category.category_name} key={category.category_name}/>
                                 {category.techniques.map((technique, index) => (
 
-                                    <Container id = {index} name = {technique.text} passed={hasPassed(technique)} key={index} ></Container>
+                                    <Container id = {index} name = {technique.text} passed={hasPassed(technique)} key={index} comment="This is a test comment!"></Container>
                                 ))}
                             </div>
                         ))}
