@@ -7,6 +7,7 @@ import { AccountContext } from "../../context"
 import AddExaminee from "../../components/Common/AddExaminee/AddExaminee"
 import EditableListItem from "../../components/Common/EditableListItem/EditableListItem"
 import { X as CloseIcon } from "react-bootstrap-icons"
+import PopupSmall from "../../components/Common/Popup/PopupSmall"
 
 import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../utils"
 import {setError as setErrorToast } from "../../utils"
@@ -37,6 +38,7 @@ export default function GradingBefore() {
 	const [checkedExamineeIds, setCheckedExamineeIds] = useState([])
   const [redirect, setRedirect] = useState(false)
   const containsSpecialChars = str => /[^\w äöåÅÄÖ-]/.test(str)
+  const [showPopup, setShowPopup] = useState(false)
 
   let numberOfPairs = 0
 
@@ -394,13 +396,14 @@ export default function GradingBefore() {
 				>
 					<p>Tillbaka</p>
 				</Button>
-				<Button
-          id="continue-button"
-					width="100%"
-					onClick={startRedirection}
-				>
-					<p>Forsätt</p>
-				</Button>
+				
+				<PopupSmall id={"test-popup"} title={"Varning"} isOpen={showPopup} setIsOpen={setShowPopup} direction={startRedirection}>
+					<h2>Är du säker på att alla deltagare är tillagda? </h2>
+					<h2> Isåfall fortsätt till bedömnings process</h2>
+				</PopupSmall>
+				
+				<Button onClick={() => setShowPopup(true)}><p>Fortsätt</p></Button>
+			
 			</div>
 		</div>
 	)
