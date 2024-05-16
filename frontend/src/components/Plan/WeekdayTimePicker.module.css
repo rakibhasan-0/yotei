@@ -1,0 +1,33 @@
+.time_picker_li {
+    float: right;
+}
+
+.weekday_text_li {
+    justify-self: center;
+}
+
+.check_box_li {
+    margin-right: 20px;
+}
+
+ul {
+    list-style-type: none;
+    overflow: hidden;
+    align-self: center;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 15px;
+}
+
+li {
+    float: left;
+}
+
+.weekday_time_picker {
+    width: 100%;
+    align-items: center;
+    font-size: 15p;
+    font-family: "Open Sans";
+    color: black;
+}
+

@@ -1,0 +1,40 @@
+.checkboxLabel {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    gap: 1rem;
+    position: relative;
+    margin: 0;
+}
+
+.checkboxLabelDisabled {
+    color: var(--gray);
+}
+
+.checkboxIcon {
+    position: absolute;
+    color: white;
+    height: 2rem;
+    width: 2rem;
+    top: 0;
+    left: 0;
+}
+
+.checkboxComponent input[type=checkbox] {
+    width: 2rem;
+    height: 2rem;
+    border: 2px solid black;
+    border-radius: 0.2rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.checkboxComponent input[type=checkbox]:checked {
+    background-color: var(--checkbox-press);
+}
+
+.checkboxComponent input[type=checkbox]:disabled {
+    border: 2px solid var(--gray);
+    background-color: var(--background);
+}

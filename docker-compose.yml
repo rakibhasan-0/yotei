@@ -1,0 +1,65 @@
+services:
+
+  psql:
+    build: infra/database
+    restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  frontend:
+    build: frontend/
+    restart: always
+    ports:
+      - "3000:3000"
+    links:
+      - psql
+
+  gateway:
+    build: backend/gateway
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - BACKEND_HOST=http://api:8085
+      - WEBSERVER_HOST=http://frontend:3000
+    links:
+      - api
+
+  api:
+    build: backend/api
+    restart: always
+    volumes:
+      - ./media:/media
+    ports:
+      - "8085:8085"
+    links:
+      - psql
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_HOST=psql:5432
+      - ENABLE_SWAGGER=true
+
+volumes:
+  pgdata:
+    #                 O  O  O
+    #                        O
+    #                  ._, __|__.
+    #                  || ||_____\
+    #                  || ||    |
+    #            .---------------------------.
+    #             \   O   O   O   O -YOTEI- /
+    #        ~ ~ ~ ~ ~ ~ ~ ~  ~ ~ ~ ~ ~ ~ ~ ~
+    #      ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~

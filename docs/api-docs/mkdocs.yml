@@ -1,0 +1,19 @@
+site_name: API Documentation
+site_url: https://example.com/
+extra_css:
+  - extra.css
+theme: material
+plugins:
+  - search
+markdown_extensions:
+  - attr_list
+  - markdown.extensions.extra
+  - admonition
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+hooks:
+  - api-hook.py

@@ -1,0 +1,85 @@
+.commonNavbar {
+    position: sticky;
+    top: 0; 
+    display: flex;
+    padding-bottom: 1rem;
+    margin: 1.5rem;
+    height: 64px;
+    border-bottom: 3px solid var(--black-primary);
+    justify-content: space-between;
+    z-index: 10;
+    background-color: var(--background);
+}
+.commonNavbarSidebar {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 3;
+    top: 0;
+    left: -70vw;
+    width: 70vw;
+    max-width: 400px;
+    min-height: 100vh;
+    height: 100%;
+    overflow-y: scroll;
+    background-color: var(--background);
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0,.93,.31,.98);
+}
+.commonNavbarIcon {
+    cursor: pointer;
+    font-size: 48px;
+    z-index: 1;
+}
+.commonNavbarIconClose {
+    cursor: pointer;
+    font-size: 48px;
+    z-index: 1;
+}
+.open {
+    left: 0;
+}
+.budoLogo {
+    height: 100%;
+}
+.boxShadowBackground {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 0vw;
+    z-index: 2;
+    display: flex;
+    backdrop-filter: blur(1px);
+    transition: background-color 0.2s ease-in-out;
+}
+.boxShadowBackgroundOpen {
+    width: 100vw; 
+    background-color: rgba(0,0,0,0.3);
+}
+.boxShadowBackgroundClosed {
+    transition: width 0s ease-in-out 0.1s, background-color 0.1s ease-in-out;
+    background-color: rgba(0,0,0,0);
+}
+.commonNavbarButton {
+    font-weight: 500;
+    font-size: 32px; 
+}
+.hide {
+    overflow-y: hidden;
+}
+.show {
+    overflow-y: scroll;
+}
+/* Applied only on screen sizes > 700px */
+@media screen and (min-width: 700px) {
+    .commonNavbarSidebar {
+        left: -400px;
+        width: 400px;
+    }
+    .open {
+        left: 0;
+    }
+  }
+  

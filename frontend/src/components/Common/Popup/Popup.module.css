@@ -1,0 +1,60 @@
+.container {
+    background-color: var(--background);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 85vh;
+    width: 90vw;
+    z-index: 100;
+    max-width: var(--layout-max-width);
+    padding: 40px 2px 25px 25px;
+    display: flex;
+    flex-direction: column;
+    -webkit-overflow-scrolling: touch;
+}
+/* All very hacky css*/
+.backdrop {
+    position: fixed;
+    /* Can't use top: 0 and left: 0 because parent elements position might have been
+       transformed. Apperently, doing a transform on the parent element breaks fixed positioning.
+       This works for now.
+    */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 90;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0,0,0,0.4);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+.topbar {
+    text-align: left;
+    margin-right: 25px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding-right: 23px;
+    /* Do not remove this line, fixes broken z-index for some reason. */
+    -webkit-overflow-scrolling: auto !important;
+}
+
+.closebutton {
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    background: none;
+	border: none;
+    padding: 0;
+    right: 14px;
+    top: 13px;
+    cursor: pointer;
+}

@@ -1,0 +1,99 @@
+.listContainer {
+    border-radius: 5px;
+    border: 1px solid var(--black-primary);
+    padding: 0;
+    user-select: none;
+}
+
+.closedContainer {
+    height: 0;
+    overflow: hidden;
+}
+
+.listCentered {
+    justify-content: space-between;
+}
+
+.listHeader {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    padding-left: 0px;
+    gap: 2px;
+}
+
+.listCentered > .listToggle {
+    margin-left: unset !important;
+}
+
+.listHeader > p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: .5rem;
+    margin: 0;
+}
+
+p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.listToggle {
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: 7px;
+    transition: all 0.2s ease-in;
+}
+
+.listText {
+    font-size: large;
+    overflow: hidden;
+}
+
+input,
+.listText {
+    width: 100%;
+}
+
+.listTextInput{
+    text-align: left;
+    border:none;
+    outline: none;
+    padding-left: 18px;
+}
+
+.listText::placeholder {
+    text-align: center;
+}
+
+.listItem {
+    cursor: pointer;
+    margin-right: 14px;
+    height: 32px;
+}
+
+.listRotate {
+    rotate: 180deg;
+}
+
+.listChild {
+    transition: all 0.2s ease-in-out;
+}
+
+.listItemContainer {
+    overflow: hidden;
+    min-height: 0;
+}
+
+.listLabel {
+    width: 100%;
+    text-align: left;
+}
+
+.listErr {
+    color: var(--red-primary);
+    margin: 5px 0 0 0;
+    transition-duration: 200ms;
+    height: auto;
+    }
