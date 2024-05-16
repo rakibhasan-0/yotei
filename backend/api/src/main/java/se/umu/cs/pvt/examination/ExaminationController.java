@@ -313,7 +313,7 @@ public class ExaminationController {
             if (techniqueName == null) {
                 return new ResponseEntity<>(null);
             }
-            return new ResponseEntity<>(examinationCommentRepository.findByPairIdAndTechniqueName(examineePairId, techniqueName), HttpStatus.OK);
+            return new ResponseEntity<>(examinationCommentRepository.findByExamineePairIdAndTechniqueName(examineePairId, techniqueName), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }   
