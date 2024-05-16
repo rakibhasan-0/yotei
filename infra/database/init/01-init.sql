@@ -169,19 +169,6 @@ ALTER TABLE
 	technique OWNER TO psql;
 
 --
--- Name: user_table; Type: TABLE; Schema: public; Owner: psql
---
-CREATE TABLE user_table(
-	user_id INT NOT NULL GENERATED ALWAYS AS IDENTITY UNIQUE,
-	username VARCHAR(255) PRIMARY KEY,
-	password VARCHAR(255) NOT NULL,
-	user_role INT NOT NULL
-);
-
-ALTER TABLE
-	user_table OWNER TO psql;
-
---
 -- Name: role; Type: TABLE; Schema: public; Owner: psql
 --
 CREATE TABLE role(
@@ -191,6 +178,22 @@ CREATE TABLE role(
 
 ALTER TABLE
 	role OWNER TO psql;
+
+--
+-- Name: user_table; Type: TABLE; Schema: public; Owner: psql
+--
+CREATE TABLE user_table(
+	user_id INT NOT NULL GENERATED ALWAYS AS IDENTITY UNIQUE,
+	username VARCHAR(255) PRIMARY KEY,
+	password VARCHAR(255) NOT NULL,
+	user_role INT NOT NULL,
+	role_id INT,
+	CONSTRAINT ur_fk_role FOREIGN KEY (role_id) REFERENCES role(role_id) ON
+	DELETE CASCADE
+);
+
+ALTER TABLE
+	user_table OWNER TO psql;
 
 --
 -- Name: permission; Type: TABLE; Schema: public; Owner: psql
@@ -697,10 +700,10 @@ ALTER TABLE
 -- ** This part relies on a feature of psql where relative
 -- ** sql files are included with '\ir'
 --
+\ir defaults/roles.sql
 \ir defaults/users.sql
 \ir defaults/belts.sql 
 \ir defaults/tags.sql 
-\ir defaults/roles.sql
 \ir defaults/permissions.sql
 \ir defaults/techniques.sql
 \ir defaults/workouts.sql
