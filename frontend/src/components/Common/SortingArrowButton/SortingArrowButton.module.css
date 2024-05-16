@@ -1,0 +1,21 @@
+.sortingButtonContainer button {
+    border: none;
+    background: none;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 3.2em; /*don't change this value*/
+    padding: 0;
+}
+
+.sortingButtonContainer img {
+    height: 2.5em;
+}
+
+.sortingButtonContainer{
+	display: flex;
+}
+
+.rotate{
+    transform: scaleY(-1);
+}
