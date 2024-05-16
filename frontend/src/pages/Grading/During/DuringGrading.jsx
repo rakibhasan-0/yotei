@@ -102,11 +102,6 @@ export default function DuringGrading() {
 	const context = useContext(AccountContext)
 	const { token } = context
 
-	// Get info about grading
-	// TODO: Loads everytime the button is pressed. Should only happen once at start. useEffect?
-	// const techniqueNameList = getTechniqueNameList(ProtocolYellow)
-	// const categoryIndexMap = getCategoryIndices(techniqueNameList)
-
 	// Go to summary when the index is equal to length. Maybe change the look of the buttons.
 	const goToNextTechnique = () => {
 		setCurrentIndex(prevIndex => Math.min(prevIndex + 1, techniqueNameList.length - 1))
@@ -173,46 +168,20 @@ export default function DuringGrading() {
 		
 	}, [examinees])
 
+    // Run to fetch the correct grading, to in turn find the correct grading protocol
     useEffect(() => {
-        async function fetchProtocolData() {
+        async function fetchData() {
             try {
-                const response1 = await fetch("/api/examination/all")
-                if (response1.status === 404) {
-					console.log("404")
-					return
-				}
-				if (!response1.ok) {
-					console.log("could not fetch the grading")
-					throw new Error("Could not fetch the grading")
-				}
-                const all_gradings = await response1.json()
-                const current_grading = getCurrentGrading(all_gradings)
-                console.log("Fetched grading: ", current_grading)
-
-                const response2 = await fetch("/api/examination/examinationprotocol/all", {headers: {"token": token}})
-                if (response2.status === 404) {
-					console.log("404")
-					return
-				}
-				if (!response2.ok) {
-					console.log("could not fetch examination protocols")
-					throw new Error("Could not fetch examination protocols")
-				}
-                const all_protocols = await response2.json()
-                const current_protocol = getProtocolCurrentGrading(all_protocols, current_grading)
-                console.log("Fetched protcol: ", current_protocol)
-
-                current_protocol.examinationProtocol = JSON.parse(current_protocol.examinationProtocol)
-                const techniqueNameList = getTechniqueNameList(current_protocol.examinationProtocol)
-	            const categoryIndexMap = getCategoryIndices(techniqueNameList)
-                setTechniqueNameList(techniqueNameList)
-                setCategoryIndices(categoryIndexMap)
-            } catch (ex) {
-                setErrorToast("Kunde inte hämta protokollet")
-                console.error(ex)
+                const grading = await fetchGrading();
+                const protocol = await fetchProtocol(grading);
+                const parsedProtocol = parseProtocol(protocol);
+                updateState(parsedProtocol);
+            } catch (error) {
+                handleFetchError(error);
             }
         }
-        fetchProtocolData();
+    
+        fetchData();
     }, []);
 
 	const [leftExamineeState, setLeftExamineeState] = useState("default")
@@ -361,11 +330,92 @@ export default function DuringGrading() {
 		return pair_names_current_grading
 	}
 
+    /**
+     * Fetches the current grading from the server.
+     * @returns {Promise<Object>} A Promise that resolves to the current grading object.
+     * @throws {Error} Throws an error if the grading is not found or cannot be fetched.
+     */
+    async function fetchGrading() {
+        const response = await fetch("/api/examination/all", {headers: {"token": token}});
+        if (response.status === 404) {
+            console.log("404");
+            throw new Error("Grading not found");
+        }
+        if (!response.ok) {
+            console.log("Could not fetch the grading");
+            throw new Error("Could not fetch the grading");
+        }
+        const allGradings = await response.json();
+        return getCurrentGrading(allGradings);
+    }
+
+    /**
+     * Fetches the examination protocol for a given grading from the server.
+     * @param {Object} grading The grading object for which to fetch the examination protocol.
+     * @returns {Promise<Object>} A Promise that resolves to the examination protocol object.
+     * @throws {Error} Throws an error if the examination protocols are not found or cannot be fetched.
+     */
+    async function fetchProtocol(grading) {
+        const response = await fetch("/api/examination/examinationprotocol/all", { headers: { "token": token } });
+        if (response.status === 404) {
+            console.log("404");
+            throw new Error("Examination protocols not found");
+        }
+        if (!response.ok) {
+            console.log("Could not fetch examination protocols");
+            throw new Error("Could not fetch examination protocols");
+        }
+        const allProtocols = await response.json();
+        return getProtocolCurrentGrading(allProtocols, grading);
+    }
+
+    /**
+     * Parses the examination protocol by converting its string properties to JSON objects.
+     * @param {Object} protocol The examination protocol to parse.
+     * @returns {Object} The parsed examination protocol object.
+     */
+    function parseProtocol(protocol) {
+        const parsedProtocol = { ...protocol };
+        parsedProtocol.examinationProtocol = JSON.parse(protocol.examinationProtocol);
+        return parsedProtocol;
+    }
+
+    /**
+     * Updates the state with the parsed examination protocol.
+     * @param {Object} parsedProtocol - The parsed examination protocol object.
+     */
+    function updateState(parsedProtocol) {
+        const techniqueNameList = getTechniqueNameList(parsedProtocol.examinationProtocol);
+        const categoryIndexMap = getCategoryIndices(techniqueNameList);
+        setTechniqueNameList(techniqueNameList);
+        setCategoryIndices(categoryIndexMap);
+    }
+
+    /**
+     * Handles errors that occur during fetching or processing of examination protocols.
+     * @param {Error} error The error object containing details of the error.
+     */
+    function handleFetchError(error) {
+        setErrorToast("Kunde inte hämta protokollet");
+        console.error(error);
+    }
+
+    /**
+     * Finds the current grading from a list of all gradings based on the grading ID.
+     * @param {Object[]} all_gradings An array containing all available gradings.
+     * @returns {Object|undefined} The current grading object, or undefined if not found.
+     */
     function getCurrentGrading(all_gradings) {
         const current_grading = all_gradings.find((grading) => grading.grading_id == gradingId)
         return current_grading
     }
 
+    /**
+     * Finds the examination protocol for the current grading from a list of all protocols.
+     * @param {Object[]} all_protocols An array containing all available examination protocols.
+     * @param {Object} current_grading The current grading object.
+     * @returns {Object|undefined} The examination protocol for the current grading, or undefined if not found.
+     */
     function getProtocolCurrentGrading(all_protocols, current_grading) {
         const current_grading_protocol = all_protocols.find((protocol) => protocol.beltId === current_grading.belt_id)
         return current_grading_protocol
