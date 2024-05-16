@@ -36,7 +36,7 @@ import java.time.Duration;
 
 /**
  * 
- * This is essencially tests for the database init scripts.
+ * This is essentially tests for the database init scripts.
  * 
  * A few new belts had to be added to the project, potentially messing things up within the database. To ensure
  * no problems occured a test-suite was created that builds a temporary container with a database using
