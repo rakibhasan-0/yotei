@@ -15,43 +15,43 @@ import { ChevronDown, ChevronRight } from "react-bootstrap-icons"
  * @returns {JSX.Element} The Sorter2 component.
  */
 export default function NewSorter({ id, selected, onSortChange, options }) {
-    const [isOpen, setIsOpen] = useState(false);
+	const [isOpen, setIsOpen] = useState(false)
 
-    /**
+	/**
      * Toggles the dropdown menu.
      */
-    const toggleDropdown = () => setIsOpen(!isOpen);
+	const toggleDropdown = () => setIsOpen(!isOpen)
 
-    /**
+	/**
      * Handles the sort change event.
      * @param {Object} option - The selected sort option.
      */
-    const handleSortChange = (option) => {
-        onSortChange(option);
-        toggleDropdown();
-    };
+	const handleSortChange = (option) => {
+		onSortChange(option)
+		toggleDropdown()
+	}
 
-    return (
-        <div className={style.sortMenuText} style={{ display: "flex", flexDirection: "row", margin: "0" }}>
-            <p onClick={toggleDropdown} style={{ fontWeight: 'bold' }}>
+	return (
+		<div id={id} className={style.sortMenuText} style={{ display: "flex", flexDirection: "row", margin: "0" }}>
+			<p onClick={toggleDropdown} style={{ fontWeight: "bold" }}>
                 Sortera efter
-                {isOpen ? <ChevronDown size={18} style={{ marginLeft: '5px' }} /> : <ChevronRight size={18} style={{ marginLeft: '5px' }} />}
-            </p>
-            {isOpen && (
-                <div style={{ position: 'absolute' }}>
-                    {options.map((option) => (
-                        <p
-                            key={option.value}
-                            onClick={() => handleSortChange(option)}
-                            className={`
+				{isOpen ? <ChevronDown size={18} style={{ marginLeft: "5px" }} /> : <ChevronRight size={18} style={{ marginLeft: "5px" }} />}
+			</p>
+			{isOpen && (
+				<div style={{ position: "absolute" }}>
+					{options.map((option) => (
+						<p
+							key={option.value}
+							onClick={() => handleSortChange(option)}
+							className={`
 								${selected.label === option.label ? style.selected : ""}
 							`}
-                        >
-                            {option.label}
-                        </p>
-                    ))}
-                </div>
-            )}
-        </div>
-    );
+						>
+							{option.label}
+						</p>
+					))}
+				</div>
+			)}
+		</div>
+	)
 }
