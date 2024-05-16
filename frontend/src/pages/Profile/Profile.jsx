@@ -4,7 +4,7 @@ import { setError as setErrorToast, setSuccess as setSuccessToast } from "../../
 import ActivityList from "../../components/Activity/ActivityList"
 import Button from "../../components/Common/Button/Button"
 import SearchBar from "../../components/Common/SearchBar/SearchBar"
-import { getWorkouts } from "../../components/Common/SearchBar/SearchBarUtils"
+import { getWorkouts, getLists } from "../../components/Common/SearchBar/SearchBarUtils"
 import { AccountContext } from "../../context"
 import style from "./Profile.module.css"
 import InputTextFieldBorderLabel from "../../components/Common/InputTextFieldBorderLabel/InputTextFieldBorderLabel"
@@ -15,6 +15,7 @@ import Spinner from "../../components/Common/Spinner/Spinner"
 import ProfileListItem from "./ProfileListItem"
 import { Lock, Unlock, Eye } from "react-bootstrap-icons"
 import starFill from "../../../assets/images/starFill.svg"
+
 
 /**
  * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3) (2024-04-23)
@@ -41,7 +42,25 @@ export default function Profile() {
 	const [passwordButtonState,setPasswordButtonDisabled] = useState(false)
 	const [usernameButtonState,setUsernameButtonDisabled] = useState(false)
 
-	const lists = [
+	const [fetchedLists, setFetchedLists] = useState(false)
+	const [lists, setLists] = useState([])
+	const [map, mapActions] = useMap()
+
+	//TODO feature toggle
+	const [isListsEnabled] = useState(false)
+
+
+	const workout = {
+		id: -1,
+		name: "Favoritpass",
+		size: 7,
+		author:{
+			userId: 1,
+			username: "Admin",
+		},
+		hidden: false,
+	}
+	const mockLists = [
 		{
 			id: -1,
 			name: "Favoritpass",
@@ -51,6 +70,7 @@ export default function Profile() {
 				username: "Admin",
 			},
 			hidden: false,
+			isShared: true,
 		},
 		{
 			id: 1,
@@ -61,6 +81,7 @@ export default function Profile() {
 				username: "Editor",
 			},
 			hidden: true,
+			isShared: true,
 		},
 		{
 			id: 2,
@@ -71,6 +92,7 @@ export default function Profile() {
 				username: "Admin",
 			},
 			hidden: true,
+			isShared: true,
 		},
 	]
 
@@ -103,6 +125,18 @@ export default function Profile() {
 			</>
 		)
 	}
+
+
+	/**
+	 * Fetches lists when the component is mounted or when the
+	 * search text are changed.
+	 */
+	useEffect(() => {
+		setFetchedLists(false)
+		setLists([workout])
+		fetchingList()
+	}, [searchText])
+
 
 	useEffect(() => {
 		getWorkouts(
@@ -210,9 +244,31 @@ export default function Profile() {
 		return <Lock />
 	}
 
+
+	/**
+	 * Fetches the lists from the backend, either from cache or by a new API-call.
+	 */
+	function fetchingList() {
+
+		const args = {
+			text: searchText
+		}
+
+		getLists(args, token, map, mapActions, (result) => {
+			if (result.error) return
+
+			const lists = result.map(item => ({ id: item.id, name: item.name, size: item.size, author: item.author, hidden: item.hidden, isShared: item.isShared}))
+
+			setLists([workout, ...lists])
+			setFetchedLists(true)
+		})
+	}
+
+
+
 	return (
-		<Tabs defaultActiveKey={"FavoriteWorkouts"} className={style.tabs}>
-			<Tab eventKey={"FavoriteWorkouts"} title={"Mina listor"} className={style.tab}>
+		<Tabs defaultActiveKey={"MyWorkouts"} className={style.tabs}>
+			{isListsEnabled && (<Tab eventKey={"FavoriteWorkouts"} title={"Mina listor"} className={style.tab}>
 				<SearchBar
 					id="searchbar-workouts-1"
 					placeholder="Sök efter pass"
@@ -226,7 +282,7 @@ export default function Profile() {
 						<ProfileListItem key={list.id} item={list} Icon={getIconFromState(list)} />
 					))
 				)}
-			</Tab>
+			</Tab> )}
 			<Tab eventKey={"MyWorkouts"} title={"Mina Pass"} className={style.tab}>
 				<SearchBar
 					id="searchbar-workouts-2"
