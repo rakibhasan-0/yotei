@@ -204,8 +204,8 @@ public class ExaminationApiTest {
         assertNotNull(responseWithComment2.getBody());
         assertNotNull(responseWithComment3.getBody());
 
-        assertEquals("EastEast", responseWithComment1.getBody().get(0).getComment());
-        assertEquals("TestTest", responseWithComment2.getBody().get(1).getComment());
+        assertEquals("TestTest", responseWithComment1.getBody().get(0).getComment());
+        assertEquals("EastEast", responseWithComment2.getBody().get(1).getComment());
         assertEquals("WestWest", responseWithComment3.getBody().get(2).getComment());
 
         // Test without existing comments.

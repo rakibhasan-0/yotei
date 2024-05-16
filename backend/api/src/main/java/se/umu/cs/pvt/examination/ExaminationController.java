@@ -313,6 +313,9 @@ public class ExaminationController {
             if (techniqueName == null) {
                 return new ResponseEntity<>(null);
             }
+             if (examinationCommentRepository.findByExamineePairIdAndTechniqueName(examineePairId, techniqueName).isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
             return new ResponseEntity<>(examinationCommentRepository.findByExamineePairIdAndTechniqueName(examineePairId, techniqueName), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
