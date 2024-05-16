@@ -10,4 +10,5 @@ public interface UserShort{
     String getUsername();
     String getUserRole();
     Long getUserId();
+    Long getRoleId();
 }

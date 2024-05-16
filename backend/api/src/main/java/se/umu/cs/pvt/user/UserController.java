@@ -1,6 +1,10 @@
 package se.umu.cs.pvt.user;
 
 import com.auth0.jwt.interfaces.Claim;
+
+import se.umu.cs.pvt.role.Role;
+import se.umu.cs.pvt.role.RoleRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,16 +29,16 @@ public class UserController {
      * CRUDRepository makes connections with the api possible.
      */
     private final UserRepository repository;
-
+    private final RoleRepository roleRepository;
 
     /**
      * Constructor for the LoginController object.
      * @param repository Autowired
      */
     @Autowired
-    public UserController(UserRepository repository) {
+    public UserController(UserRepository repository, RoleRepository roleRepository) {
         this.repository = repository;
-
+        this.roleRepository = roleRepository;
     }
 
     /**
@@ -299,6 +303,31 @@ public class UserController {
             repository.save(user);
         } catch (Exception e) {
             return new ResponseEntity<>("Gick inte att ändra roll på användaren", HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @PostMapping("/{user_id}/setrole/{role_id}")
+    public Object setUserRoleThroughId(@PathVariable("user_id") Long id, @PathVariable("role_id") int roleId) {
+        Optional<User> possibleUser = repository.findById(id);
+        if (possibleUser.isEmpty()) {
+            return new ResponseEntity<>("Användaren finns inte", HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<Role> possibleRole = roleRepository.findById(Long.valueOf(roleId));
+        if (possibleRole.isEmpty()) {
+            return new ResponseEntity<>("Rollen finns inte", HttpStatus.BAD_REQUEST);
+        }
+
+        User user = possibleUser.get();
+        user.setRoleId(Long.valueOf(roleId));
+
+        try {
+            repository.save(user);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Gick inte att ändra roll ID på användaren", HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(HttpStatus.OK);

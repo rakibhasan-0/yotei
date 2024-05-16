@@ -11,6 +11,8 @@ import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import se.umu.cs.pvt.role.RoleRepository;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.*;
@@ -33,11 +35,13 @@ public class UserApiTest {
 
     @Mock
     private final UserRepository userRepository = Mockito.mock(UserRepository.class);
+    @Mock
+    final RoleRepository roleRepository = Mockito.mock(RoleRepository.class);
 
     @BeforeEach
     void init() {
         user = new User();
-        lc = new UserController(userRepository);
+        lc = new UserController(userRepository, roleRepository);
     }
 
 
