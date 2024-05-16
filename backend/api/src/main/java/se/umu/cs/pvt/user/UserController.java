@@ -312,7 +312,7 @@ public class UserController {
 
 
     @PutMapping("/{user_id}/setrole/{role_id}")
-    public Object setUserRoleThroughId(@PathVariable("user_id") Long id, @PathVariable("role_id") Long roleId) {
+    public Object setUserRoleThroughRoleId(@PathVariable("user_id") Long id, @PathVariable("role_id") Long roleId) {
         Optional<User> possibleUser = repository.findById(id);
         if (possibleUser.isEmpty()) {
             return new ResponseEntity<>("Användaren finns inte", HttpStatus.BAD_REQUEST);
