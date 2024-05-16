@@ -39,7 +39,7 @@ import { forwardRef } from "react"
  * @since 2023-04-24
  * @updated (unknown) Added prop errorMessage and styling for the error state, converted CSS to CSS Module
  * @updated 2023-05-30 Chimera, updated documentation
- * 
+ * @updated 2024-05-16 Team Durian, removed error element if no error exists
  */
 const InputTextField = forwardRef(function InputTextField(
 	{ placeholder, text, onChange, required, type, id, onKeyUp, errorMessage, maxLength, hideLength}, ref) {
@@ -62,7 +62,7 @@ const InputTextField = forwardRef(function InputTextField(
 				ref={ref}
 				maxLength={maxLength || defaultLimit}
 			/>
-			<p className={styles.err}>{errorMessage}</p>
+			{ errorMessage && <p className={styles.err}>{errorMessage}</p>}
 		</label>
 	)
 })
