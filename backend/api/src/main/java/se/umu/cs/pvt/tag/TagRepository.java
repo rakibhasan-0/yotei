@@ -12,67 +12,72 @@ import org.springframework.stereotype.Repository;
  * The Tag API repository. Based on Spring JPA Repository.
  *
  * @Author Team 5 Verona (Doc: Griffin dv21jjn)
- * @Author Team Durian
+ * @Author Team 3 Durian
  */
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Long> {
 
     // An interface-based projection
-    interface TagUsageStats {
+    interface TagWithUsage {
+        long getId();
+        String getName();
         int getExercises();
         int getTechniques();
         int getWorkouts();
     }
 
-    static final String SQL_USAGE_SUM =
+    static final String SQL_SELECT_TAG_WITH_USAGE = 
     """
-    ORDER BY
-    (SELECT COUNT(*) FROM exercise_tag  AS e WHERE tag.tag_id = e.tag_id) +
-    (SELECT COUNT(*) FROM technique_tag AS t WHERE tag.tag_id = t.tag_id) +
-    (SELECT COUNT(*) FROM workout_tag   AS w WHERE tag.tag_id = w.tag_id) 
+    SELECT * FROM (
+        SELECT tag.tag_id AS id, tag.name,
+            (SELECT COUNT(*) FROM exercise_tag  AS e WHERE e.tag_id = tag.tag_id) AS exercises,
+            (SELECT COUNT(*) FROM technique_tag AS t WHERE t.tag_id = tag.tag_id) AS techniques,
+            (SELECT COUNT(*) FROM workout_tag   AS w WHERE w.tag_id = tag.tag_id) AS workouts
+        FROM tag
+    ) 
     """;
-    static final String SQL_ALL_TAGS = "SELECT * FROM tag ";
 
-    static final String SQL_CONTAINING = "WHERE name ILIKE %:name% ";
-
-    static final String SQL_USAGE_STATS =
-    """
-    SELECT
-    (SELECT COUNT(*) FROM exercise_tag  AS e WHERE e.tag_id = :tagId) AS exercises,
-    (SELECT COUNT(*) FROM technique_tag AS t WHERE t.tag_id = :tagId) AS techniques,
-    (SELECT COUNT(*) FROM workout_tag   AS w WHERE w.tag_id = :tagId) AS workouts;
-    """;
+    static final String SQL_ORDER_BY_USAGE = "ORDER BY exercises + techniques + workouts ";
+    static final String SQL_ORDER_BY_NAME = "ORDER BY name ";
+    static final String SQL_CONTAINING_NAME = "WHERE name ILIKE %:name% ";
 
 
     Tag getTagByName(String name);
 
     Optional<Tag> findTagByName(String name);
+    
+    @Query(nativeQuery = true, value = SQL_SELECT_TAG_WITH_USAGE + SQL_ORDER_BY_USAGE + "DESC")
+    List<TagWithUsage> getAllByOrderByUseDesc();
+
+    @Query(nativeQuery = true, value = SQL_SELECT_TAG_WITH_USAGE + SQL_ORDER_BY_USAGE + "ASC")
+    List<TagWithUsage> getAllByOrderByUseAsc();
+    /**
+     * Warning: remember to escape LIKE wildcards.
+     */
+    @Query(nativeQuery = true, value = SQL_SELECT_TAG_WITH_USAGE + SQL_CONTAINING_NAME + SQL_ORDER_BY_USAGE + "ASC")
+    List<TagWithUsage> findAllByNameContainingIgnoreCaseOrderByUseAsc(String name);
 
     /**
      * Warning: remember to escape LIKE wildcards.
      */
-    @Query(nativeQuery = true, value = SQL_ALL_TAGS + SQL_USAGE_SUM + "DESC")
-    List<Tag> getAllByOrderByUseDesc();
+    @Query(nativeQuery = true, value = SQL_SELECT_TAG_WITH_USAGE + SQL_CONTAINING_NAME + SQL_ORDER_BY_USAGE +  "DESC")
+    List<TagWithUsage> findAllByNameContainingIgnoreCaseOrderByUseDesc(String name);
+
+    @Query(nativeQuery = true, value = SQL_SELECT_TAG_WITH_USAGE + SQL_ORDER_BY_NAME + "DESC")
+    List<TagWithUsage> getAllByOrderByNameDesc();
+
+    @Query(nativeQuery = true, value = SQL_SELECT_TAG_WITH_USAGE + SQL_ORDER_BY_NAME + "ASC")
+    List<TagWithUsage> getAllByOrderByNameAsc();
 
     /**
      * Warning: remember to escape LIKE wildcards.
      */
-    @Query(nativeQuery = true, value = SQL_ALL_TAGS + SQL_USAGE_SUM + "ASC")
-    List<Tag> getAllByOrderByUseAsc();
-
-    @Query(nativeQuery = true, value = SQL_ALL_TAGS + SQL_CONTAINING + SQL_USAGE_SUM + "ASC")
-    List<Tag> findAllByNameContainingIgnoreCaseOrderByUseAsc(@Param("name") String name);
-
-    @Query(nativeQuery = true, value = SQL_ALL_TAGS + SQL_CONTAINING + SQL_USAGE_SUM + "DESC")
-    List<Tag> findAllByNameContainingIgnoreCaseOrderByUseDesc(@Param("name") String name);
-
-    List<Tag> getAllByOrderByNameDesc();
-    List<Tag> getAllByOrderByNameAsc();
-
-    // @Param is required due to a bug, see https://stackoverflow.com/a/71649782
-    List<Tag> findAllByNameContainingIgnoreCaseOrderByNameAsc(@Param("name") String name);
-    List<Tag> findAllByNameContainingIgnoreCaseOrderByNameDesc(@Param("name") String name);
-
-    @Query(nativeQuery = true, value = SQL_USAGE_STATS)
-    TagUsageStats getUsageStatsById(@Param("tagId") long tagId);
+    @Query(nativeQuery = true, value = SQL_SELECT_TAG_WITH_USAGE + SQL_CONTAINING_NAME + SQL_ORDER_BY_NAME + "ASC")
+    List<TagWithUsage> findAllByNameContainingIgnoreCaseOrderByNameAsc(String name);
+    
+    /**
+     * Warning: remember to escape LIKE wildcards.
+     */
+    @Query(nativeQuery = true, value = SQL_SELECT_TAG_WITH_USAGE + SQL_CONTAINING_NAME + SQL_ORDER_BY_NAME + "DESC")
+    List<TagWithUsage> findAllByNameContainingIgnoreCaseOrderByNameDesc(String name);
 }

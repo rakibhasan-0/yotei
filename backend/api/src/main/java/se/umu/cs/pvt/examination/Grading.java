@@ -1,6 +1,10 @@
 package se.umu.cs.pvt.examination;
 import javax.persistence.*;
+
+import se.umu.cs.pvt.belt.Belt;
+
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Grading - Entity class for the examination_grading table
@@ -29,6 +33,13 @@ public class Grading {
 
     @Column(nullable = false, name = "technique_step_num")
     private int technique_step_num;
+
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "grading_id")
+    private Set<Examinee> examinees;
+
+    public Set<Examinee> getExaminees() {
+        return examinees;
+    }
     
     /**
      * Data constructor for Grading.

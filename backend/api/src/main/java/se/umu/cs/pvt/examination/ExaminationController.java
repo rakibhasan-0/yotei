@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import se.umu.cs.pvt.belt.BeltRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Class for handling requests to the examination api.
@@ -27,6 +28,7 @@ public class ExaminationController {
     private ExamineeRepository examineeRepository;
     private ExaminationCommentRepository examinationCommentRepository;
     private ExaminationResultRepository examinationResultRepository;
+    private ExaminationProtocolRepository examinationProtocolRepository;
 
     public ResponseEntity<String> example() {
         return new ResponseEntity<>("hello", HttpStatus.OK);
@@ -44,14 +46,15 @@ public class ExaminationController {
      */
     @Autowired
     public ExaminationController(GradingRepository gradingRepository, BeltRepository beltRepository, ExamineePairRepository examineePairRepository, 
-    ExamineeRepository examineeRepository, ExaminationCommentRepository examinationCommentRepository,  ExaminationResultRepository examinationResultRepository) {
-     
+    ExamineeRepository examineeRepository, ExaminationCommentRepository examinationCommentRepository,  
+    ExaminationResultRepository examinationResultRepository, ExaminationProtocolRepository examinationProtocolRepository) {
         this.gradingRepository = gradingRepository;
         this.beltRepository = beltRepository;
         this.examineePairRepository = examineePairRepository;
         this.examineeRepository = examineeRepository;
         this.examinationCommentRepository = examinationCommentRepository;
         this.examinationResultRepository = examinationResultRepository;
+        this.examinationProtocolRepository = examinationProtocolRepository;
     }
 
     /**
@@ -113,6 +116,20 @@ public class ExaminationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     
+    /**
+     * Returns a grading with a given grading id.
+     * @param grading_id Given grading id.
+     * @return The grading with the given grading id.
+     */
+    @GetMapping("/grading/{grading_id}")
+    public ResponseEntity<Grading> getGrading(@PathVariable("grading_id") long grading_id) {
+        Optional<Grading> grading = gradingRepository.findById(grading_id);
+        if(grading.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(grading.get(), HttpStatus.OK);
+    }
+
     /**
      * Creates a examinee.
      * @param examinee Object mapped examinee from request body.
@@ -315,5 +332,16 @@ public class ExaminationController {
         examinationResultRepository.deleteById(result_id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    /**
+     * Returns all examination protocols.
+     * @return All examination protocols.  
+     * @return HTTP-status code.
+     */
+    @GetMapping("/examinationprotocol/all")
+    public ResponseEntity<List<ExaminationProtocol>> getAllExaminationProtocol() {
+        return new ResponseEntity<>(examinationProtocolRepository.findAll(), HttpStatus.OK);
+    }
+
 
 }
