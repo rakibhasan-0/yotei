@@ -14,6 +14,17 @@ import javax.persistence.Table;
 import se.umu.cs.pvt.exercise.Exercise;
 import se.umu.cs.pvt.technique.Technique;
 
+/**
+ * Model for ActivityListEntry
+ * 
+ * ActivityListEntry - Activity list entry model 
+ * ActivityListEntryController - Controller for activity list entry
+ * ActivityListEntryRepository - JPARepository interface
+ * 
+ * @author Team Tomato
+ * @since 2024-05-16
+ * @version 1.0
+ */
 @Entity
 @Table(name = "activity_list_entry")
 public class ActivityListEntry implements Serializable {

@@ -30,6 +30,10 @@ import se.umu.cs.pvt.user.JWTUtil;
  * EntryResponse class
  * 
  * Used as response for retrieval of entries.
+ * 
+ * @author Team Tomato
+ * @since 2024-05-16
+ * @version 1.0
  */
 class EntryResponse {
     private Technique technique;
