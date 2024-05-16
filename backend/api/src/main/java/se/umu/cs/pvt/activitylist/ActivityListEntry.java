@@ -57,9 +57,9 @@ public class ActivityListEntry implements Serializable {
     protected ActivityListEntry() {
     }
 
-    public ActivityListEntry(Long id, Long activityListId, Long exerciseId, Long techniqueId) {
+    public ActivityListEntry(Long id, Long listId, Long exerciseId, Long techniqueId) {
         this.id = id;
-        this.listId = activityListId;
+        this.listId = listId;
         this.exerciseId = exerciseId;
         this.techniqueId = techniqueId;
     }
