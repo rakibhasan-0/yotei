@@ -168,7 +168,7 @@ export default function DuringGrading() {
 		
 	}, [examinees])
 
-    // Run to fetch the correct grading, to in turn find the correct grading protocol
+    // Run to fetch the correct grading, to in turn fetch the correct grading protocol
     useEffect(() => {
         async function fetchData() {
             try {
@@ -370,7 +370,7 @@ export default function DuringGrading() {
     }
 
     /**
-     * Parses the examination protocol by converting its string properties to JSON objects.
+     * Parses the examination protocol by converting it from a string to a JSON object.
      * @param {Object} protocol The examination protocol to parse.
      * @returns {Object} The parsed examination protocol object.
      */
@@ -392,7 +392,7 @@ export default function DuringGrading() {
     }
 
     /**
-     * Handles errors that occur during fetching or processing of examination protocols.
+     * Handles errors that occur during fetching of examination protocols.
      * @param {Error} error The error object containing details of the error.
      */
     function handleFetchError(error) {
