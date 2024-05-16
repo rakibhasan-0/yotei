@@ -271,6 +271,25 @@ public class ExaminationController {
     }
 
 
+
+/**
+     * Returns a specific comment based on examinee_id and techniqueName.
+     * @param examinee_id examineeId of the desired examinee.
+     * @param techniqueName techniqueName of the desired technique.
+     * @return HTTP-status code.
+     */
+    
+    @GetMapping("/comment/pair/{examinee_pair_id}")
+    public ResponseEntity<List<ExaminationComment>> getExamineeComment(@PathVariable("examinee_pair_id") long pair_id, @RequestParam(name = "technique_name") String techniqueName ) {
+        try {
+            if (techniqueName == null) {
+                return new ResponseEntity<>(null);
+            }
+            return new ResponseEntity<>(examinationCommentRepository.findByPairIdAndTechniqueName(pair_id, techniqueName), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }   
+    }
     /**
      * Returns all examination comments.
      * @return All examination comments. 
