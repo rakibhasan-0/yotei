@@ -135,7 +135,7 @@ public class ExportGradingPdf {
         for(int j = (onPage*MAX_NUM_COLUMNS); j<(onPage*MAX_NUM_COLUMNS)+MAX_NUM_COLUMNS && j < examinees.size();j++){
             contentStream.addRect(initX,initY,CELL_WIDTH,-CELL_HEIGHT);
 
-            writeToCell(initX, initY, contentStream, stripName(examinees.get(j).getName()), font);
+            writeToCell(initX, initY, contentStream, shortenString(examinees.get(j).getName(), 30), font);
 
             initX+=CELL_WIDTH;
             count++;
@@ -143,33 +143,28 @@ public class ExportGradingPdf {
         initX = tableStartXPos;
         initY -=CELL_HEIGHT;
     
-        int row_count = 0;
         for(int i = 0; i < examinationTechniqueCategories.size(); i++) {
                 
             contentStream.addRect(initX, initY, CELL_WIDTH*count+30, -CELL_HEIGHT);
-            row_count++;
             writeToCell(initX, initY, contentStream, examinationTechniqueCategories.get(i).getCategoryName(), font);
 
             for(int j = 0; j < examinationTechniqueCategories.get(i).getTechniques().size(); j++) {
                 initY -=CELL_HEIGHT;
                 contentStream.addRect(initX, initY, CELL_WIDTH+30, -CELL_HEIGHT);
-                row_count++;
                 
-                String name = examinationTechniqueCategories.get(i).getTechniques().get(j).toString();
-                //Shorten technique name so it fits in the cell
-                if(name.length() > 63)
-                    name = name.substring(0, 60) + "..."; //kan lika bra va en metod som heter typ shortenString, å då skickar vi in en max storlek på antal tecken.
+                String techniqueName = examinationTechniqueCategories.get(i).getTechniques().get(j).toString();
+                shortenString(techniqueName, 63);
 
                 //Splits the string at the nearest space char and writes the rest on the next line in the cell
                 int splitOnIndex = 35;
-                if(name.length() > 35) {
+                if(techniqueName.length() > 35) {
                     for(int k = 0; k < 35; k++) {
-                        if(name.charAt(k) == ' ')
+                        if(techniqueName.charAt(k) == ' ')
                             splitOnIndex = k;
                     }
 
-                    writeToCell(initX, initY+10, contentStream, name.substring(0, splitOnIndex), font);
-                    writeToCell(initX, initY, contentStream, name.substring(splitOnIndex, name.length()), font);
+                    writeToCell(initX, initY+10, contentStream, techniqueName.substring(0, splitOnIndex), font);
+                    writeToCell(initX, initY, contentStream, techniqueName.substring(splitOnIndex, techniqueName.length()), font);
                 } 
                 else  
                     writeToCell(initX, initY, contentStream, examinationTechniqueCategories.get(i).getTechniques().get(j).toString(), font);
@@ -185,8 +180,7 @@ public class ExportGradingPdf {
 
                 initX = tableStartXPos;
 
-                //if initY - cellheigh < 0
-                if(row_count > MAX_NUM_ROWS) {
+                if(initY - CELL_HEIGHT - 35 < 0) {
                     contentStream.stroke();
                     contentStream.close();
                     PDPage page2 = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
@@ -194,7 +188,6 @@ public class ExportGradingPdf {
                     initY = pageHeight -75;
                     document.addPage(page2);
 
-                    row_count = 0;
                     contentStream = new PDPageContentStream(document,page2);
                     createHeader(code, color, contentStream);
                     drawImage(page, contentStream);
@@ -205,7 +198,7 @@ public class ExportGradingPdf {
                     for(int j2 = (onPage*MAX_NUM_COLUMNS); j2<(onPage*MAX_NUM_COLUMNS)+MAX_NUM_COLUMNS && j2 < examinees.size() ; j2++){
                         contentStream.addRect(initX,initY,CELL_WIDTH,-CELL_HEIGHT);
         
-                        writeToCell(initX, initY, contentStream, stripName(examinees.get(j2).getName()), font);
+                        writeToCell(initX, initY, contentStream, shortenString(examinees.get(j2).getName(), 30), font);
         
                         initX+=CELL_WIDTH;
                     }
@@ -319,7 +312,7 @@ public class ExportGradingPdf {
         }
 
         for(int i = 0; i < numPages; i++)  
-            this.createTablePage(i);
+            createTablePage(i);
 
         createGroupCommentPage();
         createPairCommentPage();
@@ -574,15 +567,15 @@ public class ExportGradingPdf {
     /**
      * Cuts of the String containing a name if it is too long and adds ... to the end.
      * 
-     * @param name, the String containing the name
-     * @return, the String containing the name, if it is too long, the shortened name.
+     * @param string, the String containing the string
+     * @return, the String containing the string, if it is too long, the shortened string.
      */
-    private String stripName(String name) {
-        if(name.length() > 30) {
-            name = name.substring(0, 27);
-            name = name + "...";
+    private String shortenString(String string, int maxLength) {
+        if(string.length() > maxLength) {
+            string = string.substring(0, maxLength - 3);
+            string = string + "...";
         }
-        System.out.println(name);
-        return name;
+        System.out.println(string);
+        return string;
     }
 }
