@@ -33,6 +33,17 @@ import org.testcontainers.images.builder.ImageFromDockerfile;
 
 import java.time.Duration;
 
+
+/**
+ * 
+ * This is essencially tests for the database init scripts.
+ * 
+ * A few new belts had to be added to the project, potentially messing things up within the database. To ensure
+ * no problems occured a test-suite was created that builds a temporary container with a database using
+ * the 'init.sql' script. The database is then queried to see if it builds as expected. 
+ *
+ * @author Kiwi (Grupp 2), c16kvn & dv22cen 2024-05-16
+ */
 public class TechniqueDatabaseTest {
     private static PostgreSQLContainer<?> postgreSQLContainer;
     private static final String DOCKER_IMAGE_NAME = "yotei-psql";
@@ -120,14 +131,74 @@ public class TechniqueDatabaseTest {
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
                 Statement statement = connection.createStatement()) {
             
+            /*BROWN BELT TECHNIQUES*/
             String techName = "Empi uchi, jodan och chudan (1 Kyu)";
             String expectedColor = "Brunt";
             String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
             
-            
             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
             preparedStatement.setString(1, techName);
             ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                String belt = resultSet.getString("belt_name");
+                assertEquals(expectedColor, belt);
+            }
+
+            techName = "Påkslag mot huvudet, forehand och backhand, Tsuri ashi - ju jodan uchi uke, irimi nage, ude hishigi hiza gatame";
+            expectedColor = "Brunt";
+            sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
+            
+            preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setString(1, techName);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                String belt = resultSet.getString("belt_name");
+                assertEquals(expectedColor, belt);
+            }
+
+            /*ORANGE BELT TECHNIQUES*/
+            techName = "Mae ukemi (4 Kyu)";
+            expectedColor = "Orange";
+            sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
+            
+            preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setString(1, techName);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                String belt = resultSet.getString("belt_name");
+                assertEquals(expectedColor, belt);
+            }
+            techName = "Svingslag, Ju morote jodan uke, hiki otoshi - O soto osae, ude henkan gatame";
+            expectedColor = "Orange";
+            sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
+            
+            preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setString(1, techName);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                String belt = resultSet.getString("belt_name");
+                assertEquals(expectedColor, belt);
+            }
+
+            /*BLACK BELT TECHNIQUES*/
+            techName = "Haito uchi, jodan (1 Dan)";
+            expectedColor = "Svart";
+            sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
+            
+            preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setString(1, techName);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                String belt = resultSet.getString("belt_name");
+                assertEquals(expectedColor, belt);
+            }
+            techName = "Gripa liggande, Vända liggande - Kuzure kote gaeshi gatame";
+            expectedColor = "Svart";
+            sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
+            
+            preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setString(1, techName);
+            resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 String belt = resultSet.getString("belt_name");
                 assertEquals(expectedColor, belt);
