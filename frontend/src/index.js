@@ -43,7 +43,7 @@ import AdminRoute from "./AdminRoute"
 import ActivityIndex from "./pages/Activity/ActivityIndex.jsx"
 import DuringGrading from "./pages/Grading/During/DuringGrading.jsx"
 import SessionCreateIndex from "./pages/Plan/SessionCreateIndex.jsx"
-import RoleDetailPage from "./pages/Admin/RoleDetailPage.jsx"
+import RoleEdit from "./pages/Admin/RoleEdit.jsx"
 import RoleCreate from "./pages/Admin/RoleCreate.jsx"
 
 
@@ -121,7 +121,7 @@ export default function App() {
 						<Route path="about" element={<About />} />
 						<Route path="admin" element={<Admin />} />
 						<Route path="admin/role/create" element={<RoleCreate />} />
-						<Route path="admin/role_page/:role_id" element={<RoleDetailPage />} />
+						<Route path="admin/role_page/:role_id" element={<RoleEdit />} />
 						<Route path="profile" element={<Profile />} />
 						<Route path="activity" element={<ActivityIndex />} />
 						<Route path="exercise" element={<ExerciseIndex uri={exerciseURI} />} />

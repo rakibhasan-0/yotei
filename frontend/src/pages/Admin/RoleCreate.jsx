@@ -34,7 +34,9 @@ export default function RoleCreate() {
 	const [isBlocking, setIsBlocking] = useState(false)
 	const [isToggled, setIsToggled] = useState(false)
 	const [errorMessage, setErrorMessage] = useState("")
-	
+
+	const [allMap, setAllMap] = useState(new Map())
+	const [choseMap, setChoseMap] = useState(new Map())	
 
 	useEffect(() => {
 		(async () => {
@@ -46,6 +48,10 @@ export default function RoleCreate() {
 				}
 				const json = await response.json()
 				console.log(json)
+				json.forEach(permission => {
+					setAllMap(allMap.set(permission.permissionId, permission))
+				})
+				console.log(allMap)
 				setPermissions(json)
 				setIsLoading(false)
 			} catch (ex) {
@@ -119,12 +125,15 @@ export default function RoleCreate() {
 		}
 	}
 
-	function handleButtonToggle(newToggledState) {
-		if (isToggled === newToggledState) {
-			console.log("toggled")
+	function handleButtonToggle(permissionId) {
+		console.log(permissionId)
+		let permission = allMap.get(permissionId)
+		permission.newToggledState = !permission.newToggledState
+		if (permission.newToggledState) {
+			setChoseMap(choseMap.set(permissionId, permission))
+		} else {
+			setChoseMap(choseMap.delete(permissionId))
 		}
-		console.log(newToggledState)
-		setIsToggled(newToggledState)
 	}
 
 	return (
@@ -157,32 +166,6 @@ export default function RoleCreate() {
 					))}
 				</div>
 			)}
-			<PermissionCard
-				item={"dummy permission1"}
-				key={"exercise.id1"}
-				id={"exercise.id1"}
-				toggled={isToggled}
-				changeToggled={handleButtonToggle}
-			/>
-			<PermissionCard
-				item={"dummy permission2"}
-				key={"exercise.id2"}
-				id={"exercise.id2"}
-				toggled={isToggled}
-				changeToggled={handleButtonToggle}
-			/>
-			<PermissionCard
-				item={"dummy permission3"}
-				key={"exercise.id3"}
-				id={"exercise.i3d"}
-				toggled={isToggled}
-				changeToggled={handleButtonToggle}
-			/>
-			<PermissionCard
-				item={"dummy permission4"}
-				key={"exercise.id4"}
-				id={"exercise.id4"}
-			/>
 
 			<div style={{ marginTop: "1rem", display: "flex", justifyContent: "space-between", width: "100%" }}>
 				<Button 
@@ -195,7 +178,6 @@ export default function RoleCreate() {
 				</Button>
 				<Button 
 					onClick={() => {
-						setIsBlocking(false)
 						handleRoleAdd()
 					}}
 				>

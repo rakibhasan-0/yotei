@@ -25,7 +25,7 @@ import RoleDelete from "../../components/Admin/Delete/RoleDelete"
  * @version 1.0
  */
 
-export default function RoleDetailPage() {
+export default function RoleEdit() {
 	const hasPreviousState = location.key !== "default"
 	const { role_id } = useParams()
 	const { token } = useContext(AccountContext)
@@ -39,6 +39,7 @@ export default function RoleDetailPage() {
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
 	const [isBlocking, setIsBlocking] = useState(false)
 	const [goBackPopup, setGoBackPopup] = useState(false)
+	const [isToggled, setIsToggled] = useState(false)
 	
 
 	const blocker = useBlocker(() => {
@@ -48,6 +49,26 @@ export default function RoleDetailPage() {
 		}
 		return false
 	})
+
+	const editRole = async () => {
+		setIsBlocking(false)
+		const response = await fetch("/api/permissions/role/add",
+			{
+				method: "POST",
+				headers: { "Content-Type": "application/json", token },
+				body: JSON.stringify({
+					role_id: role_id,
+					permission_id: permissions.permissionId
+				})
+			})
+
+		if (!response.ok) {
+			console.log(permissions.permissionId)
+			setErrorToast("Kunde inte ändra roll")
+			return
+		}
+		navigate("/admin")
+	}
 
 	useEffect(() => {
 		setIsBlocking(roleName !== originalRoleName)
@@ -108,6 +129,14 @@ export default function RoleDetailPage() {
 		}
 	}
 
+	function handleButtonToggle(newToggledState) {
+		if (isToggled === newToggledState) {
+			console.log("toggled")
+		}
+		console.log(newToggledState)
+		setIsToggled(newToggledState)
+	}
+
 	return (
 		<div>
 			<Trash
@@ -132,34 +161,15 @@ export default function RoleDetailPage() {
 							item={permission.permissionName}
 							key={index}
 							id={permission.permissionId}
+							changeToggled={() => handleButtonToggle(permission.permissionId)}
 						/>
 					))}
 				</div>
 			)}
-			<PermissionCard
-				item={"dummy permission1"}
-				key={"exercise.id"}
-				id={"exercise.id"}
-			/>
-			<PermissionCard
-				item={"dummy permission2"}
-				key={"exercise.id"}
-				id={"exercise.id"}
-			/>
-			<PermissionCard
-				item={"dummy permission3"}
-				key={"exercise.id"}
-				id={"exercise.id"}
-			/>
-			<PermissionCard
-				item={"dummy permission4"}
-				key={"exercise.id"}
-				id={"exercise.id"}
-			/>
 
 			<div style={{ marginTop: "1rem", display: "flex", justifyContent: "space-between", width: "100%" }}>
 				<Button outlined={true} onClick={handleNavigation}><p>Tillbaka</p></Button>
-				<Button onClick={console.log("a")}><p>Spara</p></Button>
+				<Button onClick={editRole}><p>Spara</p></Button>
 			</div>
 
 			<ConfirmPopup
