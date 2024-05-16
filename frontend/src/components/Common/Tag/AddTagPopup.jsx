@@ -327,10 +327,8 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 					<Sorter id={"tag-sort"} selected={sort} onSortChange={setSort} options={sortOptions}/>
 				</FilterContainer>
 			</div>
-			<div >
+			<div style={{paddingBottom: "5.1rem"}}> {/* Greater than btnAddActivity height */}
 				{tagListArray}
-
-				
 			</div>
 			
 			<MiniPopup title={"Taggen kan inte tas bort"} isOpen={showUsagePopup} setIsOpen={hideShowPopup} >
