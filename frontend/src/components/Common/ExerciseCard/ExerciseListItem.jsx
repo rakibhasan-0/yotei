@@ -33,9 +33,12 @@ import { Link } from "react-router-dom"
  * @version 1.1
  */
 export default function ExerciseListItem({ item, text, detailURL, id, index, checkBox }) {
+	const handleClick = () =>{
+		localStorage.setItem("stored_exercise", id)
+	}
 
 	return (
-		<div className={styles["exercise-list-container"]} data-testid="ExerciseListItem">
+		<div className={styles["exercise-list-container"]} data-testid="ExerciseListItem" onClick={handleClick} id={id}>
 			<div className={styles["exercise-list-header"]} style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
 				{checkBox}
 				<Link to={detailURL + id} data-testid="ExerciseListItem-link" style={{width: "100%"}}>
