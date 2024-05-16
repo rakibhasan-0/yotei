@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import se.umu.cs.pvt.activitylist.Dtos.ActivityListDTO;
@@ -43,65 +44,28 @@ public class ActivityListService implements IActivityListService {
     }
 
     /**
-     * Fetches all activity lists that the user has access to.
-     * 
-     * @param token    jwt token of the user sending the request
-     * @param hidden   true/false
-     * @param isAuthor true/false
-     * @return a list of activity lists in a shorter format
-     */
-    @Override
-    public List<ActivityListShortDTO> getAllAccessibleActivityListsDTO(DecodedJWT token, Boolean hidden,
-            Boolean isAuthor) {
-        List<ActivityList> activityLists = new ArrayList<>();
-        Long userId = token.getClaim("userId").asLong();
-        String userRole = token.getClaim("role").asString();
-
-        if (ROLE_ADMIN.equals(userRole)) {
-            if (hidden != null) {
-                activityLists = activityListRepository.findAllByHidden(hidden);
-            } else {
-                activityLists = activityListRepository.findAll();
-            }
-        } else if (Boolean.TRUE.equals(isAuthor)) {
-            if (hidden != null) {
-                activityLists = activityListRepository.findAllByAuthorAndHidden(userId, hidden);
-            } else {
-                activityLists = activityListRepository.findAllByAuthor(userId);
-            }
-        } else {
-
-            // fetch lists based on visibility only
-            if (hidden != null) {
-                activityLists = activityListRepository.findAllByUserIdAndHidden(userId, hidden);
-            } else {
-                activityLists = activityListRepository.findAllByUserId(userId);
-            }
-        }
-
-        return activityLists.stream().map(activityList -> convertToActivityListShortDTO(activityList, userId))
-                .collect(Collectors.toList());
-    }
-
-    /**
      * Converts an ActivityList object to an ActivityListShortDTO
      * 
      * @param activityList the list to be converted
      * @return converted object
      */
-    private ActivityListShortDTO convertToActivityListShortDTO(ActivityList activityList, Long userId) {
-        UserShort author = userShortRepository.findById(activityList.getAuthor()).orElse(null);
-        UserShortDTO authorDTO = (author != null) ? new UserShortDTO(author) : null;
-        Boolean isShared = false;
-        if (author.getUser_id() == userId && !activityList.getUsers().isEmpty()) {
-            isShared = true;
+    ActivityListShortDTO convertToActivityListShortDTO(ActivityList activityList, Long userId) {
+        Optional<UserShort> authorOpt = userShortRepository.findById(activityList.getAuthor());
+        if (authorOpt.isPresent()) {
+            UserShort author = authorOpt.get();
+            UserShortDTO authorDTO = (author != null) ? new UserShortDTO(author) : null;
+            Boolean isShared = false;
+            if (author.getUser_id() == userId && !activityList.getUsers().isEmpty()) {
+                isShared = true;
+            }
+            return new ActivityListShortDTO(
+                    activityList.getId(),
+                    activityList.getName(),
+                    activityList.getActivityEntries().size(),
+                    authorDTO,
+                    activityList.getHidden(), isShared);
         }
-        return new ActivityListShortDTO(
-                activityList.getId(),
-                activityList.getName(),
-                activityList.getActivityEntries().size(),
-                authorDTO,
-                activityList.getHidden(), isShared);
+        return null;
     }
 
     /**
@@ -122,18 +86,17 @@ public class ActivityListService implements IActivityListService {
 
         Long userIdL = jwt.getClaim("userId").asLong();
         String role = jwt.getClaim("role").asString();
-        Optional<ActivityList> listOpt;
+        Optional<ActivityList> listOpt = activityListRepository.findById(id);
         if (!role.equals(ROLE_ADMIN)) {
             listOpt = activityListRepository.findByIdAndUserId(id, userIdL);
             if (listOpt.isEmpty()) {
-                throw new UnauthorizedAccessException("User does not have permissions to read list");
+                throw new ForbiddenException("User does not have permissions to read list");
             }
         } else {
-            listOpt = activityListRepository.findById(id);
-        }
 
-        if (listOpt.isEmpty()) {
-            return null;
+            if (listOpt.isEmpty()) {
+                return null;
+            }
         }
 
         ActivityList list = listOpt.get();
@@ -210,21 +173,17 @@ public class ActivityListService implements IActivityListService {
             jwt = jwtUtil.validateToken(token);
             userIdL = jwt.getClaim("userId").asLong();
             userRole = jwt.getClaim("role").asString();
-        } catch (Exception e) {
+        } catch (JWTVerificationException e) {
             throw new UnauthorizedAccessException("Invalid token");
         }
 
-        Optional<ActivityList> result = activityListRepository.findById(id);
-        if (result.isPresent()) {
-            ActivityList list = result.get();
-            if (list.getAuthor().equals(userIdL) || ROLE_ADMIN.equals(userRole)) {
-                activityListRepository.delete(list);
-            } else {
-                throw new ForbiddenException("User does not have permission to delete this list");
-            }
-        } else {
-            throw new ResourceNotFoundException("Activity list not found");
+        ActivityList activityList = activityListRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("ActivityList not found"));
+
+        if (!activityList.getAuthor().equals(userIdL) && !ROLE_ADMIN.equals(userRole)) {
+            throw new ForbiddenException("User does not have permission to delete this list");
         }
+        activityListRepository.delete(activityList);
     }
 
     /**
@@ -321,7 +280,7 @@ public class ActivityListService implements IActivityListService {
 
         ActivityList list = listOpt.get();
         if (list.getAuthor() != userIdL && !userRole.equals(ROLE_ADMIN)) {
-            throw new UnauthorizedAccessException("You are not authorized to edit this activity list");
+            throw new ForbiddenException("You do not have permissions to edit this activity list");
         }
 
         if (listToUpdate.getName() != null) {

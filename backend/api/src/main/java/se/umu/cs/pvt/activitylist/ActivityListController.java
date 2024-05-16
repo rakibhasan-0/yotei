@@ -15,14 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
-
 import org.springframework.http.HttpStatus;
 
 import org.springframework.web.bind.annotation.RequestBody;
 
 import se.umu.cs.pvt.activitylist.Dtos.*;
-import se.umu.cs.pvt.user.JWTUtil;
 import se.umu.cs.pvt.workout.UserShortRepository;
 
 /**
@@ -37,22 +34,11 @@ import se.umu.cs.pvt.workout.UserShortRepository;
 @CrossOrigin
 @RequestMapping(path = "/api/activitylists")
 public class ActivityListController {
-    private final ActivityListRepository listRepository;
     private final ActivityListService activityListService;
-    private final UserShortRepository userShortRepository;
 
-    private DecodedJWT jwt;
-    private Long userIdL;
-    private String userRole;
-
-    @Autowired
-    private JWTUtil jwtUtil;
-
-    public ActivityListController(ActivityListRepository listRepository, ActivityListService activityListService,
+    public ActivityListController(ActivityListService activityListService,
             UserShortRepository userShortRepository) {
-        this.listRepository = listRepository;
         this.activityListService = activityListService;
-        this.userShortRepository = userShortRepository;
     }
 
     /**
@@ -132,6 +118,8 @@ public class ActivityListController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (ForbiddenException e) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
 
@@ -205,6 +193,8 @@ public class ActivityListController {
             }
             return new ResponseEntity<>(dto, HttpStatus.OK);
         } catch (UnauthorizedAccessException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        } catch (ForbiddenException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>("Bad request", HttpStatus.BAD_REQUEST);

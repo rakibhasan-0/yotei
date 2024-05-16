@@ -15,8 +15,6 @@ import se.umu.cs.pvt.activitylist.Dtos.ActivityListShortDTO;
  * @version 1.0
  */
 public interface IActivityListService {
-    List<ActivityListShortDTO> getAllAccessibleActivityListsDTO(DecodedJWT token, Boolean hidden,
-            Boolean createdByUser);
 
     ActivityListDTO getActivityListDetails(Long id, String token);
 
