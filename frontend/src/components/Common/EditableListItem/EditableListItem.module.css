@@ -1,8 +1,8 @@
-.examinee-container {
+.editable-container {
 	width: 100%;
   }
   
-  .examinee-list-container{
+  .editable-list-container{
 	  border-radius: 5px;
 	  border: 1px solid var(--black-primary);
 	  user-select: none;
@@ -12,7 +12,7 @@
 	  width: 100%;
   }
   
-  .examinee-list-header {
+  .editable-list-header {
 	  display: flex;
 	  align-items: center;
 	  text-align: center;
@@ -23,7 +23,7 @@
 	  overflow:hidden;
 	}
 	
-  .examinee-list-header p { /* Duration */
+  .editable-list-header p { /* Duration */
   
 	  margin: 0;
 	  align-items: end;
@@ -31,7 +31,7 @@
   
   }
 	  
-  .examinee-list-duration {
+  .editable-list-duration {
 	  text-align: center;
 	  display: flex;
 	  align-items: center;
