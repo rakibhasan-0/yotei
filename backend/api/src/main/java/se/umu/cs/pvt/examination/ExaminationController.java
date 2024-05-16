@@ -303,7 +303,7 @@ public class ExaminationController {
 
     /**
      * Returns a specific comment based on examinee_pair_id and techniqueName.
-     * @param examineePairId examineeId of the desired examinee.
+     * @param examineePairId examinee pair id of the desired examinee pair.
      * @param techniqueName techniqueName of the desired technique.
      * @return HTTP-status code.
      */
