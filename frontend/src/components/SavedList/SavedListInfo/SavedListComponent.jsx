@@ -67,5 +67,5 @@ export default function SavedActivityList({activities,edit}) {
 
 function setPadding() {
 	const paddingY = "pb-2"
-	return `container ${styles["workout-activity-list"]} ` + paddingY
+	return `container ${styles["list-activity-list"]} ` + paddingY
 }
