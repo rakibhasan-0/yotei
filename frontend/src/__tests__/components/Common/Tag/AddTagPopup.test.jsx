@@ -1,13 +1,16 @@
 /** @jest-environment jsdom */
-//import {React} from "react"
-//import {render, screen, configure} from "@testing-library/react"
+//import {React, useState} from "react"
+//import {render, screen, configure, fireEvent, waitFor, getByTestId} from "@testing-library/react"
 import "@testing-library/jest-dom"
 //import AddTagPopup from "../../../../components/Common/Tag/AddTagPopup"
+//import { MemoryRouter } from "react-router"
+//import TagInput from "../../../../components/Common/Tag/TagInput"
+//import Tag from "../../../../components/Common/Tag/Tag.jsx"
 
 /**
  * Test for the AddTagPopup component.
  *
- * @author Team Minotaur
+ * @author Team Minotaur, Team Durian
  * @version 1.0
  * @since 2023-05-08
  */
@@ -18,17 +21,24 @@ import "@testing-library/jest-dom"
 	// ARRANGE
 	const addedTags = [{id:1,name:"Tag1"}]
 
-	render(
+	const { getByText } = render(
 		<div>
-			<AddTagPopup id ="tagChooser" addedTags={addedTags}/>
+			<MemoryRouter>
+				<TagInput>
+					<AddTagPopup id ="tagChooser" addedTags={addedTags}/>
+				</TagInput>
+			</MemoryRouter>
 		</div>
 	)
 
+	const button = getByText("Hantera tagg")
+
+	fireEvent.click(button)
 	// ACT
-	const tag = screen.getByText("Tag1")
+	const tag = getByText("Tag1")
 
 	// ASSERT
-	expect(tag).toBeVisible()
+	expect(tag).toBeInTheDocument()
 })*/
 
 /*test("Tag: Should render the component as a whole", async() => {

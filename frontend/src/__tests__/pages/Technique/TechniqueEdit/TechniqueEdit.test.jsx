@@ -85,7 +85,7 @@ describe("verify that", () => {
 		}
 
 		server.use(
-			rest.get("/api/search/tags", (req, res, ctx) => {
+			rest.get("/api/tags/filter", (req, res, ctx) => {
 				return res(
 					ctx.json({
 						results: [
@@ -204,6 +204,7 @@ describe("verify that", () => {
 		
 	})
 
+	//Funkar för tillfället ej :(
 	/*test("adding/removing the kihon tag checks/unchecks the kihon checkbox", async () => {
 		await renderWithRouter()
 
@@ -211,9 +212,19 @@ describe("verify that", () => {
 
 		await user.click(screen.getByText("Hantera tagg"))
 
+		expect(screen.getByText("svart")).toBeInTheDocument()
+
 		await user.type(screen.getByPlaceholderText("Sök eller skapa tagg"), "kihon waza")
 
-		await user.click(screen.getByTestId("tag-add-button"))
+		await waitFor(() => {
+			user.click(screen.getByTestId("tag-add-button"))
+		})
+
+		//await user.click(screen.getByTestId("tag-add-button"))
+
+		await waitFor(() => {
+			expect(screen.getByText("name")).toBeInTheDocument()
+		})
 
 		await user.click(screen.getByTestId("save-and-close-button"))
 
@@ -299,6 +310,7 @@ describe("verify that", () => {
 		})
 	})
 
+	//Funkar för tillfället ej :(
 	/*test("adding a tag updates the technique", async () => {
 		await renderWithRouter()
 
