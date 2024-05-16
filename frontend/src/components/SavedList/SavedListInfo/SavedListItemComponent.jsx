@@ -11,14 +11,12 @@
  */
 import React, { useState, useContext } from "react"
 import styles from "./SavedListItemComponent.module.css"
-//Fanns ej i WorkoutActivityListItem.jsx 
 import { ListCreateContext } from "../../Common/List/ListCreateContext"
 import { LIST_CREATE_TYPES } from "../../Common/List/ListCreateReducer"
 import DescriptionToggle from "../../Common/DescriptionToggle"
 import { Trash } from "react-bootstrap-icons"
 
 const SavedActivityListItem = ({ activity, index, id,edit}) => {
-	//Fanns ej i WorkoutActivityList.jsx
 	let listCreateInfo,listCreateInfoDispatch
 	if(edit){
 		const {listCreateInfo:info, listCreateInfoDispatch:dispatch} = useContext(ListCreateContext)
@@ -36,12 +34,12 @@ const SavedActivityListItem = ({ activity, index, id,edit}) => {
 	}
 	//In case it is a newly added activity which has not had its technique/excercise info loaded
 	const name = activity.name?(
-		<p className={`${styles["workoutActivityName"]} m-0`}>{activity.name}</p>
+		<p className={`${styles["listActivityName"]} m-0`}>{activity.name}</p>
 	):
 	(activity.exercise ? (
-		<p className={`${styles["workoutActivityName"]} m-0`}>{activity.exercise.name}</p>
+		<p className={`${styles["listActivityName"]} m-0`}>{activity.exercise.name}</p>
 	) : (
-		<p className={`${styles["workoutActivityName"]} m-0`}>{activity.technique.name}</p>
+		<p className={`${styles["listActivityName"]} m-0`}>{activity.technique.name}</p>
 	))
 	
 	const createStripes = () => {
@@ -67,7 +65,7 @@ const SavedActivityListItem = ({ activity, index, id,edit}) => {
 				}}
 			>
 				<div className="col text-left">
-					<p className={`${styles["workoutActivityType"]} m-0`}>{name}</p>
+					<p className={`${styles["listActivityType"]} m-0`}>{name}</p>
 					{activity.exercise ? <p className="mb-0">Övning</p> : <p className="mb-0">Teknik</p>}
 				</div>
 
