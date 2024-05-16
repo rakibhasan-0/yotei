@@ -5,7 +5,6 @@ import Button from "../../../components/Common/Button/Button"
 import Popup from "../../../components/Common/Popup/Popup"
 import ExamineePairBox from "../../../components/Grading/PerformGrading/ExamineePairBox"
 import ExamineeBox from "../../../components/Grading/PerformGrading/ExamineeBox"
-import ExamineeButton from "../../../components/Grading/PerformGrading/ExamineeButton"
 
 import styles from "./DuringGrading.module.css"
 import { ArrowRight, ArrowLeft } from "react-bootstrap-icons"
@@ -110,14 +109,12 @@ export default function DuringGrading() {
 	const goToNextTechnique = () => {
 		setCurrentIndex(prevIndex => Math.min(prevIndex + 1, techniqueNameList.length - 1))
 		// reset the button colors
-		setSelectedButtons({})
 		// Should also load any stored result
 	}
     
 	const goToPrevTechnique = () => {
 		setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0))
 		// reset the button colors
-		setSelectedButtons({})
 		// Should also load any stored result
 	}
 
@@ -174,13 +171,13 @@ export default function DuringGrading() {
 		
 	}, [examinees])
 
-    const [leftExamineeState, setLeftExamineeState] = useState('default');
-    const [rightExamineeState, setRightExamineeState] = useState('default');
-    // Will handle the api call that will update the database with the result. 
-    const examineeClick = (newState, technique, pairIndex, buttonId) => {
-        console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}, with new state ${newState}`)
-        // Check what state the button is in and send the proper information to DB.
-    }
+	const [leftExamineeState, setLeftExamineeState] = useState("default")
+	const [rightExamineeState, setRightExamineeState] = useState("default")
+	// Will handle the api call that will update the database with the result. 
+	const examineeClick = (newState, technique, pairIndex, buttonId) => {
+		console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}, with new state ${newState}`)
+		// Check what state the button is in and send the proper information to DB.
+	}
 
 	// Scroll to the top of the examinees list after navigation
 	const scrollableContainerRef = useRef(null)
@@ -202,21 +199,21 @@ export default function DuringGrading() {
 						key={index}
 						rowColor={index % 2 === 0 ? "#FFFFFF" : "#F8EBEC"}
 						leftExaminee={
-                            <ExamineeBox 
-                                examineeName={item.nameLeft} 
-                                onClick={(newState) => examineeClick(newState, techniqueNameList[currentIndex].technique.text, index, `${index}-left`)}
-                                buttonState={leftExamineeState}
-                                setButtonState={setLeftExamineeState}>
-		                    </ExamineeBox>
-                        }
+							<ExamineeBox 
+								examineeName={item.nameLeft} 
+								onClick={(newState) => examineeClick(newState, techniqueNameList[currentIndex].technique.text, index, `${index}-left`)}
+								buttonState={leftExamineeState}
+								setButtonState={setLeftExamineeState}>
+							</ExamineeBox>
+						}
 						rightExaminee={
-                            <ExamineeBox 
-                                examineeName={item.nameRight}
-                                onClick={(newState) => examineeClick(newState, techniqueNameList[currentIndex].technique.text, index, `${index}-right`)}
-                                buttonState={rightExamineeState}
-                                setButtonState={setRightExamineeState}>
-                            </ExamineeBox>
-                        }
+							<ExamineeBox 
+								examineeName={item.nameRight}
+								onClick={(newState) => examineeClick(newState, techniqueNameList[currentIndex].technique.text, index, `${index}-right`)}
+								buttonState={rightExamineeState}
+								setButtonState={setRightExamineeState}>
+							</ExamineeBox>
+						}
 						pairNumber={index+1}>
 					</ExamineePairBox>
 				))}
@@ -259,7 +256,6 @@ export default function DuringGrading() {
 								setCurrentIndex(techniqueName.categoryIndex)
 								setShowPopup(false)
 								// Reset the 'U'. 'G' button colors
-								setSelectedButtons({})
 								scrollableContainerRef.current.scrollTop = 0}}>
 							<p>{techniqueName.category}</p></Button>
 					))}
