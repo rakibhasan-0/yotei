@@ -108,23 +108,23 @@ export default function DuringGrading() {
 	// Go to summary when the index is equal to length. Maybe change the look of the buttons.
 	const goToNextTechnique = () => {
 		setCurrentIndex(nextStep => {
-			const nextTechniqueStep = Math.min(nextStep + 1, techniqueNameList.length - 1);
-			onUpdateStepToDatabase(nextTechniqueStep);
-			return nextTechniqueStep;
-		});
+			const nextTechniqueStep = Math.min(nextStep + 1, techniqueNameList.length - 1)
+			onUpdateStepToDatabase(nextTechniqueStep)
+			return nextTechniqueStep
+		})
 		// reset the button colors
 		// Should also load any stored result
-	};
+	}
 	//goes to previous technique if it is not the first technique.
 	const goToPrevTechnique = () => {
 		setCurrentIndex(prevStep => {
-			const previousTechniqueStep = Math.max(prevStep - 1, 0);
-			onUpdateStepToDatabase(previousTechniqueStep);
-			return previousTechniqueStep;
-		});
+			const previousTechniqueStep = Math.max(prevStep - 1, 0)
+			onUpdateStepToDatabase(previousTechniqueStep)
+			return previousTechniqueStep
+		})
 		// reset the button colors
 		// Should also load any stored result
-	};
+	}
 	// this update the database with what techniquestep the user is on, and it works with forward and backward navigation.
 	const onUpdateStepToDatabase = async (currentTechniqueStep) => {
 		try {
@@ -133,9 +133,9 @@ export default function DuringGrading() {
 				setErrorToast("kunde inte hämta steg från databasen")
 				return
 			}
-			const step = await response.json();
-			step.technique_step_num = currentTechniqueStep;
-			console.log("response grading", step.technique_step_num);
+			const step = await response.json()
+			step.technique_step_num = currentTechniqueStep
+			console.log("response grading", step.technique_step_num)
 
 			const update = await fetch("/api/examination/grading", {
 				method: "PUT",
@@ -293,10 +293,10 @@ export default function DuringGrading() {
 							key={index}
 							onClick={() => {
 								setCurrentIndex(() => {
-									const techniquestep = techniqueName.categoryIndex;
-									onUpdateStepToDatabase(techniquestep);
-									return techniquestep;
-								});
+									const techniquestep = techniqueName.categoryIndex
+									onUpdateStepToDatabase(techniquestep)
+									return techniquestep
+								})
 								setShowPopup(false)
 								
 								// Reset the 'U'. 'G' button colors
