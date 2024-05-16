@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useContext, useEffect, useReducer, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import WorkoutFormComponent from "../../components/Common/List/ListFormComponent.jsx"
+import ListFormComponent from "../../components/Common/List/ListFormComponent.jsx"
 import { AccountContext } from "../../context.js"
 import { 
 	listCreateReducer, 
@@ -177,7 +177,7 @@ const ListEdit = () => {
 					<title>Redigera lista</title>
 					<h1 className={styles.title}>Redigera lista</h1>
 					
-					<WorkoutFormComponent callback={submitHandler} edit={true} />	
+					<ListFormComponent callback={submitHandler} edit={true} />	
 				</ListCreateContext.Provider> 
 				</>
 			}

@@ -30,14 +30,14 @@ import SavedActivityList from "../../SavedList/SavedListInfo/SavedListComponent"
  *     callback @id {function}  - Function to call when form is filled and to be sent.
  *
  * Example usage:
- *		<WorkoutFormComponent callback={submitHandler} />
+ *		<ListFormComponent callback={submitHandler} />
  *
  * @author Team Minotaur, Team 3 Durian
  * @version 2.1
  * @since 2023-05-24, 2024-04-18
  * @updated 2023-06-01 Chimera, updated pathing when pressing return to create session
  */
-export default function WorkoutFormComponent({ callback, state,edit}) {
+export default function ListFormComponent({ callback, state,edit}) {
 	const { listCreateInfo, listCreateInfoDispatch } =
 		useContext(ListCreateContext)
 	const [leaveActivityPickerPopup, setLeaveActivityPickerPopup] = useState(false)

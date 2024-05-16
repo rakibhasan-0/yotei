@@ -1,5 +1,5 @@
 /**
- * Workout create types
+ * list create types
  */
 export const LIST_CREATE_TYPES = {
 	SET_NAME: "SET_NAME",
@@ -41,7 +41,7 @@ export const LIST_CREATE_TYPES = {
 }
 
 /**
- * Initial state for the workout create reducer
+ * Initial state for the list create reducer
  */
 export const ListCreateInitialState = {
 	data: {
