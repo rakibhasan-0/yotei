@@ -65,17 +65,6 @@ export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, o
 		}
 	})
 
-	//TODO fix. REMOVE?!
-	const onCheckBoxToggle = () => setChosenGroups(prev => {
-		//TODO this is only to re-fetch, so wrong thing to do????
-		if(prev) {
-			console.log("a")
-			console.log(prev)
-			return prev.filter(g => g.id === 1) //TODO write what here? use token somehow??
-		}
-	}) //console.log("a")
-	//TODO HERE!!!
-
 	const toChanged = (event) => {
 		onDatesChange("to", event.target.value)
 	}

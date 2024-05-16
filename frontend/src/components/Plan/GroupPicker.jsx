@@ -127,14 +127,16 @@ export default function GroupPicker({ id, states, testFetchMethod, onToggle, onl
 			headers: { token }
 		}).then(async data => {
 			const json = await data.json()
-			//TODO COMMENT BETTER HERE!
+
 			if (onlyMyGroups) {
-				setGroups(json.filter(group => group.userId === user.userId).map(group => { //Was json.map before TODO remove.
+				//Only this user's groups should be shown, so we filter first.
+				setGroups(json.filter(group => group.userId === user.userId).map(group => {
 					//This is called once for each group every time you toggle a group checkbox. (You get one checkbox for each group.)
 					return {...group, selected: states && states.includes(group.id)}
 				}))
 			}
 			else {
+				//All groups are used.
 				setGroups(json.map(group => { //Old code.
 					return {...group, selected: states && states.includes(group.id)}
 				}))

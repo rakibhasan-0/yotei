@@ -90,37 +90,20 @@ export default function PlanIndex() {
 		}
 		setCookie("plan-filter", args, { path: "/" })
 		let fetchSessionPath = "api/session/all"
-	//console.log("onlyMyGroupsPI: " + onlyMyGroups) TODO REMOVE.
 		let planIds = selectedPlans.join("&id=")
 		console.log("DEFAULT PLANIDS: " + planIds)
 		if (selectedPlans && selectedPlans.length > 0) {
 			//Fetch only sessions connected to plans selected in FilterPlan.
 			// (plans = groups)
-
-		//TODO updated test code to check:
-			if (onlyMyGroups) {
-				//Do not allow for the rest of the groups, only my groups.
-
-				//Filter out only my groups (array of group ids used)
-				let selectedPlans2 = []
-				selectedPlans?.forEach(group => {if (groups?.includes(group.id)) {selectedPlans2.push(group.id)}})
-				//var planIds = selectedPlans.join("&id=")
-				console.log("Selected plans: " + selectedPlans)
-				console.log("PlanIDS!: " + planIds)
-				console.log("TESTI: " + selectedPlans2)
-				fetchSessionPath = "api/session/getByPlans?id="+ planIds
-				if (selectedPlans2.length === 0) {
-					console.log("NO GROUPS OR SOMETHING IDK.")
-				}
-			} else {
-			//var planIds = selectedPlans.join("&id=")
 			fetchSessionPath = "api/session/getByPlans?id="+ planIds
-		if (selectedPlans.length === 0) {
-					console.log("OLD CODE WAS BROKEN!")
-				}
+			//TODO: In the future if sessions can be made without a group then maybe you need to check if planIds is empty here.
+			if (onlyMyGroups) {
+				//TODO anything here?
+				//TODO yes probably want to filter out of planIds first based on the new userId...
 			}
 		} else {
 			//No groups are chosen.
+
 			console.log("No groups are chosen!!!")
 			//console.log(selectedPlans)
 
@@ -174,9 +157,7 @@ export default function PlanIndex() {
 
 		setLoading(false)
 
-		function filterSessions(sessions, args) { //TODO this is spammed.
-			//console.log(sessions[0]) //TODO this is the wrong part of the code to do the filtering in it seems.
-			//TODO: We need to filter in FilterPlan or GroupPicker instead most likely. Sessions is too late.
+		function filterSessions(sessions, args) {
 			return sessions.filter(session => {
 				const sessionDate = new Date(session.date).getTime()
 				const fromDate = new Date(args.from).getTime()
@@ -185,7 +166,7 @@ export default function PlanIndex() {
 				return sessionDate >= fromDate && sessionDate <= toDate
 			})
 		}
-	}, [ dates.to, dates.from, selectedPlans, onlyMyGroups ]) //TODO we could also register the checkbox by usestate here...
+	}, [ dates.to, dates.from, selectedPlans, onlyMyGroups ])
 
 	
 
