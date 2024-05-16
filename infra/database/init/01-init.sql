@@ -101,6 +101,12 @@ DROP TABLE IF EXISTS exercise CASCADE;
 
 DROP TABLE IF EXISTS user_table CASCADE;
 
+DROP TABLE IF EXISTS role CASCADE;
+
+DROP TABLE IF EXISTS permission CASCADE;
+
+DROP TABLE IF EXISTS role_to_permission CASCADE;
+
 DROP TABLE IF EXISTS comments CASCADE;
 
 DROP TABLE IF EXISTS plan CASCADE;
@@ -196,6 +202,23 @@ CREATE TABLE permission(
 
 ALTER TABLE
 	permission OWNER TO psql;
+
+--
+-- Name: role_to_permission; Type: TABLE; Schema: public; Owner: psql
+--
+CREATE TABLE IF NOT EXISTS role_to_permission (
+	rp_id SERIAL PRIMARY KEY,
+	role_id INT NOT NULL,
+	permission_id INT NOT NULL,
+	CONSTRAINT rp_fk_role FOREIGN KEY (role_id) REFERENCES role(role_id) ON
+	DELETE CASCADE,
+	CONSTRAINT rp_fk_permission FOREIGN KEY (permission_id) REFERENCES permission(permission_id) ON
+	DELETE CASCADE,
+	UNIQUE (role_id, permission_id)
+);
+
+ALTER TABLE
+	role_to_permission OWNER TO psql;
 
 --
 -- Name: exercise; Type: TABLE; Schema: public; Owner: psql
@@ -660,8 +683,10 @@ ALTER TABLE
 \ir defaults/users.sql
 \ir defaults/belts.sql 
 \ir defaults/tags.sql 
+\ir defaults/grading_protocols.sql
 \ir defaults/permissions.sql
 \ir defaults/roles.sql
+\ir defaults/permissions.sql
 \ir defaults/techniques.sql
 \ir defaults/workouts.sql
 \ir defaults/exercises.sql
