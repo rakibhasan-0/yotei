@@ -30,8 +30,8 @@ export enum Role {
   editor = 2,
 }
 
-// Exercise.
-export type Exercise = {
+// Technique.
+export type Technique = {
   name?: string,
   description?: string,
   time?: number,
