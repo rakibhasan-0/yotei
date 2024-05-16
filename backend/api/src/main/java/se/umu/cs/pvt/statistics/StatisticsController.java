@@ -131,7 +131,7 @@ public class StatisticsController {
         
         for (StatisticsResponse sr : allTechniques) {
             if (!uniqueActivityIds.contains(sr.getActivity_id())) {
-                // I can't get the repository to include the belts so we have to get them once again...
+                // I can't get the repository method to include the belts so we have to get them once again...
                 sr.setBelts(statisticsRepository.getBeltsForTechnique(sr.getActivity_id()));
                 uniqueActivities.add(sr);
             }
