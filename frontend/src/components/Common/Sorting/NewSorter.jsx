@@ -4,7 +4,7 @@ import "../BeltPicker/BeltPicker.module.css"
 import { ChevronDown, ChevronRight } from "react-bootstrap-icons"
 
 /**
- * A component for sorting items based on selected options. Is meant to be drag and drop replacement for the old Sorter component.
+ * A component for sorting items based on selected options.
  *
  * @component
  * @param {Object} props - The component props.
@@ -12,7 +12,10 @@ import { ChevronDown, ChevronRight } from "react-bootstrap-icons"
  * @param {boolean} props.selected - Indicates if the sorter is selected.
  * @param {Function} props.onSortChange - The callback function to handle sort changes.
  * @param {Array} props.options - The array of sorting options.
- * @returns {JSX.Element} The Sorter2 component.
+ * @returns {JSX.Element} The NewSorter component.
+ * 
+ * @author Tomato (Grupp 6)
+ * @since 2024-03-16 
  */
 export default function NewSorter({ id, selected, onSortChange, options }) {
 	const [isOpen, setIsOpen] = useState(false)
