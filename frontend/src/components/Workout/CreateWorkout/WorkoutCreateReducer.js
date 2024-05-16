@@ -1,4 +1,9 @@
 /**
+ * @author Team Kiwi
+ * @since 2024-05-13
+ * @updated 2024-05-13 Added function for removing added and checked activity
+ * 
+ * /**
  * Workout create types
  */
 export const WORKOUT_CREATE_TYPES = {
@@ -8,6 +13,7 @@ export const WORKOUT_CREATE_TYPES = {
 	SET_USERS: "SET_USERS",
 	ADD_ACTIVITY: "ADD_ACTIVITY",
 	REMOVE_ACTIVITY: "REMOVE_ACTIVITY",
+	REMOVE_ACTIVITY_ADDED_CHECKED: "REMOVE_ACTIVITY_ADDED_CHECKED",
 	REMOVE_ACTIVITY_ITEM: "REMOVE_ACTIVITY_ITEM",
 	SET_ACTIVITY_ITEMS: "SET_ACTIVITY_ITEMS",
 	SET_ACTIVITIES: "SET_ACTIVITIES",
@@ -208,6 +214,12 @@ export function workoutCreateReducer(state, action) {
 	case "REMOVE_ACTIVITY": {
 		const id = action.payload.id
 		tempState.addedActivities = tempState.addedActivities.filter(activity => activity.id !== id)
+		return tempState
+	}
+	case "REMOVE_ACTIVITY_ADDED_CHECKED": {
+		const id = action.payload.id
+		tempState.addedActivities = tempState.addedActivities.filter(activity => activity.id !== id)
+		tempState.checkedActivities.splice(action.payload.index,1)
 		return tempState
 	}
 	case "REMOVE_ACTIVITY_ITEM": {

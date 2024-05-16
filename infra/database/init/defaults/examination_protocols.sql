@@ -1,6 +1,6 @@
-INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (3, 
+INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (3, 
 '{
-    "grading_protocol": {"code": "5 KYU", "color": "GULT BÄLTE"},
+    "examination_protocol": {"code": "5 KYU", "color": "GULT BÄLTE"},
     "categories": [
         {
             "category_name": "KIHON WAZA - ATEMI WAZA",
@@ -59,9 +59,9 @@ INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (3,
         }
     ]
 }'::JSON);
-INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (5, 
+INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (5, 
 '{
-    "grading_protocol": {"code": "4 KYU", "color": "ORANGE BÄLTE"},
+    "examination_protocol": {"code": "4 KYU", "color": "ORANGE BÄLTE"},
     "categories": [
         {
             "category_name": "KIHON WAZA - ATEMI WAZA",
@@ -124,9 +124,9 @@ INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (5,
         }
     ]
 }'::JSON);
-INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (7, 
+INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (7, 
 '{
-    "grading_protocol": {"code": "3 KYU", "color": "GRÖNT BÄLTE"},
+    "examination_protocol": {"code": "3 KYU", "color": "GRÖNT BÄLTE"},
     "categories": [
         {
             "category_name": "KIHON WAZA - ATEMI WAZA",
@@ -196,9 +196,9 @@ INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (7,
         }
     ]
 }'::JSON);
-INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (9, 
+INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (9, 
 '{
-    "grading_protocol": {"code": "2 KYU", "color": "BLÅTT BÄLTE"},
+    "examination_protocol": {"code": "2 KYU", "color": "BLÅTT BÄLTE"},
     "categories": [
         {
             "category_name": "KIHON WAZA - ATEMI WAZA",
@@ -277,9 +277,9 @@ INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (9,
         }
     ]
 }'::JSON);
-INSERT INTO grading_protocol (belt_id, grading_protocol) VALUES (11, 
+INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (11, 
 '{
-    "grading_protocol": {"code": "1 KYU", "color": "BRUNT BÄLTE"},
+    "examination_protocol": {"code": "1 KYU", "color": "BRUNT BÄLTE"},
     "categories": [
         {
             "category_name": "KIHON WAZA - ATEMI WAZA",
