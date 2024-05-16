@@ -18,7 +18,7 @@ const testServer = "http://5dv214vt24-test.cs.umu.se"
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-	testDir: "./sys-test/test-files",
+	testDir: "./SystemTests/TestFiles",
 	timeout: 20000,
 	expect: {
 		timeout: 15000,

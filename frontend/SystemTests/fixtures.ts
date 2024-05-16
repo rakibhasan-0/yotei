@@ -1,6 +1,6 @@
 import { test as base, expect } from '@playwright/test';
-import { Account, Role } from 'types/systemTestsTypes';
-import { UserApi } from '@fixtures/UserApi';
+import { Account, Role } from './Types/systemTestsTypes';
+import { UserApi } from './ApiUtils/UserApi';
 
 // Note that we pass worker fixture types as a second template parameter.
 export const test = base.extend<{}, { account: Account }>({
