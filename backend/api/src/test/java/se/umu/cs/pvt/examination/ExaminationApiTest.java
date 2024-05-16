@@ -35,6 +35,8 @@ public class ExaminationApiTest {
     private ExaminationCommentRepository examinationCommentRepository;
     @MockBean
     private ExaminationResultRepository resultRepository;
+    @MockBean
+    private ExaminationProtocolRepository examinationProtocolRepository;
 
     @Autowired
     private ExaminationController examinationController;
@@ -44,6 +46,7 @@ public class ExaminationApiTest {
     List<ExamineePair> examineePairList;
     List<ExaminationComment> examineeCommentList;
     List<ExaminationResult> resultList;
+    List<ExaminationProtocol> protocolList;
 
     @BeforeEach
     void init() {
@@ -52,6 +55,7 @@ public class ExaminationApiTest {
         this.examineePairList = new ArrayList<>();
         this.examineeCommentList = new ArrayList<>();
         this.resultList = new ArrayList<>();
+        this.protocolList = new ArrayList<>();
 
         this.gradingList.add(new Grading(1L, 1L, 1L, 1, 1, new Date()));
         this.gradingList.add(new Grading(2L, 1L, 1L, 1, 1, new Date()));
@@ -73,16 +77,22 @@ public class ExaminationApiTest {
         this.resultList.add(new ExaminationResult(2L, 2L, "Testing Classing", true));
         this.resultList.add(new ExaminationResult(3L, 3L, "Class Testing", false));
 
+        this.protocolList.add(new ExaminationProtocol(1L, "Test String"));
+        this.protocolList.add(new ExaminationProtocol(2L, "Test String"));
+        this.protocolList.add(new ExaminationProtocol(3L, "Test String"));
+
+
         Mockito.when(gradingRepository.findAll()).thenReturn(gradingList);
         Mockito.when(examineeRepository.findAll()).thenReturn(examineeList);
         Mockito.when(examineePairRepository.findAll()).thenReturn(examineePairList);
         Mockito.when(examinationCommentRepository.findAll()).thenReturn(examineeCommentList);
         Mockito.when(resultRepository.findAll()).thenReturn(resultList);
+        Mockito.when(examinationProtocolRepository.findAll()).thenReturn(protocolList);
     }
 
     /**
      * Standard Spring test
-     */
+    */
     @Test
     void contextLoads() {
     }
@@ -122,4 +132,13 @@ public class ExaminationApiTest {
         int actual = resultRepository.findAll().size();
         assertEquals(3, actual);
     }
+
+    @Test
+    void testGetAllExaminationProtocols() {
+        int actual = examinationProtocolRepository.findAll().size();
+        assertEquals(3, actual);
+    }
+    
+
+
 }
