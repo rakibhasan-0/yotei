@@ -13,5 +13,7 @@ public interface ExaminationCommentRepository extends JpaRepository<ExaminationC
 
     List<ExaminationComment> findByExamineeId(Long examineeId);
 
+    List<ExaminationComment> findByTechniqueName(String techniqueName);
+
 
 }
