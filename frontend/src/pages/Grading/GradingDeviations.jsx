@@ -50,8 +50,7 @@ export default function GradingDeviations() {
 
                 for(let i = 0; i < json.length; i++) { //Replace when the API is changed to allow for fetching individual examinees
                     if(json[i] !== null) {
-                        let exId = json[i]["examinee_id"]
-                        if(exId == userId) {
+                        if(json[i]["examinee_id"] == userId) {
                             
                             setGradingId(json[i]["grading_id"])
                             setName(json[i]["name"])
@@ -64,6 +63,8 @@ export default function GradingDeviations() {
                             } else {
                                 const json2 = await response2.json()
                                 setBeltId(json2["belt_id"])
+
+                                //Fetch grading protocols
                                 const response3 = await fetch("/api/examination/examinationprotocol/all", requestOptions).catch(() => {
                                     setError("Serverfel: Kunde inte ansluta till servern.")
                                     return
@@ -74,9 +75,10 @@ export default function GradingDeviations() {
                                     return
                                 }
                                 const json3 = await response3.json()
-                        
+
+                                //Loop to find the right protocol based on the current gradings belt
                                 for(let i = 0; i < json3.length; i++) {
-                                    if(json2["belt_id"] === json3[i]["beltId"]) {
+                                    if(json2["belt_id"] === json3[i]["beltId"]) { //Found the correct protocol, set the data
                                         let examinationProtocol = JSON.parse(json3[i]["examinationProtocol"])
                                         let categories = examinationProtocol.categories
                                         setTechniqueCategories(categories)
@@ -110,7 +112,6 @@ export default function GradingDeviations() {
      * @returns A container displaying all exercises and information about the examinees performance of them
      */
     function getActivityContainer() {
-
         return techniqueCategories !== null && (
             <div className="container">
                 <div className="row">
@@ -121,7 +122,7 @@ export default function GradingDeviations() {
                                 <Divider id = 'divider-example' option= 'h2_left' title = {category.category_name} key={category.category_name}/>
                                 {category.techniques.map((technique, index) => (
 
-                                    <Container id = {index} name = {technique.text} passed={hasPassed(technique)} key={index} comment="This is a test comment!"></Container>
+                                    <Container id = {index} name = {technique.text} passed={hasPassed(technique)} key={index}></Container>
                                 ))}
                             </div>
                         ))}
