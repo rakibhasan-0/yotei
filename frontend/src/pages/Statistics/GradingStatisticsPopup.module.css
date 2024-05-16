@@ -3,7 +3,8 @@
     background: none;
     position: absolute;
     top: 0;
-    right: 3.2em;
+    right: 3.6em;
+    padding: 0;
 }
 
 .gradingButtonContainer img{

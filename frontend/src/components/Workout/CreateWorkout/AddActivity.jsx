@@ -443,29 +443,31 @@ function AddActivity({ id, setShowActivityInfo }) {
 		getListContent(args, token, map, mapActions, (result) => {
 			if (result.error) return
 
-			const listContent = result.map(item => {
-				if (item.technique) {
+
+			
+			const listContent = result.activities.map(item => {
+				if (item.type === "technique") {
 					return {
-						techniqueID: item.technique.id,
-						name: item.technique.name,
+						techniqueID: item.id,
+						name: item.name,
 						type: "technique",
-						description: item.technique.description,
+						description: item.description,
 						beltColors: [{
-							belt_color: item.technique.belts[0].color,
-							belt_name: item.technique.belts[0].name,
-							is_child: item.technique.belts[0].child
+							belt_color: item.belts[0].color,
+							belt_name: item.belts[0].name,
+							is_child: item.belts[0].child
 
 						}],
-						tags: item.technique.tags
+						tags: item.tags
 					}
 				}
-				if (item.exercise) {
+				else {
 					return {
-						id: item.exercise.id,
-						name: item.exercise.name,
+						id: item.id,
+						name: item.name,
 						type: "exercise",
-						description: item.exercise.description,
-						duration: item.exercise.duration
+						description: item.description,
+						duration: item.duration
 					}
 				}
 			})
