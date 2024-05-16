@@ -135,6 +135,7 @@ export default function DuringGrading() {
 				const current_grading_examinees = getExamineesCurrentGrading(all_examinees)
 				setExaminees(current_grading_examinees)
 				console.log("Fetched examinees in this grading: ", current_grading_examinees)
+                fetchTechniqueResults(pairs, techniqueNameList[currentIndex].technique.text, token)
 			} catch (ex) {
 				setErrorToast("Kunde inte hämta alla utövare")
 				console.error(ex)
@@ -325,4 +326,35 @@ export default function DuringGrading() {
 		})
 		return pair_names_current_grading
 	}
+
+    /**
+     * Function to fetch all results for a technique in the database
+     * @param {Array} pairs All the pairs of the examination
+     * @param {String} techniqueName Name of the technique 
+     * @param {any} token 
+     * @returns {Promise} The grading data.
+     * 
+     * @author Team Apelsin 2024-05-16
+     * @version 1.0
+     * 
+     */
+    async function fetchTechniqueResults(pairs, techniqueName, token) {
+        const requestOptions = {
+            method: "GET",
+            headers: { "token": token },
+        };
+    
+        try {
+            const response = await fetch("/api/examination/examresult/all", requestOptions);
+            if (!response.ok) {
+                throw new Error("Failed to fetch technique results");
+            }
+            const results = await response.json()
+            console.log(results)
+            return results;
+        } catch (error) {
+            alert(error.message);
+            return "hello"; // Handle the error gracefully, return null or an empty object/array
+        }
+    }
 }
