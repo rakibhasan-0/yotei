@@ -26,7 +26,7 @@ import se.umu.cs.pvt.role.RoleRepository;
 /**
  * Tests for the role_to_permission api
  * 
- * @author Team Mango (Grupp 4) - 2024-05-15
+ * @author Team Mango (Grupp 4) - 2024-05-16
  */
 @ExtendWith(MockitoExtension.class)
 class RoleToPermissionApiTest {
@@ -90,12 +90,8 @@ class RoleToPermissionApiTest {
                 Long permission_id = invocation.getArgument(1);
 
                 for (RoleToPermission rToPermission : rolePermissionPairs) {
-                    if (rToPermission.getRoleId() == roleId && rToPermission.getPerimssionId() == permission_id) {
-                        // for (Permission permission : permissions) {
-                        //     if (permission.getPermissionId() == permission_id) {
-                        //         return permission;
-                        //     }
-                        // }
+                    if (rToPermission.getRoleId() == roleId && 
+                    rToPermission.getPerimssionId() == permission_id) {
                         return rToPermission;
                     }
                 }
