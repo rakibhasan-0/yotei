@@ -36,9 +36,30 @@ export default function PlanIndex() {
 	const [ loading, setLoading ] = useState(true)
 
 	const [ groups, setGroups ] = useState() //TODO comment usage.
-	const [ onlyMyGroups, setOnlyMyGroups ] = useState(true) //TODO comment usage.
+	const [ onlyMyGroups, setOnlyMyGroups ] = useState(cookies["plan-filter"] ? cookies["plan-filter"].onlyMyGroups : true) //Variable for if to filter by only this user's groups.
 
 	const user = useContext(AccountContext) //Needed to get the userId to get only this user's groups.
+	
+	//This function needs to be high up in the code or it will be called all the time instead of only once when you press the checkbox on the screen.
+	/**
+	 * toggleOnlyMyGroups() - Toggles the boolean variable 'onlyMyGroups'.
+	 * If the variable is true, it gets set to false, and if it is false it gets set to true.
+	 */
+	function toggleOnlyMyGroups() {
+		const filterCookie = cookies["plan-filter"]
+		console.log("I toggle funktion: " + filterCookie.onlyMyGroups)
+		//setChosenGroups([]) //Reset chosen groups. TODO bad?
+		if (onlyMyGroups) {
+			setOnlyMyGroups(false)
+			//setOnlyMyGroupsPI(false) //Update the Plan Index variable too.
+		} else {
+			//We want to toggle on the variable, and then we should clear the 
+			//TODO EDIT HERE?!?
+			setOnlyMyGroups(true)
+			//setOnlyMyGroupsPI(true) //Update the Plan Index variable too.
+		}
+	}
+
 	
 	// Filtering props
 	const [ selectedPlans, setSelectedPlans ] = useState(cookies["plan-filter"] ? cookies["plan-filter"].plans : [])
@@ -78,6 +99,7 @@ export default function PlanIndex() {
 		if (filterCookie) {
 			setSelectedPlans(filterCookie.plans)
 			setDates({to: filterCookie.to, from: filterCookie.from})
+			setOnlyMyGroups(filterCookie.onlyMyGroups)
 		}
 	}, [])
 	
@@ -86,13 +108,15 @@ export default function PlanIndex() {
 		let args = {
 			from: dates.from, 
 			to: dates.to,
-			plans: selectedPlans
+			plans: selectedPlans,
+			onlyMyGroups: onlyMyGroups
 		}
 		setCookie("plan-filter", args, { path: "/" })
 		let fetchSessionPath = "api/session/all"
 	//console.log("onlyMyGroupsPI: " + onlyMyGroups) TODO REMOVE.
 		let planIds = selectedPlans.join("&id=")
 		console.log("DEFAULT PLANIDS: " + planIds)
+
 		if (selectedPlans && selectedPlans.length > 0) {
 			//Fetch only sessions connected to plans selected in FilterPlan.
 			// (plans = groups)
@@ -224,6 +248,7 @@ export default function PlanIndex() {
 				const filterCookie = cookies["plan-filter"]
 				if(filterCookie && filterCookie.plans) {
 					setSelectedPlans(plans.filter(plan => filterCookie.plans.includes(plan.id)).map(p => p.id))
+					console.log("In cookie:   " + filterCookie.onlyMyGroups)
 				}
 			})
 			.catch(() => {
@@ -264,9 +289,9 @@ export default function PlanIndex() {
 				onDatesChange={handleDatesChange}
 				chosenGroups={selectedPlans}
 				dates={dates}
-				//callbackFunction={toggleOnlyMyGroups} //Register callback function. TODO REMOVE.
 				callbackFunction={setGroups}
-				setOnlyMyGroupsPI={setOnlyMyGroups} //Register callback for the variable here to synchronize values.
+				onlyMyGroups={onlyMyGroups} //Register callback for the variable here to synchronize values.
+				toggleOnlyMyGroups={toggleOnlyMyGroups} //Register callback function. TODO REMOVE.
 			>
 			</FilterPlan>
 

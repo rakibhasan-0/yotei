@@ -26,31 +26,9 @@ import CheckBox from "../../components/Common/CheckBox/CheckBox"
 * @since 2023-05-08
 * Updates: 2024-05-10: Added a checkbox (with a feature toggle, since it does not work currently) for filtering by only my groups or all groups.
 */
-export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, onDatesChange, callbackFunction, setOnlyMyGroupsPI }) {
+export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, onDatesChange, callbackFunction, onlyMyGroups, toggleOnlyMyGroups}) {
 
 	const [checkBoxIsEnabled] = useState(true) //FEATURE TOGGLE
-
-	const [ onlyMyGroups, setOnlyMyGroups ] = useState(true) //Variable for if to filter by only this user's groups.
-	
-	//TODO remove one comment below.
-	//This function needs to be high up in the code or it will be called all the time instead of only once when you press the checkbox on the screen.
-	/**
-	 * toggleOnlyMyGroups() - Toggles the boolean variable 'onlyMyGroups'.
-	 * If the variable is true, it gets set to false, and if it is false it gets set to true.
-	 */
-	function toggleOnlyMyGroups() {
-		setChosenGroups([]) //Reset chosen groups. TODO bad?
-		if (onlyMyGroups) {
-			setOnlyMyGroups(false)
-			setOnlyMyGroupsPI(false) //Update the Plan Index variable too.
-		} else {
-			//We want to toggle on the variable, and then we should clear the 
-			//TODO EDIT HERE?!?
-			setOnlyMyGroups(true)
-			setOnlyMyGroupsPI(true) //Update the Plan Index variable too.
-		}
-	}
-
 
 	const onToggle = (checked, chosenGroup) => setChosenGroups(prev => {
 		if(prev) {
@@ -104,8 +82,8 @@ export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, o
 				{/* Checkbox for only showing this user's groups. */}
 				{ checkBoxIsEnabled && ( //FEATURE TOGGLE
 					<div className={styles.checkBoxSpace} >
-						<CheckBox id={"seeOnlyMyGroups"} onClick={() => {toggleOnlyMyGroups()
-						}} label={"Visa bara tillfällen för mina grupper"} checked={onlyMyGroups} />
+						<CheckBox id={"seeOnlyMyGroups"} onClick={() => { toggleOnlyMyGroups(); setChosenGroups([])}}  //Reset chosen groups. TODO bad?
+						label={"Visa bara tillfällen för mina grupper"} checked={onlyMyGroups} />
 						{/* The callbackFunction() call here toggles a boolean variable stored in PlanIndex.jsx. */}
 						{/* TODO: In order to filter properly, this part here and probably GroupPicker.jsx must be updated, as well as PlanIndex.jsx.*/}
 					</div>
