@@ -30,6 +30,15 @@ export enum Role {
   editor = 2,
 }
 
+// Activity can be either Technique or Exercise
+export type Activity = {
+  name?: string,
+  description?: string,
+  time?: number, // Subject to change, may use number of repetitions instead of duration
+  tag?: string,
+  mediaLink?: string
+}
+
 // Technique.
 export type Technique = {
   name?: string,
@@ -37,4 +46,14 @@ export type Technique = {
   time?: number,
   tag?: string,
   mediaLink?: string
+}
+
+// Workout
+export type Workout = {
+  name?: string,
+  description?: string,
+  activities?: Activity[],
+  isPrivate?: boolean,
+  hasAccess?: Account[],
+  tags?: string[]
 }
