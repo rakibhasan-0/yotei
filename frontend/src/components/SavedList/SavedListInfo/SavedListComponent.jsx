@@ -14,7 +14,8 @@ import { AccountContext } from "../../../context"
 import { ListCreateContext } from "../../Common/List/ListCreateContext"
 
 
-export default function WorkoutActivityList({activities,edit}) {
+export default function SavedActivityList({activities,edit}) {
+
 	const context = useContext(AccountContext)
 	/*const { listCreateInfo, listCreateInfoDispatch } =
 	useContext(ListCreateContext)*/
