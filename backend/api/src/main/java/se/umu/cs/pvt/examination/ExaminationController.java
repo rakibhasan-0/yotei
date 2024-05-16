@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import se.umu.cs.pvt.belt.Belt;
 import se.umu.cs.pvt.belt.BeltRepository;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -251,4 +252,24 @@ public class ExaminationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/exportpdf/{grading_id}")
+    public ResponseEntity<String> exportGradingToPdf(@PathVariable("grading_id") long grading_id) throws IOException {
+
+        if(gradingRepository.findById(grading_id).isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        
+
+
+        ExportGradingPdf pdfExport = new ExportGradingPdf(gradingRepository.findById(grading_id).get(), examineeRepository.findAll());
+
+        try {
+            pdfExport.generate();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        return new ResponseEntity<String>("hej", HttpStatus.OK);
+    }
 }
