@@ -8,6 +8,7 @@ import TechniqueCard from "../../components/Common/Technique/TechniqueCard/Techn
 import StatisticsPopUp from "./StatisticsPopUp"
 import FilterStatistics from "./FilterStatistics"
 import {getFormattedDateString} from "../../components/Common/DatePicker/DatePicker"
+import GradingStatisticsPopup from "./GradingStatisticsPopup"
 
 /**
  * 
@@ -167,7 +168,7 @@ export default function Statistics() {
 			{loading ? (
 				<Spinner />
 			) : (
-				<h1 id = "statistics-header" >
+				<h1 id="statistics-header">
 					{groupName ? `${groupName.name}` : "Gruppen hittades inte"}
 				</h1>
 			)}
@@ -184,20 +185,38 @@ export default function Statistics() {
 					dates={dates}
 				/>
 
-				<StatisticsPopUp groupActivities = {activities} dates ={dates} averageRating = {averageRating} 
-					numberOfSessions = {numberofSessions} />
+				<GradingStatisticsPopup id={"grading-statistics-container"} />
+
+				<StatisticsPopUp
+					groupActivities={activities}
+					dates={dates}
+					averageRating={averageRating}
+					numberOfSessions={numberofSessions}
+				/>
 			</div>
 
 			<div className="activitiesContainer" id="technique-exercise-list">
-				{	activities.length === 0 ? <h5 style={{ fontSize: "25px" }}>Inga aktiviteter hittades</h5> :
+				{activities.length === 0 ? (
+					<h5 style={{ fontSize: "25px" }}>Inga aktiviteter hittades</h5>
+				) : (
 					activities.map((activity, index) => (
-						<TechniqueCard key={index} technique={activity} checkBox={false} id={activity.activity_id} />
+						<TechniqueCard
+							key={index}
+							technique={activity}
+							checkBox={false}
+							id={activity.activity_id}
+						/>
 					))
-				}
+				)}
 			</div>
 
 			<div className={style.buttonContainer}>
-				<Button width="25%" outlined={true} onClick={() => navigate(-1) } id ="statistics-back-button">
+				<Button
+					width="25%"
+					outlined={true}
+					onClick={() => navigate(-1)}
+					id="statistics-back-button"
+				>
 					<p>Tillbaka</p>
 				</Button>
 			</div>
