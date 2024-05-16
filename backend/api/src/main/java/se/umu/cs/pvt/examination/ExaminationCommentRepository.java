@@ -15,4 +15,5 @@ public interface ExaminationCommentRepository extends JpaRepository<ExaminationC
     @Query("SELECT * FROM examination_comment AS ec WHERE ec.examinee_pair_id = :examineePairId AND ec.technique_name = :techniqueName")
     List<ExaminationComment> findByPairIdAndTechniqueName(Long examineePairId, String techniqueName);
 
+    List<ExaminationComment> findByExamineeIdAndTechniqueName(Long examineeId, String techniqueName);
 }
