@@ -73,7 +73,7 @@ public class TechniqueDatabaseTest {
     }
 
     @Test
-    public void testDatabaseInitialization() throws Exception {
+    public void testBasicTechniques() throws Exception {
         //String jdbcUrl = "jdbc:postgresql://localhost:5432/yotei";
 
         String jdbcUrl = postgreSQLContainer.getJdbcUrl();
@@ -99,14 +99,80 @@ public class TechniqueDatabaseTest {
         String password = postgreSQLContainer.getPassword();
 
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
-                Statement statement = connection.createStatement()) {
+            Statement statement = connection.createStatement()) {
+            
+                String[] techNames = {"Kamae, neutral (5 Kyu)", "Stryptag framifrån och svingslag, backhand, Frigöring - Ju morote jodan uke, ude osae, ude osae gatame"};
+                String expectedColor = "Gult";
 
-            ResultSet resultSet = statement.executeQuery("SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = 'Empi uchi, jodan och chudan (1 Kyu)';");
+                for(int i = 0; i < 2; i++){
+                    String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
+                
+                    PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+                    preparedStatement.setString(1, techNames[i]);
 
-            if (resultSet.next()) {
-                String belt = resultSet.getString("belt_name");
-                assertEquals("Brunt", belt);
-            }
+                    ResultSet resultSet = preparedStatement.executeQuery();
+
+                    if (resultSet.next()) {
+                        String belt = resultSet.getString("belt_name");
+                        assertEquals(expectedColor, belt);
+                    }
+                }
+        }
+    }
+
+    @Test
+    public void testGreenBelts() throws Exception {
+        String jdbcUrl = postgreSQLContainer.getJdbcUrl();
+        String username = postgreSQLContainer.getUsername();
+        String password = postgreSQLContainer.getPassword();
+
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+            Statement statement = connection.createStatement()) {
+            
+                String[] techNames = {"Grepp i två handleder framifrån, Shiho nage, shiho nage gatame", " Randori mot en motståndare (3 Kyu)"};
+                String expectedColor = "Grönt";
+
+                for(int i = 0; i < 2; i++){
+                    String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
+                
+                    PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+                    preparedStatement.setString(1, techNames[i]);
+
+                    ResultSet resultSet = preparedStatement.executeQuery();
+
+                    if (resultSet.next()) {
+                        String belt = resultSet.getString("belt_name");
+                        assertEquals(expectedColor, belt);
+                    }
+                }
+        }
+    }
+
+    @Test
+    public void testBlueBelts() throws Exception {
+        String jdbcUrl = postgreSQLContainer.getJdbcUrl();
+        String username = postgreSQLContainer.getUsername();
+        String password = postgreSQLContainer.getPassword();
+
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+            Statement statement = connection.createStatement()) {
+            
+                String[] techNames = {"Otoshi ukemi (2 Kyu)", "Påkslag mot huvudet, backhand, Ju jodan uchi uke, irimi nage - Ude osae, ude osae gatame"};
+                String expectedColor = "Blått";
+
+                for(int i = 0; i < 2; i++){
+                    String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
+                
+                    PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+                    preparedStatement.setString(1, techNames[i]);
+
+                    ResultSet resultSet = preparedStatement.executeQuery();
+
+                    if (resultSet.next()) {
+                        String belt = resultSet.getString("belt_name");
+                        assertEquals(expectedColor, belt);
+                    }
+                }
         }
     }
 
@@ -118,7 +184,7 @@ public class TechniqueDatabaseTest {
         String password = postgreSQLContainer.getPassword();
 
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
-                Statement statement = connection.createStatement()) {
+            Statement statement = connection.createStatement()) {
             
             String techName = "Empi uchi, jodan och chudan (1 Kyu)";
             String expectedColor = "Brunt";
