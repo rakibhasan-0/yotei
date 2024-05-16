@@ -300,23 +300,23 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 
 				}
 				<div className={styles["search-bar"]}>
-					
-					<input
-						className={styles["input-area"]}
-						placeholder="Sök eller skapa tagg"
-						value={searchText}
-						id = "tag-search-bar"
-						onChange={e => {searchForTags(e.target.value, sort.sortBy)}}
-					>
-						
-					</input>
-					<i className={styles["search-icon"]}><Search/></i>
-					{searchText !== "" &&
-						<button className ={styles["addButton"]} onClick={() => createNewTag(searchText)} id="tag-add-button" >
-							<PlusCircle style={{cursor: "pointer"}}> </PlusCircle>
-						</button>
-					}
-					
+					<div>
+						<Search className={styles["search-icon"]}/>
+					</div>
+					<div style={{flexGrow : 1}}>
+						<input
+							className={styles["input-area"]}
+							placeholder="Sök eller skapa tagg"
+							value={searchText}
+							id = "tag-search-bar"
+							onChange={e => {searchForTags(e.target.value, sort.sortBy)}}
+						/>
+					</div>	
+					<div>
+						{searchText !== "" &&
+						<PlusCircle className={styles["addButton"]} onClick={() => createNewTag(searchText)} id="tag-add-button"/>
+						}
+					</div>
 					
 				</div>
 				<div style={{height: "10px"}}></div>

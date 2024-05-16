@@ -34,7 +34,7 @@ public class ActivityListEntry implements Serializable {
     private Long id;
 
     @Column(nullable = false, name = "list_id")
-    private Long listId;
+    private Long activityListId;
 
     @Column(nullable = true, name = "exercise_id")
     private Long exerciseId;
@@ -57,9 +57,15 @@ public class ActivityListEntry implements Serializable {
     protected ActivityListEntry() {
     }
 
-    public ActivityListEntry(Long id, Long listId, Long exerciseId, Long techniqueId) {
+    public ActivityListEntry(Long id, Long activityListId, Long exerciseId, Long techniqueId) {
         this.id = id;
-        this.listId = listId;
+        this.activityListId = activityListId;
+        this.exerciseId = exerciseId;
+        this.techniqueId = techniqueId;
+    }
+
+    public ActivityListEntry(Long activityListId, Long exerciseId, Long techniqueId) {
+        this.activityListId = activityListId;
         this.exerciseId = exerciseId;
         this.techniqueId = techniqueId;
     }
@@ -69,7 +75,7 @@ public class ActivityListEntry implements Serializable {
     }
 
     public Long getListId() {
-        return listId;
+        return activityListId;
     }
 
     public Long getExerciseId() {
@@ -93,7 +99,7 @@ public class ActivityListEntry implements Serializable {
     }
 
     public void setListId(Long listId) {
-        this.listId = listId;
+        this.activityListId = listId;
     }
 
     public void setExerciseId(Long exerciseId) {

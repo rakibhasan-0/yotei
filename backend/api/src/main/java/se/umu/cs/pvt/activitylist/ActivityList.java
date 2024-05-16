@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import se.umu.cs.pvt.technique.Technique;
+import se.umu.cs.pvt.exercise.Exercise;
 import se.umu.cs.pvt.workout.UserShort;
 
 /**
@@ -22,8 +24,8 @@ import se.umu.cs.pvt.workout.UserShort;
  * ActivityListDTO - DTO for ActivityList to be able to provide complete
  * information about a list in a structured way.
  * 
- * @author Team Tomato
- * @since 2024-05-12
+ * @author Team Tomato, updated 2024-05-15
+ * @since 2024-05-08
  * @version 1.0
  */
 @Entity
@@ -53,7 +55,7 @@ public class ActivityList implements Serializable {
     @JoinTable(name = "user_to_activity_list", joinColumns = @JoinColumn(name = "list_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<UserShort> users = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "activityList")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "activityList")
     private Set<ActivityListEntry> activityEntries = new HashSet<>();
 
     protected ActivityList() {
@@ -61,6 +63,15 @@ public class ActivityList implements Serializable {
 
     public ActivityList(Long id, Long author, String name, String desc, Boolean hidden, LocalDate date) {
         this.id = id;
+        this.author = author;
+        this.name = name;
+        this.desc = desc;
+        this.hidden = hidden;
+        this.date = date;
+    }
+
+    // Constructor without id, used when saving a new ActivityList
+    public ActivityList(Long author, String name, String desc, Boolean hidden, LocalDate date) {
         this.author = author;
         this.name = name;
         this.desc = desc;
@@ -140,6 +151,16 @@ public class ActivityList implements Serializable {
 
     public void setEntries(Set<ActivityListEntry> activityEntries) {
         this.activityEntries = activityEntries;
+    }
+
+    public void addExercise(Long exerciseId) {
+        ActivityListEntry entry = new ActivityListEntry(this.id, exerciseId, null);
+        activityEntries.add(entry);
+    }
+
+    public void addTechnique(Long techniqueId) {
+        ActivityListEntry entry = new ActivityListEntry(this.id, null, techniqueId);
+        activityEntries.add(entry);
     }
 
 }
