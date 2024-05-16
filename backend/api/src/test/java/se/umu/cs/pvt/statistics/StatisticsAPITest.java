@@ -278,19 +278,19 @@ public class StatisticsAPITest {
                 .param("showexercises", showExercises.toString())
         )
         .andExpect(MockMvcResultMatchers.status().isOk()) // Status 200 OK
-        .andExpect(MockMvcResultMatchers.jsonPath("$.numberOfSessions").value(7)) // Check number of sessions
-        .andExpect(MockMvcResultMatchers.jsonPath("$.averageRating").value(4.0)) // Check average rating
-        .andExpect(MockMvcResultMatchers.jsonPath("$.activities").isArray()) // Ensure activities is an array
-        .andExpect(MockMvcResultMatchers.jsonPath("$.activities.length()").value(2)) // Ensure the length is 5
-        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].activity_id").value(138)) // Check first activity ID
-        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].name").value("Kamae, neutral (5 Kyu)")) // Check name with unicode
-        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].type").value("technique")) // First activity's type
-        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].count").value(16)) // First activity's count
-        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].beltColors").isArray()) // Check beltColors is an array
-        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].activity_id").value(8)) // Second activity ID
-        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].name").value("Armhävning")) // Second activity name
-        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].type").value("exercise")) // Second activity's type
-        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].count").value(15)); // Second activity's count
+        .andExpect(MockMvcResultMatchers.jsonPath("$.numberOfSessions").value(7)) 
+        .andExpect(MockMvcResultMatchers.jsonPath("$.averageRating").value(4.0)) 
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities").isArray()) 
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities.length()").value(2))
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].activity_id").value(8)) 
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].name").value("Armhävning")) 
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].type").value("exercise")) 
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].count").value(15)) 
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].activity_id").value(138)) 
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].name").value("Kamae, neutral (5 Kyu)"))
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].type").value("technique")) 
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].count").value(16))
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].beltColors").isArray()); 
 
     }
 
@@ -333,19 +333,19 @@ public class StatisticsAPITest {
                 .param("showexercises", showExercises.toString())
         )
         .andExpect(MockMvcResultMatchers.status().isOk()) // Status 200 OK
-        .andExpect(MockMvcResultMatchers.jsonPath("$.numberOfSessions").value(5)) // Check number of sessions
-        .andExpect(MockMvcResultMatchers.jsonPath("$.averageRating").value(4.0)) // Check average rating
-        .andExpect(MockMvcResultMatchers.jsonPath("$.activities").isArray()) // Ensure activities is an array
-        .andExpect(MockMvcResultMatchers.jsonPath("$.activities.length()").value(2)) // Ensure the length is 5
-        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].activity_id").value(138)) // Check first activity ID
-        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].name").value("Kamae, neutral (5 Kyu)")) // Check name with unicode
-        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].type").value("technique")) // First activity's type
-        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].count").value(12)) // First activity's count
-        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].beltColors").isArray()) // Check beltColors is an array
-        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].activity_id").value(8)) // Second activity ID
-        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].name").value("Armhävning")) // Second activity name
-        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].type").value("exercise")) // Second activity's type
-        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].count").value(8)); // Second activity's count
+        .andExpect(MockMvcResultMatchers.jsonPath("$.numberOfSessions").value(5)) 
+        .andExpect(MockMvcResultMatchers.jsonPath("$.averageRating").value(4.0))
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities").isArray())
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities.length()").value(2)) 
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].activity_id").value(8))
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].name").value("Armhävning"))
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].type").value("exercise"))
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[0].count").value(8)) 
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].activity_id").value(138)) 
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].name").value("Kamae, neutral (5 Kyu)")) 
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].type").value("technique")) 
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].count").value(12))
+        .andExpect(MockMvcResultMatchers.jsonPath("$.activities[1].beltColors").isArray()); 
     }
 }
 

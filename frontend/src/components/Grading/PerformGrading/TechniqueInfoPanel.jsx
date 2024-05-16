@@ -35,11 +35,12 @@ import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
  */
 
 export default function TechniqueInfoPanel( {
-	beltColor,
-	categoryTitle,
-	currentTechniqueTitle,
-	nextTechniqueTitle,
-	mainCategoryTitle
+	beltColor = "#FFDD33",
+	categoryTitle = "Test Kategori",
+	currentTechniqueTitle = "1. Grepp i två handleder framifrån och svingslag Frigöring – Ju morote jodan uke",
+	nextTechniqueTitle = " 2. Stryptag framifrån och svingslag, backhand Frigöring – Ju morote jodan uke, ude osae, ude osae gatame",
+	mainCategoryTitle = "Huvudkategori",
+	gradingId
 }) {
 
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
@@ -79,9 +80,9 @@ export default function TechniqueInfoPanel( {
 			setCommentError("Kommentaren får inte vara tom")
 			return
 		}
-		console.log("API ANROP SOM INTE FINNS ÄNNU. Detta skulle läggas in: " + commentText)
+		console.log("API ANROP SOM INTE FINNS ÄNNU. Detta skulle läggas in: " + commentText + " Grading ID: " + gradingId)
 		/* API ANROP HÄR...
-		const response = await fetch(`/api/comment/exercise/add?id=${ex_id}`, {
+		const response = await fetch(`/api/grading/${gradingId}/2/${currentTechniqueTitle}, {
 			method: "POST",
 			headers: {
 				"Content-type": "application/json",
