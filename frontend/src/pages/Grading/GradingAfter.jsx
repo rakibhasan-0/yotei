@@ -7,6 +7,13 @@ import styles from "./GradingBefore.module.css"
 import { Printer } from "react-bootstrap-icons"
 import { useParams } from "react-router-dom"
 
+/**
+ * Page to show all examinees for a grading after the grading has been completed.
+ * 
+ * @author Team Pomegranate(ens20lpn)
+ * @version 1.0
+ * @since 2024-05-15
+ */
 export default function GradingAfter() {
 	const context = useContext(AccountContext)
 	const { token} = context
@@ -18,8 +25,13 @@ export default function GradingAfter() {
 		belt_name: "",
 		color: "" 
 	})
-	//const gradingId = 1
-
+	
+	/**
+	 * Function to update the date of the grading.
+	 * @param {string} dateString - The date of the grading.
+	 * @returns {void}
+	 * @since 2024-05-15
+	 */
 	const updateDate = (dateString) => {
 		const date = new Date(dateString)
 		const hours = date.getHours()
@@ -30,10 +42,15 @@ export default function GradingAfter() {
 		setDateCreated(timeString)
 	}
 
+	/**
+	 * Function to fetch the grading from the backend.
+	 * @returns {Promise} The grading data.
+	 * @since 2024-05-15
+	 */
 	const fetchGrading = () => {
 		return fetch(`/api/examination/grading/${gradingId}`, {
 			method: "GET",
-			headers: { token }
+			headers: { "token": token }
 		})
 			.then(response => {
 				if (!response.ok) {
@@ -43,10 +60,15 @@ export default function GradingAfter() {
 			})
 	}
     
+	/**
+	 * Function to fetch the belts from the backend.
+	 * @returns {Promise} The belt data.
+	 * @since 2024-05-15
+	 */
 	const fetchBelts = () => {
 		return fetch("/api/belts/all", {
 			method: "GET",
-			headers: { token }
+			headers: { "token": token }
 		})
 			.then(response => {
 				if (!response.ok) {
@@ -56,22 +78,34 @@ export default function GradingAfter() {
 			})
 	}
 
+	/**
+	 * Function to download the grading as a pdf.
+	 */
 	const downloadPdf  =   () => {
 		// fetch(`api/export/grading/${gradingId}`, {
 		//     method: "GET",
 		//     headers: { "Authorization": `Bearer ${token}` }  // Assuming the token is a bearer token
 		// })
 	}
-    
+
+	/**
+	 * Function to navigate to the start of the grading.
+	 */
 	const navigateToGrading = () => {
 		navigate("/grading")
     
 	}
     
+	/**
+	 * Function to navigate back to the examination page.
+	 */
 	const navigateBack = () => {
 		navigate(`/grading/${gradingId}/2`)
 	}
 
+	/**
+	 * Fetches the grading and belt data when the component mounts.
+	 */
 	useEffect(() => {
 		const fetchData = async () => {
 			try {

@@ -36,9 +36,9 @@ import { useState } from "react"
  * Is returned with forwardRef so that we are able to use the ref of the input-node (makes it possible to focus)
  * Thereby, the textfield also has a ref parameter
  * 
- * @author Team Pomegrante
+ * @author Team Pomegrante, Team Durian
  * @version 1.0
- * @since 2024-05-03
+ * @since 2024-05-16
  * 
  */
 const AddExaminee = forwardRef(function AddExaminee(
@@ -87,7 +87,7 @@ const AddExaminee = forwardRef(function AddExaminee(
 					/>
 					<Plus id="plus-icon" onClick={handleClick} className={styles.plusIcon} /> 
 				</div>
-				<p className={styles.err}>{errorMessage}</p>
+				{errorMessage !== "" || !errorMessage && <p className={styles.err}>{errorMessage}</p>}
 			</label>
 		</form>
 		

@@ -31,6 +31,12 @@ export default function GradingIndex() {
 
 	const { token, userId } = context
 
+	/**
+	 * Navigate to next page, params such as gradingId, gradingStep and hexcolor for belt.
+	 * @param {integer} gradingId 
+	 * @param {integer} gradingStep 
+	 * @param {string} color 
+	 */
 	const handleNavigation = async (gradingId, gradingStep, color) => {
 		const params = {
 			ColorParam: color,
@@ -39,10 +45,14 @@ export default function GradingIndex() {
 		navigate(`/grading/${gradingId}/${gradingStep}`, { state: params })
 	}
 
+	/**
+	 * GET belts from database. 
+	 * @returns all belts stored in the database. 
+	 */
 	const fetchBelts = () => {
 		return fetch("/api/belts/all", {
 			method: "GET",
-			headers: { token }
+			headers: { "token": token }
 		})
 			.then(response => {
 				if (!response.ok) {
@@ -52,10 +62,14 @@ export default function GradingIndex() {
 			})
 	}
 
+	/**
+	 * GET all examinations in database. 
+	 * @returns all examinations stored in database.
+	 */
 	const fetchGradings = () => {
 		return fetch("/api/examination/all", {
 			method: "GET",
-			headers: { token }
+			headers: { "token": token }
 		})
 			.then(response => {
 				if (!response.ok) {
@@ -65,6 +79,10 @@ export default function GradingIndex() {
 			})
 	}
 
+	/**
+	 * Handle belt colors and name. 
+	 * Distribution current gradings and finished gradings for userid. 
+	 */
 	useEffect(() => {
 
 		const fetchData = async () => {

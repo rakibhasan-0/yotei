@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react"
+import React, { useState, useEffect, useContext} from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { AccountContext } from "../../context"
 import Spinner from "../../components/Common/Spinner/Spinner"
@@ -8,6 +8,8 @@ import TechniqueCard from "../../components/Common/Technique/TechniqueCard/Techn
 import StatisticsPopUp from "./StatisticsPopUp"
 import FilterStatistics from "./FilterStatistics"
 import {getFormattedDateString} from "../../components/Common/DatePicker/DatePicker"
+import GradingStatisticsPopup from "./GradingStatisticsPopup"
+import SortingArrowButton from "../../components/Common/SortingArrowButton/SortingArrowButton"
 
 /**
  * 
@@ -39,7 +41,8 @@ export default function Statistics() {
 		showExercises: false,
 		showKihon: false,
 	})
-
+	const [order, setDescendingOrder] = useState(false)
+	const [rotate, setRotate] = useState(false)
 
 	// creating a date object for two years before from now and today's date
 	const twoYearsBeforeFromNow = new Date()
@@ -161,13 +164,21 @@ export default function Statistics() {
 		setFilter({ ...filter, [variableName]: value })
 	}
 
+	// that function is responsible for changing the order of the group activities.
+	// initially, the order is increasing, when the user clicks on the button, the order will be descending.
+	function changeOrder() {
+		setDescendingOrder(!order)
+		setGroupActivities(groupActivities.reverse())
+		setRotate(!rotate)
+	}
+
 	return (
 		<div>
 			<title>Statistik</title>
 			{loading ? (
 				<Spinner />
 			) : (
-				<h1 id = "statistics-header" >
+				<h1 id="statistics-header">
 					{groupName ? `${groupName.name}` : "Gruppen hittades inte"}
 				</h1>
 			)}
@@ -184,20 +195,44 @@ export default function Statistics() {
 					dates={dates}
 				/>
 
-				<StatisticsPopUp groupActivities = {activities} dates ={dates} averageRating = {averageRating} 
-					numberOfSessions = {numberofSessions} />
+				<SortingArrowButton id="sorting-button" changeOrder={changeOrder} rotate={rotate} />
+
+				<div className={style.activitiesTextContainer}>
+					<h5>Aktiviteter</h5>
+				</div>
+
+				<GradingStatisticsPopup id={"grading-statistics-container"} />
+
+				<StatisticsPopUp
+					groupActivities={activities}
+					dates={dates}
+					averageRating={averageRating}
+					numberOfSessions={numberofSessions}
+				/>
 			</div>
 
 			<div className="activitiesContainer" id="technique-exercise-list">
-				{	activities.length === 0 ? <h5 style={{ fontSize: "25px" }}>Inga aktiviteter hittades</h5> :
+				{activities.length === 0 ? (
+					<h5 style={{ fontSize: "25px" }}>Inga aktiviteter hittades</h5>
+				) : (
 					activities.map((activity, index) => (
-						<TechniqueCard key={index} technique={activity} checkBox={false} id={activity.activity_id} />
+						<TechniqueCard
+							key={index}
+							technique={activity}
+							checkBox={false}
+							id={activity.activity_id}
+						/>
 					))
-				}
+				)}
 			</div>
 
 			<div className={style.buttonContainer}>
-				<Button width="25%" outlined={true} onClick={() => navigate(-1) } id ="statistics-back-button">
+				<Button
+					width="25%"
+					outlined={true}
+					onClick={() => navigate(-1)}
+					id="statistics-back-button"
+				>
 					<p>Tillbaka</p>
 				</Button>
 			</div>

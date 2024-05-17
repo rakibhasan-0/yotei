@@ -25,7 +25,29 @@ export default function GradingCreate() {
 	const today = new Date()
 	const formattedDateTime = today.toISOString()
 
-	const handleNavigation = async (beltId, color) => {
+
+	/**
+	 * Navigate to begin grading page, params gradingId and hexcolor for current belt. 
+	 * @param {integer} gradingId 
+	 * @param {string} color 
+	 */
+	const handleNavigation = async (gradingId, color) => {
+	
+		const params = {
+			ColorParam: color,
+		}
+			
+		navigate(`/grading/${gradingId}/1`, { state: params })
+
+
+	}
+
+	/**
+	 * Create the grading in databse. 
+	 * @param {integer} beltId 
+	 * @param {string} color 
+	 */
+	const createGrading = async (beltId, color) => {
 		try {
 
 			const gradingData = {
@@ -39,7 +61,8 @@ export default function GradingCreate() {
 			const response = await fetch("/api/examination/grading", {
 				method: "POST",
 				headers: {
-					"Content-Type": "application/json"
+					"Content-Type": "application/json",
+					"token": token
 				},
 				body: JSON.stringify(gradingData)
 			})
@@ -50,14 +73,11 @@ export default function GradingCreate() {
 
 			}
 
-			const responseData = await response.json()
-			const gradingId = responseData.grading_id
-
-			const params = {
-				ColorParam: color,
+			if(response.ok) {
+				const responseData = await response.json()
+				const gradingId = responseData.grading_id
+				handleNavigation(gradingId, color)
 			}
-			
-			navigate(`/grading/${gradingId}/1`, { state: params })
 
 		} catch (error) {
 			console.error("Misslyckades skapa gradering:", error)
@@ -65,13 +85,13 @@ export default function GradingCreate() {
 
 	}
 
-
-
-
+	/**
+	 * Get belts id and matching hexcolor for all belts in database. 
+	 */
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const response = await fetch("/api/belts/all", { headers: { token } })
+				const response = await fetch("/api/belts/all", { headers: { "token": token } })
 				if (response.status === 404) {
 					return
 				}
@@ -116,7 +136,7 @@ export default function GradingCreate() {
 							id={color}
 							key={color}
 							width={"100%"}
-							onClick={() => handleNavigation(belts[color].id, belts[color].hex)}
+							onClick={() => createGrading(belts[color].id, belts[color].hex)}
 							color={belts[color].hex}
 						
 						>
