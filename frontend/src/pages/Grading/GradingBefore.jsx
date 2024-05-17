@@ -40,6 +40,53 @@ export default function GradingBefore() {
 
   let numberOfPairs = 0
 
+	/**
+	 * Get method for the grading information. 
+	 * @returns JSON response
+	 */
+	const getGradingProtocol = () => {
+		return fetch(`/api/examination/grading/${gradingId}`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				"token": token },
+		})
+			.then(response => {
+				if (!response.ok) {
+					throw new Error("Network response was not ok")
+				}
+				return response.json()
+			})
+	}
+
+	/**
+	 * Update step for the grading process. 
+	 * @param {String} grading_data 
+	 * @returns status code
+	 */
+	const updateStep = (grading_data) => {
+		delete grading_data.examinees
+		grading_data.step = 2
+
+		console.log(grading_data)
+
+		return fetch("/api/examination/grading", {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				"token": token },
+			body: JSON.stringify(grading_data),
+
+		})
+			.then(response => {
+				if (!response.ok) {
+					throw new Error("Network response was not ok")
+				}
+				return response.status
+
+			})
+	}
+
   /**
    * Validets so the name of tag is not containing any illegal characters 
    * or if the name is empty or if the name of the tag already exists. 
@@ -86,6 +133,12 @@ export default function GradingBefore() {
                 postPair({examinee_1_id: examinee.id}, token)
                   .catch(() => setErrorToast("Kunde inte lägga till paret. Kontrollera din internetuppkoppling."))
           }))
+
+					const [grading_data] = await Promise.all([
+						getGradingProtocol(),
+					])
+					updateStep(grading_data)
+
           navigate(`/grading/${gradingId}/2`)
         }
 
