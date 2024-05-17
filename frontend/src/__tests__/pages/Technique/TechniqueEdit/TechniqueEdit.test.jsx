@@ -1,6 +1,6 @@
 /** @jest-environment jsdom */
 import React from "react"
-import { render, screen, configure, waitFor, fireEvent } from "@testing-library/react"
+import { render, screen, configure, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { AccountContext } from "../../../../context"
 import "@testing-library/jest-dom"
