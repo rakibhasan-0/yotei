@@ -17,10 +17,10 @@ public class Grading {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "grading_id")
-    private Long grading_id;
+    private Long gradingId;
 
     @Column(nullable = false, name = "creator_id")
-    private Long creator_id;
+    private Long creatorId;
 
     @Column(nullable = false, name = "step")
     private int step;
@@ -34,7 +34,7 @@ public class Grading {
     @Column(nullable = false, name = "technique_step_num")
     private int technique_step_num;
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy = "grading_id")
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "gradingId")
     private Set<Examinee> examinees;
 
     public Set<Examinee> getExaminees() {
@@ -52,8 +52,8 @@ public class Grading {
      * @param created_at The date of the grading.
      */
     public Grading(Long grading_id, Long creator_id, Long belt_id,int step, int technique_step_num,Date created_at) {
-        this.grading_id = grading_id;
-        this.creator_id = creator_id;
+        this.gradingId = grading_id;
+        this.creatorId = creator_id;
         this.belt_id = belt_id;
         this.step = step;
         this.technique_step_num = technique_step_num;
@@ -67,11 +67,11 @@ public class Grading {
     protected Grading() {}
     
     public Long getGrading_id() {
-        return grading_id;
+        return gradingId;
     }
 
     public Long getCreator_id() {
-        return creator_id;
+        return creatorId;
     }
 
     public int getStep() {
