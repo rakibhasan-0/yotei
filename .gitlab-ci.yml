@@ -59,7 +59,7 @@ test-backend:
       - backend/.m2/repository
   script:
     - cd backend
-    - mvn -q test -Dtest = \!TechniqueDatabaseTest
+    - mvn -q test -Dtest=\!TechniqueDatabaseTest
 
 # Requires startup of a copy of the database container, testing queries for the database
 test-database:
@@ -80,7 +80,7 @@ test-database:
       - backend/.m2/repository
   script:
     - cd backend
-    - mvn -q test -Dtest = TechniqueDatabaseTest
+    - mvn -q test -Dtest=TechniqueDatabaseTest
   
 test-frontend:
   rules:
