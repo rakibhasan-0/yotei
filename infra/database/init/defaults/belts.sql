@@ -1,6 +1,6 @@
---INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Grundläggande Tekniker', 'B4B4B4', False);
---INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Vitt', 'FCFCFC', False);
---INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Gult', 'FFDD33', False);
+INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Grundläggande Tekniker', 'B4B4B4', False);
+INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Vitt', 'FCFCFC', False);
+INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Gult', 'FFDD33', False);
 INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Gult', 'FFDD33', True);
 INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Orange', 'FFA133', False);
 INSERT INTO belt (belt_name, belt_color, is_child) VALUES ('Orange', 'FFA133', True);
