@@ -1,5 +1,5 @@
-import { test, expect } from '../fixtures';
-import { WorkoutPage } from '../PageObjectModels/workoutPage';
+import { test, expect } from '../fixtures'
+import { WorkoutPage } from '../PageObjectModels/workoutPage'
 
 test.describe('ST-4 Workout', () => {
 	let workoutPage
@@ -10,38 +10,35 @@ test.describe('ST-4 Workout', () => {
 		await expect(page.getByPlaceholder('Sök efter pass')).toBeVisible()
 	})
 
-  test('1. Create workout', async ({ page }) => {
-		const name = Math.random().toString(36).slice(2, 7) // Will generate a random string of 5 characters
-		await workoutPage.createWorkout(
+    test('1. Create workout', async ({ page }) => {
+
+        // Will generate a random string of 5 characters
+		const name = Math.random().toString(36).slice(2, 7) 
+		
+        // Creates a new workout with a randomized name, a sample description,
+        // and adds 6 different activities, 3 exercises and 3 techniques.
+        await workoutPage.createWorkout(
             {
                 description: 'description description description', 
                 name: name, 
             }
         )
-		await expect(page.getByText(`Träningspasset skapades!`)).toBeVisible()
-    	await page.waitForSelector('h1')
-		await workoutPage.deleteWorkout(name)
-    	await page.getByRole('link', { name: `${name}`}).isHidden()
-  })
-})
 
-// activities: [
-//     {
-//         name: 'Upp och ner',
-//         description: 'Gå på händer',
-//         time: 60
-//     }, {
-//         name: 'Ner och upp',
-//         description: 'Gå på fötter',
-//         time: 60
-//     }, {
-//         name: 'Livershot',
-//         description: 'Vänster uppercut mot lever',
-//         time: 10
-//     }, {
-//         name: 'Check hook',
-//         description: 'Främre hook, med samtidig sidestep',
-//         time: 10
-//     }
-// ],
-// tags: ['Akrobatik', 'Boxning']
+        // Asserts the existence of the confirmation message
+		await expect(page.getByText(`Träningspasset skapades!`)).toBeVisible()
+
+        // Waits for the next page to load
+    	await page.waitForSelector('h1')
+
+        // Deletes the created workout
+		await workoutPage.deleteWorkout(name)
+
+        // Asserts that the workout was deleted
+    	await page.getByRole('link', { name: `${name}`}).isHidden()
+    })
+
+    // test('2. Edit workout', async ({ page }) => {
+    //     const name = Math.random().toString(36).slice(2, 7) // Will generate a random string of 5 characters
+
+    // })
+})
