@@ -233,6 +233,7 @@ public class ActivityListService implements IActivityListService {
         Long userId = jwt.getClaim("userId").asLong();
         String userRole = jwt.getClaim("role").asString();
 
+        //
         List<ActivityList> activityLists;
         if (ROLE_ADMIN.equals(userRole)) {
             activityLists = (hidden != null) ? activityListRepository.findAllByHidden(hidden)
@@ -241,7 +242,10 @@ public class ActivityListService implements IActivityListService {
             activityLists = (hidden != null) ? activityListRepository.findAllByAuthorAndHidden(userId, hidden)
                     : activityListRepository.findAllByAuthor(userId);
         } else {
-            activityLists = (hidden != null) ? activityListRepository.findAllByUserIdAndHidden(userId, hidden)
+            if (hidden != null) {
+                activityLists = activityListRepository.findAllByUserIdAndHidden(userId, hidden);
+            }
+            activityLists = (Boolean.FALSE.equals(isAuthor)) ? activityListRepository.findAllSharedWithUser(userId)
                     : activityListRepository.findAllByUserId(userId);
         }
 

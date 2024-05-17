@@ -37,4 +37,7 @@ public interface ActivityListRepository extends JpaRepository<ActivityList, Long
     @Query("SELECT DISTINCT a FROM ActivityList a LEFT JOIN a.users u WHERE ((u.user_id = :userId OR a.author = :userId) OR (u IS NULL AND a.author = :userId)) AND a.id = :id")
     Optional<ActivityList> findByIdAndUserId(@Param("id") Long id, @Param("userId") Long userId);
 
+    @Query("SELECT DISTINCT a FROM ActivityList a LEFT JOIN a.users u WHERE (u.user_id = :userId AND a.author != :userId)")
+    List<ActivityList> findAllSharedWithUser(@Param("userId") Long userId);
+
 }
