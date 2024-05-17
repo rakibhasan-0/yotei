@@ -5,7 +5,7 @@ import FilterContainer from "../../components/Common/Filter/FilterContainer/Filt
 import { useCookies } from "react-cookie"
 import styles from "./FavouriteWorkoutList.module.css"
 import { AccountContext } from "../../context"
-import DatePicker, { getFormattedDateString } from "../../components/Common/DatePicker/DatePicker"
+import DatePicker from "../../components/Common/DatePicker/DatePicker"
 import {toast} from "react-toastify"
 import WorkoutListItem from "../../components/Workout/WorkoutListItem"
 import ErrorStateSearch from "../../components/Common/ErrorState/ErrorStateSearch.jsx"
@@ -37,7 +37,7 @@ export default function FavouriteWorkoutsList() {
 	const [ loading, setLoading ] = useState(true)
 	const navigate = useNavigate()
 	//Tries to retrieve filters from cookies
-	const cachedFilters = cookies['favourite-workouts-filter'];
+	const cachedFilters = cookies["favourite-workouts-filter"]
 	let fromDate, toDate
 	//Sets the from- and toDates depending on if there were any filters cached in cookies
 	if(cachedFilters!=null){
