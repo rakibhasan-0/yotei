@@ -26,7 +26,7 @@ import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
  * @version 3.0 
  */
 
-export default function ExamineeBox({ id, examineeName, examineeId, onClick, buttonState, setButtonState}) {
+export default function ExamineeBox({ id, examineeName, examineeId, onClick, setButtonState}) {
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [isAddingComment, setAddComment] = useState(false)
 	const [commentText, setCommentText] = useState()
@@ -92,6 +92,7 @@ export default function ExamineeBox({ id, examineeName, examineeId, onClick, but
 
 	const handleClick = () => {
 		// Update buttonState based on current color
+        let buttonState
 		if (colors[colorIndex] === "white") {
 			buttonState = "pass"
 		} else if (colors[colorIndex] === "lightgreen") {

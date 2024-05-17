@@ -90,33 +90,27 @@ function getCategoryIndices(dataArray) {
  *  @version 2.0
  */
 export default function DuringGrading() {
-	const [currentIndex, setCurrentIndex] = useState(0)
+    const [currentIndex, setCurrentIndex] = useState(0)
+    // The initialized is used to make sure the useEffect that is dependant on currentIndex doesn't 
+    // run whe currentIndex is initialized.
+    const [initialized, setInitialized] = useState(false) 
 	const [showPopup, setShowPopup] = useState(false)
 	const [examinees, setExaminees] = useState(undefined)
 	const [pairs, setPairs] = useState([])
+    const [leftExamineeState, setLeftExamineeState] = useState("default")
+    const [rightExamineeState, setRightExamineeState] = useState("default")
 	const { gradingId } = useParams()
 	const navigate = useNavigate()
-
+    const scrollableContainerRef = useRef(null) // Scroll to the top of the examinees list after navigation
+	
 	const context = useContext(AccountContext)
 	const { token } = context
+    
 
 	// Get info about grading
 	// TODO: Loads everytime the button is pressed. Should only happen once at start. useEffect?
 	const techniqueNameList = getTechniqueNameList(ProtocolYellow)
 	const categoryIndexMap = getCategoryIndices(techniqueNameList)
-
-	// Go to summary when the index is equal to length. Maybe change the look of the buttons.
-	const goToNextTechnique = () => {
-		setCurrentIndex(prevIndex => Math.min(prevIndex + 1, techniqueNameList.length - 1))
-		// reset the button colors
-		// Should also load any stored result
-	}
-    
-	const goToPrevTechnique = () => {
-		setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0))
-		// reset the button colors
-		// Should also load any stored result
-	}
 
 	// Run first time and fetch all examinees in this grading
 	useEffect(() => {
@@ -135,7 +129,6 @@ export default function DuringGrading() {
 				const current_grading_examinees = getExamineesCurrentGrading(all_examinees)
 				setExaminees(current_grading_examinees)
 				console.log("Fetched examinees in this grading: ", current_grading_examinees)
-                fetchTechniqueResults(pairs, techniqueNameList[currentIndex].technique.text, token)
 			} catch (ex) {
 				setErrorToast("Kunde inte hämta alla utövare")
 				console.error(ex)
@@ -161,27 +154,52 @@ export default function DuringGrading() {
 					const pair_names_current_grading = getPairsInCurrrentGrading(pairs_json)
 					setPairs(pair_names_current_grading)
 					console.log("Fetched pairs in this examination: ", pair_names_current_grading)
+                    // TODO: Set the index to the one inside the technique_step when it is available
+                    // setCurrentIndex(0)
 				} catch (ex) {
 					setErrorToast("Kunde inte hämta alla par")
 					console.error(ex)
 				}
 			})()
 		}
-		
-		
 	}, [examinees])
 
-	const [leftExamineeState, setLeftExamineeState] = useState("default")
-	const [rightExamineeState, setRightExamineeState] = useState("default")
+    useEffect(() => {
+        if (initialized) {
+            let res = fetchTechniqueResults(pairs, techniqueNameList[currentIndex].technique.text, token);
+            res.then(data => {
+                updateExamineeColors(data, pairs);
+            });
+        } else {
+            setInitialized(true);
+        }
+    }, [currentIndex, initialized]);
+
+
+    useEffect(() => {
+        console.log("leftExamineeState:", leftExamineeState);
+        console.log("rightExamineeState:", rightExamineeState);
+    }, [leftExamineeState, rightExamineeState]);
+
+
 	// Will handle the api call that will update the database with the result. 
 	const examineeClick = (newState, technique, pairIndex, buttonId) => {
 		console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}, with new state ${newState}`)
 		// Check what state the button is in and send the proper information to DB.
 	}
 
-	// Scroll to the top of the examinees list after navigation
-	const scrollableContainerRef = useRef(null)
-	// className={boxStyles.examineeButton}
+    	// Go to summary when the index is equal to length. Maybe change the look of the buttons.
+	const goToNextTechnique = () => {
+		setCurrentIndex(prevIndex => Math.min(prevIndex + 1, techniqueNameList.length - 1))
+		// reset the button colors
+		// Should also load any stored result
+	}
+    
+	const goToPrevTechnique = () => {
+		setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0))
+		// reset the button colors
+		// Should also load any stored result
+	}
 
 	return (
 		<div className={styles.container}>
@@ -328,6 +346,8 @@ export default function DuringGrading() {
 	}
 
     /**
+     * TODO: SHOULD ONLY RETURN THE RESULTS CONNECTED TO THE CURRENT EXAMINATION AND TECHNIQUE
+     * 
      * Function to fetch all results for a technique in the database
      * @param {Array} pairs All the pairs of the examination
      * @param {String} techniqueName Name of the technique 
@@ -347,14 +367,51 @@ export default function DuringGrading() {
         try {
             const response = await fetch("/api/examination/examresult/all", requestOptions);
             if (!response.ok) {
-                throw new Error("Failed to fetch technique results");
+                throw new Error("Failed to fetch technique results")
             }
             const results = await response.json()
             console.log(results)
-            return results;
+            return results
         } catch (error) {
-            alert(error.message);
-            return "hello"; // Handle the error gracefully, return null or an empty object/array
+            alert(error.message)
+            return null // Handle the error gracefully, return null or an empty object/array
         }
+    }
+
+    /**
+     *  
+     * Function to update the color of all examinees
+     * @param {Array} res the current result for the current technique.
+     * 
+     * @author Team Apelsin 2024-05-16
+     * @version 1.0
+     * 
+     */
+    function updateExamineeColors(results, pairs) {
+        results.forEach((techniqueResult) => {
+            const id = techniqueResult.examinee_id
+
+            const examinee1 = pairs.find(item => item.leftId === id)
+            const examinee2 = pairs.find(item => item.rightId === id) 
+            console.log("Examinee1: ", examinee1, " Examinee2: ", examinee2)
+
+            let techniqueState
+            switch (techniqueResult.pass) {
+                case true:
+                    techniqueState = "pass"
+                    break;
+                case false:
+                    techniqueState = "fail"
+                    break;
+                default:
+                    techniqueState = "default"
+            }
+
+            if(examinee1) {
+                setLeftExamineeState(techniqueState)
+            } else if(examinee2) {
+                setRightExamineeState(techniqueState)
+            }
+        })
     }
 }
