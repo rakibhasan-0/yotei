@@ -185,11 +185,7 @@ export default function DuringGrading() {
 		console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}, with new state ${newState}`)
 		// Check what state the button is in and send the proper information to DB.
 		let examinee_clicked = buttonId.endsWith('left') ? pairs[pairIndex].leftId : pairs[pairIndex].rightId
-		//let buttonTypeData = (newState === "pass" ? true : false)
-		//buttonTypeData = null
-		//console.log("Examinee_id: ", examinee_clicked)
 		addExamineeResult(examinee_clicked, `${technique}`, newState)
-		console.log("Added to DB: Examinee_id:", examinee_clicked, ", Techniquename: ", technique, ", newState: ", newState )
 	}
 
 	// Scroll to the top of the examinees list after navigation
@@ -298,16 +294,14 @@ export default function DuringGrading() {
 
 /**
 	 * Adds a status update to backend for an athlete
-	 * TODO: Must have option to update status, call a put from this code
 	 * @param {Int} examineeId id of the examinee that should have result added
 	 * @param {String} techniqueName name on technique in grading
 	 * @param {String} passStatus could be either 'pass', 'fail' or 'default'
 	 * 
-	 * @returns {Int} result_id for added response
-	 * 
-	 * @author Team Apelsin (2024-05-13)
+	 * @author Team Apelsin (2024-05-17) - c21ion
 	 */
 	async function addExamineeResult(examineeId, techniqueName, passStatus) {
+		// Temporary, should use a state instead
 		const data = [
 			{
 				examinee_id: 9,
@@ -315,19 +309,6 @@ export default function DuringGrading() {
 				result_id: 16,
 				technique_name: "1. Shotei uchi, jodan, rak stöt med främre och bakre handen"
 			}
-			/*,
-			{
-				examinee_id: 2,
-				pass: true,
-				result_id: 15,
-				technique_name: "2. Shotei uchi, chudan, rak stöt med främre och bakre handen"
-			},
-			{
-				examinee_id: 3,
-				pass: null,
-				result_id: 14,
-				technique_name: "2. Shotei uchi, chudan, rak stöt med främre och bakre handen"
-			}*/
 		];
 
 		// Convert string for pass status to Boolean
@@ -336,28 +317,18 @@ export default function DuringGrading() {
 			fail: false,
 			default: null,
 		  };
-		console.log("PassStatus: ", passStatusMap[passStatus])
 		// Check existance
 		const foundExamineeResult = data.find(item => item.examinee_id === examineeId)
 		if( foundExamineeResult ){
 			const data = await putExamineeResult({ result_id: foundExamineeResult.result_id, examinee_id: foundExamineeResult.examinee_id, technique_name: foundExamineeResult.technique_name, pass: passStatusMap[passStatus] }, token)
 				.catch(() => setErrorToast("Kunde inte lägga till resultat. Kolla internetuppkoppling."))
-			//response = await data.json()
 			console.log("Response PUT succesful")
 		}else{
 			const data = await postExamineeResult({ examinee_id: examineeId, technique_name: techniqueName, pass: passStatusMap[passStatus] }, token)
 				.catch(() => setErrorToast("Kunde inte lägga till resultat. Kolla internetuppkoppling."))
-			response = await data.json()
-			console.log("Response POST examineeResult: ", response)
-		}
-
-		if (passStatus === 'pass'){
-		}// false put 
-		else if(passStatus === 'fail'){
-			
-		}// null delete
-		else{
-
+			const response = await data.json()
+			// TODO: Add response to listOfExamineeResults
+			console.log("Response POST successful", response)
 		}
 	}
 
@@ -366,10 +337,10 @@ export default function DuringGrading() {
 	 * @param {JSON} result JSON object with info about result, 
 	 * 						should be on format "{ examinee_id: **examineeId**, technique_name: **techniqueName**, pass: **passStatus** }"
 	 * 
-	 * @author Team Apelsin (2024-05-13)
+	 * @author Team Apelsin (2024-05-13, c21ion)
 	 */
 	async function postExamineeResult(result, token) {
-		console.log("Result posted: ", result)
+		//console.log("Result posted: ", result)
 		const requestOptions = {
 			method: "POST",
 			headers: { "Content-Type": "application/json", "token": token },
@@ -386,10 +357,10 @@ export default function DuringGrading() {
 	 * @param {JSON} result JSON object with info about result, 
 	 * 						should be on format "{ resultid: **resultId**, examinee_id: **examineeId**, technique_name: **techniqueName**, pass: **passStatus** }"
 	 * 
-	 * @author Team Apelsin (2024-05-13)
+	 * @author Team Apelsin (2024-05-17, c21ion) 
 	 */
 	async function putExamineeResult(result, token) {
-		console.log("Result put: ", JSON.stringify(result))
+		//console.log("Result put: ", JSON.stringify(result))
 		const requestOptions = {
 			method: "PUT",
 			headers: { "Content-Type": "application/json", "token": token },
