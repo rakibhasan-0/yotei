@@ -33,6 +33,13 @@ export default function BeltIcon({ belt }) {
 			</div>
 		)
 	}
+	if (belt.inverted){
+		return (
+			<div className={styles.beltIcon} style ={{backgroundColor: color}}>
+				<div className={styles.beltIconChild} style={{backgroundColor: "white"}}/>
+			</div>
+		)
+	}
 	if (belt.name.toLowerCase().includes("dan")) {
 		const num = parseInt(belt.name.split(" ")[0])
 		return (
