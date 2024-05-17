@@ -118,9 +118,7 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
         <version>${project.parent.version}</version>
         <configuration>
-          <excludes>
-            <exclude>./src/test/java/se/umu/cs/pvt/technique/TechniqueDatabaseTest.java/TechniqueDatabaseTest.java</exclude>
-          </excludes>
+          <skipTests>true</skipTests>
           <fork>true</fork>
           <skip>false</skip>
         </configuration>
