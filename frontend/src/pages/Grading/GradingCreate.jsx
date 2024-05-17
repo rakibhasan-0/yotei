@@ -51,11 +51,11 @@ export default function GradingCreate() {
 		try {
 
 			const gradingData = {
-				creator_id: userId,
-				belt_id: beltId,
+				creatorId: userId,
+				beltId: beltId,
 				step: 1,
-				technique_step_num: 0,
-				created_at: formattedDateTime
+				techniqueStepNum: 0,
+				createdAt: formattedDateTime
 			}
 
 			const response = await fetch("/api/examination/grading", {
