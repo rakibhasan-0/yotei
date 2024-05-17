@@ -1,5 +1,5 @@
 .pairbox{
-  display:flex;
+    display:flex;
     width: 100%;
     height: 100%;
     margin: 0;
@@ -11,6 +11,9 @@
 }
 .pair{
     flex: 1;
+    flex-wrap: nowrap;
+    max-width: 100%;
+    overflow: hidden;
 }
 
 .pairleft{
@@ -20,6 +23,5 @@
 
 .pairright{
     float: right;
-    width: 48%;
-    
+    width: 48%;    
 }

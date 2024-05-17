@@ -15,25 +15,26 @@
     padding: 0;
     padding-top: 0px;
     min-height: 1rem;
-    display: flex;
+    display: inline-flex;
 }
 
 .examineeName {
 
     font-size: 8px;
-    flex: 0 0 12vh;
+    flex: 1;
+    overflow: hidden; /* Truncate long text */
+    white-space: nowrap; /* Prevent text from wrapping */
+    text-align: left;
+    padding-left: 4px;
+    
 
      
 }
 
 
 .commentButtonContainer {
-    display: flex;
     float: right;
-    justify-content: flex-end;
-    margin: 0;
-    padding: 0;
-    min-height: 1rem;
+    flex: 0 0 auto;
     
 }
 
