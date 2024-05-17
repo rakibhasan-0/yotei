@@ -185,11 +185,11 @@ export default function DuringGrading() {
 		console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}, with new state ${newState}`)
 		// Check what state the button is in and send the proper information to DB.
 		let examinee_clicked = buttonId.endsWith('left') ? pairs[pairIndex].leftId : pairs[pairIndex].rightId
-		let buttonTypeData = (newState === "pass" ? true : false)
+		//let buttonTypeData = (newState === "pass" ? true : false)
 		//buttonTypeData = null
-		console.log("Examinee_id: ", examinee_clicked+100)
-		addExamineeResult(examinee_clicked, `${technique}`, buttonTypeData)
-		console.log("Added to DB: Examinee_id:", examinee_clicked, ", Techniquename: ", technique, ", newState: ", buttonTypeData )
+		//console.log("Examinee_id: ", examinee_clicked)
+		addExamineeResult(examinee_clicked, `${technique}`, newState)
+		console.log("Added to DB: Examinee_id:", examinee_clicked, ", Techniquename: ", technique, ", newState: ", newState )
 	}
 
 	// Scroll to the top of the examinees list after navigation
@@ -303,11 +303,62 @@ export default function DuringGrading() {
 	 * @param {String} techniqueName name on technique in grading
 	 * @param {String} passStatus could be either 'pass', 'fail' or 'default'
 	 * 
+	 * @returns {Int} result_id for added response
+	 * 
 	 * @author Team Apelsin (2024-05-13)
 	 */
 	async function addExamineeResult(examineeId, techniqueName, passStatus) {
-		const data = await postExamineeResult({ examinee_id: examineeId, technique_name: techniqueName, pass: passStatus }, token)
-			.catch(() => setErrorToast("Kunde inte lägga till resultat. Kolla internetuppkoppling."))
+		const data = [
+			{
+				examinee_id: 9,
+				pass: true,
+				result_id: 16,
+				technique_name: "1. Shotei uchi, jodan, rak stöt med främre och bakre handen"
+			}
+			/*,
+			{
+				examinee_id: 2,
+				pass: true,
+				result_id: 15,
+				technique_name: "2. Shotei uchi, chudan, rak stöt med främre och bakre handen"
+			},
+			{
+				examinee_id: 3,
+				pass: null,
+				result_id: 14,
+				technique_name: "2. Shotei uchi, chudan, rak stöt med främre och bakre handen"
+			}*/
+		];
+
+		// Convert string for pass status to Boolean
+		const passStatusMap = {
+			pass: true,
+			fail: false,
+			default: null,
+		  };
+		console.log("PassStatus: ", passStatusMap[passStatus])
+		// Check existance
+		const foundExamineeResult = data.find(item => item.examinee_id === examineeId)
+		if( foundExamineeResult ){
+			const data = await putExamineeResult({ result_id: foundExamineeResult.result_id, examinee_id: foundExamineeResult.examinee_id, technique_name: foundExamineeResult.technique_name, pass: passStatusMap[passStatus] }, token)
+				.catch(() => setErrorToast("Kunde inte lägga till resultat. Kolla internetuppkoppling."))
+			//response = await data.json()
+			console.log("Response PUT succesful")
+		}else{
+			const data = await postExamineeResult({ examinee_id: examineeId, technique_name: techniqueName, pass: passStatusMap[passStatus] }, token)
+				.catch(() => setErrorToast("Kunde inte lägga till resultat. Kolla internetuppkoppling."))
+			response = await data.json()
+			console.log("Response POST examineeResult: ", response)
+		}
+
+		if (passStatus === 'pass'){
+		}// false put 
+		else if(passStatus === 'fail'){
+			
+		}// null delete
+		else{
+
+		}
 	}
 
 	/**
@@ -321,6 +372,26 @@ export default function DuringGrading() {
 		console.log("Result posted: ", result)
 		const requestOptions = {
 			method: "POST",
+			headers: { "Content-Type": "application/json", "token": token },
+			body: JSON.stringify(result)
+		}
+
+		return fetch("/api/examination/examresult", requestOptions)
+			.then(response => { return response })
+			.catch(error => { alert(error.message) })
+	}
+
+	/**
+	 * Perform a put to backend for status for an athlete
+	 * @param {JSON} result JSON object with info about result, 
+	 * 						should be on format "{ resultid: **resultId**, examinee_id: **examineeId**, technique_name: **techniqueName**, pass: **passStatus** }"
+	 * 
+	 * @author Team Apelsin (2024-05-13)
+	 */
+	async function putExamineeResult(result, token) {
+		console.log("Result put: ", JSON.stringify(result))
+		const requestOptions = {
+			method: "PUT",
 			headers: { "Content-Type": "application/json", "token": token },
 			body: JSON.stringify(result)
 		}
