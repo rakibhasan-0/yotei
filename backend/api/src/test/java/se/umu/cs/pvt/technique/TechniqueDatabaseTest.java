@@ -78,202 +78,202 @@ public class TechniqueDatabaseTest {
         postgreSQLContainer.start();
     }
 
-    // @AfterAll
-    // public static void tearDown() {
-    //     if (postgreSQLContainer != null) {
-    //         postgreSQLContainer.stop();
-    //     }
-    // }
+    @AfterAll
+    public static void tearDown() {
+        if (postgreSQLContainer != null) {
+            postgreSQLContainer.stop();
+        }
+    }
 
-    // /*The following set of tests sample a few techniques to ensure that they're connected to their respective belt*/
-    // @Test
-    // public void testBasicTechniques() throws Exception {
-    //     //String jdbcUrl = "jdbc:postgresql://localhost:5432/yotei";
+    /*The following set of tests sample a few techniques to ensure that they're connected to their respective belt*/
+    @Test
+    public void testBasicTechniques() throws Exception {
+        //String jdbcUrl = "jdbc:postgresql://localhost:5432/yotei";
 
-    //     String jdbcUrl = postgreSQLContainer.getJdbcUrl();
-    //     String username = postgreSQLContainer.getUsername();
-    //     String password = postgreSQLContainer.getPassword();
+        String jdbcUrl = postgreSQLContainer.getJdbcUrl();
+        String username = postgreSQLContainer.getUsername();
+        String password = postgreSQLContainer.getPassword();
 
-    //     try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
-    //             Statement statement = connection.createStatement()) {
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+                Statement statement = connection.createStatement()) {
 
-    //         ResultSet resultSet = statement.executeQuery("SELECT belt_name FROM belt;");
+            ResultSet resultSet = statement.executeQuery("SELECT belt_name FROM belt;");
 
-    //         if (resultSet.next()) {
-    //             String name = resultSet.getString("belt_name");
-    //             assertEquals("Grundläggande Tekniker", name);
-    //         }
-    //     }
-    // }
+            if (resultSet.next()) {
+                String name = resultSet.getString("belt_name");
+                assertEquals("Grundläggande Tekniker", name);
+            }
+        }
+    }
 
-    // @Test
-    // public void testYellowBeltsToTechniques() throws Exception {
-    //     String jdbcUrl = postgreSQLContainer.getJdbcUrl();
-    //     String username = postgreSQLContainer.getUsername();
-    //     String password = postgreSQLContainer.getPassword();
+    @Test
+    public void testYellowBeltsToTechniques() throws Exception {
+        String jdbcUrl = postgreSQLContainer.getJdbcUrl();
+        String username = postgreSQLContainer.getUsername();
+        String password = postgreSQLContainer.getPassword();
 
-    //     try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
-    //         Statement statement = connection.createStatement()) {
-    //             //This is where you edit if you wish to swap belts/technique
-    //             String[] techNames = {"Kamae, neutral (5 Kyu)", "Stryptag framifrån och svingslag, backhand, Frigöring - Ju morote jodan uke, ude osae, ude osae gatame"};
-    //             String expectedColor = "Gult";
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+            Statement statement = connection.createStatement()) {
+                //This is where you edit if you wish to swap belts/technique
+                String[] techNames = {"Kamae, neutral (5 Kyu)", "Stryptag framifrån och svingslag, backhand, Frigöring - Ju morote jodan uke, ude osae, ude osae gatame"};
+                String expectedColor = "Gult";
 
-    //             for(int i = 0; i < 2; i++){
-    //                 String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
+                for(int i = 0; i < 2; i++){
+                    String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
                 
-    //                 PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
-    //                 preparedStatement.setString(1, techNames[i]);
+                    PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+                    preparedStatement.setString(1, techNames[i]);
 
-    //                 ResultSet resultSet = preparedStatement.executeQuery();
+                    ResultSet resultSet = preparedStatement.executeQuery();
 
-    //                 if (resultSet.next()) {
-    //                     String belt = resultSet.getString("belt_name");
-    //                     assertEquals(expectedColor, belt);
-    //                 }
-    //             }
-    //     }
-    // }
+                    if (resultSet.next()) {
+                        String belt = resultSet.getString("belt_name");
+                        assertEquals(expectedColor, belt);
+                    }
+                }
+        }
+    }
 
-    // @Test
-    // public void testGreenBeltsToTechniques() throws Exception {
-    //     String jdbcUrl = postgreSQLContainer.getJdbcUrl();
-    //     String username = postgreSQLContainer.getUsername();
-    //     String password = postgreSQLContainer.getPassword();
+    @Test
+    public void testGreenBeltsToTechniques() throws Exception {
+        String jdbcUrl = postgreSQLContainer.getJdbcUrl();
+        String username = postgreSQLContainer.getUsername();
+        String password = postgreSQLContainer.getPassword();
 
-    //     try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
-    //         Statement statement = connection.createStatement()) {
-    //             //This is where you edit if you wish to swap belts/technique
-    //             String[] techNames = {"Grepp i två handleder framifrån, Shiho nage, shiho nage gatame", " Randori mot en motståndare (3 Kyu)"};
-    //             String expectedColor = "Grönt";
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+            Statement statement = connection.createStatement()) {
+                //This is where you edit if you wish to swap belts/technique
+                String[] techNames = {"Grepp i två handleder framifrån, Shiho nage, shiho nage gatame", " Randori mot en motståndare (3 Kyu)"};
+                String expectedColor = "Grönt";
 
-    //             for(int i = 0; i < 2; i++){
-    //                 String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
+                for(int i = 0; i < 2; i++){
+                    String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
                 
-    //                 PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
-    //                 preparedStatement.setString(1, techNames[i]);
+                    PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+                    preparedStatement.setString(1, techNames[i]);
 
-    //                 ResultSet resultSet = preparedStatement.executeQuery();
+                    ResultSet resultSet = preparedStatement.executeQuery();
 
-    //                 if (resultSet.next()) {
-    //                     String belt = resultSet.getString("belt_name");
-    //                     assertEquals(expectedColor, belt);
-    //                 }
-    //             }
-    //     }
-    // }
+                    if (resultSet.next()) {
+                        String belt = resultSet.getString("belt_name");
+                        assertEquals(expectedColor, belt);
+                    }
+                }
+        }
+    }
 
-    // @Test
-    // public void testBlueBeltsToTechniques() throws Exception {
-    //     String jdbcUrl = postgreSQLContainer.getJdbcUrl();
-    //     String username = postgreSQLContainer.getUsername();
-    //     String password = postgreSQLContainer.getPassword();
+    @Test
+    public void testBlueBeltsToTechniques() throws Exception {
+        String jdbcUrl = postgreSQLContainer.getJdbcUrl();
+        String username = postgreSQLContainer.getUsername();
+        String password = postgreSQLContainer.getPassword();
 
-    //     try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
-    //         Statement statement = connection.createStatement()) {
-    //             //This is where you edit if you wish to swap belts/technique            
-    //             String[] techNames = {"Otoshi ukemi (2 Kyu)", "Påkslag mot huvudet, backhand, Ju jodan uchi uke, irimi nage - Ude osae, ude osae gatame"};
-    //             String expectedColor = "Blått";
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+            Statement statement = connection.createStatement()) {
+                //This is where you edit if you wish to swap belts/technique            
+                String[] techNames = {"Otoshi ukemi (2 Kyu)", "Påkslag mot huvudet, backhand, Ju jodan uchi uke, irimi nage - Ude osae, ude osae gatame"};
+                String expectedColor = "Blått";
 
-    //             for(int i = 0; i < 2; i++){
-    //                 String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
+                for(int i = 0; i < 2; i++){
+                    String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
                 
-    //                 PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
-    //                 preparedStatement.setString(1, techNames[i]);
+                    PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+                    preparedStatement.setString(1, techNames[i]);
 
-    //                 ResultSet resultSet = preparedStatement.executeQuery();
+                    ResultSet resultSet = preparedStatement.executeQuery();
 
-    //                 if (resultSet.next()) {
-    //                     String belt = resultSet.getString("belt_name");
-    //                     assertEquals(expectedColor, belt);
-    //                 }
-    //             }
-    //     }
-    // }
+                    if (resultSet.next()) {
+                        String belt = resultSet.getString("belt_name");
+                        assertEquals(expectedColor, belt);
+                    }
+                }
+        }
+    }
 
 
-    // @Test
-    // public void testBrownBeltsToTechniques() throws Exception {
-    //     String jdbcUrl = postgreSQLContainer.getJdbcUrl();
-    //     String username = postgreSQLContainer.getUsername();
-    //     String password = postgreSQLContainer.getPassword();
+    @Test
+    public void testBrownBeltsToTechniques() throws Exception {
+        String jdbcUrl = postgreSQLContainer.getJdbcUrl();
+        String username = postgreSQLContainer.getUsername();
+        String password = postgreSQLContainer.getPassword();
 
-    //     try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
-    //         Statement statement = connection.createStatement()) {
-    //             //This is where you edit if you wish to swap belts/technique            
-    //             String[] techNames = {"Empi uchi, jodan och chudan (1 Kyu)", "Påkslag mot huvudet, forehand och backhand, Tsuri ashi - ju jodan uchi uke, irimi nage, ude hishigi hiza gatame"};
-    //             String expectedColor = "Brunt";
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+            Statement statement = connection.createStatement()) {
+                //This is where you edit if you wish to swap belts/technique            
+                String[] techNames = {"Empi uchi, jodan och chudan (1 Kyu)", "Påkslag mot huvudet, forehand och backhand, Tsuri ashi - ju jodan uchi uke, irimi nage, ude hishigi hiza gatame"};
+                String expectedColor = "Brunt";
 
-    //             for(int i = 0; i < 2; i++){
-    //                 String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
+                for(int i = 0; i < 2; i++){
+                    String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
                 
-    //                 PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
-    //                 preparedStatement.setString(1, techNames[i]);
+                    PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+                    preparedStatement.setString(1, techNames[i]);
 
-    //                 ResultSet resultSet = preparedStatement.executeQuery();
+                    ResultSet resultSet = preparedStatement.executeQuery();
 
-    //                 if (resultSet.next()) {
-    //                     String belt = resultSet.getString("belt_name");
-    //                     assertEquals(expectedColor, belt);
-    //                 }
-    //             }
-    //     }
-    // }
+                    if (resultSet.next()) {
+                        String belt = resultSet.getString("belt_name");
+                        assertEquals(expectedColor, belt);
+                    }
+                }
+        }
+    }
 
-    // @Test
-    // public void testOrangeBeltsToTechniques() throws Exception {
-    //     String jdbcUrl = postgreSQLContainer.getJdbcUrl();
-    //     String username = postgreSQLContainer.getUsername();
-    //     String password = postgreSQLContainer.getPassword();
+    @Test
+    public void testOrangeBeltsToTechniques() throws Exception {
+        String jdbcUrl = postgreSQLContainer.getJdbcUrl();
+        String username = postgreSQLContainer.getUsername();
+        String password = postgreSQLContainer.getPassword();
 
-    //     try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
-    //         Statement statement = connection.createStatement()) {
-    //             //This is where you edit if you wish to swap belts/technique            
-    //             String[] techNames = {"Mae ukemi (4 Kyu)", "Svingslag, Ju morote jodan uke, hiki otoshi - O soto osae, ude henkan gatame"};
-    //             String expectedColor = "Orange";
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+            Statement statement = connection.createStatement()) {
+                //This is where you edit if you wish to swap belts/technique            
+                String[] techNames = {"Mae ukemi (4 Kyu)", "Svingslag, Ju morote jodan uke, hiki otoshi - O soto osae, ude henkan gatame"};
+                String expectedColor = "Orange";
 
-    //             for(int i = 0; i < 2; i++){
-    //                 String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
+                for(int i = 0; i < 2; i++){
+                    String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
                 
-    //                 PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
-    //                 preparedStatement.setString(1, techNames[i]);
+                    PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+                    preparedStatement.setString(1, techNames[i]);
 
-    //                 ResultSet resultSet = preparedStatement.executeQuery();
+                    ResultSet resultSet = preparedStatement.executeQuery();
 
-    //                 if (resultSet.next()) {
-    //                     String belt = resultSet.getString("belt_name");
-    //                     assertEquals(expectedColor, belt);
-    //                 }
-    //             }
-    //     }
-    // }
+                    if (resultSet.next()) {
+                        String belt = resultSet.getString("belt_name");
+                        assertEquals(expectedColor, belt);
+                    }
+                }
+        }
+    }
 
-    // @Test
-    // public void testBlackBeltsToTechniques() throws Exception {
-    //     String jdbcUrl = postgreSQLContainer.getJdbcUrl();
-    //     String username = postgreSQLContainer.getUsername();
-    //     String password = postgreSQLContainer.getPassword();
+    @Test
+    public void testBlackBeltsToTechniques() throws Exception {
+        String jdbcUrl = postgreSQLContainer.getJdbcUrl();
+        String username = postgreSQLContainer.getUsername();
+        String password = postgreSQLContainer.getPassword();
 
-    //     try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
-    //         Statement statement = connection.createStatement()) {
-    //             //This is where you edit if you wish to swap belts/technique            
-    //             String[] techNames = {"Haito uchi, jodan (1 Dan)", "Gripa liggande, Vända liggande - Kuzure kote gaeshi gatame"};
-    //             String expectedColor = "Svart";
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+            Statement statement = connection.createStatement()) {
+                //This is where you edit if you wish to swap belts/technique            
+                String[] techNames = {"Haito uchi, jodan (1 Dan)", "Gripa liggande, Vända liggande - Kuzure kote gaeshi gatame"};
+                String expectedColor = "Svart";
 
-    //             for(int i = 0; i < 2; i++){
-    //                 String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
+                for(int i = 0; i < 2; i++){
+                    String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
                 
-    //                 PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
-    //                 preparedStatement.setString(1, techNames[i]);
+                    PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+                    preparedStatement.setString(1, techNames[i]);
 
-    //                 ResultSet resultSet = preparedStatement.executeQuery();
+                    ResultSet resultSet = preparedStatement.executeQuery();
 
-    //                 if (resultSet.next()) {
-    //                     String belt = resultSet.getString("belt_name");
-    //                     assertEquals(expectedColor, belt);
-    //                 }
-    //             }
-    //     }
-    // }
+                    if (resultSet.next()) {
+                        String belt = resultSet.getString("belt_name");
+                        assertEquals(expectedColor, belt);
+                    }
+                }
+        }
+    }
 
     /*This */
 }
