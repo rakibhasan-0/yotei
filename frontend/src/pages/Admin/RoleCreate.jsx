@@ -32,11 +32,10 @@ export default function RoleCreate() {
 	const [loading, setIsLoading] = useState(true)
 	const [goBackPopup, setGoBackPopup] = useState(false)
 	const [isBlocking, setIsBlocking] = useState(false)
-	const [isToggled, setIsToggled] = useState(false)
 	const [errorMessage, setErrorMessage] = useState("")
 
 	const [allMap, setAllMap] = useState(new Map())
-	const [choseMap, setChoseMap] = useState(new Map())	
+	const [selectedMap, setselectedMap] = useState(new Map())	
 
 	useEffect(() => {
 		(async () => {
@@ -130,10 +129,26 @@ export default function RoleCreate() {
 		let permission = allMap.get(permissionId)
 		permission.newToggledState = !permission.newToggledState
 		if (permission.newToggledState) {
-			setChoseMap(choseMap.set(permissionId, permission))
+			addToMap(permissionId, permission)
 		} else {
-			setChoseMap(choseMap.delete(permissionId))
+			removeFromMap(permissionId)
 		}
+	}
+
+	const addToMap = (permissionId, permission) => {
+		setselectedMap(prevMap => {
+			const newMap = new Map(prevMap)
+			newMap.set(permissionId, permission)
+			return newMap
+		})
+	}
+
+	const removeFromMap = (permissionId) => {
+		setselectedMap(prevMap => {
+			const newMap = new Map(prevMap)
+			newMap.delete(permissionId)
+			return newMap
+		})
 	}
 
 	return (
@@ -160,7 +175,7 @@ export default function RoleCreate() {
 							item={permission.permissionName}
 							key={index}
 							id={permission.permissionId}
-							toggled={isToggled}
+							toggled={selectedMap.has(permission.permissionId)}
 							changeToggled={() => handleButtonToggle(permission.permissionId)}
 						/>
 					))}
@@ -193,7 +208,6 @@ export default function RoleCreate() {
 				backText="Avbryt"
 				onClick={
 					async () => {
-						setIsToggled(false)
 						blocker.proceed()
 					}
 				}
