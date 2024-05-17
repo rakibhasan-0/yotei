@@ -39,7 +39,10 @@ export default function RoleEdit() {
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
 	const [isBlocking, setIsBlocking] = useState(false)
 	const [goBackPopup, setGoBackPopup] = useState(false)
-	const [isToggled, setIsToggled] = useState(false)
+	//const [isToggled, setIsToggled] = useState(false)
+
+	const [allMap, setAllMap] = useState(new Map())
+	const [selectedMap, setSelectedMap] = useState(new Map())
 	
 
 	const blocker = useBlocker(() => {
@@ -77,7 +80,9 @@ export default function RoleEdit() {
 	const fetchRole = useCallback(async () => {
 		setIsLoading(true)
 
-		const response = await fetch(`/api/roles/${role_id}`, { headers: { token } })
+		const response = await fetch(`/api/roles/${role_id}`, { 
+			method: "GET",
+			headers: { token } })
 
 		if (!response.ok) {
 			setError("Kunde inte hämta roll")
@@ -98,17 +103,44 @@ export default function RoleEdit() {
 	}, [fetchRole])
 
 	useEffect(() => {
+		
 		(async () => {
 			try {
-				const response = await fetch("/api/permissions", { headers: { token } })
+				const response = await fetch("/api/permissions/", {
+					method: "GET",
+					headers: { token } })
 				if (!response.ok) {
 					setIsLoading(false)
-					throw new Error("Kunde inte hämta rättigheter")
+					throw new Error("Kunde inte hämta all rättigheter")
 				}
 				const json = await response.json()
 				console.log(json)
+
+				const response2 = await fetch(`/api/permissions/role/${role_id}`, {
+					method: "GET",
+					headers: { token } })
+				if (!response2.ok) {
+					setIsLoading(false)
+					throw new Error("Kunde inte hämta rollens rättigheter")
+				}
+
+				const json2 = await response2.json()
+
+				json.forEach(permission => {
+					console.log("första")
+					setAllMap(allMap.set(permission.permissionId, permission))
+					//handleButtonToggle(permission.newToggledState, true)
+				})
+
 				setPermissions(json)
 				setIsLoading(false)
+				json2.forEach(permission => {
+					console.log("andra")
+					addToMap(permission.permissionId, permission)
+					console.log("tredje")
+					handleButtonToggle(permission.permissionId, true)
+					console.log("fjärde")
+				})
 			} catch (ex) {
 				setErrorToast("Kunde inte hämta rättigheter")
 				setIsLoading(false)
@@ -129,13 +161,43 @@ export default function RoleEdit() {
 		}
 	}
 
-	function handleButtonToggle(newToggledState) {
-		if (isToggled === newToggledState) {
-			console.log("toggled")
+	function handleButtonToggle(permissionId, onInitLoad) {
+		let permission = allMap.get(permissionId)
+		console.log(permissionId)
+		if(onInitLoad) {
+			console.log("onInitLoad")
+			permission.newToggledState = !permission.newToggledState
+		} else {
+			console.log("not onInitLoad")
+			permission.newToggledState = !permission.newToggledState
+			if (permission.newToggledState) {
+				console.log("set")
+				addToMap(permissionId, permission)
+			} else {
+				console.log("delete")
+				removeFromMap(permissionId)
+			}
+
 		}
-		console.log(newToggledState)
-		setIsToggled(newToggledState)
+
 	}
+
+	const addToMap = (permissionId, permission) => {
+		setSelectedMap(prevMap => {
+			const newMap = new Map(prevMap)
+			newMap.set(permissionId, permission)
+			return newMap
+		})
+	}
+
+	const removeFromMap = (permissionId) => {
+		setSelectedMap(prevMap => {
+			const newMap = new Map(prevMap)
+			newMap.delete(permissionId)
+			return newMap
+		})
+	}
+
 
 	return (
 		<div>
@@ -161,7 +223,7 @@ export default function RoleEdit() {
 							item={permission.permissionName}
 							key={index}
 							id={permission.permissionId}
-							changeToggled={() => handleButtonToggle(permission.permissionId)}
+							changeToggled={() => handleButtonToggle(permission.permissionId, false)}
 						/>
 					))}
 				</div>
