@@ -33,6 +33,19 @@ public class Activity {
         this.duration = exercise.getDuration();
     }
 
+    public Activity(Exercise exercise, Integer duration) {
+        this.type = "exercise";
+        this.id = exercise.getId();
+        this.name = exercise.getName();
+        this.description = exercise.getDescription();
+        if(duration == null) {
+            this.duration = exercise.getDuration();
+        }
+        else{
+            this.duration = duration;
+        }
+    }
+
     public Activity(Technique technique) {
         this.type = "technique";
         this.id = technique.getId();

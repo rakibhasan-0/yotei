@@ -153,8 +153,8 @@ public class ActivityList implements Serializable {
         this.activityEntries = activityEntries;
     }
 
-    public void addExercise(Long exerciseId) {
-        ActivityListEntry entry = new ActivityListEntry(this.id, exerciseId, null);
+    public void addExercise(Long exerciseId, Integer duration) {
+        ActivityListEntry entry = new ActivityListEntry(duration, this.id, exerciseId, null);
         activityEntries.add(entry);
     }
 

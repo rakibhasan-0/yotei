@@ -39,7 +39,7 @@ public class ActivityListDTO {
         this.activities = new ArrayList<>();
         for (ActivityListEntry entry : activityList.getActivityEntries()) {
             if (entry.getExercise() != null) {
-                this.activities.add(new Activity(entry.getExercise()));
+                this.activities.add(new Activity(entry.getExercise(), entry.getDuration()));
             }
             if (entry.getTechnique() != null) {
                 this.activities.add(new Activity(entry.getTechnique()));

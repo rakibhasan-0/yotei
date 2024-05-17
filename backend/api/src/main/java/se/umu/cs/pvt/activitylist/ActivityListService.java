@@ -142,7 +142,7 @@ public class ActivityListService implements IActivityListService {
 
         for (ActivityListRequest.ActivityRequest activity : listToAdd.getActivities()) {
             if (activity.getType().equals("exercise")) {
-                newList.addExercise(activity.getId());
+                newList.addExercise(activity.getId(), activity.getDuration());
             } else {
                 newList.addTechnique(activity.getId());
             }
@@ -298,7 +298,7 @@ public class ActivityListService implements IActivityListService {
         for (ActivityListRequest.ActivityRequest activity : listToUpdate.getActivities()) {
             String type = activity.getType();
             if (type.equals("exercise")) {
-                list.addExercise(activity.getId());
+                list.addExercise(activity.getId(), activity.getDuration());
             } else if (type.equals("technique")) {
                 list.addTechnique(activity.getId());
             } else {
