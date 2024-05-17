@@ -1,4 +1,19 @@
 
+.tabs > li {
+    flex: 1;
+}
+
+.tabs > li .active {
+    background-color: var(--red-primary);
+}
+
+.tabs button {
+    width: 100%;
+    height: 38px;
+    background-color: white;
+    white-space: nowrap;
+}
+
 .tabs {
 	border-width: medium;
 	overflow-x: auto;
@@ -6,7 +21,7 @@
 	margin-top: 1rem;
   }
   
-  :global(.nav) {
+  .nav {
 	flex-wrap: nowrap!important;
   }
   

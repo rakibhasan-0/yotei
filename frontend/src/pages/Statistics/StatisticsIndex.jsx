@@ -119,7 +119,7 @@ export default function Statistics() {
 					const data = await responseFromGroupDetailsAPI.json()
 					setNumberOfSessions(data.numberOfSessions)
 					setAverageRating(data.averageRating)
-					setGroupActivities(data.activities.reverse())
+					setGroupActivities(data.activities)
 				}else if (responseFromGroupDetailsAPI.status === 204) {
 					// if the response is 204, it means that there is no data to show for the selected filters.
 					setGroupActivities([])
@@ -167,7 +167,6 @@ export default function Statistics() {
 	// that function is responsible for changing the order of the group activities.
 	// initially, the order is increasing, when the user clicks on the button, the order will be descending.
 	function changeOrder() {
-		console.log("rotate", rotate)
 		setDescendingOrder(!order)
 		setGroupActivities(groupActivities.reverse())
 		setRotate(!rotate)
