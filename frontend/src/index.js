@@ -34,6 +34,11 @@ import GradingAfter from "./pages/Grading/GradingAfter.jsx"
 import GradingDeviations from "./pages/Grading/GradingDeviations.jsx"
 import BaseLayout from "./components/Common/BaseLayout/BaseLayout"
 import ErrorBoundary from "./components/ErrorHandler/ErrorBoundary"
+
+import ListInfo from "./pages/List/ListInfo"
+import FavouriteWorkoutsList from "./pages/List/FavouriteWorkoutList"
+import ListEdit from "./pages/List/ListEdit"
+
 import Statistics from "./pages/Statistics/StatisticsIndex.jsx"
 import "react-toastify/dist/ReactToastify.css"
 import { logOut } from "./utils"
@@ -110,8 +115,8 @@ export default function App() {
 		createRoutesFromElements(
 			cookie || import.meta.env.VITE_APP_LOGIN_ENABLED === "false" ? (
 				<>
-					<Route 
-						path="/" 
+					<Route
+						path="/"
 						element={
 							<ErrorBoundary>
 								<BaseLayout />
@@ -132,10 +137,17 @@ export default function App() {
 						<Route path="technique" element={<TechniqueIndex />} />
 						<Route path="activity/technique/create" element={<AdminRoute><CreateTechnique /></AdminRoute> } />
 						<Route path="technique/:techniqueId" element={<TechniqueDetail />} />
-						<Route path="technique/:techniqueId/edit" element={<AdminRoute><TechniqueEdit/></AdminRoute>} />
+						<Route
+							path="technique/:techniqueId/edit"
+							element={
+								<AdminRoute>
+									<TechniqueEdit />
+								</AdminRoute>
+							}
+						/>
 						<Route path="workout/create" element={<WorkoutCreate />} />
 						<Route path="excercise/create" element={<ExerciseCreate />} />
-						<Route path="excercise/edit/:excerciseId" element={<ExerciseEdit/>} />
+						<Route path="excercise/edit/:excerciseId" element={<ExerciseEdit />} />
 						<Route path="workout/:workoutId" element={<WorkoutView />} />
 						<Route path="workout/edit/:workoutId" element={<WorkoutEdit />} />
 						<Route path="plan" element={<PlanIndex uri={planURI} />} />
@@ -144,6 +156,13 @@ export default function App() {
 						<Route path="session/create" element={<SessionCreateIndex />} />
 						<Route path="session/edit/:session_id" element={<SessionEdit />} />
 						<Route path="groups" element={<GroupIndex />} />
+						<Route path="list/editList" element={<ListEdit/>} />
+
+						<Route path="profile/list/:list_id" element={<ListInfo />} />
+						<Route path="profile/favouriteWorkouts" element={<FavouriteWorkoutsList/>} />
+
+
+						<Route path="groups/statistics/:groupID" element={<NoPage />} />
 						<Route path="grading" element={<Grading />} />
 						<Route path="grading/create" element={<GradingCreate/>} />
 						<Route path="grading/:gradingId/1" element={<GradingBefore/>} />
@@ -164,7 +183,9 @@ export default function App() {
 	return (
 		<>
 			<ToastContainer />
-			<AccountContext.Provider value={{ token, role: decodedToken?.role, userId: decodedToken?.userId, setToken }}>
+			<AccountContext.Provider
+				value={{ token, role: decodedToken?.role, userId: decodedToken?.userId, setToken }}
+			>
 				<RouterProvider router={routes} />
 			</AccountContext.Provider>
 		</>
@@ -173,4 +194,8 @@ export default function App() {
 
 const container = document.getElementById("root")
 const root = createRoot(container)
-root.render(<CookiesProvider><App /></CookiesProvider>)
+root.render(
+	<CookiesProvider>
+		<App />
+	</CookiesProvider>
+)
