@@ -7,6 +7,7 @@ import { AccountContext } from "../../context"
 import AddExaminee from "../../components/Common/AddExaminee/AddExaminee"
 import EditableListItem from "../../components/Common/EditableListItem/EditableListItem"
 import { X as CloseIcon } from "react-bootstrap-icons"
+import PopupSmall from "../../components/Common/Popup/PopupSmall"
 
 import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../utils"
 import {setError as setErrorToast } from "../../utils"
@@ -37,6 +38,7 @@ export default function GradingBefore() {
 	const [checkedExamineeIds, setCheckedExamineeIds] = useState([])
   const [redirect, setRedirect] = useState(false)
   const containsSpecialChars = str => /[^\w äöåÅÄÖ-]/.test(str)
+  const [showPopup, setShowPopup] = useState(false)
 
   let numberOfPairs = 0
 
@@ -86,6 +88,10 @@ export default function GradingBefore() {
 
 			})
 	}
+  // this is for the automatically pair creation
+  const [lastAddedExaminee, setLastAddedExaminee] = useState({})
+  const [automaticallyPairCreation, setAutomaticallyPairCreation] = useState(false)
+
 
   /**
    * Validets so the name of tag is not containing any illegal characters 
@@ -130,7 +136,7 @@ export default function GradingBefore() {
       try {
         const exec = async () => {
           await Promise.all(examinees.map(examinee => {
-                postPair({examinee_1_id: examinee.id}, token)
+                postPair({examinee1Id: examinee.id}, token)
                   .catch(() => setErrorToast("Kunde inte lägga till paret. Kontrollera din internetuppkoppling."))
           }))
 
@@ -151,18 +157,53 @@ export default function GradingBefore() {
   }, [redirect])
 
   /**
+   * Automatically pair creation without checkbox.
+   * This is done by calling the function createPairWithId
+   */
+  useEffect(() => {
+    if(automaticallyPairCreation) {
+      // check if there has not been an examinee added previously
+      if(Object.keys(lastAddedExaminee).length !== 0) {
+        // check to see if there is a examinee checked
+        if(checkedExamineeIds.length > 0) {
+          createPairWithId(examinees[examinees.length - 1].id, examinees[examinees.length - 1].name, lastAddedExaminee.id, lastAddedExaminee.name)
+          
+          // remove the checkedExamineeId box if it exsists
+          const tempCheckedExamineeIds = checkedExamineeIds.filter(id => (id !== examinees[examinees.length - 1].id && id !== lastAddedExaminee.id))
+          setCheckedExamineeIds(tempCheckedExamineeIds)
+
+        } else {
+          createPairWithId(examinees[examinees.length - 1].id, examinees[examinees.length - 1].name, lastAddedExaminee.id, lastAddedExaminee.name)
+
+        }
+        // remove the single examinee from the examinees
+        const remainingExaminees = examinees.filter(examinee => (examinee.id !== examinees[examinees.length - 1].id && examinee.id !== lastAddedExaminee.id))
+        setExaminees(remainingExaminees)
+        setLastAddedExaminee({})
+      }
+      setAutomaticallyPairCreation(false)
+    }
+  }, [examinees])
+
+  /**
    * Create a new pair in the database and locally,
    * with the help of the array "checkedExamineeIds" that keeps track of the 
    * examinees id that are checked at theire respective checkbox
    */
 	async function createPair() {
-			
+
 		let selectedExaminees = checkedExamineeIds.map(id => {
 				const examinee = examinees.find(examinee => examinee.id === id)
 				return { id: examinee.id, name: examinee.name }
 		})
 
-		const data = await postPair({examinee_1_id: selectedExaminees[0].id, examinee_2_id: selectedExaminees[1].id}, token)
+    // check if this examinee was the lastlyAddedExaminee, if so, remove it
+    if (selectedExaminees[0].id === lastAddedExaminee.id || selectedExaminees[1].id === lastAddedExaminee.id) {
+      // remove it from the lastAddedExaminee
+      setLastAddedExaminee({})
+    }
+
+		const data = await postPair({examinee1Id: selectedExaminees[0].id, examinee2Id: selectedExaminees[1].id}, token)
 			.then(response => handleResponse(response))
 			.catch(() => setErrorToast("Kunde inte lägga till paret. Kontrollera din internetuppkoppling."))
 
@@ -171,13 +212,28 @@ export default function GradingBefore() {
 			return {id: examinee.id, name: examinee.name, pairId: data.examinee_pair_id}
 		})
 
-		const remainingExaminees = examinees.filter(examinee => !checkedExamineeIds.includes(examinee.id))
-		setExaminees(remainingExaminees)
 		setPair([...pairs, selectedExaminees])
-		setCheckedExamineeIds([])
-
 	}
 
+
+  /**
+   * Create a new pair in the database and locally automatically
+   * @param {Integer} examinee_1_id 
+   * @param {String} examinee_1_name 
+   * @param {Integer} examinee_2_id 
+   * @param {String} examinee_2_name 
+   */
+	async function createPairWithId(examinee1Id, examinee1Name, examinee2Id, examinee2Name) {
+		const data = await postPair({examinee1Id: examinee1Id, examinee2Id: examinee2Id}, token)
+			.then(response => handleResponse(response))
+			.catch(() => setErrorToast("Kunde inte lägga till paret. Kontrollera din internetuppkoppling."))
+
+		setPair([...pairs, [
+      {id: examinee1Id, name: examinee1Name, pairId: data.examineePairId}, 
+      {id: examinee2Id, name: examinee2Name, pairId: data.examineePairId}]]
+    )
+	}
+  
   /**
    * Remove an pair from the database and also remove the pair from the local array
    * @param {Integer} examinee1Id 
@@ -224,16 +280,31 @@ export default function GradingBefore() {
 		}
 	}
 
+  function resetCheckedExamineesWithCheckbox() {
+    const remainingExaminees = examinees.filter(examinee => !checkedExamineeIds.includes(examinee.id))
+		setExaminees(remainingExaminees)
+		setCheckedExamineeIds([])
+  }
+
   /**
    * Add an examinee to database and also update the local array with the corresponding data
    * @param {Map} examinee 
    */
 	async function addExaminee(examinee) {
-		const data = await postExaminee({ name: examinee, grading_id: gradingId }, token)
+		const newExaminee = await postExaminee({ name: examinee, gradingId: gradingId }, token)
 			.then(response => handleResponse(response))
 			.catch(() => setErrorToast("Kunde inte lägga till personen. Kontrollera din internetuppkoppling."))
 		
-		setExaminees([...examinees, { id: data["examinee_id"], name: data["name"] }])
+    // check if there has not been an examinee added previosly
+    if(Object.keys(lastAddedExaminee).length === 0) {
+      setLastAddedExaminee({ id: newExaminee["examineeId"], name: newExaminee["name"]})
+    } else {
+      // now there maybe will be an automatically pair created
+      setAutomaticallyPairCreation(true)
+    }
+    // set examinee
+    setExaminees([...examinees, { id: newExaminee["examineeId"], name: newExaminee["name"] }])
+
 	}
 
   /**
@@ -304,40 +375,32 @@ export default function GradingBefore() {
    * This functions call putExaminee so it gets updated in the database aswell
    * @param {Integer} examineeId 
    * @param {any} name 
+   * @param {Boolean} isExamineeInPair
    */
-	async function editExaminee(examineeId, name) {
-		setExaminees(
-			examinees.map((examinee) =>
-				examinee.id === examineeId ? { ...examinee, name: name } : examinee
-			)
-		)
+	async function editExaminee(examineeId, name, isExamineeInPair) {
+
+    if(isExamineeInPair) {
+      setPair(
+        pairs.map((pair) => {
+          if(pair[0].id === examineeId) {
+            pair[0].name = name
+          } else if (pair[1].id === examineeId) {
+            pair[1].name = name
+          }
+          return pair
+        })
+      )
+    } else {
+      setExaminees(
+        examinees.map((examinee) =>
+          examinee.id === examineeId ? { ...examinee, name: name } : examinee
+        )
+      )
+    }
 		
-		await putExaminee({name: name, examinee_id: examineeId, grading_id: gradingId}, token)
+		await putExaminee({name: name, examineeId: examineeId, gradingId: gradingId}, token)
 			.catch(() => setErrorToast("Kunde inte updatera personen. Kontrollera din internetuppkoppling."))
 	}
-
-  /**
-   * Change the name of an already exsisting examinee in a pair.
-   * This functions call putExaminee so it gets updated in the database aswell
-   * @param {Integer} examineeId 
-   * @param {any} name 
-   */
-	async function editPairExaminee(examineeId, name) {
-		setPair(
-			pairs.map((pair) => {
-        if(pair[0].id === examineeId) {
-          pair[0].name = name
-        } else if (pair[1].id === examineeId) {
-          pair[1].name = name
-        }
-				return pair
-      })
-		)
-		
-		await putExaminee({name: name, examinee_id: examineeId, grading_id: gradingId}, token)
-			.catch(() => setErrorToast("Kunde inte updatera personen. Kontrollera din internetuppkoppling."))
-	}
-
 
 	return (
 		<div>
@@ -358,7 +421,7 @@ export default function GradingBefore() {
 									id={pair[0].id}
 									item={pair[0].name}
 									onRemove={removeExamineeInPair}
-									onEdit={editPairExaminee}
+									onEdit={(id, name) => {editExaminee(id, name, true)}}
 									onCheck={onCheck}
                   validateInput={validateInput}
                   showCheckbox={false}
@@ -370,7 +433,7 @@ export default function GradingBefore() {
 									id={pair[1].id}
 									item={pair[1].name}
 									onRemove={removeExamineeInPair}
-									onEdit={editPairExaminee}
+									onEdit={(id, name) => {editExaminee(id, name, true)}}
 									onCheck={onCheck}
                   validateInput={validateInput}
                   showCheckbox={false}
@@ -403,7 +466,7 @@ export default function GradingBefore() {
                   id={examinee.id}
                   item={examinee.name}
                   onRemove={removeExaminee}
-                  onEdit={editExaminee}
+                  onEdit={(id, name) => {editExaminee(id, name, false)}}
                   onCheck={onCheck}
                   validateInput={validateInput}
                   showCheckbox={true}
@@ -433,7 +496,10 @@ export default function GradingBefore() {
           id="create-pair-button"
 					width="100%"
 					outlined={true}
-					onClick={createPair}
+					onClick={() => {
+            createPair()
+            resetCheckedExamineesWithCheckbox()
+          }}
 				>
 					<p>Skapa par</p>
 				</Button> </div>)  
@@ -447,13 +513,20 @@ export default function GradingBefore() {
 				>
 					<p>Tillbaka</p>
 				</Button>
+				
+				<PopupSmall id={"test-popup"} title={"Varning"} isOpen={showPopup} setIsOpen={setShowPopup} direction={startRedirection}>
+					<h2>Är du säker på att alla deltagare är tillagda? </h2>
+					<h2> Isåfall fortsätt till bedömnings processen</h2>
+				</PopupSmall>
+				
 				<Button
-          id="continue-button"
+					id="continue-button"		
 					width="100%"
-					onClick={startRedirection}
-				>
-					<p>Forsätt</p>
+					outlined={false}
+					onClick={() => setShowPopup(true)}>
+					<p>Fortsätt</p>
 				</Button>
+			
 			</div>
 		</div>
 	)
