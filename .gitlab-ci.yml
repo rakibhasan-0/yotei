@@ -80,7 +80,7 @@ test-database:
       - backend/.m2/repository
   script:
     - cd backend
-    - mvn -q test -Dtest=TechniqueDatabaseTest
+    - mvn -q test -Dtest=TechniqueDatabaseTest &> /dev/null
   
 test-frontend:
   rules:
