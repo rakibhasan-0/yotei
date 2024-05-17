@@ -225,6 +225,7 @@ run-systests:
     - system
   script:
     - cd frontend/
+    - npm install
     - npx playwright install
     - npm ci
     - npm run systest:ci
