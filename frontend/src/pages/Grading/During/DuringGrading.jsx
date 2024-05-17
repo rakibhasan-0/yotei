@@ -308,31 +308,26 @@ export default function DuringGrading() {
 				id={"navigation-popup"} 
 				title={"Tekniker-kategorier"} 
 				isOpen={showPopup} 
-				setIsOpen={setShowPopup}>
-                {categoryIndexMap && ( 
+				setIsOpen={setShowPopup}> 
+                {techniqueNameList && (		
 				<div className={styles.popupContent}>
-
-					{categoryIndexMap.map((techniqueName, index) => (
-						<Button 
-							key={index}
-							width={"100%"}
-							onClick={() => {
-								setCurrentIndex(() => {
-									const techniquestep = techniqueName.categoryIndex
-									onUpdateStepToDatabase(techniquestep)
-									return techniquestep
-								})
-								setShowPopup(false)
-								// Fetch the correct result for each examinee conected to this technique
-								scrollableContainerRef.current.scrollTop = 0}}>
-							<p>{techniqueName.category}</p></Button>
-					))}
-					{/* Should link to the "after" part of the grading as well as save the changes to the database. */}
-					<Button id={"summary-button"} onClick={gotoSummary}><p>Fortsätt till summering</p></Button>
-                </div>
-                )}
-                    
-					<div>
+                {categoryIndexMap.map((techniqueName, index) => (
+                    <Button 
+                        key={index}
+                        width={"100%"}
+                        onClick={() => {
+                            setCurrentIndex(() => {
+                                const techniquestep = techniqueName.categoryIndex
+                                onUpdateStepToDatabase(techniquestep)
+                                return techniquestep
+                            })
+                            setShowPopup(false)
+                            // Fetch the correct result for each examinee conected to this technique
+                            scrollableContainerRef.current.scrollTop = 0}}>
+                        <p>{techniqueName.category}</p></Button>
+                ))}
+                
+                <div>
 						{/* Go back to the add examinee page */}
 						<Button 
 							id={"back-button"} 
@@ -348,6 +343,7 @@ export default function DuringGrading() {
 						</Button>
 					</div>
 				</div>
+                )}
 			</Popup>
 		</div>
 	)
