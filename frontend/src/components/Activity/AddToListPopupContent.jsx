@@ -21,7 +21,6 @@ export const AddToListPopupContent = () => {
 
     const handleCheck = (id) => {
         setSelectedLists(prevIds => {
-			console.log(prevIds)
             if (prevIds.includes(id)) {
                 return prevIds.filter(itemId => itemId !== id);
             } else {
@@ -96,12 +95,9 @@ export const AddToListPopupContent = () => {
 			<InfiniteScrollComponent>
     			{lists.map((item, index) => (
         			<AddToListItem
-           				name={item.name}
-            			numberOfActivities={item.numberOfActivities}
-						author={item.author}
-						key={index}
-						onCheck={handleCheck}
-						id={item.id}
+					item={item}
+					key={index}
+					onCheck={handleCheck}
 					/>
 				))}
 			</InfiniteScrollComponent>
