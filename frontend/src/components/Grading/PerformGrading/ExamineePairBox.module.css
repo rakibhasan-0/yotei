@@ -7,7 +7,7 @@
 }
 
 .pairinfo{
-    flex: 0 0 8vh;
+    flex: 0 0 auto;
 }
 .pair{
     flex: 1;
