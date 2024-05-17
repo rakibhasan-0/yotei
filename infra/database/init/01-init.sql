@@ -731,17 +731,17 @@ ALTER TABLE
 --
 -- Name: technique_to_grading_protocol_category; Type: TABLE; Schema: public; Owner: psql
 --
-CREATE TABLE technique_to_grading_protocol_category(
+CREATE TABLE grading_protocol_technique(
 	id SERIAL PRIMARY KEY,
 	technique_id INT NOT NULL,
 	protocol_category_id INT NOT NULL,
 	technique_order INT NOT NULL,
-	CONSTRAINT fk_ttgpc_technique FOREIGN KEY(technique_id) REFERENCES technique(technique_id) ON DELETE CASCADE,
-	CONSTRAINT fk_ttgpc_category FOREIGN KEY(protocol_category_id) REFERENCES grading_protocol_category(category_id) ON DELETE CASCADE
+	CONSTRAINT fk_gpt_technique FOREIGN KEY(technique_id) REFERENCES technique(technique_id) ON DELETE CASCADE,
+	CONSTRAINT fk_gpt_category FOREIGN KEY(protocol_category_id) REFERENCES grading_protocol_category(category_id) ON DELETE CASCADE
 );
 
 ALTER TABLE
-	technique_to_grading_protocol_category OWNER TO psql;
+	grading_protocol_technique OWNER TO psql;
 
 
 --

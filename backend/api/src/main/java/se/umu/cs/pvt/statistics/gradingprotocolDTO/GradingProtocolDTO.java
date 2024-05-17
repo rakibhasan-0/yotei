@@ -1,4 +1,4 @@
-package se.umu.cs.pvt.statistics.gradingprotocol;
+package se.umu.cs.pvt.statistics.gradingprotocolDTO;
 
 import java.util.List;
 
@@ -10,10 +10,10 @@ public class GradingProtocolDTO {
     private String code;
     private String name;
     private BeltResponse belt;
-    private List<GradingProtocolCategory> categories;
+    private List<GradingProtocolCategoryDTO> categories;
 
 
-    public GradingProtocolDTO(String code, String name, BeltResponse belt, List<GradingProtocolCategory> categories){
+    public GradingProtocolDTO(String code, String name, BeltResponse belt, List<GradingProtocolCategoryDTO> categories){
         this.code = code;
         this.name = name;
         this.belt = belt;
@@ -32,7 +32,7 @@ public class GradingProtocolDTO {
         return this.belt;
     }
 
-    public List<GradingProtocolCategory> getCategories() {
+    public List<GradingProtocolCategoryDTO> getCategories() {
         return this.categories;
     }
 }

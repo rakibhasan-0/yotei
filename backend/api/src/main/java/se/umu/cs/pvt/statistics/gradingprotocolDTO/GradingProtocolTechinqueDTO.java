@@ -1,11 +1,11 @@
-package se.umu.cs.pvt.statistics.gradingprotocol;
+package se.umu.cs.pvt.statistics.gradingprotocolDTO;
 
-public class GradingProtocolTechinque {
+public class GradingProtocolTechinqueDTO {
     private String name;
     private Long id;
     private Long count;
 
-    public GradingProtocolTechinque(String name, Long id) {
+    public GradingProtocolTechinqueDTO(String name, Long id) {
         this.name = name;
         this.id = id;
         this.count = 0L;
