@@ -223,9 +223,9 @@ run-systests:
     - if: $CI_COMMIT_BRANCH == "main"
   tags:
     - system
-  image: mcr.microsoft.com/playwright:v1.39.0-jammy
   script:
     - cd frontend/
+    - npx playwright install
     - npm ci
     - npm run systest:ci
     
