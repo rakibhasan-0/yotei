@@ -2,7 +2,6 @@ package se.umu.cs.pvt.statistics.gradingprotocol;
 
 import java.util.List;
 
-import se.umu.cs.pvt.belt.BeltRepository;
 import se.umu.cs.pvt.statistics.BeltResponse;
 
 
@@ -27,6 +26,10 @@ public class GradingProtocolDTO {
 
     public String getName() {
         return this.name;
+    }
+
+    public BeltResponse getBelt() {
+        return this.belt;
     }
 
     public List<GradingProtocolCategory> getCategories() {

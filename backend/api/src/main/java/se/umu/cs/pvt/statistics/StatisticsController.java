@@ -158,22 +158,27 @@ public class StatisticsController {
         List<StatisticsActivity> techniques = statisticsRepository.getAllSessionReviewTechniques(id);
 
 
-        // Store unique activities
-        List<StatisticsResponse> uniqueActivities = new ArrayList<>();;
+        HashMap<Long, Long> counts = new HashMap<>();
 
-
-        // Iterate through the StatisticsActivities to retrieve the relevant information.
         for (StatisticsActivity sa : techniques) {
-            StatisticsResponse sr = new StatisticsResponse(sa.getActivity_id(), sa.getName(), sa.getType(), sa.getCount());
-            
-            if (!uniqueActivities.contains(sr)) {
-                uniqueActivities.add(sr);
+            System.out.println(sa.getName());
+            if (!counts.containsKey(sa.getActivity_id())) {
+                counts.put(sa.getActivity_id(), sa.getCount());
             } else {
-                uniqueActivities.get(uniqueActivities.indexOf(sr)).addToCount(sa.getCount());
+                counts.put(sa.getActivity_id(), counts.get(sa.getActivity_id()) + sa.getCount());
             }
+
         }
 
         GradingProtocolDTO gradingProtocol = getMockGradingProtocol();
+
+        for (GradingProtocolCategory category : gradingProtocol.getCategories()) {
+            for (GradingProtocolTechinque techinque : category.getTechniques()) {
+                if (counts.containsKey(techinque.getId())) {
+                    techinque.setCount(counts.get(techinque.getId()));
+                }
+            }
+        }
 
         return new ResponseEntity<>(gradingProtocol, HttpStatus.OK);
     }
@@ -228,6 +233,7 @@ public class StatisticsController {
 
 
         categories.add(atemiWaza);
+        categories.add(kansutsuWaza);
         categories.add(nageWaza);
         categories.add(jigoWaza);
         categories.add(renrakuWaza);
