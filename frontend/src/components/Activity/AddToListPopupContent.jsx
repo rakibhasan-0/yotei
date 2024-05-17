@@ -9,7 +9,7 @@ import { getLists } from "../Common/SearchBar/SearchBarUtils"
 import { AccountContext } from "../../context"
 import useMap from "../../hooks/useMap"
 
-export const AddToListPopupContent = () => {
+export const AddToListPopupContent = ({ techExerID }) => {
 	const [isLoading, setIsLoading] = useState(true)
 
 	const [lists, setLists] = useState([])
@@ -68,8 +68,31 @@ export const AddToListPopupContent = () => {
 	/**
 	 * POST request to save the activity to the selected lists.
 	 */
-	function saveActivityToLists() {
-		console.log(selectedLists);
+	async function saveActivityToLists() {
+		const jsonContent = {
+			listId: selectedLists[0],
+			exerciseId: techExerID.exerciseId,
+			techniqueId: techExerID.techniqueId
+		};
+
+
+		//TODO correct implementation, is there a standard in the project?
+		const response = await fetch('/api/activitylistentry/multiAdd', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'ids': selectedLists.join(','),
+				'token': token
+			},
+			body: JSON.stringify(jsonContent)
+		});
+		
+		if (!response.ok) {
+			throw new Error(`${response.status}`);
+		} else {
+			const data = await response.json();
+			console.log(data);
+		}
 	} 
 
 

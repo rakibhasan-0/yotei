@@ -25,6 +25,7 @@ import { AddToListPopupContent } from "../../../../components/Activity/AddToList
  * @version 3.0
  * @since 2024-04-18
  * @update v3 (2024-05-02 Team Kiwi) removed header from html, also rerouted button from ./create to ./exercise/create
+ * @updated 2024-05-17
  */
 export default function TechniqueIndex() {
 	const [techniques, setTechniques] = useState([])
@@ -44,6 +45,7 @@ export default function TechniqueIndex() {
 	const location = useLocation()
 	const clearSearchText = location.state && location.state.clearSearchText
 	const navigate = useNavigate()
+	const [selectedTechniqueId, setSelectedTechniqueId] = useState(null);
 
 	useEffect(() => {
 		if (filterCookie) {
@@ -128,8 +130,9 @@ export default function TechniqueIndex() {
 			setTags((current) => current.filter((tag) => tag !== "kihon waza"))
 		}
 	}
-
-	const handleMoreClicked = () => {
+	
+	const handleMoreClicked = (id) => {
+		setSelectedTechniqueId(id);
 		//Open pop up
 		setShowMorePopup(!showMorePopup)
 	}
@@ -181,7 +184,7 @@ export default function TechniqueIndex() {
 									<div className={styles["techniqueCard-container"]}>
 										<TechniqueCard marginTop={5} key={key} technique={technique} checkBox={false} />
 									</div>
-									<Link variant="link" style={{ marginTop: "10px" }} onClick={handleMoreClicked}>
+									<Link variant="link" style={{ marginTop: "10px" }} onClick={() => handleMoreClicked(technique.techniqueID)}>
 										<ThreeDotsVertical color="black" size={24} />
 									</Link>
 								</div>
@@ -190,7 +193,7 @@ export default function TechniqueIndex() {
 				)}
 			</div>
 			<Popup title="Lägg till i lista" isOpen={showMorePopup} setIsOpen={setShowMorePopup}>
-				<AddToListPopupContent />
+				<AddToListPopupContent techExerID={{ techniqueId: selectedTechniqueId, exerciseId: null }} />
 			</Popup>
 
 			{/* Spacing so the button doesn't cover a techniqueCard */}
