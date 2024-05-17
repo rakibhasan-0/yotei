@@ -12,6 +12,7 @@ import WorkoutListItem from "../../components/Workout/WorkoutListItem"
 import ErrorStateSearch from "../../components/Common/ErrorState/ErrorStateSearch.jsx"
 import Spinner from "../../components/Common/Spinner/Spinner.jsx"
 import {setError as setErrorToast} from "../../utils"
+import { useCookies } from "react-cookie"
 
 /**
  * Workout class. 
@@ -25,6 +26,7 @@ import {setError as setErrorToast} from "../../utils"
  * @author Team Durian (Group 3) (2024-04-23)
  * @author Team Tomato (Group 6)
  * @author Team Kiwi (Group 2) (2024-05-08)
+ * @author Team Mango (Group 4)
  * Removed option to filter by date created
  * Fixed so that search text is set and saved 
  * @since May 9, 2023
@@ -40,6 +42,7 @@ export default function WorkoutIndex() {
 	const [ searchErrorMessage, setSearchErrorMessage ] = useState("")
 	const [ loading, setLoading ] = useState(true)
 	const [ filterFavorites, setFilterFavorites ] = useState(false)
+	const [ cookies, setCookie ]= useCookies(["previousPath"])
 
 	// store search text
 	useEffect(() =>{
@@ -49,6 +52,10 @@ export default function WorkoutIndex() {
 	useEffect(() => {
 		sessionStorage.setItem("searchText", searchText)
 	},[searchText])
+
+	useEffect(() => {
+		setCookie("previousPath", "/workout", {path: "/"})
+	}, [setCookie, cookies.previousPath])
 
 
 	useEffect(fetchWorkouts, [filterFavorites, searchText, token, userId, tags])

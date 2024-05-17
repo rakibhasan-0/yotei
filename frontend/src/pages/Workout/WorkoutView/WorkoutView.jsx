@@ -8,6 +8,7 @@ import Button from "../../../components/Common/Button/Button"
 import { useNavigate, Link } from "react-router-dom"
 import { useParams } from "react-router"
 import { Pencil, Trash } from "react-bootstrap-icons"
+import { useCookies } from "react-cookie"
 import Review from "../../../components/Workout/WorkoutReview/ReviewFormComponent.jsx"
 import ErrorState from "../../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../../components/Common/Spinner/Spinner"
@@ -25,9 +26,10 @@ import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
  *      workoutId @type {int} - The ID of the workout.
  *      id        @type {int/string} - the id of the component
  *
- * @author Cyclops (Group 5) (2023-05-22) &  Durian (Group 3) (2024-04-23) & Team Tomato, Team Kiwi (Group 2) 
+ * @author Cyclops (Group 5) (2023-05-22) &  Durian (Group 3) (2024-04-23) & Team Tomato, Team Kiwi (Group 2), Team Mango (Group 4) 
  * @updated 2024-04-26 by Tomato
  * @updated 2024-05-03 Team Kiwi, fixed navigation from other websites
+ * @updated 2024-05-08 Team Mango, fixed navigation bug connecting planIndex and workoutIndex
  *
  * @version 1.7
  *
@@ -44,6 +46,7 @@ export default function WorkoutView({ id }) {
 	const [errorStateMsg, setErrorStateMsg] = useState("")
 	const [loading, setLoading] = useState(true)
 	const [loadingUser, setLoadingUser] = useState(true)
+	const [cookie] = useCookies(["previousPath"])
 	const { userId } = useContext(AccountContext)
 
 	useEffect(() => {
@@ -99,6 +102,33 @@ export default function WorkoutView({ id }) {
 		fetchData()
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+	const handleNavigation = () => {
+		console.log("cookie: ", cookie.previousPath)
+		if (cookie.previousPath === "/plan") {
+			navigate("/plan")
+		} else {
+			navigate("/workout")
+		}
+	}
+
+	function getButtons () {
+
+		return (
+			<div className="d-flex row justify-content-center">
+				<div className="d-flex col mb-3 mt-3 justify-content-start">
+					<Button onClick={() => handleNavigation(navigate, cookie)} outlined={true}>
+						<p>Tillbaka</p>
+					</Button>
+				</div>
+				<div className="d-flex col mb-3 mt-3 justify-content-end">
+					<Button onClick={() => setRShowPopup(true)} outlined={false}>
+						<p>Utvärdering</p>
+					</Button>
+				</div>
+			</div>
+		)
+	}
+
 	return (
 		loading || loadingUser? <div className="mt-5"> <Spinner/> </div>
 			: !workoutData ? <ErrorState message={errorStateMsg} onBack={() => navigate("/workout")} onRecover={() => window.location.reload(false)}/>
@@ -119,7 +149,7 @@ export default function WorkoutView({ id }) {
 					))}
 					{workoutData.tags.length != 0 && getTagContainer(workoutData)}
 					{(workoutUsers !== null && workoutUsers.length > 0) && getWorkoutUsersContainer(workoutUsers)}
-					{getButtons(navigate, setRShowPopup)}
+					{getButtons()}
 				</div>
 	)
 }
@@ -194,24 +224,6 @@ function getWorkoutUsersContainer(workoutUsers) {
 						</div>
 					)
 				})}
-			</div>
-		</div>
-	)
-}
-
-function getButtons(navigate, setRShowPopup) {
-
-	return (
-		<div className="d-flex row justify-content-center">
-			<div className="d-flex col mb-3 mt-3 justify-content-start">
-				<Button onClick={() => navigate("/workout")} outlined={true}>
-					<p>Tillbaka</p>
-				</Button>
-			</div>
-			<div className="d-flex col mb-3 mt-3 justify-content-end">
-				<Button onClick={() => setRShowPopup(true)} outlined={false}>
-					<p>Utvärdering</p>
-				</Button>
 			</div>
 		</div>
 	)
