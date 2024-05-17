@@ -42,11 +42,10 @@ export const AddToListPopupContent = () => {
 		}
 
 		getLists(args, token, map, mapActions, (result) => {
-			console.log(result)
 			if (result.error) return
 
 			// Extract the 'id' and 'name' fields from each item in the result used in displaying the list.
-			const lists = result.map(item => ({ id: item.id, name: item.name, author: item.author, numberOfActivities: item.size}))
+			const lists = result.map(item => ({ id: item.id, name: item.name, author: item.author, numberOfActivities: item.act}))
 
 			setLists(lists)
 			setIsLoading(false)
@@ -54,7 +53,7 @@ export const AddToListPopupContent = () => {
 	}
 
 	return isLoading ? (
-		<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', paddingTop: '50px' }}>
+		<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
     		<Spinner />
 		</div>
 	) : (
