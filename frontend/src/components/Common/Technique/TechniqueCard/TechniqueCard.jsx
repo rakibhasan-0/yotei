@@ -28,13 +28,14 @@ function TechniqueCard({ technique, checkBox, id}) {
 		} else if (technique.type === "exercise" && technique.activity_id) {
 			navigate("/exercise/exercise_page/" + technique.activity_id)
 		} else {
-			navigate("/technique/" + technique.techniqueID)
+			navigate("/technique/" + technique.techniqueID) 
 		}
 	}
 
 	const setTechnique = () =>{
 		localStorage.setItem("stored_technique", id)
 	}
+
 
 	return (
 		<div 
@@ -80,6 +81,7 @@ function TechniqueCard({ technique, checkBox, id}) {
 }
 
 function constructColor(technique) {
+
 	return (
 		<div className={styles["technique-card-belt-color-container"]}>
 			{
@@ -121,6 +123,7 @@ function constructDefaultBelt(color) {
 }
 
 function constructAdultBelt(belt, beltLength, index) {
+
 	if (belt.belt_name.toLowerCase().includes("dan")) {
 		const num = parseInt(belt.belt_name.split(" ")[0])
 		return (

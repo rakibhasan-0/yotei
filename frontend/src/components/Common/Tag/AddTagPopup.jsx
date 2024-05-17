@@ -64,6 +64,10 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 
 	const containsSpecialChars = str => /[^\w\d äöåÅÄÖ-]/.test(str)
 
+	useEffect(() => {
+		searchForTags(searchText, sort.sortBy, true)
+	}, [])
+
 	useEffect(() => {		
 		searchForTags(searchText, sort.sortBy)
 	}, [searchText, sort])
@@ -74,10 +78,12 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 	 * 
 	 * @param {String} searchText Text in searchbar.
 	 */
-	const searchForTags = async (searchText, sortBy) => {
+	const searchForTags = async (searchText, sortBy, isInitial = false) => {
 		setError("")
 		setSearchText(searchText)
-		setLoading(true)
+		if (isInitial) {
+			setLoading(true)
+		}
 		const url = new URL("/api/tags/filter", window.location.origin)
 		url.searchParams.append("sort-by", sortBy)
 		url.searchParams.append("contains", searchText)
@@ -97,7 +103,9 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 		} catch (error) {
 			setError("Något gick fel vid hämtning av taggförslag")
 		} finally {
-			setLoading(false)
+			if (isInitial) {
+				setLoading(false)
+			}
 		}
 	}
 
@@ -326,10 +334,6 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 			<div>
 				{loading ? <Spinner /> : tagListArray}
 			</div>
-			<div style={{paddingBottom: "5.1rem"}}> {/* Greater than btnAddActivity height */}
-				{tagListArray}
-			</div>
-			
 			<MiniPopup title={"Taggen kan inte tas bort"} isOpen={showUsagePopup} setIsOpen={hideShowPopup} >
 				<TagUsagePopup usage={usage}>  </TagUsagePopup>
 			</MiniPopup>
