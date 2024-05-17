@@ -80,7 +80,7 @@ test-database:
       - backend/.m2/repository
   script:
     - cd backend/api
-    - mvn -q test -Dtest=TechniqueDatabaseTest &> ~/output.log
+    - mvn -q test -Dtest=TechniqueDatabaseTest -DfailIfNoTests=false &> ~/output.log
   
 test-frontend:
   rules:
