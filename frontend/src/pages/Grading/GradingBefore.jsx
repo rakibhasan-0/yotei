@@ -417,6 +417,8 @@ export default function GradingBefore() {
                   validateInput={validateInput}
                   showCheckbox={true}
                   checked={false}
+				  showTrash={true}
+				  showX={false}
                 />
 
               </div>
@@ -432,6 +434,7 @@ export default function GradingBefore() {
 			placeholder="Lägg till ny deltagare"
 			required={true}
 			hideLength={true}
+			showX={false}
 			onSubmit={(value) => {
 				addExaminee(value)}}
 

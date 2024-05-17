@@ -42,8 +42,8 @@ import { useState } from "react"
  * 
  */
 const AddExaminee = forwardRef(function AddExaminee(
-	{ placeholder, text, onSubmit, required, type, id, onKeyUp, errorMessage, maxLength, hideLength}, ref) {
-	
+	{ placeholder, text, onSubmit, required, type, id, onKeyUp, errorMessage, maxLength, hideLength }, ref) {
+
 	const defaultLimit = 180
 	const isErr = !(errorMessage == undefined || errorMessage == null || errorMessage == "")
 
@@ -67,30 +67,34 @@ const AddExaminee = forwardRef(function AddExaminee(
 		}
 	}
 
-	return(
+	return (
 		<form onSubmit={handleClick}>
 			<label className={styles.label}>
-				{!hideLength && <p className={styles.limitText}>{text?.length || 0}/{maxLength || defaultLimit}</p> }
+				{!hideLength && <p className={styles.limitText}>{text?.length || 0}/{maxLength || defaultLimit}</p>}
 				<div className={styles.inputContainer}>
-					<input
-						className={isErr ? `${styles.input} ${styles.inputErr}` : `${styles.input}`}
-						placeholder={placeholder}
-						value={inputValue}
-						type={type}
-						id={id}
-						onKeyUp={onKeyUp}
-						required={required}
-						ref={ref}
-						maxLength={maxLength || defaultLimit}
-						onChange={handleChange}
-						onKeyDown={handleKeyPress}
-					/>
-					<Plus id="plus-icon" onClick={handleClick} className={styles.plusIcon} /> 
+					<div style={{ flexGrow: 1 }}>
+						<input
+							className={isErr ? `${styles.input} ${styles.inputErr}` : `${styles.input}`}
+							placeholder={placeholder}
+							value={inputValue}
+							type={type}
+							id={id}
+							onKeyUp={onKeyUp}
+							required={required}
+							ref={ref}
+							maxLength={maxLength || defaultLimit}
+							onChange={handleChange}
+							onKeyDown={handleKeyPress}
+						/>
+					</div>
+					<div className={styles.plusButtonDiv}>
+						<Plus id="plus-icon" onClick={handleClick} className={styles.plusIcon} />
+					</div>
 				</div>
 				{errorMessage !== "" || !errorMessage && <p className={styles.err}>{errorMessage}</p>}
 			</label>
 		</form>
-		
+
 	)
 })
 export default AddExaminee

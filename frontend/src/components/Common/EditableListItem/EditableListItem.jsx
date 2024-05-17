@@ -20,6 +20,7 @@ import CheckBox from "../CheckBox/CheckBox"
  *      checked @type {boolen} - What the default value will be for the checkbox
  *      validateInput @type {function} - Action to validate the input given
  *      grayThrash @type {boolean} - True if the trash icon should be grey otherwise it is red
+ * 		showThrash @type {boolean} - True if the trash icon should be visible
  * 
  * Example usage:
  * 		<EditableListItem
@@ -33,12 +34,14 @@ import CheckBox from "../CheckBox/CheckBox"
  *      checked={false}
  *      validateInput={validateFunction}
  *      grayTrash={false}
+ * 		showTrash={false}
+ * 		showX={false}
  * 		</EditableListItem>
  * 
  * @author Team 1, Team Durian (Group 3) (2024-05-13)
  * @since 2024-05-06
  */
-export default function EditableListItem({ item, id, index, onRemove, onEdit, onCheck, showCheckbox, checked, validateInput, grayTrash }) {
+export default function EditableListItem({ item, id, index, onRemove, onEdit, onCheck, showCheckbox, checked, validateInput, grayTrash, showTrash, showX }) {
 
 	const [isEditing, setIsEditing] = useState(false) // State to manage edit mode
 	const [editedText, setEditedText] = useState(item) // State to store edited text
@@ -52,7 +55,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 
 	const handleInputChange = (event) => {
 		const text = event.target.value
-		// The trimmed text is validated, since it will be trimmed when saved.
+		// The trimmed text is validated, since it will be trimmed when saved. <Pencil onClick={handleEdit} size="24px" style={{ color: "var(--red-primary)", cursor: "pointer", marginRight: "10px" }} id="pencil-icon"/>
 		const trimmedText = text.trim()
 		const textareaErr = validateInput(trimmedText)
 		// Update the gray check
@@ -62,7 +65,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 	}
 
 	const handleEditSubmit = () => {
-		if(error == "" && !grayEdit) {
+		if (error == "" && !grayEdit) {
 			setIsEditing(false)
 			setEditedText(editedText.trim())
 			setSavedText(editedText)
@@ -72,10 +75,19 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 
 	const handleEditAbort = () => {
 		setIsEditing(false)
-		setError("")
+		setError("123")
 		setEditedText(savedText)
 		setGrayEdit(true) // Reset
 	}
+
+	const handleBlur = (event) => {
+		if (event.relatedTarget?.id === "accept-icon") {
+			handleEditSubmit();
+		}
+		setIsEditing(false)
+	}
+
+	//const truncatedText = editedText.includes("\n") ? editedText.split("\n")[0] + "..." : editedText;
 
 	return (
 		<div className={styles["editable-container"]} id={id}>
@@ -88,49 +100,49 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 								checked={checked}
 								id="checkbox-element"
 							/>}
-							<div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flex: 1 }}>
+							<div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flex: 1 }} onClick={handleEdit}>
 								{isEditing ? (
 									<input
-										id="edit-element" 
+										id="edit-element"
 										className={error != "" ? `${styles["input"]} ${styles["errorInput"]}` : `${styles["input"]}`}
 										type="text"
 										value={editedText}
 										onChange={handleInputChange}
-										onBlur={() => {
-											if (editedText != "") {
-												handleEditSubmit
-											}
-										}}
+										onBlur={handleBlur}
 										autoFocus
-									/> 
+									/>
 								) : (
-									<div className={styles["href-link"]} style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="EditableListItem-item">{editedText}</div>
+									<div className={styles["href-link"]} style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="EditableListItem-item">
+										{editedText.length > 12 && !isEditing ? `${editedText.substring(0, 12)}...` : editedText}
+									</div>
 								)}
 								<div className={styles["flex-shrink-0"]} style={{ display: "flex", alignItems: "center" }}>
 									{isEditing ?
 										<>
-											<Check onClick={handleEditSubmit} size="24px" id="accept-icon"
-												style={grayEdit ? 
-													{color: "var(--gray)", cursor: "not-allowed", marginRight: "10px"} : 
-													{color: "var(--red-primary)", cursor: "pointer", marginRight: "10px"}}
+											<Check size="24px" id="accept-icon"
+												style={grayEdit ?
+													{ color: "var(--gray)", cursor: "not-allowed", marginRight: "10px" } :
+													{ color: "var(--red-primary)", cursor: "pointer", marginRight: "10px" }}
 											/>
-											<X
-												className={styles["close-icon"]}
-												onClick={handleEditAbort}
-												size="24px"
-												style={{ color: "var(--red-primary)" }}
-											/>
+											{showX && (
+												<X size="24px" id="x-icon"
+
+													className={styles["close-icon"]}
+													style={{ color: "var(--red-primary)" }}
+												/>
+											)}
 										</>
-										: 
+										:
 										<>
-											<Pencil onClick={handleEdit} size="24px" style={{ color: "var(--red-primary)", cursor: "pointer", marginRight: "10px" }} id="pencil-icon"/>
-											<Trash
-												className={styles["close-icon"]}
-												onClick={() => onRemove(id, grayTrash)}
-												size="24px"
-												style={grayTrash ? {color: "var(--gray)"} : { color: "var(--red-primary)" } }
-												id="close-icon"
-											/>
+											{showTrash && (
+												<Trash
+													className={styles["close-icon"]}
+													onClick={() => onRemove(id, grayTrash)}
+													size="24px"
+													style={grayTrash ? { color: "var(--gray)" } : { color: "var(--red-primary)" }}
+													id="close-icon"
+												/>
+											)}
 										</>
 									}
 								</div>
@@ -141,7 +153,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 				</div>
 
 			</div>
-			<div className={styles["input"]} style={{ color: "red" , display: error == "" ? "none" : "block"}} >{error}</div>
+			<div className={styles["input"]} style={{ color: "red", display: error == "" ? "none" : "block" }} >{error}</div>
 
 		</div>)
 }
