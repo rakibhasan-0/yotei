@@ -19,6 +19,11 @@ export const AddToListPopupContent = ({ techExerID }) => {
 
 	const [selectedLists, setSelectedLists] = useState([]);
 
+	/**
+	 * Adds or removes the ID of the item from the checkboxed list.
+	 * @param {string} id - The ID of the item.
+	 * @returns {void}
+	 */
     const handleCheck = (id) => {
         setSelectedLists(prevIds => {
             if (prevIds.includes(id)) {
@@ -74,9 +79,7 @@ export const AddToListPopupContent = ({ techExerID }) => {
 			exerciseId: techExerID.exerciseId,
 			techniqueId: techExerID.techniqueId
 		};
-
-
-		//TODO correct implementation, is there a standard in the project?
+	
 		const response = await fetch('/api/activitylistentry/multiAdd', {
 			method: 'POST',
 			headers: {
@@ -90,10 +93,13 @@ export const AddToListPopupContent = ({ techExerID }) => {
 		if (!response.ok) {
 			throw new Error(`${response.status}`);
 		} else {
-			const data = await response.json();
-			console.log(data);
+			const text = await response.text();
+			if (text) {
+				const data = JSON.parse(text);
+				console.log(data);
+			}
 		}
-	} 
+	}
 
 
 
