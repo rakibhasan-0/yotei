@@ -96,7 +96,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	const [lists, setLists] = useState([])
 	const [fetchedLists, setFetchedLists] = useState(false)
 	const [searchListText, setSearchListText] = useState("")
-	const [listContents, setListContents] = useState([]) // TODO: try to make it possible to keep different lists. 
+	const [listContents, setListContents] = useState([])  
 	const [listUpdate, setListUpdate] = useState(0)
 	const [isSearchBarEnabled] = useState(false) // TODO: feature toggle
 	const [isFilterEnabled] = useState(false) // TODO: feature toggle
