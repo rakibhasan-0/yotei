@@ -78,12 +78,12 @@ public class TechniqueDatabaseTest {
         postgreSQLContainer.start();
     }
 
-    @AfterAll
-    public static void tearDown() {
-        if (postgreSQLContainer != null) {
-            postgreSQLContainer.stop();
-        }
-    }
+    // @AfterAll
+    // public static void tearDown() {
+    //     if (postgreSQLContainer != null) {
+    //         postgreSQLContainer.stop();
+    //     }
+    // }
 
     // /*The following set of tests sample a few techniques to ensure that they're connected to their respective belt*/
     // @Test
