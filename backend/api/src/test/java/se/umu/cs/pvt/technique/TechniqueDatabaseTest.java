@@ -61,28 +61,28 @@ public class TechniqueDatabaseTest {
         
     }
 
-    // @BeforeAll
-    // public static void setUp() {
-    //     ImageFromDockerfile image = new ImageFromDockerfile()
-    //         .withDockerfile(Paths.get("../../infra/database/Dockerfile"));
+    @BeforeAll
+    public static void setUp() {
+        ImageFromDockerfile image = new ImageFromDockerfile()
+            .withDockerfile(Paths.get("../../infra/database/Dockerfile"));
 
-    //     DockerImageName imageName = DockerImageName.parse(image.get())
-    //         .asCompatibleSubstituteFor(PostgreSQLContainer.IMAGE);
+        DockerImageName imageName = DockerImageName.parse(image.get())
+            .asCompatibleSubstituteFor(PostgreSQLContainer.IMAGE);
         
-    //     postgreSQLContainer = new PostgreSQLContainer<>(imageName)
-    //     .withDatabaseName(POSTGRESQL_DATABASE)
-    //     .withUsername(POSTGRESQL_USER)
-    //     .withPassword(POSTGRESQL_PASSWORD)
-    //     .withEnv("POSTGRESQL_DATABASE", POSTGRESQL_DATABASE)
-    //     .withEnv("POSTGRESQL_USER", POSTGRESQL_USER)
-    //     .withEnv("POSTGRESQL_PASSWORD", POSTGRESQL_PASSWORD)
-    //     .withExposedPorts(PostgreSQLContainer.POSTGRESQL_PORT);
+        postgreSQLContainer = new PostgreSQLContainer<>(imageName)
+        .withDatabaseName(POSTGRESQL_DATABASE)
+        .withUsername(POSTGRESQL_USER)
+        .withPassword(POSTGRESQL_PASSWORD)
+        .withEnv("POSTGRESQL_DATABASE", POSTGRESQL_DATABASE)
+        .withEnv("POSTGRESQL_USER", POSTGRESQL_USER)
+        .withEnv("POSTGRESQL_PASSWORD", POSTGRESQL_PASSWORD)
+        .withExposedPorts(PostgreSQLContainer.POSTGRESQL_PORT);
 
-    //     postgreSQLContainer.setWaitStrategy(Wait.defaultWaitStrategy()
-    //             .withStartupTimeout(Duration.ofSeconds(60)));
+        postgreSQLContainer.setWaitStrategy(Wait.defaultWaitStrategy()
+                .withStartupTimeout(Duration.ofSeconds(60)));
         
-    //     postgreSQLContainer.start();
-    // }
+        postgreSQLContainer.start();
+    }
 
     // @AfterAll
     // public static void tearDown() {
