@@ -1,3 +1,11 @@
+.infoPanel{
+    height: "auto"; 
+    width: "100%";
+    margin-bottom: "5px"; 
+    padding-bottom: "0px";
+    /*display: flex;*/
+}
+
 .mainCategoryTitle{
     text-align: center;
     font-size: 16px;
@@ -10,9 +18,19 @@
 
 .currentTechnique{
     text-align: left;
+    flex: 1 1 fit-content;
 }
 
-.nextTechnique{
+.nextTechniqueText{
     text-align: left;
     font-size: 12px;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+}
+.nextTechniqueContainer{
+    width: "70%";
+    float: "left";
 }

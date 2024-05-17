@@ -109,15 +109,15 @@ export default function TechniqueInfoPanel( {
 					<h2 className={styles.mainCategoryTitle} role="mainCategoryTitle">{mainCategoryTitle}</h2>
 				</div>
 			</fieldset>
-			<fieldset style={{ height: "auto", width: "100%", marginBottom: "0px" , paddingBottom: "0px"}}>
+			<fieldset className={styles.infoPanel}>
 				<div>
 					<h3 className={styles.categoryTitle} role="categoryTitle">{categoryTitle}</h3>
 				</div>
 				<div>
 					<h1 className={styles.currentTechnique} role="currentTechniqueTitle">{currentTechniqueTitle}</h1>
 				</div>
-				<div style={{width: "70%", float: "left"}}>
-					<h3 className={styles.nextTechnique} role="nextTechniqueTitle"><b>Nästa:</b>{nextTechniqueTitle}</h3>
+				<div className={styles.nextTechniqueContainer}>
+					<h3 className={styles.nextTechniqueText} role="nextTechniqueTitle"><b>Nästa:</b>{nextTechniqueTitle}</h3>
 				</div>
 				<div style={{ display: "flex", justifyContent: "flex-end"}}>
 					<CommentButton onClick={() => setAddComment(true)} />
