@@ -1,6 +1,18 @@
 import { test, expect } from '@playwright/test';
 
+/**
+ * Some basic system test for testing the grading flow of the grading.
+ *
+ *  @author Team Orange (Group 5)
+ *  @since 2024-05-17
+ *  @version 1.0
+ */
+
 test.describe("Correct protocol grading flow tests", () => {
+    /**
+     * Navigera till steget där man väljer ett protokoll innan varje test
+     * i den här kategorin
+     */
     test.beforeEach(async ({page}) => {
 		await page.goto('http://localhost:3000/');
         await page.locator('#username-input').click();
@@ -13,6 +25,10 @@ test.describe("Correct protocol grading flow tests", () => {
         await page.locator('._btnAddActivity_1qfu5_1').click();
 	})
 
+    /**
+     * Testar flödet för gult protokoll, kollar framförallt att
+     * de tekniker som visas på skärmen är korrekt utifrån när testet var skrivet
+     */
     test('Test yellow belt correct protocol', async ({ page }) => {
         await page.getByRole('button', { name: 'KYU GULT BÄLTE' }).click();
         await page.getByPlaceholder('Lägg till ny deltagare').click();
@@ -73,6 +89,10 @@ test.describe("Correct protocol grading flow tests", () => {
         await expect(page.locator('#root')).toContainText('1. Försvar mot en motståndare');
     });
 
+    /**
+     * Testar flödet för grönt protokoll, kollar framförallt att
+     * de tekniker som visas på skärmen är korrekt utifrån när testet var skrivet
+     */
     test('Test green belt correct protocol', async ({ page }) => {
         await page.getByRole('button', { name: 'KYU GRÖNT BÄLTE' }).click();
         await page.getByPlaceholder('Lägg till ny deltagare').click();
