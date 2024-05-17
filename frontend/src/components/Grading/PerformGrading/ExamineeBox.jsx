@@ -112,7 +112,7 @@ export default function ExamineeBox({ id, examineeName, examineeId, onClick, but
 				<div 
 					className={styles.examineeName}
 					onClick={() => {handleClick()}}>
-					<p id="ExamineeName" style={{height:"30px"}}>{examineeName}</p>
+					<p id="ExamineeName" >{examineeName}</p>
 				</div>
 				<CommentButton onClick={() => setAddComment(true)} className={styles.commentButtonContainer}/>
 

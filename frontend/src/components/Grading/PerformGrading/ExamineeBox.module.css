@@ -20,7 +20,6 @@
 
 .examineeName {
 
-    font-size: 8px;
     flex: 1;
     overflow: hidden; /* Truncate long text */
     white-space: nowrap; /* Prevent text from wrapping */
