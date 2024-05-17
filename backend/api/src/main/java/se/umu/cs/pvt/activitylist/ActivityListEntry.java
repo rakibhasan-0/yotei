@@ -17,8 +17,12 @@ import se.umu.cs.pvt.technique.Technique;
 /**
  * Model for ActivityListEntry
  * 
- * @author Team Tomato, updated 2024-05-16
- * @since 2024-05-08
+ * ActivityListEntry - Activity list entry model 
+ * ActivityListEntryController - Controller for activity list entry
+ * ActivityListEntryRepository - JPARepository interface
+ * 
+ * @author Team Tomato
+ * @since 2024-05-16
  * @version 1.0
  */
 @Entity

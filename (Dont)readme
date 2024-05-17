@@ -1,0 +1,184 @@
+addedActivities[
+    {
+        duration
+        exerciseId: (Can be null)
+        techinqueId: (Can be null)
+        id
+        isEditable (false)
+        name
+    }
+]
+checkedActivities[
+    {
+        duration
+        id
+        name
+        type: "exercise"
+    }
+    {
+        beltColors[
+            {
+                belt_color
+                belt_name
+                is_child
+            }
+        ]
+        name
+        techinqueId
+        type="technique"
+    }
+]
+data{
+	//Här fanns det tidigare en ”0” (Från kategori), den kan dra åt helvete
+    activities[
+        {
+        duration: int
+        exercise{
+            description
+            duration
+            id
+            name
+        }
+        technique{
+            belts[
+                {
+                    id
+                    name
+                    color
+                    child
+                }
+            ]
+            description
+            id
+            name
+            tags[
+                {
+                    id
+                    name
+                }
+            ]
+        }
+        id
+        isEditable
+        name
+        }
+    ]
+    author
+    created
+    date (Edited?)
+    description
+    duration
+    id
+    isPrivate
+    name
+    users[
+        userId
+        username
+    ]
+}
+numActivities
+originalData{
+    //Ser ut som data
+}
+popUpState{}
+listId?????
+		
+		
+// Ex:
+addedActivities[],
+checkedActivities[],
+data{
+    activities[
+        {
+            duration: 200,
+            exercise{
+                description: "En övning",
+                duration: 20,
+                id: 1,
+                name: "ÖvningEx",
+            },
+            technique: null,
+            isEditable: false,
+        },
+        {
+            duration: 2,
+            exercise:null,
+            technique{
+                belts[
+                    {
+                        id,
+                        name,
+                        color,
+                        child,
+                    },
+                ],
+                description,
+                id,
+                name,
+                tags[
+                    {
+                        id,
+                        name,
+                    },
+                ],
+            },
+            isEditable: false,
+        },
+    ],
+    author: "Oliver",
+    created: "2023-06-22",
+    description: "En ganska bra lista!",
+    duration: 50,
+    id: 1//listId,
+    isPrivate: true,
+    name:" Olivers nice list ",
+    users[
+        {
+            userId: 1, username:"Jerk",
+        },
+        {
+            userId: 2, username:" Huge ",
+        },
+    ],
+},
+numActivities: 2,
+originalData{},
+popUpState{},
+
+
+//Mock list:
+		const MockList = {
+			list_id: 1,
+			list_name: "TestList",
+			state: "Private",
+			amountOfWorkouts: 3,
+			author: "Oliver",
+			author_id: 1,
+			description: "Behövs ens detta",
+			created_date: "2024-04-13",
+			changed_date: "2024-05-03",
+			list_users: ["1", "Hugo", "Willy"],
+			list: [
+				{
+					id: 1,
+					type: "technique",
+					duration: 5,
+					technique: { name: "Kniv i magen! Mycket ont", description: "Beskv1" },
+				},
+				{
+					id: 2,
+					type: "exercise",
+					duration: 10,
+					exercise: {
+						name: "Kniv i foten! Mycket ont",
+						description: "Beskv2 kdlfjad lalkdsflkd fjldksfjldfkslsdkjlsdkfjdlskjdfls",
+					},
+				},
+				{
+					id: 3,
+					type: "technique",
+					duration: 15,
+					technique: { name: "Knip i magen! Mycket ont", description: "" },
+				}, //Har inte description!
+			],
+		}
