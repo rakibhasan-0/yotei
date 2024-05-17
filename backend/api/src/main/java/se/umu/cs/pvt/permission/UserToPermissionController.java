@@ -21,7 +21,7 @@ import se.umu.cs.pvt.user.UserRepository;
 
 /**
  * UserToPermissionController API for mapping permissions to users.
- * @author Team Mango (2024-05-16)
+ * @author Team Mango (2024-05-17)
  */
 
 @RestController
@@ -111,12 +111,12 @@ public class UserToPermissionController {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         
-        UserToPermission userPermissionToAdd = new UserToPermission(
+        UserToPermission newPair = new UserToPermission(
             userId, permissionId);
 
-        userToPermissionRepository.save(userPermissionToAdd);
+        UserToPermission result = userToPermissionRepository.save(newPair);
 
-        return new ResponseEntity<>(userPermissionToAdd, HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     /**
@@ -131,22 +131,22 @@ public class UserToPermissionController {
         @PathVariable(name = "user_id") Long userId, 
         @PathVariable(name = "permission_id") Long permissionId){
 
-        UserToPermission userToPermission = userToPermissionRepository.findByUserIdAndPermissionId(
-            userId, permissionId);
+        UserToPermission userToPermission = userToPermissionRepository
+            .findByUserIdAndPermissionId(userId, permissionId);
 
         if (userToPermission == null) {
             return new ResponseEntity<>(
                 "User with ID: " + userId +  
-                "does not have the permission with ID:" + permissionId + 
+                " does not have the permission with ID: " + permissionId + 
                 ".", HttpStatus.BAD_REQUEST);
         }
 
         userToPermissionRepository.deleteByUserIdAndPermissionId(userId, permissionId);
 
-        Map<String, Long> roleToPermissionToDelete = new HashMap<>();
-        roleToPermissionToDelete.put("user_id", userId);
-        roleToPermissionToDelete.put("permission_id", permissionId);
+        Map<String, Long> map = new HashMap<>();
+        map.put("user_id", userId);
+        map.put("permission_id", permissionId);
         
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(map ,HttpStatus.OK);
     }
 }
