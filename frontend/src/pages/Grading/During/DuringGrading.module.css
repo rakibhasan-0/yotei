@@ -1,0 +1,63 @@
+.scrollableContainer {
+    max-height: 50vh; 
+    overflow-y: auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    /* For Firefox /
+    scrollbar-width: none;
+
+    / For Chrome, Safari, and Opera */
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    /*height: 100vh;*/  
+}
+
+.popupContent {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Define styles for the bottom row container */
+.bottomRowContainer {
+    display: flex; /* Use flexbox to create a row layout */
+    justify-content: center; /* Center items horizontally within the container */
+    align-items: center; /* Center items vertically within the container */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 10px; /* Add padding for spacing */
+    background-color: #fff; /* Optional: Add a background color */
+    border-top: 1px solid #ddd; /* Optional: Add a border at the top */
+}
+  
+.btnNextActivity,
+.btnPrevActivity {
+    border-radius: 50%;
+    width: 60px; /* Set a fixed width for the circles */
+    height: 60px; /* Set a fixed height for the circles */
+    line-height: 60px; /* Center the icon vertically */
+    font-size: xx-large;
+    text-align: center;
+    margin: 0 20px; /* Add horizontal margin for spacing */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--red-primary);
+}
+  
+.btnNextActivity > *,
+.btnPrevActivity > * {
+    font-size: 2rem;
+    filter: brightness(0) invert(1);
+    padding: 0;
+}

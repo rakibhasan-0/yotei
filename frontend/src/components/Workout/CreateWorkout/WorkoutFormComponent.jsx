@@ -13,12 +13,13 @@ import {
 	WORKOUT_CREATE_TYPES,
 	checkIfActivityInfoPoupChangesMade
 } from "./WorkoutCreateReducer"
-import { useNavigate } from "react-router"
+import {  useNavigate } from "react-router"
 import Popup from "../../Common/Popup/Popup"
 import ActivityInfoPopUp from "./ActivityInfoPopUp"
 import AddActivity from "./AddActivity"
 import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
 import EditActivityPopup from "./EditActivityPopup"
+import { useParams } from "react-router"
 
 /**
  * Component for input-form to be used to create a new workout (WorkoutCreate.js)
@@ -33,7 +34,7 @@ import EditActivityPopup from "./EditActivityPopup"
  *
  * @author Team Minotaur, Team 3 Durian
  * @version 2.1
- * @since 2023-05-24, 2024-04-18
+ * @since 2023-05-24, 2024-05-07
  * @updated 2023-06-01 Chimera, updated pathing when pressing return to create session
  */
 export default function WorkoutFormComponent({ callback, state }) {
@@ -43,8 +44,13 @@ export default function WorkoutFormComponent({ callback, state }) {
 	const [validated, setValidated] = useState(false)
 	const [acceptActivities, setAcceptActivities] = useState(false)
 	const navigate = useNavigate()
+	//const location = useLocation()
+	//const hasPreviousState = location.key !== "default"
 	const [showPopup, setShowPopup] = useState(false)
 
+	const { workoutId } = useParams()
+
+	
 	/**
 	 * Sets the title of the page.
 	 */
@@ -96,16 +102,28 @@ export default function WorkoutFormComponent({ callback, state }) {
 		setShowPopup(true)
 	}
 
+
 	function confirmGoBack() {
 
 		localStorage.removeItem("workoutCreateInfo")// Clear local storage as confirmed
 
 		if (state?.fromSession && !state?.fromCreate) {
-			navigate(`/session/edit/${state.session.sessionId}`, { replace: true, state })
+			return navigate(`/session/edit/${state.session.sessionId}`, { replace: true, state })
 		} else if(state?.fromCreate) {
 			return navigate("/session/create", { replace: true, state })
 		}
-		navigate(-1)
+		else if (state?.fromWorkoutView) {
+			return navigate("/workout/" + state.workoutId)
+		}
+		else {
+			if (workoutId){
+				return navigate("/workout/" + workoutId)
+			}
+			else{
+				return navigate("/workout")
+			}
+		}
+		
 	}
 
 	function handlePopupClose() {
@@ -256,6 +274,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 									tags
 								})
 							}
+							itemName={workoutCreateInfo.data.name}
 						/>
 					</Form.Group>
 

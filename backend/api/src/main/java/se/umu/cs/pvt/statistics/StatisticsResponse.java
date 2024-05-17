@@ -1,10 +1,9 @@
 package se.umu.cs.pvt.statistics;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-
 import se.umu.cs.pvt.belt.Belt;
 import java.util.List;
+import java.util.Set;
 import java.util.ArrayList;
 
 /**
@@ -30,45 +29,45 @@ import java.util.ArrayList;
  * @since 2024-04-29
  */
 public class StatisticsResponse implements Serializable {
-  private Long session_id;
   private Long activity_id;
   private String name;
   private String type;
   private List<BeltResponse> belts;
   private Long count;
-  private Boolean kihon;
-  private LocalDate date;
+
 
   /**
    * Create a new instance of StatisticsResponse.
-   * @param sid id of the session
    * @param id id of the technique
    * @param name name of the technique
    * @param cnt number of occurrences of technique in sessions.
    * @param type the type of activity to represent exercise/techniques
-   * @param date the date of the session
    * @return new StatisticsRespnse
    */
-  public StatisticsResponse(Long sid, Long id, String name, String type, Long cnt, Boolean kihon, LocalDate date) {
-    this.session_id = sid;
+  public StatisticsResponse(Long id, String name, String type, Long cnt) {
     this.activity_id = id;
     this.name = name;
     this.type = type;
     this.count  = cnt;
-    this.kihon = kihon;
-    this.date = date;
   }
 
-  /**
-   * Public getter for private property session_id
+    /**
+   * Create a new instance of StatisticsResponse with inferred 0 count.
+   * @param id id of the technique
+   * @param name name of the technique
+   * @param type the type of activity to represent exercise/techniques
+   * @return new StatisticsRespnse
    */
-  public Long getSession_id() {
-    return session_id;
+  public StatisticsResponse(Long id, String name, String type) {
+    this.activity_id = id;
+    this.name = name;
+    this.type = type;
+    this.count  = 0L;
 }
-
 
   /**
    * Public getter for private property activity_id
+   * @return activity id
    */
   public Long getActivity_id() {
       return activity_id;
@@ -76,6 +75,7 @@ public class StatisticsResponse implements Serializable {
 
   /**
    * Public getter for private property name
+   * @return activity name
    */
   public String getName() {
       return this.name;
@@ -83,6 +83,7 @@ public class StatisticsResponse implements Serializable {
 
   /**
    * Public getter for private property type
+   * @return activity type
    */
   public String getType() {
       return type;
@@ -90,6 +91,8 @@ public class StatisticsResponse implements Serializable {
 
   /**
    * Public getter for private property belts
+   * See BeltRepsonse
+   * @return wrapped belts associated with activity.
    */
   public List<BeltResponse> getBeltColors() {
       return belts;
@@ -106,24 +109,39 @@ public class StatisticsResponse implements Serializable {
       }
   }
 
+
   /**
    * Public getter for private property count
+   * @return amount of times that the activity has been done.
    */
   public Long getCount() {
       return count;
   }
 
   /**
-   * Public getter for private property kihon
+   * Public getter for private property count
    */
-  public Boolean getKihon() {
-    return kihon;
+  public void addToCount(Long count) {
+    this.count += count;
+}
+
+  // Consider two StatisticsACtivity equal if the share the same activity_id 
+  // to remove duplicates from output.
+  @Override
+  public boolean equals(Object obj) {
+
+    if (obj == this) {
+        return true;
+    }
+    if (!(obj instanceof StatisticsResponse)) {
+        return false;
+    }
+    StatisticsResponse sr = (StatisticsResponse) obj;
+    return this.activity_id.equals(sr.getActivity_id());
   }
 
-  /**
-   * Public getter for private property date
-   */
-  public LocalDate getDate() {
-    return date;
+  @Override
+  public String toString() {
+      return Long.toString(this.activity_id) + " - " + this.name;
   }
 }

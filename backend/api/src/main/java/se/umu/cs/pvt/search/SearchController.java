@@ -1,40 +1,34 @@
 package se.umu.cs.pvt.search;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import se.umu.cs.pvt.search.builders.*;
 import se.umu.cs.pvt.search.enums.TagType;
 import se.umu.cs.pvt.search.fuzzy.Fuzzy;
 import se.umu.cs.pvt.search.interfaces.*;
-import se.umu.cs.pvt.search.interfaces.responses.ExerciseSearchResponse;
-import se.umu.cs.pvt.search.interfaces.responses.PlanSearchResponse;
-import se.umu.cs.pvt.search.interfaces.responses.SearchResponseInterface;
-import se.umu.cs.pvt.search.interfaces.responses.TagSearchResponse;
-import se.umu.cs.pvt.search.interfaces.responses.TechniqueSearchResponse;
-import se.umu.cs.pvt.search.interfaces.responses.UserSearchResponse;
-import se.umu.cs.pvt.search.interfaces.responses.WorkoutSearchResponse;
-import se.umu.cs.pvt.search.params.SearchExerciseParams;
-import se.umu.cs.pvt.search.params.SearchPlanParams;
-import se.umu.cs.pvt.search.params.SearchTagsParams;
-import se.umu.cs.pvt.search.params.SearchTechniquesParams;
-import se.umu.cs.pvt.search.params.SearchUserParams;
-import se.umu.cs.pvt.search.params.SearchWorkoutParams;
+import se.umu.cs.pvt.search.interfaces.responses.*;
+import se.umu.cs.pvt.search.params.*;
 import se.umu.cs.pvt.search.persistance.SearchRepository;
 import se.umu.cs.pvt.search.responses.SearchResponse;
 import se.umu.cs.pvt.search.responses.TagResponse;
 
-import java.util.*;
-
 /**
- * Controller for making searching to Techniques, Exercises and Workouts.
+ * Controller for making searches in Techniques, Exercises and Workouts.
  *
- * @author Minotaur (James Eriksson`)
+ * @author Minotaur (James Eriksson)
  * @author Kraken (Christoffer Nordlander)
  * @author Kraken (Jonas Gustavsson)
  * @author Kraken (Oskar Westerlund Holmgren)
  * @author Chimera (Ludvig Larsson)
+ * @author Durian
  */
 
 @RestController
@@ -272,9 +266,12 @@ public class SearchController {
      * @return List of suggested tags.
      */
     private List<String> getTagSuggestions(String searchInput, List<String> tags, TagType tagType) {
-        if (searchInput == null || searchInput.isEmpty()) {
+        if (searchInput == null || (searchInput = searchInput.trim()).isEmpty()) {
             return new ArrayList<>();
         }
+
+        // All tags are in lower case, search input need to be it as well.
+        searchInput = searchInput.toLowerCase();
 
         DatabaseQuery createdQuery = new SearchTagsDBBuilder(tags, tagType)
                 .filterByTagType()
@@ -282,11 +279,6 @@ public class SearchController {
                 .build();
 
         List<TagDBResult> tagResult = searchRepository.getTagSuggestionsFromCustomQuery(createdQuery.getQuery());
-        
-        // All tags are in lowercase, serach input need to be it aswell
-        if (searchInput != null) {
-            searchInput.toLowerCase();
-        }
 
         ArrayList<IndexedTag> tagNameByIndex = new ArrayList<IndexedTag>();
 
@@ -294,7 +286,7 @@ public class SearchController {
             String tagName = tagResult.get(i).getName();
             int index = tagName.indexOf(searchInput);
             if (index != -1) { // -1 indicates that the searchInput was not found in the tag name
-                // Is the index the beginning of a word? If so, prioritze it.
+                // Is the index the beginning of a word? If so, prioritize it.
                 if (index > 0 && !Character.isLetter(tagName.charAt(index-1))) {
                     index = 1;
                 }

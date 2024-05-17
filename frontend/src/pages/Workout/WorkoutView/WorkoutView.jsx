@@ -25,10 +25,11 @@ import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
  *      workoutId @type {int} - The ID of the workout.
  *      id        @type {int/string} - the id of the component
  *
- * @author Cyclops (Group 5) (2023-05-22) &  Durian (Group 3) (2024-04-23) & Team Tomato
+ * @author Cyclops (Group 5) (2023-05-22) &  Durian (Group 3) (2024-04-23) & Team Tomato, Team Kiwi (Group 2) 
  * @updated 2024-04-26 by Tomato
+ * @updated 2024-05-03 Team Kiwi, fixed navigation from other websites
  *
- * @version 1.6
+ * @version 1.7
  *
  */
 
@@ -105,7 +106,7 @@ export default function WorkoutView({ id }) {
 				<div id={id} className="container px-0">
 					{<ConfirmPopup popupText={"Är du säker att du vill radera passet \"" + workoutData.name + "\"?"} id={"confirm-popup"} setShowPopup={setShowPopup} showPopup={showPopup} onClick={async () => deleteWorkout(workoutId, context, navigate, setShowPopup)}/>}
 					{getReviewContainer(showRPopup, setRShowPopup, workoutId)}
-					{getWorkoutInfoContainer(workoutData, setShowPopup, context, userId, workoutUsers)}
+					{getWorkoutInfoContainer(workoutData, setShowPopup, context, userId, workoutUsers, workoutId)}
 					{sortByCategories(workoutData).map((activityCategory) => (
 						<div key={activityCategory.categoryOrder}>
 							<WorkoutActivityList
@@ -199,10 +200,11 @@ function getWorkoutUsersContainer(workoutUsers) {
 }
 
 function getButtons(navigate, setRShowPopup) {
+
 	return (
 		<div className="d-flex row justify-content-center">
 			<div className="d-flex col mb-3 mt-3 justify-content-start">
-				<Button onClick={() => navigate(-1)} outlined={true}>
+				<Button onClick={() => navigate("/workout")} outlined={true}>
 					<p>Tillbaka</p>
 				</Button>
 			</div>
@@ -216,7 +218,7 @@ function getButtons(navigate, setRShowPopup) {
 }
 
 
-function getWorkoutInfoContainer(workoutData, setShowPopup, context, userId, workoutUsers) {
+function getWorkoutInfoContainer(workoutData, setShowPopup, context, userId, workoutUsers, workoutId) {
 	return (
 		<>
 			<div className="container px-0">
@@ -231,7 +233,7 @@ function getWorkoutInfoContainer(workoutData, setShowPopup, context, userId, wor
 						</div>
 						{ (userId == workoutData.author.user_id || isAdmin(context)) &&
 						<>
-							<Link className="ml-3" state={{workout: workoutData, users: workoutUsers}} to={"/workout/edit"}>
+							<Link className="ml-3" state={{workout: workoutData, workoutId: workoutId, users: workoutUsers}} to={"/workout/edit/" + workoutId}>
 								<Pencil
 									size="24px"
 									color="var(--red-primary)"

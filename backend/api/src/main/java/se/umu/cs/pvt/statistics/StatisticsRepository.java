@@ -3,7 +3,6 @@ package se.umu.cs.pvt.statistics;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.time.LocalDate;
 import java.util.List;
 import se.umu.cs.pvt.session.Session;
 import se.umu.cs.pvt.belt.Belt;
@@ -17,9 +16,10 @@ import se.umu.cs.pvt.belt.Belt;
  */
 public interface StatisticsRepository extends JpaRepository<Session, Long>{
   
+
   @Query("""
     SELECT
-      new se.umu.cs.pvt.statistics.StatisticsResponse(s.id,
+      new se.umu.cs.pvt.statistics.StatisticsActivity(s.id,
                                                       t.id, 
                                                       t.name,
                                                       'technique', 
@@ -28,16 +28,24 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
                                                         SELECT tt.techId
                                                         FROM TechniqueTag tt
                                                         WHERE tt.tag = 1
-                                                      ))
-                                                      ,s.date
-                                                      )
-                                                                                         
+                                                      )),
+                                                      s.date,
+                                                      sr.rating
+                                                      )                             
     FROM
+      SessionReview sr
+    JOIN
       Session s
+    ON 
+      s.id = sr.session_id
+    JOIN 
+      SessionReviewActivity sra
+    ON
+      sra.session_review_id = sr.id
     JOIN
       Activity a
     ON 
-      a.workoutId = s.workout
+      a.id = sra.activity_id
     JOIN 
       Technique t
     ON 
@@ -50,14 +58,15 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
       s.id,
       t.id,
       t.name,
-      s.date
+      s.date,
+      sr.rating
       """)
-  List<StatisticsResponse> getAllSampleTechniquesQuery(Long id);
+  List<StatisticsActivity> getAllSessionReviewTechniques(Long id);
 
 
   @Query("""
     SELECT
-      new se.umu.cs.pvt.statistics.StatisticsResponse(s.id, 
+      new se.umu.cs.pvt.statistics.StatisticsActivity(s.id, 
                                                       e.id, 
                                                       e.name, 
                                                       'exercise', 
@@ -67,14 +76,23 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
                                                         FROM ExerciseTag et
                                                         WHERE et.tag = 1
                                                       )),
-                                                      s.date
+                                                      s.date,
+                                                      sr.rating
                                                       ) 
     FROM
+      SessionReview sr
+    JOIN
       Session s
+    ON 
+      s.id = sr.session_id
+    JOIN 
+      SessionReviewActivity sra
+    ON
+      sra.session_review_id = sr.id
     JOIN
       Activity a
     ON 
-      a.workoutId = s.workout
+      a.id = sra.activity_id
     JOIN 
       Exercise e
     ON 
@@ -87,9 +105,32 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
       s.id,
       e.id,
       e.name,
-      s.date
+      s.date,
+      sr.rating
       """)
-  List<StatisticsResponse> getAllSampleExercisesQuery(Long id);
+  List<StatisticsActivity> getAllSessionReviewExercises(Long id);
+
+  // Get a list of belts associated with a group/plan
+  @Query("""
+    SELECT 
+        p.belts
+    FROM
+        Plan p
+    WHERE
+        p.id = :id
+    """)
+  List<Belt> getBeltsForGroup(Long id);
+
+  // Get a list of techniques associated with a list of belts.
+  @Query("""
+    SELECT 
+        new se.umu.cs.pvt.statistics.StatisticsResponse(t.id, t.name, 'technique')
+    FROM
+        Technique t
+    WHERE
+        :belts MEMBER OF t.belts
+    """)
+  List<StatisticsResponse> getTechniquesForBelts(List<Belt> belts);
 
   // Get a list of belts associated with a technique.
   @Query("""

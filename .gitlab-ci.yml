@@ -3,6 +3,7 @@ stages:
   - build
   - test
   - docs
+  - undeploy_test_server
   - rebuild_database
   - deploy_test_server
   - systest
@@ -113,6 +114,8 @@ generate-api-docs:
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_COMMIT_BRANCH == "main"
+      changes:
+        - backend/api/**/*
   tags:
     - system
   script:
@@ -126,6 +129,8 @@ generate-javadocs:
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_COMMIT_BRANCH == "main"
+      changes:
+        - backend/**/*
   tags:
     - system
   script:
@@ -135,6 +140,17 @@ generate-javadocs:
     - mkdir /var/www/html/javadocs
     - cp -r target/site/apidocs/* /var/www/html/javadocs
 
+undeploy-test-server:
+  stage: undeploy_test_server
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_COMMIT_BRANCH == "main"
+  tags:
+    - system
+  script:
+    - docker compose -f docker-compose.yml -f docker-compose-feature.yml down || true
+    
 rebuild-database:
   stage: rebuild_database
   rules:
@@ -148,9 +164,6 @@ rebuild-database:
   before_script:
     - docker login --username pvt2024 --password $DOCKER_PASS # DOCKER_PASS defined in GitLab CI/CD settings as a secure variable.
   script:
-    - cd infra/database
-    - docker stop html-psql-1 || true
-    - docker rm html-psql-1 || true
     - docker volume rm html_pgdata || true
 
 deploy-test-server:
@@ -167,24 +180,18 @@ deploy-test-server:
   script:
     - docker system prune -a -f
 
-    - rm -rf /var/www/html/*.tar
+    - docker compose -f docker-compose.yml -f docker-compose-feature.yml build
+    - docker compose -f docker-compose.yml -f docker-compose-feature.yml push
+
     - rm -rf /var/www/html/nginx
     - rm -rf /var/www/html/*.yml
 
-    - docker build --no-cache -t pvt2024/database:latest ./infra/database
-    - docker push pvt2024/database:latest
-    - docker build --no-cache -t pvt2024/gateway:latest ./backend/gateway
-    - docker push pvt2024/gateway:latest
-    - docker build --no-cache -t pvt2024/api:latest ./backend/api
-    - docker push pvt2024/api:latest
-    - docker build --no-cache -t pvt2024/frontend:latest ./frontend
-    - docker push pvt2024/frontend:latest
-
-    - cp ./docker-compose.feature.yml /var/www/html/
+    - cp ./docker-compose.yml /var/www/html/
+    - cp ./docker-compose-feature.yml /var/www/html/
     - cp -r ./nginx /var/www/html/
 
     - cd /var/www/html/
-    - docker compose -f docker-compose.feature.yml up -d
+    - docker compose -f docker-compose.yml -f docker-compose-feature.yml up -d --pull always
 
 run-systests:
   stage: systest
@@ -207,10 +214,10 @@ deploy-prod-server:
   rules:
     - if: $CI_COMMIT_TAG
   tags:
-    - system
+    - prod
   script:
-    - ssh pvt@5dv214vt24-prod.cs.umu.se 'cd /home/pvt/prod/ && ./build.sh '$CI_COMMIT_TAG' && exit'
-  release: 
+    - docker login --username pvt2024 --password $DOCKER_PASS # DOCKER_PASS defined in GitLab CI/CD settings as a secure variable.
+    - ./deploy_prod.sh $CI_COMMIT_TAG
+  release:
     tag_name: '$CI_COMMIT_TAG'
     description: '$CI_COMMIT_TAG'
-    
