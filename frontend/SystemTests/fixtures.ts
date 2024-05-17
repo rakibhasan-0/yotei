@@ -1,6 +1,6 @@
-import { test as base, expect } from '@playwright/test';
-import { Account, Role } from './Types/systemTestsTypes';
-import { UserApi } from './ApiUtils/UserApi';
+import { test as base, expect } from '@playwright/test'
+import { Account, Role } from './Types/systemTestsTypes'
+import { UserApi } from './ApiUtils/UserApi'
 
 // Note that we pass worker fixture types as a second template parameter.
 export const test = base.extend<{}, { account: Account }>({
@@ -8,7 +8,6 @@ export const test = base.extend<{}, { account: Account }>({
 		const username = Math.random().toString(36).slice(2, 7) + workerInfo.workerIndex // Will generate a random string of 5 characters
     const password = 'verysecure'
     const role = Role.admin
-    // TODO fix so you can login for all roles
 
     // Create the account with userApi.
 		const response = await UserApi.register_user({username: username, password: password, role: role})
@@ -16,6 +15,8 @@ export const test = base.extend<{}, { account: Account }>({
 
     // Use the account value.
     await use({ username, password, role, userId })
+    // Teardown after test
+    await UserApi.remove_user(userId)
   }, { scope: 'worker' }],
 
   page: async ({ page, account }, use) => {
@@ -30,8 +31,6 @@ export const test = base.extend<{}, { account: Account }>({
 
     // Use signed-in page in the test.
     await use(page)
-	  await UserApi.remove_user(account.userId)
-
   },
 });
 export { expect } from '@playwright/test';

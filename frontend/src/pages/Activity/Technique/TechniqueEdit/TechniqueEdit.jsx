@@ -17,7 +17,7 @@ import { unstable_useBlocker as useBlocker, useNavigate, useLocation, useParams 
 import { Spinner } from "react-bootstrap"
 
 
-const KIHON_TAG = { id: 1, name: "Kihon Waza" }
+const KIHON_TAG = { id: 1, name: "kihon waza" }
 
 /**
  * Edit Technique is the page that allows the user to edit 
@@ -246,6 +246,7 @@ export default function TechniqueEdit({ id }) {
 	return (
 		<div id={id} style={{ display: "flex", gap: "16px", flexDirection: "column" }}>
 			<title>Redigera teknik</title>
+			<h1>Redigera Teknik</h1>
 
 			<InputTextField
 				id="techniqueEditInputName"
@@ -298,7 +299,6 @@ export default function TechniqueEdit({ id }) {
 			<div className={style.mediaButtonContainer}>
 				<EditGallery id={techniqueId} exerciseId={techniqueId} sendData={sendMediaData} undoChanges={undoMediaChanges} done={done} />
 			</div>
-
 			<Popup title={"Lägg till media"} isOpen={showMediaPopup} setIsOpen={setShowMediaPopup} >
 				<UploadMedia id={techniqueId} exerciseId={techniqueId}/>	
 			</Popup>

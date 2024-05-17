@@ -1,6 +1,8 @@
 import { expect, request } from "@playwright/test"
 import { Account } from "../Types/systemTestsTypes"
 
+const BASE_URL = process.env.CI ? "http://5dv214vt24-test.cs.umu.se" : "http://localhost:" + process.env.FRONTEND_PORT
+
 /**
  * API testing utilities related to handling creation and deletion of a user. 
  *
@@ -31,7 +33,7 @@ export class UserApi {
 				"Content-Type": "application/json",
 			}
 		})
-		const response = await ctx.post("/api/users/verify", {
+		const response = await ctx.post(BASE_URL + '/api/users/verify', {
 			failOnStatusCode: true,
 			data: {
 				username: "admin",
@@ -49,7 +51,7 @@ export class UserApi {
 	 */
 	static async register_user(user: Account) {
 		const ctx = await UserApi.make_ctx()
-		const response = await ctx.post("/api/users", {
+		const response = await ctx.post(BASE_URL + "/api/users", {
 			data: {
 				username: user.username,
 				password: user.password,
@@ -68,6 +70,6 @@ export class UserApi {
      */
 	static async remove_user(username: string) {
 		const ctx = await UserApi.make_ctx()
-		await ctx.delete("/api/users/" + username)
+		await ctx.delete(BASE_URL + "/api/users/" + username)
 	}
 }

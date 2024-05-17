@@ -13,7 +13,7 @@ import { setError as setErrorToast, setSuccess} from "../../../utils"
 import EditGallery from "../../../components/Gallery/EditGallery"
 import { useLocation, useNavigate, useParams } from "react-router"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
-import { isAdmin, isEditor } from "../../../utils"
+import { isAdmin, isEditor, scrollToElementWithId } from "../../../utils"
 import { unstable_useBlocker as useBlocker } from "react-router"
 import Spinner from "../../../components/Common/Spinner/Spinner.jsx"
 
@@ -35,16 +35,14 @@ export default function ExerciseEdit() {
 	const context = useContext(AccountContext)
 	const [oldName, setOldName] = useState("")
 	const [oldDesc, setOldDesc] = useState("")
-	// const [oldTime, setOldTime] = useState(0)
+	const [oldTime, setOldTime] = useState(0)
 	const [name, setName] = useState("")
 	const [desc, setDesc] = useState("")
 	const [time, setTime] = useState("")
 	const [errorMessage, setErrorMessage] = useState("")
-	const [editFailed, setEditFailed] = useState(false)
-	const [tagLinkFailed, setTagLinkFailed] = useState(false)
+	const [editFailed, setEditFailed] = useState(true)
 	const [existingTags, setExistingTags] = useState([])
 	const [newTags, setNewTags] = useState([])
-	const [tagRemoveFailed, setTagRemovedFailed] = useState(false)
 	const [sendData, setSendData] = useState(false)
 	const [showMiniPopup, setShowMiniPopup] = useState(false)
 	const [undoMediaChanges, setUndoMediaChanges] = useState(false)
@@ -57,15 +55,29 @@ export default function ExerciseEdit() {
 	const { excerciseId } = useParams()
 
 	function done() {
-		if (undoMediaChanges) {
-			blocker.proceed
-			//setShowMiniPopup(true)
-			//navigate(-1)
-		} else {
-			setSendData(false)
-			editExercise()
+		if (!undoMediaChanges && !editFailed) {
+			setSuccess("Övningen uppdaterades!")
+			handleNavigation()		
 		}
+		setSendData(false)
 	}
+
+	//is activated when "avbryt" is pressed
+	useEffect(() => {
+		if(undoMediaChanges) {
+			blocker.proceed
+			setUndoMediaChanges(false)
+			handleNavigation()
+		}
+	}, [undoMediaChanges])
+
+	//when all the data (name, desc, time, taggar) is updated and the name is ok then the media is updated
+	useEffect(() => {
+		if(!editFailed){
+			setSendData(true)
+		}
+	}, [editFailed])
+
 
 	const blocker = useBlocker(() => {
 		if (isBlocking) {
@@ -75,14 +87,20 @@ export default function ExerciseEdit() {
 		return false
 	})
 
+	function checkBlocking() {
+		let tmp = localStorage.getItem("askToLeave")
+		tmp = (tmp === "true")
+		setIsBlocking((name != oldName || desc != oldDesc || time != oldTime || tmp))
+	}
+
 	useEffect(() => {
-		setIsBlocking(name != oldName || desc != oldDesc)
-	}, [name, desc, oldName, oldDesc])
+		checkBlocking()
+	}, [name, desc, oldName, oldDesc, time, oldTime])
 
 	
 	useEffect(() => {
 		if (!isAdmin(context) || !isEditor(context)) {
-			navigate(-1)			//riktigt knas kod, MÅSTE FIXAS!
+			handleNavigation()
 		}
 	}, [context, navigate])
 	
@@ -122,8 +140,9 @@ export default function ExerciseEdit() {
 		setExistingTags(tagsJson)
 		setOldName(exerciseJson.name)
 		setOldDesc(exerciseJson.description)
-		// setOldTime(exerciseJson.duration)
+		setOldTime(exerciseJson.duration)
 		setIsLoading(false)
+		localStorage.setItem("askToLeave", false)
 		/* Ska inte ligga här utan villkor */
 	}, [])
 
@@ -159,7 +178,7 @@ export default function ExerciseEdit() {
 	 *
 	 * @param {*} e The event that caused editExercise.
 	 */
-	async function editExercise() {
+	function editExercise() {
 		const requestOptionsDuplicate = {
 			method: "PUT",
 			headers: { "Content-type": "application/json", token: context.token },
@@ -170,29 +189,27 @@ export default function ExerciseEdit() {
 				duration: time,
 			}),
 		}
-		try {
-			const response = await fetch("/api/exercises/update", requestOptionsDuplicate)
-
-			if (response.status === 406 && name != oldName) {
-				setErrorMessage("Detta namn är redan taget")
-				return
-			}
-		} catch (error) {
-			setErrorToast("Ett internt fel inträffade")
-		}
-
-		if (name.trim() === "") {
-			setEditFailed(true)
-			setErrorMessage("Övningen måste ha ett namn")
-			return
-		}
-
-		await checkTags()
-		// Removed the navigate(-1) as it navigated back twice because of this.
-		// Maybe add a proper fail message instead if it's not working
-		if (!(editFailed || tagRemoveFailed || tagLinkFailed)) {
-			//navigate(-1)
-		}
+		checkTags()
+		fetch("/api/exercises/update", requestOptionsDuplicate)
+			.then( async res => {
+				
+				if (res.status === 406 && name != oldName) {
+					setEditFailed(true)
+					setErrorMessage("Detta namn är redan taget")
+					scrollToElementWithId("exerciseNameInput")
+					return
+				} else if (name.trim() === "") {
+					setEditFailed(true)
+					setErrorMessage("Övningen måste ha ett namn")
+					scrollToElementWithId("exerciseNameInput")					
+					return
+				}else {
+					setEditFailed(false)
+				}
+			})
+			.catch((err) => {
+				console.error(err)
+			})
 	}
 
 	/**
@@ -226,15 +243,11 @@ export default function ExerciseEdit() {
 		}
 		try {
 			const response = await fetch("/api/tags/exercises?tag=" + tag_id, requestOptions)
-			if (response.ok) {
-				setTagLinkFailed(false)
-			} else {
-				setTagLinkFailed(true)
+			if (!response.ok) {
 				setErrorMessage(tag_name)
 			}
 		} catch (error) {
 			setErrorToast("Det gick inte att skapa en tagg")
-			setTagLinkFailed(true)
 			setErrorMessage(tag_name)
 		}
 	}
@@ -252,24 +265,14 @@ export default function ExerciseEdit() {
 		}
 		try {
 			const response = await fetch(`/api/tags/remove/exercise?tag=${tag_id}`, requestOptions)
-			if (response.ok) {
-				setTagRemovedFailed(false)
-			} else {
-				setTagRemovedFailed(true)
+			if (!response.ok) {
 				setErrorMessage(tag_name)
 				setErrorToast("Det gick inte att ta bort taggen")
 			}
 		} catch (error) {
 			setErrorToast("Ett internt fel uppstod")
-			setTagRemovedFailed(true)
 			setErrorMessage(tag_name)
 		}
-	}
-
-	async function handleClickSave() {	
-		setIsBlocking(false)
-		setSendData(true)
-		setSuccess("Övningen Uppdaterades!")
 	}
 
 	const handleNavigation = () => {
@@ -330,7 +333,8 @@ export default function ExerciseEdit() {
 					outlined
 					onClick={() => {
 						setUndoMediaChanges(true)
-						handleNavigation()
+						checkBlocking()
+						done()
 					}}
 					width="100%"
 				>
@@ -338,10 +342,10 @@ export default function ExerciseEdit() {
 				</Button>
 
 				<Button
-					onClick={async () => {
-						await handleClickSave()
-						await editExercise()
-						handleNavigation()
+					onClick={() => {
+						setUndoMediaChanges(false)
+						setIsBlocking(false)
+						editExercise()
 					}}
 					width="100%"
 				>

@@ -13,16 +13,16 @@ import styles from "./TechniqueCard.module.css"
  *
  * @author Medusa, Coconut
  * @version 2.1
- * @since 2024-05-03
+ * @since 2024-05-16
  *
  * Converted to css module 2024-04-19, Hannes (group 1)
  *
  */
-function TechniqueCard({ technique, checkBox, id }) {
+function TechniqueCard({ technique, checkBox, id}) {
 	const navigate = useNavigate()
 
 	const handleClick = () => {
-
+		setTechnique()
 		if (technique.activity_id && technique.type === "technique") {
 			navigate("/technique/" + technique.activity_id)
 		} else if (technique.type === "exercise" && technique.activity_id) {
@@ -32,8 +32,19 @@ function TechniqueCard({ technique, checkBox, id }) {
 		}
 	}
 
+	const setTechnique = () =>{
+		localStorage.setItem("stored_technique", id)
+	}
+
 	return (
-		<div className={styles["technique-card"]} id={id}>
+		<div 
+			//If the technique count is 0, the card will be transparent otherwise
+			//it will be normal, this is mostly for the statistics page
+			className={`${styles["technique-card"]} ${
+				technique.count === 0 ? styles["transparent-card"] : ""
+			}`}
+			id={id} 
+			onClick={setTechnique}>
 			{technique.type === "exercise" ? null : constructColor(technique)}
 
 			<div className={styles["technique-info-container"]}>
@@ -51,17 +62,17 @@ function TechniqueCard({ technique, checkBox, id }) {
 
 				{/* if the technique object has count attribute then we will not render ChevronDown sign */}
 				<div className={styles["technique-arrow-container"]}>
-					{technique.count ? null : (
+					{technique.count || technique.count == 0 ? null : (
 						<Link to={"/technique/" + technique.techniqueID}>
 							<ChevronDown />
 						</Link>
 					)}
 				</div>
 
-				{/* we are about to count the number of occurrence */}
+				{/* we are about to count the number of occurrence to display on card */}
 
 				<div className={styles.countContainer}>
-					{technique.count ? <p>x{technique.count}</p> : null}
+					{technique.count || technique.count == 0 ? <p>x{technique.count}</p> : null}
 				</div>
 			</div>
 		</div>
@@ -93,7 +104,7 @@ function constructColor(technique) {
 									index
 								)
 						})
-						: constructDefaultBelt("8e03ad") //om vi fär 0st fägerger (lila)
+						: constructDefaultBelt("8e03ad") //om vi fär 0st färger (lila)
 					: constructDefaultBelt("8e03ad") //om vi inte får färger (lila)
 			}
 		</div>

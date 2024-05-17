@@ -7,18 +7,17 @@
 }
 
 .pairinfo{
-    width: 10%;
+    width: 11%;
     float:left;
 }
 .pair{
-    width: 88%; 
+    width: 89%; 
     float:right;
 }
 
 .pairleft{
-   float: left;
+    float: left;
     width: 48%;
-    margin-right: 2px;
 }
 
 .pairright{
