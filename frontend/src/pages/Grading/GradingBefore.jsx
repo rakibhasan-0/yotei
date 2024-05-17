@@ -399,10 +399,15 @@ export default function GradingBefore() {
 				
 				<PopupSmall id={"test-popup"} title={"Varning"} isOpen={showPopup} setIsOpen={setShowPopup} direction={startRedirection}>
 					<h2>Är du säker på att alla deltagare är tillagda? </h2>
-					<h2> Isåfall fortsätt till bedömnings process</h2>
+					<h2> Isåfall fortsätt till bedömnings processen</h2>
 				</PopupSmall>
 				
-				<Button onClick={() => setShowPopup(true)}><p>Fortsätt</p></Button>
+				<Button 					
+					width="100%"
+					outlined={false}
+					onClick={() => setShowPopup(true)}>
+					<p>Fortsätt</p>
+				</Button>
 			
 			</div>
 		</div>

@@ -36,7 +36,7 @@ import Button from "../Button/Button"
  * @version 3.0
  * @since 2024-05-16
  */
-export default function PopupSmall({ title, id, isOpen, setIsOpen, children, isNested, style, onClose, zIndex, direction}) {
+export default function PopupSmall({ title, id, isOpen, setIsOpen, children, isNested, style, onClose, zIndex, direction }) {
 
     // Synchronize react state with CSS-styling in browser
     useEffect(() => {
@@ -64,7 +64,7 @@ export default function PopupSmall({ title, id, isOpen, setIsOpen, children, isN
                 style={style}
             >
                 <div className={styles.topbar}>
-                    {title && <Divider title={title} option="h1_left" />}
+                    {title && <Divider title={title} option="h1_center" />}
                     <button
                         className={styles.closebutton}
                         onClick={() => {
@@ -83,6 +83,16 @@ export default function PopupSmall({ title, id, isOpen, setIsOpen, children, isN
                 <div className={styles.buttonContainer}>
                     <Button
                         id="continue-button"
+                        outlined={false}
+                        width="100%"
+                        onClick={direction}
+                    >
+                        <p>Ja</p>
+                    </Button>
+
+                    <Button
+                        id="continue-button"
+                        outlined={true}
                         width="100%"
                         onClick={() => {
                             setIsOpen(false)
@@ -91,13 +101,6 @@ export default function PopupSmall({ title, id, isOpen, setIsOpen, children, isN
                         }}
                     >
                         <p>Nej</p>
-                    </Button>
-                    <Button
-                        id="continue-button"
-                        width="100%"
-                        onClick={direction}
-                    >
-                        <p>Ja</p>
                     </Button>
                 </div>
             </div>

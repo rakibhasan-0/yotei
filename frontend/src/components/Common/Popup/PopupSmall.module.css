@@ -14,7 +14,6 @@
     -webkit-overflow-scrolling: touch;
     border-radius: 1%;
 }
-/* All very hacky css*/
 .backdrop {
     position: fixed;
     /* Can't use top: 0 and left: 0 because parent elements position might have been
