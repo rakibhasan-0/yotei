@@ -143,6 +143,12 @@ export default function App() {
 						<Route path="session/create" element={<SessionCreateIndex />} />
 						<Route path="session/edit/:session_id" element={<SessionEdit />} />
 						<Route path="groups" element={<GroupIndex />} />
+						<Route path="list/editList" element={<ListEdit/>} />
+
+						<Route path="profile/list/:list_id" element={<ListInfo />} />
+						<Route path="profile/favouriteWorkouts" element={<FavouriteWorkoutsList/>} />
+
+
 						<Route path="grading" element={<Grading />} />
 						<Route path="grading/create" element={<GradingCreate/>} />
 						<Route path="grading/:gradingId/1" element={<GradingBefore/>} />
