@@ -5,6 +5,7 @@ import BeltIcon from "../BeltIcon/BeltIcon"
 import { useContext, useEffect, useState } from "react"
 import { AccountContext } from "../../../context"
 import {setError as setErrorToast} from "../../../utils"
+import React from "react"
 
 /**
  * Represents a belt row with text, two checkboxes and two
@@ -29,6 +30,8 @@ const BeltRow = ({ belt, states, onToggle }) => {
 	const [adultState, setAdultState] = useState(false)
 	const [invertedState,setInvertedState] = useState (false)
 
+	const [isActive, setIsActive] = useState(false)
+
 	useEffect(() => {
 		setChildState(states?.some(b => b.id === child?.id))
 		setAdultState(states?.some(b => b.id === adult?.id))
@@ -37,7 +40,7 @@ const BeltRow = ({ belt, states, onToggle }) => {
 
 	return (
 		<div className={styles.beltRow}>
-			<div className={styles.beltItem}>
+			<div className={styles.beltItemChild}>
 				{child ? <>
 					<CheckBox id={`belt-child-${name}`} onClick={toggleChildState} checked={childState} />
 					<BeltIcon id={`belt-child-${name}-icon`} belt={child} />

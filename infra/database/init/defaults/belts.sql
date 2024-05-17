@@ -15,4 +15,3 @@ INSERT INTO belt (belt_name, belt_color, is_child, is_inverted) VALUES ('Svart',
 INSERT INTO belt (belt_name, belt_color, is_child, is_inverted) VALUES ('1 Dan', '201E1F', False, False);
 INSERT INTO belt (belt_name, belt_color, is_child, is_inverted) VALUES ('2 Dan', '201E1F', False, False);
 INSERT INTO belt (belt_name, belt_color, is_child, is_inverted) VALUES ('3 Dan', '201E1F', False, False);
-
