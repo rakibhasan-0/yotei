@@ -68,8 +68,8 @@ class EntryResponse {
 /**
  * ActivityListEntry API for adding and removing entries to/from activity lists.
  * 
- * @author Team Tomato
- * @since 2024-05-17
+ * @author Team Tomato, updated 2024-05-17
+ * @since 2024-05-08
  * 
  */
 @RestController
