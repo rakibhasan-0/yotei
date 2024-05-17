@@ -456,8 +456,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 							is_child: item.belts[0].child
 
 						}],
-						tags: item.tags,
-						path: item.id
+						tags: item.tags
 					}
 				}
 				else {
@@ -466,8 +465,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 						name: item.name,
 						type: "exercise",
 						description: item.description,
-						duration: item.duration,
-						path: item.id
+						duration: item.duration
 					}
 				}
 			})
