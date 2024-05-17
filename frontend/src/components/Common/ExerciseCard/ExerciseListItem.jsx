@@ -15,6 +15,7 @@ import { Link } from "react-router-dom"
  * 		detailURL @type {string} 	- The base URL for exercises
  * 		id @type {integer} 			- The ID for this particular exercise in database
  * 		index @type {integer} 		- The ID for this particular exercise on current page (Used for coloring)
+ * 		path @type {string}			- The path to the specific exercise (only used if the exercise is in a list)
  * 
  * Example usage:
  * 		<ExerciseListItem
@@ -30,6 +31,7 @@ import { Link } from "react-router-dom"
  * @author Chimera, Phoenix
  * @since 2023-05-10
  * @updated 2023-05-30 Chimera, updated documentation
+ * @updated 2024-05-17 Tomato, Fixed so that an exercise get the correct path if in a list.
  * @version 1.1
  */
 export default function ExerciseListItem({ item, text, detailURL, id, index, checkBox , path}) {
