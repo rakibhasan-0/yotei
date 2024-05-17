@@ -115,7 +115,7 @@ public class ExportGradingPdf {
         int numExamineesOnPage = examinees.size() - (onPage * MAX_NUM_COLUMNS);
         if (numExamineesOnPage > MAX_NUM_COLUMNS)
             numExamineesOnPage = MAX_NUM_COLUMNS;
-            
+
         //Calculate where starting x position will be depending on number of examinees on the page
         int tableStartXPos = (pageWidth/2) - ((numExamineesOnPage + 1)* CELL_WIDTH + 30)/2;
 
@@ -379,7 +379,7 @@ public class ExportGradingPdf {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ultrices nibh ac nibh tempor sagittis. Proin non eleifend diam. Aliquam eget egestas neque. Sed tortor dui, tincidunt eu venenatis in, sollicitudin sit amet risus. Mauris pharetra turpis in lectus euismod, ac lobortis urna tincidunt. Vestibulum tincidunt luctus sapien ut rhoncus. Curabitur sit amet orci purus. Praesent consectetur, ante vitae pharetra euismod, sapien lorem interdum dolor, vitae fringilla orci tellus et sem.
             """;
             
-        List<String> rows = getRows(groupComment);
+        List<String> rows = getRows(groupComment, 120);
         
         contentStream.beginText();
         contentStream.setFont(font, 14);
@@ -435,7 +435,7 @@ public class ExportGradingPdf {
         for (int i = 0 ; i < examinees.size() ; i+=2) { 
             //lägg till "teknik: kommentar" till rows, sen kanske en tom rad ifall en ny teknik följer och sen upprepa 
             String examineeComment = "2. Shotei uchi, chudan, rak stöt med främre och bakre handen: Bra form!                                                 9. Grepp i ärmen med drag O soto osae, ude henkan gatame: Bra form! ";
-            List<String> rows = getRows(examineeComment);
+            List<String> rows = getRows(examineeComment, 120);
 
             //Checks if the next comment block will fit on the page, if not a new page is created
             if (initY - rows.size() * 15 + 30 <= 0) {
@@ -515,7 +515,7 @@ public class ExportGradingPdf {
 
         for (int i = 0 ; i < examinees.size() ; i++) {
             String examineeComment = "2. Shotei uchi, chudan, rak stöt med främre och bakre handen: Bra form!                                                 3. Gedan geri, rak spark med främre och bakre benet: Snyggt sparkat!                                                   9. Grepp i ärmen med drag O soto osae, ude henkan gatame: Bra form! ";
-            List<String> rows = getRows(examineeComment);
+            List<String> rows = getRows(examineeComment, 120);
             
             //Checks if the next comment block will fit on the page, if not a new page is created
             if (initY - rows.size() * 15 + 30 <= 0) {
@@ -559,34 +559,34 @@ public class ExportGradingPdf {
      * The the comment split up into section so that the text wont exceed the page width. In
      * other words, newline is added.
      * 
-     * @param examineeComment, the String that will be split up in to sections
+     * @param string, the String that will be split up in to sections
      * @return a List of Strings which contains the split up sections of the comment.
      */
-    private List<String> getRows(String examineeComment) {
+    private List<String> getRows(String string, int maxLength) {
         List<String> rows = new ArrayList<>();
-        if(examineeComment.length() > 120) {
-            int numRows = (int)Math.ceil((double)examineeComment.length() / 120);
+        if(string.length() > maxLength) {
+            int numRows = (int)Math.ceil((double)string.length() / maxLength);
             
             int startIndex = 0;
-            int stopIndex = 120;
+            int stopIndex = maxLength;
             
             for(int j = 0; j < numRows; j++) {                        
-                int lastSpaceIndex = examineeComment.substring(startIndex, stopIndex).lastIndexOf(' ');
+                int lastSpaceIndex = string.substring(startIndex, stopIndex).lastIndexOf(' ');
                 
                 if(lastSpaceIndex > 0) 
                     stopIndex = lastSpaceIndex + startIndex +1;
 
-                rows.add(examineeComment.substring(startIndex, stopIndex).replaceAll("\\u000a", ""));
+                rows.add(string.substring(startIndex, stopIndex).replaceAll("\\u000a", ""));
                 
                 startIndex = stopIndex;
-                if(stopIndex + 120 <= examineeComment.length())
-                    stopIndex = stopIndex + 120;
+                if(stopIndex + maxLength <= string.length())
+                    stopIndex = stopIndex + maxLength;
                 else
-                    stopIndex = examineeComment.length();
+                    stopIndex = string.length();
             }
         }
         else
-            rows.add(examineeComment);
+            rows.add(string);
         return rows;
     }
     
