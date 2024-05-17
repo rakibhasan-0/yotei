@@ -56,4 +56,9 @@ public class ExamineePair {
     public Long getExaminee_2_id() {
         return examinee_2_id;
     }
+
+    // public void Examinee_2_id(Long examinee_2_id) {
+    //     this.examinee_2_id = examinee_2_id;
+    // }
+
 }

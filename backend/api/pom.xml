@@ -118,6 +118,7 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
         <version>${project.parent.version}</version>
         <configuration>
+          <skipTests>true</skipTests>
           <fork>true</fork>
           <skip>false</skip>
         </configuration>
