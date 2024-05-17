@@ -402,7 +402,8 @@ export default function GradingBefore() {
 					<h2> Isåfall fortsätt till bedömnings processen</h2>
 				</PopupSmall>
 				
-				<Button 					
+				<Button
+					id="continue-button"		
 					width="100%"
 					outlined={false}
 					onClick={() => setShowPopup(true)}>
