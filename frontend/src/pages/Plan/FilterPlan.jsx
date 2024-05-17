@@ -12,21 +12,23 @@ import CheckBox from "../../components/Common/CheckBox/CheckBox"
  *     prop1 @type {number}  - An id to identify the component
  *     prop2 @type {object}  - A props object containing state for the filter. 
  *
- * TODO explain the parameters for the components better.
- * @param 		@type { Int? } 	      id				A unique ID for the component. ?
- * @param		@type { Array? }      chosenGroups		???
- * @param		@type { Array? } 	  setChosenGroups	Callback function for updating the selectedPlans variable in PlanIndex.jsx.
- * @paraam		@type { Date Array? } dates				???
- * @param		@type { Date? }		  onDatesChange		???
- * @param		@type { Date? }		  callbackFunction	A function that will be called for each press of the checkbox.
- * (Currently the callbackFunction is used to toggle filtering by only "my groups" or by "all groups".)
+ * @param 		@type { Int } 	      id						A unique ID for the component.
+ * @param		@type { Array }       chosenGroups				This corresponds to selectedPlans in PlanIndex.jsx.
+ * @param		@type { Function } 	  setChosenGroups			Callback function for updating the selectedPlans variable in PlanIndex.jsx.
+ * @paraam		@type { Date Array } dates						The dates in PlanIndex.
+ * @param		@type { Function }	  onDatesChange			    Callback function to call when the dates change.
+ * @param		@type { Function }	  callbackFunctionCheckbox	A function that will be called for each press of the onlyMyGroups checkbox. This is used in GroupPicker.jsx to set groups.
+ * @param		@type { Boolean }	  onlyMyGroups				A variable for the state of the onlyMyGroups checkbox.
+ * @param		@type { Function }	  toggleOnlyMyGroups		A callback function used to toggle the onlyMyGroups variable.
+ *
  * 
-* @author Griffin, Tomato (Group 6) , Team Mango (Group 4) (2024-05-10)
+* @author Griffin, Tomato (Group 6) , Team Mango (Group 4) (2024-05-17)
 * @version 2.1
 * @since 2023-05-08
 * Updates: 2024-05-10: Added a checkbox (with a feature toggle, since it does not work currently) for filtering by only my groups or all groups.
+* 		   2024-05-17: Fixed the filtering and refactored code slightly.
 */
-export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, onDatesChange, callbackFunction, onlyMyGroups, toggleOnlyMyGroups}) {
+export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, onDatesChange, callbackFunctionCheckbox, onlyMyGroups, toggleOnlyMyGroups}) {
 
 	const [checkBoxIsEnabled] = useState(true) //FEATURE TOGGLE
 
@@ -34,7 +36,6 @@ export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, o
 		if(prev) {
 			if(!checked) {
 				//When you uncheck the checkbox (for e.g. a brown belt), you should remove the relevant belts from the filtered list.
-				//console.log("PREV: " + prev) //prev seems to be the last id you pressed.
 				return prev.filter(g => g !== chosenGroup)
 				//(When all checkboxes are unchecked everything is added again.)
 			}
@@ -73,13 +74,12 @@ export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, o
 					<div className={styles.checkBoxSpace} >
 						<CheckBox id={"seeOnlyMyGroups"} onClick={() => { toggleOnlyMyGroups()}}
 							label={"Visa bara tillfällen för mina grupper"} checked={onlyMyGroups} />
-						{/* The callbackFunction() call here toggles a boolean variable stored in PlanIndex.jsx. */}
-						{/* TODO: In order to filter properly, this part here and probably GroupPicker.jsx must be updated, as well as PlanIndex.jsx.*/}
+						{/* The toggleOnlyMyGroups() call here toggles a boolean variable stored in PlanIndex.jsx. */}
 					</div>
 				)
 				}
 
-				<GroupPicker id={42} onToggle={(c, g) => {onToggle(c, g)}} states={chosenGroups} onlyMyGroups={onlyMyGroups} callbackFunction={callbackFunction}/>
+				<GroupPicker id={42} onToggle={(c, g) => {onToggle(c, g)}} states={chosenGroups} onlyMyGroups={onlyMyGroups} callbackFunctionCheckbox={callbackFunctionCheckbox}/>
 
 			</ FilterContainer>
 		</div>

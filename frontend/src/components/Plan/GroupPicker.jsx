@@ -97,16 +97,20 @@ const GroupRow = ({group, onToggle}) => {
     } 
  * 
  * 
- * @author Griffin (Group 2), Team Mango (Group 4) (2024-05-10) 
+ * @author Griffin (Group 2), Team Mango (Group 4) (2024-05-17) 
  * @since 2023-05-17
  * @version 1.0
  * @param id An id for group picker
+ * @param states A variable corresponding to chosenGroups in FilterPlan.jsx.
  * @param testFetchMethod is used to test functionallity of GroupPicker
  * @param onToggle A toggle function when a group is selected.
+ * @param onlyMyGroups A boolean variable for if the new filtering checkbox is active or not.
+ * @param callbackFunctionCheckbox Is called when the checkbox is pressed to set the groups.
  * @returns A new group picker component.
+ * Updates: 2024-05-10: Added a checkbox and filtering of groups that a user has created.
+ *  	    2024-05-17: Fixed the filtering and refactored code slightly.
  */
-
-export default function GroupPicker({ id, states, testFetchMethod, onToggle, onlyMyGroups, callbackFunction}) { //TODO comment about last parameter. Boolean.
+export default function GroupPicker({ id, states, testFetchMethod, onToggle, onlyMyGroups, callbackFunctionCheckbox}) {
 	const [ groups, setGroups ] = useState()
 	const { token } = useContext(AccountContext)
 
@@ -148,10 +152,10 @@ export default function GroupPicker({ id, states, testFetchMethod, onToggle, onl
 
 	useEffect(() => {
 		fetchPlans()
-		if (callbackFunction) { //If the callback function is set (not true for tests).
-			callbackFunction(groups)
+		if (callbackFunctionCheckbox) { //If the callback function is set (not true for tests).
+			callbackFunctionCheckbox(groups) //Set the groups variable in PlanIndex.jsx.
 		}
-	}, [states, onlyMyGroups]) //TODO changed thing here.
+	}, [states, onlyMyGroups]) //Should be updated when the checkbox for onlyMyGroups is updated.
 
 	function checkID (id) {
 		if (id === null || id === undefined) {

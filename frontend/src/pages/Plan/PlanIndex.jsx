@@ -18,10 +18,11 @@ import { HTTP_STATUS_CODES, setError } from "../../utils"
  * If nothing is selected, the default is from todays date until inf.
  * TODO: PlanIndex is error handling on fetches(react toast).
  * 
- * @author Griffin, Team Durian (Group 3) (2024-04-23), Team Mango (Group 4) (2024-05-10)
+ * @author Griffin, Team Durian (Group 3) (2024-04-23), Team Mango (Group 4) (2024-05-17)
  * @version 1.0
  * @since 2023-05-24
  * Updates: 2024-05-10: Added a toggle for a new checkbox. The filtering part does not work yet.
+ * 			2024-05-17: Fixed the filtering and refactored code slightly.
  */
 export default function PlanIndex() {
 	const { token } = useContext(AccountContext)
@@ -35,9 +36,9 @@ export default function PlanIndex() {
 
 	const [ loading, setLoading ] = useState(true)
 
-	const [ groups, setGroups ] = useState() //TODO comment usage.
+	const [ groups, setGroups ] = useState() //This variable is used for groups and is set by GroupPicker (via FilterPlan). Potential conflict with plans, so plans should be removed.
 	const [ onlyMyGroups, setOnlyMyGroups ] = useState(cookies["plan-filter"] ? cookies["plan-filter"].onlyMyGroups : true) //Variable for if to filter by only this user's groups.
-
+	
 	const user = useContext(AccountContext) //Needed to get the userId to get only this user's groups.
 	
 	//This function needs to be high up in the code or it will be called all the time instead of only once when you press the checkbox on the screen.
@@ -107,10 +108,13 @@ export default function PlanIndex() {
 			onlyMyGroups: onlyMyGroups
 		}
 		setCookie("plan-filter", args, { path: "/" })
+		
+		//TODO: could not refactor the part below into a function for some reason. Should be done and also cleaned up.
+		//let fetchSessionPath = getFetchSessionPath() //This filters also. For some reason GroupPicker.jsx is now needed to render the page.
 		let planIds = selectedPlans?.join("&id=") //TODO remove the questionmark. This stopped working for some reason.
 		let fetchSessionPath = "api/session/all"
 		if (selectedPlans && selectedPlans.length > 0) {
-			//Fetch only sessions connected to plans selected in FilterPlan.
+			//Fetch only sessions connected to plans (groups) selected in FilterPlan.
 			
 			//In the future if sessions can be made without a group then maybe you need to check if the 'planIds' variable is empty here.
 			if (onlyMyGroups) {
@@ -228,7 +232,7 @@ export default function PlanIndex() {
 				return response.json()
 			})
 			.then(plans => {
-				setPlans(plans) //TODO remove???
+				setPlans(plans) //TODO remove later by replacing it with groups. Right now cookies are used for selectedPlans via plans, not groups, which should probably be changed.
 				setGroups(plans) //This was added to update the newly used "group" variable which is the same as the previous "plan" variable.
 
 				const filterCookie = cookies["plan-filter"]
@@ -259,7 +263,7 @@ export default function PlanIndex() {
 		<center>
 			<title>Planering</title>
 			<h1>Planering</h1>
-			{/* TODO: Improve this later, its a hotfix because FilterPlan is bad */}
+			{/* TODO: Improve this later, it's a hotfix because FilterPlan is bad */}
 			<div style={{ marginTop: "-25px", marginLeft: "auto", width: "fit-content", transform: "translateY(100%)" }}>
 				<Link to={"/groups"}>
 					<Button width="fit-content">
@@ -274,9 +278,9 @@ export default function PlanIndex() {
 				onDatesChange={handleDatesChange}
 				chosenGroups={selectedPlans}
 				dates={dates}
-				callbackFunction={setGroups}
-				onlyMyGroups={onlyMyGroups} //Register callback for the variable here to synchronize values.
-				toggleOnlyMyGroups={toggleOnlyMyGroups} //Register callback function.
+				callbackFunctionCheckbox={setGroups} //Register callback for updating the groups when the checkbox is pressed.
+				onlyMyGroups={onlyMyGroups} //Pass in the variable to know for filtering in FilterPlan.jsx.
+				toggleOnlyMyGroups={toggleOnlyMyGroups} //Register callback function for toggling onlyMyGroups.
 			>
 			</FilterPlan>
 
