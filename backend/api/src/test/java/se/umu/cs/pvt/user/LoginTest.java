@@ -10,6 +10,8 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import se.umu.cs.pvt.role.RoleRepository;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
@@ -21,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author  Phoenix (25-04-2023)
  *          Dragon (16-05-2023)
+ *          Team Mango (Grupp 4) - 2024-05-16
  */
 @ExtendWith(MockitoExtension.class)
 public class LoginTest {
@@ -33,10 +36,13 @@ public class LoginTest {
     @Mock
     private final UserRepository userRepository = Mockito.mock(UserRepository.class);
 
+    @Mock
+    final RoleRepository roleRepository = Mockito.mock(RoleRepository.class);
+
     @BeforeEach
     void init() {
         user = new User();
-        lc = new UserController(userRepository);
+        lc = new UserController(userRepository, roleRepository);
         map = new HashMap<>();
     }
 

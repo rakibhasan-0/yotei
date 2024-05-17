@@ -1,0 +1,12 @@
+.gradingButtonContainer button {
+    border: none;
+    background: none;
+    position: absolute;
+    top: 0;
+    right: 3.6em;
+    padding: 0;
+}
+
+.gradingButtonContainer img{
+    height: 2.5em;
+}

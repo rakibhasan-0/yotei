@@ -1,0 +1,9 @@
+.searchbarWorkouts {
+	margin-bottom: 20px;
+}
+
+.filterContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
