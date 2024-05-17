@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures';
 
 /**
  * Some basic system test for testing the grading flow of the grading.
@@ -14,12 +14,6 @@ test.describe("Correct protocol grading flow tests", () => {
      * i den här kategorin
      */
     test.beforeEach(async ({page}) => {
-		await page.goto('http://localhost:3000/');
-        await page.locator('#username-input').click();
-        await page.locator('#username-input').fill('admin');
-        await page.locator('#username-input').press('Tab');
-        await page.locator('#password-input').fill('admin');
-        await page.locator('#password-input').press('Enter');
         await page.locator('#hamburger-button').click();
         await page.getByRole('button', { name: 'Gradering' }).click();
         await page.locator('._btnAddActivity_1qfu5_1').click();
