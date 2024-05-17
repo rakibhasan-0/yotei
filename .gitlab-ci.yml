@@ -78,11 +78,6 @@ test-database:
   cache:
     paths:
       - backend/.m2/repository
-  artifacts:
-    expire_in: 1 day
-    when: on_failure
-    paths:
-      - test-database.log
   script:
     - cd backend
     - mvn -q test -Dtest=TechniqueDatabaseTest &> ~/output.log
