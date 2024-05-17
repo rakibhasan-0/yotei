@@ -41,6 +41,7 @@ import styles from "./TextArea.module.css"
  * @author Team Chimera & Medusa & Team Tomato & Team Durian
  * @since 2023-04-24
  * @updated 2024-04-24 Durian fixed bug
+ * @updated 2024-05-16 Team Durian, removed error element if no error exists
  * @version 4.1
  */
 export default function TextArea({
@@ -92,7 +93,7 @@ export default function TextArea({
 				type={type}
 				maxLength={maxLength || defaultLimit}
 			/>
-			{!errorDisabled && <p className={styles.err}>{errorMessage}</p>}
+			{errorMessage && !errorDisabled && <p className={styles.err}>{errorMessage}</p>}
 		</label>
 	)
 }
