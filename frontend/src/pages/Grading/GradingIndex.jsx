@@ -152,7 +152,28 @@ export default function GradingIndex() {
 				})
 				setBelts(colorMaps)
 				setLoading(false)
+
 				createLists(gradings_data)
+
+
+				gradings_data.forEach(item => {
+
+					if(item.creatorId === userId) {
+						const isCreatorInFinished = finishedGradings.some(grading => grading.creatorId === userId)
+						const isCreatorInCurrent = currentGradings.some(grading => grading.creatorId === userId)
+
+						if (!isCreatorInFinished && !isCreatorInCurrent) {
+							if (item.step === 3) {
+								setFinishedGradings(prevState => [...prevState, item])
+							} else {
+								setCurrentGradings(prevState => [...prevState, item])
+							}
+						}
+					}
+				})
+
+        
+
 
 			} catch (error) {
 				console.error("There was a problem with the fetch operation:", error)
@@ -172,10 +193,10 @@ export default function GradingIndex() {
 								<BeltButton
 									key={index}
 									width={"100%"}
-									onClick={() => handleNavigation(grading.grading_id, grading.step, belts[grading.belt_id]?.hex)}
-									color={belts[grading.belt_id]?.hex}
+									onClick={() => handleNavigation(grading.gradingId, grading.step, belts[grading.beltId]?.hex)}
+									color={belts[grading.beltId]?.hex}
 								>
-									<h2>{`${belts[grading.belt_id]?.name} bälte`} </h2>
+									<h2>{`${belts[grading.beltId]?.name} bälte`} </h2>
 								</BeltButton>
 							))}
 
@@ -192,10 +213,10 @@ export default function GradingIndex() {
 								<BeltButton
 									key={index}
 									width={"100%"}
-									onClick={() => handleNavigation(grading.grading_id, grading.step, belts[grading.belt_id]?.hex)}
-									color={belts[grading.belt_id]?.hex}
+									onClick={() => handleNavigation(grading.gradingId, grading.step, belts[grading.beltId]?.hex)}
+									color={belts[grading.beltId]?.hex}
 								>
-									<h2>{`${belts[grading.belt_id]?.name} bälte`} </h2>
+									<h2>{`${belts[grading.beltId]?.name} bälte`} </h2>
 								</BeltButton>
 							))}
 						</div>
