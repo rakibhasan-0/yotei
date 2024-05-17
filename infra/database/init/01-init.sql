@@ -870,3 +870,4 @@ $$ LANGUAGE 'plpgsql';
 
 CREATE TRIGGER insert_tag BEFORE INSERT ON tag 
 	FOR EACH ROW EXECUTE PROCEDURE tag_to_lowercase();
+
