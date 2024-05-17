@@ -2,7 +2,7 @@
 .sc23-session-container {
     user-select: none;
 	margin-bottom: 3%;
-	padding: 10px;
+	/*padding: 10px;*/
 }
 
 .sc23-outline {
@@ -150,4 +150,10 @@
 
 .listRotate {
     rotate: 180deg;
+}
+
+.showAllCheckbox {
+	justify-self: center;
+	align-self: center;
+	margin-left: 200px;
 }

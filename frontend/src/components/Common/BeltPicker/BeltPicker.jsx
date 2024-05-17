@@ -7,6 +7,13 @@ import { AccountContext } from "../../../context"
 import {setError as setErrorToast} from "../../../utils"
 
 /**
+ * @author Chimera (Group 4)
+ * @since 2023-05-12
+ * @version 2.0
+ * @returns A new belt picker component
+ * @update 2024-05-16, Team Kiwi : Added a filter for Basic Techniques 
+ * @update 2024-05-16, Team Durian : Added so that error message element only renders when error exists
+ * 
  * Represents a belt row with text, two checkboxes and two
  * icons. 
  *  
@@ -96,11 +103,6 @@ const BeltRow = ({ belt, states, onToggle }) => {
  * })
  * <BeltPicker onToggle={onToggle} states={belts} />
  * 
- * @author Chimera (Group 4)
- * @since 2023-05-12
- * @version 2.0
- * @returns A new belt picker component
- * @update 2024-04-29, Team Kiwi : Added a filter for Basic Techniques 
  */
 export default function BeltPicker({ id, states, onToggle, centered, onClearBelts, filterWhiteBelt, filterBasicTechniques, errorMessage }) {
 	const { token } = useContext(AccountContext)
@@ -165,7 +167,7 @@ export default function BeltPicker({ id, states, onToggle, centered, onClearBelt
 				}
 			</DropdownComponent>
 			
-			<p className={styles.err}>{errorMessage}</p>
+			{errorMessage && <p className={styles.err}>{errorMessage}</p>}
 		</>
 	)
 }

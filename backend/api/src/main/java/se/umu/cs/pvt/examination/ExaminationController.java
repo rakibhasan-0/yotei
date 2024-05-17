@@ -270,7 +270,6 @@ public class ExaminationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
     /**
      * Returns all examination comments.
      * @return All examination comments. 
@@ -281,6 +280,48 @@ public class ExaminationController {
 
         return new ResponseEntity<>(examinationCommentRepository.findAll(), HttpStatus.OK);
     }
+
+    /**
+     * Returns a specific comment based on examinee_id and techniqueName.
+     * @param examinee_id examineeId of the desired examinee.
+     * @param techniqueName techniqueName of the desired technique.
+     * @return HTTP-status code.
+     */
+    @GetMapping("/comment/examinee/{examinee_id}")
+    public ResponseEntity<List<ExaminationComment>> getExamineeComment(@PathVariable("examinee_id") long examinee_id, @RequestParam(name = "technique_name") String techniqueName ) {
+        try {
+            if (techniqueName == null) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            } if (examinationCommentRepository.findByExamineeIdAndTechniqueName(examinee_id, techniqueName).isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(examinationCommentRepository.findByExamineeIdAndTechniqueName(examinee_id, techniqueName), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /**
+     * Returns a specific comment based on examinee_pair_id and techniqueName.
+     * @param examineePairId examinee pair id of the desired examinee pair.
+     * @param techniqueName techniqueName of the desired technique.
+     * @return HTTP-status code.
+     */
+    @GetMapping("/comment/pair/{examinee_pair_id}")
+    public ResponseEntity<List<ExaminationComment>> getExamineePairComment(@PathVariable("examinee_pair_id") long examineePairId, @RequestParam(name = "technique_name") String techniqueName ) {
+        try {
+            if (techniqueName == null) {
+                return new ResponseEntity<>(null);
+            }
+             if (examinationCommentRepository.findByExamineePairIdAndTechniqueName(examineePairId, techniqueName).isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(examinationCommentRepository.findByExamineePairIdAndTechniqueName(examineePairId, techniqueName), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }   
+    }
+
     /**
      * Creates a examination result.
      * @param examination_result Object mapped examimnation result from request body.
