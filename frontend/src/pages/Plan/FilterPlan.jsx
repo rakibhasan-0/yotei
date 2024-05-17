@@ -29,9 +29,7 @@ import CheckBox from "../../components/Common/CheckBox/CheckBox"
 * 		   2024-05-17: Fixed the filtering and refactored code slightly.
 */
 export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, onDatesChange, callbackFunctionCheckbox, onlyMyGroups, toggleOnlyMyGroups}) {
-
-	const [checkBoxIsEnabled] = useState(true) //FEATURE TOGGLE
-
+	
 	const onToggle = (checked, chosenGroup) => setChosenGroups(prev => {
 		if(prev) {
 			if(!checked) {
@@ -70,14 +68,11 @@ export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, o
 				</div>
 
 				{/* Checkbox for only showing this user's groups. */}
-				{ checkBoxIsEnabled && ( //FEATURE TOGGLE
-					<div className={styles.checkBoxSpace} >
-						<CheckBox id={"seeOnlyMyGroups"} onClick={() => { toggleOnlyMyGroups()}}
-							label={"Visa bara tillfällen för mina grupper"} checked={onlyMyGroups} />
-						{/* The toggleOnlyMyGroups() call here toggles a boolean variable stored in PlanIndex.jsx. */}
-					</div>
-				)
-				}
+				<div className={styles.checkBoxSpace} >
+					<CheckBox id={"seeOnlyMyGroups"} onClick={() => { toggleOnlyMyGroups()}}
+						label={"Visa bara tillfällen för mina grupper"} checked={onlyMyGroups} />
+					{/* The toggleOnlyMyGroups() call here toggles a boolean variable stored in PlanIndex.jsx. */}
+				</div>
 
 				<GroupPicker id={42} onToggle={(c, g) => {onToggle(c, g)}} states={chosenGroups} onlyMyGroups={onlyMyGroups} callbackFunctionCheckbox={callbackFunctionCheckbox}/>
 
