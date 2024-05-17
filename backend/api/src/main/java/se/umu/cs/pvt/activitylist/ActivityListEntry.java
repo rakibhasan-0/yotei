@@ -104,7 +104,7 @@ public class ActivityListEntry implements Serializable {
         return exercise;
     }
 
-    public int getDuration() {
+    public Integer getDuration() {
         return duration;
     }
     public void setId(Long id) {
@@ -131,7 +131,7 @@ public class ActivityListEntry implements Serializable {
         this.exercise = exercise;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(Integer duration) {
         this.duration = duration;
     }
 

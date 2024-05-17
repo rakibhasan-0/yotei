@@ -37,6 +37,7 @@ import se.umu.cs.pvt.user.JWTUtil;
 class EntryResponse {
     private Technique technique;
     private Exercise exercise;
+    private Integer duration;
 
     public Technique getTechnique() {
         return technique;
@@ -46,12 +47,20 @@ class EntryResponse {
         return exercise;
     }
 
+    public Integer getDuration() {
+        return duration;
+    }
+
     public void setTechnique(Technique technique) {
         this.technique = technique;
     }
 
     public void setExercise(Exercise exercise) {
         this.exercise = exercise;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
     }
 
 }
@@ -270,6 +279,9 @@ public class ActivityListEntryController {
                             if ((exercise = exerciseRepository.findById(entry.getExerciseId())).isPresent()) {
                                 entryResponse.setExercise(exercise.get());
                             }
+                        }
+                        if (entry.getDuration() != null) {
+                            entryResponse.setDuration(entry.getDuration());
                         }
 
                         response.add(entryResponse);
