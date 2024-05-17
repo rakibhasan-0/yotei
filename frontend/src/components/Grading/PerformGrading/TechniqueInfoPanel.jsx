@@ -104,12 +104,12 @@ export default function TechniqueInfoPanel( {
 
 	return (
 		<div style={styles}>
-			<fieldset role="fieldsetBelt" style={{ height: "30px", width: "100%", marginBottom: "10px", backgroundColor: beltColor}}>
+			<fieldset role="fieldsetBelt" style={{ height: "30px", width: "100%", marginBottom: "3px", backgroundColor: beltColor}}>
 				<div>
 					<h2 className={styles.mainCategoryTitle} role="mainCategoryTitle">{mainCategoryTitle}</h2>
 				</div>
 			</fieldset>
-			<fieldset style={{ height: "auto", width: "100%", marginBottom: "5px" }}>
+			<fieldset style={{ height: "auto", width: "100%", marginBottom: "0px" , paddingBottom: "0px"}}>
 				<div>
 					<h3 className={styles.categoryTitle} role="categoryTitle">{categoryTitle}</h3>
 				</div>
