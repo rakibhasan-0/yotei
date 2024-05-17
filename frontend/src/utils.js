@@ -106,6 +106,7 @@ export function setInfo(msg, name) {
 export const HTTP_STATUS_CODES = {
 	OK: 200,
 	SUCCESS: 201,
+	NO_CONTENT: 204,
 	BAD_REQUEST: 400,
 	NOT_FOUND: 404,
 	CONFLICT: 409,
@@ -114,6 +115,20 @@ export const HTTP_STATUS_CODES = {
 	TEAPOT: 418,
 	INTERNAL_SERVER_ERROR: 500,
 	FORBIDDEN: 403,
+}
+
+export const USER_PERMISSION_CODES = {
+	ADMIN_RIGHTS: 1,
+	SESSION_OWN: 2, //Edit your own sessions.
+	SESSION_ALL: 3, //Edit all sessions.
+	PLAN_OWN: 4,
+	PLAN_ALL: 5,
+	WORKOUT_OWN: 6,
+	WORKOUT_ALL: 7,
+	ACTIVITY_OWN: 8,
+	ACTIVITY_ALL: 9,
+	GRADING_OWN: 10,
+	GRADING_ALL: 11,
 }
 
 /**
