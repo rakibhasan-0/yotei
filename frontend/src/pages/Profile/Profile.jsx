@@ -14,8 +14,7 @@ import Divider from "../../components/Common/Divider/Divider"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import ProfileListItem from "./ProfileListItem"
 import { Lock, Unlock, Eye } from "react-bootstrap-icons"
-import starFill from "../../../assets/images/starFill.svg"
-
+//import starFill from "../../../assets/images/starFill.svg"
 
 /**
  * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3)
@@ -39,8 +38,8 @@ export default function Profile() {
 	const [loading, setIsLoading] = useState(true)
 	const [newUsername, setNewUsername] = useState("")
 	const [usernamePassword, setUsernamePassword] = useState("")
-	const [passwordButtonState,setPasswordButtonDisabled] = useState(false)
-	const [usernameButtonState,setUsernameButtonDisabled] = useState(false)
+	const [passwordButtonState, setPasswordButtonDisabled] = useState(false)
+	const [usernameButtonState, setUsernameButtonDisabled] = useState(false)
 
 	const [fetchedLists, setFetchedLists] = useState(false)
 	const [lists, setLists] = useState([])
@@ -49,12 +48,11 @@ export default function Profile() {
 	//TODO feature toggle
 	const [isListsEnabled] = useState(false)
 
-
 	const workout = {
 		id: -1,
 		name: "Favoritpass",
 		size: 7,
-		author:{
+		author: {
 			userId: 1,
 			username: "Admin",
 		},
@@ -126,7 +124,6 @@ export default function Profile() {
 		)
 	}
 
-
 	/**
 	 * Fetches lists when the component is mounted or when the
 	 * search text are changed.
@@ -136,7 +133,6 @@ export default function Profile() {
 		setLists([workout])
 		fetchingList()
 	}, [searchText])
-
 
 	useEffect(() => {
 		getWorkouts(
@@ -166,9 +162,7 @@ export default function Profile() {
 		} else {
 			setUsernameButtonDisabled(false)
 		}
-	
 	}, [password, newPassword, verifyNewPassword, newUsername, usernamePassword])
-
 
 	/* Account management */
 
@@ -206,14 +200,14 @@ export default function Profile() {
 		const requestOptions = {
 			headers: { "Content-Type": "application/json", token },
 			method: "PUT",
-			body: JSON.stringify({newUsername: newUsername, password: usernamePassword, id: userId})
+			body: JSON.stringify({ newUsername: newUsername, password: usernamePassword, id: userId }),
 		}
 		const response = await fetch("/api/users/name", requestOptions)
 		if (response.status === 400) {
 			return setWrongUsernamePassword("Lösenordet stämmer inte")
 		}
 		if (response.status === 406) {
-			return setErrorToast("Användarnamnet finns redan")	
+			return setErrorToast("Användarnamnet finns redan")
 		}
 		if (!response.ok) {
 			return setErrorToast("Ett okänt fel inträffade på servern")
@@ -222,21 +216,21 @@ export default function Profile() {
 	}
 
 	const getIconFromState = (state) => {
-		console.log("authorId:"+state.author.userId+"\nuserId:"+userId)
-		if(state.id==-1){
+		console.log("authorId:" + state.author.userId + "\nuserId:" + userId)
+		if (state.id == -1) {
 			console.log("Favourite!")
 			//Här borde jag fixa en route till favoritsidans grej :)
-			return <img src={starFill} />
+			return <Eye />
 		}
-		if(state.hidden===true && state.author.userId==userId){
+		if (state.hidden === true && state.author.userId == userId) {
 			console.log("Locked")
 			return <Lock size={36} />
 		}
-		if(state.hidden===true && state.author.userId!=userId){
+		if (state.hidden === true && state.author.userId != userId) {
 			console.log("Shared")
 			return <Unlock size={36} />
 		}
-		if(state.hidden===false && state.author.userId==userId){
+		if (state.hidden === false && state.author.userId == userId) {
 			console.log("Public")
 			return <Eye size={36} />
 		}
@@ -244,45 +238,50 @@ export default function Profile() {
 		return <Lock />
 	}
 
-
 	/**
 	 * Fetches the lists from the backend, either from cache or by a new API-call.
 	 */
 	function fetchingList() {
-
 		const args = {
-			text: searchText
+			text: searchText,
 		}
 
 		getLists(args, token, map, mapActions, (result) => {
 			if (result.error) return
 
-			const lists = result.map(item => ({ id: item.id, name: item.name, size: item.size, author: item.author, hidden: item.hidden, isShared: item.isShared}))
+			const lists = result.map((item) => ({
+				id: item.id,
+				name: item.name,
+				size: item.size,
+				author: item.author,
+				hidden: item.hidden,
+				isShared: item.isShared,
+			}))
 
 			setLists([workout, ...lists])
 			setFetchedLists(true)
 		})
 	}
 
-	console.log("Console.log so that linter doesnt cause problems: "+fetchedLists)
+	console.log("Console.log so that linter doesnt cause problems: " + fetchedLists)
 
 	return (
 		<Tabs defaultActiveKey={"MyWorkouts"} className={style.tabs}>
-			{isListsEnabled && (<Tab eventKey={"FavoriteWorkouts"} title={"Mina listor"} className={style.tab}>
-				<SearchBar
-					id="searchbar-workouts-1"
-					placeholder="Sök efter pass"
-					text={searchText}
-					onChange={setSearchText}
-				/>
-				{loading ? (
-					<Spinner />
-				) : (
-					lists.map((list) => (
-						<ProfileListItem key={list.id} item={list} Icon={getIconFromState(list)} />
-					))
-				)}
-			</Tab> )}
+			{isListsEnabled && (
+				<Tab eventKey={"FavoriteWorkouts"} title={"Mina listor"} className={style.tab}>
+					<SearchBar
+						id="searchbar-workouts-1"
+						placeholder="Sök efter pass"
+						text={searchText}
+						onChange={setSearchText}
+					/>
+					{loading ? (
+						<Spinner />
+					) : (
+						lists.map((list) => <ProfileListItem key={list.id} item={list} Icon={getIconFromState(list)} />)
+					)}
+				</Tab>
+			)}
 			<Tab eventKey={"MyWorkouts"} title={"Mina Pass"} className={style.tab}>
 				<SearchBar
 					id="searchbar-workouts-2"
@@ -297,22 +296,80 @@ export default function Profile() {
 					<Divider option={"h2_center"} title={"Lösenord"} />
 				</div>
 				<title>Min sida</title>
-				<InputTextFieldBorderLabel errorMessage={wrongPassword} onChange={e => {setPassword(e.target.value)}} id="current-password" type="text" label="Nuvarande lösenord" />
-				<div className='mb-2' />
-				<InputTextFieldBorderLabel onChange={e => {setNewPassword(e.target.value)}} id="new-password" type="password" label="Nytt lösenord" />
-				<div className='mb-2' />
-				<InputTextFieldBorderLabel errorMessage={missMatchPassword} onChange={e => {setVerifyNewPassword(e.target.value)}} id="verify-password" type="password" label="Bekräfta lösenord" />
-				<div className='mb-2' />
-				<Button id ={"change-password-button"} className="btn btn-primary" onClick={changePassword} disabled={passwordButtonState} width={"100%"}>Ändra Lösenord</Button>
-				<div className={style.divider}><Divider option={"h2_center"} title={"Användarnamn"} /></div>
-				<InputTextFieldBorderLabel onChange={e => {setNewUsername(e.target.value)}} id="username" type="text" label="Nytt användarnamn"/>
-				<div className='mb-2' />
-				<InputTextFieldBorderLabel errorMessage={wrongUsernamePassword} onChange={e => {setUsernamePassword(e.target.value)}} id="change-username-password" type="password" label="Lösenord" />
-				<div className='mb-2' />
-				<Button id = {"change-username-button"} className = "btn btn-primary" onClick = {changeUsername} disabled={usernameButtonState} width={"100%"}>Ändra Användarnamn</Button>
-				<Divider option={"h2_center"}/>
+				<InputTextFieldBorderLabel
+					errorMessage={wrongPassword}
+					onChange={(e) => {
+						setPassword(e.target.value)
+					}}
+					id="current-password"
+					type="text"
+					label="Nuvarande lösenord"
+				/>
+				<div className="mb-2" />
+				<InputTextFieldBorderLabel
+					onChange={(e) => {
+						setNewPassword(e.target.value)
+					}}
+					id="new-password"
+					type="password"
+					label="Nytt lösenord"
+				/>
+				<div className="mb-2" />
+				<InputTextFieldBorderLabel
+					errorMessage={missMatchPassword}
+					onChange={(e) => {
+						setVerifyNewPassword(e.target.value)
+					}}
+					id="verify-password"
+					type="password"
+					label="Bekräfta lösenord"
+				/>
+				<div className="mb-2" />
+				<Button
+					id={"change-password-button"}
+					className="btn btn-primary"
+					onClick={changePassword}
+					disabled={passwordButtonState}
+					width={"100%"}
+				>
+					Ändra Lösenord
+				</Button>
+				<div className={style.divider}>
+					<Divider option={"h2_center"} title={"Användarnamn"} />
+				</div>
+				<InputTextFieldBorderLabel
+					onChange={(e) => {
+						setNewUsername(e.target.value)
+					}}
+					id="username"
+					type="text"
+					label="Nytt användarnamn"
+				/>
+				<div className="mb-2" />
+				<InputTextFieldBorderLabel
+					errorMessage={wrongUsernamePassword}
+					onChange={(e) => {
+						setUsernamePassword(e.target.value)
+					}}
+					id="change-username-password"
+					type="password"
+					label="Lösenord"
+				/>
+				<div className="mb-2" />
+				<Button
+					id={"change-username-button"}
+					className="btn btn-primary"
+					onClick={changeUsername}
+					disabled={usernameButtonState}
+					width={"100%"}
+				>
+					Ändra Användarnamn
+				</Button>
+				<Divider option={"h2_center"} />
 				<div>
-					<Button id={"logoutButton"} onClick={logOut} width={"100%"} className="btn btn-primary">Logga ut</Button>
+					<Button id={"logoutButton"} onClick={logOut} width={"100%"} className="btn btn-primary">
+						Logga ut
+					</Button>
 				</div>
 				<br />
 			</Tab>
