@@ -79,7 +79,7 @@ test-database:
     paths:
       - backend/.m2/repository
   script:
-    - cd backend
+    - cd backend/api
     - mvn -q test -Dtest=TechniqueDatabaseTest &> ~/output.log
   
 test-frontend:
