@@ -20,6 +20,8 @@ import com.fasterxml.jackson.core.JsonParser;
 
 import se.umu.cs.pvt.technique.Technique;
 
+import static org.mockito.ArgumentMatchers.anySet;
+
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -41,6 +43,7 @@ public class ExportGradingPdf {
     private List<Examinee> examinees;
     private Grading grading;
     private List<ExaminationResult> examinationResults;
+    private List<ExaminationComment> examinationComments;
     private final int totalNumColumns;
     private final int numPages;
     private PDDocument document;
@@ -54,10 +57,14 @@ public class ExportGradingPdf {
                                             och då skapar vi en ny sida */
                         TABLE_START_X_POS = 55, //behöver bättre namn
                         CELL_HEIGHT = 30,
-                        CELL_WIDTH = 100;
+                        CELL_WIDTH = 100,
+                        MAX_NAME_LENGTH = 30,
+                        MAX_TECHNIQUE_NAME_LENGTH = 63;
 
-    public ExportGradingPdf(Grading grading, List<Examinee> examinees) throws IOException {
+    public ExportGradingPdf(Grading grading, List<Examinee> examinees, List<ExaminationResult> examinationResults, List<ExaminationComment> examinationComments) throws IOException {
         this.examinees = examinees;
+        this.examinationResults = examinationResults;
+        this.examinationComments = examinationComments;
         this.totalNumColumns = examinees.size() + 1;
         this.numPages = (int)Math.ceil((double)examinees.size() / MAX_NUM_COLUMNS); //byt namn på numPages
         document = new PDDocument();
@@ -108,7 +115,7 @@ public class ExportGradingPdf {
         int numExamineesOnPage = examinees.size() - (onPage * MAX_NUM_COLUMNS);
         if (numExamineesOnPage > MAX_NUM_COLUMNS)
             numExamineesOnPage = MAX_NUM_COLUMNS;
-        
+            
         //Calculate where starting x position will be depending on number of examinees on the page
         int tableStartXPos = (pageWidth/2) - ((numExamineesOnPage + 1)* CELL_WIDTH + 30)/2;
 
@@ -135,14 +142,14 @@ public class ExportGradingPdf {
         for(int j = (onPage*MAX_NUM_COLUMNS); j<(onPage*MAX_NUM_COLUMNS)+MAX_NUM_COLUMNS && j < examinees.size();j++){
             contentStream.addRect(initX,initY,CELL_WIDTH,-CELL_HEIGHT);
 
-            writeToCell(initX, initY, contentStream, shortenString(examinees.get(j).getName(), 30), font);
+            writeToCell(initX, initY, contentStream, shortenString(examinees.get(j).getName(), MAX_NAME_LENGTH), font);
 
             initX+=CELL_WIDTH;
             count++;
         }
         initX = tableStartXPos;
-        initY -=CELL_HEIGHT;
-    
+        initY -= CELL_HEIGHT;
+        //Programing warcrimes incomming
         for(int i = 0; i < examinationTechniqueCategories.size(); i++) {
                 
             contentStream.addRect(initX, initY, CELL_WIDTH*count+30, -CELL_HEIGHT);
@@ -153,7 +160,7 @@ public class ExportGradingPdf {
                 contentStream.addRect(initX, initY, CELL_WIDTH+30, -CELL_HEIGHT);
                 
                 String techniqueName = examinationTechniqueCategories.get(i).getTechniques().get(j).toString();
-                shortenString(techniqueName, 63);
+                techniqueName = shortenString(techniqueName, MAX_TECHNIQUE_NAME_LENGTH);
 
                 //Splits the string at the nearest space char and writes the rest on the next line in the cell
                 int splitOnIndex = 35;
@@ -167,14 +174,32 @@ public class ExportGradingPdf {
                     writeToCell(initX, initY, contentStream, techniqueName.substring(splitOnIndex, techniqueName.length()), font);
                 } 
                 else  
-                    writeToCell(initX, initY, contentStream, examinationTechniqueCategories.get(i).getTechniques().get(j).toString(), font);
+                    writeToCell(initX, initY, contentStream, techniqueName, font);
                 
 
                 initX+=CELL_WIDTH+30;
 
                 for (int k = 0 ; k < count-1 ; k++) {
                     contentStream.addRect(initX, initY, CELL_WIDTH, -CELL_HEIGHT);
-                    writeToCell(initX, initY, contentStream, "G", font); // gör om detta till en sträng som innehåller G eller U och följs med : Kommentar som rymms...
+                    String grade = "";
+                    for (int l = 0 ; l < examinationResults.size() ; l++) {
+                        if ((examinationTechniqueCategories.get(i).getTechniques().get(j).toString()).equals(examinationResults.get(l).getTechnique_name())) {
+                            if (examinees.get(k).getExaminee_id() == examinationResults.get(l).getExaminee_id()) {
+                                if (examinationResults.get(l).getPass()) 
+                                    grade += "G";
+                                else
+                                    grade += "U";
+                            }
+                        }
+                    }
+
+                    for (int l = 0; l < examinationComments.size() ; l++) {
+                        if ((examinationTechniqueCategories.get(i).getTechniques().get(j).toString()).equals(examinationComments.get(l).getTechniqueName())) {
+                            if (examinees.get(k).getExaminee_id() == examinationComments.get(l).getExamineeId()) 
+                                grade += " - " + examinationComments.get(l).getComment();
+                        }
+                    }
+                    writeToCell(initX, initY, contentStream, grade, font); // gör om detta till en sträng som innehåller G eller U och följs med : Kommentar som rymms...
                     initX+=CELL_WIDTH;
                 }
 
@@ -198,7 +223,7 @@ public class ExportGradingPdf {
                     for(int j2 = (onPage*MAX_NUM_COLUMNS); j2<(onPage*MAX_NUM_COLUMNS)+MAX_NUM_COLUMNS && j2 < examinees.size() ; j2++){
                         contentStream.addRect(initX,initY,CELL_WIDTH,-CELL_HEIGHT);
         
-                        writeToCell(initX, initY, contentStream, shortenString(examinees.get(j2).getName(), 30), font);
+                        writeToCell(initX, initY, contentStream, shortenString(examinees.get(j2).getName(), MAX_NAME_LENGTH), font);
         
                         initX+=CELL_WIDTH;
                     }
@@ -314,7 +339,8 @@ public class ExportGradingPdf {
         for(int i = 0; i < numPages; i++)  
             createTablePage(i);
 
-        createGroupCommentPage();
+        createExaminationCommentPage();
+        //createGroupCommentPage();
         createPairCommentPage();
         createExamineeCommentPage();
 
@@ -327,7 +353,7 @@ public class ExportGradingPdf {
      * 
      * @throws IOException
      */
-    private void createGroupCommentPage() throws IOException {
+    private void createExaminationCommentPage() throws IOException {
         PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
         document.addPage(page);
         
@@ -575,7 +601,7 @@ public class ExportGradingPdf {
             string = string.substring(0, maxLength - 3);
             string = string + "...";
         }
-        System.out.println(string);
+        
         return string;
     }
 }
