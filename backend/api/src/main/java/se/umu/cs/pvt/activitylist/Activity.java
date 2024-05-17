@@ -12,9 +12,9 @@ import se.umu.cs.pvt.technique.Technique;
 /**
  * Dto for an activity, either an exercise or a technique.
  * 
- * @author Team Tomato
+ * @author Team Tomato, updated 2024-05-17
  * @since 2024-05-12
- * @version 1.0
+ * @version 1.1
  */
 public class Activity {
     private String type;

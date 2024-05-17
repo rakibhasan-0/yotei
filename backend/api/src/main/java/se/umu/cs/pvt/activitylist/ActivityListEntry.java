@@ -21,7 +21,7 @@ import se.umu.cs.pvt.technique.Technique;
  * ActivityListEntryController - Controller for activity list entry
  * ActivityListEntryRepository - JPARepository interface
  * 
- * @author Team Tomato
+ * @author Team Tomato, updated 2024-05-17
  * @since 2024-05-16
  * @version 1.0
  */

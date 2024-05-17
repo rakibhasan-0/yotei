@@ -30,9 +30,9 @@ import se.umu.cs.pvt.user.JWTUtil;
  * 
  * Used as response for retrieval of entries.
  * 
- * @author Team Tomato
+ * @author Team Tomato, updated 2024-05-17
  * @since 2024-05-16
- * @version 1.0
+ * @version 1.1
  */
 class EntryResponse {
     private Technique technique;
@@ -69,7 +69,8 @@ class EntryResponse {
  * ActivityListEntry API for adding and removing entries to/from activity lists.
  * 
  * @author Team Tomato
- * @since 2024-05-08
+ * @since 2024-05-17
+ * 
  */
 @RestController
 @CrossOrigin

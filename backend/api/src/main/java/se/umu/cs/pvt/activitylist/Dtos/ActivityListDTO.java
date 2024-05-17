@@ -13,9 +13,9 @@ import se.umu.cs.pvt.activitylist.ActivityListEntry;
 /**
  * Dto for an activity list that holds complete information about the list.
  * 
- * @author Team Tomato
+ * @author Team Tomato, updated 2024-05-17
  * @since 2024-05-12
- * @version 1.0
+ * @version 1.1
  */
 public class ActivityListDTO {
     private Long id;

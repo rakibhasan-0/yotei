@@ -24,9 +24,9 @@ import se.umu.cs.pvt.workout.UserShortRepository;
 /**
  * ActivityListService used in ActivityListController
  * 
- * @author Team Tomato, updated 2024-05-16
+ * @author Team Tomato, updated 2024-05-17
  * @since 2024-05-12
- * @version 1.0
+ * @version 1.1
  */
 @Component
 public class ActivityListService implements IActivityListService {
