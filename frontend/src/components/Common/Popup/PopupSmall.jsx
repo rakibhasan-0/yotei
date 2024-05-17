@@ -38,74 +38,74 @@ import Button from "../Button/Button"
 */
 export default function PopupSmall({ title, id, isOpen, setIsOpen, children, isNested, style, onClose, zIndex, direction }) {
 
-    // Synchronize react state with CSS-styling in browser
-    useEffect(() => {
-        // The body scroll should not be disabled when a nested popup is closed.
-        // That should be done when a non-nested popup is closed.
-        if (isNested) return
-        // If it is nested, these things are already applied.
-        document.body.style.overflowY = isOpen ? "hidden" : "visible"
-        document.body.style.touchAction = isOpen ? "none" : "auto"
-        document.body.style.height = isOpen ? "100vh" : "auto"
-    }, [isNested, isOpen])
+	// Synchronize react state with CSS-styling in browser
+	useEffect(() => {
+		// The body scroll should not be disabled when a nested popup is closed.
+		// That should be done when a non-nested popup is closed.
+		if (isNested) return
+		// If it is nested, these things are already applied.
+		document.body.style.overflowY = isOpen ? "hidden" : "visible"
+		document.body.style.touchAction = isOpen ? "none" : "auto"
+		document.body.style.height = isOpen ? "100vh" : "auto"
+	}, [isNested, isOpen])
 
-    if (!isOpen) return
+	if (!isOpen) return
 
-    return (
-        <>
-            <div className={styles.backdrop} style={{ zIndex: zIndex ? zIndex - 10 : 90 }} onClick={() => {
-                setIsOpen(false)
-                if (onClose) onClose()
-            }}
-            />
-            <div
-                className={styles.container}
-                id={id}
-                style={style}
-            >
-                <div className={styles.topbar}>
-                    {title && <Divider title={title} option="h1_center" />}
-                    <button
-                        className={styles.closebutton}
-                        onClick={() => {
-                            setIsOpen(false)
-                            if (onClose) onClose()
+	return (
+		<>
+			<div className={styles.backdrop} style={{ zIndex: zIndex ? zIndex - 10 : 90 }} onClick={() => {
+				setIsOpen(false)
+				if (onClose) onClose()
+			}}
+			/>
+			<div
+				className={styles.container}
+				id={id}
+				style={style}
+			>
+				<div className={styles.topbar}>
+					{title && <Divider title={title} option="h1_center" />}
+					<button
+						className={styles.closebutton}
+						onClick={() => {
+							setIsOpen(false)
+							if (onClose) onClose()
 
-                        }}
-                    >
-                        <X width={44} height={44} color="black" />
-                    </button>
-                </div>
-                <div className={styles.mainText}>
-                    {children}
-                </div>
+						}}
+					>
+						<X width={44} height={44} color="black" />
+					</button>
+				</div>
+				<div className={styles.mainText}>
+					{children}
+				</div>
 
-                <div className={styles.buttonContainer}>
-                    <Button
-                        id="continue-button"
-                        outlined={false}
-                        width="100%"
-                        onClick={direction}
-                    >
-                        <p>Ja</p>
-                    </Button>
+				<div className={styles.buttonContainer}>
+					<Button
+						id="continue-button"
+						outlined={false}
+						width="100%"
+						onClick={direction}
+					>
+						<p>Ja</p>
+					</Button>
 
-                    <Button
-                        id="continue-button"
-                        outlined={true}
-                        width="100%"
-                        onClick={() => {
-                            setIsOpen(false)
-                            if (onClose) onClose()
+					<Button
+						id="continue-button"
+						outlined={true}
+						width="100%"
+						onClick={() => {
+							setIsOpen(false)
+							if (onClose) onClose()
 
-                        }}
-                    >
-                        <p>Nej</p>
-                    </Button>
-                </div>
-            </div>
-        </>
-    )
+						}}
+					>
+						<p>Nej</p>
+					</Button>
+				</div>
+			</div>
+		</>
+	)
 }
 
 
