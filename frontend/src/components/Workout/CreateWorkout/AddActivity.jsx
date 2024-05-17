@@ -640,6 +640,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 																item={item.name}
 																key={item.id}
 																index={key}
+																path={item.path}
 															/>
 														) : null
 													))}
