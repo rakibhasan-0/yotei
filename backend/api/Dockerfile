@@ -8,7 +8,7 @@ COPY . ./
 
 EXPOSE 8085
 
-RUN mvn clean
-RUN mvn -q install -pl "\!org.testcontainers:testcontainers, \!org.testcontainers:postgresql"
+RUN mvn clean -pl \!org.testcontainers:testcontainers -pl \!org.testcontainers:postgresql
+RUN mvn -q install -pl \!org.testcontainers:testcontainers -pl \!org.testcontainers:postgresql
 
 CMD ["mvn", "spring-boot:run"]
