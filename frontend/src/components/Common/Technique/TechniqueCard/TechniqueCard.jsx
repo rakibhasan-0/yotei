@@ -40,6 +40,7 @@ function TechniqueCard({ technique, checkBox, id}) {
 		localStorage.setItem("stored_technique", id)
 	}
 
+
 	return (
 		<div 
 			//If the technique count is 0, the card will be transparent otherwise
@@ -84,6 +85,7 @@ function TechniqueCard({ technique, checkBox, id}) {
 }
 
 function constructColor(technique) {
+
 	return (
 		<div className={styles["technique-card-belt-color-container"]}>
 			{
@@ -125,6 +127,7 @@ function constructDefaultBelt(color) {
 }
 
 function constructAdultBelt(belt, beltLength, index) {
+
 	if (belt.belt_name.toLowerCase().includes("dan")) {
 		const num = parseInt(belt.belt_name.split(" ")[0])
 		return (
