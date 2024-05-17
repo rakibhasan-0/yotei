@@ -3,8 +3,9 @@ import {React} from "react"
 import {render, screen, configure} from "@testing-library/react"
 import "@testing-library/jest-dom"
 import TagInput from "../../../../components/Common/Tag/TagInput"
-//import AddTagPopup from "../../../../components/Common/Tag/AddTagPopup"
-//import { fireEvent } from "@testing-library/react"
+import AddTagPopup from "../../../../components/Common/Tag/AddTagPopup"
+import { fireEvent } from "@testing-library/react"
+import { MemoryRouter } from "react-router"
 
 /**
  * Test for the TagInput component.
@@ -32,20 +33,25 @@ test("Tag: Tag should be visible", async() => {
 	expect(tag).toBeVisible()
 })
 
-/*test("Tag: Should show popup onclick", async() => {
+test("Tag: Should show popup onclick", async() => {
 	// ARRANGE
 	const addedTags = [{id:1,name:"Tag1"}]
 
 	// ACT
-	const {getByText} =  render(<div><TagInput onClick={
-		()=> <AddTagPopup id ="addTagPopupDiv" addedTags={addedTags}/>} id ="tagChooser" addedTags={addedTags}></TagInput></div>)
+	const {getByText} =  render(<MemoryRouter>
+		<div><TagInput onClick={
+			()=> <AddTagPopup id ="addTagPopupDiv" addedTags={addedTags}/>} id ="tagChooser" addedTags={addedTags}></TagInput></div>
+	</MemoryRouter>)
+		
 
 	// ACT
 	const button = getByText("Hantera tagg")
 
 	fireEvent.click(button)
 
+	expect(button).toBeVisible()
+
 	// ASSERT
-	const popup = getByText("Tillagda taggar")
-	expect(popup).toBeVisible()
-})*/
+	const popup = getByText("Tag1")
+	expect(popup).toBeInTheDocument()
+})
