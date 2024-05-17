@@ -17,6 +17,19 @@ export const AddToListPopupContent = () => {
 	const { token } = useContext(AccountContext)
 	const [map, mapActions] = useMap()
 
+	const [selectedLists, setSelectedLists] = useState([]);
+
+    const handleCheck = (id) => {
+        setSelectedLists(prevIds => {
+			console.log(prevIds)
+            if (prevIds.includes(id)) {
+                return prevIds.filter(itemId => itemId !== id);
+            } else {
+                return [...prevIds, id];
+            }
+        });
+    };
+
 
 
 
@@ -52,6 +65,17 @@ export const AddToListPopupContent = () => {
 		})
 	}
 
+
+	/**
+	 * POST request to save the activity to the selected lists.
+	 */
+	function saveActivityToLists() {
+		console.log(selectedLists);
+	} 
+
+
+
+
 	return isLoading ? (
 		<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
     		<Spinner />
@@ -70,19 +94,21 @@ export const AddToListPopupContent = () => {
 				onChange={setSearchListText}
 			/>
 			<InfiniteScrollComponent>
-				{lists.map((item, index) => (
-					<AddToListItem
-						name={item.name}
-						numberOfActivities={item.numberOfActivities}
+    			{lists.map((item, index) => (
+        			<AddToListItem
+           				name={item.name}
+            			numberOfActivities={item.numberOfActivities}
 						author={item.author}
 						key={index}
+						onCheck={handleCheck}
+						id={item.id}
 					/>
 				))}
 			</InfiniteScrollComponent>
 
 			<div className="fixed-bottom w-100 bg-white pt-2">
 				<div className="mb-4">
-					<Button>Spara</Button>
+					<Button onClick={saveActivityToLists}>Spara</Button>
 				</div>
 			</div>
 		</div>
