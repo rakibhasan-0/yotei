@@ -7,11 +7,10 @@ import { ChevronDown, ChevronRight } from "react-bootstrap-icons"
  * A component for sorting items based on selected options.
  *
  * @component
- * @param {Object} props - The component props.
- * @param {string} props.id - The unique identifier for the sorter.
- * @param {boolean} props.selected - Indicates if the sorter is selected.
- * @param {Function} props.onSortChange - The callback function to handle sort changes.
- * @param {Array} props.options - The array of sorting options.
+ * @param {string} id - The unique identifier for the sorter.
+ * @param {boolean} selected - Indicates if the sorter is selected.
+ * @param {Function} onSortChange - The callback function to handle sort changes.
+ * @param {Array} options - The array of sorting options.
  * @returns {JSX.Element} The NewSorter component.
  * 
  * @author Tomato (Grupp 6)
