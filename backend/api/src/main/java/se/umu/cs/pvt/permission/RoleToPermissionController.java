@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import se.umu.cs.pvt.role.RoleRepository;
 
 /**
@@ -44,8 +46,9 @@ public class RoleToPermissionController {
      * (GET) Method for getting all permissions that belong to a single role
      * A BAD_REQUEST status code will be returned when the role_id doesn't exist and a
      * NO_CONTENT status code will be sent if the role has no permissions.
-     * @param roleId
-     * @return The list of permissions or an error code.
+     * 
+     * @param roleId Id of the role to fetch permission from
+     * @return The list of permissions or an error code
      */
     @GetMapping("/{role_id}")
     public ResponseEntity<List<Permission>> getAllPermissionsForRoleWithId(
@@ -83,7 +86,9 @@ public class RoleToPermissionController {
 
     /**
      * (POST) Method for creating a new pair, i.e adding a permission to a role.
-     * @param roleToPermissionToAdd
+     * 
+     * @param roleId Id of the role to add a new permission for
+     * @param permissionId Id of the permission to add for the role
      * @return The role_to_permission pair, or an error code
      */
     @PostMapping("/{role_id}/add/{permission_id}")
@@ -105,6 +110,30 @@ public class RoleToPermissionController {
         RoleToPermission newPair = new RoleToPermission(roleId, permissionId);
 
         RoleToPermission result = roleToPermissionRepository.save(newPair);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    /**
+     * (POST) Method for creating a set of new role permission pairs. If the role
+     * or ANY of the permissions doesnt exist, then BAD_REQUEST (400) will be 
+     * returned.
+     * 
+     * @param roleId Id of the role to add new permissions
+     * @param permissionIds List of permissions to add for the role
+     * @return List of user permission paris added for the role, or an 
+     * error code.
+     */
+    @PostMapping("/{role_id}/add/permissions")
+    public ResponseEntity<List<RoleToPermission>> addPermissionsToRole(
+        @PathVariable(name = "role_id") Long roleId,
+        @RequestParam List<Long> permissionIds) {
+
+        if (!roleAndPermissionExists(roleId, permissionIds)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        
+        List<RoleToPermission> result = addPermissions(roleId, permissionIds);
+
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
@@ -132,5 +161,35 @@ public class RoleToPermissionController {
         roleToPermissionToDelete.put("permission_id", permissionId);
 
         return new ResponseEntity<>(roleToPermissionToDelete, HttpStatus.OK);
+    }
+
+    private List<RoleToPermission> addPermissions(Long roleId, List<Long> permissionIds) {
+        List<RoleToPermission> rolePermissionPairs = new ArrayList<>();
+
+        for (Long permissionId : permissionIds) {
+            RoleToPermission newPair = new RoleToPermission(roleId, permissionId);
+            RoleToPermission result = roleToPermissionRepository.save(newPair);
+
+            if (roleToPermissionRepository.findByRoleIdAndPermissionId(
+                roleId, permissionId) != null) {
+                rolePermissionPairs.add(result);
+            }
+        }
+
+        return rolePermissionPairs;
+    }
+
+    private boolean roleAndPermissionExists(Long roleId, List<Long> permissionIds) {
+        for (Long permissionId : permissionIds) {
+            if (permissionRepository.findById(permissionId).isEmpty()) {
+                return false;
+            }
+        }
+        
+        if (roleRepository.findById(roleId).isEmpty()) {
+            return false;
+        }
+
+        return true;
     }
 }
