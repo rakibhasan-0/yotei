@@ -292,7 +292,7 @@ INSERT INTO technique (name, description) VALUES ('Randori mot två motståndare
 -- INSERTS FOR TECHNIQUES TO BELT
 --
 
-INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (11, 1);
+INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (11, 1); -- Empi uchi, jodan och chudan (1 Kyu)
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (11, 2);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (11, 3);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (11, 4);
@@ -327,8 +327,8 @@ INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (11, 32);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (11, 33);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (11, 34);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (11, 35);
-INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (11, 36);
-INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 37);
+INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (11, 36); --Påkslag mot huvudet, forehand och backhand, Tsuri ashi - ju jodan uchi uke, irimi nage, ude hishigi hiza gatame
+INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 37); --Haito uchi, jodan (1 Dan)
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 38);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 39);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 40);
@@ -428,7 +428,7 @@ INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 133);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 134);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 135);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 136);
-INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 137);
+INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 137); --Gripa liggande, Vända liggande - Kuzure kote gaeshi gatame
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (3, 138);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (3, 139);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (3, 140);
