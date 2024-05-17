@@ -1,12 +1,16 @@
 package se.umu.cs.pvt.examination;
 
+import org.apache.commons.lang3.ObjectUtils.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.umu.cs.pvt.belt.BeltRepository;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -131,6 +135,21 @@ public class ExaminationController {
     }
 
     /**
+     * Returns the gradings that a specific user has created.
+     * @param creator_id
+     * @return The gradings that a specific user has created.
+     * @return HTTP-status code.
+     */
+    @GetMapping("/grading/creator/{creator_id}")
+    public ResponseEntity<List<Grading>> getGradingByCreator(@PathVariable("creator_id") long creator_id) {
+        List<Grading> gradingByCreator = gradingRepository.findByCreatorId(creator_id);
+        if(gradingByCreator.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(gradingByCreator, HttpStatus.OK);
+    }
+
+    /**
      * Creates a examinee.
      * @param examinee Object mapped examinee from request body.
      * @return The created examinee.
@@ -210,6 +229,47 @@ public class ExaminationController {
     }
     
     /**
+     * Retrieves a list with all pairs with matching grading ID.
+     * @param grading_id Object mapped examinee pair from request body.
+     * @return HTTP-status code.
+    */
+    @GetMapping("/pair/grading/{grading_id}")
+    public ResponseEntity<List<Map<String, Object>>> getPairsByGradingId(@PathVariable("grading_id") long grading_id) {
+        List<ExamineePair> pairs = examineePairRepository.findAll();
+        List<Map<String, Object>> pairsByGradingId = new ArrayList<>();
+
+        for (ExamineePair p : pairs) {
+            Optional<Examinee> examinee1 = examineeRepository.findById(p.getExaminee_1_id());
+            
+            if (examinee1.isPresent() && examinee1.get().getGrading_id() == grading_id) {
+                Map<String, Object> pairMap = new HashMap<>();
+                pairMap.put("pair_id", p.getExaminee_pair_id());
+                Map<String, Object> examinee1Map = new HashMap<>();
+                examinee1Map.put("id", examinee1.get().getExaminee_id());
+                examinee1Map.put("name", examinee1.get().getName());
+                
+                pairMap.put("examinee_1", examinee1Map);
+                if(p.getExaminee_2_id() != null) {
+                    Optional<Examinee> examinee2 = examineeRepository.findById(p.getExaminee_2_id());
+                    if (examinee2.isPresent()) {
+                        Map<String, Object> examinee2Map = new HashMap<>();
+                        examinee2Map.put("id", examinee2.get().getExaminee_id());
+                        examinee2Map.put("name", examinee2.get().getName());
+                        pairMap.put("examinee_2", examinee2Map);
+                    }
+                }else {
+                    pairMap.put("examinee_2", null);
+                }
+                pairsByGradingId.add(pairMap);
+            }
+        }
+        if (pairsByGradingId.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(pairsByGradingId, HttpStatus.OK);
+    }
+
+    /**
      * Returns all examinees.
      * @return All examinee pairs.  
      * @return HTTP-status code.
@@ -217,6 +277,20 @@ public class ExaminationController {
     @GetMapping("/examinee/all")
     public ResponseEntity<List<Examinee>> getAllExaminees() {
         return new ResponseEntity<>(examineeRepository.findAll(), HttpStatus.OK);
+    }
+
+    /**
+     * Returns a examinee with a given examinee id.
+     * @param examinee_id
+     * @return examinee with given examinee id.
+     * @return HTTP-status code.  
+     */
+    @GetMapping("/examinee/{examinee_id}")
+    public ResponseEntity<Examinee> getExaminee(@PathVariable("examinee_id") long examinee_id) {
+        if(examineeRepository.findById(examinee_id).isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(examineeRepository.findById(examinee_id).get(), HttpStatus.OK);
     }
 
     /**
@@ -334,6 +408,48 @@ public class ExaminationController {
     }
 
     /**
+     * Returns a list of the result of all examinees on a given technique.
+     * @param technique_name Given technique name.
+     * @param grading_id Given grading id.
+     */
+    @GetMapping("/examresult/{technique_name}/{grading_id}")
+    public ResponseEntity<List<Map<String, Object>>> getExaminationProtocol(@PathVariable("technique_name") String technique_name, @PathVariable("grading_id") long grading_id) {
+        List<Examinee> examinees = examineeRepository.findByGradingId(grading_id);
+        List<ExaminationResult> examinationResults = examinationResultRepository.findAll();
+        List<Map<String, Object>> results = new ArrayList<>();
+        for(Examinee e : examinees) {
+            for(ExaminationResult er : examinationResults) {
+                if(er.getExaminee_id() == e.getExaminee_id() && er.getTechnique_name().equals(technique_name)) {
+                    Map<String, Object> result = new HashMap<>();
+                    result.put("examinee_id", e.getExaminee_id());
+                    result.put("result", er.getPass());
+                    results.add(result);
+                }
+            }
+        }
+        if(results.isEmpty()) {
+            return new ResponseEntity<>(results, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(results, HttpStatus.OK);
+    }   
+
+    /**
+     * Returns a list of the result of all techniques for a given examinee.
+     * @param examinee Given technique name.
+     */
+    @GetMapping("/examresult/{examinee_id}")
+    public ResponseEntity<List<ExaminationResult>>  getExaminationProtocolByExaminee(@PathVariable("examinee_id") long examinee_id) {
+        List<ExaminationResult> examinationResults = examinationResultRepository.findAll();
+        ArrayList<ExaminationResult> matching_results = new ArrayList<>();
+        for(ExaminationResult er : examinationResults) {
+            if(er.getExaminee_id() == examinee_id) {
+                matching_results.add(er);
+            }
+        }
+        return new ResponseEntity<>(matching_results, HttpStatus.OK);
+    }
+
+    /**
      * Returns all examination protocols.
      * @return All examination protocols.  
      * @return HTTP-status code.
@@ -342,6 +458,4 @@ public class ExaminationController {
     public ResponseEntity<List<ExaminationProtocol>> getAllExaminationProtocol() {
         return new ResponseEntity<>(examinationProtocolRepository.findAll(), HttpStatus.OK);
     }
-
-
 }
