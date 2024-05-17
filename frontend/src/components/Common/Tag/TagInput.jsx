@@ -25,7 +25,7 @@ import AddTagPopup from "./AddTagPopup"
  *
  * @author Team Minotaur, Team Durian (Group 3)
  * @version 1.0
- * @since 2024-05-16
+ * @since 2024-05-17
  */
 export default function TagInput({id, addedTags, setAddedTags, isNested, itemName}) {
 	const [showPopup, setShowPopup] = useState(false)
@@ -69,7 +69,7 @@ export default function TagInput({id, addedTags, setAddedTags, isNested, itemNam
 					onClick={() => handleRemoveTag(tag)}
 				/>)}
 			</div>
-			<Popup title={`Hantera taggar - ${itemName ? itemName : "X"}`} id= "addTagPopUp" isOpen={showPopup} setIsOpen={setShowPopup} isNested={isNested} onClose={handleClose}>
+			<Popup title={itemName ? itemName : "X"} dividerOption="h2_left"  id= "addTagPopUp" isOpen={showPopup} setIsOpen={setShowPopup} isNested={isNested} onClose={handleClose}>
 				<AddTagPopup id ="addTagPopupDiv" addedTags={addedTags} setAddedTags={setAddedTags} setIsOpen={setShowPopup} newAddedTags={newAddedTags} setNewAddedTags={setNewAddedTags} setShowConfirmPopup={setShowConfirmPopup} showConfirmPopup={showConfirmPopup}/>
 			</Popup>
 		</div>
