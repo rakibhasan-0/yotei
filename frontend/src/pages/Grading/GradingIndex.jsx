@@ -9,7 +9,6 @@ import containerStyles from "./GradingBefore.module.css"
 import BeltButton from "../../components/Common/Button/BeltButton"
 import Spinner from "../../components/Common/Spinner/Spinner"
 
-
 /**
  * The grading create page.
  * Creates a new grading.
@@ -18,16 +17,15 @@ import Spinner from "../../components/Common/Spinner/Spinner"
  * @version 1.0
  * @since 2024-05-07
  */
-
 export default function GradingIndex() {
 	const [belts, setBelts] = useState([]) 
 	const [beltColors] = useState(["Gult", "Orange", "Grönt", "Blått", "Brunt"])
 	const [currentGradings, setCurrentGradings] = useState([])
 	const [finishedGradings, setFinishedGradings] = useState([])
 	const [loading, setLoading] = useState(true)
+	const [isCreateListDone, setIsCreateListDone] = useState(false)
 	const context = useContext(AccountContext)
 	const navigate = useNavigate()
-
 
 	const { token, userId } = context
 
@@ -41,8 +39,14 @@ export default function GradingIndex() {
 		const params = {
 			ColorParam: color,
 		}
-
 		navigate(`/grading/${gradingId}/${gradingStep}`, { state: params })
+	}
+
+	/**
+	 * Navigate to create gradingprotocol. 
+	 */
+	function navigateTo() {
+		navigate("/grading/create")
 	}
 
 	/**
@@ -80,13 +84,58 @@ export default function GradingIndex() {
 	}
 
 	/**
+	 *  Distribution current gradings and finished gradings for userid.  
+	 * @param {json} gradings_data 
+	 */
+	function createLists(gradings_data) {
+		gradings_data.map(async (item) => {
+			if(item.creator_id === userId) {
+				const isCreatorInFinished = finishedGradings.some(grading => grading.creator_id === userId)
+				const isCreatorInCurrent = currentGradings.some(grading => grading.creator_id === userId)
+
+				if (!isCreatorInFinished && !isCreatorInCurrent) {
+					if (item.step === 3) {
+						setFinishedGradings(prevState => [...prevState, item])
+					} else {
+						setCurrentGradings(prevState => [...prevState, item])
+					}
+				}
+			}
+		})
+		setIsCreateListDone(true)
+	}
+
+	/**
+	 * Checks if the user has no earlier gradings started or finished. 
+	 * Otherwise sort it by dates.
+	 */
+	useEffect(() => {
+
+		if(isCreateListDone) {
+			if(currentGradings.length === 0 && finishedGradings.length === 0) {
+				navigateTo()
+			}
+
+			setIsCreateListDone(false)
+			const sortedCurrentGradings = [...currentGradings].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+			setCurrentGradings(sortedCurrentGradings)
+			const sortedFinishedGradings = [...finishedGradings].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+			setFinishedGradings(sortedFinishedGradings)
+
+		}
+		
+	}, [isCreateListDone])
+
+	/**
 	 * Handle belt colors and name. 
-	 * Distribution current gradings and finished gradings for userid. 
+	 * 
 	 */
 	useEffect(() => {
 
 		const fetchData = async () => {
 			try {
+				setFinishedGradings([])
+				setCurrentGradings([])
 				const [belt_data, gradings_data] = await Promise.all([
 					fetchBelts(),
 					fetchGradings()
@@ -103,37 +152,14 @@ export default function GradingIndex() {
 				})
 				setBelts(colorMaps)
 				setLoading(false)
-
-				gradings_data.forEach(item => {
-
-					if(item.creator_id === userId) {
-						const isCreatorInFinished = finishedGradings.some(grading => grading.creator_id === userId)
-						const isCreatorInCurrent = currentGradings.some(grading => grading.creator_id === userId)
-
-						if (!isCreatorInFinished && !isCreatorInCurrent) {
-							if (item.step === 3) {
-								setFinishedGradings(prevState => [...prevState, item])
-							} else {
-								setCurrentGradings(prevState => [...prevState, item])
-							}
-						}
-					}
-				})
-
-        
+				createLists(gradings_data)
 
 			} catch (error) {
 				console.error("There was a problem with the fetch operation:", error)
 			}
 		}
-
 		fetchData()
-
 	}, [])
-
-	function navigateTo() {
-		navigate("/grading/create")
-	}
 
 	return (
 		<center>
@@ -157,8 +183,6 @@ export default function GradingIndex() {
 					)}
 				</div>
 			</div>
-
-
 			<h1 className={styles.finishedGradings}>Avslutade graderingar</h1>
 			<div className={containerStyles.container}>
 				<div className={containerStyles.scrollableContainer}>
@@ -174,13 +198,9 @@ export default function GradingIndex() {
 									<h2>{`${belts[grading.belt_id]?.name} bälte`} </h2>
 								</BeltButton>
 							))}
-
 						</div>
-
 					)}
-				</div>
-
-                
+				</div>          
 			</div>
 
 			<RoundButton onClick={navigateTo}>
