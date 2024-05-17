@@ -20,9 +20,6 @@ import styles from "./TechniqueCard.module.css"
  */
 function TechniqueCard({ technique, checkBox, id}) {
 	const navigate = useNavigate()
-	if(technique.contentID) {
-		technique.techniqueID = technique.contentID
-	}
 	
 	// Fixes the path regardless if the technique is in a list or not.
 	const path = (technique.path === undefined) ? technique.techniqueID : technique.path

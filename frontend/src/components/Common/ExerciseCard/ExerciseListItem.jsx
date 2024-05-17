@@ -36,7 +36,6 @@ export default function ExerciseListItem({ item, text, detailURL, id, index, che
 
 	// Fixes the path regardless if the exercise is in a list or not.
 	const tempPath = (path === undefined) ? id : path
-	console.log(tempPath)
 	const handleClick = () =>{
 		localStorage.setItem("stored_exercise", id)
 	}
