@@ -2,7 +2,8 @@ package se.umu.cs.pvt.user;
 
 import com.auth0.jwt.interfaces.Claim;
 
-import net.bytebuddy.asm.Advice.Return;
+import se.umu.cs.pvt.permission.RoleToPermission;
+import se.umu.cs.pvt.permission.RoleToPermissionRepository;
 import se.umu.cs.pvt.role.Role;
 import se.umu.cs.pvt.role.RoleRepository;
 
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -32,15 +34,17 @@ public class UserController {
      */
     private final UserRepository repository;
     private final RoleRepository roleRepository;
+    private final RoleToPermissionRepository roleToPermissionRepository;
 
     /**
      * Constructor for the LoginController object.
      * @param repository Autowired
      */
     @Autowired
-    public UserController(UserRepository repository, RoleRepository roleRepository) {
+    public UserController(UserRepository repository, RoleRepository roleRepository, RoleToPermissionRepository roleToPermissionRepository) {
         this.repository = repository;
         this.roleRepository = roleRepository;
+        this.roleToPermissionRepository = roleToPermissionRepository;
     }
 
     /**
@@ -78,7 +82,19 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new JWTUtil().generateToken(user.getUsername(), user.getUserRole().toString(), Math.toIntExact(user.getUserId()));
+        Long roleId = user.getRoleId();
+        ArrayList<Long> permissionIds = new ArrayList<>();
+
+
+        if (roleId != null) {
+            List<RoleToPermission> rolePermissionPairs = roleToPermissionRepository.findAllByRoleId(roleId);
+    
+            for (RoleToPermission rtp : rolePermissionPairs) {
+                permissionIds.add(rtp.getPermissionId());
+            }
+        }
+
+        return new JWTUtil().generateToken(user.getUsername(), user.getUserRole().toString(), Math.toIntExact(user.getUserId()), permissionIds);
     }
 
     /**
@@ -211,7 +227,7 @@ public class UserController {
     public Object refreshToken(@RequestBody String token){
         Map<String, Claim> oldToken = new JWTUtil().validateToken(token).getClaims();
 
-        return new JWTUtil().generateToken(oldToken.get("username").asString(), oldToken.get("role").asString(), oldToken.get("userId").asInt());
+        return new JWTUtil().generateToken(oldToken.get("username").asString(), oldToken.get("role").asString(), oldToken.get("userId").asInt(), oldToken.get("permissions").asList(Long.class));
     }
 
     /**

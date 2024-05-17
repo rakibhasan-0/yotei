@@ -362,7 +362,7 @@ public class WorkoutControllerTest {
                 when(mockJwt.getClaim("userId")).thenReturn(mockClaim);
                 when(mockJwt.getClaim("role")).thenReturn(mockClaim);
                 when(jwtUtil.validateToken("testToken123")).thenReturn(mockJwt);
-                when(jwtUtil.generateToken(nonAuthor.getUsername(), nonAuthor.getUserRole().toString(), 2))
+                when(jwtUtil.generateToken(nonAuthor.getUsername(), nonAuthor.getUserRole().toString(), 2, new ArrayList<Long>()))
                                 .thenReturn("testToken123");
                 when(workoutDetailRepository.findById(1L))
                                 .thenReturn(Optional.of(privateWorkout));

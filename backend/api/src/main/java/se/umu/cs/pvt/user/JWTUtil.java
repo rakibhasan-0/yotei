@@ -9,6 +9,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Utility class for creating and verifying Json Web Tokens.
@@ -40,13 +41,14 @@ public class JWTUtil {
      * @throws JWTCreationException     Something went wrong during the signing
      *                                  process.
      */
-    public String generateToken(String username, String role, int userId)
+    public String generateToken(String username, String role, int userId, List<Long> permissions)
             throws IllegalArgumentException, JWTCreationException {
         return JWT.create()
                 .withSubject("User Details")
                 .withClaim("username", username)
                 .withClaim("role", role)
                 .withClaim("userId", userId)
+                .withClaim("permissions", permissions)
                 .withIssuedAt(new Date())
                 .withIssuer("PVT/User")
                 .withExpiresAt(new Date(System.currentTimeMillis() + validDuration))
