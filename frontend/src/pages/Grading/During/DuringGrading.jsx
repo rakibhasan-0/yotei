@@ -398,7 +398,6 @@ export default function DuringGrading() {
 	 * @author Team Apelsin (2024-05-13, c21ion)
 	 */
 	async function postExamineeResult(result, token) {
-		//console.log("Result posted: ", result)
 		const requestOptions = {
 			method: "POST",
 			headers: { "Content-Type": "application/json", "token": token },
@@ -418,7 +417,6 @@ export default function DuringGrading() {
 	 * @author Team Apelsin (2024-05-17, c21ion) 
 	 */
 	async function putExamineeResult(result, token) {
-		//console.log("Result put: ", JSON.stringify(result))
 		const requestOptions = {
 			method: "PUT",
 			headers: { "Content-Type": "application/json", "token": token },
