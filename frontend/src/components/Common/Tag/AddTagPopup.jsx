@@ -9,10 +9,8 @@ import RoundButton from "../RoundButton/RoundButton"
 import { ChevronRight } from "react-bootstrap-icons"
 import MiniPopup from "../MiniPopup/MiniPopup.jsx"
 import TagUsagePopup from "./TagUsagePopup.jsx"
-import Examinee from "./Examinee.jsx"
+import EditableListItem from "../EditableListItem/EditableListItem.jsx"
 import ConfirmPopup from "../ConfirmPopup/ConfirmPopup.jsx"
-
-
 /**
  * OBSERVE! This component is used inside the TagInput-component and should not be used by itself. 
  * Popup is a component that can be put inside a popup window, where you can search for tags to add and
@@ -35,11 +33,13 @@ import ConfirmPopup from "../ConfirmPopup/ConfirmPopup.jsx"
 			</Popup>
  *		)
  *
- * @author Team Minotaur, Team Mango (Group 4), Team Durian (Group 3) (2024-05-13)
+ * @author Team Minotaur, 
+ * @author Team Mango (Group 4), 
+ * @author Team Durian (Group 3) (2024-05-16)
  * @version 2.0
  * @since 2024-04-22
  */
-export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
+export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAddedTags, setNewAddedTags, setShowConfirmPopup, showConfirmPopup}) {
 	const sortOptions = [
 		{label: "Namn: A-Ö", sortBy: "name-asc"},
 		{label: "Namn: Ö-A", sortBy: "name-desc"},
@@ -52,22 +52,18 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	const [searchText,setSearchText] = useState("")
 	const [tagListArray, setTagListArray] = useState([])
 	const { token } = useContext(AccountContext)
-	const [newAddedTags, setNewAddedTags] = useState(addedTags)
+	
 	const [showUsagePopup, setUsageShowPopup] = useState(false)
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
 	const [sort, setSort] = useState(sortOptions[2])
 	const [usage, setUsage] = useState([]) 
 	const [tagIdToBeDeleted, setTagIdToBeDeleted] = useState([])
+
 	const containsSpecialChars = str => /[^\w\d äöåÅÄÖ-]/.test(str)
 
-
-
-
-	useEffect(() => {
-		
+	useEffect(() => {		
 		searchForTags(searchText, sort.sortBy)
-	}, [searchText, sort])	
-
+	}, [searchText, sort])
 
 	/**
 	 * Send request to API for tag suggestion matching the search text.
@@ -111,7 +107,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 			headers: {"Content-type": "application/json",token },
 			body: JSON.stringify({name: tagName}),
 		}
-		const returnErrorMessage = validateTagName(tagName)
+		const returnErrorMessage = validateInput(tagName)
 		//Checked by default
 		if (returnErrorMessage != "") {
 			setError(returnErrorMessage)
@@ -132,8 +128,6 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 				setError("Något gick fel vid skapandet av tagg")
 			}
 		}
-
-		
 	}
 
 	/**
@@ -141,7 +135,6 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	 * TagList component in a list. 
 	 */
 	useEffect(() => {
-
 		//Handle when a tag is removed from something (Not deleted)
 		const handleRemoveTag = (tag) => {
 			setError("")
@@ -155,16 +148,15 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 			setError("")
 			setNewAddedTags([...newAddedTags, tag])
 		}
-
 		const tempTagListArray = suggested.map(tag =>
-			<Examinee item={tag.name} 
+			<EditableListItem item={tag.name} 
 				key={tag.id}
 				id={tag.id} 
 				showCheckbox={true}
 				onCheck={checked => checked ? handleAddTag(tag) : handleRemoveTag(tag)}
 				checked={newAddedTags.some(a => a.id == tag.id)}	
 				onEdit={handleEditText}
-				validateTagName={validateTagName}
+				validateInput={validateInput}
 				grayTrash={tag.exercises + tag.workouts + tag.techniques > 0}
 				onRemove={() => handleDelete(tag)}
 			/>
@@ -231,7 +223,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	 * @param {String} name The name of the tag to be validated. 
 	 * @returns Nothing if the name is valid, otherwise, the errortext. 
 	 */
-	const validateTagName = (name) => {
+	const validateInput = (name) => {
 		if (name == "") {
 			return "Taggnamnet kan inte vara tomt"
 		}
@@ -289,7 +281,6 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 		} catch (error) {
 			setError("Något gick fel vid borttagning av tagg")
 		}
-
 	}
 
 	return (
@@ -297,26 +288,25 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 			<div>
 				{error !== "" &&
 					<p className={styles["error-message"]}>{error}</p>
-
 				}
 				<div className={styles["search-bar"]}>
-					
-					<input
-						className={styles["input-area"]}
-						placeholder="Sök eller skapa tagg"
-						value={searchText}
-						id = "tag-search-bar"
-						onChange={e => {searchForTags(e.target.value, sort.sortBy)}}
-					>
-						
-					</input>
-					<i className={styles["search-icon"]}><Search/></i>
-					{searchText !== "" &&
-						<button className ={styles["addButton"]} onClick={() => createNewTag(searchText)} id="tag-add-button" >
-							<PlusCircle style={{cursor: "pointer"}}> </PlusCircle>
-						</button>
-					}
-					
+					<div>
+						<Search className={styles["search-icon"]}/>
+					</div>
+					<div style={{flexGrow : 1}}>
+						<input
+							className={styles["input-area"]}
+							placeholder="Sök eller skapa tagg"
+							value={searchText}
+							id = "tag-search-bar"
+							onChange={e => {searchForTags(e.target.value, sort.sortBy)}}
+						/>
+					</div>	
+					<div>
+						{searchText !== "" &&
+						<PlusCircle className={styles["addButton"]} onClick={() => createNewTag(searchText)} id="tag-add-button"/>
+						}
+					</div>
 					
 				</div>
 				<div style={{height: "10px"}}></div>
@@ -330,7 +320,6 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 			<div >
 				{tagListArray}
 
-				
 			</div>
 			
 			<MiniPopup title={"Taggen kan inte tas bort"} isOpen={showUsagePopup} setIsOpen={hideShowPopup} >
@@ -344,8 +333,18 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 			<RoundButton onClick={saveAndClose} id={"save-and-close-button"} > 
 				<ChevronRight width={30} />
 			</RoundButton>
+			<ConfirmPopup
+				id="technique-edit-tag-confirm-popup"
+				showPopup={showConfirmPopup}
+				setShowPopup={setShowConfirmPopup}
+				confirmText={"Lämna"}
+				backText={"Avbryt"}
+				popupText={"Är du säker på att du vill lämna sidan? Dina ändringar kommer inte att sparas."}
+				onClick={async () => {
+					setNewAddedTags(addedTags)
+					setIsOpen(false)
+				}}
+			/>
 		</div>
-
-		
 	)
 }

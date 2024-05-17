@@ -1,5 +1,7 @@
 package se.umu.cs.pvt.examination;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -9,4 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface ExaminationCommentRepository extends JpaRepository<ExaminationComment, Long> {
 
+    List<ExaminationComment> findByExamineePairIdAndTechniqueName(Long examineePairId, String techniqueName);
+
+    List<ExaminationComment> findByExamineeIdAndTechniqueName(Long examineeId, String techniqueName);
 }

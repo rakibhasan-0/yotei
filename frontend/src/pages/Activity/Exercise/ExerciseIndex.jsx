@@ -23,6 +23,7 @@ import { isEditor } from "../../../utils"
  * @since 2024-04-18
  * @version 3.3
  * @update v3.3 (2024-05-02 Team Kiwi) removed header from html, also rerouted button from ./create to ./exercise/create
+ * @updated 2024-05-16 Team Durian, removed title height
  */
 export default function ExerciseIndex() {
 	const sortOptions = [
@@ -104,7 +105,7 @@ export default function ExerciseIndex() {
 
 	return (
 		<>
-			<h1 className="py-2" id={"exercise-title"} style={{marginBottom: "-10px"}}></h1>
+			<h1 id ={"exercise-header"}></h1>
 
 			<SearchBar 
 				id="exercise-search-bar" 

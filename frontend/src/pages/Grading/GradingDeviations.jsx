@@ -5,6 +5,7 @@ import styles from "./GradingDeviations.module.css"
 import Divider from "../../components/Common/Divider/Divider"
 import testData from "./yellowProtocolTemp.json"
 import Container from "./GradingDeviationContainer"
+import CheckBox from "../../components/Common/CheckBox/CheckBox"
 import { useNavigate, useParams } from "react-router-dom"
 import {HTTP_STATUS_CODES, setError} from "../../utils"
 import { AccountContext } from "../../context"
@@ -24,11 +25,12 @@ import { AccountContext } from "../../context"
 export default function GradingDeviations() {
 		const [toggled, setToggled] = useState(false)
 		const [data, setData] = useState([])
-		const { userId } = useParams()
-		const [name, setName] = useState("")
+		const { userId } = useParams() //The user id of the current examinee
+		const [name, setName] = useState("") //The name of the current examinee
 		const [, setGradingId] = useState(-1)
 		const [, setBeltId] = useState(-1)
 		const { gradingId } = useParams()
+        const [showingAll, setShowingAll] = useState(false)
 
     const context = useContext(AccountContext)
 
@@ -72,14 +74,32 @@ export default function GradingDeviations() {
                 }
 			}
         }
-
+        
+        //Initialize data
         setData(testData.categories)
         fetchData()
 		}, [])
+
+    /**
+     * Checks if the examinee has passed a specific technique
+     * @param {Technique} technique 
+     * @returns Boolean value
+     */
     function hasPassed() {
+        // har tagit bort technique eftersom det inte går igenom lintern
         return true //PLACEHOLDER
     }
+    function isDeviating() {
+        return false //PLACEHOLDER
+    }
 
+
+    /**
+     * Gets a holder which holds a container for each technique in the grading protocol. The container also has the comment 
+     *      and pass status for each technique
+     * @param {Array} exercises 
+     * @returns A container displaying all exercises and information about the examinees performance of them
+     */
     function getActivityContainer(exercises) {
 
         return exercises !== null && (
@@ -91,8 +111,9 @@ export default function GradingDeviations() {
                             <div className = {styles["sc23-outline"]} id={category} key={category}>
                                 <Divider id = 'divider-example' option= 'h2_left' title = {category.category_name} key={category.category_name}/>
                                 {category.techniques.map((technique, index) => (
-
-                                    <Container id = {index} name = {technique.text} passed={hasPassed(technique.text)} key={index} ></Container>
+                                    (isDeviating(technique) || showingAll) ?
+                                        <Container id = {index} name = {technique.text} passed={hasPassed(technique)} key={index} ></Container>
+                                        : null
                                 ))}
                             </div>
                         ))}
@@ -109,7 +130,16 @@ export default function GradingDeviations() {
 										<h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "10px", paddingBottom: "5px" }}>{name}</h1>
 										<h4 style={{ fontFamily: "Open Sans", fontSize: "15px", paddingTop: "0px", paddingBottom: "10px" }}>Kommentarer</h4>
 								</div>
-
+                <div className="d-flex justify-content-center">
+                    <CheckBox
+                        className = {styles["showAllCheckbox"]}
+                        checked={false}
+                        label = "Visa alla"
+                        onClick={(checked) => {setShowingAll(checked)}}
+                        enabled
+                        id="checkbox-element"
+                    />
+                </div>
                 <div className = {styles["sc23-session-header-clickable"]} role="button" onClick={() => setToggled(!toggled)}>
                 </div>
                 {getActivityContainer(data)}
