@@ -29,7 +29,9 @@ export default function GradingDeviations() {
 		const { userId } = useParams() //The user id of the current examinee
 		const [name, setName] = useState("") //The name of the current examinee
         const [showingAll, setShowingAll] = useState(false)
-        const [techniqueNames, setTechniqueNames] = useState([])
+        const [personalComments, setPersonalComments] = useState([])
+        const [pairCOmments, setPairComments] = useState([])
+        const [groupComments, setGroupComments] = useState([])
 
     const context = useContext(AccountContext)
 
@@ -98,6 +100,10 @@ export default function GradingDeviations() {
                     return
                 }
             }
+        }
+
+        const fetchComments = async() => {
+
         }
 
         fetchData()
