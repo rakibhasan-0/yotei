@@ -170,14 +170,23 @@ public class ExaminationApiTest {
     @Test
     void testGetExaminationCommentOnTechnique() {
 
-        Mockito.when(examinationCommentRepository.findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(1L, "wasasasasa")).thenReturn(examinationCommentList);
-        Mockito.when(examinationCommentRepository.findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(2L, "lasasasasa")).thenReturn(examinationCommentList);
-        Mockito.when(examinationCommentRepository.findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(3L, "kasasasasa")).thenReturn(examinationCommentList);
+        Mockito.when(examinationCommentRepository
+            .findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(1L, "wasasasasa"))
+            .thenReturn(examinationCommentList);
+        Mockito.when(examinationCommentRepository
+            .findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(2L, "lasasasasa"))
+            .thenReturn(examinationCommentList);
+        Mockito.when(examinationCommentRepository
+            .findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(3L, "kasasasasa"))
+            .thenReturn(examinationCommentList);
 
         // Test with existing comments.
-        ResponseEntity<List<ExaminationComment>> responseWithComment1 = examinationController.getGradingComment(1L, "wasasasasa");
-        ResponseEntity<List<ExaminationComment>> responseWithComment2 = examinationController.getGradingComment(2L, "lasasasasa");
-        ResponseEntity<List<ExaminationComment>> responseWithComment3 = examinationController.getGradingComment(3L, "kasasasasa");
+        ResponseEntity<List<ExaminationComment>> responseWithComment1 = examinationController
+            .getGradingComment(1L, "wasasasasa");
+        ResponseEntity<List<ExaminationComment>> responseWithComment2 = examinationController
+            .getGradingComment(2L, "lasasasasa");
+        ResponseEntity<List<ExaminationComment>> responseWithComment3 = examinationController
+            .getGradingComment(3L, "kasasasasa");
 
         assertEquals(HttpStatus.OK, responseWithComment1.getStatusCode());
         assertEquals(HttpStatus.OK, responseWithComment2.getStatusCode());
@@ -192,19 +201,27 @@ public class ExaminationApiTest {
         assertEquals("EastEast", responseWithComment3.getBody().get(2).getComment());
 
         // Test without existing comments.
-        Mockito.when(examinationCommentRepository.findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(1L, "nonexistentTechnique")).thenReturn(Collections.emptyList());
-        ResponseEntity<List<ExaminationComment>> responseWithoutComment = examinationController.getGradingComment(1L, "nonexistentTechnique");
+        Mockito.when(examinationCommentRepository
+            .findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(1L, "nonexistentTechnique"))
+            .thenReturn(Collections.emptyList());
+        ResponseEntity<List<ExaminationComment>> responseWithoutComment = examinationController
+            .getGradingComment(1L, "nonexistentTechnique");
         assertEquals(HttpStatus.NOT_FOUND, responseWithoutComment.getStatusCode());
         assertNull(responseWithoutComment.getBody());
 
         // Test with empty techniqueName.
-        Mockito.when(examinationCommentRepository.findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(1L, null)).thenReturn(Collections.emptyList());
+        Mockito.when(examinationCommentRepository
+            .findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(1L, null))
+            .thenReturn(Collections.emptyList());
         ResponseEntity<List<ExaminationComment>> responseWithoutTechnique = examinationController.getGradingComment(1L, null);
         assertEquals(HttpStatus.BAD_REQUEST, responseWithoutTechnique.getStatusCode());
 
         // Test with non-empty ExamineeId and ExamineePairId.
-        Mockito.when(examinationCommentRepository.findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(4L, "wasasasas")).thenReturn(Collections.emptyList());
-        ResponseEntity<List<ExaminationComment>> responseWithNonNullValues = examinationController.getGradingComment(4L, "wasasasas");
+        Mockito.when(examinationCommentRepository
+            .findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(4L, "wasasasas"))
+            .thenReturn(Collections.emptyList());
+        ResponseEntity<List<ExaminationComment>> responseWithNonNullValues = examinationController
+            .getGradingComment(4L, "wasasasas");
         assertEquals(HttpStatus.NOT_FOUND, responseWithNonNullValues.getStatusCode());
     }
 
