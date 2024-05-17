@@ -19,7 +19,7 @@ public class ExaminationComment{
     @Column(nullable = false,name = "grading_id")
     private Long gradingId;
 
-    @Column(nullable = false,name = "examinee_id")
+    @Column(name = "examinee_id")
     private Long examineeId;
 
     @Column(name = "examinee_pair_id")

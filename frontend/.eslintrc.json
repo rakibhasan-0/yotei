@@ -41,8 +41,8 @@
     {
       "files": [
         "./*.ts",
-        "sys-test/**/*.ts",
-        "sys-test/**/*.tsx"
+        "SystemTests/**/*.ts",
+        "SystemTests/**/*.tsx"
       ],
       "plugins": [
         "@typescript-eslint"
