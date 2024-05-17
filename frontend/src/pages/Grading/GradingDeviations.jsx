@@ -52,14 +52,14 @@ export default function GradingDeviations() {
                 setError("Kunde inte hämta examinee's. Felkod: " + response.status)
 			} else {
                 const json = await response.json()
-
+                console.log(json)
                 for(let i = 0; i < json.length; i++) { //Replace when the API is changed to allow for fetching individual examinees
                     if(json[i] !== null) {
-                        if(json[i]["examinee_id"] == userId) {
+                        if(json[i]["examineeId"] == userId) {
                             
-                            setGradingId(json[i]["grading_id"])
+                            setGradingId(json[i]["gradingId"])
                             setName(json[i]["name"])
-                            const response2 = await fetch("/api/examination/grading/" + json[i]["grading_id"], requestOptions).catch(() => {
+                            const response2 = await fetch("/api/examination/grading/" + json[i]["gradingId"], requestOptions).catch(() => {
                                 setError("Serverfel: Kunde inte ansluta till servern.")
                                 return
                             })
@@ -67,8 +67,8 @@ export default function GradingDeviations() {
                                 setError("Kunde inte hämta gradering. Felkod: " + response2.status)
                             } else {
                                 const json2 = await response2.json()
-                                setBeltId(json2["belt_id"])
-                                fetchProtocol(json2["belt_id"])
+                                setBeltId(json2["beltId"])
+                                fetchProtocol(json2["beltId"])
                             }
                         }
                     }
