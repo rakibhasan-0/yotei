@@ -227,7 +227,7 @@ export default function DuringGrading() {
 	const examineeClick = (newState, technique, pairIndex, buttonId) => {
 		console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}, with new state ${newState}`)
 		// Check what state the button is in and send the proper information to DB.
-		let examinee_clicked = buttonId.endsWith('left') ? pairs[pairIndex].leftId : pairs[pairIndex].rightId
+		let examinee_clicked = buttonId.endsWith("left") ? pairs[pairIndex].leftId : pairs[pairIndex].rightId
 		addExamineeResult(examinee_clicked, `${technique}`, newState)
 	}
 
@@ -350,7 +350,7 @@ export default function DuringGrading() {
 
 
 
-/**
+	/**
 	 * Adds a status update to backend for an athlete
 	 * @param {Int} examineeId id of the examinee that should have result added
 	 * @param {String} techniqueName name on technique in grading
@@ -359,7 +359,7 @@ export default function DuringGrading() {
 	 * @author Team Apelsin (2024-05-17) - c21ion
 	 */
 	async function addExamineeResult(examineeId, techniqueName, passStatus) {
-		// Temporary, should use a state instead
+		// TODO: Temporary, should use a state instead
 		const data = [
 			{
 				examinee_id: 9,
@@ -367,18 +367,18 @@ export default function DuringGrading() {
 				result_id: 16,
 				technique_name: "1. Shotei uchi, jodan, rak stöt med främre och bakre handen"
 			}
-		];
+		]
 
 		// Convert string for pass status to Boolean
 		const passStatusMap = {
 			pass: true,
 			fail: false,
 			default: null,
-		  };
+		}
 		// Check existance
 		const foundExamineeResult = data.find(item => item.examinee_id === examineeId)
 		if( foundExamineeResult ){
-			const data = await putExamineeResult({ result_id: foundExamineeResult.result_id, examinee_id: foundExamineeResult.examinee_id, technique_name: foundExamineeResult.technique_name, pass: passStatusMap[passStatus] }, token)
+			await putExamineeResult({ result_id: foundExamineeResult.result_id, examinee_id: foundExamineeResult.examinee_id, technique_name: foundExamineeResult.technique_name, pass: passStatusMap[passStatus] }, token)
 				.catch(() => setErrorToast("Kunde inte lägga till resultat. Kolla internetuppkoppling."))
 			console.log("Response PUT succesful")
 		}else{
