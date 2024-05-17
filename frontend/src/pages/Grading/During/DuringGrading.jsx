@@ -117,11 +117,15 @@ export default function DuringGrading() {
 	}
 	//goes to previous technique if it is not the first technique.
 	const goToPrevTechnique = () => {
-		setCurrentIndex(prevStep => {
-			const previousTechniqueStep = Math.max(prevStep - 1, 0)
-			onUpdateStepToDatabase(previousTechniqueStep)
-			return previousTechniqueStep
-		})
+		if(currentTechniqueStep === 0) {
+			goToAddExamineePage()
+		} else {
+			setCurrentIndex(prevStep => {
+				const previousTechniqueStep = Math.max(prevStep - 1, 0)
+				onUpdateStepToDatabase(previousTechniqueStep)
+				return previousTechniqueStep
+			})
+		}
 		// reset the button colors
 		// Should also load any stored result
 	}
@@ -286,14 +290,15 @@ export default function DuringGrading() {
 
 			<Popup 
 				id={"navigation-popup"} 
-				title={"Tekniker"} 
+				title={"Tekniker-kategorier"} 
 				isOpen={showPopup} 
 				setIsOpen={setShowPopup}> 
 				<div className={styles.popupContent}>
-					{/* Should link to the respective technique grading page. */}
+
 					{categoryIndexMap.map((techniqueName, index) => (
 						<Button 
 							key={index}
+							width={"100%"}
 							onClick={() => {
 								setCurrentIndex(() => {
 									const techniquestep = techniqueName.categoryIndex
@@ -301,13 +306,26 @@ export default function DuringGrading() {
 									return techniquestep
 								})
 								setShowPopup(false)
-								
-								// Reset the 'U'. 'G' button colors
+								// Fetch the correct result for each examinee conected to this technique
 								scrollableContainerRef.current.scrollTop = 0}}>
 							<p>{techniqueName.category}</p></Button>
 					))}
-					{/* Should link to the "after" part of the grading as well as save the changes to the database. */}
-					<Button id={"summary-button"} onClick={gotoSummary}><p>Fortsätt till summering</p></Button>
+                    
+					<div>
+						{/* Go back to the add examinee page */}
+						<Button 
+							id={"back-button"} 
+							outlined={true} 
+							onClick={goToAddExamineePage}>
+							<p>Tillbaka till <br />&quot;Lägg till deltagare&quot;</p>
+						</Button>
+						{/* Go to the summary page */}
+						<Button 
+							id={"summary-button"} 
+							onClick={gotoSummary}>
+							<p>Fortsätt till summering</p>
+						</Button>
+					</div>
 				</div>
 			</Popup>
 		</div>
@@ -319,6 +337,15 @@ export default function DuringGrading() {
 	function gotoSummary() {
 		//TODO: setShowPopup(false)
 		navigate(`/grading/${gradingId}/3`)
+	}
+
+	/**
+     * Navigate back to the page where examinees are added.
+     * 
+     * @author Team Apelsin (2024-05-15)
+     */
+	function goToAddExamineePage() {
+		navigate(`/grading/${gradingId}/1`)
 	}
 
 	/**
@@ -339,14 +366,13 @@ export default function DuringGrading() {
 	}
 
 	/**
-	 * 
-	 * @param {Array} pairs_json Array with all pairs in all gradings
-	 * @returns Array with all pairs in this grading, presented by name, ie {nameLeft, nameRight}
-	 * 
-	 * @author Team Apelsin (2024-05-12)
-	 * 
-	 * TODO: Does not handle single examinee, ie an examinee not included in a pair
-	 */
+     * 
+     * @param {Array} pairs_json Array with all pairs in all gradings
+     * @returns Array with all pairs in this grading, presented by name, ie {nameLeft, nameRight}
+     * 
+     * @author Team Apelsin (2024-05-17)
+     * @version 2.0
+     */
 	function getPairsInCurrrentGrading(pairs_json) {
 		const pair_names_current_grading = []
 		pairs_json.forEach((pair) => {
@@ -355,7 +381,14 @@ export default function DuringGrading() {
 			if (examinee1 !== undefined || examinee2 !== undefined) { // Only add if something is found
 				const name1 = examinee1 ? examinee1.name : "" // If only one name found
 				const name2 = examinee2 ? examinee2.name : ""
-				pair_names_current_grading.push({ nameLeft: name1, nameRight: name2 })
+				const id1 = examinee1 ? examinee1.examinee_id : ""
+				const id2 = examinee2 ? examinee2.examinee_id : ""
+				pair_names_current_grading.push({ 
+					nameLeft: name1, 
+					nameRight: name2, 
+					leftId: id1, 
+					rightId: id2
+				})
 			}
 		})
 		return pair_names_current_grading
