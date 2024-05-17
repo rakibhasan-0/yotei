@@ -16,6 +16,7 @@ import Divider from "../Divider/Divider"
  * 	   style     @type {object}   - Additional styles to add to the popup container.
  * 	   isNested  @type {boolean}  - disables the tinted background and fills the parent container. 
  * 								    Should be used in nested popups.
+ *     divderOption @type {string} - "h1_left" is default, but can be changed to any option in Divider 
  *
  * Example usage:
  *  
@@ -30,11 +31,11 @@ import Divider from "../Divider/Divider"
  *		</div>
  * 	)
  *
- * @author Team Medusa, Team Chimera
+ * @author Team Medusa, Team Chimera, Team Durian 
  * @version 3.0
- * @since 2023-05-16
+ * @since 2024-05-17
  */
-export default function Popup({ title, id, isOpen, setIsOpen, children, isNested, style, onClose, zIndex }) {
+export default function Popup({ title, id, isOpen, setIsOpen, children, isNested, style, onClose, zIndex, dividerOption }) {
 
 	// Synchronize react state with CSS-styling in browser
 	useEffect(() => {
@@ -62,7 +63,7 @@ export default function Popup({ title, id, isOpen, setIsOpen, children, isNested
 				style={style}
 			>
 				<div className={styles.topbar}>
-					{title && <Divider title={title} option="h1_left"/>}
+					{title && <Divider title={title} option={ dividerOption ? dividerOption : "h1_left"} />}
 					<button
 						className={styles.closebutton}
 						onClick={() => {

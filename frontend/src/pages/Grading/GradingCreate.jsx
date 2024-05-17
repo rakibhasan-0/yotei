@@ -51,12 +51,12 @@ export default function GradingCreate() {
 		try {
 
 			const gradingData = {
-				creator_id: userId,
-				belt_id: beltId,
+				creatorId: userId,
+				beltId: beltId,
 				step: 1,
-				technique_step_num: 0,
+				techniqueStepNum: 0,
         title: "Examination (" + formattedDateTime + ")",
-				created_at: formattedDateTime
+				createdAt: formattedDateTime
 			}
 
 			const response = await fetch("/api/examination/grading", {
@@ -76,7 +76,7 @@ export default function GradingCreate() {
 
 			if(response.ok) {
 				const responseData = await response.json()
-				const gradingId = responseData.grading_id
+				const gradingId = responseData.gradingId
 				handleNavigation(gradingId, color)
 			}
 

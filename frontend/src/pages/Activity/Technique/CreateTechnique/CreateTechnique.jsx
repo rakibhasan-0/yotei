@@ -33,9 +33,9 @@ const KIHON_TAG = { id: 1 }
  *
  * Changes version 2:
  * 		Refactored some code. 
- *      Moved error handling to InputTextFields and toasts.
- *
- * @author Team Medusa, Team Durian (Group 3) (2024-05-07)
+ *    Moved error handling to InputTextFields and toasts.
+ *		Removed unnecessary whitespace.
+ * @author Team Medusa, Team Durian (Group 3) (2024-05-16)
  * @version 2.0
  * @since 2023-05-10
  */
@@ -197,8 +197,37 @@ export default function CreateTechnique({ id }) {
 		}
 	}, [techniqueName, createButton])
 
+	function buildTags(tags, kihonChecked) {
+
+		if (kihonChecked && tags["id"] === KIHON_TAG.id) {
+			tags.push(KIHON_TAG)
+		}
+	
+		return tags.map(tag => {
+			return { id: tag.id }
+		})
+	}
+	
+	function buildBelts(belts) {
+		return belts.map(belt => {
+			return { id: belt.id }
+		})
+	}
+	
+	async function postTechnique(technique, token) {
+		const requestOptions = {
+			method: "POST",
+			headers: { "Content-Type": "application/json", "token": token },
+			body: JSON.stringify(technique)
+		}
+	
+		return fetch("/api/techniques", requestOptions)
+			.then(response => { return response })
+			.catch(error => { alert(error.message) })
+	}
+
 	return (
-		<div id={id} style={{ textAlign: "left", paddingBottom: "1.5rem" }}>
+		<div id={id} style={{ textAlign: "left" }}>
 			<title>Skapa teknik</title>
 			<h1 style={{ textAlign: "center" }}>Skapa teknik</h1>
 			<InputTextField
@@ -225,7 +254,6 @@ export default function CreateTechnique({ id }) {
 				onClick={setKihonChecked}
 				label="Kihon"
 			/>
-			<div style={{ height: "1rem" }} />
 
 			<BeltPicker
 				id="create-technique-beltpicker"
@@ -234,7 +262,6 @@ export default function CreateTechnique({ id }) {
 				filterWhiteBelt={true}
 				errorMessage={beltsErr}
 			/>
-			<div style={{ height: "1rem" }} />
 
 			<Divider title="Taggar" option="h1_left" />
 
@@ -245,12 +272,10 @@ export default function CreateTechnique({ id }) {
 				isNested={true}
 				itemName={techniqueName}
 			/>
-			<div style={{ height: "1rem" }} />
 
 			<Divider title="Media" option="h1_left"/>
 
 			<EditGallery id={tempId} exerciseId={tempId} sendData={sendData} undoChanges={undoMediaChanges} done={done} />
-
 
 			<CheckBox
 				id="create-technique-checkbox-continue"
@@ -305,34 +330,5 @@ export default function CreateTechnique({ id }) {
 		</div>
 	)
 
-}
-
-function buildTags(tags, kihonChecked) {
-
-	if (kihonChecked && tags["id"] === KIHON_TAG.id) {
-		tags.push(KIHON_TAG)
-	}
-
-	return tags.map(tag => {
-		return { id: tag.id }
-	})
-}
-
-function buildBelts(belts) {
-	return belts.map(belt => {
-		return { id: belt.id }
-	})
-}
-
-async function postTechnique(technique, token) {
-	const requestOptions = {
-		method: "POST",
-		headers: { "Content-Type": "application/json", "token": token },
-		body: JSON.stringify(technique)
-	}
-
-	return fetch("/api/techniques", requestOptions)
-		.then(response => { return response })
-		.catch(error => { alert(error.message) })
 }
 

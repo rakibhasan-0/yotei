@@ -110,6 +110,28 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
       """)
   List<StatisticsActivity> getAllSessionReviewExercises(Long id);
 
+  // Get a list of belts associated with a group/plan
+  @Query("""
+    SELECT 
+        p.belts
+    FROM
+        Plan p
+    WHERE
+        p.id = :id
+    """)
+  List<Belt> getBeltsForGroup(Long id);
+
+  // Get a list of techniques associated with a list of belts.
+  @Query("""
+    SELECT 
+        new se.umu.cs.pvt.statistics.StatisticsResponse(t.id, t.name, 'technique')
+    FROM
+        Technique t
+    WHERE
+        :belts MEMBER OF t.belts
+    """)
+  List<StatisticsResponse> getTechniquesForBelts(List<Belt> belts);
+
   // Get a list of belts associated with a technique.
   @Query("""
     SELECT 

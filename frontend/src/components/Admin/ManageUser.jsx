@@ -13,9 +13,9 @@ import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../ut
  * Component made for the admin page. Made to handle the add user 
  * feature on the admin page.
  *
- *  @author Chimera (Group 4), Team Mango (Group 4)
+ *  @author Chimera (Group 4), Team Mango (Group 4), Team Durian (Group 3)
  *  @version 3.0
- *  @since 2024-04-22
+ *  @since 2024-05-16
  *  @returns Component for handling adding a user meant to be used on another page.
  */
 
@@ -119,8 +119,8 @@ export default function ManageUser() {
 
 	return (
 		<div>
-			<Divider option={"h2_left"} title={"Lägg till användare"} /> 
-			<br/>
+			<Divider option={"h2_left"} title={"Lägg till användare"} />
+			<div className='mb-2' style={{height: 0.5}} />
 			<InputTextFieldBorderLabel errorMessage={usernameError} id={"register-user-username-input"} type={"user"} label= {"Användarnamn"} onChange={(event) => setUserName(event.target.value)}/>
 			<div className='mb-2' />
 			<InputTextFieldBorderLabel errorMessage={passwordError} id={"register-user-password-input"} type={"password"} label={"Lösenord"} onChange={(event) => setPasswordInput(event.target.value)}/>
@@ -141,12 +141,11 @@ export default function ManageUser() {
 					Lägg till användare
 				</Button>
 			</div>
-
-			<br/>
+			
 			<Divider option={"h2_left"} title={"Hantera användare"} /> 
-			<br/>
 			<Dropdown 
-				id={"admin-new-user-pick-role"} centered={true} 
+				id={"admin-new-user-pick-role"} 
+				centered={true} 
 				text={user?.username || "Välj användare"}>
 				{users?.map((user, index) => (
 					<div className={styles.dropdownRow} key={index} onClick={() => {
@@ -157,9 +156,9 @@ export default function ManageUser() {
 					</div>
 				))}
 			</Dropdown>
-			<div className="pt-4">
-				<InputTextFieldBorderLabel errorMessage={mgmError} id = {"confirm-username-input"} type={"user"} label= {"Bekräfta användarnamn"} onChange={(event) => setMgmConfirmUser(event.target.value)}/>
-			</div>
+			<div className='mb-2' />
+			<InputTextFieldBorderLabel errorMessage={mgmError} id = {"confirm-username-input"} type={"user"} label= {"Bekräfta användarnamn"} onChange={(event) => setMgmConfirmUser(event.target.value)}/>
+			<div className='mb-2' />
 			<Dropdown 
 				centered={true} 
 				text={manageUserRole?.role || "Välj roll"}>
@@ -174,11 +173,11 @@ export default function ManageUser() {
 			<Button disabled={!user || !manageUserRole || !mgmConfirmUser} width={"100%"} onClick={mutateUser}>
 				Ändra rättigheter	
 			</Button>
-			<div className="pt-4">
-				<Button disabled={!user || !mgmConfirmUser} width={"100%"} onClick={removeUser}>
+			<div className='mb-2' />
+			<Button disabled={!user || !mgmConfirmUser} width={"100%"} onClick={removeUser}>
 					Ta bort användare
-				</Button>
-			</div>
+			</Button>
+			
 		</div>	
 	)
 }

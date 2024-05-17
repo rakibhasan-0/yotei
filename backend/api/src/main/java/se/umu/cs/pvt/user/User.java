@@ -2,13 +2,10 @@ package se.umu.cs.pvt.user;
 
 import javax.persistence.*;
 
-import static org.mockito.ArgumentMatchers.any;
-
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * This is the User class that is responsible for the credentials of a registered user.
@@ -22,6 +19,7 @@ import java.util.Collections;
  * InvalidPasswordException.java - An exception that can be thrown when an invalid password is entered.
  * 
  * @author Team Hot-Pepper (G7) (Doc: Griffin c17wfn)
+ * @author Team Mango (Grupp 4) - 2024-05-16
  */
 @Entity
 @Table(name = "user_table")
@@ -52,6 +50,12 @@ public class User implements Serializable {
      */
     @Column(nullable = false, name = "user_role")
     private Role userRole;
+
+    /**
+     * Foreign key pointing to the role table
+     */
+    @Column(nullable = true, name = "role_id")
+    private Long roleId;
 
     /**
      * The different roles the user can have.
@@ -129,6 +133,33 @@ public class User implements Serializable {
         setUserRole(userRole);
     }
 
+    /**
+     * User constructor with arguments. Hashes the user password.
+     * @param name The username
+     * @param password The user password (plain text)
+     * @param userRole The role of the user
+     * @param roleId The id of the role to give the user
+     * @throws InvalidPasswordException Thrown when the password is invalid and null
+     * @throws InvalidUserNameException Thrown when username is empty
+     * @throws NoSuchAlgorithmException Thrown when the hashing algorithm is not found
+     * @throws InvalidKeySpecException  Thrown when the key generation fails
+     * @see Role
+     */
+    public User(String name, String password, int userRole, Long roleId) throws InvalidPasswordException, InvalidUserNameException,
+            NoSuchAlgorithmException, InvalidKeySpecException {
+
+        if (name.isEmpty()) {
+            throw new InvalidUserNameException("Name may not be empty!");
+        } else if (password == null || password.isEmpty()) {
+            throw new InvalidPasswordException("Password may not be empty!");
+        }
+
+        setUsername(name);
+        setPassword(password);
+        setUserRole(userRole);
+        setRoleId(roleId);
+    }
+
 
     public String getUsername() {
         return username;
@@ -188,6 +219,14 @@ public class User implements Serializable {
     
     public Role getUserRole() {
         return this.userRole;
+    }
+
+    public void setRoleId(Long id) {
+        this.roleId = id;
+    }
+
+    public Long getRoleId() {
+        return this.roleId;
     }
 
     /**
