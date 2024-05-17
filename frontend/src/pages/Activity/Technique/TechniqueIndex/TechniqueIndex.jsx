@@ -45,7 +45,7 @@ export default function TechniqueIndex() {
 	const location = useLocation()
 	const clearSearchText = location.state && location.state.clearSearchText
 	const navigate = useNavigate()
-	const [selectedTechniqueId, setSelectedTechniqueId] = useState(null);
+	const [selectedTechniqueId, setSelectedTechniqueId] = useState(null)
 
 	useEffect(() => {
 		if (filterCookie) {
@@ -132,7 +132,7 @@ export default function TechniqueIndex() {
 	}
 	
 	const handleMoreClicked = (id) => {
-		setSelectedTechniqueId(id);
+		setSelectedTechniqueId(id)
 		//Open pop up
 		setShowMorePopup(!showMorePopup)
 	}

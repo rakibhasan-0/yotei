@@ -8,6 +8,7 @@ import Spinner from "../Common/Spinner/Spinner"
 import { getLists } from "../Common/SearchBar/SearchBarUtils"
 import { AccountContext } from "../../context"
 import useMap from "../../hooks/useMap"
+import { setError, setSuccess } from "../../utils"
 
 export const AddToListPopupContent = ({ techExerID }) => {
 	const [isLoading, setIsLoading] = useState(true)
@@ -17,22 +18,22 @@ export const AddToListPopupContent = ({ techExerID }) => {
 	const { token } = useContext(AccountContext)
 	const [map, mapActions] = useMap()
 
-	const [selectedLists, setSelectedLists] = useState([]);
+	const [selectedLists, setSelectedLists] = useState([])
 
 	/**
 	 * Adds or removes the ID of the item from the checkboxed list.
 	 * @param {string} id - The ID of the item.
 	 * @returns {void}
 	 */
-    const handleCheck = (id) => {
-        setSelectedLists(prevIds => {
-            if (prevIds.includes(id)) {
-                return prevIds.filter(itemId => itemId !== id);
-            } else {
-                return [...prevIds, id];
-            }
-        });
-    };
+	const handleCheck = (id) => {
+		setSelectedLists(prevIds => {
+			if (prevIds.includes(id)) {
+				return prevIds.filter(itemId => itemId !== id)
+			} else {
+				return [...prevIds, id]
+			}
+		})
+	}
 
 
 
@@ -45,7 +46,7 @@ export const AddToListPopupContent = ({ techExerID }) => {
 		setIsLoading(true)
 		setLists(lists)
 		fetchingList()
-	}, [searchListText])
+	}, [searchListText, lists])
 
 
 
@@ -62,9 +63,9 @@ export const AddToListPopupContent = ({ techExerID }) => {
 			if (result.error) return
 
 			// Extract the 'id' and 'name' fields from each item in the result used in displaying the list.
-			const lists = result.map(item => ({ id: item.id, name: item.name, author: item.author, numberOfActivities: item.size}))
+			const listsToAdd = result.map(item => ({ id: item.id, name: item.name, author: item.author, numberOfActivities: item.size}))
 
-			setLists(lists)
+			setLists(listsToAdd)
 			setIsLoading(false)
 		})
 	}
@@ -78,26 +79,22 @@ export const AddToListPopupContent = ({ techExerID }) => {
 			listId: selectedLists[0],
 			exerciseId: techExerID.exerciseId,
 			techniqueId: techExerID.techniqueId
-		};
+		}
 	
-		const response = await fetch('/api/activitylistentry/multiAdd', {
-			method: 'POST',
+		const response = await fetch("/api/activitylistentry/multiAdd", {
+			method: "POST",
 			headers: {
-				'Content-Type': 'application/json',
-				'ids': selectedLists.join(','),
-				'token': token
+				"Content-Type": "application/json",
+				"ids": selectedLists.join(","),
+				"token": token
 			},
 			body: JSON.stringify(jsonContent)
-		});
+		})
 		
 		if (!response.ok) {
-			throw new Error(`${response.status}`);
+			setError("Fel vid sparning av aktivitet till listor")
 		} else {
-			const text = await response.text();
-			if (text) {
-				const data = JSON.parse(text);
-				console.log(data);
-			}
+			setSuccess("Aktivitet sparad till listor")
 		}
 	}
 
@@ -105,8 +102,8 @@ export const AddToListPopupContent = ({ techExerID }) => {
 
 
 	return isLoading ? (
-		<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
-    		<Spinner />
+		<div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh"}}>
+			<Spinner />
 		</div>
 	) : (
 		<div className={styles["container"]}>
@@ -122,11 +119,11 @@ export const AddToListPopupContent = ({ techExerID }) => {
 				onChange={setSearchListText}
 			/>
 			<InfiniteScrollComponent>
-    			{lists.map((item, index) => (
-        			<AddToListItem
-					item={item}
-					key={index}
-					onCheck={handleCheck}
+				{lists.map((item, index) => (
+					<AddToListItem
+						item={item}
+						key={index}
+						onCheck={handleCheck}
 					/>
 				))}
 			</InfiniteScrollComponent>
