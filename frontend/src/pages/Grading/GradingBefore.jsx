@@ -6,10 +6,11 @@ import styles from "./GradingBefore.module.css"
 import { AccountContext } from "../../context"
 import AddExaminee from "../../components/Common/AddExaminee/AddExaminee"
 import EditableListItem from "../../components/Common/EditableListItem/EditableListItem"
-import { X as CloseIcon } from "react-bootstrap-icons"
+import { X as CloseIcon, Translate } from "react-bootstrap-icons"
 
 import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../utils"
 import {setError as setErrorToast } from "../../utils"
+import EditableInputTextField from "../../components/Common/EditableInputTextField/EditableInputTextField"
 
 /**
  * Page to add examinees and make pairs out of the added examinees for a grading.
@@ -36,6 +37,7 @@ export default function GradingBefore() {
 	const [pairs, setPair] = useState([]) 
 	const [checkedExamineeIds, setCheckedExamineeIds] = useState([])
   const [redirect, setRedirect] = useState(false)
+  const [gradingName, setGradingName] = useState("")
   const containsSpecialChars = str => /[^\w äöåÅÄÖ-]/.test(str)
 
   let numberOfPairs = 0
@@ -55,6 +57,31 @@ export default function GradingBefore() {
 		}
 		return ""
 	}
+
+  /**
+   * Validets so the name of tag is not containing any illegal characters 
+   * or if the name is empty or if the name of the tag already exists. 
+   * @param {String} name The name of the tag to be validated. 
+   * @returns Nothing if the name is valid, otherwise, the errortext. 
+   */
+  const validateGradingName = (name) => {
+		if (name == "") {
+			return "Ange ett namn, det får inte vara tomt"
+		}
+		return ""
+	}
+
+  /**
+   * This effects called when you enter the page first time
+   */
+  useEffect(() => {
+    const fetchData = async() => {
+      const data = await getGrading(token)
+			.catch(() => setErrorToast("Kunde inte hämta examinationen. Kontrollera din internetuppkoppling."))   
+      setGradingName(data.title)
+    }
+    fetchData()
+  },[])
 
   /**
    * Help function to activate the useEffect function to start the navigation
@@ -285,12 +312,21 @@ export default function GradingBefore() {
 			.catch(() => setErrorToast("Kunde inte updatera personen. Kontrollera din internetuppkoppling."))
 	}
 
+  function editGradingName(Id, text) {
+    setGradingName(text)
+  }
 
 	return (
 		<div>
 			<div> 
-				<div style={{ backgroundColor: ColorParam, borderRadius: "0.3rem", padding: "0px" }}>
-					<h2>KIHON WAZA</h2>
+				<div style={{ backgroundColor: ColorParam, borderRadius: "0.3rem"}}>
+          <EditableInputTextField
+          item={gradingName}
+          id={"grading-name-text-field"}
+          key={"grading-name-text-field"}
+          validateInput={validateInput}
+          onEdit={editGradingName}
+          />  
 				</div>
 			</div>
 
@@ -491,6 +527,23 @@ async function putExaminee(examinee, token) {
 
 	return fetch("/api/examination/examinee", requestOptions)
 		.then(response => { return response })
+		.catch(error => { alert(error.message) })
+}
+
+/**
+ * Get an already exsisting grading in the database
+ * @param {any} token 
+ * @returns The response code
+ */
+async function getGrading(token) {
+	const requestOptions = {
+		method: "GET",
+		headers: { "Content-Type": "application/json", "token": token },
+
+	}
+
+	return fetch(`/api/examination/grading/${gradingId}`, requestOptions)
+		.then(response => { return response.json() })
 		.catch(error => { alert(error.message) })
 }
 

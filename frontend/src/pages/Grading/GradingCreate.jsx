@@ -23,7 +23,7 @@ export default function GradingCreate() {
 	const { token, userId } = context
 	const navigate = useNavigate()
 	const today = new Date()
-	const formattedDateTime = today.toISOString()
+	const formattedDateTime = today.toISOString().split('T')[0]
 
 
 	/**
@@ -55,6 +55,7 @@ export default function GradingCreate() {
 				belt_id: beltId,
 				step: 1,
 				technique_step_num: 0,
+        title: "Examination (" + formattedDateTime + ")",
 				created_at: formattedDateTime
 			}
 
