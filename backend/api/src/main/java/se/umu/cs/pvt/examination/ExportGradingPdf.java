@@ -51,6 +51,7 @@ public class ExportGradingPdf {
     private Long grading_id;
     private String gradingProtocol;
     private List<ExaminationTechniqueCategory> examinationTechniqueCategories;
+    
     private final int   MAX_NUM_COLUMNS = 6,
                         MAX_NUM_ROWS = 15, /*måsta ändra de här eftersom de klipps av annars på första sidorna eftersom de är just lite för mycke.. om den 
                                             *ändras till 14 så blir det en extra sida med bara namn så kanske komma på nå där vi kollar om nästa initY värde blir mindre än 0...
@@ -122,7 +123,7 @@ public class ExportGradingPdf {
         int initX = tableStartXPos; //kom på nå bättre namn
         int initY = pageHeight-75;
 
-        PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/truetype/freefont/FreeSerif.ttf"));
+        PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/noto/NotoSans-Regular.ttf"));
         PDPageContentStream contentStream = new PDPageContentStream(document,page);
         contentStream.setStrokingColor(Color.DARK_GRAY);
         contentStream.setLineWidth(1);
@@ -184,7 +185,7 @@ public class ExportGradingPdf {
                     String grade = "";
                     for (int l = 0 ; l < examinationResults.size() ; l++) {
                         if ((examinationTechniqueCategories.get(i).getTechniques().get(j).toString()).equals(examinationResults.get(l).getTechnique_name())) {
-                            if (examinees.get(k).getExaminee_id() == examinationResults.get(l).getExaminee_id()) {
+                            if (examinees.get(k + (onPage*MAX_NUM_COLUMNS)).getExaminee_id() == examinationResults.get(l).getExaminee_id()) {
                                 if (examinationResults.get(l).getPass()) 
                                     grade += "G";
                                 else
@@ -195,11 +196,11 @@ public class ExportGradingPdf {
 
                     for (int l = 0; l < examinationComments.size() ; l++) {
                         if ((examinationTechniqueCategories.get(i).getTechniques().get(j).toString()).equals(examinationComments.get(l).getTechniqueName())) {
-                            if (examinees.get(k).getExaminee_id() == examinationComments.get(l).getExamineeId()) 
+                            if (examinees.get(k + (onPage*MAX_NUM_COLUMNS)).getExaminee_id() == examinationComments.get(l).getExamineeId()) 
                                 grade += " - " + examinationComments.get(l).getComment();
                         }
                     }
-                    writeToCell(initX, initY, contentStream, grade, font); // gör om detta till en sträng som innehåller G eller U och följs med : Kommentar som rymms...
+                    writeToCell(initX, initY, contentStream, shortenString(grade, 25), font); // gör om detta till en sträng som innehåller G eller U och följs med : Kommentar som rymms...
                     initX+=CELL_WIDTH;
                 }
 
@@ -266,7 +267,7 @@ public class ExportGradingPdf {
      * @throws IOException
      */
     private void createHeader(String code, String color, PDPageContentStream contentStream) throws IOException {
-        PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/truetype/freefont/FreeSerif.ttf"));
+        PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/noto/NotoSans-Regular.ttf"));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String date = sdf.format(grading.getCreated_at()).toString();
         int initX = TABLE_START_X_POS;
@@ -344,7 +345,7 @@ public class ExportGradingPdf {
         createPairCommentPage();
         createExamineeCommentPage();
 
-        document.save("/home/adam/Programming/yotei/test.pdf");
+        document.save("/home/marcus/school/yotei/test.pdf");
         document.close();
     }
 
@@ -362,7 +363,7 @@ public class ExportGradingPdf {
         int initX = TABLE_START_X_POS;
         int initY = pageHeight-75;
         
-        PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/truetype/freefont/FreeSerif.ttf"));
+        PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/noto/NotoSans-Regular.ttf"));
         PDPageContentStream contentStream = new PDPageContentStream(document,page);
         contentStream.setStrokingColor(Color.DARK_GRAY);
         contentStream.setLineWidth(1);
@@ -412,7 +413,7 @@ public class ExportGradingPdf {
         int initX = TABLE_START_X_POS;
         int initY = pageHeight-75;
         
-        PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/truetype/freefont/FreeSerif.ttf"));
+        PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/noto/NotoSans-Regular.ttf"));
         PDPageContentStream contentStream = new PDPageContentStream(document,page);
         contentStream.setStrokingColor(Color.DARK_GRAY);
         contentStream.setLineWidth(1);
@@ -492,7 +493,7 @@ public class ExportGradingPdf {
         int initX = TABLE_START_X_POS;
         int initY = pageHeight-75;
         
-        PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/truetype/freefont/FreeSerif.ttf"));
+        PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/noto/NotoSans-Regular.ttf"));
         PDPageContentStream contentStream = new PDPageContentStream(document,page);
         contentStream.setStrokingColor(Color.DARK_GRAY);
         contentStream.setLineWidth(1);
