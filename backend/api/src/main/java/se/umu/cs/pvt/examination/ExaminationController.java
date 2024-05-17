@@ -273,8 +273,10 @@ public class ExaminationController {
     }
 
     /**
-     * 
-     * @return
+     * Returns a group comment based on grading id and technique name.
+     * @param gradingId the gradingId of sought grading.
+     * @param techniqueName the technique name of sought technique.
+     * @return all the comments on a group based on grading id and technique name and Examinee Id and Pair Id is null.
      */
     @GetMapping("/comment/group/{grading_id}")
     public ResponseEntity<List<ExaminationComment>> getGradingComment(@PathVariable("grading_id") long gradingId, @RequestParam(name = "technique_name") String techniqueName ) {
