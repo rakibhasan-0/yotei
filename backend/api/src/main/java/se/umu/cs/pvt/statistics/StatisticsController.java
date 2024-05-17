@@ -166,7 +166,6 @@ public class StatisticsController {
         HashMap<Long, Long> counts = new HashMap<>();
 
         for (StatisticsActivity sa : techniques) {
-            System.out.println(sa.getName());
             if (!counts.containsKey(sa.getActivity_id())) {
                 counts.put(sa.getActivity_id(), sa.getCount());
             } else {
