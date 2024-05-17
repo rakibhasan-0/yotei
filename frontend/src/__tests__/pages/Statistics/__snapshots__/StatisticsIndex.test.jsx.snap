@@ -1,0 +1,375 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Statistics Component Snapshot match 1`] = `
+<DocumentFragment>
+   
+  <div>
+    <title>
+      Statistik
+    </title>
+    <svg
+      fill="none"
+      height="45"
+      id=""
+      viewBox="0 0 45 45"
+      width="45"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        clip-rule="evenodd"
+        d="M22.5 43C22.5 44.1046 21.6015 45.0093 20.5012 44.9124C9.0111 43.901 0 34.2528 0 22.5C0 10.0736 10.0736 0 22.5 0C34.2528 0 43.901 9.0111 44.9124 20.5012C45.0093 21.6015 44.1046 22.5 43 22.5V22.5C41.8954 22.5 41.0114 21.6014 40.8935 20.5032C39.8977 11.225 32.0426 4 22.5 4C12.2827 4 4 12.2827 4 22.5C4 32.0426 11.225 39.8977 20.5032 40.8935C21.6014 41.0114 22.5 41.8954 22.5 43V43Z"
+        fill="#B4B4B4"
+        fill-rule="evenodd"
+      />
+    </svg>
+    <div>
+      <div>
+        <div
+          id="filter-container"
+        >
+          <div>
+            <div>
+              <button
+                class="undefined undefined undefined"
+                id="filter-button"
+                style="width: 40px;"
+                type="button"
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 16 16"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3h9.05zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8h2.05zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1h9.05z"
+                    fill-rule="evenodd"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div
+            id="filter-box"
+          >
+            <fieldset>
+              <legend>
+                Filtering
+              </legend>
+              <div>
+                <h2>
+                  Från
+                </h2>
+                <div />
+                <input
+                  class="false undefined"
+                  data-testid="date-picker-input"
+                  id="start-date-picker"
+                  max="6969-04-20"
+                  type="date"
+                  value="2022-05-16"
+                />
+              </div>
+              <div>
+                <h2>
+                  Till
+                </h2>
+                <div />
+                <input
+                  class="false undefined"
+                  data-testid="date-picker-input"
+                  id="end-date-picker"
+                  max="6969-04-20"
+                  type="date"
+                  value="2024-05-16"
+                />
+              </div>
+              <div>
+                <div
+                  id="techniqueFilter-BeltPicker"
+                >
+                  <div
+                    id="techniqueFilter-BeltPicker-header"
+                  >
+                    <div />
+                    <p>
+                      Bälten
+                    </p>
+                    <div
+                      class=" "
+                      id="techniqueFilter-BeltPicker-toggle-dropdown"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="28"
+                        id="techniqueFilter-BeltPicker-dropdown"
+                        viewBox="0 0 16 16"
+                        width="28"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                          fill-rule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <div>
+                    <div
+                      id="techniqueFilter-BeltPicker-children"
+                      style="display: none;"
+                    >
+                      <input
+                        style="display: none;"
+                        type="checkbox"
+                      />
+                       
+                      <div>
+                        <p
+                          class="undefined undefined"
+                        >
+                          Rensa valda bälten
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <p />
+              </div>
+              <p />
+              <div>
+                <h2>
+                  Visa Övningar
+                </h2>
+                <div />
+                <label
+                  class="undefined undefined "
+                  id="techniqueFilter-VisaÖvningar"
+                >
+                  <input
+                    id="techniqueFilter-VisaÖvningar-checkbox"
+                    type="checkbox"
+                  />
+                </label>
+              </div>
+              <div>
+                <h2>
+                  Kihon
+                </h2>
+                <div />
+                <label
+                  class="undefined undefined "
+                  id="techniqueFilter-KihonCheck"
+                >
+                  <input
+                    id="techniqueFilter-KihonCheck-checkbox"
+                    type="checkbox"
+                  />
+                </label>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+      <div
+        id="grading-statistics-container"
+      >
+        <div>
+          <button
+            id="popup-button"
+          >
+            <img
+              src="/GradingStatistics.svg"
+            />
+          </button>
+        </div>
+      </div>
+      <div>
+        <button>
+          <img
+            src="/Statistics.svg"
+          />
+        </button>
+      </div>
+    </div>
+    <div
+      class="activitiesContainer"
+      id="technique-exercise-list"
+    >
+      <h5
+        style="font-size: 25px;"
+      >
+        Inga aktiviteter hittades
+      </h5>
+    </div>
+    <div>
+      <button
+        class="undefined undefined undefined"
+        id="statistics-back-button"
+        style="width: 25%;"
+        type="button"
+      >
+        <p>
+          Tillbaka
+        </p>
+      </button>
+    </div>
+  </div>
+   
+</DocumentFragment>
+`;
+
+exports[`Statistics Filter Snapshot match 1`] = `
+<DocumentFragment>
+  <div>
+    <div
+      id="filter-container"
+    >
+      <div>
+        <div>
+          <button
+            class="undefined undefined undefined"
+            id="filter-button"
+            style="width: 40px;"
+            type="button"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 16 16"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3h9.05zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8h2.05zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1h9.05z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div
+        id="filter-box"
+      >
+        <fieldset>
+          <legend>
+            Filtering
+          </legend>
+          <div>
+            <h2>
+              Från
+            </h2>
+            <div />
+            <input
+              class="false undefined"
+              data-testid="date-picker-input"
+              id="start-date-picker"
+              max="6969-04-20"
+              type="date"
+              value="2022-05-08T00:00:00.000Z"
+            />
+          </div>
+          <div>
+            <h2>
+              Till
+            </h2>
+            <div />
+            <input
+              class="false undefined"
+              data-testid="date-picker-input"
+              id="end-date-picker"
+              max="6969-04-20"
+              type="date"
+              value="2024-05-08T00:00:00.000Z"
+            />
+          </div>
+          <div>
+            <div
+              id="techniqueFilter-BeltPicker"
+            >
+              <div
+                id="techniqueFilter-BeltPicker-header"
+              >
+                <div />
+                <p>
+                  Bälten
+                </p>
+                <div
+                  class=" "
+                  id="techniqueFilter-BeltPicker-toggle-dropdown"
+                >
+                  <svg
+                    fill="currentColor"
+                    height="28"
+                    id="techniqueFilter-BeltPicker-dropdown"
+                    viewBox="0 0 16 16"
+                    width="28"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                      fill-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div>
+                <div
+                  id="techniqueFilter-BeltPicker-children"
+                  style="display: none;"
+                >
+                  <input
+                    style="display: none;"
+                    type="checkbox"
+                  />
+                   
+                  <div>
+                    <p
+                      class="undefined undefined"
+                    >
+                      Rensa valda bälten
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p />
+          </div>
+          <p />
+          <div>
+            <h2>
+              Visa Övningar
+            </h2>
+            <div />
+            <label
+              class="undefined undefined "
+              id="techniqueFilter-VisaÖvningar"
+            >
+              <input
+                id="techniqueFilter-VisaÖvningar-checkbox"
+                type="checkbox"
+              />
+            </label>
+          </div>
+          <div>
+            <h2>
+              Kihon
+            </h2>
+            <div />
+            <label
+              class="undefined undefined "
+              id="techniqueFilter-KihonCheck"
+            >
+              <input
+                id="techniqueFilter-KihonCheck-checkbox"
+                type="checkbox"
+              />
+            </label>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
