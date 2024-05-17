@@ -61,7 +61,7 @@ public class ExaminationResult {
         return technique_name;
     }
 
-    public boolean getPass(){
+    public Boolean getPass(){
         return pass;
     }
 
