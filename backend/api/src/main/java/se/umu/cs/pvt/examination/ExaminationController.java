@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.umu.cs.pvt.belt.BeltRepository;
 
+import static org.mockito.ArgumentMatchers.isNotNull;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -231,8 +233,8 @@ public class ExaminationController {
             System.out.println("Grading not found");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        
-        if(examineeRepository.findById(examination_comment.getExamineeId()).isEmpty() || examination_comment == null){
+    
+        if(examination_comment.getExamineeId() != null && examineeRepository.findById(examination_comment.getExamineeId()).isEmpty() || examination_comment == null){
             System.out.println("Examinee not found");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
