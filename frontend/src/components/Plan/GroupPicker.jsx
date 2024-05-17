@@ -57,7 +57,7 @@ const GroupRow = ({group, onToggle}) => {
  * Parent handles logic.
  * 
  * If testFetchMethod is used, group picker will instead try to display 
- * what testFetchMethod returns. To fetch from the database dont 
+ * what testFetchMethod returns. To fetch from the database don't 
  * declare testFetchMethod when creating GroupPicker.
  * 
  * Example of using testFetchMehtod.
@@ -97,44 +97,65 @@ const GroupRow = ({group, onToggle}) => {
     } 
  * 
  * 
- * @author Griffin (Group 2), Team Mango (Group 4) (2024-05-06) 
+ * @author Griffin (Group 2), Team Mango (Group 4) (2024-05-17) 
  * @since 2023-05-17
  * @version 1.0
  * @param id An id for group picker
+ * @param states A variable corresponding to chosenGroups in FilterPlan.jsx.
  * @param testFetchMethod is used to test functionallity of GroupPicker
  * @param onToggle A toggle function when a group is selected.
+ * @param onlyMyGroups A boolean variable for if the new filtering checkbox is active or not.
+ * @param callbackFunctionCheckbox Is called when the checkbox is pressed to set the groups.
  * @returns A new group picker component.
+ * Updates: 2024-05-10: Added a checkbox and filtering of groups that a user has created.
+ *  	    2024-05-17: Fixed the filtering and refactored code slightly.
  */
-
-export default function GroupPicker({ id, states, testFetchMethod, onToggle}) {
+export default function GroupPicker({ id, states, testFetchMethod, onToggle, onlyMyGroups, callbackFunctionCheckbox}) {
 	const [ groups, setGroups ] = useState()
 	const { token } = useContext(AccountContext)
+
+	const user = useContext(AccountContext) //Needed to get the userId to get only this user's groups.
 
 	async function fetchPlans() {
 		if (testFetchMethod !== null && testFetchMethod !== undefined) {
 			//used for testing.
 			const fetch = testFetchMethod()
 			setGroups(fetch)
+			return
 		}
-		else {
-			await fetch("/api/plan/all", {
-				method: "GET",
-				headers: { token }
-			}).then(async data => {
-				const json = await data.json()
-				setGroups(json.map(group => {
+		
+		//No test method used.
+		await fetch("/api/plan/all", {
+			method: "GET",
+			headers: { token }
+		}).then(async data => {
+			const json = await data.json()
+
+			if (onlyMyGroups) {
+				//Only this user's groups should be shown, so we filter first.
+				setGroups(json.filter(group => group.userId === user.userId).map(group => {
+					//This is called once for each group every time you toggle a group checkbox. (You get one checkbox for each group.)
 					return {...group, selected: states && states.includes(group.id)}
 				}))
-			}).catch(() => {
-				setErrorToast("Kunde inte hämta grupper") //TODO this error handling here seems problematic.
-				//Potential solutions: Return 200 or 204 in the backend when there are no groups (instead of 404), or change just the code here.
-			})
-		}
+			}
+			else {
+				//All groups are used.
+				setGroups(json.map(group => { //Old code.
+					return {...group, selected: states && states.includes(group.id)}
+				}))
+			}
+		}).catch(() => {
+			setErrorToast("Kunde inte hämta grupper") //TODO this error handling here seems problematic.
+			//Potential solutions: Return 200 or 204 in the backend when there are no groups (instead of 404), or change just the code here.
+		})
 	}
 
 	useEffect(() => {
 		fetchPlans()
-	}, [states])
+		if (callbackFunctionCheckbox) { //If the callback function is set (not true for tests).
+			callbackFunctionCheckbox(groups) //Set the groups variable in PlanIndex.jsx.
+		}
+	}, [states, onlyMyGroups]) //Should be updated when the checkbox for onlyMyGroups is updated.
 
 	function checkID (id) {
 		if (id === null || id === undefined) {
