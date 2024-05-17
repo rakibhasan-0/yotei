@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom"
 import Statistics from "../../../pages/Statistics/StatisticsIndex"
 import StatisticsPopUp from "../../../pages/Statistics/StatisticsPopUp"
 import FilterStatistics from "../../../pages/Statistics/FilterStatistics"
+import GradingStatisticsPopup from "../../../pages/Statistics/GradingStatisticsPopup"
 configure({ testIdAttribute: "id" })
 
 /**
@@ -72,6 +73,41 @@ const mockedGroupActivities = [
 		name: "Hook mot lever",
 		type: "technique",
 	}]
+
+describe("Grading popup test", () => {
+
+	test("Button is rendering", () => {
+
+		render(
+			<BrowserRouter>
+				<Statistics/>
+			</BrowserRouter>
+		)
+
+		expect(screen.getByTestId("grading-statistics-container")).toBeInTheDocument()
+	})
+
+	test("Clicking button should show popup", async () => {
+
+		render(
+			<BrowserRouter>
+				<GradingStatisticsPopup/>
+			</BrowserRouter>
+		)
+
+		fireEvent.click(screen.getByRole("button"))
+
+		//TODO : 
+		//Text need to be changed in accordance with implementation
+		await waitFor(() => {
+			expect(screen.getByText("Statistik för graderingar")).toBeInTheDocument()
+		})
+		
+	})
+
+})
+
+
 
 /**
  * @author Team Coconut
