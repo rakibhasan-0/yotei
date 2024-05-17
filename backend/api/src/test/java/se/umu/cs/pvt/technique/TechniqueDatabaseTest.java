@@ -50,7 +50,7 @@ import java.time.Duration;
  */
 public class TechniqueDatabaseTest {
     private static PostgreSQLContainer<?> postgreSQLContainer;
-    private static final String DOCKER_IMAGE_NAME = "yotei-psql-ci";
+    private static final String DOCKER_IMAGE_NAME = "yotei-psql";
     private static final String POSTGRESQL_USER = "psql";
     private static final String POSTGRESQL_PASSWORD = "yotei123";
     private static final String POSTGRESQL_DATABASE = "yotei";
@@ -73,7 +73,7 @@ public class TechniqueDatabaseTest {
         .withExposedPorts(PostgreSQLContainer.POSTGRESQL_PORT);
 
         postgreSQLContainer.setWaitStrategy(Wait.defaultWaitStrategy()
-                .withStartupTimeout(Duration.ofSeconds(60)));
+                .withStartupTimeout(Duration.ofSeconds(120)));
         
         postgreSQLContainer.start();
     }
