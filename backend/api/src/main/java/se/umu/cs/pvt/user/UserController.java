@@ -4,6 +4,8 @@ import com.auth0.jwt.interfaces.Claim;
 
 import se.umu.cs.pvt.permission.RoleToPermission;
 import se.umu.cs.pvt.permission.RoleToPermissionRepository;
+import se.umu.cs.pvt.permission.UserToPermission;
+import se.umu.cs.pvt.permission.UserToPermissionRepository;
 import se.umu.cs.pvt.role.Role;
 import se.umu.cs.pvt.role.RoleRepository;
 
@@ -35,16 +37,18 @@ public class UserController {
     private final UserRepository repository;
     private final RoleRepository roleRepository;
     private final RoleToPermissionRepository roleToPermissionRepository;
+    private final UserToPermissionRepository userToPermissionRepository;
 
     /**
      * Constructor for the LoginController object.
      * @param repository Autowired
      */
     @Autowired
-    public UserController(UserRepository repository, RoleRepository roleRepository, RoleToPermissionRepository roleToPermissionRepository) {
+    public UserController(UserRepository repository, RoleRepository roleRepository, RoleToPermissionRepository roleToPermissionRepository, UserToPermissionRepository userToPermissionRepository) {
         this.repository = repository;
         this.roleRepository = roleRepository;
         this.roleToPermissionRepository = roleToPermissionRepository;
+        this.userToPermissionRepository = userToPermissionRepository;
     }
 
     /**
@@ -83,6 +87,7 @@ public class UserController {
         }
 
         Long roleId = user.getRoleId();
+        Long userId = user.getUserId();
         ArrayList<Long> permissionIds = new ArrayList<>();
 
 
@@ -91,6 +96,13 @@ public class UserController {
     
             for (RoleToPermission rtp : rolePermissionPairs) {
                 permissionIds.add(rtp.getPermissionId());
+            }
+
+            List<UserToPermission> userPermissionPairs = userToPermissionRepository.findAllByUserId(userId);
+
+            for (UserToPermission utp : userPermissionPairs) {
+                Long permId = utp.getPermissionId();
+                if (permissionIds.contains(permId)) permissionIds.add(utp.getPermissionId());
             }
         }
 

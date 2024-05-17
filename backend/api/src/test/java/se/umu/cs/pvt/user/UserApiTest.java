@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import se.umu.cs.pvt.permission.RoleToPermissionRepository;
+import se.umu.cs.pvt.permission.UserToPermissionRepository;
 import se.umu.cs.pvt.role.RoleRepository;
 
 import java.security.NoSuchAlgorithmException;
@@ -41,11 +42,13 @@ public class UserApiTest {
     final RoleRepository roleRepository = Mockito.mock(RoleRepository.class);
     @Mock
     final RoleToPermissionRepository roleToPermissionRepository = Mockito.mock(RoleToPermissionRepository.class);
+    @Mock
+    final UserToPermissionRepository userToPermissionRepository = Mockito.mock(UserToPermissionRepository.class);
 
     @BeforeEach
     void init() {
         user = new User();
-        lc = new UserController(userRepository, roleRepository, roleToPermissionRepository);
+        lc = new UserController(userRepository, roleRepository, roleToPermissionRepository, userToPermissionRepository);
     }
 
 
