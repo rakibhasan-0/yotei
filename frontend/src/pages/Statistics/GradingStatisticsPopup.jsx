@@ -16,7 +16,7 @@ const mockData = [
 	   
 	   belt: [
 			{
-				belt_color: "83530C",
+				belt_color: "f1c40f",
 				belt_name: "Gult",
 				is_child: false,
 				length: 1
