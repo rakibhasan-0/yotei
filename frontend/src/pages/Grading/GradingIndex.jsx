@@ -183,7 +183,7 @@ export default function GradingIndex() {
                 
 			</div>
 
-			<RoundButton onClick={navigateTo}>
+			<RoundButton onClick={navigateTo} id={"create-examination-button"}>
 				<Plus />
 			</RoundButton>
 		</center>

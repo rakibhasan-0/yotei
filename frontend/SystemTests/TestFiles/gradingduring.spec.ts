@@ -16,7 +16,7 @@ test.describe("Correct protocol grading flow tests", () => {
     test.beforeEach(async ({page}) => {
         await page.locator('#hamburger-button').click();
         await page.getByRole('button', { name: 'Gradering' }).click();
-        await page.locator('._btnAddActivity_1qfu5_1').click();
+        await page.locator('#create-examination-button').click();
 	})
 
     /**
