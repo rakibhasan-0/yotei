@@ -32,7 +32,11 @@ import { Link } from "react-router-dom"
  * @updated 2023-05-30 Chimera, updated documentation
  * @version 1.1
  */
-export default function ExerciseListItem({ item, text, detailURL, id, index, checkBox }) {
+export default function ExerciseListItem({ item, text, detailURL, id, index, checkBox , path}) {
+
+	// Fixes the path regardless if the exercise is in a list or not.
+	const tempPath = (path === undefined) ? id : path
+	console.log(tempPath)
 	const handleClick = () =>{
 		localStorage.setItem("stored_exercise", id)
 	}
@@ -41,7 +45,7 @@ export default function ExerciseListItem({ item, text, detailURL, id, index, che
 		<div className={styles["exercise-list-container"]} data-testid="ExerciseListItem" onClick={handleClick} id={id}>
 			<div className={styles["exercise-list-header"]} style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
 				{checkBox}
-				<Link to={detailURL + id} data-testid="ExerciseListItem-link" style={{width: "100%"}}>
+				<Link to={detailURL + tempPath} data-testid="ExerciseListItem-link" style={{width: "100%"}}>
 					<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
 						<div style={{display: "flex", alignItems: "center"}}>
 							<div className={styles["href-link"]} style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="ExerciseListItem-item">{item}</div>
