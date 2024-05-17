@@ -231,8 +231,8 @@ public class ExaminationController {
             System.out.println("Grading not found");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        
-        if(examineeRepository.findById(examination_comment.getExamineeId()).isEmpty() || examination_comment == null){
+    
+        if(examination_comment.getExamineeId() != null && examineeRepository.findById(examination_comment.getExamineeId()).isEmpty() || examination_comment == null){
             System.out.println("Examinee not found");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -268,6 +268,25 @@ public class ExaminationController {
         }
         examinationCommentRepository.deleteById(examination_comment_id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+    /**
+     * Returns a group comment based on grading id and technique name.
+     * @param gradingId the gradingId of sought grading.
+     * @param techniqueName the technique name of sought technique.
+     * @return all the comments on a group based on grading id and technique name and Examinee Id and Pair Id is null.
+     */
+    @GetMapping("/comment/group/{grading_id}")
+    public ResponseEntity<List<ExaminationComment>> getGradingComment(@PathVariable("grading_id") long gradingId, @RequestParam(name = "technique_name") String techniqueName ) {
+        try {
+            if (techniqueName == null) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            } if (examinationCommentRepository.findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(gradingId, techniqueName).isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(examinationCommentRepository.findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(gradingId, techniqueName), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     /**
