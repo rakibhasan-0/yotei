@@ -67,23 +67,23 @@ export default function ExamineeBox({ id, examineeName, examineeId, onClick, but
 			return
 		}
 		console.log("API ANROP SOM INTE FINNS ÄNNU. Detta skulle läggas in: " + commentText + " Till person: " + examineeId)
-		/* API ANROP HÄR...
-		const response = await fetch(`/api/grading/${gradingId}/2/${examineeId}/${currentTechniqueTitle}`, {
+		const response = await fetch(`/api/examination/comment/`, {
 			method: "POST",
 			headers: {
 				"Content-type": "application/json",
 				token,
-				userId
 			},
 			body: JSON.stringify({
-				commentText
+				"gradingId": gradingId,
+				"examineeId": examineeId,
+				"techniqueName": techniqueName,
+				"comment": commentText	
 			})
 		})
 		if (response.status != 201) {
 			setErrorToast("Ett fel uppstod när kommentaren skulle läggas till")
 			return
 		}
-		*/
 		await onDiscardPersonalComment()
 	}
 
