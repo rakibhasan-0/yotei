@@ -1,42 +1,62 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import Button from "../Common/Button/Button"
 import InfiniteScrollComponent from "../Common/List/InfiniteScrollComponent"
 import SearchBar from "../Common/SearchBar/SearchBar"
 import { AddToListItem } from "../SavedList/AddToListItem"
 import styles from "./AddToListPopup.module.css"
 import Spinner from "../Common/Spinner/Spinner"
+import { getLists } from "../Common/SearchBar/SearchBarUtils"
+import { AccountContext } from "../../context"
+import useMap from "../../hooks/useMap"
 
 export const AddToListPopupContent = () => {
-	const [lists, setLists] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
 
-	const mockData = [
-		{
-			id: 1,
-			name: "Lista 1",
-			numberOfActivities: 3,
-			author: {
-				username: "Admin",
-				id: 1,
-			},
-		},
-		{
-			id: 1,
-			name: "Lista 2",
-			numberOfActivities: 4,
-			author: {
-				username: "Editor",
-				id: 2,
-			},
-		},
-	]
+	const [lists, setLists] = useState([])
+	const [searchListText, setSearchListText] = useState("")
+	const { token } = useContext(AccountContext)
+	const [map, mapActions] = useMap()
+
+
+
+
+	/**
+	 * Fetches lists when the component is mounted or when the
+	 * search text are changed.
+	 */
 	useEffect(() => {
-		setLists(mockData)
-		setIsLoading(false)
-	}, [])
+		setIsLoading(true)
+		setLists(lists)
+		fetchingList()
+	}, [searchListText])
+
+
+
+	/**
+	 * Fetches the lists from the backend, either from cache or by a new API-call.
+	 */
+	function fetchingList() {
+
+		const args = {
+			text: searchListText
+		}
+
+		getLists(args, token, map, mapActions, (result) => {
+			console.log(result)
+			if (result.error) return
+
+			// Extract the 'id' and 'name' fields from each item in the result used in displaying the list.
+			const lists = result.map(item => ({ id: item.id, name: item.name, author: item.author, numberOfActivities: item.size}))
+
+			setLists(lists)
+			setIsLoading(false)
+		})
+	}
 
 	return isLoading ? (
-		<Spinner />
+		<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', paddingTop: '50px' }}>
+    		<Spinner />
+		</div>
 	) : (
 		<div className={styles["container"]}>
 			<div className="my-4">
@@ -44,7 +64,12 @@ export const AddToListPopupContent = () => {
 					<p>+ Skapa ny lista</p>
 				</Button>
 			</div>
-			<SearchBar placeholder={"Sök efter lista"} />
+			<SearchBar 
+				id="lists-search-bar"
+				placeholder="Sök efter listor"
+				text={searchListText}
+				onChange={setSearchListText}
+			/>
 			<InfiniteScrollComponent>
 				{lists.map((item, index) => (
 					<AddToListItem
