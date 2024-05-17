@@ -11,7 +11,7 @@ import MiniPopup from "../MiniPopup/MiniPopup.jsx"
 import TagUsagePopup from "./TagUsagePopup.jsx"
 import EditableListItem from "../EditableListItem/EditableListItem.jsx"
 import ConfirmPopup from "../ConfirmPopup/ConfirmPopup.jsx"
-import Spinner from "../Spinner/Spinner.jsx"
+import Spinner from "../../../components/Common/Spinner/Spinner.jsx"
 
 /**
  * OBSERVE! This component is used inside the TagInput-component and should not be used by itself. 
@@ -54,7 +54,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 	const [searchText,setSearchText] = useState("")
 	const [tagListArray, setTagListArray] = useState([])
 	const { token } = useContext(AccountContext)
-	const [isLoading, setIsLoading] = useState(true)
+	const [loading, setLoading] = useState(false)
 	
 	const [showUsagePopup, setUsageShowPopup] = useState(false)
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
@@ -82,7 +82,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 		setError("")
 		setSearchText(searchText)
 		if (isInitial) {
-			setIsLoading(true)
+			setLoading(true)
 		}
 		const url = new URL("/api/tags/filter", window.location.origin)
 		url.searchParams.append("sort-by", sortBy)
@@ -104,7 +104,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 			setError("Något gick fel vid hämtning av taggförslag")
 		} finally {
 			if (isInitial) {
-				setIsLoading(false)
+				setLoading(false)
 			}
 		}
 	}
@@ -332,7 +332,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 				</FilterContainer>
 			</div>
 			<div>
-				{isLoading ? <Spinner /> : tagListArray}
+				{loading ? <Spinner /> : tagListArray}
 			</div>
 
 			<MiniPopup title={"Taggen kan inte tas bort"} isOpen={showUsagePopup} setIsOpen={hideShowPopup} >
