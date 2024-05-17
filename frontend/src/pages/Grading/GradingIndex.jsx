@@ -9,7 +9,6 @@ import containerStyles from "./GradingBefore.module.css"
 import BeltButton from "../../components/Common/Button/BeltButton"
 import Spinner from "../../components/Common/Spinner/Spinner"
 
-
 /**
  * The grading create page.
  * Creates a new grading.
@@ -18,7 +17,6 @@ import Spinner from "../../components/Common/Spinner/Spinner"
  * @version 1.0
  * @since 2024-05-07
  */
-
 export default function GradingIndex() {
 	const [belts, setBelts] = useState([]) 
 	const [beltColors] = useState(["Gult", "Orange", "Grönt", "Blått", "Brunt"])
@@ -42,6 +40,13 @@ export default function GradingIndex() {
 			ColorParam: color,
 		}
 		navigate(`/grading/${gradingId}/${gradingStep}`, { state: params })
+	}
+
+	/**
+	 * Navigate to create gradingprotocol. 
+	 */
+	function navigateTo() {
+		navigate("/grading/create")
 	}
 
 	/**
@@ -100,18 +105,18 @@ export default function GradingIndex() {
 		setIsCreateListDone(true)
 	}
 
-
 	/**
 	 * Checks if the user has no earlier gradings started or finished. 
 	 * Otherwise sort it by dates.
 	 */
 	useEffect(() => {
+
 		if(isCreateListDone) {
 			if(currentGradings.length === 0 && finishedGradings.length === 0) {
 				navigateTo()
 			}
-			setIsCreateListDone(false)
 
+			setIsCreateListDone(false)
 			const sortedCurrentGradings = [...currentGradings].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
 			setCurrentGradings(sortedCurrentGradings)
 			const sortedFinishedGradings = [...finishedGradings].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
@@ -121,15 +126,11 @@ export default function GradingIndex() {
 		
 	}, [isCreateListDone])
 
- 
-	
-
 	/**
 	 * Handle belt colors and name. 
 	 * 
 	 */
 	useEffect(() => {
-
 
 		const fetchData = async () => {
 			try {
@@ -151,32 +152,14 @@ export default function GradingIndex() {
 				})
 				setBelts(colorMaps)
 				setLoading(false)
-
 				createLists(gradings_data)
-
-				
-				
-
 
 			} catch (error) {
 				console.error("There was a problem with the fetch operation:", error)
 			}
-
 		}
-
 		fetchData()
-	
-		
-
-		
-
 	}, [])
-
-
-
-	function navigateTo() {
-		navigate("/grading/create")
-	}
 
 	return (
 		<center>
@@ -200,8 +183,6 @@ export default function GradingIndex() {
 					)}
 				</div>
 			</div>
-
-
 			<h1 className={styles.finishedGradings}>Avslutade graderingar</h1>
 			<div className={containerStyles.container}>
 				<div className={containerStyles.scrollableContainer}>
@@ -217,13 +198,9 @@ export default function GradingIndex() {
 									<h2>{`${belts[grading.belt_id]?.name} bälte`} </h2>
 								</BeltButton>
 							))}
-
 						</div>
-
 					)}
-				</div>
-
-                
+				</div>          
 			</div>
 
 			<RoundButton onClick={navigateTo}>
