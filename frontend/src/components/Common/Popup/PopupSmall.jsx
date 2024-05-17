@@ -22,20 +22,20 @@ import Button from "../Button/Button"
  * Example usage:
  *  
  *	const [showPopup, setShowPopup] = useState(false)
- *
- *	return (
- *		<div>
- *			<PopupSmall id={"test-popup"} title={"Test"} isOpen={showPopup} setIsOpen={setShowPopup} direction={startRedirection}  >
-                <>some children</>
-            </PopupSmall>
- *			<RoundButton onClick={() => setShowPopup(true)} />
- *		</div>
- * 	)
- *
- * @author Team Medusa, Team Chimera, Team Pomegranate
- * @version 3.0
- * @since 2024-05-16
- */
+*
+*	return (
+*		<div>
+*			<PopupSmall id={"test-popup"} title={"Test"} isOpen={showPopup} setIsOpen={setShowPopup} direction={startRedirection}  >
+<>some children</>
+</PopupSmall>
+*			<RoundButton onClick={() => setShowPopup(true)} />
+*		</div>
+* 	)
+*
+* @author Team Medusa, Team Chimera, Team Pomegranate
+* @version 3.0
+* @since 2024-05-16
+*/
 export default function PopupSmall({ title, id, isOpen, setIsOpen, children, isNested, style, onClose, zIndex, direction }) {
 
     // Synchronize react state with CSS-styling in browser
