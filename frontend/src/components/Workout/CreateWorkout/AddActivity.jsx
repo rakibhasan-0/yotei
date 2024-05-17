@@ -446,7 +446,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 			const listContent = result.activities.map(item => {
 				if (item.type === "technique") {
 					return {
-						techniqueID: item.id,
+						techniqueID: listID + "-technique-" + item.id,
 						name: item.name,
 						type: "technique",
 						description: item.description,
@@ -461,7 +461,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 				}
 				else {
 					return {
-						id: item.id,
+						id: listID + "-exercise-" + item.id,
 						name: item.name,
 						type: "exercise",
 						description: item.description,
