@@ -134,8 +134,7 @@ public class ActivityListEntryController {
     }
 
     /**
-     * Adds an entry to multiple activity lists,
-     * the list id supplied in the entry does not need to be supplied in the id list
+     * Adds an entry to multiple activity lists, the list id supplied in the entry does not need to be supplied in the id list
      * (but can be).
      * 
      * @param entry entry object
