@@ -11,8 +11,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface ExaminationCommentRepository extends JpaRepository<ExaminationComment, Long> {
 
-    List<ExaminationComment> findByExamineeIdAndTechniqueName(Long examineeId, String techniqueName);
+    List<ExaminationComment> findByExamineePairIdAndTechniqueName(Long examineePairId, String techniqueName);
 
+    List<ExaminationComment> findByExamineeIdAndTechniqueName(Long examineeId, String techniqueName);
     List<ExaminationComment> findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(Long gradingId, String techniqueName);
 
 }
