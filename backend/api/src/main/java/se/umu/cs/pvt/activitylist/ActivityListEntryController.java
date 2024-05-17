@@ -155,8 +155,7 @@ public class ActivityListEntryController {
             if (opt_list_result.isPresent()) {
                 ActivityList list_result = opt_list_result.get();
                 if (list_result.getAuthor() == userIdL || userRole.equals("ADMIN")) {
-                    // lägg till entry.getDuration() nedan då den fixen har blivit mergat till main
-                    ActivityListEntry uniqueEntry = new ActivityListEntry(entry.getListId(), entry.getExerciseId(), entry.getTechniqueId());
+                    ActivityListEntry uniqueEntry = new ActivityListEntry(entry.getDuration(), entry.getListId(), entry.getExerciseId(), entry.getTechniqueId());
                     listEntryRepository.save(uniqueEntry);
                 } else {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -170,8 +169,7 @@ public class ActivityListEntryController {
             if (result.isPresent()) {
                 ActivityList list = result.get();
                 if (list.getAuthor() == userIdL || userRole.equals("ADMIN")) {
-                    // lägg till entry.getDuration() nedan då den fixen har blivit mergat till main
-                    ActivityListEntry uniqueEntry = new ActivityListEntry(id, entry.getExerciseId(), entry.getTechniqueId());
+                    ActivityListEntry uniqueEntry = new ActivityListEntry(entry.getDuration(), id, entry.getExerciseId(), entry.getTechniqueId());
                     listEntryRepository.save(uniqueEntry);
                 } else {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
