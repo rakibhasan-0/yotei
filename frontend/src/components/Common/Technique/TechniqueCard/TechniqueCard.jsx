@@ -11,24 +11,31 @@ import styles from "./TechniqueCard.module.css"
  *		checkBox (Component) : If you want a checkbox to be displayed, send it as a prop.
  *		id: Id used for testing.
  *
- * @author Medusa, Coconut
- * @version 2.1
+ * @author Medusa, Coconut, Tomato
+ * @version 2.2
  * @since 2024-05-16
  *
- * Converted to css module 2024-04-19, Hannes (group 1)
- *
+ * @update Converted to css module 2024-04-19, Hannes (group 1)
+ * @update Fixed so that techniques that are in lists get the correct path, 2024-05-17, Team Tomato (Group 6)
  */
 function TechniqueCard({ technique, checkBox, id}) {
 	const navigate = useNavigate()
+	if(technique.contentID) {
+		technique.techniqueID = technique.contentID
+	}
+	
+	// Fixes the path regardless if the technique is in a list or not.
+	const path = (technique.path === undefined) ? technique.techniqueID : technique.path
 
 	const handleClick = () => {
 		setTechnique()
+
 		if (technique.activity_id && technique.type === "technique") {
 			navigate("/technique/" + technique.activity_id)
 		} else if (technique.type === "exercise" && technique.activity_id) {
 			navigate("/exercise/exercise_page/" + technique.activity_id)
 		} else {
-			navigate("/technique/" + technique.techniqueID)
+			navigate("/technique/" + path)
 		}
 	}
 
