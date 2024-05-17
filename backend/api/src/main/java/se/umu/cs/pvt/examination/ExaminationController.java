@@ -1,6 +1,7 @@
 package se.umu.cs.pvt.examination;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jackson.JsonObjectSerializer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * Class for handling requests to the examination api.
@@ -454,6 +457,31 @@ public class ExaminationController {
     ResponseEntity<List<ExaminationResult>> getAllExaminationResults(){
         return new ResponseEntity<>(examinationResultRepository.findAll(), HttpStatus.OK);
     }
+
+    /**
+     * Returns a specific examination result based on grading_id.
+     * @param grading_id
+     * @return
+     */
+    @GetMapping("/examresult/grading/{grading_id}")
+    ResponseEntity <List<ExaminationResult>> getExaminationResultByGradingId(@PathVariable("grading_id") long grading_id){
+        String exam_protocol = examinationProtocolRepository.findById(grading_id).get().getExaminationProtocol();
+        
+        JSONObject root = new JSONObject(exam_protocol);
+        JSONArray categories = root.getJSONArray("categories");
+
+        int techniqueCount = 0;
+        for (int i = 0; i < categories.length(); i++) {
+            JSONObject category = categories.getJSONObject(i);
+            JSONArray techniques = category.getJSONArray("techniques");
+            techniqueCount += techniques.length();
+        }
+        
+        
+
+        return new ResponseEntity<>(examinationResults, HttpStatus.OK);
+    }
+
 
     /**
      * Deletes a given examination result.
