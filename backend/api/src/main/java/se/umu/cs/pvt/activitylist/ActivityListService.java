@@ -237,7 +237,7 @@ public class ActivityListService implements IActivityListService {
         List<ActivityList> activityLists;
 
         activityLists = (Boolean.TRUE.equals(isAdmin)) ? activityListRepository.findAll()
-                : activityListRepository.findAllByUserId(userId);
+                : activityListRepository.findAllByUserIdOrPublic(userId);
 
         if (hidden != null) {
             activityLists = activityLists.stream()

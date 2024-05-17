@@ -21,12 +21,12 @@ public interface ActivityListRepository extends JpaRepository<ActivityList, Long
 
     List<ActivityList> findAllByName(String name);
 
-    @Query("SELECT DISTINCT a FROM ActivityList a LEFT JOIN a.users u WHERE (u.user_id = :userId OR a.author = :userId OR (u IS NULL AND a.author = :userId))")
-    List<ActivityList> findAllByUserId(@Param("userId") Long userId);
-
     List<ActivityList> findAllByAuthor(Long userId);
 
     @Query("SELECT DISTINCT a FROM ActivityList a LEFT JOIN a.users u WHERE ((u.user_id = :userId OR a.author = :userId) OR (u IS NULL AND a.author = :userId)) AND a.id = :id")
     Optional<ActivityList> findByIdAndUserId(@Param("id") Long id, @Param("userId") Long userId);
+
+    @Query("SELECT DISTINCT a FROM ActivityList a LEFT JOIN a.users u WHERE (u.user_id = :userId OR a.author = :userId) OR a.hidden = false")
+    List<ActivityList> findAllByUserIdOrPublic(@Param("userId") Long userId);
 
 }

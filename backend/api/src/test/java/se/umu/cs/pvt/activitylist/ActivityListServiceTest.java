@@ -178,7 +178,7 @@ public class ActivityListServiceTest {
         List<ActivityList> activityLists = new ArrayList<>();
         activityLists.add(activityList1);
 
-        when(activityListRepository.findAllByUserId(2L)).thenReturn(activityLists);
+        when(activityListRepository.findAllByUserIdOrPublic(2L)).thenReturn(activityLists);
         UserShort userShort = new UserShort("USER", 2L);
         Optional<UserShort> optionalUserShort = Optional.of(userShort);
 
@@ -211,7 +211,7 @@ public class ActivityListServiceTest {
 
         when(userShortRepository.findById(any())).thenReturn(optionalUserShort);
 
-        when(activityListRepository.findAllByUserId(anyLong())).thenReturn(activityLists);
+        when(activityListRepository.findAllByUserIdOrPublic(anyLong())).thenReturn(activityLists);
 
         List<ActivityListShortDTO> result = activityListService.getAllActivityLists(
                 true, null, token);
@@ -237,7 +237,7 @@ public class ActivityListServiceTest {
 
         when(userShortRepository.findById(any())).thenReturn(optionalUserShort);
 
-        when(activityListRepository.findAllByUserId(2L)).thenReturn(activityLists);
+        when(activityListRepository.findAllByUserIdOrPublic(2L)).thenReturn(activityLists);
 
         List<ActivityListShortDTO> result = activityListService.getAllActivityLists(
                 true, null, token);
@@ -266,11 +266,38 @@ public class ActivityListServiceTest {
 
         when(userShortRepository.findById(any())).thenReturn(optionalUserShort);
 
-        when(activityListRepository.findAllByUserId(anyLong())).thenReturn(activityLists);
+        when(activityListRepository.findAllByUserIdOrPublic(anyLong())).thenReturn(activityLists);
 
         List<ActivityListShortDTO> result = activityListService.getAllActivityLists(
                 true, null, token);
         assertEquals(0, result.size());
+
+    }
+
+    @Test
+    public void testShouldReturnPublicActivityList_UserRole() {
+        userMockSetup(2L);
+
+        ActivityList activityList1 = new ActivityList();
+        activityList1.setId(1L);
+        activityList1.setName("List 1");
+        activityList1.setHidden(false);
+        activityList1.setAuthor(3L);
+
+        List<ActivityList> activityLists = new ArrayList<>();
+        activityLists.add(activityList1);
+
+        UserShort userShort = new UserShort("USER", 2L);
+        Optional<UserShort> optionalUserShort = Optional.of(userShort);
+
+        when(userShortRepository.findById(any())).thenReturn(optionalUserShort);
+
+        when(activityListRepository.findAllByUserIdOrPublic(anyLong())).thenReturn(activityLists);
+
+        List<ActivityListShortDTO> result = activityListService.getAllActivityLists(
+                null, null, token);
+        assertEquals(1, result.size());
+        assertEquals("List 1", result.get(0).getName());
 
     }
 
