@@ -97,6 +97,8 @@ public class ExaminationApiTest {
         Mockito.when(examinationCommentRepository.findAll()).thenReturn(examineeCommentList);
         Mockito.when(resultRepository.findAll()).thenReturn(resultList);
         Mockito.when(examinationProtocolRepository.findAll()).thenReturn(protocolList);
+
+        Mockito.when(resultRepository.findById(1L)).thenReturn(Optional.ofNullable(resultList.get(0)));
     }
 
     /**
@@ -140,6 +142,12 @@ public class ExaminationApiTest {
     void testGetAllResults() {
         int actual = resultRepository.findAll().size();
         assertEquals(3, actual);
+    }
+    @Test
+    void testGetExamineeResultNull() {
+        ExaminationResult resultWithNull = resultRepository.findById(1L).get();
+        assertEquals(null, resultWithNull.getPass());
+
     }
 
     @Test
