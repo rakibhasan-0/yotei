@@ -98,12 +98,12 @@ public class UserController {
                 permissionIds.add(rtp.getPermissionId());
             }
 
-            List<UserToPermission> userPermissionPairs = userToPermissionRepository.findAllByUserId(userId);
+        }
+        List<UserToPermission> userPermissionPairs = userToPermissionRepository.findAllByUserId(userId);
 
-            for (UserToPermission utp : userPermissionPairs) {
-                Long permId = utp.getPermissionId();
-                if (permissionIds.contains(permId)) permissionIds.add(utp.getPermissionId());
-            }
+        for (UserToPermission utp : userPermissionPairs) {
+            Long permId = utp.getPermissionId();
+            if (!permissionIds.contains(permId)) permissionIds.add(utp.getPermissionId());
         }
 
         return new JWTUtil().generateToken(user.getUsername(), user.getUserRole().toString(), Math.toIntExact(user.getUserId()), permissionIds);
