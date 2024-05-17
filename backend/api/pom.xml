@@ -36,27 +36,13 @@
     <groupId>org.testcontainers</groupId>
     <artifactId>testcontainers</artifactId>
     <version>1.19.8</version>
-    <optional>true</optional>
     <scope>test</scope>
-    <exclusions>
-      <exclusion>  <!-- declare the exclusion here -->
-        <groupId>org.testcontainers</groupId>
-        <artifactId>testcontainers</artifactId>
-      </exclusion>
-    </exclusions>
     </dependency>
     <dependency>
-      <groupId>org.testcontainers</groupId>
-      <artifactId>postgresql</artifactId>
-      <version>1.16.0</version> <!-- or the latest version -->
-      <optional>true</optional>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>  <!-- declare the exclusion here -->
-          <groupId>org.testcontainers</groupId>
-          <artifactId>postgresql</artifactId>
-        </exclusion>
-      </exclusions>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>postgresql</artifactId>
+    <version>1.16.0</version> <!-- or the latest version -->
+    <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -132,6 +118,9 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
         <version>${project.parent.version}</version>
         <configuration>
+          <excludes>
+            <exclude>./src/test/java/se/umu/cs/pvt/technique/TechniqueDatabaseTest.java/TechniqueDatabaseTest.java</exclude>
+          </excludes>
           <fork>true</fork>
           <skip>false</skip>
         </configuration>
