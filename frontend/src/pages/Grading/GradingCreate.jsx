@@ -56,6 +56,7 @@ export default function GradingCreate() {
 				step: 1,
 				techniqueStepNum: 0,
 				createdAt: formattedDateTime
+
 			}
 
 			const response = await fetch("/api/examination/grading", {
@@ -75,7 +76,7 @@ export default function GradingCreate() {
 
 			if(response.ok) {
 				const responseData = await response.json()
-				const gradingId = responseData.grading_id
+				const gradingId = responseData.gradingId
 				handleNavigation(gradingId, color)
 			}
 
