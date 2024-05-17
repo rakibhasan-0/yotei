@@ -24,7 +24,7 @@ public class Examinee {
     private String name;
 
     @Column(nullable = false, name = "grading_id")
-    private Long grading_id;
+    private Long gradingId;
 
     /**
      * Data constructor for Examinee.
@@ -36,7 +36,7 @@ public class Examinee {
     public Examinee(Long examinee_id, String name, Long grading_id){
         this.examinee_id = examinee_id;
         this.name = name;
-        this.grading_id = grading_id;
+        this.gradingId = grading_id;
     }
     
     /**
@@ -54,7 +54,7 @@ public class Examinee {
     }
 
     public Long getGrading_id() {
-        return grading_id;
+        return gradingId;
     }
 }
 
