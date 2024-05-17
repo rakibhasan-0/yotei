@@ -96,9 +96,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	const [lists, setLists] = useState([])
 	const [fetchedLists, setFetchedLists] = useState(false)
 	const [searchListText, setSearchListText] = useState("")
-	const [listContent, setListContent] = useState([]) 
 	const [listContents, setListContents] = useState([]) // TODO: try to make it possible to keep different lists. 
-
 	const [listUpdate, setListUpdate] = useState(0)
 	const [isSearchBarEnabled] = useState(false) // TODO: feature toggle
 	const [isFilterEnabled] = useState(false) // TODO: feature toggle
@@ -445,18 +443,6 @@ function AddActivity({ id, setShowActivityInfo }) {
 		getListContent(args, token, map, mapActions, (result) => {
 			if (result.error) return
 
-		
-			{/*  This will be inside the objects:
-
-			listContents = {
-				listID: Integer
-				listContent: Array of objects.
-			}
-
-			
-		 */}
-
-
 			const listContent = result.activities.map(item => {
 				if (item.type === "technique") {
 					return {
@@ -484,35 +470,13 @@ function AddActivity({ id, setShowActivityInfo }) {
 				}
 			})
 
-			const  tempListContents = {
-				listID: listID,
-				content: listContent
-			}
-
-			
 			setListContents(prevState => ({
 				...prevState,
 				[listID]: listContent
-			}));
+			}))
 
-			// Somewhere this code is easier to read?
-			// setListContents(prevState => {
-				
-			// 	const index = prevState.findIndex(item => item.listID === listID)
-				
-			// 	if(index === -1) {
-			// 		console.log("Adds an object.")
-			// 		return [... prevState, tempListContents]
-			// 	}
-			// 	else{
-			// 		console.log("There already information about it in the array.")
-			// 		return prevState
-			// 	}
-			// })
-			setListContent(listContent)
 			setListUpdate(listUpdate + 1)
 		})
-		console.log(listContents)
 	}
 
 	return (
