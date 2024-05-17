@@ -411,7 +411,7 @@ public class ExportGradingPdf {
         pageWidth = (int)page.getMediaBox().getWidth(); 
         pageHeight = (int)page.getMediaBox().getHeight();     
         int initX = TABLE_START_X_POS;
-        int initY = pageHeight-75;
+        int initY = pageHeight-105;
         
         PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/noto/NotoSans-Regular.ttf"));
         PDPageContentStream contentStream = new PDPageContentStream(document,page);
@@ -427,7 +427,6 @@ public class ExportGradingPdf {
         createHeader(code, color, contentStream);
         contentStream.beginText();
         contentStream.setFont(font, 14);
-        initY -= 30;
         contentStream.newLineAtOffset(initX, initY);
         contentStream.showText("Par Kommentarer");
         contentStream.endText();
@@ -446,10 +445,9 @@ public class ExportGradingPdf {
                 contentStream = new PDPageContentStream(document,page);
                 drawImage(page, contentStream);
                 createHeader(code, color, contentStream);
-                initY = pageHeight-75;
+                initY = pageHeight-105;
                 contentStream.beginText();
                 contentStream.setFont(font, 14);
-                initY -= 30;
                 contentStream.newLineAtOffset(initX, initY);
                 contentStream.showText("Par Kommentarer");
                 contentStream.endText();
@@ -491,7 +489,7 @@ public class ExportGradingPdf {
         pageWidth = (int)page.getMediaBox().getWidth(); 
         pageHeight = (int)page.getMediaBox().getHeight();     
         int initX = TABLE_START_X_POS;
-        int initY = pageHeight-75;
+        int initY = pageHeight-105;
         
         PDType0Font font = PDType0Font.load(document, new File("/usr/share/fonts/noto/NotoSans-Regular.ttf"));
         PDPageContentStream contentStream = new PDPageContentStream(document,page);
@@ -507,7 +505,6 @@ public class ExportGradingPdf {
         createHeader(code, color, contentStream);
         contentStream.beginText();
         contentStream.setFont(font, 14);
-        initY -= 30;
         contentStream.newLineAtOffset(initX, initY);
         contentStream.showText("Personliga Kommentarer");
         contentStream.endText();
@@ -526,10 +523,9 @@ public class ExportGradingPdf {
                 contentStream = new PDPageContentStream(document,page);
                 drawImage(page, contentStream);
                 createHeader(code, color, contentStream);
-                initY = pageHeight-75;
+                initY = pageHeight - 105;
                 contentStream.beginText();
                 contentStream.setFont(font, 14);
-                initY -= 30;
                 contentStream.newLineAtOffset(initX, initY);
                 contentStream.showText("Personliga Kommentarer");
                 contentStream.endText();
