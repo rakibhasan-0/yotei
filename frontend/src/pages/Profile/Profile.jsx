@@ -14,7 +14,6 @@ import Divider from "../../components/Common/Divider/Divider"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import ProfileListItem from "./ProfileListItem"
 import { Lock, Unlock, Eye } from "react-bootstrap-icons"
-//import starFill from "../../../assets/images/starFill.svg"
 
 /**
  * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3)
@@ -220,7 +219,7 @@ export default function Profile() {
 		if (state.id == -1) {
 			console.log("Favourite!")
 			//Här borde jag fixa en route till favoritsidans grej :)
-			return <Eye />
+			return <img src="../../../assets/images/starFill.svg"/>
 		}
 		if (state.hidden === true && state.author.userId == userId) {
 			console.log("Locked")
