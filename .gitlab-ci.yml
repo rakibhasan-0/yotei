@@ -80,7 +80,7 @@ test-database:
       - backend/.m2/repository
   script:
     - cd backend
-    - mvn -q test -Dtest=TechniqueDatabaseTest #&> output && cat output | tail -n 100
+    - mvn -q test -Dtest=TechniqueDatabaseTest &> output && cat output | tail -n 100
   
 test-frontend:
   rules:
