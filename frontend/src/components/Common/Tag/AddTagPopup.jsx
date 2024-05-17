@@ -12,6 +12,8 @@ import TagUsagePopup from "./TagUsagePopup.jsx"
 import EditableListItem from "../EditableListItem/EditableListItem.jsx"
 import ConfirmPopup from "../ConfirmPopup/ConfirmPopup.jsx"
 import Divider from "../../Common/Divider/Divider.jsx"
+import Spinner from "../../../components/Common/Spinner/Spinner.jsx"
+
 /**
  * OBSERVE! This component is used inside the TagInput-component and should not be used by itself. 
  * Popup is a component that can be put inside a popup window, where you can search for tags to add and
@@ -36,7 +38,7 @@ import Divider from "../../Common/Divider/Divider.jsx"
  *
  * @author Team Minotaur, 
  * @author Team Mango (Group 4), 
- * @author Team Durian (Group 3) (2024-05-16)
+ * @author Team Durian (Group 3) (2024-05-17)
  * @version 2.0
  * @since 2024-04-22
  */
@@ -53,6 +55,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 	const [searchText,setSearchText] = useState("")
 	const [tagListArray, setTagListArray] = useState([])
 	const { token } = useContext(AccountContext)
+	const [loading, setLoading] = useState(false)
 	
 	const [showUsagePopup, setUsageShowPopup] = useState(false)
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
@@ -83,6 +86,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 	const searchForTags = async (searchText, sortBy) => {
 		setError("")
 		setSearchText(searchText)
+		setLoading(true)
 		const url = new URL("/api/tags/filter", window.location.origin)
 		url.searchParams.append("sort-by", sortBy)
 		url.searchParams.append("contains", searchText)
@@ -108,6 +112,8 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 			}
 		} catch (error) {
 			setError("Något gick fel vid hämtning av taggförslag")
+		} finally {
+			setLoading(false)
 		}
 	}
 
@@ -331,6 +337,10 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 						/>
 					</>
 				))}
+				{loading ? <Spinner /> : tagListArray}
+			</div>
+			<div >
+				{tagListArray}
 			</div>
 			
 			<MiniPopup title={"Taggen kan inte tas bort"} isOpen={showUsagePopup} setIsOpen={hideShowPopup} >
