@@ -1,9 +1,11 @@
 import React from "react"
-import { useState} from "react"
+import { useState } from "react"
 import Tag from "./Tag"
 import styles from "./TagInput.module.css"
 import Popup from "../Popup/Popup"
 import AddTagPopup from "./AddTagPopup"
+
+
 /**
  * Taginput is a component to use for choosing tags and displaying chosen tags. 
  * 
@@ -23,15 +25,33 @@ import AddTagPopup from "./AddTagPopup"
  *
  * @author Team Minotaur, Team Durian (Group 3)
  * @version 1.0
- * @since 2024-05-07
+ * @since 2024-05-16
  */
 export default function TagInput({id, addedTags, setAddedTags, isNested, itemName}) {
 	const [showPopup, setShowPopup] = useState(false)
+	const [newAddedTags, setNewAddedTags] = useState(addedTags)
+
+	const [showConfirmPopup, setShowConfirmPopup] = useState(false)
+	
+
 	const handleRemoveTag = (tag) => {
 		const copy = [...addedTags]
 		const newAdded = copy.filter(tagInCopy => tagInCopy.id !== tag.id)
 		setAddedTags(newAdded)
 	}
+
+	const handleClose = () => {
+		if(addedTags !== newAddedTags) {
+			setShowPopup(true)
+			setShowConfirmPopup(true)
+		}
+		else {
+			setShowPopup(false)
+			setShowConfirmPopup(false)
+		}
+	}
+
+	
 
 	return (
 		<div id = {id} className={styles["add-tag-container"]}>
@@ -49,8 +69,8 @@ export default function TagInput({id, addedTags, setAddedTags, isNested, itemNam
 					onClick={() => handleRemoveTag(tag)}
 				/>)}
 			</div>
-			<Popup title={`Hantera taggar - ${itemName ? itemName : "X"}`} id= "addTagPopUp" isOpen={showPopup} setIsOpen={setShowPopup} isNested={isNested}>
-				<AddTagPopup id ="addTagPopupDiv" addedTags={addedTags} setAddedTags={setAddedTags} setIsOpen={setShowPopup}/>
+			<Popup title={`Hantera taggar - ${itemName ? itemName : "X"}`} id= "addTagPopUp" isOpen={showPopup} setIsOpen={setShowPopup} isNested={isNested} onClose={handleClose}>
+				<AddTagPopup id ="addTagPopupDiv" addedTags={addedTags} setAddedTags={setAddedTags} setIsOpen={setShowPopup} newAddedTags={newAddedTags} setNewAddedTags={setNewAddedTags} setShowConfirmPopup={setShowConfirmPopup} showConfirmPopup={showConfirmPopup}/>
 			</Popup>
 		</div>
 	)
