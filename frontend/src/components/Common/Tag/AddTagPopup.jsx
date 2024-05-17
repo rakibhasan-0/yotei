@@ -11,6 +11,7 @@ import MiniPopup from "../MiniPopup/MiniPopup.jsx"
 import TagUsagePopup from "./TagUsagePopup.jsx"
 import EditableListItem from "../EditableListItem/EditableListItem.jsx"
 import ConfirmPopup from "../ConfirmPopup/ConfirmPopup.jsx"
+import Divider from "../../Common/Divider/Divider.jsx"
 /**
  * OBSERVE! This component is used inside the TagInput-component and should not be used by itself. 
  * Popup is a component that can be put inside a popup window, where you can search for tags to add and
@@ -58,11 +59,19 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 	const [sort, setSort] = useState(sortOptions[2])
 	const [usage, setUsage] = useState([]) 
 	const [tagIdToBeDeleted, setTagIdToBeDeleted] = useState([])
+	const [dividerIndex, setDividerIndex] = useState(-1)
 
 	const containsSpecialChars = str => /[^\w\d äöåÅÄÖ-]/.test(str)
 
 	useEffect(() => {		
 		searchForTags(searchText, sort.sortBy)
+	}, [])
+
+	useEffect(() => {
+		const timeOutId = setTimeout(() => {
+			searchForTags(searchText, sort.sortBy)
+		},500)
+		return () => clearTimeout(timeOutId)
 	}, [searchText, sort])
 
 	/**
@@ -86,7 +95,14 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 			const response = await fetch(url, requestOptions)
 			if (response.ok) {
 				const data = await response.json()
-				setSuggested(data)
+				const sorted = data.slice().sort((a, b) => {
+					const aChecked = newAddedTags.some(tag => tag.id === a.id)
+					const bChecked = newAddedTags.some(tag => tag.id === b.id)
+					return bChecked - aChecked // This will place checked items first
+				})
+				const firstUncheckedIndex = sorted.findIndex(tag => !newAddedTags.some(a => a.id == tag.id))
+				setDividerIndex(firstUncheckedIndex)
+				setSuggested(sorted)
 			} else {
 				setError("Något gick fel vid hämtning av taggförslag")
 			}
@@ -134,35 +150,19 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 	 * Creates a TagList component for each existing tag on first render and saves each
 	 * TagList component in a list. 
 	 */
-	useEffect(() => {
-		//Handle when a tag is removed from something (Not deleted)
-		const handleRemoveTag = (tag) => {
-			setError("")
-			const copy = [...newAddedTags]
-			const newAdded = copy.filter(tagInCopy => tagInCopy.id !== tag.id)
-			setNewAddedTags(newAdded)
-		}
 
-		//Handles when tag is added to something.
-		const handleAddTag = (tag) => {
-			setError("")
-			setNewAddedTags([...newAddedTags, tag])
-		}
-		const tempTagListArray = suggested.map(tag =>
-			<EditableListItem item={tag.name} 
-				key={tag.id}
-				id={tag.id} 
-				showCheckbox={true}
-				onCheck={checked => checked ? handleAddTag(tag) : handleRemoveTag(tag)}
-				checked={newAddedTags.some(a => a.id == tag.id)}	
-				onEdit={handleEditText}
-				validateInput={validateInput}
-				grayTrash={tag.exercises + tag.workouts + tag.techniques > 0}
-				onRemove={() => handleDelete(tag)}
-			/>
-		)
-		setTagListArray(tempTagListArray)
-	}, [newAddedTags, suggested])
+	const handleRemoveTag = (tag) => {
+		setError("")
+		const copy = [...newAddedTags]
+		const newAdded = copy.filter(tagInCopy => tagInCopy.id !== tag.id)
+		setNewAddedTags(newAdded)
+	}
+
+	//Handles when tag is added to something.
+	const handleAddTag = (tag) => {
+		setError("")
+		setNewAddedTags([...newAddedTags, tag])
+	}
 
 
 	/**
@@ -208,13 +208,9 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 		} catch (error) {
 			setError("Något gick fel vid hämtning av tagganvändning")
 		}
-
-		
 		suggested.find(tag => tag.id == id).name = text
 		newAddedTags.find(tag => tag.id == id).name = text
 		addedTags.find(tag => tag.id == id).name = text
-		
-		
 	}
 
 	/**
@@ -317,9 +313,24 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 					<Sorter id={"tag-sort"} selected={sort} onSortChange={setSort} options={sortOptions}/>
 				</FilterContainer>
 			</div>
-			<div >
-				{tagListArray}
-
+			<div>
+				{suggested.map((tag, index) => (
+					<>
+						{index === dividerIndex && <Divider key="divider" title={""} option={"h2_left"} />}
+						<EditableListItem
+							item={tag.name}
+							key={tag.id}
+							id={tag.id}
+							showCheckbox={true}
+							onCheck={checked => checked ? handleAddTag(tag) : handleRemoveTag(tag)}
+							checked={newAddedTags.some(a => a.id == tag.id)}
+							onEdit={handleEditText}
+							validateInput={validateInput}
+							grayTrash={tag.exercises + tag.workouts + tag.techniques > 0}
+							onRemove={() => handleDelete(tag)}
+						/>
+					</>
+				))}
 			</div>
 			
 			<MiniPopup title={"Taggen kan inte tas bort"} isOpen={showUsagePopup} setIsOpen={hideShowPopup} >
