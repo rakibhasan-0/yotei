@@ -91,7 +91,7 @@ class RoleToPermissionApiTest {
 
                 for (RoleToPermission rToPermission : rolePermissionPairs) {
                     if (rToPermission.getRoleId() == roleId && 
-                    rToPermission.getPerimssionId() == permission_id) {
+                    rToPermission.getPermissionId() == permission_id) {
                         return rToPermission;
                     }
                 }

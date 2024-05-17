@@ -35,7 +35,7 @@ public class RoleToPermission implements Serializable {
         return this.roleId;
     }
 
-    public Long getPerimssionId() {
+    public Long getPermissionId() {
         return this.permissionId;
     }
 }

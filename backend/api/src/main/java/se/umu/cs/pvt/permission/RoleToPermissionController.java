@@ -71,7 +71,7 @@ public class RoleToPermissionController {
 
         for (RoleToPermission roleToPermission : roleToPermissions) {
             Optional<Permission> permission = permissionRepository.findById(
-                roleToPermission.getPerimssionId());
+                roleToPermission.getPermissionId());
 
             if (permission.isPresent()) {
                 permissions.add(permission.get());
