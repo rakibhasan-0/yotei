@@ -7,6 +7,8 @@ import static org.mockito.Mockito.doNothing;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +26,7 @@ import se.umu.cs.pvt.role.RoleRepository;
 /**
  * Tests for the role_to_permission api
  * 
- * @author Team Mango (Grupp 4) - 2024-05-15
+ * @author Team Mango (Grupp 4) - 2024-05-16
  */
 @ExtendWith(MockitoExtension.class)
 class RoleToPermissionApiTest {
@@ -51,21 +53,29 @@ class RoleToPermissionApiTest {
         Mockito.lenient().when(roleToPermissionRepository.findAllByRoleId(Mockito.any()))
             .thenAnswer(invocation -> {
                 Long roleId = invocation.getArgument(0);
-                ArrayList<Permission> perms = new ArrayList<>();
+                List<RoleToPermission> roleToPermissions = new ArrayList<>();
                 for (RoleToPermission rp : rolePermissionPairs) {
                     if (rp.getRoleId() == roleId) {
-                        for (Permission permission : permissions) {
-                            if (rp.getPerimssionId() == permission.getPermissionId()) {
-                                perms.add(permission);
-                            }
-                        }
+                        roleToPermissions.add(rp);
                     }
                 }
-                return perms;
+                return roleToPermissions;
             });
 
         Mockito.lenient().when(roleRepository.findById(Mockito.any())).thenReturn(Optional.of(new Role()));
-        Mockito.lenient().when(permissionRepository.findById(Mockito.any())).thenReturn(Optional.of(new Permission()));
+        Mockito.lenient().when(permissionRepository.findById(Mockito.any()))
+            .thenAnswer(invocation -> {
+                Optional<Permission> result;
+                Long permission_id = invocation.getArgument(0);
+                for (Permission permission : permissions) {
+                    if (permission.getPermissionId() == permission_id) {
+                        result = Optional.of(permission);
+                        return result;
+                    }
+                }
+                result = Optional.empty();
+                return result;
+            });
 
         Mockito.lenient().when(roleToPermissionRepository.save(Mockito.any()))
             .thenAnswer(invocation -> {
@@ -80,12 +90,9 @@ class RoleToPermissionApiTest {
                 Long permission_id = invocation.getArgument(1);
 
                 for (RoleToPermission rToPermission : rolePermissionPairs) {
-                    if (rToPermission.getRoleId() == roleId && rToPermission.getPerimssionId() == permission_id) {
-                        for (Permission permission : permissions) {
-                            if (permission.getPermissionId() == permission_id) {
-                                return permission;
-                            }
-                        }
+                    if (rToPermission.getRoleId() == roleId && 
+                    rToPermission.getPermissionId() == permission_id) {
+                        return rToPermission;
                     }
                 }
                 return null;
@@ -116,7 +123,8 @@ class RoleToPermissionApiTest {
             fail();
         }
 
-        assertEquals(new ResponseEntity<>(permissions, HttpStatus.OK), roleToPermissionController.getAllPermissionsForRoleWithId(1L));
+        assertEquals(new ResponseEntity<>(permissions, HttpStatus.OK), 
+        roleToPermissionController.getAllPermissionsForRoleWithId(1L));
     }
 
     @Test
@@ -126,15 +134,15 @@ class RoleToPermissionApiTest {
         } catch (InvalidPermissionNameException e) {
             fail();
         }
-        HashMap<String, Long> map = new HashMap<String, Long>();
-        map.put("role_id", 1L);
-        map.put("permission_id", permissions.get(0).getPermissionId());
 
         assertEquals(new ResponseEntity<>(new ArrayList<Permission>(), HttpStatus.NO_CONTENT), roleToPermissionController.getAllPermissionsForRoleWithId(1L));
 
-        roleToPermissionController.addPermissionToRole(map);
+        roleToPermissionController.addPermissionToRole(
+            1L, permissions.get(0).getPermissionId());
 
-        assertEquals(new ResponseEntity<>(permissions, HttpStatus.OK), roleToPermissionController.getAllPermissionsForRoleWithId(1L));
+        assertEquals(new ResponseEntity<>(
+            permissions, HttpStatus.OK), 
+            roleToPermissionController.getAllPermissionsForRoleWithId(1L));
     }
 
     @Test
@@ -146,13 +154,18 @@ class RoleToPermissionApiTest {
         } catch (InvalidPermissionNameException e) {
             fail();
         }
-        HashMap<String, Long> map = new HashMap<String, Long>();
+
+        Map<String, Long> map = new HashMap<>();
         map.put("role_id", 1L);
         map.put("permission_id", permissions.get(0).getPermissionId());
+        
+        roleToPermissionController.addPermissionToRole(
+            1L, permissions.get(0).getPermissionId());
+        doNothing().when(roleToPermissionRepository).deleteByRoleIdAndPermissionId(
+            anyLong(), anyLong());
 
-        roleToPermissionController.addPermissionToRole(map);
-        doNothing().when(roleToPermissionRepository).deleteByRoleIdAndPermissionId(anyLong(), anyLong());
-
-        assertEquals(new ResponseEntity<>(map, HttpStatus.OK), roleToPermissionController.deletePairFromRoleIdAndPermissionId(map));
+        assertEquals(new ResponseEntity<>(map, HttpStatus.OK), 
+            roleToPermissionController.deletePairFromRoleIdAndPermissionId(
+                1L ,permissions.get(0).getPermissionId()));
     }
 }
