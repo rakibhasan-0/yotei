@@ -647,7 +647,7 @@ CREATE TABLE IF NOT EXISTS examination_result(
 CREATE TABLE IF NOT EXISTS examination_comment( 
 	comment_id SERIAL PRIMARY KEY,
 	grading_id INT NOT NULL, 
-	examinee_id INT NOT NULL, 
+	examinee_id INT, 
 	examinee_pair_id INT, 
 	technique_name VARCHAR(255), 
 	comment VARCHAR(255)
@@ -819,3 +819,4 @@ $$ LANGUAGE 'plpgsql';
 
 CREATE TRIGGER insert_tag BEFORE INSERT ON tag 
 	FOR EACH ROW EXECUTE PROCEDURE tag_to_lowercase();
+
