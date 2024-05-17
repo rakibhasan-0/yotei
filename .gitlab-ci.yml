@@ -78,9 +78,15 @@ test-database:
   cache:
     paths:
       - backend/.m2/repository
+    artifacts:
+      expire_in: 1 day
+      when: on_failure
+      public: false
+      paths:
+        - test-database.log
   script:
     - cd backend
-    - mvn -q test -Dtest=TechniqueDatabaseTest &> output && cat output | tail -n 100 > output2 2>&1
+    - mvn -q test -Dtest=TechniqueDatabaseTest | tee -a test-database.log
   
 test-frontend:
   rules:
