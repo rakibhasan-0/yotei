@@ -85,7 +85,7 @@ test-database:
       - test-database.log
   script:
     - cd backend
-    - mvn -q test -Dtest=TechniqueDatabaseTest | tee -a test-database.log
+    - mvn -q test -Dtest=TechniqueDatabaseTest &> ~/output.log
   
 test-frontend:
   rules:
