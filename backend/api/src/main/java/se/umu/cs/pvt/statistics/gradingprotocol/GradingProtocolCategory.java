@@ -2,15 +2,14 @@ package se.umu.cs.pvt.statistics.gradingprotocol;
 
 import java.util.List;
 
-import se.umu.cs.pvt.statistics.StatisticsResponse;
 
 public class GradingProtocolCategory {
     
     private String name;
-    private List<StatisticsResponse> techniques;
+    private List<GradingProtocolTechinque> techniques;
 
 
-    public GradingProtocolCategory(String name, List<StatisticsResponse> techniques){
+    public GradingProtocolCategory(String name, List<GradingProtocolTechinque> techniques){
         this.name = name;
         this.techniques = techniques;
     }
@@ -19,7 +18,7 @@ public class GradingProtocolCategory {
         return this.name;
     }
 
-    public List<StatisticsResponse> getTechniques() {
+    public List<GradingProtocolTechinque> getTechniques() {
         return this.techniques;
     }
 }
