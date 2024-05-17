@@ -106,9 +106,9 @@ export default function GradingIndex() {
 
 				gradings_data.forEach(item => {
 
-					if(item.creator_id === userId) {
-						const isCreatorInFinished = finishedGradings.some(grading => grading.creator_id === userId)
-						const isCreatorInCurrent = currentGradings.some(grading => grading.creator_id === userId)
+					if(item.creatorId === userId) {
+						const isCreatorInFinished = finishedGradings.some(grading => grading.creatorId === userId)
+						const isCreatorInCurrent = currentGradings.some(grading => grading.creatorId === userId)
 
 						if (!isCreatorInFinished && !isCreatorInCurrent) {
 							if (item.step === 3) {
@@ -146,10 +146,10 @@ export default function GradingIndex() {
 								<BeltButton
 									key={index}
 									width={"100%"}
-									onClick={() => handleNavigation(grading.grading_id, grading.step, belts[grading.belt_id]?.hex)}
-									color={belts[grading.belt_id]?.hex}
+									onClick={() => handleNavigation(grading.gradingId, grading.step, belts[grading.beltId]?.hex)}
+									color={belts[grading.beltId]?.hex}
 								>
-									<h2>{`${belts[grading.belt_id]?.name} bälte`} </h2>
+									<h2>{`${belts[grading.beltId]?.name} bälte`} </h2>
 								</BeltButton>
 							))}
 
@@ -168,10 +168,10 @@ export default function GradingIndex() {
 								<BeltButton
 									key={index}
 									width={"100%"}
-									onClick={() => handleNavigation(grading.grading_id, grading.step, belts[grading.belt_id]?.hex)}
-									color={belts[grading.belt_id]?.hex}
+									onClick={() => handleNavigation(grading.gradingId, grading.step, belts[grading.beltId]?.hex)}
+									color={belts[grading.beltId]?.hex}
 								>
-									<h2>{`${belts[grading.belt_id]?.name} bälte`} </h2>
+									<h2>{`${belts[grading.beltId]?.name} bälte`} </h2>
 								</BeltButton>
 							))}
 
