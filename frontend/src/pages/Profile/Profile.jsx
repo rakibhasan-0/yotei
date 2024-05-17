@@ -44,19 +44,13 @@ export default function Profile() {
 	const [lists, setLists] = useState([])
 	const [map, mapActions] = useMap()
 
-	//TODO feature toggle
-	const [isListsEnabled] = useState(false)
+	const [amountOfFavouriteWorkouts, setAmountOfFavouriteWorkouts] = useState(0)
 
-	const workout = {
-		id: -1,
-		name: "Favoritpass",
-		size: 7,
-		author: {
-			userId: 1,
-			username: "Admin",
-		},
-		hidden: false,
-	}
+
+	//TODO feature toggle
+	const [isListsEnabled] = useState(true)
+	//const test = getAmountOfFavouriteWorkouts();
+
 	/*const mockLists = [
 		{
 			id: -1,
@@ -123,15 +117,48 @@ export default function Profile() {
 		)
 	}
 
+	const getAmountOfFavouriteWorkouts= async() =>{
+		const args = {
+			from: "1980-01-01",
+			to: "2060-01-01",
+			selectedTags:"",
+			id: userId,
+			text: "",
+			isFavorite: true
+		}
+		getWorkouts(args, token, null, null, (response) => {
+			if(response.error) {
+				setError("Serverfel: Kunde inte ansluta till servern!")
+				setAmountOfFavouriteWorkouts(0)
+			} else {
+				console.log("LEngth: "+response.results.length)
+				setAmountOfFavouriteWorkouts(response.results.length)
+			}
+		})
+		console.log("Emil kommer göra illa mig :)" +amountOfFavouriteWorkouts)
+
+	}
+
 	/**
 	 * Fetches lists when the component is mounted or when the
 	 * search text are changed.
 	 */
 	useEffect(() => {
+		getAmountOfFavouriteWorkouts();
+		const workout = {
+			id: -1,
+			name: "Favoritpass",
+			size: amountOfFavouriteWorkouts,//test,
+			author: {
+				userId: 1,
+				username: "Admin",
+			},
+			hidden: false,
+		}
 		setFetchedLists(false)
 		setLists([workout])
 		fetchingList()
-	}, [searchText])
+	}, [searchText,amountOfFavouriteWorkouts])
 
 	useEffect(() => {
 		getWorkouts(
