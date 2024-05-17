@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.*;
 import se.umu.cs.pvt.belt.Belt;
+import se.umu.cs.pvt.statistics.gradingprotocol.GradingProtocolCategory;
+import se.umu.cs.pvt.statistics.gradingprotocol.GradingProtocolDTO;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -147,5 +149,54 @@ public class StatisticsController {
         
         StatisticsResponseWrapper response = new StatisticsResponseWrapper(uniqueSessionIds.size(), averageRating, uniqueActivities);  
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("{id}/grading_protocol")
+    public ResponseEntity<List<StatisticsResponse>> getGradingProtocolView(@PathVariable Long id, @RequestParam Long beltId){
+
+        List<StatisticsActivity> techniques = statisticsRepository.getAllSessionReviewTechniques(id);
+
+
+        // Store unique activities
+        List<StatisticsResponse> uniqueActivities = new ArrayList<>();;
+
+
+        // Iterate through the StatisticsActivities to retrieve the relevant information.
+        for (StatisticsActivity sa : techniques) {
+            StatisticsResponse sr = new StatisticsResponse(sa.getActivity_id(), sa.getName(), sa.getType(), sa.getCount());
+            
+            if (!uniqueActivities.contains(sr)) {
+                uniqueActivities.add(sr);
+            } else {
+                uniqueActivities.get(uniqueActivities.indexOf(sr)).addToCount(sa.getCount());
+            }
+        }
+
+
+        return new ResponseEntity<>(uniqueActivities, HttpStatus.OK);
+    }
+
+
+    private GradingProtocolDTO getMockGradingProtocol() {
+        ArrayList<GradingProtocolCategory> categories = new ArrayList<>();
+
+        ArrayList<StatisticsResponse> atemiWazaTechinques = new ArrayList<>();
+        atemiWazaTechinques.add(new StatisticsResponse(null, null, null));
+
+
+        GradingProtocolCategory atemiWaza = new GradingProtocolCategory("KIHON WAZA - ATEMI WAZA", null);
+
+        GradingProtocolCategory kansutsuWaza = new GradingProtocolCategory("KIHON WAZA - KANSUTSU WAZA", null);
+
+        GradingProtocolCategory nageWaza = new GradingProtocolCategory("KIHON WAZA - NAGE WAZA", null);
+
+        GradingProtocolCategory jigoWaza = new GradingProtocolCategory("JIGO WAZA", null);
+
+        GradingProtocolCategory renrakuWaza = new GradingProtocolCategory("RENRAKU WAZA", null);
+
+        GradingProtocolCategory randori = new GradingProtocolCategory("YAKUSOKU GEIKO OR RANDORI", null);
+
+
+        return null;
     }
 }
