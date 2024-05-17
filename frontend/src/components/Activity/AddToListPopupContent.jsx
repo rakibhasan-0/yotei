@@ -45,7 +45,7 @@ export const AddToListPopupContent = () => {
 			if (result.error) return
 
 			// Extract the 'id' and 'name' fields from each item in the result used in displaying the list.
-			const lists = result.map(item => ({ id: item.id, name: item.name, author: item.author, numberOfActivities: item.act}))
+			const lists = result.map(item => ({ id: item.id, name: item.name, author: item.author, numberOfActivities: item.size}))
 
 			setLists(lists)
 			setIsLoading(false)
