@@ -72,6 +72,7 @@ public class TechniqueDatabaseTest {
         .withEnv("POSTGRESQL_PASSWORD", POSTGRESQL_PASSWORD)
         .withExposedPorts(PostgreSQLContainer.POSTGRESQL_PORT);
 
+        //NOTE: We had to increase the timer to 120 rather than 60, which is wierd as both should work.
         postgreSQLContainer.setWaitStrategy(Wait.defaultWaitStrategy()
                 .withStartupTimeout(Duration.ofSeconds(120)));
         
@@ -274,6 +275,4 @@ public class TechniqueDatabaseTest {
                 }
         }
     }
-
-    /*This */
 }
