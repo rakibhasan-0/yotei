@@ -232,7 +232,6 @@ export default function DuringGrading() {
 				currentTechniqueTitle={techniqueNameList[currentTechniqueStep].technique.text}
 				nextTechniqueTitle={techniqueNameList[currentTechniqueStep].nextTechnique.text}
 				mainCategoryTitle={techniqueNameList[currentTechniqueStep].categoryName}>
-
 			</TechniqueInfoPanel>
 			{/* All pairs */}			
 			<div ref={scrollableContainerRef} className={styles.scrollableContainer}>
@@ -245,8 +244,9 @@ export default function DuringGrading() {
 								examineeName={item.nameLeft} 
 								onClick={(newState) => examineeClick(newState, techniqueNameList[currentTechniqueStep].technique.text, index, `${index}-left`)}
 								buttonState={leftExamineeState}
-								setButtonState={setLeftExamineeState}>
-							</ExamineeBox>
+								setButtonState={setLeftExamineeState}
+								examineeId={item.leftId}
+								techniqueName={techniqueNameList[currentTechniqueStep].technique.text}/>
 						}
 						rightExaminee={
 							item.rightId ? (
@@ -256,10 +256,12 @@ export default function DuringGrading() {
 									buttonState={rightExamineeState}
 									setButtonState={setRightExamineeState}
 									examineeId={item.rightId}
-								/>
+									techniqueName={techniqueNameList[currentTechniqueStep].technique.text}/>
 							) : null
 						}
-						pairNumber={index+1}>
+						pairNumber={index+1}
+						techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
+						examineePairId={item.pairId}>
 					</ExamineePairBox>
 				))}
 			</div>
@@ -378,12 +380,14 @@ export default function DuringGrading() {
 		pairs_json.forEach((pair) => {
 			const examinee1 = examinees.find(item => item.examinee_id === pair.examinee_1_id)
 			const examinee2 = examinees.find(item => item.examinee_id === pair.examinee_2_id)
+			const examineePair = pair.examinee_pair_id
 			if (examinee1 !== undefined || examinee2 !== undefined) { // Only add if something is found
 				const name1 = examinee1 ? examinee1.name : "" // If only one name found
 				const name2 = examinee2 ? examinee2.name : ""
 				const id1 = examinee1 ? examinee1.examinee_id : ""
 				const id2 = examinee2 ? examinee2.examinee_id : ""
 				pair_names_current_grading.push({ 
+					pairId: examineePair,
 					nameLeft: name1, 
 					nameRight: name2, 
 					leftId: id1, 

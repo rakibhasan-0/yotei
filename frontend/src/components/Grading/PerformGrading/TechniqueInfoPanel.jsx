@@ -1,10 +1,14 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import CommentButton from "../PerformGrading/CommentButton"
 import styles from "./TechniqueInfoPanel.module.css"
 import Popup from "../../Common/Popup/Popup"
 import TextArea from "../../Common/TextArea/TextArea"
 import Button from "../../Common/Button/Button"
 import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
+
+import { setError as setErrorToast} from "../../../utils" 
+import { AccountContext } from "../../../context"
+import { useParams } from "react-router-dom"
 
 /**
  * This panel  present the main categori, the current technique and the next
@@ -39,14 +43,17 @@ export default function TechniqueInfoPanel( {
 	categoryTitle = "Test Kategori",
 	currentTechniqueTitle = "1. Grepp i två handleder framifrån och svingslag Frigöring – Ju morote jodan uke",
 	nextTechniqueTitle = " 2. Stryptag framifrån och svingslag, backhand Frigöring – Ju morote jodan uke, ude osae, ude osae gatame",
-	mainCategoryTitle = "Huvudkategori",
-	gradingId
+	mainCategoryTitle = "Huvudkategori"
 }) {
 
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [isAddingComment, setAddComment] = useState(false)
 	const [commentText, setCommentText] = useState()
 	const [commentError, setCommentError] = useState()
+
+	const { gradingId } = useParams()
+
+	const { token, userId } = useContext(AccountContext)
 
 	/**
 	 * Is used when discarding a comment,
@@ -81,8 +88,8 @@ export default function TechniqueInfoPanel( {
 			return
 		}
 		console.log("API ANROP SOM INTE FINNS ÄNNU. Detta skulle läggas in: " + commentText + " Grading ID: " + gradingId)
-		/* API ANROP HÄR...
-		const response = await fetch(`/api/grading/${gradingId}/2/${currentTechniqueTitle}, {
+		
+		const response = await fetch("/api/examination/comment/", {
 			method: "POST",
 			headers: {
 				"Content-type": "application/json",
@@ -90,14 +97,15 @@ export default function TechniqueInfoPanel( {
 				userId
 			},
 			body: JSON.stringify({
-				commentText
+				"gradingId": gradingId,
+				"techniqueName": currentTechniqueTitle,
+				"comment": commentText	
 			})
 		})
-		if (response.status != 201) {
+		if (response.status != 200) {
 			setErrorToast("Ett fel uppstod när kommentaren skulle läggas till")
 			return
 		}
-		*/
 		await onDiscardGroupComment()
 	}
 

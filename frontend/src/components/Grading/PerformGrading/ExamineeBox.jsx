@@ -1,10 +1,15 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import CommentButton from "./CommentButton"
 import styles from "./ExamineeBox.module.css"
 import Popup from "../../Common/Popup/Popup"
 import TextArea from "../../Common/TextArea/TextArea"
 import Button from "../../Common/Button/Button"
 import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
+import { AccountContext } from "../../../context"
+import { useParams } from "react-router-dom"
+import { setError as setErrorToast} from "../../../utils" 
+
+
 
 /**
  * This is a box containing the Examinee's name.
@@ -26,12 +31,24 @@ import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
  * @version 3.0 
  */
 
-export default function ExamineeBox({ id, examineeName, examineeId, onClick, buttonState, setButtonState}) {
+export default function ExamineeBox({ 
+	id, 
+	examineeName, 
+	examineeId,
+	techniqueName, 
+	onClick, 
+	buttonState, 
+	setButtonState
+}) {
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [isAddingComment, setAddComment] = useState(false)
 	const [commentText, setCommentText] = useState()
 	const [commentError, setCommentError] = useState()
 	const colors = ["white", "lightgreen", "lightcoral"]
+
+	const { gradingId } = useParams()
+
+	const { token, userId } = useContext(AccountContext)
 
 	/**
 	 * Is used when discarding a comment,
@@ -66,12 +83,15 @@ export default function ExamineeBox({ id, examineeName, examineeId, onClick, but
 			setCommentError("Kommentaren får inte vara tom")
 			return
 		}
-		console.log("API ANROP SOM INTE FINNS ÄNNU. Detta skulle läggas in: " + commentText + " Till person: " + examineeId)
-		const response = await fetch(`/api/examination/comment/`, {
+		// För debugging
+		console.log("API ANROP SOM INTE FINNS ÄNNU. Detta skulle läggas in: " + commentText + " Till person: " + examineeId + " GradingId: " + gradingId + " Technique: " + techniqueName)
+		
+		const response = await fetch("/api/examination/comment/", {
 			method: "POST",
 			headers: {
 				"Content-type": "application/json",
 				token,
+				userId
 			},
 			body: JSON.stringify({
 				"gradingId": gradingId,
@@ -80,7 +100,7 @@ export default function ExamineeBox({ id, examineeName, examineeId, onClick, but
 				"comment": commentText	
 			})
 		})
-		if (response.status != 201) {
+		if (response.status != 200) {
 			setErrorToast("Ett fel uppstod när kommentaren skulle läggas till")
 			return
 		}
