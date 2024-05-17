@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe("Correct protocol tests", () => {
+test.describe("Correct protocol grading flow tests", () => {
     test.beforeEach(async ({page}) => {
 		await page.goto('http://localhost:3000/');
         await page.locator('#username-input').click();
