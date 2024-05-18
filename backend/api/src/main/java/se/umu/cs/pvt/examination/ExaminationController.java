@@ -411,7 +411,7 @@ public class ExaminationController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        ExportGradingPdf pdfExport = new ExportGradingPdf(gradingRepository.findById(grading_id).get(), examineeRepository.findAll(), examinationResultRepository.findAll(), examinationCommentRepository.findByGradingId(grading_id));
+        ExportGradingPdf pdfExport = new ExportGradingPdf(gradingRepository.findById(grading_id).get(), examineeRepository.findAll(), examinationResultRepository.findAll(), examinationCommentRepository.findByGradingId(grading_id), examineePairRepository.findAll());
 
         try {
             pdfExport.generate();
