@@ -3,9 +3,14 @@ import { Roles } from "./context"
 import { toast } from "react-toastify"
 
 /**
+<<<<<<< HEAD
  * @author UNKNOWN & Team Tomato & Team Mango
  * @updated 2024-04-26  by Tomato
  * 			2024-05-20  by Team Mango: Updated permissions functions.
+=======
+ * @author UNKNOWN & Team Tomato
+ * @updated 2024-05-20  by Tomato
+>>>>>>> main
  */
 
 /**
@@ -152,6 +157,7 @@ export const HTTP_STATUS_CODES = {
 	TEAPOT: 418,
 	INTERNAL_SERVER_ERROR: 500,
 	FORBIDDEN: 403,
+	NO_CONTENT: 204,
 }
 
 export const USER_PERMISSION_CODES = {

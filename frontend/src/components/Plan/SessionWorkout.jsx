@@ -7,7 +7,12 @@ import { AccountContext } from "../../context"
 import { useNavigate } from "react-router"
 import Button from "../../components/Common/Button/Button"
 import Review from "../../components/Plan/SessionReview/SessionReviewComponent.jsx"
+<<<<<<< HEAD
 import {HTTP_STATUS_CODES, canEditSession} from "../../utils"
+=======
+import {HTTP_STATUS_CODES} from "../../utils"
+import { useCookies } from "react-cookie"
+>>>>>>> main
 
 /**
  * The SessionWorkout component is used to display information about a Sessions
@@ -27,8 +32,12 @@ import {HTTP_STATUS_CODES, canEditSession} from "../../utils"
  * 
  * @returns A SessionWorkout component
  * 
+<<<<<<< HEAD
  * @author Griffin DV21JJN C19HLN, Team Mango (2024-05-20)
  * Updates: 2024-05-20: Updated the permission check code.
+=======
+ * @author Griffin DV21JJN C19HLN, Team Mango (Group 4)
+>>>>>>> main
  */
 
 function SessionWorkout({ id, workout, sessionID, creatorID }) {
@@ -39,6 +48,7 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 	const sessionId = setSessionID()
 	const navigate = useNavigate()
 	const [showRPopup, setRShowPopup] = useState(false)
+	const [cookies, setCookie] = useCookies(["previousPath"])
 	const navigateAndClose = async path => {
 		navigate(path)
 	}
@@ -47,6 +57,10 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 	const context = useContext(AccountContext)
 	const [, setErrorStateMsg] = useState("")
 	//const {token} = context
+
+	useEffect(() => {
+		setCookie("previousPath", "/plan", {path: "/"})
+	}, [setCookie, cookies.previousPath])
 
 	useEffect(() => {
 		const fetchLoadedData = async() => {
