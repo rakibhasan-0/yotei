@@ -40,7 +40,6 @@ export default function Profile() {
 	const [passwordButtonState, setPasswordButtonDisabled] = useState(false)
 	const [usernameButtonState, setUsernameButtonDisabled] = useState(false)
 
-	const [fetchedLists, setFetchedLists] = useState(false)
 	const [lists, setLists] = useState([])
 	const [map, mapActions] = useMap()
 
@@ -48,43 +47,8 @@ export default function Profile() {
 
 
 	//TODO feature toggle
-	const [isListsEnabled] = useState(false)
+	const [isListsEnabled] = useState(true)
 
-	/*const mockLists = [
-		{
-			id: -1,
-			name: "Favoritpass",
-			size: 7,
-			author:{
-				userId: 1,
-				username: "Admin",
-			},
-			hidden: false,
-			isShared: true,
-		},
-		{
-			id: 1,
-			name: "TestList",
-			size: 3,
-			author:{
-				userId: 2,
-				username: "Editor",
-			},
-			hidden: true,
-			isShared: true,
-		},
-		{
-			id: 2,
-			name: "Lees lista",
-			size: 2,
-			author:{
-				userId: 1,
-				username: "Admin",
-			},
-			hidden: true,
-			isShared: true,
-		},
-	]*/
 
 	/* Workout management */
 
@@ -134,12 +98,23 @@ export default function Profile() {
 		})
 	}
 
+	getAmountOfFavouriteWorkouts()
+	const workout = {
+		id: -1,
+		name: "Favoritpass",
+		size: amountOfFavouriteWorkouts,
+		author: {
+			userId: 1,
+			username: "Admin",
+		},
+		hidden: false,
+	}
+
 	/**
 	 * Fetches lists when the component is mounted or when the
 	 * search text are changed.
 	 */
 	useEffect(() => {
-		setFetchedLists(false)
 		getAmountOfFavouriteWorkouts()
 		const workout = {
 			id: -1,
@@ -262,29 +237,30 @@ export default function Profile() {
 	/**
 	 * Fetches the lists from the backend, either from cache or by a new API-call.
 	 */
-	function fetchingList() {
+	async function fetchingList() {
 		const args = {
-			text: searchText,
+			hidden: "",
+			isAuthor: "",
 		}
 
 		getLists(args, token, map, mapActions, (result) => {
-			if (result.error) return
+			if (result.error) {
+				//Should handle error
+				return
+			}
 
-			/*const lists = result.map((item) => ({
+			const lists = result.map((item) => ({
 				id: item.id,
 				name: item.name,
 				size: item.size,
 				author: item.author,
 				hidden: item.hidden,
 				isShared: item.isShared,
-			}))*/
+			}))
 
-			//setLists([workout, ...lists])
-			setFetchedLists(true)
+			setLists([workout, ...lists])
 		})
 	}
-
-	console.log("Console.log so that linter doesnt cause problems: " + fetchedLists)
 
 	return (
 		<Tabs defaultActiveKey={"MyWorkouts"} className={style.tabs}>
