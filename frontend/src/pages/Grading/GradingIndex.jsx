@@ -179,7 +179,7 @@ export default function GradingIndex() {
 									onClick={() => handleNavigation(grading.gradingId, grading.step, belts[grading.beltId]?.hex)}
 									color={belts[grading.beltId]?.hex}
 								>
-                <h2>{`${grading.title}`} </h2>
+									<h2>{`${grading.title}`} </h2>
 
 								</BeltButton>
 							))}
@@ -200,7 +200,7 @@ export default function GradingIndex() {
 									onClick={() => handleNavigation(grading.gradingId, grading.step, belts[grading.beltId]?.hex)}
 									color={belts[grading.beltId]?.hex}
 								>
-                <h2>{`${grading.title}`} </h2>
+									<h2>{`${grading.title}`} </h2>
 								</BeltButton>
 							))}
 						</div>
