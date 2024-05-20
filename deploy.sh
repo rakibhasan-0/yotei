@@ -77,7 +77,7 @@ else
                     [yY] )
                         if [ -z $(crontab -l | grep "docker run --rm certbot/certbot:latest renew") ]
                         then 
-                            echo "0 0 1 * * docker run --rm certbot/certbot:latest renew" | crontab -
+                            (crontab -l ; echo "0 0 1 * * docker run --rm certbot/certbot:latest renew") | crontab -
                         fi
                         break;;
                     [nN] )
