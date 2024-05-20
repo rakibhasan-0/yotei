@@ -45,7 +45,7 @@ export default function TechniqueInfoPanel( {
 	nextTechniqueTitle = " 2. Stryptag framifrån och svingslag, backhand Frigöring – Ju morote jodan uke, ude osae, ude osae gatame",
 	mainCategoryTitle = "Huvudkategori"
 }) {
-    const [commentSaved, setCommentSaved] = useState(false);
+	const [commentSaved, setCommentSaved] = useState(false)
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [isAddingComment, setAddComment] = useState(false)
 	const [commentText, setCommentText] = useState()

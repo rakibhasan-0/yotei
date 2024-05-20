@@ -1,4 +1,5 @@
 import {configure, render, screen} from "@testing-library/react"
+import "@testing-library/jest-dom"
 import React from "react"
 import CommentButton from "../../../../components/Grading/PerformGrading/CommentButton.jsx"
 
@@ -48,5 +49,12 @@ describe("CommentButtonTests", () => {
 
 		// ASSERT
 		expect(clicked).toEqual(false)
+	})
+
+	test("CommentButton: displays the notification circle only when a comment is saved", async() => {
+		const { rerender } = render(<CommentButton id="test-button" onClick={() => {}} commentSaved={true} />)
+		expect(screen.getByTestId("notification-circle")).toBeInTheDocument()
+		rerender(<CommentButton id="test-button" onClick={() => {}} commentSaved={false} />)
+		expect(() => screen.getByTestId("notification-circle")).toThrow()
 	})
 })

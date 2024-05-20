@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from "react"
 import  "react-bootstrap-icons"
-import styles from './CommentButton.module.css'
+import styles from "./CommentButton.module.css"
 
 /**
  * This component is representing a comment button during
@@ -18,13 +18,12 @@ import styles from './CommentButton.module.css'
  * @constructor
  */
 export default function CommentButton( {id, onClick, commentSaved}) {
-    console.log('commentSaved:', commentSaved);
 	return (
-        <div id={id} onClick={onClick} className={styles.buttonContainer}>
-            <div>
-                <i className="bi bi-file-text h2" />
-                {commentSaved && <span className={styles.notificationCircle}>1</span>}
-            </div>
-        </div>
-    );
+		<div id={id} onClick={onClick} className={styles.buttonContainer}>
+			<div>
+				<i className="bi bi-file-text h2" />
+				{commentSaved && <span className={styles.notificationCircle} id={"notification-circle"}>1</span>}
+			</div>
+		</div>
+	)
 }

@@ -40,7 +40,7 @@ export default function ExamineeBox({
 	buttonState, 
 	setButtonState
 }) {
-    const [commentSaved, setCommentSaved] = useState(false);
+	const [commentSaved, setCommentSaved] = useState(false)
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [isAddingComment, setAddComment] = useState(false)
 	const [commentText, setCommentText] = useState()
