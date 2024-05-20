@@ -232,24 +232,38 @@ public class ActivityListService implements IActivityListService {
         }
         Long userId = jwt.getClaim("userId").asLong();
         String userRole = jwt.getClaim("role").asString();
+        Boolean isAdmin = ROLE_ADMIN.equals(userRole);
 
         List<ActivityList> activityLists;
-        if (ROLE_ADMIN.equals(userRole)) {
-            activityLists = (hidden != null) ? activityListRepository.findAllByHidden(hidden)
-                    : activityListRepository.findAll();
-        } else if (Boolean.TRUE.equals(isAuthor)) {
-            activityLists = (hidden != null) ? activityListRepository.findAllByAuthorAndHidden(userId, hidden)
-                    : activityListRepository.findAllByAuthor(userId);
-        } else {
-            activityLists = (hidden != null) ? activityListRepository.findAllByUserIdAndHidden(userId, hidden)
-                    : activityListRepository.findAllByUserId(userId);
+
+        activityLists = (Boolean.TRUE.equals(isAdmin)) ? activityListRepository.findAll()
+                : activityListRepository.findAllByUserIdOrPublic(userId);
+
+        if (hidden != null) {
+            activityLists = activityLists.stream()
+                    .filter(a -> hidden.equals(a.getHidden()))
+                    .collect(Collectors.toList());
+        }
+        if (isAuthor != null) {
+            if (isAuthor) {
+                activityLists = activityLists.stream()
+                        .filter(a -> userId.equals(a.getAuthor()))
+                        .collect(Collectors.toList());
+            } else {
+                activityLists = activityLists.stream()
+                        .filter(a -> !userId.equals(a.getAuthor()) &&
+                                a.getUsers().stream().anyMatch(u -> userId.equals(u.getUser_id())))
+                        .collect(Collectors.toList());
+            }
         }
 
         if (activityLists.isEmpty()) {
+
             return Collections.emptyList();
         }
-        return activityLists.stream()
-                .map(activityList -> convertToActivityListShortDTO(activityList, userId))
+        return activityLists.stream().map(activityList ->
+
+        convertToActivityListShortDTO(activityList, userId))
                 .collect(Collectors.toList());
 
     }
