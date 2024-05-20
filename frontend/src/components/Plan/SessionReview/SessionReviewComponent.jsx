@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { useState, useContext } from "react"
+import { useState, useContext, useReducer } from "react"
 import Popup from "../../Common/Popup/Popup"
 import Button from "../../Common/Button/Button"
 import Ratings from "react-ratings-declarative"
@@ -8,17 +8,26 @@ import TextArea from "../../Common/TextArea/TextArea"
 import Divider from "../../Common/Divider/Divider"
 import CheckBox from "../../Common/CheckBox/CheckBox"
 import styles from "./SessionReviewComponent.module.css"
-import {HTTP_STATUS_CODES, setError, setSuccess} from "../../../utils"
+import { HTTP_STATUS_CODES, setError, setSuccess } from "../../../utils"
 import { AccountContext } from "../../../context"
+import AddActivity from "../../Workout/CreateWorkout/AddActivity"
+import {
+	workoutCreateReducer,
+	WorkoutCreateInitialState,
+} from "../../Workout/CreateWorkout/WorkoutCreateReducer"
+import { WorkoutCreateContext } from "../../Workout/CreateWorkout/WorkoutCreateContext"
+import { WORKOUT_CREATE_TYPES } from "../../Workout/CreateWorkout/WorkoutCreateReducer"
+import ActivityInfoPopUp from "../../Workout/CreateWorkout/ActivityInfoPopUp"
 
 /**
- * Review component for an individual session. 
+ * Review component for an individual session.
  * A session can have one review on it, filled in by the trainer
  * The review can be seen and edited through the plan window
  * Based on "ReviewFormComponent.jsx"
- * 
- * @author Hannes c21hhn (Group 1, pomegranate) (2024-04-22) 
- * @version 1.0
+ *
+ * @author Hannes c21hhn (Group 1, pomegranate), Team Coconut
+ * @since 2024-05-20
+ * @version 1.1
  */
 
 export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) {
@@ -66,7 +75,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 		const fetchLoadedData = async() => {
 			const requestOptions = {
-				headers: {"Content-type": "application/json", token: context.token}
+				headers: { "Content-type": "application/json", token: context.token },
 			}
 
 			const loadedResponse = await fetch("/api/session/" + session_id + "/review/all", requestOptions).catch(() => {
@@ -106,7 +115,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			return updatedDoneList
 		})
 	}
-	
+
 
 
 	function handleCheckBoxChange (checked, id) {
@@ -117,11 +126,11 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		}
 	}
 
-	function handleChangePositive(event){
+	function handleChangePositive(event) {
 		setPositiveComment(event.target.value)
 	}
 
-	function handleChangeNegative(event){
+	function handleChangeNegative(event) {
 		setNegativeComment(event.target.value)
 	}
 
@@ -163,7 +172,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		}
 
 		const requestOptions2 = {
-			headers: {"Content-type": "application/json", token: context.token}
+			headers: { "Content-type": "application/json", token: context.token },
 		}
 
 		const loadedResponse = await fetch("/api/session/" + session_id + "/review/all", requestOptions2).catch(() => {
@@ -275,19 +284,256 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	}
 
 	function markAll(sessionData) {
-		const allActivityIds = sessionData.activityCategories.flatMap(category => category.activities.map(activity => activity.id))
+		const allActivityIds = sessionData.activityCategories.flatMap((category) =>
+			category.activities.map((activity) => activity.id)
+		)
 		setDone(allActivityIds)
 	}
-	
 
+	/**
+   * workout state and dispatch which is managed by the reducer.
+   */
+	const [workoutCreateInfo, workoutCreateInfoDispatch] = useReducer(
+		workoutCreateReducer,
+		WorkoutCreateInitialState
+	)
+
+	/**
+   * Function to toggle the popup in the added more activities functionality
+   */
+	function toggleAddMore() {
+		if (workoutCreateInfo.popupState.isOpened) {
+			workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLOSE_POPUP })
+		} else {
+			workoutCreateInfoDispatch({
+				type: WORKOUT_CREATE_TYPES.OPEN_ADD_ACTIVITY_POPUP,
+			})
+		}
+	}
+
+	/**
+   * it sets the activities that user wants to add
+   * it sets the activities data in the reducer.
+   * @param activities the activities that are added.
+   */
+	function getActivities(activities) {
+		console.log("added", workoutCreateInfo.addedActivities)
+		console.log("activities", workoutCreateInfo.checkedActivities)
+		console.log("categories", workoutCreateInfo.addedCategories)
+		workoutCreateInfoDispatch({
+			type: WORKOUT_CREATE_TYPES.SET_ACTIVITIES_WITH_PARSING,
+			payload: { result: activities },
+		})
+	}
+
+	/**
+   * it clears the activities that are added in the reducer.
+   */
+	function clearActivitiesStorage() {
+		workoutCreateInfoDispatch({
+			type: WORKOUT_CREATE_TYPES.CLEAR_ADDED_ACTIVITIES,
+		})
+		workoutCreateInfoDispatch({
+			type: WORKOUT_CREATE_TYPES.CLEAR_CHECKED_ACTIVITIES,
+		})
+	}
+
+	/**
+   *
+   * That function is responsible for adding the newly added activities to the existing categories
+   * or creating a new category with the newly added activities.
+   *
+   * @param data the data that contains the newly added activities information
+   *             it can be techniques or exercises with belonging information
+   * @param categories the categories that are checked by the user
+   */
+	function newlyAddedActivity(data, categories) {
+		console.log("newlyAddedActivity data: ", data)
+		console.log("newlyAddedActivity category: ", categories)
+
+		// calculate the duration of the data
+		addDurationToSessionData(data)
+
+		categories.forEach((category) => {
+			if (category.checked) {
+				let categoryExistence = findExistingCategory(category)
+				console.log("categoriesExistence", categoryExistence)
+
+				if (categoryExistence) {
+					addActivitiesToExistingCategory(categoryExistence, data)
+				} else {
+					createNewCategoryWithActivities(category, data)
+				}
+			}
+		})
+
+		clearActivitiesStorage()
+	}
+
+	/**
+   * that function is responsible for adding the duration of the activities to the sessionData.
+   * @param data the data that contains the newly added activities information
+   */
+
+	function addDurationToSessionData(data) {
+		let duration = countDuration(data)
+		sessionData.duration = duration
+	}
+
+	/**
+   * it calculates the total duration of the activities
+   *
+   * @param data it contains the newly added activities information
+   * @returns the total duration of the activities
+   */
+	function countDuration(data) {
+		let duration = 0
+		data.forEach((activity) => {
+			duration += activity.duration
+		})
+		console.log("duration", duration)
+		return duration
+	}
+
+	/**
+   * it checks if the category is already exist in the sessionData.
+   * if it is exist, it returns the category.
+   * otherwise, it returns null.
+   *
+   * @param category the category that is checked by the user
+   * @returns the category that is already exist in the sessionData.
+   */
+	function findExistingCategory(category) {
+		return sessionData.activityCategories.find((element) => {
+			console.log("element category", element.categoryName)
+			return element.categoryName.toLowerCase() === category.name.toLowerCase()
+		})
+	}
+
+	/**
+   * that function is responsible for adding the activities to the existing category.
+   * it creates the activity object and adds it to the category.
+   *
+   * @param category the category that is checked by the user
+   * @param activities the activities that are added by the user
+   */
+	function addActivitiesToExistingCategory(category, activities) {
+		let order = 20 // Start order at 20, may need adjustment based on requirements
+		activities.forEach((activity) => {
+			console.log("activity", activity)
+			const newActivity = createActivityObject(activity, order)
+			category.activities.push(newActivity)
+			order++
+		})
+	}
+
+	/**
+   * that function is responsible for creating a new category with the
+   * activities that are added by the user.
+   *
+   * @param category the category that is checked by the user
+   * @param activities the activities that are added by the user
+   */
+	function createNewCategoryWithActivities(category, activities) {
+		const newCategory = {
+			categoryName: category.name,
+			categoryOrder: category.id + 144, // Unique ID logic
+			activities: activities.map((activity, index) =>
+				createActivityObject(activity, index)
+			),
+		}
+		sessionData.activityCategories.push(newCategory)
+	}
+
+	/**
+   *
+   * that function is responsible for creating the activity object.
+   * based on the activity type as it can be technique or exercise.
+   *
+   *
+   * @param  activity the activity that is added by the user
+   * @param order some random number that is used for ordering the activities
+   * @returns it will successfully add the activity to the sessionData
+   */
+	function createActivityObject(activity, order) {
+		if (activity.techniqueId) {
+			getIdForActivity(activity, order)
+			return {
+				id: activity.id + 144, // Unique ID logic
+				text: "",
+				duration: activity.duration,
+				technique: {
+					id: activity.techniqueId,
+					name: activity.name,
+					description: activity.techniqueDescription || "",
+					duration: activity.duration,
+					belts: activity.belts || [],
+					tags: activity.tags || "",
+				},
+				name: activity.name,
+				exercise: null,
+				order: order,
+			}
+		} else {
+			const newId = sessionData.activityCategories.activities
+
+			return {
+				id: newId + 144, // Unique ID logic
+				text: "",
+				duration: activity.duration,
+				exercise: {
+					id: activity.exerciseId,
+					name: activity.name,
+					description: activity.exerciseDescription || "",
+					duration: activity.duration,
+					belts: activity.belts || [],
+					tags: activity.tags || "",
+				},
+				name: activity.name,
+				order: order,
+				technique: null,
+			}
+		}
+	}
+
+	/**
+   *
+   * that function is responsible for getting the id for the activity.
+   */
+	function getIdForActivity(activity, order) {
+		const obj = {
+			workoutId: null,
+			exerciseId: activity.exerciseId ? activity.exerciseId : null,
+			techniqueId: activity.techniqueId ? activity.techniqueId : null,
+			name: activity.name,
+			description: activity.techniqueDescription || "",
+			duration: activity.duration,
+			order: order,
+		}
+
+		const respons = fetch("/api/workouts/activities/add", {
+			method: "POST",
+			headers: {
+				"Content-type": "application/json",
+				token: token,
+			},
+			body: JSON.stringify(obj),
+		})
+			.then((response) => response.json())
+			.catch((error) => console.log(error))
+
+		console.log("respons", respons)
+	}
 
 	function getActivityContainer(sessionData) {
 		//console.log(sessionData)
-		return sessionData !== null && (
-			<div className="container">
-				<Divider option={"h2_center"} title={"Aktiviteter"} />
-				<div className="row">
-					<ul>
+		return (
+			sessionData !== null && (
+				<div>
+					<Divider option={"h2_center"} title={"Aktiviteter"} />
+					<div>
+						<ul>
+							{console.log(sessionData)}
 						{sessionData.activityCategories.map((category, categoryIndex) => (
 							<React.Fragment key={categoryIndex}>
 								{category.activities.map((activity, activityIndex) => (
@@ -304,8 +550,53 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 						))}
 					</ul>
 				</div>
-				<Button id="allButton" width={"100%"} onClick={() => markAll(sessionData)}>Markera alla</Button>
-			</div>
+
+					{/** here we will add plus button and by clicking on that button will create a new popup*/}
+
+					<button
+						className={styles.add_more_button_container}
+						onClick={toggleAddMore}
+					>
+						<img src="/add_more_icon.svg" />
+					</button>
+
+					{/* here are pop-ups for the adding activities*/}
+					<Popup
+						title={"Lägg till aktivitet"}
+						id={"addMorePopup"}
+						isOpen={workoutCreateInfo.popupState.isOpened}
+						setIsOpen={toggleAddMore}
+					>
+						<WorkoutCreateContext.Provider value={{ workoutCreateInfo, workoutCreateInfoDispatch }}>
+							{workoutCreateInfo.popupState.types.showAddActivity && (
+								<AddActivity
+									id="add-activity-popup"
+									sendActivity={getActivities}
+								/>
+							)}
+							{workoutCreateInfo.popupState.types.showActivityInfo && (
+								<ActivityInfoPopUp
+									isFreeText={false}
+									backToAddActivity={true}
+									newlyAddedActivities={newlyAddedActivity}
+								/>
+							)}
+						</WorkoutCreateContext.Provider>
+					</Popup>
+
+					{/* More components if necessary */}
+
+					<div style={{ marginBottom: "4%" }}>
+						<Button
+							id="allButton"
+							width={"100%"}
+							onClick={() => markAll(sessionData)}
+						>
+              				Markera alla
+						</Button>
+					</div>
+				</div>
+			)
 		)
 	}
 
