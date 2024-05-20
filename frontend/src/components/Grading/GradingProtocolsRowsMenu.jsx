@@ -11,7 +11,7 @@ export default function GradingProtocolsRowsMenu({ protocols, onSelectRow }) {
 					</div>
 				))
 			) : (
-				<p>No grading protocols available</p>
+				<p>Inga graderingsprotokoll tillgängliga</p>
 			)}
 		</div>
 	)

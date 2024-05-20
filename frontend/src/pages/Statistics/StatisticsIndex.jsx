@@ -31,6 +31,7 @@ export default function Statistics() {
 	const navigate = useNavigate()
 	const { groupID } = useParams()
 	const [group, setGroup] = useState(null)
+	const [groupBelts, setGroupBelts] = useState([])
 	const [loading, setLoading] = useState(true)
 	const { token } = useContext(AccountContext)
 	const [groupActivities, setGroupActivities] = useState([])
@@ -43,6 +44,7 @@ export default function Statistics() {
 	})
 	const [order, setDescendingOrder] = useState(false)
 	const [rotate, setRotate] = useState(false)
+
 
 	// creating a date object for two years before from now and today's date
 	const twoYearsBeforeFromNow = new Date()
@@ -129,10 +131,13 @@ export default function Statistics() {
 					throw new Error("Failed to fetch group data")
 				}
 				
-				const groups = await responseFromGroupNameAPI.json()	
-
-				const group = groups.find((group) => group.id === parseInt(groupID))
-				setGroup(group)
+				if(responseFromGroupNameAPI.status === 200) {
+					const groups = await responseFromGroupNameAPI.json()	
+					const group = groups.find((group) => group.id === parseInt(groupID))
+					setGroup(group)
+					setGroupBelts(group.belts)
+					console.log(group.belts)
+				}
 			}
 			catch (error) {
 				console.error("Fetching error:", error)
@@ -202,11 +207,13 @@ export default function Statistics() {
 					<h5>Aktiviteter</h5>
 				</div>
 
-				<GradingStatisticsPopup id={"grading-statistics-container"} 
-					groupID = {groupID}
-					beltID = {selectedBelts}
-				
+	
+				<GradingStatisticsPopup 
+					id="grading-statistics-container" 
+					groupID={groupID} 
+					belts={groupBelts}
 				/>
+			
 
 				<StatisticsPopUp
 					groupActivities={activities}
