@@ -36,11 +36,11 @@ else
         read -rp "Do you have a version deployed already? (y/n): " yn
         case $yn in 
             [yY] ) 
-            # TODO: Clean up old version
+            docker compose -f docker-compose.yml -f docker-compose-domain-release.yml down
             read -rp "Would you like to reset the database? (y/n): " yn
             case $yn in 
                 [yY] ) 
-                    # TODO: Remove pgdata docker volume
+                    docker volume ls | grep "pgdata" | rev | cut -d' ' -f1 | rev | xargs docker volume rm
                     break;;
                 [nN] )
                     break;;
