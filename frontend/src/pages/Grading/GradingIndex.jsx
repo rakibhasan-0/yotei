@@ -76,39 +76,39 @@ export default function GradingIndex() {
 			headers: { "token": token }
 		})
 			.then(response => {
-				if (!response.ok) {
-					throw new Error("Network response was not ok")
+				if(response.status === 404) {
+					return []
 				}
 				return response.json()
 			})
 	}
 
 	/**
-	 *  Distribution current gradings and finished gradings for userid.  
-	 * @param {json} gradings_data 
-	 */
+   *  Distribution current gradings and finished gradings for userid.  
+   * @param {json} gradings_data 
+   */
 	function createLists(gradings_data) {
 		gradings_data.map(async (item) => {
-			if(item.creator_id === userId) {
-				const isCreatorInFinished = finishedGradings.some(grading => grading.creatorId === userId)
-				const isCreatorInCurrent = currentGradings.some(grading => grading.creatorId === userId)
+			const isCreatorInFinished = finishedGradings.some(grading => grading.creatorId === userId)
+			const isCreatorInCurrent = currentGradings.some(grading => grading.creatorId === userId)
+	
 
-				if (!isCreatorInFinished && !isCreatorInCurrent) {
-					if (item.step === 3) {
-						setFinishedGradings(prevState => [...prevState, item])
-					} else {
-						setCurrentGradings(prevState => [...prevState, item])
-					}
+			if (!isCreatorInFinished && !isCreatorInCurrent) {
+				if (item.step === 3) {
+					setFinishedGradings(prevState => [...prevState, item])
+				} else {
+					setCurrentGradings(prevState => [...prevState, item])
 				}
 			}
+			
 		})
 		setIsCreateListDone(true)
 	}
 
 	/**
-	 * Checks if the user has no earlier gradings started or finished. 
-	 * Otherwise sort it by dates.
-	 */
+   * Checks if the user has no earlier gradings started or finished. 
+   * Otherwise sort it by dates.
+   */
 	useEffect(() => {
 
 		if(isCreateListDone) {
@@ -123,8 +123,10 @@ export default function GradingIndex() {
 			setFinishedGradings(sortedFinishedGradings)
 
 		}
-		
+    
 	}, [isCreateListDone])
+
+
 
 	/**
 	 * Handle belt colors and name. 
@@ -140,6 +142,7 @@ export default function GradingIndex() {
 					fetchBelts(),
 					fetchGradings()
 				])
+				
 				const filteredColors = belt_data.filter(item => beltColors.includes(item.name))
 				const colorMaps = {}
 				filteredColors.forEach(element => {
@@ -152,28 +155,7 @@ export default function GradingIndex() {
 				})
 				setBelts(colorMaps)
 				setLoading(false)
-
-
 				createLists(gradings_data)
-
-
-				gradings_data.forEach(item => {
-
-					if(item.creatorId === userId) {
-						const isCreatorInFinished = finishedGradings.some(grading => grading.creatorId === userId)
-						const isCreatorInCurrent = currentGradings.some(grading => grading.creatorId === userId)
-
-						if (!isCreatorInFinished && !isCreatorInCurrent) {
-							if (item.step === 3) {
-								setFinishedGradings(prevState => [...prevState, item])
-							} else {
-								setCurrentGradings(prevState => [...prevState, item])
-							}
-						}
-					}
-				})
-
-        
 
 
 			} catch (error) {
@@ -197,7 +179,8 @@ export default function GradingIndex() {
 									onClick={() => handleNavigation(grading.gradingId, grading.step, belts[grading.beltId]?.hex)}
 									color={belts[grading.beltId]?.hex}
 								>
-									<h2>{`${belts[grading.beltId]?.name} bälte`} </h2>
+									<h2>{`${grading.title}`} </h2>
+
 								</BeltButton>
 							))}
 
@@ -217,7 +200,7 @@ export default function GradingIndex() {
 									onClick={() => handleNavigation(grading.gradingId, grading.step, belts[grading.beltId]?.hex)}
 									color={belts[grading.beltId]?.hex}
 								>
-									<h2>{`${belts[grading.beltId]?.name} bälte`} </h2>
+									<h2>{`${grading.title}`} </h2>
 								</BeltButton>
 							))}
 						</div>

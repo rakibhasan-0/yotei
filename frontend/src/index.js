@@ -51,22 +51,22 @@ import SessionCreateIndex from "./pages/Plan/SessionCreateIndex.jsx"
 import RoleEdit from "./pages/Admin/RoleEdit.jsx"
 import RoleCreate from "./pages/Admin/RoleCreate.jsx"
 
-
 const exerciseURI = "https://jsonplaceholder.typicode.com/users"
 const workoutURI = "https://jsonplaceholder.typicode.com/users"
 const planURI = "https://jsonplaceholder.typicode.com/users"
 
 /**
  *
-  * Changes version 2.0:
+ * Changes version 2.0:
  *     	made path for activity page.
  * 		Activities now contain techniques and exercises.
  *
  * @author
  * 		Unknown authors
  *     	Team Kiwi, Team Mango
- * @version 2.1
+ * @version 2.2
  * @updated 2024-05-08 Changed so workout/edit url also have the workout id in it
+ * 			2024-05-20 Changed route param for profile/list
  */
 export default function App() {
 	const cookie = new Cookies().get("token")
@@ -135,7 +135,14 @@ export default function App() {
 						<Route path="workout" element={<WorkoutIndex uri={workoutURI} />} />
 						<Route path="exercise/exercise_page/:ex_id" element={<ExerciseDetailsPage />} />
 						<Route path="technique" element={<TechniqueIndex />} />
-						<Route path="activity/technique/create" element={<AdminRoute><CreateTechnique /></AdminRoute> } />
+						<Route
+							path="activity/technique/create"
+							element={
+								<AdminRoute>
+									<CreateTechnique />
+								</AdminRoute>
+							}
+						/>
 						<Route path="technique/:techniqueId" element={<TechniqueDetail />} />
 						<Route
 							path="technique/:techniqueId/edit"
@@ -156,18 +163,14 @@ export default function App() {
 						<Route path="session/create" element={<SessionCreateIndex />} />
 						<Route path="session/edit/:session_id" element={<SessionEdit />} />
 						<Route path="groups" element={<GroupIndex />} />
-						<Route path="list/editList" element={<ListEdit/>} />
-
-						<Route path="profile/list/:list_id" element={<ListInfo />} />
-						<Route path="profile/favouriteWorkouts" element={<FavouriteWorkoutsList/>} />
-
-
-						
+						<Route path="list/editList" element={<ListEdit />} />
+						<Route path="profile/list/:activityListId" element={<ListInfo />} />
+						<Route path="profile/favouriteWorkouts" element={<FavouriteWorkoutsList />} />
 						<Route path="grading" element={<Grading />} />
-						<Route path="grading/create" element={<GradingCreate/>} />
-						<Route path="grading/:gradingId/1" element={<GradingBefore/>} />
-						<Route path = "grading/:gradingId/3" element={<GradingAfter/>} />
-						<Route path = "grading/:userId/4" element={<GradingDeviations/>} />
+						<Route path="grading/create" element={<GradingCreate />} />
+						<Route path="grading/:gradingId/1" element={<GradingBefore />} />
+						<Route path="grading/:gradingId/3" element={<GradingAfter />} />
+						<Route path="grading/:userId/4" element={<GradingDeviations />} />
 						<Route path="groups/statistics/:groupID" element={<Statistics />} />
 						<Route path="grading/:gradingId/2" element={<DuringGrading />} />
 						<Route path="" element={<PlanIndex uri={planURI} />} />
