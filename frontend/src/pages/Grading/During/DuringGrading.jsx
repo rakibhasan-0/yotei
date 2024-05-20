@@ -261,7 +261,7 @@ export default function DuringGrading() {
 									setButtonState={setLeftExamineeState}
 									examineeId={item.leftId}
 									techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
-									/>
+								/>
 							}
 							rightExaminee={
 								item.rightId ? (
@@ -278,7 +278,7 @@ export default function DuringGrading() {
 							pairNumber={index+1}
 							techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
 							examineePairId={item.pairId}
-							>
+						>
 						</ExamineePairBox>
 					))}
 				</div>
