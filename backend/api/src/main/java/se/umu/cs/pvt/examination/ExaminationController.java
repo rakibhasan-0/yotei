@@ -1,6 +1,5 @@
 package se.umu.cs.pvt.examination;
 
-import org.apache.commons.lang3.ObjectUtils.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,7 @@ import java.util.Optional;
  * Class for handling requests to the examination api.
  * 
  * @author Team Pomegranate (c21man && ens20lpn)
- * @author Team Orange (dv22rfg)
+ * @author Team Orange (dv22rfg && c19jen)
  */
 @RestController
 @RequestMapping(path = "/api/examination")
@@ -85,9 +84,12 @@ public class ExaminationController {
      */
     @PostMapping("/grading")
     public ResponseEntity<Grading> createGrading(@RequestBody Grading grading) {
-        if(beltRepository.findById(grading.getBelt_id()).isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        
+        // if(beltRepository.findById(grading.getBelt_id()).isEmpty()) {
+        //     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        // }
+        System.out.println(grading.getCreatorId());
+        System.out.println(grading.getBeltId());
         Grading new_grading = gradingRepository.save(grading);
         return new ResponseEntity<>(new_grading, HttpStatus.OK);
     }
@@ -113,7 +115,7 @@ public class ExaminationController {
     */
     @PutMapping("/grading")
     public ResponseEntity<Object> updateSessionReview( @RequestBody Grading grading) {
-        if(gradingRepository.findById(grading.getGrading_id()).isEmpty()) {
+        if(gradingRepository.findById(grading.getGradingId()).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         gradingRepository.save(grading);
@@ -157,7 +159,7 @@ public class ExaminationController {
     */
     @PostMapping("/examinee")
     public ResponseEntity<Examinee> create(@RequestBody Examinee examinee) {
-        if(gradingRepository.findById(examinee.getGrading_id()).isEmpty()) {
+        if(gradingRepository.findById(examinee.getGradingId()).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Examinee new_examinee = examineeRepository.save(examinee);
@@ -185,7 +187,7 @@ public class ExaminationController {
     */
     @PutMapping("/examinee")
     public ResponseEntity<Object> updateExaminee( @RequestBody Examinee examinee) {
-        if(examineeRepository.findById(examinee.getExaminee_id()).isEmpty() || gradingRepository.findById(examinee.getGrading_id()).isEmpty()) {
+        if(examineeRepository.findById(examinee.getExamineeId()).isEmpty() || gradingRepository.findById(examinee.getGradingId()).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         examineeRepository.save(examinee);
@@ -239,21 +241,21 @@ public class ExaminationController {
         List<Map<String, Object>> pairsByGradingId = new ArrayList<>();
 
         for (ExamineePair p : pairs) {
-            Optional<Examinee> examinee1 = examineeRepository.findById(p.getExaminee_1_id());
+            Optional<Examinee> examinee1 = examineeRepository.findById(p.getExaminee1Id());
             
-            if (examinee1.isPresent() && examinee1.get().getGrading_id() == grading_id) {
+            if (examinee1.isPresent() && examinee1.get().getGradingId() == grading_id) {
                 Map<String, Object> pairMap = new HashMap<>();
-                pairMap.put("pair_id", p.getExaminee_pair_id());
+                pairMap.put("pair_id", p.getExamineePairId());
                 Map<String, Object> examinee1Map = new HashMap<>();
-                examinee1Map.put("id", examinee1.get().getExaminee_id());
+                examinee1Map.put("id", examinee1.get().getExamineeId());
                 examinee1Map.put("name", examinee1.get().getName());
                 
                 pairMap.put("examinee_1", examinee1Map);
-                if(p.getExaminee_2_id() != null) {
-                    Optional<Examinee> examinee2 = examineeRepository.findById(p.getExaminee_2_id());
+                if(p.getExaminee2Id() != null) {
+                    Optional<Examinee> examinee2 = examineeRepository.findById(p.getExaminee2Id());
                     if (examinee2.isPresent()) {
                         Map<String, Object> examinee2Map = new HashMap<>();
-                        examinee2Map.put("id", examinee2.get().getExaminee_id());
+                        examinee2Map.put("id", examinee2.get().getExamineeId());
                         examinee2Map.put("name", examinee2.get().getName());
                         pairMap.put("examinee_2", examinee2Map);
                     }
@@ -435,7 +437,7 @@ public class ExaminationController {
     @PutMapping("/examresult")
     public ResponseEntity<Object> updateExaminationResult(@RequestBody ExaminationResult examination_result){
 
-        if(examinationResultRepository.findById(examination_result.getResult_id()).isEmpty()) {
+        if(examinationResultRepository.findById(examination_result.getResultId()).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         examinationResultRepository.save(examination_result);
@@ -479,9 +481,9 @@ public class ExaminationController {
         List<Map<String, Object>> results = new ArrayList<>();
         for(Examinee e : examinees) {
             for(ExaminationResult er : examinationResults) {
-                if(er.getExaminee_id() == e.getExaminee_id() && er.getTechnique_name().equals(technique_name)) {
+                if(er.getExamineeId() == e.getExamineeId() && er.getTechniqueName().equals(technique_name)) {
                     Map<String, Object> result = new HashMap<>();
-                    result.put("examinee_id", e.getExaminee_id());
+                    result.put("examinee_id", e.getExamineeId());
                     result.put("result", er.getPass());
                     results.add(result);
                 }
@@ -502,7 +504,7 @@ public class ExaminationController {
         List<ExaminationResult> examinationResults = examinationResultRepository.findAll();
         ArrayList<ExaminationResult> matching_results = new ArrayList<>();
         for(ExaminationResult er : examinationResults) {
-            if(er.getExaminee_id() == examinee_id) {
+            if(er.getExamineeId() == examinee_id) {
                 matching_results.add(er);
             }
         }

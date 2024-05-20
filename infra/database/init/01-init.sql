@@ -137,6 +137,10 @@ DROP TABLE IF EXISTS error_log CASCADE;
 DROP TABLE IF EXISTS media CASCADE;
 DROP TABLE IF EXISTS session_review;
 
+DROP TABLE IF EXISTS grading_protocol;
+
+DROP TABLE IF EXISTS grading_protocol_category;
+
 DROP SEQUENCE IF EXISTS serial;
 
 CREATE SEQUENCE serial START WITH 1 INCREMENT BY 1;
@@ -293,7 +297,7 @@ ALTER TABLE
 --
 CREATE TABLE activity(
 	activity_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-	workout_id INT NOT NULL,
+	workout_id INT,
 	exercise_id INT,
 	technique_id INT,
 	category_name VARCHAR(255),
@@ -615,6 +619,7 @@ CREATE TABLE IF NOT EXISTS examination_grading (
 	step INT NOT NULL,
 	technique_step_num INT NOT NULL,
 	created_at DATE NOT NULL,
+  title VARCHAR(255) NOT NULL,
 	CONSTRAINT grading_fk_belt FOREIGN KEY(belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE
 );
 
@@ -693,6 +698,53 @@ CREATE TABLE IF NOT EXISTS user_to_activity_list(
 ALTER TABLE
       user_to_activity_list OWNER to psql;
 
+
+--
+-- Name: grading_protocol; Type: TABLE; Schema: public; Owner: psql
+--
+CREATE TABLE grading_protocol(
+	protocol_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	belt_id INT NOT NULL,
+	protocol_code VARCHAR(255),
+	protocol_name VARCHAR(255),
+	CONSTRAINT fk_belt_grading_protocol FOREIGN KEY (belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE
+);
+
+ALTER TABLE
+	grading_protocol OWNER TO psql;
+
+
+--
+-- Name: grading_protocol_category; Type: TABLE; Schema: public; Owner: psql
+--
+CREATE TABLE grading_protocol_category(
+	category_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	protocol_id INT NOT NULL,
+	category_name VARCHAR(255),
+	category_order INT NOT NULL,
+	CONSTRAINT fk_grading_protocol_grading_protocol_category FOREIGN KEY (protocol_id) REFERENCES grading_protocol(protocol_id) ON DELETE CASCADE
+);
+
+ALTER TABLE
+	grading_protocol_category OWNER TO psql;
+
+
+--
+-- Name: technique_to_grading_protocol_category; Type: TABLE; Schema: public; Owner: psql
+--
+CREATE TABLE grading_protocol_technique(
+	id SERIAL PRIMARY KEY,
+	technique_id INT NOT NULL,
+	protocol_category_id INT NOT NULL,
+	technique_order INT NOT NULL,
+	CONSTRAINT fk_gpt_technique FOREIGN KEY(technique_id) REFERENCES technique(technique_id) ON DELETE CASCADE,
+	CONSTRAINT fk_gpt_category FOREIGN KEY(protocol_category_id) REFERENCES grading_protocol_category(category_id) ON DELETE CASCADE
+);
+
+ALTER TABLE
+	grading_protocol_technique OWNER TO psql;
+
+
 --
 -- Default Inserts
 -- ** Note that the order of some of these might 
@@ -716,6 +768,7 @@ ALTER TABLE
 \ir defaults/sessionreviewactivities.sql
 \ir defaults/activitylists.sql
 \ir defaults/examination_protocols.sql
+\ir defaults/grading_protocols.sql
 -- Triggers for user
 --
 CREATE OR REPLACE FUNCTION remove_user_references() RETURNS TRIGGER AS $$ 
@@ -818,3 +871,6 @@ $$ LANGUAGE 'plpgsql';
 
 CREATE TRIGGER insert_tag BEFORE INSERT ON tag 
 	FOR EACH ROW EXECUTE PROCEDURE tag_to_lowercase();
+
+	
+
