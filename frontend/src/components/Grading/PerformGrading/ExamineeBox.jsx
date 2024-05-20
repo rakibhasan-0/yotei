@@ -40,6 +40,7 @@ export default function ExamineeBox({
 	buttonState, 
 	setButtonState
 }) {
+    const [commentSaved, setCommentSaved] = useState(false);
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [isAddingComment, setAddComment] = useState(false)
 	const [commentText, setCommentText] = useState()
@@ -83,7 +84,7 @@ export default function ExamineeBox({
 			setCommentError("Kommentaren får inte vara tom")
 			return
 		}
-		
+        
 		const response = await fetch("/api/examination/comment/", {
 			method: "POST",
 			headers: {
@@ -132,7 +133,7 @@ export default function ExamineeBox({
 					onClick={() => {handleClick()}}>
 					<p id="ExamineeName" style={{height:"52px", margin:"0"}}>{examineeName}</p>
 				</div>
-				<CommentButton onClick={() => setAddComment(true)} className={styles.commentButtonContainer}/>
+				<CommentButton onClick={() => setAddComment(true)} className={styles.commentButtonContainer} commentSaved={commentSaved}/>
 
 				<Popup 
 					id={"examinee-comment-popup"} 
@@ -147,12 +148,12 @@ export default function ExamineeBox({
 						onInput={e => {setCommentText(e.target.value); setCommentError(false)}}
 						errorMessage={commentError}
 					/>
-					<Button onClick={onAddPersonalComment}>Lägg till</Button>
+					<Button onClick={() => {onAddPersonalComment(); setCommentSaved(true)}} >Lägg till</Button>
 				</Popup>
 				<ConfirmPopup
 					popupText={"Är du säker på att du vill ta bort kommentarsutkastet?"}
 					showPopup={showDiscardComment}
-					onClick={() => onDiscardPersonalComment()}
+					onClick={() => {onDiscardPersonalComment(); setCommentSaved(false)}}
 					setShowPopup={() => setShowDiscardComment(false)}
 					zIndex={200} // Above the comment popup.
 				/>
