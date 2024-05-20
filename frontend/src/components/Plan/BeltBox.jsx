@@ -33,6 +33,7 @@ import styles from "./BeltBox.module.css"
  * 							belt.color 		@type { colorcode } 			- A hexcode representing the belt color "#FFFFFF".
  * 							belt.name 		@type { string }				- A string containing the name of the belt.
  * 							belt.child		@type { boolean }  				- A boolean which is true if it is aa child belt.
+ * 							belt.inverted   @type { boolean }				- A boolean which is true if it is a inverted belt.
  * 		
  * @returns A BeltBox component either correctly rendered or with placeholders in case of errors.
  */
@@ -78,9 +79,14 @@ function BeltBox ( {id, belts} ) {
 			console.error("Invalid belt.child value")
 			return false
 		}
+		if (belt.inverted == null || belt.inverted === undefined){
+			console.error("Invalid belt.inverted")
+			return false
+		}
 
 		return true
 	}
+
 
 	function adaptColorCode (color) {
 		return "#" + color
@@ -151,10 +157,11 @@ function BeltBox ( {id, belts} ) {
 										<div key={`${belt.id}-child-belt`} className={styles.sc23_beltbox_belt} style={{background:"white"}}>
 											<div id={`${belt.id}-child-belt-color`} className={styles.sc23_beltbox_belt_child} style={{background: adaptColorCode(belt.color)}}/>
 										</div>
-										:
-										checkDan(belt) 
-											
-										
+										: belt.inverted ?
+											<div key={`${belt.id}-child-belt`} className={styles.sc23_beltbox_belt} style={{background: adaptColorCode(belt.color)}}>
+												<div id={`${belt.id}-child-belt-color`} className={styles.sc23_beltbox_belt_child} style={{background:"white"}}/>
+											</div>
+											: checkDan(belt) 			
 								)
 								:
 								(

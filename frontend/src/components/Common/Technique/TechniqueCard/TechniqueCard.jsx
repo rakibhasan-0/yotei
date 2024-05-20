@@ -17,6 +17,7 @@ import styles from "./TechniqueCard.module.css"
  *
  * @update Converted to css module 2024-04-19, Hannes (group 1)
  * @update Fixed so that techniques that are in lists get the correct path, 2024-05-17, Team Tomato (Group 6)
+ * @update Added inverted belt category. 2024-05-20, Team Kiwi (Teodor Bäckström)
  */
 function TechniqueCard({ technique, checkBox, id}) {
 	const navigate = useNavigate()
@@ -85,38 +86,28 @@ function TechniqueCard({ technique, checkBox, id}) {
 }
 
 function constructColor(technique) {
-
-	return (
-		<div className={styles["technique-card-belt-color-container"]}>
-			{
-				technique.beltColors !== undefined && technique.beltColors !== null
-					? technique.beltColors.length > 0
-						? technique.beltColors.map((belt, index) => {
-							return belt !== undefined
-								? belt.is_child
-									? constructChildBelt(
-										belt,
-										technique.beltColors.length,
-										index
-									)
-									: constructAdultBelt(
-										belt,
-										technique.beltColors.length,
-										index
-									)
-								: constructAdultBelt(
-									"13c9ed",
-									technique.beltColors.length,
-									index
-								)
-						})
-						: constructDefaultBelt("8e03ad") //om vi fär 0st färger (lila)
-					: constructDefaultBelt("8e03ad") //om vi inte får färger (lila)
-			}
-		</div>
-	)
+    return (
+        <div className={styles["technique-card-belt-color-container"]}>
+            {
+                technique.beltColors !== undefined && technique.beltColors !== null
+                    ? technique.beltColors.length > 0
+                        ? technique.beltColors.map((belt, index) => {
+                            if (belt !== undefined) {
+                                return belt.is_child
+                                    ? constructChildBelt(belt, technique.beltColors.length, index)
+                                    : belt.is_inverted
+                                        ? constructInvertedBelt(belt, technique.beltColors.length, index)
+                                        : constructAdultBelt(belt, technique.beltColors.length, index);
+                            } else {
+                                return constructAdultBelt("13c9ed", technique.beltColors.length, index);
+                            }
+                        })
+                        : constructDefaultBelt("8e03ad") //om vi fär 0st färger (lila)
+                    : constructDefaultBelt("8e03ad") //om vi inte får färger (lila)
+            }
+        </div>
+    );
 }
-
 function constructDefaultBelt(color) {
 	return (
 		<div
@@ -192,11 +183,30 @@ function constructChildBelt(belt, beltLength, index) {
 			}
 			style={{
 				// background: `radial-gradient(circle, rgba(0,0,0,1) 20%, rgba(0,0,0,1) 70%, rgba(255,255,255,1) 70%`,
-				background: `linear-gradient(90deg, #fff 25%, #${belt.belt_color} 25%, #${belt.belt_color} 75%, #fff 75%)`,
+				background: `linear-gradient(90deg, #fff 35%, #${belt.belt_color} 35%, #${belt.belt_color} 65%, #fff 65%)`,
 				height: `${100 / beltLength}%`,
 			}}
 		/>
 	)
 }
+
+function constructInvertedBelt(belt, beltLength, index) {
+	return (
+		<div
+			key={index}
+			className={
+				styles[
+					["technique-card-belt-color", "technique-card-belt-border"].join(" ")
+				]
+			}
+			style={{
+				// background: `radial-gradient(circle, rgba(0,0,0,1) 20%, rgba(0,0,0,1) 70%, rgba(255,255,255,1) 70%`,
+				background: `linear-gradient(90deg, #${belt.belt_color} 35%, #fff 35% , #fff 65%, #${belt.belt_color} 65%)`,
+				height: `${100 / beltLength}%`,
+			}}
+		/>
+	)
+}
+
 
 export default TechniqueCard
