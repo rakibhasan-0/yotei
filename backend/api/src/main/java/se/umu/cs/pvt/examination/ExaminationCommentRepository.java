@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * JPA repository for examination comment api. 
  * 
- * @author Orange (dv22rfg)
+ * @author Orange (dv22rfg, c19jen)
  */
 public interface ExaminationCommentRepository extends JpaRepository<ExaminationComment, Long> {
 
