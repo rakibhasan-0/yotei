@@ -41,19 +41,20 @@ export class TechniquePage {
     await this.page.locator('#belt-adult-Gult-checkbox').check()
 
     // TODO the commented out blocks are supposed to be added later on.
-    // if(exercise.tag) {
-    //   await this.page.getByRole('button', { name: 'Hantera tagg' }).click()
-    //   await this.page.getByPlaceholder('Sök efter taggar').fill(exercise.tag)
-    //   await this.page.getByRole('button', { name: `${exercise.tag}` }).click()
-    //   await this.page.getByRole('button', { name: 'Stäng' }).click()
-    //   await this.page.getByRole('button', { name: 'Lägg till' }).click()
-    // }
+    if(technique.tag) {
+      await this.page.getByRole('button', { name: 'Hantera tagg' }).click()
+      await this.page.getByPlaceholder('Sök eller skapa tagg').click()
+      await this.page.getByPlaceholder('Sök eller skapa tagg').fill(`${technique.tag}`)
+      await this.page.getByTestId('EditableListItem-link').getByLabel('').check();
+      await this.page.locator('#save-and-close-button').getByRole('img').click()
+    }
 
-    // if(exercise.mediaLink) {
-    //   await this.page.getByRole('button', { name: '+ Media' }).click()
-    //   await this.page.getByPlaceholder('Klistra in länk').fill(exercise.mediaLink)
-    //   await this.page.getByRole('button', { name: 'Länka Till Media' }).click()
-    // }
+    if(technique.mediaLink) {
+      await this.page.getByRole('button', { name: '+ Media' }).click()
+      await this.page.getByPlaceholder('Klistra in länk').fill(technique.mediaLink)
+      await this.page.getByRole('button', { name: 'Länka Till Media' }).click()
+    }
+
     await this.page.getByRole('button', { name: 'Lägg till' }).click()
   }
 

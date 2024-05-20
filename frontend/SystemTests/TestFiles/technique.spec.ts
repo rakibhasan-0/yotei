@@ -17,10 +17,25 @@ test.describe('ST-2 Technique', () => {
 	})
 
   test('1. Create technique', async ({ page }) => {
-		const name = Math.random().toString(36).slice(2, 7) // Will generate a random string of 5 characters
-		await techniquePage.createTechnique({description: 'description description description', name: name, time: 12})
+
+	  // Will generate a random string of 5 characters
+		const name = Math.random().toString(36).slice(2, 7) 
+	
+		await techniquePage.createTechnique(
+			{
+				description: 'description description description', 
+				name: name, 
+				time: 12, 
+				tag:"kihon waza",
+				mediaLink: "https://www.youtube.com/watch?v=N5znFa4RuVg"
+			}
+		)
+	
+		// Asserts technique was created successfully and waits for page to load
 		await expect(page.getByText(`Tekniken ${name} skapades`)).toBeVisible()
     	await page.waitForURL('**/activity')
+	
+		// Deletes the new technique and asserts deletion
 		await techniquePage.deleteTechnique(name)
     	await page.getByRole('link', { name: `${name}`}).isHidden()
   })
