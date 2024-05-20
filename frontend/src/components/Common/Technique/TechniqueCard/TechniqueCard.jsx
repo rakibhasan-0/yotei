@@ -72,7 +72,7 @@ function TechniqueCard({ technique, checkBox, id}) {
 
 				{/* we are about to count the number of occurrence to display on card */}
 
-				<div className={styles.countContainer}>{technique.count ? <p>x{technique.count}</p> : null}</div>
+
 
 				<div className={styles.countContainer}>
 					{technique.count || technique.count == 0 ? <p>x{technique.count}</p> : null}
