@@ -604,9 +604,23 @@ function AddActivity({ id, setShowActivityInfo }) {
 											>
 
 												<div style={{ borderTop: "1px solid black" }}>
-													<p className={style.listTitleText}>Tekniker</p>
-													<div className={style.innerListDiv}>
+													
+
+														{/* HÄR SKA LISTITEM KOMPONENTEN IN. */}
 														{listContents[list.id]?.map(item => (
+															<ListItem
+															
+															item = {item}
+															checkBox = {
+																<CheckBox
+																checked={checkedActivities.some(a => a.techniqueID === item.techniqueID)}
+																onClick={() => onActivityToggle(item, "technique")}
+																/>
+															}
+															id = {item.id}
+															/>
+																
+															
 															item.type === "technique" ? (
 																<TechniqueCard
 																	id={"technique-list-item-" + item.techniqueID}
@@ -621,10 +635,6 @@ function AddActivity({ id, setShowActivityInfo }) {
 																/>
 															) : null
 														))}
-													</div>
-												</div>
-												<p className={style.listTitleText}>Övningar</p>
-												<div className={style.innerListDiv}>
 													{listContents[list.id]?.map((item) => (
 														item.type === "exercise" ? (
 															<ExerciseListItem
