@@ -3,7 +3,7 @@ package se.umu.cs.pvt.search.interfaces.responses;
 import java.time.LocalDate;
 
 /**
- * Class tp represent the ActivityList object returned from the API.
+ * Class to represent the ActivityList object returned from the API.
  * 
  * @author Team Tomato
  * @since 2024-05-20
