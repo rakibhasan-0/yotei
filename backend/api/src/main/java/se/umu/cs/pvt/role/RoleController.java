@@ -77,7 +77,7 @@ public class RoleController {
      */
     @PostMapping("")
     public ResponseEntity<Role> createNewRole(@RequestBody Role roleToAdd) {
-        if (roleToAdd.getRoleName().isEmpty()) {
+        if (repository.existsByRoleName(roleToAdd.getRoleName())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -113,11 +113,15 @@ public class RoleController {
      */
     @PutMapping("/{role_id}")
     public ResponseEntity<Role> updateRole(
-        @PathVariable Long roleId, @RequestBody Role updatedRole) {
+        @PathVariable("role_id") Long roleId, @RequestBody Role updatedRole) {
         
         Optional<Role> firstRole = repository.findById(roleId);
         if (!firstRole.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        if (repository.existsByRoleName(updatedRole.getRoleName())) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         Role roleToUpdate = firstRole.get();

@@ -24,13 +24,13 @@ public class Role implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "role_id")
-    private Long role_id;
+    private Long roleId;
 
     /**
      * The name for the role.
      */
     @Column(nullable = false, name = "role_name")
-    private String role_name;
+    private String roleName;
 
     /**
      * Constructor without arguments, needed for springboot.
@@ -49,23 +49,23 @@ public class Role implements Serializable{
             throw new InvalidRoleNameException("Role name can not be empty!");
         }
 
-        this.role_name = name;
+        this.roleName = name;
     }
 
     public Long getRoleId() {
-        return this.role_id;
+        return this.roleId;
     }
 
     public void setRoleName(String name) {
-        this.role_name = name;
+        this.roleName = name;
     }
 
     public String getRoleName() {
-        return this.role_name;
+        return this.roleName;
     }
 
     @Override
     public String toString() {
-        return String.format("Role name: {%s}", role_name);
+        return String.format("Role name: {%s}", roleName);
     }
 }
