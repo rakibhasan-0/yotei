@@ -68,7 +68,7 @@ export default function GradingIndex() {
 	 * @returns all examinations stored in database.
 	 */
 	const fetchGradings = () => {
-		return fetch("/api/examination/all", {
+		return fetch(`/api/examination/grading/creator/${userId}`, {
 			method: "GET",
 			headers: { "token": token }
 		})
@@ -86,9 +86,9 @@ export default function GradingIndex() {
    */
 	function createLists(gradings_data) {
 		gradings_data.map(async (item) => {
-			if(item.creator_id === userId) {
-				const isCreatorInFinished = finishedGradings.some(grading => grading.creator_id === userId)
-				const isCreatorInCurrent = currentGradings.some(grading => grading.creator_id === userId)
+			if(item.creatorId === userId) {
+				const isCreatorInFinished = finishedGradings.some(grading => grading.creatorId === userId)
+				const isCreatorInCurrent = currentGradings.some(grading => grading.creatorId === userId)
 	
 				if (!isCreatorInFinished && !isCreatorInCurrent) {
 					if (item.step === 3) {
@@ -114,16 +114,14 @@ export default function GradingIndex() {
 			}
 
 			setIsCreateListDone(false)
-			const sortedCurrentGradings = [...currentGradings].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+			const sortedCurrentGradings = [...currentGradings].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 			setCurrentGradings(sortedCurrentGradings)
-			const sortedFinishedGradings = [...finishedGradings].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+			const sortedFinishedGradings = [...finishedGradings].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 			setFinishedGradings(sortedFinishedGradings)
 
 		}
     
 	}, [isCreateListDone])
-
-	
 
 	/**
    * Handle belt colors and name. 
@@ -139,6 +137,7 @@ export default function GradingIndex() {
 					fetchBelts(),
 					fetchGradings()
 				])
+				console.log(gradings_data)
 				const filteredColors = belt_data.filter(item => beltColors.includes(item.name))
 				const colorMaps = {}
 				filteredColors.forEach(element => {
@@ -154,32 +153,12 @@ export default function GradingIndex() {
 
 				createLists(gradings_data)
 
-				gradings_data.forEach(item => {
-
-					if(item.creatorId === userId) {
-						const isCreatorInFinished = finishedGradings.some(grading => grading.creatorId === userId)
-						const isCreatorInCurrent = currentGradings.some(grading => grading.creatorId === userId)
-
-						if (!isCreatorInFinished && !isCreatorInCurrent) {
-							if (item.step === 3) {
-								setFinishedGradings(prevState => [...prevState, item])
-							} else {
-								setCurrentGradings(prevState => [...prevState, item])
-							}
-						}
-					}
-				})
-
-        
-
 			} catch (error) {
 				console.error("There was a problem with the fetch operation:", error)
 			}
 		}
 		fetchData()
 	}, [])
-
-
 
 	function navigateTo() {
 		navigate("/grading/create")
@@ -196,10 +175,10 @@ export default function GradingIndex() {
 								<BeltButton
 									key={index}
 									width={"100%"}
-									onClick={() => handleNavigation(grading.grading_id, grading.step, belts[grading.belt_id]?.hex)}
-									color={belts[grading.belt_id]?.hex}
+									onClick={() => handleNavigation(grading.gradingId, grading.step, belts[grading.beltId]?.hex)}
+									color={belts[grading.beltId]?.hex}
 								>
-									<h2>{`${belts[grading.belt_id]?.name} bälte`} </h2>
+									<h2>{`${belts[grading.beltId]?.name} bälte`} </h2>
 								</BeltButton>
 							))}
 
@@ -218,10 +197,10 @@ export default function GradingIndex() {
 								<BeltButton
 									key={index}
 									width={"100%"}
-									onClick={() => handleNavigation(grading.grading_id, grading.step, belts[grading.belt_id]?.hex)}
-									color={belts[grading.belt_id]?.hex}
+									onClick={() => handleNavigation(grading.gradingId, grading.step, belts[grading.beltId]?.hex)}
+									color={belts[grading.beltId]?.hex}
 								>
-									<h2>{`${belts[grading.belt_id]?.name} bälte`} </h2>
+									<h2>{`${belts[grading.beltId]?.name} bälte`} </h2>
 								</BeltButton>
 							))}
 
