@@ -10,7 +10,6 @@ import { useParams } from "react-router"
 import { Pencil, Trash } from "react-bootstrap-icons"
 import ErrorState from "../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../components/Common/Spinner/Spinner"
-//Commented due to linter
 import { HTTP_STATUS_CODES, setError, setSuccess, isAdmin } from "../../utils"
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 
