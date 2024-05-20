@@ -57,7 +57,7 @@ test.describe('ST-4 Workout', () => {
         await workoutPage.editWorkout()
 
         // Asserts that the workout was updated successfully
-        await expect(page.getByText('Träningen uppdaterades!')).toBeVisible();
+        await expect(page.getByText('Träningen uppdaterades!')).toBeVisible()
         await page.waitForSelector('h1')
 
         // Deletes the created workout and asserts that it was deleted
