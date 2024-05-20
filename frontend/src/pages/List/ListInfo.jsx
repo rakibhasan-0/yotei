@@ -10,7 +10,7 @@ import { useParams } from "react-router"
 import { Pencil, Trash } from "react-bootstrap-icons"
 import ErrorState from "../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../components/Common/Spinner/Spinner"
-import { HTTP_STATUS_CODES, setError, setSuccess, isAdmin } from "../../utils"
+import { HTTP_STATUS_CODES, isAdmin } from "../../utils"
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 
 /**
@@ -19,7 +19,7 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
  * are displayedy. Added user are also displayed.
  *
  * Props:
- *      listId @type {int} - The ID of the workout.
+ *      listId @type {int} - The ID of the list.
  *      id        @type {int/string} - the id of the component
  *
  * @author Team Tomato (6)
@@ -31,6 +31,7 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
  */
 
 export default function ListInfo({ id }) {
+	const { listId } = useParams()
 	const navigate = useNavigate()
 	const context = useContext(AccountContext)
 	const [showPopup, setShowPopup] = useState(false)
@@ -107,6 +108,7 @@ export default function ListInfo({ id }) {
 										size="24px"
 										color="var(--red-primary)"
 										style={{ cursor: "pointer" }}
+										onClick={() => setShowPopup(true)}
 									/>
 								</>
 							)}
@@ -174,17 +176,18 @@ export default function ListInfo({ id }) {
 			onRecover={() => window.location.reload(false)}
 		/>
 	) : (
+		
 		<div id={id} className="container px-0">
 			{
 				<ConfirmPopup
-					popupText={"Är du säker att du vill radera listan \"" + activityListData.name + "\"?"}
+					popupText={`Är du säker att du vill radera passet ${activityListData.name}?`}
 					id={"confirm-popup"}
 					setShowPopup={setShowPopup}
 					showPopup={showPopup}
-					onClick={async () => deleteList(activityListData.data.id, context, navigate, setShowPopup)}
+					onClick={async () => deleteList(activityListData.id, context, navigate, setShowPopup)}
 				/>
 			}
-			{getListInfoContainer(activityListData, setShowPopup, context, userId, activityListData.users)}
+			{getListInfoContainer(activityListData.id, context, userId, activityListData.users)}
 
 			<h2 className="font-weight-bold mb-0 mt-5 text-left">Aktiviteter</h2>
 			<SavedActivityList activities={activityListData.activities} />
@@ -199,6 +202,7 @@ export default function ListInfo({ id }) {
 		</div>
 	)
 }
+
 
 async function deleteList(listId, context, navigate, setShowPopup) {
 	const requestOptions = {
@@ -223,4 +227,3 @@ async function deleteList(listId, context, navigate, setShowPopup) {
 	navigate("/profile")
 	setShowPopup(false)
 }
-
