@@ -43,7 +43,11 @@ public class ExportGradingPdf {
     private String gradingProtocol;
     private List<ExaminationTechniqueCategory> examinationTechniqueCategories;
     private List<ExamineePair> examineePairs;
-    
+    private Map<String, Object> protocol;
+
+    private String code;
+    private String color;
+
     private final int   MAX_NUM_COLUMNS = 6,
                         PAGE_X_OFFSET = 55,
                         CELL_HEIGHT = 30,
@@ -55,12 +59,18 @@ public class ExportGradingPdf {
         this.examinees = examinees;
         this.examinationResults = examinationResults;
         this.examinationComments = examinationComments;
-        this.numPages = (int)Math.ceil((double)examinees.size() / MAX_NUM_COLUMNS); //byt namn på numPages
+        //This is the number of pages required to fit every examinee in a table (the max per page is 6)
+        this.numPages = (int)Math.ceil((double)examinees.size() / MAX_NUM_COLUMNS);
         document = new PDDocument();
         this.gradingProtocol = gradingProtocol;
         this.examinationTechniqueCategories = new ArrayList<>();
         this.grading = grading;
         this.examineePairs = examineePairs;
+        this.protocol = parseJson(gradingProtocol);
+
+        Map<String, Object> gradingProtocolObj = (Map<String, Object>) protocol.get("examination_protocol");
+        this.code = (String)gradingProtocolObj.get("code");
+        this.color = (String)gradingProtocolObj.get("color");
     }
     /**
      * The main method for the program which generates the entire PDF by calling private methods.
@@ -68,9 +78,8 @@ public class ExportGradingPdf {
      * @throws IOException
      */
     public InputStream generate() throws IOException {
-        Map<String, Object> parsedProtocol = parseJson(gradingProtocol);
 
-        List<Map<String, Object>> categories = (List<Map<String, Object>>)parsedProtocol.get("categories");
+        List<Map<String, Object>> categories = (List<Map<String, Object>>)protocol.get("categories");
 
         for(int i = 0; i < categories.size(); i++) {
             ExaminationTechniqueCategory category = new ExaminationTechniqueCategory(categories.get(i).get("category_name").toString());
@@ -90,7 +99,6 @@ public class ExportGradingPdf {
         if(examinationComment != null)
             createExaminationCommentPage(examinationComment.getComment());
 
-
         List<ExaminationComment> techniqueComments = new ArrayList<>();
         for (ExaminationComment techniqueComment : examinationComments) {
             if(techniqueComment.getExamineeId() == null && techniqueComment.getExamineePairId() == null) {
@@ -103,7 +111,6 @@ public class ExportGradingPdf {
 
 
         Map<Long, List<ExaminationComment>> pairMap = new HashMap<>();
-
 
         for (ExamineePair examineePair : examineePairs) {
             List<ExaminationComment> pairComments = new ArrayList<>();
@@ -127,13 +134,10 @@ public class ExportGradingPdf {
             examineeCommentMap.put(examinee.getExamineeId(), examineeComments); 
         }
 
-
         createPairCommentPage(pairMap);
         createExamineeCommentPage(examineeCommentMap);
 
-
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
 
         document.save(byteArrayOutputStream);
         document.close();
@@ -141,6 +145,11 @@ public class ExportGradingPdf {
         return new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
     }
     
+    /**
+     * Get the examination comment for a grading.
+     * 
+     * @return Get the comment for the entire examination.
+     */
     private ExaminationComment getExaminationComment() {
         for (ExaminationComment examinationComment : examinationComments) {
             if(examinationComment.getExamineeId() == null && examinationComment.getExamineePairId() == null &&
@@ -179,7 +188,7 @@ public class ExportGradingPdf {
     /**
      * Creates the pages which contains the table for which examinee has passed or not on each technique.
      * 
-     * @param onPage, an int, to keep track which page is being written to... //might need to be changed due to bad variable name...
+     * @param onPage, an int, to keep track which page is being written to...
      * @throws IOException
      */
     private void createTablePage(int onPage) throws IOException {
@@ -196,45 +205,40 @@ public class ExportGradingPdf {
         //Calculate where starting x position will be depending on number of examinees on the page
         int tableStartXPos = (pageWidth/2) - ((numExamineesOnPage + 1)* CELL_WIDTH + 30)/2;
 
-        int initX = tableStartXPos; //kom på nå bättre namn
-        int initY = pageHeight-75;
+        int currentXPos = tableStartXPos;
+        int currentYPos = pageHeight-75;
 
         PDType0Font font = PDType0Font.load(document, new File(System.getProperty("user.dir") + "/infra/fonts/NotoSans-Regular.ttf"));
         PDPageContentStream contentStream = new PDPageContentStream(document,page);
         contentStream.setStrokingColor(Color.DARK_GRAY);
         contentStream.setLineWidth(1);
-        Map<String, Object> protocol = parseJson(gradingProtocol);
-        Map<String, Object> gradingProtocolObj = (Map<String, Object>) protocol.get("examination_protocol");
-
-        String code = (String) gradingProtocolObj.get("code");
-        String color = (String) gradingProtocolObj.get("color");        
+  
         createHeader(code, color, contentStream);
 
         drawImage(page, contentStream);
-        contentStream.addRect(initX, initY, CELL_WIDTH+30, -CELL_HEIGHT);
-        writeToCell(initX, initY, contentStream, "Namn", font);
+        contentStream.addRect(currentXPos, currentYPos, CELL_WIDTH+30, -CELL_HEIGHT);
+        writeToCell(currentXPos, currentYPos, contentStream, "Namn", font);
         int count = 1;
 
-        initX+=CELL_WIDTH+30;
+        currentXPos+=CELL_WIDTH+30;
         for(int j = (onPage*MAX_NUM_COLUMNS); j<(onPage*MAX_NUM_COLUMNS)+MAX_NUM_COLUMNS && j < examinees.size();j++){
-            contentStream.addRect(initX,initY,CELL_WIDTH,-CELL_HEIGHT);
+            contentStream.addRect(currentXPos,currentYPos,CELL_WIDTH,-CELL_HEIGHT);
 
-            writeToCell(initX, initY, contentStream, shortenString(examinees.get(j).getName(), MAX_NAME_LENGTH), font);
+            writeToCell(currentXPos, currentYPos, contentStream, shortenString(examinees.get(j).getName(), MAX_NAME_LENGTH), font);
 
-            initX+=CELL_WIDTH;
+            currentXPos+=CELL_WIDTH;
             count++;
         }
-        initX = tableStartXPos;
-        initY -= CELL_HEIGHT;
-        //Programing warcrimes incomming
+        currentXPos = tableStartXPos;
+        currentYPos -= CELL_HEIGHT;
         for(int i = 0; i < examinationTechniqueCategories.size(); i++) {
                 
-            contentStream.addRect(initX, initY, CELL_WIDTH*count+30, -CELL_HEIGHT);
-            writeToCell(initX, initY, contentStream, examinationTechniqueCategories.get(i).getCategoryName(), font);
+            contentStream.addRect(currentXPos, currentYPos, CELL_WIDTH*count+30, -CELL_HEIGHT);
+            writeToCell(currentXPos, currentYPos, contentStream, examinationTechniqueCategories.get(i).getCategoryName(), font);
 
             for(int j = 0; j < examinationTechniqueCategories.get(i).getTechniques().size(); j++) {
-                initY -=CELL_HEIGHT;
-                contentStream.addRect(initX, initY, CELL_WIDTH+30, -CELL_HEIGHT);
+                currentYPos -=CELL_HEIGHT;
+                contentStream.addRect(currentXPos, currentYPos, CELL_WIDTH+30, -CELL_HEIGHT);
                 
                 String techniqueName = examinationTechniqueCategories.get(i).getTechniques().get(j).toString();
                 techniqueName = shortenString(techniqueName, MAX_TECHNIQUE_NAME_LENGTH);
@@ -247,16 +251,16 @@ public class ExportGradingPdf {
                             splitOnIndex = k;
                     }
 
-                    writeToCell(initX, initY+10, contentStream, techniqueName.substring(0, splitOnIndex), font);
-                    writeToCell(initX, initY, contentStream, techniqueName.substring(splitOnIndex, techniqueName.length()), font);
+                    writeToCell(currentXPos, currentYPos+10, contentStream, techniqueName.substring(0, splitOnIndex), font);
+                    writeToCell(currentXPos, currentYPos, contentStream, techniqueName.substring(splitOnIndex, techniqueName.length()), font);
                 } 
                 else  
-                    writeToCell(initX, initY, contentStream, techniqueName, font);
+                    writeToCell(currentXPos, currentYPos, contentStream, techniqueName, font);
                 
-                initX+=CELL_WIDTH+30;
+                currentXPos+=CELL_WIDTH+30;
 
                 for (int k = 0 ; k < count-1 ; k++) {
-                    contentStream.addRect(initX, initY, CELL_WIDTH, -CELL_HEIGHT);
+                    contentStream.addRect(currentXPos, currentYPos, CELL_WIDTH, -CELL_HEIGHT);
                     String grade = "";
                     for (int l = 0 ; l < examinationResults.size() ; l++) {
                         if ((examinationTechniqueCategories.get(i).getTechniques().get(j).toString()).equals(examinationResults.get(l).getTechnique_name())) {
@@ -275,39 +279,39 @@ public class ExportGradingPdf {
                                 grade += " - " + examinationComments.get(l).getComment();
                         }
                     }
-                    writeToCell(initX, initY, contentStream, shortenString(grade, 25), font); // gör om detta till en sträng som innehåller G eller U och följs med : Kommentar som rymms...
-                    initX+=CELL_WIDTH;
+                    writeToCell(currentXPos, currentYPos, contentStream, shortenString(grade, 25), font);
+                    currentXPos+=CELL_WIDTH;
                 }
 
-                initX = tableStartXPos;
+                currentXPos = tableStartXPos;
 
-                if(initY - CELL_HEIGHT - 35 < 0) {
+                if(currentYPos - CELL_HEIGHT - 70 < 0) {
                     contentStream.stroke();
                     contentStream.close();
                     PDPage page2 = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
-                    initX = tableStartXPos;
-                    initY = pageHeight -75;
+                    currentXPos = tableStartXPos;
+                    currentYPos = pageHeight -75;
                     document.addPage(page2);
 
                     contentStream = new PDPageContentStream(document,page2);
                     createHeader(code, color, contentStream);
                     drawImage(page, contentStream);
-                    contentStream.addRect(initX, initY, CELL_WIDTH+30, -CELL_HEIGHT);
-                    writeToCell(initX, initY, contentStream, "Namn", font);
+                    contentStream.addRect(currentXPos, currentYPos, CELL_WIDTH+30, -CELL_HEIGHT);
+                    writeToCell(currentXPos, currentYPos, contentStream, "Namn", font);
                     
-                    initX+=CELL_WIDTH+30;
+                    currentXPos+=CELL_WIDTH+30;
                     for(int j2 = (onPage*MAX_NUM_COLUMNS); j2<(onPage*MAX_NUM_COLUMNS)+MAX_NUM_COLUMNS && j2 < examinees.size() ; j2++){
-                        contentStream.addRect(initX,initY,CELL_WIDTH,-CELL_HEIGHT);
+                        contentStream.addRect(currentXPos,currentYPos,CELL_WIDTH,-CELL_HEIGHT);
         
-                        writeToCell(initX, initY, contentStream, shortenString(examinees.get(j2).getName(), MAX_NAME_LENGTH), font);
+                        writeToCell(currentXPos, currentYPos, contentStream, shortenString(examinees.get(j2).getName(), MAX_NAME_LENGTH), font);
         
-                        initX+=CELL_WIDTH;
+                        currentXPos+=CELL_WIDTH;
                     }
-                    initX = tableStartXPos;
+                    currentXPos = tableStartXPos;
                 }
             }
 
-            initY -=CELL_HEIGHT;
+            currentYPos -=CELL_HEIGHT;
         }
         
         contentStream.stroke();
@@ -317,16 +321,16 @@ public class ExportGradingPdf {
     /**
      * Writes to the cell at a given position the given text.
      * 
-     * @param initX, the X position of the cell?
-     * @param initY, the Y position of the cell?
+     * @param currentXPos, the X position of the cell?
+     * @param currentYPos, the Y position of the cell?
      * @param contentStream, the PDPageContentStream
      * @param cellText, the String containing the text that will be written to the cell.
      * @param font, the PDType0Font that will be used.
      * @throws IOException
      */
-    private void writeToCell(int initX, int initY, PDPageContentStream contentStream, String cellText, PDType0Font font) throws IOException {
+    private void writeToCell(int currentXPos, int currentYPos, PDPageContentStream contentStream, String cellText, PDType0Font font) throws IOException {
         contentStream.beginText();
-        contentStream.newLineAtOffset(initX+10,initY-CELL_HEIGHT+10);
+        contentStream.newLineAtOffset(currentXPos+10,currentYPos-CELL_HEIGHT+10);
         contentStream.setFont(font,7);
         contentStream.showText(cellText);
         contentStream.endText();
@@ -344,12 +348,12 @@ public class ExportGradingPdf {
         PDType0Font font = PDType0Font.load(document, new File(System.getProperty("user.dir") + "/infra/fonts/NotoSans-Regular.ttf"));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String date = sdf.format(grading.getCreatedAt()).toString();
-        int initX = PAGE_X_OFFSET;
-        int initY = pageHeight-25;
+        int currentXPos = PAGE_X_OFFSET;
+        int currentYPos = pageHeight-25;
         
         //Draws colored rectangle over belt name
         Color beltColor = getHighlightColor(color);
-        contentStream.addRect(initX - 2, initY - 20, 120, 15);
+        contentStream.addRect(currentXPos - 2, currentYPos - 20, 120, 15);
         contentStream.setStrokingColor(beltColor);
         contentStream.setNonStrokingColor(beltColor);
         contentStream.fill();
@@ -362,7 +366,7 @@ public class ExportGradingPdf {
         //Set header text
         contentStream.beginText();
         contentStream.setFont(font, 10);
-        contentStream.newLineAtOffset(initX, initY);
+        contentStream.newLineAtOffset(currentXPos, currentYPos);
         contentStream.showText("Graderingprotokoll");
         contentStream.newLineAtOffset(0, -15);
         contentStream.showText(code + " " + color);
@@ -391,29 +395,24 @@ public class ExportGradingPdf {
         return new Color(1f,1f,1f);
     }
 
-    /**
-     * Creates the group comment pdf page and writes the group comment to the pdf page.
-     * 
-     * @throws IOException
-     */
+     /**
+      * Creates the group comment pdf page and writes the group comment to the pdf page.
+      * @param examinationComment - The comment, if any, of a grading/examination
+      * @throws IOException
+      */
     private void createExaminationCommentPage(String examinationComment) throws IOException {
         PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
         document.addPage(page);
         
         pageWidth = (int)page.getMediaBox().getWidth(); 
         pageHeight = (int)page.getMediaBox().getHeight();         
-        int initX = PAGE_X_OFFSET;
-        int initY = pageHeight-75;
+        int currentXPos = PAGE_X_OFFSET;
+        int currentYPos = pageHeight-75;
         
         PDType0Font font = PDType0Font.load(document, new File(System.getProperty("user.dir") + "/infra/fonts/NotoSans-Regular.ttf"));
         PDPageContentStream contentStream = new PDPageContentStream(document,page);
         contentStream.setStrokingColor(Color.DARK_GRAY);
         contentStream.setLineWidth(1);
-        Map<String, Object> protocol = parseJson(gradingProtocol);
-        Map<String, Object> gradingProtocolObj = (Map<String, Object>) protocol.get("examination_protocol");
-        
-        String code = (String) gradingProtocolObj.get("code");
-        String color = (String) gradingProtocolObj.get("color");
         
         createHeader(code, color, contentStream);
         drawImage(page, contentStream);
@@ -422,7 +421,7 @@ public class ExportGradingPdf {
         
         contentStream.beginText();
         contentStream.setFont(font, 14);
-        contentStream.newLineAtOffset(initX, initY -= 30);
+        contentStream.newLineAtOffset(currentXPos, currentYPos -= 30);
         contentStream.showText("Passkommentar");
         contentStream.setFont(font, 10);
         contentStream.newLineAtOffset(0, -20);
@@ -438,38 +437,32 @@ public class ExportGradingPdf {
     }
 
     /**
-     * Creates the pair comment pdf page and writes the group comment to the pdf page.
-     * 
-     * @throws IOException
-     */
+      * Creates the pair comment pdf page and writes the group comment to the pdf page.
+      * @param pairMap - a map containing all pair comments of a grading
+      * @throws IOException
+    */
     private void createPairCommentPage(Map<Long, List<ExaminationComment>> pairMap) throws IOException {
         PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
         document.addPage(page);
 
         pageWidth = (int)page.getMediaBox().getWidth(); 
         pageHeight = (int)page.getMediaBox().getHeight();     
-        int initX = PAGE_X_OFFSET;
-        int initY = pageHeight-105;
+        int currentXPos = PAGE_X_OFFSET;
+        int currentYPos = pageHeight-105;
         
         PDType0Font font = PDType0Font.load(document, new File(System.getProperty("user.dir") + "/infra/fonts/NotoSans-Regular.ttf"));
         PDPageContentStream contentStream = new PDPageContentStream(document,page);
         contentStream.setStrokingColor(Color.DARK_GRAY);
         contentStream.setLineWidth(1);
-        Map<String, Object> protocol = parseJson(gradingProtocol);
-        Map<String, Object> gradingProtocolObj = (Map<String, Object>) protocol.get("examination_protocol");
-        
-        String code = (String) gradingProtocolObj.get("code");
-        String color = (String) gradingProtocolObj.get("color");
-        
         drawImage(page, contentStream);
         createHeader(code, color, contentStream);
         contentStream.beginText();
         contentStream.setFont(font, 14);
-        contentStream.newLineAtOffset(initX, initY);
+        contentStream.newLineAtOffset(currentXPos, currentYPos);
         contentStream.showText("Parkommentarer");
         contentStream.endText();
         //30 pixels is the distance between the title and where the comments section begin
-        initY -= 30;
+        currentYPos -= 30;
 
         Map<Long, List<String>> rows = new HashMap<>();
 
@@ -502,26 +495,26 @@ public class ExportGradingPdf {
             }
 
             //Checks if the next comment block will fit on the page, if not a new page is created
-            if (initY - rows.get(pairId).size() * 15 + 30 <= 0) {
+            if (currentYPos - rows.get(pairId).size() * 15 + 30 <= 0) {
                 contentStream.close();
                 page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
                 document.addPage(page);        
                 contentStream = new PDPageContentStream(document,page);
                 drawImage(page, contentStream);
                 createHeader(code, color, contentStream);
-                initY = pageHeight-105;
+                currentYPos = pageHeight-105;
                 contentStream.beginText();
                 contentStream.setFont(font, 14);
-                contentStream.newLineAtOffset(initX, initY);
+                contentStream.newLineAtOffset(currentXPos, currentYPos);
                 contentStream.showText("Parkommentarer");
                 contentStream.endText();
-                initY -= 30;
+                currentYPos -= 30;
             }
             
             contentStream.beginText();
-            contentStream.newLineAtOffset(initX + 5, initY);
+            contentStream.newLineAtOffset(currentXPos + 5, currentYPos);
             contentStream.setFont(font, 12);
-            contentStream.showText(examinee1 + " & " + examinee2); // går ej att ha udda antal examinees
+            contentStream.showText(examinee1 + " & " + examinee2);
             contentStream.setFont(font, 10);
 
             for(int j = 0; j < rows.get(pairId).size(); j++) {
@@ -533,48 +526,44 @@ public class ExportGradingPdf {
             contentStream.endText();
 
             //Calculates the size of the rectangle which encapsulates the comment
-            contentStream.addRect(initX, initY - (5 + rows.get(pairId).size()*15), CELL_WIDTH * 7 + 30, rows.get(pairId).size() * 15);
+            contentStream.addRect(currentXPos, currentYPos - (5 + rows.get(pairId).size()*15), CELL_WIDTH * 7 + 30, rows.get(pairId).size() * 15);
             contentStream.stroke();
             //Calculates the distance between the comments
-            initY -= rows.get(pairId).size() * 15 + 30;
+            currentYPos -= rows.get(pairId).size() * 15 + 30;
             
         }        
         contentStream.close();
     }
 
     /**
-     * Creates the examinee comment pdf page and writes the group comment to the pdf page.
-     * 
-     * @throws IOException
-     */
+      * Creates the examinee comment pdf page and writes the group comment to the pdf page. 
+      * @param examineeComments - The individual comments of each examinee of a examination
+      * @throws IOException
+    */
     private void createExamineeCommentPage(Map<Long, List<ExaminationComment>> examineeComments) throws IOException {
         PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
         document.addPage(page);
 
         pageWidth = (int)page.getMediaBox().getWidth(); 
         pageHeight = (int)page.getMediaBox().getHeight();     
-        int initX = PAGE_X_OFFSET;
-        int initY = pageHeight-105;
+        int currentXPos = PAGE_X_OFFSET;
+        int currentYPos = pageHeight-105;
         
         PDType0Font font = PDType0Font.load(document, new File(System.getProperty("user.dir") + "/infra/fonts/NotoSans-Regular.ttf"));
         PDPageContentStream contentStream = new PDPageContentStream(document,page);
         contentStream.setStrokingColor(Color.DARK_GRAY);
         contentStream.setLineWidth(1);
-        Map<String, Object> protocol = parseJson(gradingProtocol);
-        Map<String, Object> gradingProtocolObj = (Map<String, Object>) protocol.get("examination_protocol");
-        
-        String code = (String) gradingProtocolObj.get("code");
-        String color = (String) gradingProtocolObj.get("color");
+
         
         drawImage(page, contentStream);
         createHeader(code, color, contentStream);
         contentStream.beginText();
         contentStream.setFont(font, 14);
-        contentStream.newLineAtOffset(initX, initY);
+        contentStream.newLineAtOffset(currentXPos, currentYPos);
         contentStream.showText("Personliga Kommentarer");
         contentStream.endText();
         //30 pixels is the distance between the title and where the comments section begin
-        initY -= 30;
+        currentYPos -= 30;
 
         Map<Long, List<String>> rows = new HashMap<>();
 
@@ -591,24 +580,24 @@ public class ExportGradingPdf {
             if(rows.get(examinee.getExamineeId()).size() == 0)
                 continue;   
             //Checks if the next comment block will fit on the page, if not a new page is created
-            if (initY - rows.get(examinee.getExamineeId()).size() * 15 + 30 <= 0) {
+            if (currentYPos - rows.get(examinee.getExamineeId()).size() * 15 + 30 <= 0) {
                 contentStream.close();
                 page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
                 document.addPage(page);        
                 contentStream = new PDPageContentStream(document,page);
                 drawImage(page, contentStream);
                 createHeader(code, color, contentStream);
-                initY = pageHeight - 105;
+                currentYPos = pageHeight - 105;
                 contentStream.beginText();
                 contentStream.setFont(font, 14);
-                contentStream.newLineAtOffset(initX, initY);
+                contentStream.newLineAtOffset(currentXPos, currentYPos);
                 contentStream.showText("Personliga kommentarer");
                 contentStream.endText();
-                initY -= 30;
+                currentYPos -= 30;
             }
 
             contentStream.beginText();
-            contentStream.newLineAtOffset(initX + 5, initY);
+            contentStream.newLineAtOffset(currentXPos + 5, currentYPos);
             contentStream.setFont(font, 12);
             contentStream.showText(examinee.getName());
             contentStream.setFont(font, 10);
@@ -620,46 +609,42 @@ public class ExportGradingPdf {
             contentStream.endText();
 
             //Calculates the size of the rectangle to enclose the comment
-            contentStream.addRect(initX, initY - (5 + rows.get(examinee.getExamineeId()).size()*15), CELL_WIDTH * 7 + 30, rows.get(examinee.getExamineeId()).size() * 15);
+            contentStream.addRect(currentXPos, currentYPos - (5 + rows.get(examinee.getExamineeId()).size()*15), CELL_WIDTH * 7 + 30, rows.get(examinee.getExamineeId()).size() * 15);
             contentStream.stroke();
-            initY -= rows.get(examinee.getExamineeId()).size() * 15 + 30;
+            currentYPos -= rows.get(examinee.getExamineeId()).size() * 15 + 30;
         }        
         contentStream.close();
     }
 
-    /**
-     * Creates the examinee comment pdf page and writes the group comment to the pdf page.
-     * 
-     * @throws IOException
-     */
+   /**
+    * Creates the examinee comment pdf page and writes the group comment to the pdf page.
+    *
+    * @param techniqueComments - A list containing technique comments
+    * @throws IOException
+    */
     private void createGroupCommentPage(List<ExaminationComment> techniqueComments) throws IOException {
         PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
         document.addPage(page);
 
         pageWidth = (int)page.getMediaBox().getWidth(); 
         pageHeight = (int)page.getMediaBox().getHeight();     
-        int initX = PAGE_X_OFFSET;
-        int initY = pageHeight-105;
+        int currentXPos = PAGE_X_OFFSET;
+        int currentYPos = pageHeight-105;
         
         PDType0Font font = PDType0Font.load(document, new File(System.getProperty("user.dir") + "/infra/fonts/NotoSans-Regular.ttf"));
         PDPageContentStream contentStream = new PDPageContentStream(document,page);
         contentStream.setStrokingColor(Color.DARK_GRAY);
         contentStream.setLineWidth(1);
-        Map<String, Object> protocol = parseJson(gradingProtocol);
-        Map<String, Object> gradingProtocolObj = (Map<String, Object>) protocol.get("examination_protocol");
-        
-        String code = (String) gradingProtocolObj.get("code");
-        String color = (String) gradingProtocolObj.get("color");
         
         drawImage(page, contentStream);
         createHeader(code, color, contentStream);
         contentStream.beginText();
         contentStream.setFont(font, 14);
-        contentStream.newLineAtOffset(initX, initY);
+        contentStream.newLineAtOffset(currentXPos, currentYPos);
         contentStream.showText("Teknikkommentarer");
         contentStream.endText();
         //30 pixels is the distance between the title and where the comments section begin
-        initY -= 30;
+        currentYPos -= 30;
 
 
         for (ExaminationComment techniqueComment : techniqueComments){
@@ -667,24 +652,24 @@ public class ExportGradingPdf {
             List<String> rows = getRows(examineeComment, 120);
             
             //Checks if the next comment block will fit on the page, if not a new page is created
-            if (initY - rows.size() * 15 + 30 <= 0) {
+            if (currentYPos - rows.size() * 15 + 30 <= 0) {
                 contentStream.close();
                 page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
                 document.addPage(page);        
                 contentStream = new PDPageContentStream(document,page);
                 drawImage(page, contentStream);
                 createHeader(code, color, contentStream);
-                initY = pageHeight - 105;
+                currentYPos = pageHeight - 105;
                 contentStream.beginText();
                 contentStream.setFont(font, 14);
-                contentStream.newLineAtOffset(initX, initY);
+                contentStream.newLineAtOffset(currentXPos, currentYPos);
                 contentStream.showText("Teknikkommentarer");
                 contentStream.endText();
-                initY -= 30;
+                currentYPos -= 30;
             }
 
             contentStream.beginText();
-            contentStream.newLineAtOffset(initX + 5, initY);
+            contentStream.newLineAtOffset(currentXPos + 5, currentYPos);
             contentStream.setFont(font, 12);
             contentStream.showText(techniqueComment.getTechniqueName());
             contentStream.setFont(font, 10);
@@ -696,9 +681,9 @@ public class ExportGradingPdf {
             contentStream.endText();
 
             //Calculates the size of the rectangle to enclose the comment
-            contentStream.addRect(initX, initY - (5 + rows.size()*15), CELL_WIDTH * 7 + 30, rows.size() * 15);
+            contentStream.addRect(currentXPos, currentYPos - (5 + rows.size()*15), CELL_WIDTH * 7 + 30, rows.size() * 15);
             contentStream.stroke();
-            initY -= rows.size() * 15 + 30;
+            currentYPos -= rows.size() * 15 + 30;
         }        
         contentStream.close();
     }
