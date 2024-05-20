@@ -33,26 +33,23 @@ then
 else
 
     while true; do
-        read -rp "Do you have a version running already? (y/n): " yn
+        read -rp "Do you have a version deployed already? (y/n): " yn
         case $yn in 
             [yY] ) 
+            # TODO: Clean up old version
             read -rp "Would you like to reset the database? (y/n): " yn
             case $yn in 
-            [yY] ) 
-                read -rp "Would you like to reset the database? (y/n): " yn
-                
-                break;;
-            [nN] )
-                echo "Deploying production server"
-                docker compose -f docker-compose.yml -f docker-compose-release.yml up --build -d
-                break;;
-            * )
-                echo "Invalid response" ;;
+                [yY] ) 
+                    # TODO: Remove pgdata docker volume
+                    break;;
+                [nN] )
+                    break;;
+                * )
+                    echo "Invalid response" ;;
             esac
+
             break;;
         [nN] )
-            echo "Deploying production server"
-            docker compose -f docker-compose.yml -f docker-compose-release.yml up --build -d
             break;;
         * )
             echo "Invalid response" ;;
