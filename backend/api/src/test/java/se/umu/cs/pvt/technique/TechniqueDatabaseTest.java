@@ -40,9 +40,9 @@ import java.util.regex.Pattern;
 public class TechniqueDatabaseTest {
     private static PostgreSQLContainer<?> postgreSQLContainer;
 
-    static String POSTGRESQL_USER = System.getProperty("POSTGRES_USER");
-    static String POSTGRESQL_PASSWORD = System.getProperty("POSTGRES_PASSWORD");
-    static String POSTGRESQL_DATABASE = System.getProperty("POSTGRES_DBSS");
+    static String POSTGRESQL_USER = System.getProperty("POSTGRESQL_USER");
+    static String POSTGRESQL_PASSWORD = System.getProperty("POSTGRESQL_PASSWORD");
+    static String POSTGRESQL_DATABASE = System.getProperty("POSTGRESQL_DATABASE");
 
 
     @BeforeAll
