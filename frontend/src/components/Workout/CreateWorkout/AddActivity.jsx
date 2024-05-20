@@ -18,7 +18,6 @@ import { WorkoutCreateContext } from "./WorkoutCreateContext"
 import { WORKOUT_CREATE_TYPES } from "./WorkoutCreateReducer"
 import InfiniteScrollComponent from "../../Common/List/InfiniteScrollComponent"
 import FilterContainer from "../../Common/Filter/FilterContainer/FilterContainer"
-import Sorter from "../../Common/Sorting/Sorter"
 import { useCookies } from "react-cookie"
 import ListPicker from "./ListPicker.jsx"
 import DropDown from "../../Common/List/Dropdown"
@@ -117,7 +116,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	const [sortExercise, setSortExercise] = useState(sortOptionsExercise[0])
 	const [cookies, setCookies] = useCookies(["exercise-filter"])
 	const [visibleExercises, setVisibleExercises] = useState([])
-	const { userId: currentUserId } = useContext(AccountContext);
+	const { userId: currentUserId } = useContext(AccountContext)
 
 	const sortOptionsLists = [
 		{ 
@@ -125,30 +124,30 @@ function AddActivity({ id, setShowActivityInfo }) {
 			cmp: (a, b) => {
 				// "Mina" - prioritize items where the current user is the author
 				if (a.author.userId === currentUserId && b.author.userId !== currentUserId) {
-					return -1;
+					return -1
 				}
 				if (b.author.userId === currentUserId && a.author.userId !== currentUserId) {
-					return 1;
+					return 1
 				}
 	
 				// "Delade" - prioritize items that are shared
 				if (a.isShared && !b.isShared) {
-					return -1;
+					return -1
 				}
 				if (b.isShared && !a.isShared) {
-					return 1;
+					return 1
 				}
 	
 				// "Publika" - prioritize items that are not shared and not authored by the current user
 				if (!a.isShared && a.author.userId !== currentUserId && (b.isShared || b.author.userId === currentUserId)) {
-					return -1;
+					return -1
 				}
 				if (!b.isShared && b.author.userId !== currentUserId && (a.isShared || a.author.userId === currentUserId)) {
-					return 1;
+					return 1
 				}
 	
 				// If items are equal in terms of the above conditions, sort them by name
-				return a.name.localeCompare(b.name);
+				return a.name.localeCompare(b.name)
 			} 
 		},
 		{ label: "Namn: A-Ö", cmp: (a, b) => { return a.name.localeCompare(b.name) } },
@@ -473,7 +472,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 				},
 				hidden: item.hidden,
 				isShared: item.is_shared
-			}));
+			}))
 
 			setLists(lists.sort(sortLists.cmp))
 			setFetchedLists(true)
