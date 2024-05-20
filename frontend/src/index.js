@@ -35,6 +35,8 @@ import GradingDeviations from "./pages/Grading/GradingDeviations.jsx"
 import BaseLayout from "./components/Common/BaseLayout/BaseLayout"
 import ErrorBoundary from "./components/ErrorHandler/ErrorBoundary"
 
+import Techniquechain from "./pages/Techniquechain/TechniquechainIndex.jsx"
+
 import ListInfo from "./pages/List/ListInfo"
 import FavouriteWorkoutsList from "./pages/List/FavouriteWorkoutList"
 import ListEdit from "./pages/List/ListEdit"
@@ -159,7 +161,7 @@ export default function App() {
 						<Route path="profile/list/:list_id" element={<ListInfo />} />
 						<Route path="profile/favouriteWorkouts" element={<FavouriteWorkoutsList/>} />
 
-
+						<Route path="techniquechain" element={<Techniquechain />} />
 						
 						<Route path="grading" element={<Grading />} />
 						<Route path="grading/create" element={<GradingCreate/>} />

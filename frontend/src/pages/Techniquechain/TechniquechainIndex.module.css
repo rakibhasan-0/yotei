@@ -1,0 +1,10 @@
+.tabs {
+    border-width: medium;
+    justify-content: center;
+}
+
+.tab {
+    background-color: white;
+    height: 35px;  
+    width: 274px;
+}
