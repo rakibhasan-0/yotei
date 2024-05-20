@@ -1,5 +1,5 @@
 import { type Page } from "@playwright/test"
-import { Tag } from "../Types/systemTestsTypes"
+import { TagComponent } from "../Types/systemTestsTypes"
 
 export class AddTagPopupPage {
 	readonly page: Page
@@ -13,10 +13,10 @@ export class AddTagPopupPage {
 		await this.page.goto(this.url)
 	}
 
-	async addTag(tag: Tag) {
+	async addTag(tag: TagComponent) {
 		await this.page.getByRole("button", { name: "Hantera tagg" }).click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").click()
-		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.name)
+		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
 		await this.page.locator("#tag-add-button").click()
 		await this.page.locator("#save-and-close-button").click()
 		// generate code with codegen in the next step
