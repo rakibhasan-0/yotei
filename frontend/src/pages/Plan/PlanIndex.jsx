@@ -314,31 +314,12 @@ export default function PlanIndex() {
 				}
 			</div>}
 
-<<<<<<< HEAD
 			{
 				canCreateSession(user) ? 
 					<RoundButton linkTo={"/session/create"}>
 						<Plus />
 					</RoundButton>
 					: <></>
-=======
-			{//TODO add permission toggle here.
-			}
-
-			
-			
-			<Button onClick={tryLogOut()}>
-				<Plus />
-			</Button>
-
-			{
-			//Even if a user has a permission to edit all sessions, they may not have the permission set to edit their own sessions, so both must be checked here in the frontend.
-				//(user.permissions.includes(USER_PERMISSION_CODES.SESSION_ALL) || user.permissions.includes(USER_PERMISSION_CODES.SESSION_OWN)) ? 
-					<RoundButton linkTo={"/session/create"}>
-						<Plus />
-					</RoundButton>
-				//	: <></>
->>>>>>> main
 			}
 
 		</center>
