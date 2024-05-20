@@ -1,8 +1,11 @@
 /** @jest-environment jsdom */
 //import {React} from "react"
-//import {render, screen, configure} from "@testing-library/react"
+import {render, configure} from "@testing-library/react"
 import "@testing-library/jest-dom"
-//import AddTagPopup from "../../../../components/Common/Tag/AddTagPopup"
+import AddTagPopup from "../../../../components/Common/Tag/AddTagPopup"
+import { MemoryRouter } from "react-router"
+import TagInput from "../../../../components/Common/Tag/TagInput"
+import { fireEvent } from "@testing-library/react"
 
 /**
  * Test for the AddTagPopup component.
@@ -12,24 +15,24 @@ import "@testing-library/jest-dom"
  * @since 2023-05-08
  */
 
-//configure({testIdAttribute: "id"})
-
-/*test("Tag: Added tags should be visible", async() => {
+configure({testIdAttribute: "id"})
+test("Tag: Added tag should have checked checkbox", async() => {
 	// ARRANGE
 	const addedTags = [{id:1,name:"Tag1"}]
 
-	render(
-		<div>
-			<AddTagPopup id ="tagChooser" addedTags={addedTags}/>
-		</div>
-	)
+	// ACT
+	const {getByText} =  render(<div><MemoryRouter>
+		<TagInput onClick={
+			()=> <AddTagPopup id ="addTagPopupDiv" addedTags={addedTags}/>} id ="tagChooser" addedTags={addedTags}></TagInput></MemoryRouter></div>)
 
 	// ACT
-	const tag = screen.getByText("Tag1")
+	const button = getByText("Hantera tagg")
+	fireEvent.click(button)
 
 	// ASSERT
-	expect(tag).toBeVisible()
-})*/
+	const popup = getByText("Tag1")
+	expect(popup).toBeVisible()
+})
 
 /*test("Tag: Should render the component as a whole", async() => {
 	// ARRANGE
