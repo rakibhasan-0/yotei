@@ -1,11 +1,13 @@
 import { Cookies } from "react-cookie"
-import { Roles } from "./context"
+import { AccountContext, Roles } from "./context"
 import { toast } from "react-toastify"
 
 /**
- * @author UNKNOWN & Team Tomato
+ * @author UNKNOWN & Team Tomato & Team Mango
  * @updated 2024-04-26  by Tomato
  */
+
+const user = useContext(AccountContext)
 
 /**
  * Use:
@@ -39,6 +41,34 @@ export function checkRole(context, role) {
 		return context.userRole === role.toUpperCase()
 	}
 }
+
+//FUNCTIONS FOR THE NEW PERMISSION SYSTEM:
+
+/**
+ * canEditSession() - Check for if this user can edit the given session or not.
+ * 					  IMPORTANT: The creatorId seems to be based on the group id of the group connected to the session and should be changed!
+ * 								 Solution idea: Add a userId to the sessions in the database.
+ * @params [int] creatorId - The id for the session to be checked against the userId.
+ * @returns true if the user has permission to edit all sessions, or if the user has permission to edit their own sessions and the creatorId of
+ * 		    the session is the same as the userId. Otherwise false is returned.
+ */
+export function canEditSession(creatorId) {
+	return (user.permissions.includes(USER_PERMISSION_CODES.SESSION_ALL) ||
+	(user.permissions.includes(USER_PERMISSION_CODES.SESSION_OWN) &&
+	(user.userId === creatorId)))
+}
+
+/**
+ * canCreateSession() - Check for if this user can create a session or not.
+ * 
+ * @returns true if the user has permission to create/edit all sessions or their own sessions. Otherwise false is returned.
+ */
+export function canCreateSession() {
+	//Even if a user has a permission to edit all sessions, they may not have the permission set to edit their own sessions, so both must be checked here in the frontend.
+	//(You cannot just check for the SESSION_OWN permission. Perhaps this should be changed, but then you need to coordinate well with the backend.)
+	return (user.permissions.includes(USER_PERMISSION_CODES.SESSION_ALL) || user.permissions.includes(USER_PERMISSION_CODES.SESSION_OWN))
+}
+
 
 /**
  * Logs out the user and returns to the logIn screen
