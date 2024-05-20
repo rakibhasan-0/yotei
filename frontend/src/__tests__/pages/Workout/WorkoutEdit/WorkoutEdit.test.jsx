@@ -10,7 +10,7 @@ import { rest } from "msw"
 import { server } from "../../../server"
 import WorkoutEdit from "../../../../pages/Workout/WorkoutEdit"
 import WorkoutView from "../../../../pages/Workout/WorkoutView/WorkoutView"
-import { USER_PERMISSION_CODES, USER_PERMISSION_LIST_ALL } from "../../../../utils"
+import { USER_PERMISSION_LIST_ALL } from "../../../../utils"
 
 /**
  * Tests for the workout edit page
