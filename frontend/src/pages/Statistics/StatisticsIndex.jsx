@@ -136,7 +136,6 @@ export default function Statistics() {
 					const group = groups.find((group) => group.id === parseInt(groupID))
 					setGroup(group)
 					setGroupBelts(group.belts)
-					console.log(group.belts)
 				}
 			}
 			catch (error) {

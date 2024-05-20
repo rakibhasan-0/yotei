@@ -6,40 +6,55 @@ import GradingProtocolsRowsMenu from "../../components/Grading/GradingProtocolsR
 import GradingProtocolsRows from "../../components/Grading/GradingProtocolsRows"
 import Spinner from "../../components/Common/Spinner/Spinner"
 
+/**
+ *  The component for the grading statistics popup. It shows what techniques are required for each belt.
+ *  And what techniques have been completed by the group.
+ * 
+ * 
+ * @param {String} id - The id of the component, for testing purposes
+ * @param {String} groupID - The id of the group
+ * @param {Array} belts - The belts of the group
+ * 
+ * @since 2024-05-20
+ * @author Team Coconut 
+ */
+
+
 
 export default function GradingStatisticsPopup({ id, groupID, belts}) {
-	// State for showing the popup
+
 	const [showPopup, setShowPopup] = useState(false)
 	const [protocols, setProtocols] = useState([])
 	const [chosenProtocol, setChosenProtocol] = useState([])
+	const [beltID, setBeltID] = useState([])
 	const [loading, setLoading] = useState(false)
 	const [data, setData] = useState([])
-	//const [belts, setBelts] = useState([])
-	console.log("Group is " + groupID)
-	console.log(belts)
 
+
+
+	//Initial fetch of the grading protocol
 	useEffect(() => {
+
 		if (belts.length > 0 && groupID) {
 			async function fetchGroupGradingProtocol() {
 				try {
+	
 					setLoading(true)
+					setChosenProtocol(belts[0].name)
+					setBeltID(belts[0].id)
 					const responseFromGroupNameAPI = await fetch(`/api/statistics/${groupID}/grading_protocol?beltId=${belts[0].id}`)
-					if (!responseFromGroupNameAPI.ok) {
-						throw new Error("Failed to fetch group data")
-					}
 					if(responseFromGroupNameAPI.status === 204) {
-						setData([])
-						setProtocols([])
-						setChosenProtocol([])
 						setLoading(false)
 						return
+					}
+					if (!responseFromGroupNameAPI.ok) {
+						throw new Error("Failed to fetch group data")
 					}
 					const groups = await responseFromGroupNameAPI.json()
 					console.log(groups)
 					setData(groups)
-					setProtocols([groups.code + " " + groups.name])
-					setChosenProtocol(groups.code + " " + groups.name)
-					console.log(data.categories)
+					setProtocols(belts.map(belt => belt.name))
+
 				} catch (error) {
 					console.error("Fetching error:", error)
 				} finally {
@@ -48,7 +63,40 @@ export default function GradingStatisticsPopup({ id, groupID, belts}) {
 			}
 			fetchGroupGradingProtocol()
 		}
-	}, [groupID, belts])
+	}, [belts])
+
+	//Switching between grading protocols
+	useEffect(() => {
+		if(belts.length > 0 && groupID) {
+
+			async function fetchGroupGradingProtocolSwitch() {
+				try {
+
+					setLoading(true)
+					setBeltID(belts.find(belt => belt.name === chosenProtocol).id)
+					const responseFromGroupNameAPI = await fetch(`/api/statistics/${groupID}/grading_protocol?beltId=${beltID}`)
+					if (!responseFromGroupNameAPI.ok) {
+						throw new Error("Failed to fetch group data")
+					}
+					if(responseFromGroupNameAPI.status === 204) {
+						setLoading(false)
+						return
+					}
+					const groups = await responseFromGroupNameAPI.json()
+	
+					setData(groups)
+					setProtocols(belts.map(belt => belt.name))
+
+				} catch (error) {
+					console.error("Fetching error:", error)
+				} finally {
+					setLoading(false)
+				}
+			}
+			fetchGroupGradingProtocolSwitch()
+		}
+
+	}, [chosenProtocol])
 
 	const togglePopup = () => {
 		setShowPopup(!showPopup)
@@ -73,13 +121,13 @@ export default function GradingStatisticsPopup({ id, groupID, belts}) {
 				isOpen={showPopup}
 				id="grading-statistics-popup"
 			>
-				<Dropdown text={chosenProtocol} id="grading-protocols-dropdown">
+				<Dropdown text={data.code + " " + data.name} id="grading-protocols-dropdown">
 					<GradingProtocolsRowsMenu protocols={protocols} onSelectRow = {onSelectRow} />
 				</Dropdown>
 				{loading ? <Spinner /> : <div>
 					{	
 						(data.belt && data.categories) &&
-						<GradingProtocolsRows data={data.categories} chosenProtocol={chosenProtocol} beltColors = {[data.belt]} />
+						<GradingProtocolsRows data={data.categories} beltColors = {[data.belt]} />
 					}
 				</div>} 
 
