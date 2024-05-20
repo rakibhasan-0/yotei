@@ -608,7 +608,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 													
 
 													{/* HÄR SKA LISTITEM KOMPONENTEN IN. */}
-													{listContents[list.id]?.map(item => (
+													{listContents[list.id]?.map((item, index) => (
 														<ListItem
 														
 															item = {item}
@@ -620,6 +620,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 															}
 															id = {item.id}
 															key = {item.id}
+															index = {index}
 															
 														/>
 												
