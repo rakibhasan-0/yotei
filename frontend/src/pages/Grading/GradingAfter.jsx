@@ -36,7 +36,7 @@ export default function GradingAfter() {
 	 * @returns {void}
 	 * @since 2024-05-15
 	 */
-	const updateDate = (dateString) => {
+	/*const updateDate = (dateString) => {
 		const date = new Date(dateString)
 		const hours = date.getHours()
 		const minutes = date.getMinutes()
@@ -44,7 +44,7 @@ export default function GradingAfter() {
 		const formattedMinutes = (minutes < 10 ? "0" : "") + minutes
 		const timeString = formattedHours + ":" + formattedMinutes
 		setDateCreated(timeString)
-	}
+	}/*
 
 
 	/**
