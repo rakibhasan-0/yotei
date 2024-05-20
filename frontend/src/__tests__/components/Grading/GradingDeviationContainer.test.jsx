@@ -95,7 +95,7 @@ describe("Render test", () => {
 				/>
 			</BrowserRouter>
 		)
-		expect(screen.queryByTestId("commentDisplay")).not.toBeDefined()
+		expect(screen.queryByTestId("commentDisplay")).toBeNull()
 	})
 
 	test("Should render paircomment if paircomment exists", () => {
@@ -122,7 +122,7 @@ describe("Render test", () => {
 				/>
 			</BrowserRouter>
 		)
-		expect(screen.queryByTestId("commentPairDisplay")).not.toBeDefined()
+		expect(screen.queryByTestId("commentPairDisplay")).toBeNull()
 	})
 
 	test("Should render general comment if general comment exists", () => {
@@ -149,7 +149,7 @@ describe("Render test", () => {
 				/>
 			</BrowserRouter>
 		)
-		expect(screen.queryByTestId("commentGeneralDisplay")).not.toBeDefined()
+		expect(screen.queryByTestId("commentGeneralDisplay")).toBeNull()
 	})
 })
 
