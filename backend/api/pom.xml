@@ -33,16 +33,16 @@
       <version>2.2.3</version>
     </dependency>
     <dependency>
-    <groupId>org.testcontainers</groupId>
-    <artifactId>testcontainers</artifactId>
-    <version>1.19.8</version>
-    <scope>test</scope>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>testcontainers</artifactId>
+      <version>1.19.8</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
-    <groupId>org.testcontainers</groupId>
-    <artifactId>postgresql</artifactId>
-    <version>1.16.0</version> <!-- or the latest version -->
-    <scope>test</scope>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>1.16.0</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -124,6 +124,7 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
         <version>${project.parent.version}</version>
         <configuration>
+          <skipTests>true</skipTests>
           <fork>true</fork>
           <skip>false</skip>
         </configuration>
@@ -134,6 +135,17 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <!-- We want to exclude the database tests when running 'mvn test' -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.0.0-M5</version>
+        <configuration>
+          <excludes>
+            <exclude>**/TechniqueDatabaseTest.java</exclude>
+          </excludes>
+        </configuration>
       </plugin>
     </plugins>
   </build>

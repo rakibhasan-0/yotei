@@ -1,7 +1,10 @@
 package se.umu.cs.pvt.permission;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,13 +14,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import se.umu.cs.pvt.user.UserRepository;
+
 /**
  * UserToPermissionController API for mapping permissions to users.
- * @author Team Mango (2024-05-15)
+ * @author Team Mango (2024-05-17)
  */
 
 @RestController
@@ -28,16 +32,18 @@ public class UserToPermissionController {
 	/**
      * CRUDRepository makes connections with the api possible.
      */
-	private final UserToPermissionRepository repository;
+	private final UserToPermissionRepository userToPermissionRepository;
+    private final PermissionRepository permissionRepository;
+    private final UserRepository userRepository;
 
-	/**
-     * Constructor for the LoginController object.
-     * @param repository Autowired
-     */
     @Autowired
-    public UserToPermissionController(UserToPermissionRepository repository) {
-        this.repository = repository;
+    public UserToPermissionController(UserToPermissionRepository userToPermissionRepository,
+        PermissionRepository permissionRepository, 
+        UserRepository userRepository) {
 
+        this.userToPermissionRepository = userToPermissionRepository;
+        this.permissionRepository = permissionRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -47,8 +53,16 @@ public class UserToPermissionController {
     @GetMapping("/{user_id}")
 	public ResponseEntity<List<Permission>> getUserPermissions(
         @PathVariable("user_id") Long userId) {
-		List<Permission> result = repository.findAllByUserId(userId);
-        
+            
+        if (userRepository.findById(userId).isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        List<UserToPermission> userToPermissions = userToPermissionRepository
+            .findAllByUserId(userId);
+
+        List<Permission> result = findPermissions(userToPermissions);
+
         if (result == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
@@ -59,58 +73,80 @@ public class UserToPermissionController {
         return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
-    /**
-     * (POST) Method for creating/adding new permissions for a user.
-     * @param roleToAdd Body with permission info to be added to user.
-     * @return A response with either the newly created user permission or an error message.
-     */
-    @PostMapping("/{user_id}/permission")
-    public ResponseEntity<UserToPermission> postUserPermissionPair(
-        @RequestBody Permission permission, @PathVariable("user_id") Long userId) {
-        List<Permission> userPermissions = repository.findAllByUserId(userId);
-        if (userPermissions == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        
-        } else {
-            for (Permission userPermission : userPermissions) {
-                if (userPermission.equals(permission)) {
-                    return new ResponseEntity<>(HttpStatus.OK);
-                }
-            }
+    private List<Permission> findPermissions(List<UserToPermission> userToPermissions) {
+    List<Permission> permissions = new ArrayList<>();
+
+    for (UserToPermission userToPermission : userToPermissions) {
+        Optional<Permission> permission = permissionRepository.findById(
+            userToPermission.getPermissionId());
+
+        if (permission.isPresent()) {
+            permissions.add(permission.get());
         }
-        
-        UserToPermission userPermissionToAdd = new UserToPermission(
-            userId ,permission.getPermissionId());
+    }
 
-        repository.save(userPermissionToAdd);
-
-        return new ResponseEntity<>(userPermissionToAdd, HttpStatus.OK);
+        return permissions;
     }
 
     /**
-     * Deletes a user permission by user id and permission id.
+     * (POST) Method for creating/adding new permissions for a user.
+     * @param userId Id of the user.
+     * @param permissionId Id of the permission.
+     * @return A response with either the newly created user permission or an error message.
+     */
+    @PostMapping("/{user_id}/add/{permission_id}")
+    public ResponseEntity<UserToPermission> postUserPermissionPair(
+        @PathVariable("user_id") Long userId,
+        @PathVariable(name = "permission_id") Long permissionId) {
+        
+        if (userRepository.findById(userId).isEmpty() || 
+            permissionRepository.findById(permissionId).isEmpty()) {
+
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        // Returns an OK code if the pair already exists
+        if (userToPermissionRepository.findByUserIdAndPermissionId(
+            userId, permissionId) != null) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        
+        UserToPermission newPair = new UserToPermission(
+            userId, permissionId);
+
+        UserToPermission result = userToPermissionRepository.save(newPair);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    /**
+     * Deletes a user permission pair by user id and permission id.
      *
      * @param userId the id of the user with the permission to delete.
      * @param roleId the id of the permission to delete.
      * @return response, 200 OK on success.
      */
-    @DeleteMapping("")
+    @DeleteMapping("/{user_id}/delete/{permission_id}")
     public ResponseEntity<Object> deleteUserPermissionPair(
-        @RequestBody Map<String, Long> userPermissionToDelete) {
-        Long userId = userPermissionToDelete.get("user_id");
-        Long permissionId = userPermissionToDelete.get("permission_id");
-        UserToPermission userToPermission = repository.findByUserIdAndPermissionId(
-            userId, permissionId);
+        @PathVariable(name = "user_id") Long userId, 
+        @PathVariable(name = "permission_id") Long permissionId){
+
+        UserToPermission userToPermission = userToPermissionRepository
+            .findByUserIdAndPermissionId(userId, permissionId);
 
         if (userToPermission == null) {
             return new ResponseEntity<>(
                 "User with ID: " + userId +  
-                "does not have the permission with ID:" + permissionId + 
+                " does not have the permission with ID: " + permissionId + 
                 ".", HttpStatus.BAD_REQUEST);
         }
 
-        repository.deleteByUserIdAndPermissionId(userId, permissionId);
+        userToPermissionRepository.deleteByUserIdAndPermissionId(userId, permissionId);
+
+        Map<String, Long> map = new HashMap<>();
+        map.put("user_id", userId);
+        map.put("permission_id", permissionId);
         
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(map ,HttpStatus.OK);
     }
 }

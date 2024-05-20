@@ -30,13 +30,14 @@ import se.umu.cs.pvt.user.JWTUtil;
  * 
  * Used as response for retrieval of entries.
  * 
- * @author Team Tomato
+ * @author Team Tomato, updated 2024-05-17
  * @since 2024-05-16
- * @version 1.0
+ * @version 1.1
  */
 class EntryResponse {
     private Technique technique;
     private Exercise exercise;
+    private Integer duration;
 
     public Technique getTechnique() {
         return technique;
@@ -44,6 +45,10 @@ class EntryResponse {
 
     public Exercise getExercise() {
         return exercise;
+    }
+
+    public Integer getDuration() {
+        return duration;
     }
 
     public void setTechnique(Technique technique) {
@@ -54,13 +59,18 @@ class EntryResponse {
         this.exercise = exercise;
     }
 
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
 }
 
 /**
  * ActivityListEntry API for adding and removing entries to/from activity lists.
  * 
- * @author Team Tomato
+ * @author Team Tomato, updated 2024-05-17
  * @since 2024-05-08
+ * 
  */
 @RestController
 @CrossOrigin
@@ -124,8 +134,7 @@ public class ActivityListEntryController {
     }
 
     /**
-     * Adds an entry to multiple activity lists,
-     * the list id supplied in the entry does not need to be supplied in the id list
+     * Adds an entry to multiple activity lists, the list id supplied in the entry does not need to be supplied in the id list
      * (but can be).
      * 
      * @param entry entry object
@@ -155,7 +164,8 @@ public class ActivityListEntryController {
             if (opt_list_result.isPresent()) {
                 ActivityList list_result = opt_list_result.get();
                 if (list_result.getAuthor() == userIdL || userRole.equals("ADMIN")) {
-                    listEntryRepository.save(entry);
+                    ActivityListEntry uniqueEntry = new ActivityListEntry(entry.getDuration(), entry.getListId(), entry.getExerciseId(), entry.getTechniqueId());
+                    listEntryRepository.save(uniqueEntry);
                 } else {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
@@ -164,12 +174,12 @@ public class ActivityListEntryController {
             }
         }
         for (Long id : ids) {
-            entry.setListId(id);
             Optional<ActivityList> result = listRepository.findById(id);
             if (result.isPresent()) {
                 ActivityList list = result.get();
                 if (list.getAuthor() == userIdL || userRole.equals("ADMIN")) {
-                    listEntryRepository.save(entry);
+                    ActivityListEntry uniqueEntry = new ActivityListEntry(entry.getDuration(), id, entry.getExerciseId(), entry.getTechniqueId());
+                    listEntryRepository.save(uniqueEntry);
                 } else {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
@@ -270,6 +280,9 @@ public class ActivityListEntryController {
                             if ((exercise = exerciseRepository.findById(entry.getExerciseId())).isPresent()) {
                                 entryResponse.setExercise(exercise.get());
                             }
+                        }
+                        if (entry.getDuration() != null) {
+                            entryResponse.setDuration(entry.getDuration());
                         }
 
                         response.add(entryResponse);
