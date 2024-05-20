@@ -29,8 +29,6 @@ export default function PlanIndex() {
 	const { token } = useContext(AccountContext)
 	const [ cookies, setCookie ] = useCookies("plan-filter")
 
-	const todo = useContext(AccountContext)
-
 	const [ plans, setPlans ] = useState()
 	const [ workouts, setWorkouts ] = useState()
 	const [ sessions, setSessions ] = useState()
@@ -66,16 +64,6 @@ export default function PlanIndex() {
 		from: dateFormatter(new Date()),
 		to: dateFormatter(twoYears)
 	})
-
-
-	function tryLogOut() {
-		if (onlyMyGroups) {
-			//setCookie()
-			//setOnlyMyGroups(false)
-			//logOut()
-		}
-		
-	}
 
 	useEffect(() => {
 		const filterCookie = cookies["plan-filter"]
@@ -256,15 +244,6 @@ export default function PlanIndex() {
 			.catch(() => {
 				setError("Kunde inte ansluta till servern.")
 			})
-		console.log("USRID:")
-		console.log(todo.userId)
-		console.log(todo.role)
-		console.log(todo.roleId)
-		console.log("TSTEETST")
-		console.log(USER_PERMISSION_CODES.ADMIN_RIGHTS)
-		console.log("PERMISSIONS")
-		console.log(todo.permissions)
-		console.log("END PERMISSIONS")
 	}
 
 	/**
