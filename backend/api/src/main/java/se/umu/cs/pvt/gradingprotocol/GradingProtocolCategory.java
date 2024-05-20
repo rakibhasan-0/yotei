@@ -1,4 +1,4 @@
-package se.umu.cs.pvt.statistics.gradingprotocol;
+package se.umu.cs.pvt.gradingprotocol;
 
 import javax.persistence.*;
 import java.io.Serializable;

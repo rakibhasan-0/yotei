@@ -1,11 +1,12 @@
-package se.umu.cs.pvt.statistics.gradingprotocol;
+package se.umu.cs.pvt.gradingprotocol;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import se.umu.cs.pvt.gradingprotocol.DTOs.BeltIdDTO;
+import se.umu.cs.pvt.gradingprotocol.DTOs.TechniqueDTO;
 import se.umu.cs.pvt.statistics.gradingprotocolDTO.GradingProtocolTechinqueDTO;
-import se.umu.cs.pvt.technique.Technique;
 
 /**
  * JPARepository for GradingProtocol
@@ -39,5 +40,27 @@ public interface GradingProtocolRepository extends JpaRepository<GradingProtocol
                 gpt.categoryId = :categoryId
             """)
     List<GradingProtocolTechinqueDTO> findAllByCategoryId(Long categoryId);
+
+    @Query("""
+            SELECT
+                new se.umu.cs.pvt.gradingprotocol.DTOs.BeltIdDTO(gp.belt.id)
+            FROM
+                GradingProtocol gp
+            """)
+    List<BeltIdDTO> findAllBelts();
+
+    @Query("""
+            SELECT 
+                new se.umu.cs.pvt.gradingprotocol.DTOs.TechniqueDTO(gpt.order ,t.name)
+            FROM
+                GradingProtocolTechnique gpt
+            JOIN
+                Technique t
+            ON
+                t.id = gpt.techniqueId
+            WHERE
+                gpt.categoryId = :categoryId
+            """)
+    List<TechniqueDTO> findTechniqueDTOsByCategory(Long categoryId);   
 
 }

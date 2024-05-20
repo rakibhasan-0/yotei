@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import se.umu.cs.pvt.statistics.gradingprotocol.GradingProtocolRepository;
+import se.umu.cs.pvt.gradingprotocol.GradingProtocolRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
