@@ -15,11 +15,11 @@ public class ExaminationProtocol {
 
     @Id
     @Column(nullable = false, name = "belt_id")
-    private long belt_id;
+    private long beltId;
 
     @Column(nullable = false, name = "examination_protocol")
-    private String examination_protocol;
-
+    private String examinationProtocol;
+    
     /**
      * Data constructor for ExaminationProtocol
      * 
@@ -27,8 +27,8 @@ public class ExaminationProtocol {
      * @param examination_protocol The json for the String of the examination protocol.  
      */
     public ExaminationProtocol(long belt_id, String examination_protocol) {
-        this.belt_id = belt_id;
-        this.examination_protocol = examination_protocol;
+        this.beltId = belt_id;
+        this.examinationProtocol = examination_protocol;
     }
 
     /**
@@ -38,10 +38,10 @@ public class ExaminationProtocol {
     protected ExaminationProtocol() {}
 
     public long getBeltId() {
-        return belt_id;
+        return beltId;
     }
 
     public String getExaminationProtocol() {
-        return examination_protocol;
+        return examinationProtocol;
     }
 }
