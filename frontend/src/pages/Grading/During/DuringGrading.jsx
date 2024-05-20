@@ -124,6 +124,7 @@ export default function DuringGrading() {
 		// reset the button colors
 		// Should also load any stored result
 	}
+
 	// this update the database with what techniquestep the user is on, and it works with forward and backward navigation.
 	const onUpdateStepToDatabase = async (currentTechniqueStep) => {
 		try {
@@ -195,9 +196,9 @@ export default function DuringGrading() {
 					const pairs_json = await response.json()
 
 					// Get only pairs in this grading
-					const pair_names_current_grading = getPairsInCurrrentGrading(pairs_json)
-					setPairs(pair_names_current_grading)
-					console.log("Fetched pairs in this examination: ", pair_names_current_grading)
+					const pair_examinees_current_grading = getPairsInCurrrentGrading(pairs_json)
+					setPairs(pair_examinees_current_grading)
+					console.log("Fetched pairs in this examination: ", pair_examinees_current_grading)
 				} catch (ex) {
 					setErrorToast("Kunde inte hämta alla par")
 					console.error(ex)
@@ -227,14 +228,22 @@ export default function DuringGrading() {
 	const [leftExamineeState, setLeftExamineeState] = useState("default")
 	const [rightExamineeState, setRightExamineeState] = useState("default")
 	// Will handle the api call that will update the database with the result. 
+	/**
+	 * 
+	 * @param {String} newState : is 'pass', 'fail', 'default' 
+	 * @param {String} technique : name on technique
+	 * @param {Int} pairIndex : index of what number the of the pair that is clicked
+	 * @param {String} buttonId : button index namne that ends with either 'left' or 'right'
+	 */
 	const examineeClick = (newState, technique, pairIndex, buttonId) => {
 		console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}, with new state ${newState}`)
 		// Check what state the button is in and send the proper information to DB.
+		let examinee_clicked = buttonId.endsWith("left") ? pairs[pairIndex].leftId : pairs[pairIndex].rightId
+		addExamineeResult(examinee_clicked, `${technique}`, newState)
 	}
 
 	// Scroll to the top of the examinees list after navigation
 	const scrollableContainerRef = useRef(null)
-	// className={boxStyles.examineeButton}
 
 	return (
 		<div className={styles.container}>
@@ -354,11 +363,146 @@ export default function DuringGrading() {
 
 	/**
    * @author Team Pomagrade (2024-05-13)
-   */
-	function gotoSummary() {
+	 * Get method for the grading information. 
+	 * @returns JSON response
+	 */
+	function getGradingProtocol() {
+		return fetch(`/api/examination/grading/${gradingId}`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				"token": token },
+		})
+			.then(response => {
+				if (!response.ok) {
+					throw new Error("Network response was not ok")
+				}
+				return response.json()
+			})
+	}
+
+	/**
+	 * Update step for the grading process. 
+	 * @param {String} grading_data 
+	 * @returns status code
+	 */
+	function updateStep(grading_data) {
+		delete grading_data.examinees
+		grading_data.step = 3
+
+		console.log(grading_data)
+
+		return fetch("/api/examination/grading", {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				"token": token },
+			body: JSON.stringify(grading_data),
+
+		})
+			.then(response => {
+				if (!response.ok) {
+					throw new Error("Network response was not ok")
+				}
+				return response.status
+
+			})
+	}
+
+	async function gotoSummary() {
 		//TODO: setShowPopup(false)
+		const [grading_data] = await Promise.all([
+			getGradingProtocol(),
+		])
+		updateStep(grading_data)
+
+
 		navigate(`/grading/${gradingId}/3`)
 	}
+
+
+
+	/**
+	 * Adds a status update to backend for an athlete
+	 * @param {Int} examineeId id of the examinee that should have result added
+	 * @param {String} techniqueName name on technique in grading
+	 * @param {String} passStatus could be either 'pass', 'fail' or 'default'
+	 * 
+	 * @author Team Apelsin (2024-05-17) - c21ion
+	 */
+	async function addExamineeResult(examineeId, techniqueName, passStatus) {
+		// TODO: Temporary, should use a state instead
+		const data = [
+			{
+				examineeId: 8,
+				pass: null,
+				resultId: 7,
+				techniqueName: "1. Shotei uchi, jodan, rak stöt med främre och bakre handen"
+			}
+		]
+
+		// Convert string for pass status to Boolean
+		const passStatusMap = {
+			pass: true,
+			fail: false,
+			default: null,
+		}
+		// Check existance
+		const foundExamineeResult = data.find(item => item.examineeId === examineeId)
+		if( foundExamineeResult ){
+			await putExamineeResult({ resultId: foundExamineeResult.resultId, examineeId: foundExamineeResult.examineeId, techniqueName: foundExamineeResult.techniqueName, pass: passStatusMap[passStatus] }, token)
+				.catch(() => setErrorToast("Kunde inte lägga till resultat. Kolla internetuppkoppling."))
+		}else{
+			const data = await postExamineeResult({ examineeId: examineeId, techniqueName: techniqueName, pass: passStatusMap[passStatus] }, token)
+				.catch(() => setErrorToast("Kunde inte lägga till resultat. Kolla internetuppkoppling."))
+			const response = await data.json()
+			// TODO: Add response to listOfExamineeResults
+			console.log("Response: ", JSON.stringify(response))
+		}
+	}
+
+	/**
+	 * Perform a post to backend for status for an athlete
+	 * @param {JSON} result JSON object with info about result, 
+	 * 						should be on format "{ examinee_id: **examineeId**, technique_name: **techniqueName**, pass: **passStatus** }"
+	 * 
+	 * @author Team Apelsin (2024-05-13, c21ion)
+	 */
+	async function postExamineeResult(result, token) {
+		const requestOptions = {
+			method: "POST",
+			headers: { "Content-Type": "application/json", "token": token },
+			body: JSON.stringify(result)
+		}
+		console.log("Fetched POST: ", JSON.stringify(result))
+
+		return fetch("/api/examination/examresult", requestOptions)
+			.then(response => { return response })
+			.catch(error => { alert(error.message) })
+	}
+
+	/**
+	 * Perform a put to backend for status for an athlete
+	 * @param {JSON} result JSON object with info about result, 
+	 * 						should be on format "{ resultid: **resultId**, examinee_id: **examineeId**, technique_name: **techniqueName**, pass: **passStatus** }"
+	 * 
+	 * @author Team Apelsin (2024-05-17, c21ion) 
+	 */
+	async function putExamineeResult(result, token) {
+		const requestOptions = {
+			method: "PUT",
+			headers: { "Content-Type": "application/json", "token": token },
+			body: JSON.stringify(result)
+		}
+
+		console.log("Fetched PUT: ", result)
+
+		return fetch("/api/examination/examresult", requestOptions)
+			.then(response => { return response })
+			.catch(error => { alert(error.message) })
+	}
+
+
 
 	/**
      * Navigate back to the page where examinees are added.
