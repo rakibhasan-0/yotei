@@ -121,7 +121,7 @@ public class TechniqueDatabaseTest {
                     String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
                 
                     PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
-                    preparedStatement.setString(1, i.toString());
+                    preparedStatement.setInt(1, i);
 
                     ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -163,7 +163,7 @@ public class TechniqueDatabaseTest {
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique
-                String[] techNames = {"Shotei uchi, jodan, rak stöt med främre och bakre handen", "Försök till strypgrepp framifrån - Försök till kravattgrepp från sidan, jodan soto uke - Jodan chikai uke, kawashi, kosho otoshi, ude henkan gatame"};
+                String[] techNames = {"Knivhot mot magen, grepp, shotei uchi jodan", "Grepp i två handleder framifrån, frigöring"};
                 String expectedColor = "Gult";
 
                 for(int i = 0; i < 2; i++){
@@ -190,7 +190,7 @@ public class TechniqueDatabaseTest {
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique
-                String[] techNames = {"Kin geri, gedan, spark snett uppåt med främre och bakre benet", "Hotfullt närmande mot liggande - Långt svingslag, uppgång bakåt - ju jodan uchi uke, uki otoshi ude henkan gatame"};
+                String[] techNames = {"Grepp i två handleder framifrån, Shiho nage, shiho nage gatame", "Knivhot mot halsen, höger sida, grepp, kin geri"};
                 String expectedColor = "Grönt";
 
                 for(int i = 0; i < 2; i++){
@@ -217,7 +217,7 @@ public class TechniqueDatabaseTest {
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique            
-                String[] techNames = {"Seiken tski, jodan, rakt slag med främre och bakre handen", "Cirkulär spark mot benen - san ren uke, o soto osae, ude henkan gatame, valfri jigo waza anpassad efter ukes agerande"};
+                String[] techNames = {"Grepp och knivhot mot magen, grepp, kin geri, kote gaeshi, ude hishigi hiza gatame", "Stryptag från sidan med tryck, kote hineri, ude henkan gatame"};
                 String expectedColor = "Blått";
 
                 for(int i = 0; i < 2; i++){
@@ -245,7 +245,7 @@ public class TechniqueDatabaseTest {
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique            
-                String[] techNames = {"Empi uchi, jodan och chudan (1 Kyu)", "Påkslag mot huvudet, forehand och backhand, Tsuri ashi - ju jodan uchi uke, irimi nage, ude hishigi hiza gatame"};
+                String[] techNames = {"Grepp i håret med 2 händer och knästöt, gedan juji uke, waki gatame, ude osae gatame", "Knivhot mot halsen bakifrån med vänster arm, maesabaki, kuzure ude garami, kote gaeshi, ude hishigi hiza gatame"};
                 String expectedColor = "Brunt";
 
                 for(int i = 0; i < 2; i++){
@@ -272,7 +272,7 @@ public class TechniqueDatabaseTest {
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique            
-                String[] techNames = {"Mawashi shotei uchi, jodan, cirkulär stöt med bakre handen", "Hotfullt närmande - Långt svingslag, Hejda med tryck - Morote jodan uke, o soto osae, ude henkan gatame"};
+                String[] techNames = {"Grepp i en handled framifrån med två händer med drag, frigöring", "Knivhot mot magen, grepp, shotei uchi jodan, kote gaeshi, ude hishigi hiza gatame"};
                 String expectedColor = "Orange";
 
                 for(int i = 0; i < 2; i++){
