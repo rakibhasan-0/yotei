@@ -9,7 +9,9 @@ import {People} from "react-bootstrap-icons"
 import Button from "../../components/Common/Button/Button"
 import {Link} from "react-router-dom"
 import { useCookies } from "react-cookie"
-import { HTTP_STATUS_CODES, setError } from "../../utils"
+import { HTTP_STATUS_CODES, USER_PERMISSION_CODES, setError } from "../../utils"
+
+import { logOut } from "../../utils"
 
 /**
  * PlanIndex is the page that displays group plannings. Contains a 
@@ -27,6 +29,8 @@ import { HTTP_STATUS_CODES, setError } from "../../utils"
 export default function PlanIndex() {
 	const { token } = useContext(AccountContext)
 	const [ cookies, setCookie ] = useCookies("plan-filter")
+
+	const todo = useContext(AccountContext)
 
 	const [ plans, setPlans ] = useState()
 	const [ workouts, setWorkouts ] = useState()
@@ -63,6 +67,16 @@ export default function PlanIndex() {
 		from: dateFormatter(new Date()),
 		to: dateFormatter(twoYears)
 	})
+
+
+	function tryLogOut() {
+		if (onlyMyGroups) {
+			//setCookie()
+			//setOnlyMyGroups(false)
+			//logOut()
+		}
+		
+	}
 
 	useEffect(() => {
 		const filterCookie = cookies["plan-filter"]
@@ -243,6 +257,15 @@ export default function PlanIndex() {
 			.catch(() => {
 				setError("Kunde inte ansluta till servern.")
 			})
+		console.log("USRID:")
+		console.log(todo.userId)
+		console.log(todo.role)
+		console.log(todo.roleId)
+		console.log("TSTEETST")
+		console.log(USER_PERMISSION_CODES.ADMIN_RIGHTS)
+		console.log("PERMISSIONS")
+		console.log(todo.permissions)
+		console.log("END PERMISSIONS")
 	}
 
 	/**
@@ -258,6 +281,7 @@ export default function PlanIndex() {
 		const day = String(date.getDate()).padStart(2, "0")
 		return [year, month, day].join("-")
 	}
+
 
 	return (
 		<center>
@@ -290,10 +314,24 @@ export default function PlanIndex() {
 					<SessionList id = {"sessionlistID"} plans={plans} sessions={sessions} workouts={workouts}/>
 				}
 			</div>}
+
+			{//TODO add permission toggle here.
+			}
+
 			
-			<RoundButton linkTo={"/session/create"}>
+			
+			<Button onClick={tryLogOut()}>
 				<Plus />
-			</RoundButton>
+			</Button>
+
+			{
+			//Even if a user has a permission to edit all sessions, they may not have the permission set to edit their own sessions, so both must be checked here in the frontend.
+				//(user.permissions.includes(USER_PERMISSION_CODES.SESSION_ALL) || user.permissions.includes(USER_PERMISSION_CODES.SESSION_OWN)) ? 
+					<RoundButton linkTo={"/session/create"}>
+						<Plus />
+					</RoundButton>
+				//	: <></>
+			}
 
 		</center>
 	)	

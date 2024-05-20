@@ -29,3 +29,8 @@ INSERT INTO permission (permission_name, permission_desc) VALUES ('grading_all',
 -- INSERTS FOR ROLE_TO_PERMISSION
 --
 INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 1);
+
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 2);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 5);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 8);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 9);
