@@ -21,6 +21,8 @@ export default function GradingAfter() {
 	const navigate = useNavigate()
 	const [grading, setGrading] = useState([])
 	const[dateCreated, setDateCreated] = useState("")
+	const[totalAmountOfTechniques, setTotalAmountOfTechniques] = useState("")
+	const[fetchedResult, setFetchedResult] = useState([])
 	const [beltInfo, setBeltInfo] = useState({
 		belt_name: "",
 		color: "" 
@@ -87,7 +89,7 @@ export default function GradingAfter() {
 	 * @since 2024-05-15
 	 */
 	const fetchExamineeResult = () => {
-		return fetch(`/api/examination/grading/${gradingId}/result`, {
+		return fetch(`/api/examination/examresult/grading/${gradingId}`, {
 			method: "GET",
 			headers: { "token": token }
 		}).then(response => {
@@ -143,12 +145,16 @@ export default function GradingAfter() {
 						color: "#" + matchingBelt.color
 					})
 				}
-				setExamineeResult({
-					examinee_id: result_data.examineed,
-					name: result_data.name,
-					result: result_data.result
-				})
-		
+				setTotalAmountOfTechniques(result_data.num_techniques)
+				setFetchedResult(result_data)
+				setExamineeResult(result_data.examinee_results.map(examinee => ({
+					id: examinee.examineeId,
+					passedTechniques: examinee.passedTechniques,
+					name: examinee.name
+				})))
+				console.log("grading: ", grading)
+				console.log("examinee result: ", examineeResult)
+				console.log("fetched result: ", fetchedResult)
 			} catch (error) {
 				console.error("There was a problem with the fetch operation:", error)
 			}
@@ -171,11 +177,14 @@ export default function GradingAfter() {
 				</div>
     
 				<div className={styles.scrollableContainer}>
-					{grading.examinees && grading.examinees.map((examinee) => (
+					{grading.examinees && examineeResult.examinees.map((examinee) => (
 						<UserBoxGrading
-							key={examinee.examinee_id}
-							id={examinee.examinee_id}
-							name={examinee.name} />
+							key={examinee.id}
+							id={examinee.id}
+							name={examinee.name}
+							passedTechniques={examinee.passedTechniques}
+							totalAmountOfTechniques={totalAmountOfTechniques}
+						/>
 					))}
 				</div>
     
