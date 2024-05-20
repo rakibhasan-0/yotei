@@ -37,7 +37,6 @@ const BeltRow = ({ belt, states, onToggle }) => {
 	const [adultState, setAdultState] = useState(false)
 	const [invertedState,setInvertedState] = useState (false)
 
-	const [isActive, setIsActive] = useState(false)
 
 	useEffect(() => {
 		setChildState(states?.some(b => b.id === child?.id))

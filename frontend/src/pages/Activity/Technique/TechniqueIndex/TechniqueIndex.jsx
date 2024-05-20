@@ -65,13 +65,13 @@ export default function TechniqueIndex() {
 			text: searchBarText,
 			selectedBelts: belts?.map(belt => {
 				if (belt.child) {
-				  return belt.name + "-barn";
+					return belt.name + "-barn"
 				} else if (belt.inverted) {
-				  return belt.name + "-inverted";
+					return belt.name + "-inverted"
 				} else {
-				  return belt.name;
+					return belt.name
 				}
-			  }).filter(Boolean).join(","), // Filter out any falsy values
+			}).filter(Boolean).join(","), // Filter out any falsy values
 			kihon: kihon,
 			selectedTags: tags,
 		}

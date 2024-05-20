@@ -33,31 +33,36 @@ describe("verify that", () => {
 			"id": 1,
 			"name": "Vitt",
 			"color": "FCFCFC",
-			"child": false
+			"child": false,
+			"inverted": false
 		},
 		{
 			"id": 2,
 			"name": "Vitt",
 			"color": "BD3B41",
-			"child": true
+			"child": true,
+			"inverted": false
 		},
 		{
 			"id": 3,
 			"name": "Gult",
 			"color": "EDD70D",
-			"child": false
+			"child": false,
+			"inverted": false
 		},
 		{
 			"id": 4,
 			"name": "Gult",
 			"color": "EDD70D",
-			"child": true
+			"child": true,
+			"inverted": false
 		},
 		{
 			"id": 13,
 			"name": "Svart",
 			"color": "EDD70D",
-			"child": false
+			"child": false,
+			"inverted": false
 		}
 	]
 
@@ -73,6 +78,7 @@ describe("verify that", () => {
 					id: 13,
 					color: "000000",
 					child: false,
+					inverted: false,
 					name: "svart"
 				}
 			],
@@ -120,6 +126,7 @@ describe("verify that", () => {
 						id: belt.id,
 						color: "000000",
 						child: false,
+						inverted: false,
 						name: "svart" + belt.id
 					}
 				})

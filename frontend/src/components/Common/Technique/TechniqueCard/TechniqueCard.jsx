@@ -86,27 +86,27 @@ function TechniqueCard({ technique, checkBox, id}) {
 }
 
 function constructColor(technique) {
-    return (
-        <div className={styles["technique-card-belt-color-container"]}>
-            {
-                technique.beltColors !== undefined && technique.beltColors !== null
-                    ? technique.beltColors.length > 0
-                        ? technique.beltColors.map((belt, index) => {
-                            if (belt !== undefined) {
-                                return belt.is_child
-                                    ? constructChildBelt(belt, technique.beltColors.length, index)
-                                    : belt.is_inverted
-                                        ? constructInvertedBelt(belt, technique.beltColors.length, index)
-                                        : constructAdultBelt(belt, technique.beltColors.length, index);
-                            } else {
-                                return constructAdultBelt("13c9ed", technique.beltColors.length, index);
-                            }
-                        })
-                        : constructDefaultBelt("8e03ad") //om vi fär 0st färger (lila)
-                    : constructDefaultBelt("8e03ad") //om vi inte får färger (lila)
-            }
-        </div>
-    );
+	return (
+		<div className={styles["technique-card-belt-color-container"]}>
+			{
+				technique.beltColors !== undefined && technique.beltColors !== null
+					? technique.beltColors.length > 0
+						? technique.beltColors.map((belt, index) => {
+							if (belt !== undefined) {
+								return belt.is_child
+									? constructChildBelt(belt, technique.beltColors.length, index)
+									: belt.is_inverted
+										? constructInvertedBelt(belt, technique.beltColors.length, index)
+										: constructAdultBelt(belt, technique.beltColors.length, index)
+							} else {
+								return constructAdultBelt("13c9ed", technique.beltColors.length, index)
+							}
+						})
+						: constructDefaultBelt("8e03ad") //om vi fär 0st färger (lila)
+					: constructDefaultBelt("8e03ad") //om vi inte får färger (lila)
+			}
+		</div>
+	)
 }
 function constructDefaultBelt(color) {
 	return (
