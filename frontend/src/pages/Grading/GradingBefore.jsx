@@ -123,11 +123,9 @@ export default function GradingBefore() {
    * @returns Nothing if the name is valid, otherwise, the errortext. 
    */
   const validateGradingName = (name) => {
-		if (name == "") {
-			return "Ange ett namn, det får inte vara tomt"
-		} else if (name.length > 30) {
-      return "Namnet får inte vara längre än 30 karaktärer"
-    }
+		if (name.length > 30) {
+			return "Namnet får inte vara längre än 30 karaktärer"
+		}
 		return ""
 	}
 
@@ -442,6 +440,7 @@ export default function GradingBefore() {
 
   async function editGradingName(Id, text) {
     setGradingName(text)
+	
 
     // get the grading in the database
     let data = await getGrading(token)
@@ -453,6 +452,18 @@ export default function GradingBefore() {
 
     // update the grading in the database
     await putGrading(data, token)
+  }
+
+  function pressedContinue() {
+	if(examinees.length <= 0 && pairs.length <= 0) {
+		setErrorToast("Kan ej starta gradering utan deltagare")
+		return
+	}
+	if(gradingName == "") {
+		setErrorToast("Kan ej starta gradering utan namn")
+		return
+	}
+	setShowPopup(true)
   }
 
 
@@ -582,7 +593,7 @@ export default function GradingBefore() {
 					id="continue-button"		
 					width="100%"
 					outlined={false}
-					onClick={() => setShowPopup(true)}>
+					onClick={() => pressedContinue()}>
 					<p>Fortsätt</p>
 				</Button>
 			
