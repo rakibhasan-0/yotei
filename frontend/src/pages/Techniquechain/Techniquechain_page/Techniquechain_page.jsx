@@ -20,7 +20,7 @@ export default function Techniquechain_page() {
 			<h1 style={{textAlign: "left", wordWrap:"break-word"}}>{techniquechain?.name}</h1>
 			<div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: "10px" }}>
 				{/* empty div to get the right look with old components */}
-                <div ></div> 
+				<div ></div> 
 				{isEditor(accountRole) && (
 					<div style={{ display: "flex", flexDirection: "row", gap: "10px", justifyContent: "flex-end"}}>
                         
@@ -42,10 +42,10 @@ export default function Techniquechain_page() {
 					</div>
 				)}
 			</div>
-            <h2 style={{ fontWeight: "bold", display: "flex", flexDirection: "row", alignItems: "left", marginTop: "5px", alignContent: "left" }}>Beskrivning</h2>
-            <p style={{ textAlign: "left", whiteSpace: techniquechain?.description ? "pre-line" : "normal", fontStyle: !techniquechain?.description ? "italic" : "normal", color: !techniquechain?.description ? "var(--gray)" : "inherit" }}>
-                {techniquechain?.description || "Beskrivning saknas."}
-            </p>
+			<h2 style={{ fontWeight: "bold", display: "flex", flexDirection: "row", alignItems: "left", marginTop: "5px", alignContent: "left" }}>Beskrivning</h2>
+			<p style={{ textAlign: "left", whiteSpace: techniquechain?.description ? "pre-line" : "normal", fontStyle: !techniquechain?.description ? "italic" : "normal", color: !techniquechain?.description ? "var(--gray)" : "inherit" }}>
+				{techniquechain?.description || "Beskrivning saknas."}
+			</p>
 		</div>
 	)
 
