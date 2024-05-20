@@ -3,9 +3,9 @@ import styles from "./techniquechainCard.module.css"
 import { Link } from "react-router-dom"
 
 /**
- * An ExerciseListItem that can be used in an list view.
- * It displays the title of an exercise and its duration,
- * also the description belonging to the exercise when the
+ * An TechniquechainCard that can be used in an list view.
+ * It displays the title of an chain,
+ * also the description belonging to the chain when the
  * drop-down is toggled.
  * 
  * Props:
@@ -17,15 +17,15 @@ import { Link } from "react-router-dom"
  * 		path @type {string}			- The path to the specific exercise (only used if the exercise is in a list)
  * 
  * Example usage:
- * 		<ExerciseListItem
+ * 		<TechniquechainCard
  * 			item={the exercise name}
  * 			text={exercise duration + " min"}
  * 			id={The unique ID for an exercises, gets concatenated onto detailURL}
- * 			detailURL={the base URL for exercises}
+ * 			detailURL={the base URL for chains}
  * 			index={The index for the exercise in the list containing fetched exercises}>
  * 
  * 			"Description"
- * 		</ExerciseListItem>
+ * 		</TechniquechainCard>
  * 
  * @author Durian Team 3
  * @since 2024-05-20
@@ -37,7 +37,7 @@ export default function TechniquechainCard({ item, detailURL, id, index, checkBo
 	// Fixes the path regardless if the exercise is in a list or not.
 	const tempPath = (path === undefined) ? id : path
 	const handleClick = () =>{
-		localStorage.setItem("stored_exercise", id)
+		localStorage.setItem("stored_techniquechain", id)
 	}
 
 	return (

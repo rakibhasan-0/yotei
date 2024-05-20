@@ -9,6 +9,9 @@ import InfiniteScrollComponent from "../../../components/Common/List/InfiniteScr
 import FilterContainer from "../../../components/Common/Filter/FilterContainer/FilterContainer"
 import Sorter from "../../../components/Common/Sorting/Sorter"
 import TechniquechainCard from "../../../components/Common/TechniquechainCard/TechniquechainCard"
+import RoundButton from "../../../components/Common/RoundButton/RoundButton"
+import { isEditor } from "../../../utils"
+import { Plus } from "react-bootstrap-icons"
 
 
 
@@ -28,7 +31,7 @@ export default function Techniquechain() {
 		{label: "Namn: Ö-A", cmp: (a, b) => {return -a.name.localeCompare(b.name)}},
 	]
 
-    const detailURL = "/exercise/exercise_page/"
+	const detailURL = "/techniquechain/techniquechain_page/"
 	const context = useContext(AccountContext)
 	const cookieID = "techniquechain-filter-userId-"+context.userId
 	const [cookies, setCookie] = useCookies([cookieID])
@@ -39,7 +42,7 @@ export default function Techniquechain() {
 	//const [showFilterBox, setShowFilterBox] = useState(false)
 	const [loading, setIsLoading] = useState(false)
 	const [sort, setSort] = useState(sortOptions[0])
-	const [visibleList, setVisibleList] = useState([{id: 1, name: "test Kort"}])
+	const [visibleList, setVisibleList] = useState([{id: 1, name: "test Kort 1"}, {id: 2, name: "test Kort 2"}, {id: 3, name: "test Kort 3"}])
 
 	const saveSearchText = () => {
 		localStorage.setItem("searchText", searchBarText)
@@ -81,6 +84,14 @@ export default function Techniquechain() {
 					</div>
 				}
 			</div>
+			{/* Spacing so the button doesn't cover a exercise card */}
+			<br/><br/><br/><br/><br/>
+
+			{isEditor(context) && 
+			<RoundButton linkTo={"chain/create"} id={"exercise-round-button"}  style={{maxWidth: "5px"}}>
+				<Plus/>
+			</RoundButton>
+			}
 		</>
 	)
 }
