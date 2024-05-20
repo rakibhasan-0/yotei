@@ -14,6 +14,7 @@ import Divider from "../../components/Common/Divider/Divider"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import ProfileListItem from "./ProfileListItem"
 import { Lock, Unlock, Eye } from "react-bootstrap-icons"
+import TextArea from "../../components/Common/TextArea/TextArea"
 
 /**
  * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3)
@@ -41,6 +42,7 @@ export default function Profile() {
 	const [usernamePassword, setUsernamePassword] = useState("")
 	const [passwordButtonState, setPasswordButtonDisabled] = useState(false)
 	const [usernameButtonState, setUsernameButtonDisabled] = useState(false)
+	const context = useContext(AccountContext) 
 
 	const [fetchedLists, setFetchedLists] = useState(false)
 	const [lists, setLists] = useState([])
@@ -129,6 +131,8 @@ export default function Profile() {
 			setUsernameButtonDisabled(false)
 		}
 	}, [password, newPassword, verifyNewPassword, newUsername, usernamePassword])
+
+	const Roll = context.role || "Vet ej"
 
 	/* Account management */
 
@@ -334,6 +338,10 @@ export default function Profile() {
 				>
 					Ändra Användarnamn
 				</Button>
+				<Divider option={"h2_center"} />
+				<div >
+					Inloggad som: {Roll}
+				</div>
 				<Divider option={"h2_center"} />
 				<div>
 					<Button id={"logoutButton"} onClick={logOut} width={"100%"} className="btn btn-primary">
