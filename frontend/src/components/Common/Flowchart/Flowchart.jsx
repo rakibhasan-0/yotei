@@ -1,11 +1,24 @@
 import React, { useState, useRef } from "react"
 import Draggable from "react-draggable"
-import "./App.css"
+import styles from"./Flowchart.module.css"
+import Button from "../Button/Button"
+import Divider from "../Divider/Divider"
+import TagInput from "../Tag/TagInput"
+import CheckBox from "../CheckBox/CheckBox"
+import AddUserComponent from "../../Workout/CreateWorkout/AddUserComponent"
+import FlowChartNode from "./FlowchartNode"
+
+/**
+ * The technique index page.
+ * Fetches and displays the techniques.
+ * 
+ * @author Durian Team 3
+ * @version 1.0
+ * @since 2024-05-20
+ */
+
 const Flowchart = () => {
-	const [boxes, setBoxes] = useState([
-		{ id: 1, x: 100, y: 100 },
-		{ id: 2, x: 300, y: 100 }
-	])
+	const [nodes, setNodes] = useState([{id: 1, name: "teknik1", x: 10, y: 10},{id: 2, name: "teknik2", x: 20, y: 20},{id: 3, name: "teknik3", x: 30, y: 30}])
 	const [connections, setConnections] = useState([])
 	const [selectedBox, setSelectedBox] = useState(null)
 	const [isAddingConnection, setIsAddingConnection] = useState(false)
@@ -15,7 +28,7 @@ const Flowchart = () => {
 	const boxCounter = useRef(3) // Counter to generate unique IDs for new boxes
 
 	const handleDrag = (e, data, id) => {
-		setBoxes((prevBoxes) =>
+		setNodes((prevBoxes) =>
 			prevBoxes.map((box) =>
 				box.id === id ? { ...box, x: data.x, y: data.y } : box
 			)
@@ -23,7 +36,7 @@ const Flowchart = () => {
 	}
 
 	const handleAddBox = () => {
-		setBoxes((prevBoxes) => [
+		setNodes((prevBoxes) => [
 			...prevBoxes,
 			{ id: boxCounter.current++, x: 50, y: 50 }
 		])
@@ -111,24 +124,27 @@ const Flowchart = () => {
 	}
 
 	return (
-		<div className="Flowchart">
-			<div className="canvas">
-				{boxes.map((box) => (
+		<div className={styles.Flowchart}>
+			<div className={styles.canvas}>
+				{nodes.map((node) => (
 					<Draggable
-						key={box.id}
-						defaultPosition={{ x: box.x, y: box.y }}
-						onDrag={(e, data) => handleDrag(e, data, box.id)}
+						key={node.id}
+						defaultPosition={{ x: node.x, y: node.y }}
+						onDrag={(e, data) => handleDrag(e, data, node.id)}
+						bounds={"parent"}
 					>
-						<div
-							className={`box ${selectedBox === box.id ? "selected" : ""}`}
-							ref={(el) => (boxRefs.current[box.id] = el)}
-							onClick={() => handleSelectBox(box.id)}
-						>
-              Box {box.id}
+						<div>
+							<FlowChartNode
+								id={node.id}
+								name={node.name}
+								onClick={handleSelectBox(node.id)}
+								selected={selectedBox === node.id}
+								ref={(el) => (boxRefs.current[node.id] = el)}
+							/>
 						</div>
 					</Draggable>
 				))}
-				<svg className="arrows">
+				{/* 				<svg className={styles.arrow}>
 					<defs>
 						<marker
 							id="arrowhead"
@@ -142,8 +158,8 @@ const Flowchart = () => {
 						</marker>
 					</defs>
 					{connections.map((connection, index) => {
-						const fromBox = boxes.find((box) => box.id === connection.from)
-						const toBox = boxes.find((box) => box.id === connection.to)
+						const fromBox = nodes.find((node) => node.id === connection.from)
+						const toBox = nodes.find((node) => node.id === connection.to)
 						const { x1, y1, x2, y2 } = getArrowCoordinates(fromBox, toBox)
 						return (
 							<line
@@ -157,17 +173,36 @@ const Flowchart = () => {
 							/>
 						)
 					})}
-				</svg>
-				<button className="add-box-button" onClick={handleAddBox}>
-          Add Box
-				</button>
-				<button className="add-connection-button" onClick={handleAddConnectionMode}>
-          Add Connection
-				</button>
-				<button className="delete-connection-button" onClick={handleDeleteConnectionMode}>
-          Delete Connection
-				</button>
+				</svg> */}
+				<div className={styles.buttonRow}>
+					{nodes.length > 1 && 
+            <Button>Koppla</Button>
+					}
+					<Button>+</Button>
+					
+				</div>
 			</div>
+			<Divider option={"h1_center"}></Divider>
+			<CheckBox
+				id="workout-create-checkbox"
+				label="Privat pass"
+				onClick={() =>
+					console.log("yep")
+				}
+				checked={false}
+			/>
+			<Divider option={"h1_center"}></Divider>
+			<AddUserComponent
+				id="workout-create-add-users"
+				addedUsers={[{userId: 1, username: "eyo"}]}
+				setAddedUsers={() =>
+					console.log("yeye")
+				}
+			/>
+			<Divider option={"h1_left"} title={"Taggar"} />
+
+			<TagInput addedTags={[{id: 1, name: "eyo"}]}/>
+
 		</div>
 	)
 }

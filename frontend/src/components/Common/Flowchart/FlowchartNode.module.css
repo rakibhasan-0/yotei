@@ -1,0 +1,14 @@
+.node {
+  background-color: lightblue;
+  padding: 0.4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid var(--black-primary);
+  position: absolute;
+  cursor: pointer;
+}
+
+.node.selected {
+  border: 2px solid red;
+}

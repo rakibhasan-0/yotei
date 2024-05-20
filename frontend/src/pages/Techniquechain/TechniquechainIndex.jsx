@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Modal } from "react-bootstrap"
+import TechniqueWeaveIndex from "./TechniqueWeave/TechniqueWeaveIndex"
 import Tab from "react-bootstrap/Tab"
 import Tabs from "react-bootstrap/Tabs"
 import styles from "./TechniquechainIndex.module.css"
@@ -25,7 +26,7 @@ export default function TechniquechainIndex() {
 					<Techniquechain />
 				</Tab>
 				<Tab  eventKey="exercise" title="Teknikvävar" tabClassName={`nav-link ${styles.tab}`}>
-					hello2
+					<TechniqueWeaveIndex></TechniqueWeaveIndex>
 				</Tab>
 			</Tabs>
 		</Modal.Body>

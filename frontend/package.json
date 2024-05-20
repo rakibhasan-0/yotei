@@ -16,6 +16,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0",
+    "react-draggable": "^4.4.6",
     "react-infinite-scroll-component": "^6.1.0",
     "react-jwt": "^1.1.8",
     "react-player": "^2.12.0",
