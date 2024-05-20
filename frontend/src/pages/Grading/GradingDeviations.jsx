@@ -57,6 +57,7 @@ export default function GradingDeviations() {
                 setGradingId(json["gradingId"])
                 setName(json["name"])
                 fetchGrading(json["gradingId"])
+                fetchGroupComments(json["gradingId"])
             }
         }
 
@@ -124,8 +125,45 @@ export default function GradingDeviations() {
             setResultList(json)
         }
 
+        //Fetches an examinees personal grading comments
+        const fetchPersonalComments = async() => {
+            const requestOptions = {
+                headers: {"Content-type": "application/json", token: context.token}
+			}
+            const response = await fetch("/api/examination/comment/examinee/" + userId, requestOptions).catch(() => {
+                setError("Serverfel: Kunde inte ansluta till servern.")
+                return
+            })
+            if(response.status != HTTP_STATUS_CODES.OK){
+                setError("Kunde inte hämta personliga kommentarer. Felkod: " + response.status)
+                return
+            }
+            const json = await response.json()
+            console.log(json)
+            setPersonalComments(json)
+        }
+
+        //Fetches the entire groups grading comments
+        const fetchGroupComments = async(gradingId) => {
+            const requestOptions = {
+                headers: {"Content-type": "application/json", token: context.token}
+			}
+            const response = await fetch("/api/examination/comment/group/all/" + gradingId, requestOptions).catch(() => {
+                setError("Serverfel: Kunde inte ansluta till servern.")
+                return
+            })
+            if(response.status != HTTP_STATUS_CODES.OK){
+                setError("Kunde inte hämta gruppens kommentarer. Felkod: " + response.status)
+                return
+            }
+            const json = await response.json()
+            console.log(json)
+            setGroupComments(json)
+        }
+
         fetchData()
         fetchResult()
+        fetchPersonalComments()
 		}, [])
 
     /**
