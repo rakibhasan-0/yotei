@@ -19,6 +19,8 @@ import { Lock, Unlock, Eye } from "react-bootstrap-icons"
  * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3)
  * @since 2024-05-16
  * @version 3.0
+ * @updated 2024-05-20
+ *
  * @returns a page for managing the user's account
  */
 export default function Profile() {
@@ -57,41 +59,6 @@ export default function Profile() {
 		},
 		hidden: false,
 	}
-	/*const mockLists = [
-		{
-			id: -1,
-			name: "Favoritpass",
-			size: 7,
-			author:{
-				userId: 1,
-				username: "Admin",
-			},
-			hidden: false,
-			isShared: true,
-		},
-		{
-			id: 1,
-			name: "TestList",
-			size: 3,
-			author:{
-				userId: 2,
-				username: "Editor",
-			},
-			hidden: true,
-			isShared: true,
-		},
-		{
-			id: 2,
-			name: "Lees lista",
-			size: 2,
-			author:{
-				userId: 1,
-				username: "Admin",
-			},
-			hidden: true,
-			isShared: true,
-		},
-	]*/
 
 	/* Workout management */
 
@@ -215,11 +182,10 @@ export default function Profile() {
 	}
 
 	const getIconFromState = (state) => {
-		console.log("authorId:" + state.author.userId + "\nuserId:" + userId)
 		if (state.id == -1) {
 			console.log("Favourite!")
 			//Här borde jag fixa en route till favoritsidans grej :)
-			return <img src="../../../assets/images/starFill.svg"/>
+			return <img src="../../../assets/images/starFill.svg" />
 		}
 		if (state.hidden === true && state.author.userId == userId) {
 			console.log("Locked")
@@ -229,24 +195,28 @@ export default function Profile() {
 			console.log("Shared")
 			return <Unlock size={36} />
 		}
-		if (state.hidden === false && state.author.userId == userId) {
+		if (state.hidden === false && state.author.userId === userId) {
 			console.log("Public")
 			return <Eye size={36} />
 		}
 		console.log("Ospecat fall, borde ej kunna nå listor som publika men inte delade med oss!")
-		return <Lock />
+		return <Eye size={36} />
 	}
 
 	/**
 	 * Fetches the lists from the backend, either from cache or by a new API-call.
 	 */
-	function fetchingList() {
+	async function fetchingList() {
 		const args = {
-			text: searchText,
+			hidden: "",
+			isAuthor: "",
 		}
 
 		getLists(args, token, map, mapActions, (result) => {
-			if (result.error) return
+			if (result.error) {
+				//Should handle error
+				return
+			}
 
 			const lists = result.map((item) => ({
 				id: item.id,
@@ -270,7 +240,7 @@ export default function Profile() {
 				<Tab eventKey={"FavoriteWorkouts"} title={"Mina listor"} className={style.tab}>
 					<SearchBar
 						id="searchbar-workouts-1"
-						placeholder="Sök efter pass"
+						placeholder="Sök efter listor"
 						text={searchText}
 						onChange={setSearchText}
 					/>

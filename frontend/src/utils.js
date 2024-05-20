@@ -4,7 +4,7 @@ import { toast } from "react-toastify"
 
 /**
  * @author UNKNOWN & Team Tomato
- * @updated 2024-04-26  by Tomato
+ * @updated 2024-05-20  by Tomato
  */
 
 /**
@@ -114,6 +114,7 @@ export const HTTP_STATUS_CODES = {
 	TEAPOT: 418,
 	INTERNAL_SERVER_ERROR: 500,
 	FORBIDDEN: 403,
+	NO_CONTENT: 204,
 }
 
 /**

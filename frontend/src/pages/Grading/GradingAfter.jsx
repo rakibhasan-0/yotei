@@ -18,6 +18,8 @@ export default function GradingAfter() {
 	const context = useContext(AccountContext)
 	const { token} = context
 	const { gradingId } = useParams()
+	const hasPreviousState = location.key !== "default"
+
 	const navigate = useNavigate()
 	const [grading, setGrading] = useState([])
 	const[dateCreated, setDateCreated] = useState("")
@@ -100,7 +102,11 @@ export default function GradingAfter() {
 	 * Function to navigate back to the examination page.
 	 */
 	const navigateBack = () => {
-		navigate(`/grading/${gradingId}/2`)
+		if (hasPreviousState) {
+			navigate(-1)
+		} else {
+			navigate("/grading")
+		}
 	}
 
 	/**

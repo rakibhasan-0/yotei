@@ -922,3 +922,5 @@ $$ LANGUAGE 'plpgsql';
 
 CREATE TRIGGER protect_admin_permission BEFORE DELETE ON role_to_permission
 	FOR EACH ROW EXECUTE PROCEDURE protect_admin_role_permission();
+	
+
