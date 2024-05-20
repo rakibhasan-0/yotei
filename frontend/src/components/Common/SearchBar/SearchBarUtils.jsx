@@ -178,7 +178,7 @@ export async function getExercises(args, token, map, mapActions, callBack) {
  */
 export async function getLists(args, token, map, mapActions, callBack) {
 
-	let query = `/api/activitylists/?name=${args.text}`
+	let query = `/api/search/activitylists/?name=${args.text}`
 
 	// Checks if the query is cached and if so return it.
 	if(map && mapActions.lookup(query) !== undefined) {

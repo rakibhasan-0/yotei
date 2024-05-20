@@ -157,6 +157,28 @@ public class SearchController {
     }
 
     /**
+     * ...
+     * 
+     * @param urlQuery
+     * @return
+     */
+    @GetMapping("/activitylists")
+    public ResponseEntity<SearchResponse<ActivityListSearchResponse>> searchLists(
+            @RequestParam Map<String, String> urlQuery) {
+
+        SearchListParams searchListParams = new SearchListParams(urlQuery);
+
+        DatabaseQuery createdQuery = new SearchActivityListDBBuilder(searchListParams).build();
+
+        List<ActivityListDBResult> result = searchRepository.getActivityListFromCustomQuery(createdQuery.getQuery());
+        List<ActivityListSearchResponse> activityListSearchResponses = new SearchActivityListResponseBuilder(result).build();
+        List<ActivityListSearchResponse> filteredResult = fuzzySearchFiltering(searchListParams.getName(), activityListSearchResponses);
+
+        SearchResponse<ActivityListSearchResponse> response = new SearchResponse(filteredResult, Collections.emptyList());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
      * API endpoint for getting suggestions for tags.
      * It filters the tags based on the given query.
      *

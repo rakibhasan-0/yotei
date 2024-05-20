@@ -98,7 +98,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	const [searchListText, setSearchListText] = useState("")
 	const [listContents, setListContents] = useState([]) // TODO: try to make it possible to keep different lists. 
 	const [listUpdate, setListUpdate] = useState(0)
-	const [isSearchBarEnabled] = useState(false) // TODO: feature toggle
+	const [isSearchBarEnabled] = useState(true) // TODO: feature toggle
 	const [isFilterEnabled] = useState(false) // TODO: feature toggle
 
 
@@ -426,7 +426,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 			// Extract the 'id' and 'name' fields from each item in the result used in displaying the list.
 			const lists = result.map(item => ({ id: item.id, name: item.name }))
 
-			setLists(lists)
+			setLists(lists);
 			setFetchedLists(true)
 		})
 	}
