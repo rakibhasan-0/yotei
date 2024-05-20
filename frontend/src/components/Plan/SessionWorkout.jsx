@@ -7,12 +7,8 @@ import { AccountContext } from "../../context"
 import { useNavigate } from "react-router"
 import Button from "../../components/Common/Button/Button"
 import Review from "../../components/Plan/SessionReview/SessionReviewComponent.jsx"
-<<<<<<< HEAD
 import {HTTP_STATUS_CODES, canEditSession} from "../../utils"
-=======
-import {HTTP_STATUS_CODES} from "../../utils"
 import { useCookies } from "react-cookie"
->>>>>>> main
 
 /**
  * The SessionWorkout component is used to display information about a Sessions
@@ -32,12 +28,8 @@ import { useCookies } from "react-cookie"
  * 
  * @returns A SessionWorkout component
  * 
-<<<<<<< HEAD
  * @author Griffin DV21JJN C19HLN, Team Mango (2024-05-20)
  * Updates: 2024-05-20: Updated the permission check code.
-=======
- * @author Griffin DV21JJN C19HLN, Team Mango (Group 4)
->>>>>>> main
  */
 
 function SessionWorkout({ id, workout, sessionID, creatorID }) {
