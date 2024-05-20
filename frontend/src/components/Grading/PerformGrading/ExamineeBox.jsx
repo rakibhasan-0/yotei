@@ -44,6 +44,7 @@ export default function ExamineeBox({
 	const [isAddingComment, setAddComment] = useState(false)
 	const [commentText, setCommentText] = useState()
 	const [commentError, setCommentError] = useState()
+	const [hasComment, setComment] = useState(false)
 	const colors = ["white", "lightgreen", "lightcoral"]
 
 	const { gradingId } = useParams()
@@ -66,12 +67,18 @@ export default function ExamineeBox({
 	 * @param {bool} show Whether the add comment popup should be shown.
 	 */
 	const toggleAddPersonalComment = async (show) => {
-		if (!show && commentText && commentText.trim().length > 0) {
-			setShowDiscardComment(true)
-			return
-		}
-		setAddComment(show)
-	}
+        if (!show && commentText && commentText.trim().length > 0) {
+            setShowDiscardComment(true);
+            return;
+        }
+        if (show) {
+            const existingComment = await handleExistingInput();
+            if (existingComment) {
+                setCommentText(existingComment.comment);
+            }
+        }
+        setAddComment(show);
+    };
 
 	/**
 	 * Handles the addition of a comment by sending a POST request to the API.
@@ -80,29 +87,93 @@ export default function ExamineeBox({
 	 */
 	const onAddPersonalComment = async () => {
 		if (!commentText || !commentText.trim() || commentText.length === 0) {
-			setCommentError("Kommentaren får inte vara tom")
-			return
+			setCommentError("Kommentaren får inte vara tom");
+			return;
 		}
-		
-		const response = await fetch("/api/examination/comment/", {
-			method: "POST",
-			headers: {
-				"Content-type": "application/json",
-				token,
-				userId
-			},
-			body: JSON.stringify({
-				"gradingId": gradingId,
-				"examineeId": examineeId,
-				"techniqueName": techniqueName,
-				"comment": commentText	
-			})
-		})
-		if (response.status != 200) {
-			setErrorToast("Ett fel uppstod när kommentaren skulle läggas till")
-			return
+		console.warn("Innan if sats: " + hasComment);
+	
+		try {
+			if (hasComment) {
+				const getResponse = await fetch(`/api/examination/comment/examinee/${examineeId}?=technique_name=${techniqueName}`, {
+					headers: { "token": token }
+				});
+	
+				if (!getResponse.ok) {
+					setErrorToast("Kunde inte hämta existerande kommentar.");
+					return;
+				}
+	
+				const commentsJson = await getResponse.json();
+				console.log("Fetched comment JSON:", commentsJson);
+	
+				const comment = commentsJson.find(c => c.techniqueName === techniqueName);
+
+				const commentId = comment.commentId;
+	
+				if (!commentId) {
+					setErrorToast("commentId saknas i svaret från servern.");
+					return;
+				}
+	
+				console.log("Existerande kommentar i update: " + commentId);
+	
+				const response = await fetch("/api/examination/comment", {
+					method: "PUT",
+					headers: {
+						"Content-type": "application/json",
+						token,
+						userId
+					},
+					body: JSON.stringify({
+						"commentId": commentId,
+						"gradingId": gradingId,
+						"examineeId": examineeId,
+						"techniqueName": techniqueName,
+						"comment": commentText
+					})
+				});
+	
+				if (response.status !== 200) {
+					console.error("Error updating comment, status:", response.status);
+					setErrorToast("Ett fel uppstod när kommentaren skulle uppdateras.");
+					return;
+				}
+			} else {
+				console.log("i post kommentar.");
+				const response = await fetch("/api/examination/comment/", {
+					method: "POST",
+					headers: {
+						"Content-type": "application/json",
+						token,
+						userId
+					},
+					body: JSON.stringify({
+						"gradingId": gradingId,
+						"examineeId": examineeId,
+						"techniqueName": techniqueName,
+						"comment": commentText
+					})
+				});
+	
+				if (response.status !== 200) {
+					console.error("Error posting comment, status:", response.status);
+					setErrorToast("Ett fel uppstod när kommentaren skulle läggas till.");
+					return;
+				}
+			}
+	
+			setComment(true);
+			setAddComment(false);
+			// await onDiscardPersonalComment()
+		} catch (error) {
+			console.error("Något gick fel:", error);
+			setErrorToast("Ett fel uppstod vid kommunikation med servern.");
 		}
-		await onDiscardPersonalComment()
+	};
+	
+	
+	const onUpdatePersonalComment = async () => {
+
 	}
 
 	// Function and state to change the color of the ExamineeBox
@@ -123,6 +194,29 @@ export default function ExamineeBox({
 		// Api call will be handled here and update the DB according to state
 		onClick(buttonState) // Pass the new state as a parameter
 	}
+
+	const handleExistingInput = async () => {
+        try {
+            console.log("Innan kommentars fetch");
+            const response = await fetch(`/api/examination/comment/examinee/${examineeId}`, {
+                headers: { "token": token }
+            });
+            if (response.status === 404) {
+                console.log("No existing comment, 404 status");
+                return null;
+            }
+            if (!response.ok) {
+                console.log("Något gick fel med hämtningen.");
+                throw new Error("Could not fetch comments.");
+            }
+            const existingComment = await response.json();
+			setComment(true);
+            return existingComment;
+        } catch (ex) {
+            setErrorToast("Kunde inte hämta alla utövare");
+            console.error(ex);
+        }
+    };
 
 	return (
 		<div id={id} className={styles.examineeContainer} style={{backgroundColor: colors[colorIndex]}}>
@@ -146,6 +240,7 @@ export default function ExamineeBox({
 						autoFocus={true}
 						onInput={e => {setCommentText(e.target.value); setCommentError(false)}}
 						errorMessage={commentError}
+						text={commentText}
 					/>
 					<Button onClick={onAddPersonalComment}>Lägg till</Button>
 				</Popup>

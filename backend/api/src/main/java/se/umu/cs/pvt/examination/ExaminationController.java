@@ -474,6 +474,7 @@ public class ExaminationController {
      * @param technique_name Given technique name.
      * @param grading_id Given grading id.
      */
+    // TODO 
     @GetMapping("/examresult/{technique_name}/{grading_id}")
     public ResponseEntity<List<Map<String, Object>>> getExaminationProtocol(@PathVariable("technique_name") String technique_name, @PathVariable("grading_id") long grading_id) {
         List<Examinee> examinees = examineeRepository.findByGradingId(grading_id);
