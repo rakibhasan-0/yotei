@@ -19,6 +19,8 @@ import { Lock, Unlock, Eye } from "react-bootstrap-icons"
  * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3)
  * @since 2024-05-16
  * @version 3.0
+ * @updated 2024-05-20
+ *
  * @returns a page for managing the user's account
  */
 export default function Profile() {
@@ -180,7 +182,6 @@ export default function Profile() {
 	}
 
 	const getIconFromState = (state) => {
-		console.log("authorId:" + state.author.userId + "\nuserId:" + userId)
 		if (state.id == -1) {
 			console.log("Favourite!")
 			//Här borde jag fixa en route till favoritsidans grej :)
@@ -205,7 +206,7 @@ export default function Profile() {
 	/**
 	 * Fetches the lists from the backend, either from cache or by a new API-call.
 	 */
-	function fetchingList() {
+	async function fetchingList() {
 		const args = {
 			hidden: "",
 			isAuthor: "",
@@ -213,8 +214,7 @@ export default function Profile() {
 
 		getLists(args, token, map, mapActions, (result) => {
 			if (result.error) {
-				console.log(result)
-				console.log("error fetching lists")
+				//Should handle error
 				return
 			}
 
@@ -235,7 +235,7 @@ export default function Profile() {
 	console.log("Console.log so that linter doesnt cause problems: " + fetchedLists)
 
 	return (
-		<Tabs defaultActiveKey={"FavoriteWorkouts"} className={style.tabs}>
+		<Tabs defaultActiveKey={"MyWorkouts"} className={style.tabs}>
 			{isListsEnabled && (
 				<Tab eventKey={"FavoriteWorkouts"} title={"Mina listor"} className={style.tab}>
 					<SearchBar
