@@ -12,21 +12,36 @@ import { setError as setErrorToast } from "../../../utils"
 /**
  * This is a box containing the Examinee's name.
  * 
- *   Props:
- *    id                @type {any}      the id of the component.
- *    examineeName      @type {String}   the name of the examinee
- *    onClick           @type {function} onClick function when component is pressed.
+ * @param {Object} props - Component properties.
+ * @param {any} props.id - The id of the component.
+ * @param {String} props.examineeName - The name of the examinee.
+ * @param {any} props.examineeId - The id of the examinee.
+ * @param {String} props.techniqueName - The name of the technique.
+ * @param {function} props.onClick - onClick function when component is pressed.
+ * @param {String} props.buttonState - The current state of the button.
+ * @param {function} props.setButtonState - Function to set the state of the button.
  * 
  * Example Usage:
  * <ExamineeBox 
- *  examineeName = "test person"
- *  onClick={() => console.log("Clicked")}}/>
- *
- * @author Apelsin
+ *  examineeName="test person"
+ *  onClick={() => console.log("Clicked")}/>
+ * 
+ * @component
+ * @example
+ * return (
+ *   <ExamineeBox 
+ *     examineeName="test person"
+ *     examineeId={1}
+ *     techniqueName="Some Technique"
+ *     onClick={() => console.log("Clicked")}
+ *     buttonState="default"
+ *     setButtonState={(state) => console.log(state)}
+ *   />
+ * )
+ * 
+ * @version 3.0
  * @since 2024-05-15
- * @version 3.0 
  */
-
 export default function ExamineeBox({ 
 	id, 
 	examineeName, 
@@ -53,11 +68,18 @@ export default function ExamineeBox({
 		}
 	}, [isAddingComment])
 
+	/**
+     * Discards the current personal comment.
+     */
 	const onDiscardPersonalComment = async () => {
 		setCommentText("")
 		setAddComment(false)
 	}
 
+	/**
+     * Toggles the visibility of the personal comment input.
+     * @param {boolean} show - Whether to show or hide the comment input.
+     */
 	const toggleAddPersonalComment = (show) => {
 		if (!show && commentText && commentText.trim().length > 0) {
 			setShowDiscardComment(true)
@@ -66,6 +88,9 @@ export default function ExamineeBox({
 		setAddComment(show)
 	}
 
+	/**
+     * Updates an existing comment via an API call.
+     */
 	async function updateComment() {
 		const response = await fetch("/api/examination/comment", {
 			method: "PUT",
@@ -90,6 +115,9 @@ export default function ExamineeBox({
 		}
 	}
 
+	/**
+     * Posts a new comment via an API call.
+     */
 	async function postComment() {
 		const response = await fetch("/api/examination/comment/", {
 			method: "POST",
@@ -115,6 +143,9 @@ export default function ExamineeBox({
 		setExistingComment(true)
 	}
 
+	/**
+     * Adds or updates a personal comment based on its existence.
+     */
 	const onAddPersonalComment = async () => {
 		if (!commentText || !commentText.trim() || commentText.length === 0) {
 			setCommentError("Kommentaren får inte vara tom")
@@ -135,6 +166,9 @@ export default function ExamineeBox({
 		}
 	}
 
+	/**
+     * Handles the retrieval of existing input data (comments) for the current examinee.
+     */
 	const handleExistingInput = async () => {
 		try {
 			const response = await fetch(`/api/examination/comment/examinee/${examineeId}?technique_name=${techniqueName}`, {
@@ -190,24 +224,24 @@ export default function ExamineeBox({
 	}
 
 	return (
-		<div id={id} className={styles.examineeContainer} style={{backgroundColor: colors[colorIndex]}}>
+		<div id={id} className={styles.examineeContainer} style={{ backgroundColor: colors[colorIndex] }}>
 			<fieldset className={styles.examineeFieldset}>
 				<div 
 					className={styles.examineeName}
-					onClick={() => {handleClick()}}>
-					<p id="ExamineeName" style={{height:"52px", margin:"0"}}>{examineeName}</p>
+					onClick={() => { handleClick() }}>
+					<p id="ExamineeName" style={{ height: "52px", margin: "0" }}>{examineeName}</p>
 				</div>
 				<CommentButton onClick={() => toggleAddPersonalComment(true)} className={styles.commentButtonContainer} />
 
-				<Popup 
-					id={"examinee-comment-popup"} 
-					title={"Lägg kommentar till: " + examineeName} 
-					isOpen={isAddingComment} 
+				<Popup
+					id={"examinee-comment-popup"}
+					title={"Lägg kommentar till: " + examineeName}
+					isOpen={isAddingComment}
 					setIsOpen={toggleAddPersonalComment}
 					onClose={() => setCommentError(false)}
-					style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset"}}
+					style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset" }}
 				>
-					<TextArea 
+					<TextArea
 						autoFocus={true}
 						onInput={e => { setCommentText(e.target.value); setCommentError(false) }}
 						errorMessage={commentError}
