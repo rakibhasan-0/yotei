@@ -25,7 +25,6 @@ export default function GradingAfter() {
 		belt_name: "",
 		color: "" 
 	})
-	const [examineeResultList, setExamineeResultList] = useState()
 	const [examineeResult, setExamineeResult] = useState({
 		num_techniques: 0,
 		num_techniques_passed: 0
