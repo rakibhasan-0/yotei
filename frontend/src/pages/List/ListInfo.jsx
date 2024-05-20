@@ -31,7 +31,6 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
  */
 
 export default function ListInfo({ id }) {
-	const { listId } = useParams()
 	const navigate = useNavigate()
 	const context = useContext(AccountContext)
 	const [showPopup, setShowPopup] = useState(false)
@@ -178,14 +177,14 @@ export default function ListInfo({ id }) {
 		<div id={id} className="container px-0">
 			{
 				<ConfirmPopup
-					popupText={"Är du säker att du vill radera listan \"" + listData.data.name + "\"?"}
+					popupText={"Är du säker att du vill radera listan \"" + activityListData.name + "\"?"}
 					id={"confirm-popup"}
 					setShowPopup={setShowPopup}
 					showPopup={showPopup}
-					onClick={async () => deleteList(listData.data.id, context, navigate, setShowPopup)}
+					onClick={async () => deleteList(activityListData.data.id, context, navigate, setShowPopup)}
 				/>
 			}
-			{getListInfoContainer(listData, setShowPopup, context, userId, listUsers)}
+			{getListInfoContainer(activityListData, setShowPopup, context, userId, activityListData.users)}
 
 			<h2 className="font-weight-bold mb-0 mt-5 text-left">Aktiviteter</h2>
 			<SavedActivityList activities={activityListData.activities} />
@@ -225,104 +224,3 @@ async function deleteList(listId, context, navigate, setShowPopup) {
 	setShowPopup(false)
 }
 
-function getListSharedUsersContainer(listUsers) {
-	return (
-		<div className="container mt-3">
-			<div className="row">
-				<h2>Användare</h2>
-			</div>
-			<div className="row">
-				{listUsers.map((user, index) => {
-					return (
-						<div key={"wu" + index} className="mr-2">
-							{/* Här kommer vi behöva ändra om så att en user blir ett objekt :)  */}
-							<Tag tagType={"default"} text={user.username}></Tag>
-						</div>
-					)
-				})}
-			</div>
-		</div>
-	)
-}
-
-function getButtons(navigate) {
-	return (
-		<div className="d-flex row justify-content-center">
-			<div className="d-flex col mb-3 mt-3 justify-content-start">
-				<Button onClick={() => navigate(-1)} outlined={true}>
-					<p>Tillbaka</p>
-				</Button>
-			</div>
-		</div>
-	)
-}
-
-function getListInfoContainer(listData, setShowPopup, context) {
-
-	return (
-		<>
-			<div className="container px-0">
-				<div className={styles.info}>
-					<div className={`d-flex col ${styles.listDetailColumnItem} p-0`}>
-						<title>Pass</title>
-						<h1 className="font-weight-bold m-0">{listData.data.name}</h1>
-					</div>
-					<div className="d-flex justify-content-end align-items-center">
-						<div className={styles.clickIcon}>{/*<PrintButton listData={listData} />*/}</div>
-                        
-						{(context.userId == listData.data.author.id || isAdmin(context)) && (
-							<>
-								<Link
-									className="ml-3"
-									state={{ list: listData, users: listData.data.users }}
-									to={"/list/editList"}
-								>
-									<Pencil
-										size="24px"
-										color="var(--red-primary)"
-										style={{ cursor: "pointer" }}
-										id={"edit_pencil"}
-									/>
-								</Link>
-								<Trash
-									{...console.log("Rmv")}
-									className="ml-3 mr-3"
-									size="24px"
-									color="var(--red-primary)"
-									style={{ cursor: "pointer" }}
-									onClick={() => setShowPopup(true)}
-								/>
-							</>
-						)}
-					</div>
-
-					<div className="d-flex">
-						<div className={styles.listDetailColumnItem}>
-							<h2 className="font-weight-bold mb-0">Synlighet</h2>
-							<p className="mb-0">{listData.data.isPrivate? "Privat": "Publik"}</p>
-						</div>
-						<div className={styles.listDetailColumnItem} style={{ paddingLeft: "37px" }}>
-							<h2 className="font-weight-bold mb-0">Författare</h2>
-							{<p className="mb-0">{listData.data.author.username}</p>}
-						</div>
-					</div>
-					<div className="d-flex" id="no-print">
-						<div className={styles.listDetailColumnItem}>
-							<h2 className="font-weight-bold mb-0">Skapad</h2>
-							<p className="mb-0">{listData.data.created_date}</p>
-						</div>
-						<div className={styles.listDetailColumnItem} style={{ paddingLeft: "37px" }}>
-							<h2 className="font-weight-bold mb-0 text-align-left">Senast ändrad</h2>
-							<p className="mb-0">{listData.data.changed_date}</p>
-						</div>
-					</div>
-					<div className={styles.listDetailColumnItem}>
-						<h2 className="font-weight-bold mb-0">Beskrivning</h2>
-						<p className={styles.properties}>{listData.data.description}</p>
-					</div>
-				</div>
-			</div>
-            
-		</>
-	)
-}
