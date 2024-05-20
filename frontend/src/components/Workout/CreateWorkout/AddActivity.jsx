@@ -447,7 +447,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 			const listContent = result.activities.map(item => {
 				if (item.type === "technique") {
 					return {
-						id: listID + "-technique-" + item.id,
+						techniqueID: listID + "-technique-" + item.id,
 						name: item.name,
 						type: "technique",
 						description: item.description,
@@ -605,29 +605,50 @@ function AddActivity({ id, setShowActivityInfo }) {
 											>
 
 												<div style={{ borderTop: "1px solid black" }}>
-													
+													{listContents[list.id]?.map((item, index) => {
+														if(item.type === "technique") {
+															return (
+																<ListItem
+																	id={"technique-list-item-" + item.techniqueID}
+																	item={item}
+																	checkBox={
+																		<CheckBox 
+																			checked={checkedActivities.some(a => a.techniqueID === item.techniqueID)}
+																			onClick={() => onActivityToggle(item, "technique")}
+																		/>
+																	}
+																	key={index}
+																	index={index}
+																>
 
-													{/* HÄR SKA LISTITEM KOMPONENTEN IN. */}
-													{listContents[list.id]?.map((item, index) => (
-														<ListItem
-														
-															item = {item}
-															checkBox = {
-																<CheckBox
-																	checked={checkedActivities.some(a => a.id === item.id)}
-																	onClick={() => onActivityToggle(item, item.type)}
-																/>
-															}
-															id = {item.id}
-															key = {item.id}
-															index = {index}
+																</ListItem>
+															)
 															
-														/>
-													))}
+														} else if(item.type === "exercise") {
+															return (
+																<ListItem
+																	id={item.id}
+																	item={item}
+																	checkBox={
+																		<CheckBox 
+																			checked={checkedActivities.some(a => a.id === item.id)}
+																			onClick={() => onActivityToggle(item, "exercise")}
+																		/>
+																	}
+																	key={index}
+																	index={index}
+																>
+																</ListItem>
+															)
+														} else {
+															return null
+														}
+													}
+													)}
+
 												</div>
 											</DropDown>
 										))}
-
 									</InfiniteScrollComponent>)
 								}
 							</div>
