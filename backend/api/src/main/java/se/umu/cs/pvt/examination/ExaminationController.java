@@ -6,7 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.umu.cs.pvt.belt.BeltRepository;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -521,22 +523,32 @@ public class ExaminationController {
     public ResponseEntity<List<ExaminationProtocol>> getAllExaminationProtocol() {
         return new ResponseEntity<>(examinationProtocolRepository.findAll(), HttpStatus.OK);
     }
+    /**
+     * Generate a pdf for an examination
+     * @param grading_id
+     * @param belt_id
+     * @return
+     * @throws IOException
+     */
     @GetMapping("exportpdf/{grading_id}")
-    public ResponseEntity<String> exportGradingToPdf(@PathVariable("grading_id") long grading_id) throws IOException {
-
-        if(gradingRepository.findById(grading_id).isEmpty()) {
+    public ResponseEntity<Object> exportExaminationToPdf(@PathVariable("grading_id") long grading_id) throws IOException {
+        Optional<Grading> grading = gradingRepository.findById(grading_id);
+        if(grading.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        ExportGradingPdf pdfExport = new ExportGradingPdf(gradingRepository.findById(grading_id).get(), examineeRepository.findAll(), examinationResultRepository.findAll(), examinationCommentRepository.findByGradingId(grading_id), examineePairRepository.findAll());
+
+        System.out.println(examinationProtocolRepository.findByBeltId(grading.get().getBeltId()).getExaminationProtocol().toString());
+
+        ExportGradingPdf pdfExport = new ExportGradingPdf(examinationProtocolRepository.findByBeltId(grading.get().getBeltId()).getExaminationProtocol().toString(),gradingRepository.findById(grading_id).get(), examineeRepository.findAll(), examinationResultRepository.findAll(), examinationCommentRepository.findByGradingId(grading_id), examineePairRepository.findAll());
 
         try {
-            pdfExport.generate();
+            InputStream stream = pdfExport.generate();
+            return new ResponseEntity<Object>(stream.readAllBytes(), HttpStatus.OK);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
-        
-        return new ResponseEntity<String>("hej", HttpStatus.OK);
+            return new ResponseEntity<Object>(null, HttpStatus.BAD_REQUEST);   
+        }     
     }
 }
