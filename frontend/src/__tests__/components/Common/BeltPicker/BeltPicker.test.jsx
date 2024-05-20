@@ -25,25 +25,29 @@ beforeEach(() => {
 						id: 1,
 						name: "Vitt",
 						color: "FCFCFC",
-						child: false
+						child: false,
+						inverted: false
 					},
 					{
 						id: 2,
 						name: "Vitt",
 						color: "BD3B41",
-						child: true
+						child: true,
+						inverted: false
 					},
 					{
 						id: 1,
 						name: "Svart",
 						color: "FCFCFC",
-						child: false
+						child: false,
+						inverted: false
 					},
 					{
 						id: 2,
 						name: "Svart",
 						color: "BD3B41",
-						child: true
+						child: true,
+						inverted: false
 					}
 				]
 			))

@@ -304,7 +304,7 @@ describe("verify that", () => {
 		await user.click(screen.getByText("Spara"))
 
 		await waitFor(() => {
-			// The belt "adult white" with id 1 should be found in belts
+			// The belt "adult gult" with id 3 should be found in belts
 			expect(technique.belts.find(b => b.id === 3)).toBeTruthy()
 		})
 	})

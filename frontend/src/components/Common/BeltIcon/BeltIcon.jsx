@@ -5,7 +5,7 @@ import styles from "./BeltIcon.module.css"
  * a ribbon in the middle with the specified color.
  * 
  * Props:
- *    belt @type {Object}: A const containing .name for name, a hexcode .color for color and a boolean .child for if it's a child 
+ *    belt @type {Object}: A const containing .name for name, a hexcode .color for color and a boolean .child for if it's a child and boolean .inverted if its a inverted child belt
  *
 
  *  
@@ -23,6 +23,7 @@ import styles from "./BeltIcon.module.css"
  * @since 2023-05-30
  * @version 1.1
  * @returns  A new child belt icon
+ * @update 2024-05-20 Team Kiwi (Teodor Bäckström), added inverted belt category.
  */
 export default function BeltIcon({ belt }) {
 	const color = `#${belt.color}`

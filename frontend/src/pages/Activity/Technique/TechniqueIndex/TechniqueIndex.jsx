@@ -77,10 +77,6 @@ export default function TechniqueIndex() {
 			kihon: kihon,
 			selectedTags: tags,
 		}
-		console.log("args")
-		console.log(args)
-		console.log("belts")
-		console.log(belts)
 
 		if (args.selectedTags.find((tag) => tag === "kihon waza") === undefined) {
 			setKihon(false)

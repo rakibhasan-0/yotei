@@ -28,6 +28,7 @@ import React from "react"
  */
 
 const BeltRow = ({ belt, states, onToggle }) => {
+	console.log
 	const name = belt[0].name
 	const child = belt.find(b => b.child)
 	const adult = belt.find(b => !b.child)
@@ -36,7 +37,9 @@ const BeltRow = ({ belt, states, onToggle }) => {
 	const [childState, setChildState] = useState(false)
 	const [adultState, setAdultState] = useState(false)
 	const [invertedState,setInvertedState] = useState (false)
-
+	//console.log(name)
+	//console.log(child)
+	//console.log(inverted)
 
 	useEffect(() => {
 		setChildState(states?.some(b => b.id === child?.id))
@@ -87,7 +90,7 @@ const BeltRow = ({ belt, states, onToggle }) => {
  *    belt	   @type {Object}	A const containing .name for name, a hexcode .color for color and a boolean .child for if it's a child 
  *    id	   @type {String}	An id for the belt picker
  *    states   @type {Object}	A state object, as shown above
- * 	  onToggle @type {Function} A toggle function when a belt is selected (both child and adult)
+ * 	  onToggle @type {Function} A toggle function when a belt is selected (both child, adult and inverted)
  * 
 
  * states = [
@@ -95,7 +98,8 @@ const BeltRow = ({ belt, states, onToggle }) => {
  *   "id": 1,
  *   "name": "Brun",
  *   "color": "FFFFF6",
- *   "child": false
+ *   "child": false,
+ * 	 "inverted": false
  * 	}
  * ]
  * 
@@ -133,6 +137,7 @@ export default function BeltPicker({ id, states, onToggle, centered, onClearBelt
 				}
 				groups[belt.name].push(belt)
 			}
+			//console.log(json)
 			let newBelts = groups
 			if (filterWhiteBelt) {
 				const {Vitt, ...rest} = newBelts // eslint-disable-line
