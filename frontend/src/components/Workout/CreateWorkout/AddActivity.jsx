@@ -22,6 +22,7 @@ import Sorter from "../../Common/Sorting/Sorter"
 import { useCookies } from "react-cookie"
 import ListPicker from "./ListPicker.jsx"
 import DropDown from "../../Common/List/Dropdown"
+import NewSorter from "../../Common/Sorting/NewSorter.jsx"
 
 /**
  * This component is used to add activities to a workout. It contains three tabs, 
@@ -116,15 +117,44 @@ function AddActivity({ id, setShowActivityInfo }) {
 	const [sortExercise, setSortExercise] = useState(sortOptionsExercise[0])
 	const [cookies, setCookies] = useCookies(["exercise-filter"])
 	const [visibleExercises, setVisibleExercises] = useState([])
+	const { userId: currentUserId } = useContext(AccountContext);
 
-
-	// TODO Fix storage/cookie of which selected sort option is active???
 	const sortOptionsLists = [
-		{ label: "Mina - Delade - Publika", cmp: (a, b) => { return a.name.localeCompare(b.name) } }, //TODO: Fix order
+		{ 
+			label: "Mina - Delade - Publika", 
+			cmp: (a, b) => {
+				// "Mina" - prioritize items where the current user is the author
+				if (a.author.userId === currentUserId && b.author.userId !== currentUserId) {
+					return -1;
+				}
+				if (b.author.userId === currentUserId && a.author.userId !== currentUserId) {
+					return 1;
+				}
+	
+				// "Delade" - prioritize items that are shared
+				if (a.isShared && !b.isShared) {
+					return -1;
+				}
+				if (b.isShared && !a.isShared) {
+					return 1;
+				}
+	
+				// "Publika" - prioritize items that are not shared and not authored by the current user
+				if (!a.isShared && a.author.userId !== currentUserId && (b.isShared || b.author.userId === currentUserId)) {
+					return -1;
+				}
+				if (!b.isShared && b.author.userId !== currentUserId && (a.isShared || a.author.userId === currentUserId)) {
+					return 1;
+				}
+	
+				// If items are equal in terms of the above conditions, sort them by name
+				return a.name.localeCompare(b.name);
+			} 
+		},
 		{ label: "Namn: A-Ö", cmp: (a, b) => { return a.name.localeCompare(b.name) } },
 		{ label: "Namn: Ö-A", cmp: (a, b) => { return -a.name.localeCompare(b.name) } },
-		{ label: "Senast skapad", cmp: (a, b) => { return a.duration - b.duration } }, //TODO: Fix order
-		{ label: "Äldst", cmp: (a, b) => { return b.duration - a.duration } } //TODO: Fix order
+		//{ label: "Senast skapad", cmp: (a, b) => { return a.duration - b.duration } }, //TODO: When API gives date of creation
+		//{ label: "Äldst", cmp: (a, b) => { return b.duration - a.duration } } //TODO: When API gives date of creation
 	]
 	const [sortLists, setSortLists] = useState(sortOptionsLists[0])
 
@@ -436,7 +466,16 @@ function AddActivity({ id, setShowActivityInfo }) {
 			if (result.error) return
 
 			// Extract the 'id' and 'name' fields from each item in the result used in displaying the list.
-			const lists = result.map(item => ({ id: item.id, name: item.name }))
+			const lists = result.map(item => ({
+				id: item.id,
+				name: item.name,
+				author: {
+					userId: item.author.userId,
+					username: item.author.username
+				},
+				hidden: item.hidden,
+				isShared: item.is_shared
+			}));
 
 			setLists(lists.sort(sortLists.cmp))
 			setFetchedLists(true)
@@ -556,9 +595,9 @@ function AddActivity({ id, setShowActivityInfo }) {
 								setSuggestedTags={setSuggestedExerTags}
 							/>
 						</div>
-						<FilterContainer id="ei-filter" title="Sortering" numFilters={0}>
-							<Sorter onSortChange={setSortExercise} id="ei-sort" selected={sortExercise} options={sortOptionsExercise} />
-						</FilterContainer>
+
+						<NewSorter onSortChange={setSortExercise} id="ei-sort" selected={sortExercise} options={sortOptionsExercise} />
+
 						{(exercises.length === 0 && fetchedExer) ?
 							<ErrorStateSearch id="add-activity-no-exercise" message="Kunde inte hitta övningar" />
 							:
@@ -595,7 +634,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 								/>
 							)}
 
-							<Sorter onSortChange={setSortLists} id="ei-sort" selected={sortLists} options={sortOptionsLists} />
+							<NewSorter onSortChange={setSortLists} id="ei-sort" selected={sortLists} options={sortOptionsLists} />
 
 
 							{isFilterEnabled && ( // TODO: feature toggle.
