@@ -217,7 +217,7 @@ public class TechniqueDatabaseTest {
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique            
-                String[] techNames = {"Otoshi ukemi (2 Kyu)", "Påkslag mot huvudet, backhand, Ju jodan uchi uke, irimi nage - Ude osae, ude osae gatame"};
+                String[] techNames = {"Seiken tski, jodan, rakt slag med främre och bakre handen", "Cirkulär spark mot benen - san ren uke, o soto osae, ude henkan gatame, valfri jigo waza anpassad efter ukes agerande"};
                 String expectedColor = "Blått";
 
                 for(int i = 0; i < 2; i++){
