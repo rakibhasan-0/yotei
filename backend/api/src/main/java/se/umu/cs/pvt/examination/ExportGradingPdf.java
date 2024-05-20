@@ -253,7 +253,6 @@ public class ExportGradingPdf {
                 else  
                     writeToCell(initX, initY, contentStream, techniqueName, font);
                 
-
                 initX+=CELL_WIDTH+30;
 
                 for (int k = 0 ; k < count-1 ; k++) {
@@ -314,7 +313,6 @@ public class ExportGradingPdf {
         contentStream.stroke();
         contentStream.close();
     }
-
 
     /**
      * Writes to the cell at a given position the given text.
@@ -393,7 +391,6 @@ public class ExportGradingPdf {
         return new Color(1f,1f,1f);
     }
 
-
     /**
      * Creates the group comment pdf page and writes the group comment to the pdf page.
      * 
@@ -420,8 +417,7 @@ public class ExportGradingPdf {
         
         createHeader(code, color, contentStream);
         drawImage(page, contentStream);
-        
-            
+          
         List<String> rows = getRows(examinationComment, 120);
         
         contentStream.beginText();
@@ -475,7 +471,6 @@ public class ExportGradingPdf {
         //30 pixels is the distance between the title and where the comments section begin
         initY -= 30;
 
-
         Map<Long, List<String>> rows = new HashMap<>();
 
         for (Long pairId : pairMap.keySet()) {
@@ -503,7 +498,6 @@ public class ExportGradingPdf {
                             examinee2 = examinee.getName();
                         }
                     }
-
                 }    
             }
 
@@ -530,14 +524,12 @@ public class ExportGradingPdf {
             contentStream.showText(examinee1 + " & " + examinee2); // går ej att ha udda antal examinees
             contentStream.setFont(font, 10);
 
-
             for(int j = 0; j < rows.get(pairId).size(); j++) {
                 //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
                 contentStream.newLineAtOffset(0, -15);
                 contentStream.showText(rows.get(pairId).get(j));
             }    
         
-            
             contentStream.endText();
 
             //Calculates the size of the rectangle which encapsulates the comment
