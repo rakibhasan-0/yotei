@@ -44,6 +44,8 @@ public class ExaminationApiTest {
     private ExaminationResultRepository resultRepository;
     @MockBean
     private ExaminationProtocolRepository examinationProtocolRepository;
+    @MockBean
+    private ExaminationResultRepository examinationResultRepository;
 
     @Autowired
     private ExaminationController examinationController;
@@ -318,6 +320,11 @@ public class ExaminationApiTest {
         ResponseEntity<List<ExaminationComment>> responseWithoutTechnique = examinationController
                 .getExamineePairComment(1L, null);
         assertEquals(HttpStatus.BAD_REQUEST, responseWithoutTechnique.getStatusCode());
+    }
+
+    @Test
+    void testGetAllResultOfAllExamineesForASpecificTechnique(){
+        
     }
 
 }
