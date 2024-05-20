@@ -102,6 +102,15 @@ public class TechniqueDatabaseTest {
             postgreSQLContainer.stop();
         }
     }
+
+    /**
+     * These tests use hardcoded id:s to check if techniques in the database are connected to the correct belt.
+     * This is silly but since the id:s are auto-generated this is the simplest way to secured the structure of the schema.
+     * 
+     * ---------IF THESE FAIL----------
+     * Check if the id:s of tehcniques are connected correctly to belts in the technique_to_belt table.
+     * @throws Exception
+     */
     @Test
     public void testYellowTechniqueIDS() throws Exception {
         String jdbcUrl = postgreSQLContainer.getJdbcUrl();
@@ -132,6 +141,14 @@ public class TechniqueDatabaseTest {
         }
     }
 
+    /**
+     * These tests use hardcoded id:s to check if techniques in the database are connected to the correct belt.
+     * This is silly but since the id:s are auto-generated this is the simplest way to secured the structure of the schema.
+     * 
+     * ---------IF THESE FAIL----------
+     * Check if the id:s of tehcniques are connected correctly to belts in the technique_to_belt table.
+     * @throws Exception
+     */
     @Test
     public void testOrangeTechniqueIDS() throws Exception {
         String jdbcUrl = postgreSQLContainer.getJdbcUrl();
@@ -162,6 +179,14 @@ public class TechniqueDatabaseTest {
         }
     }
 
+    /**
+     * These tests use hardcoded id:s to check if techniques in the database are connected to the correct belt.
+     * This is silly but since the id:s are auto-generated this is the simplest way to secured the structure of the schema.
+     * 
+     * ---------IF THESE FAIL----------
+     * Check if the id:s of tehcniques are connected correctly to belts in the technique_to_belt table.
+     * @throws Exception
+     */
     @Test
     public void testGreenTechniqueIDS() throws Exception {
         String jdbcUrl = postgreSQLContainer.getJdbcUrl();
@@ -192,6 +217,14 @@ public class TechniqueDatabaseTest {
         }
     }
 
+    /**
+     * These tests use hardcoded id:s to check if techniques in the database are connected to the correct belt.
+     * This is silly but since the id:s are auto-generated this is the simplest way to secured the structure of the schema.
+     * 
+     * ---------IF THESE FAIL----------
+     * Check if the id:s of tehcniques are connected correctly to belts in the technique_to_belt table.
+     * @throws Exception
+     */
     @Test
     public void testBlueTechniqueIDS() throws Exception {
         String jdbcUrl = postgreSQLContainer.getJdbcUrl();
@@ -222,6 +255,14 @@ public class TechniqueDatabaseTest {
         }
     }
 
+    /**
+     * These tests use hardcoded id:s to check if techniques in the database are connected to the correct belt.
+     * This is silly but since the id:s are auto-generated this is the simplest way to secured the structure of the schema.
+     * 
+     * ---------IF THESE FAIL----------
+     * Check if the id:s of tehcniques are connected correctly to belts in the technique_to_belt table.
+     * @throws Exception
+     */
     @Test
     public void testBrownTechniqueIDS() throws Exception {
         String jdbcUrl = postgreSQLContainer.getJdbcUrl();
