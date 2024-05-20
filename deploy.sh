@@ -40,7 +40,7 @@ else
             read -rp "Would you like to reset the database? (y/n): " yn
             case $yn in 
                 [yY] ) 
-                    docker volume ls | grep "pgdata" | rev | cut -d' ' -f1 | rev | xargs docker volume rm
+                    docker volume ls | grep "pgdata" | rev | cut -d' ' -f1 | rev | xargs docker volume rm &> /dev/null
                     break;;
                 [nN] )
                     break;;
