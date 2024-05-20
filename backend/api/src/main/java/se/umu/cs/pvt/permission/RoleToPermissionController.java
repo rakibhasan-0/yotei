@@ -164,7 +164,7 @@ public class RoleToPermissionController {
         try {
             deleteDifferenceInPermissions(roleId, oldPermissions, newPermissionIds);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         List<RoleToPermission> result = addPermissions(roleId, newPermissionIds);
 
