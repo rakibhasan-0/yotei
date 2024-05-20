@@ -41,10 +41,6 @@ export type Technique = {
 
 //Tag
 export type TagComponent = {
-  tagName: string, 
-  tagId: number,
-  editButton: number,
-  deleteButton: number,
-  addButton: number,
-  checkbox: number
+  tagName?: string, 
+  tagId?: number
 }

@@ -13,17 +13,9 @@ test.describe("Test AddTagPopup", () => {
 	test("Add and remove a tag", async ({ page }) => {
 		const tagName = Math.random().toString(36).slice(2, 7) 
 
-		const editButton = Math.floor(Math.random() * (10000 - 1 + 1))
+		const tagId =  Math.floor(Math.random() * (10000 - 1 + 1))
 
-		const deleteButton = Math.floor(Math.random() * (10000 - 1 + 1))
-
-		const addButton = Math.floor(Math.random() * (10000 - 1 + 1))
-
-		const checkbox = Math.floor(Math.random() * (10000 - 1 + 1))
-
-		const tagId = Math.random()
-
-		await addTagPopupPage.addTag({tagName: tagName, tagId: tagId, editButton: editButton, deleteButton: deleteButton, addButton: addButton, checkbox: checkbox})
+		await addTagPopupPage.addTag({tagName: tagName, tagId: tagId})
 
 		await expect(page.getByText(tagName)).toHaveCount(1)
 
