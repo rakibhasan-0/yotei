@@ -40,7 +40,8 @@ export class TechniquePage {
     await this.page.locator('#create-technique-beltpicker-header').click()
     await this.page.locator('#belt-adult-Gult-checkbox').check()
 
-    // TODO the commented out blocks are supposed to be added later on.
+    // Searches for the string in the technique.tag prop and adds it, assumes input technique tag exists.
+    // Creating a new tag during test has been tested but removed since there is no cleanup function to remove created tags. 
     if(technique.tag) {
       await this.page.getByRole('button', { name: 'Hantera tagg' }).click()
       await this.page.getByPlaceholder('Sök eller skapa tagg').click()
@@ -49,6 +50,7 @@ export class TechniquePage {
       await this.page.locator('#save-and-close-button').getByRole('img').click()
     }
 
+    // Adds the input techniques mediaLink prop as a URL in the technique.
     if(technique.mediaLink) {
       await this.page.getByRole('button', { name: '+ Media' }).click()
       await this.page.getByPlaceholder('Klistra in länk').fill(technique.mediaLink)
