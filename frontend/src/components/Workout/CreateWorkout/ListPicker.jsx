@@ -13,19 +13,30 @@ import styles from "./ListPicker.module.css"
  */
 
 
-export default function ListPicker() {
+export default function ListPicker({ onFilterChange }) {
 	const filterOptions = [
-		{ label: "Alla" },
 		{ label: "Mina listor" },
+		{ label: "Delade med mig" },
 		{ label: "Publika listor" }
 	]
-	const [filter, setFilter] = useState(filterOptions[0])
+	const [filter, setFilter] = useState(filterOptions)
 
 	const onSelect = (option) => {
-		// Here things will happen when selecting an option.
-		setFilter(option)
-
-	}
+        setFilter(prevFilter => {
+            if (prevFilter.includes(option)) {
+                // If the option is already included, remove it
+                const newFilter = prevFilter.filter(opt => opt !== option);
+                onFilterChange(newFilter);
+                return newFilter;
+            } else {
+                // If the option is not included, add it
+                const newFilter = [...prevFilter, option];
+                onFilterChange(newFilter);
+                return newFilter;
+            }
+        })
+    }
+	
 	return (
 		<div className={styles.listPicker}>
 			<DropDown

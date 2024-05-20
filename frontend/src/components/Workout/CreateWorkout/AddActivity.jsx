@@ -99,7 +99,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	const [listContents, setListContents] = useState([])  
 	const [listUpdate, setListUpdate] = useState(0)
 	const [isSearchBarEnabled] = useState(false) // TODO: feature toggle
-	const [isFilterEnabled] = useState(false) // TODO: feature toggle
+	const [listFilter, setListFilter] = useState([])
 
 
 	/**
@@ -412,6 +412,15 @@ function AddActivity({ id, setShowActivityInfo }) {
 
 
 	/**
+	 * 
+	 * @param {*} newListFilter 
+	 */
+	const handleListFilterChange = (newListFilter) => {
+        setListFilter(newListFilter);
+    }
+
+
+	/**
 	 * Fetches the lists from the backend, either from cache or by a new API-call.
 	 */
 	function fetchingList() {
@@ -582,11 +591,10 @@ function AddActivity({ id, setShowActivityInfo }) {
 									onChange={setSearchListText}
 								/>
 							)}
-							{isFilterEnabled && ( // TODO: feature toggle.
-								<FilterContainer id="ei-filter" title="Filtrering" numFilters={0}>
-									<ListPicker />
-								</FilterContainer>
-							)}
+
+							<FilterContainer id="ei-filter" title="Filtrering" numFilters={0}>
+								<ListPicker onFilterChange={handleListFilterChange} />
+							</FilterContainer>
 
 
 							<div className={style.scrollComponentOuterDiv}>
