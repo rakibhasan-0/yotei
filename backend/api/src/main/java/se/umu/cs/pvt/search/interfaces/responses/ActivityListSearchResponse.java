@@ -2,6 +2,12 @@ package se.umu.cs.pvt.search.interfaces.responses;
 
 import java.time.LocalDate;
 
+/**
+ * Class tp represent the ActivityList object returned from the API.
+ * 
+ * @author Team Tomato
+ * @since 2024-05-20
+ */
 public class ActivityListSearchResponse implements SearchResponseInterface {
     private Long id;
     private Long author;
