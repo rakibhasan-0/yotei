@@ -167,6 +167,26 @@ export default function ExamineeBox({
 	}
 
 	/**
+     * Adds or updates a personal comment based on its existence.
+     */
+	const onAddPresetComment = async (presetComment) => {
+
+		setCommentText(presetComment);
+
+		try {
+			if (hasComment) {
+				await updateComment()
+			} else {
+				await postComment()
+			}
+			setAddComment(false)
+		} catch (error) {
+			console.error("Något gick fel:", error)
+			setErrorToast("Ett fel uppstod vid kommunikation med servern.")
+		}
+	}
+
+	/**
      * Handles the retrieval of existing input data (comments) for the current examinee.
      */
 	const handleExistingInput = async () => {
@@ -248,6 +268,9 @@ export default function ExamineeBox({
 						text={commentText}
 					/>
 					<Button onClick={onAddPersonalComment}>Lägg till</Button>
+					<Button onClick={onAddPresetComment("Böj på benen!")}>Böj på benen!</Button>
+					<Button onClick={onAddPresetComment("Balansbrytning!")}>Balansbrytning!</Button>
+					<Button onClick={onAddPresetComment("Kraftcirkeln")}>Kraftcirkeln!</Button>
 				</Popup>
 				<ConfirmPopup
 					popupText={"Är du säker på att du vill ta bort kommentarsutkastet?"}
