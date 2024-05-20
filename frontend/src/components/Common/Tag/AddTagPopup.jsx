@@ -342,7 +342,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 							validateInput={validateInput}
 							grayTrash={tag.exercises + tag.workouts + tag.techniques > 0}
 							onRemove={() => handleDelete(tag)}
-							/>
+						/>
 					</React.Fragment>
 				))}
 				{loading ? <Spinner /> : tagListArray}
