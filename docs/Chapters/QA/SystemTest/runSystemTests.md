@@ -4,7 +4,7 @@ Whenever a breaking change or a significant modification is made, system tests m
 1. Run all docker containers either in the Docker Desktop ui or with this command:
 
 ```sh
-docker compose up -d
+docker compose up --build
 ```
 2. Stop the frontend container in docker. Either through the UI or by the following commands in a terminal, which lists all running containers and stops the container with the id that you copy from the list (should look something like *eb4b620b205a*):
 
