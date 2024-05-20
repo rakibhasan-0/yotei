@@ -12,9 +12,9 @@ import se.umu.cs.pvt.technique.Technique;
 /**
  * Dto for an activity, either an exercise or a technique.
  * 
- * @author Team Tomato
+ * @author Team Tomato, updated 2024-05-17
  * @since 2024-05-12
- * @version 1.0
+ * @version 1.1
  */
 public class Activity {
     private String type;
@@ -31,6 +31,19 @@ public class Activity {
         this.name = exercise.getName();
         this.description = exercise.getDescription();
         this.duration = exercise.getDuration();
+    }
+
+    public Activity(Exercise exercise, Integer duration) {
+        this.type = "exercise";
+        this.id = exercise.getId();
+        this.name = exercise.getName();
+        this.description = exercise.getDescription();
+        if(duration == null) {
+            this.duration = exercise.getDuration();
+        }
+        else{
+            this.duration = duration;
+        }
     }
 
     public Activity(Technique technique) {
