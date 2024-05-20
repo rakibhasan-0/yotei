@@ -57,7 +57,7 @@ public class ExaminationResult {
         return examineeId;
     }
 
-    public String getTechnique_name(){
+    public String getTechniqueName(){
         return techniqueName;
     }
 
