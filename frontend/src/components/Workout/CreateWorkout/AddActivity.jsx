@@ -412,8 +412,9 @@ function AddActivity({ id, setShowActivityInfo }) {
 
 
 	/**
+	 * Sets the active filters.
 	 * 
-	 * @param {*} newListFilter 
+	 * @param {*} newListFilter The array of filters to be set.
 	 */
 	const handleListFilterChange = (newListFilter) => {
         setListFilter(newListFilter);
@@ -424,9 +425,18 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 * Fetches the lists from the backend, either from cache or by a new API-call.
 	 */
 	function fetchingList() {
-
+		const author = false
+		const hidden = false
+		const shared = false
+		if (listFilter.includes("Mina listor")) author = true
+		if (listFilter.includes("Publika listor")) hidden = true
+		if (listFilter.includes("Delade med mig")) shared = true
+		
 		const args = {
-			text: searchListText
+			text: searchListText,
+			isAuthor: author,
+			hidden: hidden,
+			isShared: shared
 		}
 
 		getLists(args, token, map, mapActions, (result) => {
