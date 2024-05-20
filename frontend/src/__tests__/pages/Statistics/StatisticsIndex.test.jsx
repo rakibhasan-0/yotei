@@ -100,7 +100,7 @@ describe("Grading popup test", () => {
 		//TODO : 
 		//Text need to be changed in accordance with implementation
 		await waitFor(() => {
-			expect(screen.getByText("Statistik för graderingar")).toBeInTheDocument()
+			expect(screen.getByText("Graderingsprotokoll")).toBeInTheDocument()
 		})
 		
 	})

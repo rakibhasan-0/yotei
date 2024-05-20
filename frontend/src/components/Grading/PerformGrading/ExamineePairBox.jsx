@@ -1,10 +1,15 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import styles from "./ExamineePairBox.module.css"
 import CommentButton from "./CommentButton"
 import Popup from "../../Common/Popup/Popup"
 import TextArea from "../../Common/TextArea/TextArea"
 import Button from "../../Common/Button/Button"
 import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
+
+import { setError as setErrorToast} from "../../../utils" 
+
+import { AccountContext } from "../../../context"
+import { useParams } from "react-router-dom"
 
 /**
  * this is a box containing an Examinee pair.
@@ -30,18 +35,21 @@ import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
 export default function ExamineePairBox({
 	id,
 	pairNumber,
+	examineePairId,
 	leftExaminee,
 	rightExaminee,
 	rowColor, 
-	//gradingId,
-	//currentTechniqueTitle
+	techniqueName
 }) {
 	
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [isAddingComment, setAddComment] = useState(false)
 	const [commentText, setCommentText] = useState()
 	const [commentError, setCommentError] = useState()
+	
+	const { gradingId } = useParams()
 
+	const { token, userId } = useContext(AccountContext)
 
 	/**
 	 * Is used when discarding a comment,
@@ -76,9 +84,7 @@ export default function ExamineePairBox({
 			setCommentError("Kommentaren får inte vara tom")
 			return
 		}
-		console.log("API ANROP SOM INTE FINNS ÄNNU. Detta skulle läggas in: " + commentText + " Till par: " + pairNumber)
-		/* API ANROP HÄR...
-		const response = await fetch(`/api/grading/${gradingId}/2/${examineeId}/${currentTechniqueTitle}`, {
+		const response = await fetch("/api/examination/comment/", {
 			method: "POST",
 			headers: {
 				"Content-type": "application/json",
@@ -86,14 +92,16 @@ export default function ExamineePairBox({
 				userId
 			},
 			body: JSON.stringify({
-				commentText
+				"gradingId": gradingId,
+				"examineePairId": examineePairId,
+				"techniqueName": techniqueName,
+				"comment": commentText	
 			})
 		})
-		if (response.status != 201) {
+		if (response.status != 200) {
 			setErrorToast("Ett fel uppstod när kommentaren skulle läggas till")
 			return
 		}
-		*/
 		await onDiscardPairComment()
 	}
 

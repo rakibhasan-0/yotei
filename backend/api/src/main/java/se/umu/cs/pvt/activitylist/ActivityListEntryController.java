@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-
 import se.umu.cs.pvt.exercise.Exercise;
 import se.umu.cs.pvt.exercise.ExerciseRepository;
 import se.umu.cs.pvt.technique.Technique;
@@ -31,13 +30,14 @@ import se.umu.cs.pvt.user.JWTUtil;
  * 
  * Used as response for retrieval of entries.
  * 
- * @author Team Tomato
+ * @author Team Tomato, updated 2024-05-17
  * @since 2024-05-16
- * @version 1.0
+ * @version 1.1
  */
 class EntryResponse {
     private Technique technique;
     private Exercise exercise;
+    private Integer duration;
 
     public Technique getTechnique() {
         return technique;
@@ -45,6 +45,10 @@ class EntryResponse {
 
     public Exercise getExercise() {
         return exercise;
+    }
+
+    public Integer getDuration() {
+        return duration;
     }
 
     public void setTechnique(Technique technique) {
@@ -55,13 +59,18 @@ class EntryResponse {
         this.exercise = exercise;
     }
 
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
 }
 
 /**
  * ActivityListEntry API for adding and removing entries to/from activity lists.
  * 
- * @author Team Tomato
+ * @author Team Tomato, updated 2024-05-17
  * @since 2024-05-08
+ * 
  */
 @RestController
 @CrossOrigin
@@ -125,68 +134,66 @@ public class ActivityListEntryController {
     }
 
     /**
-     * Adds an entry to multiple activity lists, 
-     * the list id supplied in the entry does not need to be supplied in the id list (but can be).
+     * Adds an entry to multiple activity lists, the list id supplied in the entry does not need to be supplied in the id list
+     * (but can be).
      * 
      * @param entry entry object
-     * @param ids list of activity list ids to which the entry will be added
+     * @param ids   list of activity list ids to which the entry will be added
      * @param token token of the user making the request
      * @return OK if successful
      *         Unauthorized if token was invalid
-     *         Forbidden if the the user does not have access to all the lists supplied
-     *         Requested range not satisfiable if any of the supplied lists could not be found
+     *         Forbidden if the the user does not have access to all the lists
+     *         supplied
+     *         Requested range not satisfiable if any of the supplied lists could
+     *         not be found
      */
 
     @PostMapping("/multiAdd")
-    public ResponseEntity<Void> addEntryToMultipleLists(@RequestBody ActivityListEntry entry, 
-                                                        @RequestHeader(value = "ids") ArrayList<Long> ids, 
-                                                        @RequestHeader(value = "token") String token){
+    public ResponseEntity<Void> addEntryToMultipleLists(@RequestBody ActivityListEntry entry,
+            @RequestHeader(value = "ids") ArrayList<Long> ids,
+            @RequestHeader(value = "token") String token) {
         try {
             jwt = jwtUtil.validateToken(token);
             userIdL = jwt.getClaim("userId").asLong();
             userRole = jwt.getClaim("role").asString();
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }    
-        if(!ids.contains(entry.getListId())){
+        }
+        if (!ids.contains(entry.getListId())) {
             Optional<ActivityList> opt_list_result = listRepository.findById(entry.getListId());
-            if(opt_list_result.isPresent()){
+            if (opt_list_result.isPresent()) {
                 ActivityList list_result = opt_list_result.get();
-                if(list_result.getAuthor() == userIdL || userRole.equals("ADMIN")){
-                    listEntryRepository.save(entry);
-                }
-                else{
+                if (list_result.getAuthor() == userIdL || userRole.equals("ADMIN")) {
+                    ActivityListEntry uniqueEntry = new ActivityListEntry(entry.getDuration(), entry.getListId(), entry.getExerciseId(), entry.getTechniqueId());
+                    listEntryRepository.save(uniqueEntry);
+                } else {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
-            }
-            else{
+            } else {
                 return new ResponseEntity<>(HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE);
             }
-        } 
-        for(Long id : ids){
-            entry.setListId(id);
+        }
+        for (Long id : ids) {
             Optional<ActivityList> result = listRepository.findById(id);
-            if(result.isPresent()){
+            if (result.isPresent()) {
                 ActivityList list = result.get();
-                if(list.getAuthor() == userIdL || userRole.equals("ADMIN")){
-                    listEntryRepository.save(entry);
-                }
-                else{
+                if (list.getAuthor() == userIdL || userRole.equals("ADMIN")) {
+                    ActivityListEntry uniqueEntry = new ActivityListEntry(entry.getDuration(), id, entry.getExerciseId(), entry.getTechniqueId());
+                    listEntryRepository.save(uniqueEntry);
+                } else {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
-            }
-            else{
+            } else {
                 return new ResponseEntity<>(HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE);
             }
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
     /**
-     * @deprecated USE EDIT IN ACTIVITY LIST WHEN REMOVING ENTRIES 
+     * @deprecated USE EDIT IN ACTIVITY LIST WHEN REMOVING ENTRIES
      * 
-     * Removes an entry from an activity list. 
+     *             Removes an entry from an activity list.
      * 
      * @param id    id of the entry
      * @param token token of the user making the request
@@ -197,7 +204,8 @@ public class ActivityListEntryController {
      *         Not found if the activity list OR the entry could not be found
      */
     @DeleteMapping("/remove")
-    public ResponseEntity<Void> removeEntry(@RequestHeader("id") Long id, @RequestHeader(value = "token") String token) {
+    public ResponseEntity<Void> removeEntry(@RequestHeader("id") Long id,
+            @RequestHeader(value = "token") String token) {
         try {
             jwt = jwtUtil.validateToken(token);
             userIdL = jwt.getClaim("userId").asLong();
@@ -253,7 +261,7 @@ public class ActivityListEntryController {
         if (result.isPresent()) {
             ActivityList list = result.get();
             if (list.getAuthor() == userIdL || userRole.equals("ADMIN")) {
-                List<ActivityListEntry> results = listEntryRepository.findAllByListId(listId);
+                List<ActivityListEntry> results = listEntryRepository.findAllByActivityListId(listId);
 
                 if (results.isEmpty()) {
                     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -272,6 +280,9 @@ public class ActivityListEntryController {
                             if ((exercise = exerciseRepository.findById(entry.getExerciseId())).isPresent()) {
                                 entryResponse.setExercise(exercise.get());
                             }
+                        }
+                        if (entry.getDuration() != null) {
+                            entryResponse.setDuration(entry.getDuration());
                         }
 
                         response.add(entryResponse);

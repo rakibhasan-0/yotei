@@ -5,7 +5,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -82,7 +81,7 @@ public class ActivityListEntryControllerTest {
         Exercise exercise = new Exercise(30L, "wow", "moo", 20);
         when(exerciseRepository.findById(Mockito.any())).thenReturn(Optional.of(exercise));
         when(techniqueRepository.findById(Mockito.any())).thenReturn(Optional.of(technique));
-        when(listEntryRepository.findAllByListId(Mockito.any())).thenReturn(entries);
+        when(listEntryRepository.findAllByActivityListId(Mockito.any())).thenReturn(entries);
 
         mockMvc.perform(get("/api/activitylistentry/all/1").header("token", token))
                 .andExpect(status().isOk())
@@ -95,27 +94,29 @@ public class ActivityListEntryControllerTest {
         when(listRepository.findById(Mockito.any())).thenReturn(Optional.of(list));
         String jsonContent = "{\"listId\":1, \"exerciseId\":20, \"techniqueId\":null}";
 
-        mockMvc.perform(post("/api/activitylistentry/add").contentType(MediaType.APPLICATION_JSON).content(jsonContent).header("token", token))
+        mockMvc.perform(post("/api/activitylistentry/add").contentType(MediaType.APPLICATION_JSON).content(jsonContent)
+                .header("token", token))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
 
-    @Test 
+    @Test
     public void shouldSucceedRemovingEntryFromList() throws Exception {
         userMockSetup(1L);
         ActivityListEntry entry = new ActivityListEntry(1L, 1L, 20L, null);
         when(listEntryRepository.findById(Mockito.any())).thenReturn(Optional.of(entry));
         when(listRepository.findById(Mockito.any())).thenReturn(Optional.of(list));
 
-        mockMvc.perform(delete("/api/activitylistentry/remove").contentType(MediaType.APPLICATION_JSON).header("id", "1").header("token", token))
+        mockMvc.perform(delete("/api/activitylistentry/remove").contentType(MediaType.APPLICATION_JSON)
+                .header("id", "1").header("token", token))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
- 
+
     @Test
     public void shouldSucceedAtAddingEntryToMultipleLists() throws Exception {
         userMockSetup(1L);
-        
+
         String jsonContent = "{\"listId\":4, \"exerciseId\":20, \"techniqueId\":null}";
 
         ObjectMapper mapper = new ObjectMapper();
@@ -129,11 +130,11 @@ public class ActivityListEntryControllerTest {
         when(listRepository.findById(5L)).thenReturn(Optional.of(list2));
         when(listRepository.findById(6L)).thenReturn(Optional.of(list3));
 
-        mockMvc.perform(post("/api/activitylistentry/multiAdd").contentType(MediaType.APPLICATION_JSON).content(jsonContent).header("ids", "5,6").header("token", token))
+        mockMvc.perform(post("/api/activitylistentry/multiAdd").contentType(MediaType.APPLICATION_JSON)
+                .content(jsonContent).header("ids", "5,6").header("token", token))
                 .andExpect(status().isOk())
                 .andDo(print());
 
-        
     }
-    
+
 }

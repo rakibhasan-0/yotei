@@ -15,6 +15,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ActivityListEntryRepository extends JpaRepository<ActivityListEntry, Long> {
 
-    List<ActivityListEntry> findAllByListId(Long listId);
+    List<ActivityListEntry> findAllByActivityListId(Long listId);
 
 }
