@@ -19,7 +19,7 @@ public class ExaminationComment{
     @Column(nullable = false,name = "grading_id")
     private Long gradingId;
 
-    @Column(nullable = false,name = "examinee_id")
+    @Column(name = "examinee_id")
     private Long examineeId;
 
     @Column(name = "examinee_pair_id")
@@ -34,19 +34,19 @@ public class ExaminationComment{
     /**
      * Constructs a new ExaminationComment with all field values initialized.
      *
-     * @param comment_id The identifier for the comment.
-     * @param grading_id The identifier for the associated grading.
-     * @param examinee_id The identifier for the associated examinee.
-     * @param examinee_pair_id Optional identifier for a paired examinee.
-     * @param technique_name The name of the technique discussed in the comment.
+     * @param commentId The identifier for the comment.
+     * @param gradingId The identifier for the associated grading.
+     * @param examineeId The identifier for the associated examinee.
+     * @param examineePairId Optional identifier for a paired examinee.
+     * @param techniqueName The name of the technique discussed in the comment.
      * @param comment The text of the comment.
      */
-    public ExaminationComment(Long comment_id, Long grading_id, Long examinee_id, Long examinee_pair_id, String technique_name, String comment) {
-        this.commentId = comment_id;
-        this.gradingId = grading_id;
-        this.examineeId = examinee_id;
-        this.examineePairId = examinee_pair_id;
-        this.techniqueName= technique_name;
+    public ExaminationComment(Long commentId, Long gradingId, Long examineeId, Long examineePairId, String techniqueName, String comment) {
+        this.commentId = commentId;
+        this.gradingId = gradingId;
+        this.examineeId = examineeId;
+        this.examineePairId = examineePairId;
+        this.techniqueName= techniqueName;
         this.comment = comment;
     }
 

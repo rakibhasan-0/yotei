@@ -1,0 +1,14 @@
+
+.grading-protocols-rows {
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+  
+.grading-protocol-row {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+}
+  
+.grading-protocol-row:last-child {
+    border-bottom: none;
+}

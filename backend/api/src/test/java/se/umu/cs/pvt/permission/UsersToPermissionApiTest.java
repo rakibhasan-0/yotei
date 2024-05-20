@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,26 +20,38 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import se.umu.cs.pvt.user.User;
+import se.umu.cs.pvt.user.UserRepository;
+
 /**
  * Tests for the UserToPermission api
  * 
- * @author Team Mango (Grupp 4) - 2024-05-15
+ * @author Team Mango (Grupp 4) - 2024-05-17
  */
 @ExtendWith(MockitoExtension.class)
 public class UsersToPermissionApiTest {
 	private UserToPermissionController userToPermissionController;
-	private ArrayList<UserToPermission> userToPermissions;
+	private ArrayList<UserToPermission> userPermissionPairs;
 	private ArrayList<Permission> permissions;
 
 	@Mock
 	private final UserToPermissionRepository userToPermissionRepository = Mockito.mock(
 		UserToPermissionRepository.class);
 
+	@Mock
+	private final UserRepository userRepository = Mockito.mock(
+		UserRepository.class);
+
+	@Mock
+	private final PermissionRepository permissionRepository = Mockito.mock(
+		PermissionRepository.class);
+	
+
 	@BeforeEach
 	void init() {
 		userToPermissionController = new UserToPermissionController(
-			userToPermissionRepository);
-		userToPermissions = new ArrayList<>();
+			userToPermissionRepository, permissionRepository, userRepository);
+		userPermissionPairs = new ArrayList<>();
 		permissions = new ArrayList<>();
 
 		Mockito.lenient().when(userToPermissionRepository.findAllByUserId(Mockito.any()))
@@ -48,46 +61,73 @@ public class UsersToPermissionApiTest {
 
 		Mockito.lenient().when(userToPermissionRepository.save(Mockito.any())).thenAnswer(
 			invocation -> {
-				userToPermissions.add((UserToPermission) invocation.getArgument(0));
-				return null;
+				UserToPermission result = (UserToPermission) invocation.getArgument(0);
+				userPermissionPairs.add(result);
+
+				return result;
 			});
 
 		Mockito.lenient().when(userToPermissionRepository.findByUserIdAndPermissionId(
-			Mockito.any(), Mockito.any())).thenAnswer(invocation -> {
-				Long userId = invocation.getArgument(0);
-				
-				for (UserToPermission userToPermission : userToPermissions) {
-					if (userId == userToPermission.getUserId()) {
-						Long permissionId = userToPermission.getPermissionId();
-						Long actualPermissionId = invocation.getArgument(1);
-
-						if (permissionId == actualPermissionId) {
-							return userToPermission;
-						}
-					}
-				}
-		
-				return null;
+			Mockito.any(), Mockito.any())).thenAnswer(invocation -> {				
+				UserToPermission result = findUserToPermissionPair(invocation);
+				return result;
 			});
+
+		Mockito.lenient().when(
+			userRepository.findById(Mockito.any())).thenReturn(Optional.of(new User()));
+
+
+		Mockito.lenient().when(permissionRepository.findById(Mockito.any()))
+		.thenAnswer(invocation -> {
+			return findPermission(invocation);
+		});
 	}
 
-	private Object getUserPermissions(InvocationOnMock invocation) {
+	private UserToPermission findUserToPermissionPair(InvocationOnMock invocation) {
 		Long userId = invocation.getArgument(0);
-		ArrayList<Permission> userPermissions = new ArrayList<>();
 
-		for (UserToPermission userToPermission : userToPermissions) {
+		for (UserToPermission userToPermission : userPermissionPairs) {
 			if (userId == userToPermission.getUserId()) {
 				Long permissionId = userToPermission.getPermissionId();
+				Long actualPermissionId = invocation.getArgument(1);
 
-				for (Permission permission : permissions) {
-					if (permission.getPermissionId() == permissionId) {
-						userPermissions.add(permission);
-					}
+				if (permissionId == actualPermissionId) {
+					return userToPermission;
 				}
 			}
 		}
 
-		return userPermissions;
+		return null;
+	}
+
+	private Object findPermission(InvocationOnMock invocation) {
+		Long permissionId = invocation.getArgument(0);
+		Optional<Permission> result = getPermissionObject(permissionId);
+		
+		return result;
+	}
+
+	private Optional<Permission> getPermissionObject(Long permissionId) {
+		for (Permission permission : permissions) {
+			if (permission.getPermissionId() == permissionId) {
+				return Optional.of(permission);
+			}
+		}
+
+		return Optional.empty();
+	}
+
+	private Object getUserPermissions(InvocationOnMock invocation) {
+		Long userId = invocation.getArgument(0);
+		List<UserToPermission> uToPermissions = new ArrayList<>();
+
+		for (UserToPermission userToPermission : userPermissionPairs) {
+			if (userId == userToPermission.getUserId()) {
+				uToPermissions.add(userToPermission);
+			}
+		}
+
+		return uToPermissions;
 	}
 
 	@Test
@@ -103,9 +143,9 @@ public class UsersToPermissionApiTest {
 			perm3.setPermissionId(2L);
 			permissions.add(perm3);
 			
-			userToPermissions.add(new UserToPermission(0L, 0L));
-			userToPermissions.add(new UserToPermission(0L, 1L));
-			userToPermissions.add(new UserToPermission(0L, 2L));
+			userPermissionPairs.add(new UserToPermission(0L, 0L));
+			userPermissionPairs.add(new UserToPermission(0L, 1L));
+			userPermissionPairs.add(new UserToPermission(0L, 2L));
 
 			ResponseEntity<List<Permission>> result = userToPermissionController
 				.getUserPermissions(0L);
@@ -121,13 +161,22 @@ public class UsersToPermissionApiTest {
 	void shouldSucceedInPostingNewUserPermissionPair() {
 		try {
 			Permission permission = new Permission("none", "none");
-			UserToPermission userToPermission = new UserToPermission(
-				0L, permission.getPermissionId());
-			UserToPermission result = userToPermissionController.postUserPermissionPair(
-				permission, 0L).getBody();
+			permission.setPermissionId(0L);
+			permissions.add(permission);
 
-			assertEquals(userToPermission.getPermissionId(), result.getPermissionId());
-			assertEquals(userToPermission.getUserId(), result.getUserId());
+			assertEquals(new ResponseEntity<>(
+				HttpStatus.NO_CONTENT), 
+				userToPermissionController.getUserPermissions(0L));
+
+			ResponseEntity<UserToPermission> result = userToPermissionController
+				.postUserPermissionPair(0L, 0L);
+
+			Long userIdResult = result.getBody().getUserId();
+			Long permissionIdResult = result.getBody().getPermissionId();
+
+			assertEquals(userIdResult, 0L);
+			assertEquals(permissionIdResult, 0L);
+
 		} catch (InvalidPermissionNameException e) {
 			fail();
 		}
@@ -141,21 +190,20 @@ public class UsersToPermissionApiTest {
 
 			UserToPermission userToPermission = new UserToPermission(
 				0L, permission.getPermissionId());
-			userToPermissions.add(userToPermission);
+			userPermissionPairs.add(userToPermission);
 
-			Map<String, Long> ids = new HashMap<>();
-			ids.put("user_id", 0L);
-			ids.put("permission_id", 0L);
+			Map<String, Long> map = new HashMap<>();
+			map.put("user_id", 0L);
+			map.put("permission_id", 0L);
 
 			doNothing().when(userToPermissionRepository).deleteByUserIdAndPermissionId(
 				Mockito.any(), Mockito.any());
 
-			assertEquals(new ResponseEntity<>(HttpStatus.OK), 
-				userToPermissionController.deleteUserPermissionPair(ids));
+			assertEquals(new ResponseEntity<>(map ,HttpStatus.OK), 
+				userToPermissionController.deleteUserPermissionPair(0L, 0L));
 
 		} catch (InvalidPermissionNameException e) {
 			fail();
 		}
-
 	}
 }
