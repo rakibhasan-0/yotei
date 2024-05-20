@@ -27,79 +27,82 @@ import java.util.regex.Pattern;
  * 
  * A few new belts had to be added to the project, potentially messing things up
  * within the database. To ensure
- * no problems occured a test-suite was created that builds a temporary containe
- * with a database using
- * the 'init.sql' script. The database is then queried to see if it bui
- * ds as expected.
- * 
+ * no problems occured a test-suite was created that builds a temporary
+ * container with a database using
+ * the 'init.sql' script. The database is then queried to see if it builds as
+ * expected.
  * 
  * The tool to create a temporary database does so by creating its own container
  * where the tests are executed. If
- * one is looking to integrate these tests within a CI-pipeline, special precaut
- * ons might have to be taken.
- * 
+ * one is looking to integrate these tests within a CI-pipeline, special
+ * precautions might have to be taken.
  * 
  * This test-class will likely cause problems if not excluded from being ran by
  * maven. If you do want to run it locally, you need
- * to have a .env-file with information regarding the database in the project r
- * ot.
- * 
+ * to have a .env-file with information regarding the database in the project
+ * root.
  * 
  * @author Kiwi (Grupp 2), c16kvn & dv22cen 2024-05-16
  */
 public class TechniqueDatabaseTest {
     private static PostgreSQLContainer<?> postgreSQLContainer;
 
-    static String POSTGRESQL_USER;
-    static String POSTGRESQL_PASSWORD;
-    static String POSTGRESQL_DATABASE;
+    static String POSTGRESQL_USER = System.getProperty("POSTGRESQL_USER");
+    static String POSTGRESQL_PASSWORD = System.getProperty("POSTGRESQL_PASSWORD");
+    static String POSTGRESQL_DATABASE = System.getProperty("POSTGRESQL_DATABASE");
 
+    @BeforeAll
     public static void setUp() {
-        //We go into the .env in the project root and find the password etc. for the database
-        tr y {
-        // 
-            String envFilePath = "../../.env";
-            String envFileContent = new String(Files.readAllBytes(Paths.get(envFilePath)));
+        // We go into the .env in the project root and find the password etc. for the
+        // database
+        try {
+            if (POSTGRESQL_DATABASE == null) {
+                String envFilePath = "../../.env";
+                String envFileContent = new String(Files.readAllBytes(Paths.get(envFilePath)));
 
-            // Regex for finding key-value pair
-            Pattern pattern = Pattern.compile("^([^=]+)=(.*)$", Pattern.MULTILINE);
-            Matcher matcher = pattern.matcher(envFileContent);
-            Map<String, String> envVariables = new HashMap<>();
+                // Regex for finding key-value pair
+                Pattern pattern = Pattern.compile("^([^=]+)=(.*)$", Pattern.MULTILINE);
+                Matcher matcher = pattern.matcher(envFileContent);
+                Map<String, String> envVariables = new HashMap<>();
 
-            while (matcher.find()) {
-                String key = matcher.group(1);
-                String value = matcher.group(2);
-                // Trim away quotes
-                value = value.replaceAll("^\"|\"$", "");
-                envVariables.put(key, value);
+                while (matcher.find()) {
+                    String key = matcher.group(1);
+                    String value = matcher.group(2);
+                    // Trim away quotes
+                    value = value.replaceAll("^\"|\"$", "");
+                    envVariables.put(key, value);
+                }
+                POSTGRESQL_USER = envVariables.get("POSTGRES_USER");
+                POSTGRESQL_PASSWORD = envVariables.get("POSTGRES_PASSWORD");
+                POSTGRESQL_DATABASE = envVariables.get("POSTGRES_DB");
             }
-            POSTGRESQL_USER = envVariables.get("POSTGRES_USER");
-            POSTGRESQL_PASSWORD = envVariables.get("POSTGRES_PASSWORD");
-            POSTGRESQL_DATABASE = envVariables.get("POSTGRES_DB");
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         ImageFromDockerfile image = new ImageFromDockerfile()
-            .withDockerfile(Paths.get("../../infra/database/D
-                
-        DockerImageName imageName = DockerImageName.parse(image.get())
-            .asCompatibleSubstituteFor(PostgreSQLContainer.IMAGE);
-                
+                .withDockerfile(Paths.get("../../infra/database/Dockerfile"));
 
-            .withDatabaseName(POSTGRESQL_DATABASE)
+        DockerImageName imageName = DockerImageName.parse(image.get())
+                .asCompatibleSubstituteFor(PostgreSQLContainer.IMAGE);
+
+        postgreSQLContainer = new PostgreSQLContainer<>(imageName)
+                .withDatabaseName(POSTGRESQL_DATABASE)
                 .withUsername(POSTGRESQL_USER)
-                .withPassword(POSTGRESQL_PASSW
-                .withEnv("POSTGRESQL_DATABASE", PO
+                .withPassword(POSTGRESQL_PASSWORD)
+                .withEnv("POSTGRESQL_DATABASE", POSTGRESQL_DATABASE)
                 .withEnv("POSTGRESQL_USER", POSTGRESQL_USER)
-                .withEnv("POSTGRESQL_PASSWORD", POSTGRESQL_P
-                .withExposedPorts(PostgreSQLContainer.POSTGRESQL_POR
-                
-        //NOTE: We had to increase the timer to 120 rather than 60, which is wierd as both should work.
-        po stgreSQLContainer.setWaitStrategy(Wait.defaultWaitStrategy()
-        // 
+                .withEnv("POSTGRESQL_PASSWORD", POSTGRESQL_PASSWORD)
+                .withExposedPorts(PostgreSQLContainer.POSTGRESQL_PORT);
+
+        // NOTE: We had to increase the timer to 120 rather than 60, which is wierd as
+        // both should work.
+        postgreSQLContainer.setWaitStrategy(Wait.defaultWaitStrategy()
                 .withStartupTimeout(Duration.ofSeconds(120)));
+
+        postgreSQLContainer.start();
+    }
 
     @AfterAll
     public static void tearDown() {
@@ -112,13 +115,10 @@ public class TechniqueDatabaseTest {
      * The following set of tests sample a few techniques to ensure that they're
      * connected to their respective belt
      */
-    @T
-     * est
-     * 
-     
+    @Test
     public void testBasicTechniques() throws Exception {
-        //String jdbcUrl = "jdbc:postgresql://localhost:5432/yotei";
- 
+        // String jdbcUrl = "jdbc:postgresql://localhost:5432/yotei";
+
         String jdbcUrl = postgreSQLContainer.getJdbcUrl();
         String username = postgreSQLContainer.getUsername();
         String password = postgreSQLContainer.getPassword();
@@ -142,26 +142,26 @@ public class TechniqueDatabaseTest {
         String password = postgreSQLContainer.getPassword();
 
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
-            Statement statement = connection.createStatement()) {
-                    //This is where you edit if you wish to swap belt
-            St ring[] techNames = {"Kamae, neutral (5 Kyu)", "Stryptag fr
-            String expectedColor =  "Gult";
-                     
-            
+                Statement statement = connection.createStatement()) {
+            // This is where you edit if you wish to swap belts/technique
+            String[] techNames = { "Kamae, neutral (5 Kyu)",
+                    "Stryptag framifrån och svingslag, backhand, Frigöring - Ju morote jodan uke, ude osae, ude osae gatame" };
+            String expectedColor = "Gult";
 
-                 String sqlQuery = "SEL E
-                
+            for (int i = 0; i < 2; i++) {
+                String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
 
+                PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
                 preparedStatement.setString(1, techNames[i]);
-                
 
-                
+                ResultSet resultSet = preparedStatement.executeQuery();
 
-                    String belt = resul
+                if (resultSet.next()) {
+                    String belt = resultSet.getString("belt_name");
                     assertEquals(expectedColor, belt);
-                    
-                
-            
+                }
+            }
+        }
     }
 
     @Test
@@ -171,26 +171,26 @@ public class TechniqueDatabaseTest {
         String password = postgreSQLContainer.getPassword();
 
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
-            Statement statement = connection.createStatement()) {
-                    //This is where you edit if you wish to swap belt
-            St ring[] techNames = {"Grepp i två handleder framifrån, Shih
-            String expectedColor =  "Grönt";
-                     
-            
+                Statement statement = connection.createStatement()) {
+            // This is where you edit if you wish to swap belts/technique
+            String[] techNames = { "Grepp i två handleder framifrån, Shiho nage, shiho nage gatame",
+                    " Randori mot en motståndare (3 Kyu)" };
+            String expectedColor = "Grönt";
 
-                 String sqlQuery = "SEL E
-                
+            for (int i = 0; i < 2; i++) {
+                String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
 
+                PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
                 preparedStatement.setString(1, techNames[i]);
-                
 
-                
+                ResultSet resultSet = preparedStatement.executeQuery();
 
-                    String belt = resul
+                if (resultSet.next()) {
+                    String belt = resultSet.getString("belt_name");
                     assertEquals(expectedColor, belt);
-                    
-                
-            
+                }
+            }
+        }
     }
 
     @Test
@@ -200,54 +200,55 @@ public class TechniqueDatabaseTest {
         String password = postgreSQLContainer.getPassword();
 
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
-            Statement statement = connection.createStatement()) {
-                    //This is where you edit if you wish to swap belt
-            St ring[] techNames = {"Otoshi ukemi (2 Kyu)", "Påkslag mot h
-            String expectedColor =  "Blått";
-                     
-            
+                Statement statement = connection.createStatement()) {
+            // This is where you edit if you wish to swap belts/technique
+            String[] techNames = { "Otoshi ukemi (2 Kyu)",
+                    "Påkslag mot huvudet, backhand, Ju jodan uchi uke, irimi nage - Ude osae, ude osae gatame" };
+            String expectedColor = "Blått";
 
-                 String sqlQuery = "SEL E
-                
+            for (int i = 0; i < 2; i++) {
+                String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
 
+                PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
                 preparedStatement.setString(1, techNames[i]);
-                
 
-                
+                ResultSet resultSet = preparedStatement.executeQuery();
 
-                    String belt = resul
+                if (resultSet.next()) {
+                    String belt = resultSet.getString("belt_name");
                     assertEquals(expectedColor, belt);
-                    
-                
-            
+                }
+            }
+        }
     }
 
+    @Test
     public void testBrownBeltsToTechniques() throws Exception {
         String jdbcUrl = postgreSQLContainer.getJdbcUrl();
         String username = postgreSQLContainer.getUsername();
         String password = postgreSQLContainer.getPassword();
 
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
-            Statement statement = connection.createStatement()) {
-                    //This is where you edit if you wish to swap belt
-            St ring[] techNames = {"Empi uchi, jodan och chudan (1 Kyu)",
-            String expectedColor =  "Brunt";
-                     
-            
+                Statement statement = connection.createStatement()) {
+            // This is where you edit if you wish to swap belts/technique
+            String[] techNames = { "Empi uchi, jodan och chudan (1 Kyu)",
+                    "Påkslag mot huvudet, forehand och backhand, Tsuri ashi - ju jodan uchi uke, irimi nage, ude hishigi hiza gatame" };
+            String expectedColor = "Brunt";
 
-                 String sqlQuery = "SEL E
-                
+            for (int i = 0; i < 2; i++) {
+                String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
 
+                PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
                 preparedStatement.setString(1, techNames[i]);
-                
 
-                
+                ResultSet resultSet = preparedStatement.executeQuery();
 
-                    String belt = resul
+                if (resultSet.next()) {
+                    String belt = resultSet.getString("belt_name");
                     assertEquals(expectedColor, belt);
-                    
-                
-            
+                }
+            }
+        }
     }
 
     @Test
@@ -257,26 +258,26 @@ public class TechniqueDatabaseTest {
         String password = postgreSQLContainer.getPassword();
 
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
-            Statement statement = connection.createStatement()) {
-                    //This is where you edit if you wish to swap belt
-            St ring[] techNames = {"Mae ukemi (4 Kyu)", "Svingslag, Ju mo
-            String expectedColor =  "Orange";
-                     
-            
+                Statement statement = connection.createStatement()) {
+            // This is where you edit if you wish to swap belts/technique
+            String[] techNames = { "Mae ukemi (4 Kyu)",
+                    "Svingslag, Ju morote jodan uke, hiki otoshi - O soto osae, ude henkan gatame" };
+            String expectedColor = "Orange";
 
-                 String sqlQuery = "SEL E
-                
+            for (int i = 0; i < 2; i++) {
+                String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
 
+                PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
                 preparedStatement.setString(1, techNames[i]);
-                
 
-                
+                ResultSet resultSet = preparedStatement.executeQuery();
 
-                    String belt = resul
+                if (resultSet.next()) {
+                    String belt = resultSet.getString("belt_name");
                     assertEquals(expectedColor, belt);
-                    
-                
-            
+                }
+            }
+        }
     }
 
     @Test
