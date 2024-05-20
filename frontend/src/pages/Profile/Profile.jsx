@@ -48,8 +48,7 @@ export default function Profile() {
 
 
 	//TODO feature toggle
-	const [isListsEnabled] = useState(true)
-	//const test = getAmountOfFavouriteWorkouts();
+	const [isListsEnabled] = useState(false)
 
 	/*const mockLists = [
 		{
@@ -141,7 +140,7 @@ export default function Profile() {
 	 */
 	useEffect(() => {
 		setFetchedLists(false)
-		getAmountOfFavouriteWorkouts();
+		getAmountOfFavouriteWorkouts()
 		const workout = {
 			id: -1,
 			name: "Favoritpass",
@@ -271,16 +270,16 @@ export default function Profile() {
 		getLists(args, token, map, mapActions, (result) => {
 			if (result.error) return
 
-			const lists = result.map((item) => ({
+			/*const lists = result.map((item) => ({
 				id: item.id,
 				name: item.name,
 				size: item.size,
 				author: item.author,
 				hidden: item.hidden,
 				isShared: item.isShared,
-			}))
+			}))*/
 
-			setLists([workout, ...lists])
+			//setLists([workout, ...lists])
 			setFetchedLists(true)
 		})
 	}
