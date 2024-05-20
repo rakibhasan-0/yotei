@@ -52,12 +52,12 @@ export default function ListPicker({ onFilterChange }) {
                 autoClose={false}
             >
                 <div className={styles.filterBorder}>
-                    {filterOptions.map((option, index) => (
-                        <div className="dropdownItem" key={index}>
-                            <CheckBox label={option.label} checked={filter.includes(option)} onClick={() => onSelect(option)} />
-                        </div>
-                    ))}
-                </div>
+					{filterOptions.map((option, index) => (
+						<label className={`${styles.filterItems} filterItems`} key={index}>
+							<CheckBox label={option.label} checked={filter.includes(option)} onClick={() => onSelect(option)} />
+						</label>
+					))}
+				</div>
             </DropDown>
         </div>
     )
