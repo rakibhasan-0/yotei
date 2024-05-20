@@ -21,7 +21,7 @@ export default defineConfig({
 	testDir: "./SystemTests/TestFiles",
 	timeout: 20000,
 	expect: {
-		timeout: 15000,
+		timeout: 5000,
 	},
 	globalTimeout: 3000000,
 	fullyParallel: false,
