@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import Popup from "../../components/Common/Popup/Popup"
 import style from "./GradingStatisticsPopup.module.css"
-import Dropdown from "../../components/Common/List/Dropdown" // Updated import
+import Dropdown from "../../components/Common/List/Dropdown"
 import GradingProtocolsRowsMenu from "../../components/Grading/GradingProtocolsRowsMenu"
 import GradingProtocolsRows from "../../components/Grading/GradingProtocolsRows"
 import Spinner from "../../components/Common/Spinner/Spinner"
@@ -16,45 +16,45 @@ import Spinner from "../../components/Common/Spinner/Spinner"
  * @param {Array} belts - The belts of the group
  * 
  * @since 2024-05-20
- * @author Team Coconut 
+ * @author Team Coconut
  */
-
 
 
 export default function GradingStatisticsPopup({ id, groupID, belts}) {
 
 	const [showPopup, setShowPopup] = useState(false)
 	const [protocols, setProtocols] = useState([])
-	const [chosenProtocol, setChosenProtocol] = useState([])
-	const [beltID, setBeltID] = useState([])
+	const [chosenProtocol, setChosenProtocol] = useState('')
+	const [beltID, setBeltID] = useState(null)
 	const [loading, setLoading] = useState(false)
 	const [data, setData] = useState([])
-
-
-
-	//Initial fetch of the grading protocol
-	useEffect(() => {
-
-		if (belts.length > 0 && groupID) {
-			async function fetchGroupGradingProtocol() {
-				try {
 	
+	useEffect(() => {
+		if (belts.length > 0) {
+			setProtocols(belts.map(belt => belt.name))
+			setChosenProtocol(belts[0].name)
+			setBeltID(belts[0].id)
+		}
+	}, [belts])
+
+	useEffect(() => {
+		if (groupID && beltID !== null) {
+			const fetchGroupGradingProtocol = async () => {
+				try {
 					setLoading(true)
-					setChosenProtocol(belts[0].name)
-					setBeltID(belts[0].id)
-					const responseFromGroupNameAPI = await fetch(`/api/statistics/${groupID}/grading_protocol?beltId=${belts[0].id}`)
-					if(responseFromGroupNameAPI.status === 204) {
-						setLoading(false)
-						return
-					}
-					if (!responseFromGroupNameAPI.ok) {
+					const response = await fetch(`/api/statistics/${groupID}/grading_protocol?beltId=${beltID}`)
+					if (!response.ok) {
 						throw new Error("Failed to fetch group data")
 					}
-					const groups = await responseFromGroupNameAPI.json()
-					console.log(groups)
-					setData(groups)
-					setProtocols(belts.map(belt => belt.name))
+					if(response.status === 204){
+						//For belts that do not have grading protocols
+						setProtocols([])
+					} else {
+						const groups = await response.json()
+						setData(groups)
+						
 
+					}
 				} catch (error) {
 					console.error("Fetching error:", error)
 				} finally {
@@ -63,39 +63,15 @@ export default function GradingStatisticsPopup({ id, groupID, belts}) {
 			}
 			fetchGroupGradingProtocol()
 		}
-	}, [belts])
+	}, [groupID, beltID])
 
-	//Switching between grading protocols
 	useEffect(() => {
-		if(belts.length > 0 && groupID) {
-
-			async function fetchGroupGradingProtocolSwitch() {
-				try {
-
-					setLoading(true)
-					setBeltID(belts.find(belt => belt.name === chosenProtocol).id)
-					const responseFromGroupNameAPI = await fetch(`/api/statistics/${groupID}/grading_protocol?beltId=${beltID}`)
-					if (!responseFromGroupNameAPI.ok) {
-						throw new Error("Failed to fetch group data")
-					}
-					if(responseFromGroupNameAPI.status === 204) {
-						setLoading(false)
-						return
-					}
-					const groups = await responseFromGroupNameAPI.json()
-	
-					setData(groups)
-					setProtocols(belts.map(belt => belt.name))
-
-				} catch (error) {
-					console.error("Fetching error:", error)
-				} finally {
-					setLoading(false)
-				}
+		if (chosenProtocol) {
+			const selectedBelt = belts.find(belt => belt.name === chosenProtocol)
+			if (selectedBelt) {
+				setBeltID(selectedBelt.id)
 			}
-			fetchGroupGradingProtocolSwitch()
 		}
-
 	}, [chosenProtocol])
 
 	const togglePopup = () => {
@@ -109,7 +85,6 @@ export default function GradingStatisticsPopup({ id, groupID, belts}) {
 	return (
 		<div className={style.gradingStatisticsContainer} id={id}>
 			<div className={style.gradingButtonContainer}>
-				{/* the button for the grading statistics */}
 				<button onClick={togglePopup} id="popup-button">
 					<img src="/GradingStatistics.svg" alt="Grading Statistics" />
 				</button>
@@ -121,17 +96,13 @@ export default function GradingStatisticsPopup({ id, groupID, belts}) {
 				isOpen={showPopup}
 				id="grading-statistics-popup"
 			>
-				<Dropdown text={data.code + " " + data.name} id="grading-protocols-dropdown">
-					<GradingProtocolsRowsMenu protocols={protocols} onSelectRow = {onSelectRow} />
+				<Dropdown text={data.code ? data.code + " " + data.name : "Välj ett protokoll"} id="grading-protocols-dropdown">
+					<GradingProtocolsRowsMenu protocols={protocols} onSelectRow={onSelectRow} />
 				</Dropdown>
-				{loading ? <Spinner /> : <div>
-					{	
-						(data.belt && data.categories) &&
-						<GradingProtocolsRows data={data.categories} beltColors = {[data.belt]} />
-					}
-				</div>} 
-
-
+				{loading ? <Spinner /> : 
+					(data.belt && data.categories) && 
+					<GradingProtocolsRows data={data.categories} beltColors={[data.belt]} />
+				}
 			</Popup>
 		</div>
 	)
