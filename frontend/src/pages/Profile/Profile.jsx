@@ -47,7 +47,7 @@ export default function Profile() {
 	const [map, mapActions] = useMap()
 
 	//TODO feature toggle
-	const [isListsEnabled] = useState(true)
+	const [isListsEnabled] = useState(false)
 
 	const workout = {
 		id: -1,
