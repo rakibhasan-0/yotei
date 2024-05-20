@@ -389,7 +389,7 @@ export default function DuringGrading() {
 	function getExamineesCurrentGrading(all_examinees) {
 		const current_grading_examinees = []
 		all_examinees.forEach((examinee) => {
-			if (examinee.grading_id == gradingId) {
+			if (examinee.gradingId == gradingId) {
 				current_grading_examinees.push(examinee)
 			}
 		})
@@ -407,13 +407,13 @@ export default function DuringGrading() {
 	function getPairsInCurrrentGrading(pairs_json) {
 		const pair_names_current_grading = []
 		pairs_json.forEach((pair) => {
-			const examinee1 = examinees.find(item => item.examinee_id === pair.examinee_1_id)
-			const examinee2 = examinees.find(item => item.examinee_id === pair.examinee_2_id)
+			const examinee1 = examinees.find(item => item.examineeId === pair.examinee1Id)
+			const examinee2 = examinees.find(item => item.examineeId === pair.examinee2Id)
 			if (examinee1 !== undefined || examinee2 !== undefined) { // Only add if something is found
 				const name1 = examinee1 ? examinee1.name : "" // If only one name found
 				const name2 = examinee2 ? examinee2.name : ""
-				const id1 = examinee1 ? examinee1.examinee_id : ""
-				const id2 = examinee2 ? examinee2.examinee_id : ""
+				const id1 = examinee1 ? examinee1.examineeId : ""
+				const id2 = examinee2 ? examinee2.examineeId : ""
 				pair_names_current_grading.push({ 
 					nameLeft: name1, 
 					nameRight: name2, 
@@ -570,7 +570,7 @@ export default function DuringGrading() {
      * @returns {Object|undefined} The current grading object, or undefined if not found.
      */
 	function getCurrentGrading(all_gradings) {
-		const current_grading = all_gradings.find((grading) => grading.grading_id == gradingId)
+		const current_grading = all_gradings.find((grading) => grading.gradingId == gradingId)
 		return current_grading
 	}
 
@@ -581,7 +581,7 @@ export default function DuringGrading() {
      * @returns {Object|undefined} The examination protocol for the current grading, or undefined if not found.
      */
 	function getProtocolCurrentGrading(all_protocols, current_grading) {
-		const current_grading_protocol = all_protocols.find((protocol) => protocol.beltId === current_grading.belt_id)
+		const current_grading_protocol = all_protocols.find((protocol) => protocol.beltId === current_grading.beltId)
 		return current_grading_protocol
 	}
 }
