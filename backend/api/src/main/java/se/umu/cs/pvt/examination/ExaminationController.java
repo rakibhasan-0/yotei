@@ -434,7 +434,7 @@ public class ExaminationController {
      */
     @GetMapping("/comment/group/all/{grading_id}")
     public ResponseEntity<List<ExaminationComment>> getGradingComments(@PathVariable("grading_id") long grading_id) {
-        List<ExaminationComment> comments = examinationCommentRepository.findByGradingId(grading_id);
+        List<ExaminationComment> comments = examinationCommentRepository.findByGradingIdAndExamineeIdIsNullAndExamineePairIdIsNull(grading_id);
         if(comments.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -508,7 +508,7 @@ public class ExaminationController {
     @GetMapping("/examresult/grading/{grading_id}")
     ResponseEntity <Map<String, Long>> getExaminationResultByGradingId(@PathVariable("grading_id") long grading_id){
         String exam_protocol = examinationProtocolRepository.findById(grading_id).get().getExaminationProtocol();
-        
+        List<Examinee> examinees = examineeRepository.findByGradingId(grading_id);
         JSONObject root = new JSONObject(exam_protocol);
         JSONArray categories = root.getJSONArray("categories");
         if(categories.isEmpty()) {
@@ -521,7 +521,14 @@ public class ExaminationController {
             JSONArray techniques = category.getJSONArray("techniques");
             techniqueCount += techniques.length();
         }
-        
+        for(Examinee e : examinees) {
+            Map<String, Object> result = new HashMap<>();
+            long passed = examinationResultRepository.countByExamineeIdAndPassTrue(e.getExamineeId());
+            technique_info.put("passed", passed);
+
+            
+        }
+
         technique_info.put("technique_count", (long) techniqueCount);
         long passed = examinationResultRepository.countByExamineeIdAndPassTrue(grading_id);
         technique_info.put("passed", passed);
