@@ -38,3 +38,9 @@ export type Technique = {
   tag?: string,
   mediaLink?: string
 }
+
+//Tag
+export type Tag = {
+  name: string, 
+  id: number
+}
