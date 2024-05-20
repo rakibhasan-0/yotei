@@ -1,80 +1,72 @@
 .editable-container {
 	width: 100%;
-  }
-  
-  .editable-list-container{
-	  border-radius: 5px;
-	  border: 1px solid var(--black-primary);
-	  user-select: none;
-	  overflow: auto;
-	  margin-top: 10px;
-	  display: flex;
-	  width: 100%;
-  }
-  
-  .editable-list-header {
-	  display: flex;
-	  align-items: center;
-	  text-align: center;
-	  background-color: var(--red-secondary);
-	  padding: 10px;
-	  font-weight: 400;
-	  width: 100%;
-	  overflow:hidden;
-	}
-	
-  .editable-list-header p { /* Duration */
-  
-	  margin: 0;
-	  align-items: end;
-	  font-weight: 600;
-  
-  }
-	  
-  .editable-list-duration {
-	  text-align: center;
-	  display: flex;
-	  align-items: center;
-	  justify-content: center;
-  }
-  
-  .input {
-	user-select: none;
-	overflow: hidden;
-	display: flex;
-	color: var(--black-primary);
-	align-items: center;
-	padding: 0.2rem 0.2rem 0.3rem;
-	margin: 0.06rem 0.3rem;
-	font-weight: 400;
-	width: 100%;
-	outline: none;
-	height: 100%;
-	resize: none;
-	border: 1px solid var(--black-primary);
-	border-radius: 0.3rem;
-	line-height: 1.2;
-  }
+}
 
-  .input:disabled {
-	border: 1px solid transparent;
-  }
+.editable-list-container{
+    border-radius: 5px;
+    border: 1px solid var(--black-primary);
+    user-select: none;
+    overflow: auto;
+    margin-top: 10px;
+    display: flex;
+    width: 100%;
+}
 
-  .errorInput {
-	border: 2px solid var(--red-primary);
-	background: var(--red-secondary);
-  }
-  
-  .close-icon {
-	cursor: pointer;
-  }
-  
-  .name-container {
-	display: flex;
-	justify-content: space-between;
-  }
+.editable-list-header {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    background-color: var(--red-secondary);
+    padding: 10px;
+    font-weight: 400;
+    width: 100%;
+    overflow:hidden;
+}
 
-  .textareaErr {
-	border: 2px solid var(--red-primary);
-	background: var(--red-secondary);
-  }
+.editable-list-duration {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.input {
+    user-select: none;
+    overflow: hidden;
+    display: flex;
+    color: var(--black-primary);
+    align-items: center;
+    padding: 0.2rem 0.2rem 0.3rem;
+    margin: 0.06rem 0.3rem;
+    font-weight: 400;
+    width: 100%;
+    outline: none;
+    height: 100%;
+    resize: none;
+    border: 1px solid var(--black-primary);
+    border-radius: 0.3rem;
+    line-height: 1.2;
+}
+
+.input:disabled {
+    border: 1px solid transparent;
+}
+
+.errorInput {
+    border: 2px solid var(--red-primary);
+    background: var(--red-secondary);
+}
+
+.close-icon {
+    cursor: pointer;
+}
+
+.name-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.textareaErr {
+    border: 2px solid var(--red-primary);
+    background: var(--red-secondary);
+}
