@@ -425,7 +425,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 			if (result.error) return
 		
 			const res = result.results
-			setLists([...res]);
+			setLists([...res])
 			setFetchedLists(true)
 		})
 	}
