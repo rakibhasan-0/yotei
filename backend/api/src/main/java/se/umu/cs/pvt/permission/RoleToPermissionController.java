@@ -141,7 +141,8 @@ public class RoleToPermissionController {
     /**
      * (PUT) Method for editing an existing roles permissions. If the role
      * or ANY of the permissions doesnt exist, then BAD_REQUEST (400) will be 
-     * returned.
+     * returned. BAD_REQUEST will also be returned if a permission was not 
+     * able to be deleted.
      * 
      * @param roleId Id of the role to edit permissions
      * @param newPermissionIds List of new permissions to override the roles
@@ -160,7 +161,11 @@ public class RoleToPermissionController {
 
         List<Permission> oldPermissions = getAllPermissionsForRoleWithId(
             roleId).getBody();
-        deleteDifferenceInPermissions(roleId, oldPermissions, newPermissionIds);
+        try {
+            deleteDifferenceInPermissions(roleId, oldPermissions, newPermissionIds);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         List<RoleToPermission> result = addPermissions(roleId, newPermissionIds);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -181,9 +186,13 @@ public class RoleToPermissionController {
                     "Role with id " + roleId + " does not have permission with id " + 
                     permissionId + ".", HttpStatus.BAD_REQUEST);
         }
-                    
-        roleToPermissionRepository.deleteByRoleIdAndPermissionId(roleId, permissionId);
-                    
+        
+        try {
+            roleToPermissionRepository.deleteByRoleIdAndPermissionId(roleId, permissionId);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Unable to remove permission from role", HttpStatus.BAD_REQUEST);
+        }
+
         Map<String, Long> roleToPermissionToDelete = new HashMap<>();
         roleToPermissionToDelete.put("role_id", roleId);
         roleToPermissionToDelete.put("permission_id", permissionId);
@@ -205,13 +214,17 @@ public class RoleToPermissionController {
         return rolePermissionPairs;
     }
 
-    private void deleteDifferenceInPermissions(Long roleId, List<Permission> oldPermissions, List<Long> newPermissionIds) {
+    private void deleteDifferenceInPermissions(Long roleId, List<Permission> oldPermissions, List<Long> newPermissionIds) throws Exception {
         for (Permission oldPermission : oldPermissions) {
             Long oldPermissionId = oldPermission.getPermissionId();
 
             if (!newPermissionIds.contains(oldPermissionId)) {
-                roleToPermissionRepository.deleteByRoleIdAndPermissionId(
+                try {
+                    roleToPermissionRepository.deleteByRoleIdAndPermissionId(
                     roleId, oldPermissionId);
+                } catch (Exception e) {
+                    throw e;
+                }
             }
         }
     }

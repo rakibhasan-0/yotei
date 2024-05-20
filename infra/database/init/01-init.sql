@@ -10,6 +10,14 @@ END;
 
 $$ LANGUAGE 'plpgsql' IMMUTABLE PARALLEL SAFE;
 
+-- "Konstant" för admin rättighet
+CREATE
+OR REPLACE FUNCTION admin_permission_id() RETURNS INT AS $$ BEGIN RETURN 1;
+
+END;
+
+$$ LANGUAGE 'plpgsql' IMMUTABLE PARALLEL SAFE;
+
 -- "Konstant" för editor roll
 CREATE
 OR REPLACE FUNCTION editor_role_id() RETURNS INT AS $$ BEGIN RETURN 2;
@@ -297,7 +305,7 @@ ALTER TABLE
 --
 CREATE TABLE activity(
 	activity_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-	workout_id INT NOT NULL,
+	workout_id INT,
 	exercise_id INT,
 	technique_id INT,
 	category_name VARCHAR(255),
@@ -619,6 +627,7 @@ CREATE TABLE IF NOT EXISTS examination_grading (
 	step INT NOT NULL,
 	technique_step_num INT NOT NULL,
 	created_at DATE NOT NULL,
+  title VARCHAR(255) NOT NULL,
 	CONSTRAINT grading_fk_belt FOREIGN KEY(belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE
 );
 
@@ -825,12 +834,38 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
+CREATE OR REPLACE FUNCTION protect_final_admin_role() RETURNS TRIGGER AS $$ 
+BEGIN 
+	IF OLD.role_id = admin_role_id()
+	AND (
+		SELECT
+			COUNT(user_id)
+		FROM
+			user_table
+		WHERE
+			role_id = admin_role_id()
+	) <= 1 THEN RAISE EXCEPTION 'cannot remove final admin';
+
+	END IF;
+
+	IF TG_OP = 'UPDATE' THEN RETURN NEW;
+
+	ELSE RETURN OLD;
+
+	END IF;
+END;
+$$ LANGUAGE 'plpgsql';
+
 CREATE TRIGGER remove_user BEFORE DELETE ON user_table 
 	FOR EACH ROW EXECUTE PROCEDURE remove_user_references();
 
 CREATE TRIGGER protect_admin BEFORE DELETE OR
 	UPDATE OF user_role ON user_table 
 	FOR EACH ROW EXECUTE PROCEDURE protect_final_admin();
+
+CREATE TRIGGER protect_admin_role BEFORE DELETE OR
+	UPDATE OF role_id ON user_table
+	FOR EACH ROW EXECUTE PROCEDURE protect_final_admin_role();
 
 --
 -- Triggers for categories
@@ -871,5 +906,22 @@ $$ LANGUAGE 'plpgsql';
 CREATE TRIGGER insert_tag BEFORE INSERT ON tag 
 	FOR EACH ROW EXECUTE PROCEDURE tag_to_lowercase();
 
+--
+-- Triggers for roles
+--
+CREATE OR REPLACE FUNCTION protect_admin_role_permission() RETURNS TRIGGER AS $$ 
+BEGIN 
+	IF OLD.role_id = admin_role_id()
+	AND 
+	OLD.permission_id = admin_permission_id()
+	THEN RAISE EXCEPTION 'cannot revoke admin permissions from admin role';
+
+	END IF;
+	RETURN OLD;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER protect_admin_permission BEFORE DELETE ON role_to_permission
+	FOR EACH ROW EXECUTE PROCEDURE protect_admin_role_permission();
 	
 
