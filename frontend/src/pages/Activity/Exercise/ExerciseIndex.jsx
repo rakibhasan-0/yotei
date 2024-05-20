@@ -1,10 +1,10 @@
-import React, {useState, useEffect, useContext} from "react"
+import {useState, useEffect, useContext} from "react"
 import { useCookies } from "react-cookie"
 import SearchBar from "../../../components/Common/SearchBar/SearchBar"
 import "../../../components/Common/SearchBar/SearchBarUtils"
 import { AccountContext } from "../../../context"
 import RoundButton from "../../../components/Common/RoundButton/RoundButton"
-import { Plus } from "react-bootstrap-icons"
+import { Plus, ThreeDotsVertical } from "react-bootstrap-icons"
 import { getExercises } from "../../../components/Common/SearchBar/SearchBarUtils"
 import useMap from "../../../hooks/useMap"
 import FilterContainer from "../../../components/Common/Filter/FilterContainer/FilterContainer"
@@ -13,7 +13,10 @@ import ExerciseCard from "../../../components/Common/ExerciseCard/ExerciseListIt
 import InfiniteScrollComponent from "../../../components/Common/List/InfiniteScrollComponent"
 import Spinner from "../../../components/Common/Spinner/Spinner"
 import { isEditor } from "../../../utils"
-
+import Popup from "../../../components/Common/Popup/Popup"
+import { AddToListPopupContent } from "../../../components/Activity/AddToListPopupContent"
+import styles from "./ExerciseIndex.module.css"
+import { Link } from "react-router-dom"
 
 
 /**
@@ -48,6 +51,10 @@ export default function ExerciseIndex() {
 	const [map, mapActions] = useMap()
 	const [sort, setSort] = useState(sortOptions[0])
 	const [loading, setIsLoading] = useState(true)
+	const [selectedExerciseId, setSelectedExerciseId] = useState(null)
+	const [showMorePopup, setShowMorePopup] = useState(false)
+
+	
 
 	useEffect(() => {
 		if(filterCookie) {
@@ -103,6 +110,14 @@ export default function ExerciseIndex() {
 		window.localStorage.setItem("time", "")
 	}
 
+
+	const handleMoreClicked = (id) => {
+		setSelectedExerciseId(id)
+		//Open pop up
+		setShowMorePopup(!showMorePopup)
+	}
+
+
 	return (
 		<>
 			<h1 id ={"exercise-header"}></h1>
@@ -126,14 +141,23 @@ export default function ExerciseIndex() {
 					<title>Övningar</title>
 					<InfiniteScrollComponent>
 						{ visibleList.map((exercise, index) => {
-							return <ExerciseCard
-								item={exercise.name}
-								text={exercise.duration + " min"}
-								key={exercise.id}
-								id={exercise.id}
-								detailURL={detailURL}
-								index={index}>
-							</ExerciseCard>
+							return (
+								<div key={exercise.id} className={styles["exercise-row"]}>
+									<div style={{ flexGrow: 1 }}>
+										<ExerciseCard
+											item={exercise.name}
+											text={exercise.duration + " min"}
+											key={exercise.id}
+											id={exercise.id}
+											detailURL={detailURL}
+											index={index}
+										/>
+									</div>
+									<Link variant="link" style={{ marginTop: "10px", paddingLeft: "20px" }} onClick={() => handleMoreClicked(exercise.id)}>
+										<ThreeDotsVertical color="black" size={24} />
+									</Link>
+								</div>
+							)
 						})}
 					</InfiniteScrollComponent>
 				</div>
@@ -147,6 +171,9 @@ export default function ExerciseIndex() {
 				<Plus/>
 			</RoundButton>
 			}
+			<Popup title="Lägg till i lista" isOpen={showMorePopup} setIsOpen={setShowMorePopup}>
+				<AddToListPopupContent techExerID={{ techniqueId: null, exerciseId: selectedExerciseId }} />
+			</Popup>
 		</>
 	)
 }
