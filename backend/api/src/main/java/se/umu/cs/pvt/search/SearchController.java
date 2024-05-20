@@ -170,11 +170,16 @@ public class SearchController {
      */
     @GetMapping("/activitylists")
     public ResponseEntity<SearchResponse<ActivityListSearchResponse>> searchLists(
-            @RequestParam Map<String, String> urlQuery) {
+            @RequestParam Map<String, String> urlQuery,
+            @RequestHeader(value = "token") String token) {
 
         SearchActivityListParams searchListParams = new SearchActivityListParams(urlQuery);
 
-        DatabaseQuery createdQuery = new SearchActivityListDBBuilder().build();
+        DatabaseQuery createdQuery = new SearchActivityListDBBuilder(searchListParams, token)
+        .filterByHidden()
+        .filterByIsAuthor()
+        .filterByIsShared()
+        .build();
 
         List<ActivityListDBResult> result = searchRepository.getActivityListFromCustomQuery(createdQuery.getQuery());
         List<ActivityListSearchResponse> activityListSearchResponses = new SearchActivityListResponseBuilder(result).build();
