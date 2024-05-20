@@ -113,7 +113,7 @@ export default function WorkoutIndex() {
 					message={searchErrorMessage}/>)
 			}
 			<br/>
-			<RoundButton linkTo="/workout/create">
+			<RoundButton linkTo="/workout/create" id={"CreateWorkoutButton"}>
 				<Plus />
 			</RoundButton>
 		</>

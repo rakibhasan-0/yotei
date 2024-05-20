@@ -21,7 +21,7 @@ export class WorkoutPage {
     }
 
     async createWorkout(workout: Workout) {
-        await this.page.getByRole('img').nth(4).click()
+        await this.page.locator('#CreateWorkoutButton').getByRole('img').click()
         await this.page.getByPlaceholder('Namn').click()
         await this.page.getByPlaceholder('Namn').fill(workout.name)
         await this.page.getByPlaceholder('Namn').press('Tab')
@@ -38,6 +38,30 @@ export class WorkoutPage {
         await this.page.locator('div').filter({ hasText: /^Uppvärmning$/ }).click()
         await this.page.getByRole('button', { name: 'Lägg till' }).click()
         await this.page.getByRole('button', { name: 'Spara' }).click()
+    }
+
+    async editWorkout() {
+
+        // Clicks the pen icon to edit the created workout
+        await this.page.getByRole('link').first().click();
+
+        // Updates the workouts description
+        await this.page.getByPlaceholder('Beskrivning av pass').click();
+        await this.page.getByPlaceholder('Beskrivning av pass').fill('Description description description more description');
+
+        // Adds another activity to the workout
+        await this.page.getByRole('button', { name: '+ Aktivitet' }).click();
+        await this.page.getByRole('tab', { name: 'Tekniker' }).click()
+        await this.page.locator('#technique-list-item-141').getByLabel('').check();
+        await this.page.locator('#AddCheckedActivitiesButton').getByRole('img').click();
+
+        // Sets the newly added activitys duration to five minutes
+        await this.page.locator('#minute-picker-0').click();
+        await this.page.locator('#minute-picker-0').fill('5');
+
+        // Adds the new technique and saves the workout
+        await this.page.getByRole('button', { name: 'Lägg till' }).click();
+        await this.page.getByRole('button', { name: 'Spara' }).click();        
     }
 
     async deleteWorkout(name: String) {
