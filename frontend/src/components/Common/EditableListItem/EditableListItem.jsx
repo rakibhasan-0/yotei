@@ -1,3 +1,5 @@
+import React, { useRef, useEffect } from "react"
+
 import styles from "./EditableListItem.module.css"
 import { Trash, Pencil, Check2 as Check, X } from "react-bootstrap-icons"
 import { useState } from "react"
@@ -36,7 +38,7 @@ import CheckBox from "../CheckBox/CheckBox"
  * 		</EditableListItem>
  * 
  * @author Team 1, Team Durian (Group 3) (2024-05-13)
- * @since 2024-05-06
+ * @since 2024-05-20
  */
 export default function EditableListItem({ item, id, index, onRemove, onEdit, onCheck, showCheckbox, checked, validateInput, grayTrash }) {
 
@@ -46,19 +48,47 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 	const [error, setError] = useState("")
 	const [grayEdit, setGrayEdit] = useState(true)
 
+	useEffect(() => {
+		updateTextareaHeight() // Initialize multiline textarea height.
+	}, [editedText])
+
+	// Update the textarea height when the window is resized.
+	useEffect(() => {
+		if (!textbox.current) return
+		const observer = new ResizeObserver(() => {
+			updateTextareaHeight()
+		})
+		observer.observe(textbox.current)
+		return () => observer.disconnect()
+	}, [])
+
 	const handleEdit = () => {
 		setIsEditing(true)
 	}
 
 	const handleInputChange = (event) => {
-		const text = event.target.value
+		let text = event.target.value
+		let newline = false
 		// The trimmed text is validated, since it will be trimmed when saved.
 		const trimmedText = text.trim()
 		const textareaErr = validateInput(trimmedText)
+		if (text.slice(-1) === "\n") {
+			if (text.slice(-2) === "\r\n") {
+				text = text.slice(0, -2)
+			}
+			else {
+				text = text.slice(0, -1)
+			}
+			newline = true
+		}
 		// Update the gray check
 		setGrayEdit(textareaErr != "" || trimmedText === savedText)
 		setEditedText(text)
 		setError(textareaErr)
+
+		if (newline) {
+			handleEditSubmit()
+		}
 	}
 
 	const handleEditSubmit = () => {
@@ -72,9 +102,20 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 
 	const handleEditAbort = () => {
 		setIsEditing(false)
+		// Reset error, text and grayed check.
 		setError("")
 		setEditedText(savedText)
-		setGrayEdit(true) // Reset
+		setGrayEdit(true)
+	}
+
+	const textbox = useRef(null)
+
+	const updateTextareaHeight = () => {
+		// See https://stackoverflow.com/a/73487544
+		// This, in combination with useEffect, is visibly slow.
+		// Maybe react-textarea-autosize would help?
+		textbox.current.style.height = "inherit"
+		textbox.current.style.height = `${textbox.current.scrollHeight}px`
 	}
 
 	return (
@@ -89,23 +130,22 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 								id="checkbox-element"
 							/>}
 							<div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flex: 1 }}>
-								{isEditing ? (
-									<input
-										id="edit-element" 
-										className={error != "" ? `${styles["input"]} ${styles["errorInput"]}` : `${styles["input"]}`}
-										type="text"
-										value={editedText}
-										onChange={handleInputChange}
-										onBlur={() => {
-											if (editedText != "") {
-												handleEditSubmit
-											}
-										}}
-										autoFocus
-									/> 
-								) : (
-									<div className={styles["href-link"]} style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="EditableListItem-item">{editedText}</div>
-								)}
+								<textarea
+									rows="1"
+									disabled={!isEditing}
+									ref={textbox}
+									id="edit-element"
+									className={error != "" ? `${styles["input"]} ${styles["errorInput"]}` : `${styles["input"]}`}
+									type="text"
+									value={editedText}
+									onChange={handleInputChange}
+									onBlur={() => {
+										if (editedText != "") {
+											handleEditSubmit
+										}
+									}}
+									autoFocus
+								/>
 								<div className={styles["flex-shrink-0"]} style={{ display: "flex", alignItems: "center" }}>
 									{isEditing ?
 										<>
@@ -137,11 +177,8 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 							</div>
 						</div>
 					</div>
-
 				</div>
-
 			</div>
-			<div className={styles["input"]} style={{ color: "red" , display: error == "" ? "none" : "block"}} >{error}</div>
-
+			<div style={{ color: "var(--red-primary)" , display: error == "" ? "none" : "block"}} >{error}</div>
 		</div>)
 }
