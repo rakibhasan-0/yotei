@@ -11,6 +11,7 @@ import PopupSmall from "../../components/Common/Popup/PopupSmall"
 
 import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../utils"
 import {setError as setErrorToast } from "../../utils"
+import EditableInputTextField from "../../components/Common/EditableInputTextField/EditableInputTextField"
 
 /**
  * Page to add examinees and make pairs out of the added examinees for a grading.
@@ -37,6 +38,7 @@ export default function GradingBefore() {
 	const [pairs, setPair] = useState([]) 
 	const [checkedExamineeIds, setCheckedExamineeIds] = useState([])
   const [redirect, setRedirect] = useState(false)
+  const [gradingName, setGradingName] = useState("")
   const containsSpecialChars = str => /[^\w äöåÅÄÖ-]/.test(str)
   const [showPopup, setShowPopup] = useState(false)
 
@@ -113,6 +115,35 @@ export default function GradingBefore() {
 		}
 		return ""
 	}
+
+  /**
+   * Validets so the name of tag is not containing any illegal characters 
+   * or if the name is empty or if the name of the tag already exists. 
+   * @param {String} name The name of the tag to be validated. 
+   * @returns Nothing if the name is valid, otherwise, the errortext. 
+   */
+  const validateGradingName = (name) => {
+		if (name.length > 30) {
+			return "Namnet får inte vara längre än 30 karaktärer"
+		}
+		return ""
+	}
+
+  /**
+   * This effects called when you enter the page first time
+   */
+  useEffect(() => {
+    
+    const fetchData = async() => {
+      const data = await getGrading(token)
+			.catch(() => setErrorToast("Kunde inte hämta examinationen. Kontrollera din internetuppkoppling."))   
+      if (data.title !== "default") {
+        setGradingName(data.title)
+      }
+    }
+    fetchData()
+    
+  },[])
 
   /**
    * Help function to activate the useEffect function to start the navigation
@@ -407,12 +438,46 @@ export default function GradingBefore() {
 			.catch(() => setErrorToast("Kunde inte updatera personen. Kontrollera din internetuppkoppling."))
 	}
 
+  async function editGradingName(Id, text) {
+    setGradingName(text)
+	
+
+    // get the grading in the database
+    let data = await getGrading(token)
+			.catch(() => setErrorToast("Kunde inte hämta graderingen. Kontrollera din internetuppkoppling."))
+
+    // update the title of the grading and delete examinees so PUT can be used
+    data.title = text
+    delete data.examinees
+
+    // update the grading in the database
+    await putGrading(data, token)
+  }
+
+  function pressedContinue() {
+	if(examinees.length <= 0 && pairs.length <= 0) {
+		setErrorToast("Kan ej starta gradering utan deltagare")
+		return
+	}
+	if(gradingName == "") {
+		setErrorToast("Kan ej starta gradering utan namn")
+		return
+	}
+	setShowPopup(true)
+  }
+
+
 	return (
 		<div>
-			<div> 
-				<div style={{ backgroundColor: ColorParam, borderRadius: "0.3rem", padding: "0px" }}>
-					<h2>KIHON WAZA</h2>
-				</div>
+			<div style={{position: "relative", zIndex: "0" }}>
+        <EditableInputTextField
+        item={gradingName}
+        id={"grading-name-text-field"}
+        key={"grading-name-text-field"}
+        validateInput={validateGradingName}
+        onEdit={editGradingName}
+        color={ColorParam}
+        />    
 			</div>
 
 			<div className="column">
@@ -528,7 +593,7 @@ export default function GradingBefore() {
 					id="continue-button"		
 					width="100%"
 					outlined={false}
-					onClick={() => setShowPopup(true)}>
+					onClick={() => pressedContinue()}>
 					<p>Fortsätt</p>
 				</Button>
 			
@@ -622,6 +687,37 @@ async function putExaminee(examinee, token) {
 
 	return fetch("/api/examination/examinee", requestOptions)
 		.then(response => { return response })
+		.catch(error => { alert(error.message) })
+}
+
+/**
+ * Get an already exsisting grading in the database
+ * @param {any} token 
+ * @returns The response code
+ */
+async function getGrading(token) {
+	const requestOptions = {
+		method: "GET",
+		headers: { "Content-Type": "application/json", "token": token },
+	}
+	return fetch(`/api/examination/grading/${gradingId}`, requestOptions)
+		.then(response => { return response.json() })
+		.catch(error => { alert(error.message) })
+}
+
+/**
+ * Update an already exsisting grading in the database
+ * @param {Map} grading
+ * @param {any} token 
+ * @returns The response code
+ */
+async function putGrading(grading, token) {
+	const requestOptions = {
+		method: "PUT",
+		headers: { "Content-Type": "application/json", "token": token },
+    body: JSON.stringify(grading)
+	}
+	return fetch("/api/examination/grading", requestOptions)
 		.catch(error => { alert(error.message) })
 }
 
