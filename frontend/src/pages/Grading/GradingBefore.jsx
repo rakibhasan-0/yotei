@@ -42,6 +42,13 @@ export default function GradingBefore() {
 
   let numberOfPairs = 0
 
+
+
+  // this is for the automatically pair creation
+  const [lastAddedExaminee, setLastAddedExaminee] = useState({})
+  const [automaticallyPairCreation, setAutomaticallyPairCreation] = useState(false)
+
+
 	/**
 	 * Get method for the grading information. 
 	 * @returns JSON response
@@ -88,10 +95,8 @@ export default function GradingBefore() {
 
 			})
 	}
-  // this is for the automatically pair creation
-  const [lastAddedExaminee, setLastAddedExaminee] = useState({})
-  const [automaticallyPairCreation, setAutomaticallyPairCreation] = useState(false)
 
+  
 
   /**
    * Validets so the name of tag is not containing any illegal characters 
