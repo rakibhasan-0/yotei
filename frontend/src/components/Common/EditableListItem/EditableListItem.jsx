@@ -36,12 +36,13 @@ import CheckBox from "../CheckBox/CheckBox"
  *      grayTrash={false}
  * 		showTrash={false}
  * 		showX={false}
+ * 		showPencil={false}
  * 		</EditableListItem>
  * 
  * @author Team 1, Team Durian (Group 3) (2024-05-13)
  * @since 2024-05-06
  */
-export default function EditableListItem({ item, id, index, onRemove, onEdit, onCheck, showCheckbox, checked, validateInput, grayTrash, showTrash, showX }) {
+export default function EditableListItem({ item, id, index, onRemove, onEdit, onCheck, showCheckbox, checked, validateInput, grayTrash, showTrash, showX, showPencil}) {
 
 	const [isEditing, setIsEditing] = useState(false) // State to manage edit mode
 	const [editedText, setEditedText] = useState(item) // State to store edited text
@@ -55,7 +56,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 
 	const handleInputChange = (event) => {
 		const text = event.target.value
-		// The trimmed text is validated, since it will be trimmed when saved. <Pencil onClick={handleEdit} size="24px" style={{ color: "var(--red-primary)", cursor: "pointer", marginRight: "10px" }} id="pencil-icon"/>
+		// The trimmed text is validated, since it will be trimmed when saved.
 		const trimmedText = text.trim()
 		const textareaErr = validateInput(trimmedText)
 		// Update the gray check
@@ -82,7 +83,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 
 	const handleBlur = (event) => {
 		if (event.relatedTarget?.id === "accept-icon") {
-			handleEditSubmit();
+			handleEditSubmit()
 		}
 		setIsEditing(false)
 	}
@@ -135,6 +136,9 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 										</>
 										:
 										<>
+											{showPencil && (
+												<Pencil onClick={handleEdit} size="24px" style={{ color: "var(--red-primary)", cursor: "pointer", marginRight: "10px" }} id="pencil-icon" />
+											)}
 											{showTrash && (
 												<Trash
 													className={styles["close-icon"]}
