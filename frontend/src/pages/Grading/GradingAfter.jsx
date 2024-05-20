@@ -86,11 +86,12 @@ export default function GradingAfter() {
 	/**
 	 * Function to download the grading as a pdf.
 	 */
-	const downloadPdf  =   () => {
-		// fetch(`api/export/grading/${gradingId}`, {
-		//     method: "GET",
-		//     headers: { "Authorization": `Bearer ${token}` }  // Assuming the token is a bearer token
-		// })
+	const downloadPdf  =  async () => {
+		const response = await fetch(`/api/examination/grading/${gradingId}/pdf`, {
+			method: "GET",
+			headers: { "token": token }
+		})
+		console.log(response)
 	}
 
 	/**
