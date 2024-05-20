@@ -69,7 +69,7 @@ export default function TagInput({id, addedTags, setAddedTags, isNested, itemNam
 					onClick={() => handleRemoveTag(tag)}
 				/>)}
 			</div>
-			<Popup title={itemName ? itemName : "X"} dividerOption="h2_left"  id= "addTagPopUp" isOpen={showPopup} setIsOpen={setShowPopup} isNested={isNested} onClose={handleClose}>
+			<Popup title={itemName ? itemName : "Hantera taggar"} dividerOption="h2_left"  id= "addTagPopUp" isOpen={showPopup} setIsOpen={setShowPopup} isNested={isNested} onClose={handleClose}>
 				<AddTagPopup id ="addTagPopupDiv" addedTags={addedTags} setAddedTags={setAddedTags} setIsOpen={setShowPopup} newAddedTags={newAddedTags} setNewAddedTags={setNewAddedTags} setShowConfirmPopup={setShowConfirmPopup} showConfirmPopup={showConfirmPopup}/>
 			</Popup>
 		</div>
