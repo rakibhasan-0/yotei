@@ -101,6 +101,36 @@ public class TechniqueDatabaseTest {
         }
     }
 
+    @Test
+    public void testTechniqueIDS() throws Exception {
+        String jdbcUrl = postgreSQLContainer.getJdbcUrl();
+        String username = postgreSQLContainer.getUsername();
+        String password = postgreSQLContainer.getPassword();
+
+        int yellowBegin = 1;
+        int yellowEnd = 25;
+
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+            Statement statement = connection.createStatement()) {
+                //This is where you edit if you wish to swap belts/technique
+                String expectedColor = "Gult";
+
+                for(Integer i = yellowBegin; i < yellowEnd + 1; i++){
+                    String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
+                
+                    PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+                    preparedStatement.setString(1, i.toString());
+
+                    ResultSet resultSet = preparedStatement.executeQuery();
+
+                    if (resultSet.next()) {
+                        String belt = resultSet.getString("belt_name");
+                        assertEquals(expectedColor, belt);
+                    }
+                }
+        }
+    }
+
     /*The following set of tests sample a few techniques to ensure that they're connected to their respective belt*/
     @Test
     public void testBasicTechniques() throws Exception {

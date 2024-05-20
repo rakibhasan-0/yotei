@@ -142,8 +142,11 @@ DROP TABLE IF EXISTS grading_protocol;
 DROP TABLE IF EXISTS grading_protocol_category;
 
 DROP SEQUENCE IF EXISTS serial;
+DROP SEQUENCE IF EXISTS serialEx;
 
+-- We start exercies from ID 1 to allow easier changes to the init-scripts
 CREATE SEQUENCE serial START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE serialEx START WITH 1000 INCREMENT BY 1;
 
 -- TODO: Lägg till dessa till alla CREATE TABLE (vet inte om det finns bättre lösning)
 -- ENCODING 'UTF8'
@@ -248,7 +251,7 @@ ALTER TABLE
 -- Name: exercise; Type: TABLE; Schema: public; Owner: psql
 --
 CREATE TABLE exercise(
-	exercise_id INT DEFAULT nextval('serial') PRIMARY KEY,
+	exercise_id INT DEFAULT nextval('serialEx') PRIMARY KEY,
 	name VARCHAR(255) UNIQUE,
 	description TEXT,
 	duration INT
