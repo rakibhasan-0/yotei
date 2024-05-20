@@ -7,6 +7,7 @@ import { AccountContext } from "../../context"
 import AddExaminee from "../../components/Common/AddExaminee/AddExaminee"
 import EditableListItem from "../../components/Common/EditableListItem/EditableListItem"
 import { X as CloseIcon } from "react-bootstrap-icons"
+import PopupSmall from "../../components/Common/Popup/PopupSmall"
 
 import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../utils"
 import {setError as setErrorToast } from "../../utils"
@@ -37,6 +38,7 @@ export default function GradingBefore() {
 	const [checkedExamineeIds, setCheckedExamineeIds] = useState([])
   const [redirect, setRedirect] = useState(false)
   const containsSpecialChars = str => /[^\w äöåÅÄÖ-]/.test(str)
+  const [showPopup, setShowPopup] = useState(false)
 
   let numberOfPairs = 0
 
@@ -88,7 +90,7 @@ export default function GradingBefore() {
       try {
         const exec = async () => {
           await Promise.all(examinees.map(examinee => {
-                postPair({examinee_1_id: examinee.id}, token)
+                postPair({examinee1Id: examinee.id}, token)
                   .catch(() => setErrorToast("Kunde inte lägga till paret. Kontrollera din internetuppkoppling."))
           }))
           navigate(`/grading/${gradingId}/2`)
@@ -149,7 +151,7 @@ export default function GradingBefore() {
       setLastAddedExaminee({})
     }
 
-		const data = await postPair({examinee_1_id: selectedExaminees[0].id, examinee_2_id: selectedExaminees[1].id}, token)
+		const data = await postPair({examinee1Id: selectedExaminees[0].id, examinee2Id: selectedExaminees[1].id}, token)
 			.then(response => handleResponse(response))
 			.catch(() => setErrorToast("Kunde inte lägga till paret. Kontrollera din internetuppkoppling."))
 
@@ -169,14 +171,14 @@ export default function GradingBefore() {
    * @param {Integer} examinee_2_id 
    * @param {String} examinee_2_name 
    */
-	async function createPairWithId(examinee_1_id, examinee_1_name, examinee_2_id, examinee_2_name) {
-		const data = await postPair({examinee_1_id: examinee_1_id, examinee_2_id: examinee_2_id}, token)
+	async function createPairWithId(examinee1Id, examinee1Name, examinee2Id, examinee2Name) {
+		const data = await postPair({examinee1Id: examinee1Id, examinee2Id: examinee2Id}, token)
 			.then(response => handleResponse(response))
 			.catch(() => setErrorToast("Kunde inte lägga till paret. Kontrollera din internetuppkoppling."))
 
 		setPair([...pairs, [
-      {id: examinee_1_id, name: examinee_1_name, pairId: data.examinee_pair_id}, 
-      {id: examinee_2_id, name: examinee_2_name, pairId: data.examinee_pair_id}]]
+      {id: examinee1Id, name: examinee1Name, pairId: data.examineePairId}, 
+      {id: examinee2Id, name: examinee2Name, pairId: data.examineePairId}]]
     )
 	}
   
@@ -237,19 +239,19 @@ export default function GradingBefore() {
    * @param {Map} examinee 
    */
 	async function addExaminee(examinee) {
-		const newExaminee = await postExaminee({ name: examinee, grading_id: gradingId }, token)
+		const newExaminee = await postExaminee({ name: examinee, gradingId: gradingId }, token)
 			.then(response => handleResponse(response))
 			.catch(() => setErrorToast("Kunde inte lägga till personen. Kontrollera din internetuppkoppling."))
 		
     // check if there has not been an examinee added previosly
     if(Object.keys(lastAddedExaminee).length === 0) {
-      setLastAddedExaminee({ id: newExaminee["examinee_id"], name: newExaminee["name"]})
+      setLastAddedExaminee({ id: newExaminee["examineeId"], name: newExaminee["name"]})
     } else {
       // now there maybe will be an automatically pair created
       setAutomaticallyPairCreation(true)
     }
     // set examinee
-    setExaminees([...examinees, { id: newExaminee["examinee_id"], name: newExaminee["name"] }])
+    setExaminees([...examinees, { id: newExaminee["examineeId"], name: newExaminee["name"] }])
 
 	}
 
@@ -344,7 +346,7 @@ export default function GradingBefore() {
       )
     }
 		
-		await putExaminee({name: name, examinee_id: examineeId, grading_id: gradingId}, token)
+		await putExaminee({name: name, examineeId: examineeId, gradingId: gradingId}, token)
 			.catch(() => setErrorToast("Kunde inte updatera personen. Kontrollera din internetuppkoppling."))
 	}
 
@@ -459,13 +461,20 @@ export default function GradingBefore() {
 				>
 					<p>Tillbaka</p>
 				</Button>
+				
+				<PopupSmall id={"test-popup"} title={"Varning"} isOpen={showPopup} setIsOpen={setShowPopup} direction={startRedirection}>
+					<h2>Är du säker på att alla deltagare är tillagda? </h2>
+					<h2> Isåfall fortsätt till bedömnings processen</h2>
+				</PopupSmall>
+				
 				<Button
-          id="continue-button"
+					id="continue-button"		
 					width="100%"
-					onClick={startRedirection}
-				>
-					<p>Forsätt</p>
+					outlined={false}
+					onClick={() => setShowPopup(true)}>
+					<p>Fortsätt</p>
 				</Button>
+			
 			</div>
 		</div>
 	)
