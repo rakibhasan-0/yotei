@@ -407,9 +407,6 @@ public class ExaminationController {
     @GetMapping("/comment/examinee/all/{examinee_id}")
     public ResponseEntity<List<ExaminationComment>> getExamineeComments(@PathVariable("examinee_id") long examinee_id) {
         List<ExaminationComment> comments = examinationCommentRepository.findByExamineeId(examinee_id);
-        if(comments.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
         return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 
@@ -421,9 +418,6 @@ public class ExaminationController {
     @GetMapping("/comment/pair/all/{examinee_pair_id}")
     public ResponseEntity<List<ExaminationComment>> getExamineePairComments(@PathVariable("examinee_pair_id") long examineePairId) {
         List<ExaminationComment> comments = examinationCommentRepository.findByExamineePairId(examineePairId);
-        if(comments.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
         return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 
@@ -435,9 +429,6 @@ public class ExaminationController {
     @GetMapping("/comment/group/all/{grading_id}")
     public ResponseEntity<List<ExaminationComment>> getGradingComments(@PathVariable("grading_id") long grading_id) {
         List<ExaminationComment> comments = examinationCommentRepository.findByGradingIdAndExamineeIdIsNullAndExamineePairIdIsNull(grading_id);
-        if(comments.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
         return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 

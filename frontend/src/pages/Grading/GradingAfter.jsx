@@ -89,7 +89,7 @@ export default function GradingAfter() {
 	 * @since 2024-05-15
 	 */
 	const fetchExamineeResult = () => {
-		return fetch(`/api/examination/grading/${gradingId}/result`, {
+		return fetch(`/api/examination/grading/${gradingId}`, {
 			method: "GET",
 			headers: { "token": token }
 		}).then(response => {
@@ -149,7 +149,7 @@ export default function GradingAfter() {
 					})
 				}
 				setExamineeResult({
-					examinee_id: result_data.examineed,
+					examineeId: result_data.examineed,
 					name: result_data.name,
 					result: result_data.result
 				})
@@ -178,8 +178,8 @@ export default function GradingAfter() {
 				<div className={styles.scrollableContainer}>
 					{grading.examinees && grading.examinees.map((examinee) => (
 						<UserBoxGrading
-							key={examinee.examinee_id}
-							id={examinee.examinee_id}
+							key={examinee.examineeId}
+							id={examinee.examineeId}
 							name={examinee.name} />
 					))}
 				</div>
