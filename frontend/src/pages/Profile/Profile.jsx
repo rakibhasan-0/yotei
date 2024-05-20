@@ -116,7 +116,7 @@ export default function Profile() {
 			</>
 		)
 	}
-
+	//Future-proofs so that it will get all of the favourite workouts until 2060
 	const getAmountOfFavouriteWorkouts= async() =>{
 		const args = {
 			from: "1980-01-01",
@@ -128,15 +128,11 @@ export default function Profile() {
 		}
 		getWorkouts(args, token, null, null, (response) => {
 			if(response.error) {
-				setError("Serverfel: Kunde inte ansluta till servern!")
 				setAmountOfFavouriteWorkouts(0)
 			} else {
-				console.log("LEngth: "+response.results.length)
 				setAmountOfFavouriteWorkouts(response.results.length)
 			}
 		})
-		console.log("Emil kommer göra illa mig :)" +amountOfFavouriteWorkouts)
-
 	}
 
 	/**
@@ -144,18 +140,18 @@ export default function Profile() {
 	 * search text are changed.
 	 */
 	useEffect(() => {
+		setFetchedLists(false)
 		getAmountOfFavouriteWorkouts();
 		const workout = {
 			id: -1,
 			name: "Favoritpass",
-			size: amountOfFavouriteWorkouts,//test,
+			size: amountOfFavouriteWorkouts,
 			author: {
 				userId: 1,
 				username: "Admin",
 			},
 			hidden: false,
 		}
-		setFetchedLists(false)
 		setLists([workout])
 		fetchingList()
 	}, [searchText,amountOfFavouriteWorkouts])
