@@ -501,40 +501,52 @@ public class ExaminationController {
     }
 
     /**
-     * Returns a specific examination result based on grading_id.
+     * Returns a specific examination result based on grading_id. The result is a list of examinees and the number of techniques they have passed and in addition, a total count of techniques for the entire examination.
      * @param grading_id
      * @return
      */
     @GetMapping("/examresult/grading/{grading_id}")
-    ResponseEntity <Map<String, Long>> getExaminationResultByGradingId(@PathVariable("grading_id") long grading_id){
-        String exam_protocol = examinationProtocolRepository.findById(grading_id).get().getExaminationProtocol();
+    public ResponseEntity<Map<String, Object>> getExaminationResultByGradingId(@PathVariable("grading_id") long grading_id){
+        System.out.println("grading id: " + grading_id);
         List<Examinee> examinees = examineeRepository.findByGradingId(grading_id);
+        System.out.println("The given belt for the examination: " + gradingRepository.findById(grading_id).get().getBeltId());
+        Optional<ExaminationProtocol> protocolOptional = examinationProtocolRepository.findById(gradingRepository.findById(grading_id).get().getBeltId());
+        if (!protocolOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        String exam_protocol = protocolOptional.get().getExaminationProtocol();
         JSONObject root = new JSONObject(exam_protocol);
         JSONArray categories = root.getJSONArray("categories");
+        Map<String, Object> response = new HashMap<>();
+
         if(categories.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Map<String, Long> technique_info = new HashMap<>();
         int techniqueCount = 0;
         for (int i = 0; i < categories.length(); i++) {
             JSONObject category = categories.getJSONObject(i);
             JSONArray techniques = category.getJSONArray("techniques");
             techniqueCount += techniques.length();
         }
-        for(Examinee e : examinees) {
-            Map<String, Object> result = new HashMap<>();
-            long passed = examinationResultRepository.countByExamineeIdAndPassTrue(e.getExamineeId());
-            technique_info.put("passed", passed);
-
-            
+        response.put("totalTechniques", techniqueCount);
+        
+        
+        List<Map<String, String>> examineeResults = new ArrayList<>();
+        for (Examinee examinee : examinees) {
+            Map<String, String> examineeInfo = new HashMap<>();
+            long passedTechniques = examinationResultRepository.countByExamineeIdAndPassTrue(examinee.getExamineeId());
+            examineeInfo.put("examineeId", examinee.getExamineeId().toString());
+            examineeInfo.put("passedTechniques", Long.toString(passedTechniques)); // Convert long to Long and invoke toString()
+            examineeInfo.put("name", examinee.getName());
+            examineeResults.add(examineeInfo);
         }
-
-        technique_info.put("technique_count", (long) techniqueCount);
-        long passed = examinationResultRepository.countByExamineeIdAndPassTrue(grading_id);
-        technique_info.put("passed", passed);
-        return new ResponseEntity<>(technique_info, HttpStatus.OK);
+        response.put("examinee_results", examineeResults);
+        if(response.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        
+        return ResponseEntity.ok(response);
     }
-
 
     /**
      * Deletes a given examination result.
