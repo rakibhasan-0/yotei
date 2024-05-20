@@ -19,7 +19,7 @@ public class ExaminationProtocol {
 
     @Column(nullable = false, name = "examination_protocol")
     private String examinationProtocol;
-
+    
     /**
      * Data constructor for ExaminationProtocol
      * 
