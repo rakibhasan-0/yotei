@@ -190,7 +190,7 @@ public class TechniqueDatabaseTest {
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique
-                String[] techNames = {"Knivhot mot halsen, höger sida, grepp, kin geri", "Grepp i två handleder framifrån, Shiho nage, shiho nage gatame"};
+                String[] techNames = {"Grepp i två handleder framifrån, Shiho nage, shiho nage gatame", " Randori mot en motståndare (3 Kyu)"};
                 String expectedColor = "Grönt";
 
                 for(int i = 0; i < 2; i++){
@@ -272,7 +272,7 @@ public class TechniqueDatabaseTest {
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique            
-                String[] techNames = {"Grepp i en handled framifrån med två händer med drag, frigöring", "Knivhot mot magen, grepp, shotei uchi jodan, kote gaeshi, ude hishigi hiza gatame"};
+                String[] techNames = {"Mae ukemi (4 Kyu)", "Svingslag, Ju morote jodan uke, hiki otoshi - O soto osae, ude henkan gatame"};
                 String expectedColor = "Orange";
 
                 for(int i = 0; i < 2; i++){
