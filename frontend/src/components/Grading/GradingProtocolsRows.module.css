@@ -1,5 +1,6 @@
 .container {
-    padding: 10px;
+    padding: 20px;
+    background-color: #f9f9f9;
 }
 
 .category {
@@ -7,14 +8,28 @@
 }
 
 .category h3 {
+    font-size: 1.5em;
+    color: #333;
     margin-bottom: 10px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+    text-align: left;
 }
 
 .techniques {
     list-style-type: none;
-    padding-left: 20px;
+    padding: 0;
 }
 
 .techniques li {
-    margin-bottom: 5px;
+    margin: 5px 0;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.techniques li:hover {
+    background-color: #f0f0f0;
 }

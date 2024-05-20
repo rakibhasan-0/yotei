@@ -114,8 +114,8 @@ export default function GradingAfter() {
 					fetchBelts()
 				])
 				setGrading(grading_data)
-				updateDate(grading_data.created_at)
-				const matchingBelt = belt_data.find(belt => belt.id === grading_data.belt_id)
+				updateDate(grading_data.createdAt)
+				const matchingBelt = belt_data.find(belt => belt.id === grading_data.beltId)
 				if (matchingBelt) {
 					setBeltInfo({
 						belt_name: matchingBelt.name,
