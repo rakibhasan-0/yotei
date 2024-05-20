@@ -26,28 +26,12 @@ export default function GradingAfter() {
 		belt_name: "",
 		color: "" 
 	})
-<<<<<<< HEAD
+
 	const [ setExamineeResult] = useState({
 		num_techniques: 0,
 		num_techniques_passed: 0
 	})
-	/**
-	 * Function to update the date of the grading.
-	 * @param {string} dateString - The date of the grading.
-	 * @returns {void}
-	 * @since 2024-05-15
-	 */
-	const updateDate = (dateString) => {
-		const date = new Date(dateString)
-		const hours = date.getHours()
-		const minutes = date.getMinutes()
-		const formattedHours = (hours < 10 ? "0" : "") + hours
-		const formattedMinutes = (minutes < 10 ? "0" : "") + minutes
-		const timeString = formattedHours + ":" + formattedMinutes
-		setDateCreated(timeString)
-	}
-=======
->>>>>>> main
+
 
 	/**
 	 * Function to fetch the grading from the backend.
