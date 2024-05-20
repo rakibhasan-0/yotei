@@ -1,4 +1,4 @@
-import React, { useState, useEffect , useContext, useRef } from "react"
+import React, { useState, useEffect, useRef, useContext } from "react"
 
 import TechniqueInfoPanel from "../../../components/Grading/PerformGrading/TechniqueInfoPanel"
 import Button from "../../../components/Common/Button/Button"
@@ -10,10 +10,10 @@ import styles from "./DuringGrading.module.css"
 import { ArrowRight, ArrowLeft } from "react-bootstrap-icons"
 import { useParams, useNavigate } from "react-router-dom"
 import {setError as setErrorToast} from "../../../utils" 
-import { AccountContext } from "../../../context"
 
 // Temp
 import ProtocolYellow from "./yellowProtocolTemp.json"
+import { AccountContext } from "../../../context"
 
 
 /**
@@ -90,7 +90,7 @@ function getCategoryIndices(dataArray) {
  *  @version 2.0
  */
 export default function DuringGrading() {
-	const [currentIndex, setCurrentIndex] = useState(0)
+	const [currentTechniqueStep, setCurrentIndex] = useState(0)
 	const [showPopup, setShowPopup] = useState(false)
 	const [examinees, setExaminees] = useState(undefined)
 	const [pairs, setPairs] = useState([])
@@ -107,17 +107,59 @@ export default function DuringGrading() {
 
 	// Go to summary when the index is equal to length. Maybe change the look of the buttons.
 	const goToNextTechnique = () => {
-		setCurrentIndex(prevIndex => Math.min(prevIndex + 1, techniqueNameList.length - 1))
+		setCurrentIndex(nextStep => {
+			const nextTechniqueStep = Math.min(nextStep + 1, techniqueNameList.length - 1)
+			onUpdateStepToDatabase(nextTechniqueStep)
+			return nextTechniqueStep
+		})
 		// reset the button colors
 		// Should also load any stored result
 	}
-    
+	//goes to previous technique if it is not the first technique.
 	const goToPrevTechnique = () => {
-		setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0))
+		if(currentTechniqueStep === 0) {
+			goToAddExamineePage()
+		} else {
+			setCurrentIndex(prevStep => {
+				const previousTechniqueStep = Math.max(prevStep - 1, 0)
+				onUpdateStepToDatabase(previousTechniqueStep)
+				return previousTechniqueStep
+			})
+		}
 		// reset the button colors
 		// Should also load any stored result
 	}
+	// this update the database with what techniquestep the user is on, and it works with forward and backward navigation.
+	const onUpdateStepToDatabase = async (currentTechniqueStep) => {
+		try {
+			const response = await fetch("/api/examination/grading/1", { headers: { "token": token } })
+			if (!response.ok) {
+				setErrorToast("kunde inte hämta steg från databasen")
+				return
+			}
+			const step = await response.json()
+			step.technique_step_num = currentTechniqueStep
+			console.log("response grading", step.technique_step_num)
 
+			const update = await fetch("/api/examination/grading", {
+				method: "PUT",
+				headers: {
+					"Content-type": "application/json",
+					"token": token
+				},
+				body: JSON.stringify(step)
+			})
+
+			if (!update.ok) {
+				setErrorToast("kunde inte uppdatera steg i databasen")
+				return
+			}
+		} catch (error) {
+			setErrorToast("Något gick fel när du försökte uppdatera steg i databasen")
+			console.error(error)
+		}
+	}
+	
 	// Run first time and fetch all examinees in this grading
 	useEffect(() => {
 		(async () => {
@@ -132,6 +174,7 @@ export default function DuringGrading() {
 					throw new Error("Could not fetch examinees")
 				}
 				const all_examinees = await response.json()
+				
 				const current_grading_examinees = getExamineesCurrentGrading(all_examinees)
 				setExaminees(current_grading_examinees)
 				console.log("Fetched examinees in this grading: ", current_grading_examinees)
@@ -186,10 +229,9 @@ export default function DuringGrading() {
 		<div className={styles.container}>
 			<TechniqueInfoPanel
 				categoryTitle=""
-				currentTechniqueTitle={techniqueNameList[currentIndex].technique.text}
-				nextTechniqueTitle={techniqueNameList[currentIndex].nextTechnique.text}
-				mainCategoryTitle={techniqueNameList[currentIndex].categoryName}
-				gradingId={gradingId}>
+				currentTechniqueTitle={techniqueNameList[currentTechniqueStep].technique.text}
+				nextTechniqueTitle={techniqueNameList[currentTechniqueStep].nextTechnique.text}
+				mainCategoryTitle={techniqueNameList[currentTechniqueStep].categoryName}>
 
 			</TechniqueInfoPanel>
 			{/* All pairs */}			
@@ -201,27 +243,23 @@ export default function DuringGrading() {
 						leftExaminee={
 							<ExamineeBox 
 								examineeName={item.nameLeft} 
-								onClick={(newState) => examineeClick(newState, techniqueNameList[currentIndex].technique.text, index, `${index}-left`)}
+								onClick={(newState) => examineeClick(newState, techniqueNameList[currentTechniqueStep].technique.text, index, `${index}-left`)}
 								buttonState={leftExamineeState}
-								setButtonState={setLeftExamineeState}
-								examineeId={item.leftId}>
+								setButtonState={setLeftExamineeState}>
 							</ExamineeBox>
 						}
 						rightExaminee={
 							item.rightId ? (
 								<ExamineeBox 
 									examineeName={item.nameRight}
-									onClick={(newState) => examineeClick(newState, techniqueNameList[currentIndex].technique.text, index, `${index}-right`)}
+									onClick={(newState) => examineeClick(newState, techniqueNameList[currentTechniqueStep].technique.text, index, `${index}-right`)}
 									buttonState={rightExamineeState}
 									setButtonState={setRightExamineeState}
 									examineeId={item.rightId}
 								/>
 							) : null
 						}
-						pairNumber={index+1}
-						gradingId={gradingId}
-						currentTechniqueId={techniqueNameList[currentIndex].technique.text}>
-
+						pairNumber={index+1}>
 					</ExamineePairBox>
 				))}
 			</div>
@@ -232,6 +270,7 @@ export default function DuringGrading() {
 					id={"prev_technique"} 
 					onClick={() => {
 						goToPrevTechnique() 
+
 						scrollableContainerRef.current.scrollTop = 0}} 
 					className={styles.btnPrevActivity}>
 					{<ArrowLeft/>}
@@ -251,23 +290,42 @@ export default function DuringGrading() {
 
 			<Popup 
 				id={"navigation-popup"} 
-				title={"Tekniker"} 
+				title={"Tekniker-kategorier"} 
 				isOpen={showPopup} 
 				setIsOpen={setShowPopup}> 
 				<div className={styles.popupContent}>
-					{/* Should link to the respective technique grading page. */}
+
 					{categoryIndexMap.map((techniqueName, index) => (
 						<Button 
 							key={index}
+							width={"100%"}
 							onClick={() => {
-								setCurrentIndex(techniqueName.categoryIndex)
+								setCurrentIndex(() => {
+									const techniquestep = techniqueName.categoryIndex
+									onUpdateStepToDatabase(techniquestep)
+									return techniquestep
+								})
 								setShowPopup(false)
-								// Reset the 'U'. 'G' button colors
+								// Fetch the correct result for each examinee conected to this technique
 								scrollableContainerRef.current.scrollTop = 0}}>
 							<p>{techniqueName.category}</p></Button>
 					))}
-					{/* Should link to the "after" part of the grading as well as save the changes to the database. */}
-					<Button id={"summary-button"} onClick={gotoSummary}><p>Fortsätt till summering</p></Button>
+                    
+					<div>
+						{/* Go back to the add examinee page */}
+						<Button 
+							id={"back-button"} 
+							outlined={true} 
+							onClick={goToAddExamineePage}>
+							<p>Tillbaka till <br />&quot;Lägg till deltagare&quot;</p>
+						</Button>
+						{/* Go to the summary page */}
+						<Button 
+							id={"summary-button"} 
+							onClick={gotoSummary}>
+							<p>Fortsätt till summering</p>
+						</Button>
+					</div>
 				</div>
 			</Popup>
 		</div>
@@ -279,6 +337,15 @@ export default function DuringGrading() {
 	function gotoSummary() {
 		//TODO: setShowPopup(false)
 		navigate(`/grading/${gradingId}/3`)
+	}
+
+	/**
+     * Navigate back to the page where examinees are added.
+     * 
+     * @author Team Apelsin (2024-05-15)
+     */
+	function goToAddExamineePage() {
+		navigate(`/grading/${gradingId}/1`)
 	}
 
 	/**
@@ -299,14 +366,13 @@ export default function DuringGrading() {
 	}
 
 	/**
-	 * 
-	 * @param {Array} pairs_json Array with all pairs in all gradings
-	 * @returns Array with all pairs in this grading, presented by name, ie {nameLeft, nameRight}
-	 * 
-	 * @author Team Apelsin (2024-05-12)
-	 * 
-	 * TODO: Does not handle single examinee, ie an examinee not included in a pair
-	 */
+     * 
+     * @param {Array} pairs_json Array with all pairs in all gradings
+     * @returns Array with all pairs in this grading, presented by name, ie {nameLeft, nameRight}
+     * 
+     * @author Team Apelsin (2024-05-17)
+     * @version 2.0
+     */
 	function getPairsInCurrrentGrading(pairs_json) {
 		const pair_names_current_grading = []
 		pairs_json.forEach((pair) => {

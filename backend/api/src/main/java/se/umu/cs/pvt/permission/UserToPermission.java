@@ -10,9 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * A role class representing permissions that a users can have.
+ * A mapping class representing permissions that a users has.
  * 
- * @author Team Mango (Grupp 4) - 2024-05-13
+ * @author Team Mango (Grupp 4) - 2024-05-17
  */
 @Entity
 @Table(name = "user_to_permission")
