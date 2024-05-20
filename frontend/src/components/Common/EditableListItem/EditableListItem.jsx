@@ -91,7 +91,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 	//const truncatedText = editedText.includes("\n") ? editedText.split("\n")[0] + "..." : editedText;
 
 	return (
-		<div className={styles["editable-container"]} id={id}>
+		<div className={styles["editable-container"]} id={id} key={id}>
 			<div className={styles["editable-list-container"]} data-testid="EditableListItem">
 				<div className={styles["editable-list-header"]} style={{ backgroundColor: index % 2 === 0 ? "var(--red-secondary)" : "var(--background)" }}>
 					<div data-testid="EditableListItem-link" style={{ width: "100%" }}>

@@ -1,5 +1,6 @@
 package se.umu.cs.pvt.examination;
 import javax.persistence.*;
+import javax.print.DocFlavor.CHAR_ARRAY;
 
 import se.umu.cs.pvt.belt.Belt;
 
@@ -34,6 +35,9 @@ public class Grading {
     @Column(nullable = false, name = "technique_step_num")
     private int techniqueStepNum;
 
+    @Column(nullable = false, name = "title")
+    private String title;
+
     @OneToMany(fetch=FetchType.LAZY, mappedBy = "gradingId")
     private Set<Examinee> examinees;
 
@@ -50,14 +54,18 @@ public class Grading {
      * @param step Incdicates the step of the grading.(1-3)
      * @param technique_step_num Keeps track of the current technique.
      * @param created_at The date of the grading.
+     * @param title The title of the grading
      */
-    public Grading(Long gradingId, Long creatorId, Long beltId,int step, int techniqueStepNum,Date createdAt) {
+
+    public Grading(Long gradingId, Long creatorId, Long beltId,int step, int techniqueStepNum,Date createdAt, String title) {
         this.gradingId = gradingId;
         this.creatorId = creatorId;
         this.beltId = beltId;
         this.step = step;
         this.techniqueStepNum = techniqueStepNum;
         this.createdAt = createdAt;
+        this.title = title;
+
     }
     
     /**
@@ -88,5 +96,9 @@ public class Grading {
 
     public int getTechniqueStepNum() {
         return techniqueStepNum;
+    }
+
+    public String getTitle() {
+      return title;
     }
 }

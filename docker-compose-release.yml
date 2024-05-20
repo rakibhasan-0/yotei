@@ -9,14 +9,14 @@ services:
       - gateway
 
   psql:
-    image: pvt2024/database:latest
+    image: pvt2024/database:$TAG
       
   frontend:
-    image: pvt2024/frontend:latest
+    image: pvt2024/frontend:$TAG
       
   gateway:
-    image: pvt2024/gateway:latest
+    image: pvt2024/gateway:$TAG
     
   api:
-    image: pvt2024/api:latest
+    image: pvt2024/api:$TAG
     
