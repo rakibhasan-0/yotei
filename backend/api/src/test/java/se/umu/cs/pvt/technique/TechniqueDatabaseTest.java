@@ -2,6 +2,8 @@ package se.umu.cs.pvt.technique;
 
 import java.sql.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.jupiter.api.AfterAll;
 import java.nio.file.Paths;
@@ -171,11 +173,10 @@ public class TechniqueDatabaseTest {
                     preparedStatement.setString(1, techNames[i]);
 
                     ResultSet resultSet = preparedStatement.executeQuery();
-
-                    if (resultSet.next()) {
-                        String belt = resultSet.getString("belt_name");
-                        assertEquals(expectedColor, belt);
-                    }
+                    //If the given technique doesn't exist, we got null from 'resultSet'
+                    assertEquals(resultSet.next(), true);
+                    String belt = resultSet.getString("belt_name");
+                    assertEquals(expectedColor, belt);
                 }
         }
     }
@@ -199,11 +200,10 @@ public class TechniqueDatabaseTest {
                     preparedStatement.setString(1, techNames[i]);
 
                     ResultSet resultSet = preparedStatement.executeQuery();
-
-                    if (resultSet.next()) {
-                        String belt = resultSet.getString("belt_name");
-                        assertEquals(expectedColor, belt);
-                    }
+                    //If the given technique doesn't exist, we got null from 'resultSet'
+                    assertEquals(resultSet.next(), true);
+                    String belt = resultSet.getString("belt_name");
+                    assertEquals(expectedColor, belt);
                 }
         }
     }
@@ -227,11 +227,10 @@ public class TechniqueDatabaseTest {
                     preparedStatement.setString(1, techNames[i]);
 
                     ResultSet resultSet = preparedStatement.executeQuery();
-
-                    if (resultSet.next()) {
-                        String belt = resultSet.getString("belt_name");
-                        assertEquals(expectedColor, belt);
-                    }
+                    //If the given technique doesn't exist, we got null from 'resultSet'
+                    assertEquals(resultSet.next(), true);
+                    String belt = resultSet.getString("belt_name");
+                    assertEquals(expectedColor, belt);
                 }
         }
     }
@@ -256,11 +255,10 @@ public class TechniqueDatabaseTest {
                     preparedStatement.setString(1, techNames[i]);
 
                     ResultSet resultSet = preparedStatement.executeQuery();
-
-                    if (resultSet.next()) {
-                        String belt = resultSet.getString("belt_name");
-                        assertEquals(expectedColor, belt);
-                    }
+                    //If the given technique doesn't exist, we got null from 'resultSet'
+                    assertEquals(resultSet.next(), true);
+                    String belt = resultSet.getString("belt_name");
+                    assertEquals(expectedColor, belt);
                 }
         }
     }
@@ -284,11 +282,10 @@ public class TechniqueDatabaseTest {
                     preparedStatement.setString(1, techNames[i]);
 
                     ResultSet resultSet = preparedStatement.executeQuery();
-
-                    if (resultSet.next()) {
-                        String belt = resultSet.getString("belt_name");
-                        assertEquals(expectedColor, belt);
-                    }
+                    //If the given technique doesn't exist, we got null from 'resultSet'
+                    assertEquals(resultSet.next(), true);
+                    String belt = resultSet.getString("belt_name");
+                    assertEquals(expectedColor, belt);
                 }
         }
     }
@@ -312,11 +309,10 @@ public class TechniqueDatabaseTest {
                     preparedStatement.setString(1, techNames[i]);
 
                     ResultSet resultSet = preparedStatement.executeQuery();
-
-                    if (resultSet.next()) {
-                        String belt = resultSet.getString("belt_name");
-                        assertEquals(expectedColor, belt);
-                    }
+                    //If the given technique doesn't exist, we got null from 'resultSet'
+                    assertEquals(resultSet.next(), true); 
+                    String belt = resultSet.getString("belt_name");
+                    assertEquals(expectedColor, belt);
                 }
         }
     }
