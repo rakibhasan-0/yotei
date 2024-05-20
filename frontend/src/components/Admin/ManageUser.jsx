@@ -60,7 +60,7 @@ export default function ManageUser() {
 			})
 		})
 		if (!response.ok) {
-			return setErrorToast("Kunde inte lägga till användare")
+			return setErrorToast(await response.text())
 		}
 		const user = await response.json()
 		setUsers(prev => {
