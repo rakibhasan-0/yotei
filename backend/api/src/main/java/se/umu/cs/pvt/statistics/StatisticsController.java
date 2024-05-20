@@ -161,15 +161,20 @@ public class StatisticsController {
     }
 
 
-
+    @Operation(summary = "Returns a comparison between a groups practiced techniques and a grading protocol..", 
+               description = "Must include the id of the group as a path parameter and the id of the belt of the grading protocol as a request parameter.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "OK - Successfully retrieved"),
+    })
     @GetMapping("{id}/grading_protocol")
     public ResponseEntity<GradingProtocolDTO> getGradingProtocolView(@PathVariable Long id, @RequestParam Long beltId){
 
+        // Get all techniques practiced by the group with :id 
         List<StatisticsActivity> techniques = statisticsRepository.getAllSessionReviewTechniques(id);
-
 
         HashMap<Long, Long> counts = new HashMap<>();
 
+        // Count occurances of the techniques.
         for (StatisticsActivity sa : techniques) {
             if (!counts.containsKey(sa.getActivity_id())) {
                 counts.put(sa.getActivity_id(), sa.getCount());
@@ -178,12 +183,14 @@ public class StatisticsController {
             }
 
         }
-       
+        
+        // Get the grading protocol associated with the belt id.
         GradingProtocol protocol = gradingProtocolRepository.findByBeltId(beltId);
 
         if (protocol == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
+            // Build the grading protocol DTO and fill the correct counts for each technique.
             List<GradingProtocolCategory> categories = gradingProtocolRepository.findAllByProtocolId(protocol.getId());
             List<GradingProtocolCategoryDTO> responseCategories = new ArrayList<>();
 
@@ -196,14 +203,10 @@ public class StatisticsController {
                     }
                     newCategory.addTechqnique(t);
                 }
-                
                 responseCategories.add(newCategory);
-            
             }
 
             GradingProtocolDTO responseProtocol = new GradingProtocolDTO(protocol.getCode(), protocol.getName(), new BeltResponse(protocol.getBelt()) , responseCategories);
-
-
             return new ResponseEntity<>(responseProtocol, HttpStatus.OK);
         }
     }

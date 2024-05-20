@@ -10,7 +10,9 @@ import se.umu.cs.pvt.statistics.gradingprotocolDTO.GradingProtocolTechinqueDTO;
 
 /**
  * JPARepository for GradingProtocol
- * @author Calzone
+ * @author Cocount 
+ * @version 1.0
+ * @since 2024-05-20
  */
 
 public interface GradingProtocolRepository extends JpaRepository<GradingProtocol, Long> {

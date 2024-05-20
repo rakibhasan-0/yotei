@@ -5,9 +5,6 @@ import javax.persistence.*;
 import se.umu.cs.pvt.belt.Belt;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
  
 /**
@@ -21,7 +18,6 @@ import java.util.Set;
  * @version 1.0
  * @since 2024-05-17
  */
-
 @Entity
 @Table(name = "grading_protocol")
 public class GradingProtocol implements Serializable {
@@ -61,24 +57,36 @@ public class GradingProtocol implements Serializable {
         this.name = name;
     }
 
+    /**
+     * Public getter for private property id
+     * @return id of the protocol
+     */
     public Long getId() {
         return this.id;
     }
 
+    /**
+     * Public getter for private property belt
+     * @return belt associated with of the protocol
+     */
     public Belt getBelt() {
         return this.belt;
     }
 
-
+    /**
+     * Public getter for private property code
+     * @return code of the protocol
+     */
     public String getCode() {
         return this.code;
     }
 
+    /**
+     * Public getter for private property name
+     * @return name of the protocol
+     */
     public String getName() {
         return this.name;
     }
 
-    // public List<GradingProtocolCategory> getCategories() {
-    //     return categories;
-    // }
 }
