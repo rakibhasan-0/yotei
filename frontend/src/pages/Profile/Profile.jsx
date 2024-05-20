@@ -42,23 +42,15 @@ export default function Profile() {
 	const [passwordButtonState, setPasswordButtonDisabled] = useState(false)
 	const [usernameButtonState, setUsernameButtonDisabled] = useState(false)
 
-	const [fetchedLists, setFetchedLists] = useState(false)
 	const [lists, setLists] = useState([])
 	const [map, mapActions] = useMap()
+
+	const [amountOfFavouriteWorkouts, setAmountOfFavouriteWorkouts] = useState(0)
+
 
 	//TODO feature toggle
 	const [isListsEnabled] = useState(false)
 
-	const workout = {
-		id: -1,
-		name: "Favoritpass",
-		size: 7,
-		author: {
-			userId: 1,
-			username: "Admin",
-		},
-		hidden: false,
-	}
 
 	/* Workout management */
 
@@ -89,16 +81,55 @@ export default function Profile() {
 			</>
 		)
 	}
+	//Future-proofs so that it will get all of the favourite workouts until 2060
+	const getAmountOfFavouriteWorkouts= async() =>{
+		const args = {
+			from: "1980-01-01",
+			to: "2060-01-01",
+			selectedTags:"",
+			id: userId,
+			text: "",
+			isFavorite: true
+		}
+		getWorkouts(args, token, null, null, (response) => {
+			if(response.error) {
+				setAmountOfFavouriteWorkouts(0)
+			} else {
+				setAmountOfFavouriteWorkouts(response.results.length)
+			}
+		})
+	}
+
+	const workout = {
+		id: -1,
+		name: "Favoritpass",
+		size: amountOfFavouriteWorkouts,
+		author: {
+			userId: userId,
+			username: "",
+		},
+		hidden: false,
+	}
 
 	/**
 	 * Fetches lists when the component is mounted or when the
 	 * search text are changed.
 	 */
 	useEffect(() => {
-		setFetchedLists(false)
+		getAmountOfFavouriteWorkouts()
+		const workout = {
+			id: -1,
+			name: "Favoritpass",
+			size: amountOfFavouriteWorkouts,
+			author: {
+				userId: userId,
+				username: "Admin",
+			},
+			hidden: false,
+		}
 		setLists([workout])
 		fetchingList()
-	}, [searchText])
+	}, [searchText,amountOfFavouriteWorkouts])
 
 	useEffect(() => {
 		getWorkouts(
@@ -228,11 +259,8 @@ export default function Profile() {
 			}))
 
 			setLists([workout, ...lists])
-			setFetchedLists(true)
 		})
 	}
-
-	console.log("Console.log so that linter doesnt cause problems: " + fetchedLists)
 
 	return (
 		<Tabs defaultActiveKey={"MyWorkouts"} className={style.tabs}>
