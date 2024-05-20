@@ -255,7 +255,6 @@ export default function DuringGrading() {
 		let examinee_clicked = buttonId.endsWith("left") ? pairs[pairIndex].leftId : pairs[pairIndex].rightId
 		addExamineeResult(examinee_clicked, `${technique}`, newState)
 	}
-
     
 	return (
         <div className={styles.container}>
@@ -268,7 +267,7 @@ export default function DuringGrading() {
 				</TechniqueInfoPanel>
 			)}
 			{/* All pairs */}	
-			{techniqueNameList && (		
+			{techniqueNameList && results && (		
 				<div ref={scrollableContainerRef} className={styles.scrollableContainer}>
 					{pairs.map((item, index) => (
 						<ExamineePairBox 
@@ -278,7 +277,7 @@ export default function DuringGrading() {
 								<ExamineeBox 
 									examineeName={item.nameLeft} 
 									onClick={(newState) => examineeClick(newState, techniqueNameList[currentTechniqueStep].technique.text, index, `${index}-left`)}
-									buttonState={leftExamineeState}
+                                    status={getExamineeStatus(item.leftId, results)}
 									setButtonState={setLeftExamineeState}
 									examineeId={item.leftId}
 									techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
@@ -289,7 +288,7 @@ export default function DuringGrading() {
 									<ExamineeBox 
 										examineeName={item.nameRight}
 										onClick={(newState) => examineeClick(newState, techniqueNameList[currentTechniqueStep].technique.text, index, `${index}-right`)}
-										buttonState={rightExamineeState}
+                                        status={getExamineeStatus(item.rightId, results)}
 										setButtonState={setRightExamineeState}
 										examineeId={item.rightId}
 										techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
@@ -373,6 +372,15 @@ export default function DuringGrading() {
 		</div>
 	)
 
+    function getExamineeStatus(examineeId, results) {
+        const result = results.find(res => res.examineeId === examineeId);
+        console.log("id: ", examineeId, "res: ", result);
+        if (result) {
+            return result.pass ? "pass" : "fail";
+        }
+        return "default";
+    }
+
 	/**
    * @author Team Pomagrade (2024-05-13)
    */
@@ -392,15 +400,8 @@ export default function DuringGrading() {
 	 * @author Team Apelsin (2024-05-17) - c21ion
 	 */
 	async function addExamineeResult(examineeId, techniqueName, passStatus) {
-		// TODO: Temporary, should use a state instead
-		const data = [
-			{
-				examineeId: 8,
-				pass: null,
-				resultId: 7,
-				techniqueName: "1. Shotei uchi, jodan, rak stöt med främre och bakre handen"
-			}
-		]
+        // get the data from the 'results' state
+		const data = results
 
 		// Convert string for pass status to Boolean
 		const passStatusMap = {
@@ -541,7 +542,6 @@ export default function DuringGrading() {
             headers: { "token": token },
         }
         try {
-            // const response = await fetch(`/api/examination/examresult/${techniqueNameList[currentTechniqueStep].technique.text}/${gradingId}`, requestOptions);
             const response = await fetch(`/api/examination/examresult/all`, requestOptions);
             
             if (!response.ok) {
@@ -551,14 +551,11 @@ export default function DuringGrading() {
             if (!Array.isArray(data)) {
                 throw new Error('Fetched data is not an array');
             }
-            console.log("data: ", data)
-            // TODO: MAKE SURE THE VARIABLE NAMES ALIGN WITH THE ONES IN THE RESULT DATA.
             const filtered = data
-                .filter(item => item.technique_name === technique)
-                .map(item => ({ examineeId: item.examineeId, pass: item.pass }));
+                .filter(item => item.techniqueName === technique)
 
             console.log("filtered results: ", filtered);
-            setResults("filtered data: ", filtered);
+            setResults(filtered);
         } catch (error) {
             alert(error.message)
             return null // Handle the error gracefully, return null or an empty object/array
