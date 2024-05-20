@@ -5,7 +5,7 @@ import FilterContainer from "../../components/Common/Filter/FilterContainer/Filt
 import { useCookies } from "react-cookie"
 import styles from "./FavouriteWorkoutList.module.css"
 import { AccountContext } from "../../context"
-import DatePicker, { getFormattedDateString } from "../../components/Common/DatePicker/DatePicker"
+import DatePicker from "../../components/Common/DatePicker/DatePicker"
 import {toast} from "react-toastify"
 import WorkoutListItem from "../../components/Workout/WorkoutListItem"
 import ErrorStateSearch from "../../components/Common/ErrorState/ErrorStateSearch.jsx"
@@ -32,23 +32,34 @@ export default function FavouriteWorkoutsList() {
 	const [ searchText, setSearchText ] = useState("")
 	const [ tags, setTags ] = useState([])
 	const [ suggestedTags, setSuggestedTags ] = useState([])
-	const [ cookies, setCookie ] = useCookies(["workout-filter"])
+	const [ cookies, setCookie ] = useCookies(["favourite-workouts-filter"])
 	const [ searchErrorMessage, setSearchErrorMessage ] = useState("")
 	const [ loading, setLoading ] = useState(true)
 	const navigate = useNavigate()
-	// Some fucked up shit to get +/- 1 month from today.
-	const today = new Date()
-	const lastMonth = new Date(today)
-	lastMonth.setMonth(today.getMonth() - 1)
-	const nextMonth = new Date(today)
-	nextMonth.setMonth(today.getMonth() + 1)
-
+	//Tries to retrieve filters from cookies
+	const cachedFilters = cookies["favourite-workouts-filter"]
+	let fromDate, toDate
+	//Sets the from- and toDates depending on if there were any filters cached in cookies
+	if(cachedFilters!=null){
+		fromDate = cachedFilters.from
+		toDate = cachedFilters.to
+	}
+	//No cached filters, set from date to 4 years ago
+	else{
+		const today = new Date()
+		fromDate = new Date(today)
+		fromDate.setMonth(today.getMonth() - (12*4))
+		toDate = new Date(today)
+		toDate.setMonth(today.getMonth() + 1)
+	}
+	//Sets the from, maxFrom, to and minTo values to the values set in the if statement above
 	const [ dates, setDates ] = useState({
-		from: getFormattedDateString(lastMonth), 
-		maxFrom: getFormattedDateString(nextMonth),
-		to: getFormattedDateString(nextMonth),
-		minTo: getFormattedDateString(lastMonth)
+		from: fromDate, 
+		maxFrom: toDate,
+		to: toDate,
+		minTo:fromDate,
 	})
+
 	useEffect(fetchWorkouts, [dates.from, dates.maxFrom, dates.to, dates.minTo, searchText, token, userId, tags])
 	return (
 		<>
@@ -107,6 +118,8 @@ export default function FavouriteWorkoutsList() {
 			from: `${date.target.value}`,
 			minTo: `${date.target.value}`
 		})
+		const preChangeCookie = cookies["favourite-workouts-filter"]
+		setCookie("favourite-workouts-filter", {from: date.target.value, to: dates.to, isFavorite: preChangeCookie.isFavorite, tags: preChangeCookie.tags}, {path: "/"})
 	}
 
 	function handleToDateChange(date) {
@@ -115,6 +128,8 @@ export default function FavouriteWorkoutsList() {
 			to: `${date.target.value}`,
 			maxFrom: `${date.target.value}`
 		})
+		const preChangeCookie = cookies["favourite-workouts-filter"]
+		setCookie("favourite-workouts-filter", {from: dates.from, to: date.target.value, isFavorite: preChangeCookie.isFavorite, tags: preChangeCookie.tags}, {path: "/"})
 	}
 
 	function toggleIsFavorite(event, workout) {
@@ -144,7 +159,7 @@ export default function FavouriteWorkoutsList() {
 		const selectedTags = args.selectedTags
 		let msg = "Kunde inte hitta "
 
-		args.isFavorite ? msg += "något favoritmarkerat pass" : msg += "något pass"
+		args.isFavorite ? msg += "något favoritmarkerat pass under den valda perioden" : msg += "något pass"
 
 		if (searchText !== "")
 			msg += ` med namnet "${searchText}"`
@@ -160,7 +175,7 @@ export default function FavouriteWorkoutsList() {
 
 	function fetchWorkouts() {
 		setLoading(true)
-		const filterCookie = cookies["workout-filter"]
+		const filterCookie = cookies["favourite-workouts-filter"]
 		let args
 		if(filterCookie){
 			args = {
@@ -181,7 +196,7 @@ export default function FavouriteWorkoutsList() {
 				id: userId,
 				isFavorite: true
 			}
-			setCookie("workout-filter", {from: args.from, to: args.to, isFavorite: args.isFavorite, tags: tags}, {path: "/"})
+			setCookie("favourite-workouts-filter", {from: args.from, to: args.to, isFavorite: args.isFavorite, tags: tags}, {path: "/"})
 		}
 		getWorkouts(args, token, null, null, (response) => {
 			if(response.error) {
