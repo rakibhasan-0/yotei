@@ -193,20 +193,14 @@ async function deleteWorkout(workoutId, context, navigate, setShowPopup) {
 
 function getTagContainer(workoutData) {
 	return (
-		<div className="container">
-			<div className="row">
-				<h2>Taggar</h2>
+		<>
+			<h2 style={{ fontWeight: "bold", display: "flex", flexDirection: "row", alignItems: "left"}}>Taggar</h2>
+			<div style={{ display: "flex", flexWrap: "wrap", marginBottom: "4px", gap: "10px" }}>
+				{workoutData.tags.map((tag, index) => (
+					<Tag key={index} tagType={"default"} text={tag.name} />
+				))}
 			</div>
-			<div className="row">
-				{workoutData.tags.map((tag, index) => {
-					return (
-						<div key={"tag" + index} className="mr-2">
-							<Tag tagType={"default"} text={tag.name}></Tag>
-						</div>
-					)
-				})}
-			</div>
-		</div>
+		</>
 	)
 }
 
