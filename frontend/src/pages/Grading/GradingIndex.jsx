@@ -157,6 +157,7 @@ export default function GradingIndex() {
 				setLoading(false)
 				createLists(gradings_data)
 
+
 			} catch (error) {
 				console.error("There was a problem with the fetch operation:", error)
 			}
@@ -178,7 +179,8 @@ export default function GradingIndex() {
 									onClick={() => handleNavigation(grading.gradingId, grading.step, belts[grading.beltId]?.hex)}
 									color={belts[grading.beltId]?.hex}
 								>
-									<h2>{`${belts[grading.beltId]?.name} bälte`} </h2>
+									<h2>{`${grading.title}`} </h2>
+
 								</BeltButton>
 							))}
 
@@ -198,7 +200,7 @@ export default function GradingIndex() {
 									onClick={() => handleNavigation(grading.gradingId, grading.step, belts[grading.beltId]?.hex)}
 									color={belts[grading.beltId]?.hex}
 								>
-									<h2>{`${belts[grading.beltId]?.name} bälte`} </h2>
+									<h2>{`${grading.title}`} </h2>
 								</BeltButton>
 							))}
 						</div>

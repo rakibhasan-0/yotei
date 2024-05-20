@@ -14,13 +14,11 @@
 	border-right: solid;
 	border-width: 1px;
 	border-color: var(--black-primary);
-
 }
 
 .technique-card-belt-color {
 	width: 100%;
 }
-
 
 .technique-info-container {
 	display: flex;
@@ -54,7 +52,6 @@
 .technique-arrow-container {
 	width: max-content;
 	justify-content: flex-end;
-
 }
 
 .technique-arrow-container svg {
@@ -64,8 +61,7 @@
 	rotate: 270deg;
 }
 
-
-.countContainer p{
+.countContainer p {
 	margin: 0;
 	font-size: 16px;
 	padding: 15px;
