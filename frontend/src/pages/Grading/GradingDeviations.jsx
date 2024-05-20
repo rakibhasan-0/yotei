@@ -39,6 +39,7 @@ export default function GradingDeviations() {
     const navigate = useNavigate()
 
     useEffect(() => {
+        //Fetches all data required
         const fetchData = async() => {
             const requestOptions = {
                 headers: {"Content-type": "application/json", token: context.token}
@@ -59,6 +60,7 @@ export default function GradingDeviations() {
             }
         }
 
+        //Fetches the grading object based on an id
         const fetchGrading = async(gradingId) => {
             const requestOptions = {
                 headers: {"Content-type": "application/json", token: context.token}
@@ -78,6 +80,7 @@ export default function GradingDeviations() {
             }
         }
 
+        //Fetches the correct grading protocol based on a belt id
         const fetchProtocol = async(beltId) => {
             const requestOptions = {
                 headers: {"Content-type": "application/json", token: context.token}
@@ -104,6 +107,7 @@ export default function GradingDeviations() {
             }
         }
 
+        //Fetches an examinees grading result
         const fetchResult = async() => {
             const requestOptions = {
                 headers: {"Content-type": "application/json", token: context.token}
@@ -187,6 +191,25 @@ export default function GradingDeviations() {
     }
 
     /**
+     * Get a checkbox which toggles between showing all techniques and only deviating ones
+     * @returns A checkbox
+     */
+    function getToggleCheckBox() {
+        return (
+            <div className="d-flex justify-content-center">
+                <CheckBox
+                    className = {styles["showAllCheckbox"]}
+                    checked={false}
+                    label = "Visa alla"
+                    onClick={(checked) => {setShowingAll(checked)}}
+                    enabled
+                    id="checkbox-element"
+                />
+            </div>
+        )
+    }
+
+    /**
      * Gets a holder which holds a container for each technique in the grading protocol. The container also has the comment 
      *      and pass status for each technique
      * @returns A container displaying all exercises and information about the examinees performance of them
@@ -241,16 +264,7 @@ export default function GradingDeviations() {
 										<h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "10px", paddingBottom: "5px" }}>{name}</h1>
 										<h4 style={{ fontFamily: "Open Sans", fontSize: "15px", paddingTop: "0px", paddingBottom: "10px" }}>Kommentarer</h4>
 								</div>
-                <div className="d-flex justify-content-center">
-                    <CheckBox
-                        className = {styles["showAllCheckbox"]}
-                        checked={false}
-                        label = "Visa alla"
-                        onClick={(checked) => {setShowingAll(checked)}}
-                        enabled
-                        id="checkbox-element"
-                    />
-                </div>
+                {getToggleCheckBox()}
                 <div className = {styles["sc23-session-header-clickable"]} role="button" onClick={() => setToggled(!toggled)}>
                 </div>
             {getActivityContainer()}
