@@ -105,7 +105,7 @@ export class SomePage {
 ```
 		
 ### Generate code with codegen
-You can generate code with Playwrights codegen that will open two windows, a browser window where you interact with the website you wish to test and the Playwright Inspector window where you can record your tests, copy the tests, clear your tests as well as change the language of your tests. [Read more about generating tests with Codegen](https://playwright.dev/docs/codegen-intro). This can be done by the following steps:
+You can generate code with Playwrights codegen that will open two windows, a browser window where you interact with the website you wish to test and the Playwright Inspector window where you can record, copy, clear as well as change the language of your tests. [Read more about generating tests with Codegen](https://playwright.dev/docs/codegen-intro). This can be done by the following steps:
 
 1. Run frontend
 ```sh
@@ -123,7 +123,7 @@ npm run systest:codegen
 
 4. When you have navigated to the desired page, hit record and perform the steps you want the test to do.
 
-5. Copy the generated code you want to use and add it to your POM file. Refactor the code into different methods and update how the locators are retrieved if needed. **Note TODO write about bad locators hash id, nth etc**. Here's an example of how the code were refactored:
+5. Copy the generated code you want to use and add it to your POM file. Refactor the code into different methods and update how the locators are retrieved if needed. **Note TODO write about bad locators hash id, nth etc**. Here's an example of how generated code can be refactored:
 
 ```ts
 import { type Page } from '@playwright/test'
@@ -187,7 +187,7 @@ export class WorkoutPage {
 }
 ```
 
-NOTE: As the tests run on the actual server against the actual database, any test that stores something in the database, needs a cleanup function to remove the created item. Additionally, expect should preferably bee placed in the test files to keep POM methods general and dynamic. 
+NOTE: As the tests run on the actual server against the actual database, any test that stores something in the database, needs a cleanup function to remove the created item. Additionally, expect should preferably be placed in the test files to keep POM methods general and dynamic. 
 
 ### Write the actual test file
 1. Copy this template into the test file *.spec.ts that you've created, and update it.
