@@ -163,7 +163,7 @@ public class TechniqueDatabaseTest {
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique
-                String[] techNames = {"Kamae, neutral (5 Kyu)", "Stryptag framifrån och svingslag, backhand, Frigöring - Ju morote jodan uke, ude osae, ude osae gatame"};
+                String[] techNames = {"Shotei uchi, jodan, rak stöt med främre och bakre handen", "Försök till strypgrepp framifrån - Försök till kravattgrepp från sidan, jodan soto uke - Jodan chikai uke, kawashi, kosho otoshi, ude henkan gatame"};
                 String expectedColor = "Gult";
 
                 for(int i = 0; i < 2; i++){
@@ -190,7 +190,7 @@ public class TechniqueDatabaseTest {
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique
-                String[] techNames = {"Grepp i två handleder framifrån, Shiho nage, shiho nage gatame", " Randori mot en motståndare (3 Kyu)"};
+                String[] techNames = {"Kin geri, gedan, spark snett uppåt med främre och bakre benet", "Hotfullt närmande mot liggande - Långt svingslag, uppgång bakåt - ju jodan uchi uke, uki otoshi ude henkan gatame"};
                 String expectedColor = "Grönt";
 
                 for(int i = 0; i < 2; i++){
@@ -272,7 +272,7 @@ public class TechniqueDatabaseTest {
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique            
-                String[] techNames = {"Mae ukemi (4 Kyu)", "Svingslag, Ju morote jodan uke, hiki otoshi - O soto osae, ude henkan gatame"};
+                String[] techNames = {"Mawashi shotei uchi, jodan, cirkulär stöt med bakre handen", "Hotfullt närmande - Långt svingslag, Hejda med tryck - Morote jodan uke, o soto osae, ude henkan gatame"};
                 String expectedColor = "Orange";
 
                 for(int i = 0; i < 2; i++){
