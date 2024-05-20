@@ -608,7 +608,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 													
 
 													{/* HÄR SKA LISTITEM KOMPONENTEN IN. */}
-													{listContents[list.id]?.map(item => (
+													{listContents[list.id]?.map((item, index) => (
 														<ListItem
 														
 															item = {item}
@@ -620,30 +620,10 @@ function AddActivity({ id, setShowActivityInfo }) {
 															}
 															id = {item.id}
 															key = {item.id}
+															index = {index}
 															
 														/>
-												
-
 													))}
-													{/* {listContents[list.id]?.map((item) => (
-														item.type === "exercise" ? (
-															<ExerciseListItem
-																id={item.id}
-																text={item.duration + " min"}
-																detailURL={"/exercise/exercise_page/"}
-																checkBox={
-																	<CheckBox
-																		checked={checkedActivities.some(a => a.id === item.id)}
-																		onClick={() => onActivityToggle(item, "exercise")}
-																	/>
-																}
-																item={item.name}
-																key={item.id}
-																index={key}
-																path={item.path}
-															/>
-														) : null
-													))} */}
 												</div>
 											</DropDown>
 										))}
