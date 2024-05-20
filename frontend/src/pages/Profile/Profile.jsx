@@ -100,14 +100,13 @@ export default function Profile() {
 		})
 	}
 
-	getAmountOfFavouriteWorkouts()
 	const workout = {
 		id: -1,
 		name: "Favoritpass",
 		size: amountOfFavouriteWorkouts,
 		author: {
-			userId: 1,
-			username: "Admin",
+			userId: userId,
+			username: "",
 		},
 		hidden: false,
 	}
@@ -123,7 +122,7 @@ export default function Profile() {
 			name: "Favoritpass",
 			size: amountOfFavouriteWorkouts,
 			author: {
-				userId: 1,
+				userId: userId,
 				username: "Admin",
 			},
 			hidden: false,
