@@ -11,8 +11,7 @@ import { Pencil, Trash } from "react-bootstrap-icons"
 import ErrorState from "../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../components/Common/Spinner/Spinner"
 //Commented due to linter
-//import { HTTP_STATUS_CODES, setError, setSuccess, isAdmin } from "../../utils"
-import { isAdmin } from "../../utils"
+import { HTTP_STATUS_CODES, setError, setSuccess, isAdmin } from "../../utils"
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 
 /**
@@ -38,17 +37,14 @@ export default function ListInfo({ id }) {
 	const [showPopup, setShowPopup] = useState(false)
 	const [listData, setListData] = useState(null)
 	const [listUsers, setListUsers] = useState(null)
-	const [showRPopup, setRShowPopup] = useState(false)
 	const [errorStateMsg, setErrorStateMsg] = useState("")
 	const [loading, setLoading] = useState(true)
 	const [loadingUser, setLoadingUser] = useState(true)
 	const { userId } = useContext(AccountContext)
 
 	useEffect(() => {
-		//Temp things due to linter, will be removed! (Temp solution;) )
-		setRShowPopup(false)
 		setErrorStateMsg(false)
-		console.log("Console.log due to linter: "+showRPopup)
+		console.log("Console.log due to linter: "+listId)
 		const MockList = {
 			addedActivities:[],
 			checkedActivities:[],
@@ -155,14 +151,14 @@ export default function ListInfo({ id }) {
 		<div id={id} className="container px-0">
 			{
 				<ConfirmPopup
-					popupText={"Är du säker att du vill radera passet \"" + listData.data.name + "\"?"}
+					popupText={"Är du säker att du vill radera listan \"" + listData.data.name + "\"?"}
 					id={"confirm-popup"}
 					setShowPopup={setShowPopup}
 					showPopup={showPopup}
-					onClick={async () => deleteList(listId, context, navigate, setShowPopup)}
+					onClick={async () => deleteList(listData.data.id, context, navigate, setShowPopup)}
 				/>
 			}
-			{getListInfoContainer(listData, null, context, userId, listUsers)}
+			{getListInfoContainer(listData, setShowPopup, context, userId, listUsers)}
 
 			<h2 className="font-weight-bold mb-0 mt-5 text-left">Aktiviteter</h2>
 			<SavedActivityList activities={listData}/>
@@ -173,9 +169,27 @@ export default function ListInfo({ id }) {
 }
 
 async function deleteList(listId, context, navigate, setShowPopup) {
-	console.log("Console.log due to linter" + listId + context + navigate + setShowPopup)
-	//Kolla från WorkoutView på deras "DeleteWorkout" funktion :) 
-	// frontend/src/pages/Workout/WorkoutView
+	const requestOptions = {
+		headers: { "Content-type": "application/json", token: context.token },
+		method: "DELETE",
+	}
+	const response = await fetch("/api/activitylists/remove?id="+listId, requestOptions).catch(() => {
+		setError("Serverfel: Kunde inte ansluta till servern.")
+		return
+	})
+	if (response.status === HTTP_STATUS_CODES.NOT_FOUND) {
+		setError("Listan existerar inte längre!")
+		return
+	} else if (response.status === HTTP_STATUS_CODES.BAD_REQUEST) {
+		setError("Kunde inte ta bort lista med id: '" + listId + "'.")
+		return
+	} else if (response.status != HTTP_STATUS_CODES.OK) {
+		setError("Något gick snett! Felkod: " + response.status)
+		return
+	}
+	setSuccess("Lista borttagen!")
+	navigate("/profile")
+	setShowPopup(false)
 }
 
 function getListSharedUsersContainer(listUsers) {
@@ -238,6 +252,7 @@ function getListInfoContainer(listData, setShowPopup, context) {
 									/>
 								</Link>
 								<Trash
+									{...console.log("Rmv")}
 									className="ml-3 mr-3"
 									size="24px"
 									color="var(--red-primary)"
