@@ -19,7 +19,7 @@ import org.json.JSONObject;
  * Class for handling requests to the examination api.
  * 
  * @author Team Pomegranate (c21man && ens20lpn)
- * @author Team Orange (dv22rfg)
+ * @author Team Orange (dv22rfg && c19jen)
  */
 @RestController
 @RequestMapping(path = "/api/examination")
