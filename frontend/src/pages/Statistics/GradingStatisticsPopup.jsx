@@ -1,9 +1,10 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Popup from "../../components/Common/Popup/Popup"
 import style from "./GradingStatisticsPopup.module.css"
 import Dropdown from "../../components/Common/List/Dropdown" // Updated import
 import GradingProtocolsRowsMenu from "../../components/Grading/GradingProtocolsRowsMenu"
 import GradingProtocolsRows from "../../components/Grading/GradingProtocolsRows"
+import Spinner from "../../components/Common/Spinner/Spinner"
 
 const mockGradingProtocols = [
 	"5 KYU GULT BÄLTE",
@@ -124,10 +125,50 @@ const mockData = [
 ]
 
 
-export default function GradingStatisticsPopup({ id, gradingProtocols = mockGradingProtocols , data}) {
+export default function GradingStatisticsPopup({ id, groupID, beltID}) {
 	// State for showing the popup
 	const [showPopup, setShowPopup] = useState(false)
-	const [chosenProtocol, setchosenProtocol] = useState(gradingProtocols[0])
+	const [protocols, setProtocols] = useState([])
+	const [chosenProtocol, setchosenProtocol] = useState([])
+	const [loading, setLoading] = useState(false)
+	const [data, setData] = useState([])
+	const [belts, setBelts] = useState([])
+	console.log("Group is" + groupID)
+	console.log("Belt is" + beltID)
+	const gradingProtocols = mockGradingProtocols
+	useEffect(() => {
+
+		async function fetchGroupGradingProtocol() {
+
+			try {
+				setLoading(true)
+				const responseFromGroupNameAPI= await fetch("/api/statistics/1/grading_protocol?beltId=3")
+
+				if (!responseFromGroupNameAPI.ok) {
+					throw new Error("Failed to fetch group data")
+				}
+				if(responseFromGroupNameAPI.status === 200) {
+					const groups = await responseFromGroupNameAPI.json()
+					console.log(groups)
+					setData(groups)
+					setProtocols([groups.code + " " + groups.name])
+					setchosenProtocol(groups.code + " " + groups.name)
+					console.log(data.categories)
+
+
+				}
+
+			}
+			catch (error) {
+				console.error("Fetching error:", error)
+			}
+			finally {
+				setLoading(false)
+			}
+		}
+		fetchGroupGradingProtocol()
+
+	}, [])
 
 	const togglePopup = () => {
 		setShowPopup(!showPopup)
@@ -136,8 +177,6 @@ export default function GradingStatisticsPopup({ id, gradingProtocols = mockGrad
 	const onSelectRow = (protocol) => {
 		setchosenProtocol(protocol)
 	}
-
-	data = mockData
 
 	return (
 		<div className={style.gradingStatisticsContainer} id={id}>
@@ -155,12 +194,15 @@ export default function GradingStatisticsPopup({ id, gradingProtocols = mockGrad
 				id="grading-statistics-popup"
 			>
 				<Dropdown text={chosenProtocol} id="grading-protocols-dropdown">
-					<GradingProtocolsRowsMenu protocols={gradingProtocols} onSelectRow = {onSelectRow} />
+					<GradingProtocolsRowsMenu protocols={protocols} onSelectRow = {onSelectRow} />
 				</Dropdown>
+				{loading ? <Spinner /> : <div>
+					{	
+						(data.belt && data.categories) &&
+						<GradingProtocolsRows data={data.categories} chosenProtocol={chosenProtocol} beltColors = {[data.belt]} />
+					}
+				</div>} 
 
-				<GradingProtocolsRows data={data[0].categories} chosenProtocol={chosenProtocol} beltColors = {data[0].belt} >
-
-				</GradingProtocolsRows>
 
 			</Popup>
 		</div>

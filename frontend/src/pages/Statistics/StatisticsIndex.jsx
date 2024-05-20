@@ -30,7 +30,7 @@ export default function Statistics() {
 
 	const navigate = useNavigate()
 	const { groupID } = useParams()
-	const [groupName, setGroupName] = useState(null)
+	const [group, setGroup] = useState(null)
 	const [loading, setLoading] = useState(true)
 	const { token } = useContext(AccountContext)
 	const [groupActivities, setGroupActivities] = useState([])
@@ -130,8 +130,9 @@ export default function Statistics() {
 				}
 				
 				const groups = await responseFromGroupNameAPI.json()	
-				const name = groups.find((group) => group.id === parseInt(groupID))
-				setGroupName(name)
+
+				const group = groups.find((group) => group.id === parseInt(groupID))
+				setGroup(group)
 			}
 			catch (error) {
 				console.error("Fetching error:", error)
@@ -179,7 +180,7 @@ export default function Statistics() {
 				<Spinner />
 			) : (
 				<h1 id="statistics-header">
-					{groupName ? `${groupName.name}` : "Gruppen hittades inte"}
+					{group ? `${group.name}` : "Gruppen hittades inte"}
 				</h1>
 			)}
 
@@ -201,7 +202,11 @@ export default function Statistics() {
 					<h5>Aktiviteter</h5>
 				</div>
 
-				<GradingStatisticsPopup id={"grading-statistics-container"} />
+				<GradingStatisticsPopup id={"grading-statistics-container"} 
+					groupID = {groupID}
+					beltID = {selectedBelts}
+				
+				/>
 
 				<StatisticsPopUp
 					groupActivities={activities}
