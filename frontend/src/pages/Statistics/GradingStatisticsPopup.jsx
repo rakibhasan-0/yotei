@@ -24,7 +24,7 @@ export default function GradingStatisticsPopup({ id, groupID, belts}) {
 
 	const [showPopup, setShowPopup] = useState(false)
 	const [protocols, setProtocols] = useState([])
-	const [chosenProtocol, setChosenProtocol] = useState('')
+	const [chosenProtocol, setChosenProtocol] = useState("")
 	const [beltID, setBeltID] = useState(null)
 	const [loading, setLoading] = useState(false)
 	const [data, setData] = useState([])
