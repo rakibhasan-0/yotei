@@ -20,8 +20,8 @@ import { ChevronDown } from "react-bootstrap-icons"
 import styles from "../../pages/Grading/GradingAfterComp.module.css"
 const UserBoxGrading = ({ id, name }) => {
 	const truncateName = (name) => {
-		return name.length > 16 ? name.substring(0, 16) + "..." : name;
-	  };
+		return name.length > 16 ? name.substring(0, 16) + "..." : name
+	}
 
 	return (
 		<div>
@@ -38,7 +38,7 @@ const UserBoxGrading = ({ id, name }) => {
 							<ChevronDown />
 						</Link>
 					</div>
-                
+
 				</div>
 			</div>
 		</div>
