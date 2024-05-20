@@ -88,12 +88,13 @@ function getCategoryIndices(dataArray) {
  *  @version 2.0
  */
 export default function DuringGrading() {
-	const [currentTechniqueStep, setCurrentTechniqueStep] = useState(0)
+	const [currentTechniqueStep, setCurrentTechniqueStep] = useState(undefined)
 	const [showPopup, setShowPopup] = useState(false)
 	const [examinees, setExaminees] = useState(undefined)
 	const [pairs, setPairs] = useState([])
     const [leftExamineeState, setLeftExamineeState] = useState("default")
     const [rightExamineeState, setRightExamineeState] = useState("default")
+    const [results, setResults] = useState([])
 	const [techniqueNameList, setTechniqueNameList] = useState(undefined)
 	const [categoryIndexMap, setCategoryIndices] = useState(undefined)
 	const { gradingId } = useParams()
@@ -131,7 +132,7 @@ export default function DuringGrading() {
 	// this update the database with what techniquestep the user is on, and it works with forward and backward navigation.
 	const onUpdateStepToDatabase = async (currentTechniqueStep) => {
 		try {
-			const response = await fetch("/api/examination/grading/1", { headers: { "token": token } })
+			const response = await fetch(`/api/examination/grading/${gradingId}`, { headers: { "token": token } })
 			if (!response.ok) {
 				setErrorToast("kunde inte hämta steg från databasen")
 				return
@@ -201,9 +202,7 @@ export default function DuringGrading() {
 					// Get only pairs in this grading
 					const pair_names_current_grading = getPairsInCurrrentGrading(pairs_json)
 					setPairs(pair_names_current_grading)
-					console.log("Fetched pairs in this examination: ", pair_names_current_grading)
-                    // TODO: Set the index to the one inside the technique_step when it is available
-                    // setCurrentTechniqueStep(0)
+					console.log("Fetched pairs in this examination: ", pair_names_current_grading)                    
 				} catch (ex) {
 					setErrorToast("Kunde inte hämta alla par")
 					console.error(ex)
@@ -211,49 +210,45 @@ export default function DuringGrading() {
 			})()
 		}
 	}, [examinees])
-
-    useEffect(() => {
-        if (initialized) {
-            let res = fetchTechniqueResults(pairs, techniqueNameList[currentTechniqueStep].technique.text, token);
-            res.then(data => {
-                updateExamineeColors(data, pairs);
-            });
-        } else {
-            setInitialized(true);
-        }
-    }, [currentTechniqueStep]);
-
-
-    useEffect(() => {
-        console.log("leftExamineeState:", leftExamineeState);
-        console.log("rightExamineeState:", rightExamineeState);
-    }, [leftExamineeState, rightExamineeState]);
-
-
+    
 	// Run to fetch the correct grading, to in turn fetch the correct grading protocol
 	useEffect(() => {
 		async function fetchData() {
-			try {
+            try {
 				const grading = await fetchGrading()
 				const protocol = await fetchProtocol(grading)
 				const parsedProtocol = parseProtocol(protocol)
 				updateState(parsedProtocol)
 			} catch (error) {
-				handleFetchError(error)
+                handleFetchError(error)
 			}
 		}
     
 		fetchData()
 	}, [])
 
+    useEffect(() => {
+        if(currentTechniqueStep !== undefined) {
+            fetchTechniqueResults(techniqueNameList[currentTechniqueStep].technique.text, token) 
+        }
+    }, [currentTechniqueStep])
+    
+    // Debugging the examinee states.    
+    useEffect(() => {
+        console.log("leftExamineeState:", leftExamineeState);
+        console.log("rightExamineeState:", rightExamineeState);
+    }, [leftExamineeState, rightExamineeState]);
+
+
 	// Will handle the api call that will update the database with the result. 
 	const examineeClick = (newState, technique, pairIndex, buttonId) => {
-		console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}, with new state ${newState}`)
+        console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}, with new state ${newState}`)
 		// Check what state the button is in and send the proper information to DB.
 	}
 
+    
 	return (
-		<div className={styles.container}>
+        <div className={styles.container}>
 			{techniqueNameList && (
 				<TechniqueInfoPanel
 					categoryTitle=""
@@ -330,7 +325,7 @@ export default function DuringGrading() {
 								key={index}
 								width={"100%"}
 								onClick={() => {
-									setCurrentIndex(() => {
+									setCurrentTechniqueStep(() => {
 										const techniquestep = techniqueName.categoryIndex
 										onUpdateStepToDatabase(techniquestep)
 										return techniquestep
@@ -438,20 +433,30 @@ export default function DuringGrading() {
      * @version 1.0
      * 
      */
-    async function fetchTechniqueResults(pairs, techniqueName, token) {
+    async function fetchTechniqueResults(technique, token) {
         const requestOptions = {
             method: "GET",
             headers: { "token": token },
-        };
-    
+        }
         try {
-            const response = await fetch("/api/examination/examresult/all", requestOptions);
+            // const response = await fetch(`/api/examination/examresult/${techniqueNameList[currentTechniqueStep].technique.text}/${gradingId}`, requestOptions);
+            const response = await fetch(`/api/examination/examresult/all`, requestOptions);
+            
             if (!response.ok) {
                 throw new Error("Failed to fetch technique results")
             }
-            const results = await response.json()
-            console.log(results)
-            return results
+            const data = await response.json()
+            if (!Array.isArray(data)) {
+                throw new Error('Fetched data is not an array');
+            }
+            console.log("data: ", data)
+            // TODO: MAKE SURE THE VARIABLE NAMES ALIGN WITH THE ONES IN THE RESULT DATA.
+            const filtered = data
+                .filter(item => item.technique_name === technique)
+                .map(item => ({ examineeId: item.examineeId, pass: item.pass }));
+
+            console.log("filtered results: ", filtered);
+            setResults("filtered data: ", filtered);
         } catch (error) {
             alert(error.message)
             return null // Handle the error gracefully, return null or an empty object/array
@@ -553,6 +558,8 @@ export default function DuringGrading() {
 		const categoryIndexMap = getCategoryIndices(techniqueNameList)
 		setTechniqueNameList(techniqueNameList)
 		setCategoryIndices(categoryIndexMap)
+        // TODO: Set the index to the one inside the technique_step when it is available
+        setCurrentTechniqueStep(0)
 	}
 
 	/**
