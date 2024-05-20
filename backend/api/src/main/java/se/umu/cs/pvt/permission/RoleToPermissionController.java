@@ -124,9 +124,13 @@ public class RoleToPermissionController {
                     "Role with id " + roleId + " does not have permission with id " + 
                     permissionId + ".", HttpStatus.BAD_REQUEST);
         }
-                    
-        roleToPermissionRepository.deleteByRoleIdAndPermissionId(roleId, permissionId);
-                    
+        
+        try {
+            roleToPermissionRepository.deleteByRoleIdAndPermissionId(roleId, permissionId);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Unable to remove permission from role", HttpStatus.BAD_REQUEST);
+        }
+
         Map<String, Long> roleToPermissionToDelete = new HashMap<>();
         roleToPermissionToDelete.put("role_id", roleId);
         roleToPermissionToDelete.put("permission_id", permissionId);

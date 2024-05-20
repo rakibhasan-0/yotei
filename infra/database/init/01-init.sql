@@ -10,6 +10,14 @@ END;
 
 $$ LANGUAGE 'plpgsql' IMMUTABLE PARALLEL SAFE;
 
+-- "Konstant" för admin rättighet
+CREATE
+OR REPLACE FUNCTION admin_permission_id() RETURNS INT AS $$ BEGIN RETURN 1;
+
+END;
+
+$$ LANGUAGE 'plpgsql' IMMUTABLE PARALLEL SAFE;
+
 -- "Konstant" för editor roll
 CREATE
 OR REPLACE FUNCTION editor_role_id() RETURNS INT AS $$ BEGIN RETURN 2;
@@ -897,3 +905,19 @@ $$ LANGUAGE 'plpgsql';
 CREATE TRIGGER insert_tag BEFORE INSERT ON tag 
 	FOR EACH ROW EXECUTE PROCEDURE tag_to_lowercase();
 
+--
+-- Triggers for roles
+--
+CREATE OR REPLACE FUNCTION protect_admin_role_permission() RETURNS TRIGGER AS $$ 
+BEGIN 
+	IF OLD.role_id = admin_role_id()
+	AND 
+	OLD.permission_id = admin_permission_id()
+	THEN RAISE EXCEPTION 'cannot revoke admin permissions from admin role';
+
+	END IF;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER protect_admin_permission BEFORE DELETE ON role_to_permission
+	FOR EACH ROW EXECUTE PROCEDURE protect_admin_role_permission();
