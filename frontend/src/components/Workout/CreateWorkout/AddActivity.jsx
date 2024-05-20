@@ -152,9 +152,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 			} 
 		},
 		{ label: "Namn: A-Ö", cmp: (a, b) => { return a.name.localeCompare(b.name) } },
-		{ label: "Namn: Ö-A", cmp: (a, b) => { return -a.name.localeCompare(b.name) } },
-		//{ label: "Senast skapad", cmp: (a, b) => { return a.duration - b.duration } }, //TODO: When API gives date of creation
-		//{ label: "Äldst", cmp: (a, b) => { return b.duration - a.duration } } //TODO: When API gives date of creation
+		{ label: "Namn: Ö-A", cmp: (a, b) => { return -a.name.localeCompare(b.name) } }
 	]
 	const [sortLists, setSortLists] = useState(sortOptionsLists[0])
 
