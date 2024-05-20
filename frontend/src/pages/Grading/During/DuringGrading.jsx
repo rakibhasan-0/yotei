@@ -247,51 +247,55 @@ export default function DuringGrading() {
 
 	return (
 		<div className={styles.container}>
-			{techniqueNameList && (
-				<TechniqueInfoPanel
-					categoryTitle=""
-					currentTechniqueTitle={techniqueNameList[currentTechniqueStep].technique.text}
-					nextTechniqueTitle={techniqueNameList[currentTechniqueStep].nextTechnique.text}
-					mainCategoryTitle={techniqueNameList[currentTechniqueStep].categoryName}>
-				</TechniqueInfoPanel>
-			)}
+			<div className={styles.infoPanel}>
+				{techniqueNameList && (
+					<TechniqueInfoPanel
+						categoryTitle=""
+						currentTechniqueTitle={techniqueNameList[currentTechniqueStep].technique.text}
+						nextTechniqueTitle={techniqueNameList[currentTechniqueStep].nextTechnique.text}
+						mainCategoryTitle={techniqueNameList[currentTechniqueStep].categoryName}>
+					</TechniqueInfoPanel>
+				)}
+			</div>
 			{/* All pairs */}	
-			{techniqueNameList && (		
-				<div ref={scrollableContainerRef} className={styles.scrollableContainer}>
-					{pairs.map((item, index) => (
-						<ExamineePairBox 
-							key={index}
-							rowColor={index % 2 === 0 ? "#FFFFFF" : "#F8EBEC"}
-							leftExaminee={
-								<ExamineeBox 
-									examineeName={item.nameLeft} 
-									onClick={(newState) => examineeClick(newState, techniqueNameList[currentTechniqueStep].technique.text, index, `${index}-left`)}
-									buttonState={leftExamineeState}
-									setButtonState={setLeftExamineeState}
-									examineeId={item.leftId}
-									techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
-								/>
-							}
-							rightExaminee={
-								item.rightId ? (
+			<div className={styles.middleContainer}>
+				{techniqueNameList && (		
+					<div ref={scrollableContainerRef} className={styles.scrollableContainer}>
+						{pairs.map((item, index) => (
+							<ExamineePairBox 
+								key={index}
+								rowColor={index % 2 === 0 ? "#FFFFFF" : "#F8EBEC"}
+								leftExaminee={
 									<ExamineeBox 
-										examineeName={item.nameRight}
-										onClick={(newState) => examineeClick(newState, techniqueNameList[currentTechniqueStep].technique.text, index, `${index}-right`)}
-										buttonState={rightExamineeState}
-										setButtonState={setRightExamineeState}
-										examineeId={item.rightId}
+										examineeName={item.nameLeft} 
+										onClick={(newState) => examineeClick(newState, techniqueNameList[currentTechniqueStep].technique.text, index, `${index}-left`)}
+										buttonState={leftExamineeState}
+										setButtonState={setLeftExamineeState}
+										examineeId={item.leftId}
 										techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
 									/>
-								) : null
-							}
-							pairNumber={index+1}
-							techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
-							examineePairId={item.pairId}
-						>
-						</ExamineePairBox>
-					))}
-				</div>
-			)}
+								}
+								rightExaminee={
+									item.rightId ? (
+										<ExamineeBox 
+											examineeName={item.nameRight}
+											onClick={(newState) => examineeClick(newState, techniqueNameList[currentTechniqueStep].technique.text, index, `${index}-right`)}
+											buttonState={rightExamineeState}
+											setButtonState={setRightExamineeState}
+											examineeId={item.rightId}
+											techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
+										/>
+									) : null
+								}
+								pairNumber={index+1}
+								techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
+								examineePairId={item.pairId}
+							>
+							</ExamineePairBox>
+						))}
+					</div>
+				)}
+			</div>
 
 			<div className={styles.bottomRowContainer}>
 				{/* Prev technique button */}
