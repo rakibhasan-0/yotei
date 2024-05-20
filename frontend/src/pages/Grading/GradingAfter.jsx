@@ -26,6 +26,26 @@ export default function GradingAfter() {
 		belt_name: "",
 		color: "" 
 	})
+	const [ setExamineeResult] = useState({
+		num_techniques: 0,
+		num_techniques_passed: 0
+	})
+	/**
+	 * Function to update the date of the grading.
+	 * @param {string} dateString - The date of the grading.
+	 * @returns {void}
+	 * @since 2024-05-15
+	 */
+	/*const updateDate = (dateString) => {
+		const date = new Date(dateString)
+		const hours = date.getHours()
+		const minutes = date.getMinutes()
+		const formattedHours = (hours < 10 ? "0" : "") + hours
+		const formattedMinutes = (minutes < 10 ? "0" : "") + minutes
+		const timeString = formattedHours + ":" + formattedMinutes
+		setDateCreated(timeString)
+	}/*
+
 
 	/**
 	 * Function to fetch the grading from the backend.
@@ -64,6 +84,23 @@ export default function GradingAfter() {
 	}
 
 	/**
+	 * Function to fetch the belts from the backend.
+	 * @returns {Promise} The belt data.
+	 * @since 2024-05-15
+	 */
+	const fetchExamineeResult = () => {
+		return fetch(`/api/examination/grading/${gradingId}`, {
+			method: "GET",
+			headers: { "token": token }
+		}).then(response => {
+			if(!response.ok){
+				throw new Error("Network response was not ok")
+			}
+			return response.json()
+		})
+	}
+
+	/**
 	 * Function to download the grading as a pdf.
 	 */
 	const downloadPdf  =   () => {
@@ -98,9 +135,10 @@ export default function GradingAfter() {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const [grading_data, belt_data] = await Promise.all([
+				const [grading_data, belt_data,result_data] = await Promise.all([
 					fetchGrading(),
-					fetchBelts()
+					fetchBelts(),
+					fetchExamineeResult()
 				])
 				setGrading(grading_data)
 				const matchingBelt = belt_data.find(belt => belt.id === grading_data.beltId)
@@ -110,6 +148,12 @@ export default function GradingAfter() {
 						color: "#" + matchingBelt.color
 					})
 				}
+				setExamineeResult({
+					examineeId: result_data.examineed,
+					name: result_data.name,
+					result: result_data.result
+				})
+		
 			} catch (error) {
 				console.error("There was a problem with the fetch operation:", error)
 			}
@@ -134,8 +178,8 @@ export default function GradingAfter() {
 				<div className={styles.scrollableContainer}>
 					{grading.examinees && grading.examinees.map((examinee) => (
 						<UserBoxGrading
-							key={examinee.examinee_id}
-							id={examinee.examinee_id}
+							key={examinee.examineeId}
+							id={examinee.examineeId}
 							name={examinee.name} />
 					))}
 				</div>
