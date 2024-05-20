@@ -1,3 +1,5 @@
+import TechniqueCard from "../../Common/Technique/TechniqueCard/TechniqueCard"
+import ExerciseListItem from "../../Common/ExerciseCard/ExerciseListItem"
 
 /**
  * This component is used to display the content of a list that is 
@@ -10,14 +12,36 @@
  * @author	Team Tomato
  * @since	2024-05-20
  */
-export default function ListItem(item, checkBox, id) {
+export default function ListItem({item, checkBox, id}) {
 
-//TODO: Kanske ett namnbyte på komponenten? ListItem är något vagt?
-
+	//TODO: Kanske ett namnbyte på komponenten? ListItem är något vagt?
+	
 
 	return(
 		<div>
+			
+			{item.type === "technique" ? (
+				<TechniqueCard
+					id={"technique-list-item-" + id}
+					checkBox={checkBox}
+					technique={item}
+				/>
+			) : null
+			}
 
+			{
+				item.type === "exercise" ? (
+					<ExerciseListItem
+						id={id}
+						text={item.duration + " min"}
+						detailURL={"/exercise/exercise_page/"}
+						checkBox={checkBox}
+						item={item.name}
+						index={item.id}
+						path={item.path}
+					/>
+				) : null
+			}
 		</div>
 	)
 }

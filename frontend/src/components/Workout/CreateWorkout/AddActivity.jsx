@@ -22,6 +22,7 @@ import Sorter from "../../Common/Sorting/Sorter"
 import { useCookies } from "react-cookie"
 import ListPicker from "./ListPicker.jsx"
 import DropDown from "../../Common/List/Dropdown"
+import ListItem from "./ListItem.jsx"
 
 /**
  * This component is used to add activities to a workout. It contains three tabs, 
@@ -446,7 +447,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 			const listContent = result.activities.map(item => {
 				if (item.type === "technique") {
 					return {
-						techniqueID: listID + "-technique-" + item.id,
+						id: listID + "-technique-" + item.id,
 						name: item.name,
 						type: "technique",
 						description: item.description,
@@ -606,36 +607,25 @@ function AddActivity({ id, setShowActivityInfo }) {
 												<div style={{ borderTop: "1px solid black" }}>
 													
 
-														{/* HÄR SKA LISTITEM KOMPONENTEN IN. */}
-														{listContents[list.id]?.map(item => (
-															<ListItem
-															
+													{/* HÄR SKA LISTITEM KOMPONENTEN IN. */}
+													{listContents[list.id]?.map(item => (
+														<ListItem
+														
 															item = {item}
 															checkBox = {
 																<CheckBox
-																checked={checkedActivities.some(a => a.techniqueID === item.techniqueID)}
-																onClick={() => onActivityToggle(item, "technique")}
+																	checked={checkedActivities.some(a => a.id === item.id)}
+																	onClick={() => onActivityToggle(item, item.type)}
 																/>
 															}
 															id = {item.id}
-															/>
-																
+															key = {item.id}
 															
-															item.type === "technique" ? (
-																<TechniqueCard
-																	id={"technique-list-item-" + item.techniqueID}
-																	checkBox={
-																		<CheckBox
-																			checked={checkedActivities.some(a => a.techniqueID === item.techniqueID)}
-																			onClick={() => onActivityToggle(item, "technique")}
-																		/>
-																	}
-																	technique={item}
-																	key={item.techniqueID}
-																/>
-															) : null
-														))}
-													{listContents[list.id]?.map((item) => (
+														/>
+												
+
+													))}
+													{/* {listContents[list.id]?.map((item) => (
 														item.type === "exercise" ? (
 															<ExerciseListItem
 																id={item.id}
@@ -653,7 +643,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 																path={item.path}
 															/>
 														) : null
-													))}
+													))} */}
 												</div>
 											</DropDown>
 										))}
