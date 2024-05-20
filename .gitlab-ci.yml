@@ -80,7 +80,7 @@ test-database:
       - backend/.m2/repository
   script:
     - cd backend/api
-    - mvn -q test -Dtest=TechniqueDatabaseTest &> ~/output.log
+    - mvn -q test -Dtest=TechniqueDatabaseTest -DPOSTGRESQL_DATABASE=$POSTGRES_DB -DPOSTGRESQL_PASSWORD=$POSTGRES_PASSWORD -DPOSTGRESQL_USER=$POSTGRES_USER &> ~/output.log
   
 test-frontend:
   rules:
