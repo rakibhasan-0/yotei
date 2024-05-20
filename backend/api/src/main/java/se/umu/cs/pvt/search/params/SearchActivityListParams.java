@@ -5,11 +5,17 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-public class SearchListParams {
+/**
+ * This class stores the urlQuery in attributes.
+ *
+ * @author Team Tomato 2024-05-20
+ * 
+ */
+public class SearchActivityListParams {
 	    
 	private String name;
 
-    public SearchListParams(Map<String, String> urlQuery){
+    public SearchActivityListParams(Map<String, String> urlQuery){
 
         try {
             if(urlQuery.get("name") != null) {

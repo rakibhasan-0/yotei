@@ -40,6 +40,12 @@ public class SearchRepository {
         return entityManager.createNativeQuery(query, ExerciseDBResult.class).getResultList();
     }
 
+    /**
+     * Retrieves a list of ActivityListDBResult objects based on a custom query.
+     *
+     * @param query the custom query to execute
+     * @return a list of ActivityListDBResult objects
+     */
     public List<ActivityListDBResult> getActivityListFromCustomQuery(String query){
         return entityManager.createNativeQuery(query, ActivityListDBResult.class).getResultList();
     }

@@ -31,13 +31,14 @@ import DropDown from "../../Common/List/Dropdown"
  * 
  * @param {string} id A unique id of the component (Testing purposes)
  * @param {function} setShowActivityInfo Callback function to report selected activities
- *  
- * @author Kraken (Grupp 7), Team Coconut, Team Kiwi
+ * 
+ * @author Kraken (Grupp 7), Team Coconut, Team Kiwi, Team Tomato
  * @since 2024-04-19
  * @updated 2024-04-22 Kiwi, Fixed so searchbar is not cleared unless component is closed, also so the active tab will show
  * @updated 2024-04-23 Kiwi, Kihon checkbox is now saved when clicking and redirecting to a technique.
  * @updated 2024-05-02 Kiwi, Fixed search so that current response won't be concatenated with previous.
  * @updated 2024-05-13 Kiwi, Added Automatic scrolling and Removal of activities from popup
+ * @updated 2024-05-20 Tomato, Added search function for activity lists.  
  */
 function AddActivity({ id, setShowActivityInfo }) {
 
@@ -422,11 +423,9 @@ function AddActivity({ id, setShowActivityInfo }) {
 
 		getLists(args, token, map, mapActions, (result) => {
 			if (result.error) return
-
-			// Extract the 'id' and 'name' fields from each item in the result used in displaying the list.
-			const lists = result.map(item => ({ id: item.id, name: item.name }))
-
-			setLists(lists);
+		
+			const res = result.results
+			setLists([...res]);
 			setFetchedLists(true)
 		})
 	}

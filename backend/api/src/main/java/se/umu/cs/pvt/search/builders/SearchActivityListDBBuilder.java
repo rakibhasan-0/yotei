@@ -4,17 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import se.umu.cs.pvt.search.DatabaseQuery;
-import se.umu.cs.pvt.search.params.SearchListParams;
 
-
+/**
+ * This class builds a {@link DatabaseQuery DatabaseQuery} based on
+ * the filtering methods used.
+ *
+ * @author Team Tomato
+ * @date 2024-05-20
+ */
 public class SearchActivityListDBBuilder {
 	    
-	private final SearchListParams searchListQuery;
     private final List<DatabaseQuery> queries = new ArrayList<>();
 
-    public SearchActivityListDBBuilder(SearchListParams searchListQuery){
-        this.searchListQuery = searchListQuery;
-    }
+    public SearchActivityListDBBuilder(){}
 
     /**
      * Bundles all the queries together and returns a {@link DatabaseQuery DatabaseQuery}.

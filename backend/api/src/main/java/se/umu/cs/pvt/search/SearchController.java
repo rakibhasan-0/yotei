@@ -157,18 +157,24 @@ public class SearchController {
     }
 
     /**
-     * ...
-     * 
-     * @param urlQuery
-     * @return
+     * API endpoint for making search requests to activity lists.
+     * It filters the activity lists based on the given query.
+     *
+     * Example query:
+     * (GET) /api/search/activitylists?name=something+something
+     *
+     * Note that the query can be empty, or contain any or all of the entries.
+     *
+     * @param urlQuery The query passed with the request.
+     * @return A SearchResponseInterface.
      */
     @GetMapping("/activitylists")
     public ResponseEntity<SearchResponse<ActivityListSearchResponse>> searchLists(
             @RequestParam Map<String, String> urlQuery) {
 
-        SearchListParams searchListParams = new SearchListParams(urlQuery);
+        SearchActivityListParams searchListParams = new SearchActivityListParams(urlQuery);
 
-        DatabaseQuery createdQuery = new SearchActivityListDBBuilder(searchListParams).build();
+        DatabaseQuery createdQuery = new SearchActivityListDBBuilder().build();
 
         List<ActivityListDBResult> result = searchRepository.getActivityListFromCustomQuery(createdQuery.getQuery());
         List<ActivityListSearchResponse> activityListSearchResponses = new SearchActivityListResponseBuilder(result).build();
