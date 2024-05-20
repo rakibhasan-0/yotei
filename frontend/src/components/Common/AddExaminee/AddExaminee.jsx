@@ -72,27 +72,25 @@ const AddExaminee = forwardRef(function AddExaminee(
 			<label className={styles.label}>
 				{!hideLength && <p className={styles.limitText}>{text?.length || 0}/{maxLength || defaultLimit}</p>}
 				<div className={styles.inputContainer}>
-					<div style={{ flexGrow: 1 }}>
-						<input
-							className={isErr ? `${styles.input} ${styles.inputErr}` : `${styles.input}`}
-							placeholder={placeholder}
-							value={inputValue}
-							type={type}
-							id={id}
-							onKeyUp={onKeyUp}
-							required={required}
-							ref={ref}
-							maxLength={maxLength || defaultLimit}
-							onChange={handleChange}
-							onKeyDown={handleKeyPress}
-						/>
-						<Plus id="plus-icon" onClick={handleClick} className={styles.plusIcon} />
-					</div>
+					<input
+						className={isErr ? `${styles.input} ${styles.inputErr}` : `${styles.input}`}
+						placeholder={placeholder}
+						value={inputValue}
+						type={type}
+						id={id}
+						onKeyUp={onKeyUp}
+						required={required}
+						ref={ref}
+						maxLength={maxLength || defaultLimit}
+						onChange={handleChange}
+						onKeyDown={handleKeyPress}
+					/>
+					<Plus id="plus-icon" onClick={handleClick} className={styles.plusIcon} />
 				</div>
 				{errorMessage !== "" || !errorMessage && <p className={styles.err}>{errorMessage}</p>}
 			</label>
 		</form>
-
 	)
 })
+
 export default AddExaminee
