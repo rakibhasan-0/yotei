@@ -1,14 +1,17 @@
+.infoPanelContainer{
+    margin: 0%;
+}
 .infoPanel{
     height: "auto"; 
     width: "100%";
-    margin-bottom: "5px"; 
-    padding-bottom: "0px";
+    padding-bottom: 0%;
+    margin: 2%;
     /*display: flex;*/
 }
 
 .mainCategoryTitle{
     text-align: center;
-    font-size: 16px;
+    font-size: 12px;
 }
 
 .categoryTitle{
@@ -31,6 +34,14 @@
 
 }
 .nextTechniqueContainer{
-    width: "70%";
-    float: "left";
+    max-width: 96%;
+    margin-bottom: "0px"; 
+    padding-bottom: "0px";
+}
+
+.techniqueAndCommentSection{
+    display: flex;
+}
+.buttonGroupComment{
+    float: right;
 }

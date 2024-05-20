@@ -108,27 +108,36 @@ export default function TechniqueInfoPanel( {
 		await onDiscardGroupComment()
 	}
 
+	/* This was inside return earlier, but removed to get more space
+		After row: <fieldset className={styles.infoPanel}>
+		Before row: <div>
+						<h3 className={styles.categoryTitle} role="categoryTitle">{mainCategoryTitle}</h3>
+					</div>
+		Code that existed in between:
+				<fieldset role="fieldsetBelt" style={{ height: "0px", width: "100%", marginBottom: "3px", backgroundColor: beltColor}}>
+					<div>
+						<h2 className={styles.mainCategoryTitle} role="mainCategoryTitle">{mainCategoryTitle}</h2>
+					</div>
+				</fieldset>
+	*/
 
 	return (
-		<div style={styles}>
-			<fieldset role="fieldsetBelt" style={{ height: "30px", width: "100%", marginBottom: "3px", backgroundColor: beltColor}}>
-				<div>
-					<h2 className={styles.mainCategoryTitle} role="mainCategoryTitle">{mainCategoryTitle}</h2>
-				</div>
-			</fieldset>
+		<div className={styles.infoPanelContainer}>
 			<fieldset className={styles.infoPanel}>
 				<div>
-					<h3 className={styles.categoryTitle} role="categoryTitle">{categoryTitle}</h3>
+					<h3 className={styles.categoryTitle} role="categoryTitle">{mainCategoryTitle}</h3>
+				</div>
+				<div className={styles.buttonGroupComment}>
+						<CommentButton onClick={() => setAddComment(true)} />
 				</div>
 				<div>
-					<h1 className={styles.currentTechnique} role="currentTechniqueTitle">{currentTechniqueTitle}</h1>
+					<h2 className={styles.currentTechnique} role="currentTechniqueTitle">{currentTechniqueTitle}</h2>
 				</div>
-				<div className={styles.nextTechniqueContainer}>
+				
+				<div className={styles.techniqueAndCommentSection}>
 					<h3 className={styles.nextTechniqueText} role="nextTechniqueTitle"><b>Nästa:</b>{nextTechniqueTitle}</h3>
 				</div>
-				<div style={{ display: "flex", justifyContent: "flex-end"}}>
-					<CommentButton onClick={() => setAddComment(true)} />
-				</div>
+				
 			</fieldset>
 			<Popup 
 				id={"group-comment-popup"} 
