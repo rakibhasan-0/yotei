@@ -84,7 +84,6 @@ export default function ExamineePairBox({
 			setCommentError("Kommentaren får inte vara tom")
 			return
 		}
-		console.log("API ANROP SOM INTE FINNS ÄNNU. Detta skulle läggas in: " + commentText + " Till person: " + examineePairId + " GradingId: " + gradingId + " Technique: " + techniqueName)
 		const response = await fetch("/api/examination/comment/", {
 			method: "POST",
 			headers: {

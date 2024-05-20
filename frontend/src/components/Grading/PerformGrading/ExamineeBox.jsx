@@ -83,8 +83,6 @@ export default function ExamineeBox({
 			setCommentError("Kommentaren får inte vara tom")
 			return
 		}
-		// För debugging
-		console.log("API ANROP SOM INTE FINNS ÄNNU. Detta skulle läggas in: " + commentText + " Till person: " + examineeId + " GradingId: " + gradingId + " Technique: " + techniqueName)
 		
 		const response = await fetch("/api/examination/comment/", {
 			method: "POST",

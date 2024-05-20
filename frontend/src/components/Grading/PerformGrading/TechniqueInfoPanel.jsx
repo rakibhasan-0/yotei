@@ -87,7 +87,6 @@ export default function TechniqueInfoPanel( {
 			setCommentError("Kommentaren får inte vara tom")
 			return
 		}
-		console.log("API ANROP SOM INTE FINNS ÄNNU. Detta skulle läggas in: " + commentText + " Grading ID: " + gradingId)
 		
 		const response = await fetch("/api/examination/comment/", {
 			method: "POST",
