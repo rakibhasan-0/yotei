@@ -139,12 +139,13 @@ run-systests:
     - systest
   script:
     - docker compose -f docker-compose.yml -f docker-compose-feature.yml down -v || true
-    - docker compose -f docker-compose.yml -f docker-compose-feature.yml up --build -d
+    - docker compose -f docker-compose.yml -f docker-compose-feature.yml up psql api gateway --build -d
     - cd frontend/
     - npm install
     - npx playwright install
     - npm ci
     - npm run systest:ci
+    - cd ..
     - docker compose -f docker-compose.yml -f docker-compose-feature.yml down -v || true
       
 generate-api-docs:
