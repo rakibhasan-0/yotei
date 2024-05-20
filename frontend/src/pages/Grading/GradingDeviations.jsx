@@ -58,6 +58,7 @@ export default function GradingDeviations() {
                 setName(json["name"])
                 fetchGrading(json["gradingId"])
                 fetchGroupComments(json["gradingId"])
+                fetchPairComments(json["gradingId"])
             }
         }
 
@@ -151,6 +152,28 @@ export default function GradingDeviations() {
                 setError("Serverfel: Kunde inte ansluta till servern.")
                 return
             })
+            if(response.status != HTTP_STATUS_CODES.OK){
+                setError("Kunde inte hämta gruppens kommentarer. Felkod: " + response.status)
+                return
+            }
+            const json = await response.json()
+            for(let i = 0; i < json.length; i++) {
+                if(json[i]["examinee_1"].id == userId || json[i]["examinee_2"].id == userId) {
+                    console.log(json[i])
+                    const response2 = await fetch("/api/examination/comment/pair/all/" + json[i]["pair_id"], requestOptions).catch(() => {
+                        setError("Serverfel: Kunde inte ansluta till servern.")
+                        return
+                    })
+                    if(response2.status != HTTP_STATUS_CODES.OK){
+                        setError("Kunde inte hämta par-kommentarer. Felkod: " + response2.status)
+                        return
+                    }
+                    const json2 = await response2.json()
+                    console.log(json2)
+                    setPairComments(json2)
+                }
+            }
+            console.log(json)
         }
 
         //Fetches the entire groups grading comments
@@ -179,7 +202,7 @@ export default function GradingDeviations() {
     /**
      * Checks if the examinee has passed a specific technique
      * @param {Technique} technique 
-     * @returns Boolean value
+     * @returns Boolean value statomg whether the examinee has passed the technique or not
      */
     function hasPassed(techniqueName) {
         for(let i = 0; i < resultList.length; i++) {
