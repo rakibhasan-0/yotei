@@ -27,7 +27,7 @@ export default defineConfig({
 	fullyParallel: false,
 	workers: 4, // Since system computer in CI pipeline has 4 cores.
 	forbidOnly: !!process.env.CI,
-	maxFailures: process.env.CI ? 3 : undefined,
+	maxFailures: process.env.CI ? 2 : undefined,
 	retries: process.env.CI ? 2 : 0,
 	reporter: process.env.CI ? [ ["list"], ["junit", { outputFile: "results.xml" }] ] : "list",
 	use: {

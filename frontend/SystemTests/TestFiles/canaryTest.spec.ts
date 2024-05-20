@@ -10,6 +10,6 @@ import { test, expect } from '../fixtures';
  */
 test.describe('ST-1 Canary Test', () => {
   test('1. Planering title should be visible if the fixtures work', async ({ page }) => {
-    await expect(page.locator('center').getByRole('heading', { name: 'kgfldjgöfkdj' })).toBeVisible();
+    await expect(page.locator('center').getByRole('heading', { name: 'Planering' })).toBeVisible();
   });
 });
