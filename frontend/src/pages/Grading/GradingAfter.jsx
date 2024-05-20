@@ -25,7 +25,11 @@ export default function GradingAfter() {
 		belt_name: "",
 		color: "" 
 	})
-	
+	const [examineeResultList, setExamineeResultList] = useState()
+	const [examineeResult, setExamineeResult] = useState({
+		num_techniques: 0,
+		num_techniques_passed: 0
+	})
 	/**
 	 * Function to update the date of the grading.
 	 * @param {string} dateString - The date of the grading.
@@ -79,6 +83,23 @@ export default function GradingAfter() {
 	}
 
 	/**
+	 * Function to fetch the belts from the backend.
+	 * @returns {Promise} The belt data.
+	 * @since 2024-05-15
+	 */
+	const fetchExamineeResult = () => {
+		return fetch(`/api/examination/grading/${gradingId}/result`, {
+			method: "GET",
+			headers: { "token": token }
+		}).then(response => {
+			if(!response.ok){
+				throw new Error("Network response was not ok")
+			}
+			return response.json()
+		})
+	}
+
+	/**
 	 * Function to download the grading as a pdf.
 	 */
 	const downloadPdf  =   () => {
@@ -109,9 +130,10 @@ export default function GradingAfter() {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const [grading_data, belt_data] = await Promise.all([
+				const [grading_data, belt_data,result_data] = await Promise.all([
 					fetchGrading(),
-					fetchBelts()
+					fetchBelts(),
+					fetchExamineeResult()
 				])
 				setGrading(grading_data)
 				updateDate(grading_data.createdAt)
@@ -122,6 +144,12 @@ export default function GradingAfter() {
 						color: "#" + matchingBelt.color
 					})
 				}
+				setExamineeResult({
+					examinee_id: result_data.examineed,
+					name: result_data.name,
+					result: result_data.result
+				})
+		
 			} catch (error) {
 				console.error("There was a problem with the fetch operation:", error)
 			}

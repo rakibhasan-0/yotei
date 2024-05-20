@@ -1,6 +1,7 @@
 package se.umu.cs.pvt.examination;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jackson.JsonObjectSerializer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * Class for handling requests to the examination api.
@@ -397,6 +400,48 @@ public class ExaminationController {
     }
 
     /**
+     * Returns a list of comments based on examinee_id.
+     * @param examinee_id
+     * @return List of comments based on examinee_id.
+     */
+    @GetMapping("/comment/examinee/{examinee_id}")
+    public ResponseEntity<List<ExaminationComment>> getExamineeComments(@PathVariable("examinee_id") long examinee_id) {
+        List<ExaminationComment> comments = examinationCommentRepository.findByExamineeId(examinee_id);
+        if(comments.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(comments, HttpStatus.OK);
+    }
+
+    /**
+     * Returns a list of comments based on examinee_pair_id.
+     * @param examineePairId
+     * @return List of comments based on examinee_pair_id
+     */
+    @GetMapping("/comment/pair/all/{examinee_pair_id}")
+    public ResponseEntity<List<ExaminationComment>> getExamineePairComments(@PathVariable("examinee_pair_id") long examineePairId) {
+        List<ExaminationComment> comments = examinationCommentRepository.findByExamineePairId(examineePairId);
+        if(comments.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(comments, HttpStatus.OK);
+    }
+
+    /**
+     * Returns a list of group comments based on grading_id.
+     * @param grading_id
+     * @return List of group comments based on grading_id.
+     */
+    @GetMapping("/comment/group/all/{grading_id}")
+    public ResponseEntity<List<ExaminationComment>> getGradingComments(@PathVariable("grading_id") long grading_id) {
+        List<ExaminationComment> comments = examinationCommentRepository.findByGradingId(grading_id);
+        if(comments.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(comments, HttpStatus.OK);
+    }
+
+    /**
      * Returns a specific comment based on examinee_pair_id and techniqueName.
      * @param examineePairId examinee pair id of the desired examinee pair.
      * @param techniqueName techniqueName of the desired technique.
@@ -454,6 +499,35 @@ public class ExaminationController {
     ResponseEntity<List<ExaminationResult>> getAllExaminationResults(){
         return new ResponseEntity<>(examinationResultRepository.findAll(), HttpStatus.OK);
     }
+
+    /**
+     * Returns a specific examination result based on grading_id.
+     * @param grading_id
+     * @return
+     */
+    @GetMapping("/examresult/grading/{grading_id}")
+    ResponseEntity <Map<String, Long>> getExaminationResultByGradingId(@PathVariable("grading_id") long grading_id){
+        String exam_protocol = examinationProtocolRepository.findById(grading_id).get().getExaminationProtocol();
+        
+        JSONObject root = new JSONObject(exam_protocol);
+        JSONArray categories = root.getJSONArray("categories");
+        if(categories.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Map<String, Long> technique_info = new HashMap<>();
+        int techniqueCount = 0;
+        for (int i = 0; i < categories.length(); i++) {
+            JSONObject category = categories.getJSONObject(i);
+            JSONArray techniques = category.getJSONArray("techniques");
+            techniqueCount += techniques.length();
+        }
+        
+        technique_info.put("technique_count", (long) techniqueCount);
+        long passed = examinationResultRepository.countByExamineeIdAndPassTrue(grading_id);
+        technique_info.put("passed", passed);
+        return new ResponseEntity<>(technique_info, HttpStatus.OK);
+    }
+
 
     /**
      * Deletes a given examination result.

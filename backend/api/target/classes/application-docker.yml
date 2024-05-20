@@ -1,7 +1,0 @@
-extends:
-  file: application.yml
-jwt:
-    secret: "pvt"
-logging:
-  level:
-    root: warn
