@@ -825,12 +825,38 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
+CREATE OR REPLACE FUNCTION protect_final_admin_role() RETURNS TRIGGER AS $$ 
+BEGIN 
+	IF OLD.role_id = admin_role_id()
+	AND (
+		SELECT
+			COUNT(user_id)
+		FROM
+			user_table
+		WHERE
+			role_id = admin_role_id()
+	) <= 1 THEN RAISE EXCEPTION 'cannot remove final admin';
+
+	END IF;
+
+	IF TG_OP = 'UPDATE' THEN RETURN NEW;
+
+	ELSE RETURN OLD;
+
+	END IF;
+END;
+$$ LANGUAGE 'plpgsql';
+
 CREATE TRIGGER remove_user BEFORE DELETE ON user_table 
 	FOR EACH ROW EXECUTE PROCEDURE remove_user_references();
 
 CREATE TRIGGER protect_admin BEFORE DELETE OR
 	UPDATE OF user_role ON user_table 
 	FOR EACH ROW EXECUTE PROCEDURE protect_final_admin();
+
+CREATE TRIGGER protect_admin_role BEFORE DELETE OR
+	UPDATE OF role_id ON user_table
+	FOR EACH ROW EXECUTE PROCEDURE protect_final_admin_role();
 
 --
 -- Triggers for categories
