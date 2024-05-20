@@ -2,12 +2,12 @@ import { test, expect } from '../fixtures';
 import { TechniquePage } from '../PageObjectModels/techniquePage';
 
 /**
- *
+ *  Tests related to technique tab at the page /activity.  
  *  @author Team Mango (Group 4)
- *  @since 2024-05-8
+ *  @since 2024-05-17
  *  @version 2.0
  */
-test.describe('ST-2 Technique', () => {
+test.describe('Technique test', () => {
 	let techniquePage
 
 	test.beforeEach('navigate to technique section', async ({page}) => {
@@ -37,6 +37,6 @@ test.describe('ST-2 Technique', () => {
 	
 		// Deletes the new technique and asserts deletion
 		await techniquePage.deleteTechnique(name)
-    	await page.getByRole('link', { name: `${name}`}).isHidden()
+    await expect(page.getByRole('link', { name: `${name}`})).toBeHidden()
   })
 })

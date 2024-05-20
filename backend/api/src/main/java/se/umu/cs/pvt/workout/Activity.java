@@ -25,7 +25,7 @@ public class Activity {
     @Column(nullable = false, name = "activity_id")
     private Long id;
 
-    @Column(nullable = false, name = "workout_id")
+    @Column(nullable = true, name = "workout_id")
     private Long workoutId;
 
     @Column(name = "exercise_id")
