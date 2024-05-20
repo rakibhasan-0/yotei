@@ -9,7 +9,7 @@ import javax.persistence.*;
  * Entity to represent the object returned
  * from the query when searching for activityLists.
  *
- * @author TEam Tomato 
+ * @author Team Tomato 
  * @since 2024-05-20
  */
 @Entity 
