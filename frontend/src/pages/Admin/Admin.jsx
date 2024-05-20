@@ -45,7 +45,6 @@ export default function Admin() {
 					throw new Error("Kunde inte hämta roller")
 				}
 				const json = await response.json()
-				console.log(json)
 				setRoles(json)
 				setIsLoading(false)
 			} catch (ex) {

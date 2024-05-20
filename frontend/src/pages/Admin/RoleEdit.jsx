@@ -5,7 +5,6 @@ import { Trash } from "react-bootstrap-icons"
 import { AccountContext } from "../../context"
 import { setError as setErrorToast } from "../../utils"
 
-
 import Divider from "../../components/Common/Divider/Divider"
 import InputTextFieldBorderLabel from "../../components/Common/InputTextFieldBorderLabel/InputTextFieldBorderLabel"
 import PermissionCard from "../../components/Common/RoleCard/PermissionListItem"
@@ -39,10 +38,10 @@ export default function RoleEdit() {
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
 	const [isBlocking, setIsBlocking] = useState(false)
 	const [goBackPopup, setGoBackPopup] = useState(false)
-	//const [isToggled, setIsToggled] = useState(false)
 
 	const [allMap, setAllMap] = useState(new Map())
 	const [selectedMap, setSelectedMap] = useState(new Map())
+	const [firstSelectedMap, setFirstSelectedMap] = useState(new Map())
 	
 
 	const blocker = useBlocker(() => {
@@ -55,27 +54,49 @@ export default function RoleEdit() {
 
 	const editRole = async () => {
 		setIsBlocking(false)
-		const response = await fetch("/api/permissions/role/add",
-			{
-				method: "POST",
-				headers: { "Content-Type": "application/json", token },
-				body: JSON.stringify({
-					role_id: role_id,
-					permission_id: permissions.permissionId
-				})
-			})
+		const mapToList = Array.from(selectedMap.keys())
+		
+		const params = new URLSearchParams({
+			newPermissionIds: mapToList
+		})
+
+		const response = await fetch(`/api/roles/${role_id}`, {
+			method: "PUT",
+			headers: { "Content-Type": "application/json", token },
+			body: JSON.stringify({ roleName })
+		})
 
 		if (!response.ok) {
-			console.log(permissions.permissionId)
-			setErrorToast("Kunde inte ändra roll")
+			if(response.status === 400) {
+				setErrorToast("Namnet på rollen är upptaget")
+			}
+			setErrorToast("Kunde inte ändra rollens namn")
+			return
+		}
+
+		const response2 = await fetch(`/api/permissions/role/${role_id}/edit/permissions?${params}`,
+			{
+				method: "PUT",
+				headers: { "Content-Type": "application/json", token }
+			}
+		)
+
+		if (!response2.ok) {
+			setErrorToast("Kunde inte ändra rollens rättigheter")
 			return
 		}
 		navigate("/admin")
 	}
 
 	useEffect(() => {
+		for (let [key] of allMap) {
+			if (selectedMap.get(key) !== firstSelectedMap.get(key)) {
+				setIsBlocking(true)
+				return
+			}
+		}
 		setIsBlocking(roleName !== originalRoleName)
-	}, [roleName, originalRoleName])
+	}, [roleName, originalRoleName, selectedMap, firstSelectedMap, allMap])
 
 	const fetchRole = useCallback(async () => {
 		setIsLoading(true)
@@ -122,25 +143,28 @@ export default function RoleEdit() {
 				if (!response2.ok) {
 					setIsLoading(false)
 					throw new Error("Kunde inte hämta rollens rättigheter")
-				}
-
-				const json2 = await response2.json()
+				}		
 
 				json.forEach(permission => {
-					console.log("första")
 					setAllMap(allMap.set(permission.permissionId, permission))
-					//handleButtonToggle(permission.newToggledState, true)
 				})
 
 				setPermissions(json)
 				setIsLoading(false)
-				json2.forEach(permission => {
-					console.log("andra")
-					addToMap(permission.permissionId, permission)
-					console.log("tredje")
-					handleButtonToggle(permission.permissionId, true)
-					console.log("fjärde")
-				})
+
+				if (response2.status === 204) {
+					setIsLoading(false)
+					return
+				} else {
+					const json2 = await response2.json()
+
+					json2.forEach(permission => {
+						addToMap("selectedMap", permission.permissionId, permission)
+						addToMap("firstSelectedMap", permission.permissionId, permission)
+						
+						handleButtonToggle(permission.permissionId, true)
+					})
+				}
 			} catch (ex) {
 				setErrorToast("Kunde inte hämta rättigheter")
 				setIsLoading(false)
@@ -163,18 +187,13 @@ export default function RoleEdit() {
 
 	function handleButtonToggle(permissionId, onInitLoad) {
 		let permission = allMap.get(permissionId)
-		console.log(permissionId)
 		if(onInitLoad) {
-			console.log("onInitLoad")
 			permission.newToggledState = !permission.newToggledState
 		} else {
-			console.log("not onInitLoad")
 			permission.newToggledState = !permission.newToggledState
 			if (permission.newToggledState) {
-				console.log("set")
-				addToMap(permissionId, permission)
+				addToMap("selectedMap", permissionId, permission)
 			} else {
-				console.log("delete")
 				removeFromMap(permissionId)
 			}
 
@@ -182,12 +201,20 @@ export default function RoleEdit() {
 
 	}
 
-	const addToMap = (permissionId, permission) => {
-		setSelectedMap(prevMap => {
-			const newMap = new Map(prevMap)
-			newMap.set(permissionId, permission)
-			return newMap
-		})
+	const addToMap = (map, permissionId, permission) => {
+		if (map === "selectedMap") {
+			setSelectedMap(prevMap => {
+				const newMap = new Map(prevMap)
+				newMap.set(permissionId, permission)
+				return newMap
+			})
+		} else {
+			setFirstSelectedMap(prevMap => {
+				const newMap = new Map(prevMap)
+				newMap.set(permissionId, permission)
+				return newMap
+			})
+		}
 	}
 
 	const removeFromMap = (permissionId) => {
@@ -204,6 +231,7 @@ export default function RoleEdit() {
 			<Trash
 				onClick={() => setShowDeletePopup(true)}
 				size="24px"
+				display={roleName === "admin"}
 				style={{ color: "var(--red-primary)", position: "absolute", right: "2rem", top: "rem"}}
 			/>	
 			<Divider option={"h2_left"} title={"Redigera roll"} /> 
@@ -231,8 +259,15 @@ export default function RoleEdit() {
 			)}
 
 			<div style={{ marginTop: "1rem", display: "flex", justifyContent: "space-between", width: "100%" }}>
-				<Button outlined={true} onClick={handleNavigation}><p>Tillbaka</p></Button>
-				<Button onClick={editRole}><p>Spara</p></Button>
+				<Button 
+					outlined={true} 
+					onClick={handleNavigation}>
+					<p>Tillbaka</p>
+				</Button>
+				<Button 
+					onClick={editRole}>
+					<p>Spara</p>
+				</Button>
 			</div>
 
 			<ConfirmPopup

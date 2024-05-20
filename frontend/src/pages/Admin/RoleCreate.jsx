@@ -4,7 +4,6 @@ import { AccountContext } from "../../context"
 import { setError as setErrorToast } from "../../utils"
 import { toast } from "react-toastify"
 
-
 import Divider from "../../components/Common/Divider/Divider"
 import InputTextFieldBorderLabel from "../../components/Common/InputTextFieldBorderLabel/InputTextFieldBorderLabel"
 import PermissionCard from "../../components/Common/RoleCard/PermissionListItem"
@@ -35,8 +34,9 @@ export default function RoleCreate() {
 	const [errorMessage, setErrorMessage] = useState("")
 
 	const [allMap, setAllMap] = useState(new Map())
-	const [selectedMap, setselectedMap] = useState(new Map())	
+	const [selectedMap, setselectedMap] = useState(new Map())
 
+	
 	useEffect(() => {
 		(async () => {
 			try {
@@ -46,11 +46,9 @@ export default function RoleCreate() {
 					throw new Error("Kunde inte hämta rättigheter")
 				}
 				const json = await response.json()
-				console.log(json)
 				json.forEach(permission => {
 					setAllMap(allMap.set(permission.permissionId, permission))
 				})
-				console.log(allMap)
 				setPermissions(json)
 				setIsLoading(false)
 			} catch (ex) {
@@ -63,8 +61,8 @@ export default function RoleCreate() {
 	}, [token])
 
 	useEffect(() => {
-		setIsBlocking(roleName != originalRoleName)
-	}, [roleName, originalRoleName])
+		setIsBlocking(roleName != originalRoleName || selectedMap.size > 0)
+	}, [roleName, originalRoleName, selectedMap])
 
 
 	const handleNavigation = () => {
@@ -88,7 +86,6 @@ export default function RoleCreate() {
 		if (checkInput() === true) {
 			setIsBlocking(false)
 			addRole()
-			console.log("Role added")
 		}
 	}
 
@@ -111,21 +108,44 @@ export default function RoleCreate() {
 			method: "POST",
 			headers: { "Content-Type": "application/json", token},
 			body: JSON.stringify({
-				roleName: roleName,
-				permissions: permissions
+				roleName: roleName
 			})
 		})
 		if (!response.ok) {
-			setErrorMessage("Kunde inte skapa roll")
-			console.error("Kunde inte skapa roll")
-		} else {
-			toast.success("Rollen har skapats")
-			navigate("/admin")
+			if (response.status === 400) {
+				setErrorMessage("Rollnamn finns redan")
+			} else {
+				setErrorMessage("Kunde inte skapa roll")
+				console.error("Kunde inte skapa roll")
+			}
+		} 
+		const responseJson = await response.json()
+
+		const mapToList = Array.from(selectedMap.keys())
+		
+		const params = new URLSearchParams({
+			newPermissionIds: mapToList
+		})
+
+		const response2 = await fetch(`/api/permissions/role/${responseJson.roleId}/edit/permissions?${params}`,
+			{
+				method: "PUT",
+				headers: { "Content-Type": "application/json", token }
+			}
+		)
+
+		if (!response2.ok) {
+			console.log(response.text)
+			console.log(mapToList)
+			setErrorMessage("Kunde inte ändra rollens rättigheter")
+			return
 		}
+
+		toast.success("Rollen har skapats")
+		navigate("/admin")
 	}
 
 	function handleButtonToggle(permissionId) {
-		console.log(permissionId)
 		let permission = allMap.get(permissionId)
 		permission.newToggledState = !permission.newToggledState
 		if (permission.newToggledState) {
