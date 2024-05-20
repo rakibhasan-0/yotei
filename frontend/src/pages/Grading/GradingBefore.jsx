@@ -406,7 +406,7 @@ export default function GradingBefore() {
 				{examinees.map((examinee, index) => {
 						return (
               <div style={{display: "flex", width: "100%", justifyContent: "center"}} key={"single-pair-" + examinee.id} id={"single-pair-" + examinee.id}>
-                <div className={styles.number}>{numberOfPairs + index + 1}</div>
+                <div className={styles.numberSingle}>{numberOfPairs + index + 1}</div>
                 <EditableListItem
                   key={examinee.id}
                   id={examinee.id}

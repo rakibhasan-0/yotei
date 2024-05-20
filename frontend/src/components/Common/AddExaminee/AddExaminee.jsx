@@ -86,8 +86,6 @@ const AddExaminee = forwardRef(function AddExaminee(
 							onChange={handleChange}
 							onKeyDown={handleKeyPress}
 						/>
-					</div>
-					<div className={styles.plusButtonDiv}>
 						<Plus id="plus-icon" onClick={handleClick} className={styles.plusIcon} />
 					</div>
 				</div>
