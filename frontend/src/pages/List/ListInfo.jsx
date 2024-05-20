@@ -10,7 +10,8 @@ import { useParams } from "react-router"
 import { Pencil, Trash } from "react-bootstrap-icons"
 import ErrorState from "../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../components/Common/Spinner/Spinner"
-import { HTTP_STATUS_CODES, isAdmin } from "../../utils"
+import { HTTP_STATUS_CODES, setError, setSuccess, isAdmin } from "../../utils"
+
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 
 /**
@@ -31,7 +32,6 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
  */
 
 export default function ListInfo({ id }) {
-	const { listId } = useParams()
 	const navigate = useNavigate()
 	const context = useContext(AccountContext)
 	const [showPopup, setShowPopup] = useState(false)
