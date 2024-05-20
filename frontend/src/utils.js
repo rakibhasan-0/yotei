@@ -1,13 +1,13 @@
 import { Cookies } from "react-cookie"
 import { AccountContext, Roles } from "./context"
 import { toast } from "react-toastify"
+import { useContext } from "react"
 
 /**
  * @author UNKNOWN & Team Tomato & Team Mango
  * @updated 2024-04-26  by Tomato
+ * 			2024-05-20  by Team Mango
  */
-
-const user = useContext(AccountContext)
 
 /**
  * Use:
@@ -53,6 +53,9 @@ export function checkRole(context, role) {
  * 		    the session is the same as the userId. Otherwise false is returned.
  */
 export function canEditSession(creatorId) {
+	const user = useContext(AccountContext)
+	//if (user.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
+	console.log("UP:" + user.permissions)
 	return (user.permissions.includes(USER_PERMISSION_CODES.SESSION_ALL) ||
 	(user.permissions.includes(USER_PERMISSION_CODES.SESSION_OWN) &&
 	(user.userId === creatorId)))
@@ -64,6 +67,8 @@ export function canEditSession(creatorId) {
  * @returns true if the user has permission to create/edit all sessions or their own sessions. Otherwise false is returned.
  */
 export function canCreateSession() {
+	const user = useContext(AccountContext)
+	//if (user.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
 	//Even if a user has a permission to edit all sessions, they may not have the permission set to edit their own sessions, so both must be checked here in the frontend.
 	//(You cannot just check for the SESSION_OWN permission. Perhaps this should be changed, but then you need to coordinate well with the backend.)
 	return (user.permissions.includes(USER_PERMISSION_CODES.SESSION_ALL) || user.permissions.includes(USER_PERMISSION_CODES.SESSION_OWN))
