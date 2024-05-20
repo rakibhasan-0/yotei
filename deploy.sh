@@ -36,17 +36,20 @@ else
         read -rp "Do you have a version deployed already? (y/n): " yn
         case $yn in 
             [yY] ) 
-            docker compose -f docker-compose.yml -f docker-compose-domain-release.yml down
-            read -rp "Would you like to reset the database? (y/n): " yn
-            case $yn in 
-                [yY] ) 
-                    docker volume ls | grep "pgdata" | rev | cut -d' ' -f1 | rev | xargs docker volume rm &> /dev/null
-                    break;;
-                [nN] )
-                    break;;
-                * )
-                    echo "Invalid response" ;;
-            esac
+            docker compose -p yotei -f docker-compose.yml -f docker-compose-domain-release.yml down
+
+            while true; do
+                read -rp "Would you like to reset the database? (y/n): " yn
+                case $yn in 
+                    [yY] ) 
+                        docker volume ls | grep "pgdata" | rev | cut -d' ' -f1 | rev | xargs docker volume rm &> /dev/null
+                        break;;
+                    [nN] )
+                        break;;
+                    * )
+                        echo "Invalid response" ;;
+                esac
+            done
 
             break;;
         [nN] )
@@ -61,16 +64,31 @@ else
         case $yn in 
             [yY] ) 
             read -rp "Whats your domain name: " domain
-            docker compose -f docker-compose.yml -f docker-compose-domain-release.yml up -d
-            docker compose -f docker-compose.yml -f docker-compose-domain-release.yml exec -e DOMAIN_NAME=$domain nginx /root/install.sh
-            docker compose -f docker-compose.yml -f docker-compose-domain-release.yml restart nginx
-            docker compose -f docker-compose.yml -f docker-compose-domain-release.yml run --rm certbot certonly -v --webroot --webroot-path /var/www/certbot/ --register-unsafely-without-email -d $domain
-            docker exec yotei-nginx-1 sed -i 's/#//g' /etc/nginx/conf.d/prod.conf
-            docker compose -f docker-compose.yml -f docker-compose-domain-release.yml restart
+            docker compose -p yotei -f docker-compose.yml -f docker-compose-domain-release.yml up -d
+            docker compose -p yotei -f docker-compose.yml -f docker-compose-domain-release.yml exec -e DOMAIN_NAME=$domain nginx /root/install.sh
+            docker compose -p yotei -f docker-compose.yml -f docker-compose-domain-release.yml restart nginx
+            docker compose -p yotei -f docker-compose.yml -f docker-compose-domain-release.yml run --rm certbot certonly -v --webroot --webroot-path /var/www/certbot/ --register-unsafely-without-email -d $domain
+            docker compose -p yotei -f docker-compose.yml -f docker-compose-domain-release.yml exec nginx sed -i 's/#//g' /etc/nginx/conf.d/prod.conf
+            docker compose -p yotei -f docker-compose.yml -f docker-compose-domain-release.yml restart
+
+            while true; do
+                read -rp "Would you like to create a cronjob for certificate renewal (y/n): " yn
+                case $yn in
+                    [yY] )
+                    
+                        break;;
+                    [nN] )
+
+                        break;;
+                    * )
+                        echo "Invalid response" ;;
+                esac
+            done
+            
             break;;
         [nN] )
             echo "Deploying production server"
-            docker compose -f docker-compose.yml -f docker-compose-release.yml up --build -d
+            docker compose -p yotei -f docker-compose.yml -f docker-compose-release.yml up -d
             break;;
         * )
             echo "Invalid response" ;;
