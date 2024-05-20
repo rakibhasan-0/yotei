@@ -9,7 +9,7 @@ import {People} from "react-bootstrap-icons"
 import Button from "../../components/Common/Button/Button"
 import {Link} from "react-router-dom"
 import { useCookies } from "react-cookie"
-import { HTTP_STATUS_CODES, setError } from "../../utils"
+import { HTTP_STATUS_CODES, USER_PERMISSION_CODES, setError } from "../../utils"
 
 /**
  * PlanIndex is the page that displays group plannings. Contains a 
@@ -23,6 +23,7 @@ import { HTTP_STATUS_CODES, setError } from "../../utils"
  * @since 2023-05-24
  * Updates: 2024-05-10: Added a toggle for a new checkbox. The filtering part does not work yet.
  * 			2024-05-17: Fixed the filtering and refactored code slightly.
+ *          2024-05-20: Added a check for if the add session button should be shown or not.
  */
 export default function PlanIndex() {
 	const { token } = useContext(AccountContext)
@@ -290,10 +291,16 @@ export default function PlanIndex() {
 					<SessionList id = {"sessionlistID"} plans={plans} sessions={sessions} workouts={workouts}/>
 				}
 			</div>}
-			
-			<RoundButton linkTo={"/session/create"}>
-				<Plus />
-			</RoundButton>
+
+			{
+			//Even if a user has a permission to edit all sessions, they may not have the permission set to edit their own sessions, so both must be checked here in the frontend.
+			//(You cannot just check for the SESSION_OWN permission.)
+				(user.permissions.includes(USER_PERMISSION_CODES.SESSION_ALL) || user.permissions.includes(USER_PERMISSION_CODES.SESSION_OWN)) ? 
+					<RoundButton linkTo={"/session/create"}>
+						<Plus />
+					</RoundButton>
+					: <></>
+			}
 
 		</center>
 	)	
