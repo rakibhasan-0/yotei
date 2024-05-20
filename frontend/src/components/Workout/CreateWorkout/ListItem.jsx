@@ -1,3 +1,4 @@
+import { Link, useNavigate } from "react-router-dom"
 import style from "./ListItem.module.css"
 /**
  * This component is used to display the content of a list that is 
@@ -12,10 +13,20 @@ import style from "./ListItem.module.css"
  */
 
 export default function ListItem({ item, checkBox, id, index}) {
+	const navigate = useNavigate()
 
 	// Determine background color based on index
 	const bgColor = index % 2 === 0 ? "#F8EBEC" : "#FFFFFF"
 
+	// Determines what happens on clicking on the name of different activities in a list.
+	const handleOnClick = () => {
+		if(item.type === "technique") {
+			navigate("/technique/"+ item.path)
+		}
+		if(item.type === "exercise") {
+			navigate("/exercise/exercise_page/" + item.path)
+		}
+	}
 	return (
 		<div style={{ backgroundColor: bgColor }}>
 			
@@ -24,9 +35,16 @@ export default function ListItem({ item, checkBox, id, index}) {
 				<div 
 					id={"technique-list-item-" + id}>
 					<div className={style.innerDiv}>
-						<div className={style.checkboxDiv}> {checkBox} </div>
-						<div className={style.nameTag}> <p>{item.name}</p> </div>
 
+						<div className={style.checkboxDiv}> 
+							{checkBox} 
+						</div>
+
+						<div className={style.nameTag}> 
+							<Link onClick={handleOnClick}>
+								<p>{item.name}</p> 
+							</Link>
+						</div>
 					</div>
 				</div>
 				
@@ -36,11 +54,17 @@ export default function ListItem({ item, checkBox, id, index}) {
 				<div  id={id}>
 					<div className={style.innerDiv}>
 
-					{checkBox}
-						<div className={style.nameTag}> <p>{item.name}</p> </div>
-						<div className={style.durationTag}> <p>{item.duration} min</p> </div>
+						{checkBox}
+						<div className={style.nameTag}>
+							<Link onClick={handleOnClick}>
+								<p>{item.name}</p>
+							</Link>
+						</div>
+						<div className={style.durationTag}> 
+							<p>{item.duration} min</p>
+						</div>
 					</div>
-					{/* <a href={"/exercise/exercise_page/" + id}>More Details</a> */}
+					
 				</div>
 			) : null}
 		</div>
