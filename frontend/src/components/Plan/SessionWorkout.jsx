@@ -9,6 +9,7 @@ import { useNavigate } from "react-router"
 import Button from "../../components/Common/Button/Button"
 import Review from "../../components/Plan/SessionReview/SessionReviewComponent.jsx"
 import {HTTP_STATUS_CODES} from "../../utils"
+import { useCookies } from "react-cookie"
 
 /**
  * The SessionWorkout component is used to display information about a Sessions
@@ -28,7 +29,7 @@ import {HTTP_STATUS_CODES} from "../../utils"
  * 
  * @returns A SessionWorkout component
  * 
- * @author Griffin DV21JJN C19HLN
+ * @author Griffin DV21JJN C19HLN, Team Mango (Group 4)
  */
 
 function SessionWorkout({ id, workout, sessionID, creatorID }) {
@@ -40,6 +41,7 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 	const { userId } = userContext
 	const navigate = useNavigate()
 	const [showRPopup, setRShowPopup] = useState(false)
+	const [cookies, setCookie] = useCookies(["previousPath"])
 	const navigateAndClose = async path => {
 		navigate(path)
 	}
@@ -48,6 +50,10 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 	const context = useContext(AccountContext)
 	const [, setErrorStateMsg] = useState("")
 	//const {token} = context
+
+	useEffect(() => {
+		setCookie("previousPath", "/plan", {path: "/"})
+	}, [setCookie, cookies.previousPath])
 
 	useEffect(() => {
 		const fetchLoadedData = async() => {

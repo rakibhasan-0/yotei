@@ -300,7 +300,7 @@ ALTER TABLE
 --
 CREATE TABLE activity(
 	activity_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-	workout_id INT NOT NULL,
+	workout_id INT,
 	exercise_id INT,
 	technique_id INT,
 	category_name VARCHAR(255),
@@ -623,6 +623,7 @@ CREATE TABLE IF NOT EXISTS examination_grading (
 	step INT NOT NULL,
 	technique_step_num INT NOT NULL,
 	created_at DATE NOT NULL,
+  title VARCHAR(255) NOT NULL,
 	CONSTRAINT grading_fk_belt FOREIGN KEY(belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE
 );
 
@@ -874,4 +875,6 @@ $$ LANGUAGE 'plpgsql';
 
 CREATE TRIGGER insert_tag BEFORE INSERT ON tag 
 	FOR EACH ROW EXECUTE PROCEDURE tag_to_lowercase();
+
+	
 
