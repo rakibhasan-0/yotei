@@ -55,7 +55,6 @@ export function checkRole(context, role) {
 export function canEditSession(creatorId) {
 	const user = useContext(AccountContext)
 	//if (user.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
-	console.log("UP:" + user.permissions)
 	return (user.permissions.includes(USER_PERMISSION_CODES.SESSION_ALL) ||
 	(user.permissions.includes(USER_PERMISSION_CODES.SESSION_OWN) &&
 	(user.userId === creatorId)))
@@ -74,6 +73,32 @@ export function canCreateSession() {
 	return (user.permissions.includes(USER_PERMISSION_CODES.SESSION_ALL) || user.permissions.includes(USER_PERMISSION_CODES.SESSION_OWN))
 }
 
+
+/**
+ * canCreateGroups() - check if a user can create a group.
+ * @param {*} user AccountContext from user.
+ * @returns true if user can create a group, else false.
+ */
+export function canCreateGroups(user) {
+	if (!user.permissions) return false
+	//if (user.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
+	return (user.permissions.includes(USER_PERMISSION_CODES.PLAN_ALL) ||
+	(user.permissions.includes(USER_PERMISSION_CODES.PLAN_OWN)))
+}
+
+/**
+ * canEditGroups() - checks if a user can edit a group. If not all, check if user can edit own and if so let user edit their own.
+ * @param {*} user AccountContext from user.
+ * @param {*} group Group info.
+ * @returns true if user can edit a group.
+ */
+export function canEditGroups(user, group) {
+	if (!user.permissions) return false
+
+	return (user.permissions.includes(USER_PERMISSION_CODES.PLAN_ALL) ||
+	(user.permissions.includes(USER_PERMISSION_CODES.PLAN_OWN) &&
+	(user.userId === group.userId)))
+}
 
 /**
  * Logs out the user and returns to the logIn screen
