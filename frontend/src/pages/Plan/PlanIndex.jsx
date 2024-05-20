@@ -9,7 +9,7 @@ import {People} from "react-bootstrap-icons"
 import Button from "../../components/Common/Button/Button"
 import {Link} from "react-router-dom"
 import { useCookies } from "react-cookie"
-import { HTTP_STATUS_CODES, USER_PERMISSION_CODES, setError } from "../../utils"
+import { HTTP_STATUS_CODES, canCreateSession, setError } from "../../utils"
 
 /**
  * PlanIndex is the page that displays group plannings. Contains a 
@@ -293,13 +293,11 @@ export default function PlanIndex() {
 			</div>}
 
 			{
-			//Even if a user has a permission to edit all sessions, they may not have the permission set to edit their own sessions, so both must be checked here in the frontend.
-			//(You cannot just check for the SESSION_OWN permission.)
-				(user.permissions.includes(USER_PERMISSION_CODES.SESSION_ALL) || user.permissions.includes(USER_PERMISSION_CODES.SESSION_OWN)) ? 
-					<RoundButton linkTo={"/session/create"}>
-						<Plus />
-					</RoundButton>
-					: <></>
+			canCreateSession() ? 
+				<RoundButton linkTo={"/session/create"}>
+					<Plus />
+				</RoundButton>
+			: <></>
 			}
 
 		</center>
