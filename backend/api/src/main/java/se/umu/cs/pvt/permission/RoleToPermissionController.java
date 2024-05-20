@@ -19,13 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import se.umu.cs.pvt.role.RoleRepository;
 
 /**
  * RoleToPermission api for mapping permissions to roles.
  * 
- * @author Team Mango (Grupp 4) - 2024-05-16
+ * @author Team Mango (Grupp 4) - 2024-05-20
  */
 @RestController
 @CrossOrigin
