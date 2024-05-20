@@ -50,7 +50,7 @@ export default function Profile() {
 
 
 	//TODO feature toggle
-	const [isListsEnabled] = useState(true)
+	const [isListsEnabled] = useState(false)
 
 
 	/* Workout management */
