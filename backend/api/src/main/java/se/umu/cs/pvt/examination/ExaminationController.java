@@ -404,7 +404,7 @@ public class ExaminationController {
      * @param examinee_id
      * @return List of comments based on examinee_id.
      */
-    @GetMapping("/comment/examinee/{examinee_id}")
+    @GetMapping("/comment/examinee/all/{examinee_id}")
     public ResponseEntity<List<ExaminationComment>> getExamineeComments(@PathVariable("examinee_id") long examinee_id) {
         List<ExaminationComment> comments = examinationCommentRepository.findByExamineeId(examinee_id);
         if(comments.isEmpty()) {

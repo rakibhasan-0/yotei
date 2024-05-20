@@ -130,7 +130,7 @@ export default function GradingDeviations() {
             const requestOptions = {
                 headers: {"Content-type": "application/json", token: context.token}
 			}
-            const response = await fetch("/api/examination/comment/examinee/" + userId, requestOptions).catch(() => {
+            const response = await fetch("/api/examination/comment/examinee/all/" + userId, requestOptions).catch(() => {
                 setError("Serverfel: Kunde inte ansluta till servern.")
                 return
             })
@@ -141,6 +141,16 @@ export default function GradingDeviations() {
             const json = await response.json()
             console.log(json)
             setPersonalComments(json)
+        }
+
+        const fetchPairComments = async(gradingId) => {
+            const requestOptions = {
+                headers: {"Content-type": "application/json", token: context.token}
+			}
+            const response = await fetch("/api/examination/pair/grading/" + gradingId, requestOptions).catch(() => {
+                setError("Serverfel: Kunde inte ansluta till servern.")
+                return
+            })
         }
 
         //Fetches the entire groups grading comments
@@ -209,7 +219,12 @@ export default function GradingDeviations() {
      * @returns The personal comment of a given technique
      */
     function getPersonalComment(techniqueName) {
-        return "" //PLACEHOLDER
+        for(let i = 0; i < personalComments.length; i++) {
+            if(personalComments[i].techniqueName == techniqueName) {
+                return personalComments[i].comment
+            }
+        }
+        return ""
     }
 
     /**
@@ -217,7 +232,12 @@ export default function GradingDeviations() {
      * @returns The pair comment of a given technique
      */
     function getPairComment(techniqueName) {
-        return "" //PLACEHOLDER
+        for(let i = 0; i < pairComments.length; i++) {
+            if(pairComments[i].techniqueName == techniqueName) {
+                return pairComments[i].comment
+            }
+        }
+        return ""
     }
 
     /**
@@ -225,7 +245,12 @@ export default function GradingDeviations() {
      * @returns The group comment of a given technique
      */
     function getGroupComment(techniqueName) {
-        return "" //PLACEHOLDER
+        for(let i = 0; i < groupComments.length; i++) {
+            if(groupComments[i].techniqueName == techniqueName) {
+                return groupComments[i].comment
+            }
+        }
+        return ""
     }
 
     /**
@@ -263,7 +288,8 @@ export default function GradingDeviations() {
                                 <Divider id = 'divider-example' option= 'h2_left' title = {category.category_name} key={category.category_name}/>
                                 {category.techniques.map((technique, index) => (
                                     (isDeviating(technique.text) || showingAll) ?
-                                        <Container id = {index} name = {technique.text} passed={hasPassed(technique.text)} key={index} ></Container>
+                                        <Container id = {index} name = {technique.text} passed={hasPassed(technique.text)} key={index} 
+                                        comment={getPersonalComment(technique.text)} pairComment={getPairComment(technique.text)} generalComment={getGroupComment(technique.text)}></Container>
                                         : null
                                 ))}
                             </div>
