@@ -17,5 +17,4 @@ public interface ExaminationCommentRepository extends JpaRepository<ExaminationC
     List<ExaminationComment> findByGradingIdAndExamineeIdIsNullAndExamineePairIdIsNull(Long gradingId);
     List<ExaminationComment> findByExamineeIdAndTechniqueName(Long examineeId, String techniqueName);
     List<ExaminationComment> findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(Long gradingId, String techniqueName);
-
 }

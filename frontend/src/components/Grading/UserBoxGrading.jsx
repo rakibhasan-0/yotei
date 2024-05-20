@@ -18,7 +18,7 @@ import React from "react"
 import { Link } from "react-router-dom"
 import { ChevronDown } from "react-bootstrap-icons"
 import styles from "../../pages/Grading/GradingAfterComp.module.css"
-const UserBoxGrading = ({ id, name,passedTechniques,totalAmountOfTechniques }) => {
+const UserBoxGrading = ({ id, name, passedTechniques, totalAmountOfTechniques }) => {
 	return (
 		<div>
 			<div className={styles["technique-card"]} id={id}>

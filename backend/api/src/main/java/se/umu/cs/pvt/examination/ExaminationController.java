@@ -538,13 +538,13 @@ public class ExaminationController {
             examineeInfo.put("examineeId", examinee.getExamineeId().toString());
             examineeInfo.put("passedTechniques", Long.toString(passedTechniques)); // Convert long to Long and invoke toString()
             examineeInfo.put("name", examinee.getName());
+            System.out.println("Examinee name: " + examinee.getName()+ " " + "Num passed " + passedTechniques);
             examineeResults.add(examineeInfo);
         }
-        response.put("examinee_results", examineeResults);
+        response.put("examineeResults", examineeResults);
         if(response.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        
         return ResponseEntity.ok(response);
     }
 
