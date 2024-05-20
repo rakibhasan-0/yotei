@@ -160,7 +160,7 @@ export default function App() {
 						<Route path="profile/favouriteWorkouts" element={<FavouriteWorkoutsList/>} />
 
 
-						<Route path="groups/statistics/:groupID" element={<NoPage />} />
+						
 						<Route path="grading" element={<Grading />} />
 						<Route path="grading/create" element={<GradingCreate/>} />
 						<Route path="grading/:gradingId/1" element={<GradingBefore/>} />
