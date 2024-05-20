@@ -383,10 +383,10 @@ export default function DuringGrading() {
 		// TODO: Temporary, should use a state instead
 		const data = [
 			{
-				examinee_id: 9,
-				pass: true,
-				result_id: 16,
-				technique_name: "1. Shotei uchi, jodan, rak stöt med främre och bakre handen"
+				examineeId: 8,
+				pass: null,
+				resultId: 7,
+				techniqueName: "1. Shotei uchi, jodan, rak stöt med främre och bakre handen"
 			}
 		]
 
@@ -397,17 +397,16 @@ export default function DuringGrading() {
 			default: null,
 		}
 		// Check existance
-		const foundExamineeResult = data.find(item => item.examinee_id === examineeId)
+		const foundExamineeResult = data.find(item => item.examineeId === examineeId)
 		if( foundExamineeResult ){
-			await putExamineeResult({ result_id: foundExamineeResult.result_id, examinee_id: foundExamineeResult.examinee_id, technique_name: foundExamineeResult.technique_name, pass: passStatusMap[passStatus] }, token)
+			await putExamineeResult({ resultId: foundExamineeResult.resultId, examineeId: foundExamineeResult.examineeId, techniqueName: foundExamineeResult.techniqueName, pass: passStatusMap[passStatus] }, token)
 				.catch(() => setErrorToast("Kunde inte lägga till resultat. Kolla internetuppkoppling."))
-			console.log("Response PUT succesful")
 		}else{
-			const data = await postExamineeResult({ examinee_id: examineeId, technique_name: techniqueName, pass: passStatusMap[passStatus] }, token)
+			const data = await postExamineeResult({ examineeId: examineeId, techniqueName: techniqueName, pass: passStatusMap[passStatus] }, token)
 				.catch(() => setErrorToast("Kunde inte lägga till resultat. Kolla internetuppkoppling."))
 			const response = await data.json()
 			// TODO: Add response to listOfExamineeResults
-			console.log("Response POST successful", response)
+			console.log("Response: ", JSON.stringify(response))
 		}
 	}
 
@@ -424,6 +423,7 @@ export default function DuringGrading() {
 			headers: { "Content-Type": "application/json", "token": token },
 			body: JSON.stringify(result)
 		}
+		console.log("Fetched POST: ", JSON.stringify(result))
 
 		return fetch("/api/examination/examresult", requestOptions)
 			.then(response => { return response })
@@ -443,6 +443,8 @@ export default function DuringGrading() {
 			headers: { "Content-Type": "application/json", "token": token },
 			body: JSON.stringify(result)
 		}
+
+		console.log("Fetched PUT: ", result)
 
 		return fetch("/api/examination/examresult", requestOptions)
 			.then(response => { return response })
