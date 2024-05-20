@@ -75,10 +75,12 @@ else
                 read -rp "Would you like to create a cronjob for certificate renewal (y/n): " yn
                 case $yn in
                     [yY] )
-                    
+                        if [ -z $(crontab -l | grep "docker run --rm certbot/certbot:latest renew") ]
+                        then 
+                            echo "0 0 1 * * docker run --rm certbot/certbot:latest renew" | crontab -
+                        fi
                         break;;
                     [nN] )
-
                         break;;
                     * )
                         echo "Invalid response" ;;
