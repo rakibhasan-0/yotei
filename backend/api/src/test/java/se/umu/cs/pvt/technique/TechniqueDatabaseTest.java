@@ -71,10 +71,6 @@ public class TechniqueDatabaseTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
-        POSTGRESQL_USER = "psql";
-        POSTGRESQL_PASSWORD = "yotei123";
-        POSTGRESQL_DATABASE = "yotei";
 
         ImageFromDockerfile image = new ImageFromDockerfile()
             .withDockerfile(Paths.get("../../infra/database/Dockerfile"));
