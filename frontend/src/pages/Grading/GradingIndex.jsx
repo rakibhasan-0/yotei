@@ -9,7 +9,6 @@ import containerStyles from "./GradingBefore.module.css"
 import BeltButton from "../../components/Common/Button/BeltButton"
 import Spinner from "../../components/Common/Spinner/Spinner"
 
-
 /**
  * The grading create page.
  * Creates a new grading.
@@ -18,7 +17,6 @@ import Spinner from "../../components/Common/Spinner/Spinner"
  * @version 1.0
  * @since 2024-05-07
  */
-
 export default function GradingIndex() {
 	const [belts, setBelts] = useState([]) 
 	const [beltColors] = useState(["Gult", "Orange", "Grönt", "Blått", "Brunt"])
@@ -28,7 +26,6 @@ export default function GradingIndex() {
 	const [isCreateListDone, setIsCreateListDone] = useState(false)
 	const context = useContext(AccountContext)
 	const navigate = useNavigate()
-
 
 	const { token, userId } = context
 
@@ -42,8 +39,14 @@ export default function GradingIndex() {
 		const params = {
 			ColorParam: color,
 		}
-
 		navigate(`/grading/${gradingId}/${gradingStep}`, { state: params })
+	}
+
+	/**
+	 * Navigate to create gradingprotocol. 
+	 */
+	function navigateTo() {
+		navigate("/grading/create")
 	}
 
 	/**
@@ -73,8 +76,8 @@ export default function GradingIndex() {
 			headers: { "token": token }
 		})
 			.then(response => {
-				if (!response.ok) {
-					throw new Error("Network response was not ok")
+				if(response.status === 404) {
+					return []
 				}
 				return response.json()
 			})
@@ -86,18 +89,18 @@ export default function GradingIndex() {
    */
 	function createLists(gradings_data) {
 		gradings_data.map(async (item) => {
-			if(item.creatorId === userId) {
-				const isCreatorInFinished = finishedGradings.some(grading => grading.creatorId === userId)
-				const isCreatorInCurrent = currentGradings.some(grading => grading.creatorId === userId)
+			const isCreatorInFinished = finishedGradings.some(grading => grading.creatorId === userId)
+			const isCreatorInCurrent = currentGradings.some(grading => grading.creatorId === userId)
 	
-				if (!isCreatorInFinished && !isCreatorInCurrent) {
-					if (item.step === 3) {
-						setFinishedGradings(prevState => [...prevState, item])
-					} else {
-						setCurrentGradings(prevState => [...prevState, item])
-					}
+
+			if (!isCreatorInFinished && !isCreatorInCurrent) {
+				if (item.step === 3) {
+					setFinishedGradings(prevState => [...prevState, item])
+				} else {
+					setCurrentGradings(prevState => [...prevState, item])
 				}
 			}
+			
 		})
 		setIsCreateListDone(true)
 	}
@@ -123,10 +126,12 @@ export default function GradingIndex() {
     
 	}, [isCreateListDone])
 
+
+
 	/**
-   * Handle belt colors and name. 
-   * 
-   */
+	 * Handle belt colors and name. 
+	 * 
+	 */
 	useEffect(() => {
 
 		const fetchData = async () => {
@@ -137,7 +142,7 @@ export default function GradingIndex() {
 					fetchBelts(),
 					fetchGradings()
 				])
-				console.log(gradings_data)
+				
 				const filteredColors = belt_data.filter(item => beltColors.includes(item.name))
 				const colorMaps = {}
 				filteredColors.forEach(element => {
@@ -150,7 +155,6 @@ export default function GradingIndex() {
 				})
 				setBelts(colorMaps)
 				setLoading(false)
-
 				createLists(gradings_data)
 
 			} catch (error) {
@@ -159,10 +163,6 @@ export default function GradingIndex() {
 		}
 		fetchData()
 	}, [])
-
-	function navigateTo() {
-		navigate("/grading/create")
-	}
 
 	return (
 		<center>
@@ -186,8 +186,6 @@ export default function GradingIndex() {
 					)}
 				</div>
 			</div>
-
-
 			<h1 className={styles.finishedGradings}>Avslutade graderingar</h1>
 			<div className={containerStyles.container}>
 				<div className={containerStyles.scrollableContainer}>
@@ -203,13 +201,9 @@ export default function GradingIndex() {
 									<h2>{`${belts[grading.beltId]?.name} bälte`} </h2>
 								</BeltButton>
 							))}
-
 						</div>
-
 					)}
-				</div>
-
-                
+				</div>          
 			</div>
 
 			<RoundButton onClick={navigateTo}>
