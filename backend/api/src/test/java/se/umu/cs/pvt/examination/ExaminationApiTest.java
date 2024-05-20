@@ -65,9 +65,9 @@ public class ExaminationApiTest {
         this.resultList = new ArrayList<>();
         this.protocolList = new ArrayList<>();
 
-        this.gradingList.add(new Grading(1L, 1L, 1L, 1, 1, new Date()));
-        this.gradingList.add(new Grading(2L, 1L, 1L, 1, 1, new Date()));
-        this.gradingList.add(new Grading(3L, 1L, 1L, 1, 1, new Date()));
+        this.gradingList.add(new Grading(1L, 1L, 1L, 1, 1, new Date(), "title1"));
+        this.gradingList.add(new Grading(2L, 1L, 1L, 1, 1, new Date(), "title2"));
+        this.gradingList.add(new Grading(3L, 1L, 1L, 1, 1, new Date(), "title3"));
 
         this.examineeList.add(new Examinee(1L, "Linus Testman", 2L));
         this.examineeList.add(new Examinee(2L, "Test Testman", 1L));
