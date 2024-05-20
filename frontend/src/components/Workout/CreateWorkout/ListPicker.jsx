@@ -1,6 +1,7 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import DropDown from "../../Common/List/Dropdown"
 import styles from "./ListPicker.module.css"
+import CheckBox from "../../Common/CheckBox/CheckBox"
 
 
 /**
@@ -14,52 +15,50 @@ import styles from "./ListPicker.module.css"
 
 
 export default function ListPicker({ onFilterChange }) {
-	const filterOptions = [
-		{ label: "Mina listor" },
-		{ label: "Delade med mig" },
-		{ label: "Publika listor" }
-	]
-	const [filter, setFilter] = useState(filterOptions)
+    const filterOptions = [
+        { label: "Mina listor" },
+        { label: "Delade med mig" },
+        { label: "Publika listor" }
+    ]
+    const [filter, setFilter] = useState([])
 
-	const onSelect = (option) => {
-        setFilter(prevFilter => {
-            if (prevFilter.includes(option)) {
-                // If the option is already included, remove it
-                const newFilter = prevFilter.filter(opt => opt !== option);
-                onFilterChange(newFilter);
-                return newFilter;
-            } else {
-                // If the option is not included, add it
-                const newFilter = [...prevFilter, option];
-                onFilterChange(newFilter);
-                return newFilter;
-            }
-        })
-    }
-	
-	return (
-		<div className={styles.listPicker}>
-			<DropDown
-				text={filter.label}
-				className={styles.filterText}
-				id="list-filter-workout" centered={true}
-				autoClose={true}
-			>
 
-				<div className={styles.filterBorder}>
-					{filterOptions.map((option, index) => (
 
-						<div className={styles.filterItems} id={"listFilterItem"}
-							key={index}
-							onClick={() => {
-								onSelect(option)
-							}}>
-							<p className={styles.listItemText}>{option.label}</p>
-						</div>
-					))}
-				</div>
+	useEffect(() => {
+		onFilterChange(filter);
+		console.log(filter)
+	}, [filter, onFilterChange]);
 
-			</DropDown>
-		</div>
-	)
+
+
+    const onSelect = (option) => {
+		setFilter(prevFilter => {
+			if (prevFilter.some(opt => opt.label === option.label)) {
+				// If the option is already included, remove it
+				return prevFilter.filter(opt => opt.label !== option.label);
+			} else {
+				// If the option is not included, add it
+				return [...prevFilter, option];
+			}
+		})
+	}
+
+    return (
+        <div className={styles.listPicker}>
+            <DropDown
+                text={"Listor"}
+                className={styles.filterText}
+                id="list-filter-workout" centered={true}
+                autoClose={false}
+            >
+                <div className={styles.filterBorder}>
+                    {filterOptions.map((option, index) => (
+                        <div className="dropdownItem" key={index}>
+                            <CheckBox label={option.label} checked={filter.includes(option)} onClick={() => onSelect(option)} />
+                        </div>
+                    ))}
+                </div>
+            </DropDown>
+        </div>
+    )
 }
