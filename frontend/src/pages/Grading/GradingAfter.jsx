@@ -20,27 +20,10 @@ export default function GradingAfter() {
 	const { gradingId } = useParams()
 	const navigate = useNavigate()
 	const [grading, setGrading] = useState([])
-	const[dateCreated, setDateCreated] = useState("")
 	const [beltInfo, setBeltInfo] = useState({
 		belt_name: "",
 		color: "" 
 	})
-	
-	/**
-	 * Function to update the date of the grading.
-	 * @param {string} dateString - The date of the grading.
-	 * @returns {void}
-	 * @since 2024-05-15
-	 */
-	const updateDate = (dateString) => {
-		const date = new Date(dateString)
-		const hours = date.getHours()
-		const minutes = date.getMinutes()
-		const formattedHours = (hours < 10 ? "0" : "") + hours
-		const formattedMinutes = (minutes < 10 ? "0" : "") + minutes
-		const timeString = formattedHours + ":" + formattedMinutes
-		setDateCreated(timeString)
-	}
 
 	/**
 	 * Function to fetch the grading from the backend.
@@ -114,7 +97,6 @@ export default function GradingAfter() {
 					fetchBelts()
 				])
 				setGrading(grading_data)
-				updateDate(grading_data.createdAt)
 				const matchingBelt = belt_data.find(belt => belt.id === grading_data.beltId)
 				if (matchingBelt) {
 					setBeltInfo({
@@ -132,12 +114,12 @@ export default function GradingAfter() {
 	return (
 		<div className={styles.container}>
 			<div>
-				<div className={styles.topContainer}>
-					<div className={styles.content}>
-						<div style={{ backgroundColor: beltInfo.color, borderRadius: "0.3rem", padding: "0px" }}>
-							<h2
-								style={{ color : beltInfo.color === "#201E1F" ? "white" : "black" }}
-							>{beltInfo.belt_name} bälte {dateCreated}</h2>
+				<div>
+					<div>
+						<div style={{ backgroundColor: beltInfo.color, borderRadius: "0.3rem", padding: "10px", textAlign: "center", justifyContent: "center", alignItems: "center", display: "flex", position: "relative" }}>
+							<span
+								style={{ color : beltInfo.color === "#201E1F" ? "white" : "black", fontWeight: "bold" }}
+							>{grading.title}</span>
 						</div>
 					</div>
 					<h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "10px", paddingBottom: "10px" }}>Summering</h1>

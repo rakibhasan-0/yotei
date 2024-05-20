@@ -1,5 +1,5 @@
 import styles from "./EditableInputTextField.module.css"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 /**
  * An EditableInputTextField that can be edited only
@@ -16,12 +16,13 @@ import { useState } from "react"
  * 			id={The unique ID for an exercises, gets concatenated onto detailURL}
  *      onEdit={onEditFunction}
  *      validateInput={validateFunction}
+ *      color={hex}
  * 		</EditableInputTextField>
  * 
  * @author Team Pomegrade (Group 1) (2024-05-17)
  * @since 2024-05-06
  */
-export default function EditableInputTextField({ item, id, onEdit, validateInput }) {
+export default function EditableInputTextField({ item, id, onEdit, validateInput, color }) {
 
 	const [isEditing, setIsEditing] = useState(false) // State to manage edit mode
 	const [editedText, setEditedText] = useState(item) // State to store edited text
@@ -32,6 +33,11 @@ export default function EditableInputTextField({ item, id, onEdit, validateInput
 	const handleEdit = () => {
 		setIsEditing(true)
 	}
+
+	useEffect(() => {
+		setEditedText(item)
+		setSavedText(item)
+	}, [item])
 
 	const handleInputChange = (event) => {
 		const text = event.target.value
@@ -53,45 +59,54 @@ export default function EditableInputTextField({ item, id, onEdit, validateInput
 		}
 	}
 
-	const handleBlur = (event) => {
-		if (event.relatedTarget?.id === "accept-icon") {
-			handleEditSubmit();
-		}
-		setIsEditing(false)
+	const handleBlur = () => {
+		handleEditSubmit()
 	}
 
-  return (
-    <div className={styles["editable-container"]} id={id}>
-        <div className={styles["editable-list-container"]} data-testid="EditableListItem">
-            <div className={styles["editable-list-header"]}>
-                <div data-testid="EditableListItem-link" style={{ width: "100%" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
-                        <div
-                            style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flex: 1 }}
-                            onClick={handleEdit}
-                        >
-                            {isEditing ? (
-                                <input
-                                    id="edit-element"
-                                    className={error ? `${styles["input"]} ${styles["errorInput"]}` : `${styles["input"]}`}
-                                    type="text"
-                                    value={editedText}
-                                    onChange={handleInputChange}
-                                    onBlur={handleBlur}
-                                    autoFocus
-                                />
-                            ) : (
-                                <div className={styles["href-link"]} style={{ wordBreak: "break-word" }} data-testid="EditableListItem-item">
-                                    <span>{editedText}</span>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div className={styles["input"]} style={{ color: "red", display: error ? "block" : "none" }}>{error}</div>
-    </div>
-  );
+	const _handleKeyDown = (e) => {
+		if (e.key === "Enter") {
+			handleEditSubmit()
+		}
+	}
+
+	return (
+		<div className={styles["editable-container"]} style={{backgroundColor: color}} id={id}>
+			<div className={styles["editable-list-container"]} data-testid="EditableListItem">
+				<div className={styles["editable-list-header"]}>
+					<div data-testid="EditableListItem-link" style={{ width: "100%" }}>
+						<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+							<div
+								style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flex: 1 }}
+								onClick={handleEdit}
+							>
+								{isEditing ? (
+									<input
+										id="edit-element"
+										style={{fontWeight: "bold", backgroundColor: color, borderColor: color}}
+										className={error ? `${styles["input"]} ${styles["errorInput"]}` : `${styles["input"]}`}
+										type="text"
+										value={editedText}
+										onChange={handleInputChange}
+										onBlur={handleBlur}
+										autoFocus
+										onKeyDown={_handleKeyDown}
+									/>
+								) : (
+                                
+									<div className={styles["href-link"]} style={{ cursor: "pointer", wordBreak: "break-word", fontWeight: "bold"}} data-testid="EditableListItem-item">
+										<span className={editedText == "" ? `${styles["noText"]}` : null}>
+											{editedText == "" ? "Lägg till ett namn på graderingen" : editedText}
+										</span>
+									</div>
+                               
+								)}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div className={styles["input"]} style={{ color: "red", display: error ? "block" : "none" }}>{error}</div>
+		</div>
+	)
 }
 

@@ -6,7 +6,7 @@ import styles from "./GradingBefore.module.css"
 import { AccountContext } from "../../context"
 import AddExaminee from "../../components/Common/AddExaminee/AddExaminee"
 import EditableListItem from "../../components/Common/EditableListItem/EditableListItem"
-import { X as CloseIcon, Translate } from "react-bootstrap-icons"
+import { X as CloseIcon } from "react-bootstrap-icons"
 import PopupSmall from "../../components/Common/Popup/PopupSmall"
 
 import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../utils"
@@ -74,7 +74,9 @@ export default function GradingBefore() {
   const validateGradingName = (name) => {
 		if (name == "") {
 			return "Ange ett namn, det får inte vara tomt"
-		}
+		} else if (name.length > 30) {
+      return "Namnet får inte vara längre än 30 karaktärer"
+    }
 		return ""
 	}
 
@@ -82,12 +84,16 @@ export default function GradingBefore() {
    * This effects called when you enter the page first time
    */
   useEffect(() => {
+    
     const fetchData = async() => {
       const data = await getGrading(token)
 			.catch(() => setErrorToast("Kunde inte hämta examinationen. Kontrollera din internetuppkoppling."))   
-      setGradingName(data.title)
+      if (data.title !== "default") {
+        setGradingName(data.title)
+      }
     }
     fetchData()
+    
   },[])
 
   /**
@@ -377,43 +383,33 @@ export default function GradingBefore() {
 			.catch(() => setErrorToast("Kunde inte updatera personen. Kontrollera din internetuppkoppling."))
 	}
 
-  /**
-   * Change the name of an already exsisting examinee in a pair.
-   * This functions call putExaminee so it gets updated in the database aswell
-   * @param {Integer} examineeId 
-   * @param {any} name 
-   */
-	async function editPairExaminee(examineeId, name) {
-		setPair(
-			pairs.map((pair) => {
-        if(pair[0].id === examineeId) {
-          pair[0].name = name
-        } else if (pair[1].id === examineeId) {
-          pair[1].name = name
-        }
-				return pair
-      })
-		)
-		
-		await putExaminee({name: name, examinee_id: examineeId, grading_id: gradingId}, token)
-			.catch(() => setErrorToast("Kunde inte updatera personen. Kontrollera din internetuppkoppling."))
-	}
-
-  function editGradingName(Id, text) {
+  async function editGradingName(Id, text) {
     setGradingName(text)
+
+    // get the grading in the database
+    let data = await getGrading(token)
+			.catch(() => setErrorToast("Kunde inte hämta graderingen. Kontrollera din internetuppkoppling."))
+
+    // update the title of the grading and delete examinees so PUT can be used
+    data.title = text
+    delete data.examinees
+
+    // update the grading in the database
+    await putGrading(data, token)
   }
 
 
 	return (
 		<div>
-			<div style={{backgroundColor: "blue", position: "relative", zIndex: "0" }}> 
-          <EditableInputTextField
-          item={"Examination (2024-05-16)"}
-          id={"grading-name-text-field"}
-          key={"grading-name-text-field"}
-          validateInput={validateGradingName}
-          onEdit={editGradingName}
-          />  
+			<div style={{position: "relative", zIndex: "0" }}>
+        <EditableInputTextField
+        item={gradingName}
+        id={"grading-name-text-field"}
+        key={"grading-name-text-field"}
+        validateInput={validateGradingName}
+        onEdit={editGradingName}
+        color={ColorParam}
+        />    
 			</div>
 
 			<div className="column">
@@ -635,11 +631,25 @@ async function getGrading(token) {
 	const requestOptions = {
 		method: "GET",
 		headers: { "Content-Type": "application/json", "token": token },
-
 	}
-
 	return fetch(`/api/examination/grading/${gradingId}`, requestOptions)
 		.then(response => { return response.json() })
+		.catch(error => { alert(error.message) })
+}
+
+/**
+ * Update an already exsisting grading in the database
+ * @param {Map} grading
+ * @param {any} token 
+ * @returns The response code
+ */
+async function putGrading(grading, token) {
+	const requestOptions = {
+		method: "PUT",
+		headers: { "Content-Type": "application/json", "token": token },
+    body: JSON.stringify(grading)
+	}
+	return fetch("/api/examination/grading", requestOptions)
 		.catch(error => { alert(error.message) })
 }
 

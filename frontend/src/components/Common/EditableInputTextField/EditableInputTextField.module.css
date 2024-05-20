@@ -1,7 +1,7 @@
 .editable-container {
-    background-color: blue;
     z-index: 0;
     position: relative;
+    border-radius: 10px;
 }
 
 .editable-list-container {
@@ -58,14 +58,17 @@
     overflow: auto;
     display: flex;
     align-items: center; /* Align items vertically center */
-    padding: 5px; /* Same padding */
+    text-align:center;
     font-weight: 400;
     width: 100%;
     outline: none;
-    background-color: blue;
-    border-color: blue;
     z-index: 3; /* Set higher to ensure input is visible */
     position: relative;
+}
+
+.noText {
+  font-style: italic;
+  font-weight: 200;
 }
 
 .errorInput {
