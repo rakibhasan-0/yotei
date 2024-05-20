@@ -29,7 +29,7 @@ INSERT INTO technique (name, description) VALUES ('Knivhot mot magen, grepp, sho
 -- Renraku waza-- 
 INSERT INTO technique (name, description) VALUES ('Försök till strypgrepp framifrån - Försök till kravattgrepp från sidan, jodan soto uke - Jodan chikai uke, kawashi, kosho otoshi, ude henkan gatame','');
 -- Yakusoku geiko --
-INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare','');
+INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare (1)','');
 
 -- ORANGE BELT TECHNIQUES -- 23 techniques
 -- Atemi waza --
@@ -42,7 +42,7 @@ INSERT INTO technique (name, description) VALUES ('Kote gaeshi, grepp i handlede
 -- Nage waza --
 INSERT INTO technique (name, description) VALUES ('Uki otoshi, i rörelse, nedläggning snett framåt','');
 -- Jigo waza --
-INSERT INTO technique (name, description) VALUES ('Grepp i en handled framifrån med två händer med drag, frigöring','')
+INSERT INTO technique (name, description) VALUES ('Grepp i en handled framifrån med två händer med drag, frigöring','');
 INSERT INTO technique (name, description) VALUES ('Grepp i två handleder bakifrån, kote gaeshi, ude hishigi hiza gatame','');
 INSERT INTO technique (name, description) VALUES ('Grepp i håret framifrån, frigöring','');
 INSERT INTO technique (name, description) VALUES ('Försök till stryptag framifrån, uki otoshi, ude henkan gatame','');
@@ -60,7 +60,7 @@ INSERT INTO technique (name, description) VALUES ('Knivhot mot magen, grepp, sho
 INSERT INTO technique (name, description) VALUES ('Grepp i två handleder framifrån - Kort svingslag, Frigöring - Jodan chikai uke, kawashi, koshi otoshi, ude henkan gatame','');
 INSERT INTO technique (name, description) VALUES ('Hotfullt närmande - Långt svingslag, Hejda med tryck - Morote jodan uke, o soto osae, ude henkan gatame','');
 -- Yakusoku geiko --
-INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare','');
+INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare (2)','');
 
 -- GREEN BELT TECHNIQUES -- 26 techniques
 INSERT INTO technique (name, description) VALUES ('Kin geri, gedan, spark snett uppåt med främre och bakre benet','');
@@ -91,7 +91,7 @@ INSERT INTO technique (name, description) VALUES ('Knivhot mot halsen, höger si
 INSERT INTO technique (name, description) VALUES ('Grepp i två handleder bakifrån - Rak spark mot magen, frigöring - gedan uchi uke, koshi otoshi, ude henkan gatame','');
 INSERT INTO technique (name, description) VALUES ('Hotfullt närmande mot liggande - Långt svingslag, uppgång bakåt - ju jodan uchi uke, uki otoshi ude henkan gatame','');
 -- Yakusoku geiko --
-INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare','');
+INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare (3)','');
 
 -- BLUE BELT TECHNIQUES -- 27 techniques
 -- Atemi waza --
@@ -126,7 +126,7 @@ INSERT INTO technique (name, description) VALUES ('Försök till grepp i kläder
 INSERT INTO technique (name, description) VALUES ('Grepp i kläderna med drag - o soto otoshi, ude hishigi hiza gatame, valfri jigo waza anpassad efter ukes agerande','');
 INSERT INTO technique (name, description) VALUES ('Cirkulär spark mot benen - san ren uke, o soto osae, ude henkan gatame, valfri jigo waza anpassad efter ukes agerande','');
 -- Randori --
-INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare','');
+INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare (4)','');
 
 -- BROWN BELT TECHNIQUES --
 -- Atemi waza 
@@ -167,7 +167,7 @@ INSERT INTO technique (name, description) VALUES ('Stryptag bakifrån - o soto o
 INSERT INTO technique (name, description) VALUES ('Grepp om nacken och en knästöt - Gedan juji uke, frigöring, valfri jogi waza anpassad efter ukes agerande','');
 INSERT INTO technique (name, description) VALUES ('Livtag över armarna framifrån - o goshi, ude hishigi hiza gatame, valfri jigo waza anpassad efter ukes agerande','');
 -- Randori waza -- 
-INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare','');
+INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare (5)','');
 -- Total 133 --
 
 --
@@ -310,4 +310,3 @@ INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (12, 129);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (12, 130);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (12, 131);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (12, 132);
-INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (12, 133);
