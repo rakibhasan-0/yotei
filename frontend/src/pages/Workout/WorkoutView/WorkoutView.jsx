@@ -200,7 +200,8 @@ function getTagContainer(workoutData) {
 			<div className="row">
 				{workoutData.tags.map((tag, index) => {
 					return (
-						<div key={"tag" + index} className="mr-2">
+						<div style={{marginBottom: "4px"}}
+							key={"tag" + index} className="mr-1.9">
 							<Tag tagType={"default"} text={tag.name}></Tag>
 						</div>
 					)
