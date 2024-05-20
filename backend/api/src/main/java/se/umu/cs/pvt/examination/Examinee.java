@@ -18,7 +18,7 @@ public class Examinee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "examinee_id")
-    private Long examinee_id;
+    private Long examineeId;
 
     @Column(nullable = false, name = "name")
     private String name;
@@ -29,14 +29,14 @@ public class Examinee {
     /**
      * Data constructor for Examinee.
      * 
-     * @param examinee_id Id of the examinee.
+     * @param examineeId Id of the examinee.
      * @param name Name of the examinee.
-     * @param grading_id The grading id of the examinee.
+     * @param gradingId The grading id of the examinee.
      */
-    public Examinee(Long examinee_id, String name, Long grading_id){
-        this.examinee_id = examinee_id;
+    public Examinee(Long examineeId, String name, Long gradingId){
+        this.examineeId = examineeId;
         this.name = name;
-        this.gradingId = grading_id;
+        this.gradingId = gradingId;
     }
     
     /**
@@ -45,15 +45,15 @@ public class Examinee {
      */
     protected Examinee() {}
 
-    public Long getExaminee_id() {
-        return examinee_id;
+    public Long getExamineeId() {
+        return examineeId;
     }
 
     public String getName() {
         return name;
     }
 
-    public Long getGrading_id() {
+    public Long getGradingId() {
         return gradingId;
     }
 }

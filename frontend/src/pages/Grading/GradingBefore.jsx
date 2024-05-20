@@ -42,10 +42,61 @@ export default function GradingBefore() {
 
   let numberOfPairs = 0
 
+
+
   // this is for the automatically pair creation
   const [lastAddedExaminee, setLastAddedExaminee] = useState({})
   const [automaticallyPairCreation, setAutomaticallyPairCreation] = useState(false)
 
+
+	/**
+	 * Get method for the grading information. 
+	 * @returns JSON response
+	 */
+	const getGradingProtocol = () => {
+		return fetch(`/api/examination/grading/${gradingId}`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				"token": token },
+		})
+			.then(response => {
+				if (!response.ok) {
+					throw new Error("Network response was not ok")
+				}
+				return response.json()
+			})
+	}
+
+	/**
+	 * Update step for the grading process. 
+	 * @param {String} grading_data 
+	 * @returns status code
+	 */
+	const updateStep = (grading_data) => {
+		delete grading_data.examinees
+		grading_data.step = 2
+
+		console.log(grading_data)
+
+		return fetch("/api/examination/grading", {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				"token": token },
+			body: JSON.stringify(grading_data),
+
+		})
+			.then(response => {
+				if (!response.ok) {
+					throw new Error("Network response was not ok")
+				}
+				return response.status
+
+			})
+	}
+
+  
 
   /**
    * Validets so the name of tag is not containing any illegal characters 
@@ -90,9 +141,15 @@ export default function GradingBefore() {
       try {
         const exec = async () => {
           await Promise.all(examinees.map(examinee => {
-                postPair({examinee_1_id: examinee.id}, token)
+                postPair({examinee1Id: examinee.id}, token)
                   .catch(() => setErrorToast("Kunde inte lägga till paret. Kontrollera din internetuppkoppling."))
           }))
+
+					const [grading_data] = await Promise.all([
+						getGradingProtocol(),
+					])
+					updateStep(grading_data)
+
           navigate(`/grading/${gradingId}/2`)
         }
 
@@ -151,7 +208,7 @@ export default function GradingBefore() {
       setLastAddedExaminee({})
     }
 
-		const data = await postPair({examinee_1_id: selectedExaminees[0].id, examinee_2_id: selectedExaminees[1].id}, token)
+		const data = await postPair({examinee1Id: selectedExaminees[0].id, examinee2Id: selectedExaminees[1].id}, token)
 			.then(response => handleResponse(response))
 			.catch(() => setErrorToast("Kunde inte lägga till paret. Kontrollera din internetuppkoppling."))
 
@@ -171,14 +228,14 @@ export default function GradingBefore() {
    * @param {Integer} examinee_2_id 
    * @param {String} examinee_2_name 
    */
-	async function createPairWithId(examinee_1_id, examinee_1_name, examinee_2_id, examinee_2_name) {
-		const data = await postPair({examinee_1_id: examinee_1_id, examinee_2_id: examinee_2_id}, token)
+	async function createPairWithId(examinee1Id, examinee1Name, examinee2Id, examinee2Name) {
+		const data = await postPair({examinee1Id: examinee1Id, examinee2Id: examinee2Id}, token)
 			.then(response => handleResponse(response))
 			.catch(() => setErrorToast("Kunde inte lägga till paret. Kontrollera din internetuppkoppling."))
 
 		setPair([...pairs, [
-      {id: examinee_1_id, name: examinee_1_name, pairId: data.examinee_pair_id}, 
-      {id: examinee_2_id, name: examinee_2_name, pairId: data.examinee_pair_id}]]
+      {id: examinee1Id, name: examinee1Name, pairId: data.examineePairId}, 
+      {id: examinee2Id, name: examinee2Name, pairId: data.examineePairId}]]
     )
 	}
   
@@ -239,19 +296,19 @@ export default function GradingBefore() {
    * @param {Map} examinee 
    */
 	async function addExaminee(examinee) {
-		const newExaminee = await postExaminee({ name: examinee, grading_id: gradingId }, token)
+		const newExaminee = await postExaminee({ name: examinee, gradingId: gradingId }, token)
 			.then(response => handleResponse(response))
 			.catch(() => setErrorToast("Kunde inte lägga till personen. Kontrollera din internetuppkoppling."))
 		
     // check if there has not been an examinee added previosly
     if(Object.keys(lastAddedExaminee).length === 0) {
-      setLastAddedExaminee({ id: newExaminee["examinee_id"], name: newExaminee["name"]})
+      setLastAddedExaminee({ id: newExaminee["examineeId"], name: newExaminee["name"]})
     } else {
       // now there maybe will be an automatically pair created
       setAutomaticallyPairCreation(true)
     }
     // set examinee
-    setExaminees([...examinees, { id: newExaminee["examinee_id"], name: newExaminee["name"] }])
+    setExaminees([...examinees, { id: newExaminee["examineeId"], name: newExaminee["name"] }])
 
 	}
 
@@ -346,7 +403,7 @@ export default function GradingBefore() {
       )
     }
 		
-		await putExaminee({name: name, examinee_id: examineeId, grading_id: gradingId}, token)
+		await putExaminee({name: name, examineeId: examineeId, gradingId: gradingId}, token)
 			.catch(() => setErrorToast("Kunde inte updatera personen. Kontrollera din internetuppkoppling."))
 	}
 
