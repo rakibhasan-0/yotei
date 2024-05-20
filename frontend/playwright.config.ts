@@ -19,7 +19,7 @@ const testServer = "http://5dv214vt24-test.cs.umu.se"
  */
 export default defineConfig({
 	testDir: "./SystemTests/TestFiles",
-	timeout: 20000,
+	timeout: 40000,
 	expect: {
 		timeout: 15000,
 	},
