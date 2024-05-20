@@ -916,6 +916,7 @@ BEGIN
 	THEN RAISE EXCEPTION 'cannot revoke admin permissions from admin role';
 
 	END IF;
+	RETURN OLD;
 END;
 $$ LANGUAGE 'plpgsql';
 
