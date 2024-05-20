@@ -55,8 +55,8 @@ export default function GradingCreate() {
 				beltId: beltId,
 				step: 1,
 				techniqueStepNum: 0,
+				title: "default",
 				createdAt: formattedDateTime
-
 			}
 			const response = await fetch("/api/examination/grading", {
 				method: "POST",
