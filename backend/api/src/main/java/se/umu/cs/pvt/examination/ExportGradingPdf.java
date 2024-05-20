@@ -108,7 +108,6 @@ public class ExportGradingPdf {
         for (ExamineePair examineePair : examineePairs) {
             List<ExaminationComment> pairComments = new ArrayList<>();
             for (ExaminationComment pairComment : examinationComments) {
-                System.out.println("Grading id: " + grading_id + "\\n pairComment.gradingId: " + pairComment.getGradingId() + "\\n pairComment.examineePairId: "+ pairComment.getExamineePairId() + "\\n examineepair.examineePairId: " + examineePair.getExamineePairId());
                 if(pairComment.getExamineePairId() == examineePair.getExamineePairId()) {
                     pairComments.add( pairComment);
                 }
@@ -121,7 +120,6 @@ public class ExportGradingPdf {
         for (Examinee examinee : examinees) {
             List<ExaminationComment> examineeComments = new ArrayList<>();
             for (ExaminationComment examineeComment : examinationComments) {
-                System.out.println("Grading id: " + grading_id + "\\n pairComment.gradingId: " + examineeComment.getGradingId() + "\\n pairComment.examineePairId: "+ examineeComment.getExamineePairId() + "\\n examineepair.examineePairId: " + examineeComment.getExamineePairId());
                 if(examineeComment.getExamineeId() == examinee.getExamineeId()) {
                     examineeComments.add(examineeComment);
                 }
@@ -479,8 +477,6 @@ public class ExportGradingPdf {
 
 
         Map<Long, List<String>> rows = new HashMap<>();
-
-        System.out.println(pairMap);
 
         for (Long pairId : pairMap.keySet()) {
             List<String> pairRows = new ArrayList<>();
