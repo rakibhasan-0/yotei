@@ -134,7 +134,7 @@ export default function WorkoutView({ id }) {
 			: !workoutData ? <ErrorState message={errorStateMsg} onBack={() => navigate("/workout")} onRecover={() => window.location.reload(false)}/>
 				:
 				<div id={id} className="container px-0">
-					{<ConfirmPopup popupText={"Är du säker att du vill radera passet \"" + workoutData.name + "\"?"} id={"confirm-popup"} setShowPopup={setShowPopup} showPopup={showPopup} onClick={async () => deleteWorkout(workoutId, context, navigate, setShowPopup)}/>}
+					{<ConfirmPopup popupText={"Är du säker att du vill radera passet \"" + workoutData.name + "\"?"} id={"confirm-popup"} setShowPopup={setShowPopup} showPopup={showPopup} onClick={async () => deleteWorkout(workoutId, context, handleNavigation, setShowPopup)}/>}
 					{getReviewContainer(showRPopup, setRShowPopup, workoutId)}
 					{getWorkoutInfoContainer(workoutData, setShowPopup, context, userId, workoutUsers, workoutId)}
 					{sortByCategories(workoutData).map((activityCategory) => (
@@ -164,7 +164,7 @@ function getReviewContainer(showRPopup, setRShowPopup, workoutId) {
 	return <Review isOpen={showRPopup} setIsOpen={setRShowPopup} workout_id={workoutId} />
 }
 
-async function deleteWorkout(workoutId, context, navigate, setShowPopup) {
+async function deleteWorkout(workoutId, context, handleNavigation, setShowPopup) {
 	const requestOptions = {
 		headers: { "Content-type": "application/json", token: context.token },
 		method: "DELETE",
@@ -187,7 +187,7 @@ async function deleteWorkout(workoutId, context, navigate, setShowPopup) {
 	}
 
 	setSuccess("Pass borttagen!")
-	navigate("/workout")
+	handleNavigation("/workout")
 	setShowPopup(false)
 }
 
