@@ -100,7 +100,7 @@ export default function GradingDeviations() {
 
             //Loop to find the right protocol based on the current gradings belt
             for(let i = 0; i < json.length; i++) {
-                if(beltId=== json[i]["beltId"]) { //Found the correct protocol, set the data
+                if(beltId === json[i]["beltId"]) { //Found the correct protocol, set the data
                     let examinationProtocol = JSON.parse(json[i]["examinationProtocol"])
                     let categories = examinationProtocol.categories
                     setTechniqueCategories(categories)
