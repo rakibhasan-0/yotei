@@ -188,9 +188,9 @@ export class WorkoutPage {
   }
 }
 ```
-7. Check how codegen retrieve different elements, and update if needed. If components don't have either ids, labels, data-test ids or some other unique identifier codegen will use any of these two methods for setting an identifier. **They aren't preferable and should be changed**:
+7. Check how codegen retrieves different elements, and update if needed. If components don't have either ids, labels, data-test ids or some other unique identifier codegen will use one of these two methods for setting an identifier. **They aren't preferable and should be changed**:
 
-  - It creates an id of the className prop and an unique hash at the end. For example: 
+  - It creates an id of the className prop and a unique hash at the end. For example: 
     ```ts
     await page.locator('._statisticsButtonContainer_1pejx_1 > button').click()
     ```
