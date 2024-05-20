@@ -50,12 +50,13 @@ import java.util.regex.Pattern;
 public class TechniqueDatabaseTest {
     private static PostgreSQLContainer<?> postgreSQLContainer;
 
-    static String POSTGRESQL_USER;
-    static String POSTGRESQL_PASSWORD;
-    static String POSTGRESQL_DATABASE;
+    static String POSTGRESQL_USER = System.getProperty("POSTGRESQL_USER");
+    static String POSTGRESQL_PASSWORD = System.getProperty("POSTGRESQL_PASSWORD");
+    static String POSTGRESQL_DATABASE = System.getProperty("POSTGRESQL_DATABASE");
 
     public static void setUp() {
         //We go into the .env in the project root and find the password etc. for the database
+<<<<<<< HEAD
         tr y {
         // 
             String envFilePath = "../../.env";
@@ -72,10 +73,29 @@ public class TechniqueDatabaseTest {
                 // Trim away quotes
                 value = value.replaceAll("^\"|\"$", "");
                 envVariables.put(key, value);
+=======
+        try {
+            if (POSTGRESQL_DATABASE == null) {
+                String envFilePath = "../../.env";
+                String envFileContent = new String(Files.readAllBytes(Paths.get(envFilePath)));
+
+                // Regex for finding key-value pair
+                Pattern pattern = Pattern.compile("^([^=]+)=(.*)$", Pattern.MULTILINE);
+                Matcher matcher = pattern.matcher(envFileContent);
+                Map<String, String> envVariables = new HashMap<>();
+
+                while (matcher.find()) {
+                    String key = matcher.group(1);
+                    String value = matcher.group(2);
+                    // Trim away quotes
+                    value = value.replaceAll("^\"|\"$", "");
+                    envVariables.put(key, value);
+                }
+                POSTGRESQL_USER = envVariables.get("POSTGRES_USER");
+                POSTGRESQL_PASSWORD = envVariables.get("POSTGRES_PASSWORD");
+                POSTGRESQL_DATABASE = envVariables.get("POSTGRES_DB");
+>>>>>>> 80c2cad1076d5414d5655ab664f0d115c42a1d9c
             }
-            POSTGRESQL_USER = envVariables.get("POSTGRES_USER");
-            POSTGRESQL_PASSWORD = envVariables.get("POSTGRES_PASSWORD");
-            POSTGRESQL_DATABASE = envVariables.get("POSTGRES_DB");
 
         } catch (IOException e) {
             e.printStackTrace();
