@@ -39,7 +39,9 @@ const KIHON_TAG = { id: 1, name: "kihon waza" }
  * 	   Fixed navigation from pages outside the website 
  * 		 Removed unnecessary whitespace
  * 
- * @author Team Medusa, Team Tomato, Team Kiwi (Group 2) (2024-05-03) Team Durian (Group 3) (2024-05-16)
+ * @author Team Medusa, Team Tomato, Team Durian (Group 3) (2024-05-07), 
+ * @author Team Kiwi (Group 2) (2024-05-03) 
+ * @author Team Durian (Group 3) (2024-05-16)
  * @version 2.2
  * @since 2023-05-16
  */
@@ -279,7 +281,6 @@ export default function TechniqueEdit({ id }) {
 				filterWhiteBelt={true}
 				errorMessage={beltsErr}
 			/>
-
 
 			<Divider title="Taggar" option="h2_left"/>
 

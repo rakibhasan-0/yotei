@@ -11,7 +11,8 @@ import MiniPopup from "../MiniPopup/MiniPopup.jsx"
 import TagUsagePopup from "./TagUsagePopup.jsx"
 import EditableListItem from "../EditableListItem/EditableListItem.jsx"
 import ConfirmPopup from "../ConfirmPopup/ConfirmPopup.jsx"
-
+import Divider from "../../Common/Divider/Divider.jsx"
+import Spinner from "../../../components/Common/Spinner/Spinner.jsx"
 
 /**
  * OBSERVE! This component is used inside the TagInput-component and should not be used by itself. 
@@ -35,11 +36,13 @@ import ConfirmPopup from "../ConfirmPopup/ConfirmPopup.jsx"
 			</Popup>
  *		)
  *
- * @author Team Minotaur, Team Mango (Group 4), Team Durian (Group 3) (2024-05-13)
+ * @author Team Minotaur, 
+ * @author Team Mango (Group 4), 
+ * @author Team Durian (Group 3) (2024-05-17)
  * @version 2.0
  * @since 2024-04-22
  */
-export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
+export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAddedTags, setNewAddedTags, setShowConfirmPopup, showConfirmPopup}) {
 	const sortOptions = [
 		{label: "Namn: A-Ö", sortBy: "name-asc"},
 		{label: "Namn: Ö-A", sortBy: "name-desc"},
@@ -52,22 +55,31 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	const [searchText,setSearchText] = useState("")
 	const [tagListArray, setTagListArray] = useState([])
 	const { token } = useContext(AccountContext)
-	const [newAddedTags, setNewAddedTags] = useState(addedTags)
+	const [loading, setLoading] = useState(false)
+	
 	const [showUsagePopup, setUsageShowPopup] = useState(false)
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
 	const [sort, setSort] = useState(sortOptions[2])
 	const [usage, setUsage] = useState([]) 
 	const [tagIdToBeDeleted, setTagIdToBeDeleted] = useState([])
+	const [dividerIndex, setDividerIndex] = useState(-1)
+
 	const containsSpecialChars = str => /[^\w\d äöåÅÄÖ-]/.test(str)
 
+	useEffect(() => {
+		searchForTags(searchText, sort.sortBy, true)
+	}, [])
 
-
+	useEffect(() => {		
+		searchForTags(searchText, sort.sortBy)
+	}, [])
 
 	useEffect(() => {
-		
-		searchForTags(searchText, sort.sortBy)
-	}, [searchText, sort])	
-
+		const timeOutId = setTimeout(() => {
+			searchForTags(searchText, sort.sortBy)
+		},500)
+		return () => clearTimeout(timeOutId)
+	}, [searchText, sort])
 
 	/**
 	 * Send request to API for tag suggestion matching the search text.
@@ -75,9 +87,12 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 	 * 
 	 * @param {String} searchText Text in searchbar.
 	 */
-	const searchForTags = async (searchText, sortBy) => {
+	const searchForTags = async (searchText, sortBy, isInitial = false) => {
 		setError("")
 		setSearchText(searchText)
+		if (isInitial) {
+			setLoading(true)
+		}
 		const url = new URL("/api/tags/filter", window.location.origin)
 		url.searchParams.append("sort-by", sortBy)
 		url.searchParams.append("contains", searchText)
@@ -90,12 +105,23 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 			const response = await fetch(url, requestOptions)
 			if (response.ok) {
 				const data = await response.json()
-				setSuggested(data)
+				const sorted = data.slice().sort((a, b) => {
+					const aChecked = newAddedTags.some(tag => tag.id === a.id)
+					const bChecked = newAddedTags.some(tag => tag.id === b.id)
+					return bChecked - aChecked // This will place checked items first
+				})
+				const firstUncheckedIndex = sorted.findIndex(tag => !newAddedTags.some(a => a.id == tag.id))
+				setDividerIndex(firstUncheckedIndex)
+				setSuggested(sorted)
 			} else {
 				setError("Något gick fel vid hämtning av taggförslag")
 			}
 		} catch (error) {
 			setError("Något gick fel vid hämtning av taggförslag")
+		} finally {
+			if (isInitial) {
+				setLoading(false)
+			}
 		}
 	}
 
@@ -132,45 +158,25 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 				setError("Något gick fel vid skapandet av tagg")
 			}
 		}
-
-		
 	}
 
 	/**
 	 * Creates a TagList component for each existing tag on first render and saves each
 	 * TagList component in a list. 
 	 */
-	useEffect(() => {
 
-		//Handle when a tag is removed from something (Not deleted)
-		const handleRemoveTag = (tag) => {
-			setError("")
-			const copy = [...newAddedTags]
-			const newAdded = copy.filter(tagInCopy => tagInCopy.id !== tag.id)
-			setNewAddedTags(newAdded)
-		}
+	const handleRemoveTag = (tag) => {
+		setError("")
+		const copy = [...newAddedTags]
+		const newAdded = copy.filter(tagInCopy => tagInCopy.id !== tag.id)
+		setNewAddedTags(newAdded)
+	}
 
-		//Handles when tag is added to something.
-		const handleAddTag = (tag) => {
-			setError("")
-			setNewAddedTags([...newAddedTags, tag])
-		}
-
-		const tempTagListArray = suggested.map(tag =>
-			<EditableListItem item={tag.name} 
-				key={tag.id}
-				id={tag.id} 
-				showCheckbox={true}
-				onCheck={checked => checked ? handleAddTag(tag) : handleRemoveTag(tag)}
-				checked={newAddedTags.some(a => a.id == tag.id)}	
-				onEdit={handleEditText}
-				validateInput={validateInput}
-				grayTrash={tag.exercises + tag.workouts + tag.techniques > 0}
-				onRemove={() => handleDelete(tag)}
-			/>
-		)
-		setTagListArray(tempTagListArray)
-	}, [newAddedTags, suggested])
+	//Handles when tag is added to something.
+	const handleAddTag = (tag) => {
+		setError("")
+		setNewAddedTags([...newAddedTags, tag])
+	}
 
 
 	/**
@@ -216,13 +222,9 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 		} catch (error) {
 			setError("Något gick fel vid hämtning av tagganvändning")
 		}
-
-		
 		suggested.find(tag => tag.id == id).name = text
 		newAddedTags.find(tag => tag.id == id).name = text
 		addedTags.find(tag => tag.id == id).name = text
-		
-		
 	}
 
 	/**
@@ -289,7 +291,6 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 		} catch (error) {
 			setError("Något gick fel vid borttagning av tagg")
 		}
-
 	}
 
 	return (
@@ -297,7 +298,6 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 			<div>
 				{error !== "" &&
 					<p className={styles["error-message"]}>{error}</p>
-
 				}
 				<div className={styles["search-bar"]}>
 					<div>
@@ -327,12 +327,26 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 					<Sorter id={"tag-sort"} selected={sort} onSortChange={setSort} options={sortOptions}/>
 				</FilterContainer>
 			</div>
-			<div >
-				{tagListArray}
-
-				
+			<div>
+				{suggested.map((tag, index) => (
+					<>
+						{index === dividerIndex && <Divider key="divider" title={""} option={"h2_left"} />}
+						<EditableListItem
+							item={tag.name}
+							key={tag.id}
+							id={tag.id}
+							showCheckbox={true}
+							onCheck={checked => checked ? handleAddTag(tag) : handleRemoveTag(tag)}
+							checked={newAddedTags.some(a => a.id == tag.id)}
+							onEdit={handleEditText}
+							validateInput={validateInput}
+							grayTrash={tag.exercises + tag.workouts + tag.techniques > 0}
+							onRemove={() => handleDelete(tag)}
+						/>
+					</>
+				))}
+				{loading ? <Spinner /> : tagListArray}
 			</div>
-			
 			<MiniPopup title={"Taggen kan inte tas bort"} isOpen={showUsagePopup} setIsOpen={hideShowPopup} >
 				<TagUsagePopup usage={usage}>  </TagUsagePopup>
 			</MiniPopup>
@@ -344,8 +358,18 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen}) {
 			<RoundButton onClick={saveAndClose} id={"save-and-close-button"} > 
 				<ChevronRight width={30} />
 			</RoundButton>
+			<ConfirmPopup
+				id="technique-edit-tag-confirm-popup"
+				showPopup={showConfirmPopup}
+				setShowPopup={setShowConfirmPopup}
+				confirmText={"Lämna"}
+				backText={"Avbryt"}
+				popupText={"Är du säker på att du vill lämna sidan? Dina ändringar kommer inte att sparas."}
+				onClick={async () => {
+					setNewAddedTags(addedTags)
+					setIsOpen(false)
+				}}
+			/>
 		</div>
-
-		
 	)
 }
