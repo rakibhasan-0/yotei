@@ -13,7 +13,9 @@ test.describe("Test AddTagPopup", () => {
 	test("Add and remove a tag", async ({ page }) => {
 		const tagName = Math.random().toString(36).slice(2, 7) 
 
-		await addTagPopupPage.addTag({name: tagName, id:"1"})
+		const tagId = Math.random()
+
+		await addTagPopupPage.addTag({name: tagName, id: tagId})
 
 		await expect(page.getByText(tagName)).toHaveCount(1)
 
