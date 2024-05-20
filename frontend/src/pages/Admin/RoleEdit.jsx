@@ -38,6 +38,7 @@ export default function RoleEdit() {
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
 	const [isBlocking, setIsBlocking] = useState(false)
 	const [goBackPopup, setGoBackPopup] = useState(false)
+	const [trashVisible, setTrashVisible] = useState(false)
 
 	const [allMap, setAllMap] = useState(new Map())
 	const [selectedMap, setSelectedMap] = useState(new Map())
@@ -95,6 +96,7 @@ export default function RoleEdit() {
 				return
 			}
 		}
+		setTrashVisible(originalRoleName === "admin")
 		setIsBlocking(roleName !== originalRoleName)
 	}, [roleName, originalRoleName, selectedMap, firstSelectedMap, allMap])
 
@@ -228,12 +230,13 @@ export default function RoleEdit() {
 
 	return (
 		<div>
-			<Trash
-				onClick={() => setShowDeletePopup(true)}
-				size="24px"
-				display={roleName === "admin"}
-				style={{ color: "var(--red-primary)", position: "absolute", right: "2rem", top: "rem"}}
-			/>	
+			{trashVisible ? "" : (
+				<Trash
+					onClick={() => setShowDeletePopup(true)}
+					size="24px"
+					style={{ color: "var(--red-primary)", position: "absolute", right: "2rem", top: "rem"}}
+				/>
+			)}	
 			<Divider option={"h2_left"} title={"Redigera roll"} /> 
 			<br/>
 			<InputTextFieldBorderLabel 
