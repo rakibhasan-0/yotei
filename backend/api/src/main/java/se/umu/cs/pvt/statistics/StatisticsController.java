@@ -120,7 +120,7 @@ public class StatisticsController {
             }
         }
 
-        if (uniqueSessionIds.size() < 0) {
+        if (uniqueSessionIds.size() > 0) {
             // Calculate average rating
             for (Long sid : uniqueSessionIds) {
                 averageRating += ratings.get(sid);
