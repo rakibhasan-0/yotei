@@ -21,7 +21,7 @@ import se.umu.cs.pvt.technique.Technique;
  * ActivityListEntryController - Controller for activity list entry
  * ActivityListEntryRepository - JPARepository interface
  * 
- * @author Team Tomato
+ * @author Team Tomato, updated 2024-05-17
  * @since 2024-05-16
  * @version 1.0
  */
@@ -41,6 +41,9 @@ public class ActivityListEntry implements Serializable {
 
     @Column(nullable = true, name = "technique_id")
     private Long techniqueId;
+
+    @Column(nullable = true, name = "duration")
+    private Integer duration;
 
     @ManyToOne
     @JoinColumn(name = "list_id", referencedColumnName = "id", insertable = false, updatable = false)
@@ -62,6 +65,13 @@ public class ActivityListEntry implements Serializable {
         this.activityListId = activityListId;
         this.exerciseId = exerciseId;
         this.techniqueId = techniqueId;
+    }
+
+    public ActivityListEntry(Integer duration, Long activityListId, Long exerciseId, Long techniqueId) {
+        this.activityListId = activityListId;
+        this.exerciseId = exerciseId;
+        this.techniqueId = techniqueId;
+        this.duration = duration;
     }
 
     public ActivityListEntry(Long activityListId, Long exerciseId, Long techniqueId) {
@@ -94,6 +104,9 @@ public class ActivityListEntry implements Serializable {
         return exercise;
     }
 
+    public Integer getDuration() {
+        return duration;
+    }
     public void setId(Long id) {
         this.id = id;
     }
@@ -116,6 +129,10 @@ public class ActivityListEntry implements Serializable {
 
     public void setExercise(Exercise exercise) {
         this.exercise = exercise;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
     }
 
 }

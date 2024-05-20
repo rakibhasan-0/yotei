@@ -1,0 +1,42 @@
+
+.tabs {
+  border-width: medium;
+
+}
+
+.tab {
+	background-color: white;
+  height: 35px;  
+}
+
+:global(.nav-tabs){
+  border-bottom: 1px solid var(--black-primary);
+}
+
+
+:global(.nav-link.active){
+  background-color: var(--red-primary) !important;
+  color: white !important;
+}
+
+:global(.nav-item) {
+  border: 1px solid black !important;
+  border-radius:  5px 5px 0px 0px !important;
+}
+
+:global(.nav-link){
+  padding: 0 1.5rem 0 1.5rem !important;
+  border: 0 !important;
+  color: var(--black-primary);
+}
+
+button:focus{
+  outline: none;
+}
+
+.searchBar {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  
+}
+
