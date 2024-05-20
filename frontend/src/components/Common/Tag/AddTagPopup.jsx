@@ -70,10 +70,6 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 		searchForTags(searchText, sort.sortBy, true)
 	}, [])
 
-	useEffect(() => {		
-		searchForTags(searchText, sort.sortBy)
-	}, [])
-
 	useEffect(() => {
 		const timeOutId = setTimeout(() => {
 			searchForTags(searchText, sort.sortBy)
@@ -238,7 +234,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 			return "Taggnamnet kan inte vara tomt"
 		}
 		else if (containsSpecialChars(name)) {
-			return "Endast tecken A-Ö, 0-9 och - tillåts"
+			return "Endast tecken A-Ö, 0-9 och bindestreck tillåts"
 		}
 		else if (suggested.find(tag => tag.name == name)) {
 			return "Taggen finns redan"
