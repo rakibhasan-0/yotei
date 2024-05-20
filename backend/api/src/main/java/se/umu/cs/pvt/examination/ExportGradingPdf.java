@@ -263,7 +263,7 @@ public class ExportGradingPdf {
                     contentStream.addRect(currentXPos, currentYPos, CELL_WIDTH, -CELL_HEIGHT);
                     String grade = "";
                     for (int l = 0 ; l < examinationResults.size() ; l++) {
-                        if ((examinationTechniqueCategories.get(i).getTechniques().get(j).toString()).equals(examinationResults.get(l).getTechnique_name())) {
+                        if ((examinationTechniqueCategories.get(i).getTechniques().get(j).toString()).equals(examinationResults.get(l).getTechniqueName())) {
                             if (examinees.get(k + (onPage*MAX_NUM_COLUMNS)).getExamineeId() == examinationResults.get(l).getExamineeId()) {
                                 if (examinationResults.get(l).getPass()) 
                                     grade += "G";
