@@ -40,33 +40,35 @@ import java.util.regex.Pattern;
 public class TechniqueDatabaseTest {
     private static PostgreSQLContainer<?> postgreSQLContainer;
 
-    static String POSTGRESQL_USER;
-    static String POSTGRESQL_PASSWORD;
-    static String POSTGRESQL_DATABASE;
+    static String POSTGRESQL_USER = System.getProperty("POSTGRES_USER");
+    static String POSTGRESQL_PASSWORD = System.getProperty("POSTGRES_PASSWORD");
+    static String POSTGRESQL_DATABASE = System.getProperty("POSTGRES_DBSS");
 
 
     @BeforeAll
     public static void setUp() {
         //We go into the .env in the project root and find the password etc. for the database
         try {
-            String envFilePath = "../../.env";
-            String envFileContent = new String(Files.readAllBytes(Paths.get(envFilePath)));
+            if (POSTGRESQL_DATABASE == null) {
+                String envFilePath = "../../.env";
+                String envFileContent = new String(Files.readAllBytes(Paths.get(envFilePath)));
 
-            // Regex for finding key-value pair
-            Pattern pattern = Pattern.compile("^([^=]+)=(.*)$", Pattern.MULTILINE);
-            Matcher matcher = pattern.matcher(envFileContent);
-            Map<String, String> envVariables = new HashMap<>();
+                // Regex for finding key-value pair
+                Pattern pattern = Pattern.compile("^([^=]+)=(.*)$", Pattern.MULTILINE);
+                Matcher matcher = pattern.matcher(envFileContent);
+                Map<String, String> envVariables = new HashMap<>();
 
-            while (matcher.find()) {
-                String key = matcher.group(1);
-                String value = matcher.group(2);
-                // Trim away quotes
-                value = value.replaceAll("^\"|\"$", "");
-                envVariables.put(key, value);
+                while (matcher.find()) {
+                    String key = matcher.group(1);
+                    String value = matcher.group(2);
+                    // Trim away quotes
+                    value = value.replaceAll("^\"|\"$", "");
+                    envVariables.put(key, value);
+                }
+                POSTGRESQL_USER = envVariables.get("POSTGRES_USER");
+                POSTGRESQL_PASSWORD = envVariables.get("POSTGRES_PASSWORD");
+                POSTGRESQL_DATABASE = envVariables.get("POSTGRES_DB");
             }
-            POSTGRESQL_USER = envVariables.get("POSTGRES_USER");
-            POSTGRESQL_PASSWORD = envVariables.get("POSTGRES_PASSWORD");
-            POSTGRESQL_DATABASE = envVariables.get("POSTGRES_DB");
 
         } catch (IOException e) {
             e.printStackTrace();
