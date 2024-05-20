@@ -258,8 +258,10 @@ export default function DuringGrading() {
 									examineeName={item.nameLeft} 
 									onClick={(newState) => examineeClick(newState, techniqueNameList[currentTechniqueStep].technique.text, index, `${index}-left`)}
 									buttonState={leftExamineeState}
-									setButtonState={setLeftExamineeState}>
-								</ExamineeBox>
+									setButtonState={setLeftExamineeState}
+									examineeId={item.leftId}
+									techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
+								/>
 							}
 							rightExaminee={
 								item.rightId ? (
@@ -269,10 +271,14 @@ export default function DuringGrading() {
 										buttonState={rightExamineeState}
 										setButtonState={setRightExamineeState}
 										examineeId={item.rightId}
+										techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
 									/>
 								) : null
 							}
-							pairNumber={index+1}>
+							pairNumber={index+1}
+							techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
+							examineePairId={item.pairId}
+						>
 						</ExamineePairBox>
 					))}
 				</div>
@@ -393,12 +399,14 @@ export default function DuringGrading() {
 		pairs_json.forEach((pair) => {
 			const examinee1 = examinees.find(item => item.examineeId === pair.examinee1Id)
 			const examinee2 = examinees.find(item => item.examineeId === pair.examinee2Id)
+			const examineePair = pair.examineePairId
 			if (examinee1 !== undefined || examinee2 !== undefined) { // Only add if something is found
 				const name1 = examinee1 ? examinee1.name : "" // If only one name found
 				const name2 = examinee2 ? examinee2.name : ""
 				const id1 = examinee1 ? examinee1.examineeId : ""
 				const id2 = examinee2 ? examinee2.examineeId : ""
 				pair_names_current_grading.push({ 
+					pairId: examineePair,
 					nameLeft: name1, 
 					nameRight: name2, 
 					leftId: id1, 
