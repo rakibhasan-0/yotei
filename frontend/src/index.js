@@ -61,7 +61,7 @@ const planURI = "https://jsonplaceholder.typicode.com/users"
  *     	Team Kiwi, Team Mango
  * @version 2.1
  * @updated 2024-05-08 Changed so workout/edit url also have the workout id in it
- *          2024-05-17 Added user permissions to token.
+*           2024-05-17 Added user permissions to token.
  */
 export default function App() {
 	const cookie = new Cookies().get("token")
@@ -110,8 +110,8 @@ export default function App() {
 		createRoutesFromElements(
 			cookie || import.meta.env.VITE_APP_LOGIN_ENABLED === "false" ? (
 				<>
-					<Route 
-						path="/" 
+					<Route
+						path="/"
 						element={
 							<ErrorBoundary>
 								<BaseLayout />
@@ -148,7 +148,7 @@ export default function App() {
 						<Route path="profile/list/:list_id" element={<ListInfo />} />
 						<Route path="profile/favouriteWorkouts" element={<FavouriteWorkoutsList/>} />
 
-
+						
 						<Route path="grading" element={<Grading />} />
 						<Route path="grading/create" element={<GradingCreate/>} />
 						<Route path="grading/:gradingId/1" element={<GradingBefore/>} />
