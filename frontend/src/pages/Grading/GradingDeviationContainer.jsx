@@ -1,7 +1,6 @@
 import styles from "./GradingDeviations.module.css"
 import React from "react"
 import { useState } from "react"
-import { ChevronDown } from "react-bootstrap-icons"
 
 
 /**
@@ -65,7 +64,7 @@ function GradingDeviationContainer({ id, name, comment, pairComment, generalComm
 										</div>
 									}
 									{
-									(pairComment != "" && pairComment != undefined) &&
+										(pairComment != "" && pairComment != undefined) &&
 										<div>
 											<h2 className={styles["commentStyle2"]}>Parkommentar:</h2>
 											{

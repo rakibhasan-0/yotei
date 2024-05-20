@@ -88,14 +88,14 @@ describe("Render test", () => {
 	test("Should render no comment if no comment entered", () => {
 		render(
 			<BrowserRouter>
-			<GradingDeviationContainer
-				id={id}
-				name={name}
-				passed={passed}
-			/>
+				<GradingDeviationContainer
+					id={id}
+					name={name}
+					passed={passed}
+				/>
 			</BrowserRouter>
 		)
-		expect(screen.queryByTestId("commentDisplay")).not.toBeDefined
+		expect(screen.queryByTestId("commentDisplay")).not.toBeDefined()
 	})
 
 	test("Should render paircomment if paircomment exists", () => {
@@ -115,14 +115,14 @@ describe("Render test", () => {
 	test("Should render no pair comment if no pair comment entered", () => {
 		render(
 			<BrowserRouter>
-			<GradingDeviationContainer
-				id={id}
-				name={name}
-				passed={passed}
-			/>
+				<GradingDeviationContainer
+					id={id}
+					name={name}
+					passed={passed}
+				/>
 			</BrowserRouter>
 		)
-		expect(screen.queryByTestId("commentPairDisplay")).not.toBeDefined
+		expect(screen.queryByTestId("commentPairDisplay")).not.toBeDefined()
 	})
 
 	test("Should render general comment if general comment exists", () => {
@@ -142,14 +142,14 @@ describe("Render test", () => {
 	test("Should render no general comment if no general comment entered", () => {
 		render(
 			<BrowserRouter>
-			<GradingDeviationContainer
-				id={id}
-				name={name}
-				passed={passed}
-			/>
+				<GradingDeviationContainer
+					id={id}
+					name={name}
+					passed={passed}
+				/>
 			</BrowserRouter>
 		)
-		expect(screen.queryByTestId("commentGeneralDisplay")).not.toBeDefined
+		expect(screen.queryByTestId("commentGeneralDisplay")).not.toBeDefined()
 	})
 })
 

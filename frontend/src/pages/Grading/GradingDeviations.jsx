@@ -25,7 +25,6 @@ export default function GradingDeviations() {
 		const [toggled, setToggled] = useState(false)
 		const [techniqueCategories, setTechniqueCategories] = useState([])
 		const [gradingId, setGradingId] = useState(-1)
-		const [beltId, setBeltId] = useState(-1)
 		const { userId } = useParams() //The user id of the current examinee
 		const [name, setName] = useState("") //The name of the current examinee
         const [showingAll, setShowingAll] = useState(false)
@@ -77,7 +76,6 @@ export default function GradingDeviations() {
                 setError("Kunde inte hämta gradering. Felkod: " + response.status)
             } else {
                 const json = await response.json()
-                setBeltId(json["beltId"])
                 fetchProtocol(json["beltId"])
             }
         }
