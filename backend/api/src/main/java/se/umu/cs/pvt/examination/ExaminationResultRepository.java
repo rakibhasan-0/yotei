@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.Query;
  * @author Orange (dv22rfg)
  */
 public interface ExaminationResultRepository extends JpaRepository<ExaminationResult, Long> {
-    long countByExamineeId(Long examineeId);
+    long countByExamineeIdAndPassTrue(long examineeId);
 
 }
