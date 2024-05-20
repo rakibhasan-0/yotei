@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react"
+import React, { useState, useEffect, useContext} from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { AccountContext } from "../../context"
 import Spinner from "../../components/Common/Spinner/Spinner"
@@ -9,6 +9,7 @@ import StatisticsPopUp from "./StatisticsPopUp"
 import FilterStatistics from "./FilterStatistics"
 import {getFormattedDateString} from "../../components/Common/DatePicker/DatePicker"
 import GradingStatisticsPopup from "./GradingStatisticsPopup"
+import SortingArrowButton from "../../components/Common/SortingArrowButton/SortingArrowButton"
 
 /**
  * 
@@ -40,7 +41,8 @@ export default function Statistics() {
 		showExercises: false,
 		showKihon: false,
 	})
-
+	const [order, setDescendingOrder] = useState(false)
+	const [rotate, setRotate] = useState(false)
 
 	// creating a date object for two years before from now and today's date
 	const twoYearsBeforeFromNow = new Date()
@@ -162,6 +164,14 @@ export default function Statistics() {
 		setFilter({ ...filter, [variableName]: value })
 	}
 
+	// that function is responsible for changing the order of the group activities.
+	// initially, the order is increasing, when the user clicks on the button, the order will be descending.
+	function changeOrder() {
+		setDescendingOrder(!order)
+		setGroupActivities(groupActivities.reverse())
+		setRotate(!rotate)
+	}
+
 	return (
 		<div>
 			<title>Statistik</title>
@@ -185,6 +195,12 @@ export default function Statistics() {
 					dates={dates}
 				/>
 
+				<SortingArrowButton id="sorting-button" changeOrder={changeOrder} rotate={rotate} />
+
+				<div className={style.activitiesTextContainer}>
+					<h5>Aktiviteter</h5>
+				</div>
+
 				<GradingStatisticsPopup id={"grading-statistics-container"} />
 
 				<StatisticsPopUp
@@ -200,12 +216,14 @@ export default function Statistics() {
 					<h5 style={{ fontSize: "25px" }}>Inga aktiviteter hittades</h5>
 				) : (
 					activities.map((activity, index) => (
+						
 						<TechniqueCard
 							key={index}
 							technique={activity}
 							checkBox={false}
 							id={activity.activity_id}
 						/>
+
 					))
 				)}
 			</div>

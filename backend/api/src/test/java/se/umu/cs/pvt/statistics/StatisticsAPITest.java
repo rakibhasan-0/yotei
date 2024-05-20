@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import se.umu.cs.pvt.statistics.gradingprotocol.GradingProtocolRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ public class StatisticsAPITest {
 
     @MockBean
     private StatisticsRepository statisticsRepository;
+    @MockBean
+    private GradingProtocolRepository gradingProtocolRepository;
 
     @Autowired
     private MockMvc mockMvc;
