@@ -134,8 +134,7 @@ public class ActivityListEntryController {
     }
 
     /**
-     * Adds an entry to multiple activity lists,
-     * the list id supplied in the entry does not need to be supplied in the id list
+     * Adds an entry to multiple activity lists, the list id supplied in the entry does not need to be supplied in the id list
      * (but can be).
      * 
      * @param entry entry object
@@ -165,7 +164,8 @@ public class ActivityListEntryController {
             if (opt_list_result.isPresent()) {
                 ActivityList list_result = opt_list_result.get();
                 if (list_result.getAuthor() == userIdL || userRole.equals("ADMIN")) {
-                    listEntryRepository.save(entry);
+                    ActivityListEntry uniqueEntry = new ActivityListEntry(entry.getDuration(), entry.getListId(), entry.getExerciseId(), entry.getTechniqueId());
+                    listEntryRepository.save(uniqueEntry);
                 } else {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
@@ -174,12 +174,12 @@ public class ActivityListEntryController {
             }
         }
         for (Long id : ids) {
-            entry.setListId(id);
             Optional<ActivityList> result = listRepository.findById(id);
             if (result.isPresent()) {
                 ActivityList list = result.get();
                 if (list.getAuthor() == userIdL || userRole.equals("ADMIN")) {
-                    listEntryRepository.save(entry);
+                    ActivityListEntry uniqueEntry = new ActivityListEntry(entry.getDuration(), id, entry.getExerciseId(), entry.getTechniqueId());
+                    listEntryRepository.save(uniqueEntry);
                 } else {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
