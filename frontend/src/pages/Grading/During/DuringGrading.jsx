@@ -89,6 +89,7 @@ function getCategoryIndices(dataArray) {
  */
 export default function DuringGrading() {
 	const [currentTechniqueStep, setCurrentIndex] = useState(0)
+	const [indexBeforeRandondi, setRandoriIndex] = useState(0)
 	const [showPopup, setShowPopup] = useState(false)
 	const [examinees, setExaminees] = useState(undefined)
 	const [pairs, setPairs] = useState([])
@@ -127,7 +128,7 @@ export default function DuringGrading() {
 	// this update the database with what techniquestep the user is on, and it works with forward and backward navigation.
 	const onUpdateStepToDatabase = async (currentTechniqueStep) => {
 		try {
-			const response = await fetch("/api/examination/grading/1", { headers: { "token": token } })
+			const response = await fetch(`/api/examination/grading/${gradingId}`, { headers: { "token": token } })
 			if (!response.ok) {
 				setErrorToast("kunde inte hämta steg från databasen")
 				return
@@ -144,7 +145,7 @@ export default function DuringGrading() {
 				},
 				body: JSON.stringify(step)
 			})
-
+			
 			if (!update.ok) {
 				setErrorToast("kunde inte uppdatera steg i databasen")
 				return
@@ -316,6 +317,7 @@ export default function DuringGrading() {
 								onClick={() => {
 									setCurrentIndex(() => {
 										const techniquestep = techniqueName.categoryIndex
+										setRandoriIndex(currentTechniqueStep)
 										onUpdateStepToDatabase(techniquestep)
 										return techniquestep
 									})
@@ -324,12 +326,24 @@ export default function DuringGrading() {
 									scrollableContainerRef.current.scrollTop = 0}}>
 								<p>{techniqueName.category}</p></Button>
 						))}
-                
+						{currentTechniqueStep === techniqueNameList.length - 1 && (
+							<Button
+								width={"100%"}
+								outlined={true}
+								onClick={() => {
+									setCurrentIndex(() => {
+										onUpdateStepToDatabase(indexBeforeRandondi)
+										return indexBeforeRandondi
+									})
+									setShowPopup(false)
+								}}>
+								<p>Gå Tillbaka till Tidigare teknik</p>
+							</Button>)}
 						<div>
 							{/* Go back to the add examinee page */}
 							<Button 
 								id={"back-button"} 
-								outlined={true} 
+								outlined={true}
 								onClick={goToAddExamineePage}>
 								<p>Tillbaka till <br />&quot;Lägg till deltagare&quot;</p>
 							</Button>
