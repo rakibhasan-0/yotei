@@ -35,14 +35,10 @@ import GradingDeviations from "./pages/Grading/GradingDeviations.jsx"
 import BaseLayout from "./components/Common/BaseLayout/BaseLayout"
 import ErrorBoundary from "./components/ErrorHandler/ErrorBoundary"
 
-<<<<<<< Updated upstream
-import Techniquechain from "./pages/Techniquechain/TechniquechainIndex.jsx"
 import Techniquechain_page from "./pages/Techniquechain/Techniquechain_page/Techniquechain_page.jsx"
 import TechniquechainCreate from "./pages/Techniquechain/Techniquechain_create/TechniquechainCreate.jsx"
-=======
 import Techniquechain from "./pages/Techniquechain/TechniquechainIndex"
 import CreateWeave from "./pages/Techniquechain/TechniqueWeaveCreate/TechniqueWeaveCreate"
->>>>>>> Stashed changes
 
 import ListInfo from "./pages/List/ListInfo"
 import FavouriteWorkoutsList from "./pages/List/FavouriteWorkoutList"

@@ -743,6 +743,40 @@ CREATE TABLE grading_protocol_technique(
 ALTER TABLE
 	grading_protocol_technique OWNER TO psql;
 
+CREATE TABLE technique_chain(
+	id SERIAL PRIMARY KEY,
+	node_id INT[],
+	name VARCHAR(180),
+	description VARCHAR(800),
+	parent_weave_id INT
+);
+
+ALTER TABLE
+	technique_chain OWNER TO psql;
+
+CREATE TABLE node(
+	id SERIAL PRIMARY KEY,
+	parent_weave INT,
+	name VARCHAR(180),
+	description VARCHAR(800),
+	technique INT,
+	attack BOOLEAN,
+	partisipant INT,
+	connected_to INT[]
+);
+
+ALTER TABLE
+	node OWNER TO psql;
+
+CREATE TABLE technique_weave(
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(180),
+	description VARCHAR(800),
+	nodes INT[][]
+);
+
+ALTER TABLE
+	technique_weave OWNER TO psql;
 
 --
 -- Default Inserts
