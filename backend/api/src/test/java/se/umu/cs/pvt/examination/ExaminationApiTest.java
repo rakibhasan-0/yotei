@@ -23,6 +23,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+/**
+ * @author: Team Orange (c19jen, dv22rfg)
+ */
 @WebMvcTest(controllers = ExaminationController.class)
 @ExtendWith(MockitoExtension.class)
 public class ExaminationApiTest {
