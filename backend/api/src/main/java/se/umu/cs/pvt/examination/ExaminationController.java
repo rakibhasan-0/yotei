@@ -475,8 +475,8 @@ public class ExaminationController {
      * @param grading_id Given grading id.
      */
     // TODO 
-    @GetMapping("/examresult/{technique_name}/{grading_id}")
-    public ResponseEntity<List<Map<String, Object>>> getExaminationProtocol(@PathVariable("technique_name") String technique_name, @PathVariable("grading_id") long grading_id) {
+    @GetMapping("/examresult/{grading_id}")
+    public ResponseEntity<List<Map<String, Object>>> getExaminationProtocol(@PathVariable("grading_id") long grading_id, @RequestParam("technique_name") String technique_name) {
         List<Examinee> examinees = examineeRepository.findByGradingId(grading_id);
         List<ExaminationResult> examinationResults = examinationResultRepository.findAll();
         List<Map<String, Object>> results = new ArrayList<>();
