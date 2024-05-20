@@ -406,16 +406,14 @@ export default function GradingBefore() {
 
 	return (
 		<div>
-			<div> 
-				<div style={{ backgroundColor: ColorParam, borderRadius: "0.3rem"}}>
+			<div style={{backgroundColor: "blue", position: "relative", zIndex: "0" }}> 
           <EditableInputTextField
-          item={gradingName}
+          item={"Examination (2024-05-16)"}
           id={"grading-name-text-field"}
           key={"grading-name-text-field"}
-          validateInput={validateInput}
+          validateInput={validateGradingName}
           onEdit={editGradingName}
           />  
-				</div>
 			</div>
 
 			<div className="column">
