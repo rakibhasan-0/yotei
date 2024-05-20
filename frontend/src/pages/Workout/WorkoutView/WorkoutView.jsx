@@ -103,11 +103,10 @@ export default function WorkoutView({ id }) {
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 	const handleNavigation = () => {
-		console.log("cookie: ", cookie.previousPath)
 		if (cookie.previousPath === "/plan") {
-			navigate("/plan")
+			navigate("/plan", {replace : true})
 		} else {
-			navigate("/workout")
+			navigate("/workout", {replace : true})
 		}
 	}
 
@@ -116,7 +115,7 @@ export default function WorkoutView({ id }) {
 		return (
 			<div className="d-flex row justify-content-center">
 				<div className="d-flex col mb-3 mt-3 justify-content-start">
-					<Button onClick={() => handleNavigation(navigate, cookie)} outlined={true}>
+					<Button onClick={() => handleNavigation()} outlined={true}>
 						<p>Tillbaka</p>
 					</Button>
 				</div>
@@ -187,7 +186,7 @@ async function deleteWorkout(workoutId, context, handleNavigation, setShowPopup)
 	}
 
 	setSuccess("Pass borttagen!")
-	handleNavigation("/workout")
+	handleNavigation()
 	setShowPopup(false)
 }
 
