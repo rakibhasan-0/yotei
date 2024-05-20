@@ -103,7 +103,7 @@ public class TechniqueDatabaseTest {
         }
     }
     @Test
-    public void testTechniqueIDS() throws Exception {
+    public void testYellowTechniqueIDS() throws Exception {
         String jdbcUrl = postgreSQLContainer.getJdbcUrl();
         String username = postgreSQLContainer.getUsername();
         String password = postgreSQLContainer.getPassword();
@@ -115,6 +115,126 @@ public class TechniqueDatabaseTest {
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique
                 String expectedColor = "Gult";
+
+                for(Integer i = yellowBegin; i < yellowEnd + 1; i++){
+                    String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
+                
+                    PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+                    preparedStatement.setInt(1, i);
+
+                    ResultSet resultSet = preparedStatement.executeQuery();
+
+                    if (resultSet.next()) {
+                        String belt = resultSet.getString("belt_name");
+                        assertEquals(expectedColor, belt);
+                    }
+                }
+        }
+    }
+
+    @Test
+    public void testOrangeTechniqueIDS() throws Exception {
+        String jdbcUrl = postgreSQLContainer.getJdbcUrl();
+        String username = postgreSQLContainer.getUsername();
+        String password = postgreSQLContainer.getPassword();
+
+        int yellowBegin = 26;
+        int yellowEnd = 48;
+
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+            Statement statement = connection.createStatement()) {
+                //This is where you edit if you wish to swap belts/technique
+                String expectedColor = "Orange";
+
+                for(Integer i = yellowBegin; i < yellowEnd + 1; i++){
+                    String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
+                
+                    PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+                    preparedStatement.setInt(1, i);
+
+                    ResultSet resultSet = preparedStatement.executeQuery();
+
+                    if (resultSet.next()) {
+                        String belt = resultSet.getString("belt_name");
+                        assertEquals(expectedColor, belt);
+                    }
+                }
+        }
+    }
+
+    @Test
+    public void testGreenTechniqueIDS() throws Exception {
+        String jdbcUrl = postgreSQLContainer.getJdbcUrl();
+        String username = postgreSQLContainer.getUsername();
+        String password = postgreSQLContainer.getPassword();
+
+        int yellowBegin = 49;
+        int yellowEnd = 73;
+
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+            Statement statement = connection.createStatement()) {
+                //This is where you edit if you wish to swap belts/technique
+                String expectedColor = "Grönt";
+
+                for(Integer i = yellowBegin; i < yellowEnd + 1; i++){
+                    String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
+                
+                    PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+                    preparedStatement.setInt(1, i);
+
+                    ResultSet resultSet = preparedStatement.executeQuery();
+
+                    if (resultSet.next()) {
+                        String belt = resultSet.getString("belt_name");
+                        assertEquals(expectedColor, belt);
+                    }
+                }
+        }
+    }
+
+    @Test
+    public void testBlueTechniqueIDS() throws Exception {
+        String jdbcUrl = postgreSQLContainer.getJdbcUrl();
+        String username = postgreSQLContainer.getUsername();
+        String password = postgreSQLContainer.getPassword();
+
+        int yellowBegin = 74;
+        int yellowEnd = 100;
+
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+            Statement statement = connection.createStatement()) {
+                //This is where you edit if you wish to swap belts/technique
+                String expectedColor = "Blått";
+
+                for(Integer i = yellowBegin; i < yellowEnd + 1; i++){
+                    String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
+                
+                    PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+                    preparedStatement.setInt(1, i);
+
+                    ResultSet resultSet = preparedStatement.executeQuery();
+
+                    if (resultSet.next()) {
+                        String belt = resultSet.getString("belt_name");
+                        assertEquals(expectedColor, belt);
+                    }
+                }
+        }
+    }
+
+    @Test
+    public void testBrownTechniqueIDS() throws Exception {
+        String jdbcUrl = postgreSQLContainer.getJdbcUrl();
+        String username = postgreSQLContainer.getUsername();
+        String password = postgreSQLContainer.getPassword();
+
+        int yellowBegin = 101;
+        int yellowEnd = 132;
+
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+            Statement statement = connection.createStatement()) {
+                //This is where you edit if you wish to swap belts/technique
+                String expectedColor = "Brunt";
 
                 for(Integer i = yellowBegin; i < yellowEnd + 1; i++){
                     String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
