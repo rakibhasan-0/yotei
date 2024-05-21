@@ -374,12 +374,19 @@ export default function DuringGrading() {
 
     function getExamineeStatus(examineeId, results) {
         const result = results.find(res => res.examineeId === examineeId);
-        console.log("id: ", examineeId, "res: ", result);
-        if (result) {
-            return result.pass ? "pass" : "fail";
+        console.log("id:", examineeId, "res:", result);
+    
+        if (!result) {
+            return "default";
         }
-        return "default";
+    
+        if (result.pass === null) {
+            return "default";
+        }
+    
+        return result.pass ? "pass" : "fail";
     }
+    
 
 	/**
    * @author Team Pomagrade (2024-05-13)
@@ -451,8 +458,6 @@ export default function DuringGrading() {
 	 * @author Team Apelsin (2024-05-17) - c21ion
 	 */
 	async function addExamineeResult(examineeId, techniqueName, passStatus) {
-        // get the data from the 'results' state
-		const data = results
 
 		// Convert string for pass status to Boolean
 		const passStatusMap = {
@@ -461,16 +466,25 @@ export default function DuringGrading() {
 			default: null,
 		}
 		// Check existance
-		const foundExamineeResult = data.find(item => item.examineeId === examineeId)
+		const foundExamineeResult = results.find(item => item.examineeId === examineeId)
 		if( foundExamineeResult ){
 			await putExamineeResult({ resultId: foundExamineeResult.resultId, examineeId: foundExamineeResult.examineeId, techniqueName: foundExamineeResult.techniqueName, pass: passStatusMap[passStatus] }, token)
 				.catch(() => setErrorToast("Kunde inte lägga till resultat. Kolla internetuppkoppling."))
 		}else{
-			const data = await postExamineeResult({ examineeId: examineeId, techniqueName: techniqueName, pass: passStatusMap[passStatus] }, token)
+            const examineeResultToPost = { examineeId: examineeId, techniqueName: techniqueName, pass: passStatusMap[passStatus] }
+			const response = await postExamineeResult(examineeResultToPost, token)
 				.catch(() => setErrorToast("Kunde inte lägga till resultat. Kolla internetuppkoppling."))
-			const response = await data.json()
-			// TODO: Add response to listOfExamineeResults
-			console.log("Response: ", JSON.stringify(response))
+			const responseJson = await response.json()
+            // console.log(responseJson)
+            // Create a copy of the current state
+            let tempRes = [...results]
+
+            // Add the new response to the copy
+            tempRes.push(responseJson)
+
+            // Update the state with the modified copy
+            setResults(tempRes)
+			// console.log("Response: ", JSON.stringify(responseJson))
 		}
 	}
 
@@ -487,7 +501,7 @@ export default function DuringGrading() {
 			headers: { "Content-Type": "application/json", "token": token },
 			body: JSON.stringify(result)
 		}
-		console.log("Fetched POST: ", JSON.stringify(result))
+		// console.log("Fetched POST: ", JSON.stringify(result))
 
 		return fetch("/api/examination/examresult", requestOptions)
 			.then(response => { return response })
@@ -508,7 +522,7 @@ export default function DuringGrading() {
 			body: JSON.stringify(result)
 		}
 
-		console.log("Fetched PUT: ", result)
+		// console.log("Fetched PUT: ", result)
 
 		return fetch("/api/examination/examresult", requestOptions)
 			.then(response => { return response })
@@ -605,7 +619,7 @@ export default function DuringGrading() {
             const filtered = data
                 .filter(item => item.techniqueName === technique)
 
-            console.log("filtered results: ", filtered);
+            // console.log("filtered results: ", filtered);
             setResults(filtered);
         } catch (error) {
             alert(error.message)
