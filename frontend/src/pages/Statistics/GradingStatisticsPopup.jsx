@@ -1,148 +1,90 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Popup from "../../components/Common/Popup/Popup"
 import style from "./GradingStatisticsPopup.module.css"
-import Dropdown from "../../components/Common/List/Dropdown" // Updated import
+import Dropdown from "../../components/Common/List/Dropdown"
 import GradingProtocolsRowsMenu from "../../components/Grading/GradingProtocolsRowsMenu"
 import GradingProtocolsRows from "../../components/Grading/GradingProtocolsRows"
+import Spinner from "../../components/Common/Spinner/Spinner"
 
-const mockGradingProtocols = [
-	"5 KYU GULT BÄLTE",
-	"4 KYU ORANGE BÄLTE",
-]
-const mockData = [
-	{
-		code: "5 KYU",
-		name: "GULT BÄLTE",
-		
-		belt: [
-			{
-				belt_color: "f1c40f",
-				belt_name: "Gult",
-				is_child: false,
-				length: 1
-			}
-		],
-	
-		categories: [
-			{
-				name: "KIHON WAZA - ATEMI WAZA",
-				techniques: [
-					{
-						activity_id: 151,
-						name: "Shotei uchi, jodan, rak stöt med främre och bakre handen",
-						count: 1
-					},
-					{
-						name: "Shotei uchi, chudan, rak stöt med främre och bakre handen",
-						activity_id: 151,
-						count: 1
-					},
-					{
-						activity_id: 153,
-						name: "Gedan geri, rak spark med främre och bakre benet",
-						count: 1
-					}
-				]
-			},
-			{
-				name: "KIHON WAZA - KANSUTSU WAZA",
-				techniques: [
-					{
-						name: "O soto osae, utan grepp, nedläggning snett bakåt",
-						activity_id: 187,
-						count: 1
-					}
-				]
-			},
-			{
-				name: "KIHON WAZA - NAGE WAZA",
-				techniques: [
-					{
-						name: "Koshi otoshi, utan grepp, nedläggning snett bakåt",
-						activity_id: 248,
-						count: 0
-					}
-				]
-			},
-			{
-				name: "JIGO WAZA",
-				techniques: [
-					{
-						name: "Grepp i två handleder framifrån - Frigöring",
-						activity_id: 158,
-						count: 0
-					},
-					{
-						name: "Grepp i två handleder bakifrån - Frigöring",
-						activity_id: 159,
-						count: 0
-					},
-					{
-						name: "Grepp i håret bakifrån - Tettsui uchi, frigöring",
-						activity_id: 161,
-						count: 0
-					},
-					{
-						name: "Försök till stryptag framifrån - Jodan soto uke",
-						activity_id: 216,
-						count: 0
-					},
-					{
-						name: "Stryptag framifrån - Kawashi, frigöring",
-						activity_id: 162,
-						count: 0
-					},
-					{
-						name: "Stryptag bakifrån - Maesabaki, kawashi, frigöring",
-						activity_id: 163,
-						count: 0
-					},
-					{
-						name: "Stryptag med armen - Maesabaki, kuzure ude osae, ude henkan gatame",
-						activity_id: 164,
-						count: 0
-					},
-					{
-						name: "Försök till kravattgrepp från sidan - Jodan chikai uke, kawashi, koshi otoshi, ude henkan gatame",
-						activity_id: 165,
-						count: 0
-					},
-					{
-						name: "Grepp i ärmen med drag - O soto osae, ude henkan gatame",
-						activity_id: 154,
-						count: 0
-					},
-					{
-						name: "Livtag under armarna framifrån - Tate hishigi, ude henkan gatame",
-						activity_id: 169,
-						count: 0
-					}
-				]
-			}
-		]
-	}
-]
+/**
+ *  The component for the grading statistics popup. It shows what techniques are required for each belt.
+ *  And what techniques have been completed by the group.
+ * 
+ * 
+ * @param {String} id - The id of the component, for testing purposes
+ * @param {String} groupID - The id of the group
+ * @param {Array} belts - The belts of the group
+ * 
+ * @since 2024-05-20
+ * @author Team Coconut
+ */
 
 
-export default function GradingStatisticsPopup({ id, gradingProtocols = mockGradingProtocols , data}) {
-	// State for showing the popup
+export default function GradingStatisticsPopup({ id, groupID, belts}) {
+
 	const [showPopup, setShowPopup] = useState(false)
-	const [chosenProtocol, setchosenProtocol] = useState(gradingProtocols[0])
+	const [protocols, setProtocols] = useState([])
+	const [chosenProtocol, setChosenProtocol] = useState("")
+	const [beltID, setBeltID] = useState(null)
+	const [loading, setLoading] = useState(false)
+	const [data, setData] = useState([])
+	
+	useEffect(() => {
+		if (belts.length > 0) {
+			setProtocols(belts.map(belt => belt.name))
+			setChosenProtocol(belts[0].name)
+			setBeltID(belts[0].id)
+		}
+	}, [belts])
+
+	useEffect(() => {
+		if (groupID && beltID !== null) {
+			const fetchGroupGradingProtocol = async () => {
+				try {
+					setLoading(true)
+					const response = await fetch(`/api/statistics/${groupID}/grading_protocol?beltId=${beltID}`)
+					if (!response.ok) {
+						throw new Error("Failed to fetch group data")
+					}
+					if(response.status === 204){
+						//For belts that do not have grading protocols
+						setProtocols([])
+					} else {
+						const groups = await response.json()
+						setData(groups)
+						
+
+					}
+				} catch (error) {
+					console.error("Fetching error:", error)
+				} finally {
+					setLoading(false)
+				}
+			}
+			fetchGroupGradingProtocol()
+		}
+	}, [groupID, beltID])
+
+	useEffect(() => {
+		if (chosenProtocol) {
+			const selectedBelt = belts.find(belt => belt.name === chosenProtocol)
+			if (selectedBelt) {
+				setBeltID(selectedBelt.id)
+			}
+		}
+	}, [chosenProtocol])
 
 	const togglePopup = () => {
 		setShowPopup(!showPopup)
 	}
 
 	const onSelectRow = (protocol) => {
-		setchosenProtocol(protocol)
+		setChosenProtocol(protocol)
 	}
-
-	data = mockData
 
 	return (
 		<div className={style.gradingStatisticsContainer} id={id}>
 			<div className={style.gradingButtonContainer}>
-				{/* the button for the grading statistics */}
 				<button onClick={togglePopup} id="popup-button">
 					<img src="/GradingStatistics.svg" alt="Grading Statistics" />
 				</button>
@@ -154,14 +96,13 @@ export default function GradingStatisticsPopup({ id, gradingProtocols = mockGrad
 				isOpen={showPopup}
 				id="grading-statistics-popup"
 			>
-				<Dropdown text={chosenProtocol} id="grading-protocols-dropdown">
-					<GradingProtocolsRowsMenu protocols={gradingProtocols} onSelectRow = {onSelectRow} />
+				<Dropdown text={data.code ? data.code + " " + data.name : "Välj ett protokoll"} id="grading-protocols-dropdown">
+					<GradingProtocolsRowsMenu protocols={protocols} onSelectRow={onSelectRow} />
 				</Dropdown>
-
-				<GradingProtocolsRows data={data[0].categories} chosenProtocol={chosenProtocol} beltColors = {data[0].belt} >
-
-				</GradingProtocolsRows>
-
+				{loading ? <Spinner /> : 
+					(data.belt && data.categories) && 
+					<GradingProtocolsRows data={data.categories} beltColors={[data.belt]} />
+				}
 			</Popup>
 		</div>
 	)
