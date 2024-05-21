@@ -157,3 +157,7 @@
 	align-self: center;
 	margin-left: 200px;
 }
+
+.buttonContainer {
+	padding-top: 15px;
+}
