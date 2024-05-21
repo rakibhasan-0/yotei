@@ -26,8 +26,6 @@ export default function Login() {
 	const currentPath = window.location.pathname
 	const passwordField = useRef(null)
 
-	const token2 = useContext(AccountContext) //TODO remove
-
 	/**
 	 * Redirects the user to the given link if the user has previously logged in.
 	 */
@@ -73,10 +71,6 @@ export default function Login() {
 		response.text().then(token => {
 			setCookies("token", token, { secure: false, path: "/" })
 			setToken(token)
-			console.log("token")
-			console.log(token.id)
-			console.log(token)
-			console.log(token2.username) //TODO remove.
 			// Redirect
 			if (currentPath === "/" || currentPath === "" || currentPath === undefined) {
 				return navigate("/plan")				
