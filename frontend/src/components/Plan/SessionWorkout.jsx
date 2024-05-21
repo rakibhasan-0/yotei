@@ -4,17 +4,16 @@ import { StopwatchFill, ExclamationCircleFill   } from "react-bootstrap-icons"
 import { Pencil } from "react-bootstrap-icons"
 import { Link } from "react-router-dom"
 import { AccountContext } from "../../context"
-import { isEditor } from "../../utils"
 import { useNavigate } from "react-router"
 import Button from "../../components/Common/Button/Button"
 import Review from "../../components/Plan/SessionReview/SessionReviewComponent.jsx"
-import {HTTP_STATUS_CODES} from "../../utils"
+import {HTTP_STATUS_CODES, canEditSession} from "../../utils"
 import { useCookies } from "react-cookie"
 
 /**
  * The SessionWorkout component is used to display information about a Sessions
  * connected workout if it exists, if no workout is connected: placeholders are
- * rendered and the if the currently logged in user is the creator of the Session
+ * rendered and if the currently logged in user is the creator of the Session
  * a button to connect a workout is displayed. The edit button is only displayed if
  * the current user is the creator of the plan which includes the session, otherwise
  * the edit-button is hidden.
@@ -29,16 +28,16 @@ import { useCookies } from "react-cookie"
  * 
  * @returns A SessionWorkout component
  * 
- * @author Griffin DV21JJN C19HLN, Team Mango (Group 4)
+ * @author Griffin DV21JJN C19HLN, Team Mango (2024-05-20)
+ * Updates: 2024-05-20: Updated the permission check code.
  */
 
 function SessionWorkout({ id, workout, sessionID, creatorID }) {
+	const user = useContext(AccountContext) //For new permissions code.
 	const workoutId = setWorkoutID()
 	const title = setWorkoutTitle()
 	const description = setWorkoutDescription()
 	const sessionId = setSessionID()
-	const userContext = useContext(AccountContext)
-	const { userId } = userContext
 	const navigate = useNavigate()
 	const [showRPopup, setRShowPopup] = useState(false)
 	const [cookies, setCookie] = useCookies(["previousPath"])
@@ -76,6 +75,7 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 					setReviewId(json[0]["id"])
 				}
 			}
+			//console.log(userId + " and " + creatorID) //TODO "3 and 1" always. there is a bug here.
 		}
 		fetchLoadedData()
 	})
@@ -170,7 +170,7 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 
 						<div id={`${id}-no-workout`} className={styles.sc23_session_workout_info}>
 							<h2 className={styles.sc23_session_workput_text}>Det finns inget pass.</h2>
-							{(isEditor(userContext) || userId == creatorID) &&
+							{canEditSession(creatorID, user) &&
 								<p className={styles.sc23_session_workput_text}>Du kan trycka på pennan för att lägga till ett.</p>
 							}
 						</div>
@@ -186,7 +186,7 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 							<div />
 					}
 					{
-						isEditor(userContext) && 
+						canEditSession(creatorID, user) &&
 						<Button className = {styles.review_button} onClick={ () => {
 							setRShowPopup(true)
 						}} outlined={false}>
@@ -197,7 +197,7 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 						</Button>
 					}
 					{
-						(isEditor(userContext) || userId == creatorID) &&
+						canEditSession(creatorID, user) &&
 						<div>
 							<Pencil
 								aria-label="Edit Session"
