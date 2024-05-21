@@ -10,6 +10,10 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import se.umu.cs.pvt.permission.RoleToPermissionRepository;
+import se.umu.cs.pvt.permission.UserToPermissionRepository;
+import se.umu.cs.pvt.role.RoleRepository;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
@@ -22,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Test class for UPDATE-USER methods.
  *
  * @author Quattro Formaggio (Group 1), Phoenix (25-04-2023)
+ * @author Team Mango (Grupp 4) - 2024-05-17
  */
 
 @ExtendWith(MockitoExtension.class)
@@ -34,11 +39,17 @@ public class UpdateUserTest {
 
     @Mock
     private final UserRepository userRepository = Mockito.mock(UserRepository.class);
+    @Mock
+    final RoleRepository roleRepository = Mockito.mock(RoleRepository.class);
+    @Mock
+    final RoleToPermissionRepository roleToPermissionRepository = Mockito.mock(RoleToPermissionRepository.class);
+    @Mock
+    final UserToPermissionRepository userToPermissionRepository = Mockito.mock(UserToPermissionRepository.class);
 
     @BeforeEach
     void init() {
         user = new User();
-        userController = new UserController(userRepository);
+        userController = new UserController(userRepository, roleRepository, roleToPermissionRepository, userToPermissionRepository);
         map = new HashMap<>();
     }
 

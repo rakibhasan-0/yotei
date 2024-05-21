@@ -2,11 +2,10 @@ stages:
   - linter
   - build
   - test
+  - systest
   - docs
   - undeploy_test_server
-  - rebuild_database
   - deploy_test_server
-  - systest
   - deploy_prod_server
 
 dummy-job:
@@ -59,7 +58,28 @@ test-backend:
       - backend/.m2/repository
   script:
     - cd backend
-    - mvn -q test
+    - mvn -q test -Dtest=\!TechniqueDatabaseTest
+
+# Requires startup of a copy of the database container, testing queries for the database
+test-database:
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
+      changes:
+        - infra/database/init/**/*
+  stage: test
+  tags:
+    - system
+  image: maven:3.8.3-openjdk-17
+  variables:
+    MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/backend/.m2/repository"
+  cache:
+    paths:
+      - backend/.m2/repository
+  script:
+    - cd backend/api
+    - mvn -q test -Dtest=TechniqueDatabaseTest -DPOSTGRESQL_DATABASE=$POSTGRES_DB -DPOSTGRESQL_PASSWORD=$POSTGRES_PASSWORD -DPOSTGRESQL_USER=$POSTGRES_USER &> ~/output.log
   
 test-frontend:
   rules:
@@ -106,6 +126,26 @@ build-frontend:
       - frontend/.npm/
   script:
     - npm run build
+
+run-systests:
+  stage: systest
+  resource_group: systest
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
+  tags:
+    - systest
+  script:
+    - docker compose down -v || true
+    - docker compose up psql api gateway --build -d
+    - cd frontend/
+    - npm install
+    - npx playwright install
+    - npm ci
+    - npm run systest:ci
+    - cd ..
+    - docker compose down -v || true
       
 generate-api-docs:
   stage: docs
@@ -114,6 +154,8 @@ generate-api-docs:
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_COMMIT_BRANCH == "main"
+      changes:
+        - backend/api/**/*
   tags:
     - system
   script:
@@ -127,6 +169,8 @@ generate-javadocs:
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_COMMIT_BRANCH == "main"
+      changes:
+        - backend/**/*
   tags:
     - system
   script:
@@ -138,29 +182,17 @@ generate-javadocs:
 
 undeploy-test-server:
   stage: undeploy_test_server
+  resource_group: deploy
   rules:
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_COMMIT_BRANCH == "main"
-  tags:
-    - system
-  script:
-    - docker compose -f docker-compose.yml -f docker-compose-feature.yml down || true
-    
-rebuild-database:
-  stage: rebuild_database
-  rules:
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_COMMIT_BRANCH == "main"
-      changes:
-        - infra/database/init/**/*
   tags:
     - system
   before_script:
     - docker login --username pvt2024 --password $DOCKER_PASS # DOCKER_PASS defined in GitLab CI/CD settings as a secure variable.
   script:
-    - docker volume rm html_pgdata || true
+    - docker compose -f docker-compose.yml -f docker-compose-feature.yml down -v || true
 
 deploy-test-server:
   stage: deploy_test_server
@@ -188,21 +220,6 @@ deploy-test-server:
 
     - cd /var/www/html/
     - docker compose -f docker-compose.yml -f docker-compose-feature.yml up -d --pull always
-
-run-systests:
-  stage: systest
-  resource_group: deploy
-  rules:
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_COMMIT_BRANCH == "main"
-  tags:
-    - system
-  image: mcr.microsoft.com/playwright:v1.39.0-jammy
-  script:
-    - cd frontend/
-    - npm ci
-    - npm run systest:ci
     
 deploy-prod-server:
   stage: deploy_prod_server
@@ -210,10 +227,10 @@ deploy-prod-server:
   rules:
     - if: $CI_COMMIT_TAG
   tags:
-    - system
+    - prod
   script:
-    - ssh pvt@5dv214vt24-prod.cs.umu.se 'cd /home/pvt/prod/ && ./build.sh '$CI_COMMIT_TAG' && exit'
-  release: 
+    - docker login --username pvt2024 --password $DOCKER_PASS # DOCKER_PASS defined in GitLab CI/CD settings as a secure variable.
+    - ./deploy_prod.sh $CI_COMMIT_TAG
+  release:
     tag_name: '$CI_COMMIT_TAG'
     description: '$CI_COMMIT_TAG'
-    

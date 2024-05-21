@@ -1,0 +1,43 @@
+.sortMenuText {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 19px;
+    display: flex;
+    align-items: center;
+    color: #000000;
+    position: relative;
+}
+
+.sortMenuText div {
+    position: absolute;
+    top: 70%;
+    left: 0;
+    background: white;
+    border: 1px solid black;
+    width: 200px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    z-index: 1;
+}
+
+.sortMenuText div p {
+    padding: 8px;
+    margin: 0;
+    cursor: pointer;
+    text-align: left;
+    border-bottom: 1px solid black;
+}
+
+.sortMenuText div p:last-child {
+    border-bottom: none;
+}
+
+.sortMenuText div p:hover {
+    background: #f0f0f0;
+}
+
+.selected {
+    font-weight: bold;
+}

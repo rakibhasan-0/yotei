@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useContext, useEffect, useReducer, useState } from "react"
+import {useParams} from "react-router"
 import { useLocation, useNavigate } from "react-router-dom"
 import WorkoutFormComponent from "../../components/Workout/CreateWorkout/WorkoutFormComponent.jsx"
 import { AccountContext } from "../../context.js"
@@ -16,10 +17,11 @@ import { Spinner } from "react-bootstrap"
 /**
  * This is the page for editing a saved workout.
  * 
- * @author Team Minotaur, Team Kiwi, Team Durian (Group 3) (2024-04-23)
+ * @author Team Minotaur, Team Kiwi, Team Durian, Team Tomato
  * @version 2.0
  * @since 2023-05-24
  * @updated 2024-04-23 Team Kiwi, Removed blockers and Pop-up for redirecting to technique descriptions
+ * @update 2024-05-21  Fixed the convertion of id's when activities come from a list.
  */
 const WorkoutEdit = () => {
 	const [workoutCreateInfo, workoutCreateInfoDispatch] = useReducer(
@@ -27,8 +29,10 @@ const WorkoutEdit = () => {
 	const navigate = useNavigate()
 	const { token, userId } = useContext(AccountContext)
 	const location = useLocation()
+	const { state } = useLocation()
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const [isLoading, setIsLoading] = useState(true)
+
 
 	/**
 	 * Submits the form data to the API.
@@ -39,12 +43,14 @@ const WorkoutEdit = () => {
 		const data = parseData(workoutCreateInfo.data)
 		const workoutId = await updateWorkout(data)
 
+
 		if(workoutId) {
 			setSuccess("Träningen uppdaterades!")
 		} else {
 			setError("Träningen kunde inte uppdateras.")
 		}
-		navigate(-1)
+		navigate("/workout/" + workoutId)
+		
 	}
 
 	/**
@@ -77,16 +83,22 @@ const WorkoutEdit = () => {
 					order: activityOrder,
 				}
 
-				if(activity.technique) {
-					obj.techniqueId = activity.technique.id
-				} else if (activity.techniqueId) {
-					obj.techniqueId = activity.techniqueId
-				}
-
-				if(activity.exercise) {
-					obj.exerciseId = activity.exercise.id
+				if (activity.techniqueId) {
+					// Convert the id to the correct form if it comes from a list.
+					if (activity.techniqueId.includes("-technique-")) {
+						obj.techniqueId = activity.techniqueId.split("-technique-").pop()
+					} else{
+						obj.techniqueId = activity.techniqueId
+					}
+					
 				} else if (activity.exerciseId) {
-					obj.exerciseId = activity.exerciseId
+					// Convert the id to the correct form if it comes from a list.
+					if (activity.exerciseId.includes("-exercise-")) {
+						obj.exerciseId = activity.exerciseId.split("-exercise-").pop()
+					} else {
+						obj.exerciseId = activity.exerciseId
+					}
+					
 				}
 
 
@@ -148,6 +160,7 @@ const WorkoutEdit = () => {
 		const workoutData = location.state?.workout
 		const userData = location.state?.users
 
+
 		if (workoutData){
 			workoutCreateInfoDispatch({
 				type: WORKOUT_CREATE_TYPES.INIT_EDIT_DATA,
@@ -161,7 +174,7 @@ const WorkoutEdit = () => {
 				payload: JSON.parse(item)
 			})
 		} else {
-			navigate(-1, {replace: true})
+			navigate("/workout" , {replace: true})
 		}
 		setIsLoading(false)
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -186,7 +199,7 @@ const WorkoutEdit = () => {
 					<title>Redigera pass</title>
 					<h1 className={styles.title}>Redigera pass</h1>
 		
-					<WorkoutFormComponent callback={submitHandler} />	
+					<WorkoutFormComponent callback={submitHandler} state = {state}/>	
 				</WorkoutCreateContext.Provider> 
 			}
 		</>

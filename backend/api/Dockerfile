@@ -9,6 +9,6 @@ COPY . ./
 EXPOSE 8085
 
 RUN mvn clean
-RUN mvn -q install
+RUN mvn -q install -DskipTests
 
-CMD ["mvn", "spring-boot:run"]
+CMD ["mvn", "-q" ,"spring-boot:run"]
