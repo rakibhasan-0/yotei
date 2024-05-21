@@ -16,7 +16,7 @@ import se.umu.cs.pvt.workout.UserShortRepository;
 /**
  * Dto for an activity list that holds complete information about the list.
  * 
- * @author Team Tomato, updated 2024-05-17
+ * @author Team Tomato, updated 2024-05-21
  * @since 2024-05-12
  * @version 1.1
  */

@@ -24,7 +24,7 @@ import se.umu.cs.pvt.workout.UserShortRepository;
 /**
  * ActivityListService used in ActivityListController
  * 
- * @author Team Tomato, updated 2024-05-17
+ * @author Team Tomato, updated 2024-05-21
  * @since 2024-05-12
  * @version 1.1
  */
