@@ -283,8 +283,8 @@ export default function GradingBefore() {
 		const newExaminees = pairs.map(pair => {
 			if (pair.length === 2) {
 				if (pair[0].id === examinee1Id && pair[1].id === examinee2Id) {
-					return [{ id: pair[0].id, name: pair[0].name },
-					{ id: pair[1].id, name: pair[1].name }]
+					return [{ id: pair[1].id, name: pair[1].name },
+					{ id: pair[0].id, name: pair[0].name }]
 				}
 			}
 		}).filter(Boolean)
@@ -489,8 +489,8 @@ export default function GradingBefore() {
 								<div className={styles.number}>{index + 1}</div>
 								<EditableListItem
 									key={"first-examinee-pair-" + pair[0].id}
-									id={pair[0].id}
-									item={pair[0].name}
+									id={pair[1].id}
+									item={pair[1].name}
 									onRemove={removeExamineeInPair}
 									onEdit={(id, name) => { editExaminee(id, name, true) }}
 									onCheck={onCheck}
@@ -501,8 +501,8 @@ export default function GradingBefore() {
 								<div style={{ width: "10px" }}></div>
 								<EditableListItem
 									key={"second-examinee-pair-" + pair[1].id}
-									id={pair[1].id}
-									item={pair[1].name}
+									id={pair[0].id}
+									item={pair[0].name}
 									onRemove={removeExamineeInPair}
 									onEdit={(id, name) => { editExaminee(id, name, true) }}
 									onCheck={onCheck}
