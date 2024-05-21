@@ -149,6 +149,10 @@ DROP TABLE IF EXISTS grading_protocol;
 
 DROP TABLE IF EXISTS grading_protocol_category;
 
+DROP TABLE IF EXISTS technique_chain CASCADE;
+DROP TABLE IF EXISTS node CASCADE;
+DROP TABLE IF EXISTS technique_weave CASCADE;
+
 DROP SEQUENCE IF EXISTS serial;
 
 CREATE SEQUENCE serial START WITH 1 INCREMENT BY 1;
@@ -752,12 +756,25 @@ CREATE TABLE grading_protocol_technique(
 ALTER TABLE
 	grading_protocol_technique OWNER TO psql;
 
+
+--TODOO: Dubbelkolla om technique_chain, node and technique_weave are correct and that no orphans is created.
+CREATE TABLE technique_weave(
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(180),
+	description VARCHAR(800),
+	nodes INT[][]
+);
+
+ALTER TABLE
+	technique_weave OWNER TO psql;
+
 CREATE TABLE technique_chain(
 	id SERIAL PRIMARY KEY,
 	node_id INT[],
 	name VARCHAR(180),
 	description VARCHAR(800),
-	parent_weave_id INT
+	parent_weave_id INT,
+	CONSTRAINT rm_p_weave FOREIGN KEY(parent_weave_id) REFERENCES technique_weave(id) ON DELETE CASCADE
 );
 
 ALTER TABLE
@@ -769,23 +786,15 @@ CREATE TABLE node(
 	name VARCHAR(180),
 	description VARCHAR(800),
 	technique INT,
-	attack BOOLEAN,
-	partisipant INT,
-	connected_to INT[]
+	attack BOOLEAN NOT NULL,
+	partisipant INT NOT NULL,
+	connected_to INT[],
+	CONSTRAINT rm_parent_weave FOREIGN KEY(parent_weave) REFERENCES technique_weave(id) ON DELETE CASCADE
 );
 
 ALTER TABLE
 	node OWNER TO psql;
 
-CREATE TABLE technique_weave(
-	id SERIAL PRIMARY KEY,
-	name VARCHAR(180),
-	description VARCHAR(800),
-	nodes INT[][]
-);
-
-ALTER TABLE
-	technique_weave OWNER TO psql;
 
 --
 -- Default Inserts

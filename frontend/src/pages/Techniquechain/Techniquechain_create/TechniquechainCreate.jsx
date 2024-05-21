@@ -10,11 +10,11 @@ import { useNavigate } from "react-router"
 
 export default function TechniquechainCreate() {
 
-    const { state } = useLocation()
+	const { state } = useLocation()
 	const [errorMessage, setErrorMessage] = useState("")
-    const [groups, setGroups] = useState()
+	const [groups, setGroups] = useState()
 	const [group, setGroup] = useState(state?.session?.group)
-    const navigate = useNavigate()
+	const navigate = useNavigate()
 
 	// true when data has been saved, when unmounting and rebuilding view.
 	const [techniquechainCreateInput, setTechniquechainCreateInput] = useState(() => {
@@ -115,7 +115,7 @@ export default function TechniquechainCreate() {
 				</div>}
 			</Dropdown>
 
-            <div className={styles.wrapCentering} style={{ marginBottom: "2rem", marginTop: "1rem" }} >
+			<div className={styles.wrapCentering} style={{ marginBottom: "2rem", marginTop: "1rem" }} >
 				<Button onClick= {() => navigate("/techniquechain")} id = {"sessions-back"}outlined={true}><p>Tillbaka</p></Button>
 			</div>
 		</div>

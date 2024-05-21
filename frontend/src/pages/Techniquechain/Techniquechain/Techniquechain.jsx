@@ -14,8 +14,6 @@ import { isEditor } from "../../../utils"
 import { Plus } from "react-bootstrap-icons"
 
 
-
-
 /**
  * The techniquechain page.
  * Fetches and displays the techniquechains.
