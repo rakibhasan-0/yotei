@@ -33,24 +33,24 @@ export class AddTagPopupPage {
 		await saveAndCloseButton.click()
 	}
 
-	async deleteTag(name: string) {
+	async deleteTag(tag: TagComponent) {
 		await this.page.goto(this.url)
 		await this.page.getByRole("button", { name: "Hantera tagg" }).click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").click()
-		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(name)
+		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
 
-		const editableListItem = this.page.getByTestId("EditableListItem-link").locator("label")
-		await editableListItem.waitFor({ state: "visible" })
+		await this.page.getByTestId("EditableListItem-link").locator("label")
+		//await editableListItem.waitFor({ state: "visible" })
 
-		await editableListItem.uncheck()
+		//await editableListItem.uncheck()
 
 		await this.page.locator("#save-and-close-button").click()
 		await this.page.getByRole("button", { name: "Spara" }).click()
 		await this.page.goto(this.url)
 		await this.page.getByRole("button", { name: "Hantera tagg" }).click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").click()
-		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(name)
-		await this.page.locator("#close-icon").click()
+		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
+		await this.page.getByTestId("trash-icon" + tag.tagId).click()
 		await this.page.getByRole("button", { name: "Ta bort" }).click()
 		await this.page.locator("#save-and-close-button").click()
 	}

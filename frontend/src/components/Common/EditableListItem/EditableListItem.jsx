@@ -130,7 +130,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 												onClick={() => onRemove(id, grayTrash)}
 												size="24px"
 												style={grayTrash ? {color: "var(--gray)"} : { color: "var(--red-primary)" } }
-												id={"close-icon" + id}
+												id={"trash-icon" + id}
 											/>
 										</>
 									}

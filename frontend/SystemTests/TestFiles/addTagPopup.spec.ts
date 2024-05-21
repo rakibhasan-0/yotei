@@ -17,7 +17,7 @@ test.describe("Test AddTagPopup", () => {
 		await addTagPopupPage.addTag({tagName: tagName, tagId: tagId})
 		await expect(page.getByText(tagName)).toHaveCount(1)
 
-		await addTagPopupPage.deleteTag(tagName)
+		await addTagPopupPage.deleteTag({tagName: tagName, tagId: tagId})
 		await expect(page.getByText(tagName)).toHaveCount(0)
 	})
 })
