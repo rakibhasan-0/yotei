@@ -29,7 +29,7 @@ INSERT INTO technique (name, description) VALUES ('Knivhot mot magen, grepp, sho
 -- Renraku waza-- 
 INSERT INTO technique (name, description) VALUES ('Försök till strypgrepp framifrån - Försök till kravattgrepp från sidan, jodan soto uke - Jodan chikai uke, kawashi, kosho otoshi, ude henkan gatame',''); -- id: 24
 -- Yakusoku geiko --
-INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare','');-- id: 25
+INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare (kyu 5)','');-- id: 25
 
 -- ORANGE BELT TECHNIQUES -- 24 techniques
 -- Atemi waza --
@@ -42,7 +42,7 @@ INSERT INTO technique (name, description) VALUES ('Kote gaeshi, grepp i handlede
 -- Nage waza --
 INSERT INTO technique (name, description) VALUES ('Uki otoshi, i rörelse, nedläggning snett framåt','');-- id: 31
 -- Jigo waza --
-INSERT INTO technique (name, description) VALUES ('Grepp i en handled framifrån med två händer med drag, frigöring','') -- id: 32
+INSERT INTO technique (name, description) VALUES ('Grepp i en handled framifrån med två händer med drag, frigöring',''); -- id: 32
 INSERT INTO technique (name, description) VALUES ('Grepp i två handleder bakifrån, kote gaeshi, ude hishigi hiza gatame',''); -- id: 33
 INSERT INTO technique (name, description) VALUES ('Grepp i håret framifrån, frigöring',''); -- id: 34
 INSERT INTO technique (name, description) VALUES ('Försök till stryptag framifrån, uki otoshi, ude henkan gatame',''); -- id: 35
@@ -55,13 +55,13 @@ INSERT INTO technique (name, description) VALUES ('Stryptag mot liggande sittand
 INSERT INTO technique (name, description) VALUES ('Långt svingslag, ju jodan uchi uke, uki otoshi, ude henkan gatame',''); -- id: 42
 INSERT INTO technique (name, description) VALUES ('Rak spark mot magen, gedan uchi uke, koshi otoshi, ude henkan gatame',''); -- id: 43
 INSERT INTO technique (name, description) VALUES ('Påkslag mot huvudet, ju jodan uchi uke, uki otoshi, ude hishigi hiza gatame',''); -- id: 44
-INSERT INTO technique (name, description) VALUES ('Påkslag mot huvudet, backhand, Ju morote jodan uke, kote gaeshi,ude hishigi hiza gatame') --id 45 HÄR ÄR DET ÄNDRAT
+INSERT INTO technique (name, description) VALUES ('Påkslag mot huvudet, backhand, Ju morote jodan uke, kote gaeshi,ude hishigi hiza gatame', ''); --id 45 
 INSERT INTO technique (name, description) VALUES ('Knivhot mot magen, grepp, shotei uchi jodan, kote gaeshi, ude hishigi hiza gatame',''); -- id: 46
 -- Renraku waza --
 INSERT INTO technique (name, description) VALUES ('Grepp i två handleder framifrån - Kort svingslag, Frigöring - Jodan chikai uke, kawashi, koshi otoshi, ude henkan gatame',''); -- id: 47
 INSERT INTO technique (name, description) VALUES ('Hotfullt närmande - Långt svingslag, Hejda med tryck - Morote jodan uke, o soto osae, ude henkan gatame',''); -- id: 48
 -- Yakusoku geiko --
-INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare',''); -- id: 49
+INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare (kyu 4)',''); -- id: 49
 
 -- GREEN BELT TECHNIQUES -- 25 techniques
 -- Atemi waza --
@@ -94,7 +94,7 @@ INSERT INTO technique (name, description) VALUES ('Knivhot mot halsen, höger si
 INSERT INTO technique (name, description) VALUES ('Grepp i två handleder bakifrån - Rak spark mot magen, frigöring - gedan uchi uke, koshi otoshi, ude henkan gatame',''); -- id: 72
 INSERT INTO technique (name, description) VALUES ('Hotfullt närmande mot liggande - Långt svingslag, uppgång bakåt - ju jodan uchi uke, uki otoshi ude henkan gatame',''); -- id: 73
 -- Yakusoku geiko --
-INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare',''); -- id: 74
+INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare (kyu 3)',''); -- id: 74
 
 -- BLUE BELT TECHNIQUES -- 27 techniques
 -- Atemi waza --
@@ -129,7 +129,7 @@ INSERT INTO technique (name, description) VALUES ('Försök till grepp i kläder
 INSERT INTO technique (name, description) VALUES ('Grepp i kläderna med drag - o soto otoshi, ude hishigi hiza gatame, valfri jigo waza anpassad efter ukes agerande',''); -- id: 99
 INSERT INTO technique (name, description) VALUES ('Cirkulär spark mot benen - san ren uke, o soto osae, ude henkan gatame, valfri jigo waza anpassad efter ukes agerande',''); -- id: 100
 -- Randori --
-INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare',''); -- id: 101
+INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare (kyu 2)',''); -- id: 101
 
 -- BROWN BELT TECHNIQUES -- 33 techniques
 -- Atemi waza 
@@ -163,14 +163,14 @@ INSERT INTO technique (name, description) VALUES ('Påkslag mot huvudet forehand
 INSERT INTO technique (name, description) VALUES ('Påkslag mot huvudet forehand och backhand, tsuri ashi, ayumi ashi, moroto jodan uke, o soto osae, ude hishigi hiza gatame',''); -- id: 126
 INSERT INTO technique (name, description) VALUES ('Grepp och knivhot mot halsen, höger sida, grepp waki gatame, ude hiza osae gatame',''); -- id: 127
 INSERT INTO technique (name, description) VALUES ('Knivhot mot halsen bakifrån med höger arm, maesabaki, kuzure ude osae, ude hiza osae gatame',''); -- id: 128
-INSERT INTO technique (name, description) VALUES ('Knivhot mot halsen bakifrpn med vänster arm, maesabaki, kuzure ude garami, kote gaeshi, ude hishigi hiza gatame',''); -- id: 129
+INSERT INTO technique (name, description) VALUES ('Knivhot mot halsen bakifrån med vänster arm, maesabaki, kuzure ude garami, kote gaeshi, ude hishigi hiza gatame',''); -- id: 129
 INSERT INTO technique (name, description) VALUES ('Två motstådandare, svingslag och svingslag, morote jodan uke, hiza geri, tai guruma, morote jodan uke, hiza geri, tai guruma',''); -- id: 130
 -- Renraku waza --
 INSERT INTO technique (name, description) VALUES ('Stryptag bakifrån - o soto otoshi, ude hishigi hiza gatame, valfri jigo waza anpassad efter ukes agerande',''); -- id: 131
 INSERT INTO technique (name, description) VALUES ('Grepp om nacken och en knästöt - Gedan juji uke, frigöring, valfri jogi waza anpassad efter ukes agerande',''); -- id: 132
 INSERT INTO technique (name, description) VALUES ('Livtag över armarna framifrån - o goshi, ude hishigi hiza gatame, valfri jigo waza anpassad efter ukes agerande',''); -- id: 133
 -- Randori waza -- 
-INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare',''); -- id: 134
+INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare (kyu 1)',''); -- id: 134
 -- Total 134 --
 
 --
@@ -413,7 +413,7 @@ INSERT INTO technique_tag (tech_id, tag_id) VALUES (67,4), (67,18);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (68,4), (68,18);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (69,4), (69,18);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (70,4), (70,18);
-INSERT INTO technique_tag (tech_id, tag_id) VALUES (71,4), (71,18);.
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (71,4), (71,18);
 -- Renraku waza --
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (72,4), (72,19);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (73,4), (73,19);
