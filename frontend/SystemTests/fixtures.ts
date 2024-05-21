@@ -2,7 +2,12 @@ import { test as base, expect } from '@playwright/test'
 import { Account, Role } from './Types/systemTestsTypes'
 import { UserApi } from './ApiUtils/UserApi'
 
-// Note that we pass worker fixture types as a second template parameter.
+/**
+ * This file is a fixture for a page, read more about fixture here: https://playwright.dev/docs/test-fixtures
+ * It creates and logs in to a new admin account for each worker, this needs to be done in another way if one in the 
+ * future wants to test the system with different permissions. 
+ * The newly created accounts are deleted after the tests.
+ */
 export const test = base.extend<{}, { account: Account }>({
   account: [async ({ browser }, use, workerInfo) => {
 		const username = Math.random().toString(36).slice(2, 7) + workerInfo.workerIndex // Will generate a random string of 5 characters
