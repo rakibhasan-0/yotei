@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useContext, useEffect, useReducer, useState } from "react"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 import ListFormComponent from "../../components/Common/List/ListFormComponent.jsx"
@@ -14,12 +13,11 @@ import { setSuccess, setError } from "../../utils.js"
 import { Spinner } from "react-bootstrap"
 
 /**
- * This is the page for editing a saved workout.
+ * This is the page for editing a saved list.
  *
- * @author Team Minotaur, Team Kiwi, Team Durian (Group 3) (2024-04-23)
- * @version 2.0
- * @since 2023-05-24
- * @updated 2024-04-23 Team Kiwi, Removed blockers and Pop-up for redirecting to technique descriptions
+ * @author Team Tomato (6)
+ * @since 2023-05-21
+ * Based on WorkoutEdit
  */
 const ListEdit = () => {
 	const [listCreateInfo, listCreateInfoDispatch] = useReducer(
