@@ -24,7 +24,7 @@ RUN mkdocs build -d /docs
 
 FROM nginx:latest
 EXPOSE 80
-RUN rm -rf /etc/nginx/conf.d/*
-COPY ./nginx/development/development.conf /etc/nginx/conf.d/nginx.conf
+RUN rm -rf /etc/nginx/nginx.conf
+COPY ./nginx/development/development.conf /etc/nginx/nginx.conf
 COPY --from=javadocs /src/target/site/apidocs /var/www/html/javadocs
 COPY --from=api-docs /docs /var/www/html/api-docs
