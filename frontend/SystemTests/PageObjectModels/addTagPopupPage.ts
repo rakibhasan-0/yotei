@@ -31,6 +31,8 @@ export class AddTagPopupPage {
 		await this.waitForEnabled(saveAndCloseButton)
 
 		await saveAndCloseButton.click()
+		await this.page.getByRole("button", { name: "Spara" }).click()
+
 	}
 
 	async deleteTag(tag: TagComponent) {
@@ -39,10 +41,9 @@ export class AddTagPopupPage {
 		await this.page.getByPlaceholder("Sök eller skapa tagg").click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
 
-		await this.page.getByTestId("EditableListItem-link").locator("label")
-		//await editableListItem.waitFor({ state: "visible" })
-
-		//await editableListItem.uncheck()
+		const editableListItem = this.page.getByTestId("EditableListItem").locator("label")
+		await this.waitForEnabled(editableListItem)
+		await editableListItem.uncheck()
 
 		await this.page.locator("#save-and-close-button").click()
 		await this.page.getByRole("button", { name: "Spara" }).click()
@@ -50,7 +51,14 @@ export class AddTagPopupPage {
 		await this.page.getByRole("button", { name: "Hantera tagg" }).click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
-		await this.page.getByTestId("trash-icon" + tag.tagId).click()
+
+		const editableListItem2 = this.page.getByTestId("EditableListItem" + tag.tagId).locator("label")
+		await this.waitForEnabled(editableListItem2)
+
+		const trashButton = editableListItem2.getByTestId("trash-icon" + tag.tagId)
+		await this.waitForEnabled(trashButton)
+		await trashButton.click()
+
 		await this.page.getByRole("button", { name: "Ta bort" }).click()
 		await this.page.locator("#save-and-close-button").click()
 	}
