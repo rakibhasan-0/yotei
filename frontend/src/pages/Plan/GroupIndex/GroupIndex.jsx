@@ -107,12 +107,11 @@ export default function GroupIndex() {
 					}
 					
 					{
-
-						(canCreateGroups(context)) ?
-							<RoundButton linkTo={"/plan/create"}>
-								<Plus className="plus-icon" />
-							</RoundButton>
-							: <></>
+					(canCreateGroups(context)) ?
+						<RoundButton linkTo={"/plan/create"} id="group-add-button">
+							<Plus className="plus-icon" />
+						</RoundButton>
+						: <></>
 					}
 
 				</div>
