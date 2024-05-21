@@ -139,6 +139,7 @@ run-systests:
     - docker compose -p yotei up psql api gateway --build -d
     - cd frontend/
     - npm install
+    - npx playwright install-deps
     - npx playwright install
     - npm ci
     - npm run systest:ci
