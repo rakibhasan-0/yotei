@@ -119,7 +119,7 @@ const ListEdit = () => {
 			navigate(-1, { replace: true })
 		}
 		setIsLoading(false)
-	}, []) // eslint-disable-line react-hooks/exhaustive-deps
+	}, [])
 
 	/**
 	 * Saves the data to local storage when the user leaves the page.
