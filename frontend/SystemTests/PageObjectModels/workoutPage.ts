@@ -58,15 +58,15 @@ export class WorkoutPage {
      */
     async checkAllActivities(activities, levelsUp) {
         for (const activity of activities) {
-            let locator = this.page.getByText(`${activity.name}`, { exact: true });
+            let locator = this.page.getByText(`${activity.name}`, { exact: true })
             
             // Traverse up the DOM tree the specified number of levels
             for (let i = 0; i < levelsUp; i++) {
-                locator = locator.locator('..');
+                locator = locator.locator('..')
             }
             
             // Locate and check the checkbox
-            await locator.locator('input[type="checkbox"]').check();
+            await locator.locator('input[type="checkbox"]').check()
         }
     }
     

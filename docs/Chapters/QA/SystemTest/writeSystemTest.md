@@ -1,5 +1,6 @@
 # Write System Test
 This is a guide for how you write a system test in Playwright. For a system test to run, it requires a few different files to be present. Below is a step by step walkthrough with additional examples.
+This is heavy reading but worth getting into.
 
 ## Structure & Naming
 We will first look at the different files that we are working with while creating a system test.
@@ -21,12 +22,12 @@ Example:
 	
 ### Types File
 - A function in the POM file might need an object to store data in a page, or if several tests use data structured in a similar way a type object should be created.
-- All types are written in this file [systemTestsTypes.ts](../../../frontend/SystemTests/Types/systemTestsTypes.ts)
+- All types are written in this file [systemTestsTypes.ts](../../../../frontend/SystemTests/Types/systemTestsTypes.ts)
 - It should be named after what it represents.
 The properties in these objects should all be nullable to keep the tests flexible, and able to test absence of non-nullable properties. This is done through adding '?' at the end of the property name. 
 
 Example:
-	The test for creating a workout uses the following two types:
+	The test for creating a workout uses, among others, the following two types:
 	
 ```ts
 export type Activity = {
@@ -37,11 +38,12 @@ export type Activity = {
   mediaLink?: string
 }
 
-
+// Workout
 export type Workout = {
   name?: string,
   description?: string,
-  activities?: Activity[],
+  techniques?: Technique[],
+  exercises?: Exercise[],
   isPrivate?: boolean,
   hasAccess?: Account[],
   tags?: string[]
@@ -49,8 +51,8 @@ export type Workout = {
 ```
 	
 When creating a workout, it needs a name, and optionally a description, techniques, and exercises. 
-The Workout object has the properties 'name?', 'description?', and 'activities?' for these.
-The Activity object can represent either a technique or an exercise, and can be contained in the Workout objects' Activity array.
+The Workout object has the properties 'name?', 'description?', 'exercises?', and 'techniques?' for these.
+The Activity object can represent either a technique or an exercise.
 
 ## Step by step
 We will now walk through how you write your first test.
@@ -74,7 +76,7 @@ With npm and nodejs installed through nvm, vite installed, and necessary .env fi
 5. If needed, add a type in the file 'frontend/SystemTests/Types/systemTestsTypes.ts' or use the already created. 
 
 ### Write the POM file
-1. Copy this template into the test file *.spec.ts that you've created, and update it.
+1. Copy this template into the test file '*Page.ts' that you've created, and update it.
 
 ```ts
 import { type Page } from '@playwright/test'
@@ -148,7 +150,7 @@ export class WorkoutPage {
   // Function for creating a workout
   async createWorkout(workout: Workout) {
     // Clicks a button to create a new workout
-    await this.page.getByRole('img').nth(4).click() 
+    await this.page.locator('#CreateWorkoutButton').getByRole('img').click()
     // Clicks a textfield to set the workouts name
     await this.page.getByPlaceholder('Namn').click()
     // Enters the input objects name value into workouts name textfield
@@ -182,7 +184,7 @@ export class WorkoutPage {
   // Method for deleting the workout created from the createWorkout function
   async deleteWorkout(name: String) {
     // Locates and clicks the button to remove the workout
-    await this.page.getByRole('img').nth(3).click()
+    await this.page.locator('#delete_trashcan').click()
     // Locates and clicks the button to confirm removing the workout
     await this.page.getByRole('button', { name: 'Ta bort' }).click()
   }
@@ -204,7 +206,39 @@ export class WorkoutPage {
 
     If generated code uses either of these two ways to identify a component, you need to add a unique id to the component where it is rendered. 
 
-NOTE: As the tests run on the actual server against the actual database, any test that stores something in the database, needs a cleanup function to remove the created item. Additionally, expect should preferably be placed in the test files to keep POM methods general and dynamic. 
+#### Tips
+
+  If you're having trouble accessing a component within another component, for example an edit button in an element in a list. You can use some Xpath commands to traverse the DOM structure of an element.
+  Locate a unique persistent string or id in the element you're trying to access, 
+
+  ```ts
+  let locator = this.page.getByText(`${activity.name}`, { exact: true })
+  ```
+  Then from this locator, access its parent with
+
+  ```ts
+  const parent = locator.locator('..')
+  ```
+  this can be repeated to move up the hierarchy.
+
+  See: [workoutPage.ts](../../../../frontend/SystemTests/PageObjectModels/workoutPage.ts) for an example. 
+
+  When navigating through elements this way it helps to log the locator contents in the console to see what the element contains. An elements contents can be logged like this:
+
+  ```ts
+  const parentHTML = await parent.innerHTML()
+  console.log("parentHTML", parentHTML)
+  ```
+  Following the above example of trying to access an edit button in an element in a list. Look for the button in the logged HTML, if it isn't present, move up one more level and log that parent. repeat until found.
+
+  ```ts
+  const grandParent = parent.locator('..')
+  const grandParentHTML = await grandParent.innerHTML()
+  console.log("grandParentHTML", grandParentHTML)
+  ```
+
+## NOTE: 
+As the tests run on the actual server against the actual database, any test that stores something in the database, needs a cleanup function to remove the created item. Additionally, expect should preferably be placed in the test files to keep POM methods general and dynamic. 
 
 ### Write the actual test file
 1. Copy this template into the test file *.spec.ts that you've created, and update it.
