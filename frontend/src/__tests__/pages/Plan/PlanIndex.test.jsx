@@ -3,10 +3,11 @@ import "@testing-library/jest-dom"
 import PlanIndex from "../../../pages/Plan/PlanIndex"
 import { rest } from "msw"
 import { server } from "../../server"
+import GroupPicker from "../../../components/Plan/GroupPicker"
 
 
 /**
- * @author Team Durian (Group 3) (2024-04-23) 
+ * @author Team Durian (Group 3) (2024-04-23)  Team Mango (Group 4) (2024-05-16)
  */
 
 configure({testIdAttribute: "id"})
@@ -27,7 +28,8 @@ test("Should render title on init", async () => {
 })
 
 test("should render data from the plan api", async () => {
-	// ARRANGE
+	// ARRANGE	
+	render(<GroupPicker id = {42}/>) //This is needed now since PlanIndex.jsx has been updated. PlanIndex should probably be rewritten to not require this.
 	render(<PlanIndex />)
 	server.use(
 		rest.get("api/plan/all", async (req, res, ctx) => {

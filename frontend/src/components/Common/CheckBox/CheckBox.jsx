@@ -1,5 +1,4 @@
 import styles from "./CheckBox.module.css"
-import { Check } from "react-bootstrap-icons"
 import { useState } from "react"
 import { useEffect } from "react"
 
@@ -41,7 +40,6 @@ export default function CheckBox({checked, onClick, label, disabled, id}) {
 	
 	return (
 		<label className={`${styles.checkboxLabel} ${styles.checkboxComponent} ${disabled ? styles.checkboxLabelDisabled : ""}`} id={id}>
-			{checkedState && <Check className={styles.checkboxIcon} />}
 			<input
 				type="checkbox"
 				id = {id+"-checkbox"}

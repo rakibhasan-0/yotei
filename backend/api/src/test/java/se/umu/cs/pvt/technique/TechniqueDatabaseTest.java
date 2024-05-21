@@ -1,38 +1,25 @@
 package se.umu.cs.pvt.technique;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.sql.*;
-
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.AfterAll;
 import java.nio.file.Paths;
-import java.nio.file.Path;
+import java.io.IOException;
+import java.nio.file.Files;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.event.ContextClosedEvent;
-import org.springframework.core.env.MapPropertySource;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.testcontainers.utility.DockerImageName;
-import org.testcontainers.utility.MountableFile;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.images.builder.ImageFromDockerfile;
 
 import java.time.Duration;
+import java.util.HashMap;
 
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 
@@ -45,18 +32,48 @@ import java.time.Duration;
  * The tool to create a temporary database does so by creating its own container where the tests are executed. If
  * one is looking to integrate these tests within a CI-pipeline, special precautions might have to be taken.
  * 
- *
+ * This test-class will likely cause problems if not excluded from being ran by maven. If you do want to run it locally, you need
+ * to have a .env-file with information regarding the database in the project root.
+ * 
  * @author Kiwi (Grupp 2), c16kvn & dv22cen 2024-05-16
  */
 public class TechniqueDatabaseTest {
     private static PostgreSQLContainer<?> postgreSQLContainer;
-    private static final String DOCKER_IMAGE_NAME = "yotei-psql";
-    private static final String POSTGRESQL_USER = "psql";
-    private static final String POSTGRESQL_PASSWORD = "yotei123";
-    private static final String POSTGRESQL_DATABASE = "yotei";
+
+    static String POSTGRESQL_USER = System.getProperty("POSTGRESQL_USER");
+    static String POSTGRESQL_PASSWORD = System.getProperty("POSTGRESQL_PASSWORD");
+    static String POSTGRESQL_DATABASE = System.getProperty("POSTGRESQL_DATABASE");
+
 
     @BeforeAll
     public static void setUp() {
+        //We go into the .env in the project root and find the password etc. for the database
+        try {
+            if (POSTGRESQL_DATABASE == null) {
+                String envFilePath = "../../.env";
+                String envFileContent = new String(Files.readAllBytes(Paths.get(envFilePath)));
+
+                // Regex for finding key-value pair
+                Pattern pattern = Pattern.compile("^([^=]+)=(.*)$", Pattern.MULTILINE);
+                Matcher matcher = pattern.matcher(envFileContent);
+                Map<String, String> envVariables = new HashMap<>();
+
+                while (matcher.find()) {
+                    String key = matcher.group(1);
+                    String value = matcher.group(2);
+                    // Trim away quotes
+                    value = value.replaceAll("^\"|\"$", "");
+                    envVariables.put(key, value);
+                }
+                POSTGRESQL_USER = envVariables.get("POSTGRES_USER");
+                POSTGRESQL_PASSWORD = envVariables.get("POSTGRES_PASSWORD");
+                POSTGRESQL_DATABASE = envVariables.get("POSTGRES_DB");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         ImageFromDockerfile image = new ImageFromDockerfile()
             .withDockerfile(Paths.get("../../infra/database/Dockerfile"));
 
@@ -64,13 +81,13 @@ public class TechniqueDatabaseTest {
             .asCompatibleSubstituteFor(PostgreSQLContainer.IMAGE);
         
         postgreSQLContainer = new PostgreSQLContainer<>(imageName)
-        .withDatabaseName(POSTGRESQL_DATABASE)
-        .withUsername(POSTGRESQL_USER)
-        .withPassword(POSTGRESQL_PASSWORD)
-        .withEnv("POSTGRESQL_DATABASE", POSTGRESQL_DATABASE)
-        .withEnv("POSTGRESQL_USER", POSTGRESQL_USER)
-        .withEnv("POSTGRESQL_PASSWORD", POSTGRESQL_PASSWORD)
-        .withExposedPorts(PostgreSQLContainer.POSTGRESQL_PORT);
+            .withDatabaseName(POSTGRESQL_DATABASE)
+            .withUsername(POSTGRESQL_USER)
+            .withPassword(POSTGRESQL_PASSWORD)
+            .withEnv("POSTGRESQL_DATABASE", POSTGRESQL_DATABASE)
+            .withEnv("POSTGRESQL_USER", POSTGRESQL_USER)
+            .withEnv("POSTGRESQL_PASSWORD", POSTGRESQL_PASSWORD)
+            .withExposedPorts(PostgreSQLContainer.POSTGRESQL_PORT);
 
         //NOTE: We had to increase the timer to 120 rather than 60, which is wierd as both should work.
         postgreSQLContainer.setWaitStrategy(Wait.defaultWaitStrategy()

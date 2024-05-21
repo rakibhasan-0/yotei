@@ -17,13 +17,13 @@ public class ExaminationResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "result_id")
-    private Long result_id;
+    private Long resultId;
 
     @Column(nullable = false, name = "examinee_id")
-    private Long examinee_id;
+    private Long examineeId;
 
     @Column(nullable = false, name = "technique_name")
-    private String technique_name;
+    private String techniqueName;
 
     @Column(nullable = true, name = "pass")
     private Boolean pass;
@@ -31,15 +31,15 @@ public class ExaminationResult {
     /**
      * Data constructor for ExaminationResult.
      * 
-     * @param result_id The id of the examination result.
-     * @param examinee_id The id of the examinee.
-     * @param technique_name The name of the technique.
+     * @param resultId The id of the examination result.
+     * @param examineeId The id of the examinee.
+     * @param techniqueName The name of the technique.
      * @param pass Pass or fail of performing the technique.
      */
-    public ExaminationResult(Long result_id, Long examinee_id, String technique_name, Boolean pass){
-        this.result_id = result_id;
-        this.examinee_id = examinee_id;
-        this.technique_name = technique_name;
+    public ExaminationResult(Long resultId, Long examineeId, String techniqueName, Boolean pass){
+        this.resultId = resultId;
+        this.examineeId = examineeId;
+        this.techniqueName = techniqueName;
         this.pass = pass;
     }
 
@@ -49,16 +49,16 @@ public class ExaminationResult {
      */
     protected ExaminationResult() {}
 
-    public Long getResult_id(){
-        return result_id;
+    public Long getResultId(){
+        return resultId;
     }
 
-    public Long getExaminee_id(){
-        return examinee_id;
+    public Long getExamineeId(){
+        return examineeId;
     }
 
-    public String getTechnique_name(){
-        return technique_name;
+    public String getTechniqueName(){
+        return techniqueName;
     }
 
     public Boolean getPass(){

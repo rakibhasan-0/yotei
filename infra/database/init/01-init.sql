@@ -10,6 +10,14 @@ END;
 
 $$ LANGUAGE 'plpgsql' IMMUTABLE PARALLEL SAFE;
 
+-- "Konstant" för admin rättighet
+CREATE
+OR REPLACE FUNCTION admin_permission_id() RETURNS INT AS $$ BEGIN RETURN 1;
+
+END;
+
+$$ LANGUAGE 'plpgsql' IMMUTABLE PARALLEL SAFE;
+
 -- "Konstant" för editor roll
 CREATE
 OR REPLACE FUNCTION editor_role_id() RETURNS INT AS $$ BEGIN RETURN 2;
@@ -136,6 +144,10 @@ DROP TABLE IF EXISTS error_log CASCADE;
 
 DROP TABLE IF EXISTS media CASCADE;
 DROP TABLE IF EXISTS session_review;
+
+DROP TABLE IF EXISTS grading_protocol;
+
+DROP TABLE IF EXISTS grading_protocol_category;
 
 DROP SEQUENCE IF EXISTS serial;
 
@@ -293,7 +305,7 @@ ALTER TABLE
 --
 CREATE TABLE activity(
 	activity_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-	workout_id INT NOT NULL,
+	workout_id INT,
 	exercise_id INT,
 	technique_id INT,
 	category_name VARCHAR(255),
@@ -615,6 +627,7 @@ CREATE TABLE IF NOT EXISTS examination_grading (
 	step INT NOT NULL,
 	technique_step_num INT NOT NULL,
 	created_at DATE NOT NULL,
+  title VARCHAR(255) NOT NULL,
 	CONSTRAINT grading_fk_belt FOREIGN KEY(belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE
 );
 
@@ -693,6 +706,53 @@ CREATE TABLE IF NOT EXISTS user_to_activity_list(
 ALTER TABLE
       user_to_activity_list OWNER to psql;
 
+
+--
+-- Name: grading_protocol; Type: TABLE; Schema: public; Owner: psql
+--
+CREATE TABLE grading_protocol(
+	protocol_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	belt_id INT NOT NULL,
+	protocol_code VARCHAR(255),
+	protocol_name VARCHAR(255),
+	CONSTRAINT fk_belt_grading_protocol FOREIGN KEY (belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE
+);
+
+ALTER TABLE
+	grading_protocol OWNER TO psql;
+
+
+--
+-- Name: grading_protocol_category; Type: TABLE; Schema: public; Owner: psql
+--
+CREATE TABLE grading_protocol_category(
+	category_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	protocol_id INT NOT NULL,
+	category_name VARCHAR(255),
+	category_order INT NOT NULL,
+	CONSTRAINT fk_grading_protocol_grading_protocol_category FOREIGN KEY (protocol_id) REFERENCES grading_protocol(protocol_id) ON DELETE CASCADE
+);
+
+ALTER TABLE
+	grading_protocol_category OWNER TO psql;
+
+
+--
+-- Name: technique_to_grading_protocol_category; Type: TABLE; Schema: public; Owner: psql
+--
+CREATE TABLE grading_protocol_technique(
+	id SERIAL PRIMARY KEY,
+	technique_id INT NOT NULL,
+	protocol_category_id INT NOT NULL,
+	technique_order INT NOT NULL,
+	CONSTRAINT fk_gpt_technique FOREIGN KEY(technique_id) REFERENCES technique(technique_id) ON DELETE CASCADE,
+	CONSTRAINT fk_gpt_category FOREIGN KEY(protocol_category_id) REFERENCES grading_protocol_category(category_id) ON DELETE CASCADE
+);
+
+ALTER TABLE
+	grading_protocol_technique OWNER TO psql;
+
+
 --
 -- Default Inserts
 -- ** Note that the order of some of these might 
@@ -716,6 +776,7 @@ ALTER TABLE
 \ir defaults/sessionreviewactivities.sql
 \ir defaults/activitylists.sql
 \ir defaults/examination_protocols.sql
+\ir defaults/grading_protocols.sql
 -- Triggers for user
 --
 CREATE OR REPLACE FUNCTION remove_user_references() RETURNS TRIGGER AS $$ 
@@ -773,12 +834,38 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
+CREATE OR REPLACE FUNCTION protect_final_admin_role() RETURNS TRIGGER AS $$ 
+BEGIN 
+	IF OLD.role_id = admin_role_id()
+	AND (
+		SELECT
+			COUNT(user_id)
+		FROM
+			user_table
+		WHERE
+			role_id = admin_role_id()
+	) <= 1 THEN RAISE EXCEPTION 'cannot remove final admin';
+
+	END IF;
+
+	IF TG_OP = 'UPDATE' THEN RETURN NEW;
+
+	ELSE RETURN OLD;
+
+	END IF;
+END;
+$$ LANGUAGE 'plpgsql';
+
 CREATE TRIGGER remove_user BEFORE DELETE ON user_table 
 	FOR EACH ROW EXECUTE PROCEDURE remove_user_references();
 
 CREATE TRIGGER protect_admin BEFORE DELETE OR
 	UPDATE OF user_role ON user_table 
 	FOR EACH ROW EXECUTE PROCEDURE protect_final_admin();
+
+CREATE TRIGGER protect_admin_role BEFORE DELETE OR
+	UPDATE OF role_id ON user_table
+	FOR EACH ROW EXECUTE PROCEDURE protect_final_admin_role();
 
 --
 -- Triggers for categories
@@ -818,3 +905,23 @@ $$ LANGUAGE 'plpgsql';
 
 CREATE TRIGGER insert_tag BEFORE INSERT ON tag 
 	FOR EACH ROW EXECUTE PROCEDURE tag_to_lowercase();
+
+--
+-- Triggers for roles
+--
+CREATE OR REPLACE FUNCTION protect_admin_role_permission() RETURNS TRIGGER AS $$ 
+BEGIN 
+	IF OLD.role_id = admin_role_id()
+	AND 
+	OLD.permission_id = admin_permission_id()
+	THEN RAISE EXCEPTION 'cannot revoke admin permissions from admin role';
+
+	END IF;
+	RETURN OLD;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER protect_admin_permission BEFORE DELETE ON role_to_permission
+	FOR EACH ROW EXECUTE PROCEDURE protect_admin_role_permission();
+	
+

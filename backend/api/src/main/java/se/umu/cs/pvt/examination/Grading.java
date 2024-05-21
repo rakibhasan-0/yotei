@@ -1,5 +1,6 @@
 package se.umu.cs.pvt.examination;
 import javax.persistence.*;
+import javax.print.DocFlavor.CHAR_ARRAY;
 
 import se.umu.cs.pvt.belt.Belt;
 
@@ -26,13 +27,16 @@ public class Grading {
     private int step;
 
     @Column(nullable = false, name = "created_at")
-    private Date created_at;
+    private Date createdAt;
 
     @Column(nullable = false, name = "belt_id")
-    private Long belt_id;
+    private Long beltId;
 
     @Column(nullable = false, name = "technique_step_num")
-    private int technique_step_num;
+    private int techniqueStepNum;
+
+    @Column(nullable = false, name = "title")
+    private String title;
 
     @OneToMany(fetch=FetchType.LAZY, mappedBy = "gradingId")
     private Set<Examinee> examinees;
@@ -50,14 +54,18 @@ public class Grading {
      * @param step Incdicates the step of the grading.(1-3)
      * @param technique_step_num Keeps track of the current technique.
      * @param created_at The date of the grading.
+     * @param title The title of the grading
      */
-    public Grading(Long grading_id, Long creator_id, Long belt_id,int step, int technique_step_num,Date created_at) {
-        this.gradingId = grading_id;
-        this.creatorId = creator_id;
-        this.belt_id = belt_id;
+
+    public Grading(Long gradingId, Long creatorId, Long beltId,int step, int techniqueStepNum,Date createdAt, String title) {
+        this.gradingId = gradingId;
+        this.creatorId = creatorId;
+        this.beltId = beltId;
         this.step = step;
-        this.technique_step_num = technique_step_num;
-        this.created_at = created_at;
+        this.techniqueStepNum = techniqueStepNum;
+        this.createdAt = createdAt;
+        this.title = title;
+
     }
     
     /**
@@ -66,11 +74,11 @@ public class Grading {
      */
     protected Grading() {}
     
-    public Long getGrading_id() {
+    public Long getGradingId() {
         return gradingId;
     }
 
-    public Long getCreator_id() {
+    public Long getCreatorId() {
         return creatorId;
     }
 
@@ -78,15 +86,19 @@ public class Grading {
         return step;
     }
 
-    public Date getCreated_at() {
-        return created_at;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public Long getBelt_id() {
-        return belt_id;
+    public Long getBeltId() {
+        return beltId;
     }
 
-    public int getTechnique_step_num() {
-        return technique_step_num;
+    public int getTechniqueStepNum() {
+        return techniqueStepNum;
+    }
+
+    public String getTitle() {
+      return title;
     }
 }

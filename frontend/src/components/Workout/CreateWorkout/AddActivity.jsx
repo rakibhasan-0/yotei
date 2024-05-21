@@ -97,7 +97,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	const [lists, setLists] = useState([])
 	const [fetchedLists, setFetchedLists] = useState(false)
 	const [searchListText, setSearchListText] = useState("")
-	const [listContents, setListContents] = useState([]) // TODO: try to make it possible to keep different lists. 
+	const [listContents, setListContents] = useState([])  
 	const [listUpdate, setListUpdate] = useState(0)
 	const [isSearchBarEnabled] = useState(true) // TODO: feature toggle
 	const [isFilterEnabled] = useState(false) // TODO: feature toggle
@@ -445,7 +445,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 			const listContent = result.activities.map(item => {
 				if (item.type === "technique") {
 					return {
-						techniqueID: item.id,
+						techniqueID: listID + "-technique-" + item.id,
 						name: item.name,
 						type: "technique",
 						description: item.description,
@@ -455,16 +455,18 @@ function AddActivity({ id, setShowActivityInfo }) {
 							is_child: item.belts[0].child
 
 						}],
-						tags: item.tags
+						tags: item.tags,
+						path:  item.id
 					}
 				}
 				else {
 					return {
-						id: item.id,
+						id: listID + "-exercise-" + item.id,
 						name: item.name,
 						type: "exercise",
 						description: item.description,
-						duration: item.duration
+						duration: item.duration,
+						path: item.id
 					}
 				}
 			})
@@ -637,6 +639,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 																item={item.name}
 																key={item.id}
 																index={key}
+																path={item.path}
 															/>
 														) : null
 													))}

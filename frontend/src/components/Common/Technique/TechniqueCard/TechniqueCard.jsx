@@ -11,30 +11,35 @@ import styles from "./TechniqueCard.module.css"
  *		checkBox (Component) : If you want a checkbox to be displayed, send it as a prop.
  *		id: Id used for testing.
  *
- * @author Medusa, Coconut
- * @version 2.1
+ * @author Medusa, Coconut, Tomato
+ * @version 2.2
  * @since 2024-05-16
  *
- * Converted to css module 2024-04-19, Hannes (group 1)
- *
+ * @update Converted to css module 2024-04-19, Hannes (group 1)
+ * @update Fixed so that techniques that are in lists get the correct path, 2024-05-17, Team Tomato (Group 6)
  */
 function TechniqueCard({ technique, checkBox, id}) {
 	const navigate = useNavigate()
+	
+	// Fixes the path regardless if the technique is in a list or not.
+	const path = (technique.path === undefined) ? technique.techniqueID : technique.path
 
 	const handleClick = () => {
 		setTechnique()
+
 		if (technique.activity_id && technique.type === "technique") {
 			navigate("/technique/" + technique.activity_id)
 		} else if (technique.type === "exercise" && technique.activity_id) {
 			navigate("/exercise/exercise_page/" + technique.activity_id)
 		} else {
-			navigate("/technique/" + technique.techniqueID)
+			navigate("/technique/" + path)
 		}
 	}
 
 	const setTechnique = () =>{
 		localStorage.setItem("stored_technique", id)
 	}
+
 
 	return (
 		<div 
@@ -48,11 +53,7 @@ function TechniqueCard({ technique, checkBox, id}) {
 			{technique.type === "exercise" ? null : constructColor(technique)}
 
 			<div className={styles["technique-info-container"]}>
-				{checkBox ? (
-					<div className={styles["technique-checkbox-container"]}>
-						{checkBox}
-					</div>
-				) : null}
+				{checkBox ? <div className={styles["technique-checkbox-container"]}>{checkBox}</div> : null}
 
 				<div className={styles["technique-name-container"]}>
 					<Link onClick={handleClick}>
@@ -71,6 +72,8 @@ function TechniqueCard({ technique, checkBox, id}) {
 
 				{/* we are about to count the number of occurrence to display on card */}
 
+
+
 				<div className={styles.countContainer}>
 					{technique.count || technique.count == 0 ? <p>x{technique.count}</p> : null}
 				</div>
@@ -80,6 +83,7 @@ function TechniqueCard({ technique, checkBox, id}) {
 }
 
 function constructColor(technique) {
+
 	return (
 		<div className={styles["technique-card-belt-color-container"]}>
 			{
@@ -112,15 +116,11 @@ function constructColor(technique) {
 }
 
 function constructDefaultBelt(color) {
-	return (
-		<div
-			className={styles["technique-card-belt-color"]}
-			style={{ background: `#${color}` }}
-		/>
-	)
+	return <div className={styles["technique-card-belt-color"]} style={{ background: `#${color}` }} />
 }
 
 function constructAdultBelt(belt, beltLength, index) {
+
 	if (belt.belt_name.toLowerCase().includes("dan")) {
 		const num = parseInt(belt.belt_name.split(" ")[0])
 		return (
@@ -160,10 +160,9 @@ function constructAdultBelt(belt, beltLength, index) {
 			key={index}
 			className={
 				styles[
-					[
-						"technique-card-belt-color",
-						belt.belt_name === "Vitt" ? "technique-card-belt-border" : "",
-					].join(" ")
+					["technique-card-belt-color", belt.belt_name === "Vitt" ? "technique-card-belt-border" : ""].join(
+						" "
+					)
 				]
 			}
 			style={{
@@ -178,11 +177,7 @@ function constructChildBelt(belt, beltLength, index) {
 	return (
 		<div
 			key={index}
-			className={
-				styles[
-					["technique-card-belt-color", "technique-card-belt-border"].join(" ")
-				]
-			}
+			className={styles[["technique-card-belt-color", "technique-card-belt-border"].join(" ")]}
 			style={{
 				// background: `radial-gradient(circle, rgba(0,0,0,1) 20%, rgba(0,0,0,1) 70%, rgba(255,255,255,1) 70%`,
 				background: `linear-gradient(90deg, #fff 25%, #${belt.belt_color} 25%, #${belt.belt_color} 75%, #fff 75%)`,
