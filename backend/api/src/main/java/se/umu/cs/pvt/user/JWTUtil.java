@@ -15,6 +15,7 @@ import java.util.List;
  * Utility class for creating and verifying Json Web Tokens.
  * 
  * @author Team Hot-Pepper (G7) (Doc: Grupp 2 Griffin c17wfn) & Team Tomato
+ *         Team Mango (Grupp 4) - 2024-05-17
  * @updated 2024-04-23 by Team Tomato
  */
 @Component

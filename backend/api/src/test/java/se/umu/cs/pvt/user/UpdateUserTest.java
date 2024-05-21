@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Test class for UPDATE-USER methods.
  *
  * @author Quattro Formaggio (Group 1), Phoenix (25-04-2023)
- * @author Team Mango (Grupp 4) - 2024-05-16
+ * @author Team Mango (Grupp 4) - 2024-05-17
  */
 
 @ExtendWith(MockitoExtension.class)
