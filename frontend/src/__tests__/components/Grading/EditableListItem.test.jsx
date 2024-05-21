@@ -25,22 +25,7 @@ test("User can be created test", async() => {
             />
         </BrowserRouter>
     )
-    expect(screen.getByTestId("EditableListItem").toHaveTextContent(id, 1))
+    expect(screen.getByTestId("EditableListItem")).toHaveTextContent(id, 1)
 })
 
-test("User name can be edited test", async() => {
-    var name = "Test 123"
-	var id = 1
-	var index = 0
 
-    render(
-        <BrowserRouter>
-            <EditableListItem
-                id={id}
-                item={name}
-                index={index}
-            />
-        </BrowserRouter>
-    )
-    expect(screen.getByTestId("EditableListItem"))
-})
