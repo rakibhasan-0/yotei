@@ -8,6 +8,7 @@ import { useNavigate } from "react-router"
 import Button from "../../components/Common/Button/Button"
 import Review from "../../components/Plan/SessionReview/SessionReviewComponent.jsx"
 import {HTTP_STATUS_CODES, canEditSession} from "../../utils"
+import { useCookies } from "react-cookie"
 
 /**
  * The SessionWorkout component is used to display information about a Sessions
@@ -32,12 +33,14 @@ import {HTTP_STATUS_CODES, canEditSession} from "../../utils"
  */
 
 function SessionWorkout({ id, workout, sessionID, creatorID }) {
+	const user = useContext(AccountContext) //For new permissions code.
 	const workoutId = setWorkoutID()
 	const title = setWorkoutTitle()
 	const description = setWorkoutDescription()
 	const sessionId = setSessionID()
 	const navigate = useNavigate()
 	const [showRPopup, setRShowPopup] = useState(false)
+	const [cookies, setCookie] = useCookies(["previousPath"])
 	const navigateAndClose = async path => {
 		navigate(path)
 	}
@@ -46,6 +49,10 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 	const context = useContext(AccountContext)
 	const [, setErrorStateMsg] = useState("")
 	//const {token} = context
+
+	useEffect(() => {
+		setCookie("previousPath", "/plan", {path: "/"})
+	}, [setCookie, cookies.previousPath])
 
 	useEffect(() => {
 		const fetchLoadedData = async() => {
@@ -163,7 +170,7 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 
 						<div id={`${id}-no-workout`} className={styles.sc23_session_workout_info}>
 							<h2 className={styles.sc23_session_workput_text}>Det finns inget pass.</h2>
-							{canEditSession(creatorID) &&
+							{canEditSession(creatorID, user) &&
 								<p className={styles.sc23_session_workput_text}>Du kan trycka på pennan för att lägga till ett.</p>
 							}
 						</div>
@@ -179,7 +186,7 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 							<div />
 					}
 					{
-						canEditSession(creatorID) &&
+						canEditSession(creatorID, user) &&
 						<Button className = {styles.review_button} onClick={ () => {
 							setRShowPopup(true)
 						}} outlined={false}>
@@ -190,7 +197,7 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 						</Button>
 					}
 					{
-						canEditSession(creatorID) &&
+						canEditSession(creatorID, user) &&
 						<div>
 							<Pencil
 								aria-label="Edit Session"
