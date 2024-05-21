@@ -105,14 +105,13 @@ export function canEditGroups(context, group) {
 }
 
 /**
- * Check if user can create an activity. An activity is an exercise or technique.
+ * canCreateAndEditActivity() - Check if user can create an activity. An activity is an exercise or technique.
  * @param {*} context Accountcontext from user. 
  * @returns true if user can create an activity (exercise and technique).
  */
-export function canCreateActivity(context) {
+export function canCreateAndEditActivity(context) {
 	if (!context.permissions) return false
-	return (context.permissions.includes(USER_PERMISSION_CODES.ACTIVITY_ALL) ||
-	(context.permissions.includes(USER_PERMISSION_CODES.ACTIVITY_OWN)))
+	return (context.permissions.includes(USER_PERMISSION_CODES.ACTIVITY_ALL))
 }
 
 /**
@@ -200,7 +199,7 @@ export const USER_PERMISSION_CODES = {
 	PLAN_ALL: 5,
 	WORKOUT_OWN: 6,
 	WORKOUT_ALL: 7,
-	ACTIVITY_OWN: 8, // Techniques and exercice
+	ACTIVITY_OWN: 8, // Techniques and exercices. This one is not used. Right now only all or nothing.
 	ACTIVITY_ALL: 9,
 	GRADING_OWN: 10,
 	GRADING_ALL: 11,
