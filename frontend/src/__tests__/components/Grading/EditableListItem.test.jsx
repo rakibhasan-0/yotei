@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen, configure } from "@testing-library/react"
+import { render, screen } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import EditableListItem from "../../../components/Common/EditableListItem/EditableListItem.jsx"
 import { BrowserRouter } from "react-router-dom"
