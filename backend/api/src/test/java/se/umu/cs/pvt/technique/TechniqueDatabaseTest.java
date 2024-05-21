@@ -36,6 +36,7 @@ import java.util.regex.Pattern;
  * to have a .env-file with information regarding the database in the project root.
  * 
  * @author Kiwi (Grupp 2), c16kvn & dv22cen 2024-05-16
+ * @updated Kiwi (Grupp 2), c16kvn & dv22cen 2024-05-20
  */
 public class TechniqueDatabaseTest {
     private static PostgreSQLContainer<?> postgreSQLContainer;
