@@ -383,9 +383,60 @@ export default function DuringGrading() {
 
 	/**
    * @author Team Pomagrade (2024-05-13)
-   */
-	function gotoSummary() {
+	 * Get method for the grading information. 
+	 * @returns JSON response
+	 */
+	function getGradingProtocol() {
+		return fetch(`/api/examination/grading/${gradingId}`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				"token": token },
+		})
+			.then(response => {
+				if (!response.ok) {
+					throw new Error("Network response was not ok")
+				}
+				return response.json()
+			})
+	}
+
+	/**
+	 * Update step for the grading process. 
+	 * @param {String} grading_data 
+	 * @returns status code
+	 */
+	function updateStep(grading_data) {
+		delete grading_data.examinees
+		grading_data.step = 3
+
+		console.log(grading_data)
+
+		return fetch("/api/examination/grading", {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				"token": token },
+			body: JSON.stringify(grading_data),
+
+		})
+			.then(response => {
+				if (!response.ok) {
+					throw new Error("Network response was not ok")
+				}
+				return response.status
+
+			})
+	}
+
+	async function gotoSummary() {
 		//TODO: setShowPopup(false)
+		const [grading_data] = await Promise.all([
+			getGradingProtocol(),
+		])
+		updateStep(grading_data)
+
+
 		navigate(`/grading/${gradingId}/3`)
 	}
 
