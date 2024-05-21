@@ -1,9 +1,11 @@
 import { render, configure, screen, fireEvent} from "@testing-library/react"
 import "@testing-library/jest-dom"
 import GroupIndex from "../../../pages/Plan/GroupIndex/GroupIndex"
+import StatisticsIndex from '../../../pages/Statistics/StatisticsIndex';
 import { rest } from "msw"
 import { server } from "../../server"
-
+import { AccountContext } from '../../../context';
+import { MemoryRouter, Route, Routes, useNavigate } from 'react-router-dom';
 /**
  * Unit-test for the GroupIndex page, 
  * init as well as making sure search button is case insensitive
@@ -159,16 +161,15 @@ test("Should not display groups missing message when there are groups", async ()
 		})
 	)
 
-	await screen.findByTestId("Groups-are-visible") //This is needed for the test to work.
+	await screen.findByTestId("Groups-are-visible") 
 	expect(screen.getByTestId("Groups-are-visible")).toBeInTheDocument()
-	//The code below would also work, but we want fast tests, so we instead opt for the unnecessary div solution.
-	//await new Promise((r) => setTimeout(r, 2000))
-	//expect(screen.queryByTestId("No-groups-visible-text")).not.toBeInTheDocument()
+
 
 })
 
-test("Should render statistics button next to group", async () => {
+test("Statistic button next to group should render", async () => {
 
+	const mockNavigate = jest.fn()
 	render(<GroupIndex/>)
 
 	server.use(
@@ -177,7 +178,7 @@ test("Should render statistics button next to group", async () => {
 				ctx.status(200),
 				ctx.json([
 					{
-						"id": 1,
+						"id": 101,
 						"name": "Grönt bälte träning",
 						"userId": 1,
 						"belts": [
@@ -191,10 +192,13 @@ test("Should render statistics button next to group", async () => {
 					},
 				])
 			)
-		})
+		}),
+
+
+	
 	)
-
-	await screen.findByTestId("statistics-page-button")
-
+	await screen.findByTestId("statistics-page-button-101")
+	expect(screen.getByTestId("statistics-page-button-101")).toBeInTheDocument()
+	fireEvent.click(screen.getByTestId("statistics-page-button-101"))
 
 })
