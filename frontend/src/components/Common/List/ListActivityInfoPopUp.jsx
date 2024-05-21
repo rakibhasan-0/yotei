@@ -1,6 +1,6 @@
 //Commented due to linter
 //import { useEffect, useContext, useState } from "react"
-import { useEffect, useContext} from "react"
+import { useEffect, useContext } from "react"
 import styles from "./ListActivityInfoPopUp.module.css"
 import Divider from "../../Common/Divider/Divider.jsx"
 import Button from "../../Common/Button/Button.jsx"
@@ -10,13 +10,13 @@ import MinutePicker from "../../Common/MinutePicker/MinutePicker"
 
 /**
  * Component for setting the time for each activity connected to an exercise.
- * 
+ *
  * Props:
  * 	   index @type {number} - The index of the activity in the list.
  *     categoryName @type {string}  - The name of the category.
  *     id @type {number} - The id of the activity.
  *     text @type {string} - The text that is written in the text area.
- * 
+ *
  * Example usage:
  *		<ActivityItem
  *			index={0}
@@ -27,27 +27,26 @@ import MinutePicker from "../../Common/MinutePicker/MinutePicker"
  */
 function ActivityItem({ index, categoryName, id, text }) {
 	const { listCreateInfo, listCreateInfoDispatch } = useContext(ListCreateContext)
-	console.log("HATAR")
-	console.log(useContext(ListCreateContext))
 
 	// Updates the text area height to fit the text
 	useEffect(() => {
 		const textArea = document.querySelector(`#${"activity-description-" + id} textarea`)
 		textArea.style.height = "inherit"
-		textArea.style.height =  `${textArea.scrollHeight}px`
+		textArea.style.height = `${textArea.scrollHeight}px`
 	}, [text, id])
 
 	return (
 		<fieldset className={styles.activityItem} id={"activity-description-" + id}>
 			{categoryName && <legend>{<h2>{categoryName}</h2>}</legend>}
-			<textarea 
+			<textarea
 				className={styles.activityItemTextArea}
 				placeholder="Fri text ..."
-				onChange={(e) => 
-					listCreateInfoDispatch({ 
-						type: "UPDATE_ACTIVITY_NAME", 
-						payload: { index, name: e.target.value }
-					})}
+				onChange={(e) =>
+					listCreateInfoDispatch({
+						type: "UPDATE_ACTIVITY_NAME",
+						payload: { index, name: e.target.value },
+					})
+				}
 				value={listCreateInfo.addedActivities[index].name}
 				rows={1}
 			/>
@@ -55,17 +54,16 @@ function ActivityItem({ index, categoryName, id, text }) {
 	)
 }
 
-
 /**
  * Component for setting the time for each activity connected to an exercise.
- * 
+ *
  * Example usage:
  * 		<ActivityList/>
  */
-function ActivityList(){
+function ActivityList() {
 	//Commented due to linter
 	//const { listCreateInfo, listCreateInfoDispatch } = useContext(ListCreateContext)
-	const { listCreateInfo} = useContext(ListCreateContext)
+	const { listCreateInfo } = useContext(ListCreateContext)
 
 	return (
 		<div className={styles.activityList}>
@@ -76,12 +74,13 @@ function ActivityList(){
 						key={"activity-list-item-" + index}
 						id={index}
 						index={index}
-						text={activity.name} />)
+						text={activity.name}
+					/>
+				)
 			})}
 		</div>
 	)
 }
-
 
 /**
  * Component for setting the time for each activity connected to an exercise.
@@ -96,8 +95,8 @@ function ActivityTimes() {
 
 	const minutePickerCallback = (id, time) => {
 		listCreateInfoDispatch({
-			type: "UPDATE_ACTIVITY_TIME", 
-			payload: { index: id, time: time ? time : 0 }
+			type: "UPDATE_ACTIVITY_TIME",
+			payload: { index: id, time: time ? time : 0 },
 		})
 	}
 
@@ -108,17 +107,13 @@ function ActivityTimes() {
 					<li key={index} className={styles.activityTimesItem}>
 						<p className={styles.activityTimeText}>{"Aktivitet " + (index + 1)} </p>
 						<i className={["bi", "bi-dash-lg", styles.activityTimeLine].join(" ")}></i>
-						<MinutePicker 
-							initialValue={activity.duration} 
-							id={index} 
-							callback={minutePickerCallback} />
+						<MinutePicker initialValue={activity.duration} id={index} callback={minutePickerCallback} />
 					</li>
 				)
 			})}
 		</ul>
 	)
 }
-
 
 /**
  * Component for setting the time for each activity connected to a exercise.
@@ -147,28 +142,32 @@ function ActivityTimes() {
 export default function ActivityInfoPopUp() {
 	//Commented due to linter
 	//const { listCreateInfo, listCreateInfoDispatch } = useContext(ListCreateContext)
-	const {listCreateInfoDispatch } = useContext(ListCreateContext)
+	const { listCreateInfoDispatch } = useContext(ListCreateContext)
 
 	const goBack = () => {
 		listCreateInfoDispatch({ type: LIST_CREATE_TYPES.CLOSE_ACIVITY_POPUP })
 	}
 
 	const saveActivities = () => {
-		listCreateInfoDispatch({ type: LIST_CREATE_TYPES.CREATE_ACTIVITY_ITEMS, payload: {}})
-		{console.log("Breakpoint 1")}
+		listCreateInfoDispatch({ type: LIST_CREATE_TYPES.CREATE_ACTIVITY_ITEMS, payload: {} })
+		{
+			console.log("Breakpoint 1")
+		}
 		listCreateInfoDispatch({ type: LIST_CREATE_TYPES.CLOSE_POPUP })
 	}
 
 	return (
 		<div className={styles.container}>
 			<div className={styles.infoContainer}>
-				<ActivityList/>
+				<ActivityList />
 				<Divider id="ListTimeDivider" option="h2_left" title="Tid" />
 				<ActivityTimes />
 			</div>
-			
+
 			<div className={styles.infoButtons}>
-				<Button onClick={goBack} outlined={true}><h2>Tillbaka</h2></Button>
+				<Button onClick={goBack} outlined={true}>
+					<h2>Tillbaka</h2>
+				</Button>
 				<div className={styles.buttonDivider} />
 				<Button onClick={saveActivities}>Lägg till</Button>
 			</div>
