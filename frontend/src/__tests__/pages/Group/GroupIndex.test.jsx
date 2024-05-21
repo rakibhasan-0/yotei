@@ -167,7 +167,7 @@ test("Should not display groups missing message when there are groups", async ()
 
 })
 
-test("Statistic button next to group should render", async () => {
+test("Statistic button next to group should render and can be clicked", async () => {
 
 	const mockNavigate = jest.fn()
 	render(<GroupIndex/>)
