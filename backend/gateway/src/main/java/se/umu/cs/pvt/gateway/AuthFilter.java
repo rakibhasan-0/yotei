@@ -150,7 +150,6 @@ public class AuthFilter implements GlobalFilter, Ordered {
                     return false;
                 }
             }
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "permissions: " + permissions + " path: " + path + "apiPath: " + apiPath);
         }
 
         // Protect import and export endpoints
