@@ -1,6 +1,13 @@
 import { test, expect } from "../fixtures"
 import { AddTagPopupPage } from "../PageObjectModels/addTagPopupPage"
 
+/**
+ *  Tests related to addTagPopup
+ *  @author Team Durian (Group 3)
+ *  @since 2024-05-21
+ *  @version 1.0
+ */
+
 test.describe("Test AddTagPopup", () => {
 	let addTagPopupPage
     
@@ -10,6 +17,7 @@ test.describe("Test AddTagPopup", () => {
 		await expect(page.getByText("Taggar")).toBeVisible()
 	})
     
+	//Tests the functionallity of the tagsystem by adding and removing a tag. 
 	test("Add and remove a tag", async ({ page }) => {
 		const tagName = Math.random().toString(36).slice(2, 7) 
 		const tagId = Math.floor(Math.random() * (10000 - 1 + 1))

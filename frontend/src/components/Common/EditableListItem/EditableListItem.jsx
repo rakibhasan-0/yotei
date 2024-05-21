@@ -109,7 +109,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 								<div className={styles["flex-shrink-0"]} style={{ display: "flex", alignItems: "center" }}>
 									{isEditing ?
 										<>
-											<Check onClick={handleEditSubmit} size="24px" id={"accept-icon" + id}
+											<Check onClick={handleEditSubmit} size="24px" id="accept-icon"
 												style={grayEdit ? 
 													{color: "var(--gray)", cursor: "not-allowed", marginRight: "10px"} : 
 													{color: "var(--red-primary)", cursor: "pointer", marginRight: "10px"}}
