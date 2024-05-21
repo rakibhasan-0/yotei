@@ -465,7 +465,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 			if (result.error) return
 
 			// Extract the 'id' and 'name' fields from each item in the result used in displaying the list.
-			const lists = result.map(item => ({
+			const lists = result.results.map(item => ({
 				id: item.id,
 				name: item.name,
 				author: {
@@ -654,6 +654,9 @@ function AddActivity({ id, setShowActivityInfo }) {
 												id={list.id}
 												onClick={() => fetchingListContent(list.id)}
 												key={list.id}
+												checkBox={<CheckBox>
+													
+												</CheckBox>}
 											>
 
 												<div style={{ borderTop: "1px solid black" }}>
