@@ -26,7 +26,7 @@ import MinutePicker from "../../Common/MinutePicker/MinutePicker"
  *		/>
  */
 function ActivityItem({ index, activityName, id, text }) {
-	const { listCreateInfo, listCreateInfoDispatch } = useContext(ListCreateContext)
+	const { listCreateInfo} = useContext(ListCreateContext)
 
 	// Updates the text area height to fit the text
 	useEffect(() => {
