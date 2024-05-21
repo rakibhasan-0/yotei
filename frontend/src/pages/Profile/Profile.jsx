@@ -14,8 +14,7 @@ import Divider from "../../components/Common/Divider/Divider"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import ProfileListItem from "./ProfileListItem"
 import { Lock, Unlock, Eye } from "react-bootstrap-icons"
-import RoundButton from "../../components/Common/RoundButton/RoundButton"
-import { Plus } from "react-bootstrap-icons"
+
 /**
  * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3)
  * @since 2024-05-16
@@ -43,14 +42,47 @@ export default function Profile() {
 	const [passwordButtonState, setPasswordButtonDisabled] = useState(false)
 	const [usernameButtonState, setUsernameButtonDisabled] = useState(false)
 
+	const [fetchedLists, setFetchedLists] = useState(false)
 	const [lists, setLists] = useState([])
 	const [map, mapActions] = useMap()
+    const [isFavouriteWorkoutsFetched, setIsFavouriteWorkoutsFetched] = useState(false);
 
 	const [amountOfFavouriteWorkouts, setAmountOfFavouriteWorkouts] = useState(0)
 
-
 	//TODO feature toggle
-	const [isListsEnabled] = useState(false)
+	const [isListsEnabled] = useState(true)
+
+	const workout = {
+		id: -1,
+		name: "Favoritpass",
+		size: 7,
+		author: {
+			userId: 1,
+			username: "Admin",
+		},
+		hidden: false,
+	}
+
+	//Future-proofs so that it will get all of the favourite workouts until 2060
+	const getAmountOfFavouriteWorkouts= async() =>{
+		const args = {
+			from: "1980-01-01",
+			to: "2060-01-01",
+			selectedTags:"",
+			id: userId,
+			text: "",
+			isFavorite: true
+		}
+		getWorkouts(args, token, null, null, (response) => {
+			if(response.error) {
+				setAmountOfFavouriteWorkouts(0)
+			} else {
+				setAmountOfFavouriteWorkouts(response.results.length)
+			}
+			setIsFavouriteWorkoutsFetched(true)
+		})
+
+	}
 
 
 	/* Workout management */
@@ -82,55 +114,28 @@ export default function Profile() {
 			</>
 		)
 	}
-	//Future-proofs so that it will get all of the favourite workouts until 2060
-	const getAmountOfFavouriteWorkouts= async() =>{
-		const args = {
-			from: "1980-01-01",
-			to: "2060-01-01",
-			selectedTags:"",
-			id: userId,
-			text: "",
-			isFavorite: true
-		}
-		getWorkouts(args, token, null, null, (response) => {
-			if(response.error) {
-				setAmountOfFavouriteWorkouts(0)
-			} else {
-				setAmountOfFavouriteWorkouts(response.results.length)
-			}
-		})
-	}
 
-	const workout = {
-		id: -1,
-		name: "Favoritpass",
-		size: amountOfFavouriteWorkouts,
-		author: {
-			userId: userId,
-			username: "",
-		},
-		hidden: false,
-	}
+    useEffect(() => {
+        getAmountOfFavouriteWorkouts();
+    }, []);
+	useEffect(() => {
+        if (isFavouriteWorkoutsFetched) {
+            workout.size = amountOfFavouriteWorkouts;
+            setFetchedLists(false);
+            setLists([workout]);
+            fetchingList();
+        }
+    }, [isFavouriteWorkoutsFetched, amountOfFavouriteWorkouts]);
 
 	/**
 	 * Fetches lists when the component is mounted or when the
 	 * search text are changed.
 	 */
 	useEffect(() => {
-		getAmountOfFavouriteWorkouts()
-		const workout = {
-			id: -1,
-			name: "Favoritpass",
-			size: amountOfFavouriteWorkouts,
-			author: {
-				userId: userId,
-				username: "Admin",
-			},
-			hidden: false,
-		}
+		setFetchedLists(false)
 		setLists([workout])
 		fetchingList()
-	}, [searchText,amountOfFavouriteWorkouts])
+	}, [searchText])
 
 	useEffect(() => {
 		getWorkouts(
@@ -257,6 +262,7 @@ export default function Profile() {
 			}))
 
 			setLists([workout, ...lists])
+			setFetchedLists(true)
 		})
 	}
 
@@ -275,9 +281,6 @@ export default function Profile() {
 					) : (
 						lists.map((list) => <ProfileListItem key={list.id} item={list} Icon={getIconFromState(list)} />)
 					)}
-					<RoundButton linkTo="/profile/createList">
-						<Plus />
-					</RoundButton>
 				</Tab>
 			)}
 			<Tab eventKey={"MyWorkouts"} title={"Mina Pass"} className={style.tab}>
