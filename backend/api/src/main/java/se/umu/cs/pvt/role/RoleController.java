@@ -98,7 +98,7 @@ public class RoleController {
      * @return response, 200 OK on success.
      */
     @DeleteMapping("/{role_id}")
-    public ResponseEntity<Object> deleteRole(@PathVariable Long roleId) {
+    public ResponseEntity<Object> deleteRole(@PathVariable("role_id") Long roleId) {
         if (roleRepository.findById(roleId).isEmpty()) {
             return new ResponseEntity<>(
                 "Role with ID: " + roleId +  "does not exist", HttpStatus.NOT_FOUND);
