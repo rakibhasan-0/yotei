@@ -16,7 +16,7 @@ test.describe('Technique test', () => {
 		await expect(page.getByPlaceholder('Sök efter tekniker')).toBeVisible()
 	})
 
-  test('1. Create technique', async ({ page }) => {
+  test('1. Create technique with description, name, time, tag and media link, should display success toast', async ({ page }) => {
 
 	  // Will generate a random string of 5 characters
 		const name = Math.random().toString(36).slice(2, 7) 
@@ -33,7 +33,7 @@ test.describe('Technique test', () => {
 	
 		// Asserts technique was created successfully and waits for page to load
 		await expect(page.getByText(`Tekniken ${name} skapades`)).toBeVisible()
-    	await page.waitForURL('**/activity')
+		await page.waitForURL('**/activity')
 	
 		// Deletes the new technique and asserts deletion
 		await techniquePage.deleteTechnique(name)
