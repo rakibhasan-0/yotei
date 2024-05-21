@@ -20,7 +20,7 @@ import CheckBox from "../CheckBox/CheckBox"
  *      checked @type {boolen} - What the default value will be for the checkbox
  *      validateInput @type {function} - Action to validate the input given
  *      grayThrash @type {boolean} - True if the trash icon should be grey otherwise it is red
- * 		showThrash @type {boolean} - True if the trash icon should be visible
+ * 		  showThrash @type {boolean} - True if the trash icon should be visible
  * 
  * Example usage:
  * 		<EditableListItem
