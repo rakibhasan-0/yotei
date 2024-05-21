@@ -31,7 +31,7 @@ INSERT INTO technique (name, description) VALUES ('Försök till strypgrepp fram
 -- Yakusoku geiko --
 INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare','');-- id: 25
 
--- ORANGE BELT TECHNIQUES -- 23 techniques
+-- ORANGE BELT TECHNIQUES -- 24 techniques
 -- Atemi waza --
 INSERT INTO technique (name, description) VALUES ('Mawashi shotei uchi, jodan, cirkulär stöt med bakre handen',''); -- id: 26
 INSERT INTO technique (name, description) VALUES ('Chudan tski, stöt snett uppåt med bakre handen',''); -- id: 27
@@ -62,6 +62,7 @@ INSERT INTO technique (name, description) VALUES ('Grepp i två handleder framif
 INSERT INTO technique (name, description) VALUES ('Hotfullt närmande - Långt svingslag, Hejda med tryck - Morote jodan uke, o soto osae, ude henkan gatame',''); -- id: 48
 -- Yakusoku geiko --
 INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare',''); -- id: 49
+
 -- GREEN BELT TECHNIQUES -- 25 techniques
 -- Atemi waza --
 INSERT INTO technique (name, description) VALUES ('Mawashi seiken tski, jodan, cirkulärt slag med främre och bakre handen',''); -- id: 50
@@ -473,7 +474,7 @@ INSERT INTO technique_tag (tech_id, tag_id) VALUES (111,3), (111,14);
 -- Jigo waza --
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (112,3), (112,18);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (113,3), (113,18);
-INSERT INTO technique_tag (tech_id, tag_id) VALUES (114,3), (11,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (114,3), (114,18);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (115,3), (115,18);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (116,3), (116,18);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (117,3), (117,18);
