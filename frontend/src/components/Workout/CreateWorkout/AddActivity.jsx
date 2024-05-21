@@ -465,9 +465,9 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 * Fetches the lists from the backend, either from cache or by a new API-call.
 	 */
 	function fetchingList() {
-		const author = true
-		const hidden = true
-		const shared = true
+		const author = false
+		const hidden = false
+		const shared = false
 		if (listFilter.includes("Mina listor")) author = true
 		if (listFilter.includes("Publika listor")) hidden = true
 		if (listFilter.includes("Delade med mig")) shared = true
@@ -484,7 +484,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 			
 			// Extract the 'id' and 'name' fields from each item in the result used in displaying the list.
 			
-			const lists = result.map(item => ({
+			const lists = result.results.map(item => ({
 
 				id: item.id,
 				name: item.name,
