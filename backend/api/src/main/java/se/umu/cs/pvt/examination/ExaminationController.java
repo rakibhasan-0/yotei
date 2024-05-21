@@ -1,22 +1,28 @@
 package se.umu.cs.pvt.examination;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jackson.JsonObjectSerializer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.umu.cs.pvt.belt.BeltRepository;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * Class for handling requests to the examination api.
  * 
  * @author Team Pomegranate (c21man && ens20lpn)
- * @author Team Orange (dv22rfg)
+ * @author Team Orange (dv22rfg && c19jen)
  */
 @RestController
 @RequestMapping(path = "/api/examination")
@@ -397,6 +403,39 @@ public class ExaminationController {
     }
 
     /**
+     * Returns a list of comments based on examinee_id.
+     * @param examinee_id
+     * @return List of comments based on examinee_id.
+     */
+    @GetMapping("/comment/examinee/all/{examinee_id}")
+    public ResponseEntity<List<ExaminationComment>> getExamineeComments(@PathVariable("examinee_id") long examinee_id) {
+        List<ExaminationComment> comments = examinationCommentRepository.findByExamineeId(examinee_id);
+        return new ResponseEntity<>(comments, HttpStatus.OK);
+    }
+
+    /**
+     * Returns a list of comments based on examinee_pair_id.
+     * @param examineePairId
+     * @return List of comments based on examinee_pair_id
+     */
+    @GetMapping("/comment/pair/all/{examinee_pair_id}")
+    public ResponseEntity<List<ExaminationComment>> getExamineePairComments(@PathVariable("examinee_pair_id") long examineePairId) {
+        List<ExaminationComment> comments = examinationCommentRepository.findByExamineePairId(examineePairId);
+        return new ResponseEntity<>(comments, HttpStatus.OK);
+    }
+
+    /**
+     * Returns a list of group comments based on grading_id.
+     * @param grading_id
+     * @return List of group comments based on grading_id.
+     */
+    @GetMapping("/comment/group/all/{grading_id}")
+    public ResponseEntity<List<ExaminationComment>> getGradingComments(@PathVariable("grading_id") long grading_id) {
+        List<ExaminationComment> comments = examinationCommentRepository.findByGradingIdAndExamineeIdIsNullAndExamineePairIdIsNull(grading_id);
+        return new ResponseEntity<>(comments, HttpStatus.OK);
+    }
+
+    /**
      * Returns a specific comment based on examinee_pair_id and techniqueName.
      * @param examineePairId examinee pair id of the desired examinee pair.
      * @param techniqueName techniqueName of the desired technique.
@@ -456,6 +495,42 @@ public class ExaminationController {
     }
 
     /**
+     * Returns a specific examination result based on grading_id.
+     * @param grading_id
+     * @return
+     */
+    @GetMapping("/examresult/grading/{grading_id}")
+    ResponseEntity <Map<String, Long>> getExaminationResultByGradingId(@PathVariable("grading_id") long grading_id){
+        String exam_protocol = examinationProtocolRepository.findById(grading_id).get().getExaminationProtocol();
+        List<Examinee> examinees = examineeRepository.findByGradingId(grading_id);
+        JSONObject root = new JSONObject(exam_protocol);
+        JSONArray categories = root.getJSONArray("categories");
+        if(categories.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Map<String, Long> technique_info = new HashMap<>();
+        int techniqueCount = 0;
+        for (int i = 0; i < categories.length(); i++) {
+            JSONObject category = categories.getJSONObject(i);
+            JSONArray techniques = category.getJSONArray("techniques");
+            techniqueCount += techniques.length();
+        }
+        for(Examinee e : examinees) {
+            Map<String, Object> result = new HashMap<>();
+            long passed = examinationResultRepository.countByExamineeIdAndPassTrue(e.getExamineeId());
+            technique_info.put("passed", passed);
+
+            
+        }
+
+        technique_info.put("technique_count", (long) techniqueCount);
+        long passed = examinationResultRepository.countByExamineeIdAndPassTrue(grading_id);
+        technique_info.put("passed", passed);
+        return new ResponseEntity<>(technique_info, HttpStatus.OK);
+    }
+
+
+    /**
      * Deletes a given examination result.
      * @param result_id Given examinee id.
      * @return HTTP-status code.
@@ -474,14 +549,15 @@ public class ExaminationController {
      * @param technique_name Given technique name.
      * @param grading_id Given grading id.
      */
-    @GetMapping("/examresult/{technique_name}/{grading_id}")
-    public ResponseEntity<List<Map<String, Object>>> getExaminationProtocol(@PathVariable("technique_name") String technique_name, @PathVariable("grading_id") long grading_id) {
+    // TODO 
+    @GetMapping("/examresult/{grading_id}")
+    public ResponseEntity<List<Map<String, Object>>> getExaminationProtocol(@PathVariable("grading_id") long grading_id, @RequestParam("technique_name") String technique_name) {
         List<Examinee> examinees = examineeRepository.findByGradingId(grading_id);
         List<ExaminationResult> examinationResults = examinationResultRepository.findAll();
         List<Map<String, Object>> results = new ArrayList<>();
         for(Examinee e : examinees) {
             for(ExaminationResult er : examinationResults) {
-                if(er.getExamineeId() == e.getExamineeId() && er.getTechnique_name().equals(technique_name)) {
+                if(er.getExamineeId() == e.getExamineeId() && er.getTechniqueName().equals(technique_name)) {
                     Map<String, Object> result = new HashMap<>();
                     result.put("examinee_id", e.getExamineeId());
                     result.put("result", er.getPass());
@@ -519,5 +595,33 @@ public class ExaminationController {
     @GetMapping("/examinationprotocol/all")
     public ResponseEntity<List<ExaminationProtocol>> getAllExaminationProtocol() {
         return new ResponseEntity<>(examinationProtocolRepository.findAll(), HttpStatus.OK);
+    }
+    /**
+     * Generate a pdf for an examination
+     * @param grading_id
+     * @param belt_id
+     * @return
+     * @throws IOException
+     */
+    @GetMapping("exportpdf/{grading_id}")
+    public ResponseEntity<Object> exportExaminationToPdf(@PathVariable("grading_id") long grading_id) throws IOException {
+        Optional<Grading> grading = gradingRepository.findById(grading_id);
+        if(grading.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+
+        System.out.println(examinationProtocolRepository.findByBeltId(grading.get().getBeltId()).getExaminationProtocol().toString());
+
+        ExportGradingPdf pdfExport = new ExportGradingPdf(examinationProtocolRepository.findByBeltId(grading.get().getBeltId()).getExaminationProtocol().toString(),gradingRepository.findById(grading_id).get(), examineeRepository.findAll(), examinationResultRepository.findAll(), examinationCommentRepository.findByGradingId(grading_id), examineePairRepository.findAll());
+
+        try {
+            InputStream stream = pdfExport.generate();
+            return new ResponseEntity<Object>(stream.readAllBytes(), HttpStatus.OK);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return new ResponseEntity<Object>(null, HttpStatus.BAD_REQUEST);   
+        }     
     }
 }
