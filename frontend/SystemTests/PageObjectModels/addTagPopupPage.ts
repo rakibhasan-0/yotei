@@ -58,7 +58,7 @@ export class AddTagPopupPage {
 
 		await this.findComponents(tag)
 
-		//await this.page.getByRole("button", { name: "Ta bort" }).click()
+		await this.page.getByRole("button", { name: "Ta bort" }).click()
 		await this.page.locator("#save-and-close-button").click()
 	}
 
@@ -79,15 +79,7 @@ export class AddTagPopupPage {
 		for (let i = 0 ; i < 2 ; i++) {
 			locator = locator.locator("..")
 		}
-
-		const element = await this.page.$("checkbox-element")
-
-		if (element) {
-			const innerHTML = await element.evaluate(el => el.innerHTML)
-			console.log(innerHTML)
-		}
-		
-
-		await locator.locator('input[type="checkbox"]').check()
+	
+		await locator.locator('#trash-icon').click()
 	}
 }
