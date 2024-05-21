@@ -73,3 +73,11 @@
     filter: brightness(0) invert(1);
     padding: 0;
 }
+
+.navigationGoBackButton{
+    line-height: 26px;
+    white-space: nowrap;
+    flex-wrap:  nowrap ;
+    overflow: hidden; 
+    text-overflow: elipsis;
+}

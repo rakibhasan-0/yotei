@@ -104,6 +104,9 @@ export default function DuringGrading() {
 	// Go to summary when the index is equal to length. Maybe change the look of the buttons.
 	const goToNextTechnique = () => {
 		setCurrentIndex(nextStep => {
+			if(nextStep === techniqueNameList.length -2){
+				setRandoriIndex(nextStep)
+			}
 			const nextTechniqueStep = Math.min(nextStep + 1, techniqueNameList.length - 1)
 			onUpdateStepToDatabase(nextTechniqueStep)
 			return nextTechniqueStep
@@ -135,8 +138,8 @@ export default function DuringGrading() {
 				return
 			}
 			const step = await response.json()
-			step.technique_step_num = currentTechniqueStep
-			console.log("response grading", step.technique_step_num)
+			step.techniqueStepNum = currentTechniqueStep
+			console.log("response grading", step.techniqueStepNum)
 
 			const update = await fetch("/api/examination/grading", {
 				method: "PUT",
@@ -332,7 +335,9 @@ export default function DuringGrading() {
 								onClick={() => {
 									setCurrentIndex(() => {
 										const techniquestep = techniqueName.categoryIndex
-										setRandoriIndex(currentTechniqueStep)
+										if(techniqueNameList[currentTechniqueStep].categoryName != "YAKUSOKU GEIKO OR RANDORI"){
+											setRandoriIndex(currentTechniqueStep)
+										}
 										onUpdateStepToDatabase(techniquestep)
 										return techniquestep
 									})
@@ -341,19 +346,22 @@ export default function DuringGrading() {
 									scrollableContainerRef.current.scrollTop = 0}}>
 								<p>{techniqueName.category}</p></Button>
 						))}
-						{currentTechniqueStep === techniqueNameList.length - 1 && (
-							<Button
-								width={"100%"}
-								outlined={true}
-								onClick={() => {
-									setCurrentIndex(() => {
-										onUpdateStepToDatabase(indexBeforeRandondi)
-										return indexBeforeRandondi
-									})
-									setShowPopup(false)
-								}}>
-								<p>Gå Tillbaka till Tidigare teknik</p>
-							</Button>)}
+						{
+							// Button that allows the user to return to the technique they was on when going 
+							// into randori and is only visible when in the randori category.
+							currentTechniqueStep === techniqueNameList.length - 1 && (
+								<Button
+									width={"100%"}
+									outlined={true}
+									onClick={() => {
+										setCurrentIndex(() => {
+											onUpdateStepToDatabase(indexBeforeRandondi)
+											return indexBeforeRandondi
+										})
+										setShowPopup(false)
+									}}>
+									<p className={styles.navigationGoBackButton}>Tillbaka till <br/>{techniqueNameList[indexBeforeRandondi].technique.text}</p>
+								</Button>)}
 						<div>
 							{/* Go back to the add examinee page */}
 							<Button 
