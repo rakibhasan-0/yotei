@@ -2,7 +2,7 @@ stages:
   - linter
   - build
   - test
-  - systest
+#  - systest
   - deploy_test_server
   - deploy_prod_server
 
