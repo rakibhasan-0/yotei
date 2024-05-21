@@ -1,5 +1,7 @@
 package se.umu.cs.pvt.role;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +13,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long>{
     boolean existsByRoleName(String roleName);
+
+    Optional<Role> findByRoleName(String roleName);
 }
