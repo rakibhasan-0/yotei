@@ -140,6 +140,35 @@ export default function GradingBefore() {
       if (data.title !== "default") {
         setGradingName(data.title)
       }
+      // check if there is any examinees already added
+      const exsistingPairs = await getAllPairOfExaminees(token)
+      .catch(() => setErrorToast("Kunde inte hämta befintliga par. Kontrollera din internetuppkoppling.")) 
+
+      console.log(exsistingPairs)
+      // if there exsists pairs in this grading already
+      if (exsistingPairs.length !== 0) {
+          // convert the pairs to the local format so the pairs can be displayed for the user
+          const convertedToLocalPairs = exsistingPairs.map(pair => {
+            if(pair.examinee_1 !== null && pair.examinee_2 !== null) {
+              return [{id: pair.examinee_1.id, name: pair.examinee_1.name, pairId: pair.pair_id}, 
+                      {id: pair.examinee_2.id, name: pair.examinee_2.name, pairId: pair.pair_id}]
+            } else {
+              // if we come in here there is a lonly examinee in a pair.
+
+              // set the examinee in the local array
+              setExaminees([...examinees, { id: pair.examinee_1.id, name: pair.examinee_1.name }])
+
+              // remove the pair 
+              deletePair(pair.pair_id, token)
+
+              // need to return something, so we return a undefined and filter this "element" with Boolean efter the iteration
+              return undefined
+            }
+          }).filter(Boolean)
+
+          setPair(convertedToLocalPairs)
+      }
+
     }
     fetchData()
     
@@ -156,7 +185,15 @@ export default function GradingBefore() {
   /**
    * Handle the navigation back to the previous visited route
    */
-  function handleNavigation() {
+  async function handleNavigation() {
+
+    // add lonly examinees as pairs
+    await Promise.all(examinees.map(examinee => {
+              postPair({examinee1Id: examinee.id}, token)
+              .catch(() => setErrorToast("Kunde inte lägga till paret. Kontrollera din internetuppkoppling."))
+        }))
+
+    // navigate to the previous visisted site
     if (hasPreviousState) {
       navigate(-1)
     } else {
@@ -586,7 +623,9 @@ export default function GradingBefore() {
 				
 				<PopupSmall id={"test-popup"} title={"Varning"} isOpen={showPopup} setIsOpen={setShowPopup} direction={startRedirection}>
 					<h2>Är du säker på att alla deltagare är tillagda? </h2>
-					<h2> Isåfall fortsätt till bedömnings processen</h2>
+          <h2>Du kan <span style={{fontWeight: "bold", fontSize: "18px"}}>inte</span> lägga till eller redigera i efterhand</h2>
+					<br></br>
+          <h2> Isåfall fortsätt till bedömnings processen</h2>
 				</PopupSmall>
 				
 				<Button
@@ -721,6 +760,20 @@ async function putGrading(grading, token) {
 		.catch(error => { alert(error.message) })
 }
 
+/**
+ * Get all examinees from a specific grading
+ * @param {any} token 
+ * @returns empty array if response is 404 otherwise return the json object
+ */
+async function getAllPairOfExaminees(token) {
+	const requestOptions = {
+		method: "GET",
+		headers: { "Content-Type": "application/json", "token": token },
+	}
+	return fetch(`/api/examination/pair/grading/${gradingId}`, requestOptions)
+    .then(response => { return response.status === HTTP_STATUS_CODES.NOT_FOUND ? [] : response.json() })
+		.catch(error => { alert(error.message) })
+}
 
 /**
  * To handle the response from a fetch
