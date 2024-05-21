@@ -55,121 +55,121 @@ INSERT INTO technique (name, description) VALUES ('Stryptag mot liggande sittand
 INSERT INTO technique (name, description) VALUES ('Långt svingslag, ju jodan uchi uke, uki otoshi, ude henkan gatame',''); -- id: 42
 INSERT INTO technique (name, description) VALUES ('Rak spark mot magen, gedan uchi uke, koshi otoshi, ude henkan gatame',''); -- id: 43
 INSERT INTO technique (name, description) VALUES ('Påkslag mot huvudet, ju jodan uchi uke, uki otoshi, ude hishigi hiza gatame',''); -- id: 44
-INSERT INTO technique (name, description) VALUES ('Knivhot mot magen, grepp, shotei uchi jodan, kote gaeshi, ude hishigi hiza gatame',''); -- id: 45
+INSERT INTO technique (name, description) VALUES ('Påkslag mot huvudet, backhand, Ju morote jodan uke, kote gaeshi,ude hishigi hiza gatame') --id 45 HÄR ÄR DET ÄNDRAT
+INSERT INTO technique (name, description) VALUES ('Knivhot mot magen, grepp, shotei uchi jodan, kote gaeshi, ude hishigi hiza gatame',''); -- id: 46
 -- Renraku waza --
-INSERT INTO technique (name, description) VALUES ('Grepp i två handleder framifrån - Kort svingslag, Frigöring - Jodan chikai uke, kawashi, koshi otoshi, ude henkan gatame',''); -- id: 46
-INSERT INTO technique (name, description) VALUES ('Hotfullt närmande - Långt svingslag, Hejda med tryck - Morote jodan uke, o soto osae, ude henkan gatame',''); -- id: 47
+INSERT INTO technique (name, description) VALUES ('Grepp i två handleder framifrån - Kort svingslag, Frigöring - Jodan chikai uke, kawashi, koshi otoshi, ude henkan gatame',''); -- id: 47
+INSERT INTO technique (name, description) VALUES ('Hotfullt närmande - Långt svingslag, Hejda med tryck - Morote jodan uke, o soto osae, ude henkan gatame',''); -- id: 48
 -- Yakusoku geiko --
-INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare',''); -- id: 48
-
+INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare',''); -- id: 49
 -- GREEN BELT TECHNIQUES -- 25 techniques
 -- Atemi waza --
-INSERT INTO technique (name, description) VALUES ('Mawashi seiken tski, jodan, cirkulärt slag med främre och bakre handen',''); -- id: 49
-INSERT INTO technique (name, description) VALUES ('Kin geri, gedan, spark snett uppåt med främre och bakre benet',''); -- id: 50
-INSERT INTO technique (name, description) VALUES ('Mae geri, chudan, rak spark med främre och bakre benet',''); -- id: 51
+INSERT INTO technique (name, description) VALUES ('Mawashi seiken tski, jodan, cirkulärt slag med främre och bakre handen',''); -- id: 50
+INSERT INTO technique (name, description) VALUES ('Kin geri, gedan, spark snett uppåt med främre och bakre benet',''); -- id: 51
+INSERT INTO technique (name, description) VALUES ('Mae geri, chudan, rak spark med främre och bakre benet',''); -- id: 52
 -- Kansetsu waza --
-INSERT INTO technique (name, description) VALUES ('Ude osae, grepp i kragen med tryck, nedläggning framåt',''); -- id: 52
-INSERT INTO technique (name, description) VALUES ('Ude osae, i rörelse, cirkulär nedläggning',''); -- id: 53
+INSERT INTO technique (name, description) VALUES ('Ude osae, grepp i kragen med tryck, nedläggning framåt',''); -- id: 53
+INSERT INTO technique (name, description) VALUES ('Ude osae, i rörelse, cirkulär nedläggning',''); -- id: 54
 -- Nage waza
-INSERT INTO technique (name, description) VALUES ('O soto otoshi, grepp i kragen med drag, nedläggning snett bakåt',''); -- id: 54
-INSERT INTO technique (name, description) VALUES ('O soto otoshi, utan grepp, nedläggning snett bakåt',''); -- id: 55
+INSERT INTO technique (name, description) VALUES ('O soto otoshi, grepp i kragen med drag, nedläggning snett bakåt',''); -- id: 55
+INSERT INTO technique (name, description) VALUES ('O soto otoshi, utan grepp, nedläggning snett bakåt',''); -- id: 56
 -- Jigo waza
-INSERT INTO technique (name, description) VALUES ('Grepp i två handleder framifrån, Shiho nage, shiho nage gatame',''); -- id: 56
-INSERT INTO technique (name, description) VALUES ('Stryptag framifrån, o soto otoshi, ude hishigi hiza gatame',''); -- id: 57
-INSERT INTO technique (name, description) VALUES ('Stryptag bakifrån med vänster arm, maesabaki, kuzure ude garami,  kote gaeshi, ude hishigi hiza gatame',''); -- id: 58
-INSERT INTO technique (name, description) VALUES ('Grepp i kläderna med tryck, ude osae, ude osae gatame',''); -- id: 59
-INSERT INTO technique (name, description) VALUES ('Grepp i kläderna med drag, o soto otoshi, ude hishigi hza gatame',''); -- id: 60
-INSERT INTO technique (name, description) VALUES ('Grepp om nacken och en knästöt, gedan juji uke, kawashi, koshi otoshi, ude henkan gatame',''); -- id: 61
-INSERT INTO technique (name, description) VALUES ('Livtag under armarna bakifrån, ude osae, ode odae gatame',''); -- id: 62
-INSERT INTO technique (name, description) VALUES ('Högt livtag över armarna bakifrån, maesabaki, kuzure ude odae, ude henkan gatame',''); -- id: 63
-INSERT INTO technique (name, description) VALUES ('Stryptag mot liggande sittande mellan benen, frigöring',''); -- id: 64
-INSERT INTO technique (name, description) VALUES ('Svingslag mot liggande mot huvudet, jodan chikai uke, hiza kansetsu waza',''); -- id: 65
-INSERT INTO technique (name, description) VALUES ('Rakt slag mot huvudet, jodan soto uke, o soto otoshi, ude hishigi hiza gatame',''); -- id: 66
-INSERT INTO technique (name, description) VALUES ('Cirkulär spark mot benen, san ren uke, o soto osae, ude henkan gatame',''); -- id: 67
-INSERT INTO technique (name, description) VALUES ('Påkslag mot huvudet, backhand, ju morote jodan uke, ude osae, ude osae gatame',''); -- id: 68
-INSERT INTO technique (name, description) VALUES ('Knivhot mot halsen, vänster sida, grepp, kin geri',''); -- id: 69
-INSERT INTO technique (name, description) VALUES ('Knivhot mot halsen, höger sida, grepp, kin geri',''); -- id: 70
+INSERT INTO technique (name, description) VALUES ('Grepp i två handleder framifrån, Shiho nage, shiho nage gatame',''); -- id: 57
+INSERT INTO technique (name, description) VALUES ('Stryptag framifrån, o soto otoshi, ude hishigi hiza gatame',''); -- id: 58
+INSERT INTO technique (name, description) VALUES ('Stryptag bakifrån med vänster arm, maesabaki, kuzure ude garami,  kote gaeshi, ude hishigi hiza gatame',''); -- id: 59
+INSERT INTO technique (name, description) VALUES ('Grepp i kläderna med tryck, ude osae, ude osae gatame',''); -- id: 60
+INSERT INTO technique (name, description) VALUES ('Grepp i kläderna med drag, o soto otoshi, ude hishigi hza gatame',''); -- id: 61
+INSERT INTO technique (name, description) VALUES ('Grepp om nacken och en knästöt, gedan juji uke, kawashi, koshi otoshi, ude henkan gatame',''); -- id: 62
+INSERT INTO technique (name, description) VALUES ('Livtag under armarna bakifrån, ude osae, ode odae gatame',''); -- id: 63
+INSERT INTO technique (name, description) VALUES ('Högt livtag över armarna bakifrån, maesabaki, kuzure ude odae, ude henkan gatame',''); -- id: 64
+INSERT INTO technique (name, description) VALUES ('Stryptag mot liggande sittande mellan benen, frigöring',''); -- id: 65
+INSERT INTO technique (name, description) VALUES ('Svingslag mot liggande mot huvudet, jodan chikai uke, hiza kansetsu waza',''); -- id: 66
+INSERT INTO technique (name, description) VALUES ('Rakt slag mot huvudet, jodan soto uke, o soto otoshi, ude hishigi hiza gatame',''); -- id: 67
+INSERT INTO technique (name, description) VALUES ('Cirkulär spark mot benen, san ren uke, o soto osae, ude henkan gatame',''); -- id: 68
+INSERT INTO technique (name, description) VALUES ('Påkslag mot huvudet, backhand, ju morote jodan uke, ude osae, ude osae gatame',''); -- id: 69
+INSERT INTO technique (name, description) VALUES ('Knivhot mot halsen, vänster sida, grepp, kin geri',''); -- id: 70
+INSERT INTO technique (name, description) VALUES ('Knivhot mot halsen, höger sida, grepp, kin geri',''); -- id: 71
 -- Renraku waza--
-INSERT INTO technique (name, description) VALUES ('Grepp i två handleder bakifrån - Rak spark mot magen, frigöring - gedan uchi uke, koshi otoshi, ude henkan gatame',''); -- id: 71
-INSERT INTO technique (name, description) VALUES ('Hotfullt närmande mot liggande - Långt svingslag, uppgång bakåt - ju jodan uchi uke, uki otoshi ude henkan gatame',''); -- id: 72
+INSERT INTO technique (name, description) VALUES ('Grepp i två handleder bakifrån - Rak spark mot magen, frigöring - gedan uchi uke, koshi otoshi, ude henkan gatame',''); -- id: 72
+INSERT INTO technique (name, description) VALUES ('Hotfullt närmande mot liggande - Långt svingslag, uppgång bakåt - ju jodan uchi uke, uki otoshi ude henkan gatame',''); -- id: 73
 -- Yakusoku geiko --
-INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare',''); -- id: 73
+INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare',''); -- id: 74
 
 -- BLUE BELT TECHNIQUES -- 27 techniques
 -- Atemi waza --
-INSERT INTO technique (name, description) VALUES ('Seiken tski, jodan, rakt slag med främre och bakre handen',''); -- id: 74
-INSERT INTO technique (name, description) VALUES ('Seiken tski, chudan, rakt slag med främre och bakre handen',''); -- id: 75
-INSERT INTO technique (name, description) VALUES ('Mawashi geri, gedan, cirkulär spark med främre och bakre benet',''); -- id: 76
-INSERT INTO technique (name, description) VALUES ('Mawashi geri, chudan, cirkulär spark med främre och bakre benet',''); -- id: 77
+INSERT INTO technique (name, description) VALUES ('Seiken tski, jodan, rakt slag med främre och bakre handen',''); -- id: 75
+INSERT INTO technique (name, description) VALUES ('Seiken tski, chudan, rakt slag med främre och bakre handen',''); -- id: 76
+INSERT INTO technique (name, description) VALUES ('Mawashi geri, gedan, cirkulär spark med främre och bakre benet',''); -- id: 77
+INSERT INTO technique (name, description) VALUES ('Mawashi geri, chudan, cirkulär spark med främre och bakre benet',''); -- id: 78
 -- Kansetsu waza --
-INSERT INTO technique (name, description) VALUES ('Irimi nage, grepp i handleden, nedläggning snett bakåt',''); -- id: 78
-INSERT INTO technique (name, description) VALUES ('Irimi nage, i rörelse, nedläggning snett framåt',''); -- id: 79
+INSERT INTO technique (name, description) VALUES ('Irimi nage, grepp i handleden, nedläggning snett bakåt',''); -- id: 79
+INSERT INTO technique (name, description) VALUES ('Irimi nage, i rörelse, nedläggning snett framåt',''); -- id: 80
 -- Nage waza --
-INSERT INTO technique (name, description) VALUES ('O goshi, utan grepp, kast snett framåt',''); -- id: 80
-INSERT INTO technique (name, description) VALUES ('Tai guruma, utan grepp, nedläggning snett framåt',''); -- id: 81
+INSERT INTO technique (name, description) VALUES ('O goshi, utan grepp, kast snett framåt',''); -- id: 81
+INSERT INTO technique (name, description) VALUES ('Tai guruma, utan grepp, nedläggning snett framåt',''); -- id: 82
 -- Jigo waza --
-INSERT INTO technique (name, description) VALUES ('Stryptag från sidan med tryck, kote hineri, ude henkan gatame',''); -- id: 82
-INSERT INTO technique (name, description) VALUES ('Stryptag bakifrån, o soto otoshi, ude hishigi hiza gatame',''); -- id: 83
-INSERT INTO technique (name, description) VALUES ('Grepp i kläderna mot vägg, tate hishigi, ude henkan gatame',''); -- id: 84
-INSERT INTO technique (name, description) VALUES ('Försök till livtag över armarna, framifrån, uki otoshi, ude henkan gatame',''); -- id: 85
-INSERT INTO technique (name, description) VALUES ('Livtag över armarna framifrån, o goshi, ude hishigi hiza gatame',''); -- id: 86
-INSERT INTO technique (name, description) VALUES ('Försök till grepp om båda benen, framifrån, tai guruma, ude henkan gatame',''); -- id: 87
-INSERT INTO technique (name, description) VALUES ('Stryptag mot liggande med armen, frigöring, ude henkan gatame',''); -- id: 88
-INSERT INTO technique (name, description) VALUES ('Spark mot liggande mot huvudet, san ren uke, hiza kansetsu waza',''); -- id: 89
-INSERT INTO technique (name, description) VALUES ('Hotfullt uppträdande, ude hishigi',''); -- id: 90
-INSERT INTO technique (name, description) VALUES ('Kort svingslag, jodan chikai uke, o soto otoshi, ude hishigi hiza gatame',''); -- id: 91
-INSERT INTO technique (name, description) VALUES ('Långt svingslag, morote jodan uke, hiza geri, tai guruma, ude henkan gatame',''); -- id: 92
-INSERT INTO technique (name, description) VALUES ('Svingslag, backhand, morote jodan uke, irimi nage, ude henkan gatame',''); -- id: 93
-INSERT INTO technique (name, description) VALUES ('Påkslag mot huvudet, backhand, ju jodan uchi uke, irimi nage, ude hishigi hiza gatame',''); -- id: 94
-INSERT INTO technique (name, description) VALUES ('Grepp och knivhot mot magen, grepp, kin geri, kote gaeshi, ude hishigi hiza gatame',''); -- id: 95
-INSERT INTO technique (name, description) VALUES ('Två motståndare, grepp i kläderna, ude osae',''); -- id: 96
+INSERT INTO technique (name, description) VALUES ('Stryptag från sidan med tryck, kote hineri, ude henkan gatame',''); -- id: 83
+INSERT INTO technique (name, description) VALUES ('Stryptag bakifrån, o soto otoshi, ude hishigi hiza gatame',''); -- id: 84
+INSERT INTO technique (name, description) VALUES ('Grepp i kläderna mot vägg, tate hishigi, ude henkan gatame',''); -- id: 85
+INSERT INTO technique (name, description) VALUES ('Försök till livtag över armarna, framifrån, uki otoshi, ude henkan gatame',''); -- id: 86
+INSERT INTO technique (name, description) VALUES ('Livtag över armarna framifrån, o goshi, ude hishigi hiza gatame',''); -- id: 87
+INSERT INTO technique (name, description) VALUES ('Försök till grepp om båda benen, framifrån, tai guruma, ude henkan gatame',''); -- id: 88
+INSERT INTO technique (name, description) VALUES ('Stryptag mot liggande med armen, frigöring, ude henkan gatame',''); -- id: 89
+INSERT INTO technique (name, description) VALUES ('Spark mot liggande mot huvudet, san ren uke, hiza kansetsu waza',''); -- id: 90
+INSERT INTO technique (name, description) VALUES ('Hotfullt uppträdande, ude hishigi',''); -- id: 91
+INSERT INTO technique (name, description) VALUES ('Kort svingslag, jodan chikai uke, o soto otoshi, ude hishigi hiza gatame',''); -- id: 92
+INSERT INTO technique (name, description) VALUES ('Långt svingslag, morote jodan uke, hiza geri, tai guruma, ude henkan gatame',''); -- id: 93
+INSERT INTO technique (name, description) VALUES ('Svingslag, backhand, morote jodan uke, irimi nage, ude henkan gatame',''); -- id: 94
+INSERT INTO technique (name, description) VALUES ('Påkslag mot huvudet, backhand, ju jodan uchi uke, irimi nage, ude hishigi hiza gatame',''); -- id: 95
+INSERT INTO technique (name, description) VALUES ('Grepp och knivhot mot magen, grepp, kin geri, kote gaeshi, ude hishigi hiza gatame',''); -- id: 96
+INSERT INTO technique (name, description) VALUES ('Två motståndare, grepp i kläderna, ude osae',''); -- id: 97
 -- Renraku waza --
-INSERT INTO technique (name, description) VALUES ('Försök till grepp i kläderna - chudan soto uke, koshi otoshi, ude henkan gatame, valfri jigo waza anpassad efter ukes agerande',''); -- id: 97
-INSERT INTO technique (name, description) VALUES ('Grepp i kläderna med drag - o soto otoshi, ude hishigi hiza gatame, valfri jigo waza anpassad efter ukes agerande',''); -- id: 98
-INSERT INTO technique (name, description) VALUES ('Cirkulär spark mot benen - san ren uke, o soto osae, ude henkan gatame, valfri jigo waza anpassad efter ukes agerande',''); -- id: 99
+INSERT INTO technique (name, description) VALUES ('Försök till grepp i kläderna - chudan soto uke, koshi otoshi, ude henkan gatame, valfri jigo waza anpassad efter ukes agerande',''); -- id: 98
+INSERT INTO technique (name, description) VALUES ('Grepp i kläderna med drag - o soto otoshi, ude hishigi hiza gatame, valfri jigo waza anpassad efter ukes agerande',''); -- id: 99
+INSERT INTO technique (name, description) VALUES ('Cirkulär spark mot benen - san ren uke, o soto osae, ude henkan gatame, valfri jigo waza anpassad efter ukes agerande',''); -- id: 100
 -- Randori --
-INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare',''); -- id: 100
+INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare',''); -- id: 101
 
 -- BROWN BELT TECHNIQUES -- 33 techniques
 -- Atemi waza 
-INSERT INTO technique (name, description) VALUES ('Empi uchi, jodan, cirkulär stöt med främre och bakre armen',''); -- id: 101
-INSERT INTO technique (name, description) VALUES ('Empi uchi, chudan, rak stöt åt sidan med närmaste armen',''); -- id: 102
-INSERT INTO technique (name, description) VALUES ('Kakato geri, chuda, rak spark med bakre benet',''); -- id: 103
-INSERT INTO technique (name, description) VALUES ('Yoko geri, chudan, rak spark åt sidan med närmaste benet',''); -- id: 104
+INSERT INTO technique (name, description) VALUES ('Empi uchi, jodan, cirkulär stöt med främre och bakre armen',''); -- id: 102
+INSERT INTO technique (name, description) VALUES ('Empi uchi, chudan, rak stöt åt sidan med närmaste armen',''); -- id: 103
+INSERT INTO technique (name, description) VALUES ('Kakato geri, chuda, rak spark med bakre benet',''); -- id: 104
+INSERT INTO technique (name, description) VALUES ('Yoko geri, chudan, rak spark åt sidan med närmaste benet',''); -- id: 105
 -- Kansetsu waza
-INSERT INTO technique (name, description) VALUES ('Waki gatame, grepp i handleden, nedläggning snett bakåt',''); -- id: 105
-INSERT INTO technique (name, description) VALUES ('Kote mawashi, grepp i kragen med tryck, nedläggning snett framåt',''); -- id: 106
+INSERT INTO technique (name, description) VALUES ('Waki gatame, grepp i handleden, nedläggning snett bakåt',''); -- id: 106
+INSERT INTO technique (name, description) VALUES ('Kote mawashi, grepp i kragen med tryck, nedläggning snett framåt',''); -- id: 107
 -- Nage waza
-INSERT INTO technique (name, description) VALUES ('Harai goshi, utan grepp, kast snett framåt',''); -- id: 107
-INSERT INTO technique (name, description) VALUES ('Harai goshi, i rörelse, kast snett framåt',''); -- id: 108
-INSERT INTO technique (name, description) VALUES ('Sukui nage, utan grepp, kast snett framåt',''); -- id: 109
-INSERT INTO technique (name, description) VALUES ('Ko uchi gari, utan grepp, kast snett bakåt',''); -- id: 110
+INSERT INTO technique (name, description) VALUES ('Harai goshi, utan grepp, kast snett framåt',''); -- id: 108
+INSERT INTO technique (name, description) VALUES ('Harai goshi, i rörelse, kast snett framåt',''); -- id: 109
+INSERT INTO technique (name, description) VALUES ('Sukui nage, utan grepp, kast snett framåt',''); -- id: 110
+INSERT INTO technique (name, description) VALUES ('Ko uchi gari, utan grepp, kast snett bakåt',''); -- id: 111
 -- Jigo waza 
-INSERT INTO technique (name, description) VALUES ('Grepp i håret med 2 händer och knästöt, gedan juji uke, waki gatame, ude osae gatame',''); -- id: 111
-INSERT INTO technique (name, description) VALUES ('Stryptag från sidan, harai goshi, ude hishigi hiza gatame',''); -- id: 112
-INSERT INTO technique (name, description) VALUES ('Stryptag bakifrån, jodan chikai uke, sukui nage, ude hishigi hiza gatame',''); -- id: 113
-INSERT INTO technique (name, description) VALUES ('Stryptag med armen med drag, o soto otoshi, ude hishigi hiza gatame',''); -- id: 114
-INSERT INTO technique (name, description) VALUES ('Kravatt grepp framifrån, chudan tski, kote hineri, ude henkan gatame',''); -- id: 115
-INSERT INTO technique (name, description) VALUES ('Kravattgrepp med nedbrytning i sidled, frigöring, ude henkan gatame',''); -- id: 116
-INSERT INTO technique (name, description) VALUES ('Grepp i kläderna med tryck, kote mawashi, ude osae gatame',''); -- id: 117
-INSERT INTO technique (name, description) VALUES ('Flera svingslag mot liggande sittande på magen, jodan chikai uke, frigöring',''); -- id: 118
-INSERT INTO technique (name, description) VALUES ('Hotfullt närmande mot liggande, uppgång framåt, jodan chikai uke, hiza kansetsu waza',''); -- id: 119
-INSERT INTO technique (name, description) VALUES ('hotfullt uppträdande, hara osae, ude henkan gatame',''); -- id: 120
-INSERT INTO technique (name, description) VALUES ('Kort svingslag, jodan chikai uke, uki otoshi, ude henkan gatame',''); -- id: 121
-INSERT INTO technique (name, description) VALUES ('Kort svingslag, jodan chikai uke, ko uchi gari',''); -- id: 122
-INSERT INTO technique (name, description) VALUES ('Rak spark mot magen, gedan uchi uke, irimi nage, ude henkan gatame',''); -- id: 123
-INSERT INTO technique (name, description) VALUES ('Påkslag mot huvudet forehand och backhand, tsuri ashi, ayumi ashi, ju jodan uchi uke, irimi nage, ude hishigi hiza gatame',''); -- id: 124
-INSERT INTO technique (name, description) VALUES ('Påkslag mot huvudet forehand och backhand, tsuri ashi, ayumi ashi, moroto jodan uke, o soto osae, ude hishigi hiza gatame',''); -- id: 125
-INSERT INTO technique (name, description) VALUES ('Grepp och knivhot mot halsen, höger sida, grepp waki gatame, ude hiza osae gatame',''); -- id: 126
-INSERT INTO technique (name, description) VALUES ('Knivhot mot halsen bakifrån med höger arm, maesabaki, kuzure ude osae, ude hiza osae gatame',''); -- id: 127
-INSERT INTO technique (name, description) VALUES ('Knivhot mot halsen bakifrpn med vänster arm, maesabaki, kuzure ude garami, kote gaeshi, ude hishigi hiza gatame',''); -- id: 128
-INSERT INTO technique (name, description) VALUES ('Två motstådandare, svingslag och svingslag, morote jodan uke, hiza geri, tai guruma, morote jodan uke, hiza geri, tai guruma',''); -- id: 129
+INSERT INTO technique (name, description) VALUES ('Grepp i håret med 2 händer och knästöt, gedan juji uke, waki gatame, ude osae gatame',''); -- id: 112
+INSERT INTO technique (name, description) VALUES ('Stryptag från sidan, harai goshi, ude hishigi hiza gatame',''); -- id: 113
+INSERT INTO technique (name, description) VALUES ('Stryptag bakifrån, jodan chikai uke, sukui nage, ude hishigi hiza gatame',''); -- id: 114
+INSERT INTO technique (name, description) VALUES ('Stryptag med armen med drag, o soto otoshi, ude hishigi hiza gatame',''); -- id: 115
+INSERT INTO technique (name, description) VALUES ('Kravatt grepp framifrån, chudan tski, kote hineri, ude henkan gatame',''); -- id: 116
+INSERT INTO technique (name, description) VALUES ('Kravattgrepp med nedbrytning i sidled, frigöring, ude henkan gatame',''); -- id: 117
+INSERT INTO technique (name, description) VALUES ('Grepp i kläderna med tryck, kote mawashi, ude osae gatame',''); -- id: 118
+INSERT INTO technique (name, description) VALUES ('Flera svingslag mot liggande sittande på magen, jodan chikai uke, frigöring',''); -- id: 119
+INSERT INTO technique (name, description) VALUES ('Hotfullt närmande mot liggande, uppgång framåt, jodan chikai uke, hiza kansetsu waza',''); -- id: 120
+INSERT INTO technique (name, description) VALUES ('hotfullt uppträdande, hara osae, ude henkan gatame',''); -- id: 121
+INSERT INTO technique (name, description) VALUES ('Kort svingslag, jodan chikai uke, uki otoshi, ude henkan gatame',''); -- id: 122
+INSERT INTO technique (name, description) VALUES ('Kort svingslag, jodan chikai uke, ko uchi gari',''); -- id: 123
+INSERT INTO technique (name, description) VALUES ('Rak spark mot magen, gedan uchi uke, irimi nage, ude henkan gatame',''); -- id: 124
+INSERT INTO technique (name, description) VALUES ('Påkslag mot huvudet forehand och backhand, tsuri ashi, ayumi ashi, ju jodan uchi uke, irimi nage, ude hishigi hiza gatame',''); -- id: 125
+INSERT INTO technique (name, description) VALUES ('Påkslag mot huvudet forehand och backhand, tsuri ashi, ayumi ashi, moroto jodan uke, o soto osae, ude hishigi hiza gatame',''); -- id: 126
+INSERT INTO technique (name, description) VALUES ('Grepp och knivhot mot halsen, höger sida, grepp waki gatame, ude hiza osae gatame',''); -- id: 127
+INSERT INTO technique (name, description) VALUES ('Knivhot mot halsen bakifrån med höger arm, maesabaki, kuzure ude osae, ude hiza osae gatame',''); -- id: 128
+INSERT INTO technique (name, description) VALUES ('Knivhot mot halsen bakifrpn med vänster arm, maesabaki, kuzure ude garami, kote gaeshi, ude hishigi hiza gatame',''); -- id: 129
+INSERT INTO technique (name, description) VALUES ('Två motstådandare, svingslag och svingslag, morote jodan uke, hiza geri, tai guruma, morote jodan uke, hiza geri, tai guruma',''); -- id: 130
 -- Renraku waza --
-INSERT INTO technique (name, description) VALUES ('Stryptag bakifrån - o soto otoshi, ude hishigi hiza gatame, valfri jigo waza anpassad efter ukes agerande',''); -- id: 130
-INSERT INTO technique (name, description) VALUES ('Grepp om nacken och en knästöt - Gedan juji uke, frigöring, valfri jogi waza anpassad efter ukes agerande',''); -- id: 131
-INSERT INTO technique (name, description) VALUES ('Livtag över armarna framifrån - o goshi, ude hishigi hiza gatame, valfri jigo waza anpassad efter ukes agerande',''); -- id: 132
+INSERT INTO technique (name, description) VALUES ('Stryptag bakifrån - o soto otoshi, ude hishigi hiza gatame, valfri jigo waza anpassad efter ukes agerande',''); -- id: 131
+INSERT INTO technique (name, description) VALUES ('Grepp om nacken och en knästöt - Gedan juji uke, frigöring, valfri jogi waza anpassad efter ukes agerande',''); -- id: 132
+INSERT INTO technique (name, description) VALUES ('Livtag över armarna framifrån - o goshi, ude hishigi hiza gatame, valfri jigo waza anpassad efter ukes agerande',''); -- id: 133
 -- Randori waza -- 
-INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare',''); -- id: 133
+INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare',''); -- id: 134
 -- Total 133 --
 
 --
@@ -225,8 +225,8 @@ INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (6, 45);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (6, 46);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (6, 47);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (6, 48);
+INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (6, 49);
 -- GREEN BELTS --
-INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (9, 49);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (9, 50);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (9, 51);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (9, 52);
@@ -251,8 +251,8 @@ INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (9, 70);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (9, 71);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (9, 72);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (9, 73);
+INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (9, 74);
 -- BLUE BELT -- 
-INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (12, 74);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (12, 75);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (12, 76);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (12, 77);
@@ -279,8 +279,8 @@ INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (12, 97);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (12, 98);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (12, 99);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (12, 100);
+INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (12, 101);
 -- BROWN BELTS --
-INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 101);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 102);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 103);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 104);
@@ -313,6 +313,7 @@ INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 130);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 131);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 132);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 133);
+INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 134);
 
 --
 -- INSERTS FOR TECHNIQUES TAG
@@ -377,28 +378,29 @@ INSERT INTO technique_tag (tech_id, tag_id) VALUES (42,7), (42,18);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (43,7), (43,18);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (44,7), (44,18);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (45,7), (45,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (46,7), (46,18); -- 
 -- Renraku waza -- 
-INSERT INTO technique_tag (tech_id, tag_id) VALUES (46,7), (46,19);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (47,7), (47,19);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (48,7), (48,19);
 --Yakusoku geiko
-INSERT INTO technique_tag (tech_id, tag_id) VALUES (48,7), (48,95);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (49,7), (49,95);
 
 
 -- GREEN BELT --
 -- Atemi waza --
-INSERT INTO technique_tag (tech_id, tag_id) VALUES (49,4), (49,12);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (50,4), (50,12);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (51,4), (51,12);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (52,4), (52,12);
 -- Kansetsu waza --
-INSERT INTO technique_tag (tech_id, tag_id) VALUES (52,4), (52,13);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (53,4), (53,13);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (54,4), (54,13);
 -- Nage waza --
-INSERT INTO technique_tag (tech_id, tag_id) VALUES (54,4), (54,14);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (55,4), (55,14);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (56,4), (56,14);
 -- Jigo waza --
-INSERT INTO technique_tag (tech_id, tag_id) VALUES (56,4), (56,18);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (57,4), (57,18);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (58,4), (58,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (59,4), (59,18);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (59,4), (59,18);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (60,4), (60,18);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (61,4), (61,18);
