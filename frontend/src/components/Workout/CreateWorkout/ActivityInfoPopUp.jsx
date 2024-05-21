@@ -284,8 +284,8 @@ export default function ActivityInfoPopUp({ isFreeText , backToAddActivity = fal
 				<ActivityList isFreeText={isFreeText} />
 				<Divider id="ListTimeDivider" option="h2_left" title="Tid" />
 				<ActivityTimes />
-				<Divider id="TimesCategoriesDivider" option="h2_left" title="Kategori" />
-				<ActivityCategories />
+				{backToAddActivity? null: <Divider id="TimesCategoriesDivider" option="h2_left" title="Kategori" />}
+				{backToAddActivity? null: <ActivityCategories />}
 			</div>
 			
 			<div className={styles.infoButtons}>

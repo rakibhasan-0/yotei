@@ -73,6 +73,8 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			}
 		}
 
+
+
 		const fetchLoadedData = async() => {
 			const requestOptions = {
 				headers: { "Content-type": "application/json", token: context.token },
@@ -106,15 +108,18 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		fetchLoadedData()
 	}, [])
 
+	useEffect(() => {
+        console.log(doneList);
+    }, [doneList]);
+
 	function setDoneActivities(activities) {
 		setDone(prevDoneList => {
-			const updatedDoneList = [...prevDoneList]
-			for (let i = 0; i < activities.length; i++) {
-				updatedDoneList.push(activities[i]["activity_id"])
-			}
-			return updatedDoneList
+			const newIds = activities.map(activity => activity["activity_id"])
+			const uniqueNewIds = newIds.filter(id => !prevDoneList.includes(id))
+			return [...prevDoneList, ...uniqueNewIds]
 		})
 	}
+
 
 
 
@@ -141,6 +146,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		}
 		console.log(doneList)
 		//console.log("Review id: " + reviewId)
+		console.log(sessionData);
 		if(reviewId < 0) {
 			addReview()
 		} else {
@@ -293,10 +299,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	/**
    * workout state and dispatch which is managed by the reducer.
    */
-	const [workoutCreateInfo, workoutCreateInfoDispatch] = useReducer(
-		workoutCreateReducer,
-		WorkoutCreateInitialState
-	)
+	const [workoutCreateInfo, workoutCreateInfoDispatch] = useReducer(workoutCreateReducer,WorkoutCreateInitialState)
 
 	/**
    * Function to toggle the popup in the added more activities functionality
@@ -338,6 +341,9 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		})
 	}
 
+
+	const [extraActivities, setExtraActivities] = useState([])
+
 	/**
    *
    * That function is responsible for adding the newly added activities to the existing categories
@@ -351,10 +357,13 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		console.log("newlyAddedActivity data: ", data)
 		console.log("newlyAddedActivity category: ", categories)
 
-		// calculate the duration of the data
-		addDurationToSessionData(data)
+		//createNewCategoryWithActivities("ExtraActivities", data)
 
-		categories.forEach((category) => {
+		// calculate the duration of the data
+		//addDurationToSessionData(data)
+		
+
+		/*categories.forEach((category) => {
 			if (category.checked) {
 				let categoryExistence = findExistingCategory(category)
 				console.log("categoriesExistence", categoryExistence)
@@ -365,7 +374,18 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 					createNewCategoryWithActivities(category, data)
 				}
 			}
+		})*/
+
+		const categoryExistence= sessionData.activityCategories.find((element) => {
+			return element.categoryName.toLowerCase() === "ExtraActivities".toLowerCase()
 		})
+
+		if (categoryExistence) {
+			addActivitiesToExistingCategory(categoryExistence, data);
+		} else {
+			createNewCategoryWithActivities("ExtraActivities", data)
+		}
+
 
 		clearActivitiesStorage()
 	}
@@ -435,9 +455,13 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
    * @param activities the activities that are added by the user
    */
 	function createNewCategoryWithActivities(category, activities) {
+		let categoryOrder = sessionData.activityCategories
+		categoryOrder = categoryOrder.length + 1
+		console.log("categoryOrder", categoryOrder)
+
 		const newCategory = {
-			categoryName: category.name,
-			categoryOrder: category.id + 144, // Unique ID logic
+			categoryName: category,
+			categoryOrder: categoryOrder, // Unique ID logic
 			activities: activities.map((activity, index) =>
 				createActivityObject(activity, index)
 			),
@@ -457,9 +481,10 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
    */
 	function createActivityObject(activity, order) {
 		if (activity.techniqueId) {
-			getIdForActivity(activity, order)
+			//getIdForActivity(activity, order)
 			return {
-				id: activity.id + 144, // Unique ID logic
+			 // Unique ID logic
+			 	id: -1,
 				text: "",
 				duration: activity.duration,
 				technique: {
@@ -475,10 +500,10 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 				order: order,
 			}
 		} else {
-			const newId = sessionData.activityCategories.activities
-
+			//getIdForActivity(activity, order)
 			return {
-				id: newId + 144, // Unique ID logic
+	// Unique ID logic
+				id: -1,
 				text: "",
 				duration: activity.duration,
 				exercise: {
@@ -500,7 +525,8 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
    *
    * that function is responsible for getting the id for the activity.
    */
-	function getIdForActivity(activity, order) {
+	async function getIdForActivity(activity, order) {
+
 		const obj = {
 			workoutId: null,
 			exerciseId: activity.exerciseId ? activity.exerciseId : null,
@@ -511,19 +537,24 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			order: order,
 		}
 
-		const respons = fetch("/api/workouts/activities/add", {
-			method: "POST",
-			headers: {
-				"Content-type": "application/json",
-				token: token,
-			},
-			body: JSON.stringify(obj),
-		})
-			.then((response) => response.json())
-			.catch((error) => console.log(error))
+		try {
+			const response = await fetch("/api/workouts/activities/add", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					token: token,
+				},
+				body: JSON.stringify(obj),
+			})
 
-		console.log("respons", respons)
+			const responseData = await response.json()
+			console.log("response", responseData)
+			return responseData
+		} catch (error) {
+			console.error("Error fetching data:", error)
+		}
 	}
+
 
 	function getActivityContainer(sessionData) {
 		//console.log(sessionData)
