@@ -24,7 +24,7 @@ import java.util.Optional;
 /**
  * Main class for handling login information and transactions with the database.
  * @author Team Hot-Pepper (G7), Quattro formaggio (G1), Chimera (G4) c20lln dv21oby, Griffin (G2) c17wfn
- * @author Team Mango (Grupp 4) - 2024-05-16
+ * @author Team Mango (Grupp 4) - 2024-05-17
  */
 @RestController
 @CrossOrigin

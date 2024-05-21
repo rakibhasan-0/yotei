@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author  Phoenix (25-04-2023)
  *          Dragon (16-05-2023)
- *          Team Mango (Grupp 4) - 2024-05-16
+ *          Team Mango (Grupp 4) - 2024-05-17
  */
 @ExtendWith(MockitoExtension.class)
 public class LoginTest {
