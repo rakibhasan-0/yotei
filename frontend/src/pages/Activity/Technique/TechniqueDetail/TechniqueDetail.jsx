@@ -36,9 +36,11 @@ import ActivityDelete from "../../../../components/Activity/ActivityDelete/Activ
  * Version 4.1:
  * 		Fixed navigation from pages outside the website 
  * 
- * @author Team Medusa (Grupp 6) & Cyclops (Group 5) & Tomato (Group 6) & Team Durian (Group 3) (2024-04-23), Team Kiwi (Group 2) (2024-05-03)
+ * @author Team Medusa (Grupp 6) & Cyclops (Group 5) & Tomato (Group 6) & Team Durian (Group 3) (2024-04-23), Team Kiwi (Group 2) (2024-05-03), Team Mango (2024-05-21)
  * @version 4.1
  * @since 2024-04-25
+ * 
+ * @update 2024-05-21: changed check for user premission to edit technique to the new check.
  */
 function TechniqueDetail({ id }) {
 
