@@ -183,8 +183,7 @@ public class SearchController {
     public ResponseEntity<SearchResponse<ActivityListSearchResponse>> searchLists(
             @RequestParam Map<String, String> urlQuery,
             @RequestHeader(value = "token") String token) {
-
-                
+ 
         try {
             jwt = jwtUtil.validateToken(token);
             userIdL = jwt.getClaim("userId").asLong();
