@@ -19,12 +19,16 @@ import { Link } from "react-router-dom"
 import { ChevronDown } from "react-bootstrap-icons"
 import styles from "../../pages/Grading/GradingAfterComp.module.css"
 const UserBoxGrading = ({ id, name }) => {
+	const truncateName = (name) => {
+		return name.length > 16 ? name.substring(0, 16) + "..." : name
+	}
+
 	return (
-		<div style={{ background: "#C9EEC3"}}>
+		<div>
 			<div className={styles["technique-card"]} id={id}>
 				<div className={styles["technique-info-container"]}>
 					<div className={styles["technique-name-container"]}>
-						<h5 className={styles["technique-name"]}>{name}</h5>
+						<h5 className={styles["technique-name"]}>{truncateName(name)}</h5>
 					</div>
 					{/* if the technique object has count attribute then we will not render ChevronDown sign */}
 					<div className={styles["technique-arrow-container"]}>
@@ -34,7 +38,7 @@ const UserBoxGrading = ({ id, name }) => {
 							<ChevronDown />
 						</Link>
 					</div>
-                
+
 				</div>
 			</div>
 		</div>
