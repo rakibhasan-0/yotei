@@ -10,7 +10,7 @@ test.describe('Workout', () => {
 		await expect(page.getByPlaceholder('Sök efter pass')).toBeVisible()
 	})
 
-    test('Workout is created and then deleted', async ({ page }) => {
+    test('Workout is created and then deleted, should display success toast', async ({ page }) => {
 
         // Will generate a random string of 5 characters
 		const name = Math.random().toString(36).slice(2, 7) 
@@ -34,8 +34,15 @@ test.describe('Workout', () => {
             }
         )
 
-        // Asserts the existence of the confirmation message
-		await expect(page.getByText(`Träningspasset skapades!`)).toBeVisible()
+        // Asserts the existence of the confirmation message and that the workout was created correctly.
+        await expect(page.getByRole('alert')).toContainText('Träningspasset skapades!')
+        await expect(page.locator('#root')).toContainText('description description description')
+        await expect(page.locator('#WorkoutActivityList-1')).toContainText('Kamae, neutral (5 Kyu)')
+        await expect(page.locator('#WorkoutActivityList-1')).toContainText('Kamae, beredd (5 Kyu)')
+        await expect(page.locator('#WorkoutActivityList-1')).toContainText('Kamae, gard (5 Kyu)')
+        await expect(page.locator('#WorkoutActivityList-1')).toContainText('Armhävningar')
+        await expect(page.locator('#WorkoutActivityList-1')).toContainText('Armhävningar med bred handposition')
+        await expect(page.locator('#WorkoutActivityList-1')).toContainText('Armhävningar med handklapp')
 
         // Waits for the next page to load
     	await page.waitForSelector('h1')
@@ -44,7 +51,7 @@ test.describe('Workout', () => {
 		await workoutPage.deleteWorkout(name)
 
         // Asserts that the workout was deleted
-    	await page.getByRole('link', { name: `${name}`}).isHidden()
+    	await expect(page.getByRole('link', { name: `${name}`})).toBeHidden()
     })
 
     test('Workout is created, then edited, then deleted', async ({ page }) => {
@@ -71,8 +78,16 @@ test.describe('Workout', () => {
             }
         )
 
-        // Asserts the existence of the confirmation message
-		await expect(page.getByText(`Träningspasset skapades!`)).toBeVisible()
+        // Asserts the existence of the confirmation message and that the workout was created correctly.
+        await expect(page.getByRole('alert')).toContainText('Träningspasset skapades!')
+        await expect(page.locator('#root')).toContainText('description description description')
+        await expect(page.locator('#WorkoutActivityList-1')).toContainText('Kamae, neutral (5 Kyu)')
+        await expect(page.locator('#WorkoutActivityList-1')).toContainText('Kamae, beredd (5 Kyu)')
+        await expect(page.locator('#WorkoutActivityList-1')).toContainText('Kamae, gard (5 Kyu)')
+        await expect(page.locator('#WorkoutActivityList-1')).toContainText('Armhävningar')
+        await expect(page.locator('#WorkoutActivityList-1')).toContainText('Armhävningar med bred handposition')
+        await expect(page.locator('#WorkoutActivityList-1')).toContainText('Armhävningar med handklapp')
+        
     	await page.waitForSelector('h1')
 
         // Edits the page
