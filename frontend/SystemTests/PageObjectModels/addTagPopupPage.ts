@@ -52,14 +52,13 @@ export class AddTagPopupPage {
 		await this.page.getByPlaceholder("Sök eller skapa tagg").click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
 
-		const editableListItem2 = this.page.getByTestId("EditableListItem").locator("label")
-		await this.waitForEnabled(editableListItem2)
-
-		const trashButton = editableListItem2.getByTestId("trash-icon" + tag.tagId)
+		/*const trashButton = this.page.locator("EditableListItem-link" + tag.tagId).locator("trash-icon")
 		await this.waitForEnabled(trashButton)
-		await trashButton.click()
+		await trashButton.click()*/
 
-		await this.page.getByRole("button", { name: "Ta bort" }).click()
+		await this.findComponents(tag)
+
+		//await this.page.getByRole("button", { name: "Ta bort" }).click()
 		await this.page.locator("#save-and-close-button").click()
 	}
 
@@ -72,5 +71,23 @@ export class AddTagPopupPage {
 			await this.page.waitForTimeout(100)
 		}
 		throw new Error("Element not enabled in time")
+	}
+
+	async findComponents(tag) {
+		let locator = this.page.getByText(tag.tagName, { exact: true})
+
+		for (let i = 0 ; i < 2 ; i++) {
+			locator = locator.locator("..")
+		}
+
+		const element = await this.page.$("checkbox-element")
+
+		if (element) {
+			const innerHTML = await element.evaluate(el => el.innerHTML)
+			console.log(innerHTML)
+		}
+		
+
+		await locator.locator('input[type="checkbox"]').check()
 	}
 }

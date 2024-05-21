@@ -81,12 +81,12 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 		<div className={styles["editable-container"]} id={id}>
 			<div className={styles["editable-list-container"]} data-testid="EditableListItem">
 				<div className={styles["editable-list-header"]} style={{ backgroundColor: index % 2 === 0 ? "var(--red-secondary)" : "var(--background)" }}>
-					<div data-testid={"EditableListItem-link" + id} style={{ width: "100%" }}>
+					<div data-testid="EditableListItem-link" style={{ width: "100%" }}>
 						<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
 							{showCheckbox && <CheckBox
 								onClick={(checked) => onCheck(checked, id)}
 								checked={checked}
-								id={"checkbox-element" + id}
+								id="checkbox-element"
 							/>}
 							<div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flex: 1 }}>
 								{isEditing ? (
@@ -119,18 +119,18 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 												onClick={handleEditAbort}
 												size="24px"
 												style={{ color: "var(--red-primary)" }}
-												id={"close-icon" + id}
+												id="close-icon"
 											/>
 										</>
 										: 
 										<>
-											<Pencil onClick={handleEdit} size="24px" style={{ color: "var(--red-primary)", cursor: "pointer", marginRight: "10px" }} id={"pencil-icon" + id}/>
+											<Pencil onClick={handleEdit} size="24px" style={{ color: "var(--red-primary)", cursor: "pointer", marginRight: "10px" }} id="pencil-icon"/>
 											<Trash
 												className={styles["close-icon"]}
 												onClick={() => onRemove(id, grayTrash)}
 												size="24px"
 												style={grayTrash ? {color: "var(--gray)"} : { color: "var(--red-primary)" } }
-												id={"trash-icon" + id}
+												id="trash-icon"
 											/>
 										</>
 									}
