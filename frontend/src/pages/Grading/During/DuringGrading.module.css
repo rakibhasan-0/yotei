@@ -12,10 +12,10 @@
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 10px;
-    
+    flex: 1;
+    padding-bottom: 23%;
     /* For Firefox /
     scrollbar-width: none;
-
     / For Chrome, Safari, and Opera */
     &::-webkit-scrollbar {
         display: none;
@@ -26,7 +26,6 @@
 .container {
     display: flex;
     flex-direction: column;
-    /*height: 100vh;*/  
 }
 
 .popupContent {
@@ -52,19 +51,16 @@
 /* Define styles for the bottom row container */
 .bottomRowContainer {
     display: flex; /* Use flexbox to create a row layout */
-    
     padding: 3px; /* Add padding for spacing */
     background-color: #fff; /* Optional: Add a background color */
     border-top: 1px solid #ddd; /* Optional: Add a border at the top */
-    flex: 0 0 auto; 
     position: fixed;
     bottom:0;
     width: 100%;
     justify-content: center; /* Center items horizontally within the container */
     align-items: center; /* Center items vertically within the container */
     left: 0;
-    
-
+    flex: 1;
 }
   
 .btnNextActivity,
