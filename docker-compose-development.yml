@@ -1,9 +1,9 @@
 services:
   nginx:
+    image: pvt2024/nginx-dev:latest
     build:
       context: ./
       dockerfile: ./nginx/development/Dockerfile
-
     restart: always
     ports:
       - 80:80
