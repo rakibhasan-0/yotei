@@ -117,14 +117,6 @@ export default function GradingBefore() {
 	}
 
 	/**
-	 * Help function to activate the useEffect function to start the navigation
-	 * to the next step in the grading process
-	 */
-	function startRedirection() {
-		setRedirect(true)
-	}
-
-	/**
 	 * Validets so the name of tag is not containing any illegal characters 
 	 * or if the name is empty or if the name of the tag already exists. 
 	 * @param {String} name The name of the tag to be validated. 
