@@ -21,4 +21,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
     Optional<User> findUserByUsernameIgnoreCase(String username);
 
     List<UserShort> findAllProjectedBy();
+
+    boolean existsByRoleId(Long roleId); 
 }
