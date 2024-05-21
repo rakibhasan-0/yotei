@@ -481,9 +481,11 @@ function AddActivity({ id, setShowActivityInfo }) {
 
 		getLists(args, token, map, mapActions, (result) => {
 			if (result.error) return
-
+			
 			// Extract the 'id' and 'name' fields from each item in the result used in displaying the list.
+			
 			const lists = result.map(item => ({
+
 				id: item.id,
 				name: item.name,
 				author: {
@@ -491,9 +493,10 @@ function AddActivity({ id, setShowActivityInfo }) {
 					username: item.author.username
 				},
 				hidden: item.hidden,
+				date: item.date,
 				isShared: item.is_shared
 			}))
-
+			
 			setLists(lists.sort(sortLists.cmp))
 			setFetchedLists(true)
 		})
