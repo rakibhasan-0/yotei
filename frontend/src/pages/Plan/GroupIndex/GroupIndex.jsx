@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from "react"
-import { isEditor } from "../../../utils"
 import { setError as setErrorToast, canCreateGroups, canEditGroups } from "../../../utils"
 import { AccountContext } from "../../../context"
 import style from "./GroupIndex.module.css"
@@ -23,7 +22,7 @@ export default function GroupIndex() {
 	const [groups, setGroups] = useState([])
 	const [searchText, setSearchText] = useState()
 	const context = useContext(AccountContext)
-	const { token, userId } = context
+	const { token } = context
 	const [loading, setLoading] = useState(true)
 	const [groupsEmpty, setGroupsEmpty] = useState(true) //Boolean to check if there are no groups.
 
@@ -108,11 +107,11 @@ export default function GroupIndex() {
 					
 					{
 
-					(canCreateGroups(context)) ?
-						<RoundButton linkTo={"/plan/create"}>
-							<Plus className="plus-icon" />
-						</RoundButton>
-						: <></>
+						(canCreateGroups(context)) ?
+							<RoundButton linkTo={"/plan/create"}>
+								<Plus className="plus-icon" />
+							</RoundButton>
+							: <></>
 					}
 
 				</div>
