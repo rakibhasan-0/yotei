@@ -47,7 +47,7 @@ export default function Profile() {
 	const [map, mapActions] = useMap()
 
 	//TODO feature toggle
-	const [isListsEnabled] = useState(true)
+	const [isListsEnabled] = useState(false)
 
 	const workout = {
 		id: -1,
@@ -230,7 +230,7 @@ export default function Profile() {
 	}
 
 	return (
-		<Tabs defaultActiveKey={"MyLists"} className={style.tabs}>
+		<Tabs defaultActiveKey={"MyWorkouts"} className={style.tabs}>
 			{isListsEnabled && (
 				<Tab eventKey={"MyLists"} title={"Mina listor"} className={style.tab}>
 					<SearchBar
