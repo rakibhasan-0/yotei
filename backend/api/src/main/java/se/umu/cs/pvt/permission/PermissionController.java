@@ -54,7 +54,7 @@ public class PermissionController {
      * @return The permission or an error message.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Permission> updatePermissionFromId(@PathVariable Long id, @RequestBody Permission updatedPermission) {
+    public ResponseEntity<Permission> updatePermissionFromId(@PathVariable ("id") Long id, @RequestBody Permission updatedPermission) {
         Optional<Permission> permission = repository.findById(id);
         if (!permission.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -74,7 +74,7 @@ public class PermissionController {
      * @return A single permission or an error message
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Permission> getPermissionFromId(@PathVariable Long id) {
+    public ResponseEntity<Permission> getPermissionFromId(@PathVariable ("id") Long id) {
         Optional<Permission> permission = repository.findById(id);
         if (permission.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
