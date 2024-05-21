@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 /**
  * Main class for handling login information and transactions with the database.
- * @author Team Mango (2024-05-20)
+ * @author Team Mango (2024-05-21)
  */
 @RestController
 @CrossOrigin
