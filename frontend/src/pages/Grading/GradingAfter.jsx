@@ -4,7 +4,7 @@ import { AccountContext } from "../../context"
 import UserBoxGrading from "../../components/Grading/UserBoxGrading"
 import Button from "../../components/Common/Button/Button"
 import styles from "./GradingBefore.module.css"
-import { Printer } from "react-bootstrap-icons"
+import { Download } from "react-bootstrap-icons"
 import { useParams } from "react-router-dom"
 
 /**
@@ -25,10 +25,6 @@ export default function GradingAfter() {
 	const [beltInfo, setBeltInfo] = useState({
 		belt_name: "",
 		color: "" 
-	})
-	const [ setExamineeResult] = useState({
-		num_techniques: 0,
-		num_techniques_passed: 0
 	})
 	/**
 	 * Function to update the date of the grading.
@@ -84,30 +80,56 @@ export default function GradingAfter() {
 	}
 
 	/**
-	 * Function to fetch the belts from the backend.
-	 * @returns {Promise} The belt data.
-	 * @since 2024-05-15
-	 */
-	const fetchExamineeResult = () => {
-		return fetch(`/api/examination/grading/${gradingId}`, {
-			method: "GET",
-			headers: { "token": token }
-		}).then(response => {
-			if(!response.ok){
-				throw new Error("Network response was not ok")
-			}
-			return response.json()
-		})
-	}
-
-	/**
 	 * Function to download the grading as a pdf.
 	 */
-	const downloadPdf  =   () => {
-		// fetch(`api/export/grading/${gradingId}`, {
-		//     method: "GET",
-		//     headers: { "Authorization": `Bearer ${token}` }  // Assuming the token is a bearer token
-		// })
+	const fetchPdf = async () => {
+		try {
+			const response = await fetch(`/api/examination/exportpdf/${gradingId}`, {
+				method: "GET",
+				headers: { "token": token }  // Assume token is a bearer token
+			})
+	
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`)
+			}
+	
+			// Assuming the server sends the base64 string directly as a response text
+			const base64String = await response.text() // Read the response as text
+			const byteCharacters = atob(base64String) // Decode base64 string
+			const byteNumbers = new Array(byteCharacters.length)
+			for (let i = 0; i < byteCharacters.length; i++) {
+				byteNumbers[i] = byteCharacters.charCodeAt(i)
+			}
+			const byteArray = new Uint8Array(byteNumbers)
+			const blob = new Blob([byteArray], {type: "application/pdf"})
+
+			console.log("Blob created from base64 string:", blob)
+			return blob // This is the correct blob to use for downloads or viewing
+		} catch (error) {
+			console.error("Error fetching PDF:", error)
+			return null  // Return null or handle the error appropriately in your app
+		}
+	}
+	
+	
+	const downloadPdf = async () => {
+		const pdfBlob = await fetchPdf()
+		if (pdfBlob) {
+			const url = window.URL.createObjectURL(pdfBlob)
+			console.log("URL created:", url)
+			const link = document.createElement("a")
+			link.href = url
+			link.setAttribute("download", "filename.pdf")
+			document.body.appendChild(link)
+			link.click()
+			setTimeout(() => { // Delay the revocation a bit to ensure it downloads
+				window.URL.revokeObjectURL(url)
+				link.remove()
+			}, 100)
+			window.URL.revokeObjectURL(url)
+			link.remove()
+			
+		}
 	}
 
 	/**
@@ -135,10 +157,9 @@ export default function GradingAfter() {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const [grading_data, belt_data,result_data] = await Promise.all([
+				const [grading_data, belt_data] = await Promise.all([
 					fetchGrading(),
 					fetchBelts(),
-					fetchExamineeResult()
 				])
 				setGrading(grading_data)
 				const matchingBelt = belt_data.find(belt => belt.id === grading_data.beltId)
@@ -148,11 +169,6 @@ export default function GradingAfter() {
 						color: "#" + matchingBelt.color
 					})
 				}
-				setExamineeResult({
-					examineeId: result_data.examineed,
-					name: result_data.name,
-					result: result_data.result
-				})
 		
 			} catch (error) {
 				console.error("There was a problem with the fetch operation:", error)
@@ -196,7 +212,7 @@ export default function GradingAfter() {
 							width={"60px"}
 							onClick={downloadPdf}
 						>
-							<Printer size={30} color="white" />
+							<Download size={30} color="white" />
 						</Button>
 					</div>
     
