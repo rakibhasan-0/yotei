@@ -310,3 +310,183 @@ INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 129);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 130);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 131);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 132);
+
+--
+-- INSERTS FOR TECHNIQUES TAG
+--
+
+-- YELLOW BELTS --
+-- Atemi Waza --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (1,6), (1,12); 
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (2,6), (2,12);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (3,6), (3,12);
+-- Kansetsu waza --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (4,6), (4,13);
+-- Nage waza --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (5,6), (5,14);
+-- Jigo waza -- 
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (6,6), (6,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (7,6), (7,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (8,6), (8,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (9,6), (9,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (10,6), (10,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (11,6), (11,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (12,6), (12,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (13,6), (13,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (14,6), (14,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (15,6), (15,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (16,6), (16,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (17,6), (17,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (18,6), (18,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (19,6), (19,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (20,6), (20,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (21,6), (21,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (22,6), (22,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (23,6), (23,18);
+-- Renraku waza --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (24,6), (24,19);
+-- Yakusoku geiko --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (25,6), (25,95);
+
+
+-- ORANGE BELT --
+-- Atemi waza --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (26,7), (26,12);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (27,7), (27,12);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (28,7), (28,12);
+-- Kansetsu waza --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (29,7), (29,13);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (30,7), (30,13);
+-- Nage waza --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (31,7), (31,14);
+-- Jigo waza --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (32,7), (32,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (33,7), (33,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (34,7), (34,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (35,7), (35,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (36,7), (36,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (37,7), (37,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (38,7), (38,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (39,7), (39,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (40,7), (40,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (41,7), (41,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (42,7), (42,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (43,7), (43,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (44,7), (44,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (45,7), (45,18);
+-- Renraku waza -- 
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (46,7), (46,19);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (47,7), (47,19);
+--Yakusoku geiko
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (48,7), (48,95);
+
+
+-- GREEN BELT --
+-- Atemi waza --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (49,4), (49,12);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (50,4), (50,12);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (51,4), (51,12);
+-- Kansetsu waza --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (52,4), (52,13);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (53,4), (53,13);
+-- Nage waza --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (54,4), (54,14);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (55,4), (55,14);
+-- Jigo waza --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (56,4), (56,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (57,4), (57,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (58,4), (58,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (59,4), (59,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (60,4), (60,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (61,4), (61,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (62,4), (62,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (63,4), (63,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (64,4), (64,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (65,4), (65,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (66,4), (66,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (67,4), (67,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (68,4), (68,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (69,4), (69,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (70,4), (70,18);
+-- Renraku waza --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (71,4), (71,19);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (72,4), (72,19);
+-- Yakusoku geiko --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (73,4), (73,95);
+
+
+-- BLUE BELT --
+-- Atemi waza --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (74,5), (74,12);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (75,5), (75,12);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (76,5), (76,12);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (77,5), (77,12);
+-- Kansetsu waza --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (78,5), (78,13);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (79,5), (79,13);
+-- Nage waza --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (80,5), (80,14);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (81,5), (81,14);
+-- Jigo waza --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (82,5), (82,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (83,5), (83,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (84,5), (84,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (85,5), (85,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (86,5), (86,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (87,5), (87,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (88,5), (88,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (89,5), (89,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (90,5), (90,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (91,5), (91,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (92,5), (92,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (93,5), (93,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (94,5), (94,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (95,5), (95,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (96,5), (96,18);
+-- Renraku waza --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (97,5), (97,19);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (98,5), (98,19);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (99,5), (99,19);
+-- Randori --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (100,5), (100,17);
+
+
+-- BROWN BELT --
+-- Atemi waza --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (101,3), (101,12);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (102,3), (102,12);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (103,3), (103,12);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (104,3), (104,12);
+-- Kansetsu waza --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (105,3), (105,13);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (106,3), (106,13);
+-- Nage waza --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (107,3), (107,14);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (108,3), (108,14);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (109,3), (109,14);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (110,3), (110,14);
+-- Jigo waza --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (111,3), (111,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (112,3), (112,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (113,3), (113,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (114,3), (114,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (115,3), (115,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (116,3), (116,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (117,3), (117,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (118,3), (118,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (119,3), (119,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (120,3), (120,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (121,3), (121,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (122,3), (122,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (123,3), (123,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (124,3), (124,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (125,3), (125,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (126,3), (126,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (127,3), (127,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (128,3), (128,18);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (129,3), (129,18);
+-- Renraku waza --
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (130,3), (130,19);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (131,3), (131,19);
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (132,3), (132,19);
+-- Randori waza --

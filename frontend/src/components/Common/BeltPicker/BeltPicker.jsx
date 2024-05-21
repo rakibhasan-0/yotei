@@ -28,18 +28,15 @@ import React from "react"
  */
 
 const BeltRow = ({ belt, states, onToggle }) => {
-	console.log
 	const name = belt[0].name
 	const child = belt.find(b => b.child)
-	const adult = belt.find(b => !b.child)
+	const adult = belt.find(b => !(b.child || b.inverted))
 	const inverted = belt.find(b =>b.inverted)
 
 	const [childState, setChildState] = useState(false)
 	const [adultState, setAdultState] = useState(false)
 	const [invertedState,setInvertedState] = useState (false)
-	//console.log(name)
-	//console.log(child)
-	//console.log(inverted)
+	
 
 	useEffect(() => {
 		setChildState(states?.some(b => b.id === child?.id))
