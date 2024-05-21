@@ -137,15 +137,15 @@ run-systests:
   tags:
     - systest
   script:
-    - docker compose down -v || true
-    - docker compose up psql api gateway --build -d
+    - docker compose -p yotei down -v || true
+    - docker compose -p yotei up psql api gateway --build -d
     - cd frontend/
     - npm install
     - npx playwright install
     - npm ci
     - npm run systest:ci
     - cd ..
-    - docker compose down -v || true
+    - docker compose -p yotei down -v || true
       
 generate-api-docs:
   stage: docs
@@ -192,7 +192,7 @@ undeploy-test-server:
   before_script:
     - docker login --username pvt2024 --password $DOCKER_PASS # DOCKER_PASS defined in GitLab CI/CD settings as a secure variable.
   script:
-    - docker compose -f docker-compose.yml -f docker-compose-feature.yml down -v || true
+    - docker compose -p html -f docker-compose.yml -f docker-compose-feature.yml down -v || true
 
 deploy-test-server:
   stage: deploy_test_server
@@ -208,8 +208,8 @@ deploy-test-server:
   script:
     - docker system prune -a -f
 
-    - docker compose -f docker-compose.yml -f docker-compose-feature.yml build
-    - docker compose -f docker-compose.yml -f docker-compose-feature.yml push
+    - docker compose -p html -f docker-compose.yml -f docker-compose-feature.yml build
+    - docker compose -p html -f docker-compose.yml -f docker-compose-feature.yml push
 
     - rm -rf /var/www/html/nginx
     - rm -rf /var/www/html/*.yml
@@ -219,7 +219,7 @@ deploy-test-server:
     - cp -r ./nginx /var/www/html/
 
     - cd /var/www/html/
-    - docker compose -f docker-compose.yml -f docker-compose-feature.yml up -d --pull always
+    - docker compose -p html -f docker-compose.yml -f docker-compose-feature.yml up -d --pull always
     
 deploy-prod-server:
   stage: deploy_prod_server
