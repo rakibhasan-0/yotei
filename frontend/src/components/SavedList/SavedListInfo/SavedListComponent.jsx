@@ -1,3 +1,7 @@
+import SavedActivityListItem from "./SavedListItemComponent.jsx"
+import styles from "./SavedListComponent.module.css"
+import { useState } from "react"
+
 /**
  * A container component for ActivityList items. Each item represents a row in the list.
  *
@@ -7,10 +11,6 @@
  * @since 2024-05-06
  * @updated 2024-05-20
  */
-import SavedActivityListItem from "./SavedListItemComponent.jsx"
-import styles from "./SavedListComponent.module.css"
-import { useState } from "react"
-
 export default function SavedActivityList({ activities, listCreateInfoDispatchProp = null }) {
 	//Commented due to linter
 	//const context = useContext(AccountContext)
@@ -41,9 +41,9 @@ export default function SavedActivityList({ activities, listCreateInfoDispatchPr
 					activities.map((activity, index) => (
 						<SavedActivityListItem
 							//Id är inte unikt
-							key={activity.id}
-							activity={activity}
 							index={index}
+							key={index}
+							activity={activity}
 							listCreateInfoDispatchProp={listCreateInfoDispatchProp}
 						/>
 					))}

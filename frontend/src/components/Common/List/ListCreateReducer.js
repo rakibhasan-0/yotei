@@ -114,277 +114,276 @@ export function checkIfChangesMade(info) {
 export function listCreateReducer(state, action) {
 	const tempState = { ...state }
 	switch (action.type) {
-		case "SET_INITIAL_STATE":
-			return JSON.parse(JSON.stringify(ListCreateInitialState))
-		case "INIT_WITH_DATA":
-			return action.payload
-		case "INIT_EDIT_DATA": {
-			const listData = action.payload.listData
-			const users = listData.users.map((user) => {
-				return {
-					userId: user.id,
-					username: user.username,
-				}
-			})
-
-			// Prepare data object
-			const data = {
-				id: listData.id,
-				name: listData.name,
-				desc: listData.desc,
-				hidden: listData.hidden, // === "Private",
-				author: listData.author, //.author_id,
-				date: listData.date.split("T")[0],
-				users: users,
-				activities: listData.activities,
+	case "SET_INITIAL_STATE":
+		return JSON.parse(JSON.stringify(ListCreateInitialState))
+	case "INIT_WITH_DATA":
+		return action.payload
+	case "INIT_EDIT_DATA": {
+		const listData = action.payload.listData
+		const users = listData.users.map((user) => {
+			return {
+				userId: user.id,
+				username: user.username,
 			}
-			const listCreateInfo = {
-				popupState: listData.popUpState,
-				numActivities: listData.size,
-				data: data,
-				originalData: data,
-			}
-			tempState.data = JSON.parse(JSON.stringify(listCreateInfo.data))
-			tempState.originalData = JSON.parse(JSON.stringify(listCreateInfo.data))
+		})
 
-			return tempState
+		// Prepare data object
+		const data = {
+			id: listData.id,
+			name: listData.name,
+			desc: listData.desc,
+			hidden: listData.hidden, // === "Private",
+			author: listData.author, //.author_id,
+			date: listData.date.split("T")[0],
+			users: users,
+			activities: listData.activities,
 		}
-		case "REMOVE_FROM_LIST":
-			/*console.log("Hewwo! :3")
+		const listCreateInfo = {
+			popupState: listData.popUpState,
+			numActivities: listData.size,
+			data: data,
+			originalData: data,
+		}
+		tempState.data = JSON.parse(JSON.stringify(listCreateInfo.data))
+		tempState.originalData = JSON.parse(JSON.stringify(listCreateInfo.data))
+
+		return tempState
+	}
+	case "REMOVE_FROM_LIST":
+		/*console.log("Hewwo! :3")
 		return tempState.data.filter(function (el) {
 			return el.id != activity.id
 		})*/
-			break
-		case "RESET":
-			return JSON.parse(JSON.stringify(ListCreateInitialState))
-		case "SET_NAME":
-			tempState.data.name = action.name
-			return tempState
-		case "SET_DESCRIPTION":
-			tempState.data.desc = action.desc
-			return tempState
-		case "SET_IS_PRIVATE":
-			tempState.data.hidden = action.hidden
-			return tempState
-		case "SET_USERS":
-			tempState.data.users = action.users
-			return tempState
-		case "REMOVE_ACTIVITY": {
-			const id = action.payload.id
-			tempState.addedActivities = tempState.addedActivities.filter((activity) => activity.id !== id)
-			return tempState
-		}
-		case "REMOVE_ACTIVITY_ITEM": {
-			const id = action.payload.id
-			// Remove the activity with the given ID from the list
-			tempState.data.activities = tempState.data.activities.filter((activity) => {
-				if (activity.exercise && activity.exercise.id === id) {
-					return false // Exclude this activity from the list
-				}
-				if (activity.technique && activity.technique.id === id) {
-					return false // Exclude this activity from the list
-				}
-				if (activity.id === id) {
-					return false // Exclude this activity from the list (*** KOLLA PÅ DENNA)
-				}
-				return true // Include other activities in the list
-			})
-			// Update the numActivities count
-			tempState.numActivities = tempState.data.activities.length
-			return tempState
-		}
-		case "SET_ACTIVITY_ITEMS":
-			tempState.data.activityItems = action.activityItems.filter((item) => item.activities.length > 0)
-			return tempState
-		case "SET_ACTIVITIES": {
-			tempState.data.activityItems[action.id].activities = action.activities
-			return tempState
-		}
-		case "SET_ACTIVITIES_WITH_PARSING": {
-			const results = action.payload.result
-			tempState.addedActivities = results.map((result) => {
-				console.log(result)
-				return {
-					type: result.type,
-					id: result.id,
-					name: Object.prototype.hasOwnProperty.call(result, "name") ? result.name : "",
-					duration: Object.prototype.hasOwnProperty.call(result, "duration") ? result.duration : 0,
-				}
-			})
-			return tempState
-		}
-		case "CLOSE_POPUP":
-			tempState.popupState.types.activityPopup = false
-			tempState.popupState.types.chooseActivityPopup = false
-			tempState.popupState.types.editActivityPopup = false
-			tempState.popupState.isOpened = false
-			tempState.checkedActivities = []
-			return tempState
-		case "CLOSE_ACIVITY_POPUP":
-			tempState.popupState.types.activityPopup = false
-			tempState.popupState.types.chooseActivityPopup = true
-			tempState.popupState.types.editActivityPopup = false
-			tempState.popupState.isOpened = true
-			return tempState
-		case "OPEN_FREE_TEXT_POPUP":
-			tempState.addedCategories[0].checked = true
-			tempState.popupState.types.activityPopup = false
-			tempState.popupState.types.chooseActivityPopup = false
-			tempState.popupState.types.editActivityPopup = false
-			tempState.popupState.isOpened = true
-
-			return tempState
-		case "OPEN_ACTIVITY_POPUP":
-			tempState.popupState.types.activityPopup = true
-			tempState.popupState.types.chooseActivityPopup = false
-			tempState.popupState.types.editActivityPopup = false
-			tempState.popupState.isOpened = true
-
-			return tempState
-		case "OPEN_CHOOSE_ACTIVITY_POPUP":
-			tempState.popupState.types.activityPopup = false
-			tempState.popupState.types.chooseActivityPopup = true
-			tempState.popupState.types.editActivityPopup = false
-			tempState.popupState.isOpened = true
-			return tempState
-		case "OPEN_EDIT_ACTIVITY_POPUP":
-			tempState.popupState.types.activityPopup = false
-			tempState.popupState.types.chooseActivityPopup = false
-			tempState.popupState.types.editActivityPopup = true
-			tempState.popupState.isOpened = true
-			return tempState
-		case "SET_CURRENTLY_EDITING": {
-			const activityId = action.payload.id
-			tempState.popupState.currentlyEditing.id = activityId
-
-			let activity = null
-
-			tempState.data.activityItems.forEach((item) => {
-				item.activities.forEach((act) => {
-					if (act.id === activityId) activity = act
-				})
-			})
-
-			if (activity === null) return tempState
-
-			tempState.popupState.currentlyEditing = {
-				id: activityId,
-				data: { ...activity },
+		break
+	case "RESET":
+		return JSON.parse(JSON.stringify(ListCreateInitialState))
+	case "SET_NAME":
+		tempState.data.name = action.name
+		return tempState
+	case "SET_DESCRIPTION":
+		tempState.data.desc = action.desc
+		return tempState
+	case "SET_IS_PRIVATE":
+		tempState.data.hidden = action.hidden
+		return tempState
+	case "SET_USERS":
+		tempState.data.users = action.users
+		return tempState
+	case "REMOVE_ACTIVITY": {
+		const id = action.payload.id
+		tempState.addedActivities = tempState.addedActivities.filter((activity) => activity.id !== id)
+		return tempState
+	}
+	case "REMOVE_ACTIVITY_ITEM": {
+		const id = action.payload.id
+		// Remove the activity with the given ID from the list
+		tempState.data.activities = tempState.data.activities.filter((activity) => {
+			if (activity.exercise && activity.exercise.id === id) {
+				return false // Exclude this activity from the list
 			}
+			if (activity.technique && activity.technique.id === id) {
+				return false // Exclude this activity from the list
+			}
+			if (activity.id === id) {
+				return false // Exclude this activity from the list (*** KOLLA PÅ DENNA)
+			}
+			return true // Include other activities in the list
+		})
+		// Update the numActivities count
+		tempState.numActivities = tempState.data.activities.length
+		return tempState
+	}
+	case "SET_ACTIVITY_ITEMS":
+		tempState.data.activityItems = action.activityItems.filter((item) => item.activities.length > 0)
+		return tempState
+	case "SET_ACTIVITIES": {
+		tempState.data.activityItems[action.id].activities = action.activities
+		return tempState
+	}
+	case "SET_ACTIVITIES_WITH_PARSING": {
+		const results = action.payload.result
+		tempState.addedActivities = results.map((result) => {
+			return {
+				type: result.type,
+				id: result.id,
+				name: Object.prototype.hasOwnProperty.call(result, "name") ? result.name : "",
+				duration: Object.prototype.hasOwnProperty.call(result, "duration") ? result.duration : 0,
+			}
+		})
+		return tempState
+	}
+	case "CLOSE_POPUP":
+		tempState.popupState.types.activityPopup = false
+		tempState.popupState.types.chooseActivityPopup = false
+		tempState.popupState.types.editActivityPopup = false
+		tempState.popupState.isOpened = false
+		tempState.checkedActivities = []
+		return tempState
+	case "CLOSE_ACIVITY_POPUP":
+		tempState.popupState.types.activityPopup = false
+		tempState.popupState.types.chooseActivityPopup = true
+		tempState.popupState.types.editActivityPopup = false
+		tempState.popupState.isOpened = true
+		return tempState
+	case "OPEN_FREE_TEXT_POPUP":
+		tempState.addedCategories[0].checked = true
+		tempState.popupState.types.activityPopup = false
+		tempState.popupState.types.chooseActivityPopup = false
+		tempState.popupState.types.editActivityPopup = false
+		tempState.popupState.isOpened = true
 
-			return tempState
-		}
-		case "ADD_ACTIVITY": {
-			const name = action.payload.name
-			const id = tempState.numActivities++
-			tempState.addedActivities.push({ id, duration: 0, name })
-			return tempState
-		}
-		case "UPDATE_ACTIVITY_TIME": {
-			const index = action.payload.index
-			const time = action.payload.time
-			tempState.addedActivities[index].duration = Number.parseInt(time)
-			return tempState
-		}
-		case "UPDATE_ACTIVITY": {
-			const newActivity = action.payload.activity
-			let changedCategory = true
-			let categoryId
-			let removIds = []
+		return tempState
+	case "OPEN_ACTIVITY_POPUP":
+		tempState.popupState.types.activityPopup = true
+		tempState.popupState.types.chooseActivityPopup = false
+		tempState.popupState.types.editActivityPopup = false
+		tempState.popupState.isOpened = true
 
-			tempState.data.activityItems.forEach((category, categoryIndex) => {
-				category.activities.forEach((activity, index) => {
-					if (activity.id === newActivity.id) {
-						if (category.id === categoryId) {
-							changedCategory = false
-							category.activities[index] = newActivity
-						} else {
-							category.activities.splice(index, 1)
-							if (tempState.data.activityItems[categoryIndex].activities.length === 0) {
-								removIds.push(categoryIndex)
-							}
+		return tempState
+	case "OPEN_CHOOSE_ACTIVITY_POPUP":
+		tempState.popupState.types.activityPopup = false
+		tempState.popupState.types.chooseActivityPopup = true
+		tempState.popupState.types.editActivityPopup = false
+		tempState.popupState.isOpened = true
+		return tempState
+	case "OPEN_EDIT_ACTIVITY_POPUP":
+		tempState.popupState.types.activityPopup = false
+		tempState.popupState.types.chooseActivityPopup = false
+		tempState.popupState.types.editActivityPopup = true
+		tempState.popupState.isOpened = true
+		return tempState
+	case "SET_CURRENTLY_EDITING": {
+		const activityId = action.payload.id
+		tempState.popupState.currentlyEditing.id = activityId
+
+		let activity = null
+
+		tempState.data.activityItems.forEach((item) => {
+			item.activities.forEach((act) => {
+				if (act.id === activityId) activity = act
+			})
+		})
+
+		if (activity === null) return tempState
+
+		tempState.popupState.currentlyEditing = {
+			id: activityId,
+			data: { ...activity },
+		}
+
+		return tempState
+	}
+	case "ADD_ACTIVITY": {
+		const name = action.payload.name
+		const id = tempState.numActivities++
+		tempState.addedActivities.push({ id, duration: 0, name })
+		return tempState
+	}
+	case "UPDATE_ACTIVITY_TIME": {
+		const index = action.payload.index
+		const time = action.payload.time
+		tempState.addedActivities[index].duration = Number.parseInt(time)
+		return tempState
+	}
+	case "UPDATE_ACTIVITY": {
+		const newActivity = action.payload.activity
+		let changedCategory = true
+		let categoryId
+		let removIds = []
+
+		tempState.data.activityItems.forEach((category, categoryIndex) => {
+			category.activities.forEach((activity, index) => {
+				if (activity.id === newActivity.id) {
+					if (category.id === categoryId) {
+						changedCategory = false
+						category.activities[index] = newActivity
+					} else {
+						category.activities.splice(index, 1)
+						if (tempState.data.activityItems[categoryIndex].activities.length === 0) {
+							removIds.push(categoryIndex)
 						}
 					}
-				})
-
-				if (changedCategory && category.id === categoryId) {
-					tempState.data.activityItems[categoryIndex].activities.push(newActivity)
 				}
 			})
 
-			removIds.forEach((number) => {
-				tempState.data.activityItems.splice(number, 1)
-			})
-			return tempState
-		}
-
-		case "UPDATE_ACTIVITY_NAME":
-			tempState.addedActivities[action.payload.index].name = action.payload.name
-			return tempState
-		case "CREATE_ACTIVITY_ITEMS": {
-			if (state.addedActivities.length === 0) return tempState
-			let counter = -1
-			let activities = tempState.addedActivities.map((activity) => {
-				counter++
-				console.log("Activity(" + counter + "):")
-				console.log(activity)
-				return {
-					id: activity.id, //activity.id,
-					//activityId: activity.id,
-					name: activity.name,
-					duration: activity.duration,
-					type: activity.type,
-				}
-			})
-
-			let i = 0
-			activities.forEach((activity) => {
-				console.log("Activity " + i + ":")
-				console.log(activity)
-				i++
-				tempState.data.activities.push(activity)
-			})
-
-			tempState.addedActivities = []
-			return tempState
-		}
-		case "CLEAR_ADDED_ACTIVITIES":
-			tempState.addedActivities = []
-			return tempState
-		case "SET_CHECKED_ACTIVITIES":
-			tempState.checkedActivities = action.payload
-			return tempState
-		case "CLEAR_CHECKED_ACTIVITIES":
-			tempState.checkedActivities = []
-			return tempState
-		case "TOGGLE_CHECKED_ACTIVITY": {
-			const type = action.payload.type
-			const id = type === "technique" ? action.payload.techniqueID : action.payload.id
-
-			if (type === "technique") {
-				const index = tempState.checkedActivities.findIndex((activity) => activity.techniqueID === id)
-				if (index === -1) {
-					tempState.checkedActivities = [...tempState.checkedActivities, action.payload]
-				} else {
-					tempState.checkedActivities = tempState.checkedActivities.filter(
-						(activity) => activity.techniqueID !== id
-					)
-				}
-			} else {
-				const index = tempState.checkedActivities.findIndex((activity) => activity.id === id)
-				if (index === -1) {
-					tempState.checkedActivities = [...tempState.checkedActivities, action.payload]
-				} else {
-					tempState.checkedActivities = tempState.checkedActivities.filter((activity) => activity.id !== id)
-				}
+			if (changedCategory && category.id === categoryId) {
+				tempState.data.activityItems[categoryIndex].activities.push(newActivity)
 			}
+		})
 
-			return tempState
+		removIds.forEach((number) => {
+			tempState.data.activityItems.splice(number, 1)
+		})
+		return tempState
+	}
+
+	case "UPDATE_ACTIVITY_NAME":
+		tempState.addedActivities[action.payload.index].name = action.payload.name
+		return tempState
+	case "CREATE_ACTIVITY_ITEMS": {
+		if (state.addedActivities.length === 0) return tempState
+		let counter = -1
+		let activities = tempState.addedActivities.map((activity) => {
+			counter++
+			console.log("Activity(" + counter + "):")
+			console.log(activity)
+			return {
+				id: activity.id, //activity.id,
+				//activityId: activity.id,
+				name: activity.name,
+				duration: activity.duration,
+				type: activity.type,
+			}
+		})
+
+		let i = 0
+		activities.forEach((activity) => {
+			console.log("Activity " + i + ":")
+			console.log(activity)
+			i++
+			tempState.data.activities.push(activity)
+		})
+
+		tempState.addedActivities = []
+		return tempState
+	}
+	case "CLEAR_ADDED_ACTIVITIES":
+		tempState.addedActivities = []
+		return tempState
+	case "SET_CHECKED_ACTIVITIES":
+		tempState.checkedActivities = action.payload
+		return tempState
+	case "CLEAR_CHECKED_ACTIVITIES":
+		tempState.checkedActivities = []
+		return tempState
+	case "TOGGLE_CHECKED_ACTIVITY": {
+		const type = action.payload.type
+		const id = type === "technique" ? action.payload.techniqueID : action.payload.id
+
+		if (type === "technique") {
+			const index = tempState.checkedActivities.findIndex((activity) => activity.techniqueID === id)
+			if (index === -1) {
+				tempState.checkedActivities = [...tempState.checkedActivities, action.payload]
+			} else {
+				tempState.checkedActivities = tempState.checkedActivities.filter(
+					(activity) => activity.techniqueID !== id
+				)
+			}
+		} else {
+			const index = tempState.checkedActivities.findIndex((activity) => activity.id === id)
+			if (index === -1) {
+				tempState.checkedActivities = [...tempState.checkedActivities, action.payload]
+			} else {
+				tempState.checkedActivities = tempState.checkedActivities.filter((activity) => activity.id !== id)
+			}
 		}
-		case "UPDATE_EDITING_ACTIVITY":
-			tempState.popupState.currentlyEditing.data = action.payload
-			return tempState
-		default:
-			return state
+
+		return tempState
+	}
+	case "UPDATE_EDITING_ACTIVITY":
+		tempState.popupState.currentlyEditing.data = action.payload
+		return tempState
+	default:
+		return state
 	}
 }
