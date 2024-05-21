@@ -45,7 +45,6 @@ export default function Profile() {
 	const [fetchedLists, setFetchedLists] = useState(false)
 	const [lists, setLists] = useState([])
 	const [map, mapActions] = useMap()
-	const [fetchedLists, setFetchedLists] = useState(false)
 	const [amountOfFavouriteWorkouts, setAmountOfFavouriteWorkouts] = useState(0)
 
 
