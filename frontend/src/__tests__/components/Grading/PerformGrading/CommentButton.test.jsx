@@ -52,9 +52,9 @@ describe("CommentButtonTests", () => {
 	})
 
 	test("CommentButton: displays the notification circle only when a comment is saved", async() => {
-		const { rerender } = render(<CommentButton id="test-button" onClick={() => {}} commentSaved={true} />)
+		const { rerender } = render(<CommentButton id="test-button" onClick={() => {}} hasComment={true} />)
 		expect(screen.getByTestId("notification-circle")).toBeInTheDocument()
-		rerender(<CommentButton id="test-button" onClick={() => {}} commentSaved={false} />)
+		rerender(<CommentButton id="test-button" onClick={() => {}} hasComment={false} />)
 		expect(() => screen.getByTestId("notification-circle")).toThrow()
 	})
 })
