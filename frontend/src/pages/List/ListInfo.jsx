@@ -25,7 +25,7 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
  *
  * @author Team Tomato (6)
  * @since 2024/05/03
- * @updated 2024-05-20
+ * @updated 2024-05-21
  *
  * @version 1.6
  *
@@ -93,8 +93,8 @@ export default function ListInfo({ id }) {
 								<>
 									<Link
 										className="ml-3"
-										state={{ list: activityListData, users: activityListData.users }}
-										to={"/list/editList"}
+										state={{ list: activityListData }}
+										to={"/list/edit/" + activityListId}
 									>
 										<Pencil
 											size="24px"
@@ -130,13 +130,9 @@ export default function ListInfo({ id }) {
 								<p className="mb-0">{activityListData.date}</p>
 							</div>
 							<div className={styles.listDetailColumnItem} style={{ paddingLeft: "37px" }}>
-								<h2 className="font-weight-bold mb-0 text-align-left">Senast ändrad</h2>
-								<p className="mb-0">{"saknas"}</p>
+								<h2 className="font-weight-bold mb-0 text-align-left">Beskrivning</h2>
+								<p className={styles.properties}>{activityListData.desc}</p>
 							</div>
-						</div>
-						<div className={styles.listDetailColumnItem}>
-							<h2 className="font-weight-bold mb-0">Beskrivning</h2>
-							<p className={styles.properties}>{activityListData.desc}</p>
 						</div>
 					</div>
 				</div>
