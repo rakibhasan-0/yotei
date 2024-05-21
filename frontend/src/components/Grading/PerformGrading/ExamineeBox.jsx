@@ -41,6 +41,7 @@ import { setError as setErrorToast } from "../../../utils"
  * 
  * @version 3.0
  * @since 2024-05-15
+ * @author Apelsin
  */
 export default function ExamineeBox({ 
 	id, 
@@ -67,6 +68,13 @@ export default function ExamineeBox({
 			handleExistingInput()
 		}
 	}, [isAddingComment])
+
+	useEffect(() => {
+		setCharacterCount(commentText.length)
+	}, [commentText])
+
+	const [characterCount, setCharacterCount] = useState(0)
+
 
 	/**
      * Discards the current personal comment.
@@ -167,26 +175,6 @@ export default function ExamineeBox({
 	}
 
 	/**
-     * Adds or updates a personal comment based on its existence.
-     */
-	const onAddPresetComment = async (presetComment) => {
-
-		setCommentText(presetComment);
-
-		try {
-			if (hasComment) {
-				await updateComment()
-			} else {
-				await postComment()
-			}
-			setAddComment(false)
-		} catch (error) {
-			console.error("Något gick fel:", error)
-			setErrorToast("Ett fel uppstod vid kommunikation med servern.")
-		}
-	}
-
-	/**
      * Handles the retrieval of existing input data (comments) for the current examinee.
      */
 	const handleExistingInput = async () => {
@@ -263,11 +251,19 @@ export default function ExamineeBox({
 				>
 					<TextArea
 						autoFocus={true}
-						onInput={e => { setCommentText(e.target.value); setCommentError(false) }}
+						onInput={e => { 
+							setCommentText(e.target.value); 
+							setCommentError(false); 
+						}}
 						errorMessage={commentError}
 						text={commentText}
 					/>
-					<Button onClick={onAddPersonalComment}>Lägg till</Button>
+					<div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px" }}>
+						<Button outlined={true} onClick={() => setCommentText(commentText + " " + "Böj på benen!")}>Böj på benen!</Button>
+						<Button outlined={true} onClick={() => setCommentText(commentText + " " + "Balansbrytning!")}>Balansbrytning!</Button>
+						<Button outlined={true} onClick={() => setCommentText(commentText + " " + "Kraftcirkeln")}>Kraftcirkeln!</Button>
+					</div>
+					<Button onClick={() => onAddPersonalComment()}>Lägg till</Button>
 				</Popup>
 				<ConfirmPopup
 					popupText={"Är du säker på att du vill ta bort kommentarsutkastet?"}
@@ -280,8 +276,3 @@ export default function ExamineeBox({
 		</div>
 	)
 }
-/**
- * 	<Button onClick={onAddPresetComment("Böj på benen!")}>Böj på benen!</Button>
-   	<Button onClick={onAddPresetComment("Balansbrytning!")}>Balansbrytning!</Button>
-	<Button onClick={onAddPresetComment("Kraftcirkeln")}>Kraftcirkeln!</Button>
- */
