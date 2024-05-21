@@ -100,7 +100,6 @@ function AddActivity({ id, setShowActivityInfo }) {
 	const [searchListText, setSearchListText] = useState("")
 	const [listContents, setListContents] = useState([])  
 	const [listUpdate, setListUpdate] = useState(0)
-	const [isSearchBarEnabled] = useState(false) // TODO: feature toggle
 	const [listFilter, setListFilter] = useState([])
 
 
@@ -466,9 +465,9 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 * Fetches the lists from the backend, either from cache or by a new API-call.
 	 */
 	function fetchingList() {
-		const author = false
-		const hidden = false
-		const shared = false
+		const author = true
+		const hidden = true
+		const shared = true
 		if (listFilter.includes("Mina listor")) author = true
 		if (listFilter.includes("Publika listor")) hidden = true
 		if (listFilter.includes("Delade med mig")) shared = true
@@ -642,15 +641,12 @@ function AddActivity({ id, setShowActivityInfo }) {
 					</Tab>
 					<Tab eventKey="lists" title="Listor" tabClassName={`nav-link ${style.tab}`}>
 						<div className={style.searchBar}>
-							{isSearchBarEnabled && ( // TODO: feature toggle.
-								<SearchBar
-									id="lists-search-bar"
-									placeholder="Sök efter listor"
-									text={searchListText}
-									onChange={setSearchListText}
-								/>
-							)}
-
+							<SearchBar
+								id="lists-search-bar"
+								placeholder="Sök efter listor"
+								text={searchListText}
+								onChange={setSearchListText}
+							/>
 							<FilterContainer id="ei-filter" title="Filtrering" numFilters={0}>
 								<ListPicker onFilterChange={handleListFilterChange} />
 							</FilterContainer>
