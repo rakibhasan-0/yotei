@@ -13,7 +13,7 @@ import { createMemoryRouter, RouterProvider, createRoutesFromElements, Route } f
 //import { useNavigate } from "react-router-dom"
 import { rest } from "msw"
 import { server } from "../../../server"
-import { HTTP_STATUS_CODES, USER_PERMISSION_CODES, USER_PERMISSION_LIST_ALL } from "../../../../utils" 
+import { HTTP_STATUS_CODES, USER_PERMISSION_LIST_ALL } from "../../../../utils" 
 const requestSpy = jest.fn()
 server.events.on("request:start", requestSpy)
 
@@ -23,7 +23,7 @@ server.events.on("request:start", requestSpy)
  * that the search bar works as intended (filtering)
  * and that the user can create a new technique.
  *
- * @author ???, Team Mango (Group 4)
+ * @author UNKNOWN, Team Mango (Group 4)
  * @since 2024-04-24
  * @version 2.0 
  * Updates: 2024-05-21: Added permissions to user ADMIN to fix test by giving it all permissions.
@@ -56,7 +56,7 @@ test("should render create technique button as admin", () => {
 test("should not render create technique button when user is not admin", () => {
 	render (
 		// eslint-disable-next-line no-dupe-keys
-		<AccountContext.Provider value={{ undefined, role: "USER", userId: "", undefined }}>
+		<AccountContext.Provider value={{ undefined, role: "USER", userId: "", permissions: [], undefined }}>
 			<MemoryRouter>
 				<TechniqueIndex/>
 			</MemoryRouter>
