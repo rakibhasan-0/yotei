@@ -41,6 +41,9 @@ const mockedBelts = [{
 	child: false
 },]
 
+
+
+
 const mockedGroupActivities = [
 	{
 		activity_id: 1,
@@ -91,7 +94,7 @@ describe("Grading popup test", () => {
 
 		render(
 			<BrowserRouter>
-				<GradingStatisticsPopup/>
+				<GradingStatisticsPopup id = {"grading-statistics-container"} groupid = {"3"} belts/>
 			</BrowserRouter>
 		)
 
