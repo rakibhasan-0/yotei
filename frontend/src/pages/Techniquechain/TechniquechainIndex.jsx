@@ -23,10 +23,10 @@ export default function TechniquechainIndex() {
 			<title>Teknikkedjor</title>
 			<Tabs eventKey={key} onSelect={(tab) => setKey(tab)} className={styles.tabs}>
 				<Tab eventKey="technique" title="Teknikkedjor" tabClassName={`nav-link ${styles.tab}`}>
-					<Techniquechain />
+					<Techniquechain/>
 				</Tab>
 				<Tab  eventKey="exercise" title="Teknikvävar" tabClassName={`nav-link ${styles.tab}`}>
-					<TechniqueWeaveIndex></TechniqueWeaveIndex>
+					<TechniqueWeaveIndex/>
 				</Tab>
 			</Tabs>
 		</Modal.Body>
