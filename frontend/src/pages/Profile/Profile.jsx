@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react"
+import { useCookies } from "react-cookie"
 import { Tab, Tabs } from "react-bootstrap"
 import { setError as setErrorToast, setSuccess as setSuccessToast } from "../../utils"
 import ActivityList from "../../components/Activity/ActivityList"
@@ -17,10 +18,10 @@ import { Lock, Unlock, Eye } from "react-bootstrap-icons"
 import RoundButton from "../../components/Common/RoundButton/RoundButton"
 import { Plus } from "react-bootstrap-icons"
 /**
- * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3)
+ * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3), Team Kiwi (Group 2)
  * @since 2024-05-16
  * @version 3.0
- * @updated 2024-05-20
+ * @updated 2024-05-21
  *
  * @returns a page for managing the user's account
  */
@@ -42,6 +43,7 @@ export default function Profile() {
 	const [usernamePassword, setUsernamePassword] = useState("")
 	const [passwordButtonState, setPasswordButtonDisabled] = useState(false)
 	const [usernameButtonState, setUsernameButtonDisabled] = useState(false)
+	const [cookies, setCookie] = useCookies(["previousPath"])
 
 	const [lists, setLists] = useState([])
 	const [map, mapActions] = useMap()
@@ -52,6 +54,10 @@ export default function Profile() {
 	//TODO feature toggle
 	const [isListsEnabled] = useState(false)
 
+	// sets the previous path to profile, checked in workoutView 
+	useEffect(() => {
+		setCookie("previousPath", "/profile", {path: "/"})
+	}, [setCookie, cookies.previousPath])
 
 	/* Workout management */
 

@@ -105,6 +105,8 @@ export default function WorkoutView({ id }) {
 	const handleNavigation = () => {
 		if (cookie.previousPath === "/plan") {
 			navigate("/plan", {replace : true})
+		} else if(cookie.previousPath === "/profile"){
+			navigate("/profile", {replace : true})
 		} else {
 			navigate("/workout", {replace : true})
 		}
