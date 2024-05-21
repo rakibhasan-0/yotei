@@ -34,7 +34,7 @@ export const AddToListPopupContent = ({ techExerID }) => {
 			}
 		})
 	}
-
+ 
 
 
 
@@ -56,7 +56,10 @@ export const AddToListPopupContent = ({ techExerID }) => {
 	function fetchingList() {
 
 		const args = {
-			text: searchListText
+			text: searchListText,
+			isAuthor: true,
+			isShared: false,
+			hidden: true
 		}
 
 		getLists(args, token, map, mapActions, (result) => {
