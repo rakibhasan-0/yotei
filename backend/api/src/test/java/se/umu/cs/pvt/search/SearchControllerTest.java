@@ -26,6 +26,7 @@ import se.umu.cs.pvt.search.params.SearchTechniquesParams;
 import se.umu.cs.pvt.search.persistance.SearchRepository;
 import se.umu.cs.pvt.search.responses.SearchResponse;
 import se.umu.cs.pvt.search.responses.TagResponse;
+import se.umu.cs.pvt.user.JWTUtil;
 
 /**
  * Test class for SearchController endpoint
@@ -39,6 +40,9 @@ public class SearchControllerTest {
 
     @MockBean
     private SearchRepository searchRepository;
+
+    @MockBean
+    private JWTUtil jwtUtil;
 
     @Autowired
     private SearchController controller;
