@@ -63,8 +63,7 @@ function SessionContainer ({ id, workout, session, plan}) {
 
 	function setPlanCreatorID(){
 		if(checkPlan())
-			return plan.userId
-		
+			return plan.userId //TODO this should probably be changed. This is based on groups, not who created the session. Is this desirable behavior?
 		return null
 	}
 

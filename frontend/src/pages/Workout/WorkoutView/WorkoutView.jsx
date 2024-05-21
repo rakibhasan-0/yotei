@@ -103,11 +103,10 @@ export default function WorkoutView({ id }) {
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 	const handleNavigation = () => {
-		console.log("cookie: ", cookie.previousPath)
 		if (cookie.previousPath === "/plan") {
-			navigate("/plan")
+			navigate("/plan", {replace : true})
 		} else {
-			navigate("/workout")
+			navigate("/workout", {replace : true})
 		}
 	}
 
@@ -116,7 +115,7 @@ export default function WorkoutView({ id }) {
 		return (
 			<div className="d-flex row justify-content-center">
 				<div className="d-flex col mb-3 mt-3 justify-content-start">
-					<Button onClick={() => handleNavigation(navigate, cookie)} outlined={true}>
+					<Button onClick={() => handleNavigation()} outlined={true}>
 						<p>Tillbaka</p>
 					</Button>
 				</div>
@@ -134,7 +133,7 @@ export default function WorkoutView({ id }) {
 			: !workoutData ? <ErrorState message={errorStateMsg} onBack={() => navigate("/workout")} onRecover={() => window.location.reload(false)}/>
 				:
 				<div id={id} className="container px-0">
-					{<ConfirmPopup popupText={"Är du säker att du vill radera passet \"" + workoutData.name + "\"?"} id={"confirm-popup"} setShowPopup={setShowPopup} showPopup={showPopup} onClick={async () => deleteWorkout(workoutId, context, navigate, setShowPopup)}/>}
+					{<ConfirmPopup popupText={"Är du säker att du vill radera passet \"" + workoutData.name + "\"?"} id={"confirm-popup"} setShowPopup={setShowPopup} showPopup={showPopup} onClick={async () => deleteWorkout(workoutId, context, handleNavigation, setShowPopup)}/>}
 					{getReviewContainer(showRPopup, setRShowPopup, workoutId)}
 					{getWorkoutInfoContainer(workoutData, setShowPopup, context, userId, workoutUsers, workoutId)}
 					{sortByCategories(workoutData).map((activityCategory) => (
@@ -164,7 +163,7 @@ function getReviewContainer(showRPopup, setRShowPopup, workoutId) {
 	return <Review isOpen={showRPopup} setIsOpen={setRShowPopup} workout_id={workoutId} />
 }
 
-async function deleteWorkout(workoutId, context, navigate, setShowPopup) {
+async function deleteWorkout(workoutId, context, handleNavigation, setShowPopup) {
 	const requestOptions = {
 		headers: { "Content-type": "application/json", token: context.token },
 		method: "DELETE",
@@ -187,7 +186,7 @@ async function deleteWorkout(workoutId, context, navigate, setShowPopup) {
 	}
 
 	setSuccess("Pass borttagen!")
-	navigate("/workout")
+	handleNavigation()
 	setShowPopup(false)
 }
 
