@@ -22,6 +22,7 @@ import se.umu.cs.pvt.search.persistance.SearchRepository;
 import se.umu.cs.pvt.search.responses.SearchResponse;
 import se.umu.cs.pvt.search.responses.TagResponse;
 import se.umu.cs.pvt.user.JWTUtil;
+import se.umu.cs.pvt.workout.UserShortRepository;
 
 /**
  * Controller for making searches in Techniques, Exercises and Workouts.
@@ -40,16 +41,17 @@ import se.umu.cs.pvt.user.JWTUtil;
 public class SearchController {
 
     private final SearchRepository searchRepository;
-
     private DecodedJWT jwt;
     private Long userIdL;
+    private final UserShortRepository userShortRepository;
 
     @Autowired
     private JWTUtil jwtUtil;
     
     @Autowired
-    public SearchController(SearchRepository searchRepository) {
+    public SearchController(SearchRepository searchRepository, UserShortRepository userShortRepository) {
         this.searchRepository = searchRepository;
+        this.userShortRepository = userShortRepository;
     }
 
     /**
@@ -197,9 +199,9 @@ public class SearchController {
         .filterByIsAuthor()
         .filterByIsShared()
         .build();
-
+        
         List<ActivityListDBResult> result = searchRepository.getActivityListFromCustomQuery(createdQuery.getQuery());
-        List<ActivityListSearchResponse> activityListSearchResponses = new SearchActivityListResponseBuilder(result).build();
+        List<ActivityListSearchResponse> activityListSearchResponses = new SearchActivityListResponseBuilder(result, userShortRepository).build();
         List<ActivityListSearchResponse> filteredResult = fuzzySearchFiltering(searchListParams.getName(), activityListSearchResponses);
 
         SearchResponse<ActivityListSearchResponse> response = new SearchResponse(filteredResult, Collections.emptyList());

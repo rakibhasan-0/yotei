@@ -2,6 +2,8 @@ package se.umu.cs.pvt.search.interfaces.responses;
 
 import java.time.LocalDate;
 
+import se.umu.cs.pvt.activitylist.Dtos.UserShortDTO;
+
 /**
  * Class to represent the ActivityList object returned from the API.
  * 
@@ -10,12 +12,12 @@ import java.time.LocalDate;
  */
 public class ActivityListSearchResponse implements SearchResponseInterface {
     private Long id;
-    private Long author;
+    private UserShortDTO author;
     private String name;
     private Boolean hidden;
     private LocalDate date;
     
-    public ActivityListSearchResponse(Long id, Long author, String name, Boolean hidden, LocalDate date) {
+    public ActivityListSearchResponse(Long id, UserShortDTO author, String name, Boolean hidden, LocalDate date) {
         this.id = id;
         this.author = author;
         this.name = name;
@@ -27,7 +29,7 @@ public class ActivityListSearchResponse implements SearchResponseInterface {
         return id;
     }
 
-    public Long getAuthor() {
+    public UserShortDTO getAuthor() {
         return author;
     }
 
