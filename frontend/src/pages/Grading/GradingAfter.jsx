@@ -26,7 +26,7 @@ export default function GradingAfter() {
 		belt_name: "",
 		color: "" 
 	})
-	const [fetchedBelt, setFetchedBelt] = useState([]) // <--- 
+	const [fetchedBelt, setFetchedBelt] = useState([])
 	const [ isGrading, setIsGrading ] = useState(false)
 	const [ isBelt, setIsBelt ] = useState(false)
 	const [ isExaminee, setIsExaminee ] = useState(false)
@@ -67,7 +67,7 @@ export default function GradingAfter() {
 	}
 
 	/**
-	 * Function to fetch the belts from the backend.
+	 * Function that fetchs all of the results of each examinee.
 	 * @returns {Promise} The belt data.
 	 * @since 2024-05-15
 	 */

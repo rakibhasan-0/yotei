@@ -495,15 +495,14 @@ public class ExaminationController {
     }
 
     /**
-     * Returns a specific examination result based on grading_id. The result is a list of examinees and the number of techniques they have passed and in addition, a total count of techniques for the entire examination.
+     * Returns a specific examination result based on grading_id. The return is a map of examinees and the number of techniques 
+     * they have passed and in addition, a total count of techniques for the entire examination.
      * @param grading_id
      * @return
      */
     @GetMapping("/examresult/grading/{grading_id}")
     public ResponseEntity<Map<String, Object>> getExaminationResultByGradingId(@PathVariable("grading_id") long grading_id){
-        System.out.println("grading id: " + grading_id);
         List<Examinee> examinees = examineeRepository.findByGradingId(grading_id);
-        System.out.println("The given belt for the examination: " + gradingRepository.findById(grading_id).get().getBeltId());
         Optional<ExaminationProtocol> protocolOptional = examinationProtocolRepository.findById(gradingRepository.findById(grading_id).get().getBeltId());
         if (!protocolOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -517,6 +516,7 @@ public class ExaminationController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         int techniqueCount = 0;
+        //Check the total number of techniques in the examination
         for (int i = 0; i < categories.length(); i++) {
             JSONObject category = categories.getJSONObject(i);
             JSONArray techniques = category.getJSONArray("techniques");
@@ -526,13 +526,13 @@ public class ExaminationController {
         
         
         List<Map<String, String>> examineeResults = new ArrayList<>();
+        //Check the number of passed techniques for each examinee
         for (Examinee examinee : examinees) {
             Map<String, String> examineeInfo = new HashMap<>();
             long passedTechniques = examinationResultRepository.countByExamineeIdAndPassTrue(examinee.getExamineeId());
             examineeInfo.put("examineeId", examinee.getExamineeId().toString());
             examineeInfo.put("passedTechniques", Long.toString(passedTechniques)); // Convert long to Long and invoke toString()
             examineeInfo.put("name", examinee.getName());
-            System.out.println("Examinee name: " + examinee.getName()+ " " + "Num passed " + passedTechniques);
             examineeResults.add(examineeInfo);
         }
         response.put("examineeResults", examineeResults);
@@ -631,7 +631,6 @@ public class ExaminationController {
             InputStream stream = pdfExport.generate();
             return new ResponseEntity<Object>(stream.readAllBytes(), HttpStatus.OK);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return new ResponseEntity<Object>(null, HttpStatus.BAD_REQUEST);   
         }     
