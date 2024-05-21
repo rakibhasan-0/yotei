@@ -46,8 +46,6 @@ import { useParams } from "react-router-dom"
  * 
  */
 export default function TechniqueInfoPanel({
-	beltColor = "#FFDD33",
-	categoryTitle = "Test Kategori",
 	currentTechniqueTitle = "1. Grepp i två handleder framifrån och svingslag Frigöring – Ju morote jodan uke",
 	nextTechniqueTitle = "2. Stryptag framifrån och svingslag, backhand Frigöring – Ju morote jodan uke, ude osae, ude osae gatame",
 	mainCategoryTitle = "Huvudkategori"
@@ -201,6 +199,7 @@ export default function TechniqueInfoPanel({
 			console.error(ex)
 		}
 	}
+	
 	/* This was inside return earlier, but removed to get more space
 		After row: <fieldset className={styles.infoPanel}>
 		Before row: <div>
@@ -221,7 +220,7 @@ export default function TechniqueInfoPanel({
 					<h3 className={styles.categoryTitle} role="categoryTitle">{mainCategoryTitle}</h3>
 				</div>
 				<div className={styles.buttonGroupComment}>
-						<CommentButton onClick={() => setAddComment(true)} />
+					<CommentButton onClick={() => setAddComment(true)} />
 				</div>
 				<div>
 					<h2 className={styles.currentTechnique} role="currentTechniqueTitle">{currentTechniqueTitle}</h2>

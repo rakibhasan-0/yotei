@@ -250,7 +250,6 @@ export default function DuringGrading() {
 			<div className={styles.infoPanel}>
 				{techniqueNameList && (
 					<TechniqueInfoPanel
-						categoryTitle=""
 						currentTechniqueTitle={techniqueNameList[currentTechniqueStep].technique.text}
 						nextTechniqueTitle={techniqueNameList[currentTechniqueStep].nextTechnique.text}
 						mainCategoryTitle={techniqueNameList[currentTechniqueStep].categoryName}>
