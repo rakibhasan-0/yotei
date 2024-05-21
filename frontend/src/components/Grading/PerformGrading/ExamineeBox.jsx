@@ -268,9 +268,6 @@ export default function ExamineeBox({
 						text={commentText}
 					/>
 					<Button onClick={onAddPersonalComment}>Lägg till</Button>
-					<Button onClick={onAddPresetComment("Böj på benen!")}>Böj på benen!</Button>
-					<Button onClick={onAddPresetComment("Balansbrytning!")}>Balansbrytning!</Button>
-					<Button onClick={onAddPresetComment("Kraftcirkeln")}>Kraftcirkeln!</Button>
 				</Popup>
 				<ConfirmPopup
 					popupText={"Är du säker på att du vill ta bort kommentarsutkastet?"}
@@ -283,3 +280,8 @@ export default function ExamineeBox({
 		</div>
 	)
 }
+/**
+ * 	<Button onClick={onAddPresetComment("Böj på benen!")}>Böj på benen!</Button>
+   	<Button onClick={onAddPresetComment("Balansbrytning!")}>Balansbrytning!</Button>
+	<Button onClick={onAddPresetComment("Kraftcirkeln")}>Kraftcirkeln!</Button>
+ */
