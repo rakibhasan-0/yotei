@@ -260,6 +260,7 @@ export default function PlanIndex() {
 		return [year, month, day].join("-")
 	}
 
+
 	return (
 		<center>
 			<title>Planering</title>
@@ -293,11 +294,11 @@ export default function PlanIndex() {
 			</div>}
 
 			{
-			canCreateSession() ? 
-				<RoundButton linkTo={"/session/create"}>
-					<Plus />
-				</RoundButton>
-			: <></>
+				canCreateSession(user) ? 
+					<RoundButton linkTo={"/session/create"}>
+						<Plus />
+					</RoundButton>
+					: <></>
 			}
 
 		</center>
