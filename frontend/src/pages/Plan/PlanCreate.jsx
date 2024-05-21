@@ -178,8 +178,8 @@ export default function PlanCreate() {
     * Function for api call when creating a plan
     */
 	async function addPlan() {
-		setIsBlocking(false)
 		if (validateForm()) {
+			setIsBlocking(false)
 
 			const requestOptions = {
 				method: "POST",

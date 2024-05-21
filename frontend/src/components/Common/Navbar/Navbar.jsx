@@ -26,7 +26,6 @@ import { AccountContext } from "../../../context"
 function Navbar({ testId }) {
 
 	const [open, setOpen] = useState(false)
-	const [isExaminationEnabled] = useState(false) // FEATURE TOGGLE
 	const navigate = useNavigate()
 	const context = useContext(AccountContext) 
 
@@ -42,11 +41,10 @@ function Navbar({ testId }) {
 
 	return (
 		<nav data-testid={testId} className={styles.commonNavbar}>
-			<HamburgerIcon role="button" className={styles.commonNavbarIcon} onClick={() => {setOpen(true)}}/>
+			<HamburgerIcon id="hamburger-button" role="button" className={styles.commonNavbarIcon} onClick={() => {setOpen(true)}}/>
 			<img src="/ubk-logga.jpg" className={styles.budoLogo} onClick={() => navigateAndClose("/")} />
 
 			<div className={`${styles.commonNavbarSidebar} p-4  ${open ? styles.open : ""}`}>
-
 				<div className={styles.closeAndUserIconsWrapper}>
 					<CloseIcon role="button"  className={styles.closeIconWrapper} onClick={() => {setOpen(false)}} />
 					<Button  onClick={() => navigateAndClose("/profile")}>
@@ -73,7 +71,7 @@ function Navbar({ testId }) {
 					</Button>
 
 					{isExaminationEnabled ? (
-						<Button width={"100%"} onClick={() => {}}>
+						<Button width={"100%"} onClick={() => {navigateAndClose("/grading")}}>
 							<h1 className={styles.commonNavbarButton}>Gradering</h1>
 						</Button>
 					) : (
@@ -81,7 +79,6 @@ function Navbar({ testId }) {
 					)}
 				</div>
 				
-
 				{ isAdmin(context) ? 
 					<Button width={"min-content"} onClick={() => navigateAndClose("/profile")}>
 						<AdminIcon role="button" className={styles.commonNavbarIconAdmin}  onClick={() => navigateAndClose("/admin")} />

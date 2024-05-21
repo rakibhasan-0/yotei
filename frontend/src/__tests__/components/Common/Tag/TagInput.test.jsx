@@ -5,6 +5,7 @@ import "@testing-library/jest-dom"
 import TagInput from "../../../../components/Common/Tag/TagInput"
 import AddTagPopup from "../../../../components/Common/Tag/AddTagPopup"
 import { fireEvent } from "@testing-library/react"
+import { MemoryRouter } from "react-router"
 
 /**
  * Test for the TagInput component.
@@ -37,15 +38,15 @@ test("Tag: Should show popup onclick", async() => {
 	const addedTags = [{id:1,name:"Tag1"}]
 
 	// ACT
-	const {getByText} =  render(<div><TagInput onClick={
-		()=> <AddTagPopup id ="addTagPopupDiv" addedTags={addedTags}/>} id ="tagChooser" addedTags={addedTags}></TagInput></div>)
+	const {getByText} =  render(<div><MemoryRouter>
+		<TagInput onClick={
+			()=> <AddTagPopup id ="addTagPopupDiv" addedTags={addedTags}/>} id ="tagChooser" addedTags={addedTags}></TagInput></MemoryRouter></div>)
 
 	// ACT
 	const button = getByText("Hantera tagg")
-
 	fireEvent.click(button)
 
 	// ASSERT
-	const popup = getByText("Tillagda taggar")
+	const popup = getByText("Tag1")
 	expect(popup).toBeVisible()
 })

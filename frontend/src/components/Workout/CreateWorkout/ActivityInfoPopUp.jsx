@@ -2,6 +2,7 @@ import { useEffect, useContext, useState } from "react"
 import styles from "./ActivityInfoPopUp.module.css"
 import Divider from "../../Common/Divider/Divider.jsx"
 import Button from "../../Common/Button/Button.jsx"
+import { Trash } from "react-bootstrap-icons"
 import { Plus } from "react-bootstrap-icons"
 import { WorkoutCreateContext } from "./WorkoutCreateContext"
 import { WORKOUT_CREATE_TYPES } from "./WorkoutCreateReducer"
@@ -40,18 +41,30 @@ function ActivityItem({ index, categoryName, id, inputDisabled, text }) {
 	return (
 		<fieldset className={styles.activityItem} id={"activity-description-" + id}>
 			{categoryName && <legend>{<h2>{categoryName}</h2>}</legend>}
-			<textarea 
-				className={styles.activityItemTextArea}
-				placeholder="Fri text ..."
-				disabled={inputDisabled} 
-				onChange={(e) => 
-					workoutCreateInfoDispatch({ 
-						type: "UPDATE_ACTIVITY_NAME", 
-						payload: { index, name: e.target.value }
+			<div className={styles.activityItemContainer}>
+				<textarea
+					className={styles.activityItemTextArea}
+					placeholder="Fri text ..."
+					disabled={inputDisabled}
+					onChange={(e) =>
+						workoutCreateInfoDispatch({
+							type: "UPDATE_ACTIVITY_NAME",
+							payload: { index, name: e.target.value }
+						})}
+					value={workoutCreateInfo.addedActivities[index].name}
+					rows={1}
+				/>
+				<Trash
+					className={styles.trashIcon}
+					size="24px"
+					color="var(--red-primary)"
+					style={{ cursor: "pointer" }}
+					onClick={() => workoutCreateInfoDispatch({
+						type: "REMOVE_ACTIVITY_ADDED_CHECKED",
+						payload: {id: workoutCreateInfo.addedActivities[index].id, index: index}
 					})}
-				value={workoutCreateInfo.addedActivities[index].name}
-				rows={1}
-			/>
+				/>
+			</div>
 		</fieldset>
 	)
 }
@@ -66,9 +79,10 @@ function ActivityItem({ index, categoryName, id, inputDisabled, text }) {
  * Example usage:
  * 		<ActivityList isFreeText={true} />
  */
+
+
 function ActivityList({ isFreeText }){
 	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(WorkoutCreateContext)
-
 	return (
 		<div className={styles.activityList}>
 			{workoutCreateInfo.addedActivities.map((activity, index) => {
@@ -79,7 +93,9 @@ function ActivityList({ isFreeText }){
 						id={index}
 						index={index}
 						inputDisabled={!isFreeText}
-						text={activity.name} />)
+						text={activity.name} 
+					/>
+				)
 			})}
 			{isFreeText && 
 				<div className={styles.activityAddButton}>

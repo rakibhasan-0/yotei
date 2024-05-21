@@ -1,0 +1,49 @@
+.listPicker{
+    display: flex;
+    
+    padding-inline: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    align-items: center;
+}
+
+.filterBorder{
+	border-top: solid 1px black;
+}
+
+.listPickerRow{
+	display: flex;
+    gap: 7px;
+    width: 35%;
+    overflow: hidden;
+}
+
+.listItemText{
+	margin: 0;
+	margin-left: 4px;
+	align-self: center;
+}
+
+.filterItems{
+	display: flex;
+    height: 3rem;
+    align-items: center;
+    text-align: center;
+    padding-left: 1rem;
+    border-bottom: 1px solid black;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.filterItems:hover{
+    background-color: var(--red-primary);
+}
+
+.filterItems:hover > p{
+	color: white;
+}
+.filterText{
+	display: flex;
+	flex-direction: row;
+	margin: 0;
+}

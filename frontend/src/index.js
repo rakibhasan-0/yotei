@@ -27,9 +27,19 @@ import GroupIndex from "./pages/Plan/GroupIndex/GroupIndex"
 import EditGroup from "./pages/Plan/EditGroup/EditGroup"
 import SessionEdit from "./pages/Plan/SessionEdit"
 import PlanIndex from "./pages/Plan/PlanIndex"
+import Grading from "./pages/Grading/GradingIndex.jsx"
+import GradingCreate from "./pages/Grading/GradingCreate.jsx"
+import GradingBefore from "./pages/Grading/GradingBefore.jsx"
+import GradingAfter from "./pages/Grading/GradingAfter.jsx"
+import GradingDeviations from "./pages/Grading/GradingDeviations.jsx"
 import BaseLayout from "./components/Common/BaseLayout/BaseLayout"
 import ErrorBoundary from "./components/ErrorHandler/ErrorBoundary"
-import Statistics from "./pages/Statistics/Statistics.jsx"
+
+import ListInfo from "./pages/List/ListInfo"
+import FavouriteWorkoutsList from "./pages/List/FavouriteWorkoutList"
+import ListEdit from "./pages/List/ListEdit"
+
+import Statistics from "./pages/Statistics/StatisticsIndex.jsx"
 import "react-toastify/dist/ReactToastify.css"
 import { logOut } from "./utils"
 import { ToastContainer, toast } from "react-toastify"
@@ -38,6 +48,7 @@ import AdminRoute from "./AdminRoute"
 import ActivityIndex from "./pages/Activity/ActivityIndex.jsx"
 import DuringGrading from "./pages/Grading/During/DuringGrading.jsx"
 import SessionCreateIndex from "./pages/Plan/SessionCreateIndex.jsx"
+import RoleDetailPage from "./pages/Admin/RoleDetailPage.jsx"
 
 const exerciseURI = "https://jsonplaceholder.typicode.com/users"
 const workoutURI = "https://jsonplaceholder.typicode.com/users"
@@ -45,15 +56,16 @@ const planURI = "https://jsonplaceholder.typicode.com/users"
 
 /**
  *
-  * Changes version 2.0:
+ * Changes version 2.0:
  *     	made path for activity page.
  * 		Activities now contain techniques and exercises.
  *
  * @author
  * 		Unknown authors
- *     	Team Kiwi
- * @version 2.1
+ *     	Team Kiwi, Team Mango
+ * @version 2.2
  * @updated 2024-05-08 Changed so workout/edit url also have the workout id in it
+ * 			2024-05-20 Changed route param for profile/list
  */
 export default function App() {
 	const cookie = new Cookies().get("token")
@@ -102,8 +114,8 @@ export default function App() {
 		createRoutesFromElements(
 			cookie || import.meta.env.VITE_APP_LOGIN_ENABLED === "false" ? (
 				<>
-					<Route 
-						path="/" 
+					<Route
+						path="/"
 						element={
 							<ErrorBoundary>
 								<BaseLayout />
@@ -112,6 +124,7 @@ export default function App() {
 					>
 						<Route path="about" element={<About />} />
 						<Route path="admin" element={<Admin />} />
+						<Route path="admin/role_page/" element={<RoleDetailPage />} /> {/*:role_id*/}
 						<Route path="profile" element={<Profile />} />
 						<Route path="activity" element={<ActivityIndex />} />
 						<Route path="exercise" element={<ExerciseIndex uri={exerciseURI} />} />
@@ -120,12 +133,26 @@ export default function App() {
 						<Route path="workout" element={<WorkoutIndex uri={workoutURI} />} />
 						<Route path="exercise/exercise_page/:ex_id" element={<ExerciseDetailsPage />} />
 						<Route path="technique" element={<TechniqueIndex />} />
-						<Route path="activity/technique/create" element={<AdminRoute><CreateTechnique /></AdminRoute> } />
+						<Route
+							path="activity/technique/create"
+							element={
+								<AdminRoute>
+									<CreateTechnique />
+								</AdminRoute>
+							}
+						/>
 						<Route path="technique/:techniqueId" element={<TechniqueDetail />} />
-						<Route path="technique/:techniqueId/edit" element={<AdminRoute><TechniqueEdit/></AdminRoute>} />
+						<Route
+							path="technique/:techniqueId/edit"
+							element={
+								<AdminRoute>
+									<TechniqueEdit />
+								</AdminRoute>
+							}
+						/>
 						<Route path="workout/create" element={<WorkoutCreate />} />
 						<Route path="excercise/create" element={<ExerciseCreate />} />
-						<Route path="excercise/edit/:excerciseId" element={<ExerciseEdit/>} />
+						<Route path="excercise/edit/:excerciseId" element={<ExerciseEdit />} />
 						<Route path="workout/:workoutId" element={<WorkoutView />} />
 						<Route path="workout/edit/:workoutId" element={<WorkoutEdit />} />
 						<Route path="plan" element={<PlanIndex uri={planURI} />} />
@@ -134,8 +161,16 @@ export default function App() {
 						<Route path="session/create" element={<SessionCreateIndex />} />
 						<Route path="session/edit/:session_id" element={<SessionEdit />} />
 						<Route path="groups" element={<GroupIndex />} />
+						<Route path="list/editList" element={<ListEdit />} />
+						<Route path="profile/list/:activityListId" element={<ListInfo />} />
+						<Route path="profile/favouriteWorkouts" element={<FavouriteWorkoutsList />} />
+						<Route path="grading" element={<Grading />} />
+						<Route path="grading/create" element={<GradingCreate />} />
+						<Route path="grading/:gradingId/1" element={<GradingBefore />} />
+						<Route path="grading/:gradingId/3" element={<GradingAfter />} />
+						<Route path="grading/:userId/4" element={<GradingDeviations />} />
 						<Route path="groups/statistics/:groupID" element={<Statistics />} />
-						<Route path="grading/during" element={<DuringGrading />} />
+						<Route path="grading/:gradingId/2" element={<DuringGrading />} />
 						<Route path="" element={<PlanIndex uri={planURI} />} />
 						<Route path="*" element={<NoPage />} />
 					</Route>
@@ -149,7 +184,9 @@ export default function App() {
 	return (
 		<>
 			<ToastContainer />
-			<AccountContext.Provider value={{ token, role: decodedToken?.role, userId: decodedToken?.userId, setToken }}>
+			<AccountContext.Provider
+				value={{ token, role: decodedToken?.role, userId: decodedToken?.userId, setToken }}
+			>
 				<RouterProvider router={routes} />
 			</AccountContext.Provider>
 		</>
@@ -158,4 +195,8 @@ export default function App() {
 
 const container = document.getElementById("root")
 const root = createRoot(container)
-root.render(<CookiesProvider><App /></CookiesProvider>)
+root.render(
+	<CookiesProvider>
+		<App />
+	</CookiesProvider>
+)

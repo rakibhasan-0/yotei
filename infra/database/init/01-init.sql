@@ -10,6 +10,14 @@ END;
 
 $$ LANGUAGE 'plpgsql' IMMUTABLE PARALLEL SAFE;
 
+-- "Konstant" för admin rättighet
+CREATE
+OR REPLACE FUNCTION admin_permission_id() RETURNS INT AS $$ BEGIN RETURN 1;
+
+END;
+
+$$ LANGUAGE 'plpgsql' IMMUTABLE PARALLEL SAFE;
+
 -- "Konstant" för editor roll
 CREATE
 OR REPLACE FUNCTION editor_role_id() RETURNS INT AS $$ BEGIN RETURN 2;
@@ -81,8 +89,10 @@ DROP TABLE IF EXISTS workout_tag CASCADE;
 DROP TABLE IF EXISTS examination_grading CASCADE;
 DROP TABLE IF EXISTS examination_examinee CASCADE;
 DROP TABLE IF EXISTS examination_examinee_pair CASCADE;
-DROP TABLE IF EXISTS examination_result_technique CASCADE;
+DROP TABLE IF EXISTS examination_result CASCADE;
 DROP TABLE IF EXISTS examination_comment CASCADE;
+DROP TABLE IF EXISTS grading_protocol CASCADE;
+
 DROP TABLE IF EXISTS activity CASCADE;
 
 DROP TABLE IF EXISTS tag CASCADE;
@@ -99,11 +109,17 @@ DROP TABLE IF EXISTS exercise CASCADE;
 
 DROP TABLE IF EXISTS user_table CASCADE;
 
+DROP TABLE IF EXISTS user_to_permission CASCADE;
+DROP TABLE IF EXISTS role CASCADE;
+
+DROP TABLE IF EXISTS permission CASCADE;
+
+DROP TABLE IF EXISTS role_to_permission CASCADE;
+
 DROP TABLE IF EXISTS comments CASCADE;
 
 DROP TABLE IF EXISTS plan CASCADE;
 
-DROP TABLE IF EXISTS session_review;
 DROP TABLE IF EXISTS session_review_activity;
 
 DROP TABLE IF EXISTS session CASCADE;
@@ -127,8 +143,11 @@ DROP TABLE IF EXISTS technique_to_belt CASCADE;
 DROP TABLE IF EXISTS error_log CASCADE;
 
 DROP TABLE IF EXISTS media CASCADE;
+DROP TABLE IF EXISTS session_review;
 
+DROP TABLE IF EXISTS grading_protocol;
 
+DROP TABLE IF EXISTS grading_protocol_category;
 
 DROP SEQUENCE IF EXISTS serial;
 
@@ -162,17 +181,76 @@ ALTER TABLE
 	technique OWNER TO psql;
 
 --
+-- Name: role; Type: TABLE; Schema: public; Owner: psql
+--
+CREATE TABLE role(
+	role_id INT NOT NULL GENERATED ALWAYS AS IDENTITY UNIQUE,
+	role_name VARCHAR(255) NOT NULL
+);
+
+ALTER TABLE
+	role OWNER TO psql;
+
+--
 -- Name: user_table; Type: TABLE; Schema: public; Owner: psql
 --
 CREATE TABLE user_table(
 	user_id INT NOT NULL GENERATED ALWAYS AS IDENTITY UNIQUE,
 	username VARCHAR(255) PRIMARY KEY,
 	password VARCHAR(255) NOT NULL,
-	user_role INT NOT NULL
+	user_role INT NOT NULL,
+	role_id INT,
+	CONSTRAINT ur_fk_role FOREIGN KEY (role_id) REFERENCES role(role_id) ON
+	DELETE CASCADE
 );
 
 ALTER TABLE
 	user_table OWNER TO psql;
+
+--
+-- Name: permission; Type: TABLE; Schema: public; Owner: psql
+--
+CREATE TABLE permission(
+	permission_id INT NOT NULL GENERATED ALWAYS AS IDENTITY UNIQUE,
+	permission_name VARCHAR(255) NOT NULL UNIQUE,
+	permission_desc VARCHAR(255)
+);
+
+ALTER TABLE
+	permission OWNER TO psql;
+
+--
+-- Name: user_to_permission (Mapping table); Type: TABLE; Schema: public; Owner: psql
+--
+
+CREATE TABLE user_to_permission(
+	pair_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	user_id INT NOT NULL,
+	permission_id INT NOT NULL,
+	CONSTRAINT up_fk_user_table FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON
+	DELETE CASCADE,
+	CONSTRAINT up_fk_permission FOREIGN KEY (permission_id) REFERENCES permission(permission_id) ON
+	DELETE CASCADE,
+	UNIQUE(user_id, permission_id)
+);
+
+ALTER TABLE
+	user_to_permission OWNER TO psql;
+-- Name: role_to_permission; Type: TABLE; Schema: public; Owner: psql
+--
+CREATE TABLE IF NOT EXISTS role_to_permission (
+	rp_id SERIAL PRIMARY KEY,
+	role_id INT NOT NULL,
+	permission_id INT NOT NULL,
+	CONSTRAINT rp_fk_role FOREIGN KEY (role_id) REFERENCES role(role_id) ON
+	DELETE CASCADE,
+	CONSTRAINT rp_fk_permission FOREIGN KEY (permission_id) REFERENCES permission(permission_id) ON
+	DELETE CASCADE,
+	UNIQUE (role_id, permission_id)
+);
+
+ALTER TABLE
+	role_to_permission OWNER TO psql;
 
 --
 -- Name: exercise; Type: TABLE; Schema: public; Owner: psql
@@ -227,7 +305,7 @@ ALTER TABLE
 --
 CREATE TABLE activity(
 	activity_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-	workout_id INT NOT NULL,
+	workout_id INT,
 	exercise_id INT,
 	technique_id INT,
 	category_name VARCHAR(255),
@@ -549,6 +627,7 @@ CREATE TABLE IF NOT EXISTS examination_grading (
 	step INT NOT NULL,
 	technique_step_num INT NOT NULL,
 	created_at DATE NOT NULL,
+  title VARCHAR(255) NOT NULL,
 	CONSTRAINT grading_fk_belt FOREIGN KEY(belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE
 );
 
@@ -563,32 +642,32 @@ CREATE TABLE IF NOT EXISTS examination_examinee (
 CREATE TABLE IF NOT EXISTS examination_examinee_pair (
 	examinee_pair_id SERIAL PRIMARY KEY,
 	examinee_1_id INT NOT NULL,
-	examinee_2_id INT NOT NULL,
+	examinee_2_id INT,
 	CONSTRAINT examinee_pair_fk_examinee_1 FOREIGN KEY(examinee_1_id) REFERENCES examination_examinee(examinee_id) ON DELETE CASCADE,
 	CONSTRAINT examinee_pair_fk_examinee_2 FOREIGN KEY(examinee_2_id) REFERENCES examination_examinee(examinee_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS examination_result(
+    result_id SERIAL PRIMARY KEY,
 	examinee_id INT NOT NULL,
 	technique_name VARCHAR(255) NOT NULL, -- Should be string with technique_name in grading protocol
 	pass BOOLEAN,
-	CONSTRAINT examinee_id_fk FOREIGN KEY(examinee_id) REFERENCES examination_examinee(examinee_id) ON DELETE CASCADE,
-	CONSTRAINT examination_result_pk PRIMARY KEY (examinee_id, technique_name)
+	CONSTRAINT examinee_id_fk FOREIGN KEY(examinee_id) REFERENCES examination_examinee(examinee_id) ON DELETE CASCADE
 );
 
 
 CREATE TABLE IF NOT EXISTS examination_comment( 
 	comment_id SERIAL PRIMARY KEY,
-	grading_id INT, 
+	grading_id INT NOT NULL, 
 	examinee_id INT, 
 	examinee_pair_id INT, 
-	technique_name VARCHAR(255) NOT NULL, 
-	comment VARCHAR NOT NULL 
+	technique_name VARCHAR(255), 
+	comment VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS grading_protocol(
+CREATE TABLE IF NOT EXISTS examination_protocol(
 	belt_id INT PRIMARY KEY,
-	grading_protocol JSON NOT NULL,
+	examination_protocol JSON NOT NULL,
 	CONSTRAINT fk_belt_id FOREIGN KEY (belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE
 );
 
@@ -610,6 +689,7 @@ CREATE TABLE IF NOT EXISTS activity_list_entry(
        list_id INT NOT NULL,
        exercise_id INT,
        technique_id INT,
+       duration INT,
        CONSTRAINT ale_list_id_fk FOREIGN KEY (list_id) REFERENCES activity_list(id) ON DELETE CASCADE
 );
 
@@ -626,6 +706,53 @@ CREATE TABLE IF NOT EXISTS user_to_activity_list(
 ALTER TABLE
       user_to_activity_list OWNER to psql;
 
+
+--
+-- Name: grading_protocol; Type: TABLE; Schema: public; Owner: psql
+--
+CREATE TABLE grading_protocol(
+	protocol_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	belt_id INT NOT NULL,
+	protocol_code VARCHAR(255),
+	protocol_name VARCHAR(255),
+	CONSTRAINT fk_belt_grading_protocol FOREIGN KEY (belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE
+);
+
+ALTER TABLE
+	grading_protocol OWNER TO psql;
+
+
+--
+-- Name: grading_protocol_category; Type: TABLE; Schema: public; Owner: psql
+--
+CREATE TABLE grading_protocol_category(
+	category_id INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	protocol_id INT NOT NULL,
+	category_name VARCHAR(255),
+	category_order INT NOT NULL,
+	CONSTRAINT fk_grading_protocol_grading_protocol_category FOREIGN KEY (protocol_id) REFERENCES grading_protocol(protocol_id) ON DELETE CASCADE
+);
+
+ALTER TABLE
+	grading_protocol_category OWNER TO psql;
+
+
+--
+-- Name: technique_to_grading_protocol_category; Type: TABLE; Schema: public; Owner: psql
+--
+CREATE TABLE grading_protocol_technique(
+	id SERIAL PRIMARY KEY,
+	technique_id INT NOT NULL,
+	protocol_category_id INT NOT NULL,
+	technique_order INT NOT NULL,
+	CONSTRAINT fk_gpt_technique FOREIGN KEY(technique_id) REFERENCES technique(technique_id) ON DELETE CASCADE,
+	CONSTRAINT fk_gpt_category FOREIGN KEY(protocol_category_id) REFERENCES grading_protocol_category(category_id) ON DELETE CASCADE
+);
+
+ALTER TABLE
+	grading_protocol_technique OWNER TO psql;
+
+
 --
 -- Default Inserts
 -- ** Note that the order of some of these might 
@@ -633,9 +760,11 @@ ALTER TABLE
 -- ** This part relies on a feature of psql where relative
 -- ** sql files are included with '\ir'
 --
+\ir defaults/roles.sql
 \ir defaults/users.sql
 \ir defaults/belts.sql 
 \ir defaults/tags.sql 
+\ir defaults/permissions.sql
 \ir defaults/techniques.sql
 \ir defaults/workouts.sql
 \ir defaults/exercises.sql
@@ -646,6 +775,7 @@ ALTER TABLE
 \ir defaults/sessionreviews.sql
 \ir defaults/sessionreviewactivities.sql
 \ir defaults/activitylists.sql
+\ir defaults/examination_protocols.sql
 \ir defaults/grading_protocols.sql
 -- Triggers for user
 --
@@ -704,12 +834,38 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
+CREATE OR REPLACE FUNCTION protect_final_admin_role() RETURNS TRIGGER AS $$ 
+BEGIN 
+	IF OLD.role_id = admin_role_id()
+	AND (
+		SELECT
+			COUNT(user_id)
+		FROM
+			user_table
+		WHERE
+			role_id = admin_role_id()
+	) <= 1 THEN RAISE EXCEPTION 'cannot remove final admin';
+
+	END IF;
+
+	IF TG_OP = 'UPDATE' THEN RETURN NEW;
+
+	ELSE RETURN OLD;
+
+	END IF;
+END;
+$$ LANGUAGE 'plpgsql';
+
 CREATE TRIGGER remove_user BEFORE DELETE ON user_table 
 	FOR EACH ROW EXECUTE PROCEDURE remove_user_references();
 
 CREATE TRIGGER protect_admin BEFORE DELETE OR
 	UPDATE OF user_role ON user_table 
 	FOR EACH ROW EXECUTE PROCEDURE protect_final_admin();
+
+CREATE TRIGGER protect_admin_role BEFORE DELETE OR
+	UPDATE OF role_id ON user_table
+	FOR EACH ROW EXECUTE PROCEDURE protect_final_admin_role();
 
 --
 -- Triggers for categories
@@ -749,3 +905,23 @@ $$ LANGUAGE 'plpgsql';
 
 CREATE TRIGGER insert_tag BEFORE INSERT ON tag 
 	FOR EACH ROW EXECUTE PROCEDURE tag_to_lowercase();
+
+--
+-- Triggers for roles
+--
+CREATE OR REPLACE FUNCTION protect_admin_role_permission() RETURNS TRIGGER AS $$ 
+BEGIN 
+	IF OLD.role_id = admin_role_id()
+	AND 
+	OLD.permission_id = admin_permission_id()
+	THEN RAISE EXCEPTION 'cannot revoke admin permissions from admin role';
+
+	END IF;
+	RETURN OLD;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER protect_admin_permission BEFORE DELETE ON role_to_permission
+	FOR EACH ROW EXECUTE PROCEDURE protect_admin_role_permission();
+	
+
