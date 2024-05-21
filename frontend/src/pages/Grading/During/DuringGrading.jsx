@@ -303,10 +303,9 @@ export default function DuringGrading() {
 							>
 							</ExamineePairBox>
 						))}
-				</div>
-			)}
+					</div>
+				)}
 			</div>
-
 			<div className={styles.bottomRowContainer}>
 				{/* Prev technique button */}
 				<div 
