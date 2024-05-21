@@ -1,18 +1,16 @@
 import { render, configure, screen, fireEvent} from "@testing-library/react"
 import "@testing-library/jest-dom"
 import GroupIndex from "../../../pages/Plan/GroupIndex/GroupIndex"
-import StatisticsIndex from '../../../pages/Statistics/StatisticsIndex';
 import { rest } from "msw"
 import { server } from "../../server"
-import { AccountContext } from '../../../context';
-import { MemoryRouter, Route, Routes, useNavigate } from 'react-router-dom';
+
 /**
  * Unit-test for the GroupIndex page, 
  * init as well as making sure search button is case insensitive
  *
- * @author Team Mango (Group 4) (2024-05-06), Team Durian (Group 3) (2024-04-23)
- * @since 2024-04-18
- * @version 1.0 
+ * @author Team Mango (Group 4) (2024-05-06), Team Durian (Group 3) (2024-04-23), Team Coconut (2024-05-21)
+ * @since 2024-05-21
+ * @version 1.4
  */
 
 configure({testIdAttribute: "id"})
@@ -169,7 +167,6 @@ test("Should not display groups missing message when there are groups", async ()
 
 test("Statistic button next to group should render and can be clicked", async () => {
 
-	const mockNavigate = jest.fn()
 	render(<GroupIndex/>)
 
 	server.use(
