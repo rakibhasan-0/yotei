@@ -19,6 +19,7 @@ export default function ActivityListComponent() {
 	const { workoutCreateInfo, workoutCreateInfoDispatch } =
 		useContext(WorkoutCreateContext)
 
+
 	const handleDragEnd = (result) => {
 		const { source, destination } = result
 

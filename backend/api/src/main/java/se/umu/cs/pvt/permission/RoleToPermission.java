@@ -9,6 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * A mapping class representing permissions that a role has.
+ * 
+ * @author Team Mango (Grupp 4) - 2024-05-17
+ */
 @Entity
 @Table(name = "role_to_permission")
 public class RoleToPermission implements Serializable {
@@ -35,7 +40,7 @@ public class RoleToPermission implements Serializable {
         return this.roleId;
     }
 
-    public Long getPerimssionId() {
+    public Long getPermissionId() {
         return this.permissionId;
     }
 }

@@ -11,6 +11,10 @@ import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import se.umu.cs.pvt.permission.RoleToPermissionRepository;
+import se.umu.cs.pvt.permission.UserToPermissionRepository;
+import se.umu.cs.pvt.role.RoleRepository;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.*;
@@ -21,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Test class for USER-API methods.
  *
  * @author Quattro Formaggio (Group 1), Phoenix (25-04-2023)
+ * @author Team Mango (Grupp 4) - 2024-05-17
  */
 
 @ExtendWith(MockitoExtension.class)
@@ -33,11 +38,17 @@ public class UserApiTest {
 
     @Mock
     private final UserRepository userRepository = Mockito.mock(UserRepository.class);
+    @Mock
+    final RoleRepository roleRepository = Mockito.mock(RoleRepository.class);
+    @Mock
+    final RoleToPermissionRepository roleToPermissionRepository = Mockito.mock(RoleToPermissionRepository.class);
+    @Mock
+    final UserToPermissionRepository userToPermissionRepository = Mockito.mock(UserToPermissionRepository.class);
 
     @BeforeEach
     void init() {
         user = new User();
-        lc = new UserController(userRepository);
+        lc = new UserController(userRepository, roleRepository, roleToPermissionRepository, userToPermissionRepository);
     }
 
 

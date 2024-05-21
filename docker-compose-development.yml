@@ -1,0 +1,35 @@
+services:
+  nginx:
+    image: pvt2024/nginx-dev:latest
+    build:
+      context: ./
+      dockerfile: ./nginx/development/Dockerfile
+    restart: always
+    ports:
+      - 80:80
+    links:
+      - gateway
+
+  psql:
+    ports:
+      - 5432:5432
+    image: pvt2024/database:latest
+      
+  frontend:
+    image: pvt2024/frontend:latest
+      
+  gateway:
+    image: pvt2024/gateway:latest
+    
+  api:
+    image: pvt2024/api:latest
+
+    #                 O  O  O
+    #                        O
+    #                  ._, __|__.
+    #                  || ||_____\
+    #                  || ||    |
+    #            .---------------------------.
+    #             \   O   O   O   O -YOTEI- /
+    #        ~ ~ ~ ~ ~ ~ ~ ~  ~ ~ ~ ~ ~ ~ ~ ~
+    #      ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~

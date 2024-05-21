@@ -18,13 +18,13 @@ public class ExamineePair {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "examinee_pair_id")
-    private Long examinee_pair_id;
+    private Long examineePairId;
 
     @Column(nullable = false, name = "examinee_1_id")
-    private Long examinee_1_id;
+    private Long examinee1Id;
 
     @Column(name = "examinee_2_id")
-    private Long examinee_2_id;
+    private Long examinee2Id;
 
     /**
      * Data constructor for ExamineePair.
@@ -34,9 +34,9 @@ public class ExamineePair {
      * @param examinee_2_id Id of the second examinee.
      */
     public ExamineePair(Long examinee_pair_id, Long examinee_1_id, Long examinee_2_id){
-        this.examinee_pair_id = examinee_pair_id;
-        this.examinee_1_id = examinee_1_id;
-        this.examinee_2_id = examinee_2_id;
+        this.examineePairId = examinee_pair_id;
+        this.examinee1Id = examinee_1_id;
+        this.examinee2Id = examinee_2_id;
     }
     
     /**
@@ -45,15 +45,20 @@ public class ExamineePair {
      */
     protected ExamineePair() {}
     
-    public Long getExaminee_pair_id() {
-        return examinee_pair_id;
+    public Long getExamineePairId() {
+        return examineePairId;
     }
 
-    public Long getExaminee_1_id() {
-        return examinee_1_id;
+    public Long getExaminee1Id() {
+        return examinee1Id;
     }
 
-    public Long getExaminee_2_id() {
-        return examinee_2_id;
+    public Long getExaminee2Id() {
+        return examinee2Id;
     }
+
+    // public void Examinee_2_id(Long examinee_2_id) {
+    //     this.examinee_2_id = examinee_2_id;
+    // }
+
 }

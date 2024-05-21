@@ -30,7 +30,8 @@ export default function Statistics() {
 
 	const navigate = useNavigate()
 	const { groupID } = useParams()
-	const [groupName, setGroupName] = useState(null)
+	const [group, setGroup] = useState(null)
+	const [groupBelts, setGroupBelts] = useState([])
 	const [loading, setLoading] = useState(true)
 	const { token } = useContext(AccountContext)
 	const [groupActivities, setGroupActivities] = useState([])
@@ -43,6 +44,7 @@ export default function Statistics() {
 	})
 	const [order, setDescendingOrder] = useState(false)
 	const [rotate, setRotate] = useState(false)
+
 
 	// creating a date object for two years before from now and today's date
 	const twoYearsBeforeFromNow = new Date()
@@ -119,7 +121,7 @@ export default function Statistics() {
 					const data = await responseFromGroupDetailsAPI.json()
 					setNumberOfSessions(data.numberOfSessions)
 					setAverageRating(data.averageRating)
-					setGroupActivities(data.activities.reverse())
+					setGroupActivities(data.activities)
 				}else if (responseFromGroupDetailsAPI.status === 204) {
 					// if the response is 204, it means that there is no data to show for the selected filters.
 					setGroupActivities([])
@@ -129,9 +131,12 @@ export default function Statistics() {
 					throw new Error("Failed to fetch group data")
 				}
 				
-				const groups = await responseFromGroupNameAPI.json()	
-				const name = groups.find((group) => group.id === parseInt(groupID))
-				setGroupName(name)
+				if(responseFromGroupNameAPI.status === 200) {
+					const groups = await responseFromGroupNameAPI.json()	
+					const group = groups.find((group) => group.id === parseInt(groupID))
+					setGroup(group)
+					setGroupBelts(group.belts)
+				}
 			}
 			catch (error) {
 				console.error("Fetching error:", error)
@@ -167,7 +172,6 @@ export default function Statistics() {
 	// that function is responsible for changing the order of the group activities.
 	// initially, the order is increasing, when the user clicks on the button, the order will be descending.
 	function changeOrder() {
-		console.log("rotate", rotate)
 		setDescendingOrder(!order)
 		setGroupActivities(groupActivities.reverse())
 		setRotate(!rotate)
@@ -180,7 +184,7 @@ export default function Statistics() {
 				<Spinner />
 			) : (
 				<h1 id="statistics-header">
-					{groupName ? `${groupName.name}` : "Gruppen hittades inte"}
+					{group ? `${group.name}` : "Gruppen hittades inte"}
 				</h1>
 			)}
 
@@ -202,7 +206,13 @@ export default function Statistics() {
 					<h5>Aktiviteter</h5>
 				</div>
 
-				<GradingStatisticsPopup id={"grading-statistics-container"} />
+	
+				<GradingStatisticsPopup 
+					id="grading-statistics-container" 
+					groupID={groupID} 
+					belts={groupBelts}
+				/>
+			
 
 				<StatisticsPopUp
 					groupActivities={activities}
@@ -217,12 +227,14 @@ export default function Statistics() {
 					<h5 style={{ fontSize: "25px" }}>Inga aktiviteter hittades</h5>
 				) : (
 					activities.map((activity, index) => (
+						
 						<TechniqueCard
 							key={index}
 							technique={activity}
 							checkBox={false}
 							id={activity.activity_id}
 						/>
+
 					))
 				)}
 			</div>
