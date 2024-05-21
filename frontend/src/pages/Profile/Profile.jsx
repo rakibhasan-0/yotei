@@ -246,7 +246,6 @@ export default function Profile() {
 
 		getLists(args, token, map, mapActions, (result) => {
 			if (result.error) {
-				console.log("ERror fetching")
 				//Should handle error
 				setFetchedLists(true)
 				return

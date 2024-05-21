@@ -194,8 +194,6 @@ function AddActivity({ id, setShowActivityInfo }) {
 
 		const tempTechniques = []
 		const tempExercises = []
-		console.log("checkedActivities:")
-		console.log(checkedActivities)
 		checkedActivities.forEach(checkedActivity => {
 			if (checkedActivity.type === "technique") {
 				tempTechniques.push(checkedActivity)
