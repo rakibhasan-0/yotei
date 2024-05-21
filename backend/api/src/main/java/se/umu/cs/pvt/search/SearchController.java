@@ -60,7 +60,7 @@ public class SearchController {
      *
      * Example query:
      * (GET)
-     * /api/search/techniques?name=lm+ao&beltColors=grön,grön-barn&kihon=false&tags=kniv,spark
+     * /api/search/techniques?name=lm+ao&beltColors=grön,grön-barn,grön-inverted&kihon=false&tags=kniv,spark
      *
      * Note that the query can be empty, or contain any or all of the entries.
      *
