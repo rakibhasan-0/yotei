@@ -16,19 +16,34 @@ export class AddTagPopupPage {
 	async addTag(tag: TagComponent) {
 		await this.page.getByRole("button", { name: "Hantera tagg" }).click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").click()
-		tag.tagName && await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
-		await this.page.locator("#tag-add-button").click()
-		await this.page.locator("#save-and-close-button").click()
-		// generate code with codegen in the next step
+		if (tag.tagName) {
+			await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
+		}
+
+		const tagAddButton = this.page.locator("#tag-add-button")
+		await tagAddButton.waitFor({ state: "visible" })
+		await this.waitForEnabled(tagAddButton)
+
+		await tagAddButton.click()
+
+		const saveAndCloseButton = this.page.locator("#save-and-close-button")
+		await saveAndCloseButton.waitFor({ state: "visible" })
+		await this.waitForEnabled(saveAndCloseButton)
+
+		await saveAndCloseButton.click()
 	}
 
 	async deleteTag(name: string) {
-		await this.page.getByRole("button", { name: "Spara" }).click()
 		await this.page.goto(this.url)
 		await this.page.getByRole("button", { name: "Hantera tagg" }).click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(name)
-		await this.page.getByTestId("EditableListItem-link").getByLabel("").uncheck()
+
+		const editableListItem = this.page.getByTestId("EditableListItem-link").locator("label")
+		await editableListItem.waitFor({ state: "visible" })
+
+		await editableListItem.uncheck()
+
 		await this.page.locator("#save-and-close-button").click()
 		await this.page.getByRole("button", { name: "Spara" }).click()
 		await this.page.goto(this.url)
@@ -38,8 +53,16 @@ export class AddTagPopupPage {
 		await this.page.locator("#close-icon").click()
 		await this.page.getByRole("button", { name: "Ta bort" }).click()
 		await this.page.locator("#save-and-close-button").click()
-		// generate code with codegen in the next step
 	}
 
-
+	async waitForEnabled(locator) {
+		await locator.waitFor({ state: "visible" })
+		for (let i = 0; i < 20; i++) {
+			if (await locator.isEnabled()) {
+				return
+			}
+			await this.page.waitForTimeout(100)
+		}
+		throw new Error("Element not enabled in time")
+	}
 }
