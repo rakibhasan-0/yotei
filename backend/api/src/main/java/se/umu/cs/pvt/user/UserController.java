@@ -2,7 +2,10 @@ package se.umu.cs.pvt.user;
 
 import com.auth0.jwt.interfaces.Claim;
 
-import net.bytebuddy.asm.Advice.Return;
+import se.umu.cs.pvt.permission.RoleToPermission;
+import se.umu.cs.pvt.permission.RoleToPermissionRepository;
+import se.umu.cs.pvt.permission.UserToPermission;
+import se.umu.cs.pvt.permission.UserToPermissionRepository;
 import se.umu.cs.pvt.role.Role;
 import se.umu.cs.pvt.role.RoleRepository;
 
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -20,7 +24,7 @@ import java.util.Optional;
 /**
  * Main class for handling login information and transactions with the database.
  * @author Team Hot-Pepper (G7), Quattro formaggio (G1), Chimera (G4) c20lln dv21oby, Griffin (G2) c17wfn
- * @author Team Mango (Grupp 4) - 2024-05-16
+ * @author Team Mango (Grupp 4) - 2024-05-17
  */
 @RestController
 @CrossOrigin
@@ -32,15 +36,19 @@ public class UserController {
      */
     private final UserRepository repository;
     private final RoleRepository roleRepository;
+    private final RoleToPermissionRepository roleToPermissionRepository;
+    private final UserToPermissionRepository userToPermissionRepository;
 
     /**
      * Constructor for the LoginController object.
      * @param repository Autowired
      */
     @Autowired
-    public UserController(UserRepository repository, RoleRepository roleRepository) {
+    public UserController(UserRepository repository, RoleRepository roleRepository, RoleToPermissionRepository roleToPermissionRepository, UserToPermissionRepository userToPermissionRepository) {
         this.repository = repository;
         this.roleRepository = roleRepository;
+        this.roleToPermissionRepository = roleToPermissionRepository;
+        this.userToPermissionRepository = userToPermissionRepository;
     }
 
     /**
@@ -78,7 +86,27 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new JWTUtil().generateToken(user.getUsername(), user.getUserRole().toString(), Math.toIntExact(user.getUserId()));
+        Long roleId = user.getRoleId();
+        Long userId = user.getUserId();
+        ArrayList<Long> permissionIds = new ArrayList<>();
+
+
+        if (roleId != null) {
+            List<RoleToPermission> rolePermissionPairs = roleToPermissionRepository.findAllByRoleId(roleId);
+    
+            for (RoleToPermission rtp : rolePermissionPairs) {
+                permissionIds.add(rtp.getPermissionId());
+            }
+
+        }
+        List<UserToPermission> userPermissionPairs = userToPermissionRepository.findAllByUserId(userId);
+
+        for (UserToPermission utp : userPermissionPairs) {
+            Long permId = utp.getPermissionId();
+            if (!permissionIds.contains(permId)) permissionIds.add(utp.getPermissionId());
+        }
+
+        return new JWTUtil().generateToken(user.getUsername(), user.getUserRole().toString(), Math.toIntExact(user.getUserId()), permissionIds);
     }
 
     /**
@@ -211,7 +239,7 @@ public class UserController {
     public Object refreshToken(@RequestBody String token){
         Map<String, Claim> oldToken = new JWTUtil().validateToken(token).getClaims();
 
-        return new JWTUtil().generateToken(oldToken.get("username").asString(), oldToken.get("role").asString(), oldToken.get("userId").asInt());
+        return new JWTUtil().generateToken(oldToken.get("username").asString(), oldToken.get("role").asString(), oldToken.get("userId").asInt(), oldToken.get("permissions").asList(Long.class));
     }
 
     /**

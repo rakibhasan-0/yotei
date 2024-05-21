@@ -22,6 +22,7 @@ import { useCookies } from "react-cookie"
 import ListPicker from "./ListPicker.jsx"
 import DropDown from "../../Common/List/Dropdown"
 import NewSorter from "../../Common/Sorting/NewSorter.jsx"
+import ListItem from "./ListItem.jsx"
 
 /**
  * This component is used to add activities to a workout. It contains three tabs, 
@@ -502,7 +503,6 @@ function AddActivity({ id, setShowActivityInfo }) {
 							belt_color: item.belts[0].color,
 							belt_name: item.belts[0].name,
 							is_child: item.belts[0].child
-
 						}],
 						tags: item.tags,
 						path:  item.id
@@ -656,50 +656,50 @@ function AddActivity({ id, setShowActivityInfo }) {
 											>
 
 												<div style={{ borderTop: "1px solid black" }}>
-													<p className={style.listTitleText}>Tekniker</p>
-													<div className={style.innerListDiv}>
-														{listContents[list.id]?.map(item => (
-															item.type === "technique" ? (
-																<TechniqueCard
+													{listContents[list.id]?.map((item, index) => {
+														if(item.type === "technique") {
+															return (
+																<ListItem
 																	id={"technique-list-item-" + item.techniqueID}
+																	item={item}
 																	checkBox={
-																		<CheckBox
+																		<CheckBox 
 																			checked={checkedActivities.some(a => a.techniqueID === item.techniqueID)}
 																			onClick={() => onActivityToggle(item, "technique")}
 																		/>
 																	}
-																	technique={item}
-																	key={item.techniqueID}
-																/>
-															) : null
-														))}
-													</div>
-												</div>
-												<p className={style.listTitleText}>Övningar</p>
-												<div className={style.innerListDiv}>
-													{listContents[list.id]?.map((item) => (
-														item.type === "exercise" ? (
-															<ExerciseListItem
-																id={item.id}
-																text={item.duration + " min"}
-																detailURL={"/exercise/exercise_page/"}
-																checkBox={
-																	<CheckBox
-																		checked={checkedActivities.some(a => a.id === item.id)}
-																		onClick={() => onActivityToggle(item, "exercise")}
-																	/>
-																}
-																item={item.name}
-																key={item.id}
-																index={key}
-																path={item.path}
-															/>
-														) : null
-													))}
+																	key={index}
+																	index={index}
+																>
+
+																</ListItem>
+															)
+															
+														} else if(item.type === "exercise") {
+															return (
+																<ListItem
+																	id={item.id}
+																	item={item}
+																	checkBox={
+																		<CheckBox 
+																			checked={checkedActivities.some(a => a.id === item.id)}
+																			onClick={() => onActivityToggle(item, "exercise")}
+																		/>
+																	}
+																	key={index}
+																	index={index}
+																>
+																</ListItem>
+															)
+														} else {
+															return null
+														}
+													}
+													)}
+
 												</div>
 											</DropDown>
 										))}
-
 									</InfiniteScrollComponent>)
 								}
 							</div>
