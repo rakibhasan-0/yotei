@@ -18,10 +18,10 @@ import { WorkoutCreateContext } from "./WorkoutCreateContext"
 import { WORKOUT_CREATE_TYPES } from "./WorkoutCreateReducer"
 import InfiniteScrollComponent from "../../Common/List/InfiniteScrollComponent"
 import FilterContainer from "../../Common/Filter/FilterContainer/FilterContainer"
-import Sorter from "../../Common/Sorting/Sorter"
 import { useCookies } from "react-cookie"
 import ListPicker from "./ListPicker.jsx"
 import DropDown from "../../Common/List/Dropdown"
+import NewSorter from "../../Common/Sorting/NewSorter.jsx"
 import ListItem from "./ListItem.jsx"
 
 /**
@@ -109,15 +109,54 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 */
 	const [hasLoadedData, setHasLoadedData] = useState(false)
 
-	const sortOptions = [
+	const sortOptionsExercise = [
 		{ label: "Namn: A-Ö", cmp: (a, b) => { return a.name.localeCompare(b.name) } },
 		{ label: "Namn: Ö-A", cmp: (a, b) => { return -a.name.localeCompare(b.name) } },
 		{ label: "Tid: Kortast först", cmp: (a, b) => { return a.duration - b.duration } },
 		{ label: "Tid: Längst först", cmp: (a, b) => { return b.duration - a.duration } }
 	]
-	const [sort, setSort] = useState(sortOptions[0])
+	const [sortExercise, setSortExercise] = useState(sortOptionsExercise[0])
 	const [cookies, setCookies] = useCookies(["exercise-filter"])
 	const [visibleExercises, setVisibleExercises] = useState([])
+	const { userId: currentUserId } = useContext(AccountContext)
+
+	const sortOptionsLists = [
+		{ 
+			label: "Mina - Delade - Publika", 
+			cmp: (a, b) => {
+				// "Mina" - prioritize items where the current user is the author
+				if (a.author.userId === currentUserId && b.author.userId !== currentUserId) {
+					return -1
+				}
+				if (b.author.userId === currentUserId && a.author.userId !== currentUserId) {
+					return 1
+				}
+	
+				// "Delade" - prioritize items that are shared
+				if (a.isShared && !b.isShared) {
+					return -1
+				}
+				if (b.isShared && !a.isShared) {
+					return 1
+				}
+	
+				// "Publika" - prioritize items that are not shared and not authored by the current user
+				if (!a.isShared && a.author.userId !== currentUserId && (b.isShared || b.author.userId === currentUserId)) {
+					return -1
+				}
+				if (!b.isShared && b.author.userId !== currentUserId && (a.isShared || a.author.userId === currentUserId)) {
+					return 1
+				}
+	
+				// If items are equal in terms of the above conditions, sort them by name
+				return a.name.localeCompare(b.name)
+			} 
+		},
+		{ label: "Namn: A-Ö", cmp: (a, b) => { return a.name.localeCompare(b.name) } },
+		{ label: "Namn: Ö-A", cmp: (a, b) => { return -a.name.localeCompare(b.name) } }
+	]
+	const [sortLists, setSortLists] = useState(sortOptionsLists[0])
+
 
 	const searchCount = useRef(0)
 
@@ -132,12 +171,12 @@ function AddActivity({ id, setShowActivityInfo }) {
 		setSearchListText(sessionStorage.getItem("searchListText") || "")
 		setActiveTab(getJSONSession("activeTab") || "technique")
 		setKihon(sessionStorage.getItem("kihon") || false)
-		setSort(getJSONSession("sort") || sortOptions[0])
+		setSortExercise(getJSONSession("sort") || sortOptionsExercise[0])
 	}, [])
 
 
 	useEffect(() =>
-		sessionStorage.setItem("sort", JSON.stringify(sort))
+		sessionStorage.setItem("sort", JSON.stringify(sortExercise))
 	)
 
 
@@ -197,12 +236,12 @@ function AddActivity({ id, setShowActivityInfo }) {
 		const filterCookie = cookies["exercise-filter"]
 		if (filterCookie) {
 			setSelectedExerTags(filterCookie.tags)
-			let cachedSort = sortOptions.find(option => filterCookie.sort === option.label)
-			setSort(cachedSort ? cachedSort : sortOptions[0])
+			let cachedSort = sortOptionsExercise.find(option => filterCookie.sort === option.label)
+			setSortExercise(cachedSort ? cachedSort : sortOptionsExercise[0])
 		}
 	}, [])
 
-	useEffect(setExerciseList, [exercises, sort, searchExerText])
+	useEffect(setExerciseList, [exercises, sortExercise, searchExerText])
 
 	useEffect(() => {
 		const activeTab = tabCookie["active-tab"]
@@ -245,7 +284,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 		setFetchedLists(false)
 		setLists(lists)
 		fetchingList()
-	}, [searchListText, hasLoadedData, listUpdate])
+	}, [searchListText, hasLoadedData, listUpdate, sortLists])
 
 
 	/**
@@ -377,7 +416,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 */
 	const searchExercises = () => {
 		searchCount.current++
-		setCookies("exercise-filter", { tags: selectedExerTags, sort: sort.label }, { path: "/" })
+		setCookies("exercise-filter", { tags: selectedExerTags, sort: sortExercise.label }, { path: "/" })
 		const args = {
 			text: searchExerText,
 			selectedTags: selectedExerTags,
@@ -397,9 +436,9 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 * Also updates the exercise filter cookie.
 	 */
 	function setExerciseList() {
-		setCookies("exercise-filter", { tags: selectedExerTags, sort: sort.label }, { path: "/" })
+		setCookies("exercise-filter", { tags: selectedExerTags, sort: sortExercise.label }, { path: "/" })
 		if (exercises && searchExerText === "") {
-			const sortedList = [...exercises].sort(sort.cmp)
+			const sortedList = [...exercises].sort(sortExercise.cmp)
 			setVisibleExercises(sortedList)
 		}
 		else {
@@ -424,9 +463,20 @@ function AddActivity({ id, setShowActivityInfo }) {
 
 		getLists(args, token, map, mapActions, (result) => {
 			if (result.error) return
-		
-			const res = result.results
-			setLists([...res])
+
+			// Extract the 'id' and 'name' fields from each item in the result used in displaying the list.
+			const lists = result.map(item => ({
+				id: item.id,
+				name: item.name,
+				author: {
+					userId: item.author.userId,
+					username: item.author.username
+				},
+				hidden: item.hidden,
+				isShared: item.is_shared
+			}))
+
+			setLists(lists.sort(sortLists.cmp))
 			setFetchedLists(true)
 		})
 	}
@@ -543,9 +593,9 @@ function AddActivity({ id, setShowActivityInfo }) {
 								setSuggestedTags={setSuggestedExerTags}
 							/>
 						</div>
-						<FilterContainer id="ei-filter" title="Sortering" numFilters={0}>
-							<Sorter onSortChange={setSort} id="ei-sort" selected={sort} options={sortOptions} />
-						</FilterContainer>
+
+						<NewSorter onSortChange={setSortExercise} id="ei-sort" selected={sortExercise} options={sortOptionsExercise} />
+
 						{(exercises.length === 0 && fetchedExer) ?
 							<ErrorStateSearch id="add-activity-no-exercise" message="Kunde inte hitta övningar" />
 							:
@@ -581,6 +631,10 @@ function AddActivity({ id, setShowActivityInfo }) {
 									onChange={setSearchListText}
 								/>
 							)}
+
+							<NewSorter onSortChange={setSortLists} id="ei-sort" selected={sortLists} options={sortOptionsLists} />
+
+
 							{isFilterEnabled && ( // TODO: feature toggle.
 								<FilterContainer id="ei-filter" title="Filtrering" numFilters={0}>
 									<ListPicker />

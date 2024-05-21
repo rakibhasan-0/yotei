@@ -43,7 +43,6 @@ export default function Profile() {
 	const [passwordButtonState, setPasswordButtonDisabled] = useState(false)
 	const [usernameButtonState, setUsernameButtonDisabled] = useState(false)
 	const [fetchedLists, setFetchedLists] = useState(false)
-	
 	const [lists, setLists] = useState([])
 	const [map, mapActions] = useMap()
 
