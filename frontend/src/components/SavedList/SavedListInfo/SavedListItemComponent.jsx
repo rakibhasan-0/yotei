@@ -19,9 +19,6 @@ const SavedActivityListItem = ({ activity, index, id, listCreateInfoDispatchProp
 	const [isActive, setIsActive] = useState(false)
 	let bgColor = "#ffdfe3"
 
-	const isFreeTextElem = () => {
-		return activity.exercise == null && activity.technique == null
-	}
 	//In case it is a newly added activity which has not had its technique/excercise info loaded
 	const name = activity.name ? (
 		<p className={`${styles["listActivityName"]} m-0`}>{activity.name}</p>
@@ -45,14 +42,14 @@ const SavedActivityListItem = ({ activity, index, id, listCreateInfoDispatchProp
 					backgroundColor: bgColor,
 				}}
 				onClick={() => {
-					if (!isFreeTextElem() && (activity.exercise?.description || activity.technique?.description)) {
+					if (activity.exercise?.description || activity.technique?.description) {
 						setIsActive(!isActive)
 					}
 				}}
 			>
 				<div className="col text-left">
 					<p className={`${styles["listActivityType"]} m-0`}>{name}</p>
-					{activity.exercise ? <p className="mb-0">Övning</p> : <p className="mb-0">Teknik</p>}
+					{activity.type === "exercise" ? <p className="mb-0">Övning</p> : <p className="mb-0">Teknik</p>}
 				</div>
 
 				<div
@@ -63,7 +60,7 @@ const SavedActivityListItem = ({ activity, index, id, listCreateInfoDispatchProp
 					) : (
 						<p className="mb-0"> - </p>
 					)}
-					{!isFreeTextElem() && (activity.exercise?.description || activity.technique?.description) && (
+					{(activity.exercise?.description || activity.technique?.description) && (
 						<div role="optional-toggle" className="toggleIcon ml-2">
 							<DescriptionToggle isActive={isActive} />
 						</div>
@@ -72,8 +69,6 @@ const SavedActivityListItem = ({ activity, index, id, listCreateInfoDispatchProp
 						<div className="pl-3">
 							<i
 								onClick={() => {
-									console.log("activity:")
-									console.log(activity)
 									listCreateInfoDispatchProp({
 										type: LIST_CREATE_TYPES.REMOVE_ACTIVITY_ITEM,
 										payload: { id: activity.exercise?.id || activity.technique?.id || activity.id },
@@ -97,12 +92,9 @@ const SavedActivityListItem = ({ activity, index, id, listCreateInfoDispatchProp
 				{isActive && (
 					<div className="row mb-0" style={{ backgroundColor: bgColor }}>
 						<div className="col">
+							{/* Se över description, att det blir korrekt */}
 							<p role="description-div" className={styles["textDesc"]}>
-								{isFreeTextElem()
-									? activity.text
-									: activity.exercise
-										? activity.exercise.description
-										: activity.technique.description}
+								activity.description
 							</p>
 						</div>
 					</div>
