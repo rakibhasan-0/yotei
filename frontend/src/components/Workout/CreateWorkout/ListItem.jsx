@@ -44,7 +44,7 @@ export default function ListItem({ item, checkBox, id, index}) {
 
 						<div className={style.nameTag}> 
 							<Link onClick={handleOnClick}>
-								<p>{item.name}</p> 
+								<p className={style.nameLink}>{item.name}</p> 
 							</Link>
 						</div>
 					</div>
@@ -59,7 +59,7 @@ export default function ListItem({ item, checkBox, id, index}) {
 						{checkBox}
 						<div className={style.nameTag}>
 							<Link onClick={handleOnClick}>
-								<p>{item.name}</p>
+								<p className={style.nameLink}>{item.name}</p>
 							</Link>
 						</div>
 						<div className={style.durationTag}> 
