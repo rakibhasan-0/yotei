@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import java.util.Base64;
 
 /**
  * Class for handling requests to the examination api.
@@ -617,7 +618,7 @@ public class ExaminationController {
 
         try {
             InputStream stream = pdfExport.generate();
-            return new ResponseEntity<Object>(stream.readAllBytes(), HttpStatus.OK);
+            return new ResponseEntity<Object>( Base64.getEncoder().encode(stream.readAllBytes()), HttpStatus.OK);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
