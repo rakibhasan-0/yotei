@@ -23,7 +23,7 @@ export type Account = {
   userId?: string,
 };
 
-// Enum for the different types of roles. 
+// Enum for the different types of roles. This needs to be updated when permissions are implemented. 
 export enum Role {
   user = 0,
   admin = 1,

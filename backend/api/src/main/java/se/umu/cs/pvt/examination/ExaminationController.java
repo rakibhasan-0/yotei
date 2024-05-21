@@ -16,7 +16,7 @@ import java.util.Optional;
  * Class for handling requests to the examination api.
  * 
  * @author Team Pomegranate (c21man && ens20lpn)
- * @author Team Orange (dv22rfg)
+ * @author Team Orange (dv22rfg && c19jen)
  */
 @RestController
 @RequestMapping(path = "/api/examination")
@@ -481,7 +481,7 @@ public class ExaminationController {
         List<Map<String, Object>> results = new ArrayList<>();
         for(Examinee e : examinees) {
             for(ExaminationResult er : examinationResults) {
-                if(er.getExamineeId() == e.getExamineeId() && er.getTechnique_name().equals(technique_name)) {
+                if(er.getExamineeId() == e.getExamineeId() && er.getTechniqueName().equals(technique_name)) {
                     Map<String, Object> result = new HashMap<>();
                     result.put("examinee_id", e.getExamineeId());
                     result.put("result", er.getPass());
