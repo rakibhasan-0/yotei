@@ -247,6 +247,7 @@ function getWorkoutInfoContainer(workoutData, setShowPopup, context, userId, wor
 								color="var(--red-primary)"
 								style={{cursor: "pointer"}}
 								onClick={() => setShowPopup(true)}
+								id={"delete_trashcan"}
 							/>
 						</>
 						}

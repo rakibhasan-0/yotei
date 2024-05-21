@@ -48,11 +48,21 @@ export type Technique = {
   mediaLink?: string
 }
 
+// Exercise
+export type Exercise = {
+  name?: string,
+  description?: string,
+  time?: number,
+  tag?: string,
+  mediaLink?: string
+}
+
 // Workout
 export type Workout = {
   name?: string,
   description?: string,
-  activities?: Activity[],
+  techniques?: Technique[],
+  exercises?: Exercise[],
   isPrivate?: boolean,
   hasAccess?: Account[],
   tags?: string[]

@@ -22,28 +22,58 @@ export class WorkoutPage {
 
     async createWorkout(workout: Workout) {
         await this.page.locator('#CreateWorkoutButton').getByRole('img').click()
-        await this.page.getByPlaceholder('Namn').click()
-        await this.page.getByPlaceholder('Namn').fill(workout.name)
-        await this.page.getByPlaceholder('Namn').press('Tab')
-        await this.page.getByPlaceholder('Beskrivning av pass').fill(workout.description)
-        await this.page.getByRole('button', { name: '+ Aktivitet' }).click()
-        await this.page.locator('#technique-list-item-138').getByLabel('').check()
-        await this.page.locator('#technique-list-item-139').getByLabel('').check()
-        await this.page.locator('#technique-list-item-140').getByLabel('').check()
-        await this.page.getByRole('tab', { name: 'Övningar' }).click()
-        await this.page.locator('#ExerciseListItemCheckBox-289-checkbox').check()
-        await this.page.locator('#ExerciseListItemCheckBox-305-checkbox').check()
-        await this.page.locator('#ExerciseListItemCheckBox-340-checkbox').check()     
-        await this.page.locator('#AddCheckedActivitiesButton').click()
-        await this.page.locator('div').filter({ hasText: /^Uppvärmning$/ }).click()
-        await this.page.getByRole('button', { name: 'Lägg till' }).click()
+
+
+        workout.name && await this.page.getByPlaceholder('Namn').fill(workout.name)
+        workout.description && await this.page.getByPlaceholder('Beskrivning av pass').fill(workout.description)
+        
+        if (workout.techniques || workout.exercises) {
+
+            await this.page.getByRole('button', { name: '+ Aktivitet' }).click()
+            workout.techniques && await this.checkAllActivities(workout.techniques, 3)
+            
+            if (workout.exercises) {
+                await this.page.getByRole('tab', { name: 'Övningar' }).click()
+                await this.checkAllActivities(workout.exercises, 4)
+            }
+
+            // Adds selected activities to workout
+            await this.page.locator('#AddCheckedActivitiesButton').click()
+            await this.page.locator('div').filter({ hasText: /^Uppvärmning$/ }).click()
+            await this.page.getByRole('button', { name: 'Lägg till' }).click()
+        }
+
+        // Saves Workout
         await this.page.getByRole('button', { name: 'Spara' }).click()
     }
+
+    /**
+     * Since the list elements for techniques and exercises differ, 
+     * to locate their respective checkboxes from an input string, 
+     * the locator needs to traverse up the DOM tree either 3 or 4 times.
+     * 
+     * For an array of Techniques : Call with levelsUp = 3
+     * For an array of Exercises : Call with levelsUp = 4
+     */
+    async checkAllActivities(activities, levelsUp) {
+        for (const activity of activities) {
+            let locator = this.page.getByText(`${activity.name}`, { exact: true });
+            
+            // Traverse up the DOM tree the specified number of levels
+            for (let i = 0; i < levelsUp; i++) {
+                locator = locator.locator('..');
+            }
+            
+            // Locate and check the checkbox
+            await locator.locator('input[type="checkbox"]').check();
+        }
+    }
+    
 
     async editWorkout() {
 
         // Clicks the pen icon to edit the created workout
-        await this.page.getByRole('link').first().click();
+        await this.page.locator('#edit_pencil').click();
 
         // Updates the workouts description
         await this.page.getByPlaceholder('Beskrivning av pass').click();
@@ -64,8 +94,8 @@ export class WorkoutPage {
         await this.page.getByRole('button', { name: 'Spara' }).click();        
     }
 
-    async deleteWorkout(name: String) {
-        await this.page.getByRole('img').nth(3).click()
+    async deleteWorkout() {
+        await this.page.locator('#delete_trashcan').click()
         await this.page.getByRole('button', { name: 'Ta bort' }).click()
     }
 }

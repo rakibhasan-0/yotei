@@ -10,7 +10,7 @@ test.describe('ST-4 Workout', () => {
 		await expect(page.getByPlaceholder('Sök efter pass')).toBeVisible()
 	})
 
-    test('1. Create workout', async ({ page }) => {
+    test('Workout is created and then deleted', async ({ page }) => {
 
         // Will generate a random string of 5 characters
 		const name = Math.random().toString(36).slice(2, 7) 
@@ -21,6 +21,16 @@ test.describe('ST-4 Workout', () => {
             {
                 description: 'description description description', 
                 name: name, 
+                techniques: [
+                    { name: "Kamae, neutral (5 Kyu)" },
+                    { name: "Kamae, beredd (5 Kyu)" },
+                    { name: "Kamae, gard (5 Kyu)" },
+                ],
+                exercises: [
+                    { name: "Armhävningar" },
+                    { name: "Armhävningar med bred handposition" },
+                    { name: "Armhävningar med handklapp" },
+                ],
             }
         )
 
@@ -37,17 +47,29 @@ test.describe('ST-4 Workout', () => {
     	await page.getByRole('link', { name: `${name}`}).isHidden()
     })
 
-    test('2. Edit workout', async ({ page }) => {
+    test('Workout is created, then edited, then deleted', async ({ page }) => {
 
         // Generates a random string of five characters
         const name = Math.random().toString(36).slice(2, 7) // Will generate a random string of 5 characters
 
         // Creates a new workout with a randomized name, a sample description,
         // and adds 6 different activities, 3 exercises and 3 techniques.
-        await workoutPage.createWorkout({
+        await workoutPage.createWorkout(
+            {
                 description: 'description description description', 
                 name: name, 
-        })
+                techniques: [
+                    { name: "Kamae, neutral (5 Kyu)" },
+                    { name: "Kamae, beredd (5 Kyu)" },
+                    { name: "Kamae, gard (5 Kyu)" },
+                ],
+                exercises: [
+                    { name: "Armhävningar" },
+                    { name: "Armhävningar med bred handposition" },
+                    { name: "Armhävningar med handklapp" },
+                ],
+            }
+        )
 
         // Asserts the existence of the confirmation message
 		await expect(page.getByText(`Träningspasset skapades!`)).toBeVisible()
