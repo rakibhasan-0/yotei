@@ -10,16 +10,15 @@ import { rest } from "msw"
 import { server } from "../../../server"
 import TechniqueDetail from "../../../../pages/Activity/Technique/TechniqueDetail/TechniqueDetail"
 import TechniqueEdit from "../../../../pages/Activity/Technique/TechniqueEdit/TechniqueEdit"
-import { USER_PERMISSION_LIST_ALL } from "../../../../utils"
+import { USER_PERMISSION_CODES, USER_PERMISSION_LIST_ALL } from "../../../../utils"
 
-//TODO should add tests similar to techniqueIndex.test for the techniqueEdit symbols.
 /**
  * Tests for the technique edit page.
  * 
  * @author Team Medusa (Group 6), Team Durian (Group 3), Team Mango (Group 4)
  * @version 1.0
  * @since 2024-05-02
- * Updates: 2024-05-21: Added permissions to the currently used user to fix tests by giving them all permissions.
+ * Updates: 2024-05-21: Added correct permissions to old tests and wrote new permission tests.
  */
 const api = jest.fn()
 server.events.on("request:start", api)
@@ -164,7 +163,7 @@ describe("verify that", () => {
 	})
 
 	// Render the technique detail page with router and account context. Also waits for it to fully render.
-	const renderWithRouter = async() => {
+	const renderWithRouter = async(permissions_list) => {
 		const techniqueId = 1
 		window.HTMLElement.prototype.scrollIntoView = jest.fn
 		const router = createMemoryRouter(
@@ -177,7 +176,7 @@ describe("verify that", () => {
 		)
 
 		render ( //eslint-disable-next-line no-dupe-keys
-			<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", permissions: USER_PERMISSION_LIST_ALL, undefined }}>
+			<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", permissions: permissions_list, undefined }}>
 				<RouterProvider router={router}/>
 			</AccountContext.Provider>
 		)
@@ -187,6 +186,54 @@ describe("verify that", () => {
 			expect(api).toHaveBeenCalledTimes(3)
 		})
 	}
+
+
+	//PERMISSION TESTS
+
+	//EDIT BUTTON.
+
+	test("Admin should see edit button", async () => {
+		await renderWithRouter(USER_PERMISSION_LIST_ALL)
+
+		expect(screen.getByTestId("technique-edit-button")).toBeInTheDocument()
+	})
+
+	test("someone with edit rights should see edit button", async () => {
+		await renderWithRouter([USER_PERMISSION_CODES.ACTIVITY_ALL])
+
+		expect(screen.getByTestId("technique-edit-button")).toBeInTheDocument()
+	})
+
+	test("someone without edit rights should not see edit button", async () => {
+		await renderWithRouter([])
+
+		expect(screen.queryByTestId("technique-edit-button")).not.toBeInTheDocument()
+	})
+
+	//DELETE BUTTON.
+
+	test("Admin should see delete button", async () => {
+		await renderWithRouter(USER_PERMISSION_LIST_ALL)
+
+		expect(screen.getByTestId("technique-delete-button")).toBeInTheDocument()
+	})
+
+	test("someone with edit rights should see delete button", async () => {
+		await renderWithRouter([USER_PERMISSION_CODES.ACTIVITY_ALL])
+
+		expect(screen.getByTestId("technique-delete-button")).toBeInTheDocument()
+	})
+
+
+	test("someone without edit rights should not see delete button", async () => {
+		await renderWithRouter([])
+
+		expect(screen.queryByTestId("technique-delete-button")).not.toBeInTheDocument()
+	})
+
+	//END PERMISSION TESTS
+	
+	
 
 	/*test("checking the kihon checkbox adds and removes the kihon tag", async () => {
 		await renderWithRouter()
@@ -235,7 +282,7 @@ describe("verify that", () => {
 	})*/
 
 	test("changing the technique name and canceling shows the confirm popup", async () => {
-		await renderWithRouter()
+		await renderWithRouter(USER_PERMISSION_LIST_ALL)
 
 		await user.click(screen.getByTestId("technique-edit-button"))
 		await user.type(screen.getByPlaceholderText("Namn"), " med nytt namn")
@@ -248,7 +295,7 @@ describe("verify that", () => {
 	})
 
 	test("changing the technique name and canceling does not update the technique", async () => {
-		await renderWithRouter()
+		await renderWithRouter(USER_PERMISSION_LIST_ALL)
 
 		await user.click(screen.getByTestId("technique-edit-button"))
 		await user.type(screen.getByPlaceholderText("Namn"), " med nytt namn")
@@ -266,7 +313,7 @@ describe("verify that", () => {
 	})
 
 	test("changing the technique name updates the technique", async () => {
-		await renderWithRouter()
+		await renderWithRouter(USER_PERMISSION_LIST_ALL)
 
 		await user.click(screen.getByTestId("technique-edit-button"))
 		await user.type(screen.getByPlaceholderText("Namn"), " med nytt namn")
@@ -279,7 +326,7 @@ describe("verify that", () => {
 	})
 
 	test("changing the technique description updates the technique", async () => {
-		await renderWithRouter()
+		await renderWithRouter(USER_PERMISSION_LIST_ALL)
 
 		await user.click(screen.getByTestId("technique-edit-button"))
 		await user.type(screen.getByPlaceholderText("Beskrivning av teknik"), " Ny beskrivning")
@@ -292,7 +339,7 @@ describe("verify that", () => {
 	})
 
 	test("adding a belt updates the technique", async () => {
-		await renderWithRouter()
+		await renderWithRouter(USER_PERMISSION_LIST_ALL)
 
 		await user.click(screen.getByTestId("technique-edit-button"))
 		await user.click(screen.getByText("Bälten"))
@@ -330,7 +377,7 @@ describe("verify that", () => {
 	})*/
 
 	test("correct error message is shown when the updated name is empty", async () => {
-		await renderWithRouter()
+		await renderWithRouter(USER_PERMISSION_LIST_ALL)
 
 		await user.click(screen.getByTestId("technique-edit-button"))
 		await user.clear(screen.getByPlaceholderText("Namn"))
@@ -347,7 +394,7 @@ describe("verify that", () => {
 	})
 
 	test("a technique without belt can't be created", async () => {
-		await renderWithRouter()
+		await renderWithRouter(USER_PERMISSION_LIST_ALL)
 
 		await user.click(screen.getByTestId("technique-edit-button"))
 		await user.click(screen.getByText("Bälten"))
@@ -361,4 +408,3 @@ describe("verify that", () => {
 	})
 
 })
-
