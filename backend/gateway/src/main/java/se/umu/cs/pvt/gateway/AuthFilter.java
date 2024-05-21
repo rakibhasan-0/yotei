@@ -3,6 +3,7 @@ package se.umu.cs.pvt.gateway;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.fasterxml.jackson.databind.deser.DataFormatReaders.Match;
 
 import ch.qos.logback.classic.Level;
 
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -134,20 +136,27 @@ public class AuthFilter implements GlobalFilter, Ordered {
             // Might be a better way but this makes it so that no 
             // newly created endpoint is permission-locked from the get-go
             // Any new endpoint that needs to be locked has to be included here
-            String[] permission_locked_paths = {
-                "/add",
-                "/addList",
-                "/delete",
-                "/deleteByPlan",
-                "/update"
+            Pattern[] patterns = {
+                // From SessionController
+                Pattern.compile("^/api/session/add$"),
+                Pattern.compile("^/api/session/addList$"),
+                Pattern.compile("^/api/session/delete$"),
+                Pattern.compile("^/api/session/deleteByPlan$"),
+                Pattern.compile("^/api/session/update$"),
+                // From SessionReviewController
+                Pattern.compile("^/api/session/\\d+/review$"),
+                Pattern.compile("^/api/session/\\d+/review/\\d+/activity$"),
+                Pattern.compile("^/api/session/\\d+/review/\\d+/activity/\\d+$"),
+                Pattern.compile("^/api/session/\\d+/review/\\d+$")
             };
 
-            String apiPath = path.substring("/api/session".length());
-
-            if (Arrays.asList(permission_locked_paths).contains(apiPath)) {
-                if (!(permissions.contains(permission_list.SESSION_OWN.value) || 
-                    permissions.contains(permission_list.SESSION_ALL.value))) {
-                    return false;
+            for (Pattern pattern : patterns) {
+                Matcher matcher = pattern.matcher(path);
+                if (matcher.matches()) {
+                    if (!(permissions.contains(permission_list.SESSION_OWN.value) || 
+                        permissions.contains(permission_list.SESSION_ALL.value))) {
+                        return false;
+                    }
                 }
             }
         }
@@ -157,5 +166,4 @@ public class AuthFilter implements GlobalFilter, Ordered {
         return !(path.contains("import") || path.contains("export") || path.equals("/api/users"));
 
     }
-
 }
