@@ -3,6 +3,9 @@ package se.umu.cs.pvt.gateway;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+
+import ch.qos.logback.classic.Level;
+
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.cloud.gateway.route.Route;
@@ -17,6 +20,8 @@ import reactor.core.publisher.Mono;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 /**
  * @author UNKNOWN (Doc: Griffin c20wnn)
@@ -40,17 +45,17 @@ public class AuthFilter implements GlobalFilter, Ordered {
     // These are listed in permissions.sql and should mirror 
     // what is present in utils.js
     private enum permission_list {
-        ADMIN_RIGHTS(0),
-	    SESSION_OWN(1), //Edit your own sessions.
-	    SESSION_ALL(2), //Edit all sessions.
-	    PLAN_OWN(3),
-	    PLAN_ALL(4),
-	    WORKOUT_OWN(5),
-	    WORKOUT_ALL(6),
-	    ACTIVITY_OWN(7),
-	    ACTIVITY_ALL(8),
-	    GRADING_OWN(9),
-	    GRADING_ALL(10);
+        ADMIN_RIGHTS(1),
+	    SESSION_OWN(2), //Edit your own sessions.
+	    SESSION_ALL(3), //Edit all sessions.
+	    PLAN_OWN(4),
+	    PLAN_ALL(5),
+	    WORKOUT_OWN(6),
+	    WORKOUT_ALL(7),
+	    ACTIVITY_OWN(8),
+	    ACTIVITY_ALL(9),
+	    GRADING_OWN(10),
+	    GRADING_ALL(11);
 
         private final int value;
         private permission_list(int value) {
@@ -115,14 +120,15 @@ public class AuthFilter implements GlobalFilter, Ordered {
             return false;
         }
 
+        //System.err.println("permissions: " + permissions);
+        //Logger.log(Level.DEBUG, "permissions: " + permissions);
+        
         if (role.equals("ADMIN") || permissions.contains(permission_list.ADMIN_RIGHTS.value)) {
             return true;
         }
-
-        // Protect import and export endpoints
-        // Only allow admin to create users
-        if (!(path.contains("import") || path.contains("export") || path.equals("/api/users"))) return false;
-
+        
+        //throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "permissions: " + permissions + "\nadmin right: " + permission_list.ADMIN_RIGHTS.value);
+        
         // Check for each permission-locked api path and determine if user is allowed through
         if (path.startsWith("/api/session")) {
             // Might be a better way but this makes it so that no 
@@ -133,19 +139,24 @@ public class AuthFilter implements GlobalFilter, Ordered {
                 "/addList",
                 "/delete",
                 "/deleteByPlan",
-                "/update",
+                "/update"
             };
 
-            String api_path = path.substring(path.indexOf("/api/session"));
-            if (Arrays.asList(permission_locked_paths).contains(api_path)) {
+            String apiPath = path.substring("/api/session".length());
+
+            if (Arrays.asList(permission_locked_paths).contains(apiPath)) {
                 if (!(permissions.contains(permission_list.SESSION_OWN.value) || 
                     permissions.contains(permission_list.SESSION_ALL.value))) {
                     return false;
                 }
             }
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "permissions: " + permissions + " path: " + path + "apiPath: " + apiPath);
         }
 
-        return true;
+        // Protect import and export endpoints
+        // Only allow admin to create users
+        return !(path.contains("import") || path.contains("export") || path.equals("/api/users"));
+
     }
 
 }
