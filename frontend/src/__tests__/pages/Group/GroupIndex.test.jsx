@@ -25,6 +25,12 @@ jest.mock("react-router-dom", () => ({
 	Link: jest.fn().mockImplementation(({ children }) => children),
 }))
 
+jest.mock('../../../utils', () => ({
+	...jest.requireActual('../../../utils'),
+	canEditGroups: jest.fn().mockReturnValue(true),
+}));
+  
+
 test("Should render title on init", async () => {
 	render(<GroupIndex/>)
 	//Gets the first "Grupper" so there can exist a header and a tab title with the same name.
@@ -161,3 +167,34 @@ test("Should not display groups missing message when there are groups", async ()
 
 })
 
+test("Should render statistics button next to group", async () => {
+
+	render(<GroupIndex/>)
+
+	server.use(
+		rest.get("api/plan/all", async (req, res, ctx) => {
+			return res(
+				ctx.status(200),
+				ctx.json([
+					{
+						"id": 1,
+						"name": "Grönt bälte träning",
+						"userId": 1,
+						"belts": [
+							{
+								"id": 7,
+								"name": "Grönt",
+								"color": "0C7D2B",
+								"child": false
+							}
+						]
+					},
+				])
+			)
+		})
+	)
+
+	await screen.findByTestId("statistics-page-button")
+
+
+})
