@@ -84,6 +84,6 @@ test.describe('Workout', () => {
 
         // Deletes the created workout and asserts that it was deleted
 		await workoutPage.deleteWorkout(name)
-    	await page.getByRole('link', { name: `${name}`}).isHidden()
+    	await expect(page.getByRole('link', { name: `${name}`})).toBeHidden()
     })
 })
