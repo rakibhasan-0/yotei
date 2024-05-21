@@ -53,25 +53,25 @@ export default function ExamineeBox({
 }) {
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [isAddingComment, setAddComment] = useState(false)
-    const [commentText, setCommentText] = useState("")
-    const [commentError, setCommentError] = useState("")
+	const [commentText, setCommentText] = useState("")
+	const [commentError, setCommentError] = useState("")
 	const [hasComment, setExistingComment] = useState(false)
 	const [commentId, setCommentId] = useState(null)
 	const colors = {
-        default: "white",
-        pass: "lightgreen",
-        fail: "lightcoral"
-    }
+		default: "white",
+		pass: "lightgreen",
+		fail: "lightcoral"
+	}
     
 	const { gradingId } = useParams()
 	const { token, userId } = useContext(AccountContext)
 
-    // Set initial color index based on status prop
-    const [color, setColor] = useState(colors[status] || colors.default)
+	// Set initial color index based on status prop
+	const [color, setColor] = useState(colors[status] || colors.default)
 
-    useEffect(() => {
-        setColor(colors[status] || colors.default);
-    }, [status]);
+	useEffect(() => {
+		setColor(colors[status] || colors.default)
+	}, [status])
     
 	useEffect(() => {
 		if (isAddingComment) {
@@ -217,27 +217,27 @@ export default function ExamineeBox({
 	}
 
 	const handleClick = () => {
-        // Update buttonState and color based on current color
-        let newButtonState;
-        let newColor;
+		// Update buttonState and color based on current color
+		let newButtonState
+		let newColor
         
-        if (color === colors.default) {
-            newButtonState = "pass";
-            newColor = colors.pass;
-        } else if (color === colors.pass) {
-            newButtonState = "fail";
-            newColor = colors.fail;
-        } else if (color === colors.fail) {
-            newButtonState = "default";
-            newColor = colors.default;
-        }
+		if (color === colors.default) {
+			newButtonState = "pass"
+			newColor = colors.pass
+		} else if (color === colors.pass) {
+			newButtonState = "fail"
+			newColor = colors.fail
+		} else if (color === colors.fail) {
+			newButtonState = "default"
+			newColor = colors.default
+		}
         
-        setButtonState(newButtonState);
-        setColor(newColor);
-        onClick(newButtonState); // Pass the new state as a parameter
-    };
+		setButtonState(newButtonState)
+		setColor(newColor)
+		onClick(newButtonState) // Pass the new state as a parameter
+	}
 
-    console.log("name: ", examineeName, ", status: ", status, ", color: ", color)
+	console.log("name: ", examineeName, ", status: ", status, ", color: ", color)
 
 	return (
 		<div id={id} className={styles.examineeContainer} style={{ backgroundColor: color }}>

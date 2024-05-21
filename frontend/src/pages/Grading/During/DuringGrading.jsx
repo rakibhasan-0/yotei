@@ -92,14 +92,14 @@ export default function DuringGrading() {
 	const [showPopup, setShowPopup] = useState(false)
 	const [examinees, setExaminees] = useState(undefined)
 	const [pairs, setPairs] = useState([])
-    const [leftExamineeState, setLeftExamineeState] = useState("default")
-    const [rightExamineeState, setRightExamineeState] = useState("default")
-    const [results, setResults] = useState([])
+	const [leftExamineeState, setLeftExamineeState] = useState("default")
+	const [rightExamineeState, setRightExamineeState] = useState("default")
+	const [results, setResults] = useState([])
 	const [techniqueNameList, setTechniqueNameList] = useState(undefined)
 	const [categoryIndexMap, setCategoryIndices] = useState(undefined)
 	const { gradingId } = useParams()
 	const navigate = useNavigate()
-    const scrollableContainerRef = useRef(null) // Scroll to the top of the examinees list after navigation
+	const scrollableContainerRef = useRef(null) // Scroll to the top of the examinees list after navigation
 	
 	const context = useContext(AccountContext)
 	const { token } = context
@@ -215,30 +215,30 @@ export default function DuringGrading() {
 	// Run to fetch the correct grading, to in turn fetch the correct grading protocol
 	useEffect(() => {
 		async function fetchData() {
-            try {
+			try {
 				const grading = await fetchGrading()
 				const protocol = await fetchProtocol(grading)
 				const parsedProtocol = parseProtocol(protocol)
 				updateState(parsedProtocol)
 			} catch (error) {
-                handleFetchError(error)
+				handleFetchError(error)
 			}
 		}
     
 		fetchData()
 	}, [])
 
-    useEffect(() => {
-        if(currentTechniqueStep !== undefined) {
-            fetchTechniqueResults(techniqueNameList[currentTechniqueStep].technique.text, token) 
-        }
-    }, [currentTechniqueStep])
+	useEffect(() => {
+		if(currentTechniqueStep !== undefined) {
+			fetchTechniqueResults(techniqueNameList[currentTechniqueStep].technique.text, token) 
+		}
+	}, [currentTechniqueStep])
     
-    // Debugging the examinee states.    
-    useEffect(() => {
-        console.log("leftExamineeState:", leftExamineeState);
-        console.log("rightExamineeState:", rightExamineeState);
-    }, [leftExamineeState, rightExamineeState]);
+	// Debugging the examinee states.    
+	useEffect(() => {
+		console.log("leftExamineeState:", leftExamineeState)
+		console.log("rightExamineeState:", rightExamineeState)
+	}, [leftExamineeState, rightExamineeState])
 
 
 	// Will handle the api call that will update the database with the result. 
@@ -250,14 +250,14 @@ export default function DuringGrading() {
 	 * @param {String} buttonId : button index namne that ends with either 'left' or 'right'
 	 */
 	const examineeClick = (newState, technique, pairIndex, buttonId) => {
-        console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}, with new state ${newState}`)
+		console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}, with new state ${newState}`)
 		// Check what state the button is in and send the proper information to DB.
 		let examinee_clicked = buttonId.endsWith("left") ? pairs[pairIndex].leftId : pairs[pairIndex].rightId
 		addExamineeResult(examinee_clicked, `${technique}`, newState)
 	}
     
 	return (
-        <div className={styles.container}>
+		<div className={styles.container}>
 			{techniqueNameList && (
 				<TechniqueInfoPanel
 					categoryTitle=""
@@ -277,7 +277,7 @@ export default function DuringGrading() {
 								<ExamineeBox 
 									examineeName={item.nameLeft} 
 									onClick={(newState) => examineeClick(newState, techniqueNameList[currentTechniqueStep].technique.text, index, `${index}-left`)}
-                                    status={getExamineeStatus(item.leftId, results)}
+									status={getExamineeStatus(item.leftId, results)}
 									setButtonState={setLeftExamineeState}
 									examineeId={item.leftId}
 									techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
@@ -288,7 +288,7 @@ export default function DuringGrading() {
 									<ExamineeBox 
 										examineeName={item.nameRight}
 										onClick={(newState) => examineeClick(newState, techniqueNameList[currentTechniqueStep].technique.text, index, `${index}-right`)}
-                                        status={getExamineeStatus(item.rightId, results)}
+										status={getExamineeStatus(item.rightId, results)}
 										setButtonState={setRightExamineeState}
 										examineeId={item.rightId}
 										techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
@@ -372,20 +372,30 @@ export default function DuringGrading() {
 		</div>
 	)
 
-    function getExamineeStatus(examineeId, results) {
-        const result = results.find(res => res.examineeId === examineeId);
-        console.log("id:", examineeId, "res:", result);
+	/**
+     * A function to get the status of an examinee.
+     * 
+     * @param {*} examineeId the Id of the examinee that we want to find status of 
+     * @param {*} results The examination results of the current technique to search through
+     * @returns the status of the examinee
+     * @author Team Apelsin (2024-05-21)
+     * @version 1.0
+     */
+
+	function getExamineeStatus(examineeId, results) {
+		const result = results.find(res => res.examineeId === examineeId)
+		console.log("id:", examineeId, "res:", result)
     
-        if (!result) {
-            return "default";
-        }
+		if (!result) {
+			return "default"
+		}
     
-        if (result.pass === null) {
-            return "default";
-        }
+		if (result.pass === null) {
+			return "default"
+		}
     
-        return result.pass ? "pass" : "fail";
-    }
+		return result.pass ? "pass" : "fail"
+	}
     
 
 	/**
@@ -471,19 +481,19 @@ export default function DuringGrading() {
 			await putExamineeResult({ resultId: foundExamineeResult.resultId, examineeId: foundExamineeResult.examineeId, techniqueName: foundExamineeResult.techniqueName, pass: passStatusMap[passStatus] }, token)
 				.catch(() => setErrorToast("Kunde inte lägga till resultat. Kolla internetuppkoppling."))
 		}else{
-            const examineeResultToPost = { examineeId: examineeId, techniqueName: techniqueName, pass: passStatusMap[passStatus] }
+			const examineeResultToPost = { examineeId: examineeId, techniqueName: techniqueName, pass: passStatusMap[passStatus] }
 			const response = await postExamineeResult(examineeResultToPost, token)
 				.catch(() => setErrorToast("Kunde inte lägga till resultat. Kolla internetuppkoppling."))
 			const responseJson = await response.json()
-            // console.log(responseJson)
-            // Create a copy of the current state
-            let tempRes = [...results]
+			// console.log(responseJson)
+			// Create a copy of the current state
+			let tempRes = [...results]
 
-            // Add the new response to the copy
-            tempRes.push(responseJson)
+			// Add the new response to the copy
+			tempRes.push(responseJson)
 
-            // Update the state with the modified copy
-            setResults(tempRes)
+			// Update the state with the modified copy
+			setResults(tempRes)
 			// console.log("Response: ", JSON.stringify(responseJson))
 		}
 	}
@@ -588,7 +598,7 @@ export default function DuringGrading() {
 		return pair_names_current_grading
 	}
 
-    /**
+	/**
      * TODO: SHOULD ONLY RETURN THE RESULTS CONNECTED TO THE CURRENT EXAMINATION AND TECHNIQUE
      * 
      * Function to fetch all results for a technique in the database
@@ -601,68 +611,31 @@ export default function DuringGrading() {
      * @version 1.0
      * 
      */
-    async function fetchTechniqueResults(technique, token) {
-        const requestOptions = {
-            method: "GET",
-            headers: { "token": token },
-        }
-        try {
-            const response = await fetch(`/api/examination/examresult/all`, requestOptions);
+	async function fetchTechniqueResults(technique, token) {
+		const requestOptions = {
+			method: "GET",
+			headers: { "token": token },
+		}
+		try {
+			const response = await fetch("/api/examination/examresult/all", requestOptions)
             
-            if (!response.ok) {
-                throw new Error("Failed to fetch technique results")
-            }
-            const data = await response.json()
-            if (!Array.isArray(data)) {
-                throw new Error('Fetched data is not an array');
-            }
-            const filtered = data
-                .filter(item => item.techniqueName === technique)
+			if (!response.ok) {
+				throw new Error("Failed to fetch technique results")
+			}
+			const data = await response.json()
+			if (!Array.isArray(data)) {
+				throw new Error("Fetched data is not an array")
+			}
+			const filtered = data
+				.filter(item => item.techniqueName === technique)
 
-            // console.log("filtered results: ", filtered);
-            setResults(filtered);
-        } catch (error) {
-            alert(error.message)
-            return null // Handle the error gracefully, return null or an empty object/array
-        }
-    }
-
-    /**
-     *  
-     * Function to update the color of all examinees
-     * @param {Array} res the current result for the current technique.
-     * 
-     * @author Team Apelsin 2024-05-16
-     * @version 1.0
-     * 
-     */
-    function updateExamineeColors(results, pairs) {
-        results.forEach((techniqueResult) => {
-            const id = techniqueResult.examinee_id
-
-            const examinee1 = pairs.find(item => item.leftId === id)
-            const examinee2 = pairs.find(item => item.rightId === id) 
-            console.log("Examinee1: ", examinee1, " Examinee2: ", examinee2)
-
-            let techniqueState
-            switch (techniqueResult.pass) {
-                case true:
-                    techniqueState = "pass"
-                    break;
-                case false:
-                    techniqueState = "fail"
-                    break;
-                default:
-                    techniqueState = "default"
-            }
-
-            if(examinee1) {
-                setLeftExamineeState(techniqueState)
-            } else if(examinee2) {
-                setRightExamineeState(techniqueState)
-            }
-        })
-    }
+			// console.log("filtered results: ", filtered);
+			setResults(filtered)
+		} catch (error) {
+			alert(error.message)
+			return null // Handle the error gracefully, return null or an empty object/array
+		}
+	}
 	/**
      * Fetches the current grading from the server.
      * @returns {Promise<Object>} A Promise that resolves to the current grading object.
@@ -722,8 +695,8 @@ export default function DuringGrading() {
 		const categoryIndexMap = getCategoryIndices(techniqueNameList)
 		setTechniqueNameList(techniqueNameList)
 		setCategoryIndices(categoryIndexMap)
-        // TODO: Set the index to the one inside the technique_step when it is available
-        setCurrentTechniqueStep(0)
+		// TODO: Set the index to the one inside the technique_step when it is available
+		setCurrentTechniqueStep(0)
 	}
 
 	/**
