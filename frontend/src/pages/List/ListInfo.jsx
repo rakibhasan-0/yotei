@@ -24,7 +24,7 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
  *
  * @author Team Tomato (6)
  * @since 2024/05/03
- * @updated 2024-05-20
+ * @updated 2024-05-21
  *
  * @version 1.6
  *

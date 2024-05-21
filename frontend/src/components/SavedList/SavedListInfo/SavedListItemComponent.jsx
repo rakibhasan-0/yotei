@@ -14,6 +14,7 @@ import { Trash } from "react-bootstrap-icons"
  *
  * @author Tomato (Group 6)
  * @since 2024-05-07
+ * @updated 2024-05-21
  */
 const SavedActivityListItem = ({ activity, index, id, listCreateInfoDispatchProp }) => {
 	const [isActive, setIsActive] = useState(false)
@@ -71,7 +72,7 @@ const SavedActivityListItem = ({ activity, index, id, listCreateInfoDispatchProp
 								onClick={() => {
 									listCreateInfoDispatchProp({
 										type: LIST_CREATE_TYPES.REMOVE_ACTIVITY_ITEM,
-										payload: { id: activity.exercise?.id || activity.technique?.id || activity.id },
+										payload: { index },
 									})
 								}}
 							>
@@ -92,7 +93,6 @@ const SavedActivityListItem = ({ activity, index, id, listCreateInfoDispatchProp
 				{isActive && (
 					<div className="row mb-0" style={{ backgroundColor: bgColor }}>
 						<div className="col">
-							{/* Se över description, att det blir korrekt */}
 							<p role="description-div" className={styles["textDesc"]}>
 								activity.description
 							</p>
