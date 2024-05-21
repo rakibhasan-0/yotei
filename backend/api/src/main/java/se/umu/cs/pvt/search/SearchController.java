@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
+
 import se.umu.cs.pvt.search.builders.*;
 import se.umu.cs.pvt.search.enums.TagType;
 import se.umu.cs.pvt.search.fuzzy.Fuzzy;
@@ -19,6 +21,7 @@ import se.umu.cs.pvt.search.params.*;
 import se.umu.cs.pvt.search.persistance.SearchRepository;
 import se.umu.cs.pvt.search.responses.SearchResponse;
 import se.umu.cs.pvt.search.responses.TagResponse;
+import se.umu.cs.pvt.user.JWTUtil;
 
 /**
  * Controller for making searches in Techniques, Exercises and Workouts.
@@ -38,6 +41,12 @@ public class SearchController {
 
     private final SearchRepository searchRepository;
 
+    private DecodedJWT jwt;
+    private Long userIdL;
+
+    @Autowired
+    private JWTUtil jwtUtil;
+    
     @Autowired
     public SearchController(SearchRepository searchRepository) {
         this.searchRepository = searchRepository;
@@ -173,9 +182,17 @@ public class SearchController {
             @RequestParam Map<String, String> urlQuery,
             @RequestHeader(value = "token") String token) {
 
+                
+        try {
+            jwt = jwtUtil.validateToken(token);
+            userIdL = jwt.getClaim("userId").asLong();
+        } catch (Exception e) {
+            System.err.println("Failed to authenticate user:" + e.getMessage());
+        }
+
         SearchActivityListParams searchListParams = new SearchActivityListParams(urlQuery);
 
-        DatabaseQuery createdQuery = new SearchActivityListDBBuilder(searchListParams, token)
+        DatabaseQuery createdQuery = new SearchActivityListDBBuilder(searchListParams, userIdL)
         .filterByHidden()
         .filterByIsAuthor()
         .filterByIsShared()
