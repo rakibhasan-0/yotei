@@ -147,7 +147,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 													size="24px"
 													style={grayTrash ? { color: "var(--gray)" } : { color: "var(--red-primary)" }}
 													id="close-icon"
-												/>
+													data-testid="trash-icon"/>
 											)}
 										</>
 									}
