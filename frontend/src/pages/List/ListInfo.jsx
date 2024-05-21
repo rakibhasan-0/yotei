@@ -93,7 +93,7 @@ export default function ListInfo({ id }) {
 								<>
 									<Link
 										className="ml-3"
-										state={{ list: activityListData, users: activityListData.users }}
+										state={{ list: activityListData }}
 										to={"/list/edit/" + activityListId}
 									>
 										<Pencil

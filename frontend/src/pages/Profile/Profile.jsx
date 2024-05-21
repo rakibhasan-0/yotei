@@ -47,7 +47,7 @@ export default function Profile() {
 	const [map, mapActions] = useMap()
 
 	//TODO feature toggle
-	const [isListsEnabled] = useState(false)
+	const [isListsEnabled] = useState(true)
 
 	const workout = {
 		id: -1,
@@ -214,7 +214,9 @@ export default function Profile() {
 
 		getLists(args, token, map, mapActions, (result) => {
 			if (result.error) {
+				console.log("ERror fetching")
 				//Should handle error
+				setFetchedLists(true)
 				return
 			}
 
@@ -232,19 +234,17 @@ export default function Profile() {
 		})
 	}
 
-	console.log("Console.log so that linter doesnt cause problems: " + fetchedLists)
-
 	return (
-		<Tabs defaultActiveKey={"MyWorkouts"} className={style.tabs}>
+		<Tabs defaultActiveKey={"MyLists"} className={style.tabs}>
 			{isListsEnabled && (
-				<Tab eventKey={"FavoriteWorkouts"} title={"Mina listor"} className={style.tab}>
+				<Tab eventKey={"MyLists"} title={"Mina listor"} className={style.tab}>
 					<SearchBar
 						id="searchbar-workouts-1"
 						placeholder="Sök efter listor"
 						text={searchText}
 						onChange={setSearchText}
 					/>
-					{loading ? (
+					{!fetchedLists ? (
 						<Spinner />
 					) : (
 						lists.map((list) => <ProfileListItem key={list.id} item={list} Icon={getIconFromState(list)} />)

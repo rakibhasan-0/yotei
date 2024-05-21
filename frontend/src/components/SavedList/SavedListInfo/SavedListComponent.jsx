@@ -40,6 +40,7 @@ export default function SavedActivityList({ activities, listCreateInfoDispatchPr
 				{!isCollapsed &&
 					activities.map((activity, index) => (
 						<SavedActivityListItem
+							//Id är inte unikt
 							key={activity.id}
 							activity={activity}
 							index={index}
