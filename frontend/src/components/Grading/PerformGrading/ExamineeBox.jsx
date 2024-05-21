@@ -68,7 +68,7 @@ export default function ExamineeBox({
 
 	// Set initial color index based on status prop
 	const [color, setColor] = useState(colors[status] || colors.default)
-
+    
 	useEffect(() => {
 		setColor(colors[status] || colors.default)
 	}, [status])
@@ -78,6 +78,11 @@ export default function ExamineeBox({
 			handleExistingInput()
 		}
 	}, [isAddingComment])
+
+	// Updates notifications when switching techniques
+	useEffect(() => {
+		handleExistingInput()
+	}, [techniqueName])
 
 	/**
      * Discards the current personal comment.

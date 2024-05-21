@@ -67,6 +67,11 @@ export default function TechniqueInfoPanel({
 		}
 	}, [isAddingComment])
 
+	// Updates notifications when switching techniques
+	useEffect(() => {
+		handleExistingInput()
+	}, [currentTechniqueTitle])
+
 	/**
      * Discards the current group comment.
      */

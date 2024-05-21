@@ -70,6 +70,11 @@ export default function ExamineePairBox({
 		}
 	}, [isAddingComment])
 
+	// Updates notifications when switching techniques
+	useEffect(() => {
+		handleExistingInput()
+	}, [techniqueName])
+
 	/**
      * Discards the current pair comment.
      */
