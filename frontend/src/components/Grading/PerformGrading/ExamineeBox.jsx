@@ -51,7 +51,6 @@ export default function ExamineeBox({
 	buttonState, 
 	setButtonState
 }) {
-	const [commentSaved, setCommentSaved] = useState(false)
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [isAddingComment, setAddComment] = useState(false)
 	const [commentText, setCommentText] = useState("")
@@ -232,7 +231,7 @@ export default function ExamineeBox({
 					onClick={() => { handleClick() }}>
 					<p id="ExamineeName" style={{ height: "52px", margin: "0" }}>{examineeName}</p>
 				</div>
-				<CommentButton onClick={() => toggleAddPersonalComment(true)} className={styles.commentButtonContainer} commentSaved={commentSaved} />
+				<CommentButton onClick={() => toggleAddPersonalComment(true)} className={styles.commentButtonContainer} hasComment={hasComment} />
 
 				<Popup
 					id={"examinee-comment-popup"}
@@ -248,12 +247,12 @@ export default function ExamineeBox({
 						errorMessage={commentError}
 						text={commentText}
 					/>
-					<Button onClick={() => {onAddPersonalComment(); setCommentSaved(true)}} >Lägg till</Button>
+					<Button onClick={() => {onAddPersonalComment()}} >Lägg till</Button>
 				</Popup>
 				<ConfirmPopup
 					popupText={"Är du säker på att du vill ta bort kommentarsutkastet?"}
 					showPopup={showDiscardComment}
-					onClick={() => {onDiscardPersonalComment(); setCommentSaved(false)}}
+					onClick={() => {onDiscardPersonalComment()}}
 					setShowPopup={() => setShowDiscardComment(false)}
 					zIndex={200} // Above the comment popup.
 				/>

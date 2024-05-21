@@ -52,7 +52,6 @@ export default function TechniqueInfoPanel({
 	nextTechniqueTitle = "2. Stryptag framifrån och svingslag, backhand Frigöring – Ju morote jodan uke, ude osae, ude osae gatame",
 	mainCategoryTitle = "Huvudkategori"
 }) {
-	const [commentSaved, setCommentSaved] = useState(false)
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [isAddingComment, setAddComment] = useState(false)
 	const [commentText, setCommentText] = useState("")
@@ -221,7 +220,7 @@ export default function TechniqueInfoPanel({
 					<h3 className={styles.nextTechnique} role="nextTechniqueTitle"><b>Nästa:</b>{nextTechniqueTitle}</h3>
 				</div>
 				<div style={{ display: "flex", justifyContent: "flex-end" }}>
-					<CommentButton onClick={() => setAddComment(true)} commentSaved={commentSaved} />
+					<CommentButton onClick={() => setAddComment(true)} hasComment={hasComment} />
 				</div>
 			</fieldset>
 			<Popup
@@ -238,12 +237,12 @@ export default function TechniqueInfoPanel({
 					errorMessage={commentError}
 					text={commentText}
 				/>
-				<Button onClick={() => {onAddGroupComment(); setCommentSaved(true)}}>Lägg till</Button>
+				<Button onClick={() => {onAddGroupComment()}}>Lägg till</Button>
 			</Popup>
 			<ConfirmPopup
 				popupText={"Är du säker på att du vill ta bort kommentarsutkastet?"}
 				showPopup={showDiscardComment}
-				onClick={() => {onDiscardGroupComment(); setCommentSaved(false)}}
+				onClick={() => {onDiscardGroupComment()}}
 				setShowPopup={() => setShowDiscardComment(false)}
 				zIndex={200} // Above the comment popup.
 			/>

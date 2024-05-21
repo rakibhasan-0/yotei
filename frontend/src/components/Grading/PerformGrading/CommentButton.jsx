@@ -17,12 +17,12 @@ import styles from "./CommentButton.module.css"
  * @returns {JSX.Element}
  * @constructor
  */
-export default function CommentButton( {id, onClick, commentSaved}) {
+export default function CommentButton( {id, onClick, hasComment}) {
 	return (
 		<div id={id} onClick={onClick} className={styles.buttonContainer}>
 			<div>
 				<i className="bi bi-file-text h2" />
-				{commentSaved && <span className={styles.notificationCircle} id={"notification-circle"}>1</span>}
+				{hasComment && <span className={styles.notificationCircle} id={"notification-circle"}>1</span>}
 			</div>
 		</div>
 	)

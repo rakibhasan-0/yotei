@@ -54,7 +54,6 @@ export default function ExamineePairBox({
 	rowColor,
 	techniqueName
 }) {
-	const [commentSaved, setCommentSaved] = useState(false)
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [isAddingComment, setAddComment] = useState(false)
 	const [commentText, setCommentText] = useState("")
@@ -213,7 +212,7 @@ export default function ExamineePairBox({
 			<div className={styles.pairinfo}>
 				<p id="PairTextId" style={{ fontSize: "12px", marginBottom: "0" }}>Par:</p>
 				<p id="PairNumberId" style={{ fontSize: "12px", marginBottom: "2px" }}>{pairNumber}</p>
-				<CommentButton onClick={() => setAddComment(true)} commentSaved={commentSaved} />
+				<CommentButton onClick={() => setAddComment(true)} hasComment={hasComment} />
 			</div>
 			<div className={styles.pair}>
 				<div id="ExamineeLeftNameId" className={styles.pairleft}>
@@ -237,12 +236,12 @@ export default function ExamineePairBox({
 					errorMessage={commentError}
 					text={commentText}
 				/>
-				<Button onClick={() => {onAddPairComment(); setCommentSaved(true)}} >Lägg till</Button>
+				<Button onClick={() => {onAddPairComment()}} >Lägg till</Button>
 			</Popup>
 			<ConfirmPopup
 				popupText={"Är du säker på att du vill ta bort kommentarsutkastet?"}
 				showPopup={showDiscardComment}
-				onClick={() => {onDiscardPairComment(); setCommentSaved(false)}}
+				onClick={() => {onDiscardPairComment()}}
 				setShowPopup={() => setShowDiscardComment(false)}
 				zIndex={200} // Above the comment popup.
 			/>
