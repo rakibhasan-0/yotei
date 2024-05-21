@@ -647,6 +647,10 @@ function AddActivity({ id, setShowActivityInfo }) {
 								text={searchListText}
 								onChange={setSearchListText}
 							/>
+
+							<NewSorter onSortChange={setSortLists} id="ei-sort" selected={sortLists} options={sortOptionsLists} />
+
+
 							<FilterContainer id="ei-filter" title="Filtrering" numFilters={0}>
 								<ListPicker onFilterChange={handleListFilterChange} />
 							</FilterContainer>
