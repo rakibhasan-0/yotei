@@ -290,7 +290,7 @@ export default function RoleEdit() {
 					isOpen={showDeletePopup}
 					setIsOpen={setShowDeletePopup}
 					style={{height: "unset"}}>
-					<RoleDelete id={"role-delete-popup"} roleID={role_id} name={roleName} setIsOpen={setShowDeletePopup} what={"Rollen"}/>
+					<RoleDelete id={"role-delete-popup"} roleID={role_id} name={roleName} setIsOpen={setShowDeletePopup}/>
 				</Popup>
 			</div>
 		</div>

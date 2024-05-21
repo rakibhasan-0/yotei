@@ -34,7 +34,7 @@ export default function Admin() {
 	const [roles, setRoles] = useState([])
 	const [loading, setIsLoading] = useState(true)
 	const [key, setKey] = useState(window.localStorage.getItem("active-tab") || "HandleUsers")
-	const [isRoleTabEnabled] = useState(false) //FEATURE TOGGLE
+	const [isRoleTabEnabled] = useState(true) //FEATURE TOGGLE
 
 	useEffect(() => {
 		(async () => {

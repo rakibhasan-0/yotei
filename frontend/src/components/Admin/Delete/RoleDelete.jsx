@@ -7,39 +7,33 @@ import { useLocation, useNavigate } from "react-router"
 import { toast } from "react-toastify" 
 
 /**
- * ActivityDelete is a popup page that allows the user to delete
- * a technique or exercise. 
+ * RoleDelete is a popup page that allows a user with the admin role to delete
+ * other roles and all their permissions. 
  * 
  * Props:
- *     	id @type {string} - Should be set to a unique activityID to identify the component
- *		activityID @type {string} - ID for the activity, either technique ID or exercise ID
- *		name @type {string} - The name for the activity
+ *     	id @type {string} - Should be set to a unique roleID to identify the component
+ *		roleID @type {string} - ID for the role
+ *		name @type {string} - The name for the role
  *     	setIsOpen @type {useState} - Must be passed by parent to allow the popup
  *			to close itself
- *		what @type {string} - String indicating if it is showing a technique or exercise
- *			must be set to either "Teknik" or "Övning". CASE SENSITIVE!
  *
  * Example usage:
  *
  * const [showDeletePopup, setShowDeletePopup] = useState(false)
  * ........ 
  *		<Popup
- * 			title="Ta bort teknik"
+ * 			title="Ta bort roll"
  *			isOpen={showDeletePopup}
  *			setIsOpen={setShowDeletePopup}>
- *			<ActivityDelete id={"technique-workout-delete-popup"} activityID={techniqueId 
- *				name={technique.name} setIsOpen={showDeletePopup} what={"Teknik"}/>
+ *			<RoleDelete id={"role-delete-popup"} roleID={roleId 
+ *				name={role.name} setIsOpen={showDeletePopup}/>
  *		</Popup>
  *
- * Changes version 2.0
- *     Replaced custom workout card with standard workout card.
- *
- * @author Team Medusa (Grupp 6), Team Kiwi (Group 2)
- * @version 2.1
- * @since 2023-05-24
- * @updated 2024-05-07 Fixed so navigation goes back to activity page instead of technique pr exrecise page, as those are gone
+ * @author Team Mango (Group 4)
+ * @version 1.0
+ * @since 2024-05-13
  */
-export default function RoleDelete({ id, roleID, name, setIsOpen, what }) {
+export default function RoleDelete({ id, roleID, name, setIsOpen }) {
 	
 	const {token} = useContext(AccountContext)
 	const [deleteButtonDisabled, setDeleteButtonDisabled] = useState(true)
@@ -89,7 +83,7 @@ export default function RoleDelete({ id, roleID, name, setIsOpen, what }) {
 				width="100%"
 				onClick={async () => {
 					cascadeDelete(roleID, token)
-					toast.success(`${what} ${name} har tagits bort`)
+					toast.success(`Rollen ${name} har tagits bort`)
 					handleNavigation()
 				}}>
 				<p>Ta bort</p></Button>
@@ -106,12 +100,6 @@ export default function RoleDelete({ id, roleID, name, setIsOpen, what }) {
 		/>
 	}
 
-
-	/**
-	 * Handles navigation in the page
-	 * Makes sure the page navigate back to default activity page if 
-	 * navigate(-1) is not a page on our website
-	 */
 	const handleNavigation = () => {
 		if(hasPreviousState) {
 			navigate(-1)
@@ -122,12 +110,7 @@ export default function RoleDelete({ id, roleID, name, setIsOpen, what }) {
 	}
 
 	return <div className={styles.popupContainer} id={id}>
-		<p>Är du säker på att du vill ta bort {what.toLowerCase()} <b>{name}?</b></p>
-		{/* 		
-		{ gotResponse ? constructWorkoutCardList() : <Spinner id={"technique-workout-spinner"}/> }
-		<p>
-			{ hasWorkouts() && `${what}en kommmer att tas bort från samtliga pass ovan.` } 
-		</p> */}
+		<p>Är du säker på att du vill ta bort rollen <b>{name}?</b></p>
 		{ constructButtons() }
 
 	</div>
