@@ -28,4 +28,28 @@ INSERT INTO permission (permission_name, permission_desc) VALUES ('grading_all',
 --
 -- INSERTS FOR ROLE_TO_PERMISSION
 --
+
+-- Admin role - Has all permissions
 INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 1);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 2);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 3);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 4);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 5);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 6);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 7);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 8);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 9);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 10);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 11);
+
+-- Editor role
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (2, 4);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (2, 6);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (2, 8);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (2, 10);
+
+
+-- User role
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (3, 4);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (3, 6);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (3, 10);
