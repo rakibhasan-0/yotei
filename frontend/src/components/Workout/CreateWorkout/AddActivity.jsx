@@ -455,7 +455,6 @@ function AddActivity({ id, setShowActivityInfo }) {
 							belt_color: item.belts[0].color,
 							belt_name: item.belts[0].name,
 							is_child: item.belts[0].child
-
 						}],
 						tags: item.tags,
 						path:  item.id
