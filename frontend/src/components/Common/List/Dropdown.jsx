@@ -17,6 +17,7 @@ import styles from "./Dropdown.module.css"
  *	centered @type {Boolean}  Boolean to set text as centered
  *	id       @type {String}   ID of the component
  * 	onClick  @type {Function} Function when an item is pressed in the drop down
+ * 	checkBox @type {JSX}	  If a checkbox is wanted, send it as a prop
  * 
  * Example usage:
  * 
@@ -27,9 +28,10 @@ import styles from "./Dropdown.module.css"
  * @author Chimera, Tomato (Group 6)
  * @since 2023-05-02
  * @updated 2023-05-30 Chimera, updated documentation
+ * @uodate	2024-05-21 Tomato,	Added a checkbox so that a dropdown menu can have one if wanted. 
  * @version 2.1 
  */
-export default function Component({ item, text, children, id, autoClose, errorMessage, onClick}) {
+export default function Component({ item, text, children, id, autoClose, errorMessage, onClick, checkBox}) {
 	const [toggled, setToggled] = useState(false)
 	const handleToggle = () => {
 		
