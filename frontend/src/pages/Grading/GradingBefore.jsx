@@ -142,9 +142,19 @@ export default function GradingBefore() {
     const fetchData = async() => {
       const data = await getGrading(token)
 			.catch(() => setErrorToast("Kunde inte hämta examinationen. Kontrollera din internetuppkoppling."))   
+      
+      // check if title is added already
       if (data.title !== "default") {
         setGradingName(data.title)
       }
+
+      // check if the grading is comming from the during process. 
+      let shouldBeLocked = false
+      // If so, lockdown already exsisting pairs
+      if(data.step === 3) {
+        shouldBeLocked = true
+      }
+
       // check if there is any examinees already added
       const exsistingPairs = await getAllPairOfExaminees(token)
       .catch(() => setErrorToast("Kunde inte hämta befintliga par. Kontrollera din internetuppkoppling.")) 
@@ -159,7 +169,12 @@ export default function GradingBefore() {
                       {id: pair.examinee_2.id, name: pair.examinee_2.name, pairId: pair.pair_id}]
             } else {
               // if we come in here there is a lonly examinee in a pair.
-
+              
+              // check if we are comming from during process, then this pair should be locked
+              if (shouldBeLocked) {
+                setExaminees([...examinees, { id: pair.examinee_1.id, name: pair.examinee_1.name }])
+                return undefined
+              }
               // set the examinee in the local array
               setExaminees([...examinees, { id: pair.examinee_1.id, name: pair.examinee_1.name }])
 
