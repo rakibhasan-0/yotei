@@ -52,7 +52,7 @@ export class AddTagPopupPage {
 		await this.page.getByPlaceholder("Sök eller skapa tagg").click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
 
-		const editableListItem2 = this.page.getByTestId("EditableListItem" + tag.tagId).locator("label")
+		const editableListItem2 = this.page.getByTestId("EditableListItem").locator("label")
 		await this.waitForEnabled(editableListItem2)
 
 		const trashButton = editableListItem2.getByTestId("trash-icon" + tag.tagId)

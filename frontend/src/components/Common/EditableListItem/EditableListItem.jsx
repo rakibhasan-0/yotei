@@ -79,7 +79,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 
 	return (
 		<div className={styles["editable-container"]} id={id}>
-			<div className={styles["editable-list-container"]} data-testid={"EditableListItem" + id}>
+			<div className={styles["editable-list-container"]} data-testid="EditableListItem">
 				<div className={styles["editable-list-header"]} style={{ backgroundColor: index % 2 === 0 ? "var(--red-secondary)" : "var(--background)" }}>
 					<div data-testid={"EditableListItem-link" + id} style={{ width: "100%" }}>
 						<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
