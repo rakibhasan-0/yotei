@@ -77,6 +77,7 @@ export default function PlanCreate() {
 		{ name: "Tors", value: false, time: "" },
 		{ name: "Fre", value: false, time: "" },
 		{ name: "Lör", value: false, time: "" }
+		
 	])
 
 	const [beltsChosen, setBelts] = useState([])
@@ -266,19 +267,20 @@ export default function PlanCreate() {
 
 				let startDate = new Date(planData.startDate)
 				let endDate = new Date(planData.endDate)
-				let dayNr = startDate.getDay() -1
-
+				let dayNr = startDate.getDay()
+				
 				var tempDate
 				var tempTime
-
+				
 				/* Find first date occurences of chosen weekdays */
 				for (var i = 0; i < 7; i++) {
-
+					
 					if (weekdays[dayNr].value) {
-
+						console.log("adding first occurence: " + weekdays[dayNr].name)
+						
 						tempDate = new Date(startDate)
 						tempTime = weekdays[dayNr].time.target.value + ":00"
-
+						
 						firstDatesArray.push({ date: tempDate, time: tempTime })
 					}
 
@@ -289,20 +291,21 @@ export default function PlanCreate() {
 
 				/* If days chosen */
 				if (firstDatesArray.length !== 0) {
-
+					
 					/* Find all date occurences of chosen weekdays */
 					firstDatesArray.forEach((e) => {
 
 						tempDate = new Date(e.date)
 						tempTime = e.time
-
+						
 						while (tempDate <= endDate) {
+							console.log("adding: " + weekdays[tempDate.getDay()].name +" + " + tempDate)
 							allDatesArray.push({ plan: plan, date: formatDate(tempDate), time: tempTime })
-
+							
 							tempDate.setDate(tempDate.getDate() + 7)
 						}
 					})
-
+					
 					/* Add plan id to each object in array */
 					allDatesArray = allDatesArray.map(session => {
 						return { plan: plan, ...session }

@@ -155,13 +155,14 @@ export default function SessionsCreate({setIsBlocking}){
      * The user can choose a time for each day.
      */
 	const [weekdays, setWeekdays] = useState([
+		{ name: "Sön", value: false, time: "" },
 		{ name: "Mån", value: false, time: "" },
 		{ name: "Tis", value: false, time: "" },
 		{ name: "Ons", value: false, time: "" },
 		{ name: "Tors", value: false, time: "" },
 		{ name: "Fre", value: false, time: "" },
-		{ name: "Lör", value: false, time: "" },
-		{ name: "Sön", value: false, time: "" }
+		{ name: "Lör", value: false, time: "" }
+		
 	])
 
 
@@ -199,7 +200,7 @@ export default function SessionsCreate({setIsBlocking}){
 
 			let startDate = new Date(planData.startDate)
 			let endDate = new Date(planData.endDate)
-			let dayNr = startDate.getDay() -1
+			let dayNr = startDate.getDay()
 
 			var tempDate
 			var tempTime
@@ -255,7 +256,7 @@ export default function SessionsCreate({setIsBlocking}){
 			let minutesDiff = (x.getHours() - x.getTimezoneOffset()) % 60
 			x.setHours(hoursDiff)
 			x.setMinutes(minutesDiff)
-			x.setDate(x.getDate()+1)
+			x.setDate(x.getDate())
 			return { ...session, date: new Date(x)}
 		})
 		/* Add group id to each object in array */
