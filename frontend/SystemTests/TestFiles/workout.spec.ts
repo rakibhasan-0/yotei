@@ -1,7 +1,7 @@
 import { test, expect } from '../fixtures'
 import { WorkoutPage } from '../PageObjectModels/workoutPage'
 
-test.describe('ST-4 Workout', () => {
+test.describe('Workout', () => {
 	let workoutPage
 
 	test.beforeEach('navigate to workout page', async ({page}) => {
