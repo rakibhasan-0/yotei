@@ -27,19 +27,20 @@ import CheckBox from "../CheckBox/CheckBox"
  * 			item={name}
  * 			id={The unique ID for an exercises, gets concatenated onto detailURL}
  * 			index={The index for the exercise in the list containing fetched exercises}>
- *      onRemove={onRemoveFunction}
- *      onEdit={onEditFunction}
- *      onCheck={onCheckFunction}
- *      showCheckbox={true}
- *      checked={false}
- *      validateInput={validateFunction}
- *      grayTrash={false}
- * 		showTrash={false}
- * 		showX={false}
- * 		showPencil={false}
- * 		</EditableListItem>
+*			onRemove={onRemoveFunction}
+*			onEdit={onEditFunction}
+*			onCheck={onCheckFunction}
+*			showCheckbox={true}
+*			checked={false}
+*			validateInput={validateFunction}
+*			grayTrash={false}
+* 			showTrash={false}
+* 			showX={false}
+* 			showX={false}
+* 			showPencil={false}
+* 		</EditableListItem>
  * 
- * @author Team 1, Team Durian (Group 3) (2024-05-13)
+ * @author Team Pomegranate (Group 1), Team Durian (Group 3) (2024-05-13) 
  * @since 2024-05-06
  */
 export default function EditableListItem({ item, id, index, onRemove, onEdit, onCheck, showCheckbox, checked, validateInput, grayTrash, showTrash, showX, showPencil}) {
@@ -56,7 +57,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 
 	const handleInputChange = (event) => {
 		const text = event.target.value
-		// The trimmed text is validated, since it will be trimmed when saved.
+		// The trimmed text is validated, since it will be trimmed when saved. 
 		const trimmedText = text.trim()
 		const textareaErr = validateInput(trimmedText)
 		// Update the gray check
@@ -88,10 +89,8 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 		setIsEditing(false)
 	}
 
-	//const truncatedText = editedText.includes("\n") ? editedText.split("\n")[0] + "..." : editedText;
-
 	return (
-		<div className={styles["editable-container"]} id={id} key={id}>
+		<div className={styles["editable-container"]} id={id}>
 			<div className={styles["editable-list-container"]} data-testid="EditableListItem">
 				<div className={styles["editable-list-header"]} style={{ backgroundColor: index % 2 === 0 ? "var(--red-secondary)" : "var(--background)" }}>
 					<div data-testid="EditableListItem-link" style={{ width: "100%" }}>
@@ -114,7 +113,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 									/>
 								) : (
 									<div className={styles["href-link"]} style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="EditableListItem-item">
-										{editedText.length > 12 && !isEditing ? `${editedText.substring(0, 12)}...` : editedText}
+										{editedText}
 									</div>
 								)}
 								<div className={styles["flex-shrink-0"]} style={{ display: "flex", alignItems: "center" }}>
@@ -137,7 +136,9 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 										:
 										<>
 											{showPencil && (
-												<Pencil onClick={handleEdit} size="24px" style={{ color: "var(--red-primary)", cursor: "pointer", marginRight: "10px" }} id="pencil-icon" />
+												<Pencil
+													onClick={handleEdit} size="24px" style={{ color: "var(--red-primary)", cursor: "pointer", marginRight: "10px" }} id="pencil-icon"
+												/>
 											)}
 											{showTrash && (
 												<Trash
