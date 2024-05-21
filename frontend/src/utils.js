@@ -6,6 +6,7 @@ import { toast } from "react-toastify"
  * @author UNKNOWN & Team Tomato & Team Mango
  * @updated 2024-04-26  by Tomato
  * 			2024-05-20  by Team Mango: Updated permissions functions.
+ *  		2024-05-21  by Team Mango: Commented functions, changed names and added more permissions functions.
  */
 
 /**
@@ -52,7 +53,7 @@ export function checkRole(context, role) {
  * @returns true if the user has permission to edit all sessions, or if the user has permission to edit their own sessions and the creatorId of
  * 		    the session is the same as the userId. Otherwise false is returned.
  */
-export function canEditSession(creatorId, context) {
+export function canEditSessions(context, creatorId) {
 	//if (user.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
 	if (!context.permissions) { //Safety check for undefined which is always false.
 		return false
@@ -67,7 +68,7 @@ export function canEditSession(creatorId, context) {
  * @params context - AccountContext with info about user.
  * @returns true if the user has permission to create/edit all sessions or their own sessions. Otherwise false is returned.
  */
-export function canCreateSession(context) {
+export function canCreateSessions(context) {
 	//if (context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
 	if (!context.permissions) { //Safety check for undefined which is always false.
 		return false
@@ -103,6 +104,21 @@ export function canEditGroups(context, group) {
 	(context.permissions.includes(USER_PERMISSION_CODES.PLAN_OWN) &&
 	(context.userId === group.userId)))
 }
+
+/**
+ * canCreateWorkouts() - check if a user can create a group.
+ * @param {*} context AccountContext from user.
+ * @returns true if user can create a workout, else false.
+ */
+export function canCreateWorkouts(context) {
+	if (!context.permissions) return false
+	//if (user.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
+	return (context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_ALL) ||
+	(context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_OWN)))
+}
+
+
+
 
 /**
  * canCreateAndEditActivity() - Check if user can create an activity. An activity is an exercise or technique.
