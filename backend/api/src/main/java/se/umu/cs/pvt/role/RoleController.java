@@ -129,8 +129,14 @@ public class RoleController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        if (roleRepository.existsByRoleName(updatedRole.getRoleName())) {
+        Optional<Role> roleWithSameName = roleRepository
+            .findByRoleName(updatedRole.getRoleName());
+
+        if (nameTaken(roleId, roleWithSameName)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        } else if (roleWithSameName.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.OK);
         }
 
         Role roleToUpdate = firstRole.get();
@@ -139,5 +145,9 @@ public class RoleController {
         roleRepository.save(roleToUpdate);
 
         return new ResponseEntity<>(roleToUpdate, HttpStatus.OK);
+    }
+
+    private boolean nameTaken(Long roleId, Optional<Role> roleWithSameName) {
+        return roleWithSameName.isPresent() && roleWithSameName.get().getRoleId() != roleId;
     }
 }
