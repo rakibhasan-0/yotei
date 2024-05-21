@@ -26,7 +26,6 @@ export default function ListPicker({ onFilterChange }) {
 
 	useEffect(() => {
 		onFilterChange(filter);
-		console.log(filter)
 	}, [filter, onFilterChange]);
 
 
