@@ -80,38 +80,39 @@ export default function GradingAfter() {
 	}
 
 	/**
-	 * Function to download the grading as a pdf.
-	 */
+	 * Function to fetches the result of the examination.
+	 * @returns {Blob} The fetched data converted as a Blob.
+	*/
 	const fetchPdf = async () => {
 		try {
 			const response = await fetch(`/api/examination/exportpdf/${gradingId}`, {
 				method: "GET",
-				headers: { "token": token }  // Assume token is a bearer token
+				headers: { "token": token } 
 			})
 	
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`)
 			}
 	
-			// Assuming the server sends the base64 string directly as a response text
-			const base64String = await response.text() // Read the response as text
-			const byteCharacters = atob(base64String) // Decode base64 string
-			const byteNumbers = new Array(byteCharacters.length)
+			const base64String = await response.text() 
+			const byteCharacters = atob(base64String) //Decode base64 string
+			const byteNumbers = new Array(byteCharacters.length) // Convert to array of byte numbers
 			for (let i = 0; i < byteCharacters.length; i++) {
 				byteNumbers[i] = byteCharacters.charCodeAt(i)
 			}
 			const byteArray = new Uint8Array(byteNumbers)
-			const blob = new Blob([byteArray], {type: "application/pdf"})
-
-			console.log("Blob created from base64 string:", blob)
-			return blob // This is the correct blob to use for downloads or viewing
+			const blob = new Blob([byteArray], {type: "application/pdf"}) // Create a blob from the byte array
+			return blob 
 		} catch (error) {
 			console.error("Error fetching PDF:", error)
-			return null  // Return null or handle the error appropriately in your app
+			return null  
 		}
 	}
 	
-	
+	/**
+	 * Function that creates a PDF by the result of the examination and downloads it.
+	 * @returns {void}
+	 */
 	const downloadPdf = async () => {
 		const pdfBlob = await fetchPdf()
 		if (pdfBlob) {
@@ -122,7 +123,7 @@ export default function GradingAfter() {
 			link.setAttribute("download", "filename.pdf")
 			document.body.appendChild(link)
 			link.click()
-			setTimeout(() => { // Delay the revocation a bit to ensure it downloads
+			setTimeout(() => { 
 				window.URL.revokeObjectURL(url)
 				link.remove()
 			}, 100)
