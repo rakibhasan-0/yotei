@@ -24,10 +24,11 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup.jsx"
  * 							the previous page after creating a workout.
  * 							Otherwise the user is sent to the workoutView page.
  * 
- * @author Team Minotaur, Team 3 Durian, Team Kiwi
+ * @author Team Minotaur, Team 3 Durian, Team Kiwi, Team Tomato
  * @version 2.1
  * @since 2023-05-24
- * @updated 2024-04-22 Removed blockers and pop-up window from this component. They are only commented out for now
+ * @updated 2024-04-22 Removed blockers and pop-up window from this component. They are only commented out for now.
+ * @update 2024-05-21  Fixed the convertion of the id's when activities come from a list.
  */
 const WorkoutCreate = () => {
 	const [workoutCreateInfo, workoutCreateInfoDispatch] = useReducer(
@@ -123,10 +124,23 @@ const WorkoutCreate = () => {
 					order: activityOrder,
 				}
 
+				
 				if (activity.techniqueId) {
-					obj.techniqueId = activity.techniqueId
+					// Convert the id to the correct form if it comes from a list.
+					if (activity.techniqueId.includes("-technique-")) {
+						obj.techniqueId = activity.techniqueId.split("-technique-").pop()
+					} else{
+						obj.techniqueId = activity.techniqueId
+					}
+					
 				} else if (activity.exerciseId) {
-					obj.exerciseId = activity.exerciseId
+					// Convert the id to the correct form if it comes from a list.
+					if (activity.exerciseId.includes("-exercise-")) {
+						obj.exerciseId = activity.exerciseId.split("-exercise-").pop()
+					} else {
+						obj.exerciseId = activity.exerciseId
+					}
+					
 				}
 
 				activities.push(obj)
