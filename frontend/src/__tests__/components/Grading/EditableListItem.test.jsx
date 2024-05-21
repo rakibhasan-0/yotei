@@ -28,4 +28,20 @@ test("User can be created test", async() => {
     expect(screen.getByTestId("EditableListItem")).toHaveTextContent(id, 1)
 })
 
-
+test("Trash icon rendered test", async() => {
+    var name = "Test 123"
+	var id = 1
+	var index = 0
+    
+    render(
+        <BrowserRouter>
+            <EditableListItem
+                id={id}
+                item={name}
+                index={index}
+                showTrash={true}
+            />
+        </BrowserRouter>
+    )
+    expect(screen.getByTestId("trash-icon")).toBeInTheDocument()
+})
