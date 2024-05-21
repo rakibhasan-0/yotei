@@ -10,13 +10,16 @@ import { rest } from "msw"
 import { server } from "../../../server"
 import TechniqueDetail from "../../../../pages/Activity/Technique/TechniqueDetail/TechniqueDetail"
 import TechniqueEdit from "../../../../pages/Activity/Technique/TechniqueEdit/TechniqueEdit"
+import { USER_PERMISSION_LIST_ALL } from "../../../../utils"
 
+//TODO should add tests similar to techniqueIndex.test for the techniqueEdit symbols.
 /**
- * Tests for the technique edit page
+ * Tests for the technique edit page.
  * 
- * @author Team Medusa (Grupp 6), Team Durian (Grupp 3)
+ * @author Team Medusa (Group 6), Team Durian (Group 3), Team Mango (Group 4)
  * @version 1.0
  * @since 2024-05-02
+ * Updates: 2024-05-21: Added permissions to the currently used user to fix tests by giving them all permissions.
  */
 const api = jest.fn()
 server.events.on("request:start", api)
@@ -174,7 +177,7 @@ describe("verify that", () => {
 		)
 
 		render ( //eslint-disable-next-line no-dupe-keys
-			<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", undefined }}>
+			<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", permissions: USER_PERMISSION_LIST_ALL, undefined }}>
 				<RouterProvider router={router}/>
 			</AccountContext.Provider>
 		)
