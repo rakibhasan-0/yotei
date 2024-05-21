@@ -1,5 +1,6 @@
 import { type Page } from '@playwright/test';
 import { Workout } from '../Types/systemTestsTypes'
+import { Activity } from '../Types/systemTestsTypes'
 
 
 export class WorkoutPage {
@@ -70,7 +71,7 @@ export class WorkoutPage {
     }
     
 
-    async editWorkout() {
+    async editWorkout(activities: Activity[]) {
 
         // Clicks the pen icon to edit the created workout
         await this.page.locator('#edit_pencil').click();
@@ -82,12 +83,12 @@ export class WorkoutPage {
         // Adds another activity to the workout
         await this.page.getByRole('button', { name: '+ Aktivitet' }).click();
         await this.page.getByRole('tab', { name: 'Tekniker' }).click()
-        await this.page.locator('#technique-list-item-141').getByLabel('').check();
+        await this.checkAllActivities(activities, 3)
         await this.page.locator('#AddCheckedActivitiesButton').getByRole('img').click();
 
         // Sets the newly added activitys duration to five minutes
         await this.page.locator('#minute-picker-0').click();
-        await this.page.locator('#minute-picker-0').fill('5');
+        await this.page.locator('#minute-picker-0').fill(`${activities[0].time}`);
 
         // Adds the new technique and saves the workout
         await this.page.getByRole('button', { name: 'Lägg till' }).click();

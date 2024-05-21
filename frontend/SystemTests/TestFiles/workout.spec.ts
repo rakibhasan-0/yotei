@@ -76,7 +76,12 @@ test.describe('Workout', () => {
     	await page.waitForSelector('h1')
 
         // Edits the page
-        await workoutPage.editWorkout()
+        await workoutPage.editWorkout([
+            {
+                name: "Ayumi ashi (5 Kyu)",
+                time: 10,
+            }
+        ])
 
         // Asserts that the workout was updated successfully
         await expect(page.getByText('Träningen uppdaterades!')).toBeVisible()
