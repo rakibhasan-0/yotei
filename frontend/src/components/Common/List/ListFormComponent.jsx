@@ -64,7 +64,6 @@ export default function ListFormComponent({ callback, state, listCreateInfoDispa
 	 * @param {*} event
 	 */
 	function handleSubmit(event) {
-		console.log("Sparaknappen har tryckts")
 		const form = event.currentTarget
 		event.preventDefault()
 

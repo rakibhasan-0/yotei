@@ -50,7 +50,7 @@ export default function Profile() {
 
 
 	//TODO feature toggle
-	const [isListsEnabled] = useState(true)
+	const [isListsEnabled] = useState(false)
 
 
 	/* Workout management */
@@ -215,23 +215,18 @@ export default function Profile() {
 
 	const getIconFromState = (state) => {
 		if (state.id == -1) {
-			console.log("Favourite!")
 			//Här borde jag fixa en route till favoritsidans grej :)
 			return <img src="../../../assets/images/starFill.svg" />
 		}
 		if (state.hidden === true && state.author.userId == userId) {
-			console.log("Locked")
 			return <Lock size={36} />
 		}
 		if (state.hidden === true && state.author.userId != userId) {
-			console.log("Shared")
 			return <Unlock size={36} />
 		}
 		if (state.hidden === false && state.author.userId === userId) {
-			console.log("Public")
 			return <Eye size={36} />
 		}
-		console.log("Ospecat fall, borde ej kunna nå listor som publika men inte delade med oss!")
 		return <Eye size={36} />
 	}
 
@@ -266,7 +261,7 @@ export default function Profile() {
 	}
 
 	return (
-		<Tabs defaultActiveKey={"MyLists"} className={style.tabs}>
+		<Tabs defaultActiveKey={"MyWorkouts"} className={style.tabs}>
 			{isListsEnabled && (
 				<Tab eventKey={"MyLists"} title={"Mina listor"} className={style.tab}>
 					<SearchBar
