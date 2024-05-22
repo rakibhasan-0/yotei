@@ -18,7 +18,7 @@ import { USER_PERMISSION_LIST_ALL } from "../../../../utils"
  * @author Kiwi, Team Mango
  * @version 1.0
  * @since 2024-04-23
- * Updates. 2024-05-20: Added permissions to user to fix a test by giving it all permissions.
+ * Updates: 2024-05-20: Added permissions to user to fix a test by giving it all permissions.
  */
 
 const api = jest.fn()
