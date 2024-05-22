@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
 import { useContext, useEffect, useReducer, useState } from "react"
-import { useLocation, useNavigate, useParams } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import ListFormComponent from "../../components/Common/List/ListFormComponent.jsx"
 import { AccountContext } from "../../context.js"
 import {
@@ -10,16 +9,14 @@ import {
 } from "../../components/Common/List/ListCreateReducer.js"
 import { ListCreateContext } from "../../components/Common/List/ListCreateContext.js"
 import styles from "./WorkoutModify.module.css"
-import { setSuccess, setError } from "../../utils.js"
 import { Spinner } from "react-bootstrap"
 
 /**
- * This is the page for editing a saved workout.
+ * This is the page for editing a saved list.
  *
- * @author Team Minotaur, Team Kiwi, Team Durian (Group 3) (2024-04-23)
- * @version 2.0
- * @since 2023-05-24
- * @updated 2024-04-23 Team Kiwi, Removed blockers and Pop-up for redirecting to technique descriptions
+ * @author Team Tomato (6)
+ * @since 2023-05-21
+ * Based on WorkoutEdit
  */
 const ListEdit = () => {
 	const [listCreateInfo, listCreateInfoDispatch] = useReducer(
@@ -27,9 +24,11 @@ const ListEdit = () => {
 		JSON.parse(JSON.stringify(ListCreateInitialState))
 	)
 	const navigate = useNavigate()
-	const { token, userId } = useContext(AccountContext)
+	const {userId } = useContext(AccountContext)
+	//TBF
+	//const { token, userId } = useContext(AccountContext)
+
 	const location = useLocation()
-	const { activityListId } = useParams()
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const [isLoading, setIsLoading] = useState(true)
 
@@ -39,14 +38,8 @@ const ListEdit = () => {
 	async function submitHandler() {
 		setIsSubmitted(true)
 		const data = parseData(listCreateInfo.data)
-		console.log("Data: " + JSON.stringify(data))
-		// const listId = await updateActivityList(data)
-
-		// if (listId) {
-		// 	setSuccess("Träningen uppdaterades!")
-		// } else {
-		// 	setError("Träningen kunde inte uppdateras.")
-		// }
+		//TBF
+		console.log("Console.log so that linter does not give errors:"+data)
 		navigate(-1)
 	}
 
@@ -78,7 +71,7 @@ const ListEdit = () => {
 			users: data.users.map((user) => user.userId),
 		}
 	}
-
+	/* TBF (To Be Fixed)
 	const updateActivityList = async (body) => {
 		const requestOptions = {
 			method: "PUT",
@@ -95,7 +88,7 @@ const ListEdit = () => {
 
 		return jsonResp.workoutId
 	}
-
+*/
 	/**
 	 * Fetches the data from the local storage and context.
 	 */
@@ -119,7 +112,7 @@ const ListEdit = () => {
 			navigate(-1, { replace: true })
 		}
 		setIsLoading(false)
-	}, []) // eslint-disable-line react-hooks/exhaustive-deps
+	}, [])
 
 	/**
 	 * Saves the data to local storage when the user leaves the page.

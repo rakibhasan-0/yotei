@@ -45,9 +45,12 @@ export default function GradingBefore() {
 	let numberOfPairs = 0
 
 
-	// this is for the automatically pair creation
-	const [lastAddedExaminee, setLastAddedExaminee] = useState({})
-	const [automaticallyPairCreation, setAutomaticallyPairCreation] = useState(false)
+  // this is for the automatically pair creation
+  const [lastAddedExaminee, setLastAddedExaminee] = useState({})
+  const [automaticallyPairCreation, setAutomaticallyPairCreation] = useState(false)
+  
+  const [gradingStep, setGradingStep] = useState(1)
+
 
 
 	/**
@@ -78,8 +81,6 @@ export default function GradingBefore() {
 	const updateStep = (grading_data) => {
 		delete grading_data.examinees
 		grading_data.step = 2
-
-		console.log(grading_data)
 
 		return fetch("/api/examination/grading", {
 			method: "PUT",
@@ -116,14 +117,6 @@ export default function GradingBefore() {
 	}
 
 	/**
-	 * Help function to activate the useEffect function to start the navigation
-	 * to the next step in the grading process
-	 */
-	function startRedirection() {
-		setRedirect(true)
-	}
-
-	/**
 	 * Validets so the name of tag is not containing any illegal characters 
 	 * or if the name is empty or if the name of the tag already exists. 
 	 * @param {String} name The name of the tag to be validated. 
@@ -136,44 +129,123 @@ export default function GradingBefore() {
 		return ""
 	}
 
-	/**
-	 * This effects called when you enter the page first time
-	 */
-	useEffect(() => {
+  /**
+   * This effects called when you enter the page first time
+   */
+  useEffect(() => {
+    
+    const fetchData = async() => {
+      const data = await getGrading(token)
+			.catch(() => setErrorToast("Kunde inte hämta examinationen. Kontrollera din internetuppkoppling."))   
+      
+      // Set the step so we know how to navigate back, what type of route it should choose, in function @handleNavigation
+      setGradingStep(data.step)
 
-		const fetchData = async () => {
-			const data = await getGrading(token)
-				.catch(() => setErrorToast("Kunde inte hämta examinationen. Kontrollera din internetuppkoppling."))
-			if (data.title !== "default") {
-				setGradingName(data.title)
-			}
-		}
-		fetchData()
+      // check if title is added already
+      if (data.title !== "default") {
+        setGradingName(data.title)
+      }
 
-	}, [])
+      // check if the grading is comming from the during process. 
+      let shouldBeLocked = false
 
-	/**
-	 * Handle the navigation back to the previous visited route
-	 */
-	function handleNavigation() {
-		if (hasPreviousState) {
-			navigate(-1)
-		} else {
-			navigate("/grading")
-		}
-	}
+      // If the process is during, all examinees that are already added should be locked to modifications
+      if(data.step === 2) {
+        shouldBeLocked = true
+      }
 
-	/**
-	 * Effect that are used to navigate to the next step in the grading process
-	 */
-	useEffect(() => {
-		if (redirect != false) {
-			try {
-				const exec = async () => {
-					await Promise.all(examinees.map(examinee => {
-						postPair({ examinee1Id: examinee.id }, token)
-							.catch(() => setErrorToast("Kunde inte lägga till paret. Kontrollera din internetuppkoppling."))
-					}))
+      // check if there is any examinees already added
+      const exsistingPairs = await getAllPairOfExaminees(token)
+      .catch(() => setErrorToast("Kunde inte hämta befintliga par. Kontrollera din internetuppkoppling.")) 
+
+      console.log(exsistingPairs)
+      // if there exsists pairs in this grading already
+      if (exsistingPairs.length !== 0) {
+          // convert the pairs to the local format so the pairs can be displayed for the user
+          const convertedToLocalPairs = exsistingPairs.map(pair => {
+            if(pair.examinee_1 !== null && pair.examinee_2 !== null) {
+
+              return [{id: pair.examinee_1.id, name: pair.examinee_1.name, pairId: pair.pair_id, isLocked: shouldBeLocked}, 
+                      {id: pair.examinee_2.id, name: pair.examinee_2.name, pairId: pair.pair_id, isLocked: shouldBeLocked}]
+            } else {
+              // if we come in here there is a lonly examinee in a pair.
+              return undefined
+            }
+          }).filter(Boolean)
+
+          setPair(convertedToLocalPairs)
+
+          const convertedToAloneLocalPairs = exsistingPairs.map(pair => {
+            if(pair.examinee_1 !== null && pair.examinee_2 === null) {
+
+              //check if we are comming from during process, then this pair should be locked
+              if (!shouldBeLocked) {
+
+                // remove the pair 
+                deletePair(pair.pair_id, token)
+
+              }
+              return { id: pair.examinee_1.id, name: pair.examinee_1.name, isLocked: shouldBeLocked }       
+            } else {
+              // if we come in here the pair consists of two.
+              return undefined
+            }
+          }).filter(Boolean)
+          setExaminees(convertedToAloneLocalPairs)
+      }
+
+    }
+    fetchData()
+    
+  },[])
+
+  /**
+   * Help function to activate the useEffect function to start the navigation
+   * to the next step in the grading process
+   */
+  function startRedirection() {
+    setRedirect(true)
+  }
+
+  /**
+   * Handle the navigation back to the previous visited route
+   */
+  async function handleNavigation() {
+
+    // add lonly examinees as pairs
+    await Promise.all(examinees.map(examinee => {
+            // check to see if the examinee is locked. If it is locked we have been moving back from during process.
+            // the examinee already exsists in the database, skip it
+            if(!examinee.isLocked) {
+              postPair({examinee1Id: examinee.id}, token)
+              .catch(() => setErrorToast("Kunde inte lägga till paret. Kontrollera din internetuppkoppling."))
+            }
+        }))
+
+    // navigate to the previous visisted site
+    if (hasPreviousState && gradingStep !== 2) {
+      navigate(-1)
+    } else {
+      navigate("/grading")
+    }
+  }
+
+  /**
+   * Effect that are used to navigate to the next step in the grading process
+   */
+  useEffect(() => {
+    if (redirect != false) {
+      try {
+        const exec = async () => {
+          await Promise.all(examinees.map(examinee => {
+            // check to see if the examinee is locked. If it is locked we have been moving back from during process.
+            // the examinee already exsists in the database, skip it
+            if(!examinee.isLocked) {
+            postPair({examinee1Id: examinee.id}, token)
+              .catch(() => setErrorToast("Kunde inte lägga till paret. Kontrollera din internetuppkoppling."))
+            }
+          }
+        ))
 
 					const [grading_data] = await Promise.all([
 						getGradingProtocol(),
@@ -242,10 +314,8 @@ export default function GradingBefore() {
 			.then(response => handleResponse(response))
 			.catch(() => setErrorToast("Kunde inte lägga till paret. Kontrollera din internetuppkoppling."))
 
-		console.log(data)
-
 		selectedExaminees = selectedExaminees.map(examinee => {
-			return { id: examinee.id, name: examinee.name, pairId: data.examineePairId }
+			return { id: examinee.id, name: examinee.name, pairId: data.examineePairId, isLocked: false }
 		})
 
 		setPair([...pairs, selectedExaminees])
@@ -265,8 +335,8 @@ export default function GradingBefore() {
 			.catch(() => setErrorToast("Kunde inte lägga till paret. Kontrollera din internetuppkoppling."))
 
 		setPair([...pairs, [
-			{ id: examinee1Id, name: examinee1Name, pairId: data.examineePairId },
-			{ id: examinee2Id, name: examinee2Name, pairId: data.examineePairId }]]
+			{ id: examinee1Id, name: examinee1Name, pairId: data.examineePairId, isLocked: false },
+			{ id: examinee2Id, name: examinee2Name, pairId: data.examineePairId, isLocked: false }]]
 		)
 	}
 
@@ -283,8 +353,8 @@ export default function GradingBefore() {
 		const newExaminees = pairs.map(pair => {
 			if (pair.length === 2) {
 				if (pair[0].id === examinee1Id && pair[1].id === examinee2Id) {
-					return [{ id: pair[0].id, name: pair[0].name },
-					{ id: pair[1].id, name: pair[1].name }]
+					return [{ id: pair[1].id, name: pair[1].name, isLocked: pair[1].isLocked },
+					{ id: pair[0].id, name: pair[0].name, isLocked: pair[0].isLocked }]
 				}
 			}
 		}).filter(Boolean)
@@ -295,8 +365,8 @@ export default function GradingBefore() {
 
 		const newPairs = pairs.map(pair => {
 			if (pair[0].pairId !== pairId) {
-				return [{ id: pair[0].id, name: pair[0].name, pairId: pair[0].pairId },
-				{ id: pair[1].id, name: pair[1].name, pairId: pair[1].pairId }]
+				return [{ id: pair[0].id, name: pair[0].name, pairId: pair[0].pairId, isLocked: pair[0].isLocked },
+				{ id: pair[1].id, name: pair[1].name, pairId: pair[1].pairId, isLocked: pair[1].isLocked }]
 			}
 		}).filter(Boolean)
 		setPair(newPairs)
@@ -333,13 +403,13 @@ export default function GradingBefore() {
 
 		// check if there has not been an examinee added previosly
 		if (Object.keys(lastAddedExaminee).length === 0) {
-			setLastAddedExaminee({ id: newExaminee["examineeId"], name: newExaminee["name"] })
+			setLastAddedExaminee({ id: newExaminee["examineeId"], name: newExaminee["name"], isLocked: false })
 		} else {
 			// now there maybe will be an automatically pair created
 			setAutomaticallyPairCreation(true)
 		}
 		// set examinee
-		setExaminees([...examinees, { id: newExaminee["examineeId"], name: newExaminee["name"] }])
+		setExaminees([...examinees, { id: newExaminee["examineeId"], name: newExaminee["name"], isLocked: false }])
 
 	}
 
@@ -376,7 +446,7 @@ export default function GradingBefore() {
 		// gets the pair that will be modified
 		let modifyPair = pairs.find(pair => {
 			if (pair[0].pairId === pairId) {
-				return pair[0].id === examineeId ? { id: pair[1].id, name: pair[1].name } : { id: pair[0].id, name: pair[0].name }
+				return pair[0].id === examineeId ? { id: pair[1].id, name: pair[1].name, isLocked: false } : { id: pair[0].id, name: pair[0].name, isLocked: false }
 			}
 		})
 
@@ -397,8 +467,8 @@ export default function GradingBefore() {
 		// create a new array with the remaining pairs
 		const newPairs = pairs.map(pair => {
 			if (pair[0].id !== examineeId && pair[1].id !== examineeId) {
-				return [{ id: pair[0].id, name: pair[0].name, pairId: pair[0].pairId },
-				{ id: pair[1].id, name: pair[1].name, pairId: pair[1].pairId }]
+				return [{ id: pair[0].id, name: pair[0].name, pairId: pair[0].pairId, isLocked: false },
+				{ id: pair[1].id, name: pair[1].name, pairId: pair[1].pairId, isLocked: false }]
 			}
 		}).filter(Boolean)
 
@@ -489,8 +559,8 @@ export default function GradingBefore() {
 								<div className={styles.number}>{index + 1}</div>
 								<EditableListItem
 									key={"first-examinee-pair-" + pair[0].id}
-									id={pair[0].id}
-									item={pair[0].name}
+									id={pair[1].id}
+									item={pair[1].name}
 									onRemove={removeExamineeInPair}
 									onEdit={(id, name) => { editExaminee(id, name, true) }}
 									onCheck={onCheck}
@@ -501,8 +571,8 @@ export default function GradingBefore() {
 								<div style={{ width: "10px" }}></div>
 								<EditableListItem
 									key={"second-examinee-pair-" + pair[1].id}
-									id={pair[1].id}
-									item={pair[1].name}
+									id={pair[0].id}
+									item={pair[0].name}
 									onRemove={removeExamineeInPair}
 									onEdit={(id, name) => { editExaminee(id, name, true) }}
 									onCheck={onCheck}
@@ -510,7 +580,8 @@ export default function GradingBefore() {
 									showCheckbox={false}
 									checked={false}
 								/>
-								<div style={{ paddingTop: "20px", right: "-25px", position: "absolute" }}>
+                {Boolean(!pair[0].isLocked) === true ? 
+                <div style={{ paddingTop: "20px", right: "-25px", position: "absolute" }}>
 									<CloseIcon
 										key={"close-icon-" + toString(pair[0].id) + toString(pair[1].id)}
 										size="25px"
@@ -520,6 +591,7 @@ export default function GradingBefore() {
 										onClick={() => removePair(pair[0].id, pair[1].id, pair[1].pairId)}
 									/>
 								</div>
+                : null}						
 							</div>
 						)
 					}
@@ -544,9 +616,9 @@ export default function GradingBefore() {
 								onEdit={(id, name) => { editExaminee(id, name, false) }}
 								onCheck={onCheck}
 								validateInput={validateInput}
-								showCheckbox={true}
+								showCheckbox={Boolean(!examinee.isLocked)}
 								checked={false}
-								showTrash={true}
+								showTrash={Boolean(!examinee.isLocked)}
 								showX={false}
 							/>
 
@@ -595,7 +667,9 @@ export default function GradingBefore() {
 
 				<PopupSmall id={"test-popup"} title={"Varning"} isOpen={showPopup} setIsOpen={setShowPopup} direction={startRedirection}>
 					<h2>Är du säker på att alla deltagare är tillagda? </h2>
-					<h2> Isåfall fortsätt till bedömnings processen</h2>
+          <h2>Du kan <span style={{fontWeight: "bold", fontSize: "18px"}}>inte</span> lägga till eller redigera i efterhand</h2>
+					<br></br>
+          <h2> Isåfall fortsätt till bedömnings processen</h2>
 				</PopupSmall>
 
 				<Button
@@ -681,38 +755,38 @@ export default function GradingBefore() {
 	}
 
 
-	/**
-	 * Update an already exsisting examinee in the database
-	 * @param {Map} examinee 
-	 * @param {any} token 
-	 * @returns The response code
-	 */
-	async function putExaminee(examinee, token) {
-		const requestOptions = {
-			method: "PUT",
-			headers: { "Content-Type": "application/json", "token": token },
-			body: JSON.stringify(examinee)
-		}
+  /**
+     * Update an already exsisting examinee in the database
+     * @param {Map} examinee 
+     * @param {any} token 
+     * @returns The response code
+     */
+    async function putExaminee(examinee, token) {
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", "token": token },
+        body: JSON.stringify(examinee)
+      }
 
-		return fetch("/api/examination/examinee", requestOptions)
-			.then(response => { return response })
-			.catch(error => { alert(error.message) })
-	}
+      return fetch("/api/examination/examinee", requestOptions)
+        .then(response => { return response })
+        .catch(error => { alert(error.message) })
+    }
 
-	/**
-	 * Get an already exsisting grading in the database
-	 * @param {any} token 
-	 * @returns The response code
-	 */
-	async function getGrading(token) {
-		const requestOptions = {
-			method: "GET",
-			headers: { "Content-Type": "application/json", "token": token },
-		}
-		return fetch(`/api/examination/grading/${gradingId}`, requestOptions)
-			.then(response => { return response.json() })
-			.catch(error => { alert(error.message) })
-	}
+  /**
+   * Get an already exsisting grading in the database
+   * @param {any} token 
+   * @returns The response code
+   */
+  async function getGrading(token) {
+    const requestOptions = {
+      method: "GET",
+      headers: { "Content-Type": "application/json", "token": token },
+    }
+    return fetch(`/api/examination/grading/${gradingId}`, requestOptions)
+      .then(response => { return response.json() })
+      .catch(error => { alert(error.message) })
+  }
 
 	/**
 	 * Update an already exsisting grading in the database
@@ -730,6 +804,20 @@ export default function GradingBefore() {
 			.catch(error => { alert(error.message) })
 	}
 
+/**
+ * Get all examinees from a specific grading
+ * @param {any} token 
+ * @returns empty array if response is 404 otherwise return the json object
+ */
+async function getAllPairOfExaminees(token) {
+	const requestOptions = {
+		method: "GET",
+		headers: { "Content-Type": "application/json", "token": token },
+	}
+	return fetch(`/api/examination/pair/grading/${gradingId}`, requestOptions)
+    .then(response => { return response.status === HTTP_STATUS_CODES.NOT_FOUND ? [] : response.json() })
+		.catch(error => { alert(error.message) })
+}
 
 	/**
 	 * To handle the response from a fetch
