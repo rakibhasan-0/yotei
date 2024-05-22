@@ -237,7 +237,7 @@ public class UserApiTest {
                     return newUser;
                 });
             
-            Object response = lc.setUserRoleThroughRoleId(id, 2L);
+            Object response = lc.setUserRoleThroughRoleId(id, 4L);
             if (response instanceof ResponseEntity<?>) {
                 HttpStatus actual = ((ResponseEntity<?>) response).getStatusCode();
                 assertEquals(HttpStatus.OK, actual);
