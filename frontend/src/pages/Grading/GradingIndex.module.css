@@ -1,3 +1,24 @@
 .finishedGradings {
     margin-top: 1rem;
 }
+
+.scrollableContainer {
+    max-height: 30 vh; 
+    overflow-y: auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    /* For Firefox /
+    scrollbar-width: none;
+  
+    / For Chrome, Safari, and Opera */
+    &::-webkit-scrollbar {
+        display: none;
+    }
+  }
+  
+  .container {
+      display: flex;
+      flex-direction: column;
+      height: 25vh; 
+  }
