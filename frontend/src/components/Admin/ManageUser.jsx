@@ -169,7 +169,6 @@ export default function ManageUser() {
 				{users?.map((user, index) => (
 					<div className={styles.dropdownRow} key={index} onClick={() => {
 						setUser(user)
-						//setManageUserRole(roles.find(role => role.roleId === user.roleId))
 					}}>
 						<p className={styles.dropdownRowText}>{user.username}</p>
 					</div>
