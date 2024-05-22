@@ -1,7 +1,10 @@
 /**
- * @author Team Kiwi
- * @since 2024-05-13
+ * @author Team Kiwi, Team Coconut 
+ * @since 2024-05-20
  * @updated 2024-05-13 Added function for removing added and checked activity
+ * @updated 2024-05-20 added two new types for opening add activity popup and activity info popup
+ * 			and added belts to the addedActivities
+ *
  * 
  * /**
  * Workout create types
@@ -45,6 +48,8 @@ export const WORKOUT_CREATE_TYPES = {
 	UPDATE_EDITING_ACTIVITY: "UPDATE_EDITING_ACTIVITY",
 	CHECK_ALL_ACTIVITIES: "CHECK_ALL_ACTIVITIES",
 	UNCHECK_ALL_ACTIVITIES: "UNCHECK_ALL_ACTIVITIES",
+	OPEN_ADD_ACTIVITY_POPUP: "OPEN_ADD_ACTIVITY_POPUP",
+	OPEN_ACTIVITY_INFO_POPUP: "OPEN_ACTIVITY_INFO_POPUP",
 }
 
 /**
@@ -252,6 +257,11 @@ export function workoutCreateReducer(state, action) {
 				duration: Object.prototype.hasOwnProperty.call(result,"duration") ? result.duration : 0,
 				exerciseId: Object.prototype.hasOwnProperty.call(result,"type") && result.type === "exercise" ? result.id : null,
 				techniqueId: Object.prototype.hasOwnProperty.call(result,"type") && result.type === "technique" ? result.techniqueID : null,
+				belts: result.beltColors ? result.beltColors.map(belt => ({
+					name: belt.belt_name,
+					color: belt.belt_color,
+					child: belt.is_child
+				})) : null
 			}
 		})
 		return tempState
@@ -314,6 +324,35 @@ export function workoutCreateReducer(state, action) {
 		tempState.popupState.types.editActivityPopup = true
 		tempState.popupState.isOpened = true
 		return tempState
+	case "OPEN_ADD_ACTIVITY_POPUP":
+		// it opens add activity popup and close activity info popup
+		return {
+			...state,  
+			popupState: {
+				...state.popupState,  
+				isOpened: true,
+				types: {
+					...state.popupState.types,  
+					showAddActivity: true,
+					showActivityInfo: false
+				}
+			}
+		}
+	case "OPEN_ACTIVITY_INFO_POPUP":
+		// it opens activity info popup and close add activity popup
+		return {
+			...state,
+			popupState: {
+				...state.popupState,
+				isOpened: true,
+				types: {
+					...state.popupState.types,
+					showAddActivity: false,
+					showActivityInfo: true
+				}
+			}
+		}
+
 	case "SET_CURRENTLY_EDITING": {
 		const activityId = action.payload.id
 		tempState.popupState.currentlyEditing.id = activityId
