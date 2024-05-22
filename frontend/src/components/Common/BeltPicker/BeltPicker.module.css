@@ -21,13 +21,19 @@
     gap: 10px;
     align-items: center;
     flex-shrink: 0; /* Prevent shrinking */
+    margin-left: auto;
 }
 
-.beltItem {
-    margin-left: auto; /* Push to the right side */
-}
 
 .beltText {
+    margin: 0;
+    position: absolute; /* Position it absolutely within the beltRow */
+    left: 2%; /* Move to the horizontal center */
+    transform: none; /* Adjust to center it */
+    text-align: left;
+}
+
+.beltTextSpecial {
     margin: 0;
     position: absolute; /* Position it absolutely within the beltRow */
     left: 50%; /* Move to the horizontal center */
