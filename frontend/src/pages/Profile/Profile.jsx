@@ -43,12 +43,14 @@ export default function Profile() {
 	const [usernamePassword, setUsernamePassword] = useState("")
 	const [passwordButtonState, setPasswordButtonDisabled] = useState(false)
 	const [usernameButtonState, setUsernameButtonDisabled] = useState(false)
-	const [cookies, setCookie] = useCookies(["previousPath"])
+	
 
 	const [lists, setLists] = useState([])
 	const [map, mapActions] = useMap()
 
 	const [amountOfFavouriteWorkouts, setAmountOfFavouriteWorkouts] = useState(0)
+	
+	const [cookies, setCookie] = useCookies(["previousPath"])
 
 
 	//TODO feature toggle
