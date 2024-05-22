@@ -21,6 +21,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.core.joran.spi.JoranException;
+import ch.qos.logback.core.util.StatusPrinter;
+
 /**
  * 
  * This is essentially tests for the database init scripts.
@@ -45,12 +52,18 @@ public class TechniqueDatabaseTest {
     static String POSTGRESQL_PASSWORD = System.getProperty("POSTGRESQL_PASSWORD");
     static String POSTGRESQL_DATABASE = System.getProperty("POSTGRESQL_DATABASE");
 
+    static LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
 
     @BeforeAll
     public static void setUp() {
+        loggerContext.stop();
+        System.out.println("Setting up container");
+
         //We go into the .env in the project root and find the password etc. for the database
         try {
             if (POSTGRESQL_DATABASE == null) {
+                System.out.println("Getting DB credentials");
+
                 String envFilePath = "../../.env";
                 String envFileContent = new String(Files.readAllBytes(Paths.get(envFilePath)));
 
@@ -75,6 +88,7 @@ public class TechniqueDatabaseTest {
             e.printStackTrace();
         }
 
+        System.out.println("Building Image from DockerFile");
         ImageFromDockerfile image = new ImageFromDockerfile()
             .withDockerfile(Paths.get("../../infra/database/Dockerfile"));
 
@@ -89,19 +103,24 @@ public class TechniqueDatabaseTest {
             .withEnv("POSTGRESQL_USER", POSTGRESQL_USER)
             .withEnv("POSTGRESQL_PASSWORD", POSTGRESQL_PASSWORD)
             .withExposedPorts(PostgreSQLContainer.POSTGRESQL_PORT);
-
+            
+        System.out.println("Waiting for container to be ready");
         //NOTE: We had to increase the timer to 120 rather than 60, which is wierd as both should work.
         postgreSQLContainer.setWaitStrategy(Wait.defaultWaitStrategy()
                 .withStartupTimeout(Duration.ofSeconds(120)));
-        
+        System.out.println("Starting container");
         postgreSQLContainer.start();
     }
 
     @AfterAll
     public static void tearDown() {
+        String output = postgreSQLContainer.getLogs();
         if (postgreSQLContainer != null) {
             postgreSQLContainer.stop();
         }
+        System.out.println(output);
+        loggerContext.start();
+        System.out.println("Running Tests!");
     }
 
     /**
