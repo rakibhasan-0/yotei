@@ -68,7 +68,7 @@ export default function ExamineeBox({
 
 	// Set initial color index based on status prop
 	const [color, setColor] = useState(colors[status] || colors.default)
-
+    
 	useEffect(() => {
 		setColor(colors[status] || colors.default)
 	}, [status])
@@ -78,6 +78,11 @@ export default function ExamineeBox({
 			handleExistingInput()
 		}
 	}, [isAddingComment])
+
+	// Updates notifications when switching techniques
+	useEffect(() => {
+		handleExistingInput()
+	}, [techniqueName])
 
 	/**
      * Discards the current personal comment.
@@ -247,7 +252,7 @@ export default function ExamineeBox({
 					onClick={() => {handleClick()}}>
 					<p id="ExamineeName" >{examineeName}</p>
 				</div>
-				<CommentButton onClick={() => toggleAddPersonalComment(true)} className={styles.commentButtonContainer} />
+				<CommentButton onClick={() => toggleAddPersonalComment(true)} className={styles.commentButtonContainer} hasComment={hasComment} />
 
 				<Popup
 					id={"examinee-comment-popup"}
@@ -263,12 +268,12 @@ export default function ExamineeBox({
 						errorMessage={commentError}
 						text={commentText}
 					/>
-					<Button onClick={onAddPersonalComment}>Lägg till</Button>
+					<Button onClick={() => {onAddPersonalComment()}} >Lägg till</Button>
 				</Popup>
 				<ConfirmPopup
 					popupText={"Är du säker på att du vill ta bort kommentarsutkastet?"}
 					showPopup={showDiscardComment}
-					onClick={() => onDiscardPersonalComment()}
+					onClick={() => {onDiscardPersonalComment()}}
 					setShowPopup={() => setShowDiscardComment(false)}
 					zIndex={200} // Above the comment popup.
 				/>
