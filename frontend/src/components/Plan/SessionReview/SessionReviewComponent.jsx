@@ -57,9 +57,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			const requestOptions = {
 				headers: {"Content-type": "application/json", token: context.token}
 			}
-
-			console.log("the api call just started for the session data")
-
 			const response = await fetch(`/api/workouts/detail/${workout_id}`, requestOptions).catch(() => {
 				setErrorStateMsg("Serverfel: Kunde inte ansluta till servern.")
 				//setLoading(false)
@@ -72,7 +69,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			} else {
 				const json = await response.json()
 				setSessionData(() => json)
-				console.log(json)
 				//setLoading(false)
 				setErrorStateMsg("")
 				fetchLoadedData()
@@ -99,7 +95,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 				//setLoading(false)
 			} else {
 				const json = await loadedResponse.json()
-				console.log("Session Id is", session_id)
 				//console.log(session_id)
 				if(json[0] !== null && json[0] !== undefined) {
 					//console.log(json[0])
@@ -156,13 +151,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	}, [])
 
 
-	/**
-	 * used for the debugging purposes
-	 */
-	useEffect(() => {
-        console.log("doneList", doneList);
-		console.log("activitiesToBeDeleted", activitiesToBeDeleted)
-    }, [doneList]);
 
 
 	function setDoneActivities(activities) {
@@ -173,27 +161,13 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		})
 	}
 
-	/**
-	* for debugging purposes
-	* it will trigger when the activitiesToBeDeleted is updated
-	*/
-	useEffect(() => {
-		console.log("activitiesToBeDeleted", activitiesToBeDeleted)
-	}, [activitiesToBeDeleted])
 
 	function handleCheckBoxChange (checked, id) {
 		if(checked) { //Add exercise
 			setDone([...doneList,id])
 		} else { //Remove exercise
-			console.log("Removing", id)
-			
 			if(activitiesToBeDeleted.length == 1){
-
 			}
-
-		
-
-
 			setDone(doneList.filter(doneId=>doneId !== id))
 		}
 	}
@@ -211,23 +185,24 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			setError("Kunde inte spara utvärdering, vänligen sätt ett betyg")
 			return
 		}
-		console.log("Extra", sessionData.activityCategories.find(category => category.categoryName === "Extra").activities)
-		console.log("doneList before transforming", doneList)
-		console.log("transform is about to run")
+		
 		await transformDoneList()
-		console.log("transform done")
-		removingNotCheckedActivities()
-		//window.location.reload();
+
 	}
 
 
 	function removingNotCheckedActivities() {
-		const extraActivities = sessionData.activityCategories.find(category => category.categoryName.toLowerCase() === "extra").activities
-		extraActivities.forEach(activity => {
-			if (!doneList.includes(activity.id)) {
-				activitiesToBeDeleted.push(activity.id)
-			}
-		})
+		const extraCategory = sessionData.activityCategories.find(category => category.categoryName === "Extra");
+
+		if (extraCategory) {
+			extraActivities.forEach(activity => {
+				if (!doneList.includes(activity.id)) {
+					removeActivity(activity.id)
+				}
+			})
+		} 
+
+		//window.location.reload();
 	}
 	
 
@@ -271,6 +246,8 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		setDone(updatedList)
 		console.log("list after setting the transform", doneList)
 		setIsTransformComplete(true) 
+
+		removingNotCheckedActivities()
 
 	}
 
@@ -386,6 +363,25 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		}
 		setSuccess("Utvärdering sparad")
 	}
+
+	async function removeActivity(activity_id) {
+		const requestOptions = {
+			method: "DELETE",
+			headers: {"Content-type": "application/json", "token": token}
+		}
+		const deleteResponse = await fetch("/api/workouts/activities/delete/" + activity_id , requestOptions).catch(() => {
+			setError("Serverfel: Kunde inte ansluta till servern.")
+			return
+		})
+		if(deleteResponse.status == HTTP_STATUS_CODES.BAD_REQUEST) {
+			console.log("Kunde inte radera aktivitet med id: " + activity_id)
+		} else if (deleteResponse.status == HTTP_STATUS_CODES.NOT_FOUND) {
+			console.log("Hittade ingen aktivitet med id: " + activity_id)
+		} else if (HTTP_STATUS_CODES.status == HTTP_STATUS_CODES.OK) {
+			console.log("Raderade aktivitet med id: " + activity_id)
+		}
+	}
+
 
 	async function clearActivities(review_id, session_id) {
 		//console.log("Clearing activities")
