@@ -20,7 +20,10 @@ import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -132,38 +135,51 @@ public class AuthFilter implements GlobalFilter, Ordered {
         //throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "permissions: " + permissions + "\nadmin right: " + permission_list.ADMIN_RIGHTS.value);
         
         // Check for each permission-locked api path and determine if user is allowed through
-        if (path.startsWith("/api/session")) {
-            // Might be a better way but this makes it so that no 
-            // newly created endpoint is permission-locked from the get-go
-            // Any new endpoint that needs to be locked has to be included here
-            Pattern[] patterns = {
-                // From SessionController
-                Pattern.compile("^/api/session/add$"),
-                Pattern.compile("^/api/session/addList$"),
-                Pattern.compile("^/api/session/delete$"),
-                Pattern.compile("^/api/session/deleteByPlan$"),
-                Pattern.compile("^/api/session/update$"),
-                // From SessionReviewController
-                Pattern.compile("^/api/session/\\d+/review$"),
-                Pattern.compile("^/api/session/\\d+/review/\\d+/activity$"),
-                Pattern.compile("^/api/session/\\d+/review/\\d+/activity/\\d+$"),
-                Pattern.compile("^/api/session/\\d+/review/\\d+$")
-            };
-
-            for (Pattern pattern : patterns) {
-                Matcher matcher = pattern.matcher(path);
-                if (matcher.matches()) {
-                    if (!(permissions.contains(permission_list.SESSION_OWN.value) || 
-                        permissions.contains(permission_list.SESSION_ALL.value))) {
-                        return false;
-                    }
-                }
-            }
-        }
+        if (path.startsWith("/api/session") 
+            && !checkSessionPermissions(path, permissions)) return false;
 
         // Protect import and export endpoints
         // Only allow admin to create users
         return !(path.contains("import") || path.contains("export") || path.equals("/api/users"));
 
+    }
+
+    private boolean checkSessionPermissions(String path, List<Integer> permissions) {
+        // Might be a better way but this makes it so that no 
+        // newly created endpoint is permission-locked from the get-go
+        // Any new endpoint that needs to be locked has to be included here
+        Pattern[] patterns = {
+            // From SessionController
+            Pattern.compile("^/api/session/add$"),
+            Pattern.compile("^/api/session/addList$"),
+            Pattern.compile("^/api/session/delete$"),
+            Pattern.compile("^/api/session/deleteByPlan$"),
+            Pattern.compile("^/api/session/update$"),
+            // From SessionReviewController
+            Pattern.compile("^/api/session/\\d+/review$"),
+            Pattern.compile("^/api/session/\\d+/review/\\d+/activity$"),
+            Pattern.compile("^/api/session/\\d+/review/\\d+/activity/\\d+$"),
+            Pattern.compile("^/api/session/\\d+/review/\\d+$")
+        };
+    
+        Integer[] permissionsToCheck = {
+            permission_list.SESSION_ALL.value,
+            permission_list.SESSION_OWN.value
+        };
+
+        return hasPermission(path, permissions, Arrays.asList(patterns), Arrays.asList(permissionsToCheck));
+    }
+
+    private boolean hasPermission(String path, List<Integer> permissions, List<Pattern> patterns, List<Integer> permissionsToCheck) {
+        for (Pattern pattern : patterns) {
+            Matcher matcher = pattern.matcher(path);
+            if (matcher.matches()) {
+                if (Collections.disjoint(permissions, permissionsToCheck)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }
