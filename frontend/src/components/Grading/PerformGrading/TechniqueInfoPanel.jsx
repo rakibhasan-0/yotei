@@ -67,6 +67,11 @@ export default function TechniqueInfoPanel({
 		}
 	}, [isAddingComment])
 
+	// Updates notifications when switching techniques
+	useEffect(() => {
+		handleExistingInput()
+	}, [currentTechniqueTitle])
+
 	/**
      * Discards the current group comment.
      */
@@ -226,7 +231,7 @@ export default function TechniqueInfoPanel({
 					<h3 className={styles.categoryTitle} id="categoryTitle">{mainCategoryTitle}</h3>
 				</div>
 				<div className={styles.buttonGroupComment}>
-					<CommentButton onClick={() => setAddComment(true)} />
+					<CommentButton onClick={() => setAddComment(true)} hasComment={hasComment} />
 				</div>
 				<div>
 					<h2 className={styles.currentTechnique} id="currentTechniqueTitle">{currentTechniqueTitle}</h2>
@@ -267,7 +272,7 @@ export default function TechniqueInfoPanel({
 			<ConfirmPopup
 				popupText={"Är du säker på att du vill ta bort kommentarsutkastet?"}
 				showPopup={showDiscardComment}
-				onClick={() => onDiscardGroupComment()}
+				onClick={() => {onDiscardGroupComment()}}
 				setShowPopup={() => setShowDiscardComment(false)}
 				zIndex={200} // Above the comment popup.
 			/>
