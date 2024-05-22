@@ -15,7 +15,6 @@ import Spinner from "../../../components/Common/Spinner/Spinner"
 import { HTTP_STATUS_CODES, setError, setSuccess, canEditWorkout, isAdminUser } from "../../../utils"
 import PrintButton from "../../../components/Common/PrintButton/PrintButton"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
-import { contextType } from "react-star-ratings"
 
 /**
  * A page for viewing workouts. The user can view the information
