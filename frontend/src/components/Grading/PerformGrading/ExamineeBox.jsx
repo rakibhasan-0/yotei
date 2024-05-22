@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from "react"
 import CommentButton from "./CommentButton"
 import styles from "./ExamineeBox.module.css"
 import Popup from "../../Common/Popup/Popup"
-import TextArea from "../../Common/TextArea/TextArea"
 import Button from "../../Common/Button/Button"
 import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
 import { AccountContext } from "../../../context"
@@ -18,7 +17,7 @@ import { setError as setErrorToast } from "../../../utils"
  * @param {any} props.examineeId - The id of the examinee.
  * @param {String} props.techniqueName - The name of the technique.
  * @param {function} props.onClick - onClick function when component is pressed.
- * @param {String} props.buttonState - The current state of the button.
+ * @param {String} props.status - The current status of the button.
  * @param {function} props.setButtonState - Function to set the state of the button.
  * 
  * Example Usage:
@@ -34,13 +33,14 @@ import { setError as setErrorToast } from "../../../utils"
  *     examineeId={1}
  *     techniqueName="Some Technique"
  *     onClick={() => console.log("Clicked")}
- *     buttonState="default"
+ *     status="default"
  *     setButtonState={(state) => console.log(state)}
  *   />
  * )
  * 
  * @version 3.0
- * @since 2024-05-15
+ * @since 2024-05-21
+ * @author Apelsin
  */
 export default function ExamineeBox({ 
 	id, 
@@ -48,7 +48,7 @@ export default function ExamineeBox({
 	examineeId,
 	techniqueName, 
 	onClick, 
-	buttonState, 
+	status, 
 	setButtonState
 }) {
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
@@ -57,22 +57,45 @@ export default function ExamineeBox({
 	const [commentError, setCommentError] = useState("")
 	const [hasComment, setExistingComment] = useState(false)
 	const [commentId, setCommentId] = useState(null)
-	const colors = ["white", "lightgreen", "lightcoral"]
+	
+	const isErr = !(commentError == undefined || commentError == null || commentError == "")
 
+
+
+	const colors = {
+		default: "white",
+		pass: "lightgreen",
+		fail: "lightcoral"
+	}
+    
 	const { gradingId } = useParams()
 	const { token, userId } = useContext(AccountContext)
 
+	// Set initial color index based on status prop
+	const [color, setColor] = useState(colors[status] || colors.default)
+    
+	useEffect(() => {
+		setColor(colors[status] || colors.default)
+	}, [status])
+    
 	useEffect(() => {
 		if (isAddingComment) {
 			handleExistingInput()
 		}
 	}, [isAddingComment])
 
+	// Updates notifications when switching techniques
+	useEffect(() => {
+		handleExistingInput()
+	}, [techniqueName])
+
 	/**
      * Discards the current personal comment.
      */
 	const onDiscardPersonalComment = async () => {
-		setCommentText("")
+		if (!hasComment) {
+			setCommentText("")
+		}
 		setAddComment(false)
 	}
 
@@ -205,33 +228,38 @@ export default function ExamineeBox({
 		}
 	}
 
-	const [colorIndex, setColorIndex] = useState(0)
-
 	const handleClick = () => {
-		// Update buttonState based on current color
-		if (colors[colorIndex] === "white") {
-			buttonState = "pass"
-		} else if (colors[colorIndex] === "lightgreen") {
-			buttonState = "fail"
-		} else if (colors[colorIndex] === "lightcoral") {
-			buttonState = "default"
+		// Update buttonState and color based on current color
+		let newButtonState
+		let newColor
+        
+		if (color === colors.default) {
+			newButtonState = "pass"
+			newColor = colors.pass
+		} else if (color === colors.pass) {
+			newButtonState = "fail"
+			newColor = colors.fail
+		} else if (color === colors.fail) {
+			newButtonState = "default"
+			newColor = colors.default
 		}
-		setButtonState(buttonState)
-		// Update the color
-		setColorIndex((colorIndex + 1) % colors.length)
-		// Api call will be handled here and update the DB according to state
-		onClick(buttonState) // Pass the new state as a parameter
+        
+		setButtonState(newButtonState)
+		setColor(newColor)
+		onClick(newButtonState) // Pass the new state as a parameter
 	}
 
+	console.log("name: ", examineeName, ", status: ", status, ", color: ", color)
+
 	return (
-		<div id={id} className={styles.examineeContainer} style={{ backgroundColor: colors[colorIndex] }}>
+		<div id={id} className={styles.examineeContainer} style={{ backgroundColor: color }}>
 			<fieldset className={styles.examineeFieldset}>
 				<div 
 					className={styles.examineeName}
-					onClick={() => { handleClick() }}>
-					<p id="ExamineeName" style={{ height: "52px", margin: "0" }}>{examineeName}</p>
+					onClick={() => {handleClick()}}>
+					<p id="ExamineeName" >{examineeName}</p>
 				</div>
-				<CommentButton onClick={() => toggleAddPersonalComment(true)} className={styles.commentButtonContainer} />
+				<CommentButton onClick={() => toggleAddPersonalComment(true)} className={styles.commentButtonContainer} hasComment={hasComment} />
 
 				<Popup
 					id={"examinee-comment-popup"}
@@ -241,18 +269,29 @@ export default function ExamineeBox({
 					onClose={() => setCommentError(false)}
 					style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset" }}
 				>
-					<TextArea
+					<textarea
+						className={isErr ? `${styles.textarea} ${styles.textareaErr}` : `${styles.textarea}`}
 						autoFocus={true}
-						onInput={e => { setCommentText(e.target.value); setCommentError(false) }}
-						errorMessage={commentError}
-						text={commentText}
+						onInput={ e => {
+							setCommentText(e.target.value)
+							setCommentError(false)
+						}}
+						value={commentText}
+						id={"TextareaTestId"}
+						type={"text"}
 					/>
-					<Button onClick={onAddPersonalComment}>Lägg till</Button>
+					{commentError && <p className={styles.err}>{commentError}</p>}
+					<div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px", marginTop: "10px"}}>
+						<Button outlined={true} onClick={() => setCommentText(commentText + " " + "Böj på benen!")}>Böj på benen!</Button>
+						<Button outlined={true} onClick={() => setCommentText(commentText + " " + "Balansbrytning!")}>Balansbrytning!</Button>
+						<Button outlined={true} onClick={() => setCommentText(commentText + " " + "Kraftcirkeln!")}>Kraftcirkeln!</Button>
+					</div>
+					<Button onClick={() => onAddPersonalComment()}>Lägg till</Button>
 				</Popup>
 				<ConfirmPopup
 					popupText={"Är du säker på att du vill ta bort kommentarsutkastet?"}
 					showPopup={showDiscardComment}
-					onClick={() => onDiscardPersonalComment()}
+					onClick={() => {onDiscardPersonalComment()}}
 					setShowPopup={() => setShowDiscardComment(false)}
 					zIndex={200} // Above the comment popup.
 				/>

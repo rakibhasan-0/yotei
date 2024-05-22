@@ -37,7 +37,12 @@ TODO specify who and when system tests should be written.
 
 =============================================================================================
     TO DO:
-    
+
+    Describe how all files used in the tests are related to eachother, include links to their 
+    respective documentations
+
+    Files to describe relation of: testName.spec.ts systemTestsTypes.ts testPage.ts (pom)
+
     https://playwright.dev/docs/pom
 =============================================================================================
 All tests should reside in `sys-test` and have names like `*.spec.ts`. If making direct calls to the API, the code should be placed in a separate file `sys-test/fixtures/<api-namn>Api.ts`. 
@@ -68,7 +73,7 @@ test.describe('ST-<suite-nr> <namn på test>', () => {
 ``` 
 
 ### Generate tests with Codegen
-Codegen will open two windows, a browser window where you interact with the website you wish to test and the Playwright Inspector window where you can record your tests, copy the tests, clear your tests as well as change the language of your tests. This can be done by the following steps:
+Codegen will open two windows, a browser window where you interact with the website you wish to test and the Playwright Inspector window where you can record, copy, clear, and change the language of your tests. This can be done by the following steps:
 
 1. Run frontend
 ```sh

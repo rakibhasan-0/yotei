@@ -1,3 +1,6 @@
+//it.todo("Should render the correct belts when selected")
+//it.todo("all tests need to be rewritten to work with inverted belts category")
+//TODO write a file comment in this file and clean up tests with good test data and more tests.
 import { render, screen, configure, waitFor } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import BeltPicker from "../../../../components/Common/BeltPicker/BeltPicker"
@@ -25,26 +28,44 @@ beforeEach(() => {
 						id: 1,
 						name: "Vitt",
 						color: "FCFCFC",
-						child: false
+						child: false,
+						inverted: true
 					},
 					{
 						id: 2,
 						name: "Vitt",
 						color: "BD3B41",
-						child: true
+						child: true,
+						inverted: false
+					},
+					{
+						id: 3,
+						name: "Svart",
+						color: "BD3B41",
+						child: true,
+						inverted: false
+					},
+					{
+						id: 5,
+						name: "Vitt",
+						color: "FCFCFC",
+						child: false,
+						inverted: false
+					},
+					{
+						id: 6,
+						name: "Svart",
+						color: "BD3B41",
+						child: false,
+						inverted: false
 					},
 					{
 						id: 1,
 						name: "Svart",
-						color: "FCFCFC",
-						child: false
-					},
-					{
-						id: 2,
-						name: "Svart",
 						color: "BD3B41",
-						child: true
-					}
+						child: true,
+						inverted: true
+					},
 				]
 			))
 		})
@@ -60,7 +81,7 @@ describe("BeltPicker.jsx", () => {
 			expect(requestSpy).toHaveBeenCalled()
 		})
 		expect(screen.getByTestId("belt-text-Vitt")).toBeInTheDocument()
-		expect(screen.getByTestId("belt-adult-Vitt")).toBeInTheDocument()
+		expect(screen.getByTestId("belt-inverted-Vitt")).toBeInTheDocument()
 		expect(screen.getByTestId("belt-child-Vitt")).toBeInTheDocument()
 	})
 
