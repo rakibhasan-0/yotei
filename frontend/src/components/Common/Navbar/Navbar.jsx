@@ -26,7 +26,6 @@ import { AccountContext } from "../../../context"
 function Navbar({ testId }) {
 
 	const [open, setOpen] = useState(false)
-	const [isExaminationEnabled] = useState(false) // FEATURE TOGGLE
 	const navigate = useNavigate()
 	const context = useContext(AccountContext) 
 
@@ -60,10 +59,6 @@ function Navbar({ testId }) {
 						<h1 className={styles.commonNavbarButton}>Planering</h1>
 					</Button>
 
-					<Button width={"100%"} onClick={() => navigateAndClose("/groups")}>
-						<h1 className={styles.commonNavbarButton}>Grupper</h1>
-					</Button>
-
 					<Button width={"100%"} onClick={() => navigateAndClose("/workout")}>
 						<h1 className={styles.commonNavbarButton}>Pass</h1>
 					</Button>
@@ -72,13 +67,9 @@ function Navbar({ testId }) {
 						<h1 className={styles.commonNavbarButton}>Tekniker & Övningar</h1>
 					</Button>
 
-					{isExaminationEnabled ? (
-						<Button width={"100%"} onClick={() => {}}>
-							<h1 className={styles.commonNavbarButton}>Gradering</h1>
-						</Button>
-					) : (
-						null
-					)}
+					<Button width={"100%"} onClick={() => navigateAndClose("/grading")}>
+						<h1 className={styles.commonNavbarButton}>Gradering</h1>
+					</Button>
 				</div>
 				
 
