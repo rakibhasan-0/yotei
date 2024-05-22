@@ -58,7 +58,7 @@ locked: true
 
 query-params:
     parameters:
-        beltId: ID of the belt of associated with the protocol
+        beltId: ID of the belt of associated with the protocol | Integer
 
 examples:
   - name: 200
