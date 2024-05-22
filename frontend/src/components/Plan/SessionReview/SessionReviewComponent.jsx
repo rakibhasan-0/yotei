@@ -698,13 +698,14 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 		const obj = {
 			workoutId: null,
-			exerciseId: activity.exerciseId ? activity.exerciseId : null,
-			techniqueId: activity.techniqueId ? activity.techniqueId : null,
+			exerciseId: activity.exercise ? activity.exercise.id : null,
+			techniqueId: activity.technique ? activity.technique.id : null,
 			name: activity.name,
 			description: activity.techniqueDescription || "",
 			duration: activity.duration,
 			order: order,
 		}
+
 
 		try {
 			const response = await fetch("/api/workouts/activities/add", {
