@@ -4,7 +4,7 @@ import { TagComponent } from "../Types/systemTestsTypes"
 /**
  *  Tests related to addTagPopup
  *  @author Team Durian (Group 3)
- *  @since 2024-05-21
+ *  @since 2024-05-22
  *  @version 1.0
  */
 
@@ -54,7 +54,6 @@ export class AddTagPopupPage {
 		await this.page.getByRole("button", { name: "Hantera tagg" }).click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
-		await this.page.getByTestId("EditableListItem").locator("label").waitFor({state: "visible"})
 		//await this.page.waitForTimeout(3000)
 
 		//Uncheck the tag.
@@ -71,6 +70,9 @@ export class AddTagPopupPage {
 		await this.page.getByPlaceholder("Sök eller skapa tagg").click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
 		await this.page.getByTestId("EditableListItem").locator("label").waitFor({state: "visible"})
+
+		//Wait for result to appear.
+		await this.waitForEnabled(this.page.getByTestId("EditableListItem").locator("label"))
 
 		//Remove the tag from the database. 
 		await this.findComponents(tag, "#trash-icon")
