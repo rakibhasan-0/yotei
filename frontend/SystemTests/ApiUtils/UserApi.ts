@@ -56,6 +56,7 @@ export class UserApi {
 				username: user.username,
 				password: user.password,
 				userRole: user.role,
+				roleId: user.role
 			},
 		})
 

@@ -100,8 +100,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 	const [searchListText, setSearchListText] = useState("")
 	const [listContents, setListContents] = useState([])  
 	const [listUpdate, setListUpdate] = useState(0)
-	const [isSearchBarEnabled] = useState(true) // TODO: feature toggle
-	const [isFilterEnabled] = useState(false) // TODO: feature toggle
+	const [listFilter, setListFilter] = useState([])
 
 
 	/**
@@ -131,31 +130,34 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 				if (b.author.userId === currentUserId && a.author.userId !== currentUserId) {
 					return 1
 				}
-	
-				// "Delade" - prioritize items that are shared
-				if (a.isShared && !b.isShared) {
+			
+				// "Delade" - prioritize items that are not authored by the current user and are hidden
+				if (a.hidden && !b.hidden && a.author.userId !== currentUserId && b.author.userId === currentUserId) {
 					return -1
 				}
-				if (b.isShared && !a.isShared) {
+				if (b.hidden && !a.hidden && b.author.userId !== currentUserId && a.author.userId === currentUserId) {
 					return 1
 				}
-	
-				// "Publika" - prioritize items that are not shared and not authored by the current user
-				if (!a.isShared && a.author.userId !== currentUserId && (b.isShared || b.author.userId === currentUserId)) {
+			
+				// "Publika" - prioritize items that are not authored by the current user and are not hidden
+				if (!a.hidden && a.author.userId !== currentUserId && (b.hidden || b.author.userId === currentUserId)) {
 					return -1
 				}
-				if (!b.isShared && b.author.userId !== currentUserId && (a.isShared || a.author.userId === currentUserId)) {
+				if (!b.hidden && b.author.userId !== currentUserId && (a.hidden || a.author.userId === currentUserId)) {
 					return 1
 				}
-	
+			
 				// If items are equal in terms of the above conditions, sort them by name
 				return a.name.localeCompare(b.name)
-			} 
+			}
 		},
 		{ label: "Namn: A-Ö", cmp: (a, b) => { return a.name.localeCompare(b.name) } },
-		{ label: "Namn: Ö-A", cmp: (a, b) => { return -a.name.localeCompare(b.name) } }
+		{ label: "Namn: Ö-A", cmp: (a, b) => { return -a.name.localeCompare(b.name) } },
+		{ label: "Senast skapad", cmp: (a, b) => { return new Date(b.date) - new Date(a.date) } },
+		{ label: "Äldst", cmp: (a, b) => { return new Date(a.date) - new Date(b.date) } }
 	]
 	const [sortLists, setSortLists] = useState(sortOptionsLists[0])
+	const [filterCount, setFilterCount] = useState(0)
 
 
 	const searchCount = useRef(0)
@@ -281,10 +283,11 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 	useEffect(() => {
 		if (!hasLoadedData) return
 
+		setFilterCount(listFilter.length)
 		setFetchedLists(false)
 		setLists(lists)
 		fetchingList()
-	}, [searchListText, hasLoadedData, listUpdate, sortLists])
+	}, [searchListText, hasLoadedData, listUpdate, sortLists, listFilter])
 
 
 	/**
@@ -453,19 +456,38 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 
 
 	/**
+	 * Sets the active filters.
+	 * 
+	 * @param {*} newListFilter The array of filters to be set.
+	 */
+	const handleListFilterChange = (newListFilter) => {
+		setListFilter(newListFilter)
+	}
+
+	/**
 	 * Fetches the lists from the backend, either from cache or by a new API-call.
 	 */
 	function fetchingList() {
-
+		let author = false
+		let hidden = false
+		let shared = false
+		if (listFilter.some(opt => opt.label === "Mina listor")) author = true
+		if (listFilter.some(opt => opt.label === "Publika listor")) hidden = true
+		if (listFilter.some(opt => opt.label === "Delade med mig")) shared = true
+		
 		const args = {
-			text: searchListText
+			text: searchListText,
+			isAuthor: author,
+			hidden: hidden,
+			isShared: shared
 		}
 
 		getLists(args, token, map, mapActions, (result) => {
 			if (result.error) return
+			
+			// Extract the fields from each item in the result used in displaying the list.
+			const lists = result.results.map(item => ({
 
-			// Extract the 'id' and 'name' fields from each item in the result used in displaying the list.
-			const lists = result.map(item => ({
 				id: item.id,
 				name: item.name,
 				author: {
@@ -473,9 +495,9 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 					username: item.author.username
 				},
 				hidden: item.hidden,
-				isShared: item.is_shared
+				date: item.date
 			}))
-
+			
 			setLists(lists.sort(sortLists.cmp))
 			setFetchedLists(true)
 		})
@@ -634,6 +656,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 											<CheckBox
 												checked={checkedActivities.some(a => a.id === exercise.id)}
 												onClick={() => onActivityToggle(exercise, "exercise")}
+												id={`ExerciseListItemCheckBox-${ exercise.id }`}
 											/>
 										}
 										item={exercise.name}
@@ -646,23 +669,19 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 					</Tab>
 					<Tab eventKey="lists" title="Listor" tabClassName={`nav-link ${style.tab}`}>
 						<div className={style.searchBar}>
-							{isSearchBarEnabled && ( // TODO: feature toggle.
-								<SearchBar
-									id="lists-search-bar"
-									placeholder="Sök efter listor"
-									text={searchListText}
-									onChange={setSearchListText}
-								/>
-							)}
+							<SearchBar
+								id="lists-search-bar"
+								placeholder="Sök efter listor"
+								text={searchListText}
+								onChange={setSearchListText}
+							/>
 
 							<NewSorter onSortChange={setSortLists} id="ei-sort" selected={sortLists} options={sortOptionsLists} />
 
 
-							{isFilterEnabled && ( // TODO: feature toggle.
-								<FilterContainer id="ei-filter" title="Filtrering" numFilters={0}>
-									<ListPicker />
-								</FilterContainer>
-							)}
+							<FilterContainer id="ei-filter" title="Filtrering" numFilters={filterCount}>
+								<ListPicker onFilterChange={handleListFilterChange} />
+							</FilterContainer>
 
 
 							<div className={style.scrollComponentOuterDiv}>
