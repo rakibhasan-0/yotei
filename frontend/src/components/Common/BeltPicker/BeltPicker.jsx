@@ -15,6 +15,7 @@ import React from "react"
  * @update 2024-05-16, Team Kiwi : Added a filter for Basic Techniques 
  * @update 2024-05-16, Team Durian : Added so that error message element only renders when error exists
  * @update 2024-05-22, Team Mango & Team Kiwi: Fixed a bug with rendering checkboxes for belts.
+ * @update 2024-05-22, Team Kiwi: Changed the design of the beltrows in order to work correctly on mobile devices.
  * 
  * Represents a belt row with text, two checkboxes and two
  * icons. 
