@@ -7,7 +7,7 @@ import React from "react"
 import Button from "../../../Common/Button/Button"
 import TextArea from "../../../Common/TextArea/TextArea"
 import styles from "./ReviewStyles.module.css"
-import {isAdmin} from "../../../../utils"
+import {isAdminUser} from "../../../../utils"
 import {useContext} from "react"
 import {AccountContext} from "../../../../context"
 import {HTTP_STATUS_CODES, setError, setSuccess} from "../../../../utils"
@@ -150,7 +150,7 @@ export default function ReviewComponent({comment, onDelete, token, getTodaysDate
 							}
 						</div>
 					</div>
-					{(isAdmin(context) || userId == comment.user_id) &&
+					{(isAdminUser(context) || userId == comment.user_id) &&
 					<div className="d-flex align-items-center justify-content-end">
 						{editMode ?
 							<>
