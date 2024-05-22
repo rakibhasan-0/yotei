@@ -438,7 +438,7 @@ public class ExportGradingPdf {
         contentStream.newLineAtOffset(0, -20);
         
         for(int i = 0; i < rows.size(); i++) {
-            contentStream.showText(rows.get(i));
+            contentStream.showText(rows.get(i).replaceAll("\\u000a", ""));
             contentStream.newLineAtOffset(0, -15);
         }
         
@@ -525,13 +525,13 @@ public class ExportGradingPdf {
             contentStream.beginText();
             contentStream.newLineAtOffset(currentXPos + 5, currentYPos);
             contentStream.setFont(font, 12);
-            contentStream.showText(examinee1 + " & " + examinee2);
+            contentStream.showText((examinee1 + " & " + examinee2).replaceAll("\\u000a", ""));
             contentStream.setFont(font, 10);
 
             for(int j = 0; j < rows.get(pairId).size(); j++) {
                 //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
                 contentStream.newLineAtOffset(0, -15);
-                contentStream.showText(rows.get(pairId).get(j));
+                contentStream.showText(rows.get(pairId).get(j).replaceAll("\\u000a", ""));
             }    
         
             contentStream.endText();
@@ -610,7 +610,7 @@ public class ExportGradingPdf {
             contentStream.beginText();
             contentStream.newLineAtOffset(currentXPos + 5, currentYPos);
             contentStream.setFont(font, 12);
-            contentStream.showText(examinee.getName());
+            contentStream.showText(examinee.getName().replaceAll("\\u000a", ""));
             contentStream.setFont(font, 10);
             for(int j = 0; j < rows.get(examinee.getExamineeId()).size(); j++) {
                 //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
@@ -682,7 +682,7 @@ public class ExportGradingPdf {
             contentStream.beginText();
             contentStream.newLineAtOffset(currentXPos + 5, currentYPos);
             contentStream.setFont(font, 12);
-            contentStream.showText(techniqueComment.getTechniqueName());
+            contentStream.showText(techniqueComment.getTechniqueName().replaceAll("\\u000a", ""));
             contentStream.setFont(font, 10);
             for(int j = 0; j < rows.size(); j++) {
                 //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
@@ -720,8 +720,8 @@ public class ExportGradingPdf {
                 if(lastSpaceIndex > 0) 
                     stopIndex = lastSpaceIndex + startIndex +1;
 
-                String tmpStr = string.substring(startIndex, stopIndex).replaceAll("\\u000a", "");
-                tmpStr = string.substring(startIndex, stopIndex).replaceAll("\\u0009", "");
+                String tmpStr = string.substring(startIndex, stopIndex);
+                tmpStr = string.substring(startIndex, stopIndex).replaceAll("\\u0009", "").replaceAll("\\u000a", "");
                 rows.add(tmpStr);
                 
                 startIndex = stopIndex;
