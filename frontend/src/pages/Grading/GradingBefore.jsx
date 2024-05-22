@@ -130,6 +130,19 @@ export default function GradingBefore() {
 	}
 
 	/**
+	 * Gets todays date
+	 * @returns Todays date as a string
+	 */
+	function getTodaysDate() {
+		var today = new Date()
+		var dd = String(today.getDate()).padStart(2, "0")
+		var mm = String(today.getMonth() + 1).padStart(2, "0")
+		var yyyy = today.getFullYear()
+
+		return yyyy + "-" + mm + "-" + dd
+	}
+
+	/**
 	 * This effects called when you enter the page first time
 	 */
 	useEffect(() => {
@@ -551,14 +564,13 @@ export default function GradingBefore() {
 		await putGrading(data, token)
 	}
 
-	function pressedContinue() {
+	async function pressedContinue() {
 		if (examinees.length <= 0 && pairs.length <= 0) {
 			setErrorToast("Kan ej starta gradering utan deltagare")
 			return
 		}
 		if (gradingName == "") {
-			setErrorToast("Kan ej starta gradering utan namn")
-			return
+			await editGradingName(gradingId, "Gradering " + gradingId + " | " + getTodaysDate())
 		}
 		setShowPopup(true)
 	}
