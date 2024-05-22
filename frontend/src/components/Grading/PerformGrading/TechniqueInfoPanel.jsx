@@ -229,7 +229,7 @@ export default function TechniqueInfoPanel({
 					<h3 className={styles.categoryTitle} id="categoryTitle">{mainCategoryTitle}</h3>
 				</div>
 				<div className={styles.buttonGroupComment}>
-					<CommentButton onClick={() => setAddComment(true)} />
+					<CommentButton onClick={() => setAddComment(true)} hasComment={hasComment} />
 				</div>
 				<div>
 					<h2 className={styles.currentTechnique} id="currentTechniqueTitle">{currentTechniqueTitle}</h2>
