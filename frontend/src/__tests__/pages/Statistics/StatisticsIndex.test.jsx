@@ -142,13 +142,6 @@ describe("Grading popup", () => {
 	})
 })
 
-
-
-/**
- * @author Team Coconut
- * @since 2024-05-02
- * @version 1.0
- */
 describe("Statistics Popup", () => {
 	test("Clicking button should show popup", async () => {
 		// Mock data
