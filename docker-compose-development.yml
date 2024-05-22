@@ -1,15 +1,12 @@
 services:
-
   nginx:
-    image: nginx:latest
+    image: pvt2024/nginx-dev:latest
+    build:
+      context: ./
+      dockerfile: ./nginx/development/Dockerfile
     restart: always
-    volumes:
-      - ./nginx/development.conf:/etc/nginx/nginx.conf
-      - ./api-docs:/var/www/html/api-docs
-      - ./javadocs:/var/www/html/javadocs
     ports:
       - 80:80
-      - 443:443
     links:
       - gateway
 
@@ -26,7 +23,6 @@ services:
     
   api:
     image: pvt2024/api:latest
-
 
     #                 O  O  O
     #                        O
