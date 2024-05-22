@@ -119,22 +119,40 @@ export function canCreateWorkouts(context) {
 }
 
 /**
- * canEditWorkouts() - Check if a user can edit a group.
+ * canEditWorkout() - Check if a user can edit a group.
  * @param {*} context AccountContext from user.
- * @param {*} commentId Comment id.
+ * @param {*} workoutId The id of the user that created the workout.
  * @returns true if user can edit a workout, else false.
  */
-export function canEditWorkouts(context, commentId) {
+export function canEditWorkout(context, workoutId) {
+	if (!context.permissions) return false //If the user's context disappears they lose all permissions and must log in again.
+	if (context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
+	//True if the user is an admin or "owns" the workout and is able to edit any workouts.
+	//Both permissions must be checked since having one does not imply having the other.
+	return ((context.userId === workoutId) && (
+		context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_OWN) ||
+	context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_ALL)
+	)
+	)
+}
+
+/**
+ * canDeleteComment() - Check if a user can delete a comment.
+ * @param {*} context AccountContext from user.
+ * @param {*} commentId The id of the user that created the comment.
+ * @returns true if user can delete a comment, otherwise false.
+ */
+export function canDeleteComment(context, commentId) {
 	if (!context.permissions) return false //If the user's context disappears they lose all permissions and must log in again.
 	if (context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
 	//True if the user is an admin or "owns" the comment and is able to edit any workouts.
 	//Both permissions must be checked since having one does not imply having the other.
 	return ((context.userId === commentId) && (
-	context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_OWN) ||
+		context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_OWN) ||
 	context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_ALL)
 	)
 	)
-}
+} //TODO refactor canEditWorkout and this function (canDeleteComments) since they do the same checks currently.
 
 
 

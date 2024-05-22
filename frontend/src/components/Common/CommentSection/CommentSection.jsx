@@ -1,6 +1,6 @@
 import { Trash } from "react-bootstrap-icons"
 import styles from "./CommentSection.module.css"
-import { isAdmin } from "../../../utils"
+import { canDeleteComment } from "../../../utils"
 import { useContext} from "react"
 import { AccountContext } from "../../../context"
 
@@ -27,15 +27,16 @@ import { AccountContext } from "../../../context"
  *   }
  * ]
  * 
- * @author Chimera (Gruoup 4) & Cyclops(Group 5) & Durian(Group 3)
+ * @author Chimera (Gruoup 4) & Cyclops (Group 5) & Durian (Group 3) & Mango (Group 4)
  * @since 2024-04-23
  * @version 3.1
+ * Updates: 2024-05-22: Changed to new permission code.
 */
 
 
 export default function CommentSection({ id, userId, comments, onDelete }) {
 	
-	const accountRole = useContext(AccountContext)
+	const context = useContext(AccountContext)
 	
 	return(
 		<div id={id} className="w-100 d-flex flex-column align-items-center">
@@ -50,7 +51,7 @@ export default function CommentSection({ id, userId, comments, onDelete }) {
 				
 					</div>
 					<p className={`mt-2 ${styles.text}`} style={{whiteSpace: "pre-line"}}>{comment.commentText}</p>
-					{(isAdmin(accountRole) || userId == comment.userId) && 
+					{ canDeleteComment(context, comment.userId) &&
 					<div className="d-flex align-items-end flex-column">
 						<Trash
 							size="24px"
