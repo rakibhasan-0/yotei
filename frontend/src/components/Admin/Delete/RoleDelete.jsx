@@ -5,7 +5,7 @@ import { useContext, useEffect, useState,} from "react"
 import { AccountContext } from "../../../context"
 import { useLocation, useNavigate } from "react-router"
 import { toast } from "react-toastify" 
-import RoleListItem from "../../Common/RoleCard/RoleListItem"
+import RoleCard from "../../Common/RoleCard/RoleListItem"
 import { Spinner } from "react-bootstrap"
 
 /**
@@ -123,7 +123,7 @@ export default function RoleDelete({ id, roleID, name, setIsOpen }) {
 			<div className={"grip-striped"} style={{textAlign: "center", marginBottom: "1rem"}}>
 				{users.map((user, index) => {
 					console.log(user.username)
-					return <RoleListItem item={user.username} key={user.userId} id={user.userId} index={index} />})
+					return <RoleCard item={user.username} key={user.userId} index={index} />})
 				}
 			</div>
 		</>

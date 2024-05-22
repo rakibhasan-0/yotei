@@ -6,7 +6,7 @@ import ManageUser from "../../components/Admin/ManageUser"
 import SearchBar from "../../components/Common/SearchBar/SearchBar"
 import InfiniteScrollComponent from "../../components/Common/List/InfiniteScrollComponent"
 import Spinner from "../../components/Common/Spinner/Spinner"
-import RoleCard from "../../components/Common/RoleCard/RoleListItem"
+import RoleCardLink from "../../components/Common/RoleCard/RoleListItemLink"
 import RoundButton from "../../components/Common/RoundButton/RoundButton"
 import style from "./Admin.module.css"
 import { AccountContext } from "../../context"
@@ -89,13 +89,13 @@ export default function Admin() {
 							}
 							return true
 						}).map((role, index) =>
-							<RoleCard
+							<RoleCardLink
 								item={role.roleName}
 								key={role.roleId}
 								id={role.roleId}
 								detailURL={detailURL}
 								index={index}>
-							</RoleCard>)
+							</RoleCardLink>)
 					
 	
 						}
