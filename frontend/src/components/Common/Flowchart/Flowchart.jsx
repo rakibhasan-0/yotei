@@ -7,7 +7,8 @@ import TagInput from "../Tag/TagInput"
 import CheckBox from "../CheckBox/CheckBox"
 import AddUserComponent from "../../Workout/CreateWorkout/AddUserComponent"
 import FlowChartNode from "./FlowchartNode"
-
+import Popup from "../Popup/Popup"
+import AddTechnique from "../../Workout/CreateWorkout/AddTechnique"
 /**
  * The technique index page.
  * Fetches and displays the techniques.
@@ -17,32 +18,34 @@ import FlowChartNode from "./FlowchartNode"
  * @since 2024-05-20
  */
 
-const Flowchart = () => {
-	const [nodes, setNodes] = useState([{id: 1, name: "teknik1", x: 10, y: 10},{id: 2, name: "teknik2", x: 20, y: 20},{id: 3, name: "teknik3", x: 30, y: 30}])
+const Flowchart = ({}) => {
+	const [nodes, setNodes] = useState([{id: 1, name: "en väääääldigt lång teknik1", x: 10, y: 10},{id: 2, name: "teknik2", x: 20, y: 20},{id: 3, name: "teknik3", x: 30, y: 30}])
+	
 	const [connections, setConnections] = useState([])
+	const [activityPopup, setActivityPopup] = useState(false)
 	const [selectedBox, setSelectedBox] = useState(null)
 	const [isAddingConnection, setIsAddingConnection] = useState(false)
 	const [isDeletingConnection, setIsDeletingConnection] = useState(false)
 
 	const boxRefs = useRef({})
-	const boxCounter = useRef(3) // Counter to generate unique IDs for new boxes
+	const boxCounter = useRef(nodes.length) // Counter to generate unique IDs for new boxes
 
 	const handleDrag = (e, data, id) => {
 		setNodes((prevBoxes) =>
-			prevBoxes.map((box) =>
-				box.id === id ? { ...box, x: data.x, y: data.y } : box
+			prevBoxes.map((node) =>
+				node.id === id ? { ...node, x: data.x, y: data.y } : node
 			)
 		)
 	}
 
-	const handleAddBox = () => {
+	const handleAddNode = () => {
 		setNodes((prevBoxes) => [
 			...prevBoxes,
-			{ id: boxCounter.current++, x: 50, y: 50 }
+			{ id: boxCounter.current++, x: 50, y: 50, name: "Teknik" }
 		])
 	}
 
-	const handleSelectBox = (id) => {
+	const handleSelectNode = (id) => {
 		if (!isAddingConnection && !isDeletingConnection) {
 			return
 		}
@@ -137,7 +140,7 @@ const Flowchart = () => {
 							<FlowChartNode
 								id={node.id}
 								name={node.name}
-								onClick={handleSelectBox(node.id)}
+								onClick={handleSelectNode(node.id)}
 								selected={selectedBox === node.id}
 								ref={(el) => (boxRefs.current[node.id] = el)}
 							/>
@@ -176,11 +179,17 @@ const Flowchart = () => {
 				</svg> */}
 				<div className={styles.buttonRow}>
 					{nodes.length > 1 && 
-            <Button>Koppla</Button>
+            <Button onClick={console.log("huh")}><h2>Koppla</h2></Button>
 					}
-					<Button>+</Button>
-					
+					<Button
+						onClick={() =>
+							setActivityPopup(true)
+						}
+					>
+						<h2>+ Aktivitet</h2>
+					</Button>
 				</div>
+
 			</div>
 			<Divider option={"h1_center"}></Divider>
 			<CheckBox
@@ -194,7 +203,7 @@ const Flowchart = () => {
 			<Divider option={"h1_center"}></Divider>
 			<AddUserComponent
 				id="workout-create-add-users"
-				addedUsers={[{userId: 1, username: "eyo"}]}
+				addedUsers={[{userId: 1, username: "eyyy"}]}
 				setAddedUsers={() =>
 					console.log("yeye")
 				}
@@ -203,6 +212,9 @@ const Flowchart = () => {
 
 			<TagInput addedTags={[{id: 1, name: "eyo"}]}/>
 
+			<Popup title="Lägg till teknik" isOpen={activityPopup} setIsOpen={setActivityPopup}>
+				<AddTechnique></AddTechnique>
+			</Popup>
 		</div>
 	)
 }

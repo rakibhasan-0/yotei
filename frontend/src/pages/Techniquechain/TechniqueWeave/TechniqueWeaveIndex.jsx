@@ -1,8 +1,7 @@
-import { useState, useContext } from "react"
+import { useState } from "react"
+import { Plus } from "react-bootstrap-icons"
 import RoundButton from "../../../components/Common/RoundButton/RoundButton"
 import styles from "./TechniqueWeaveIndex.module.css"
-import { Plus } from "react-bootstrap-icons"
-import { AccountContext } from "../../../context"
 import SearchBar from "../../../components/Common/SearchBar/SearchBar"
 import TechniquechainCard from "../../../components/Common/TechniquechainCard/TechniquechainCard"
 
@@ -16,8 +15,10 @@ import TechniquechainCard from "../../../components/Common/TechniquechainCard/Te
  */
 
 const TechniquechainIndex = ()=> {
-	const context = useContext(AccountContext)
+
+	// eslint-disable-next-line no-unused-vars
 	const [techniqueWeaves, setTechniqueWeaves] = useState([{name: "testväv",id: 1 },{name: "testväv2", id: 2}])
+
 	return (
 		<>
 			<h1 id ={"teknikväv-header"}></h1>
@@ -34,7 +35,7 @@ const TechniquechainIndex = ()=> {
 				/>
 			)}
 			
-			<RoundButton id={"technique-add-button"} linkTo={"techniqueweavecreate"}>
+			<RoundButton id={"technique-add-button"} linkTo={"/techniquechain/techniqueweavecreate"}>
 				<Plus className={styles["plus-icon"]} />
 			</RoundButton>
 		</>

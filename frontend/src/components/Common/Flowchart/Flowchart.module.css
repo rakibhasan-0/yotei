@@ -1,8 +1,8 @@
 .Flowchart {
-  display: flex;
+  /* display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
+  flex-direction: column; */
   margin-bottom: 3rem;
 }
 
@@ -15,17 +15,6 @@
   position: relative;
   display: flex;
   justify-content: center;
-}
-
-.box {
-  background-color: lightblue;
-  padding: 0.4rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 2px solid var(--black-primary);
-  position: absolute;
-  cursor: pointer;
 }
 
 .box.selected {
@@ -44,6 +33,7 @@
 .buttonRow {
   display: flex;
   align-items: flex-end;
+  justify-content: center;
   position: absolute;
   bottom: 1rem;
   gap: 1rem;
