@@ -113,10 +113,10 @@ export default function GradingDeviations() {
             const requestOptions = {
                 headers: {"Content-type": "application/json", token: context.token}
 			}
-            console.log("user id: " + userId);
+            console.log("user id: " + userId)
             const response = await fetch("/api/examination/examresult/" + gradingId + "/" + userId, requestOptions).catch(() => {
                 setError("Serverfel: Kunde inte ansluta till servern.")
-                re1turn
+                return
             })
             if(response.status != HTTP_STATUS_CODES.OK){
                 setError("Kunde inte hämta graderingsresultat. Felkod: " + response.status)
