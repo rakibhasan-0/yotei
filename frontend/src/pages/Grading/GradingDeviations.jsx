@@ -346,8 +346,8 @@ export default function GradingDeviations() {
 				<div className={styles.scrollableContainer}>
 						<div>
 								<div className={styles.topContainer}>
-										<h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "10px", paddingBottom: "5px" }}>{name}</h1>
-										<h4 style={{ fontFamily: "Open Sans", fontSize: "15px", paddingTop: "0px", paddingBottom: "10px" }}>Kommentarer</h4>
+										<h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "5x", paddingBottom: "0px" }}>{name}</h1>
+										<h4 style={{ fontFamily: "Open Sans", fontSize: "15px", paddingTop: "0px", paddingBottom: "5x" }}>Kommentarer</h4>
 								</div>
                 {getToggleCheckBox()}
                 <div className = {styles["sc23-session-header-clickable"]} role="button" onClick={() => setToggled(!toggled)}>
