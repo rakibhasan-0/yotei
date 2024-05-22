@@ -155,14 +155,9 @@ export function canEditWorkout(context, workoutId) {
 export function canDeleteComment(context, commentId) {
 	if (!context.permissions) return false //If the user's context disappears they lose all permissions and must log in again.
 	if (context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
-	//True if the user is an admin or "owns" the comment and is able to edit any workouts.
-	//Both permissions must be checked since having one does not imply having the other.
-	return ((context.userId === commentId) && (
-		context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_OWN) ||
-	context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_ALL)
-	)
-	)
-} //TODO refactor canEditWorkout and this function (canDeleteComments) since they do the same checks currently.
+	//True if the user is an admin or "owns" the comment.
+	return (context.userId === commentId)
+}
 
 
 

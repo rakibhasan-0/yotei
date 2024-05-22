@@ -7,6 +7,7 @@ import { AccountContext } from "../../../context"
 /**
  * A comment section, used to display comments.#$
  * User and Editors can only delete their own comment, but Admin can delete all comments.
+ * All users can add comments. TODO: Is this behavior wanted? Could be changed in utils.js by adding a new function canCreateComments().
  *  
  *  Props:
  *  	userId   @type {String}   userId Id of the current user
