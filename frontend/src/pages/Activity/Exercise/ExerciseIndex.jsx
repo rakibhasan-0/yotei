@@ -168,7 +168,7 @@ export default function ExerciseIndex() {
 			<br/><br/><br/><br/><br/>
 
 			
-			{isAdminUser(context) || canCreateAndEditActivity(context) && 
+			{(isAdminUser(context) || canCreateAndEditActivity(context)) && 
 			<RoundButton linkTo={"exercise/create"} id={"exercise-round-button"}  style={{maxWidth: "5px"}}>
 				<Plus/>
 			</RoundButton>

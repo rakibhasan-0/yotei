@@ -244,7 +244,7 @@ function getWorkoutInfoContainer(workoutData, setShowPopup, context, workoutUser
 						<div className={styles.clickIcon}>
 							<PrintButton workoutData={workoutData} />
 						</div>
-						{isAdminUser(context) || canEditWorkout(context, workoutData.author.user_id) &&
+						{(isAdminUser(context) || canEditWorkout(context, workoutData.author.user_id)) &&
 						<>
 							<Link className="ml-3" state={{workout: workoutData, workoutId: workoutId, users: workoutUsers}} to={"/workout/edit/" + workoutId}>
 								<Pencil

@@ -213,7 +213,7 @@ export default function TechniqueIndex() {
 			<br />
 
 			
-			{isAdminUser(context) || canCreateAndEditActivity(context) && (
+			{(isAdminUser(context) || canCreateAndEditActivity(context)) && (
 				<Link to={"technique/create"}>
 					<RoundButton id="technique-add-button">
 						<Plus className={styles["plus-icon"]} />
