@@ -33,6 +33,7 @@ import se.umu.cs.pvt.workout.UserShortRepository;
  * @author Kraken (Oskar Westerlund Holmgren)
  * @author Chimera (Ludvig Larsson)
  * @author Durian
+ * @author Tomato
  */
 
 @RestController
@@ -43,6 +44,7 @@ public class SearchController {
     private final SearchRepository searchRepository;
     private DecodedJWT jwt;
     private Long userIdL;
+    private String userRole;
     private final UserShortRepository userShortRepository;
 
     @Autowired
@@ -187,13 +189,14 @@ public class SearchController {
         try {
             jwt = jwtUtil.validateToken(token);
             userIdL = jwt.getClaim("userId").asLong();
+            userRole = jwt.getClaim("role").asString();
         } catch (Exception e) {
             System.err.println("Failed to authenticate user:" + e.getMessage());
         }
 
         SearchActivityListParams searchListParams = new SearchActivityListParams(urlQuery);
 
-        DatabaseQuery createdQuery = new SearchActivityListDBBuilder(searchListParams, userIdL)
+        DatabaseQuery createdQuery = new SearchActivityListDBBuilder(searchListParams, userIdL, userRole)
         .filterByHidden()
         .filterByIsAuthor()
         .filterByIsShared()

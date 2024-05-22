@@ -19,13 +19,13 @@ const testServer = "http://5dv214vt24-test.cs.umu.se"
  */
 export default defineConfig({
 	testDir: "./SystemTests/TestFiles",
-	timeout: 60000,
+	timeout: 30000,
 	expect: {
 		timeout: 5000,
 	},
 	globalTimeout: 3000000,
 	fullyParallel: false,
-	workers: 1, // Since system computer in CI pipeline has 4 cores.
+	workers: 4, // Since system computer in CI pipeline has 4 cores.
 	forbidOnly: !!process.env.CI,
 	maxFailures: process.env.CI ? 1 : undefined,
 	retries: process.env.CI ? 1 : 0,

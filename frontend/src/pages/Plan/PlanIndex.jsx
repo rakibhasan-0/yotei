@@ -9,7 +9,7 @@ import {People} from "react-bootstrap-icons"
 import Button from "../../components/Common/Button/Button"
 import {Link} from "react-router-dom"
 import { useCookies } from "react-cookie"
-import { HTTP_STATUS_CODES, canCreateSession, setError } from "../../utils"
+import { HTTP_STATUS_CODES, canCreateSessions, setError } from "../../utils"
 
 /**
  * PlanIndex is the page that displays group plannings. Contains a 
@@ -294,7 +294,7 @@ export default function PlanIndex() {
 			</div>}
 
 			{
-				canCreateSession(user) ? 
+				canCreateSessions(user) ? 
 					<RoundButton linkTo={"/session/create"}>
 						<Plus />
 					</RoundButton>
