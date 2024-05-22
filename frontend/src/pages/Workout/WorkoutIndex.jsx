@@ -126,7 +126,7 @@ export default function WorkoutIndex() {
 			
 			{
 				canCreateWorkouts(context) ?
-					<RoundButton linkTo="/workout/create">
+					<RoundButton linkTo="/workout/create" id="CreateWorkoutButton">
 						<Plus />
 					</RoundButton>
 					: <></>
