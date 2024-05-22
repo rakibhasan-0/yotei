@@ -754,7 +754,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 				<br /><br /><br />
 
 				{checkedActivities.length > 0 && (
-					<RoundButton onClick={handleRoundButtonClick}>
+					<RoundButton onClick={handleRoundButtonClick} id="AddCheckedActivitiesButton">
 						<ChevronRight width={30} />
 					</RoundButton>
 				)}
