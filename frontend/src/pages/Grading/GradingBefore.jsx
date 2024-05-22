@@ -585,7 +585,7 @@ export default function GradingBefore() {
 									checked={false}
 								/>
                 {Boolean(!pair[0].isLocked) === true ? 
-                <div style={{ paddingTop: "20px", right: "-25px", position: "absolute" }}>
+                <div style={{ paddingTop: "20px", right: "10px", position: "absolute" }}>
 									<CloseIcon
 										key={"close-icon-" + toString(pair[0].id) + toString(pair[1].id) + "-pairId-" + toString(pair[0].pairId)}
 										size="25px"
