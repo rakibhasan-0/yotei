@@ -11,16 +11,17 @@ import Gallery from "../../../components/Gallery/Gallery"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
 import ActivityDelete from "../../../components/Activity/ActivityDelete/ActivityDelete"
 import ErrorState from "../../../components/Common/ErrorState/ErrorState"
-import { isEditor } from "../../../utils"
+import { canCreateAndEditActivity } from "../../../utils"
 import {setError as setErrorToast} from "../../../utils" 
 
 /**
  * A component for displaying details about an exercise.
  * 
- * @author Chimera, Phoenix, Team Coconut, Team Durian, Team Orange, Team Kiwi
+ * @author Chimera, Phoenix, Team Coconut, Team Durian, Team Orange, Team Kiwi, Team mango
  * @since 2024-04-23
  * @version 2.2
  * @returns A page for displaying details about an exercise.
+ * Update 2024-05-22 by team Mango: Changed check for editing and deleting exercie according to new permission.
  */
 export default function ExerciseDetailsPage() {
 	const { ex_id } = useParams()
@@ -40,7 +41,7 @@ export default function ExerciseDetailsPage() {
 	const location = useLocation()
 	const hasPreviousState = location.key !== "default"
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
-	const accountRole = useContext(AccountContext)
+	const context = useContext(AccountContext)
 
 
 	const fetchComments = () => {
@@ -202,7 +203,7 @@ export default function ExerciseDetailsPage() {
 					<Clock />
 					<p style={{ marginBottom: "0", marginLeft: "5px" }}>{exercise?.duration} min</p>
 				</div>
-				{isEditor(accountRole) && (
+				{canCreateAndEditActivity(context) && (
 					<div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
 						<Pencil
 							onClick={() => {

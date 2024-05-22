@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from "react"
 import CommentButton from "./CommentButton"
 import styles from "./ExamineeBox.module.css"
 import Popup from "../../Common/Popup/Popup"
-import TextArea from "../../Common/TextArea/TextArea"
 import Button from "../../Common/Button/Button"
 import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
 import { AccountContext } from "../../../context"
@@ -41,6 +40,7 @@ import { setError as setErrorToast } from "../../../utils"
  * 
  * @version 3.0
  * @since 2024-05-21
+ * @author Apelsin
  */
 export default function ExamineeBox({ 
 	id, 
@@ -57,6 +57,11 @@ export default function ExamineeBox({
 	const [commentError, setCommentError] = useState("")
 	const [hasComment, setExistingComment] = useState(false)
 	const [commentId, setCommentId] = useState(null)
+	
+	const isErr = !(commentError == undefined || commentError == null || commentError == "")
+
+
+
 	const colors = {
 		default: "white",
 		pass: "lightgreen",
@@ -68,7 +73,7 @@ export default function ExamineeBox({
 
 	// Set initial color index based on status prop
 	const [color, setColor] = useState(colors[status] || colors.default)
-
+    
 	useEffect(() => {
 		setColor(colors[status] || colors.default)
 	}, [status])
@@ -79,11 +84,18 @@ export default function ExamineeBox({
 		}
 	}, [isAddingComment])
 
+	// Updates notifications when switching techniques
+	useEffect(() => {
+		handleExistingInput()
+	}, [techniqueName])
+
 	/**
      * Discards the current personal comment.
      */
 	const onDiscardPersonalComment = async () => {
-		setCommentText("")
+		if (!hasComment) {
+			setCommentText("")
+		}
 		setAddComment(false)
 	}
 
@@ -244,10 +256,10 @@ export default function ExamineeBox({
 			<fieldset className={styles.examineeFieldset}>
 				<div 
 					className={styles.examineeName}
-					onClick={() => { handleClick() }}>
-					<p id="ExamineeName" style={{ height: "52px", margin: "0" }}>{examineeName}</p>
+					onClick={() => {handleClick()}}>
+					<p id="ExamineeName" >{examineeName}</p>
 				</div>
-				<CommentButton onClick={() => toggleAddPersonalComment(true)} className={styles.commentButtonContainer} />
+				<CommentButton onClick={() => toggleAddPersonalComment(true)} className={styles.commentButtonContainer} hasComment={hasComment} />
 
 				<Popup
 					id={"examinee-comment-popup"}
@@ -257,18 +269,29 @@ export default function ExamineeBox({
 					onClose={() => setCommentError(false)}
 					style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset" }}
 				>
-					<TextArea
+					<textarea
+						className={isErr ? `${styles.textarea} ${styles.textareaErr}` : `${styles.textarea}`}
 						autoFocus={true}
-						onInput={e => { setCommentText(e.target.value); setCommentError(false) }}
-						errorMessage={commentError}
-						text={commentText}
+						onInput={ e => {
+							setCommentText(e.target.value)
+							setCommentError(false)
+						}}
+						value={commentText}
+						id={"TextareaTestId"}
+						type={"text"}
 					/>
-					<Button onClick={onAddPersonalComment}>Lägg till</Button>
+					{commentError && <p className={styles.err}>{commentError}</p>}
+					<div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px", marginTop: "10px"}}>
+						<Button outlined={true} onClick={() => setCommentText(commentText + " " + "Böj på benen!")}>Böj på benen!</Button>
+						<Button outlined={true} onClick={() => setCommentText(commentText + " " + "Balansbrytning!")}>Balansbrytning!</Button>
+						<Button outlined={true} onClick={() => setCommentText(commentText + " " + "Kraftcirkeln!")}>Kraftcirkeln!</Button>
+					</div>
+					<Button onClick={() => onAddPersonalComment()}>Lägg till</Button>
 				</Popup>
 				<ConfirmPopup
 					popupText={"Är du säker på att du vill ta bort kommentarsutkastet?"}
 					showPopup={showDiscardComment}
-					onClick={() => onDiscardPersonalComment()}
+					onClick={() => {onDiscardPersonalComment()}}
 					setShowPopup={() => setShowDiscardComment(false)}
 					zIndex={200} // Above the comment popup.
 				/>

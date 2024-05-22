@@ -12,7 +12,7 @@ import CreateTechnique from "../CreateTechnique/CreateTechnique"
 import { useCookies } from "react-cookie"
 import TechniqueCard from "../../../../components/Common/Technique/TechniqueCard/TechniqueCard"
 import InfiniteScrollComponent from "../../../../components/Common/List/InfiniteScrollComponent"
-import { isAdmin } from "../../../../utils"
+import { canCreateAndEditActivity } from "../../../../utils"
 import Spinner from "../../../../components/Common/Spinner/Spinner"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { AddToListPopupContent } from "../../../../components/Activity/AddToListPopupContent"
@@ -21,11 +21,12 @@ import { AddToListPopupContent } from "../../../../components/Activity/AddToList
  * The technique index page.
  * Fetches and displays the techniques.
  *
- * @author Medusa, Team Tomato (group 6), Team Mango (Group 4), Team Kiwi
+ * @author Medusa, Team Tomato (group 6), Team Mango (Group 4), Team Kiwi, Team Mango (2024-05-21)
  * @version 3.0
  * @since 2024-04-18
  * @update v3 (2024-05-02 Team Kiwi) removed header from html, also rerouted button from ./create to ./exercise/create
- * @updated 2024-05-17
+ * @update Team Mango (2024-05-21) changed check for adding technique to new user premission check.
+ * @updated 2024-05-21
  */
 export default function TechniqueIndex() {
 	const [techniques, setTechniques] = useState([])
@@ -201,7 +202,7 @@ export default function TechniqueIndex() {
 				)}
 			</div>
 			<Popup title="Lägg till i lista" isOpen={showMorePopup} setIsOpen={setShowMorePopup}>
-				<AddToListPopupContent techExerID={{ techniqueId: selectedTechniqueId, exerciseId: null }} />
+				<AddToListPopupContent techExerID={{ techniqueId: selectedTechniqueId, exerciseId: null }} setShowMorePopup={setShowMorePopup} />
 			</Popup>
 
 			{/* Spacing so the button doesn't cover a techniqueCard */}
@@ -211,7 +212,8 @@ export default function TechniqueIndex() {
 			<br />
 			<br />
 
-			{isAdmin(context) && (
+			
+			{canCreateAndEditActivity(context) && (
 				<Link to={"technique/create"}>
 					<RoundButton id="technique-add-button">
 						<Plus className={styles["plus-icon"]} />

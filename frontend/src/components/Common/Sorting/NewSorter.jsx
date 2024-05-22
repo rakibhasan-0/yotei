@@ -41,9 +41,9 @@ export default function NewSorter({ id, selected, onSortChange, options }) {
 			</p>
 			{isOpen && (
 				<div style={{ position: "absolute" }}>
-					{options.map((option) => (
+					{options.map((option, index) => (
 						<p
-							key={option.value}
+							key={index}
 							onClick={() => handleSortChange(option)}
 							className={`
 								${selected.label === option.label ? style.selected : ""}
