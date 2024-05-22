@@ -353,8 +353,8 @@ export default function GradingBefore() {
 		const newExaminees = pairs.map(pair => {
 			if (pair.length === 2) {
 				if (pair[0].id === examinee1Id && pair[1].id === examinee2Id) {
-					return [{ id: pair[1].id, name: pair[1].name },
-					{ id: pair[0].id, name: pair[0].name }]
+					return [{ id: pair[1].id, name: pair[1].name, isLocked: pair[1].isLocked },
+					{ id: pair[0].id, name: pair[0].name, isLocked: pair[0].isLocked }]
 				}
 			}
 		}).filter(Boolean)
@@ -365,8 +365,8 @@ export default function GradingBefore() {
 
 		const newPairs = pairs.map(pair => {
 			if (pair[0].pairId !== pairId) {
-				return [{ id: pair[0].id, name: pair[0].name, pairId: pair[0].pairId, isLocked: false },
-				{ id: pair[1].id, name: pair[1].name, pairId: pair[1].pairId, isLocked: false }]
+				return [{ id: pair[0].id, name: pair[0].name, pairId: pair[0].pairId, isLocked: pair[0].isLocked },
+				{ id: pair[1].id, name: pair[1].name, pairId: pair[1].pairId, isLocked: pair[1].isLocked }]
 			}
 		}).filter(Boolean)
 		setPair(newPairs)

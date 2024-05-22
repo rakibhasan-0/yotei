@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react"
 import Button from "../Common/Button/Button"
 import styles from "./AdminComponent.module.css"
-import {Roles} from "../../context"
 import { AccountContext } from "../../context"
 import Divider from "../Common/Divider/Divider"
 import InputTextFieldBorderLabel from "../../components/Common/InputTextFieldBorderLabel/InputTextFieldBorderLabel"
@@ -32,14 +31,12 @@ export default function ManageUser() {
 	// Adding users
 	const [usernameError, setUsernameError] = useState()
 	const [passwordError, setPasswordError] = useState()
-	const [userNameInput, setUserName] = useState()	
-	const [passwordInput, setPasswordInput] = useState()	
-	const [confirmPasswordInput, setConfirmPasswordInput] = useState()
+	const [userNameInput, setUserName] = useState("")	
+	const [passwordInput, setPasswordInput] = useState("")	
+	const [confirmPasswordInput, setConfirmPasswordInput] = useState("")
 	const [roleInput, setRoleInput] = useState()
-
-	const capitalize = str => {
-		return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase()
-	}
+	
+	const [roles, setRoles] = useState([])
 
 	const addUser = async () => {
 		setUsernameError("")
@@ -56,7 +53,8 @@ export default function ManageUser() {
 			body: JSON.stringify({
 				username: userNameInput,
 				password: passwordInput,
-				userRole: roleInput.index
+				userRole: 0,
+				roleId: roleInput.index
 			})
 		})
 		if (!response.ok) {
@@ -67,6 +65,9 @@ export default function ManageUser() {
 			return [...prev, user]
 		})
 		setRoleInput(undefined)
+		setUserName("")
+		setPasswordInput("")
+		setConfirmPasswordInput("")
 		setSuccessToast("Användare tillagd")
 	}
 	
@@ -87,7 +88,9 @@ export default function ManageUser() {
 			return prev.filter(u => u.userId !== user.userId)
 		})
 		setUser(undefined)
+		setManageUserRole(undefined)
 		setMgmConfirmUser("")
+		setSuccessToast("Användare borttagen")
 	}
 
 	const mutateUser = async () => {
@@ -95,13 +98,16 @@ export default function ManageUser() {
 		if (mgmConfirmUser !== user.username) {
 			return setMgmError("Användarnamn matchar inte")
 		}
-		const response = await fetch(`/api/users/${user.userId}/role/${manageUserRole.index}`, {
-			method: "POST",
+		const response = await fetch(`/api/users/${user.userId}/setrole/${manageUserRole.index}`, {
+			method: "PUT",
 			headers: { "Content-Type": "application/json", token }	
 		})
 		if (!response.ok) {
 			return setErrorToast("Kunde inte ändra roll för användare")
 		}
+		setUser(undefined)
+		setManageUserRole(undefined)
+		setMgmConfirmUser("")
 		setSuccessToast("Användarroll ändrad")
 	}
 
@@ -115,24 +121,37 @@ export default function ManageUser() {
 			const json = await response.json()
 			setUsers(json)
 		})
+
+		fetch("/api/roles", { 
+			headers: { token } 
+		}).then(async response => {
+			if (!response.ok) {
+				return setErrorToast("Kunde inte hämta roller")
+			}
+			const json = await response.json()
+			setRoles(json)
+		})
 	}, [token])
 
 	return (
 		<div>
 			<Divider option={"h2_left"} title={"Lägg till användare"} />
 			<div className='mb-2' style={{height: 0.5}} />
-			<InputTextFieldBorderLabel errorMessage={usernameError} id={"register-user-username-input"} type={"user"} label= {"Användarnamn"} onChange={(event) => setUserName(event.target.value)}/>
+			<InputTextFieldBorderLabel errorMessage={usernameError} id={"register-user-username-input"} text={userNameInput} type={"user"} label= {"Användarnamn"} onChange={(event) => setUserName(event.target.value)}/>
 			<div className='mb-2' />
-			<InputTextFieldBorderLabel errorMessage={passwordError} id={"register-user-password-input"} type={"password"} label={"Lösenord"} onChange={(event) => setPasswordInput(event.target.value)}/>
+			<InputTextFieldBorderLabel errorMessage={passwordError} id={"register-user-password-input"} text={passwordInput} type={"password"} label={"Lösenord"} onChange={(event) => setPasswordInput(event.target.value)}/>
 			<div className='mb-2' />
-			<InputTextFieldBorderLabel id={"register-user-password-confirm-input"} type={"password"} label={"Bekräfta lösenord"} onChange={(event) => setConfirmPasswordInput(event.target.value)}/>
+			<InputTextFieldBorderLabel id={"register-user-password-confirm-input"} type={"password"} text={confirmPasswordInput} label={"Bekräfta lösenord"} onChange={(event) => setConfirmPasswordInput(event.target.value)}/>
 			<div className='mb-2' />
 			<Dropdown 
 				id={"admin-new-user-pick-role"} centered={true} 
 				text={roleInput?.role || "Välj roll"}>
-				{Object.values(Roles).map(capitalize).map((role, index) => (
-					<div className={styles.dropdownRow} key={index} onClick={() => setRoleInput({role, index})}>
-						<p className={styles.dropdownRowText}>{role}</p>
+				{roles?.map((role, index) => (
+					<div 
+						className={styles.dropdownRow} 
+						key={index} 
+						onClick={() => setRoleInput({role: role.roleName, index: role.roleId})}>
+						<p className={styles.dropdownRowText}>{role.roleName}</p>
 					</div>
 				))}
 			</Dropdown>
@@ -150,21 +169,20 @@ export default function ManageUser() {
 				{users?.map((user, index) => (
 					<div className={styles.dropdownRow} key={index} onClick={() => {
 						setUser(user)
-						setManageUserRole({role: capitalize(user.userRole), index: Object.values(Roles).indexOf(user.userRole)})
 					}}>
 						<p className={styles.dropdownRowText}>{user.username}</p>
 					</div>
 				))}
 			</Dropdown>
 			<div className='mb-2' />
-			<InputTextFieldBorderLabel errorMessage={mgmError} id = {"confirm-username-input"} type={"user"} label= {"Bekräfta användarnamn"} onChange={(event) => setMgmConfirmUser(event.target.value)}/>
+			<InputTextFieldBorderLabel errorMessage={mgmError} id = {"confirm-username-input"} text={mgmConfirmUser} type={"user"} label= {"Bekräfta användarnamn"} onChange={(event) => setMgmConfirmUser(event.target.value)}/>
 			<div className='mb-2' />
 			<Dropdown 
 				centered={true} 
 				text={manageUserRole?.role || "Välj roll"}>
-				{manageUserRole ? Object.values(Roles).map(capitalize).map((role, index) => (
-					<div className={styles.dropdownRow} key={index} onClick={() => setManageUserRole({role, index})}>
-						<p className={styles.dropdownRowText}>{role}</p>
+				{user ? roles?.map((role, index) => (
+					<div className={styles.dropdownRow} key={index} onClick={() => setManageUserRole({role: role.roleName, index: role.roleId })}>
+						<p className={styles.dropdownRowText}>{role.roleName}</p>
 					</div>
 				)) : <div className={styles.dropdownRow}>
 					<p className={styles.dropdownRowText}>Välj användare först</p>
