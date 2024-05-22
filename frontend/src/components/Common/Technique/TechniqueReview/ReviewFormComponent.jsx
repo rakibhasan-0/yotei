@@ -7,7 +7,7 @@ import Star from "../../../Common/StarButton/StarButton"
 import ReviewComment from "./ReviewComment"
 import { AccountContext } from "../../../../context"
 import {HTTP_STATUS_CODES, setError, setSuccess} from "../../../../utils"
-import { isAdmin } from "../../../../utils"
+import { isAdminUser } from "../../../../utils"
 import TextArea from "../../../Common/TextArea/TextArea"
 import Divider from "../../../Common/Divider/Divider"
 
@@ -149,7 +149,7 @@ export default function Review({isOpen, setIsOpen, technique_id}) {
 			<Divider title={""} option={"h2_center"}/>
 			<div className="w-100  d-flex flex-column justify-content-center align-items-center">
 				{commentList.map((comment) => (
-					<ReviewComment key={comment.review_id} updateCommentList={updateCommentList} editable={isAdmin(context) || userId == comment.user_id} comment={comment} onDelete={(comment) => {setCommentList(commentList.filter(c => c.review_id != comment.review_id))}} token={token} getTodaysDate={getTodaysDate}></ReviewComment>
+					<ReviewComment key={comment.review_id} updateCommentList={updateCommentList} editable={isAdminUser(context) || userId == comment.user_id} comment={comment} onDelete={(comment) => {setCommentList(commentList.filter(c => c.review_id != comment.review_id))}} token={token} getTodaysDate={getTodaysDate}></ReviewComment>
 				))}
 			</div>
 		</Popup>
