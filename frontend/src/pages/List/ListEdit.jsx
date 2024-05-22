@@ -121,11 +121,8 @@ const ListEdit = () => {
 			},
 			body: JSON.stringify(body),
 		}
-		console.log("Doing await")
 		const response = await fetch("/api/activitylists/add", requestOptions)
 		const jsonResp = await response.json()
-		console.log("Cool stuff :)")
-		console.log(jsonResp)
 		return jsonResp
 	}
 	/**
