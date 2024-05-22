@@ -163,12 +163,10 @@ export function listCreateReducer(state, action) {
 	}
 	case "SET_ACTIVITIES_WITH_PARSING": {
 		const results = action.payload.result
-		console.log("Results:")
-		console.log(results)
 		tempState.addedActivities = results.map((result) => {
 			return {
-				type: result.type,		
-				id: result.id? result.id:result.techniqueID,
+				type: result.type,
+				id: result.id ? result.id : result.techniqueID,
 				name: Object.prototype.hasOwnProperty.call(result, "name") ? result.name : "",
 				duration: Object.prototype.hasOwnProperty.call(result, "duration") ? result.duration : 0,
 			}
