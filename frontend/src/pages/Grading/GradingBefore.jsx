@@ -380,10 +380,17 @@ export default function GradingBefore() {
 	 */
 	function onCheck(isChecked, examineeId) {
 		if (isChecked) {
-			setCheckedExamineeIds([...checkedExamineeIds, examineeId])
+			if (checkedExamineeIds.length < 2) {
+				setCheckedExamineeIds([...checkedExamineeIds, examineeId])
+			  } else {
+				setErrorToast("You can only select two examinees at a time.")
+				return false
+			  }
 		} else {
 			setCheckedExamineeIds(checkedExamineeIds.filter((id) => id !== examineeId))
 		}
+		const checked = checkedExamineeIds.length < 3;
+		return checked;
 	}
 
 	function resetCheckedExamineesWithCheckbox() {
@@ -611,6 +618,7 @@ export default function GradingBefore() {
 				{examinees.map((examinee, index) => {
 					const unlockedExaminees = examinees.filter(exam => !exam.isLocked).length
 					const showCheckbox = unlockedExaminees > 1 && !examinee.isLocked
+					
 					return (
 						<div style={{ display: "flex", width: "100%", justifyContent: "center" }} key={"single-pair-" + examinee.id} id={"single-pair-" + examinee.id}>
 							<div className={styles.numberSingle}>{numberOfPairs + index + 1}</div>
