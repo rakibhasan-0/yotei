@@ -41,6 +41,9 @@ const mockedBelts = [{
 	child: false
 },]
 
+
+
+
 const mockedGroupActivities = [
 	{
 		activity_id: 1,
@@ -91,7 +94,7 @@ describe("Grading popup test", () => {
 
 		render(
 			<BrowserRouter>
-				<GradingStatisticsPopup/>
+				<GradingStatisticsPopup id = {"grading-statistics-container"} groupid = {"3"} belts/>
 			</BrowserRouter>
 		)
 
@@ -104,6 +107,7 @@ describe("Grading popup test", () => {
 		})
 		
 	})
+
 
 })
 
@@ -151,9 +155,10 @@ describe("Statistics Popup", () => {
 		fireEvent.click(screen.getByRole("button"))
 
 		// Wait for the popup to appear
-		await waitFor(() => {
-			expect(screen.getByText("Sammanställning av tillfällen")).toBeInTheDocument()
-		})
+
+		await expect(screen.getByText("Sammanställning av tillfällen")).toBeInTheDocument()
+		await expect(screen.getByText("Bält-tekniker")).toBeInTheDocument()
+
 	})
 })
 

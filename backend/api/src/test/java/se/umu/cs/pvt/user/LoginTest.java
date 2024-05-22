@@ -10,6 +10,8 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import se.umu.cs.pvt.permission.RoleToPermissionRepository;
+import se.umu.cs.pvt.permission.UserToPermissionRepository;
 import se.umu.cs.pvt.role.RoleRepository;
 
 import java.security.NoSuchAlgorithmException;
@@ -23,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author  Phoenix (25-04-2023)
  *          Dragon (16-05-2023)
- *          Team Mango (Grupp 4) - 2024-05-16
+ *          Team Mango (Grupp 4) - 2024-05-17
  */
 @ExtendWith(MockitoExtension.class)
 public class LoginTest {
@@ -38,11 +40,17 @@ public class LoginTest {
 
     @Mock
     final RoleRepository roleRepository = Mockito.mock(RoleRepository.class);
+    
+    @Mock
+    final RoleToPermissionRepository roleToPermissionRepository = Mockito.mock(RoleToPermissionRepository.class);
+
+    @Mock
+    final UserToPermissionRepository userToPermissionRepository = Mockito.mock(UserToPermissionRepository.class);
 
     @BeforeEach
     void init() {
         user = new User();
-        lc = new UserController(userRepository, roleRepository);
+        lc = new UserController(userRepository, roleRepository, roleToPermissionRepository, userToPermissionRepository);
         map = new HashMap<>();
     }
 

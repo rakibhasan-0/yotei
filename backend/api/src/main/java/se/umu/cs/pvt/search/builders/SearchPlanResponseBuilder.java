@@ -12,6 +12,7 @@ import java.util.List;
  * based on the given list of {@link PlanDBResult PlanDBResults}.
  *
  * @author Minotaur (James Eriksson)
+ * @updated 2024-05-21 Added inverted category Team Kiwi (Teodor Bäckström)
  */
 public class SearchPlanResponseBuilder {
     private List<PlanDBResult> planDBResults;
@@ -33,7 +34,7 @@ public class SearchPlanResponseBuilder {
 
             if(map.containsKey(planID)){
                 PlanSearchResponse response =  map.get(planID);
-                response.addPlanColor(result.getBelt_color(), result.getBelt_name(), result.getIs_child());
+                response.addPlanColor(result.getBelt_color(), result.getBelt_name(), result.getIs_child(), result.getIs_inverted());
                 response.addSession(result.getSession_id(), result.getSession_date(), result.getSession_time(), result.getSession_text());
             } else {
                 map.put(planID, new PlanSearchResponse(
@@ -41,6 +42,7 @@ public class SearchPlanResponseBuilder {
                         result.getBelt_color(),
                         result.getBelt_name(),
                         result.getIs_child(),
+                        result.getIs_inverted(),
                         result.getSession_id(),
                         result.getSession_date(),
                         result.getSession_time(),

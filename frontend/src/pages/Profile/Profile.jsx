@@ -14,7 +14,8 @@ import Divider from "../../components/Common/Divider/Divider"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import ProfileListItem from "./ProfileListItem"
 import { Lock, Unlock, Eye } from "react-bootstrap-icons"
-
+import RoundButton from "../../components/Common/RoundButton/RoundButton"
+import { Plus } from "react-bootstrap-icons"
 /**
  * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3)
  * @since 2024-05-16
@@ -41,10 +42,9 @@ export default function Profile() {
 	const [usernamePassword, setUsernamePassword] = useState("")
 	const [passwordButtonState, setPasswordButtonDisabled] = useState(false)
 	const [usernameButtonState, setUsernameButtonDisabled] = useState(false)
-
 	const [lists, setLists] = useState([])
 	const [map, mapActions] = useMap()
-
+	const [fetchedLists, setFetchedLists] = useState(false)
 	const [amountOfFavouriteWorkouts, setAmountOfFavouriteWorkouts] = useState(0)
 
 
@@ -214,23 +214,18 @@ export default function Profile() {
 
 	const getIconFromState = (state) => {
 		if (state.id == -1) {
-			console.log("Favourite!")
 			//Här borde jag fixa en route till favoritsidans grej :)
 			return <img src="../../../assets/images/starFill.svg" />
 		}
 		if (state.hidden === true && state.author.userId == userId) {
-			console.log("Locked")
 			return <Lock size={36} />
 		}
 		if (state.hidden === true && state.author.userId != userId) {
-			console.log("Shared")
 			return <Unlock size={36} />
 		}
 		if (state.hidden === false && state.author.userId === userId) {
-			console.log("Public")
 			return <Eye size={36} />
 		}
-		console.log("Ospecat fall, borde ej kunna nå listor som publika men inte delade med oss!")
 		return <Eye size={36} />
 	}
 
@@ -245,7 +240,9 @@ export default function Profile() {
 
 		getLists(args, token, map, mapActions, (result) => {
 			if (result.error) {
+				console.log("ERror fetching")
 				//Should handle error
+				setFetchedLists(true)
 				return
 			}
 
@@ -265,18 +262,21 @@ export default function Profile() {
 	return (
 		<Tabs defaultActiveKey={"MyWorkouts"} className={style.tabs}>
 			{isListsEnabled && (
-				<Tab eventKey={"FavoriteWorkouts"} title={"Mina listor"} className={style.tab}>
+				<Tab eventKey={"MyLists"} title={"Mina listor"} className={style.tab}>
 					<SearchBar
 						id="searchbar-workouts-1"
 						placeholder="Sök efter listor"
 						text={searchText}
 						onChange={setSearchText}
 					/>
-					{loading ? (
+					{!fetchedLists ? (
 						<Spinner />
 					) : (
 						lists.map((list) => <ProfileListItem key={list.id} item={list} Icon={getIconFromState(list)} />)
 					)}
+					<RoundButton linkTo="/profile/createList">
+						<Plus />
+					</RoundButton>
 				</Tab>
 			)}
 			<Tab eventKey={"MyWorkouts"} title={"Mina Pass"} className={style.tab}>
