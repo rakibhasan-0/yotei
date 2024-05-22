@@ -24,7 +24,7 @@ import se.umu.cs.pvt.workout.UserShort;
  * ActivityListDTO - DTO for ActivityList to be able to provide complete
  * information about a list in a structured way.
  * 
- * @author Team Tomato, updated 2024-05-17
+ * @author Team Tomato, updated 2024-05-22
  * @since 2024-05-08
  * @version 1.1
  */
@@ -158,9 +158,8 @@ public class ActivityList implements Serializable {
         activityEntries.add(entry);
     }
 
-    public void addTechnique(Long techniqueId) {
-        ActivityListEntry entry = new ActivityListEntry(this.id, null, techniqueId);
+    public void addTechnique(Long techniqueId, Integer duration) {
+        ActivityListEntry entry = new ActivityListEntry(duration, this.id, null, techniqueId);
         activityEntries.add(entry);
     }
-
 }

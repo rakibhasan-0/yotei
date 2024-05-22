@@ -78,6 +78,16 @@ export function canCreateSessions(context) {
 	return (context.permissions.includes(USER_PERMISSION_CODES.SESSION_ALL) || context.permissions.includes(USER_PERMISSION_CODES.SESSION_OWN))
 }
 
+/**
+ * isAdminUser() - Checks if a user has the permission to edit users.
+ * @param {} context AccountContext from user.
+ * @returns True if user is alloowed to edit users, else false. 
+ */
+export function isAdminUser(context) {
+	if (!context.permissions) return false
+	return (context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS))
+}
+
 
 /**
  * canCreateGroups() - check if a user can create a group.
@@ -128,6 +138,17 @@ export function canCreateWorkouts(context) {
 export function canCreateAndEditActivity(context) {
 	if (!context.permissions) return false
 	return (context.permissions.includes(USER_PERMISSION_CODES.ACTIVITY_ALL))
+}
+
+/**
+ * canCreateGradings() - Check if user can create a grading.
+ * @param {*} context Accountcontext from user. 
+ * @returns true if user can create a grading.
+ */
+
+export function canHandleGradings(context) {
+	if (!context.permissions) return false
+	return (context.permissions.includes(USER_PERMISSION_CODES.GRADING_ALL))
 }
 
 /**
