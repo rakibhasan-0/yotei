@@ -42,7 +42,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	const[reviewId, setReviewId] = useState(-1)
 	const [extraActivityId, setExtraActivityId] = useState(-1)
 	const [isTransformComplete, setIsTransformComplete] = useState(false)
-
+	const [activitiesToBeDeleted, setActivitiesToBeDeleted] = useState([])
 
 	const [, setErrorStateMsg] = useState("")
 
@@ -75,6 +75,8 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 				console.log(json)
 				//setLoading(false)
 				setErrorStateMsg("")
+				fetchLoadedData()
+
 			}
 		}
 
@@ -93,9 +95,11 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 			if(loadedResponse.status != HTTP_STATUS_CODES.OK){
 				setErrorStateMsg("Session med ID '" + session_id + "' existerar inte. Felkod: " + loadedResponse.status)
+			
 				//setLoading(false)
 			} else {
 				const json = await loadedResponse.json()
+				console.log("Session Id is", session_id)
 				//console.log(session_id)
 				if(json[0] !== null && json[0] !== undefined) {
 					//console.log(json[0])
@@ -105,12 +109,50 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 					setNegativeComment(json[0]["negativeComment"])
 					setReviewId(json[0]["id"])
 					setSavedDate(json[0]["date"])
+
+					fetchLoadedExtraData();
 				}
+
+				
 			}
+
+
+		}
+
+		const fetchLoadedExtraData = async() => {
+
+			const requestOptions = {
+				headers: { "Content-type": "application/json", token: context.token },
+			}
+			const extraActivitiesloadedResponse = await fetch("/api/session/" + session_id + "/review/extraactivities", requestOptions).catch(() => {
+				setErrorStateMsg("Serverfel: Kunde inte ansluta till servern.")
+				//setLoading(false)
+				return
+			})
+
+			if(extraActivitiesloadedResponse.status != HTTP_STATUS_CODES.OK){
+				setErrorStateMsg("Kunde inte hämta anonyma aktiviteter. Felkod: " + extraActivitiesloadedResponse.status)
+			
+			} else if (extraActivitiesloadedResponse.status == HTTP_STATUS_CODES.OK) {
+				const json = await extraActivitiesloadedResponse.json()
+				// that json data will be used to add the sessionData
+				setSessionData((prevSessionData) => {
+					return {
+						...prevSessionData, // spread the previous state to maintain other properties
+						activityCategories: [
+							...prevSessionData.activityCategories, // spread the existing categories
+							json, // add the new json object
+						],
+					}
+				})
+
+	
+			}
+
 		}
 
 		fetchData()
-		fetchLoadedData()
+
 	}, [])
 
 
@@ -118,7 +160,8 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	 * used for the debugging purposes
 	 */
 	useEffect(() => {
-        console.log(doneList);
+        console.log("doneList", doneList);
+		console.log("activitiesToBeDeleted", activitiesToBeDeleted)
     }, [doneList]);
 
 
@@ -130,13 +173,27 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		})
 	}
 
-
-
+	/**
+	* for debugging purposes
+	* it will trigger when the activitiesToBeDeleted is updated
+	*/
+	useEffect(() => {
+		console.log("activitiesToBeDeleted", activitiesToBeDeleted)
+	}, [activitiesToBeDeleted])
 
 	function handleCheckBoxChange (checked, id) {
 		if(checked) { //Add exercise
 			setDone([...doneList,id])
 		} else { //Remove exercise
+			console.log("Removing", id)
+			
+			if(activitiesToBeDeleted.length == 1){
+
+			}
+
+		
+
+
 			setDone(doneList.filter(doneId=>doneId !== id))
 		}
 	}
@@ -154,13 +211,27 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			setError("Kunde inte spara utvärdering, vänligen sätt ett betyg")
 			return
 		}
+		console.log("Extra", sessionData.activityCategories.find(category => category.categoryName === "Extra").activities)
 		console.log("doneList before transforming", doneList)
 		console.log("transform is about to run")
 		await transformDoneList()
 		console.log("transform done")
+		removingNotCheckedActivities()
+		//window.location.reload();
 	}
 
 
+	function removingNotCheckedActivities() {
+		const extraActivities = sessionData.activityCategories.find(category => category.categoryName.toLowerCase() === "extra").activities
+		extraActivities.forEach(activity => {
+			if (!doneList.includes(activity.id)) {
+				activitiesToBeDeleted.push(activity.id)
+			}
+		})
+	}
+	
+
+	
 	function replaceDoneId(oldId, newId) {
 		console.log("Replacing", oldId, "with", newId)
 		setDone(doneList.map(id => id === oldId ? newId : id))
@@ -210,7 +281,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	 */
 	useEffect(() => {
 		if (isTransformComplete) {
-			console.log("Done list updated and transform complete:", doneList);
+			//console.log("Done list updated and transform complete:", doneList);
 			proceedWithReview();
 			setIsTransformComplete(false)
     	}
@@ -229,7 +300,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 
 	useEffect(() => {
-		console.log("session Data has been updated", sessionData)
+		//console.log("session Data has been updated", sessionData)
 	}, [sessionData])
 
 	async function addReview() {
@@ -666,7 +737,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 					<Divider option={"h2_center"} title={"Aktiviteter"} />
 					<div>
 						<ul>
-						{console.log("sessionData just rendered", sessionData)}
 						{sessionData.activityCategories.map((category, categoryIndex) => (
 							<React.Fragment key={categoryIndex}>
 								{category.activities.map((activity, activityIndex) => (
