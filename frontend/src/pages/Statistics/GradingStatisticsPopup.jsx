@@ -41,9 +41,14 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 	useEffect(() => {
 		if (groupID && beltID !== null) {
 			const fetchGroupGradingProtocol = async () => {
+
+				const requestOptions = {
+					headers: {"Content-type": "application/json", token: token}
+				}
+
 				try {
 					setLoading(true)
-					const response = await fetch(`/api/statistics/${groupID}/grading_protocol?beltId=${beltID}&startdate=${datesFrom}&enddate=${datesTo}`, {headers: {token}})
+					const response = await fetch(`/api/statistics/${groupID}/grading_protocol?beltId=${beltID}&startdate=${datesFrom}&enddate=${datesTo}`, requestOptions)
 					if (!response.ok) {
 						throw new Error("Failed to fetch group data")
 					}
