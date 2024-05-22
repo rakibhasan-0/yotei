@@ -18,12 +18,13 @@ import { HTTP_STATUS_CODES, canCreateSessions, setError } from "../../utils"
  * If nothing is selected, the default is from todays date until inf.
  * TODO: PlanIndex is error handling on fetches(react toast).
  * 
- * @author Griffin, Team Durian (Group 3) (2024-04-23), Team Mango (Group 4) (2024-05-17)
+ * @author Griffin, Team Durian (Group 3) (2024-04-23), Team Mango (Group 4) (2024-05-17) , Team Durian (Group 3) (2024-05-22)
  * @version 1.0
  * @since 2023-05-24
  * Updates: 2024-05-10: Added a toggle for a new checkbox. The filtering part does not work yet.
  * 			2024-05-17: Fixed the filtering and refactored code slightly.
  *          2024-05-20: Added a check for if the add session button should be shown or not.
+ * 		    2024-05-22: Added a numFilters counter to the FilterPlan.
  */
 export default function PlanIndex() {
 	const { token } = useContext(AccountContext)
@@ -283,6 +284,7 @@ export default function PlanIndex() {
 				callbackFunctionCheckbox={setGroups} //Register callback for updating the groups when the checkbox is pressed.
 				onlyMyGroups={onlyMyGroups} //Pass in the variable to know for filtering in FilterPlan.jsx.
 				toggleOnlyMyGroups={toggleOnlyMyGroups} //Register callback function for toggling onlyMyGroups.
+				numFilters={selectedPlans.length + (onlyMyGroups ? 1 : 0)} //Count the number of filters.
 			>
 			</FilterPlan>
 

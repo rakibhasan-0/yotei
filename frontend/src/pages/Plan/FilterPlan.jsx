@@ -21,13 +21,14 @@ import CheckBox from "../../components/Common/CheckBox/CheckBox"
  * @param		@type { Function }	  toggleOnlyMyGroups		A callback function used to toggle the onlyMyGroups variable.
  *
  * 
-* @author Griffin, Tomato (Group 6) , Team Mango (Group 4) (2024-05-17)
+* @author Griffin, Tomato (Group 6) , Team Mango (Group 4) (2024-05-17) , Team Durian (Group 3) (2024-05-22)
 * @version 2.1
 * @since 2023-05-08
 * Updates: 2024-05-10: Added a checkbox (with a feature toggle, since it does not work currently) for filtering by only my groups or all groups.
 * 		   2024-05-17: Fixed the filtering and refactored code slightly.
+*		   2024-05-22: Added a numFilters counter to the FilterContainer.	 
 */
-export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, onDatesChange, callbackFunctionCheckbox, onlyMyGroups, toggleOnlyMyGroups}) {
+export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, onDatesChange, callbackFunctionCheckbox, onlyMyGroups, toggleOnlyMyGroups, numFilters}) {
 	
 	const onToggle = (checked, chosenGroup) => setChosenGroups(prev => {
 		if(prev) {
@@ -50,7 +51,7 @@ export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, o
 
 	return (
 		<div id = {id}>
-			<FilterContainer id={"planfilter"} numFilters={0}>
+			<FilterContainer id={"planfilter"} numFilters={numFilters}>
 								
 				<div className={styles.datePickerContainer}>
 					<p className={styles.datePickerTitle}>Från</p>
