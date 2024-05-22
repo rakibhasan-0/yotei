@@ -6,7 +6,7 @@ import { toast } from "react-toastify"
  * @updated 2024-04-26  by Tomato
  * 			2024-05-20  by Team Mango: Updated permissions functions.
  *  		2024-05-21  by Team Mango: Commented functions, changed names and added more permissions functions.
- *  		2024-05-22  by Team Mango: Added some more permissions functions and removed all old permission code.
+ *  		2024-05-22  by Team Mango: Added some more permissions functions and removed all of the old permission code.
  */
 
 /**
@@ -121,7 +121,7 @@ export function canDeleteComment(context, commentId) {
 	if (context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
 	//True if the user is an admin or "owns" the comment.
 	return (context.userId === commentId)
-} //PERMISSION TODO: Should there be a permission for deleting others' comments without being an admin? And should 
+} //PERMISSION TODO: Should there be a permission for deleting others' comments without being an admin? And should everyone be able to write comments?
 
 
 
