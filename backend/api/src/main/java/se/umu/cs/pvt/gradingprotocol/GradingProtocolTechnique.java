@@ -1,8 +1,19 @@
-package se.umu.cs.pvt.statistics.gradingprotocol;
+package se.umu.cs.pvt.gradingprotocol;
 
 import javax.persistence.*;
 import java.io.Serializable;
+/**
+ * Model for grading_protocol_technique in database.
+ * Models a technique contained in a grading_protocol_category
 
+ * JPA (Java Persistence API)
+ *
+ *  GradingProtocolTechnique.java - GradingProtocolTechnique class. Represents the GradingProtocolTechnique Entity.
+ *
+ * @author Cocount 
+ * @version 1.0
+ * @since 2024-05-17
+ */
 @Entity
 @Table(name = "grading_protocol_technique")
 public class GradingProtocolTechnique implements Serializable {
@@ -26,7 +37,7 @@ public class GradingProtocolTechnique implements Serializable {
     /**
      * Constructor for GradingProtocolTechnique
      *
-     * @param id id for workout
+     * @param id id of the grading protocol technique entity
      * @param techniqueId id of protocol associated with category
      * @param categoryId name of the technique
      * @param order order of the technique
@@ -38,20 +49,35 @@ public class GradingProtocolTechnique implements Serializable {
         this.order = order;
     }
 
-    // Getters and setters
+    
+    /**
+     * Public getter for private property id
+     * @return id of the grading protocol technique entity
+     */
     public Long getId() {
         return id;
     }
 
+    /**
+     * Public getter for private property techniqueId
+     * @return id of the technique
+     */
     public Long getTechniqueId() {
         return techniqueId;
     }
 
+    /**
+     * Public getter for private property categoryId
+     * @return id of the category the the technique is contained in
+     */
     public Long getCategoryId() {
         return categoryId;
     }
 
-
+    /**
+     * Public getter for private property order
+     * @return order of the technique within the category
+     */
     public int getOrder() {
         return order;
     }
