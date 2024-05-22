@@ -32,7 +32,7 @@ import Spinner from "../../../components/Common/Spinner/Spinner.jsx"
  * @since 2023-05-22
  * @version 2.0
  * 
- * Updated Team Mango 2024-05-22: update isAdmin check ro new check.
+ * Updated Team Mango 2024-05-22: update isAdmin check to new check and removed isEditor check.
  */
 export default function ExerciseEdit() {
 	const context = useContext(AccountContext)
@@ -102,7 +102,7 @@ export default function ExerciseEdit() {
 
 	
 	useEffect(() => {
-		if (!isAdminUser(context) || !isEditor(context)) {
+		if (!isAdminUser(context)) {
 			handleNavigation()
 		}
 	}, [context, navigate])
