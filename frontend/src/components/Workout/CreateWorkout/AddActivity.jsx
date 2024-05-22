@@ -158,6 +158,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	]
 	const [sortLists, setSortLists] = useState(sortOptionsLists[0])
 	const [filterCount, setFilterCount] = useState(0)
+	const [listToToggle, setListToToggle] = useState(null);
 
 
 	const searchCount = useRef(0)
@@ -219,6 +220,15 @@ function AddActivity({ id, setShowActivityInfo }) {
 	useEffect(() => {
 		sessionStorage.setItem("searchListText", searchListText)
 	}, [searchListText])
+
+
+	// This calls the onAllActivitiesToggle function when the listContents state is updated and runs only when the checkbox to toggle all activities in a list is pressed.
+	useEffect(() => {
+		if (listToToggle) {
+			onAllActivitiesToggle(listToToggle);
+			setListToToggle(null); // Reset listToToggle
+		}
+	}, [listContents]);
 
 
 	function setJSONSession(key, value) {
@@ -368,10 +378,12 @@ function AddActivity({ id, setShowActivityInfo }) {
 		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.TOGGLE_CHECKED_ACTIVITY, payload: activity })
 	}
 
+	const onActivityToggleAll = (listId) => {
+		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CHECK_ALL_ACTIVITIES, payload: listContents[listId] })
+	}
+
 	const onAllActivitiesToggle = (listId) => {
-		listContents[listId]?.map((item) => {
-			onActivityToggle(item, item.type)
-		})
+		onActivityToggleAll(listId)
 	}
 
 	/**
@@ -513,7 +525,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 * Fetches the content from a list given the ID of the same list. 
 	 * @param {Integer} listID 
 	 */
-	function fetchingListContent(listID) {
+	function fetchingListContent(listID, callback) {
 		const args = {
 			id: listID
 		}
@@ -555,9 +567,14 @@ function AddActivity({ id, setShowActivityInfo }) {
 			}))
 
 			setListUpdate(listUpdate + 1)
+
+			if (callback) {
+				callback();
+			}
 		})
 	}
-
+	
+	
 	return (
 		<div id={id}>
 			<Modal.Body style={{ padding: "0" }}>
@@ -681,10 +698,10 @@ function AddActivity({ id, setShowActivityInfo }) {
 												key={list.id}
 												checkBox={
 													<CheckBox
-														checked={console.log("hej")}
 														onClick={() => {
-															fetchingListContent(list.id)
-															onAllActivitiesToggle(list.id)
+															fetchingListContent(list.id, () => {
+																setListToToggle(list.id);
+															});
 														}}
 													/>}
 												style={{display: "flex", alignitems: "center",  margin: "5px 15px 5px 15px"}}
@@ -701,7 +718,6 @@ function AddActivity({ id, setShowActivityInfo }) {
 																		<CheckBox 
 																			checked={checkedActivities.some(a => a.techniqueID === item.techniqueID)}
 																			onClick={() => onActivityToggle(item, "technique")}
-																			
 																		/>
 																	}
 																	key={index}

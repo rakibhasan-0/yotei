@@ -43,6 +43,8 @@ export const WORKOUT_CREATE_TYPES = {
 	CLEAR_CHECKED_ACTIVITIES: "CLEAR_CHECKED_ACTIVITIES",
 	TOGGLE_CHECKED_ACTIVITY: "TOGGLE_CHECKED_ACTIVITY",
 	UPDATE_EDITING_ACTIVITY: "UPDATE_EDITING_ACTIVITY",
+	CHECK_ALL_ACTIVITIES: "CHECK_ALL_ACTIVITIES",
+	UNCHECK_ALL_ACTIVITIES: "UNCHECK_ALL_ACTIVITIES",
 }
 
 /**
@@ -498,6 +500,21 @@ export function workoutCreateReducer(state, action) {
 	case "UPDATE_EDITING_ACTIVITY": 
 		tempState.popupState.currentlyEditing.data = action.payload
 		return tempState
+	
+	case "CHECK_ALL_ACTIVITIES": {
+		const allActivities = action.payload;
+		
+		tempState.checkedActivities = [...allActivities];
+
+		return tempState;
+	}
+	case "UNCHECK_ALL_ACTIVITIES": {
+		const allActivities = action.payload;
+
+		tempState.checkedActivities = tempState.checkedActivities.filter(activity => !allActivities.includes(activity));
+
+		return tempState;
+	}
 	default:
 		return state
 	}
