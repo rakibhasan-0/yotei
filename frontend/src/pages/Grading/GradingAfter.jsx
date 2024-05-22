@@ -102,7 +102,7 @@ export default function GradingAfter() {
 			}
 	
 			const base64String = await response.text()
-			const byteCharacters = window.atob(base64String.replace(/-/g, "+").replace(/_/g, "/")) // Decode base64 string
+			const byteCharacters = window.atob(base64String) // Decode base64 string
 			const byteNumbers = new Array(byteCharacters.length)
 			for (let i = 0; i < byteCharacters.length; i++) {
 				byteNumbers[i] = byteCharacters.charCodeAt(i)
