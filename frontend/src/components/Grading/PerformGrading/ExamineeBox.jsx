@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from "react"
 import CommentButton from "./CommentButton"
 import styles from "./ExamineeBox.module.css"
 import Popup from "../../Common/Popup/Popup"
-import TextArea from "../../Common/TextArea/TextArea"
 import Button from "../../Common/Button/Button"
 import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
 import { AccountContext } from "../../../context"
@@ -58,7 +57,10 @@ export default function ExamineeBox({
 	const [commentError, setCommentError] = useState("")
 	const [hasComment, setExistingComment] = useState(false)
 	const [commentId, setCommentId] = useState(null)
-	const [characterCount, setCharacterCount] = useState(commentText?.length)
+	
+	const isErr = !(commentError == undefined || commentError == null || commentError == "")
+
+
 
 	const colors = {
 		default: "white",
@@ -81,10 +83,6 @@ export default function ExamineeBox({
 			handleExistingInput()
 		}
 	}, [isAddingComment])
-
-	useEffect(() => {
-		setCharacterCount(commentText.length)
-	}, [commentText])
 
 	/**
      * Discards the current personal comment.
@@ -264,23 +262,22 @@ export default function ExamineeBox({
 					onClose={() => setCommentError(false)}
 					style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset" }}
 				>
-					<TextArea
+					<textarea
+						className={isErr ? `${styles.textarea} ${styles.textareaErr}` : `${styles.textarea}`}
 						autoFocus={true}
-						onInput={e => { 
-							setCommentText(e.target.value); 
-							setCommentError(false); 
+						onInput={ e => {
+							setCommentText(e.target.value)
+							setCommentError(false)
 						}}
-						onChange={e => {
-							setCommentText(e.target.value); 
-							setCommentError(false); 
-						}}
-						errorMessage={commentError}
-						text={commentText}
+						value={commentText}
+						id={"TextareaTestId"}
+						type={"text"}
 					/>
-					<div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px" }}>
-						<Button outlined={true} width={50} onClick={() => setCommentText(commentText + " " + "Böj på benen!")}>Böj på benen!</Button>
+					{commentError && <p className={styles.err}>{commentError}</p>}
+					<div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px", marginTop: "10px"}}>
+						<Button outlined={true} onClick={() => setCommentText(commentText + " " + "Böj på benen!")}>Böj på benen!</Button>
 						<Button outlined={true} onClick={() => setCommentText(commentText + " " + "Balansbrytning!")}>Balansbrytning!</Button>
-						<Button outlined={true} onClick={() => setCommentText(commentText + " " + "Kraftcirkeln")}>Kraftcirkeln!</Button>
+						<Button outlined={true} onClick={() => setCommentText(commentText + " " + "Kraftcirkeln!")}>Kraftcirkeln!</Button>
 					</div>
 					<Button onClick={() => onAddPersonalComment()}>Lägg till</Button>
 				</Popup>
