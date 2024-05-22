@@ -72,7 +72,11 @@ public class SearchActivityListDBBuilder {
         DatabaseQuery databaseQuery = new DatabaseQuery();
         if(queries.isEmpty()) {
             databaseQuery.setQuery(
-                    "SELECT name, id, author, private, created_date FROM activity_list"
+                    "SELECT DISTINCT al.name, al.id, al.author, al.private, al.created_date " + 
+                    "FROM activity_list AS al, user_to_activity_list AS utal " +
+                    "WHERE (al.id = utal.list_id AND utal.user_id = " + userId + ")" +
+                    "OR (al.author = " + userId + ")" +
+                    "OR (al.private = false)"
             );
         } else {
             List<String> queryList = new ArrayList<>();
