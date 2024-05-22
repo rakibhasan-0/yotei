@@ -74,7 +74,9 @@ export default function ExamineePairBox({
      * Discards the current pair comment.
      */
 	const onDiscardPairComment = async () => {
-		setCommentText("")
+		if (!hasComment) {
+			setCommentText("")
+		}
 		setAddComment(false)
 	}
 

@@ -71,7 +71,9 @@ export default function TechniqueInfoPanel({
      * Discards the current group comment.
      */
 	const onDiscardGroupComment = async () => {
-		setCommentText("")
+		if (!hasComment) {
+			setCommentText("")
+		}
 		setAddComment(false)
 	}
 

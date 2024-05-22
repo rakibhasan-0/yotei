@@ -88,7 +88,9 @@ export default function ExamineeBox({
      * Discards the current personal comment.
      */
 	const onDiscardPersonalComment = async () => {
-		setCommentText("")
+		if (!hasComment) {
+			setCommentText("")
+		}
 		setAddComment(false)
 	}
 
