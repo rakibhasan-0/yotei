@@ -32,7 +32,6 @@ export default function Profile() {
 	const [searchText, setSearchText] = useState("")
 	const [searchListText, setSearchListText] = useState("")
 
-
 	const [cache, cacheActions] = useMap()
 	const [password, setPassword] = useState("")
 	const [newPassword, setNewPassword] = useState("")
@@ -45,7 +44,7 @@ export default function Profile() {
 	const [usernamePassword, setUsernamePassword] = useState("")
 	const [passwordButtonState, setPasswordButtonDisabled] = useState(false)
 	const [usernameButtonState, setUsernameButtonDisabled] = useState(false)
-	const context = useContext(AccountContext) 
+	const context = useContext(AccountContext)
 
 	const [fetchedLists, setFetchedLists] = useState(false)
 	const [lists, setLists] = useState([])
@@ -54,11 +53,8 @@ export default function Profile() {
 	const [cookies, setCookie] = useCookies(["previousPath"])
 	const [amountOfFavouriteWorkouts, setAmountOfFavouriteWorkouts] = useState(0)
 
-	//TODO feature toggle
-	const [isListsEnabled] = useState(false)
-
 	useEffect(() => {
-		setCookie("previousPath", "/profile", {path: "/"})
+		setCookie("previousPath", "/profile", { path: "/" })
 	}, [setCookie, cookies.previousPath])
 
 	const workout = {
@@ -74,26 +70,24 @@ export default function Profile() {
 	const userName = context.username || "Vet ej"
 
 	//Future-proofs so that it will get all of the favourite workouts until 2060
-	const getAmountOfFavouriteWorkouts= async() =>{
+	const getAmountOfFavouriteWorkouts = async () => {
 		const args = {
 			from: "1980-01-01",
 			to: "2060-01-01",
-			selectedTags:"",
+			selectedTags: "",
 			id: userId,
 			text: "",
-			isFavorite: true
+			isFavorite: true,
 		}
 		getWorkouts(args, token, null, null, (response) => {
-			if(response.error) {
+			if (response.error) {
 				setAmountOfFavouriteWorkouts(0)
 			} else {
 				setAmountOfFavouriteWorkouts(response.results.length)
 			}
 			setIsFavouriteWorkoutsFetched(true)
 		})
-
 	}
-
 
 	/* Workout management */
 
@@ -253,7 +247,7 @@ export default function Profile() {
 			hidden: false,
 			isAuthor: true,
 			text: searchListText,
-			isShared: false
+			isShared: false,
 		}
 
 		getLists(args, token, map, mapActions, (result) => {
@@ -272,7 +266,7 @@ export default function Profile() {
 					hidden: item.hidden,
 					isShared: item.isShared,
 				}))
-			
+
 				setLists([workout, ...lists])
 				setFetchedLists(true)
 			}
@@ -280,25 +274,24 @@ export default function Profile() {
 	}
 
 	return (
-		<Tabs defaultActiveKey={"MyWorkouts"} className={style.tabs}>
-			{isListsEnabled && (
-				<Tab eventKey={"MyLists"} title={"Mina listor"} className={style.tab}>
-					<SearchBar
-						id="searchbar-workouts-1"
-						placeholder="Sök efter listor"
-						text={searchListText}
-						onChange={setSearchListText}
-					/>
-					{!fetchedLists ? (
-						<Spinner />
-					) : (
-						lists.map((list) => <ProfileListItem key={list.id} item={list} Icon={getIconFromState(list)} />)
-					)}
-					<RoundButton linkTo="/list/create">
-						<Plus />
-					</RoundButton>
-				</Tab>
-			)}
+		<Tabs defaultActiveKey={"MyLists"} className={style.tabs}>
+			<Tab eventKey={"MyLists"} title={"Mina listor"} className={style.tab}>
+				<SearchBar
+					id="searchbar-workouts-1"
+					placeholder="Sök efter listor"
+					text={searchListText}
+					onChange={setSearchListText}
+				/>
+				{!fetchedLists ? (
+					<Spinner />
+				) : (
+					lists.map((list) => <ProfileListItem key={list.id} item={list} Icon={getIconFromState(list)} />)
+				)}
+				<RoundButton linkTo="/list/create">
+					<Plus />
+				</RoundButton>
+			</Tab>
+
 			<Tab eventKey={"MyWorkouts"} title={"Mina Pass"} className={style.tab}>
 				<SearchBar
 					id="searchbar-workouts-2"
@@ -383,8 +376,8 @@ export default function Profile() {
 					Ändra Användarnamn
 				</Button>
 				<Divider option={"h2_center"} />
-				<div >
-					Inloggad som: {userName} <br/> 
+				<div>
+					Inloggad som: {userName} <br />
 				</div>
 				<Divider option={"h2_center"} />
 				<div>

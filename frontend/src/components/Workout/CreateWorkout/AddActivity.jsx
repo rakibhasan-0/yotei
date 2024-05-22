@@ -41,7 +41,7 @@ import ListItem from "./ListItem.jsx"
  * @updated 2024-05-13 Kiwi, Added Automatic scrolling and Removal of activities from popup
  * @updated 2024-05-20 Tomato, Added search function for activity lists.  
  */
-function AddActivity({ id, setShowActivityInfo }) {
+function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 
 	const { token } = useContext(AccountContext)
 	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(WorkoutCreateContext)
@@ -552,6 +552,29 @@ function AddActivity({ id, setShowActivityInfo }) {
 		})
 	}
 
+	/**
+	 * Handles the click event for the round button.
+	 * It checks if the sendActivity prop is null, if it is, it will set the showActivityInfo state
+	 * by calling the setShowActivityInfo function with the checkedActivities state as a parameter.
+	 * If the sendActivity prop is not null, it will call the sendActivity function with 
+	 * the checkedActivities state as a parameter.
+	 */
+	function handleRoundButtonClick() {
+		//console.log("Checked activities")
+		if(sendActivity == null) {
+			setShowActivityInfo(checkedActivities)
+		} else {
+			//console.log("Sending activities")
+			sendActivity(checkedActivities)
+			workoutCreateInfoDispatch({
+				type: WORKOUT_CREATE_TYPES.OPEN_ACTIVITY_INFO_POPUP,
+			})
+			workoutCreateInfoDispatch({
+				type: WORKOUT_CREATE_TYPES.CLEAR_ADDED_DATA,
+			})
+		}
+	}
+
 	return (
 		<div id={id}>
 			<Modal.Body style={{ padding: "0" }}>
@@ -730,14 +753,16 @@ function AddActivity({ id, setShowActivityInfo }) {
 				{/* Spacing so the button doesn't cover an ExerciseListItem */}
 				<br /><br /><br />
 
-				{checkedActivities.length > 0 &&
-					<RoundButton onClick={() => setShowActivityInfo(checkedActivities)} id="AddCheckedActivitiesButton">
+				{checkedActivities.length > 0 && (
+					<RoundButton onClick={handleRoundButtonClick} id="AddCheckedActivitiesButton">
 						<ChevronRight width={30} />
 					</RoundButton>
-				}
+				)}
 
 			</Modal.Body>
 		</div>
 	)
 }
+
+
 export default AddActivity
