@@ -86,7 +86,7 @@ export default function GroupIndex() {
 										<div style={{ width: "20px" }}/>
 										<Link to={`./statistics/${group.id}`}>
 											<GraphUp
-												id="statistics-page-button"
+												id={`statistics-page-button-${group.id}`}
 												size="24px"
 												color="var(--red-primary)"
 												style={{ cursor: "pointer" }}

@@ -17,17 +17,15 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 /**
  * A page for viewing lists. The user can view the information
  * about a lists on this page. Activities linked to the list
- * are displayedy. Added user are also displayed.
+ * are displayed. Added user are also displayed.
  *
  * Props:
  *      listId @type {int} - The ID of the list.
  *      id        @type {int/string} - the id of the component
  *
  * @author Team Tomato (6)
- * @since 2024/05/03
- * @updated 2024-05-21
- *
- * @version 1.6
+ * @since 2024-05-21
+ * Based on WorkoutView.jsx
  *
  */
 
@@ -87,7 +85,7 @@ export default function ListInfo({ id }) {
 							<h1 className="font-weight-bold m-0">{activityListData.name}</h1>
 						</div>
 						<div className="d-flex justify-content-end align-items-center">
-							<div className={styles.clickIcon}>{/*<PrintButton listData={listData} />*/}</div>
+							<div className={styles.clickIcon}>{/*<PrintButton listData={activityListData} />*/}</div>
 
 							{(context.userId == activityListData.author || isAdmin(context)) && (
 								<>
@@ -150,7 +148,6 @@ export default function ListInfo({ id }) {
 					{activityListData.users.map((user, index) => {
 						return (
 							<div key={"wu" + index} className="mr-2">
-								{/* Här kommer vi behöva ändra om så att en user blir ett objekt :)  */}
 								<Tag tagType={"default"} text={user.username}></Tag>
 							</div>
 						)
@@ -176,7 +173,7 @@ export default function ListInfo({ id }) {
 		<div id={id} className="container px-0">
 			{
 				<ConfirmPopup
-					popupText={`Är du säker att du vill radera passet ${activityListData.name}?`}
+					popupText={`Är du säker att du vill radera listan "${activityListData.name}"?`}
 					id={"confirm-popup"}
 					setShowPopup={setShowPopup}
 					showPopup={showPopup}
