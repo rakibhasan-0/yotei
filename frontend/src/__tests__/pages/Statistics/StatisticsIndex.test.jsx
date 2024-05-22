@@ -273,6 +273,19 @@ const mockedDates = {
 
 describe("Statistics Filter", () => {
 	test("User interaction - filter params", () => {
+
+		// eslint-disable-next-line no-undef
+		global.fetch = jest.fn(() =>
+			Promise.resolve({
+				ok: true,
+				json: () =>
+					Promise.resolve([
+						...mockedBelts,
+						...mockedDates
+					]),
+			})
+		)
+
 		// render component & mock toggles
 		const {getByTestId} =
 			render(<BrowserRouter>
