@@ -10,7 +10,7 @@ import { TagComponent } from "../Types/systemTestsTypes"
 
 export class AddTagPopupPage {
 	readonly page: Page
-	readonly url: string = "/technique/138/edit"
+	readonly url: string = "/technique/1/edit"
 
 	public constructor(page: Page) {
 		this.page = page
@@ -29,7 +29,7 @@ export class AddTagPopupPage {
 		await this.page.getByRole("button", { name: "Hantera tagg" }).click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
-		await this.page.waitForTimeout(3000)
+		//await this.page.waitForTimeout(3000)
 		
 		//Add the tag. 
 		const tagAddButton = this.page.locator("#tag-add-button")
@@ -54,7 +54,8 @@ export class AddTagPopupPage {
 		await this.page.getByRole("button", { name: "Hantera tagg" }).click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
-		await this.page.waitForTimeout(3000)
+		await this.page.getByTestId("EditableListItem").locator("label").waitFor({state: "visible"})
+		//await this.page.waitForTimeout(3000)
 
 		//Uncheck the tag.
 		await this.waitForEnabled(this.page.getByTestId("EditableListItem").locator("label"))
@@ -69,6 +70,7 @@ export class AddTagPopupPage {
 		await this.page.getByRole("button", { name: "Hantera tagg" }).click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
+		await this.page.getByTestId("EditableListItem").locator("label").waitFor({state: "visible"})
 
 		//Remove the tag from the database. 
 		await this.findComponents(tag, "#trash-icon")
