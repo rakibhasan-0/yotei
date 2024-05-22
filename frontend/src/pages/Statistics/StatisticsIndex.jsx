@@ -213,6 +213,7 @@ export default function Statistics() {
 					belts={groupBelts}
 					datesTo={dates.to}
 					datesFrom={dates.from}
+
 				/>
 			
 

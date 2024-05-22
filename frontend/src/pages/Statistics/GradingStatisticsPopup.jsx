@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useContext } from "react"
 import Popup from "../../components/Common/Popup/Popup"
 import style from "./GradingStatisticsPopup.module.css"
 import Dropdown from "../../components/Common/List/Dropdown"
 import GradingProtocolsRowsMenu from "../../components/Grading/GradingProtocolsRowsMenu"
 import GradingProtocolsRows from "../../components/Grading/GradingProtocolsRows"
 import Spinner from "../../components/Common/Spinner/Spinner"
-
+import { AccountContext } from "../../context"
 /**
  *  The component for the grading statistics popup. It shows what techniques are required for each belt.
  *  And what techniques have been completed by the group.
@@ -28,6 +28,7 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 	const [beltID, setBeltID] = useState(null)
 	const [loading, setLoading] = useState(false)
 	const [data, setData] = useState([])
+	const { token } = useContext(AccountContext)
 
 	useEffect(() => {
 		if (belts.length > 0) {
@@ -42,7 +43,7 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 			const fetchGroupGradingProtocol = async () => {
 				try {
 					setLoading(true)
-					const response = await fetch(`/api/statistics/${groupID}/grading_protocol?beltId=${beltID}&startdate=${datesFrom}&enddate=${datesTo}`)
+					const response = await fetch(`/api/statistics/${groupID}/grading_protocol?beltId=${beltID}&startdate=${datesFrom}&enddate=${datesTo}`, {headers: {token}})
 					if (!response.ok) {
 						throw new Error("Failed to fetch group data")
 					}
