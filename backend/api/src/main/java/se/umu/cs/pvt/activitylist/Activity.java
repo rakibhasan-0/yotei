@@ -12,13 +12,14 @@ import se.umu.cs.pvt.technique.Technique;
 /**
  * Dto for an activity, either an exercise or a technique.
  * 
- * @author Team Tomato, updated 2024-05-17
+ * @author Team Tomato, updated 2024-05-21
  * @since 2024-05-12
  * @version 1.1
  */
 public class Activity {
     private String type;
     private Long id;
+    private Long entryId;
     private String name;
     private String description;
     private Integer duration; // Only set for exercises
@@ -33,25 +34,27 @@ public class Activity {
         this.duration = exercise.getDuration();
     }
 
-    public Activity(Exercise exercise, Integer duration) {
+    public Activity(Exercise exercise, Integer duration, Long entryId) {
         this.type = "exercise";
         this.id = exercise.getId();
+        this.entryId = entryId;
         this.name = exercise.getName();
         this.description = exercise.getDescription();
-        if(duration == null) {
+        if (duration == null) {
             this.duration = exercise.getDuration();
-        }
-        else{
+        } else {
             this.duration = duration;
         }
     }
 
-    public Activity(Technique technique) {
+    public Activity(Technique technique, Integer duration, Long entryId) {
         this.type = "technique";
         this.id = technique.getId();
+        this.entryId = entryId;
         this.name = technique.getName();
         this.description = technique.getDescription();
         this.tags = technique.getTags();
+        this.duration = duration;
         this.belts = technique.getBelts();
     }
 
@@ -89,5 +92,10 @@ public class Activity {
     @JsonProperty
     public Set<Belt> getBelts() {
         return belts;
+    }
+
+    @JsonProperty
+    public Long getEntryId() {
+        return entryId;
     }
 }

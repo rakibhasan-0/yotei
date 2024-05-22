@@ -140,7 +140,6 @@ deploy-test-server:
     - docker login --username pvt2024 --password $DOCKER_PASS # DOCKER_PASS defined in GitLab CI/CD settings as a secure variable.
   script:
     - docker compose -p yotei -f docker-compose.yml -f docker-compose-development.yml down -v || true
-    - docker system prune -a -f
     - docker compose -p yotei -f docker-compose.yml -f docker-compose-development.yml up --build -d
     - docker compose -p yotei -f docker-compose.yml -f docker-compose-development.yml push
 

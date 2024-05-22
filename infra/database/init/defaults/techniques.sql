@@ -155,7 +155,7 @@ INSERT INTO technique (name, description) VALUES ('Kravattgrepp med nedbrytning 
 INSERT INTO technique (name, description) VALUES ('Grepp i kläderna med tryck, kote mawashi, ude osae gatame',''); -- id: 118
 INSERT INTO technique (name, description) VALUES ('Flera svingslag mot liggande sittande på magen, jodan chikai uke, frigöring',''); -- id: 119
 INSERT INTO technique (name, description) VALUES ('Hotfullt närmande mot liggande, uppgång framåt, jodan chikai uke, hiza kansetsu waza',''); -- id: 120
-INSERT INTO technique (name, description) VALUES ('hotfullt uppträdande, hara osae, ude henkan gatame',''); -- id: 121
+INSERT INTO technique (name, description) VALUES ('Hotfullt uppträdande, hara osae, ude henkan gatame',''); -- id: 121
 INSERT INTO technique (name, description) VALUES ('Kort svingslag, jodan chikai uke, uki otoshi, ude henkan gatame',''); -- id: 122
 INSERT INTO technique (name, description) VALUES ('Kort svingslag, jodan chikai uke, ko uchi gari',''); -- id: 123
 INSERT INTO technique (name, description) VALUES ('Rak spark mot magen, gedan uchi uke, irimi nage, ude henkan gatame',''); -- id: 124
