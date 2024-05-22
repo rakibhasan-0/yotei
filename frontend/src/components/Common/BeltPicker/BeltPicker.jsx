@@ -14,6 +14,8 @@ import React from "react"
  * @returns A new belt picker component
  * @update 2024-05-16, Team Kiwi : Added a filter for Basic Techniques 
  * @update 2024-05-16, Team Durian : Added so that error message element only renders when error exists
+ * @update 2024-05-22, Team Mango & Team Kiwi: Fixed a bug with rendering checkboxes for belts.
+ * @update 2024-05-22, Team Kiwi: Changed the design of the beltrows in order to work correctly on mobile devices.
  * 
  * Represents a belt row with text, two checkboxes and two
  * icons. 
@@ -46,19 +48,26 @@ const BeltRow = ({ belt, states, onToggle }) => {
 
 	return (
 		<div className={styles.beltRow}>
-			<div className={styles.beltItemChild}>
-				{child ? <>
-					<CheckBox id={`belt-child-${name}`} onClick={toggleChildState} checked={childState} />
+			<div className={styles.beltItem}>
+				{(child) ? <>
 					<BeltIcon id={`belt-child-${name}-icon`} belt={child} />
-					<CheckBox id={`belt-inverted-${name}`} onClick={toggleInvertedState} checked={invertedState}/>
+					<CheckBox id={`belt-child-${name}`} onClick={toggleChildState} checked={childState} />
+					
+				</> : <></>}
+				{inverted ? <>
 					<BeltIcon id={`belt-inverted-${name}-icon`} belt={inverted} />
-				</> : <div style={{width:"72px"}} />}
+					<CheckBox id={`belt-inverted-${name}`} onClick={toggleInvertedState} checked={invertedState}/>
+				</>
+					: <></>
+				}
+				{adult ? <>
+					<BeltIcon id={`belt-adult-${name}-icon`} belt={adult} />
+					<CheckBox id={`belt-adult-${name}`} onClick={toggleAdultState} checked={adultState} />
+				</>
+					: <div style={{width:"72px"}} />
+				}
 			</div>
 			<p id={`belt-text-${name}`} className={styles.beltText}>{name}</p>
-			<div className={styles.beltItem}>
-				<BeltIcon id={`belt-adult-${name}-icon`} belt={adult} />
-				<CheckBox id={`belt-adult-${name}`} onClick={toggleAdultState} checked={adultState} />
-			</div>
 		</div>
 	)
 
@@ -174,7 +183,7 @@ export default function BeltPicker({ id, states, onToggle, centered, onClearBelt
 						))}
 						{onClearBelts &&
 							<div className={styles.beltRow} onClick={clearBelts}>
-								<p className={`${styles.beltText} ${styles.centeredText}`}>Rensa valda bälten</p>
+								<p className={`${styles.beltTextSpecial} ${styles.centeredText}`}>Rensa valda bälten</p>
 							</div>
 						}
 					</>

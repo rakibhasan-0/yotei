@@ -16,6 +16,7 @@ import Spinner from "../../../components/Common/Spinner/Spinner"
  * @version 2.1
  * @since 2024-04-29
  * @returns A group index page
+ * @update Team Mango (2024-05-21) added new check for create group button to new user rights check.
  * Updated: 2024-05-06
  */
 export default function GroupIndex() {
@@ -86,7 +87,7 @@ export default function GroupIndex() {
 										<div style={{ width: "20px" }}/>
 										<Link to={`./statistics/${group.id}`}>
 											<GraphUp
-												id="statistics-page-button"
+												id={`statistics-page-button-${group.id}`}
 												size="24px"
 												color="var(--red-primary)"
 												style={{ cursor: "pointer" }}

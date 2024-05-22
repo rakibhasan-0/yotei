@@ -5,11 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import se.umu.cs.pvt.user.User;
+import se.umu.cs.pvt.user.UserRepository;
+
 import java.util.List;
 import java.util.Optional;
 /**
  * Main class for handling login information and transactions with the database.
- * @author Team Mango (2024-05-20)
+ * @author Team Mango (2024-05-24)
  */
 @RestController
 @CrossOrigin
@@ -19,15 +22,18 @@ public class RoleController {
 	/**
      * CRUDRepository makes connections with the api possible.
      */
-	private final RoleRepository repository;
+	private final RoleRepository roleRepository;
+
+    private final UserRepository userRepository;
 
     /**
      * Constructor for the LoginController object.
-     * @param repository Autowired
+     * @param roleRepository Autowired
      */
     @Autowired
-    public RoleController(RoleRepository repository) {
-        this.repository = repository;
+    public RoleController(RoleRepository roleRepository, UserRepository userRepository) {
+        this.roleRepository = roleRepository;
+        this.userRepository = userRepository;
 
     }
 
@@ -37,7 +43,7 @@ public class RoleController {
      */
     @GetMapping("")
     public ResponseEntity<List<Role>> getRoles() {
-        List<Role> result = repository.findAll();
+        List<Role> result = roleRepository.findAll();
 		
         if (result == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -62,12 +68,39 @@ public class RoleController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Optional<Role> role = repository.findById(roleId);
+        Optional<Role> role = roleRepository.findById(roleId);
         if (role.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>(role.get(), HttpStatus.OK);
+    }
+
+    /**
+     * (GET) Returns all users with a specific role.
+     * @param roleId The id of the role to get users that are returned.
+     * @return A response with either the users with the role or an error message.
+     */
+
+    @GetMapping("/users/{role_id}")
+    public ResponseEntity<List<User>> getUsersByRoleId(@PathVariable("role_id") Long roleId) {
+        if (roleId == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<Role> role = roleRepository.findById(roleId);
+        if (role.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        List<User> users = userRepository.findAllByRoleId(roleId);
+
+        if (users.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(users, HttpStatus.OK);
+
     }
 
     /**
@@ -77,11 +110,11 @@ public class RoleController {
      */
     @PostMapping("")
     public ResponseEntity<Role> createNewRole(@RequestBody Role roleToAdd) {
-        if (repository.existsByRoleName(roleToAdd.getRoleName())) {
+        if (roleRepository.existsByRoleName(roleToAdd.getRoleName())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        repository.save(roleToAdd);
+        roleRepository.save(roleToAdd);
 
         return new ResponseEntity<>(roleToAdd, HttpStatus.OK);
     }
@@ -94,12 +127,16 @@ public class RoleController {
      */
     @DeleteMapping("/{role_id}")
     public ResponseEntity<Object> deleteRole(@PathVariable("role_id") Long roleId) {
-        if (repository.findById(roleId).isEmpty()) {
+        if (roleRepository.findById(roleId).isEmpty()) {
             return new ResponseEntity<>(
-                "Role with ID: " + roleId +  "does not exist", HttpStatus.BAD_REQUEST);
+                "Role with ID: " + roleId +  "does not exist", HttpStatus.NOT_FOUND);
+
+        } else if (userRepository.existsByRoleId(roleId)) {
+            return new ResponseEntity<>("Cannot remove role that is assigned to a user", 
+            HttpStatus.FORBIDDEN);
         }
 
-        repository.deleteById(roleId);
+        roleRepository.deleteById(roleId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -115,20 +152,30 @@ public class RoleController {
     public ResponseEntity<Role> updateRole(
         @PathVariable("role_id") Long roleId, @RequestBody Role updatedRole) {
         
-        Optional<Role> firstRole = repository.findById(roleId);
+        Optional<Role> firstRole = roleRepository.findById(roleId);
         if (!firstRole.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        if (repository.existsByRoleName(updatedRole.getRoleName())) {
+        Optional<Role> roleWithSameName = roleRepository
+            .findByRoleName(updatedRole.getRoleName());
+
+        if (nameTaken(roleId, roleWithSameName)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        } else if (roleWithSameName.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.OK);
         }
 
         Role roleToUpdate = firstRole.get();
         roleToUpdate.setRoleName(updatedRole.getRoleName());
 
-        repository.save(roleToUpdate);
+        roleRepository.save(roleToUpdate);
 
         return new ResponseEntity<>(roleToUpdate, HttpStatus.OK);
+    }
+
+    private boolean nameTaken(Long roleId, Optional<Role> roleWithSameName) {
+        return roleWithSameName.isPresent() && roleWithSameName.get().getRoleId() != roleId;
     }
 }
