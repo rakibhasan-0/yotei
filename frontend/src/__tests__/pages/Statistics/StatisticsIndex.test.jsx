@@ -108,6 +108,7 @@ describe("Grading popup test", () => {
 		
 	})
 
+
 })
 
 
@@ -154,9 +155,10 @@ describe("Statistics Popup", () => {
 		fireEvent.click(screen.getByRole("button"))
 
 		// Wait for the popup to appear
-		await waitFor(() => {
-			expect(screen.getByText("Sammanställning av tillfällen")).toBeInTheDocument()
-		})
+
+		await expect(screen.getByText("Sammanställning av tillfällen")).toBeInTheDocument()
+		await expect(screen.getByText("Bält-tekniker")).toBeInTheDocument()
+
 	})
 })
 

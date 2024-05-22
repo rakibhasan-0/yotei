@@ -9,11 +9,13 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Utility class for creating and verifying Json Web Tokens.
  * 
  * @author Team Hot-Pepper (G7) (Doc: Grupp 2 Griffin c17wfn) & Team Tomato
+ *         Team Mango (Grupp 4) - 2024-05-17
  * @updated 2024-04-23 by Team Tomato
  */
 @Component
@@ -40,13 +42,14 @@ public class JWTUtil {
      * @throws JWTCreationException     Something went wrong during the signing
      *                                  process.
      */
-    public String generateToken(String username, String role, int userId)
+    public String generateToken(String username, String role, int userId, List<Long> permissions)
             throws IllegalArgumentException, JWTCreationException {
         return JWT.create()
                 .withSubject("User Details")
                 .withClaim("username", username)
                 .withClaim("role", role)
                 .withClaim("userId", userId)
+                .withClaim("permissions", permissions)
                 .withIssuedAt(new Date())
                 .withIssuer("PVT/User")
                 .withExpiresAt(new Date(System.currentTimeMillis() + validDuration))

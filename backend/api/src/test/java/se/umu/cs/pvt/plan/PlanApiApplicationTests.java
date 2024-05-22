@@ -40,9 +40,9 @@ class PlanApiApplicationTests {
         assertThat(controller).isNotNull();
     }
 
-    private final Belt belt1 = new Belt(1L, "Vitt", "#F12F12", false);
-    private final Belt belt2 = new Belt(2L, "Brunt", "#FFFFFF", true);
-    private final Belt belt3 = new Belt(3L, "Svart", "#000000", false);
+    private final Belt belt1 = new Belt(1L, "Vitt", "#F12F12", false, false);
+    private final Belt belt2 = new Belt(2L, "Brunt", "#FFFFFF", true, false);
+    private final Belt belt3 = new Belt(3L, "Svart", "#000000", false, false);
     private final Set<Belt> belts = new HashSet<>();
     private final Plan ex1 = new Plan(1L, "namn 1", 1L, belts);
     private final Plan ex2 = new Plan(2L, "namn 2", 2L, belts);

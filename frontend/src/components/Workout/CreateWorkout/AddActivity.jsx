@@ -18,10 +18,11 @@ import { WorkoutCreateContext } from "./WorkoutCreateContext"
 import { WORKOUT_CREATE_TYPES } from "./WorkoutCreateReducer"
 import InfiniteScrollComponent from "../../Common/List/InfiniteScrollComponent"
 import FilterContainer from "../../Common/Filter/FilterContainer/FilterContainer"
-import Sorter from "../../Common/Sorting/Sorter"
 import { useCookies } from "react-cookie"
 import ListPicker from "./ListPicker.jsx"
 import DropDown from "../../Common/List/Dropdown"
+import NewSorter from "../../Common/Sorting/NewSorter.jsx"
+import ListItem from "./ListItem.jsx"
 
 /**
  * This component is used to add activities to a workout. It contains three tabs, 
@@ -31,13 +32,14 @@ import DropDown from "../../Common/List/Dropdown"
  * 
  * @param {string} id A unique id of the component (Testing purposes)
  * @param {function} setShowActivityInfo Callback function to report selected activities
- *  
- * @author Kraken (Grupp 7), Team Coconut, Team Kiwi
+ * 
+ * @author Kraken (Grupp 7), Team Coconut, Team Kiwi, Team Tomato
  * @since 2024-04-19
  * @updated 2024-04-22 Kiwi, Fixed so searchbar is not cleared unless component is closed, also so the active tab will show
  * @updated 2024-04-23 Kiwi, Kihon checkbox is now saved when clicking and redirecting to a technique.
  * @updated 2024-05-02 Kiwi, Fixed search so that current response won't be concatenated with previous.
  * @updated 2024-05-13 Kiwi, Added Automatic scrolling and Removal of activities from popup
+ * @updated 2024-05-20 Tomato, Added search function for activity lists.  
  */
 function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 
@@ -98,7 +100,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 	const [searchListText, setSearchListText] = useState("")
 	const [listContents, setListContents] = useState([])  
 	const [listUpdate, setListUpdate] = useState(0)
-	const [isSearchBarEnabled] = useState(false) // TODO: feature toggle
+	const [isSearchBarEnabled] = useState(true) // TODO: feature toggle
 	const [isFilterEnabled] = useState(false) // TODO: feature toggle
 
 
@@ -107,15 +109,54 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 	 */
 	const [hasLoadedData, setHasLoadedData] = useState(false)
 
-	const sortOptions = [
+	const sortOptionsExercise = [
 		{ label: "Namn: A-Ö", cmp: (a, b) => { return a.name.localeCompare(b.name) } },
 		{ label: "Namn: Ö-A", cmp: (a, b) => { return -a.name.localeCompare(b.name) } },
 		{ label: "Tid: Kortast först", cmp: (a, b) => { return a.duration - b.duration } },
 		{ label: "Tid: Längst först", cmp: (a, b) => { return b.duration - a.duration } }
 	]
-	const [sort, setSort] = useState(sortOptions[0])
+	const [sortExercise, setSortExercise] = useState(sortOptionsExercise[0])
 	const [cookies, setCookies] = useCookies(["exercise-filter"])
 	const [visibleExercises, setVisibleExercises] = useState([])
+	const { userId: currentUserId } = useContext(AccountContext)
+
+	const sortOptionsLists = [
+		{ 
+			label: "Mina - Delade - Publika", 
+			cmp: (a, b) => {
+				// "Mina" - prioritize items where the current user is the author
+				if (a.author.userId === currentUserId && b.author.userId !== currentUserId) {
+					return -1
+				}
+				if (b.author.userId === currentUserId && a.author.userId !== currentUserId) {
+					return 1
+				}
+	
+				// "Delade" - prioritize items that are shared
+				if (a.isShared && !b.isShared) {
+					return -1
+				}
+				if (b.isShared && !a.isShared) {
+					return 1
+				}
+	
+				// "Publika" - prioritize items that are not shared and not authored by the current user
+				if (!a.isShared && a.author.userId !== currentUserId && (b.isShared || b.author.userId === currentUserId)) {
+					return -1
+				}
+				if (!b.isShared && b.author.userId !== currentUserId && (a.isShared || a.author.userId === currentUserId)) {
+					return 1
+				}
+	
+				// If items are equal in terms of the above conditions, sort them by name
+				return a.name.localeCompare(b.name)
+			} 
+		},
+		{ label: "Namn: A-Ö", cmp: (a, b) => { return a.name.localeCompare(b.name) } },
+		{ label: "Namn: Ö-A", cmp: (a, b) => { return -a.name.localeCompare(b.name) } }
+	]
+	const [sortLists, setSortLists] = useState(sortOptionsLists[0])
+
 
 	const searchCount = useRef(0)
 
@@ -130,12 +171,12 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 		setSearchListText(sessionStorage.getItem("searchListText") || "")
 		setActiveTab(getJSONSession("activeTab") || "technique")
 		setKihon(sessionStorage.getItem("kihon") || false)
-		setSort(getJSONSession("sort") || sortOptions[0])
+		setSortExercise(getJSONSession("sort") || sortOptionsExercise[0])
 	}, [])
 
 
 	useEffect(() =>
-		sessionStorage.setItem("sort", JSON.stringify(sort))
+		sessionStorage.setItem("sort", JSON.stringify(sortExercise))
 	)
 
 
@@ -195,12 +236,12 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 		const filterCookie = cookies["exercise-filter"]
 		if (filterCookie) {
 			setSelectedExerTags(filterCookie.tags)
-			let cachedSort = sortOptions.find(option => filterCookie.sort === option.label)
-			setSort(cachedSort ? cachedSort : sortOptions[0])
+			let cachedSort = sortOptionsExercise.find(option => filterCookie.sort === option.label)
+			setSortExercise(cachedSort ? cachedSort : sortOptionsExercise[0])
 		}
 	}, [])
 
-	useEffect(setExerciseList, [exercises, sort, searchExerText])
+	useEffect(setExerciseList, [exercises, sortExercise, searchExerText])
 
 	useEffect(() => {
 		const activeTab = tabCookie["active-tab"]
@@ -243,7 +284,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 		setFetchedLists(false)
 		setLists(lists)
 		fetchingList()
-	}, [searchListText, hasLoadedData, listUpdate])
+	}, [searchListText, hasLoadedData, listUpdate, sortLists])
 
 
 	/**
@@ -375,7 +416,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 	 */
 	const searchExercises = () => {
 		searchCount.current++
-		setCookies("exercise-filter", { tags: selectedExerTags, sort: sort.label }, { path: "/" })
+		setCookies("exercise-filter", { tags: selectedExerTags, sort: sortExercise.label }, { path: "/" })
 		const args = {
 			text: searchExerText,
 			selectedTags: selectedExerTags,
@@ -395,9 +436,9 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 	 * Also updates the exercise filter cookie.
 	 */
 	function setExerciseList() {
-		setCookies("exercise-filter", { tags: selectedExerTags, sort: sort.label }, { path: "/" })
+		setCookies("exercise-filter", { tags: selectedExerTags, sort: sortExercise.label }, { path: "/" })
 		if (exercises && searchExerText === "") {
-			const sortedList = [...exercises].sort(sort.cmp)
+			const sortedList = [...exercises].sort(sortExercise.cmp)
 			setVisibleExercises(sortedList)
 		}
 		else {
@@ -424,9 +465,18 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 			if (result.error) return
 
 			// Extract the 'id' and 'name' fields from each item in the result used in displaying the list.
-			const lists = result.map(item => ({ id: item.id, name: item.name }))
+			const lists = result.map(item => ({
+				id: item.id,
+				name: item.name,
+				author: {
+					userId: item.author.userId,
+					username: item.author.username
+				},
+				hidden: item.hidden,
+				isShared: item.is_shared
+			}))
 
-			setLists(lists)
+			setLists(lists.sort(sortLists.cmp))
 			setFetchedLists(true)
 		})
 	}
@@ -454,7 +504,6 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 							belt_color: item.belts[0].color,
 							belt_name: item.belts[0].name,
 							is_child: item.belts[0].child
-
 						}],
 						tags: item.tags,
 						path:  item.id
@@ -504,19 +553,11 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 		}
 	}
 
-	return (
+		return (
 		<div id={id}>
 			<Modal.Body style={{ padding: "0" }}>
-				<Tabs
-					activeKey={key}
-					onSelect={(k) => setKey(k)}
-					className={style.tabs}
-				>
-					<Tab
-						eventKey="technique"
-						title="Tekniker"
-						tabClassName={`nav-link ${style.tab}`}
-					>
+				<Tabs activeKey={key} onSelect={(k) => setKey(k)} className={style.tabs}>
+					<Tab eventKey="technique" title="Tekniker" tabClassName={`nav-link ${style.tab}`}>
 						<div className={style.searchBar}>
 							<SearchBar
 								id="technique-search-bar"
@@ -536,28 +577,21 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 							onKihonChange={handleKihonChanged}
 							onClearBelts={clearSelectedBelts}
 							id="test"
-							filterWhiteBelt={true}
-						></TechniqueFilter>
+							filterWhiteBelt={true}>
+						</TechniqueFilter>
 
-						{techniques.length === 0 && fetchedTech ? (
-							<ErrorStateSearch
-								id="add-activity-no-technique"
-								message="Kunde inte hitta tekniker"
-							/>
-						) : (
-							<InfiniteScrollComponent
-								activities={techniques}
-								activeKey={key}
-								searchCount={searchCount.current}
+						{(techniques.length === 0 && fetchedTech) ?
+							<ErrorStateSearch id="add-activity-no-technique" message="Kunde inte hitta tekniker" />
+							:
+							(<InfiniteScrollComponent
+								activities={techniques} activeKey={key} searchCount={searchCount.current}
 							>
 								{techniques.map((technique, key) => (
 									<TechniqueCard
 										id={"technique-list-item-" + technique.techniqueID}
 										checkBox={
 											<CheckBox
-												checked={checkedActivities.some(
-													(a) => a.techniqueID === technique.techniqueID
-												)}
+												checked={checkedActivities.some(a => a.techniqueID === technique.techniqueID)}
 												onClick={() => onActivityToggle(technique, "technique")}
 											/>
 										}
@@ -565,8 +599,9 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 										key={key}
 									/>
 								))}
-							</InfiniteScrollComponent>
-						)}
+							</ InfiniteScrollComponent>)
+						}
+
 					</Tab>
 					<Tab eventKey="exercise" title="Övningar" tabClassName={style.tab}>
 						<div className={style.searchBar}>
@@ -581,24 +616,14 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 								setSuggestedTags={setSuggestedExerTags}
 							/>
 						</div>
-						<FilterContainer id="ei-filter" title="Sortering" numFilters={0}>
-							<Sorter
-								onSortChange={setSort}
-								id="ei-sort"
-								selected={sort}
-								options={sortOptions}
-							/>
-						</FilterContainer>
-						{exercises.length === 0 && fetchedExer ? (
-							<ErrorStateSearch
-								id="add-activity-no-exercise"
-								message="Kunde inte hitta övningar"
-							/>
-						) : (
+
+						<NewSorter onSortChange={setSortExercise} id="ei-sort" selected={sortExercise} options={sortOptionsExercise} />
+
+						{(exercises.length === 0 && fetchedExer) ?
+							<ErrorStateSearch id="add-activity-no-exercise" message="Kunde inte hitta övningar" />
+							:
 							<InfiniteScrollComponent
-								activities={visibleExercises}
-								activeKey={key}
-								searchCount={searchCount.current}
+								activities={visibleExercises} activeKey={key} searchCount={searchCount.current}
 							>
 								{visibleExercises.map((exercise, key) => (
 									<ExerciseListItem
@@ -607,9 +632,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 										detailURL={"/exercise/exercise_page/"}
 										checkBox={
 											<CheckBox
-												checked={checkedActivities.some(
-													(a) => a.id === exercise.id
-												)}
+												checked={checkedActivities.some(a => a.id === exercise.id)}
 												onClick={() => onActivityToggle(exercise, "exercise")}
 											/>
 										}
@@ -619,13 +642,9 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 									/>
 								))}
 							</InfiniteScrollComponent>
-						)}
+						}
 					</Tab>
-					<Tab
-						eventKey="lists"
-						title="Listor"
-						tabClassName={`nav-link ${style.tab}`}
-					>
+					<Tab eventKey="lists" title="Listor" tabClassName={`nav-link ${style.tab}`}>
 						<div className={style.searchBar}>
 							{isSearchBarEnabled && ( // TODO: feature toggle.
 								<SearchBar
@@ -635,94 +654,96 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 									onChange={setSearchListText}
 								/>
 							)}
+
+							<NewSorter onSortChange={setSortLists} id="ei-sort" selected={sortLists} options={sortOptionsLists} />
+
+
 							{isFilterEnabled && ( // TODO: feature toggle.
-								<FilterContainer
-									id="ei-filter"
-									title="Filtrering"
-									numFilters={0}
-								>
+								<FilterContainer id="ei-filter" title="Filtrering" numFilters={0}>
 									<ListPicker />
 								</FilterContainer>
 							)}
 
+
 							<div className={style.scrollComponentOuterDiv}>
-								{lists.length === 0 && fetchedLists ? (
+								{(lists.length === 0 && fetchedLists) ?
 									<ErrorStateSearch id="add-activity-no-list" message="Kunde inte hitta någon lista" />
-								) : (
-									<InfiniteScrollComponent activities={lists}>
+									:
+									(<InfiniteScrollComponent activities={lists}>
 										{lists.map(list => (
 											<DropDown
 												text={list.name}
 												autoClose={false}
-												id={list.id.toString()}
+												id={list.id}
 												onClick={() => fetchingListContent(list.id)}
 												key={list.id}
 											>
+
 												<div style={{ borderTop: "1px solid black" }}>
-													<p className={style.listTitleText}>Tekniker</p>
-													<div className={style.innerListDiv}>
-														{listContents[list.id]?.map(item => (
-															item.type === "technique" ? (
-																<TechniqueCard
+													{listContents[list.id]?.map((item, index) => {
+														if(item.type === "technique") {
+															return (
+																<ListItem
 																	id={"technique-list-item-" + item.techniqueID}
+																	item={item}
 																	checkBox={
-																		<CheckBox
-																			checked={checkedActivities.some(
-																				a => a.techniqueID === item.techniqueID
-																			)}
+																		<CheckBox 
+																			checked={checkedActivities.some(a => a.techniqueID === item.techniqueID)}
 																			onClick={() => onActivityToggle(item, "technique")}
 																		/>
 																	}
-																	technique={item}
-																	key={item.techniqueID}
-																/>
-															) : null
-														))}
-													</div>
-												</div>
-												<p className={style.listTitleText}>Övningar</p>
-												<div className={style.innerListDiv}>
-													{listContents[list.id]?.map(item => (
-														item.type === "exercise" ? (
-															<ExerciseListItem
-																id={item.id}
-																text={item.duration + " min"}
-																detailURL={"/exercise/exercise_page/"}
-																checkBox={
-																	<CheckBox
-																		checked={checkedActivities.some(
-																			a => a.id === item.id
-																		)}
-																		onClick={() => onActivityToggle(item, "exercise")}
-																	/>
-																}
-																item={item.name}
-																key={item.id}
-															/>
-														) : null
-													))}
+																	key={index}
+																	index={index}
+																>
+
+																</ListItem>
+															)
+															
+														} else if(item.type === "exercise") {
+															return (
+																<ListItem
+																	id={item.id}
+																	item={item}
+																	checkBox={
+																		<CheckBox 
+																			checked={checkedActivities.some(a => a.id === item.id)}
+																			onClick={() => onActivityToggle(item, "exercise")}
+																		/>
+																	}
+																	key={index}
+																	index={index}
+																>
+																</ListItem>
+															)
+														} else {
+															return null
+														}
+													}
+													)}
+
 												</div>
 											</DropDown>
 										))}
-									</InfiniteScrollComponent>
-								)}
+									</InfiniteScrollComponent>)
+								}
 							</div>
-
-								
 						</div>
 					</Tab>
 				</Tabs>
 
 				{/* Spacing so the button doesn't cover an ExerciseListItem */}
 				<br /><br /><br />
-				
+
 				{checkedActivities.length > 0 && (
 					<RoundButton onClick={handleRoundButtonClick}>
 						<ChevronRight width={30} />
 					</RoundButton>
 				)}
+
 			</Modal.Body>
 		</div>
 	)
 }
+
+
 export default AddActivity

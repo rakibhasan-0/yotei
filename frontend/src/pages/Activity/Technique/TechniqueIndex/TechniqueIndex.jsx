@@ -65,7 +65,15 @@ export default function TechniqueIndex() {
 		// The selected belts are transformed from an array of belts objects to an array of strings, consisting of the belt names
 		const args = {
 			text: searchBarText,
-			selectedBelts: belts?.map((belt) => (belt.child ? belt.name + "-barn" : belt.name)).join(","),
+			selectedBelts: belts?.map(belt => {
+				if (belt.child) {
+					return belt.name + "-barn"
+				} else if (belt.inverted) {
+					return belt.name + "-inverted"
+				} else {
+					return belt.name
+				}
+			}).filter(Boolean).join(","), // Filter out any falsy values
 			kihon: kihon,
 			selectedTags: tags,
 		}
