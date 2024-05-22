@@ -14,6 +14,7 @@ import React from "react"
  * @returns A new belt picker component
  * @update 2024-05-16, Team Kiwi : Added a filter for Basic Techniques 
  * @update 2024-05-16, Team Durian : Added so that error message element only renders when error exists
+ * @update 2024-05-22, Team Mango & Team Kiwi: Fixed a bug with rendering checkboxes for belts.
  * 
  * Represents a belt row with text, two checkboxes and two
  * icons. 
@@ -54,11 +55,11 @@ const BeltRow = ({ belt, states, onToggle }) => {
 					
 				</> : <div style={{width:"72px"}} />}
 				{inverted ? <>
-				<CheckBox id={`belt-inverted-${name}`} onClick={toggleInvertedState} checked={invertedState}/>
+					<CheckBox id={`belt-inverted-${name}`} onClick={toggleInvertedState} checked={invertedState}/>
 					<BeltIcon id={`belt-inverted-${name}-icon`} belt={inverted} />
 				</>
-				: <div style={{width:"72px"}} />
-			}
+					: <div style={{width:"72px"}} />
+				}
 			</div>
 			<p id={`belt-text-${name}`} className={styles.beltText}>{name}</p>
 			
@@ -67,7 +68,7 @@ const BeltRow = ({ belt, states, onToggle }) => {
 					<BeltIcon id={`belt-adult-${name}-icon`} belt={adult} />
 					<CheckBox id={`belt-adult-${name}`} onClick={toggleAdultState} checked={adultState} />
 				</>
-				: <></>}
+					: <></>}
 			</div>
 		</div>
 	)

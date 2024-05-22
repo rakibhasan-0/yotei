@@ -1,5 +1,6 @@
 //it.todo("Should render the correct belts when selected")
 //it.todo("all tests need to be rewritten to work with inverted belts category")
+//TODO write a file comment in this file and clean up tests with good test data and more tests.
 import { render, screen, configure, waitFor } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import BeltPicker from "../../../../components/Common/BeltPicker/BeltPicker"
@@ -44,21 +45,21 @@ beforeEach(() => {
 						child: true,
 						inverted: false
 					},
-                    {
+					{
 						id: 5,
 						name: "Vitt",
 						color: "FCFCFC",
 						child: false,
 						inverted: false
 					},
-                    {
+					{
 						id: 6,
 						name: "Svart",
 						color: "BD3B41",
 						child: false,
 						inverted: false
 					},
-                    {
+					{
 						id: 1,
 						name: "Svart",
 						color: "BD3B41",
