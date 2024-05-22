@@ -77,7 +77,7 @@ export function canCreateSession(user) {
 }
 
 /**
- * canEditUsers() - Checks if a user has the permission to edit users.
+ * isAdminUser() - Checks if a user has the permission to edit users.
  * @param {} context AccountContext from user.
  * @returns True if user is alloowed to edit users, else false. 
  */
