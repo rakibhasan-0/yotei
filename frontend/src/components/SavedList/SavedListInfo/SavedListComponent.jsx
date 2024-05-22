@@ -8,8 +8,7 @@ import { useState } from "react"
  * @param activities - A list of activities.
  *
  * @author Tomato (Group 6)
- * @since 2024-05-06
- * @updated 2024-05-21
+ * @since 2024-05-21
  */
 export default function SavedActivityList({ activities, listCreateInfoDispatchProp = null }) {
 	const [isCollapsed, setIsCollapsed] = useState(false)

@@ -46,7 +46,7 @@ import { useParams } from "react-router-dom"
  * 
  */
 export default function TechniqueInfoPanel({
-	beltColor = "#FFDD33",
+	beltColor = "#FFDD33", 
 	categoryTitle = "Test Kategori",
 	currentTechniqueTitle = "1. Grepp i två handleder framifrån och svingslag Frigöring – Ju morote jodan uke",
 	nextTechniqueTitle = "2. Stryptag framifrån och svingslag, backhand Frigöring – Ju morote jodan uke, ude osae, ude osae gatame",
@@ -206,27 +206,39 @@ export default function TechniqueInfoPanel({
 			console.error(ex)
 		}
 	}
+	// To have linter not fail, all below should be removed later if not used before 2024-06-10
+	console.log(beltColor)
+	console.log(categoryTitle)
+	/* This was inside return earlier, but removed to get more space
+		After row: <fieldset className={styles.infoPanel}>
+		Before row: <div>
+						<h3 className={styles.categoryTitle} role="categoryTitle">{mainCategoryTitle}</h3>
+					</div>
+		Code that existed in between:
+				<fieldset role="fieldsetBelt" style={{ height: "0px", width: "100%", marginBottom: "3px", backgroundColor: beltColor }}>
+					<div>
+						<h2 className={styles.mainCategoryTitle} role="mainCategoryTitle">{mainCategoryTitle}</h2>
+					</div>
+				</fieldset>
+	*/
 
 	return (
-		<div style={styles}>
-			<fieldset role="fieldsetBelt" style={{ height: "30px", width: "100%", marginBottom: "10px", backgroundColor: beltColor }}>
+		<div className={styles.infoPanelContainer}>
+			<fieldset className={styles.infoPanel}>
 				<div>
-					<h2 className={styles.mainCategoryTitle} role="mainCategoryTitle">{mainCategoryTitle}</h2>
+					<h3 className={styles.categoryTitle} id="categoryTitle">{mainCategoryTitle}</h3>
 				</div>
-			</fieldset>
-			<fieldset style={{ height: "auto", width: "100%", marginBottom: "5px" }}>
-				<div>
-					<h3 className={styles.categoryTitle} role="categoryTitle">{categoryTitle}</h3>
+				<div className={styles.buttonGroupComment}>
+					<CommentButton onClick={() => setAddComment(true)} />
 				</div>
 				<div>
-					<h1 className={styles.currentTechnique} role="currentTechniqueTitle">{currentTechniqueTitle}</h1>
+					<h2 className={styles.currentTechnique} id="currentTechniqueTitle">{currentTechniqueTitle}</h2>
 				</div>
-				<div style={{ width: "70%", float: "left" }}>
-					<h3 className={styles.nextTechnique} role="nextTechniqueTitle"><b>Nästa:</b>{nextTechniqueTitle}</h3>
+				
+				<div className={styles.techniqueAndCommentSection}>
+					<h3 className={styles.nextTechniqueText} id="nextTechniqueTitle"><b>Nästa:</b>{nextTechniqueTitle}</h3>
 				</div>
-				<div style={{ display: "flex", justifyContent: "flex-end" }}>
-					<CommentButton onClick={() => setAddComment(true)} hasComment={hasComment} />
-				</div>
+				
 			</fieldset>
 			<Popup
 				id={"group-comment-popup"}

@@ -21,7 +21,7 @@ export default function CommentButton( {id, onClick, hasComment}) {
 	return (
 		<div id={id} onClick={onClick} className={styles.buttonContainer}>
 			<div>
-				<i className="bi bi-file-text h2" />
+				<i className="bi bi-file-text h3"  />
 				{hasComment && <span className={styles.notificationCircle} id={"notification-circle"}>1</span>}
 			</div>
 		</div>
