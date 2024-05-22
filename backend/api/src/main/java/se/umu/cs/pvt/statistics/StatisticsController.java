@@ -167,10 +167,19 @@ public class StatisticsController {
         @ApiResponse(responseCode = "200", description = "OK - Successfully retrieved"),
     })
     @GetMapping("{id}/grading_protocol")
-    public ResponseEntity<GradingProtocolDTO> getGradingProtocolView(@PathVariable Long id, @RequestParam Long beltId){
+    public ResponseEntity<GradingProtocolDTO> getGradingProtocolView(@PathVariable Long id, 
+                                                                     @RequestParam Long beltId,
+                                                                     @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<LocalDate> startdate, 
+                                                                     @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<LocalDate> enddate){
 
         // Get all techniques practiced by the group with :id 
         List<StatisticsActivity> techniques = statisticsRepository.getAllSessionReviewTechniques(id);
+
+        // Check if date filter is present
+        if (startdate.isPresent() && enddate.isPresent()) {
+            techniques.removeIf(item -> item.getDate().isBefore(startdate.get()));
+            techniques.removeIf(item -> item.getDate().isAfter(enddate.get()));
+        }
 
         HashMap<Long, Long> counts = new HashMap<>();
 
