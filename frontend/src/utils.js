@@ -69,15 +69,15 @@ export function canCreateGroups(context) {
 /**
  * canEditGroups() - checks if a user can edit a group. If not all, check if user can edit own and if so let user edit their own.
  * @param {*} context AccountContext from user.
- * @param {*} group Group info.
+ * @param {*} groupId The Id of the user that created the group.
  * @returns true if user can edit a group.
  */
-export function canEditGroups(context, group) {
+export function canEditGroups(context, groupCreatorId) {
 	if (!context.permissions) return false
 
 	return (context.permissions.includes(USER_PERMISSION_CODES.PLAN_ALL) ||
 	(context.permissions.includes(USER_PERMISSION_CODES.PLAN_OWN) &&
-	(context.userId === group.userId)))
+	(context.userId === groupCreatorId)))
 }
 
 /**
@@ -101,13 +101,10 @@ export function canCreateWorkouts(context) {
 export function canEditWorkout(context, workoutId) {
 	if (!context.permissions) return false //If the user's context disappears they lose all permissions and must log in again.
 	if (context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
-	//True if the user is an admin or "owns" the workout and is able to edit any workouts.
-	//Both permissions must be checked since having one does not imply having the other.
-	return ((context.userId === workoutId) && (
-		context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_OWN) ||
-	context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_ALL)
-	)
-	)
+	//True if the user is an admin or may edit all workouts or or "owns" the workout and is able to edit their own workouts.
+	return (context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_ALL) ||
+	(context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_OWN) &&
+	(context.userId === workoutId)))
 }
 
 /**
