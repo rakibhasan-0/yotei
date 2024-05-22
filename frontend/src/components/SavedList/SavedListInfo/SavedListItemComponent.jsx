@@ -5,7 +5,7 @@ import DescriptionToggle from "../../Common/DescriptionToggle"
 import { Trash } from "react-bootstrap-icons"
 
 /**
- * List item for an activity part of a list. Either exercise/technique or free text element.
+ * List item for an activity part of a list. Either exercise or technique
  *
  * Props:
  *		activity @type {Activity Object} - The activity to be displayed within the item.
@@ -13,8 +13,7 @@ import { Trash } from "react-bootstrap-icons"
  *		id @type {int} - The id of the list item.
  *
  * @author Tomato (Group 6)
- * @since 2024-05-07
- * @updated 2024-05-21
+ * @since 2024-05-21
  */
 const SavedActivityListItem = ({ activity, index, id, listCreateInfoDispatchProp }) => {
 	const [isActive, setIsActive] = useState(false)
