@@ -15,6 +15,7 @@ import React from "react"
  * @update 2024-05-16, Team Kiwi : Added a filter for Basic Techniques 
  * @update 2024-05-16, Team Durian : Added so that error message element only renders when error exists
  * @update 2024-05-22, Team Mango & Team Kiwi: Fixed a bug with rendering checkboxes for belts.
+ * @update 2024-05-22, Team Kiwi: Changed the design of the beltrows in order to work correctly on mobile devices.
  * 
  * Represents a belt row with text, two checkboxes and two
  * icons. 
@@ -47,29 +48,26 @@ const BeltRow = ({ belt, states, onToggle }) => {
 
 	return (
 		<div className={styles.beltRow}>
-			<div className={styles.beltItemChild}>
-				{/* TODO I ADDED THE && inverted. remove later or fix or whatever. */}
+			<div className={styles.beltItem}>
 				{(child) ? <>
-					<CheckBox id={`belt-child-${name}`} onClick={toggleChildState} checked={childState} />
 					<BeltIcon id={`belt-child-${name}-icon`} belt={child} />
+					<CheckBox id={`belt-child-${name}`} onClick={toggleChildState} checked={childState} />
 					
-				</> : <div style={{width:"72px"}} />}
+				</> : <></>}
 				{inverted ? <>
-					<CheckBox id={`belt-inverted-${name}`} onClick={toggleInvertedState} checked={invertedState}/>
 					<BeltIcon id={`belt-inverted-${name}-icon`} belt={inverted} />
+					<CheckBox id={`belt-inverted-${name}`} onClick={toggleInvertedState} checked={invertedState}/>
+				</>
+					: <></>
+				}
+				{adult ? <>
+					<BeltIcon id={`belt-adult-${name}-icon`} belt={adult} />
+					<CheckBox id={`belt-adult-${name}`} onClick={toggleAdultState} checked={adultState} />
 				</>
 					: <div style={{width:"72px"}} />
 				}
 			</div>
 			<p id={`belt-text-${name}`} className={styles.beltText}>{name}</p>
-			
-			<div className={styles.beltItem}>
-				{adult ? <>
-					<BeltIcon id={`belt-adult-${name}-icon`} belt={adult} />
-					<CheckBox id={`belt-adult-${name}`} onClick={toggleAdultState} checked={adultState} />
-				</>
-					: <></>}
-			</div>
 		</div>
 	)
 
@@ -185,7 +183,7 @@ export default function BeltPicker({ id, states, onToggle, centered, onClearBelt
 						))}
 						{onClearBelts &&
 							<div className={styles.beltRow} onClick={clearBelts}>
-								<p className={`${styles.beltText} ${styles.centeredText}`}>Rensa valda bälten</p>
+								<p className={`${styles.beltTextSpecial} ${styles.centeredText}`}>Rensa valda bälten</p>
 							</div>
 						}
 					</>

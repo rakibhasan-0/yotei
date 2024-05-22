@@ -5,7 +5,6 @@ import { useNavigate} from "react-router-dom"
 import { AccountContext } from "../../context"
 import { Plus } from "react-bootstrap-icons"
 import styles from "./GradingIndex.module.css"
-import containerStyles from "./GradingBefore.module.css"
 import BeltButton from "../../components/Common/Button/BeltButton"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import { Trash} from "react-bootstrap-icons"
@@ -219,8 +218,8 @@ export default function GradingIndex() {
 	return (
 		<center>
 			<h1>Pågående graderingar</h1>
-			<div className={containerStyles.container}>
-				<div className={containerStyles.scrollableContainer}>
+			<div className={styles.container}>
+				<div className={styles.scrollableContainer}>
 					{loading ? <Spinner /> : ( 
 						<div>
 							{currentGradings.map((grading, index) => (
@@ -268,8 +267,9 @@ export default function GradingIndex() {
 				</div>
 			</div>
 			<h1 className={styles.finishedGradings}>Avslutade graderingar</h1>
-			<div className={containerStyles.container}>
-				<div className={containerStyles.scrollableContainer}>
+
+			<div className={styles.container}>
+				<div className={styles.scrollableContainer}>
 					{loading ? <Spinner /> : ( 
 						<div>
 							{finishedGradings.map((grading, index) => (
@@ -300,6 +300,7 @@ export default function GradingIndex() {
 					)}
 				</div>          
 			</div>
+
 
 			<RoundButton onClick={navigateTo}>
 				<Plus />

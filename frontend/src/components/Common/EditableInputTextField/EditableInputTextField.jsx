@@ -76,6 +76,7 @@ export default function EditableInputTextField({ item, id, onEdit, validateInput
 					<div data-testid="EditableListItem-link" style={{ width: "100%" }}>
 						<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
 							<div
+								id="edit-clickable"
 								style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flex: 1 }}
 								onClick={handleEdit}
 							>

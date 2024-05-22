@@ -21,7 +21,7 @@ import { Plus } from "react-bootstrap-icons"
  * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3), Team Tomato (6), Team Kiwi (Group 2)
  * @since 2024-05-16
  * @version 3.0
- * @updated 2024-05-21
+ * @updated 2024-05-22
  *
  * @returns a page for managing the user's account
  */
@@ -45,6 +45,7 @@ export default function Profile() {
 	const [usernamePassword, setUsernamePassword] = useState("")
 	const [passwordButtonState, setPasswordButtonDisabled] = useState(false)
 	const [usernameButtonState, setUsernameButtonDisabled] = useState(false)
+	const context = useContext(AccountContext) 
 
 	const [fetchedLists, setFetchedLists] = useState(false)
 	const [lists, setLists] = useState([])
@@ -70,6 +71,7 @@ export default function Profile() {
 		},
 		hidden: false,
 	}
+	const userName = context.username || "Vet ej"
 
 	//Future-proofs so that it will get all of the favourite workouts until 2060
 	const getAmountOfFavouriteWorkouts= async() =>{
@@ -380,6 +382,10 @@ export default function Profile() {
 				>
 					Ändra Användarnamn
 				</Button>
+				<Divider option={"h2_center"} />
+				<div >
+					Inloggad som: {userName} <br/> 
+				</div>
 				<Divider option={"h2_center"} />
 				<div>
 					<Button id={"logoutButton"} onClick={logOut} width={"100%"} className="btn btn-primary">
