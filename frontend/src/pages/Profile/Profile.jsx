@@ -28,6 +28,8 @@ export default function Profile() {
 
 	const [workouts, setWorkouts] = useState()
 	const [searchText, setSearchText] = useState("")
+	const [searchListText, setSearchListText] = useState("")
+
 
 	const [cache, cacheActions] = useMap()
 	const [password, setPassword] = useState("")
@@ -50,7 +52,7 @@ export default function Profile() {
 	const [amountOfFavouriteWorkouts, setAmountOfFavouriteWorkouts] = useState(0)
 
 	//TODO feature toggle
-	const [isListsEnabled] = useState(false)
+	const [isListsEnabled] = useState(true)
 
 	const workout = {
 		id: -1,
@@ -135,7 +137,7 @@ export default function Profile() {
 		setFetchedLists(false)
 		setLists([workout])
 		fetchingList()
-	}, [searchText])
+	}, [searchText, searchListText])
 
 	useEffect(() => {
 		getWorkouts(
@@ -240,8 +242,10 @@ export default function Profile() {
 	 */
 	async function fetchingList() {
 		const args = {
-			hidden: "",
-			isAuthor: "",
+			hidden: false,
+			isAuthor: true,
+			text: searchListText,
+			isShared: false
 		}
 
 		getLists(args, token, map, mapActions, (result) => {
@@ -251,7 +255,7 @@ export default function Profile() {
 				return
 			}
 
-			const lists = result.map((item) => ({
+			const lists = result.results.map((item) => ({
 				id: item.id,
 				name: item.name,
 				size: item.size,
@@ -272,8 +276,8 @@ export default function Profile() {
 					<SearchBar
 						id="searchbar-workouts-1"
 						placeholder="Sök efter listor"
-						text={searchText}
-						onChange={setSearchText}
+						text={searchListText}
+						onChange={setSearchListText}
 					/>
 					{!fetchedLists ? (
 						<Spinner />
