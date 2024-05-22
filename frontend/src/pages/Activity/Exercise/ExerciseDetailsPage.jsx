@@ -11,7 +11,7 @@ import Gallery from "../../../components/Gallery/Gallery"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
 import ActivityDelete from "../../../components/Activity/ActivityDelete/ActivityDelete"
 import ErrorState from "../../../components/Common/ErrorState/ErrorState"
-import { isEditor } from "../../../utils"
+import { canCreateAndEditActivity } from "../../../utils"
 import {setError as setErrorToast} from "../../../utils" 
 
 /**
@@ -40,7 +40,7 @@ export default function ExerciseDetailsPage() {
 	const location = useLocation()
 	const hasPreviousState = location.key !== "default"
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
-	const accountRole = useContext(AccountContext)
+	const context = useContext(AccountContext)
 
 
 	const fetchComments = () => {
@@ -202,7 +202,7 @@ export default function ExerciseDetailsPage() {
 					<Clock />
 					<p style={{ marginBottom: "0", marginLeft: "5px" }}>{exercise?.duration} min</p>
 				</div>
-				{isEditor(accountRole) && (
+				{canCreateAndEditActivity(context) && (
 					<div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
 						<Pencil
 							onClick={() => {
