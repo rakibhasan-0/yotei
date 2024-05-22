@@ -21,12 +21,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.core.joran.spi.JoranException;
-import ch.qos.logback.core.util.StatusPrinter;
 
 /**
  * 
@@ -103,7 +99,7 @@ public class TechniqueDatabaseTest {
             .withEnv("POSTGRESQL_USER", POSTGRESQL_USER)
             .withEnv("POSTGRESQL_PASSWORD", POSTGRESQL_PASSWORD)
             .withExposedPorts(PostgreSQLContainer.POSTGRESQL_PORT);
-            
+
         System.out.println("Waiting for container to be ready");
         //NOTE: We had to increase the timer to 120 rather than 60, which is wierd as both should work.
         postgreSQLContainer.setWaitStrategy(Wait.defaultWaitStrategy()
