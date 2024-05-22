@@ -74,8 +74,19 @@ export class AddTagPopupPage {
 		//Wait for result to appear.
 		await this.waitForEnabled(this.page.getByTestId("EditableListItem").locator("label"))
 
+		const locator = await this.page.getByText(tag.tagName, { exact: true })
+		const locatorHTML = await locator.innerHTML()
+		console.log(locatorHTML)
+
+		const parent = await locator.locator('..')
+		const parentHTML = await parent.innerHTML()
+		console.log(parentHTML)
+		const grandParent = await parent.locator('..')
+		const grandParentHTML = await grandParent.innerHTML()
+		console.log(grandParentHTML)
+
 		//Remove the tag from the database. 
-		await this.findComponents(tag, "#trash-icon")
+		await this.findComponents(tag, "#close-icon")
 		await this.page.getByRole("button", { name: "Ta bort" }).click()
 		await this.page.locator("#save-and-close-button").click()
 	}
@@ -102,9 +113,9 @@ export class AddTagPopupPage {
 	async findComponents(tag, name) {
 		let locator = this.page.getByText(tag.tagName, { exact: true })
 
-		for (let i = 0 ; i < 2 ; i++) {
-			locator = locator.locator("..")
-		}
+		
+		locator = locator.locator("..")
+		
 		
 		await locator.locator(name).click()
 	}
