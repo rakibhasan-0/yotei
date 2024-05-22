@@ -604,7 +604,9 @@ export default function GradingBefore() {
 
 
 			<div className="column">
-				{examinees.map((examinee, index) => {const showCheckbox = examinees.length > 1 && !examinee.isLocked;
+				{examinees.map((examinee, index) => {
+					const unlockedExaminees = examinees.filter(exam => !exam.isLocked).length;
+					const showCheckbox = unlockedExaminees > 1 && !examinee.isLocked;
 					return (
 						<div style={{ display: "flex", width: "100%", justifyContent: "center" }} key={"single-pair-" + examinee.id} id={"single-pair-" + examinee.id}>
 							<div className={styles.numberSingle}>{numberOfPairs + index + 1}</div>
