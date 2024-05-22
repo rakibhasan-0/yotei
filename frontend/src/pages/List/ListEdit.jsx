@@ -35,7 +35,7 @@ const ListEdit = () => {
 	const location = useLocation()
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const [isLoading, setIsLoading] = useState(true)
-
+	const localStorageDestination = isEdit? "listCreateInfoEdit":"listCreateInfoCreate"
 	/**
 	 * Submits the form data to the API.
 	 */
@@ -133,7 +133,7 @@ const createActivityList = async (body) => {
 	 */
 	useEffect(() => {
 		setIsLoading(true)
-		const item = localStorage.getItem("listCreateInfoEdit")
+		const item = localStorage.getItem(localStorageDestination)
 		const listData = location.state?.list
 		const userData = location.state?.list.users
 		if (listData&&isEdit) {
@@ -162,10 +162,10 @@ const createActivityList = async (body) => {
 	 * Or removes it if the user has submitted the form.
 	 */
 	useEffect(() => {
-		localStorage.setItem("listCreateInfoEdit", JSON.stringify(listCreateInfo))
+		localStorage.setItem(localStorageDestination, JSON.stringify(listCreateInfo))
 
 		return () => {
-			if (isSubmitted) localStorage.removeItem("listCreateInfoEdit")
+			if (isSubmitted) localStorage.removeItem(localStorageDestination)
 		}
 	}, [listCreateInfo, isSubmitted])
 	return (
