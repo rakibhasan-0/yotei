@@ -1,11 +1,14 @@
 import "@testing-library/jest-dom"
-import {render, screen, fireEvent, configure} from "@testing-library/react"
+import { render, screen, fireEvent, configure, waitFor } from "@testing-library/react"
 import { BrowserRouter } from "react-router-dom"
 import Statistics from "../../../pages/Statistics/StatisticsIndex"
 import StatisticsPopUp from "../../../pages/Statistics/StatisticsPopUp"
 import FilterStatistics from "../../../pages/Statistics/FilterStatistics"
 import GradingStatisticsPopup from "../../../pages/Statistics/GradingStatisticsPopup"
 import React from "react"
+import { server } from "../../server.js"
+import { rest } from "msw"
+import BeltPicker from "../../../components/Common/BeltPicker/BeltPicker.jsx"
 configure({ testIdAttribute: "id" })
 
 /**
@@ -20,9 +23,11 @@ const mockedGroup = [{
 	child: false
 }]
 
+const testBelt = "Svart"
+
 const mockedBelts = [{
 	id: 5,
-	name: "Svart",
+	name: testBelt,
 	color: "000000",
 	child: false
 }, {
@@ -37,13 +42,10 @@ const mockedBelts = [{
 	child: false
 }, {
 	id: 4,
-	name: "Brunt",
-	color: "83530C",
-	child: false
+	name: testBelt,
+	color: "000000",
+	child: true
 },]
-
-
-
 
 const mockedGroupActivities = [
 	{
@@ -258,69 +260,130 @@ describe("Statistics component", () => {
 
 })
 
+const togExercise = jest.fn()
+const togKihon = jest.fn()
+const togDateChange = jest.fn()
+const togBeltSelect = jest.fn()
+const togBeltClear = jest.fn()
 
-/**
- * Test is incomplete because the BeltPicker cant use the 'mockedBelts' json object.
- * According to its (BeltPickers) documentation its` input should follow the structure
- *  states = [
- *  {
- *   "id": 1,
- *   "name": "Brun",
- *   "color": "FFFFF6",
- *   "child": false
- * 	}
- * ]
- * Which the mockedBelts object does. 
- * Something is preventing the BeltPicker from inserting the data into its list, 
- * and so any functionality beyond being rendered has not been tested.
- */
-describe("FilterStatistics component", () => {
+const mockedDates = {
+	from: new Date("2022-05-08").toISOString(),
+	to: new Date("2024-05-08").toISOString(),
+}
 
-	test("FilterStatistics renders correctly within Statistics component", async () => {
+describe("Statistics Filter", () => {
+	test("User interaction - filter params", () => {
+		// render component & mock toggles
+		const {getByTestId} =
+			render(<BrowserRouter>
+				<FilterStatistics
+					onToggleExercise={togExercise}
+					onToggleKihon={togKihon}
+					onDateChanges={togDateChange}
+					onToggleBelts={togBeltSelect}
+					onClearBelts={togBeltClear}
+					belts={mockedBelts}
+					dates={mockedDates}/>
+			</BrowserRouter>)
 
-		const mockedDates = {
-			from: new Date("2022-05-08").toISOString(),
-			to: new Date("2024-05-08").toISOString(),
-		}
+		// simulate user interaction with checkboxes and date picker
+		fireEvent.click(getByTestId("techniqueFilter-VisaÖvningar"))
+		fireEvent.click(getByTestId("techniqueFilter-KihonCheck"))
+		fireEvent.change(getByTestId("start-date-picker"), {target: {value: "2023-01-01"}})
+		fireEvent.change(getByTestId("end-date-picker"), {target: {value: "2024-01-01"}})
 
-		// eslint-disable-next-line no-undef
-		global.fetch = jest.fn(() =>
-			Promise.resolve({
-				ok: true,
-				json: () =>
-					Promise.resolve([
-						...mockedBelts,
-					]),
+		// make sure it's been called right with the correct values
+		expect(togExercise).toHaveBeenCalledWith(true)
+		expect(togKihon).toHaveBeenCalledWith(true)
+		expect(togDateChange).toHaveBeenCalledWith("from", "2023-01-01")
+		expect(togDateChange).toHaveBeenCalledWith("to", "2024-01-01")
+	})
+
+	// test currently only works if isolated
+	// eslint-disable-next-line jest/no-disabled-tests
+	test.skip("User interaction - select belts]", async () => {
+
+		const requestSpy = jest.fn()
+		server.events.on("request:start", requestSpy)
+
+		server.use(
+			rest.get("http://localhost/api/belts", async (req, res, ctx) => {
+				return res(ctx.status(200), ctx.json(
+					[{
+						id: 5,
+						name: "Svart",
+						color: "000000",
+						child: false
+					}, {
+						id: 2,
+						name: "Svart",
+						color: "000000",
+						child: true
+					}, {
+						id: 3,
+						name: "Grönt",
+						color: "0C7D2B",
+						child: false
+					}, {
+						id: 4,
+						name: "Brunt",
+						color: "83530C",
+						child: false
+					}]
+				))
 			})
 		)
 
-		// Render statistics page
-		render(	
-			<BrowserRouter>	
-				<FilterStatistics 
-					onToggleExercise={jest.fn()}
-					onToggleKihon={jest.fn()}
-					onDateChanges={jest.fn()}
-					onToggleBelts={jest.fn()}
-					onClearBelts={jest.fn()}
-					belts={mockedBelts}
-					dates={mockedDates} /> 
-			</BrowserRouter> )
+		// render component & mock belt toggle
+		render(<BeltPicker id={"bp"} onToggle={togBeltSelect}/>)
 
-		// Simulate clicking the filter button to open the filter container
-		fireEvent.click(screen.getByTestId("filter-button"))
+		await waitFor(() => {
+			expect(requestSpy).toHaveBeenCalled()
+		})
 
-		// Assert existence of filter container
-		expect(screen.getByTestId("filter-container")).toBeInTheDocument()
+		// make sure belts been rendered successfully
+		expect(screen.getByTestId(`belt-adult-${testBelt}`)).toBeInTheDocument()
+		expect(screen.getByTestId(`belt-child-${testBelt}`)).toBeInTheDocument()
+		expect(screen.getByTestId("belt-adult-Grönt")).toBeInTheDocument()
+		expect(screen.getByTestId("belt-adult-Brunt")).toBeInTheDocument()
 
-		// Clicking the beltpicker to show dropdown
-		// fireEvent.click(screen.getByTestId("techniqueFilter-BeltPicker"))
+		/* Simulate user interaction toggling belts ON/OFF
+		 * And check it's been called in the correct sequence using expect()
+		 * */
 
-		// Assert existence of on of the mocked belts 
-		// expect(screen.getByText("Svart")).toBeInTheDocument()
+		fireEvent.click(screen.getByTestId(`belt-adult-${testBelt}`))	// toggle adult ON
+		expect(togBeltSelect).toHaveBeenCalledWith(true, {
+			"child": false,
+			"color": "000000",
+			"id": 5,
+			"name": `${testBelt}`
+		})
+
+		fireEvent.click(screen.getByTestId(`belt-child-${testBelt}`))	// toggle child ON
+		fireEvent.click(screen.getByTestId(`belt-adult-${testBelt}`))	// toggle adult OFF
+
+		expect(togBeltSelect).toHaveBeenCalledWith(true, {
+			"child": true,
+			"color": "000000",
+			"id": 2,
+			"name": `${testBelt}`
+		})
+		expect(togBeltSelect).toHaveBeenCalledWith(false, {
+			"child": false,
+			"color": "000000",
+			"id": 5,
+			"name": `${testBelt}`
+		})
+
+		fireEvent.click(screen.getByTestId(`belt-child-${testBelt}`))	// toggle child OFF
+		expect(togBeltSelect).toHaveBeenCalledWith(false, {
+			"child": true,
+			"color": "000000",
+			"id": 2,
+			"name": `${testBelt}`
+		})
+
 	})
 })
-	
-
 
 
