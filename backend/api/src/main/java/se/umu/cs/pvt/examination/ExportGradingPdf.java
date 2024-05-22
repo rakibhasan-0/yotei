@@ -720,7 +720,9 @@ public class ExportGradingPdf {
                 if(lastSpaceIndex > 0) 
                     stopIndex = lastSpaceIndex + startIndex +1;
 
-                rows.add(string.substring(startIndex, stopIndex).replaceAll("\\u000a\\u0009", ""));
+                String tmpStr = string.substring(startIndex, stopIndex).replaceAll("\\u000a", "");
+                tmpStr = string.substring(startIndex, stopIndex).replaceAll("\\u0009", "");
+                rows.add(tmpStr);
                 
                 startIndex = stopIndex;
                 if(stopIndex + maxLength <= string.length())
