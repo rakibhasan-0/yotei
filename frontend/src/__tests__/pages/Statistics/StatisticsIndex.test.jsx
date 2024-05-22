@@ -312,7 +312,7 @@ describe("Statistics Filter", () => {
 		expect(togDateChange).toHaveBeenCalledWith("to", "2024-01-01")
 	})
 
-	// test currently only works if isolated
+	// TODO: test currently only works if launched by itself (isolated)
 	// eslint-disable-next-line jest/no-disabled-tests
 	test.skip("User interaction - select belts]", async () => {
 
