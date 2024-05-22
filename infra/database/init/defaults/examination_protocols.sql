@@ -52,14 +52,14 @@ INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (3,
             ]
         },
         {
-            "category_name": "YAKUSOKU GEIKO OR RANDORI",
+            "category_name": "YAKUSOKU GEIKO ELLER RANDORI",
             "techniques": [
                 { "text": "1. Försvar mot en motståndare" }
             ]
         }
     ]
 }'::JSON);
-INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (5, 
+INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (6, 
 '{
     "examination_protocol": {"code": "4 KYU", "color": "ORANGE BÄLTE"},
     "categories": [
@@ -117,14 +117,14 @@ INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (5,
             ]
         },
         {
-            "category_name": "YAKUSOKU GEIKO OR RANDORI",
+            "category_name": "YAKUSOKU GEIKO ELLER RANDORI",
             "techniques": [
                 { "text": "1. Försvar mot en motståndare" }
             ]
         }
     ]
 }'::JSON);
-INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (7, 
+INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (9, 
 '{
     "examination_protocol": {"code": "3 KYU", "color": "GRÖNT BÄLTE"},
     "categories": [
@@ -189,14 +189,14 @@ INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (7,
             ]
         },
         {
-            "category_name": "YAKUSOKU GEIKO_OR_RANDORI",
+            "category_name": "YAKUSOKU GEIKO ELLER RANDORI",
             "techniques": [
                 { "text": "1. Försvar mot en motståndare" }
             ]
         }
     ]
 }'::JSON);
-INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (9, 
+INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (12, 
 '{
     "examination_protocol": {"code": "2 KYU", "color": "BLÅTT BÄLTE"},
     "categories": [
@@ -270,14 +270,14 @@ INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (9,
             ]
         },
         {
-            "category_name": "YAKUSOKU GEIKO_OR_RANDORI",
+            "category_name": "YAKUSOKU GEIKO ELLER RANDORI",
             "techniques": [
                 { "text": "1. Försvar mot en motståndare" }
             ]
         }
     ]
 }'::JSON);
-INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (11, 
+INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (13, 
 '{
     "examination_protocol": {"code": "1 KYU", "color": "BRUNT BÄLTE"},
     "categories": [
@@ -365,7 +365,7 @@ INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (11,
             ]
         },
         {
-            "category_name": "YAKUSOKU GEIKO_OR_RANDORI",
+            "category_name": "YAKUSOKU GEIKO ELLER RANDORI",
             "techniques": [
                 { "text": "1. Försvar mot en motståndare" }
             ]

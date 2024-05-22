@@ -17,10 +17,11 @@ import { Spinner } from "react-bootstrap"
 /**
  * This is the page for editing a saved workout.
  * 
- * @author Team Minotaur, Team Kiwi, Team Durian (Group 3) (2024-04-23)
+ * @author Team Minotaur, Team Kiwi, Team Durian, Team Tomato
  * @version 2.0
  * @since 2023-05-24
  * @updated 2024-04-23 Team Kiwi, Removed blockers and Pop-up for redirecting to technique descriptions
+ * @update 2024-05-21  Fixed the convertion of id's when activities come from a list.
  */
 const WorkoutEdit = () => {
 	const [workoutCreateInfo, workoutCreateInfoDispatch] = useReducer(
@@ -82,16 +83,22 @@ const WorkoutEdit = () => {
 					order: activityOrder,
 				}
 
-				if(activity.technique) {
-					obj.techniqueId = activity.technique.id
-				} else if (activity.techniqueId) {
-					obj.techniqueId = activity.techniqueId
-				}
-
-				if(activity.exercise) {
-					obj.exerciseId = activity.exercise.id
+				if (activity.techniqueId) {
+					// Convert the id to the correct form if it comes from a list.
+					if (typeof activity.techniqueId === "string" && activity.techniqueId.includes("-technique-")) {
+						obj.techniqueId = activity.techniqueId.split("-technique-").pop()
+					} else{
+						obj.techniqueId = activity.techniqueId
+					}
+					
 				} else if (activity.exerciseId) {
-					obj.exerciseId = activity.exerciseId
+					// Convert the id to the correct form if it comes from a list.
+					if (typeof activity.exerciseId === "string" && activity.exerciseId.includes("-exercise-")) {
+						obj.exerciseId = activity.exerciseId.split("-exercise-").pop()
+					} else {
+						obj.exerciseId = activity.exerciseId
+					}
+					
 				}
 
 

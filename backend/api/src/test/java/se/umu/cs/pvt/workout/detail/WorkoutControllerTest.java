@@ -47,6 +47,7 @@ import static org.mockito.Mockito.when;
  * Test class for the WorkoutDetails part of the WorkoutController.
  *
  * @author Grupp 5 cyclops & Team Tomato
+ *         Team Mango (Grupp 4) - 2024-05-17
  * @updated 2024-04-24 by Team Tomato
  */
 @WebMvcTest(controllers = WorkoutController.class)
@@ -362,7 +363,7 @@ public class WorkoutControllerTest {
                 when(mockJwt.getClaim("userId")).thenReturn(mockClaim);
                 when(mockJwt.getClaim("role")).thenReturn(mockClaim);
                 when(jwtUtil.validateToken("testToken123")).thenReturn(mockJwt);
-                when(jwtUtil.generateToken(nonAuthor.getUsername(), nonAuthor.getUserRole().toString(), 2))
+                when(jwtUtil.generateToken(nonAuthor.getUsername(), nonAuthor.getUserRole().toString(), 2, new ArrayList<Long>()))
                                 .thenReturn("testToken123");
                 when(workoutDetailRepository.findById(1L))
                                 .thenReturn(Optional.of(privateWorkout));

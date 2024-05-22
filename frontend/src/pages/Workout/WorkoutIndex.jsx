@@ -12,6 +12,8 @@ import WorkoutListItem from "../../components/Workout/WorkoutListItem"
 import ErrorStateSearch from "../../components/Common/ErrorState/ErrorStateSearch.jsx"
 import Spinner from "../../components/Common/Spinner/Spinner.jsx"
 import {setError as setErrorToast} from "../../utils"
+import { useCookies } from "react-cookie"
+import { canCreateWorkouts } from "../../utils"
 
 /**
  * Workout class. 
@@ -24,7 +26,8 @@ import {setError as setErrorToast} from "../../utils"
  * @author Team Tomato (Group 6)
  * @author Team Durian (Group 3) (2024-04-23)
  * @author Team Tomato (Group 6)
- * @author Team Kiwi (Group 2) (2024-05-08) 
+ * @author Team Kiwi (Group 2) (2024-05-08)
+ * @author Team Mango (Group 4)
  * Removed option to filter by date created
  * Fixed so that search text is set and saved 
  * (2024-05-16) Fixed so that favorites filter is saved when redirecting 
@@ -41,8 +44,11 @@ export default function WorkoutIndex() {
 	const [ searchErrorMessage, setSearchErrorMessage ] = useState("")
 	const [ loading, setLoading ] = useState(true)
 	const [ filterFavorites, setFilterFavorites ] = useState(false)
+	const [ cookies, setCookie ]= useCookies(["previousPath"])
 	const [ initialized, setInitialized ] = useState(false)
 
+	const context = useContext(AccountContext) //For permissions.
+	
 	// store search text and filter favorites
 	useEffect(() =>{
 		setSearchText(sessionStorage.getItem("searchText") || "")
@@ -70,6 +76,10 @@ export default function WorkoutIndex() {
 	// fecthWorkouts in dependency array causes recursion
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [filterFavorites, searchText, token, userId, tags, initialized])
+
+	useEffect(() => {
+		setCookie("previousPath", "/workout", {path: "/"})
+	}, [setCookie, cookies.previousPath])
 	return (
 		<>
 			<div id="search-area">
@@ -113,9 +123,14 @@ export default function WorkoutIndex() {
 					message={searchErrorMessage}/>)
 			}
 			<br/>
-			<RoundButton linkTo="/workout/create">
-				<Plus />
-			</RoundButton>
+			
+			{
+				canCreateWorkouts(context) ?
+					<RoundButton linkTo="/workout/create" id="CreateWorkoutButton">
+						<Plus />
+					</RoundButton>
+					: <></>
+			}
 		</>
 	)
 

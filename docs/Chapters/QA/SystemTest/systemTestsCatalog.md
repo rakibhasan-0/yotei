@@ -1,0 +1,10 @@
+# System Test Catalog
+This file summarizes and briefly explains all implemented system tests. All system tests should be found here. 
+
+| Test file | Test name | Test scenario | Test data | Expected outcome |
+|-------|-------|--------|--------|--------|
+| [canaryTest.spec.ts](../../../../frontend/SystemTests/TestFiles/canaryTest.spec.ts) | Planering title should be visible if the fixtures work | Runs fixtures to render application homepage | N/A | Homepage is rendered, 'Planering' title is located |
+| [technique.spec.ts](../../../../frontend/SystemTests/TestFiles/techniques.spec.ts)| Create technique | Creates a new technique with a randomized name, asserts its existence then deletes it | A description, duration, and a randommized name | The newly created test is inserted into the database, then deleted |
+|| Next test in technique suite | Next tests scenario | Next tests data | Next tests outcome |
+| [workout.spec.ts](../../../../frontend/SystemTests/TestFiles/workout.spec.ts) | Workout is created and then deleted, should display success toast | Creates a new workout, adds 3 exercises and 3 techniques then saves it. After confirming that the workout is saved, it is deleted. | A randomized name and generic description. Three techniques (Kamae, neutral/beredd/gard), and three exercises (Armhävningar, vanliga/bred handposition/med klapp) | The newly created workout is inserted into the database with the desired name, description, and activities. After that its deleted |
+|  | Workout is created, then edited, then deleted | Creates a workout, adds 3 exercises and 3 techniques, then saves it. After save confirmation it opens the editing view and adds another technique. After saving again test asserts that the change was saved, then deletes the workout. | A workout object with name, description, two arrays, one with techniques and one with exercises | Workout is successfully edited and confirmation toast is visible |

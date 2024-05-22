@@ -4,7 +4,7 @@ import { AccountContext } from "../../context"
 import UserBoxGrading from "../../components/Grading/UserBoxGrading"
 import Button from "../../components/Common/Button/Button"
 import styles from "./GradingBefore.module.css"
-import { Printer } from "react-bootstrap-icons"
+import { Download } from "react-bootstrap-icons"
 import { useParams } from "react-router-dom"
 
 /**
@@ -20,27 +20,16 @@ export default function GradingAfter() {
 	const { gradingId } = useParams()
 	const navigate = useNavigate()
 	const [grading, setGrading] = useState([])
-	const[dateCreated, setDateCreated] = useState("")
+	const[totalAmountOfTechniques, setTotalAmountOfTechniques] = useState("")
+	const[fetchedResult, setFetchedResult] = useState([])
 	const [beltInfo, setBeltInfo] = useState({
 		belt_name: "",
 		color: "" 
 	})
-	
-	/**
-	 * Function to update the date of the grading.
-	 * @param {string} dateString - The date of the grading.
-	 * @returns {void}
-	 * @since 2024-05-15
-	 */
-	const updateDate = (dateString) => {
-		const date = new Date(dateString)
-		const hours = date.getHours()
-		const minutes = date.getMinutes()
-		const formattedHours = (hours < 10 ? "0" : "") + hours
-		const formattedMinutes = (minutes < 10 ? "0" : "") + minutes
-		const timeString = formattedHours + ":" + formattedMinutes
-		setDateCreated(timeString)
-	}
+	const [fetchedBelt, setFetchedBelt] = useState([])
+	const [ isGrading, setIsGrading ] = useState(false)
+	const [ isBelt, setIsBelt ] = useState(false)
+	const [ isExaminee, setIsExaminee ] = useState(false)
 
 	/**
 	 * Function to fetch the grading from the backend.
@@ -79,13 +68,77 @@ export default function GradingAfter() {
 	}
 
 	/**
-	 * Function to download the grading as a pdf.
+	 * Function that fetchs all of the results of each examinee.
+	 * @returns {Promise} The belt data.
+	 * @since 2024-05-15
 	 */
-	const downloadPdf  =   () => {
-		// fetch(`api/export/grading/${gradingId}`, {
-		//     method: "GET",
-		//     headers: { "Authorization": `Bearer ${token}` }  // Assuming the token is a bearer token
-		// })
+	const fetchExamineeResult = () => {
+		return fetch(`/api/examination/examresult/grading/${gradingId}`, {
+			method: "GET",
+			headers: { "token": token }
+		}).then(response => {
+			if(!response.ok){
+				throw new Error("Network response was not ok")
+			}
+			return response.json()
+		})
+	}
+
+	/**
+	 * Function that fetchs all of the results of each examinee.
+	 * @returns {Promise} The belt data.
+	 * @since 2024-05-15
+	 */
+	const fetchPdf = async () => {
+		console.log("Fetching PDF with grading id:", gradingId)
+		try {
+			const response = await fetch(`/api/examination/exportpdf/${gradingId}`, {
+				method: "GET",
+				headers: { "token": token }
+			})
+	
+			if (!response.ok) {
+				throw new Error("Network response was not ok")
+			}
+	
+			const base64String = await response.text()
+			const byteCharacters = window.atob(base64String) // Decode base64 string
+			const byteNumbers = new Array(byteCharacters.length)
+			for (let i = 0; i < byteCharacters.length; i++) {
+				byteNumbers[i] = byteCharacters.charCodeAt(i)
+			}
+			const byteArray = new Uint8Array(byteNumbers)
+			const blob = new Blob([byteArray], {type: "application/pdf"}) // Create a blob from the byte array
+			console.log("Blob created:", blob)
+			return blob
+		} catch (error) {
+			console.error("Error fetching PDF:", error)
+			return null
+		}
+	}
+	
+	/**
+	 * Function that creates a PDF by the result of the examination and downloads it.
+	 * @returns {void}
+	 */
+	const downloadPdf = async () => {
+		const pdfBlob = await fetchPdf()
+		if (pdfBlob) {
+			const url = window.URL.createObjectURL(pdfBlob)
+			console.log("URL created:", url)
+			const link = document.createElement("a")
+			link.href = url
+			link.setAttribute("download", "filename.pdf")
+			document.body.appendChild(link)
+			link.click()
+			setTimeout(() => { 
+				window.URL.revokeObjectURL(url)
+				link.remove()
+			}, 100)
+			window.URL.revokeObjectURL(url)
+			link.remove()
+			
+		}
 	}
 
 	/**
@@ -107,27 +160,47 @@ export default function GradingAfter() {
 	 * Fetches the grading and belt data when the component mounts.
 	 */
 	useEffect(() => {
+		
 		const fetchData = async () => {
 			try {
-				const [grading_data, belt_data] = await Promise.all([
+				const [grading_data, belt_data, result_data] = await Promise.all([
 					fetchGrading(),
-					fetchBelts()
+					fetchBelts(),
+					fetchExamineeResult()
 				])
+				
+				setIsGrading(true)
 				setGrading(grading_data)
-				updateDate(grading_data.createdAt)
-				const matchingBelt = belt_data.find(belt => belt.id === grading_data.beltId)
-				if (matchingBelt) {
-					setBeltInfo({
-						belt_name: matchingBelt.name,
-						color: "#" + matchingBelt.color
-					})
-				}
+
+				setIsBelt(true)
+				setFetchedBelt(belt_data)
+
+				setIsExaminee(true)
+				setTotalAmountOfTechniques(result_data.totalTechniques)
+				setFetchedResult(result_data)
+
 			} catch (error) {
 				console.error("There was a problem with the fetch operation:", error)
 			}
 		}
 		fetchData()
+
 	}, [])
+
+	useEffect(() => {
+		if(isGrading && isBelt && isExaminee){
+			const matchingBelt = fetchedBelt.find(belt => belt.id === grading.beltId)
+			if (matchingBelt) {
+				setBeltInfo({
+					belt_name: matchingBelt.name,
+					color: "#" + matchingBelt.color
+				})
+			}
+			setIsBelt(false)
+			setIsGrading(false)
+			setIsExaminee(false)
+		}
+	}, [grading, beltInfo, fetchedResult, isGrading, isBelt, isExaminee, fetchedBelt])
 
 	return (
 		<div className={styles.container}>
@@ -137,18 +210,21 @@ export default function GradingAfter() {
 						<div style={{ backgroundColor: beltInfo.color, borderRadius: "0.3rem", padding: "0px" }}>
 							<h2
 								style={{ color : beltInfo.color === "#201E1F" ? "white" : "black" }}
-							>{beltInfo.belt_name} bälte {dateCreated}</h2>
+							>{beltInfo.belt_name} bälte</h2>
 						</div>
 					</div>
 					<h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "10px", paddingBottom: "10px" }}>Summering</h1>
 				</div>
     
 				<div className={styles.scrollableContainer}>
-					{grading.examinees && grading.examinees.map((examinee) => (
+					{fetchedResult.examineeResults && fetchedResult.examineeResults.map((examinee) => (
 						<UserBoxGrading
-							key={examinee.examinee_id}
-							id={examinee.examinee_id}
-							name={examinee.name} />
+							key={examinee.examineeId}
+							id={examinee.examineeId}
+							name={examinee.name}
+							passedTechniques={examinee.passedTechniques}
+							totalAmountOfTechniques={totalAmountOfTechniques}
+						/>
 					))}
 				</div>
     
@@ -164,7 +240,7 @@ export default function GradingAfter() {
 							width={"60px"}
 							onClick={downloadPdf}
 						>
-							<Printer size={30} color="white" />
+							<Download size={30} color="white" />
 						</Button>
 					</div>
     

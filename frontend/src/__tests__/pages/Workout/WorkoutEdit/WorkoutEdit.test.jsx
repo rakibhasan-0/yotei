@@ -10,13 +10,15 @@ import { rest } from "msw"
 import { server } from "../../../server"
 import WorkoutEdit from "../../../../pages/Workout/WorkoutEdit"
 import WorkoutView from "../../../../pages/Workout/WorkoutView/WorkoutView"
+import { USER_PERMISSION_LIST_ALL } from "../../../../utils"
 
 /**
  * Tests for the workout edit page
  * 
- * @author Kiwi
+ * @author Kiwi, Team Mango
  * @version 1.0
  * @since 2024-04-23
+ * Updates: 2024-05-20: Added permissions to user to fix a test by giving it all permissions.
  */
 
 const api = jest.fn()
@@ -297,7 +299,7 @@ describe("WorkoutEdit", () => {
 		)
 
 		render ( //eslint-disable-next-line no-dupe-keys
-			<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", undefined }}>
+			<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: 1, permissions: USER_PERMISSION_LIST_ALL, undefined }}>
 				<RouterProvider router={router}/>
 			</AccountContext.Provider>
 		)

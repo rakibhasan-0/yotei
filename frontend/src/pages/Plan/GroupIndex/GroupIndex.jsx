@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from "react"
-import { isEditor } from "../../../utils"
-import { setError as setErrorToast } from "../../../utils"
+import { setError as setErrorToast, canCreateGroups, canEditGroups } from "../../../utils"
 import { AccountContext } from "../../../context"
 import style from "./GroupIndex.module.css"
 import BeltBox from "../../../components/Plan/BeltBox"
@@ -17,13 +16,14 @@ import Spinner from "../../../components/Common/Spinner/Spinner"
  * @version 2.1
  * @since 2024-04-29
  * @returns A group index page
+ * @update Team Mango (2024-05-21) added new check for create group button to new user rights check.
  * Updated: 2024-05-06
  */
 export default function GroupIndex() {
 	const [groups, setGroups] = useState([])
 	const [searchText, setSearchText] = useState()
 	const context = useContext(AccountContext)
-	const { token, userId } = context
+	const { token } = context
 	const [loading, setLoading] = useState(true)
 	const [groupsEmpty, setGroupsEmpty] = useState(true) //Boolean to check if there are no groups.
 
@@ -78,7 +78,8 @@ export default function GroupIndex() {
 								<div className={style.item}>
 									<BeltBox id={index} belts={group.belts} />
 								</div>
-								<div style = {{marginLeft: "5px", display: "flex"}}> { (isEditor(context) || userId == group.userId) && (
+
+								<div style = {{marginLeft: "5px", display: "flex"}}> { (canEditGroups(context, group)) && (
 									<>
 										<Link to={`/plan/edit/${group.id}`}>
 											<Pencil size={24} color="var(--red-primary)"/>
@@ -86,7 +87,7 @@ export default function GroupIndex() {
 										<div style={{ width: "20px" }}/>
 										<Link to={`./statistics/${group.id}`}>
 											<GraphUp
-												id="statistics-page-button"
+												id={`statistics-page-button-${group.id}`}
 												size="24px"
 												color="var(--red-primary)"
 												style={{ cursor: "pointer" }}
@@ -104,10 +105,16 @@ export default function GroupIndex() {
 					</div>)
 						: <div id = {"Groups-are-visible"}></div> //Default is nothing. This div is for testing!
 					}
+					
+					{
 
-					<RoundButton linkTo={"/plan/create"}>
-						<Plus className="plus-icon" />
-					</RoundButton>
+						(canCreateGroups(context)) ?
+							<RoundButton linkTo={"/plan/create"}>
+								<Plus className="plus-icon" />
+							</RoundButton>
+							: <></>
+					}
+
 				</div>
 			)}
 		</div>

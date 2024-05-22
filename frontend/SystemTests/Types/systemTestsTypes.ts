@@ -23,11 +23,20 @@ export type Account = {
   userId?: string,
 };
 
-// Enum for the different types of roles. 
+// Enum for the different types of roles. This needs to be updated when permissions are implemented. 
 export enum Role {
   user = 0,
   admin = 1,
   editor = 2,
+}
+
+// Activity can be either Technique or Exercise
+export type Activity = {
+  name?: string,
+  description?: string,
+  time?: number, // Subject to change, may use number of repetitions instead of duration
+  tag?: string,
+  mediaLink?: string
 }
 
 // Technique.
@@ -37,4 +46,24 @@ export type Technique = {
   time?: number,
   tag?: string,
   mediaLink?: string
+}
+
+// Exercise
+export type Exercise = {
+  name?: string,
+  description?: string,
+  time?: number,
+  tag?: string,
+  mediaLink?: string
+}
+
+// Workout
+export type Workout = {
+  name?: string,
+  description?: string,
+  techniques?: Technique[],
+  exercises?: Exercise[],
+  isPrivate?: boolean,
+  hasAccess?: Account[],
+  tags?: string[]
 }

@@ -1,60 +1,59 @@
 .yoteiButton {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: fit-content;
-    padding: 0.6rem;
-    transition: all 0.2s ease-in-out;
-    user-select: none;
-    border: 2px solid var(--button-border);
-    border-radius: var(--border-radius);
+	justify-content: center;
+	align-items: center;
+	width: fit-content;
+	padding: 0.6rem;
+	transition: all 0.2s ease-in-out;
+	user-select: none;
+	border: 2px solid var(--button-border);
+	border-radius: var(--border-radius);
+	line-height: 1.1rem;
 }
 
 .yoteiButtonNormal {
-    background-color: var(--red-primary);
-    color: whitesmoke;
+	background-color: var(--red-primary);
+	color: whitesmoke;
 }
 
 .yoteiButton:hover {
-    background-color: var(--button-hover);
+	background-color: var(--button-hover);
 }
 
 .yoteiButton:active {
-    background-color: var(--button-press);
+	background-color: var(--button-press);
 }
 
 .yoteiButton:disabled {
 	background-color: var(--body);
 	border: none;
-
 }
 
 .yoteiButton > * {
-    padding: 0;
-    margin: 0;
-    color: whitesmoke;
-    min-height: 1rem;
+	padding: 0;
+	margin: 0;
+	color: whitesmoke;
+	min-height: 1rem;
 }
 
 .yoteiButton img {
-    filter: brightness(0) invert(1);
+	filter: brightness(0) invert(1);
 }
 
 /* Back button */
 
 .yoteiButtonBack > * {
-    color: var(--button-border);
+	color: var(--button-border);
 }
 
 .yoteiButtonBack:hover,
 .yoteiButtonBack:hover > * {
-    color: whitesmoke;
+	color: whitesmoke;
 }
 
 .yoteiButtonBack {
-    background-color: white;
+	background-color: white;
 }
 
 .toggled {
-    background-color: var(--button-hover);
+	background-color: var(--button-hover);
 }

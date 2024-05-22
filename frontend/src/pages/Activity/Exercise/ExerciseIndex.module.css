@@ -37,3 +37,11 @@
 .selectWorkout{
     padding-top: 12px;
 }
+
+.exercise-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	text-align: center;
+	margin-top: 0;
+}
