@@ -1,11 +1,11 @@
 import "@testing-library/jest-dom"
-import {render, screen, fireEvent, configure, waitFor} from "@testing-library/react"
+import {render, screen, fireEvent, configure} from "@testing-library/react"
 import { BrowserRouter } from "react-router-dom"
 import Statistics from "../../../pages/Statistics/StatisticsIndex"
 import StatisticsPopUp from "../../../pages/Statistics/StatisticsPopUp"
 import FilterStatistics from "../../../pages/Statistics/FilterStatistics"
 import GradingStatisticsPopup from "../../../pages/Statistics/GradingStatisticsPopup"
-import React from "react";
+import React from "react"
 configure({ testIdAttribute: "id" })
 
 /**
