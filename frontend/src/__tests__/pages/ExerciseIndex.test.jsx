@@ -7,6 +7,14 @@ import {render, configure, screen, waitFor} from "@testing-library/react"
 import ExerciseIndex from "../../pages/Activity/Exercise/ExerciseIndex"
 import { MemoryRouter } from "react-router-dom"
 import { AccountContext } from "../../context"
+import { USER_PERMISSION_LIST_ALL } from "../../utils"
+
+/**
+ * Unit-test for the Exercise Index page, 
+ *
+ * @author UNKNOWN, Team Mango (Group 4) (2024-05-22)
+ * Updated 2024-05-22: Added so admin have all permissions according to new permissions implementation.
+ */
 
 configure({testIdAttribute: "id"})
 const requestSpy = jest.fn()
@@ -80,7 +88,7 @@ describe("ExerciseIndex should render with all components", () => {
 
 	beforeEach(() => {
 		render( //eslint-disable-line
-			<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "" }}>
+			<AccountContext.Provider value={{ undefined, role: "ADMIN", permissions: USER_PERMISSION_LIST_ALL, userId: "" }}>
 				<MemoryRouter>
 					<ExerciseIndex />
 				</MemoryRouter>

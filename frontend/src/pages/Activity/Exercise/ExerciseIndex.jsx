@@ -12,7 +12,7 @@ import Sorter from "../../../components/Common/Sorting/Sorter"
 import ExerciseCard from "../../../components/Common/ExerciseCard/ExerciseListItem"
 import InfiniteScrollComponent from "../../../components/Common/List/InfiniteScrollComponent"
 import Spinner from "../../../components/Common/Spinner/Spinner"
-import { isEditor } from "../../../utils"
+import { canCreateAndEditActivity } from "../../../utils"
 import Popup from "../../../components/Common/Popup/Popup"
 import { AddToListPopupContent } from "../../../components/Activity/AddToListPopupContent"
 import styles from "./ExerciseIndex.module.css"
@@ -22,11 +22,12 @@ import { Link } from "react-router-dom"
 /**
  * Displays a searchbar, a sorter and a list of exercises.
  * 
- * @author Hawaii, Verona, Phoenix, Cyclops, Team Mango, Team Coconut, Team Tomato, Team Durian, Team Kiwi
+ * @author Hawaii, Verona, Phoenix, Cyclops, Team Mango, Team Coconut, Team Tomato, Team Durian, Team Kiwi, Team Mango
  * @since 2024-04-18
  * @version 3.3
  * @update v3.3 (2024-05-02 Team Kiwi) removed header from html, also rerouted button from ./create to ./exercise/create
  * @updated 2024-05-16 Team Durian, removed title height
+ * @updated 2024-05-22 Team Mango: Changed check for adding exercise according to new permissions.
  */
 export default function ExerciseIndex() {
 	const sortOptions = [
@@ -166,7 +167,8 @@ export default function ExerciseIndex() {
 			{/* Spacing so the button doesn't cover a exercise card */}
 			<br/><br/><br/><br/><br/>
 
-			{isEditor(context) && 
+			
+			{canCreateAndEditActivity(context) && 
 			<RoundButton linkTo={"exercise/create"} id={"exercise-round-button"}  style={{maxWidth: "5px"}}>
 				<Plus/>
 			</RoundButton>
