@@ -57,7 +57,7 @@ export default function Component({ item, text, children, id, autoClose, errorMe
 			<div id={id} className={styles.listContainer} style={errorStyle}>
 				<div style={style ? style : {}} className={!style ? styles.listHeader : ""} onClick={(e) => { setToggled(!toggled); handleOnClick(e)}} id={`${id}-header`}>
 					{checkBox && (
-						<div className={styles.check}>
+						<div className={styles.check} onClick={(e) => e.stopPropagation()}>
 							{checkBox}
 						</div>
 					)}
