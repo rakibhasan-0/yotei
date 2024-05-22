@@ -44,6 +44,7 @@ export default function Profile() {
 	const [usernameButtonState, setUsernameButtonDisabled] = useState(false)
 	const [lists, setLists] = useState([])
 	const [map, mapActions] = useMap()
+	const [fetchedLists, setFetchedLists] = useState(false)
 	const [amountOfFavouriteWorkouts, setAmountOfFavouriteWorkouts] = useState(0)
 
 
