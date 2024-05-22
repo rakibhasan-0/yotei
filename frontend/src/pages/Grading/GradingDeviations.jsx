@@ -123,6 +123,7 @@ export default function GradingDeviations() {
                 return
             }
             const json = await response.json()
+            console.log(json)
             setResultList(json)
         }
 
@@ -190,7 +191,6 @@ export default function GradingDeviations() {
                 return
             }
             const json = await response.json()
-            console.log(json)
             setGroupComments(json)
         }
 
@@ -206,7 +206,7 @@ export default function GradingDeviations() {
     function hasPassed(techniqueName) {
         for(let i = 0; i < resultList.length; i++) {
             if(resultList[i] != null) {
-                if(resultList[i]["technique_name"] == techniqueName) {
+                if(resultList[i]["techniqueName"] == techniqueName) {
                     return resultList[i]["pass"]
                 }
             }
