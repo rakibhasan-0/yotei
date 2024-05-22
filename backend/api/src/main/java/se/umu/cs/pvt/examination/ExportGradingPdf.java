@@ -72,7 +72,7 @@ public class ExportGradingPdf {
 
         String currentPath = new java.io.File(".").getCanonicalPath();
 
-        fontPath = currentPath + "/../infra/fonts/NotoSans-Regular.ttf";
+        fontPath = currentPath + "/infra/fonts/NotoSans-Regular.ttf";
 
         Map<String, Object> gradingProtocolObj = (Map<String, Object>) protocol.get("examination_protocol");
         this.code = (String)gradingProtocolObj.get("code");
@@ -173,7 +173,7 @@ public class ExportGradingPdf {
      * @throws IOException
      */
     private void drawImage(PDPage page, PDPageContentStream contentStream) throws IOException {
-        String path = System.getProperty("user.dir") + "/../frontend/public/ubk-logga.jpg";
+        String path = System.getProperty("user.dir") + "/frontend/public/ubk-logga.jpg";
         int x = (int)page.getMediaBox().getWidth() - 155;
         int y = pageHeight-60;
         PDImageXObject pdImage = PDImageXObject.createFromFile(path, document);
