@@ -149,7 +149,6 @@ export default function DuringGrading() {
 			}
 			const step = await response.json()
 			step.techniqueStepNum = currentTechniqueStep
-			console.log("response grading", step.techniqueStepNum)
 
 			const update = await fetch("/api/examination/grading", {
 				method: "PUT",
@@ -188,7 +187,6 @@ export default function DuringGrading() {
 
 				const current_grading_examinees = getExamineesCurrentGrading(all_examinees)
 				setExaminees(current_grading_examinees)
-				console.log("Fetched examinees in this grading: ", current_grading_examinees)
 			} catch (ex) {
 				setErrorToast("Kunde inte hämta alla utövare")
 				console.error(ex)
@@ -215,7 +213,6 @@ export default function DuringGrading() {
 					// Get only pairs in this grading
 					const pair_examinees_current_grading = getPairsInCurrrentGrading(pairs_json)
 					setPairs(pair_examinees_current_grading)
-					console.log("Fetched pairs in this examination: ", pair_examinees_current_grading)
 				} catch (ex) {
 					setErrorToast("Kunde inte hämta alla par")
 					console.error(ex)
@@ -245,12 +242,6 @@ export default function DuringGrading() {
 			fetchTechniqueResults(techniqueNameList[currentTechniqueStep].technique.text, token) 
 		}
 	}, [currentTechniqueStep])
-    
-	// Debugging the examinee states.    
-	useEffect(() => {
-		console.log("leftExamineeState:", leftExamineeState)
-		console.log("rightExamineeState:", rightExamineeState)
-	}, [leftExamineeState, rightExamineeState])
 
 
 	// Will handle the api call that will update the database with the result. 
@@ -264,8 +255,6 @@ export default function DuringGrading() {
 	const examineeClick = (newState, technique, pairIndex, buttonId) => {
 		if (isSubmitting) return
 		setIsSubmitting(true)
-
-		console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}, with new state ${newState}`)
 		// Check what state the button is in and send the proper information to DB.
 		let examinee_clicked = buttonId.endsWith("left") ? pairs[pairIndex].leftId : pairs[pairIndex].rightId
 		addExamineeResult(examinee_clicked, `${technique}`, newState)
@@ -424,7 +413,6 @@ export default function DuringGrading() {
 
 	function getExamineeStatus(examineeId, results) {
 		const result = results.find(res => res.examineeId === examineeId)
-		console.log("id:", examineeId, "res:", result)
     
 		if (!result) {
 			return "default"
@@ -466,8 +454,6 @@ export default function DuringGrading() {
 	function updateStep(grading_data) {
 		delete grading_data.examinees
 		grading_data.step = 3
-
-		console.log(grading_data)
 
 		return fetch("/api/examination/grading", {
 			method: "PUT",
@@ -526,7 +512,6 @@ export default function DuringGrading() {
 			const response = await postExamineeResult(examineeResultToPost, token)
 				.catch(() => setErrorToast("Kunde inte lägga till resultat. Kolla internetuppkoppling."))
 			const responseJson = await response.json()
-			// console.log(responseJson)
 			// Create a copy of the current state
 			let tempRes = [...results]
 
@@ -535,7 +520,6 @@ export default function DuringGrading() {
 
 			// Update the state with the modified copy
 			setResults(tempRes)
-			// console.log("Response: ", JSON.stringify(responseJson))
 		}
 		setIsSubmitting(false)
 	}
@@ -553,7 +537,6 @@ export default function DuringGrading() {
 			headers: { "Content-Type": "application/json", "token": token },
 			body: JSON.stringify(result)
 		}
-		// console.log("Fetched POST: ", JSON.stringify(result))
 
 		return fetch("/api/examination/examresult", requestOptions)
 			.then(response => { return response })
@@ -573,8 +556,6 @@ export default function DuringGrading() {
 			headers: { "Content-Type": "application/json", "token": token },
 			body: JSON.stringify(result)
 		}
-
-		// console.log("Fetched PUT: ", result)
 
 		return fetch("/api/examination/examresult", requestOptions)
 			.then(response => { return response })
@@ -659,7 +640,7 @@ export default function DuringGrading() {
 			headers: { "token": token },
 		}
 		try {
-			const response = await fetch("/api/examination/examresult/all", requestOptions)
+			const response = await fetch(`/api/examination/examresult/${gradingId}`, requestOptions)
             
 			if (!response.ok) {
 				setLoading(false)
@@ -673,7 +654,6 @@ export default function DuringGrading() {
 			const filtered = data
 				.filter(item => item.techniqueName === technique)
 
-			// console.log("filtered results: ", filtered);
 			setResults(filtered)
 			setLoading(false)
 		} catch (error) {
