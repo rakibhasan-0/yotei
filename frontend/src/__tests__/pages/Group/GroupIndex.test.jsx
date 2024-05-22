@@ -25,10 +25,10 @@ jest.mock("react-router-dom", () => ({
 	Link: jest.fn().mockImplementation(({ children }) => children),
 }))
 
-jest.mock('../../../utils', () => ({
-	...jest.requireActual('../../../utils'),
+jest.mock("../../../utils", () => ({
+	...jest.requireActual("../../../utils"),
 	canEditGroups: jest.fn().mockReturnValue(true),
-}));
+}))
   
 
 test("Should render title on init", async () => {
