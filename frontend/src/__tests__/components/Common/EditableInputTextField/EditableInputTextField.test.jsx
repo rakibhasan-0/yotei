@@ -16,38 +16,38 @@ import { BrowserRouter } from "react-router-dom"
 configure({testIdAttribute: "id"})
 
 describe("Initialization", () => {
-    test("Should contain initial text", () => {
-        render(
-            <BrowserRouter>
-                <EditableInputTextField id="field" item={"Hello"} />
-            </BrowserRouter>
-        )
-        expect(screen.getByText("Hello")).toBeInTheDocument()
-    })
+	test("Should contain initial text", () => {
+		render(
+			<BrowserRouter>
+				<EditableInputTextField id="field" item={"Hello"} />
+			</BrowserRouter>
+		)
+		expect(screen.getByText("Hello")).toBeInTheDocument()
+	})
 
-    test("Should have correct id", () => {
-        render(
-            <BrowserRouter>
-                <EditableInputTextField id="editableID" />
-            </BrowserRouter>
-        )
-        expect(screen.getByTestId("editableID")).toBeInTheDocument()
-    })
+	test("Should have correct id", () => {
+		render(
+			<BrowserRouter>
+				<EditableInputTextField id="editableID" />
+			</BrowserRouter>
+		)
+		expect(screen.getByTestId("editableID")).toBeInTheDocument()
+	})
 })
 
 describe("Functionality", () => {
-    test("Opens edit window when clicked", () => {
-        render(
-            <BrowserRouter>
-                <EditableInputTextField id="field" item="Hello there!"/>
-            </BrowserRouter>
-        )
-        expect(screen.queryByTestId("edit-element")).toBeNull()
-        fireEvent.click(screen.getByTestId("edit-clickable"))
-        expect(screen.getByTestId("edit-element")).toBeInTheDocument()
-    })
+	test("Opens edit window when clicked", () => {
+		render(
+			<BrowserRouter>
+				<EditableInputTextField id="field" item="Hello there!"/>
+			</BrowserRouter>
+		)
+		expect(screen.queryByTestId("edit-element")).toBeNull()
+		fireEvent.click(screen.getByTestId("edit-clickable"))
+		expect(screen.getByTestId("edit-element")).toBeInTheDocument()
+	})
 
-    /*test("Calls onedit on enter", () => {
+	/*test("Calls onedit on enter", () => {
         const onEditFn = jest.fn()
         const validateFn = jest.fn()
         render(
