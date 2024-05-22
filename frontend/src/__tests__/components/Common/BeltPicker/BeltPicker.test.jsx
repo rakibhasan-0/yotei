@@ -14,7 +14,7 @@ configure({ testIdAttribute: "id" })
 
 /**
  * Set up mock server to mock the api call to get all belts
- * @updated 2024-05-20 Added inverted belts to the mock data and tests
+ * @updated 2024-05-20, Team Kiwi: Added inverted belts to the mock data and tests
  */
 beforeEach(() => {
 	// ARRANGE
