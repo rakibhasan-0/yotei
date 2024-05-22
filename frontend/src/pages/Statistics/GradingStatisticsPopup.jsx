@@ -28,8 +28,6 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 	const [beltID, setBeltID] = useState(null)
 	const [loading, setLoading] = useState(false)
 	const [data, setData] = useState([])
-	console.log(datesFrom)
-	console.log(datesTo)
 
 	useEffect(() => {
 		if (belts.length > 0) {
