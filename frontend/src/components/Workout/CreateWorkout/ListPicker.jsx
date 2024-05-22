@@ -53,7 +53,7 @@ export default function ListPicker({ onFilterChange }) {
                 <div className={styles.filterBorder}>
 					{filterOptions.map((option, index) => (
 						<label className={`${styles.filterItems} filterItems`} key={index}>
-							<CheckBox label={option.label} checked={filter.includes(option)} onClick={() => onSelect(option)} />
+							<CheckBox label={option.label} checked={filter.some(opt => opt.label === option.label)} onClick={() => onSelect(option)} />
 						</label>
 					))}
 				</div>

@@ -155,6 +155,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 		{ label: "Namn: Ö-A", cmp: (a, b) => { return -a.name.localeCompare(b.name) } }
 	]
 	const [sortLists, setSortLists] = useState(sortOptionsLists[0])
+	const [filterCount, setFilterCount] = useState(0)
 
 
 	const searchCount = useRef(0)
@@ -280,10 +281,11 @@ function AddActivity({ id, setShowActivityInfo }) {
 	useEffect(() => {
 		if (!hasLoadedData) return
 
+		setFilterCount(listFilter.length)
 		setFetchedLists(false)
 		setLists(lists)
 		fetchingList()
-	}, [searchListText, hasLoadedData, listUpdate, sortLists])
+	}, [searchListText, hasLoadedData, listUpdate, sortLists, listFilter])
 
 
 	/**
@@ -460,17 +462,16 @@ function AddActivity({ id, setShowActivityInfo }) {
         setListFilter(newListFilter);
     }
 
-
 	/**
 	 * Fetches the lists from the backend, either from cache or by a new API-call.
 	 */
 	function fetchingList() {
-		const author = false
-		const hidden = false
-		const shared = false
-		if (listFilter.includes("Mina listor")) author = true
-		if (listFilter.includes("Publika listor")) hidden = true
-		if (listFilter.includes("Delade med mig")) shared = true
+		let author = false
+		let hidden = false
+		let shared = false
+		if (listFilter.some(opt => opt.label === "Mina listor")) author = true;
+		if (listFilter.some(opt => opt.label === "Publika listor")) hidden = true;
+		if (listFilter.some(opt => opt.label === "Delade med mig")) shared = true;
 		
 		const args = {
 			text: searchListText,
@@ -482,8 +483,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 		getLists(args, token, map, mapActions, (result) => {
 			if (result.error) return
 			
-			// Extract the 'id' and 'name' fields from each item in the result used in displaying the list.
-			
+			// Extract the fields from each item in the result used in displaying the list.
 			const lists = result.results.map(item => ({
 
 				id: item.id,
@@ -493,8 +493,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 					username: item.author.username
 				},
 				hidden: item.hidden,
-				date: item.date,
-				isShared: item.is_shared
+				date: item.date
 			}))
 			
 			setLists(lists.sort(sortLists.cmp))
@@ -654,7 +653,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 							<NewSorter onSortChange={setSortLists} id="ei-sort" selected={sortLists} options={sortOptionsLists} />
 
 
-							<FilterContainer id="ei-filter" title="Filtrering" numFilters={0}>
+							<FilterContainer id="ei-filter" title="Filtrering" numFilters={filterCount}>
 								<ListPicker onFilterChange={handleListFilterChange} />
 							</FilterContainer>
 
