@@ -626,7 +626,7 @@ public class ExaminationController {
 
         System.out.println(examinationProtocolRepository.findByBeltId(grading.get().getBeltId()).getExaminationProtocol().toString());
 
-        ExportGradingPdf pdfExport = new ExportGradingPdf(examinationProtocolRepository.findByBeltId(grading.get().getBeltId()).getExaminationProtocol().toString(),gradingRepository.findById(grading_id).get(), examineeRepository.findAll(), examinationResultRepository.findAll(), examinationCommentRepository.findByGradingId(grading_id), examineePairRepository.findAll());
+        ExportGradingPdf pdfExport = new ExportGradingPdf(examinationProtocolRepository.findByBeltId(grading.get().getBeltId()).getExaminationProtocol().toString(),gradingRepository.findById(grading_id).get(), examineeRepository.findByGradingId(grading_id), examinationResultRepository.findAll(), examinationCommentRepository.findByGradingId(grading_id), examineePairRepository.findAll());
 
         try {
             InputStream stream = pdfExport.generate();
