@@ -540,29 +540,29 @@ export function workoutCreateReducer(state, action) {
 		tempState.popupState.currentlyEditing.data = action.payload
 		return tempState
 	
-		case "CHECK_ALL_ACTIVITIES": {
-			const allActivities = action.payload;
-			const mergedActivities = [...tempState.checkedActivities, ...allActivities];
+	case "CHECK_ALL_ACTIVITIES": {
+		const allActivities = action.payload
+		const mergedActivities = [...tempState.checkedActivities, ...allActivities]
 		
-			// Remove duplicates
-			tempState.checkedActivities = mergedActivities.filter((activity, index, self) =>
-				index === self.findIndex((t) => (
-					t.type === 'technique' ? t.techniqueID === activity.techniqueID : t.id === activity.id
-				))
-			);
+		// Remove duplicates
+		tempState.checkedActivities = mergedActivities.filter((activity, index, self) =>
+			index === self.findIndex((t) => (
+				t.type === "technique" ? t.techniqueID === activity.techniqueID : t.id === activity.id
+			))
+		)
 		
-			return tempState;
-		}
+		return tempState
+	}
 	case "UNCHECK_ALL_ACTIVITIES": {
-		const activitiesToUncheck = action.payload;
-		const activitiesToUncheckIds = activitiesToUncheck.map(activity => activity.type === 'technique' ? activity.techniqueID : activity.id);
+		const activitiesToUncheck = action.payload
+		const activitiesToUncheckIds = activitiesToUncheck.map(activity => activity.type === "technique" ? activity.techniqueID : activity.id)
 	
 		tempState.checkedActivities = tempState.checkedActivities.filter(activity => {
-			const activityId = activity.type === 'technique' ? activity.techniqueID : activity.id;
-			return !activitiesToUncheckIds.includes(activityId);
-		});
+			const activityId = activity.type === "technique" ? activity.techniqueID : activity.id
+			return !activitiesToUncheckIds.includes(activityId)
+		})
 	
-		return tempState;
+		return tempState
 	}
 	default:
 		return state
