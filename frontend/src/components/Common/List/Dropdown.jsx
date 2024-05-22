@@ -18,6 +18,7 @@ import styles from "./Dropdown.module.css"
  *	id       @type {String}   ID of the component
  * 	onClick  @type {Function} Function when an item is pressed in the drop down
  * 	checkBox @type {JSX}	  If a checkbox is wanted, send it as a prop
+ * 	style	 @type {String}	  Send a string of CSS to style the div listHeader
  * 
  * Example usage:
  * 
