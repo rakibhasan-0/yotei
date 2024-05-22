@@ -1,5 +1,5 @@
 /** @jest-environment jsdom */
-import { USER_PERMISSION_LIST_ALL, isAdminUser, isEditor } from "../../utils"
+import { USER_PERMISSION_LIST_ALL, isAdminUser } from "../../utils"
 import { configure } from "@testing-library/react"
 import { Roles } from "../../context"
 import "@testing-library/jest-dom"
