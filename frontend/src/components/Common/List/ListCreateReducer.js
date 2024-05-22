@@ -149,7 +149,7 @@ export function listCreateReducer(state, action) {
 		return tempState
 	}
 	case "REMOVE_FROM_LIST":
-		/*console.log("Hewwo! :3")
+		/*
 		return tempState.data.filter(function (el) {
 			return el.id != activity.id
 		})*/
