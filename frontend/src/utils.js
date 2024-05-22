@@ -81,7 +81,7 @@ export function canCreateSession(user) {
  * @param {} context AccountContext from user.
  * @returns True if user is alloowed to edit users, else false. 
  */
-export function canEditUsers(context) {
+export function isAdminUser(context) {
 	if (!context.permissions) return false
 	return (context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS))
 }

@@ -3,7 +3,7 @@ import Button from "../Button/Button"
 import { List as HamburgerIcon, X as CloseIcon } from "react-bootstrap-icons"
 import styles from "./Navbar.module.css"
 import { useNavigate } from "react-router"
-import { canEditUsers } from "../../../utils"
+import { isAdminUser } from "../../../utils"
 import { AccountContext } from "../../../context"
 
 /**
@@ -71,7 +71,7 @@ function Navbar({ testId }) {
 				</Button>
 				
         
-				{ canEditUsers(context) ? 
+				{ isAdminUser(context) ? 
 					<Button width={"100%"} onClick={() => navigateAndClose("/admin")}>
 						<h1 className={styles.commonNavbarButton}>Admin</h1>
 					</Button>
