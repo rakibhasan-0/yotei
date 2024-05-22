@@ -24,13 +24,13 @@ import { Link } from "react-router-dom"
  * @since 2023-05-08
  * @version 1.0
  */
-export default function RoleListItem({ item, detailURL, /*id,*/ index, checkBox }) {
+export default function RoleListItem({ item, detailURL, id, index, checkBox }) {
 
 	return (
-		<div className={styles["role-list-container"]} data-testid="RoleListItem">
+		<div className={styles["role-list-container"]} data-testid="RoleListItem" id={"RoleListItem-" + item}>
 			<div className={styles["role-list-header"]} style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
 				{checkBox}
-				<Link to={detailURL} data-testid="RoleListItem-link" style={{width: "100%"}}>
+				<Link to={detailURL + id} data-testid="RoleListItem-link" style={{width: "100%"}}>
 					<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
 						<div style={{display: "flex", alignItems: "center"}}>
 							<div className={styles["href-link"]} style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="RoleListItem-item">{item}</div>

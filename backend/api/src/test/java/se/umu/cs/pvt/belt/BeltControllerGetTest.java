@@ -40,8 +40,8 @@ public class BeltControllerGetTest {
         assertThat(controller).isNotNull();
     }
 
-    private final Belt belt1 = new Belt(1L, "Vit", "FFFFFF", true);
-    private final Belt belt2 = new Belt(1L, "Svart", "000000", false);
+    private final Belt belt1 = new Belt(1L, "Vit", "FFFFFF", true, false);
+    private final Belt belt2 = new Belt(1L, "Svart", "000000", false, false);
     private ArrayList<Belt> belts;
     
      

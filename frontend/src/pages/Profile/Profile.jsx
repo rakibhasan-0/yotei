@@ -16,10 +16,10 @@ import ProfileListItem from "./ProfileListItem"
 import { Lock, Unlock, Eye } from "react-bootstrap-icons"
 
 /**
- * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3)
+ * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3), Team Tomato (6)
  * @since 2024-05-16
  * @version 3.0
- * @updated 2024-05-20
+ * @updated 2024-05-21
  *
  * @returns a page for managing the user's account
  */
@@ -46,6 +46,9 @@ export default function Profile() {
 	const [fetchedLists, setFetchedLists] = useState(false)
 	const [lists, setLists] = useState([])
 	const [map, mapActions] = useMap()
+	const [isFavouriteWorkoutsFetched, setIsFavouriteWorkoutsFetched] = useState(false)
+
+	const [amountOfFavouriteWorkouts, setAmountOfFavouriteWorkouts] = useState(0)
 
 	//TODO feature toggle
 	const [isListsEnabled] = useState(false)
@@ -61,6 +64,28 @@ export default function Profile() {
 		hidden: false,
 	}
 	const Roll = context.role || "Vet ej"
+
+	//Future-proofs so that it will get all of the favourite workouts until 2060
+	const getAmountOfFavouriteWorkouts= async() =>{
+		const args = {
+			from: "1980-01-01",
+			to: "2060-01-01",
+			selectedTags:"",
+			id: userId,
+			text: "",
+			isFavorite: true
+		}
+		getWorkouts(args, token, null, null, (response) => {
+			if(response.error) {
+				setAmountOfFavouriteWorkouts(0)
+			} else {
+				setAmountOfFavouriteWorkouts(response.results.length)
+			}
+			setIsFavouriteWorkoutsFetched(true)
+		})
+
+	}
+
 
 	/* Workout management */
 
@@ -91,6 +116,18 @@ export default function Profile() {
 			</>
 		)
 	}
+
+	useEffect(() => {
+		getAmountOfFavouriteWorkouts()
+	}, [])
+	useEffect(() => {
+		if (isFavouriteWorkoutsFetched) {
+			workout.size = amountOfFavouriteWorkouts
+			setFetchedLists(false)
+			setLists([workout])
+			fetchingList()
+		}
+	}, [isFavouriteWorkoutsFetched, amountOfFavouriteWorkouts])
 
 	/**
 	 * Fetches lists when the component is mounted or when the
@@ -185,23 +222,18 @@ export default function Profile() {
 
 	const getIconFromState = (state) => {
 		if (state.id == -1) {
-			console.log("Favourite!")
 			//Här borde jag fixa en route till favoritsidans grej :)
 			return <img src="../../../assets/images/starFill.svg" />
 		}
 		if (state.hidden === true && state.author.userId == userId) {
-			console.log("Locked")
 			return <Lock size={36} />
 		}
 		if (state.hidden === true && state.author.userId != userId) {
-			console.log("Shared")
 			return <Unlock size={36} />
 		}
 		if (state.hidden === false && state.author.userId === userId) {
-			console.log("Public")
 			return <Eye size={36} />
 		}
-		console.log("Ospecat fall, borde ej kunna nå listor som publika men inte delade med oss!")
 		return <Eye size={36} />
 	}
 
@@ -217,6 +249,7 @@ export default function Profile() {
 		getLists(args, token, map, mapActions, (result) => {
 			if (result.error) {
 				//Should handle error
+				setFetchedLists(true)
 				return
 			}
 
@@ -234,19 +267,17 @@ export default function Profile() {
 		})
 	}
 
-	console.log("Console.log so that linter doesnt cause problems: " + fetchedLists)
-
 	return (
 		<Tabs defaultActiveKey={"MyWorkouts"} className={style.tabs}>
 			{isListsEnabled && (
-				<Tab eventKey={"FavoriteWorkouts"} title={"Mina listor"} className={style.tab}>
+				<Tab eventKey={"MyLists"} title={"Mina listor"} className={style.tab}>
 					<SearchBar
 						id="searchbar-workouts-1"
 						placeholder="Sök efter listor"
 						text={searchText}
 						onChange={setSearchText}
 					/>
-					{loading ? (
+					{!fetchedLists ? (
 						<Spinner />
 					) : (
 						lists.map((list) => <ProfileListItem key={list.id} item={list} Icon={getIconFromState(list)} />)

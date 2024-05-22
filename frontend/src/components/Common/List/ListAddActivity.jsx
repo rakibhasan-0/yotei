@@ -30,11 +30,9 @@ import { useCookies } from "react-cookie"
  * @param {string} id A unique id of the component (Testing purposes)
  * @param {function} setShowActivityInfo Callback function to report selected activities
  *  
- * @author Kraken (Grupp 7), Team Coconut, Team Kiwi
- * @since 2024-04-19
- * @updated 2024-04-22 Kiwi, Fixed so searchbar is not cleared unless component is closed, also so the active tab will show
- * @updated 2024-04-23 Kiwi, Kihon checkbox is now saved when clicking and redirecting to a technique.
- * @updated 2024-05-02 Kiwi, Fixed search so that current response won't be concatenated with previous.
+ * @author Team Tomato (6)
+ * @since 2024-05-21
+ * Based on AddActivity.jsx
  */
 function AddActivity({ id, setShowActivityInfo }) {
 	const { token } = useContext(AccountContext)
@@ -89,7 +87,6 @@ function AddActivity({ id, setShowActivityInfo }) {
 	/**
 	 * Keeps track of which activities that are checked/selected by the user.
 	 */
-	// const [checkedActivities, setCheckedActivities] = useState([])
 
 	const [hasLoadedData, setHasLoadedData] = useState(false)
 
@@ -101,7 +98,6 @@ function AddActivity({ id, setShowActivityInfo }) {
 	]
 	const [sort, setSort] = useState(sortOptions[0])
 	const [cookies, setCookies] = useCookies(["exercise-filter"])
-	//const [cookiesExer, setCookiesExer] = useCookies(["techniques-filter"])
 	const [visibleExercises, setVisibleExercises] = useState([])
 
 
@@ -109,7 +105,7 @@ function AddActivity({ id, setShowActivityInfo }) {
      * Makes sure the data in the search bar is stored when choosing between techniques and exercises
      * also when redirected to and from info on techniques and exercises.
      * Also makes sure we return to the tab we where on before, either excerises or techniques
-	 * (2024-04-22)
+	 * (2024-04-22 from AddActivity.jsx)
      */
 	useEffect(() => {
 		setSearchTechText(sessionStorage.getItem("searchTechText")|| "")
@@ -172,8 +168,6 @@ function AddActivity({ id, setShowActivityInfo }) {
 	
 
 	useEffect(() => {
-		//sessionStorage.getItem(sort)
-
 		const filterCookie = cookies["exercise-filter"]
 		if (filterCookie) {
 			setSelectedExerTags(filterCookie.tags)
@@ -200,8 +194,6 @@ function AddActivity({ id, setShowActivityInfo }) {
 
 		const tempTechniques = []
 		const tempExercises = []
-		console.log("checkedActivities:")
-		console.log(checkedActivities)
 		checkedActivities.forEach(checkedActivity => {
 			if (checkedActivity.type === "technique") {
 				tempTechniques.push(checkedActivity)

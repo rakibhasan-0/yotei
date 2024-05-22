@@ -41,7 +41,7 @@ query-params:
 examples:
   - name: 200
 
-    request: GET /api/session/get?id=1
+    request: GET /api/statistics/1
 
     response:
         content-type: application/json
@@ -120,4 +120,171 @@ examples:
         content-type: application/json
         body: |
 
-    </api>
+</api>
+
+<api>
+name: Compares the techniques practiced by a group to a grading protocol.
+
+path: GET /api/statistics/{id}/grading_protocol
+
+locked: true
+
+text: |
+    Get the techniques of a grading protocol compared to the techniques practiced by a group.
+
+
+
+path-params:
+    parameters:
+        id: The id of the group | 1
+
+query-params:
+    parameters:
+        beltId: ID if the belt associated with the grading protocol to compare to.
+
+examples:
+  - name: 200
+
+    request: GET /api/statistics/1/grading_protocol?beltId=3
+
+    response:
+        content-type: application/json
+        body: |
+            {
+                code: "5 KYU",
+                name: "GULT BÄLTE",
+                belt: {
+                    belt_color: "FFDD33",
+                    belt_name: "Gult",
+                    is_child: false
+                },
+                categories: [
+                    {
+                        name: "KIHON WAZA - ATEMI WAZA",
+                        techniques: [
+                        {
+                            name: "Empi uchi, jodan och chudan (1 Kyu)",
+                            id: 1,
+                            count: 1
+                        },
+                        {
+                            name: "Uraken uchi, jodan (1 Kyu)",
+                            id: 2,
+                            count: 1
+                        },
+                        {
+                            name: "Yoko geri chudan (1 Kyu)",
+                            id: 3,
+                            count: 1
+                        },
+                        {
+                            name: "Waki gatame, mot diagonalt grepp, ude osage gatame (1 Kyu)",
+                            id: 4,
+                            count: 1
+                        }
+                        ]
+                    },
+                    {
+                        name: "KIHON WAZA - KANSETSU WAZA",
+                        techniques: [
+                        {
+                            name: "hiji gatame, gripa, ude hishigi hiza gatame",
+                            id: 5,
+                            count: 1
+                        },
+                        {
+                            name: "Seoi nage, mot grepp i ärmen, ude hishigi hiza gatame (1 Kyu)",
+                            id: 6,
+                            count: 4
+                        },
+                        {
+                            name: "Uki otoshi, mot grepp i ärmen, ude henkan gatame (1 Kyu)",
+                            id: 7,
+                            count: 0
+                        },
+                        {
+                            name: "Ude hiza osae gatame (1 Kyu)",
+                            id: 8,
+                            count: 1
+                        }
+                        ]
+                    },
+                    {
+                        name: "KIHON WAZA - NAGE WAZA",
+                        techniques: [
+                        {
+                            name: "Kata osae (1 Kyu)",
+                            id: 9,
+                            count: 0
+                        },
+                        {
+                            name: "Nige no kata (1 Kyu)",
+                            id: 10,
+                            count: 0
+                        },
+                        {
+                            name: "Randori mot en motståndare (1 Kyu)",
+                            id: 11,
+                            count: 0
+                        },
+                        {
+                            name: "Randori mot en motståndare som angriper liggande (1 Kyu)",
+                            id: 12,
+                            count: 0
+                        }
+                        ]
+                    },
+                        {
+                        name: "RENRAKU WAZA",
+                        techniques: [
+                        {
+                            name: "Grepp i håret med två händer och knästöt, Gedan juji uke, waki gatame, kata osae",
+                            id: 13,
+                            count: 0
+                        },
+                        {
+                            name: "Försök till stryptag, Uki otoshi, ude henkan gatame",
+                            id: 14,
+                            count: 0
+                        },
+                        {
+                            name: "Stryptag med armen med drag, Uki otoshi, ude henkan gatame",
+                            id: 15,
+                            count: 0
+                        },
+                        {
+                            name: "Kravattgrepp med neddrag, Frigöring, ude henkan gatame (1 Kyu)",
+                            id: 16,
+                            count: 0
+                        }
+                        ]
+                    },
+                        {
+                        name: "YAKUSOKU GEIKO",
+                        techniques: [
+                        {
+                            name: "Grepp i kragen med höger hand och svingslag, Jodan uchi uke, ude gatame, kata osae",
+                            id: 17,
+                            count: 0
+                        },
+                        {
+                            name: "Grepp i kragen med vänster hand och svingslag, Jodan uchi uke, o soto otoshi, ude henkan gatame",
+                            id: 18,
+                            count: 0
+                        },
+                        {
+                            name: "Grepp i håret mot liggande, Frigöring, ude henkan gatame",
+                            id: 19,
+                            count: 0
+                        },
+                        {
+                            name: "Stryptag mot liggande, mellan benen, Juji gatame, shiho nage gatame",
+                            id: 20,
+                            count: 0
+                        }
+                    ]
+                    }
+                ]
+            }
+
+</api>
