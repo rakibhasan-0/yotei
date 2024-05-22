@@ -12,7 +12,9 @@ import java.util.List;
  * based on the given list of {@link TechniqueDBResult TechniqueDBResults}.
  * 
  * @author Minotaur (James Eriksson)
- * 
+ * @updated 2024-05-20 Team Kiwi (Teodor Bäckström)
+ * Added inverted belt category
+ *  
  */
 public class SearchTechniqueResponseBuilder {
     private List<TechniqueDBResult> techniqueDBResultList;
@@ -35,7 +37,7 @@ public class SearchTechniqueResponseBuilder {
 
             if(map.containsKey(techniqueID)){
                 resultList.get(map.get(techniqueID)).addBeltColor(
-                        result.getBelt_color(), result.getBelt_name(), result.getIs_child()
+                        result.getBelt_color(), result.getBelt_name(), result.getIs_child(), result.getIs_inverted()
                 );
             } else {
 				int index = resultList.size();
@@ -45,7 +47,8 @@ public class SearchTechniqueResponseBuilder {
                         result.getName(),
                         result.getBelt_color(),
                         result.getBelt_name(),
-                        result.getIs_child()
+                        result.getIs_child(),
+                        result.getIs_inverted()
                 ));
             }
         });

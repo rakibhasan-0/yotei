@@ -1,5 +1,5 @@
 import styles from "./EditableListItem.module.css"
-import { Trash, Pencil, Check2 as Check, X } from "react-bootstrap-icons"
+import { Trash, Pencil, Check as Check, X , LockFill} from "react-bootstrap-icons"
 import { useState } from "react"
 import CheckBox from "../CheckBox/CheckBox"
 
@@ -20,7 +20,7 @@ import CheckBox from "../CheckBox/CheckBox"
  *      checked @type {boolen} - What the default value will be for the checkbox
  *      validateInput @type {function} - Action to validate the input given
  *      grayThrash @type {boolean} - True if the trash icon should be grey otherwise it is red
- * 		showThrash @type {boolean} - True if the trash icon should be visible
+ * 		  showThrash @type {boolean} - True if the trash icon should be visible
  * 
  * Example usage:
  * 		<EditableListItem
@@ -43,7 +43,7 @@ import CheckBox from "../CheckBox/CheckBox"
  * @author Team Pomegranate (Group 1), Team Durian (Group 3) (2024-05-13) 
  * @since 2024-05-06
  */
-export default function EditableListItem({ item, id, index, onRemove, onEdit, onCheck, showCheckbox, checked, validateInput, grayTrash, showTrash, showX, showPencil}) {
+export default function EditableListItem({ item, id, index, onRemove, onEdit, onCheck, showCheckbox, checked, validateInput, grayTrash, showTrash, showX, showPencil, showLock}) {
 
 	const [isEditing, setIsEditing] = useState(false) // State to manage edit mode
 	const [editedText, setEditedText] = useState(item) // State to store edited text
@@ -147,6 +147,11 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 													size="24px"
 													style={grayTrash ? { color: "var(--gray)" } : { color: "var(--red-primary)" }}
 													id="close-icon"
+													data-testid="trash-icon"/>
+											)}
+											{showLock && (
+												<LockFill
+													size="24px" style={{ color: "var(--red-primary)"}}
 												/>
 											)}
 										</>

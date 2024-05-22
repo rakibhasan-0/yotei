@@ -43,13 +43,21 @@ INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 10);
 INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 11);
 
 -- Editor role
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (2, 2);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (2, 3);
 INSERT INTO role_to_permission (role_id, permission_id) VALUES (2, 4);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (2, 5);
 INSERT INTO role_to_permission (role_id, permission_id) VALUES (2, 6);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (2, 7);
 INSERT INTO role_to_permission (role_id, permission_id) VALUES (2, 8);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (2, 9);
 INSERT INTO role_to_permission (role_id, permission_id) VALUES (2, 10);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (2, 11);
 
 
 -- User role
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (3, 2);
 INSERT INTO role_to_permission (role_id, permission_id) VALUES (3, 4);
 INSERT INTO role_to_permission (role_id, permission_id) VALUES (3, 6);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (3, 8);
 INSERT INTO role_to_permission (role_id, permission_id) VALUES (3, 10);

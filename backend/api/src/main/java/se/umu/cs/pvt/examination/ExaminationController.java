@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import java.util.Base64;
 
 /**
  * Class for handling requests to the examination api.
@@ -495,40 +496,52 @@ public class ExaminationController {
     }
 
     /**
-     * Returns a specific examination result based on grading_id.
+     * Returns a specific examination result based on grading_id. The return is a map of examinees and the number of techniques 
+     * they have passed and in addition, a total count of techniques for the entire examination.
      * @param grading_id
      * @return
      */
     @GetMapping("/examresult/grading/{grading_id}")
-    ResponseEntity <Map<String, Long>> getExaminationResultByGradingId(@PathVariable("grading_id") long grading_id){
-        String exam_protocol = examinationProtocolRepository.findById(grading_id).get().getExaminationProtocol();
+    public ResponseEntity<Map<String, Object>> getExaminationResultByGradingId(@PathVariable("grading_id") long grading_id){
         List<Examinee> examinees = examineeRepository.findByGradingId(grading_id);
+        Optional<ExaminationProtocol> protocolOptional = examinationProtocolRepository.findById(gradingRepository.findById(grading_id).get().getBeltId());
+        if (!protocolOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        String exam_protocol = protocolOptional.get().getExaminationProtocol();
         JSONObject root = new JSONObject(exam_protocol);
         JSONArray categories = root.getJSONArray("categories");
+        Map<String, Object> response = new HashMap<>();
+
         if(categories.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Map<String, Long> technique_info = new HashMap<>();
         int techniqueCount = 0;
+        //Check the total number of techniques in the examination
         for (int i = 0; i < categories.length(); i++) {
             JSONObject category = categories.getJSONObject(i);
             JSONArray techniques = category.getJSONArray("techniques");
             techniqueCount += techniques.length();
         }
-        for(Examinee e : examinees) {
-            Map<String, Object> result = new HashMap<>();
-            long passed = examinationResultRepository.countByExamineeIdAndPassTrue(e.getExamineeId());
-            technique_info.put("passed", passed);
-
-            
+        response.put("totalTechniques", techniqueCount);
+        
+        
+        List<Map<String, String>> examineeResults = new ArrayList<>();
+        //Check the number of passed techniques for each examinee
+        for (Examinee examinee : examinees) {
+            Map<String, String> examineeInfo = new HashMap<>();
+            long passedTechniques = examinationResultRepository.countByExamineeIdAndPassTrue(examinee.getExamineeId());
+            examineeInfo.put("examineeId", examinee.getExamineeId().toString());
+            examineeInfo.put("passedTechniques", Long.toString(passedTechniques)); // Convert long to Long and invoke toString()
+            examineeInfo.put("name", examinee.getName());
+            examineeResults.add(examineeInfo);
         }
-
-        technique_info.put("technique_count", (long) techniqueCount);
-        long passed = examinationResultRepository.countByExamineeIdAndPassTrue(grading_id);
-        technique_info.put("passed", passed);
-        return new ResponseEntity<>(technique_info, HttpStatus.OK);
+        response.put("examineeResults", examineeResults);
+        if(response.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(response);
     }
-
 
     /**
      * Deletes a given examination result.
@@ -575,8 +588,8 @@ public class ExaminationController {
      * Returns a list of the result of all techniques for a given examinee.
      * @param examinee Given technique name.
      */
-    @GetMapping("/examresult/{examinee_id}")
-    public ResponseEntity<List<ExaminationResult>>  getExaminationProtocolByExaminee(@PathVariable("examinee_id") long examinee_id) {
+    @GetMapping("/examresult/{grading_id}/{examinee_id}")
+    public ResponseEntity<List<ExaminationResult>>  getExaminationProtocolByExaminee(@PathVariable("grading_id") long grading_id, @PathVariable("examinee_id") long examinee_id) {
         List<ExaminationResult> examinationResults = examinationResultRepository.findAll();
         ArrayList<ExaminationResult> matching_results = new ArrayList<>();
         for(ExaminationResult er : examinationResults) {
@@ -613,13 +626,12 @@ public class ExaminationController {
 
         System.out.println(examinationProtocolRepository.findByBeltId(grading.get().getBeltId()).getExaminationProtocol().toString());
 
-        ExportGradingPdf pdfExport = new ExportGradingPdf(examinationProtocolRepository.findByBeltId(grading.get().getBeltId()).getExaminationProtocol().toString(),gradingRepository.findById(grading_id).get(), examineeRepository.findAll(), examinationResultRepository.findAll(), examinationCommentRepository.findByGradingId(grading_id), examineePairRepository.findAll());
+        ExportGradingPdf pdfExport = new ExportGradingPdf(examinationProtocolRepository.findByBeltId(grading.get().getBeltId()).getExaminationProtocol().toString(),gradingRepository.findById(grading_id).get(), examineeRepository.findByGradingId(grading_id), examinationResultRepository.findAll(), examinationCommentRepository.findByGradingId(grading_id), examineePairRepository.findAll());
 
         try {
             InputStream stream = pdfExport.generate();
-            return new ResponseEntity<Object>(stream.readAllBytes(), HttpStatus.OK);
+            return new ResponseEntity<Object>( Base64.getEncoder().encode(stream.readAllBytes()), HttpStatus.OK);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return new ResponseEntity<Object>(null, HttpStatus.BAD_REQUEST);   
         }     

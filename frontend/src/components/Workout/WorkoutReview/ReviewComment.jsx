@@ -7,7 +7,7 @@ import React from "react"
 import Button from "../../Common/Button/Button"
 import TextArea from "../../Common/TextArea/TextArea"
 import styles from "./ReviewStyles.module.css"
-import {isAdmin} from "../../../utils"
+import {isAdminUser} from "../../../utils"
 import {useContext} from "react"
 import {AccountContext} from "../../../context"
 import {HTTP_STATUS_CODES, setError, setSuccess} from "../../../utils"
@@ -15,8 +15,9 @@ import {HTTP_STATUS_CODES, setError, setSuccess} from "../../../utils"
 /**
  *  Component for review comment. Includes name, positive comment, negative comment, date.
  *
- * @author Cyclops (Group 5) (2023-05-16) Group Granatäpple (Team 1)
+ * @author Cyclops (Group 5) (2023-05-16) & Group Granatäpple (Team 1) & Team Mango (Grupp 4) (2024-05-22)
  * @version 1.0
+ * Update Team Mango 2024-05-22: Changed isAdmin check to new permission check.
  */
 
 export default function ReviewComponent({comment, onDelete, token, getTodaysDate, updateCommentList, testId}) {
@@ -151,7 +152,7 @@ export default function ReviewComponent({comment, onDelete, token, getTodaysDate
 							}
 						</div>
 					</div>
-					{(isAdmin(context) || userId == comment.user_id) &&
+					{(isAdminUser(context) || userId == comment.user_id) &&
 					<div className="d-flex align-items-center justify-content-end">
 						{editMode ?
 							<>

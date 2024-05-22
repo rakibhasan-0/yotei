@@ -55,6 +55,8 @@ public class ExportGradingPdf {
                         MAX_NAME_LENGTH = 30,
                         MAX_TECHNIQUE_NAME_LENGTH = 63;
 
+    private String fontPath;
+
     public ExportGradingPdf(String gradingProtocol, Grading grading, List<Examinee> examinees, List<ExaminationResult> examinationResults, List<ExaminationComment> examinationComments, List<ExamineePair> examineePairs) throws IOException {
         this.examinees = examinees;
         this.examinationResults = examinationResults;
@@ -67,6 +69,10 @@ public class ExportGradingPdf {
         this.grading = grading;
         this.examineePairs = examineePairs;
         this.protocol = parseJson(gradingProtocol);
+
+        String currentPath = new java.io.File(".").getCanonicalPath();
+
+        fontPath = currentPath + "/infra/fonts/NotoSans-Regular.ttf";
 
         Map<String, Object> gradingProtocolObj = (Map<String, Object>) protocol.get("examination_protocol");
         this.code = (String)gradingProtocolObj.get("code");
@@ -208,7 +214,7 @@ public class ExportGradingPdf {
         int currentXPos = tableStartXPos;
         int currentYPos = pageHeight-75;
 
-        PDType0Font font = PDType0Font.load(document, new File(System.getProperty("user.dir") + "/infra/fonts/NotoSans-Regular.ttf"));
+        PDType0Font font = PDType0Font.load(document, new File (fontPath));
         PDPageContentStream contentStream = new PDPageContentStream(document,page);
         contentStream.setStrokingColor(Color.DARK_GRAY);
         contentStream.setLineWidth(1);
@@ -265,10 +271,15 @@ public class ExportGradingPdf {
                     for (int l = 0 ; l < examinationResults.size() ; l++) {
                         if ((examinationTechniqueCategories.get(i).getTechniques().get(j).toString()).equals(examinationResults.get(l).getTechniqueName())) {
                             if (examinees.get(k + (onPage*MAX_NUM_COLUMNS)).getExamineeId() == examinationResults.get(l).getExamineeId()) {
+                                if (examinationResults.get(l).getPass() == null) {
+                                    grade = "";
+                                    continue;
+                                }
+
                                 if (examinationResults.get(l).getPass()) 
-                                    grade += "G";
+                                    grade = "G";
                                 else
-                                    grade += "U";
+                                    grade = "U";
                             }
                         }
                     }
@@ -345,7 +356,7 @@ public class ExportGradingPdf {
      * @throws IOException
      */
     private void createHeader(String code, String color, PDPageContentStream contentStream) throws IOException {
-        PDType0Font font = PDType0Font.load(document, new File(System.getProperty("user.dir") + "/infra/fonts/NotoSans-Regular.ttf"));
+        PDType0Font font = PDType0Font.load(document, new File(fontPath));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String date = sdf.format(grading.getCreatedAt()).toString();
         int currentXPos = PAGE_X_OFFSET;
@@ -409,7 +420,7 @@ public class ExportGradingPdf {
         int currentXPos = PAGE_X_OFFSET;
         int currentYPos = pageHeight-75;
         
-        PDType0Font font = PDType0Font.load(document, new File(System.getProperty("user.dir") + "/infra/fonts/NotoSans-Regular.ttf"));
+        PDType0Font font = PDType0Font.load(document, new File(fontPath));
         PDPageContentStream contentStream = new PDPageContentStream(document,page);
         contentStream.setStrokingColor(Color.DARK_GRAY);
         contentStream.setLineWidth(1);
@@ -427,7 +438,7 @@ public class ExportGradingPdf {
         contentStream.newLineAtOffset(0, -20);
         
         for(int i = 0; i < rows.size(); i++) {
-            contentStream.showText(rows.get(i));
+            contentStream.showText(rows.get(i).replaceAll("\\u000a", ""));
             contentStream.newLineAtOffset(0, -15);
         }
         
@@ -450,7 +461,7 @@ public class ExportGradingPdf {
         int currentXPos = PAGE_X_OFFSET;
         int currentYPos = pageHeight-105;
         
-        PDType0Font font = PDType0Font.load(document, new File(System.getProperty("user.dir") + "/infra/fonts/NotoSans-Regular.ttf"));
+        PDType0Font font = PDType0Font.load(document, new File(fontPath));
         PDPageContentStream contentStream = new PDPageContentStream(document,page);
         contentStream.setStrokingColor(Color.DARK_GRAY);
         contentStream.setLineWidth(1);
@@ -514,13 +525,13 @@ public class ExportGradingPdf {
             contentStream.beginText();
             contentStream.newLineAtOffset(currentXPos + 5, currentYPos);
             contentStream.setFont(font, 12);
-            contentStream.showText(examinee1 + " & " + examinee2);
+            contentStream.showText((examinee1 + " & " + examinee2).replaceAll("\\u000a", ""));
             contentStream.setFont(font, 10);
 
             for(int j = 0; j < rows.get(pairId).size(); j++) {
                 //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
                 contentStream.newLineAtOffset(0, -15);
-                contentStream.showText(rows.get(pairId).get(j));
+                contentStream.showText(rows.get(pairId).get(j).replaceAll("\\u000a", ""));
             }    
         
             contentStream.endText();
@@ -549,7 +560,7 @@ public class ExportGradingPdf {
         int currentXPos = PAGE_X_OFFSET;
         int currentYPos = pageHeight-105;
         
-        PDType0Font font = PDType0Font.load(document, new File(System.getProperty("user.dir") + "/infra/fonts/NotoSans-Regular.ttf"));
+        PDType0Font font = PDType0Font.load(document, new File(fontPath));
         PDPageContentStream contentStream = new PDPageContentStream(document,page);
         contentStream.setStrokingColor(Color.DARK_GRAY);
         contentStream.setLineWidth(1);
@@ -599,12 +610,12 @@ public class ExportGradingPdf {
             contentStream.beginText();
             contentStream.newLineAtOffset(currentXPos + 5, currentYPos);
             contentStream.setFont(font, 12);
-            contentStream.showText(examinee.getName());
+            contentStream.showText(examinee.getName().replaceAll("\\u000a", ""));
             contentStream.setFont(font, 10);
             for(int j = 0; j < rows.get(examinee.getExamineeId()).size(); j++) {
                 //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
                 contentStream.newLineAtOffset(0, -15);
-                contentStream.showText(rows.get(examinee.getExamineeId()).get(j));
+                contentStream.showText(rows.get(examinee.getExamineeId()).get(j).replaceAll("\\u0009", " "));
             }
             contentStream.endText();
 
@@ -631,7 +642,7 @@ public class ExportGradingPdf {
         int currentXPos = PAGE_X_OFFSET;
         int currentYPos = pageHeight-105;
         
-        PDType0Font font = PDType0Font.load(document, new File(System.getProperty("user.dir") + "/infra/fonts/NotoSans-Regular.ttf"));
+        PDType0Font font = PDType0Font.load(document, new File(fontPath));
         PDPageContentStream contentStream = new PDPageContentStream(document,page);
         contentStream.setStrokingColor(Color.DARK_GRAY);
         contentStream.setLineWidth(1);
@@ -671,7 +682,7 @@ public class ExportGradingPdf {
             contentStream.beginText();
             contentStream.newLineAtOffset(currentXPos + 5, currentYPos);
             contentStream.setFont(font, 12);
-            contentStream.showText(techniqueComment.getTechniqueName());
+            contentStream.showText(techniqueComment.getTechniqueName().replaceAll("\\u000a", ""));
             contentStream.setFont(font, 10);
             for(int j = 0; j < rows.size(); j++) {
                 //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
@@ -709,7 +720,9 @@ public class ExportGradingPdf {
                 if(lastSpaceIndex > 0) 
                     stopIndex = lastSpaceIndex + startIndex +1;
 
-                rows.add(string.substring(startIndex, stopIndex).replaceAll("\\u000a", ""));
+                String tmpStr = string.substring(startIndex, stopIndex);
+                tmpStr = string.substring(startIndex, stopIndex).replaceAll("\\u0009", "").replaceAll("\\u000a", "");
+                rows.add(tmpStr);
                 
                 startIndex = stopIndex;
                 if(stopIndex + maxLength <= string.length())
