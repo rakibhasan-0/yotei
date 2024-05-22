@@ -1,6 +1,17 @@
+.infoPanelContainer{
+    margin: 0%;
+}
+.infoPanel{
+    height: "auto"; 
+    width: "100%";
+    padding-bottom: 0%;
+    margin: 2%;
+    /*display: flex;*/
+}
+
 .mainCategoryTitle{
     text-align: center;
-    font-size: 16px;
+    font-size: 12px;
 }
 
 .categoryTitle{
@@ -10,9 +21,27 @@
 
 .currentTechnique{
     text-align: left;
+    flex: 1 1 fit-content;
 }
 
-.nextTechnique{
+.nextTechniqueText{
     text-align: left;
     font-size: 12px;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+}
+.nextTechniqueContainer{
+    max-width: 96%;
+    margin-bottom: "0px"; 
+    padding-bottom: "0px";
+}
+
+.techniqueAndCommentSection{
+    display: flex;
+}
+.buttonGroupComment{
+    float: right;
 }
