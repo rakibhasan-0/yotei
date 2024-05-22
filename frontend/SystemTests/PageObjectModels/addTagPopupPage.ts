@@ -2,7 +2,8 @@ import { type Page } from "@playwright/test"
 import { TagComponent } from "../Types/systemTestsTypes"
 
 /**
- *  Tests related to addTagPopup
+ *  Tests related to addTagPopup, in this test the window is tested on a technique. 
+ * 	Should work just fine on any other place where tags are used. 
  *  @author Team Durian (Group 3)
  *  @since 2024-05-22
  *  @version 1.0
@@ -29,18 +30,15 @@ export class AddTagPopupPage {
 		await this.page.getByRole("button", { name: "Hantera tagg" }).click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
-		//await this.page.waitForTimeout(3000)
 		
 		//Add the tag. 
 		const tagAddButton = this.page.locator("#tag-add-button")
 		await tagAddButton.waitFor({ state: "visible" })
-		await this.waitForEnabled(tagAddButton)
 		await tagAddButton.click()
 
 		//Close the window and save the newly added tag.
 		const saveAndCloseButton = this.page.locator("#save-and-close-button")
 		await saveAndCloseButton.waitFor({ state: "visible" })
-		await this.waitForEnabled(saveAndCloseButton)
 		await saveAndCloseButton.click()
 
 		//Save the technique so the newly added tag is saved with it. 
@@ -54,10 +52,9 @@ export class AddTagPopupPage {
 		await this.page.getByRole("button", { name: "Hantera tagg" }).click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
-		//await this.page.waitForTimeout(3000)
 
 		//Uncheck the tag.
-		await this.waitForEnabled(this.page.getByTestId("EditableListItem").locator("label"))
+		await this.page.getByTestId("EditableListItem").locator("label").waitFor({state: "visible"})
 		await this.page.getByTestId("EditableListItem").locator("label").uncheck()
 
 		//Close the popup and save the technique
@@ -72,37 +69,12 @@ export class AddTagPopupPage {
 		await this.page.getByTestId("EditableListItem").locator("label").waitFor({state: "visible"})
 
 		//Wait for result to appear.
-		await this.waitForEnabled(this.page.getByTestId("EditableListItem").locator("label"))
-
-		// const locator = await this.page.getByText(tag.tagName, { exact: true })
-		// const locatorHTML = await locator.innerHTML()
-		// console.log(locatorHTML)
-
-		// const parent = await locator.locator('..')
-		// const parentHTML = await parent.innerHTML()
-		// console.log(parentHTML)
-		// const grandParent = await parent.locator('..')
-		// const grandParentHTML = await grandParent.innerHTML()
-		// console.log(grandParentHTML)
+		await this.page.getByTestId("EditableListItem").locator("label").waitFor({state: "visible"})
 
 		//Remove the tag from the database. 
 		await this.findComponents(tag, "#close-icon")
 		await this.page.getByRole("button", { name: "Ta bort" }).click()
 		await this.page.locator("#save-and-close-button").click()
-	}
-
-	/**
-	 * Makes sure everything is rendered. 
-	 */
-	async waitForEnabled(locator) {
-		await locator.waitFor({ state: "visible" })
-		for (let i = 0; i < 20; i++) {
-			if (await locator.isEnabled()) {
-				return
-			}
-			await this.page.waitForTimeout(100)
-		}
-		throw new Error("Element not enabled in time")
 	}
 
 	/**

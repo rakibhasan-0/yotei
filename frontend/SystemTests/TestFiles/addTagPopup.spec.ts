@@ -2,7 +2,8 @@ import { test, expect } from "../fixtures"
 import { AddTagPopupPage } from "../PageObjectModels/addTagPopupPage"
 
 /**
- *  Tests related to addTagPopup
+ *  Tests related to addTagPopup, in this test the window is tested on a technique. 
+ * 	Should work just fine on any other place where tags are used. 
  *  @author Team Durian (Group 3)
  *  @since 2024-05-22
  *  @version 1.0
