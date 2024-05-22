@@ -31,7 +31,7 @@ import styles from "./Dropdown.module.css"
  * @uodate	2024-05-21 Tomato,	Added a checkbox so that a dropdown menu can have one if wanted. 
  * @version 2.1 
  */
-export default function Component({ item, text, children, id, autoClose, errorMessage, onClick, checkBox}) {
+export default function Component({ item, text, children, id, autoClose, errorMessage, onClick, checkBox, style}) {
 	const [toggled, setToggled] = useState(false)
 	const handleToggle = () => {
 		
@@ -50,11 +50,17 @@ export default function Component({ item, text, children, id, autoClose, errorMe
 	}
 
 	
-	const style = errorMessage?.length > 0 ? { border: "2px solid var(--red-primary)" } : {}
+	const errorStyle = errorMessage?.length > 0 ? { border: "2px solid var(--red-primary)" } : {}
 	return (
 		<div className={styles.listLabel}>
-			<div id={id} className={styles.listContainer} style={style}>
-				<div className={styles.listHeader} onClick={(e) => { setToggled(!toggled); handleOnClick(e)}} id={`${id}-header`}>
+			<div id={id} className={styles.listContainer} style={errorStyle}>
+				<div style={style ? style : {}} className={!style ? styles.listHeader : ""} onClick={(e) => { setToggled(!toggled); handleOnClick(e)}} id={`${id}-header`}>
+					{checkBox && (
+						<div className={styles.check}>
+							{checkBox}
+						</div>
+					)}
+					
 					<div className={styles.listItem}>
 						{item}
 					</div>
