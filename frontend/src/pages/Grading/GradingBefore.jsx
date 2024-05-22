@@ -421,6 +421,10 @@ export default function GradingBefore() {
 		await deleteExaminee(examineeId, token)
 			.catch(() => setErrorToast("Kunde inte tabort personen. Kontrollera din internetuppkoppling."))
 
+    if(lastAddedExaminee.id === examineeId) {
+      setLastAddedExaminee({})
+    }
+
 		if (checkedExamineeIds.includes(examineeId)) {
 			setCheckedExamineeIds(checkedExamineeIds.filter((id) => id !== examineeId))
 		}

@@ -241,7 +241,7 @@ export default function DuringGrading() {
 
 	useEffect(() => {
 		if(currentTechniqueStep !== undefined) {
-			fetchTechniqueResults(techniqueNameList[currentTechniqueStep].technique.text, token)
+			fetchTechniqueResults(techniqueNameList[currentTechniqueStep].technique.text, token) 
 		}
 	}, [currentTechniqueStep])
     
@@ -250,6 +250,7 @@ export default function DuringGrading() {
 		console.log("leftExamineeState:", leftExamineeState)
 		console.log("rightExamineeState:", rightExamineeState)
 	}, [leftExamineeState, rightExamineeState])
+
 
 	// Will handle the api call that will update the database with the result. 
 	/**
@@ -356,7 +357,7 @@ export default function DuringGrading() {
 											setCurrentTechniqueStep(() => {
 												setLoading(true)
 												const techniquestep = techniqueName.categoryIndex
-												if(techniqueNameList[currentTechniqueStep].categoryName != "YAKUSOKU GEIKO OR RANDORI"){
+												if(techniqueNameList[currentTechniqueStep].categoryName != "YAKUSOKU GEIKO ELLER RANDORI"){
 													setRandoriIndex(currentTechniqueStep)
 												}
 												onUpdateStepToDatabase(techniquestep)
@@ -520,7 +521,6 @@ export default function DuringGrading() {
 			const response = await postExamineeResult(examineeResultToPost, token)
 				.catch(() => setErrorToast("Kunde inte lägga till resultat. Kolla internetuppkoppling."))
 			const responseJson = await response.json()
-
 			// console.log(responseJson)
 			// Create a copy of the current state
 			let tempRes = [...results]
