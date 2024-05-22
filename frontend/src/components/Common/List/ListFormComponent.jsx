@@ -2,9 +2,7 @@ import { useState, useContext, useCallback } from "react"
 import { Form } from "react-bootstrap"
 import styles from "./ListFormComponent.module.css"
 import InputTextField from "../../Common/InputTextField/InputTextField"
-//import ActivityListComponent from "./ListActivityListComponent"
 import TextArea from "../../Common/TextArea/TextArea"
-//import TagInput from "../../Common/Tag/TagInput"
 import AddUserComponent from "../../Workout/CreateWorkout/AddUserComponent"
 import Button from "../../Common/Button/Button"
 import CheckBox from "../../Common/CheckBox/CheckBox"
@@ -19,7 +17,7 @@ import EditActivityPopup from "../../Workout/CreateWorkout/EditActivityPopup"
 import SavedActivityList from "../../SavedList/SavedListInfo/SavedListComponent"
 
 /**
- * Component for input-form to be used to create a new workout (WorkoutCreate.js)
+ * Component for input-form to be used to create/edit a new list (ListEdit.js)
  *
  * This component requires the ListCreateContext to be used.
  *
@@ -29,10 +27,9 @@ import SavedActivityList from "../../SavedList/SavedListInfo/SavedListComponent"
  * Example usage:
  *		<ListFormComponent callback={submitHandler} />
  *
- * @author Team Minotaur, Team 3 Durian
- * @version 2.1
- * @since 2023-05-24, 2024-04-18
- * @updated 2023-06-01 Chimera, updated pathing when pressing return to create session
+ * @author Team Tomato (6)
+ * @since 2024-05-21
+ * Based on WorkoutFormComponent.jsx
  */
 export default function ListFormComponent({ callback, state, listCreateInfoDispatchProp = null }) {
 	const { listCreateInfo, listCreateInfoDispatch } = useContext(ListCreateContext)
@@ -58,7 +55,7 @@ export default function ListFormComponent({ callback, state, listCreateInfoDispa
 	}, [listCreateInfo.popupState.types])
 
 	/**
-	 * Handles the submission of a workout. This function is called when the
+	 * Handles the submission of a list. This function is called when the
 	 * save button is pressed.
 	 *
 	 * @param {*} event
@@ -80,8 +77,8 @@ export default function ListFormComponent({ callback, state, listCreateInfoDispa
 
 	/**
 	 * This function is called when the "go back" button is pressed.
-	 * Checks if any changes are made to the workout-form, if so a confirm-popup is shown.
-	 * If no changes to the workout are made, then it navigates back.
+	 * Checks if any changes are made to the list-form, if so a confirm-popup is shown.
+	 * If no changes to the list are made, then it navigates back.
 	 */
 	function handleGoBack() {
 		setShowPopup(true)
@@ -130,7 +127,7 @@ export default function ListFormComponent({ callback, state, listCreateInfoDispa
 							type="text"
 							placeholder="Namn"
 							errorMessage={
-								validated && listCreateInfo.data.name.length == 0 ? "Fyll i namn på passet" : ""
+								validated && listCreateInfo.data.name.length == 0 ? "Fyll i namn på listan" : ""
 							}
 							as={InputTextField}
 							text={listCreateInfo.data.name}
@@ -161,7 +158,6 @@ export default function ListFormComponent({ callback, state, listCreateInfoDispa
 						/>
 					</Form.Group>
 					<Form.Group className="mb-3">
-						{/*<ActivityListComponent /> {/* Tror denna kraschar grejor :=) */}
 						<ConfirmPopup
 							id="NoActivitiesConfirm"
 							showPopup={validated && listCreateInfo.data.activities.length == 0 && acceptActivities}
@@ -194,7 +190,7 @@ export default function ListFormComponent({ callback, state, listCreateInfoDispa
 					<Form.Group className="mb-3">
 						<CheckBox
 							id="list-create-checkbox"
-							label="Privat pass"
+							label="Privat lista"
 							onClick={() =>
 								listCreateInfoDispatch({
 									type: LIST_CREATE_TYPES.SET_IS_PRIVATE,
