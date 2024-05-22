@@ -19,6 +19,8 @@ import { USER_PERMISSION_CODES, USER_PERMISSION_LIST_ALL } from "../../../../uti
  * @version 1.0
  * @since 2024-05-02
  * Updates: 2024-05-21: Added correct permissions to old tests and wrote new permission tests.
+ * Updates: 2024-05-22: Fixed broken tests from new merge from other group ???.
+ * 
  */
 const api = jest.fn()
 server.events.on("request:start", api)
@@ -35,31 +37,36 @@ describe("verify that", () => {
 			"id": 1,
 			"name": "Vitt",
 			"color": "FCFCFC",
-			"child": false
+			"child": false,
+			"inverted": false
 		},
 		{
 			"id": 2,
 			"name": "Vitt",
 			"color": "BD3B41",
-			"child": true
+			"child": true,
+			"inverted": false
 		},
 		{
 			"id": 3,
 			"name": "Gult",
 			"color": "EDD70D",
-			"child": false
+			"child": false,
+			"inverted": false
 		},
 		{
 			"id": 4,
 			"name": "Gult",
 			"color": "EDD70D",
-			"child": true
+			"child": true,
+			"inverted": false
 		},
 		{
 			"id": 13,
 			"name": "Svart",
 			"color": "EDD70D",
-			"child": false
+			"child": false,
+			"inverted": false
 		}
 	]
 
@@ -75,7 +82,8 @@ describe("verify that", () => {
 					id: 13,
 					color: "000000",
 					child: false,
-					name: "svart"
+					name: "svart",
+					inverted: false
 				}
 			],
 			tags: [
@@ -122,7 +130,8 @@ describe("verify that", () => {
 						id: belt.id,
 						color: "000000",
 						child: false,
-						name: "svart" + belt.id
+						name: "svart" + belt.id,
+						inverted: false
 					}
 				})
 
@@ -152,8 +161,6 @@ describe("verify that", () => {
 				)
 			})
 
-
-
 		)
 
 	})
@@ -168,7 +175,7 @@ describe("verify that", () => {
 		window.HTMLElement.prototype.scrollIntoView = jest.fn
 		const router = createMemoryRouter(
 			createRoutesFromElements( [
-				<Route key={"key1"} path="technique/:techniqueId" element={<TechniqueDetail />}/> ,
+				<Route key={"key1"} path="technique/:techniqueId" element={<TechniqueDetail/>}/> ,
 				<Route key={"key2"} path="technique/:techniqueId/edit" element={<TechniqueEdit/>}/>
 			]
 			),
@@ -256,30 +263,33 @@ describe("verify that", () => {
 	/*test("adding/removing the kihon tag checks/unchecks the kihon checkbox", async () => {
 		await renderWithRouter()
 
-		await user.click(screen.getByTestId("technique-edit-button"))
+it.todo("Should render the correct belts when selected")
+it.todo("all tests need to be rewritten to work with inverted belts category")
 
-		await user.click(screen.getByText("Hantera tagg"))
+// 		await user.click(screen.getByTestId("technique-edit-button"))
 
-		await user.type(screen.getByPlaceholderText("Sök eller skapa tagg"), "kihon waza")
+// 		await user.click(screen.getByText("Hantera tagg"))
 
-		await user.click(screen.getByTestId("tag-add-button"))
+// 		await user.type(screen.getByPlaceholderText("Sök eller skapa tagg"), "kihon waza")
 
-		// The tag suggestion and the create tag elements are identical, clicks the first one on the page.
-		const allTags = screen.getAllByText("kihon waza")
-		await user.click(allTags[0])
+// 		await user.click(screen.getByTestId("tag-add-button"))
 
-		await user.click(screen.getByTestId("save-and-close-button"))
+// 		// The tag suggestion and the create tag elements are identical, clicks the first one on the page.
+// 		const allTags = screen.getAllByText("kihon waza")
+// 		await user.click(allTags[0])
 
-				await waitFor(() => {
-			expect(screen.getByLabelText("Kihon")).toBeChecked()
-		}) 
-		/*await user.click(screen.getByText("kihon waza"))
+// 		await user.click(screen.getByTestId("save-and-close-button"))
 
-		await waitFor(() => {
-			expect(screen.getByLabelText("Kihon")).not.toBeChecked()
-		})
+// 				await waitFor(() => {
+// 			expect(screen.getByLabelText("Kihon")).toBeChecked()
+// 		}) 
+// 		/*await user.click(screen.getByText("kihon waza"))
 
-	})*/
+// 		await waitFor(() => {
+// 			expect(screen.getByLabelText("Kihon")).not.toBeChecked()
+// 		})
+
+// 	})*/
 
 	test("changing the technique name and canceling shows the confirm popup", async () => {
 		await renderWithRouter(USER_PERMISSION_LIST_ALL)
@@ -353,7 +363,7 @@ describe("verify that", () => {
 	})
 
 	/*test("adding a tag updates the technique", async () => {
-		await renderWithRouter()
+		await renderWithRouter(USER_PERMISSION_LIST_ALL) //TODO this test did not work earlier I'm pretty sure.
 
 		await waitFor(() => {
 			expect(screen.queryByText("ny tagg")).not.toBeInTheDocument()
