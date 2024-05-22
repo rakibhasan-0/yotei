@@ -29,7 +29,7 @@ export default function GradingBefore() {
 	const { gradingId } = useParams()
 
 	const hasPreviousState = location.key !== "default"
-	const { ColorParam } = location.state ? location.state : {}
+	const [beltColor, setBeltColor] = useState()
 
 	const context = useContext(AccountContext)
 	const { token } = context
@@ -135,69 +135,91 @@ export default function GradingBefore() {
 	useEffect(() => {
 
 		const fetchData = async () => {
-			const data = await getGrading(token)
-				.catch(() => setErrorToast("Kunde inte hämta examinationen. Kontrollera din internetuppkoppling."))
+			
+			try {
+				const [data] = await Promise.all([
+					getGrading(token).catch(() => setErrorToast("Kunde inte hämta examinationen. Kontrollera din internetuppkoppling.")),
+				])
 
-			// Set the step so we know how to navigate back, what type of route it should choose, in function @handleNavigation
-			setGradingStep(data.step)
+				// set belt color
+				const [beltData] = await Promise.all([
+					getBeltColor(data.beltId, token).catch(() => setErrorToast("Kunde inte hämta bältesfärgen. Kontrollera din internetuppkoppling.")),
+				])
+				setBeltColor("#" + beltData)
 
-			// check if title is added already
-			if (data.title !== "default") {
-				setGradingName(data.title)
-			}
 
-			// check if the grading is comming from the during process. 
-			let shouldBeLocked = false
-
-			// If the process is during, all examinees that are already added should be locked to modifications
-			if (data.step === 2) {
-				shouldBeLocked = true
-			}
-
-			// check if there is any examinees already added
-			const exsistingPairs = await getAllPairOfExaminees(token)
-				.catch(() => setErrorToast("Kunde inte hämta befintliga par. Kontrollera din internetuppkoppling."))
-
-			console.log(exsistingPairs)
-			// if there exsists pairs in this grading already
-			if (exsistingPairs.length !== 0) {
-				// convert the pairs to the local format so the pairs can be displayed for the user
-				const convertedToLocalPairs = exsistingPairs.map(pair => {
-					if (pair.examinee_1 !== null && pair.examinee_2 !== null) {
-
-						return [{ id: pair.examinee_1.id, name: pair.examinee_1.name, pairId: pair.pair_id, isLocked: shouldBeLocked },
-						{ id: pair.examinee_2.id, name: pair.examinee_2.name, pairId: pair.pair_id, isLocked: shouldBeLocked }]
-					} else {
-						// if we come in here there is a lonly examinee in a pair.
-						return undefined
-					}
-				}).filter(Boolean)
-
-				setPair(convertedToLocalPairs)
-
-				const convertedToAloneLocalPairs = exsistingPairs.map(pair => {
-					if (pair.examinee_1 !== null && pair.examinee_2 === null) {
-
-						//check if we are comming from during process, then this pair should be locked
-						if (!shouldBeLocked) {
-
-							// remove the pair 
-							deletePair(pair.pair_id, token)
-
+				
+	
+				//const data = await getGrading(token)
+				//	.catch(() => setErrorToast("Kunde inte hämta examinationen. Kontrollera din internetuppkoppling."))
+	
+				// Set the step so we know how to navigate back, what type of route it should choose, in function @handleNavigation
+				setGradingStep(data.step)
+	
+				// check if title is added already
+				if (data.title !== "default") {
+					setGradingName(data.title)
+				}
+	
+				// check if the grading is comming from the during process. 
+				let shouldBeLocked = false
+	
+				// If the process is during, all examinees that are already added should be locked to modifications
+				if (data.step === 2) {
+					shouldBeLocked = true
+				}
+	
+				// check if there is any examinees already added
+				const exsistingPairs = await getAllPairOfExaminees(token)
+					.catch(() => setErrorToast("Kunde inte hämta befintliga par. Kontrollera din internetuppkoppling."))
+	
+				console.log(exsistingPairs)
+				// if there exsists pairs in this grading already
+				if (exsistingPairs.length !== 0) {
+					// convert the pairs to the local format so the pairs can be displayed for the user
+					const convertedToLocalPairs = exsistingPairs.map(pair => {
+						if (pair.examinee_1 !== null && pair.examinee_2 !== null) {
+	
+							return [{ id: pair.examinee_1.id, name: pair.examinee_1.name, pairId: pair.pair_id, isLocked: shouldBeLocked },
+							{ id: pair.examinee_2.id, name: pair.examinee_2.name, pairId: pair.pair_id, isLocked: shouldBeLocked }]
+						} else {
+							// if we come in here there is a lonly examinee in a pair.
+							return undefined
 						}
-						return { id: pair.examinee_1.id, name: pair.examinee_1.name, isLocked: shouldBeLocked }
-					} else {
-						// if we come in here the pair consists of two.
-						return undefined
-					}
-				}).filter(Boolean)
-				setExaminees(convertedToAloneLocalPairs)
+					}).filter(Boolean)
+	
+					setPair(convertedToLocalPairs)
+	
+					const convertedToAloneLocalPairs = exsistingPairs.map(pair => {
+						if (pair.examinee_1 !== null && pair.examinee_2 === null) {
+	
+							//check if we are comming from during process, then this pair should be locked
+							if (!shouldBeLocked) {
+	
+								// remove the pair 
+								deletePair(pair.pair_id, token)
+	
+							}
+							return { id: pair.examinee_1.id, name: pair.examinee_1.name, isLocked: shouldBeLocked }
+						} else {
+							// if we come in here the pair consists of two.
+							return undefined
+						}
+					}).filter(Boolean)
+					setExaminees(convertedToAloneLocalPairs)
+					
+				}
+			} catch (error) {	
+				console.error("Misslyckades skicka vidare till nästa steg i gradering:", error)
 			}
-
 		}
 		fetchData()
 
 	}, [])
+
+	useEffect(() => {
+		console.log(beltColor)
+	}, [beltColor])
 
 	/**
 	 * Help function to activate the useEffect function to start the navigation
@@ -547,7 +569,7 @@ export default function GradingBefore() {
 					key={"grading-name-text-field"}
 					validateInput={validateGradingName}
 					onEdit={editGradingName}
-					color={ColorParam}
+					color={beltColor}
 				/>
 			</div>
 
@@ -788,6 +810,21 @@ export default function GradingBefore() {
 		return fetch(`/api/examination/grading/${gradingId}`, requestOptions)
 			.then(response => { return response.json() })
 			.catch(error => { alert(error.message) })
+	}
+
+	/**
+	 * 
+	 * @param {*} token  
+	 * @param {*} beltId 
+	 * @returns 
+	 */
+	async function getBeltColor(beltId, token) {
+		const requestOptions = {
+			method: "GET",
+			headers: { "Content-Type": "application/json", "token": token },
+		}
+		return fetch(`/api/belts/getBeltColor/${beltId}`, requestOptions)
+			.then(response => { return response.text() })
 	}
 
 	/**
