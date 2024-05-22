@@ -139,9 +139,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
             request.getMethod().equals(HttpMethod.GET)) {
             return true;
         }
-        
-        //throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "permissions: " + permissions + "\nadmin right: " + permission_list.ADMIN_RIGHTS.value);
-        
+                
         // Check for each permission-locked api path and determine if user is allowed through
         if (path.startsWith("/api/session") 
             && !checkSessionPermissions(path, permissions)) return false;
@@ -221,11 +219,10 @@ public class AuthFilter implements GlobalFilter, Ordered {
         return true;
     }
 
-    private boolean isAdminLockedEndPoints(String path) {
+        private boolean isAdminLockedEndPoints(String path) {
         return 
             path.contains("import") || 
             path.contains("export") || 
-            path.equals("/api/users") || 
-            path.startsWith("/api/permissions/role");
+            path.equals("/api/users");
     }
 }
