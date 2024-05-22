@@ -45,7 +45,7 @@ export class AddTagPopupPage {
 
 		//Save the technique so the newly added tag is saved with it. 
 		await this.page.getByRole("button", { name: "Spara" }).click()
-
+		await this.page.goto("/technique/1")
 	}
 
 	async deleteTag(tag: TagComponent) {
@@ -74,16 +74,16 @@ export class AddTagPopupPage {
 		//Wait for result to appear.
 		await this.waitForEnabled(this.page.getByTestId("EditableListItem").locator("label"))
 
-		const locator = await this.page.getByText(tag.tagName, { exact: true })
-		const locatorHTML = await locator.innerHTML()
-		console.log(locatorHTML)
+		// const locator = await this.page.getByText(tag.tagName, { exact: true })
+		// const locatorHTML = await locator.innerHTML()
+		// console.log(locatorHTML)
 
-		const parent = await locator.locator('..')
-		const parentHTML = await parent.innerHTML()
-		console.log(parentHTML)
-		const grandParent = await parent.locator('..')
-		const grandParentHTML = await grandParent.innerHTML()
-		console.log(grandParentHTML)
+		// const parent = await locator.locator('..')
+		// const parentHTML = await parent.innerHTML()
+		// console.log(parentHTML)
+		// const grandParent = await parent.locator('..')
+		// const grandParentHTML = await grandParent.innerHTML()
+		// console.log(grandParentHTML)
 
 		//Remove the tag from the database. 
 		await this.findComponents(tag, "#close-icon")
