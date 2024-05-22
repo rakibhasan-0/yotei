@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from "react"
 import CommentButton from "../PerformGrading/CommentButton"
 import styles from "./TechniqueInfoPanel.module.css"
 import Popup from "../../Common/Popup/Popup"
-import TextArea from "../../Common/TextArea/TextArea"
 import Button from "../../Common/Button/Button"
 import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
 import { setError as setErrorToast } from "../../../utils"
@@ -46,7 +45,7 @@ import { useParams } from "react-router-dom"
  * 
  */
 export default function TechniqueInfoPanel({
-	beltColor = "#FFDD33",
+	beltColor = "#FFDD33", 
 	categoryTitle = "Test Kategori",
 	currentTechniqueTitle = "1. Grepp i två handleder framifrån och svingslag Frigöring – Ju morote jodan uke",
 	nextTechniqueTitle = "2. Stryptag framifrån och svingslag, backhand Frigöring – Ju morote jodan uke, ude osae, ude osae gatame",
@@ -60,6 +59,7 @@ export default function TechniqueInfoPanel({
 	const [commentId, setCommentId] = useState(null)
 	const { gradingId } = useParams()
 	const { token, userId } = useContext(AccountContext)
+	const isErr = !(commentError == undefined || commentError == null || commentError == "")
 
 	useEffect(() => {
 		if (isAddingComment) {
@@ -67,11 +67,18 @@ export default function TechniqueInfoPanel({
 		}
 	}, [isAddingComment])
 
+	// Updates notifications when switching techniques
+	useEffect(() => {
+		handleExistingInput()
+	}, [currentTechniqueTitle])
+
 	/**
      * Discards the current group comment.
      */
 	const onDiscardGroupComment = async () => {
-		setCommentText("")
+		if (!hasComment) {
+			setCommentText("")
+		}
 		setAddComment(false)
 	}
 
@@ -201,27 +208,39 @@ export default function TechniqueInfoPanel({
 			console.error(ex)
 		}
 	}
+	// To have linter not fail, all below should be removed later if not used before 2024-06-10
+	console.log(beltColor)
+	console.log(categoryTitle)
+	/* This was inside return earlier, but removed to get more space
+		After row: <fieldset className={styles.infoPanel}>
+		Before row: <div>
+						<h3 className={styles.categoryTitle} role="categoryTitle">{mainCategoryTitle}</h3>
+					</div>
+		Code that existed in between:
+				<fieldset role="fieldsetBelt" style={{ height: "0px", width: "100%", marginBottom: "3px", backgroundColor: beltColor }}>
+					<div>
+						<h2 className={styles.mainCategoryTitle} role="mainCategoryTitle">{mainCategoryTitle}</h2>
+					</div>
+				</fieldset>
+	*/
 
 	return (
-		<div style={styles}>
-			<fieldset role="fieldsetBelt" style={{ height: "30px", width: "100%", marginBottom: "10px", backgroundColor: beltColor }}>
+		<div className={styles.infoPanelContainer}>
+			<fieldset className={styles.infoPanel}>
 				<div>
-					<h2 className={styles.mainCategoryTitle} role="mainCategoryTitle">{mainCategoryTitle}</h2>
+					<h3 className={styles.categoryTitle} id="categoryTitle">{mainCategoryTitle}</h3>
 				</div>
-			</fieldset>
-			<fieldset style={{ height: "auto", width: "100%", marginBottom: "5px" }}>
-				<div>
-					<h3 className={styles.categoryTitle} role="categoryTitle">{categoryTitle}</h3>
+				<div className={styles.buttonGroupComment}>
+					<CommentButton onClick={() => setAddComment(true)} hasComment={hasComment} />
 				</div>
 				<div>
-					<h1 className={styles.currentTechnique} role="currentTechniqueTitle">{currentTechniqueTitle}</h1>
+					<h2 className={styles.currentTechnique} id="currentTechniqueTitle">{currentTechniqueTitle}</h2>
 				</div>
-				<div style={{ width: "70%", float: "left" }}>
-					<h3 className={styles.nextTechnique} role="nextTechniqueTitle"><b>Nästa:</b>{nextTechniqueTitle}</h3>
+				
+				<div className={styles.techniqueAndCommentSection}>
+					<h3 className={styles.nextTechniqueText} id="nextTechniqueTitle"><b>Nästa:</b>{nextTechniqueTitle}</h3>
 				</div>
-				<div style={{ display: "flex", justifyContent: "flex-end" }}>
-					<CommentButton onClick={() => setAddComment(true)} />
-				</div>
+				
 			</fieldset>
 			<Popup
 				id={"group-comment-popup"}
@@ -231,18 +250,29 @@ export default function TechniqueInfoPanel({
 				onClose={() => setCommentError(false)}
 				style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset" }}
 			>
-				<TextArea
+				<textarea
+					className={isErr ? `${styles.textarea} ${styles.textareaErr}` : `${styles.textarea}`}
 					autoFocus={true}
-					onInput={e => { setCommentText(e.target.value); setCommentError(false) }}
-					errorMessage={commentError}
-					text={commentText}
+					onInput={ e => {
+						setCommentText(e.target.value)
+						setCommentError(false)
+					}}
+					value={commentText}
+					id={"TextareaTestId"}
+					type={"text"}
 				/>
-				<Button onClick={onAddGroupComment}>Lägg till</Button>
+				{commentError && <p className={styles.err}>{commentError}</p>}
+				<div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px", marginTop: "10px"}}>
+					<Button outlined={true} onClick={() => setCommentText(commentText + " " + "Böj på benen!")}>Böj på benen!</Button>
+					<Button outlined={true} onClick={() => setCommentText(commentText + " " + "Balansbrytning!")}>Balansbrytning!</Button>
+					<Button outlined={true} onClick={() => setCommentText(commentText + " " + "Kraftcirkeln!")}>Kraftcirkeln!</Button>
+				</div>
+				<Button onClick={() => onAddGroupComment()}>Lägg till</Button>
 			</Popup>
 			<ConfirmPopup
 				popupText={"Är du säker på att du vill ta bort kommentarsutkastet?"}
 				showPopup={showDiscardComment}
-				onClick={() => onDiscardGroupComment()}
+				onClick={() => {onDiscardGroupComment()}}
 				setShowPopup={() => setShowDiscardComment(false)}
 				zIndex={200} // Above the comment popup.
 			/>

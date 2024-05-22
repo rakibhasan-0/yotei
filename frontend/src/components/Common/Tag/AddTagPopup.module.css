@@ -21,6 +21,7 @@
 	border-radius: 0.3rem;
 	min-height: 2rem;
 	transition-duration: 200ms;
+	align-items: center;
 }
 
 .input-area:focus {
@@ -28,8 +29,8 @@
 }
 
 .search-icon {
-	height: 100%;
-	width: 100%;
+	height: auto;
+	width: auto;
 	padding-left: 1rem;
 	font-size: 1.2rem;
 }
@@ -51,7 +52,7 @@
 .addButton {
 	cursor: pointer;
 	padding-right: 0.6rem;
-	height: 100%;
-	width: 100%;
+	height: auto;
+	width: auto;
 	font-size: 1.5rem;
 }
