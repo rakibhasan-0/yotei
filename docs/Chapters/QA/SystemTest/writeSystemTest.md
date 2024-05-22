@@ -1,6 +1,6 @@
 # Write System Test
 This is a guide for how you write a system test in Playwright. For a system test to run, it requires a few different files to be present. Below is a step by step walkthrough with additional examples.
-This might be heavy reading but worth getting into. Press (ctrl + shift + v) for a preview.
+This might be heavy reading but worth getting into. Press (ctrl + shift + v) for a preview. Learn more about system testing with playwright here: [Playwright Documentation](https://playwright.dev/docs/intro).
 
 ## Structure & Naming
 We will first look at the different files that we are working with while creating a system test.

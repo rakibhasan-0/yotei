@@ -329,8 +329,8 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 			</div>
 			<div style={{paddingBottom: "5.1rem"}}> {/* Greater than btnAddActivity height */}
 				{suggested.map((tag, index) => (
-					<>
-						{index === dividerIndex && <Divider key="divider" title={""} option={"h2_left"} />}
+					<React.Fragment key={tag.id}>
+						{index === dividerIndex && <Divider key={`divider-${index}`} title={""} option={"h2_left"} />}
 						<EditableListItem
 							item={tag.name}
 							key={tag.id}
@@ -345,7 +345,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 							grayTrash={tag.exercises + tag.workouts + tag.techniques > 0}
 							onRemove={() => handleDelete(tag)}
 						/>
-					</>
+					</React.Fragment>
 				))}
 				{loading ? <Spinner /> : tagListArray}
 			</div>
