@@ -1,6 +1,7 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import DropDown from "../../Common/List/Dropdown"
 import styles from "./ListPicker.module.css"
+import CheckBox from "../../Common/CheckBox/CheckBox"
 
 
 /**
@@ -13,41 +14,49 @@ import styles from "./ListPicker.module.css"
  */
 
 
-export default function ListPicker() {
+export default function ListPicker({ onFilterChange }) {
 	const filterOptions = [
-		{ label: "Alla" },
 		{ label: "Mina listor" },
+		{ label: "Delade med mig" },
 		{ label: "Publika listor" }
 	]
-	const [filter, setFilter] = useState(filterOptions[0])
+	const [filter, setFilter] = useState([])
+
+
+
+	useEffect(() => {
+		onFilterChange(filter)
+	}, [filter, onFilterChange])
+
+
 
 	const onSelect = (option) => {
-		// Here things will happen when selecting an option.
-		setFilter(option)
-
+		setFilter(prevFilter => {
+			if (prevFilter.some(opt => opt.label === option.label)) {
+				// If the option is already included, remove it
+				return prevFilter.filter(opt => opt.label !== option.label)
+			} else {
+				// If the option is not included, add it
+				return [...prevFilter, option]
+			}
+		})
 	}
+
 	return (
 		<div className={styles.listPicker}>
 			<DropDown
-				text={filter.label}
+				text={"Listor"}
 				className={styles.filterText}
 				id="list-filter-workout" centered={true}
-				autoClose={true}
+				autoClose={false}
 			>
-
 				<div className={styles.filterBorder}>
 					{filterOptions.map((option, index) => (
-
-						<div className={styles.filterItems} id={"listFilterItem"}
-							key={index}
-							onClick={() => {
-								onSelect(option)
-							}}>
-							<p className={styles.listItemText}>{option.label}</p>
-						</div>
+						<label className={`${styles.filterItems} filterItems`} key={index}>
+							<CheckBox label={option.label} checked={filter.some(opt => opt.label === option.label)} onClick={() => onSelect(option)} />
+						</label>
 					))}
 				</div>
-
 			</DropDown>
 		</div>
 	)
