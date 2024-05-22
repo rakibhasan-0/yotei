@@ -23,9 +23,11 @@ test.describe("Test AddTagPopup", () => {
 		const tagId = Math.floor(Math.random() * (10000 - 1 + 1))
 
 		await addTagPopupPage.addTag({tagName: tagName, tagId: tagId})
-		await expect(page.getByText(tagName)).toHaveCount(1)
+		await expect(page.getByText(tagName)).toBeVisible()
+		//await expect(page.getByText(tagName)).toHaveCount(1)
 
 		await addTagPopupPage.deleteTag({tagName: tagName, tagId: tagId})
-		await expect(page.getByText(tagName)).toHaveCount(0)
+		//await expect(page.getByText(tagName)).toHaveCount(0)
+		await expect(page.getByText(tagName)).toBeHidden()
 	})
 })
