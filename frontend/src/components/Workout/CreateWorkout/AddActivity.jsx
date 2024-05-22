@@ -126,30 +126,30 @@ function AddActivity({ id, setShowActivityInfo }) {
 			cmp: (a, b) => {
 				// "Mina" - prioritize items where the current user is the author
 				if (a.author.userId === currentUserId && b.author.userId !== currentUserId) {
-					return -1;
+					return -1
 				}
 				if (b.author.userId === currentUserId && a.author.userId !== currentUserId) {
-					return 1;
+					return 1
 				}
 			
 				// "Delade" - prioritize items that are not authored by the current user and are hidden
 				if (a.hidden && !b.hidden && a.author.userId !== currentUserId && b.author.userId === currentUserId) {
-					return -1;
+					return -1
 				}
 				if (b.hidden && !a.hidden && b.author.userId !== currentUserId && a.author.userId === currentUserId) {
-					return 1;
+					return 1
 				}
 			
 				// "Publika" - prioritize items that are not authored by the current user and are not hidden
 				if (!a.hidden && a.author.userId !== currentUserId && (b.hidden || b.author.userId === currentUserId)) {
-					return -1;
+					return -1
 				}
 				if (!b.hidden && b.author.userId !== currentUserId && (a.hidden || a.author.userId === currentUserId)) {
-					return 1;
+					return 1
 				}
 			
 				// If items are equal in terms of the above conditions, sort them by name
-				return a.name.localeCompare(b.name);
+				return a.name.localeCompare(b.name)
 			}
 		},
 		{ label: "Namn: A-Ö", cmp: (a, b) => { return a.name.localeCompare(b.name) } },
