@@ -69,7 +69,7 @@ export function canCreateGroups(context) {
 /**
  * canEditGroups() - checks if a user can edit a group. If not all, check if user can edit own and if so let user edit their own.
  * @param {*} context AccountContext from user.
- * @param {*} groupId The Id of the user that created the group.
+ * @param {*} groupCreatorId The Id of the user that created the group.
  * @returns true if user can edit a group.
  */
 export function canEditGroups(context, groupCreatorId) {
