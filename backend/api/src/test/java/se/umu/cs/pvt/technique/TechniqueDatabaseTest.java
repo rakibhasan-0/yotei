@@ -171,15 +171,15 @@ public class TechniqueDatabaseTest {
         String username = postgreSQLContainer.getUsername();
         String password = postgreSQLContainer.getPassword();
 
-        int yellowBegin = 26;
-        int yellowEnd = 49;
+        int orangeBegin = 26;
+        int orangeEnd = 49;
 
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique
                 String expectedColor = "Orange";
 
-                for(Integer i = yellowBegin; i < yellowEnd + 1; i++){
+                for(Integer i = orangeBegin; i < orangeEnd + 1; i++){
                     String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
                 
                     PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
@@ -209,15 +209,15 @@ public class TechniqueDatabaseTest {
         String username = postgreSQLContainer.getUsername();
         String password = postgreSQLContainer.getPassword();
 
-        int yellowBegin = 50;
-        int yellowEnd = 74;
+        int greenBegin = 50;
+        int greenEnd = 74;
 
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique
                 String expectedColor = "Grönt";
 
-                for(Integer i = yellowBegin; i < yellowEnd + 1; i++){
+                for(Integer i = greenBegin; i < greenEnd + 1; i++){
                     String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
                 
                     PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
@@ -247,15 +247,15 @@ public class TechniqueDatabaseTest {
         String username = postgreSQLContainer.getUsername();
         String password = postgreSQLContainer.getPassword();
 
-        int yellowBegin = 75;
-        int yellowEnd = 101;
+        int blueBegin = 75;
+        int blueEnd = 101;
 
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique
                 String expectedColor = "Blått";
 
-                for(Integer i = yellowBegin; i < yellowEnd + 1; i++){
+                for(Integer i = blueBegin; i < blueEnd + 1; i++){
                     String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
                 
                     PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
@@ -285,15 +285,15 @@ public class TechniqueDatabaseTest {
         String username = postgreSQLContainer.getUsername();
         String password = postgreSQLContainer.getPassword();
 
-        int yellowBegin = 102;
-        int yellowEnd = 134;
+        int brownBegin = 102;
+        int brownEnd = 134;
 
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique
                 String expectedColor = "Brunt";
 
-                for(Integer i = yellowBegin; i < yellowEnd + 1; i++){
+                for(Integer i = brownBegin; i < brownEnd + 1; i++){
                     String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
                 
                     PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
