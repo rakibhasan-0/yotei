@@ -327,7 +327,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 					<Sorter id={"tag-sort"} selected={sort} onSortChange={setSort} options={sortOptions}/>
 				</FilterContainer>
 			</div>
-			<div>
+			<div style={{paddingBottom: "5.1rem"}}> {/* Greater than btnAddActivity height */}
 				{suggested.map((tag, index) => (
 					<>
 						{index === dividerIndex && <Divider key="divider" title={""} option={"h2_left"} />}
