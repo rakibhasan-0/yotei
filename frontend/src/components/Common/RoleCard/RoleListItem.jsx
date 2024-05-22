@@ -1,23 +1,22 @@
 import styles from "./RoleListItem.module.css"
 /**
- 
-An RoleListItem that can be used in an list view.
-It displays the title of an role and a link to the permission page.
-Props:
-item @type {string}         - Text displaying the title of the role
-detailURL @type {string}     - The base URL for roles
-id @type {integer}             - The ID for this particular role in database
-index @type {integer}         - The ID for this particular role on current page (Used for coloring)
-Example usage:
-<RoleListItem
-item={the role name}
-id={The unique ID for an role, gets concatenated onto detailURL}
-detailURL={the base URL for roles}
-index={The index for the role in the list containing fetched roles}>
-</RoleListItem>
-@author Team Mango (Group 4)
-@since 2023-05-08
-@version 1.0
+ * An RoleListItem that can be used in an list view.
+ * It displays the title of an role.
+ * 
+ * Props:
+ *    	item @type {string} - Text displaying the title of the role
+ *         index @type {integer} - The ID for this particular role on current page (Used for coloring)
+ * 
+ * Example usage:
+ *         <RoleListItem
+ *            item={the role name}
+ *           index={The index for the role in the list containing fetched roles}>
+ * 
+ *        </RoleListItem>
+ * 
+ * @author Team Mango (Group 4)
+ * @since 2024-05-22
+ * @version 1.0
 */
 export default function RoleListItem({ item, index }) {
 

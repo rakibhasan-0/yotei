@@ -2,7 +2,7 @@ import styles from "./RoleListItem.module.css"
 import { ChevronRight } from "react-bootstrap-icons"
 import { Link } from "react-router-dom"
 /**
- * An RoleListItem that can be used in an list view.
+ * An RoleListItemLink that can be used in an list view.
  * It displays the title of an role and a link to the permission page.
  * 
  * Props:
@@ -12,13 +12,13 @@ import { Link } from "react-router-dom"
  * 		index @type {integer} 		- The ID for this particular role on current page (Used for coloring)
  * 
  * Example usage:
- * 		<RoleListItem
+ * 		<RoleListItemLink
  * 			item={the role name}
  * 			id={The unique ID for an role, gets concatenated onto detailURL}
  * 			detailURL={the base URL for roles}
  * 			index={The index for the role in the list containing fetched roles}>
  * 
- * 		</RoleListItem>
+ * 		</RoleListItemLink>
  * 
  * @author Team Mango (Group 4)
  * @since 2023-05-08
