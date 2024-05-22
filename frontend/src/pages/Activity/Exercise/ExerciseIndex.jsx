@@ -174,7 +174,7 @@ export default function ExerciseIndex() {
 			</RoundButton>
 			}
 			<Popup title="Lägg till i lista" isOpen={showMorePopup} setIsOpen={setShowMorePopup}>
-				<AddToListPopupContent techExerID={{ techniqueId: null, exerciseId: selectedExerciseId }} />
+				<AddToListPopupContent techExerID={{ techniqueId: null, exerciseId: selectedExerciseId }} setShowMorePopup={setShowMorePopup} />
 			</Popup>
 		</>
 	)
