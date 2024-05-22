@@ -715,7 +715,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 
 											<DropDown
 												text={list.name}
-												autoClose={isChecked}
+												autoClose={false}
 												id={list.id}
 												onClick={() => fetchingListContent(list.id)}
 												key={list.id}
