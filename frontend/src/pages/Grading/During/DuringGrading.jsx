@@ -636,7 +636,7 @@ export default function DuringGrading() {
 			headers: { "token": token },
 		}
 		try {
-			const response = await fetch(`/api/examination/examresult/${gradingId}`, requestOptions)
+			const response = await fetch("/api/examination/examresult/all", requestOptions)
             
 			if (!response.ok) {
 				setLoading(false)
