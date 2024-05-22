@@ -172,6 +172,17 @@ export function canCreateAndEditActivity(context) {
 }
 
 /**
+ * canCreateGradings() - Check if user can create a grading.
+ * @param {*} context Accountcontext from user. 
+ * @returns true if user can create a grading.
+ */
+
+export function canHandleGradings(context) {
+	if (!context.permissions) return false
+	return (context.permissions.includes(USER_PERMISSION_CODES.GRADING_ALL))
+}
+
+/**
  * Logs out the user and returns to the logIn screen
  */
 export function logOut() {
