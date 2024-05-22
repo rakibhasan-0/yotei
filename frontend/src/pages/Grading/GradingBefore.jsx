@@ -421,6 +421,10 @@ export default function GradingBefore() {
 		await deleteExaminee(examineeId, token)
 			.catch(() => setErrorToast("Kunde inte tabort personen. Kontrollera din internetuppkoppling."))
 
+    if(lastAddedExaminee.id === examineeId) {
+      setLastAddedExaminee({})
+    }
+
 		if (checkedExamineeIds.includes(examineeId)) {
 			setCheckedExamineeIds(checkedExamineeIds.filter((id) => id !== examineeId))
 		}
@@ -669,9 +673,9 @@ export default function GradingBefore() {
 
 				<PopupSmall id={"test-popup"} title={"Varning"} isOpen={showPopup} setIsOpen={setShowPopup} direction={startRedirection}>
 					<h2>Är du säker på att alla deltagare är tillagda? </h2>
-					<h2>Du kan <span style={{ fontWeight: "bold", fontSize: "18px" }}>inte</span> lägga till eller redigera i efterhand</h2>
+					<h2>Du kan <span style={{ fontWeight: "bold", fontSize: "18px" }}>inte</span> redigera skapade individer i efterhand</h2>
 					<br></br>
-					<h2> Isåfall fortsätt till bedömnings processen</h2>
+					<h2> Isåfall fortsätt till graderingsprocessen</h2>
 				</PopupSmall>
 
 				<Button
