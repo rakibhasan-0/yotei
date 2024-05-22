@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.deser.DataFormatReaders.Match;
 
 import ch.qos.logback.classic.Level;
+import org.springframework.http.HttpMethod;
 
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -13,6 +14,7 @@ import org.springframework.cloud.gateway.route.Route;
 import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
@@ -49,7 +51,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
     // Enum for all existing permissions
     // These are listed in permissions.sql and should mirror 
     // what is present in utils.js
-    private enum permission_list {
+    private enum permissionList {
         ADMIN_RIGHTS(1),
 	    SESSION_OWN(2), //Edit your own sessions.
 	    SESSION_ALL(3), //Edit all sessions.
@@ -63,7 +65,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
 	    GRADING_ALL(11);
 
         private final int value;
-        private permission_list(int value) {
+        private permissionList(int value) {
             this.value = value;
         }
     }
@@ -77,12 +79,14 @@ public class AuthFilter implements GlobalFilter, Ordered {
 
         String path = route != null ? exchange.getRequest().getPath().toString() : null;
 
+        ServerHttpRequest request = route != null ? exchange.getRequest() : null;
+
         String apiKey = "";
         if (apiKeyHeader != null) {
             apiKey = apiKeyHeader.get(0);
         }
 
-        if (!isAuthorized(routeId, apiKey, path)) {
+        if (!isAuthorized(routeId, apiKey, path, request)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Please check your api key.");
         }
 
@@ -97,9 +101,11 @@ public class AuthFilter implements GlobalFilter, Ordered {
     /**
      * @param routeId id of route
      * @param apikey  client header api key
+     * @param request 
      * @return true if is authorized, false otherwise
      */
-    private boolean isAuthorized(String routeId, String apikey, String path) {
+    private boolean isAuthorized(
+        String routeId, String apikey, String path, ServerHttpRequest request) {
 
         // Always access to webserver and login api
         if (routeId.equals("webserver") || path.equals("/api/users/verify") || path.startsWith("/api/media/files/")) {
@@ -128,7 +134,9 @@ public class AuthFilter implements GlobalFilter, Ordered {
         //System.err.println("permissions: " + permissions);
         //Logger.log(Level.DEBUG, "permissions: " + permissions);
         
-        if (role.equals("ADMIN") || permissions.contains(permission_list.ADMIN_RIGHTS.value)) {
+        if (role.equals("ADMIN") || 
+            permissions.contains(permissionList.ADMIN_RIGHTS.value) ||
+            request.getMethod().equals(HttpMethod.GET)) {
             return true;
         }
         
@@ -138,9 +146,10 @@ public class AuthFilter implements GlobalFilter, Ordered {
         if (path.startsWith("/api/session") 
             && !checkSessionPermissions(path, permissions)) return false;
 
-        // Protect import and export endpoints
-        // Only allow admin to create users
-        return !(path.contains("import") || path.contains("export") || path.equals("/api/users"));
+        if (path.startsWith("/api/workouts") 
+        && !checkWorkoutPermissions(path, permissions, request)) return false;
+
+        return !isAdminLockedEndPoints(path);
 
     }
 
@@ -163,12 +172,41 @@ public class AuthFilter implements GlobalFilter, Ordered {
         };
     
         Integer[] permissionsToCheck = {
-            permission_list.SESSION_ALL.value,
-            permission_list.SESSION_OWN.value
+            permissionList.SESSION_ALL.value,
+            permissionList.SESSION_OWN.value
         };
 
         return hasPermission(path, permissions, Arrays.asList(patterns), Arrays.asList(permissionsToCheck));
     }
+
+    private boolean checkWorkoutPermissions(
+        String path, List<Integer> permissions, ServerHttpRequest request) {
+        // Might be a better way but this makes it so that no 
+        // newly created endpoint is permission-locked from the get-go
+        // Any new endpoint that needs to be locked has to be included here
+        Pattern[] patterns = {
+            // From WorkoutController
+            Pattern.compile("^/api/workouts$"),
+            Pattern.compile("^/api/workouts/update_full_workout$"),
+            Pattern.compile("^/api/workouts/reviews$"),
+            Pattern.compile("^/api/workouts/favorites$"),
+            Pattern.compile("^/api/workouts/add_full_workout$"),
+            Pattern.compile("^/api/workouts/delete_full_workout/\\d+$"),
+            Pattern.compile("^/api/workouts/delete/\\d+$"),
+            // From UserWorkoutController
+            Pattern.compile("^/api/workouts/add/workout/\\d+/user/\\d+$"),
+            Pattern.compile("^/api/workouts/remove/workout/\\d+/user/\\d+$"),
+        };
+    
+        Integer[] permissionsToCheck = {
+            permissionList.WORKOUT_ALL.value,
+            permissionList.WORKOUT_OWN.value
+        };
+
+        return hasPermission(
+            path, permissions, Arrays.asList(patterns), Arrays.asList(permissionsToCheck));
+    }
+
 
     private boolean hasPermission(String path, List<Integer> permissions, List<Pattern> patterns, List<Integer> permissionsToCheck) {
         for (Pattern pattern : patterns) {
@@ -181,5 +219,13 @@ public class AuthFilter implements GlobalFilter, Ordered {
         }
 
         return true;
+    }
+
+    private boolean isAdminLockedEndPoints(String path) {
+        return 
+            path.contains("import") || 
+            path.contains("export") || 
+            path.equals("/api/users") || 
+            path.startsWith("/api/permissions/role");
     }
 }
