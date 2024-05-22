@@ -95,8 +95,9 @@ export function checkIfChangesMade(info) {
 
 /**
  * List create reducer
- * @author Team Tomato
- *
+ * @author Team Tomato (6)
+ * @since 2024-05-22
+ * Based on WorkoutCreateReducer
  */
 export function listCreateReducer(state, action) {
 	const tempState = { ...state }
