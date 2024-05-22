@@ -1,19 +1,22 @@
 package se.umu.cs.pvt.activitylist;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Component;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import se.umu.cs.pvt.activitylist.ActivityListRequest.ActivityRequest;
 import se.umu.cs.pvt.activitylist.Dtos.ActivityListDTO;
 import se.umu.cs.pvt.activitylist.Dtos.ActivityListShortDTO;
 import se.umu.cs.pvt.activitylist.Dtos.UserShortDTO;
@@ -24,7 +27,7 @@ import se.umu.cs.pvt.workout.UserShortRepository;
 /**
  * ActivityListService used in ActivityListController
  * 
- * @author Team Tomato, updated 2024-05-21
+ * @author Team Tomato, updated 2024-05-22
  * @since 2024-05-12
  * @version 1.1
  */
@@ -32,15 +35,17 @@ import se.umu.cs.pvt.workout.UserShortRepository;
 public class ActivityListService implements IActivityListService {
     private final UserShortRepository userShortRepository;
     private final ActivityListRepository activityListRepository;
+    private final ActivityListEntryRepository entryRepository;
     private final JWTUtil jwtUtil;
 
     private static final String ROLE_ADMIN = "ADMIN";
 
     public ActivityListService(UserShortRepository userShortRepository, ActivityListRepository activityListRepository,
-            JWTUtil jwtUtil) {
+            JWTUtil jwtUtil, ActivityListEntryRepository entryRepository) {
         this.userShortRepository = userShortRepository;
         this.activityListRepository = activityListRepository;
         this.jwtUtil = jwtUtil;
+        this.entryRepository = entryRepository;
     }
 
     /**
@@ -144,7 +149,7 @@ public class ActivityListService implements IActivityListService {
             if (activity.getType().equals("exercise")) {
                 newList.addExercise(activity.getId(), activity.getDuration());
             } else {
-                newList.addTechnique(activity.getId());
+                newList.addTechnique(activity.getId(), activity.getDuration());
             }
         }
 
@@ -275,6 +280,7 @@ public class ActivityListService implements IActivityListService {
      * @param listToUpdate data about the list to be updated
      * @return the id of the updated list
      */
+    @Transactional
     @Override
     public Long editActivityList(ActivityListRequest listToUpdate, String token) {
         DecodedJWT jwt;
@@ -309,19 +315,60 @@ public class ActivityListService implements IActivityListService {
         Set<UserShort> usersToAdd = new HashSet<>(usersList);
         list.setUsers(usersToAdd);
 
-        for (ActivityListRequest.ActivityRequest activity : listToUpdate.getActivities()) {
-            String type = activity.getType();
-            if (type.equals("exercise")) {
-                list.addExercise(activity.getId(), activity.getDuration());
-            } else if (type.equals("technique")) {
-                list.addTechnique(activity.getId());
-            } else {
-                throw new IllegalArgumentException("Invalid activity type");
-            }
+        Set<ActivityListEntry> existingActivities = list.getActivityEntries();
+        Set<Long> updatedActivityIds = getUpdatedActivityIds(listToUpdate);
+        Set<ActivityListRequest.ActivityRequest> activitiesToAdd = getActivitiesToAdd(listToUpdate, existingActivities);
+
+        removeOldActivities(existingActivities, updatedActivityIds);
+
+        // Lastly add new activities to the list
+        for (ActivityRequest a : activitiesToAdd) {
+            addActivity(list, a);
         }
 
         ActivityList updatedList = activityListRepository.save(list);
         return updatedList.getId();
+    }
+
+    private void addActivity(ActivityList list, ActivityListRequest.ActivityRequest activity) {
+        switch (activity.getType()) {
+            case "exercise":
+                list.addExercise(activity.getId(), activity.getDuration());
+                break;
+            case "technique":
+                list.addTechnique(activity.getId(), activity.getDuration());
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid activity type");
+        }
+    }
+
+    private Set<Long> getUpdatedActivityIds(ActivityListRequest listToUpdate) {
+        return listToUpdate.getActivities().stream()
+                .map(ActivityListRequest.ActivityRequest::getEntryId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+    }
+
+    private void removeOldActivities(Set<ActivityListEntry> existingActivities, Set<Long> updatedActivityIds) {
+        Set<Long> idsToRemove = existingActivities.stream()
+                .filter(existingActivity -> existingActivity.getId() != null
+                        && !updatedActivityIds.contains(existingActivity.getId()))
+                .map(ActivityListEntry::getId)
+                .collect(Collectors.toSet());
+
+        idsToRemove.forEach(id -> {
+            entryRepository.findById(id).ifPresent(entryRepository::delete);
+            existingActivities.removeIf(activity -> activity.getId().equals(id));
+        });
+    }
+
+    private Set<ActivityListRequest.ActivityRequest> getActivitiesToAdd(ActivityListRequest listToUpdate,
+            Set<ActivityListEntry> existingActivities) {
+        return listToUpdate.getActivities().stream()
+                .filter(activity -> activity.getEntryId() == null || !existingActivities.stream()
+                        .anyMatch(entry -> entry.getId() != null && entry.getId().equals(activity.getEntryId())))
+                .collect(Collectors.toSet());
     }
 
 }

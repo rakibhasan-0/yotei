@@ -12,6 +12,7 @@ import { useParams, useNavigate } from "react-router-dom"
 import {setError as setErrorToast} from "../../../utils" 
 
 import { AccountContext } from "../../../context"
+import Spinner from "../../../components/Common/Spinner/Spinner"
 
 
 /**
@@ -88,21 +89,33 @@ function getCategoryIndices(dataArray) {
  *  @version 2.0
  */
 export default function DuringGrading() {
-	const [currentTechniqueStep, setCurrentIndex] = useState(0)
+	const [loading, setLoading] = useState(true)
+	const [currentTechniqueStep, setCurrentTechniqueStep] = useState(undefined)
+	const [indexBeforeRandondi, setRandoriIndex] = useState(0)
 	const [showPopup, setShowPopup] = useState(false)
 	const [examinees, setExaminees] = useState(undefined)
 	const [pairs, setPairs] = useState([])
+	const [leftExamineeState, setLeftExamineeState] = useState("default")
+	const [rightExamineeState, setRightExamineeState] = useState("default")
+	const [results, setResults] = useState([])
 	const [techniqueNameList, setTechniqueNameList] = useState(undefined)
 	const [categoryIndexMap, setCategoryIndices] = useState(undefined)
+	const [isSubmitting, setIsSubmitting] = useState(false)
 	const { gradingId } = useParams()
 	const navigate = useNavigate()
-
+	const scrollableContainerRef = useRef(null) // Scroll to the top of the examinees list after navigation
+	
 	const context = useContext(AccountContext)
 	const { token } = context
+    
 
 	// Go to summary when the index is equal to length. Maybe change the look of the buttons.
 	const goToNextTechnique = () => {
-		setCurrentIndex(nextStep => {
+		setLoading(true)
+		setCurrentTechniqueStep(nextStep => {
+			if(nextStep === techniqueNameList.length -2){
+				setRandoriIndex(nextStep)
+			}
 			const nextTechniqueStep = Math.min(nextStep + 1, techniqueNameList.length - 1)
 			onUpdateStepToDatabase(nextTechniqueStep)
 			return nextTechniqueStep
@@ -112,10 +125,11 @@ export default function DuringGrading() {
 	}
 	//goes to previous technique if it is not the first technique.
 	const goToPrevTechnique = () => {
+		setLoading(true)
 		if(currentTechniqueStep === 0) {
 			goToAddExamineePage()
 		} else {
-			setCurrentIndex(prevStep => {
+			setCurrentTechniqueStep(prevStep => {
 				const previousTechniqueStep = Math.max(prevStep - 1, 0)
 				onUpdateStepToDatabase(previousTechniqueStep)
 				return previousTechniqueStep
@@ -128,14 +142,14 @@ export default function DuringGrading() {
 	// this update the database with what techniquestep the user is on, and it works with forward and backward navigation.
 	const onUpdateStepToDatabase = async (currentTechniqueStep) => {
 		try {
-			const response = await fetch("/api/examination/grading/1", { headers: { "token": token } })
+			const response = await fetch(`/api/examination/grading/${gradingId}`, { headers: { "token": token } })
 			if (!response.ok) {
 				setErrorToast("kunde inte hämta steg från databasen")
 				return
 			}
 			const step = await response.json()
-			step.technique_step_num = currentTechniqueStep
-			console.log("response grading", step.technique_step_num)
+			step.techniqueStepNum = currentTechniqueStep
+			console.log("response grading", step.techniqueStepNum)
 
 			const update = await fetch("/api/examination/grading", {
 				method: "PUT",
@@ -145,7 +159,7 @@ export default function DuringGrading() {
 				},
 				body: JSON.stringify(step)
 			})
-
+			
 			if (!update.ok) {
 				setErrorToast("kunde inte uppdatera steg i databasen")
 				return
@@ -167,10 +181,11 @@ export default function DuringGrading() {
 				}
 				if (!response.ok) {
 					console.log("could not fetch examinees")
+					setLoading(false)
 					throw new Error("Could not fetch examinees")
 				}
 				const all_examinees = await response.json()
-				
+
 				const current_grading_examinees = getExamineesCurrentGrading(all_examinees)
 				setExaminees(current_grading_examinees)
 				console.log("Fetched examinees in this grading: ", current_grading_examinees)
@@ -191,9 +206,11 @@ export default function DuringGrading() {
 						return
 					}
 					if (!response.ok) {
+						setLoading(false)
 						throw new Error("Could not fetch pairs")
 					}
 					const pairs_json = await response.json()
+					setLoading(false)
 
 					// Get only pairs in this grading
 					const pair_examinees_current_grading = getPairsInCurrrentGrading(pairs_json)
@@ -205,10 +222,8 @@ export default function DuringGrading() {
 				}
 			})()
 		}
-		
-		
 	}, [examinees])
-
+    
 	// Run to fetch the correct grading, to in turn fetch the correct grading protocol
 	useEffect(() => {
 		async function fetchData() {
@@ -225,8 +240,19 @@ export default function DuringGrading() {
 		fetchData()
 	}, [])
 
-	const [leftExamineeState, setLeftExamineeState] = useState("default")
-	const [rightExamineeState, setRightExamineeState] = useState("default")
+	useEffect(() => {
+		if(currentTechniqueStep !== undefined) {
+			fetchTechniqueResults(techniqueNameList[currentTechniqueStep].technique.text, token) 
+		}
+	}, [currentTechniqueStep])
+    
+	// Debugging the examinee states.    
+	useEffect(() => {
+		console.log("leftExamineeState:", leftExamineeState)
+		console.log("rightExamineeState:", rightExamineeState)
+	}, [leftExamineeState, rightExamineeState])
+
+
 	// Will handle the api call that will update the database with the result. 
 	/**
 	 * 
@@ -236,130 +262,181 @@ export default function DuringGrading() {
 	 * @param {String} buttonId : button index namne that ends with either 'left' or 'right'
 	 */
 	const examineeClick = (newState, technique, pairIndex, buttonId) => {
+		if (isSubmitting) return
+		setIsSubmitting(true)
+
 		console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}, with new state ${newState}`)
 		// Check what state the button is in and send the proper information to DB.
 		let examinee_clicked = buttonId.endsWith("left") ? pairs[pairIndex].leftId : pairs[pairIndex].rightId
 		addExamineeResult(examinee_clicked, `${technique}`, newState)
+
 	}
-
-	// Scroll to the top of the examinees list after navigation
-	const scrollableContainerRef = useRef(null)
-
+    
 	return (
-		<div className={styles.container}>
-			{techniqueNameList && (
-				<TechniqueInfoPanel
-					categoryTitle=""
-					currentTechniqueTitle={techniqueNameList[currentTechniqueStep].technique.text}
-					nextTechniqueTitle={techniqueNameList[currentTechniqueStep].nextTechnique.text}
-					mainCategoryTitle={techniqueNameList[currentTechniqueStep].categoryName}>
-				</TechniqueInfoPanel>
-			)}
-			{/* All pairs */}	
-			{techniqueNameList && (		
-				<div ref={scrollableContainerRef} className={styles.scrollableContainer}>
-					{pairs.map((item, index) => (
-						<ExamineePairBox 
-							key={index}
-							rowColor={index % 2 === 0 ? "#FFFFFF" : "#F8EBEC"}
-							leftExaminee={
-								<ExamineeBox 
-									examineeName={item.nameLeft} 
-									onClick={(newState) => examineeClick(newState, techniqueNameList[currentTechniqueStep].technique.text, index, `${index}-left`)}
-									buttonState={leftExamineeState}
-									setButtonState={setLeftExamineeState}
-									examineeId={item.leftId}
-									techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
-								/>
-							}
-							rightExaminee={
-								item.rightId ? (
-									<ExamineeBox 
-										examineeName={item.nameRight}
-										onClick={(newState) => examineeClick(newState, techniqueNameList[currentTechniqueStep].technique.text, index, `${index}-right`)}
-										buttonState={rightExamineeState}
-										setButtonState={setRightExamineeState}
-										examineeId={item.rightId}
+		<div>
+			{loading ? <Spinner /> : ( 
+				<div className={styles.container}>
+					<div className={styles.infoPanel}>
+						{techniqueNameList && (
+							<TechniqueInfoPanel
+								currentTechniqueTitle={techniqueNameList[currentTechniqueStep].technique.text}
+								nextTechniqueTitle={techniqueNameList[currentTechniqueStep].nextTechnique.text}
+								mainCategoryTitle={techniqueNameList[currentTechniqueStep].categoryName}>
+							</TechniqueInfoPanel>
+						)}
+					</div>
+					{/* All pairs */}	
+					<div className={styles.middleContainer}>
+						{techniqueNameList && results && (		
+							<div ref={scrollableContainerRef} className={styles.scrollableContainer}>
+								{pairs.map((item, index) => (
+									<ExamineePairBox 
+										key={index}
+										rowColor={index % 2 === 0 ? "#FFFFFF" : "#F8EBEC"}
+										leftExaminee={
+											<ExamineeBox 
+												examineeName={item.nameLeft} 
+												onClick={(newState) => examineeClick(newState, techniqueNameList[currentTechniqueStep].technique.text, index, `${index}-left`)}
+												status={getExamineeStatus(item.leftId, results)}
+												setButtonState={setLeftExamineeState}
+												examineeId={item.leftId}
+												techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
+											/>
+										}
+										rightExaminee={
+											item.rightId ? (
+												<ExamineeBox 
+													examineeName={item.nameRight}
+													onClick={(newState) => examineeClick(newState, techniqueNameList[currentTechniqueStep].technique.text, index, `${index}-right`)}
+													status={getExamineeStatus(item.rightId, results)}
+													setButtonState={setRightExamineeState}
+													examineeId={item.rightId}
+													techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
+												/>
+											) : null
+										}
+										pairNumber={index+1}
 										techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
-									/>
-								) : null
-							}
-							pairNumber={index+1}
-							techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
-							examineePairId={item.pairId}
-						>
-						</ExamineePairBox>
-					))}
-				</div>
-			)}
-
-			<div className={styles.bottomRowContainer}>
-				{/* Prev technique button */}
-				<div 
-					id={"prev_technique"} 
-					onClick={() => {
-						goToPrevTechnique() 
-
-						scrollableContainerRef.current.scrollTop = 0}} 
-					className={styles.btnPrevActivity}>
-					{<ArrowLeft/>}
-				</div>
-				{ /*Techniques button*/ }
-				<Button id={"techniques-button"} onClick={() => setShowPopup(true)}><p>Tekniker</p></Button>
-				{ /* Next technique button */ }
-				<div 
-					id={"next_technique"} 
-					onClick={() => {
-						goToNextTechnique()
-						scrollableContainerRef.current.scrollTop = 0}} 
-					className={styles.btnNextActivity}>
-					{<ArrowRight/>}
-				</div>
-			</div>
-
-			<Popup 
-				id={"navigation-popup"} 
-				title={"Tekniker-kategorier"} 
-				isOpen={showPopup} 
-				setIsOpen={setShowPopup}> 
-				{techniqueNameList && (		
-					<div className={styles.popupContent}>
-						{categoryIndexMap.map((techniqueName, index) => (
-							<Button 
-								key={index}
-								width={"100%"}
-								onClick={() => {
-									setCurrentIndex(() => {
-										const techniquestep = techniqueName.categoryIndex
-										onUpdateStepToDatabase(techniquestep)
-										return techniquestep
-									})
-									setShowPopup(false)
-									// Fetch the correct result for each examinee conected to this technique
-									scrollableContainerRef.current.scrollTop = 0}}>
-								<p>{techniqueName.category}</p></Button>
-						))}
-                
-						<div>
-							{/* Go back to the add examinee page */}
-							<Button 
-								id={"back-button"} 
-								outlined={true} 
-								onClick={goToAddExamineePage}>
-								<p>Tillbaka till <br />&quot;Lägg till deltagare&quot;</p>
-							</Button>
-							{/* Go to the summary page */}
-							<Button 
-								id={"summary-button"} 
-								onClick={gotoSummary}>
-								<p>Fortsätt till summering</p>
-							</Button>
+										examineePairId={item.pairId}
+									>
+									</ExamineePairBox>
+								))}
+							</div>
+						)}
+					</div>
+					<div className={styles.bottomRowContainer}>
+						{/* Prev technique button */}
+						<div 
+							id={"prev_technique"} 
+							onClick={() => {
+								goToPrevTechnique() 
+								scrollableContainerRef.current.scrollTop = 0}} 
+							className={styles.btnPrevActivity}>
+							{<ArrowLeft/>}
+						</div>
+						{ /*Techniques button*/ }
+						<Button id={"techniques-button"} onClick={() => setShowPopup(true)}><p>Tekniker</p></Button>
+						{ /* Next technique button */ }
+						<div 
+							id={"next_technique"} 
+							onClick={() => {
+								goToNextTechnique()
+								scrollableContainerRef.current.scrollTop = 0}} 
+							className={styles.btnNextActivity}>
+							{<ArrowRight/>}
 						</div>
 					</div>
-				)}
-			</Popup>
+
+					<Popup 
+						id={"navigation-popup"} 
+						title={"Tekniker-kategorier"} 
+						isOpen={showPopup} 
+						setIsOpen={setShowPopup}> 
+						{techniqueNameList && (		
+							<div className={styles.popupContent}>
+								{categoryIndexMap.map((techniqueName, index) => (
+									<Button 
+										key={index}
+										width={"100%"}
+										onClick={() => {
+											setCurrentTechniqueStep(() => {
+												setLoading(true)
+												const techniquestep = techniqueName.categoryIndex
+												if(techniqueNameList[currentTechniqueStep].categoryName != "YAKUSOKU GEIKO ELLER RANDORI"){
+													setRandoriIndex(currentTechniqueStep)
+												}
+												onUpdateStepToDatabase(techniquestep)
+												return techniquestep
+											})
+											setShowPopup(false)
+											// Fetch the correct result for each examinee conected to this technique
+											scrollableContainerRef.current.scrollTop = 0}}>
+										<p>{techniqueName.category}</p></Button>
+								))}
+								{
+									// Button that allows the user to return to the technique they was on when going 
+									// into randori and is only visible when in the randori category.
+									currentTechniqueStep === techniqueNameList.length - 1 && (
+										<Button
+											width={"100%"}
+											outlined={true}
+											onClick={() => {
+												setCurrentTechniqueStep(() => {
+													onUpdateStepToDatabase(indexBeforeRandondi)
+													return indexBeforeRandondi
+												})
+												setShowPopup(false)
+											}}>
+											<p className={styles.navigationGoBackButton}>Tillbaka till <br/>{techniqueNameList[indexBeforeRandondi].technique.text}</p>
+										</Button>)}
+								<div>
+									{/* Go back to the add examinee page */}
+									<Button 
+										id={"back-button"} 
+										outlined={true}
+										onClick={goToAddExamineePage}>
+										<p>Tillbaka till <br />&quot;Lägg till deltagare&quot;</p>
+									</Button>
+									{/* Go to the summary page */}
+									<Button 
+										id={"summary-button"} 
+										onClick={gotoSummary}>
+										<p>Fortsätt till summering</p>
+									</Button>
+								</div>
+							</div>
+						)}
+					</Popup>
+				</div>
+			)}
 		</div>
 	)
+
+	/**
+     * A function to get the status of an examinee.
+     * 
+     * @param {*} examineeId the Id of the examinee that we want to find status of 
+     * @param {*} results The examination results of the current technique to search through
+     * @returns the status of the examinee
+     * @author Team Apelsin (2024-05-21)
+     * @version 1.0
+     */
+
+	function getExamineeStatus(examineeId, results) {
+		const result = results.find(res => res.examineeId === examineeId)
+		console.log("id:", examineeId, "res:", result)
+    
+		if (!result) {
+			return "default"
+		}
+    
+		if (result.pass === null) {
+			return "default"
+		}
+    
+		return result.pass ? "pass" : "fail"
+	}
+    
 
 	/**
    * @author Team Pomagrade (2024-05-13)
@@ -402,6 +479,7 @@ export default function DuringGrading() {
 		})
 			.then(response => {
 				if (!response.ok) {
+					setLoading(false)
 					throw new Error("Network response was not ok")
 				}
 				return response.status
@@ -431,15 +509,6 @@ export default function DuringGrading() {
 	 * @author Team Apelsin (2024-05-17) - c21ion
 	 */
 	async function addExamineeResult(examineeId, techniqueName, passStatus) {
-		// TODO: Temporary, should use a state instead
-		const data = [
-			{
-				examineeId: 8,
-				pass: null,
-				resultId: 7,
-				techniqueName: "1. Shotei uchi, jodan, rak stöt med främre och bakre handen"
-			}
-		]
 
 		// Convert string for pass status to Boolean
 		const passStatusMap = {
@@ -448,17 +517,27 @@ export default function DuringGrading() {
 			default: null,
 		}
 		// Check existance
-		const foundExamineeResult = data.find(item => item.examineeId === examineeId)
+		const foundExamineeResult = results.find(item => item.examineeId === examineeId)
 		if( foundExamineeResult ){
 			await putExamineeResult({ resultId: foundExamineeResult.resultId, examineeId: foundExamineeResult.examineeId, techniqueName: foundExamineeResult.techniqueName, pass: passStatusMap[passStatus] }, token)
 				.catch(() => setErrorToast("Kunde inte lägga till resultat. Kolla internetuppkoppling."))
 		}else{
-			const data = await postExamineeResult({ examineeId: examineeId, techniqueName: techniqueName, pass: passStatusMap[passStatus] }, token)
+			const examineeResultToPost = { examineeId: examineeId, techniqueName: techniqueName, pass: passStatusMap[passStatus] }
+			const response = await postExamineeResult(examineeResultToPost, token)
 				.catch(() => setErrorToast("Kunde inte lägga till resultat. Kolla internetuppkoppling."))
-			const response = await data.json()
-			// TODO: Add response to listOfExamineeResults
-			console.log("Response: ", JSON.stringify(response))
+			const responseJson = await response.json()
+			// console.log(responseJson)
+			// Create a copy of the current state
+			let tempRes = [...results]
+
+			// Add the new response to the copy
+			tempRes.push(responseJson)
+
+			// Update the state with the modified copy
+			setResults(tempRes)
+			// console.log("Response: ", JSON.stringify(responseJson))
 		}
+		setIsSubmitting(false)
 	}
 
 	/**
@@ -474,7 +553,7 @@ export default function DuringGrading() {
 			headers: { "Content-Type": "application/json", "token": token },
 			body: JSON.stringify(result)
 		}
-		console.log("Fetched POST: ", JSON.stringify(result))
+		// console.log("Fetched POST: ", JSON.stringify(result))
 
 		return fetch("/api/examination/examresult", requestOptions)
 			.then(response => { return response })
@@ -495,7 +574,7 @@ export default function DuringGrading() {
 			body: JSON.stringify(result)
 		}
 
-		console.log("Fetched PUT: ", result)
+		// console.log("Fetched PUT: ", result)
 
 		return fetch("/api/examination/examresult", requestOptions)
 			.then(response => { return response })
@@ -562,6 +641,47 @@ export default function DuringGrading() {
 	}
 
 	/**
+     * TODO: SHOULD ONLY RETURN THE RESULTS CONNECTED TO THE CURRENT EXAMINATION AND TECHNIQUE
+     * 
+     * Function to fetch all results for a technique in the database
+     * @param {Array} pairs All the pairs of the examination
+     * @param {String} techniqueName Name of the technique 
+     * @param {any} token 
+     * @returns {Promise} The grading data.
+     * 
+     * @author Team Apelsin 2024-05-16
+     * @version 1.0
+     * 
+     */
+	async function fetchTechniqueResults(technique, token) {
+		const requestOptions = {
+			method: "GET",
+			headers: { "token": token },
+		}
+		try {
+			const response = await fetch("/api/examination/examresult/all", requestOptions)
+            
+			if (!response.ok) {
+				setLoading(false)
+				throw new Error("Failed to fetch technique results")
+			}
+			const data = await response.json()
+
+			if (!Array.isArray(data)) {
+				throw new Error("Fetched data is not an array")
+			}
+			const filtered = data
+				.filter(item => item.techniqueName === technique)
+
+			// console.log("filtered results: ", filtered);
+			setResults(filtered)
+			setLoading(false)
+		} catch (error) {
+			alert(error.message)
+			return null // Handle the error gracefully, return null or an empty object/array
+		}
+	}
+	/**
      * Fetches the current grading from the server.
      * @returns {Promise<Object>} A Promise that resolves to the current grading object.
      * @throws {Error} Throws an error if the grading is not found or cannot be fetched.
@@ -570,7 +690,7 @@ export default function DuringGrading() {
 		const response = await fetch("/api/examination/all", {headers: {"token": token}})
 		if (response.status === 404) {
 			console.log("404")
-			throw new Error("Grading not found")
+			return
 		}
 		if (!response.ok) {
 			console.log("Could not fetch the grading")
@@ -590,7 +710,7 @@ export default function DuringGrading() {
 		const response = await fetch("/api/examination/examinationprotocol/all", { headers: { "token": token } })
 		if (response.status === 404) {
 			console.log("404")
-			throw new Error("Examination protocols not found")
+			return
 		}
 		if (!response.ok) {
 			console.log("Could not fetch examination protocols")
@@ -620,6 +740,8 @@ export default function DuringGrading() {
 		const categoryIndexMap = getCategoryIndices(techniqueNameList)
 		setTechniqueNameList(techniqueNameList)
 		setCategoryIndices(categoryIndexMap)
+		// TODO: Set the index to the one inside the technique_step when it is available
+		setCurrentTechniqueStep(0)
 	}
 
 	/**
