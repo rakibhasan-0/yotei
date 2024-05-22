@@ -12,7 +12,7 @@ import { useCookies } from "react-cookie"
 import Review from "../../../components/Workout/WorkoutReview/ReviewFormComponent.jsx"
 import ErrorState from "../../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../../components/Common/Spinner/Spinner"
-import { HTTP_STATUS_CODES, setError, setSuccess, isAdmin } from "../../../utils"
+import { HTTP_STATUS_CODES, setError, setSuccess, isAdminUser } from "../../../utils"
 import PrintButton from "../../../components/Common/PrintButton/PrintButton"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
 
@@ -30,6 +30,7 @@ import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
  * @updated 2024-04-26 by Tomato
  * @updated 2024-05-03 Team Kiwi, fixed navigation from other websites
  * @updated 2024-05-08 Team Mango, fixed navigation bug connecting planIndex and workoutIndex
+ * @updated 2024-05-22 Team Mango: changed isAdmin check to new check.
  *
  * @version 1.7
  *
@@ -244,7 +245,7 @@ function getWorkoutInfoContainer(workoutData, setShowPopup, context, userId, wor
 						<div className={styles.clickIcon}>
 							<PrintButton workoutData={workoutData} />
 						</div>
-						{ (userId == workoutData.author.user_id || isAdmin(context)) &&
+						{ (userId == workoutData.author.user_id || isAdminUser(context)) &&
 						<>
 							<Link className="ml-3" state={{workout: workoutData, workoutId: workoutId, users: workoutUsers}} to={"/workout/edit/" + workoutId}>
 								<Pencil
