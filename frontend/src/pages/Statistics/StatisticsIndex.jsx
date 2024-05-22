@@ -227,7 +227,6 @@ export default function Statistics() {
 					<h5 style={{ fontSize: "25px" }}>Inga aktiviteter hittades</h5>
 				) : (
 					activities.map((activity, index) => (
-						
 						<TechniqueCard
 							key={index}
 							technique={activity}
