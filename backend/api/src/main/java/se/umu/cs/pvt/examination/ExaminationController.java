@@ -588,8 +588,8 @@ public class ExaminationController {
      * Returns a list of the result of all techniques for a given examinee.
      * @param examinee Given technique name.
      */
-    @GetMapping("/examresult/{examinee_id}")
-    public ResponseEntity<List<ExaminationResult>>  getExaminationProtocolByExaminee(@PathVariable("examinee_id") long examinee_id) {
+    @GetMapping("/examresult/{grading_id}/{examinee_id}")
+    public ResponseEntity<List<ExaminationResult>>  getExaminationProtocolByExaminee(@PathVariable("grading_id") long grading_id, @PathVariable("examinee_id") long examinee_id) {
         List<ExaminationResult> examinationResults = examinationResultRepository.findAll();
         ArrayList<ExaminationResult> matching_results = new ArrayList<>();
         for(ExaminationResult er : examinationResults) {
