@@ -66,6 +66,9 @@ export default function ListInfo({ id }) {
 			} else if (response.status === HTTP_STATUS_CODES.UNAUTHORIZED) {
 				setErrorStateMsg("Token är inte giltig. Felkod: " + response.status)
 				setLoading(false)
+			} else if (response.status === 500) {
+				setErrorStateMsg("Serverfel Felkod: " + response.status)
+				setLoading(false)
 			} else {
 				const json = await response.json()
 				setActivityListData(() => json)
@@ -146,13 +149,14 @@ export default function ListInfo({ id }) {
 					<h2>Användare</h2>
 				</div>
 				<div className="row">
-					{activityListData.users.map((user, index) => {
-						return (
-							<div key={"wu" + index} className="mr-2">
-								<Tag tagType={"default"} text={user.username}></Tag>
-							</div>
-						)
-					})}
+					{activityListData.users &&
+						activityListData.users.map((user, index) => {
+							return (
+								<div key={"wu" + index} className="mr-2">
+									<Tag tagType={"default"} text={user.username}></Tag>
+								</div>
+							)
+						})}
 				</div>
 			</div>
 		)
@@ -170,7 +174,6 @@ export default function ListInfo({ id }) {
 			onRecover={() => window.location.reload(false)}
 		/>
 	) : (
-		
 		<div id={id} className="container px-0">
 			{
 				<ConfirmPopup
@@ -197,13 +200,12 @@ export default function ListInfo({ id }) {
 	)
 }
 
-
 async function deleteList(listId, context, navigate, setShowPopup) {
 	const requestOptions = {
 		headers: { "Content-type": "application/json", token: context.token },
 		method: "DELETE",
 	}
-	const response = await fetch("/api/activitylists/remove?id="+listId, requestOptions).catch(() => {
+	const response = await fetch("/api/activitylists/remove?id=" + listId, requestOptions).catch(() => {
 		setError("Serverfel: Kunde inte ansluta till servern.")
 		return
 	})
