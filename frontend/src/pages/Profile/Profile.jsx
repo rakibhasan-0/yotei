@@ -255,19 +255,19 @@ export default function Profile() {
 				return
 			}
 
-			const lists = result.results.map((item) => ({
-				id: item.id,
-				name: item.name,
-				size: item.size,
-				author: item.author,
-				hidden: item.hidden,
-				isShared: item.isShared,
-			}))
-
-			setLists([workout, ...lists])
-			setFetchedLists(true)
-			setSuccessToast()
-
+			if (result && result.results) {
+				const lists = result.results.map((item) => ({
+					id: item.id,
+					name: item.name,
+					size: item.size,
+					author: item.author,
+					hidden: item.hidden,
+					isShared: item.isShared,
+				}))
+			
+				setLists([workout, ...lists])
+				setFetchedLists(true)
+			}
 		})
 	}
 
