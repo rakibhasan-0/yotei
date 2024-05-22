@@ -2,7 +2,6 @@ import React from "react"
 import { render, screen, configure, fireEvent } from "@testing-library/react"
 import EditableInputTextField from "../../../../components/Common/EditableInputTextField/EditableInputTextField"
 import "@testing-library/jest-dom"
-import userEvent from "@testing-library/user-event"
 import { BrowserRouter } from "react-router-dom"
 
 
