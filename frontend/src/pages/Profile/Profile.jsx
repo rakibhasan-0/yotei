@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react"
+import { useCookies } from "react-cookie"
 import { Tab, Tabs } from "react-bootstrap"
 import { setError as setErrorToast, setSuccess as setSuccessToast } from "../../utils"
 import ActivityList from "../../components/Activity/ActivityList"
@@ -14,9 +15,10 @@ import Divider from "../../components/Common/Divider/Divider"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import ProfileListItem from "./ProfileListItem"
 import { Lock, Unlock, Eye } from "react-bootstrap-icons"
-
+import RoundButton from "../../components/Common/RoundButton/RoundButton"
+import { Plus } from "react-bootstrap-icons"
 /**
- * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3), Team Tomato (6)
+ * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3), Team Tomato (6), Team Kiwi (Group 2)
  * @since 2024-05-16
  * @version 3.0
  * @updated 2024-05-21
@@ -28,6 +30,8 @@ export default function Profile() {
 
 	const [workouts, setWorkouts] = useState()
 	const [searchText, setSearchText] = useState("")
+	const [searchListText, setSearchListText] = useState("")
+
 
 	const [cache, cacheActions] = useMap()
 	const [password, setPassword] = useState("")
@@ -46,11 +50,15 @@ export default function Profile() {
 	const [lists, setLists] = useState([])
 	const [map, mapActions] = useMap()
 	const [isFavouriteWorkoutsFetched, setIsFavouriteWorkoutsFetched] = useState(false)
-
+	const [cookies, setCookie] = useCookies(["previousPath"])
 	const [amountOfFavouriteWorkouts, setAmountOfFavouriteWorkouts] = useState(0)
 
 	//TODO feature toggle
 	const [isListsEnabled] = useState(false)
+
+	useEffect(() => {
+		setCookie("previousPath", "/profile", {path: "/"})
+	}, [setCookie, cookies.previousPath])
 
 	const workout = {
 		id: -1,
@@ -135,7 +143,7 @@ export default function Profile() {
 		setFetchedLists(false)
 		setLists([workout])
 		fetchingList()
-	}, [searchText])
+	}, [searchListText])
 
 	useEffect(() => {
 		getWorkouts(
@@ -240,8 +248,10 @@ export default function Profile() {
 	 */
 	async function fetchingList() {
 		const args = {
-			hidden: "",
-			isAuthor: "",
+			hidden: false,
+			isAuthor: true,
+			text: searchListText,
+			isShared: false
 		}
 
 		getLists(args, token, map, mapActions, (result) => {
@@ -251,17 +261,19 @@ export default function Profile() {
 				return
 			}
 
-			const lists = result.map((item) => ({
-				id: item.id,
-				name: item.name,
-				size: item.size,
-				author: item.author,
-				hidden: item.hidden,
-				isShared: item.isShared,
-			}))
-
-			setLists([workout, ...lists])
-			setFetchedLists(true)
+			if (result && result.results) {
+				const lists = result.results.map((item) => ({
+					id: item.id,
+					name: item.name,
+					size: item.size,
+					author: item.author,
+					hidden: item.hidden,
+					isShared: item.isShared,
+				}))
+			
+				setLists([workout, ...lists])
+				setFetchedLists(true)
+			}
 		})
 	}
 
@@ -272,14 +284,17 @@ export default function Profile() {
 					<SearchBar
 						id="searchbar-workouts-1"
 						placeholder="Sök efter listor"
-						text={searchText}
-						onChange={setSearchText}
+						text={searchListText}
+						onChange={setSearchListText}
 					/>
 					{!fetchedLists ? (
 						<Spinner />
 					) : (
 						lists.map((list) => <ProfileListItem key={list.id} item={list} Icon={getIconFromState(list)} />)
 					)}
+					<RoundButton linkTo="/list/create">
+						<Plus />
+					</RoundButton>
 				</Tab>
 			)}
 			<Tab eventKey={"MyWorkouts"} title={"Mina Pass"} className={style.tab}>

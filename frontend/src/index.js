@@ -168,6 +168,7 @@ export default function App() {
 						<Route path="session/edit/:session_id" element={<SessionEdit />} />
 						<Route path="groups" element={<GroupIndex />} />
 						<Route path="list/edit/:activityListId" element={<ListEdit />} />
+						<Route path="list/create" element={<ListEdit />} />
 						<Route path="profile/list/:activityListId" element={<ListInfo />} />
 						<Route path="profile/favouriteWorkouts" element={<FavouriteWorkoutsList />} />
 						<Route path="grading" element={<Grading />} />

@@ -5,13 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import se.umu.cs.pvt.user.User;
 import se.umu.cs.pvt.user.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
 /**
  * Main class for handling login information and transactions with the database.
- * @author Team Mango (2024-05-21)
+ * @author Team Mango (2024-05-24)
  */
 @RestController
 @CrossOrigin
@@ -73,6 +74,33 @@ public class RoleController {
         }
 
         return new ResponseEntity<>(role.get(), HttpStatus.OK);
+    }
+
+    /**
+     * (GET) Returns all users with a specific role.
+     * @param roleId The id of the role to get users that are returned.
+     * @return A response with either the users with the role or an error message.
+     */
+
+    @GetMapping("/users/{role_id}")
+    public ResponseEntity<List<User>> getUsersByRoleId(@PathVariable("role_id") Long roleId) {
+        if (roleId == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<Role> role = roleRepository.findById(roleId);
+        if (role.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        List<User> users = userRepository.findAllByRoleId(roleId);
+
+        if (users.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(users, HttpStatus.OK);
+
     }
 
     /**

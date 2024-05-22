@@ -348,7 +348,7 @@ export default function DuringGrading() {
 								onClick={() => {
 									setCurrentTechniqueStep(() => {
 										const techniquestep = techniqueName.categoryIndex
-										if(techniqueNameList[currentTechniqueStep].categoryName != "YAKUSOKU GEIKO OR RANDORI"){
+										if(techniqueNameList[currentTechniqueStep].categoryName != "YAKUSOKU GEIKO ELLER RANDORI"){
 											setRandoriIndex(currentTechniqueStep)
 										}
 										onUpdateStepToDatabase(techniquestep)

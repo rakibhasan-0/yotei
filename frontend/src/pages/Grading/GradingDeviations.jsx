@@ -55,6 +55,7 @@ export default function GradingDeviations() {
                 const json = await response.json()   
                 setGradingId(json["gradingId"])
                 setName(json["name"])
+                fetchResult(json["gradingId"])
                 fetchGrading(json["gradingId"])
                 fetchGroupComments(json["gradingId"])
                 fetchPairComments(json["gradingId"])
@@ -108,11 +109,12 @@ export default function GradingDeviations() {
         }
 
         //Fetches an examinees grading result
-        const fetchResult = async() => {
+        const fetchResult = async(gradingId) => {
             const requestOptions = {
                 headers: {"Content-type": "application/json", token: context.token}
 			}
-            const response = await fetch("/api/examination/examresult/" + userId, requestOptions).catch(() => {
+            console.log("user id: " + userId)
+            const response = await fetch("/api/examination/examresult/" + gradingId + "/" + userId, requestOptions).catch(() => {
                 setError("Serverfel: Kunde inte ansluta till servern.")
                 return
             })
@@ -193,7 +195,6 @@ export default function GradingDeviations() {
         }
 
         fetchData()
-        fetchResult()
         fetchPersonalComments()
 		}, [])
 
@@ -303,10 +304,9 @@ export default function GradingDeviations() {
             <div className="container">
                 <div className="row">
                     <ul>
-                        {techniqueCategories.map((category) => (
-                            
-                            <div className = {styles["sc23-outline"]} id={category} key={category}>
-                                <Divider id = 'divider-example' option= 'h2_left' title = {category.category_name} key={category.category_name}/>
+                        {techniqueCategories.map((category,index_div,index_id) => (
+                            <div className = {styles["sc23-outline"]} id={category} key={index_div}>
+                                <Divider id = 'divider-example' option= 'h2_left' title = {category.category_name} key={index_id}/>
                                 {category.techniques.map((technique, index) => (
                                     (isDeviating(technique.text) || showingAll) ?
                                         <Container id = {index} name = {technique.text} passed={hasPassed(technique.text)} key={index} 

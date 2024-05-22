@@ -268,6 +268,7 @@ export default function RoleEdit() {
 					<p>Tillbaka</p>
 				</Button>
 				<Button 
+					disabled={originalRoleName === "admin"}
 					onClick={editRole}>
 					<p>Spara</p>
 				</Button>
