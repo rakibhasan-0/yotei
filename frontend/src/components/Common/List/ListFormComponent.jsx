@@ -235,7 +235,10 @@ export default function ListFormComponent({ callback, state, listCreateInfoDispa
 							zIndex={1000}
 						/>
 						<Button type="submit" id="list-create-back-button">
-							<h2>Spara</h2>
+							{window.location.href.toString().includes("edit")?
+								<h2>Spara</h2>:
+								<h2>Skapa</h2>
+							}
 						</Button>
 					</Form.Group>
 				</div>
