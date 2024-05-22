@@ -661,7 +661,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 														checked={console.log("janne")}
 														onClick={() => console.log("haj")}
 													/>}
-													style={{display: "flex",  padding: "15px 15px 5px 15px"}}
+													style={{display: "flex", alignitems: "center",  margin: "5px 15px 5px 15px"}}
 											>
 
 												<div style={{ borderTop: "1px solid black" }}>
