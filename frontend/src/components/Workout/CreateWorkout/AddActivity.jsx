@@ -575,7 +575,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 		}
 	}
 
-		return (
+	return (
 		<div id={id}>
 			<Modal.Body style={{ padding: "0" }}>
 				<Tabs activeKey={key} onSelect={(k) => setKey(k)} className={style.tabs}>

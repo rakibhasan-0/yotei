@@ -107,7 +107,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 					setReviewId(json[0]["id"])
 					setSavedDate(json[0]["date"])
 
-					fetchLoadedExtraData();
+					fetchLoadedExtraData()
 				}
 
 				
@@ -155,7 +155,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 	useEffect(() => {
 		if (shouldReload) {
-			window.location.reload();
+			window.location.reload()
 		}
 	},[shouldReload])
 
@@ -203,7 +203,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	 */
 	async function removingNotCheckedActivities() {
 		
-		const extraCategory = sessionData.activityCategories.find(category => category.categoryName === "Extra");
+		const extraCategory = sessionData.activityCategories.find(category => category.categoryName === "Extra")
 		if (extraCategory) {
 			extraCategory.activities.forEach(activity => {
 				//console.log("running")
@@ -246,8 +246,8 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 					}
 				}
 			}
-			return activityID;
-		});
+			return activityID
+		})
 
 		const updatedList = await Promise.all(promises)
 
@@ -265,10 +265,9 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	useEffect(() => {
 		if (isTransformComplete) {
 			//console.log("Done list updated and transform complete:", doneList);
-			proceedWithReview();
+			proceedWithReview()
 			setIsTransformComplete(false)
-    	}
-
+		}
 	}, [isTransformComplete])
 
 
@@ -281,7 +280,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		if (reviewId < 0) {
 			addReview()
 		} else {
-			updateReview();
+			updateReview()
 		}
 	}
 
@@ -522,7 +521,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		})
 
 		if (categoryExistence) {
-			addActivitiesToExistingCategory(categoryExistence, data);
+			addActivitiesToExistingCategory(categoryExistence, data)
 		} else {
 			createNewCategoryWithActivities("ExtraActivities", data)
 		}
@@ -549,12 +548,12 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 						activities: [...cat.activities, ...activities.map((activity, index) => 
 							createActivityObject(activity, cat.activities.length + index, currentExtraId--))
 						]
-					};
+					}
 				}
-				return cat;
-			});
+				return cat
+			})
 
-			return { ...prevSessionData, activityCategories: newCategories };
+			return { ...prevSessionData, activityCategories: newCategories }
 		})
 
 		setExtraActivityId(currentExtraId)
@@ -604,7 +603,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	function createActivityObject(activity, order, negativeId) {
 		if (activity.techniqueId) {
 			return {
-			 	id: negativeId,
+				id: negativeId,
 				text: "",
 				duration: activity.duration,
 				technique: {
@@ -686,22 +685,22 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 					<Divider option={"h2_center"} title={"Aktiviteter"} />
 					<div>
 						<ul>
-						{sessionData.activityCategories.map((category, categoryIndex) => (
-							<React.Fragment key={categoryIndex}>
-								{category.activities.map((activity, activityIndex) => (
-									<div key={activityIndex} className={styles["activity_wrapper"]}>
-										<li className={styles["check_box_li"]}>
-											<CheckBox id={"CheckBox" + activity.id} value={activity.id} onClick={() => handleCheckBoxChange(!doneList.includes(activity.id), activity.id)} checked={doneList.includes(activity.id)} />
-										</li>
-										<li className={styles["activity_text_li"]}>
-											{activity.technique !== null ? activity.technique.name : activity.name}
-										</li>
-									</div>
-								))}
-							</React.Fragment>
-						))}
-					</ul>
-				</div>
+							{sessionData.activityCategories.map((category, categoryIndex) => (
+								<React.Fragment key={categoryIndex}>
+									{category.activities.map((activity, activityIndex) => (
+										<div key={activityIndex} className={styles["activity_wrapper"]}>
+											<li className={styles["check_box_li"]}>
+												<CheckBox id={"CheckBox" + activity.id} value={activity.id} onClick={() => handleCheckBoxChange(!doneList.includes(activity.id), activity.id)} checked={doneList.includes(activity.id)} />
+											</li>
+											<li className={styles["activity_text_li"]}>
+												{activity.technique !== null ? activity.technique.name : activity.name}
+											</li>
+										</div>
+									))}
+								</React.Fragment>
+							))}
+						</ul>
+					</div>
 
 					{/** here we will add plus button and by clicking on that button will create a new popup*/}
 
@@ -743,8 +742,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 							id="allButton"
 							width={"100%"}
 							onClick={() => markAll(sessionData)}
-						>
-              				Markera alla
+						>	Markera alla
 						</Button>
 					</div>
 				</div>
