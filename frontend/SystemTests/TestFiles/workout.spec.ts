@@ -75,9 +75,9 @@ test.describe('Workout', () => {
                 description: 'description description description', 
                 name: name, 
                 techniques: [
-                    { name: "Kamae, neutral (5 Kyu)" },
-                    { name: "Kamae, beredd (5 Kyu)" },
-                    { name: "Kamae, gard (5 Kyu)" },
+                    { name: "Shotei uchi, jodan, rak stöt med främre och bakre handen" },
+                    { name: "Shotei uchi, chudan, rak stöt med främre och bakre handen" },
+                    { name: "Gedan geri, rak spark med främre och bakre benet" },
                 ],
                 exercises: [
                     { name: "Armhävningar" },
@@ -90,9 +90,9 @@ test.describe('Workout', () => {
         // Asserts the existence of the confirmation message and that the workout was created correctly.
         await expect(page.getByRole('alert')).toContainText('Träningspasset skapades!')
         await expect(page.locator('#root')).toContainText('description description description')
-        await expect(page.locator('#WorkoutActivityList-1')).toContainText('Kamae, neutral (5 Kyu)')
-        await expect(page.locator('#WorkoutActivityList-1')).toContainText('Kamae, beredd (5 Kyu)')
-        await expect(page.locator('#WorkoutActivityList-1')).toContainText('Kamae, gard (5 Kyu)')
+        await expect(page.locator('#WorkoutActivityList-1')).toContainText('Shotei uchi, jodan, rak stöt med främre och bakre handen')
+        await expect(page.locator('#WorkoutActivityList-1')).toContainText('Shotei uchi, chudan, rak stöt med främre och bakre handen')
+        await expect(page.locator('#WorkoutActivityList-1')).toContainText('Gedan geri, rak spark med främre och bakre benet')
         await expect(page.locator('#WorkoutActivityList-1')).toContainText('Armhävningar')
         await expect(page.locator('#WorkoutActivityList-1')).toContainText('Armhävningar med bred handposition')
         await expect(page.locator('#WorkoutActivityList-1')).toContainText('Armhävningar med handklapp')
@@ -102,7 +102,7 @@ test.describe('Workout', () => {
         // Edits the page
         await workoutPage.editWorkout([
             {
-                name: "Ayumi ashi (5 Kyu)",
+                name: "O soto osae, utan grepp, nedläggning snett bakåt",
                 time: 10,
             }
         ])
