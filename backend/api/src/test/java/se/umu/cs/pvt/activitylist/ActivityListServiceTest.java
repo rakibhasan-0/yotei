@@ -26,7 +26,7 @@ import java.util.Optional;
 /**
  * Test class for ActivityListService
  * 
- * @author Team Tomato, updated 2024-05-17
+ * @author Team Tomato, updated 2024-05-22
  * @since 2024-05-16
  * @version 1.1
  */
@@ -315,7 +315,7 @@ public class ActivityListServiceTest {
 
         when(userShortRepository.findById(activityList.getAuthor())).thenReturn(Optional.of(author));
 
-        ActivityListService activityListService = new ActivityListService(userShortRepository, null, null);
+        ActivityListService activityListService = new ActivityListService(userShortRepository, null, null, null);
 
         ActivityListShortDTO result = activityListService.convertToActivityListShortDTO(activityList, 3L);
 
