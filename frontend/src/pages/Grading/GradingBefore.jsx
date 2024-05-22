@@ -10,7 +10,7 @@ import { X as CloseIcon } from "react-bootstrap-icons"
 import PopupSmall from "../../components/Common/Popup/PopupSmall"
 
 import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../utils"
-import {setError as setErrorToast } from "../../utils"
+import { setError as setErrorToast } from "../../utils"
 import EditableInputTextField from "../../components/Common/EditableInputTextField/EditableInputTextField"
 
 /**
@@ -37,10 +37,10 @@ export default function GradingBefore() {
 	const [examinees, setExaminees] = useState([])
 	const [pairs, setPair] = useState([])
 	const [checkedExamineeIds, setCheckedExamineeIds] = useState([])
-  const [redirect, setRedirect] = useState(false)
-  const [gradingName, setGradingName] = useState("")
-  const containsSpecialChars = str => /[^\w äöåÅÄÖ-]/.test(str)
-  const [showPopup, setShowPopup] = useState(false)
+	const [redirect, setRedirect] = useState(false)
+	const [gradingName, setGradingName] = useState("")
+	const containsSpecialChars = str => /[^\w äöåÅÄÖ-]/.test(str)
+	const [showPopup, setShowPopup] = useState(false)
 
 	let numberOfPairs = 0
 
@@ -62,7 +62,8 @@ export default function GradingBefore() {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
-				"token": token },
+				"token": token
+			},
 		})
 			.then(response => {
 				if (!response.ok) {
@@ -85,7 +86,8 @@ export default function GradingBefore() {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
-				"token": token },
+				"token": token
+			},
 			body: JSON.stringify(grading_data),
 
 		})
@@ -98,13 +100,13 @@ export default function GradingBefore() {
 			})
 	}
 
-  /**
-   * Validets so the name of tag is not containing any illegal characters 
-   * or if the name is empty or if the name of the tag already exists. 
-   * @param {String} name The name of the tag to be validated. 
-   * @returns Nothing if the name is valid, otherwise, the errortext. 
-   */
-  const validateInput = (name) => {
+	/**
+	 * Validets so the name of tag is not containing any illegal characters 
+	 * or if the name is empty or if the name of the tag already exists. 
+	 * @param {String} name The name of the tag to be validated. 
+	 * @returns Nothing if the name is valid, otherwise, the errortext. 
+	 */
+	const validateInput = (name) => {
 		if (name == "") {
 			return "Ange ett namn, det får inte vara tomt"
 		}
@@ -250,8 +252,8 @@ export default function GradingBefore() {
 					])
 					updateStep(grading_data)
 
-          navigate(`/grading/${gradingId}/2`)
-        }
+					navigate(`/grading/${gradingId}/2`)
+				}
 
 				exec()
 
@@ -511,53 +513,53 @@ export default function GradingBefore() {
 			.catch(() => setErrorToast("Kunde inte updatera personen. Kontrollera din internetuppkoppling."))
 	}
 
-  async function editGradingName(Id, text) {
-    setGradingName(text)
-	
+	async function editGradingName(Id, text) {
+		setGradingName(text)
 
-    // get the grading in the database
-    let data = await getGrading(token)
+
+		// get the grading in the database
+		let data = await getGrading(token)
 			.catch(() => setErrorToast("Kunde inte hämta graderingen. Kontrollera din internetuppkoppling."))
 
-    // update the title of the grading and delete examinees so PUT can be used
-    data.title = text
-    delete data.examinees
+		// update the title of the grading and delete examinees so PUT can be used
+		data.title = text
+		delete data.examinees
 
-    // update the grading in the database
-    await putGrading(data, token)
-  }
+		// update the grading in the database
+		await putGrading(data, token)
+	}
 
-  function pressedContinue() {
-	if(examinees.length <= 0 && pairs.length <= 0) {
-		setErrorToast("Kan ej starta gradering utan deltagare")
-		return
+	function pressedContinue() {
+		if (examinees.length <= 0 && pairs.length <= 0) {
+			setErrorToast("Kan ej starta gradering utan deltagare")
+			return
+		}
+		if (gradingName == "") {
+			setErrorToast("Kan ej starta gradering utan namn")
+			return
+		}
+		setShowPopup(true)
 	}
-	if(gradingName == "") {
-		setErrorToast("Kan ej starta gradering utan namn")
-		return
-	}
-	setShowPopup(true)
-  }
 
 
 	return (
 		<div>
-			<div style={{position: "relative", zIndex: "0" }}>
-        <EditableInputTextField
-        item={gradingName}
-        id={"grading-name-text-field"}
-        key={"grading-name-text-field"}
-        validateInput={validateGradingName}
-        onEdit={editGradingName}
-        color={ColorParam}
-        />    
+			<div style={{ position: "relative", zIndex: "0" }}>
+				<EditableInputTextField
+					item={gradingName}
+					id={"grading-name-text-field"}
+					key={"grading-name-text-field"}
+					validateInput={validateGradingName}
+					onEdit={editGradingName}
+					color={ColorParam}
+				/>
 			</div>
 
 			<div className="column">
 				{pairs.map((pair, index) => {
 					if (pair.length === 2) {
 						return (
-							<div style={{ display: "flex", width: "100%", justifyContent: "center" }} key={"pair-" + pair[0].pairId}>
+							<div style={{ display: "flex", width: "100%", justifyContent: "left", position: "relative" }} key={"pair-" + pair[0].pairId}>
 								<div className={styles.number}>{index + 1}</div>
 								<EditableListItem
 									key={"first-examinee-pair-" + pair[0].id + "-pairId-" + pair[0].pairId}
@@ -792,21 +794,21 @@ export default function GradingBefore() {
 			.catch(error => { alert(error.message) })
 	}
 
-/**
- * Update an already exsisting grading in the database
- * @param {Map} grading
- * @param {any} token 
- * @returns The response code
- */
-async function putGrading(grading, token) {
-	const requestOptions = {
-		method: "PUT",
-		headers: { "Content-Type": "application/json", "token": token },
-    body: JSON.stringify(grading)
+	/**
+	 * Update an already exsisting grading in the database
+	 * @param {Map} grading
+	 * @param {any} token 
+	 * @returns The response code
+	 */
+	async function putGrading(grading, token) {
+		const requestOptions = {
+			method: "PUT",
+			headers: { "Content-Type": "application/json", "token": token },
+			body: JSON.stringify(grading)
+		}
+		return fetch("/api/examination/grading", requestOptions)
+			.catch(error => { alert(error.message) })
 	}
-	return fetch("/api/examination/grading", requestOptions)
-		.catch(error => { alert(error.message) })
-}
 
 	/**
 	 * Get all examinees from a specific grading
@@ -823,12 +825,12 @@ async function putGrading(grading, token) {
 			.catch(error => { alert(error.message) })
 	}
 
-/**
- * To handle the response from a fetch
- * @param {Map} response 
- * @returns Parsed data in a map
- */
-async function handleResponse(response) {
+	/**
+	 * To handle the response from a fetch
+	 * @param {Map} response 
+	 * @returns Parsed data in a map
+	 */
+	async function handleResponse(response) {
 
 		if (response.status == HTTP_STATUS_CODES.NOT_ACCEPTABLE) {
 			scrollToElementWithId("create-technique-input-name")
