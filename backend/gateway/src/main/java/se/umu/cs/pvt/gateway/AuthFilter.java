@@ -38,7 +38,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
      */
     private final String secret = "PVT";
 
-    PermissionValidator permisisonValidater = new PermissionValidator();
+    PermissionValidator PermissionValidator = new PermissionValidator();
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -100,37 +100,27 @@ public class AuthFilter implements GlobalFilter, Ordered {
         } catch (Exception e) {
             return false;
         }
-
-        //System.err.println("permissions: " + permissions);
-        //Logger.log(Level.DEBUG, "permissions: " + permissions);
         
-        if (role.equals("ADMIN") || 
-            permissions.contains(permisisonValidater.getAdminRightsValue()) ||
-            request.getMethod().equals(HttpMethod.GET)) {
+        if (adminOrGetMethod(request, role, permissions)) {
             return true;
         }
                 
-        // Check for each permission-locked api path and determine if user is allowed through
-        if (path.startsWith("/api/session") 
-            && !permisisonValidater.checkSessionPermissions(path, permissions)) return false;
+        if (!PermissionValidator.validate(path, permissions)) {
+            return false;
+        }
 
-        if (path.startsWith("/api/plan")
-            && !permisisonValidater.checkPlanPermissions(path, permissions)) return false;
-
-        if ((path.startsWith("/api/techniques") || path.startsWith("/api/exercises"))
-            && !permisisonValidater.checkTechniqueExercisePermissions(path, permissions)) return false;
-
-        if (path.startsWith("/api/examination")
-            && !permisisonValidater.checkGradingPermissions(path, permissions)) return false;
-
-        if (path.startsWith("/api/workouts") 
-            && !permisisonValidater.checkWorkoutPermissions(path, permissions)) return false;
-
-        return !isAdminLockedEndPoints(path);
+        return !isAdminLockedEndPoint(path);
 
     }
 
-    private boolean isAdminLockedEndPoints(String path) {
+    private boolean adminOrGetMethod(ServerHttpRequest request, 
+        String role, List<Integer> permissions) {
+        return role.equals("ADMIN") || 
+            permissions.contains(PermissionValidator.getAdminRightsValue()) ||
+            request.getMethod().equals(HttpMethod.GET);
+    }
+
+    private boolean isAdminLockedEndPoint(String path) {
         return 
             path.contains("import") || 
             path.contains("export") || 

@@ -45,6 +45,34 @@ public class PermissionValidator {
         }
 	}
 
+    /**
+     * Validates if a user has permissions to use the API endpoints 
+     * requested in the path.
+     * 
+     * @param path The path for the API call
+     * @param permissions The permissions belonging to the user
+     * 
+     * @return True if the user has the required permissions; else false
+     */
+    public boolean validate(String path, List<Integer> permissions) {
+        if (path.startsWith("/api/session") 
+            && !checkSessionPermissions(path, permissions)) return false;
+
+        if (path.startsWith("/api/plan")
+            && !checkPlanPermissions(path, permissions)) return false;
+
+        if ((path.startsWith("/api/techniques") || path.startsWith("/api/exercises"))
+            && !checkTechniqueExercisePermissions(path, permissions)) return false;
+
+        if (path.startsWith("/api/examination")
+            && !checkGradingPermissions(path, permissions)) return false;
+
+        if (path.startsWith("/api/workouts") 
+            && !checkWorkoutPermissions(path, permissions)) return false;
+
+        return true;
+    }
+
 	public int getAdminRightsValue() {return permissionList.ADMIN_RIGHTS.value;}
 
     /**
@@ -58,7 +86,7 @@ public class PermissionValidator {
      * 
      * @return True if the user has the required permissions; else false.
      */
-	public boolean checkSessionPermissions(String path, List<Integer> permissions) {
+	private boolean checkSessionPermissions(String path, List<Integer> permissions) {
         Pattern[] patterns = {
             // From SessionController
             Pattern.compile("^/api/session/add$"),
@@ -92,7 +120,7 @@ public class PermissionValidator {
      * 
      * @return True if the user has the required permissions; else false.
      */
-    public boolean checkPlanPermissions(String path, List<Integer> permissions) {
+    private boolean checkPlanPermissions(String path, List<Integer> permissions) {
         Pattern[] patterns = {
             // From PlanController
             Pattern.compile("^/api/plan/add$"),
@@ -120,7 +148,7 @@ public class PermissionValidator {
      * 
      * @return True if the user has the required permissions; else false.
      */
-    public boolean checkTechniqueExercisePermissions(String path, List<Integer> permissions) {
+    private boolean checkTechniqueExercisePermissions(String path, List<Integer> permissions) {
         Pattern[] patterns = {
             // From TechniqueController
             Pattern.compile("^/api/techniques$"),
@@ -153,7 +181,7 @@ public class PermissionValidator {
      * 
      * @return True if the user has the required permissions; else false.
      */
-    public boolean checkGradingPermissions(String path, List<Integer> permissions) {
+    private boolean checkGradingPermissions(String path, List<Integer> permissions) {
         Pattern[] patterns = {
             // From ExaminationController
             Pattern.compile("^/api/examination/grading$"),
@@ -188,7 +216,7 @@ public class PermissionValidator {
      * 
      * @return True if the user has the required permissions; else false.
      */
-    public boolean checkWorkoutPermissions(String path, List<Integer> permissions) {
+    private boolean checkWorkoutPermissions(String path, List<Integer> permissions) {
         Pattern[] patterns = {
             // From WorkoutController
             Pattern.compile("^/api/workouts$"),
