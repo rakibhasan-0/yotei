@@ -46,7 +46,7 @@ const ListEdit = () => {
 			if (listId) {
 				setSuccess("Träningen uppdaterades!")
 			} else {
-				setError("Träningen kunde inte uppdateras hejhej.")
+				setError("Träningen kunde inte uppdateras.")
 			}
 		} else {
 			listId = await createActivityList(data)
