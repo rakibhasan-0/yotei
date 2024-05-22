@@ -1,6 +1,6 @@
 package se.umu.cs.pvt.techniqueChain;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TechniqueChainWeaveRepository extends JpaRepository<TechniqueChainWeave, Long> {
+public interface TechniqueWeaveRepresentRepository extends JpaRepository<TechniqueWeaveRepresent, Long> {
     
 }

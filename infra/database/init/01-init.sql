@@ -150,6 +150,8 @@ DROP TABLE IF EXISTS grading_protocol;
 DROP TABLE IF EXISTS grading_protocol_category;
 
 DROP TABLE IF EXISTS technique_chain CASCADE;
+DROP TABLE IF EXISTS edges CASCADE;
+DROP TABLE IF EXISTS weave_representation;
 DROP TABLE IF EXISTS node CASCADE;
 DROP TABLE IF EXISTS technique_weave CASCADE;
 
@@ -761,8 +763,7 @@ ALTER TABLE
 CREATE TABLE technique_weave(
 	id SERIAL PRIMARY KEY,
 	name VARCHAR(180),
-	description VARCHAR(800),
-	nodes INT[][]
+	description VARCHAR(800)
 );
 
 ALTER TABLE
@@ -770,7 +771,6 @@ ALTER TABLE
 
 CREATE TABLE technique_chain(
 	id SERIAL PRIMARY KEY,
-	node_id INT[],
 	name VARCHAR(180),
 	description VARCHAR(800),
 	parent_weave_id INT,
@@ -787,14 +787,35 @@ CREATE TABLE node(
 	description VARCHAR(800),
 	technique INT,
 	attack BOOLEAN NOT NULL,
-	partisipant INT NOT NULL,
-	connected_to INT[],
+	participant INT NOT NULL,
 	CONSTRAINT rm_parent_weave FOREIGN KEY(parent_weave) REFERENCES technique_weave(id) ON DELETE CASCADE
 );
 
 ALTER TABLE
 	node OWNER TO psql;
 
+CREATE TABLE edges (
+    id SERIAL PRIMARY KEY,
+    from_node_id INTEGER REFERENCES node(id),
+    to_node_id INTEGER REFERENCES node(id),
+    FOREIGN KEY (from_node_id) REFERENCES node (id) ON DELETE CASCADE,
+    FOREIGN KEY (to_node_id) REFERENCES node (id) ON DELETE CASCADE
+);
+
+ALTER TABLE
+	edges OWNER TO psql;
+
+CREATE TABLE weave_representation(
+	id SERIAL PRIMARY KEY,
+	parent_weave_id INT REFERENCES technique_weave(id),
+	node_id INT NOT NULL,
+	node_x_pos INT NOT NULL,
+	node_y_pos INT NOT NULL,
+	CONSTRAINT fk_node FOREIGN KEY (node_id) REFERENCES node (id) ON DELETE CASCADE
+);
+
+ALTER TABLE
+weave_representation OWNER TO psql;
 
 --
 -- Default Inserts
@@ -820,6 +841,7 @@ ALTER TABLE
 \ir defaults/activitylists.sql
 \ir defaults/examination_protocols.sql
 \ir defaults/grading_protocols.sql
+\ir defaults/techniqueChain.sql
 -- Triggers for user
 --
 CREATE OR REPLACE FUNCTION remove_user_references() RETURNS TRIGGER AS $$ 
