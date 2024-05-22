@@ -58,7 +58,7 @@ public class SearchActivityListDBBuilder {
             createdQuery.setQuery(
                 "SELECT al.name, al.id, al.author, al.private, al.created_Date " +
                 "FROM activity_list AS al, user_to_activity_list AS utal " +
-                "WHERE al.id = utal.list_id AND utal.user_id = " + userId
+                "WHERE al.author <> " + userId + " AND al.private = true AND al.id = utal.list_id AND utal.user_id = " + userId
             );
             queries.add(createdQuery);
         }
