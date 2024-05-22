@@ -18,7 +18,7 @@ import  "react-bootstrap-icons"
 export default function CommentButton( {id, onClick}) {
 	return (
 		<div  id={id} onClick={onClick}>
-			<i className="bi bi-file-text h2"/>
+			<i className="bi bi-file-text h3" />
 		</div>
 	)
 }
