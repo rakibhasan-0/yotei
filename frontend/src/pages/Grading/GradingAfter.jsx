@@ -18,35 +18,18 @@ export default function GradingAfter() {
 	const context = useContext(AccountContext)
 	const { token} = context
 	const { gradingId } = useParams()
-	const hasPreviousState = location.key !== "default"
-
 	const navigate = useNavigate()
 	const [grading, setGrading] = useState([])
+	const[totalAmountOfTechniques, setTotalAmountOfTechniques] = useState("")
+	const[fetchedResult, setFetchedResult] = useState([])
 	const [beltInfo, setBeltInfo] = useState({
 		belt_name: "",
 		color: "" 
 	})
-	const [ setExamineeResult] = useState({
-		num_techniques: 0,
-		num_techniques_passed: 0
-	})
-	/**
-	 * Function to update the date of the grading.
-	 * @param {string} dateString - The date of the grading.
-	 * @returns {void}
-	 * @since 2024-05-15
-	 */
-	/*const updateDate = (dateString) => {
-		const date = new Date(dateString)
-		const hours = date.getHours()
-		const minutes = date.getMinutes()
-		const formattedHours = (hours < 10 ? "0" : "") + hours
-		const formattedMinutes = (minutes < 10 ? "0" : "") + minutes
-		const timeString = formattedHours + ":" + formattedMinutes
-		setDateCreated(timeString)
-	}/*
-
-
+	const [fetchedBelt, setFetchedBelt] = useState([])
+	const [ isGrading, setIsGrading ] = useState(false)
+	const [ isBelt, setIsBelt ] = useState(false)
+	const [ isExaminee, setIsExaminee ] = useState(false)
 	/**
 	 * Function to fetch the grading from the backend.
 	 * @returns {Promise} The grading data.
@@ -84,12 +67,12 @@ export default function GradingAfter() {
 	}
 
 	/**
-	 * Function to fetch the belts from the backend.
+	 * Function that fetchs all of the results of each examinee.
 	 * @returns {Promise} The belt data.
 	 * @since 2024-05-15
 	 */
 	const fetchExamineeResult = () => {
-		return fetch(`/api/examination/grading/${gradingId}`, {
+		return fetch(`/api/examination/examresult/grading/${gradingId}`, {
 			method: "GET",
 			headers: { "token": token }
 		}).then(response => {
@@ -103,11 +86,12 @@ export default function GradingAfter() {
 	/**
 	 * Function to download the grading as a pdf.
 	 */
-	const downloadPdf  =   () => {
-		// fetch(`api/export/grading/${gradingId}`, {
-		//     method: "GET",
-		//     headers: { "Authorization": `Bearer ${token}` }  // Assuming the token is a bearer token
-		// })
+	const downloadPdf  =  async () => {
+		const response = await fetch(`/api/examination/grading/${gradingId}/pdf`, {
+			method: "GET",
+			headers: { "token": token }
+		})
+		console.log(response)
 	}
 
 	/**
@@ -122,17 +106,14 @@ export default function GradingAfter() {
 	 * Function to navigate back to the examination page.
 	 */
 	const navigateBack = () => {
-		if (hasPreviousState) {
-			navigate(-1)
-		} else {
-			navigate("/grading")
-		}
+		navigate(`/grading/${gradingId}/2`)
 	}
 
 	/**
 	 * Fetches the grading and belt data when the component mounts.
 	 */
 	useEffect(() => {
+		
 		const fetchData = async () => {
 			try {
 				const [grading_data, belt_data,result_data] = await Promise.all([
@@ -140,47 +121,67 @@ export default function GradingAfter() {
 					fetchBelts(),
 					fetchExamineeResult()
 				])
+				
+				setIsGrading(true)
 				setGrading(grading_data)
-				const matchingBelt = belt_data.find(belt => belt.id === grading_data.beltId)
-				if (matchingBelt) {
-					setBeltInfo({
-						belt_name: matchingBelt.name,
-						color: "#" + matchingBelt.color
-					})
-				}
-				setExamineeResult({
-					examineeId: result_data.examineed,
-					name: result_data.name,
-					result: result_data.result
-				})
-		
+
+				setIsBelt(true)
+				setFetchedBelt(belt_data)
+
+				setIsExaminee(true)
+				setTotalAmountOfTechniques(result_data.totalTechniques)
+				setFetchedResult(result_data)
+
+				
 			} catch (error) {
 				console.error("There was a problem with the fetch operation:", error)
 			}
 		}
 		fetchData()
+
 	}, [])
+
+	useEffect(() => {
+		if(isGrading && isBelt && isExaminee){
+			const matchingBelt = fetchedBelt.find(belt => belt.id === grading.beltId)
+			if (matchingBelt) {
+				setBeltInfo({
+					belt_name: matchingBelt.name,
+					color: "#" + matchingBelt.color
+				})
+			}
+			setIsBelt(false)
+			setIsGrading(false)
+			setIsExaminee(false)
+			console.log("Belt: ", beltInfo)
+			console.log("Grading: ", grading)
+			console.log("Examinee: ", fetchedResult)
+		}
+	}, [grading, beltInfo, fetchedResult, isGrading, isBelt, isExaminee, fetchedBelt])
 
 	return (
 		<div className={styles.container}>
 			<div>
-				<div>
-					<div>
-						<div style={{ backgroundColor: beltInfo.color, borderRadius: "0.3rem", padding: "10px", textAlign: "center", justifyContent: "center", alignItems: "center", display: "flex", position: "relative" }}>
-							<span
-								style={{ color : beltInfo.color === "#201E1F" ? "white" : "black", fontWeight: "bold" }}
-							>{grading.title}</span>
+				<div className={styles.topContainer}>
+					<div className={styles.content}>
+						<div style={{ backgroundColor: beltInfo.color, borderRadius: "0.3rem", padding: "0px" }}>
+							<h2
+								style={{ color : beltInfo.color === "#201E1F" ? "white" : "black" }}
+							>{beltInfo.belt_name} bälte</h2>
 						</div>
 					</div>
 					<h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "10px", paddingBottom: "10px" }}>Summering</h1>
 				</div>
     
 				<div className={styles.scrollableContainer}>
-					{grading.examinees && grading.examinees.map((examinee) => (
+					{fetchedResult.examineeResults && fetchedResult.examineeResults.map((examinee) => (
 						<UserBoxGrading
-							key={examinee.examineeId}
-							id={examinee.examineeId}
-							name={examinee.name} />
+							key={examinee.id}
+							id={examinee.id}
+							name={examinee.name}
+							passedTechniques={examinee.passedTechniques}
+							totalAmountOfTechniques={totalAmountOfTechniques}
+						/>
 					))}
 				</div>
     

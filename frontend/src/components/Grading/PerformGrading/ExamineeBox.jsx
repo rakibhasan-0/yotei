@@ -18,7 +18,7 @@ import { setError as setErrorToast } from "../../../utils"
  * @param {any} props.examineeId - The id of the examinee.
  * @param {String} props.techniqueName - The name of the technique.
  * @param {function} props.onClick - onClick function when component is pressed.
- * @param {String} props.buttonState - The current state of the button.
+ * @param {String} props.status - The current status of the button.
  * @param {function} props.setButtonState - Function to set the state of the button.
  * 
  * Example Usage:
@@ -34,13 +34,13 @@ import { setError as setErrorToast } from "../../../utils"
  *     examineeId={1}
  *     techniqueName="Some Technique"
  *     onClick={() => console.log("Clicked")}
- *     buttonState="default"
+ *     status="default"
  *     setButtonState={(state) => console.log(state)}
  *   />
  * )
  * 
  * @version 3.0
- * @since 2024-05-15
+ * @since 2024-05-21
  */
 export default function ExamineeBox({ 
 	id, 
@@ -48,7 +48,7 @@ export default function ExamineeBox({
 	examineeId,
 	techniqueName, 
 	onClick, 
-	buttonState, 
+	status, 
 	setButtonState
 }) {
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
@@ -57,11 +57,22 @@ export default function ExamineeBox({
 	const [commentError, setCommentError] = useState("")
 	const [hasComment, setExistingComment] = useState(false)
 	const [commentId, setCommentId] = useState(null)
-	const colors = ["white", "lightgreen", "lightcoral"]
-
+	const colors = {
+		default: "white",
+		pass: "lightgreen",
+		fail: "lightcoral"
+	}
+    
 	const { gradingId } = useParams()
 	const { token, userId } = useContext(AccountContext)
 
+	// Set initial color index based on status prop
+	const [color, setColor] = useState(colors[status] || colors.default)
+
+	useEffect(() => {
+		setColor(colors[status] || colors.default)
+	}, [status])
+    
 	useEffect(() => {
 		if (isAddingComment) {
 			handleExistingInput()
@@ -205,26 +216,31 @@ export default function ExamineeBox({
 		}
 	}
 
-	const [colorIndex, setColorIndex] = useState(0)
-
 	const handleClick = () => {
-		// Update buttonState based on current color
-		if (colors[colorIndex] === "white") {
-			buttonState = "pass"
-		} else if (colors[colorIndex] === "lightgreen") {
-			buttonState = "fail"
-		} else if (colors[colorIndex] === "lightcoral") {
-			buttonState = "default"
+		// Update buttonState and color based on current color
+		let newButtonState
+		let newColor
+        
+		if (color === colors.default) {
+			newButtonState = "pass"
+			newColor = colors.pass
+		} else if (color === colors.pass) {
+			newButtonState = "fail"
+			newColor = colors.fail
+		} else if (color === colors.fail) {
+			newButtonState = "default"
+			newColor = colors.default
 		}
-		setButtonState(buttonState)
-		// Update the color
-		setColorIndex((colorIndex + 1) % colors.length)
-		// Api call will be handled here and update the DB according to state
-		onClick(buttonState) // Pass the new state as a parameter
+        
+		setButtonState(newButtonState)
+		setColor(newColor)
+		onClick(newButtonState) // Pass the new state as a parameter
 	}
 
+	console.log("name: ", examineeName, ", status: ", status, ", color: ", color)
+
 	return (
-		<div id={id} className={styles.examineeContainer} style={{ backgroundColor: colors[colorIndex] }}>
+		<div id={id} className={styles.examineeContainer} style={{ backgroundColor: color }}>
 			<fieldset className={styles.examineeFieldset}>
 				<div 
 					className={styles.examineeName}

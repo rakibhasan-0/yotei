@@ -126,24 +126,24 @@ build-frontend:
     - npm run build
 
 run-systests:
-  stage: systest
-  resource_group: systest
-  rules:
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
-  tags:
-    - systest
-  script:
-    - docker compose -p yotei down -v || true
-    - docker compose -p yotei up psql api gateway --build -d
-    - cd frontend/
-    - npm install
-    - npx playwright install
-    - npm ci
-    - npm run systest:ci
-    - cd ..
-    - docker compose -p yotei down -v || true
+ stage: systest
+ resource_group: systest
+ rules:
+   - if: $CI_COMMIT_TAG
+     when: never
+   - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED
+ tags:
+   - systest
+ script:
+   - docker compose -p yotei down -v || true
+   - docker compose -p yotei up psql api gateway --build -d
+   - cd frontend/
+   - npm install
+   - npx playwright install
+   - npm ci
+   - npm run systest:ci
+   - cd ..
+   - docker compose -p yotei down -v || true
       
 deploy-test-server:
   stage: deploy_test_server

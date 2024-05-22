@@ -135,7 +135,7 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
   // Get a list of belts associated with a technique.
   @Query("""
     SELECT 
-      new se.umu.cs.pvt.belt.Belt(b.id, b.name, b.color, b.isChild)
+      new se.umu.cs.pvt.belt.Belt(b.id, b.name, b.color, b.isChild, b.isInverted)
     FROM
       TechniqueBelt tb
     JOIN
