@@ -119,7 +119,7 @@ export const AddToListPopupContent = ({ techExerID, setShowMorePopup }) => {
 	return (
 		<div className={styles["container"]}>
 			<div className="my-4">
-				<Link to={`/list/create`}>
+				<Link to={"/list/create"}>
 					<Button outlined={true}>
 						<p>+ Skapa ny lista</p>
 					</Button>
