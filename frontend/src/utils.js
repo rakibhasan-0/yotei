@@ -79,6 +79,16 @@ export function canCreateSessions(context) {
 	return (context.permissions.includes(USER_PERMISSION_CODES.SESSION_ALL) || context.permissions.includes(USER_PERMISSION_CODES.SESSION_OWN))
 }
 
+/**
+ * isAdminUser() - Checks if a user has the permission to edit users.
+ * @param {} context AccountContext from user.
+ * @returns True if user is alloowed to edit users, else false. 
+ */
+export function isAdminUser(context) {
+	if (!context.permissions) return false
+	return (context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS))
+}
+
 
 /**
  * canCreateGroups() - check if a user can create a group.
