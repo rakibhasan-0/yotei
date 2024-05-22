@@ -40,12 +40,8 @@ const ListEdit = () => {
 	async function submitHandler() {
 		setIsSubmitted(true)
 		const data = parseData(listCreateInfo.data)
-<<<<<<< HEAD
-=======
-		//TBF
-		console.log("Console.log so that linter does not give errors:"+data)
->>>>>>> main
 		let listId
+
 		if (isEdit) {
 			listId = await updateActivityList(data)
 			if (listId) {
@@ -53,21 +49,15 @@ const ListEdit = () => {
 			} else {
 				setError("Träningen kunde inte uppdateras.")
 			}
-<<<<<<< HEAD
 		} else {
-=======
-			navigate(-1)
-			*/
-		}
-		else{
->>>>>>> main
 			listId = await createActivityList(data)
+
 			if (listId) {
 				setSuccess("Träningen skapades!")
 			} else {
 				setError("Träningen kunde inte skapas.")
 			}
-			navigate("/profile/list/"+listId)
+			navigate("/profile/list/" + listId)
 		}
 	}
 
@@ -129,10 +119,7 @@ const ListEdit = () => {
 		}
 		const response = await fetch("/api/activitylists/add", requestOptions)
 		const jsonResp = await response.json()
-<<<<<<< HEAD
 
-=======
->>>>>>> main
 		return jsonResp
 	}
 	/**
