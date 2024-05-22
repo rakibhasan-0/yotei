@@ -58,6 +58,9 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			const requestOptions = {
 				headers: {"Content-type": "application/json", token: context.token}
 			}
+
+			console.log("the api call just started for the session data")
+
 			const response = await fetch(`/api/workouts/detail/${workout_id}`, requestOptions).catch(() => {
 				setErrorStateMsg("Serverfel: Kunde inte ansluta till servern.")
 				//setLoading(false)
@@ -70,6 +73,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			} else {
 				const json = await response.json()
 				setSessionData(() => json)
+				console.log(json)
 				//setLoading(false)
 				setErrorStateMsg("")
 				fetchLoadedData()
@@ -96,6 +100,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 				//setLoading(false)
 			} else {
 				const json = await loadedResponse.json()
+				console.log("Session Id is", session_id)
 				//console.log(session_id)
 				if(json[0] !== null && json[0] !== undefined) {
 					//console.log(json[0])
@@ -153,7 +158,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 
 
-
 	function setDoneActivities(activities) {
 		setDone(prevDoneList => {
 			const newIds = activities.map(activity => activity["activity_id"])
@@ -184,9 +188,13 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			setError("Kunde inte spara utvärdering, vänligen sätt ett betyg")
 			return
 		}
-		
+		console.log("Extra", sessionData.activityCategories.find(category => category.categoryName === "Extra").activities)
+		console.log("doneList before transforming", doneList)
+		console.log("transform is about to run")
 		await transformDoneList()
-
+		console.log("transform done")
+		removingNotCheckedActivities()
+		//window.location.reload();
 	}
 
 
@@ -204,7 +212,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	}
 	
 
-	
+
 	function replaceDoneId(oldId, newId) {
 		console.log("Replacing", oldId, "with", newId)
 		setDone(doneList.map(id => id === oldId ? newId : id))
@@ -244,8 +252,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		setDone(updatedList)
 		console.log("list after setting the transform", doneList)
 		setIsTransformComplete(true) 
-
-		removingNotCheckedActivities()
 
 	}
 
@@ -366,6 +372,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		}
 		setSuccess("Utvärdering sparad")
 	}
+
 
 	async function removeActivity(activity_id) {
 		const requestOptions = {
@@ -710,14 +717,13 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 		const obj = {
 			workoutId: null,
-			exerciseId: activity.exercise ? activity.exercise.id : null,
-			techniqueId: activity.technique ? activity.technique.id : null,
+			exerciseId: activity.exerciseId ? activity.exerciseId : null,
+			techniqueId: activity.techniqueId ? activity.techniqueId : null,
 			name: activity.name,
 			description: activity.techniqueDescription || "",
 			duration: activity.duration,
 			order: order,
 		}
-
 
 		try {
 			const response = await fetch("/api/workouts/activities/add", {
