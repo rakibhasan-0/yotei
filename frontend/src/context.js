@@ -1,5 +1,14 @@
 import React from "react"
 
+/**
+ * @author Team Durian (Group 3) + unknown
+ * @since 2024-05-16
+ * @version 3.0
+ * @updated 2024-05-22
+ *
+ * @returns a page for managing the user's account
+ */
+
 export const Roles = Object.freeze({
 	other: "USER",
 	admin: "ADMIN",

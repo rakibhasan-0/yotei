@@ -63,14 +63,11 @@ const planURI = "https://jsonplaceholder.typicode.com/users"
  *
  * @author
  * 		Unknown authors
- *     	Team Kiwi, Team Mango
+ *     	Team Kiwi, Team Mango, Team Durian
  * @version 2.2
  * @updated 2024-05-08 Changed so workout/edit url also have the workout id in it
-<<<<<<< HEAD
- *          2024-05-17 Added user permissions to token.
-=======
  * 			2024-05-20 Changed route param for profile/list
->>>>>>> main
+ * 			2024-05-22 Added username
  */
 export default function App() {
 	const cookie = new Cookies().get("token")
