@@ -108,6 +108,7 @@ describe("Grading popup test", () => {
 		
 	})
 
+
 })
 
 
@@ -156,6 +157,8 @@ describe("Statistics Popup", () => {
 		// Wait for the popup to appear
 		await waitFor(() => {
 			expect(screen.getByText("Sammanställning av tillfällen")).toBeInTheDocument()
+			expect(screen.getByText("Bält-tekniker")).toBeInTheDocument()
+
 		})
 	})
 })
