@@ -18,8 +18,9 @@ import Divider from "../../../Common/Divider/Divider"
  * for the review, and also remove the review if the user id match.
  *
  *
- * @author Cyclops (Group 5) (2023-05-17) & Granatäpple (Group 1) (2024-04-19)
+ * @author Cyclops (Group 5) (2023-05-17) & Granatäpple (Group 1) (2024-04-19) & Team Mango (Grupp 4) (2024-05-22)
  * @version 2.0
+ * Update Team Mango 2024-05-22: Changed isAdmin check to new permission check.
  */
 
 export default function Review({isOpen, setIsOpen, technique_id}) {

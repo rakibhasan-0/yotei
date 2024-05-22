@@ -4,6 +4,13 @@ import { configure } from "@testing-library/react"
 import { Roles } from "../../context"
 import "@testing-library/jest-dom"
 
+/**
+ * Test for utils file.
+ * 
+ * @author UNKNOWN, Team Mango (Grupp 4) (2024-05-22)
+ * Updated 2024-05-22: changed to new isAdmin check.
+ */
+
 configure({testIdAttribute: "id"})
 
 describe("Authorization tests", () => {
