@@ -23,7 +23,7 @@
 	  overflow:hidden;
 	}
 	
-  .editable-list-header p { /* Duration */
+  .editable-list-header p {
   
 	  margin: 0;
 	  align-items: end;
@@ -36,21 +36,30 @@
 	  display: flex;
 	  align-items: center;
 	  justify-content: center;
+	  
   }
   
   .href-link {
-	  margin: 0 0 0 10px;
+	margin: 0 0 0 10px;
+	overflow: hidden; 
+	text-overflow: ellipsis; 
+	white-space: nowrap; 
+	width: 25vw; 
+	max-width: 225px;
+	
   }
   
   .input {
+	
 	user-select: none;
 	overflow: auto;
 	display: flex;
-	align-items: center; /* Align items vertically center */
-	padding: 5px; /* Same padding */
+	align-items: center; 
+	padding: 5px; 
 	font-weight: 400;
 	width: 100%;
 	outline: none;
+	
   }
 
   .errorInput {
@@ -70,6 +79,7 @@
   .textareaErr {
 	border: 2px solid var(--red-primary);
 	background: var(--red-secondary);
+	
   }
 
   .textarea {
