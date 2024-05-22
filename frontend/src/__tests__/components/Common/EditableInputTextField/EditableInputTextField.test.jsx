@@ -50,17 +50,20 @@ describe("Functionality", () => {
 
     /*test("Calls onedit on enter", () => {
         const onEditFn = jest.fn()
+        const validateFn = jest.fn()
         render(
             <BrowserRouter>
-                <EditableInputTextField id="field" item="Hello there!" onEdit={onEditFn}/>
+                <EditableInputTextField id="field" item="Hello there!" onEdit={onEditFn} validateInput={validateFn}/>
             </BrowserRouter>
         )
         fireEvent.click(screen.getByTestId("edit-clickable"))
 
         const input = screen.getByTestId("edit-element")
-        fireEvent.change(input, { target: { value: "New text" } });
+        fireEvent.change(input, { target: { value: "New text" } })
+        input.focus()
         fireEvent.keyPress(input, {key: 'Enter', code: 13, charCode: 13})
 
-        expect(onEditFn).toHaveBeenCalled();
+        expect(onEditFn).toHaveBeenCalled()
+        expect(validateFn).toHaveBeenCalled()
     })*/
 })
