@@ -42,8 +42,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	const[reviewId, setReviewId] = useState(-1)
 	const [extraActivityId, setExtraActivityId] = useState(-1)
 	const [isTransformComplete, setIsTransformComplete] = useState(false)
-	const [activeRequests, setActiveRequests] = useState(0)
-
+	const [shouldReload, setShouldReload] = useState(false)
 
 	const [, setErrorStateMsg] = useState("")
 
@@ -59,8 +58,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 				headers: {"Content-type": "application/json", token: context.token}
 			}
 
-			console.log("the api call just started for the session data")
-
 			const response = await fetch(`/api/workouts/detail/${workout_id}`, requestOptions).catch(() => {
 				setErrorStateMsg("Serverfel: Kunde inte ansluta till servern.")
 				//setLoading(false)
@@ -73,13 +70,13 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			} else {
 				const json = await response.json()
 				setSessionData(() => json)
-				console.log(json)
 				//setLoading(false)
 				setErrorStateMsg("")
 				fetchLoadedData()
 
 			}
 		}
+
 
 
 
@@ -100,7 +97,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 				//setLoading(false)
 			} else {
 				const json = await loadedResponse.json()
-				console.log("Session Id is", session_id)
 				//console.log(session_id)
 				if(json[0] !== null && json[0] !== undefined) {
 					//console.log(json[0])
@@ -157,6 +153,13 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	}, [])
 
 
+	useEffect(() => {
+		if (shouldReload) {
+			window.location.reload();
+		}
+	},[shouldReload])
+
+
 
 	function setDoneActivities(activities) {
 		setDone(prevDoneList => {
@@ -188,35 +191,23 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			setError("Kunde inte spara utvärdering, vänligen sätt ett betyg")
 			return
 		}
-		console.log("Extra", sessionData.activityCategories.find(category => category.categoryName === "Extra").activities)
-		console.log("doneList before transforming", doneList)
-		console.log("transform is about to run")
+
 		await transformDoneList()
-		console.log("transform done")
-		removingNotCheckedActivities()
-		//window.location.reload();
+
 	}
 
 
-	function removingNotCheckedActivities() {
+	async function removingNotCheckedActivities() {
+		
 		const extraCategory = sessionData.activityCategories.find(category => category.categoryName === "Extra");
-
 		if (extraCategory) {
-			extraActivities.forEach(activity => {
+			extraCategory.activities.forEach(activity => {
+				console.log("running")
 				if (!doneList.includes(activity.id)) {
 					removeActivity(activity.id)
 				}
 			})
 		} 
-
-	}
-	
-
-
-	function replaceDoneId(oldId, newId) {
-		console.log("Replacing", oldId, "with", newId)
-		setDone(doneList.map(id => id === oldId ? newId : id))
-		console.log("Done list after replacing", doneList)
 	}
 
 
@@ -234,7 +225,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 						try {
 							const newId = await getIdForActivity(foundActivity, foundActivity.order)
 							foundActivity.id = newId
-							console.log("Transformed new ID:", newId)
 							//replaceDoneId(activityID, newId)
 							return newId
 						} catch (error) {
@@ -247,10 +237,9 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		});
 
 		const updatedList = await Promise.all(promises)
-		console.log("Updated list", updatedList)
-		console.log("Done list after the transform of ids and before updating", doneList)
+
 		setDone(updatedList)
-		console.log("list after setting the transform", doneList)
+
 		setIsTransformComplete(true) 
 
 	}
@@ -270,15 +259,11 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	}, [isTransformComplete])
 
 
-	useEffect(() => {
-		console.log("ACTIVE REQUESTS:", activeRequests)
-
-	}, [activeRequests])
 
 
 	function proceedWithReview() {
 		if (reviewId < 0) {
-			addReview();
+			addReview()
 		} else {
 			updateReview();
 		}
@@ -329,16 +314,17 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			const json = await loadedResponse.json()
 			if(json[0] !== null && json[0] !== undefined) {
 				setReviewId(json[0]["id"])
-				clearActivities(json[0]["id"], session_id)
-				console.log("doneList", doneList)
+				await clearActivities(json[0]["id"], session_id)
 				for(let i = 0; i < doneList.length; i++) {
-					submitActivity(json[0]["id"], session_id, doneList[i])
+					await submitActivity(json[0]["id"], session_id, doneList[i])
 				}
 			}
 		}
 
 		updateSavedDateDisplay(ts)
 		setSuccess("Utvärdering skapad")
+		
+		setShouldReload(true)
 	}
 
 	async function updateReview() {
@@ -366,11 +352,14 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			return
 		}
 		updateSavedDateDisplay(ts)
-		clearActivities(reviewId, session_id)
+
+		await clearActivities(reviewId, session_id)
 		for(let i = 0; i < doneList.length; i++) {
-			submitActivity(reviewId, session_id, doneList[i])
+			await submitActivity(reviewId, session_id, doneList[i])
 		}
+
 		setSuccess("Utvärdering sparad")
+		setShouldReload(true)
 	}
 
 
@@ -379,9 +368,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			method: "DELETE",
 			headers: {"Content-type": "application/json", "token": token}
 		}
-		setActiveRequests((prev) => {
-			return prev + 1;
-		})
 
 		const deleteResponse = await fetch("/api/workouts/activities/delete/" + activity_id , requestOptions).catch(() => {
 			setError("Serverfel: Kunde inte ansluta till servern.")
@@ -389,16 +375,13 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		})
 		if(deleteResponse.status == HTTP_STATUS_CODES.BAD_REQUEST) {
 			console.log("Kunde inte radera aktivitet med id: " + activity_id)
-			setActiveRequests((prev) => {
-				return prev - 1;
-			})
 		} else if (deleteResponse.status == HTTP_STATUS_CODES.NOT_FOUND) {
 			console.log("Hittade ingen aktivitet med id: " + activity_id)
-			return prev - 1;
 		} else if (HTTP_STATUS_CODES.status == HTTP_STATUS_CODES.OK) {
 			console.log("Raderade aktivitet med id: " + activity_id)
-			return prev - 1;
 		}
+
+		
 	} 
 
 
@@ -418,11 +401,12 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		if(deleteResponse.status != HTTP_STATUS_CODES.OK) {
 			setError("Serverfel: Något gick snett! Felkod: " + deleteResponse.status)
 			return
+		} else {
+			await removingNotCheckedActivities()
 		}
 	}
 
 	async function submitActivity(review_id, session_id, activity_id) {
-		console.log("Submitting activity: " + activity_id)
 		const requestOptions = {
 			method: "POST",
 			headers: {"Content-type": "application/json", "token": token},
@@ -485,9 +469,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
    * @param activities the activities that are added.
    */
 	function getActivities(activities) {
-		console.log("added", workoutCreateInfo.addedActivities)
-		console.log("activities", workoutCreateInfo.checkedActivities)
-		console.log("categories", workoutCreateInfo.addedCategories)
 		workoutCreateInfoDispatch({
 			type: WORKOUT_CREATE_TYPES.SET_ACTIVITIES_WITH_PARSING,
 			payload: { result: activities },
@@ -519,27 +500,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
    * @param categories the categories that are checked by the user
    */
 	function newlyAddedActivity(data, categories) {
-		console.log("newlyAddedActivity data: ", data)
-		console.log("newlyAddedActivity category: ", categories)
 
-		//createNewCategoryWithActivities("ExtraActivities", data)
-
-		// calculate the duration of the data
-		//addDurationToSessionData(data)
-		
-
-		/*categories.forEach((category) => {
-			if (category.checked) {
-				let categoryExistence = findExistingCategory(category)
-				console.log("categoriesExistence", categoryExistence)
-
-				if (categoryExistence) {
-					addActivitiesToExistingCategory(categoryExistence, data)
-				} else {
-					createNewCategoryWithActivities(category, data)
-				}
-			}
-		})*/
 
 		const categoryExistence= sessionData.activityCategories.find((element) => {
 			return element.categoryName.toLowerCase() === "ExtraActivities".toLowerCase()
@@ -577,7 +538,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		data.forEach((activity) => {
 			duration += activity.duration
 		})
-		console.log("duration", duration)
 		return duration
 	}
 
@@ -591,7 +551,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
    */
 	function findExistingCategory(category) {
 		return sessionData.activityCategories.find((element) => {
-			console.log("element category", element.categoryName)
 			return element.categoryName.toLowerCase() === category.name.toLowerCase()
 		})
 	
@@ -606,7 +565,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
    */
 	function addActivitiesToExistingCategory(category, activities) {
 		let currentExtraId = extraActivityId
-		console.log("currentExtraId", currentExtraId)
+
 		setSessionData(prevSessionData => {
 			const newCategories = prevSessionData.activityCategories.map(cat => {
 				if (cat.categoryName === category.categoryName) {
@@ -717,8 +676,8 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 		const obj = {
 			workoutId: null,
-			exerciseId: activity.exerciseId ? activity.exerciseId : null,
-			techniqueId: activity.techniqueId ? activity.techniqueId : null,
+			exerciseId: activity.exercise ? activity.exercise.id : null,
+			techniqueId: activity.technique ? activity.technique.id : null,
 			name: activity.name,
 			description: activity.techniqueDescription || "",
 			duration: activity.duration,
@@ -736,7 +695,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			})
 
 			const responseData = await response.json()
-			console.log("response", responseData)
 			return responseData.id
 		} catch (error) {
 			console.error("Error fetching data:", error)
@@ -745,7 +703,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 
 	function getActivityContainer(sessionData) {
-		//console.log(sessionData)
 		return (
 			sessionData !== null && (
 				<div>
