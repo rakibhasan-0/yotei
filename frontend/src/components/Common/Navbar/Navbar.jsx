@@ -74,7 +74,7 @@ function Navbar({ testId }) {
 				
 
 				{ isAdmin(context) ? 
-					<Button width={"min-content"} onClick={() => navigateAndClose("/profile")}>
+					<Button width={"min-content"} onClick={() => navigateAndClose("/admin")}>
 						<AdminIcon role="button" className={styles.commonNavbarIconAdmin}  onClick={() => navigateAndClose("/admin")} />
 					</Button>
 					
