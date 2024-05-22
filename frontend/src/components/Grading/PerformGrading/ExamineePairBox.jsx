@@ -210,11 +210,10 @@ export default function ExamineePairBox({
 	}
 
 	return (
-		<fieldset id={id} className={styles.pairbox} style={{ backgroundColor: rowColor }}>
-			<div className={styles.pairinfo}>
-				<p id="PairTextId" style={{ fontSize: "12px", marginBottom: "0" }}>Par:</p>
-				<p id="PairNumberId" style={{ fontSize: "12px", marginBottom: "2px" }}>{pairNumber}</p>
-				<CommentButton onClick={() => setAddComment(true)} />
+		<fieldset id={id} className={styles.pairbox} style={{backgroundColor: rowColor}}>
+			<div className={styles.pairinfo} style={{ display: "flex", alignItems: "center" }}>
+				<p id="PairNumberId" style={{ fontSize: "12px", marginBottom: "0" }}>P{pairNumber}</p>
+				<CommentButton onClick={() => setAddComment(true)}/>
 			</div>
 			<div className={styles.pair}>
 				<div id="ExamineeLeftNameId" className={styles.pairleft}>
