@@ -13,20 +13,20 @@ import MinutePicker from "../../Common/MinutePicker/MinutePicker"
  *
  * Props:
  * 	   index @type {number} - The index of the activity in the list.
- *     categoryName @type {string}  - The name of the category.
+ *     activityName @type {string}  - The name of the activity.
  *     id @type {number} - The id of the activity.
  *     text @type {string} - The text that is written in the text area.
  *
  * Example usage:
  *		<ActivityItem
  *			index={0}
- *			categoryName={"01"}
+ *			activityName={"01"}
  *			id={0}
  *			text={"Namn på aktivitet"}
  *		/>
  */
-function ActivityItem({ index, categoryName, id, text }) {
-	const { listCreateInfo, listCreateInfoDispatch } = useContext(ListCreateContext)
+function ActivityItem({ index, activityName, id, text }) {
+	const { listCreateInfo} = useContext(ListCreateContext)
 
 	// Updates the text area height to fit the text
 	useEffect(() => {
@@ -37,16 +37,10 @@ function ActivityItem({ index, categoryName, id, text }) {
 
 	return (
 		<fieldset className={styles.activityItem} id={"activity-description-" + id}>
-			{categoryName && <legend>{<h2>{categoryName}</h2>}</legend>}
+			{activityName && <legend>{<h2>{activityName}</h2>}</legend>}
 			<textarea
+				disabled={true}
 				className={styles.activityItemTextArea}
-				placeholder="Fri text ..."
-				onChange={(e) =>
-					listCreateInfoDispatch({
-						type: "UPDATE_ACTIVITY_NAME",
-						payload: { index, name: e.target.value },
-					})
-				}
 				value={listCreateInfo.addedActivities[index].name}
 				rows={1}
 			/>
@@ -61,8 +55,6 @@ function ActivityItem({ index, categoryName, id, text }) {
  * 		<ActivityList/>
  */
 function ActivityList() {
-	//Commented due to linter
-	//const { listCreateInfo, listCreateInfoDispatch } = useContext(ListCreateContext)
 	const { listCreateInfo } = useContext(ListCreateContext)
 
 	return (
@@ -70,7 +62,7 @@ function ActivityList() {
 			{listCreateInfo.addedActivities.map((activity, index) => {
 				return (
 					<ActivityItem
-						categoryName={"Aktivitet " + (index + 1)}
+						activityName={"Aktivitet " + (index + 1)}
 						key={"activity-list-item-" + index}
 						id={index}
 						index={index}
@@ -135,13 +127,11 @@ function ActivityTimes() {
  *		<ActivityTimes activityTimes={list1} activityTimesHandler={list2}></ActivityTimes>
  *
  *
- * @author Team Minotaur
- * @version 1.0
- * @since 2023-05-24
+ * @author Team Tomato (6)
+ * @since 2024-05-21
+ * Based on ActivityInfoPopUp
  */
 export default function ActivityInfoPopUp() {
-	//Commented due to linter
-	//const { listCreateInfo, listCreateInfoDispatch } = useContext(ListCreateContext)
 	const { listCreateInfoDispatch } = useContext(ListCreateContext)
 
 	const goBack = () => {
@@ -150,9 +140,6 @@ export default function ActivityInfoPopUp() {
 
 	const saveActivities = () => {
 		listCreateInfoDispatch({ type: LIST_CREATE_TYPES.CREATE_ACTIVITY_ITEMS, payload: {} })
-		{
-			console.log("Breakpoint 1")
-		}
 		listCreateInfoDispatch({ type: LIST_CREATE_TYPES.CLOSE_POPUP })
 	}
 
