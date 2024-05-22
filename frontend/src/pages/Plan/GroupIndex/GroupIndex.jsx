@@ -79,7 +79,7 @@ export default function GroupIndex() {
 									<BeltBox id={index} belts={group.belts} />
 								</div>
 
-								<div style = {{marginLeft: "5px", display: "flex"}}> { (canEditGroups(context, group)) && (
+								<div style = {{marginLeft: "5px", display: "flex"}}> { (canEditGroups(context, group.userId)) && (
 									<>
 										<Link to={`/plan/edit/${group.id}`}>
 											<Pencil size={24} color="var(--red-primary)"/>
