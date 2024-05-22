@@ -49,7 +49,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
     // Enum for all existing permissions
     // These are listed in permissions.sql and should mirror 
     // what is present in utils.js
-    private enum permission_list {
+    private enum permissionList {
         ADMIN_RIGHTS(1),
 	    SESSION_OWN(2), //Edit your own sessions.
 	    SESSION_ALL(3), //Edit all sessions.
@@ -63,7 +63,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
 	    GRADING_ALL(11);
 
         private final int value;
-        private permission_list(int value) {
+        private permissionList(int value) {
             this.value = value;
         }
     }
@@ -128,7 +128,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
         //System.err.println("permissions: " + permissions);
         //Logger.log(Level.DEBUG, "permissions: " + permissions);
         
-        if (role.equals("ADMIN") || permissions.contains(permission_list.ADMIN_RIGHTS.value)) {
+        if (role.equals("ADMIN") || permissions.contains(permissionList.ADMIN_RIGHTS.value)) {
             return true;
         }
         
@@ -137,6 +137,9 @@ public class AuthFilter implements GlobalFilter, Ordered {
         // Check for each permission-locked api path and determine if user is allowed through
         if (path.startsWith("/api/session") 
             && !checkSessionPermissions(path, permissions)) return false;
+
+        if (path.startsWith("/api/plan")
+            && !checkPlanPermissions(path, permissions)) return false;
 
         // Protect import and export endpoints
         // Only allow admin to create users
@@ -163,8 +166,27 @@ public class AuthFilter implements GlobalFilter, Ordered {
         };
     
         Integer[] permissionsToCheck = {
-            permission_list.SESSION_ALL.value,
-            permission_list.SESSION_OWN.value
+            permissionList.SESSION_ALL.value,
+            permissionList.SESSION_OWN.value
+        };
+
+        return hasPermission(path, permissions, Arrays.asList(patterns), Arrays.asList(permissionsToCheck));
+    }
+
+    private boolean checkPlanPermissions(String path, List<Integer> permissions) {
+        // Might be a better way but this makes it so that no 
+        // newly created endpoint is permission-locked from the get-go
+        // Any new endpoint that needs to be locked has to be included here
+        Pattern[] patterns = {
+            // From PlanController
+            Pattern.compile("^/api/plan/add$"),
+            Pattern.compile("^/api/plan/remove$"),
+            Pattern.compile("^/api/plan/update$"),
+        };
+    
+        Integer[] permissionsToCheck = {
+            permissionList.PLAN_ALL.value,
+            permissionList.PLAN_OWN.value
         };
 
         return hasPermission(path, permissions, Arrays.asList(patterns), Arrays.asList(permissionsToCheck));
