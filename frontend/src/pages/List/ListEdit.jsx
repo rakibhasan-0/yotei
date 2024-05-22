@@ -47,12 +47,12 @@ const ListEdit = () => {
 		console.log(listCreateInfo.data)
 		let listId
 		if(isEdit){
-			listId = await updateActivityList(data)
+			/*listId = await updateActivityList(data)
 			if(listId){
 				setSuccess("Träningen uppdaterades!")
-		   } else {
+			} else {
 				setError("Träningen kunde inte uppdateras.")
-			}
+			}*/
 		}
 		else{
 			listId = await createActivityList(data)
@@ -111,23 +111,23 @@ const ListEdit = () => {
 		return jsonResp.workoutId
 	}
 */
-const createActivityList = async (body) => {
-	const requestOptions = {
-		method: "POST",
-		headers: {
-			Accept: "application/json",
-			"Content-type": "application/json",
-			token,
-		},
-		body: JSON.stringify(body),
+	const createActivityList = async (body) => {
+		const requestOptions = {
+			method: "POST",
+			headers: {
+				Accept: "application/json",
+				"Content-type": "application/json",
+				token,
+			},
+			body: JSON.stringify(body),
+		}
+		console.log("Doing await")
+		const response = await fetch("/api/activitylists/add", requestOptions)
+		const jsonResp = await response.json()
+		console.log("Cool stuff :)")
+		console.log(jsonResp)
+		return jsonResp
 	}
-	console.log("Doing await")
-	const response = await fetch("/api/activitylists/add", requestOptions)
-	const jsonResp = await response.json()
-	console.log("Cool stuff :)")
-	console.log(jsonResp)
-	return jsonResp
-}
 	/**
 	 * Fetches the data from the local storage and context.
 	 */
@@ -145,7 +145,7 @@ const createActivityList = async (body) => {
 		}else if (!item && !isEdit) {
 			listCreateInfoDispatch({ type: LIST_CREATE_TYPES.SET_INITIAL_STATE })
 		}
-		 else if (item) {
+		else if (item) {
 			listCreateInfoDispatch({
 				type: LIST_CREATE_TYPES.INIT_WITH_DATA,
 				payload: JSON.parse(item),
@@ -177,15 +177,15 @@ const createActivityList = async (body) => {
 					<ListCreateContext.Provider value={{ listCreateInfo, listCreateInfoDispatch }}>
 						{
 							isEdit? 
-							<>
-							<title>Redigera lista</title>
-							<h1 className={styles.title}>Redigera lista</h1>
-							</>
-							:
-							<>
-							<title>Skapa lista</title>
-							<h1 className={styles.title}>Skapa lista</h1>
-							</>
+								<>
+									<title>Redigera lista</title>
+									<h1 className={styles.title}>Redigera lista</h1>
+								</>
+								:
+								<>
+									<title>Skapa lista</title>
+									<h1 className={styles.title}>Skapa lista</h1>
+								</>
 						}
 						
 						<ListFormComponent
