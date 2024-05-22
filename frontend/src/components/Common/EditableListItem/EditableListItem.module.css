@@ -36,6 +36,7 @@
 	  display: flex;
 	  align-items: center;
 	  justify-content: center;
+	  
   }
   
   .href-link {
@@ -44,9 +45,12 @@
 	text-overflow: ellipsis; 
 	white-space: nowrap; 
 	width: 25vw; 
+	max-width: 225px;
+	
   }
   
   .input {
+	
 	user-select: none;
 	overflow: auto;
 	display: flex;
@@ -55,6 +59,7 @@
 	font-weight: 400;
 	width: 100%;
 	outline: none;
+	
   }
 
   .errorInput {
@@ -74,6 +79,7 @@
   .textareaErr {
 	border: 2px solid var(--red-primary);
 	background: var(--red-secondary);
+	
   }
 
   .textarea {

@@ -5,6 +5,7 @@ import BeltIcon from "../BeltIcon/BeltIcon"
 import { useContext, useEffect, useState } from "react"
 import { AccountContext } from "../../../context"
 import {setError as setErrorToast} from "../../../utils"
+import React from "react"
 
 /**
  * @author Chimera (Group 4)
@@ -13,6 +14,8 @@ import {setError as setErrorToast} from "../../../utils"
  * @returns A new belt picker component
  * @update 2024-05-16, Team Kiwi : Added a filter for Basic Techniques 
  * @update 2024-05-16, Team Durian : Added so that error message element only renders when error exists
+ * @update 2024-05-22, Team Mango & Team Kiwi: Fixed a bug with rendering checkboxes for belts.
+ * @update 2024-05-22, Team Kiwi: Changed the design of the beltrows in order to work correctly on mobile devices.
  * 
  * Represents a belt row with text, two checkboxes and two
  * icons. 
@@ -29,29 +32,42 @@ import {setError as setErrorToast} from "../../../utils"
 const BeltRow = ({ belt, states, onToggle }) => {
 	const name = belt[0].name
 	const child = belt.find(b => b.child)
-	const adult = belt.find(b => !b.child)
+	const adult = belt.find(b => !(b.child || b.inverted))
+	const inverted = belt.find(b =>b.inverted)
 
 	const [childState, setChildState] = useState(false)
 	const [adultState, setAdultState] = useState(false)
+	const [invertedState,setInvertedState] = useState (false)
+	
 
 	useEffect(() => {
 		setChildState(states?.some(b => b.id === child?.id))
 		setAdultState(states?.some(b => b.id === adult?.id))
+		setInvertedState(states?.some(b => b.id === inverted?.id))
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
 		<div className={styles.beltRow}>
 			<div className={styles.beltItem}>
-				{child ? <>
-					<CheckBox id={`belt-child-${name}`} onClick={toggleChildState} checked={childState} />
+				{(child) ? <>
 					<BeltIcon id={`belt-child-${name}-icon`} belt={child} />
-				</> : <div style={{width:"72px"}} />}
+					<CheckBox id={`belt-child-${name}`} onClick={toggleChildState} checked={childState} />
+					
+				</> : <></>}
+				{inverted ? <>
+					<BeltIcon id={`belt-inverted-${name}-icon`} belt={inverted} />
+					<CheckBox id={`belt-inverted-${name}`} onClick={toggleInvertedState} checked={invertedState}/>
+				</>
+					: <></>
+				}
+				{adult ? <>
+					<BeltIcon id={`belt-adult-${name}-icon`} belt={adult} />
+					<CheckBox id={`belt-adult-${name}`} onClick={toggleAdultState} checked={adultState} />
+				</>
+					: <div style={{width:"72px"}} />
+				}
 			</div>
 			<p id={`belt-text-${name}`} className={styles.beltText}>{name}</p>
-			<div className={styles.beltItem}>
-				<BeltIcon id={`belt-adult-${name}-icon`} belt={adult} />
-				<CheckBox id={`belt-adult-${name}`} onClick={toggleAdultState} checked={adultState} />
-			</div>
 		</div>
 	)
 
@@ -64,6 +80,11 @@ const BeltRow = ({ belt, states, onToggle }) => {
 		setAdultState(state)
 		onToggle(state, adult)
 	}
+
+	function toggleInvertedState(state){
+		setInvertedState(state)
+		onToggle(state,inverted)
+	}
 }
 
 /**
@@ -75,7 +96,7 @@ const BeltRow = ({ belt, states, onToggle }) => {
  *    belt	   @type {Object}	A const containing .name for name, a hexcode .color for color and a boolean .child for if it's a child 
  *    id	   @type {String}	An id for the belt picker
  *    states   @type {Object}	A state object, as shown above
- * 	  onToggle @type {Function} A toggle function when a belt is selected (both child and adult)
+ * 	  onToggle @type {Function} A toggle function when a belt is selected (both child, adult and inverted)
  * 
 
  * states = [
@@ -83,7 +104,8 @@ const BeltRow = ({ belt, states, onToggle }) => {
  *   "id": 1,
  *   "name": "Brun",
  *   "color": "FFFFF6",
- *   "child": false
+ *   "child": false,
+ * 	 "inverted": false
  * 	}
  * ]
  * 
@@ -121,6 +143,7 @@ export default function BeltPicker({ id, states, onToggle, centered, onClearBelt
 				}
 				groups[belt.name].push(belt)
 			}
+			//console.log(json)
 			let newBelts = groups
 			if (filterWhiteBelt) {
 				const {Vitt, ...rest} = newBelts // eslint-disable-line
@@ -160,7 +183,7 @@ export default function BeltPicker({ id, states, onToggle, centered, onClearBelt
 						))}
 						{onClearBelts &&
 							<div className={styles.beltRow} onClick={clearBelts}>
-								<p className={`${styles.beltText} ${styles.centeredText}`}>Rensa valda bälten</p>
+								<p className={`${styles.beltTextSpecial} ${styles.centeredText}`}>Rensa valda bälten</p>
 							</div>
 						}
 					</>
