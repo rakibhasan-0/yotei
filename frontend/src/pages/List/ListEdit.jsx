@@ -12,13 +12,12 @@ import styles from "./WorkoutModify.module.css"
 import { Spinner } from "react-bootstrap"
 import { setSuccess, setError } from "../../utils.js"
 
-
 /**
  * This is the page for editing a saved list.
  *
  * @author Team Tomato (6)
- * @since 2023-05-21
- * Based on WorkoutEdit
+ * @version 1.0
+ * @since 2024-05-22
  */
 
 const ListEdit = () => {
@@ -29,33 +28,29 @@ const ListEdit = () => {
 	const isEdit = window.location.href.toString().includes("edit")
 
 	const navigate = useNavigate()
-	const {userId,token } = useContext(AccountContext)
+	const { userId, token } = useContext(AccountContext)
 
 	const location = useLocation()
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const [isLoading, setIsLoading] = useState(true)
-	const localStorageDestination = isEdit? "listCreateInfoEdit":"listCreateInfoCreate"
+	const localStorageDestination = isEdit ? "listCreateInfoEdit" : "listCreateInfoCreate"
 	/**
 	 * Submits the form data to the API.
 	 */
 	async function submitHandler() {
 		setIsSubmitted(true)
 		const data = parseData(listCreateInfo.data)
-		//TBF
-		console.log("Console.log so that linter does not give errors:"+data)
-		console.log(listCreateInfo.data)
 		let listId
-		if(isEdit){
-			/*listId = await updateActivityList(data)
-			if(listId){
+		if (isEdit) {
+			listId = await updateActivityList(data)
+			if (listId) {
 				setSuccess("Träningen uppdaterades!")
 			} else {
-				setError("Träningen kunde inte uppdateras.")
-			}*/
-		}
-		else{
+				setError("Träningen kunde inte uppdateras hejhej.")
+			}
+		} else {
 			listId = await createActivityList(data)
-			if(listId){
+			if (listId) {
 				setSuccess("Träningen skapades!")
 			} else {
 				setError("Träningen kunde inte skapas.")
@@ -92,7 +87,7 @@ const ListEdit = () => {
 			users: data.users.map((user) => user.userId),
 		}
 	}
-	/* TBF (To Be Fixed)
+
 	const updateActivityList = async (body) => {
 		const requestOptions = {
 			method: "PUT",
@@ -107,9 +102,9 @@ const ListEdit = () => {
 		const response = await fetch("/api/activitylists/edit", requestOptions)
 		const jsonResp = await response.json()
 
-		return jsonResp.workoutId
+		return jsonResp
 	}
-*/
+
 	const createActivityList = async (body) => {
 		const requestOptions = {
 			method: "POST",
@@ -120,11 +115,9 @@ const ListEdit = () => {
 			},
 			body: JSON.stringify(body),
 		}
-		console.log("Doing await")
 		const response = await fetch("/api/activitylists/add", requestOptions)
 		const jsonResp = await response.json()
-		console.log("Cool stuff :)")
-		console.log(jsonResp)
+
 		return jsonResp
 	}
 	/**
@@ -135,22 +128,20 @@ const ListEdit = () => {
 		const item = localStorage.getItem(localStorageDestination)
 		const listData = location.state?.list
 		const userData = location.state?.list.users
-		if (listData&&isEdit) {
+		if (listData && isEdit) {
 			listCreateInfoDispatch({
 				type: LIST_CREATE_TYPES.INIT_EDIT_DATA,
 				payload: { listData, userData: userData ? userData : [] },
 			})
 			window.history.replaceState({}, document.title)
-		}else if (!item && !isEdit) {
+		} else if (!item && !isEdit) {
 			listCreateInfoDispatch({ type: LIST_CREATE_TYPES.SET_INITIAL_STATE })
-		}
-		else if (item) {
+		} else if (item) {
 			listCreateInfoDispatch({
 				type: LIST_CREATE_TYPES.INIT_WITH_DATA,
 				payload: JSON.parse(item),
 			})
-		} 
-		else {
+		} else {
 			navigate(-1, { replace: true })
 		}
 		setIsLoading(false)
@@ -174,19 +165,18 @@ const ListEdit = () => {
 			) : (
 				<>
 					<ListCreateContext.Provider value={{ listCreateInfo, listCreateInfoDispatch }}>
-						{
-							isEdit? 
-								<>
-									<title>Redigera lista</title>
-									<h1 className={styles.title}>Redigera lista</h1>
-								</>
-								:
-								<>
-									<title>Skapa lista</title>
-									<h1 className={styles.title}>Skapa lista</h1>
-								</>
-						}
-						
+						{isEdit ? (
+							<>
+								<title>Redigera lista</title>
+								<h1 className={styles.title}>Redigera lista</h1>
+							</>
+						) : (
+							<>
+								<title>Skapa lista</title>
+								<h1 className={styles.title}>Skapa lista</h1>
+							</>
+						)}
+
 						<ListFormComponent
 							callback={submitHandler}
 							listCreateInfoDispatchProp={listCreateInfoDispatch}
