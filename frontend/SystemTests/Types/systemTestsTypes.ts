@@ -53,6 +53,7 @@ export type Technique = {
 export type TagComponent = {
   tagName?: string, 
   tagId?: number
+}
 
 // Exercise
 export type Exercise = {
