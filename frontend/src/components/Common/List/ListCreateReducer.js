@@ -4,6 +4,7 @@ export const LIST_CREATE_TYPES = {
 	SET_IS_PRIVATE: "SET_IS_PRIVATE",
 	SET_USERS: "SET_USERS",
 	REMOVE_ACTIVITY_ITEM: "REMOVE_ACTIVITY_ITEM",
+	SET_ACTIVITIES: "SET_ACTIVITIES",
 	SET_INITIAL_STATE: "SET_INITIAL_STATE",
 	INIT_WITH_DATA: "INIT_WITH_DATA",
 	INIT_EDIT_DATA: "INIT_EDIT_DATA",
@@ -12,11 +13,11 @@ export const LIST_CREATE_TYPES = {
 	OPEN_ACTIVITY_POPUP: "OPEN_ACTIVITY_POPUP",
 	OPEN_CHOOSE_ACTIVITY_POPUP: "OPEN_CHOOSE_ACTIVITY_POPUP",
 	UPDATE_ACTIVITY_TIME: "UPDATE_ACTIVITY_TIME",
-	UPDATE_ACTIVITY_TIME: "CREATE_ACTIVITY_ITEMS",
+	UPDATE_ACTIVITY: "UPDATE_ACTIVITY",
+	CREATE_ACTIVITY_ITEMS: "CREATE_ACTIVITY_ITEMS",
 	CLEAR_ADDED_ACTIVITIES: "CLEAR_ADDED_ACTIVITIES",
 	SET_ACTIVITIES_WITH_PARSING: "SET_ACTIVITIES_WITH_PARSING",
 	TOGGLE_CHECKED_ACTIVITY: "TOGGLE_CHECKED_ACTIVITY",
-	UPDATE_EDITING_ACTIVITY: "UPDATE_EDITING_ACTIVITY",
 }
 
 /**
@@ -85,11 +86,17 @@ export function checkIfActivityInfoPoupChangesMade(info) {
 	return false
 }
 
+export function checkIfChangesMade(info) {
+	if (!compareCurrentToOriginal(info.data, info.originalData)) return true
+	if (checkIfActivityInfoPoupChangesMade(info)) return true
+
+	return false
+}
+
 /**
  * List create reducer
- * @author Team Tomato (6)
- * @since 2024-05-22
- * Based on WorkoutCreateReducer
+ * @author Team Tomato
+ *
  */
 export function listCreateReducer(state, action) {
 	const tempState = { ...state }
@@ -106,6 +113,7 @@ export function listCreateReducer(state, action) {
 				username: user.username,
 			}
 		})
+
 		// Prepare data object
 		const data = {
 			id: listData.id,
@@ -128,6 +136,8 @@ export function listCreateReducer(state, action) {
 
 		return tempState
 	}
+	case "RESET":
+		return JSON.parse(JSON.stringify(ListCreateInitialState))
 	case "SET_NAME":
 		tempState.data.name = action.name
 		return tempState
@@ -145,6 +155,10 @@ export function listCreateReducer(state, action) {
 		// Remove the activity with the given index/position in the list
 		tempState.data.activities = tempState.data.activities.filter((activity, idx) => idx !== index)
 		tempState.numActivities = tempState.data.activities.length
+		return tempState
+	}
+	case "SET_ACTIVITIES": {
+		tempState.data.activityItems[action.id].activities = action.activities
 		return tempState
 	}
 	case "SET_ACTIVITIES_WITH_PARSING": {
@@ -193,7 +207,37 @@ export function listCreateReducer(state, action) {
 		tempState.addedActivities[index].duration = Number.parseInt(time)
 		return tempState
 	}
+	case "UPDATE_ACTIVITY": {
+		const newActivity = action.payload.activity
+		let changedCategory = true
+		let categoryId
+		let removIds = []
 
+		tempState.data.activityItems.forEach((category, categoryIndex) => {
+			category.activities.forEach((activity, index) => {
+				if (activity.id === newActivity.id) {
+					if (category.id === categoryId) {
+						changedCategory = false
+						category.activities[index] = newActivity
+					} else {
+						category.activities.splice(index, 1)
+						if (tempState.data.activityItems[categoryIndex].activities.length === 0) {
+							removIds.push(categoryIndex)
+						}
+					}
+				}
+			})
+
+			if (changedCategory && category.id === categoryId) {
+				tempState.data.activityItems[categoryIndex].activities.push(newActivity)
+			}
+		})
+
+		removIds.forEach((number) => {
+			tempState.data.activityItems.splice(number, 1)
+		})
+		return tempState
+	}
 	case "CREATE_ACTIVITY_ITEMS": {
 		if (state.addedActivities.length === 0) return tempState
 		let activities = tempState.addedActivities.map((activity, idx) => {
