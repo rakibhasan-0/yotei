@@ -59,8 +59,8 @@ public class AuthFilter implements GlobalFilter, Ordered {
 	    PLAN_ALL(5),
 	    WORKOUT_OWN(6),
 	    WORKOUT_ALL(7),
-	    ACTIVITY_OWN(8),
-	    ACTIVITY_ALL(9),
+	    TEHCNIQUE_EXERCISE_OWN(8),
+	    TEHCNIQUE_EXERCISE_ALL(9),
 	    GRADING_OWN(10),
 	    GRADING_ALL(11);
 
@@ -144,6 +144,15 @@ public class AuthFilter implements GlobalFilter, Ordered {
         if (path.startsWith("/api/session") 
             && !checkSessionPermissions(path, permissions)) return false;
 
+        if (path.startsWith("/api/plan")
+            && !checkPlanPermissions(path, permissions)) return false;
+
+        if ((path.startsWith("/api/techniques") || path.startsWith("/api/exercises"))
+            && !checkTechniqueExercisePermissions(path, permissions)) return false;
+
+        if (path.startsWith("/api/examination")
+            && !checkGradingPermissions(path, permissions)) return false;
+
         if (path.startsWith("/api/workouts") 
         && !checkWorkoutPermissions(path, permissions, request)) return false;
 
@@ -152,9 +161,6 @@ public class AuthFilter implements GlobalFilter, Ordered {
     }
 
     private boolean checkSessionPermissions(String path, List<Integer> permissions) {
-        // Might be a better way but this makes it so that no 
-        // newly created endpoint is permission-locked from the get-go
-        // Any new endpoint that needs to be locked has to be included here
         Pattern[] patterns = {
             // From SessionController
             Pattern.compile("^/api/session/add$"),
@@ -172,6 +178,68 @@ public class AuthFilter implements GlobalFilter, Ordered {
         Integer[] permissionsToCheck = {
             permissionList.SESSION_ALL.value,
             permissionList.SESSION_OWN.value
+        };
+
+        return hasPermission(path, permissions, Arrays.asList(patterns), Arrays.asList(permissionsToCheck));
+    }
+
+    private boolean checkPlanPermissions(String path, List<Integer> permissions) {
+        Pattern[] patterns = {
+            // From PlanController
+            Pattern.compile("^/api/plan/add$"),
+            Pattern.compile("^/api/plan/remove$"),
+            Pattern.compile("^/api/plan/update$"),
+        };
+    
+        Integer[] permissionsToCheck = {
+            permissionList.PLAN_ALL.value,
+            permissionList.PLAN_OWN.value
+        };
+
+        return hasPermission(path, permissions, Arrays.asList(patterns), Arrays.asList(permissionsToCheck));
+    }
+
+    private boolean checkTechniqueExercisePermissions(String path, List<Integer> permissions) {
+        Pattern[] patterns = {
+            // From TechniqueController
+            // TODO: This should only be valid for the POST and PUT method
+            Pattern.compile("^/api/techniques$"),
+            Pattern.compile("^/api/techniques/\\d+$"),
+            // TODO: Only for the POST, DELETE and PUT methods
+            Pattern.compile("^/api/techniques/reviews$"),
+            // From ExerciseController
+            Pattern.compile("^/api/exercises/add$"),
+            Pattern.compile("^/api/exercises/add/update$"),
+            Pattern.compile("^/api/exercises/add/remove/\\d+$"),
+            Pattern.compile("^/api/exercises/add/image$")
+        };
+    
+        Integer[] permissionsToCheck = {
+            permissionList.TEHCNIQUE_EXERCISE_ALL.value,
+            permissionList.TEHCNIQUE_EXERCISE_OWN.value
+        };
+
+        return hasPermission(path, permissions, Arrays.asList(patterns), Arrays.asList(permissionsToCheck));
+    }
+
+    private boolean checkGradingPermissions(String path, List<Integer> permissions) {
+        Pattern[] patterns = {
+            // From ExaminationController
+            Pattern.compile("^/api/examination/grading$"),
+            Pattern.compile("^/api/examination/grading/\\d+$"),
+            Pattern.compile("^/api/examination/examinee$"),
+            Pattern.compile("^/api/examination/examinee/\\d+$"),
+            Pattern.compile("^/api/examination/pair$"),
+            Pattern.compile("^/api/examination/pair/\\d+$"),
+            Pattern.compile("^/api/examination/comment$"),
+            Pattern.compile("^/api/examination/comment/\\d+$"),
+            Pattern.compile("^/api/examination/examresult$"),
+            Pattern.compile("^/api/examination/examresult/\\d+$")
+        };
+    
+        Integer[] permissionsToCheck = {
+            permissionList.GRADING_ALL.value,
+            permissionList.GRADING_OWN.value
         };
 
         return hasPermission(path, permissions, Arrays.asList(patterns), Arrays.asList(permissionsToCheck));
