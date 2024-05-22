@@ -72,33 +72,49 @@ export default function GradingAfter() {
 	 * @returns {Promise} The belt data.
 	 * @since 2024-05-15
 	 */
+	const fetchExamineeResult = () => {
+		return fetch(`/api/examination/examresult/grading/${gradingId}`, {
+			method: "GET",
+			headers: { "token": token }
+		}).then(response => {
+			if(!response.ok){
+				throw new Error("Network response was not ok")
+			}
+			return response.json()
+		})
+	}
+
+	/**
+	 * Function that fetchs all of the results of each examinee.
+	 * @returns {Promise} The belt data.
+	 * @since 2024-05-15
+	 */
 	const fetchPdf = async () => {
 		try {
 			const response = await fetch(`/api/examination/examresult/grading/${gradingId}`, {
 				method: "GET",
 				headers: { "token": token }
-			});
+			})
 	
 			if (!response.ok) {
 				throw new Error("Network response was not ok");
 			}
 	
-			const base64String = await response.text();
-			const byteCharacters = atob(base64String); // Decode base64 string
-			const byteNumbers = new Array(byteCharacters.length);
+			const base64String = await response.text()
+			const byteCharacters = atob(base64String) // Decode base64 string
+			const byteNumbers = new Array(byteCharacters.length)
 			for (let i = 0; i < byteCharacters.length; i++) {
-				byteNumbers[i] = byteCharacters.charCodeAt(i);
+				byteNumbers[i] = byteCharacters.charCodeAt(i)
 			}
-			const byteArray = new Uint8Array(byteNumbers);
-			const blob = new Blob([byteArray], {type: "application/pdf"}); // Create a blob from the byte array
+			const byteArray = new Uint8Array(byteNumbers)
+			const blob = new Blob([byteArray], {type: "application/pdf"}) // Create a blob from the byte array
 	
-			return blob;
+			return blob
 		} catch (error) {
-			console.error("Error fetching PDF:", error);
-			return null;
+			console.error("Error fetching PDF:", error)
+			return null
 		}
 	}
-	
 	
 	/**
 	 * Function that creates a PDF by the result of the examination and downloads it.
@@ -149,7 +165,7 @@ export default function GradingAfter() {
 				const [grading_data, belt_data, result_data] = await Promise.all([
 					fetchGrading(),
 					fetchBelts(),
-					
+					fetchExamineeResult()
 				])
 				
 				setIsGrading(true)
@@ -182,9 +198,6 @@ export default function GradingAfter() {
 			setIsBelt(false)
 			setIsGrading(false)
 			setIsExaminee(false)
-			console.log("Belt: ", beltInfo)
-			console.log("Grading: ", grading)
-			console.log("Examinee: ", fetchedResult)
 		}
 	}, [grading, beltInfo, fetchedResult, isGrading, isBelt, isExaminee, fetchedBelt])
 
