@@ -52,7 +52,7 @@ export default function Profile() {
 	const [amountOfFavouriteWorkouts, setAmountOfFavouriteWorkouts] = useState(0)
 
 	//TODO feature toggle
-	const [isListsEnabled] = useState(false)
+	const [isListsEnabled] = useState(true)
 
 	const workout = {
 		id: -1,
@@ -137,7 +137,7 @@ export default function Profile() {
 		setFetchedLists(false)
 		setLists([workout])
 		fetchingList()
-	}, [searchText, searchListText])
+	}, [searchListText])
 
 	useEffect(() => {
 		getWorkouts(
