@@ -73,7 +73,7 @@ function Navbar({ testId }) {
 						<h1 className={styles.commonNavbarButton}>Grupper</h1>
 					</Button>
 
-					{ canHandleGradings(context) ?
+					{isAdminUser(context) || canHandleGradings(context) ?
 						<Button width={"100%"} onClick={() => navigateAndClose("/grading")}>
 							<h1 className={styles.commonNavbarButton}>Gradering</h1>
 						</Button>

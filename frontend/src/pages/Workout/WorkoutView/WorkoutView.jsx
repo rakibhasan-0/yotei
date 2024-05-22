@@ -12,9 +12,10 @@ import { useCookies } from "react-cookie"
 import Review from "../../../components/Workout/WorkoutReview/ReviewFormComponent.jsx"
 import ErrorState from "../../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../../components/Common/Spinner/Spinner"
-import { HTTP_STATUS_CODES, setError, setSuccess, canEditWorkout } from "../../../utils"
+import { HTTP_STATUS_CODES, setError, setSuccess, canEditWorkout, isAdminUser } from "../../../utils"
 import PrintButton from "../../../components/Common/PrintButton/PrintButton"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
+import { contextType } from "react-star-ratings"
 
 /**
  * A page for viewing workouts. The user can view the information
@@ -244,7 +245,7 @@ function getWorkoutInfoContainer(workoutData, setShowPopup, context, workoutUser
 						<div className={styles.clickIcon}>
 							<PrintButton workoutData={workoutData} />
 						</div>
-						{ canEditWorkout(context, workoutData.author.user_id) &&
+						{isAdminUser(context) || canEditWorkout(context, workoutData.author.user_id) &&
 						<>
 							<Link className="ml-3" state={{workout: workoutData, workoutId: workoutId, users: workoutUsers}} to={"/workout/edit/" + workoutId}>
 								<Pencil
