@@ -43,7 +43,6 @@ const ListEdit = () => {
 		const data = parseData(listCreateInfo.data)
 		//TBF
 		console.log("Console.log so that linter does not give errors:"+data)
-		console.log(listCreateInfo.data)
 		let listId
 		if(isEdit){
 			/*listId = await updateActivityList(data)
@@ -51,7 +50,9 @@ const ListEdit = () => {
 				setSuccess("Träningen uppdaterades!")
 			} else {
 				setError("Träningen kunde inte uppdateras.")
-			}*/
+			}
+			navigate(-1)
+			*/
 		}
 		else{
 			listId = await createActivityList(data)
@@ -60,8 +61,8 @@ const ListEdit = () => {
 			} else {
 				setError("Träningen kunde inte skapas.")
 			}
+			navigate("/profile/list/"+listId)
 		}
-		navigate(-1)
 	}
 
 	/**
