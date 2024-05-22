@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from "react"
 import CommentButton from "../PerformGrading/CommentButton"
 import styles from "./TechniqueInfoPanel.module.css"
 import Popup from "../../Common/Popup/Popup"
-import TextArea from "../../Common/TextArea/TextArea"
 import Button from "../../Common/Button/Button"
 import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
 import { setError as setErrorToast } from "../../../utils"
@@ -60,6 +59,7 @@ export default function TechniqueInfoPanel({
 	const [commentId, setCommentId] = useState(null)
 	const { gradingId } = useParams()
 	const { token, userId } = useContext(AccountContext)
+	const isErr = !(commentError == undefined || commentError == null || commentError == "")
 
 	useEffect(() => {
 		if (isAddingComment) {
@@ -67,11 +67,18 @@ export default function TechniqueInfoPanel({
 		}
 	}, [isAddingComment])
 
+	// Updates notifications when switching techniques
+	useEffect(() => {
+		handleExistingInput()
+	}, [currentTechniqueTitle])
+
 	/**
      * Discards the current group comment.
      */
 	const onDiscardGroupComment = async () => {
-		setCommentText("")
+		if (!hasComment) {
+			setCommentText("")
+		}
 		setAddComment(false)
 	}
 
@@ -224,7 +231,7 @@ export default function TechniqueInfoPanel({
 					<h3 className={styles.categoryTitle} id="categoryTitle">{mainCategoryTitle}</h3>
 				</div>
 				<div className={styles.buttonGroupComment}>
-					<CommentButton onClick={() => setAddComment(true)} />
+					<CommentButton onClick={() => setAddComment(true)} hasComment={hasComment} />
 				</div>
 				<div>
 					<h2 className={styles.currentTechnique} id="currentTechniqueTitle">{currentTechniqueTitle}</h2>
@@ -243,18 +250,29 @@ export default function TechniqueInfoPanel({
 				onClose={() => setCommentError(false)}
 				style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset" }}
 			>
-				<TextArea
+				<textarea
+					className={isErr ? `${styles.textarea} ${styles.textareaErr}` : `${styles.textarea}`}
 					autoFocus={true}
-					onInput={e => { setCommentText(e.target.value); setCommentError(false) }}
-					errorMessage={commentError}
-					text={commentText}
+					onInput={ e => {
+						setCommentText(e.target.value)
+						setCommentError(false)
+					}}
+					value={commentText}
+					id={"TextareaTestId"}
+					type={"text"}
 				/>
-				<Button onClick={onAddGroupComment}>Lägg till</Button>
+				{commentError && <p className={styles.err}>{commentError}</p>}
+				<div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px", marginTop: "10px"}}>
+					<Button outlined={true} onClick={() => {setCommentText(commentText + " " + "Böj på benen!"); setCommentError(false)}}>Böj på benen!</Button>
+					<Button outlined={true} onClick={() => {setCommentText(commentText + " " + "Balansbrytning!"); setCommentError(false)}}>Balansbrytning!</Button>
+					<Button outlined={true} onClick={() => {setCommentText(commentText + " " + "Kraftcirkeln!"); setCommentError(false)}}>Kraftcirkeln!</Button>
+				</div>
+				<Button onClick={() => onAddGroupComment()}>Lägg till</Button>
 			</Popup>
 			<ConfirmPopup
 				popupText={"Är du säker på att du vill ta bort kommentarsutkastet?"}
 				showPopup={showDiscardComment}
-				onClick={() => onDiscardGroupComment()}
+				onClick={() => {onDiscardGroupComment()}}
 				setShowPopup={() => setShowDiscardComment(false)}
 				zIndex={200} // Above the comment popup.
 			/>

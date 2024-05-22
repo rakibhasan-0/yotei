@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from "react"
 import styles from "./ExamineePairBox.module.css"
 import CommentButton from "./CommentButton"
 import Popup from "../../Common/Popup/Popup"
-import TextArea from "../../Common/TextArea/TextArea"
 import Button from "../../Common/Button/Button"
 import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
 import { setError as setErrorToast } from "../../../utils"
@@ -60,6 +59,7 @@ export default function ExamineePairBox({
 	const [commentError, setCommentError] = useState("")
 	const [hasComment, setExistingComment] = useState(false)
 	const [commentId, setCommentId] = useState(null)
+	const isErr = !(commentError == undefined || commentError == null || commentError == "")
 
 	const { gradingId } = useParams()
 	const { token, userId } = useContext(AccountContext)
@@ -70,11 +70,18 @@ export default function ExamineePairBox({
 		}
 	}, [isAddingComment])
 
+	// Updates notifications when switching techniques
+	useEffect(() => {
+		handleExistingInput()
+	}, [techniqueName])
+
 	/**
      * Discards the current pair comment.
      */
 	const onDiscardPairComment = async () => {
-		setCommentText("")
+		if (!hasComment) {
+			setCommentText("")
+		}
 		setAddComment(false)
 	}
 
@@ -211,7 +218,7 @@ export default function ExamineePairBox({
 		<fieldset id={id} className={styles.pairbox} style={{backgroundColor: rowColor}}>
 			<div className={styles.pairinfo} style={{ display: "flex", alignItems: "center" }}>
 				<p id="PairNumberId" style={{ fontSize: "12px", marginBottom: "0" }}>P{pairNumber}</p>
-				<CommentButton onClick={() => setAddComment(true)}/>
+				<CommentButton onClick={() => setAddComment(true)} hasComment={hasComment}/>
 			</div>
 			<div className={styles.pair}>
 				<div id="ExamineeLeftNameId" className={styles.pairleft}>
@@ -229,18 +236,29 @@ export default function ExamineePairBox({
 				onClose={() => setCommentError(false)}
 				style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset" }}
 			>
-				<TextArea
+				<textarea
+					className={isErr ? `${styles.textarea} ${styles.textareaErr}` : `${styles.textarea}`}
 					autoFocus={true}
-					onInput={e => { setCommentText(e.target.value); setCommentError(false) }}
-					errorMessage={commentError}
-					text={commentText}
+					onInput={ e => {
+						setCommentText(e.target.value)
+						setCommentError(false)
+					}}
+					value={commentText}
+					id={"TextareaTestId"}
+					type={"text"}
 				/>
-				<Button onClick={onAddPairComment}>Lägg till</Button>
+				{commentError && <p className={styles.err}>{commentError}</p>}
+				<div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px", marginTop: "10px"}}>
+					<Button outlined={true} onClick={() => {setCommentText(commentText + " " + "Böj på benen!"); setCommentError(false)}}>Böj på benen!</Button>
+					<Button outlined={true} onClick={() => {setCommentText(commentText + " " + "Balansbrytning!"); setCommentError(false)}}>Balansbrytning!</Button>
+					<Button outlined={true} onClick={() => {setCommentText(commentText + " " + "Kraftcirkeln!"); setCommentError(false)}}>Kraftcirkeln!</Button>
+				</div>
+				<Button onClick={() => onAddPairComment()}>Lägg till</Button>
 			</Popup>
 			<ConfirmPopup
 				popupText={"Är du säker på att du vill ta bort kommentarsutkastet?"}
 				showPopup={showDiscardComment}
-				onClick={() => onDiscardPairComment()}
+				onClick={() => {onDiscardPairComment()}}
 				setShowPopup={() => setShowDiscardComment(false)}
 				zIndex={200} // Above the comment popup.
 			/>
