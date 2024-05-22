@@ -14,7 +14,7 @@ import styles from "./TechniqueDetail.module.css"
 import ErrorState from "../../../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../../../components/Common/Spinner/Spinner"
 import Gallery from "../../../../components/Gallery/Gallery"
-import { isAdmin } from "../../../../utils"
+import { canCreateAndEditActivity } from "../../../../utils"
 
 import Popup from "../../../../components/Common/Popup/Popup"
 import ConfirmPopup from "../../../../components/Common/ConfirmPopup/ConfirmPopup"
@@ -36,9 +36,11 @@ import ActivityDelete from "../../../../components/Activity/ActivityDelete/Activ
  * Version 4.1:
  * 		Fixed navigation from pages outside the website 
  * 
- * @author Team Medusa (Grupp 6) & Cyclops (Group 5) & Tomato (Group 6) & Team Durian (Group 3) (2024-04-23), Team Kiwi (Group 2) (2024-05-03)
+ * @author Team Medusa (Grupp 6) & Cyclops (Group 5) & Tomato (Group 6) & Team Durian (Group 3) (2024-04-23), Team Kiwi (Group 2) (2024-05-03), Team Mango (2024-05-21)
  * @version 4.1
  * @since 2024-04-25
+ * 
+ * @update 2024-05-21: changed check for user premission to edit technique to the new check.
  */
 function TechniqueDetail({ id }) {
 
@@ -52,7 +54,7 @@ function TechniqueDetail({ id }) {
 	const [error, setError] = useState("")
 	const [loading, setLoading] = useState(true)
 
-	const accountRole = useContext(AccountContext)
+	const context = useContext(AccountContext)
 	const [showConfirmPopup, setShowConfirmPopup] = useState(false)
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
 
@@ -138,7 +140,7 @@ function TechniqueDetail({ id }) {
 			<div className={styles["technique-detail-container"]} id={id == undefined ? "technique" : id}>
 				<title>Tekniker</title>
 				<h1>{technique.name}</h1>
-				{isAdmin(accountRole) && <div className={styles["technique-detail-actions-container"]} data-testid="technique-detail-actions-container">
+				{canCreateAndEditActivity(context) && <div className={styles["technique-detail-actions-container"]} data-testid="technique-detail-actions-container">
 					<Link to={"edit"}>
 						<Pencil
 							id="technique-edit-button"
