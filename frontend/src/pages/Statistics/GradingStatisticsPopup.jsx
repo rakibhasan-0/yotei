@@ -51,8 +51,9 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 						setProtocols([])
 					} else {
 						const groups = await response.json()
+
 						setData(groups)
-						
+						console.log(groups)
 
 					}
 				} catch (error) {
@@ -63,7 +64,7 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 			}
 			fetchGroupGradingProtocol()
 		}
-	}, [groupID, beltID])
+	}, [groupID, beltID,showPopup])
 
 	useEffect(() => {
 		if (chosenProtocol) {
