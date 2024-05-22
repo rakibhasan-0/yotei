@@ -365,7 +365,11 @@ function AddActivity({ id, setShowActivityInfo }) {
 		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.TOGGLE_CHECKED_ACTIVITY, payload: activity })
 	}
 
-	const onAllActivitiesToggle = (listId) => {}
+	const onAllActivitiesToggle = (listId) => {
+		listContents[listId]?.map((item) => {
+			onActivityToggle(item, item.type)
+		})
+	}
 
 	/**
 	 * Fetches techniques from the backend, either from cache or by a new API-call. 
@@ -658,10 +662,10 @@ function AddActivity({ id, setShowActivityInfo }) {
 												key={list.id}
 												checkBox={
 													<CheckBox
-														checked={console.log("janne")}
-														onClick={() => console.log("haj")}
+														checked={console.log("hej")}
+														onClick={() => onAllActivitiesToggle(list.id)}
 													/>}
-													style={{display: "flex", alignitems: "center",  margin: "5px 15px 5px 15px"}}
+												style={{display: "flex", alignitems: "center",  margin: "5px 15px 5px 15px"}}
 											>
 
 												<div style={{ borderTop: "1px solid black" }}>
