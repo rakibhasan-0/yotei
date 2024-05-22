@@ -3,7 +3,7 @@ import Button from "../Button/Button"
 import { List as HamburgerIcon, X as CloseIcon , Hammer as AdminIcon, Person as UserIcon} from "react-bootstrap-icons"
 import styles from "./Navbar.module.css"
 import { useNavigate } from "react-router"
-import { isAdmin } from "../../../utils"
+import { canHandleGradings, isAdminUser } from "../../../utils"
 import { AccountContext } from "../../../context"
 
 /**
@@ -18,8 +18,10 @@ import { AccountContext } from "../../../context"
  * Changes version 4.0:
  *     	merged techniques and exercise buttons, 
  * 		this new button routs to activity page.
+ * 
+ * Update 2024-05-22 Team Mango: changed check for admin page according to new permissions.  
  *
- * @author Team Medusa & Team Cyclops & Team Tomato & Team Coconut & Team Kiwi
+ * @author Team Medusa & Team Cyclops & Team Tomato & Team Coconut & Team Kiwi & Team Mango
  * @version 4.0
  * @since 2024-05-02
  */
@@ -67,13 +69,20 @@ function Navbar({ testId }) {
 						<h1 className={styles.commonNavbarButton}>Tekniker & Övningar</h1>
 					</Button>
 
-					<Button width={"100%"} onClick={() => navigateAndClose("/grading")}>
-						<h1 className={styles.commonNavbarButton}>Gradering</h1>
+					<Button width={"100%"} onClick={() => navigateAndClose("/groups",  {state: {clearSearchText: true}})}>
+						<h1 className={styles.commonNavbarButton}>Grupper</h1>
 					</Button>
+
+					{ canHandleGradings(context) ?
+						<Button width={"100%"} onClick={() => navigateAndClose("/grading")}>
+							<h1 className={styles.commonNavbarButton}>Gradering</h1>
+						</Button>
+						:<></>
+					}
 				</div>
 				
 
-				{ isAdmin(context) ? 
+				{ isAdminUser(context) ? 
 					<Button width={"min-content"} onClick={() => navigateAndClose("/admin")}>
 						<AdminIcon role="button" className={styles.commonNavbarIconAdmin}  onClick={() => navigateAndClose("/admin")} />
 					</Button>
