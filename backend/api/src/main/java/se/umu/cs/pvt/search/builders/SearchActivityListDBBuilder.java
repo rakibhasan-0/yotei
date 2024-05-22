@@ -17,10 +17,12 @@ public class SearchActivityListDBBuilder {
     private SearchActivityListParams searchActivityListParams;
     private final List<DatabaseQuery> queries = new ArrayList<>();
 
+    private String userRole;
     private Long userId;
 
-    public SearchActivityListDBBuilder(SearchActivityListParams searchActivityListParams, Long userId){
+    public SearchActivityListDBBuilder(SearchActivityListParams searchActivityListParams, Long userId, String userRole){
         this.userId = userId;
+        this.userRole = userRole;
         this.searchActivityListParams = searchActivityListParams;
     }
 
@@ -70,7 +72,13 @@ public class SearchActivityListDBBuilder {
      */
     public DatabaseQuery build() {
         DatabaseQuery databaseQuery = new DatabaseQuery();
-        if(queries.isEmpty()) {
+        if(userRole.equals("ADMIN")){
+            databaseQuery.setQuery(
+                "SELECT DISTINCT name, id, author, private, created_date " + 
+                "FROM activity_list"
+            );
+        }
+        else if(queries.isEmpty()) {
             databaseQuery.setQuery(
                     "SELECT DISTINCT al.name, al.id, al.author, al.private, al.created_date " + 
                     "FROM activity_list AS al, user_to_activity_list AS utal " +

@@ -421,6 +421,10 @@ export default function GradingBefore() {
 		await deleteExaminee(examineeId, token)
 			.catch(() => setErrorToast("Kunde inte tabort personen. Kontrollera din internetuppkoppling."))
 
+    if(lastAddedExaminee.id === examineeId) {
+      setLastAddedExaminee({})
+    }
+
 		if (checkedExamineeIds.includes(examineeId)) {
 			setCheckedExamineeIds(checkedExamineeIds.filter((id) => id !== examineeId))
 		}
@@ -558,7 +562,7 @@ export default function GradingBefore() {
 							<div style={{ display: "flex", width: "100%", justifyContent: "left", position: "relative" }} key={"pair-" + pair[0].pairId}>
 								<div className={styles.number}>{index + 1}</div>
 								<EditableListItem
-									key={"first-examinee-pair-" + pair[0].id}
+									key={"first-examinee-pair-" + pair[0].id + "-pairId-" + pair[0].pairId}
 									id={pair[1].id}
 									item={pair[1].name}
 									onRemove={removeExamineeInPair}
@@ -570,7 +574,7 @@ export default function GradingBefore() {
 								/>
 								<div style={{ width: "10px" }}></div>
 								<EditableListItem
-									key={"second-examinee-pair-" + pair[1].id}
+									key={"second-examinee-pair-" + pair[1].id + "-pairId-" + pair[1].pairId}
 									id={pair[0].id}
 									item={pair[0].name}
 									onRemove={removeExamineeInPair}
@@ -580,18 +584,18 @@ export default function GradingBefore() {
 									showCheckbox={false}
 									checked={false}
 								/>
-								{Boolean(!pair[0].isLocked) === true ?
-									<div style={{ paddingTop: "20px", right: "-25px", position: "absolute" }}>
-										<CloseIcon
-											key={"close-icon-" + toString(pair[0].id) + toString(pair[1].id)}
-											size="25px"
-											position="static"
-											color="var(--red-primary)"
-											className={styles.trashcan}
-											onClick={() => removePair(pair[0].id, pair[1].id, pair[1].pairId)}
-										/>
-									</div>
-									: null}
+                {Boolean(!pair[0].isLocked) === true ? 
+                <div style={{ paddingTop: "20px", right: "-25px", position: "absolute" }}>
+									<CloseIcon
+										key={"close-icon-" + toString(pair[0].id) + toString(pair[1].id) + "-pairId-" + toString(pair[0].pairId)}
+										size="25px"
+										position="static"
+										color="var(--red-primary)"
+										className={styles.trashcan}
+										onClick={() => removePair(pair[0].id, pair[1].id, pair[1].pairId)}
+									/>
+								</div>
+                : null}						
 							</div>
 						)
 					}
@@ -669,9 +673,9 @@ export default function GradingBefore() {
 
 				<PopupSmall id={"test-popup"} title={"Varning"} isOpen={showPopup} setIsOpen={setShowPopup} direction={startRedirection}>
 					<h2>Är du säker på att alla deltagare är tillagda? </h2>
-					<h2>Du kan <span style={{ fontWeight: "bold", fontSize: "18px" }}>inte</span> lägga till eller redigera i efterhand</h2>
+					<h2>Du kan <span style={{ fontWeight: "bold", fontSize: "18px" }}>inte</span> redigera skapade individer i efterhand</h2>
 					<br></br>
-					<h2> Isåfall fortsätt till bedömnings processen</h2>
+					<h2> Isåfall fortsätt till graderingsprocessen</h2>
 				</PopupSmall>
 
 				<Button
