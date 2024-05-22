@@ -144,6 +144,9 @@ public class AuthFilter implements GlobalFilter, Ordered {
         if ((path.startsWith("/api/techniques") || path.startsWith("/api/exercises"))
             && !checkTechniqueExercisePermissions(path, permissions)) return false;
 
+        if (path.startsWith("/api/examination")
+            && !checkGradingPermissions(path, permissions)) return false;
+
         // Protect import and export endpoints
         // Only allow admin to create users
         return !(path.contains("import") || path.contains("export") || path.equals("/api/users"));
@@ -207,6 +210,29 @@ public class AuthFilter implements GlobalFilter, Ordered {
         Integer[] permissionsToCheck = {
             permissionList.TEHCNIQUE_EXERCISE_ALL.value,
             permissionList.TEHCNIQUE_EXERCISE_OWN.value
+        };
+
+        return hasPermission(path, permissions, Arrays.asList(patterns), Arrays.asList(permissionsToCheck));
+    }
+
+    private boolean checkGradingPermissions(String path, List<Integer> permissions) {
+        Pattern[] patterns = {
+            // From ExaminationController
+            Pattern.compile("^/api/examination/grading$"),
+            Pattern.compile("^/api/examination/grading/\\d+$"),
+            Pattern.compile("^/api/examination/examinee$"),
+            Pattern.compile("^/api/examination/examinee/\\d+$"),
+            Pattern.compile("^/api/examination/pair$"),
+            Pattern.compile("^/api/examination/pair/\\d+$"),
+            Pattern.compile("^/api/examination/comment$"),
+            Pattern.compile("^/api/examination/comment/\\d+$"),
+            Pattern.compile("^/api/examination/examresult$"),
+            Pattern.compile("^/api/examination/examresult/\\d+$")
+        };
+    
+        Integer[] permissionsToCheck = {
+            permissionList.GRADING_ALL.value,
+            permissionList.GRADING_OWN.value
         };
 
         return hasPermission(path, permissions, Arrays.asList(patterns), Arrays.asList(permissionsToCheck));
