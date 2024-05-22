@@ -50,6 +50,23 @@ public class TechniqueDatabaseTest {
 
     static LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
 
+    //INDICES FOR ALL START AND STOPS OF TECHNIQUES TO EACH BELT IN TECHNIQUES.SQL
+    //CHANGE THESE IF THE TESTS FAIL AFTER TECHNIQUES.SQL IS CHANGED
+    static int yellowBegin = 1;
+    static int yellowEnd = 25;
+
+    static int orangeBegin = 26;
+    static int orangeEnd = 49;
+
+    static int greenBegin = 50;
+    static int greenEnd = 74;
+
+    static int blueBegin = 75;
+    static int blueEnd = 101;
+
+    static int brownBegin = 102;
+    static int brownEnd = 134;
+
     @BeforeAll
     public static void setUp() {
         loggerContext.stop();
@@ -133,9 +150,6 @@ public class TechniqueDatabaseTest {
         String username = postgreSQLContainer.getUsername();
         String password = postgreSQLContainer.getPassword();
 
-        int yellowBegin = 1;
-        int yellowEnd = 25;
-
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique
@@ -170,9 +184,6 @@ public class TechniqueDatabaseTest {
         String jdbcUrl = postgreSQLContainer.getJdbcUrl();
         String username = postgreSQLContainer.getUsername();
         String password = postgreSQLContainer.getPassword();
-
-        int orangeBegin = 26;
-        int orangeEnd = 49;
 
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
@@ -209,9 +220,6 @@ public class TechniqueDatabaseTest {
         String username = postgreSQLContainer.getUsername();
         String password = postgreSQLContainer.getPassword();
 
-        int greenBegin = 50;
-        int greenEnd = 74;
-
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique
@@ -247,9 +255,6 @@ public class TechniqueDatabaseTest {
         String username = postgreSQLContainer.getUsername();
         String password = postgreSQLContainer.getPassword();
 
-        int blueBegin = 75;
-        int blueEnd = 101;
-
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique
@@ -284,9 +289,6 @@ public class TechniqueDatabaseTest {
         String jdbcUrl = postgreSQLContainer.getJdbcUrl();
         String username = postgreSQLContainer.getUsername();
         String password = postgreSQLContainer.getPassword();
-
-        int brownBegin = 102;
-        int brownEnd = 134;
 
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
