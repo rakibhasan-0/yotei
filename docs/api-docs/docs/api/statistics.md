@@ -140,7 +140,7 @@ path-params:
 
 query-params:
     parameters:
-        beltId: ID if the belt associated with the grading protocol to compare to.
+        beltId: ID if the belt associated with the grading protocol to compare to. | Integer
 
 examples:
   - name: 200
