@@ -111,21 +111,22 @@ export default function DuringGrading() {
 
 	// Go to summary when the index is equal to length. Maybe change the look of the buttons.
 	const goToNextTechnique = () => {
-		setLoading(true)
-		setCurrentTechniqueStep(nextStep => {
-			if(nextStep === techniqueNameList.length -2){
-				setRandoriIndex(nextStep)
-			}
-			const nextTechniqueStep = Math.min(nextStep + 1, techniqueNameList.length - 1)
-			onUpdateStepToDatabase(nextTechniqueStep)
-			return nextTechniqueStep
-		})
-		// reset the button colors
-		// Should also load any stored result
+        if(currentTechniqueStep === techniqueNameList.length - 1) {
+            // Go to summary
+        } else {
+            setCurrentTechniqueStep(nextStep => {
+                if(nextStep === techniqueNameList.length -2){
+                    setRandoriIndex(nextStep)
+                }
+                const nextTechniqueStep = Math.min(nextStep + 1, techniqueNameList.length - 1)
+                onUpdateStepToDatabase(nextTechniqueStep)
+                return nextTechniqueStep
+            })
+        }
 	}
 	//goes to previous technique if it is not the first technique.
 	const goToPrevTechnique = () => {
-		setLoading(true)
+		
 		if(currentTechniqueStep === 0) {
 			goToAddExamineePage()
 		} else {
@@ -135,12 +136,11 @@ export default function DuringGrading() {
 				return previousTechniqueStep
 			})
 		}
-		// reset the button colors
-		// Should also load any stored result
 	}
 
 	// this update the database with what techniquestep the user is on, and it works with forward and backward navigation.
 	const onUpdateStepToDatabase = async (currentTechniqueStep) => {
+        setLoading(true)
 		try {
 			const response = await fetch(`/api/examination/grading/${gradingId}`, { headers: { "token": token } })
 			if (!response.ok) {
@@ -210,7 +210,6 @@ export default function DuringGrading() {
 						throw new Error("Could not fetch pairs")
 					}
 					const pairs_json = await response.json()
-					setLoading(false)
 
 					// Get only pairs in this grading
 					const pair_examinees_current_grading = getPairsInCurrrentGrading(pairs_json)
@@ -663,7 +662,7 @@ export default function DuringGrading() {
             
 			if (!response.ok) {
 				setLoading(false)
-				throw new Error("Failed to fetch technique results")
+				throw new Error("Kunde inte hämta teknikresultatet")
 			}
 			const data = await response.json()
 
@@ -675,9 +674,10 @@ export default function DuringGrading() {
 
 			// console.log("filtered results: ", filtered);
 			setResults(filtered)
-			setLoading(false)
+            setLoading(false)
 		} catch (error) {
-			alert(error.message)
+            setErrorToast(error.message)
+            setLoading(false)
 			return null // Handle the error gracefully, return null or an empty object/array
 		}
 	}

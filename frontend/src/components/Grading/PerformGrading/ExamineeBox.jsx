@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react"
+import React, { useState, useContext, useEffect, useCallback } from "react"
 import CommentButton from "./CommentButton"
 import styles from "./ExamineeBox.module.css"
 import Popup from "../../Common/Popup/Popup"
@@ -76,7 +76,7 @@ export default function ExamineeBox({
     
 	useEffect(() => {
 		setColor(colors[status] || colors.default)
-	}, [status])
+	}, [])
     
 	useEffect(() => {
 		if (isAddingComment) {
@@ -244,12 +244,32 @@ export default function ExamineeBox({
 			newColor = colors.default
 		}
         
+		onClick(newButtonState) // Pass the new state as a parameter
 		setButtonState(newButtonState)
 		setColor(newColor)
-		onClick(newButtonState) // Pass the new state as a parameter
 	}
 
-	console.log("name: ", examineeName, ", status: ", status, ", color: ", color)
+    // const handleClick = useCallback(() => {
+    //     console.log("handleClick called");
+    
+    //     let newColor;
+    //     let newStatus;
+    
+    //     if (color === colors.default) {
+    //       newStatus = "pass";
+    //       newColor = colors.pass;
+    //     } else if (color === colors.pass) {
+    //       newStatus = "fail";
+    //       newColor = colors.fail;
+    //     } else if (color === colors.fail) {
+    //       newStatus = "default";
+    //       newColor = colors.default;
+    //     }
+    
+    //     setButtonState(newStatus);
+    //     setColor(newColor);
+    //     onClick(newStatus);
+    //   }, [color, colors, onClick, setButtonState]);
 
 	return (
 		<div id={id} className={styles.examineeContainer} style={{ backgroundColor: color }}>
