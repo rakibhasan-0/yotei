@@ -14,7 +14,8 @@ import Divider from "../../components/Common/Divider/Divider"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import ProfileListItem from "./ProfileListItem"
 import { Lock, Unlock, Eye } from "react-bootstrap-icons"
-
+import RoundButton from "../../components/Common/RoundButton/RoundButton"
+import { Plus } from "react-bootstrap-icons"
 /**
  * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3), Team Tomato (6)
  * @since 2024-05-16
@@ -280,6 +281,9 @@ export default function Profile() {
 					) : (
 						lists.map((list) => <ProfileListItem key={list.id} item={list} Icon={getIconFromState(list)} />)
 					)}
+					<RoundButton linkTo="/list/create">
+						<Plus />
+					</RoundButton>
 				</Tab>
 			)}
 			<Tab eventKey={"MyWorkouts"} title={"Mina Pass"} className={style.tab}>
