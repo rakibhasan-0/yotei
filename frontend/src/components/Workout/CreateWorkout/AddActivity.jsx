@@ -663,7 +663,10 @@ function AddActivity({ id, setShowActivityInfo }) {
 												checkBox={
 													<CheckBox
 														checked={console.log("hej")}
-														onClick={() => onAllActivitiesToggle(list.id)}
+														onClick={() => {
+															fetchingListContent(list.id)
+															onAllActivitiesToggle(list.id)
+														}}
 													/>}
 												style={{display: "flex", alignitems: "center",  margin: "5px 15px 5px 15px"}}
 											>
