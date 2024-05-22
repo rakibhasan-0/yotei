@@ -21,7 +21,6 @@ import { setSuccess, setError } from "../../utils.js"
  * Based on WorkoutEdit
  */
 
-//Skciak ner handler & om edit/inte :)
 const ListEdit = () => {
 	const [listCreateInfo, listCreateInfoDispatch] = useReducer(
 		listCreateReducer,
