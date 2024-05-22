@@ -266,6 +266,8 @@ export default function Profile() {
 
 			setLists([workout, ...lists])
 			setFetchedLists(true)
+			setSuccessToast()
+
 		})
 	}
 
