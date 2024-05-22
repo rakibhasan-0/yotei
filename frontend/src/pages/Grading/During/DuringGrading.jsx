@@ -95,8 +95,6 @@ export default function DuringGrading() {
 	const [showPopup, setShowPopup] = useState(false)
 	const [examinees, setExaminees] = useState(undefined)
 	const [pairs, setPairs] = useState([])
-	const [leftExamineeState, setLeftExamineeState] = useState("default")
-	const [rightExamineeState, setRightExamineeState] = useState("default")
 	const [results, setResults] = useState([])
 	const [techniqueNameList, setTechniqueNameList] = useState(undefined)
 	const [categoryIndexMap, setCategoryIndices] = useState(undefined)
@@ -287,7 +285,6 @@ export default function DuringGrading() {
 												examineeName={item.nameLeft} 
 												onClick={(newState) => examineeClick(newState, techniqueNameList[currentTechniqueStep].technique.text, index, `${index}-left`)}
 												status={getExamineeStatus(item.leftId, results)}
-												setButtonState={setLeftExamineeState}
 												examineeId={item.leftId}
 												techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
 											/>
@@ -298,7 +295,6 @@ export default function DuringGrading() {
 													examineeName={item.nameRight}
 													onClick={(newState) => examineeClick(newState, techniqueNameList[currentTechniqueStep].technique.text, index, `${index}-right`)}
 													status={getExamineeStatus(item.rightId, results)}
-													setButtonState={setRightExamineeState}
 													examineeId={item.rightId}
 													techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
 												/>
