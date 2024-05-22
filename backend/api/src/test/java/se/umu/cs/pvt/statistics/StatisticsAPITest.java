@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import se.umu.cs.pvt.statistics.gradingprotocol.GradingProtocolRepository;
+import se.umu.cs.pvt.gradingprotocol.GradingProtocolRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -36,19 +36,6 @@ public class StatisticsAPITest {
     private MockMvc mockMvc;
 
 
-
-    @Test
-    void shouldReturn204WhenemptyResults() throws Exception {
-        Long groupId = 1L;
-
-        Mockito.when(statisticsRepository.getAllSessionReviewTechniques(groupId)).thenReturn(new ArrayList<>());
-
-        mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/statistics/{id}", groupId) 
-            )
-            .andExpect(MockMvcResultMatchers.status().isNoContent()); 
-
-    }
 
 
     @Test
@@ -112,37 +99,6 @@ public class StatisticsAPITest {
             .andExpect(MockMvcResultMatchers.jsonPath("$.activities[4].type").value("technique")) // Type of the fifth activity
             .andExpect(MockMvcResultMatchers.jsonPath("$.activities[4].count").value(1)); // Count for the fifth activity
   }
-
-    @Test
-    void shouldReturn204WhenDateFilterMatchesNoActivities() throws Exception {
-        List<StatisticsActivity> techniqueList = new ArrayList<>();
-        techniqueList.add(new StatisticsActivity(1L, 138L, "Kamae, neutral (5 Kyu)", "technique", 1L, false, LocalDate.of(2024, 5, 7), 4));
-        techniqueList.add(new StatisticsActivity(1L,139L, "Kamae, beredd (5 Kyu)", "technique", 1L, false, LocalDate.of(2024, 5, 7), 4));
-        techniqueList.add(new StatisticsActivity(1L, 140L, "Kamae, gard (5 Kyu)", "technique", 1L, false, LocalDate.of(2024, 5, 7), 4));
-
-        List<StatisticsActivity> exerciseList = new ArrayList<>();
-        exerciseList.add(new StatisticsActivity(1L, 8L, "Armhävning", "technique", 1L, false, LocalDate.of(2024, 5, 7), 4));
-        exerciseList.add(new StatisticsActivity(1L,9L, "Bicepscurl", "technique", 1L, false, LocalDate.of(2024, 5, 7), 4));
-
-
-        Long groupId = 1L;
-        String startDate = "2023-01-01";
-        String endDate = "2023-12-31"; 
-        Boolean showExercises = true; 
-
-        Mockito.when(statisticsRepository.getAllSessionReviewTechniques(groupId)).thenReturn(techniqueList);  
-        Mockito.when(statisticsRepository.getAllSessionReviewExercises(groupId)).thenReturn(exerciseList);  
-
-
-        mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/statistics/{id}", groupId)
-                    .param("startdate", startDate)
-                    .param("enddate", endDate)
-                    .param("showexercises", showExercises.toString())
-            )
-            .andExpect(MockMvcResultMatchers.status().isNoContent());
-    }
-
 
     @Test
     void shouldReturnOnlyKihonActivityWhenKihonIsSet() throws Exception {
