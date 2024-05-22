@@ -10,24 +10,23 @@ import { useParams } from "react-router"
 import { Pencil, Trash } from "react-bootstrap-icons"
 import ErrorState from "../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../components/Common/Spinner/Spinner"
-import { HTTP_STATUS_CODES, setError, setSuccess, isAdmin } from "../../utils"
+import { HTTP_STATUS_CODES, setError, setSuccess, isAdminUser } from "../../utils"
 
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 
 /**
  * A page for viewing lists. The user can view the information
  * about a lists on this page. Activities linked to the list
- * are displayedy. Added user are also displayed.
+ * are displayed. Added user are also displayed.
  *
  * Props:
  *      listId @type {int} - The ID of the list.
  *      id        @type {int/string} - the id of the component
  *
- * @author Team Tomato (6)
- * @since 2024/05/03
- * @updated 2024-05-21
- *
- * @version 1.6
+ * @author Team Tomato (6) & Team Mango (Grupp 4) (2024-05-22)
+ * @since 2024-05-21
+ * Based on WorkoutView.jsx
+ * Updated Team Mango 2024-05-22: changed check isAdmin to new check.
  *
  */
 
@@ -67,6 +66,9 @@ export default function ListInfo({ id }) {
 			} else if (response.status === HTTP_STATUS_CODES.UNAUTHORIZED) {
 				setErrorStateMsg("Token är inte giltig. Felkod: " + response.status)
 				setLoading(false)
+			} else if (response.status === 500) {
+				setErrorStateMsg("Serverfel Felkod: " + response.status)
+				setLoading(false)
 			} else {
 				const json = await response.json()
 				setActivityListData(() => json)
@@ -87,9 +89,9 @@ export default function ListInfo({ id }) {
 							<h1 className="font-weight-bold m-0">{activityListData.name}</h1>
 						</div>
 						<div className="d-flex justify-content-end align-items-center">
-							<div className={styles.clickIcon}>{/*<PrintButton listData={listData} />*/}</div>
+							<div className={styles.clickIcon}>{/*<PrintButton listData={activityListData} />*/}</div>
 
-							{(context.userId == activityListData.author || isAdmin(context)) && (
+							{(context.userId == activityListData.author || isAdminUser(context)) && (
 								<>
 									<Link
 										className="ml-3"
@@ -147,14 +149,14 @@ export default function ListInfo({ id }) {
 					<h2>Användare</h2>
 				</div>
 				<div className="row">
-					{activityListData.users.map((user, index) => {
-						return (
-							<div key={"wu" + index} className="mr-2">
-								{/* Här kommer vi behöva ändra om så att en user blir ett objekt :)  */}
-								<Tag tagType={"default"} text={user.username}></Tag>
-							</div>
-						)
-					})}
+					{activityListData.users &&
+						activityListData.users.map((user, index) => {
+							return (
+								<div key={"wu" + index} className="mr-2">
+									<Tag tagType={"default"} text={user.username}></Tag>
+								</div>
+							)
+						})}
 				</div>
 			</div>
 		)
@@ -172,11 +174,10 @@ export default function ListInfo({ id }) {
 			onRecover={() => window.location.reload(false)}
 		/>
 	) : (
-		
 		<div id={id} className="container px-0">
 			{
 				<ConfirmPopup
-					popupText={`Är du säker att du vill radera passet ${activityListData.name}?`}
+					popupText={`Är du säker att du vill radera listan "${activityListData.name}"?`}
 					id={"confirm-popup"}
 					setShowPopup={setShowPopup}
 					showPopup={showPopup}
@@ -199,13 +200,12 @@ export default function ListInfo({ id }) {
 	)
 }
 
-
 async function deleteList(listId, context, navigate, setShowPopup) {
 	const requestOptions = {
 		headers: { "Content-type": "application/json", token: context.token },
 		method: "DELETE",
 	}
-	const response = await fetch("/api/activitylists/remove?id="+listId, requestOptions).catch(() => {
+	const response = await fetch("/api/activitylists/remove?id=" + listId, requestOptions).catch(() => {
 		setError("Serverfel: Kunde inte ansluta till servern.")
 		return
 	})

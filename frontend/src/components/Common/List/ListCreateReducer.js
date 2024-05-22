@@ -149,7 +149,7 @@ export function listCreateReducer(state, action) {
 		return tempState
 	}
 	case "REMOVE_FROM_LIST":
-		/*console.log("Hewwo! :3")
+		/*
 		return tempState.data.filter(function (el) {
 			return el.id != activity.id
 		})*/
@@ -192,7 +192,7 @@ export function listCreateReducer(state, action) {
 		tempState.addedActivities = results.map((result) => {
 			return {
 				type: result.type,
-				id: result.id,
+				id: result.id ? result.id : result.techniqueID,
 				name: Object.prototype.hasOwnProperty.call(result, "name") ? result.name : "",
 				duration: Object.prototype.hasOwnProperty.call(result, "duration") ? result.duration : 0,
 			}

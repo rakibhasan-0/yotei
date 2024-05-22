@@ -34,17 +34,19 @@ function TechniqueCard({ technique, checkBox, id, popUp}) {
 	const handleClick = () => {
 		
 		setTechnique()
+
 		if(!popUp){
 			if (technique.activity_id && technique.type === "technique") {
 				navigate("/technique/" + technique.activity_id)
+			} else if (technique.id && technique.type === "technique") {
+				navigate("/technique/" + technique.id) 
 			} else if (technique.type === "exercise" && technique.activity_id) {
-				console.log("x")
 				navigate("/exercise/exercise_page/" + technique.activity_id)
 			} else {
 				navigate("/technique/" + path)
 			}
 		}
-		else{
+		else {
 			setIsOpen(true)
 		}
 		

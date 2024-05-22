@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import se.umu.cs.pvt.activitylist.ActivityListEntryRepository;
 import se.umu.cs.pvt.search.builders.*;
 import se.umu.cs.pvt.search.enums.TagType;
 import se.umu.cs.pvt.search.fuzzy.Fuzzy;
@@ -33,6 +34,7 @@ import se.umu.cs.pvt.workout.UserShortRepository;
  * @author Kraken (Oskar Westerlund Holmgren)
  * @author Chimera (Ludvig Larsson)
  * @author Durian
+ * @author Tomato
  */
 
 @RestController
@@ -43,13 +45,16 @@ public class SearchController {
     private final SearchRepository searchRepository;
     private DecodedJWT jwt;
     private Long userIdL;
+    private String userRole;
     private final UserShortRepository userShortRepository;
+    private final ActivityListEntryRepository activityListEntryRepository;
 
     @Autowired
     private JWTUtil jwtUtil;
     
     @Autowired
-    public SearchController(SearchRepository searchRepository, UserShortRepository userShortRepository) {
+    public SearchController(SearchRepository searchRepository, UserShortRepository userShortRepository, ActivityListEntryRepository activityListEntryRepository) {
+        this.activityListEntryRepository = activityListEntryRepository;
         this.searchRepository = searchRepository;
         this.userShortRepository = userShortRepository;
     }
@@ -187,20 +192,21 @@ public class SearchController {
         try {
             jwt = jwtUtil.validateToken(token);
             userIdL = jwt.getClaim("userId").asLong();
+            userRole = jwt.getClaim("role").asString();
         } catch (Exception e) {
             System.err.println("Failed to authenticate user:" + e.getMessage());
         }
 
         SearchActivityListParams searchListParams = new SearchActivityListParams(urlQuery);
 
-        DatabaseQuery createdQuery = new SearchActivityListDBBuilder(searchListParams, userIdL)
+        DatabaseQuery createdQuery = new SearchActivityListDBBuilder(searchListParams, userIdL, userRole)
         .filterByHidden()
         .filterByIsAuthor()
         .filterByIsShared()
         .build();
         
         List<ActivityListDBResult> result = searchRepository.getActivityListFromCustomQuery(createdQuery.getQuery());
-        List<ActivityListSearchResponse> activityListSearchResponses = new SearchActivityListResponseBuilder(result, userShortRepository).build();
+        List<ActivityListSearchResponse> activityListSearchResponses = new SearchActivityListResponseBuilder(result, userShortRepository, activityListEntryRepository).build();
         List<ActivityListSearchResponse> filteredResult = fuzzySearchFiltering(searchListParams.getName(), activityListSearchResponses);
 
         SearchResponse<ActivityListSearchResponse> response = new SearchResponse(filteredResult, Collections.emptyList());

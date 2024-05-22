@@ -6,6 +6,8 @@ import { toast } from "react-toastify"
  * @author UNKNOWN & Team Tomato & Team Mango
  * @updated 2024-04-26  by Tomato
  * 			2024-05-20  by Team Mango: Updated permissions functions.
+ *  		2024-05-21  by Team Mango: Commented functions, changed names and added more permissions functions.
+ *  		2024-05-22  by Team Mango: Added some more permissions functions.
  */
 
 /**
@@ -48,59 +50,136 @@ export function checkRole(context, role) {
  * 					  IMPORTANT: The creatorId seems to be based on the group id of the group connected to the session and should be changed!
  * 								 Solution idea: Add a userId to the sessions in the database.
  * @params [int] creatorId - The id for the session to be checked against the userId.
+ * @params context - AccountContext with info about user.
  * @returns true if the user has permission to edit all sessions, or if the user has permission to edit their own sessions and the creatorId of
  * 		    the session is the same as the userId. Otherwise false is returned.
  */
-export function canEditSession(creatorId, user) {
+export function canEditSessions(context, creatorId) {
 	//if (user.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
-	if (!user.permissions) { //Safety check for undefined which is always true.
+	if (!context.permissions) { //Safety check for undefined which is always false.
 		return false
 	}
-	return (user.permissions.includes(USER_PERMISSION_CODES.SESSION_ALL) ||
-	(user.permissions.includes(USER_PERMISSION_CODES.SESSION_OWN) &&
-	(user.userId === creatorId)))
+	return (context.permissions.includes(USER_PERMISSION_CODES.SESSION_ALL) ||
+	(context.permissions.includes(USER_PERMISSION_CODES.SESSION_OWN) &&
+	(context.userId === creatorId)))
 }
 
 /**
  * canCreateSession() - Check for if this user can create a session or not.
- * 
+ * @params context - AccountContext with info about user.
  * @returns true if the user has permission to create/edit all sessions or their own sessions. Otherwise false is returned.
  */
-export function canCreateSession(user) {
-	//if (user.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
-	if (!user.permissions) { //Safety check for undefined which is always true.
+export function canCreateSessions(context) {
+	//if (context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
+	if (!context.permissions) { //Safety check for undefined which is always false.
 		return false
 	}
 	//Even if a user has a permission to edit all sessions, they may not have the permission set to edit their own sessions, so both must be checked here in the frontend.
 	//(You cannot just check for the SESSION_OWN permission. Perhaps this should be changed, but then you need to coordinate well with the backend.)
-	return (user.permissions.includes(USER_PERMISSION_CODES.SESSION_ALL) || user.permissions.includes(USER_PERMISSION_CODES.SESSION_OWN))
+	return (context.permissions.includes(USER_PERMISSION_CODES.SESSION_ALL) || context.permissions.includes(USER_PERMISSION_CODES.SESSION_OWN))
+}
+
+/**
+ * isAdminUser() - Checks if a user has the permission to edit users.
+ * @param {} context AccountContext from user.
+ * @returns True if user is alloowed to edit users, else false. 
+ */
+export function isAdminUser(context) {
+	if (!context.permissions) return false
+	return (context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS))
 }
 
 
 /**
  * canCreateGroups() - check if a user can create a group.
- * @param {*} user AccountContext from user.
+ * @param {*} context AccountContext from user.
  * @returns true if user can create a group, else false.
  */
-export function canCreateGroups(user) {
-	if (!user.permissions) return false
+export function canCreateGroups(context) {
+	if (!context.permissions) return false
 	//if (user.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
-	return (user.permissions.includes(USER_PERMISSION_CODES.PLAN_ALL) ||
-	(user.permissions.includes(USER_PERMISSION_CODES.PLAN_OWN)))
+	return (context.permissions.includes(USER_PERMISSION_CODES.PLAN_ALL) ||
+	(context.permissions.includes(USER_PERMISSION_CODES.PLAN_OWN)))
 }
 
 /**
  * canEditGroups() - checks if a user can edit a group. If not all, check if user can edit own and if so let user edit their own.
- * @param {*} user AccountContext from user.
+ * @param {*} context AccountContext from user.
  * @param {*} group Group info.
  * @returns true if user can edit a group.
  */
-export function canEditGroups(user, group) {
-	if (!user.permissions) return false
+export function canEditGroups(context, group) {
+	if (!context.permissions) return false
 
-	return (user.permissions.includes(USER_PERMISSION_CODES.PLAN_ALL) ||
-	(user.permissions.includes(USER_PERMISSION_CODES.PLAN_OWN) &&
-	(user.userId === group.userId)))
+	return (context.permissions.includes(USER_PERMISSION_CODES.PLAN_ALL) ||
+	(context.permissions.includes(USER_PERMISSION_CODES.PLAN_OWN) &&
+	(context.userId === group.userId)))
+}
+
+/**
+ * canCreateWorkouts() - check if a user can create a group.
+ * @param {*} context AccountContext from user.
+ * @returns true if user can create a workout, else false.
+ */
+export function canCreateWorkouts(context) {
+	if (!context.permissions) return false
+	//if (user.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
+	return (context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_ALL) ||
+	(context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_OWN)))
+}
+
+/**
+ * canEditWorkout() - Check if a user can edit a group.
+ * @param {*} context AccountContext from user.
+ * @param {*} workoutId The id of the user that created the workout.
+ * @returns true if user can edit a workout, else false.
+ */
+export function canEditWorkout(context, workoutId) {
+	if (!context.permissions) return false //If the user's context disappears they lose all permissions and must log in again.
+	if (context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
+	//True if the user is an admin or "owns" the workout and is able to edit any workouts.
+	//Both permissions must be checked since having one does not imply having the other.
+	return ((context.userId === workoutId) && (
+		context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_OWN) ||
+	context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_ALL)
+	)
+	)
+}
+
+/**
+ * canDeleteComment() - Check if a user can delete a comment.
+ * @param {*} context AccountContext from user.
+ * @param {*} commentId The id of the user that created the comment.
+ * @returns true if user can delete a comment, otherwise false.
+ */
+export function canDeleteComment(context, commentId) {
+	if (!context.permissions) return false //If the user's context disappears they lose all permissions and must log in again.
+	if (context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
+	//True if the user is an admin or "owns" the comment.
+	return (context.userId === commentId)
+}
+
+
+
+/**
+ * canCreateAndEditActivity() - Check if user can create an activity. An activity is an exercise or technique.
+ * @param {*} context Accountcontext from user. 
+ * @returns true if user can create an activity (exercise and technique).
+ */
+export function canCreateAndEditActivity(context) {
+	if (!context.permissions) return false
+	return (context.permissions.includes(USER_PERMISSION_CODES.TECHNIQUE_EXERCISE_ALL))
+}
+
+/**
+ * canCreateGradings() - Check if user can create a grading.
+ * @param {*} context Accountcontext from user. 
+ * @returns true if user can create a grading.
+ */
+
+export function canHandleGradings(context) {
+	if (!context.permissions) return false
+	return (context.permissions.includes(USER_PERMISSION_CODES.GRADING_ALL))
 }
 
 /**
@@ -184,12 +263,12 @@ export const USER_PERMISSION_CODES = {
 	ADMIN_RIGHTS: 1,
 	SESSION_OWN: 2, //Edit your own sessions.
 	SESSION_ALL: 3, //Edit all sessions.
-	PLAN_OWN: 4,
+	PLAN_OWN: 4, // Plan = groups
 	PLAN_ALL: 5,
 	WORKOUT_OWN: 6,
 	WORKOUT_ALL: 7,
-	ACTIVITY_OWN: 8,
-	ACTIVITY_ALL: 9,
+	TECHNIQUE_EXERCISE_OWN: 8, // Techniques and exercices. This one is not used. Right now only all or nothing.
+	TECHNIQUE_EXERCISE_ALL: 9, //Old name: ACTIVITY_ALL (Was a potential conflict in the database naming, so we changed it.)
 	GRADING_OWN: 10,
 	GRADING_ALL: 11,
 }
