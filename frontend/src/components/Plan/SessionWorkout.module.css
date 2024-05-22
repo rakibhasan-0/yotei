@@ -38,19 +38,21 @@
 
 .review_button {
 	position: relative;
+	display: flex;
 }
 
 .review_text {
 	position: absolute;
 	padding: 0%;
+	display: contents;
 }
 
 .no_review_alert {
 	width: 25px;
 	height: 25px;
 	position: relative;
-	bottom: 75%;
-	left: 60%;
+	bottom: 85%;
+	left: 25%;
 	background-color: #BD3B41;
 	border-radius: 50%;
 	border: 1px solid  #BD3B41;
