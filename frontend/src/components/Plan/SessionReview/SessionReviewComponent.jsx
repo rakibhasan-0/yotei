@@ -40,6 +40,9 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	const[negativeComment, setNegativeComment] = useState("")
 	const[savedDate, setSavedDate] = useState("")
 	const[reviewId, setReviewId] = useState(-1)
+	const [extraActivityId, setExtraActivityId] = useState(-1)
+	const [isTransformComplete, setIsTransformComplete] = useState(false)
+
 
 	const [, setErrorStateMsg] = useState("")
 
@@ -55,6 +58,8 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 				headers: {"Content-type": "application/json", token: context.token}
 			}
 
+			console.log("the api call just started for the session data")
+
 			const response = await fetch(`/api/workouts/detail/${workout_id}`, requestOptions).catch(() => {
 				setErrorStateMsg("Serverfel: Kunde inte ansluta till servern.")
 				//setLoading(false)
@@ -66,8 +71,8 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 				//setLoading(false)
 			} else {
 				const json = await response.json()
-				//console.log(json)
 				setSessionData(() => json)
+				console.log(json)
 				//setLoading(false)
 				setErrorStateMsg("")
 			}
@@ -108,9 +113,14 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		fetchLoadedData()
 	}, [])
 
+
+	/**
+	 * used for the debugging purposes
+	 */
 	useEffect(() => {
         console.log(doneList);
     }, [doneList]);
+
 
 	function setDoneActivities(activities) {
 		setDone(prevDoneList => {
@@ -144,15 +154,83 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			setError("Kunde inte spara utvärdering, vänligen sätt ett betyg")
 			return
 		}
-		console.log(doneList)
-		//console.log("Review id: " + reviewId)
-		console.log(sessionData);
-		if(reviewId < 0) {
-			addReview()
+		console.log("doneList before transforming", doneList)
+		console.log("transform is about to run")
+		await transformDoneList()
+		console.log("transform done")
+	}
+
+
+	function replaceDoneId(oldId, newId) {
+		console.log("Replacing", oldId, "with", newId)
+		setDone(doneList.map(id => id === oldId ? newId : id))
+		console.log("Done list after replacing", doneList)
+	}
+
+
+
+	async function transformDoneList() {
+		const promises = doneList.map(async activityID => {
+			if (activityID < 0) {
+				const extraActivitiesCategory = sessionData.activityCategories.find(category => 
+					category.categoryName.toLowerCase() === "extraactivities"
+				)
+
+				if (extraActivitiesCategory) {
+					const foundActivity = extraActivitiesCategory.activities.find(act => act.id === activityID)
+					if (foundActivity) {
+						try {
+							const newId = await getIdForActivity(foundActivity, foundActivity.order)
+							foundActivity.id = newId
+							console.log("Transformed new ID:", newId)
+							//replaceDoneId(activityID, newId)
+							return newId
+						} catch (error) {
+							console.error("Error fetching new ID:", error)
+						}
+					}
+				}
+			}
+			return activityID;
+		});
+
+		const updatedList = await Promise.all(promises)
+		console.log("Updated list", updatedList)
+		console.log("Done list after the transform of ids and before updating", doneList)
+		setDone(updatedList)
+		console.log("list after setting the transform", doneList)
+		setIsTransformComplete(true) 
+
+	}
+
+
+	/**
+	 * it will trigger when the transformation of the done list is complete, 
+	 * we can proceed with the review. So that setDone() can be updated synchronously.
+	 */
+	useEffect(() => {
+		if (isTransformComplete) {
+			console.log("Done list updated and transform complete:", doneList);
+			proceedWithReview();
+			setIsTransformComplete(false)
+    	}
+
+	}, [isTransformComplete])
+
+
+
+	function proceedWithReview() {
+		if (reviewId < 0) {
+			addReview();
 		} else {
-			updateReview()
+			updateReview();
 		}
 	}
+
+
+	useEffect(() => {
+		console.log("session Data has been updated", sessionData)
+	}, [sessionData])
 
 	async function addReview() {
 		let ts = getTodaysDate()
@@ -195,6 +273,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			if(json[0] !== null && json[0] !== undefined) {
 				setReviewId(json[0]["id"])
 				clearActivities(json[0]["id"], session_id)
+				console.log("doneList", doneList)
 				for(let i = 0; i < doneList.length; i++) {
 					submitActivity(json[0]["id"], session_id, doneList[i])
 				}
@@ -257,7 +336,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	}
 
 	async function submitActivity(review_id, session_id, activity_id) {
-		//console.log("Submitting activity: " + activity_id)
+		console.log("Submitting activity: " + activity_id)
 		const requestOptions = {
 			method: "POST",
 			headers: {"Content-type": "application/json", "token": token},
@@ -380,6 +459,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			return element.categoryName.toLowerCase() === "ExtraActivities".toLowerCase()
 		})
 
+
 		if (categoryExistence) {
 			addActivitiesToExistingCategory(categoryExistence, data);
 		} else {
@@ -428,6 +508,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			console.log("element category", element.categoryName)
 			return element.categoryName.toLowerCase() === category.name.toLowerCase()
 		})
+	
 	}
 
 	/**
@@ -438,14 +519,27 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
    * @param activities the activities that are added by the user
    */
 	function addActivitiesToExistingCategory(category, activities) {
-		let order = 20 // Start order at 20, may need adjustment based on requirements
-		activities.forEach((activity) => {
-			console.log("activity", activity)
-			const newActivity = createActivityObject(activity, order)
-			category.activities.push(newActivity)
-			order++
+		let currentExtraId = extraActivityId
+		console.log("currentExtraId", currentExtraId)
+		setSessionData(prevSessionData => {
+			const newCategories = prevSessionData.activityCategories.map(cat => {
+				if (cat.categoryName === category.categoryName) {
+					return {
+						...cat,
+						activities: [...cat.activities, ...activities.map((activity, index) => 
+							createActivityObject(activity, cat.activities.length + index, currentExtraId--))
+						]
+					};
+				}
+				return cat;
+			});
+
+			return { ...prevSessionData, activityCategories: newCategories };
 		})
+
+		setExtraActivityId(currentExtraId)
 	}
+
 
 	/**
    * that function is responsible for creating a new category with the
@@ -457,16 +551,24 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	function createNewCategoryWithActivities(category, activities) {
 		let categoryOrder = sessionData.activityCategories
 		categoryOrder = categoryOrder.length + 1
-		console.log("categoryOrder", categoryOrder)
+		let currentExtraId = extraActivityId
 
 		const newCategory = {
 			categoryName: category,
 			categoryOrder: categoryOrder, // Unique ID logic
 			activities: activities.map((activity, index) =>
-				createActivityObject(activity, index)
+				createActivityObject(activity, index, currentExtraId--)
 			),
 		}
-		sessionData.activityCategories.push(newCategory)
+
+		// Adding new category to the sessionData 
+		setSessionData(prevSessionData => ({
+			...prevSessionData,
+			activityCategories: [...prevSessionData.activityCategories, newCategory]
+		}))
+
+		setExtraActivityId(currentExtraId)
+
 	}
 
 	/**
@@ -479,12 +581,12 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
    * @param order some random number that is used for ordering the activities
    * @returns it will successfully add the activity to the sessionData
    */
-	function createActivityObject(activity, order) {
+	function createActivityObject(activity, order, negativeId) {
 		if (activity.techniqueId) {
 			//getIdForActivity(activity, order)
 			return {
 			 // Unique ID logic
-			 	id: -1,
+			 	id: negativeId,
 				text: "",
 				duration: activity.duration,
 				technique: {
@@ -503,7 +605,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			//getIdForActivity(activity, order)
 			return {
 	// Unique ID logic
-				id: -1,
+				id: negativeId,
 				text: "",
 				duration: activity.duration,
 				exercise: {
@@ -549,7 +651,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 			const responseData = await response.json()
 			console.log("response", responseData)
-			return responseData
+			return responseData.id
 		} catch (error) {
 			console.error("Error fetching data:", error)
 		}
@@ -564,7 +666,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 					<Divider option={"h2_center"} title={"Aktiviteter"} />
 					<div>
 						<ul>
-							{console.log(sessionData)}
+						{console.log("sessionData just rendered", sessionData)}
 						{sessionData.activityCategories.map((category, categoryIndex) => (
 							<React.Fragment key={categoryIndex}>
 								{category.activities.map((activity, activityIndex) => (

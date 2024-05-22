@@ -51,7 +51,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 	 */
 	const [map, mapActions] = useMap()
 	const [key, setKey] = useState("technique")
-	const [tabCookie, setCookie, removeTabCookie] = useCookies(["active-tab"])
+	const [tabCookie, setCookie] = useCookies(["active-tab"])
 
 
 	/**
@@ -114,7 +114,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 		{ label: "Tid: Längst först", cmp: (a, b) => { return b.duration - a.duration } }
 	]
 	const [sort, setSort] = useState(sortOptions[0])
-	const [cookies, setCookies, removeExerciseCookie] = useCookies(["exercise-filter"])
+	const [cookies, setCookies] = useCookies(["exercise-filter"])
 	const [visibleExercises, setVisibleExercises] = useState([])
 
 	const searchCount = useRef(0)
