@@ -265,7 +265,6 @@ export const USER_PERMISSION_CODES = {
 	TECHNIQUE_EXERCISE_ALL: 9, //Old name: ACTIVITY_ALL (Was a potential conflict in the database naming, so we changed it.)
 	GRADING_OWN: 10,
 	GRADING_ALL: 11,
-	TEHCNIQUE_EXERCISE_OWN
 }
 
 export const USER_PERMISSION_LIST_ALL = [1,2,3,4,5,6,7,8,9,10,11]
