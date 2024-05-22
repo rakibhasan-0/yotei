@@ -1,5 +1,3 @@
-//it.todo("Should render the correct belts when selected")
-//it.todo("all tests need to be rewritten to work with inverted belts category")
 //TODO write a file comment in this file and clean up tests with good test data and more tests.
 import { render, screen, configure, waitFor } from "@testing-library/react"
 import "@testing-library/jest-dom"
