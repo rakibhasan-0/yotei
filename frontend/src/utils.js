@@ -7,6 +7,7 @@ import { toast } from "react-toastify"
  * @updated 2024-04-26  by Tomato
  * 			2024-05-20  by Team Mango: Updated permissions functions.
  *  		2024-05-21  by Team Mango: Commented functions, changed names and added more permissions functions.
+ *  		2024-05-22  by Team Mango: Added some more permissions functions.
  */
 
 /**
@@ -127,6 +128,36 @@ export function canCreateWorkouts(context) {
 	(context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_OWN)))
 }
 
+/**
+ * canEditWorkout() - Check if a user can edit a group.
+ * @param {*} context AccountContext from user.
+ * @param {*} workoutId The id of the user that created the workout.
+ * @returns true if user can edit a workout, else false.
+ */
+export function canEditWorkout(context, workoutId) {
+	if (!context.permissions) return false //If the user's context disappears they lose all permissions and must log in again.
+	if (context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
+	//True if the user is an admin or "owns" the workout and is able to edit any workouts.
+	//Both permissions must be checked since having one does not imply having the other.
+	return ((context.userId === workoutId) && (
+		context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_OWN) ||
+	context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_ALL)
+	)
+	)
+}
+
+/**
+ * canDeleteComment() - Check if a user can delete a comment.
+ * @param {*} context AccountContext from user.
+ * @param {*} commentId The id of the user that created the comment.
+ * @returns true if user can delete a comment, otherwise false.
+ */
+export function canDeleteComment(context, commentId) {
+	if (!context.permissions) return false //If the user's context disappears they lose all permissions and must log in again.
+	if (context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
+	//True if the user is an admin or "owns" the comment.
+	return (context.userId === commentId)
+}
 
 
 
@@ -137,7 +168,18 @@ export function canCreateWorkouts(context) {
  */
 export function canCreateAndEditActivity(context) {
 	if (!context.permissions) return false
-	return (context.permissions.includes(USER_PERMISSION_CODES.ACTIVITY_ALL))
+	return (context.permissions.includes(USER_PERMISSION_CODES.TECHNIQUE_EXERCISE_ALL))
+}
+
+/**
+ * canCreateGradings() - Check if user can create a grading.
+ * @param {*} context Accountcontext from user. 
+ * @returns true if user can create a grading.
+ */
+
+export function canHandleGradings(context) {
+	if (!context.permissions) return false
+	return (context.permissions.includes(USER_PERMISSION_CODES.GRADING_ALL))
 }
 
 /**
@@ -225,8 +267,8 @@ export const USER_PERMISSION_CODES = {
 	PLAN_ALL: 5,
 	WORKOUT_OWN: 6,
 	WORKOUT_ALL: 7,
-	ACTIVITY_OWN: 8, // Techniques and exercices. This one is not used. Right now only all or nothing.
-	ACTIVITY_ALL: 9,
+	TECHNIQUE_EXERCISE_OWN: 8, // Techniques and exercices. This one is not used. Right now only all or nothing.
+	TECHNIQUE_EXERCISE_ALL: 9, //Old name: ACTIVITY_ALL (Was a potential conflict in the database naming, so we changed it.)
 	GRADING_OWN: 10,
 	GRADING_ALL: 11,
 }

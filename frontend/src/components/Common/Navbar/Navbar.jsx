@@ -3,7 +3,7 @@ import Button from "../Button/Button"
 import { List as HamburgerIcon, X as CloseIcon , Hammer as AdminIcon, Person as UserIcon} from "react-bootstrap-icons"
 import styles from "./Navbar.module.css"
 import { useNavigate } from "react-router"
-import { isAdminUser } from "../../../utils"
+import { canHandleGradings, isAdminUser } from "../../../utils"
 import { AccountContext } from "../../../context"
 
 /**
@@ -73,9 +73,16 @@ function Navbar({ testId }) {
 						<h1 className={styles.commonNavbarButton}>Tekniker & Övningar</h1>
 					</Button>
 
-					<Button width={"100%"} onClick={() => navigateAndClose("/grading")}>
-						<h1 className={styles.commonNavbarButton}>Gradering</h1>
+					<Button width={"100%"} onClick={() => navigateAndClose("/groups",  {state: {clearSearchText: true}})}>
+						<h1 className={styles.commonNavbarButton}>Grupper</h1>
 					</Button>
+
+					{ canHandleGradings(context) ?
+						<Button width={"100%"} onClick={() => navigateAndClose("/grading")}>
+							<h1 className={styles.commonNavbarButton}>Gradering</h1>
+						</Button>
+						:<></>
+					}
 				</div>
 				
 

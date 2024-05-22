@@ -10,7 +10,7 @@ import { useParams } from "react-router"
 import { Pencil, Trash } from "react-bootstrap-icons"
 import ErrorState from "../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../components/Common/Spinner/Spinner"
-import { HTTP_STATUS_CODES, setError, setSuccess, isAdmin } from "../../utils"
+import { HTTP_STATUS_CODES, setError, setSuccess, isAdminUser } from "../../utils"
 
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 
@@ -23,9 +23,10 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
  *      listId @type {int} - The ID of the list.
  *      id        @type {int/string} - the id of the component
  *
- * @author Team Tomato (6)
+ * @author Team Tomato (6) & Team Mango (Grupp 4) (2024-05-22)
  * @since 2024-05-21
  * Based on WorkoutView.jsx
+ * Updated Team Mango 2024-05-22: changed check isAdmin to new check.
  *
  */
 
@@ -87,7 +88,7 @@ export default function ListInfo({ id }) {
 						<div className="d-flex justify-content-end align-items-center">
 							<div className={styles.clickIcon}>{/*<PrintButton listData={activityListData} />*/}</div>
 
-							{(context.userId == activityListData.author || isAdmin(context)) && (
+							{(context.userId == activityListData.author || isAdminUser(context)) && (
 								<>
 									<Link
 										className="ml-3"
