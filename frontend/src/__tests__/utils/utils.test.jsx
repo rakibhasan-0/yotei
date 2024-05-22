@@ -8,7 +8,8 @@ import "@testing-library/jest-dom"
  * Test for utils file.
  * 
  * @author UNKNOWN, Team Mango (Grupp 4) (2024-05-22)
- * Updated 2024-05-22: changed to new isAdmin check.
+ * Updated 2024-05-22: changed to new isAdmin check and removed editor test
+ *                     because editor do not exist anymore.
  */
 
 configure({testIdAttribute: "id"})
@@ -29,35 +30,36 @@ describe("Authorization tests", () => {
 		expect(isAdminUser(editor)).toBe(false)
 	})
 
-	test("should be editor", async() => {
-		let editor = ({token: "nan", role: Roles.editor, userId: 0, setToken: jest.fn()})
-		let admin = ({token: "nan", role: Roles.editor, userId: 0, setToken: jest.fn()})
-		
-		expect(isEditor(editor)).toBe(true)
-		expect(isEditor(admin)).toBe(true)
-	})
-
-	test("should not be editor", async() => {
-		let user = ({token: "nan", role: Roles.other, userId: 0, setToken: jest.fn()})
-
-		expect(isEditor(user)).toBe(false)
-	})
-
-	test("should return false on 'undefined' context", async() => {
-		let user
-
-		expect(isEditor(user)).toBe(false)
-	})
-
-	test("should return false on 'null' context", async() => {
-		let user = null
-
-		expect(isEditor(user)).toBe(false)
-	})
-
-	test("should return false on 'undefined' role", async() => {
-		let user = ({token: "nan", userId: 0, setToken: jest.fn()})
-
-		expect(isEditor(user)).toBe(false)
-	})
+// Test removed because editor do not exist anymore!!!!
+//	test("should be editor", async() => {
+//		let editor = ({token: "nan", role: Roles.editor, userId: 0, setToken: jest.fn()})
+//		let admin = ({token: "nan", role: Roles.editor, userId: 0, setToken: jest.fn()})
+//		
+//		expect(isEditor(editor)).toBe(true)
+//		expect(isEditor(admin)).toBe(true)
+//	})
+//
+//	test("should not be editor", async() => {
+//		let user = ({token: "nan", role: Roles.other, userId: 0, setToken: jest.fn()})
+//
+//		expect(isEditor(user)).toBe(false)
+//	})
+//
+//	test("should return false on 'undefined' context", async() => {
+//		let user
+//
+//		expect(isEditor(user)).toBe(false)
+//	})
+//
+//	test("should return false on 'null' context", async() => {
+//		let user = null
+//
+//		expect(isEditor(user)).toBe(false)
+//	})
+//
+//	test("should return false on 'undefined' role", async() => {
+//		let user = ({token: "nan", userId: 0, setToken: jest.fn()})
+//
+//		expect(isEditor(user)).toBe(false)
+//	})
 })
