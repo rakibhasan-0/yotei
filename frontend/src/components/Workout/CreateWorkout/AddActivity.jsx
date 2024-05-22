@@ -100,8 +100,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	const [searchListText, setSearchListText] = useState("")
 	const [listContents, setListContents] = useState([])  
 	const [listUpdate, setListUpdate] = useState(0)
-	const [isSearchBarEnabled] = useState(true) // TODO: feature toggle
-	const [isFilterEnabled] = useState(false) // TODO: feature toggle
+	const [listFilter, setListFilter] = useState([])
 
 
 	/**
@@ -158,6 +157,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 		{ label: "Äldst", cmp: (a, b) => { return new Date(a.date) - new Date(b.date) } }
 	]
 	const [sortLists, setSortLists] = useState(sortOptionsLists[0])
+	const [filterCount, setFilterCount] = useState(0)
 
 
 	const searchCount = useRef(0)
@@ -283,10 +283,11 @@ function AddActivity({ id, setShowActivityInfo }) {
 	useEffect(() => {
 		if (!hasLoadedData) return
 
+		setFilterCount(listFilter.length)
 		setFetchedLists(false)
 		setLists(lists)
 		fetchingList()
-	}, [searchListText, hasLoadedData, listUpdate, sortLists])
+	}, [searchListText, hasLoadedData, listUpdate, sortLists, listFilter])
 
 
 	/**
@@ -455,19 +456,38 @@ function AddActivity({ id, setShowActivityInfo }) {
 
 
 	/**
+	 * Sets the active filters.
+	 * 
+	 * @param {*} newListFilter The array of filters to be set.
+	 */
+	const handleListFilterChange = (newListFilter) => {
+		setListFilter(newListFilter)
+	}
+
+	/**
 	 * Fetches the lists from the backend, either from cache or by a new API-call.
 	 */
 	function fetchingList() {
-
+		let author = false
+		let hidden = false
+		let shared = false
+		if (listFilter.some(opt => opt.label === "Mina listor")) author = true
+		if (listFilter.some(opt => opt.label === "Publika listor")) hidden = true
+		if (listFilter.some(opt => opt.label === "Delade med mig")) shared = true
+		
 		const args = {
-			text: searchListText
+			text: searchListText,
+			isAuthor: author,
+			hidden: hidden,
+			isShared: shared
 		}
 
 		getLists(args, token, map, mapActions, (result) => {
 			if (result.error) return
-
-			// Extract the 'id' and 'name' fields from each item in the result used in displaying the list.
+			
+			// Extract the fields from each item in the result used in displaying the list.
 			const lists = result.results.map(item => ({
+
 				id: item.id,
 				name: item.name,
 				author: {
@@ -477,7 +497,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 				hidden: item.hidden,
 				date: item.date
 			}))
-
+			
 			setLists(lists.sort(sortLists.cmp))
 			setFetchedLists(true)
 		})
@@ -626,23 +646,19 @@ function AddActivity({ id, setShowActivityInfo }) {
 					</Tab>
 					<Tab eventKey="lists" title="Listor" tabClassName={`nav-link ${style.tab}`}>
 						<div className={style.searchBar}>
-							{isSearchBarEnabled && ( // TODO: feature toggle.
-								<SearchBar
-									id="lists-search-bar"
-									placeholder="Sök efter listor"
-									text={searchListText}
-									onChange={setSearchListText}
-								/>
-							)}
+							<SearchBar
+								id="lists-search-bar"
+								placeholder="Sök efter listor"
+								text={searchListText}
+								onChange={setSearchListText}
+							/>
 
 							<NewSorter onSortChange={setSortLists} id="ei-sort" selected={sortLists} options={sortOptionsLists} />
 
 
-							{isFilterEnabled && ( // TODO: feature toggle.
-								<FilterContainer id="ei-filter" title="Filtrering" numFilters={0}>
-									<ListPicker />
-								</FilterContainer>
-							)}
+							<FilterContainer id="ei-filter" title="Filtrering" numFilters={filterCount}>
+								<ListPicker onFilterChange={handleListFilterChange} />
+							</FilterContainer>
 
 
 							<div className={style.scrollComponentOuterDiv}>
