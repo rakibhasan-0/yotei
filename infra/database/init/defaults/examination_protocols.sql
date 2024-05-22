@@ -52,7 +52,7 @@ INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (3,
             ]
         },
         {
-            "category_name": "YAKUSOKU GEIKO OR RANDORI",
+            "category_name": "YAKUSOKU GEIKO ELLER RANDORI",
             "techniques": [
                 { "text": "1. Försvar mot en motståndare" }
             ]
@@ -117,7 +117,7 @@ INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (6,
             ]
         },
         {
-            "category_name": "YAKUSOKU GEIKO OR RANDORI",
+            "category_name": "YAKUSOKU GEIKO ELLER RANDORI",
             "techniques": [
                 { "text": "1. Försvar mot en motståndare" }
             ]
@@ -189,7 +189,7 @@ INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (9,
             ]
         },
         {
-            "category_name": "YAKUSOKU GEIKO_OR_RANDORI",
+            "category_name": "YAKUSOKU GEIKO ELLER RANDORI",
             "techniques": [
                 { "text": "1. Försvar mot en motståndare" }
             ]
@@ -270,7 +270,7 @@ INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (12,
             ]
         },
         {
-            "category_name": "YAKUSOKU GEIKO_OR_RANDORI",
+            "category_name": "YAKUSOKU GEIKO ELLER RANDORI",
             "techniques": [
                 { "text": "1. Försvar mot en motståndare" }
             ]
@@ -365,7 +365,7 @@ INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (13,
             ]
         },
         {
-            "category_name": "YAKUSOKU GEIKO_OR_RANDORI",
+            "category_name": "YAKUSOKU GEIKO ELLER RANDORI",
             "techniques": [
                 { "text": "1. Försvar mot en motståndare" }
             ]
