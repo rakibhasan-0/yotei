@@ -13,7 +13,7 @@ import { setError as setErrorToast, setSuccess} from "../../../utils"
 import EditGallery from "../../../components/Gallery/EditGallery"
 import { useLocation, useNavigate, useParams } from "react-router"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
-import { isAdminUser, isEditor, scrollToElementWithId } from "../../../utils"
+import { isAdminUser, scrollToElementWithId } from "../../../utils"
 import { unstable_useBlocker as useBlocker } from "react-router"
 import Spinner from "../../../components/Common/Spinner/Spinner.jsx"
 
