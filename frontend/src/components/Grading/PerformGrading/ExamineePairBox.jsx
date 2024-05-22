@@ -70,6 +70,11 @@ export default function ExamineePairBox({
 		}
 	}, [isAddingComment])
 
+	// Updates notifications when switching techniques
+	useEffect(() => {
+		handleExistingInput()
+	}, [techniqueName])
+
 	/**
      * Discards the current pair comment.
      */
@@ -208,11 +213,10 @@ export default function ExamineePairBox({
 	}
 
 	return (
-		<fieldset id={id} className={styles.pairbox} style={{ backgroundColor: rowColor }}>
-			<div className={styles.pairinfo}>
-				<p id="PairTextId" style={{ fontSize: "12px", marginBottom: "0" }}>Par:</p>
-				<p id="PairNumberId" style={{ fontSize: "12px", marginBottom: "2px" }}>{pairNumber}</p>
-				<CommentButton onClick={() => setAddComment(true)} />
+		<fieldset id={id} className={styles.pairbox} style={{backgroundColor: rowColor}}>
+			<div className={styles.pairinfo} style={{ display: "flex", alignItems: "center" }}>
+				<p id="PairNumberId" style={{ fontSize: "12px", marginBottom: "0" }}>P{pairNumber}</p>
+				<CommentButton onClick={() => setAddComment(true)} hasComment={hasComment}/>
 			</div>
 			<div className={styles.pair}>
 				<div id="ExamineeLeftNameId" className={styles.pairleft}>
@@ -236,12 +240,12 @@ export default function ExamineePairBox({
 					errorMessage={commentError}
 					text={commentText}
 				/>
-				<Button onClick={onAddPairComment}>Lägg till</Button>
+				<Button onClick={() => {onAddPairComment()}} >Lägg till</Button>
 			</Popup>
 			<ConfirmPopup
 				popupText={"Är du säker på att du vill ta bort kommentarsutkastet?"}
 				showPopup={showDiscardComment}
-				onClick={() => onDiscardPairComment()}
+				onClick={() => {onDiscardPairComment()}}
 				setShowPopup={() => setShowDiscardComment(false)}
 				zIndex={200} // Above the comment popup.
 			/>

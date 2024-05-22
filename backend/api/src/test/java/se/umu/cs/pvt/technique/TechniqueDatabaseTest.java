@@ -157,7 +157,7 @@ public class TechniqueDatabaseTest {
         String password = postgreSQLContainer.getPassword();
 
         int yellowBegin = 26;
-        int yellowEnd = 48;
+        int yellowEnd = 49;
 
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
@@ -194,8 +194,8 @@ public class TechniqueDatabaseTest {
         String username = postgreSQLContainer.getUsername();
         String password = postgreSQLContainer.getPassword();
 
-        int yellowBegin = 49;
-        int yellowEnd = 73;
+        int yellowBegin = 50;
+        int yellowEnd = 74;
 
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
@@ -232,8 +232,8 @@ public class TechniqueDatabaseTest {
         String username = postgreSQLContainer.getUsername();
         String password = postgreSQLContainer.getPassword();
 
-        int yellowBegin = 74;
-        int yellowEnd = 100;
+        int yellowBegin = 75;
+        int yellowEnd = 101;
 
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
@@ -270,8 +270,8 @@ public class TechniqueDatabaseTest {
         String username = postgreSQLContainer.getUsername();
         String password = postgreSQLContainer.getPassword();
 
-        int yellowBegin = 101;
-        int yellowEnd = 132;
+        int yellowBegin = 102;
+        int yellowEnd = 134;
 
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
