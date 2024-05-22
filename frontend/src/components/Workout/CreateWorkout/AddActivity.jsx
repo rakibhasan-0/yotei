@@ -365,6 +365,8 @@ function AddActivity({ id, setShowActivityInfo }) {
 		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.TOGGLE_CHECKED_ACTIVITY, payload: activity })
 	}
 
+	const onAllActivitiesToggle = (listId) => {}
+
 	/**
 	 * Fetches techniques from the backend, either from cache or by a new API-call. 
 	 * But first, the selected belts are filtered and parsed to be used in the request. 
@@ -654,9 +656,12 @@ function AddActivity({ id, setShowActivityInfo }) {
 												id={list.id}
 												onClick={() => fetchingListContent(list.id)}
 												key={list.id}
-												checkBox={<CheckBox>
-													
-												</CheckBox>}
+												checkBox={
+													<CheckBox
+														checked={console.log("janne")}
+														onClick={() => console.log("haj")}
+													/>}
+													style={{display: "flex",  padding: "15px 15px 5px 15px"}}
 											>
 
 												<div style={{ borderTop: "1px solid black" }}>
@@ -670,6 +675,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 																		<CheckBox 
 																			checked={checkedActivities.some(a => a.techniqueID === item.techniqueID)}
 																			onClick={() => onActivityToggle(item, "technique")}
+																			
 																		/>
 																	}
 																	key={index}
