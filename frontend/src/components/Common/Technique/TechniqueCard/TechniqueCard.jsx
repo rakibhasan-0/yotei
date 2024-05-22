@@ -1,6 +1,10 @@
 import { ChevronDown } from "react-bootstrap-icons"
 import { Link, useNavigate } from "react-router-dom"
 import styles from "./TechniqueCard.module.css"
+import PopupMini from "../../Popup/PopupMini"
+import TechniqueDetailMini from "../../../../pages/Activity/Technique/TechniqueDetail/TechniqueDetailMini"
+//import ExerciseDetailMini from "../../../../pages/Activity/Exercise/ExerciseDetailMini"
+import { useState } from "react"
 
 /**
  * Technique card component.
@@ -11,39 +15,48 @@ import styles from "./TechniqueCard.module.css"
  *		checkBox (Component) : If you want a checkbox to be displayed, send it as a prop.
  *		id: Id used for testing.
  *
- * @author Medusa, Coconut, Tomato
- * @version 2.2
+ * @author Medusa, Coconut, Tomato, Team Kiwi
+ * @version 2.3
  * @since 2024-05-16
  *
  * @update Converted to css module 2024-04-19, Hannes (group 1)
  * @update Fixed so that techniques that are in lists get the correct path, 2024-05-17, Team Tomato (Group 6)
  * @update Added inverted belt category. 2024-05-20, Team Kiwi (Teodor Bäckström)
+ * @update Added a popUp window for when popUp is true.
  */
-function TechniqueCard({ technique, checkBox, id}) {
+function TechniqueCard({ technique, checkBox, id, popUp}) {
 	const navigate = useNavigate()
+	const [isOpen, setIsOpen] = useState(false)
 	
 	// Fixes the path regardless if the technique is in a list or not.
 	const path = (technique.path === undefined) ? technique.techniqueID : technique.path
 
 	const handleClick = () => {
+		
 		setTechnique()
-
-		if (technique.activity_id && technique.type === "technique") {
-			navigate("/technique/" + technique.activity_id)
-		} else if (technique.type === "exercise" && technique.activity_id) {
-			navigate("/exercise/exercise_page/" + technique.activity_id)
-		} else {
-			navigate("/technique/" + path)
+		if(!popUp){
+			if (technique.activity_id && technique.type === "technique") {
+				navigate("/technique/" + technique.activity_id)
+			} else if (technique.type === "exercise" && technique.activity_id) {
+				console.log("x")
+				navigate("/exercise/exercise_page/" + technique.activity_id)
+			} else {
+				navigate("/technique/" + path)
+			}
 		}
+		else{
+			setIsOpen(true)
+		}
+		
 	}
 
 	const setTechnique = () =>{
 		localStorage.setItem("stored_technique", id)
 	}
 
-
 	return (
 		<div 
+
 			//If the technique count is 0, the card will be transparent otherwise
 			//it will be normal, this is mostly for the statistics page
 			className={`${styles["technique-card"]} ${
@@ -51,6 +64,13 @@ function TechniqueCard({ technique, checkBox, id}) {
 			}`}
 			id={id} 
 			onClick={setTechnique}>
+			
+			
+			<PopupMini title = {technique.name} id = "pop-up-id-tech" isOpen = {isOpen} setIsOpen = {setIsOpen} isNested = {true}> 
+				<TechniqueDetailMini id = {technique.techniqueID}>
+				</TechniqueDetailMini>
+			</PopupMini>
+
 			{technique.type === "exercise" ? null : constructColor(technique)}
 
 			<div className={styles["technique-info-container"]}>

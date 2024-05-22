@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useCallback, useParams } from "react"
+import { useState, useEffect, useContext, useCallback } from "react"
 
 
 import { AccountContext } from "../../../../context"
@@ -18,24 +18,18 @@ import Gallery from "../../../../components/Gallery/Gallery"
 
 
 /**
- * The detail page for a technique.
+ * The detail page for a technique in a mini popup window. Without edit, delete and print buttons.
+ * Taken from TechniqueDetail file
  * 
- * Props:
- * 		id: The id used for testing purposes.
+ * @param id: The id used for fetching techniques.
+ * Version 1
  * 
- * Example usage:
- * 	   <TechniqueDetail id="test-id"/>
- * 
- * Version 4.1:
- * 		Fixed navigation from pages outside the website 
- * 
- * @author Team Medusa (Grupp 6) & Cyclops (Group 5) & Tomato (Group 6) & Team Durian (Group 3) (2024-04-23), Team Kiwi (Group 2) (2024-05-03)
- * @version 4.1
- * @since 2024-04-25
+ * @author Team Kiwi
+ * @version 1
+ * @since 2024-05-22
  */
-function TechniqueDetail({ id }) {
+function TechniqueDetailMini({ id }) {
 
-	const { techniqueId } = useParams()
 	const { token } = useContext(AccountContext)
 	const [technique, setTechnique] = useState()
 	const [error, setError] = useState("")
@@ -57,7 +51,7 @@ function TechniqueDetail({ id }) {
 	const handleGet = useCallback(() => {
 		setLoading(true)
 		setError("")
-		fetch(`/api/techniques/${techniqueId}`, { headers: { token } })
+		fetch("/api/techniques/" + 300, { headers: { token } })
 			.then(async res => {
 				if (!res.ok) {
 					// Quick fix with + " " because old API returns empty body on 404.
@@ -73,24 +67,26 @@ function TechniqueDetail({ id }) {
 				setError("Ett nätverksfel inträffade. Kontrollera din internetuppkoppling.")
 				setLoading(false)
 			})
-	}, [techniqueId, token])
+	}, [id, token])
 
-	useEffect(() => handleGet(), [handleGet, techniqueId, token])
+	useEffect(() => handleGet(), [handleGet, id, token])
 
 	
-
 	if (error != "") return <ErrorState
 		message={error}
 		onRecover={handleGet}
 	/>
 
-	if (loading) return <div className={styles["technique-detail-center-spinner"]}><Spinner /></div>
+	if (loading) {
+		console.log("y")
+		return <div className={styles["technique-detail-center-spinner"]}><Spinner /></div>
+	}
 
 	return (
 		<>
 			<div className={styles["technique-detail-container"]} id={id == undefined ? "technique" : id}>
 				<title>Tekniker</title>
-				<h1>{technique.name}</h1>
+			
 
 				<div className={styles["technique-detail-belts-container"]}>
 					{technique.belts ? ( 
@@ -121,12 +117,11 @@ function TechniqueDetail({ id }) {
 					}
 				</div>
 		
-				<Gallery id={techniqueId} />
+				<Gallery id={id} />
 				
 			</div>
 		</>
 	)
 }
 
-
-export default TechniqueDetail
+export default TechniqueDetailMini

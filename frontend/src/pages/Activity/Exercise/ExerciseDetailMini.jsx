@@ -1,67 +1,77 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useCallback, useContext, useEffect, useState } from "react"
 import { Clock } from "react-bootstrap-icons"
 import { AccountContext } from "../../../context"
-import { useParams } from "react-router"
 
 import Tag from "../../../components/Common/Tag/Tag"
 import Gallery from "../../../components/Gallery/Gallery"
 import ErrorState from "../../../components/Common/ErrorState/ErrorState"
 import {setError as setErrorToast} from "../../../utils" 
+import Spinner from "../../../components/Common/Spinner/Spinner"
+
+import styles from "./ExerciseDetailMini.module.css"
 
 /**
- * A component for displaying details about an exercise.
+ * A component for displaying details about an exercise in a mini pop up, without the edit, delete and print buttons.
+ * Taken from ExerciseDetailsPage file.
  * 
- * @author Chimera, Phoenix, Team Coconut, Team Durian, Team Orange, Team Kiwi
- * @since 2024-04-23
+ * @author Team Kiwi
+ * @since 2024-05-22
  * @version 2.2
  * @returns A page for displaying details about an exercise.
  */
-export default function ExerciseDetailsPage() {
-	const { ex_id } = useParams()
+export default function ExerciseDetailMini({id}) {
 	const { token } = useContext(AccountContext)
 	const [exercise, setExercise] = useState()
 	const [tags, setTags] = useState()
-	const [error, setError] = useState()
+	const [error, setError] = useState("")
+	const [loading, setLoading] = useState(true)
 
-
-
-	async function fetchData() {
-		fetch(`/api/exercises/${ex_id}`, {
-			headers: { token }
-		})
-			.then(res => res.json())
-			.then(data => setExercise(data))
-			.catch(ex => {
-				setError("Kunde inte hämta övning")
-				console.error(ex)
+	const fetchData = useCallback(() => {
+		setLoading(true)
+		
+		fetch(`/api/exercises/${300}`, { headers: { token } })
+			.then(async res => {
+				if (!res.ok) {
+					// Quick fix with + " " because old API returns empty body on 404.
+					setError(await res.text() + " ")
+					setLoading(false)
+					return
+				}
+				const exercise = await res.json()
+				setExercise(exercise)
+				setLoading(false)
 			})
 
-
-		fetch(`/api/tags/get/tag/by-exercise?exerciseId=${ex_id}`, {
-			headers: { token }
-		}).then(res => res.json())
-			.then(data => setTags(data))
-			.catch(ex => {
-				setErrorToast("Kunde inte hämta taggar")
-				console.error(ex)
+		fetch(`/api/tags/get/tag/by-exercise?exerciseId=${id}`, { headers: { token } })
+			.then(async res => {
+				if (!res.ok) {
+					// Quick fix with + " " because old API returns empty body on 404.
+					setErrorToast(await res.text() + " ")
+					setLoading(false)
+					return
+				}
+				const data = await res.json()
+				setTags(data)
+				setLoading(false)
 			})
+	}, [id, token] )
+
+	useEffect(() =>  fetchData() ,[fetchData,token, id])
+
+
+	if (error != "")  return <ErrorState 
+		message={error} 
+		onRecover= {fetchData} 
+	/>
+
+
+	if (loading) { 
+		console.log("x")
+		return <div className={styles["exercise-detail-center-spinner"]}><Spinner /></div>
 	}
-
-	useEffect(() => {
-		fetchData()
-	},[token, ex_id])
-
-
-
-	if (error) {
-		return <ErrorState message={error} />
-	}
-
 
 	return (
 		<div style={{ display: "flex", flexDirection: "column" }}>
-			<title>Övningar</title>
-			<h1 style={{textAlign: "left", wordWrap:"break-word"}}>{exercise?.name}</h1>
 			<div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: "10px" }}>
 				<div className="d-flex align-items-center">
 					<Clock />
@@ -88,7 +98,7 @@ export default function ExerciseDetailsPage() {
 			)}
 
 			<div>
-				<Gallery id={ex_id} />
+				<Gallery id={id} />
 			</div>
 
 		</div>

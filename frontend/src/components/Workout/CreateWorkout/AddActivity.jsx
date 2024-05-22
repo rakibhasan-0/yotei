@@ -574,6 +574,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 										}
 										technique={technique}
 										key={key}
+										popUp={true}
 									/>
 								))}
 							</ InfiniteScrollComponent>)
@@ -616,6 +617,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 										item={exercise.name}
 										key={key}
 										index={key}
+										popUp = {true}
 									/>
 								))}
 							</InfiniteScrollComponent>

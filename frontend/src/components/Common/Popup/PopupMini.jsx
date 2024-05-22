@@ -1,8 +1,8 @@
 import { X } from "react-bootstrap-icons"
-import styles from "./PopupSmall.module.css"
+import styles from "./PopupMini.module.css"
 import React, { useEffect } from "react"
 import Divider from "../Divider/Divider"
-import Button from "../Button/Button"
+
 
 
 /**
@@ -26,9 +26,9 @@ import Button from "../Button/Button"
 *
 *	return (
 *		<div>
-*			<PopupSmall id={"test-popup"} title={"Test"} isOpen={showPopup} setIsOpen={setShowPopup} direction={startRedirection}  >
+*			<PopupMini id={"test-popup"} title={"Test"} isOpen={showPopup} setIsOpen={setShowPopup} direction={startRedirection}  >
 <>some children</>
-</PopupSmall>
+</PopupMini>
 *			<RoundButton onClick={() => setShowPopup(true)} />
 *		</div>
 * 	)
@@ -37,7 +37,7 @@ import Button from "../Button/Button"
 * @version 1.0
 * @since 2024-05-22
 */
-export default function PopupSmall({ title, id, isOpen, setIsOpen, children, isNested, style, onClose, zIndex, direction }) {
+export default function PopupMini({ title, id, isOpen, setIsOpen, children, isNested, style, onClose, zIndex }) {
 
 	// Synchronize react state with CSS-styling in browser
 	useEffect(() => {
@@ -80,30 +80,7 @@ export default function PopupSmall({ title, id, isOpen, setIsOpen, children, isN
 				<div className={styles.mainText}>
 					{children}
 				</div>
-
-				<div className={styles.buttonContainer}>
-					<Button
-						id="continue-button"
-						outlined={false}
-						width="100%"
-						onClick={direction}
-					>
-						<p>Ja</p>
-					</Button>
-
-					<Button
-						id="continue-button"
-						outlined={true}
-						width="100%"
-						onClick={() => {
-							setIsOpen(false)
-							if (onClose) onClose()
-
-						}}
-					>
-						<p>Nej</p>
-					</Button>
-				</div>
+				
 			</div>
 		</>
 	)
