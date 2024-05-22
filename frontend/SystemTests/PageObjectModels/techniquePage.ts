@@ -46,7 +46,12 @@ export class TechniquePage {
       await this.page.getByRole('button', { name: 'Hantera tagg' }).click()
       await this.page.getByPlaceholder('Sök eller skapa tagg').click()
       await this.page.getByPlaceholder('Sök eller skapa tagg').fill(`${technique.tag}`)
-      await this.page.getByTestId('EditableListItem-link').getByLabel('').check()
+
+      // Retrieve checkbox for the passed tag.
+      const locator = this.page.getByText(`${technique.tag}`, {exact: true})
+      const checkBox = await locator.locator('../..')
+
+      await checkBox.locator('input[type="checkbox"]').check()
       await this.page.locator('#save-and-close-button').getByRole('img').click()
     }
 
