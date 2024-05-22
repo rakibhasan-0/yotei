@@ -219,8 +219,8 @@ export default function GradingAfter() {
 				<div className={styles.scrollableContainer}>
 					{fetchedResult.examineeResults && fetchedResult.examineeResults.map((examinee) => (
 						<UserBoxGrading
-							key={examinee.id}
-							id={examinee.id}
+							key={examinee.examineeId}
+							id={examinee.examineeId}
 							name={examinee.name}
 							passedTechniques={examinee.passedTechniques}
 							totalAmountOfTechniques={totalAmountOfTechniques}
