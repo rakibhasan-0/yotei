@@ -41,6 +41,16 @@ public class SearchRepository {
     }
 
     /**
+     * Retrieves a list of ActivityListDBResult objects based on a custom query.
+     *
+     * @param query the custom query to execute
+     * @return a list of ActivityListDBResult objects
+     */
+    public List<ActivityListDBResult> getActivityListFromCustomQuery(String query){
+        return entityManager.createNativeQuery(query, ActivityListDBResult.class).getResultList();
+    }
+
+    /**
      * Retrieves a list of TechniqueDBResult objects based on a custom query.
      *
      * @param query the custom query to execute
@@ -49,6 +59,8 @@ public class SearchRepository {
     public List<TechniqueDBResult> getTechniquesFromCustomQuery(String query){
         return entityManager.createNativeQuery(query, TechniqueDBResult.class).getResultList();
     }
+
+
 
     /**
      * Retrieves a list of TagDBResult objects based on a custom query.
