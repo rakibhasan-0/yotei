@@ -53,7 +53,6 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 						const groups = await response.json()
 
 						setData(groups)
-						console.log(groups)
 
 					}
 				} catch (error) {
