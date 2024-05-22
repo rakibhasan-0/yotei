@@ -58,6 +58,8 @@ export default function ExamineeBox({
 	const [commentError, setCommentError] = useState("")
 	const [hasComment, setExistingComment] = useState(false)
 	const [commentId, setCommentId] = useState(null)
+	const [characterCount, setCharacterCount] = useState(commentText?.length)
+
 	const colors = ["white", "lightgreen", "lightcoral"]
 
 	const { gradingId } = useParams()
@@ -72,9 +74,6 @@ export default function ExamineeBox({
 	useEffect(() => {
 		setCharacterCount(commentText.length)
 	}, [commentText])
-
-	const [characterCount, setCharacterCount] = useState(0)
-
 
 	/**
      * Discards the current personal comment.
@@ -255,11 +254,15 @@ export default function ExamineeBox({
 							setCommentText(e.target.value); 
 							setCommentError(false); 
 						}}
+						onChange={e => {
+							setCommentText(e.target.value); 
+							setCommentError(false); 
+						}}
 						errorMessage={commentError}
 						text={commentText}
 					/>
 					<div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px" }}>
-						<Button outlined={true} onClick={() => setCommentText(commentText + " " + "Böj på benen!")}>Böj på benen!</Button>
+						<Button outlined={true} width={50} onClick={() => setCommentText(commentText + " " + "Böj på benen!")}>Böj på benen!</Button>
 						<Button outlined={true} onClick={() => setCommentText(commentText + " " + "Balansbrytning!")}>Balansbrytning!</Button>
 						<Button outlined={true} onClick={() => setCommentText(commentText + " " + "Kraftcirkeln")}>Kraftcirkeln!</Button>
 					</div>
