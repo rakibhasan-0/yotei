@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.*;
 import se.umu.cs.pvt.belt.Belt;
-import se.umu.cs.pvt.statistics.gradingprotocol.GradingProtocol;
-import se.umu.cs.pvt.statistics.gradingprotocol.GradingProtocolRepository;
-import se.umu.cs.pvt.statistics.gradingprotocol.GradingProtocolCategory;
+import se.umu.cs.pvt.gradingprotocol.GradingProtocol;
+import se.umu.cs.pvt.gradingprotocol.GradingProtocolCategory;
+import se.umu.cs.pvt.gradingprotocol.GradingProtocolRepository;
 import se.umu.cs.pvt.statistics.gradingprotocolDTO.GradingProtocolDTO;
 import se.umu.cs.pvt.statistics.gradingprotocolDTO.GradingProtocolCategoryDTO;
 import se.umu.cs.pvt.statistics.gradingprotocolDTO.GradingProtocolTechinqueDTO;
@@ -89,11 +89,6 @@ public class StatisticsController {
             union.removeIf(item -> item.getDate().isAfter(enddate.get()));
         }
 
-        // Guard against empty result
-        if (union.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } 
-
         // Store unique activities
         List<StatisticsResponse> uniqueActivities = new ArrayList<>();
 
@@ -125,17 +120,25 @@ public class StatisticsController {
             }
         }
 
-
-        // Calculate average rating
-        for (Long sid : uniqueSessionIds) {
-            averageRating += ratings.get(sid);
+        if (uniqueSessionIds.size() > 0) {
+            // Calculate average rating
+            for (Long sid : uniqueSessionIds) {
+                averageRating += ratings.get(sid);
+            }
+            averageRating /= uniqueSessionIds.size();
+            averageRating = Math.round(averageRating * 100.0) / 100.0;
+        } else {
+            averageRating = 0;
         }
-        averageRating /= uniqueSessionIds.size();
-        averageRating = Math.round(averageRating * 100.0) / 100.0;
         
         // Get all techniques associated with the groups belts
         List<Belt> groupBelts = statisticsRepository.getBeltsForGroup(id);
-        List<StatisticsResponse> allTechniques = statisticsRepository.getTechniquesForBelts(groupBelts);   
+        List<StatisticsResponse> allTechniques = new ArrayList<>();
+
+        // Iterate through the belts to handle groups that have more than one belt.
+        for (Belt belt : groupBelts) {
+            allTechniques.addAll(statisticsRepository.getTechniquesForBelt(belt));
+        }
         
         // Add the techniques that has not been performed by the group
         for (StatisticsResponse sr : allTechniques) {
@@ -157,14 +160,21 @@ public class StatisticsController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+
+    @Operation(summary = "Returns a comparison between a groups practiced techniques and a grading protocol..", 
+               description = "Must include the id of the group as a path parameter and the id of the belt of the grading protocol as a request parameter.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "OK - Successfully retrieved"),
+    })
     @GetMapping("{id}/grading_protocol")
     public ResponseEntity<GradingProtocolDTO> getGradingProtocolView(@PathVariable Long id, @RequestParam Long beltId){
 
+        // Get all techniques practiced by the group with :id 
         List<StatisticsActivity> techniques = statisticsRepository.getAllSessionReviewTechniques(id);
-
 
         HashMap<Long, Long> counts = new HashMap<>();
 
+        // Count occurances of the techniques.
         for (StatisticsActivity sa : techniques) {
             if (!counts.containsKey(sa.getActivity_id())) {
                 counts.put(sa.getActivity_id(), sa.getCount());
@@ -173,12 +183,14 @@ public class StatisticsController {
             }
 
         }
-       
+        
+        // Get the grading protocol associated with the belt id.
         GradingProtocol protocol = gradingProtocolRepository.findByBeltId(beltId);
 
         if (protocol == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
+            // Build the grading protocol DTO and fill the correct counts for each technique.
             List<GradingProtocolCategory> categories = gradingProtocolRepository.findAllByProtocolId(protocol.getId());
             List<GradingProtocolCategoryDTO> responseCategories = new ArrayList<>();
 
@@ -191,84 +203,13 @@ public class StatisticsController {
                     }
                     newCategory.addTechqnique(t);
                 }
-                
                 responseCategories.add(newCategory);
-            
             }
 
             GradingProtocolDTO responseProtocol = new GradingProtocolDTO(protocol.getCode(), protocol.getName(), new BeltResponse(protocol.getBelt()) , responseCategories);
-
-            // GradingProtocolDTO gradingProtocol = getMockGradingProtocol();
-
-            // for (GradingProtocolCategoryDTO category : gradingProtocol.getCategories()) {
-            //     for (GradingProtocolTechinque techinque : category.getTechniques()) {
-            //         if (counts.containsKey(techinque.getId())) {
-            //             techinque.setCount(counts.get(techinque.getId()));
-            //         }
-            //     }
-            // }
-
             return new ResponseEntity<>(responseProtocol, HttpStatus.OK);
         }
     }
 
 
-    private GradingProtocolDTO getMockGradingProtocol() {
-        ArrayList<GradingProtocolCategoryDTO> categories = new ArrayList<>();
-
-        ArrayList<GradingProtocolTechinqueDTO> atemiWazaTechinques = new ArrayList<>();
-        atemiWazaTechinques.add(new GradingProtocolTechinqueDTO("Shotei uchi, jodan, rak stöt med främre och bakre handen", 151L));
-        atemiWazaTechinques.add(new GradingProtocolTechinqueDTO("Shotei uchi, chudan, rak stöt med främre och bakre handen", 151L));
-        atemiWazaTechinques.add(new GradingProtocolTechinqueDTO("Gedan geri, rak spark med främre och bakre benet", 153L));
-        GradingProtocolCategoryDTO atemiWaza = new GradingProtocolCategoryDTO("KIHON WAZA - ATEMI WAZA", atemiWazaTechinques);
-
-
-        ArrayList<GradingProtocolTechinqueDTO> kansutsuWazaTechniques = new ArrayList<>();
-        kansutsuWazaTechniques.add(new GradingProtocolTechinqueDTO("O soto osae, utan grepp, nedläggning snett bakåt", 187L));
-        GradingProtocolCategoryDTO kansutsuWaza = new GradingProtocolCategoryDTO("KIHON WAZA - KANSUTSU WAZA", kansutsuWazaTechniques);
-
-        ArrayList<GradingProtocolTechinqueDTO> nageWazaTechniques = new ArrayList<>();
-        nageWazaTechniques.add(new GradingProtocolTechinqueDTO("Koshi otoshi, utan grepp, nedläggning snett bakåt", 248L));
-        GradingProtocolCategoryDTO nageWaza = new GradingProtocolCategoryDTO("KIHON WAZA - NAGE WAZA", nageWazaTechniques);
-
-        ArrayList<GradingProtocolTechinqueDTO> jigoWazaTechniques = new ArrayList<>();
-        jigoWazaTechniques.add(new GradingProtocolTechinqueDTO("Grepp i två handleder framifrån - Frigöring", 158L));
-        jigoWazaTechniques.add(new GradingProtocolTechinqueDTO("Grepp i två handleder bakifrån - Frigöring", 159L));
-        jigoWazaTechniques.add(new GradingProtocolTechinqueDTO("Grepp i håret bakifrån - Tettsui uchi, frigöring", 161L));
-        jigoWazaTechniques.add(new GradingProtocolTechinqueDTO("Försök till stryptag framifrån - Jodan soto uke", 216L));
-        jigoWazaTechniques.add(new GradingProtocolTechinqueDTO("Stryptag framifrån - Kawashi, frigöring", 162L));
-        jigoWazaTechniques.add(new GradingProtocolTechinqueDTO("Stryptag bakifrån - Maesabaki, kawashi, frigöring", 163L));
-        jigoWazaTechniques.add(new GradingProtocolTechinqueDTO("Stryptag med armen - Maesabaki, kuzure ude osae, ude henkan gatame", 164L));
-        jigoWazaTechniques.add(new GradingProtocolTechinqueDTO("Försök till kravattgrepp från sidan - Jodan chikai uke, kawashi, koshi otoshi, ude henkan gatame", 165L));
-        jigoWazaTechniques.add(new GradingProtocolTechinqueDTO("Grepp i ärmen med drag - O soto osae, ude henkan gatame", 154L));
-        jigoWazaTechniques.add(new GradingProtocolTechinqueDTO("Livtag under armarna framifrån - Tate hishigi, ude henkan gatame", 169L));
-        jigoWazaTechniques.add(new GradingProtocolTechinqueDTO("Stryptag mot liggande sittande vid sidan - Frigöring, ude henkan gatame", 171L));
-        jigoWazaTechniques.add(new GradingProtocolTechinqueDTO("Hotfullt närmande mot liggande - Uppgång bakåt", 173L));
-        jigoWazaTechniques.add(new GradingProtocolTechinqueDTO("Hotfullt närmande - Hejda med tryck", 173L));
-        jigoWazaTechniques.add(new GradingProtocolTechinqueDTO("Kort svingslag - Jodan chikai uke, kawashi, koshi otoshi, ude henkan gatame", 147L));
-        jigoWazaTechniques.add(new GradingProtocolTechinqueDTO("Långt svingslag - Morote jodan uke, o soto osae, ude henkan gatame", 174L));
-        jigoWazaTechniques.add(new GradingProtocolTechinqueDTO("Påkslag mot huvudet - Ju morote jodan uke", 175L));
-        jigoWazaTechniques.add(new GradingProtocolTechinqueDTO("Påkslag mot huvudet, backhand - Ju morote jodan uke", 176L));
-        jigoWazaTechniques.add(new GradingProtocolTechinqueDTO("Knivhot mot magen - Grepp, shotei uchi jodan", 231L));
-        GradingProtocolCategoryDTO jigoWaza = new GradingProtocolCategoryDTO("JIGO WAZA", jigoWazaTechniques);
-
-        ArrayList<GradingProtocolTechinqueDTO> renrakuWazaTechniques = new ArrayList<>();
-        renrakuWazaTechniques.add(new GradingProtocolTechinqueDTO("Försök till stryptag framifrån - Försök till kravattgrepp från sidan Jodan soto uke - Jodan chikai uke, kawashi, koshi otoshi, ude henkan gatame", 165L));
-        GradingProtocolCategoryDTO renrakuWaza = new GradingProtocolCategoryDTO("RENRAKU WAZA", renrakuWazaTechniques);
-
-        ArrayList<GradingProtocolTechinqueDTO> randoriTechniques = new ArrayList<>();
-        randoriTechniques.add(new GradingProtocolTechinqueDTO("Försvar mot en motståndare", 157L));
-        GradingProtocolCategoryDTO randori = new GradingProtocolCategoryDTO("YAKUSOKU GEIKO", randoriTechniques);
-
-
-        categories.add(atemiWaza);
-        categories.add(kansutsuWaza);
-        categories.add(nageWaza);
-        categories.add(jigoWaza);
-        categories.add(renrakuWaza);
-        categories.add(randori);
-
-
-        return new GradingProtocolDTO("5 KYU", "GULT BÄLTE", new BeltResponse(new Belt(1L, "Gult", "FFDD33", false)), categories);
-    }
 }
