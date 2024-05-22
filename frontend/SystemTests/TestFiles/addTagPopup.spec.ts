@@ -17,7 +17,7 @@ test.describe("Test AddTagPopup", () => {
 		await expect(page.getByText("Taggar")).toBeVisible()
 	})
     
-	//Tests the functionallity of the tagsystem by adding and removing a tag. 
+	//Tests the functionality of the tag system by adding and removing a tag.
 	test("Add and remove a tag", async ({ page }) => {
 		const tagName = Math.random().toString(36).slice(2, 7) 
 		const tagId = Math.floor(Math.random() * (10000 - 1 + 1))
