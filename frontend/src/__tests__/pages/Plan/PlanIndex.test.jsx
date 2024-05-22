@@ -67,7 +67,6 @@ test("should render data from the plan api", async () => {
     
 })
 
-
 test.todo("should render data from the sessions api")
 
 test.todo("should render data from the workout api")

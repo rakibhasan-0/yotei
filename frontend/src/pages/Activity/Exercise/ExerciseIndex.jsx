@@ -139,7 +139,7 @@ export default function ExerciseIndex() {
 			</FilterContainer>
 			{ loading ? <Spinner/> :
 				<div>
-					<title>Övningar</title>
+					<title>Tekniker & Övningar</title>
 					<InfiniteScrollComponent>
 						{ visibleList.map((exercise, index) => {
 							return (
