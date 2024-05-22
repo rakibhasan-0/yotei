@@ -131,29 +131,31 @@ function AddActivity({ id, setShowActivityInfo }) {
 				if (b.author.userId === currentUserId && a.author.userId !== currentUserId) {
 					return 1
 				}
-	
-				// "Delade" - prioritize items that are shared
-				if (a.isShared && !b.isShared) {
+			
+				// "Delade" - prioritize items that are not authored by the current user and are hidden
+				if (a.hidden && !b.hidden && a.author.userId !== currentUserId && b.author.userId === currentUserId) {
 					return -1
 				}
-				if (b.isShared && !a.isShared) {
+				if (b.hidden && !a.hidden && b.author.userId !== currentUserId && a.author.userId === currentUserId) {
 					return 1
 				}
-	
-				// "Publika" - prioritize items that are not shared and not authored by the current user
-				if (!a.isShared && a.author.userId !== currentUserId && (b.isShared || b.author.userId === currentUserId)) {
+			
+				// "Publika" - prioritize items that are not authored by the current user and are not hidden
+				if (!a.hidden && a.author.userId !== currentUserId && (b.hidden || b.author.userId === currentUserId)) {
 					return -1
 				}
-				if (!b.isShared && b.author.userId !== currentUserId && (a.isShared || a.author.userId === currentUserId)) {
+				if (!b.hidden && b.author.userId !== currentUserId && (a.hidden || a.author.userId === currentUserId)) {
 					return 1
 				}
-	
+			
 				// If items are equal in terms of the above conditions, sort them by name
 				return a.name.localeCompare(b.name)
-			} 
+			}
 		},
 		{ label: "Namn: A-Ö", cmp: (a, b) => { return a.name.localeCompare(b.name) } },
-		{ label: "Namn: Ö-A", cmp: (a, b) => { return -a.name.localeCompare(b.name) } }
+		{ label: "Namn: Ö-A", cmp: (a, b) => { return -a.name.localeCompare(b.name) } },
+		{ label: "Senast skapad", cmp: (a, b) => { return new Date(b.date) - new Date(a.date) } },
+		{ label: "Äldst", cmp: (a, b) => { return new Date(a.date) - new Date(b.date) } }
 	]
 	const [sortLists, setSortLists] = useState(sortOptionsLists[0])
 
@@ -465,7 +467,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 			if (result.error) return
 
 			// Extract the 'id' and 'name' fields from each item in the result used in displaying the list.
-			const lists = result.map(item => ({
+			const lists = result.results.map(item => ({
 				id: item.id,
 				name: item.name,
 				author: {
@@ -473,7 +475,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 					username: item.author.username
 				},
 				hidden: item.hidden,
-				isShared: item.is_shared
+				date: item.date
 			}))
 
 			setLists(lists.sort(sortLists.cmp))
@@ -611,6 +613,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 											<CheckBox
 												checked={checkedActivities.some(a => a.id === exercise.id)}
 												onClick={() => onActivityToggle(exercise, "exercise")}
+												id={`ExerciseListItemCheckBox-${ exercise.id }`}
 											/>
 										}
 										item={exercise.name}
@@ -712,7 +715,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 				<br /><br /><br />
 
 				{checkedActivities.length > 0 &&
-					<RoundButton onClick={() => setShowActivityInfo(checkedActivities)}>
+					<RoundButton onClick={() => setShowActivityInfo(checkedActivities)} id="AddCheckedActivitiesButton">
 						<ChevronRight width={30} />
 					</RoundButton>
 				}

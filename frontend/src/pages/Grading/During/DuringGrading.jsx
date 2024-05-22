@@ -89,6 +89,7 @@ function getCategoryIndices(dataArray) {
  */
 export default function DuringGrading() {
 	const [currentTechniqueStep, setCurrentTechniqueStep] = useState(undefined)
+	const [indexBeforeRandondi, setRandoriIndex] = useState(0)
 	const [showPopup, setShowPopup] = useState(false)
 	const [examinees, setExaminees] = useState(undefined)
 	const [pairs, setPairs] = useState([])
@@ -108,6 +109,9 @@ export default function DuringGrading() {
 	// Go to summary when the index is equal to length. Maybe change the look of the buttons.
 	const goToNextTechnique = () => {
 		setCurrentTechniqueStep(nextStep => {
+			if(nextStep === techniqueNameList.length -2){
+				setRandoriIndex(nextStep)
+			}
 			const nextTechniqueStep = Math.min(nextStep + 1, techniqueNameList.length - 1)
 			onUpdateStepToDatabase(nextTechniqueStep)
 			return nextTechniqueStep
@@ -139,8 +143,8 @@ export default function DuringGrading() {
 				return
 			}
 			const step = await response.json()
-			step.technique_step_num = currentTechniqueStep
-			console.log("response grading", step.technique_step_num)
+			step.techniqueStepNum = currentTechniqueStep
+			console.log("response grading", step.techniqueStepNum)
 
 			const update = await fetch("/api/examination/grading", {
 				method: "PUT",
@@ -150,7 +154,7 @@ export default function DuringGrading() {
 				},
 				body: JSON.stringify(step)
 			})
-
+			
 			if (!update.ok) {
 				setErrorToast("kunde inte uppdatera steg i databasen")
 				return
@@ -258,52 +262,54 @@ export default function DuringGrading() {
     
 	return (
 		<div className={styles.container}>
-			{techniqueNameList && (
-				<TechniqueInfoPanel
-					categoryTitle=""
-					currentTechniqueTitle={techniqueNameList[currentTechniqueStep].technique.text}
-					nextTechniqueTitle={techniqueNameList[currentTechniqueStep].nextTechnique.text}
-					mainCategoryTitle={techniqueNameList[currentTechniqueStep].categoryName}>
-				</TechniqueInfoPanel>
-			)}
+			<div className={styles.infoPanel}>
+				{techniqueNameList && (
+					<TechniqueInfoPanel
+						currentTechniqueTitle={techniqueNameList[currentTechniqueStep].technique.text}
+						nextTechniqueTitle={techniqueNameList[currentTechniqueStep].nextTechnique.text}
+						mainCategoryTitle={techniqueNameList[currentTechniqueStep].categoryName}>
+					</TechniqueInfoPanel>
+				)}
+			</div>
 			{/* All pairs */}	
-			{techniqueNameList && results && (		
-				<div ref={scrollableContainerRef} className={styles.scrollableContainer}>
-					{pairs.map((item, index) => (
-						<ExamineePairBox 
-							key={index}
-							rowColor={index % 2 === 0 ? "#FFFFFF" : "#F8EBEC"}
-							leftExaminee={
-								<ExamineeBox 
-									examineeName={item.nameLeft} 
-									onClick={(newState) => examineeClick(newState, techniqueNameList[currentTechniqueStep].technique.text, index, `${index}-left`)}
-									status={getExamineeStatus(item.leftId, results)}
-									setButtonState={setLeftExamineeState}
-									examineeId={item.leftId}
-									techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
-								/>
-							}
-							rightExaminee={
-								item.rightId ? (
+			<div className={styles.middleContainer}>
+				{techniqueNameList && results && (		
+					<div ref={scrollableContainerRef} className={styles.scrollableContainer}>
+						{pairs.map((item, index) => (
+							<ExamineePairBox 
+								key={index}
+								rowColor={index % 2 === 0 ? "#FFFFFF" : "#F8EBEC"}
+								leftExaminee={
 									<ExamineeBox 
-										examineeName={item.nameRight}
-										onClick={(newState) => examineeClick(newState, techniqueNameList[currentTechniqueStep].technique.text, index, `${index}-right`)}
-										status={getExamineeStatus(item.rightId, results)}
-										setButtonState={setRightExamineeState}
-										examineeId={item.rightId}
+										examineeName={item.nameLeft} 
+										onClick={(newState) => examineeClick(newState, techniqueNameList[currentTechniqueStep].technique.text, index, `${index}-left`)}
+										status={getExamineeStatus(item.leftId, results)}
+										setButtonState={setLeftExamineeState}
+										examineeId={item.leftId}
 										techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
 									/>
-								) : null
-							}
-							pairNumber={index+1}
-							techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
-							examineePairId={item.pairId}
-						>
-						</ExamineePairBox>
-					))}
-				</div>
-			)}
-
+								}
+								rightExaminee={
+									item.rightId ? (
+										<ExamineeBox 
+											examineeName={item.nameRight}
+											onClick={(newState) => examineeClick(newState, techniqueNameList[currentTechniqueStep].technique.text, index, `${index}-right`)}
+											status={getExamineeStatus(item.rightId, results)}
+											setButtonState={setRightExamineeState}
+											examineeId={item.rightId}
+											techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
+										/>
+									) : null
+								}
+								pairNumber={index+1}
+								techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
+								examineePairId={item.pairId}
+							>
+							</ExamineePairBox>
+						))}
+					</div>
+				)}
+			</div>
 			<div className={styles.bottomRowContainer}>
 				{/* Prev technique button */}
 				<div 
@@ -342,6 +348,9 @@ export default function DuringGrading() {
 								onClick={() => {
 									setCurrentTechniqueStep(() => {
 										const techniquestep = techniqueName.categoryIndex
+										if(techniqueNameList[currentTechniqueStep].categoryName != "YAKUSOKU GEIKO OR RANDORI"){
+											setRandoriIndex(currentTechniqueStep)
+										}
 										onUpdateStepToDatabase(techniquestep)
 										return techniquestep
 									})
@@ -350,12 +359,27 @@ export default function DuringGrading() {
 									scrollableContainerRef.current.scrollTop = 0}}>
 								<p>{techniqueName.category}</p></Button>
 						))}
-                
+						{
+							// Button that allows the user to return to the technique they was on when going 
+							// into randori and is only visible when in the randori category.
+							currentTechniqueStep === techniqueNameList.length - 1 && (
+								<Button
+									width={"100%"}
+									outlined={true}
+									onClick={() => {
+										setCurrentTechniqueStep(() => {
+											onUpdateStepToDatabase(indexBeforeRandondi)
+											return indexBeforeRandondi
+										})
+										setShowPopup(false)
+									}}>
+									<p className={styles.navigationGoBackButton}>Tillbaka till <br/>{techniqueNameList[indexBeforeRandondi].technique.text}</p>
+								</Button>)}
 						<div>
 							{/* Go back to the add examinee page */}
 							<Button 
 								id={"back-button"} 
-								outlined={true} 
+								outlined={true}
 								onClick={goToAddExamineePage}>
 								<p>Tillbaka till <br />&quot;Lägg till deltagare&quot;</p>
 							</Button>
