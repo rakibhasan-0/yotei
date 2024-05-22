@@ -18,7 +18,7 @@ import React from "react"
 import { Link } from "react-router-dom"
 import { ChevronDown } from "react-bootstrap-icons"
 import styles from "../../pages/Grading/GradingAfterComp.module.css"
-const UserBoxGrading = ({ id, name }) => {
+const UserBoxGrading = ({ id, name, passedTechniques, totalAmountOfTechniques  }) => {
 	const truncateName = (name) => {
 		return name.length > 16 ? name.substring(0, 16) + "..." : name
 	}
@@ -32,7 +32,7 @@ const UserBoxGrading = ({ id, name }) => {
 					</div>
 					{/* if the technique object has count attribute then we will not render ChevronDown sign */}
 					<div className={styles["technique-arrow-container"]}>
-						{/*<span>/52</span> {/* Points are now to the left of the icon */}
+						<span>{passedTechniques}/{totalAmountOfTechniques}</span> 
 						<Link to={`/grading/${id}/4`}>
 
 							<ChevronDown />
