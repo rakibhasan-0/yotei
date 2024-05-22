@@ -55,6 +55,7 @@ export default function GradingDeviations() {
                 const json = await response.json()   
                 setGradingId(json["gradingId"])
                 setName(json["name"])
+                fetchResult(json["gradingId"])
                 fetchGrading(json["gradingId"])
                 fetchGroupComments(json["gradingId"])
                 fetchPairComments(json["gradingId"])
@@ -108,13 +109,14 @@ export default function GradingDeviations() {
         }
 
         //Fetches an examinees grading result
-        const fetchResult = async() => {
+        const fetchResult = async(gradingId) => {
             const requestOptions = {
                 headers: {"Content-type": "application/json", token: context.token}
 			}
-            const response = await fetch("/api/examination/examresult/" + userId, requestOptions).catch(() => {
+            console.log("user id: " + userId);
+            const response = await fetch("/api/examination/examresult/" + gradingId + "/" + userId, requestOptions).catch(() => {
                 setError("Serverfel: Kunde inte ansluta till servern.")
-                return
+                re1turn
             })
             if(response.status != HTTP_STATUS_CODES.OK){
                 setError("Kunde inte hämta graderingsresultat. Felkod: " + response.status)
@@ -193,7 +195,6 @@ export default function GradingDeviations() {
         }
 
         fetchData()
-        fetchResult()
         fetchPersonalComments()
 		}, [])
 
