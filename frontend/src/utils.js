@@ -7,6 +7,7 @@ import { toast } from "react-toastify"
  * @updated 2024-04-26  by Tomato
  * 			2024-05-20  by Team Mango: Updated permissions functions.
  *  		2024-05-21  by Team Mango: Commented functions, changed names and added more permissions functions.
+ *  		2024-05-22  by Team Mango: Added some more permissions functions.
  */
 
 /**
@@ -117,6 +118,22 @@ export function canCreateWorkouts(context) {
 	(context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_OWN)))
 }
 
+/**
+ * canEditWorkouts() - Check if a user can edit a group.
+ * @param {*} context AccountContext from user.
+ * @param {*} commentId Comment id.
+ * @returns true if user can edit a workout, else false.
+ */
+export function canEditWorkouts(context, commentId) {
+	if (!context.permissions) return false //If the user's context disappears they lose all permissions and must log in again.
+	if (context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
+	//True if the user is an admin or "owns" the comment and is able to edit any workouts.
+	return ((context.userId === commentId) && (
+	context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_OWN) ||
+	context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_ALL)
+	)
+	)
+}
 
 
 
