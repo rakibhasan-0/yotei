@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 /**
  * Main class for handling login information and transactions with the database.
- * @author Team Mango (2024-05-20)
+ * @author Team Mango (2024-05-21)
  */
 @RestController
 @CrossOrigin
@@ -93,7 +93,7 @@ public class RoleController {
      * @return response, 200 OK on success.
      */
     @DeleteMapping("/{role_id}")
-    public ResponseEntity<Object> deleteRole(@PathVariable Long roleId) {
+    public ResponseEntity<Object> deleteRole(@PathVariable("role_id") Long roleId) {
         if (repository.findById(roleId).isEmpty()) {
             return new ResponseEntity<>(
                 "Role with ID: " + roleId +  "does not exist", HttpStatus.BAD_REQUEST);
@@ -120,8 +120,14 @@ public class RoleController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        if (repository.existsByRoleName(updatedRole.getRoleName())) {
+        Optional<Role> roleWithSameName = repository
+            .findByRoleName(updatedRole.getRoleName());
+
+        if (nameTaken(roleId, roleWithSameName)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        } else if (roleWithSameName.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.OK);
         }
 
         Role roleToUpdate = firstRole.get();
@@ -130,5 +136,9 @@ public class RoleController {
         repository.save(roleToUpdate);
 
         return new ResponseEntity<>(roleToUpdate, HttpStatus.OK);
+    }
+
+    private boolean nameTaken(Long roleId, Optional<Role> roleWithSameName) {
+        return roleWithSameName.isPresent() && roleWithSameName.get().getRoleId() != roleId;
     }
 }

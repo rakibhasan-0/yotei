@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+
 import styles from "./ToggleButton.module.css"
 
 /**
@@ -17,13 +18,23 @@ import styles from "./ToggleButton.module.css"
  */
 
 
-export default function ToggleButton() {
-	const [toggled, setToggled] = useState(false)
+export default function ToggleButton({isButtonToggled, onClick, id}) {
+	
+	const [toggled, setToggled] = useState(isButtonToggled)
+
+	useEffect(() => {
+		setToggled(isButtonToggled)
+	}, [isButtonToggled])
 
 	return (
+		
 		<button 
+			id = {id + "-toggleButton"} 
 			className={styles.toggleButton + " " + (toggled ? styles.toggled : "")}
-			onClick={() => setToggled(!toggled)}
+			onClick={() => { 
+				setToggled(!toggled)
+				onClick(!toggled)
+			}}
 		>
 			<div className={styles.thumb}></div>
 		</button>

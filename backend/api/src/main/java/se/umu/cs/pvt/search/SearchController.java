@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
+
 import se.umu.cs.pvt.search.builders.*;
 import se.umu.cs.pvt.search.enums.TagType;
 import se.umu.cs.pvt.search.fuzzy.Fuzzy;
@@ -19,6 +21,8 @@ import se.umu.cs.pvt.search.params.*;
 import se.umu.cs.pvt.search.persistance.SearchRepository;
 import se.umu.cs.pvt.search.responses.SearchResponse;
 import se.umu.cs.pvt.search.responses.TagResponse;
+import se.umu.cs.pvt.user.JWTUtil;
+import se.umu.cs.pvt.workout.UserShortRepository;
 
 /**
  * Controller for making searches in Techniques, Exercises and Workouts.
@@ -37,10 +41,17 @@ import se.umu.cs.pvt.search.responses.TagResponse;
 public class SearchController {
 
     private final SearchRepository searchRepository;
+    private DecodedJWT jwt;
+    private Long userIdL;
+    private final UserShortRepository userShortRepository;
 
     @Autowired
-    public SearchController(SearchRepository searchRepository) {
+    private JWTUtil jwtUtil;
+    
+    @Autowired
+    public SearchController(SearchRepository searchRepository, UserShortRepository userShortRepository) {
         this.searchRepository = searchRepository;
+        this.userShortRepository = userShortRepository;
     }
 
     /**
@@ -49,7 +60,7 @@ public class SearchController {
      *
      * Example query:
      * (GET)
-     * /api/search/techniques?name=lm+ao&beltColors=grön,grön-barn&kihon=false&tags=kniv,spark
+     * /api/search/techniques?name=lm+ao&beltColors=grön,grön-barn,grön-inverted&kihon=false&tags=kniv,spark
      *
      * Note that the query can be empty, or contain any or all of the entries.
      *
@@ -153,6 +164,46 @@ public class SearchController {
                 TagType.exercise_tag);
 
         SearchResponse<ExerciseSearchResponse> response = new SearchResponse(filteredResult, tagCompletion);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * API endpoint for making search requests to activity lists.
+     * It filters the activity lists based on the given query.
+     *
+     * Example query:
+     * (GET) /api/search/activitylists?name=something+something
+     *
+     * Note that the query can be empty, or contain any or all of the entries.
+     *
+     * @param urlQuery The query passed with the request.
+     * @return A SearchResponseInterface.
+     */
+    @GetMapping("/activitylists")
+    public ResponseEntity<SearchResponse<ActivityListSearchResponse>> searchLists(
+            @RequestParam Map<String, String> urlQuery,
+            @RequestHeader(value = "token") String token) {
+ 
+        try {
+            jwt = jwtUtil.validateToken(token);
+            userIdL = jwt.getClaim("userId").asLong();
+        } catch (Exception e) {
+            System.err.println("Failed to authenticate user:" + e.getMessage());
+        }
+
+        SearchActivityListParams searchListParams = new SearchActivityListParams(urlQuery);
+
+        DatabaseQuery createdQuery = new SearchActivityListDBBuilder(searchListParams, userIdL)
+        .filterByHidden()
+        .filterByIsAuthor()
+        .filterByIsShared()
+        .build();
+        
+        List<ActivityListDBResult> result = searchRepository.getActivityListFromCustomQuery(createdQuery.getQuery());
+        List<ActivityListSearchResponse> activityListSearchResponses = new SearchActivityListResponseBuilder(result, userShortRepository).build();
+        List<ActivityListSearchResponse> filteredResult = fuzzySearchFiltering(searchListParams.getName(), activityListSearchResponses);
+
+        SearchResponse<ActivityListSearchResponse> response = new SearchResponse(filteredResult, Collections.emptyList());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
