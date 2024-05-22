@@ -336,6 +336,8 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 							key={tag.id}
 							id={tag.id}
 							showCheckbox={true}
+							showTrash={true}
+							showPencil={true}
 							onCheck={checked => checked ? handleAddTag(tag) : handleRemoveTag(tag)}
 							checked={newAddedTags.some(a => a.id == tag.id)}
 							onEdit={handleEditText}
