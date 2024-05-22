@@ -13,7 +13,7 @@ import { setError as setErrorToast, setSuccess} from "../../../utils"
 import EditGallery from "../../../components/Gallery/EditGallery"
 import { useLocation, useNavigate, useParams } from "react-router"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
-import { isAdmin, isEditor, scrollToElementWithId } from "../../../utils"
+import { isAdminUser, isEditor, scrollToElementWithId } from "../../../utils"
 import { unstable_useBlocker as useBlocker } from "react-router"
 import Spinner from "../../../components/Common/Spinner/Spinner.jsx"
 
@@ -28,8 +28,11 @@ import Spinner from "../../../components/Common/Spinner/Spinner.jsx"
  *     Team Medusa  (Group 6) (2023-06-01)
  * 	   Team Durian  (Group 3) (2024-05-07)
  * 	   Team Kiwi    (Group 2) (2024-05-03)
+ * 	   Team Mango  	(Grupp 4) (2024-05-22)
  * @since 2023-05-22
  * @version 2.0
+ * 
+ * Updated Team Mango 2024-05-22: update isAdmin check ro new check.
  */
 export default function ExerciseEdit() {
 	const context = useContext(AccountContext)
@@ -99,7 +102,7 @@ export default function ExerciseEdit() {
 
 	
 	useEffect(() => {
-		if (!isAdmin(context) || !isEditor(context)) {
+		if (!isAdminUser(context) || !isEditor(context)) {
 			handleNavigation()
 		}
 	}, [context, navigate])
