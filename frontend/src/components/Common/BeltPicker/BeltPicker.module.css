@@ -39,6 +39,7 @@
     left: 50%; /* Move to the horizontal center */
     transform: translateX(-50%); /* Adjust to center it */
     text-align: center;
+    font-weight: bold;
 }
 
 .err {
