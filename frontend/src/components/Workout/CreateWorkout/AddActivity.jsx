@@ -560,11 +560,11 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 	 * the checkedActivities state as a parameter.
 	 */
 	function handleRoundButtonClick() {
-		console.log("Checked activities")
+		//console.log("Checked activities")
 		if(sendActivity == null) {
 			setShowActivityInfo(checkedActivities)
 		} else {
-			console.log("Sending activities")
+			//console.log("Sending activities")
 			sendActivity(checkedActivities)
 			workoutCreateInfoDispatch({
 				type: WORKOUT_CREATE_TYPES.OPEN_ACTIVITY_INFO_POPUP,

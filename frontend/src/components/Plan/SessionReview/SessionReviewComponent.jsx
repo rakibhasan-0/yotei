@@ -59,7 +59,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 				headers: {"Content-type": "application/json", token: context.token}
 			}
 
-			console.log("the api call just started for the session data")
+			//console.log("the api call just started for the session data")
 
 			const response = await fetch(`/api/workouts/detail/${workout_id}`, requestOptions).catch(() => {
 				setErrorStateMsg("Serverfel: Kunde inte ansluta till servern.")
@@ -73,7 +73,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			} else {
 				const json = await response.json()
 				setSessionData(() => json)
-				console.log(json)
+				//console.log(json)
 				//setLoading(false)
 				setErrorStateMsg("")
 				fetchLoadedData()
@@ -100,7 +100,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 				//setLoading(false)
 			} else {
 				const json = await loadedResponse.json()
-				console.log("Session Id is", session_id)
+				//console.log("Session Id is", session_id)
 				//console.log(session_id)
 				if(json[0] !== null && json[0] !== undefined) {
 					//console.log(json[0])
@@ -213,14 +213,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	
 
 
-	function replaceDoneId(oldId, newId) {
-		console.log("Replacing", oldId, "with", newId)
-		setDone(doneList.map(id => id === oldId ? newId : id))
-		console.log("Done list after replacing", doneList)
-	}
-
-
-
 	async function transformDoneList() {
 		const promises = doneList.map(async activityID => {
 			if (activityID < 0) {
@@ -269,11 +261,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 	}, [isTransformComplete])
 
-
-	useEffect(() => {
-		console.log("ACTIVE REQUESTS:", activeRequests)
-
-	}, [activeRequests])
 
 
 	function proceedWithReview() {
@@ -507,7 +494,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	}
 
 
-	const [extraActivities, setExtraActivities] = useState([])
 
 	/**
    *
@@ -516,35 +502,12 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
    *
    * @param data the data that contains the newly added activities information
    *             it can be techniques or exercises with belonging information
-   * @param categories the categories that are checked by the user
    */
-	function newlyAddedActivity(data, categories) {
-		console.log("newlyAddedActivity data: ", data)
-		console.log("newlyAddedActivity category: ", categories)
-
-		//createNewCategoryWithActivities("ExtraActivities", data)
-
-		// calculate the duration of the data
-		//addDurationToSessionData(data)
-		
-
-		/*categories.forEach((category) => {
-			if (category.checked) {
-				let categoryExistence = findExistingCategory(category)
-				console.log("categoriesExistence", categoryExistence)
-
-				if (categoryExistence) {
-					addActivitiesToExistingCategory(categoryExistence, data)
-				} else {
-					createNewCategoryWithActivities(category, data)
-				}
-			}
-		})*/
+	function newlyAddedActivity(data) {
 
 		const categoryExistence= sessionData.activityCategories.find((element) => {
 			return element.categoryName.toLowerCase() === "ExtraActivities".toLowerCase()
 		})
-
 
 		if (categoryExistence) {
 			addActivitiesToExistingCategory(categoryExistence, data);
@@ -554,17 +517,10 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 
 		clearActivitiesStorage()
+		console.log("sessionData duration", sessionData.duration)
 	}
 
-	/**
-   * that function is responsible for adding the duration of the activities to the sessionData.
-   * @param data the data that contains the newly added activities information
-   */
-
-	function addDurationToSessionData(data) {
-		let duration = countDuration(data)
-		sessionData.duration = duration
-	}
+	
 
 	/**
    * it calculates the total duration of the activities
