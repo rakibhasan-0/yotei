@@ -6,7 +6,8 @@ import Button from "../Button/Button"
 
 
 /**
- * Popup is a component that creates a popup window with a title and a close button.
+ * PopupMini is a component that creates a mini popup window with a title and a close button.
+ * Mostly used for the exercise and technique detail popups 
  * 
  * 
  * Props:
@@ -32,9 +33,9 @@ import Button from "../Button/Button"
 *		</div>
 * 	)
 *
-* @author Team Medusa, Team Chimera, Team Pomegranate
-* @version 3.0
-* @since 2024-05-16
+* @author Team Kiwi Group 2
+* @version 1.0
+* @since 2024-05-22
 */
 export default function PopupSmall({ title, id, isOpen, setIsOpen, children, isNested, style, onClose, zIndex, direction }) {
 
