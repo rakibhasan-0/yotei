@@ -5,6 +5,7 @@ import Statistics from "../../../pages/Statistics/StatisticsIndex"
 import StatisticsPopUp from "../../../pages/Statistics/StatisticsPopUp"
 import FilterStatistics from "../../../pages/Statistics/FilterStatistics"
 import GradingStatisticsPopup from "../../../pages/Statistics/GradingStatisticsPopup"
+import React from "react";
 configure({ testIdAttribute: "id" })
 
 /**
@@ -77,38 +78,68 @@ const mockedGroupActivities = [
 		type: "technique",
 	}]
 
-describe("Grading popup test", () => {
+describe("Grading popup", () => {
 
-	test("Button is rendering", () => {
+	const popupBtnID = "popup-button"
+	const headerText = "Graderingsprotokoll"
+	const dropdownText = "Välj ett protokoll"
+	const dropdownID = "grading-protocols-dropdown-dropdown"
+	const protocolExist = "SVART BÄLTE"
+	const protocolNotExist = "BRUNT BÄLTE"
+	const protocols= [
+		{
+			name: "SVART",
+			id: 1
+		}
+	]
 
+	test("Render button", () => {
+
+		// render popup
 		render(
 			<BrowserRouter>
 				<Statistics/>
 			</BrowserRouter>
 		)
 
+		// statistics page should include the grading popup feature
 		expect(screen.getByTestId("grading-statistics-container")).toBeInTheDocument()
+		expect(screen.getByTestId(popupBtnID)).toBeInTheDocument()
 	})
 
-	test("Clicking button should show popup", async () => {
+	test("Access popup", async () => {
 
-		render(
-			<BrowserRouter>
-				<GradingStatisticsPopup id = {"grading-statistics-container"} groupid = {"3"} belts/>
-			</BrowserRouter>
-		)
+		// render page
+		render(<BrowserRouter> <Statistics/> </BrowserRouter>)
 
-		fireEvent.click(screen.getByRole("button"))
+		// popup elements should not be present before toggling popup
+		expect(screen.queryByRole("heading", { name: headerText })).not.toBeInTheDocument()
+		expect(screen.queryByText(dropdownText)).not.toBeInTheDocument()
 
-		//TODO : 
-		//Text need to be changed in accordance with implementation
-		await waitFor(() => {
-			expect(screen.getByText("Graderingsprotokoll")).toBeInTheDocument()
-		})
+		// toggle popup
+		fireEvent.click(screen.getByTestId(popupBtnID))
+
+		// some popup elements should be visible on toggle
+		expect(screen.getByRole("heading", { name: headerText })).toBeInTheDocument()
+		expect(screen.getByText(dropdownText)).toBeInTheDocument()
 		
 	})
 
+	test("Functionality", async () => {
 
+		// render popup
+		render(<BrowserRouter>
+			<GradingStatisticsPopup id = {"grading-statistics-container"} groupid = {"3"} belts = {protocols}/>
+		</BrowserRouter>)
+
+		// toggle popup & dropdown
+		fireEvent.click(screen.getByTestId(popupBtnID))
+		fireEvent.click(screen.getByTestId(dropdownID))
+
+		// protocols should now be visible
+		expect(screen.getByText(protocolExist)).toBeInTheDocument()
+		expect(screen.queryByText(protocolNotExist)).not.toBeInTheDocument()
+	})
 })
 
 
