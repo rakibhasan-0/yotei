@@ -10,7 +10,7 @@ import { AccountContext } from "../../context"
 import useMap from "../../hooks/useMap"
 import { setError, setSuccess } from "../../utils"
 
-export const AddToListPopupContent = ({ techExerID }) => {
+export const AddToListPopupContent = ({ techExerID, setShowMorePopup }) => {
 	const [isLoading, setIsLoading] = useState(true)
 
 	const [lists, setLists] = useState([])
@@ -59,14 +59,24 @@ export const AddToListPopupContent = ({ techExerID }) => {
 			text: searchListText,
 			isAuthor: true,
 			isShared: false,
-			hidden: true
+			hidden: false
 		}
 
 		getLists(args, token, map, mapActions, (result) => {
 			if (result.error) return
 
 			// Extract the 'id' and 'name' fields from each item in the result used in displaying the list.
-			const listsToAdd = result.map(item => ({ id: item.id, name: item.name, author: item.author, numberOfActivities: item.size}))
+			const listsToAdd = result.results.map(item => ({
+
+				id: item.id,
+				name: item.name,
+				author: {
+					userId: item.author.userId,
+					username: item.author.username
+				},
+				hidden: item.hidden,
+				date: item.date
+			}))
 
 			setLists(listsToAdd)
 			setIsLoading(false)
@@ -98,17 +108,14 @@ export const AddToListPopupContent = ({ techExerID }) => {
 			setError("Fel vid sparning av aktivitet till listor")
 		} else {
 			setSuccess("Aktivitet sparad till listor")
+			setShowMorePopup(false)
 		}
 	}
 
 
 
 
-	return isLoading ? (
-		<div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh"}}>
-			<Spinner />
-		</div>
-	) : (
+	return (
 		<div className={styles["container"]}>
 			<div className="my-4">
 				<Button outlined={true}>
@@ -121,16 +128,21 @@ export const AddToListPopupContent = ({ techExerID }) => {
 				text={searchListText}
 				onChange={setSearchListText}
 			/>
-			<InfiniteScrollComponent>
-				{lists.map((item, index) => (
-					<AddToListItem
-						item={item}
-						key={index}
-						onCheck={handleCheck}
-					/>
-				))}
-			</InfiniteScrollComponent>
-
+			{isLoading ? (
+				<div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh"}}>
+					<Spinner />
+				</div>
+			) : (
+				<InfiniteScrollComponent>
+					{lists.map((item, index) => (
+						<AddToListItem
+							item={item}
+							key={index}
+							onCheck={handleCheck}
+						/>
+					))}
+				</InfiniteScrollComponent>
+			)}
 			<div className="fixed-bottom w-100 bg-white pt-2">
 				<div className="mb-4">
 					<Button onClick={saveActivityToLists}>Spara</Button>
