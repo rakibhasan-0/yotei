@@ -26,7 +26,7 @@ import { AccountContext } from "../../../context"
 function Navbar({ testId }) {
 
 	const [open, setOpen] = useState(false)
-	const [isExaminationEnabled] = useState(false) // FEATURE TOGGLE
+	const [isExaminationEnabled] = useState(true) // FEATURE TOGGLE
 	const navigate = useNavigate()
 	const context = useContext(AccountContext) 
 
@@ -58,10 +58,6 @@ function Navbar({ testId }) {
 				<div className={styles.btnWrapper}>
 					<Button width={"100%"} onClick={() => navigateAndClose("/plan")}>
 						<h1 className={styles.commonNavbarButton}>Planering</h1>
-					</Button>
-
-					<Button width={"100%"} onClick={() => navigateAndClose("/groups")}>
-						<h1 className={styles.commonNavbarButton}>Grupper</h1>
 					</Button>
 
 					<Button width={"100%"} onClick={() => navigateAndClose("/workout")}>
