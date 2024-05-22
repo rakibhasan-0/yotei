@@ -509,10 +509,14 @@ export function workoutCreateReducer(state, action) {
 		return tempState;
 	}
 	case "UNCHECK_ALL_ACTIVITIES": {
-		const allActivities = action.payload;
-
-		tempState.checkedActivities = tempState.checkedActivities.filter(activity => !allActivities.includes(activity));
-
+		const activitiesToUncheck = action.payload;
+		const activitiesToUncheckIds = activitiesToUncheck.map(activity => activity.type === 'technique' ? activity.techniqueID : activity.id);
+	
+		tempState.checkedActivities = tempState.checkedActivities.filter(activity => {
+			const activityId = activity.type === 'technique' ? activity.techniqueID : activity.id;
+			return !activitiesToUncheckIds.includes(activityId);
+		});
+	
 		return tempState;
 	}
 	default:

@@ -118,6 +118,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	const [cookies, setCookies] = useCookies(["exercise-filter"])
 	const [visibleExercises, setVisibleExercises] = useState([])
 	const { userId: currentUserId } = useContext(AccountContext)
+	const [listCheckboxStatus, setListCheckboxStatus] = useState({})
 
 	const sortOptionsLists = [
 		{ 
@@ -220,6 +221,17 @@ function AddActivity({ id, setShowActivityInfo }) {
 	useEffect(() => {
 		sessionStorage.setItem("searchListText", searchListText)
 	}, [searchListText])
+
+
+	useEffect(() => {
+		if (listCheckboxStatus) return 
+
+		const initialCheckboxStatus = {};
+		lists.forEach(list => {
+			initialCheckboxStatus[list.id] = false;
+		});
+		setListCheckboxStatus(initialCheckboxStatus);
+	}, [lists]);
 
 
 	// This calls the onAllActivitiesToggle function when the listContents state is updated and runs only when the checkbox to toggle all activities in a list is pressed.
@@ -378,12 +390,20 @@ function AddActivity({ id, setShowActivityInfo }) {
 		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.TOGGLE_CHECKED_ACTIVITY, payload: activity })
 	}
 
-	const onActivityToggleAll = (listId) => {
+	const onActivityToggleAllTrue = (listId) => {
 		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CHECK_ALL_ACTIVITIES, payload: listContents[listId] })
 	}
 
+	const onActivityToggleAllFalse = (listId) => {
+		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.UNCHECK_ALL_ACTIVITIES, payload: listContents[listId] })
+	}
+
 	const onAllActivitiesToggle = (listId) => {
-		onActivityToggleAll(listId)
+		if (!listCheckboxStatus[listId]) {
+			onActivityToggleAllFalse(listId);
+		} else {
+			onActivityToggleAllTrue(listId);
+		}
 	}
 
 	/**
@@ -689,22 +709,31 @@ function AddActivity({ id, setShowActivityInfo }) {
 									<ErrorStateSearch id="add-activity-no-list" message="Kunde inte hitta någon lista" />
 									:
 									(<InfiniteScrollComponent activities={lists}>
-										{lists.map(list => (
+										{lists.map(list => {
+											const isChecked = !!listCheckboxStatus[list.id];
+											return (
+
 											<DropDown
 												text={list.name}
-												autoClose={false}
+												autoClose={isChecked}
 												id={list.id}
 												onClick={() => fetchingListContent(list.id)}
 												key={list.id}
 												checkBox={
 													<CheckBox
+														checked={isChecked}
 														onClick={() => {
 															fetchingListContent(list.id, () => {
 																setListToToggle(list.id);
 															});
+															setListCheckboxStatus(prevState => ({
+																...prevState,
+																[list.id]: !isChecked
+															}));
 														}}
-													/>}
-												style={{display: "flex", alignitems: "center",  margin: "5px 15px 5px 15px"}}
+													/>
+												}
+												style={{ display: "flex", alignItems: "center", margin: "5px 15px 5px 15px" }}
 											>
 
 												<div style={{ borderTop: "1px solid black" }}>
@@ -751,7 +780,9 @@ function AddActivity({ id, setShowActivityInfo }) {
 
 												</div>
 											</DropDown>
-										))}
+										)}
+										)}
+
 									</InfiniteScrollComponent>)
 								}
 							</div>
