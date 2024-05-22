@@ -46,6 +46,7 @@ export class AddTagPopupPage {
 
 		//Save the technique so the newly added tag is saved with it. 
 		await this.page.getByRole("button", { name: "Spara" }).click()
+		await this.page.goto("/technique/1")
 
 	}
 
@@ -76,7 +77,7 @@ export class AddTagPopupPage {
 		await this.waitForEnabled(this.page.getByTestId("EditableListItem").locator("label"))
 
 		//Remove the tag from the database. 
-		await this.findComponents(tag, "#trash-icon")
+		await this.findComponents(tag, "#close-icon")
 		await this.page.getByRole("button", { name: "Ta bort" }).click()
 		await this.page.locator("#save-and-close-button").click()
 	}
