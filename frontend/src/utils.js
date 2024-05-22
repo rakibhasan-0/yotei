@@ -7,43 +7,8 @@ import { toast } from "react-toastify"
  * @updated 2024-04-26  by Tomato
  * 			2024-05-20  by Team Mango: Updated permissions functions.
  *  		2024-05-21  by Team Mango: Commented functions, changed names and added more permissions functions.
- *  		2024-05-22  by Team Mango: Added some more permissions functions.
+ *  		2024-05-22  by Team Mango: Added some more permissions functions and removed all old permission code.
  */
-
-/**
- * Use:
- * const context = useContext(AccountContext)
- * isAdmin(context)
- *
- * If you want to use destructuring you can do this:
- * const context = useContext(AccountContext)
- * const { token, userId } =  context
- * ...
- * isAdmin(context)
- */
-export function isAdmin(context) {
-	return checkRole(context, Roles.admin)
-}
-
-/**
- * Use:
- * const context = useContext(AccountContext)
- * isEditor(context)
- */
-export function isEditor(context) {
-	return isAdmin(context) || checkRole(context, Roles.editor)
-}
-
-export function checkRole(context, role) {
-	if (!context) return false
-	if (context.role) {
-		return context.role === role.toUpperCase()
-	} else {
-		return context.userRole === role.toUpperCase()
-	}
-}
-
-//FUNCTIONS FOR THE NEW PERMISSION SYSTEM:
 
 /**
  * canEditSession() - Check for if this user can edit the given session or not.
@@ -157,7 +122,7 @@ export function canDeleteComment(context, commentId) {
 	if (context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
 	//True if the user is an admin or "owns" the comment.
 	return (context.userId === commentId)
-}
+} //PERMISSION TODO: Should there be a permission for deleting others' comments without being an admin? And should 
 
 
 
