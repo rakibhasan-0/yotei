@@ -61,7 +61,7 @@ export default function RoleDelete({ id, roleID, name, setIsOpen }) {
 				if (response.ok) {
 					setUsers(data)
 					setGotResponse(true)
-					setDeleteButtonDisabled(false)
+					setDeleteButtonDisabled(true)
 				}
 				else {
 					setHasError(true)
@@ -151,7 +151,7 @@ export default function RoleDelete({ id, roleID, name, setIsOpen }) {
 	return <div className={styles.popupContainer} id={id}>
 		<p>Är du säker på att du vill ta bort rollen <b>{name}?</b></p>
 
-		{gotResponse ?  constructUserList() : <Spinner id={"role-spinner"}/>}
+		{gotResponse ? constructUserList() : <Spinner id={"role-spinner"}/>}
 	
 
 		{ constructButtons() }

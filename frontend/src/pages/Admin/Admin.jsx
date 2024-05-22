@@ -34,7 +34,6 @@ export default function Admin() {
 	const [roles, setRoles] = useState([])
 	const [loading, setIsLoading] = useState(true)
 	const [key, setKey] = useState(window.localStorage.getItem("active-tab") || "HandleUsers")
-	const [isRoleTabEnabled] = useState(true) //FEATURE TOGGLE
 
 	useEffect(() => {
 		(async () => {
@@ -74,40 +73,37 @@ export default function Admin() {
 					<ManageUser />
 				</div>
 			</Tab>
-			{isRoleTabEnabled && ( //FEATURE TOGGLE
-				<Tab eventKey={"Roles"} title={"Roller"}>
-					<SearchBar 
-						id="searchbar-roles" 
-						placeholder="Sök efter en roll" 
-						text={searchText} 
-						onChange={setSearchText}
-					/>
-					{loading ? <Spinner/> : <InfiniteScrollComponent>
-						{roles?.filter(role => {
-							if (searchText?.length > 0) {
-								return role.roleName.toLowerCase().includes(searchText.toLowerCase())
-							}
-							return true
-						}).map((role, index) =>
-							<RoleCardLink
-								item={role.roleName}
-								key={role.roleId}
-								id={role.roleId}
-								detailURL={detailURL}
-								index={index}>
-							</RoleCardLink>)
+			<Tab eventKey={"Roles"} title={"Roller"}>
+				<SearchBar 
+					id="searchbar-roles" 
+					placeholder="Sök efter en roll" 
+					text={searchText} 
+					onChange={setSearchText}
+				/>
+				{loading ? <Spinner/> : <InfiniteScrollComponent>
+					{roles?.filter(role => {
+						if (searchText?.length > 0) {
+							return role.roleName.toLowerCase().includes(searchText.toLowerCase())
+						}
+						return true
+					}).map((role, index) =>
+						<RoleCardLink
+							item={role.roleName}
+							key={role.roleId}
+							id={role.roleId}
+							detailURL={detailURL}
+							index={index}>
+						</RoleCardLink>)
 					
 	
-						}
-					</InfiniteScrollComponent>}
+					}
+				</InfiniteScrollComponent>}
 
-					<RoundButton linkTo={"role/create"} id={"role-round-button"}  style={{maxWidth: "5px"}}>
-						<Plus/>
-					</RoundButton>
+				<RoundButton linkTo={"role/create"} id={"role-round-button"}  style={{maxWidth: "5px"}}>
+					<Plus/>
+				</RoundButton>
 
-				</Tab>
-			)}
-			
+			</Tab>			
 			<Tab eventKey={"ImportExport"} title={"Importera/Exportera"}>
 				<div className="center card-admin">
 					<br/>
