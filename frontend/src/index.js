@@ -191,7 +191,7 @@ export default function App() {
 		<>
 			<ToastContainer />
 			<AccountContext.Provider
-				value={{ token, role: decodedToken?.role, userId: decodedToken?.userId, permissions: decodedToken?.permissions, setToken }}
+				value={{ token, role: decodedToken?.role, userId: decodedToken?.userId, username: decodedToken?.username, permissions: decodedToken?.permissions, setToken }}
 			>
 				<RouterProvider router={routes} />
 			</AccountContext.Provider>
