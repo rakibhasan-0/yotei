@@ -111,18 +111,18 @@ export default function DuringGrading() {
 
 	// Go to summary when the index is equal to length. Maybe change the look of the buttons.
 	const goToNextTechnique = () => {
-        if(currentTechniqueStep === techniqueNameList.length - 1) {
-            // Go to summary
-        } else {
-            setCurrentTechniqueStep(nextStep => {
-                if(nextStep === techniqueNameList.length -2){
-                    setRandoriIndex(nextStep)
-                }
-                const nextTechniqueStep = Math.min(nextStep + 1, techniqueNameList.length - 1)
-                onUpdateStepToDatabase(nextTechniqueStep)
-                return nextTechniqueStep
-            })
-        }
+		if(currentTechniqueStep === techniqueNameList.length - 1) {
+			// Go to summary
+		} else {
+			setCurrentTechniqueStep(nextStep => {
+				if(nextStep === techniqueNameList.length -2){
+					setRandoriIndex(nextStep)
+				}
+				const nextTechniqueStep = Math.min(nextStep + 1, techniqueNameList.length - 1)
+				onUpdateStepToDatabase(nextTechniqueStep)
+				return nextTechniqueStep
+			})
+		}
 	}
 	//goes to previous technique if it is not the first technique.
 	const goToPrevTechnique = () => {
@@ -140,7 +140,7 @@ export default function DuringGrading() {
 
 	// this update the database with what techniquestep the user is on, and it works with forward and backward navigation.
 	const onUpdateStepToDatabase = async (currentTechniqueStep) => {
-        setLoading(true)
+		setLoading(true)
 		try {
 			const response = await fetch(`/api/examination/grading/${gradingId}`, { headers: { "token": token } })
 			if (!response.ok) {
@@ -260,14 +260,12 @@ export default function DuringGrading() {
 	 * @param {Int} pairIndex : index of what number the of the pair that is clicked
 	 * @param {String} buttonId : button index namne that ends with either 'left' or 'right'
 	 */
-	const examineeClick = (newState, technique, pairIndex, buttonId) => {
-		if (isSubmitting) return
-		setIsSubmitting(true)
+	const examineeClick = async (newState, technique, pairIndex, buttonId) => {
 
 		console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}, with new state ${newState}`)
 		// Check what state the button is in and send the proper information to DB.
 		let examinee_clicked = buttonId.endsWith("left") ? pairs[pairIndex].leftId : pairs[pairIndex].rightId
-		addExamineeResult(examinee_clicked, `${technique}`, newState)
+		await addExamineeResult(examinee_clicked, `${technique}`, newState)
 
 	}
     
@@ -508,6 +506,8 @@ export default function DuringGrading() {
 	 * @author Team Apelsin (2024-05-17) - c21ion
 	 */
 	async function addExamineeResult(examineeId, techniqueName, passStatus) {
+		if (isSubmitting) return
+		setIsSubmitting(true)
 
 		// Convert string for pass status to Boolean
 		const passStatusMap = {
@@ -674,10 +674,10 @@ export default function DuringGrading() {
 
 			// console.log("filtered results: ", filtered);
 			setResults(filtered)
-            setLoading(false)
+			setLoading(false)
 		} catch (error) {
-            setErrorToast(error.message)
-            setLoading(false)
+			setErrorToast(error.message)
+			setLoading(false)
 			return null // Handle the error gracefully, return null or an empty object/array
 		}
 	}
