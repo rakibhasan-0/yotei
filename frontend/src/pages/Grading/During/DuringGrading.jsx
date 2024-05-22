@@ -100,6 +100,7 @@ export default function DuringGrading() {
 	const [results, setResults] = useState([])
 	const [techniqueNameList, setTechniqueNameList] = useState(undefined)
 	const [categoryIndexMap, setCategoryIndices] = useState(undefined)
+	const [isSubmitting, setIsSubmitting] = useState(false)
 	const { gradingId } = useParams()
 	const navigate = useNavigate()
 	const scrollableContainerRef = useRef(null) // Scroll to the top of the examinees list after navigation
@@ -261,10 +262,14 @@ export default function DuringGrading() {
 	 * @param {String} buttonId : button index namne that ends with either 'left' or 'right'
 	 */
 	const examineeClick = (newState, technique, pairIndex, buttonId) => {
+		if (isSubmitting) return
+		setIsSubmitting(true)
+
 		console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}, with new state ${newState}`)
 		// Check what state the button is in and send the proper information to DB.
 		let examinee_clicked = buttonId.endsWith("left") ? pairs[pairIndex].leftId : pairs[pairIndex].rightId
 		addExamineeResult(examinee_clicked, `${technique}`, newState)
+
 	}
     
 	return (
@@ -532,6 +537,7 @@ export default function DuringGrading() {
 			setResults(tempRes)
 			// console.log("Response: ", JSON.stringify(responseJson))
 		}
+		setIsSubmitting(false)
 	}
 
 	/**
