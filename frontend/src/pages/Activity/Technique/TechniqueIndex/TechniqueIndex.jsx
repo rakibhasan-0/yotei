@@ -202,7 +202,7 @@ export default function TechniqueIndex() {
 				)}
 			</div>
 			<Popup title="Lägg till i lista" isOpen={showMorePopup} setIsOpen={setShowMorePopup}>
-				<AddToListPopupContent techExerID={{ techniqueId: selectedTechniqueId, exerciseId: null }} />
+				<AddToListPopupContent techExerID={{ techniqueId: selectedTechniqueId, exerciseId: null }} setShowMorePopup={setShowMorePopup} />
 			</Popup>
 
 			{/* Spacing so the button doesn't cover a techniqueCard */}
