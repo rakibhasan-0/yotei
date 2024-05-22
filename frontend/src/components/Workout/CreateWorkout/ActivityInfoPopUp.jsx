@@ -224,7 +224,7 @@ export function ActivityCategories() {
  *
  * @author Team Minotaur, Team Coconut 
  * @version 1.1
- * @since 2024-05-20
+ * @since 2024-05-22
  */
 export default function ActivityInfoPopUp({ isFreeText , backToAddActivity = false, newlyAddedActivities = null }) {
 	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(WorkoutCreateContext)
@@ -272,9 +272,9 @@ export default function ActivityInfoPopUp({ isFreeText , backToAddActivity = fal
 		// If newlyAddedActivities is set, call it with the added activities and categories
 		if(newlyAddedActivities !== null){
 			// we are doing deep copy of the added categories and activities to avoid any changes in the original data
-			const categories = _.cloneDeep(workoutCreateInfo.addedCategories)
+			//const categories = _.cloneDeep(workoutCreateInfo.addedCategories)
 			const data = _.cloneDeep(workoutCreateInfo.addedActivities)
-			newlyAddedActivities(data, categories)
+			newlyAddedActivities(data)
 		}
 	}
 

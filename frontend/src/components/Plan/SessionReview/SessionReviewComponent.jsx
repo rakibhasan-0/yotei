@@ -26,7 +26,7 @@ import ActivityInfoPopUp from "../../Workout/CreateWorkout/ActivityInfoPopUp"
  * Based on "ReviewFormComponent.jsx"
  *
  * @author Hannes c21hhn (Group 1, pomegranate), Team Coconut
- * @since 2024-05-20
+ * @since 2024-05-22
  * @version 1.1
  */
 
@@ -197,12 +197,16 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	}
 
 
+	/**
+	 * that function is responsible for removing the activities that are not checked by the user.
+	 * In that case it will remove activities which includes in the extra category.
+	 */
 	async function removingNotCheckedActivities() {
 		
 		const extraCategory = sessionData.activityCategories.find(category => category.categoryName === "Extra");
 		if (extraCategory) {
 			extraCategory.activities.forEach(activity => {
-				console.log("running")
+				//console.log("running")
 				if (!doneList.includes(activity.id)) {
 					removeActivity(activity.id)
 				}
@@ -212,6 +216,15 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 
 
+
+	/**
+	 * that function is responsible for transforming the done list. 
+	 * so that each activity id which is negative will be replaced with the new 
+	 * positive id.
+	 * 
+	 * That negative numbers transformation will only happen if the 
+	 * category name is "ExtraActivities".
+	 */
 	async function transformDoneList() {
 		const promises = doneList.map(async activityID => {
 			if (activityID < 0) {
@@ -246,7 +259,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 
 	/**
-	 * it will trigger when the transformation of the done list is complete, 
+	 * it will trigger when the transformation of the done list is complete, then
 	 * we can proceed with the review. So that setDone() can be updated synchronously.
 	 */
 	useEffect(() => {
@@ -260,6 +273,10 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 
 
+	/**
+	 * it will proceed with the review after the transformation of the done list is complete.
+	 * it will set the review if it is a new review, otherwise it will update the review.
+	 */
 	function proceedWithReview() {
 		if (reviewId < 0) {
 			addReview()
@@ -268,10 +285,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		}
 	}
 
-
-	useEffect(() => {
-		//console.log("session Data has been updated", sessionData)
-	}, [sessionData])
 
 	async function addReview() {
 		let ts = getTodaysDate()
@@ -362,6 +375,11 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	}
 
 
+	/**
+	 * it will remove the given activity from the database.
+	 * 
+	 * @param activity_id the id of the activity that is going to be removed.
+	 */
 	async function removeActivity(activity_id) {
 		const requestOptions = {
 			method: "DELETE",
@@ -490,14 +508,14 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 	/**
    *
-   * That function is responsible for adding the newly added activities to the existing categories
-   * or creating a new category with the newly added activities.
+   * That function is responsible for adding the newly added activities to 
+   * a category name "ExtraActivities". If the category is already exist in the sessionData,
+   * then it will add the activities to the existing category
    *
    * @param data the data that contains the newly added activities information
    *             it can be techniques or exercises with belonging information
    */
-	function newlyAddedActivity(data, categories) {
-
+	function newlyAddedActivity(data) {
 
 		const categoryExistence= sessionData.activityCategories.find((element) => {
 			return element.categoryName.toLowerCase() === "ExtraActivities".toLowerCase()
@@ -509,41 +527,9 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			createNewCategoryWithActivities("ExtraActivities", data)
 		}
 
-
 		clearActivitiesStorage()
-		console.log("sessionData duration", sessionData.duration)
 	}
 
-	
-
-	/**
-   * it calculates the total duration of the activities
-   *
-   * @param data it contains the newly added activities information
-   * @returns the total duration of the activities
-   */
-	function countDuration(data) {
-		let duration = 0
-		data.forEach((activity) => {
-			duration += activity.duration
-		})
-		return duration
-	}
-
-	/**
-   * it checks if the category is already exist in the sessionData.
-   * if it is exist, it returns the category.
-   * otherwise, it returns null.
-   *
-   * @param category the category that is checked by the user
-   * @returns the category that is already exist in the sessionData.
-   */
-	function findExistingCategory(category) {
-		return sessionData.activityCategories.find((element) => {
-			return element.categoryName.toLowerCase() === category.name.toLowerCase()
-		})
-	
-	}
 
 	/**
    * that function is responsible for adding the activities to the existing category.
@@ -617,9 +603,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
    */
 	function createActivityObject(activity, order, negativeId) {
 		if (activity.techniqueId) {
-			//getIdForActivity(activity, order)
 			return {
-			 // Unique ID logic
 			 	id: negativeId,
 				text: "",
 				duration: activity.duration,
@@ -636,9 +620,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 				order: order,
 			}
 		} else {
-			//getIdForActivity(activity, order)
 			return {
-	// Unique ID logic
 				id: negativeId,
 				text: "",
 				duration: activity.duration,
@@ -659,7 +641,13 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 	/**
    *
-   * that function is responsible for getting the id for the activity.
+   * That function uses the given activity's information such as get the techniqueId or exerciseId
+   * Then based on the information an object will be created and added to the database.
+   * 
+   * 
+   * @param activity the activity.
+   * @param order the order which is kinda a random number.
+   * 
    */
 	async function getIdForActivity(activity, order) {
 
