@@ -20,7 +20,7 @@ import Spinner from "../../components/Common/Spinner/Spinner"
  */
 
 
-export default function GradingStatisticsPopup({ id, groupID, belts}) {
+export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,datesTo}) {
 
 	const [showPopup, setShowPopup] = useState(false)
 	const [protocols, setProtocols] = useState([])
@@ -28,7 +28,9 @@ export default function GradingStatisticsPopup({ id, groupID, belts}) {
 	const [beltID, setBeltID] = useState(null)
 	const [loading, setLoading] = useState(false)
 	const [data, setData] = useState([])
-	
+	console.log(datesFrom)
+	console.log(datesTo)
+
 	useEffect(() => {
 		if (belts.length > 0) {
 			setProtocols(belts.map(belt => belt.name))
@@ -42,7 +44,7 @@ export default function GradingStatisticsPopup({ id, groupID, belts}) {
 			const fetchGroupGradingProtocol = async () => {
 				try {
 					setLoading(true)
-					const response = await fetch(`/api/statistics/${groupID}/grading_protocol?beltId=${beltID}`)
+					const response = await fetch(`/api/statistics/${groupID}/grading_protocol?beltId=${beltID}&startdate=${datesFrom}&enddate=${datesTo}`)
 					if (!response.ok) {
 						throw new Error("Failed to fetch group data")
 					}

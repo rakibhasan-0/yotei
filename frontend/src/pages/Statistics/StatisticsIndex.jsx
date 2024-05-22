@@ -211,6 +211,8 @@ export default function Statistics() {
 					id="grading-statistics-container" 
 					groupID={groupID} 
 					belts={groupBelts}
+					datesTo={dates.to}
+					datesFrom={dates.from}
 				/>
 			
 
