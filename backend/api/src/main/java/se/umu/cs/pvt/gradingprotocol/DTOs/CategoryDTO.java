@@ -2,6 +2,13 @@ package se.umu.cs.pvt.gradingprotocol.DTOs;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.List;
 
+/**
+ * Data Transfer Object for formatting the category field in JSON response for grading protocol.
+ *
+ * @author Cocount 
+ * @version 1.0
+ * @since 2024-05-20
+ */
 @JsonPropertyOrder({ "category_name", "techniques" })
 public class CategoryDTO {
 
