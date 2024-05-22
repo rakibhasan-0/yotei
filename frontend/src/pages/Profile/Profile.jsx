@@ -63,7 +63,7 @@ export default function Profile() {
 		},
 		hidden: false,
 	}
-	const Roll = context.role || "Vet ej"
+	const userName = context.username || "Vet ej"
 
 	//Future-proofs so that it will get all of the favourite workouts until 2060
 	const getAmountOfFavouriteWorkouts= async() =>{
@@ -369,7 +369,7 @@ export default function Profile() {
 				</Button>
 				<Divider option={"h2_center"} />
 				<div >
-					Inloggad som: {Roll}
+					Inloggad som: {userName} <br/> 
 				</div>
 				<Divider option={"h2_center"} />
 				<div>
