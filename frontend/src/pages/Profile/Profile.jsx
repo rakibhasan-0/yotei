@@ -52,7 +52,7 @@ export default function Profile() {
 	const [amountOfFavouriteWorkouts, setAmountOfFavouriteWorkouts] = useState(0)
 
 	//TODO feature toggle
-	const [isListsEnabled] = useState(true)
+	const [isListsEnabled] = useState(false)
 
 	const workout = {
 		id: -1,
