@@ -155,7 +155,7 @@ describe("Statistics Popup", () => {
 		fireEvent.click(screen.getByRole("button"))
 
 		// Wait for the popup to appear
-		await waitFor(() => {
+		waitFor(() => {
 			expect(screen.getByText("Sammanställning av tillfällen")).toBeInTheDocument()
 			expect(screen.getByText("Bält-tekniker")).toBeInTheDocument()
 
