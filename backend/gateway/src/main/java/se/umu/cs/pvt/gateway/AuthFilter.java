@@ -219,10 +219,11 @@ public class AuthFilter implements GlobalFilter, Ordered {
         return true;
     }
 
-        private boolean isAdminLockedEndPoints(String path) {
+    private boolean isAdminLockedEndPoints(String path) {
         return 
             path.contains("import") || 
             path.contains("export") || 
-            path.equals("/api/users");
+            path.equals("/api/users") || 
+            path.startsWith("/api/permissions/role");
     }
 }
