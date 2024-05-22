@@ -114,7 +114,7 @@ export default function GroupPicker({ id, states, testFetchMethod, onToggle, onl
 	const [ groups, setGroups ] = useState()
 	const { token } = useContext(AccountContext)
 
-	const user = useContext(AccountContext) //Needed to get the userId to get only this user's groups.
+	const context = useContext(AccountContext) //Needed to get the userId to get only this user's groups.
 
 	async function fetchPlans() {
 		if (testFetchMethod !== null && testFetchMethod !== undefined) {
@@ -133,7 +133,7 @@ export default function GroupPicker({ id, states, testFetchMethod, onToggle, onl
 
 			if (onlyMyGroups) {
 				//Only this user's groups should be shown, so we filter first.
-				setGroups(json.filter(group => group.userId === user.userId).map(group => {
+				setGroups(json.filter(group => group.userId === context.userId).map(group => {
 					//This is called once for each group every time you toggle a group checkbox. (You get one checkbox for each group.)
 					return {...group, selected: states && states.includes(group.id)}
 				}))
