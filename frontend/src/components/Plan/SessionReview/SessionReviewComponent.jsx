@@ -42,7 +42,8 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	const[reviewId, setReviewId] = useState(-1)
 	const [extraActivityId, setExtraActivityId] = useState(-1)
 	const [isTransformComplete, setIsTransformComplete] = useState(false)
-	const [activitiesToBeDeleted, setActivitiesToBeDeleted] = useState([])
+	const [activeRequests, setActiveRequests] = useState(0)
+
 
 	const [, setErrorStateMsg] = useState("")
 
@@ -166,8 +167,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		if(checked) { //Add exercise
 			setDone([...doneList,id])
 		} else { //Remove exercise
-			if(activitiesToBeDeleted.length == 1){
-			}
 			setDone(doneList.filter(doneId=>doneId !== id))
 		}
 	}
@@ -202,7 +201,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			})
 		} 
 
-		//window.location.reload();
 	}
 	
 
@@ -265,6 +263,11 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 	}, [isTransformComplete])
 
+
+	useEffect(() => {
+		console.log("ACTIVE REQUESTS:", activeRequests)
+
+	}, [activeRequests])
 
 
 	function proceedWithReview() {
@@ -369,18 +372,27 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			method: "DELETE",
 			headers: {"Content-type": "application/json", "token": token}
 		}
+		setActiveRequests((prev) => {
+			return prev + 1;
+		})
+
 		const deleteResponse = await fetch("/api/workouts/activities/delete/" + activity_id , requestOptions).catch(() => {
 			setError("Serverfel: Kunde inte ansluta till servern.")
 			return
 		})
 		if(deleteResponse.status == HTTP_STATUS_CODES.BAD_REQUEST) {
 			console.log("Kunde inte radera aktivitet med id: " + activity_id)
+			setActiveRequests((prev) => {
+				return prev - 1;
+			})
 		} else if (deleteResponse.status == HTTP_STATUS_CODES.NOT_FOUND) {
 			console.log("Hittade ingen aktivitet med id: " + activity_id)
+			return prev - 1;
 		} else if (HTTP_STATUS_CODES.status == HTTP_STATUS_CODES.OK) {
 			console.log("Raderade aktivitet med id: " + activity_id)
+			return prev - 1;
 		}
-	}
+	} 
 
 
 	async function clearActivities(review_id, session_id) {
