@@ -2,7 +2,14 @@ import { type Page } from '@playwright/test';
 import { Workout } from '../Types/systemTestsTypes'
 import { Activity } from '../Types/systemTestsTypes'
 
-
+/**
+ *  
+ *  Page Object Model for the workout page with url '/workout'.
+ * 
+ *  @author Team Coconut (Group 7)
+ *  @since 2024-05-15
+ *  @version 1.0
+ */
 export class WorkoutPage {
     readonly page: Page
     readonly url: string = '/workout'

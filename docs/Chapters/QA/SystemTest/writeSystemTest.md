@@ -127,69 +127,8 @@ npm run systest:codegen
 
 5. Copy the generated code you want to use and add it to your POM file.
 
-6. Refactor the code into different methods. Here's an example of how generated code can be refactored:
+6. Refactor the code into different methods. [Here's](../../../../frontend/SystemTests/PageObjectModels/workoutPage.ts) an example of how generated code can be refactored:
 
-```ts
-import { type Page } from '@playwright/test'
-import { Workout } from '../Types/systemTestsTypes'	// Imports a Type object
-
-// The POM used in the tests
-export class WorkoutPage {
-  readonly page: Page // The Page object defined by this POM
-  readonly url: string = '/workout'	// The URL for the page
-
-  public constructor(page: Page) { // POM constructor, looks the same in every POM
-    this.page = page
-  }
-
-  // Navigates to the page and potentially to a specific segment on a page
-  async visit() { 
-    await this.page.goto(this.url)
-  }
-
-  // Function for creating a workout
-  async createWorkout(workout: Workout) {
-    // Clicks a button to create a new workout
-    await this.page.locator('#CreateWorkoutButton').getByRole('img').click()
-    // Clicks a textfield to set the workouts name
-    await this.page.getByPlaceholder('Namn').click()
-    // Enters the input objects name value into workouts name textfield
-    await this.page.getByPlaceholder('Namn').fill(workout.name)
-    // Navigates to next textfield to set the workouts description
-    await this.page.getByPlaceholder('Namn').press('Tab')
-    // Enters the input objects description value into the description textfield
-    await this.page.getByPlaceholder('Beskrivning av pass').fill(workout.description)
-    // Locates and clicks the button to add activities to the workout
-    await this.page.getByRole('button', { name: '+ Aktivitet' }).click()
-    // Locates and checks a techniques checkbox
-    await this.page.locator('#technique-list-item-138').getByLabel('').check()
-    await this.page.locator('#technique-list-item-139').getByLabel('').check()
-    await this.page.locator('#technique-list-item-140').getByLabel('').check()
-    // Locates and clicks the exercises tab
-    await this.page.getByRole('tab', { name: 'Övningar' }).click()
-    // Locates and checks an exercises' checkbox
-    await this.page.locator('#ExerciseListItemCheckBox-289-checkbox').check()
-    await this.page.locator('#ExerciseListItemCheckBox-305-checkbox').check()
-    await this.page.locator('#ExerciseListItemCheckBox-340-checkbox').check()
-    // Locates and clicks the button to add the selected activities to the workout
-    await this.page.locator('#AddCheckedActivitiesButton').click()
-    // Clicks a radio button to set added activities as Uppvärmning
-    await this.page.locator('div').filter({ hasText: /^Uppvärmning$/ }).click()
-    // Clicks a button to save the selected activities to the workout
-    await this.page.getByRole('button', { name: 'Lägg till' }).click()
-    // Clicks a button to confirm saving the selected activities 
-    await this.page.getByRole('button', { name: 'Spara' }).click()
-  }
-
-  // Method for deleting the workout created from the createWorkout function
-  async deleteWorkout(name: String) {
-    // Locates and clicks the button to remove the workout
-    await this.page.locator('#delete_trashcan').click()
-    // Locates and clicks the button to confirm removing the workout
-    await this.page.getByRole('button', { name: 'Ta bort' }).click()
-  }
-}
-```
 7. Check how codegen retrieves different elements, and update if needed. If components don't have either ids, labels, data-test ids or some other unique identifier codegen will use one of these two methods for setting an identifier. **They aren't preferable and should be changed**:
 
   - It creates an id of the className prop and a unique hash at the end. For example: 

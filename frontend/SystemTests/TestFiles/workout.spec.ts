@@ -1,6 +1,15 @@
 import { test, expect } from '../fixtures'
 import { WorkoutPage } from '../PageObjectModels/workoutPage'
 
+
+/**
+ *  
+ *  Test file for the workout page.
+ * 
+ *  @author Team Coconut (Group 7)
+ *  @since 2024-05-15
+ *  @version 1.0
+ */
 test.describe('Workout', () => {
 	let workoutPage
 
