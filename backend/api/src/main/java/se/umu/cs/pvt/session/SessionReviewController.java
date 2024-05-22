@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import se.umu.cs.pvt.workout.Activity;
+import se.umu.cs.pvt.workout.detail.ActivityDetail;
 
 import java.util.List;
 import java.util.Optional;
@@ -85,6 +86,17 @@ public class SessionReviewController {
         activity.setSession_review_id(review_id);
         sessionReviewActivityRepository.save(activity);
         return new ResponseEntity<>(activity, HttpStatus.OK);
+    }
+
+    @GetMapping("extraactivities")
+    public ResponseEntity<ExtraActivitiesDTO> getAnonymousActivities(@PathVariable("id") long id) {
+        List<ActivityDetail> activities = sessionReviewRepository.findAnonymousActivitiesForSession(id);
+
+        if (activities.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(new ExtraActivitiesDTO("Extra", 99, activities), HttpStatus.OK);
     }
 
     /**
