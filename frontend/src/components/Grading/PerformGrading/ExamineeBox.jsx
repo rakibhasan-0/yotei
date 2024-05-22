@@ -282,9 +282,9 @@ export default function ExamineeBox({
 					/>
 					{commentError && <p className={styles.err}>{commentError}</p>}
 					<div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px", marginTop: "10px"}}>
-						<Button outlined={true} onClick={() => setCommentText(commentText + " " + "Böj på benen!")}>Böj på benen!</Button>
-						<Button outlined={true} onClick={() => setCommentText(commentText + " " + "Balansbrytning!")}>Balansbrytning!</Button>
-						<Button outlined={true} onClick={() => setCommentText(commentText + " " + "Kraftcirkeln!")}>Kraftcirkeln!</Button>
+						<Button outlined={true} onClick={() => {setCommentText(commentText + " " + "Böj på benen!"); setCommentError(false)}}>Böj på benen!</Button>
+						<Button outlined={true} onClick={() => {setCommentText(commentText + " " + "Balansbrytning!"); setCommentError(false)}}>Balansbrytning!</Button>
+						<Button outlined={true} onClick={() => {setCommentText(commentText + " " + "Kraftcirkeln!"); setCommentError(false)}}>Kraftcirkeln!</Button>
 					</div>
 					<Button onClick={() => onAddPersonalComment()}>Lägg till</Button>
 				</Popup>

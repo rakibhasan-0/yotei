@@ -113,7 +113,6 @@ export default function GradingDeviations() {
             const requestOptions = {
                 headers: {"Content-type": "application/json", token: context.token}
 			}
-            console.log("user id: " + userId)
             const response = await fetch("/api/examination/examresult/" + gradingId + "/" + userId, requestOptions).catch(() => {
                 setError("Serverfel: Kunde inte ansluta till servern.")
                 return
@@ -140,7 +139,6 @@ export default function GradingDeviations() {
                 return
             }
             const json = await response.json()
-            console.log(json)
             setPersonalComments(json)
         }
 
@@ -159,7 +157,6 @@ export default function GradingDeviations() {
             const json = await response.json()
             for(let i = 0; i < json.length; i++) {
                 if(json[i]["examinee_1"].id == userId || json[i]["examinee_2"].id == userId) {
-                    console.log(json[i])
                     const response2 = await fetch("/api/examination/comment/pair/all/" + json[i]["pair_id"], requestOptions).catch(() => {
                         setError("Serverfel: Kunde inte ansluta till servern.")
                         return
@@ -169,11 +166,9 @@ export default function GradingDeviations() {
                         return
                     }
                     const json2 = await response2.json()
-                    console.log(json2)
                     setPairComments(json2)
                 }
             }
-            console.log(json)
         }
 
         //Fetches the entire groups grading comments
@@ -190,7 +185,6 @@ export default function GradingDeviations() {
                 return
             }
             const json = await response.json()
-            console.log(json)
             setGroupComments(json)
         }
 
@@ -206,7 +200,7 @@ export default function GradingDeviations() {
     function hasPassed(techniqueName) {
         for(let i = 0; i < resultList.length; i++) {
             if(resultList[i] != null) {
-                if(resultList[i]["technique_name"] == techniqueName) {
+                if(resultList[i]["techniqueName"] == techniqueName) {
                     return resultList[i]["pass"]
                 }
             }
