@@ -173,7 +173,7 @@ export function canDeleteComment(context, commentId) {
  */
 export function canCreateAndEditActivity(context) {
 	if (!context.permissions) return false
-	return (context.permissions.includes(USER_PERMISSION_CODES.ACTIVITY_ALL))
+	return (context.permissions.includes(USER_PERMISSION_CODES.TECHNIQUE_EXERCISE_ALL))
 }
 
 /**
@@ -261,10 +261,11 @@ export const USER_PERMISSION_CODES = {
 	PLAN_ALL: 5,
 	WORKOUT_OWN: 6,
 	WORKOUT_ALL: 7,
-	ACTIVITY_OWN: 8, // Techniques and exercices. This one is not used. Right now only all or nothing.
-	ACTIVITY_ALL: 9,
+	TECHNIQUE_EXERCISE_OWN: 8, // Techniques and exercices. This one is not used. Right now only all or nothing.
+	TECHNIQUE_EXERCISE_ALL: 9, //Old name: ACTIVITY_ALL (Was a potential conflict in the database naming, so we changed it.)
 	GRADING_OWN: 10,
 	GRADING_ALL: 11,
+	TEHCNIQUE_EXERCISE_OWN
 }
 
 export const USER_PERMISSION_LIST_ALL = [1,2,3,4,5,6,7,8,9,10,11]
