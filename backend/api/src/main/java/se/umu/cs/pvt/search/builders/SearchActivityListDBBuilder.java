@@ -10,7 +10,7 @@ import se.umu.cs.pvt.search.params.SearchActivityListParams;
  * This class builds a {@link DatabaseQuery DatabaseQuery} based on
  * the filtering methods used.
  *
- * @author Team Tomato, updated 2024-05-22
+ * @author Team Tomato, updated 2024-05-22 
  * @date 2024-05-20
  */
 public class SearchActivityListDBBuilder {
