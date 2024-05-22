@@ -48,17 +48,26 @@ const BeltRow = ({ belt, states, onToggle }) => {
 		<div className={styles.beltRow}>
 			<div className={styles.beltItemChild}>
 				{/* TODO I ADDED THE && inverted. remove later or fix or whatever. */}
-				{(child && inverted) ? <>
+				{(child) ? <>
 					<CheckBox id={`belt-child-${name}`} onClick={toggleChildState} checked={childState} />
 					<BeltIcon id={`belt-child-${name}-icon`} belt={child} />
-					<CheckBox id={`belt-inverted-${name}`} onClick={toggleInvertedState} checked={invertedState}/>
-					<BeltIcon id={`belt-inverted-${name}-icon`} belt={inverted} />
+					
 				</> : <div style={{width:"72px"}} />}
+				{inverted ? <>
+				<CheckBox id={`belt-inverted-${name}`} onClick={toggleInvertedState} checked={invertedState}/>
+					<BeltIcon id={`belt-inverted-${name}-icon`} belt={inverted} />
+				</>
+				: <div style={{width:"72px"}} />
+			}
 			</div>
 			<p id={`belt-text-${name}`} className={styles.beltText}>{name}</p>
+			
 			<div className={styles.beltItem}>
-				<BeltIcon id={`belt-adult-${name}-icon`} belt={adult} />
-				<CheckBox id={`belt-adult-${name}`} onClick={toggleAdultState} checked={adultState} />
+				{adult ? <>
+					<BeltIcon id={`belt-adult-${name}-icon`} belt={adult} />
+					<CheckBox id={`belt-adult-${name}`} onClick={toggleAdultState} checked={adultState} />
+				</>
+				: <></>}
 			</div>
 		</div>
 	)
