@@ -72,7 +72,7 @@ public class SearchActivityListDBBuilder {
      */
     public DatabaseQuery build() {
         DatabaseQuery databaseQuery = new DatabaseQuery();
-        if(userRole.equals("ADMIN")){
+        if(userRole.equals("ADMIN") && queries.isEmpty()){
             databaseQuery.setQuery(
                 "SELECT DISTINCT name, id, author, private, created_date " + 
                 "FROM activity_list"
