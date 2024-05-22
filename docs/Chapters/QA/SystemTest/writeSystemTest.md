@@ -1,12 +1,12 @@
 # Write System Test
 This is a guide for how you write a system test in Playwright. For a system test to run, it requires a few different files to be present. Below is a step by step walkthrough with additional examples.
-This is heavy reading but worth getting into.
+This might be heavy reading but worth getting into. Press (ctrl + shift + v) for a preview.
 
 ## Structure & Naming
 We will first look at the different files that we are working with while creating a system test.
 
 ### Test Files
-- The test file that holds the actual test, is placed in the following directory: yotei/frontend/SystemTests/TestFiles.
+- The test file that holds the actual test, is placed in the following directory: [TestFiles](../../../../frontend/SystemTests/TestFiles)
 - The file should be named after the activity that's being tested. The file ending needs to be '*.spec.ts'.
 
 Example:
@@ -14,7 +14,7 @@ Example:
 	
 ### Page Object Model (POM)
 - Beside the file containing the test, a file containing helper functions used in the tests is needed, this reduces duplicated code. This file should export a class named after the page that's being tested, or part of a page if it's very large or complex.
-- This file is a Page Object Model (POM) and should be placed in the following directory: yotei/frontend/SystemTests/PageObjectModels.
+- This file is a Page Object Model (POM) and should be placed in the following directory: [PageObjectMOdels](../../../../frontend/SystemTests/PageObjectModels)
 - The name should contain the page being tested and end with '(...)Page.ts'
 
 Example:
@@ -27,7 +27,7 @@ Example:
 The properties in these objects should all be nullable to keep the tests flexible, and able to test absence of non-nullable properties. This is done through adding '?' at the end of the property name. 
 
 Example:
-	The test for creating a workout uses, among others, the following two types:
+	The tests for the workout page uses, among others, the following two types:
 	
 ```ts
 export type Activity = {
@@ -69,11 +69,11 @@ With npm and nodejs installed through nvm, vite installed, and necessary .env fi
   ```
 	
 ### Creating files
-1. Create a test file in the following directory 'frontend/SystemTests/TestFiles'
+1. Create a test file in the following directory [TestFiles](../../../../frontend/SystemTests/TestFiles)
 2. Name it after the activity being tested, file ending should be '*.spec.ts'
-3. Create a POM file in the following directory 'frontend/SystemTests/PageObjectModels'
+3. Create a POM file in the following directory [PageObjectMOdels](../../../../frontend/SystemTests/PageObjectModels)
 4. Name it after the page being tested, name should end with '*Page.ts'
-5. If needed, add a type in the file 'frontend/SystemTests/Types/systemTestsTypes.ts' or use the already created. 
+5. If needed, add a type in the file [systemTestsTypes.ts](../../../../frontend/SystemTests/Types/systemTestsTypes.ts) or use the existing ones. 
 
 ### Write the POM file
 1. Copy this template into the test file '*Page.ts' that you've created, and update it.
@@ -107,7 +107,7 @@ export class SomePage {
 ```
 		
 ### Generate code with codegen
-You can generate code with Playwrights codegen that will open two windows, a browser window where you interact with the website you wish to test and the Playwright Inspector window where you can record, copy, clear as well as change the language of your tests. [Read more about generating tests with Codegen](https://playwright.dev/docs/codegen-intro). This can be done by the following steps:
+When generating code with Playwrights codegen two windows will open. A browser window where you interact with the website you wish to test and the Playwright Inspector window where you can record, copy, clear as well as change the language of your tests. [Read more about generating tests with Codegen](https://playwright.dev/docs/codegen-intro). This can be done by the following steps:
 
 1. Run frontend
 ```sh

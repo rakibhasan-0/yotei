@@ -24,7 +24,6 @@ export class WorkoutPage {
     async createWorkout(workout: Workout) {
         await this.page.locator('#CreateWorkoutButton').getByRole('img').click()
 
-
         workout.name && await this.page.getByPlaceholder('Namn').fill(workout.name)
         workout.description && await this.page.getByPlaceholder('Beskrivning av pass').fill(workout.description)
         
