@@ -16,7 +16,7 @@ INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa/red
 
 -- Pass (Workout)
 INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa/redigera/radera egna pass', 'Tillåtelse att skapa, redigera och radera sina egna pass.');
-INSERT INTO permission (permission_name, permission_desc) VALUES ('kan skapa/redigera/radera alla pass', 'Tillåtelse att skapa pass samt redigera och radera pass som de kan nå.');
+INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa/redigera/radera alla pass', 'Tillåtelse att skapa pass samt redigera och radera pass som de kan nå.');
 
 -- Tekniker och övningar (Activity)
 INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa/redigera/radera alla tekniker/övningar', 'Tillåtelse att skapa tekniker och övningar samt redigera och radera tekniker och övningar som de kan nå.');
