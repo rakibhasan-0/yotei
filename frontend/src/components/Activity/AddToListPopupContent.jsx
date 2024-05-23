@@ -4,7 +4,6 @@ import InfiniteScrollComponent from "../Common/List/InfiniteScrollComponent"
 import SearchBar from "../Common/SearchBar/SearchBar"
 import { AddToListItem } from "../SavedList/AddToListItem"
 import styles from "./AddToListPopup.module.css"
-import Spinner from "../Common/Spinner/Spinner"
 import { getLists } from "../Common/SearchBar/SearchBarUtils"
 import { AccountContext } from "../../context"
 import useMap from "../../hooks/useMap"
@@ -116,10 +115,10 @@ export const AddToListPopupContent = ({ techExerID, setShowMorePopup }) => {
 		<div className={styles["container"]}>
 			<div className="my-4">
 				<Link to={"/list/create"}>
-						<Button outlined={true}>
-							<p>+ Skapa ny lista</p>
-						</Button>
-					</Link>
+					<Button outlined={true}>
+						<p>+ Skapa ny lista</p>
+					</Button>
+				</Link>
 			</div>
 			<SearchBar 
 				id="lists-search-bar"
@@ -127,15 +126,15 @@ export const AddToListPopupContent = ({ techExerID, setShowMorePopup }) => {
 				text={searchListText}
 				onChange={setSearchListText}
 			/>
-				<InfiniteScrollComponent>
-					{lists.map((item, index) => (
-						<AddToListItem
-							item={item}
-							key={index}
-							onCheck={handleCheck}
-						/>
-					))}
-				</InfiniteScrollComponent>
+			<InfiniteScrollComponent>
+				{lists.map((item, index) => (
+					<AddToListItem
+						item={item}
+						key={index}
+						onCheck={handleCheck}
+					/>
+				))}
+			</InfiniteScrollComponent>
 			<div className="fixed-bottom w-100 bg-white pt-2">
 				<div className="mb-4">
 					<Button onClick={saveActivityToLists}>Spara</Button>
