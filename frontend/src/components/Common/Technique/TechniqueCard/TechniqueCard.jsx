@@ -22,9 +22,10 @@ import { useState } from "react"
  * @update Converted to css module 2024-04-19, Hannes (group 1)
  * @update Fixed so that techniques that are in lists get the correct path, 2024-05-17, Team Tomato (Group 6)
  * @update Added inverted belt category. 2024-05-20, Team Kiwi (Teodor Bäckström)
- * @update Added a popUp window for when popUp is true.
+ * @update Added a popUp window for when popUp is true, fixed so chevron link uses handleClick (Team Kiwi) 2024-05-23
  */
-function TechniqueCard({ technique, checkBox, id, popUp}) {
+function TechniqueCard({ technique, checkBox, id, popUp, techniqueInProtocol}) {
+
 	const navigate = useNavigate()
 	const [isOpen, setIsOpen] = useState(false)
 	
@@ -64,14 +65,13 @@ function TechniqueCard({ technique, checkBox, id, popUp}) {
 			//If the technique count is 0, the card will be transparent otherwise
 			//it will be normal, this is mostly for the statistics page
 			className={`${styles["technique-card"]} ${
-				technique.count === 0 ? styles["transparent-card"] : ""
+				(technique.count === 0 && !isOpen) ? styles["transparent-card"] : ""
 			}`}
 			id={id} 
 			onClick={setTechnique}>
 			
-			
 			<PopupMini title = {technique.name} id = "pop-up-id-tech" isOpen = {isOpen} setIsOpen = {setIsOpen} isNested = {true}> 
-				<TechniqueDetailMini id = {technique.techniqueID}>
+				<TechniqueDetailMini id = {technique.techniqueID ? technique.techniqueID : technique.activity_id}>
 				</TechniqueDetailMini>
 			</PopupMini>
 
@@ -82,14 +82,14 @@ function TechniqueCard({ technique, checkBox, id, popUp}) {
 
 				<div className={styles["technique-name-container"]}>
 					<Link onClick={handleClick}>
-						<h5 className={styles["technique-name"]}>{technique.name}</h5>
+						<h5 className={technique.new || !techniqueInProtocol ? styles["technique-name"] : styles["technique-name-old"]}>{technique.name}</h5>
 					</Link>
 				</div>
 
 				{/* if the technique object has count attribute then we will not render ChevronDown sign */}
 				<div className={styles["technique-arrow-container"]}>
 					{technique.count || technique.count == 0 ? null : (
-						<Link to={"/technique/" + technique.techniqueID}>
+						<Link onClick = {handleClick}>
 							<ChevronDown />
 						</Link>
 					)}

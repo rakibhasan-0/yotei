@@ -244,16 +244,16 @@ export default function GradingIndex() {
 										<h2 style={{ margin: 0, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
 											{grading.title}
 										</h2>
-
-										<button 
+										<Trash
+											className={styles["close-icon"]}
 											onClick={(e) => {
 												e.stopPropagation() 
 												handleIconClick(grading)
-											}} 
-											style={{ marginLeft: "auto", background: "none", border: "none", cursor: "pointer" }}
-										>
-											<Trash />
-										</button>
+											}}
+											size="24px"
+											style={ { color: "var(--black)", marginLeft:"auto" }}
+											id="close-icon"
+											data-testid="trash-icon"/>
 									
 									</div>
 								</BeltButton>
@@ -280,15 +280,16 @@ export default function GradingIndex() {
 										<h2 style={{ margin: 0, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
 											{grading.title}
 										</h2>
-										<button 
+										<Trash
+											className={styles["close-icon"]}
 											onClick={(e) => {
 												e.stopPropagation() 
 												handleIconClick(grading)
-											}} 
-											style={{ marginLeft: "auto", background: "none", border: "none", cursor: "pointer" }}
-										>
-											<Trash />
-										</button>
+											}}
+											size="24px"
+											style={ { color: "var(--black)", marginLeft:"auto" }}
+											id="close-icon"
+											data-testid="trash-icon"/>
 									</div>
 
 								</BeltButton>
