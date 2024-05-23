@@ -14,6 +14,10 @@ public class TechniqueChainNodeService {
         return nodeRepository.findAll();
     }
 
+    public List<TechniqueChainNode> getNodesByParentWeaveId(Long parentWeaveId) {
+        return nodeRepository.findByParentWeave(parentWeaveId);
+    }
+
     public boolean deleteNode(Long id) {
         // Check if the node exists
         if (nodeRepository.existsById(id)) {
@@ -36,7 +40,7 @@ public class TechniqueChainNodeService {
             existingNode.setTechnique(updatedNodeData.getTechnique());
             existingNode.setAttack(updatedNodeData.getAttack());
             existingNode.setParticipant(updatedNodeData.getParticipant());
-            existingNode.setParent_weave(updatedNodeData.getParent_weave());
+            existingNode.setParentWeave(updatedNodeData.getParentWeave());
             existingNode.setIn_chain(updatedNodeData.getIn_chain());
             
             // Save the updated node

@@ -22,7 +22,7 @@ public class TechniqueChainNode implements Serializable {
     private Long id;
 
    @Column(name = "parent_weave")
-    private int parent_weave;
+    private Long parentWeave;
 
     @Column(name = "name")
     private String name;
@@ -49,16 +49,16 @@ public class TechniqueChainNode implements Serializable {
      * Constructs a new node with all field values initialized.
      *
      * @param id The identifier for the comment.
-     * @param parent_weave The identifier for the parent weave.
+     * @param parentWeave The identifier for the parent weave.
      * @param name The name of the node.
      * @param description The description of the node.
      * @param technique The id of the technique the node uses.
      * @param attack If the node is a attack node or a defence node.
      * @param partisipant what partisepant it is.
      */
-    public TechniqueChainNode(Long id, int parent_weave, String name, String description, int technique, Boolean attack, int participant, List<TechniqueChainEdges> outgoingEdges, int in_chain) {
+    public TechniqueChainNode(Long id, Long parentWeave, String name, String description, int technique, Boolean attack, int participant, List<TechniqueChainEdges> outgoingEdges, int in_chain) {
         this.id = id;
-        this.parent_weave = parent_weave;
+        this.parentWeave = parentWeave;
         this.name = name;
         this.description = description;
         this.technique= technique;
@@ -81,8 +81,8 @@ public class TechniqueChainNode implements Serializable {
         return in_chain;
     }
 
-    public int getParent_weave() {
-        return parent_weave;
+    public Long getParentWeave() {
+        return parentWeave;
     }
 
     public String getName() {
@@ -137,8 +137,8 @@ public class TechniqueChainNode implements Serializable {
         this.outgoingEdges = outgoingEdges;
     }
 
-    public void setParent_weave(int parent_weave) {
-        this.parent_weave = parent_weave;
+    public void setParentWeave(Long parentWeave) {
+        this.parentWeave = parentWeave;
     }
 
     public void setTechnique(int technique) {

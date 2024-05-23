@@ -103,10 +103,17 @@ public class TechniqueChainController {
         }
     }
     
-    //TODOO:ändra så att den hämtar bara alla till samma väv
+    /**
+     * gets all nodes that are in a specifyed weave.
+     * @param parentWeaveId the weave to get all nodes to
+     * @return HTTP-status code.
+     * 
+     * Example url
+     * /api/techniquechain/node/weave?parentWeaveId=1
+     */
     @GetMapping("/node/weave")
-    public ResponseEntity<List<TechniqueChainNode>> getNodes() {
-        List<TechniqueChainNode> nodes = nodeService.getAllNodes();
+    public ResponseEntity<List<TechniqueChainNode>> getNodes(@RequestParam Long parentWeaveId) {
+        List<TechniqueChainNode> nodes = nodeService.getNodesByParentWeaveId(parentWeaveId);
         for (TechniqueChainNode node : nodes) {
             // Eagerly fetch the edges if needed
             node.getOutgoingEdges().size();
