@@ -265,7 +265,7 @@ export default function ExamineeBox({
 					isOpen={isAddingComment}
 					setIsOpen={toggleAddPersonalComment}
 					onClose={() => setCommentError(false)}
-					style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset" }}
+					style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset",top: "35vh"}}
 				>
 					<textarea
 						className={isErr ? `${styles.textarea} ${styles.textareaErr}` : `${styles.textarea}`}
