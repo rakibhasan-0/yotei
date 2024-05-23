@@ -230,7 +230,7 @@ export const USER_PERMISSION_CODES = {
 	GRADING_ALL: 9,
 }
 
-export const USER_PERMISSION_LIST_ALL = [1,2,3,4,5,6,7,8,9,10,11]
+export const USER_PERMISSION_LIST_ALL = [1,2,3,4,5,6,7,8,9]
 
 /**
  * Scrolls an element with given id into view.
