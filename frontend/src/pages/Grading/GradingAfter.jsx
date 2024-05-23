@@ -6,7 +6,7 @@ import Button from "../../components/Common/Button/Button"
 import styles from "./GradingBefore.module.css"
 import { Download } from "react-bootstrap-icons"
 import { useParams } from "react-router-dom"
-import { isAdminUser } from "../../utils"
+import { canHandleGradings, isAdminUser } from "../../utils"
 
 /**
  * Page to show all examinees for a grading after the grading has been completed.
@@ -203,7 +203,7 @@ export default function GradingAfter() {
 		}
 	}, [grading, beltInfo, fetchedResult, isGrading, isBelt, isExaminee, fetchedBelt])
 
-	if(!isAdminUser(context)){
+	if(!isAdminUser(context) && !canHandleGradings(context)){
 		window.location.replace("/404")
 		return null
 	}
