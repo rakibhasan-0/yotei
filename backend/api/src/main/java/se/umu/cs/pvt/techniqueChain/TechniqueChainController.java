@@ -19,15 +19,20 @@ public class TechniqueChainController {
     private TechniqueChainWeaveRepository weaveRepository;
     private TechniqueWeaveService weaveService;
 
+    private TechniqueChainChainRepository chainRepository;
+    private TechniqueChainChainService chainService;
+
     @Autowired
     public TechniqueChainController(TechniqueChainNodeRepository nodeRepository, TechniqueChainNodeService nodeService, TechniqueChainEdgesRepository edgeRepository, TechniqueChainWeaveRepository weaveRepository,
-            TechniqueWeaveService weaveService) {
+            TechniqueWeaveService weaveService, TechniqueChainChainRepository chainRepository, TechniqueChainChainService chainService) {
 
         this.nodeRepository = nodeRepository;
         this.nodeService = nodeService;
         this.edgeRepository = edgeRepository;
         this.weaveRepository = weaveRepository;
         this.weaveService = weaveService;
+        this.chainRepository = chainRepository;
+        this.chainService = chainService;
     }
 
     protected TechniqueChainController() {}
@@ -45,7 +50,7 @@ public class TechniqueChainController {
      *  "attack": false,
      *  "technique": 1,
      *  "participant": 1,
-     *  "parent_weave": 1,
+     *  "parentWeave": 1,
      *  "in_chain": 2   //optional
      * }
      */
@@ -273,5 +278,44 @@ public class TechniqueChainController {
         }
     }
 
-    //lägga till så man kan hämta kedjor?
+    /**
+     * gets all the weaves.
+     * @return HTTP-status code.
+     * @return all the weaves with its nodeInfo.
+     */
+    @GetMapping("/chain/all")
+    public ResponseEntity<List<TechniqueChainChain>> getAllTechniqueChains() {
+        List<TechniqueChainChain> chains = chainRepository.findAll();
+        return new ResponseEntity<>(chains, HttpStatus.OK);
+    }
+
+    @PostMapping("/chain/create")
+    public ResponseEntity<Object> createNewChain(@RequestBody TechniqueChainChain chain) {
+        TechniqueChainChain newChain = chainRepository.save(chain);
+        return new ResponseEntity<>(newChain, HttpStatus.OK);
+    }
+
+    @PutMapping("/chain/edit")
+    public ResponseEntity<TechniqueChainChain> updatechain(@RequestBody TechniqueChainChain updatedChainData) {
+        TechniqueChainChain updatedWeave = chainService.updateChain(updatedChainData.getId(), updatedChainData);
+        if (updatedWeave != null) {
+            return new ResponseEntity<>(updatedWeave, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/chain/{id}")
+    public ResponseEntity<TechniqueChainChain> getChainById(@PathVariable Long id) {
+        Optional<TechniqueChainChain> optionalWeave = chainRepository.findById(id);
+        if (optionalWeave.isPresent()) {
+            TechniqueChainChain chain = optionalWeave.get();
+            // Eagerly fetch the edges if needed
+            chain.getNodes().size();
+            return new ResponseEntity<>(chain, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

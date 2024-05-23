@@ -1,6 +1,6 @@
 package se.umu.cs.pvt.techniqueChain;
 import javax.persistence.*;
-
+import java.util.List;
 import java.io.Serializable;
 
 /**
@@ -25,6 +25,8 @@ public class TechniqueChainChain implements Serializable {
 
     @Column(name = "parent_weave_id")
     private int parent_weave_id;
+
+    private List<TechniqueChainNode> node;
     
     /**
      * Constructs a new node with all field values initialized.
@@ -34,16 +36,21 @@ public class TechniqueChainChain implements Serializable {
      * @param name The name of the node.
      * @param description The description of the node.
      */
-    public TechniqueChainChain(Long id, String name, String description, int parent_weave_id) {
+    public TechniqueChainChain(Long id, String name, String description, int parent_weave_id, List<TechniqueChainNode> node) {
         this.id = id;
         this.parent_weave_id = parent_weave_id;
         this.name = name;
         this.description = description;
+        this.node = node;
     }
     /**
      * Protected no-args constructor for JPA use only.
      */
     protected TechniqueChainChain() {
+    }
+
+    public List<TechniqueChainNode> getNode() {
+        return node;
     }
 
     public Long getId() {
@@ -76,5 +83,9 @@ public class TechniqueChainChain implements Serializable {
 
     public void setParent_weave_id(int parent_weave_id) {
         this.parent_weave_id = parent_weave_id;
+    }
+
+    public void setNode(List<TechniqueChainNode> node) {
+        this.node = node;
     }
 }
