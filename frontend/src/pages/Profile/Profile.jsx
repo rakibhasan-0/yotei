@@ -14,7 +14,7 @@ import useMap from "../../hooks/useMap"
 import Divider from "../../components/Common/Divider/Divider"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import ProfileListItem from "./ProfileListItem"
-import { Lock, Unlock, Eye } from "react-bootstrap-icons"
+import { Lock, Eye } from "react-bootstrap-icons"
 import RoundButton from "../../components/Common/RoundButton/RoundButton"
 import { Plus } from "react-bootstrap-icons"
 /**
@@ -227,16 +227,11 @@ export default function Profile() {
 			//Här borde jag fixa en route till favoritsidans grej :)
 			return <img src="../../../assets/images/starFill.svg" />
 		}
-		if (state.hidden === true && state.author.userId == userId) {
+		if (state.hidden === true) {
 			return <Lock size={36} />
-		}
-		if (state.hidden === true && state.author.userId != userId) {
-			return <Unlock size={36} />
-		}
-		if (state.hidden === false && state.author.userId === userId) {
+		} else {
 			return <Eye size={36} />
 		}
-		return <Eye size={36} />
 	}
 
 	/**
