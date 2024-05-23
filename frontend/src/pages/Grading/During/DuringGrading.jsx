@@ -130,7 +130,6 @@ export default function DuringGrading() {
 		} else {
 			setCurrentTechniqueStep(prevStep => {
 				const previousTechniqueStep = Math.max(prevStep - 1, 0)
-				sessionStorage.setItem("currentTechniqueStep", previousTechniqueStep)
 				onUpdateStepToDatabase(previousTechniqueStep)
 				return previousTechniqueStep
 			})
@@ -211,6 +210,16 @@ export default function DuringGrading() {
 					// Get only pairs in this grading
 					const pair_examinees_current_grading = getPairsInCurrrentGrading(pairs_json)
 					setPairs(pair_examinees_current_grading)
+
+					const getSteps = await fetch(`/api/examination/grading/${gradingId}`, { headers: { "token": token } })
+					if (getSteps.status === 204) {
+						return
+					}
+					if (!getSteps.ok) {
+						throw new Error("Could not fetch pairs")
+					}
+					const steps = await getSteps.json()
+					setCurrentTechniqueStep(steps.techniqueStepNum)
 				} catch (ex) {
 					setErrorToast("Kunde inte hämta alla par")
 					console.error(ex)
@@ -724,9 +733,7 @@ export default function DuringGrading() {
 		setTechniqueNameList(techniqueNameList)
 		setCategoryIndices(categoryIndexMap)
 		// TODO: Set the index to the one inside the technique_step when it is available
-		if(sessionStorage.getItem("currentTechniqueStep") != undefined){
-			setCurrentTechniqueStep(sessionStorage.getItem("currentTechniqueStep"))
-		}else {
+		if(currentTechniqueStep === undefined){
 			setCurrentTechniqueStep(0)
 		}
 	}
