@@ -27,7 +27,7 @@ export default function GradingDeviations() {
 		const [gradingId, setGradingId] = useState(-1)
 		const { userId } = useParams() //The user id of the current examinee
 		const [name, setName] = useState("") //The name of the current examinee
-        const [showingAll, setShowingAll] = useState(false)
+        const [showingDeviationsOnly, setShowingDeviationsOnly] = useState(true)
         const [resultList, setResultList] = useState([])
         const [personalComments, setPersonalComments] = useState([])
         const [pairComments, setPairComments] = useState([])
@@ -278,9 +278,9 @@ export default function GradingDeviations() {
             <div className="d-flex justify-content-center">
                 <CheckBox
                     className = {styles["showAllCheckbox"]}
-                    checked={false}
-                    label = "Visa alla"
-                    onClick={(checked) => {setShowingAll(checked)}}
+                    checked={true}
+                    label = "Visa endast avvikelser"
+                    onClick={(checked) => {setShowingDeviationsOnly(checked)}}
                     enabled
                     id="checkbox-element"
                 />
@@ -302,7 +302,7 @@ export default function GradingDeviations() {
                             <div className = {styles["sc23-outline"]} id={category} key={index_div}>
                                 <Divider id = 'divider-example' option= 'h2_left' title = {category.category_name} key={index_id}/>
                                 {category.techniques.map((technique, index) => (
-                                    (isDeviating(technique.text) || showingAll) ?
+                                    (isDeviating(technique.text) || !showingDeviationsOnly) ?
                                         <Container id = {index} name = {technique.text} passed={hasPassed(technique.text)} key={index} 
                                         comment={getPersonalComment(technique.text)} pairComment={getPairComment(technique.text)} generalComment={getGroupComment(technique.text)}></Container>
                                         : null
