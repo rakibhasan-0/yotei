@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom"
+import { useState } from "react"
 import style from "./ListItem.module.css"
-import PopupMini from "src/components/Common/Popup/PopupMini.jsx"
+import PopupMini from "../../Common/Popup/PopupMini.jsx"
 import TechniqueDetailMini from "../../../pages/Activity/Technique/TechniqueDetail/TechniqueDetailMini"
 import ExerciseDetailMini from "../../../pages/Activity/Exercise/ExerciseDetailMini"
 
@@ -32,60 +33,62 @@ export default function ListItem({ item, checkBox, id, index, popUp}) {
 			}
 			if(item.type === "exercise") {
 				navigate("/exercise/exercise_page/" + item.path)
-			}
-		}	else{
+			}	
+		}else{
 			setIsOpen(true)
 
 		}
 	}
 
-	
 	return (
 		<div style={{ backgroundColor: bgColor }}>
-			<PopupMini title={item.name} id = "popup-list-item" isOpen={isOpen} setIsOpen={setIsOpen} isNested={true}  >
-			{(item.type == "technique") ?
-				<TechniqueDetailMini id = {item.path}></TechniqueDetailMini>
-				:
-				<ExerciseDetailMini id = {item.path}></ExerciseDetailMini>	
-			}	
-			</PopupMini>
 			
 			{item.type === "technique" ? (
-				
-				<div 
-					id={"technique-list-item-" + id}>
-					<div className={style.innerDiv}>
+				<>
+					<PopupMini title={item.name} id = "popup-list-item" isOpen={isOpen} setIsOpen={setIsOpen} isNested={true}  >
+						<TechniqueDetailMini id = {item.path}></TechniqueDetailMini>
+					</PopupMini>
+					
+					<div 
+						id={"technique-list-item-" + id}>
+						<div className={style.innerDiv}>
 
-						<div className={style.checkboxDiv}> 
-							{checkBox} 
-						</div>
+							<div className={style.checkboxDiv}> 
+								{checkBox} 
+							</div>
 
-						<div className={style.nameTag}> 
-							<Link onClick={handleOnClick}>
-								<p className={style.nameLink}>{item.name}</p> 
-							</Link>
+							<div className={style.nameTag}> 
+								<Link onClick={handleOnClick}>
+									<p className={style.nameLink}>{item.name}</p> 
+								</Link>
+							</div>
 						</div>
 					</div>
-				</div>
+				</>
 				
 			) : null}
 
 			{item.type === "exercise" ? (
-				<div  id={id}>
-					<div className={style.innerDiv}>
+				<>
+					<PopupMini title={item.name} id = "popup-list-item" isOpen={isOpen} setIsOpen={setIsOpen} isNested={true}  >
+						<ExerciseDetailMini id = {item.path}></ExerciseDetailMini>
+					</PopupMini>
+					<div  id={id}>
+						<div className={style.innerDiv}>
 
-						{checkBox}
-						<div className={style.nameTag}>
-							<Link onClick={handleOnClick}>
-								<p className={style.nameLink}>{item.name}</p>
-							</Link>
+							{checkBox}
+							<div className={style.nameTag}>
+								<Link onClick={handleOnClick}>
+									<p className={style.nameLink}>{item.name}</p>
+								</Link>
+							</div>
+							<div className={style.durationTag}> 
+								<p>{item.duration} min</p>
+							</div>
 						</div>
-						<div className={style.durationTag}> 
-							<p>{item.duration} min</p>
-						</div>
+						
 					</div>
-					
-				</div>
+				</>
 			) : null}
 		</div>
 	)
