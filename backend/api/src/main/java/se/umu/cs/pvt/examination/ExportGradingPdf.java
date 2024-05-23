@@ -72,15 +72,8 @@ public class ExportGradingPdf {
         this.examineePairs = examineePairs;
         this.protocol = parseJson(gradingProtocol);
 
-        try {
-            String currentPath = ExportGradingPdf.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-            File file = new File(currentPath);
-    
-            fontPath = file.getAbsolutePath() + "/se/umu/cs/pvt/fonts/NotoSans-Regular.ttf";
-    
-        }catch(Exception e) {
-            
-        }
+        fontPath = System.getenv("FONT_PATH");
+
 
         Map<String, Object> gradingProtocolObj = (Map<String, Object>) protocol.get("examination_protocol");
         this.code = (String)gradingProtocolObj.get("code");
