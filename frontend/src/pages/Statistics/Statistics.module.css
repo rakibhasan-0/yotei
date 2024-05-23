@@ -5,7 +5,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 10;
+    z-index: 4;
 	left: 50%; /* Center horizontally */
     transform: translateX(-50%); /* Adjust to center */
     padding: 10px; /* Adjust padding as necessary */
