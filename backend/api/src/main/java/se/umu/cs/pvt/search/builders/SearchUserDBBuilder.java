@@ -28,7 +28,7 @@ public class SearchUserDBBuilder implements SearchDBBuilderInterface {
 
             DatabaseQuery createdQuery = new DatabaseQuery();
             createdQuery.setQuery(
-                    "SELECT u.user_id, u.username, u.user_role " +
+                    "SELECT u.user_id, u.username " +
                     "FROM user_table AS u WHERE u.user_id='" + id + "'"
             );
             queries.add(createdQuery);
@@ -43,8 +43,8 @@ public class SearchUserDBBuilder implements SearchDBBuilderInterface {
 
             DatabaseQuery createdQuery = new DatabaseQuery();
             createdQuery.setQuery(
-                    "SELECT u.user_id, u.username, u.user_role " +
-                    "FROM user_table AS u WHERE u.user_role='" + role + "'"
+                    "SELECT u.user_id, u.username " +
+                    "FROM user_table AS u WHERE u.role_id='" + role + "'"
             );
             queries.add(createdQuery);
         }
@@ -56,7 +56,7 @@ public class SearchUserDBBuilder implements SearchDBBuilderInterface {
         DatabaseQuery databaseQuery = new DatabaseQuery();
         if (queries.isEmpty()) {
             databaseQuery.setQuery(
-                    "SELECT u.user_id, u.username, u.user_role " +
+                    "SELECT u.user_id, u.username " +
                     "FROM user_table AS u"
             );
         } else {

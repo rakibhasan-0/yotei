@@ -116,25 +116,31 @@ public class SearchController {
     @GetMapping("/workouts")
     public ResponseEntity<SearchResponse<WorkoutSearchResponse>> searchWorkouts(
             @RequestParam Map<String, String> urlQuery) {
-        SearchWorkoutParams searchWorkoutParams = new SearchWorkoutParams(urlQuery);
-
-        DatabaseQuery createdQuery = new SearchWorkoutDBBuilder(searchWorkoutParams)
-                .filterByDate()
-                .filterByFavourite()
-                .filterByPublic()
-                .filterByTags()
-                .build();
-
-        List<WorkoutDBResult> result = searchRepository.getWorkoutsFromCustomQuery(createdQuery.getQuery());
-        List<WorkoutSearchResponse> workoutSearchResponses = new SearchWorkoutResponseBuilder(result).build();
-        List<WorkoutSearchResponse> filteredResult = fuzzySearchFiltering(searchWorkoutParams.getName(),
-                workoutSearchResponses);
-
-        // Get tag complete suggestion from search input
-        List<String> tagCompletion = getTagSuggestions(searchWorkoutParams.getName(), searchWorkoutParams.getTags(),
-                TagType.workout_tag);
-
-        SearchResponse<WorkoutSearchResponse> response = new SearchResponse<>(filteredResult, tagCompletion);
+        SearchResponse<WorkoutSearchResponse> response = new SearchResponse<>(null, null);
+        try {
+            SearchWorkoutParams searchWorkoutParams = new SearchWorkoutParams(urlQuery);
+    
+            DatabaseQuery createdQuery = new SearchWorkoutDBBuilder(searchWorkoutParams)
+                    .filterByDate()
+                    .filterByFavourite()
+                    .filterByPublic()
+                    .filterByTags()
+                    .build();
+    
+            List<WorkoutDBResult> result = searchRepository.getWorkoutsFromCustomQuery(createdQuery.getQuery());
+            List<WorkoutSearchResponse> workoutSearchResponses = new SearchWorkoutResponseBuilder(result).build();
+            List<WorkoutSearchResponse> filteredResult = fuzzySearchFiltering(searchWorkoutParams.getName(),
+                    workoutSearchResponses);
+    
+            // Get tag complete suggestion from search input
+            List<String> tagCompletion = getTagSuggestions(searchWorkoutParams.getName(), searchWorkoutParams.getTags(),
+                    TagType.workout_tag);
+    
+            response = new SearchResponse<>(filteredResult, tagCompletion);
+            
+        } catch (Exception e) {
+            throw e;
+        }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

@@ -36,7 +36,7 @@ public class UserDBBuilderTest {
         params = new SearchUserParams(urlQuery);
         builder = new SearchUserDBBuilder(params);
 
-        String expectedQuery = "SELECT u.user_id, u.username, u.user_role " +
+        String expectedQuery = "SELECT u.user_id, u.username " +
                 "FROM user_table AS u";
 
         assertThat(builder
