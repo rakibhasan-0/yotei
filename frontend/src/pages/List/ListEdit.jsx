@@ -10,37 +10,55 @@ import {
 import { ListCreateContext } from "../../components/Common/List/ListCreateContext.js"
 import styles from "./WorkoutModify.module.css"
 import { Spinner } from "react-bootstrap"
+import { setSuccess, setError } from "../../utils.js"
 
 /**
  * This is the page for editing a saved list.
  *
  * @author Team Tomato (6)
- * @since 2023-05-21
- * Based on WorkoutEdit
+ * @version 1.0
+ * @since 2024-05-22
  */
+
 const ListEdit = () => {
 	const [listCreateInfo, listCreateInfoDispatch] = useReducer(
 		listCreateReducer,
 		JSON.parse(JSON.stringify(ListCreateInitialState))
 	)
+	const isEdit = window.location.href.toString().includes("edit")
+
 	const navigate = useNavigate()
-	const {userId } = useContext(AccountContext)
-	//TBF
-	//const { token, userId } = useContext(AccountContext)
+	const { userId, token } = useContext(AccountContext)
 
 	const location = useLocation()
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const [isLoading, setIsLoading] = useState(true)
-
+	const localStorageDestination = isEdit ? "listCreateInfoEdit" : "listCreateInfoCreate"
 	/**
 	 * Submits the form data to the API.
 	 */
 	async function submitHandler() {
 		setIsSubmitted(true)
 		const data = parseData(listCreateInfo.data)
-		//TBF
-		console.log("Console.log so that linter does not give errors:"+data)
-		navigate(-1)
+		let listId
+
+		if (isEdit) {
+			listId = await updateActivityList(data)
+			if (listId) {
+				setSuccess("Träningen uppdaterades!")
+			} else {
+				setError("Träningen kunde inte uppdateras.")
+			}
+		} else {
+			listId = await createActivityList(data)
+
+			if (listId) {
+				setSuccess("Träningen skapades!")
+			} else {
+				setError("Träningen kunde inte skapas.")
+			}
+			navigate("/profile/list/" + listId)
+		}
 	}
 
 	/**
@@ -71,7 +89,7 @@ const ListEdit = () => {
 			users: data.users.map((user) => user.userId),
 		}
 	}
-	/* TBF (To Be Fixed)
+
 	const updateActivityList = async (body) => {
 		const requestOptions = {
 			method: "PUT",
@@ -86,23 +104,40 @@ const ListEdit = () => {
 		const response = await fetch("/api/activitylists/edit", requestOptions)
 		const jsonResp = await response.json()
 
-		return jsonResp.workoutId
+		return jsonResp
 	}
-*/
+
+	const createActivityList = async (body) => {
+		const requestOptions = {
+			method: "POST",
+			headers: {
+				Accept: "application/json",
+				"Content-type": "application/json",
+				token,
+			},
+			body: JSON.stringify(body),
+		}
+		const response = await fetch("/api/activitylists/add", requestOptions)
+		const jsonResp = await response.json()
+
+		return jsonResp
+	}
 	/**
 	 * Fetches the data from the local storage and context.
 	 */
 	useEffect(() => {
 		setIsLoading(true)
-		const item = localStorage.getItem("listCreateInfoEdit")
+		const item = localStorage.getItem(localStorageDestination)
 		const listData = location.state?.list
 		const userData = location.state?.list.users
-		if (listData) {
+		if (listData && isEdit) {
 			listCreateInfoDispatch({
 				type: LIST_CREATE_TYPES.INIT_EDIT_DATA,
 				payload: { listData, userData: userData ? userData : [] },
 			})
 			window.history.replaceState({}, document.title)
+		} else if (!item && !isEdit) {
+			listCreateInfoDispatch({ type: LIST_CREATE_TYPES.SET_INITIAL_STATE })
 		} else if (item) {
 			listCreateInfoDispatch({
 				type: LIST_CREATE_TYPES.INIT_WITH_DATA,
@@ -119,10 +154,10 @@ const ListEdit = () => {
 	 * Or removes it if the user has submitted the form.
 	 */
 	useEffect(() => {
-		localStorage.setItem("listCreateInfoEdit", JSON.stringify(listCreateInfo))
+		localStorage.setItem(localStorageDestination, JSON.stringify(listCreateInfo))
 
 		return () => {
-			if (isSubmitted) localStorage.removeItem("listCreateInfoEdit")
+			if (isSubmitted) localStorage.removeItem(localStorageDestination)
 		}
 	}, [listCreateInfo, isSubmitted])
 	return (
@@ -132,8 +167,17 @@ const ListEdit = () => {
 			) : (
 				<>
 					<ListCreateContext.Provider value={{ listCreateInfo, listCreateInfoDispatch }}>
-						<title>Redigera lista</title>
-						<h1 className={styles.title}>Redigera lista</h1>
+						{isEdit ? (
+							<>
+								<title>Redigera lista</title>
+								<h1 className={styles.title}>Redigera lista</h1>
+							</>
+						) : (
+							<>
+								<title>Skapa lista</title>
+								<h1 className={styles.title}>Skapa lista</h1>
+							</>
+						)}
 
 						<ListFormComponent
 							callback={submitHandler}

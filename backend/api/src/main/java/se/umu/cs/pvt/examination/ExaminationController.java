@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import java.util.Base64;
 
 /**
  * Class for handling requests to the examination api.
@@ -587,8 +588,8 @@ public class ExaminationController {
      * Returns a list of the result of all techniques for a given examinee.
      * @param examinee Given technique name.
      */
-    @GetMapping("/examresult/{examinee_id}")
-    public ResponseEntity<List<ExaminationResult>>  getExaminationProtocolByExaminee(@PathVariable("examinee_id") long examinee_id) {
+    @GetMapping("/examresult/{grading_id}/{examinee_id}")
+    public ResponseEntity<List<ExaminationResult>>  getExaminationProtocolByExaminee(@PathVariable("grading_id") long grading_id, @PathVariable("examinee_id") long examinee_id) {
         List<ExaminationResult> examinationResults = examinationResultRepository.findAll();
         ArrayList<ExaminationResult> matching_results = new ArrayList<>();
         for(ExaminationResult er : examinationResults) {
@@ -625,11 +626,11 @@ public class ExaminationController {
 
         System.out.println(examinationProtocolRepository.findByBeltId(grading.get().getBeltId()).getExaminationProtocol().toString());
 
-        ExportGradingPdf pdfExport = new ExportGradingPdf(examinationProtocolRepository.findByBeltId(grading.get().getBeltId()).getExaminationProtocol().toString(),gradingRepository.findById(grading_id).get(), examineeRepository.findAll(), examinationResultRepository.findAll(), examinationCommentRepository.findByGradingId(grading_id), examineePairRepository.findAll());
+        ExportGradingPdf pdfExport = new ExportGradingPdf(examinationProtocolRepository.findByBeltId(grading.get().getBeltId()).getExaminationProtocol().toString(),gradingRepository.findById(grading_id).get(), examineeRepository.findByGradingId(grading_id), examinationResultRepository.findAll(), examinationCommentRepository.findByGradingId(grading_id), examineePairRepository.findAll());
 
         try {
             InputStream stream = pdfExport.generate();
-            return new ResponseEntity<Object>(stream.readAllBytes(), HttpStatus.OK);
+            return new ResponseEntity<Object>( Base64.getEncoder().encode(stream.readAllBytes()), HttpStatus.OK);
         } catch (IOException e) {
             e.printStackTrace();
             return new ResponseEntity<Object>(null, HttpStatus.BAD_REQUEST);   

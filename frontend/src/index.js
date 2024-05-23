@@ -68,11 +68,12 @@ const planURI = "https://jsonplaceholder.typicode.com/users"
  *
  * @author
  * 		Unknown authors
- *     	Team Kiwi, Team Mango
+ *     	Team Kiwi, Team Mango, Team Durian
  * @version 2.2
  * @updated 2024-05-08 Changed so workout/edit url also have the workout id in it
  *          2024-05-17 Added user permissions to token.
  * 					2024-05-20 Changed route param for profile/list
+ * 					2024-05-22 Added username
  */
 export default function App() {
 	const cookie = new Cookies().get("token")
@@ -181,6 +182,7 @@ export default function App() {
 						
 						<Route path="list/editList" element={<ListEdit />} />
 						<Route path="list/edit/:activityListId" element={<ListEdit />} />
+						<Route path="list/create" element={<ListEdit />} />
 						<Route path="profile/list/:activityListId" element={<ListInfo />} />
 						<Route path="profile/favouriteWorkouts" element={<FavouriteWorkoutsList />} />
 						<Route path="grading" element={<Grading />} />
@@ -204,7 +206,7 @@ export default function App() {
 		<>
 			<ToastContainer />
 			<AccountContext.Provider
-				value={{ token, role: decodedToken?.role, userId: decodedToken?.userId, permissions: decodedToken?.permissions, setToken }}
+				value={{ token, role: decodedToken?.role, userId: decodedToken?.userId, username: decodedToken?.username, permissions: decodedToken?.permissions, setToken }}
 			>
 				<RouterProvider router={routes} />
 			</AccountContext.Provider>

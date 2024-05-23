@@ -1,7 +1,14 @@
 import { useContext, useEffect } from "react"
-import { isAdmin } from "./utils"
+import { isAdminUser } from "./utils"
 import { useNavigate } from "react-router"
 import { AccountContext } from "./context"
+
+/**
+ * TODO: figure out what this file does AND document it here.
+ * 
+ * @author UNKNOWN, Team Mango
+ * @updated 2024-05-22 Team Mango: Changed isAdmin check to new check.
+ */
 
 export default function AdminRoute({children}) {
 
@@ -9,12 +16,12 @@ export default function AdminRoute({children}) {
 	const navigate = useNavigate()
 
 	useEffect(() => {
-		if(!isAdmin(token)) {
+		if(!isAdminUser(token)) {
 			navigate(-1)
 		}
 	})
 
-	if(isAdmin(token)) {
+	if(isAdminUser(token)) {
 		return (
 			<div>
 				{children}

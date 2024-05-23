@@ -5,6 +5,7 @@ import { render, screen, configure} from "@testing-library/react"
 import "@testing-library/jest-dom"
 import ReviewComment from "../../../components/Workout/WorkoutReview/ReviewComment.jsx"
 import { AccountContext } from "../../../context"
+import { USER_PERMISSION_LIST_ALL } from "../../../utils.js"
 configure({testIdAttribute: "id"})
 
 /**
@@ -137,7 +138,7 @@ test("Admin can see icon to remove user comment", async () => {
 	}
 
 	render(
-		<AccountContext.Provider value={{ userId: 1, role: "ADMIN" }}>
+		<AccountContext.Provider value={{ userId: 1, role: "ADMIN", permissions: USER_PERMISSION_LIST_ALL }}>
 			<ReviewComment comment={review} testId={1}/>
 		</AccountContext.Provider>
 	)

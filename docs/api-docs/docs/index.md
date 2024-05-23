@@ -34,6 +34,7 @@ Remove this paragraph when documentation is done.
 | Import API      | Done        |
 | Comment API     | Done        |
 | Statistics API  | Done        |
+|Examination API  | In progress |
 
 # Documenting endpoints
 
