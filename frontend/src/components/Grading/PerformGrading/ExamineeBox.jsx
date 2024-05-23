@@ -8,40 +8,6 @@ import { AccountContext } from "../../../context"
 import { useParams } from "react-router-dom"
 import { setError as setErrorToast } from "../../../utils"
 
-/**
- * This is a box containing the Examinee's name.
- * 
- * @param {Object} props - Component properties.
- * @param {any} props.id - The id of the component.
- * @param {String} props.examineeName - The name of the examinee.
- * @param {any} props.examineeId - The id of the examinee.
- * @param {String} props.techniqueName - The name of the technique.
- * @param {function} props.onClick - onClick function when component is pressed.
- * @param {String} props.status - The current status of the button.
- * @param {function} props.setButtonState - Function to set the state of the button.
- * 
- * Example Usage:
- * <ExamineeBox 
- *  examineeName="test person"
- *  onClick={() => console.log("Clicked")}/>
- * 
- * @component
- * @example
- * return (
- *   <ExamineeBox 
- *     examineeName="test person"
- *     examineeId={1}
- *     techniqueName="Some Technique"
- *     onClick={() => console.log("Clicked")}
- *     status="default"
- *     setButtonState={(state) => console.log(state)}
- *   />
- * )
- * 
- * @version 3.0
- * @since 2024-05-21
- * @author Apelsin
- */
 export default function ExamineeBox({ 
 	id, 
 	examineeName, 
@@ -54,13 +20,12 @@ export default function ExamineeBox({
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [isAddingComment, setAddComment] = useState(false)
 	const [commentText, setCommentText] = useState("")
+	const [initialCommentText, setInitialCommentText] = useState("") 
 	const [commentError, setCommentError] = useState("")
 	const [hasComment, setExistingComment] = useState(false)
 	const [commentId, setCommentId] = useState(null)
 	
 	const isErr = !(commentError == undefined || commentError == null || commentError == "")
-
-
 
 	const colors = {
 		default: "white",
@@ -71,7 +36,6 @@ export default function ExamineeBox({
 	const { gradingId } = useParams()
 	const { token, userId } = useContext(AccountContext)
 
-	// Set initial color index based on status prop
 	const [color, setColor] = useState(colors[status] || colors.default)
     
 	useEffect(() => {
@@ -84,14 +48,10 @@ export default function ExamineeBox({
 		}
 	}, [isAddingComment])
 
-	// Updates notifications when switching techniques
 	useEffect(() => {
 		handleExistingInput()
 	}, [techniqueName])
 
-	/**
-     * Discards the current personal comment.
-     */
 	const onDiscardPersonalComment = async () => {
 		if (!hasComment) {
 			setCommentText("")
@@ -99,21 +59,17 @@ export default function ExamineeBox({
 		setAddComment(false)
 	}
 
-	/**
-     * Toggles the visibility of the personal comment input.
-     * @param {boolean} show - Whether to show or hide the comment input.
-     */
 	const toggleAddPersonalComment = (show) => {
-		if (!show && commentText && commentText.trim().length > 0) {
+		if (!show && commentText !== initialCommentText) { 
 			setShowDiscardComment(true)
 			return
 		}
 		setAddComment(show)
+		if (show) {
+			setInitialCommentText(commentText)
+		}
 	}
 
-	/**
-     * Updates an existing comment via an API call.
-     */
 	async function updateComment() {
 		const response = await fetch("/api/examination/comment", {
 			method: "PUT",
@@ -138,9 +94,6 @@ export default function ExamineeBox({
 		}
 	}
 
-	/**
-     * Posts a new comment via an API call.
-     */
 	async function postComment() {
 		const response = await fetch("/api/examination/comment/", {
 			method: "POST",
@@ -166,9 +119,6 @@ export default function ExamineeBox({
 		setExistingComment(true)
 	}
 
-	/**
-     * Adds or updates a personal comment based on its existence.
-     */
 	const onAddPersonalComment = async () => {
 		if (!commentText || !commentText.trim() || commentText.length === 0) {
 			setCommentError("Kommentaren får inte vara tom")
@@ -189,9 +139,6 @@ export default function ExamineeBox({
 		}
 	}
 
-	/**
-     * Handles the retrieval of existing input data (comments) for the current examinee.
-     */
 	const handleExistingInput = async () => {
 		try {
 			const response = await fetch(`/api/examination/comment/examinee/${examineeId}?technique_name=${techniqueName}`, {
@@ -201,6 +148,7 @@ export default function ExamineeBox({
 			if (response.status === 404) {
 				console.log("No existing comment, 404 status")
 				setCommentText("")
+				setInitialCommentText("")
 				setExistingComment(false)
 				return
 			}
@@ -216,10 +164,12 @@ export default function ExamineeBox({
 			if (commentObject) {
 				setCommentId(commentObject.commentId)
 				setCommentText(commentObject.comment)
+				setInitialCommentText(commentObject.comment)
 				setExistingComment(true)
 			} else {
 				setCommentId(null)
 				setCommentText("")
+				setInitialCommentText("")
 				setExistingComment(false)
 			}
 		} catch (ex) {
@@ -229,7 +179,6 @@ export default function ExamineeBox({
 	}
 
 	const handleClick = () => {
-		// Update buttonState and color based on current color
 		let newButtonState
 		let newColor
         
@@ -246,7 +195,7 @@ export default function ExamineeBox({
         
 		setButtonState(newButtonState)
 		setColor(newColor)
-		onClick(newButtonState) // Pass the new state as a parameter
+		onClick(newButtonState)
 	}
 
 	return (
@@ -291,7 +240,7 @@ export default function ExamineeBox({
 					showPopup={showDiscardComment}
 					onClick={() => {onDiscardPersonalComment()}}
 					setShowPopup={() => setShowDiscardComment(false)}
-					zIndex={200} // Above the comment popup.
+					zIndex={200}
 				/>
 			</fieldset>
 		</div>
