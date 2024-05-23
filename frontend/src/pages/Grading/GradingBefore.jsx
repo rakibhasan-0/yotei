@@ -6,7 +6,7 @@ import styles from "./GradingBefore.module.css"
 import { AccountContext } from "../../context"
 import AddExaminee from "../../components/Common/AddExaminee/AddExaminee"
 import EditableListItem from "../../components/Common/EditableListItem/EditableListItem"
-import { X as CloseIcon } from "react-bootstrap-icons"
+import { X as CloseIcon, LockFill } from "react-bootstrap-icons"
 import PopupSmall from "../../components/Common/Popup/PopupSmall"
 
 import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../utils"
@@ -524,7 +524,7 @@ export default function GradingBefore() {
 	 * @param {Boolean} isExamineeInPair
 	 */
 	async function editExaminee(examineeId, name, isExamineeInPair) {
-
+    console.log("hej")
 		if (isExamineeInPair) {
 			setPair(
 				pairs.map((pair) => {
@@ -601,6 +601,7 @@ export default function GradingBefore() {
 									item={pair[1].name}
 									onRemove={removeExamineeInPair}
 									onEdit={(id, name) => { editExaminee(id, name, true) }}
+                  canEdit={Boolean(!pair[1].isLocked)}
 									onCheck={onCheck}
 									validateInput={validateInput}
 									showCheckbox={false}
@@ -613,6 +614,7 @@ export default function GradingBefore() {
 									item={pair[0].name}
 									onRemove={removeExamineeInPair}
 									onEdit={(id, name) => { editExaminee(id, name, true) }}
+                  canEdit={Boolean(!pair[0].isLocked)}
 									onCheck={onCheck}
 									validateInput={validateInput}
 									showCheckbox={false}
@@ -629,7 +631,16 @@ export default function GradingBefore() {
 										onClick={() => removePair(pair[0].id, pair[1].id, pair[1].pairId)}
 									/>
 								</div>
-                : null}						
+                : 
+                <div style={{ paddingTop: "20px", right: "10px", position: "absolute" }}> 
+                  <LockFill
+                    className={styles.lock}
+                    key={"lock-icon-" + toString(pair[0].id) + toString(pair[1].id) + "-pairId-" + toString(pair[0].pairId)}
+                    position="static"
+										color="var(--red-primary)"
+                    size="20px"
+                  />  
+                </div>}						
 							</div>
 						)
 					}
@@ -653,14 +664,15 @@ export default function GradingBefore() {
 								id={examinee.id}
 								item={examinee.name}
 								onRemove={removeExaminee}
-								onEdit={(id, name) => { editExaminee(id, name, false) }}
+								onEdit={(id, name) => {editExaminee(id, name, false)}}
+                canEdit={Boolean(!examinee.isLocked)}
 								onCheck={onCheck}
 								validateInput={validateInput}
 								showCheckbox={showCheckbox}
 								checked={false}
 								showTrash={Boolean(!examinee.isLocked)}
 								showX={false}
-								showLock={Boolean(examinee.isLocked)}
+								showLock={!Boolean(!examinee.isLocked)}
 							/>
 
 						</div>
