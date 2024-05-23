@@ -21,6 +21,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.LoggerFactory;
+import ch.qos.logback.classic.LoggerContext;
+
 /**
  * 
  * This is essentially tests for the database init scripts.
@@ -45,12 +48,35 @@ public class TechniqueDatabaseTest {
     static String POSTGRESQL_PASSWORD = System.getProperty("POSTGRESQL_PASSWORD");
     static String POSTGRESQL_DATABASE = System.getProperty("POSTGRESQL_DATABASE");
 
+    static LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+
+    //INDICES FOR ALL START AND STOPS OF TECHNIQUES TO EACH BELT IN TECHNIQUES.SQL
+    //CHANGE THESE IF THE TESTS FAIL AFTER TECHNIQUES.SQL IS CHANGED
+    static int yellowBegin = 1;
+    static int yellowEnd = 25;
+
+    static int orangeBegin = 26;
+    static int orangeEnd = 49;
+
+    static int greenBegin = 50;
+    static int greenEnd = 74;
+
+    static int blueBegin = 75;
+    static int blueEnd = 101;
+
+    static int brownBegin = 102;
+    static int brownEnd = 134;
 
     @BeforeAll
     public static void setUp() {
+        loggerContext.stop();
+        System.out.println("Setting up container");
+
         //We go into the .env in the project root and find the password etc. for the database
         try {
             if (POSTGRESQL_DATABASE == null) {
+                System.out.println("Getting DB credentials");
+
                 String envFilePath = "../../.env";
                 String envFileContent = new String(Files.readAllBytes(Paths.get(envFilePath)));
 
@@ -75,6 +101,7 @@ public class TechniqueDatabaseTest {
             e.printStackTrace();
         }
 
+        System.out.println("Building Image from DockerFile");
         ImageFromDockerfile image = new ImageFromDockerfile()
             .withDockerfile(Paths.get("../../infra/database/Dockerfile"));
 
@@ -90,18 +117,23 @@ public class TechniqueDatabaseTest {
             .withEnv("POSTGRESQL_PASSWORD", POSTGRESQL_PASSWORD)
             .withExposedPorts(PostgreSQLContainer.POSTGRESQL_PORT);
 
+        System.out.println("Waiting for container to be ready");
         //NOTE: We had to increase the timer to 120 rather than 60, which is wierd as both should work.
         postgreSQLContainer.setWaitStrategy(Wait.defaultWaitStrategy()
                 .withStartupTimeout(Duration.ofSeconds(120)));
-        
+        System.out.println("Starting container");
         postgreSQLContainer.start();
     }
 
     @AfterAll
     public static void tearDown() {
+        String output = postgreSQLContainer.getLogs();
         if (postgreSQLContainer != null) {
             postgreSQLContainer.stop();
         }
+        System.out.println(output);
+        loggerContext.start();
+        System.out.println("Running Tests!");
     }
 
     /**
@@ -117,9 +149,6 @@ public class TechniqueDatabaseTest {
         String jdbcUrl = postgreSQLContainer.getJdbcUrl();
         String username = postgreSQLContainer.getUsername();
         String password = postgreSQLContainer.getPassword();
-
-        int yellowBegin = 1;
-        int yellowEnd = 25;
 
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
@@ -156,15 +185,12 @@ public class TechniqueDatabaseTest {
         String username = postgreSQLContainer.getUsername();
         String password = postgreSQLContainer.getPassword();
 
-        int yellowBegin = 26;
-        int yellowEnd = 49;
-
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique
                 String expectedColor = "Orange";
 
-                for(Integer i = yellowBegin; i < yellowEnd + 1; i++){
+                for(Integer i = orangeBegin; i < orangeEnd + 1; i++){
                     String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
                 
                     PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
@@ -194,15 +220,12 @@ public class TechniqueDatabaseTest {
         String username = postgreSQLContainer.getUsername();
         String password = postgreSQLContainer.getPassword();
 
-        int yellowBegin = 50;
-        int yellowEnd = 74;
-
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique
                 String expectedColor = "Grönt";
 
-                for(Integer i = yellowBegin; i < yellowEnd + 1; i++){
+                for(Integer i = greenBegin; i < greenEnd + 1; i++){
                     String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
                 
                     PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
@@ -232,15 +255,12 @@ public class TechniqueDatabaseTest {
         String username = postgreSQLContainer.getUsername();
         String password = postgreSQLContainer.getPassword();
 
-        int yellowBegin = 75;
-        int yellowEnd = 101;
-
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique
                 String expectedColor = "Blått";
 
-                for(Integer i = yellowBegin; i < yellowEnd + 1; i++){
+                for(Integer i = blueBegin; i < blueEnd + 1; i++){
                     String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
                 
                     PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
@@ -270,15 +290,12 @@ public class TechniqueDatabaseTest {
         String username = postgreSQLContainer.getUsername();
         String password = postgreSQLContainer.getPassword();
 
-        int yellowBegin = 102;
-        int yellowEnd = 134;
-
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique
                 String expectedColor = "Brunt";
 
-                for(Integer i = yellowBegin; i < yellowEnd + 1; i++){
+                for(Integer i = brownBegin; i < brownEnd + 1; i++){
                     String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
                 
                     PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);

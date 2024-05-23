@@ -7,12 +7,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import se.umu.cs.pvt.permission.RoleToPermissionRepository;
 import se.umu.cs.pvt.permission.UserToPermissionRepository;
+import se.umu.cs.pvt.role.Role;
 import se.umu.cs.pvt.role.RoleRepository;
 
 import java.security.NoSuchAlgorithmException;
@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Test class for USER-API methods.
  *
  * @author Quattro Formaggio (Group 1), Phoenix (25-04-2023)
- * @author Team Mango (Grupp 4) - 2024-05-17
+ * @author Team Mango (Grupp 4) - 2024-05-22
  */
 
 @ExtendWith(MockitoExtension.class)
@@ -220,6 +220,49 @@ public class UserApiTest {
         } catch (Exception e) {
             e.printStackTrace();
             fail();
+        }
+    }
+
+    @Test
+    void shouldSetRoleCorrectly() {
+        try {
+            Long id = 3L;
+            Mockito.lenient().when(userRepository.findById(id)).thenAnswer(invocation -> Optional.of(new User("user3", "user3", 1, 2L)));
+
+            Mockito.lenient().when(roleRepository.findById(Mockito.anyLong())).thenAnswer(invocation -> Optional.of(new Role("test")));
+
+            Mockito.lenient().when(userRepository.save(Mockito.any()))
+                .thenAnswer(invocation -> {
+                    User newUser = invocation.getArgument(0);
+                    return newUser;
+                });
+            
+            Object response = lc.setUserRoleThroughRoleId(id, 4L);
+            if (response instanceof ResponseEntity<?>) {
+                HttpStatus actual = ((ResponseEntity<?>) response).getStatusCode();
+                assertEquals(HttpStatus.OK, actual);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    void shouldRemoveRoleCorrectly() {
+        Long id = 3L;
+        Mockito.lenient().when(userRepository.findById(id)).thenAnswer(invocation -> Optional.of(new User("user3", "user3", 1, 2L)));
+
+        Mockito.lenient().when(userRepository.save(Mockito.any()))
+            .thenAnswer(invocation -> {
+                User newUser = invocation.getArgument(0);
+                return newUser;
+            });
+
+        Object response = lc.removeRoleFromUserWithId(id);
+        if (response instanceof ResponseEntity<?>) {
+            HttpStatus actual = ((ResponseEntity<?>) response).getStatusCode();
+            assertEquals(HttpStatus.OK, actual);
         }
     }
 }
