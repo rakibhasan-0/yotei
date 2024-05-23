@@ -304,18 +304,18 @@ public class TechniqueChainController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
+/*
     @GetMapping("/chain/{id}")
     public ResponseEntity<TechniqueChainChain> getChainById(@PathVariable Long id) {
         Optional<TechniqueChainChain> optionalWeave = chainRepository.findById(id);
         if (optionalWeave.isPresent()) {
             TechniqueChainChain chain = optionalWeave.get();
             // Eagerly fetch the edges if needed
-            chain.getNodes().size();
+            chain.getNode().size();
             return new ResponseEntity<>(chain, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
+*/
 }

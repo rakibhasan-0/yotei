@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 public class TechniqueChainChainService {
+    
     @Autowired
     private TechniqueChainChainRepository chainRepository;
 
@@ -33,4 +34,5 @@ public class TechniqueChainChainService {
             return null; // Node not found
         }
     }
+    
 }
