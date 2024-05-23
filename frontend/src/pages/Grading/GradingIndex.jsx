@@ -7,7 +7,11 @@ import { Plus } from "react-bootstrap-icons"
 import styles from "./GradingIndex.module.css"
 import BeltButton from "../../components/Common/Button/BeltButton"
 import Spinner from "../../components/Common/Spinner/Spinner"
+import { Trash} from "react-bootstrap-icons"
 import { canHandleGradings, isAdminUser } from "../../utils"
+import PopupSmall from "../../components/Common/Popup/PopupSmall"
+
+
 
 /**
  * The grading create page.
@@ -26,8 +30,10 @@ export default function GradingIndex() {
 	const [isCreateListDone, setIsCreateListDone] = useState(false)
 	const context = useContext(AccountContext)
 	const navigate = useNavigate()
-
+	const [showPopup, setShowPopup] = useState(false)
+	const [trashClicked, setTrashClicked] = useState(false)
 	const { token, userId } = context
+	const [gradingToDelete, setGradingToDelete] = useState(null)
 
 	/**
 	 * Navigate to next page, params such as gradingId, gradingStep and hexcolor for belt.
@@ -39,7 +45,11 @@ export default function GradingIndex() {
 		const params = {
 			ColorParam: color,
 		}
-		navigate(`/grading/${gradingId}/${gradingStep}`, { state: params })
+		if (!trashClicked) {
+			navigate(`/grading/${gradingId}/${gradingStep}`, { state: params })
+		}
+
+		setTrashClicked(false)
 	}
 
 	/**
@@ -47,6 +57,54 @@ export default function GradingIndex() {
 	 */
 	function navigateTo() {
 		navigate("/grading/create")
+	}
+
+	const handleIconClick = (grading) => {
+		setTrashClicked(true)
+		setGradingToDelete(grading)
+		setShowPopup(true)	 
+	}
+
+	function handleTrashClick(gradingId) {
+
+		if(showPopup) {
+
+			fetch(`/api/examination/grading/${gradingId}`, {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+					"token": token 
+				}
+			})
+				.then(response => {
+					if (currentGradings.some(grading => grading.gradingId === gradingId)) {
+						setCurrentGradings(prevCurrentGradings =>
+							prevCurrentGradings.filter(grading => grading.gradingId !== gradingId)
+						)
+
+					}
+					
+					if (finishedGradings.some(grading => grading.gradingId === gradingId)) {
+						setFinishedGradings(prevFinishedGradings =>
+							prevFinishedGradings.filter(grading => grading.gradingId !== gradingId)
+						)
+					}
+
+					if (!response.ok) {
+						throw new Error("Network response was not ok")
+					}
+
+				})
+				.catch(error => {
+					console.error("Det uppstod ett problem med DELETE-förfrågan:", error)
+				})
+
+			setShowPopup(false)	 
+			setGradingToDelete(null)
+			navigate("/grading")
+
+
+		}
 	}
 
 	/**
@@ -181,11 +239,27 @@ export default function GradingIndex() {
 								<BeltButton
 									key={index}
 									width={"100%"}
+									
 									onClick={() => handleNavigation(grading.gradingId, grading.step, belts[grading.beltId]?.hex)}
 									color={belts[grading.beltId]?.hex}
 								>
-									<h2>{`${grading.title}`} </h2>
+								
+									<div style={{ display: "flex", alignItems: "center", width: "100%", position: "relative" }}>
+										<h2 style={{ margin: 0, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
+											{grading.title}
+										</h2>
 
+										<button 
+											onClick={(e) => {
+												e.stopPropagation() 
+												handleIconClick(grading)
+											}} 
+											style={{ marginLeft: "auto", background: "none", border: "none", cursor: "pointer" }}
+										>
+											<Trash />
+										</button>
+									
+									</div>
 								</BeltButton>
 							))}
 
@@ -206,18 +280,49 @@ export default function GradingIndex() {
 									onClick={() => handleNavigation(grading.gradingId, grading.step, belts[grading.beltId]?.hex)}
 									color={belts[grading.beltId]?.hex}
 								>
-									<h2>{`${grading.title}`} </h2>
+									<div style={{ display: "flex", alignItems: "center", width: "100%", position: "relative" }}>
+										<h2 style={{ margin: 0, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
+											{grading.title}
+										</h2>
+										<button 
+											onClick={(e) => {
+												e.stopPropagation() 
+												handleIconClick(grading)
+											}} 
+											style={{ marginLeft: "auto", background: "none", border: "none", cursor: "pointer" }}
+										>
+											<Trash />
+										</button>
+									</div>
+
 								</BeltButton>
 							))}
 						</div>
 					)}
 				</div>          
 			</div>
-
-
+			
 			<RoundButton onClick={navigateTo}>
 				<Plus />
 			</RoundButton>
+
+			{showPopup && gradingToDelete && (
+				<PopupSmall
+					id={"test-popup"}
+					title={"Varning"}
+					isOpen={showPopup}
+					setIsOpen={setShowPopup}
+					direction={() => handleTrashClick(gradingToDelete.gradingId)}
+				>
+					<h2>Är du säker på att du vill radera: <span style={{ fontWeight: "bold", fontSize: "18px" }}>{gradingToDelete.title}</span>? </h2>
+					<h2>Graderingsprotokollet kommer att <span style={{ fontWeight: "bold", fontSize: "18px" }}>raderas</span> och går inte att återskapas. </h2>
+					<br></br>
+				</PopupSmall>
+			)}
 		</center>
+
+
+		
+
 	)	
 }
