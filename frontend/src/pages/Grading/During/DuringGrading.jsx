@@ -210,16 +210,6 @@ export default function DuringGrading() {
 					// Get only pairs in this grading
 					const pair_examinees_current_grading = getPairsInCurrrentGrading(pairs_json)
 					setPairs(pair_examinees_current_grading)
-
-					const getSteps = await fetch(`/api/examination/grading/${gradingId}`, { headers: { "token": token } })
-					if (getSteps.status === 204) {
-						return
-					}
-					if (!getSteps.ok) {
-						throw new Error("Could not fetch pairs")
-					}
-					const steps = await getSteps.json()
-					setCurrentTechniqueStep(steps.techniqueStepNum)
 				} catch (ex) {
 					setErrorToast("Kunde inte hämta alla par")
 					console.error(ex)
@@ -235,6 +225,12 @@ export default function DuringGrading() {
 				const grading = await fetchGrading()
 				const protocol = await fetchProtocol(grading)
 				const parsedProtocol = parseProtocol(protocol)
+				const getSteps = await fetch(`/api/examination/grading/${gradingId}`, { headers: { "token": token } })
+				if (getSteps.status === 204) {
+					//return
+				}
+				const steps = await getSteps.json()
+				setCurrentTechniqueStep(steps.techniqueStepNum)
 				updateState(parsedProtocol)
 			} catch (error) {
 				handleFetchError(error)
@@ -733,9 +729,10 @@ export default function DuringGrading() {
 		setTechniqueNameList(techniqueNameList)
 		setCategoryIndices(categoryIndexMap)
 		// TODO: Set the index to the one inside the technique_step when it is available
-		if(currentTechniqueStep === undefined){
+		
+		/*if(currentTechniqueStep === undefined){
 			setCurrentTechniqueStep(0)
-		}
+		}*/
 	}
 
 	/**
