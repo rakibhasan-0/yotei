@@ -14,9 +14,10 @@ import useMap from "../../hooks/useMap"
 import Divider from "../../components/Common/Divider/Divider"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import ProfileListItem from "./ProfileListItem"
-import { Lock, Unlock, Eye } from "react-bootstrap-icons"
+import { Lock, Eye } from "react-bootstrap-icons"
 import RoundButton from "../../components/Common/RoundButton/RoundButton"
 import { Plus } from "react-bootstrap-icons"
+import { useNavigate } from "react-router"
 /**
  * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3), Team Tomato (6), Team Kiwi (Group 2)
  * @since 2024-05-16
@@ -27,6 +28,7 @@ import { Plus } from "react-bootstrap-icons"
  */
 export default function Profile() {
 	const { userId, token } = useContext(AccountContext)
+	const navigate = useNavigate()
 
 	const [workouts, setWorkouts] = useState()
 	const [searchText, setSearchText] = useState("")
@@ -230,16 +232,11 @@ export default function Profile() {
 			//Här borde jag fixa en route till favoritsidans grej :)
 			return <img src="../../../assets/images/starFill.svg" />
 		}
-		if (state.hidden === true && state.author.userId == userId) {
+		if (state.hidden === true) {
 			return <Lock size={36} />
-		}
-		if (state.hidden === true && state.author.userId != userId) {
-			return <Unlock size={36} />
-		}
-		if (state.hidden === false && state.author.userId === userId) {
+		} else {
 			return <Eye size={36} />
 		}
-		return <Eye size={36} />
 	}
 
 	/**
@@ -276,6 +273,10 @@ export default function Profile() {
 		})
 	}
 
+	const handleCreateList = () => {
+		navigate("/list/create", { state: { returnTo: "/profile" } })
+	}
+
 	return (
 		<Tabs defaultActiveKey={"MyLists"} className={style.tabs}>
 			<Tab eventKey={"MyLists"} title={"Mina listor"} className={style.tab}>
@@ -290,7 +291,7 @@ export default function Profile() {
 				) : (
 					lists.map((list) => <ProfileListItem key={list.id} item={list} Icon={getIconFromState(list)} />)
 				)}
-				<RoundButton linkTo="/list/create">
+				<RoundButton onClick={handleCreateList}>
 					<Plus />
 				</RoundButton>
 			</Tab>

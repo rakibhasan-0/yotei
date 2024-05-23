@@ -107,7 +107,7 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 				</Dropdown>
 				{loading ? <Spinner /> : 
 					(data.belt && data.categories) &&
-					<div style={{ border: `3px dashed #${[data.belt.belt_color]}`, padding: "8px", borderRadius: "10px" }}>
+					<div style={{ border: `3px dashed #${[data.belt.belt_color]}`, padding: "4px", borderRadius: "10px" }}>
 						<GradingProtocolsRows data={data.categories} />
 					</div>
 				}
