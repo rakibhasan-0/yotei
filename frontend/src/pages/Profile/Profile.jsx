@@ -99,6 +99,10 @@ export default function Profile() {
 			setWorkouts((old) => [
 				...old.map((w) => {
 					if (w.workoutID === workout.workoutID) {
+						(w.favourite?
+                            setAmountOfFavouriteWorkouts(amountOfFavouriteWorkouts-1):
+                            setAmountOfFavouriteWorkouts(amountOfFavouriteWorkouts+1)
+                            )
 						w.favourite = !w.favourite
 					}
 					return w
