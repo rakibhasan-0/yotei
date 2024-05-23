@@ -7,12 +7,13 @@ import { Plus } from "react-bootstrap-icons"
 import styles from "./GradingIndex.module.css"
 import BeltButton from "../../components/Common/Button/BeltButton"
 import Spinner from "../../components/Common/Spinner/Spinner"
+import { canHandleGradings, isAdminUser } from "../../utils"
 
 /**
  * The grading create page.
  * Creates a new grading.
  * 
- * @author Team Pomegranate
+ * @author Team Pomegranate, Team Mango
  * @version 1.0
  * @since 2024-05-07
  */
@@ -163,6 +164,11 @@ export default function GradingIndex() {
 		}
 		fetchData()
 	}, [])
+
+	if(!isAdminUser(context) && !canHandleGradings(context)){
+		window.location.replace("/404")
+		return null
+	}
 
 	return (
 		<center>

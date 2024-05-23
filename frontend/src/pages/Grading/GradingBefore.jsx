@@ -9,14 +9,14 @@ import EditableListItem from "../../components/Common/EditableListItem/EditableL
 import { X as CloseIcon } from "react-bootstrap-icons"
 import PopupSmall from "../../components/Common/Popup/PopupSmall"
 
-import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../utils"
+import { HTTP_STATUS_CODES, canHandleGradings, isAdminUser, scrollToElementWithId } from "../../utils"
 import { setError as setErrorToast } from "../../utils"
 import EditableInputTextField from "../../components/Common/EditableInputTextField/EditableInputTextField"
 
 /**
  * Page to add examinees and make pairs out of the added examinees for a grading.
  * 
- * @author Team Pomegranate
+ * @author Team Pomegranate, Team Mango
  * @version 1.0
  * @since 2024-05-02
  */
@@ -326,6 +326,11 @@ export default function GradingBefore() {
 			setAutomaticallyPairCreation(false)
 		}
 	}, [examinees])
+
+	if(!isAdminUser(context) && !canHandleGradings(context)){
+		window.location.replace("/404")
+		return null
+	}
 
 	/**
 	 * Create a new pair in the database and locally,
