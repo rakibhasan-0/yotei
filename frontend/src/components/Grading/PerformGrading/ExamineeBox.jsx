@@ -233,7 +233,7 @@ export default function ExamineeBox({
 		setColor(newColor)
 		
 		setIsApiCallInProgress(true)
-		await onClick(newButtonState) to the API call
+		await onClick(newButtonState) //to the API call
 		setIsApiCallInProgress(false) // Unlock updates after API call completes
 	}
 
