@@ -3,16 +3,25 @@ package se.umu.cs.pvt.techniqueChain;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 public class TechniqueChainChainService {
     
-    @Autowired
+    
     private TechniqueChainChainRepository chainRepository;
 
+    @Autowired
+    public TechniqueChainChainService(TechniqueChainChainRepository chainRepository) {
+        this.chainRepository = chainRepository;
+    }
 
+    @Transactional(readOnly = true)
+    public TechniqueChainChain getTechniqueChainWithNodes(Long id) {
+        return chainRepository.findByIdWithNodes(id);
+    }
 
     public List<TechniqueChainChain> getAllTechniqueWeaves() {
         return chainRepository.findAll();

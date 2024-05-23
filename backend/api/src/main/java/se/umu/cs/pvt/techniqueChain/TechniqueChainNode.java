@@ -1,6 +1,7 @@
 package se.umu.cs.pvt.techniqueChain;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.List;
@@ -21,8 +22,10 @@ public class TechniqueChainNode implements Serializable {
     @Column(nullable = false, name = "id")
     private Long id;
 
-   @Column(name = "parent_weave")
-    private Long parentWeave;
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "parent_weave")
+    @JsonDeserialize(using = TechniqueChainWeaveDeserializer.class)
+    private TechniqueChainWeave parentWeave;
 
     @Column(name = "name")
     private String name;
@@ -39,8 +42,10 @@ public class TechniqueChainNode implements Serializable {
     @Column(nullable = false, name = "participant")
     private int participant;
 
-    @Column(name = "in_chain")
-    private int in_chain;
+    @ManyToOne
+    @JoinColumn(name = "in_chain")
+    @JsonDeserialize(using = TechniqueChainChainDeserializer.class)
+    private TechniqueChainChain inChain;
 
     @OneToMany(mappedBy = "fromNode", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TechniqueChainEdges> outgoingEdges;
@@ -56,7 +61,7 @@ public class TechniqueChainNode implements Serializable {
      * @param attack If the node is a attack node or a defence node.
      * @param partisipant what partisepant it is.
      */
-    public TechniqueChainNode(Long id, Long parentWeave, String name, String description, int technique, Boolean attack, int participant, List<TechniqueChainEdges> outgoingEdges, int in_chain) {
+    public TechniqueChainNode(Long id, TechniqueChainWeave parentWeave, String name, String description, int technique, Boolean attack, int participant, List<TechniqueChainEdges> outgoingEdges, TechniqueChainChain inChain) {
         this.id = id;
         this.parentWeave = parentWeave;
         this.name = name;
@@ -65,7 +70,7 @@ public class TechniqueChainNode implements Serializable {
         this.attack = attack;
         this.participant = participant;
         this.outgoingEdges = outgoingEdges;
-        this.in_chain = in_chain;
+        this.inChain = inChain;
     }
     /**
      * Protected no-args constructor for JPA use only.
@@ -77,11 +82,11 @@ public class TechniqueChainNode implements Serializable {
         return id;
     }
 
-    public int getIn_chain() {
-        return in_chain;
+    public TechniqueChainChain getInChain() {
+        return inChain;
     }
 
-    public Long getParentWeave() {
+    public TechniqueChainWeave getParentWeave() {
         return parentWeave;
     }
 
@@ -109,8 +114,8 @@ public class TechniqueChainNode implements Serializable {
         return outgoingEdges;
     }
 
-    public void setIn_chain(int in_chain) {
-        this.in_chain = in_chain;
+    public void setInChain(TechniqueChainChain inChain) {
+        this.inChain = inChain;
     }
 
     public void setAttack(Boolean attack) {
@@ -137,7 +142,7 @@ public class TechniqueChainNode implements Serializable {
         this.outgoingEdges = outgoingEdges;
     }
 
-    public void setParentWeave(Long parentWeave) {
+    public void setParentWeave(TechniqueChainWeave parentWeave) {
         this.parentWeave = parentWeave;
     }
 

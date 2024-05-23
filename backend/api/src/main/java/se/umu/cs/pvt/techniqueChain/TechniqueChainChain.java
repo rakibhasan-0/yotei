@@ -23,10 +23,15 @@ public class TechniqueChainChain implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "parent_weave_id")
-    private int parent_weave_id;
+    @ManyToOne
+    @JoinColumn(name = "parent_weave_id")
+    private TechniqueChainWeave parent_weave_id;
 
-    //private List<TechniqueChainNode> node;
+    @OneToMany(mappedBy = "inChain", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
+    private List<TechniqueChainNode> node;
+
+    @Transient
+    private Long parentId;
     
     /**
      * Constructs a new node with all field values initialized.
@@ -36,28 +41,33 @@ public class TechniqueChainChain implements Serializable {
      * @param name The name of the node.
      * @param description The description of the node.
      */
-    public TechniqueChainChain(Long id, String name, String description, int parent_weave_id) {
+    public TechniqueChainChain(Long id, String name, String description, TechniqueChainWeave parent_weave_id, List<TechniqueChainNode> node, Long parentId) {
         this.id = id;
         this.parent_weave_id = parent_weave_id;
         this.name = name;
         this.description = description;
-        //this.node = node;
+        this.node = node;
+        this.parentId = parentId;
     }
     /**
      * Protected no-args constructor for JPA use only.
      */
     protected TechniqueChainChain() {
     }
-/*
+
+    public Long getParentId() {
+        return parentId;
+    }
+
     public List<TechniqueChainNode> getNode() {
         return node;
     }
-*/
+
     public Long getId() {
         return id;
     }
 
-    public int getParent_weave_id() {
+    public TechniqueChainWeave getParent_weave_id() {
         return parent_weave_id;
     }
 
@@ -81,12 +91,15 @@ public class TechniqueChainChain implements Serializable {
         this.id = id;
     }
 
-    public void setParent_weave_id(int parent_weave_id) {
+    public void setParent_weave_id(TechniqueChainWeave parent_weave_id) {
         this.parent_weave_id = parent_weave_id;
     }
-/*
+
     public void setNode(List<TechniqueChainNode> node) {
         this.node = node;
     }
-    */
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
 }

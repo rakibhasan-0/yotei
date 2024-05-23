@@ -1,6 +1,8 @@
 package se.umu.cs.pvt.techniqueChain;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -11,6 +13,7 @@ import java.util.ArrayList;
  */
 @Entity
 @Table(name = "weave_representation")
+@JsonSerialize(using = TechniqueChainWeaveRepresentSerializer.class)
 public class TechniqueWeaveRepresent implements Serializable {
     
     @Id
@@ -24,10 +27,21 @@ public class TechniqueWeaveRepresent implements Serializable {
     @Column(nullable = false, name = "node_y_pos")
     private int node_y_pos;
 
+    @Column(nullable = false, name = "node_id")
+    private Long nodeId;
+
     @ManyToOne
     @JoinColumn(name = "parent_weave_id", nullable = false)
     private TechniqueChainWeave techniqueWeave;
     
+    @Transient
+    private Long techniqueWeaveId;
+
+/*
+    @Column(nullable = false, name = "parent_weave_id")
+    private Long techniqueWeave;
+*/
+
     /**
      * Constructs a new node with all field values initialized.
      *
@@ -35,11 +49,13 @@ public class TechniqueWeaveRepresent implements Serializable {
      * @param node_x_pos The name of the node.
      * @param description The description of the node.
      */
-    public TechniqueWeaveRepresent(Long id, int node_x_pos, int node_y_pos, TechniqueChainWeave techniqueWeave) {
+    public TechniqueWeaveRepresent(Long id, int node_x_pos, int node_y_pos, TechniqueChainWeave techniqueWeave, Long nodeId, Long techniqueWeaveId) {
         this.id = id;
         this.node_x_pos = node_x_pos;
         this.node_y_pos = node_y_pos;
         this.techniqueWeave = techniqueWeave;
+        this.nodeId = nodeId;
+        this.techniqueWeaveId = techniqueWeaveId;
     }
     /**
      * Protected no-args constructor for JPA use only.
@@ -47,8 +63,16 @@ public class TechniqueWeaveRepresent implements Serializable {
     protected TechniqueWeaveRepresent() {
     }
 
+    public Long getTechniqueWeaveId() {
+        return techniqueWeaveId;
+    }
+
     public TechniqueChainWeave getTechniqueWeave() {
         return techniqueWeave;
+    }
+
+    public Long getNodeId() {
+        return nodeId;
     }
 
     public Long getId() {
@@ -77,5 +101,13 @@ public class TechniqueWeaveRepresent implements Serializable {
 
     public void setTechniqueWeave(TechniqueChainWeave techniqueWeave) {
         this.techniqueWeave = techniqueWeave;
+    }
+
+    public void setNodeId(Long nodeId) {
+        this.nodeId = nodeId;
+    }
+
+    public void setTechniqueWeaveId(Long techniqueWeaveId) {
+        this.techniqueWeaveId = techniqueWeaveId;
     }
 }

@@ -23,9 +23,9 @@ public class TechniqueChainNodeSerializer extends StdSerializer<TechniqueChainNo
         jsonGenerator.writeStringField("description", node.getDescription());
         jsonGenerator.writeBooleanField("attack", node.getAttack());
         jsonGenerator.writeNumberField("participant", node.getParticipant());
-        jsonGenerator.writeNumberField("parent_weave", node.getParentWeave());
-        if(node.getIn_chain() != 0){
-            jsonGenerator.writeNumberField("in_chain", node.getIn_chain());
+        jsonGenerator.writeNumberField("parent_weave", node.getParentWeave().getId());
+        if(node.getInChain() != null && node.getInChain().getId() != 0){
+            jsonGenerator.writeNumberField("inChain", node.getInChain().getId());
         }
 
         // Serialize outgoingEdges only if it's not null
