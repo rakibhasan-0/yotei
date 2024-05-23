@@ -18,7 +18,6 @@ import { setError as setErrorToast } from "../../../utils"
  * @param {String} props.techniqueName - The name of the technique.
  * @param {function} props.onClick - onClick function when component is pressed.
  * @param {String} props.status - The current status of the button.
- * @param {function} props.setButtonState - Function to set the state of the button.
  * 
  * Example Usage:
  * <ExamineeBox 
@@ -34,7 +33,6 @@ import { setError as setErrorToast } from "../../../utils"
  *     techniqueName="Some Technique"
  *     onClick={() => console.log("Clicked")}
  *     status="default"
- *     setButtonState={(state) => console.log(state)}
  *   />
  * )
  * 
@@ -49,7 +47,6 @@ export default function ExamineeBox({
 	techniqueName, 
 	onClick, 
 	status, 
-	setButtonState
 }) {
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [isAddingComment, setAddComment] = useState(false)
@@ -249,7 +246,6 @@ export default function ExamineeBox({
 			newColor = colors.default
 		}
         
-		setButtonState(newButtonState)
 		setColor(newColor)
 		
 		setIsApiCallInProgress(true)
