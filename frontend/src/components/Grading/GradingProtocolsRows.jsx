@@ -18,7 +18,7 @@ export default function GradingProtocolsRows({ data, beltColors }) {
 								type: "technique" // Add the new attribute
 							}
 							return (
-								<TechniqueCard key={idx} technique={updatedTechnique} checkbox={false} id={updatedTechnique.activity_id} />
+								<TechniqueCard key={idx} technique={updatedTechnique} checkbox={false} id={updatedTechnique.id} />
 							)
 						})}
 					</ul>
