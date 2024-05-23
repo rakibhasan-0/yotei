@@ -24,7 +24,8 @@ import { useState } from "react"
  * @update Added inverted belt category. 2024-05-20, Team Kiwi (Teodor Bäckström)
  * @update Added a popUp window for when popUp is true.
  */
-function TechniqueCard({ technique, checkBox, id, popUp}) {
+function TechniqueCard({ technique, checkBox, id, popUp, techniqueInProtocol}) {
+
 	const navigate = useNavigate()
 	const [isOpen, setIsOpen] = useState(false)
 	
@@ -82,7 +83,7 @@ function TechniqueCard({ technique, checkBox, id, popUp}) {
 
 				<div className={styles["technique-name-container"]}>
 					<Link onClick={handleClick}>
-						<h5 className={styles["technique-name"]}>{technique.name}</h5>
+						<h5 className={technique.new || !techniqueInProtocol ? styles["technique-name"] : styles["technique-name-old"]}>{technique.name}</h5>
 					</Link>
 				</div>
 
