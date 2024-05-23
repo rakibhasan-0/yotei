@@ -5,7 +5,7 @@ import Button from "../../components/Common/Button/Button"
 import styles from "./GradingBefore.module.css"
 import { AccountContext } from "../../context"
 import AddExaminee from "../../components/Common/AddExaminee/AddExaminee"
-import EditableListItem from "../../components/Common/EditableListItem/EditableListItem"
+import EditableListItem from "../../components/Common/EditableListItem/EditableListItemGrading"
 import { X as CloseIcon } from "react-bootstrap-icons"
 import PopupSmall from "../../components/Common/Popup/PopupSmall"
 
