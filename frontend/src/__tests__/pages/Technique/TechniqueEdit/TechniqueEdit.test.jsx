@@ -206,7 +206,7 @@ describe("verify that", () => {
 	})
 
 	test("someone with edit rights should see edit button", async () => {
-		await renderWithRouter([USER_PERMISSION_CODES.ACTIVITY_ALL])
+		await renderWithRouter([USER_PERMISSION_CODES.TECHNIQUE_EXERCISE_ALL])
 
 		expect(screen.getByTestId("technique-edit-button")).toBeInTheDocument()
 	})
@@ -226,7 +226,7 @@ describe("verify that", () => {
 	})
 
 	test("someone with edit rights should see delete button", async () => {
-		await renderWithRouter([USER_PERMISSION_CODES.ACTIVITY_ALL])
+		await renderWithRouter([USER_PERMISSION_CODES.TECHNIQUE_EXERCISE_ALL])
 
 		expect(screen.getByTestId("technique-delete-button")).toBeInTheDocument()
 	})
