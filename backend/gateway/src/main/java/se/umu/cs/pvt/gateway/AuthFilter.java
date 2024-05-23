@@ -88,20 +88,18 @@ public class AuthFilter implements GlobalFilter, Ordered {
         }
 
         // Select user role from apikey
-        String role = "";
         List<Integer> permissions;
         try {
             JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret))
                     .withSubject("User Details")
                     .withIssuer("PVT/User")
                     .build();
-            role = verifier.verify(apikey).getClaim("role").asString();
             permissions = verifier.verify(apikey).getClaim("permissions").asList(Integer.class);
         } catch (Exception e) {
             return false;
         }
         
-        if (adminOrGetMethod(request, role, permissions)) {
+        if (adminOrGetMethod(request, permissions)) {
             return true;
         }
                 
@@ -113,9 +111,8 @@ public class AuthFilter implements GlobalFilter, Ordered {
 
     }
 
-    private boolean adminOrGetMethod(ServerHttpRequest request, 
-        String role, List<Integer> permissions) {
-        return role.equals("ADMIN") || 
+    private boolean adminOrGetMethod(ServerHttpRequest request, List<Integer> permissions) {
+        return
             permissions.contains(PermissionValidator.getAdminRightsValue()) ||
             request.getMethod().equals(HttpMethod.GET);
     }

@@ -84,8 +84,8 @@ public class PermissionValidator {
      * 
      * @return True if the user has admin rights; else false
      */
-    public boolean isAdmin(List<Integer> permissions) {
-        return permissions.contains(getAdminRightsValue());}  
+    public static boolean isAdmin(List<Integer> permissions) {
+        return permissions.contains(permissionList.ADMIN_RIGHTS.value);}  
 
     /**
      * Checks if a user has permissions to access API endpoints associated 
