@@ -16,13 +16,15 @@ public class ActivityListSearchResponse implements SearchResponseInterface {
     private String name;
     private Boolean hidden;
     private LocalDate date;
+    private int size;
     
-    public ActivityListSearchResponse(Long id, UserShortDTO author, String name, Boolean hidden, LocalDate date) {
+    public ActivityListSearchResponse(Long id, UserShortDTO author, String name, Boolean hidden, LocalDate date, int size) {
         this.id = id;
         this.author = author;
         this.name = name;
         this.hidden = hidden;
         this.date = date;
+        this.size = size;
     }
 
     public Long getId() {
@@ -43,6 +45,10 @@ public class ActivityListSearchResponse implements SearchResponseInterface {
 
     public LocalDate getDate() {
         return date;
+    }
+
+    public int getSize() {
+        return size;
     }
     
 
