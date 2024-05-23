@@ -225,6 +225,12 @@ export default function DuringGrading() {
 				const grading = await fetchGrading()
 				const protocol = await fetchProtocol(grading)
 				const parsedProtocol = parseProtocol(protocol)
+				const getSteps = await fetch(`/api/examination/grading/${gradingId}`, { headers: { "token": token } })
+				if (getSteps.status === 204) {
+					//return
+				}
+				const steps = await getSteps.json()
+				setCurrentTechniqueStep(steps.techniqueStepNum)
 				updateState(parsedProtocol)
 			} catch (error) {
 				handleFetchError(error)
@@ -484,7 +490,7 @@ export default function DuringGrading() {
 		])
 		updateStep(grading_data)
 
-
+		
 		navigate(`/grading/${gradingId}/3`)
 	}
 
@@ -728,7 +734,10 @@ export default function DuringGrading() {
 		setTechniqueNameList(techniqueNameList)
 		setCategoryIndices(categoryIndexMap)
 		// TODO: Set the index to the one inside the technique_step when it is available
-		setCurrentTechniqueStep(0)
+		
+		/*if(currentTechniqueStep === undefined){
+			setCurrentTechniqueStep(0)
+		}*/
 	}
 
 	/**
