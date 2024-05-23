@@ -2,9 +2,9 @@
 
 if ! command -v zip &> /dev/null
 then
-    echo "Installing zip"
+    echo "Installing unzip"
     sudo apt update
-    yes | sudo apt install zip
+    yes | sudo apt install unzip
 fi
 rm -rf yotei
 unzip yotei.zip
