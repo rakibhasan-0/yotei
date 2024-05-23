@@ -54,7 +54,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, ca
 
 	const handleEdit = () => {
 		if(canEdit === undefined || canEdit === true) {
-		  setIsEditing(true)
+			setIsEditing(true)
 		}
 	}
 
