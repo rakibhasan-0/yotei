@@ -19,9 +19,10 @@ import styles from "./ErrorState.module.css"
  * 			id="test-id"
  * 		/>
  *
- * @author Team Medusa
- * @version 1.0
+ * @author Team Medusa, Team Kiwi
+ * @version 1.1
  * @since 2023-05-05
+ * @updated 2024-05-22 Added a condition to onBack button, should not show if we do not have an onBack function
  */
 function ErrorState({ message, onBack, onRecover, id }) {
 	return (
@@ -33,9 +34,14 @@ function ErrorState({ message, onBack, onRecover, id }) {
 			<h2>Det verkar som att något gick fel</h2>
 			<h2 style={{color: "var(--red-primary)", marginTop: "2rem"}}>{message}</h2>
 			<div className={styles["error-state-button-container"]}>
-				<Button onClick={onBack} outlined={true}>
-					<p>Tillbaka</p>
-				</Button>
+				{onBack ? 
+					<Button onClick={onBack} outlined={true}>
+						<p>Tillbaka</p>
+					</Button>
+					:
+					<>
+					</>
+				}
 				<Button onClick={onRecover ? onRecover : () => window.location.reload()}>
 					<p>Försök igen</p>
 				</Button>
