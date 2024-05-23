@@ -9,4 +9,5 @@ fi
 rm -rf yotei
 unzip yotei.zip
 cd yotei
+chmod +x deploy.sh
 bash -c "./deploy.sh"
