@@ -4,13 +4,13 @@ import BeltButton from "../../components/Common/Button/BeltButton"
 import style from "./GradingCreate.module.css"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import { AccountContext } from "../../context"
-import {setError as setErrorToast} from "../../utils"
+import {canHandleGradings, isAdminUser, setError as setErrorToast} from "../../utils"
 
 /**
  * The grading create page.
  * Creates a new grading.
  * 
- * @author Team Pomegranate
+ * @author Team Pomegranate, Team Mango
  * @version 1.0
  * @since 2024-05-02
  */
@@ -123,6 +123,11 @@ export default function GradingCreate() {
 		}
 		fetchData()
 	}, [token])
+
+	if(!isAdminUser(context) && !canHandleGradings(context)){
+		window.location.replace("/404")
+		return null
+	}
 
 	return (
 		<div> 

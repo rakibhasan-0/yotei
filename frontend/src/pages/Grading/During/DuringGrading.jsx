@@ -9,7 +9,7 @@ import ExamineeBox from "../../../components/Grading/PerformGrading/ExamineeBox"
 import styles from "./DuringGrading.module.css"
 import { ArrowRight, ArrowLeft } from "react-bootstrap-icons"
 import { useParams, useNavigate } from "react-router-dom"
-import {setError as setErrorToast} from "../../../utils" 
+import {canHandleGradings, isAdminUser, setError as setErrorToast} from "../../../utils" 
 
 import { AccountContext } from "../../../context"
 import Spinner from "../../../components/Common/Spinner/Spinner"
@@ -85,7 +85,7 @@ function getCategoryIndices(dataArray) {
 /**
  * Main function that is rendered for during grading
  * 
- *  @author Team Apelsin (2024-05-13)
+ *  @author Team Apelsin (2024-05-13) Team Mango (2024-05-23)
  *  @version 2.0
  */
 export default function DuringGrading() {
@@ -245,6 +245,11 @@ export default function DuringGrading() {
 			fetchTechniqueResults(techniqueNameList[currentTechniqueStep].technique.text, token) 
 		}
 	}, [currentTechniqueStep])
+
+	if (!isAdminUser(context) && !canHandleGradings(context)) {
+		window.location.replace("/404")
+		return null
+	}
 
 
 	// Will handle the api call that will update the database with the result. 
