@@ -1,46 +1,34 @@
 import styles from "./RoleListItem.module.css"
-import { ChevronRight } from "react-bootstrap-icons"
-import { Link } from "react-router-dom"
 /**
  * An RoleListItem that can be used in an list view.
- * It displays the title of an role and a link to the permission page.
+ * It displays the title of an role.
  * 
  * Props:
- *     	item @type {string} 		- Text displaying the title of the role
- * 		detailURL @type {string} 	- The base URL for roles
- * 		id @type {integer} 			- The ID for this particular role in database
- * 		index @type {integer} 		- The ID for this particular role on current page (Used for coloring)
+ *    	item @type {string} - Text displaying the title of the role
+ *         index @type {integer} - The ID for this particular role on current page (Used for coloring)
  * 
  * Example usage:
- * 		<RoleListItem
- * 			item={the role name}
- * 			id={The unique ID for an role, gets concatenated onto detailURL}
- * 			detailURL={the base URL for roles}
- * 			index={The index for the role in the list containing fetched roles}>
+ *         <RoleListItem
+ *            item={the role name}
+ *           index={The index for the role in the list containing fetched roles}>
  * 
- * 		</RoleListItem>
+ *        </RoleListItem>
  * 
  * @author Team Mango (Group 4)
- * @since 2023-05-08
+ * @since 2024-05-22
  * @version 1.0
- */
-export default function RoleListItem({ item, detailURL, id, index, checkBox }) {
+*/
+export default function RoleListItem({ item, index }) {
 
 	return (
 		<div className={styles["role-list-container"]} data-testid="RoleListItem" id={"RoleListItem-" + item}>
 			<div className={styles["role-list-header"]} style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
-				{checkBox}
-				<Link to={detailURL + id} data-testid="RoleListItem-link" style={{width: "100%"}}>
-					<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
-						<div style={{display: "flex", alignItems: "center"}}>
-							<div className={styles["href-link"]} style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="RoleListItem-item">{item}</div>
-						</div>
-						<div className={styles["flex-shrink-0"]} style={{display: "flex", alignItems: "center"}}>
-							<ChevronRight size="30px"/>
-						</div>
+				<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+					<div style={{display: "flex", alignItems: "center"}}>
+						<div className={styles["href-link"]} style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="RoleListItem-item">{item}</div>
 					</div>
-
-				</Link>
+						
+				</div>
 			</div>
 		</div>
 	)
