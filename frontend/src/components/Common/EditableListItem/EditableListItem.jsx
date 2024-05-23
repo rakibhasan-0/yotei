@@ -1,5 +1,5 @@
 import styles from "./EditableListItem.module.css"
-import { Trash, Pencil, Check2 as Check, X } from "react-bootstrap-icons"
+import { Trash, Pencil, Check2 as Check, X, LockFill} from "react-bootstrap-icons"
 import { useState } from "react"
 import CheckBox from "../CheckBox/CheckBox"
 
