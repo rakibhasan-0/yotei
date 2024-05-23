@@ -1,5 +1,10 @@
 package se.umu.cs.pvt.statistics.gradingprotocolDTO;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import se.umu.cs.pvt.belt.Belt;
+import se.umu.cs.pvt.statistics.BeltResponse;
 
 /**
  * Used to represent the techniques field in the Grading Protcol Statistics API.
@@ -13,6 +18,7 @@ public class GradingProtocolTechinqueDTO {
     private Long id;
     private Long count;
     private Boolean newTechnique = false;
+    private List<BeltResponse> belts;
 
     /**
      * Constructor for GradingProtocolTechinqueDTO.
@@ -68,6 +74,25 @@ public class GradingProtocolTechinqueDTO {
      */
     public void setNew(Boolean isNew) {
         this.newTechnique = isNew;
+    }
+    /**
+     * Public getter for private property belts
+     * See BeltRepsonse
+     * @return wrapped belts associated with activity.
+     */
+    public List<BeltResponse> getBeltColors() {
+        return belts;
+    }
+
+    /**
+     * Public setter for private property belts
+     * @param belts
+     */
+    public void setBelts(List<Belt> belts) {
+        this.belts = new ArrayList<>();
+        for (Belt b : belts) {
+        this.belts.add(new BeltResponse(b));
+        }
     }
 
     /**
