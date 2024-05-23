@@ -100,7 +100,7 @@ function SessionContainer ({ id, workout, session, plan}) {
 
 		let last = plan.belts.length - 1
 		let sortedBelts = sortBelts()
-		let background = sortedBelts[last];
+		let background = sortedBelts[last]
 		if (background.color === "201E1F") return false
 		else return true
 	}
@@ -157,9 +157,9 @@ function SessionContainer ({ id, workout, session, plan}) {
 							<div className = {styles["sc23-session-header-clickable"]} role="button" onClick={() => setToggled(!toggled)}>
 								{
 									checkPlan() ?
-									<BeltBox id ={styles["sc23-session-container-beltbox"]} belts={plan.belts} style={{borderTopLeftRadius:"4px"}}/>
-									:
-									<BeltBox id ={styles["sc23-session-container-beltbox"]} style={{borderTopLeftRadius:"4px"}}/>
+										<BeltBox id ={styles["sc23-session-container-beltbox"]} belts={plan.belts} style={{borderTopLeftRadius:"4px"}}/>
+										:
+										<BeltBox id ={styles["sc23-session-container-beltbox"]} style={{borderTopLeftRadius:"4px"}}/>
 								}
 								{
 									checkPlan() && checkColor() ?
