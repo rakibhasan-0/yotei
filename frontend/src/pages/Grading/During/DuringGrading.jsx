@@ -88,7 +88,7 @@ function getCategoryIndices(dataArray) {
  *  @version 2.0
  */
 export default function DuringGrading() {
-	const [currentTechniqueStep, setCurrentTechniqueStep] = useState(undefined)
+	let [currentTechniqueStep, setCurrentTechniqueStep] = useState(undefined)
 	const [indexBeforeRandondi, setRandoriIndex] = useState(0)
 	const [showPopup, setShowPopup] = useState(false)
 	const [examinees, setExaminees] = useState(undefined)
@@ -112,7 +112,11 @@ export default function DuringGrading() {
 			if(nextStep === techniqueNameList.length -2){
 				setRandoriIndex(nextStep)
 			}
+			if(nextStep === undefined){
+				nextStep = sessionStorage.getItem("currentTechniqueStep")
+			}
 			const nextTechniqueStep = Math.min(nextStep + 1, techniqueNameList.length - 1)
+			sessionStorage.setItem("currentTechniqueStep", nextTechniqueStep)
 			onUpdateStepToDatabase(nextTechniqueStep)
 			return nextTechniqueStep
 		})
@@ -126,6 +130,7 @@ export default function DuringGrading() {
 		} else {
 			setCurrentTechniqueStep(prevStep => {
 				const previousTechniqueStep = Math.max(prevStep - 1, 0)
+				sessionStorage.setItem("currentTechniqueStep", previousTechniqueStep)
 				onUpdateStepToDatabase(previousTechniqueStep)
 				return previousTechniqueStep
 			})
@@ -179,9 +184,10 @@ export default function DuringGrading() {
 					throw new Error("Could not fetch examinees")
 				}
 				const all_examinees = await response.json()
-				
 				const current_grading_examinees = getExamineesCurrentGrading(all_examinees)
 				setExaminees(current_grading_examinees)
+				console.log("grading current =", sessionStorage.getItem("currentTechniqueStep"))
+				currentTechniqueStep = sessionStorage.getItem("currentTechniqueStep")
 				console.log("Fetched examinees in this grading: ", current_grading_examinees)
 			} catch (ex) {
 				setErrorToast("Kunde inte hämta alla utövare")
@@ -237,6 +243,20 @@ export default function DuringGrading() {
 			fetchTechniqueResults(techniqueNameList[currentTechniqueStep].technique.text, token) 
 		}
 	}, [currentTechniqueStep])
+
+	useEffect(() => {
+		const clearSessionStorage = () => {
+			if (!location.pathname.includes("/grading/")) {
+				sessionStorage.clear()
+			}
+		}
+
+		clearSessionStorage()
+
+		return () => {
+			clearSessionStorage()
+		}
+	}, [location.pathname])
     
 	// Debugging the examinee states.    
 	useEffect(() => {
@@ -351,6 +371,7 @@ export default function DuringGrading() {
 										if(techniqueNameList[currentTechniqueStep].categoryName != "YAKUSOKU GEIKO OR RANDORI"){
 											setRandoriIndex(currentTechniqueStep)
 										}
+										sessionStorage.setItem("currentTechniqueStep", techniquestep)
 										onUpdateStepToDatabase(techniquestep)
 										return techniquestep
 									})
@@ -477,7 +498,7 @@ export default function DuringGrading() {
 		])
 		updateStep(grading_data)
 
-
+		
 		navigate(`/grading/${gradingId}/3`)
 	}
 
@@ -720,7 +741,11 @@ export default function DuringGrading() {
 		setTechniqueNameList(techniqueNameList)
 		setCategoryIndices(categoryIndexMap)
 		// TODO: Set the index to the one inside the technique_step when it is available
-		setCurrentTechniqueStep(0)
+		if(sessionStorage.getItem("currentTechniqueStep") != undefined){
+			setCurrentTechniqueStep(sessionStorage.getItem("currentTechniqueStep"))
+		}else {
+			setCurrentTechniqueStep(0)
+		}
 	}
 
 	/**
