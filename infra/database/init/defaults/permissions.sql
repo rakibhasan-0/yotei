@@ -1,3 +1,6 @@
+-- Author: Team Mango
+-- Created: 2024-05-23
+-- Inserts permissions into the database. The order they are inserted represents the number of the permisssion.
 --
 -- INSERTS FOR PERMISSION
 --
