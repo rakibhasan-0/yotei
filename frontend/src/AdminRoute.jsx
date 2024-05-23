@@ -7,7 +7,7 @@ import { AccountContext } from "./context"
  * TODO: figure out what this file does AND document it here.
  * 
  * @author UNKNOWN, Team Mango
- * @updated 2024-05-22 Team Mango: Changed isAdmin check to new check.
+ * @updated 2024-05-22 Team Mango: Changed isAdmin check to new isAdminUser check.
  */
 
 export default function AdminRoute({children}) {

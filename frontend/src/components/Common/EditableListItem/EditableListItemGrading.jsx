@@ -1,7 +1,7 @@
 import styles from "./EditableListItem.module.css"
-import { Trash, Pencil, Check2 as Check, X, LockFill} from "react-bootstrap-icons"
+import { Trash, Pencil, Check as Check, X , LockFill} from "react-bootstrap-icons"
 import { useState } from "react"
-import CheckBox from "../CheckBox/CheckBox"
+import GradingCheckBox from "../CheckBox/GradingCheckBox"
 
 /**
  * An ExerciseListItem that can be used in an list view.
@@ -44,8 +44,7 @@ import CheckBox from "../CheckBox/CheckBox"
  * @since 2024-05-06
  */
 
-export default function EditableListItem({ item, id, index, onRemove, onEdit, canEdit, onCheck, showCheckbox, checked, validateInput, grayTrash, showTrash, showX, showPencil, showLock}) {
-
+export default function EditableListItem({ item, id, index, onRemove, onEdit, onCheck, showCheckbox, checked, validateInput, grayTrash, showTrash, showX, showPencil, numberOfCheckedExaminees, showLock}) {
 
 	const [isEditing, setIsEditing] = useState(false) // State to manage edit mode
 	const [editedText, setEditedText] = useState(item) // State to store edited text
@@ -54,9 +53,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, ca
 	const [grayEdit, setGrayEdit] = useState(true)
 
 	const handleEdit = () => {
-		if(canEdit === undefined || canEdit === true) {
-			setIsEditing(true)
-		}
+		setIsEditing(true)
 	}
 
 	const handleInputChange = (event) => {
@@ -87,12 +84,13 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, ca
 	}
 
 	const handleBlur = (event) => {
-		if (event.target?.id === "edit-element") {
+		if (event.relatedTarget?.id === "accept-icon") {
 			handleEditSubmit()
-		} else {
-			setIsEditing(false)
 		}
+		setIsEditing(false)
 	}
+
+	const shouldShowCheckbox = numberOfCheckedExaminees <= 2 && showCheckbox
 
 	return (
 		<div className={styles["editable-container"]} id={id}>
@@ -100,10 +98,11 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, ca
 				<div className={styles["editable-list-header"]} style={{ backgroundColor: index % 2 === 0 ? "var(--red-secondary)" : "var(--background)" }}>
 					<div data-testid="EditableListItem-link" style={{ width: "100%" }}>
 						<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
-							{showCheckbox && <CheckBox
+							{shouldShowCheckbox  && <GradingCheckBox
 								onClick={(checked) => onCheck(checked, id)}
 								checked={checked}
 								id="checkbox-element"
+								disableChecking={numberOfCheckedExaminees >= 2 && !checked}
 							/>}
 							<div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flex: 1 }} onClick={handleEdit}>
 								{isEditing ? (
@@ -124,8 +123,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, ca
 								<div className={styles["flex-shrink-0"]} style={{ display: "flex", alignItems: "center" }}>
 									{isEditing ?
 										<>
-											<Check onClick={() => {handleEditSubmit}} size="24px" id="accept-icon"
-												key={"check-icon-" + id}
+											<Check onClick={handleEditSubmit} size="24px" id="accept-icon"
 												style={grayEdit ?
 													{ color: "var(--gray)", cursor: "not-allowed", marginRight: "10px" } :
 													{ color: "var(--red-primary)", cursor: "pointer", marginRight: "10px" }}
@@ -155,10 +153,9 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, ca
 													id="close-icon"
 													data-testid="trash-icon"/>
 											)}
-
 											{showLock && (
 												<LockFill
-													size="20px" style={{ color: "var(--red-primary)"}}
+													size="24px" style={{ color: "var(--red-primary)"}}
 												/>
 											)}
 										</>

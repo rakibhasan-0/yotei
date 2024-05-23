@@ -125,7 +125,7 @@ export default function WorkoutIndex() {
 			<br/>
 			
 			{
-				isAdminUser(context) || canCreateWorkouts(context) ?
+				(isAdminUser(context) || canCreateWorkouts(context)) ?
 					<RoundButton linkTo="/workout/create" id="CreateWorkoutButton">
 						<Plus />
 					</RoundButton>
