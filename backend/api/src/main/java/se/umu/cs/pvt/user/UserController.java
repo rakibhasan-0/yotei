@@ -106,7 +106,7 @@ public class UserController {
             if (!permissionIds.contains(permId)) permissionIds.add(utp.getPermissionId());
         }
 
-        return new JWTUtil().generateToken(user.getUsername(), user.getUserRole().toString(), Math.toIntExact(user.getUserId()), permissionIds);
+        return new JWTUtil().generateToken(user.getUsername(), Math.toIntExact(user.getUserId()), permissionIds);
     }
 
     /**
@@ -204,9 +204,6 @@ public class UserController {
         if(repository.findUserByUsernameIgnoreCase(user.getUsername()).isPresent()) {
             return new ResponseEntity<>("Användarnamnet används redan", HttpStatus.NOT_ACCEPTABLE);
         }
-        if(user.getUserRole() == null) {
-            return new ResponseEntity<>("Användaren måste ha en roll", HttpStatus.NOT_ACCEPTABLE);
-        }
 
         try {
             User saved = repository.save(user);
@@ -239,7 +236,7 @@ public class UserController {
     public Object refreshToken(@RequestBody String token){
         Map<String, Claim> oldToken = new JWTUtil().validateToken(token).getClaims();
 
-        return new JWTUtil().generateToken(oldToken.get("username").asString(), oldToken.get("role").asString(), oldToken.get("userId").asInt(), oldToken.get("permissions").asList(Long.class));
+        return new JWTUtil().generateToken(oldToken.get("username").asString(), oldToken.get("userId").asInt(), oldToken.get("permissions").asList(Long.class));
     }
 
     /**
@@ -313,31 +310,6 @@ public class UserController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-    /**
-     * (PUT) Changes the role of the given user.
-     * @param uid the id of the user to update
-     * @param rid the id of the role to change to
-     * @return HTTP status.
-     */
-    @PostMapping("/{uid}/role/{rid}")
-    public Object changeRoleUser(@PathVariable("uid") Long id, @PathVariable("rid") int roleId) {
-        Optional<User> possibleUser = repository.findById(id);
-        if (possibleUser.isEmpty()) {
-            return new ResponseEntity<>("Användaren finns inte", HttpStatus.BAD_REQUEST);
-        }
-        User user = possibleUser.get();
-        user.setUserRole(roleId);
-
-        try {
-            repository.save(user);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Gick inte att ändra roll på användaren", HttpStatus.BAD_REQUEST);
-        }
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
 
     @PutMapping("/{user_id}/setrole/{role_id}")
     public Object setUserRoleThroughRoleId(@PathVariable("user_id") Long id, @PathVariable("role_id") Long roleId) {

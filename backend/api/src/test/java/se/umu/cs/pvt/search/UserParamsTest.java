@@ -24,7 +24,7 @@ public class UserParamsTest {
     void init() {
         Map<String, String> urlQuery = new HashMap<>();
         urlQuery.put("name", "name of user");
-        urlQuery.put("role", "admin");
+        urlQuery.put("roleId", "1");
         urlQuery.put("id", "1");
 
         params = new SearchUserParams(urlQuery);
@@ -70,7 +70,7 @@ public class UserParamsTest {
 
     @Test
     void getRoleTest() {
-        assertThat(params.getRole()).isEqualTo(String.valueOf(User.Role.ADMIN.getKey()));
+        assertThat(params.getRole()).isEqualTo(1L);
     }
 
     @Test

@@ -39,7 +39,7 @@ public class SearchUserDBBuilder implements SearchDBBuilderInterface {
 
     public SearchUserDBBuilder filterByRole() {
         if(searchUserParams.hasRole()){
-            String role = searchUserParams.getRole();
+            Long role = searchUserParams.getRole();
 
             DatabaseQuery createdQuery = new DatabaseQuery();
             createdQuery.setQuery(

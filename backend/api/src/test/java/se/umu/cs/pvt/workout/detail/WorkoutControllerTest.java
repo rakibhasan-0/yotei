@@ -27,7 +27,6 @@ import se.umu.cs.pvt.user.InvalidPasswordException;
 import se.umu.cs.pvt.user.InvalidUserNameException;
 import se.umu.cs.pvt.user.JWTUtil;
 import se.umu.cs.pvt.user.User;
-import se.umu.cs.pvt.user.User.Role;
 import se.umu.cs.pvt.workout.*;
 
 import java.security.NoSuchAlgorithmException;
@@ -123,7 +122,6 @@ public class WorkoutControllerTest {
                                                 null));
                 User author = new User("hej", "hejsan123!");
                 author.setUserId(1L);
-                author.setUserRole(Role.ADMIN);
 
                 String token = "testToken123";
                 DecodedJWT mockJwt = Mockito.mock(DecodedJWT.class);
@@ -257,12 +255,10 @@ public class WorkoutControllerTest {
         @Test
         public void shouldReturn403WhenWorkoutIsPrivateAndUserDoesNotHaveAccessToIt() throws Exception {
                 User author = new User("author", "password123");
-                author.setUserRole(Role.ADMIN);
                 author.setUserId(1L);
 
                 User nonAuthor = new User("nonAuthor", "password!");
                 nonAuthor.setUserId(2L);
-                nonAuthor.setUserRole(Role.USER);
 
                 String token = "testToken123";
                 DecodedJWT mockJwt = Mockito.mock(DecodedJWT.class);
@@ -307,12 +303,10 @@ public class WorkoutControllerTest {
         @Test
         public void shouldReturn404WhenWorkoutDoesNotExist() throws Exception {
                 User author = new User("author", "password123");
-                author.setUserRole(Role.ADMIN);
                 author.setUserId(1L);
 
                 User nonAuthor = new User("nonAuthor", "password!");
                 nonAuthor.setUserId(2L);
-                nonAuthor.setUserRole(Role.USER);
 
                 String token = "testToken123";
                 DecodedJWT mockJwt = Mockito.mock(DecodedJWT.class);
@@ -336,12 +330,10 @@ public class WorkoutControllerTest {
         @Test
         public void shouldReturnWorkoutDetailWhenUserIsAddedToPrivateWorkout() throws Exception {
                 User author = new User("author", "password123");
-                author.setUserRole(Role.ADMIN);
                 author.setUserId(1L);
 
                 User nonAuthor = new User("userName", "password!");
                 nonAuthor.setUserId(2L);
-                nonAuthor.setUserRole(Role.USER);
 
                 List<ActivityDetail> activityDetails = List.of(new ActivityDetail(
                                 2L,
@@ -382,7 +374,7 @@ public class WorkoutControllerTest {
                 when(mockJwt.getClaim("permissions")).thenReturn(mockClaim);
                 when(jwtUtil.validateToken("testToken123")).thenReturn(mockJwt);
                 
-                when(jwtUtil.generateToken(nonAuthor.getUsername(), nonAuthor.getUserRole().toString(), 2, new ArrayList<Long>()))
+                when(jwtUtil.generateToken(nonAuthor.getUsername(), 2, new ArrayList<Long>()))
                                 .thenReturn("testToken123");
                 when(workoutDetailRepository.findById(1L))
                                 .thenReturn(Optional.of(privateWorkout));
