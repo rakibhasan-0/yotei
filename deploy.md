@@ -11,7 +11,7 @@ Now you are ready to run the deploy_customer.sh using:
 
 ```./deploy_customer.sh```
 
-Firstly **zip** will be installed if not already existing on your machine.
+Firstly **unzip** will be installed if not already existing on your machine.
 
 If there exist a yotei folder it will be removed before unzipping the new **yotei.zip**.
 
