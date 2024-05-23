@@ -1,4 +1,4 @@
-import {configure, screen, render} from "@testing-library/react"
+import {configure, screen, render, fireEvent} from "@testing-library/react"
 import ExamineeBox from "../../../../components/Grading/PerformGrading/ExamineeBox.jsx"
 import "@testing-library/jest-dom"
 import React from "react"
@@ -11,4 +11,13 @@ describe("ExamineeBox name testing", () => {
 		render(<ExamineeBox id={"ExamineeBox"} examineeName={testText}/>)
 		expect(screen.getByTestId("ExamineeName")).toHaveTextContent(testText)
 	})
+})
+
+describe("ExamineeBox onClick testing", () => {
+    test("ExamineeBox: function should run once on click", () => {
+        const handleClick = jest.fn()
+        render(<ExamineeBox id={"ExamineeBox"} onClick={handleClick}/>)
+        fireEvent.click(screen.getByTestId("ExamineeBox"))
+        expect(handleClick).toHaveBeenCalledTimes(1)
+    })
 })
