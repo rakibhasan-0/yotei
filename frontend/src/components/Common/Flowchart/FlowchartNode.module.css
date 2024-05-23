@@ -1,5 +1,4 @@
 .node {
-  background-color: lightblue;
   padding: 0.4rem;
   display: flex;
   justify-content: center;
@@ -9,6 +8,7 @@
   text-wrap: wrap;
   width: 100px;
   border: 0px solid var(--black-primary);
+  border-radius: 5%;
 }
 
 .node.selected {

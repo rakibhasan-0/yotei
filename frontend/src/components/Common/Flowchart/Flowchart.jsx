@@ -1,34 +1,39 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, } from "react"
 import Draggable from "react-draggable"
 import styles from"./Flowchart.module.css"
 import Button from "../Button/Button"
-import Divider from "../Divider/Divider"
-import TagInput from "../Tag/TagInput"
-import CheckBox from "../CheckBox/CheckBox"
-import AddUserComponent from "../../Workout/CreateWorkout/AddUserComponent"
 import FlowChartNode from "./FlowchartNode"
 import Popup from "../Popup/Popup"
 import AddTechnique from "../../Workout/CreateWorkout/AddTechnique"
+
 /**
  * The technique index page.
  * Fetches and displays the techniques.
+ * 
+ * TODOS: Mappa ids för att göra kopplingar, Radera noder, spara väven, 
+ * måste inte ange en teknik, visa beskrivning, resizea flowchartruten
  * 
  * @author Durian Team 3
  * @version 1.0
  * @since 2024-05-20
  */
 
-const Flowchart = ({}) => {
-	const [nodes, setNodes] = useState([{id: 1, name: "en väääääldigt lång teknik1", x: 10, y: 10},{id: 2, name: "teknik2", x: 20, y: 20},{id: 3, name: "teknik3", x: 30, y: 30}])
+const Flowchart = () => {
+	const [nodes, setNodes] = useState([{id: 1, name: "en väääääldigt lång teknik1", x: 0, y: 110, participant: 1},{id: 2, name: "teknik2", x: 20, y: 20, participant: 2},{id: 3, name: "teknik3", x: 30, y: 30, participant: 1}])
 	
 	const [connections, setConnections] = useState([])
 	const [activityPopup, setActivityPopup] = useState(false)
 	const [selectedBox, setSelectedBox] = useState(null)
 	const [isAddingConnection, setIsAddingConnection] = useState(false)
 	const [isDeletingConnection, setIsDeletingConnection] = useState(false)
+	const [clickedNodes, setClickedNodes] = useState([])
 
-	const boxRefs = useRef({})
-	const boxCounter = useRef(nodes.length) // Counter to generate unique IDs for new boxes
+
+	const [ownName, setOwnName] = useState("")
+	const [nodeDesc, setNodeDesc] = useState("")
+	const [chosenTech, setChosenTech] = useState(null)
+	const [participant, setParticipant] = useState(1)
+
 
 	const handleDrag = (e, data, id) => {
 		setNodes((prevBoxes) =>
@@ -38,92 +43,33 @@ const Flowchart = ({}) => {
 		)
 	}
 
-	const handleAddNode = () => {
+	function handleSubmit(){
+		setActivityPopup(false)
+		handleAddNode(chosenTech, ownName, nodeDesc, participant)
+		setOwnName("")
+		setChosenTech(null)
+		setNodeDesc("")
+		setParticipant(1)
+	}
+
+	function handleAddNode(chosenTech, ownName, nodeDesc, participant) {
+		setActivityPopup(false)
 		setNodes((prevBoxes) => [
 			...prevBoxes,
-			{ id: boxCounter.current++, x: 50, y: 50, name: "Teknik" }
+			{ id: nodes.length+1, x: 50, y: 50, name: ownName ? ownName : chosenTech.name, participant: participant }
 		])
 	}
 
 	const handleSelectNode = (id) => {
-		if (!isAddingConnection && !isDeletingConnection) {
-			return
-		}
-
-		if (selectedBox === null) {
-			setSelectedBox(id)
-		} else {
-			if (selectedBox !== id) {
-				if (isAddingConnection) {
-					setConnections((prevConnections) => [
-						...prevConnections,
-						{ from: selectedBox, to: id }
-					])
-				} else if (isDeletingConnection) {
-					setConnections((prevConnections) =>
-						prevConnections.filter(
-							(conn) => !(conn.from === selectedBox && conn.to === id)
-						)
-					)
-				}
-			}
-			setSelectedBox(null)
-			setIsAddingConnection(false)
-			setIsDeletingConnection(false)
-		}
+		console.log(id + "hej")
+		setClickedNodes(prev => {
+			console.log(prev)
+			const newClickedButtons = [id, ...prev]
+			return newClickedButtons.slice(0, 2)
+		})
 	}
-
-	const handleAddConnectionMode = () => {
-		setIsAddingConnection(true)
-		setSelectedBox(null)
-	}
-
-	const handleDeleteConnectionMode = () => {
-		setIsDeletingConnection(true)
-		setSelectedBox(null)
-	}
-
-	const getArrowCoordinates = (box1, box2) => {
-		const midX1 = box1.x + 50
-		const midY1 = box1.y + 50
-		const midX2 = box2.x + 50
-		const midY2 = box2.y + 50
-
-		const dx = midX2 - midX1
-		const dy = midY2 - midY1
-
-		const absDx = Math.abs(dx)
-		const absDy = Math.abs(dy)
-
-		let x1, y1, x2, y2
-
-		if (absDx > absDy) {
-			if (dx > 0) {
-				x1 = box1.x + 100
-				y1 = midY1
-				x2 = box2.x
-				y2 = midY2
-			} else {
-				x1 = box1.x
-				y1 = midY1
-				x2 = box2.x + 100
-				y2 = midY2
-			}
-		} else {
-			if (dy > 0) {
-				x1 = midX1
-				y1 = box1.y + 100
-				x2 = midX2
-				y2 = box2.y
-			} else {
-				x1 = midX1
-				y1 = box1.y
-				x2 = midX2
-				y2 = box2.y + 100
-			}
-		}
-
-		return { x1, y1, x2, y2 }
+	const handleConnection = () => {
+		console.log(clickedNodes)
 	}
 
 	return (
@@ -136,84 +82,41 @@ const Flowchart = ({}) => {
 						onDrag={(e, data) => handleDrag(e, data, node.id)}
 						bounds={"parent"}
 					>
-						<div>
-							<FlowChartNode
-								id={node.id}
-								name={node.name}
-								onClick={handleSelectNode(node.id)}
-								selected={selectedBox === node.id}
-								ref={(el) => (boxRefs.current[node.id] = el)}
-							/>
+						<div 
+							id={node.id} 
+							type="button" 
+							onClick={(node)=>handleSelectNode(node.id)}
+							//className={styles.node}
+							className={[styles.node, `${clickedNodes[0] === node.id || clickedNodes[1] === node.is ? "selected" : ""}`]}
+							style={node.participant === 1 ? {backgroundColor: "lightblue"}:{backgroundColor: "lightgreen"}}
+						>
+							{node.name}
 						</div>
 					</Draggable>
 				))}
-				{/* 				<svg className={styles.arrow}>
-					<defs>
-						<marker
-							id="arrowhead"
-							markerWidth="10"
-							markerHeight="7"
-							refX="10"
-							refY="3.5"
-							orient="auto"
-						>
-							<polygon points="0 0, 10 3.5, 0 7" />
-						</marker>
-					</defs>
-					{connections.map((connection, index) => {
-						const fromBox = nodes.find((node) => node.id === connection.from)
-						const toBox = nodes.find((node) => node.id === connection.to)
-						const { x1, y1, x2, y2 } = getArrowCoordinates(fromBox, toBox)
-						return (
-							<line
-								key={index}
-								x1={x1}
-								y1={y1}
-								x2={x2}
-								y2={y2}
-								stroke="black"
-								markerEnd="url(#arrowhead)"
-							/>
-						)
-					})}
-				</svg> */}
 				<div className={styles.buttonRow}>
 					{nodes.length > 1 && 
-            <Button onClick={console.log("huh")}><h2>Koppla</h2></Button>
+            <Button onClick={() => handleConnection()}><h2>Koppla</h2></Button>
 					}
-					<Button
-						onClick={() =>
-							setActivityPopup(true)
-						}
-					>
+					<Button onClick={() =>setActivityPopup(true)}>
 						<h2>+ Aktivitet</h2>
 					</Button>
 				</div>
 
 			</div>
-			<Divider option={"h1_center"}></Divider>
-			<CheckBox
-				id="workout-create-checkbox"
-				label="Privat pass"
-				onClick={() =>
-					console.log("yep")
-				}
-				checked={false}
-			/>
-			<Divider option={"h1_center"}></Divider>
-			<AddUserComponent
-				id="workout-create-add-users"
-				addedUsers={[{userId: 1, username: "eyyy"}]}
-				setAddedUsers={() =>
-					console.log("yeye")
-				}
-			/>
-			<Divider option={"h1_left"} title={"Taggar"} />
-
-			<TagInput addedTags={[{id: 1, name: "eyo"}]}/>
-
 			<Popup title="Lägg till teknik" isOpen={activityPopup} setIsOpen={setActivityPopup}>
-				<AddTechnique></AddTechnique>
+				<AddTechnique 
+					submit={handleSubmit}
+					participant={participant}
+					chosenTech={chosenTech}
+					nodeDesc={nodeDesc}
+					ownName={ownName}
+					setChosenTech={setChosenTech}
+					setParticipant={setParticipant}
+					setNodeDesc={setNodeDesc}
+					setOwnName={setOwnName}
+				/>
+				
 			</Popup>
 		</div>
 	)

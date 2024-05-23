@@ -39,3 +39,23 @@
   gap: 1rem;
   width: 80%;
 }
+
+.node {
+  padding: 0.4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  cursor: pointer;
+  text-wrap: wrap;
+  width: 100px;
+  border: 0px;
+  border-radius: 5%;
+}
+
+.node.selected {
+  border: 2px;
+}
+
+
+

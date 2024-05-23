@@ -11,23 +11,23 @@ import { ChevronRight } from "react-bootstrap-icons"
 import ErrorStateSearch from "../../Common/ErrorState/ErrorStateSearch"
 import style from "./AddActivity.module.css"
 import InfiniteScrollComponent from "../../Common/List/InfiniteScrollComponent"
+import InputTextField from "../../Common/InputTextField/InputTextField"
+import TextArea from "../../Common/TextArea/TextArea"
 
 /**
  *  
  * @author Team Durian
  * @since 2024-05-21
  */
-function AddTechnique({ id, setShowActivityInfo }) {
+function AddTechnique({ id, submit, chosenTech, ownName, nodeDesc, participant, setChosenTech, setOwnName, setNodeDesc, setParticipant }) {
 
 	const { token } = useContext(AccountContext)
-
+	const [ownNameErr, setOwnNameErr] = useState(null)
 	/**
 	 * Used to cache techniques and exercises that are fetched from the backend.
 	 * This map is used as a parameter when using getTechniques method.
 	 */
 	const [map, mapActions] = useMap()
-
-
 	/**
 	 * States related to keeping track of which techniques
 	 * to display, and the search text, selected belts, kihon 
@@ -47,26 +47,15 @@ function AddTechnique({ id, setShowActivityInfo }) {
 		return savedTags ? JSON.parse(savedTags) : []
 	})
 	const [suggestedTechTags, setSuggestedTechTags] = useState([])
-
-	/**
-	 * Keeps track of which activities that are checked/selected by the user.
-	 */
-	const [hasLoadedData, setHasLoadedData] = useState(false)
-
-	const sortOptions = [
-		{ label: "Namn: A-Ö", cmp: (a, b) => { return a.name.localeCompare(b.name) } },
-		{ label: "Namn: Ö-A", cmp: (a, b) => { return -a.name.localeCompare(b.name) } },
-		{ label: "Tid: Kortast först", cmp: (a, b) => { return a.duration - b.duration } },
-		{ label: "Tid: Längst först", cmp: (a, b) => { return b.duration - a.duration } }
-	]
-	const [sort, setSort] = useState(sortOptions[0])
-
 	const searchCount = useRef(0)
+
+	useEffect(() => {
+		searchTechniques()
+	}, [searchTechText, selectedBelts, kihon, chosenTech])
 
 	useEffect(() => {
 		setSearchTechText(sessionStorage.getItem("searchTechText") || "")
 		setKihon(sessionStorage.getItem("kihon") || false)
-		setSort(getJSONSession("sort") || sortOptions[0])
 	}, [])
 
 	useEffect(() => {
@@ -89,10 +78,6 @@ function AddTechnique({ id, setShowActivityInfo }) {
 
 	function setJSONSession(key, value) {
 		sessionStorage.setItem(key, JSON.stringify(value))
-	}
-
-	function getJSONSession(key) {
-		JSON.parse(sessionStorage.getItem(key))
 	}
 
 	/**
@@ -154,7 +139,6 @@ function AddTechnique({ id, setShowActivityInfo }) {
 			}
 			filteredBelts.push(x)
 		})
-		//setCookiesExer("techniques-filter", { sort: sort.label }, { path: "/" })
 
 		const args = {
 			text: searchTechText,
@@ -179,6 +163,34 @@ function AddTechnique({ id, setShowActivityInfo }) {
 
 	return (
 		<div id={id}>
+			<InputTextField
+				id="create-technique-weave-name"
+				text={ownName}
+				placeholder="Frivilligt namn"
+				errormessage={ownNameErr}
+				onChange={e => {
+					setOwnName(e.target.value)
+					setOwnNameErr(null)
+				}}
+				required={false}
+				type="text"
+				errorMessage={ownNameErr}
+			/>
+			<TextArea
+				className={style.standArea}
+				placeholder="Beskrivning"
+				text={nodeDesc}
+				onChange={(e) => {
+					setNodeDesc(e.target.value)
+				}}
+				required={false}
+				type="text"
+				id = "exercise-description-input"
+				errorDisabled={true}
+			/>
+			<CheckBox onClick={()=>setParticipant(1)} checked={participant === 1} label={"Deltagare 1"}/>
+			<CheckBox onClick={()=>setParticipant(2)} checked={participant === 2} label={"Deltagare 2"}/>
+
 			<div className={style.searchBar}>
 				<SearchBar
 					id="technique-search-bar"
@@ -202,7 +214,7 @@ function AddTechnique({ id, setShowActivityInfo }) {
 			</TechniqueFilter>
 
 			{(techniques.length === 0 && fetchedTech) ?
-				<ErrorStateSearch id="add-activity-no-technique" message="Kunde inte hitta tekniker" />
+				<ErrorStateSearch id="add-activity-to-weave-no-technique" message="Kunde inte hitta tekniker" />
 				:
 				(<InfiniteScrollComponent
 					activities={techniques} searchCount={searchCount.current}
@@ -212,8 +224,8 @@ function AddTechnique({ id, setShowActivityInfo }) {
 							id={"technique-list-item-" + technique.techniqueID}
 							checkBox={
 								<CheckBox
-									checked={false}
-									onClick={() => console.log("ah")}
+									checked={chosenTech ? chosenTech.techniqueID === technique.techniqueID : false}
+									onClick={() => {setChosenTech(technique)/*; setOwnName(technique.name)*/}}
 								/>
 							}
 							technique={technique}
@@ -225,8 +237,8 @@ function AddTechnique({ id, setShowActivityInfo }) {
 			{/* Spacing so the button doesn't cover an ExerciseListItem */}
 			<br /><br /><br />
 
-			{1 > 0 &&
-					<RoundButton onClick={() => console.log("ye")}>
+			{chosenTech &&
+					<RoundButton onClick={submit}>
 						<ChevronRight width={30} />
 					</RoundButton>
 			}
