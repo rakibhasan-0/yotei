@@ -241,12 +241,13 @@ export default function Statistics() {
 							technique={activity}
 							checkBox={false}
 							id={activity.activity_id}
+							popUp={true}
 						/>
 
 					))
 				)}
 			</div>
-
+			<div style={{ height: "70px" }}></div>
 			<div className={style.buttonContainer}>
 				<Button
 					width="25%"

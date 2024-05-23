@@ -85,7 +85,7 @@ const AddExaminee = forwardRef(function AddExaminee(
 						onChange={handleChange}
 						onKeyDown={handleKeyPress}
 					/>
-					<Plus id="plus-icon" onClick={handleClick} className={styles.plusIcon} />
+					<Plus style={{ width: "40px" }}id="plus-icon" onClick={handleClick} className={styles.plusIcon} />
 				</div>
 				{errorMessage !== "" || !errorMessage && <p className={styles.err}>{errorMessage}</p>}
 			</label>

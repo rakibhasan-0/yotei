@@ -15,18 +15,19 @@ import { toast } from "react-toastify"
  * canEditSession() - Check for if this user can edit the given session or not.
  * 					  IMPORTANT: The creatorId seems to be based on the group id of the group connected to the session and should be changed!
  * 								 Solution idea: Add a userId to the sessions in the database.
- * @params [int] creatorId - The id for the session to be checked against the userId.
+ * @params [int] creatorIdOfGroup - The user id for the group connected to the session to be checked against the userId.
+ *                                  That is, the user id of the user who creted the group connected to this session.
  * @params context - AccountContext with info about user.
  * @returns true if the user has permission to edit all sessions, or if the user has permission to edit their own sessions and the creatorId of
  * 		    the session is the same as the userId. Otherwise false is returned.
  */
-export function canEditSessions(context, creatorId) {
+export function canEditSessions(context, creatorIdOfGroup) {
 	if (!context.permissions) { //Safety check for undefined which is always false.
 		return false
 	}
 	return (context.permissions.includes(USER_PERMISSION_CODES.SESSION_ALL) ||
 	(context.permissions.includes(USER_PERMISSION_CODES.SESSION_OWN) &&
-	(context.userId === creatorId)))
+	(context.userId === creatorIdOfGroup)))
 }
 
 /**
@@ -129,7 +130,7 @@ export function canCreateAndEditActivity(context) {
 }
 
 /**
- * canCreateGradings() - Check if user can create a grading.
+ * canHandleGradings() - Check if user can create a grading.
  * @param {*} context Accountcontext from user. 
  * @returns true if user can create a grading.
  */
@@ -216,6 +217,7 @@ export const HTTP_STATUS_CODES = {
 	FORBIDDEN: 403,
 }
 
+// These attributes have to be in the same order from 1-x as inserted into the database.
 export const USER_PERMISSION_CODES = {
 	ADMIN_RIGHTS: 1,
 	SESSION_OWN: 2, //Edit your own sessions.
@@ -224,13 +226,11 @@ export const USER_PERMISSION_CODES = {
 	PLAN_ALL: 5,
 	WORKOUT_OWN: 6,
 	WORKOUT_ALL: 7,
-	TECHNIQUE_EXERCISE_OWN: 8, // Techniques and exercices. This one is not used. Right now only all or nothing.
-	TECHNIQUE_EXERCISE_ALL: 9, //Old name: ACTIVITY_ALL (Was a potential conflict in the database naming, so we changed it.)
-	GRADING_OWN: 10,
-	GRADING_ALL: 11,
+	TECHNIQUE_EXERCISE_ALL: 8, //Old name: ACTIVITY_ALL (Was a potential conflict in the database naming, so we changed it.)
+	GRADING_ALL: 9,
 }
 
-export const USER_PERMISSION_LIST_ALL = [1,2,3,4,5,6,7,8,9,10,11]
+export const USER_PERMISSION_LIST_ALL = [1,2,3,4,5,6,7,8,9]
 
 /**
  * Scrolls an element with given id into view.

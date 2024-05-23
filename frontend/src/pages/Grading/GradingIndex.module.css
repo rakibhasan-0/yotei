@@ -22,3 +22,7 @@
       flex-direction: column;
       height: 33vh; 
   }
+
+  .close-icon {
+	cursor: pointer;
+  }

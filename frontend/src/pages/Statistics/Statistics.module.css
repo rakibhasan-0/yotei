@@ -1,10 +1,19 @@
+.buttonContainer {
+    position: fixed;
+    bottom: 0;
+    width: 25rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 4;
+	left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Adjust to center */
+    padding: 10px; /* Adjust padding as necessary */
 
-.buttonContainer{
-	margin-top: 5%;
-	margin-bottom: 3%;
 }
 
 .FilterAndSortContainer {
+	/* */
 	position: relative;
 	margin-top: 4%;
 }

@@ -12,6 +12,7 @@ package se.umu.cs.pvt.examination;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -20,6 +21,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.aspectj.apache.bcel.classfile.Module.Export;
 import org.springframework.boot.json.JsonParserFactory;
 
 import java.awt.*;
@@ -69,10 +71,9 @@ public class ExportGradingPdf {
         this.grading = grading;
         this.examineePairs = examineePairs;
         this.protocol = parseJson(gradingProtocol);
-        
-        String currentPath = new java.io.File(".").getCanonicalPath();
 
-        fontPath = currentPath + "/backend/api/src/main/java/se/umu/cs/pvt/fonts/NotoSans-Regular.ttf";
+        fontPath = System.getenv("PDF_ASSET_PATH") + "/NotoSans-Regular.ttf";
+
 
         Map<String, Object> gradingProtocolObj = (Map<String, Object>) protocol.get("examination_protocol");
         this.code = (String)gradingProtocolObj.get("code");
@@ -173,7 +174,7 @@ public class ExportGradingPdf {
      * @throws IOException
      */
     private void drawImage(PDPage page, PDPageContentStream contentStream) throws IOException {
-        String path = System.getProperty("user.dir") + "/frontend/public/ubk-logga.jpg";
+        String path = System.getenv("PDF_ASSET_PATH") + "/ubk-logga.jpg";
         int x = (int)page.getMediaBox().getWidth() - 155;
         int y = pageHeight-60;
         PDImageXObject pdImage = PDImageXObject.createFromFile(path, document);
