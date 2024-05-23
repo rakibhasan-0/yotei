@@ -72,8 +72,8 @@ function Navbar({ testId }) {
 					<Button width={"100%"} onClick={() => navigateAndClose("/activity",  {state: {clearSearchText: true}})}>
 						<h1 className={styles.commonNavbarButton}>Tekniker & Övningar</h1>
 					</Button>
-
-					{ canHandleGradings(context) ?
+					
+					{isAdminUser(context) || canHandleGradings(context) ?
 						<Button width={"100%"} onClick={() => navigateAndClose("/grading")}>
 							<h1 className={styles.commonNavbarButton}>Gradering</h1>
 						</Button>

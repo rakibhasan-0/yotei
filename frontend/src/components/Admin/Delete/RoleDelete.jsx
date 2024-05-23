@@ -5,6 +5,8 @@ import { useContext, useEffect, useState,} from "react"
 import { AccountContext } from "../../../context"
 import { useLocation, useNavigate } from "react-router"
 import { toast } from "react-toastify" 
+import RoleCard from "../../Common/RoleCard/RoleListItem"
+import { Spinner } from "react-bootstrap"
 
 /**
  * RoleDelete is a popup page that allows a user with the admin role to delete
@@ -38,13 +40,36 @@ export default function RoleDelete({ id, roleID, name, setIsOpen }) {
 	const {token} = useContext(AccountContext)
 	const [deleteButtonDisabled, setDeleteButtonDisabled] = useState(true)
 	const [hasError, setHasError] = useState(false)
+	const [gotResponse, setGotResponse] = useState(false)
+	const [users, setUsers] = useState([])
 	const navigate = useNavigate()
 	const location = useLocation()
 	const hasPreviousState = location.key !== "default"
 
 	useEffect(() => {
-		setDeleteButtonDisabled(false)
-	}, [])
+		fetchUsersWithRole(roleID, token)
+	}, [roleID, token])
+
+	async function fetchUsersWithRole(roleID, token) {
+
+		await fetch(`/api/roles/users/${roleID}`, {
+			headers: { "Content-Type": "application/json", token }
+		})
+			.then(async response => {
+				const data = response.status === 200 ? await response.json() : []
+				console.log(response)
+
+				if (response.status === 200) {
+					setUsers(data)
+					setGotResponse(true)
+					setDeleteButtonDisabled(true)
+				}
+				else {
+					setGotResponse(true)
+					setDeleteButtonDisabled(false)
+				}
+			})
+	}
 
 	async function cascadeDelete(roleID, token) {
 		let url = "/api/roles/"
@@ -90,6 +115,18 @@ export default function RoleDelete({ id, roleID, name, setIsOpen }) {
 		</div>
 	}
 
+	function constructUserList() {
+		return <>
+			<p>{users.length > 0 ? "Rollen används av följande användare:" : ""}</p>
+			<div className={"grip-striped"} style={{textAlign: "center", marginBottom: "1rem"}}>
+				{users.map((user, index) => {
+					console.log(user.username)
+					return <RoleCard item={user.username} key={user.userId} index={index} />})
+				}
+			</div>
+		</>
+	}
+
 
 
 	if (hasError) {
@@ -111,6 +148,10 @@ export default function RoleDelete({ id, roleID, name, setIsOpen }) {
 
 	return <div className={styles.popupContainer} id={id}>
 		<p>Är du säker på att du vill ta bort rollen <b>{name}?</b></p>
+
+		{gotResponse ? constructUserList() : <Spinner id={"role-spinner"}/>}
+	
+
 		{ constructButtons() }
 
 	</div>

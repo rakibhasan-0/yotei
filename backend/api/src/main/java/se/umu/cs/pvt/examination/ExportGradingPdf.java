@@ -12,6 +12,7 @@ package se.umu.cs.pvt.examination;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -20,6 +21,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.aspectj.apache.bcel.classfile.Module.Export;
 import org.springframework.boot.json.JsonParserFactory;
 
 import java.awt.*;
@@ -70,9 +72,15 @@ public class ExportGradingPdf {
         this.examineePairs = examineePairs;
         this.protocol = parseJson(gradingProtocol);
 
-        String currentPath = new java.io.File(".").getCanonicalPath();
-
-        fontPath = currentPath + "/infra/fonts/NotoSans-Regular.ttf";
+        try {
+            String currentPath = ExportGradingPdf.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+            File file = new File(currentPath);
+    
+            fontPath = file.getAbsolutePath() + "/se/umu/cs/pvt/fonts/NotoSans-Regular.ttf";
+    
+        }catch(Exception e) {
+            
+        }
 
         Map<String, Object> gradingProtocolObj = (Map<String, Object>) protocol.get("examination_protocol");
         this.code = (String)gradingProtocolObj.get("code");

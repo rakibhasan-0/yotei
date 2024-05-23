@@ -4,22 +4,25 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import se.umu.cs.pvt.activitylist.Activity;
 import se.umu.cs.pvt.activitylist.ActivityList;
 import se.umu.cs.pvt.activitylist.ActivityListEntry;
+import se.umu.cs.pvt.workout.UserShort;
+import se.umu.cs.pvt.workout.UserShortRepository;
 
 /**
  * Dto for an activity list that holds complete information about the list.
  * 
- * @author Team Tomato, updated 2024-05-17
+ * @author Team Tomato, updated 2024-05-21
  * @since 2024-05-12
  * @version 1.1
  */
 public class ActivityListDTO {
     private Long id;
-    private Long author;
+    private UserShortDTO author;
     private String name;
     private String desc;
     private Boolean hidden;
@@ -27,9 +30,10 @@ public class ActivityListDTO {
     private List<UserShortDTO> users;
     private List<Activity> activities;
 
-    public ActivityListDTO(ActivityList activityList) {
+    public ActivityListDTO(ActivityList activityList, UserShortRepository userShortRepository) {
+        Optional<UserShort> userShort = userShortRepository.findById(activityList.getAuthor());
+        this.author = userShort.isPresent() ? new UserShortDTO(userShort.get()) : null;
         this.id = activityList.getId();
-        this.author = activityList.getAuthor();
         this.name = activityList.getName();
         this.desc = activityList.getDesc();
         this.hidden = activityList.getHidden();
@@ -46,6 +50,8 @@ public class ActivityListDTO {
             }
         }
 
+
+
     }
 
     // Getters for all properties
@@ -53,7 +59,7 @@ public class ActivityListDTO {
         return id;
     }
 
-    public Long getAuthor() {
+    public UserShortDTO getAuthor() {
         return author;
     }
 

@@ -46,6 +46,8 @@ export const WORKOUT_CREATE_TYPES = {
 	CLEAR_CHECKED_ACTIVITIES: "CLEAR_CHECKED_ACTIVITIES",
 	TOGGLE_CHECKED_ACTIVITY: "TOGGLE_CHECKED_ACTIVITY",
 	UPDATE_EDITING_ACTIVITY: "UPDATE_EDITING_ACTIVITY",
+	CHECK_ALL_ACTIVITIES: "CHECK_ALL_ACTIVITIES",
+	UNCHECK_ALL_ACTIVITIES: "UNCHECK_ALL_ACTIVITIES",
 	OPEN_ADD_ACTIVITY_POPUP: "OPEN_ADD_ACTIVITY_POPUP",
 	OPEN_ACTIVITY_INFO_POPUP: "OPEN_ACTIVITY_INFO_POPUP",
 }
@@ -537,6 +539,31 @@ export function workoutCreateReducer(state, action) {
 	case "UPDATE_EDITING_ACTIVITY": 
 		tempState.popupState.currentlyEditing.data = action.payload
 		return tempState
+	
+	case "CHECK_ALL_ACTIVITIES": {
+		const allActivities = action.payload
+		const mergedActivities = [...tempState.checkedActivities, ...allActivities]
+		
+		// Remove duplicates
+		tempState.checkedActivities = mergedActivities.filter((activity, index, self) =>
+			index === self.findIndex((t) => (
+				t.type === "technique" ? t.techniqueID === activity.techniqueID : t.id === activity.id
+			))
+		)
+		
+		return tempState
+	}
+	case "UNCHECK_ALL_ACTIVITIES": {
+		const activitiesToUncheck = action.payload
+		const activitiesToUncheckIds = activitiesToUncheck.map(activity => activity.type === "technique" ? activity.techniqueID : activity.id)
+	
+		tempState.checkedActivities = tempState.checkedActivities.filter(activity => {
+			const activityId = activity.type === "technique" ? activity.techniqueID : activity.id
+			return !activitiesToUncheckIds.includes(activityId)
+		})
+	
+		return tempState
+	}
 	default:
 		return state
 	}

@@ -105,7 +105,7 @@ public class ActivityListService implements IActivityListService {
         }
 
         ActivityList list = listOpt.get();
-        return new ActivityListDTO(list);
+        return new ActivityListDTO(list, userShortRepository);
     }
 
     /**

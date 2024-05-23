@@ -5,8 +5,9 @@ import Button from "../../components/Common/Button/Button"
 import styles from "./GradingBefore.module.css"
 import { AccountContext } from "../../context"
 import AddExaminee from "../../components/Common/AddExaminee/AddExaminee"
-import EditableListItem from "../../components/Common/EditableListItem/EditableListItem"
-import { X as CloseIcon } from "react-bootstrap-icons"
+import EditableListItem from "../../components/Common/EditableListItem/EditableListItemGrading"
+import { X as CloseIcon, LockFill } from "react-bootstrap-icons"
+
 import PopupSmall from "../../components/Common/Popup/PopupSmall"
 
 import { HTTP_STATUS_CODES, scrollToElementWithId } from "../../utils"
@@ -19,7 +20,7 @@ import EditableInputTextField from "../../components/Common/EditableInputTextFie
  * @author Team Pomegranate
  * @version 1.0
  * @since 2024-05-02
- */
+*/
 
 
 export default function GradingBefore() {
@@ -48,7 +49,7 @@ export default function GradingBefore() {
 	// this is for the automatically pair creation
 	const [lastAddedExaminee, setLastAddedExaminee] = useState({})
 	const [automaticallyPairCreation, setAutomaticallyPairCreation] = useState(false)
-
+	
 	const [gradingStep, setGradingStep] = useState(1)
 
 
@@ -185,8 +186,7 @@ export default function GradingBefore() {
 				// check if there is any examinees already added
 				const exsistingPairs = await getAllPairOfExaminees(token)
 					.catch(() => setErrorToast("Kunde inte hämta befintliga par. Kontrollera din internetuppkoppling."))
-	
-				console.log(exsistingPairs)
+
 				// if there exsists pairs in this grading already
 				if (exsistingPairs.length !== 0) {
 					// convert the pairs to the local format so the pairs can be displayed for the user
@@ -415,11 +415,13 @@ export default function GradingBefore() {
 	 */
 	function onCheck(isChecked, examineeId) {
 		if (isChecked) {
+		
 			setCheckedExamineeIds([...checkedExamineeIds, examineeId])
 		} else {
 			setCheckedExamineeIds(checkedExamineeIds.filter((id) => id !== examineeId))
 		}
 	}
+
 
 	function resetCheckedExamineesWithCheckbox() {
 		const remainingExaminees = examinees.filter(examinee => !checkedExamineeIds.includes(examinee.id))
@@ -524,7 +526,7 @@ export default function GradingBefore() {
 	 * @param {Boolean} isExamineeInPair
 	 */
 	async function editExaminee(examineeId, name, isExamineeInPair) {
-
+    console.log("hej")
 		if (isExamineeInPair) {
 			setPair(
 				pairs.map((pair) => {
@@ -601,6 +603,7 @@ export default function GradingBefore() {
 									item={pair[1].name}
 									onRemove={removeExamineeInPair}
 									onEdit={(id, name) => { editExaminee(id, name, true) }}
+                  canEdit={Boolean(!pair[1].isLocked)}
 									onCheck={onCheck}
 									validateInput={validateInput}
 									showCheckbox={false}
@@ -613,6 +616,7 @@ export default function GradingBefore() {
 									item={pair[0].name}
 									onRemove={removeExamineeInPair}
 									onEdit={(id, name) => { editExaminee(id, name, true) }}
+                  canEdit={Boolean(!pair[0].isLocked)}
 									onCheck={onCheck}
 									validateInput={validateInput}
 									showCheckbox={false}
@@ -629,7 +633,16 @@ export default function GradingBefore() {
 										onClick={() => removePair(pair[0].id, pair[1].id, pair[1].pairId)}
 									/>
 								</div>
-                : null}						
+                : 
+                <div style={{ paddingTop: "20px", right: "10px", position: "absolute" }}> 
+                  <LockFill
+                    className={styles.lock}
+                    key={"lock-icon-" + toString(pair[0].id) + toString(pair[1].id) + "-pairId-" + toString(pair[0].pairId)}
+                    position="static"
+										color="var(--red-primary)"
+                    size="20px"
+                  />  
+                </div>}						
 							</div>
 						)
 					}
@@ -644,7 +657,8 @@ export default function GradingBefore() {
 			<div className="column">
 				{examinees.map((examinee, index) => {
 					const unlockedExaminees = examinees.filter(exam => !exam.isLocked).length
-					const showCheckbox = unlockedExaminees > 1 && !examinee.isLocked
+					let showCheckbox = unlockedExaminees > 1 && !examinee.isLocked
+
 					return (
 						<div style={{ display: "flex", width: "100%", justifyContent: "center" }} key={"single-pair-" + examinee.id} id={"single-pair-" + examinee.id}>
 							<div className={styles.numberSingle}>{numberOfPairs + index + 1}</div>
@@ -653,14 +667,16 @@ export default function GradingBefore() {
 								id={examinee.id}
 								item={examinee.name}
 								onRemove={removeExaminee}
-								onEdit={(id, name) => { editExaminee(id, name, false) }}
+								onEdit={(id, name) => {editExaminee(id, name, false)}}
+                canEdit={Boolean(!examinee.isLocked)}
 								onCheck={onCheck}
 								validateInput={validateInput}
 								showCheckbox={showCheckbox}
-								checked={false}
+								checked={checkedExamineeIds.includes(examinee.id)}
+								numberOfCheckedExaminees={checkedExamineeIds.length}
 								showTrash={Boolean(!examinee.isLocked)}
 								showX={false}
-								showLock={Boolean(examinee.isLocked)}
+								showLock={!!examinee.isLocked}
 							/>
 
 						</div>
