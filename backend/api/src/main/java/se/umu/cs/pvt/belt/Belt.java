@@ -80,4 +80,12 @@ public class Belt implements Serializable {
     public boolean isInverted(){
         return isInverted;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Belt belt = (Belt) obj;
+        return id == belt.id;
+    }
 }
