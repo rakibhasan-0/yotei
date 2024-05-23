@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import se.umu.cs.pvt.activitylist.ActivityListEntryRepository;
 import se.umu.cs.pvt.search.builders.*;
 import se.umu.cs.pvt.search.enums.TagType;
 import se.umu.cs.pvt.search.fuzzy.Fuzzy;
@@ -46,12 +47,14 @@ public class SearchController {
     private Long userIdL;
     private String userRole;
     private final UserShortRepository userShortRepository;
+    private final ActivityListEntryRepository activityListEntryRepository;
 
     @Autowired
     private JWTUtil jwtUtil;
     
     @Autowired
-    public SearchController(SearchRepository searchRepository, UserShortRepository userShortRepository) {
+    public SearchController(SearchRepository searchRepository, UserShortRepository userShortRepository, ActivityListEntryRepository activityListEntryRepository) {
+        this.activityListEntryRepository = activityListEntryRepository;
         this.searchRepository = searchRepository;
         this.userShortRepository = userShortRepository;
     }
@@ -203,7 +206,7 @@ public class SearchController {
         .build();
         
         List<ActivityListDBResult> result = searchRepository.getActivityListFromCustomQuery(createdQuery.getQuery());
-        List<ActivityListSearchResponse> activityListSearchResponses = new SearchActivityListResponseBuilder(result, userShortRepository).build();
+        List<ActivityListSearchResponse> activityListSearchResponses = new SearchActivityListResponseBuilder(result, userShortRepository, activityListEntryRepository).build();
         List<ActivityListSearchResponse> filteredResult = fuzzySearchFiltering(searchListParams.getName(), activityListSearchResponses);
 
         SearchResponse<ActivityListSearchResponse> response = new SearchResponse(filteredResult, Collections.emptyList());
