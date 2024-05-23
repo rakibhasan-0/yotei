@@ -82,3 +82,17 @@
     text-align: right;
 }
 
+.presetCommentContainer {
+    display: flex;
+    justify-content: "space-between"; /* Center the buttons horizontally */
+    gap: 4px; /* Space between the buttons */
+    margin-bottom: 10px;
+    margin-top: 10px;
+    width: 100%; /* Ensure the container takes the full width of the popup */
+    box-sizing: border-box; /* Include padding in the element's total width and height */
+}
+
+.presetCommentText {
+    font-size: 12px;
+    color: black;
+}
