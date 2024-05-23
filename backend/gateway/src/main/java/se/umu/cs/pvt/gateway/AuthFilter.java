@@ -12,7 +12,6 @@ import org.springframework.cloud.gateway.route.Route;
 import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
@@ -22,8 +21,8 @@ import java.util.List;
 
 /**
  * @author UNKNOWN (Doc: Griffin c20wnn)
- * @author Team Mango (Group 4) - 2024-05-22
- * @since 2024-05-20
+ * @author Team Mango (Group 4) - 2024-05-23
+ * @since 2024-05-23
  *
  *         AuthFilter.java - Authorization class.
  *         GatewayApplication.java - SpringBootApplication
@@ -49,14 +48,14 @@ public class AuthFilter implements GlobalFilter, Ordered {
 
         String path = route != null ? exchange.getRequest().getPath().toString() : null;
 
-        ServerHttpRequest request = route != null ? exchange.getRequest() : null;
+        HttpMethod method = route != null ? exchange.getRequest().getMethod() : null;
 
         String apiKey = "";
         if (apiKeyHeader != null) {
             apiKey = apiKeyHeader.get(0);
         }
 
-        if (!isAuthorized(routeId, apiKey, path, request)) {
+        if (!isAuthorized(routeId, apiKey, path, method)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Please check your api key.");
         }
 
@@ -71,11 +70,11 @@ public class AuthFilter implements GlobalFilter, Ordered {
     /**
      * @param routeId id of route
      * @param apikey  client header api key
-     * @param request 
+     * @param method The API calls http method
      * @return true if is authorized, false otherwise
      */
     private boolean isAuthorized(
-        String routeId, String apikey, String path, ServerHttpRequest request) {
+        String routeId, String apikey, String path, HttpMethod method) {
 
         // Always access to webserver and login api
         if (routeId.equals("webserver") || path.equals("/api/users/verify") || path.startsWith("/api/media/files/")) {
@@ -99,7 +98,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
             return false;
         }
         
-        if (adminOrGetMethod(request, permissions)) {
+        if (adminOrGetMethod(method, permissions)) {
             return true;
         }
                 
@@ -111,10 +110,10 @@ public class AuthFilter implements GlobalFilter, Ordered {
 
     }
 
-    private boolean adminOrGetMethod(ServerHttpRequest request, List<Integer> permissions) {
+    private boolean adminOrGetMethod(HttpMethod method, List<Integer> permissions) {
         return
             permissions.contains(PermissionValidator.getAdminRightsValue()) ||
-            request.getMethod().equals(HttpMethod.GET);
+            method.equals(HttpMethod.GET);
     }
 
     private boolean isAdminLockedEndPoint(String path) {
