@@ -190,7 +190,7 @@ export default function ListInfo({ id }) {
 			{activityListData.users.length > 0 && <SharedUsersContainer />}
 			<div className="d-flex row justify-content-center">
 				<div className="d-flex col mb-3 mt-3 justify-content-start">
-					<Button onClick={() => navigate(-1)} outlined={true}>
+					<Button onClick={() => navigate("/profile")} outlined={true}>
 						<p>Tillbaka</p>
 					</Button>
 				</div>
