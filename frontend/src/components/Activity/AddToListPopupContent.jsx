@@ -7,15 +7,21 @@ import styles from "./AddToListPopup.module.css"
 import { getLists } from "../Common/SearchBar/SearchBarUtils"
 import { AccountContext } from "../../context"
 import useMap from "../../hooks/useMap"
-import { setError, setSuccess } from "../../utils"
+import { setError, setSuccess,isAdminUser } from "../../utils"
 import { Link } from "react-router-dom"
 
+
+/**
+ * @author Team Tomato
+ * @since 2024-05-09, updated 2024-05-23
+ * @version 1.0
+ * */
 export const AddToListPopupContent = ({ techExerID, setShowMorePopup }) => {
 	const [lists, setLists] = useState([])
 	const [searchListText, setSearchListText] = useState("")
 	const { token } = useContext(AccountContext)
 	const [map, mapActions] = useMap()
-
+	const context = useContext(AccountContext)
 	const [selectedLists, setSelectedLists] = useState([])
 
 	/**
@@ -54,7 +60,7 @@ export const AddToListPopupContent = ({ techExerID, setShowMorePopup }) => {
 
 		const args = {
 			text: searchListText,
-			isAuthor: true,
+			isAuthor: isAdminUser(context) ? false : true,
 			isShared: false,
 			hidden: false
 		}
