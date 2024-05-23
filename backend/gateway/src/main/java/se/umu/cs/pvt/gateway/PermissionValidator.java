@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  *        feature.
  * 		- Create a list of regex patterns for each endpoint.
  *
- * @author Team Mango (Group 4) - 2024-05-22
+ * @author Team Mango (Group 4) - 2024-05-23
  * 
  */
 public class PermissionValidator {
@@ -74,6 +74,18 @@ public class PermissionValidator {
     }
 
 	public int getAdminRightsValue() {return permissionList.ADMIN_RIGHTS.value;}
+
+    /**
+     * Checks if a user is an admin.
+     * 
+     * Looks if the users permissions contains the admin permission.
+     * 
+     * @param permissions A list of permissions belonging to the user
+     * 
+     * @return True if the user has admin rights; else false
+     */
+    public boolean isAdmin(List<Integer> permissions) {
+        return permissions.contains(getAdminRightsValue());}  
 
     /**
      * Checks if a user has permissions to access API endpoints associated 
