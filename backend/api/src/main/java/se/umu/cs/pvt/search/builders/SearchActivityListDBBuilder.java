@@ -17,13 +17,13 @@ public class SearchActivityListDBBuilder {
     private SearchActivityListParams searchActivityListParams;
     private final List<DatabaseQuery> queries = new ArrayList<>();
 
-    private String userRole;
     private Long userId;
+    private List<Integer> permissions;
 
-    public SearchActivityListDBBuilder(SearchActivityListParams searchActivityListParams, Long userId, String userRole){
+    public SearchActivityListDBBuilder(SearchActivityListParams searchActivityListParams, Long userId, List<Integer> permissions){
         this.userId = userId;
-        this.userRole = userRole;
         this.searchActivityListParams = searchActivityListParams;
+        this.permissions = permissions;
     }
 
     public SearchActivityListDBBuilder filterByHidden() {
@@ -72,7 +72,7 @@ public class SearchActivityListDBBuilder {
      */
     public DatabaseQuery build() {
         DatabaseQuery databaseQuery = new DatabaseQuery();
-        if(userRole.equals("ADMIN") && queries.isEmpty()){
+        if(PermissionValidator.isAdmin(permissions) && queries.isEmpty()){
             databaseQuery.setQuery(
                 "SELECT DISTINCT name, id, author, private, created_date " + 
                 "FROM activity_list"

@@ -47,7 +47,6 @@ public class JWTUtil {
         return JWT.create()
                 .withSubject("User Details")
                 .withClaim("username", username)
-                .withClaim("role", role)
                 .withClaim("userId", userId)
                 .withClaim("permissions", permissions)
                 .withIssuedAt(new Date())

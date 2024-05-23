@@ -134,7 +134,6 @@ public class WorkoutControllerTest {
                 when(mockClaim.asInt()).thenReturn(1);
                 when(mockClaim.asString()).thenReturn("ADMIN");
                 when(mockJwt.getClaim("userId")).thenReturn(mockClaim);
-                when(mockJwt.getClaim("role")).thenReturn(mockClaim);
                 when(jwtUtil.validateToken("testToken123")).thenReturn(mockJwt);
 
                 when(workoutDetailRepository.findById(1L))
@@ -258,7 +257,6 @@ public class WorkoutControllerTest {
                 when(mockClaim.asInt()).thenReturn(2);
                 when(mockClaim.asString()).thenReturn("USER");
                 when(mockJwt.getClaim("userId")).thenReturn(mockClaim);
-                when(mockJwt.getClaim("role")).thenReturn(mockClaim);
                 when(jwtUtil.validateToken("testToken123")).thenReturn(mockJwt);
                 when(workoutDetailRepository.findById(1L))
                                 .thenReturn(Optional.of(new WorkoutDetail(
@@ -306,7 +304,6 @@ public class WorkoutControllerTest {
                 when(mockClaim.asInt()).thenReturn(2);
                 when(mockClaim.asString()).thenReturn("USER");
                 when(mockJwt.getClaim("userId")).thenReturn(mockClaim);
-                when(mockJwt.getClaim("role")).thenReturn(mockClaim);
                 when(jwtUtil.validateToken("testToken123")).thenReturn(mockJwt);
                 when(workoutDetailRepository.findById(1L))
                                 .thenReturn(Optional.empty());
@@ -361,7 +358,6 @@ public class WorkoutControllerTest {
                 when(mockClaim.asInt()).thenReturn(2);
                 when(mockClaim.asString()).thenReturn("USER");
                 when(mockJwt.getClaim("userId")).thenReturn(mockClaim);
-                when(mockJwt.getClaim("role")).thenReturn(mockClaim);
                 when(jwtUtil.validateToken("testToken123")).thenReturn(mockJwt);
                 when(jwtUtil.generateToken(nonAuthor.getUsername(), nonAuthor.getUserRole().toString(), 2, new ArrayList<Long>()))
                                 .thenReturn("testToken123");

@@ -45,7 +45,6 @@ public class SearchController {
     private final SearchRepository searchRepository;
     private DecodedJWT jwt;
     private Long userIdL;
-    private String userRole;
     private final UserShortRepository userShortRepository;
     private final ActivityListEntryRepository activityListEntryRepository;
 
@@ -192,14 +191,14 @@ public class SearchController {
         try {
             jwt = jwtUtil.validateToken(token);
             userIdL = jwt.getClaim("userId").asLong();
-            userRole = jwt.getClaim("role").asString();
+            List<Integer> permissions = jwt.getClaim("permissions").asList(Integer.class);
         } catch (Exception e) {
             System.err.println("Failed to authenticate user:" + e.getMessage());
         }
 
         SearchActivityListParams searchListParams = new SearchActivityListParams(urlQuery);
 
-        DatabaseQuery createdQuery = new SearchActivityListDBBuilder(searchListParams, userIdL, userRole)
+        DatabaseQuery createdQuery = new SearchActivityListDBBuilder(searchListParams, userIdL, permissions)
         .filterByHidden()
         .filterByIsAuthor()
         .filterByIsShared()

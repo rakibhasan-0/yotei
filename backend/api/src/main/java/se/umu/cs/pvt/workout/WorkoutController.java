@@ -104,13 +104,13 @@ public class WorkoutController {
         int userId;
         Long userIdL;
         String userRole;
+        List<Integer> permissions;
 
         try {
             DecodedJWT jwt = jwtUtil.validateToken(token);
             userId = jwt.getClaim("userId").asInt();
             userIdL = Long.valueOf(userId);
-            userRole = jwt.getClaim("role").asString();
-
+            permissions = jwt.getClaim("permissions").asList(Integer.class);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -121,7 +121,7 @@ public class WorkoutController {
         }
         WorkoutDetail workout = workoutOpt.get();
 
-        if (!userRole.equals("ADMIN")) {
+        if (!PermissionValidator.isAdmin(permissions)) {
             UserWorkout userWorkout = userWorkoutRepository.findByWorkoutIdAndUserId(id, userIdL);
             if (workout.getHidden() == true && (workout.getAuthor().getUserId() != userId && userWorkout == null)) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);

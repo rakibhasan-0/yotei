@@ -43,7 +43,7 @@ test("should render the search bar", () => {
 test("should render create technique button as admin", () => {
 	render (
 		// eslint-disable-next-line no-dupe-keys
-		<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", permissions: USER_PERMISSION_LIST_ALL, undefined }}>
+		<AccountContext.Provider value={{ undefined, userId: "", permissions: USER_PERMISSION_LIST_ALL, undefined }}>
 			<MemoryRouter>
 				<TechniqueIndex/>
 			</MemoryRouter>
@@ -302,7 +302,7 @@ describe("should update", () => {
 	test("should filter correctly, when leaving site and returning search-bar should have been saved", async () => {
 		render(
 			// eslint-disable-next-line no-dupe-keys
-			<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", permissions: USER_PERMISSION_LIST_ALL, undefined }}>
+			<AccountContext.Provider value={{ undefined, userId: "", permissions: USER_PERMISSION_LIST_ALL, undefined }}>
 				<MemoryRouter>
 					<TechniqueIndex/>
 				</MemoryRouter>
@@ -371,7 +371,7 @@ describe("should update", () => {
 
 		render (
 			// eslint-disable-next-line no-dupe-keys
-			<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", permissions: USER_PERMISSION_LIST_ALL, undefined }}>
+			<AccountContext.Provider value={{ undefined, userId: "", permissions: USER_PERMISSION_LIST_ALL, undefined }}>
 				<MemoryRouter>
 					<TechniqueIndex/>
 				</MemoryRouter>

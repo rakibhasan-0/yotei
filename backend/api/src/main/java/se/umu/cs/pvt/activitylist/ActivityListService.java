@@ -38,8 +38,6 @@ public class ActivityListService implements IActivityListService {
     private final ActivityListEntryRepository entryRepository;
     private final JWTUtil jwtUtil;
 
-    private static final String ROLE_ADMIN = "ADMIN";
-
     public ActivityListService(UserShortRepository userShortRepository, ActivityListRepository activityListRepository,
             JWTUtil jwtUtil, ActivityListEntryRepository entryRepository) {
         this.userShortRepository = userShortRepository;
@@ -90,9 +88,9 @@ public class ActivityListService implements IActivityListService {
         }
 
         Long userIdL = jwt.getClaim("userId").asLong();
-        String role = jwt.getClaim("role").asString();
+        List<Integer> permissions = jwt.getClaim("permissions").asList(Integer.class);
         Optional<ActivityList> listOpt = activityListRepository.findById(id);
-        if (!role.equals(ROLE_ADMIN)) {
+        if (!PermissionValidator.isAdmin(permissions)) {
             listOpt = activityListRepository.findByIdAndUserId(id, userIdL);
             if (listOpt.isEmpty()) {
                 throw new ForbiddenException("User does not have permissions to read list");
@@ -177,7 +175,7 @@ public class ActivityListService implements IActivityListService {
         try {
             jwt = jwtUtil.validateToken(token);
             userIdL = jwt.getClaim("userId").asLong();
-            userRole = jwt.getClaim("role").asString();
+            List<Integer> permissions = jwt.getClaim("permissions").asList(Integer.class);
         } catch (JWTVerificationException e) {
             throw new UnauthorizedAccessException("Invalid token");
         }
@@ -185,7 +183,7 @@ public class ActivityListService implements IActivityListService {
         ActivityList activityList = activityListRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ActivityList not found"));
 
-        if (!activityList.getAuthor().equals(userIdL) && !ROLE_ADMIN.equals(userRole)) {
+        if (!activityList.getAuthor().equals(userIdL) && !PermissionValidator.isAdmin(permissions)) {
             throw new ForbiddenException("User does not have permission to delete this list");
         }
         activityListRepository.delete(activityList);
@@ -236,8 +234,8 @@ public class ActivityListService implements IActivityListService {
             throw new UnauthorizedAccessException("Invalid token");
         }
         Long userId = jwt.getClaim("userId").asLong();
-        String userRole = jwt.getClaim("role").asString();
-        Boolean isAdmin = ROLE_ADMIN.equals(userRole);
+        List<Integer> permissions = jwt.getClaim("permissions").asList(Integer.class);
+        Boolean isAdmin = PermissionValidator.isAdmin(permissions);
 
         List<ActivityList> activityLists;
 
@@ -291,7 +289,7 @@ public class ActivityListService implements IActivityListService {
         }
 
         Long userIdL = jwt.getClaim("userId").asLong();
-        String userRole = jwt.getClaim("role").asString();
+        List<Integer> permissions = jwt.getClaim("permissions").asList(Integer.class);
 
         Optional<ActivityList> listOpt = activityListRepository.findById(listToUpdate.getId());
         if (listOpt.isEmpty()) {
@@ -299,7 +297,7 @@ public class ActivityListService implements IActivityListService {
         }
 
         ActivityList list = listOpt.get();
-        if (list.getAuthor() != userIdL && !userRole.equals(ROLE_ADMIN)) {
+        if (list.getAuthor() != userIdL && !PermissionValidator.isAdmin(permissions)) {
             throw new ForbiddenException("You do not have permissions to edit this activity list");
         }
 

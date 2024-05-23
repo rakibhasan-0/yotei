@@ -87,7 +87,6 @@ public class ActivityListControllerTest {
         when(mockClaim.asLong()).thenReturn(1L);
         when(mockClaim.asString()).thenReturn("ADMIN");
         when(mockJwt.getClaim("userId")).thenReturn(mockClaim);
-        when(mockJwt.getClaim("role")).thenReturn(mockClaim);
         when(jwtUtil.validateToken(token)).thenReturn(mockJwt);
     }
 
@@ -97,7 +96,6 @@ public class ActivityListControllerTest {
         when(mockClaim.asLong()).thenReturn(userId);
         when(mockClaim.asString()).thenReturn("USER");
         when(mockJwt.getClaim("userId")).thenReturn(mockClaim);
-        when(mockJwt.getClaim("role")).thenReturn(mockClaim);
         when(jwtUtil.validateToken(token)).thenReturn(mockJwt);
     }
 
