@@ -57,18 +57,17 @@ export default function RoleDelete({ id, roleID, name, setIsOpen }) {
 		})
 			.then(async response => {
 				const data = response.status === 200 ? await response.json() : []
+				console.log(response)
 
-				if (response.ok) {
+				if (response.status === 200) {
 					setUsers(data)
 					setGotResponse(true)
 					setDeleteButtonDisabled(true)
 				}
 				else {
-					setHasError(true)
+					setGotResponse(true)
+					setDeleteButtonDisabled(false)
 				}
-			})
-			.catch(() => {
-				setHasError(true)
 			})
 	}
 
@@ -117,7 +116,6 @@ export default function RoleDelete({ id, roleID, name, setIsOpen }) {
 	}
 
 	function constructUserList() {
-		//setDeleteButtonDisabled(true)
 		return <>
 			<p>{users.length > 0 ? "Rollen används av följande användare:" : ""}</p>
 			<div className={"grip-striped"} style={{textAlign: "center", marginBottom: "1rem"}}>
