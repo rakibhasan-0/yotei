@@ -3,6 +3,7 @@ package se.umu.cs.pvt.search.builders;
 import java.util.ArrayList;
 import java.util.List;
 
+import se.umu.cs.pvt.PermissionValidator;
 import se.umu.cs.pvt.search.DatabaseQuery;
 import se.umu.cs.pvt.search.params.SearchActivityListParams;
 

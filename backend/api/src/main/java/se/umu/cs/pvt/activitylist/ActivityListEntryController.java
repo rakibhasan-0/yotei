@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import se.umu.cs.pvt.PermissionValidator;
 import se.umu.cs.pvt.exercise.Exercise;
 import se.umu.cs.pvt.exercise.ExerciseRepository;
 import se.umu.cs.pvt.technique.Technique;
@@ -83,7 +84,6 @@ public class ActivityListEntryController {
 
     private DecodedJWT jwt;
     private Long userIdL;
-    private String userRole;
     private List<Integer> permissions;
 
     @Autowired

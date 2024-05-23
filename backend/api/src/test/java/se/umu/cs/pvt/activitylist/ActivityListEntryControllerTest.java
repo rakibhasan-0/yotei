@@ -1,5 +1,6 @@
 package se.umu.cs.pvt.activitylist;
 
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -7,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.List;
 
@@ -59,12 +61,25 @@ public class ActivityListEntryControllerTest {
     private Claim mockClaim;
 
     public void userMockSetup(Long userId) {
+        Integer[] mockPermissions = {
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+        };
+
         mockJwt = Mockito.mock(DecodedJWT.class);
         mockClaim = Mockito.mock(Claim.class);
-        when(mockClaim.asLong()).thenReturn(userId);
-        when(mockClaim.asString()).thenReturn("USER");
-        when(mockJwt.getClaim("userId")).thenReturn(mockClaim);
-        when(jwtUtil.validateToken(token)).thenReturn(mockJwt);
+        lenient().when(mockClaim.asLong()).thenReturn(userId);
+        lenient().when(mockClaim.asString()).thenReturn("USER");
+        lenient().when(mockClaim.asList(Integer.class)).thenReturn(Arrays.asList(mockPermissions));
+        lenient().when(mockJwt.getClaim("userId")).thenReturn(mockClaim);
+        lenient().when(mockJwt.getClaim("permissions")).thenReturn(mockClaim);
+        lenient().when(jwtUtil.validateToken(token)).thenReturn(mockJwt);
     }
 
     @Test

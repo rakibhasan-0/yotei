@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import se.umu.cs.pvt.PermissionValidator;
 import se.umu.cs.pvt.activitylist.ActivityListRequest.ActivityRequest;
 import se.umu.cs.pvt.activitylist.Dtos.ActivityListDTO;
 import se.umu.cs.pvt.activitylist.Dtos.ActivityListShortDTO;
@@ -170,12 +171,12 @@ public class ActivityListService implements IActivityListService {
     public void removeActivityList(Long id, String token) {
         DecodedJWT jwt;
         Long userIdL;
-        String userRole;
+        List<Integer> permissions;
 
         try {
             jwt = jwtUtil.validateToken(token);
             userIdL = jwt.getClaim("userId").asLong();
-            List<Integer> permissions = jwt.getClaim("permissions").asList(Integer.class);
+            permissions = jwt.getClaim("permissions").asList(Integer.class);
         } catch (JWTVerificationException e) {
             throw new UnauthorizedAccessException("Invalid token");
         }

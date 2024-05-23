@@ -45,6 +45,7 @@ public class SearchController {
     private final SearchRepository searchRepository;
     private DecodedJWT jwt;
     private Long userIdL;
+    private List<Integer> permissions;
     private final UserShortRepository userShortRepository;
     private final ActivityListEntryRepository activityListEntryRepository;
 
@@ -191,7 +192,7 @@ public class SearchController {
         try {
             jwt = jwtUtil.validateToken(token);
             userIdL = jwt.getClaim("userId").asLong();
-            List<Integer> permissions = jwt.getClaim("permissions").asList(Integer.class);
+            permissions = jwt.getClaim("permissions").asList(Integer.class);
         } catch (Exception e) {
             System.err.println("Failed to authenticate user:" + e.getMessage());
         }
