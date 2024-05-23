@@ -777,6 +777,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 																		}
 																		key={index}
 																		index={index}
+																		popUp = {true}
 																	>
 
 																	</ListItem>
@@ -795,6 +796,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 																		}
 																		key={index}
 																		index={index}
+																		popUp = {true}
 																	>
 																	</ListItem>
 																)
