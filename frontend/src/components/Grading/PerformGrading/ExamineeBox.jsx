@@ -18,7 +18,6 @@ import { setError as setErrorToast } from "../../../utils"
  * @param {String} props.techniqueName - The name of the technique.
  * @param {function} props.onClick - onClick function when component is pressed.
  * @param {String} props.status - The current status of the button.
- * @param {function} props.setButtonState - Function to set the state of the button.
  * 
  * Example Usage:
  * <ExamineeBox 
@@ -34,7 +33,6 @@ import { setError as setErrorToast } from "../../../utils"
  *     techniqueName="Some Technique"
  *     onClick={() => console.log("Clicked")}
  *     status="default"
- *     setButtonState={(state) => console.log(state)}
  *   />
  * )
  * 
@@ -49,7 +47,6 @@ export default function ExamineeBox({
 	techniqueName, 
 	onClick, 
 	status, 
-	setButtonState
 }) {
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [isAddingComment, setAddComment] = useState(false)
@@ -57,6 +54,8 @@ export default function ExamineeBox({
 	const [commentError, setCommentError] = useState("")
 	const [hasComment, setExistingComment] = useState(false)
 	const [commentId, setCommentId] = useState(null)
+	const [isApiCallInProgress, setIsApiCallInProgress] = useState(false)
+
 	
 	const isErr = !(commentError == undefined || commentError == null || commentError == "")
 
@@ -76,7 +75,7 @@ export default function ExamineeBox({
     
 	useEffect(() => {
 		setColor(colors[status] || colors.default)
-	}, [status])
+	}, [])
     
 	useEffect(() => {
 		if (isAddingComment) {
@@ -228,8 +227,11 @@ export default function ExamineeBox({
 		}
 	}
 
-	const handleClick = () => {
+	const handleClick = async () => {
 		// Update buttonState and color based on current color
+		if (isApiCallInProgress) {
+			return // Exit if an API call is already in progress
+		}
 		let newButtonState
 		let newColor
         
@@ -244,12 +246,12 @@ export default function ExamineeBox({
 			newColor = colors.default
 		}
         
-		setButtonState(newButtonState)
 		setColor(newColor)
-		onClick(newButtonState) // Pass the new state as a parameter
+		
+		setIsApiCallInProgress(true)
+		await onClick(newButtonState) // Pass the new state as a parameter to the API call
+		setIsApiCallInProgress(false) // Unlock updates after API call completes
 	}
-
-	console.log("name: ", examineeName, ", status: ", status, ", color: ", color)
 
 	return (
 		<div id={id} className={styles.examineeContainer} style={{ backgroundColor: color }}>
@@ -267,7 +269,7 @@ export default function ExamineeBox({
 					isOpen={isAddingComment}
 					setIsOpen={toggleAddPersonalComment}
 					onClose={() => setCommentError(false)}
-					style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset" }}
+					style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset",top: "35vh"}}
 				>
 					<textarea
 						className={isErr ? `${styles.textarea} ${styles.textareaErr}` : `${styles.textarea}`}
@@ -281,10 +283,25 @@ export default function ExamineeBox({
 						type={"text"}
 					/>
 					{commentError && <p className={styles.err}>{commentError}</p>}
-					<div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px", marginTop: "10px"}}>
-						<Button outlined={true} onClick={() => {setCommentText(commentText + " " + "Böj på benen!"); setCommentError(false)}}>Böj på benen!</Button>
-						<Button outlined={true} onClick={() => {setCommentText(commentText + " " + "Balansbrytning!"); setCommentError(false)}}>Balansbrytning!</Button>
-						<Button outlined={true} onClick={() => {setCommentText(commentText + " " + "Kraftcirkeln!"); setCommentError(false)}}>Kraftcirkeln!</Button>
+					<div className={styles.presetCommentContainer}>
+						<Button 
+							outlined={true} 
+							onClick={() => {setCommentText(commentText + " " + "Böj på benen!") 
+								setCommentError(false)}}>
+							<p className={styles.presetCommentText}>Böj på benen!</p>
+						</Button>
+						<Button 
+							outlined={true} 
+							onClick={() => {setCommentText(commentText + " " + "Balansbrytning!") 
+								setCommentError(false)}}>
+							<p className={styles.presetCommentText}>Balansbrytning!</p>
+						</Button>
+						<Button 
+							outlined={true} 
+							onClick={() => {setCommentText(commentText + " " + "Kraftcirkeln!") 
+								setCommentError(false)}}>
+							<p className={styles.presetCommentText}>Kraftcirkeln!</p>
+						</Button>
 					</div>
 					<Button onClick={() => onAddPersonalComment()}>Lägg till</Button>
 				</Popup>

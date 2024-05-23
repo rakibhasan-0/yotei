@@ -6,7 +6,7 @@ import Divider from "../../components/Common/Divider/Divider"
 import Container from "./GradingDeviationContainer"
 import CheckBox from "../../components/Common/CheckBox/CheckBox"
 import { useNavigate, useParams } from "react-router-dom"
-import {HTTP_STATUS_CODES, setError} from "../../utils"
+import {HTTP_STATUS_CODES, canHandleGradings, isAdminUser, setError} from "../../utils"
 import { AccountContext } from "../../context"
 
 
@@ -15,7 +15,7 @@ import { AccountContext } from "../../context"
  * Imports grading data and displays if the user passed or not 
  * and shows comments if there are any.
  * 
- * @author Team Pomegranate
+ * @author Team Pomegranate, Team Mango
  * @version 1.0
  * @since 2024-05-07
  */
@@ -27,7 +27,7 @@ export default function GradingDeviations() {
 		const [gradingId, setGradingId] = useState(-1)
 		const { userId } = useParams() //The user id of the current examinee
 		const [name, setName] = useState("") //The name of the current examinee
-        const [showingAll, setShowingAll] = useState(false)
+        const [showingDeviationsOnly, setShowingDeviationsOnly] = useState(true)
         const [resultList, setResultList] = useState([])
         const [personalComments, setPersonalComments] = useState([])
         const [pairComments, setPairComments] = useState([])
@@ -190,7 +190,13 @@ export default function GradingDeviations() {
 
         fetchData()
         fetchPersonalComments()
-		}, [])
+	}, [])
+
+    if(!isAdminUser(context) && !canHandleGradings(context)) {
+        window.location.replace("/404")
+        return null
+    }
+
 
     /**
      * Checks if the examinee has passed a specific technique
@@ -278,9 +284,9 @@ export default function GradingDeviations() {
             <div className="d-flex justify-content-center">
                 <CheckBox
                     className = {styles["showAllCheckbox"]}
-                    checked={false}
-                    label = "Visa alla"
-                    onClick={(checked) => {setShowingAll(checked)}}
+                    checked={true}
+                    label = "Visa endast avvikelser"
+                    onClick={(checked) => {setShowingDeviationsOnly(checked)}}
                     enabled
                     id="checkbox-element"
                 />
@@ -302,7 +308,7 @@ export default function GradingDeviations() {
                             <div className = {styles["sc23-outline"]} id={category} key={index_div}>
                                 <Divider id = 'divider-example' option= 'h2_left' title = {category.category_name} key={index_id}/>
                                 {category.techniques.map((technique, index) => (
-                                    (isDeviating(technique.text) || showingAll) ?
+                                    (isDeviating(technique.text) || !showingDeviationsOnly) ?
                                         <Container id = {index} name = {technique.text} passed={hasPassed(technique.text)} key={index} 
                                         comment={getPersonalComment(technique.text)} pairComment={getPairComment(technique.text)} generalComment={getGroupComment(technique.text)}></Container>
                                         : null

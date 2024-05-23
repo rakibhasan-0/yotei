@@ -47,6 +47,7 @@ p {
 }
 
 .listText {
+	padding-top: 1px;
     font-size: large;
     overflow: hidden;
 }
@@ -97,3 +98,4 @@ input,
     transition-duration: 200ms;
     height: auto;
     }
+

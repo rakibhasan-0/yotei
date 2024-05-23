@@ -12,7 +12,7 @@ import CreateTechnique from "../CreateTechnique/CreateTechnique"
 import { useCookies } from "react-cookie"
 import TechniqueCard from "../../../../components/Common/Technique/TechniqueCard/TechniqueCard"
 import InfiniteScrollComponent from "../../../../components/Common/List/InfiniteScrollComponent"
-import { canCreateAndEditActivity } from "../../../../utils"
+import { canCreateAndEditActivity, isAdminUser } from "../../../../utils"
 import Spinner from "../../../../components/Common/Spinner/Spinner"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { AddToListPopupContent } from "../../../../components/Activity/AddToListPopupContent"
@@ -27,6 +27,8 @@ import { AddToListPopupContent } from "../../../../components/Activity/AddToList
  * @update v3 (2024-05-02 Team Kiwi) removed header from html, also rerouted button from ./create to ./exercise/create
  * @update Team Mango (2024-05-21) changed check for adding technique to new user premission check.
  * @updated 2024-05-21
+ * @updated 2024-05-22 Team Mango: added returnTo
+ *
  */
 export default function TechniqueIndex() {
 	const [techniques, setTechniques] = useState([])
@@ -66,15 +68,18 @@ export default function TechniqueIndex() {
 		// The selected belts are transformed from an array of belts objects to an array of strings, consisting of the belt names
 		const args = {
 			text: searchBarText,
-			selectedBelts: belts?.map(belt => {
-				if (belt.child) {
-					return belt.name + "-barn"
-				} else if (belt.inverted) {
-					return belt.name + "-inverted"
-				} else {
-					return belt.name
-				}
-			}).filter(Boolean).join(","), // Filter out any falsy values
+			selectedBelts: belts
+				?.map((belt) => {
+					if (belt.child) {
+						return belt.name + "-barn"
+					} else if (belt.inverted) {
+						return belt.name + "-inverted"
+					} else {
+						return belt.name
+					}
+				})
+				.filter(Boolean)
+				.join(","), // Filter out any falsy values
 			kihon: kihon,
 			selectedTags: tags,
 		}
@@ -139,7 +144,7 @@ export default function TechniqueIndex() {
 			setTags((current) => current.filter((tag) => tag !== "kihon waza"))
 		}
 	}
-	
+
 	const handleMoreClicked = (id) => {
 		setSelectedTechniqueId(id)
 		//Open pop up
@@ -193,7 +198,11 @@ export default function TechniqueIndex() {
 									<div className={styles["techniqueCard-container"]}>
 										<TechniqueCard marginTop={5} key={key} technique={technique} checkBox={false} />
 									</div>
-									<Link variant="link" style={{ marginTop: "10px" }} onClick={() => handleMoreClicked(technique.techniqueID)}>
+									<Link
+										variant="link"
+										style={{ marginTop: "10px" }}
+										onClick={() => handleMoreClicked(technique.techniqueID)}
+									>
 										<ThreeDotsVertical color="black" size={24} />
 									</Link>
 								</div>
@@ -202,7 +211,11 @@ export default function TechniqueIndex() {
 				)}
 			</div>
 			<Popup title="Lägg till i lista" isOpen={showMorePopup} setIsOpen={setShowMorePopup}>
-				<AddToListPopupContent techExerID={{ techniqueId: selectedTechniqueId, exerciseId: null }} setShowMorePopup={setShowMorePopup} />
+				<AddToListPopupContent
+					techExerID={{ techniqueId: selectedTechniqueId, exerciseId: null }}
+					setShowMorePopup={setShowMorePopup}
+					returnTo="/activity"
+				/>
 			</Popup>
 
 			{/* Spacing so the button doesn't cover a techniqueCard */}
@@ -212,8 +225,7 @@ export default function TechniqueIndex() {
 			<br />
 			<br />
 
-			
-			{canCreateAndEditActivity(context) && (
+			{(isAdminUser(context) || canCreateAndEditActivity(context)) && (
 				<Link to={"technique/create"}>
 					<RoundButton id="technique-add-button">
 						<Plus className={styles["plus-icon"]} />
