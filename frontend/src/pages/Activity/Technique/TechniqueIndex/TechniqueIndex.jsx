@@ -12,7 +12,7 @@ import CreateTechnique from "../CreateTechnique/CreateTechnique"
 import { useCookies } from "react-cookie"
 import TechniqueCard from "../../../../components/Common/Technique/TechniqueCard/TechniqueCard"
 import InfiniteScrollComponent from "../../../../components/Common/List/InfiniteScrollComponent"
-import { canCreateAndEditActivity } from "../../../../utils"
+import { canCreateAndEditActivity, isAdminUser } from "../../../../utils"
 import Spinner from "../../../../components/Common/Spinner/Spinner"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { AddToListPopupContent } from "../../../../components/Activity/AddToListPopupContent"
@@ -213,7 +213,7 @@ export default function TechniqueIndex() {
 			<br />
 
 			
-			{canCreateAndEditActivity(context) && (
+			{(isAdminUser(context) || canCreateAndEditActivity(context)) && (
 				<Link to={"technique/create"}>
 					<RoundButton id="technique-add-button">
 						<Plus className={styles["plus-icon"]} />
