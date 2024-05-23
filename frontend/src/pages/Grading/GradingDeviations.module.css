@@ -52,7 +52,7 @@
 	min-height: 30px;
 	cursor: pointer;
 	grid-template-columns: repeat(5, 1fr);
-	
+	position:relative;
 }
 
 #sc23-session-container-beltbox {
@@ -164,4 +164,32 @@
 .container {
     display: flex;
     flex-direction: column;
+}
+
+.outerCircle{
+	position: absolute;
+	top:2px;
+	right:2px;
+	height: 1rem;
+	width: 1rem;
+	background-color: #FFFFFF;
+	border-radius: 50%;
+}
+
+.innerCircle{
+	position: relative;
+	top: 1px;
+	left: 1px;
+	height: 0.9rem;
+	width: 0.9rem;
+	background-color: #BD3B41;
+	border-radius: 50%;
+	text-align: center;
+	justify-content: center;
+}
+
+.counterText{
+	color: white;
+	position: relative;
+	font-size: 10px;
 }
