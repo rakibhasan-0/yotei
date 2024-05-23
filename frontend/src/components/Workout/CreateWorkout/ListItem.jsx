@@ -1,5 +1,8 @@
 import { Link, useNavigate } from "react-router-dom"
 import style from "./ListItem.module.css"
+import PopupMini from "src/components/Common/Popup/PopupMini.jsx"
+import TechniqueDetailMini from "../../../pages/Activity/Technique/TechniqueDetail/TechniqueDetailMini"
+import ExerciseDetailMini from "../../../pages/Activity/Exercise/ExerciseDetailMini"
 
 /**
  * This component is used to display the content of a list that is 
@@ -39,7 +42,13 @@ export default function ListItem({ item, checkBox, id, index, popUp}) {
 	
 	return (
 		<div style={{ backgroundColor: bgColor }}>
-			<PopupMini></PopupMini>
+			<PopupMini title={item.name} id = "popup-list-item" isOpen={isOpen} setIsOpen={setIsOpen} isNested={true}  >
+			{(item.type == "technique") ?
+				<TechniqueDetailMini id = {item.path}></TechniqueDetailMini>
+				:
+				<ExerciseDetailMini id = {item.path}></ExerciseDetailMini>	
+			}	
+			</PopupMini>
 			
 			{item.type === "technique" ? (
 				
