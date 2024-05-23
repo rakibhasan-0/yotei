@@ -2,7 +2,7 @@ import React from "react"
 import styles from "./GradingProtocolsRows.module.css"
 import TechniqueCard from "../Common/Technique/TechniqueCard/TechniqueCard"
 
-export default function GradingProtocolsRows({ data, beltColors }) {
+export default function GradingProtocolsRows({ data }) {
 	return (
 		<div className={styles.container}>
 			{data.map((category, index) => (
