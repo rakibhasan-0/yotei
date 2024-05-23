@@ -34,10 +34,8 @@ public class PermissionValidator {
 	    PLAN_ALL(5),
 	    WORKOUT_OWN(6),
 	    WORKOUT_ALL(7),
-	    TECHNIQUE_EXERCISE_OWN(8),
-	    TECHNIQUE_EXERCISE_ALL(9),
-	    GRADING_OWN(10),
-	    GRADING_ALL(11);
+        TECHNIQUE_EXERCISE_ALL(8),
+	    GRADING_ALL(9);
 
         private final int value;
         private permissionList(int value) {
@@ -174,8 +172,7 @@ public class PermissionValidator {
         };
     
         Integer[] permissionsToCheck = {
-            permissionList.TECHNIQUE_EXERCISE_ALL.value,
-            permissionList.TECHNIQUE_EXERCISE_OWN.value
+            permissionList.TECHNIQUE_EXERCISE_ALL.value
         };
 
         return hasPermission(path, permissions, 
@@ -209,8 +206,7 @@ public class PermissionValidator {
         };
     
         Integer[] permissionsToCheck = {
-            permissionList.GRADING_ALL.value,
-            permissionList.GRADING_OWN.value
+            permissionList.GRADING_ALL.value
         };
 
         return hasPermission(path, permissions, 
