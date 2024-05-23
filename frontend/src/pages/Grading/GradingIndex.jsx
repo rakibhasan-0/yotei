@@ -8,6 +8,7 @@ import styles from "./GradingIndex.module.css"
 import BeltButton from "../../components/Common/Button/BeltButton"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import { Trash} from "react-bootstrap-icons"
+import { canHandleGradings, isAdminUser } from "../../utils"
 import PopupSmall from "../../components/Common/Popup/PopupSmall"
 
 
@@ -16,7 +17,7 @@ import PopupSmall from "../../components/Common/Popup/PopupSmall"
  * The grading create page.
  * Creates a new grading.
  * 
- * @author Team Pomegranate
+ * @author Team Pomegranate, Team Mango
  * @version 1.0
  * @since 2024-05-07
  */
@@ -220,9 +221,12 @@ export default function GradingIndex() {
 			}
 		}
 		fetchData()
-		
-
 	}, [])
+
+	if(!isAdminUser(context) && !canHandleGradings(context)){
+		window.location.replace("/404")
+		return null
+	}
 
 	return (
 		<center>
@@ -244,16 +248,16 @@ export default function GradingIndex() {
 										<h2 style={{ margin: 0, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
 											{grading.title}
 										</h2>
-
-										<button 
+										<Trash
+											className={styles["close-icon"]}
 											onClick={(e) => {
 												e.stopPropagation() 
 												handleIconClick(grading)
-											}} 
-											style={{ marginLeft: "auto", background: "none", border: "none", cursor: "pointer" }}
-										>
-											<Trash />
-										</button>
+											}}
+											size="24px"
+											style={ { color: "var(--black)", marginLeft:"auto" }}
+											id="close-icon"
+											data-testid="trash-icon"/>
 									
 									</div>
 								</BeltButton>
@@ -280,15 +284,16 @@ export default function GradingIndex() {
 										<h2 style={{ margin: 0, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
 											{grading.title}
 										</h2>
-										<button 
+										<Trash
+											className={styles["close-icon"]}
 											onClick={(e) => {
 												e.stopPropagation() 
 												handleIconClick(grading)
-											}} 
-											style={{ marginLeft: "auto", background: "none", border: "none", cursor: "pointer" }}
-										>
-											<Trash />
-										</button>
+											}}
+											size="24px"
+											style={ { color: "var(--black)", marginLeft:"auto" }}
+											id="close-icon"
+											data-testid="trash-icon"/>
 									</div>
 
 								</BeltButton>
