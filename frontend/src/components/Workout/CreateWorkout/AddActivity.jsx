@@ -546,6 +546,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 	 * @param {Integer} listID 
 	 */
 	function fetchingListContent(listID, callback) {
+		let index = 0
 		const args = {
 			id: listID
 		}
@@ -554,9 +555,10 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 			if (result.error) return
 
 			const listContent = result.activities.map(item => {
+				index += 1
 				if (item.type === "technique") {
 					return {
-						techniqueID: listID + "-technique-" + item.id,
+						techniqueID: listID + "-" + index + "-technique-" + item.id,
 						name: item.name,
 						type: "technique",
 						description: item.description,
@@ -765,7 +767,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 															if(item.type === "technique") {
 																return (
 																	<ListItem
-																		id={"technique-list-item-" + item.techniqueID}
+																		id={index + "-technique-list-item-" + item.techniqueID}
 																		item={item}
 																		checkBox={
 																			<CheckBox 
