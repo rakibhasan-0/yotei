@@ -163,9 +163,9 @@ function SessionContainer ({ id, workout, session, plan}) {
 								}
 								{
 									checkPlan() && checkColor() ?
-										<ChevronDown id={styles["sc23-dropdown"]} style={{color:"black", zIndex: 1000}} className={styles[["sc23-session-container-chevron-rotation-animation sc23-session-container-header-overlap", toggled ? "sc23-chevron-rotate" : ""].join(" ")]} size={20}/>
+										<ChevronDown id={styles["sc23-dropdown"]} style={{color:"black", zIndex: 1}} className={styles[["sc23-session-container-chevron-rotation-animation sc23-session-container-header-overlap", toggled ? "sc23-chevron-rotate" : ""].join(" ")]} size={20}/>
 										:
-										<ChevronDown id={styles["sc23-dropdown"]} className={styles[["sc23-session-container-chevron-rotation-animation sc23-session-container-header-overlap", toggled ? "sc23-chevron-rotate" : ""].join(" ")]} size={20}/>
+										<ChevronDown id={styles["sc23-dropdown"]} style={{zIndex:1}}className={styles[["sc23-session-container-chevron-rotation-animation sc23-session-container-header-overlap", toggled ? "sc23-chevron-rotate" : ""].join(" ")]} size={20}/>
 								}
 							</div>
 							<div id = {`${id}-content`} className={styles["sc23-session-container-content"]}>
