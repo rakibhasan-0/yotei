@@ -787,6 +787,7 @@ ALTER TABLE
 CREATE TABLE node(
 	id SERIAL PRIMARY KEY,
 	parent_weave INT,
+	in_chain INT,
 	name VARCHAR(180),
 	description VARCHAR(800),
 	technique INT,

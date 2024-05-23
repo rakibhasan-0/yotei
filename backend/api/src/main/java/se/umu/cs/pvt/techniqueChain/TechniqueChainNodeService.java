@@ -37,6 +37,7 @@ public class TechniqueChainNodeService {
             existingNode.setAttack(updatedNodeData.getAttack());
             existingNode.setParticipant(updatedNodeData.getParticipant());
             existingNode.setParent_weave(updatedNodeData.getParent_weave());
+            existingNode.setIn_chain(updatedNodeData.getIn_chain());
             
             // Save the updated node
             return nodeRepository.save(existingNode);

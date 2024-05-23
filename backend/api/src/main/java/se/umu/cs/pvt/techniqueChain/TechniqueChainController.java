@@ -32,12 +32,47 @@ public class TechniqueChainController {
 
     protected TechniqueChainController() {}
 
+    /**
+     * Creates a node.
+     * @param node the node to create.
+     * @return The new created node.
+     * @return HTTP-status code.
+     * 
+     * Example Body
+     * {
+     *  "name": "skriver kommentarer",  //optional
+     *  "description": "kollar så api create weave fungerar",   //optional
+     *  "attack": false,
+     *  "technique": 1,
+     *  "participant": 1,
+     *  "parent_weave": 1,
+     *  "in_chain": 2   //optional
+     * }
+     */
     @PostMapping("/node/create")
     public ResponseEntity<Object> createNewNode(@RequestBody TechniqueChainNode node) {
         TechniqueChainNode newNode = nodeRepository.save(node);
         return new ResponseEntity<>(newNode, HttpStatus.OK);
     }
 
+    /**
+     * edits a node.
+     * @param node the node to chage.
+     * @return The edited node data.
+     * @return HTTP-status code.
+     * 
+     * Example Body
+     * {
+     *  "id": 1,
+     *  "name": "skriver kommentarer",  //optional
+     *  "description": "kollar så api create weave fungerar",   //optional
+     *  "attack": false,
+     *  "technique": 1,
+     *  "participant": 1,
+     *  "parent_weave": 1,
+     *  "in_chain": 2   //optional
+     * }
+     */
     @PutMapping("/node/edit")
     public ResponseEntity<TechniqueChainNode> updateNode(@RequestBody TechniqueChainNode updatedNodeData) {
         TechniqueChainNode updatedNode = nodeService.updateNode(updatedNodeData.getId(), updatedNodeData);
@@ -48,6 +83,16 @@ public class TechniqueChainController {
         }
     }
 
+    /**
+     * deletes a node.
+     * @param node the node to delete.
+     * @return HTTP-status code.
+     * 
+     * Example Body
+     * {
+     *  "deleteNode": 1
+     * }
+     */
     @DeleteMapping("/node/delete")
     public ResponseEntity<Void> deleteNode(@RequestBody DeleteNodeRequest node) {
         boolean deleted = nodeService.deleteNode(node.getDeleteNode());
@@ -69,6 +114,12 @@ public class TechniqueChainController {
         return new ResponseEntity<>(nodes, HttpStatus.OK);
     }
 
+    /**
+     * deletes a node.
+     * @param node the node to delete.
+     * @return HTTP-status code.
+     * @return the node with the input id.
+     */
     @GetMapping("/node/{id}")
     public ResponseEntity<TechniqueChainNode> getNodeById(@PathVariable Long id) {
         Optional<TechniqueChainNode> optionalNode = nodeRepository.findById(id);
@@ -82,6 +133,18 @@ public class TechniqueChainController {
         }
     }
 
+    /**
+     * creates a edge.
+     * @param edgeDTO the edge to create.
+     * @return HTTP-status code.
+     * @return the two nodes that get connected.
+     * 
+     * Example Body
+     * {
+     *  "fromNodeId": 1,
+     *  "toNodeId": 2
+     * }
+     */
     @PostMapping("/edge/create")
     public ResponseEntity<TechniqueChainEdges> createEdge(@RequestBody TechniqueChainEdgeDTO edgeDTO) {
         try {
@@ -106,6 +169,17 @@ public class TechniqueChainController {
         }
     }
 
+    /**
+     * deletes a edge.
+     * @param request the edge to create.
+     * @return HTTP-status code.
+     * @return string with text "edge deleted successfully".
+     * 
+     * Example Body
+     * {
+     *  "edgeToDelete": 1
+     * }
+     */
     @DeleteMapping("/edge/delete")
     public ResponseEntity<String> deleteEdge(@RequestBody TechniqueChainEdgeDTO request) {
         try {
@@ -121,18 +195,48 @@ public class TechniqueChainController {
         }
     }
 
+    /**
+     * gets all the weaves.
+     * @return HTTP-status code.
+     * @return all the weaves with its nodeInfo.
+     */
     @GetMapping("/weave/all")
     public ResponseEntity<List<TechniqueChainWeave>> getAllTechniqueWeaves() {
         List<TechniqueChainWeave> nodes = weaveRepository.findAll();
         return new ResponseEntity<>(nodes, HttpStatus.OK);
     }
 
+    /**
+     * creates a weave.
+     * @param request the weave to create.
+     * @return HTTP-status code.
+     * @return the new weave object with its id.
+     * 
+     * Example Body
+     * {
+     *  "name": "khion wasa",
+     *  "description": "jobbig"
+     * }
+     */
     @PostMapping("/weave/create")
-    public ResponseEntity<Object> createNewWeave(@RequestBody TechniqueChainWeave node) {
-        TechniqueChainWeave newWeave = weaveRepository.save(node);
+    public ResponseEntity<Object> createNewWeave(@RequestBody TechniqueChainWeave weave) {
+        TechniqueChainWeave newWeave = weaveRepository.save(weave);
         return new ResponseEntity<>(newWeave, HttpStatus.OK);
     }
 
+    /**
+     * edits a weave.
+     * @param request the weave to edit.
+     * @return HTTP-status code.
+     * @return the edited weave object with its id and a array with all the nodes it contains.
+     * 
+     * Example Body
+     * {
+     *  "id": 3,
+     *  "name": "khion wasa",
+     *  "description": "jobbig"
+     * }
+     */
     @PutMapping("/weave/edit")
     public ResponseEntity<TechniqueChainWeave> updateWeave(@RequestBody TechniqueChainWeave updatedWeaveData) {
         TechniqueChainWeave updatedWeave = weaveService.updateWeave(updatedWeaveData.getId(), updatedWeaveData);
@@ -143,6 +247,12 @@ public class TechniqueChainController {
         }
     }
 
+    /**
+     * edits a weave.
+     * @param id the weave id to get.
+     * @return HTTP-status code.
+     * @return the weave object with its id and a array with all the nodes it contains.
+     */
     @GetMapping("/weave/{id}")
     public ResponseEntity<TechniqueChainWeave> getWeaveById(@PathVariable Long id) {
         Optional<TechniqueChainWeave> optionalWeave = weaveRepository.findById(id);
