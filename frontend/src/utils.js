@@ -7,6 +7,8 @@ import { toast } from "react-toastify"
  * 			2024-05-20  by Team Mango: Updated permissions functions.
  *  		2024-05-21  by Team Mango: Commented functions, changed names and added more permissions functions.
  *  		2024-05-22  by Team Mango: Added some more permissions functions and removed all of the old permission code.
+ * 			2024-05-23  by Team Mango: Separated admin permission function from the rest,
+ * 										making it more readable that they are different.
  */
 
 /**
@@ -19,7 +21,6 @@ import { toast } from "react-toastify"
  * 		    the session is the same as the userId. Otherwise false is returned.
  */
 export function canEditSessions(context, creatorId) {
-	//if (user.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
 	if (!context.permissions) { //Safety check for undefined which is always false.
 		return false
 	}
@@ -34,7 +35,6 @@ export function canEditSessions(context, creatorId) {
  * @returns true if the user has permission to create/edit all sessions or their own sessions. Otherwise false is returned.
  */
 export function canCreateSessions(context) {
-	//if (context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
 	if (!context.permissions) { //Safety check for undefined which is always false.
 		return false
 	}
@@ -61,7 +61,6 @@ export function isAdminUser(context) {
  */
 export function canCreateGroups(context) {
 	if (!context.permissions) return false
-	//if (user.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
 	return (context.permissions.includes(USER_PERMISSION_CODES.PLAN_ALL) ||
 	(context.permissions.includes(USER_PERMISSION_CODES.PLAN_OWN)))
 }
@@ -87,7 +86,6 @@ export function canEditGroups(context, groupCreatorId) {
  */
 export function canCreateWorkouts(context) {
 	if (!context.permissions) return false
-	//if (user.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
 	return (context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_ALL) ||
 	(context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_OWN)))
 }
@@ -100,8 +98,7 @@ export function canCreateWorkouts(context) {
  */
 export function canEditWorkout(context, workoutId) {
 	if (!context.permissions) return false //If the user's context disappears they lose all permissions and must log in again.
-	if (context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
-	//True if the user is an admin or may edit all workouts or or "owns" the workout and is able to edit their own workouts.
+	//True if the user may edit all workouts or "owns" the workout and is able to edit their own workouts.
 	return (context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_ALL) ||
 	(context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_OWN) &&
 	(context.userId === workoutId)))
@@ -115,7 +112,6 @@ export function canEditWorkout(context, workoutId) {
  */
 export function canDeleteComment(context, commentId) {
 	if (!context.permissions) return false //If the user's context disappears they lose all permissions and must log in again.
-	if (context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)) return true
 	//True if the user is an admin or "owns" the comment.
 	return (context.userId === commentId)
 } //PERMISSION TODO: Should there be a permission for deleting others' comments without being an admin? And should everyone be able to write comments?

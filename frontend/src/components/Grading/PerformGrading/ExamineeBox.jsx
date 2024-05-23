@@ -249,8 +249,6 @@ export default function ExamineeBox({
 		onClick(newButtonState) // Pass the new state as a parameter
 	}
 
-	console.log("name: ", examineeName, ", status: ", status, ", color: ", color)
-
 	return (
 		<div id={id} className={styles.examineeContainer} style={{ backgroundColor: color }}>
 			<fieldset className={styles.examineeFieldset}>

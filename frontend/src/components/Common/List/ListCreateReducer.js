@@ -121,7 +121,7 @@ export function listCreateReducer(state, action) {
 		const listData = action.payload.listData
 		const users = listData.users.map((user) => {
 			return {
-				userId: user.id,
+				userId: user.userId,
 				username: user.username,
 			}
 		})
