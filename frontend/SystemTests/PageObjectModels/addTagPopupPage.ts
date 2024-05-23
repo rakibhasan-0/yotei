@@ -38,6 +38,7 @@ export class AddTagPopupPage {
 		await tagAddButton.waitFor({ state: "visible" })
 		// await this.waitForVisibility(tagAddButton)
 		await tagAddButton.click()
+		await this.page.getByTestId("EditableListItem").getByText(`${tag.tagName}`).waitFor()
 
 		//Close the window and save the newly added tag.
 		const saveAndCloseButton = this.page.locator("#save-and-close-button")
@@ -47,10 +48,16 @@ export class AddTagPopupPage {
 
 		//Save the technique so the newly added tag is saved with it. 
 		await this.page.getByRole("button", { name: "Spara" }).click()
-		await this.page.goto("/technique/1")
+		// await this.page.waitForNavigation({ waitUntil: 'networkidle' });
 
+		await this.page.getByText("Tekniken uppdaterades!").waitFor()
+		await this.page.goto("/technique/1")
 	}
 
+	/**
+	 * 
+	 * @param tag 
+	 */
 	async deleteTag(tag: TagComponent) {
 		//Open the popup and search for the tag to be deleted. 
 		await this.page.goto(this.url)
@@ -59,7 +66,9 @@ export class AddTagPopupPage {
 		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
 
 		//Uncheck the tag.
-		await this.page.getByTestId("EditableListItem").locator("label").waitFor({state: "visible"})
+		// await this.page.getByText(`${tag.tagName}`).waitFor()
+		// await this.page.getByTestId("EditableListItem").locator("label").waitFor({state: "visible"})
+		await this.page.getByTestId("EditableListItem").getByText(`${tag.tagName}`).waitFor()
 		// await this.waitForVisibility(this.page.getByTestId("EditableListItem").locator("label"))
 		await this.page.getByTestId("EditableListItem").locator("label").uncheck()
 
@@ -72,7 +81,7 @@ export class AddTagPopupPage {
 		await this.page.getByRole("button", { name: "Hantera tagg" }).click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
-		await this.page.getByTestId("EditableListItem").locator("label").waitFor({state: "visible"})
+		await this.page.getByTestId("EditableListItem").getByText(`${tag.tagName}`).waitFor()
 
 		// //Wait for result to appear.
 		// await this.waitForVisibility(this.page.getByTestId("EditableListItem").locator("label"))
