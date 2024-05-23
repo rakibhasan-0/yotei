@@ -1,7 +1,13 @@
 
 .buttonContainer{
+	
+	position: fixed;
+	bottom: -5vh;
+	left: 40vw;
+	z-index: 10;
 	margin-top: 5%;
 	margin-bottom: 3%;
+	width : 20%;
 }
 
 .FilterAndSortContainer {

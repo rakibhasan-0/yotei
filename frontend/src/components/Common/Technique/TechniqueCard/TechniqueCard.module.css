@@ -49,6 +49,13 @@
 	font-size: 16px;
 }
 
+.technique-name-old {
+	text-align: left;
+	margin: 10px;
+	font-size: 16px;
+	font-style: italic;
+}
+
 .technique-arrow-container {
 	width: max-content;
 	justify-content: flex-end;
