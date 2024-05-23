@@ -44,7 +44,7 @@ import GradingCheckBox from "../CheckBox/GradingCheckBox"
  * @since 2024-05-06
  */
 
-export default function EditableListItem({ item, id, index, onRemove, onEdit, onCheck, showCheckbox, checked, validateInput, grayTrash, showTrash, showX, showPencil, numberOfCheckedExaminees, showLock}) {
+export default function EditableListItem({ item, id, index, onRemove, onEdit, canEdit, onCheck, showCheckbox, checked, validateInput, grayTrash, showTrash, showX, showPencil, numberOfCheckedExaminees, showLock}) {
 
 	const [isEditing, setIsEditing] = useState(false) // State to manage edit mode
 	const [editedText, setEditedText] = useState(item) // State to store edited text
