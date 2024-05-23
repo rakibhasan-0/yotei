@@ -8,6 +8,8 @@ import styles from "./BeltBox.module.css"
  * 
  * 	Constraints are to be set by the parent component.
  * 
+ *  A new type of 'inverted mon'-belt was added 16/5 -24. BeltBox was updated as a result.
+ * 
  * Example usage:
  *      var belts = [{
  * 			"id":  "1",
@@ -22,6 +24,7 @@ import styles from "./BeltBox.module.css"
  *      }]
  * 
  * @author Griffin DV21JJN C19HLN
+ * @updated Kiwi c16kvn 2024-05-16
  * 
  * @param 	id 				@type { number } 				- An ID to identify the component
  * @param   belts 			@type { arr } 		         	- An array of Belts containing belt colorcode and child. 
@@ -30,6 +33,7 @@ import styles from "./BeltBox.module.css"
  * 							belt.color 		@type { colorcode } 			- A hexcode representing the belt color "#FFFFFF".
  * 							belt.name 		@type { string }				- A string containing the name of the belt.
  * 							belt.child		@type { boolean }  				- A boolean which is true if it is aa child belt.
+ * 							belt.inverted   @type { boolean }				- A boolean which is true if it is a inverted belt.
  * 		
  * @returns A BeltBox component either correctly rendered or with placeholders in case of errors.
  */
@@ -75,9 +79,14 @@ function BeltBox ( {id, belts} ) {
 			console.error("Invalid belt.child value")
 			return false
 		}
+		if (belt.inverted == null || belt.inverted === undefined){
+			console.error("Invalid belt.inverted")
+			return false
+		}
 
 		return true
 	}
+
 
 	function adaptColorCode (color) {
 		return "#" + color
@@ -102,22 +111,22 @@ function BeltBox ( {id, belts} ) {
 	}
 
 	function checkDan(belt) {
-		if (belt.id > 13) {
+		if (belt.id > 14) {
 			switch (belt.id) {
-			case(14):
+			case(15):
 				return( 
 					<div key={`${belt.id}-adult-belt`} className={`${styles.sc23_beltbox_belt} ${styles.sc23_beltbox_belt_dan1}`} style={{background: adaptColorCode(belt.color)}}>
 						<div className={styles.sc23_beltbox_belt_dan}/>
 					</div>)
 			
-			case(15):
+			case(16):
 				return ( 
 					<div key={`${belt.id}-adult-belt`} className={`${styles.sc23_beltbox_belt} ${styles.sc23_beltbox_belt_dan2}`} style={{background: adaptColorCode(belt.color)}}>
 						<div className={styles.sc23_beltbox_belt_dan}/>
 						<div className={styles.sc23_beltbox_belt_dan}/>
 					</div>)
 			
-			case(16):
+			case(17):
 				return (
 					<div key={`${belt.id}-adult-belt`} className={`${styles.sc23_beltbox_belt} ${styles.sc23_beltbox_belt_dan3}`} style={{background: adaptColorCode(belt.color)}}>
 						<div className={styles.sc23_beltbox_belt_dan}/>
@@ -148,10 +157,11 @@ function BeltBox ( {id, belts} ) {
 										<div key={`${belt.id}-child-belt`} className={styles.sc23_beltbox_belt} style={{background:"white"}}>
 											<div id={`${belt.id}-child-belt-color`} className={styles.sc23_beltbox_belt_child} style={{background: adaptColorCode(belt.color)}}/>
 										</div>
-										:
-										checkDan(belt) 
-											
-										
+										: belt.inverted ?
+											<div key={`${belt.id}-child-belt`} className={styles.sc23_beltbox_belt} style={{background: adaptColorCode(belt.color)}}>
+												<div id={`${belt.id}-child-belt-color`} className={styles.sc23_beltbox_belt_child} style={{background:"white"}}/>
+											</div>
+											: checkDan(belt) 			
 								)
 								:
 								(

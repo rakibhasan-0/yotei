@@ -1,7 +1,6 @@
 import styles from "./GradingDeviations.module.css"
 import React from "react"
 import { useState } from "react"
-import { ChevronDown } from "react-bootstrap-icons"
 
 
 /**
@@ -38,6 +37,20 @@ function GradingDeviationContainer({ id, name, comment, pairComment, generalComm
 		return true
 	}
 
+	function getNrComments() {
+		let count = 0
+		if(comment != undefined && comment != "") {
+			count++
+		}
+		if(pairComment != undefined && pairComment != "") {
+			count++
+		}
+		if(generalComment != undefined && generalComment != "") {
+			count++
+		}
+		return count
+	}
+
 	return (
 
 		checkID(id) ?
@@ -50,28 +63,52 @@ function GradingDeviationContainer({ id, name, comment, pairComment, generalComm
 								<h2 id="nameDisplay" className={styles["techniqueName"]}>
 									{name}
 								</h2>
-								<div className={[styles.listToggle, toggled ? styles.listRotate : ""].join(" ")} id={`${id}-toggle-dropdown`}>
-									<ChevronDown id={`${id}-dropdown`} size={28} />
-								</div>
+								{
+									getNrComments() > 0 ? (
+										<div className={styles.outerCircle}>
+											<div className={styles.innerCircle}>
+												<p className={styles.counterText}>
+													{getNrComments()}
+												</p>
+											</div>
+										</div>
+									) : null
+								}
 							</div>
 							<div id={`${id}-content`} className={styles["sc23-session-container-content"]}>
 
 								<div className={styles["sc23-session-container-child"]} style={{ display: toggled ? "inherit" : "none" }} id={`${id}-children`}>
-									<h2 className={styles["commentStyle2"]}>Kommentar:</h2>
+									{ (comment != "" && comment != undefined) &&
+										<div>
+											<h2 className={styles["commentStyle2"]}>Kommentar:</h2>
+											{
+												<h2 id="commentDisplay" className={styles["commentStyle"]}>
+													{comment}
+												</h2>
+											}
+										</div>
+									}
 									{
-										<h2 id="commentDisplay" className={styles["commentStyle"]}>
-											Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet porta ex.
-											Donec laoreet urna in hendrerit venenatis. Sed sem ligula, aliquet at odio id, varius rutrum dolor.
-											Sed elementum at magna nec tincidunt.{comment}
-										</h2>
-									}{
-										<h2 id="commentPairDisplay" className={styles["commentStyle"]}>
-											{pairComment}
-										</h2>
-									}{
-										<h2 id="commentGeneralDisplay" className={styles["commentStyle"]}>
-											{generalComment}
-										</h2>
+										(pairComment != "" && pairComment != undefined) &&
+										<div>
+											<h2 className={styles["commentStyle2"]}>Parkommentar:</h2>
+											{
+												<h2 id="commentPairDisplay" className={styles["commentStyle"]}>
+													{pairComment}
+												</h2>
+											}
+										</div>
+									}
+									{
+										(generalComment != "" && generalComment != undefined) &&
+										<div>
+											<h2 className={styles["commentStyle2"]}>Gruppkommentar:</h2>
+											{
+												<h2 id="commentGeneralDisplay" className={styles["commentStyle"]}>
+													{generalComment}
+												</h2>
+											}
+										</div>
 									}
 								</div>
 							</div>

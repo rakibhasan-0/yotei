@@ -1,6 +1,6 @@
 services:
   nginx:
-    build: ./nginx/local/
+    build: ./nginx/prod_local/
     image: pvt2024/nginx_local:latest
     restart: always
     ports:

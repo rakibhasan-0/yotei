@@ -14,7 +14,7 @@
     position: fixed;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 40px;
     z-index: 3;
     top: 0;
     left: -70vw;
@@ -27,16 +27,45 @@
     transition-duration: 200ms;
     transition-timing-function: cubic-bezier(0,.93,.31,.98);
 }
+
+.btnWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.btnWrapper > button {
+    cursor: pointer;
+}
+
 .commonNavbarIcon {
     cursor: pointer;
     font-size: 48px;
     z-index: 1;
 }
-.commonNavbarIconClose {
+.commonNavbarUserIcon {
     cursor: pointer;
     font-size: 48px;
     z-index: 1;
 }
+
+.commonNavbarIconAdmin{
+    aspect-ratio: 1;
+    cursor: pointer;
+    font-size: 36px;
+    margin: 8px;
+    z-index: 1;
+}
+
+/* Selects a button (yoteibutton) which contains the admin icon and pushes it to the bottom using margin-top: auto; */
+button:has(.commonNavbarIconAdmin){
+    display: inline-block !important;
+    aspect-ratio: 1;
+    margin-top: auto;
+}
+
+
+
 .open {
     left: 0;
 }
@@ -81,5 +110,29 @@
     .open {
         left: 0;
     }
-  }
-  
+}
+
+.commonNavbar .closeAndUserIconsWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: right;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.closeAndUserIconsWrapper > button {
+    width: auto !important;
+}
+
+.commonNavbar .closeIconWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: right;
+    font-size: 48px;
+    cursor: pointer;
+}
+
+.commonNavbar .closeAndUserIconsWrapper .commonNavbarUserIcon {
+    padding-right: 0px;
+    width: 80%;
+}

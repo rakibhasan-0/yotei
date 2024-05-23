@@ -8,6 +8,7 @@ import { WorkoutCreateContext } from "./WorkoutCreateContext"
 import { WORKOUT_CREATE_TYPES } from "./WorkoutCreateReducer"
 import RadioButton from "../../Common/RadioButton/RadioButton"
 import MinutePicker from "../../Common/MinutePicker/MinutePicker"
+import _ from "lodash"
 
 /**
  * Component for setting the time for each activity connected to an exercise.
@@ -221,11 +222,11 @@ export function ActivityCategories() {
  *		<ActivityTimes activityTimes={list1} activityTimesHandler={list2}></ActivityTimes>
  *
  *
- * @author Team Minotaur
- * @version 1.0
- * @since 2023-05-24
+ * @author Team Minotaur, Team Coconut 
+ * @version 1.1
+ * @since 2024-05-22
  */
-export default function ActivityInfoPopUp({ isFreeText }) {
+export default function ActivityInfoPopUp({ isFreeText , backToAddActivity = false, newlyAddedActivities = null }) {
 	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(WorkoutCreateContext)
 	const { addedActivities } = workoutCreateInfo
 
@@ -254,15 +255,27 @@ export default function ActivityInfoPopUp({ isFreeText }) {
 		if (isFreeText){
 			workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLEAR_ADDED_ACTIVITIES })
 			workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLOSE_POPUP })
-		} else {
+		} 
+		else if (backToAddActivity){
+			workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.OPEN_ADD_ACTIVITY_POPUP })
+		}
+		else {
 			workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLOSE_ACIVITY_POPUP })
 		}
 	}
 
-	const saveActivities = () => {
+	const saveActivities = () => {		
 		if(isFreeText) clearEmptyActivities()
 		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CREATE_ACTIVITY_ITEMS, payload: { isFreeText }})
 		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CLOSE_POPUP })
+
+		// If newlyAddedActivities is set, call it with the added activities and categories
+		if(newlyAddedActivities !== null){
+			// we are doing deep copy of the added categories and activities to avoid any changes in the original data
+			//const categories = _.cloneDeep(workoutCreateInfo.addedCategories)
+			const data = _.cloneDeep(workoutCreateInfo.addedActivities)
+			newlyAddedActivities(data)
+		}
 	}
 
 	return (
@@ -271,8 +284,8 @@ export default function ActivityInfoPopUp({ isFreeText }) {
 				<ActivityList isFreeText={isFreeText} />
 				<Divider id="ListTimeDivider" option="h2_left" title="Tid" />
 				<ActivityTimes />
-				<Divider id="TimesCategoriesDivider" option="h2_left" title="Kategori" />
-				<ActivityCategories />
+				{backToAddActivity? null: <Divider id="TimesCategoriesDivider" option="h2_left" title="Kategori" />}
+				{backToAddActivity? null: <ActivityCategories />}
 			</div>
 			
 			<div className={styles.infoButtons}>

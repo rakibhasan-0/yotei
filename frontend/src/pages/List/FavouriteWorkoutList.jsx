@@ -23,7 +23,7 @@ import { useNavigate} from "react-router"
  * activitylist after the current search term.
  *
  * @author Team Tomato (Group 6)
- * @since 2024-05-06
+ * @since 2024-05-21
  */
 
 export default function FavouriteWorkoutsList() {
@@ -44,7 +44,7 @@ export default function FavouriteWorkoutsList() {
 		fromDate = cachedFilters.from
 		toDate = cachedFilters.to
 	}
-	//No cached filters, set from date to 4 years ago
+	//No cached filters, set "from date" to 4 years ago
 	else{
 		const today = new Date()
 		fromDate = new Date(today)

@@ -36,3 +36,17 @@
 .href-link {
     margin: 0 0 0 10px;
 }
+
+
+.exercise-checkbox-container {
+	text-align: center;
+	padding-left: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.exercise-checkbox-container .checkbox-container {
+	width: 30px;
+	height: 30px;
+	margin: 10px;
+}

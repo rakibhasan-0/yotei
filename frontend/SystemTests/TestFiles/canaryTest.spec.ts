@@ -8,6 +8,7 @@ import { test, expect } from '../fixtures'
  *  @since 2024-05-17
  *  @version 2.0
  */
+
 test.describe('Canary test', () => {
   test('1. planering title should be visible if the fixtures work', async ({ page }) => {
     await expect(page.locator('center').getByRole('heading', { name: 'Planering' })).toBeVisible()

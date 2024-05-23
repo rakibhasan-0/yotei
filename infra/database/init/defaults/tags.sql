@@ -95,3 +95,4 @@ INSERT INTO tag (name) VALUES ('kondition och uthållighet');
 INSERT INTO tag (name) VALUES ('styrka och explosivitet');
 INSERT INTO tag (name) VALUES ('rörlighet och smidighet');
 INSERT INTO tag (name) VALUES ('flexibilitet');
+INSERT INTO tag (name) VALUES ('Yakusoku geiko');

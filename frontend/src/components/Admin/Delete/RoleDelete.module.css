@@ -1,0 +1,14 @@
+.popupContainer {
+	text-align: justify;
+	align-items: center;
+	text-align: left; 
+}
+.popupContainer > p {
+	font-size: large;
+}
+.buttonGroup {
+    display: flex;
+	gap: 1rem;
+    flex-direction: row;
+	align-items: center;
+}

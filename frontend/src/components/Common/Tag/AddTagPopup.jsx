@@ -323,15 +323,17 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 					<Sorter id={"tag-sort"} selected={sort} onSortChange={setSort} options={sortOptions}/>
 				</FilterContainer>
 			</div>
-			<div>
+			<div style={{paddingBottom: "5.1rem"}}> {/* Greater than btnAddActivity height */}
 				{suggested.map((tag, index) => (
-					<>
-						{index === dividerIndex && <Divider key="divider" title={""} option={"h2_left"} />}
+					<React.Fragment key={tag.id}>
+						{index === dividerIndex && <Divider key={`divider-${index}`} title={""} option={"h2_left"} />}
 						<EditableListTagItem
 							item={tag.name}
 							key={tag.id}
 							id={tag.id}
 							showCheckbox={true}
+							showTrash={true}
+							showPencil={true}
 							onCheck={checked => checked ? handleAddTag(tag) : handleRemoveTag(tag)}
 							checked={newAddedTags.some(a => a.id == tag.id)}
 							onEdit={handleEditText}
@@ -339,7 +341,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 							grayTrash={tag.exercises + tag.workouts + tag.techniques > 0}
 							onRemove={() => handleDelete(tag)}
 						/>
-					</>
+					</React.Fragment>
 				))}
 				{loading ? <Spinner /> : tagListArray}
 			</div>

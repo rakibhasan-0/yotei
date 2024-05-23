@@ -59,8 +59,8 @@ public class TechniqueApiApplicationTests {
 
     private final Tag tag1 = new Tag(1L, "tag1");
     private final Tag tag2 = new Tag(2L, "tag2");
-    private final Belt belt1 = new Belt(1L, "grön", "00000", false);
-    private final Belt belt2 = new Belt(1L, "Vit", "00000", true);
+    private final Belt belt1 = new Belt(1L, "grön", "00000", false, false);
+    private final Belt belt2 = new Belt(1L, "Vit", "00000", true, false);
     private final Set<Belt> belts = new HashSet<>();
     private final Set<Tag> tags = new HashSet<>();
 

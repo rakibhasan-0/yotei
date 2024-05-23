@@ -8,9 +8,9 @@ import { server } from "../../server"
  * Unit-test for the GroupIndex page, 
  * init as well as making sure search button is case insensitive
  *
- * @author Team Mango (Group 4) (2024-05-06), Team Durian (Group 3) (2024-04-23)
- * @since 2024-04-18
- * @version 1.0 
+ * @author Team Mango (Group 4) (2024-05-06), Team Durian (Group 3) (2024-04-23), Team Coconut (2024-05-21)
+ * @since 2024-05-21
+ * @version 1.4
  */
 
 configure({testIdAttribute: "id"})
@@ -24,6 +24,12 @@ jest.mock("react-router-dom", () => ({
 	...jest.requireActual("react-router-dom"),
 	Link: jest.fn().mockImplementation(({ children }) => children),
 }))
+
+jest.mock("../../../utils", () => ({
+	...jest.requireActual("../../../utils"),
+	canEditGroups: jest.fn().mockReturnValue(true),
+}))
+  
 
 test("Should render title on init", async () => {
 	render(<GroupIndex/>)
@@ -153,11 +159,43 @@ test("Should not display groups missing message when there are groups", async ()
 		})
 	)
 
-	await screen.findByTestId("Groups-are-visible") //This is needed for the test to work.
+	await screen.findByTestId("Groups-are-visible") 
 	expect(screen.getByTestId("Groups-are-visible")).toBeInTheDocument()
-	//The code below would also work, but we want fast tests, so we instead opt for the unnecessary div solution.
-	//await new Promise((r) => setTimeout(r, 2000))
-	//expect(screen.queryByTestId("No-groups-visible-text")).not.toBeInTheDocument()
+
 
 })
 
+test("Statistic button next to group should render and can be clicked", async () => {
+
+	render(<GroupIndex/>)
+
+	server.use(
+		rest.get("api/plan/all", async (req, res, ctx) => {
+			return res(
+				ctx.status(200),
+				ctx.json([
+					{
+						"id": 101,
+						"name": "Grönt bälte träning",
+						"userId": 1,
+						"belts": [
+							{
+								"id": 7,
+								"name": "Grönt",
+								"color": "0C7D2B",
+								"child": false
+							}
+						]
+					},
+				])
+			)
+		}),
+
+
+	
+	)
+	await screen.findByTestId("statistics-page-button-101")
+	expect(screen.getByTestId("statistics-page-button-101")).toBeInTheDocument()
+	fireEvent.click(screen.getByTestId("statistics-page-button-101"))
+
+})

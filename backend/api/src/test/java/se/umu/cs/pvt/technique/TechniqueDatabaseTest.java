@@ -21,6 +21,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.LoggerFactory;
+import ch.qos.logback.classic.LoggerContext;
+
 /**
  * 
  * This is essentially tests for the database init scripts.
@@ -35,7 +38,10 @@ import java.util.regex.Pattern;
  * This test-class will likely cause problems if not excluded from being ran by maven. If you do want to run it locally, you need
  * to have a .env-file with information regarding the database in the project root.
  * 
+ * Tests belt-tag to technique also in every ID test for each belt
+ * 
  * @author Kiwi (Grupp 2), c16kvn & dv22cen 2024-05-16
+ * @updated Kiwi (Grupp 2), c16kvn & dv22cen 2024-05-23
  */
 public class TechniqueDatabaseTest {
     private static PostgreSQLContainer<?> postgreSQLContainer;
@@ -44,12 +50,37 @@ public class TechniqueDatabaseTest {
     static String POSTGRESQL_PASSWORD = System.getProperty("POSTGRESQL_PASSWORD");
     static String POSTGRESQL_DATABASE = System.getProperty("POSTGRESQL_DATABASE");
 
+    static LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+
+    //INDICES FOR ALL START AND STOPS OF TECHNIQUES TO EACH BELT IN TECHNIQUES.SQL
+    //CHANGE THESE IF THE TESTS FAIL AFTER TECHNIQUES.SQL IS CHANGED
+    static int yellowBegin = 1;
+    static int yellowEnd = 25;
+
+    static int orangeBegin = 26;
+    static int orangeEnd = 49;
+
+    static int greenBegin = 50;
+    static int greenEnd = 74;
+
+    static int blueBegin = 75;
+    static int blueEnd = 101;
+
+    static int brownBegin = 102;
+    static int brownEnd = 134;
+
+    static int firstNonBeltTagId = 12;
 
     @BeforeAll
     public static void setUp() {
+        loggerContext.stop();
+        System.out.println("Setting up container");
+
         //We go into the .env in the project root and find the password etc. for the database
         try {
             if (POSTGRESQL_DATABASE == null) {
+                System.out.println("Getting DB credentials");
+
                 String envFilePath = "../../.env";
                 String envFileContent = new String(Files.readAllBytes(Paths.get(envFilePath)));
 
@@ -74,6 +105,7 @@ public class TechniqueDatabaseTest {
             e.printStackTrace();
         }
 
+        System.out.println("Building Image from DockerFile");
         ImageFromDockerfile image = new ImageFromDockerfile()
             .withDockerfile(Paths.get("../../infra/database/Dockerfile"));
 
@@ -89,17 +121,262 @@ public class TechniqueDatabaseTest {
             .withEnv("POSTGRESQL_PASSWORD", POSTGRESQL_PASSWORD)
             .withExposedPorts(PostgreSQLContainer.POSTGRESQL_PORT);
 
+        System.out.println("Waiting for container to be ready");
         //NOTE: We had to increase the timer to 120 rather than 60, which is wierd as both should work.
         postgreSQLContainer.setWaitStrategy(Wait.defaultWaitStrategy()
                 .withStartupTimeout(Duration.ofSeconds(120)));
-        
+        System.out.println("Starting container");
         postgreSQLContainer.start();
     }
 
     @AfterAll
     public static void tearDown() {
+        String output = postgreSQLContainer.getLogs();
         if (postgreSQLContainer != null) {
             postgreSQLContainer.stop();
+        }
+        System.out.println(output);
+        loggerContext.start();
+        System.out.println("Running Tests!");
+    }
+
+    /**
+     * These tests use hardcoded id:s to check if techniques in the database are connected to the correct belt.
+     * This is silly but since the id:s are auto-generated this is the simplest way to secured the structure of the schema.
+     * 
+     * ---------IF THESE FAIL----------
+     * Check if the id:s of tehcniques are connected correctly to belts in the technique_to_belt table.
+     * @throws Exception
+     */
+    @Test
+    public void testYellowTechniqueIDS() throws Exception {
+        String jdbcUrl = postgreSQLContainer.getJdbcUrl();
+        String username = postgreSQLContainer.getUsername();
+        String password = postgreSQLContainer.getPassword();
+
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+            Statement statement = connection.createStatement()) {
+                //This is where you edit if you wish to swap belts/technique
+                String expectedColor = "Gult";
+
+                for(Integer i = yellowBegin; i < yellowEnd + 1; i++){
+                    String sqlQueryBelt = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
+                    String sqlQueryTag = "SELECT tag.name FROM tag INNER JOIN technique_tag tt ON tt.tag_id = tag.tag_id INNER JOIN technique t ON tt.tech_id = t.technique_id WHERE t.technique_id = ? AND tag.tag_id < ? ORDER BY tag.tag_id DESC";
+
+                    PreparedStatement preparedStatementBelt = connection.prepareStatement(sqlQueryBelt);
+                    preparedStatementBelt.setInt(1, i);
+
+                    PreparedStatement preparedStatementTag = connection.prepareStatement(sqlQueryTag);
+                    preparedStatementTag.setInt(1, i);
+                    preparedStatementTag.setInt(2, firstNonBeltTagId);
+
+                    ResultSet resultSetBelt = preparedStatementBelt.executeQuery();
+
+                    ResultSet resultSetTag = preparedStatementTag.executeQuery();
+
+                    if (resultSetBelt.next()) {
+                        String belt = resultSetBelt.getString("belt_name");
+                        assertEquals(expectedColor, belt);
+                    }
+
+                    if(resultSetTag.next()){
+                        String tagName = resultSetTag.getString("name");
+                        
+                        assertEquals(expectedColor.toLowerCase(), tagName);
+                    }
+                }
+        }
+    }
+
+    /**
+     * These tests use hardcoded id:s to check if techniques in the database are connected to the correct belt.
+     * This is silly but since the id:s are auto-generated this is the simplest way to secured the structure of the schema.
+     * 
+     * ---------IF THESE FAIL----------
+     * Check if the id:s of tehcniques are connected correctly to belts in the technique_to_belt table.
+     * @throws Exception
+     */
+    @Test
+    public void testOrangeTechniqueIDS() throws Exception {
+        String jdbcUrl = postgreSQLContainer.getJdbcUrl();
+        String username = postgreSQLContainer.getUsername();
+        String password = postgreSQLContainer.getPassword();
+
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+            Statement statement = connection.createStatement()) {
+                //This is where you edit if you wish to swap belts/technique
+                String expectedColor = "Orange";
+
+                for(Integer i = orangeBegin; i < orangeEnd + 1; i++){
+                    String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
+                    String sqlQueryTag = "SELECT tag.name FROM tag INNER JOIN technique_tag tt ON tt.tag_id = tag.tag_id INNER JOIN technique t ON tt.tech_id = t.technique_id WHERE t.technique_id = ? AND tag.tag_id < ? ORDER BY tag.tag_id DESC";
+
+                    PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+                    preparedStatement.setInt(1, i);
+
+                    PreparedStatement preparedStatementTag = connection.prepareStatement(sqlQueryTag);
+                    preparedStatementTag.setInt(1, i);
+                    preparedStatementTag.setInt(2, firstNonBeltTagId);
+
+                    ResultSet resultSet = preparedStatement.executeQuery();
+
+                    ResultSet resultSetTag = preparedStatementTag.executeQuery();
+
+                    if (resultSet.next()) {
+                        String belt = resultSet.getString("belt_name");
+                        assertEquals(expectedColor, belt);
+                    }
+
+                    if(resultSetTag.next()){
+                        String tagName = resultSetTag.getString("name");
+                        
+                        assertEquals(expectedColor.toLowerCase(), tagName);
+                    }
+                }
+        }
+    }
+
+    /**
+     * These tests use hardcoded id:s to check if techniques in the database are connected to the correct belt.
+     * This is silly but since the id:s are auto-generated this is the simplest way to secured the structure of the schema.
+     * 
+     * ---------IF THESE FAIL----------
+     * Check if the id:s of tehcniques are connected correctly to belts in the technique_to_belt table.
+     * @throws Exception
+     */
+    @Test
+    public void testGreenTechniqueIDS() throws Exception {
+        String jdbcUrl = postgreSQLContainer.getJdbcUrl();
+        String username = postgreSQLContainer.getUsername();
+        String password = postgreSQLContainer.getPassword();
+
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+            Statement statement = connection.createStatement()) {
+                //This is where you edit if you wish to swap belts/technique
+                String expectedColor = "Grönt";
+
+                for(Integer i = greenBegin; i < greenEnd + 1; i++){
+                    String sqlQueryBelt = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
+                    String sqlQueryTag = "SELECT tag.name FROM tag INNER JOIN technique_tag tt ON tt.tag_id = tag.tag_id INNER JOIN technique t ON tt.tech_id = t.technique_id WHERE t.technique_id = ? AND tag.tag_id < ? ORDER BY tag.tag_id DESC";
+
+                    PreparedStatement preparedStatementBelt = connection.prepareStatement(sqlQueryBelt);
+                    preparedStatementBelt.setInt(1, i);
+
+                    PreparedStatement preparedStatementTag = connection.prepareStatement(sqlQueryTag);
+                    preparedStatementTag.setInt(1, i);
+                    preparedStatementTag.setInt(2, firstNonBeltTagId);
+
+                    ResultSet resultSetBelt = preparedStatementBelt.executeQuery();
+
+                    ResultSet resultSetTag = preparedStatementTag.executeQuery();
+
+                    if (resultSetBelt.next()) {
+                        String belt = resultSetBelt.getString("belt_name");
+                        assertEquals(expectedColor, belt);
+                    }
+
+                    if(resultSetTag.next()){
+                        String tagName = resultSetTag.getString("name");
+                        
+                        assertEquals(expectedColor.toLowerCase(), tagName);
+                    }
+                }
+        }
+    }
+
+    /**
+     * These tests use hardcoded id:s to check if techniques in the database are connected to the correct belt.
+     * This is silly but since the id:s are auto-generated this is the simplest way to secured the structure of the schema.
+     * 
+     * ---------IF THESE FAIL----------
+     * Check if the id:s of tehcniques are connected correctly to belts in the technique_to_belt table.
+     * @throws Exception
+     */
+    @Test
+    public void testBlueTechniqueIDS() throws Exception {
+        String jdbcUrl = postgreSQLContainer.getJdbcUrl();
+        String username = postgreSQLContainer.getUsername();
+        String password = postgreSQLContainer.getPassword();
+
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+            Statement statement = connection.createStatement()) {
+                //This is where you edit if you wish to swap belts/technique
+                String expectedColor = "Blått";
+
+                for(Integer i = blueBegin; i < blueEnd + 1; i++){
+                    String sqlQueryBelt = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
+                    String sqlQueryTag = "SELECT tag.name FROM tag INNER JOIN technique_tag tt ON tt.tag_id = tag.tag_id INNER JOIN technique t ON tt.tech_id = t.technique_id WHERE t.technique_id = ? AND tag.tag_id < ? ORDER BY tag.tag_id DESC";
+
+                    PreparedStatement preparedStatementBelt = connection.prepareStatement(sqlQueryBelt);
+                    preparedStatementBelt.setInt(1, i);
+
+                    PreparedStatement preparedStatementTag = connection.prepareStatement(sqlQueryTag);
+                    preparedStatementTag.setInt(1, i);
+                    preparedStatementTag.setInt(2, firstNonBeltTagId);
+
+                    ResultSet resultSetBelt = preparedStatementBelt.executeQuery();
+
+                    ResultSet resultSetTag = preparedStatementTag.executeQuery();
+
+                    if (resultSetBelt.next()) {
+                        String belt = resultSetBelt.getString("belt_name");
+                        assertEquals(expectedColor, belt);
+                    }
+
+                    if(resultSetTag.next()){
+                        String tagName = resultSetTag.getString("name");
+                        
+                        assertEquals(expectedColor.toLowerCase(), tagName);
+                    }
+                }
+        }
+    }
+
+    /**
+     * These tests use hardcoded id:s to check if techniques in the database are connected to the correct belt.
+     * This is silly but since the id:s are auto-generated this is the simplest way to secured the structure of the schema.
+     * 
+     * ---------IF THESE FAIL----------
+     * Check if the id:s of tehcniques are connected correctly to belts in the technique_to_belt table.
+     * @throws Exception
+     */
+    @Test
+    public void testBrownTechniqueIDS() throws Exception {
+        String jdbcUrl = postgreSQLContainer.getJdbcUrl();
+        String username = postgreSQLContainer.getUsername();
+        String password = postgreSQLContainer.getPassword();
+
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+            Statement statement = connection.createStatement()) {
+                //This is where you edit if you wish to swap belts/technique
+                String expectedColor = "Brunt";
+
+                for(Integer i = brownBegin; i < brownEnd + 1; i++){
+                    String sqlQueryBelt = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
+                    String sqlQueryTag = "SELECT tag.name FROM tag INNER JOIN technique_tag tt ON tt.tag_id = tag.tag_id INNER JOIN technique t ON tt.tech_id = t.technique_id WHERE t.technique_id = ? AND tag.tag_id < ? ORDER BY tag.tag_id DESC";
+
+                    PreparedStatement preparedStatementBelt = connection.prepareStatement(sqlQueryBelt);
+                    preparedStatementBelt.setInt(1, i);
+
+                    PreparedStatement preparedStatementTag = connection.prepareStatement(sqlQueryTag);
+                    preparedStatementTag.setInt(1, i);
+                    preparedStatementTag.setInt(2, firstNonBeltTagId);
+
+                    ResultSet resultSetBelt = preparedStatementBelt.executeQuery();
+
+                    ResultSet resultSetTag = preparedStatementTag.executeQuery();
+
+                    if (resultSetBelt.next()) {
+                        String belt = resultSetBelt.getString("belt_name");
+                        assertEquals(expectedColor, belt);
+                    }
+
+                    if(resultSetTag.next()){
+                        String tagName = resultSetTag.getString("name");
+                        
+                        assertEquals(expectedColor.toLowerCase(), tagName);
+                    }
+                }
         }
     }
 
@@ -133,7 +410,7 @@ public class TechniqueDatabaseTest {
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique
-                String[] techNames = {"Kamae, neutral (5 Kyu)", "Stryptag framifrån och svingslag, backhand, Frigöring - Ju morote jodan uke, ude osae, ude osae gatame"};
+                String[] techNames = {"Knivhot mot magen, grepp, shotei uchi jodan", "Grepp i två handleder framifrån, frigöring"};
                 String expectedColor = "Gult";
 
                 for(int i = 0; i < 2; i++){
@@ -143,11 +420,10 @@ public class TechniqueDatabaseTest {
                     preparedStatement.setString(1, techNames[i]);
 
                     ResultSet resultSet = preparedStatement.executeQuery();
-
-                    if (resultSet.next()) {
-                        String belt = resultSet.getString("belt_name");
-                        assertEquals(expectedColor, belt);
-                    }
+                    //If the given technique doesn't exist, we got null from 'resultSet'
+                    assertEquals(resultSet.next(), true);
+                    String belt = resultSet.getString("belt_name");
+                    assertEquals(expectedColor, belt);
                 }
         }
     }
@@ -161,7 +437,7 @@ public class TechniqueDatabaseTest {
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique
-                String[] techNames = {"Grepp i två handleder framifrån, Shiho nage, shiho nage gatame", " Randori mot en motståndare (3 Kyu)"};
+                String[] techNames = {"Grepp i två handleder framifrån, Shiho nage, shiho nage gatame", "Knivhot mot halsen, höger sida, grepp, kin geri"};
                 String expectedColor = "Grönt";
 
                 for(int i = 0; i < 2; i++){
@@ -171,11 +447,10 @@ public class TechniqueDatabaseTest {
                     preparedStatement.setString(1, techNames[i]);
 
                     ResultSet resultSet = preparedStatement.executeQuery();
-
-                    if (resultSet.next()) {
-                        String belt = resultSet.getString("belt_name");
-                        assertEquals(expectedColor, belt);
-                    }
+                    //If the given technique doesn't exist, we got null from 'resultSet'
+                    assertEquals(resultSet.next(), true);
+                    String belt = resultSet.getString("belt_name");
+                    assertEquals(expectedColor, belt);
                 }
         }
     }
@@ -189,7 +464,7 @@ public class TechniqueDatabaseTest {
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique            
-                String[] techNames = {"Otoshi ukemi (2 Kyu)", "Påkslag mot huvudet, backhand, Ju jodan uchi uke, irimi nage - Ude osae, ude osae gatame"};
+                String[] techNames = {"Grepp och knivhot mot magen, grepp, kin geri, kote gaeshi, ude hishigi hiza gatame", "Stryptag från sidan med tryck, kote hineri, ude henkan gatame"};
                 String expectedColor = "Blått";
 
                 for(int i = 0; i < 2; i++){
@@ -199,11 +474,10 @@ public class TechniqueDatabaseTest {
                     preparedStatement.setString(1, techNames[i]);
 
                     ResultSet resultSet = preparedStatement.executeQuery();
-
-                    if (resultSet.next()) {
-                        String belt = resultSet.getString("belt_name");
-                        assertEquals(expectedColor, belt);
-                    }
+                    //If the given technique doesn't exist, we got null from 'resultSet'
+                    assertEquals(resultSet.next(), true);
+                    String belt = resultSet.getString("belt_name");
+                    assertEquals(expectedColor, belt);
                 }
         }
     }
@@ -218,7 +492,7 @@ public class TechniqueDatabaseTest {
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique            
-                String[] techNames = {"Empi uchi, jodan och chudan (1 Kyu)", "Påkslag mot huvudet, forehand och backhand, Tsuri ashi - ju jodan uchi uke, irimi nage, ude hishigi hiza gatame"};
+                String[] techNames = {"Grepp i håret med 2 händer och knästöt, gedan juji uke, waki gatame, ude osae gatame", "Knivhot mot halsen bakifrån med vänster arm, maesabaki, kuzure ude garami, kote gaeshi, ude hishigi hiza gatame"};
                 String expectedColor = "Brunt";
 
                 for(int i = 0; i < 2; i++){
@@ -228,11 +502,10 @@ public class TechniqueDatabaseTest {
                     preparedStatement.setString(1, techNames[i]);
 
                     ResultSet resultSet = preparedStatement.executeQuery();
-
-                    if (resultSet.next()) {
-                        String belt = resultSet.getString("belt_name");
-                        assertEquals(expectedColor, belt);
-                    }
+                    //If the given technique doesn't exist, we got null from 'resultSet'
+                    assertEquals(resultSet.next(), true);
+                    String belt = resultSet.getString("belt_name");
+                    assertEquals(expectedColor, belt);
                 }
         }
     }
@@ -246,7 +519,7 @@ public class TechniqueDatabaseTest {
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
             Statement statement = connection.createStatement()) {
                 //This is where you edit if you wish to swap belts/technique            
-                String[] techNames = {"Mae ukemi (4 Kyu)", "Svingslag, Ju morote jodan uke, hiki otoshi - O soto osae, ude henkan gatame"};
+                String[] techNames = {"Grepp i en handled framifrån med två händer med drag, frigöring", "Knivhot mot magen, grepp, shotei uchi jodan, kote gaeshi, ude hishigi hiza gatame"};
                 String expectedColor = "Orange";
 
                 for(int i = 0; i < 2; i++){
@@ -256,11 +529,10 @@ public class TechniqueDatabaseTest {
                     preparedStatement.setString(1, techNames[i]);
 
                     ResultSet resultSet = preparedStatement.executeQuery();
-
-                    if (resultSet.next()) {
-                        String belt = resultSet.getString("belt_name");
-                        assertEquals(expectedColor, belt);
-                    }
+                    //If the given technique doesn't exist, we got null from 'resultSet'
+                    assertEquals(resultSet.next(), true);
+                    String belt = resultSet.getString("belt_name");
+                    assertEquals(expectedColor, belt);
                 }
         }
     }
@@ -277,19 +549,19 @@ public class TechniqueDatabaseTest {
                 String[] techNames = {"Haito uchi, jodan (1 Dan)", "Gripa liggande, Vända liggande - Kuzure kote gaeshi gatame"};
                 String expectedColor = "Svart";
 
-                for(int i = 0; i < 2; i++){
-                    String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
+                /*TODO: THIS TEST ISN'T FEASIBLE TO DESIGN UNTIL WE HAVE BLACKBELT TECHNIQUES*/
+                // for(int i = 0; i < 2; i++){
+                //     String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.name = ?";
                 
-                    PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
-                    preparedStatement.setString(1, techNames[i]);
+                //     PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+                //     preparedStatement.setString(1, techNames[i]);
 
-                    ResultSet resultSet = preparedStatement.executeQuery();
-
-                    if (resultSet.next()) {
-                        String belt = resultSet.getString("belt_name");
-                        assertEquals(expectedColor, belt);
-                    }
-                }
+                //     ResultSet resultSet = preparedStatement.executeQuery();
+                //     //If the given technique doesn't exist, we got null from 'resultSet'
+                //     assertEquals(resultSet.next(), true); 
+                //     String belt = resultSet.getString("belt_name");
+                //     assertEquals(expectedColor, belt);
+                // }
         }
     }
 }

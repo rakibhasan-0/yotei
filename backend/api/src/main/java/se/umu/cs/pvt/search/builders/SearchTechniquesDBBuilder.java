@@ -55,13 +55,16 @@ public class SearchTechniquesDBBuilder implements SearchDBBuilderInterface {
         List<String> queryList = new ArrayList<>();
         for(String beltColor : searchTechniquesParams.getBeltColors()){
             boolean isChildColor = beltColor.endsWith("-barn"); // Child colors need to contain the ending -barn
+            boolean isInvertedColor = beltColor.endsWith("-inverted"); //inverted color need to contain the ending -inverted
             String color = beltColor.split("-")[0];
+        
 
             queryList.add("SELECT te.technique_id, te.name " +
                     "FROM technique AS te, belt AS b, technique_to_belt AS ttb " +
                     "WHERE te.technique_id=ttb.technique_id AND b.belt_id=ttb.belt_id AND " +
-                    "LOWER(b.belt_name)=LOWER('" + color + "') AND b.is_child=" + isChildColor
-            );
+                    "LOWER(b.belt_name)=LOWER('" + color + "') AND b.is_child=" + isChildColor 
+                    + " AND b.is_inverted=" + isInvertedColor
+            );       
         }
 
         DatabaseQuery databaseQuery = new DatabaseQuery();
@@ -122,12 +125,12 @@ public class SearchTechniquesDBBuilder implements SearchDBBuilderInterface {
     private DatabaseQuery createJoinBeltsQuery(DatabaseQuery databaseQuery){
         String resultQuery = databaseQuery.getQuery();
 
-        String stringQuery = "SELECT result.technique_id, result.name, b.belt_name, b.belt_color, b.is_child FROM ( " +
+        String stringQuery = "SELECT result.technique_id, result.name, b.belt_name, b.belt_color, b.is_child, b.is_inverted FROM ( " +
                 resultQuery + " " +
                 ") AS result " +
                 "LEFT JOIN technique_to_belt AS ttb ON ttb.technique_id=result.technique_id " +
                 "LEFT JOIN belt AS b ON ttb.belt_id=b.belt_id " +
-				"GROUP BY result.technique_id, result.name, b.belt_name, b.belt_color, b.is_child, ttb.belt_id " +
+				"GROUP BY result.technique_id, result.name, b.belt_name, b.belt_color, b.is_child, b.is_inverted, ttb.belt_id " +
 				"ORDER BY ttb.belt_id ASC";
 
         DatabaseQuery createdDatabaseQuery = new DatabaseQuery();

@@ -155,13 +155,14 @@ export default function SessionsCreate({setIsBlocking}){
      * The user can choose a time for each day.
      */
 	const [weekdays, setWeekdays] = useState([
+		{ name: "Sön", value: false, time: "" },
 		{ name: "Mån", value: false, time: "" },
 		{ name: "Tis", value: false, time: "" },
 		{ name: "Ons", value: false, time: "" },
 		{ name: "Tors", value: false, time: "" },
 		{ name: "Fre", value: false, time: "" },
-		{ name: "Lör", value: false, time: "" },
-		{ name: "Sön", value: false, time: "" }
+		{ name: "Lör", value: false, time: "" }
+		
 	])
 
 
@@ -227,6 +228,7 @@ export default function SessionsCreate({setIsBlocking}){
 
 					tempDate = new Date(e.date)
 					tempTime = e.time
+					
 
 					while (tempDate <= endDate) {
 						allDatesArray.push({ plan: plan, date: formatDate(tempDate), time: tempTime })
@@ -234,7 +236,6 @@ export default function SessionsCreate({setIsBlocking}){
 						tempDate.setDate(tempDate.getDate() + 7)
 					}
 				})
-
 
 				addSessions()
 			} 
@@ -255,7 +256,7 @@ export default function SessionsCreate({setIsBlocking}){
 			let minutesDiff = (x.getHours() - x.getTimezoneOffset()) % 60
 			x.setHours(hoursDiff)
 			x.setMinutes(minutesDiff)
-			x.setDate(x.getDate()+1)
+			x.setDate(x.getDate())
 			return { ...session, date: new Date(x)}
 		})
 		/* Add group id to each object in array */
@@ -360,7 +361,7 @@ export default function SessionsCreate({setIsBlocking}){
 						minDate={dateFormatter(today)}   
 					/>
 				</div>
-				<p className={styles.p_date-name}>Till:</p>
+				<p className={styles.p_date_name}>Till:</p>
 				<div className={styles.p_date_picker}>
 					<DatePicker 
 						id="end-date-picker"

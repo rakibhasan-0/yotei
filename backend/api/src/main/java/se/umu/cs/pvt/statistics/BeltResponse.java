@@ -54,4 +54,12 @@ public class BeltResponse implements Serializable {
     public boolean getIs_child() {
         return belt.isChild();
     }
+
+    /**
+     * Public getter for private proprty is_inverted
+     * @return true if belt is a inverted belt, otherwise false.
+     */
+    public boolean getIs_inverted(){
+        return belt.isInverted();
+    }
 }

@@ -80,20 +80,20 @@ public class ExaminationApiTest {
         this.examineePairList.add(new ExamineePair(2L, 2L, 1L));
         this.examineePairList.add(new ExamineePair(3L, 3L, 3L));
 
-        this.examineeCommentList.add(new ExaminationComment(1L, 1L, 1L, 1L, "wasasasasa", "EastEast"));
-        this.examineeCommentList.add(new ExaminationComment(2L, 2L, 2L, 2L, "lasasasasa", "TestTest"));
-        this.examineeCommentList.add(new ExaminationComment(3L, 3L, 3L, 3L, "kasasasasa", "WestWest"));
+        this.examineeCommentList.add(new ExaminationComment(1L, 1L, 1L, 1L, "wasasasasa as", "EastEast"));
+        this.examineeCommentList.add(new ExaminationComment(2L, 2L, 2L, 2L, "lasasasasa as", "TestTest"));
+        this.examineeCommentList.add(new ExaminationComment(3L, 3L, 3L, 3L, "kasasasasa as", "WestWest"));
 
-        this.examineePairCommentList.add(new ExaminationComment(1L, 1L, 1L, 1L, "wasasasasa", "TestTest"));
-        this.examineePairCommentList.add(new ExaminationComment(1L, 1L, 1L, 1L, "lasasasasa", "EastEast"));
-        this.examineePairCommentList.add(new ExaminationComment(1L, 1L, 1L, 1L, "kasasasasa", "WestWest"));
+        this.examineePairCommentList.add(new ExaminationComment(1L, 1L, 1L, 1L, "wasasasasa as", "TestTest"));
+        this.examineePairCommentList.add(new ExaminationComment(1L, 1L, 1L, 1L, "lasasasasa as", "EastEast"));
+        this.examineePairCommentList.add(new ExaminationComment(1L, 1L, 1L, 1L, "kasasasasa as", "WestWest"));
 
-        this.examinationCommentList.add(new ExaminationComment(1L, 1L, null, null, "wasasasasa", "TestTest"));
-        this.examinationCommentList.add(new ExaminationComment(2L, 2L, null, null, "lasasasasa", "WestWest"));
-        this.examinationCommentList.add(new ExaminationComment(3L, 3L, null, null, "kasasasasa", "EastEast"));
-        this.examinationCommentList.add(new ExaminationComment(4L, 4L, 4L, 4L, "wasasasas", "ShouldNotFind"));
-        this.examinationCommentList.add(new ExaminationComment(4L, 4L, null, 4L, "wasasasas", "ShouldNotFind"));
-        this.examinationCommentList.add(new ExaminationComment(4L, 4L, 4L, null, "wasasasas", "ShouldNotFind"));
+        this.examinationCommentList.add(new ExaminationComment(1L, 1L, null, null, "wasasasasa as", "TestTest"));
+        this.examinationCommentList.add(new ExaminationComment(2L, 2L, null, null, "lasasasasa as", "WestWest"));
+        this.examinationCommentList.add(new ExaminationComment(3L, 3L, null, null, "kasasasasa as", "EastEast"));
+        this.examinationCommentList.add(new ExaminationComment(4L, 4L, 4L, 4L, "wasasasas as", "ShouldNotFind"));
+        this.examinationCommentList.add(new ExaminationComment(4L, 4L, null, 4L, "wasasasas as", "ShouldNotFind"));
+        this.examinationCommentList.add(new ExaminationComment(4L, 4L, 4L, null, "wasasasas as", "ShouldNotFind"));
 
         this.resultList.add(new ExaminationResult(1L, 1L, "Test Class", null));
         this.resultList.add(new ExaminationResult(2L, 2L, "Testing Classing", true));
@@ -174,22 +174,22 @@ public class ExaminationApiTest {
     void testGetExaminationCommentOnTechnique() {
 
         Mockito.when(examinationCommentRepository
-            .findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(1L, "wasasasasa"))
+            .findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(1L, "wasasasasa as"))
             .thenReturn(examinationCommentList);
         Mockito.when(examinationCommentRepository
-            .findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(2L, "lasasasasa"))
+            .findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(2L, "lasasasasa as"))
             .thenReturn(examinationCommentList);
         Mockito.when(examinationCommentRepository
-            .findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(3L, "kasasasasa"))
+            .findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(3L, "kasasasasa as"))
             .thenReturn(examinationCommentList);
 
         // Test with existing comments.
         ResponseEntity<List<ExaminationComment>> responseWithComment1 = examinationController
-            .getGradingComment(1L, "wasasasasa");
+            .getGradingComment(1L, "wasasasasa as");
         ResponseEntity<List<ExaminationComment>> responseWithComment2 = examinationController
-            .getGradingComment(2L, "lasasasasa");
+            .getGradingComment(2L, "lasasasasa as");
         ResponseEntity<List<ExaminationComment>> responseWithComment3 = examinationController
-            .getGradingComment(3L, "kasasasasa");
+            .getGradingComment(3L, "kasasasasa as");
 
         assertEquals(HttpStatus.OK, responseWithComment1.getStatusCode());
         assertEquals(HttpStatus.OK, responseWithComment2.getStatusCode());
@@ -221,7 +221,7 @@ public class ExaminationApiTest {
 
         // Test with non-empty ExamineeId and ExamineePairId.
         Mockito.when(examinationCommentRepository
-            .findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(4L, "wasasasas"))
+            .findByGradingIdAndTechniqueNameAndExamineeIdIsNullAndExamineePairIdIsNull(4L, "wasasasas as"))
             .thenReturn(Collections.emptyList());
         ResponseEntity<List<ExaminationComment>> responseWithNonNullValues = examinationController
             .getGradingComment(4L, "wasasasas");
@@ -231,20 +231,20 @@ public class ExaminationApiTest {
     @Test
     void testGetExamineeCommentOnTechnique() {
 
-        Mockito.when(examinationCommentRepository.findByExamineeIdAndTechniqueName(1L, "wasasasasa"))
+        Mockito.when(examinationCommentRepository.findByExamineeIdAndTechniqueName(1L, "wasasasasa as"))
                 .thenReturn(examineeCommentList);
-        Mockito.when(examinationCommentRepository.findByExamineeIdAndTechniqueName(2L, "lasasasasa"))
+        Mockito.when(examinationCommentRepository.findByExamineeIdAndTechniqueName(2L, "lasasasasa as"))
                 .thenReturn(examineeCommentList);
-        Mockito.when(examinationCommentRepository.findByExamineeIdAndTechniqueName(3L, "kasasasasa"))
+        Mockito.when(examinationCommentRepository.findByExamineeIdAndTechniqueName(3L, "kasasasasa as"))
                 .thenReturn(examineeCommentList);
 
         // Test with existing comments.
         ResponseEntity<List<ExaminationComment>> responseWithComment1 = examinationController.getExamineeComment(1L,
-                "wasasasasa");
+                "wasasasasa as");
         ResponseEntity<List<ExaminationComment>> responseWithComment2 = examinationController.getExamineeComment(2L,
-                "lasasasasa");
+                "lasasasasa as");
         ResponseEntity<List<ExaminationComment>> responseWithComment3 = examinationController.getExamineeComment(3L,
-                "kasasasasa");
+                "kasasasasa as");
 
         assertEquals(HttpStatus.OK, responseWithComment1.getStatusCode());
         assertEquals(HttpStatus.OK, responseWithComment2.getStatusCode());
@@ -277,20 +277,20 @@ public class ExaminationApiTest {
     @Test
     void testGetExamineePairCommentOnTechnique() {
 
-        Mockito.when(examinationCommentRepository.findByExamineePairIdAndTechniqueName(1L, "wasasasasa"))
+        Mockito.when(examinationCommentRepository.findByExamineePairIdAndTechniqueName(1L, "wasasasasa as"))
                 .thenReturn(examineePairCommentList);
-        Mockito.when(examinationCommentRepository.findByExamineePairIdAndTechniqueName(2L, "lasasasasa"))
+        Mockito.when(examinationCommentRepository.findByExamineePairIdAndTechniqueName(2L, "lasasasasa as"))
                 .thenReturn(examineePairCommentList);
-        Mockito.when(examinationCommentRepository.findByExamineePairIdAndTechniqueName(3L, "kasasasasa"))
+        Mockito.when(examinationCommentRepository.findByExamineePairIdAndTechniqueName(3L, "kasasasasa as"))
                 .thenReturn(examineePairCommentList);
 
         // Test with existing comments.
         ResponseEntity<List<ExaminationComment>> responseWithComment1 = examinationController.getExamineePairComment(1L,
-                "wasasasasa");
+                "wasasasasa as");
         ResponseEntity<List<ExaminationComment>> responseWithComment2 = examinationController.getExamineePairComment(2L,
-                "lasasasasa");
+                "lasasasasa as");
         ResponseEntity<List<ExaminationComment>> responseWithComment3 = examinationController.getExamineePairComment(3L,
-                "kasasasasa");
+                "kasasasasa as");
 
         assertEquals(HttpStatus.OK, responseWithComment1.getStatusCode());
         assertEquals(HttpStatus.OK, responseWithComment2.getStatusCode());
