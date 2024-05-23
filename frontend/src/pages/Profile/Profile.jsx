@@ -90,7 +90,6 @@ export default function Profile() {
 	}
 
 	/* Workout management */
-
 	const WorkoutList = ({ list }) => {
 		// eslint-disable-next-line no-unused-vars
 		const onFavorite = async (_, workout) => {
@@ -99,6 +98,10 @@ export default function Profile() {
 			setWorkouts((old) => [
 				...old.map((w) => {
 					if (w.workoutID === workout.workoutID) {
+						(w.favourite?
+							setAmountOfFavouriteWorkouts(amountOfFavouriteWorkouts-1):
+							setAmountOfFavouriteWorkouts(amountOfFavouriteWorkouts+1)
+						)
 						w.favourite = !w.favourite
 					}
 					return w

@@ -35,7 +35,7 @@ import ExerciseDetailMini from "../../../pages/Activity/Exercise/ExerciseDetailM
  * @since 2023-05-10
  * @updated 2023-05-30 Chimera, updated documentation
  * @updated 2024-05-17 Tomato, Fixed so that an exercise get the correct path if in a list.
- * @updated 2024-05-22 Kiwi, fixed a popup window for when popUp is true.
+ * @updated 2024-05-22 Kiwi, fixed a popup window for when popUp is true, added links so you can better se when something redirects to popups.
  * @version 1.1
  */
 export default function ExerciseListItem({ item, text, detailURL, id, index, checkBox , path, popUp}) {
@@ -61,17 +61,23 @@ export default function ExerciseListItem({ item, text, detailURL, id, index, che
 				<div className={styles["exercise-list-header"]} style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
 					{checkBox ? <div className={styles["technique-checkbox-container"]}>{checkBox}</div> : null}
 					{popUp ? 
-						<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}  onClick={handleClick} >
+					
+						<div style={{ display: "flex", justifyContent: "space-between", width: "100%"}} onClick = {handleClick} >
 							<div style={{display: "flex", alignItems: "center"}}>
-								<div className={styles["href-link"]} style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="ExerciseListItem-item">{item}</div>
+								<Link >
+									<div className={styles["href-link"]} style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="ExerciseListItem-item">{item}</div>
+								</Link>
 							</div>
 							<div className={styles["flex-shrink-0"]} style={{display: "flex", alignItems: "center"}}>
 								<div className={styles["exercise-list-duration"]} data-testid="ExerciseListItem-text">
 									<p>{text}</p>
 								</div>
-								<ChevronRight size="30px"/>
+								<Link>
+									<ChevronRight size="30px"/>
+								</Link>
 							</div>
-						</div> :
+						</div> 
+						:
 						<Link to={detailURL + tempPath} data-testid="ExerciseListItem-link" style={{width: "100%"}}>
 							<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
 								<div style={{display: "flex", alignItems: "center"}}>
@@ -81,7 +87,9 @@ export default function ExerciseListItem({ item, text, detailURL, id, index, che
 									<div className={styles["exercise-list-duration"]} data-testid="ExerciseListItem-text">
 										<p>{text}</p>
 									</div>
-									<ChevronRight size="30px"/>
+									<Link>
+										<ChevronRight size="30px"/>
+									</Link>
 								</div>
 							</div>
 						</Link>
