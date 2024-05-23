@@ -26,7 +26,9 @@ import { Spinner } from "react-bootstrap"
  * @version 2.1
  * @returns A page for editing a session.
  * Updates: 2024-05-20: Fixed a bug where you could not edit the time or date of a session if there are no workouts set.
- */
+ *          2024-05-21: Fixed a bug where going back from 'WorkoutCreate' caused the site to crash by loading null values.
+
+*/
 export default function SessionEdit() {
 	const { state } = useLocation()
 	const navigate = useNavigate()
@@ -146,7 +148,7 @@ export default function SessionEdit() {
 					//if you come from create new during edit
 					if(state == null){
 						setWorkout(workouts.find(workout => workout.id === session.workout))
-					}else {
+					}else if(state.session.workout){
 						setWorkout(workouts.find(workout => workout.id === state.session.workout.id))
 					}
 					setDate(session.date)

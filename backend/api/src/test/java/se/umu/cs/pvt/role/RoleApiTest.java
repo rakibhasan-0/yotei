@@ -10,6 +10,8 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import se.umu.cs.pvt.user.UserRepository;
+
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,9 +35,13 @@ public class RoleApiTest {
     private final RoleRepository roleRepository = Mockito.mock(
 		RoleRepository.class);
 
+	@Mock
+	private final UserRepository userRepository = Mockito.mock(
+		UserRepository.class);
+
     @BeforeEach
     void init() {
-        roleController = new RoleController(roleRepository);
+        roleController = new RoleController(roleRepository, userRepository);
 		roleList = new ArrayList<>();
 
 		Mockito.lenient().when(roleRepository.findById(Mockito.any()))

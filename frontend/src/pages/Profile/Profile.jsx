@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react"
+import { useCookies } from "react-cookie"
 import { Tab, Tabs } from "react-bootstrap"
-import { setError as setErrorToast, setSuccess as setSuccessToast } from "../../utils"
+import { isAdminUser, setError as setErrorToast, setSuccess as setSuccessToast } from "../../utils"
 import ActivityList from "../../components/Activity/ActivityList"
 import Button from "../../components/Common/Button/Button"
 import SearchBar from "../../components/Common/SearchBar/SearchBar"
@@ -14,12 +15,13 @@ import Divider from "../../components/Common/Divider/Divider"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import ProfileListItem from "./ProfileListItem"
 import { Lock, Unlock, Eye } from "react-bootstrap-icons"
-
+import RoundButton from "../../components/Common/RoundButton/RoundButton"
+import { Plus } from "react-bootstrap-icons"
 /**
- * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3)
+ * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3), Team Tomato (6), Team Kiwi (Group 2)
  * @since 2024-05-16
  * @version 3.0
- * @updated 2024-05-20
+ * @updated 2024-05-23
  *
  * @returns a page for managing the user's account
  */
@@ -28,6 +30,7 @@ export default function Profile() {
 
 	const [workouts, setWorkouts] = useState()
 	const [searchText, setSearchText] = useState("")
+	const [searchListText, setSearchListText] = useState("")
 
 	const [cache, cacheActions] = useMap()
 	const [password, setPassword] = useState("")
@@ -41,16 +44,50 @@ export default function Profile() {
 	const [usernamePassword, setUsernamePassword] = useState("")
 	const [passwordButtonState, setPasswordButtonDisabled] = useState(false)
 	const [usernameButtonState, setUsernameButtonDisabled] = useState(false)
+	const context = useContext(AccountContext)
 
+	const [fetchedLists, setFetchedLists] = useState(false)
 	const [lists, setLists] = useState([])
 	const [map, mapActions] = useMap()
-
+	const [isFavouriteWorkoutsFetched, setIsFavouriteWorkoutsFetched] = useState(false)
+	const [cookies, setCookie] = useCookies(["previousPath"])
 	const [amountOfFavouriteWorkouts, setAmountOfFavouriteWorkouts] = useState(0)
 
+	useEffect(() => {
+		setCookie("previousPath", "/profile", { path: "/" })
+	}, [setCookie, cookies.previousPath])
 
-	//TODO feature toggle
-	const [isListsEnabled] = useState(false)
+	const workout = {
+		id: -1,
+		name: "Favoritpass",
+		size: 7,
+		author: {
+			userId: 1,
+			username: "Admin",
+		},
+		hidden: false,
+	}
+	const userName = context.username || "Vet ej"
 
+	//Future-proofs so that it will get all of the favourite workouts until 2060
+	const getAmountOfFavouriteWorkouts = async () => {
+		const args = {
+			from: "1980-01-01",
+			to: "2060-01-01",
+			selectedTags: "",
+			id: userId,
+			text: "",
+			isFavorite: true,
+		}
+		getWorkouts(args, token, null, null, (response) => {
+			if (response.error) {
+				setAmountOfFavouriteWorkouts(0)
+			} else {
+				setAmountOfFavouriteWorkouts(response.results.length)
+			}
+			setIsFavouriteWorkoutsFetched(true)
+		})
+	}
 
 	/* Workout management */
 
@@ -81,55 +118,28 @@ export default function Profile() {
 			</>
 		)
 	}
-	//Future-proofs so that it will get all of the favourite workouts until 2060
-	const getAmountOfFavouriteWorkouts= async() =>{
-		const args = {
-			from: "1980-01-01",
-			to: "2060-01-01",
-			selectedTags:"",
-			id: userId,
-			text: "",
-			isFavorite: true
-		}
-		getWorkouts(args, token, null, null, (response) => {
-			if(response.error) {
-				setAmountOfFavouriteWorkouts(0)
-			} else {
-				setAmountOfFavouriteWorkouts(response.results.length)
-			}
-		})
-	}
 
-	const workout = {
-		id: -1,
-		name: "Favoritpass",
-		size: amountOfFavouriteWorkouts,
-		author: {
-			userId: userId,
-			username: "",
-		},
-		hidden: false,
-	}
+	useEffect(() => {
+		getAmountOfFavouriteWorkouts()
+	}, [])
+	useEffect(() => {
+		if (isFavouriteWorkoutsFetched) {
+			workout.size = amountOfFavouriteWorkouts
+			setFetchedLists(false)
+			setLists([workout])
+			fetchingList()
+		}
+	}, [isFavouriteWorkoutsFetched, amountOfFavouriteWorkouts])
 
 	/**
 	 * Fetches lists when the component is mounted or when the
 	 * search text are changed.
 	 */
 	useEffect(() => {
-		getAmountOfFavouriteWorkouts()
-		const workout = {
-			id: -1,
-			name: "Favoritpass",
-			size: amountOfFavouriteWorkouts,
-			author: {
-				userId: userId,
-				username: "Admin",
-			},
-			hidden: false,
-		}
+		setFetchedLists(false)
 		setLists([workout])
 		fetchingList()
-	}, [searchText,amountOfFavouriteWorkouts])
+	}, [searchListText])
 
 	useEffect(() => {
 		getWorkouts(
@@ -214,23 +224,18 @@ export default function Profile() {
 
 	const getIconFromState = (state) => {
 		if (state.id == -1) {
-			console.log("Favourite!")
 			//Här borde jag fixa en route till favoritsidans grej :)
 			return <img src="../../../assets/images/starFill.svg" />
 		}
 		if (state.hidden === true && state.author.userId == userId) {
-			console.log("Locked")
 			return <Lock size={36} />
 		}
 		if (state.hidden === true && state.author.userId != userId) {
-			console.log("Shared")
 			return <Unlock size={36} />
 		}
 		if (state.hidden === false && state.author.userId === userId) {
-			console.log("Public")
 			return <Eye size={36} />
 		}
-		console.log("Ospecat fall, borde ej kunna nå listor som publika men inte delade med oss!")
 		return <Eye size={36} />
 	}
 
@@ -239,46 +244,54 @@ export default function Profile() {
 	 */
 	async function fetchingList() {
 		const args = {
-			hidden: "",
-			isAuthor: "",
+			hidden: false,
+			isAuthor: isAdminUser(context) ? false : true,
+			text: searchListText,
+			isShared: false,
 		}
 
 		getLists(args, token, map, mapActions, (result) => {
 			if (result.error) {
 				//Should handle error
+				setFetchedLists(true)
 				return
 			}
 
-			const lists = result.map((item) => ({
-				id: item.id,
-				name: item.name,
-				size: item.size,
-				author: item.author,
-				hidden: item.hidden,
-				isShared: item.isShared,
-			}))
+			if (result && result.results) {
+				const lists = result.results.map((item) => ({
+					id: item.id,
+					name: item.name,
+					size: item.size,
+					author: item.author,
+					hidden: item.hidden,
+					isShared: item.isShared,
+				}))
 
-			setLists([workout, ...lists])
+				setLists([workout, ...lists])
+				setFetchedLists(true)
+			}
 		})
 	}
 
 	return (
-		<Tabs defaultActiveKey={"MyWorkouts"} className={style.tabs}>
-			{isListsEnabled && (
-				<Tab eventKey={"FavoriteWorkouts"} title={"Mina listor"} className={style.tab}>
-					<SearchBar
-						id="searchbar-workouts-1"
-						placeholder="Sök efter listor"
-						text={searchText}
-						onChange={setSearchText}
-					/>
-					{loading ? (
-						<Spinner />
-					) : (
-						lists.map((list) => <ProfileListItem key={list.id} item={list} Icon={getIconFromState(list)} />)
-					)}
-				</Tab>
-			)}
+		<Tabs defaultActiveKey={"MyLists"} className={style.tabs}>
+			<Tab eventKey={"MyLists"} title={"Mina listor"} className={style.tab}>
+				<SearchBar
+					id="searchbar-workouts-1"
+					placeholder="Sök efter listor"
+					text={searchListText}
+					onChange={setSearchListText}
+				/>
+				{!fetchedLists ? (
+					<Spinner />
+				) : (
+					lists.map((list) => <ProfileListItem key={list.id} item={list} Icon={getIconFromState(list)} />)
+				)}
+				<RoundButton linkTo="/list/create">
+					<Plus />
+				</RoundButton>
+			</Tab>
+
 			<Tab eventKey={"MyWorkouts"} title={"Mina Pass"} className={style.tab}>
 				<SearchBar
 					id="searchbar-workouts-2"
@@ -362,6 +375,10 @@ export default function Profile() {
 				>
 					Ändra Användarnamn
 				</Button>
+				<Divider option={"h2_center"} />
+				<div>
+					Inloggad som: {userName} <br />
+				</div>
 				<Divider option={"h2_center"} />
 				<div>
 					<Button id={"logoutButton"} onClick={logOut} width={"100%"} className="btn btn-primary">

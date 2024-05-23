@@ -47,8 +47,8 @@ public class StatisticsResponseTest {
 
     @Test
     void beltsAreNotEmptyWhenBeltsAreAdded() {
-        Belt b1 = new Belt(1L, "Gult", "123123", false);
-        Belt b2 = new Belt(1L, "Rött", "321321", true);
+        Belt b1 = new Belt(1L, "Gult", "123123", false, false);
+        Belt b2 = new Belt(1L, "Rött", "321321", true, false);
 
         ArrayList<Belt> belts = new ArrayList<>();
         belts.add(b1);
@@ -61,7 +61,7 @@ public class StatisticsResponseTest {
 
     @Test
     void shouldRetrieveAddedBelt() {
-        Belt b1 = new Belt(1L, "Gult", "123123", false);
+        Belt b1 = new Belt(1L, "Gult", "123123", false, false);
 
         ArrayList<Belt> belts = new ArrayList<>();
         belts.add(b1);

@@ -12,7 +12,7 @@ import { useCookies } from "react-cookie"
 import Review from "../../../components/Workout/WorkoutReview/ReviewFormComponent.jsx"
 import ErrorState from "../../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../../components/Common/Spinner/Spinner"
-import { HTTP_STATUS_CODES, setError, setSuccess, isAdmin } from "../../../utils"
+import { HTTP_STATUS_CODES, setError, setSuccess, canEditWorkout, isAdminUser } from "../../../utils"
 import PrintButton from "../../../components/Common/PrintButton/PrintButton"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
 
@@ -30,6 +30,7 @@ import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
  * @updated 2024-04-26 by Tomato
  * @updated 2024-05-03 Team Kiwi, fixed navigation from other websites
  * @updated 2024-05-08 Team Mango, fixed navigation bug connecting planIndex and workoutIndex
+ * @updated 2024-05-22 Team Mango, updated permission check and removed unnecessary variable.
  *
  * @version 1.7
  *
@@ -47,7 +48,6 @@ export default function WorkoutView({ id }) {
 	const [loading, setLoading] = useState(true)
 	const [loadingUser, setLoadingUser] = useState(true)
 	const [cookie] = useCookies(["previousPath"])
-	const { userId } = useContext(AccountContext)
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -103,11 +103,12 @@ export default function WorkoutView({ id }) {
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 	const handleNavigation = () => {
-		console.log("cookie: ", cookie.previousPath)
 		if (cookie.previousPath === "/plan") {
-			navigate("/plan")
+			navigate("/plan", {replace : true})
+		} else if(cookie.previousPath === "/profile"){
+			navigate("/profile", {replace : true})
 		} else {
-			navigate("/workout")
+			navigate("/workout", {replace : true})
 		}
 	}
 
@@ -116,7 +117,7 @@ export default function WorkoutView({ id }) {
 		return (
 			<div className="d-flex row justify-content-center">
 				<div className="d-flex col mb-3 mt-3 justify-content-start">
-					<Button onClick={() => handleNavigation(navigate, cookie)} outlined={true}>
+					<Button onClick={() => handleNavigation()} outlined={true}>
 						<p>Tillbaka</p>
 					</Button>
 				</div>
@@ -134,9 +135,9 @@ export default function WorkoutView({ id }) {
 			: !workoutData ? <ErrorState message={errorStateMsg} onBack={() => navigate("/workout")} onRecover={() => window.location.reload(false)}/>
 				:
 				<div id={id} className="container px-0">
-					{<ConfirmPopup popupText={"Är du säker att du vill radera passet \"" + workoutData.name + "\"?"} id={"confirm-popup"} setShowPopup={setShowPopup} showPopup={showPopup} onClick={async () => deleteWorkout(workoutId, context, navigate, setShowPopup)}/>}
+					{<ConfirmPopup popupText={"Är du säker att du vill radera passet \"" + workoutData.name + "\"?"} id={"confirm-popup"} setShowPopup={setShowPopup} showPopup={showPopup} onClick={async () => deleteWorkout(workoutId, context, handleNavigation, setShowPopup)}/>}
 					{getReviewContainer(showRPopup, setRShowPopup, workoutId)}
-					{getWorkoutInfoContainer(workoutData, setShowPopup, context, userId, workoutUsers, workoutId)}
+					{getWorkoutInfoContainer(workoutData, setShowPopup, context, workoutUsers, workoutId)}
 					{sortByCategories(workoutData).map((activityCategory) => (
 						<div key={activityCategory.categoryOrder}>
 							<WorkoutActivityList
@@ -164,7 +165,7 @@ function getReviewContainer(showRPopup, setRShowPopup, workoutId) {
 	return <Review isOpen={showRPopup} setIsOpen={setRShowPopup} workout_id={workoutId} />
 }
 
-async function deleteWorkout(workoutId, context, navigate, setShowPopup) {
+async function deleteWorkout(workoutId, context, handleNavigation, setShowPopup) {
 	const requestOptions = {
 		headers: { "Content-type": "application/json", token: context.token },
 		method: "DELETE",
@@ -187,7 +188,7 @@ async function deleteWorkout(workoutId, context, navigate, setShowPopup) {
 	}
 
 	setSuccess("Pass borttagen!")
-	navigate("/workout")
+	handleNavigation()
 	setShowPopup(false)
 }
 
@@ -230,7 +231,7 @@ function getWorkoutUsersContainer(workoutUsers) {
 }
 
 
-function getWorkoutInfoContainer(workoutData, setShowPopup, context, userId, workoutUsers, workoutId) {
+function getWorkoutInfoContainer(workoutData, setShowPopup, context, workoutUsers, workoutId) {
 	return (
 		<>
 			<div className="container px-0">
@@ -243,7 +244,7 @@ function getWorkoutInfoContainer(workoutData, setShowPopup, context, userId, wor
 						<div className={styles.clickIcon}>
 							<PrintButton workoutData={workoutData} />
 						</div>
-						{ (userId == workoutData.author.user_id || isAdmin(context)) &&
+						{(isAdminUser(context) || canEditWorkout(context, workoutData.author.user_id)) &&
 						<>
 							<Link className="ml-3" state={{workout: workoutData, workoutId: workoutId, users: workoutUsers}} to={"/workout/edit/" + workoutId}>
 								<Pencil
@@ -259,6 +260,7 @@ function getWorkoutInfoContainer(workoutData, setShowPopup, context, userId, wor
 								color="var(--red-primary)"
 								style={{cursor: "pointer"}}
 								onClick={() => setShowPopup(true)}
+								id={"delete_trashcan"}
 							/>
 						</>
 						}

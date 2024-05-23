@@ -20,13 +20,14 @@ public class PlanSearchResponse {
             String beltColor,
             String beltName,
             Boolean isChild,
+            Boolean isInverted,
             Long sessionID,
             String sessionDate,
             String sessionTime,
             String sessionText) {
         this.planID = planID;
         addSession(sessionID, sessionDate, sessionTime, sessionText);
-        addPlanColor(beltColor, beltName, isChild);
+        addPlanColor(beltColor, beltName, isChild, isInverted);
     }
 
     public Long getPlanID() {
@@ -41,10 +42,10 @@ public class PlanSearchResponse {
         return sessions;
     }
 
-    public void addPlanColor(String beltColor, String beltName, Boolean isChild){
+    public void addPlanColor(String beltColor, String beltName, Boolean isChild, Boolean isInverted){
         if(beltColor == null) return;
 
-        planColors.add(new ColorObject(beltColor, beltName, isChild));
+        planColors.add(new ColorObject(beltColor, beltName, isChild, isInverted));
     }
 
     public void addSession(Long sessionID, String sessionDate, String sessionTime, String sessionText){
@@ -62,11 +63,13 @@ public class PlanSearchResponse {
         private String beltColor;
         private String beltName;
         private Boolean isChild;
+        private Boolean isInverted;
 
-        public ColorObject(String beltColor, String beltName, Boolean isChild){
+        public ColorObject(String beltColor, String beltName, Boolean isChild, Boolean isInverted){
             this.beltColor = beltColor;
             this.beltName = beltName;
             this.isChild = isChild;
+            this.isInverted = isInverted;
         }
 
         public String getBeltColor() {
@@ -79,6 +82,10 @@ public class PlanSearchResponse {
 
         public Boolean getChild() {
             return isChild;
+        }
+
+        public Boolean getInverted(){
+            return isInverted;
         }
     }
 

@@ -20,7 +20,7 @@ public class BeltResponseTest {
 
     @BeforeEach
     void init() {
-        Belt belt = new Belt(1L, "Gult", "123123", false);
+        Belt belt = new Belt(1L, "Gult", "123123", false, false);
         beltResponse = new BeltResponse(belt);
     }
 

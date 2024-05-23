@@ -23,18 +23,21 @@ import ToggleButton from "../ToggleButton/ToggleButton"
  * @since 2023-05-08
  * @version 1.0
  */
-export default function PermissionListItem({ item, /*id,*/ index, checkBox }) {
+export default function PermissionListItem({ item, id, index, toggled, changeToggled }) {
 
 	return (
-		<div className={styles["role-list-container"]} data-testid="PermissionListItem">
+		<div className={styles["role-list-container"]} data-testid="PermissionListItem" id={"PermissionListItem-" + id}>
 			<div className={styles["role-list-header"]} style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
-				{checkBox}
 				<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
 					<div style={{display: "flex", alignItems: "center"}}>
 						<div className={styles["href-link"]} style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="RoleListItem-item">{item}</div>
 					</div>
 					<div className={styles["flex-shrink-0"]} style={{display: "flex", alignItems: "center"}}>
-						<ToggleButton/>
+						<ToggleButton 
+							isButtonToggled={toggled}
+							id={item + "-toggleButton"}
+							onClick={() => changeToggled(!toggled)}
+						/>
 					</div>
 				</div>
 			</div>

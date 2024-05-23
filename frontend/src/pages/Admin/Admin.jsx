@@ -5,13 +5,15 @@ import Divider from "../../components/Common/Divider/Divider"
 import ManageUser from "../../components/Admin/ManageUser"
 import SearchBar from "../../components/Common/SearchBar/SearchBar"
 import InfiniteScrollComponent from "../../components/Common/List/InfiniteScrollComponent"
+import Spinner from "../../components/Common/Spinner/Spinner"
 import RoleCard from "../../components/Common/RoleCard/RoleListItem"
 import RoundButton from "../../components/Common/RoundButton/RoundButton"
 import style from "./Admin.module.css"
 import { AccountContext } from "../../context"
-import { isAdmin } from "../../utils"
+import { isAdminUser } from "../../utils"
 import { Tab, Tabs } from "react-bootstrap"
 import { Plus } from "react-bootstrap-icons"
+import { setError as setErrorToast } from "../../utils"
 import ErrorLogsDisplay from "../../components/ErrorLogsDisplay/ErrorLogsDisplay"
 
 
@@ -22,19 +24,43 @@ import ErrorLogsDisplay from "../../components/ErrorLogsDisplay/ErrorLogsDisplay
  *  @since 2023-05-23
  *  @version 2.0
  *  @returns A page for the administrative functions.
+ *  Updated Team Mango 2024-05-22: changed check isAdmin to new check.
  */
 export default function Admin() {
 	const context = useContext(AccountContext)
+	const { token, /*userId*/ } = context
 	const detailURL = "/admin/role_page/"
+
 	const [searchText, setSearchText] = useState("")
+	const [roles, setRoles] = useState([])
+	const [loading, setIsLoading] = useState(true)
 	const [key, setKey] = useState(window.localStorage.getItem("active-tab") || "HandleUsers")
-	const [isRoleTabEnabled] = useState(false) //FEATURE TOGGLE
+	const [isRoleTabEnabled] = useState(true) //FEATURE TOGGLE
+
+	useEffect(() => {
+		(async () => {
+			try {
+				const response = await fetch("/api/roles", { headers: { token } })
+				if (!response.ok) {
+					setIsLoading(false)
+					throw new Error("Kunde inte hämta roller")
+				}
+				const json = await response.json()
+				setRoles(json)
+				setIsLoading(false)
+			} catch (ex) {
+				setErrorToast("Kunde inte hämta roller")
+				setIsLoading(false)
+				console.error(ex)
+			}
+		})()
+	}, [token, searchText])
 
 	useEffect(()=>{
 		window.localStorage.setItem("active-tab", key)
 	}, [key]) 
 
-	if(!isAdmin(context)){
+	if(!isAdminUser(context)){
 		window.location.replace("/404")
 		return null
 	}	
@@ -57,23 +83,26 @@ export default function Admin() {
 						text={searchText} 
 						onChange={setSearchText}
 					/>
-					<InfiniteScrollComponent
+					{loading ? <Spinner/> : <InfiniteScrollComponent>
+						{roles?.filter(role => {
+							if (searchText?.length > 0) {
+								return role.roleName.toLowerCase().includes(searchText.toLowerCase())
+							}
+							return true
+						}).map((role, index) =>
+							<RoleCard
+								item={role.roleName}
+								key={role.roleId}
+								id={role.roleId}
+								detailURL={detailURL}
+								index={index}>
+							</RoleCard>)
+					
+	
+						}
+					</InfiniteScrollComponent>}
 
-						id={"admin-view-roles"}>
-						<RoleCard
-							item={"exercise.name"}
-							key={"exercise.id"}
-							id={"exercise.id"}
-							detailURL={detailURL}>
-						</RoleCard>
-						<RoleCard
-							item={"exercise.n1ame"}
-							key={"exercise1.id"}
-							id={"exercise.1id"}>
-						</RoleCard>
-					</InfiniteScrollComponent>
-
-					<RoundButton linkTo={"exercise/create"} id={"exercise-round-button"}  style={{maxWidth: "5px"}}>
+					<RoundButton linkTo={"role/create"} id={"role-round-button"}  style={{maxWidth: "5px"}}>
 						<Plus/>
 					</RoundButton>
 

@@ -4,7 +4,6 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    height: 30vh;
     width: 90vw;
     z-index: 100;
     max-width: var(--layout-max-width);

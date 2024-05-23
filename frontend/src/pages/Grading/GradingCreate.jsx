@@ -101,11 +101,11 @@ export default function GradingCreate() {
 				}
 				const json = await response.json()
 				setLoading(false)
-
 				const filteredColors = json.filter(item => beltColors.includes(item.name))
 				const colorMaps = {}
+
 				filteredColors.forEach(element => {
-					if(element.child === false) {
+					if(element.child === false && element.inverted === false) {
 						colorMaps[element.name] = {
 							id: element.id,
 							hex: `#${element.color}`,

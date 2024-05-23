@@ -14,6 +14,7 @@ configure({ testIdAttribute: "id" })
 
 /**
  * Set up mock server to mock the api call to get all belts
+ * @updated 2024-05-20, Team Kiwi: Added inverted belts to the mock data and tests
  */
 beforeEach(() => {
 	// ARRANGE
@@ -25,26 +26,44 @@ beforeEach(() => {
 						id: 1,
 						name: "Vitt",
 						color: "FCFCFC",
-						child: false
+						child: false,
+						inverted: true
 					},
 					{
 						id: 2,
 						name: "Vitt",
 						color: "BD3B41",
-						child: true
+						child: true,
+						inverted: false
+					},
+					{
+						id: 3,
+						name: "Svart",
+						color: "BD3B41",
+						child: true,
+						inverted: false
+					},
+					{
+						id: 5,
+						name: "Vitt",
+						color: "FCFCFC",
+						child: false,
+						inverted: false
+					},
+					{
+						id: 6,
+						name: "Svart",
+						color: "BD3B41",
+						child: false,
+						inverted: false
 					},
 					{
 						id: 1,
 						name: "Svart",
-						color: "FCFCFC",
-						child: false
-					},
-					{
-						id: 2,
-						name: "Svart",
 						color: "BD3B41",
-						child: true
-					}
+						child: true,
+						inverted: true
+					},
 				]
 			))
 		})
@@ -60,8 +79,9 @@ describe("BeltPicker.jsx", () => {
 			expect(requestSpy).toHaveBeenCalled()
 		})
 		expect(screen.getByTestId("belt-text-Vitt")).toBeInTheDocument()
-		expect(screen.getByTestId("belt-adult-Vitt")).toBeInTheDocument()
+		expect(screen.getByTestId("belt-inverted-Vitt")).toBeInTheDocument()
 		expect(screen.getByTestId("belt-child-Vitt")).toBeInTheDocument()
+		expect(screen.getByTestId("belt-adult-Vitt")).toBeInTheDocument()
 	})
 
 	test("Should render two children when on render", async () => {
@@ -76,9 +96,11 @@ describe("BeltPicker.jsx", () => {
 		})
 		expect(screen.getByTestId("belt-adult-Vitt")).toBeInTheDocument()
 		expect(screen.getByTestId("belt-child-Vitt")).toBeInTheDocument()
+		expect(screen.getByTestId("belt-inverted-Vitt")).toBeInTheDocument()
 		expect(screen.getByTestId("belt-text-Svart")).toBeInTheDocument()
 		expect(screen.getByTestId("belt-adult-Svart")).toBeInTheDocument()
 		expect(screen.getByTestId("belt-child-Svart")).toBeInTheDocument()
+		expect(screen.getByTestId("belt-inverted-Svart")).toBeInTheDocument()
 	})
     
 	/**

@@ -4,6 +4,17 @@ import SessionWorkout from  "../../../components/Plan/SessionWorkout"
 import { BrowserRouter } from "react-router-dom"
 import React from "react"
 import { AccountContext } from "../../../context"
+import { USER_PERMISSION_LIST_ALL } from "../../../utils"
+
+/**
+ * Tests for SessionWorkout.test.jsx
+ * 
+ * @author UNKNOWN, Team Mango
+ * @version 1.0
+ * @updated 2024-05-20
+ * Updates. 2024-05-20: Added permissions to user to fix a test by giving it all permissions.
+ */
+
 
 configure({testIdAttribute: "id"})
 
@@ -29,7 +40,7 @@ describe("SessionWorkout", () => {
 		})
 
 		test("should render component displaying placeholder text if workoutConnected is false", () => {
-			render(<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: ""}}>
+			render(<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: 1, permissions: USER_PERMISSION_LIST_ALL}}>
 				<BrowserRouter>
 					<SessionWorkout id={testID}/>
 				</BrowserRouter>

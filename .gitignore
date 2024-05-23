@@ -320,3 +320,6 @@ $RECYCLE.BIN/
 
 # Playwright report
 test-results
+
+# Api target
+backend/api/target

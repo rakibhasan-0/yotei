@@ -1,6 +1,6 @@
 services:
   nginx:
-    build: ./nginx/
+    build: ./nginx/prod_domain/
     image: pvt2024/nginx:$TAG
     restart: always
     volumes:
