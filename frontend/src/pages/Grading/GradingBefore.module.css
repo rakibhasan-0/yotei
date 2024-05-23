@@ -38,6 +38,11 @@
   cursor: pointer;
 }
 
+.lock {
+  top: 4px;
+  right: 0;
+}
+
 .number {
   display: flex;
   text-align: center;
