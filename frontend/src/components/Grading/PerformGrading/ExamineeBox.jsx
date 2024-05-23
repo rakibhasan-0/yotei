@@ -8,6 +8,38 @@ import { AccountContext } from "../../../context"
 import { useParams } from "react-router-dom"
 import { setError as setErrorToast } from "../../../utils"
 
+/**
+ * This is a box containing the Examinee's name.
+ * 
+ * @param {Object} props - Component properties.
+ * @param {any} props.id - The id of the component.
+ * @param {String} props.examineeName - The name of the examinee.
+ * @param {any} props.examineeId - The id of the examinee.
+ * @param {String} props.techniqueName - The name of the technique.
+ * @param {function} props.onClick - onClick function when component is pressed.
+ * @param {String} props.status - The current status of the button.
+ * 
+ * Example Usage:
+ * <ExamineeBox 
+ *  examineeName="test person"
+ *  onClick={() => console.log("Clicked")}/>
+ * 
+ * @component
+ * @example
+ * return (
+ *   <ExamineeBox 
+ *     examineeName="test person"
+ *     examineeId={1}
+ *     techniqueName="Some Technique"
+ *     onClick={() => console.log("Clicked")}
+ *     status="default"
+ *   />
+ * )
+ * 
+ * @version 3.0
+ * @since 2024-05-21
+ * @author Apelsin
+ */
 export default function ExamineeBox({ 
 	id, 
 	examineeName, 
@@ -15,7 +47,6 @@ export default function ExamineeBox({
 	techniqueName, 
 	onClick, 
 	status, 
-	setButtonState
 }) {
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [isAddingComment, setAddComment] = useState(false)
@@ -24,6 +55,8 @@ export default function ExamineeBox({
 	const [commentError, setCommentError] = useState("")
 	const [hasComment, setExistingComment] = useState(false)
 	const [commentId, setCommentId] = useState(null)
+	const [isApiCallInProgress, setIsApiCallInProgress] = useState(false)
+
 	
 	const isErr = !(commentError == undefined || commentError == null || commentError == "")
 
@@ -40,7 +73,7 @@ export default function ExamineeBox({
     
 	useEffect(() => {
 		setColor(colors[status] || colors.default)
-	}, [status])
+	}, [])
     
 	useEffect(() => {
 		if (isAddingComment) {
@@ -178,7 +211,11 @@ export default function ExamineeBox({
 		}
 	}
 
-	const handleClick = () => {
+	const handleClick = async () => {
+		// Update buttonState and color based on current color
+		if (isApiCallInProgress) {
+			return // Exit if an API call is already in progress
+		}
 		let newButtonState
 		let newColor
         
@@ -193,9 +230,11 @@ export default function ExamineeBox({
 			newColor = colors.default
 		}
         
-		setButtonState(newButtonState)
 		setColor(newColor)
-		onClick(newButtonState)
+		
+		setIsApiCallInProgress(true)
+		await onClick(newButtonState) to the API call
+		setIsApiCallInProgress(false) // Unlock updates after API call completes
 	}
 
 	return (
@@ -214,7 +253,7 @@ export default function ExamineeBox({
 					isOpen={isAddingComment}
 					setIsOpen={toggleAddPersonalComment}
 					onClose={() => setCommentError(false)}
-					style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset" }}
+					style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset",top: "35vh"}}
 				>
 					<textarea
 						className={isErr ? `${styles.textarea} ${styles.textareaErr}` : `${styles.textarea}`}
