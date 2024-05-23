@@ -19,7 +19,7 @@ import EditableInputTextField from "../../components/Common/EditableInputTextFie
  * @author Team Pomegranate
  * @version 1.0
  * @since 2024-05-02
- */
+*/
 
 
 export default function GradingBefore() {
@@ -48,7 +48,7 @@ export default function GradingBefore() {
 	// this is for the automatically pair creation
 	const [lastAddedExaminee, setLastAddedExaminee] = useState({})
 	const [automaticallyPairCreation, setAutomaticallyPairCreation] = useState(false)
-
+	
 	const [gradingStep, setGradingStep] = useState(1)
 
 
@@ -185,8 +185,7 @@ export default function GradingBefore() {
 				// check if there is any examinees already added
 				const exsistingPairs = await getAllPairOfExaminees(token)
 					.catch(() => setErrorToast("Kunde inte hämta befintliga par. Kontrollera din internetuppkoppling."))
-	
-				console.log(exsistingPairs)
+
 				// if there exsists pairs in this grading already
 				if (exsistingPairs.length !== 0) {
 					// convert the pairs to the local format so the pairs can be displayed for the user
@@ -415,11 +414,13 @@ export default function GradingBefore() {
 	 */
 	function onCheck(isChecked, examineeId) {
 		if (isChecked) {
+		
 			setCheckedExamineeIds([...checkedExamineeIds, examineeId])
 		} else {
 			setCheckedExamineeIds(checkedExamineeIds.filter((id) => id !== examineeId))
 		}
 	}
+
 
 	function resetCheckedExamineesWithCheckbox() {
 		const remainingExaminees = examinees.filter(examinee => !checkedExamineeIds.includes(examinee.id))
@@ -655,7 +656,8 @@ export default function GradingBefore() {
 			<div className="column">
 				{examinees.map((examinee, index) => {
 					const unlockedExaminees = examinees.filter(exam => !exam.isLocked).length
-					const showCheckbox = unlockedExaminees > 1 && !examinee.isLocked
+					let showCheckbox = unlockedExaminees > 1 && !examinee.isLocked
+
 					return (
 						<div style={{ display: "flex", width: "100%", justifyContent: "center" }} key={"single-pair-" + examinee.id} id={"single-pair-" + examinee.id}>
 							<div className={styles.numberSingle}>{numberOfPairs + index + 1}</div>
@@ -669,7 +671,8 @@ export default function GradingBefore() {
 								onCheck={onCheck}
 								validateInput={validateInput}
 								showCheckbox={showCheckbox}
-								checked={false}
+								checked={checkedExamineeIds.includes(examinee.id)}
+								numberOfCheckedExaminees={checkedExamineeIds.length}
 								showTrash={Boolean(!examinee.isLocked)}
 								showX={false}
 								showLock={!!examinee.isLocked}

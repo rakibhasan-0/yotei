@@ -1,7 +1,7 @@
 import styles from "./EditableListItem.module.css"
 import { Trash, Pencil, Check as Check, X , LockFill} from "react-bootstrap-icons"
 import { useState } from "react"
-import CheckBox from "../CheckBox/CheckBox"
+import GradingCheckBox from "../CheckBox/GradingCheckBox"
 
 /**
  * An ExerciseListItem that can be used in an list view.
@@ -43,7 +43,8 @@ import CheckBox from "../CheckBox/CheckBox"
  * @author Team Pomegranate (Group 1), Team Durian (Group 3) (2024-05-13) 
  * @since 2024-05-06
  */
-export default function EditableListItem({ item, id, index, onRemove, onEdit, canEdit, onCheck, showCheckbox, checked, validateInput, grayTrash, showTrash, showX, showPencil, showLock}) {
+
+export default function EditableListItem({ item, id, index, onRemove, onEdit, onCheck, showCheckbox, checked, validateInput, grayTrash, showTrash, showX, showPencil, numberOfCheckedExaminees, showLock}) {
 
 	const [isEditing, setIsEditing] = useState(false) // State to manage edit mode
 	const [editedText, setEditedText] = useState(item) // State to store edited text
@@ -92,6 +93,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, ca
 		}
 	}
 
+	const shouldShowCheckbox = numberOfCheckedExaminees <= 2 && showCheckbox
 
 	return (
 		<div className={styles["editable-container"]} id={id}>
@@ -99,10 +101,11 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, ca
 				<div className={styles["editable-list-header"]} style={{ backgroundColor: index % 2 === 0 ? "var(--red-secondary)" : "var(--background)" }}>
 					<div data-testid="EditableListItem-link" style={{ width: "100%" }}>
 						<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
-							{showCheckbox && <CheckBox
+							{shouldShowCheckbox  && <GradingCheckBox
 								onClick={(checked) => onCheck(checked, id)}
 								checked={checked}
 								id="checkbox-element"
+								disableChecking={numberOfCheckedExaminees >= 2 && !checked}
 							/>}
 							<div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flex: 1 }} onClick={handleEdit}>
 								{isEditing ? (
