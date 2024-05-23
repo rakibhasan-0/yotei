@@ -17,6 +17,7 @@ import ProfileListItem from "./ProfileListItem"
 import { Lock, Eye } from "react-bootstrap-icons"
 import RoundButton from "../../components/Common/RoundButton/RoundButton"
 import { Plus } from "react-bootstrap-icons"
+import { useNavigate } from "react-router"
 /**
  * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3), Team Tomato (6), Team Kiwi (Group 2)
  * @since 2024-05-16
@@ -27,6 +28,7 @@ import { Plus } from "react-bootstrap-icons"
  */
 export default function Profile() {
 	const { userId, token } = useContext(AccountContext)
+	const navigate = useNavigate()
 
 	const [workouts, setWorkouts] = useState()
 	const [searchText, setSearchText] = useState("")
@@ -268,6 +270,10 @@ export default function Profile() {
 		})
 	}
 
+	const handleCreateList = () => {
+		navigate("/list/create", { state: { returnTo: "/profile" } })
+	}
+
 	return (
 		<Tabs defaultActiveKey={"MyLists"} className={style.tabs}>
 			<Tab eventKey={"MyLists"} title={"Mina listor"} className={style.tab}>
@@ -282,7 +288,7 @@ export default function Profile() {
 				) : (
 					lists.map((list) => <ProfileListItem key={list.id} item={list} Icon={getIconFromState(list)} />)
 				)}
-				<RoundButton linkTo="/list/create">
+				<RoundButton onClick={handleCreateList}>
 					<Plus />
 				</RoundButton>
 			</Tab>

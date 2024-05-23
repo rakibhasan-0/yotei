@@ -6,7 +6,7 @@ import styles from "./ListInfo.module.css"
 import Tag from "../../components/Common/Tag/Tag"
 import Button from "../../components/Common/Button/Button"
 import { useNavigate, Link } from "react-router-dom"
-import { useParams } from "react-router"
+import { useLocation, useParams } from "react-router"
 import { Pencil, Trash } from "react-bootstrap-icons"
 import ErrorState from "../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../components/Common/Spinner/Spinner"
@@ -23,7 +23,7 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
  *      listId @type {int} - The ID of the list.
  *      id        @type {int/string} - the id of the component
  *
- * @author Team Tomato (6) & Team Mango (Grupp 4) (2024-05-22)
+ * @author Team Tomato (6) & Team Mango (Grupp 4) (2024-05-23)
  * @since 2024-05-21
  * Based on WorkoutView.jsx
  * Updated Team Mango 2024-05-22: changed check isAdmin to new check.
@@ -38,6 +38,7 @@ export default function ListInfo({ id }) {
 	const [loading, setLoading] = useState(true)
 	const [activityListData, setActivityListData] = useState()
 	const { activityListId } = useParams()
+	const location = useLocation()
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -161,6 +162,12 @@ export default function ListInfo({ id }) {
 		)
 	}
 
+	//Check if there's a return url present, otherwise go back to previous page
+	const goBack = () => {
+		const returnTo = location.state?.returnTo || -1
+		navigate(returnTo)
+	}
+
 	return loading ? (
 		<div className="mt-5">
 			{" "}
@@ -190,7 +197,7 @@ export default function ListInfo({ id }) {
 			{activityListData.users.length > 0 && <SharedUsersContainer />}
 			<div className="d-flex row justify-content-center">
 				<div className="d-flex col mb-3 mt-3 justify-content-start">
-					<Button onClick={() => navigate("/profile")} outlined={true}>
+					<Button onClick={goBack} outlined={true}>
 						<p>Tillbaka</p>
 					</Button>
 				</div>
