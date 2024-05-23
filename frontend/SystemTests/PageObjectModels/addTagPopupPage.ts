@@ -24,7 +24,7 @@ export class AddTagPopupPage {
 	}
 
 	/**
-	 * Adds a tag to a technique. 
+	 * Creates a new tag and  Adds it to a technique. 
 	 * @param tag The tag to be added. 
 	 */
 	async addTag(tag: TagComponent) {
@@ -36,27 +36,24 @@ export class AddTagPopupPage {
 		//Add the tag. 
 		const tagAddButton = this.page.locator("#tag-add-button")
 		await tagAddButton.waitFor({ state: "visible" })
-		// await this.waitForVisibility(tagAddButton)
 		await tagAddButton.click()
 		await this.page.getByTestId("EditableListItem").getByText(`${tag.tagName}`).waitFor()
 
 		//Close the window and save the newly added tag.
 		const saveAndCloseButton = this.page.locator("#save-and-close-button")
 		await saveAndCloseButton.waitFor({ state: "visible" })
-		//await this.waitForVisibility(saveAndCloseButton)
 		await saveAndCloseButton.click()
 
 		//Save the technique so the newly added tag is saved with it. 
 		await this.page.getByRole("button", { name: "Spara" }).click()
-		// await this.page.waitForNavigation({ waitUntil: 'networkidle' });
-
 		await this.page.getByText("Tekniken uppdaterades!").waitFor()
 		await this.page.goto("/technique/1")
 	}
 
 	/**
-	 * 
-	 * @param tag 
+	 * Removes the created tag from the technique it was added to
+	 * then saves the updated technique. and deletes the tag.
+	 * @param tag The tag to be removed
 	 */
 	async deleteTag(tag: TagComponent) {
 		//Open the popup and search for the tag to be deleted. 
@@ -66,10 +63,7 @@ export class AddTagPopupPage {
 		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
 
 		//Uncheck the tag.
-		// await this.page.getByText(`${tag.tagName}`).waitFor()
-		// await this.page.getByTestId("EditableListItem").locator("label").waitFor({state: "visible"})
 		await this.page.getByTestId("EditableListItem").getByText(`${tag.tagName}`).waitFor()
-		// await this.waitForVisibility(this.page.getByTestId("EditableListItem").locator("label"))
 		await this.page.getByTestId("EditableListItem").locator("label").uncheck()
 
 		//Close the popup and save the technique
@@ -83,27 +77,11 @@ export class AddTagPopupPage {
 		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
 		await this.page.getByTestId("EditableListItem").getByText(`${tag.tagName}`).waitFor()
 
-		// //Wait for result to appear.
-		// await this.waitForVisibility(this.page.getByTestId("EditableListItem").locator("label"))
-
 		//Remove the tag from the database. 
 		await this.findComponents(tag, "#close-icon")
 		await this.page.getByRole("button", { name: "Ta bort" }).click()
 		await this.page.locator("#save-and-close-button").click()
 	}
-
-	// /**
-	//  * Makes sure everything is rendered by 
-	//  */
-	// async waitForVisibility(locator) {
-	// 	await locator.waitFor({ state: "visible" })
-	// 	for (let i = 0; i < 20; i++) {
-	// 		if (await locator.isVisible()) {
-	// 			return
-	// 		}
-	// 	}
-	// 	throw new Error("Element not enabled in time")
-	// }
 
 	/**
 	 * Finds the component to click within the EditableListItem.
