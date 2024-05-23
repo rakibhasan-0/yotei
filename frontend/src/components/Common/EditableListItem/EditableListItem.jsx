@@ -52,9 +52,9 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, ca
 	const [grayEdit, setGrayEdit] = useState(true)
 
 	const handleEdit = () => {
-    if(canEdit === undefined || canEdit === true) {
+		if(canEdit === undefined || canEdit === true) {
 		  setIsEditing(true)
-    }
+		}
 	}
 
 	const handleInputChange = (event) => {
@@ -84,13 +84,13 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, ca
 		setGrayEdit(true) // Reset
 	}
 
-  const handleBlur = (event) => {
-    if (event.target?.id === "edit-element") {
-      handleEditSubmit()
-    } else {
-      setIsEditing(false)
-    }
-  }
+	const handleBlur = (event) => {
+		if (event.target?.id === "edit-element") {
+			handleEditSubmit()
+		} else {
+			setIsEditing(false)
+		}
+	}
 
 
 	return (
@@ -124,7 +124,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, ca
 									{isEditing ?
 										<>
 											<Check onClick={() => {handleEditSubmit}} size="24px" id="accept-icon"
-                        key={"check-icon-" + id}
+												key={"check-icon-" + id}
 												style={grayEdit ?
 													{ color: "var(--gray)", cursor: "not-allowed", marginRight: "10px" } :
 													{ color: "var(--red-primary)", cursor: "pointer", marginRight: "10px" }}
