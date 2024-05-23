@@ -325,7 +325,11 @@ export default function DuringGrading() {
 						<div 
 							id={"next_technique"} 
 							onClick={() => {
-								goToNextTechnique()
+								if (currentTechniqueStep != techniqueNameList.length -1){
+									goToNextTechnique()									
+								}else{
+									gotoSummary()
+								}
 								scrollableContainerRef.current.scrollTop = 0}} 
 							className={styles.btnNextActivity}>
 							{<ArrowRight/>}
