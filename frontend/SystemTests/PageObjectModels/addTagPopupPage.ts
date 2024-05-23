@@ -3,8 +3,10 @@ import { TagComponent } from "../Types/systemTestsTypes"
 
 /**
  *  Tests related to addTagPopup, in this test the window is tested on a technique. 
- * 	Should work just fine on any other place where tags are used. 
- *  @author Team Durian (Group 3)
+ * 	Should work just fine on any other place where tags are used. If you want to use
+ *  these tests for another page, change the 'url' attribute below to navigate to 
+ *  whatever page you're testing. 
+ *  @author Team Durian (Group 3) Team Coconut (Group 4)
  *  @since 2024-05-22
  *  @version 1.0
  */
@@ -30,18 +32,17 @@ export class AddTagPopupPage {
 		await this.page.getByRole("button", { name: "Hantera tagg" }).click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
-		//await this.page.waitForTimeout(3000)
 		
 		//Add the tag. 
 		const tagAddButton = this.page.locator("#tag-add-button")
 		await tagAddButton.waitFor({ state: "visible" })
-		await this.waitForEnabled(tagAddButton)
+		// await this.waitForVisibility(tagAddButton)
 		await tagAddButton.click()
 
 		//Close the window and save the newly added tag.
 		const saveAndCloseButton = this.page.locator("#save-and-close-button")
 		await saveAndCloseButton.waitFor({ state: "visible" })
-		await this.waitForEnabled(saveAndCloseButton)
+		//await this.waitForVisibility(saveAndCloseButton)
 		await saveAndCloseButton.click()
 
 		//Save the technique so the newly added tag is saved with it. 
@@ -56,10 +57,10 @@ export class AddTagPopupPage {
 		await this.page.getByRole("button", { name: "Hantera tagg" }).click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
-		//await this.page.waitForTimeout(3000)
 
 		//Uncheck the tag.
-		await this.waitForEnabled(this.page.getByTestId("EditableListItem").locator("label"))
+		await this.page.getByTestId("EditableListItem").locator("label").waitFor({state: "visible"})
+		// await this.waitForVisibility(this.page.getByTestId("EditableListItem").locator("label"))
 		await this.page.getByTestId("EditableListItem").locator("label").uncheck()
 
 		//Close the popup and save the technique
@@ -73,8 +74,8 @@ export class AddTagPopupPage {
 		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
 		await this.page.getByTestId("EditableListItem").locator("label").waitFor({state: "visible"})
 
-		//Wait for result to appear.
-		await this.waitForEnabled(this.page.getByTestId("EditableListItem").locator("label"))
+		// //Wait for result to appear.
+		// await this.waitForVisibility(this.page.getByTestId("EditableListItem").locator("label"))
 
 		//Remove the tag from the database. 
 		await this.findComponents(tag, "#close-icon")
@@ -82,22 +83,23 @@ export class AddTagPopupPage {
 		await this.page.locator("#save-and-close-button").click()
 	}
 
-	/**
-	 * Makes sure everything is rendered. 
-	 */
-	async waitForEnabled(locator) {
-		await locator.waitFor({ state: "visible" })
-		for (let i = 0; i < 20; i++) {
-			if (await locator.isEnabled()) {
-				return
-			}
-			await this.page.waitForTimeout(100)
-		}
-		throw new Error("Element not enabled in time")
-	}
+	// /**
+	//  * Makes sure everything is rendered by 
+	//  */
+	// async waitForVisibility(locator) {
+	// 	await locator.waitFor({ state: "visible" })
+	// 	for (let i = 0; i < 20; i++) {
+	// 		if (await locator.isVisible()) {
+	// 			return
+	// 		}
+	// 	}
+	// 	throw new Error("Element not enabled in time")
+	// }
 
 	/**
-	 * Finds the component to click within the EditableListItem. 
+	 * Finds the component to click within the EditableListItem.
+	 * Component is located by searching for the name, then navigating
+	 * to it's parent components moving up the DOM hierarchy.
 	 * @param tag The tag that exist in the EditableListItem. 
 	 * @param name The name of the component to be clicked. 
 	 */
