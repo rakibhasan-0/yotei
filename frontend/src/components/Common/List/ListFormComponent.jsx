@@ -87,8 +87,8 @@ export default function ListFormComponent({ callback, state, listCreateInfoDispa
 
 	function confirmGoBack() {
 		(isEdit?
-		localStorage.removeItem("listCreateInfoEdit"): // Clear local storage as confirmed
-		localStorage.removeItem("listCreateInfoCreate"))
+			localStorage.removeItem("listCreateInfoEdit"): // Clear local storage as confirmed
+			localStorage.removeItem("listCreateInfoCreate"))
 		if (state?.fromSession && !state?.fromCreate) {
 			navigate(`/session/edit/${state.session.sessionId}`, { replace: true, state })
 		} else if (state?.fromCreate) {
