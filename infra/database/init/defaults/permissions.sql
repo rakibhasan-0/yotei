@@ -15,9 +15,9 @@ INSERT INTO permission (permission_name, permission_desc) VALUES ('plan_all', 'T
 INSERT INTO permission (permission_name, permission_desc) VALUES ('workout_own', 'Tillåtelse att skapa, redigera och radera sina egna pass.');
 INSERT INTO permission (permission_name, permission_desc) VALUES ('workout_all', 'Tillåtelse att skapa pass samt redigera och radera pass som de kan nå.');
 
--- Tekniker och övningar (Activity)
-INSERT INTO permission (permission_name, permission_desc) VALUES ('activity_own', 'Tillåtelse att skapa, redigera och radera sina egna tekniker och övningar.');
-INSERT INTO permission (permission_name, permission_desc) VALUES ('activity_all', 'Tillåtelse att skapa tekniker och övningar samt redigera och radera tekniker och övningar som de kan nå.');
+-- Tekniker och övningar (Techniques and exercises)
+INSERT INTO permission (permission_name, permission_desc) VALUES ('technique_exercise_own', 'Tillåtelse att skapa, redigera och radera sina egna tekniker och övningar.');
+INSERT INTO permission (permission_name, permission_desc) VALUES ('technique_exercise_all', 'Tillåtelse att skapa tekniker och övningar samt redigera och radera tekniker och övningar som de kan nå.');
 
 -- Gradering (Grading)
 INSERT INTO permission (permission_name, permission_desc) VALUES ('grading_own', 'Tillåtelse att skapa, redigera och radera sina egna graderingar.');
