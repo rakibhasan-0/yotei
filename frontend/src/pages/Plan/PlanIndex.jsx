@@ -294,7 +294,7 @@ export default function PlanIndex() {
 			</div>}
 
 			{
-				isAdminUser(user) || canCreateSessions(user) ? 
+				(isAdminUser(user) || canCreateSessions(user)) ? 
 					<RoundButton linkTo={"/session/create"}>
 						<Plus />
 					</RoundButton>

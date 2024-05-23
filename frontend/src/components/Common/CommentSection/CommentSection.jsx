@@ -52,7 +52,7 @@ export default function CommentSection({ id, userId, comments, onDelete }) {
 				
 					</div>
 					<p className={`mt-2 ${styles.text}`} style={{whiteSpace: "pre-line"}}>{comment.commentText}</p>
-					{isAdminUser(context) || canDeleteComment(context, comment.userId) &&
+					{(isAdminUser(context) || canDeleteComment(context, comment.userId)) &&
 					<div className="d-flex align-items-end flex-column">
 						<Trash
 							size="24px"

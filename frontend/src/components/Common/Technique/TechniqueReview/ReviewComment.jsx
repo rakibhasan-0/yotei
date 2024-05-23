@@ -151,7 +151,7 @@ export default function ReviewComponent({comment, onDelete, token, getTodaysDate
 							}
 						</div>
 					</div>
-					{(isAdminUser(context) || userId == comment.user_id) &&
+					{(isAdminUser(context) || userId === comment.user_id) &&
 					<div className="d-flex align-items-center justify-content-end">
 						{editMode ?
 							<>
@@ -164,13 +164,14 @@ export default function ReviewComponent({comment, onDelete, token, getTodaysDate
 							</>
 							:
 							<div style={{marginTop:"10px"}}>
-								{userId === comment.user_id &&
+								{(userId === comment.user_id) &&
 									<Pencil
 										size="24px"
 										color="var(--red-primary)"
 										style={{cursor: "pointer", marginRight: "20px" }}
 										onClick={() => setEditMode(!editMode)}
 									/>
+									//TODO is this permission set correctly? (Should admin also see this?)
 								}
 								<Trash
 									size="24px"
