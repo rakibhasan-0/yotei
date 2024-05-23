@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react"
 import { useCookies } from "react-cookie"
 import { Tab, Tabs } from "react-bootstrap"
-import { setError as setErrorToast, setSuccess as setSuccessToast } from "../../utils"
+import { isAdminUser, setError as setErrorToast, setSuccess as setSuccessToast } from "../../utils"
 import ActivityList from "../../components/Activity/ActivityList"
 import Button from "../../components/Common/Button/Button"
 import SearchBar from "../../components/Common/SearchBar/SearchBar"
@@ -21,7 +21,7 @@ import { Plus } from "react-bootstrap-icons"
  * @author Chimera, Team Mango (Group 4), Team Pomegranate(Group 1), Team Durian (Group 3), Team Tomato (6), Team Kiwi (Group 2)
  * @since 2024-05-16
  * @version 3.0
- * @updated 2024-05-22
+ * @updated 2024-05-23
  *
  * @returns a page for managing the user's account
  */
@@ -245,7 +245,7 @@ export default function Profile() {
 	async function fetchingList() {
 		const args = {
 			hidden: false,
-			isAuthor: true,
+			isAuthor: isAdminUser(context) ? false : true,
 			text: searchListText,
 			isShared: false,
 		}
