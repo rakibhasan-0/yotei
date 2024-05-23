@@ -663,6 +663,7 @@ export default function GradingBefore() {
 								numberOfCheckedExaminees={checkedExamineeIds.length}
 								showTrash={Boolean(!examinee.isLocked)}
 								showX={false}
+								showLock={Boolean(examinee.isLocked)}
 							/>
 
 						</div>

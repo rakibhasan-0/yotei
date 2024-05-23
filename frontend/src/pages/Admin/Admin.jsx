@@ -10,7 +10,7 @@ import RoleCard from "../../components/Common/RoleCard/RoleListItem"
 import RoundButton from "../../components/Common/RoundButton/RoundButton"
 import style from "./Admin.module.css"
 import { AccountContext } from "../../context"
-import { isAdmin } from "../../utils"
+import { isAdminUser } from "../../utils"
 import { Tab, Tabs } from "react-bootstrap"
 import { Plus } from "react-bootstrap-icons"
 import { setError as setErrorToast } from "../../utils"
@@ -24,6 +24,7 @@ import ErrorLogsDisplay from "../../components/ErrorLogsDisplay/ErrorLogsDisplay
  *  @since 2023-05-23
  *  @version 2.0
  *  @returns A page for the administrative functions.
+ *  Updated Team Mango 2024-05-22: changed check isAdmin to new check.
  */
 export default function Admin() {
 	const context = useContext(AccountContext)
@@ -59,7 +60,7 @@ export default function Admin() {
 		window.localStorage.setItem("active-tab", key)
 	}, [key]) 
 
-	if(!isAdmin(context)){
+	if(!isAdminUser(context)){
 		window.location.replace("/404")
 		return null
 	}	

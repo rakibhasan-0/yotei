@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import se.umu.cs.pvt.activitylist.ActivityListEntryRepository;
 import se.umu.cs.pvt.search.builders.SearchTechniquesDBBuilder;
 import se.umu.cs.pvt.search.interfaces.responses.ExerciseSearchResponse;
 import se.umu.cs.pvt.search.interfaces.responses.TagSearchResponse;
@@ -46,6 +48,9 @@ public class SearchControllerTest {
     private UserShortRepository userShortRepository;
 
     @MockBean
+    private ActivityListEntryRepository activityListEntryRepository;
+
+    @MockBean
     private JWTUtil jwtUtil;
 
     @Autowired
@@ -55,7 +60,7 @@ public class SearchControllerTest {
     void search_techniques_should_return_ok() {
         DatabaseQuery query = new SearchTechniquesDBBuilder(new SearchTechniquesParams(new HashMap<>())).build();
         when(searchRepository.getTechniquesFromCustomQuery(query.getQuery())).thenReturn(List.of());
-        SearchController searchController = new SearchController(searchRepository, userShortRepository);
+        SearchController searchController = new SearchController(searchRepository, userShortRepository, activityListEntryRepository);
 
         ResponseEntity<SearchResponse<TechniqueSearchResponse>> response = searchController.searchTechniques(new HashMap<>());
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
