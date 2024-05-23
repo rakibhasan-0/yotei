@@ -9,7 +9,7 @@ import RoundButton from "../RoundButton/RoundButton"
 import { ChevronRight } from "react-bootstrap-icons"
 import MiniPopup from "../MiniPopup/MiniPopup.jsx"
 import TagUsagePopup from "./TagUsagePopup.jsx"
-import EditableListItem from "../EditableListItem/EditableListItem.jsx"
+import EditableListTagItem from "../EditableListTagItem/EditableListTagItem.jsx"
 import ConfirmPopup from "../ConfirmPopup/ConfirmPopup.jsx"
 import Divider from "../../Common/Divider/Divider.jsx"
 import Spinner from "../../../components/Common/Spinner/Spinner.jsx"
@@ -37,10 +37,10 @@ import Spinner from "../../../components/Common/Spinner/Spinner.jsx"
  *		)
  *
  * @author Team Minotaur, 
- * @author Team Mango (Group 4), 
+ * @author Team Mango (Group 4)
  * @author Team Durian (Group 3) (2024-05-17)
  * @version 2.0
- * @since 2024-04-22
+ * @since 2024-04-23
  */
 export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAddedTags, setNewAddedTags, setShowConfirmPopup, showConfirmPopup}) {
 	const sortOptions = [
@@ -327,7 +327,7 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 				{suggested.map((tag, index) => (
 					<>
 						{index === dividerIndex && <Divider key="divider" title={""} option={"h2_left"} />}
-						<EditableListItem
+						<EditableListTagItem
 							item={tag.name}
 							key={tag.id}
 							id={tag.id}
