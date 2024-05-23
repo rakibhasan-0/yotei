@@ -65,14 +65,14 @@ function TechniqueCard({ technique, checkBox, id, popUp, techniqueInProtocol}) {
 			//If the technique count is 0, the card will be transparent otherwise
 			//it will be normal, this is mostly for the statistics page
 			className={`${styles["technique-card"]} ${
-				technique.count === 0 ? styles["transparent-card"] : ""
+				(technique.count === 0 && !isOpen) ? styles["transparent-card"] : ""
 			}`}
 			id={id} 
 			onClick={setTechnique}>
 			
 			
 			<PopupMini title = {technique.name} id = "pop-up-id-tech" isOpen = {isOpen} setIsOpen = {setIsOpen} isNested = {true}> 
-				<TechniqueDetailMini id = {technique.techniqueID}>
+				<TechniqueDetailMini id = {technique.techniqueID ? technique.techniqueID : technique.activity_id}>
 				</TechniqueDetailMini>
 			</PopupMini>
 
