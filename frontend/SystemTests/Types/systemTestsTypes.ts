@@ -67,3 +67,12 @@ export type Workout = {
   hasAccess?: Account[],
   tags?: string[]
 }
+
+// Data related to creating a group.
+export type Group = {
+  name?: string,
+  startDate?: string,
+  endDate?: string,
+  days?: string,
+  time?: string,
+}
