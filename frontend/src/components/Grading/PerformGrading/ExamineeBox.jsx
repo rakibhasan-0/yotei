@@ -85,6 +85,9 @@ export default function ExamineeBox({
 		handleExistingInput()
 	}, [techniqueName])
 
+	/**
+     * Discards the current personal comment.
+     */
 	const onDiscardPersonalComment = async () => {
 		if (!hasComment) {
 			setCommentText("")
@@ -92,6 +95,10 @@ export default function ExamineeBox({
 		setAddComment(false)
 	}
 
+	/**
+     * Toggles the visibility of the personal comment input.
+     * @param {boolean} show - Whether to show or hide the comment input.
+     */
 	const toggleAddPersonalComment = (show) => {
 		if (!show && commentText !== initialCommentText) { 
 			setShowDiscardComment(true)
@@ -103,6 +110,9 @@ export default function ExamineeBox({
 		}
 	}
 
+	/**
+     * Updates an existing comment via an API call.
+     */
 	async function updateComment() {
 		const response = await fetch("/api/examination/comment", {
 			method: "PUT",
@@ -152,6 +162,9 @@ export default function ExamineeBox({
 		setExistingComment(true)
 	}
 
+	/**
+     * Adds or updates a personal comment based on its existence.
+     */
 	const onAddPersonalComment = async () => {
 		if (!commentText || !commentText.trim() || commentText.length === 0) {
 			setCommentError("Kommentaren får inte vara tom")
@@ -171,7 +184,10 @@ export default function ExamineeBox({
 			setErrorToast("Ett fel uppstod vid kommunikation med servern.")
 		}
 	}
-
+	
+	/**
+     * Handles the retrieval of existing input data (comments) for the current examinee.
+     */
 	const handleExistingInput = async () => {
 		try {
 			const response = await fetch(`/api/examination/comment/examinee/${examineeId}?technique_name=${techniqueName}`, {
