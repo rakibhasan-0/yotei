@@ -368,7 +368,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	return (
 		<div id={id}>
 			<Modal.Body style={{ padding: "0" }}>
-				<Tabs activeKey={key} onSelect={(k) => setKey(k)} className={style.tabs}>
+				<Tabs  activeKey={key} onSelect={(k) => setKey(k)} className={style.tabs}>
 					<Tab eventKey="technique" title="Tekniker" tabClassName={`nav-link ${style.tab}`}>
 						<div className={style.searchBar}>
 							<SearchBar
@@ -409,6 +409,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 										}
 										technique={technique}
 										key={key}
+										popUp={true}
 									/>
 								))}
 							</ InfiniteScrollComponent>)
@@ -451,6 +452,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 										item={exercise.name}
 										key={key}
 										index={key}
+										popUp={true}
 									/>
 								))}
 							</InfiniteScrollComponent>

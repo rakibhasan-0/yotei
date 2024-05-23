@@ -9,7 +9,7 @@ import ExamineeBox from "../../../components/Grading/PerformGrading/ExamineeBox"
 import styles from "./DuringGrading.module.css"
 import { ArrowRight, ArrowLeft } from "react-bootstrap-icons"
 import { useParams, useNavigate } from "react-router-dom"
-import {setError as setErrorToast} from "../../../utils" 
+import {canHandleGradings, isAdminUser, setError as setErrorToast} from "../../../utils" 
 
 import { AccountContext } from "../../../context"
 import Spinner from "../../../components/Common/Spinner/Spinner"
@@ -85,7 +85,7 @@ function getCategoryIndices(dataArray) {
 /**
  * Main function that is rendered for during grading
  * 
- *  @author Team Apelsin (2024-05-13)
+ *  @author Team Apelsin (2024-05-13) Team Mango (2024-05-23)
  *  @version 2.0
  */
 export default function DuringGrading() {
@@ -225,6 +225,12 @@ export default function DuringGrading() {
 				const grading = await fetchGrading()
 				const protocol = await fetchProtocol(grading)
 				const parsedProtocol = parseProtocol(protocol)
+				const getSteps = await fetch(`/api/examination/grading/${gradingId}`, { headers: { "token": token } })
+				if (getSteps.status === 204) {
+					//return
+				}
+				const steps = await getSteps.json()
+				setCurrentTechniqueStep(steps.techniqueStepNum)
 				updateState(parsedProtocol)
 			} catch (error) {
 				handleFetchError(error)
@@ -239,6 +245,11 @@ export default function DuringGrading() {
 			fetchTechniqueResults(techniqueNameList[currentTechniqueStep].technique.text, token) 
 		}
 	}, [currentTechniqueStep])
+
+	if (!isAdminUser(context) && !canHandleGradings(context)) {
+		window.location.replace("/404")
+		return null
+	}
 
 
 	// Will handle the api call that will update the database with the result. 
@@ -479,7 +490,7 @@ export default function DuringGrading() {
 		])
 		updateStep(grading_data)
 
-
+		
 		navigate(`/grading/${gradingId}/3`)
 	}
 
@@ -723,7 +734,10 @@ export default function DuringGrading() {
 		setTechniqueNameList(techniqueNameList)
 		setCategoryIndices(categoryIndexMap)
 		// TODO: Set the index to the one inside the technique_step when it is available
-		setCurrentTechniqueStep(0)
+		
+		/*if(currentTechniqueStep === undefined){
+			setCurrentTechniqueStep(0)
+		}*/
 	}
 
 	/**

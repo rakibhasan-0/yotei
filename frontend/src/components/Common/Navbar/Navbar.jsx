@@ -19,7 +19,7 @@ import { AccountContext } from "../../../context"
  *     	merged techniques and exercise buttons, 
  * 		this new button routs to activity page.
  * 
- * Update 2024-05-22 Team Mango: changed check for admin page according to new permissions.  
+ * Update 2024-05-22 Team Mango: changed check for admin page according to new permissions.
  *
  * @author Team Medusa & Team Cyclops & Team Tomato & Team Coconut & Team Kiwi & Team Mango
  * @version 4.0
@@ -61,6 +61,10 @@ function Navbar({ testId }) {
 						<h1 className={styles.commonNavbarButton}>Planering</h1>
 					</Button>
 
+					<Button width={"100%"} onClick={() => navigateAndClose("/groups",  {state: {clearSearchText: true}})}>
+						<h1 className={styles.commonNavbarButton}>Grupper</h1>
+					</Button>
+
 					<Button width={"100%"} onClick={() => navigateAndClose("/workout")}>
 						<h1 className={styles.commonNavbarButton}>Pass</h1>
 					</Button>
@@ -73,7 +77,7 @@ function Navbar({ testId }) {
 						<h1 className={styles.commonNavbarButton}>Grupper</h1>
 					</Button>
 
-					{isAdminUser(context) || canHandleGradings(context) ?
+					{(isAdminUser(context) || canHandleGradings(context)) ?
 						<Button width={"100%"} onClick={() => navigateAndClose("/grading")}>
 							<h1 className={styles.commonNavbarButton}>Gradering</h1>
 						</Button>
