@@ -237,7 +237,7 @@ export default function Statistics() {
 					))
 				)}
 			</div>
-
+			<div style={{ height: "70px" }}></div>
 			<div className={style.buttonContainer}>
 				<Button
 					width="25%"
