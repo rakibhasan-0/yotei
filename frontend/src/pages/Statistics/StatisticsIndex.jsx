@@ -241,6 +241,7 @@ export default function Statistics() {
 							technique={activity}
 							checkBox={false}
 							id={activity.activity_id}
+							popUp={true}
 						/>
 
 					))
