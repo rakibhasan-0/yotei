@@ -11,7 +11,7 @@ import {toast} from "react-toastify"
 import WorkoutListItem from "../../components/Workout/WorkoutListItem"
 import ErrorStateSearch from "../../components/Common/ErrorState/ErrorStateSearch.jsx"
 import Spinner from "../../components/Common/Spinner/Spinner.jsx"
-import {setError as setErrorToast} from "../../utils"
+import {isAdminUser, setError as setErrorToast} from "../../utils"
 import { useCookies } from "react-cookie"
 import { canCreateWorkouts } from "../../utils"
 
@@ -125,7 +125,7 @@ export default function WorkoutIndex() {
 			<br/>
 			
 			{
-				canCreateWorkouts(context) ?
+				isAdminUser(context) || canCreateWorkouts(context) ?
 					<RoundButton linkTo="/workout/create" id="CreateWorkoutButton">
 						<Plus />
 					</RoundButton>
