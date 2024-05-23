@@ -263,25 +263,25 @@ export default function TechniqueInfoPanel({
 				/>
 				{commentError && <p className={styles.err}>{commentError}</p>}
 				<div className={styles.presetCommentContainer}>
-                    <Button 
-                        outlined={true} 
-                        onClick={() => {setCommentText(commentText + " " + "Böj på benen!"); 
-                        setCommentError(false)}}>
-                            <p className={styles.presetCommentText}>Böj på benen!</p>
-                    </Button>
-                    <Button 
-                        outlined={true} 
-                        onClick={() => {setCommentText(commentText + " " + "Balansbrytning!"); 
-                        setCommentError(false)}}>
-                            <p className={styles.presetCommentText}>Balansbrytning!</p>
-                    </Button>
-                    <Button 
-                        outlined={true} 
-                        onClick={() => {setCommentText(commentText + " " + "Kraftcirkeln!"); 
-                        setCommentError(false)}}>
-                            <p className={styles.presetCommentText}>Kraftcirkeln!</p>
-                    </Button>
-                </div>
+					<Button 
+						outlined={true} 
+						onClick={() => {setCommentText(commentText + " " + "Böj på benen!") 
+							setCommentError(false)}}>
+						<p className={styles.presetCommentText}>Böj på benen!</p>
+					</Button>
+					<Button 
+						outlined={true} 
+						onClick={() => {setCommentText(commentText + " " + "Balansbrytning!") 
+							setCommentError(false)}}>
+						<p className={styles.presetCommentText}>Balansbrytning!</p>
+					</Button>
+					<Button 
+						outlined={true} 
+						onClick={() => {setCommentText(commentText + " " + "Kraftcirkeln!") 
+							setCommentError(false)}}>
+						<p className={styles.presetCommentText}>Kraftcirkeln!</p>
+					</Button>
+				</div>
 				<Button onClick={() => onAddGroupComment()}>Lägg till</Button>
 			</Popup>
 			<ConfirmPopup
