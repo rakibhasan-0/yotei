@@ -44,7 +44,7 @@ import GradingCheckBox from "../CheckBox/GradingCheckBox"
  * @since 2024-05-06
  */
 
-export default function EditableListItem({ item, id, index, onRemove, onEdit, onCheck, showCheckbox, checked, validateInput, grayTrash, showTrash, showX, showPencil, numberOfCheckedExaminees, showLock}) {
+export default function EditableListItem({ item, id, index, onRemove, onEdit, canEdit, onCheck, showCheckbox, checked, validateInput, grayTrash, showTrash, showX, showPencil, numberOfCheckedExaminees, showLock}) {
 
 	const [isEditing, setIsEditing] = useState(false) // State to manage edit mode
 	const [editedText, setEditedText] = useState(item) // State to store edited text
@@ -53,7 +53,9 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 	const [grayEdit, setGrayEdit] = useState(true)
 
 	const handleEdit = () => {
-		setIsEditing(true)
+		if(canEdit === undefined || canEdit === true) {
+			setIsEditing(true)
+		}
 	}
 
 	const handleInputChange = (event) => {
@@ -84,10 +86,11 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 	}
 
 	const handleBlur = (event) => {
-		if (event.relatedTarget?.id === "accept-icon") {
+		if (event.target?.id === "edit-element") {
 			handleEditSubmit()
+		} else {
+			setIsEditing(false)
 		}
-		setIsEditing(false)
 	}
 
 	const shouldShowCheckbox = numberOfCheckedExaminees <= 2 && showCheckbox
@@ -123,7 +126,8 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 								<div className={styles["flex-shrink-0"]} style={{ display: "flex", alignItems: "center" }}>
 									{isEditing ?
 										<>
-											<Check onClick={handleEditSubmit} size="24px" id="accept-icon"
+											<Check onClick={() => {handleEditSubmit}} size="24px" id="accept-icon"
+												key={"check-icon-" + id}
 												style={grayEdit ?
 													{ color: "var(--gray)", cursor: "not-allowed", marginRight: "10px" } :
 													{ color: "var(--red-primary)", cursor: "pointer", marginRight: "10px" }}
@@ -155,7 +159,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 											)}
 											{showLock && (
 												<LockFill
-													size="24px" style={{ color: "var(--red-primary)"}}
+													size="20px" style={{ color: "var(--red-primary)"}}
 												/>
 											)}
 										</>
