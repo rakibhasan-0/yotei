@@ -1,6 +1,6 @@
 import { Trash } from "react-bootstrap-icons"
 import styles from "./CommentSection.module.css"
-import { canDeleteComment } from "../../../utils"
+import { canDeleteComment, isAdminUser } from "../../../utils"
 import { useContext} from "react"
 import { AccountContext } from "../../../context"
 
@@ -52,7 +52,7 @@ export default function CommentSection({ id, userId, comments, onDelete }) {
 				
 					</div>
 					<p className={`mt-2 ${styles.text}`} style={{whiteSpace: "pre-line"}}>{comment.commentText}</p>
-					{ canDeleteComment(context, comment.userId) &&
+					{isAdminUser(context) || canDeleteComment(context, comment.userId) &&
 					<div className="d-flex align-items-end flex-column">
 						<Trash
 							size="24px"
