@@ -36,7 +36,6 @@ export default function ListInfo({ id }) {
 	const [showPopup, setShowPopup] = useState(false)
 	const [errorStateMsg, setErrorStateMsg] = useState("")
 	const [loading, setLoading] = useState(true)
-	const { userId } = useContext(AccountContext)
 	const [activityListData, setActivityListData] = useState()
 	const { activityListId } = useParams()
 
@@ -79,7 +78,7 @@ export default function ListInfo({ id }) {
 		fetchData()
 	}, [])
 
-	function getListInfoContainer() {
+	const ListInfoContainer = () => {
 		return (
 			<>
 				<div className="container px-0">
@@ -91,7 +90,7 @@ export default function ListInfo({ id }) {
 						<div className="d-flex justify-content-end align-items-center">
 							<div className={styles.clickIcon}>{/*<PrintButton listData={activityListData} />*/}</div>
 
-							{(context.userId == activityListData.author || isAdminUser(context)) && (
+							{(context.userId == activityListData.author.userId || isAdminUser(context)) && (
 								<>
 									<Link
 										className="ml-3"
@@ -123,7 +122,7 @@ export default function ListInfo({ id }) {
 							</div>
 							<div className={styles.listDetailColumnItem} style={{ paddingLeft: "37px" }}>
 								<h2 className="font-weight-bold mb-0">Författare</h2>
-								{<p className="mb-0">{activityListData.author}</p>}
+								{<p className="mb-0">{activityListData.author.username}</p>}
 							</div>
 						</div>
 						<div className="d-flex" id="no-print">
@@ -142,7 +141,7 @@ export default function ListInfo({ id }) {
 		)
 	}
 
-	function getListSharedUsersContainer() {
+	const SharedUsersContainer = () => {
 		return (
 			<div className="container mt-3">
 				<div className="row">
@@ -184,11 +183,11 @@ export default function ListInfo({ id }) {
 					onClick={async () => deleteList(activityListData.id, context, navigate, setShowPopup)}
 				/>
 			}
-			{getListInfoContainer(activityListData.id, context, userId, activityListData.users)}
+			<ListInfoContainer />
 
 			<h2 className="font-weight-bold mb-0 mt-5 text-left">Aktiviteter</h2>
 			<SavedActivityList activities={activityListData.activities} />
-			{activityListData.users.length > 0 && getListSharedUsersContainer()}
+			{activityListData.users.length > 0 && <SharedUsersContainer />}
 			<div className="d-flex row justify-content-center">
 				<div className="d-flex col mb-3 mt-3 justify-content-start">
 					<Button onClick={() => navigate(-1)} outlined={true}>
