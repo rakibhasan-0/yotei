@@ -48,6 +48,13 @@ export type Technique = {
   mediaLink?: string
 }
 
+
+//Tag
+export type TagComponent = {
+  tagName?: string, 
+  tagId?: number
+}
+
 // Exercise
 export type Exercise = {
   name?: string,

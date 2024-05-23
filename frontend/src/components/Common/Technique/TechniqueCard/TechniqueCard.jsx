@@ -1,6 +1,10 @@
 import { ChevronDown } from "react-bootstrap-icons"
 import { Link, useNavigate } from "react-router-dom"
 import styles from "./TechniqueCard.module.css"
+import PopupMini from "../../Popup/PopupMini"
+import TechniqueDetailMini from "../../../../pages/Activity/Technique/TechniqueDetail/TechniqueDetailMini"
+//import ExerciseDetailMini from "../../../../pages/Activity/Exercise/ExerciseDetailMini"
+import { useState } from "react"
 
 /**
  * Technique card component.
@@ -11,50 +15,66 @@ import styles from "./TechniqueCard.module.css"
  *		checkBox (Component) : If you want a checkbox to be displayed, send it as a prop.
  *		id: Id used for testing.
  *
- * @author Medusa, Coconut, Tomato
- * @version 2.2
+ * @author Medusa, Coconut, Tomato, Team Kiwi
+ * @version 2.3
  * @since 2024-05-16
  *
  * @update Converted to css module 2024-04-19, Hannes (group 1)
  * @update Fixed so that techniques that are in lists get the correct path, 2024-05-17, Team Tomato (Group 6)
  * @update Added inverted belt category. 2024-05-20, Team Kiwi (Teodor Bäckström)
+ * @update Added a popUp window for when popUp is true, fixed so chevron link uses handleClick (Team Kiwi) 2024-05-23
  */
-function TechniqueCard({ technique, checkBox, id}) {
+function TechniqueCard({ technique, checkBox, id, popUp, techniqueInProtocol}) {
+
 	const navigate = useNavigate()
+	const [isOpen, setIsOpen] = useState(false)
 	
 	// Fixes the path regardless if the technique is in a list or not.
 	const path = (technique.path === undefined) ? technique.techniqueID : technique.path
 
 	const handleClick = () => {
+		
 		setTechnique()
 
-		if (technique.activity_id && technique.type === "technique") {
-			navigate("/technique/" + technique.activity_id)
-		} else if (technique.type === "technique" && technique.id) { 
-			//This is only entered through the grading protocol statistics popup. 
-			//TODO : Change technique.id to technique.activity_id (Problem is because of the api)
-			navigate("/technique/" + technique.id)
-		} else if (technique.type === "exercise" && technique.activity_id) {
-			navigate("/exercise/exercise_page/" + technique.activity_id)
-		} else {
-			navigate("/technique/" + path)
+		if (!popUp){
+			if (technique.activity_id && technique.type === "technique") {
+				navigate("/technique/" + technique.activity_id)
+			} else if (technique.type === "technique" && technique.id) { 
+				//This is only entered through the grading protocol statistics popup. 
+				//TODO : Change technique.id to technique.activity_id (Problem is because of the api)
+				navigate("/technique/" + technique.id)
+			} else if (technique.type === "exercise" && technique.activity_id) {
+				navigate("/exercise/exercise_page/" + technique.activity_id)
+			} else {
+				navigate("/technique/" + path)
+			}
 		}
+		else {
+			setIsOpen(true)
+		}
+		
 	}
 
 	const setTechnique = () =>{
 		localStorage.setItem("stored_technique", id)
 	}
 
-
 	return (
 		<div 
+
 			//If the technique count is 0, the card will be transparent otherwise
 			//it will be normal, this is mostly for the statistics page
 			className={`${styles["technique-card"]} ${
-				technique.count === 0 ? styles["transparent-card"] : ""
+				(technique.count === 0 && !isOpen) ? styles["transparent-card"] : ""
 			}`}
 			id={id} 
 			onClick={setTechnique}>
+			
+			<PopupMini title = {technique.name} id = "pop-up-id-tech" isOpen = {isOpen} setIsOpen = {setIsOpen} isNested = {true}> 
+				<TechniqueDetailMini id = {technique.techniqueID ? technique.techniqueID : technique.activity_id}>
+				</TechniqueDetailMini>
+			</PopupMini>
+
 			{technique.type === "exercise" ? null : constructColor(technique)}
 
 			<div className={styles["technique-info-container"]}>
@@ -62,14 +82,14 @@ function TechniqueCard({ technique, checkBox, id}) {
 
 				<div className={styles["technique-name-container"]}>
 					<Link onClick={handleClick}>
-						<h5 className={styles["technique-name"]}>{technique.name}</h5>
+						<h5 className={technique.new || !techniqueInProtocol ? styles["technique-name"] : styles["technique-name-old"]}>{technique.name}</h5>
 					</Link>
 				</div>
 
 				{/* if the technique object has count attribute then we will not render ChevronDown sign */}
 				<div className={styles["technique-arrow-container"]}>
 					{technique.count || technique.count == 0 ? null : (
-						<Link to={"/technique/" + technique.techniqueID}>
+						<Link onClick = {handleClick}>
 							<ChevronDown />
 						</Link>
 					)}

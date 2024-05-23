@@ -12,7 +12,7 @@ import { useCookies } from "react-cookie"
 import Review from "../../../components/Workout/WorkoutReview/ReviewFormComponent.jsx"
 import ErrorState from "../../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../../components/Common/Spinner/Spinner"
-import { HTTP_STATUS_CODES, setError, setSuccess, canEditWorkout } from "../../../utils"
+import { HTTP_STATUS_CODES, setError, setSuccess, canEditWorkout, isAdminUser } from "../../../utils"
 import PrintButton from "../../../components/Common/PrintButton/PrintButton"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
 
@@ -194,20 +194,14 @@ async function deleteWorkout(workoutId, context, handleNavigation, setShowPopup)
 
 function getTagContainer(workoutData) {
 	return (
-		<div className="container">
-			<div className="row">
-				<h2>Taggar</h2>
+		<>
+			<h2 style={{ fontWeight: "bold", display: "flex", flexDirection: "row", alignItems: "left"}}>Taggar</h2>
+			<div style={{ display: "flex", flexWrap: "wrap", marginBottom: "4px", gap: "10px" }}>
+				{workoutData.tags.map((tag, index) => (
+					<Tag key={index} tagType={"default"} text={tag.name} />
+				))}
 			</div>
-			<div className="row">
-				{workoutData.tags.map((tag, index) => {
-					return (
-						<div key={"tag" + index} className="mr-2">
-							<Tag tagType={"default"} text={tag.name}></Tag>
-						</div>
-					)
-				})}
-			</div>
-		</div>
+		</>
 	)
 }
 
@@ -244,7 +238,7 @@ function getWorkoutInfoContainer(workoutData, setShowPopup, context, workoutUser
 						<div className={styles.clickIcon}>
 							<PrintButton workoutData={workoutData} />
 						</div>
-						{ canEditWorkout(context, workoutData.author.user_id) &&
+						{(isAdminUser(context) || canEditWorkout(context, workoutData.author.user_id)) &&
 						<>
 							<Link className="ml-3" state={{workout: workoutData, workoutId: workoutId, users: workoutUsers}} to={"/workout/edit/" + workoutId}>
 								<Pencil

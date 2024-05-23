@@ -118,6 +118,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 	const [cookies, setCookies] = useCookies(["exercise-filter"])
 	const [visibleExercises, setVisibleExercises] = useState([])
 	const { userId: currentUserId } = useContext(AccountContext)
+	const [listCheckboxStatus, setListCheckboxStatus] = useState({})
 
 	const sortOptionsLists = [
 		{ 
@@ -158,6 +159,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 	]
 	const [sortLists, setSortLists] = useState(sortOptionsLists[0])
 	const [filterCount, setFilterCount] = useState(0)
+	const [listToToggle, setListToToggle] = useState(null)
 
 
 	const searchCount = useRef(0)
@@ -219,6 +221,26 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 	useEffect(() => {
 		sessionStorage.setItem("searchListText", searchListText)
 	}, [searchListText])
+
+
+	useEffect(() => {
+		if (listCheckboxStatus) return 
+
+		const initialCheckboxStatus = {}
+		lists.forEach(list => {
+			initialCheckboxStatus[list.id] = false
+		})
+		setListCheckboxStatus(initialCheckboxStatus)
+	}, [lists])
+
+
+	// This calls the onAllActivitiesToggle function when the listContents state is updated and runs only when the checkbox to toggle all activities in a list is pressed.
+	useEffect(() => {
+		if (listToToggle) {
+			onAllActivitiesToggle(listToToggle)
+			setListToToggle(null) // Reset listToToggle
+		}
+	}, [listContents])
 
 
 	function setJSONSession(key, value) {
@@ -368,6 +390,22 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.TOGGLE_CHECKED_ACTIVITY, payload: activity })
 	}
 
+	const onActivityToggleAllTrue = (listId) => {
+		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CHECK_ALL_ACTIVITIES, payload: listContents[listId] })
+	}
+
+	const onActivityToggleAllFalse = (listId) => {
+		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.UNCHECK_ALL_ACTIVITIES, payload: listContents[listId] })
+	}
+
+	const onAllActivitiesToggle = (listId) => {
+		if (!listCheckboxStatus[listId]) {
+			onActivityToggleAllFalse(listId)
+		} else {
+			onActivityToggleAllTrue(listId)
+		}
+	}
+
 	/**
 	 * Fetches techniques from the backend, either from cache or by a new API-call. 
 	 * But first, the selected belts are filtered and parsed to be used in the request. 
@@ -507,7 +545,8 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 	 * Fetches the content from a list given the ID of the same list. 
 	 * @param {Integer} listID 
 	 */
-	function fetchingListContent(listID) {
+	function fetchingListContent(listID, callback) {
+		let index = 0
 		const args = {
 			id: listID
 		}
@@ -516,9 +555,10 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 			if (result.error) return
 
 			const listContent = result.activities.map(item => {
+				index += 1
 				if (item.type === "technique") {
 					return {
-						techniqueID: listID + "-technique-" + item.id,
+						techniqueID: listID + "-" + index + "-technique-" + item.id,
 						name: item.name,
 						type: "technique",
 						description: item.description,
@@ -549,6 +589,10 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 			}))
 
 			setListUpdate(listUpdate + 1)
+			
+			if (callback) {
+				callback()
+			}
 		})
 	}
 
@@ -619,6 +663,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 										}
 										technique={technique}
 										key={key}
+										popUp={true}
 									/>
 								))}
 							</ InfiniteScrollComponent>)
@@ -662,6 +707,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 										item={exercise.name}
 										key={key}
 										index={key}
+										popUp = {true}
 									/>
 								))}
 							</InfiniteScrollComponent>
@@ -689,60 +735,82 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 									<ErrorStateSearch id="add-activity-no-list" message="Kunde inte hitta någon lista" />
 									:
 									(<InfiniteScrollComponent activities={lists}>
-										{lists.map(list => (
-											<DropDown
-												text={list.name}
-												autoClose={false}
-												id={list.id}
-												onClick={() => fetchingListContent(list.id)}
-												key={list.id}
-											>
+										{lists.map(list => {
+											const isChecked = !!listCheckboxStatus[list.id]
+											return (
 
-												<div style={{ borderTop: "1px solid black" }}>
-													{listContents[list.id]?.map((item, index) => {
-														if(item.type === "technique") {
-															return (
-																<ListItem
-																	id={"technique-list-item-" + item.techniqueID}
-																	item={item}
-																	checkBox={
-																		<CheckBox 
-																			checked={checkedActivities.some(a => a.techniqueID === item.techniqueID)}
-																			onClick={() => onActivityToggle(item, "technique")}
-																		/>
-																	}
-																	key={index}
-																	index={index}
-																>
-
-																</ListItem>
-															)
-															
-														} else if(item.type === "exercise") {
-															return (
-																<ListItem
-																	id={item.id}
-																	item={item}
-																	checkBox={
-																		<CheckBox 
-																			checked={checkedActivities.some(a => a.id === item.id)}
-																			onClick={() => onActivityToggle(item, "exercise")}
-																		/>
-																	}
-																	key={index}
-																	index={index}
-																>
-																</ListItem>
-															)
-														} else {
-															return null
-														}
+												<DropDown
+													text={list.name}
+													autoClose={false}
+													id={list.id}
+													onClick={() => fetchingListContent(list.id)}
+													key={list.id}
+													checkBox={
+														<CheckBox
+															checked={isChecked}
+															onClick={() => {
+																fetchingListContent(list.id, () => {
+																	setListToToggle(list.id)
+																})
+																setListCheckboxStatus(prevState => ({
+																	...prevState,
+																	[list.id]: !isChecked
+																}))
+															}}
+														/>
 													}
-													)}
+													style={{ display: "flex", alignItems: "center", margin: "5px 15px 5px 15px" }}
+												>
 
-												</div>
-											</DropDown>
-										))}
+													<div style={{ borderTop: "1px solid black" }}>
+														{listContents[list.id]?.map((item, index) => {
+															if(item.type === "technique") {
+																return (
+																	<ListItem
+																		id={index + "-technique-list-item-" + item.techniqueID}
+																		item={item}
+																		checkBox={
+																			<CheckBox 
+																				checked={checkedActivities.some(a => a.techniqueID === item.techniqueID)}
+																				onClick={() => onActivityToggle(item, "technique")}
+																			/>
+																		}
+																		key={index}
+																		index={index}
+																		popUp = {true}
+																	>
+
+																	</ListItem>
+																)
+															
+															} else if(item.type === "exercise") {
+																return (
+																	<ListItem
+																		id={item.id}
+																		item={item}
+																		checkBox={
+																			<CheckBox 
+																				checked={checkedActivities.some(a => a.id === item.id)}
+																				onClick={() => onActivityToggle(item, "exercise")}
+																			/>
+																		}
+																		key={index}
+																		index={index}
+																		popUp = {true}
+																	>
+																	</ListItem>
+																)
+															} else {
+																return null
+															}
+														}
+														)}
+
+													</div>
+												</DropDown>
+											)}
+										)}
+
 									</InfiniteScrollComponent>)
 								}
 							</div>

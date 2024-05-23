@@ -65,6 +65,7 @@ else
             [yY] ) 
             read -rp "Whats your domain name: " domain
             docker compose -p yotei -f docker-compose.yml -f docker-compose-domain-release.yml up -d
+	    docker compose -p yotei -f docker-compose.yml -f docker-compose-domain-release.yml exec nginx chmod +x /root/install.sh
             docker compose -p yotei -f docker-compose.yml -f docker-compose-domain-release.yml exec -e DOMAIN_NAME=$domain nginx /root/install.sh
             docker compose -p yotei -f docker-compose.yml -f docker-compose-domain-release.yml restart nginx
             docker compose -p yotei -f docker-compose.yml -f docker-compose-domain-release.yml run --rm certbot certonly -v --webroot --webroot-path /var/www/certbot/ --register-unsafely-without-email -d $domain

@@ -17,7 +17,7 @@ import { setSuccess, setError } from "../../utils.js"
  *
  * @author Team Tomato (6)
  * @version 1.0
- * @since 2024-05-22
+ * @since 2024-05-22, updated 2024-05-23
  */
 
 const ListEdit = () => {
@@ -34,6 +34,8 @@ const ListEdit = () => {
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const [isLoading, setIsLoading] = useState(true)
 	const localStorageDestination = isEdit ? "listCreateInfoEdit" : "listCreateInfoCreate"
+	const returnTo = location.state?.returnTo || "/activity"
+
 	/**
 	 * Submits the form data to the API.
 	 */
@@ -49,6 +51,8 @@ const ListEdit = () => {
 			} else {
 				setError("Träningen kunde inte uppdateras.")
 			}
+			localStorage.removeItem(localStorageDestination)
+			navigate(-1)
 		} else {
 			listId = await createActivityList(data)
 
@@ -57,7 +61,9 @@ const ListEdit = () => {
 			} else {
 				setError("Träningen kunde inte skapas.")
 			}
-			navigate("/profile/list/" + listId)
+			localStorage.removeItem(localStorageDestination)
+			console.log("skickar till listInfo: " + JSON.stringify(returnTo))
+			navigate("/profile/list/" + listId, { state: { returnTo: returnTo } })
 		}
 	}
 
@@ -129,7 +135,7 @@ const ListEdit = () => {
 		setIsLoading(true)
 		const item = localStorage.getItem(localStorageDestination)
 		const listData = location.state?.list
-		const userData = location.state?.list.users
+		const userData = location.state?.list?.users
 		if (listData && isEdit) {
 			listCreateInfoDispatch({
 				type: LIST_CREATE_TYPES.INIT_EDIT_DATA,

@@ -96,17 +96,13 @@ function SessionContainer ({ id, workout, session, plan}) {
 
 	function checkColor () {
 
-		if (plan.belts.length !== 0 ) {
-			let last = plan.belts.length - 1
-			let sortedBelts = sortBelts()
+		if (plan.belts.length === 0) return true
 
-			if (sortedBelts[last].id === 1 || sortedBelts[last].id === 3 || sortedBelts[last].id === 4 ||
-				sortedBelts[last].id === 5 || sortedBelts[last].id === 6 ){
-				return true
-			}
-			return false
-		}
-		return true
+		let last = plan.belts.length - 1
+		let sortedBelts = sortBelts()
+		let background = sortedBelts[last]
+		if (background.color === "201E1F") return false
+		else return true
 	}
 
 	function sortBelts () {
@@ -167,9 +163,9 @@ function SessionContainer ({ id, workout, session, plan}) {
 								}
 								{
 									checkPlan() && checkColor() ?
-										<ChevronDown id={styles["sc23-dropdown"]} style={{color:"black"}} className={styles[["sc23-session-container-chevron-rotation-animation sc23-session-container-header-overlap", toggled ? "sc23-chevron-rotate" : ""].join(" ")]} size={20}/>
+										<ChevronDown id={styles["sc23-dropdown"]} style={{color:"black", zIndex: 1}} className={styles[["sc23-session-container-chevron-rotation-animation sc23-session-container-header-overlap", toggled ? "sc23-chevron-rotate" : ""].join(" ")]} size={20}/>
 										:
-										<ChevronDown id={styles["sc23-dropdown"]} className={styles[["sc23-session-container-chevron-rotation-animation sc23-session-container-header-overlap", toggled ? "sc23-chevron-rotate" : ""].join(" ")]} size={20}/>
+										<ChevronDown id={styles["sc23-dropdown"]} style={{zIndex:1}}className={styles[["sc23-session-container-chevron-rotation-animation sc23-session-container-header-overlap", toggled ? "sc23-chevron-rotate" : ""].join(" ")]} size={20}/>
 								}
 							</div>
 							<div id = {`${id}-content`} className={styles["sc23-session-container-content"]}>

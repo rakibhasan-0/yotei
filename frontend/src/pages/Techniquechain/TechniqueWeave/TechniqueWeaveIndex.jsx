@@ -1,13 +1,27 @@
-import { useState } from "react"
+import { useState, useContext, useEffect } from "react"
+import { AccountContext } from "../../../context"
 import { Plus } from "react-bootstrap-icons"
+import { canCreateAndEditActivity } from "../../../utils"
+import { HTTP_STATUS_CODES } from "../../../utils"
 import RoundButton from "../../../components/Common/RoundButton/RoundButton"
 import styles from "./TechniqueWeaveIndex.module.css"
 import SearchBar from "../../../components/Common/SearchBar/SearchBar"
 import TechniquechainCard from "../../../components/Common/TechniquechainCard/TechniquechainCard"
+import Spinner from "../../../components/Common/Spinner/Spinner"
 
 /**
  * The technique weave index page.
- * ADD DESC
+ * 
+ * !NOTE! 
+ * This component is far from done and is not optimally implemented, 
+ * it is left in this state due to time constraints and unclear specifications.
+ * The decision on starting the implementation was made so that the users can test
+ * something that maybe resembles what they are looking for. A complete remodel
+ * might be a good idea...
+ * !NOTE!
+ * 
+ * TODOS: Sökning, filtrering, öppna och visa detaljer av en väv, redigera väv
+ * 				radera väv
  * 
  * @author Team Durian
  * @version 1.0
@@ -17,8 +31,32 @@ import TechniquechainCard from "../../../components/Common/TechniquechainCard/Te
 const TechniquechainIndex = ()=> {
 
 	// eslint-disable-next-line no-unused-vars
-	const [techniqueWeaves, setTechniqueWeaves] = useState([{name: "testväv",id: 1 },{name: "testväv2", id: 2}])
+	const [techniqueWeaves, setTechniqueWeaves] = useState([])
+	const [isLoading, setIsLoading] = useState(true)
+	const context = useContext(AccountContext)
+	useEffect(() => {
+		getWeaves()
+	}, [])
 
+	const getWeaves = async () => {
+		const requestOptions = {
+			method: "GET",
+			headers: { "Content-type": "application/json", "token": context.token }
+		}
+
+		const response = await fetch("/api/techniquechain/weave/all", requestOptions)
+		if (response.status !== HTTP_STATUS_CODES.OK) {
+			//Implement som error message/popup
+			return null
+		} else {
+			const data = await response.json()
+			console.log(data)
+			setTechniqueWeaves(data)
+			setIsLoading(false)
+		}
+	}
+	//useEffect för att hämta alla vävar
+	//Implment functionality to open and show details of a weave
 	return (
 		<>
 			<h1 id ={"teknikväv-header"}></h1>
@@ -26,7 +64,9 @@ const TechniquechainIndex = ()=> {
 				id={"searchbar-techniqueWeave"}
 				placeholder={"Sök efter teknikvävar"}
 			/>
-			{techniqueWeaves.map( (techniqueWeave) => 
+			{isLoading &&
+			<Spinner id={"create-weave-index-spinner"}></Spinner>}
+			{!isLoading && techniqueWeaves.map( (techniqueWeave) =>
 				<TechniquechainCard
 					item={techniqueWeave.name}
 					id={techniqueWeave.id}
@@ -34,10 +74,12 @@ const TechniquechainIndex = ()=> {
 					checkBox={false}
 				/>
 			)}
+			{canCreateAndEditActivity(context) && (
+				<RoundButton id={"technique-add-button"} linkTo={"/techniquechain/techniqueweavecreate/"}>
+					<Plus className={styles["plus-icon"]} />
+				</RoundButton>
+			)}
 			
-			<RoundButton id={"technique-add-button"} linkTo={"/techniquechain/techniqueweavecreate"}>
-				<Plus className={styles["plus-icon"]} />
-			</RoundButton>
 		</>
 	)
 }

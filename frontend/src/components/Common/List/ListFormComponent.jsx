@@ -38,6 +38,7 @@ export default function ListFormComponent({ callback, state, listCreateInfoDispa
 	const [acceptActivities, setAcceptActivities] = useState(false)
 	const navigate = useNavigate()
 	const [showPopup, setShowPopup] = useState(false)
+	const isEdit = window.location.href.toString().includes("edit")
 
 	/**
 	 * Sets the title of the page.
@@ -85,8 +86,9 @@ export default function ListFormComponent({ callback, state, listCreateInfoDispa
 	}
 
 	function confirmGoBack() {
-		localStorage.removeItem("listCreateInfo") // Clear local storage as confirmed
-
+		(isEdit?
+			localStorage.removeItem("listCreateInfoEdit"): // Clear local storage as confirmed
+			localStorage.removeItem("listCreateInfoCreate"))
 		if (state?.fromSession && !state?.fromCreate) {
 			navigate(`/session/edit/${state.session.sessionId}`, { replace: true, state })
 		} else if (state?.fromCreate) {
@@ -235,7 +237,7 @@ export default function ListFormComponent({ callback, state, listCreateInfoDispa
 							zIndex={1000}
 						/>
 						<Button type="submit" id="list-create-back-button">
-							{window.location.href.toString().includes("edit")?
+							{isEdit?
 								<h2>Spara</h2>:
 								<h2>Skapa</h2>
 							}
