@@ -20,23 +20,11 @@ import Divider from "../Divider/Divider"
  * 	   isNested  @type {boolean}  - disables the tinted background and fills the parent container. 
  * 								    Should be used in nested popups.
  *
- * Example usage:
- *  
- *	const [showPopup, setShowPopup] = useState(false)
-*
-*	return (
-*		<div>
-*			<PopupMini id={"test-popup"} title={"Test"} isOpen={showPopup} setIsOpen={setShowPopup} direction={startRedirection}  >
-<>some children</>
-</PopupMini>
-*			<RoundButton onClick={() => setShowPopup(true)} />
-*		</div>
-* 	)
-*
-* @author Team Kiwi Group 2
-* @version 1.0
-* @since 2024-05-22
-*/
+ *
+ * @author Team Kiwi Group 2
+ * @version 1.0
+ * @since 2024-05-22
+ */
 export default function PopupMini({ title, id, isOpen, setIsOpen, children, isNested, style, onClose, zIndex }) {
 
 	// Synchronize react state with CSS-styling in browser

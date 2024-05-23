@@ -19,7 +19,7 @@ import Gallery from "../../../../components/Gallery/Gallery"
 
 /**
  * The detail page for a technique in a mini popup window. Without edit, delete and print buttons.
- * Taken from TechniqueDetail file
+ * Taken from TechniqueDetail file.
  * 
  * @param id: The id used for fetching techniques.
  * Version 1
@@ -51,7 +51,7 @@ function TechniqueDetailMini({ id }) {
 	const handleGet = useCallback(() => {
 		setLoading(true)
 		setError("")
-		fetch("/api/techniques/" + 300, { headers: { token } })
+		fetch("/api/techniques/" + id, { headers: { token } })
 			.then(async res => {
 				if (!res.ok) {
 					// Quick fix with + " " because old API returns empty body on 404.
@@ -78,7 +78,6 @@ function TechniqueDetailMini({ id }) {
 	/>
 
 	if (loading) {
-		console.log("y")
 		return <div className={styles["technique-detail-center-spinner"]}><Spinner /></div>
 	}
 

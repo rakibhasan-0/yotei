@@ -11,7 +11,7 @@ import Spinner from "../../../components/Common/Spinner/Spinner"
 import styles from "./ExerciseDetailMini.module.css"
 
 /**
- * A component for displaying details about an exercise in a mini pop up, without the edit, delete and print buttons.
+ * A component for displaying details about an exercise in a mini pop up. Without the edit, delete and print buttons.
  * Taken from ExerciseDetailsPage file.
  * 
  * @author Team Kiwi
@@ -29,7 +29,7 @@ export default function ExerciseDetailMini({id}) {
 	const fetchData = useCallback(() => {
 		setLoading(true)
 		
-		fetch(`/api/exercises/${300}`, { headers: { token } })
+		fetch(`/api/exercises/${id}`, { headers: { token } })
 			.then(async res => {
 				if (!res.ok) {
 					// Quick fix with + " " because old API returns empty body on 404.
@@ -64,9 +64,8 @@ export default function ExerciseDetailMini({id}) {
 		onRecover= {fetchData} 
 	/>
 
-
+	// We never enter this snippet, need to look into that.
 	if (loading) { 
-		console.log("x")
 		return <div className={styles["exercise-detail-center-spinner"]}><Spinner /></div>
 	}
 
