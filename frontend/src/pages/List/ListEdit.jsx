@@ -49,6 +49,8 @@ const ListEdit = () => {
 			} else {
 				setError("Träningen kunde inte uppdateras.")
 			}
+			localStorage.removeItem(localStorageDestination)
+			navigate(-1)
 		} else {
 			listId = await createActivityList(data)
 
@@ -57,6 +59,7 @@ const ListEdit = () => {
 			} else {
 				setError("Träningen kunde inte skapas.")
 			}
+			localStorage.removeItem(localStorageDestination)
 			navigate("/profile/list/" + listId)
 		}
 	}
