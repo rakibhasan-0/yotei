@@ -52,7 +52,7 @@ export default function GradingStatisticsPopup({ id, groupID, belts}) {
 					} else {
 						const groups = await response.json()
 						setData(groups)
-						
+						console.log(groups)
 
 					}
 				} catch (error) {
@@ -100,8 +100,10 @@ export default function GradingStatisticsPopup({ id, groupID, belts}) {
 					<GradingProtocolsRowsMenu protocols={protocols} onSelectRow={onSelectRow} />
 				</Dropdown>
 				{loading ? <Spinner /> : 
-					(data.belt && data.categories) && 
-					<GradingProtocolsRows data={data.categories} beltColors={[data.belt]} />
+					(data.belt && data.categories) &&
+					<div style={{ border: `3px dashed #${[data.belt.belt_color]}`, padding: '8px', borderRadius: '10px' }}>
+						<GradingProtocolsRows data={data.categories} beltColors={[data.belt]} />
+					</div>
 				}
 			</Popup>
 		</div>

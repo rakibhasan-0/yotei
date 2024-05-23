@@ -19,7 +19,7 @@ import styles from "./TechniqueCard.module.css"
  * @update Fixed so that techniques that are in lists get the correct path, 2024-05-17, Team Tomato (Group 6)
  * @update Added inverted belt category. 2024-05-20, Team Kiwi (Teodor Bäckström)
  */
-function TechniqueCard({ technique, checkBox, id}) {
+function TechniqueCard({ technique, checkBox, id, techniqueInProtocol}) {
 	const navigate = useNavigate()
 	
 	// Fixes the path regardless if the technique is in a list or not.
@@ -60,7 +60,7 @@ function TechniqueCard({ technique, checkBox, id}) {
 
 				<div className={styles["technique-name-container"]}>
 					<Link onClick={handleClick}>
-						<h5 className={styles["technique-name"]}>{technique.name}</h5>
+						<h5 className={technique.new || !techniqueInProtocol ? styles["technique-name"] : styles["technique-name-old"]}>{technique.name}</h5>
 					</Link>
 				</div>
 
