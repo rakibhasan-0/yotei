@@ -35,11 +35,13 @@ function TechniqueCard({ technique, checkBox, id, popUp}) {
 		
 		setTechnique()
 
-		if(!popUp){
+		if (!popUp){
 			if (technique.activity_id && technique.type === "technique") {
 				navigate("/technique/" + technique.activity_id)
-			} else if (technique.id && technique.type === "technique") {
-				navigate("/technique/" + technique.id) 
+			} else if (technique.type === "technique" && technique.id) { 
+				//This is only entered through the grading protocol statistics popup. 
+				//TODO : Change technique.id to technique.activity_id (Problem is because of the api)
+				navigate("/technique/" + technique.id)
 			} else if (technique.type === "exercise" && technique.activity_id) {
 				navigate("/exercise/exercise_page/" + technique.activity_id)
 			} else {
