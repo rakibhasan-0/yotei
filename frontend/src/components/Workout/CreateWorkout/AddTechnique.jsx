@@ -16,6 +16,8 @@ import TextArea from "../../Common/TextArea/TextArea"
 
 /**
  *  
+ * A popup that lets a user select a technique.
+ * 
  * @author Team Durian
  * @since 2024-05-21
  */
@@ -150,7 +152,7 @@ function AddTechnique({ id, submit, chosenTech, ownName, nodeDesc, participant, 
 		getTechniques(args, token, map, mapActions, (result) => {
 			if (!result.results) return
 
-			const res = result.results//.filter((technique) => !checkedActivities.some(a => a.type === "technique" && a.techniqueID === technique.techniqueID))
+			const res = result.results
 			setTechniques([...res])
 			setSuggestedTechTags(result.tagCompletion)
 			setFetchedTech(true)
@@ -237,11 +239,11 @@ function AddTechnique({ id, submit, chosenTech, ownName, nodeDesc, participant, 
 			{/* Spacing so the button doesn't cover an ExerciseListItem */}
 			<br /><br /><br />
 
-			{chosenTech &&
-					<RoundButton onClick={submit}>
-						<ChevronRight width={30} />
-					</RoundButton>
-			}
+			
+			<RoundButton onClick={submit}>
+				<ChevronRight width={30} />
+			</RoundButton>
+			
 		</div>
 	)
 }
