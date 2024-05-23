@@ -4,20 +4,24 @@ import InfiniteScrollComponent from "../Common/List/InfiniteScrollComponent"
 import SearchBar from "../Common/SearchBar/SearchBar"
 import { AddToListItem } from "../SavedList/AddToListItem"
 import styles from "./AddToListPopup.module.css"
-import Spinner from "../Common/Spinner/Spinner"
 import { getLists } from "../Common/SearchBar/SearchBarUtils"
 import { AccountContext } from "../../context"
 import useMap from "../../hooks/useMap"
-import { setError, setSuccess } from "../../utils"
+import { setError, setSuccess,isAdminUser } from "../../utils"
+import { Link } from "react-router-dom"
 
+
+/**
+ * @author Team Tomato
+ * @since 2024-05-09, updated 2024-05-23
+ * @version 1.0
+ * */
 export const AddToListPopupContent = ({ techExerID, setShowMorePopup }) => {
-	const [isLoading, setIsLoading] = useState(true)
-
 	const [lists, setLists] = useState([])
 	const [searchListText, setSearchListText] = useState("")
 	const { token } = useContext(AccountContext)
 	const [map, mapActions] = useMap()
-
+	const context = useContext(AccountContext)
 	const [selectedLists, setSelectedLists] = useState([])
 
 	/**
@@ -43,7 +47,6 @@ export const AddToListPopupContent = ({ techExerID, setShowMorePopup }) => {
 	 * search text are changed.
 	 */
 	useEffect(() => {
-		setIsLoading(true)
 		setLists(lists)
 		fetchingList()
 	}, [searchListText, lists])
@@ -57,7 +60,7 @@ export const AddToListPopupContent = ({ techExerID, setShowMorePopup }) => {
 
 		const args = {
 			text: searchListText,
-			isAuthor: true,
+			isAuthor: isAdminUser(context) ? false : true,
 			isShared: false,
 			hidden: false
 		}
@@ -79,7 +82,6 @@ export const AddToListPopupContent = ({ techExerID, setShowMorePopup }) => {
 			}))
 
 			setLists(listsToAdd)
-			setIsLoading(false)
 		})
 	}
 
@@ -118,9 +120,11 @@ export const AddToListPopupContent = ({ techExerID, setShowMorePopup }) => {
 	return (
 		<div className={styles["container"]}>
 			<div className="my-4">
-				<Button outlined={true}>
-					<p>+ Skapa ny lista</p>
-				</Button>
+				<Link to={"/list/create"}>
+					<Button outlined={true}>
+						<p>+ Skapa ny lista</p>
+					</Button>
+				</Link>
 			</div>
 			<SearchBar 
 				id="lists-search-bar"
@@ -128,21 +132,15 @@ export const AddToListPopupContent = ({ techExerID, setShowMorePopup }) => {
 				text={searchListText}
 				onChange={setSearchListText}
 			/>
-			{isLoading ? (
-				<div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh"}}>
-					<Spinner />
-				</div>
-			) : (
-				<InfiniteScrollComponent>
-					{lists.map((item, index) => (
-						<AddToListItem
-							item={item}
-							key={index}
-							onCheck={handleCheck}
-						/>
-					))}
-				</InfiniteScrollComponent>
-			)}
+			<InfiniteScrollComponent>
+				{lists.map((item, index) => (
+					<AddToListItem
+						item={item}
+						key={index}
+						onCheck={handleCheck}
+					/>
+				))}
+			</InfiniteScrollComponent>
 			<div className="fixed-bottom w-100 bg-white pt-2">
 				<div className="mb-4">
 					<Button onClick={saveActivityToLists}>Spara</Button>

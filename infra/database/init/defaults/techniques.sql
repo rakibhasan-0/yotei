@@ -322,7 +322,7 @@ INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (13, 134);
 
 -- YELLOW BELTS --
 -- Atemi Waza --
-INSERT INTO technique_tag (tech_id, tag_id) VALUES (1,6), (1,12); 
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (1,12), (1,6); 
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (2,6), (2,12);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (3,6), (3,12);
 -- Kansetsu waza --

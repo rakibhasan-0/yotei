@@ -69,10 +69,10 @@ public class ExportGradingPdf {
         this.grading = grading;
         this.examineePairs = examineePairs;
         this.protocol = parseJson(gradingProtocol);
-
+        
         String currentPath = new java.io.File(".").getCanonicalPath();
 
-        fontPath = currentPath + "/infra/fonts/NotoSans-Regular.ttf";
+        fontPath = currentPath + "/backend/api/src/main/java/se/umu/cs/pvt/fonts/NotoSans-Regular.ttf";
 
         Map<String, Object> gradingProtocolObj = (Map<String, Object>) protocol.get("examination_protocol");
         this.code = (String)gradingProtocolObj.get("code");
