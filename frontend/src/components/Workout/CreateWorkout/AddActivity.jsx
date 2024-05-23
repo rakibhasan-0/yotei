@@ -41,7 +41,7 @@ import ListItem from "./ListItem.jsx"
  * @updated 2024-05-13 Kiwi, Added Automatic scrolling and Removal of activities from popup
  * @updated 2024-05-20 Tomato, Added search function for activity lists.  
  */
-function AddActivity({ id, setShowActivityInfo }) {
+function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 
 	const { token } = useContext(AccountContext)
 	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(WorkoutCreateContext)
@@ -118,6 +118,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	const [cookies, setCookies] = useCookies(["exercise-filter"])
 	const [visibleExercises, setVisibleExercises] = useState([])
 	const { userId: currentUserId } = useContext(AccountContext)
+	const [listCheckboxStatus, setListCheckboxStatus] = useState({})
 
 	const sortOptionsLists = [
 		{ 
@@ -158,6 +159,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	]
 	const [sortLists, setSortLists] = useState(sortOptionsLists[0])
 	const [filterCount, setFilterCount] = useState(0)
+	const [listToToggle, setListToToggle] = useState(null)
 
 
 	const searchCount = useRef(0)
@@ -219,6 +221,26 @@ function AddActivity({ id, setShowActivityInfo }) {
 	useEffect(() => {
 		sessionStorage.setItem("searchListText", searchListText)
 	}, [searchListText])
+
+
+	useEffect(() => {
+		if (listCheckboxStatus) return 
+
+		const initialCheckboxStatus = {}
+		lists.forEach(list => {
+			initialCheckboxStatus[list.id] = false
+		})
+		setListCheckboxStatus(initialCheckboxStatus)
+	}, [lists])
+
+
+	// This calls the onAllActivitiesToggle function when the listContents state is updated and runs only when the checkbox to toggle all activities in a list is pressed.
+	useEffect(() => {
+		if (listToToggle) {
+			onAllActivitiesToggle(listToToggle)
+			setListToToggle(null) // Reset listToToggle
+		}
+	}, [listContents])
 
 
 	function setJSONSession(key, value) {
@@ -368,6 +390,22 @@ function AddActivity({ id, setShowActivityInfo }) {
 		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.TOGGLE_CHECKED_ACTIVITY, payload: activity })
 	}
 
+	const onActivityToggleAllTrue = (listId) => {
+		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CHECK_ALL_ACTIVITIES, payload: listContents[listId] })
+	}
+
+	const onActivityToggleAllFalse = (listId) => {
+		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.UNCHECK_ALL_ACTIVITIES, payload: listContents[listId] })
+	}
+
+	const onAllActivitiesToggle = (listId) => {
+		if (!listCheckboxStatus[listId]) {
+			onActivityToggleAllFalse(listId)
+		} else {
+			onActivityToggleAllTrue(listId)
+		}
+	}
+
 	/**
 	 * Fetches techniques from the backend, either from cache or by a new API-call. 
 	 * But first, the selected belts are filtered and parsed to be used in the request. 
@@ -507,7 +545,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 	 * Fetches the content from a list given the ID of the same list. 
 	 * @param {Integer} listID 
 	 */
-	function fetchingListContent(listID) {
+	function fetchingListContent(listID, callback) {
 		const args = {
 			id: listID
 		}
@@ -549,7 +587,34 @@ function AddActivity({ id, setShowActivityInfo }) {
 			}))
 
 			setListUpdate(listUpdate + 1)
+			
+			if (callback) {
+				callback()
+			}
 		})
+	}
+
+	/**
+	 * Handles the click event for the round button.
+	 * It checks if the sendActivity prop is null, if it is, it will set the showActivityInfo state
+	 * by calling the setShowActivityInfo function with the checkedActivities state as a parameter.
+	 * If the sendActivity prop is not null, it will call the sendActivity function with 
+	 * the checkedActivities state as a parameter.
+	 */
+	function handleRoundButtonClick() {
+		//console.log("Checked activities")
+		if(sendActivity == null) {
+			setShowActivityInfo(checkedActivities)
+		} else {
+			//console.log("Sending activities")
+			sendActivity(checkedActivities)
+			workoutCreateInfoDispatch({
+				type: WORKOUT_CREATE_TYPES.OPEN_ACTIVITY_INFO_POPUP,
+			})
+			workoutCreateInfoDispatch({
+				type: WORKOUT_CREATE_TYPES.CLEAR_ADDED_DATA,
+			})
+		}
 	}
 
 	return (
@@ -666,60 +731,80 @@ function AddActivity({ id, setShowActivityInfo }) {
 									<ErrorStateSearch id="add-activity-no-list" message="Kunde inte hitta någon lista" />
 									:
 									(<InfiniteScrollComponent activities={lists}>
-										{lists.map(list => (
-											<DropDown
-												text={list.name}
-												autoClose={false}
-												id={list.id}
-												onClick={() => fetchingListContent(list.id)}
-												key={list.id}
-											>
+										{lists.map(list => {
+											const isChecked = !!listCheckboxStatus[list.id]
+											return (
 
-												<div style={{ borderTop: "1px solid black" }}>
-													{listContents[list.id]?.map((item, index) => {
-														if(item.type === "technique") {
-															return (
-																<ListItem
-																	id={"technique-list-item-" + item.techniqueID}
-																	item={item}
-																	checkBox={
-																		<CheckBox 
-																			checked={checkedActivities.some(a => a.techniqueID === item.techniqueID)}
-																			onClick={() => onActivityToggle(item, "technique")}
-																		/>
-																	}
-																	key={index}
-																	index={index}
-																>
-
-																</ListItem>
-															)
-															
-														} else if(item.type === "exercise") {
-															return (
-																<ListItem
-																	id={item.id}
-																	item={item}
-																	checkBox={
-																		<CheckBox 
-																			checked={checkedActivities.some(a => a.id === item.id)}
-																			onClick={() => onActivityToggle(item, "exercise")}
-																		/>
-																	}
-																	key={index}
-																	index={index}
-																>
-																</ListItem>
-															)
-														} else {
-															return null
-														}
+												<DropDown
+													text={list.name}
+													autoClose={false}
+													id={list.id}
+													onClick={() => fetchingListContent(list.id)}
+													key={list.id}
+													checkBox={
+														<CheckBox
+															checked={isChecked}
+															onClick={() => {
+																fetchingListContent(list.id, () => {
+																	setListToToggle(list.id)
+																})
+																setListCheckboxStatus(prevState => ({
+																	...prevState,
+																	[list.id]: !isChecked
+																}))
+															}}
+														/>
 													}
-													)}
+													style={{ display: "flex", alignItems: "center", margin: "5px 15px 5px 15px" }}
+												>
 
-												</div>
-											</DropDown>
-										))}
+													<div style={{ borderTop: "1px solid black" }}>
+														{listContents[list.id]?.map((item, index) => {
+															if(item.type === "technique") {
+																return (
+																	<ListItem
+																		id={"technique-list-item-" + item.techniqueID}
+																		item={item}
+																		checkBox={
+																			<CheckBox 
+																				checked={checkedActivities.some(a => a.techniqueID === item.techniqueID)}
+																				onClick={() => onActivityToggle(item, "technique")}
+																			/>
+																		}
+																		key={index}
+																		index={index}
+																	>
+
+																	</ListItem>
+																)
+															
+															} else if(item.type === "exercise") {
+																return (
+																	<ListItem
+																		id={item.id}
+																		item={item}
+																		checkBox={
+																			<CheckBox 
+																				checked={checkedActivities.some(a => a.id === item.id)}
+																				onClick={() => onActivityToggle(item, "exercise")}
+																			/>
+																		}
+																		key={index}
+																		index={index}
+																	>
+																	</ListItem>
+																)
+															} else {
+																return null
+															}
+														}
+														)}
+
+													</div>
+												</DropDown>
+											)}
+										)}
+
 									</InfiniteScrollComponent>)
 								}
 							</div>
@@ -730,14 +815,16 @@ function AddActivity({ id, setShowActivityInfo }) {
 				{/* Spacing so the button doesn't cover an ExerciseListItem */}
 				<br /><br /><br />
 
-				{checkedActivities.length > 0 &&
-					<RoundButton onClick={() => setShowActivityInfo(checkedActivities)} id="AddCheckedActivitiesButton">
+				{checkedActivities.length > 0 && (
+					<RoundButton onClick={handleRoundButtonClick} id="AddCheckedActivitiesButton">
 						<ChevronRight width={30} />
 					</RoundButton>
-				}
+				)}
 
 			</Modal.Body>
 		</div>
 	)
 }
+
+
 export default AddActivity

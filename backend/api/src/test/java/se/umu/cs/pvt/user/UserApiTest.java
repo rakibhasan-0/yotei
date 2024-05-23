@@ -1,6 +1,5 @@
 package se.umu.cs.pvt.user;
 
-import org.apache.catalina.connector.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,15 +20,12 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
 
 /**
  * Test class for USER-API methods.
  *
  * @author Quattro Formaggio (Group 1), Phoenix (25-04-2023)
- * @author Team Mango (Grupp 4) - 2024-05-17
+ * @author Team Mango (Grupp 4) - 2024-05-22
  */
 
 @ExtendWith(MockitoExtension.class)
@@ -241,7 +237,7 @@ public class UserApiTest {
                     return newUser;
                 });
             
-            Object response = lc.setUserRoleThroughRoleId(id, 2L);
+            Object response = lc.setUserRoleThroughRoleId(id, 4L);
             if (response instanceof ResponseEntity<?>) {
                 HttpStatus actual = ((ResponseEntity<?>) response).getStatusCode();
                 assertEquals(HttpStatus.OK, actual);
