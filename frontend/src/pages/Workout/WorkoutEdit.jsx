@@ -85,7 +85,7 @@ const WorkoutEdit = () => {
 
 				if (activity.techniqueId) {
 					// Convert the id to the correct form if it comes from a list.
-					if (activity.techniqueId.includes("-technique-")) {
+					if (typeof activity.techniqueId === "string" && activity.techniqueId.includes("-technique-")) {
 						obj.techniqueId = activity.techniqueId.split("-technique-").pop()
 					} else{
 						obj.techniqueId = activity.techniqueId
@@ -93,7 +93,7 @@ const WorkoutEdit = () => {
 					
 				} else if (activity.exerciseId) {
 					// Convert the id to the correct form if it comes from a list.
-					if (activity.exerciseId.includes("-exercise-")) {
+					if (typeof activity.exerciseId === "string" && activity.exerciseId.includes("-exercise-")) {
 						obj.exerciseId = activity.exerciseId.split("-exercise-").pop()
 					} else {
 						obj.exerciseId = activity.exerciseId

@@ -27,7 +27,7 @@ export default function GradingDeviations() {
 		const [gradingId, setGradingId] = useState(-1)
 		const { userId } = useParams() //The user id of the current examinee
 		const [name, setName] = useState("") //The name of the current examinee
-        const [showingAll, setShowingAll] = useState(false)
+        const [showingDeviationsOnly, setShowingDeviationsOnly] = useState(true)
         const [resultList, setResultList] = useState([])
         const [personalComments, setPersonalComments] = useState([])
         const [pairComments, setPairComments] = useState([])
@@ -113,7 +113,6 @@ export default function GradingDeviations() {
             const requestOptions = {
                 headers: {"Content-type": "application/json", token: context.token}
 			}
-            console.log("user id: " + userId)
             const response = await fetch("/api/examination/examresult/" + gradingId + "/" + userId, requestOptions).catch(() => {
                 setError("Serverfel: Kunde inte ansluta till servern.")
                 return
@@ -140,7 +139,6 @@ export default function GradingDeviations() {
                 return
             }
             const json = await response.json()
-            console.log(json)
             setPersonalComments(json)
         }
 
@@ -159,7 +157,6 @@ export default function GradingDeviations() {
             const json = await response.json()
             for(let i = 0; i < json.length; i++) {
                 if(json[i]["examinee_1"].id == userId || json[i]["examinee_2"].id == userId) {
-                    console.log(json[i])
                     const response2 = await fetch("/api/examination/comment/pair/all/" + json[i]["pair_id"], requestOptions).catch(() => {
                         setError("Serverfel: Kunde inte ansluta till servern.")
                         return
@@ -169,11 +166,9 @@ export default function GradingDeviations() {
                         return
                     }
                     const json2 = await response2.json()
-                    console.log(json2)
                     setPairComments(json2)
                 }
             }
-            console.log(json)
         }
 
         //Fetches the entire groups grading comments
@@ -190,7 +185,6 @@ export default function GradingDeviations() {
                 return
             }
             const json = await response.json()
-            console.log(json)
             setGroupComments(json)
         }
 
@@ -206,7 +200,7 @@ export default function GradingDeviations() {
     function hasPassed(techniqueName) {
         for(let i = 0; i < resultList.length; i++) {
             if(resultList[i] != null) {
-                if(resultList[i]["technique_name"] == techniqueName) {
+                if(resultList[i]["techniqueName"] == techniqueName) {
                     return resultList[i]["pass"]
                 }
             }
@@ -284,9 +278,9 @@ export default function GradingDeviations() {
             <div className="d-flex justify-content-center">
                 <CheckBox
                     className = {styles["showAllCheckbox"]}
-                    checked={false}
-                    label = "Visa alla"
-                    onClick={(checked) => {setShowingAll(checked)}}
+                    checked={true}
+                    label = "Visa endast avvikelser"
+                    onClick={(checked) => {setShowingDeviationsOnly(checked)}}
                     enabled
                     id="checkbox-element"
                 />
@@ -308,7 +302,7 @@ export default function GradingDeviations() {
                             <div className = {styles["sc23-outline"]} id={category} key={index_div}>
                                 <Divider id = 'divider-example' option= 'h2_left' title = {category.category_name} key={index_id}/>
                                 {category.techniques.map((technique, index) => (
-                                    (isDeviating(technique.text) || showingAll) ?
+                                    (isDeviating(technique.text) || !showingDeviationsOnly) ?
                                         <Container id = {index} name = {technique.text} passed={hasPassed(technique.text)} key={index} 
                                         comment={getPersonalComment(technique.text)} pairComment={getPairComment(technique.text)} generalComment={getGroupComment(technique.text)}></Container>
                                         : null
@@ -346,8 +340,8 @@ export default function GradingDeviations() {
 				<div className={styles.scrollableContainer}>
 						<div>
 								<div className={styles.topContainer}>
-										<h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "10px", paddingBottom: "5px" }}>{name}</h1>
-										<h4 style={{ fontFamily: "Open Sans", fontSize: "15px", paddingTop: "0px", paddingBottom: "10px" }}>Kommentarer</h4>
+										<h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "5x", paddingBottom: "0px" }}>{name}</h1>
+										<h4 style={{ fontFamily: "Open Sans", fontSize: "15px", paddingTop: "0px", paddingBottom: "5x" }}>Kommentarer</h4>
 								</div>
                 {getToggleCheckBox()}
                 <div className = {styles["sc23-session-header-clickable"]} role="button" onClick={() => setToggled(!toggled)}>

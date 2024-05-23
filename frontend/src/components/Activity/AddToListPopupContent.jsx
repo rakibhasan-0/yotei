@@ -4,20 +4,24 @@ import InfiniteScrollComponent from "../Common/List/InfiniteScrollComponent"
 import SearchBar from "../Common/SearchBar/SearchBar"
 import { AddToListItem } from "../SavedList/AddToListItem"
 import styles from "./AddToListPopup.module.css"
-import Spinner from "../Common/Spinner/Spinner"
 import { getLists } from "../Common/SearchBar/SearchBarUtils"
 import { AccountContext } from "../../context"
 import useMap from "../../hooks/useMap"
-import { setError, setSuccess } from "../../utils"
+import { setError, setSuccess,isAdminUser } from "../../utils"
+import { Link } from "react-router-dom"
 
-export const AddToListPopupContent = ({ techExerID }) => {
-	const [isLoading, setIsLoading] = useState(true)
 
+/**
+ * @author Team Tomato
+ * @since 2024-05-09, updated 2024-05-23
+ * @version 1.0
+ * */
+export const AddToListPopupContent = ({ techExerID, setShowMorePopup }) => {
 	const [lists, setLists] = useState([])
 	const [searchListText, setSearchListText] = useState("")
 	const { token } = useContext(AccountContext)
 	const [map, mapActions] = useMap()
-
+	const context = useContext(AccountContext)
 	const [selectedLists, setSelectedLists] = useState([])
 
 	/**
@@ -34,7 +38,7 @@ export const AddToListPopupContent = ({ techExerID }) => {
 			}
 		})
 	}
-
+ 
 
 
 
@@ -43,7 +47,6 @@ export const AddToListPopupContent = ({ techExerID }) => {
 	 * search text are changed.
 	 */
 	useEffect(() => {
-		setIsLoading(true)
 		setLists(lists)
 		fetchingList()
 	}, [searchListText, lists])
@@ -56,17 +59,29 @@ export const AddToListPopupContent = ({ techExerID }) => {
 	function fetchingList() {
 
 		const args = {
-			text: searchListText
+			text: searchListText,
+			isAuthor: isAdminUser(context) ? false : true,
+			isShared: false,
+			hidden: false
 		}
 
 		getLists(args, token, map, mapActions, (result) => {
 			if (result.error) return
 
 			// Extract the 'id' and 'name' fields from each item in the result used in displaying the list.
-			const listsToAdd = result.map(item => ({ id: item.id, name: item.name, author: item.author, numberOfActivities: item.size}))
+			const listsToAdd = result.results.map(item => ({
+
+				id: item.id,
+				name: item.name,
+				author: {
+					userId: item.author.userId,
+					username: item.author.username
+				},
+				hidden: item.hidden,
+				date: item.date
+			}))
 
 			setLists(listsToAdd)
-			setIsLoading(false)
 		})
 	}
 
@@ -95,22 +110,21 @@ export const AddToListPopupContent = ({ techExerID }) => {
 			setError("Fel vid sparning av aktivitet till listor")
 		} else {
 			setSuccess("Aktivitet sparad till listor")
+			setShowMorePopup(false)
 		}
 	}
 
 
 
 
-	return isLoading ? (
-		<div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh"}}>
-			<Spinner />
-		</div>
-	) : (
+	return (
 		<div className={styles["container"]}>
 			<div className="my-4">
-				<Button outlined={true}>
-					<p>+ Skapa ny lista</p>
-				</Button>
+				<Link to={"/list/create"}>
+					<Button outlined={true}>
+						<p>+ Skapa ny lista</p>
+					</Button>
+				</Link>
 			</div>
 			<SearchBar 
 				id="lists-search-bar"
@@ -127,7 +141,6 @@ export const AddToListPopupContent = ({ techExerID }) => {
 					/>
 				))}
 			</InfiniteScrollComponent>
-
 			<div className="fixed-bottom w-100 bg-white pt-2">
 				<div className="mb-4">
 					<Button onClick={saveActivityToLists}>Spara</Button>

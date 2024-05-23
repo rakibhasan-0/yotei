@@ -122,6 +122,7 @@ export default function Statistics() {
 					setNumberOfSessions(data.numberOfSessions)
 					setAverageRating(data.averageRating)
 					setGroupActivities(data.activities)
+					resetOrderIcon()
 				}else if (responseFromGroupDetailsAPI.status === 204) {
 					// if the response is 204, it means that there is no data to show for the selected filters.
 					setGroupActivities([])
@@ -169,6 +170,11 @@ export default function Statistics() {
 		setFilter({ ...filter, [variableName]: value })
 	}
 
+	// Resets the order icon to ascending order. Called in the useEffect when the group activities are fetched.
+	function resetOrderIcon() {
+		setRotate(false)
+	}
+
 	// that function is responsible for changing the order of the group activities.
 	// initially, the order is increasing, when the user clicks on the button, the order will be descending.
 	function changeOrder() {
@@ -211,6 +217,9 @@ export default function Statistics() {
 					id="grading-statistics-container" 
 					groupID={groupID} 
 					belts={groupBelts}
+					datesTo={dates.to}
+					datesFrom={dates.from}
+
 				/>
 			
 
@@ -227,7 +236,6 @@ export default function Statistics() {
 					<h5 style={{ fontSize: "25px" }}>Inga aktiviteter hittades</h5>
 				) : (
 					activities.map((activity, index) => (
-						
 						<TechniqueCard
 							key={index}
 							technique={activity}
