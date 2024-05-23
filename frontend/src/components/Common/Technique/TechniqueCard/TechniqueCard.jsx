@@ -24,11 +24,8 @@ import { useState } from "react"
  * @update Added inverted belt category. 2024-05-20, Team Kiwi (Teodor Bäckström)
  * @update Added a popUp window for when popUp is true.
  */
-<<<<<<< HEAD
-function TechniqueCard({ technique, checkBox, id, techniqueInProtocol}) {
-=======
-function TechniqueCard({ technique, checkBox, id, popUp}) {
->>>>>>> main
+function TechniqueCard({ technique, checkBox, id, popUp, techniqueInProtocol}) {
+
 	const navigate = useNavigate()
 	const [isOpen, setIsOpen] = useState(false)
 	
