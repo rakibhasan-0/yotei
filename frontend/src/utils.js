@@ -130,7 +130,7 @@ export function canCreateAndEditActivity(context) {
 }
 
 /**
- * canCreateGradings() - Check if user can create a grading.
+ * canHandleGradings() - Check if user can create a grading.
  * @param {*} context Accountcontext from user. 
  * @returns true if user can create a grading.
  */
