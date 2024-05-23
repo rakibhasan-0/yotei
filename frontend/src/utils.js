@@ -54,6 +54,9 @@ export function isAdminUser(context) {
 	return (context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS))
 }
 
+export function isEditor() {
+	return true
+}
 
 /**
  * canCreateGroups() - check if a user can create a group.

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { Trash, Pencil, Clock, Plus } from "react-bootstrap-icons"
 import { useLocation, useNavigate, useParams } from "react-router"
-import { isEditor } from "../../../utils"
+import { isEditor, HTTP_STATUS_CODES } from "../../../utils"
 import { AccountContext } from "../../../context"
 import PrintButton from "../../../components/Common/PrintButton/PrintButton"
 import styles from "./Techniquechain_page.module.css"
@@ -16,14 +16,44 @@ export default function Techniquechain_page() {
 	const techniqueId = localStorage.getItem("stored_techniquechain")
 
 	//this is the currently chosen technique, onely get the id when mounting so need to get all the other info from db
-	const [techniquechain, settechniquechain] = useState({id: techniqueId, name: "test övning 1", description: "hejsan mycket rolig kedja"})
-	const accountRole = useContext(AccountContext)
+	const [techniquechain, settechniquechain] = useState()
+	const context = useContext(AccountContext)
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
 
 	//this is a list of all the techniques to be displayed in the list. read all the real techniqus from the db insted of hard coded
-	const [chainTechniques, setChaintechniques] = useState([{id: techniqueId, name: "test övning 1", description: "hejsan mycket rolig kedja"}, {id: techniqueId, name: "test övning 2", description: "hejsan mycket rolig kedja"}])
+	const [chainTechniques, setChaintechniques] = useState([])
 	const [loading, setIsLoading] = useState(false)
 	const detailURL = "/techniquechain/techniquechain_page/"
+
+	useEffect(() => {
+		getChainInfo()
+	}, [])
+
+	const getChainInfo = async () => {
+
+		const requestOptions = {
+			method: "GET",
+			headers: { "Content-type": "application/json", "token": context.token }
+		}
+		const response = await fetch(`/api/techniquechain/chain/${techniqueId}`, requestOptions)
+		if (response.status !== HTTP_STATUS_CODES.OK) {
+			//Implement som error message/popup
+			return null
+		} else {
+			const data = await response.json()
+			settechniquechain({id: data.id, name: data.name, description: data.description})
+
+			const nodesToDesplay = data.node
+			const transformedArray = nodesToDesplay.map(item => ({
+				id: item.id,
+				name: item.name,
+				description: item.description
+			}))
+			
+			setChaintechniques(transformedArray)
+			setIsLoading(false)
+		}
+	}
 
 	return (
 		<div style={{ display: "flex", flexDirection: "column" }}>
@@ -32,7 +62,7 @@ export default function Techniquechain_page() {
 			<div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: "10px" }}>
 				{/* empty div to get the right look with old components */}
 				<div ></div> 
-				{isEditor(accountRole) && (
+				{isEditor(context) && (
 					<div style={{ display: "flex", flexDirection: "row", gap: "10px", justifyContent: "flex-end"}}>
                         
 						{/* TODOO: add a printer button and functionallity to print a chain and its graph */}

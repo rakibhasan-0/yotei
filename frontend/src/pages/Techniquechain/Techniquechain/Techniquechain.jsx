@@ -10,7 +10,7 @@ import FilterContainer from "../../../components/Common/Filter/FilterContainer/F
 import Sorter from "../../../components/Common/Sorting/Sorter"
 import TechniquechainCard from "../../../components/Common/TechniquechainCard/TechniquechainCard"
 import RoundButton from "../../../components/Common/RoundButton/RoundButton"
-import { isEditor } from "../../../utils"
+import { isEditor, HTTP_STATUS_CODES } from "../../../utils"
 import { Plus } from "react-bootstrap-icons"
 
 
@@ -40,10 +40,35 @@ export default function Techniquechain() {
 	//const [showFilterBox, setShowFilterBox] = useState(false)
 	const [loading, setIsLoading] = useState(false)
 	const [sort, setSort] = useState(sortOptions[0])
-	const [visibleList, setVisibleList] = useState([{id: 1, name: "test Kort 1"}, {id: 2, name: "test Kort 2"}, {id: 3, name: "test Kort 3"}])
+	const [visibleList, setVisibleList] = useState([])
 
 	const saveSearchText = () => {
 		localStorage.setItem("searchText", searchBarText)
+	}
+
+	useEffect(() => {
+		getChains()
+	}, [])
+
+	const getChains = async () => {
+		const requestOptions = {
+			method: "GET",
+			headers: { "Content-type": "application/json", "token": context.token }
+		}
+
+		const response = await fetch("/api/techniquechain/chain/all", requestOptions)
+		if (response.status !== HTTP_STATUS_CODES.OK) {
+			//Implement som error message/popup
+			return null
+		} else {
+			const data = await response.json()
+			const transformedArray = data.map(item => ({
+				id: item.id,
+				name: item.name
+			}))
+			setVisibleList(transformedArray)
+			setIsLoading(false)
+		}
 	}
     
 	return (

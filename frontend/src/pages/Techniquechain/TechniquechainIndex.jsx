@@ -20,40 +20,7 @@ import { AccountContext } from "../../context"
  */
 export default function TechniquechainIndex() {
 
-
-
-	const context = useContext(AccountContext)
-
-
-
 	const [key, setKey] = useState(sessionStorage.getItem("active-tab") || "technique")
-
-	useEffect(() => {
-
-		const list = {parentWeaveId: 1, nodeName: "test nod 1", description: "kollar om det funkar", techniqueId: 1, attacker: false, partisipant: 1, connected_to: [1,2]}
-
-		const requestOptions = {
-			method: "POST",
-			headers: { "token": context.token },
-			body: JSON.stringify(list)
-		}
-
-		console.log(requestOptions)
-
-		fetch("/api/techniquechain/node/create", requestOptions)
-			.then(response => {
-				if(!response.ok) {
-					console.log("respone not ok")
-				}
-				console.log(response)
-				return response.json()
-			})
-			.catch(() => {
-				console.log("nått gick fel!")
-			})
-	
-
-	}, [])
 	
 	return (
 		<Modal.Body style={{ padding: "0" }}>
