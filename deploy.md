@@ -1,26 +1,23 @@
 # Deploy Yotei
 
 ## Instructions
+Root is not needed but sudo access is required for this script to run.
 
-Open a terminal and unzip the folder using:
+First of all you will need to change the permissions to executable for the deploy_customer.sh using:
 
-```unzip yotei.zip```
+```chmod +x deploy_customer.sh```
 
-Then enter the folder using:
+Now you are ready to run the deploy_customer.sh using:
 
-```cd yotei```
+```./deploy_customer.sh```
 
-You will need to change the permissions using:
+Firstly **zip** will be installed if not already existing on your machine.
 
-```chmod +x deploy.sh```
+If there exist a yotei folder it will be removed before unzipping the new **yotei.zip**.
 
-Now we are ready to run the deploy.sh using:
+The required **docker** dependencies will be downloaded if they do not exist on your machine.
 
-```./deploy.sh```
-
-Firstly the required docker dependencies will be downloaded if they do not exist on your machine.
-
-You will be asked if you currently have an older version deployed on your machine. If that is the case you will also be asked if you would like to reset the database or keep the current one.
+You will be asked if you currently have an older version deployed on your machine. If that is the case you will also be asked if you would like to reset the database or keep the current one. If you are deploying a new version of Yotei you should reset the database in order to match any required changes to the database.
 
 You will be asked if you intend to use a domain. If the answer is yes, provide the correct domain. Otherwise it will build locally and work on localhost through port 8080.
 
