@@ -47,6 +47,7 @@
   font-size: large;
   margin: 5px;
   width: 50px;
+  padding-top: 9px;
 }
 
 .numberSingle {
@@ -58,4 +59,5 @@
   font-size: large;
   margin: 5px;
   width: 24px;
+  padding-top: 9px;
 }
