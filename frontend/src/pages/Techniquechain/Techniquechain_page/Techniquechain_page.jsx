@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
 import { Trash, Pencil } from "react-bootstrap-icons"
-import { useNavigate } from "react-router"
+import { useLocation, useNavigate, useParams } from "react-router"
 import { isEditor, HTTP_STATUS_CODES } from "../../../utils"
 import { AccountContext } from "../../../context"
 import styles from "./Techniquechain_page.module.css"
@@ -75,7 +75,7 @@ export default function Techniquechain_page() {
 							style={{ color: "var(--red-primary)" }}
 						/>
 						<Trash
-							onClick={() => setShowDeletePopup(showDeletePopup)} //not tested extensivly
+							onClick={() => setShowDeletePopup(true)}
 							size="24px"
 							style={{ color: "var(--red-primary)" }}
 						/>

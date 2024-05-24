@@ -10,7 +10,7 @@ import { useLocation } from "react-router-dom"
 import Button from "../../../components/Common/Button/Button.jsx"
 import { useNavigate } from "react-router"
 import InfiniteScrollComponent from "../../../components/Common/List/InfiniteScrollComponent"
-import TechniquechainCard from "../../../components/Common/TechniquechainCard/TechniquechainCard"
+import TechniquechainNode from "../../../components/Common/TechniquechainCard/TechniquechainNode"
 
 export default function TechniquechainCreate() {
 
@@ -207,15 +207,14 @@ export default function TechniquechainCreate() {
 				{ nodesToDisplay.map((technique, index) => {
 					return (
 						<div key={technique.id} style={{ display: "flex", alignItems: "center", marginBottom: "1px", width: "100%" }}>
-							<span style={{ marginRight: "10px", fontSize: "25px", marginTop: "10px" }}>{index + 1}</span>
 							<div style={{ flex: 1 }}>
-								<TechniquechainCard
+								<TechniquechainNode
 									item={technique.name}
 									key={technique.id}
 									id={technique.id}
 									detailURL={detailURL}
 									index={index}>
-								</TechniquechainCard>
+								</TechniquechainNode>
 							</div>
 						</div>
 					)

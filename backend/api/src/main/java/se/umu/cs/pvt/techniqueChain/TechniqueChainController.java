@@ -84,7 +84,7 @@ public class TechniqueChainController {
        "in_chain": 2   //optional
       }
      */
-    @PutMapping("/node/edit")
+    @PutMapping("/node/edit") // funkar dåligt?
     public ResponseEntity<TechniqueChainNode> updateNode(@RequestBody TechniqueChainNode updatedNodeData) {
         TechniqueChainNode updatedNode = nodeService.updateNode(updatedNodeData.getId(), updatedNodeData);
         if (updatedNode != null) {
