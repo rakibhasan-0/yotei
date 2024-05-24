@@ -111,7 +111,6 @@ export default function WorkoutIndex() {
 			{workouts.length !== 0 ?
 				<div className="grid-striped">
 					{workouts.map((workout) => {
-						console.log(workout)
 						return (
 							<WorkoutListItem
 								key={workout.workoutID}
