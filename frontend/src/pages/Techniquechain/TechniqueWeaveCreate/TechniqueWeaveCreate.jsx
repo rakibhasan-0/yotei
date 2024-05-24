@@ -22,6 +22,9 @@ import { HTTP_STATUS_CODES } from "../../../utils"
  * might be a good idea...
  * !NOTE!
  * 
+ * TODOS: Validation of input, not being able to save a weave without a name
+ * 				add node coordinates when saving a weave
+ * 
  * @author Team Durian
  * @version 1.0
  * @since 2024-05-20
@@ -87,6 +90,8 @@ const CreateWeave = () => {
 
 	const handleGoBack = () => {
 		//Should make sure that no unsaved changes are discarded without prompting the user
+		//And if the user discards the newly created weave it should be deleted from db as it is created on render
+		//the reason for that behavior is due to the fact that every node needs to be linked to a weave
 		navigate(-1)
 	}
 
@@ -96,7 +101,7 @@ const CreateWeave = () => {
 	}
 
 	return (
-		<>
+		<div className={styles.content}>
 			<title>Skapa teknikväv</title>
 			<h1>Skapa teknikväv</h1>
 			<InputTextField
@@ -172,7 +177,7 @@ const CreateWeave = () => {
 				</Button>
 			</div>
 			
-		</>
+		</div>
 	)
 }
 

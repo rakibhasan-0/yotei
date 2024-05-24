@@ -227,7 +227,7 @@ function AddTechnique({ id, submit, chosenTech, ownName, nodeDesc, participant, 
 							checkBox={
 								<CheckBox
 									checked={chosenTech ? chosenTech.techniqueID === technique.techniqueID : false}
-									onClick={() => {setChosenTech(technique)/*; setOwnName(technique.name)*/}}
+									onClick={() => {setChosenTech(technique)}}
 								/>
 							}
 							technique={technique}
@@ -239,10 +239,12 @@ function AddTechnique({ id, submit, chosenTech, ownName, nodeDesc, participant, 
 			{/* Spacing so the button doesn't cover an ExerciseListItem */}
 			<br /><br /><br />
 
-			
-			<RoundButton onClick={submit}>
-				<ChevronRight width={30} />
-			</RoundButton>
+			{ownName || chosenTech ? (
+				<RoundButton onClick={submit}>
+					<ChevronRight width={30} />
+				</RoundButton>
+			) : null}
+
 			
 		</div>
 	)

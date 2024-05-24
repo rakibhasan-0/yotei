@@ -20,8 +20,8 @@ import Spinner from "../../../components/Common/Spinner/Spinner"
  * might be a good idea...
  * !NOTE!
  * 
- * TODOS: Sökning, filtrering, öppna och visa detaljer av en väv, redigera väv
- * 				radera väv
+ * TODOS: Search, filter, open and view details of a weave, edit weave
+ * 								delete weave
  * 
  * @author Team Durian
  * @version 1.0
@@ -50,7 +50,6 @@ const TechniquechainIndex = ()=> {
 			return null
 		} else {
 			const data = await response.json()
-			console.log(data)
 			setTechniqueWeaves(data)
 			setIsLoading(false)
 		}
