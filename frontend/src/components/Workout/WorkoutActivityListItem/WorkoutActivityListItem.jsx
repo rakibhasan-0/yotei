@@ -10,30 +10,20 @@
  * @author Cyclops    (Group 5) (2023-05-09)
  * @author Durian     (Group 3) (2024-04-18)
  * @author Tomato	  (Group 6) (2024-04-23)
+ * @updated Kiwi      (Group 2) (2024-05-24) Added popups for activities 
  */
 import React, { useState } from "react"
 import styles from "./WorkoutActivityListItem.module.css"
 import { Link } from "react-router-dom"
-import DescriptionToggle from "../../Common/DescriptionToggle"
 import PopupMini from "../../Common/Popup/PopupMini"
 import TechniqueDetailMini from "../../../pages/Activity/Technique/TechniqueDetail/TechniqueDetailMini"
 import ExerciseDetailMini from "../../../pages/Activity/Exercise/ExerciseDetailMini"
 
 const WorkoutActivityListItem = ({ activity, index, id}) => {
-	const [isActive, setIsActive] = useState(false)
 	const [isOpen, setIsOpen] = useState(false)
 	let bgColor = "#ffdfe3"
 
-	console.log(activity)
-
-
-	const isFreeTextElem = () => {
-		return activity.exercise == null && activity.technique == null
-	}
-
-	const name = isFreeTextElem() ? (
-		<Link className={styles["noCursor"]} to={"#"} onClick={(e) => e.preventDefault()}>{activity.name}</Link>
-	) : (
+	const name = (
 		activity.exercise ? (
 			activity.exercise.name
 		) : (
@@ -47,72 +37,38 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 
 	const handleClick = () => {
 		setIsOpen(true)
-		console.log(isOpen)
 	}
 
 	return (
 		<>
 			{
-				isFreeTextElem ? (
-					activity.name ? 
-						<PopupMini title = {name} id = "popup-list-item-exer" isOpen = {isOpen} setIsOpen = {setIsOpen} >
-							<TechniqueDetailMini id = {activity.id}></TechniqueDetailMini>
-						</PopupMini>
-						:
-						<PopupMini title = {name} id = "popup-list-item-exer" isOpen = {isOpen} setIsOpen = {setIsOpen} >
-							<ExerciseDetailMini id = {activity.id}></ExerciseDetailMini>
-						</PopupMini>
-				)
-					: 
-					(
-						activity.technique ?
-							<PopupMini title = {name} id = "popup-list-item-tech" isOpen = {isOpen} setIsOpen = {setIsOpen} >
-								<TechniqueDetailMini id = {activity.technique.id}></TechniqueDetailMini>
-							</PopupMini>
-							:
-							<PopupMini title = {name} id = "popup-list-item-exer" isOpen = {isOpen} setIsOpen = {setIsOpen} >
-								<ExerciseDetailMini id = {activity.exercise.id}></ExerciseDetailMini>
-							</PopupMini>
-					)
+				activity.technique ?
+					<PopupMini title = {name} id = "popup-list-item-tech" isOpen = {isOpen} setIsOpen = {setIsOpen} >
+						<TechniqueDetailMini id = {activity.technique.id}></TechniqueDetailMini>
+					</PopupMini>
+					:
+					<PopupMini title = {name} id = "popup-list-item-exer" isOpen = {isOpen} setIsOpen = {setIsOpen} >
+						<ExerciseDetailMini id = {activity.exercise.id}></ExerciseDetailMini>
+					</PopupMini>	
 			}		
 
 			<div id={id} className="animate">
 				{createStripes()}
-				<div className={"row align-items-center " + (isActive ? "pt-2 pb-2" : "py-2")}  key={activity.id}
+				<div className={"row align-items-center " + "py-2"}  key={activity.id}
 					style={{
 						backgroundColor: bgColor
 					}}>
 
-					
-					<div className="col text-left">
-						<Link onClick = {handleClick} >
-							<p className={`${styles["workoutActivityName"]} m-0`}>{name}</p>
-						</Link>
-					</div>
-					
-					
+					<Link className="col text-left" onClick = {handleClick}  >
+						<h5 className={`${styles["workoutActivityName"]} m-0`}>{name}</h5>
+					</Link>
+				
 					<div className={`${styles["listItemTime"]} d-flex align-items-center justify-content-end col-xs-5 pl-0 text-right`}>
 						{activity.duration > 1? (<p className="mb-0">{activity.duration} min </p>
 						) : ( <p className="mb-0"> - </p>)
 						}
-						{
-							(!isFreeTextElem() && (activity.exercise?.description || activity.technique?.description))
-						&&
-						(<div role="optional-toggle" className="toggleIcon ml-2" onClick={() => setIsActive(!isActive)}>
-							<DescriptionToggle isActive={isActive} />
-						</div>)	
-						}
 					</div>
 					
-				</div>
-				<div>
-					{isActive && 
-						<div className="row pb-2" style={{ backgroundColor: bgColor }}>
-							<div className="col">
-								<p role="description-div" className={styles["textDesc"]}>{isFreeTextElem() ? activity.text : activity.exercise ? activity.exercise.description : activity.technique.description}</p>
-							</div>
-						</div>
-					}
 				</div>
 			</div>
 		</>
