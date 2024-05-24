@@ -12,8 +12,11 @@ import styles from "./WorkoutActivityList.module.css"
 import {useState} from "react"
 
 export default function WorkoutActivityList({categoryName, activities, id}) {
+	console.log(activities)
 	
 	const [isCollapsed, setIsCollapsed] = useState(false)
+
+	//console.log(activities)
 	
 	const rotatedIcon = {
 		transform: "rotate(180deg)",
@@ -30,7 +33,7 @@ export default function WorkoutActivityList({categoryName, activities, id}) {
 				</div>
 			</legend>
 			{!isCollapsed && sortActivities(activities).map((activity, index) =>
-				<WorkoutActivityListItem key={activity.id} activity={activity} index={index}/>)}
+				<WorkoutActivityListItem key={activity.id} activity={activity} index={index}  />)}
 			{categoryName === null && <div style={{margin:"20px"}}></div>}
 		</fieldset>
 	)
