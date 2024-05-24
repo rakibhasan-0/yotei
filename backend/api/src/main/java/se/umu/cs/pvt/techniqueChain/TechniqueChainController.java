@@ -121,16 +121,18 @@ public class TechniqueChainController {
      * @return HTTP-status code.
      * 
      * Example url
-     * /api/techniquechain/node/weave?parentWeaveId=1
+     * /api/techniquechain/node/weave/1
      */
-    @GetMapping("/node/weave")      //funkar inte 
-    public ResponseEntity<List<TechniqueChainNode>> getNodes(@RequestParam Long parentWeaveId) {
-        List<TechniqueChainNode> nodes = nodeService.getNodesByParentWeaveId(parentWeaveId);
-        for (TechniqueChainNode node : nodes) {
-            // Eagerly fetch the edges if needed
-            node.getOutgoingEdges().size();
+    @GetMapping("/node/weave/{parentWeaveId}")
+    public ResponseEntity<List<TechniqueChainNode>> getNodes(@PathVariable Long parentWeaveId) {
+        TechniqueChainWeave weave = weaveRepository.findById(parentWeaveId)
+            .orElseThrow(() -> new IllegalArgumentException("FromNode with ID " + parentWeaveId + " does not exist"));
+        List<TechniqueChainNode> nodes = nodeRepository.findByParentWeave(weave);
+        if (nodes.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.ok(nodes);
         }
-        return new ResponseEntity<>(nodes, HttpStatus.OK);
     }
 
     /**

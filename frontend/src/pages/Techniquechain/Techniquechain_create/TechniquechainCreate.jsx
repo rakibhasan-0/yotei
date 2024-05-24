@@ -1,19 +1,27 @@
 import InputTextField from "../../../components/Common/InputTextField/InputTextField.jsx"
-import React, { useContext, useEffect, useState, useRef } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import styles from "./TechniquechainCreate.module.css"
+import { AccountContext } from "../../../context"
+import { HTTP_STATUS_CODES } from "../../../utils"
 import TextArea from "../../../components/Common/TextArea/TextArea.jsx"
 import Divider from "../../../components/Common/Divider/Divider.jsx"
 import Dropdown from "../../../components/Common/List/Dropdown"
 import { useLocation } from "react-router-dom"
 import Button from "../../../components/Common/Button/Button.jsx"
 import { useNavigate } from "react-router"
+import InfiniteScrollComponent from "../../../components/Common/List/InfiniteScrollComponent"
+import TechniquechainCard from "../../../components/Common/TechniquechainCard/TechniquechainCard"
 
 export default function TechniquechainCreate() {
 
 	const { state } = useLocation()
 	const [errorMessage, setErrorMessage] = useState("")
+	const context = useContext(AccountContext)
 	const [groups, setGroups] = useState()
 	const [group, setGroup] = useState(state?.session?.group)
+	const [nodesToDisplayId, setNodesToDisplayId] = useState([])
+	const [nodesToDisplay, setNodesToDisplay ] = useState([])
+	const detailURL = "/techniquechain/techniquechain_page/"
 	const navigate = useNavigate()
 
 	// true when data has been saved, when unmounting and rebuilding view.
@@ -32,30 +40,11 @@ export default function TechniquechainCreate() {
 		}
 	})
 
-	const clearTechniqueCreateInput = (addBoxChecked, eraseBoxChecked) => {
-		setTechniquechainCreateInput({
-			name: "",
-			desc: "",
-			addBoxChecked: addBoxChecked,
-			eraseBoxChecked: eraseBoxChecked,
-			addedTags: []
-		})
-
-		localStorage.removeItem("techniqueCreateLocalStorageKey")
-	}
-
 	const [name, setName] = useState(() => {
 		return techniquechainCreateInput.name
 	})
 	const [desc, setDesc] = useState(() => {
 		return techniquechainCreateInput.desc
-	})
-	const [time, setTime] = useState(() => {
-		return techniquechainCreateInput.time
-	})
-
-	const [addedTags, setAddedTags] = useState(() => {
-		return techniquechainCreateInput.addedTags
 	})
 
 	/**
@@ -69,6 +58,105 @@ export default function TechniquechainCreate() {
 			[fieldName]: value
 		}))
 	}
+
+	useEffect(() => {
+		getAllWeaves()
+	}, [])
+
+	const getAllWeaves = async () => {
+
+		const requestOptions = {
+			method: "GET",
+			headers: { "Content-type": "application/json", "token": context.token }
+		}
+		const response = await fetch("/api/techniquechain/weave/all", requestOptions)
+		if (response.status !== HTTP_STATUS_CODES.OK) {
+			//Implement som error message/popup
+			return null
+		} else {
+			const data = await response.json()
+			const transformedArray = data.map(item => ({
+				id: item.id,
+				name: item.name
+			}))		
+			setGroups(transformedArray)
+			//setIsLoading(false)
+		}
+	}
+
+	useEffect(() => {
+		getStartNodes()
+	}, [group])
+
+	const getStartNodes = async () => {
+
+		const requestOptions = {
+			method: "GET",
+			headers: { "Content-type": "application/json", "token": context.token }
+		}
+		const response = await fetch(`/api/techniquechain/node/weave/${group.id}`, requestOptions)
+		if (response.status !== HTTP_STATUS_CODES.OK) {
+			//Implement som error message/popup
+			return null
+		} else {
+			const data = await response.json()
+			const transformedArray = data.map(item => ({
+				id: item.id
+			}))		
+			setNodesToDisplayId(transformedArray)
+		}
+	}
+
+	useEffect(() => {
+		getNodes()
+	}, [nodesToDisplayId])
+
+	const getNodes = async () => {
+
+		let tmpArray = []
+
+		for(let i = 0; i < nodesToDisplayId.length; i++) {
+			const requestOptions = {
+				method: "GET",
+				headers: { "Content-type": "application/json", "token": context.token }
+			}
+			const response = await fetch(`/api/techniquechain/node/${nodesToDisplayId[i].id}`, requestOptions)
+			if (response.status !== HTTP_STATUS_CODES.OK) {
+				//Implement som error message/popup
+				return null
+			} else {
+				const data = await response.json()
+
+				if(data.attack) {
+					tmpArray.push(data)
+				}
+				
+			}
+		}
+		setNodesToDisplay(tmpArray)
+	}
+
+	const handleSave = async () => {
+		console.log(group)
+
+		const requestOptions = {
+			method: "POST",
+			headers: { "Content-type": "application/json", "token": context.token },
+			body: JSON.stringify({
+				name: name,
+				description: desc,
+				parentId: group.id
+			})
+		}
+		const response = await fetch("/api/techniquechain/chain/create", requestOptions)
+		if (response.status !== HTTP_STATUS_CODES.OK) {
+			//Implement som error message/popup
+			return null
+		} else {		
+			navigate("/techniquechain")	
+		}
+	}
+
 
 	return (
 		<div>
@@ -115,8 +203,31 @@ export default function TechniquechainCreate() {
 				</div>}
 			</Dropdown>
 
-			<div className={styles.wrapCentering} style={{ marginBottom: "2rem", marginTop: "1rem" }} >
-				<Button onClick= {() => navigate("/techniquechain")} id = {"sessions-back"}outlined={true}><p>Tillbaka</p></Button>
+			<InfiniteScrollComponent>
+				{ nodesToDisplay.map((technique, index) => {
+					return (
+						<div key={technique.id} style={{ display: "flex", alignItems: "center", marginBottom: "1px", width: "100%" }}>
+							<span style={{ marginRight: "10px", fontSize: "25px", marginTop: "10px" }}>{index + 1}</span>
+							<div style={{ flex: 1 }}>
+								<TechniquechainCard
+									item={technique.name}
+									key={technique.id}
+									id={technique.id}
+									detailURL={detailURL}
+									index={index}>
+								</TechniquechainCard>
+							</div>
+						</div>
+					)
+				})}
+			</InfiniteScrollComponent>
+			<div style={{display: "flex", flexDirection: "row", width: "100%", justifyContent: "center", gap: 10 }}>
+				<div className={styles.wrapCentering} style={{ marginBottom: "2rem", marginTop: "1rem" }} >
+					<Button onClick= {() => navigate("/techniquechain")} id = {"sessions-back"}outlined={true}><p>Tillbaka</p></Button>
+				</div>
+				<div className={styles.wrapCentering} style={{ marginBottom: "2rem", marginTop: "1rem" }} >
+					<Button onClick= {() => handleSave()} id = {"sessions-back"}outlined={true}><p>Spara</p></Button>
+				</div>
 			</div>
 		</div>
 	)

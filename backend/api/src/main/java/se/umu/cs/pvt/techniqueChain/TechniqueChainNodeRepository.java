@@ -7,4 +7,5 @@ import org.springframework.data.repository.query.Param;
 public interface TechniqueChainNodeRepository extends JpaRepository<TechniqueChainNode, Long> {
     @Query("SELECT n FROM TechniqueChainNode n WHERE n.parentWeave = :parentWeaveId")
     List<TechniqueChainNode> findByParentWeaveId(@Param("parentWeaveId") Long parentWeaveId);
+    List<TechniqueChainNode> findByParentWeave(TechniqueChainWeave parentWeaveId);
 }

@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Trash, Pencil, Clock, Plus } from "react-bootstrap-icons"
-import { useLocation, useNavigate, useParams } from "react-router"
+import { Trash, Pencil } from "react-bootstrap-icons"
+import { useNavigate } from "react-router"
 import { isEditor, HTTP_STATUS_CODES } from "../../../utils"
 import { AccountContext } from "../../../context"
-import PrintButton from "../../../components/Common/PrintButton/PrintButton"
 import styles from "./Techniquechain_page.module.css"
 import Spinner from "../../../components/Common/Spinner/Spinner"
 import InfiniteScrollComponent from "../../../components/Common/List/InfiniteScrollComponent"
@@ -43,8 +42,8 @@ export default function Techniquechain_page() {
 			const data = await response.json()
 			settechniquechain({id: data.id, name: data.name, description: data.description})
 
-			const nodesToDesplay = data.node
-			const transformedArray = nodesToDesplay.map(item => ({
+			//const nodesToDesplay = data.node
+			const transformedArray = data.node.map(item => ({
 				id: item.id,
 				name: item.name,
 				description: item.description
@@ -76,7 +75,7 @@ export default function Techniquechain_page() {
 							style={{ color: "var(--red-primary)" }}
 						/>
 						<Trash
-							onClick={() => setShowDeletePopup(true)}
+							onClick={() => setShowDeletePopup(showDeletePopup)} //not tested extensivly
 							size="24px"
 							style={{ color: "var(--red-primary)" }}
 						/>
