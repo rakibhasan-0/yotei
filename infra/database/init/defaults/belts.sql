@@ -12,6 +12,5 @@ INSERT INTO belt (belt_name, belt_color, is_child, is_inverted) VALUES ('Grönt'
 INSERT INTO belt (belt_name, belt_color, is_child, is_inverted) VALUES ('Blått', '1E9CE3', False, False);
 INSERT INTO belt (belt_name, belt_color, is_child, is_inverted) VALUES ('Brunt', '83530C', False, False);
 INSERT INTO belt (belt_name, belt_color, is_child, is_inverted) VALUES ('Svart', '201E1F', False, False);
-INSERT INTO belt (belt_name, belt_color, is_child, is_inverted) VALUES ('1 Dan', '201E1F', False, False);
 INSERT INTO belt (belt_name, belt_color, is_child, is_inverted) VALUES ('2 Dan', '201E1F', False, False);
 INSERT INTO belt (belt_name, belt_color, is_child, is_inverted) VALUES ('3 Dan', '201E1F', False, False);
