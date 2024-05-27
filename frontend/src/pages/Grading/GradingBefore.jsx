@@ -597,7 +597,6 @@ export default function GradingBefore() {
 									checked={false}
                   showX={false}
 								/>
-              			
 							</div>
 						)
 					}
