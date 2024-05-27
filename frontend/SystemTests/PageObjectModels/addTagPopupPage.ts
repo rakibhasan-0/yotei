@@ -37,6 +37,8 @@ export class AddTagPopupPage {
 		const tagAddButton = this.page.locator("#tag-add-button")
 		await tagAddButton.waitFor({ state: "visible" })
 		await tagAddButton.click()
+		//The way the id is written here, each EditableListTagItem has the id of that and the name of the tag
+		//This way of setting ids could be done for each component within the EditableListTagItem as well. But is not done yet. 
 		await this.page.getByTestId("EditableListTagItem" + tag.tagName).getByText(`${tag.tagName}`).waitFor()
 
 		//Close the window and save the newly added tag.
@@ -88,6 +90,8 @@ export class AddTagPopupPage {
 	 * Finds the component to click within the EditableListTagItem.
 	 * Component is located by searching for the name, then navigating
 	 * to it's parent components moving up the DOM hierarchy.
+	 * The component to be clicked here is already in the found EditableListTagItem, therefore it exists only one of it
+	 * so the id of it can be nonidentical. 
 	 * @param tag The tag that exist in the EditableListTagItem. 
 	 * @param name The name of the component to be clicked. 
 	 */
