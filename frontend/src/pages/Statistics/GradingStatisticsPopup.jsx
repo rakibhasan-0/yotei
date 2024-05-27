@@ -28,15 +28,18 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 	const [beltID, setBeltID] = useState(null)
 	const [nextBeltId, setNextBeltId] = useState(null)
 	const [loading, setLoading] = useState(false)
+	const [newBelts, setNewBelts] = useState([])
 	const [data, setData] = useState([])
 	const { token } = useContext(AccountContext)
 	
 
 	useEffect(() => {
+
 		if (belts.length > 0) {
-			setProtocols(belts.map(belt => belt.name))
+			//setProtocols(belts.map(belt => belt.name))
+			getNextBelts()
 			setChosenProtocol(belts[0].name)
-			setBeltID(belts[0].id)
+			//setBeltID(belts[0].id)
 		}
 	}, [belts])
 
@@ -50,7 +53,7 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 
 				try {
 					setLoading(true)
-					const response = await fetch(`/api/statistics/${groupID}/grading_protocol?beltId=${nextbeltID}&startdate=${datesFrom}&enddate=${datesTo}`, requestOptions)
+					const response = await fetch(`/api/statistics/${groupID}/grading_protocol?beltId=${beltID}&startdate=${datesFrom}&enddate=${datesTo}`, requestOptions)
 					if (!response.ok) {
 						throw new Error("Failed to fetch group data")
 					}
@@ -71,49 +74,26 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 			}
 			fetchGroupGradingProtocol()
 		}
-	}, [groupID, beltID,showPopup])
+	}, [beltID])
 
 	
 	useEffect(() => {
 		if (chosenProtocol) {
-			const selectedBelt = belts.find(belt => belt.name === chosenProtocol)
+			const index = protocols.findIndex(p => p === chosenProtocol);
+			const selectedBelt = newBelts[index]
 			if (selectedBelt) {
 				setBeltID(selectedBelt.id)
 			}
 		}
 	}, [chosenProtocol])
 
-	useEffect(() => {
-		if (groupID !== null) {
-			const fetchProtocolBeltsForGroup = async () => {
-				const requestOptions = {
-					headers: {"Content-type": "application/json", token: token}
-				}
 
-				try {
-					setLoading(true)
-					const response = await fetch(`/api/statistics/${groupID}/grading_protocol_belts`, requestOptions)
-					if (!response.ok) {
-						throw new Error("Failed to fetch group data")
-					}
-					if(response.status === 204){
-						//For belts that do not have grading protocols
-						setBelts([])
-					} else {
-						const groups = await response.json()
-
-						setData(groups)
-
-					}
-				} catch (error) {
-					console.error("Fetching error:", error)
-				} 
-			}
-
-			fetchProtocolBeltsForGroup()
-		}
-		
-	}, [])
+	function addNumbersToUrl(baseUrl, numbers, key = 'beltId') {
+		const params = new URLSearchParams();
+		numbers.forEach(num => params.append(key, num));
+		return `${baseUrl}?${params.toString()}`;
+	}
+	
 
 	const togglePopup = () => {
 		setShowPopup(!showPopup)
@@ -123,7 +103,7 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 		setChosenProtocol(protocol)
 	}
 
-	useEffect(() => {
+	const getNextBelts = async () => {
 		
 		// Run initially to get the next belt of the current
 		const requestOptions = {
@@ -132,11 +112,19 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 
 		try {
 			setLoading(true)
-			const response = fetch(`/api/statistics/next_belt?beltId=${beltID}`, requestOptions)
-			if (!response.ok) {
+			const url = addNumbersToUrl("/api/statistics/next_belt", belts.map(belt => belt.id))
+			const response = await fetch(url, requestOptions)
+			if (response.status === 200) {
+				const json = await response.json()
+				setNewBelts(json)
+				setProtocols(json.map(belt => belt.name))
+				
+			} else if (response.status === 204) {
+				setProtocols([])
+			} else {
 				throw new Error("Failed to fetch group data")
 			}
-
+			
 		} catch (error) {
 			console.error("Fetching error:", error)
 		} finally {
@@ -145,7 +133,14 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 	
 
 
-	}, [])
+	}
+
+	useEffect(() => {
+		if (newBelts[0]) {
+			setBeltID(newBelts[0].id)
+		}
+		
+	},[newBelts])
 
 	return (
 		<div className={style.gradingStatisticsContainer} id={id}>
