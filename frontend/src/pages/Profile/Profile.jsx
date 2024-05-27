@@ -230,7 +230,7 @@ export default function Profile() {
 	const getIconFromState = (state) => {
 		if (state.id == -1) {
 			//Här borde jag fixa en route till favoritsidans grej :)
-			return <img src="../../../assets/images/starFill.svg" />
+			return <img src="/starFill.svg" />
 		}
 		if (state.hidden === true) {
 			return <Lock size={36} />
