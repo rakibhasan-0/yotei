@@ -59,8 +59,6 @@ export default function RoleEdit() {
 		setIsBlocking(false)
 		const mapToList = Array.from(selectedMap.keys())
 		
-		console.log(mapToList)
-
 		const params = new URLSearchParams({
 			newPermissionIds: mapToList
 		})
@@ -141,7 +139,6 @@ export default function RoleEdit() {
 					throw new Error("Kunde inte hämta all rättigheter")
 				}
 				const json = await response.json()
-				console.log(json)
 
 				const response2 = await fetch(`/api/permissions/role/${role_id}`, {
 					method: "GET",
