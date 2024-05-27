@@ -26,6 +26,7 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 	const [protocols, setProtocols] = useState([])
 	const [chosenProtocol, setChosenProtocol] = useState("")
 	const [beltID, setBeltID] = useState(null)
+	const [nextBeltId, setNextBeltId] = useState(null)
 	const [loading, setLoading] = useState(false)
 	const [data, setData] = useState([])
 	const { token } = useContext(AccountContext)
@@ -49,7 +50,7 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 
 				try {
 					setLoading(true)
-					const response = await fetch(`/api/statistics/${groupID}/grading_protocol?beltId=${beltID}&startdate=${datesFrom}&enddate=${datesTo}`, requestOptions)
+					const response = await fetch(`/api/statistics/${groupID}/grading_protocol?beltId=${nextbeltID}&startdate=${datesFrom}&enddate=${datesTo}`, requestOptions)
 					if (!response.ok) {
 						throw new Error("Failed to fetch group data")
 					}
@@ -72,6 +73,7 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 		}
 	}, [groupID, beltID,showPopup])
 
+	
 	useEffect(() => {
 		if (chosenProtocol) {
 			const selectedBelt = belts.find(belt => belt.name === chosenProtocol)
@@ -120,6 +122,30 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 	const onSelectRow = (protocol) => {
 		setChosenProtocol(protocol)
 	}
+
+	useEffect(() => {
+		
+		// Run initially to get the next belt of the current
+		const requestOptions = {
+			headers: {"Content-type": "application/json", token: token}
+		}
+
+		try {
+			setLoading(true)
+			const response = fetch(`/api/statistics/next_belt?beltId=${beltID}`, requestOptions)
+			if (!response.ok) {
+				throw new Error("Failed to fetch group data")
+			}
+
+		} catch (error) {
+			console.error("Fetching error:", error)
+		} finally {
+			setLoading(false)
+		}
+	
+
+
+	}, [])
 
 	return (
 		<div className={style.gradingStatisticsContainer} id={id}>
