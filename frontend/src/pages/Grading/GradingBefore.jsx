@@ -535,7 +535,7 @@ export default function GradingBefore() {
 
 
 	return (
-		<div>
+		<div style={{ width: "100%"}}>
 			<div style={{ position: "relative", zIndex: "0" }}>
 				<EditableInputTextField
 					item={gradingName}
@@ -572,6 +572,7 @@ export default function GradingBefore() {
                       key={"close-icon-" + toString(pair[0].id) + toString(pair[1].id) + "-pairId-" + toString(pair[0].pairId)}
                       color="var(--red-primary)"
                       className={styles.link}
+                      size="24px"
                       onClick={() => removePair(pair[0].id, pair[1].id, pair[1].pairId)}
                     />
                 </div>
@@ -582,7 +583,7 @@ export default function GradingBefore() {
                     key={"lock-icon-" + toString(pair[0].id) + toString(pair[1].id) + "-pairId-" + toString(pair[0].pairId)}
                     position="static"
 										color="var(--red-primary)"
-                    size="20px"
+                    size="24px"
                   />  
                 </div>}				
                 <EditableListItem
