@@ -43,7 +43,7 @@ public class SearchUserDBBuilder implements SearchDBBuilderInterface {
 
             DatabaseQuery createdQuery = new DatabaseQuery();
             createdQuery.setQuery(
-                    "SELECT u.user_id, u.username " +
+                    "SELECT u.user_id, u.username, u.role_id " +
                     "FROM user_table AS u WHERE u.role_id='" + role + "'"
             );
             queries.add(createdQuery);
