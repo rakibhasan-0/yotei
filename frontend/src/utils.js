@@ -153,8 +153,8 @@ export function logOut() {
 /**
  * Sets the message of a toast error message and displays it.
  */
-export function setError(msg, name) {
-	if (name && toast.isActive(name)) return
+export function setError(msg) {
+
 	toast.error(msg, {
 		position: "top-center",
 		autoClose: 2000,
@@ -164,15 +164,15 @@ export function setError(msg, name) {
 		draggable: false,
 		progress: undefined,
 		theme: "colored",
-		toastId: name,
+		toastId: msg,
 	})
 }
 
 /**
  * Sets the message of a toast success message and displays it.
  */
-export function setSuccess(msg, name) {
-	if (name && toast.isActive(name)) return
+export function setSuccess(msg) {
+
 	toast.success(msg, {
 		position: "top-center",
 		autoClose: 2000,
@@ -182,15 +182,15 @@ export function setSuccess(msg, name) {
 		draggable: true,
 		progress: undefined,
 		theme: "colored",
-		toastId: name,
+		toastId: msg,
 	})
 }
 
 /**
  * Sets the message of a toast error message and displays it.
  */
-export function setInfo(msg, name) {
-	if (name && toast.isActive(name)) return
+export function setInfo(msg) {
+
 	toast.info(msg, {
 		position: "top-center",
 		autoClose: 2000,
@@ -200,7 +200,7 @@ export function setInfo(msg, name) {
 		draggable: false,
 		progress: undefined,
 		theme: "colored",
-		toastId: name,
+		toastId: msg,
 	})
 }
 

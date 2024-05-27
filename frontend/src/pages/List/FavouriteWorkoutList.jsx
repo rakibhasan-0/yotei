@@ -139,20 +139,7 @@ export default function FavouriteWorkoutsList() {
 		)
 	}
 
-	function setError(msg){
-		if (toast.isActive("search-error")) return
-		setErrorToast(msg, {
-			position: "top-center",
-			autoClose: 5000,
-			hideProgressBar: false,
-			closeOnClick: true,
-			pauseOnHover: true, 
-			draggable: false,
-			progress: undefined,
-			theme: "colored",
-			toastId: "search-error",
-		})
-	}
+
 
 	function constructSearchErrorMessage(args) {
 		const searchText = args.text.trim()
@@ -200,7 +187,7 @@ export default function FavouriteWorkoutsList() {
 		}
 		getWorkouts(args, token, null, null, (response) => {
 			if(response.error) {
-				setError("Serverfel: Kunde inte ansluta till servern!")
+				setErrorToast("Serverfel: Kunde inte ansluta till servern!")
 			} else {
 				if (response.results.length === 0) constructSearchErrorMessage(args)
 				setWorkouts(response.results)
