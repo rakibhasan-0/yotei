@@ -546,7 +546,8 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 	 * @param {Integer} listID 
 	 */
 	function fetchingListContent(listID, callback) {
-		let index = 0
+		let technique_index = 0
+		let exercise_index = 0
 		const args = {
 			id: listID
 		}
@@ -555,10 +556,10 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 			if (result.error) return
 
 			const listContent = result.activities.map(item => {
-				index += 1
 				if (item.type === "technique") {
+					technique_index += 1
 					return {
-						techniqueID: listID + "-" + index + "-technique-" + item.id,
+						techniqueID: listID + "-" + technique_index + "-technique-" + item.id,
 						name: item.name,
 						type: "technique",
 						description: item.description,
@@ -572,8 +573,9 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 					}
 				}
 				else {
+					exercise_index += 1
 					return {
-						id: listID + "-exercise-" + item.id,
+						id: listID + "-" + exercise_index + "-exercise-" + item.id,
 						name: item.name,
 						type: "exercise",
 						description: item.description,
