@@ -81,11 +81,11 @@ export default function GroupIndex() {
 
 								<div style = {{marginLeft: "5px", display: "flex"}}> { (isAdminUser(context) || canEditGroups(context, group)) && (
 									<>
-										<Link to={`/plan/edit/${group.id}`}>
+										<Link to={`/plan/edit/${group.id}`} id="pencil-button">
 											<Pencil size={24} color="var(--red-primary)"/>
 										</Link>
 										<div style={{ width: "20px" }}/>
-										<Link to={`./statistics/${group.id}`}>
+										<Link to={`./statistics/${group.id}`} id="graph-button">
 											<GraphUp
 												id={`statistics-page-button-${group.id}`}
 												size="24px"
