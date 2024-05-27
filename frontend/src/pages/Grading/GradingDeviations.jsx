@@ -321,9 +321,9 @@ export default function GradingDeviations() {
      */
     function getBackButton() {
         return (
-            <div className={styles.buttonContainer}>
+            <div className={styles.bottomRowContainer}>
                 <Button
-                    width="100%"
+                    width="50%"
                     outlined={true}
                     onClick={() => {
                         navigate("/grading/" + gradingId + "/3")
