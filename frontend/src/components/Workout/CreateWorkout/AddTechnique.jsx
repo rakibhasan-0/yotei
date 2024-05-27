@@ -21,7 +21,7 @@ import TextArea from "../../Common/TextArea/TextArea"
  * @author Team Durian
  * @since 2024-05-21
  */
-function AddTechnique({ id, submit, chosenTech, ownName, nodeDesc, participant, setChosenTech, setOwnName, setNodeDesc, setParticipant }) {
+function AddTechnique({ id, submit, chosenTech, ownName, nodeDesc, participant, attack, setAttack, setChosenTech, setOwnName, setNodeDesc, setParticipant }) {
 
 	const { token } = useContext(AccountContext)
 	const [ownNameErr, setOwnNameErr] = useState(null)
@@ -190,8 +190,17 @@ function AddTechnique({ id, submit, chosenTech, ownName, nodeDesc, participant, 
 				id = "exercise-description-input"
 				errorDisabled={true}
 			/>
-			<CheckBox onClick={()=>setParticipant(1)} checked={participant === 1} label={"Deltagare 1"}/>
-			<CheckBox onClick={()=>setParticipant(2)} checked={participant === 2} label={"Deltagare 2"}/>
+			<div style={{display: "flex", flexDirection: "row", justifyContent: "center", gap: 5, alignItems: "center", }}>
+				<div style={{display: "flex", flexDirection: "column", gap: 2, justifyContent: "flex-start", width: "50%" }}>
+					<CheckBox onClick={()=>setParticipant(1)} checked={participant === 1} label={"Deltagare 1"}/>
+					<CheckBox onClick={()=>setAttack(false)} checked={attack === false} label={"Försvar"}/>
+				</div>
+				<div style={{display: "flex", flexDirection: "column", gap: 2, justifyContent: "flex-start", width: "50%" }}>
+					<CheckBox onClick={()=>setParticipant(2)} checked={participant === 2} label={"Deltagare 2"}/>
+					<CheckBox onClick={()=>setAttack(true)} checked={attack === true} label={"Anfall"}/>
+				</div>
+			</div>
+			
 
 			<div className={style.searchBar}>
 				<SearchBar

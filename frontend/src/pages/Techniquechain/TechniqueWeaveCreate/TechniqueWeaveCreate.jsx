@@ -12,6 +12,8 @@ import AddUserComponent from "../../../components/Workout/CreateWorkout/AddUserC
 import { AccountContext } from "../../../context"
 import { useNavigate} from "react-router"
 import { HTTP_STATUS_CODES } from "../../../utils"
+import { useNodesState } from "reactflow"
+
 /**
  * The technique weave create page.
  * !NOTE! 
@@ -23,7 +25,7 @@ import { HTTP_STATUS_CODES } from "../../../utils"
  * !NOTE!
  * 
  * TODOS: Validation of input, not being able to save a weave without a name
- * 				add node coordinates when saving a weave
+ * 				add node coordinates when saving a weave (more things are commented in the code)
  * 
  * @author Team Durian
  * @version 1.0
@@ -33,13 +35,14 @@ import { HTTP_STATUS_CODES } from "../../../utils"
 const CreateWeave = () => {
 	const [techniqueWeaveName, setTechniqueName] = useState("")
 	const [weaveId, setWeaveId] = useState("")
-	const [techniqueWeaveNameErr, setTechniqueNameErr] = useState("")
+	const [nodes, setNodes, onNodesChange] = useNodesState([])
+	const [edges, setEdges] = useState([])
+	// Should be used to prompt the user to fill in a name for the weave
+	const [techniqueWeaveNameErr, setTechniqueNameWeaveErr] = useState("")
 	const [techniqueWeaveDesc, setTechniqueDesc] = useState("")
+
 	const [showPopup, setShowPopup] = useState(false)
 	const context = useContext(AccountContext)
-	// Should be used to prompt the user to fill in a name for the weave
-	// eslint-disable-next-line no-unused-vars
-	const [errorMessage, setErrorMessage] = useState("")
 	const navigate = useNavigate()
 
 	useEffect(()=> {
@@ -68,25 +71,59 @@ const CreateWeave = () => {
 	}
 
 	const handleSave = async () => {
-		//Add nodes coordinates
-		const requestOptions = {
-			method: "PUT",
-			headers: { "Content-type": "application/json", "token": context.token },
-			body: JSON.stringify({
-				id: weaveId,
-				name: techniqueWeaveName,
-				description: techniqueWeaveDesc
+		// Should probably check for unnecessary whitespaces and wierd characters
+		if(techniqueWeaveName) {
+			console.log(edges)
+			console.log(nodes)
+
+			edges.map(async (edge)  => {
+				const requestOptions = {
+					method: "POST",
+					headers: { "Content-type": "application/json", "token": context.token },
+					body: JSON.stringify({
+						fromNodeId: parseInt(edge.source),
+						toNodeId: parseInt(edge.target)
+					})
+				}
+				const response = await fetch("/api/techniquechain/edge/create", requestOptions)
+				if(response.status !== 200) console.error("failed to create edge")
 			})
+			nodes.map(async (node)  => {
+				const requestOptions = {
+					method: "POST",
+					headers: { "Content-type": "application/json", "token": context.token },
+					body: JSON.stringify({
+						node_x_pos: node.position.x,
+						node_y_pos: node.position.y,
+						nodeId: node.id,
+						techniqueWeaveId: weaveId
+					})
+				}
+				const response = await fetch("/api/techniquechain/weaveRepresentation/create", requestOptions)
+				if(response.ok) console.error("failed to create representation")
+			})
+			const requestOptions = {
+				method: "PUT",
+				headers: { "Content-type": "application/json", "token": context.token },
+				body: JSON.stringify({
+					id: weaveId,
+					name: techniqueWeaveName,
+					description: techniqueWeaveDesc
+				})
+			}
+
+			const response = await fetch("/api/techniquechain/weave/edit", requestOptions)
+			if (response.status !== HTTP_STATUS_CODES.OK) {
+			//Implement som error message/popup
+				console.error("error editing weave")
+				return null
+			} else {
+			//success popup
+				navigate("/techniquechain/")
+			}	
 		}
 
-		const response = await fetch("/api/techniquechain/weave/edit", requestOptions)
-		if (response.status !== HTTP_STATUS_CODES.OK) {
-			//Implement som error message/popup
-			return null
-		} else {
-			//success popup
-			navigate("/techniquechain/")
-		}	}
+	}
 
 	const handleGoBack = () => {
 		//Should make sure that no unsaved changes are discarded without prompting the user
@@ -111,11 +148,10 @@ const CreateWeave = () => {
 				errormessage={techniqueWeaveNameErr}
 				onChange={e => {
 					setTechniqueName(e.target.value)
-					setTechniqueNameErr(null)
+					setTechniqueNameWeaveErr("")
 				}}
 				required={true}
 				type="text"
-				errorMessage={errorMessage}
 			/>
 			<TextArea
 				className={styles.standArea}
@@ -129,7 +165,14 @@ const CreateWeave = () => {
 				id = "exercise-description-input"
 				errorDisabled={true}
 			/>
-			<Flowchart weaveId={weaveId}></Flowchart>
+			<Flowchart 
+				weaveId={weaveId}
+				nodes={nodes}
+				edges={edges}
+				setNodes={setNodes}
+				setEdges={setEdges}
+				onNodesChange={onNodesChange}
+			/>
 			<CheckBox
 				id="workout-create-checkbox"
 				label="Privat pass"
@@ -157,7 +200,7 @@ const CreateWeave = () => {
 						handleGoBack()
 					}}
 					outlined={true}
-					id="workout-create-back-button"
+					id="technique-weave-back-button"
 				>
 					<h2>Tillbaka</h2>
 				</Button>

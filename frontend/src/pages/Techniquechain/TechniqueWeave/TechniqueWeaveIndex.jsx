@@ -54,7 +54,6 @@ const TechniquechainIndex = ()=> {
 			setIsLoading(false)
 		}
 	}
-	//useEffect för att hämta alla vävar
 	//Implment functionality to open and show details of a weave
 	return (
 		<>
