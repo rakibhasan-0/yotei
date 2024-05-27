@@ -31,7 +31,7 @@ public class SearchUserResponseBuilder {
                 new UserSearchResponse(
                         result.getId(),
                         result.getName(),
-                        result.getRole()
+                        result.getRoleId()
                 )
         ));
         return array;
