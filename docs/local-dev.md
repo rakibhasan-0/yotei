@@ -23,9 +23,3 @@ To run the frontend, go into `frontend` and run `npm install` to install all the
 dependencies. Then, you can run `npm start` to start the project locally. 
 Connect to `localhost:<port>` where port will be displayed in the terminal, usually
 3000.
-
-### Switching between local and remote backend
-
-The frontend can be configured to use a localhost backend, or the test 
-server. To use the test server, set `USE_IMP_SERVER` to `true` in the `.env` 
-file. If set to false, it will use a localhost instance of the backend.
