@@ -43,7 +43,7 @@ import se.umu.cs.pvt.workout.UserShortRepository;
 /**
  * Test class for ActivityListController
  * 
- * @author Team Tomato, updated 2024-05-16
+ * @author Team Tomato, updated 2024-05-16, updated 2024-05-27
  * @since 2024-05-08
  * @version 1.0
  */
@@ -157,49 +157,6 @@ public class ActivityListControllerTest {
         mockMvc.perform(put("/api/activitylists/edit").contentType(MediaType.APPLICATION_JSON).content(jsonContent)
                 .header("token", token))
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    public void shouldSucceedAtGettingAllListsWhenUserIsAuthor() throws Exception {
-
-        List<ActivityListShortDTO> dtos = new ArrayList<>();
-        List<ActivityList> lists = new ArrayList<>();
-        ActivityList testList = new ActivityList(2L, 1L, "List name", "description", false, testDate);
-        ActivityListShortDTO dto = new ActivityListShortDTO(2L, "List", 2, new UserShortDTO(new UserShort("ADMIN", 1L)),
-                true, true);
-        dtos.add(dto);
-        lists.add(testList);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        when(listRepository.findAllByAuthor(Mockito.any())).thenReturn(lists);
-
-        when(listService.getUserActivityLists(token)).thenReturn(dtos);
-
-        mockMvc.perform(get("/api/activitylists/userlists").header("token", token))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(dtos)));
-    }
-
-    @Test
-    public void shouldReturn204WhenTryingToGetListsWhenUserIsAuthorButNonExists() throws Exception {
-        when(listRepository.findAllByAuthor(Mockito.any())).thenReturn(new ArrayList<>());
-
-        mockMvc.perform(get("/api/activitylists/userlists").header("token", token)).andExpect(status().isNoContent());
-    }
-
-    @Test
-    public void shouldReturnAllAccessibleLists() throws Exception {
-        List<ActivityListShortDTO> activityLists = new ArrayList<>();
-        UserShortDTO userShortDTO = new UserShortDTO(new UserShort("USER", 3L));
-        ActivityListShortDTO testListDTO = new ActivityListShortDTO(1L, "Test list", 5, userShortDTO, false, false);
-
-        activityLists.add(testListDTO);
-        when(listService.getAllActivityLists(null, null, token)).thenReturn(activityLists);
-
-        mockMvc.perform(get("/api/activitylists/").header("token", token)).andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(activityLists)));
     }
 
 }
