@@ -156,8 +156,8 @@ export function setError(msg, name) {
 	if (name && toast.isActive(name)) return
 	toast.error(msg, {
 		position: "top-center",
-		autoClose: 5000,
-		hideProgressBar: false,
+		autoClose: 2000,
+		hideProgressBar: true,
 		closeOnClick: true,
 		pauseOnHover: true,
 		draggable: false,
@@ -174,8 +174,8 @@ export function setSuccess(msg, name) {
 	if (name && toast.isActive(name)) return
 	toast.success(msg, {
 		position: "top-center",
-		autoClose: 5000,
-		hideProgressBar: false,
+		autoClose: 2000,
+		hideProgressBar: true,
 		closeOnClick: true,
 		pauseOnHover: true,
 		draggable: true,
@@ -192,8 +192,8 @@ export function setInfo(msg, name) {
 	if (name && toast.isActive(name)) return
 	toast.info(msg, {
 		position: "top-center",
-		autoClose: 5000,
-		hideProgressBar: false,
+		autoClose: 2000,
+		hideProgressBar: true,
 		closeOnClick: true,
 		pauseOnHover: true,
 		draggable: false,
