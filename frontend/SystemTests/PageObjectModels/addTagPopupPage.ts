@@ -39,7 +39,7 @@ export class AddTagPopupPage {
 		await tagAddButton.click()
 		//The way the id is written here, each EditableListTagItem has the id of that and the name of the tag
 		//This way of setting ids could be done for each component within the EditableListTagItem as well. But is not done yet. 
-		await this.page.getByTestId("EditableListTagItem" + tag.tagName).getByText(`${tag.tagName}`).waitFor()
+		await this.page.getByTestId("EditableListTagItem-" + tag.tagName).getByText(`${tag.tagName}`).waitFor()
 
 		//Close the window and save the newly added tag.
 		const saveAndCloseButton = this.page.locator("#save-and-close-button")
@@ -65,8 +65,8 @@ export class AddTagPopupPage {
 		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
 
 		//Uncheck the tag.
-		await this.page.getByTestId("EditableListTagItem" + tag.tagName).getByText(`${tag.tagName}`).waitFor()
-		await this.page.getByTestId("EditableListTagItem" + tag.tagName).locator("label").uncheck()
+		await this.page.getByTestId("EditableListTagItem-" + tag.tagName).getByText(`${tag.tagName}`).waitFor()
+		await this.page.getByTestId("EditableListTagItem-" + tag.tagName).locator("label").uncheck()
 
 
 		//Close the popup and save the technique
