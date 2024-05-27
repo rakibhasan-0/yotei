@@ -58,17 +58,8 @@ public class UserTest {
         }
     }
 
-    @Test
-    public void userHasADefaultRole() {
-        try {
-            User user = new User("test", "test");
-            assertEquals(User.Role.USER, user.getUserRole());
-        } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
-            fail();
-        }
-    }
-
-    @Test
+    // These are for the old role system, should be rewritten
+    /* @Test
     public void usersHasAdminRoleAfterSettingToAdmin() {
         try {
             User user = new User("test", "test");
@@ -89,5 +80,5 @@ public class UserTest {
         } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             fail();
         }
-    }
+    } */
 }

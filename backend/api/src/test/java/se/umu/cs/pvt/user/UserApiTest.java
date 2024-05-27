@@ -74,7 +74,6 @@ public class UserApiTest {
         try {
             user.setUsername("user");
             user.setPassword("1234");
-            user.setUserRole(1);
 
             Mockito.when(userRepository.findUserByUsernameIgnoreCase(user.getUsername())).thenReturn(Optional.of(user));
 
@@ -94,7 +93,6 @@ public class UserApiTest {
         try {
             user.setUsername("user");
             user.setPassword("1234");
-            user.setUserRole(1);
 
             Mockito.when(userRepository.findUserByUsernameIgnoreCase(user.getUsername())).thenReturn(Optional.empty());
 
@@ -128,7 +126,7 @@ public class UserApiTest {
     void shouldSucceedWhenRemovingUsers() {
         try {
             Long id = 3L;
-            Mockito.when(userRepository.findById(id)).thenAnswer(invocation -> Optional.of(new User("user3", "user3", 0)));
+            Mockito.when(userRepository.findById(id)).thenAnswer(invocation -> Optional.of(new User("user3", "user3")));
             Object response = lc.removeUser(id);
             if (response instanceof ResponseEntity<?>) {
                 HttpStatus actual = ((ResponseEntity<?>) response).getStatusCode();
@@ -172,24 +170,8 @@ public class UserApiTest {
     }
 
 
-    @Test
-    void shouldSucceedWhenChangingUserRole() {
-        try {
-            Long id = 3L;
-            Mockito.when(userRepository.findById(id)).thenAnswer(invocation -> Optional.of(new User("user3", "user3", 1)));
-
-            Object response = lc.changeRoleUser(id, User.Role.USER.getKey());
-            if (response instanceof ResponseEntity<?>) {
-                HttpStatus actual = ((ResponseEntity<?>) response).getStatusCode();
-                assertEquals(HttpStatus.OK, actual);
-            }
-        } catch (Exception e) {
-            fail();
-        }
-    }
-
-
-    @Test
+    // These tests are for the old role system, should be rewritten for the new system
+    /* @Test
     void shouldFailWhenChangingRoleOnNoneExistingUser() {
         try {
             Long id = 20L;
@@ -203,10 +185,10 @@ public class UserApiTest {
         } catch (Exception e) {
             fail();
         }
-    }
+    } */
 
 
-    @Test
+    /* @Test
     void shouldFailWhenChangingRoleOnUserWithDatabaseFail() {
         try {
             Long id = 3L;
@@ -221,13 +203,13 @@ public class UserApiTest {
             e.printStackTrace();
             fail();
         }
-    }
+    } */
 
     @Test
     void shouldSetRoleCorrectly() {
         try {
             Long id = 3L;
-            Mockito.lenient().when(userRepository.findById(id)).thenAnswer(invocation -> Optional.of(new User("user3", "user3", 1, 2L)));
+            Mockito.lenient().when(userRepository.findById(id)).thenAnswer(invocation -> Optional.of(new User("user3", "user3", 2L)));
 
             Mockito.lenient().when(roleRepository.findById(Mockito.anyLong())).thenAnswer(invocation -> Optional.of(new Role("test")));
 
@@ -251,7 +233,7 @@ public class UserApiTest {
     @Test
     void shouldRemoveRoleCorrectly() {
         Long id = 3L;
-        Mockito.lenient().when(userRepository.findById(id)).thenAnswer(invocation -> Optional.of(new User("user3", "user3", 1, 2L)));
+        Mockito.lenient().when(userRepository.findById(id)).thenAnswer(invocation -> Optional.of(new User("user3", "user3", 2L)));
 
         Mockito.lenient().when(userRepository.save(Mockito.any()))
             .thenAnswer(invocation -> {
