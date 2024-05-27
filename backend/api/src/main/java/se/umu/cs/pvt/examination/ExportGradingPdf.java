@@ -72,15 +72,8 @@ public class ExportGradingPdf {
         this.examineePairs = examineePairs;
         this.protocol = parseJson(gradingProtocol);
 
-        try {
-            String currentPath = ExportGradingPdf.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-            File file = new File(currentPath);
-    
-            fontPath = file.getAbsolutePath() + "/se/umu/cs/pvt/fonts/NotoSans-Regular.ttf";
-    
-        }catch(Exception e) {
-            
-        }
+        fontPath = System.getenv("PDF_ASSET_PATH") + "/NotoSans-Regular.ttf";
+
 
         Map<String, Object> gradingProtocolObj = (Map<String, Object>) protocol.get("examination_protocol");
         this.code = (String)gradingProtocolObj.get("code");
@@ -181,7 +174,7 @@ public class ExportGradingPdf {
      * @throws IOException
      */
     private void drawImage(PDPage page, PDPageContentStream contentStream) throws IOException {
-        String path = System.getProperty("user.dir") + "/frontend/public/ubk-logga.jpg";
+        String path = System.getenv("PDF_ASSET_PATH") + "/ubk-logga.jpg";
         int x = (int)page.getMediaBox().getWidth() - 155;
         int y = pageHeight-60;
         PDImageXObject pdImage = PDImageXObject.createFromFile(path, document);

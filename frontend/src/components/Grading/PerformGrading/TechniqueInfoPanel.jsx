@@ -54,6 +54,7 @@ export default function TechniqueInfoPanel({
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [isAddingComment, setAddComment] = useState(false)
 	const [commentText, setCommentText] = useState("")
+	const [initialCommentText, setInitialCommentText] = useState("")
 	const [commentError, setCommentError] = useState("")
 	const [hasComment, setExistingComment] = useState(false)
 	const [commentId, setCommentId] = useState(null)
@@ -87,11 +88,14 @@ export default function TechniqueInfoPanel({
      * @param {boolean} show - Whether to show or hide the comment input.
      */
 	const toggleAddGroupComment = (show) => {
-		if (!show && commentText && commentText.trim().length > 0) {
+		if (!show && commentText !== initialCommentText) {
 			setShowDiscardComment(true)
 			return
 		}
 		setAddComment(show)
+		if (show) {
+			setInitialCommentText(commentText)
+		}
 	}
 
 	/**
@@ -182,6 +186,7 @@ export default function TechniqueInfoPanel({
 			if (response.status === 404) {
 				console.log("No existing comment, 404 status")
 				setCommentText("")
+				setInitialCommentText("")
 				setExistingComment(false)
 				return
 			}
@@ -197,10 +202,12 @@ export default function TechniqueInfoPanel({
 			if (commentObject) {
 				setCommentId(commentObject.commentId)
 				setCommentText(commentObject.comment)
+				setInitialCommentText(commentObject.comment)
 				setExistingComment(true)
 			} else {
 				setCommentId(null)
 				setCommentText("")
+				setInitialCommentText("")
 				setExistingComment(false)
 			}
 		} catch (ex) {
@@ -262,10 +269,25 @@ export default function TechniqueInfoPanel({
 					type={"text"}
 				/>
 				{commentError && <p className={styles.err}>{commentError}</p>}
-				<div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px", marginTop: "10px"}}>
-					<Button outlined={true} onClick={() => {setCommentText(commentText + " " + "Böj på benen!"); setCommentError(false)}}>Böj på benen!</Button>
-					<Button outlined={true} onClick={() => {setCommentText(commentText + " " + "Balansbrytning!"); setCommentError(false)}}>Balansbrytning!</Button>
-					<Button outlined={true} onClick={() => {setCommentText(commentText + " " + "Kraftcirkeln!"); setCommentError(false)}}>Kraftcirkeln!</Button>
+				<div className={styles.presetCommentContainer}>
+					<Button 
+						outlined={true} 
+						onClick={() => {setCommentText(commentText + " " + "Böj på benen!") 
+							setCommentError(false)}}>
+						<p className={styles.presetCommentText}>Böj på benen!</p>
+					</Button>
+					<Button 
+						outlined={true} 
+						onClick={() => {setCommentText(commentText + " " + "Balansbrytning!") 
+							setCommentError(false)}}>
+						<p className={styles.presetCommentText}>Balansbrytning!</p>
+					</Button>
+					<Button 
+						outlined={true} 
+						onClick={() => {setCommentText(commentText + " " + "Kraftcirkeln!") 
+							setCommentError(false)}}>
+						<p className={styles.presetCommentText}>Kraftcirkeln!</p>
+					</Button>
 				</div>
 				<Button onClick={() => onAddGroupComment()}>Lägg till</Button>
 			</Popup>

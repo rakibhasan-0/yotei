@@ -24,8 +24,6 @@ Om docker körts lokalt tidigare kan oanvända containers mm. att behöva rensas
 5. Navigera till `backend/api/src/main/java/se/umu/cs/pvt`
 6. Kör main metoden i ApiApplication.java i intelliJ.
 
-**NOTERA!**
-1. För att testköra frontend tillsammans med den lokala backend som satts upp måste **.env** i frontend mappen uppdataras genom att ändra raden `USE_IMP_SERVER="true"` till `USE_IMP_SERVER="false"`. 
 
 ## Vid arbete med backends databas
 

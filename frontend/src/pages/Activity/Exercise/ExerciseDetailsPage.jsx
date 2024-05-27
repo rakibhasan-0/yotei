@@ -204,7 +204,7 @@ export default function ExerciseDetailsPage() {
 					<Clock />
 					<p style={{ marginBottom: "0", marginLeft: "5px" }}>{exercise?.duration} min</p>
 				</div>
-				{isAdminUser(context) || canCreateAndEditActivity(context) && (
+				{(isAdminUser(context) || canCreateAndEditActivity(context)) && (
 					<div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
 						<Pencil
 							onClick={() => {

@@ -91,7 +91,7 @@ För att sedan starta React appen kör kommandot: <br>
 ```
 npm start
 ```
-REACT servern kommer per default köras på **localhost:3000**. Per default körs frontend mot imp (dev servern) om du vill köra backend lokalt kan du ändra USE_IMP_SERVER till "false" i .env filen.
+REACT servern kommer per default köras på **localhost:3000**.
 
 ### React Tester
 

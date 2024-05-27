@@ -38,10 +38,10 @@ export default defineConfig(({ mode }) => {
     server: {
       proxy: {
         '/api': {
-          target: env.USE_IMP_SERVER === "true" ? 'http://imp.cs.umu.se:80' : "http://localhost:" + env.GATEWAY_PORT,
+          target: "http://localhost:" + env.GATEWAY_PORT,
         },
         '/user': {
-          target: env.USE_IMP_SERVER === "true" ? 'http://imp.cs.umu.se:80' : "http://localhost:" + env.GATEWAY_PORT,
+          target: "http://localhost:" + env.GATEWAY_PORT,
         },
       },
       port: env.FRONTEND_PORT,

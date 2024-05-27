@@ -6,7 +6,7 @@ import Divider from "../../components/Common/Divider/Divider"
 import Container from "./GradingDeviationContainer"
 import CheckBox from "../../components/Common/CheckBox/CheckBox"
 import { useNavigate, useParams } from "react-router-dom"
-import {HTTP_STATUS_CODES, setError} from "../../utils"
+import {HTTP_STATUS_CODES, canHandleGradings, isAdminUser, setError} from "../../utils"
 import { AccountContext } from "../../context"
 
 
@@ -15,7 +15,7 @@ import { AccountContext } from "../../context"
  * Imports grading data and displays if the user passed or not 
  * and shows comments if there are any.
  * 
- * @author Team Pomegranate
+ * @author Team Pomegranate, Team Mango
  * @version 1.0
  * @since 2024-05-07
  */
@@ -190,7 +190,13 @@ export default function GradingDeviations() {
 
         fetchData()
         fetchPersonalComments()
-		}, [])
+	}, [])
+
+    if(!isAdminUser(context) && !canHandleGradings(context)) {
+        window.location.replace("/404")
+        return null
+    }
+
 
     /**
      * Checks if the examinee has passed a specific technique
