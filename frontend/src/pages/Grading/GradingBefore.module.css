@@ -32,6 +32,11 @@
   justify-content: space-between; /* To evenly distribute items */
 }
 
+.link {
+  font-size: 100%;
+  cursor: pointer;
+}
+
 .trashcan {
   top: 4px;
   right: 0;
