@@ -73,6 +73,12 @@ export type Group = {
   name?: string,
   startDate?: string,
   endDate?: string,
-  days?: string,
+  days?: GroupsDay[],
+  time?: string,
+}
+
+// Used when creating a group and deciding days for sessions.
+export type GroupsDay = {
+  name?: 'Mån' | 'Tis' | 'Ons' | 'Tor' | 'Fre' | 'Lör' | 'Sön',
   time?: string,
 }
