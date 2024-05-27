@@ -9,7 +9,9 @@ import { toast } from "react-toastify"
  *  		2024-05-22  by Team Mango: Added some more permissions functions and removed all of the old permission code.
  * 			2024-05-23  by Team Mango: Separated admin permission function from the rest,
  * 										making it more readable that they are different.
- * 			2024-05-27 By Team Coconut: Tweaking numbers of toasts and disabled the progessbar on customers wishes
+ * 			2024-05-27  by Team Coconut: Tweaking numbers of toasts and disabled the progessbar on customers wishes
+ * 										 every toast function no longer takes a second argument and uses the message sent as ID instead
+ * 										 this automatically ensures that the same message is not displayed multiple times.
  */
 
 /**
