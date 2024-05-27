@@ -34,6 +34,7 @@ import { Spinner } from "react-bootstrap"
  * @author Team Mango (Group 4)
  * @version 1.0
  * @since 2024-05-13
+ * Updates: 2024-05-27: Changed text for when role is already used and someone tries to delete it.
  */
 export default function RoleDelete({ id, roleID, name, setIsOpen }) {
 	
@@ -117,7 +118,10 @@ export default function RoleDelete({ id, roleID, name, setIsOpen }) {
 
 	function constructUserList() {
 		return <>
+			<p>{users.length > 0 ? <>Det går inte att ta bort rollen <b>{name}</b>.</> : ""}</p>
+					
 			<p>{users.length > 0 ? "Rollen används av följande användare:" : ""}</p>
+
 			<div className={"grip-striped"} style={{textAlign: "center", marginBottom: "1rem"}}>
 				{users.map((user, index) => {
 					console.log(user.username)
@@ -147,7 +151,8 @@ export default function RoleDelete({ id, roleID, name, setIsOpen }) {
 	}
 
 	return <div className={styles.popupContainer} id={id}>
-		<p>Är du säker på att du vill ta bort rollen <b>{name}?</b></p>
+		{/* The text is only shown if there are no users that have that role. */}
+		<p>{users.length > 0 ? "" : <>Är du säker på att du vill ta bort rollen <b>{name}</b>?</>}</p>
 
 		{gotResponse ? constructUserList() : <Spinner id={"role-spinner"}/>}
 	
