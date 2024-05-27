@@ -17,6 +17,7 @@ import { canHandleGradings, isAdminUser } from "../../utils"
  */
 export default function GradingAfter() {
 	const context = useContext(AccountContext)
+	const hasPreviousState = location.key !== "default"
 	const { token} = context
 	const { gradingId } = useParams()
 	const navigate = useNavigate()
@@ -48,6 +49,7 @@ export default function GradingAfter() {
 				}
 				return response.json()
 			})
+			
 	}
     
 	/**
@@ -154,7 +156,11 @@ export default function GradingAfter() {
 	 * Function to navigate back to the examination page.
 	 */
 	const navigateBack = () => {
-		navigate(`/grading/${gradingId}/2`)
+		if (hasPreviousState) {
+			navigate(-1)
+		} else {
+			navigate(`/grading/${gradingId}/2`)
+		}
 	}
 
 	/**
@@ -169,7 +175,6 @@ export default function GradingAfter() {
 					fetchBelts(),
 					fetchExamineeResult()
 				])
-				
 				setIsGrading(true)
 				setGrading(grading_data)
 
@@ -216,7 +221,7 @@ export default function GradingAfter() {
 						<div style={{ backgroundColor: beltInfo.color, borderRadius: "0.3rem", padding: "0px" }}>
 							<h2
 								style={{ color : beltInfo.color === "#201E1F" ? "white" : "black" }}
-							>{beltInfo.belt_name} bälte</h2>
+							>{grading.title}</h2>
 						</div>
 					</div>
 					<h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "10px", paddingBottom: "10px" }}>Summering</h1>
