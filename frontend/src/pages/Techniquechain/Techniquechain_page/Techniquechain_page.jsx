@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { Trash, Pencil } from "react-bootstrap-icons"
 import { useLocation, useNavigate, useParams } from "react-router"
-import { isEditor, HTTP_STATUS_CODES } from "../../../utils"
+import { isAdminUser, HTTP_STATUS_CODES } from "../../../utils"
 import { AccountContext } from "../../../context"
 import styles from "./Techniquechain_page.module.css"
 import Spinner from "../../../components/Common/Spinner/Spinner"
@@ -61,7 +61,7 @@ export default function Techniquechain_page() {
 			<div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: "10px" }}>
 				{/* empty div to get the right look with old components */}
 				<div ></div> 
-				{isEditor(context) && (
+				{isAdminUser(context) && (
 					<div style={{ display: "flex", flexDirection: "row", gap: "10px", justifyContent: "flex-end"}}>
                         
 						{/* TODOO: add a printer button and functionallity to print a chain and its graph */}

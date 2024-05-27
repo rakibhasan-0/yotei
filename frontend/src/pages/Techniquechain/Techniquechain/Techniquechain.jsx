@@ -10,7 +10,7 @@ import FilterContainer from "../../../components/Common/Filter/FilterContainer/F
 import Sorter from "../../../components/Common/Sorting/Sorter"
 import TechniquechainCard from "../../../components/Common/TechniquechainCard/TechniquechainCard"
 import RoundButton from "../../../components/Common/RoundButton/RoundButton"
-import { isEditor, HTTP_STATUS_CODES } from "../../../utils"
+import { isAdminUser, HTTP_STATUS_CODES } from "../../../utils"
 import { Plus } from "react-bootstrap-icons"
 
 
@@ -110,7 +110,7 @@ export default function Techniquechain() {
 			{/* Spacing so the button doesn't cover a exercise card */}
 			<br/><br/><br/><br/><br/>
 
-			{isEditor(context) && 
+			{isAdminUser(context) && 
 			<RoundButton linkTo={"chain/create"} id={"exercise-round-button"}  style={{maxWidth: "5px"}}>
 				<Plus/>
 			</RoundButton>
