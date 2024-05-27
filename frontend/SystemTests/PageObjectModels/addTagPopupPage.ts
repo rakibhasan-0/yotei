@@ -78,7 +78,7 @@ export class AddTagPopupPage {
 		await this.page.getByRole("button", { name: "Hantera tagg" }).click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
-		await this.page.getByTestId("EditableListTagItem" + tag.tagName).getByText(`${tag.tagName}`).waitFor()
+		await this.page.getByTestId("EditableListTagItem-" + tag.tagName).getByText(`${tag.tagName}`).waitFor()
 
 		//Remove the tag from the database. 
 		await this.findComponents(tag, "#close-icon")
