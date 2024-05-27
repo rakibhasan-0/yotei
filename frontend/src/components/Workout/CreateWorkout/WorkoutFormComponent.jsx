@@ -155,7 +155,8 @@ export default function WorkoutFormComponent({ callback, state }) {
 
 	return (
 		<>
-			<Form noValidate validated={validated} onSubmit={handleSubmit}>
+			{/* preventDefault stops random buttons in components triggering the form submit.*/}
+			<Form noValidate validated={validated} onSubmit={e => e.preventDefault()}>
 				<div className={styles.row}>
 					<Form.Group controlId="validationCustom0" className="mb-1">
 						<Form.Control
@@ -298,7 +299,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 							backText="Avbryt"
 							zIndex={1000} 
 						/>
-						<Button type="submit" id="workout-create-back-button">
+						<Button type="submit" id="workout-create-back-button" onClick={handleSubmit}>
 							<h2>Spara</h2>
 						</Button>
 					</Form.Group>
