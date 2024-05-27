@@ -17,14 +17,18 @@ import se.umu.cs.pvt.workout.UserShortRepository;
  * based on the given list of {@link ActivityListDBResult ActivityListDBResults}.
  * 
  * @author Team Tomato
- * @since 2024-05-20
+ * @since 2024-05-20, updated 2024-05-27
  */
 public class SearchActivityListResponseBuilder {
+    private Long exerciseId;
+    private Long techniqueId;
     private List<ActivityListDBResult> activityListDBResultList;
     private final UserShortRepository userShortRepository;
     private final ActivityListEntryRepository activityListEntryRepository;
 
-    public SearchActivityListResponseBuilder(List<ActivityListDBResult> activityListDBResultList, UserShortRepository userShortRepository, ActivityListEntryRepository activityListEntryRepository){
+    public SearchActivityListResponseBuilder(List<ActivityListDBResult> activityListDBResultList, UserShortRepository userShortRepository, ActivityListEntryRepository activityListEntryRepository, Long exerciseId, Long techniqueId){
+        this.exerciseId = exerciseId;
+        this.techniqueId = techniqueId;
         this.activityListEntryRepository = activityListEntryRepository;
         this.activityListDBResultList = activityListDBResultList;
         this.userShortRepository = userShortRepository;
@@ -37,8 +41,22 @@ public class SearchActivityListResponseBuilder {
         Optional<UserShort> userShort = userShortRepository.findById(result.getAuthor());
         UserShortDTO authorDTO = userShort.isPresent() ? new UserShortDTO(userShort.get()) : null;
         List<ActivityListEntry> entries = activityListEntryRepository.findAllByActivityListId(result.getId());
+        int numOccurences = 0;
+        for(ActivityListEntry entry : entries){
+            if(exerciseId != null){
+                if(entry.getExerciseId() == exerciseId){
+                    numOccurences++;
+                }
+            }
+            else if (techniqueId != null){
+                if(entry.getTechniqueId() == techniqueId){
+                    numOccurences++;
+                }
+            }
+        }
+
         response.add(new ActivityListSearchResponse(
-            result.getId(), authorDTO, result.getName(), result.getHidden(), result.getDate(), entries.size()
+            result.getId(), authorDTO, result.getName(), result.getHidden(), result.getDate(), entries.size(), numOccurences
         ));
     });
     return response;
