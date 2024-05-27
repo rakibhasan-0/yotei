@@ -6,7 +6,7 @@ import styles from "./GradingBefore.module.css"
 import { AccountContext } from "../../context"
 import AddExaminee from "../../components/Common/AddExaminee/AddExaminee"
 import EditableListItem from "../../components/Common/EditableListItem/EditableListItemGrading"
-import { X as CloseIcon, LockFill } from "react-bootstrap-icons"
+import { LockFill, Link } from "react-bootstrap-icons"
 
 import PopupSmall from "../../components/Common/Popup/PopupSmall"
 
@@ -475,55 +475,6 @@ export default function GradingBefore() {
 	}
 
 	/**
-	 * Remove an examinee pair. This functions removes it from the database and also locally in the array.
-	 * @param {Integer} examineeId 
-	 */
-	async function removeExamineeInPair(examineeId) {
-
-		let pairId
-
-		// gets the pair id. this can be done by checking both examinee in the same pair
-		pairs.map(pair => {
-			if (pair[0].id === examineeId || pair[1].id === examineeId) {
-				pairId = pair[0].pairId
-			}
-		})
-
-		// gets the pair that will be modified
-		let modifyPair = pairs.find(pair => {
-			if (pair[0].pairId === pairId) {
-				return pair[0].id === examineeId ? { id: pair[1].id, name: pair[1].name, isLocked: false } : { id: pair[0].id, name: pair[0].name, isLocked: false }
-			}
-		})
-
-		// saves the remaining examinee from the deleted pair
-		modifyPair = modifyPair.map(examinee => {
-			if (examinee.id !== examineeId) {
-				return examinee
-			}
-		}).filter(Boolean)
-
-		await deletePair(pairId, token)
-			.catch(() => setErrorToast("Kunde inte tabort paret. Kontrollera din internetuppkoppling."))
-
-
-		await deleteExaminee(examineeId, token)
-			.catch(() => setErrorToast("Kunde inte tabort personen. Kontrollera din internetuppkoppling."))
-
-		// create a new array with the remaining pairs
-		const newPairs = pairs.map(pair => {
-			if (pair[0].id !== examineeId && pair[1].id !== examineeId) {
-				return [{ id: pair[0].id, name: pair[0].name, pairId: pair[0].pairId, isLocked: false },
-				{ id: pair[1].id, name: pair[1].name, pairId: pair[1].pairId, isLocked: false }]
-			}
-		}).filter(Boolean)
-
-		setPair(newPairs)
-		setExaminees([...examinees, modifyPair[0]])
-
-	}
-
-	/**
 	 * Change the name of an already exsisting examinee if it has no pair.
 	 * This functions call putExaminee so it gets updated in the database aswell
 	 * @param {Integer} examineeId 
@@ -584,7 +535,7 @@ export default function GradingBefore() {
 
 
 	return (
-		<div>
+		<div style={{ width: "100%"}}>
 			<div style={{ position: "relative", zIndex: "0" }}>
 				<EditableInputTextField
 					item={gradingName}
@@ -600,13 +551,12 @@ export default function GradingBefore() {
 				{pairs.map((pair, index) => {
 					if (pair.length === 2) {
 						return (
-							<div style={{ display: "flex", width: "100%", justifyContent: "left", position: "relative" }} key={"pair-" + pair[0].pairId}>
+							<div style={{ display: "flex", width: "100%", justifyContent: "left", position: "relative", alignItems: "center" }} key={"pair-" + pair[0].pairId}>
 								<div className={styles.number}>{index + 1}</div>
 								<EditableListItem
 									key={"first-examinee-pair-" + pair[0].id + "-pairId-" + pair[0].pairId}
 									id={pair[1].id}
 									item={pair[1].name}
-									onRemove={removeExamineeInPair}
 									onEdit={(id, name) => { editExaminee(id, name, true) }}
                   canEdit={Boolean(!pair[1].isLocked)}
 									onCheck={onCheck}
@@ -614,40 +564,40 @@ export default function GradingBefore() {
 									showCheckbox={false}
 									checked={false}
 								/>
-								<div style={{ width: "10px" }}></div>
-								<EditableListItem
+               
+                
+                {Boolean(!pair[0].isLocked) === true ? 
+                <div>
+                  <Link
+                      key={"close-icon-" + toString(pair[0].id) + toString(pair[1].id) + "-pairId-" + toString(pair[0].pairId)}
+                      color="var(--red-primary)"
+                      className={styles.link}
+                      size="24px"
+                      onClick={() => removePair(pair[0].id, pair[1].id, pair[1].pairId)}
+                    />
+                </div>
+                : 
+                <div> 
+                  <LockFill
+                    className={styles.lock}
+                    key={"lock-icon-" + toString(pair[0].id) + toString(pair[1].id) + "-pairId-" + toString(pair[0].pairId)}
+                    position="static"
+										color="var(--red-primary)"
+                    size="24px"
+                  />  
+                </div>}				
+                <EditableListItem
 									key={"second-examinee-pair-" + pair[1].id + "-pairId-" + pair[1].pairId}
 									id={pair[0].id}
 									item={pair[0].name}
-									onRemove={removeExamineeInPair}
 									onEdit={(id, name) => { editExaminee(id, name, true) }}
                   canEdit={Boolean(!pair[0].isLocked)}
 									onCheck={onCheck}
 									validateInput={validateInput}
 									showCheckbox={false}
 									checked={false}
+                  showX={false}
 								/>
-                {Boolean(!pair[0].isLocked) === true ? 
-                <div style={{ paddingTop: "20px", right: "10px", position: "absolute" }}>
-									<CloseIcon
-										key={"close-icon-" + toString(pair[0].id) + toString(pair[1].id) + "-pairId-" + toString(pair[0].pairId)}
-										size="25px"
-										position="static"
-										color="var(--red-primary)"
-										className={styles.trashcan}
-										onClick={() => removePair(pair[0].id, pair[1].id, pair[1].pairId)}
-									/>
-								</div>
-                : 
-                <div style={{ paddingTop: "20px", right: "10px", position: "absolute" }}> 
-                  <LockFill
-                    className={styles.lock}
-                    key={"lock-icon-" + toString(pair[0].id) + toString(pair[1].id) + "-pairId-" + toString(pair[0].pairId)}
-                    position="static"
-										color="var(--red-primary)"
-                    size="20px"
-                  />  
-                </div>}						
 							</div>
 						)
 					}
@@ -728,10 +678,11 @@ export default function GradingBefore() {
 				</Button>
 
 				<PopupSmall id={"test-popup"} title={"Varning"} isOpen={showPopup} setIsOpen={setShowPopup} direction={startRedirection}>
-					<h2>Är du säker på att alla deltagare är tillagda? </h2>
-					<h2>Du kan <span style={{ fontWeight: "bold", fontSize: "18px" }}>inte</span> redigera skapade individer i efterhand</h2>
+					<h2>Kontrollera att alla deltagare är tillagda.</h2>
+					<h2>Du kan ändra namn på skapade individer i efterhand.</h2>
+					<h2>Men det går <span style={{ fontWeight: "bold", fontSize: "18px" }}>inte</span> att redigera par i efterhand.</h2>
 					<br></br>
-					<h2> Isåfall fortsätt till graderingsprocessen</h2>
+					<h2> När du är redo, fortsätt till graderingsprocessen.</h2>
 				</PopupSmall>
 
 				<Button

@@ -6,10 +6,8 @@ import { config } from "dotenv"
  */
 config()
 
-// We never want to run system-tests on IMP.
 const systestEnv = {
 	...process.env,
-	"USE_IMP_SERVER": "false",
 }
 const frontendURL = "http://localhost:" + process.env.FRONTEND_PORT
 const testServer = "http://5dv214vt24-test.cs.umu.se"

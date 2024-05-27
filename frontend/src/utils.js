@@ -2,13 +2,16 @@ import { Cookies } from "react-cookie"
 import { toast } from "react-toastify"
 
 /**
- * @author UNKNOWN & Team Tomato & Team Mango
+ * @author UNKNOWN & Team Tomato & Team Mango & Team Coconut
  * @updated 2024-04-26  by Tomato
  * 			2024-05-20  by Team Mango: Updated permissions functions.
  *  		2024-05-21  by Team Mango: Commented functions, changed names and added more permissions functions.
  *  		2024-05-22  by Team Mango: Added some more permissions functions and removed all of the old permission code.
  * 			2024-05-23  by Team Mango: Separated admin permission function from the rest,
  * 										making it more readable that they are different.
+ * 			2024-05-27  by Team Coconut: Tweaking numbers of toasts and disabled the progessbar on customers wishes
+ * 										 every toast function no longer takes a second argument and uses the message sent as ID instead
+ * 										 this automatically ensures that the same message is not displayed multiple times.
  */
 
 /**
@@ -152,54 +155,54 @@ export function logOut() {
 /**
  * Sets the message of a toast error message and displays it.
  */
-export function setError(msg, name) {
-	if (name && toast.isActive(name)) return
+export function setError(msg) {
+
 	toast.error(msg, {
 		position: "top-center",
-		autoClose: 5000,
-		hideProgressBar: false,
+		autoClose: 2000,
+		hideProgressBar: true,
 		closeOnClick: true,
 		pauseOnHover: true,
 		draggable: false,
 		progress: undefined,
 		theme: "colored",
-		toastId: name,
+		toastId: msg,
 	})
 }
 
 /**
  * Sets the message of a toast success message and displays it.
  */
-export function setSuccess(msg, name) {
-	if (name && toast.isActive(name)) return
+export function setSuccess(msg) {
+
 	toast.success(msg, {
 		position: "top-center",
-		autoClose: 5000,
-		hideProgressBar: false,
+		autoClose: 2000,
+		hideProgressBar: true,
 		closeOnClick: true,
 		pauseOnHover: true,
 		draggable: true,
 		progress: undefined,
 		theme: "colored",
-		toastId: name,
+		toastId: msg,
 	})
 }
 
 /**
  * Sets the message of a toast error message and displays it.
  */
-export function setInfo(msg, name) {
-	if (name && toast.isActive(name)) return
+export function setInfo(msg) {
+
 	toast.info(msg, {
 		position: "top-center",
-		autoClose: 5000,
-		hideProgressBar: false,
+		autoClose: 2000,
+		hideProgressBar: true,
 		closeOnClick: true,
 		pauseOnHover: true,
 		draggable: false,
 		progress: undefined,
 		theme: "colored",
-		toastId: name,
+		toastId: msg,
 	})
 }
 
