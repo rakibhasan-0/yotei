@@ -6,7 +6,7 @@ import styles from "./GradingBefore.module.css"
 import { AccountContext } from "../../context"
 import AddExaminee from "../../components/Common/AddExaminee/AddExaminee"
 import EditableListItem from "../../components/Common/EditableListItem/EditableListItemGrading"
-import { X as CloseIcon, LockFill, Link } from "react-bootstrap-icons"
+import { LockFill, Link } from "react-bootstrap-icons"
 
 import PopupSmall from "../../components/Common/Popup/PopupSmall"
 
@@ -472,55 +472,6 @@ export default function GradingBefore() {
 		}
 
 		setExaminees(examinees.filter((examinee) => examinee.id !== examineeId))
-	}
-
-	/**
-	 * Remove an examinee pair. This functions removes it from the database and also locally in the array.
-	 * @param {Integer} examineeId 
-	 */
-	async function removeExamineeInPair(examineeId) {
-
-		let pairId
-
-		// gets the pair id. this can be done by checking both examinee in the same pair
-		pairs.map(pair => {
-			if (pair[0].id === examineeId || pair[1].id === examineeId) {
-				pairId = pair[0].pairId
-			}
-		})
-
-		// gets the pair that will be modified
-		let modifyPair = pairs.find(pair => {
-			if (pair[0].pairId === pairId) {
-				return pair[0].id === examineeId ? { id: pair[1].id, name: pair[1].name, isLocked: false } : { id: pair[0].id, name: pair[0].name, isLocked: false }
-			}
-		})
-
-		// saves the remaining examinee from the deleted pair
-		modifyPair = modifyPair.map(examinee => {
-			if (examinee.id !== examineeId) {
-				return examinee
-			}
-		}).filter(Boolean)
-
-		await deletePair(pairId, token)
-			.catch(() => setErrorToast("Kunde inte tabort paret. Kontrollera din internetuppkoppling."))
-
-
-		await deleteExaminee(examineeId, token)
-			.catch(() => setErrorToast("Kunde inte tabort personen. Kontrollera din internetuppkoppling."))
-
-		// create a new array with the remaining pairs
-		const newPairs = pairs.map(pair => {
-			if (pair[0].id !== examineeId && pair[1].id !== examineeId) {
-				return [{ id: pair[0].id, name: pair[0].name, pairId: pair[0].pairId, isLocked: false },
-				{ id: pair[1].id, name: pair[1].name, pairId: pair[1].pairId, isLocked: false }]
-			}
-		}).filter(Boolean)
-
-		setPair(newPairs)
-		setExaminees([...examinees, modifyPair[0]])
-
 	}
 
 	/**
