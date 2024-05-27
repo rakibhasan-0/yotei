@@ -203,7 +203,6 @@
     bottom:0;
     width: 100%;
     justify-content: center; /* Center items horizontally within the container */
-    align-items: center; /* Center items vertically within the container */
-    left: 0;
+    align-items: center; 
     flex: 1;
 }
