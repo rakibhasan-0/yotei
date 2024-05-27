@@ -84,7 +84,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 	}
 
 	const handleBlur = (event) => {
-		if (event.relatedTarget?.id === "accept-icon") {
+		if (event.target?.id === "edit-element") {
 			handleEditSubmit()
 		}
 		setIsEditing(false)
@@ -155,7 +155,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 											)}
 											{showLock && (
 												<LockFill
-													size="24px" style={{ color: "var(--red-primary)"}}
+													size="20px" style={{ color: "var(--red-primary)"}}
 												/>
 											)}
 										</>

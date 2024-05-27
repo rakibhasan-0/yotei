@@ -2,31 +2,35 @@ import { Cookies } from "react-cookie"
 import { toast } from "react-toastify"
 
 /**
- * @author UNKNOWN & Team Tomato & Team Mango
+ * @author UNKNOWN & Team Tomato & Team Mango & Team Coconut
  * @updated 2024-04-26  by Tomato
  * 			2024-05-20  by Team Mango: Updated permissions functions.
  *  		2024-05-21  by Team Mango: Commented functions, changed names and added more permissions functions.
  *  		2024-05-22  by Team Mango: Added some more permissions functions and removed all of the old permission code.
  * 			2024-05-23  by Team Mango: Separated admin permission function from the rest,
  * 										making it more readable that they are different.
+ * 			2024-05-27  by Team Coconut: Tweaking numbers of toasts and disabled the progessbar on customers wishes
+ * 										 every toast function no longer takes a second argument and uses the message sent as ID instead
+ * 										 this automatically ensures that the same message is not displayed multiple times.
  */
 
 /**
  * canEditSession() - Check for if this user can edit the given session or not.
  * 					  IMPORTANT: The creatorId seems to be based on the group id of the group connected to the session and should be changed!
  * 								 Solution idea: Add a userId to the sessions in the database.
- * @params [int] creatorId - The id for the session to be checked against the userId.
+ * @params [int] creatorIdOfGroup - The user id for the group connected to the session to be checked against the userId.
+ *                                  That is, the user id of the user who creted the group connected to this session.
  * @params context - AccountContext with info about user.
  * @returns true if the user has permission to edit all sessions, or if the user has permission to edit their own sessions and the creatorId of
  * 		    the session is the same as the userId. Otherwise false is returned.
  */
-export function canEditSessions(context, creatorId) {
+export function canEditSessions(context, creatorIdOfGroup) {
 	if (!context.permissions) { //Safety check for undefined which is always false.
 		return false
 	}
 	return (context.permissions.includes(USER_PERMISSION_CODES.SESSION_ALL) ||
 	(context.permissions.includes(USER_PERMISSION_CODES.SESSION_OWN) &&
-	(context.userId === creatorId)))
+	(context.userId === creatorIdOfGroup)))
 }
 
 /**
@@ -129,7 +133,7 @@ export function canCreateAndEditActivity(context) {
 }
 
 /**
- * canCreateGradings() - Check if user can create a grading.
+ * canHandleGradings() - Check if user can create a grading.
  * @param {*} context Accountcontext from user. 
  * @returns true if user can create a grading.
  */
@@ -151,54 +155,54 @@ export function logOut() {
 /**
  * Sets the message of a toast error message and displays it.
  */
-export function setError(msg, name) {
-	if (name && toast.isActive(name)) return
+export function setError(msg) {
+
 	toast.error(msg, {
 		position: "top-center",
-		autoClose: 5000,
-		hideProgressBar: false,
+		autoClose: 2000,
+		hideProgressBar: true,
 		closeOnClick: true,
 		pauseOnHover: true,
 		draggable: false,
 		progress: undefined,
 		theme: "colored",
-		toastId: name,
+		toastId: msg,
 	})
 }
 
 /**
  * Sets the message of a toast success message and displays it.
  */
-export function setSuccess(msg, name) {
-	if (name && toast.isActive(name)) return
+export function setSuccess(msg) {
+
 	toast.success(msg, {
 		position: "top-center",
-		autoClose: 5000,
-		hideProgressBar: false,
+		autoClose: 2000,
+		hideProgressBar: true,
 		closeOnClick: true,
 		pauseOnHover: true,
 		draggable: true,
 		progress: undefined,
 		theme: "colored",
-		toastId: name,
+		toastId: msg,
 	})
 }
 
 /**
  * Sets the message of a toast error message and displays it.
  */
-export function setInfo(msg, name) {
-	if (name && toast.isActive(name)) return
+export function setInfo(msg) {
+
 	toast.info(msg, {
 		position: "top-center",
-		autoClose: 5000,
-		hideProgressBar: false,
+		autoClose: 2000,
+		hideProgressBar: true,
 		closeOnClick: true,
 		pauseOnHover: true,
 		draggable: false,
 		progress: undefined,
 		theme: "colored",
-		toastId: name,
+		toastId: msg,
 	})
 }
 
@@ -216,6 +220,7 @@ export const HTTP_STATUS_CODES = {
 	FORBIDDEN: 403,
 }
 
+// These attributes have to be in the same order from 1-x as inserted into the database.
 export const USER_PERMISSION_CODES = {
 	ADMIN_RIGHTS: 1,
 	SESSION_OWN: 2, //Edit your own sessions.
@@ -224,13 +229,11 @@ export const USER_PERMISSION_CODES = {
 	PLAN_ALL: 5,
 	WORKOUT_OWN: 6,
 	WORKOUT_ALL: 7,
-	TECHNIQUE_EXERCISE_OWN: 8, // Techniques and exercices. This one is not used. Right now only all or nothing.
-	TECHNIQUE_EXERCISE_ALL: 9, //Old name: ACTIVITY_ALL (Was a potential conflict in the database naming, so we changed it.)
-	GRADING_OWN: 10,
-	GRADING_ALL: 11,
+	TECHNIQUE_EXERCISE_ALL: 8, //Old name: ACTIVITY_ALL (Was a potential conflict in the database naming, so we changed it.)
+	GRADING_ALL: 9,
 }
 
-export const USER_PERMISSION_LIST_ALL = [1,2,3,4,5,6,7,8,9,10,11]
+export const USER_PERMISSION_LIST_ALL = [1,2,3,4,5,6,7,8,9]
 
 /**
  * Scrolls an element with given id into view.

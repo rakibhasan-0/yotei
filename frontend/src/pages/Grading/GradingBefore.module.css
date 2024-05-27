@@ -32,6 +32,11 @@
   justify-content: space-between; /* To evenly distribute items */
 }
 
+.link {
+  font-size: 25px;
+  cursor: pointer;
+}
+
 .trashcan {
   top: 4px;
   right: 0;
@@ -52,6 +57,7 @@
   font-size: large;
   margin: 5px;
   width: 50px;
+  padding-top: 9px;
 }
 
 .numberSingle {
@@ -63,4 +69,5 @@
   font-size: large;
   margin: 5px;
   width: 24px;
+  padding-top: 9px;
 }
