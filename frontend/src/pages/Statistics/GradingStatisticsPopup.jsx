@@ -29,6 +29,7 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 	const [loading, setLoading] = useState(false)
 	const [data, setData] = useState([])
 	const { token } = useContext(AccountContext)
+	
 
 	useEffect(() => {
 		if (belts.length > 0) {
@@ -79,6 +80,38 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 			}
 		}
 	}, [chosenProtocol])
+
+	useEffect(() => {
+		if (groupID !== null) {
+			const fetchProtocolBeltsForGroup = async () => {
+				const requestOptions = {
+					headers: {"Content-type": "application/json", token: token}
+				}
+
+				try {
+					setLoading(true)
+					const response = await fetch(`/api/statistics/${groupID}/grading_protocol_belts`, requestOptions)
+					if (!response.ok) {
+						throw new Error("Failed to fetch group data")
+					}
+					if(response.status === 204){
+						//For belts that do not have grading protocols
+						setBelts([])
+					} else {
+						const groups = await response.json()
+
+						setData(groups)
+
+					}
+				} catch (error) {
+					console.error("Fetching error:", error)
+				} 
+			}
+
+			fetchProtocolBeltsForGroup()
+		}
+		
+	}, [])
 
 	const togglePopup = () => {
 		setShowPopup(!showPopup)
