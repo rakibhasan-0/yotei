@@ -299,7 +299,7 @@ describe("WorkoutEdit", () => {
 		)
 
 		render ( //eslint-disable-next-line no-dupe-keys
-			<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: 1, permissions: USER_PERMISSION_LIST_ALL, undefined }}>
+			<AccountContext.Provider value={{ undefined, userId: 1, permissions: USER_PERMISSION_LIST_ALL, undefined }}>
 				<RouterProvider router={router}/>
 			</AccountContext.Provider>
 		)
