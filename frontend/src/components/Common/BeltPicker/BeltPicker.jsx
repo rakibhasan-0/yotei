@@ -67,7 +67,10 @@ const BeltRow = ({ belt, states, onToggle }) => {
 					: <div style={{width:"72px"}} />
 				}
 			</div>
-			<p id={`belt-text-${name}`} className={styles.beltText}>{name}</p>
+			<p id={`belt-text-${name}`} className={styles.beltText}>
+				
+				{(name == "Svart") ? "1 Dan":name}
+			</p>
 		</div>
 	)
 
