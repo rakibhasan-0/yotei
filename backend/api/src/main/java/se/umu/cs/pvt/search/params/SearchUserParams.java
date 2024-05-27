@@ -53,7 +53,7 @@ public class SearchUserParams {
         return roleId != null;
     }
 
-    public long getRole() {
+    public long getRoleId() {
         return roleId;
     }
 }

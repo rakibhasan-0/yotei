@@ -70,7 +70,7 @@ public class UserParamsTest {
 
     @Test
     void getRoleTest() {
-        assertThat(params.getRole()).isEqualTo(1L);
+        assertThat(params.getRoleId()).isEqualTo(1L);
     }
 
     @Test
