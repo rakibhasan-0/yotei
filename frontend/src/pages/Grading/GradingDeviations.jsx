@@ -329,7 +329,7 @@ export default function GradingDeviations() {
 		return (
 			<div className={styles.bottomRowContainer}>
 				<Button
-					width="50%"
+					width="100%"
 					outlined={true}
 					onClick={() => {
 						navigate("/grading/" + gradingId + "/3")
@@ -342,9 +342,9 @@ export default function GradingDeviations() {
 	}
 
 	return (
-		<div>
+		<div className={styles.container}>
 			<div className={styles.scrollableContainer}>
-				<div>
+
 					<div className={styles.topContainer}>
 						<h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "5x", paddingBottom: "0px" }}>{name}</h1>
 						<h4 style={{ fontFamily: "Open Sans", fontSize: "15px", paddingTop: "0px", paddingBottom: "5x" }}>Kommentarer</h4>
@@ -353,7 +353,7 @@ export default function GradingDeviations() {
 					<div className={styles["sc23-session-header-clickable"]} role="button" onClick={() => setToggled(!toggled)}>
 					</div>
 					{getActivityContainer()}
-				</div>
+
 			</div>
 			{getBackButton()}
 		</div>
