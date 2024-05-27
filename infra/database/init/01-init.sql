@@ -154,6 +154,7 @@ DROP TABLE IF EXISTS edges CASCADE;
 DROP TABLE IF EXISTS weave_representation;
 DROP TABLE IF EXISTS node CASCADE;
 DROP TABLE IF EXISTS technique_weave CASCADE;
+DROP TABLE IF EXISTS in_chain;
 
 DROP SEQUENCE IF EXISTS serial;
 DROP SEQUENCE IF EXISTS serialEx;
@@ -820,8 +821,16 @@ CREATE TABLE weave_representation(
 );
 
 ALTER TABLE
-weave_representation OWNER TO psql;
+	weave_representation OWNER TO psql;
 
+CREATE TABLE in_chain(
+	id SERIAL PRIMARY KEY,
+	node_id INT NOT NULL,
+	chain_id INT NOT NULL
+);
+
+ALTER TABLE
+	in_chain OWNER TO psql;
 --
 -- Default Inserts
 -- ** Note that the order of some of these might 

@@ -24,9 +24,9 @@ export default function TechniquechainIndex() {
 	
 	return (
 		<Modal.Body style={{ padding: "0" }}>
-			<title>Teknikkedjor</title>
+			<title>Tekniktrådar</title>
 			<Tabs eventKey={key} onSelect={(tab) => setKey(tab)} className={styles.tabs}>
-				<Tab eventKey="technique" title="Teknikkedjor" tabClassName={`nav-link ${styles.tab}`}>
+				<Tab eventKey="technique" title="Tekniktrådar" tabClassName={`nav-link ${styles.tab}`}>
 					<Techniquechain/>
 				</Tab>
 				<Tab  eventKey="exercise" title="Teknikvävar" tabClassName={`nav-link ${styles.tab}`}>

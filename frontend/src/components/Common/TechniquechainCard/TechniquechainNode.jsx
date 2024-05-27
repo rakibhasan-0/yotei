@@ -1,6 +1,4 @@
-import { ChevronRight } from "react-bootstrap-icons"
 import styles from "./techniquechainCard.module.css"
-import { Link } from "react-router-dom"
 
 /**
  * An TechniquechainCard that can be used in an list view.
@@ -32,12 +30,11 @@ import { Link } from "react-router-dom"
  * @version 1.0
  * based on earlyer code by Chimera, Phoenix
  */
-export default function TechniquechainNode({ item, detailURL, id, index, checkBox , path}) {
+export default function TechniquechainNode({ item, detailURL, id, index, checkBox}) {
 
 	// Fixes the path regardless if the exercise is in a list or not.
 	const handleClick = () =>{
-		console.log("tröck på en av dom!")
-        console.log(id)
+		detailURL(id)
 	}
 
 	return (
@@ -49,12 +46,7 @@ export default function TechniquechainNode({ item, detailURL, id, index, checkBo
 					<div style={{display: "flex", alignItems: "center"}}>
 						<div className={styles["href-link"]} style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="ExerciseListItem-item">{item}</div>
 					</div>
-					<div className={styles["flex-shrink-0"]} style={{display: "flex", alignItems: "center"}}>
-						<ChevronRight size="30px"/>
-					</div>
 				</div>
-
-
 			</div>
 		</div>
 	)

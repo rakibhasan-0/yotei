@@ -56,8 +56,7 @@ public class TechniqueChainController {
        "attack": false,
        "technique": 1,
        "participant": 1,
-       "parentWeave": 1,
-       "inChain": 1   //optional
+       "parentWeave": 1
       }
      */
     @PostMapping("/node/create")
@@ -188,6 +187,12 @@ public class TechniqueChainController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/edge/{id}")
+    public ResponseEntity<List<TechniqueChainEdges>> getEdgeById(@PathVariable Long id) {
+        List<TechniqueChainEdges> edges = edgeRepository.findByFromNode_Id(id);
+        return ResponseEntity.ok(edges);
     }
 
     /**

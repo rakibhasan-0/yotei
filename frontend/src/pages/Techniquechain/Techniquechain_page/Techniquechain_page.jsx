@@ -56,7 +56,7 @@ export default function Techniquechain_page() {
 
 	return (
 		<div style={{ display: "flex", flexDirection: "column" }}>
-			<title>Teknikkedja</title>
+			<title>Tekniktråd</title>
 			<h1 style={{textAlign: "left", wordWrap:"break-word"}}>{techniquechain?.name}</h1>
 			<div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: "10px" }}>
 				{/* empty div to get the right look with old components */}

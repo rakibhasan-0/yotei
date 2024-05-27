@@ -78,7 +78,7 @@ export default function Techniquechain() {
 				<SearchBar
 					onBlur={saveSearchText}
 					id="searchbar-technique"
-					placeholder="Sök efter Teknikkedjor"
+					placeholder="Sök efter Tekniktrådar"
 					text={searchBarText}
 					onChange={setSearchBarText}
 					addedTags={tags}
