@@ -2,13 +2,14 @@ import { Cookies } from "react-cookie"
 import { toast } from "react-toastify"
 
 /**
- * @author UNKNOWN & Team Tomato & Team Mango
+ * @author UNKNOWN & Team Tomato & Team Mango & Team Coconut
  * @updated 2024-04-26  by Tomato
  * 			2024-05-20  by Team Mango: Updated permissions functions.
  *  		2024-05-21  by Team Mango: Commented functions, changed names and added more permissions functions.
  *  		2024-05-22  by Team Mango: Added some more permissions functions and removed all of the old permission code.
  * 			2024-05-23  by Team Mango: Separated admin permission function from the rest,
  * 										making it more readable that they are different.
+ * 			2024-05-27 By Team Coconut: Tweaking numbers of toasts and disabled the progessbar on customers wishes
  */
 
 /**
