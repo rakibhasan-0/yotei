@@ -67,6 +67,7 @@ const planURI = "https://jsonplaceholder.typicode.com/users"
  * @updated 2024-05-08 Changed so workout/edit url also have the workout id in it
  * 			2024-05-20 Changed route param for profile/list
  * 			2024-05-22 Added username
+ * 			2024-05-27 Removed AdminRoute uses (file is now removed).
  */
 export default function App() {
 	const cookie = new Cookies().get("token")
