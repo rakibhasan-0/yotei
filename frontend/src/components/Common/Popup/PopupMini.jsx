@@ -65,7 +65,7 @@ export default function PopupMini({ title, id, isOpen, setIsOpen, children, isNe
 						<X width={44} height={44} color="black" />
 					</button>
 				</div>
-				<div className={styles.mainText}>
+				<div id = "desc-container" className={styles.mainText}>
 					{children}
 				</div>
 				

@@ -59,7 +59,7 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 						backgroundColor: bgColor
 					}}>
 
-					<Link role = "link-to-popup" className="col text-left" onClick = {handleClick}  >
+					<Link role = "link" className="col text-left" onClick = {handleClick}  >
 						<h5 className={`${styles["workoutActivityName"]} m-0`}>{name}</h5>
 					</Link>
 				
