@@ -56,7 +56,7 @@ public class SearchUserDBBuilder implements SearchDBBuilderInterface {
         DatabaseQuery databaseQuery = new DatabaseQuery();
         if (queries.isEmpty()) {
             databaseQuery.setQuery(
-                    "SELECT u.user_id, u.username " +
+                    "SELECT u.user_id, u.username, u.role_id " +
                     "FROM user_table AS u"
             );
         } else {
