@@ -117,7 +117,7 @@ export default function RoleDelete({ id, roleID, name, setIsOpen }) {
 	}
 
 	function constructUserList() {
-		return <>	
+		return <>
 			<p>{users.length > 0 ? "Rollen används av följande användare:" : ""}</p>
 			<div className={"grip-striped"} style={{textAlign: "center", marginBottom: "1rem"}}>
 				{users.map((user, index) => {
