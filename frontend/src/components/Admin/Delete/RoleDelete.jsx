@@ -148,8 +148,8 @@ export default function RoleDelete({ id, roleID, name, setIsOpen }) {
 	}
 
 	return <div className={styles.popupContainer} id={id}>
-		<p>{users.length > 0 ? <>Det går inte att ta bort rollen <b>{name}</b>.</> 
-							 : <>Är du säker på att du vill ta bort rollen <b>{name}</b>?</>}</p>
+		<p>{users.length > 0 ? <>Det går inte att ta bort rollen <b>{name}</b>.</>
+			: <>Är du säker på att du vill ta bort rollen <b>{name}</b>?</>}</p>
 
 		{gotResponse ? constructUserList() : <Spinner id={"role-spinner"}/>}
 
