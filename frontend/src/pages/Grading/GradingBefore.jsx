@@ -728,10 +728,11 @@ export default function GradingBefore() {
 				</Button>
 
 				<PopupSmall id={"test-popup"} title={"Varning"} isOpen={showPopup} setIsOpen={setShowPopup} direction={startRedirection}>
-					<h2>Är du säker på att alla deltagare är tillagda? </h2>
-					<h2>Du kan <span style={{ fontWeight: "bold", fontSize: "18px" }}>inte</span> redigera skapade individer i efterhand</h2>
+					<h2>Kontrollera att alla deltagare är tillagda.</h2>
+					<h2>Du kan ändra namn på skapade individer i efterhand.</h2>
+					<h2>Men det går <span style={{ fontWeight: "bold", fontSize: "18px" }}>inte</span> att redigera par i efterhand.</h2>
 					<br></br>
-					<h2> Isåfall fortsätt till graderingsprocessen</h2>
+					<h2> När du är redo, fortsätt till graderingsprocessen.</h2>
 				</PopupSmall>
 
 				<Button
