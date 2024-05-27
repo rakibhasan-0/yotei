@@ -229,7 +229,7 @@ export default function Profile() {
 
 	const getIconFromState = (state) => {
 		if (state.id == -1) {
-			//Här borde jag fixa en route till favoritsidans grej :)
+			//Might not work on local build, prod&test build is assembled differently
 			return <img src="/starFill.svg" />
 		}
 		if (state.hidden === true) {
