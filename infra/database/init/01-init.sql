@@ -671,6 +671,7 @@ CREATE TABLE IF NOT EXISTS examination_comment(
 
 CREATE TABLE IF NOT EXISTS examination_protocol(
 	belt_id INT PRIMARY KEY,
+    belt_color TEXT NOT NULL,
 	examination_protocol JSON NOT NULL,
 	CONSTRAINT fk_belt_id FOREIGN KEY (belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE
 );

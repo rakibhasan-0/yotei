@@ -22,8 +22,7 @@ import PopupSmall from "../../components/Common/Popup/PopupSmall"
  * @since 2024-05-07
  */
 export default function GradingIndex() {
-	const [belts, setBelts] = useState([]) 
-	const [beltColors] = useState(["Gult", "Orange", "Grönt", "Blått", "Brunt"])
+	const [beltColors, setBeltColors] = useState([]) 
 	const [currentGradings, setCurrentGradings] = useState([])
 	const [finishedGradings, setFinishedGradings] = useState([])
 	const [loading, setLoading] = useState(true)
@@ -108,11 +107,11 @@ export default function GradingIndex() {
 	}
 
 	/**
-	 * GET belts from database. 
-	 * @returns all belts stored in the database. 
+	 * GET protocols from database. 
+	 * @returns all protocols stored in the database. 
 	 */
-	const fetchBelts = () => {
-		return fetch("/api/belts/all", {
+	const fetchProtocols = () => {
+		return fetch("/api/examination/examinationprotocol/all", {
 			method: "GET",
 			headers: { "token": token }
 		})
@@ -196,22 +195,20 @@ export default function GradingIndex() {
 			try {
 				setFinishedGradings([])
 				setCurrentGradings([])
-				const [belt_data, gradings_data] = await Promise.all([
-					fetchBelts(),
+				const [protocols_data, gradings_data] = await Promise.all([
+					fetchProtocols(),
 					fetchGradings()
 				])
-				
-				const filteredColors = belt_data.filter(item => beltColors.includes(item.name))
+
 				const colorMaps = {}
-				filteredColors.forEach(element => {
-					if(element.child === false) {
-						colorMaps[element.id] = {
-							name: element.name,
-							hex: `#${element.color}`,
+				protocols_data.forEach(element => {
+                    console.log('Processing element:', element);
+					colorMaps[element.beltId] = {
+							beltId: element.beltId,
+							hex: `#${element.beltColor}`,
 						}
-					}
 				})
-				setBelts(colorMaps)
+				setBeltColors(colorMaps)
 				setLoading(false)
 				createLists(gradings_data)
 
@@ -240,8 +237,8 @@ export default function GradingIndex() {
 									key={index}
 									width={"100%"}
 									
-									onClick={() => handleNavigation(grading.gradingId, grading.step, belts[grading.beltId]?.hex)}
-									color={belts[grading.beltId]?.hex}
+									onClick={() => handleNavigation(grading.gradingId, grading.step, beltColors[grading.beltId]?.hex)}
+									color={beltColors[grading.beltId]?.hex}
 								>
 								
 									<div style={{ display: "flex", alignItems: "center", width: "100%", position: "relative" }}>
@@ -277,8 +274,8 @@ export default function GradingIndex() {
 								<BeltButton
 									key={index}
 									width={"100%"}
-									onClick={() => handleNavigation(grading.gradingId, grading.step, belts[grading.beltId]?.hex)}
-									color={belts[grading.beltId]?.hex}
+									onClick={() => handleNavigation(grading.gradingId, grading.step, beltColors[grading.beltId]?.hex)}
+									color={beltColors[grading.beltId]?.hex}
 								>
 									<div style={{ display: "flex", alignItems: "center", width: "100%", position: "relative" }}>
 										<h2 style={{ margin: 0, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
