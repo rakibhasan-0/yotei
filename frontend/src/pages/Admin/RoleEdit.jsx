@@ -43,7 +43,9 @@ export default function RoleEdit() {
 	const [allMap, setAllMap] = useState(new Map())
 	const [selectedMap, setSelectedMap] = useState(new Map())
 	const [firstSelectedMap, setFirstSelectedMap] = useState(new Map())
-	
+
+	// Filter out admin permissions if the role is not admin (starts mapping from index 1)
+	const shouldRenderAdminPerm = roleName !== "admin" ? permissions.slice(1) : permissions
 
 	const blocker = useBlocker(() => {
 		if (isBlocking) {
@@ -57,6 +59,8 @@ export default function RoleEdit() {
 		setIsBlocking(false)
 		const mapToList = Array.from(selectedMap.keys())
 		
+		console.log(mapToList)
+
 		const params = new URLSearchParams({
 			newPermissionIds: mapToList
 		})
@@ -249,7 +253,7 @@ export default function RoleEdit() {
 
 			{loading ? <Spinner /> : (
 				<div>
-					{ permissions.map((permission, index) => (
+					{ shouldRenderAdminPerm.map((permission, index) => (
 						<PermissionCard
 							item={permission.permissionName}
 							key={index}

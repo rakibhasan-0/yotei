@@ -190,10 +190,10 @@ export default function RoleCreate() {
 
 			{loading ? <Spinner /> : (
 				<div>
-					{ permissions.map((permission, index) => (
+					{ permissions.slice(1).map((permission, index) => (
 						<PermissionCard
 							item={permission.permissionName}
-							key={index}
+							key={index + 1}
 							id={permission.permissionId}
 							toggled={selectedMap.has(permission.permissionId)}
 							changeToggled={() => handleButtonToggle(permission.permissionId)}
