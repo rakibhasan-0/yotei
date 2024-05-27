@@ -44,7 +44,6 @@ import "react-toastify/dist/ReactToastify.css"
 import { logOut } from "./utils"
 import { ToastContainer, toast } from "react-toastify"
 import CreateTechnique from "./pages/Activity/Technique/CreateTechnique/CreateTechnique.jsx"
-import AdminRoute from "./AdminRoute"
 import ActivityIndex from "./pages/Activity/ActivityIndex.jsx"
 import DuringGrading from "./pages/Grading/During/DuringGrading.jsx"
 import SessionCreateIndex from "./pages/Plan/SessionCreateIndex.jsx"
@@ -138,20 +137,12 @@ export default function App() {
 						<Route path="technique" element={<TechniqueIndex />} />
 						<Route
 							path="activity/technique/create"
-							element={
-								<AdminRoute>
-									<CreateTechnique />
-								</AdminRoute>
-							}
+							element={<CreateTechnique />}
 						/>
 						<Route path="technique/:techniqueId" element={<TechniqueDetail />} />
 						<Route
 							path="technique/:techniqueId/edit"
-							element={
-								<AdminRoute>
-									<TechniqueEdit />
-								</AdminRoute>
-							}
+							element={<TechniqueEdit />}
 						/>
 						<Route path="workout/create" element={<WorkoutCreate />} />
 						<Route path="excercise/create" element={<ExerciseCreate />} />
