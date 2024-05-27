@@ -92,15 +92,13 @@ public class ActivityListService implements IActivityListService {
         Long userIdL = jwt.getClaim("userId").asLong();
         String role = jwt.getClaim("role").asString();
         Optional<ActivityList> listOpt = activityListRepository.findById(id);
+        if (listOpt.isEmpty()) {
+            throw new ResourceNotFoundException("Activity list does not exists with specified id");
+        }
         if (!role.equals(ROLE_ADMIN)) {
             listOpt = activityListRepository.findByIdAndUserId(id, userIdL);
             if (listOpt.isEmpty()) {
                 throw new ForbiddenException("User does not have permissions to read list");
-            }
-        } else {
-
-            if (listOpt.isEmpty()) {
-                return null;
             }
         }
 
