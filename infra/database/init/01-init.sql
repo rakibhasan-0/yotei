@@ -667,6 +667,7 @@ CREATE TABLE IF NOT EXISTS examination_comment(
 	examinee_pair_id INT, 
 	technique_name VARCHAR(255), 
 	comment VARCHAR(255)
+	CONSTRAINT examinee_id_fk FOREIGN KEY(examinee_id) REFERENCES examination_examinee(examinee_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS examination_protocol(
