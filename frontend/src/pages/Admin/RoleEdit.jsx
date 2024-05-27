@@ -3,7 +3,7 @@ import { unstable_useBlocker as useBlocker } from "react-router"
 import { useEffect, useState, useContext, useCallback } from "react"
 import { Trash } from "react-bootstrap-icons"
 import { AccountContext } from "../../context"
-import { setError as setErrorToast } from "../../utils"
+import { isAdminUser, setError as setErrorToast } from "../../utils"
 
 import Divider from "../../components/Common/Divider/Divider"
 import InputTextFieldBorderLabel from "../../components/Common/InputTextFieldBorderLabel/InputTextFieldBorderLabel"
@@ -26,6 +26,7 @@ import RoleDelete from "../../components/Admin/Delete/RoleDelete"
 
 export default function RoleEdit() {
 	const hasPreviousState = location.key !== "default"
+	const context = useContext(AccountContext)
 	const { role_id } = useParams()
 	const { token } = useContext(AccountContext)
 
@@ -174,6 +175,11 @@ export default function RoleEdit() {
 			}
 		})()
 	}, [token])
+
+	if (!isAdminUser(context)) {
+		window.location.replace("/404")
+		return null
+	}
 	
 	if (error) {
 		return <ErrorState message={error} onBack={() => navigate("/admin")} />
