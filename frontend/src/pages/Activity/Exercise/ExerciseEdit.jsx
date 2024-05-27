@@ -13,7 +13,7 @@ import { setError as setErrorToast, setSuccess} from "../../../utils"
 import EditGallery from "../../../components/Gallery/EditGallery"
 import { useLocation, useNavigate, useParams } from "react-router"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
-import { isAdminUser, scrollToElementWithId } from "../../../utils"
+import { scrollToElementWithId } from "../../../utils"
 import { unstable_useBlocker as useBlocker } from "react-router"
 import Spinner from "../../../components/Common/Spinner/Spinner.jsx"
 
@@ -99,13 +99,6 @@ export default function ExerciseEdit() {
 	useEffect(() => {
 		checkBlocking()
 	}, [name, desc, oldName, oldDesc, time, oldTime])
-
-	
-	useEffect(() => {
-		if (!isAdminUser(context)) {
-			handleNavigation()
-		}
-	}, [context, navigate])
 	
 	/**
 	 * Returns the information about the exercise and its tags with the id in the pathname.
