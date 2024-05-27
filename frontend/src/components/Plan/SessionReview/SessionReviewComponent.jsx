@@ -43,7 +43,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	const [extraActivityId, setExtraActivityId] = useState(-1)
 	const [isTransformComplete, setIsTransformComplete] = useState(false)
 	const [shouldReload, setShouldReload] = useState(false)
-
+	const [markActivitiesInCategory, setMarkActivitiesInCategory] = useState(false)
 	const [, setErrorStateMsg] = useState("")
 
 	//const [loading, setLoading] = useState(true)
@@ -92,8 +92,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			})
 
 			if(loadedResponse.status != HTTP_STATUS_CODES.OK){
-				setErrorStateMsg("Session med ID '" + session_id + "' existerar inte. Felkod: " + loadedResponse.status)
-			
+				setErrorStateMsg("Session med ID '" + session_id + "' existerar inte. Felkod: " + loadedResponse.status)			
 				//setLoading(false)
 			} else {
 				const json = await loadedResponse.json()
@@ -109,10 +108,8 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 					fetchLoadedExtraData()
 				}
-
 				
 			}
-
 
 		}
 
@@ -206,7 +203,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		const extraCategory = sessionData.activityCategories.find(category => category.categoryName === "Extra")
 		if (extraCategory) {
 			extraCategory.activities.forEach(activity => {
-				//console.log("running")
 				if (!doneList.includes(activity.id)) {
 					removeActivity(activity.id)
 				}
@@ -238,7 +234,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 						try {
 							const newId = await getIdForActivity(foundActivity, foundActivity.order)
 							foundActivity.id = newId
-							//replaceDoneId(activityID, newId)
 							return newId
 						} catch (error) {
 							console.error("Error fetching new ID:", error)
@@ -264,7 +259,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	 */
 	useEffect(() => {
 		if (isTransformComplete) {
-			//console.log("Done list updated and transform complete:", doneList);
 			proceedWithReview()
 			setIsTransformComplete(false)
 		}
@@ -525,9 +519,35 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		} else {
 			createNewCategoryWithActivities("ExtraActivities", data)
 		}
-
 		clearActivitiesStorage()
 	}
+
+
+
+	useEffect(() =>{
+
+		if(markActivitiesInCategory) {
+
+			const extraCategory = sessionData.activityCategories.find(
+				category => category.categoryName.toLowerCase() === "ExtraActivities".toLowerCase()
+			)
+
+			setDone(prevDoneList =>{
+				if(extraCategory){
+					const newIds = extraCategory.activities.map(activity => activity.id)
+					console.log("New ids:", newIds)
+					const uniqueNewIds = newIds.filter(id => !prevDoneList.includes(id))
+					return [...prevDoneList, ...uniqueNewIds]
+				}
+			})
+
+			setMarkActivitiesInCategory(false)
+		}
+
+	}, [markActivitiesInCategory])
+
+
+
 
 
 	/**
@@ -538,26 +558,55 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
    * @param activities the activities that are added by the user
    */
 	function addActivitiesToExistingCategory(category, activities) {
-		let currentExtraId = extraActivityId
 
+		updateSessionDataWithActivities(category, activities, (newExtraId) => {
+			setExtraActivityId(newExtraId)
+			setMarkActivitiesInCategory(true)
+		})
+	}
+
+
+	/**
+	* it updates session data by adding specified activities to an existing category. It assigns new,
+	* decrementing IDs to each activity to maintain unique identifiers across the session. 
+	* This function is designed to handle the dynamic addition of activities within the user's session,
+	* ensuring all activities are accounted for in the appropriate category.
+	*
+	* @param category - The category to which activities will be added. Must contain a 'categoryName' property.
+ 	* @param activities - Array of activities to add. Each activity must be suitable for conversion into an activity object.
+ 	* @param callback - Callback to execute after activities have been added. Takes the last used ID as an argument.
+ 	*
+	*/
+
+	function updateSessionDataWithActivities(category, activities, callback) {
 		setSessionData(prevSessionData => {
 			const newCategories = prevSessionData.activityCategories.map(cat => {
 				if (cat.categoryName === category.categoryName) {
+					let localId = extraActivityId;
+					const newActivities = activities.map((activity, index) => {
+						const activityObject = createActivityObject(activity, cat.activities.length + index, localId);
+						localId--;
+						return activityObject;
+					});
+
+					callback(localId)
+
 					return {
 						...cat,
-						activities: [...cat.activities, ...activities.map((activity, index) => 
-							createActivityObject(activity, cat.activities.length + index, currentExtraId--))
-						]
-					}
+						activities: [...cat.activities, ...newActivities],
+					};
 				}
-				return cat
-			})
+				return cat;
+			});
 
-			return { ...prevSessionData, activityCategories: newCategories }
-		})
-
-		setExtraActivityId(currentExtraId)
+			return { ...prevSessionData, activityCategories: newCategories };
+		});
 	}
+
+
+	useEffect(() => {
+		console.log("Done list updated:", doneList)
+	}, [doneList])
 
 
 	/**
@@ -579,6 +628,15 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 				createActivityObject(activity, index, currentExtraId--)
 			),
 		}
+
+	
+		setDone(prevDoneList =>{
+			const newIds = newCategory.activities.map(activity => activity.id)
+			console.log("New ids:", newIds)
+			const uniqueNewIds = newIds.filter(id => !prevDoneList.includes(id))
+			return [...prevDoneList, ...uniqueNewIds]
+		})
+		
 
 		// Adding new category to the sessionData 
 		setSessionData(prevSessionData => ({
