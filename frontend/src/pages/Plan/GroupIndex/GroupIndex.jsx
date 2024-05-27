@@ -85,7 +85,7 @@ export default function GroupIndex() {
 											<Pencil id={'edit-group-button'} size={24} color="var(--red-primary)"/>
 										</Link>
 										<div style={{ width: "20px" }}/>
-										<Link to={`./statistics/${group.id}`} id="graph-button">
+										<Link to={`./statistics/${group.id}`}>
 											<GraphUp
 												id={`statistics-page-button-${group.id}`}
 												size="24px"
