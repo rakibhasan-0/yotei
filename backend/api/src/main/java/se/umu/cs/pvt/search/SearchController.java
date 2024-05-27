@@ -207,9 +207,18 @@ public class SearchController {
         .build();
         
         List<ActivityListDBResult> result = searchRepository.getActivityListFromCustomQuery(createdQuery.getQuery());
-        List<ActivityListSearchResponse> activityListSearchResponses = new SearchActivityListResponseBuilder(result, userShortRepository, activityListEntryRepository).build();
+        List<ActivityListSearchResponse> activityListSearchResponses;
+        if(searchListParams.hasExerciseId()){
+            activityListSearchResponses = new SearchActivityListResponseBuilder(result, userShortRepository, activityListEntryRepository, searchListParams.getExerciseId(), null).build();
+        }
+        else if(searchListParams.hasTecniqueId()){
+            activityListSearchResponses = new SearchActivityListResponseBuilder(result, userShortRepository, activityListEntryRepository, null, searchListParams.getTechniqueId()).build();
+        }
+        else{
+            activityListSearchResponses = new SearchActivityListResponseBuilder(result, userShortRepository, activityListEntryRepository, null, null).build();
+        }
+        
         List<ActivityListSearchResponse> filteredResult = fuzzySearchFiltering(searchListParams.getName(), activityListSearchResponses);
-
         SearchResponse<ActivityListSearchResponse> response = new SearchResponse(filteredResult, Collections.emptyList());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
