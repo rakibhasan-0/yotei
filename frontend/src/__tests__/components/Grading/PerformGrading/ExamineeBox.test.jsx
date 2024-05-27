@@ -56,4 +56,10 @@ describe("ExamineeBox onClick testing", () => {
 		fireEvent.click(screen.getByTestId("ExamineeName"))
 		expect(examineeBox).toHaveStyle({ backgroundColor: "lightcoral" })
 	})
+
+    test("ExamineeBox: should have a comment button", () => {
+        render(<ExamineeBox id="ExamineeBox" examineeName="testname"/>)
+		const examineeCommentButton = screen.getByTestId("examinee-comment-button")
+		expect(examineeCommentButton).toBeInTheDocument()
+    })
 })
