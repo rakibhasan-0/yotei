@@ -229,7 +229,6 @@ export default function Profile() {
 
 	const getIconFromState = (state) => {
 		if (state.id == -1) {
-			//Might not work on local build, prod&test build is assembled differently
 			return <img src="/starFill.svg" />
 		}
 		if (state.hidden === true) {
