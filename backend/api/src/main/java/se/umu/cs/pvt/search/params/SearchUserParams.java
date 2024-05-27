@@ -4,7 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import se.umu.cs.pvt.user.User.Role;
 
 /**
  * This class stores the urlQuery in attributes.
@@ -14,7 +13,7 @@ import se.umu.cs.pvt.user.User.Role;
 public class SearchUserParams {
     private String name;
     private String id;
-    private String role;
+    private Long roleId;
 
     public SearchUserParams(Map<String, String> urlQuery){
         try {
@@ -28,13 +27,9 @@ public class SearchUserParams {
         }
 
         id = urlQuery.get("id");
-        String inputRole = urlQuery.get("role");
+        String inputRole = urlQuery.get("roleId");
         if (inputRole != null) {
-            if (isRole(inputRole.toUpperCase())) {
-                role = Integer.toString(Role.valueOf(inputRole.toUpperCase()).ordinal());
-            } else {
-                role = inputRole;
-            }
+            roleId = (long)(Integer.parseInt(inputRole));            
         }
     }
 
@@ -55,25 +50,10 @@ public class SearchUserParams {
     }
 
     public boolean hasRole() {
-        return role != null;
+        return roleId != null;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    /**
-     * Checks if the enum Role contains the given string.
-     *
-     * @param str The string to check
-     * @return True if the string is in the enum Role, false otherwise
-     */
-    private Boolean isRole(String str) {
-        for (Role role : Role.values()) {
-            if (role.name().equals(str)) {
-                return true;
-            }
-        }
-        return false;
+    public long getRoleId() {
+        return roleId;
     }
 }

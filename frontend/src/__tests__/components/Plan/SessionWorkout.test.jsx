@@ -40,7 +40,7 @@ describe("SessionWorkout", () => {
 		})
 
 		test("should render component displaying placeholder text if workoutConnected is false", () => {
-			render(<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: 1, permissions: USER_PERMISSION_LIST_ALL}}>
+			render(<AccountContext.Provider value={{ undefined, userId: 1, permissions: USER_PERMISSION_LIST_ALL}}>
 				<BrowserRouter>
 					<SessionWorkout id={testID}/>
 				</BrowserRouter>

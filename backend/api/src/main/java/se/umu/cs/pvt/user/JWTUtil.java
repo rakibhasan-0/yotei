@@ -42,12 +42,11 @@ public class JWTUtil {
      * @throws JWTCreationException     Something went wrong during the signing
      *                                  process.
      */
-    public String generateToken(String username, String role, int userId, List<Long> permissions)
+    public String generateToken(String username, int userId, List<Long> permissions)
             throws IllegalArgumentException, JWTCreationException {
         return JWT.create()
                 .withSubject("User Details")
                 .withClaim("username", username)
-                .withClaim("role", role)
                 .withClaim("userId", userId)
                 .withClaim("permissions", permissions)
                 .withIssuedAt(new Date())
