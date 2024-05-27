@@ -8,7 +8,7 @@ import Button from "../Button/Button"
 import Popup from "../Popup/Popup"
 import AddTechnique from "../../Workout/CreateWorkout/AddTechnique"
 import { AccountContext } from "../../../context"
-import ReactFlow, { addEdge, useNodesState, applyEdgeChanges, MarkerType } from "reactflow"
+import ReactFlow, { addEdge, applyEdgeChanges, MarkerType} from "reactflow"
 
 import CustomNode from "./CustomNode"
 import FloatingEdge from "./FloatingEdge"
@@ -24,7 +24,7 @@ import CustomConnectionLine from "./CustomConnectionLine"
  * The decision on starting the implementation was made so that the users can test
  * something that maybe resembles what they are looking for. A complete remodel
  * might be a good idea however I suggest you continue working with react flow to
- * create and visualize the flowchart!
+ * create and visualize the flowchart! /id20eht
  * Great docs can be found here https://reactflow.dev/examples.
  * !NOTE!
  * 
@@ -60,12 +60,10 @@ const defaultEdgeOptions = {
 	},
 }
 
-const Flowchart = ({weaveId}) => {
+const Flowchart = ({weaveId, nodes, edges, setEdges, setNodes, onNodesChange}) => {
 	
 	const context = useContext(AccountContext)
 	//States and functions to handle the nodes and their edges
-	const [nodes, setNodes, onNodesChange] = useNodesState([])
-	const [edges, setEdges] = useState([])
 	const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges])
 	const onEdgesChange = useCallback(
 		(changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
@@ -77,6 +75,7 @@ const Flowchart = ({weaveId}) => {
 	const [nodeDesc, setNodeDesc] = useState("")
 	const [chosenTech, setChosenTech] = useState(null)
 	const [participant, setParticipant] = useState(1)
+	const [attack, setAttack] = useState(false)
 
 
 
@@ -86,15 +85,32 @@ const Flowchart = ({weaveId}) => {
 		setOwnName("")
 		setChosenTech(null)
 		setNodeDesc("")
+		setAttack(false)
 		setParticipant(1)
 	}
 
-	async function handleAddNode(chosenTech, ownName, nodeDesc, participant) {
+	async function handleAddNode() {
 
+		const requestOptions = {
+			method: "POST",
+			headers: { "Content-type": "application/json", "token": context.token },
+			body: JSON.stringify({
+				name: ownName ? ownName : chosenTech.name, 
+				description: nodeDesc, 
+				attack: attack, 
+				participant: participant, 
+				parentWeave: Number(weaveId), 
+				technique: chosenTech ? chosenTech.techniqueID : -1,
+			})
+		}
+
+		const response = await fetch("/api/techniquechain/node/create", requestOptions)
+		const jsonResp = await response.json()
+		const id = jsonResp.id
 		const node = [{ 
-			id: nodes.length + 1 +"",
+			id: id + "", //must be a string
 			type: "custom",
-			data: {id:nodes.length + 1 +"", ownName: ownName, name: chosenTech? chosenTech.name : "", participant: participant},
+			data: {id: id + "", ownName: ownName, name: chosenTech? chosenTech.name : "", participant: participant, attack: attack},
 			position: { x: 50, y: 50}, 
 		}]
 		if(nodes) {
@@ -103,28 +119,13 @@ const Flowchart = ({weaveId}) => {
 		} else {
 			setNodes(nodes)
 		}	
-		const requestOptions = {
-			method: "POST",
-			headers: { "Content-type": "application/json", "token": context.token },
-			body: JSON.stringify({
-				name: ownName ? ownName : chosenTech.name, 
-				description: nodeDesc, 
-				attack: false, 
-				participant: participant, 
-				parentWeave: Number(weaveId), 
-				technique: chosenTech ? chosenTech.techniqueID : -1,
-			})
-		}
-
-		const response = await fetch("/api/techniquechain/node/create", requestOptions)
 
 		if (response.status !== 200) {
 			//Implement some error message/popup
 			return null
 		} else {
-			const jsonResp = await response.json()
 			setActivityPopup(false)
-			return jsonResp.workoutId
+			return id
 		}
 	}
 
@@ -160,10 +161,12 @@ const Flowchart = ({weaveId}) => {
 					chosenTech={chosenTech}
 					nodeDesc={nodeDesc}
 					ownName={ownName}
+					attack={attack}
 					setChosenTech={setChosenTech}
 					setParticipant={setParticipant}
 					setNodeDesc={setNodeDesc}
 					setOwnName={setOwnName}
+					setAttack={setAttack}
 				/>
 				
 			</Popup>

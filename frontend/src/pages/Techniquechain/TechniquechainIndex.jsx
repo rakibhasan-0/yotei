@@ -1,13 +1,10 @@
-import { useState, useEffect, useContext } from "react"
+import { useState } from "react"
 import { Modal } from "react-bootstrap"
 import TechniqueWeaveIndex from "./TechniqueWeave/TechniqueWeaveIndex"
 import Tab from "react-bootstrap/Tab"
 import Tabs from "react-bootstrap/Tabs"
 import styles from "./TechniquechainIndex.module.css"
 import Techniquechain from "./Techniquechain/Techniquechain.jsx"
-
-
-import { AccountContext } from "../../context"
 
 
 /**
