@@ -25,13 +25,6 @@
 }
 
 
-.beltText {
-    margin: 0;
-    position: absolute; /* Position it absolutely within the beltRow */
-    left: 2%; /* Move to the horizontal center */
-    transform: none; /* Adjust to center it */
-    text-align: left;
-}
 
 .beltTextSpecial {
     margin: 0;
