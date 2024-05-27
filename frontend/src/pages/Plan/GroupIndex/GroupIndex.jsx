@@ -81,8 +81,8 @@ export default function GroupIndex() {
 
 								<div style = {{marginLeft: "5px", display: "flex"}}> { (isAdminUser(context) || canEditGroups(context, group)) && (
 									<>
-										<Link to={`/plan/edit/${group.id}`} id="pencil-button">
-											<Pencil size={24} color="var(--red-primary)"/>
+										<Link to={`/plan/edit/${group.id}`}>
+											<Pencil id={'edit-group-button'} size={24} color="var(--red-primary)"/>
 										</Link>
 										<div style={{ width: "20px" }}/>
 										<Link to={`./statistics/${group.id}`} id="graph-button">
