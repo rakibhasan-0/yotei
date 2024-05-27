@@ -117,11 +117,8 @@ export default function RoleDelete({ id, roleID, name, setIsOpen }) {
 	}
 
 	function constructUserList() {
-		return <>
-			<p>{users.length > 0 ? <>Det går inte att ta bort rollen <b>{name}</b>.</> : ""}</p>
-					
+		return <>	
 			<p>{users.length > 0 ? "Rollen används av följande användare:" : ""}</p>
-
 			<div className={"grip-striped"} style={{textAlign: "center", marginBottom: "1rem"}}>
 				{users.map((user, index) => {
 					console.log(user.username)
@@ -151,11 +148,10 @@ export default function RoleDelete({ id, roleID, name, setIsOpen }) {
 	}
 
 	return <div className={styles.popupContainer} id={id}>
-		{/* The text is only shown if there are no users that have that role. */}
-		<p>{users.length > 0 ? "" : <>Är du säker på att du vill ta bort rollen <b>{name}</b>?</>}</p>
+		<p>{users.length > 0 ? <>Det går inte att ta bort rollen <b>{name}</b>.</> 
+							 : <>Är du säker på att du vill ta bort rollen <b>{name}</b>?</>}</p>
 
 		{gotResponse ? constructUserList() : <Spinner id={"role-spinner"}/>}
-	
 
 		{ constructButtons() }
 
