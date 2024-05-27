@@ -1,4 +1,4 @@
-import { type Page } from "@playwright/test"
+import { type Page, Locator } from "@playwright/test"
 import { TagComponent } from "../Types/systemTestsTypes"
 
 /**
@@ -37,7 +37,9 @@ export class AddTagPopupPage {
 		const tagAddButton = this.page.locator("#tag-add-button")
 		await tagAddButton.waitFor({ state: "visible" })
 		await tagAddButton.click()
-		await this.page.getByTestId("EditableListTagItem").getByText(`${tag.tagName}`).waitFor()
+		//The way the id is written here, each EditableListTagItem has the id of that and the name of the tag
+		//This way of setting ids could be done for each component within the EditableListTagItem as well. But is not done yet. 
+		await this.page.getByTestId("EditableListTagItem-" + tag.tagName).getByText(`${tag.tagName}`).waitFor()
 
 		//Close the window and save the newly added tag.
 		const saveAndCloseButton = this.page.locator("#save-and-close-button")
@@ -63,8 +65,9 @@ export class AddTagPopupPage {
 		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
 
 		//Uncheck the tag.
-		await this.page.getByTestId("EditableListTagItem").getByText(`${tag.tagName}`).waitFor()
-		await this.page.getByTestId("EditableListTagItem").locator("label").uncheck()
+		await this.page.getByTestId("EditableListTagItem-" + tag.tagName).getByText(`${tag.tagName}`).waitFor()
+		await this.page.getByTestId("EditableListTagItem-" + tag.tagName).locator("label").uncheck()
+
 
 		//Close the popup and save the technique
 		await this.page.locator("#save-and-close-button").click()
@@ -75,7 +78,7 @@ export class AddTagPopupPage {
 		await this.page.getByRole("button", { name: "Hantera tagg" }).click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").click()
 		await this.page.getByPlaceholder("Sök eller skapa tagg").fill(tag.tagName)
-		await this.page.getByTestId("EditableListTagItem").getByText(`${tag.tagName}`).waitFor()
+		await this.page.getByTestId("EditableListTagItem-" + tag.tagName).getByText(`${tag.tagName}`).waitFor()
 
 		//Remove the tag from the database. 
 		await this.findComponents(tag, "#close-icon")
@@ -87,6 +90,8 @@ export class AddTagPopupPage {
 	 * Finds the component to click within the EditableListTagItem.
 	 * Component is located by searching for the name, then navigating
 	 * to it's parent components moving up the DOM hierarchy.
+	 * The component to be clicked here is already in the found EditableListTagItem, therefore it exists only one of it
+	 * so the id of it can be nonidentical. 
 	 * @param tag The tag that exist in the EditableListTagItem. 
 	 * @param name The name of the component to be clicked. 
 	 */

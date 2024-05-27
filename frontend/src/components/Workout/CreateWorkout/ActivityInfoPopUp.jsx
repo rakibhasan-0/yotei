@@ -276,6 +276,9 @@ export default function ActivityInfoPopUp({ isFreeText , backToAddActivity = fal
 			const data = _.cloneDeep(workoutCreateInfo.addedActivities)
 			newlyAddedActivities(data)
 		}
+		localStorage.removeItem("storedTech")
+		localStorage.removeItem("stored_technique")
+		localStorage.removeItem("stored_exercise")
 	}
 
 	return (
