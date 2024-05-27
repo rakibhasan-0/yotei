@@ -1,4 +1,4 @@
-import { type Page } from "@playwright/test"
+import { type Page, Locator } from "@playwright/test"
 import { TagComponent } from "../Types/systemTestsTypes"
 
 /**
@@ -10,6 +10,17 @@ import { TagComponent } from "../Types/systemTestsTypes"
  *  @since 2024-05-22
  *  @version 1.0
  */
+async function waitForSingleElement(locator: Locator, timeout: number = 30000) {
+	const start = Date.now();
+	while ((Date.now() - start) < timeout) {
+		const count = await locator.count()
+		if (count === 1) {
+			return
+		}
+		await new Promise(resolve => setTimeout(resolve, 100))
+	}
+	throw new Error(`Timed out after ${timeout}ms waiting for a single element`)
+}
 
 export class AddTagPopupPage {
 	readonly page: Page
@@ -64,7 +75,9 @@ export class AddTagPopupPage {
 
 		//Uncheck the tag.
 		await this.page.getByTestId("EditableListTagItem").getByText(`${tag.tagName}`).waitFor()
-		await this.page.getByTestId("EditableListTagItem").locator("label").uncheck()
+        const labelLocator = this.page.getByTestId("EditableListTagItem").locator("label");
+        await waitForSingleElement(labelLocator);
+        await labelLocator.uncheck();
 
 		//Close the popup and save the technique
 		await this.page.locator("#save-and-close-button").click()
