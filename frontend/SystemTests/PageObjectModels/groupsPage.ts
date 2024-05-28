@@ -31,10 +31,10 @@ export class GroupsPage {
   async createGroup(group: Group) {
     await this.page.locator('.plus-icon').click()
     group.name && await this.page.getByPlaceholder('Namn').fill(group.name)
-    // TODO Choice of belt should be changed to be dynamically´.
-    await this.page.locator('#form-belt-picker-dropdown').click()
 
+    // Fill checkboxes based on the passed belt ids in group object.
     if(group.beltIds) {
+      await this.page.locator('#form-belt-picker-dropdown').click()
       for(const belt of group.beltIds) {
         await this.page.locator(`#belt-${belt}`).check()
       }
