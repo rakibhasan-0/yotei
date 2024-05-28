@@ -121,6 +121,16 @@ public interface StatisticsRepository extends JpaRepository<Session, Long>{
     """)
   List<Belt> getBeltsForGroup(Long id);
 
+  @Query("""
+      SELECT
+        b.nextBelt
+      FROM
+        BeltSuccession b
+      WHERE
+        b.beltId = :id
+      """)
+  Belt getNextBelt(Long id);
+
   // Get a list of techniques associated with a list of belts.
   @Query("""
     SELECT 
