@@ -24,5 +24,5 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     boolean existsByRoleId(Long roleId); 
 
-    List<User> findAllByRoleId(Long roleId);
+    List<UserShort> findAllProjectedByRoleId(Long roleId);
 }

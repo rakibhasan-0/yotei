@@ -5,8 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import se.umu.cs.pvt.user.User;
 import se.umu.cs.pvt.user.UserRepository;
+import se.umu.cs.pvt.user.UserShort;
 
 import java.util.List;
 import java.util.Optional;
@@ -83,7 +83,7 @@ public class RoleController {
      */
 
     @GetMapping("/users/{role_id}")
-    public ResponseEntity<List<User>> getUsersByRoleId(@PathVariable("role_id") Long roleId) {
+    public ResponseEntity<List<UserShort>> getUsersByRoleId(@PathVariable("role_id") Long roleId) {
         if (roleId == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -93,7 +93,7 @@ public class RoleController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        List<User> users = userRepository.findAllByRoleId(roleId);
+        List<UserShort> users = userRepository.findAllProjectedByRoleId(roleId);
 
         if (users.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
