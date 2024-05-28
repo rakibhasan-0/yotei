@@ -19,7 +19,7 @@ export default function GradingProtocolsRows({ data }) {
 								type: "technique" // Add the new attribute
 							}
 							return (
-								<TechniqueCard key={idx} technique={updatedTechnique} checkbox={false} id={updatedTechnique.id} techniqueInProtocol={true}/>
+								<TechniqueCard key={idx} technique={updatedTechnique} checkbox={false} id={updatedTechnique.id} popUp={true} techniqueInProtocol={true}/>
 							)
 						})}
 					</ul>

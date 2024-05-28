@@ -8,7 +8,7 @@ import java.util.Optional;
 
 /**
  * Interface for handling SQL transactions which may be empty.
- * @author Team Hot-Pepper (G7), Team Mango - 2024-05-24
+ * @author Team Hot-Pepper (G7), Team Mango - 2024-05-28
  */
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
@@ -24,5 +24,5 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     boolean existsByRoleId(Long roleId); 
 
-    List<User> findAllByRoleId(Long roleId);
+    List<UserShort> findAllProjectedByRoleId(Long roleId);
 }

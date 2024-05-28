@@ -195,7 +195,6 @@ export default function ExamineeBox({
 			})
 
 			if (response.status === 404) {
-				console.log("No existing comment, 404 status")
 				setCommentText("")
 				setInitialCommentText("")
 				setExistingComment(false)
@@ -261,7 +260,7 @@ export default function ExamineeBox({
 					onClick={() => {handleClick()}}>
 					<p id="ExamineeName" >{examineeName}</p>
 				</div>
-				<CommentButton onClick={() => toggleAddPersonalComment(true)} className={styles.commentButtonContainer} hasComment={hasComment} />
+				<CommentButton id="examinee-comment-button" onClick={() => toggleAddPersonalComment(true)} className={styles.commentButtonContainer} hasComment={hasComment} />
 
 				<Popup
 					id={"examinee-comment-popup"}
