@@ -9,9 +9,10 @@ import { toast } from "react-toastify"
  *  		2024-05-22  by Team Mango: Added some more permissions functions and removed all of the old permission code.
  * 			2024-05-23  by Team Mango: Separated admin permission function from the rest,
  * 										making it more readable that they are different.
- * 			2024-05-27  by Team Coconut: Tweaking numbers of toasts and disabled the progessbar on customers wishes
+ * 			2024-05-27  by Team Coconut: Tweaking number of toasts and disabled the progess bar on customers wishes
  * 										 every toast function no longer takes a second argument and uses the message sent as ID instead
  * 										 this automatically ensures that the same message is not displayed multiple times.
+ * 			2024-05-28  by Team Mango: Updated permissions list and functions to include new permissions (e.g. groups and sessions are now combined).
  */
 
 /**
@@ -65,8 +66,8 @@ export function isAdminUser(context) {
  */
 export function canCreateGroups(context) {
 	if (!context.permissions) return false
-	return (context.permissions.includes(USER_PERMISSION_CODES.PLAN_ALL) ||
-	(context.permissions.includes(USER_PERMISSION_CODES.PLAN_OWN)))
+	return (context.permissions.includes(USER_PERMISSION_CODES.SESSION_GROUP_ALL) ||
+	(context.permissions.includes(USER_PERMISSION_CODES.SESSION_GROUP_OWN)))
 }
 
 /**
@@ -78,8 +79,8 @@ export function canCreateGroups(context) {
 export function canEditGroups(context, groupCreatorId) {
 	if (!context.permissions) return false
 
-	return (context.permissions.includes(USER_PERMISSION_CODES.PLAN_ALL) ||
-	(context.permissions.includes(USER_PERMISSION_CODES.PLAN_OWN) &&
+	return (context.permissions.includes(USER_PERMISSION_CODES.SESSION_GROUP_ALL) ||
+	(context.permissions.includes(USER_PERMISSION_CODES.SESSION_GROUP_OWN) &&
 	(context.userId === groupCreatorId)))
 }
 
@@ -223,17 +224,15 @@ export const HTTP_STATUS_CODES = {
 // These attributes have to be in the same order from 1-x as inserted into the database.
 export const USER_PERMISSION_CODES = {
 	ADMIN_RIGHTS: 1,
-	SESSION_OWN: 2, //Edit your own sessions.
-	SESSION_ALL: 3, //Edit all sessions.
-	PLAN_OWN: 4, // Plan = groups
-	PLAN_ALL: 5,
-	WORKOUT_OWN: 6,
-	WORKOUT_ALL: 7,
-	TECHNIQUE_EXERCISE_ALL: 8, //Old name: ACTIVITY_ALL (Was a potential conflict in the database naming, so we changed it.)
-	GRADING_ALL: 9,
+	SESSION_GROUP_OWN: 2, //Edit your own groups and sessions.
+	SESSION_GROUP_ALL: 3, //Edit all groups and sessions.
+	WORKOUT_OWN: 4,
+	WORKOUT_ALL: 5,
+	TECHNIQUE_EXERCISE_ALL: 6, //Old name: ACTIVITY_ALL (Was a potential conflict in the database naming, so we changed it.)
+	GRADING_ALL: 7,
 }
 
-export const USER_PERMISSION_LIST_ALL = [1,2,3,4,5,6,7,8,9]
+export const USER_PERMISSION_LIST_ALL = [1,2,3,4,5,6,7]
 
 /**
  * Scrolls an element with given id into view.
