@@ -147,7 +147,7 @@ export default function Statistics() {
 	}, [groupID, token, filter, dates])
 
 
-	// function is responsible for handling date changes and storing dates state.
+	// function handles date changes and storing of dates state.
 	function handleDateChanges(variableName, value) {
 		const selectedDate = new Date(value)
 		const toDate = new Date(dates.to)
@@ -165,13 +165,13 @@ export default function Statistics() {
 		setFilter({ ...filter, [variableName]: value })
 	}
 
-	// Resets the order icon to ascending order. Called in the useEffect when the group activities are fetched.
+	// resets the order icon to ascending order. Called in the useEffect when the group activities are fetched.
 	function resetOrderIcon() {
 		setRotate(false)
 	}
 
-	// function is responsible for changing the order of the group activities.
-	// initially, order is ascending, when user clicks the button, order changes to descending.
+	// function changes the order of group activities.
+	// initially, order is ascending, when user clicks the sorting button, order changes to descending.
 	function changeOrder() {
 		setDescendingOrder(!order)
 		setGroupActivities(groupActivities.reverse())

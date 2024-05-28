@@ -18,7 +18,7 @@ import { AccountContext } from "../../context"
  * @since 2024-05-20
  * @author Team Coconut
  */
-export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,datesTo}) {
+export default function GradingStatisticsPopup({ id, groupID, belts, datesFrom, datesTo}) {
 
 	const [showPopup, setShowPopup] = useState(false)
 	const [protocols, setProtocols] = useState([])
@@ -28,6 +28,7 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 	const [data, setData] = useState([])
 	const { token } = useContext(AccountContext)
 
+	// Sets up protocols and ids for input belts
 	useEffect(() => {
 		if (belts.length > 0) {
 			setProtocols(belts.map(belt => belt.name))
@@ -36,6 +37,7 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 		}
 	}, [belts])
 
+	// Fetches and sets groups protocols and data
 	useEffect(() => {
 		if (groupID && beltID !== null) {
 			const fetchGroupGradingProtocol = async () => {
@@ -70,6 +72,7 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 		}
 	}, [groupID, beltID,showPopup])
 
+	// Finds and sets selected belts
 	useEffect(() => {
 		if (chosenProtocol) {
 			const selectedBelt = belts.find(belt => belt.name === chosenProtocol)
@@ -79,10 +82,12 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 		}
 	}, [chosenProtocol])
 
+	// Toggles popups visibility
 	const togglePopup = () => {
 		setShowPopup(!showPopup)
 	}
 
+	// Sets chosen protocol
 	const onSelectRow = (protocol) => {
 		setChosenProtocol(protocol)
 	}
