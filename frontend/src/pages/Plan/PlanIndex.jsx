@@ -16,7 +16,6 @@ import { HTTP_STATUS_CODES, canCreateSessions, isAdminUser, setError } from "../
  * FilterPlan-component and a SessionList. Fetches and filters sessions 
  * depending on what is selected as selected plans(groups) in the FilterPlan-component.
  * If nothing is selected, the default is from todays date until inf.
- * TODO: PlanIndex is error handling on fetches(react toast).
  * 
  * @author Griffin, Team Durian (Group 3) (2024-04-23), Team Mango (Group 4) (2024-05-28) , Team Durian (Group 3) (2024-05-22)
  * @version 1.0
@@ -26,6 +25,7 @@ import { HTTP_STATUS_CODES, canCreateSessions, isAdminUser, setError } from "../
  *          2024-05-20: Added a check for if the add session button should be shown or not.
  * 		    2024-05-22: Added a numFilters counter to the FilterPlan.
  *  		2024-05-28: Fixed a filtering bug for the onlyMyGroups selection and refactored the code a bit.
+ * 						Also updated error handling to remove unnecessary error message.
  */
 export default function PlanIndex() {
 	const { token } = useContext(AccountContext)
@@ -111,15 +111,16 @@ export default function PlanIndex() {
 			if (onlyMyGroups) {
 				//We still only want to fetch sessions connected to this user's groups.
 
-				//Filter out only my groups.
-				let myGroups = groups.filter(group => group.userId === user.userId)
-			
 				//Filter out only my groups (array of group ids used)
 				if (!groups) {
 					//The groups have not been fetched yet. (Or there are no groups.)
 					setLoading(false)
 					return null//Nothing could be done.
 				}
+
+				//Filter out only my groups.
+				let myGroups = groups.filter(group => group.userId === user.userId)
+				
 
 				//Extract the group ids into an array and form the string.
 				let groupIds = myGroups?.map(g => g.id)
@@ -190,7 +191,7 @@ export default function PlanIndex() {
 			setLoading(false)
 			return
 		}
-		let planIds = selectedPlans.join("&id=") //TODO remove the questionmark. This stopped working for some reason.
+		let planIds = selectedPlans.join("&id=")
 		//let fetchSessionPath = "api/session/all"
 		let fetchSessionPath = getFetchSessionPath(planIds)
 		if (!fetchSessionPath) {
@@ -203,12 +204,17 @@ export default function PlanIndex() {
 		})
 			.then(response => {
 				if(!response.ok && !HTTP_STATUS_CODES.NOT_FOUND) {
+					console.log(response)
 					setError("Kunde inte hämta tillfällen.")
+				}
+				if (response === HTTP_STATUS_CODES.NO_CONTENT) {
+					return
 				}
 				return response.json()
 			})
 			.then(sessions => setSessions(filterSessions(sessions, args)))
 			.catch(() => {
+				console.log("A")
 				setError("Kunde inte ansluta till servern.")
 			})
 
@@ -240,6 +246,7 @@ export default function PlanIndex() {
 			})
 			.then(workouts => setWorkouts(workouts))
 			.catch(() => {
+				console.log("A")
 				setError("Kunde inte ansluta till servern.")
 			})
 	}
@@ -253,6 +260,14 @@ export default function PlanIndex() {
 				if(!response.ok) {
 					setError("Kunde inte hämta övningar")
 				}
+				if (response.status === HTTP_STATUS_CODES.NO_CONTENT) {
+					//There were no groups.
+					return []
+				}
+				if (response.status === HTTP_STATUS_CODES.NOT_FOUND) {
+					setError("Kunde inte ansluta till servern.") //TODO better error message?
+					return []
+				}
 				return response.json()
 			})
 			.then(plans => {
@@ -264,7 +279,7 @@ export default function PlanIndex() {
 					setSelectedPlans(plans.filter(plan => filterCookie.plans.includes(plan.id)).map(p => p.id))
 				}
 			})
-			.catch(() => {
+			.catch((e) => {
 				setError("Kunde inte ansluta till servern.")
 			})
 	}
