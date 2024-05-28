@@ -6,10 +6,10 @@ import GradingProtocolsRowsMenu from "../../components/Grading/GradingProtocolsR
 import GradingProtocolsRows from "../../components/Grading/GradingProtocolsRows"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import { AccountContext } from "../../context"
+
 /**
- *  The component for the grading statistics popup. It shows what techniques are required for each belt.
+ *  Component for the grading statistics popup. It shows what techniques are required for each belt.
  *  And what techniques have been completed by the group.
- * 
  * 
  * @param {String} id - The id of the component, for testing purposes
  * @param {String} groupID - The id of the group
@@ -18,8 +18,6 @@ import { AccountContext } from "../../context"
  * @since 2024-05-20
  * @author Team Coconut
  */
-
-
 export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,datesTo}) {
 
 	const [showPopup, setShowPopup] = useState(false)
@@ -49,18 +47,19 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 				try {
 					setLoading(true)
 					const response = await fetch(`/api/statistics/${groupID}/grading_protocol?beltId=${beltID}&startdate=${datesFrom}&enddate=${datesTo}`, requestOptions)
+
 					if (!response.ok) {
 						throw new Error("Failed to fetch group data")
 					}
+
 					if(response.status === 204){
 						//For belts that do not have grading protocols
 						setProtocols([])
 					} else {
 						const groups = await response.json()
-
 						setData(groups)
-
 					}
+
 				} catch (error) {
 					console.error("Fetching error:", error)
 				} finally {
@@ -105,6 +104,7 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 				<Dropdown text={data.code ? data.code + " " + data.name : "Välj ett protokoll"} id="grading-protocols-dropdown">
 					<GradingProtocolsRowsMenu protocols={protocols} onSelectRow={onSelectRow} />
 				</Dropdown>
+				
 				{loading ? <Spinner /> : 
 					(data.belt && data.categories) &&
 					<div style={{ border: `3px dashed #${[data.belt.belt_color]}`, padding: "4px", borderRadius: "10px" }}>

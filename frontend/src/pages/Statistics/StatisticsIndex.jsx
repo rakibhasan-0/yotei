@@ -13,12 +13,11 @@ import SortingArrowButton from "../../components/Common/SortingArrowButton/Sorti
 
 /**
  * 
- * That component is responsible for the visualization of the statistics for a group.
+ * Component is responsible for the visualization of the statistics for a group.
  * It shows the techniques and statistics for the selected group. The user will be able to filter
  * the list of techniques and exercise based on the selected belts, dates, kihon. 
  * 
- * 
- * example usage:
+ * Example usage:
  *  <Statistics />
  * 
  * @returns A page with statistics for a group.
@@ -45,8 +44,7 @@ export default function Statistics() {
 	const [order, setDescendingOrder] = useState(false)
 	const [rotate, setRotate] = useState(false)
 
-
-	// creating a date object for two years before from now and today's date
+	// creates two date objects, one two years before now and one with today's date
 	const twoYearsBeforeFromNow = new Date()
 	twoYearsBeforeFromNow.setFullYear(twoYearsBeforeFromNow.getFullYear() - 2)
 	const today = new Date()
@@ -57,9 +55,9 @@ export default function Statistics() {
 		to: getFormattedDateString(today),
 	})
 
-	// filtering the group activities based on the selected belts.
+	// filters the groups activities based on the selected belts.
 	// first it checks if the selectedBelts is not empty, then it filters the groupActivities based on the selected belts.
-	// if the selectedBelts is empty, it will show all the groupActivities. 
+	// if the selectedBelts is empty, it will show all groupActivities. 
 	const activities =	
 	selectedBelts.length > 0	
 		? groupActivities.filter((activity) =>
@@ -73,8 +71,7 @@ export default function Statistics() {
 		)
 		: groupActivities
 
-
-	// that function store the selected belts data. 	
+	// function stores the selected belts data. 	
 	function handleBeltToggle(isSelected, belt) {
 		setSelectedBelts(prevSelected => {
 			if (isSelected) {
@@ -85,21 +82,21 @@ export default function Statistics() {
 		})
 	}
 
-	// it clears the selected belts when user decide to clear the belts in the belts filter.
+	// function clears selected belts when user clears belts in belts filter.
 	function onBeltsClear() {
 		setSelectedBelts([])
 	}
-	
 
-	// it is a regex function to check if the format of the date is correct or not.
+	// regex function to check if the format of the date is correct or not.
 	function checkIfDateIsValid(date) {
 		return /^[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(date) && !isNaN(new Date(date).getTime())
 	}
 
 	useEffect(() => {
 
-		// that function is responsible for fetching the group activities and group name.
+		// function fetches groups activities and groups name.
 		async function fetchGroupActivitiesData() {	
+			
 			if(!checkIfDateIsValid(dates.from) || !checkIfDateIsValid(dates.to)) {
 				return
 			}
@@ -123,8 +120,8 @@ export default function Statistics() {
 					setAverageRating(data.averageRating)
 					setGroupActivities(data.activities)
 					resetOrderIcon()
-				}else if (responseFromGroupDetailsAPI.status === 204) {
-					// if the response is 204, it means that there is no data to show for the selected filters.
+				} else if (responseFromGroupDetailsAPI.status === 204) {
+					// if response is 204, there is no data to show for the selected filters.
 					setGroupActivities([])
 				}
 
@@ -138,21 +135,19 @@ export default function Statistics() {
 					setGroup(group)
 					setGroupBelts(group.belts)
 				}
-			}
-			catch (error) {
+
+			} catch (error) {
 				console.error("Fetching error:", error)
-			}
-			finally {
+			} finally {
 				setLoading(false)
 			}
 		}
 	
 		fetchGroupActivitiesData()
-
 	}, [groupID, token, filter, dates])
 
 
-	// that function is responsible for handling the date changes and storing the dates state.
+	// function is responsible for handling date changes and storing dates state.
 	function handleDateChanges(variableName, value) {
 		const selectedDate = new Date(value)
 		const toDate = new Date(dates.to)
@@ -164,7 +159,7 @@ export default function Statistics() {
 		}
 	}
 
-	// when the user selects the checkbox for the showing exercises and kihon, that function will be called 
+	// when user checks checkbox for showing exercises and kihon, this function will be called 
 	// and it will update the filter state.
 	function handleChanges(variableName, value) {
 		setFilter({ ...filter, [variableName]: value })
@@ -175,8 +170,8 @@ export default function Statistics() {
 		setRotate(false)
 	}
 
-	// that function is responsible for changing the order of the group activities.
-	// initially, the order is increasing, when the user clicks on the button, the order will be descending.
+	// function is responsible for changing the order of the group activities.
+	// initially, order is ascending, when user clicks the button, order changes to descending.
 	function changeOrder() {
 		setDescendingOrder(!order)
 		setGroupActivities(groupActivities.reverse())
@@ -211,7 +206,6 @@ export default function Statistics() {
 				<div className={style.activitiesTextContainer}>
 					<h5>Aktiviteter</h5>
 				</div>
-
 	
 				<GradingStatisticsPopup 
 					id="grading-statistics-container" 
@@ -221,7 +215,6 @@ export default function Statistics() {
 					datesFrom={dates.from}
 
 				/>
-			
 
 				<StatisticsPopUp
 					groupActivities={activities}
@@ -243,12 +236,13 @@ export default function Statistics() {
 							id={activity.activity_id}
 							popUp={true}
 						/>
-
 					))
 				)}
 			</div>
+
 			<div style={{ height: "70px" }}></div>
 			<div className={style.buttonContainer}>
+
 				<Button
 					width="25%"
 					outlined={true}
@@ -257,6 +251,7 @@ export default function Statistics() {
 				>
 					<p>Tillbaka</p>
 				</Button>
+
 			</div>
 		</div>
 	)
