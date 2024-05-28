@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  *        feature.
  * 		- Create a list of regex patterns for each endpoint.
  *
- * @author Team Mango (Group 4) - 2024-05-23
+ * @author Team Mango (Group 4) - 2024-05-27
  * 
  */
 public class PermissionValidator {
@@ -32,8 +32,11 @@ public class PermissionValidator {
 	    SESSION_GROUP_ALL(3), //Edit all groups and sessions.
 	    WORKOUT_OWN(4),
 	    WORKOUT_ALL(5),
-        TECHNIQUE_EXERCISE_ALL(6),
-	    GRADING_ALL(7);
+        TECHNIQUE_OWN(8),
+        TECHNIQUE_ALL(9),
+        EXERCISE_OWN(10),
+        EXERCISE_ALL(11),
+	    GRADING_ALL(12);
 
         private final int value;
         private permissionList(int value) {
@@ -54,8 +57,11 @@ public class PermissionValidator {
         if ((path.startsWith("/api/session") || (path.startsWith("/api/plan")))
             && !checkSessionGroupPermissions(path, permissions)) return false;
 
-        if ((path.startsWith("/api/techniques") || path.startsWith("/api/exercises"))
-            && !checkTechniqueExercisePermissions(path, permissions)) return false;
+            if ((path.startsWith("/api/techniques"))
+            && !checkTechniquePermissions(path, permissions)) return false;
+
+        if ((path.startsWith("/api/exercises"))
+            && !checkExercisePermissions(path, permissions)) return false;
 
         if (path.startsWith("/api/examination")
             && !checkGradingPermissions(path, permissions)) return false;
@@ -120,9 +126,9 @@ public class PermissionValidator {
 
     /**
      * Checks if a user has permissions to access API endpoints associated 
-     * with Technique/Exercise.
+     * with Technique.
      * 
-     * Checks when a user tries to access Technique/Exercise via 
+     * Checks when a user tries to access Technique via 
      * POST, PUT, DELETE http methods. 
      * 
      * @param path The path for the API call
@@ -130,12 +136,38 @@ public class PermissionValidator {
      * 
      * @return True if the user has the required permissions; else false.
      */
-    private boolean checkTechniqueExercisePermissions(String path, List<Integer> permissions) {
+    private boolean checkTechniquePermissions(String path, List<Integer> permissions) {
         Pattern[] patterns = {
             // From TechniqueController
             Pattern.compile("^/api/techniques$"),
             Pattern.compile("^/api/techniques/\\d+$"),
             Pattern.compile("^/api/techniques/reviews$"),
+        };
+    
+        Integer[] permissionsToCheck = {
+            permissionList.TECHNIQUE_OWN.value,
+            permissionList.TECHNIQUE_ALL.value
+
+        };
+
+        return hasPermission(path, permissions, 
+            Arrays.asList(patterns), Arrays.asList(permissionsToCheck));
+    }
+
+    /**
+     * Checks if a user has permissions to access API endpoints associated 
+     * with Exercise.
+     * 
+     * Checks when a user tries to access Exercise via 
+     * POST, PUT, DELETE http methods. 
+     * 
+     * @param path The path for the API call
+     * @param permissions The permissions belonging to the user
+     * 
+     * @return True if the user has the required permissions; else false.
+     */
+    private boolean checkExercisePermissions(String path, List<Integer> permissions) {
+        Pattern[] patterns = {
             // From ExerciseController
             Pattern.compile("^/api/exercises/add$"),
             Pattern.compile("^/api/exercises/add/update$"),
@@ -144,7 +176,8 @@ public class PermissionValidator {
         };
     
         Integer[] permissionsToCheck = {
-            permissionList.TECHNIQUE_EXERCISE_ALL.value
+            permissionList.EXERCISE_OWN.value,
+            permissionList.EXERCISE_ALL.value
         };
 
         return hasPermission(path, permissions, 

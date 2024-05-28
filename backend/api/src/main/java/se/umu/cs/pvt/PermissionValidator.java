@@ -7,7 +7,7 @@ import java.util.List;
  * what's present in the permission validator from the gateway, this solely exists
  * since the gateway classes can't be accessed from within this package.
  * 
- * @author Team Mango (Group 4) - 2024-05-23
+ * @author Team Mango (Group 4) - 2024-05-27
  */
 public class PermissionValidator {
     // Enum for all existing permissions
@@ -19,8 +19,11 @@ public class PermissionValidator {
 	    SESSION_GROUP_ALL(3), //Edit all groups and sessions.
 	    WORKOUT_OWN(4),
 	    WORKOUT_ALL(5),
-        TECHNIQUE_EXERCISE_ALL(6),
-	    GRADING_ALL(7);
+        TECHNIQUE_OWN(8),
+        TECHNIQUE_ALL(9),
+        EXERCISE_OWN(10),
+        EXERCISE_ALL(11),
+	    GRADING_ALL(12);
 
         private final int value;
         private permissionList(int value) {
