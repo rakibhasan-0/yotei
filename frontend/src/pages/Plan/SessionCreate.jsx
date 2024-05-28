@@ -8,7 +8,7 @@ import { useContext, useEffect, useState } from "react"
 import { AccountContext } from "../../context"
 import { useLocation } from "react-router-dom"
 import Divider from "../../components/Common/Divider/Divider"
-import {setError as setErrorToast, setSuccess as setSuccessToast, canEditGroups} from "../../utils"
+import {setError as setErrorToast, setSuccess as setSuccessToast, canEditSessionsAndGroups} from "../../utils"
 /**
  * A component for creating a session.
  * 
@@ -48,7 +48,7 @@ export default function SessionCreate({setIsBlocking}) {
 				}
 
 				const json = await response.json()
-				setGroups(json.filter(group => canEditGroups(context, group.userId)))
+				setGroups(json.filter(group => canEditSessionsAndGroups(context, group.userId)))
 
 			} catch (ex) {
 				setErrorToast("Kunde inte hämta alla grupper")
