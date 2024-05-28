@@ -13,7 +13,7 @@ import { setError as setErrorToast, setSuccess} from "../../../utils"
 import EditGallery from "../../../components/Gallery/EditGallery"
 import { useLocation, useNavigate, useParams } from "react-router"
 import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
-import { isAdminUser, scrollToElementWithId } from "../../../utils"
+import { scrollToElementWithId } from "../../../utils"
 import { unstable_useBlocker as useBlocker } from "react-router"
 import Spinner from "../../../components/Common/Spinner/Spinner.jsx"
 
@@ -29,10 +29,12 @@ import Spinner from "../../../components/Common/Spinner/Spinner.jsx"
  * 	   Team Durian  (Group 3) (2024-05-07)
  * 	   Team Kiwi    (Group 2) (2024-05-03)
  * 	   Team Mango  	(Grupp 4) (2024-05-22)
+ * 	   Team Mango  	(Grupp 4) (2024-05-27)
  * @since 2023-05-22
  * @version 2.0
  * 
  * Updated Team Mango 2024-05-22: update isAdmin check to new check and removed isEditor check.
+ * Update by Team Mango 2024-05-27: Removed isAdmin check for navigation to fix bug.
  */
 export default function ExerciseEdit() {
 	const context = useContext(AccountContext)
@@ -99,13 +101,6 @@ export default function ExerciseEdit() {
 	useEffect(() => {
 		checkBlocking()
 	}, [name, desc, oldName, oldDesc, time, oldTime])
-
-	
-	useEffect(() => {
-		if (!isAdminUser(context)) {
-			handleNavigation()
-		}
-	}, [context, navigate])
 	
 	/**
 	 * Returns the information about the exercise and its tags with the id in the pathname.

@@ -149,6 +149,8 @@ DROP TABLE IF EXISTS grading_protocol;
 
 DROP TABLE IF EXISTS grading_protocol_category;
 
+DROP SEQUENCE IF EXISTS belt_succession;
+
 DROP SEQUENCE IF EXISTS serial;
 DROP SEQUENCE IF EXISTS serialEx;
 
@@ -201,7 +203,6 @@ CREATE TABLE user_table(
 	user_id INT NOT NULL GENERATED ALWAYS AS IDENTITY UNIQUE,
 	username VARCHAR(255) PRIMARY KEY,
 	password VARCHAR(255) NOT NULL,
-	user_role INT NOT NULL,
 	role_id INT,
 	CONSTRAINT ur_fk_role FOREIGN KEY (role_id) REFERENCES role(role_id) ON
 	DELETE CASCADE
@@ -666,7 +667,8 @@ CREATE TABLE IF NOT EXISTS examination_comment(
 	examinee_id INT, 
 	examinee_pair_id INT, 
 	technique_name VARCHAR(255), 
-	comment VARCHAR(255)
+	comment VARCHAR(255),
+	CONSTRAINT examinee_id_fk FOREIGN KEY(examinee_id) REFERENCES examination_examinee(examinee_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS examination_protocol(
@@ -757,6 +759,15 @@ CREATE TABLE grading_protocol_technique(
 ALTER TABLE
 	grading_protocol_technique OWNER TO psql;
 
+CREATE TABLE belt_succession(
+       belt_id INT NOT NULL,
+       next_belt_id INT NOT NULL,
+       CONSTRAINT belt_id_fk FOREIGN KEY (belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE,
+       CONSTRAINT next_belt_id_fk FOREIGN KEY (next_belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE
+);
+
+ALTER TABLE
+      user_to_activity_list OWNER to psql;
 
 --
 -- Default Inserts
@@ -817,28 +828,6 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
-CREATE OR REPLACE FUNCTION protect_final_admin() RETURNS TRIGGER AS $$ 
-BEGIN 
-	IF OLD.user_role = admin_role_id()
-	AND (
-		SELECT
-			COUNT(user_id)
-		FROM
-			user_table
-		WHERE
-			user_role = admin_role_id()
-	) <= 1 THEN RAISE EXCEPTION 'cannot remove final admin';
-
-	END IF;
-
-	IF TG_OP = 'UPDATE' THEN RETURN NEW;
-
-	ELSE RETURN OLD;
-
-	END IF;
-END;
-$$ LANGUAGE 'plpgsql';
-
 CREATE OR REPLACE FUNCTION protect_final_admin_role() RETURNS TRIGGER AS $$ 
 BEGIN 
 	IF OLD.role_id = admin_role_id()
@@ -863,10 +852,6 @@ $$ LANGUAGE 'plpgsql';
 
 CREATE TRIGGER remove_user BEFORE DELETE ON user_table 
 	FOR EACH ROW EXECUTE PROCEDURE remove_user_references();
-
-CREATE TRIGGER protect_admin BEFORE DELETE OR
-	UPDATE OF user_role ON user_table 
-	FOR EACH ROW EXECUTE PROCEDURE protect_final_admin();
 
 CREATE TRIGGER protect_admin_role BEFORE DELETE OR
 	UPDATE OF role_id ON user_table

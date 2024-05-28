@@ -1,7 +1,7 @@
 import { useNavigate, unstable_useBlocker as useBlocker } from "react-router"
 import { useEffect, useState, useContext } from "react"
 import { AccountContext } from "../../context"
-import { setError as setErrorToast } from "../../utils"
+import { isAdminUser, setError as setErrorToast } from "../../utils"
 import { toast } from "react-toastify"
 
 import Divider from "../../components/Common/Divider/Divider"
@@ -23,6 +23,8 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
 export default function RoleCreate() {
 	const hasPreviousState = location.key !== "default"
 	const { token } = useContext(AccountContext)
+	const context = useContext(AccountContext)
+
 
 	const [roleName, setRoleName] = useState("")
 	const [originalRoleName, setOriginalRoleName] = useState("")
@@ -60,18 +62,10 @@ export default function RoleCreate() {
 		setOriginalRoleName(roleName)
 	}, [token])
 
+	
 	useEffect(() => {
 		setIsBlocking(roleName != originalRoleName || selectedMap.size > 0)
 	}, [roleName, originalRoleName, selectedMap])
-
-
-	const handleNavigation = () => {
-		if (hasPreviousState) {
-			navigate("/admin")
-		} else {
-			navigate("/plan")
-		}
-	}
 
 	const blocker = useBlocker(() => {
 		if (isBlocking) {
@@ -80,7 +74,19 @@ export default function RoleCreate() {
 		}
 		return false
 	})
+	
+	if (!isAdminUser(context)) {
+		window.location.replace("/404")
+		return null
+	}
 
+	const handleNavigation = () => {
+		if (hasPreviousState) {
+			navigate("/admin")
+		} else {
+			navigate("/plan")
+		}
+	}
 
 	const handleRoleAdd = () => {
 		if (checkInput() === true) {
@@ -101,7 +107,7 @@ export default function RoleCreate() {
 
 	async function addRole() {
 		setErrorMessage("")
-		if (!roleName.match(/^([-a-zA-Z0-9_åöäÅÄÖ]+)$/)) {
+		if (!roleName.match(/^([-a-zA-Z0-9_åöäÅÄÖ ]+)$/)) {
 			return setErrorMessage("Ogiligt rollnamn")
 		}
 		const response = await fetch("/api/roles", {
@@ -190,11 +196,12 @@ export default function RoleCreate() {
 
 			{loading ? <Spinner /> : (
 				<div>
-					{ permissions.map((permission, index) => (
+					{ permissions.slice(1).map((permission, index) => (
 						<PermissionCard
 							item={permission.permissionName}
-							key={index}
+							key={index + 1}
 							id={permission.permissionId}
+							description={permission.permissionDescription}
 							toggled={selectedMap.has(permission.permissionId)}
 							changeToggled={() => handleButtonToggle(permission.permissionId)}
 						/>

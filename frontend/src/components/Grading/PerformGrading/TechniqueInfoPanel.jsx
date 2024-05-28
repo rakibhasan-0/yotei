@@ -54,6 +54,7 @@ export default function TechniqueInfoPanel({
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [isAddingComment, setAddComment] = useState(false)
 	const [commentText, setCommentText] = useState("")
+	const [initialCommentText, setInitialCommentText] = useState("")
 	const [commentError, setCommentError] = useState("")
 	const [hasComment, setExistingComment] = useState(false)
 	const [commentId, setCommentId] = useState(null)
@@ -87,11 +88,14 @@ export default function TechniqueInfoPanel({
      * @param {boolean} show - Whether to show or hide the comment input.
      */
 	const toggleAddGroupComment = (show) => {
-		if (!show && commentText && commentText.trim().length > 0) {
+		if (!show && commentText !== initialCommentText) {
 			setShowDiscardComment(true)
 			return
 		}
 		setAddComment(show)
+		if (show) {
+			setInitialCommentText(commentText)
+		}
 	}
 
 	/**
@@ -182,6 +186,7 @@ export default function TechniqueInfoPanel({
 			if (response.status === 404) {
 				console.log("No existing comment, 404 status")
 				setCommentText("")
+				setInitialCommentText("")
 				setExistingComment(false)
 				return
 			}
@@ -197,10 +202,12 @@ export default function TechniqueInfoPanel({
 			if (commentObject) {
 				setCommentId(commentObject.commentId)
 				setCommentText(commentObject.comment)
+				setInitialCommentText(commentObject.comment)
 				setExistingComment(true)
 			} else {
 				setCommentId(null)
 				setCommentText("")
+				setInitialCommentText("")
 				setExistingComment(false)
 			}
 		} catch (ex) {
@@ -231,7 +238,7 @@ export default function TechniqueInfoPanel({
 					<h3 className={styles.categoryTitle} id="categoryTitle">{mainCategoryTitle}</h3>
 				</div>
 				<div className={styles.buttonGroupComment}>
-					<CommentButton onClick={() => setAddComment(true)} hasComment={hasComment} />
+					<CommentButton id="technique-info-panel-comment-button" onClick={() => setAddComment(true)} hasComment={hasComment} />
 				</div>
 				<div>
 					<h2 className={styles.currentTechnique} id="currentTechniqueTitle">{currentTechniqueTitle}</h2>
