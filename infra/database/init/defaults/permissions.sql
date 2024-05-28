@@ -6,13 +6,9 @@
 --
 INSERT INTO permission (permission_name, permission_desc) VALUES ('Admin-rättigheter: Ger alla rättigheter', 'Admin rättigheter. Detsamma som att ha alla rättigheter på sidan.');
 
--- Tillfällen (Session)
-INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa/redigera/radera tillfällen för egna grupper', 'Tillåtelse att skapa, redigera och radera sina egna tillfällen.');
-INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa/redigera/radera alla tillfällen', 'Tillåtelse att skapa tillfällen samt redigera och radera tillfällen som de kan nå.');
-
--- Grupper (Plan)
-INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa/redigera/radera egna grupper', 'Tillåtelse att skapa, redigera och radera sina egna grupper.');
-INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa/redigera/radera alla grupper', 'Tillåtelse att skapa grupper samt redigera och radera grupper som de kan nå.');
+-- Grupper (Plan) och Tillfällen (Session)
+INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa/redigera/radera egna grupper och tillfällen', 'Tillåtelse att skapa, redigera och radera sina egna grupper och tillfällen till de grupperna.');
+INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa/redigera/radera alla grupper och tillfällen', 'Tillåtelse att skapa grupper samt redigera och radera grupper och tillfällen som de kan nå.');
 
 -- Pass (Workout)
 INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa/redigera/radera egna pass', 'Tillåtelse att skapa, redigera och radera sina egna pass.');
