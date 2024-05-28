@@ -6,7 +6,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
+
+import se.umu.cs.pvt.PermissionValidator;
+import se.umu.cs.pvt.plan.Plan;
+import se.umu.cs.pvt.plan.PlanRepository;
+import se.umu.cs.pvt.user.JWTUtil;
+
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -16,8 +23,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import javax.swing.text.html.HTML;
 
 /**
  * Class for handling requests to the session api.
@@ -30,11 +35,15 @@ import javax.swing.text.html.HTML;
 @RestController
 @RequestMapping(path = "/api/session")
 public class SessionController {
+    private final JWTUtil jwtUtil;
     private final SessionRepository sessionRepository;
+    private final PlanRepository planRepository;
 
     @Autowired
-    public SessionController(SessionRepository sessionRepository) {
+    public SessionController(JWTUtil jwtUtil, SessionRepository sessionRepository, PlanRepository planRepository) {
+        this.jwtUtil = jwtUtil;
         this.sessionRepository = sessionRepository;
+        this.planRepository = planRepository;
     }
 
     /**
@@ -71,7 +80,11 @@ public class SessionController {
      * @return Response containing the added session and an HTTP code.
      */
     @PostMapping("/add")
-    public ResponseEntity<Session> add(@RequestBody Session session) {
+    public ResponseEntity<Session> add(@RequestBody Session session, @RequestHeader(name = "token") String token) {
+        if (!canEditCreateSession(token, session)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         if (session.getId() != null || session.invalidFormat())
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(sessionRepository.save(session), HttpStatus.OK);
@@ -85,7 +98,12 @@ public class SessionController {
      * @return The added sessions including id:s.
      */
     @PostMapping("/addList")
-    public ResponseEntity<List<Session>> addList(@RequestBody List<Session> sessions) {
+    public ResponseEntity<List<Session>> addList(@RequestBody List<Session> sessions, @RequestHeader(name = "token") String token) {
+        for (Session session : sessions) {
+            if (!canEditCreateSession(token, session)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+        }
 
         if (sessions.isEmpty() || sessions.stream().anyMatch(session -> session.invalidFormat()))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -100,9 +118,15 @@ public class SessionController {
      * @return HTTP-status code
      */
     @DeleteMapping("/delete")
-    public ResponseEntity<String> delete(@RequestParam Long id) {
-        if (sessionRepository.findById(id).isEmpty()) {
+    public ResponseEntity<String> delete(@RequestParam Long id, @RequestHeader(name = "token") String token) {
+        Optional<Session> session = sessionRepository.findById(id);
+        
+        if (session.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        if (!canEditCreateSession(token, session.get())) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         sessionRepository.deleteById(id);
@@ -117,7 +141,11 @@ public class SessionController {
      * @return HTTP-status code for the request.
      */
     @DeleteMapping("/deleteByPlan")
-    public ResponseEntity<Void> deleteByPlan(@RequestParam Long id) {
+    public ResponseEntity<Void> deleteByPlan(@RequestParam Long id, @RequestHeader(name = "token") String token) {
+        if (!isGroupOwner(token, id)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        
         if (!sessionRepository.findAllByPlan(id).isEmpty()) {
             sessionRepository.deleteAllByPlan(id);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -188,11 +216,14 @@ public class SessionController {
      * @return Response with status code and body containing the updated session.
      */
     @PutMapping("/update")
-    public ResponseEntity<Session> update(@RequestParam Long id, @RequestBody Map<String, Object> updateInfo) {
+    public ResponseEntity<Session> update(@RequestParam Long id, @RequestBody Map<String, Object> updateInfo, @RequestHeader(name = "token") String token) {
         Optional<Session> toUpdateResult = sessionRepository.findById(id);
 
         if (toUpdateResult.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if (!canEditCreateSession(token, toUpdateResult.get())) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         Session toUpdate = toUpdateResult.get();
@@ -229,5 +260,58 @@ public class SessionController {
 
         // Update and return updated session with OK code
         return new ResponseEntity<>(sessionRepository.save(toUpdate), HttpStatus.OK);
+    }
+
+    private boolean canEditCreateSession(String token, Session session) {
+        DecodedJWT jwt;
+
+        try {
+            jwt = jwtUtil.validateToken(token);
+        } catch (JWTVerificationException e) {
+            throw new JWTVerificationException("Invalid token");
+        }
+
+        List<Integer> permissions = jwt.getClaim("permissions").asList(Integer.class);
+        Long userId = jwt.getClaim("userId").asLong();
+
+        if (permissions.contains(PermissionValidator.permissionList.SESSION_GROUP_ALL.value)) {
+            return true;
+        }
+
+        Plan plan = planRepository.getById(session.getPlan());
+        Long plan_owner = plan.getUserId();
+
+        if (userId == plan_owner) {
+            return true;
+        }
+
+
+        return false;
+    }
+    
+    private boolean isGroupOwner(String token, Long plan_id) {
+        DecodedJWT jwt;
+
+        try {
+            jwt = jwtUtil.validateToken(token);
+        } catch (JWTVerificationException e) {
+            throw new JWTVerificationException("Invalid token");
+        }
+
+        List<Integer> permissions = jwt.getClaim("permissions").asList(Integer.class);
+        Long userId = jwt.getClaim("userId").asLong();
+
+        if (permissions.contains(PermissionValidator.permissionList.SESSION_GROUP_ALL.value)) {
+            return true;
+        }
+
+        Plan plan = planRepository.getById(plan_id);
+        Long plan_owner = plan.getUserId();
+
+        if (userId == plan_owner) {
+            return true;
+        }
+
+        return false;
     }
 }
