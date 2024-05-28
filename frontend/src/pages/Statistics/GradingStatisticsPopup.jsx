@@ -33,8 +33,8 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 	
 
 	useEffect(() => {
-
 		if (belts.length > 0) {
+			console.log(belts)
 			getNextBelts()
 			setChosenProtocol(belts[0].name)
 		}
