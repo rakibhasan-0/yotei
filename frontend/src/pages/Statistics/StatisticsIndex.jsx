@@ -56,7 +56,7 @@ export default function Statistics() {
 	})
 
 	// filters the groups activities based on the selected belts.
-	// first it checks if the selectedBelts is not empty, then it filters the groupActivities based on the selected belts.
+	// first it checks if selectedBelts is not empty, then it filters the groupActivities based on the selected belts.
 	// if the selectedBelts is empty, it will show all groupActivities. 
 	const activities =	
 	selectedBelts.length > 0	
@@ -145,7 +145,6 @@ export default function Statistics() {
 	
 		fetchGroupActivitiesData()
 	}, [groupID, token, filter, dates])
-
 
 	// function handles date changes and storing of dates state.
 	function handleDateChanges(variableName, value) {
