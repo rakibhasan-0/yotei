@@ -54,19 +54,27 @@ const BeltRow = ({ belt, states, onToggle }) => {
 			</p>
 			<div className={styles.beltItem}>
 				{(child) ? <>
-					<BeltIcon id={`belt-child-${name}-icon`} belt={child} />
-					<CheckBox id={`belt-child-${name}`} onClick={toggleChildState} checked={childState} />
-					
+					<div className={styles.beltItemDuo}>					
+						<BeltIcon id={`belt-child-${name}-icon`} belt={child} />
+						<CheckBox id={`belt-child-${name}`} onClick={toggleChildState} checked={childState} />
+					</div>
+
 				</> : <></>}
 				{inverted ? <>
-					<BeltIcon id={`belt-inverted-${name}-icon`} belt={inverted} />
-					<CheckBox id={`belt-inverted-${name}`} onClick={toggleInvertedState} checked={invertedState}/>
+					<div className={styles.beltItemDuo}>
+						<BeltIcon id={`belt-inverted-${name}-icon`} belt={inverted} />
+						<CheckBox id={`belt-inverted-${name}`} onClick={toggleInvertedState} checked={invertedState}/>
+					</div>
+
 				</>
 					: <></>
 				}
 				{adult ? <>
+				<div className={styles.beltItemDuo}>
 					<BeltIcon id={`belt-adult-${name}-icon`} belt={adult} />
 					<CheckBox id={`belt-adult-${name}`} onClick={toggleAdultState} checked={adultState} />
+				</div>
+
 				</>
 					: <div style={{width:"72px"}} />
 				}

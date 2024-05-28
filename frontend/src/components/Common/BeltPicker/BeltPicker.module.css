@@ -1,6 +1,6 @@
 .beltRow {
     border-top: solid 1px black;
-    height: 50px;
+    height: auto;
     width: 100%;
     display: flex;
     align-items: center;
@@ -20,11 +20,17 @@
     display: flex;
     gap: 10px;
     align-items: center;
-    flex-shrink: 0; /* Prevent shrinking */
     margin-left: auto;
+    flex-wrap: wrap;
 }
 
-
+.beltItemDuo {
+    display: flex;
+    height: 50px;
+    align-items: center;
+    gap: 2px;
+    justify-content: center;
+}
 
 .beltTextSpecial {
     margin: 0;
