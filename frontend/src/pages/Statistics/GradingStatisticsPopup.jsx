@@ -6,10 +6,10 @@ import GradingProtocolsRowsMenu from "../../components/Grading/GradingProtocolsR
 import GradingProtocolsRows from "../../components/Grading/GradingProtocolsRows"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import { AccountContext } from "../../context"
+
 /**
- *  The component for the grading statistics popup. It shows what techniques are required for each belt.
+ *  Component for the grading statistics popup. It shows what techniques are required for each belt.
  *  And what techniques have been completed by the group.
- * 
  * 
  * @param {String} id - The id of the component, for testing purposes
  * @param {String} groupID - The id of the group
@@ -18,9 +18,7 @@ import { AccountContext } from "../../context"
  * @since 2024-05-20
  * @author Team Coconut
  */
-
-
-export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,datesTo}) {
+export default function GradingStatisticsPopup({ id, groupID, belts, datesFrom, datesTo}) {
 
 	const [showPopup, setShowPopup] = useState(false)
 	const [protocols, setProtocols] = useState([])
@@ -30,16 +28,15 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 	const [newBelts, setNewBelts] = useState([])
 	const [data, setData] = useState([])
 	const { token } = useContext(AccountContext)
-	
 
 	useEffect(() => {
 		if (belts.length > 0) {
-			console.log(belts)
 			getNextBelts()
 			setChosenProtocol(belts[0].name)
 		}
 	}, [belts])
 
+	// Fetches and sets groups protocols and data
 	useEffect(() => {
 		if (groupID && beltID !== null) {
 			const fetchGroupGradingProtocol = async () => {
@@ -51,18 +48,19 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 				try {
 					setLoading(true)
 					const response = await fetch(`/api/statistics/${groupID}/grading_protocol?beltId=${beltID}&startdate=${datesFrom}&enddate=${datesTo}`, requestOptions)
+
 					if (!response.ok) {
 						throw new Error("Failed to fetch group data")
 					}
+
 					if(response.status === 204){
 						//For belts that do not have grading protocols
 						setProtocols([])
 					} else {
 						const groups = await response.json()
-
 						setData(groups)
-
 					}
+
 				} catch (error) {
 					console.error("Fetching error:", error)
 				} finally {
@@ -72,8 +70,8 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 			fetchGroupGradingProtocol()
 		}
 	}, [beltID])
-
 	
+	// Finds and sets the selected belts ids for the chosen protocol
 	useEffect(() => {
 		if (chosenProtocol) {
 			const index = protocols.findIndex(p => p === chosenProtocol)
@@ -84,18 +82,24 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 		}
 	}, [chosenProtocol])
 
-
+	/**
+	 * Completes the url for the api call to retrieve the next belt
+	 * 
+	 * @param baseUrl the base url to which numbers will be appended
+	 * @param numbers the numbers added to the base url
+	 */
 	function addNumbersToUrl(baseUrl, numbers, key = "beltId") {
 		const params = new URLSearchParams()
 		numbers.forEach(num => params.append(key, num))
 		return `${baseUrl}?${params.toString()}`
 	}
-	
 
+	// Toggles popups visibility
 	const togglePopup = () => {
 		setShowPopup(!showPopup)
 	}
 
+	// Sets chosen protocol
 	const onSelectRow = (protocol) => {
 		setChosenProtocol(protocol)
 	}
@@ -115,7 +119,6 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 				const json = await response.json()
 				setNewBelts(json)
 				setProtocols(json.map(belt => belt.name))
-				
 			} else if (response.status === 204) {
 				setProtocols([])
 			} else {
@@ -127,9 +130,6 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 		} finally {
 			setLoading(false)
 		}
-	
-
-
 	}
 
 	useEffect(() => {
@@ -156,6 +156,7 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 				<Dropdown text={data.code ? data.code + " " + data.name : "Välj ett protokoll"} id="grading-protocols-dropdown">
 					<GradingProtocolsRowsMenu protocols={protocols} onSelectRow={onSelectRow} />
 				</Dropdown>
+				
 				{loading ? <Spinner /> : 
 					(data.belt && data.categories) &&
 					<div style={{ border: `3px dashed #${[data.belt.belt_color]}`, padding: "4px", borderRadius: "10px" }}>
