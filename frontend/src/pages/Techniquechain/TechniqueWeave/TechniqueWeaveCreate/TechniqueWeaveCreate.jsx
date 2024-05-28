@@ -1,17 +1,17 @@
 import { useState, useEffect, useContext } from "react"
 import styles from "./TechniqueWeaveCreate.module.css"
-import InputTextField from "../../../components/Common/InputTextField/InputTextField"
-import TextArea from "../../../components/Common/TextArea/TextArea"
-import Flowchart from "../../../components/Common/Flowchart/Flowchart"
-import Button from "../../../components/Common/Button/Button"
-import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
-import Divider from "../../../components/Common/Divider/Divider"
-import CheckBox from "../../../components/Common/CheckBox/CheckBox"
-import TagInput from "../../../components/Common/Tag/TagInput"
-import AddUserComponent from "../../../components/Workout/CreateWorkout/AddUserComponent"
-import { AccountContext } from "../../../context"
+import InputTextField from "../../../../components/Common/InputTextField/InputTextField"
+import TextArea from "../../../../components/Common/TextArea/TextArea"
+import Flowchart from "../../../../components/Common/Flowchart/Flowchart"
+import Button from "../../../../components/Common/Button/Button"
+import ConfirmPopup from "../../../../components/Common/ConfirmPopup/ConfirmPopup"
+import Divider from "../../../../components/Common/Divider/Divider"
+import CheckBox from "../../../../components/Common/CheckBox/CheckBox"
+import TagInput from "../../../../components/Common/Tag/TagInput"
+import AddUserComponent from "../../../../components/Workout/CreateWorkout/AddUserComponent"
+import { AccountContext } from "../../../../context"
 import { useNavigate} from "react-router"
-import { HTTP_STATUS_CODES } from "../../../utils"
+import { HTTP_STATUS_CODES } from "../../../../utils"
 import { useNodesState } from "reactflow"
 
 /**
@@ -65,19 +65,19 @@ const CreateWeave = () => {
 			return null
 		} else {
 			const data = await response.json()
-			console.log(data)
 			setWeaveId(data.id)
 		}
 	}
 
 	const handleSave = async () => {
+		console.log("Edges")
+		console.log(edges)
+		console.log("nodes")
+		console.log(nodes)
 		// Should probably check for unnecessary whitespaces and wierd characters
 		if(techniqueWeaveName) {
-			console.log(edges)
-			console.log(nodes)
-
 			edges.map(async (edge)  => {
-				const requestOptions = {
+				const requestOptions1 = {
 					method: "POST",
 					headers: { "Content-type": "application/json", "token": context.token },
 					body: JSON.stringify({
@@ -85,22 +85,23 @@ const CreateWeave = () => {
 						toNodeId: parseInt(edge.target)
 					})
 				}
-				const response = await fetch("/api/techniquechain/edge/create", requestOptions)
-				if(response.status !== 200) console.error("failed to create edge")
+				const response = await fetch("/api/techniquechain/edge/create", requestOptions1)
+				if(response.status !== 201) console.error("failed to create edge")
 			})
+
 			nodes.map(async (node)  => {
-				const requestOptions = {
+				const requestOptions2 = {
 					method: "POST",
 					headers: { "Content-type": "application/json", "token": context.token },
 					body: JSON.stringify({
 						node_x_pos: node.position.x,
 						node_y_pos: node.position.y,
-						nodeId: node.id,
+						node_id: node.id,
 						techniqueWeaveId: weaveId
 					})
 				}
-				const response = await fetch("/api/techniquechain/weaveRepresentation/create", requestOptions)
-				if(response.ok) console.error("failed to create representation")
+				const response = await fetch("/api/techniquechain/weaveRepresentation/create", requestOptions2)
+				if(!response.ok) console.error("failed to create representation")
 			})
 			const requestOptions = {
 				method: "PUT",
@@ -172,6 +173,7 @@ const CreateWeave = () => {
 				setNodes={setNodes}
 				setEdges={setEdges}
 				onNodesChange={onNodesChange}
+				editable={true}
 			/>
 			<CheckBox
 				id="workout-create-checkbox"
