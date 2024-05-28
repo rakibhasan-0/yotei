@@ -6,19 +6,77 @@ import CheckBox from "../../Common/CheckBox/CheckBox"
 import DropDown from "../../Common/List/Dropdown"
 import ListItem from "./ListItem.jsx"
 import { WORKOUT_CREATE_TYPES } from "./WorkoutCreateReducer"
+import { getListContent } from "../../Common/SearchBar/SearchBarUtils.jsx"
+import useMap from "../../../hooks/useMap.jsx"
+import { AccountContext } from "../../../context.js"
 
 /**
  * Displays a list of dropdowns with Activity lists. The user can select activities to be added to the workout.
  * @author Team Tomato
  * @since 2024-05-28
  */
-export const ActivityLists = ({ lists, fetchingListContent, listContents, setListUpdate, listUpdate }) => {
+export const ActivityLists = ({ lists, setListUpdate, listUpdate }) => {
 	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(WorkoutCreateContext)
 	const { checkedActivities } = workoutCreateInfo
 	const [listCheckboxStatus, setListCheckboxStatus] = useState([false])
 	const [listToToggle, setListToToggle] = useState(null)
+	const [listContents, setListContents] = useState([])
+	const [map, mapActions] = useMap()
+	const { token } = useContext(AccountContext)
 
-	// This calls the onAllActivitiesToggle function when the listContents state is updated and runs only when the checkbox to toggle all activities in a list is pressed.
+	/**
+	 * Fetches the content from a list given the ID of the same list.
+	 * @param {Integer} listID
+	 */
+	function fetchingListContent(listID, callback) {
+		let technique_index = 0
+		let exercise_index = 0
+		const args = {
+			id: listID,
+		}
+
+		getListContent(args, token, map, mapActions, (result) => {
+			if (result.error) return
+
+			const listContent = result.activities.map((item) => {
+				if (item.type === "technique") {
+					technique_index += 1
+					return {
+						techniqueID: listID + "-" + technique_index + "-technique-" + item.id,
+						name: item.name,
+						type: "technique",
+						description: item.description,
+						tags: item.tags,
+						path: item.id,
+					}
+				} else {
+					exercise_index += 1
+					return {
+						id: listID + "-" + exercise_index + "-exercise-" + item.id,
+						name: item.name,
+						type: "exercise",
+						description: item.description,
+						duration: item.duration,
+						path: item.id,
+					}
+				}
+			})
+
+			setListContents((prevState) => ({
+				...prevState,
+				[listID]: listContent,
+			}))
+
+			setListUpdate(listUpdate + 1)
+
+			if (callback) {
+				callback()
+			}
+		})
+	}
+
+	// This calls the onAllActivitiesToggle function when the listContents state is
+	// updated and runs only when the checkbox to toggle all activities in a list is pressed.
 	useEffect(() => {
 		if (listToToggle) {
 			onAllActivitiesToggle(listToToggle)

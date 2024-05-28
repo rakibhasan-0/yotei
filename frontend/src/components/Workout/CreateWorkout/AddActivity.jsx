@@ -5,7 +5,7 @@ import Tabs from "react-bootstrap/Tabs"
 import Modal from "react-bootstrap/Modal"
 import useMap from "../../../hooks/useMap"
 import SearchBar from "../../Common/SearchBar/SearchBar"
-import { getTechniques, getExercises, getLists, getListContent } from "../../Common/SearchBar/SearchBarUtils"
+import { getTechniques, getExercises, getLists } from "../../Common/SearchBar/SearchBarUtils"
 import TechniqueFilter from "../../Common/Filter/TechniqueFilter"
 import CheckBox from "../../Common/CheckBox/CheckBox"
 import TechniqueCard from "../../Common/Technique/TechniqueCard/TechniqueCard"
@@ -96,7 +96,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null }) {
 	const [lists, setLists] = useState([])
 	const [fetchedLists, setFetchedLists] = useState(false)
 	const [searchListText, setSearchListText] = useState("")
-	const [listContents, setListContents] = useState([])
+
 	const [listUpdate, setListUpdate] = useState(0)
 	const [listFilter, setListFilter] = useState([])
 
@@ -518,57 +518,6 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null }) {
 	}
 
 	/**
-	 * Fetches the content from a list given the ID of the same list.
-	 * @param {Integer} listID
-	 */
-	function fetchingListContent(listID, callback) {
-		let technique_index = 0
-		let exercise_index = 0
-		const args = {
-			id: listID,
-		}
-
-		getListContent(args, token, map, mapActions, (result) => {
-			if (result.error) return
-
-			const listContent = result.activities.map((item) => {
-				if (item.type === "technique") {
-					technique_index += 1
-					return {
-						techniqueID: listID + "-" + technique_index + "-technique-" + item.id,
-						name: item.name,
-						type: "technique",
-						description: item.description,
-						tags: item.tags,
-						path: item.id,
-					}
-				} else {
-					exercise_index += 1
-					return {
-						id: listID + "-" + exercise_index + "-exercise-" + item.id,
-						name: item.name,
-						type: "exercise",
-						description: item.description,
-						duration: item.duration,
-						path: item.id,
-					}
-				}
-			})
-
-			setListContents((prevState) => ({
-				...prevState,
-				[listID]: listContent,
-			}))
-
-			setListUpdate(listUpdate + 1)
-
-			if (callback) {
-				callback()
-			}
-		})
-	}
-
-	/**
 	 * Handles the click event for the round button.
 	 * It checks if the sendActivity prop is null, if it is, it will set the showActivityInfo state
 	 * by calling the setShowActivityInfo function with the checkedActivities state as a parameter.
@@ -721,11 +670,9 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null }) {
 									/>
 								) : (
 									<ActivityLists
+										lists={lists}
 										listUpdate={listUpdate}
 										setListUpdate={setListUpdate}
-										lists={lists}
-										fetchingListContent={fetchingListContent}
-										listContents={listContents}
 									/>
 								)}
 							</div>
