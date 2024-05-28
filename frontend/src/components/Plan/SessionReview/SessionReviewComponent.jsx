@@ -49,7 +49,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	//const [loading, setLoading] = useState(true)
 
 	const context = useContext(AccountContext)
-
 	const {token, userId} = context
 
 	useEffect(() => {
