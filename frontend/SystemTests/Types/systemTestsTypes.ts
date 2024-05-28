@@ -74,3 +74,31 @@ export type Workout = {
   hasAccess?: Account[],
   tags?: string[]
 }
+
+export type Examinee = {
+  examineeId?: number,
+  name?: string
+}
+
+export type Pair = {
+  pairId?: number,
+  examinee1?: Examinee,
+  examinee2?: Examinee
+}
+
+export type Comment = {
+  commentId?: number,
+  techniqueName?: string,
+  examineeId?: number,
+  pairId?: number,
+  content?: string,
+}
+
+export type DuringGrading = {
+  gradingId?: number,
+  name?: string, 
+  examinees?: Examinee[],
+  pairs?: Pair[],
+  techniques?: string[],
+  passOrFail?: boolean[],
+}
