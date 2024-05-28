@@ -524,6 +524,11 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 
 
 
+	/**
+	 * it triggers the activities in the category "ExtraActivities" is being 
+	 * added so that negative ids can be added in the done list synchronously.
+	 * 
+	 */
 	useEffect(() =>{
 
 		if(markActivitiesInCategory) {
@@ -535,7 +540,6 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 			setDone(prevDoneList =>{
 				if(extraCategory){
 					const newIds = extraCategory.activities.map(activity => activity.id)
-					console.log("New ids:", newIds)
 					const uniqueNewIds = newIds.filter(id => !prevDoneList.includes(id))
 					return [...prevDoneList, ...uniqueNewIds]
 				}
@@ -572,7 +576,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 	* This function is designed to handle the dynamic addition of activities within the user's session,
 	* ensuring all activities are accounted for in the appropriate category.
 	*
-	* @param category - The category to which activities will be added. Must contain a 'categoryName' property.
+	* @param category - The category to add activities to.
  	* @param activities - Array of activities to add. Each activity must be suitable for conversion into an activity object.
  	* @param callback - Callback to execute after activities have been added. Takes the last used ID as an argument.
  	*
@@ -582,11 +586,11 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 		setSessionData(prevSessionData => {
 			const newCategories = prevSessionData.activityCategories.map(cat => {
 				if (cat.categoryName === category.categoryName) {
-					let localId = extraActivityId;
+					let localId = extraActivityId
 					const newActivities = activities.map((activity, index) => {
-						const activityObject = createActivityObject(activity, cat.activities.length + index, localId);
-						localId--;
-						return activityObject;
+						const activityObject = createActivityObject(activity, cat.activities.length + index, localId)
+						localId--
+						return activityObject
 					});
 
 					callback(localId)
@@ -596,17 +600,12 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 						activities: [...cat.activities, ...newActivities],
 					};
 				}
-				return cat;
-			});
+				return cat
+			})
 
-			return { ...prevSessionData, activityCategories: newCategories };
-		});
+			return { ...prevSessionData, activityCategories: newCategories }
+		})
 	}
-
-
-	useEffect(() => {
-		console.log("Done list updated:", doneList)
-	}, [doneList])
 
 
 	/**
