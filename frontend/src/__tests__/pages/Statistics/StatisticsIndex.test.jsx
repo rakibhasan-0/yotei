@@ -98,12 +98,14 @@ describe("Statistics Component", () => {
 		const headerText = "Graderingsprotokoll"
 		const dropdownText = "Välj ett protokoll"
 		const dropdownID = "grading-protocols-dropdown-dropdown"
-		const protocolExist = "SVART BÄLTE"
-		const protocolNotExist = "BRUNT BÄLTE"
-		const protocols= [
+		const protocolExist = "BLÅTT BÄLTE"
+		const belts= [
 			{
-				name: "SVART",
-				id: 1
+				child: false,
+				color: "0C7D2B",
+				id: 9,
+				inverted: false,
+				name: "Grönt"
 			}
 		]
 
@@ -141,17 +143,36 @@ describe("Statistics Component", () => {
 		test("Functionality", async () => {
 			// render popup
 			render(<BrowserRouter>
-				<GradingStatisticsPopup id = {"grading-statistics-container"} groupid = {"3"} belts = {protocols}/>
+				<GradingStatisticsPopup id = {"grading-statistics-container"} groupid = {"1"} belts = {belts}/>
 			</BrowserRouter>)
 
 			// toggle popup & dropdown
 			fireEvent.click(screen.getByTestId(popupBtnID))
 			fireEvent.click(screen.getByTestId(dropdownID))
 
-			// protocols should now be visible
-			expect(screen.getByText(protocolExist)).toBeInTheDocument()
-			expect(screen.queryByText(protocolNotExist)).not.toBeInTheDocument()
 
+			const requestSpy = jest.fn()
+			server.events.on("request:start", requestSpy)
+
+			server.use(
+				rest.get("http://localhost/api/statistics/next_belt?beltId=9", async (req, res, ctx) => {
+					return res(ctx.status(200), ctx.json(
+						[
+							{
+								id: 12,
+								name: "Blått",
+								color: "1E9CE3",
+								child: false,
+								inverted: false
+							}
+						]
+					))
+				})
+			)
+			
+			const protocolElement = await screen.findByText(protocolExist)
+			expect(protocolElement).toBeInTheDocument()
+			
 		})
 
 	})
