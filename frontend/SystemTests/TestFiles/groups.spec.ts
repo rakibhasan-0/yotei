@@ -2,7 +2,7 @@ import { test, expect } from '../fixtures'
 import { GroupsPage } from '../PageObjectModels/groupsPage'
 import { GroupsDay, Group } from 'Types/systemTestsTypes'
 
-test.describe('Groups', () => {
+test.describe('Groups test', () => {
   let groupsPage
   
   test.beforeEach('navigate to groups page', async ({page}) => {
@@ -11,8 +11,8 @@ test.describe('Groups', () => {
     await expect(page.locator('#root')).toContainText('Grupper')
   })
   
-  test('Create group', async ({ page }) => {
-    // Will generate a random string of 5 characters
+  test('1. Create group with name, start date, end date and two days, should display success toast', async ({ page }) => {
+    // Generate data for a group object
 		const name = Math.random().toString(36).slice(2, 7) 
     const monday: GroupsDay = { name: 'Tis', time: '18:00' }
     const wednesday: GroupsDay = { name: 'Ons', time: '17:30' }
@@ -23,10 +23,13 @@ test.describe('Groups', () => {
       days: [ monday, wednesday ]
     }
 
+    // Create a group and assert that it was done successfully
     await groupsPage.createGroup(group)
     await expect(page.locator('#root')).toContainText(`Gruppen ${name} lades till`)
     await expect(page.locator('#root')).toContainText('Tillfällen lades till.')
 
+    // Delete the new group and asserts deletion
     await groupsPage.deleteGroup(name)
+    await expect(page.getByText('Ändringar sparade.')).toBeVisible()
   })
 })

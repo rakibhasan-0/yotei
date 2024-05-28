@@ -1,6 +1,14 @@
 import { type Page } from '@playwright/test'
 import { Group } from 'Types/systemTestsTypes'
 
+/**
+ *  
+ *  Page Object Model for the group index page with url '/groups'.
+ * 
+ *  @author Team Mango (Group 4)
+ *  @since 2024-05-27
+ *  @version 1.0
+ */
 export class GroupsPage {
   readonly page: Page
   readonly url: string = '/groups'
@@ -9,10 +17,17 @@ export class GroupsPage {
     this.page = page
   }
 
+  /**
+   * Redirect to /groups.
+   */
   async visit() {
     await this.page.goto(this.url)
   }
 
+  /**
+   * Create a new group based on the passed properties. 
+   * @param group properties (possibly name, start date, end date, days and time) related to the group to be created. 
+   */
   async createGroup(group: Group) {
     await this.page.locator('.plus-icon').click()
     group.name && await this.page.getByPlaceholder('Namn').fill(group.name)
@@ -32,17 +47,14 @@ export class GroupsPage {
     await this.page.getByRole('button', { name: 'Gå vidare' }).click()
   }
 
+  /**
+   * Delete a created group based on its name. 
+   * @param name name of group
+   */
   async deleteGroup(name: string) {
-    // await this.page.locator('role=alert', { hasText: `${name}` }).waitFor({ state: 'hidden' })
-
-    const locator = await this.page.getByText(`${name}`, { exact: true })
-    const parent = await locator.locator('..')
-    await parent.locator('#pencil-button').click()
-    //const parentHtml = await pencil.innerHTML()
-    //console.log(parentHtml)
-
-    //.locator('#edit-group-button').click()
-    // await this.page.getByTestId('#trashcan_button').click()
-    // await this.page.getByRole('button', { name: 'Ta bort grupp' }).click()
+    const parent = await this.page.getByText(`${name}`, { exact: true }).locator('..')
+    await parent.locator('#edit-group-button').click()
+    await this.page.locator('#trashcan_button').click()
+    await this.page.getByRole('button', { name: 'Ta bort grupp' }).click()
   }
 }
