@@ -1,4 +1,4 @@
-.role-list-container{
+.permission-list-container{
     border-radius: 5px;
     border: 1px solid var(--black-primary);
     user-select: none;
@@ -6,7 +6,7 @@
     margin-top: 10px;
 }
 
-.role-list-header {
+.permission-list-header {
     display: flex;
     align-items: center;
     text-align: center;
@@ -15,4 +15,11 @@
     font-weight: 400;
     width: 100%;
     overflow:hidden;
+}
+
+.permission-list-description {
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 4px 4px;
 }
