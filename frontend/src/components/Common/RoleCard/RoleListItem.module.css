@@ -16,10 +16,3 @@
     width: 100%;
     overflow:hidden;
 }
-
-.role-list-description {
-    padding: 1rem;
-    border: 1px solid var(--border-color);
-    border-top: none;
-    border-radius: 0 0 4px 4px;
-}
