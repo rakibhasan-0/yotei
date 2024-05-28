@@ -28,11 +28,11 @@ export function isAdminUser(context) {
 
 
 /**
- * canCreateGroups() - check if a user can create a group or session.
+ * canCreateSessionsAndGroups() - check if a user can create a group or session.
  * @param {*} context AccountContext from user.
  * @returns true if user can create a group, else false.
  */
-export function canCreateGroups(context) {
+export function canCreateSessionsAndGroups(context) {
 	if (!context.permissions) return false
 	return (context.permissions.includes(USER_PERMISSION_CODES.SESSION_GROUP_ALL) ||
 	(context.permissions.includes(USER_PERMISSION_CODES.SESSION_GROUP_OWN)))

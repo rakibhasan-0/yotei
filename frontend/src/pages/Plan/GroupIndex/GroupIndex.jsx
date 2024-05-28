@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react"
-import { setError as setErrorToast, canCreateGroups, canEditGroups, isAdminUser } from "../../../utils"
+import { setError as setErrorToast, canCreateSessionsAndGroups, canEditGroups, isAdminUser } from "../../../utils"
 import { AccountContext } from "../../../context"
 import style from "./GroupIndex.module.css"
 import BeltBox from "../../../components/Plan/BeltBox"
@@ -107,7 +107,7 @@ export default function GroupIndex() {
 					
 					{
 
-						(isAdminUser(context) || canCreateGroups(context)) ?
+						(isAdminUser(context) || canCreateSessionsAndGroups(context)) ?
 							<RoundButton linkTo={"/plan/create"}>
 								<Plus className="plus-icon" />
 							</RoundButton>
