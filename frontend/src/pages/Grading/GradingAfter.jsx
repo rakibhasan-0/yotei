@@ -17,7 +17,6 @@ import { canHandleGradings, isAdminUser } from "../../utils"
  */
 export default function GradingAfter() {
 	const context = useContext(AccountContext)
-	const hasPreviousState = location.key !== "default"
 	const { token} = context
 	const { gradingId } = useParams()
 	const navigate = useNavigate()
@@ -151,10 +150,8 @@ export default function GradingAfter() {
 	 * @returns status code
 	 */
 	function updateStep(newStepNum) {
-		//delete grading_data.examinees
 		const grading_data = grading
 		grading_data.step = newStepNum
-		console.log("New grading data: ", grading_data)
 		setGrading(grading_data)
 
 		return fetch("/api/examination/grading", {
@@ -167,17 +164,15 @@ export default function GradingAfter() {
 		})
 			.then(response => {
 				if (!response.ok) {
-					setLoading(false)
 					throw new Error("Network response was not ok")
 				}
 				return response.status
 
 			})
-			
 	}
 
 	/**
-	 * Function to navigate to the start of the grading.
+	 * Function to save and exit a grading, navigates to grading startpage.
 	 */
 	async function saveAndExitGrading(){
 		await updateStep(4)
@@ -299,12 +294,14 @@ export default function GradingAfter() {
 						>
 							<p>Tillbaka</p>
 						</Button>
-						<Button
-							width="100%"
-							onClick={saveAndExitGrading}
-						>
-							<p>Spara och avsluta</p>
-						</Button>
+						{(grading.step === 4) ? null : (
+							<Button
+								width="100%"
+								onClick={saveAndExitGrading}
+							>
+								<p>Spara och avsluta</p>
+							</Button>
+						)}
 					</div>
 				</div>
 			</div>
