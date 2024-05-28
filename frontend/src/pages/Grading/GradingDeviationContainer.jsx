@@ -129,7 +129,7 @@ function GradingDeviationContainer({ id, name, comment, pairComment, generalComm
 		checkID(id) ?
 			(
 				<div id={id} className={styles["sc23-session-container"]}>
-					<div id={`${id}-header`} className={passed ? styles["sc23-session-container-header-passed"] : styles["sc23-session-container-header-failed"]}>
+					<div id={`${id}-header`} className={passed != undefined ? (passed ? styles["sc23-session-container-header-passed"] : styles["sc23-session-container-header-failed"]) : ""}>
 						<div className={styles["sc23-outline-sub"]}>
 
 							<div id={`${id}-clickable`} className={styles["sc23-session-header-clickable"]} role="button" onClick={() => setToggled(!toggled)}>
