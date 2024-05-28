@@ -2,11 +2,19 @@ package se.umu.cs.pvt.statistics;
 
 
 import javax.persistence.*;
-
 import se.umu.cs.pvt.belt.Belt;
-
 import java.io.Serializable;
 
+
+/**
+ * The entity representing the relation of what belt is following another belt.
+ * When having a belt with beltId and passing a grading, you receive 
+ * the belt with nextBeltId.
+ *
+ * @Author Group 7 Coconut
+ * @Since 2024-05-28
+ * @Version 1.0
+ */
 @Entity
 @Table(name = "belt_succession")
 public class BeltSuccession implements Serializable {
