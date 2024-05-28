@@ -337,7 +337,7 @@ export default function GradingDeviations() {
 	 */
 	const fetchPdf = async () => {
 		try {
-			const response = await fetch(`/api/examination/exportpdf/${gradingId}`, {
+			const response = await fetch(`/api/examination/exportExamineePDF/${userId}`, {
 				method: "GET",
 				headers: { "token": context.token }
 			})
