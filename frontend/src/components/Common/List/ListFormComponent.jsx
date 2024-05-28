@@ -56,10 +56,6 @@ export default function ListFormComponent({ callback, state, listCreateInfoDispa
 		}
 	}, [listCreateInfo.popupState.types])
 
-
-	useEffect(() => {
-
-	}, [showAddUser])
 	/**
 	 * Handles the submission of a list. This function is called when the
 	 * save button is pressed.
@@ -126,25 +122,6 @@ export default function ListFormComponent({ callback, state, listCreateInfoDispa
 		}
 	}
 
-	function showAddUsers() {
-		if (showAddUser) {
-			//setShowAddUser(!showAddUser)
-			return (
-				<Form.Group>
-					<AddUserComponent
-						id="list-create-add-users"
-						addedUsers={listCreateInfo.data.users}
-						setAddedUsers={(users) =>
-							listCreateInfoDispatch({
-								type: LIST_CREATE_TYPES.SET_USERS,
-								users,
-							})
-						}
-					/>
-				</Form.Group> 
-			)
-		}
-	}
 	return (
 		<>
 			<Form noValidate validated={validated} onSubmit={handleSubmit}>
@@ -223,17 +200,27 @@ export default function ListFormComponent({ callback, state, listCreateInfoDispa
 									type: LIST_CREATE_TYPES.SET_IS_PRIVATE,
 									hidden: !listCreateInfo.data.hidden,
 								})
-								showAddUsers
-							}}
-							checked={() => {
-								listCreateInfo.data.hidden
-								showAddUser
-							}}	
+								setShowAddUser(!showAddUser)
+							}
+							}
+							checked={showAddUser}
 						/>
 					</Form.Group>
 					
-					
-
+					{showAddUser &&
+						<Form.Group>
+							<AddUserComponent
+								id="list-create-add-users"
+								addedUsers={listCreateInfo.data.users}
+								setAddedUsers={(users) =>
+									listCreateInfoDispatch({
+										type: LIST_CREATE_TYPES.SET_USERS,
+										users,
+									})
+								}
+							/>
+						</Form.Group>
+					} 
 					<Form.Group className={styles.buttonContainer}>
 						<Button
 							onClick={() => {
