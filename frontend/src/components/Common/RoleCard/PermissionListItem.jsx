@@ -40,7 +40,7 @@ export default function PermissionListItem({ item, id, description, toggled, cha
 			>
 				<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
 					<div style={{display: "flex", alignItems: "center"}}>
-						<div className={styles["href-link"]} style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="RoleListItem-item">{item}</div>
+						<div className={styles["href-link"]} style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="RoleListItem-item" dangerouslySetInnerHTML={{ __html: item.replace(/egna/g, "<b>egna</b>").replace(/alla/g, "<b>alla</b>") }}></div>
 					</div>
 					<div className={styles["flex-shrink-0"]} style={{display: "flex", alignItems: "center"}}>
 						<ToggleButton 
