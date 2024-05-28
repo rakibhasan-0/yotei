@@ -47,8 +47,9 @@ export PGPASSFILE=$SCRIPT_PATH/pgpass.conf # Remember to edit this file!
 if $USELOCALFILE
 then
     echo "Using local file '$INFILE'"
+    docker cp $INFILE yotei-psql-1:$INFILE
 else
-    echo "Using file '$INFILE'"
+    echo "Using file '$INFILE' in container"
 fi
 
 
