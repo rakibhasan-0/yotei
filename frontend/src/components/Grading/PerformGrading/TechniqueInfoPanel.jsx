@@ -232,7 +232,7 @@ export default function TechniqueInfoPanel({
 	*/
 
 	return (
-		<div className={styles.infoPanelContainer}>
+		<div id = "infoPanel" className={styles.infoPanelContainer}>
 			<fieldset className={styles.infoPanel}>
 				<div>
 					<h3 className={styles.categoryTitle} id="categoryTitle">{mainCategoryTitle}</h3>
