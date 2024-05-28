@@ -162,21 +162,21 @@ export default function GradingIndex() {
 		setIsCreateListDone(true)
 	}
 
-    /**
+	/**
      * Parses examination protocol data to extract color maps.
      * @param {Array} data Examination protocol data array.
      * @returns {Array} Array of color maps containing id and hex properties.
      */
-    const parseColorMaps = (data) => {
-        const colorMaps = {}
-        data.forEach(element => {
-            colorMaps[element.beltId] = {
-                    beltId: element.beltId,
-                    hex: `#${element.beltColor}`,
-                }
-        })
-        return colorMaps
-    }
+	const parseColorMaps = (data) => {
+		const colorMaps = {}
+		data.forEach(element => {
+			colorMaps[element.beltId] = {
+				beltId: element.beltId,
+				hex: `#${element.beltColor}`,
+			}
+		})
+		return colorMaps
+	}
 
 	/**
      * Checks if the user has no earlier gradings started or finished. 
