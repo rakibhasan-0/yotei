@@ -139,7 +139,7 @@ function TechniqueDetail({ id }) {
 
 			<div className={styles["technique-detail-container"]} id={id == undefined ? "technique" : id}>
 				<title>Tekniker</title>
-				<h1>{technique.name}</h1>
+				<h1 style={{wordBreak: "break-word"}}>{technique.name}</h1>
 				{(isAdminUser(context) || canCreateAndEditActivity(context)) && <div className={styles["technique-detail-actions-container"]} data-testid="technique-detail-actions-container">
 					<Link to={"edit"}>
 						<Pencil
