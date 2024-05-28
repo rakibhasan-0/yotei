@@ -28,8 +28,7 @@ test("Should render title on init", async () => {
 })
 
 test("should render data from the plan api", async () => {
-	// ARRANGE	
-	render(<GroupPicker id = {42}/>) //This is needed now since PlanIndex.jsx has been updated. PlanIndex should probably be rewritten to not require this.
+	// ARRANGE
 	render(<PlanIndex />)
 	server.use(
 		rest.get("api/plan/all", async (req, res, ctx) => {
