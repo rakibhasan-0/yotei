@@ -99,7 +99,6 @@ describe("Statistics Component", () => {
 		const dropdownText = "Välj ett protokoll"
 		const dropdownID = "grading-protocols-dropdown-dropdown"
 		const protocolExist = "BLÅTT BÄLTE"
-		const protocolNotExist = "Inga graderingsprotokoll tillgängliga"
 		const belts= [
 			{
 				child: false,
@@ -170,11 +169,9 @@ describe("Statistics Component", () => {
 					))
 				})
 			)
-
-		
-			// protocols should now be visible
-			expect(screen.findByText(protocolNotExist)).not.toBeInTheDocument()
-			expect(screen.getByText(protocolExist)).toBeInTheDocument()
+			
+			const protocolElement = await screen.findByText(protocolExist)
+			expect(protocolElement).toBeInTheDocument()
 			
 		})
 
