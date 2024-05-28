@@ -546,6 +546,8 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 	 * @param {Integer} listID 
 	 */
 	function fetchingListContent(listID, callback) {
+		let technique_index = 0
+		let exercise_index = 0
 		const args = {
 			id: listID
 		}
@@ -555,23 +557,20 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 
 			const listContent = result.activities.map(item => {
 				if (item.type === "technique") {
+					technique_index += 1
 					return {
-						techniqueID: listID + "-technique-" + item.id,
+						techniqueID: listID + "-" + technique_index + "-technique-" + item.id,
 						name: item.name,
 						type: "technique",
 						description: item.description,
-						beltColors: [{
-							belt_color: item.belts[0].color,
-							belt_name: item.belts[0].name,
-							is_child: item.belts[0].child
-						}],
 						tags: item.tags,
 						path:  item.id
 					}
 				}
 				else {
+					exercise_index += 1
 					return {
-						id: listID + "-exercise-" + item.id,
+						id: listID + "-" + exercise_index + "-exercise-" + item.id,
 						name: item.name,
 						type: "exercise",
 						description: item.description,
@@ -661,6 +660,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 										}
 										technique={technique}
 										key={key}
+										popUp={true}
 									/>
 								))}
 							</ InfiniteScrollComponent>)
@@ -704,6 +704,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 										item={exercise.name}
 										key={key}
 										index={key}
+										popUp = {true}
 									/>
 								))}
 							</InfiniteScrollComponent>
@@ -763,7 +764,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 															if(item.type === "technique") {
 																return (
 																	<ListItem
-																		id={"technique-list-item-" + item.techniqueID}
+																		id={index + "-technique-list-item-" + item.techniqueID}
 																		item={item}
 																		checkBox={
 																			<CheckBox 
@@ -773,6 +774,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 																		}
 																		key={index}
 																		index={index}
+																		popUp = {true}
 																	>
 
 																	</ListItem>
@@ -791,6 +793,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null}) {
 																		}
 																		key={index}
 																		index={index}
+																		popUp = {true}
 																	>
 																	</ListItem>
 																)

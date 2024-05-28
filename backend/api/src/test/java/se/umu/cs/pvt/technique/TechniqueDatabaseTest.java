@@ -38,8 +38,10 @@ import ch.qos.logback.classic.LoggerContext;
  * This test-class will likely cause problems if not excluded from being ran by maven. If you do want to run it locally, you need
  * to have a .env-file with information regarding the database in the project root.
  * 
+ * Tests belt-tag to technique also in every ID test for each belt
+ * 
  * @author Kiwi (Grupp 2), c16kvn & dv22cen 2024-05-16
- * @updated Kiwi (Grupp 2), c16kvn & dv22cen 2024-05-20
+ * @updated Kiwi (Grupp 2), c16kvn & dv22cen 2024-05-23
  */
 public class TechniqueDatabaseTest {
     private static PostgreSQLContainer<?> postgreSQLContainer;
@@ -66,6 +68,8 @@ public class TechniqueDatabaseTest {
 
     static int brownBegin = 102;
     static int brownEnd = 134;
+
+    static int firstNonBeltTagId = 12;
 
     @BeforeAll
     public static void setUp() {
@@ -156,16 +160,29 @@ public class TechniqueDatabaseTest {
                 String expectedColor = "Gult";
 
                 for(Integer i = yellowBegin; i < yellowEnd + 1; i++){
-                    String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
-                
-                    PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
-                    preparedStatement.setInt(1, i);
+                    String sqlQueryBelt = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
+                    String sqlQueryTag = "SELECT tag.name FROM tag INNER JOIN technique_tag tt ON tt.tag_id = tag.tag_id INNER JOIN technique t ON tt.tech_id = t.technique_id WHERE t.technique_id = ? AND tag.tag_id < ? ORDER BY tag.tag_id DESC";
 
-                    ResultSet resultSet = preparedStatement.executeQuery();
+                    PreparedStatement preparedStatementBelt = connection.prepareStatement(sqlQueryBelt);
+                    preparedStatementBelt.setInt(1, i);
 
-                    if (resultSet.next()) {
-                        String belt = resultSet.getString("belt_name");
+                    PreparedStatement preparedStatementTag = connection.prepareStatement(sqlQueryTag);
+                    preparedStatementTag.setInt(1, i);
+                    preparedStatementTag.setInt(2, firstNonBeltTagId);
+
+                    ResultSet resultSetBelt = preparedStatementBelt.executeQuery();
+
+                    ResultSet resultSetTag = preparedStatementTag.executeQuery();
+
+                    if (resultSetBelt.next()) {
+                        String belt = resultSetBelt.getString("belt_name");
                         assertEquals(expectedColor, belt);
+                    }
+
+                    if(resultSetTag.next()){
+                        String tagName = resultSetTag.getString("name");
+                        
+                        assertEquals(expectedColor.toLowerCase(), tagName);
                     }
                 }
         }
@@ -192,15 +209,28 @@ public class TechniqueDatabaseTest {
 
                 for(Integer i = orangeBegin; i < orangeEnd + 1; i++){
                     String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
-                
+                    String sqlQueryTag = "SELECT tag.name FROM tag INNER JOIN technique_tag tt ON tt.tag_id = tag.tag_id INNER JOIN technique t ON tt.tech_id = t.technique_id WHERE t.technique_id = ? AND tag.tag_id < ? ORDER BY tag.tag_id DESC";
+
                     PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
                     preparedStatement.setInt(1, i);
 
+                    PreparedStatement preparedStatementTag = connection.prepareStatement(sqlQueryTag);
+                    preparedStatementTag.setInt(1, i);
+                    preparedStatementTag.setInt(2, firstNonBeltTagId);
+
                     ResultSet resultSet = preparedStatement.executeQuery();
+
+                    ResultSet resultSetTag = preparedStatementTag.executeQuery();
 
                     if (resultSet.next()) {
                         String belt = resultSet.getString("belt_name");
                         assertEquals(expectedColor, belt);
+                    }
+
+                    if(resultSetTag.next()){
+                        String tagName = resultSetTag.getString("name");
+                        
+                        assertEquals(expectedColor.toLowerCase(), tagName);
                     }
                 }
         }
@@ -226,16 +256,29 @@ public class TechniqueDatabaseTest {
                 String expectedColor = "Grönt";
 
                 for(Integer i = greenBegin; i < greenEnd + 1; i++){
-                    String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
-                
-                    PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
-                    preparedStatement.setInt(1, i);
+                    String sqlQueryBelt = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
+                    String sqlQueryTag = "SELECT tag.name FROM tag INNER JOIN technique_tag tt ON tt.tag_id = tag.tag_id INNER JOIN technique t ON tt.tech_id = t.technique_id WHERE t.technique_id = ? AND tag.tag_id < ? ORDER BY tag.tag_id DESC";
 
-                    ResultSet resultSet = preparedStatement.executeQuery();
+                    PreparedStatement preparedStatementBelt = connection.prepareStatement(sqlQueryBelt);
+                    preparedStatementBelt.setInt(1, i);
 
-                    if (resultSet.next()) {
-                        String belt = resultSet.getString("belt_name");
+                    PreparedStatement preparedStatementTag = connection.prepareStatement(sqlQueryTag);
+                    preparedStatementTag.setInt(1, i);
+                    preparedStatementTag.setInt(2, firstNonBeltTagId);
+
+                    ResultSet resultSetBelt = preparedStatementBelt.executeQuery();
+
+                    ResultSet resultSetTag = preparedStatementTag.executeQuery();
+
+                    if (resultSetBelt.next()) {
+                        String belt = resultSetBelt.getString("belt_name");
                         assertEquals(expectedColor, belt);
+                    }
+
+                    if(resultSetTag.next()){
+                        String tagName = resultSetTag.getString("name");
+                        
+                        assertEquals(expectedColor.toLowerCase(), tagName);
                     }
                 }
         }
@@ -261,16 +304,29 @@ public class TechniqueDatabaseTest {
                 String expectedColor = "Blått";
 
                 for(Integer i = blueBegin; i < blueEnd + 1; i++){
-                    String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
-                
-                    PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
-                    preparedStatement.setInt(1, i);
+                    String sqlQueryBelt = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
+                    String sqlQueryTag = "SELECT tag.name FROM tag INNER JOIN technique_tag tt ON tt.tag_id = tag.tag_id INNER JOIN technique t ON tt.tech_id = t.technique_id WHERE t.technique_id = ? AND tag.tag_id < ? ORDER BY tag.tag_id DESC";
 
-                    ResultSet resultSet = preparedStatement.executeQuery();
+                    PreparedStatement preparedStatementBelt = connection.prepareStatement(sqlQueryBelt);
+                    preparedStatementBelt.setInt(1, i);
 
-                    if (resultSet.next()) {
-                        String belt = resultSet.getString("belt_name");
+                    PreparedStatement preparedStatementTag = connection.prepareStatement(sqlQueryTag);
+                    preparedStatementTag.setInt(1, i);
+                    preparedStatementTag.setInt(2, firstNonBeltTagId);
+
+                    ResultSet resultSetBelt = preparedStatementBelt.executeQuery();
+
+                    ResultSet resultSetTag = preparedStatementTag.executeQuery();
+
+                    if (resultSetBelt.next()) {
+                        String belt = resultSetBelt.getString("belt_name");
                         assertEquals(expectedColor, belt);
+                    }
+
+                    if(resultSetTag.next()){
+                        String tagName = resultSetTag.getString("name");
+                        
+                        assertEquals(expectedColor.toLowerCase(), tagName);
                     }
                 }
         }
@@ -296,16 +352,29 @@ public class TechniqueDatabaseTest {
                 String expectedColor = "Brunt";
 
                 for(Integer i = brownBegin; i < brownEnd + 1; i++){
-                    String sqlQuery = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
-                
-                    PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
-                    preparedStatement.setInt(1, i);
+                    String sqlQueryBelt = "SELECT belt_name FROM belt INNER JOIN technique_to_belt ttb ON ttb.belt_id = belt.belt_id INNER JOIN technique t ON ttb.technique_id = t.technique_id WHERE t.technique_id = ?";
+                    String sqlQueryTag = "SELECT tag.name FROM tag INNER JOIN technique_tag tt ON tt.tag_id = tag.tag_id INNER JOIN technique t ON tt.tech_id = t.technique_id WHERE t.technique_id = ? AND tag.tag_id < ? ORDER BY tag.tag_id DESC";
 
-                    ResultSet resultSet = preparedStatement.executeQuery();
+                    PreparedStatement preparedStatementBelt = connection.prepareStatement(sqlQueryBelt);
+                    preparedStatementBelt.setInt(1, i);
 
-                    if (resultSet.next()) {
-                        String belt = resultSet.getString("belt_name");
+                    PreparedStatement preparedStatementTag = connection.prepareStatement(sqlQueryTag);
+                    preparedStatementTag.setInt(1, i);
+                    preparedStatementTag.setInt(2, firstNonBeltTagId);
+
+                    ResultSet resultSetBelt = preparedStatementBelt.executeQuery();
+
+                    ResultSet resultSetTag = preparedStatementTag.executeQuery();
+
+                    if (resultSetBelt.next()) {
+                        String belt = resultSetBelt.getString("belt_name");
                         assertEquals(expectedColor, belt);
+                    }
+
+                    if(resultSetTag.next()){
+                        String tagName = resultSetTag.getString("name");
+                        
+                        assertEquals(expectedColor.toLowerCase(), tagName);
                     }
                 }
         }

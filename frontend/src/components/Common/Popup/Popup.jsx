@@ -81,7 +81,7 @@ export default function Popup({ title, id, isOpen, setIsOpen, children, isNested
 						It needs to be here so that Safari prioritizes scrolling this container
 						instead of the body. */}
 					<div style={{opacity: 0}}>k</div>
-				</div>
+				</div> 
 			</div>
 		</>
 	)

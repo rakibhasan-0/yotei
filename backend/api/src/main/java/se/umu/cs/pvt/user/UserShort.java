@@ -9,7 +9,6 @@ package se.umu.cs.pvt.user;
 
 public interface UserShort{
     String getUsername();
-    String getUserRole();
     Long getUserId();
     Long getRoleId();
 }

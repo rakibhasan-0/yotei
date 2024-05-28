@@ -150,7 +150,6 @@ public class LoginTest {
         try {
             user.setUsername("user");
             user.setPassword("1234");
-            user.setUserRole(1);
             user.setUserId(1L);
 
             Mockito.when(userRepository.findUserByUsernameIgnoreCase(user.getUsername())).thenReturn(Optional.of(user));

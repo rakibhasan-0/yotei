@@ -9,12 +9,12 @@ package se.umu.cs.pvt.search.interfaces.responses;
 public class UserSearchResponse implements SearchResponseInterface {
     private long userId;
     private String name;
-    private String role;
+    private long roleId;
 
-    public UserSearchResponse(long userId, String name, String role){
+    public UserSearchResponse(long userId, String name, long roleId){
         this.userId = userId;
         this.name = name;
-        this.role = role;
+        this.roleId = roleId;
     }
 
     public String getName() {
@@ -25,7 +25,7 @@ public class UserSearchResponse implements SearchResponseInterface {
         return userId;
     }
 
-    public String getRole() {
-        return role;
+    public long getRole() {
+        return roleId;
     }
 }

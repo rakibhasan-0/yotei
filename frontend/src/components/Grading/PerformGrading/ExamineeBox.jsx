@@ -18,7 +18,6 @@ import { setError as setErrorToast } from "../../../utils"
  * @param {String} props.techniqueName - The name of the technique.
  * @param {function} props.onClick - onClick function when component is pressed.
  * @param {String} props.status - The current status of the button.
- * @param {function} props.setButtonState - Function to set the state of the button.
  * 
  * Example Usage:
  * <ExamineeBox 
@@ -34,7 +33,6 @@ import { setError as setErrorToast } from "../../../utils"
  *     techniqueName="Some Technique"
  *     onClick={() => console.log("Clicked")}
  *     status="default"
- *     setButtonState={(state) => console.log(state)}
  *   />
  * )
  * 
@@ -49,18 +47,18 @@ export default function ExamineeBox({
 	techniqueName, 
 	onClick, 
 	status, 
-	setButtonState
 }) {
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [isAddingComment, setAddComment] = useState(false)
 	const [commentText, setCommentText] = useState("")
+	const [initialCommentText, setInitialCommentText] = useState("") 
 	const [commentError, setCommentError] = useState("")
 	const [hasComment, setExistingComment] = useState(false)
 	const [commentId, setCommentId] = useState(null)
+	const [isApiCallInProgress, setIsApiCallInProgress] = useState(false)
+
 	
 	const isErr = !(commentError == undefined || commentError == null || commentError == "")
-
-
 
 	const colors = {
 		default: "white",
@@ -71,12 +69,11 @@ export default function ExamineeBox({
 	const { gradingId } = useParams()
 	const { token, userId } = useContext(AccountContext)
 
-	// Set initial color index based on status prop
 	const [color, setColor] = useState(colors[status] || colors.default)
     
 	useEffect(() => {
 		setColor(colors[status] || colors.default)
-	}, [status])
+	}, [])
     
 	useEffect(() => {
 		if (isAddingComment) {
@@ -84,7 +81,6 @@ export default function ExamineeBox({
 		}
 	}, [isAddingComment])
 
-	// Updates notifications when switching techniques
 	useEffect(() => {
 		handleExistingInput()
 	}, [techniqueName])
@@ -104,11 +100,14 @@ export default function ExamineeBox({
      * @param {boolean} show - Whether to show or hide the comment input.
      */
 	const toggleAddPersonalComment = (show) => {
-		if (!show && commentText && commentText.trim().length > 0) {
+		if (!show && commentText !== initialCommentText) { 
 			setShowDiscardComment(true)
 			return
 		}
 		setAddComment(show)
+		if (show) {
+			setInitialCommentText(commentText)
+		}
 	}
 
 	/**
@@ -138,9 +137,6 @@ export default function ExamineeBox({
 		}
 	}
 
-	/**
-     * Posts a new comment via an API call.
-     */
 	async function postComment() {
 		const response = await fetch("/api/examination/comment/", {
 			method: "POST",
@@ -188,7 +184,7 @@ export default function ExamineeBox({
 			setErrorToast("Ett fel uppstod vid kommunikation med servern.")
 		}
 	}
-
+	
 	/**
      * Handles the retrieval of existing input data (comments) for the current examinee.
      */
@@ -201,6 +197,7 @@ export default function ExamineeBox({
 			if (response.status === 404) {
 				console.log("No existing comment, 404 status")
 				setCommentText("")
+				setInitialCommentText("")
 				setExistingComment(false)
 				return
 			}
@@ -216,10 +213,12 @@ export default function ExamineeBox({
 			if (commentObject) {
 				setCommentId(commentObject.commentId)
 				setCommentText(commentObject.comment)
+				setInitialCommentText(commentObject.comment)
 				setExistingComment(true)
 			} else {
 				setCommentId(null)
 				setCommentText("")
+				setInitialCommentText("")
 				setExistingComment(false)
 			}
 		} catch (ex) {
@@ -228,8 +227,11 @@ export default function ExamineeBox({
 		}
 	}
 
-	const handleClick = () => {
+	const handleClick = async () => {
 		// Update buttonState and color based on current color
+		if (isApiCallInProgress) {
+			return // Exit if an API call is already in progress
+		}
 		let newButtonState
 		let newColor
         
@@ -244,9 +246,11 @@ export default function ExamineeBox({
 			newColor = colors.default
 		}
         
-		setButtonState(newButtonState)
 		setColor(newColor)
-		onClick(newButtonState) // Pass the new state as a parameter
+		
+		setIsApiCallInProgress(true)
+		await onClick(newButtonState) //to the API call
+		setIsApiCallInProgress(false) // Unlock updates after API call completes
 	}
 
 	return (
@@ -265,7 +269,7 @@ export default function ExamineeBox({
 					isOpen={isAddingComment}
 					setIsOpen={toggleAddPersonalComment}
 					onClose={() => setCommentError(false)}
-					style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset" }}
+					style={{ overflow: "hidden", overflowY: "hidden", maxHeight: "85vh", height: "unset",top: "35vh"}}
 				>
 					<textarea
 						className={isErr ? `${styles.textarea} ${styles.textareaErr}` : `${styles.textarea}`}
@@ -279,10 +283,25 @@ export default function ExamineeBox({
 						type={"text"}
 					/>
 					{commentError && <p className={styles.err}>{commentError}</p>}
-					<div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px", marginTop: "10px"}}>
-						<Button outlined={true} onClick={() => {setCommentText(commentText + " " + "Böj på benen!"); setCommentError(false)}}>Böj på benen!</Button>
-						<Button outlined={true} onClick={() => {setCommentText(commentText + " " + "Balansbrytning!"); setCommentError(false)}}>Balansbrytning!</Button>
-						<Button outlined={true} onClick={() => {setCommentText(commentText + " " + "Kraftcirkeln!"); setCommentError(false)}}>Kraftcirkeln!</Button>
+					<div className={styles.presetCommentContainer}>
+						<Button 
+							outlined={true} 
+							onClick={() => {setCommentText(commentText + " " + "Böj på benen!") 
+								setCommentError(false)}}>
+							<p className={styles.presetCommentText}>Böj på benen!</p>
+						</Button>
+						<Button 
+							outlined={true} 
+							onClick={() => {setCommentText(commentText + " " + "Balansbrytning!") 
+								setCommentError(false)}}>
+							<p className={styles.presetCommentText}>Balansbrytning!</p>
+						</Button>
+						<Button 
+							outlined={true} 
+							onClick={() => {setCommentText(commentText + " " + "Kraftcirkeln!") 
+								setCommentError(false)}}>
+							<p className={styles.presetCommentText}>Kraftcirkeln!</p>
+						</Button>
 					</div>
 					<Button onClick={() => onAddPersonalComment()}>Lägg till</Button>
 				</Popup>
@@ -291,7 +310,7 @@ export default function ExamineeBox({
 					showPopup={showDiscardComment}
 					onClick={() => {onDiscardPersonalComment()}}
 					setShowPopup={() => setShowDiscardComment(false)}
-					zIndex={200} // Above the comment popup.
+					zIndex={200}
 				/>
 			</fieldset>
 		</div>

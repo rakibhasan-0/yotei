@@ -78,8 +78,7 @@ export default function GroupIndex() {
 								<div className={style.item}>
 									<BeltBox id={index} belts={group.belts} />
 								</div>
-
-								<div style = {{marginLeft: "5px", display: "flex"}}> { (isAdminUser(context) || canEditGroups(context, group)) && (
+								<div style = {{marginLeft: "5px", display: "flex"}}> { (isAdminUser(context) || canEditGroups(context, group.userId)) && (
 									<>
 										<Link to={`/plan/edit/${group.id}`}>
 											<Pencil id={'edit-group-button'} size={24} color="var(--red-primary)"/>

@@ -207,6 +207,12 @@ public class StatisticsController {
                 GradingProtocolCategoryDTO newCategory = new GradingProtocolCategoryDTO(cat.getCategoryName());
                 List<GradingProtocolTechinqueDTO> ts = gradingProtocolRepository.findAllByCategoryId(cat.getId());
                 for (GradingProtocolTechinqueDTO t : ts) {
+                    List<Belt> belts = statisticsRepository.getBeltsForTechnique(t.getId());
+                    t.setBelts(belts);
+                    if (belts.contains(protocol.getBelt())) {
+                        t.setNew(true);
+                    }
+
                     if (counts.containsKey(t.getId())) {
                         t.setCount(counts.get(t.getId()));
                     }
