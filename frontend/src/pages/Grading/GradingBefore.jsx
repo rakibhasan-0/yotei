@@ -6,7 +6,7 @@ import styles from "./GradingBefore.module.css"
 import { AccountContext } from "../../context"
 import AddExaminee from "../../components/Common/AddExaminee/AddExaminee"
 import EditableListItem from "../../components/Common/EditableListItem/EditableListItemGrading"
-import { X as CloseIcon, LockFill } from "react-bootstrap-icons"
+import { LockFill, Link } from "react-bootstrap-icons"
 
 import PopupSmall from "../../components/Common/Popup/PopupSmall"
 
@@ -257,6 +257,10 @@ export default function GradingBefore() {
 			}
 		}))
 
+		if (gradingName == "") {
+			await editGradingName(gradingId, "Gradering " + gradingId + " | " + getTodaysDate())
+		}
+
 		// navigate to the previous visisted site
 		if (hasPreviousState && gradingStep !== 2) {
 			navigate(-1)
@@ -475,55 +479,6 @@ export default function GradingBefore() {
 	}
 
 	/**
-	 * Remove an examinee pair. This functions removes it from the database and also locally in the array.
-	 * @param {Integer} examineeId 
-	 */
-	async function removeExamineeInPair(examineeId) {
-
-		let pairId
-
-		// gets the pair id. this can be done by checking both examinee in the same pair
-		pairs.map(pair => {
-			if (pair[0].id === examineeId || pair[1].id === examineeId) {
-				pairId = pair[0].pairId
-			}
-		})
-
-		// gets the pair that will be modified
-		let modifyPair = pairs.find(pair => {
-			if (pair[0].pairId === pairId) {
-				return pair[0].id === examineeId ? { id: pair[1].id, name: pair[1].name, isLocked: false } : { id: pair[0].id, name: pair[0].name, isLocked: false }
-			}
-		})
-
-		// saves the remaining examinee from the deleted pair
-		modifyPair = modifyPair.map(examinee => {
-			if (examinee.id !== examineeId) {
-				return examinee
-			}
-		}).filter(Boolean)
-
-		await deletePair(pairId, token)
-			.catch(() => setErrorToast("Kunde inte tabort paret. Kontrollera din internetuppkoppling."))
-
-
-		await deleteExaminee(examineeId, token)
-			.catch(() => setErrorToast("Kunde inte tabort personen. Kontrollera din internetuppkoppling."))
-
-		// create a new array with the remaining pairs
-		const newPairs = pairs.map(pair => {
-			if (pair[0].id !== examineeId && pair[1].id !== examineeId) {
-				return [{ id: pair[0].id, name: pair[0].name, pairId: pair[0].pairId, isLocked: false },
-				{ id: pair[1].id, name: pair[1].name, pairId: pair[1].pairId, isLocked: false }]
-			}
-		}).filter(Boolean)
-
-		setPair(newPairs)
-		setExaminees([...examinees, modifyPair[0]])
-
-	}
-
-	/**
 	 * Change the name of an already exsisting examinee if it has no pair.
 	 * This functions call putExaminee so it gets updated in the database aswell
 	 * @param {Integer} examineeId 
@@ -581,170 +536,6 @@ export default function GradingBefore() {
 		}
 		setShowPopup(true)
 	}
-
-
-	return (
-		<div>
-			<div style={{ position: "relative", zIndex: "0" }}>
-				<EditableInputTextField
-					item={gradingName}
-					id={"grading-name-text-field"}
-					key={"grading-name-text-field"}
-					validateInput={validateGradingName}
-					onEdit={editGradingName}
-					color={beltColor}
-				/>
-			</div>
-
-			<div className="column">
-				{pairs.map((pair, index) => {
-					if (pair.length === 2) {
-						return (
-							<div style={{ display: "flex", width: "100%", justifyContent: "left", position: "relative" }} key={"pair-" + pair[0].pairId}>
-								<div className={styles.number}>{index + 1}</div>
-								<EditableListItem
-									key={"first-examinee-pair-" + pair[0].id + "-pairId-" + pair[0].pairId}
-									id={pair[1].id}
-									item={pair[1].name}
-									onRemove={removeExamineeInPair}
-									onEdit={(id, name) => { editExaminee(id, name, true) }}
-                  canEdit={Boolean(!pair[1].isLocked)}
-									onCheck={onCheck}
-									validateInput={validateInput}
-									showCheckbox={false}
-									checked={false}
-								/>
-								<div style={{ width: "10px" }}></div>
-								<EditableListItem
-									key={"second-examinee-pair-" + pair[1].id + "-pairId-" + pair[1].pairId}
-									id={pair[0].id}
-									item={pair[0].name}
-									onRemove={removeExamineeInPair}
-									onEdit={(id, name) => { editExaminee(id, name, true) }}
-                  canEdit={Boolean(!pair[0].isLocked)}
-									onCheck={onCheck}
-									validateInput={validateInput}
-									showCheckbox={false}
-									checked={false}
-								/>
-                {Boolean(!pair[0].isLocked) === true ? 
-                <div style={{ paddingTop: "20px", right: "10px", position: "absolute" }}>
-									<CloseIcon
-										key={"close-icon-" + toString(pair[0].id) + toString(pair[1].id) + "-pairId-" + toString(pair[0].pairId)}
-										size="25px"
-										position="static"
-										color="var(--red-primary)"
-										className={styles.trashcan}
-										onClick={() => removePair(pair[0].id, pair[1].id, pair[1].pairId)}
-									/>
-								</div>
-                : 
-                <div style={{ paddingTop: "20px", right: "10px", position: "absolute" }}> 
-                  <LockFill
-                    className={styles.lock}
-                    key={"lock-icon-" + toString(pair[0].id) + toString(pair[1].id) + "-pairId-" + toString(pair[0].pairId)}
-                    position="static"
-										color="var(--red-primary)"
-                    size="20px"
-                  />  
-                </div>}						
-							</div>
-						)
-					}
-				}
-				)}
-				<div style={{ display: "none" }}>
-					{numberOfPairs = pairs.length}
-				</div>
-			</div>
-
-
-			<div className="column">
-				{examinees.map((examinee, index) => {
-					const unlockedExaminees = examinees.filter(exam => !exam.isLocked).length
-					let showCheckbox = unlockedExaminees > 1 && !examinee.isLocked
-
-					return (
-						<div style={{ display: "flex", width: "100%", justifyContent: "center" }} key={"single-pair-" + examinee.id} id={"single-pair-" + examinee.id}>
-							<div className={styles.numberSingle}>{numberOfPairs + index + 1}</div>
-							<EditableListItem
-								key={"single-examinee-" + examinee.id}
-								id={examinee.id}
-								item={examinee.name}
-								onRemove={removeExaminee}
-								onEdit={(id, name) => {editExaminee(id, name, false)}}
-                canEdit={Boolean(!examinee.isLocked)}
-								onCheck={onCheck}
-								validateInput={validateInput}
-								showCheckbox={showCheckbox}
-								checked={checkedExamineeIds.includes(examinee.id)}
-								numberOfCheckedExaminees={checkedExamineeIds.length}
-								showTrash={Boolean(!examinee.isLocked)}
-								showX={false}
-								showLock={!!examinee.isLocked}
-							/>
-
-						</div>
-					)
-				})}
-			</div>
-
-			<AddExaminee
-				name="add-examinee"
-				id="add-examinee"
-				key={"add-examinee-before"}
-				type="text"
-				placeholder="Lägg till ny deltagare"
-				required={true}
-				hideLength={true}
-				showX={false}
-				onSubmit={(value) => {
-					addExaminee(value)
-				}}
-
-			/>
-			{checkedExamineeIds.length === 2 && (
-				<div className={styles.buttonContainer}>
-					<Button
-						id="create-pair-button"
-						width="100%"
-						outlined={true}
-						onClick={() => {
-							createPair()
-							resetCheckedExamineesWithCheckbox()
-						}}
-					>
-						<p>Skapa par</p>
-					</Button> </div>)
-			}
-			<div className={styles.buttonContainer}>
-				<Button
-					id="back-button"
-					width="100%"
-					outlined={true}
-					onClick={handleNavigation}
-				>
-					<p>Tillbaka</p>
-				</Button>
-
-				<PopupSmall id={"test-popup"} title={"Varning"} isOpen={showPopup} setIsOpen={setShowPopup} direction={startRedirection}>
-					<h2>Är du säker på att alla deltagare är tillagda? </h2>
-					<h2>Du kan <span style={{ fontWeight: "bold", fontSize: "18px" }}>inte</span> redigera skapade individer i efterhand</h2>
-					<br></br>
-					<h2> Isåfall fortsätt till graderingsprocessen</h2>
-				</PopupSmall>
-
-				<Button
-					id="continue-button"
-					width="100%"
-					outlined={false}
-					onClick={() => pressedContinue()}>
-					<p>Fortsätt</p>
-				</Button>
-
-			</div>
-		</div>
-	)
 
 	/**
 	* Delete an exsisting pair in the database
@@ -925,5 +716,168 @@ export default function GradingBefore() {
 
 		return await response.json()
 	}
+
+	return (
+		<div style={{ width: "100%"}}>
+			<div style={{ position: "relative", zIndex: "0" }}>
+				<EditableInputTextField
+					item={gradingName}
+					id={"grading-name-text-field"}
+					key={"grading-name-text-field"}
+					validateInput={validateGradingName}
+					onEdit={editGradingName}
+					color={beltColor}
+				/>
+			</div>
+
+			<div className="column">
+				{pairs.map((pair, index) => {
+					if (pair.length === 2) {
+						return (
+							<div style={{ display: "flex", width: "100%", justifyContent: "left", position: "relative", alignItems: "center" }} key={"pair-" + pair[0].pairId}>
+								<div className={styles.number}>{index + 1}</div>
+								<EditableListItem
+									key={"first-examinee-pair-" + pair[0].id + "-pairId-" + pair[0].pairId}
+									id={pair[1].id}
+									item={pair[1].name}
+									onEdit={(id, name) => { editExaminee(id, name, true) }}
+                  canEdit={Boolean(!pair[1].isLocked)}
+									onCheck={onCheck}
+									validateInput={validateInput}
+									showCheckbox={false}
+									checked={false}
+								/>
+               
+                
+                {Boolean(!pair[0].isLocked) === true ? 
+                <div>
+                  <Link
+                      key={"close-icon-" + toString(pair[0].id) + toString(pair[1].id) + "-pairId-" + toString(pair[0].pairId)}
+                      color="var(--red-primary)"
+                      className={styles.link}
+                      size="24px"
+                      onClick={() => removePair(pair[0].id, pair[1].id, pair[1].pairId)}
+                    />
+                </div>
+                : 
+                <div> 
+                  <LockFill
+                    className={styles.lock}
+                    key={"lock-icon-" + toString(pair[0].id) + toString(pair[1].id) + "-pairId-" + toString(pair[0].pairId)}
+                    position="static"
+										color="var(--red-primary)"
+                    size="24px"
+                  />  
+                </div>}				
+                <EditableListItem
+									key={"second-examinee-pair-" + pair[1].id + "-pairId-" + pair[1].pairId}
+									id={pair[0].id}
+									item={pair[0].name}
+									onEdit={(id, name) => { editExaminee(id, name, true) }}
+                  canEdit={Boolean(!pair[0].isLocked)}
+									onCheck={onCheck}
+									validateInput={validateInput}
+									showCheckbox={false}
+									checked={false}
+                  showX={false}
+								/>
+							</div>
+						)
+					}
+				}
+				)}
+				<div style={{ display: "none" }}>
+					{numberOfPairs = pairs.length}
+				</div>
+			</div>
+
+
+			<div className="column">
+				{examinees.map((examinee, index) => {
+					const unlockedExaminees = examinees.filter(exam => !exam.isLocked).length
+					let showCheckbox = unlockedExaminees > 1 && !examinee.isLocked
+
+					return (
+						<div style={{ display: "flex", width: "100%", justifyContent: "center" }} key={"single-pair-" + examinee.id} id={"single-pair-" + examinee.id}>
+							<div className={styles.numberSingle}>{numberOfPairs + index + 1}</div>
+							<EditableListItem
+								key={"single-examinee-" + examinee.id}
+								id={examinee.id}
+								item={examinee.name}
+								onRemove={removeExaminee}
+								onEdit={(id, name) => {editExaminee(id, name, false)}}
+                canEdit={Boolean(!examinee.isLocked)}
+								onCheck={onCheck}
+								validateInput={validateInput}
+								showCheckbox={showCheckbox}
+								checked={checkedExamineeIds.includes(examinee.id)}
+								numberOfCheckedExaminees={checkedExamineeIds.length}
+								showTrash={Boolean(!examinee.isLocked)}
+								showX={false}
+								showLock={!!examinee.isLocked}
+							/>
+
+						</div>
+					)
+				})}
+			</div>
+
+			<AddExaminee
+				name="add-examinee"
+				id="add-examinee"
+				key={"add-examinee-before"}
+				type="text"
+				placeholder="Lägg till ny deltagare"
+				required={true}
+				hideLength={true}
+				showX={false}
+				onSubmit={(value) => {
+					addExaminee(value)
+				}}
+
+			/>
+			{checkedExamineeIds.length === 2 && (
+				<div className={styles.buttonContainer}>
+					<Button
+						id="create-pair-button"
+						width="100%"
+						outlined={true}
+						onClick={() => {
+							createPair()
+							resetCheckedExamineesWithCheckbox()
+						}}
+					>
+						<p>Skapa par</p>
+					</Button> </div>)
+			}
+			<div className={styles.buttonContainer}>
+				<Button
+					id="back-button"
+					width="100%"
+					outlined={true}
+					onClick={handleNavigation}
+				>
+					<p>Tillbaka</p>
+				</Button>
+
+				<PopupSmall id={"test-popup"} title={"Varning"} isOpen={showPopup} setIsOpen={setShowPopup} direction={startRedirection}>
+					<h2>Kontrollera att alla deltagare är tillagda.</h2>
+					<h2>Du kan ändra namn på skapade individer i efterhand.</h2>
+					<h2>Men det går <span style={{ fontWeight: "bold", fontSize: "18px" }}>inte</span> att redigera par i efterhand.</h2>
+					<br></br>
+					<h2> När du är redo, fortsätt till graderingsprocessen.</h2>
+				</PopupSmall>
+
+				<Button
+					id="continue-button"
+					width="100%"
+					outlined={false}
+					onClick={() => pressedContinue()}>
+					<p>Fortsätt</p>
+				</Button>
+
+			</div>
+		</div>
+	)
 }
 

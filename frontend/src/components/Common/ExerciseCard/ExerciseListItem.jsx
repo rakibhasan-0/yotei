@@ -38,66 +38,69 @@ import ExerciseDetailMini from "../../../pages/Activity/Exercise/ExerciseDetailM
  * @updated 2024-05-22 Kiwi, fixed a popup window for when popUp is true, added links so you can better se when something redirects to popups.
  * @version 1.1
  */
-export default function ExerciseListItem({ item, text, detailURL, id, index, checkBox , path, popUp}) {
+export default function ExerciseListItem({ item, text, detailURL, id, index, checkBox, path, popUp }) {
 
 	// Fixes the path regardless if the exercise is in a list or not.
 	const tempPath = (path === undefined) ? id : path
 	const [isOpen, setIsOpen] = useState(false)
 
-	const handleClick = () =>{
-		localStorage.setItem("stored_exercise", id)
-		if(popUp){
+	const handleClick = () => {
+		if (popUp) {
 			setIsOpen(true)
 		}
 	}
 
+	const setExercise = () =>{
+		localStorage.setItem("stored_exercise", id)
+	}
+
 	return (
 		<>
-			<PopupMini title = {item} id = "pop-up-id-exer" isOpen = {isOpen} setIsOpen = {setIsOpen} isNested = {true}> 
-				<ExerciseDetailMini id = {id}>
+			<PopupMini title={item} id="pop-up-id-exer" isOpen={isOpen} setIsOpen={setIsOpen} isNested={true}>
+				<ExerciseDetailMini id={id}>
 				</ExerciseDetailMini>
 			</PopupMini>
-			<div className={styles["exercise-list-container"]} data-testid="ExerciseListItem" id={id}>
+			<div className={styles["exercise-list-container"]} data-testid="ExerciseListItem" id={id} onClick={setExercise}>
 				<div className={styles["exercise-list-header"]} style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
 					{checkBox ? <div className={styles["technique-checkbox-container"]}>{checkBox}</div> : null}
-					{popUp ? 
-					
-						<div style={{ display: "flex", justifyContent: "space-between", width: "100%"}} onClick = {handleClick} >
-							<div style={{display: "flex", alignItems: "center"}}>
+					{popUp ?
+
+						<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }} onClick={handleClick} >
+							<div style={{ display: "flex", alignItems: "center" }}>
 								<Link >
 									<div className={styles["href-link"]} style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="ExerciseListItem-item">{item}</div>
 								</Link>
 							</div>
-							<div className={styles["flex-shrink-0"]} style={{display: "flex", alignItems: "center"}}>
+							<div className={styles["flex-shrink-0"]} style={{ display: "flex", alignItems: "center" }}>
 								<div className={styles["exercise-list-duration"]} data-testid="ExerciseListItem-text">
 									<p>{text}</p>
 								</div>
-								<Link>
-									<ChevronRight size="30px"/>
+								<Link to={detailURL + tempPath}>
+									<ChevronRight size="30px" />
 								</Link>
 							</div>
-						</div> 
+						</div>
 						:
-						<Link to={detailURL + tempPath} data-testid="ExerciseListItem-link" style={{width: "100%"}}>
+						<Link to={detailURL + tempPath} data-testid="ExerciseListItem-link" style={{ width: "100%" }}>
 							<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
-								<div style={{display: "flex", alignItems: "center"}}>
+								<div style={{ display: "flex", alignItems: "center" }}>
 									<div className={styles["href-link"]} style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="ExerciseListItem-item">{item}</div>
 								</div>
-								<div className={styles["flex-shrink-0"]} style={{display: "flex", alignItems: "center"}}>
+								<div className={styles["flex-shrink-0"]} style={{ display: "flex", alignItems: "center" }}>
 									<div className={styles["exercise-list-duration"]} data-testid="ExerciseListItem-text">
 										<p>{text}</p>
 									</div>
-									<Link>
-										<ChevronRight size="30px"/>
+									<Link to={detailURL + tempPath}>
+										<ChevronRight size="30px" />
 									</Link>
 								</div>
 							</div>
 						</Link>
 					}
-					
+
 				</div>
 			</div>
 		</>
-		
+
 	)
 }

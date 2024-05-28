@@ -1,46 +1,72 @@
+import { useState } from "react"
+import { ChevronDown } from "react-bootstrap-icons"
 import styles from "./RoleListItem.module.css"
 import ToggleButton from "../ToggleButton/ToggleButton"
+
 /**
- * An PermissionListItem that can be used in an list view.
- * It displays the title of an role and a link to the permission page.
- * 
+ * A PermissionListItem that can be used in a list view.
+ * It displays the title of a role and a link to the permission page.
  * Props:
- *     	item @type {string} 		- Text displaying the title of the role
- * 		detailURL @type {string} 	- The base URL for roles
- * 		id @type {integer} 			- The ID for this particular role in database
- * 		index @type {integer} 		- The ID for this particular role on current page (Used for coloring)
+ * 		item @type {string}         - Text displaying the title of the role
+ * 		id @type {integer}          - The ID for this particular role in database
+ * 		index @type {integer}       - The ID for this particular role on current page (Used for coloring)
+ * 		toggled @type {boolean}     - The toggle state for the permission
+ * 		changeToggled @type {function} - Function to handle the toggle change
  * 
  * Example usage:
  * 		<PermissionListItem
  * 			item={the role name}
- * 			id={The unique ID for an role, gets concatenated onto detailURL}
- * 			detailURL={the base URL for roles}
- * 			index={The index for the role in the list containing fetched roles}>
- * 
- * 		</PermissionListItem>
- * 
- * @author Team Mango (Group 4)
- * @since 2023-05-08
+ * 			id={The unique ID for a role, gets concatenated onto detailURL}
+ * 			index={The index for the role in the list containing fetched roles}
+ * 			toggled={true/false}
+ * 			changeToggled={function to change toggle state}
+ * 		/>
+ * @since 2024-05-08
  * @version 1.0
  */
-export default function PermissionListItem({ item, id, index, toggled, changeToggled }) {
+ 
+export default function PermissionListItem({ item, id, description, toggled, changeToggled }) {
+	const [expanded, setExpanded] = useState(false)
+
+	const handleCardClick = () => {
+		setExpanded(!expanded)
+	}
 
 	return (
 		<div className={styles["role-list-container"]} data-testid="PermissionListItem" id={"PermissionListItem-" + id}>
-			<div className={styles["role-list-header"]} style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
+			<div 
+				className={styles["role-list-header"]} 
+				style={{ backgroundColor: (id % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}
+				onClick={handleCardClick}
+			>
 				<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
 					<div style={{display: "flex", alignItems: "center"}}>
-						<div className={styles["href-link"]} style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="RoleListItem-item">{item}</div>
+						<div className={styles["href-link"]} style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="RoleListItem-item" dangerouslySetInnerHTML={{ __html: item.replace(/egna/g, "<b>egna</b>").replace(/alla/g, "<b>alla</b>") }}></div>
 					</div>
 					<div className={styles["flex-shrink-0"]} style={{display: "flex", alignItems: "center"}}>
+						<ChevronDown 
+							size={24} 
+							style={{ transform: expanded ? "rotate(180deg)" : "rotate(0deg)", marginRight: "1rem"}}
+						/>
 						<ToggleButton 
 							isButtonToggled={toggled}
 							id={item + "-toggleButton"}
-							onClick={() => changeToggled(!toggled)}
+							onClick={(e) => {
+								e.stopPropagation() // Prevent click event from propagating to the parent div
+								changeToggled(!toggled)
+							}}
 						/>
 					</div>
 				</div>
 			</div>
+			{expanded && (
+				<div 
+					className={styles["role-list-description"]} 
+					style={{ backgroundColor: (id % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }} 
+					onClick={handleCardClick}>
+					{description}
+				</div>
+			)}
 		</div>
 	)
 }

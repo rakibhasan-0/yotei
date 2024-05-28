@@ -84,7 +84,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 	}
 
 	const handleBlur = (event) => {
-		if (event.relatedTarget?.id === "accept-icon") {
+		if (event.target?.id === "edit-element") {
 			handleEditSubmit()
 		}
 		setIsEditing(false)

@@ -45,7 +45,7 @@ public class SearchController {
     private final SearchRepository searchRepository;
     private DecodedJWT jwt;
     private Long userIdL;
-    private String userRole;
+    private List<Integer> permissions;
     private final UserShortRepository userShortRepository;
     private final ActivityListEntryRepository activityListEntryRepository;
 
@@ -116,6 +116,7 @@ public class SearchController {
     @GetMapping("/workouts")
     public ResponseEntity<SearchResponse<WorkoutSearchResponse>> searchWorkouts(
             @RequestParam Map<String, String> urlQuery) {
+        SearchResponse<WorkoutSearchResponse> response = new SearchResponse<>(null, null);
         SearchWorkoutParams searchWorkoutParams = new SearchWorkoutParams(urlQuery);
 
         DatabaseQuery createdQuery = new SearchWorkoutDBBuilder(searchWorkoutParams)
@@ -134,7 +135,7 @@ public class SearchController {
         List<String> tagCompletion = getTagSuggestions(searchWorkoutParams.getName(), searchWorkoutParams.getTags(),
                 TagType.workout_tag);
 
-        SearchResponse<WorkoutSearchResponse> response = new SearchResponse<>(filteredResult, tagCompletion);
+        response = new SearchResponse<>(filteredResult, tagCompletion);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -192,23 +193,32 @@ public class SearchController {
         try {
             jwt = jwtUtil.validateToken(token);
             userIdL = jwt.getClaim("userId").asLong();
-            userRole = jwt.getClaim("role").asString();
+            permissions = jwt.getClaim("permissions").asList(Integer.class);
         } catch (Exception e) {
             System.err.println("Failed to authenticate user:" + e.getMessage());
         }
 
         SearchActivityListParams searchListParams = new SearchActivityListParams(urlQuery);
 
-        DatabaseQuery createdQuery = new SearchActivityListDBBuilder(searchListParams, userIdL, userRole)
+        DatabaseQuery createdQuery = new SearchActivityListDBBuilder(searchListParams, userIdL, permissions)
         .filterByHidden()
         .filterByIsAuthor()
         .filterByIsShared()
         .build();
         
         List<ActivityListDBResult> result = searchRepository.getActivityListFromCustomQuery(createdQuery.getQuery());
-        List<ActivityListSearchResponse> activityListSearchResponses = new SearchActivityListResponseBuilder(result, userShortRepository, activityListEntryRepository).build();
+        List<ActivityListSearchResponse> activityListSearchResponses;
+        if(searchListParams.hasExerciseId()){
+            activityListSearchResponses = new SearchActivityListResponseBuilder(result, userShortRepository, activityListEntryRepository, searchListParams.getExerciseId(), null).build();
+        }
+        else if(searchListParams.hasTecniqueId()){
+            activityListSearchResponses = new SearchActivityListResponseBuilder(result, userShortRepository, activityListEntryRepository, null, searchListParams.getTechniqueId()).build();
+        }
+        else{
+            activityListSearchResponses = new SearchActivityListResponseBuilder(result, userShortRepository, activityListEntryRepository, null, null).build();
+        }
+        
         List<ActivityListSearchResponse> filteredResult = fuzzySearchFiltering(searchListParams.getName(), activityListSearchResponses);
-
         SearchResponse<ActivityListSearchResponse> response = new SearchResponse(filteredResult, Collections.emptyList());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

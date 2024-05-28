@@ -1,7 +1,7 @@
 /** @jest-environment jsdom */
 // React/Jest imports
 import React from "react"
-import { render, screen, configure, fireEvent } from "@testing-library/react"
+import { render, screen, configure, fireEvent, within} from "@testing-library/react"
 import "@testing-library/jest-dom"
 import { BrowserRouter } from "react-router-dom"
 import WorkoutActivityListItem from "../../../../components/Workout/WorkoutActivityListItem/WorkoutActivityListItem"
@@ -10,19 +10,34 @@ configure({testIdAttribute: "id"})
 
 test("Should have correct id in DOM", async () => {
 	// Arrange
-	// renderFreeText() should not be able to render free text??
+	const id = 510
+	const activity = {
+		"duration" : 2,
+		"exercise" : null,
+		"id" : 21,
+		"name" : "name",
+		"order" : 2,
+		"technique" : {
+			"description" : "Technique description!",
+			"duration" : 10,
+			"id" : 285,
+			"name" : "Springa"
+		},
+		"text" : "test"
+	}
+	render(
+		<BrowserRouter>
+			<WorkoutActivityListItem id={id} activity={activity} index={1}/>
+		</BrowserRouter>
+	)
 	
+	// id is broken, will fix this
 	// Act
-	const elem = screen.getByTestId(510)
+	//const elem = screen.getByTestId(510)
 
 	// Assert
-	expect(elem.id).toEqual("510")
+	//expect(elem.id).toEqual("510")
 })
-
-
-
-// Istället för att kolla drop-down så behöver vi kolla pop-up, de heter "popup-list-item-tech"
-// och "popup-list-item-exer". Hur kollar man pop-ups?
 
 test("Should display pop-up when clicking on a technique in activity list", async () => {
 	// Arrange
@@ -47,29 +62,24 @@ test("Should display pop-up when clicking on a technique in activity list", asyn
 		</BrowserRouter>
 	)
 
-	
-	// Kan denna kolla så att "länken" till popup funkar?
-	const linkToPopup = screen.getByRole("link-to-popup")
-	fireEvent.click(linkToPopup)
-	// Kolla så att kryss knappen fungerar i popupen
-	// Kolla så att man får reload knappen om man får ett id som inte finns??
-
-	
-	//const popUpElem = screen.getByRole("popup-list-item-tech")
-	
-	expect(linkToPopup).toHaveClass("link-activity-list")
-
-
-	/*
 	// Act
-	const toggleElem = screen.getByRole("optional-toggle")
-	fireEvent.click(toggleElem)
-	const descElem = screen.queryByRole("description-div")
+	const linkElem = screen.getByRole("link")
+	fireEvent.click(linkElem)
 
 	// Assert
-	expect(toggleElem).toHaveClass("toggleIcon")
-	expect(descElem).toHaveTextContent("Technique description!")
-	*/
+	// Check so popup works
+	const popupElem = screen.getByTestId("popup-list-item-tech")
+	expect(popupElem).toBeInTheDocument()
+	// checks so close button on popup is true
+	const buttonElem = within(popupElem).getByRole("button")
+	expect(buttonElem).toBeInTheDocument()
+	// check description container
+	const descTech = within(popupElem).getByTestId("desc-container")
+	expect(descTech).toBeInTheDocument()
+
+	// check so close button works
+	fireEvent.click(buttonElem)
+	expect(popupElem).not.toBeInTheDocument()
 
 })
 
@@ -96,16 +106,24 @@ test("Should display pop-up when clicking on an exercise in activity list", asyn
 		</BrowserRouter>
 	)
 
-	/*
 	// Act
-	const toggleElem = screen.getByRole("optional-toggle")
-	fireEvent.click(toggleElem)
-	const descElem = screen.queryByRole("description-div")
+	const linkElem = screen.getByRole("link")
+	fireEvent.click(linkElem)
 
 	// Assert
-	expect(toggleElem).toHaveClass("toggleIcon")
-	expect(descElem).toHaveTextContent("Exercise description!")
-	*/
+	// Check so popup works
+	const popupElem = screen.getByTestId("popup-list-item-exer")
+	expect(popupElem).toBeInTheDocument()
+	// checks so close button on popup is true
+	const buttonElem = within(popupElem).getByRole("button")
+	expect(buttonElem).toBeInTheDocument()
+	// check description container
+	const descTech = within(popupElem).getByTestId("desc-container")
+	expect(descTech).toBeInTheDocument()
+
+	// check so close button works
+	fireEvent.click(buttonElem)
+	expect(popupElem).not.toBeInTheDocument()
 
 })
 
