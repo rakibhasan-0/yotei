@@ -38,4 +38,9 @@ describe("TechniqueInfoPanel", () => {
 		expect(fieldset).toHaveStyle("background-color: #FFDD33")
 	})
 	*/
+	test("should have a comment button", () => {
+		render(<TechniqueInfoPanel/>)
+		const techniqueInfoPanelCommentButton = screen.getByTestId("technique-info-panel-comment-button")
+		expect(techniqueInfoPanelCommentButton).toBeInTheDocument()
+	})
 })
