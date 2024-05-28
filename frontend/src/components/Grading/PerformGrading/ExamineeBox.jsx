@@ -51,6 +51,7 @@ export default function ExamineeBox({
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [isAddingComment, setAddComment] = useState(false)
 	const [commentText, setCommentText] = useState("")
+	const [initialCommentText, setInitialCommentText] = useState("") 
 	const [commentError, setCommentError] = useState("")
 	const [hasComment, setExistingComment] = useState(false)
 	const [commentId, setCommentId] = useState(null)
@@ -58,8 +59,6 @@ export default function ExamineeBox({
 
 	
 	const isErr = !(commentError == undefined || commentError == null || commentError == "")
-
-
 
 	const colors = {
 		default: "white",
@@ -70,7 +69,6 @@ export default function ExamineeBox({
 	const { gradingId } = useParams()
 	const { token, userId } = useContext(AccountContext)
 
-	// Set initial color index based on status prop
 	const [color, setColor] = useState(colors[status] || colors.default)
     
 	useEffect(() => {
@@ -83,7 +81,6 @@ export default function ExamineeBox({
 		}
 	}, [isAddingComment])
 
-	// Updates notifications when switching techniques
 	useEffect(() => {
 		handleExistingInput()
 	}, [techniqueName])
@@ -103,11 +100,14 @@ export default function ExamineeBox({
      * @param {boolean} show - Whether to show or hide the comment input.
      */
 	const toggleAddPersonalComment = (show) => {
-		if (!show && commentText && commentText.trim().length > 0) {
+		if (!show && commentText !== initialCommentText) { 
 			setShowDiscardComment(true)
 			return
 		}
 		setAddComment(show)
+		if (show) {
+			setInitialCommentText(commentText)
+		}
 	}
 
 	/**
@@ -137,9 +137,6 @@ export default function ExamineeBox({
 		}
 	}
 
-	/**
-     * Posts a new comment via an API call.
-     */
 	async function postComment() {
 		const response = await fetch("/api/examination/comment/", {
 			method: "POST",
@@ -187,7 +184,7 @@ export default function ExamineeBox({
 			setErrorToast("Ett fel uppstod vid kommunikation med servern.")
 		}
 	}
-
+	
 	/**
      * Handles the retrieval of existing input data (comments) for the current examinee.
      */
@@ -200,6 +197,7 @@ export default function ExamineeBox({
 			if (response.status === 404) {
 				console.log("No existing comment, 404 status")
 				setCommentText("")
+				setInitialCommentText("")
 				setExistingComment(false)
 				return
 			}
@@ -215,10 +213,12 @@ export default function ExamineeBox({
 			if (commentObject) {
 				setCommentId(commentObject.commentId)
 				setCommentText(commentObject.comment)
+				setInitialCommentText(commentObject.comment)
 				setExistingComment(true)
 			} else {
 				setCommentId(null)
 				setCommentText("")
+				setInitialCommentText("")
 				setExistingComment(false)
 			}
 		} catch (ex) {
@@ -249,7 +249,7 @@ export default function ExamineeBox({
 		setColor(newColor)
 		
 		setIsApiCallInProgress(true)
-		await onClick(newButtonState) // Pass the new state as a parameter to the API call
+		await onClick(newButtonState) //to the API call
 		setIsApiCallInProgress(false) // Unlock updates after API call completes
 	}
 
@@ -310,7 +310,7 @@ export default function ExamineeBox({
 					showPopup={showDiscardComment}
 					onClick={() => {onDiscardPersonalComment()}}
 					setShowPopup={() => setShowDiscardComment(false)}
-					zIndex={200} // Above the comment popup.
+					zIndex={200}
 				/>
 			</fieldset>
 		</div>

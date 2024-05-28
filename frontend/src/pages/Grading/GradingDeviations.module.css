@@ -193,3 +193,15 @@
 	position: relative;
 	font-size: 10px;
 }
+
+.bottomRowContainer {
+    display: flex; /* Use flexbox to create a row layout */
+    padding: 10px; /* Add padding for spacing, matching other containers */
+    background-color: #fcfcfc; /* Optional: Add a background color */
+    position: fixed; /* Fix the element to the bottom of the viewport */
+    bottom: 0; /* Position the element at the bottom */
+    width: 90vw; /* Span the full width of the viewport */
+	max-width: 550px;
+    justify-content: center; /* Center items horizontally within the container */
+    align-items: center; /* Center items vertically within the container */
+}
