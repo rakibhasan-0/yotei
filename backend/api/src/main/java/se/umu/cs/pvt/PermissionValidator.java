@@ -7,7 +7,7 @@ import java.util.List;
  * what's present in the permission validator from the gateway, this solely exists
  * since the gateway classes can't be accessed from within this package.
  * 
- * @author Team Mango (Group 4) - 2024-05-27
+ * @author Team Mango (Group 4) - 2024-05-28
  */
 public class PermissionValidator {
     // Enum for all existing permissions

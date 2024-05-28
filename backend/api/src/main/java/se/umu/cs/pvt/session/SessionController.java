@@ -31,6 +31,7 @@ import java.util.Optional;
  * that have been replaced by 'addList'.
  *
  * @author Hawaii (Doc: Griffins c20jjs)
+ * @author Team Mango (Group 4) - 2024-05-28
  */
 @RestController
 @RequestMapping(path = "/api/session")

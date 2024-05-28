@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  *        feature.
  * 		- Create a list of regex patterns for each endpoint.
  *
- * @author Team Mango (Group 4) - 2024-05-27
+ * @author Team Mango (Group 4) - 2024-05-28
  * 
  */
 public class PermissionValidator {
