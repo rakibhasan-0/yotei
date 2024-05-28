@@ -6,7 +6,7 @@ import { toast } from "react-toastify"
 
 import Divider from "../../components/Common/Divider/Divider"
 import InputTextFieldBorderLabel from "../../components/Common/InputTextFieldBorderLabel/InputTextFieldBorderLabel"
-import PermissionCard from "../../components/Common/RoleCard/PermissionListItem"
+import PermissionCard from "../../components/Common/PermissionCard/PermissionListItem"
 import Button from "../../components/Common/Button/Button"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"

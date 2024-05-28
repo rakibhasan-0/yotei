@@ -5,10 +5,9 @@ import DatePicker from "../../components/Common/DatePicker/DatePicker"
 import BeltPicker from "../../components/Common/BeltPicker/BeltPicker"
 import style from "./FilterStatistics.module.css"
 
-
 /**
  * 
- * A component for filtering statistics.It contains filters for dates, belts, exercises and kihon.
+ * Component for filtering statistics. Can filter by dates, belts, exercises and kihon.
  * 
  * Example usage:
  * 
@@ -37,11 +36,12 @@ import style from "./FilterStatistics.module.css"
  * 
  */
 
-export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDateChanges, onToggleBelts, onClearBelts, belts, dates}) {
+export default function FilterStatistics({ exercises, kihon, onToggleExercise, onToggleKihon, onDateChanges, onToggleBelts, onClearBelts, belts, dates}) {
 
 	return (
 		<div>
 			<FilterContainer id="filter-container" title="Filtering" numFilters={0}>
+
 				<div className={style.dateContainer}>
 					<h2>Från</h2>
 					<div></div>
@@ -79,7 +79,7 @@ export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDa
 					<div></div>
 					<CheckBox
 						id={"techniqueFilter-VisaÖvningar"}
-						checked={false}
+						checked={exercises}
 						onClick={(isChecked) => {
 							onToggleExercise(isChecked)
 						}}
@@ -91,12 +91,13 @@ export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDa
 					<div></div>
 					<CheckBox
 						id={"techniqueFilter-KihonCheck"}
-						checked={false}
+						checked={kihon}
 						onClick={(isChecked) => {
 							onToggleKihon(isChecked)
 						}}
 					/>
 				</div>
+				
 			</FilterContainer>
 		</div>
 	)

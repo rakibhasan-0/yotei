@@ -1,4 +1,4 @@
-.role-list-container{
+.role-list-link-container{
     border-radius: 5px;
     border: 1px solid var(--black-primary);
     user-select: none;
@@ -6,7 +6,7 @@
     margin-top: 10px;
 }
 
-.role-list-header {
+.role-list-link-header {
     display: flex;
     align-items: center;
     text-align: center;
