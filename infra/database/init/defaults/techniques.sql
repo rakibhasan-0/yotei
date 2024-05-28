@@ -176,7 +176,6 @@ INSERT INTO technique (name, description) VALUES ('Försvar mot två motståndar
 INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare som angriper med påk (1 dan)', ''); -- id:136
 INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare (1 dan)', ''); -- id:137
 INSERT INTO technique (name, description) VALUES ('Grepp i håret framifrån - Kote mawashi, ude osae gatame', ''); -- id:138
-
 INSERT INTO technique (name, description) VALUES ('Stryptag framifrån - Koshi guruma, ude hishigi hiza gatarne',''); -- id: 139
 INSERT INTO technique (name, description) VALUES ('Stryptag med armen med neddrag - Ura makikomi, ude henkan gatame',''); -- id: 140 
 INSERT INTO technique (name, description) VALUES ('Stryptag med armen med neddrag - Hiza kansetsu waza','');-- id: 141
@@ -206,61 +205,61 @@ INSERT INTO technique (name, description) VALUES ('Försvar mot en motståndare 
 INSERT INTO technique (name, description) VALUES ('Försvar mot två motståndare (2 dan)',''); -- id: 163
 INSERT INTO technique (name, description) VALUES ('Grepp i håret bakifrån med neddrag - Shiho nage, ude henkan gatame',''); -- id: 164
 INSERT INTO technique (name, description) VALUES ('Kravattgrep från sida - Tani otoshi, ude henkan gatame',''); -- id: 165
-INSERT INTO technique (name, description) VALUES ('Grepp  om nacken med flera knästötar - Gedan juji uke, kawashi, irimi nage, ude henkan gatame',''); -- id: 167
-INSERT INTO technique (name, description) VALUES ('Grepp i en ärm och svingslag - Jodan chikai uke, kuzure ude guruma',''); -- id: 168
-INSERT INTO technique (name, description) VALUES ('Grepp bakifrån med vänster hand och svingslag - Jodan chikai uke, o soto otoshi, ude hishigi hiza gatame',''); -- id: 169
-INSERT INTO technique (name, description) VALUES ('Nedtryckning mot liggande sittande mellan benen - Frigöring, ude henkan gatame',''); -- id: 170
-INSERT INTO technique (name, description) VALUES ('Stryptag mot liggande sittande ovanför huvudet - Frigöring, ude henkan gatame',''); -- id: 171
-INSERT INTO technique (name, description) VALUES ('Svingslag mot liggande mot huvudet - Kuzure kibisu gaeshi',''); -- id: 172
-INSERT INTO technique (name, description) VALUES ('Spark mot liggande mot kroppen - San ren uke, kuzure hiza kansetsu waza',''); -- id: 173
-INSERT INTO technique (name, description) VALUES ('Hotfullt uppträdande - Hiji gatame',''); -- id: 174
-INSERT INTO technique (name, description) VALUES ('Rakt slag mot huvudet - Jodan soto uke, te guruma, ude hishigi hiza gatame',''); -- id: 175
-INSERT INTO technique (name, description) VALUES ('Cirkulär spark mot sidan - Gedan uchi uke, o uchi gari',''); -- id: 176
-INSERT INTO technique (name, description) VALUES ('Påkslag mot huvudet med lång påk - Tsuri ashi, ayumi ashi, koshi otoshi, ude hishigi hiza gatame',''); -- id: 177
-INSERT INTO technique (name, description) VALUES ('Påkslag mot benen med lång påk - San ren uke, o soto osae, ude hishigi hiza gatame',''); -- id: 178
-INSERT INTO technique (name, description) VALUES ('Grepp om nacken och flera knivhugg underifrån - Chudan barai, hara osae, ude hiza osae gatame',''); -- id: 179
-INSERT INTO technique (name, description) VALUES ('Flera knivhugg underifrån - Chudan barai, seiken tski jodan, hiza geri chudan, kuzure ude guruma',''); -- id: 180
-INSERT INTO technique (name, description) VALUES ('Pistolhot bakifrån - Grepp, kin geri',''); -- id: 181
-INSERT INTO technique (name, description) VALUES ('Två motståndare, svingslag och svingslag - Jodan chikai uke, yoko geri chudan, o soto otoshi',''); -- id: 182
-INSERT INTO technique (name, description) VALUES ('Två motståndare, påkslag forehand, backhand och svingslag - Tsuri ashi, ayumi ashi, ju jodan uchi uke, irimi nage, påkslag',''); -- id: 183
-INSERT INTO technique (name, description) VALUES ('Grepp i håret framifrån - Kote mawashi, ude osae gatame - Valfri jigo waza anpassad efter ukes agerande',''); -- id: 184
-INSERT INTO technique (name, description) VALUES ('Kravattgrep framifrån - Chudan tski, kote hineri, ude henkan gatame - Valfri jigo waza anpassad efter ukes agerande',''); -- id: 185
-INSERT INTO technique (name, description) VALUES ('Högt livtag över armarna bakifrån - Hiza kansetsu waza - Valfri jigo waza anpassad efter ukes agerande',''); -- id: 186
-INSERT INTO technique (name, description) VALUES ('Hotfullt uppträdande - Ude hishigi - Valfri jigo waza anpassad efter ukes agerande',''); -- id: 187
+INSERT INTO technique (name, description) VALUES ('Grepp  om nacken med flera knästötar - Gedan juji uke, kawashi, irimi nage, ude henkan gatame',''); -- id: 166
+INSERT INTO technique (name, description) VALUES ('Grepp i en ärm och svingslag - Jodan chikai uke, kuzure ude guruma',''); -- id: 167
+INSERT INTO technique (name, description) VALUES ('Grepp bakifrån med vänster hand och svingslag - Jodan chikai uke, o soto otoshi, ude hishigi hiza gatame',''); -- id: 168
+INSERT INTO technique (name, description) VALUES ('Nedtryckning mot liggande sittande mellan benen - Frigöring, ude henkan gatame',''); -- id: 169
+INSERT INTO technique (name, description) VALUES ('Stryptag mot liggande sittande ovanför huvudet - Frigöring, ude henkan gatame',''); -- id: 170
+INSERT INTO technique (name, description) VALUES ('Svingslag mot liggande mot huvudet - Kuzure kibisu gaeshi',''); -- id: 171
+INSERT INTO technique (name, description) VALUES ('Spark mot liggande mot kroppen - San ren uke, kuzure hiza kansetsu waza',''); -- id: 172
+INSERT INTO technique (name, description) VALUES ('Hotfullt uppträdande - Hiji gatame',''); -- id: 173
+INSERT INTO technique (name, description) VALUES ('Rakt slag mot huvudet - Jodan soto uke, te guruma, ude hishigi hiza gatame',''); -- id: 174
+INSERT INTO technique (name, description) VALUES ('Cirkulär spark mot sidan - Gedan uchi uke, o uchi gari',''); -- id: 175
+INSERT INTO technique (name, description) VALUES ('Påkslag mot huvudet med lång påk - Tsuri ashi, ayumi ashi, koshi otoshi, ude hishigi hiza gatame',''); -- id: 176
+INSERT INTO technique (name, description) VALUES ('Påkslag mot benen med lång påk - San ren uke, o soto osae, ude hishigi hiza gatame',''); -- id: 177
+INSERT INTO technique (name, description) VALUES ('Grepp om nacken och flera knivhugg underifrån - Chudan barai, hara osae, ude hiza osae gatame',''); -- id: 178
+INSERT INTO technique (name, description) VALUES ('Flera knivhugg underifrån - Chudan barai, seiken tski jodan, hiza geri chudan, kuzure ude guruma',''); -- id: 179
+INSERT INTO technique (name, description) VALUES ('Pistolhot bakifrån - Grepp, kin geri',''); -- id: 180
+INSERT INTO technique (name, description) VALUES ('Två motståndare, svingslag och svingslag - Jodan chikai uke, yoko geri chudan, o soto otoshi',''); -- id: 181
+INSERT INTO technique (name, description) VALUES ('Två motståndare, påkslag forehand, backhand och svingslag - Tsuri ashi, ayumi ashi, ju jodan uchi uke, irimi nage, påkslag',''); -- id: 182
+INSERT INTO technique (name, description) VALUES ('Grepp i håret framifrån - Kote mawashi, ude osae gatame - Valfri jigo waza anpassad efter ukes agerande',''); -- id: 183
+INSERT INTO technique (name, description) VALUES ('Kravattgrep framifrån - Chudan tski, kote hineri, ude henkan gatame - Valfri jigo waza anpassad efter ukes agerande',''); -- id: 184
+INSERT INTO technique (name, description) VALUES ('Högt livtag över armarna bakifrån - Hiza kansetsu waza - Valfri jigo waza anpassad efter ukes agerande',''); -- id: 185
+INSERT INTO technique (name, description) VALUES ('Hotfullt uppträdande - Ude hishigi - Valfri jigo waza anpassad efter ukes agerande',''); -- id: 186
 
 --Grundläggande tekniker--
-INSERT INTO technique (name, description) VALUES ('Tsuri ashi',''); -- id: 188
-INSERT INTO technique (name, description) VALUES ('Ayumi ashi',''); -- id: 189
-INSERT INTO technique (name, description) VALUES ('Taisabaki kort',''); -- id: 190
-INSERT INTO technique (name, description) VALUES ('Taisabaki lång',''); -- id: 191
-INSERT INTO technique (name, description) VALUES ('Maesebaki',''); -- id: 192
-INSERT INTO technique (name, description) VALUES ('Uppgång bakåt',''); -- id: 193
-INSERT INTO technique (name, description) VALUES ('Uppgång framåt',''); -- id: 194
-INSERT INTO technique (name, description) VALUES ('Kawashi',''); -- id: 195
-INSERT INTO technique (name, description) VALUES ('Ushiro ukemi med dämpning',''); -- id: 196
-INSERT INTO technique (name, description) VALUES ('Mae ukemi',''); -- id: 197
-INSERT INTO technique (name, description) VALUES ('Ushiro ukemi',''); -- id: 198
-INSERT INTO technique (name, description) VALUES ('Mae ukemi med dämpning',''); -- id: 199
-INSERT INTO technique (name, description) VALUES ('Otoshi ukemi',''); -- id: 200
-INSERT INTO technique (name, description) VALUES ('Jodan chikai uke',''); -- id: 201
-INSERT INTO technique (name, description) VALUES ('Morote jodan uke',''); -- id: 202
-INSERT INTO technique (name, description) VALUES ('Ju morote jodan uke',''); -- id: 203
-INSERT INTO technique (name, description) VALUES ('Gedan juji uke',''); -- id: 204
-INSERT INTO technique (name, description) VALUES ('Soto uke jodan',''); -- id: 205
-INSERT INTO technique (name, description) VALUES ('Soto uke chudan',''); -- id: 206
-INSERT INTO technique (name, description) VALUES ('Soto uke gedan',''); -- id: 207
-INSERT INTO technique (name, description) VALUES ('Uchi uke jodan',''); -- id: 208
-INSERT INTO technique (name, description) VALUES ('Uchi uke chudan',''); -- id: 209
-INSERT INTO technique (name, description) VALUES ('Uchi uke gedan',''); -- id: 210
-INSERT INTO technique (name, description) VALUES ('Ju jodan uchi uke',''); -- id: 211
-INSERT INTO technique (name, description) VALUES ('San ren uke',''); -- id: 212
-INSERT INTO technique (name, description) VALUES ('Chudan barai',''); -- id: 213
-INSERT INTO technique (name, description) VALUES ('Ude henkan gatame',''); -- id: 214
-INSERT INTO technique (name, description) VALUES ('Ude osae gatame',''); -- id: 215
-INSERT INTO technique (name, description) VALUES ('Ude hishigi hiza gatame',''); -- id: 216
-INSERT INTO technique (name, description) VALUES ('Kote gatame',''); -- id: 217
-INSERT INTO technique (name, description) VALUES ('Kate osae',''); -- id: 218
-INSERT INTO technique (name, description) VALUES ('Kuzure kata osae',''); -- id: 219
+INSERT INTO technique (name, description) VALUES ('Tsuri ashi',''); -- id: 187
+INSERT INTO technique (name, description) VALUES ('Ayumi ashi',''); -- id: 188
+INSERT INTO technique (name, description) VALUES ('Taisabaki kort',''); -- id: 189
+INSERT INTO technique (name, description) VALUES ('Taisabaki lång',''); -- id: 190
+INSERT INTO technique (name, description) VALUES ('Maesebaki',''); -- id: 191
+INSERT INTO technique (name, description) VALUES ('Uppgång bakåt',''); -- id: 192
+INSERT INTO technique (name, description) VALUES ('Uppgång framåt',''); -- id: 193
+INSERT INTO technique (name, description) VALUES ('Kawashi',''); -- id: 194
+INSERT INTO technique (name, description) VALUES ('Ushiro ukemi med dämpning',''); -- id: 195
+INSERT INTO technique (name, description) VALUES ('Mae ukemi',''); -- id: 196
+INSERT INTO technique (name, description) VALUES ('Ushiro ukemi',''); -- id: 197
+INSERT INTO technique (name, description) VALUES ('Mae ukemi med dämpning',''); -- id: 198
+INSERT INTO technique (name, description) VALUES ('Otoshi ukemi',''); -- id: 199
+INSERT INTO technique (name, description) VALUES ('Jodan chikai uke',''); -- id: 200
+INSERT INTO technique (name, description) VALUES ('Morote jodan uke',''); -- id: 201
+INSERT INTO technique (name, description) VALUES ('Ju morote jodan uke',''); -- id: 202
+INSERT INTO technique (name, description) VALUES ('Gedan juji uke',''); -- id: 203
+INSERT INTO technique (name, description) VALUES ('Soto uke jodan',''); -- id: 204
+INSERT INTO technique (name, description) VALUES ('Soto uke chudan',''); -- id: 205
+INSERT INTO technique (name, description) VALUES ('Soto uke gedan',''); -- id: 206
+INSERT INTO technique (name, description) VALUES ('Uchi uke jodan',''); -- id: 207
+INSERT INTO technique (name, description) VALUES ('Uchi uke chudan',''); -- id: 208
+INSERT INTO technique (name, description) VALUES ('Uchi uke gedan',''); -- id: 209
+INSERT INTO technique (name, description) VALUES ('Ju jodan uchi uke',''); -- id: 210
+INSERT INTO technique (name, description) VALUES ('San ren uke',''); -- id: 211
+INSERT INTO technique (name, description) VALUES ('Chudan barai',''); -- id: 212
+INSERT INTO technique (name, description) VALUES ('Ude henkan gatame',''); -- id: 213
+INSERT INTO technique (name, description) VALUES ('Ude osae gatame',''); -- id: 214
+INSERT INTO technique (name, description) VALUES ('Ude hishigi hiza gatame',''); -- id: 215
+INSERT INTO technique (name, description) VALUES ('Kote gatame',''); -- id: 216
+INSERT INTO technique (name, description) VALUES ('Kate osae',''); -- id: 217
+INSERT INTO technique (name, description) VALUES ('Kuzure kata osae',''); -- id: 218
 
 
 
@@ -463,8 +462,8 @@ INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (15, 183);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (15, 184);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (15, 185);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (15, 186);
-INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (15, 187);
 --Grundläggande tekniker--
+INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (1, 187);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (1, 188);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (1, 189);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (1, 190);
@@ -496,7 +495,6 @@ INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (1, 215);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (1, 216);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (1, 217);
 INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (1, 218);
-INSERT INTO technique_to_belt (belt_id, technique_id) VALUES (1, 219);
 
 
 
@@ -744,14 +742,14 @@ INSERT INTO technique_tag (tech_id, tag_id) VALUES (179,2), (179,10), (179,18);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (180,2), (180,10), (180,18);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (181,2), (181,10), (181,18);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (182,2), (182,10), (182,18);
-INSERT INTO technique_tag (tech_id, tag_id) VALUES (183,2), (183,10), (183,18);
 --Renraku waza--
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (183,2), (183,10), (183,19);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (184,2), (184,10), (184,19);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (185,2), (185,10), (185,19);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (186,2), (186,10), (186,19);
-INSERT INTO technique_tag (tech_id, tag_id) VALUES (187,2), (187,10), (187,19);
 --Grundläggande tekniker--
 --Taisabaki wasa--
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (187,22);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (188,22);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (189,22);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (190,22);
@@ -759,14 +757,14 @@ INSERT INTO technique_tag (tech_id, tag_id) VALUES (191,22);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (192,22);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (193,22);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (194,22);
-INSERT INTO technique_tag (tech_id, tag_id) VALUES (195,22);
 --Ukemi waza--
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (195,23);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (196,23);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (197,23);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (198,23);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (199,23);
-INSERT INTO technique_tag (tech_id, tag_id) VALUES (200,23);
 --Uke waza--
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (200,24);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (201,24);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (202,24);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (203,24);
@@ -779,14 +777,13 @@ INSERT INTO technique_tag (tech_id, tag_id) VALUES (209,24);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (210,24);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (211,24);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (212,24);
-INSERT INTO technique_tag (tech_id, tag_id) VALUES (213,24);
 --Katame waza--
+INSERT INTO technique_tag (tech_id, tag_id) VALUES (213,15);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (214,15);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (215,15);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (216,15);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (217,15);
 INSERT INTO technique_tag (tech_id, tag_id) VALUES (218,15);
-INSERT INTO technique_tag (tech_id, tag_id) VALUES (219,15);
 
 
 
