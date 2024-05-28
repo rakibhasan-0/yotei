@@ -15,6 +15,7 @@ import TechniquechainNode from "../../../components/Common/TechniquechainCard/Te
 export default function TechniquechainCreate() {
 
 	const { state } = useLocation()
+	// eslint-disable-next-line no-unused-vars
 	const [errorMessage, setErrorMessage] = useState("")
 	const context = useContext(AccountContext)
 	const [groups, setGroups] = useState()
@@ -163,6 +164,16 @@ export default function TechniquechainCreate() {
 			setNewChainId(data.id)
 		}
 	}
+	const appendToChosenNodes = (foundObject) => {
+		setChosenNodes(prevNodes => {
+			if (Array.isArray(prevNodes)) {
+				return [...prevNodes, foundObject]
+			} else {
+				console.error("Previous nodes state is not an array:", prevNodes)
+				return [foundObject] // Fallback to ensure the state remains an array
+			}
+		})
+	}
 
 	useEffect(() => {
 		handleSaveNodes()
@@ -292,7 +303,7 @@ export default function TechniquechainCreate() {
 
 			<Divider option={"h1_left"} title={"Nästa Teknik"} />
 
-			<InfiniteScrollComponent>
+			{nodesToDisplay.length !== 0 && <InfiniteScrollComponent>
 				{ nodesToDisplay.map((technique, index) => {
 					return (
 						<div key={technique.id} style={{ display: "flex", alignItems: "center", marginBottom: "1px", width: "100%" }}>
@@ -309,13 +320,13 @@ export default function TechniquechainCreate() {
 					)
 				})}
 			</InfiniteScrollComponent>
-
+			}
 			<div style={{display: "flex", flexDirection: "row", width: "100%", justifyContent: "center", gap: 10 }}>
 				<div className={styles.wrapCentering} style={{ marginBottom: "2rem", marginTop: "1rem" }} >
-					<Button onClick= {() => navigate("/techniquechain")} id = {"sessions-back"}outlined={true}><p>Tillbaka</p></Button>
+					<Button onClick= {() => navigate("/techniquechain")} id = {"technique-chain-create-back"}outlined={true}><p>Tillbaka</p></Button>
 				</div>
 				<div className={styles.wrapCentering} style={{ marginBottom: "2rem", marginTop: "1rem" }} >
-					<Button onClick= {() => handleSave()} id = {"sessions-back"}outlined={true}><p>Spara</p></Button>
+					<Button onClick= {() => handleSave()} id = {"technique-chain-create-back"}outlined={true}><p>Spara</p></Button>
 				</div>
 			</div>
 		</div>

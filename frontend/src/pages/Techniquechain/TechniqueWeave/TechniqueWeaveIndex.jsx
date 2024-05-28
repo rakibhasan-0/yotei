@@ -1,4 +1,5 @@
 import { useState, useContext, useEffect } from "react"
+import { useCookies } from "react-cookie"
 import { AccountContext } from "../../../context"
 import { Plus } from "react-bootstrap-icons"
 import { canCreateAndEditActivity } from "../../../utils"
@@ -29,11 +30,23 @@ import Spinner from "../../../components/Common/Spinner/Spinner"
  */
 
 const TechniquechainIndex = ()=> {
-
+	const context = useContext(AccountContext)
+	//const cookieID = "techniquechain-filter-userId-"+context.userId
 	// eslint-disable-next-line no-unused-vars
 	const [techniqueWeaves, setTechniqueWeaves] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
-	const context = useContext(AccountContext)
+
+	//const filterCookie = cookies[cookieID]
+	//const [cookies, setCookie] = useCookies([cookieID])
+	//const [searchBarText, setSearchBarText] = useState(filterCookie ? filterCookie.searchText : "")
+
+	const detailURL = "/techniquechain/techniqueWeave_page/"
+
+
+	/* 	const saveSearchText = () => {
+		localStorage.setItem("searchText", searchBarText)
+	} */
+
 	useEffect(() => {
 		getWeaves()
 	}, [])
@@ -64,12 +77,14 @@ const TechniquechainIndex = ()=> {
 			/>
 			{isLoading &&
 			<Spinner id={"create-weave-index-spinner"}></Spinner>}
-			{!isLoading && techniqueWeaves.map( (techniqueWeave) =>
+			{!isLoading && techniqueWeaves.map( (techniqueWeave, index) =>
 				<TechniquechainCard
 					item={techniqueWeave.name}
 					id={techniqueWeave.id}
 					key={techniqueWeave.name}
 					checkBox={false}
+					detailURL={detailURL}
+					index={index}
 				/>
 			)}
 			{canCreateAndEditActivity(context) && (
