@@ -231,7 +231,7 @@ export default function GradingBefore() {
 	}, [])
 
 	useEffect(() => {
-		console.log(beltColor)
+		
 	}, [beltColor])
 
 	/**
@@ -482,7 +482,6 @@ export default function GradingBefore() {
 	 * @param {Boolean} isExamineeInPair
 	 */
 	async function editExaminee(examineeId, name, isExamineeInPair) {
-    console.log("hej")
 		if (isExamineeInPair) {
 			setPair(
 				pairs.map((pair) => {

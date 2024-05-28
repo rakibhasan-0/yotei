@@ -93,7 +93,6 @@ export default function GradingAfter() {
 	 * @since 2024-05-15
 	 */
 	const fetchPdf = async () => {
-		console.log("Fetching PDF with grading id:", gradingId)
 		try {
 			const response = await fetch(`/api/examination/exportpdf/${gradingId}`, {
 				method: "GET",
@@ -112,7 +111,6 @@ export default function GradingAfter() {
 			}
 			const byteArray = new Uint8Array(byteNumbers)
 			const blob = new Blob([byteArray], {type: "application/pdf"}) // Create a blob from the byte array
-			console.log("Blob created:", blob)
 			return blob
 		} catch (error) {
 			console.error("Error fetching PDF:", error)
