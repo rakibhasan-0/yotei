@@ -162,11 +162,19 @@ function SessionContainer ({ id, workout, session, plan}) {
 										<BeltBox id ={styles["sc23-session-container-beltbox"]} style={{borderTopLeftRadius:"4px"}}/>
 								}
 								{
-									checkPlan() && checkColor() ?
-										<ChevronDown id={styles["sc23-dropdown"]} style={{color:"black", zIndex: 1}} className={styles[["sc23-session-container-chevron-rotation-animation sc23-session-container-header-overlap", toggled ? "sc23-chevron-rotate" : ""].join(" ")]} size={20}/>
+									checkPlan() && checkColor() ?<ChevronDown id={styles["sc23-dropdown"]} style={{ color: "black", zIndex: 1 }}
+										className={[
+											styles["sc23-session-container-chevron-rotation-animation"],
+											styles["sc23-session-container-header-overlap"],
+											toggled ? styles["sc23-chevron-rotate"] : ""
+										].join(" ")} size={20}/>
 										:
-										<ChevronDown id={styles["sc23-dropdown"]} style={{zIndex:1}}className={styles[["sc23-session-container-chevron-rotation-animation sc23-session-container-header-overlap", toggled ? "sc23-chevron-rotate" : ""].join(" ")]} size={20}/>
-								}
+										<ChevronDown id={styles["sc23-dropdown"]} style={{ zIndex: 1 }}
+											className={[
+												styles["sc23-session-container-chevron-rotation-animation"],
+												styles["sc23-session-container-header-overlap"],
+												toggled ? styles["sc23-chevron-rotate"] : ""
+											].join(" ")}size={20}/>}
 							</div>
 							<div id = {`${id}-content`} className={styles["sc23-session-container-content"]}>
 								

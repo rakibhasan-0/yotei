@@ -62,7 +62,6 @@ const ListEdit = () => {
 				setError("Listan kunde inte skapas.")
 			}
 			localStorage.removeItem(localStorageDestination)
-			console.log("skickar till listInfo: " + JSON.stringify(returnTo))
 			navigate("/profile/list/" + listId, { state: { returnTo: returnTo } })
 		}
 	}
