@@ -4,7 +4,7 @@ import { AccountContext } from "../../context"
 import BeltIcon from "../Common/BeltIcon/BeltIcon"
 import CheckBox from "../Common/CheckBox/CheckBox"
 import styles from "./GroupPicker.module.css"
-import {setError as setErrorToast} from "../../utils"
+import {HTTP_STATUS_CODES, setError as setErrorToast} from "../../utils"
 
 /**
  * GroupRow represents a row in the dropdown menu 
@@ -109,6 +109,7 @@ const GroupRow = ({group, onToggle}) => {
  * @returns A new group picker component.
  * Updates: 2024-05-10: Added a checkbox and filtering of groups that a user has created.
  *  	    2024-05-17: Fixed the filtering and refactored code slightly.
+ * 			2024-05-28: Updated error handling with new HTTP code.
  */
 export default function GroupPicker({ id, states, testFetchMethod, onToggle, onlyMyGroups, callbackFunctionCheckbox}) {
 	const [ groups, setGroups ] = useState()
@@ -129,7 +130,18 @@ export default function GroupPicker({ id, states, testFetchMethod, onToggle, onl
 			method: "GET",
 			headers: { token }
 		}).then(async data => {
+			if (data.status === HTTP_STATUS_CODES.NO_CONTENT) {
+				//There are no groups.
+				return
+			}
+			if (data.status === HTTP_STATUS_CODES.NOT_FOUND) {
+				//There has been a server error.
+				setErrorToast("Kunde inte hämta grupper")
+				return
+			}
+			console.log(data.status)
 			const json = await data.json()
+
 
 			if (onlyMyGroups) {
 				//Only this user's groups should be shown, so we filter first.
@@ -145,8 +157,7 @@ export default function GroupPicker({ id, states, testFetchMethod, onToggle, onl
 				}))
 			}
 		}).catch(() => {
-			setErrorToast("Kunde inte hämta grupper") //TODO this error handling here seems problematic.
-			//Potential solutions: Return 200 or 204 in the backend when there are no groups (instead of 404), or change just the code here.
+			setErrorToast("Kunde inte hämta grupper")
 		})
 	}
 
