@@ -17,39 +17,6 @@ import { toast } from "react-toastify"
  */
 
 /**
- * canEditSession() - Check for if this user can edit the given session or not.
- * 					  IMPORTANT: The creatorId seems to be based on the group id of the group connected to the session and should be changed!
- * 								 Solution idea: Add a userId to the sessions in the database.
- * @params [int] creatorIdOfGroup - The user id for the group connected to the session to be checked against the userId.
- *                                  That is, the user id of the user who creted the group connected to this session.
- * @params context - AccountContext with info about user.
- * @returns true if the user has permission to edit all sessions, or if the user has permission to edit their own sessions and the creatorId of
- * 		    the session is the same as the userId. Otherwise false is returned.
- */
-export function canEditSessions(context, creatorIdOfGroup) {
-	if (!context.permissions) { //Safety check for undefined which is always false.
-		return false
-	}
-	return (context.permissions.includes(USER_PERMISSION_CODES.SESSION_ALL) ||
-	(context.permissions.includes(USER_PERMISSION_CODES.SESSION_OWN) &&
-	(context.userId === creatorIdOfGroup)))
-}
-
-/**
- * canCreateSession() - Check for if this user can create a session or not.
- * @params context - AccountContext with info about user.
- * @returns true if the user has permission to create/edit all sessions or their own sessions. Otherwise false is returned.
- */
-export function canCreateSessions(context) {
-	if (!context.permissions) { //Safety check for undefined which is always false.
-		return false
-	}
-	//Even if a user has a permission to edit all sessions, they may not have the permission set to edit their own sessions, so both must be checked here in the frontend.
-	//(You cannot just check for the SESSION_OWN permission. Perhaps this should be changed, but then you need to coordinate well with the backend.)
-	return (context.permissions.includes(USER_PERMISSION_CODES.SESSION_ALL) || context.permissions.includes(USER_PERMISSION_CODES.SESSION_OWN))
-}
-
-/**
  * isAdminUser() - Checks if a user has the permission to edit users.
  * @param {} context AccountContext from user.
  * @returns True if user is alloowed to edit users, else false. 
@@ -61,23 +28,23 @@ export function isAdminUser(context) {
 
 
 /**
- * canCreateGroups() - check if a user can create a group.
+ * canCreateSessionsAndGroups() - check if a user can create a group or session.
  * @param {*} context AccountContext from user.
  * @returns true if user can create a group, else false.
  */
-export function canCreateGroups(context) {
+export function canCreateSessionsAndGroups(context) {
 	if (!context.permissions) return false
 	return (context.permissions.includes(USER_PERMISSION_CODES.SESSION_GROUP_ALL) ||
 	(context.permissions.includes(USER_PERMISSION_CODES.SESSION_GROUP_OWN)))
 }
 
 /**
- * canEditGroups() - checks if a user can edit a group. If not all, check if user can edit own and if so let user edit their own.
+ * canEditSessionsAndGroups() - checks if a user can edit a group or session. If not all, check if user can edit own and if so let user edit their own.
  * @param {*} context AccountContext from user.
  * @param {*} groupCreatorId The Id of the user that created the group.
- * @returns true if user can edit a group.
+ * @returns true if user can edit a group or session.
  */
-export function canEditGroups(context, groupCreatorId) {
+export function canEditSessionsAndGroups(context, groupCreatorId) {
 	if (!context.permissions) return false
 
 	return (context.permissions.includes(USER_PERMISSION_CODES.SESSION_GROUP_ALL) ||

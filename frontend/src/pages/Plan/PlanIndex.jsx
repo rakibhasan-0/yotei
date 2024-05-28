@@ -9,7 +9,7 @@ import {People} from "react-bootstrap-icons"
 import Button from "../../components/Common/Button/Button"
 import {Link} from "react-router-dom"
 import { useCookies } from "react-cookie"
-import { HTTP_STATUS_CODES, canCreateSessions, isAdminUser, setError } from "../../utils"
+import { HTTP_STATUS_CODES, canCreateSessionsAndGroups, isAdminUser, setError } from "../../utils"
 
 /**
  * PlanIndex is the page that displays group plannings. Contains a 
@@ -296,7 +296,7 @@ export default function PlanIndex() {
 			</div>}
 
 			{
-				(isAdminUser(user) || canCreateSessions(user)) ? 
+				(isAdminUser(user) || canCreateSessionsAndGroups(user)) ? 
 					<RoundButton linkTo={"/session/create"}>
 						<Plus />
 					</RoundButton>
