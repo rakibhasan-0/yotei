@@ -143,26 +143,6 @@ export default function GradingAfter() {
 			
 		}
 	}
-	/**
- 	* @author Team Pomagrade (2024-05-13)
-	 * Get method for the grading information. 
-	 * @returns JSON response
-	 */
-	function getGradingProtocol() {
-		return fetch(`/api/examination/grading/${gradingId}`, {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-				"token": token },
-		})
-			.then(response => {
-				if (!response.ok) {
-					throw new Error("Network response was not ok")
-				}
-				return response.json()
-			})
-	}
-
 
 	/**
 	 * Update step for the grading process. 
@@ -170,9 +150,12 @@ export default function GradingAfter() {
 	 * @param {Int} newStepNum New step that should be updated to database
 	 * @returns status code
 	 */
-	function updateStep(grading_data, newStepNum) {
-		delete grading_data.examinees
+	function updateStep(newStepNum) {
+		//delete grading_data.examinees
+		const grading_data = grading
 		grading_data.step = newStepNum
+		console.log("New grading data: ", grading_data)
+		setGrading(grading_data)
 
 		return fetch("/api/examination/grading", {
 			method: "PUT",
@@ -187,29 +170,31 @@ export default function GradingAfter() {
 					setLoading(false)
 					throw new Error("Network response was not ok")
 				}
+				navigate("/grading")
 				return response.status
 
 			})
+			
 	}
 
 	/**
 	 * Function to navigate to the start of the grading.
 	 */
-	const navigateToGrading = () => {
-		navigate("/grading")
-
-    
+	function saveAndExitGrading(){
+		updateStep(4)
 	}
     
 	/**
 	 * Function to navigate back to the examination page.
 	 */
 	const navigateBack = () => {
-		if (hasPreviousState) {
-			navigate(-1)
-		} else {
+		if (grading.step === 3){
 			navigate(`/grading/${gradingId}/2`)
+		} 
+		else{
+			navigate("/grading")
 		}
+		
 	}
 
 	/**
@@ -314,7 +299,7 @@ export default function GradingAfter() {
 						</Button>
 						<Button
 							width="100%"
-							onClick={navigateToGrading}
+							onClick={saveAndExitGrading}
 						>
 							<p>Spara och avsluta</p>
 						</Button>
