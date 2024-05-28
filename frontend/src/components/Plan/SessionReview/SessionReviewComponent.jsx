@@ -763,6 +763,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 					<button
 						className={styles.add_more_button_container}
 						onClick={toggleAddMore}
+						id={"AddActivityButton"}
 					>
 						<img src="/add_more_icon.svg" />
 					</button>
