@@ -7,7 +7,7 @@ import { AccountContext } from "../../context"
 import { useNavigate } from "react-router"
 import Button from "../../components/Common/Button/Button"
 import Review from "../../components/Plan/SessionReview/SessionReviewComponent.jsx"
-import {HTTP_STATUS_CODES, canEditGroups, isAdminUser} from "../../utils"
+import {HTTP_STATUS_CODES, canEditSessionsAndGroups, isAdminUser} from "../../utils"
 import { useCookies } from "react-cookie"
 
 /**
@@ -170,7 +170,7 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 
 						<div id={`${id}-no-workout`} className={styles.sc23_session_workout_info}>
 							<h2 className={styles.sc23_session_workput_text}>Det finns inget pass.</h2>
-							{(isAdminUser(context) || canEditGroups(context, creatorID)) &&
+							{(isAdminUser(context) || canEditSessionsAndGroups(context, creatorID)) &&
 								<p className={styles.sc23_session_workput_text}>Du kan trycka på pennan för att lägga till ett.</p>
 							}
 						</div>
@@ -186,7 +186,7 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 							<div />
 					}
 					{
-						(isAdminUser(context) || canEditGroups(context, creatorID)) &&
+						(isAdminUser(context) || canEditSessionsAndGroups(context, creatorID)) &&
 						<Button className = {styles.review_button} onClick={ () => {
 							setRShowPopup(true)
 						}} outlined={false}>
@@ -197,7 +197,7 @@ function SessionWorkout({ id, workout, sessionID, creatorID }) {
 						</Button>
 					}
 					{
-						(isAdminUser(context) || canEditGroups(context, creatorID)) &&
+						(isAdminUser(context) || canEditSessionsAndGroups(context, creatorID)) &&
 						<div>
 							<Pencil
 								aria-label="Edit Session"

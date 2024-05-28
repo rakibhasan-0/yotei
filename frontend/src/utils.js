@@ -39,12 +39,12 @@ export function canCreateSessionsAndGroups(context) {
 }
 
 /**
- * canEditGroups() - checks if a user can edit a group. If not all, check if user can edit own and if so let user edit their own.
+ * canEditSessionsAndGroups() - checks if a user can edit a group or session. If not all, check if user can edit own and if so let user edit their own.
  * @param {*} context AccountContext from user.
  * @param {*} groupCreatorId The Id of the user that created the group.
- * @returns true if user can edit a group.
+ * @returns true if user can edit a group or session.
  */
-export function canEditGroups(context, groupCreatorId) {
+export function canEditSessionsAndGroups(context, groupCreatorId) {
 	if (!context.permissions) return false
 
 	return (context.permissions.includes(USER_PERMISSION_CODES.SESSION_GROUP_ALL) ||
