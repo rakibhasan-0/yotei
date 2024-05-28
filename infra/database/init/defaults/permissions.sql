@@ -37,6 +37,7 @@ INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 4);
 INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 5);
 INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 6);
 INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 7);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 8);
 
 -- Editor role
 INSERT INTO role_to_permission (role_id, permission_id) VALUES (2, 2);
