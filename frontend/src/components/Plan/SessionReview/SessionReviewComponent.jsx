@@ -590,14 +590,14 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 						const activityObject = createActivityObject(activity, cat.activities.length + index, localId)
 						localId--
 						return activityObject
-					});
+					})
 
 					callback(localId)
 
 					return {
 						...cat,
 						activities: [...cat.activities, ...newActivities],
-					};
+					}
 				}
 				return cat
 			})
