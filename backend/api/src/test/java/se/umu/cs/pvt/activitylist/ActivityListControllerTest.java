@@ -36,7 +36,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import se.umu.cs.pvt.activitylist.Dtos.*;
 import se.umu.cs.pvt.user.JWTUtil;
 import se.umu.cs.pvt.user.User;
-import se.umu.cs.pvt.user.User.Role;
 import se.umu.cs.pvt.workout.UserShort;
 import se.umu.cs.pvt.workout.UserShortRepository;
 
@@ -85,9 +84,7 @@ public class ActivityListControllerTest {
         mockJwt = Mockito.mock(DecodedJWT.class);
         mockClaim = Mockito.mock(Claim.class);
         when(mockClaim.asLong()).thenReturn(1L);
-        when(mockClaim.asString()).thenReturn("ADMIN");
         when(mockJwt.getClaim("userId")).thenReturn(mockClaim);
-        when(mockJwt.getClaim("role")).thenReturn(mockClaim);
         when(jwtUtil.validateToken(token)).thenReturn(mockJwt);
     }
 
@@ -95,20 +92,16 @@ public class ActivityListControllerTest {
         mockJwt = Mockito.mock(DecodedJWT.class);
         mockClaim = Mockito.mock(Claim.class);
         when(mockClaim.asLong()).thenReturn(userId);
-        when(mockClaim.asString()).thenReturn("USER");
         when(mockJwt.getClaim("userId")).thenReturn(mockClaim);
-        when(mockJwt.getClaim("role")).thenReturn(mockClaim);
         when(jwtUtil.validateToken(token)).thenReturn(mockJwt);
     }
 
     @BeforeAll
     public static void userSetUp() throws Exception {
         admin = new User("author", "password123");
-        admin.setUserRole(Role.ADMIN);
         admin.setUserId(1L);
 
         nonAdmin = new User("nonAuthor", "password123");
-        nonAdmin.setUserRole(Role.USER);
         nonAdmin.setUserId(2L);
     }
 

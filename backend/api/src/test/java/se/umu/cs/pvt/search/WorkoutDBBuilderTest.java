@@ -77,7 +77,7 @@ public class WorkoutDBBuilderTest {
         String userId = params.getUser_id();
         String expectedQuery = "SELECT workout_name, workout_id, workout_author FROM workout WHERE " +
             "workout_hidden = FALSE OR workout_author = " + userId +
-            " OR " + userId + " IN ( SELECT user_id FROM user_table WHERE user_role = 1 )" +
+            " OR " + userId + " IN ( SELECT user_id FROM user_table WHERE role_id = 1 )" +
             " OR " + userId + " IN ( SELECT user_id FROM user_workout WHERE workout_id = workout.workout_id )";
 
 

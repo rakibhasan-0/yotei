@@ -5,15 +5,8 @@ WORKDIR /src
 RUN mvn javadoc:aggregate
 
 FROM python:3.12.3-bookworm as api-docs
-COPY ./docs/api-docs /src
+COPY ./api-docs /src
 WORKDIR /src
-#RUN yes | apt-get update
-#RUN yes | apt-get install libgl1-mesa-dev
-#RUN pip install mkdocs
-#RUN pip install mkdocs-macros-plugin
-#RUN pip install wheel
-#RUN pip install materialx
-
 
 RUN pip install mkdocs
 RUN pip install mkdocs-material-extensions
