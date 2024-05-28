@@ -7,6 +7,7 @@ import styles from "./GradingBefore.module.css"
 import { Download } from "react-bootstrap-icons"
 import { useParams } from "react-router-dom"
 import { canHandleGradings, isAdminUser } from "../../utils"
+import Spinner from "../../components/Common/Spinner/Spinner"
 
 /**
  * Page to show all examinees for a grading after the grading has been completed.
@@ -32,6 +33,7 @@ export default function GradingAfter() {
 	const [ isGrading, setIsGrading ] = useState(false)
 	const [ isBelt, setIsBelt ] = useState(false)
 	const [ isExaminee, setIsExaminee ] = useState(false)
+	const [ downloadingPdf, setDownloadingPdf] = useState(false)
 
 	/**
 	 * Function to fetch the grading from the backend.
@@ -125,6 +127,7 @@ export default function GradingAfter() {
 	 * @returns {void}
 	 */
 	const downloadPdf = async () => {
+		setDownloadingPdf(true)
 		const pdfBlob = await fetchPdf()
 		if (pdfBlob) {
 			const url = window.URL.createObjectURL(pdfBlob)
@@ -142,6 +145,7 @@ export default function GradingAfter() {
 			link.remove()
 			
 		}
+		setDownloadingPdf(false)
 	}
 
 	/**
@@ -241,6 +245,14 @@ export default function GradingAfter() {
     
 				<div className={styles.bottomContainer}>
 					<div style={{ display: "flex", justifyContent: "flex-end", paddingTop: "10px" }}>
+						{
+							downloadingPdf ? 
+								<div className={styles.spinner}>
+									<Spinner></Spinner>
+								</div>
+								:
+								null
+						}
 						<Button
 							style={{
 								backgroundColor: "#FFD700",
