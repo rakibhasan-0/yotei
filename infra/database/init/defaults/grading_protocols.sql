@@ -1,3 +1,23 @@
+---
+--- INSERTS TO BELT SUCCESSIONS, A GROUP WITH A BELT SHOULD VIEW THE GRADING PROTOCOL FOR THE NEXT BELT.
+---
+
+--- WHITE -> YELLOW
+INSERT INTO belt_succession (belt_id, next_belt_id) VALUES (2,3);
+--- YELLOW -> ORANGE
+INSERT INTO belt_succession (belt_id, next_belt_id) VALUES (3,6);
+--- ORANGE -> GREEN
+INSERT INTO belt_succession (belt_id, next_belt_id) VALUES (6,9);
+--- GREEN -> BLUE
+INSERT INTO belt_succession (belt_id, next_belt_id) VALUES (9,12);
+--- BLUE -> BROWN
+INSERT INTO belt_succession (belt_id, next_belt_id) VALUES (12,13);
+
+--- CONTINUE TO BLACK BELTS HERE
+
+
+
+
 --
 -- INSERTS FOR GRADING PROTOCOLS
 --
