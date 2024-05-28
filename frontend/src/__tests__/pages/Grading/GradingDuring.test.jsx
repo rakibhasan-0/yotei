@@ -1,19 +1,26 @@
 //import React from "react"
 import { render, configure, screen, } from "@testing-library/react"
 import "@testing-library/jest-dom"
-import GradingBefore from "../../../pages/Grading/GradingBefore"
+import DuringGrading from "../../../pages/Grading/During/DuringGrading"
 import { Route, RouterProvider, createMemoryRouter, createRoutesFromElements } from "react-router-dom"
 import { AccountContext } from "../../../context"
 import { USER_PERMISSION_CODES, USER_PERMISSION_LIST_ALL } from "../../../utils"
 configure({ testIdAttribute: "id" })
 
-
+/**
+ * Unit-test for the GradingBefore page, 
+ * init page is tested
+ *
+ * @author Team Orange (Group 5, c19jen, ens21ljn)
+ * @since 2024-05-28
+ * @version 1.0 
+ */
 const renderWithRouter = async(permissions_list) => {
 	const gradingId = 1
 	window.HTMLElement.prototype.scrollIntoView = jest.fn
 	const router = createMemoryRouter(
 		createRoutesFromElements( [
-			<Route key={"key1"} path="grading/:gradingId/2" element={<GradingBefore />}/> ,
+			<Route key={"key1"} path="grading/:gradingId/2" element={<DuringGrading />}/> ,
 		]
 		),
 		{initialEntries: [`/grading/${gradingId}/2`]}
