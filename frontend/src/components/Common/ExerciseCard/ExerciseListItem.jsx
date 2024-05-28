@@ -45,10 +45,13 @@ export default function ExerciseListItem({ item, text, detailURL, id, index, che
 	const [isOpen, setIsOpen] = useState(false)
 
 	const handleClick = () => {
-		localStorage.setItem("stored_exercise", id)
 		if (popUp) {
 			setIsOpen(true)
 		}
+	}
+
+	const setExercise = () =>{
+		localStorage.setItem("stored_exercise", id)
 	}
 
 	return (
@@ -57,7 +60,7 @@ export default function ExerciseListItem({ item, text, detailURL, id, index, che
 				<ExerciseDetailMini id={id}>
 				</ExerciseDetailMini>
 			</PopupMini>
-			<div className={styles["exercise-list-container"]} data-testid="ExerciseListItem" id={id}>
+			<div className={styles["exercise-list-container"]} data-testid="ExerciseListItem" id={id} onClick={setExercise}>
 				<div className={styles["exercise-list-header"]} style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
 					{checkBox ? <div className={styles["technique-checkbox-container"]}>{checkBox}</div> : null}
 					{popUp ?
