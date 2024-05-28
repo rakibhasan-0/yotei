@@ -39,6 +39,7 @@ import Techniquechain_page from "./pages/Techniquechain/Techniquechain_page/Tech
 import TechniquechainCreate from "./pages/Techniquechain/Techniquechain_create/TechniquechainCreate.jsx"
 import Techniquechain from "./pages/Techniquechain/TechniquechainIndex"
 import CreateWeave from "./pages/Techniquechain/TechniqueWeaveCreate/TechniqueWeaveCreate"
+import TechniqueWeave_page from "./pages/Techniquechain/TechniqueWeave/TechniqueWeave_page/TechniqueWeave_page.jsx"
 
 import ListInfo from "./pages/List/ListInfo"
 import FavouriteWorkoutsList from "./pages/List/FavouriteWorkoutList"
@@ -170,6 +171,7 @@ export default function App() {
 						<Route path="techniquechain/techniquechain_page/:tecid_id" element={<Techniquechain_page />} />
 						<Route path="techniquechain/chain/create" element={<TechniquechainCreate />} />
 						<Route path="techniquechain/techniqueweavecreate" element={<CreateWeave />} />
+						<Route path="techniquechain/techniqueweave_page/:weave_id_id" element={<TechniqueWeave_page />} />
 						
 						<Route path="list/editList" element={<ListEdit />} />
 						<Route path="list/edit/:activityListId" element={<ListEdit />} />
