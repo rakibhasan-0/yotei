@@ -27,9 +27,12 @@ public class TechniqueChainController {
 
     private TechniqueWeaveRepresentRepository weaveRepresentRepository;
 
+    private TechniqueChainInChainRepository inChainRepository;
+
     @Autowired
     public TechniqueChainController(TechniqueChainNodeRepository nodeRepository, TechniqueChainNodeService nodeService, TechniqueChainEdgesRepository edgeRepository, TechniqueChainWeaveRepository weaveRepository,
-            TechniqueWeaveService weaveService, TechniqueChainChainRepository chainRepository, TechniqueChainChainService chainService, TechniqueWeaveRepresentRepository weaveRepresentRepository) {
+            TechniqueWeaveService weaveService, TechniqueChainChainRepository chainRepository, TechniqueChainChainService chainService, TechniqueWeaveRepresentRepository weaveRepresentRepository,
+            TechniqueChainInChainRepository inChainRepository) {
 
         this.nodeRepository = nodeRepository;
         this.nodeService = nodeService;
@@ -39,6 +42,7 @@ public class TechniqueChainController {
         this.chainRepository = chainRepository;
         this.chainService = chainService;
         this.weaveRepresentRepository = weaveRepresentRepository;
+        this.inChainRepository = inChainRepository;
     }
 
     protected TechniqueChainController() {}
@@ -455,5 +459,28 @@ public class TechniqueChainController {
         } catch (Exception e) {
             return new ResponseEntity<>("Failed to delete chain: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+    /*gets all the nodes that belong to the chain id */
+    @GetMapping("/chainNodes/{id}")
+    public ResponseEntity<List<TechniqueChainInChain>> getTechniqueChainNodes(@PathVariable Long id) {
+        List<TechniqueChainInChain> techniqueChain = inChainRepository.findByChainId(id);
+        return ResponseEntity.ok(techniqueChain);
+    }
+/*
+{
+    "nodeId": 1,
+    "chainId": 2,
+    "posInChain": 3
+}
+*/
+    @PostMapping("/chainNodes/create")
+    public ResponseEntity<TechniqueChainInChain> addChainNode(@RequestBody TechniqueChainInChain inChainDTO) {
+        TechniqueChainInChain newChainNode = new TechniqueChainInChain();
+        newChainNode.setNodeId(inChainDTO.getNodeId());
+        newChainNode.setChainId(inChainDTO.getChainId());
+        newChainNode.setPosInChain(inChainDTO.getPosInChain());
+
+        TechniqueChainInChain savedChainNode = inChainRepository.save(newChainNode);
+        return ResponseEntity.status(HttpStatus.OK).body(savedChainNode);
     }
 }

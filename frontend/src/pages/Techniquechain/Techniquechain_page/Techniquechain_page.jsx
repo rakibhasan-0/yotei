@@ -18,6 +18,7 @@ export default function Techniquechain_page() {
 	const [techniquechain, settechniquechain] = useState()
 	const context = useContext(AccountContext)
 	const [showDeletePopup, setShowDeletePopup] = useState(false)
+	const [nodesIdToGet, setNodesIdToGet] = useState([])
 
 	//this is a list of all the techniques to be displayed in the list. read all the real techniqus from the db insted of hard coded
 	const [chainTechniques, setChaintechniques] = useState([])
@@ -43,20 +44,62 @@ export default function Techniquechain_page() {
 			settechniquechain({id: data.id, name: data.name, description: data.description})
 
 			//const nodesToDesplay = data.node
-			const transformedArray = data.node.map(item => ({
-				id: item.id,
-				name: item.name,
-				description: item.description
-			}))
 			
-			setChaintechniques(transformedArray)
+			await getChainNodesInfo()
 			setIsLoading(false)
 		}
 	}
 
+	const getChainNodesInfo = async () => {
+
+		const requestOptions = {
+			method: "GET",
+			headers: { "Content-type": "application/json", "token": context.token }
+		}
+		const response = await fetch(`/api/techniquechain/chainNodes/${techniqueId}`, requestOptions)
+		if (response.status !== HTTP_STATUS_CODES.OK) {
+			//Implement som error message/popup
+			return null
+		} else {
+			const data = await response.json()
+			const transformedArray = data.map(item => ({
+				id: item.nodeId,
+				posInChain: item.posInChain
+			}))
+			setNodesIdToGet(transformedArray)
+		}
+	}
+
+	useEffect(() => {
+		getChainNodes()
+	}, [nodesIdToGet])
+
+	const getChainNodes = async () => {
+
+		let tmpArray = []
+		const requestOptions = {
+			method: "GET",
+			headers: { "Content-type": "application/json", "token": context.token }
+		}
+
+		for(let i = 0; i < nodesIdToGet.length; i++) {
+
+			const response = await fetch(`/api/techniquechain/node/${nodesIdToGet[i].id}`, requestOptions)
+			if (response.status !== HTTP_STATUS_CODES.OK) {
+				//Implement som error message/popup
+				return null
+			} else {
+				const data = await response.json()				
+				tmpArray.push({id: data.id, name: data.name, posInChain: nodesIdToGet[i].posInChain})
+			}
+		}
+		tmpArray.sort((a, b) => a.posInChain - b.posInChain)
+		setChaintechniques(tmpArray)
+	}
+
 	return (
 		<div style={{ display: "flex", flexDirection: "column" }}>
-			<title>Tekniktråd</title>
+			<title>Tekniktrådar</title>
 			<h1 style={{textAlign: "left", wordWrap:"break-word"}}>{techniquechain?.name}</h1>
 			<div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: "10px" }}>
 				{/* empty div to get the right look with old components */}

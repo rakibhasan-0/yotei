@@ -24,6 +24,7 @@ export default function TechniquechainCreate() {
 	const [chosenNodes, setChosenNodes] = useState([])
 	const [nodeToGetNext, setNodeToGetNext] = useState()
 	const [firstNodes, setFirstNodes] = useState(true)
+	const [newChainId, setNewChainId] = useState()
 	const navigate = useNavigate()
 
 	// true when data has been saved, when unmounting and rebuilding view.
@@ -63,7 +64,6 @@ export default function TechniquechainCreate() {
 
 	useEffect(() => {
 		getAllWeaves()
-		console.log(chosenNodes)
 	}, [])
 
 	const getAllWeaves = async () => {
@@ -106,7 +106,6 @@ export default function TechniquechainCreate() {
 			const transformedArray = data.map(item => ({
 				id: item.id
 			}))		
-			console.log(transformedArray)
 			setNodesToDisplayId(transformedArray)
 		}
 	}
@@ -145,7 +144,6 @@ export default function TechniquechainCreate() {
 	}
 
 	const handleSave = async () => {
-		console.log(group)
 
 		const requestOptions = {
 			method: "POST",
@@ -161,21 +159,43 @@ export default function TechniquechainCreate() {
 			//Implement som error message/popup
 			return null
 		} else {		
-			navigate("/techniquechain")	
+			const data = await response.json()
+			setNewChainId(data.id)
+		}
+	}
+
+	useEffect(() => {
+		handleSaveNodes()
+	}, [newChainId])
+
+	const handleSaveNodes = async () => {
+
+		for(let i = 0; i < chosenNodes.length; i++) {
+			const requestOptions = {
+				method: "POST",
+				headers: { "Content-type": "application/json", "token": context.token },
+				body: JSON.stringify({
+					nodeId: chosenNodes[i].id,
+					chainId: newChainId,
+					posInChain: i
+				})
+			}
+			const response = await fetch("/api/techniquechain/chainNodes/create", requestOptions)
+			if (response.status !== HTTP_STATUS_CODES.OK) {
+				//Implement som error message/popup
+				return null
+			} else {		
+				navigate("/techniquechain")	
+			}
 		}
 	}
 
 	useEffect(() => {
 
-		console.log(nodesToDisplay)
-
 		const foundObject = nodesToDisplay.find(obj => obj.id === nodeToGetNext)
-		console.log(foundObject)
 		if(chosenNodes.length == 0 && foundObject) {
-			console.log("inside of if")
-			setChosenNodes(foundObject)
+			setChosenNodes([foundObject])
 		}else if(foundObject) {
-			console.log("inside else")
 			setChosenNodes(prevArray => [ ... prevArray, foundObject])
 		}
 		if(nodeToGetNext) {
@@ -252,7 +272,7 @@ export default function TechniquechainCreate() {
 
 			<Divider option={"h1_left"} title={"Valda Tekniker"} />
 
-			{/*<InfiniteScrollComponent>
+			<InfiniteScrollComponent>
 				{ chosenNodes.map((technique, index) => {
 					return (
 						<div key={technique.id} style={{ display: "flex", alignItems: "center", marginBottom: "1px", width: "100%" }}>
@@ -268,7 +288,7 @@ export default function TechniquechainCreate() {
 						</div>
 					)
 				})}
-			</InfiniteScrollComponent>*/}
+			</InfiniteScrollComponent>
 
 			<Divider option={"h1_left"} title={"Nästa Teknik"} />
 

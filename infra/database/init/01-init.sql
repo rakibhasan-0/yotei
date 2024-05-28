@@ -826,7 +826,8 @@ ALTER TABLE
 CREATE TABLE in_chain(
 	id SERIAL PRIMARY KEY,
 	node_id INT NOT NULL,
-	chain_id INT NOT NULL
+	chain_id INT NOT NULL,
+	pos_in_chain INT NOT NULL
 );
 
 ALTER TABLE

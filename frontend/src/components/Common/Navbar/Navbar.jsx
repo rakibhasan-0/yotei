@@ -75,7 +75,7 @@ function Navbar({ testId }) {
 
 					{(isAdminUser(context)) ?
 						<Button width={"100%"} onClick={() => navigateAndClose("/techniquechain")}>
-							<h1 className={styles.commonNavbarButton}>Teknikkedjor</h1>
+							<h1 className={styles.commonNavbarButton}>Tekniktrådar</h1>
 						</Button>
 						:<></>
 					}
