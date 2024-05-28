@@ -38,8 +38,6 @@ export default function GradingCreate() {
 		}
 			
 		navigate(`/grading/${gradingId}/1`, { state: params })
-
-
 	}
 
 	/**
@@ -85,53 +83,67 @@ export default function GradingCreate() {
 
 	}
 
+    /**
+     * Parses examination protocol data to extract color maps.
+     * @param {Array} data Examination protocol data array.
+     * @returns {Array} Array of color maps containing id and hex properties.
+     */
+    const parseColorMaps = (data) => {
+        return data.map(element => ({
+            id: element.beltId,
+            hex: `#${element.beltColor}`
+        }))
+    }
+
+    /**
+     * Parses examination protocol data to extract protocol names.
+     * @param {Array} data Examination protocol data array.
+     * @returns {Array} Array of protocol names containing id, code, and color properties.
+     */
+    const parseProtocolMap = (data) => {
+        return data.map(element => {
+            let code = null
+            let color = null
+            try {
+                const parsedProtocol = JSON.parse(element.examinationProtocol)
+                if(parsedProtocol.examination_protocol) {
+                    code = parsedProtocol.examination_protocol.code
+                    color = parsedProtocol.examination_protocol.color
+                }
+            } catch (error) {
+                console.error("Misslyckade med parse på examinationProtocol för element med beltId: ", element.beltId, error)
+            }
+            return {
+                id: element.beltId,
+                code: code,
+                color: color
+            }
+        })
+    }
+
 	/**
 	 * Get belts id and matching hexcolor for all belts in database. 
 	 */
 	useEffect(() => {
 		const fetchData = async () => {
-			try {
-				const response = await fetch("/api/examination/examinationprotocol/all", { headers: { "token": token } })
-				if (response.status === 404) {
-					return
-				}
-				if (!response.ok) {
-					setLoading(false)
-					throw new Error("Kunde inte hämta bälten")
-				}
-				const data = await response.json()
-				setLoading(false)
-                const colorMaps = data.map(element => ({
-                    id: element.beltId,
-                    hex: `#${element.beltColor}`
-                }))
-				setBeltColors(colorMaps)
-
-                const protocolMap = data.map(element => {
-                    let code = null
-                    let color = null
-                    try {
-                        const parsedProtocol = JSON.parse(element.examinationProtocol)
-                        if(parsedProtocol.examination_protocol) {
-                            code = parsedProtocol.examination_protocol.code
-                            color = parsedProtocol.examination_protocol.color
-                        }
-                    } catch (error) {
-                        console.error("Failed to parse examinationProtocol for element with beltId", element.beltId, error)
-                    }
-                    return {
-                        id: element.beltId,
-                        code: code,
-                        color: color
-                    }
-                })
+            try {
+                const response = await fetch("/api/examination/examinationprotocol/all", { headers: { "token": token } })
+                if (response.status === 404) {
+                    return
+                }
+                if (!response.ok) {
+                    setLoading(false)
+                    throw new Error("Kunde inte hämta bälten")
+                }
+                const data = await response.json()
+                setLoading(false)
+                const colorMaps = parseColorMaps(data)
+                setBeltColors(colorMaps)
+                const protocolMap = parseProtocolMap(data)
                 setProtocolNames(protocolMap)
-        
-			} catch (ex) {
-				setErrorToast("Kunde inte hämta bälten")
-				setLoading(false)
-				console.error(ex)
-			}
+            } catch (ex) {
+                console.error("Misslyckades med att hämta protokoll: ", error)
+            }
 		}
 		fetchData()
 	}, [token])

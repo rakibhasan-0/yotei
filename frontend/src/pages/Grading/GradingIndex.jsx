@@ -141,9 +141,9 @@ export default function GradingIndex() {
 	}
 
 	/**
-   *  Distribution current gradings and finished gradings for userid.  
-   * @param {json} gradings_data 
-   */
+     *  Distribution current gradings and finished gradings for userid.  
+     * @param {json} gradings_data 
+     */
 	function createLists(gradings_data) {
 		gradings_data.map(async (item) => {
 			const isCreatorInFinished = finishedGradings.some(grading => grading.creatorId === userId)
@@ -162,10 +162,26 @@ export default function GradingIndex() {
 		setIsCreateListDone(true)
 	}
 
+    /**
+     * Parses examination protocol data to extract color maps.
+     * @param {Array} data Examination protocol data array.
+     * @returns {Array} Array of color maps containing id and hex properties.
+     */
+    const parseColorMaps = (data) => {
+        const colorMaps = {}
+        data.forEach(element => {
+            colorMaps[element.beltId] = {
+                    beltId: element.beltId,
+                    hex: `#${element.beltColor}`,
+                }
+        })
+        return colorMaps
+    }
+
 	/**
-   * Checks if the user has no earlier gradings started or finished. 
-   * Otherwise sort it by dates.
-   */
+     * Checks if the user has no earlier gradings started or finished. 
+     * Otherwise sort it by dates.
+     */
 	useEffect(() => {
 
 		if(isCreateListDone) {
@@ -200,13 +216,7 @@ export default function GradingIndex() {
 					fetchGradings()
 				])
 
-				const colorMaps = {}
-				protocols_data.forEach(element => {
-					colorMaps[element.beltId] = {
-							beltId: element.beltId,
-							hex: `#${element.beltColor}`,
-						}
-				})
+				const colorMaps = parseColorMaps(protocols_data)
 				setBeltColors(colorMaps)
 				setLoading(false)
 				createLists(gradings_data)
