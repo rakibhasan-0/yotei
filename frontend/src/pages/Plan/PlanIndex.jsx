@@ -204,7 +204,6 @@ export default function PlanIndex() {
 		})
 			.then(response => {
 				if(!response.ok && !HTTP_STATUS_CODES.NOT_FOUND) {
-					console.log(response)
 					setError("Kunde inte hämta tillfällen.")
 				}
 				if (response === HTTP_STATUS_CODES.NO_CONTENT) {
@@ -214,7 +213,6 @@ export default function PlanIndex() {
 			})
 			.then(sessions => setSessions(filterSessions(sessions, args)))
 			.catch(() => {
-				console.log("A")
 				setError("Kunde inte ansluta till servern.")
 			})
 
@@ -246,7 +244,6 @@ export default function PlanIndex() {
 			})
 			.then(workouts => setWorkouts(workouts))
 			.catch(() => {
-				console.log("A")
 				setError("Kunde inte ansluta till servern.")
 			})
 	}
