@@ -7,6 +7,7 @@ import styles from "./GradingBefore.module.css"
 import { Download } from "react-bootstrap-icons"
 import { useParams } from "react-router-dom"
 import { canHandleGradings, isAdminUser } from "../../utils"
+import Spinner from "../../components/Common/Spinner/Spinner"
 
 /**
  * Page to show all examinees for a grading after the grading has been completed.
@@ -31,6 +32,7 @@ export default function GradingAfter() {
 	const [ isGrading, setIsGrading ] = useState(false)
 	const [ isBelt, setIsBelt ] = useState(false)
 	const [ isExaminee, setIsExaminee ] = useState(false)
+	const [ downloadingPdf, setDownloadingPdf] = useState(false)
 
 	/**
 	 * Function to fetch the grading from the backend.
@@ -92,7 +94,6 @@ export default function GradingAfter() {
 	 * @since 2024-05-15
 	 */
 	const fetchPdf = async () => {
-		console.log("Fetching PDF with grading id:", gradingId)
 		try {
 			const response = await fetch(`/api/examination/exportpdf/${gradingId}`, {
 				method: "GET",
@@ -111,7 +112,6 @@ export default function GradingAfter() {
 			}
 			const byteArray = new Uint8Array(byteNumbers)
 			const blob = new Blob([byteArray], {type: "application/pdf"}) // Create a blob from the byte array
-			console.log("Blob created:", blob)
 			return blob
 		} catch (error) {
 			console.error("Error fetching PDF:", error)
@@ -124,6 +124,7 @@ export default function GradingAfter() {
 	 * @returns {void}
 	 */
 	const downloadPdf = async () => {
+		setDownloadingPdf(true)
 		const pdfBlob = await fetchPdf()
 		if (pdfBlob) {
 			const url = window.URL.createObjectURL(pdfBlob)
@@ -141,6 +142,7 @@ export default function GradingAfter() {
 			link.remove()
 			
 		}
+		setDownloadingPdf(false)
 	}
 
 	/**
@@ -272,6 +274,14 @@ export default function GradingAfter() {
     
 				<div className={styles.bottomContainer}>
 					<div style={{ display: "flex", justifyContent: "flex-end", paddingTop: "10px" }}>
+						{
+							downloadingPdf ? 
+								<div className={styles.spinner}>
+									<Spinner></Spinner>
+								</div>
+								:
+								null
+						}
 						<Button
 							style={{
 								backgroundColor: "#FFD700",

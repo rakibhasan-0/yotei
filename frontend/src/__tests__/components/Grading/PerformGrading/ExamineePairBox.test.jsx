@@ -61,4 +61,10 @@ describe("ExamineePairBox Testing", () => {
 		expect(screen.getByTestId("PairNumberId")).toHaveTextContent(testPairNumber)
 		expect(screen.getByTestId("ExamineePairBox")).toHaveStyle("background-color: " + testColorHexColor)
 	})
+
+	test("ExamineePairBox: should have a comment button", () => {
+		render(<ExamineePairBox id={"ExamineePairBox"}/>)
+		const examineePairBoxCommentButton = screen.getByTestId("examinee-pair-box-comment-button")
+		expect(examineePairBoxCommentButton).toBeInTheDocument()
+	})
 })

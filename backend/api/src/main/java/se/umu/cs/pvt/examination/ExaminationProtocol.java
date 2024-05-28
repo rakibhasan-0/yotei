@@ -19,6 +19,9 @@ public class ExaminationProtocol {
 
     @Column(nullable = false, name = "examination_protocol")
     private String examinationProtocol;
+
+    @Column(nullable = false, name = "belt_color")
+    private String beltColor;
     
     /**
      * Data constructor for ExaminationProtocol
@@ -43,5 +46,9 @@ public class ExaminationProtocol {
 
     public String getExaminationProtocol() {
         return examinationProtocol;
+    }
+
+    public String getBeltColor() {
+        return beltColor;
     }
 }

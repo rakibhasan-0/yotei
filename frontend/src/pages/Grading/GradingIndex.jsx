@@ -17,13 +17,12 @@ import PopupSmall from "../../components/Common/Popup/PopupSmall"
  * The grading create page.
  * Creates a new grading.
  * 
- * @author Team Pomegranate, Team Mango
+ * @author Team Pomegranate, Team Mango, Team Apelsin
  * @version 1.0
  * @since 2024-05-07
  */
 export default function GradingIndex() {
-	const [belts, setBelts] = useState([]) 
-	const [beltColors] = useState(["Gult", "Orange", "Grönt", "Blått", "Brunt"])
+	const [beltColors, setBeltColors] = useState([]) 
 	const [currentGradings, setCurrentGradings] = useState([])
 	const [finishedGradings, setFinishedGradings] = useState([])
 	const [loading, setLoading] = useState(true)
@@ -108,11 +107,11 @@ export default function GradingIndex() {
 	}
 
 	/**
-	 * GET belts from database. 
-	 * @returns all belts stored in the database. 
+	 * GET protocols from database. 
+	 * @returns all protocols stored in the database. 
 	 */
-	const fetchBelts = () => {
-		return fetch("/api/belts/all", {
+	const fetchProtocols = () => {
+		return fetch("/api/examination/examinationprotocol/all", {
 			method: "GET",
 			headers: { "token": token }
 		})
@@ -142,9 +141,9 @@ export default function GradingIndex() {
 	}
 
 	/**
-   *  Distribution current gradings and finished gradings for userid.  
-   * @param {json} gradings_data 
-   */
+     *  Distribution current gradings and finished gradings for userid.  
+     * @param {json} gradings_data 
+     */
 	function createLists(gradings_data) {
 		gradings_data.map(async (item) => {
 			const isCreatorInFinished = finishedGradings.some(grading => grading.creatorId === userId)
@@ -164,9 +163,25 @@ export default function GradingIndex() {
 	}
 
 	/**
-   * Checks if the user has no earlier gradings started or finished. 
-   * Otherwise sort it by dates.
-   */
+     * Parses examination protocol data to extract color maps.
+     * @param {Array} data Examination protocol data array.
+     * @returns {Array} Array of color maps containing id and hex properties.
+     */
+	const parseColorMaps = (data) => {
+		const colorMaps = {}
+		data.forEach(element => {
+			colorMaps[element.beltId] = {
+				beltId: element.beltId,
+				hex: `#${element.beltColor}`,
+			}
+		})
+		return colorMaps
+	}
+
+	/**
+     * Checks if the user has no earlier gradings started or finished. 
+     * Otherwise sort it by dates.
+     */
 	useEffect(() => {
 
 		if(isCreateListDone) {
@@ -196,22 +211,13 @@ export default function GradingIndex() {
 			try {
 				setFinishedGradings([])
 				setCurrentGradings([])
-				const [belt_data, gradings_data] = await Promise.all([
-					fetchBelts(),
+				const [protocols_data, gradings_data] = await Promise.all([
+					fetchProtocols(),
 					fetchGradings()
 				])
-				
-				const filteredColors = belt_data.filter(item => beltColors.includes(item.name))
-				const colorMaps = {}
-				filteredColors.forEach(element => {
-					if(element.child === false) {
-						colorMaps[element.id] = {
-							name: element.name,
-							hex: `#${element.color}`,
-						}
-					}
-				})
-				setBelts(colorMaps)
+
+				const colorMaps = parseColorMaps(protocols_data)
+				setBeltColors(colorMaps)
 				setLoading(false)
 				createLists(gradings_data)
 
@@ -240,8 +246,8 @@ export default function GradingIndex() {
 									key={index}
 									width={"100%"}
 									
-									onClick={() => handleNavigation(grading.gradingId, grading.step, belts[grading.beltId]?.hex)}
-									color={belts[grading.beltId]?.hex}
+									onClick={() => handleNavigation(grading.gradingId, grading.step, beltColors[grading.beltId]?.hex)}
+									color={beltColors[grading.beltId]?.hex}
 								>
 								
 									<div style={{ display: "flex", alignItems: "center", width: "100%", position: "relative" }}>

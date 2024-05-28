@@ -173,7 +173,6 @@ export default function DuringGrading() {
 			try {
 				const response = await fetch("/api/examination/examinee/all", {headers: {"token": token}})
 				if (response.status === 404) {
-					console.log("404")
 					return
 				}
 				if (!response.ok) {
@@ -262,7 +261,7 @@ export default function DuringGrading() {
 	 */
 	const examineeClick = async (newState, technique, pairIndex, buttonId) => {
 
-		console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}, with new state ${newState}`)
+		//console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}, with new state ${newState}`)
 		// Check what state the button is in and send the proper information to DB.
 		let examinee_clicked = buttonId.endsWith("left") ? pairs[pairIndex].leftId : pairs[pairIndex].rightId
 		await addExamineeResult(examinee_clicked, `${technique}`, newState)
@@ -683,7 +682,6 @@ export default function DuringGrading() {
 	async function fetchGrading() {
 		const response = await fetch("/api/examination/all", {headers: {"token": token}})
 		if (response.status === 404) {
-			console.log("404")
 			return
 		}
 		if (!response.ok) {
@@ -703,7 +701,6 @@ export default function DuringGrading() {
 	async function fetchProtocol(grading) {
 		const response = await fetch("/api/examination/examinationprotocol/all", { headers: { "token": token } })
 		if (response.status === 404) {
-			console.log("404")
 			return
 		}
 		if (!response.ok) {
