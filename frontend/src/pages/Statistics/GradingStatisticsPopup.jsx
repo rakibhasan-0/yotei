@@ -28,7 +28,6 @@ export default function GradingStatisticsPopup({ id, groupID, belts, datesFrom, 
 	const [newBelts, setNewBelts] = useState([])
 	const [data, setData] = useState([])
 	const { token } = useContext(AccountContext)
-	
 
 	useEffect(() => {
 		if (belts.length > 0) {
@@ -72,8 +71,8 @@ export default function GradingStatisticsPopup({ id, groupID, belts, datesFrom, 
 			fetchGroupGradingProtocol()
 		}
 	}, [beltID])
-
 	
+	// Finds and sets the selected belts ids for the chosen protocol
 	useEffect(() => {
 		if (chosenProtocol) {
 			const index = protocols.findIndex(p => p === chosenProtocol)
@@ -84,14 +83,19 @@ export default function GradingStatisticsPopup({ id, groupID, belts, datesFrom, 
 		}
 	}, [chosenProtocol])
 
-
+	/**
+	 * Completes the url for the api call to retrieve the next belt
+	 * 
+	 * @param baseUrl the base url to which numbers will be appended
+	 * @param numbers the numbers added to the base url
+	 */
 	function addNumbersToUrl(baseUrl, numbers, key = "beltId") {
 		const params = new URLSearchParams()
 		numbers.forEach(num => params.append(key, num))
 		return `${baseUrl}?${params.toString()}`
 	}
-	
 
+	// Toggles popups visibility
 	const togglePopup = () => {
 		setShowPopup(!showPopup)
 	}
@@ -116,7 +120,6 @@ export default function GradingStatisticsPopup({ id, groupID, belts, datesFrom, 
 				const json = await response.json()
 				setNewBelts(json)
 				setProtocols(json.map(belt => belt.name))
-				
 			} else if (response.status === 204) {
 				setProtocols([])
 			} else {
@@ -128,9 +131,6 @@ export default function GradingStatisticsPopup({ id, groupID, belts, datesFrom, 
 		} finally {
 			setLoading(false)
 		}
-	
-
-
 	}
 
 	useEffect(() => {
