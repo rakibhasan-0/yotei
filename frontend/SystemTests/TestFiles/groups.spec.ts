@@ -28,7 +28,10 @@ test.describe('Groups test', () => {
       endDate: '2025-06-01',
       days: [ tuesday, wednesday ],
       // 'adult-1', 'adult-2', 'adult-3', 
-      beltIds: ['adult-Vitt-checkbox', 'adult-Gult-checkbox', 'adult-Orange-checkbox', 'adult-Grönt-checkbox', 'adult-Blått-checkbox', 'adult-Brunt-checkbox', 'adult-Svart-checkbox', 'child-Gult-checkbox', 'child-Orange-checkbox', 'child-Grönt-checkbox', 'inverted-Gult-checkbox', 'inverted-Orange-checkbox', 'inverted-Grönt-checkbox']
+      beltIds: ['adult-Vitt-checkbox', 'adult-Gult-checkbox', 'adult-Orange-checkbox', 'adult-Grönt-checkbox', 
+                'adult-Blått-checkbox', 'adult-Brunt-checkbox', 'adult-Svart-checkbox', 'adult-2\\ Dan-checkbox',
+                'adult-3\\ Dan-checkbox', 'child-Gult-checkbox', 'child-Orange-checkbox', 'child-Grönt-checkbox',
+                'inverted-Gult-checkbox', 'inverted-Orange-checkbox', 'inverted-Grönt-checkbox']
     }
 
     // Create a group and assert that it was done successfully
