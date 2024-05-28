@@ -16,8 +16,7 @@ import {canHandleGradings, isAdminUser, setError as setErrorToast} from "../../u
  */
 export default function GradingCreate() {
 
-	const [beltColors] = useState(["Gult", "Orange", "Grönt", "Blått", "Brunt"])
-	const [belts, setBelts] = useState([]) 
+	const [beltColors, setBeltColors] = useState([]) 
 	const [loading, setLoading] = useState(true)
 	const context = useContext(AccountContext)
 	const { token, userId } = context
@@ -91,7 +90,7 @@ export default function GradingCreate() {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const response = await fetch("/api/belts/all", { headers: { "token": token } })
+				const response = await fetch("/api/examination/examinationprotocol/all", { headers: { "token": token } })
 				if (response.status === 404) {
 					return
 				}
@@ -99,21 +98,13 @@ export default function GradingCreate() {
 					setLoading(false)
 					throw new Error("Kunde inte hämta bälten")
 				}
-				const json = await response.json()
+				const data = await response.json()
 				setLoading(false)
-				const filteredColors = json.filter(item => beltColors.includes(item.name))
-				const colorMaps = {}
-
-				filteredColors.forEach(element => {
-					if(element.child === false && element.inverted === false) {
-						colorMaps[element.name] = {
-							id: element.id,
-							hex: `#${element.color}`,
-						}
-					}
-				})
-				setBelts(colorMaps)
-
+                const colorMaps = data.map(element => ({
+                    id: element.beltId,
+                    hex: `#${element.beltColor}`
+                }));
+				setBeltColors(colorMaps)
         
 			} catch (ex) {
 				setErrorToast("Kunde inte hämta bälten")
@@ -136,16 +127,16 @@ export default function GradingCreate() {
 			</div>
 			{loading ? <Spinner /> : ( 
 				<div>
-					{beltColors.map((color, index) => (
+					{beltColors.map((belt, index) => (
 						<BeltButton
-							id={color}
-							key={color}
+							id={belt.id}
+							key={belt.id}
 							width={"100%"}
-							onClick={() => createGrading(belts[color].id, belts[color].hex)}
-							color={belts[color].hex}
+							onClick={() => createGrading(belt.id, belt.hex)}
+							color={belt.hex}
 						
 						>
-							<h2>{`${5 - index} KYU ${color.toUpperCase()} BÄLTE`} </h2>
+							<h2>{`${5 - index} KYU BÄLTE`} </h2>
 						</BeltButton>
 					))}
 				</div>

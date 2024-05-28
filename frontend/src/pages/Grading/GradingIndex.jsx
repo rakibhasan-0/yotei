@@ -202,7 +202,6 @@ export default function GradingIndex() {
 
 				const colorMaps = {}
 				protocols_data.forEach(element => {
-                    console.log('Processing element:', element);
 					colorMaps[element.beltId] = {
 							beltId: element.beltId,
 							hex: `#${element.beltColor}`,
