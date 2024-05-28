@@ -49,20 +49,20 @@ export default function WorkoutFormComponent({ callback, state }) {
 	//const hasPreviousState = location.key !== "default"
 	const [showPopup, setShowPopup] = useState(false)
 	const [isBlocking, setIsBlocking] = useState(false)
-
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const { workoutId } = useParams()
 
-	const blocker = useBlocker(() => {
-		if (isBlocking) {
-			setShowPopup(true)
-			return true
-		}
-		return false
-	})
+    const blocker = useBlocker(() => {
+        if (isBlocking && !isSubmitting) {
+            setShowPopup(true)
+            return true
+        }
+        return false
+    })
 
-	useEffect(() => {
-		setIsBlocking(true)
-	})
+    useEffect(() => {
+        setIsBlocking(true)
+    }, [])
 	
 	/**
 	 * Sets the title of the page.
@@ -89,22 +89,27 @@ export default function WorkoutFormComponent({ callback, state }) {
 	 * @param {*} event
 	 */
 	function handleSubmit(event) {
-		const form = event.currentTarget
-		event.preventDefault()
+        const form = event.currentTarget;
+        event.preventDefault();
 
-		if (form.checkValidity() === false) {
-			event.stopPropagation()
-		} else if (
-			workoutCreateInfo.data.activityItems.length == 0 &&
-			!acceptActivities
-		) {
-			setAcceptActivities(true)
-		} else {
-			callback()
-		}
+        if (form.checkValidity() === false) {
+            event.stopPropagation();
+        } else if (
+            workoutCreateInfo.data.activityItems.length == 0 &&
+            !acceptActivities
+        ) {
+            setAcceptActivities(true);
+        } else {
+            setIsSubmitting(true); // Temporarily disable the blocker
+            setIsBlocking(false); // Disable blocking
+            callback().finally(() => {
+                setIsSubmitting(false); // Re-enable the blocker
+                setIsBlocking(true); // Re-enable blocking
+            });
+        }
 
-		setValidated(true)
-	}
+        setValidated(true);
+    }
 
 	/**
 	 * This function is called when the "go back" button is pressed.
