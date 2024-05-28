@@ -178,11 +178,12 @@ export default function GradingDeviations() {
 			}
 			const json = await response.json()
 			for (let i = 0; i < json.length; i++) {
-				if (json[i]["examinee_1"].id == userId || json[i]["examinee_2"].id == userId) {
-					const response2 = await fetch("/api/examination/comment/pair/all/" + json[i]["pair_id"], requestOptions).catch(() => {
-						setError("Serverfel: Kunde inte ansluta till servern.")
-						return
-					})
+				const examinee1 = json[i]["examinee_1"]
+				const examinee2 = json[i]["examinee_2"]
+
+				if ((examinee1 && examinee1.id === userId) || (examinee2 && examinee2.id === userId)) {
+					const response2 = await fetch("/api/examination/comment/pair/all/" + json[i]["pair_id"], requestOptions)
+					
 					if (response2.status != HTTP_STATUS_CODES.OK) {
 						setError("Kunde inte hämta par-kommentarer. Felkod: " + response2.status)
 						return
