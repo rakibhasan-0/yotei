@@ -38,11 +38,6 @@ test("Should have correct id in DOM", async () => {
 	expect(elem.id).toEqual("510")
 })
 
-
-
-// Istället för att kolla drop-down så behöver vi kolla pop-up, de heter "popup-list-item-tech"
-// och "popup-list-item-exer". Hur kollar man pop-ups?
-
 test("Should display pop-up when clicking on a technique in activity list", async () => {
 	// Arrange
 	const id = 21
@@ -65,7 +60,6 @@ test("Should display pop-up when clicking on a technique in activity list", asyn
 			<WorkoutActivityListItem id={id} activity={activity} index={1}/>
 		</BrowserRouter>
 	)
-
 
 	// Act
 	const linkElem = screen.getByRole("link")
@@ -111,6 +105,7 @@ test("Should display pop-up when clicking on an exercise in activity list", asyn
 		</BrowserRouter>
 	)
 
+	// Act
 	const linkElem = screen.getByRole("link")
 	fireEvent.click(linkElem)
 
@@ -128,17 +123,6 @@ test("Should display pop-up when clicking on an exercise in activity list", asyn
 	// check so close button works
 	fireEvent.click(buttonElem)
 	expect(popupElem).not.toBeInTheDocument()
-
-	/*
-	// Act
-	const toggleElem = screen.getByRole("optional-toggle")
-	fireEvent.click(toggleElem)
-	const descElem = screen.queryByRole("description-div")
-
-	// Assert
-	expect(toggleElem).toHaveClass("toggleIcon")
-	expect(descElem).toHaveTextContent("Exercise description!")
-	*/
 
 })
 
