@@ -33,7 +33,13 @@ export class GroupsPage {
     group.name && await this.page.getByPlaceholder('Namn').fill(group.name)
     // TODO Choice of belt should be changed to be dynamically´.
     await this.page.locator('#form-belt-picker-dropdown').click()
-    await this.page.locator('#belt-adult-Vitt-checkbox').check()
+
+    if(group.beltIds) {
+      for(const belt of group.beltIds) {
+        await this.page.locator(`#belt-${belt}`).check()
+      }
+    }
+
     group.startDate && await this.page.locator('#start-date-picker').fill(group.startDate)
     group.endDate && await this.page.locator('#end-date-picker').fill(group.endDate)
 

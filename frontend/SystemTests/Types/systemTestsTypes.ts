@@ -82,7 +82,7 @@ export type Group = {
   endDate?: string,
   days?: GroupsDay[],
   time?: string,
-  belt?: Belt[]
+  beltIds?: Belt[]
 }
 
 // Used when creating a group and deciding days for sessions.
