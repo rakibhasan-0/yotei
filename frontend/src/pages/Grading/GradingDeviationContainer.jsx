@@ -66,15 +66,15 @@ function GradingDeviationContainer({ id, name, comment, pairComment, generalComm
 	 */
 	function getCommentNotification() {
 		return (
-				getNrComments() > 0 ? (
-					<div className={styles.outerCircle}>
-						<div className={styles.innerCircle}>
-							<p className={styles.counterText}>
-								{getNrComments()}
-							</p>
-						</div>
+			getNrComments() > 0 ? (
+				<div className={styles.outerCircle}>
+					<div className={styles.innerCircle}>
+						<p className={styles.counterText}>
+							{getNrComments()}
+						</p>
 					</div>
-				) : null
+				</div>
+			) : null
 		)
 	}
 
