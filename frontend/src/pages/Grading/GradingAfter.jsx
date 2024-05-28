@@ -143,12 +143,61 @@ export default function GradingAfter() {
 			
 		}
 	}
+	/**
+ 	* @author Team Pomagrade (2024-05-13)
+	 * Get method for the grading information. 
+	 * @returns JSON response
+	 */
+	function getGradingProtocol() {
+		return fetch(`/api/examination/grading/${gradingId}`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				"token": token },
+		})
+			.then(response => {
+				if (!response.ok) {
+					throw new Error("Network response was not ok")
+				}
+				return response.json()
+			})
+	}
+
+
+	/**
+	 * Update step for the grading process. 
+	 * @param {String} grading_data data on JSON format for a grading
+	 * @param {Int} newStepNum New step that should be updated to database
+	 * @returns status code
+	 */
+	function updateStep(grading_data, newStepNum) {
+		delete grading_data.examinees
+		grading_data.step = newStepNum
+
+		return fetch("/api/examination/grading", {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				"token": token },
+			body: JSON.stringify(grading_data),
+
+		})
+			.then(response => {
+				if (!response.ok) {
+					setLoading(false)
+					throw new Error("Network response was not ok")
+				}
+				return response.status
+
+			})
+	}
 
 	/**
 	 * Function to navigate to the start of the grading.
 	 */
 	const navigateToGrading = () => {
 		navigate("/grading")
+
     
 	}
     

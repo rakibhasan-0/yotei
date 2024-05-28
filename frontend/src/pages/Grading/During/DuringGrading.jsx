@@ -458,7 +458,7 @@ export default function DuringGrading() {
 
 	/**
 	 * Update step for the grading process. 
-	 * @param {String} grading_data 
+	 * @param {String} grading_data data on JSON format for a grading
 	 * @returns status code
 	 */
 	function updateStep(grading_data) {
