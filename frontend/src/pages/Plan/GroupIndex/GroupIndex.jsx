@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react"
-import { setError as setErrorToast, canCreateGroups, canEditGroups, isAdminUser } from "../../../utils"
+import { setError as setErrorToast, canCreateGroups, canEditGroups, isAdminUser, HTTP_STATUS_CODES } from "../../../utils"
 import { AccountContext } from "../../../context"
 import style from "./GroupIndex.module.css"
 import BeltBox from "../../../components/Plan/BeltBox"
@@ -18,6 +18,7 @@ import Spinner from "../../../components/Common/Spinner/Spinner"
  * @returns A group index page
  * @update Team Mango (2024-05-21) added new check for create group button to new user rights check.
  * Updated: 2024-05-06
+ * 		 	2024-05-28: Updated error handling with new HTTP code.
  */
 export default function GroupIndex() {
 	const [groups, setGroups] = useState([])
@@ -31,8 +32,7 @@ export default function GroupIndex() {
 		(async () => {
 			try {
 				const response = await fetch("/api/plan/all", { headers: { token } })
-				if (response.status === 404) {
-					//TODO should change this to be the case for code 200 or 204.
+				if (response.status === HTTP_STATUS_CODES.NO_CONTENT) {
 					//This code runs if there are no groups.
 					setGroupsEmpty(true) //Set a flag for the groups being empty.
 					setLoading(false) //Stop the page from loading.
