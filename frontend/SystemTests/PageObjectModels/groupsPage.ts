@@ -31,7 +31,7 @@ export class GroupsPage {
   async createGroup(group: Group) {
     await this.page.locator('.plus-icon').click()
     group.name && await this.page.getByPlaceholder('Namn').fill(group.name)
-    // Choice of belt should be changed to be dynamically´.
+    // TODO Choice of belt should be changed to be dynamically´.
     await this.page.locator('#form-belt-picker-dropdown').click()
     await this.page.locator('#belt-adult-Vitt-checkbox').check()
     group.startDate && await this.page.locator('#start-date-picker').fill(group.startDate)
@@ -52,8 +52,10 @@ export class GroupsPage {
    * @param name name of group
    */
   async deleteGroup(name: string) {
-    const parent = await this.page.getByText(`${name}`, { exact: true }).locator('..')
-    await parent.locator('#edit-group-button').click()
+    const groupContainer = await this.page.getByText(`${name}`, { exact: true }).locator('..')
+    const html = await groupContainer.innerHTML()
+    console.log(html)
+    await groupContainer.locator('#edit-group-button').click()
     await this.page.locator('#trashcan_button').click()
     await this.page.getByRole('button', { name: 'Ta bort grupp' }).click()
   }
