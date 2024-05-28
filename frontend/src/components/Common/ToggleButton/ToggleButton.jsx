@@ -31,10 +31,7 @@ export default function ToggleButton({isButtonToggled, onClick, id}) {
 		<button 
 			id = {id + "-toggleButton"} 
 			className={styles.toggleButton + " " + (toggled ? styles.toggled : "")}
-			onClick={() => { 
-				setToggled(!toggled)
-				onClick(!toggled)
-			}}
+			onClick={onClick}
 		>
 			<div className={styles.thumb}></div>
 		</button>

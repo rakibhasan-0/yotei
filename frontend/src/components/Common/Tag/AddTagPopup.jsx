@@ -213,14 +213,18 @@ export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAd
 			if (!response.ok) {
 				setError("Något gick fel vid hämtning av tagganvändning")
 			}
-			
-
 		} catch (error) {
 			setError("Något gick fel vid hämtning av tagganvändning")
 		}
-		suggested.find(tag => tag.id == id).name = text
-		newAddedTags.find(tag => tag.id == id).name = text
-		addedTags.find(tag => tag.id == id).name = text
+
+		updateTagName(id, text, suggested)
+		updateTagName(id, text, newAddedTags)
+		updateTagName(id, text, addedTags)
+	}
+
+	const updateTagName = (id, newName, tags) => {
+		const tag = tags.find(tag => tag.id === id)
+		if (tag) tag.name = newName
 	}
 
 	/**
