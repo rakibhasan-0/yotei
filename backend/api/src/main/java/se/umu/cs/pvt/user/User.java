@@ -46,47 +46,20 @@ public class User implements Serializable {
     private String password;
 
     /**
-     * The role for the user.
-     */
-    @Column(nullable = false, name = "user_role")
-    private Role userRole;
-
-    /**
      * Foreign key pointing to the role table
      */
     @Column(nullable = true, name = "role_id")
     private Long roleId;
 
     /**
-     * The different roles the user can have.
-     */
-    public enum Role {
-        USER(0), ADMIN(1), EDITOR(2);
-        private final int key;
-
-        Role(int key) {
-            this.key = key;
-        }
-
-        public int getKey() {
-            return this.key;
-        }
-
-        public static Role fromKey(int key) {
-            return Arrays.stream(Role.values()).filter((role) -> 
-                role.getKey() == key
-            ).findAny().orElse(null);
-        }
-    }
-
-    /**
      * Constructor without arguments, needed for springboot.
      */
     public User() {
     }
-
+    
     /**
      * User constructor with arguments. Hashes the user password.
+     * The users role will be set to null (i.e. they will have no role)
      * @param name The username
      * @param password The user password (plain text)
      * @throws InvalidPasswordException Thrown when the password is invalid and null
@@ -104,40 +77,13 @@ public class User implements Serializable {
 
         this.username = name;
         this.password = PasswordHash.hashPassword(password);
-        this.userRole = Role.USER;
-    }
-
-
-    /**
-     * User constructor with arguments. Hashes the user password.
-     * @param name The username
-     * @param password The user password (plain text)
-     * @param userRole The role of the user
-     * @throws InvalidPasswordException Thrown when the password is invalid and null
-     * @throws InvalidUserNameException Thrown when username is empty
-     * @throws NoSuchAlgorithmException Thrown when the hashing algorithm is not found
-     * @throws InvalidKeySpecException  Thrown when the key generation fails
-     * @see Role
-     */
-    public User(String name, String password, int userRole) throws InvalidPasswordException, InvalidUserNameException,
-            NoSuchAlgorithmException, InvalidKeySpecException {
-
-        if (name.isEmpty()) {
-            throw new InvalidUserNameException("Name may not be empty!");
-        } else if (password == null || password.isEmpty()) {
-            throw new InvalidPasswordException("Password may not be empty!");
-        }
-
-        setUsername(name);
-        setPassword(password);
-        setUserRole(userRole);
+        this.roleId = null;
     }
 
     /**
      * User constructor with arguments. Hashes the user password.
      * @param name The username
      * @param password The user password (plain text)
-     * @param userRole The role of the user
      * @param roleId The id of the role to give the user
      * @throws InvalidPasswordException Thrown when the password is invalid and null
      * @throws InvalidUserNameException Thrown when username is empty
@@ -145,7 +91,7 @@ public class User implements Serializable {
      * @throws InvalidKeySpecException  Thrown when the key generation fails
      * @see Role
      */
-    public User(String name, String password, int userRole, Long roleId) throws InvalidPasswordException, InvalidUserNameException,
+    public User(String name, String password, Long roleId) throws InvalidPasswordException, InvalidUserNameException,
             NoSuchAlgorithmException, InvalidKeySpecException {
 
         if (name.isEmpty()) {
@@ -156,7 +102,6 @@ public class User implements Serializable {
 
         setUsername(name);
         setPassword(password);
-        setUserRole(userRole);
         setRoleId(roleId);
     }
 
@@ -205,20 +150,6 @@ public class User implements Serializable {
 
     public Long getUserId() {
         return userId;
-    }
-
-
-    public void setUserRole(int role) {
-        setUserRole(Role.fromKey(role));
-    }
-
-    public void setUserRole(Role role) {
-        this.userRole = role;
-    }
-
-    
-    public Role getUserRole() {
-        return this.userRole;
     }
 
     public void setRoleId(Long id) {

@@ -3,7 +3,7 @@ import { unstable_useBlocker as useBlocker } from "react-router"
 import { useEffect, useState, useContext, useCallback } from "react"
 import { Trash } from "react-bootstrap-icons"
 import { AccountContext } from "../../context"
-import { setError as setErrorToast } from "../../utils"
+import { isAdminUser, setError as setErrorToast } from "../../utils"
 
 import Divider from "../../components/Common/Divider/Divider"
 import InputTextFieldBorderLabel from "../../components/Common/InputTextFieldBorderLabel/InputTextFieldBorderLabel"
@@ -26,6 +26,7 @@ import RoleDelete from "../../components/Admin/Delete/RoleDelete"
 
 export default function RoleEdit() {
 	const hasPreviousState = location.key !== "default"
+	const context = useContext(AccountContext)
 	const { role_id } = useParams()
 	const { token } = useContext(AccountContext)
 
@@ -43,7 +44,9 @@ export default function RoleEdit() {
 	const [allMap, setAllMap] = useState(new Map())
 	const [selectedMap, setSelectedMap] = useState(new Map())
 	const [firstSelectedMap, setFirstSelectedMap] = useState(new Map())
-	
+
+	// Filter out admin permissions if the role is not admin (starts mapping from index 1)
+	const shouldRenderAdminPerm = roleName !== "admin" ? permissions.slice(1) : permissions
 
 	const blocker = useBlocker(() => {
 		if (isBlocking) {
@@ -137,7 +140,6 @@ export default function RoleEdit() {
 					throw new Error("Kunde inte hämta all rättigheter")
 				}
 				const json = await response.json()
-				console.log(json)
 
 				const response2 = await fetch(`/api/permissions/role/${role_id}`, {
 					method: "GET",
@@ -174,6 +176,11 @@ export default function RoleEdit() {
 			}
 		})()
 	}, [token])
+
+	if (!isAdminUser(context)) {
+		window.location.replace("/404")
+		return null
+	}
 	
 	if (error) {
 		return <ErrorState message={error} onBack={() => navigate("/admin")} />
@@ -249,7 +256,7 @@ export default function RoleEdit() {
 
 			{loading ? <Spinner /> : (
 				<div>
-					{ permissions.map((permission, index) => (
+					{ shouldRenderAdminPerm.map((permission, index) => (
 						<PermissionCard
 							item={permission.permissionName}
 							key={index}

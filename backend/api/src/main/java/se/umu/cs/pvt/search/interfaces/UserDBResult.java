@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.io.Serializable;
-import se.umu.cs.pvt.user.User.Role;
 
 /**
  * This entity represents the object returned
@@ -22,15 +21,15 @@ public class UserDBResult implements Serializable {
     @Column(nullable = false, name = "username")
     private String name;
 
-    @Column(nullable = false, name = "user_role")
-    private String role;
+    @Column(nullable = true, name = "role_id")
+    private Long roleId;
 
     protected UserDBResult() {}
 
-    public UserDBResult(Long userId, String name, String role) {
+    public UserDBResult(Long userId, String name, Long roleId) {
         this.userId = userId;
         this.name = name;
-        this.role = role;
+        this.roleId = roleId;
     }
 
     public Long getId() {
@@ -41,7 +40,7 @@ public class UserDBResult implements Serializable {
         return name;
     }
 
-    public String getRole() {
-        return Role.values()[Integer.parseInt(role)].toString();
+    public Long getRoleId() {
+        return roleId;
     }
 }
