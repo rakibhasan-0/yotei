@@ -91,4 +91,7 @@ export type GroupsDay = {
   time?: string,
 }
 
-export type Belt = 'adult-Vitt-checkbox' | 'adult-Gult-checkbox' | 'adult-Orange-checkbox' | 'adult-Grönt-checkbox' | 'adult-Blått-checkbox' | 'adult-Brunt-checkbox' | 'adult-Svart-checkbox' | 'adult-1' | 'adult-2' | 'adult-3' | 'child-Gult-checkbox' | 'child-Orange-checkbox' | 'child-Grönt-checkbox' | 'inverted-Gult-checkbox' | 'inverted-Orange-checkbox' | 'inverted-Grönt-checkbox'
+export type Belt = 'adult-Vitt-checkbox' | 'adult-Gult-checkbox' | 'adult-Orange-checkbox' | 'adult-Grönt-checkbox' | 
+                   'adult-Blått-checkbox' | 'adult-Brunt-checkbox' | 'adult-Svart-checkbox' | 'adult-2\\ Dan-checkbox' |
+                   'adult-3\\ Dan-checkbox' | 'child-Gult-checkbox' | 'child-Orange-checkbox' | 'child-Grönt-checkbox' |
+                   'inverted-Gult-checkbox' | 'inverted-Orange-checkbox' | 'inverted-Grönt-checkbox'
