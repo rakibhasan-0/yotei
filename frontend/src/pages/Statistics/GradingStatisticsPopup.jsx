@@ -26,7 +26,6 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 	const [protocols, setProtocols] = useState([])
 	const [chosenProtocol, setChosenProtocol] = useState("")
 	const [beltID, setBeltID] = useState(null)
-	const [nextBeltId, setNextBeltId] = useState(null)
 	const [loading, setLoading] = useState(false)
 	const [newBelts, setNewBelts] = useState([])
 	const [data, setData] = useState([])
@@ -79,7 +78,7 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 	
 	useEffect(() => {
 		if (chosenProtocol) {
-			const index = protocols.findIndex(p => p === chosenProtocol);
+			const index = protocols.findIndex(p => p === chosenProtocol)
 			const selectedBelt = newBelts[index]
 			if (selectedBelt) {
 				setBeltID(selectedBelt.id)
@@ -88,10 +87,10 @@ export default function GradingStatisticsPopup({ id, groupID, belts,datesFrom,da
 	}, [chosenProtocol])
 
 
-	function addNumbersToUrl(baseUrl, numbers, key = 'beltId') {
-		const params = new URLSearchParams();
-		numbers.forEach(num => params.append(key, num));
-		return `${baseUrl}?${params.toString()}`;
+	function addNumbersToUrl(baseUrl, numbers, key = "beltId") {
+		const params = new URLSearchParams()
+		numbers.forEach(num => params.append(key, num))
+		return `${baseUrl}?${params.toString()}`
 	}
 	
 
