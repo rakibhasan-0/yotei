@@ -48,6 +48,13 @@
 	
 }
 
+.sc23-session-container-header-undefined {
+	display: flex;
+	flex-direction: column;
+	border: 0;
+	background-color: white  ;
+}
+
 .sc23-session-header-clickable {
 	min-height: 30px;
 	cursor: pointer;
