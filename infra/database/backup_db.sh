@@ -5,8 +5,8 @@ SAVELOCALLY=false                 # Don't save local copy by default
 
 while getopts ':ho:l:' opt; do
     case "$opt" in
-	o) # Output filename
-	    OUTFILE=${OPTARG} # Output file = the script argument (will save in container)
+	o) # Output filename (in container)
+	    OUTFILE=${OPTARG}
 	    ;;
 	l) # Local copy filename
 	    SAVELOCALLY=true
