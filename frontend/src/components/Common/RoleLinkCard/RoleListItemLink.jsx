@@ -1,4 +1,4 @@
-import styles from "./RoleListItem.module.css"
+import styles from "./RoleListItemLink.module.css"
 import { ChevronRight } from "react-bootstrap-icons"
 import { Link } from "react-router-dom"
 /**
@@ -27,8 +27,8 @@ import { Link } from "react-router-dom"
 export default function RoleListItemLink({ item, detailURL, id, index }) {
 
 	return (
-		<div className={styles["role-list-container"]} data-testid="RoleListItemLink" id={"RoleListItemLink-" + item}>
-			<div className={styles["role-list-header"]} style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
+		<div className={styles["role-list-link-container"]} data-testid="RoleListItemLink" id={"RoleListItemLink-" + item}>
+			<div className={styles["role-list-link-header"]} style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
 				<Link to={detailURL + id} data-testid="RoleListItemLink-link" style={{width: "100%"}}>
 					<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
 						<div style={{display: "flex", alignItems: "center"}}>
