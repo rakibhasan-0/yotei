@@ -41,7 +41,7 @@ const WarningPopup = ({type,show,setShow}) => {
 		name === "techniques" ? setSuccess("Export av tekniker lyckades!") : setSuccess("Export av övningar lyckades!") 
 	}
 
-	const initialPopupStateTechniques = {
+	const initialPopupStateExercises = {  
 		id : "warning-exercise",
 		onClick : () => export_("/api/export/exercises", "exercises"),
 		popupText : "Du kommer nu ladda ned alla övningar i JSON format",
@@ -49,7 +49,7 @@ const WarningPopup = ({type,show,setShow}) => {
 		backText : "återvänder"
 	}
 	
-	const initialPopupStateExercises = {
+	const  initialPopupStateTechniques = {
 		id : "warning-technique",
 		onClick : () => export_("/api/export/techniques", "techniques"),
 		popupText : "Du kommer nu ladda ned alla tekniker i JSON format",
