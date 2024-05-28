@@ -17,25 +17,6 @@ import { toast } from "react-toastify"
  */
 
 /**
- * canEditSession() - Check for if this user can edit the given session or not.
- * 					  IMPORTANT: The creatorId seems to be based on the group id of the group connected to the session and should be changed!
- * 								 Solution idea: Add a userId to the sessions in the database.
- * @params [int] creatorIdOfGroup - The user id for the group connected to the session to be checked against the userId.
- *                                  That is, the user id of the user who creted the group connected to this session.
- * @params context - AccountContext with info about user.
- * @returns true if the user has permission to edit all sessions, or if the user has permission to edit their own sessions and the creatorId of
- * 		    the session is the same as the userId. Otherwise false is returned.
- */
-export function canEditSessions(context, creatorIdOfGroup) {
-	if (!context.permissions) { //Safety check for undefined which is always false.
-		return false
-	}
-	return (context.permissions.includes(USER_PERMISSION_CODES.SESSION_ALL) ||
-	(context.permissions.includes(USER_PERMISSION_CODES.SESSION_OWN) &&
-	(context.userId === creatorIdOfGroup)))
-}
-
-/**
  * isAdminUser() - Checks if a user has the permission to edit users.
  * @param {} context AccountContext from user.
  * @returns True if user is alloowed to edit users, else false. 
