@@ -206,10 +206,6 @@ export default function Statistics() {
 		setFilter({ ...filter, [variableName]: value })
 	}
 
-	// Resets the order icon to ascending order. Called in the useEffect when the group activities are fetched.
-	function resetOrderIcon() {
-		setOrder(false)
-	}
 
 	// that function is responsible for changing the order of the group activities.
 	// initially, the order is increasing, when the user clicks on the button, the order will be descending.
