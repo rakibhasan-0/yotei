@@ -170,7 +170,6 @@ export default function GradingAfter() {
 					setLoading(false)
 					throw new Error("Network response was not ok")
 				}
-				navigate("/grading")
 				return response.status
 
 			})
@@ -180,15 +179,18 @@ export default function GradingAfter() {
 	/**
 	 * Function to navigate to the start of the grading.
 	 */
-	function saveAndExitGrading(){
-		updateStep(4)
+	async function saveAndExitGrading(){
+		await updateStep(4)
+		navigate("/grading")
+
 	}
     
 	/**
 	 * Function to navigate back to the examination page.
 	 */
-	const navigateBack = () => {
+	const navigateBack = async () => {
 		if (grading.step === 3){
+			await updateStep(2)
 			navigate(`/grading/${gradingId}/2`)
 		} 
 		else{
