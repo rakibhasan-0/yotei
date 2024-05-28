@@ -279,7 +279,7 @@ export default function PlanIndex() {
 					setSelectedPlans(plans.filter(plan => filterCookie.plans.includes(plan.id)).map(p => p.id))
 				}
 			})
-			.catch((e) => {
+			.catch(() => {
 				setError("Kunde inte ansluta till servern.")
 			})
 	}
