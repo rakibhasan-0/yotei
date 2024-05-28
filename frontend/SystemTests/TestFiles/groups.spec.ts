@@ -2,6 +2,12 @@ import { test, expect } from '../fixtures'
 import { GroupsPage } from '../PageObjectModels/groupsPage'
 import { GroupsDay, Group } from 'Types/systemTestsTypes'
 
+/**
+ *  Tests related to the page /groups.  
+ *  @author Team Mango (Group 4)
+ *  @since 2024-05-28
+ *  @version 1.0
+ */
 test.describe('Groups test', () => {
   let groupsPage
   
