@@ -6,14 +6,35 @@ import { Examinee, Comment } from '../Types/systemTestsTypes'
 
 export class DuringGradingPage {
     readonly page: Page
-    readonly url: string = '/grading/:gradingId:/2'
+
 
     public constructor(page: Page) {
         this.page = page
     }
 
-    async visit() {
-        await this.page.goto(this.url)
+    async visit(url: string) {
+        await this.page.goto(url)
+    }
+
+    async createGrading() {
+        await this.page.goto('/grading/create');
+        await this.page.getByRole('button', { name: 'KYU GULT BÄLTE' }).click();
+        await this.page.getByPlaceholder('Lägg till ny deltagare').click();
+        await this.page.getByPlaceholder('Lägg till ny deltagare').fill('TestPerson1');
+        await this.page.getByPlaceholder('Lägg till ny deltagare').press('Enter');
+        await this.page.waitForTimeout(1000);
+        await this.page.getByPlaceholder('Lägg till ny deltagare').fill('TestPerson2');
+        await this.page.getByPlaceholder('Lägg till ny deltagare').press('Enter');
+        await this.page.waitForTimeout(1000);
+        await this.page.getByPlaceholder('Lägg till ny deltagare').fill('TestPerson3');
+        await this.page.getByPlaceholder('Lägg till ny deltagare').press('Enter');
+        await this.page.waitForTimeout(1000);
+        await this.page.getByPlaceholder('Lägg till ny deltagare').fill('TestPerson4');
+        await this.page.getByPlaceholder('Lägg till ny deltagare').press('Enter');
+        await this.page.waitForTimeout(1000);
+        await this.page.getByRole('button', { name: 'Fortsätt' }).click();
+        await this.page.getByRole('button', { name: 'Ja' }).click();
+
     }
 
     async addGroupComment(comment: Comment) {
@@ -39,18 +60,24 @@ export class DuringGradingPage {
     }
 
     async setPassResultForExaminee(examinee: Examinee) {
-        await this.page.locator('div').filter({ hasText: examinee.name }).nth(2).click();
+        await this.page.waitForTimeout(1000);
+        await this.page.getByText(examinee.name, { exact: true }).first().click();
     }
 
     async setFailResultForExaminee(examinee: Examinee) {
-        await this.page.locator('div').filter({ hasText: examinee.name }).nth(2).click();
-        await this.page.locator('div').filter({ hasText: examinee.name }).nth(2).click();
+        await this.page.waitForTimeout(1000);
+        await this.page.getByText(examinee.name, { exact: true }).first().click();
+        await this.page.waitForTimeout(1000);
+        await this.page.getByText(examinee.name, { exact: true }).first().click();
     }
 
     async setDefaultResultForExaminee(examinee: Examinee) {
-        await this.page.locator('div').filter({ hasText: examinee.name }).nth(2).click();
-        await this.page.locator('div').filter({ hasText: examinee.name }).nth(2).click();
-        await this.page.locator('div').filter({ hasText: examinee.name }).nth(2).click();
+        await this.page.waitForTimeout(1000);
+        await this.page.getByText(examinee.name, { exact: true }).first().click();
+        await this.page.waitForTimeout(1000);
+        await this.page.getByText(examinee.name, { exact: true }).first().click();
+        await this.page.waitForTimeout(1000);
+        await this.page.getByText(examinee.name, { exact: true }).first().click();
     }
 
     async moveToNextTechnique() {
@@ -70,5 +97,11 @@ export class DuringGradingPage {
     async moveBackFromRandori() {
         await this.page.getByRole('button', { name: 'Tekniker', exact: true }).click();
         await this.page.getByRole('button', { name: 'Tillbaka till 5. Stryptag' }).click();
+    }
+
+    async getCurrentUrl(): Promise<string> {
+        const parts = this.page.url().split('/')
+        const gradingId = parts[4];
+        return gradingId
     }
 }

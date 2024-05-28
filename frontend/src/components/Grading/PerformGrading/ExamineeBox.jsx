@@ -254,7 +254,7 @@ export default function ExamineeBox({
 	}
 
 	return (
-		<div id={id} className={styles.examineeContainer} style={{ backgroundColor: color }}>
+		<div id={id} data-testid={examineeName+"systest"} className={styles.examineeContainer} style={{ backgroundColor: color }}>
 			<fieldset className={styles.examineeFieldset}>
 				<div 
 					className={styles.examineeName}
