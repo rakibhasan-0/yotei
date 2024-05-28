@@ -69,15 +69,15 @@ function TechniqueCard({ technique, checkBox, id, popUp, techniqueInProtocol}) {
 			id={id} 
 			onClick={setTechnique}>
 			{technique.type && technique.type == "exercise" ? 
-			<PopupMini title = {technique.name} id = "pop-up-id-tech" isOpen = {isOpen} setIsOpen = {setIsOpen} isNested = {true}> 
-				<ExerciseDetailMini id = {id}>
-				</ExerciseDetailMini>
-			</PopupMini>
-			:
-			<PopupMini title = {technique.name} id = "pop-up-id-tech" isOpen = {isOpen} setIsOpen = {setIsOpen} isNested = {true}> 
-				<TechniqueDetailMini id = {id}>
-				</TechniqueDetailMini>
-			</PopupMini>}
+				<PopupMini title = {technique.name} id = "pop-up-id-tech" isOpen = {isOpen} setIsOpen = {setIsOpen} isNested = {true}> 
+					<ExerciseDetailMini id = {id}>
+					</ExerciseDetailMini>
+				</PopupMini>
+				:
+				<PopupMini title = {technique.name} id = "pop-up-id-tech" isOpen = {isOpen} setIsOpen = {setIsOpen} isNested = {true}> 
+					<TechniqueDetailMini id = {id}>
+					</TechniqueDetailMini>
+				</PopupMini>}
 			
 
 			{technique.type === "exercise" ? null : constructColor(technique)}
