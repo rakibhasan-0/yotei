@@ -305,7 +305,7 @@ public class TechniqueChainController {
 {
   "node_x_pos": 65,
   "node_y_pos": 44,
-  "nodeId": 17,
+  "node_id": 17,
   "techniqueWeaveId": 1
 }
      */
