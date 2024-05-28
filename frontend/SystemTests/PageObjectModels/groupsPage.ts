@@ -54,7 +54,6 @@ export class GroupsPage {
    */
   async deleteGroup(name: string) {
     const groupContainer = await this.page.getByText(`${name}`, { exact: true }).locator('..')
-    const html = await groupContainer.innerHTML()
     await groupContainer.locator('#edit-group-button').click()
     await this.page.locator('#trashcan_button').click()
     await this.page.getByRole('button', { name: 'Ta bort grupp' }).click()
