@@ -11,6 +11,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.*;
+import se.umu.cs.pvt.PermissionValidator;
 import se.umu.cs.pvt.exercise.Exercise;
 import se.umu.cs.pvt.exercise.ExerciseRepository;
 import se.umu.cs.pvt.tag.Tag;
@@ -103,14 +104,13 @@ public class WorkoutController {
             @PathVariable Long id) {
         int userId;
         Long userIdL;
-        String userRole;
+        List<Integer> permissions;
 
         try {
             DecodedJWT jwt = jwtUtil.validateToken(token);
             userId = jwt.getClaim("userId").asInt();
             userIdL = Long.valueOf(userId);
-            userRole = jwt.getClaim("role").asString();
-
+            permissions = jwt.getClaim("permissions").asList(Integer.class);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -121,7 +121,7 @@ public class WorkoutController {
         }
         WorkoutDetail workout = workoutOpt.get();
 
-        if (!userRole.equals("ADMIN")) {
+        if (!PermissionValidator.isAdmin(permissions)) {
             UserWorkout userWorkout = userWorkoutRepository.findByWorkoutIdAndUserId(id, userIdL);
             if (workout.getHidden() == true && (workout.getAuthor().getUserId() != userId && userWorkout == null)) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);

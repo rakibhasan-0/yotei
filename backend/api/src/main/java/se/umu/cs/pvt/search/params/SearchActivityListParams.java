@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * This class stores the urlQuery in attributes.
  *
- * @author Team Tomato 2024-05-20
+ * @author Team Tomato 2024-05-20, updated 2024-05-27
  * 
  */
 public class SearchActivityListParams {
@@ -17,6 +17,8 @@ public class SearchActivityListParams {
     private Boolean isAuthor;
     private Boolean isShared;
 	private String name;
+    private Long techniqueId;
+    private Long exerciseId;
 
     public SearchActivityListParams(Map<String, String> urlQuery){
         try {
@@ -36,6 +38,24 @@ public class SearchActivityListParams {
         }
         if(urlQuery.containsKey("isShared")){
             isShared = Boolean.parseBoolean(urlQuery.get("isShared"));
+        }
+        if(urlQuery.containsKey("techniqueId")){
+            if(urlQuery.get("techniqueId").contains("undefined") || urlQuery.get("techniqueId").contains("null")){
+                techniqueId = null;
+            }
+            else{
+                techniqueId = Long.parseLong(urlQuery.get("techniqueId"));
+            }
+            
+        }
+        if(urlQuery.containsKey("exerciseId")){
+            if(urlQuery.get("exerciseId").contains("undefined") || urlQuery.get("exerciseId").contains("null")){
+                exerciseId = null;
+            }
+            else{
+                exerciseId = Long.parseLong(urlQuery.get("exerciseId"));
+            }
+            
         }
 
     }
@@ -70,6 +90,22 @@ public class SearchActivityListParams {
 
     public Boolean getIsShared() {
         return isShared;
+    }
+
+    public boolean hasTecniqueId() {
+        return techniqueId != null;
+    }
+
+    public Long getTechniqueId() {
+        return techniqueId;
+    }
+
+    public boolean hasExerciseId() {
+        return exerciseId != null;
+    }
+
+    public Long getExerciseId() {
+        return exerciseId;
     }
 
     

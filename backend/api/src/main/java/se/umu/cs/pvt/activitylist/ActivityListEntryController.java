@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import se.umu.cs.pvt.PermissionValidator;
 import se.umu.cs.pvt.exercise.Exercise;
 import se.umu.cs.pvt.exercise.ExerciseRepository;
 import se.umu.cs.pvt.technique.Technique;
@@ -83,7 +84,7 @@ public class ActivityListEntryController {
 
     private DecodedJWT jwt;
     private Long userIdL;
-    private String userRole;
+    private List<Integer> permissions;
 
     @Autowired
     private JWTUtil jwtUtil;
@@ -116,14 +117,14 @@ public class ActivityListEntryController {
         try {
             jwt = jwtUtil.validateToken(token);
             userIdL = jwt.getClaim("userId").asLong();
-            userRole = jwt.getClaim("role").asString();
+            permissions = jwt.getClaim("permissions").asList(Integer.class);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         Optional<ActivityList> result = listRepository.findById(entry.getListId());
         if (result.isPresent()) {
             ActivityList list = result.get();
-            if (list.getAuthor() == userIdL || userRole.equals("ADMIN")) {
+            if (list.getAuthor() == userIdL || PermissionValidator.isAdmin(permissions)) {
                 listEntryRepository.save(entry);
                 return new ResponseEntity<>(HttpStatus.OK);
             }
@@ -155,7 +156,7 @@ public class ActivityListEntryController {
         try {
             jwt = jwtUtil.validateToken(token);
             userIdL = jwt.getClaim("userId").asLong();
-            userRole = jwt.getClaim("role").asString();
+            permissions = jwt.getClaim("permissions").asList(Integer.class);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -163,7 +164,7 @@ public class ActivityListEntryController {
             Optional<ActivityList> opt_list_result = listRepository.findById(entry.getListId());
             if (opt_list_result.isPresent()) {
                 ActivityList list_result = opt_list_result.get();
-                if (list_result.getAuthor() == userIdL || userRole.equals("ADMIN")) {
+                if (list_result.getAuthor() == userIdL || PermissionValidator.isAdmin(permissions)) {
                     ActivityListEntry uniqueEntry = new ActivityListEntry(entry.getDuration(), entry.getListId(), entry.getExerciseId(), entry.getTechniqueId());
                     listEntryRepository.save(uniqueEntry);
                 } else {
@@ -177,7 +178,7 @@ public class ActivityListEntryController {
             Optional<ActivityList> result = listRepository.findById(id);
             if (result.isPresent()) {
                 ActivityList list = result.get();
-                if (list.getAuthor() == userIdL || userRole.equals("ADMIN")) {
+                if (list.getAuthor() == userIdL || PermissionValidator.isAdmin(permissions)) {
                     ActivityListEntry uniqueEntry = new ActivityListEntry(entry.getDuration(), id, entry.getExerciseId(), entry.getTechniqueId());
                     listEntryRepository.save(uniqueEntry);
                 } else {
@@ -209,7 +210,7 @@ public class ActivityListEntryController {
         try {
             jwt = jwtUtil.validateToken(token);
             userIdL = jwt.getClaim("userId").asLong();
-            userRole = jwt.getClaim("role").asString();
+            permissions = jwt.getClaim("permissions").asList(Integer.class);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -220,7 +221,7 @@ public class ActivityListEntryController {
             Optional<ActivityList> listResult = listRepository.findById(entry.getListId());
             if (listResult.isPresent()) {
                 ActivityList list = listResult.get();
-                if (list.getAuthor() == userIdL || userRole.equals("ADMIN")) {
+                if (list.getAuthor() == userIdL || PermissionValidator.isAdmin(permissions)) {
                     listEntryRepository.delete(entry);
                     return new ResponseEntity<>(HttpStatus.OK);
                 }
@@ -253,14 +254,14 @@ public class ActivityListEntryController {
         try {
             jwt = jwtUtil.validateToken(token);
             userIdL = jwt.getClaim("userId").asLong();
-            userRole = jwt.getClaim("role").asString();
+            permissions = jwt.getClaim("permissions").asList(Integer.class);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         Optional<ActivityList> result = listRepository.findById(listId);
         if (result.isPresent()) {
             ActivityList list = result.get();
-            if (list.getAuthor() == userIdL || userRole.equals("ADMIN")) {
+            if (list.getAuthor() == userIdL || PermissionValidator.isAdmin(permissions)) {
                 List<ActivityListEntry> results = listEntryRepository.findAllByActivityListId(listId);
 
                 if (results.isEmpty()) {

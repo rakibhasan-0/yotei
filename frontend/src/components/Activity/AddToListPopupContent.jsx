@@ -57,6 +57,8 @@ export const AddToListPopupContent = ({ techExerID, setShowMorePopup, returnTo }
 			isAuthor: isAdminUser(context) ? false : true,
 			isShared: false,
 			hidden: false,
+			techniqueId: techExerID.techniqueId,
+			exerciseId: techExerID.exerciseId,
 		}
 
 		getLists(args, token, map, mapActions, (result) => {
@@ -70,6 +72,8 @@ export const AddToListPopupContent = ({ techExerID, setShowMorePopup, returnTo }
 					userId: item.author.userId,
 					username: item.author.username,
 				},
+				numberOfActivities: item.size,
+				numOccurences: item.numOccurences,
 				hidden: item.hidden,
 				date: item.date,
 			}))

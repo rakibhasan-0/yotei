@@ -88,7 +88,7 @@ describe("ExerciseIndex should render with all components", () => {
 
 	beforeEach(() => {
 		render( //eslint-disable-line
-			<AccountContext.Provider value={{ undefined, role: "ADMIN", permissions: USER_PERMISSION_LIST_ALL, userId: "" }}>
+			<AccountContext.Provider value={{ undefined, permissions: USER_PERMISSION_LIST_ALL, userId: "" }}>
 				<MemoryRouter>
 					<ExerciseIndex />
 				</MemoryRouter>

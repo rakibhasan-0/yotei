@@ -11,7 +11,7 @@ export const AddToListItem = ({ item, onCheck }) => {
 			<div className="text-left my-2">
 				<h2 className="font-weight-bold mb-0">{item.name}</h2>
 				<p className="mb-0">
-					{authorName} <strong>·</strong> {item.numberOfActivities} aktiviteter
+					{authorName} <strong>·</strong> {item.numberOfActivities} aktiviteter <strong>·</strong> {item.numOccurences} förekomster inom lista
 				</p>
 			</div>
 			<div className="">

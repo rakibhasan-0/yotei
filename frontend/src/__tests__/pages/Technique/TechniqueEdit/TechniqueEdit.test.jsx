@@ -183,7 +183,7 @@ describe("verify that", () => {
 		)
 
 		render ( //eslint-disable-next-line no-dupe-keys
-			<AccountContext.Provider value={{ undefined, role: "ADMIN", userId: "", permissions: permissions_list, undefined }}>
+			<AccountContext.Provider value={{ undefined, userId: "", permissions: permissions_list, undefined }}>
 				<RouterProvider router={router}/>
 			</AccountContext.Provider>
 		)
