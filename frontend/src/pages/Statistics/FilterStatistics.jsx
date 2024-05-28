@@ -37,7 +37,7 @@ import style from "./FilterStatistics.module.css"
  * 
  */
 
-export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDateChanges, onToggleBelts, onClearBelts, belts, dates}) {
+export default function FilterStatistics({ exercises, kihon, onToggleExercise, onToggleKihon, onDateChanges, onToggleBelts, onClearBelts, belts, dates}) {
 
 	return (
 		<div>
@@ -79,7 +79,7 @@ export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDa
 					<div></div>
 					<CheckBox
 						id={"techniqueFilter-VisaÖvningar"}
-						checked={false}
+						checked={exercises}
 						onClick={(isChecked) => {
 							onToggleExercise(isChecked)
 						}}
@@ -91,7 +91,7 @@ export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDa
 					<div></div>
 					<CheckBox
 						id={"techniqueFilter-KihonCheck"}
-						checked={false}
+						checked={kihon}
 						onClick={(isChecked) => {
 							onToggleKihon(isChecked)
 						}}

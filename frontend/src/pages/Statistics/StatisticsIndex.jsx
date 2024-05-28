@@ -32,18 +32,18 @@ export default function Statistics() {
 	const { groupID } = useParams()
 	const [group, setGroup] = useState(null)
 	const [groupBelts, setGroupBelts] = useState([])
-	const [loading, setLoading] = useState(true)
+	const [groupLoading, setGroupLoading] = useState(true)
+	const [listLoading, setListLoading] = useState(true)
 	const { token } = useContext(AccountContext)
 	const [groupActivities, setGroupActivities] = useState([])
-	const [selectedBelts, setSelectedBelts] = useState([])
+	const [selectedBelts, setSelectedBelts] = useState(localStorage.getItem("statistics-filter-belts") ? JSON.parse(localStorage.getItem("statistics-filter-belts")) : [])
 	const [numberofSessions, setNumberOfSessions] = useState()
 	const [averageRating, setAverageRating] = useState()
-	const [filter, setFilter] = useState({
+	const [filter, setFilter] = useState(localStorage.getItem("statistics-filter") ? JSON.parse(localStorage.getItem("statistics-filter")) : {
 		showExercises: false,
 		showKihon: false,
 	})
-	const [order, setDescendingOrder] = useState(false)
-	const [rotate, setRotate] = useState(false)
+	const [rotate, setDescendingOrder] = useState(localStorage.getItem("statistics-filter-order") ? JSON.parse(localStorage.getItem("statistics-filter-order")) : false)
 
 
 	// creating a date object for two years before from now and today's date
@@ -52,7 +52,7 @@ export default function Statistics() {
 	const today = new Date()
 
 	// state for storing the dates
-	const [dates, setDates] = useState({
+	const [dates, setDates] = useState(localStorage.getItem("statistics-filter-dates") ? JSON.parse(localStorage.getItem("statistics-filter-dates")) : {
 		from: getFormattedDateString(twoYearsBeforeFromNow),
 		to: getFormattedDateString(today),
 	})
@@ -97,6 +97,34 @@ export default function Statistics() {
 	}
 
 	useEffect(() => {
+		async function fetchGroup(){
+			try {
+				setGroupLoading(true)
+				const responseFromGroupNameAPI= await fetch("/api/plan/all", { headers: { token } })
+
+				if (!responseFromGroupNameAPI.ok) {
+					throw new Error("Failed to fetch group data")
+				}
+				
+				if(responseFromGroupNameAPI.status === 200) {
+					const groups = await responseFromGroupNameAPI.json()	
+					const group = groups.find((group) => group.id === parseInt(groupID))
+					setGroup(group)
+					setGroupBelts(group.belts)
+				}
+
+			}
+			catch (error) {
+				console.error("Fetching error:", error)
+			}
+			finally {
+				setGroupLoading(false)
+			}
+		}
+		fetchGroup()
+	},[])
+
+	useEffect(() => {
 
 		// that function is responsible for fetching the group activities and group name.
 		async function fetchGroupActivitiesData() {	
@@ -113,37 +141,29 @@ export default function Statistics() {
 			})
 
 			try {
-				setLoading(true)
-				const responseFromGroupNameAPI= await fetch("/api/plan/all", { headers: { token } })
+				setListLoading(true)
 				const responseFromGroupDetailsAPI = await fetch(`/api/statistics/${groupID}?${param}`, {headers: { token }})
 
 				if(responseFromGroupDetailsAPI.status === 200) {
 					const data = await responseFromGroupDetailsAPI.json()
 					setNumberOfSessions(data.numberOfSessions)
 					setAverageRating(data.averageRating)
-					setGroupActivities(data.activities)
-					resetOrderIcon()
+					setGroupActivities(rotate ? data.activities.reverse() : data.activities)
 				}else if (responseFromGroupDetailsAPI.status === 204) {
 					// if the response is 204, it means that there is no data to show for the selected filters.
 					setGroupActivities([])
 				}
 
-				if (!responseFromGroupDetailsAPI.ok || !responseFromGroupNameAPI.ok) {
+				if (!responseFromGroupDetailsAPI.ok) {
 					throw new Error("Failed to fetch group data")
 				}
 				
-				if(responseFromGroupNameAPI.status === 200) {
-					const groups = await responseFromGroupNameAPI.json()	
-					const group = groups.find((group) => group.id === parseInt(groupID))
-					setGroup(group)
-					setGroupBelts(group.belts)
-				}
 			}
 			catch (error) {
 				console.error("Fetching error:", error)
 			}
 			finally {
-				setLoading(false)
+				setListLoading(false)
 			}
 		}
 	
@@ -151,6 +171,22 @@ export default function Statistics() {
 
 	}, [groupID, token, filter, dates])
 
+
+	useEffect(() => {
+		localStorage.setItem("statistics-filter", JSON.stringify(filter))
+	}, [filter])
+
+	useEffect(() => {
+		localStorage.setItem("statistics-filter-dates", JSON.stringify(dates))
+	}, [dates])
+
+	useEffect(() => {
+		localStorage.setItem("statistics-filter-order", rotate)
+	}, [rotate])
+
+	useEffect(() => {
+		localStorage.setItem("statistics-filter-belts", JSON.stringify(selectedBelts))
+	}, [selectedBelts])
 
 	// that function is responsible for handling the date changes and storing the dates state.
 	function handleDateChanges(variableName, value) {
@@ -172,21 +208,20 @@ export default function Statistics() {
 
 	// Resets the order icon to ascending order. Called in the useEffect when the group activities are fetched.
 	function resetOrderIcon() {
-		setRotate(false)
+		setOrder(false)
 	}
 
 	// that function is responsible for changing the order of the group activities.
 	// initially, the order is increasing, when the user clicks on the button, the order will be descending.
 	function changeOrder() {
-		setDescendingOrder(!order)
+		setDescendingOrder(!rotate)
 		setGroupActivities(groupActivities.reverse())
-		setRotate(!rotate)
 	}
 
 	return (
 		<div>
 			<title>Statistik</title>
-			{loading ? (
+			{groupLoading ? (
 				<Spinner />
 			) : (
 				<h1 id="statistics-header">
@@ -197,6 +232,8 @@ export default function Statistics() {
 			<div className={style.FilterAndSortContainer}>
 				<FilterStatistics
 					id="statistics-filter-container"
+					exercises={filter.showExercises}
+					kihon={filter.showKihon}
 					onToggleExercise={(value) => handleChanges("showExercises", value)}
 					onToggleKihon={(value) => handleChanges("showKihon", value)}
 					onDateChanges={handleDateChanges}
@@ -230,23 +267,27 @@ export default function Statistics() {
 					numberOfSessions={numberofSessions}
 				/>
 			</div>
+			{listLoading ? (
+				<Spinner />
+			) : (
+				<div className="activitiesContainer" id="technique-exercise-list">
+					{activities.length === 0 ? (
+						<h5 style={{ fontSize: "25px" }}>Inga aktiviteter matchar det valda filtret</h5>
+					) : (
+						activities.map((activity, index) => (
+							<TechniqueCard
+								key={index}
+								technique={activity}
+								checkBox={false}
+								id={activity.activity_id}
+								popUp={true}
+							/>
 
-			<div className="activitiesContainer" id="technique-exercise-list">
-				{activities.length === 0 ? (
-					<h5 style={{ fontSize: "25px" }}>Inga aktiviteter hittades</h5>
-				) : (
-					activities.map((activity, index) => (
-						<TechniqueCard
-							key={index}
-							technique={activity}
-							checkBox={false}
-							id={activity.activity_id}
-							popUp={true}
-						/>
+						))
+					)}
+				</div>
 
-					))
-				)}
-			</div>
+			)}
 			<div style={{ height: "70px" }}></div>
 			<div className={style.buttonContainer}>
 				<Button
