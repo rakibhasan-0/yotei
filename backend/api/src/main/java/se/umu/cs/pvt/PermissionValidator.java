@@ -15,14 +15,12 @@ public class PermissionValidator {
     // what is present in utils.js
     private enum permissionList {
         ADMIN_RIGHTS(1),
-	    SESSION_OWN(2), //Edit your own sessions.
-	    SESSION_ALL(3), //Edit all sessions.
-	    PLAN_OWN(4),
-	    PLAN_ALL(5),
-	    WORKOUT_OWN(6),
-	    WORKOUT_ALL(7),
-        TECHNIQUE_EXERCISE_ALL(8),
-	    GRADING_ALL(9);
+	    SESSION_GROUP_OWN(2), //Edit your own groups and sessions.
+	    SESSION_GROUP_ALL(3), //Edit all groups and sessions.
+	    WORKOUT_OWN(4),
+	    WORKOUT_ALL(5),
+        TECHNIQUE_EXERCISE_ALL(6),
+	    GRADING_ALL(7);
 
         private final int value;
         private permissionList(int value) {
