@@ -20,6 +20,7 @@ import se.umu.cs.pvt.workout.UserShort;
 import se.umu.cs.pvt.workout.UserShortRepository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,22 +50,47 @@ public class ActivityListServiceTest {
     private Claim mockClaim;
 
     public void adminMockSetUp() {
+        Integer[] mockPermissions = {
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+        };
+
         mockJwt = Mockito.mock(DecodedJWT.class);
         mockClaim = Mockito.mock(Claim.class);
         when(mockClaim.asLong()).thenReturn(1L);
         when(mockClaim.asString()).thenReturn("ADMIN");
+        when(mockClaim.asList(Integer.class)).thenReturn(Arrays.asList(mockPermissions));
         when(mockJwt.getClaim("userId")).thenReturn(mockClaim);
-        when(mockJwt.getClaim("role")).thenReturn(mockClaim);
+        when(mockJwt.getClaim("permissions")).thenReturn(mockClaim);
         when(jwtUtil.validateToken(token)).thenReturn(mockJwt);
     }
 
     public void userMockSetup(Long userId) {
+        Integer[] mockPermissions = {
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+        };
+
         mockJwt = Mockito.mock(DecodedJWT.class);
         mockClaim = Mockito.mock(Claim.class);
         when(mockClaim.asLong()).thenReturn(userId);
         when(mockClaim.asString()).thenReturn("USER");
+        when(mockClaim.asList(Integer.class)).thenReturn(Arrays.asList(mockPermissions));
         when(mockJwt.getClaim("userId")).thenReturn(mockClaim);
-        when(mockJwt.getClaim("role")).thenReturn(mockClaim);
+        when(mockJwt.getClaim("permissions")).thenReturn(mockClaim);
         when(jwtUtil.validateToken(token)).thenReturn(mockJwt);
     }
 

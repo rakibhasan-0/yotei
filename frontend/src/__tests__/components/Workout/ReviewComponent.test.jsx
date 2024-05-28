@@ -138,7 +138,7 @@ test("Admin can see icon to remove user comment", async () => {
 	}
 
 	render(
-		<AccountContext.Provider value={{ userId: 1, role: "ADMIN", permissions: USER_PERMISSION_LIST_ALL }}>
+		<AccountContext.Provider value={{ userId: 1, permissions: USER_PERMISSION_LIST_ALL }}>
 			<ReviewComment comment={review} testId={1}/>
 		</AccountContext.Provider>
 	)
@@ -156,7 +156,7 @@ test("Admin can not see pencil icon for user comment", async () => {
 	}
 
 	render(
-		<AccountContext.Provider value={{ userId: 1, role: "ADMIN" }}>
+		<AccountContext.Provider value={{ userId: 1 }}>
 			<ReviewComment comment={review} testId={1}/>
 		</AccountContext.Provider>
 	)
