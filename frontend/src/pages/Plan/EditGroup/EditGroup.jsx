@@ -157,6 +157,7 @@ function EditGroup() {
 			<title>Redigera grupp</title>
 			<h1 className="mb-4">Redigera grupp</h1>
 			<Trash
+				id={"trashcan_button"}
 				size="32px"
 				color="var(--red-primary)"
 				className={styles.trashcan}
