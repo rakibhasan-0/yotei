@@ -23,6 +23,8 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 	const [isOpen, setIsOpen] = useState(false)
 	let bgColor = "#ffdfe3"
 
+	console.log(id) // here so id is used for now
+
 	/*
 	const isFreeTextElem = () => {
 		console.log(activity.id)
