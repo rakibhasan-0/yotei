@@ -27,7 +27,6 @@ test.describe('Groups test', () => {
       startDate: '2025-01-01',
       endDate: '2025-06-01',
       days: [ tuesday, wednesday ],
-      // 'adult-1', 'adult-2', 'adult-3', 
       beltIds: ['adult-Vitt-checkbox', 'adult-Gult-checkbox', 'adult-Orange-checkbox', 'adult-Grönt-checkbox', 
                 'adult-Blått-checkbox', 'adult-Brunt-checkbox', 'adult-Svart-checkbox', 'adult-2\\ Dan-checkbox',
                 'adult-3\\ Dan-checkbox', 'child-Gult-checkbox', 'child-Orange-checkbox', 'child-Grönt-checkbox',
@@ -44,20 +43,3 @@ test.describe('Groups test', () => {
     await expect(page.getByText('Ändringar sparade.')).toBeVisible()
   })
 })
-
-// await page.locator('#belt-adult-Vitt-checkbox').check();
-// await page.locator('#belt-child-Gult-checkbox').check();
-// await page.locator('#belt-inverted-Gult-checkbox').check();
-// await page.locator('#belt-adult-Gult-checkbox').check();
-// await page.locator('#belt-child-Orange-checkbox').check();
-// await page.locator('#belt-inverted-Orange-checkbox').check();
-// await page.locator('#belt-adult-Orange-checkbox').check();
-// await page.locator('#belt-adult-Grönt-checkbox').check();
-// await page.locator('#belt-inverted-Grönt-checkbox').check();
-// await page.locator('#belt-child-Grönt-checkbox').check();
-// await page.locator('#belt-adult-Blått-checkbox').check();
-// await page.locator('#belt-adult-Brunt-checkbox').check();
-// await page.locator('#belt-adult-Svart-checkbox').check();
-// await page.locator('#belt-adult-1').check();
-// await page.locator('#belt-adult-2').check();
-// await page.locator('#belt-adult-3').check();
