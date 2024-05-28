@@ -1,0 +1,25 @@
+.role-list-link-container{
+    border-radius: 5px;
+    border: 1px solid var(--black-primary);
+    user-select: none;
+    overflow: auto;
+    margin-top: 10px;
+}
+
+.role-list-link-header {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    background-color: var(--red-secondary);
+	padding: 10px;
+    font-weight: 400;
+    width: 100%;
+    overflow:hidden;
+}
+
+.role-list-link-description {
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+}
