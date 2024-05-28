@@ -224,12 +224,14 @@ public class ExportGradingPdf {
 
         drawImage(page, contentStream);
         contentStream.addRect(currentXPos, currentYPos, CELL_WIDTH+30, -CELL_HEIGHT);
+        contentStream.stroke();
         writeToCell(currentXPos, currentYPos, contentStream, "Namn", font);
         int count = 1;
 
         currentXPos+=CELL_WIDTH+30;
         for(int j = (onPage*MAX_NUM_COLUMNS); j<(onPage*MAX_NUM_COLUMNS)+MAX_NUM_COLUMNS && j < examinees.size();j++){
             contentStream.addRect(currentXPos,currentYPos,CELL_WIDTH,-CELL_HEIGHT);
+            contentStream.stroke();
 
             writeToCell(currentXPos, currentYPos, contentStream, shortenString(examinees.get(j).getName(), MAX_NAME_LENGTH), font);
 
@@ -241,11 +243,14 @@ public class ExportGradingPdf {
         for(int i = 0; i < examinationTechniqueCategories.size(); i++) {
                 
             contentStream.addRect(currentXPos, currentYPos, CELL_WIDTH*count+30, -CELL_HEIGHT);
+            contentStream.stroke();
+
             writeToCell(currentXPos, currentYPos, contentStream, examinationTechniqueCategories.get(i).getCategoryName(), font);
 
             for(int j = 0; j < examinationTechniqueCategories.get(i).getTechniques().size(); j++) {
                 currentYPos -=CELL_HEIGHT;
                 contentStream.addRect(currentXPos, currentYPos, CELL_WIDTH+30, -CELL_HEIGHT);
+                contentStream.stroke();
                 
                 String techniqueName = examinationTechniqueCategories.get(i).getTechniques().get(j).toString();
                 techniqueName = shortenString(techniqueName, MAX_TECHNIQUE_NAME_LENGTH);
@@ -268,6 +273,8 @@ public class ExportGradingPdf {
 
                 for (int k = 0 ; k < count-1 ; k++) {
                     contentStream.addRect(currentXPos, currentYPos, CELL_WIDTH, -CELL_HEIGHT);
+                    contentStream.stroke();
+
                     String grade = "";
                     for (int l = 0 ; l < examinationResults.size() ; l++) {
                         if ((examinationTechniqueCategories.get(i).getTechniques().get(j).toString()).equals(examinationResults.get(l).getTechniqueName())) {
@@ -309,11 +316,14 @@ public class ExportGradingPdf {
                     createHeader(code, color, contentStream);
                     drawImage(page, contentStream);
                     contentStream.addRect(currentXPos, currentYPos, CELL_WIDTH+30, -CELL_HEIGHT);
+                    contentStream.stroke();
+
                     writeToCell(currentXPos, currentYPos, contentStream, "Namn", font);
                     
                     currentXPos+=CELL_WIDTH+30;
                     for(int j2 = (onPage*MAX_NUM_COLUMNS); j2<(onPage*MAX_NUM_COLUMNS)+MAX_NUM_COLUMNS && j2 < examinees.size() ; j2++){
                         contentStream.addRect(currentXPos,currentYPos,CELL_WIDTH,-CELL_HEIGHT);
+                        contentStream.stroke();
         
                         writeToCell(currentXPos, currentYPos, contentStream, shortenString(examinees.get(j2).getName(), MAX_NAME_LENGTH), font);
         
