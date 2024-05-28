@@ -20,11 +20,9 @@ INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa/red
 
 -- Tekniker (Techniques)
 INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa/redigera/radera egna tekniker', 'Tillåtelse att skapa tekniker samt redigera och radera tekniker som de kan nå.');
-INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa/redigera/radera alla tekniker', 'Tillåtelse att skapa tekniker samt redigera och radera tekniker som de kan nå.');
 
 -- Övningar (Exercises)
 INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa/redigera/radera egna övningar', 'Tillåtelse att skapa övningar samt redigera och radera övningar som de kan nå.');
-INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa/redigera/radera alla övningar', 'Tillåtelse att skapa övningar samt redigera och radera övningar som de kan nå.');
 
 -- Gradering (Grading)
 INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa en gradering', 'Tillåtelse att skapa graderingar samt redigera och radera graderingar som de kan nå.');

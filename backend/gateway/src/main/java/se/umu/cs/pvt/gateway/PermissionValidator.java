@@ -32,11 +32,9 @@ public class PermissionValidator {
 	    SESSION_GROUP_ALL(3), //Edit all groups and sessions.
 	    WORKOUT_OWN(4),
 	    WORKOUT_ALL(5),
-        TECHNIQUE_OWN(8),
-        TECHNIQUE_ALL(9),
-        EXERCISE_OWN(10),
-        EXERCISE_ALL(11),
-	    GRADING_ALL(12);
+        TECHNIQUE_ALL(6),
+        EXERCISE_ALL(7),
+	    GRADING_ALL(8);
 
         private final int value;
         private permissionList(int value) {
@@ -145,7 +143,6 @@ public class PermissionValidator {
         };
     
         Integer[] permissionsToCheck = {
-            permissionList.TECHNIQUE_OWN.value,
             permissionList.TECHNIQUE_ALL.value
 
         };
@@ -176,7 +173,6 @@ public class PermissionValidator {
         };
     
         Integer[] permissionsToCheck = {
-            permissionList.EXERCISE_OWN.value,
             permissionList.EXERCISE_ALL.value
         };
 

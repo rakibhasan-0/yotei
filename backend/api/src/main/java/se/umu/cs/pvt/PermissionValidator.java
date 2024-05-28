@@ -13,19 +13,17 @@ public class PermissionValidator {
     // Enum for all existing permissions
     // These are listed in permissions.sql and should mirror 
     // what is present in utils.js
-    private enum permissionList {
+    public static enum permissionList {
         ADMIN_RIGHTS(1),
 	    SESSION_GROUP_OWN(2), //Edit your own groups and sessions.
 	    SESSION_GROUP_ALL(3), //Edit all groups and sessions.
 	    WORKOUT_OWN(4),
 	    WORKOUT_ALL(5),
-        TECHNIQUE_OWN(8),
-        TECHNIQUE_ALL(9),
-        EXERCISE_OWN(10),
-        EXERCISE_ALL(11),
-	    GRADING_ALL(12);
+        TECHNIQUE_ALL(6),
+        EXERCISE_ALL(7),
+	    GRADING_ALL(8);
 
-        private final int value;
+        public final int value;
         private permissionList(int value) {
             this.value = value;
         }
