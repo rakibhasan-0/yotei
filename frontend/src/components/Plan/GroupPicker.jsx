@@ -139,7 +139,6 @@ export default function GroupPicker({ id, states, testFetchMethod, onToggle, onl
 				setErrorToast("Kunde inte hämta grupper")
 				return
 			}
-			console.log(data.status)
 			const json = await data.json()
 
 
