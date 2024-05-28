@@ -173,8 +173,8 @@ describe("Statistics Component", () => {
 
 		
 			// protocols should now be visible
-			await waitFor(() => expect(screen.queryByText(protocolNotExist)).not.toBeInTheDocument())
-			await waitFor(() => expect(screen.getByText(protocolExist)).toBeInTheDocument())
+			expect(screen.findByText(protocolNotExist)).not.toBeInTheDocument()
+			expect(screen.getByText(protocolExist)).toBeInTheDocument()
 			
 		})
 
