@@ -12,7 +12,8 @@ import { toast } from "react-toastify"
  * 			2024-05-27  by Team Coconut: Tweaking number of toasts and disabled the progess bar on customers wishes
  * 										 every toast function no longer takes a second argument and uses the message sent as ID instead
  * 										 this automatically ensures that the same message is not displayed multiple times.
- * 			2024-05-28  by Team Mango: Updated permissions list and functions to include new permissions (e.g. groups and sessions are now combined).
+ * 			2024-05-28  by Team Mango: Separated technique and exercises permissions. Also updated permissions list and functions to include new permissions.
+ *									   Groups and sessions are now combined).
  */
 
 /**
@@ -85,7 +86,7 @@ export function canEditGroups(context, groupCreatorId) {
 }
 
 /**
- * canCreateWorkouts() - check if a user can create a group.
+ * canCreateWorkouts() - check if a user can create a workout.
  * @param {*} context AccountContext from user.
  * @returns true if user can create a workout, else false.
  */
@@ -96,7 +97,7 @@ export function canCreateWorkouts(context) {
 }
 
 /**
- * canEditWorkout() - Check if a user can edit a group.
+ * canEditWorkout() - Check if a user can edit a workout.
  * @param {*} context AccountContext from user.
  * @param {*} workoutId The id of the user that created the workout.
  * @returns true if user can edit a workout, else false.
@@ -123,16 +124,29 @@ export function canDeleteComment(context, commentId) {
 
 
 
+
 /**
- * canCreateAndEditActivity() - Check if user can create an activity. An activity is an exercise or technique.
+ * canCreateAndEditTechnique() - Check if user can create an technique.
  * @param {*} context Accountcontext from user. 
- * @returns true if user can create an activity (exercise and technique).
+ * @returns true if user can create an technique.
  */
-export function canCreateAndEditActivity(context) {
+export function canCreateAndEditTechnique(context) {
 	if (!context.permissions) return false
-	return (context.permissions.includes(USER_PERMISSION_CODES.TECHNIQUE_EXERCISE_ALL))
+	return (context.permissions.includes(USER_PERMISSION_CODES.TECHNIQUE_OWN) ||
+			context.permissions.includes(USER_PERMISSION_CODES.TECHNIQUE_ALL))
 }
 
+/**
+ * canCreateAndEditExercise() - Check if user can create an exercise.
+ * @param {*} context Accountcontext from user. 
+ * @returns true if user can create an exercise.
+ */
+export function canCreateAndEditExercise(context) {
+	if (!context.permissions) return false
+	return (context.permissions.includes(USER_PERMISSION_CODES.EXERCISE_OWN ||
+			context.permissions.includes(USER_PERMISSION_CODES.EXERCISE_ALL)
+	))
+}
 /**
  * canHandleGradings() - Check if user can create a grading.
  * @param {*} context Accountcontext from user. 
@@ -228,11 +242,12 @@ export const USER_PERMISSION_CODES = {
 	SESSION_GROUP_ALL: 3, //Edit all groups and sessions.
 	WORKOUT_OWN: 4,
 	WORKOUT_ALL: 5,
-	TECHNIQUE_EXERCISE_ALL: 6, //Old name: ACTIVITY_ALL (Was a potential conflict in the database naming, so we changed it.)
-	GRADING_ALL: 7,
+	TECHNIQUE_ALL: 6,
+	EXERCISE_ALL: 7,
+	GRADING_ALL: 8,
 }
 
-export const USER_PERMISSION_LIST_ALL = [1,2,3,4,5,6,7]
+export const USER_PERMISSION_LIST_ALL = [1,2,3,4,5,6,7,8]
 
 /**
  * Scrolls an element with given id into view.

@@ -12,7 +12,7 @@ import Sorter from "../../../components/Common/Sorting/Sorter"
 import ExerciseCard from "../../../components/Common/ExerciseCard/ExerciseListItem"
 import InfiniteScrollComponent from "../../../components/Common/List/InfiniteScrollComponent"
 import Spinner from "../../../components/Common/Spinner/Spinner"
-import { canCreateAndEditActivity, isAdminUser } from "../../../utils"
+import { canCreateAndEditExercise, isAdminUser } from "../../../utils"
 import Popup from "../../../components/Common/Popup/Popup"
 import { AddToListPopupContent } from "../../../components/Activity/AddToListPopupContent"
 import styles from "./ExerciseIndex.module.css"
@@ -192,7 +192,7 @@ export default function ExerciseIndex() {
 			<br />
 			<br />
 
-			{(isAdminUser(context) || canCreateAndEditActivity(context)) && (
+			{(isAdminUser(context) || canCreateAndEditExercise(context)) && (
 				<RoundButton linkTo={"exercise/create"} id={"exercise-round-button"} style={{ maxWidth: "5px" }}>
 					<Plus />
 				</RoundButton>
