@@ -507,7 +507,7 @@ public class ExportGradingPdf {
             }
 
             //Checks if the next comment block will fit on the page, if not a new page is created
-            if (currentYPos - rows.get(pairId).size() * 15 + 30 <= 0) {
+            if (currentYPos - (rows.get(pairId).size() * 15 + 30) <= 0) {
                 contentStream.close();
                 page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
                 document.addPage(page);        
@@ -592,7 +592,7 @@ public class ExportGradingPdf {
             if(rows.get(examinee.getExamineeId()).size() == 0)
                 continue;   
             //Checks if the next comment block will fit on the page, if not a new page is created
-            if (currentYPos - rows.get(examinee.getExamineeId()).size() * 15 + 30 <= 0) {
+            if (currentYPos - (rows.get(examinee.getExamineeId()).size() * 15 + 30) <= 0) {
                 contentStream.close();
                 page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
                 document.addPage(page);        
@@ -664,7 +664,7 @@ public class ExportGradingPdf {
             List<String> rows = getRows(examineeComment, 120);
             
             //Checks if the next comment block will fit on the page, if not a new page is created
-            if (currentYPos - rows.size() * 15 + 30 <= 0) {
+            if (currentYPos - (rows.size() * 15 + 30) <= 0) {
                 contentStream.close();
                 page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
                 document.addPage(page);        

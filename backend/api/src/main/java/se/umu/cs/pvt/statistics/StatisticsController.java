@@ -1,6 +1,7 @@
 package se.umu.cs.pvt.statistics;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
 
@@ -71,8 +74,6 @@ public class StatisticsController {
             // Set to empty ArrayList if not to allow stream.
             exercises = new ArrayList<>();
         }
-
-        
 
         // Combine techniques and exericises
         List<StatisticsActivity> union = Stream.concat( exercises.stream(), techniques.stream())
@@ -133,10 +134,23 @@ public class StatisticsController {
         
         // Get all techniques associated with the groups belts
         List<Belt> groupBelts = statisticsRepository.getBeltsForGroup(id);
+
+
+        //Get belt succession
         List<StatisticsResponse> allTechniques = new ArrayList<>();
 
-        // Iterate through the belts to handle groups that have more than one belt.
+        List<Belt> nextBelts = new ArrayList<>();
+
         for (Belt belt : groupBelts) {
+            Belt b = statisticsRepository.getNextBelt(belt.getId());
+            if (b != null) {
+                nextBelts.add(b);
+            }
+        }
+
+        // Iterate through the belts to handle groups that have more than one belt.
+        for (Belt belt : nextBelts) {
+            //Long nextBeltId = statisticsRepository.getNextBelt(beltId);
             allTechniques.addAll(statisticsRepository.getTechniquesForBelt(belt));
         }
         
@@ -161,7 +175,7 @@ public class StatisticsController {
     }
 
 
-    @Operation(summary = "Returns a comparison between a groups practiced techniques and a grading protocol..", 
+    @Operation(summary = "Returns a comparison between a groups practiced techniques and a grading protocol.", 
                description = "Must include the id of the group as a path parameter and the id of the belt of the grading protocol as a request parameter.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "OK - Successfully retrieved"),
@@ -171,6 +185,7 @@ public class StatisticsController {
                                                                      @RequestParam Long beltId,
                                                                      @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<LocalDate> startdate, 
                                                                      @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<LocalDate> enddate){
+
 
         // Get all techniques practiced by the group with :id 
         List<StatisticsActivity> techniques = statisticsRepository.getAllSessionReviewTechniques(id);
@@ -226,5 +241,30 @@ public class StatisticsController {
         }
     }
 
+
+    @Operation(summary = "Returns the belt following a belt.")
+    @ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "OK - Successfully retrieved"),
+    })
+    @GetMapping("/next_belt")
+    public ResponseEntity<List<Belt>> getNextBelt(@RequestParam List<Long> beltId){
+
+        List<Belt> belts = new ArrayList<>();
+
+        for (Long id : beltId) {
+            Belt belt = statisticsRepository.getNextBelt(id);
+            if (belt != null) {
+                belts.add(belt);
+            }
+        }
+
+        if (belts.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+
+        return new ResponseEntity<>(belts, HttpStatus.OK);
+
+    }
 
 }

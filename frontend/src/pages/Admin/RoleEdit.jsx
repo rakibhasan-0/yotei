@@ -261,6 +261,7 @@ export default function RoleEdit() {
 							item={permission.permissionName}
 							key={index}
 							id={permission.permissionId}
+							description={permission.permissionDescription}
 							toggled={selectedMap.has(permission.permissionId) }
 							changeToggled={() => handleButtonToggle(permission.permissionId, false)}
 						/>
