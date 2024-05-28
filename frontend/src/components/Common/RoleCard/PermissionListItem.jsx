@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { ChevronDown } from "react-bootstrap-icons"
 import styles from "./RoleListItem.module.css"
 import ToggleButton from "../ToggleButton/ToggleButton"
 
@@ -43,6 +44,10 @@ export default function PermissionListItem({ item, id, description, toggled, cha
 						<div className={styles["href-link"]} style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="RoleListItem-item" dangerouslySetInnerHTML={{ __html: item.replace(/egna/g, "<b>egna</b>").replace(/alla/g, "<b>alla</b>") }}></div>
 					</div>
 					<div className={styles["flex-shrink-0"]} style={{display: "flex", alignItems: "center"}}>
+						<ChevronDown 
+							size={24} 
+							style={{ transform: expanded ? "rotate(180deg)" : "rotate(0deg)", marginRight: "1rem"}}
+						/>
 						<ToggleButton 
 							isButtonToggled={toggled}
 							id={item + "-toggleButton"}
