@@ -21,7 +21,7 @@ test("Add activity during session review render test", async () => {
         )
 
     // Hitta igen knappen
-    let addActivityButton = screen.getByTestId('AddActivityButton')
+    let addActivityButton = screen.getByTestId('#AddActivityButton')
     expect(addActivityButton).toBeInTheDocument()
 
     // Klicka på knappen
