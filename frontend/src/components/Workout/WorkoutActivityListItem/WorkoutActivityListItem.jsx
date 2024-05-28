@@ -23,12 +23,23 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 	const [isOpen, setIsOpen] = useState(false)
 	let bgColor = "#ffdfe3"
 
-	const name = (
+	/*
+	const isFreeTextElem = () => {
+		console.log(activity.id)
+		console.log(id)
+		return activity.exercise == null && activity.technique == null
+	}
+	
+
+	const name = 
 		activity.exercise ? (
+			
 			activity.exercise.name
 		) : (
+		
 			activity.technique.name
-		))
+		)
+		*/
 
 
 	const createStripes = () => {
@@ -43,16 +54,16 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 		<>
 			{
 				activity.technique ?
-					<PopupMini title = {name} id = "popup-list-item-tech" isOpen = {isOpen} setIsOpen = {setIsOpen} >
-						<TechniqueDetailMini id = {activity.technique.id}></TechniqueDetailMini>
+					<PopupMini title = {activity.name ? activity.name : "hej"} id = "popup-list-item-tech" isOpen = {isOpen} setIsOpen = {setIsOpen} >
+						<TechniqueDetailMini id = {activity.id}></TechniqueDetailMini>
 					</PopupMini>
 					:
-					<PopupMini title = {name} id = "popup-list-item-exer" isOpen = {isOpen} setIsOpen = {setIsOpen} >
-						<ExerciseDetailMini id = {activity.exercise.id}></ExerciseDetailMini>
+					<PopupMini title = {activity.name ? activity.name : "hej"} id = "popup-list-item-exer" isOpen = {isOpen} setIsOpen = {setIsOpen} >
+						<ExerciseDetailMini id = {activity.id}></ExerciseDetailMini>
 					</PopupMini>	
 			}		
 
-			<div id={id} className="animate">
+			<div id={activity.id} className="animate">
 				{createStripes()}
 				<div className={"row align-items-center " + "py-2"}  key={activity.id}
 					style={{
@@ -60,7 +71,7 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 					}}>
 
 					<Link role = "link" className="col text-left" onClick = {handleClick}  >
-						<h5 className={`${styles["workoutActivityName"]} m-0`}>{name}</h5>
+						<h5 className={`${styles["workoutActivityName"]} m-0`}>{activity.name}</h5>
 					</Link>
 				
 					<div className={`${styles["listItemTime"]} d-flex align-items-center justify-content-end col-xs-5 pl-0 text-right`}>
