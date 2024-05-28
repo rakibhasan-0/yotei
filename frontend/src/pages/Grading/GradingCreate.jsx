@@ -10,13 +10,14 @@ import {canHandleGradings, isAdminUser, setError as setErrorToast} from "../../u
  * The grading create page.
  * Creates a new grading.
  * 
- * @author Team Pomegranate, Team Mango
+ * @author Team Pomegranate, Team Mango, Team Apelsin
  * @version 1.0
  * @since 2024-05-02
  */
 export default function GradingCreate() {
 
 	const [beltColors, setBeltColors] = useState([]) 
+    const [protocolNames, setProtocolNames] = useState([])
 	const [loading, setLoading] = useState(true)
 	const context = useContext(AccountContext)
 	const { token, userId } = context
@@ -103,8 +104,28 @@ export default function GradingCreate() {
                 const colorMaps = data.map(element => ({
                     id: element.beltId,
                     hex: `#${element.beltColor}`
-                }));
+                }))
 				setBeltColors(colorMaps)
+
+                const protocolMap = data.map(element => {
+                    let code = null
+                    let color = null
+                    try {
+                        const parsedProtocol = JSON.parse(element.examinationProtocol)
+                        if(parsedProtocol.examination_protocol) {
+                            code = parsedProtocol.examination_protocol.code
+                            color = parsedProtocol.examination_protocol.color
+                        }
+                    } catch (error) {
+                        console.error("Failed to parse examinationProtocol for element with beltId", element.beltId, error)
+                    }
+                    return {
+                        id: element.beltId,
+                        code: code,
+                        color: color
+                    }
+                })
+                setProtocolNames(protocolMap)
         
 			} catch (ex) {
 				setErrorToast("Kunde inte hämta bälten")
@@ -136,7 +157,7 @@ export default function GradingCreate() {
 							color={belt.hex}
 						
 						>
-							<h2>{`${5 - index} KYU BÄLTE`} </h2>
+							<h2>{`${protocolNames[index].code} ${protocolNames[index].color}`} </h2>
 						</BeltButton>
 					))}
 				</div>
