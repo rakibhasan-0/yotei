@@ -27,8 +27,8 @@ import SavedActivityList from "../../SavedList/SavedListInfo/SavedListComponent"
  * Example usage:
  *		<ListFormComponent callback={submitHandler} />
  *
- * @author Team Tomato (6)
- * @since 2024-05-21
+ * @author Team Tomato (6), Team Durian (3)
+ * @since 2024-05-28
  * Based on WorkoutFormComponent.jsx
  */
 export default function ListFormComponent({ callback, state, listCreateInfoDispatchProp = null }) {
