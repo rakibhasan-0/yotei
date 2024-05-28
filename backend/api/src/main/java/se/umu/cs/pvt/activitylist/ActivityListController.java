@@ -30,7 +30,7 @@ import se.umu.cs.pvt.workout.UserShortRepository;
  * ActivityList API for retreiving, creating, removing and editing activityList
  * objects.
  * 
- * @author Team Tomato ,updated 2024-05-16
+ * @author Team Tomato ,updated 2024-05-16, updated 2024-05-27
  * @since 2024-05-08
  * @version 1.0
  */
@@ -149,69 +149,6 @@ public class ActivityListController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (ForbiddenException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-    }
-
-    /**
-     * Returns all activity lists created by the user. The user has permissions to
-     * edit these lists
-     * 
-     * @param user_id id of the user
-     * @param token   token of the user
-     * @return list of activity lists if successful
-     *         Unauthorized if token is invalid
-     *         No Content if there are no lists created by the user
-     */
-
-    @Operation(summary = "Returns all activity lists created by the user.", description = "Fetches all activity lists that the user has created. Requires a valid user token.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK - Successfully retrieved the activity lists"),
-            @ApiResponse(responseCode = "204", description = "No Content - No activity lists found for the user"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized - Token is invalid")
-    })
-    @GetMapping("/userlists")
-    public ResponseEntity<List<ActivityListShortDTO>> getUserLists(
-            @RequestHeader(value = "token") String token) {
-        try {
-            List<ActivityListShortDTO> dtos = activityListService.getUserActivityLists(token);
-            if (dtos.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-            return new ResponseEntity<>(dtos, HttpStatus.OK);
-        } catch (UnauthorizedAccessException e) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-    }
-
-    /**
-     * Returns all lists that the user has access to
-     * 
-     * @param hidden   when true. returns private lists
-     * @param isAuthor when true, returns only the lists created by the user
-     * @param token    token of the user
-     * @return list of activity lists if successful
-     *         Unauthorized if token is invalid
-     *         No Content if there are no lists created by the user
-     */
-    @Operation(summary = "Returns all activity lists the user has access to.", description = "Fetches all activity lists that the user has access to, with optional filters. Requires a valid user token.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK - Successfully retrieved the activity lists"),
-            @ApiResponse(responseCode = "204", description = "No Content - No activity lists found"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized - Token is invalid")
-    })
-    @GetMapping("/")
-    public ResponseEntity<List<ActivityListShortDTO>> getAllLists(@RequestParam(required = false) Boolean hidden,
-            @RequestParam(required = false) Boolean isAuthor,
-            @RequestHeader(value = "token") String token) {
-
-        try {
-            List<ActivityListShortDTO> dtos = activityListService.getAllActivityLists(hidden, isAuthor, token);
-            if (dtos.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-            return new ResponseEntity<>(dtos, HttpStatus.OK);
-        } catch (UnauthorizedAccessException e) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 

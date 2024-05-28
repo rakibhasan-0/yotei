@@ -25,15 +25,16 @@ export default function GradingStatisticsPopup({ id, groupID, belts, datesFrom, 
 	const [chosenProtocol, setChosenProtocol] = useState("")
 	const [beltID, setBeltID] = useState(null)
 	const [loading, setLoading] = useState(false)
+	const [newBelts, setNewBelts] = useState([])
 	const [data, setData] = useState([])
 	const { token } = useContext(AccountContext)
+	
 
-	// Sets up protocols and ids for input belts
 	useEffect(() => {
 		if (belts.length > 0) {
-			setProtocols(belts.map(belt => belt.name))
+			console.log(belts)
+			getNextBelts()
 			setChosenProtocol(belts[0].name)
-			setBeltID(belts[0].id)
 		}
 	}, [belts])
 
@@ -70,19 +71,27 @@ export default function GradingStatisticsPopup({ id, groupID, belts, datesFrom, 
 			}
 			fetchGroupGradingProtocol()
 		}
-	}, [groupID, beltID,showPopup])
+	}, [beltID])
 
-	// Finds and sets selected belts
+	
 	useEffect(() => {
 		if (chosenProtocol) {
-			const selectedBelt = belts.find(belt => belt.name === chosenProtocol)
+			const index = protocols.findIndex(p => p === chosenProtocol)
+			const selectedBelt = newBelts[index]
 			if (selectedBelt) {
 				setBeltID(selectedBelt.id)
 			}
 		}
 	}, [chosenProtocol])
 
-	// Toggles popups visibility
+
+	function addNumbersToUrl(baseUrl, numbers, key = "beltId") {
+		const params = new URLSearchParams()
+		numbers.forEach(num => params.append(key, num))
+		return `${baseUrl}?${params.toString()}`
+	}
+	
+
 	const togglePopup = () => {
 		setShowPopup(!showPopup)
 	}
@@ -91,6 +100,45 @@ export default function GradingStatisticsPopup({ id, groupID, belts, datesFrom, 
 	const onSelectRow = (protocol) => {
 		setChosenProtocol(protocol)
 	}
+
+	const getNextBelts = async () => {
+		
+		// Run initially to get the next belt of the current
+		const requestOptions = {
+			headers: {"Content-type": "application/json", token: token}
+		}
+
+		try {
+			setLoading(true)
+			const url = addNumbersToUrl("/api/statistics/next_belt", belts.map(belt => belt.id))
+			const response = await fetch(url, requestOptions)
+			if (response.status === 200) {
+				const json = await response.json()
+				setNewBelts(json)
+				setProtocols(json.map(belt => belt.name))
+				
+			} else if (response.status === 204) {
+				setProtocols([])
+			} else {
+				throw new Error("Failed to fetch group data")
+			}
+			
+		} catch (error) {
+			console.error("Fetching error:", error)
+		} finally {
+			setLoading(false)
+		}
+	
+
+
+	}
+
+	useEffect(() => {
+		if (newBelts[0]) {
+			setBeltID(newBelts[0].id)
+		}
+		
+	},[newBelts])
 
 	return (
 		<div className={style.gradingStatisticsContainer} id={id}>

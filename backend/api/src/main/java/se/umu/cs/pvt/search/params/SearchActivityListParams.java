@@ -40,10 +40,22 @@ public class SearchActivityListParams {
             isShared = Boolean.parseBoolean(urlQuery.get("isShared"));
         }
         if(urlQuery.containsKey("techniqueId")){
-            techniqueId = Long.parseLong(urlQuery.get("techniqueId"));
+            if(urlQuery.get("techniqueId").contains("undefined") || urlQuery.get("techniqueId").contains("null")){
+                techniqueId = null;
+            }
+            else{
+                techniqueId = Long.parseLong(urlQuery.get("techniqueId"));
+            }
+            
         }
         if(urlQuery.containsKey("exerciseId")){
-            exerciseId = Long.parseLong(urlQuery.get("exerciseId"));
+            if(urlQuery.get("exerciseId").contains("undefined") || urlQuery.get("exerciseId").contains("null")){
+                exerciseId = null;
+            }
+            else{
+                exerciseId = Long.parseLong(urlQuery.get("exerciseId"));
+            }
+            
         }
 
     }
