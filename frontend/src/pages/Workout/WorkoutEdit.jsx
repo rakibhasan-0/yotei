@@ -60,6 +60,8 @@ const WorkoutEdit = () => {
 	 * @returns The parsed data.
 	 */
 	function parseData(data) {
+		console.log("data")
+		console.log(data)
 
 		let totDuration = 0
 		data.activityItems.forEach(category => {
@@ -82,7 +84,7 @@ const WorkoutEdit = () => {
 					duration: activity.duration,
 					order: activityOrder,
 				}
-
+				/*
 				if (activity.techniqueId) {
 					// Convert the id to the correct form if it comes from a list.
 					if (typeof activity.techniqueId === "string" && activity.techniqueId.includes("-technique-")) {
@@ -99,6 +101,12 @@ const WorkoutEdit = () => {
 						obj.exerciseId = activity.exerciseId
 					}
 					
+				}
+				*/
+				if(activity.technique){
+					obj.techniqeId = activity.technique.id
+				}else{
+					obj.exerciseId = activity.exercise.id
 				}
 
 
