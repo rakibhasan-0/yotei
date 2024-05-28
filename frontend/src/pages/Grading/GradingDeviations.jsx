@@ -38,7 +38,9 @@ export default function GradingDeviations() {
 	const navigate = useNavigate()
 
 	useEffect(() => {
-		//Fetches all data required
+		/**
+		 * Fetches all data required for this page
+		 */
 		const fetchData = async () => {
 			const requestOptions = {
 				headers: { "Content-type": "application/json", token: context.token }
@@ -57,12 +59,16 @@ export default function GradingDeviations() {
 				setName(json["name"])
 				fetchResult(json["gradingId"])
 				fetchGrading(json["gradingId"])
+				fetchPersonalComments()
 				fetchGroupComments(json["gradingId"])
 				fetchPairComments(json["gradingId"])
 			}
 		}
 
-		//Fetches the grading object based on an id
+		/**
+		 * Fetches a grading entry based on the grading ID
+		 * @param {int} gradingId the grading ID of which to fetch a grading from 
+		 */
 		const fetchGrading = async (gradingId) => {
 			const requestOptions = {
 				headers: { "Content-type": "application/json", token: context.token }
@@ -81,7 +87,11 @@ export default function GradingDeviations() {
 			}
 		}
 
-		//Fetches the correct grading protocol based on a belt id
+		/**
+		 * Fetches the correct grading protocol based on the belt ID
+		 * @param {int} beltId The belt ID of this grading 
+		 * @returns The entire grading protocol for the specified belt ID
+		 */
 		const fetchProtocol = async (beltId) => {
 			const requestOptions = {
 				headers: { "Content-type": "application/json", token: context.token }
@@ -108,7 +118,11 @@ export default function GradingDeviations() {
 			}
 		}
 
-		//Fetches an examinees grading result
+		/**
+		 * Fetches an examinees grading results
+		 * @param {int} gradingId the id of the current grading 
+		 * @returns Sets the result list array with boolean values
+		 */
 		const fetchResult = async (gradingId) => {
 			const requestOptions = {
 				headers: { "Content-type": "application/json", token: context.token }
@@ -125,7 +139,10 @@ export default function GradingDeviations() {
 			setResultList(json)
 		}
 
-		//Fetches an examinees personal grading comments
+		/**
+		 * Fetches an examinees personal grading comments
+		 * @returns Sets the personal comment array
+		 */
 		const fetchPersonalComments = async () => {
 			const requestOptions = {
 				headers: { "Content-type": "application/json", token: context.token }
@@ -142,6 +159,11 @@ export default function GradingDeviations() {
 			setPersonalComments(json)
 		}
 
+		/**
+		 * Fetches an examinees pair comments
+		 * @param {int} gradingId the id of the current grading 
+		 * @returns Sets the pair comment array
+		 */
 		const fetchPairComments = async (gradingId) => {
 			const requestOptions = {
 				headers: { "Content-type": "application/json", token: context.token }
@@ -171,7 +193,11 @@ export default function GradingDeviations() {
 			}
 		}
 
-		//Fetches the entire groups grading comments
+		/**
+		 * Fetches the entire groups comments
+		 * @param {int} gradingId the id of the current grading 
+		 * @returns Sets the group comment array
+		 */
 		const fetchGroupComments = async (gradingId) => {
 			const requestOptions = {
 				headers: { "Content-type": "application/json", token: context.token }
@@ -189,7 +215,6 @@ export default function GradingDeviations() {
 		}
 
 		fetchData()
-		fetchPersonalComments()
 	}, [])
 
 	if (!isAdminUser(context) && !canHandleGradings(context)) {
