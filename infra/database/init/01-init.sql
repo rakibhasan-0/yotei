@@ -149,6 +149,8 @@ DROP TABLE IF EXISTS grading_protocol;
 
 DROP TABLE IF EXISTS grading_protocol_category;
 
+DROP SEQUENCE IF EXISTS belt_succession;
+
 DROP SEQUENCE IF EXISTS serial;
 DROP SEQUENCE IF EXISTS serialEx;
 
@@ -756,6 +758,15 @@ CREATE TABLE grading_protocol_technique(
 ALTER TABLE
 	grading_protocol_technique OWNER TO psql;
 
+CREATE TABLE belt_succession(
+       belt_id INT NOT NULL,
+       next_belt_id INT NOT NULL,
+       CONSTRAINT belt_id_fk FOREIGN KEY (belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE,
+       CONSTRAINT next_belt_id_fk FOREIGN KEY (next_belt_id) REFERENCES belt(belt_id) ON DELETE CASCADE
+);
+
+ALTER TABLE
+      user_to_activity_list OWNER to psql;
 
 --
 -- Default Inserts
