@@ -125,9 +125,9 @@ export function canDeleteComment(context, commentId) {
 
 
 /**
- * canCreateAndEditTechnique() - Check if user can create an technique.
+ * canCreateAndEditTechnique() - Check if user can create a technique.
  * @param {*} context Accountcontext from user. 
- * @returns true if user can create an technique.
+ * @returns true if user can create a technique.
  */
 export function canCreateAndEditTechnique(context) {
 	if (!context.permissions) return false
