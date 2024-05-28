@@ -17,7 +17,7 @@ import PopupSmall from "../../components/Common/Popup/PopupSmall"
  * The grading create page.
  * Creates a new grading.
  * 
- * @author Team Pomegranate, Team Mango
+ * @author Team Pomegranate, Team Mango, Team Apelsin
  * @version 1.0
  * @since 2024-05-07
  */
