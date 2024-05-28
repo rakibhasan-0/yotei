@@ -27,7 +27,6 @@ public class TechniqueChainWeave implements Serializable {
 
     @Column(name = "description")
     private String description;
-
     
     @OneToMany(mappedBy = "techniqueWeave", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TechniqueWeaveRepresent> weaveRepresentations;

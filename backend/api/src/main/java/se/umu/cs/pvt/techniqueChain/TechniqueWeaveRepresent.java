@@ -28,7 +28,7 @@ public class TechniqueWeaveRepresent implements Serializable {
     private int node_y_pos;
 
     @Column(nullable = false, name = "node_id")
-    private Long nodeId;
+    private Long node_id;
 
     @ManyToOne
     @JoinColumn(name = "parent_weave_id", nullable = false)
@@ -49,12 +49,12 @@ public class TechniqueWeaveRepresent implements Serializable {
      * @param node_x_pos The name of the node.
      * @param description The description of the node.
      */
-    public TechniqueWeaveRepresent(Long id, int node_x_pos, int node_y_pos, TechniqueChainWeave techniqueWeave, Long nodeId, Long techniqueWeaveId) {
+    public TechniqueWeaveRepresent(Long id, int node_x_pos, int node_y_pos, TechniqueChainWeave techniqueWeave, Long node_id, Long techniqueWeaveId) {
         this.id = id;
         this.node_x_pos = node_x_pos;
         this.node_y_pos = node_y_pos;
         this.techniqueWeave = techniqueWeave;
-        this.nodeId = nodeId;
+        this.node_id = node_id;
         this.techniqueWeaveId = techniqueWeaveId;
     }
     /**
@@ -71,8 +71,8 @@ public class TechniqueWeaveRepresent implements Serializable {
         return techniqueWeave;
     }
 
-    public Long getNodeId() {
-        return nodeId;
+    public Long getNode_id() {
+        return node_id;
     }
 
     public Long getId() {
@@ -103,8 +103,8 @@ public class TechniqueWeaveRepresent implements Serializable {
         this.techniqueWeave = techniqueWeave;
     }
 
-    public void setNodeId(Long nodeId) {
-        this.nodeId = nodeId;
+    public void setNode_id(Long node_id) {
+        this.node_id = node_id;
     }
 
     public void setTechniqueWeaveId(Long techniqueWeaveId) {

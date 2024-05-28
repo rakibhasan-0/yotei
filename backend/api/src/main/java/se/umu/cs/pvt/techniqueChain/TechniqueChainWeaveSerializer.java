@@ -27,12 +27,11 @@ public class TechniqueChainWeaveSerializer extends StdSerializer<TechniqueChainW
             jsonGenerator.writeArrayFieldStart("NodeInfo");
             for (TechniqueWeaveRepresent edge : weave.getWeaveRepresentations()) {
                 jsonGenerator.writeStartObject();
-                jsonGenerator.writeFieldName("id");
-                jsonGenerator.writeNumber(edge.getId());
-                jsonGenerator.writeFieldName("node_x_pos");
-                jsonGenerator.writeNumber(edge.getNode_x_pos());
-                jsonGenerator.writeFieldName("node_y_pos");
-                jsonGenerator.writeNumber(edge.getNode_y_pos());
+
+                jsonGenerator.writeNumberField("id", edge.getId());
+                jsonGenerator.writeNumberField("node_id", edge.getNode_id());
+                jsonGenerator.writeNumberField("node_x_pos", edge.getNode_x_pos());
+                jsonGenerator.writeNumberField("node_y_pos", edge.getNode_y_pos());
                 jsonGenerator.writeEndObject();
                 
             }

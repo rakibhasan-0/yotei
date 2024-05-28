@@ -20,7 +20,7 @@ public class TechniqueChainWeaveRepresentSerializer extends StdSerializer<Techni
     public void serialize(TechniqueWeaveRepresent node, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeNumberField("id", node.getId());
-        jsonGenerator.writeNumberField("node_id", node.getNodeId());
+        jsonGenerator.writeNumberField("node_id", node.getNode_id());
         jsonGenerator.writeNumberField("node_x_pos", node.getNode_x_pos());
         jsonGenerator.writeNumberField("node_y_pos", node.getNode_y_pos());
         if(node.getTechniqueWeave() != null) {
