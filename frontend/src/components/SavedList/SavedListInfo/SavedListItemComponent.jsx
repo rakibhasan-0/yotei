@@ -55,7 +55,7 @@ const SavedActivityListItem = ({ activity, index, id, listCreateInfoDispatchProp
 				<div
 					className={`${styles["listItemTime"]} d-flex align-items-center justify-content-end col-xs-5 pl-0 text-right`}
 				>
-					{activity.duration > 1 ? (
+					{activity.duration > 0 ? (
 						<p className="mb-0">{activity.duration} min </p>
 					) : (
 						<p className="mb-0"> - </p>

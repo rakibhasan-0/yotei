@@ -636,4 +636,27 @@ public class ExaminationController {
             return new ResponseEntity<Object>(null, HttpStatus.BAD_REQUEST);   
         }     
     }
+
+    /**
+     * Returns a examination protocol given an examinee ID.
+     * @return A examination protocol.  
+     * @return HTTP-status code.
+     */
+    @GetMapping("/exportExamineePDF/{examinee_id}")
+    public ResponseEntity<Object> exportExamineeToPdf(@PathVariable("examinee_id") long examinee_id) throws IOException {
+        Optional<Examinee> examinee = examineeRepository.findById(examinee_id);
+        if(examinee.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        ExportGradingExamineePdf pdfExport = new ExportGradingExamineePdf(examinationProtocolRepository.findByBeltId(examinee.get().getGradingId()).getExaminationProtocol().toString(), gradingRepository.findById(examinee.get().getGradingId()).get(),examinee.get(),examinationResultRepository.findByExamineeId(examinee_id),examinationCommentRepository.findByExamineeId(examinee_id),examineePairRepository.findAll(),examineeRepository.findByGradingId(examinee.get().getGradingId()));
+
+        try {
+            InputStream stream = pdfExport.generate();
+            return new ResponseEntity<Object>( Base64.getEncoder().encode(stream.readAllBytes()), HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<Object>(null, HttpStatus.BAD_REQUEST);   
+        } 
+    }
+
 }

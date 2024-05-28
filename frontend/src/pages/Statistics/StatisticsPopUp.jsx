@@ -22,14 +22,16 @@ export default function StatisticsPopUp({groupActivities,dates,averageRating,num
 	const [beltColorsData, setBeltColorsData] = useState({})
 
 	useEffect(() => {
-		// Function to calculate the amount of techniques by belt color
+
+		// Function calculates the amount of techniques per belt color
 		const calculateBeltColorsData = () => {
 			const beltColors = {}
 			groupActivities.forEach(activity => {
-				
+
 				if(activity.type == "technique") {
 					activity.beltColors.forEach(beltColor => {
 						const identifier = beltColor.belt_name + (beltColor.is_child ? "_c" : "")
+
 						if (beltColors[identifier]) {
 							beltColors[identifier]["count"] += activity.count
 						} else {
@@ -51,22 +53,22 @@ export default function StatisticsPopUp({groupActivities,dates,averageRating,num
 		calculateBeltColorsData()
 	}, [groupActivities])
 
-
 	const [showPopup, setShowPopup] = useState(false)
 
 	const togglePopup = () => {
 		setShowPopup(!showPopup)
-
 	}
 
 	return (
 		<div className={style.statisticsButtonContainer}>
+
 			<button onClick={togglePopup}>
 				<img src="/Statistics.svg" />
 			</button>
 
 			<Popup title={"Sammanställning av tillfällen"} id="statistics-popup" isOpen={showPopup} setIsOpen={setShowPopup} >
 				<div className={style.statisticsPopupContainer}>
+
 					<StarRatings
 						rating={averageRating}
 						starRatedColor="#ffcc00"
@@ -75,11 +77,14 @@ export default function StatisticsPopUp({groupActivities,dates,averageRating,num
 						starDimension="50px"
 						starSpacing="4px"
 					/>
+
 					<p style={{ color: "#b9b0b0" }}>
 						Genomsnittligt betyg {averageRating}/5 för {numberOfSessions}{" "}
 						tillfällen från {<br />} datum {startDate} till {endDate}
 					</p>
+
 					<p style={{ fontSize: "25px" }}>Bält-tekniker</p>
+
 					<div style={{ overflowY: "auto" }}>
 						<BeltColorChart beltColorsData={beltColorsData} />
 					</div>
