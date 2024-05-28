@@ -38,6 +38,7 @@ export default function TechniquechainCard({ item, detailURL, id, index, checkBo
 	const tempPath = (path === undefined) ? id : path
 	const handleClick = () =>{
 		localStorage.setItem("stored_techniquechain", id)
+		localStorage.setItem("stored_techniqueweave", id)
 	}
 
 	return (

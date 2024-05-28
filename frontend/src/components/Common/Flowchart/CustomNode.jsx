@@ -11,7 +11,6 @@ const connectionNodeIdSelector = (state) => state.connectionNodeId
 
 export default function CustomNode({ data }) {
 	const connectionNodeId = useStore(connectionNodeIdSelector)
-	console.log("id " + data.id + " ownName " + data.ownName + " technique name " + data.name + " attack? " + data.attack)
 	const backgroundColor = data.participant === 1 ? "lightblue" : "lightgreen"
 	const text = data.ownName ? data.ownName : data.name
 	const isConnecting = !!connectionNodeId

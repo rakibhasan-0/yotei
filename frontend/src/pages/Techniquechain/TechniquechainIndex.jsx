@@ -26,7 +26,7 @@ export default function TechniquechainIndex() {
 				<Tab eventKey="technique" title="Tekniktrådar" tabClassName={`nav-link ${styles.tab}`}>
 					<Techniquechain/>
 				</Tab>
-				<Tab  eventKey="exercise" title="Teknikvävar" tabClassName={`nav-link ${styles.tab}`}>
+				<Tab  eventKey="weave" title="Teknikvävar" tabClassName={`nav-link ${styles.tab}`}>
 					<TechniqueWeaveIndex/>
 				</Tab>
 			</Tabs>

@@ -8,12 +8,13 @@ import Button from "../Button/Button"
 import Popup from "../Popup/Popup"
 import AddTechnique from "../../Workout/CreateWorkout/AddTechnique"
 import { AccountContext } from "../../../context"
-import ReactFlow, { addEdge, applyEdgeChanges, MarkerType} from "reactflow"
+import ReactFlow, { addEdge, applyEdgeChanges, MarkerType,} from "reactflow"
 
 import CustomNode from "./CustomNode"
 import FloatingEdge from "./FloatingEdge"
 import CustomConnectionLine from "./CustomConnectionLine"
 
+// CREATE CUSTOM EDGES? SKAPA REPRESENTATIONEN VID KJEDJOR DÄR KANTER/STARTNOD ÄR MARKERADE!
 
 /**
  * Displays a thechinque weave as a Flowchart.
@@ -52,7 +53,7 @@ const edgeTypes = {
 }
 
 const defaultEdgeOptions = {
-	style: { strokeWidth: 3, stroke: "black" },
+	style: { strokeWidth: 3, stroke: "black", strokeDasharray: 5 },
 	type: "floating",
 	markerEnd: {
 		type: MarkerType.ArrowClosed,
@@ -60,13 +61,14 @@ const defaultEdgeOptions = {
 	},
 }
 
-const Flowchart = ({weaveId, nodes, edges, setEdges, setNodes, onNodesChange}) => {
-	
+const Flowchart = ({weaveId, nodes, edges, setEdges, setNodes, onNodesChange, editable}) => {
 	const context = useContext(AccountContext)
 	//States and functions to handle the nodes and their edges
-	const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges])
+	const onConnect = useCallback((params) => {
+		if(params.source === params.target) return
+		setEdges((eds) => addEdge(params, eds))}, [setEdges])
 	const onEdgesChange = useCallback(
-		(changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
+		(changes) => {setEdges((eds) => applyEdgeChanges(changes, eds))},
 		[],
 	)
 	const [activityPopup, setActivityPopup] = useState(false)
@@ -76,8 +78,6 @@ const Flowchart = ({weaveId, nodes, edges, setEdges, setNodes, onNodesChange}) =
 	const [chosenTech, setChosenTech] = useState(null)
 	const [participant, setParticipant] = useState(1)
 	const [attack, setAttack] = useState(false)
-
-
 
 	function handleSubmit(){
 		setActivityPopup(false)
@@ -135,9 +135,9 @@ const Flowchart = ({weaveId, nodes, edges, setEdges, setNodes, onNodesChange}) =
 				<ReactFlow
 					nodes={nodes}
 					edges={edges}
-					onNodesChange={onNodesChange}
-					onEdgesChange={onEdgesChange}
-					onConnect={onConnect}
+					onNodesChange={editable? onNodesChange:()=>null}
+					onEdgesChange={editable? onEdgesChange:()=>null}
+					onConnect={editable?onConnect:()=> null}
 					fitView
 					attributionPosition="top-right"
 					nodeTypes={nodeTypes}
@@ -148,11 +148,11 @@ const Flowchart = ({weaveId, nodes, edges, setEdges, setNodes, onNodesChange}) =
 				>
 				</ReactFlow>
 					
-				<div className={styles.buttonRow}>
+				{editable && <div className={styles.buttonRow}>
 					<Button onClick={() =>setActivityPopup(true)}>
 						<h2>+ Aktivitet</h2>
 					</Button>
-				</div>
+				</div>}
 			</div>
 			<Popup title="Lägg till teknik" isOpen={activityPopup} setIsOpen={setActivityPopup}>
 				<AddTechnique 

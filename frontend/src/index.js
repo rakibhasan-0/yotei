@@ -38,7 +38,7 @@ import ErrorBoundary from "./components/ErrorHandler/ErrorBoundary"
 import Techniquechain_page from "./pages/Techniquechain/Techniquechain_page/Techniquechain_page.jsx"
 import TechniquechainCreate from "./pages/Techniquechain/Techniquechain_create/TechniquechainCreate.jsx"
 import Techniquechain from "./pages/Techniquechain/TechniquechainIndex"
-import CreateWeave from "./pages/Techniquechain/TechniqueWeaveCreate/TechniqueWeaveCreate"
+import CreateWeave from "./pages/Techniquechain/TechniqueWeave/TechniqueWeaveCreate/TechniqueWeaveCreate.jsx"
 import TechniqueWeave_page from "./pages/Techniquechain/TechniqueWeave/TechniqueWeave_page/TechniqueWeave_page.jsx"
 
 import ListInfo from "./pages/List/ListInfo"
