@@ -64,13 +64,11 @@ public class UpdateUserTest {
             user.setUsername("user");
             user.setPassword("1234");
             user.setUserId(42L);
-            user.setUserRole(0);
 
             Mockito.when(userRepository.findById(42L)).thenReturn(Optional.of(user));
 
             User newUser = new User("newName", "1234");
             newUser.setUserId(42L);
-            newUser.setUserRole(1);
 
             ResponseEntity<Object> response = userController.updateUsername(map);
             // You should check if a user was found (HttpStatus) before doing the following...
@@ -94,7 +92,6 @@ public class UpdateUserTest {
             user.setUsername("user");
             user.setPassword("1234");
             user.setUserId(42L);
-            user.setUserRole(0);
 
             Mockito.when(userRepository.findById(42L)).thenReturn(Optional.of(user));
 
@@ -117,7 +114,6 @@ public class UpdateUserTest {
             user.setUsername("user");
             user.setPassword("1234");
             user.setUserId(42L);
-            user.setUserRole(0);
 
             Mockito.when(userRepository.findUserByUsernameIgnoreCase("user")).thenReturn(Optional.of(user));
 
@@ -134,7 +130,6 @@ public class UpdateUserTest {
             user.setUsername("user");
             user.setPassword("1234");
             user.setUserId(42L);
-            user.setUserRole(0);
         } catch (InvalidUserNameException | InvalidKeySpecException | NoSuchAlgorithmException | InvalidPasswordException e) {
             e.printStackTrace();
         }
@@ -154,7 +149,6 @@ public class UpdateUserTest {
             user.setUsername("user");
             user.setPassword("1234");
             user.setUserId(42L);
-            user.setUserRole(0);
         } catch (InvalidUserNameException | InvalidKeySpecException | NoSuchAlgorithmException | InvalidPasswordException e) {
             e.printStackTrace();
         }
@@ -173,7 +167,6 @@ public class UpdateUserTest {
             user.setUsername("user");
             user.setPassword("1234");
             user.setUserId(42L);
-            user.setUserRole(0);
         } catch (InvalidUserNameException | InvalidKeySpecException | NoSuchAlgorithmException | InvalidPasswordException e) {
             e.printStackTrace();
         }
@@ -193,7 +186,6 @@ public class UpdateUserTest {
             user.setUsername("user");
             user.setPassword("1234");
             user.setUserId(42L);
-            user.setUserRole(0);
         } catch (InvalidUserNameException | InvalidKeySpecException | NoSuchAlgorithmException | InvalidPasswordException e) {
             e.printStackTrace();
         }

@@ -21,7 +21,7 @@ import CheckBox from "../../components/Common/CheckBox/CheckBox"
  * @param		@type { Function }	  toggleOnlyMyGroups		A callback function used to toggle the onlyMyGroups variable.
  *
  * 
-* @author Griffin, Tomato (Group 6) , Team Mango (Group 4) (2024-05-17) , Team Durian (Group 3) (2024-05-22)
+* @author Griffin, Tomato (Group 6) , Team Mango (Group 4) (2024-05-17) , Team Durian (Group 3) (2024-05-27)
 * @version 2.1
 * @since 2023-05-08
 * Updates: 2024-05-10: Added a checkbox (with a feature toggle, since it does not work currently) for filtering by only my groups or all groups.
@@ -68,9 +68,9 @@ export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, o
 				</div>
 
 				{/* Checkbox for only showing this user's groups. */}
-				<div className={styles.checkBoxSpace} >
-					<CheckBox id={"seeOnlyMyGroups"} onClick={() => { toggleOnlyMyGroups()}}
-						label={"Visa bara tillfällen för mina grupper"} checked={onlyMyGroups} />
+				<div className={styles.checkBoxSpace} style={{display : "flex", alignItems : "center"}} >
+					<CheckBox id={"seeOnlyMyGroups"} onClick={() => { toggleOnlyMyGroups()}} checked={onlyMyGroups}/>
+					<label className={styles.groupPickerLabel} style={{paddingLeft : "5px", marginTop : "10px"}} >Visa bara tillfällen för mina grupper</label>
 					{/* The toggleOnlyMyGroups() call here toggles a boolean variable stored in PlanIndex.jsx. */}
 				</div>
 

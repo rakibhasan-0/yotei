@@ -100,7 +100,7 @@ public class SearchWorkoutDBBuilder implements SearchDBBuilderInterface {
             query.append("OR workout_author = " + userId);
             // Allow admins to see every workout
             query.append("OR " + userId + " IN (")
-                .append("SELECT user_id FROM user_table WHERE user_role = 1")
+                .append("SELECT user_id FROM user_table WHERE role_id = 1")
                 .append(")"); 
             // Show workouts where the user is added, but does not own
             query.append("OR " + userId + " IN (")
