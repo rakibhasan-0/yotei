@@ -194,6 +194,10 @@
 	font-size: 10px;
 }
 
+.spinner{
+	width: 50px;
+}
+
 .bottomRowContainer {
     display: flex; /* Use flexbox to create a row layout */
     padding: 10px; /* Add padding for spacing, matching other containers */

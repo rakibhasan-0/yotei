@@ -101,7 +101,8 @@ export default function GradingAfter() {
 			})
 	
 			if (!response.ok) {
-				throw new Error("Network response was not ok")
+				setError("Nätverk svar var inte OK, felkod: " + response.status)
+				return
 			}
 	
 			const base64String = await response.text()
@@ -115,7 +116,7 @@ export default function GradingAfter() {
 			console.log("Blob created:", blob)
 			return blob
 		} catch (error) {
-			console.error("Error fetching PDF:", error)
+			setError("Ett fel inträffade vid hämtning av PDF, felkod:" + error)
 			return null
 		}
 	}
