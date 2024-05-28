@@ -116,7 +116,6 @@ public class ExportGradingPdf {
         if(techniqueComments.size() > 0)
             createGroupCommentPage(techniqueComments);
 
-
         Map<Long, List<ExaminationComment>> pairMap = new HashMap<>();
 
         for (ExamineePair examineePair : examineePairs) {
@@ -128,6 +127,9 @@ public class ExportGradingPdf {
             }
             pairMap.put(examineePair.getExamineePairId(), pairComments); 
         }
+
+        if(pairMap.size() > 0)
+            createPairCommentPage(pairMap);
 
         Map<Long, List<ExaminationComment>> examineeCommentMap = new HashMap<>();
 
@@ -141,8 +143,8 @@ public class ExportGradingPdf {
             examineeCommentMap.put(examinee.getExamineeId(), examineeComments); 
         }
 
-        createPairCommentPage(pairMap);
-        createExamineeCommentPage(examineeCommentMap);
+        if(examineeCommentMap.size() > 0)
+            createExamineeCommentPage(examineeCommentMap);
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
@@ -639,7 +641,7 @@ public class ExportGradingPdf {
     }
 
    /**
-    * Creates the examinee comment pdf page and writes the group comment to the pdf page.
+    * Creates the examinee comment pdf page and writes the group comment to the pdf page. <-- THIS IS NOT IMPLEMENTED IN FRONTEND YET. :-(
     *
     * @param techniqueComments - A list containing technique comments
     * @throws IOException
