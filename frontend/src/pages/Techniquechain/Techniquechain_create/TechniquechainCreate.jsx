@@ -25,6 +25,8 @@ export default function TechniquechainCreate() {
 	const [nodeToGetNext, setNodeToGetNext] = useState()
 	const [firstNodes, setFirstNodes] = useState(true)
 	const [newChainId, setNewChainId] = useState()
+	const [haveChosenNodes, setHaveChosenNodes] = useState(false)
+	const [haveChosenWeave, setHaveChosenWeave] = useState(false)
 	const navigate = useNavigate()
 
 	// true when data has been saved, when unmounting and rebuilding view.
@@ -195,8 +197,10 @@ export default function TechniquechainCreate() {
 		const foundObject = nodesToDisplay.find(obj => obj.id === nodeToGetNext)
 		if(chosenNodes.length == 0 && foundObject) {
 			setChosenNodes([foundObject])
+			setHaveChosenNodes(true)
 		}else if(foundObject) {
 			setChosenNodes(prevArray => [ ... prevArray, foundObject])
+			setHaveChosenNodes(true)
 		}
 		if(nodeToGetNext) {
 			updateNodesToShow()
@@ -262,6 +266,7 @@ export default function TechniquechainCreate() {
 				{groups?.length > 0 ? groups.map((plan, index) => (
 					<div className={styles.dropdownRow} key={index} onClick={() =>{ 
 						setGroup(plan)
+						setHaveChosenWeave(true)
 					}}>
 						<p className={styles.dropdownRowText}>{plan.name}</p>
 					</div>
@@ -270,45 +275,53 @@ export default function TechniquechainCreate() {
 				</div>}
 			</Dropdown>
 
-			<Divider option={"h1_left"} title={"Valda Tekniker"} />
+			{ haveChosenNodes ? 
+				<div>
+					<Divider option={"h1_left"} title={"Valda Tekniker"} />
+					<InfiniteScrollComponent>
+						{ chosenNodes.map((technique, index) => {
+							return (
+								<div key={technique.id} style={{ display: "flex", alignItems: "center", marginBottom: "1px", width: "100%" }}>
+									<div style={{ flex: 1 }}>
+										<TechniquechainNode
+											item={technique.name}
+											key={technique.id}
+											id={technique.id}
+											detailURL={setNodeToGetNext}
+											index={index}>
+										</TechniquechainNode>
+									</div>
+								</div>
+							)
+						})}
+					</InfiniteScrollComponent>		
+				</div>
+				:<></>
+			}
 
-			<InfiniteScrollComponent>
-				{ chosenNodes.map((technique, index) => {
-					return (
-						<div key={technique.id} style={{ display: "flex", alignItems: "center", marginBottom: "1px", width: "100%" }}>
-							<div style={{ flex: 1 }}>
-								<TechniquechainNode
-									item={technique.name}
-									key={technique.id}
-									id={technique.id}
-									detailURL={setNodeToGetNext}
-									index={index}>
-								</TechniquechainNode>
-							</div>
-						</div>
-					)
-				})}
-			</InfiniteScrollComponent>
-
-			<Divider option={"h1_left"} title={"Nästa Teknik"} />
-
-			<InfiniteScrollComponent>
-				{ nodesToDisplay.map((technique, index) => {
-					return (
-						<div key={technique.id} style={{ display: "flex", alignItems: "center", marginBottom: "1px", width: "100%" }}>
-							<div style={{ flex: 1 }}>
-								<TechniquechainNode
-									item={technique.name}
-									key={technique.id}
-									id={technique.id}
-									detailURL={setNodeToGetNext}
-									index={index}>
-								</TechniquechainNode>
-							</div>
-						</div>
-					)
-				})}
-			</InfiniteScrollComponent>
+			{haveChosenWeave ?
+				<div>
+					<Divider option={"h1_left"} title={"Nästa Teknik"} />
+					<InfiniteScrollComponent>
+						{ nodesToDisplay.map((technique, index) => {
+							return (
+								<div key={technique.id} style={{ display: "flex", alignItems: "center", marginBottom: "1px", width: "100%" }}>
+									<div style={{ flex: 1 }}>
+										<TechniquechainNode
+											item={technique.name}
+											key={technique.id}
+											id={technique.id}
+											detailURL={setNodeToGetNext}
+											index={index}>
+										</TechniquechainNode>
+									</div>
+								</div>
+							)
+						})}
+					</InfiniteScrollComponent>
+				</div>
+				:<></>
+			}
 
 			<div style={{display: "flex", flexDirection: "row", width: "100%", justifyContent: "center", gap: 10 }}>
 				<div className={styles.wrapCentering} style={{ marginBottom: "2rem", marginTop: "1rem" }} >
