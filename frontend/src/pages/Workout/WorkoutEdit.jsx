@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 import { useContext, useEffect, useReducer, useState } from "react"
-import {useParams} from "react-router"
+import { useParams } from "react-router"
 import { useLocation, useNavigate } from "react-router-dom"
 import WorkoutFormComponent from "../../components/Workout/CreateWorkout/WorkoutFormComponent.jsx"
 import { AccountContext } from "../../context.js"
-import { 
-	workoutCreateReducer, 
-	WorkoutCreateInitialState, 
+import {
+	workoutCreateReducer,
+	WorkoutCreateInitialState,
 	WORKOUT_CREATE_TYPES,
 } from "../../components/Workout/CreateWorkout/WorkoutCreateReducer.js"
 import { WorkoutCreateContext } from "../../components/Workout/CreateWorkout/WorkoutCreateContext.js"
@@ -16,7 +16,7 @@ import { Spinner } from "react-bootstrap"
 
 /**
  * This is the page for editing a saved workout.
- * 
+ *
  * @author Team Minotaur, Team Kiwi, Team Durian, Team Tomato
  * @version 2.0
  * @since 2023-05-24
@@ -24,15 +24,13 @@ import { Spinner } from "react-bootstrap"
  * @update 2024-05-21  Fixed the convertion of id's when activities come from a list.
  */
 const WorkoutEdit = () => {
-	const [workoutCreateInfo, workoutCreateInfoDispatch] = useReducer(
-		workoutCreateReducer, JSON.parse(JSON.stringify(WorkoutCreateInitialState)))
+	const [workoutCreateInfo, workoutCreateInfoDispatch] = useReducer(workoutCreateReducer, WorkoutCreateInitialState)
 	const navigate = useNavigate()
 	const { token, userId } = useContext(AccountContext)
 	const location = useLocation()
 	const { state } = useLocation()
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const [isLoading, setIsLoading] = useState(true)
-
 
 	/**
 	 * Submits the form data to the API.
@@ -43,27 +41,24 @@ const WorkoutEdit = () => {
 		const data = parseData(workoutCreateInfo.data)
 		const workoutId = await updateWorkout(data)
 
-
-		if(workoutId) {
+		if (workoutId) {
 			setSuccess("Träningen uppdaterades!")
 		} else {
 			setError("Träningen kunde inte uppdateras.")
 		}
 		navigate("/workout/" + workoutId)
-		
 	}
 
 	/**
 	 * Parses the data from the workoutCreateInfo state to a format that the API accepts.
-	 * 
-	 * @param {*} data 
+	 *
+	 * @param {*} data
 	 * @returns The parsed data.
 	 */
 	function parseData(data) {
-
 		let totDuration = 0
-		data.activityItems.forEach(category => {
-			category.activities.forEach(activity=> {
+		data.activityItems.forEach((category) => {
+			category.activities.forEach((activity) => {
 				totDuration += +activity.duration
 			})
 		})
@@ -83,24 +78,27 @@ const WorkoutEdit = () => {
 					order: activityOrder,
 				}
 
-				if (activity.techniqueId) {
-					// Convert the id to the correct form if it comes from a list.
-					if (typeof activity.techniqueId === "string" && activity.techniqueId.includes("-technique-")) {
-						obj.techniqueId = activity.techniqueId.split("-technique-").pop()
-					} else{
-						obj.techniqueId = activity.techniqueId
-					}
-					
-				} else if (activity.exerciseId) {
-					// Convert the id to the correct form if it comes from a list.
-					if (typeof activity.exerciseId === "string" && activity.exerciseId.includes("-exercise-")) {
-						obj.exerciseId = activity.exerciseId.split("-exercise-").pop()
+				if (activity.technique) {
+					obj.techniqueId = activity.technique.id
+				} else {
+					if (activity.techniqueId) {
+						// Convert the id to the correct form if it comes from a list.
+						if (typeof activity.techniqueId === "string" && activity.techniqueId.includes("-technique-")) {
+							obj.techniqueId = activity.techniqueId.split("-technique-").pop()
+						} else {
+							obj.techniqueId = activity.techniqueId
+						}
+					} else if (activity.exerciseId) {
+						// Convert the id to the correct form if it comes from a list.
+						if (typeof activity.exerciseId === "string" && activity.exerciseId.includes("-exercise-")) {
+							obj.exerciseId = activity.exerciseId.split("-exercise-").pop()
+						} else {
+							obj.exerciseId = activity.exerciseId
+						}
 					} else {
-						obj.exerciseId = activity.exerciseId
+						obj.exerciseId = activity.exercise.id
 					}
-					
 				}
-
 
 				activities.push(obj)
 			})
@@ -108,10 +106,9 @@ const WorkoutEdit = () => {
 
 		// Temp solution
 		const date = new Date()
-		const todaysDate = date.getFullYear() + "-" + 
-				("0" + (date.getMonth()+1)).slice(-2) + "-" + 
-				("0" + date.getDate()).slice(-2)
-		
+		const todaysDate =
+			date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2)
+
 		return {
 			workout: {
 				id: data.id,
@@ -124,14 +121,14 @@ const WorkoutEdit = () => {
 				author: userId,
 			},
 			activities,
-			users: data.users.map(user => user.userId),
-			tagIds: data.tags.map(tag => tag.id),
+			users: data.users.map((user) => user.userId),
+			tagIds: data.tags.map((tag) => tag.id),
 		}
 	}
 
 	/**
 	 * Updates the workout in the database.
-	 * 
+	 *
 	 * @param {*} body
 	 * @returns The id of the updated workout if successfull, otherwise null.
 	 */
@@ -139,12 +136,13 @@ const WorkoutEdit = () => {
 		const requestOptions = {
 			method: "PUT",
 			headers: {
-				"Accept": "application/json",
-				"Content-type": "application/json", token
+				Accept: "application/json",
+				"Content-type": "application/json",
+				token,
 			},
-			body: JSON.stringify(body)
+			body: JSON.stringify(body),
 		}
-    
+
 		const response = await fetch("/api/workouts", requestOptions)
 		const jsonResp = await response.json()
 
@@ -152,40 +150,39 @@ const WorkoutEdit = () => {
 	}
 
 	/**
-     * Fetches the data from the local storage and context.
-     */
+	 * Fetches the data from the local storage and context.
+	 */
 	useEffect(() => {
 		setIsLoading(true)
 		const item = localStorage.getItem("workoutCreateInfoEdit")
 		const workoutData = location.state?.workout
 		const userData = location.state?.users
 
-
-		if (workoutData){
+		if (workoutData) {
 			workoutCreateInfoDispatch({
 				type: WORKOUT_CREATE_TYPES.INIT_EDIT_DATA,
-				payload: { workoutData, userData: userData ? userData : [] }
+				payload: { workoutData, userData: userData ? userData : [] },
 			})
-			
+
 			window.history.replaceState({}, document.title)
 		} else if (item) {
 			workoutCreateInfoDispatch({
 				type: WORKOUT_CREATE_TYPES.INIT_WITH_DATA,
-				payload: JSON.parse(item)
+				payload: JSON.parse(item),
 			})
 		} else {
-			navigate("/workout" , {replace: true})
+			navigate("/workout", { replace: true })
 		}
 		setIsLoading(false)
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
-	
+
 	/**
-     * Saves the data to local storage when the user leaves the page.
-     * Or removes it if the user has submitted the form.
-     */
+	 * Saves the data to local storage when the user leaves the page.
+	 * Or removes it if the user has submitted the form.
+	 */
 	useEffect(() => {
 		localStorage.setItem("workoutCreateInfoEdit", JSON.stringify(workoutCreateInfo))
-		
+
 		return () => {
 			if (isSubmitted) localStorage.removeItem("workoutCreateInfoEdit")
 		}
@@ -193,15 +190,16 @@ const WorkoutEdit = () => {
 
 	return (
 		<>
-			{isLoading ? <Spinner/> :
-
-				<WorkoutCreateContext.Provider value={{workoutCreateInfo, workoutCreateInfoDispatch}} >
+			{isLoading ? (
+				<Spinner />
+			) : (
+				<WorkoutCreateContext.Provider value={{ workoutCreateInfo, workoutCreateInfoDispatch }}>
 					<title>Redigera pass</title>
 					<h1 className={styles.title}>Redigera pass</h1>
-		
-					<WorkoutFormComponent callback={submitHandler} state = {state}/>	
-				</WorkoutCreateContext.Provider> 
-			}
+
+					<WorkoutFormComponent callback={submitHandler} state={state} />
+				</WorkoutCreateContext.Provider>
+			)}
 		</>
 	)
 }
