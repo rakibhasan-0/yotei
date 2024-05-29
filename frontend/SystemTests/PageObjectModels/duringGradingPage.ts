@@ -49,14 +49,14 @@ export class DuringGradingPage {
     async addExamineeComment(comment: Comment) {
         await this.page.getByTestId(comment.examineeName + "systest").locator('i').click();
         await this.page.waitForTimeout(500);
-        await this.page.locator('#TextareaTestId').fill('Systest Kommentar');
+        await this.page.locator('#TextareaTestId').fill(comment.content);
         await this.page.getByRole('button', { name: 'Lägg till' }).click();
     }
     
     async addPairComment(comment: Comment) {
         await this.page.getByTestId(comment.pairId).locator('i').click();
         await this.page.waitForTimeout(500);
-        await this.page.locator('#TextareaTestId').fill('Systest Kommentar Par');
+        await this.page.locator('#TextareaTestId').fill(comment.content);
         await this.page.getByRole('button', { name: 'Lägg till' }).click();
     }
 
