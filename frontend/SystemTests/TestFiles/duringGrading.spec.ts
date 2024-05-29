@@ -1,6 +1,17 @@
 import { test, expect } from '../fixtures'
 import { DuringGradingPage } from '../PageObjectModels/duringGradingPage'
 
+/**
+ * A test for the during grading page where it tests the different components functionality and verifies 
+ * that correct fetches of data from backend has been made. 
+ * 
+ * This test covers results, stepping back and forth and posting and fetching
+ * comments for Group, Pair And Individial comments.
+ *
+ *  @author Team Orange (Group 5, c19jen, ens21ljn)
+ *  @since 2024-05-29
+ *  @version 1.0
+ */
 test.describe('Systest for DuringGrading page.', () => {
     let duringGradingPage: DuringGradingPage
     
@@ -12,13 +23,11 @@ test.describe('Systest for DuringGrading page.', () => {
         expect(page.getByTestId("infoPanel"))
     })
     test.afterEach('delete created grading', async ({}) => {
-
         const gradingId = await duringGradingPage.getCurrentUrl()
         await duringGradingPage.visit(`grading/${gradingId}/2`)
         await duringGradingPage.saveGrading()
         await duringGradingPage.visit(`grading`)
         await duringGradingPage.removeGrading()
-
     })
     
     test('1. Should set result for technique to pass and fail to half of the examinees.', async ({ page }) => {
@@ -30,45 +39,44 @@ test.describe('Systest for DuringGrading page.', () => {
         await duringGradingPage.setFailResultForExaminee({ examineeId: 1, name: "TestPerson4" })
         
         const backgroundColor1 = await page.$eval('[data-testid="TestPerson1systest"]', (element) => {
-            return window.getComputedStyle(element).backgroundColor;
-        });
+            return window.getComputedStyle(element).backgroundColor
+        })
         const backgroundColor2 = await page.$eval('[data-testid="TestPerson2systest"]', (element) => {
-            return window.getComputedStyle(element).backgroundColor;
-        });
+            return window.getComputedStyle(element).backgroundColor
+        })
         const backgroundColor3 = await page.$eval('[data-testid="TestPerson3systest"]', (element) => {
-            return window.getComputedStyle(element).backgroundColor;
-        });
+            return window.getComputedStyle(element).backgroundColor
+        })
         const backgroundColor4 = await page.$eval('[data-testid="TestPerson4systest"]', (element) => {
-            return window.getComputedStyle(element).backgroundColor;
-        });
+            return window.getComputedStyle(element).backgroundColor
+        })
 
-        expect(backgroundColor1).toBe('rgb(144, 238, 144)');
-        expect(backgroundColor2).toBe('rgb(240, 128, 128)');
-        expect(backgroundColor3).toBe('rgb(144, 238, 144)');
-        expect(backgroundColor4).toBe('rgb(240, 128, 128)');
-    
+        expect(backgroundColor1).toBe('rgb(144, 238, 144)')
+        expect(backgroundColor2).toBe('rgb(240, 128, 128)')
+        expect(backgroundColor3).toBe('rgb(144, 238, 144)')
+        expect(backgroundColor4).toBe('rgb(240, 128, 128)')
     })
     
     test('2. Should go to next technique. and the colors should be set to default.', async ({ page }) => {
         await duringGradingPage.moveToNextTechnique()
 
         const backgroundColor1 = await page.$eval('[data-testid="TestPerson1systest"]', (element) => {
-            return window.getComputedStyle(element).backgroundColor;
-        });
+            return window.getComputedStyle(element).backgroundColor
+        })
         const backgroundColor2 = await page.$eval('[data-testid="TestPerson2systest"]', (element) => {
-            return window.getComputedStyle(element).backgroundColor;
-        });
+            return window.getComputedStyle(element).backgroundColor
+        })
         const backgroundColor3 = await page.$eval('[data-testid="TestPerson3systest"]', (element) => {
-            return window.getComputedStyle(element).backgroundColor;
-        });
+            return window.getComputedStyle(element).backgroundColor
+        })
         const backgroundColor4 = await page.$eval('[data-testid="TestPerson4systest"]', (element) => {
-            return window.getComputedStyle(element).backgroundColor;
-        });
+            return window.getComputedStyle(element).backgroundColor
+        })
 
-        expect(backgroundColor1).toBe('rgb(255, 255, 255)');
-        expect(backgroundColor2).toBe('rgb(255, 255, 255)');
-        expect(backgroundColor3).toBe('rgb(255, 255, 255)');
-        expect(backgroundColor4).toBe('rgb(255, 255, 255)');
+        expect(backgroundColor1).toBe('rgb(255, 255, 255)')
+        expect(backgroundColor2).toBe('rgb(255, 255, 255)')
+        expect(backgroundColor3).toBe('rgb(255, 255, 255)')
+        expect(backgroundColor4).toBe('rgb(255, 255, 255)')
     })
 
     test('3. Should fill out the first technique for all examinees and move to next and then back to see if they are filled.', async ({ page }) => {
@@ -80,42 +88,42 @@ test.describe('Systest for DuringGrading page.', () => {
         await duringGradingPage.moveToNextTechnique()
 
         const backgroundColor1 = await page.$eval('[data-testid="TestPerson1systest"]', (element) => {
-            return window.getComputedStyle(element).backgroundColor;
-        });
+            return window.getComputedStyle(element).backgroundColor
+        })
         const backgroundColor2 = await page.$eval('[data-testid="TestPerson2systest"]', (element) => {
-            return window.getComputedStyle(element).backgroundColor;
-        });
+            return window.getComputedStyle(element).backgroundColor
+        })
         const backgroundColor3 = await page.$eval('[data-testid="TestPerson3systest"]', (element) => {
-            return window.getComputedStyle(element).backgroundColor;
-        });
+            return window.getComputedStyle(element).backgroundColor
+        })
         const backgroundColor4 = await page.$eval('[data-testid="TestPerson4systest"]', (element) => {
-            return window.getComputedStyle(element).backgroundColor;
-        });
+            return window.getComputedStyle(element).backgroundColor
+        })
 
-        expect(backgroundColor1).toBe('rgb(255, 255, 255)');
-        expect(backgroundColor2).toBe('rgb(255, 255, 255)');
-        expect(backgroundColor3).toBe('rgb(255, 255, 255)');
-        expect(backgroundColor4).toBe('rgb(255, 255, 255)');
+        expect(backgroundColor1).toBe('rgb(255, 255, 255)')
+        expect(backgroundColor2).toBe('rgb(255, 255, 255)')
+        expect(backgroundColor3).toBe('rgb(255, 255, 255)')
+        expect(backgroundColor4).toBe('rgb(255, 255, 255)')
 
         await duringGradingPage.moveToPreviousTechnique()
 
         const backgroundColor11 = await page.$eval('[data-testid="TestPerson1systest"]', (element) => {
-            return window.getComputedStyle(element).backgroundColor;
-        });
+            return window.getComputedStyle(element).backgroundColor
+        })
         const backgroundColor22 = await page.$eval('[data-testid="TestPerson2systest"]', (element) => {
-            return window.getComputedStyle(element).backgroundColor;
-        });
+            return window.getComputedStyle(element).backgroundColor
+        })
         const backgroundColor33 = await page.$eval('[data-testid="TestPerson3systest"]', (element) => {
-            return window.getComputedStyle(element).backgroundColor;
-        });
+            return window.getComputedStyle(element).backgroundColor
+        })
         const backgroundColor44 = await page.$eval('[data-testid="TestPerson4systest"]', (element) => {
-            return window.getComputedStyle(element).backgroundColor;
-        });
+            return window.getComputedStyle(element).backgroundColor
+        })
 
-        expect(backgroundColor11).toBe('rgb(144, 238, 144)');
-        expect(backgroundColor22).toBe('rgb(240, 128, 128)');
-        expect(backgroundColor33).toBe('rgb(144, 238, 144)');
-        expect(backgroundColor44).toBe('rgb(240, 128, 128)');
+        expect(backgroundColor11).toBe('rgb(144, 238, 144)')
+        expect(backgroundColor22).toBe('rgb(240, 128, 128)')
+        expect(backgroundColor33).toBe('rgb(144, 238, 144)')
+        expect(backgroundColor44).toBe('rgb(240, 128, 128)')
     })
 
     test('4. Should add Examinee Comment and load it.', async ({ page }) => {
@@ -136,22 +144,22 @@ test.describe('Systest for DuringGrading page.', () => {
 
         await duringGradingPage.navigateToExamineeComment({ examineeName: "TestPerson1" })
         const textAreaValue1 = await page.$eval('#TextareaTestId', (el) =>(el as HTMLTextAreaElement).value)
-        await expect(textAreaValue1).toBe("Systest Kommentar Personlig1")
+        expect(textAreaValue1).toBe("Systest Kommentar Personlig1")
         await duringGradingPage.closeExamineePopup()
 
         await duringGradingPage.navigateToExamineeComment({ examineeName: "TestPerson2" })
         const textAreaValue2 = await page.$eval('#TextareaTestId', (el) => (el as HTMLTextAreaElement).value)
-        await expect(textAreaValue2).toBe("Systest Kommentar Personlig2")
+        expect(textAreaValue2).toBe("Systest Kommentar Personlig2")
         await duringGradingPage.closeExamineePopup()
 
         await duringGradingPage.navigateToExamineeComment({ examineeName: "TestPerson3" })
         const textAreaValue3 = await page.$eval('#TextareaTestId', (el) =>(el as HTMLTextAreaElement).value)
-        await expect(textAreaValue3).toBe("Systest Kommentar Personlig3")
+        expect(textAreaValue3).toBe("Systest Kommentar Personlig3")
         await duringGradingPage.closeExamineePopup()
 
         await duringGradingPage.navigateToExamineeComment({ examineeName: "TestPerson4" })
         const textAreaValue4 = await page.$eval('#TextareaTestId', (el) =>(el as HTMLTextAreaElement).value)
-        await expect(textAreaValue4).toBe("Systest Kommentar Personlig4")
+        expect(textAreaValue4).toBe("Systest Kommentar Personlig4")
         await duringGradingPage.closeExamineePopup() 
     })
 
@@ -166,12 +174,12 @@ test.describe('Systest for DuringGrading page.', () => {
 
         await duringGradingPage.navigateToPairComment({pairId: "P1systest"})
         const textAreaValue1 = await page.$eval('#TextareaTestId', (el) =>(el as HTMLTextAreaElement).value)
-        await expect(textAreaValue1).toBe("Systest Kommentar Par1")
+        expect(textAreaValue1).toBe("Systest Kommentar Par1")
         await duringGradingPage.closePairPopup()
 
         await duringGradingPage.navigateToPairComment({pairId: "P2systest"})
         const textAreaValue2 = await page.$eval('#TextareaTestId', (el) => (el as HTMLTextAreaElement).value)
-        await expect(textAreaValue2).toBe("Systest Kommentar Par2")
+        expect(textAreaValue2).toBe("Systest Kommentar Par2")
         await duringGradingPage.closePairPopup()
     })
 
@@ -184,7 +192,7 @@ test.describe('Systest for DuringGrading page.', () => {
 
         await duringGradingPage.navigateToGroupComment()
         const textAreaValue1 = await page.$eval('#TextareaTestId', (el) =>(el as HTMLTextAreaElement).value)
-        await expect(textAreaValue1).toBe("Systest Kommentar grupp")
+        expect(textAreaValue1).toBe("Systest Kommentar grupp")
         await duringGradingPage.closeGroupPopup()
     })
 })
