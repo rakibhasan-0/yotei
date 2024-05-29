@@ -230,11 +230,18 @@ export default function GradingBefore() {
         if(data.step === 1) {
           
           let aloneExaminees = data.examinees.map(examinee => {
-            return {name: examinee.name, id: examinee.examineeId}
+            return {name: examinee.name, id: examinee.examineeId, isLocked: false}
           })
           
-          
+          if(exsistingPairs.length >= 1) {
+            aloneExaminees = aloneExaminees.filter(examinee => {
+                return exsistingPairs.map(pair => {
 
+                })
+            })
+          }
+          
+          setExaminees([...examinees, aloneExaminees])
         }
 
 			} catch (error) {	
