@@ -34,12 +34,13 @@ import Divider from "../Divider/Divider"
  *		</div>
  * 	)
  *
- * @author Team Medusa, Team Chimera, Team Durian 
+ * @author Team Medusa, Team Chimera, Team Durian, Team coconut
  * @version 3.0
  * @since 2024-05-17
+ * @updated 2024-05-29 - Added scrollId to make popup inside popup possible
  * @updated 2024-05-29 Kiwi, Updated props comment.
  */
-export default function Popup({ title, id, isOpen, setIsOpen, children, isNested, style, onClose, zIndex, dividerOption }) {
+export default function Popup({ title, id, isOpen, setIsOpen, children, isNested, style, onClose, zIndex, dividerOption, scrollId = "scrollable-content" }) {
 
 	// Synchronize react state with CSS-styling in browser
 	useEffect(() => {
@@ -79,7 +80,7 @@ export default function Popup({ title, id, isOpen, setIsOpen, children, isNested
 						<X width={44} height={44} color="black"/>
 					</button>
 				</div>
-				<div className={styles.content} id = "scrollable-content">
+				<div className={styles.content} id = {scrollId}>
 					{children}
 					{/* This div is here to force the browser to make this container scrollable
 						It needs to be here so that Safari prioritizes scrolling this container

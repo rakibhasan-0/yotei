@@ -19,13 +19,14 @@ import Spinner from "../Spinner/Spinner"
  *   ))}
  * </InfiniteScrollComponent>
  * 
- * @author Kraken (Grupp 7), Kiwi (Group 2 - 2024)
- * @updated 2024-05-29 Kiwi, Added auto-scroll and updated comment
- * @version 1.2
+ * @author Kraken (Grupp 7), Kiwi (Group 2 - 2024), Coconut (Group 7- 2024)
+ * @version 1.1
  * @since 2024-05-08
+ * @updated 2024-05-29 - Added scrollId to make popup inside popup possible
+ * @updated 2024-05-29 Kiwi, Added auto-scroll and updated comment
  */
 
-export default function InfiniteScrollComponent({ children, activities, activeKey, searchCount }) {
+export default function InfiniteScrollComponent({ children, activities, activeKey, searchCount, scrollId }) {
 
 	const shownItems = useRef(20)
 
@@ -45,10 +46,8 @@ export default function InfiniteScrollComponent({ children, activities, activeKe
 		let startIndex = shownItems.current - 20
 		let endIndex = shownItems.current 
 		let data = children.slice(startIndex, endIndex)
-
 		setVisibleTechniques(prevItems => [...prevItems, ...data])
 		fetchedUpdate()
-		
 		shownItems.current += 20
 		setIsLoading(false)
 	}
@@ -116,7 +115,7 @@ export default function InfiniteScrollComponent({ children, activities, activeKe
 
 	return (
 		isLoading ? 
-			< Spinner />
+			< Spinner/>
 			:
 			<InfiniteScroll
 				dataLength={visibleTechniques.length}
@@ -127,7 +126,7 @@ export default function InfiniteScrollComponent({ children, activities, activeKe
 						<Spinner/>
 					</div>
 				}
-				scrollableTarget={"scrollable-content"}
+				scrollableTarget={scrollId}
 			>
 				<div>
 					{visibleTechniques}
