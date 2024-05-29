@@ -13,8 +13,8 @@ import { toast } from "react-toastify"
  * 										 every toast function no longer takes a second argument and uses the message sent as ID instead
  * 										 this automatically ensures that the same message is not displayed multiple times.
  * 			2024-05-28  by Team Mango: Separated technique and exercises permissions. Also updated permissions list and functions to include new permissions.
- *									   Groups and sessions are now combined).
- *			2024-05-28  by Team Mango: Removed technique and exercise own in checks because variable do not exist.
+ *									   Groups and sessions are now combined). Removed technique and exercise own in checks because variable do not exist.
+ * 			2024-05-29	by Team Mango: Added BETA_ACCESS permission and relevant hasBetaAccess function.st.
  */
 
 /**
@@ -25,6 +25,16 @@ import { toast } from "react-toastify"
 export function isAdminUser(context) {
 	if (!context.permissions) return false
 	return context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)
+}
+
+/**
+ * hasBetaAccess() - check if a user has access to beta features.
+ * @param {*} context AccountContext from user. 
+ * @returns 
+ */
+export function hasBetaAccess(context) {
+	if (!context.permissions) return false
+	return (context.permissions.includes(USER_PERMISSION_CODES.BETA_ACCESS))
 }
 
 /**
@@ -96,9 +106,9 @@ export function canDeleteComment(context, commentId) {
 } //PERMISSION TODO: Should there be a permission for deleting others' comments without being an admin? And should everyone be able to write comments?
 
 /**
- * canCreateAndEditTechnique() - Check if user can create an technique.
- * @param {*} context Accountcontext from user.
- * @returns true if user can create/edit an technique.
+ * canCreateAndEditTechnique() - Check if user can create a technique.
+ * @param {*} context Accountcontext from user. 
+ * @returns true if user can create/edit a technique.
  */
 export function canCreateAndEditTechnique(context) {
 	if (!context.permissions) return false
@@ -203,13 +213,14 @@ export const HTTP_STATUS_CODES = {
 // These attributes have to be in the same order from 1-x as inserted into the database.
 export const USER_PERMISSION_CODES = {
 	ADMIN_RIGHTS: 1,
-	SESSION_GROUP_OWN: 2, //Edit your own groups and sessions.
-	SESSION_GROUP_ALL: 3, //Edit all groups and sessions.
-	WORKOUT_OWN: 4,
-	WORKOUT_ALL: 5,
-	TECHNIQUE_ALL: 6,
-	EXERCISE_ALL: 7,
-	GRADING_ALL: 8,
+	BETA_ACCESS: 2,
+	SESSION_GROUP_OWN: 3, //Edit your own groups and sessions.
+	SESSION_GROUP_ALL: 4, //Edit all groups and sessions.
+	WORKOUT_OWN: 5,
+	WORKOUT_ALL: 6,
+	TECHNIQUE_ALL: 7,
+	EXERCISE_ALL: 8,
+	GRADING_ALL: 9,
 }
 
 export const USER_PERMISSION_LIST_ALL = [1, 2, 3, 4, 5, 6, 7, 8]
