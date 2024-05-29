@@ -1,17 +1,13 @@
 package se.umu.cs.pvt.session;
 
-import static org.mockito.Mockito.when;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +15,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+
+import se.umu.cs.pvt.plan.PlanRepository;
+import se.umu.cs.pvt.user.JWTUtil;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -42,6 +41,12 @@ public class SessionControllerGetAllTest {
 
     @MockBean
     private SessionRepository sessionRepository;
+
+    @MockBean
+    private PlanRepository planRepository;
+
+    @MockBean
+    private JWTUtil jwtUtil;
 
     @BeforeEach
     void init() {
