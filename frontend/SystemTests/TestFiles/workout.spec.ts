@@ -47,12 +47,12 @@ test.describe("Workout", () => {
 		// Asserts the existence of the confirmation message and that the workout was created correctly.
 		await expect(page.getByRole("alert")).toContainText("Träningspasset skapades!")
 		await expect(page.locator("#root")).toContainText("description description description")
-		await expect(page.locator("#WorkoutActivityList-1")).toContainText(`${workout.techniques[0]}`)
-		await expect(page.locator("#WorkoutActivityList-1")).toContainText(`${workout.techniques[1]}`)
-		await expect(page.locator("#WorkoutActivityList-1")).toContainText(`${workout.techniques[2]}`)
-		await expect(page.locator("#WorkoutActivityList-1")).toContainText(`${workout.exercises[0]}`)
-		await expect(page.locator("#WorkoutActivityList-1")).toContainText(`${workout.exercises[1]}`)
-		await expect(page.locator("#WorkoutActivityList-1")).toContainText(`${workout.exercises[2]}`)
+		for(const technique of workout.techniques) {
+			await expect(page.locator("#WorkoutActivityList-1")).toContainText(`${technique.name}`)
+		}
+		for(const exercise of workout.exercises) {
+			await expect(page.locator("#WorkoutActivityList-1")).toContainText(`${exercise.name}`)
+		}
 
 		// Waits for the next page to load
 		await page.waitForSelector("h1")
@@ -92,12 +92,12 @@ test.describe("Workout", () => {
 		// Asserts the existence of the confirmation message and that the workout was created correctly.
 		await expect(page.getByRole("alert")).toContainText("Träningspasset skapades!")
 		await expect(page.locator("#root")).toContainText("description description description")
-		await expect(page.locator("#WorkoutActivityList-1")).toContainText(`Tsuri ashi`)
-		await expect(page.locator("#WorkoutActivityList-1")).toContainText(`Ayumi ashi`)
-		await expect(page.locator("#WorkoutActivityList-1")).toContainText(`Taisabaki kort`)
-		await expect(page.locator("#WorkoutActivityList-1")).toContainText(`Armhävningar`)
-		await expect(page.locator("#WorkoutActivityList-1")).toContainText(`Armhävningar med bred handposition`)
-		await expect(page.locator("#WorkoutActivityList-1")).toContainText(`Armhävningar med handklapp`)
+		for(const technique of workout.techniques) {
+			await expect(page.locator("#WorkoutActivityList-1")).toContainText(`${technique.name}`)
+		}
+		for(const exercise of workout.exercises) {
+			await expect(page.locator("#WorkoutActivityList-1")).toContainText(`${exercise.name}`)
+		}
         
 		await page.waitForSelector("h1")
 
