@@ -13,6 +13,7 @@ import Button from "../Button/Button"
  *    popupText    @type {String}   Text to be displayed in the popup
  *    confirmText  @type {String}   Text to be displayed on confirm-button, default is: "Radera"
  * 	  backText     @type {String}   Text to be displayed on back-button, default is: "Tillbaka"
+ * 	  onClick	   @type {Function} Function to be run when the object using it is clicked.
  * 
  * Example usage:
  *  

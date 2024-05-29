@@ -24,8 +24,12 @@ import Spinner from "../../../components/Common/Spinner/Spinner.jsx"
  * Props:
  *     id @type {string} - Sets the id of the addTag-popup. 
  * 	   addedTags @type {List of tags} - The list of choosen tags.
- *     setAddedTags @type {useState} - Sets the list of chosen tags. 
- *
+ *     setAddedTags @type {useState} - Sets the list of chosen tags.
+ * 	   setIsOpen @type {useState} - Sets open state.
+ * 	   newAddedTags @type {useState} - Array holding newly added tags.
+ *	   setNewAddedTags @type {useState} - Setter for NewAddedTags.
+ *     showConfirmPopup @type {useState} - State for confirm popup
+ *     setShowConfirmPopup @type {useState} - Setter for showConfirmPopup
  * Example usage:
  *  
  *	const [addedTags, setAddedTags] = useState([])
@@ -41,6 +45,7 @@ import Spinner from "../../../components/Common/Spinner/Spinner.jsx"
  * @author Team Durian (Group 3) (2024-05-17)
  * @version 2.0
  * @since 2024-04-23
+ * @updated 2024-05-29 Kiwi, Updated props comment.
  */
 export default function AddTagPopup({id,addedTags,setAddedTags, setIsOpen, newAddedTags, setNewAddedTags, setShowConfirmPopup, showConfirmPopup}) {
 	const sortOptions = [
