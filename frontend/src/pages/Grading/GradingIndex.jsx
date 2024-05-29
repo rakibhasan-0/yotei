@@ -151,7 +151,7 @@ export default function GradingIndex() {
 	
 
 			if (!isCreatorInFinished && !isCreatorInCurrent) {
-				if (item.step === 3) {
+				if (item.step === 4) {
 					setFinishedGradings(prevState => [...prevState, item])
 				} else {
 					setCurrentGradings(prevState => [...prevState, item])
@@ -283,7 +283,7 @@ export default function GradingIndex() {
 									<BeltButton
 										key={index}
 										width={"100%"}
-										onClick={() => handleNavigation(grading.gradingId, grading.step, beltColors[grading.beltId]?.hex)}
+										onClick={() => handleNavigation(grading.gradingId, 3, beltColors[grading.beltId]?.hex)}
 										color={beltColors[grading.beltId]?.hex}
 									>
 										<div style={{ display: "flex", alignItems: "center", width: "100%", position: "relative" }}>
