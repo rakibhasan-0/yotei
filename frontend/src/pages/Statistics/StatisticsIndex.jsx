@@ -55,23 +55,33 @@ export default function Statistics() {
 		to: getFormattedDateString(today),
 	})
 
+
+
+	/**
+	*	Filters an activity based on belt colors and selected belt criteria.
+ 	*	This function checks if any of the activity's belt colors match the selected belts.
+	*	A belt matches if it satisfies the 'child' condition (if applicable) and the belt name.
+	*/	
+	const filterActivityByBelt = (activity, selectedBelts) => {
+		return activity.beltColors?.some(belt => {
+				return selectedBelts.some(selectedBelt => {
+					if (selectedBelt.child) {
+						return belt.is_child === true && selectedBelt.name === belt.belt_name
+					} else {
+						return belt.is_child === false && selectedBelt.name === belt.belt_name
+					}
+				})
+			})
+		}
+
 	/* 
 		Filters the group's activities based on the selected belts.
 		First it checks if selectedBelts is not empty, then it filters the groupActivities based on the selected belts.
 		If the selectedBelts is empty, it instead shows all groupActivities. 
 	*/
-	const activities =	
-	selectedBelts.length > 0	
-		? groupActivities.filter((activity) =>
-			activity.beltColors?.some((belt) =>	
-				selectedBelts.some((selectedBelt) =>	
-					selectedBelt.child	
-						? belt.is_child == true && selectedBelt.name === belt.belt_name
-						:	selectedBelt.name === belt.belt_name && belt.is_child == false
-				)
-			)
-		)
-		: groupActivities
+	const activities = selectedBelts.length > 0 ? 
+		groupActivities.filter(activity => filterActivityByBelt(activity, selectedBelts))
+    	: groupActivities
 
 	// Stores the selected belts data. 	
 	function handleBeltToggle(isSelected, belt) {
@@ -212,6 +222,7 @@ export default function Statistics() {
 	return (
 		<div>
 			<title>Statistik</title>
+			{console.log("groupActivities", activities)}
 			{groupLoading ? (
 				<Spinner />
 			) : (
