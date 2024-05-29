@@ -283,8 +283,8 @@ export default function GradingIndex() {
 								<BeltButton
 									key={index}
 									width={"100%"}
-									onClick={() => handleNavigation(grading.gradingId, 3, belts[grading.beltId]?.hex)}
-									color={belts[grading.beltId]?.hex}
+									onClick={() => handleNavigation(grading.gradingId, 3, beltColors[grading.beltId]?.hex)}
+									color={beltColors[grading.beltId]?.hex}
 								>
 									<div style={{ display: "flex", alignItems: "center", width: "100%", position: "relative" }}>
 										<h2 style={{ margin: 0, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
