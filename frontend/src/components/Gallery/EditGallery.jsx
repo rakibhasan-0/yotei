@@ -40,6 +40,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	const [mediaToRemove, setMediaToRemove] = useState([])
 	const [mediaThatWasUploaded, setMediaThatWasUploaded] = useState([])
 	const [mediaToBeAdded, setMediaToBeAdded] = useState([])
+	const [activeIndex, setActiveIndex] = useState([])
 
 	const [descMap, setDescMap] = useState(new Map())
 
@@ -94,23 +95,23 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	 * Sends a remove request for the currently selected MediaObject to server
 	 * 
 	 */
-	async function removeMedia(){
-
-		//sets a variable so that the tillbaka popup window apperes when media is change to
+	async function removeMedia() {
+		// Set a flag to indicate that changes have been made
 		localStorage.setItem("askToLeave", true)
-		if(mediaToBeAdded.some(item => item.url === selectedMedia.url && item.description === selectedMedia.description && selectedMedia.id === undefined)) {
+	
+		if (mediaToBeAdded.some(item => item.url === selectedMedia.url && item.description === selectedMedia.description && selectedMedia.id === undefined)) {
 			const index = mediaToBeAdded.findIndex(item => item.url === selectedMedia.url && item.description === selectedMedia.description)
-			if(index !== -1) {
+			if (index !== -1) {
 				mediaToBeAdded.splice(index, 1)
-				setMedia(mediaToBeAdded)
+				setMedia([...mediaToBeAdded]) // Ensure you create a new array to trigger re-render
 			}
-		}else {
+		} else {
 			setMediaToRemove(mediaToRemove => [...mediaToRemove, selectedMedia])
-			let temp = [... media]
-			var index = temp.indexOf(selectedMedia)
-			temp.splice(index, 1)
-			
-			setMedia(temp)
+			const updatedMedia = media.filter(item => item !== selectedMedia) // Create a new array without the selected media
+			setMedia(updatedMedia) // Update state with the new array
+		}
+		if(activeIndex > 0){
+			setActiveIndex(activeIndex - 1)
 		}
 	}
 
@@ -174,6 +175,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 	 */
 	const setupRemovePopup = (mediaObject) => {
 		setSelectedMedia(mediaObject)
+		
 		setShowRemovePopup(true)
 	}
 	
@@ -269,7 +271,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 		fetch("/api/media", requestOptions)
 			.then(res => {
 				if(!res.ok) {
-					console.error("Something whent wrong with the deletion of the Media!")
+					console.error("Something went wrong with the deletion of the Media!")
 				}
 				done()
 			})
@@ -395,7 +397,7 @@ export default function EditGallery({ id, exerciseId, sendData, undoChanges, don
 			{UploadPopup}
 			<div className="row mt-2 mb-4"  style={{backgroundColor : media.length ? "var(--black-primary)" : "var(--background)"}}>
 				<div className="col-sm-12 text-center ">
-					<Carousel showThumbs={false} showStatus={false}>                         
+					<Carousel selectedItem ={activeIndex} onChange={index => setActiveIndex(index)} showThumbs={false} showStatus={false}>                       
 						{pictures.map((image, index) => (
 							<div key={index} className="d-flex flex-column justify-content-center align-items-center">
 								<Image id={`${image.id}-image`} path={image.url} />
