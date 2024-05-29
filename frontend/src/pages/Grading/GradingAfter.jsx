@@ -18,11 +18,10 @@ import Spinner from "../../components/Common/Spinner/Spinner"
  */
 export default function GradingAfter() {
 	const context = useContext(AccountContext)
-	const hasPreviousState = location.key !== "default"
 	const { token} = context
 	const { gradingId } = useParams()
 	const navigate = useNavigate()
-	const [grading, setGrading] = useState([])
+	const [grading, setGrading] = useState([])	
 	const[totalAmountOfTechniques, setTotalAmountOfTechniques] = useState("")
 	const[fetchedResult, setFetchedResult] = useState([])
 	const [beltInfo, setBeltInfo] = useState({
@@ -73,7 +72,7 @@ export default function GradingAfter() {
 	}
 
 	/**
-	 * Function that fetchs all of the results of each examinee.
+	 * Function that fetches all of the results of each examinee.
 	 * @returns {Promise} The belt data.
 	 * @since 2024-05-15
 	 */
@@ -102,7 +101,7 @@ export default function GradingAfter() {
 			})
 	
 			if (!response.ok) {
-				throw new Error("Network response was not ok")
+				throw new Error("Nätverk svar var inte OK, felkod: " + response.status)
 			}
 	
 			const base64String = await response.text()
@@ -115,8 +114,7 @@ export default function GradingAfter() {
 			const blob = new Blob([byteArray], {type: "application/pdf"}) // Create a blob from the byte array
 			return blob
 		} catch (error) {
-			console.error("Error fetching PDF:", error)
-			return null
+			console.error("Ett fel inträffade vid hämtning av PDF, felkod:" + error)
 		}
 	}
 	
@@ -147,22 +145,54 @@ export default function GradingAfter() {
 	}
 
 	/**
-	 * Function to navigate to the start of the grading.
+	 * Update step for the grading process. 
+	 * @param {String} grading_data data on JSON format for a grading
+	 * @param {Int} newStepNum New step that should be updated to database
+	 * @returns status code
 	 */
-	const navigateToGrading = () => {
+	function updateStep(newStepNum) {
+		const grading_data = grading
+		grading_data.step = newStepNum
+		setGrading(grading_data)
+
+		return fetch("/api/examination/grading", {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				"token": token },
+			body: JSON.stringify(grading_data),
+
+		})
+			.then(response => {
+				if (!response.ok) {
+					throw new Error("Network response was not ok")
+				}
+				return response.status
+
+			})
+	}
+
+	/**
+	 * Function to save and exit a grading, navigates to grading startpage.
+	 */
+	async function saveAndExitGrading(){
+		await updateStep(4)
 		navigate("/grading")
-    
+
 	}
     
 	/**
 	 * Function to navigate back to the examination page.
 	 */
-	const navigateBack = () => {
-		if (hasPreviousState) {
-			navigate(-1)
-		} else {
+	const navigateBack = async () => {
+		if (grading.step === 3){
+			await updateStep(2)
 			navigate(`/grading/${gradingId}/2`)
+		} 
+		else{
+			navigate("/grading")
 		}
+		
 	}
 
 	/**
@@ -186,7 +216,6 @@ export default function GradingAfter() {
 				setIsExaminee(true)
 				setTotalAmountOfTechniques(result_data.totalTechniques)
 				setFetchedResult(result_data)
-
 			} catch (error) {
 				console.error("There was a problem with the fetch operation:", error)
 			}
@@ -226,20 +255,26 @@ export default function GradingAfter() {
 							>{grading.title}</h2>
 						</div>
 					</div>
-					<h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "10px", paddingBottom: "10px" }}>Summering</h1>
+					<h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "10px", paddingBottom: "10px" }}>Summering </h1>
 				</div>
     
 				<div className={styles.scrollableContainer}>
-					{fetchedResult.examineeResults && fetchedResult.examineeResults.map((examinee) => (
-						<UserBoxGrading
-							key={examinee.examineeId}
-							id={examinee.examineeId}
-							name={examinee.name}
-							passedTechniques={examinee.passedTechniques}
-							totalAmountOfTechniques={totalAmountOfTechniques}
-						/>
-					))}
+					{fetchedResult.examineeResults && fetchedResult.examineeResults.map((examinee) => {
+						const totalTechniques = examinee.failedTechniques + examinee.passedTechniques
+						const hasNullTechnique = totalTechniques < totalAmountOfTechniques
+						return (
+							<UserBoxGrading
+								key={examinee.examineeId}
+								id={examinee.examineeId}
+								name={examinee.name}
+								passedTechniques={examinee.passedTechniques}
+								totalAmountOfTechniques={totalAmountOfTechniques}	
+								hasNullTechnique={hasNullTechnique} 		
+							/>
+						)
+					})}
 				</div>
+
     
 				<div className={styles.bottomContainer}>
 					<div style={{ display: "flex", justifyContent: "flex-end", paddingTop: "10px" }}>
@@ -273,12 +308,14 @@ export default function GradingAfter() {
 						>
 							<p>Tillbaka</p>
 						</Button>
-						<Button
-							width="100%"
-							onClick={navigateToGrading}
-						>
-							<p>Spara och avsluta</p>
-						</Button>
+						{(grading.step === 4) ? null : (
+							<Button
+								width="100%"
+								onClick={saveAndExitGrading}
+							>
+								<p>Spara och avsluta</p>
+							</Button>
+						)}
 					</div>
 				</div>
 			</div>

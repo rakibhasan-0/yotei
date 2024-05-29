@@ -11,11 +11,11 @@ import styles from "./Dropdown.module.css"
  * The width of the component will be set by the parent.
  * 
  * props = {
- *     item: Optional JSX element which will be displayed on the left of the text,
- *     text: Text of the component,wg
- *     children: JSX element which will be displayed when the component is expanded
- * 	   centered: Boolean to set text as centered
- *     id: string
+ *     item @type {JSX} Optional JSX element which will be displayed on the left of the text,
+ *     text @type {String} Text of the component,wg
+ *     children @type {JSX} JSX element which will be displayed when the component is expanded
+ * 	   centered @type {boolean} Boolean to set text as centered
+ *     id @type {String} Id of DropDown
  * }
  * 
  * The parent container using this button must constrain its width.
@@ -35,6 +35,7 @@ import styles from "./Dropdown.module.css"
  * 
  * @author Minotaur
  * @since 2023-05-02
+ * @updated 2024-05-29 Kiwi, Updated props comment
  * @version 2.0 
  */
 export default function SearchableDropdown({ query, setQuery, placeholder, children, id, autoClose }) {

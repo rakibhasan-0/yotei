@@ -12,7 +12,9 @@ import AddTagPopup from "./AddTagPopup"
  * Props:
  *     id @type {string} - Sets the id of the taginput. 
  * 	   addedTags @type {List of tags} - The list of choosen tags.
- *     setAddedTags @type {useState} - Sets the list of chosen tags. 
+ *     setAddedTags @type {useState} - Sets the list of chosen tags.
+ * 	   isNested @type {boolean} - True if nested
+ * 	   itemName @type {String} - Name of item
  *
  * Example usage:
  *  
@@ -26,6 +28,7 @@ import AddTagPopup from "./AddTagPopup"
  * @author Team Minotaur, Team Durian (Group 3)
  * @version 1.0
  * @since 2024-05-17
+ * @updated 2024-05-29 Kiwi, Updated props comment
  */
 export default function TagInput({id, addedTags, setAddedTags, isNested, itemName}) {
 	const [showPopup, setShowPopup] = useState(false)
