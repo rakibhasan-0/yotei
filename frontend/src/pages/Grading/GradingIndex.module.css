@@ -3,7 +3,7 @@
 }
 
 .scrollableContainer {
-    max-height: 19 vh; 
+    max-height: calc(33vh - 3vh);
     overflow-y: auto;
     padding: 10px;
     border: 1px solid #ccc;
@@ -26,3 +26,28 @@
   .close-icon {
 	cursor: pointer;
   }
+
+  .bottomRowContainer {
+    display: flex;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    height: 10vh;
+    width: 90vw;
+    max-width: 550px;
+    justify-content: center;
+    align-items: center;
+}
+
+.mainContainer {
+    padding-bottom: 10vh; 
+}
+
+@media (max-width: 389px) or (max-height: 750px) {
+    .scrollableContainer {
+        max-height: calc(33vh - 11vh); 
+    }
+    .mainContainer {
+        padding-bottom: 5vh; 
+    }
+}

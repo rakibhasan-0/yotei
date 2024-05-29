@@ -21,7 +21,7 @@ export default function GradingAfter() {
 	const { token} = context
 	const { gradingId } = useParams()
 	const navigate = useNavigate()
-	const [grading, setGrading] = useState([])
+	const [grading, setGrading] = useState([])	
 	const[totalAmountOfTechniques, setTotalAmountOfTechniques] = useState("")
 	const[fetchedResult, setFetchedResult] = useState([])
 	const [beltInfo, setBeltInfo] = useState({
@@ -72,7 +72,7 @@ export default function GradingAfter() {
 	}
 
 	/**
-	 * Function that fetchs all of the results of each examinee.
+	 * Function that fetches all of the results of each examinee.
 	 * @returns {Promise} The belt data.
 	 * @since 2024-05-15
 	 */
@@ -101,7 +101,7 @@ export default function GradingAfter() {
 			})
 	
 			if (!response.ok) {
-				throw new Error("Network response was not ok")
+				throw new Error("Nätverk svar var inte OK, felkod: " + response.status)
 			}
 	
 			const base64String = await response.text()
@@ -114,8 +114,7 @@ export default function GradingAfter() {
 			const blob = new Blob([byteArray], {type: "application/pdf"}) // Create a blob from the byte array
 			return blob
 		} catch (error) {
-			console.error("Error fetching PDF:", error)
-			return null
+			console.error("Ett fel inträffade vid hämtning av PDF, felkod:" + error)
 		}
 	}
 	
@@ -217,7 +216,6 @@ export default function GradingAfter() {
 				setIsExaminee(true)
 				setTotalAmountOfTechniques(result_data.totalTechniques)
 				setFetchedResult(result_data)
-
 			} catch (error) {
 				console.error("There was a problem with the fetch operation:", error)
 			}
@@ -257,20 +255,26 @@ export default function GradingAfter() {
 							>{grading.title}</h2>
 						</div>
 					</div>
-					<h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "10px", paddingBottom: "10px" }}>Summering</h1>
+					<h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "10px", paddingBottom: "10px" }}>Summering </h1>
 				</div>
     
 				<div className={styles.scrollableContainer}>
-					{fetchedResult.examineeResults && fetchedResult.examineeResults.map((examinee) => (
-						<UserBoxGrading
-							key={examinee.examineeId}
-							id={examinee.examineeId}
-							name={examinee.name}
-							passedTechniques={examinee.passedTechniques}
-							totalAmountOfTechniques={totalAmountOfTechniques}
-						/>
-					))}
+					{fetchedResult.examineeResults && fetchedResult.examineeResults.map((examinee) => {
+						const totalTechniques = examinee.failedTechniques + examinee.passedTechniques
+						const hasNullTechnique = totalTechniques < totalAmountOfTechniques
+						return (
+							<UserBoxGrading
+								key={examinee.examineeId}
+								id={examinee.examineeId}
+								name={examinee.name}
+								passedTechniques={examinee.passedTechniques}
+								totalAmountOfTechniques={totalAmountOfTechniques}	
+								hasNullTechnique={hasNullTechnique} 		
+							/>
+						)
+					})}
 				</div>
+
     
 				<div className={styles.bottomContainer}>
 					<div style={{ display: "flex", justifyContent: "flex-end", paddingTop: "10px" }}>

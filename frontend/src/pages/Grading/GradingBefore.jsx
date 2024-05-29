@@ -154,18 +154,18 @@ export default function GradingBefore() {
 				const [data] = await Promise.all([
 					getGrading(token).catch(() => setErrorToast("Kunde inte hämta examinationen. Kontrollera din internetuppkoppling.")),
 				])
+        
+        if(data.step === 3) {
+          navigate(`/grading/${gradingId}/3`)
+        }
+        
+        console.log(data)
 
 				// set belt color
 				const [beltData] = await Promise.all([
 					getBeltColor(data.beltId, token).catch(() => setErrorToast("Kunde inte hämta bältesfärgen. Kontrollera din internetuppkoppling.")),
 				])
 				setBeltColor("#" + beltData)
-
-
-				
-	
-				//const data = await getGrading(token)
-				//	.catch(() => setErrorToast("Kunde inte hämta examinationen. Kontrollera din internetuppkoppling."))
 	
 				// Set the step so we know how to navigate back, what type of route it should choose, in function @handleNavigation
 				setGradingStep(data.step)
@@ -222,6 +222,29 @@ export default function GradingBefore() {
 					setExaminees(convertedToAloneLocalPairs)
 					
 				}
+
+        // add alone examinees
+        if(data.step === 1 && data.examinees.length >= 1) {
+          
+          let aloneExaminees = data.examinees.map(examinee => ({
+            name: examinee.name,
+            id: examinee.examineeId,
+            isLocked: false
+          }))
+
+          if (exsistingPairs.length >= 1) {
+            aloneExaminees = aloneExaminees.filter(examinee => {
+              return !exsistingPairs.some(pair => 
+                pair.examinee_1.id === examinee.id || pair.examinee_2.id === examinee.id
+              )
+            })
+          }
+
+          if (aloneExaminees.length >= 1) {
+            setExaminees(aloneExaminees)
+          }
+        }
+
 			} catch (error) {	
 				console.error("Misslyckades skicka vidare till nästa steg i gradering:", error)
 			}
@@ -229,10 +252,6 @@ export default function GradingBefore() {
 		fetchData()
 
 	}, [])
-
-	useEffect(() => {
-		
-	}, [beltColor])
 
 	/**
 	 * Help function to activate the useEffect function to start the navigation
