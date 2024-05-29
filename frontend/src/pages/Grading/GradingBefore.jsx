@@ -230,18 +230,18 @@ export default function GradingBefore() {
             name: examinee.name,
             id: examinee.examineeId,
             isLocked: false
-          }));
+          }))
 
           if (exsistingPairs.length >= 1) {
             aloneExaminees = aloneExaminees.filter(examinee => {
               return !exsistingPairs.some(pair => 
                 pair.examinee_1.id === examinee.id || pair.examinee_2.id === examinee.id
-              );
-            });
+              )
+            })
           }
 
           if (aloneExaminees.length >= 1) {
-            setExaminees(aloneExaminees);
+            setExaminees(aloneExaminees)
           }
         }
 
