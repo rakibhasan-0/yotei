@@ -38,6 +38,7 @@
 	grid-row: 1 / 2;
 	place-self: center;
 	color: white;
+	z-index: 0;
 }
 
 .sc23-chevron-rotate {
