@@ -68,7 +68,7 @@ export class DuringGradingPage {
      */
     async navigateToGroupComment(){
         await this.page.locator('#infoPanel i').click();
-        await this.page.waitForTimeout(100);
+        await this.page.waitForTimeout(250);
     }
 
     /**
@@ -76,7 +76,7 @@ export class DuringGradingPage {
      * @param comment comment entity which can be viewed in the 'systemTestsTypes.ts' 
      */
     async addExamineeComment(comment: Comment) {
-        await this.page.waitForTimeout(100);
+        await this.page.waitForTimeout(250);
         await this.page.locator('#TextareaTestId').fill(comment.content);
         await this.page.getByRole('button', { name: 'Lägg till' }).click();
     }
@@ -87,7 +87,7 @@ export class DuringGradingPage {
      */
     async navigateToExamineeComment(comment: Comment){
         await this.page.getByTestId(comment.examineeName + "systest").locator('i').click();
-        await this.page.waitForTimeout(100);
+        await this.page.waitForTimeout(250);
     }
     
     /**
@@ -95,7 +95,7 @@ export class DuringGradingPage {
      * @param comment comment entity which can be viewed in the 'systemTestsTypes.ts'
      */
     async addPairComment(comment: Comment) {
-        await this.page.waitForTimeout(100);
+        await this.page.waitForTimeout(250);
         await this.page.locator('#TextareaTestId').fill(comment.content);
         await this.page.getByRole('button', { name: 'Lägg till' }).click();
     }
@@ -106,7 +106,7 @@ export class DuringGradingPage {
      */
     async navigateToPairComment(comment: Comment){
         await this.page.getByTestId(comment.pairId).locator('i').click();
-        await this.page.waitForTimeout(100);
+        await this.page.waitForTimeout(250);
     }
 
     /**
@@ -135,7 +135,7 @@ export class DuringGradingPage {
      * @param examinee examinee entity which can be viewed in the 'systemTestsTypes.ts'
      */
     async setPassResultForExaminee(examinee: Examinee) {
-        await this.page.waitForTimeout(100);
+        await this.page.waitForTimeout(250);
         await this.page.getByText(examinee.name, { exact: true }).first().click();
     }
 
@@ -144,9 +144,9 @@ export class DuringGradingPage {
      * @param examinee examinee entity which can be viewed in the 'systemTestsTypes.ts'
      */
     async setFailResultForExaminee(examinee: Examinee) {
-        await this.page.waitForTimeout(100);
+        await this.page.waitForTimeout(250);
         await this.page.getByText(examinee.name, { exact: true }).first().click();
-        await this.page.waitForTimeout(100);
+        await this.page.waitForTimeout(250);
         await this.page.getByText(examinee.name, { exact: true }).first().click();
     }
 
@@ -155,11 +155,11 @@ export class DuringGradingPage {
      * @param examinee examinee entity which can be viewed in the 'systemTestsTypes.ts'
      */
     async setDefaultResultForExaminee(examinee: Examinee) {
-        await this.page.waitForTimeout(100);
+        await this.page.waitForTimeout(250);
         await this.page.getByText(examinee.name, { exact: true }).first().click();
-        await this.page.waitForTimeout(100);
+        await this.page.waitForTimeout(250);
         await this.page.getByText(examinee.name, { exact: true }).first().click();
-        await this.page.waitForTimeout(100);
+        await this.page.waitForTimeout(250);
         await this.page.getByText(examinee.name, { exact: true }).first().click();
     }
 
@@ -168,7 +168,7 @@ export class DuringGradingPage {
      */
     async moveToNextTechnique() {
         await this.page.locator('#next_technique').getByRole('img').click();
-        await this.page.waitForTimeout(100);
+        await this.page.waitForTimeout(250);
 
     }
 
@@ -177,7 +177,7 @@ export class DuringGradingPage {
      */
     async moveToPreviousTechnique() {
         await this.page.locator('#prev_technique').getByRole('img').click();
-        await this.page.waitForTimeout(100);
+        await this.page.waitForTimeout(250);
     }
 
     /**
