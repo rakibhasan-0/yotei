@@ -24,9 +24,17 @@ import ActivityInfoPopUp from "../../Workout/CreateWorkout/ActivityInfoPopUp"
  * A session can have one review on it, filled in by the trainer
  * The review can be seen and edited through the plan window
  * Based on "ReviewFormComponent.jsx"
+ * 
+ * Props:
+ * 		id @type {String/Number} - ID representing the Review
+ * 		isOpen @type {boolean} True if open
+ * 		setIsOpen @type {useState} Setter for isOpen
+ * 		session_id @type {String/Number} ID representing the session
+ * 		workout_id @type {String/Number} ID representing the workout.
  *
  * @author Hannes c21hhn (Group 1, pomegranate), Team Coconut
  * @since 2024-05-22
+ * @updated 2024-05-29 Kiwi, Updated props comment.
  * @version 1.1
  */
 

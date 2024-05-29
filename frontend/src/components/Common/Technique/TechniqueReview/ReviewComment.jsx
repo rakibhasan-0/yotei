@@ -14,10 +14,19 @@ import {HTTP_STATUS_CODES, setError, setSuccess} from "../../../../utils"
 
 /**
  *  Component for review comment. Includes name, positive comment, negative comment, date.
+ * 
+ *	Props:
+ *    comment 		@type {Object}   Comment objectcontaining positive and negative comment.
+ *    onDelete 		@type {Function} Funcion to be called on delete.
+ * 	  token			@type {String} Token for login?
+ *    getTodaysDate @type {Function} Function to get todays date 
+ *    uppdateCommentList @type {Function} Function to update commentList
+ *    testId 	   	@type {String/Id}  Id for component	
  *
  * @author Cyclops (Group 5) (2023-05-16) & Granatäpple (Group 1) (2024-04-19) & Team Mango (Grupp 4) (2024-05-22)
  * @version 1.0
- * Update Team Mango 2024-05-22: Changed isAdmin check to new permission check.
+ * @Updated Team Mango 2024-05-22: Changed isAdmin check to new permission check.
+ * @Updated 2024-05-29 Kiwi, Updated props comment
  */
 
 export default function ReviewComponent({comment, onDelete, token, getTodaysDate, updateCommentList, testId}) {

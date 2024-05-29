@@ -17,10 +17,15 @@ import Divider from "../../Common/Divider/Divider"
  * popup. The user can add a rating, positive comment and negative comment
  * for the review, and also remove the review if the user id match.
  *
+ * Props:
+ *    isOpen 		@type {boolean}   True if open
+ *    setIsOpen 	@type {UseState/Function}  Setter for isOpen.
+ * 	  workout_id    @type {number} Workout id.
  *
  * @author Cyclops (Group 5) (2023-05-17) & Team Mango (Grupp 4) (2024-05-22)
  * @version 2.0
- * Update Team Mango 2024-05-22: Changed isAdmin check to new permission check.
+ * @Updated Team Mango 2024-05-22: Changed isAdmin check to new permission check.
+ * @updated 2024-05-29 Kiwi, Updated props in comment.
  */
 
 export default function Review({isOpen, setIsOpen, workout_id}) {

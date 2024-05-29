@@ -11,6 +11,11 @@ import { setError, setSuccess, isAdminUser } from "../../utils"
 import { Link, useNavigate } from "react-router-dom"
 
 /**
+ * Props:
+ *     	techExerID @type {Object} - Struct of technique and exercise ID -> {techniqueId, exerciseId}
+ *		setShowMorePopup @type {SetState} - Setter for ShowMorePopup
+ *		returnTo @type {string} - String for URL to return to
+ *
  * @author Team Tomato
  * @since 2024-05-09, updated 2024-05-23
  * @version 1.0
