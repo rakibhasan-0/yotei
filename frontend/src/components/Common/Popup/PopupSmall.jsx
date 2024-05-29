@@ -26,8 +26,8 @@ import Button from "../Button/Button"
 *	return (
 *		<div>
 *			<PopupSmall id={"test-popup"} title={"Test"} isOpen={showPopup} setIsOpen={setShowPopup} direction={startRedirection}  >
-<>some children</>
-</PopupSmall>
+*			<>some children</>
+*			</PopupSmall>
 *			<RoundButton onClick={() => setShowPopup(true)} />
 *		</div>
 * 	)
@@ -38,12 +38,8 @@ import Button from "../Button/Button"
 */
 export default function PopupSmall({ title, id, isOpen, setIsOpen, children, isNested, style, onClose, zIndex, direction }) {
 
-	// Synchronize react state with CSS-styling in browser
 	useEffect(() => {
-		// The body scroll should not be disabled when a nested popup is closed.
-		// That should be done when a non-nested popup is closed.
 		if (isNested) return
-		// If it is nested, these things are already applied.
 		document.body.style.overflowY = isOpen ? "hidden" : "visible"
 		document.body.style.touchAction = isOpen ? "none" : "auto"
 		document.body.style.height = isOpen ? "100vh" : "auto"
@@ -58,11 +54,7 @@ export default function PopupSmall({ title, id, isOpen, setIsOpen, children, isN
 				if (onClose) onClose()
 			}}
 			/>
-			<div
-				className={styles.container}
-				id={id}
-				style={style}
-			>
+			<div className={styles.container} id={id} style={style}>
 				<div className={styles.topbar}>
 					{title && <Divider title={title} option="h1_center" />}
 					<button

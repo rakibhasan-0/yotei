@@ -305,8 +305,8 @@ public class ExportGradingPdf {
                 }
 
                 currentXPos = tableStartXPos;
-
-                if(currentYPos - CELL_HEIGHT - 70 < 0) {
+                //Creates a new page if the techniques don't fit on the page, j != examinationTC size -1 is a quick fix to avoid a bug where a empty page is created.
+                if(currentYPos - CELL_HEIGHT - 70 < 0 && j != examinationTechniqueCategories.get(i).getTechniques().size() - 1) {
                     contentStream.stroke();
                     contentStream.close();
                     PDPage page2 = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
