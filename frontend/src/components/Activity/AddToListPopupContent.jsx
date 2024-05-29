@@ -13,7 +13,7 @@ import { Link, useNavigate } from "react-router-dom"
 /**
  * Props:
  *     	techExerID @type {Object} - Struct of technique and exercise ID -> {techniqueId, exerciseId}
- *		setShowMorePopup @type {import("react").SetStateAction} - Setter for ShowMorePopup
+ *		setShowMorePopup @type {SetState} - Setter for ShowMorePopup
  *		returnTo @type {string} - String for URL to return to
  *
  * @author Team Tomato
