@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  *        feature.
  * 		- Create a list of regex patterns for each endpoint.
  *
- * @author Team Mango (Group 4) - 2024-05-28
+ * @author Team Mango (Group 4) - 2024-05-29
  * 
  */
 public class PermissionValidator {
@@ -28,13 +28,14 @@ public class PermissionValidator {
     // what is present in utils.js
     private enum permissionList {
         ADMIN_RIGHTS(1),
-	    SESSION_GROUP_OWN(2), //Edit your own groups and sessions.
-	    SESSION_GROUP_ALL(3), //Edit all groups and sessions.
-	    WORKOUT_OWN(4),
-	    WORKOUT_ALL(5),
-        TECHNIQUE_ALL(6),
-        EXERCISE_ALL(7),
-	    GRADING_ALL(8);
+        BETA_ACCESS(2),
+	    SESSION_GROUP_OWN(3), //Edit your own groups and sessions.
+	    SESSION_GROUP_ALL(4), //Edit all groups and sessions.
+	    WORKOUT_OWN(5),
+	    WORKOUT_ALL(6),
+        TECHNIQUE_ALL(7),
+        EXERCISE_ALL(8),
+	    GRADING_ALL(9);
 
         private final int value;
         private permissionList(int value) {
