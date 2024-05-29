@@ -19,9 +19,10 @@ import Spinner from "../Spinner/Spinner"
  *   ))}
  * </InfiniteScrollComponent>
  * 
- * @author Kraken (Grupp 7), Kiwi (Group 2 - 2024)
+ * @author Kraken (Grupp 7), Kiwi (Group 2 - 2024), Coconut (Group 7- 2024)
  * @version 1.1
  * @since 2024-05-08
+ * @updated 2024-05-29 - Added scrollId to make popup inside popup possible
  */
 
 export default function InfiniteScrollComponent({ children, activities, activeKey, searchCount, scrollId }) {

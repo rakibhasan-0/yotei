@@ -31,9 +31,10 @@ import Divider from "../Divider/Divider"
  *		</div>
  * 	)
  *
- * @author Team Medusa, Team Chimera, Team Durian 
+ * @author Team Medusa, Team Chimera, Team Durian, Team coconut
  * @version 3.0
  * @since 2024-05-17
+ * @updated 2024-05-29 - Added scrollId to make popup inside popup possible
  */
 export default function Popup({ title, id, isOpen, setIsOpen, children, isNested, style, onClose, zIndex, dividerOption, scrollId = "scrollable-content" }) {
 

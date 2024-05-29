@@ -32,7 +32,7 @@ import { ActivityLists } from "./ActivityLists.jsx"
  * @param {string} id A unique id of the component (Testing purposes)
  * @param {function} setShowActivityInfo Callback function to report selected activities
  *
- * @author Kraken (Grupp 7), Team Coconut, Team Kiwi, Team Tomato
+ * @author Kraken (Grupp 7), Team Coconut, Team Kiwi, Team Tomato, Team Coconut
  * @since 2024-04-19
  * @updated 2024-04-22 Kiwi, Fixed so searchbar is not cleared unless component is closed, also so the active tab will show
  * @updated 2024-04-23 Kiwi, Kihon checkbox is now saved when clicking and redirecting to a technique.
@@ -40,6 +40,7 @@ import { ActivityLists } from "./ActivityLists.jsx"
  * @updated 2024-05-13 Kiwi, Added Automatic scrolling and Removal of activities from popup
  * @updated 2024-05-20 Tomato, Added search function for activity lists.
  * @updated 2024-05-28 Tomato, Fixed logic regarding the checkbox for toggling all activities in a list when adding activities
+ * @updated 2024-05-29 - Added scrollId to make popup inside popup possible
  */
 function AddActivity({ id, setShowActivityInfo, sendActivity = null, scrollId="scrollable-content" }) {
 	const { token } = useContext(AccountContext)
