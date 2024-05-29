@@ -480,13 +480,13 @@ public class ExportGradingExamineePdf {
         contentStream.beginText();
         contentStream.newLineAtOffset(currentXPos + 5, currentYPos);
         contentStream.setFont(font, 12);
-        contentStream.showText((examinee1 + " & " + examinee2).replaceAll("\\u000a", ""));
+        contentStream.showText((examinee1 + " & " + examinee2).replaceAll("\\u000a", " "));
         contentStream.setFont(font, 10);
 
         for(ExaminationComment ec : examinationPairComments) {
             //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
             contentStream.newLineAtOffset(0, -15);
-            contentStream.showText(ec.getComment().replaceAll("\\u000a", ""));
+            contentStream.showText(ec.getComment().replaceAll("\\u000a", " "));
         }    
     
         contentStream.endText();
@@ -535,16 +535,16 @@ public class ExportGradingExamineePdf {
         contentStream.beginText();
         contentStream.newLineAtOffset(currentXPos + 5, currentYPos);
         contentStream.setFont(font, 12);
-        contentStream.showText(examinee.getName().replaceAll("\\u000a", ""));
+        contentStream.showText(examinee.getName().replaceAll("\\u000a", " "));
         contentStream.setFont(font, 10);
         int count = 0;
         for( ExaminationComment ec: examineeComments){
             //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
             contentStream.newLineAtOffset(0, -15);
-            List<String> rows = getRows(ec.getComment(), 120);
-            for(String comment : rows) {
-                String temp = comment.replaceAll("\\u0009", "");
-                contentStream.showText(temp.replaceAll("\\u000a", ""));
+            List<String> rows = getRows(ec.getComment().replaceAll("\\u000a", " "), 120);
+            for(String r : rows){
+                contentStream.showText(r);
+                contentStream.newLineAtOffset(0, -15);
             }
             count += rows.size();
         }
@@ -611,12 +611,12 @@ public class ExportGradingExamineePdf {
             contentStream.beginText();
             contentStream.newLineAtOffset(currentXPos + 5, currentYPos);
             contentStream.setFont(font, 12);
-            contentStream.showText(techniqueComment.getTechniqueName().replaceAll("\\u000a", ""));
+            contentStream.showText(techniqueComment.getTechniqueName().replaceAll("\\u000a", " "));
             contentStream.setFont(font, 10);
             for(int j = 0; j < rows.size(); j++) {
                 //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
                 contentStream.newLineAtOffset(0, -15);
-                contentStream.showText(rows.get(j));
+                contentStream.showText(rows.get(j).replaceAll("\\u000a", " "));
             }
             contentStream.endText();
 
@@ -650,7 +650,7 @@ public class ExportGradingExamineePdf {
                     stopIndex = lastSpaceIndex + startIndex +1;
 
                 String tmpStr = string.substring(startIndex, stopIndex);
-                tmpStr = string.substring(startIndex, stopIndex).replaceAll("\\u0009", "").replaceAll("\\u000a", "");
+                tmpStr = string.substring(startIndex, stopIndex).replaceAll("\\u0009", "").replaceAll("\\u000a", " ");
                 rows.add(tmpStr);
                 
                 startIndex = stopIndex;

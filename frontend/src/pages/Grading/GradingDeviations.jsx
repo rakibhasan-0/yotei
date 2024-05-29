@@ -317,7 +317,7 @@ export default function GradingDeviations() {
 			console.log("URL created:", url)
 			const link = document.createElement("a")
 			link.href = url
-			link.setAttribute("download", "filename.pdf")
+			link.setAttribute("download", "Gradering_" + name + ".pdf")
 			document.body.appendChild(link)
 			link.click()
 			setTimeout(() => { 
