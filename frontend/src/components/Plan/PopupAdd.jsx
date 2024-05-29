@@ -11,9 +11,15 @@ import styles from "./PopupAdd.module.css"
  * If the user clicks 'Planering' the user is redirected to /plan/create.
  * If the user clicks 'Tillfälle' the user is redirected to /session/create.
  * 
+ * Props:
+ *    id 		@type {String/Number}   An id for the button
+ *    isOpen 	@type {Boolean}  A boolean to indicate if open 
+ * 	  setIsOpen @type {UseState/Function} Setter for isOpen.
+ * 
  * @author Griffin
  * @since 2023-05-03
- * @version 1.0
+ * @updated 2024-05-29 Kiwi, Updated Comment props.
+ * @version 1.""
  */
 export default function PopupAdd({id, isOpen, setIsOpen}) {
 	const navigate = useNavigate()

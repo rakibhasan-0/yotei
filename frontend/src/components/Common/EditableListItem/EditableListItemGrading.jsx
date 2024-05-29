@@ -1,5 +1,5 @@
 import styles from "./EditableListItem.module.css"
-import { Trash, Pencil, Check as Check, X , LockFill} from "react-bootstrap-icons"
+import { Trash, Pencil, Check as Check, X, LockFill } from "react-bootstrap-icons"
 import { useState } from "react"
 import GradingCheckBox from "../CheckBox/GradingCheckBox"
 
@@ -11,8 +11,8 @@ import GradingCheckBox from "../CheckBox/GradingCheckBox"
  * 
  * Props:
  *     	item @type {string} 		- Text displaying the title of the exercise
- * 		  id @type {integer} 			- The ID for this particular exercise in database
- * 		  index @type {integer} 		- The ID for this particular exercise on current page (Used for coloring)
+ * 		id @type {integer} 			- The ID for this particular exercise in database
+ * 		index @type {integer} 		- The ID for this particular exercise on current page (Used for coloring)
  *      onRemove @type {function} - Action when removing the item
  *      onEdit @type {function}   - Action when editing the item
  *      onCheck @type {function} - Action when checking the checkbox
@@ -20,7 +20,10 @@ import GradingCheckBox from "../CheckBox/GradingCheckBox"
  *      checked @type {boolen} - What the default value will be for the checkbox
  *      validateInput @type {function} - Action to validate the input given
  *      grayThrash @type {boolean} - True if the trash icon should be grey otherwise it is red
- * 		  showThrash @type {boolean} - True if the trash icon should be visible
+ * 		showThrash @type {boolean} - True if the trash icon should be visible
+ * 		showX @type {boolean} - True if the X icon should be visible
+ * 		showPencil @type {boolean} - True if the Pencil icon should be visible
+ * 		showLock @type {boolean} - True if the Lock icon should be visible
  * 
  * Example usage:
  * 		<EditableListItem
@@ -44,10 +47,10 @@ import GradingCheckBox from "../CheckBox/GradingCheckBox"
  * @since 2024-05-06
  */
 
-export default function EditableListItem({ item, id, index, onRemove, onEdit, onCheck, showCheckbox, checked, validateInput, grayTrash, showTrash, showX, showPencil, numberOfCheckedExaminees, showLock}) {
+export default function EditableListItem({ item, id, index, onRemove, onEdit, onCheck, showCheckbox, checked, validateInput, grayTrash, showTrash, showX, showPencil, numberOfCheckedExaminees, showLock }) {
 
-	const [isEditing, setIsEditing] = useState(false) // State to manage edit mode
-	const [editedText, setEditedText] = useState(item) // State to store edited text
+	const [isEditing, setIsEditing] = useState(false) 
+	const [editedText, setEditedText] = useState(item) 
 	const [savedText, setSavedText] = useState(item)
 	const [error, setError] = useState("")
 	const [grayEdit, setGrayEdit] = useState(true)
@@ -55,18 +58,16 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 	const handleEdit = () => {
 		setIsEditing(true)
 	}
-
+	/* Function to handle changes in the input field */
 	const handleInputChange = (event) => {
 		const text = event.target.value
-		// The trimmed text is validated, since it will be trimmed when saved. 
 		const trimmedText = text.trim()
 		const textareaErr = validateInput(trimmedText)
-		// Update the gray check
 		setGrayEdit(textareaErr != "" || trimmedText === savedText)
 		setEditedText(text)
 		setError(textareaErr)
 	}
-
+	/* Function to handle submission of the edited text */
 	const handleEditSubmit = () => {
 		if (error == "" && !grayEdit) {
 			setIsEditing(false)
@@ -75,14 +76,14 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 			onEdit(id, editedText)
 		}
 	}
-
+	/* Function to handle aborting the edit */
 	const handleEditAbort = () => {
 		setIsEditing(false)
 		setError("123")
 		setEditedText(savedText)
 		setGrayEdit(true) // Reset
 	}
-
+	/* Function to handle blur event on the input field */
 	const handleBlur = (event) => {
 		if (event.target?.id === "edit-element") {
 			handleEditSubmit()
@@ -98,7 +99,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 				<div className={styles["editable-list-header"]} style={{ backgroundColor: index % 2 === 0 ? "var(--red-secondary)" : "var(--background)" }}>
 					<div data-testid="EditableListItem-link" style={{ width: "100%" }}>
 						<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
-							{shouldShowCheckbox  && <GradingCheckBox
+							{shouldShowCheckbox && <GradingCheckBox
 								onClick={(checked) => onCheck(checked, id)}
 								checked={checked}
 								id="checkbox-element"
@@ -151,11 +152,11 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 													size="24px"
 													style={grayTrash ? { color: "var(--gray)" } : { color: "var(--red-primary)" }}
 													id="close-icon"
-													data-testid="trash-icon"/>
+													data-testid="trash-icon" />
 											)}
 											{showLock && (
 												<LockFill
-													size="24px" style={{ color: "var(--red-primary)"}}
+													size="24px" style={{ color: "var(--red-primary)" }}
 												/>
 											)}
 										</>
@@ -166,9 +167,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 					</div>
 
 				</div>
-
 			</div>
 			<div className={styles["input"]} style={{ color: "red", display: error == "" ? "none" : "block" }} >{error}</div>
-
 		</div>)
 }

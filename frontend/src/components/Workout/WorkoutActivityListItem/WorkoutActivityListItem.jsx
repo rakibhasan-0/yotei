@@ -23,14 +23,15 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 	const [isOpen, setIsOpen] = useState(false)
 	let bgColor = "#ffdfe3"
 
-	const name = (
+	const name = 
 		activity.exercise ? (
+			
 			activity.exercise.name
 		) : (
+		
 			activity.technique.name
-		))
-
-
+		)
+		
 	const createStripes = () => {
 		index % 2 == 0 ? bgColor = "#F8EBEC" : bgColor = "#FFFFFF"
 	}

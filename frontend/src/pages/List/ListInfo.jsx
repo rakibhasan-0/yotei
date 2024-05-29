@@ -93,11 +93,7 @@ export default function ListInfo({ id }) {
 
 							{(context.userId == activityListData.author.userId || isAdminUser(context)) && (
 								<>
-									<Link
-										className="ml-3"
-										state={{ list: activityListData }}
-										to={"/list/edit/" + activityListId}
-									>
+									<Link className="ml-3" state={{ list: activityListData }} to={"/list/edit/"}>
 										<Pencil
 											size="24px"
 											color="var(--red-primary)"

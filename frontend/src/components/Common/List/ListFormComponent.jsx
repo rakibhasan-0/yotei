@@ -1,4 +1,4 @@
-import { useState, useContext, useCallback } from "react"
+import { useState, useContext, useCallback} from "react"
 import { Form } from "react-bootstrap"
 import styles from "./ListFormComponent.module.css"
 import InputTextField from "../../Common/InputTextField/InputTextField"
@@ -22,13 +22,15 @@ import SavedActivityList from "../../SavedList/SavedListInfo/SavedListComponent"
  * This component requires the ListCreateContext to be used.
  *
  * Props:
- *     callback @id {function}  - Function to call when form is filled and to be sent.
+ *      callback @type {Function}  - Function to call when form is filled and to be sent.
+ * 	    state @type {State} - State holding data from calling component
  *
  * Example usage:
  *		<ListFormComponent callback={submitHandler} />
  *
- * @author Team Tomato (6)
- * @since 2024-05-21
+ * @author Team Tomato (6), Team Durian (3)
+ * @since 2024-05-28
+ * @updated 20204-05-29 Kiwi, Updated props comment
  * Based on WorkoutFormComponent.jsx
  */
 export default function ListFormComponent({ callback, state, listCreateInfoDispatchProp = null }) {
@@ -39,6 +41,7 @@ export default function ListFormComponent({ callback, state, listCreateInfoDispa
 	const navigate = useNavigate()
 	const [showPopup, setShowPopup] = useState(false)
 	const isEdit = window.location.href.toString().includes("edit")
+	const [showAddUser, setShowAddUser] = useState(false)
 
 	/**
 	 * Sets the title of the page.
@@ -120,6 +123,7 @@ export default function ListFormComponent({ callback, state, listCreateInfoDispa
 			localStorage.clear()
 		}
 	}
+
 	return (
 		<>
 			<Form noValidate validated={validated} onSubmit={handleSubmit}>
@@ -193,29 +197,32 @@ export default function ListFormComponent({ callback, state, listCreateInfoDispa
 						<CheckBox
 							id="list-create-checkbox"
 							label="Privat lista"
-							onClick={() =>
+							onClick={() => {
 								listCreateInfoDispatch({
 									type: LIST_CREATE_TYPES.SET_IS_PRIVATE,
 									hidden: !listCreateInfo.data.hidden,
 								})
+								setShowAddUser(!showAddUser)
 							}
-							checked={listCreateInfo.data.hidden}
+							}
+							checked={showAddUser}
 						/>
 					</Form.Group>
-
-					<Form.Group>
-						<AddUserComponent
-							id="list-create-add-users"
-							addedUsers={listCreateInfo.data.users}
-							setAddedUsers={(users) =>
-								listCreateInfoDispatch({
-									type: LIST_CREATE_TYPES.SET_USERS,
-									users,
-								})
-							}
-						/>
-					</Form.Group>
-
+					
+					{showAddUser &&
+						<Form.Group>
+							<AddUserComponent
+								id="list-create-add-users"
+								addedUsers={listCreateInfo.data.users}
+								setAddedUsers={(users) =>
+									listCreateInfoDispatch({
+										type: LIST_CREATE_TYPES.SET_USERS,
+										users,
+									})
+								}
+							/>
+						</Form.Group>
+					} 
 					<Form.Group className={styles.buttonContainer}>
 						<Button
 							onClick={() => {

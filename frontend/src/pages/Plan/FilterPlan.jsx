@@ -21,24 +21,27 @@ import CheckBox from "../../components/Common/CheckBox/CheckBox"
  * @param		@type { Function }	  toggleOnlyMyGroups		A callback function used to toggle the onlyMyGroups variable.
  *
  * 
-* @author Griffin, Tomato (Group 6) , Team Mango (Group 4) (2024-05-17) , Team Durian (Group 3) (2024-05-27)
+* @author Griffin, Tomato (Group 6) , Team Mango (Group 4) (2024-05-28) , Team Durian (Group 3) (2024-05-27)
 * @version 2.1
 * @since 2023-05-08
 * Updates: 2024-05-10: Added a checkbox (with a feature toggle, since it does not work currently) for filtering by only my groups or all groups.
 * 		   2024-05-17: Fixed the filtering and refactored code slightly.
 *		   2024-05-22: Added a numFilters counter to the FilterContainer.	 
+*		   2024-05-28: Improved documentation slightly.
 */
 export default function FilterPlan({ id, chosenGroups, setChosenGroups, dates, onDatesChange, callbackFunctionCheckbox, onlyMyGroups, toggleOnlyMyGroups, numFilters}) {
 	
+	//This function is called when you press to toggle any checkbox in the GroupPicker drop-down menu.
 	const onToggle = (checked, chosenGroup) => setChosenGroups(prev => {
 		if(prev) {
 			if(!checked) {
-				//When you uncheck the checkbox (for e.g. a brown belt), you should remove the relevant belts from the filtered list.
-				return prev.filter(g => g !== chosenGroup)
-				//(When all checkboxes are unchecked everything is added again.)
+				//When you uncheck the checkbox for a group, that group should be removed from the array of selected groups.
+				return prev.filter(g => g !== chosenGroup) //This is the same as a .delete()-function for an array.
+				//(When all checkboxes are unchecked an empty array is left. This is considered a special case in PlanIndex.)
+				//The "chosenGroups", which is really "selectedPlans" in PlanIndex is just an array of ids of the currently selected groups.
 			}
 			//If the checkbox is checked you should add the chosen group. (e.g. all groups with yellow belts.)
-			return [...prev, chosenGroup]
+			return [...prev, chosenGroup] //Append syntax...
 		}
 	})
 

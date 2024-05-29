@@ -1,7 +1,18 @@
 import { useContext } from "react"
 import CheckBox from "../Common/CheckBox/CheckBox"
 import { AccountContext } from "../../context"
-
+/**
+ * 	 Supports adding Activities to a list.
+ * 
+ *   Props:
+ *    item		@type {Object}   Object being added.
+ *    onCheck 	@type {Function} Function for handling checking of checkbox. 
+ * 
+ * @author Chimera, Kiwi
+ * @since 2023-05-02
+ * @updated 2024-05-29
+ * @version 2.0 
+ */
 export const AddToListItem = ({ item, onCheck }) => {
 	const userContext = useContext(AccountContext)
 	const authorName = item.author.id === userContext.userId ? "av mig" : item.author.username

@@ -73,22 +73,28 @@ function Navbar({ testId }) {
 						<h1 className={styles.commonNavbarButton}>Tekniker & Övningar</h1>
 					</Button>
 
+					{(isAdminUser(context)) ?
+						<Button width={"100%"} onClick={() => navigateAndClose("/techniquechain")}>
+							<h1 className={styles.commonNavbarButton}>Tekniktrådar</h1>
+						</Button>
+						:<></>
+					}
+
 					{(isAdminUser(context) || canHandleGradings(context)) ?
 						<Button width={"100%"} onClick={() => navigateAndClose("/grading")}>
 							<h1 className={styles.commonNavbarButton}>Gradering</h1>
 						</Button>
 						:<></>
 					}
-					{ isAdminUser(context) ? 
-						<Button width={"min-content"} onClick={() => navigateAndClose("/admin")}>
-							<AdminIcon role="button" className={styles.commonNavbarIconAdmin}  onClick={() => navigateAndClose("/admin")} />
-						</Button>
-						
-						:<></>
-					}
 				</div>
-				
 
+				{ isAdminUser(context) ? 
+					<Button width={"min-content"} onClick={() => navigateAndClose("/admin")}>
+						<AdminIcon role="button" className={styles.commonNavbarIconAdmin}  onClick={() => navigateAndClose("/admin")} />
+					</Button>
+					:<></>
+				}
+				
 			</div>
 			<div className={`${styles.boxShadowBackground} ${open ? styles.boxShadowBackgroundOpen : styles.boxShadowBackgroundClosed}`} onClick={() => {setOpen(false)}}/>
 		</nav>

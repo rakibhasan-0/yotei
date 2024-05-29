@@ -116,7 +116,6 @@ public class ExportGradingPdf {
         if(techniqueComments.size() > 0)
             createGroupCommentPage(techniqueComments);
 
-
         Map<Long, List<ExaminationComment>> pairMap = new HashMap<>();
 
         for (ExamineePair examineePair : examineePairs) {
@@ -128,6 +127,9 @@ public class ExportGradingPdf {
             }
             pairMap.put(examineePair.getExamineePairId(), pairComments); 
         }
+
+        if(pairMap.size() > 0)
+            createPairCommentPage(pairMap);
 
         Map<Long, List<ExaminationComment>> examineeCommentMap = new HashMap<>();
 
@@ -141,8 +143,8 @@ public class ExportGradingPdf {
             examineeCommentMap.put(examinee.getExamineeId(), examineeComments); 
         }
 
-        createPairCommentPage(pairMap);
-        createExamineeCommentPage(examineeCommentMap);
+        if(examineeCommentMap.size() > 0)
+            createExamineeCommentPage(examineeCommentMap);
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
@@ -224,12 +226,14 @@ public class ExportGradingPdf {
 
         drawImage(page, contentStream);
         contentStream.addRect(currentXPos, currentYPos, CELL_WIDTH+30, -CELL_HEIGHT);
+        contentStream.stroke();
         writeToCell(currentXPos, currentYPos, contentStream, "Namn", font);
         int count = 1;
 
         currentXPos+=CELL_WIDTH+30;
         for(int j = (onPage*MAX_NUM_COLUMNS); j<(onPage*MAX_NUM_COLUMNS)+MAX_NUM_COLUMNS && j < examinees.size();j++){
             contentStream.addRect(currentXPos,currentYPos,CELL_WIDTH,-CELL_HEIGHT);
+            contentStream.stroke();
 
             writeToCell(currentXPos, currentYPos, contentStream, shortenString(examinees.get(j).getName(), MAX_NAME_LENGTH), font);
 
@@ -241,11 +245,14 @@ public class ExportGradingPdf {
         for(int i = 0; i < examinationTechniqueCategories.size(); i++) {
                 
             contentStream.addRect(currentXPos, currentYPos, CELL_WIDTH*count+30, -CELL_HEIGHT);
+            contentStream.stroke();
+
             writeToCell(currentXPos, currentYPos, contentStream, examinationTechniqueCategories.get(i).getCategoryName(), font);
 
             for(int j = 0; j < examinationTechniqueCategories.get(i).getTechniques().size(); j++) {
                 currentYPos -=CELL_HEIGHT;
                 contentStream.addRect(currentXPos, currentYPos, CELL_WIDTH+30, -CELL_HEIGHT);
+                contentStream.stroke();
                 
                 String techniqueName = examinationTechniqueCategories.get(i).getTechniques().get(j).toString();
                 techniqueName = shortenString(techniqueName, MAX_TECHNIQUE_NAME_LENGTH);
@@ -268,6 +275,8 @@ public class ExportGradingPdf {
 
                 for (int k = 0 ; k < count-1 ; k++) {
                     contentStream.addRect(currentXPos, currentYPos, CELL_WIDTH, -CELL_HEIGHT);
+                    contentStream.stroke();
+
                     String grade = "";
                     for (int l = 0 ; l < examinationResults.size() ; l++) {
                         if ((examinationTechniqueCategories.get(i).getTechniques().get(j).toString()).equals(examinationResults.get(l).getTechniqueName())) {
@@ -296,8 +305,8 @@ public class ExportGradingPdf {
                 }
 
                 currentXPos = tableStartXPos;
-
-                if(currentYPos - CELL_HEIGHT - 70 < 0) {
+                //Creates a new page if the techniques don't fit on the page, j != examinationTC size -1 is a quick fix to avoid a bug where a empty page is created.
+                if(currentYPos - CELL_HEIGHT - 70 < 0 && j != examinationTechniqueCategories.get(i).getTechniques().size() - 1) {
                     contentStream.stroke();
                     contentStream.close();
                     PDPage page2 = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
@@ -309,11 +318,14 @@ public class ExportGradingPdf {
                     createHeader(code, color, contentStream);
                     drawImage(page, contentStream);
                     contentStream.addRect(currentXPos, currentYPos, CELL_WIDTH+30, -CELL_HEIGHT);
+                    contentStream.stroke();
+
                     writeToCell(currentXPos, currentYPos, contentStream, "Namn", font);
                     
                     currentXPos+=CELL_WIDTH+30;
                     for(int j2 = (onPage*MAX_NUM_COLUMNS); j2<(onPage*MAX_NUM_COLUMNS)+MAX_NUM_COLUMNS && j2 < examinees.size() ; j2++){
                         contentStream.addRect(currentXPos,currentYPos,CELL_WIDTH,-CELL_HEIGHT);
+                        contentStream.stroke();
         
                         writeToCell(currentXPos, currentYPos, contentStream, shortenString(examinees.get(j2).getName(), MAX_NAME_LENGTH), font);
         
@@ -344,7 +356,7 @@ public class ExportGradingPdf {
         contentStream.beginText();
         contentStream.newLineAtOffset(currentXPos+10,currentYPos-CELL_HEIGHT+10);
         contentStream.setFont(font,7);
-        contentStream.showText(cellText);
+        contentStream.showText(cellText.replaceAll("\\u000a", " "));
         contentStream.endText();
     }
 
@@ -439,7 +451,7 @@ public class ExportGradingPdf {
         contentStream.newLineAtOffset(0, -20);
         
         for(int i = 0; i < rows.size(); i++) {
-            contentStream.showText(rows.get(i).replaceAll("\\u000a", ""));
+            contentStream.showText(rows.get(i).replaceAll("\\u000a", " "));
             contentStream.newLineAtOffset(0, -15);
         }
         
@@ -526,13 +538,13 @@ public class ExportGradingPdf {
             contentStream.beginText();
             contentStream.newLineAtOffset(currentXPos + 5, currentYPos);
             contentStream.setFont(font, 12);
-            contentStream.showText((examinee1 + " & " + examinee2).replaceAll("\\u000a", ""));
+            contentStream.showText((examinee1 + " & " + examinee2).replaceAll("\\u000a", " "));
             contentStream.setFont(font, 10);
 
             for(int j = 0; j < rows.get(pairId).size(); j++) {
                 //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
                 contentStream.newLineAtOffset(0, -15);
-                contentStream.showText(rows.get(pairId).get(j).replaceAll("\\u000a", ""));
+                contentStream.showText(rows.get(pairId).get(j).replaceAll("\\u000a", " "));
             }    
         
             contentStream.endText();
@@ -611,12 +623,12 @@ public class ExportGradingPdf {
             contentStream.beginText();
             contentStream.newLineAtOffset(currentXPos + 5, currentYPos);
             contentStream.setFont(font, 12);
-            contentStream.showText(examinee.getName().replaceAll("\\u000a", ""));
+            contentStream.showText(examinee.getName().replaceAll("\\u000a", " "));
             contentStream.setFont(font, 10);
             for(int j = 0; j < rows.get(examinee.getExamineeId()).size(); j++) {
                 //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
                 contentStream.newLineAtOffset(0, -15);
-                contentStream.showText(rows.get(examinee.getExamineeId()).get(j).replaceAll("\\u0009", " "));
+                contentStream.showText(rows.get(examinee.getExamineeId()).get(j).replaceAll("\\u000a", " "));
             }
             contentStream.endText();
 
@@ -629,7 +641,7 @@ public class ExportGradingPdf {
     }
 
    /**
-    * Creates the examinee comment pdf page and writes the group comment to the pdf page.
+    * Creates the examinee comment pdf page and writes the group comment to the pdf page. <-- THIS IS NOT IMPLEMENTED IN FRONTEND YET. :-(
     *
     * @param techniqueComments - A list containing technique comments
     * @throws IOException
@@ -683,12 +695,12 @@ public class ExportGradingPdf {
             contentStream.beginText();
             contentStream.newLineAtOffset(currentXPos + 5, currentYPos);
             contentStream.setFont(font, 12);
-            contentStream.showText(techniqueComment.getTechniqueName().replaceAll("\\u000a", ""));
+            contentStream.showText(techniqueComment.getTechniqueName().replaceAll("\\u000a", " "));
             contentStream.setFont(font, 10);
             for(int j = 0; j < rows.size(); j++) {
                 //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
                 contentStream.newLineAtOffset(0, -15);
-                contentStream.showText(rows.get(j));
+                contentStream.showText(rows.get(j).replaceAll("\\u000a", " "));
             }
             contentStream.endText();
 

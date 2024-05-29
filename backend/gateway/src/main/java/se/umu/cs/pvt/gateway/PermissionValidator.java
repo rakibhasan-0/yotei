@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  *        feature.
  * 		- Create a list of regex patterns for each endpoint.
  *
- * @author Team Mango (Group 4) - 2024-05-27
+ * @author Team Mango (Group 4) - 2024-05-29
  * 
  */
 public class PermissionValidator {
@@ -28,17 +28,14 @@ public class PermissionValidator {
     // what is present in utils.js
     private enum permissionList {
         ADMIN_RIGHTS(1),
-	    SESSION_OWN(2), //Edit your own sessions.
-	    SESSION_ALL(3), //Edit all sessions.
-	    PLAN_OWN(4),
-	    PLAN_ALL(5),
-	    WORKOUT_OWN(6),
-	    WORKOUT_ALL(7),
-        TECHNIQUE_OWN(8),
-        TECHNIQUE_ALL(9),
-        EXERCISE_OWN(10),
-        EXERCISE_ALL(11),
-	    GRADING_ALL(12);
+        BETA_ACCESS(2),
+	    SESSION_GROUP_OWN(3), //Edit your own groups and sessions.
+	    SESSION_GROUP_ALL(4), //Edit all groups and sessions.
+	    WORKOUT_OWN(5),
+	    WORKOUT_ALL(6),
+        TECHNIQUE_ALL(7),
+        EXERCISE_ALL(8),
+	    GRADING_ALL(9);
 
         private final int value;
         private permissionList(int value) {
@@ -56,11 +53,8 @@ public class PermissionValidator {
      * @return True if the user has the required permissions; else false
      */
     public boolean validate(String path, List<Integer> permissions) {
-        if (path.startsWith("/api/session") 
-            && !checkSessionPermissions(path, permissions)) return false;
-
-        if (path.startsWith("/api/plan")
-            && !checkPlanPermissions(path, permissions)) return false;
+        if ((path.startsWith("/api/session") || (path.startsWith("/api/plan")))
+            && !checkSessionGroupPermissions(path, permissions)) return false;
 
             if ((path.startsWith("/api/techniques"))
             && !checkTechniquePermissions(path, permissions)) return false;
@@ -93,17 +87,21 @@ public class PermissionValidator {
 
     /**
      * Checks if a user has permissions to access API endpoints associated 
-     * with Sessions.
+     * with Sessions and Groups (plans).
      * 
-     * Checks when a user tries to access Sessions via POST, PUT, DELETE http methods. 
+     * Checks when a user tries to access Sessions or Groups via POST, PUT, DELETE http methods. 
      * 
      * @param path The path for the API call
      * @param permissions The permissions belonging to the user
      * 
      * @return True if the user has the required permissions; else false.
      */
-	private boolean checkSessionPermissions(String path, List<Integer> permissions) {
+	private boolean checkSessionGroupPermissions(String path, List<Integer> permissions) {
         Pattern[] patterns = {
+            // From PlanController
+            Pattern.compile("^/api/plan/add$"),
+            Pattern.compile("^/api/plan/remove$"),
+            Pattern.compile("^/api/plan/update$"),
             // From SessionController
             Pattern.compile("^/api/session/add$"),
             Pattern.compile("^/api/session/addList$"),
@@ -118,35 +116,8 @@ public class PermissionValidator {
         };
     
         Integer[] permissionsToCheck = {
-            permissionList.SESSION_ALL.value,
-            permissionList.SESSION_OWN.value
-        };
-
-        return hasPermission(path, permissions, Arrays.asList(patterns), Arrays.asList(permissionsToCheck));
-    }
-
-    /**
-     * Checks if a user has permissions to access API endpoints associated 
-     * with Plan/Group.
-     * 
-     * Checks when a user tries to access Plan/Group via POST, PUT, DELETE http methods. 
-     * 
-     * @param path The path for the API call
-     * @param permissions The permissions belonging to the user
-     * 
-     * @return True if the user has the required permissions; else false.
-     */
-    private boolean checkPlanPermissions(String path, List<Integer> permissions) {
-        Pattern[] patterns = {
-            // From PlanController
-            Pattern.compile("^/api/plan/add$"),
-            Pattern.compile("^/api/plan/remove$"),
-            Pattern.compile("^/api/plan/update$"),
-        };
-    
-        Integer[] permissionsToCheck = {
-            permissionList.PLAN_ALL.value,
-            permissionList.PLAN_OWN.value
+            permissionList.SESSION_GROUP_ALL.value,
+            permissionList.SESSION_GROUP_OWN.value
         };
 
         return hasPermission(path, permissions, Arrays.asList(patterns), Arrays.asList(permissionsToCheck));
@@ -173,7 +144,6 @@ public class PermissionValidator {
         };
     
         Integer[] permissionsToCheck = {
-            permissionList.TECHNIQUE_OWN.value,
             permissionList.TECHNIQUE_ALL.value
 
         };
@@ -204,7 +174,6 @@ public class PermissionValidator {
         };
     
         Integer[] permissionsToCheck = {
-            permissionList.EXERCISE_OWN.value,
             permissionList.EXERCISE_ALL.value
         };
 

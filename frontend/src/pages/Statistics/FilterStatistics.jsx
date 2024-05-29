@@ -5,10 +5,10 @@ import DatePicker from "../../components/Common/DatePicker/DatePicker"
 import BeltPicker from "../../components/Common/BeltPicker/BeltPicker"
 import style from "./FilterStatistics.module.css"
 
-
 /**
  * 
- * A component for filtering statistics.It contains filters for dates, belts, exercises and kihon.
+ * Component for filtering statistics. Can display exercises and kihon,
+ * and also filter by dates and belts.
  * 
  * Example usage:
  * 
@@ -37,17 +37,18 @@ import style from "./FilterStatistics.module.css"
  * 
  */
 
-export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDateChanges, onToggleBelts, onClearBelts, belts, dates}) {
+export default function FilterStatistics({ exercises, kihon, onToggleExercise, onToggleKihon, onDateChanges, onToggleBelts, onClearBelts, belts, dates}) {
 
 	return (
 		<div>
 			<FilterContainer id="filter-container" title="Filtering" numFilters={0}>
+
 				<div className={style.dateContainer}>
 					<h2>Från</h2>
 					<div></div>
 					<DatePicker
 						id="start-date-picker"
-						selectedDate={dates.from} // two years before from today
+						selectedDate={dates.from} // Default: two years before from today
 						onChange={(e) => {
 							onDateChanges("from", e.target.value)
 						}}
@@ -59,7 +60,7 @@ export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDa
 					<div></div>
 					<DatePicker
 						id="end-date-picker"
-						selectedDate={dates.to} // today's date
+						selectedDate={dates.to} // Default: today's date
 						onChange={(e) => {
 							onDateChanges("to", e.target.value)
 						}}
@@ -79,7 +80,7 @@ export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDa
 					<div></div>
 					<CheckBox
 						id={"techniqueFilter-VisaÖvningar"}
-						checked={false}
+						checked={exercises}
 						onClick={(isChecked) => {
 							onToggleExercise(isChecked)
 						}}
@@ -91,12 +92,13 @@ export default function FilterStatistics({ onToggleExercise, onToggleKihon, onDa
 					<div></div>
 					<CheckBox
 						id={"techniqueFilter-KihonCheck"}
-						checked={false}
+						checked={kihon}
 						onClick={(isChecked) => {
 							onToggleKihon(isChecked)
 						}}
 					/>
 				</div>
+				
 			</FilterContainer>
 		</div>
 	)

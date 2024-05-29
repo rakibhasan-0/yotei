@@ -173,7 +173,6 @@ export default function DuringGrading() {
 			try {
 				const response = await fetch("/api/examination/examinee/all", {headers: {"token": token}})
 				if (response.status === 404) {
-					console.log("404")
 					return
 				}
 				if (!response.ok) {
@@ -262,7 +261,7 @@ export default function DuringGrading() {
 	 */
 	const examineeClick = async (newState, technique, pairIndex, buttonId) => {
 
-		console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}, with new state ${newState}`)
+		//console.log(`Pressed ${buttonId} button in pair ${pairIndex} on technique: ${technique}, with new state ${newState}`)
 		// Check what state the button is in and send the proper information to DB.
 		let examinee_clicked = buttonId.endsWith("left") ? pairs[pairIndex].leftId : pairs[pairIndex].rightId
 		await addExamineeResult(examinee_clicked, `${technique}`, newState)
@@ -321,34 +320,39 @@ export default function DuringGrading() {
 					</div>
 					<div className={styles.bottomRowContainer}>
 						{/* Prev technique button */}
-						<div 
-							id={"prev_technique"} 
-							onClick={() => {
-								goToPrevTechnique() 
-								scrollableContainerRef.current.scrollTop = 0}} 
-							className={styles.btnPrevActivity}>
-							{<ArrowLeft/>}
-						</div>
+						{(currentTechniqueStep === 0) ? (
+							<div className={styles.btnPlaceholder}></div>
+						) : (
+							<div 
+								id={"prev_technique"} 
+								onClick={() => {
+									goToPrevTechnique() 
+									scrollableContainerRef.current.scrollTop = 0}} 
+								className={styles.btnPrevActivity}>
+								{<ArrowLeft/>}
+							</div>
+						)}
 						{ /*Techniques button*/ }
-						<Button id={"techniques-button"} onClick={() => setShowPopup(true)}><p>Tekniker</p></Button>
+						<Button id={"navigation-button"} onClick={() => setShowPopup(true)}><p>Navigering</p></Button>
 						{ /* Next technique button */ }
-						<div 
-							id={"next_technique"} 
-							onClick={() => {
-								if (currentTechniqueStep != techniqueNameList.length -1){
+						{(currentTechniqueStep === techniqueNameList.length - 1) ? (
+							<div className={styles.btnPlaceholder}></div>
+						) : (
+							<div 
+								id={"next_technique"} 
+								onClick={() => {
 									goToNextTechnique()									
-								}else{
-									gotoSummary()
-								}
-								scrollableContainerRef.current.scrollTop = 0}} 
-							className={styles.btnNextActivity}>
-							{<ArrowRight/>}
-						</div>
+									scrollableContainerRef.current.scrollTop = 0
+								}} 
+								className={styles.btnNextActivity}>
+								{<ArrowRight/>}
+							</div>
+						)}
 					</div>
 
 					<Popup 
 						id={"navigation-popup"} 
-						title={"Tekniker-kategorier"} 
+						title={"Navigering"} 
 						isOpen={showPopup} 
 						setIsOpen={setShowPopup}> 
 						{techniqueNameList && (		
@@ -458,7 +462,7 @@ export default function DuringGrading() {
 
 	/**
 	 * Update step for the grading process. 
-	 * @param {String} grading_data 
+	 * @param {String} grading_data data on JSON format for a grading
 	 * @returns status code
 	 */
 	function updateStep(grading_data) {
@@ -682,7 +686,6 @@ export default function DuringGrading() {
 	async function fetchGrading() {
 		const response = await fetch("/api/examination/all", {headers: {"token": token}})
 		if (response.status === 404) {
-			console.log("404")
 			return
 		}
 		if (!response.ok) {
@@ -702,7 +705,6 @@ export default function DuringGrading() {
 	async function fetchProtocol(grading) {
 		const response = await fetch("/api/examination/examinationprotocol/all", { headers: { "token": token } })
 		if (response.status === 404) {
-			console.log("404")
 			return
 		}
 		if (!response.ok) {

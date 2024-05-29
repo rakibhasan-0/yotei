@@ -5,9 +5,12 @@ import styles from "./GradingDeviations.module.css"
 import Divider from "../../components/Common/Divider/Divider"
 import Container from "./GradingDeviationContainer"
 import CheckBox from "../../components/Common/CheckBox/CheckBox"
+import { Download } from "react-bootstrap-icons"
 import { useNavigate, useParams } from "react-router-dom"
 import { HTTP_STATUS_CODES, canHandleGradings, isAdminUser, setError } from "../../utils"
 import { AccountContext } from "../../context"
+import Spinner from "../../components/Common/Spinner/Spinner"
+
 
 
 /**
@@ -32,6 +35,7 @@ export default function GradingDeviations() {
 	const [personalComments, setPersonalComments] = useState([])
 	const [pairComments, setPairComments] = useState([])
 	const [groupComments, setGroupComments] = useState([])
+	const [ downloadingPdf, setDownloadingPdf] = useState(false)
 
 	const context = useContext(AccountContext)
 
@@ -178,11 +182,12 @@ export default function GradingDeviations() {
 			}
 			const json = await response.json()
 			for (let i = 0; i < json.length; i++) {
-				if (json[i]["examinee_1"].id == userId || json[i]["examinee_2"].id == userId) {
-					const response2 = await fetch("/api/examination/comment/pair/all/" + json[i]["pair_id"], requestOptions).catch(() => {
-						setError("Serverfel: Kunde inte ansluta till servern.")
-						return
-					})
+				const examinee1 = json[i]["examinee_1"]
+				const examinee2 = json[i]["examinee_2"]
+
+				if ((examinee1 && examinee1.id === userId) || (examinee2 && examinee2.id === userId)) {
+					const response2 = await fetch("/api/examination/comment/pair/all/" + json[i]["pair_id"], requestOptions)
+					
 					if (response2.status != HTTP_STATUS_CODES.OK) {
 						setError("Kunde inte hämta par-kommentarer. Felkod: " + response2.status)
 						return
@@ -222,6 +227,16 @@ export default function GradingDeviations() {
 		return null
 	}
 
+	function hasStatus(techniqueName) {
+		for (let i = 0; i < resultList.length; i++) {
+			if (resultList[i] != null) {
+				if (resultList[i]["techniqueName"] == techniqueName) {
+					return true
+				}
+			}
+		}
+		return false
+	}
 
 	/**
 	 * Checks if the examinee has passed a specific technique
@@ -301,6 +316,63 @@ export default function GradingDeviations() {
 	}
 
 	/**
+	 * Downloads a pdf of the current examinee's performance
+	 * @returns {void}
+	 */
+	async function downloadPdf() {
+		setDownloadingPdf(true)
+		const pdfBlob = await fetchPdf()
+		if (pdfBlob) {
+			const url = window.URL.createObjectURL(pdfBlob)
+			console.log("URL created:", url)
+			const link = document.createElement("a")
+			link.href = url
+			link.setAttribute("download", "Gradering_" + name + ".pdf")
+			document.body.appendChild(link)
+			link.click()
+			setTimeout(() => { 
+				window.URL.revokeObjectURL(url)
+				link.remove()
+			}, 100)
+			window.URL.revokeObjectURL(url)
+			link.remove()
+		}
+		setDownloadingPdf(false)
+	}
+
+	/**
+	 * Function that fetches all of the results of an examinee.
+	 * @returns {Promise} The belt data.
+	 * @since 2024-05-15
+	 */
+	const fetchPdf = async () => {
+		try {
+			const response = await fetch(`/api/examination/exportExamineePDF/${userId}`, {
+				method: "GET",
+				headers: { "token": context.token }
+			})
+	
+			if (!response.ok) {
+				setError("Nätverk svar var inte OK, felkod: " + response.status)
+				return
+			}
+	
+			const base64String = await response.text()
+			const byteCharacters = window.atob(base64String) // Decode base64 string
+			const byteNumbers = new Array(byteCharacters.length)
+			for (let i = 0; i < byteCharacters.length; i++) {
+				byteNumbers[i] = byteCharacters.charCodeAt(i)
+			}
+			const byteArray = new Uint8Array(byteNumbers)
+			const blob = new Blob([byteArray], {type: "application/pdf"}) // Create a blob from the byte array
+			return blob
+		} catch (error) {
+			setError("Ett fel inträffade vid hämtning av PDF, felkod:"  + error)
+			return null
+		}
+	}
+
+	/**
 	 * Get a checkbox which toggles between showing all techniques and only deviating ones
 	 * @returns A checkbox
 	 */
@@ -334,7 +406,7 @@ export default function GradingDeviations() {
 								<Divider id='divider-example' option='h2_left' title={category.category_name} key={index_id} />
 								{category.techniques.map((technique, index) => (
 									(isDeviating(technique.text) || !showingDeviationsOnly) ?
-										<Container id={index} name={technique.text} passed={hasPassed(technique.text)} key={index}
+										<Container id={index} name={technique.text} passed={hasStatus(technique.text) ? hasPassed(technique.text) : undefined} key={index}
 											comment={getPersonalComment(technique.text)} pairComment={getPairComment(technique.text)} generalComment={getGroupComment(technique.text)}></Container>
 										: null
 								))}
@@ -353,6 +425,25 @@ export default function GradingDeviations() {
 	function getBackButton() {
 		return (
 			<div className={styles.bottomRowContainer}>
+				<Button
+					style={{
+						backgroundColor: "#FFD700",
+						borderRadius: "0.1rem",
+						padding: "0px",
+						height: "50px"
+					}}
+					width={"60px"}
+					onClick={downloadPdf}>
+					<Download size={30} color="white" />
+				</Button>
+				<div className={styles.spinner}>
+					{
+						downloadingPdf ? 
+							<Spinner/>
+						:
+							null
+					}
+				</div>
 				<Button
 					width="100%"
 					outlined={true}

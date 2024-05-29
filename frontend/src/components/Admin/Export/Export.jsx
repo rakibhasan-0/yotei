@@ -7,6 +7,16 @@ import style from "./Export.module.css"
 
 import Popup from "../../Common/Popup/Popup"
 
+/**
+ * Props:
+ *     	type @type {String} - Type of activity string eg. technique
+ *		show @type {boolean} - If is being shown or not.
+ *		setShow @type {function} - Setter for show.
+ *
+ * @author Team Kiwi
+ * @since 2024-05-02
+ * @version 1.1
+ * */
 const WarningPopup = ({type,show,setShow}) => {
 	const context = useContext(AccountContext)
 
@@ -41,7 +51,7 @@ const WarningPopup = ({type,show,setShow}) => {
 		name === "techniques" ? setSuccess("Export av tekniker lyckades!") : setSuccess("Export av övningar lyckades!") 
 	}
 
-	const initialPopupStateTechniques = {
+	const initialPopupStateExercises = {  
 		id : "warning-exercise",
 		onClick : () => export_("/api/export/exercises", "exercises"),
 		popupText : "Du kommer nu ladda ned alla övningar i JSON format",
@@ -49,7 +59,7 @@ const WarningPopup = ({type,show,setShow}) => {
 		backText : "återvänder"
 	}
 	
-	const initialPopupStateExercises = {
+	const  initialPopupStateTechniques = {
 		id : "warning-technique",
 		onClick : () => export_("/api/export/techniques", "techniques"),
 		popupText : "Du kommer nu ladda ned alla tekniker i JSON format",

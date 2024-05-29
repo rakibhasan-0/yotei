@@ -25,14 +25,14 @@ import { Spinner } from "react-bootstrap"
  */
 const WorkoutEdit = () => {
 	const [workoutCreateInfo, workoutCreateInfoDispatch] = useReducer(
-		workoutCreateReducer, JSON.parse(JSON.stringify(WorkoutCreateInitialState)))
+		workoutCreateReducer, 
+		WorkoutCreateInitialState)
 	const navigate = useNavigate()
 	const { token, userId } = useContext(AccountContext)
 	const location = useLocation()
 	const { state } = useLocation()
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const [isLoading, setIsLoading] = useState(true)
-
 
 	/**
 	 * Submits the form data to the API.
@@ -43,8 +43,7 @@ const WorkoutEdit = () => {
 		const data = parseData(workoutCreateInfo.data)
 		const workoutId = await updateWorkout(data)
 
-
-		if(workoutId) {
+		if (workoutId) {
 			setSuccess("Träningen uppdaterades!")
 		} else {
 			setError("Träningen kunde inte uppdateras.")
@@ -60,10 +59,9 @@ const WorkoutEdit = () => {
 	 * @returns The parsed data.
 	 */
 	function parseData(data) {
-
 		let totDuration = 0
 		data.activityItems.forEach(category => {
-			category.activities.forEach(activity=> {
+			category.activities.forEach(activity => {
 				totDuration += +activity.duration
 			})
 		})
@@ -83,35 +81,36 @@ const WorkoutEdit = () => {
 					order: activityOrder,
 				}
 
-				if (activity.techniqueId) {
-					// Convert the id to the correct form if it comes from a list.
-					if (typeof activity.techniqueId === "string" && activity.techniqueId.includes("-technique-")) {
-						obj.techniqueId = activity.techniqueId.split("-technique-").pop()
-					} else{
-						obj.techniqueId = activity.techniqueId
-					}
-					
-				} else if (activity.exerciseId) {
-					// Convert the id to the correct form if it comes from a list.
-					if (typeof activity.exerciseId === "string" && activity.exerciseId.includes("-exercise-")) {
-						obj.exerciseId = activity.exerciseId.split("-exercise-").pop()
+				if (activity.technique){
+					obj.techniqueId = activity.technique.id
+				} else {
+					if (activity.techniqueId) {
+						// Convert the id to the correct form if it comes from a list.
+						if (typeof activity.techniqueId === "string" && activity.techniqueId.includes("-technique-")) {
+							obj.techniqueId = activity.techniqueId.split("-technique-").pop()
+						} else {
+							obj.techniqueId = activity.techniqueId
+						}
+					} else if (activity.exerciseId) {
+						// Convert the id to the correct form if it comes from a list.
+						if (typeof activity.exerciseId === "string" && activity.exerciseId.includes("-exercise-")) {
+							obj.exerciseId = activity.exerciseId.split("-exercise-").pop()
+						} else {
+							obj.exerciseId = activity.exerciseId
+						}
 					} else {
-						obj.exerciseId = activity.exerciseId
+						obj.exerciseId = activity.exercise.id
 					}
-					
 				}
-
-
 				activities.push(obj)
 			})
 		})
 
 		// Temp solution
 		const date = new Date()
-		const todaysDate = date.getFullYear() + "-" + 
-				("0" + (date.getMonth()+1)).slice(-2) + "-" + 
-				("0" + date.getDate()).slice(-2)
-		
+		const todaysDate =
+		date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2)
+
 		return {
 			workout: {
 				id: data.id,
@@ -124,8 +123,8 @@ const WorkoutEdit = () => {
 				author: userId,
 			},
 			activities,
-			users: data.users.map(user => user.userId),
-			tagIds: data.tags.map(tag => tag.id),
+			users: data.users.map((user) => user.userId),
+			tagIds: data.tags.map((tag) => tag.id),
 		}
 	}
 
@@ -139,10 +138,11 @@ const WorkoutEdit = () => {
 		const requestOptions = {
 			method: "PUT",
 			headers: {
-				"Accept": "application/json",
-				"Content-type": "application/json", token
+				Accept: "application/json",
+				"Content-type": "application/json",
+				token,
 			},
-			body: JSON.stringify(body)
+			body: JSON.stringify(body),
 		}
     
 		const response = await fetch("/api/workouts", requestOptions)
@@ -161,7 +161,7 @@ const WorkoutEdit = () => {
 		const userData = location.state?.users
 
 
-		if (workoutData){
+		if (workoutData) {
 			workoutCreateInfoDispatch({
 				type: WORKOUT_CREATE_TYPES.INIT_EDIT_DATA,
 				payload: { workoutData, userData: userData ? userData : [] }
@@ -171,7 +171,7 @@ const WorkoutEdit = () => {
 		} else if (item) {
 			workoutCreateInfoDispatch({
 				type: WORKOUT_CREATE_TYPES.INIT_WITH_DATA,
-				payload: JSON.parse(item)
+				payload: JSON.parse(item),
 			})
 		} else {
 			navigate("/workout" , {replace: true})
@@ -193,15 +193,17 @@ const WorkoutEdit = () => {
 
 	return (
 		<>
-			{isLoading ? <Spinner/> :
+			{isLoading ? (
+				<Spinner />
+			) : (
+				<WorkoutCreateContext.Provider value={{ workoutCreateInfo, workoutCreateInfoDispatch }}>
 
-				<WorkoutCreateContext.Provider value={{workoutCreateInfo, workoutCreateInfoDispatch}} >
 					<title>Redigera pass</title>
 					<h1 className={styles.title}>Redigera pass</h1>
-		
-					<WorkoutFormComponent callback={submitHandler} state = {state}/>	
-				</WorkoutCreateContext.Provider> 
-			}
+				
+					<WorkoutFormComponent callback={submitHandler} state={state} />
+				</WorkoutCreateContext.Provider>
+			)}
 		</>
 	)
 }

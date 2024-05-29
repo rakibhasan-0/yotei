@@ -36,7 +36,7 @@
 	display: flex;
 	flex-direction: column;
 	border: 0;
-	background-color: #c9eec3 ;
+	background-color: lightgreen;
 	
 }
 
@@ -44,8 +44,15 @@
 	display: flex;
 	flex-direction: column;
 	border: 0;
-	background-color: #f8ebec  ;
+	background-color: lightcoral  ;
 	
+}
+
+.sc23-session-container-header-undefined {
+	display: flex;
+	flex-direction: column;
+	border: 0;
+	background-color: white  ;
 }
 
 .sc23-session-header-clickable {
@@ -66,15 +73,6 @@
 	place-self: center;
 	color: white;
 	
-}
-
-.sc23-chevron-rotate {
-    rotate: 180deg;
-}
-
-.sc23-session-container-chevron-rotation-animation {
-    margin-left: auto;
-    transition: all 0.2s ease-in;
 }
 
 .sc23-session-container-header-overlap {
@@ -194,14 +192,18 @@
 	font-size: 10px;
 }
 
+.spinner{
+	width: 50px;
+}
+
 .bottomRowContainer {
-    display: flex; /* Use flexbox to create a row layout */
-    padding: 10px; /* Add padding for spacing, matching other containers */
-    background-color: #fcfcfc; /* Optional: Add a background color */
-    position: fixed; /* Fix the element to the bottom of the viewport */
-    bottom: 0; /* Position the element at the bottom */
-    width: 90vw; /* Span the full width of the viewport */
+    display: flex; 
+    padding: 10px; 
+    background-color: #fcfcfc; 
+    position: fixed; 
+    bottom: 0; 
+    width: 90vw; 
 	max-width: 550px;
-    justify-content: center; /* Center items horizontally within the container */
-    align-items: center; /* Center items vertically within the container */
+    justify-content: center; 
+    align-items: center; 
 }

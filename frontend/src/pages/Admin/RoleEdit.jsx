@@ -7,7 +7,7 @@ import { isAdminUser, setError as setErrorToast } from "../../utils"
 
 import Divider from "../../components/Common/Divider/Divider"
 import InputTextFieldBorderLabel from "../../components/Common/InputTextFieldBorderLabel/InputTextFieldBorderLabel"
-import PermissionCard from "../../components/Common/RoleCard/PermissionListItem"
+import PermissionCard from "../../components/Common/PermissionCard/PermissionListItem"
 import Button from "../../components/Common/Button/Button"
 import ErrorState from "../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../components/Common/Spinner/Spinner"
@@ -261,6 +261,7 @@ export default function RoleEdit() {
 							item={permission.permissionName}
 							key={index}
 							id={permission.permissionId}
+							description={permission.permissionDescription}
 							toggled={selectedMap.has(permission.permissionId) }
 							changeToggled={() => handleButtonToggle(permission.permissionId, false)}
 						/>

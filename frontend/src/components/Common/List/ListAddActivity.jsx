@@ -182,6 +182,8 @@ function AddActivity({ id, setShowActivityInfo }) {
 		const activeTab = tabCookie["active-tab"]
 		if (activeTab) {
 			setKey(activeTab)
+		} else {
+			setKey("technique")
 		}
 	}, [])
 
