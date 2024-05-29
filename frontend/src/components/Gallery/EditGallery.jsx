@@ -20,12 +20,17 @@ import Button from "../Common/Button/Button"
  * Props:
  *     id @type {number}  - The id of the component (for testing)
  *	   exerciseId @type {number}  - The id of a techique/exercise
+ *	   sendData @type {boolean} True if API call is to be done
+ * 	   undoChanges @type {boolean} True if chnages should not be saved
+ * 	   done @type {Function} Called after API call.
+ *
  *
  * Example usage:
  *
  * @author Team Dragon (Group 3), Team Mango (Group 4), Team Durian (group 3)
  * @version 2.0
  * @since 2023-05-04, 2024-05-07
+ * @updated 2024-05-29 Kiwi, updated param comment.
  * 
  * Modifications:
  * 2024-04-29: Added placeholder text and id to media description textbox.

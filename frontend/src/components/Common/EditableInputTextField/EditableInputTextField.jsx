@@ -6,9 +6,10 @@ import { useState, useEffect } from "react"
  * 
  * Props:
  *     	item @type {string} 		- Text displaying the title of the exercise
- * 		  id @type {integer} 			- The ID for this particular exercise in database
+ * 		id @type {integer} 			- The ID for this particular exercise in database
  *      onEdit @type {function}   - Action when editing the item
  *      validateInput @type {function} - Action to validate the input given
+ * 		color @type {String} Color code eg. "FFFFF"
  * 
  * Example usage:
  * 		<EditableInputTextField

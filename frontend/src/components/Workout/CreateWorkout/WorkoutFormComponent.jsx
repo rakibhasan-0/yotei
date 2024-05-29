@@ -28,7 +28,8 @@ import { unstable_useBlocker as useBlocker } from "react-router"
  * This component requires the WorkoutCreateContext to be used.
  *
  * Props:
- *     callback @id {function}  - Function to call when form is filled and to be sent.
+ *     callback @type {function}  - Function to call when form is filled and to be sent.
+ * 		state @type {State} - Holds information about the caller
  *
  * Example usage:
  *		<WorkoutFormComponent callback={submitHandler} />
@@ -37,6 +38,7 @@ import { unstable_useBlocker as useBlocker } from "react-router"
  * @version 2.1
  * @since 2023-05-24, 2024-05-28
  * @updated 2023-06-01 Chimera, updated pathing when pressing return to create session
+ * @updated 2024-05-29 Kiwi, Updated props comment.
  */
 export default function WorkoutFormComponent({ callback, state }) {
 	const { workoutCreateInfo, workoutCreateInfoDispatch } =
