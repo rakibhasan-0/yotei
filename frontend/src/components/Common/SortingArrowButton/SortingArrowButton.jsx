@@ -7,9 +7,9 @@ import style from "./SortingArrowButton.module.css"
  * That component is responsible for the visualization of the sorting arrow button.
  * The user can rotate the arrow by clicking on the button.
  * 
- * @param {id} id- The id of the button. 
- * @param {changeOrder} changeOrder- The function that changes the order of the list.
- * @param {rotate} rotate- A boolean that determines if the arrow should be rotated or not.
+ * id @type {String/Int} id- The id of the button. 
+ * changeOrder @type {Function} changeOrder- The function that changes the order of the list.
+ * rotate @type {boolean} rotate- A boolean that determines if the arrow should be rotated or not.
  * 
  * 
  *  example usage:
@@ -28,6 +28,7 @@ import style from "./SortingArrowButton.module.css"
  * 
  * @version 1.0
  * @since 2024-05-16
+ * @updated 2024-05-29 Kiwi, Updated props comment
  * @author Team Coconut
  * 
  */

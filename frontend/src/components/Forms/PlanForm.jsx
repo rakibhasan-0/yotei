@@ -11,26 +11,27 @@ import InputTextField from "../Common/InputTextField/InputTextField"
  * A form for collecting the data for a new group plan.
  * 
  * props = {
- * 	planData: the data for the plan
- *	weekdays: the weekdays chosen and the time of that day
- *	belts: the belts
- *	setBelts: function for setting belts
- *	onClickData: function for altering data
- *	onClickWeekday: function for handling toggling of weekdays 
- *	onClickDayTime: function for handling changes in the time input field
- *	okName: function for verifying that the name is set
- *	okStartDate: function for verifying that start date is valid
- *	okEndDate: function for verifying that end date is valid
- *	buttonClicked: the state if the button has been clicked.
- *	submitClicked: function for handling submits of the form, if the "Gå vidare" button is clicked.
- *	backClicked: function for handling if the back button is clicked
- *	textInputErrorMsg(Optional): error message to InputTextField-component 
+ * 	planData @type {Object} the data for the plan
+ *	weekdays @type {Object} the weekdays chosen and the time of that day
+ *	belts @type {Object} the belts
+ *	setBelts @type {Function} function for setting belts
+ *	onClickData @type {Function} function for altering data
+ *	onClickWeekday @type {Function} function for handling toggling of weekdays 
+ *	onClickDayTime @type {Function} function for handling changes in the time input field
+ *	okName @type {Function} function for verifying that the name is set
+ *	okStartDate @type {Function} function for verifying that start date is valid
+ *	okEndDate @type {Function} function for verifying that end date is valid
+ *	buttonClicked @type {useState} the state if the button has been clicked.
+ *	submitClicked @type {Function} function for handling submits of the form, if the "Gå vidare" button is clicked.
+ *	backClicked @type {Function} function for handling if the back button is clicked
+ *	textInputErrorMsg(Optional) @type {String} error message to InputTextField-component 
  * }
  * 
  * 
  * @author Squad 2 Griffins, Squad 3 Durian
  * @since 2023-05-10, 2024-04-17
  * @update 2024-04-29, Team Kiwi : Added true for filtering basic techniques in BeltPicker 
+ * @update 2024-05-29, Team Kiwi - Updated props comment
  */
 
 export default function PlanForm(props) {

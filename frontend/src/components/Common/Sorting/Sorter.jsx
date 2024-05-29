@@ -8,6 +8,12 @@ import "../BeltPicker/BeltPicker.module.css"
  * of data. The "onSortChange" function will be called whenever the currently 
  * selected option is changed.
  * 
+ * Props:
+ *    id 		@type {String/Int}   An id for the button
+ *    selected  @type {Struct} Selected Sorting option eg. { label: "Namn: A-Ö", cmp: (a, b) => { return a.name.localeCompare(b.name) } }
+ * 	  onSortChanged @type {Function} Function for handling sorting change
+ * 	  option @type {Struct} Entire sorting options struct
+ * 	
  * @usage Example:
  * const sortOptions = [
  *    {label: "option1", ...},
@@ -18,6 +24,7 @@ import "../BeltPicker/BeltPicker.module.css"
  * @author Phoenix, edited by Cyclops (Group 5)
  * @version 2.0
  * 
+ * @updated 2024-05-29 Kiwi, Updated props comment
  * @param {*} param0 
  * @returns 
  */

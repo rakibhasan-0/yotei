@@ -15,6 +15,7 @@ import style from "./TechniqueFilter.module.css"
  *		kihon			@type {object} 		- True/False if the kihon checkbox has been selected or not.
  *		onKihonChange 	@type {function} 	- Function for setting the kihon boolean uppon selection.
  *		onClearBelts	@type {function}	- Function to run when the clear belts button is pressed.
+ *      filterWhiteBelt @type {boolean}     - True if the whiteBelt should not be included
  *
  * Example usage: 
  * 		<TechniqueFilter
@@ -27,6 +28,7 @@ import style from "./TechniqueFilter.module.css"
  *		</TechniqueFilter>
  *
  * @author Kraken (Grupp 7), Tomato (Group 6)
+ * @updated 2024-05-29 Kiwi, Added FilterWhiteBelt and Updated Props comment
  * @version 1.1
  * @since 2023-05-24
  */

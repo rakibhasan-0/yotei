@@ -151,7 +151,7 @@ export default function GradingIndex() {
 	
 
 			if (!isCreatorInFinished && !isCreatorInCurrent) {
-				if (item.step === 3) {
+				if (item.step === 4) {
 					setFinishedGradings(prevState => [...prevState, item])
 				} else {
 					setCurrentGradings(prevState => [...prevState, item])
@@ -274,45 +274,46 @@ export default function GradingIndex() {
 				</div>
 			</div>
 			<h1 className={styles.finishedGradings}>Avslutade graderingar</h1>
+			<div className={styles.mainContainer}>
+				<div className={styles.container}>
+					<div className={styles.scrollableContainer}>
+						{loading ? <Spinner /> : ( 
+							<div>
+								{finishedGradings.map((grading, index) => (
+									<BeltButton
+										key={index}
+										width={"100%"}
+										onClick={() => handleNavigation(grading.gradingId, 3, beltColors[grading.beltId]?.hex)}
+										color={beltColors[grading.beltId]?.hex}
+									>
+										<div style={{ display: "flex", alignItems: "center", width: "100%", position: "relative" }}>
+											<h2 style={{ margin: 0, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
+												{grading.title}
+											</h2>
+											<Trash
+												className={styles["close-icon"]}
+												onClick={(e) => {
+													e.stopPropagation() 
+													handleIconClick(grading)
+												}}
+												size="24px"
+												style={ { color: "var(--black)", marginLeft:"auto" }}
+												id="close-icon"
+												data-testid="trash-icon"/>
+										</div>
 
-			<div className={styles.container}>
-				<div className={styles.scrollableContainer}>
-					{loading ? <Spinner /> : ( 
-						<div>
-							{finishedGradings.map((grading, index) => (
-								<BeltButton
-									key={index}
-									width={"100%"}
-									onClick={() => handleNavigation(grading.gradingId, grading.step, beltColors[grading.beltId]?.hex)}
-									color={beltColors[grading.beltId]?.hex}
-								>
-									<div style={{ display: "flex", alignItems: "center", width: "100%", position: "relative" }}>
-										<h2 style={{ margin: 0, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
-											{grading.title}
-										</h2>
-										<Trash
-											className={styles["close-icon"]}
-											onClick={(e) => {
-												e.stopPropagation() 
-												handleIconClick(grading)
-											}}
-											size="24px"
-											style={ { color: "var(--black)", marginLeft:"auto" }}
-											id="close-icon"
-											data-testid="trash-icon"/>
-									</div>
-
-								</BeltButton>
-							))}
-						</div>
-					)}
-				</div>          
+									</BeltButton>
+								))}
+							</div>
+						)}
+					</div>          
+				</div>
 			</div>
-			
-			<RoundButton onClick={navigateTo}>
-				<Plus />
-			</RoundButton>
-
+			<div className={styles.bottomRowContainer}>
+				<RoundButton onClick={navigateTo}>
+					<Plus />
+				</RoundButton>
+			</div>
 			{showPopup && gradingToDelete && (
 				<PopupSmall
 					id={"test-popup"}

@@ -13,16 +13,18 @@ import { Spinner } from "react-bootstrap"
 import { setSuccess, setError, parseActivityListToDTO } from "../../utils.js"
 
 /**
- * This is the page for editing a saved list.
+ * This is the page for creating a new list
  *
  * @author Team Tomato (6)
  * @version 1.0
- * @since 2024-05-22
- * @updated 2024-05-29 by Team Tomato, refactoring
+ * @since 2024-05-29
  */
 
-const ListEdit = () => {
-	const [listCreateInfo, listCreateInfoDispatch] = useReducer(listCreateReducer, ListCreateInitialState)
+const ListCreate = () => {
+	const [listCreateInfo, listCreateInfoDispatch] = useReducer(
+		listCreateReducer,
+		JSON.parse(JSON.stringify(ListCreateInitialState))
+	)
 
 	const navigate = useNavigate()
 	const { userId, token } = useContext(AccountContext)
@@ -30,7 +32,8 @@ const ListEdit = () => {
 	const location = useLocation()
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const [isLoading, setIsLoading] = useState(true)
-	const localStorageDestination = "listCreateInfoEdit"
+	const localStorageDestination = "listCreateInfoCreate"
+	const returnTo = location.state?.returnTo || "/activity"
 
 	/**
 	 * Submits the form data to the API.
@@ -38,20 +41,22 @@ const ListEdit = () => {
 	async function submitHandler() {
 		setIsSubmitted(true)
 		const data = parseActivityListToDTO(listCreateInfo.data, userId)
+		let listId
 
-		const listId = await updateActivityList(data)
+		listId = await createActivityList(data)
+
 		if (listId) {
-			setSuccess("Listan uppdaterades!")
+			setSuccess("Listan skapades!")
 		} else {
-			setError("Listan kunde inte uppdateras.")
+			setError("Listan kunde inte skapas.")
 		}
 		localStorage.removeItem(localStorageDestination)
-		navigate(-1)
+		navigate("/profile/list/" + listId, { state: { returnTo: returnTo } })
 	}
 
-	const updateActivityList = async (body) => {
+	const createActivityList = async (body) => {
 		const requestOptions = {
-			method: "PUT",
+			method: "POST",
 			headers: {
 				Accept: "application/json",
 				"Content-type": "application/json",
@@ -59,27 +64,19 @@ const ListEdit = () => {
 			},
 			body: JSON.stringify(body),
 		}
-
-		const response = await fetch("/api/activitylists/edit", requestOptions)
+		const response = await fetch("/api/activitylists/add", requestOptions)
 		const jsonResp = await response.json()
 
 		return jsonResp
 	}
-
 	/**
 	 * Fetches the data from the local storage and context.
 	 */
 	useEffect(() => {
 		setIsLoading(true)
 		const item = localStorage.getItem(localStorageDestination)
-		const listData = location.state?.list
-		const userData = location.state?.list?.users
-		if (listData) {
-			listCreateInfoDispatch({
-				type: LIST_CREATE_TYPES.INIT_EDIT_DATA,
-				payload: { listData, userData: userData ? userData : [] },
-			})
-			window.history.replaceState({}, document.title)
+		if (!item) {
+			listCreateInfoDispatch({ type: LIST_CREATE_TYPES.SET_INITIAL_STATE })
 		} else if (item) {
 			listCreateInfoDispatch({
 				type: LIST_CREATE_TYPES.INIT_WITH_DATA,
@@ -102,7 +99,6 @@ const ListEdit = () => {
 			if (isSubmitted) localStorage.removeItem(localStorageDestination)
 		}
 	}, [listCreateInfo, isSubmitted])
-
 	return (
 		<>
 			{isLoading ? (
@@ -110,8 +106,8 @@ const ListEdit = () => {
 			) : (
 				<>
 					<ListCreateContext.Provider value={{ listCreateInfo, listCreateInfoDispatch }}>
-						<title>Redigera lista</title>
-						<h1 className={styles.title}>Redigera lista</h1>
+						<title>Skapa lista</title>
+						<h1 className={styles.title}>Skapa lista</h1>
 
 						<ListFormComponent
 							callback={submitHandler}
@@ -123,4 +119,4 @@ const ListEdit = () => {
 		</>
 	)
 }
-export default ListEdit
+export default ListCreate

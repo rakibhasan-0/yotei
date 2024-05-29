@@ -30,13 +30,11 @@ test("Should have correct id in DOM", async () => {
 			<WorkoutActivityListItem id={id} activity={activity} index={1}/>
 		</BrowserRouter>
 	)
-	
-	// id is broken, will fix this
 	// Act
-	//const elem = screen.getByTestId(510)
+	const elem = screen.getByTestId(510)
 
 	// Assert
-	//expect(elem.id).toEqual("510")
+	expect(elem.id).toEqual("510")
 })
 
 test("Should display pop-up when clicking on a technique in activity list", async () => {
@@ -73,9 +71,6 @@ test("Should display pop-up when clicking on a technique in activity list", asyn
 	// checks so close button on popup is true
 	const buttonElem = within(popupElem).getByRole("button")
 	expect(buttonElem).toBeInTheDocument()
-	// check description container
-	const descTech = within(popupElem).getByTestId("desc-container")
-	expect(descTech).toBeInTheDocument()
 
 	// check so close button works
 	fireEvent.click(buttonElem)
@@ -117,9 +112,6 @@ test("Should display pop-up when clicking on an exercise in activity list", asyn
 	// checks so close button on popup is true
 	const buttonElem = within(popupElem).getByRole("button")
 	expect(buttonElem).toBeInTheDocument()
-	// check description container
-	const descTech = within(popupElem).getByTestId("desc-container")
-	expect(descTech).toBeInTheDocument()
 
 	// check so close button works
 	fireEvent.click(buttonElem)

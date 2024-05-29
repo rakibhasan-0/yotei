@@ -4,6 +4,15 @@ import { setError as setErrorToast } from "../../../utils"
 /** 
  * A default checkbox that should be used throughout the project.
  * The checkbox handles the checking and unchecking of the box itself.
+ * 
+ * Props:
+ *    checked 	@type {boolean}  Is the checkbox checked?
+ *    onCLick 	@type {Function} Function to be run when the checkbox is checked.
+ * 	  label     @type {String}   String for label?
+ *    disabled  @type {boolean}  Boolean checking if disabled 
+ *    id	   	@type {String/Int}   Id for the Checkbox.
+ * 	  disabledChecking @type {booolean} Disables checking of the checkbox but still shows it.
+ * 
  * I.e. usage like this is incorrect
  *      <CheckBox
  * 			checked={checked}
