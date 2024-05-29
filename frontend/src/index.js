@@ -55,6 +55,7 @@ import DuringGrading from "./pages/Grading/During/DuringGrading.jsx"
 import SessionCreateIndex from "./pages/Plan/SessionCreateIndex.jsx"
 import RoleEdit from "./pages/Admin/RoleEdit.jsx"
 import RoleCreate from "./pages/Admin/RoleCreate.jsx"
+import ListCreate from "./pages/List/ListCreate.jsx"
 
 const exerciseURI = "https://jsonplaceholder.typicode.com/users"
 const workoutURI = "https://jsonplaceholder.typicode.com/users"
@@ -142,15 +143,9 @@ export default function App() {
 						<Route path="workout" element={<WorkoutIndex uri={workoutURI} />} />
 						<Route path="exercise/exercise_page/:ex_id" element={<ExerciseDetailsPage />} />
 						<Route path="technique" element={<TechniqueIndex />} />
-						<Route
-							path="activity/technique/create"
-							element={<CreateTechnique />}
-						/>
+						<Route path="activity/technique/create" element={<CreateTechnique />} />
 						<Route path="technique/:techniqueId" element={<TechniqueDetail />} />
-						<Route
-							path="technique/:techniqueId/edit"
-							element={<TechniqueEdit />}
-						/>
+						<Route path="technique/:techniqueId/edit" element={<TechniqueEdit />} />
 						<Route path="workout/create" element={<WorkoutCreate />} />
 						<Route path="excercise/create" element={<ExerciseCreate />} />
 						<Route path="excercise/edit/:excerciseId" element={<ExerciseEdit />} />
@@ -162,10 +157,6 @@ export default function App() {
 						<Route path="session/create" element={<SessionCreateIndex />} />
 						<Route path="session/edit/:session_id" element={<SessionEdit />} />
 						<Route path="groups" element={<GroupIndex />} />
-						<Route path="list/editList" element={<ListEdit/>} />
-
-						<Route path="profile/list/:list_id" element={<ListInfo />} />
-						<Route path="profile/favouriteWorkouts" element={<FavouriteWorkoutsList/>} />
 
 						<Route path="techniquechain" element={<Techniquechain />} />
 						<Route path="techniquechain/techniquechain_page/:tecid_id" element={<Techniquechain_page />} />
@@ -173,9 +164,8 @@ export default function App() {
 						<Route path="techniquechain/techniqueweavecreate" element={<CreateWeave />} />
 						<Route path="techniquechain/techniqueweave_page/:weave_id_id" element={<TechniqueWeave_page />} />
 						
-						<Route path="list/editList" element={<ListEdit />} />
-						<Route path="list/edit/:activityListId" element={<ListEdit />} />
-						<Route path="list/create" element={<ListEdit />} />
+						<Route path="list/edit" element={<ListEdit />} />
+						<Route path="list/create" element={<ListCreate />} />
 						<Route path="profile/list/:activityListId" element={<ListInfo />} />
 						<Route path="profile/favouriteWorkouts" element={<FavouriteWorkoutsList />} />
 						<Route path="grading" element={<Grading />} />
@@ -199,7 +189,14 @@ export default function App() {
 		<>
 			<ToastContainer />
 			<AccountContext.Provider
-				value={{ token, role: decodedToken?.role, userId: decodedToken?.userId, username: decodedToken?.username, permissions: decodedToken?.permissions, setToken }}
+				value={{
+					token,
+					role: decodedToken?.role,
+					userId: decodedToken?.userId,
+					username: decodedToken?.username,
+					permissions: decodedToken?.permissions,
+					setToken,
+				}}
 			>
 				<RouterProvider router={routes} />
 			</AccountContext.Provider>
