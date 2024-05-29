@@ -228,13 +228,13 @@ export default function GradingBefore() {
 
         // add alone examinees
         if(data.step === 1) {
-
           
-          const aloneExaminees = data.examinees.filter(examinee => {
-            return exsistingPairs.map(pair => {
-              examinee.id !== pair[0].id && examinee.id !== pair[1].id 
-            })
+          let aloneExaminees = data.examinees.map(examinee => {
+            return {name: examinee.name, id: examinee.examineeId}
           })
+          
+          
+
         }
 
 			} catch (error) {	
