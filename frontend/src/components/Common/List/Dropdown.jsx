@@ -19,6 +19,7 @@ import styles from "./Dropdown.module.css"
  * 	onClick  @type {Function} Function when an item is pressed in the drop down
  * 	checkBox @type {JSX}	  If a checkbox is wanted, send it as a prop
  * 	style	 @type {String}	  Send a string of CSS to style the div listHeader
+ * 	autoClose @type {boolean} True if should auto close.
  * 
  * Example usage:
  * 
@@ -29,8 +30,9 @@ import styles from "./Dropdown.module.css"
  * @author Chimera, Tomato (Group 6)
  * @since 2023-05-02
  * @updated 2023-05-30 Chimera, updated documentation
- * @uodate	2024-05-21 Tomato,	Added a checkbox so that a dropdown menu can have one if wanted. 
- * @version 2.1 
+ * @update	2024-05-21 Tomato,	Added a checkbox so that a dropdown menu can have one if wanted. 
+ * @update  2024-05-29 Kiwi, Updated props comment
+ * @version 2.2 
  */
 export default function Component({ item, text, children, id, autoClose, errorMessage, onClick, checkBox, style}) {
 	const [toggled, setToggled] = useState(false)
