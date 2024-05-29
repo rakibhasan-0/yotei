@@ -222,7 +222,7 @@ export default function ExamineePairBox({
 
 	return (
 		<fieldset id={id} className={styles.pairbox} style={{backgroundColor: rowColor}}>
-			<div className={styles.pairinfo} style={{ display: "flex", alignItems: "center" }}>
+			<div data-testid={"P"+pairNumber+"systest"} className={styles.pairinfo} style={{ display: "flex", alignItems: "center" }}>
 				<p id="PairNumberId" style={{ fontSize: "12px", marginBottom: "0" }}>P{pairNumber}</p>
 				<CommentButton id="examinee-pair-box-comment-button" onClick={() => setAddComment(true)} hasComment={hasComment}/>
 			</div>
