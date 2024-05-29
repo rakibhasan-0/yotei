@@ -154,6 +154,10 @@ export default function GradingBefore() {
 				const [data] = await Promise.all([
 					getGrading(token).catch(() => setErrorToast("Kunde inte hämta examinationen. Kontrollera din internetuppkoppling.")),
 				])
+        
+        if(data.step === 3) {
+          navigate(`/grading/${gradingId}/3`)
+        }
 
 				// set belt color
 				const [beltData] = await Promise.all([
@@ -161,9 +165,6 @@ export default function GradingBefore() {
 				])
 				setBeltColor("#" + beltData)
 
-
-				
-	
 				//const data = await getGrading(token)
 				//	.catch(() => setErrorToast("Kunde inte hämta examinationen. Kontrollera din internetuppkoppling."))
 	
@@ -229,10 +230,6 @@ export default function GradingBefore() {
 		fetchData()
 
 	}, [])
-
-	useEffect(() => {
-		
-	}, [beltColor])
 
 	/**
 	 * Help function to activate the useEffect function to start the navigation
