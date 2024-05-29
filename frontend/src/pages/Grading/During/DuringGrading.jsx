@@ -320,7 +320,9 @@ export default function DuringGrading() {
 					</div>
 					<div className={styles.bottomRowContainer}>
 						{/* Prev technique button */}
-						{(currentTechniqueStep === 0) ? null : (
+						{(currentTechniqueStep === 0) ? (
+                            <div className={styles.btnPlaceholder}></div>
+                        ) : (
 							<div 
 								id={"prev_technique"} 
 								onClick={() => {
@@ -333,7 +335,9 @@ export default function DuringGrading() {
 						{ /*Techniques button*/ }
 						<Button id={"navigation-button"} onClick={() => setShowPopup(true)}><p>Navigering</p></Button>
 						{ /* Next technique button */ }
-						{(currentTechniqueStep === techniqueNameList.length - 1) ? null : (
+						{(currentTechniqueStep === techniqueNameList.length - 1) ? (
+                            <div className={styles.btnPlaceholder}></div>
+                        ) : (
 							<div 
 								id={"next_technique"} 
 								onClick={() => {
