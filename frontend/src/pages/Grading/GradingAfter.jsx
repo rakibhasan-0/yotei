@@ -18,7 +18,6 @@ import Spinner from "../../components/Common/Spinner/Spinner"
  */
 export default function GradingAfter() {
 	const context = useContext(AccountContext)
-	const hasPreviousState = location.key !== "default"
 	const { token} = context
 	const { gradingId } = useParams()
 	const navigate = useNavigate()
@@ -147,22 +146,54 @@ export default function GradingAfter() {
 	}
 
 	/**
-	 * Function to navigate to the start of the grading.
+	 * Update step for the grading process. 
+	 * @param {String} grading_data data on JSON format for a grading
+	 * @param {Int} newStepNum New step that should be updated to database
+	 * @returns status code
 	 */
-	const navigateToGrading = () => {
+	function updateStep(newStepNum) {
+		const grading_data = grading
+		grading_data.step = newStepNum
+		setGrading(grading_data)
+
+		return fetch("/api/examination/grading", {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				"token": token },
+			body: JSON.stringify(grading_data),
+
+		})
+			.then(response => {
+				if (!response.ok) {
+					throw new Error("Network response was not ok")
+				}
+				return response.status
+
+			})
+	}
+
+	/**
+	 * Function to save and exit a grading, navigates to grading startpage.
+	 */
+	async function saveAndExitGrading(){
+		await updateStep(4)
 		navigate("/grading")
-    
+
 	}
     
 	/**
 	 * Function to navigate back to the examination page.
 	 */
-	const navigateBack = () => {
-		if (hasPreviousState) {
-			navigate(-1)
-		} else {
+	const navigateBack = async () => {
+		if (grading.step === 3){
+			await updateStep(2)
 			navigate(`/grading/${gradingId}/2`)
+		} 
+		else{
+			navigate("/grading")
 		}
+		
 	}
 
 	/**
@@ -273,12 +304,14 @@ export default function GradingAfter() {
 						>
 							<p>Tillbaka</p>
 						</Button>
-						<Button
-							width="100%"
-							onClick={navigateToGrading}
-						>
-							<p>Spara och avsluta</p>
-						</Button>
+						{(grading.step === 4) ? null : (
+							<Button
+								width="100%"
+								onClick={saveAndExitGrading}
+							>
+								<p>Spara och avsluta</p>
+							</Button>
+						)}
 					</div>
 				</div>
 			</div>

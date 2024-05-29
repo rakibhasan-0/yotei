@@ -64,7 +64,8 @@
 }
   
 .btnNextActivity,
-.btnPrevActivity {
+.btnPrevActivity,
+.btnPlaceholder {
     border-radius: 50%;
     width: 60px; /* Set a fixed width for the circles */
     height: 60px; /* Set a fixed height for the circles */
@@ -75,6 +76,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.btnPlaceholder {
+    background-color: transparent; /* Ensure placeholders are invisible */
+}
+
+.btnNextActivity,
+.btnPrevActivity {
     background-color: var(--red-primary);
 }
   
@@ -84,6 +93,12 @@
     filter: brightness(0) invert(1);
     padding: 0;
 }
+
+.btnNextActivity:hover,
+.btnPrevActivity:hover {
+	background-color: var(--button-hover);
+}
+
 
 .navigationGoBackButton{
     line-height: 26px;
