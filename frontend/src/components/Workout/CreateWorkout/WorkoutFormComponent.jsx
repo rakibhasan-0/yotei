@@ -51,7 +51,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 	const [isBlocking, setIsBlocking] = useState(false)
 
 	const { workoutId } = useParams()
-
+	
 	const blocker = useBlocker(() => {
 		if (isBlocking) {
 			setShowPopup(true)
@@ -62,7 +62,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 
 	useEffect(() => {
 		setIsBlocking(true)
-	})
+	}, [])
 	
 	/**
 	 * Sets the title of the page.
@@ -89,6 +89,8 @@ export default function WorkoutFormComponent({ callback, state }) {
 	 * @param {*} event
 	 */
 	function handleSubmit(event) {
+		setIsBlocking(false)
+		setShowPopup(false)
 		const form = event.currentTarget
 		event.preventDefault()
 
