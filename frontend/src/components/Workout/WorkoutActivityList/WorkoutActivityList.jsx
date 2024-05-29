@@ -1,12 +1,13 @@
 /**
  * A container component for ActivityList items. Each item represents a row in the list.
  *
- * @param categoryName - The name of the category 
- * @param activities - A list of activities. 
- * @param id - Component id
+ * @param categoryName @type {String} - The name of the category 
+ * @param activities @type {Array/List} - A list of activities. 
+ * @param id @type {String} - Component id
  * 
  * @author G5 Cyclops (2023-05-04)
  * @update G2 Team kiwi (2024-05-23) Removed chevron for description and added popups instead
+ * @updated 2024-05-29 Kiwi, Updated props comment.
  */
 import WorkoutActivityListItem from "../WorkoutActivityListItem/WorkoutActivityListItem.jsx"
 import styles from "./WorkoutActivityList.module.css"

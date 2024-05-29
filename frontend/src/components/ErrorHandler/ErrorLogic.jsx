@@ -2,6 +2,7 @@
  * Helperfile made for error-handling logic for components to use.
  *
  *  @author Team 3 Dragon
+ *  @updated 2024-05-29 Kiwi, Updated props comment
  */
 
 /**
@@ -24,8 +25,9 @@ export function getTodaysDate() {
 
 /**
  * Method for API call when Error Boundary is triggered.
- * @param error_input The error that was thrown.
- * @param info_input An object with a componentStack key containing information about which component threw the error.
+ * error_input @type {Object} The error that was thrown.
+ * info_input @type {Object} An object with a componentStack key containing information about which component threw the error.
+ * toke @type {String} Token for login?
  */
 export async function addErrorLog(error_input, info_input, token) {
 

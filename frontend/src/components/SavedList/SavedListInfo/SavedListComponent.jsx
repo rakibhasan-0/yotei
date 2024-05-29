@@ -4,11 +4,12 @@ import { useState } from "react"
 
 /**
  * A container component for ActivityList items. Each item represents a row in the list.
- *
- * @param activities - A list of activities.
+ * Props:
+ * 		activities @type {Array} - A list of activities.
  *
  * @author Tomato (Group 6)
- * @since 2024-05-21
+ * @since 2024-05-21 Kiwi, Updated Uniform props comment
+ * @updated 2024-05-29
  */
 export default function SavedActivityList({ activities, listCreateInfoDispatchProp = null }) {
 	const [isCollapsed, setIsCollapsed] = useState(false)

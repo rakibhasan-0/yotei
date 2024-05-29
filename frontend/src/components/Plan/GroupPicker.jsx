@@ -12,8 +12,14 @@ import {HTTP_STATUS_CODES, setError as setErrorToast} from "../../utils"
  * It contains one checkbox, the name of the group, and the 
  * colors of the belts that are connected to the group.
  * 
- * @param group Object that represents the group data. Name, id, and belts.
- * @param onToggle Function that runs when checkbox is clicked and 
+ * @author UNKNOWN & Team Mango (Grupp 4) (2024-05-29)
+ * 
+ * Updates 2024-05-29: Added so group drop down shows text saying no groups when there is no groups to see.
+ * @updated 2024-05-29 Kiwi, Updated comment props
+ * 
+ * Props:
+ * 		group @type {Object} - Represents the group data. Name, id, and belts.
+ * 		onToggle @type {Function} Function that runs when checkbox is clicked and 
  *                 and toggles it.
  * 
  * @returns The html for th new group row.
@@ -189,13 +195,17 @@ export default function GroupPicker({ id, states, testFetchMethod, onToggle, onl
 	return(
 		checkID(id) ?
 			<div id = {id} className={styles.gp23_group_picker} >
+				
 				<DropDown text={"Grupper"} id= {"gp-drop-down" + id} centered={true} autoClose={false}>
-					{
-						groups && groups.map((group) => (
-							<GroupRow key={group.id} selected={group.selected} group={group} onToggle={handleToggle} />
-						))
-					}
+						
+					{groups?.length > 0 ? groups.map((group) => (
+						<GroupRow key={group.id} selected={group.selected} group={group} onToggle={handleToggle} />
+					)) : <div className={styles.dropdownRow}>
+						<p className={styles.dropdownRowText}>Kunde inte hitta några grupper</p>
+					</div>}
+					
 				</DropDown>
+
 			</div>
 			:
 			<div id = "error-load-group-picker" className={styles.gp23_failed_to_load}>
