@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.*;
  * @author Team Durian
  * @date 2024-05-29
  * @version 1.0
- * TODOO: in some api calls you get more information then you need, try to onely send the relevent data, this is beacuse the ManyToOne/OneToMany relations
  */
 @RestController
 @RequestMapping(path = "/api/techniquechain")
 public class TechniqueChainController {
+
+    //TODOO: the structure of the db is not optimal, especially when removing thing. Make sure that the db is secure and that no orphans can be created.
+    //TODOO: in some api calls you get more information then you need, try to onely send the relevent data, this is beacuse the ManyToOne/OneToMany relations
 
     private TechniqueChainNodeRepository nodeRepository; 
     private TechniqueChainNodeService nodeService;
