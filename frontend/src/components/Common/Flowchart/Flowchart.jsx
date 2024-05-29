@@ -1,6 +1,6 @@
 import React, { useState, useContext, useCallback } from "react"
 import styles from"./Flowchart.module.css"
-// Som default styling for nodes and flowchart window
+// Some default styling for nodes and flowchart window
 import "reactflow/dist/style.css"
 // Styling for the nodes, could not be done in a css module
 import "./style.css"
@@ -9,29 +9,27 @@ import Popup from "../Popup/Popup"
 import AddTechnique from "../../Workout/CreateWorkout/AddTechnique"
 import { AccountContext } from "../../../context"
 import ReactFlow, { addEdge, applyEdgeChanges, MarkerType,} from "reactflow"
-
+//Custom components for the flowchart
 import CustomNode from "./CustomNode"
 import FloatingEdge from "./FloatingEdge"
 import CustomConnectionLine from "./CustomConnectionLine"
 
-// CREATE CUSTOM EDGES? SKAPA REPRESENTATIONEN VID KJEDJOR DÄR KANTER/STARTNOD ÄR MARKERADE!
-
 /**
- * Displays a thechinque weave as a Flowchart.
+ * Displays a thechinque weave as a Flowchart. Is also used to create a weave.
  * 
  * !NOTE! 
  * This component is far from done and is not optimally implemented, 
  * it is left in this state due to time constraints and unclear specifications.
  * The decision on starting the implementation was made so that the users can test
- * something that maybe resembles what they are looking for. A complete remodel
- * might be a good idea however I suggest you continue working with react flow to
- * create and visualize the flowchart! /id20eht
+ * something that maybe resembles what they are looking for.
+ * I suggest you continue working with react flow to create and visualize the flowchart! /id20eht
  * Great docs can be found here https://reactflow.dev/examples.
- * !NOTE!
+ *
  * 
  * TODOS: Delete nodes, click on nodes to show descriptions and techniques, 
- * handle tags, handle permissions, improve styling for mobile use, error handling
- * navigate to correct tab when saving/exiting
+ * handle tags, handle permissions, improve styling for mobile use (drag and drop 
+ * functionality is not great, also visuals and clickable areas should be updated)
+ * , error handling, navigate to correct tab when saving/exiting
  * 
  * @author Durian Team 3
  * @version 1.0
@@ -51,7 +49,7 @@ const nodeTypes = {
 const edgeTypes = {
 	floating: FloatingEdge,
 }
-
+//If no style attribute is found on the edge this will be used
 const defaultEdgeOptions = {
 	style: { strokeWidth: 3, stroke: "black", strokeDasharray: 5 },
 	type: "floating",
@@ -60,7 +58,18 @@ const defaultEdgeOptions = {
 		color: "black",
 	},
 }
-
+/**
+ * 
+ * @param {String} weaveId: A weave Id, used to add new nodes into a weave
+ * @param {Array} nodes: An array of node objects (is an empty array if the weave is empty)
+ * @param {Array} edges: An array of edge objects (is an empty array if the weave has no edges)
+ * @param {Function} setNodes: set state funtion to add new nodes to nodes array
+ * @param {Function} setEdges: set state funtion to add new edges to edge array
+ * @param {Function} onNodesChange: function to update nodes (aquired from useNodesState)
+ * @param {Boolean} editable: (optional) is set to false when nodes and edges should not be able to change
+ * 
+ * @returns A flowchart component
+ */
 const Flowchart = ({weaveId, nodes, edges, setEdges, setNodes, onNodesChange, editable}) => {
 	const context = useContext(AccountContext)
 	//States and functions to handle the nodes and their edges
@@ -82,6 +91,7 @@ const Flowchart = ({weaveId, nodes, edges, setEdges, setNodes, onNodesChange, ed
 	const [participant, setParticipant] = useState(1)
 	const [attack, setAttack] = useState(false)
 
+	//Function that handles the submit of addActivity popup
 	function handleSubmit(){
 		setActivityPopup(false)
 		handleAddNode(chosenTech, ownName, nodeDesc, participant)
@@ -93,7 +103,6 @@ const Flowchart = ({weaveId, nodes, edges, setEdges, setNodes, onNodesChange, ed
 	}
 
 	async function handleAddNode() {
-
 		const requestOptions = {
 			method: "POST",
 			headers: { "Content-type": "application/json", "token": context.token },
@@ -112,9 +121,9 @@ const Flowchart = ({weaveId, nodes, edges, setEdges, setNodes, onNodesChange, ed
 		const id = jsonResp.id
 		const node = [{ 
 			id: id + "", //must be a string
-			type: "custom",
-			data: {id: id + "", ownName: ownName, name: chosenTech? chosenTech.name : "", participant: participant, attack: attack},
-			position: { x: 50, y: 50}, 
+			type: "custom", //maps to nodeTypes
+			data: {id: id + "", ownName: ownName, name: chosenTech? chosenTech.name : "", participant: participant, attack: attack}, //All data needed in the node
+			position: { x: 50, y: 50}, // Default position (should maybe be set dynamically to hinder nodes from covering each other)
 		}]
 		if(nodes) {
 			const nds = nodes.concat(node)

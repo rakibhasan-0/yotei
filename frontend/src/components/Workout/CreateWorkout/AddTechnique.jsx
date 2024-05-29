@@ -15,11 +15,20 @@ import InputTextField from "../../Common/InputTextField/InputTextField"
 import TextArea from "../../Common/TextArea/TextArea"
 
 /**
- *  
- * A popup that lets a user select a technique.
+ * A popup that lets a user select a technique. 
+ * (A stripped down version of same functionality used in workout create)
  * 
- * @author Team Durian
- * @since 2024-05-21
+ * @param {String} id: Id for root div
+ * @param {Function} submit: A function that handles when a new technique is submitted
+ * @param {Number} chosenTech: state that stores chosen technique
+ * @param {String} ownName: state that stores the users own name for a node
+ * @param {String} nodeDesc: state that stores the users description of a node
+ * @param {Number} participant: 1/2 that represents which participant the node represents
+ * @param {Boolean} attack: true if the node is an attack otherwise false
+ * @param {*}: The rest are setState functions for above states.
+ * 
+ * @author Team Durian (Grupp 3)
+ * @since 2024-05-20
  */
 function AddTechnique({ id, submit, chosenTech, ownName, nodeDesc, participant, attack, setAttack, setChosenTech, setOwnName, setNodeDesc, setParticipant }) {
 
@@ -193,10 +202,10 @@ function AddTechnique({ id, submit, chosenTech, ownName, nodeDesc, participant, 
 			<div style={{display: "flex", flexDirection: "row", justifyContent: "center", gap: 5, alignItems: "center", }}>
 				<div style={{display: "flex", flexDirection: "column", gap: 2, justifyContent: "flex-start", width: "50%" }}>
 					<CheckBox onClick={()=>setParticipant(1)} checked={participant === 1} label={"Deltagare 1"}/>
-					<CheckBox onClick={()=>setAttack(false)} checked={attack === false} label={"Försvar"}/>
+					<CheckBox onClick={()=>setParticipant(2)} checked={participant === 2} label={"Deltagare 2"}/>
 				</div>
 				<div style={{display: "flex", flexDirection: "column", gap: 2, justifyContent: "flex-start", width: "50%" }}>
-					<CheckBox onClick={()=>setParticipant(2)} checked={participant === 2} label={"Deltagare 2"}/>
+					<CheckBox onClick={()=>setAttack(false)} checked={attack === false} label={"Försvar"}/>
 					<CheckBox onClick={()=>setAttack(true)} checked={attack === true} label={"Anfall"}/>
 				</div>
 			</div>

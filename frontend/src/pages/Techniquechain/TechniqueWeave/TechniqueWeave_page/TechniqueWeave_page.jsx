@@ -5,14 +5,29 @@ import { AccountContext } from "../../../../context"
 import Spinner from "../../../../components/Common/Spinner/Spinner"
 import Button from "../../../../components/Common/Button/Button.jsx"
 import Flowchart from "../../../../components/Common/Flowchart/Flowchart.jsx"
-import { useNodesState, useEdgesState } from "reactflow"
+import { useNodesState} from "reactflow"
+
+/** 
+ * Specific weave page. View, edit and delete.
+ * !NOTE! 
+ * This component is far from done and is not optimally implemented, 
+ * it is left in this state due to time constraints and unclear specifications.
+ * The decision on starting the implementation was made so that the users can test
+ * something that maybe resembles what they are looking for.
+ * !NOTE!
+ * 
+ * TODOS: add a printer, edit and delete button and functionallity
+ *
+ * @author Team Durian (Grupp 3)
+ * @since 2024-05-20
+*/
 
 export default function TechniqueWeave_page() {
 
 	const navigate = useNavigate()
 	const weaveId = localStorage.getItem("stored_techniqueweave")
 
-	//this is the currently chosen technique, onely get the id when mounting so need to get all the other info from db
+	//this is the currently chosen technique, only get the id when mounting so need to get all the other info from db
 	// eslint-disable-next-line no-unused-vars
 	const [techniqueWeave, settechniqueWeave] = useState()
 	const [nodes, setNodes, onNodesChanged ] = useNodesState([])
@@ -21,11 +36,22 @@ export default function TechniqueWeave_page() {
 	const [weaveData, setWeaveData] = useState([])
 
 	const context = useContext(AccountContext)
-
-	//this is a list of all the techniques to be displayed in the list. read all the real techniqus from the db insted of hard coded
 	const [loading, setIsLoading] = useState(true)
 
+	useEffect(()=> {
+		if(nodeArr) {
+			getNodes(nodeArr)
+		}
+	}, [nodeArr])
+
+	useEffect(()=> {
+		getEdges()
+	},[weaveData])
+
 	useEffect(() => {
+		/**
+		 * Gets weave data (name description nodeInfo)
+		 */
 		const getChainInfo = async () => {
 			const requestOptions = {
 				method: "GET",
@@ -43,20 +69,9 @@ export default function TechniqueWeave_page() {
 		}
 		getChainInfo()
 	}, [])
-
-	useEffect(()=> {
-		if(nodeArr) {
-			getNodes(nodeArr)
-		}
-	}, [nodeArr])
-
-	useEffect(()=> {
-		getEdges()
-	},[weaveData])
-
-
-
-
+	/**
+	 * Gets all nodes in the weave and inserts them into the nodes state.
+	 */
 	const getNodes = async () => {
 		const requestOptionsNodes = {
 			method: "GET",
@@ -87,7 +102,9 @@ export default function TechniqueWeave_page() {
 			setWeaveData(data)
 		}
 	}
-
+	/**
+	 * Gets all edges in the weave and inserts them into the edges state.
+	 */
 	const getEdges = async () => {
 		const tempEdges = []
 		weaveData.map(node => node.outgoingEdges.map((target) => {
@@ -126,7 +143,7 @@ export default function TechniqueWeave_page() {
 			<p style={{ textAlign: "left", whiteSpace: techniqueWeave?.description ? "pre-line" : "normal", fontStyle: !techniqueWeave?.description ? "italic" : "normal", color: !techniqueWeave?.description ? "var(--gray)" : "inherit" }}>
 				{techniqueWeave?.description || "Beskrivning saknas."}
 			</p>
-			{ loading && nodes.length !== 0 && edges.length !== 0 ? <Spinner/> :
+			{ loading ? <Spinner/> :
 				<Flowchart 
 					weaveId={weaveId} 
 					nodes={nodes} 
@@ -139,7 +156,7 @@ export default function TechniqueWeave_page() {
 			}
             
 			<div style={{ marginBottom: "2rem", marginTop: "1rem" }} >
-				<Button onClick= {() => handleGoback()} id = {"sessions-back"}outlined={true}><p>Tillbaka</p></Button>
+				<Button onClick= {() => handleGoback()} id ={"weave-page-back"} outlined={true}><p>Tillbaka</p></Button>
 			</div>	
 		</div>
 	)
