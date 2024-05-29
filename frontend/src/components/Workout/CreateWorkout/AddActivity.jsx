@@ -5,7 +5,7 @@ import Tabs from "react-bootstrap/Tabs"
 import Modal from "react-bootstrap/Modal"
 import useMap from "../../../hooks/useMap"
 import SearchBar from "../../Common/SearchBar/SearchBar"
-import { getTechniques, getExercises, getLists, getListContent } from "../../Common/SearchBar/SearchBarUtils"
+import { getTechniques, getExercises, getLists } from "../../Common/SearchBar/SearchBarUtils"
 import TechniqueFilter from "../../Common/Filter/TechniqueFilter"
 import CheckBox from "../../Common/CheckBox/CheckBox"
 import TechniqueCard from "../../Common/Technique/TechniqueCard/TechniqueCard"
@@ -20,9 +20,8 @@ import InfiniteScrollComponent from "../../Common/List/InfiniteScrollComponent"
 import FilterContainer from "../../Common/Filter/FilterContainer/FilterContainer"
 import { useCookies } from "react-cookie"
 import ListPicker from "./ListPicker.jsx"
-import DropDown from "../../Common/List/Dropdown"
 import NewSorter from "../../Common/Sorting/NewSorter.jsx"
-import ListItem from "./ListItem.jsx"
+import { ActivityLists } from "./ActivityLists.jsx"
 
 /**
  * This component is used to add activities to a workout. It contains three tabs,
@@ -33,7 +32,7 @@ import ListItem from "./ListItem.jsx"
  * @param {string} id A unique id of the component (Testing purposes)
  * @param {function} setShowActivityInfo Callback function to report selected activities
  *
- * @author Kraken (Grupp 7), Team Coconut, Team Kiwi, Team Tomato
+ * @author Kraken (Grupp 7), Team Coconut, Team Kiwi, Team Tomato, Team Coconut
  * @since 2024-04-19
  * @updated 2024-04-22 Kiwi, Fixed so searchbar is not cleared unless component is closed, also so the active tab will show
  * @updated 2024-04-23 Kiwi, Kihon checkbox is now saved when clicking and redirecting to a technique.
@@ -41,8 +40,9 @@ import ListItem from "./ListItem.jsx"
  * @updated 2024-05-13 Kiwi, Added Automatic scrolling and Removal of activities from popup
  * @updated 2024-05-20 Tomato, Added search function for activity lists.
  * @updated 2024-05-28 Tomato, Fixed logic regarding the checkbox for toggling all activities in a list when adding activities
+ * @updated 2024-05-29 - Added scrollId to make popup inside popup possible
  */
-function AddActivity({ id, setShowActivityInfo, sendActivity = null }) {
+function AddActivity({ id, setShowActivityInfo, sendActivity = null, scrollId="scrollable-content" }) {
 	const { token } = useContext(AccountContext)
 	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(WorkoutCreateContext)
 	const { checkedActivities } = workoutCreateInfo
@@ -97,7 +97,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null }) {
 	const [lists, setLists] = useState([])
 	const [fetchedLists, setFetchedLists] = useState(false)
 	const [searchListText, setSearchListText] = useState("")
-	const [listContents, setListContents] = useState([])
+
 	const [listUpdate, setListUpdate] = useState(0)
 	const [listFilter, setListFilter] = useState([])
 
@@ -136,7 +136,6 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null }) {
 	const [cookies, setCookies] = useCookies(["exercise-filter"])
 	const [visibleExercises, setVisibleExercises] = useState([])
 	const { userId: currentUserId } = useContext(AccountContext)
-	const [listCheckboxStatus, setListCheckboxStatus] = useState([false])
 
 	const sortOptionsLists = [
 		{
@@ -197,7 +196,6 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null }) {
 	]
 	const [sortLists, setSortLists] = useState(sortOptionsLists[0])
 	const [filterCount, setFilterCount] = useState(0)
-	const [listToToggle, setListToToggle] = useState(null)
 
 	const searchCount = useRef(0)
 
@@ -248,14 +246,6 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null }) {
 	useEffect(() => {
 		sessionStorage.setItem("searchListText", searchListText)
 	}, [searchListText])
-
-	// This calls the onAllActivitiesToggle function when the listContents state is updated and runs only when the checkbox to toggle all activities in a list is pressed.
-	useEffect(() => {
-		if (listToToggle) {
-			onAllActivitiesToggle(listToToggle)
-			setListToToggle(null) // Reset listToToggle
-		}
-	}, [listContents])
 
 	function setJSONSession(key, value) {
 		sessionStorage.setItem(key, JSON.stringify(value))
@@ -396,58 +386,6 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null }) {
 		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.TOGGLE_CHECKED_ACTIVITY, payload: activity })
 	}
 
-	const onListActivityToggle = (activity, type, isChecked, listId) => {
-		activity.type = type
-
-		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.TOGGLE_CHECKED_ACTIVITY, payload: activity })
-		updateAllActivitiesListCheckbox(isChecked, listId, activity)
-		setListUpdate(listUpdate + 1)
-	}
-
-	const updateAllActivitiesListCheckbox = (isChecked, listId, activity) => {
-		if (!isChecked) {
-			setListCheckboxStatus((prevState) => ({
-				...prevState,
-				[listId]: false,
-			}))
-		} else {
-			const allChecked = listContents[listId]
-				?.filter((item) => item.id !== activity.id)
-				.every((item) => {
-					if (item.type === "technique" && item.techniqueID !== undefined) {
-						return checkedActivities.some((a) => a.techniqueID === item.techniqueID)
-					} else if (item.type === "exercise" && item.id !== undefined) {
-						return checkedActivities.some((a) => a.id === item.id)
-					}
-
-					return false
-				})
-
-			if (allChecked) {
-				setListCheckboxStatus((prevState) => ({
-					...prevState,
-					[listId]: true,
-				}))
-			}
-		}
-	}
-
-	const onActivityToggleAllTrue = (listId) => {
-		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.CHECK_ALL_ACTIVITIES, payload: listContents[listId] })
-	}
-
-	const onActivityToggleAllFalse = (listId) => {
-		workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.UNCHECK_ALL_ACTIVITIES, payload: listContents[listId] })
-	}
-
-	const onAllActivitiesToggle = (listId) => {
-		if (!listCheckboxStatus[listId]) {
-			onActivityToggleAllFalse(listId)
-		} else {
-			onActivityToggleAllTrue(listId)
-		}
-	}
-
 	/**
 	 * Fetches techniques from the backend, either from cache or by a new API-call.
 	 * But first, the selected belts are filtered and parsed to be used in the request.
@@ -581,57 +519,6 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null }) {
 	}
 
 	/**
-	 * Fetches the content from a list given the ID of the same list.
-	 * @param {Integer} listID
-	 */
-	function fetchingListContent(listID, callback) {
-		let technique_index = 0
-		let exercise_index = 0
-		const args = {
-			id: listID,
-		}
-
-		getListContent(args, token, map, mapActions, (result) => {
-			if (result.error) return
-
-			const listContent = result.activities.map((item) => {
-				if (item.type === "technique") {
-					technique_index += 1
-					return {
-						techniqueID: listID + "-" + technique_index + "-technique-" + item.id,
-						name: item.name,
-						type: "technique",
-						description: item.description,
-						tags: item.tags,
-						path: item.id,
-					}
-				} else {
-					exercise_index += 1
-					return {
-						id: listID + "-" + exercise_index + "-exercise-" + item.id,
-						name: item.name,
-						type: "exercise",
-						description: item.description,
-						duration: item.duration,
-						path: item.id,
-					}
-				}
-			})
-
-			setListContents((prevState) => ({
-				...prevState,
-				[listID]: listContent,
-			}))
-
-			setListUpdate(listUpdate + 1)
-
-			if (callback) {
-				callback()
-			}
-		})
-	}
-
-	/**
 	 * Handles the click event for the round button.
 	 * It checks if the sendActivity prop is null, if it is, it will set the showActivityInfo state
 	 * by calling the setShowActivityInfo function with the checkedActivities state as a parameter.
@@ -686,6 +573,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null }) {
 								activities={techniques}
 								activeKey={key}
 								searchCount={searchCount.current}
+								scrollId={scrollId}
 							>
 								{techniques.map((technique, key) => (
 									<TechniqueCard
@@ -783,103 +671,11 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null }) {
 										message="Kunde inte hitta någon lista"
 									/>
 								) : (
-									<InfiniteScrollComponent activities={lists}>
-										{lists.map((list) => {
-											const isChecked = !!listCheckboxStatus[list.id]
-											return (
-												<DropDown
-													text={list.name}
-													autoClose={false}
-													id={list.id}
-													onClick={() => fetchingListContent(list.id)}
-													key={list.id}
-													checkBox={
-														<CheckBox
-															checked={isChecked}
-															onClick={() => {
-																fetchingListContent(list.id, () => {
-																	setListToToggle(list.id)
-																})
-																setListCheckboxStatus((prevState) => ({
-																	...prevState,
-																	[list.id]: !isChecked,
-																}))
-															}}
-														/>
-													}
-													style={{
-														display: "flex",
-														alignItems: "center",
-														margin: "5px 15px 5px 15px",
-													}}
-												>
-													<div style={{ borderTop: "1px solid black" }}>
-														{listContents[list.id]?.map((item, index) => {
-															if (item.type === "technique") {
-																return (
-																	<ListItem
-																		id={
-																			index +
-																			"-technique-list-item-" +
-																			item.techniqueID
-																		}
-																		item={item}
-																		checkBox={
-																			<CheckBox
-																				checked={checkedActivities.some(
-																					(a) =>
-																						a.techniqueID ===
-																						item.techniqueID
-																				)}
-																				onClick={(newCheckedState) =>
-																					onListActivityToggle(
-																						item,
-																						"technique",
-																						newCheckedState,
-																						list.id
-																					)
-																				}
-																			/>
-																		}
-																		key={index}
-																		index={index}
-																		popUp={true}
-																	></ListItem>
-																)
-															} else if (item.type === "exercise") {
-																return (
-																	<ListItem
-																		id={item.id}
-																		item={item}
-																		checkBox={
-																			<CheckBox
-																				checked={checkedActivities.some(
-																					(a) => a.id === item.id
-																				)}
-																				onClick={(newCheckedState) =>
-																					onListActivityToggle(
-																						item,
-																						"exercise",
-																						newCheckedState,
-																						list.id
-																					)
-																				}
-																			/>
-																		}
-																		key={index}
-																		index={index}
-																		popUp={true}
-																	></ListItem>
-																)
-															} else {
-																return null
-															}
-														})}
-													</div>
-												</DropDown>
-											)
-										})}
-									</InfiniteScrollComponent>
+									<ActivityLists
+										lists={lists}
+										listUpdate={listUpdate}
+										setListUpdate={setListUpdate}
+									/>
 								)}
 							</div>
 						</div>

@@ -178,11 +178,12 @@ export default function GradingDeviations() {
 			}
 			const json = await response.json()
 			for (let i = 0; i < json.length; i++) {
-				if (json[i]["examinee_1"].id == userId || json[i]["examinee_2"].id == userId) {
-					const response2 = await fetch("/api/examination/comment/pair/all/" + json[i]["pair_id"], requestOptions).catch(() => {
-						setError("Serverfel: Kunde inte ansluta till servern.")
-						return
-					})
+				const examinee1 = json[i]["examinee_1"]
+				const examinee2 = json[i]["examinee_2"]
+
+				if ((examinee1 && examinee1.id === userId) || (examinee2 && examinee2.id === userId)) {
+					const response2 = await fetch("/api/examination/comment/pair/all/" + json[i]["pair_id"], requestOptions)
+					
 					if (response2.status != HTTP_STATUS_CODES.OK) {
 						setError("Kunde inte hämta par-kommentarer. Felkod: " + response2.status)
 						return
@@ -222,6 +223,16 @@ export default function GradingDeviations() {
 		return null
 	}
 
+	function hasStatus(techniqueName) {
+		for (let i = 0; i < resultList.length; i++) {
+			if (resultList[i] != null) {
+				if (resultList[i]["techniqueName"] == techniqueName) {
+					return true
+				}
+			}
+		}
+		return false
+	}
 
 	/**
 	 * Checks if the examinee has passed a specific technique
@@ -334,7 +345,7 @@ export default function GradingDeviations() {
 								<Divider id='divider-example' option='h2_left' title={category.category_name} key={index_id} />
 								{category.techniques.map((technique, index) => (
 									(isDeviating(technique.text) || !showingDeviationsOnly) ?
-										<Container id={index} name={technique.text} passed={hasPassed(technique.text)} key={index}
+										<Container id={index} name={technique.text} passed={hasStatus(technique.text) ? hasPassed(technique.text) : undefined} key={index}
 											comment={getPersonalComment(technique.text)} pairComment={getPairComment(technique.text)} generalComment={getGroupComment(technique.text)}></Container>
 										: null
 								))}

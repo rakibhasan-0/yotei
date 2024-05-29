@@ -9,22 +9,23 @@ import {People} from "react-bootstrap-icons"
 import Button from "../../components/Common/Button/Button"
 import {Link} from "react-router-dom"
 import { useCookies } from "react-cookie"
-import { HTTP_STATUS_CODES, canCreateSessions, isAdminUser, setError } from "../../utils"
+import { HTTP_STATUS_CODES, canCreateSessionsAndGroups, isAdminUser, setError } from "../../utils"
 
 /**
  * PlanIndex is the page that displays group plannings. Contains a 
  * FilterPlan-component and a SessionList. Fetches and filters sessions 
  * depending on what is selected as selected plans(groups) in the FilterPlan-component.
  * If nothing is selected, the default is from todays date until inf.
- * TODO: PlanIndex is error handling on fetches(react toast).
  * 
- * @author Griffin, Team Durian (Group 3) (2024-04-23), Team Mango (Group 4) (2024-05-17) , Team Durian (Group 3) (2024-05-22)
+ * @author Griffin, Team Durian (Group 3) (2024-04-23), Team Mango (Group 4) (2024-05-28) , Team Durian (Group 3) (2024-05-22)
  * @version 1.0
  * @since 2023-05-24
  * Updates: 2024-05-10: Added a toggle for a new checkbox. The filtering part does not work yet.
  * 			2024-05-17: Fixed the filtering and refactored code slightly.
  *          2024-05-20: Added a check for if the add session button should be shown or not.
  * 		    2024-05-22: Added a numFilters counter to the FilterPlan.
+ *  		2024-05-28: Fixed a filtering bug for the onlyMyGroups selection and refactored the code a bit.
+ * 						Also updated error handling to remove unnecessary error message.
  */
 export default function PlanIndex() {
 	const { token } = useContext(AccountContext)
@@ -59,12 +60,86 @@ export default function PlanIndex() {
 	}
 
 	// Filtering props
+
+	//selectedPlans is an array of ids (numbers) of the groups (= plans) that have been chosen in the GroupPicker.
 	const [ selectedPlans, setSelectedPlans ] = useState(cookies["plan-filter"] ? cookies["plan-filter"].plans : [])
-	//selectedPlans seems to be an array of numbers with the ids of the groups (= plans) to choose from.
+	
 	const [ dates, setDates ] = useState({
 		from: dateFormatter(new Date()),
 		to: dateFormatter(twoYears)
 	})
+
+	/**
+	 * getFetchSessionPath() - Get the path for fetching the correct sessions based on filtering.
+	 * @param {String} planIds The string of ids to use in the API call (e.g. 1&id=2&id=3)
+	 * @returns A string of the fetch session path or null if no sessions should be fetched.
+	 */
+	function getFetchSessionPath(planIds) {
+		let fetchSessionPath = "api/session/all"
+		if (selectedPlans && selectedPlans.length > 0) {
+			//Fetch only sessions connected to plans (groups) selected in FilterPlan.
+			
+			//In the future if sessions can be made without a group then maybe you need to check if the 'planIds' variable is empty here.
+			if (onlyMyGroups) {
+				//If only my groups are to be used in the filtering then we need to remove some Ids from selectedPlans.
+				//Filter out only my groups.
+				let myGroups = groups?.filter(group => group.userId === user.userId)
+				//Filter out the selected groups from myGroups. (Basically we have removed the other selected groups now.)
+				let mySelectedGroups = myGroups.filter(group => selectedPlans.includes(group.id))?.map(g => g.id)
+				//(The map part just extracts the id to get an array of ids.)
+
+				if (mySelectedGroups && mySelectedGroups.length === 0) {
+					//There are no selected groups, except for "hidden" selected groups that are not mine.
+					//Then we get all of myGroups as the selected ones.
+					mySelectedGroups = myGroups?.map(p => p.id)
+				}
+				planIds = mySelectedGroups?.join("&id=")
+				fetchSessionPath = "api/session/getByPlans?id=" + planIds
+				
+				//In case there are no selected planIds.
+				if (!planIds) {
+					setSessions([]) //There are no sessions that should be shown.
+					setLoading(false)
+					return null
+				}
+			} else {
+				fetchSessionPath = "api/session/getByPlans?id=" + planIds
+			}
+		} else {
+			//No groups are chosen.
+
+			if (onlyMyGroups) {
+				//We still only want to fetch sessions connected to this user's groups.
+
+				//Filter out only my groups (array of group ids used)
+				if (!groups) {
+					//The groups have not been fetched yet. (Or there are no groups.)
+					setLoading(false)
+					return null//Nothing could be done.
+				}
+
+				//Filter out only my groups.
+				let myGroups = groups.filter(group => group.userId === user.userId)
+				
+
+				//Extract the group ids into an array and form the string.
+				let groupIds = myGroups?.map(g => g.id)
+				let groupIdsStr = groupIds?.join("&id=")
+				
+				if (groupIds?.length === 0) {
+					//There are no groups.
+					setSessions([]) //This removes all sessions, since none should be shown. Remove if you can create sessions without groups.
+					setLoading(false)
+					return null//Nothing could be done.
+				}
+
+				fetchSessionPath = "api/session/getByPlans?id=" + groupIdsStr
+			} //If false, then all sessions connected to all groups may be fetched (default).
+		}
+		return fetchSessionPath
+	}
+
+
 
 	useEffect(() => {
 		const filterCookie = cookies["plan-filter"]
@@ -111,68 +186,16 @@ export default function PlanIndex() {
 		}
 		setCookie("plan-filter", args, { path: "/" })
 		
-		//TODO: could not refactor the part below into a function for some reason. Should be done and also cleaned up.
-		//let fetchSessionPath = getFetchSessionPath() //This filters also. For some reason GroupPicker.jsx is now needed to render the page.
-		let planIds = selectedPlans?.join("&id=") //TODO remove the questionmark. This stopped working for some reason.
-		let fetchSessionPath = "api/session/all"
-		if (selectedPlans && selectedPlans.length > 0) {
-			//Fetch only sessions connected to plans (groups) selected in FilterPlan.
-			
-			//In the future if sessions can be made without a group then maybe you need to check if the 'planIds' variable is empty here.
-			if (onlyMyGroups) {
-				//If only my groups are to be used in the filtering then we need to remove some Ids from selectedPlans.
-
-				//Filter out only my groups.
-				let myGroups = groups?.filter(group => group.userId === user.userId)
-				//Filter out the selected groups from myGroups. (Basically we have removed the other selected groups now.)
-				let mySelectedGroups = myGroups?.filter(group => selectedPlans.includes(group.id))?.map(g => g.id)
-				//(The map part just extracts the id to get an array of ids.)
-
-				if (mySelectedGroups && mySelectedGroups.length === 0) {
-					//There are no selected groups, except for "hidden" selected groups that are not mine.
-					//Then we get all of myGroups as the selected ones.
-					mySelectedGroups = myGroups?.map(p => p.id)
-				}
-				planIds = mySelectedGroups?.join("&id=")
-				fetchSessionPath = "api/session/getByPlans?id=" + planIds
-				
-				//This is needed to avoid an error message.
-				if (!planIds) {
-					setLoading(false)
-					return
-				}
-			} else {
-				fetchSessionPath = "api/session/getByPlans?id=" + planIds
-			}
-		} else {
-			//No groups are chosen.
-			
-
-			if (onlyMyGroups) {
-				//We still only want to fetch sessions connected to this user's groups.
-
-				//Filter out only my groups.
-				let myGroups = groups?.filter(group => group.userId === user.userId)
-			
-				//Filter out only my groups (array of group ids used)
-				if (!groups) {
-					//The groups have not been fetched yet. (Or there are no groups.)
-					setLoading(false)
-					return //Nothing could be done.
-				}
-
-				//Extract the group ids into an array and form the string.
-				let groupIds = myGroups?.map(g => g.id)
-				let groupIdsStr = groupIds?.join("&id=")
-				
-				if (groupIds?.length === 0) {
-					//There are no groups.
-					setLoading(false)
-					return //Nothing could be done.
-				}
-
-				fetchSessionPath = "api/session/getByPlans?id=" + groupIdsStr
-			} //If false, then all sessions connected to all groups may be fetched (default).
+		
+		if (!selectedPlans) {
+			setLoading(false)
+			return
+		}
+		let planIds = selectedPlans.join("&id=")
+		//let fetchSessionPath = "api/session/all"
+		let fetchSessionPath = getFetchSessionPath(planIds)
+		if (!fetchSessionPath) {
+			return //If the returned result was null we return here and do not fetch anything.
 		}
 
 		fetch(fetchSessionPath, {
@@ -182,6 +205,9 @@ export default function PlanIndex() {
 			.then(response => {
 				if(!response.ok && !HTTP_STATUS_CODES.NOT_FOUND) {
 					setError("Kunde inte hämta tillfällen.")
+				}
+				if (response === HTTP_STATUS_CODES.NO_CONTENT) {
+					return
 				}
 				return response.json()
 			})
@@ -231,6 +257,14 @@ export default function PlanIndex() {
 				if(!response.ok) {
 					setError("Kunde inte hämta övningar")
 				}
+				if (response.status === HTTP_STATUS_CODES.NO_CONTENT) {
+					//There were no groups.
+					return []
+				}
+				if (response.status === HTTP_STATUS_CODES.NOT_FOUND) {
+					setError("Kunde inte ansluta till servern.") //TODO better error message?
+					return []
+				}
 				return response.json()
 			})
 			.then(plans => {
@@ -266,7 +300,7 @@ export default function PlanIndex() {
 		<center>
 			<title>Planering</title>
 			<h1>Planering</h1>
-			{/* TODO: Improve this later, it's a hotfix because FilterPlan is bad */}
+			{/* Comment from 2023 that I do not understand how to fix: TODO: Improve this later, it's a hotfix because FilterPlan is bad */}
 			<div style={{ marginTop: "-25px", marginLeft: "auto", width: "fit-content", transform: "translateY(100%)" }}>
 				<Link to={"/groups"}>
 					<Button width="fit-content">
@@ -296,7 +330,7 @@ export default function PlanIndex() {
 			</div>}
 
 			{
-				(isAdminUser(user) || canCreateSessions(user)) ? 
+				(isAdminUser(user) || canCreateSessionsAndGroups(user)) ? 
 					<RoundButton linkTo={"/session/create"}>
 						<Plus />
 					</RoundButton>

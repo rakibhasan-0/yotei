@@ -1,47 +1,31 @@
-/**
- * This class uses the help of PDFBox to generate a PDF-file which contains the contents of a completed examination.
- * 
- * Good luck debugging this! :)
- * 
- * @author Team Granatäpple
- * @version 1.0
- * @since 2024-05-20
- */
-
 package se.umu.cs.pvt.examination;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.awt.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import org.aspectj.apache.bcel.classfile.Module.Export;
 import org.springframework.boot.json.JsonParserFactory;
 
-import java.awt.*;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.util.*;
-import java.util.List;
-import java.util.stream.Stream;
-
-
-public class ExportGradingPdf {
-    private List<Examinee> examinees;
+public class ExportGradingExamineePdf {
+    private Examinee examinee;
     private Grading grading;
     private List<ExaminationResult> examinationResults;
     private List<ExaminationComment> examinationComments;
-    private final int numPages;
+    private List<Examinee> examinees;
     private PDDocument document;
     private int pageWidth, pageHeight;
-    private Long grading_id;
     private String gradingProtocol;
     private List<ExaminationTechniqueCategory> examinationTechniqueCategories;
     private List<ExamineePair> examineePairs;
@@ -59,27 +43,25 @@ public class ExportGradingPdf {
 
     private String fontPath;
 
-    public ExportGradingPdf(String gradingProtocol, Grading grading, List<Examinee> examinees, List<ExaminationResult> examinationResults, List<ExaminationComment> examinationComments, List<ExamineePair> examineePairs) throws IOException {
-        this.examinees = examinees;
+    public ExportGradingExamineePdf(String gradingProtocol, Grading grading,Examinee examinee, List<ExaminationResult> examinationResults, 
+    List<ExaminationComment> examinationComments, List<ExamineePair> examineePairs, List<Examinee> examinees) throws IOException {
+        this.gradingProtocol = gradingProtocol;
+        this.grading = grading;
+        this.examinee = examinee;
         this.examinationResults = examinationResults;
         this.examinationComments = examinationComments;
-        //This is the number of pages required to fit every examinee in a table (the max per page is 6)
-        this.numPages = (int)Math.ceil((double)examinees.size() / MAX_NUM_COLUMNS);
-        document = new PDDocument();
-        this.gradingProtocol = gradingProtocol;
-        this.examinationTechniqueCategories = new ArrayList<>();
-        this.grading = grading;
         this.examineePairs = examineePairs;
+        this.examinees = examinees;
         this.protocol = parseJson(gradingProtocol);
-
         fontPath = System.getenv("PDF_ASSET_PATH") + "/NotoSans-Regular.ttf";
-
-
+        
         Map<String, Object> gradingProtocolObj = (Map<String, Object>) protocol.get("examination_protocol");
         this.code = (String)gradingProtocolObj.get("code");
         this.color = (String)gradingProtocolObj.get("color");
     }
-    /**
+
+
+        /**
      * The main method for the program which generates the entire PDF by calling private methods.
      * 
      * @throws IOException
@@ -98,8 +80,7 @@ public class ExportGradingPdf {
             examinationTechniqueCategories.add(category);
         }
 
-        for(int i = 0; i < numPages; i++)  
-            createTablePage(i);
+        //createTablePage();
 
         ExaminationComment examinationComment = getExaminationComment();
 
@@ -117,32 +98,31 @@ public class ExportGradingPdf {
             createGroupCommentPage(techniqueComments);
 
 
-        Map<Long, List<ExaminationComment>> pairMap = new HashMap<>();
 
-        for (ExamineePair examineePair : examineePairs) {
-            List<ExaminationComment> pairComments = new ArrayList<>();
-            for (ExaminationComment pairComment : examinationComments) {
-                if(pairComment.getExamineePairId() == examineePair.getExamineePairId()) {
-                    pairComments.add( pairComment);
+        List<ExaminationComment> examineePaircomments = new ArrayList<>();
+        
+        for(ExamineePair e: examineePairs){
+            if(e.getExaminee1Id() == examinee.getExamineeId() || e.getExaminee2Id() == examinee.getExamineeId()){
+                for (ExaminationComment examineePairComment : examinationComments) {
+                    if(examineePairComment.getExamineePairId() == e.getExamineePairId()) {
+                        examineePaircomments.add( examineePairComment);
+                    }
                 }
             }
-            pairMap.put(examineePair.getExamineePairId(), pairComments); 
+
         }
-
-        Map<Long, List<ExaminationComment>> examineeCommentMap = new HashMap<>();
-
-        for (Examinee examinee : examinees) {
-            List<ExaminationComment> examineeComments = new ArrayList<>();
-            for (ExaminationComment examineeComment : examinationComments) {
-                if(examineeComment.getExamineeId() == examinee.getExamineeId()) {
-                    examineeComments.add(examineeComment);
-                }
+        if(examineePaircomments.size() > 0)
+            createPairCommentPage(examineePaircomments);
+    
+        List<ExaminationComment> examineeComments = new ArrayList<>();
+        for (ExaminationComment examineeComment : examinationComments) {
+            if(examinee.getExamineeId() == examineeComment.getExamineeId()) {
+                examineeComments.add(examineeComment);
             }
-            examineeCommentMap.put(examinee.getExamineeId(), examineeComments); 
         }
-
-        createPairCommentPage(pairMap);
-        createExamineeCommentPage(examineeCommentMap);
+        
+        if(examineeComments.size() > 0)
+            createExamineeCommentPage(examineeComments);
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
@@ -151,7 +131,7 @@ public class ExportGradingPdf {
 
         return new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
     }
-    
+
     /**
      * Get the examination comment for a grading.
      * 
@@ -166,7 +146,7 @@ public class ExportGradingPdf {
         return null;
     }
 
-    /**
+        /**
      * Draws the ubk logo in the top right corner. 
      * 
      * @param page, PDPage (Page for PDF)
@@ -198,19 +178,15 @@ public class ExportGradingPdf {
      * @param onPage, an int, to keep track which page is being written to...
      * @throws IOException
      */
-    private void createTablePage(int onPage) throws IOException {
+    private void createTablePage() throws IOException {
         PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
         document.addPage(page);
         pageWidth = (int)page.getMediaBox().getWidth(); 
         pageHeight = (int)page.getMediaBox().getHeight(); 
 
-        //Get number of examinees that will be on the page
-        int numExamineesOnPage = examinees.size() - (onPage * MAX_NUM_COLUMNS);
-        if (numExamineesOnPage > MAX_NUM_COLUMNS)
-            numExamineesOnPage = MAX_NUM_COLUMNS;
 
-        //Calculate where starting x position will be depending on number of examinees on the page
-        int tableStartXPos = (pageWidth/2) - ((numExamineesOnPage + 1)* CELL_WIDTH + 30)/2;
+        //Calculate where starting x position for the table should be
+        int tableStartXPos = (pageWidth/2) - ((2)* CELL_WIDTH + 30)/2;
 
         int currentXPos = tableStartXPos;
         int currentYPos = pageHeight-75;
@@ -229,29 +205,29 @@ public class ExportGradingPdf {
         int count = 1;
 
         currentXPos+=CELL_WIDTH+30;
-        for(int j = (onPage*MAX_NUM_COLUMNS); j<(onPage*MAX_NUM_COLUMNS)+MAX_NUM_COLUMNS && j < examinees.size();j++){
-            contentStream.addRect(currentXPos,currentYPos,CELL_WIDTH,-CELL_HEIGHT);
-            contentStream.stroke();
+        // for(int j = (onPage*MAX_NUM_COLUMNS); j<(onPage*MAX_NUM_COLUMNS)+MAX_NUM_COLUMNS && j < examinees.size();j++){
+        //     contentStream.addRect(currentXPos,currentYPos,CELL_WIDTH,-CELL_HEIGHT);
 
-            writeToCell(currentXPos, currentYPos, contentStream, shortenString(examinees.get(j).getName(), MAX_NAME_LENGTH), font);
+        //     writeToCell(currentXPos, currentYPos, contentStream, shortenString(examinees.get(j).getName(), MAX_NAME_LENGTH), font);
 
-            currentXPos+=CELL_WIDTH;
-            count++;
-        }
+        //     currentXPos+=CELL_WIDTH;
+        //     count++;
+        // }
+        contentStream.addRect(currentXPos,currentYPos,CELL_WIDTH,-CELL_HEIGHT);
+        contentStream.stroke();
+        writeToCell(currentXPos, currentYPos, contentStream, shortenString(examinee.getName(), MAX_NAME_LENGTH), font);
         currentXPos = tableStartXPos;
         currentYPos -= CELL_HEIGHT;
         for(int i = 0; i < examinationTechniqueCategories.size(); i++) {
                 
             contentStream.addRect(currentXPos, currentYPos, CELL_WIDTH*count+30, -CELL_HEIGHT);
             contentStream.stroke();
-
             writeToCell(currentXPos, currentYPos, contentStream, examinationTechniqueCategories.get(i).getCategoryName(), font);
 
             for(int j = 0; j < examinationTechniqueCategories.get(i).getTechniques().size(); j++) {
                 currentYPos -=CELL_HEIGHT;
                 contentStream.addRect(currentXPos, currentYPos, CELL_WIDTH+30, -CELL_HEIGHT);
                 contentStream.stroke();
-                
                 String techniqueName = examinationTechniqueCategories.get(i).getTechniques().get(j).toString();
                 techniqueName = shortenString(techniqueName, MAX_TECHNIQUE_NAME_LENGTH);
 
@@ -271,38 +247,39 @@ public class ExportGradingPdf {
                 
                 currentXPos+=CELL_WIDTH+30;
 
-                for (int k = 0 ; k < count-1 ; k++) {
-                    contentStream.addRect(currentXPos, currentYPos, CELL_WIDTH, -CELL_HEIGHT);
-                    contentStream.stroke();
-
-                    String grade = "";
-                    for (int l = 0 ; l < examinationResults.size() ; l++) {
-                        if ((examinationTechniqueCategories.get(i).getTechniques().get(j).toString()).equals(examinationResults.get(l).getTechniqueName())) {
-                            if (examinees.get(k + (onPage*MAX_NUM_COLUMNS)).getExamineeId() == examinationResults.get(l).getExamineeId()) {
-                                if (examinationResults.get(l).getPass() == null) {
-                                    grade = "";
-                                    continue;
-                                }
-
-                                if (examinationResults.get(l).getPass()) 
-                                    grade = "G";
-                                else
-                                    grade = "U";
-                            }
+             //   for (int k = 0 ; k < count-1 ; k++) {
+                contentStream.addRect(currentXPos, currentYPos, CELL_WIDTH, -CELL_HEIGHT);
+                contentStream.stroke();
+                String grade = "";
+                for (int l = 0 ; l < examinationResults.size() ; l++) {
+                    if ((examinationTechniqueCategories.get(i).getTechniques().get(j).toString()).equals(examinationResults.get(l).getTechniqueName())) {
+                        // if (examinees.get(k + (onPage*MAX_NUM_COLUMNS)).getExamineeId() == examinationResults.get(l).getExamineeId()) {
+                        if (examinationResults.get(l).getPass() == null) {
+                            grade = "";
+                            continue;
                         }
-                    }
 
-                    for (int l = 0; l < examinationComments.size() ; l++) {
-                        if ((examinationTechniqueCategories.get(i).getTechniques().get(j).toString()).equals(examinationComments.get(l).getTechniqueName())) {
-                            if (examinees.get(k + (onPage*MAX_NUM_COLUMNS)).getExamineeId() == examinationComments.get(l).getExamineeId()) 
-                                grade += " - " + examinationComments.get(l).getComment();
-                        }
+                        if (examinationResults.get(l).getPass()) 
+                            grade = "G";
+                        else
+                            grade = "U";
+                        //}
                     }
-                    writeToCell(currentXPos, currentYPos, contentStream, shortenString(grade, 25), font);
-                    currentXPos+=CELL_WIDTH;
                 }
 
+                for (int l = 0; l < examinationComments.size() ; l++) {
+                    if ((examinationTechniqueCategories.get(i).getTechniques().get(j).toString()).equals(examinationComments.get(l).getTechniqueName())) {
+                        if (examinee.getExamineeId() == examinationComments.get(l).getExamineeId()) 
+                            grade += " - " + examinationComments.get(l).getComment();
+                    }
+                }
+                writeToCell(currentXPos, currentYPos, contentStream, shortenString(grade, 25), font);
+                currentXPos+=CELL_WIDTH;
+         //       }
+
                 currentXPos = tableStartXPos;
+
+                
                 //Creates a new page if the techniques don't fit on the page, j != examinationTC size -1 is a quick fix to avoid a bug where a empty page is created.
                 if(currentYPos - CELL_HEIGHT - 70 < 0 && j != examinationTechniqueCategories.get(i).getTechniques().size() - 1) {
                     contentStream.stroke();
@@ -316,19 +293,15 @@ public class ExportGradingPdf {
                     createHeader(code, color, contentStream);
                     drawImage(page, contentStream);
                     contentStream.addRect(currentXPos, currentYPos, CELL_WIDTH+30, -CELL_HEIGHT);
-                    contentStream.stroke();
-
                     writeToCell(currentXPos, currentYPos, contentStream, "Namn", font);
                     
                     currentXPos+=CELL_WIDTH+30;
-                    for(int j2 = (onPage*MAX_NUM_COLUMNS); j2<(onPage*MAX_NUM_COLUMNS)+MAX_NUM_COLUMNS && j2 < examinees.size() ; j2++){
-                        contentStream.addRect(currentXPos,currentYPos,CELL_WIDTH,-CELL_HEIGHT);
-                        contentStream.stroke();
-        
-                        writeToCell(currentXPos, currentYPos, contentStream, shortenString(examinees.get(j2).getName(), MAX_NAME_LENGTH), font);
-        
-                        currentXPos+=CELL_WIDTH;
-                    }
+                    contentStream.addRect(currentXPos,currentYPos,CELL_WIDTH,-CELL_HEIGHT);
+    
+                    writeToCell(currentXPos, currentYPos, contentStream, shortenString(examinee.getName(), MAX_NAME_LENGTH), font);
+    
+                    currentXPos+=CELL_WIDTH;
+                    
                     currentXPos = tableStartXPos;
                 }
             }
@@ -404,25 +377,28 @@ public class ExportGradingPdf {
      */
     private Color getHighlightColor(String color) {
         String split[] = color.split(" ");
-        if (split[0].equals("GULT"))
-            return Color.decode("#FFDD33");
-        if (split[0].equals("BRUNT"))
-            return Color.decode("#83530C");
-        if (split[0].equals("ORANGE"))
-            return Color.decode("#FFA133");
-        if (split[0].equals("GRÖNT"))
-            return Color.decode("#0C7D2B");
-        if (split[0].equals("BLÅTT"))
-            return Color.decode("#1E9CE3");
-        return new Color(1f,1f,1f);
+        
+        switch(split[0]) {
+            case "GULT":
+                return Color.decode("#FFDD33");
+            case "BRUNT":
+                return Color.decode("#83530C");
+            case "ORANGE":
+                return Color.decode("#FFA133");
+            case "GRÖNT":
+                return Color.decode("#0C7D2B");
+            case "BLÅTT":
+                return Color.decode("#1E9CE3");
+            default:
+                return new Color(1f,1f,1f);
+        }
     }
-
-     /**
+    /**
       * Creates the group comment pdf page and writes the group comment to the pdf page.
       * @param examinationComment - The comment, if any, of a grading/examination
       * @throws IOException
       */
-    private void createExaminationCommentPage(String examinationComment) throws IOException {
+      private void createExaminationCommentPage(String examinationComment) throws IOException {
         PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
         document.addPage(page);
         
@@ -456,14 +432,14 @@ public class ExportGradingPdf {
         contentStream.endText();
         contentStream.stroke();
         contentStream.close();
-    }
+    }      
 
     /**
       * Creates the pair comment pdf page and writes the group comment to the pdf page.
       * @param pairMap - a map containing all pair comments of a grading
       * @throws IOException
     */
-    private void createPairCommentPage(Map<Long, List<ExaminationComment>> pairMap) throws IOException {
+    private void createPairCommentPage(List<ExaminationComment> examinationPairComments) throws IOException {
         PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
         document.addPage(page);
 
@@ -486,83 +462,71 @@ public class ExportGradingPdf {
         //30 pixels is the distance between the title and where the comments section begin
         currentYPos -= 30;
 
-        Map<Long, List<String>> rows = new HashMap<>();
+        String examinee1, examinee2;
+        examinee1 = examinee.getName(); 
+        examinee2 = "";
+        // for (Long pairId: rows.keySet()) { 
+        //     //Skip empty comment list
+        //     if(rows.get(pairId).size() == 0)
+        //         continue;
 
-        for (Long pairId : pairMap.keySet()) {
-            List<String> pairRows = new ArrayList<>();
-            for (ExaminationComment c: pairMap.get(pairId)) {
-                List<String> tempRows = getRows(c.getTechniqueName() +" - "+ c.getComment(), 120);
-                pairRows = Stream.concat(pairRows.stream(), tempRows.stream()).toList();
-            } 
-            rows.put(pairId, pairRows); 
+        for (ExamineePair examineePair : examineePairs) {
+            if(examineePair.getExaminee1Id() == examinee.getExamineeId() || examineePair.getExaminee2Id() == examinee.getExamineeId()) {
+                for(Examinee e : examinees) {
+                    if(examineePair.getExaminee1Id() == e.getExamineeId()) {
+                        examinee1 = e.getName();
+                    }
+                }
+            }    
         }
 
-        String examinee1, examinee2;
-        examinee1 = examinee2 = "";
-        for (Long pairId: rows.keySet()) { 
-            //Skip empty comment list
-            if(rows.get(pairId).size() == 0)
-                continue;
-
-            for (ExamineePair examineePair : examineePairs) {
-                if(pairId == examineePair.getExamineePairId()) {
-                    for (Examinee examinee : examinees) {
-                        if(examineePair.getExaminee1Id() == examinee.getExamineeId()) {
-                            examinee1 = examinee.getName();
-                        } else if(examineePair.getExaminee2Id() == examinee.getExamineeId()) {
-                            examinee2 = examinee.getName();
-                        }
-                    }
-                }    
-            }
-
-            //Checks if the next comment block will fit on the page, if not a new page is created
-            if (currentYPos - (rows.get(pairId).size() * 15 + 30) <= 0) {
-                contentStream.close();
-                page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
-                document.addPage(page);        
-                contentStream = new PDPageContentStream(document,page);
-                drawImage(page, contentStream);
-                createHeader(code, color, contentStream);
-                currentYPos = pageHeight-105;
-                contentStream.beginText();
-                contentStream.setFont(font, 14);
-                contentStream.newLineAtOffset(currentXPos, currentYPos);
-                contentStream.showText("Parkommentarer");
-                contentStream.endText();
-                currentYPos -= 30;
-            }
-            
+        //Checks if the next comment block will fit on the page, if not a new page is created
+        /*if (currentYPos - (rows.get(pairId).size() * 15 + 30) <= 0) {
+            contentStream.close();
+            page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
+            document.addPage(page);        
+            contentStream = new PDPageContentStream(document,page);
+            drawImage(page, contentStream);
+            createHeader(code, color, contentStream);
+            currentYPos = pageHeight-105;
             contentStream.beginText();
-            contentStream.newLineAtOffset(currentXPos + 5, currentYPos);
-            contentStream.setFont(font, 12);
-            contentStream.showText((examinee1 + " & " + examinee2).replaceAll("\\u000a", ""));
-            contentStream.setFont(font, 10);
-
-            for(int j = 0; j < rows.get(pairId).size(); j++) {
-                //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
-                contentStream.newLineAtOffset(0, -15);
-                contentStream.showText(rows.get(pairId).get(j).replaceAll("\\u000a", ""));
-            }    
-        
+            contentStream.setFont(font, 14);
+            contentStream.newLineAtOffset(currentXPos, currentYPos);
+            contentStream.showText("Parkommentarer");
             contentStream.endText();
+            currentYPos -= 30;
+        }*/
+        
+        contentStream.beginText();
+        contentStream.newLineAtOffset(currentXPos + 5, currentYPos);
+        contentStream.setFont(font, 12);
+        contentStream.showText((examinee1 + " & " + examinee2).replaceAll("\\u000a", ""));
+        contentStream.setFont(font, 10);
 
-            //Calculates the size of the rectangle which encapsulates the comment
-            contentStream.addRect(currentXPos, currentYPos - (5 + rows.get(pairId).size()*15), CELL_WIDTH * 7 + 30, rows.get(pairId).size() * 15);
-            contentStream.stroke();
-            //Calculates the distance between the comments
-            currentYPos -= rows.get(pairId).size() * 15 + 30;
+        for(ExaminationComment ec : examinationPairComments) {
+            //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
+            contentStream.newLineAtOffset(0, -15);
+            contentStream.showText(ec.getComment().replaceAll("\\u000a", ""));
+        }    
+    
+        contentStream.endText();
+
+        //Calculates the size of the rectangle which encapsulates the comment
+        contentStream.addRect(currentXPos, currentYPos - (5 + examinationPairComments.size()*15), CELL_WIDTH * 7 + 30, examinationPairComments.size() * 15);
+        contentStream.stroke();
+        //Calculates the distance between the comments
+        //currentYPos -= rows.get(pairId).size() * 15 + 30;
             
-        }        
+        //}        
         contentStream.close();
     }
-
+    
     /**
       * Creates the examinee comment pdf page and writes the group comment to the pdf page. 
       * @param examineeComments - The individual comments of each examinee of a examination
       * @throws IOException
     */
-    private void createExamineeCommentPage(Map<Long, List<ExaminationComment>> examineeComments) throws IOException {
+    private void createExamineeCommentPage(List<ExaminationComment> examineeComments) throws IOException {
         PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
         document.addPage(page);
 
@@ -587,58 +551,26 @@ public class ExportGradingPdf {
         //30 pixels is the distance between the title and where the comments section begin
         currentYPos -= 30;
 
-        Map<Long, List<String>> rows = new HashMap<>();
 
-        for (Long examineeId : examineeComments.keySet()) {
-            List<String> commentRows = new ArrayList<>();
-            for (ExaminationComment c: examineeComments.get(examineeId)) {
-                List<String> tempRows = getRows(c.getTechniqueName() +" - "+ c.getComment(), 120);
-                commentRows = Stream.concat(commentRows.stream(), tempRows.stream()).toList();
-            } 
-            rows.put(examineeId, commentRows); 
+        contentStream.beginText();
+        contentStream.newLineAtOffset(currentXPos + 5, currentYPos);
+        contentStream.setFont(font, 12);
+        contentStream.showText(examinee.getName().replaceAll("\\u000a", ""));
+        contentStream.setFont(font, 10);
+        for( ExaminationComment ec: examineeComments){
+            //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
+            contentStream.newLineAtOffset(0, -15);
+            contentStream.showText(ec.getComment().replaceAll("\\u0009", " "));
         }
+        contentStream.endText();
 
-        for (Examinee examinee: examinees) {         
-            if(rows.get(examinee.getExamineeId()).size() == 0)
-                continue;   
-            //Checks if the next comment block will fit on the page, if not a new page is created
-            if (currentYPos - (rows.get(examinee.getExamineeId()).size() * 15 + 30) <= 0) {
-                contentStream.close();
-                page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
-                document.addPage(page);        
-                contentStream = new PDPageContentStream(document,page);
-                drawImage(page, contentStream);
-                createHeader(code, color, contentStream);
-                currentYPos = pageHeight - 105;
-                contentStream.beginText();
-                contentStream.setFont(font, 14);
-                contentStream.newLineAtOffset(currentXPos, currentYPos);
-                contentStream.showText("Personliga kommentarer");
-                contentStream.endText();
-                currentYPos -= 30;
-            }
-
-            contentStream.beginText();
-            contentStream.newLineAtOffset(currentXPos + 5, currentYPos);
-            contentStream.setFont(font, 12);
-            contentStream.showText(examinee.getName().replaceAll("\\u000a", ""));
-            contentStream.setFont(font, 10);
-            for(int j = 0; j < rows.get(examinee.getExamineeId()).size(); j++) {
-                //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
-                contentStream.newLineAtOffset(0, -15);
-                contentStream.showText(rows.get(examinee.getExamineeId()).get(j).replaceAll("\\u0009", " "));
-            }
-            contentStream.endText();
-
-            //Calculates the size of the rectangle to enclose the comment
-            contentStream.addRect(currentXPos, currentYPos - (5 + rows.get(examinee.getExamineeId()).size()*15), CELL_WIDTH * 7 + 30, rows.get(examinee.getExamineeId()).size() * 15);
-            contentStream.stroke();
-            currentYPos -= rows.get(examinee.getExamineeId()).size() * 15 + 30;
-        }        
+        //Calculates the size of the rectangle to enclose the comment
+        contentStream.addRect(currentXPos, currentYPos - (5 + examineeComments.size()*15), CELL_WIDTH * 7 + 30, examinationComments.size() * 15);
+        contentStream.stroke();
         contentStream.close();
     }
 
-   /**
+       /**
     * Creates the examinee comment pdf page and writes the group comment to the pdf page.
     *
     * @param techniqueComments - A list containing technique comments
@@ -763,4 +695,5 @@ public class ExportGradingPdf {
         
         return string;
     }
-}
+
+}   
