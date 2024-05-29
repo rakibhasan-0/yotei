@@ -5,7 +5,7 @@ import { AccountContext } from "../../../../context"
 import Spinner from "../../../../components/Common/Spinner/Spinner"
 import Button from "../../../../components/Common/Button/Button.jsx"
 import Flowchart from "../../../../components/Common/Flowchart/Flowchart.jsx"
-import { useNodesState } from "reactflow"
+import { useNodesState, useEdgesState } from "reactflow"
 
 export default function TechniqueWeave_page() {
 
@@ -70,16 +70,11 @@ export default function TechniqueWeave_page() {
 		} else {
 			const data = await nodesResponse.json()
 			const tempNodes = []
-			console.log("data")
-			console.log(data)
-			console.log("nodeArr")
-			console.log(nodeArr)
 			for(let i = 0; i < data.length; i++) {
 				const nodeReps = data.map(node => {
 					const match = nodeArr.find(nodeRep => nodeRep.node_id === node.id)
 					return match ? match : null
 				})
-				console.log(nodeReps)
 				const node = { 
 					id: data[i].id + "", //must be a string
 					type: "custom",
@@ -144,7 +139,7 @@ export default function TechniqueWeave_page() {
 			}
             
 			<div style={{ marginBottom: "2rem", marginTop: "1rem" }} >
-				<Button onClick= {() => handleGoback} id = {"sessions-back"}outlined={true}><p>Tillbaka</p></Button>
+				<Button onClick= {() => handleGoback()} id = {"sessions-back"}outlined={true}><p>Tillbaka</p></Button>
 			</div>	
 		</div>
 	)

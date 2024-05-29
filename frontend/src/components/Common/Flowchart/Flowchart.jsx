@@ -41,7 +41,7 @@ import CustomConnectionLine from "./CustomConnectionLine"
 //Register styles and custom components for the flowchart
 const connectionLineStyle = {
 	strokeWidth: 3,
-	stroke: "black",
+	stroke: "blue",
 }
 
 const nodeTypes = {
@@ -67,8 +67,11 @@ const Flowchart = ({weaveId, nodes, edges, setEdges, setNodes, onNodesChange, ed
 	const onConnect = useCallback((params) => {
 		if(params.source === params.target) return
 		setEdges((eds) => addEdge(params, eds))}, [setEdges])
+
 	const onEdgesChange = useCallback(
-		(changes) => {setEdges((eds) => applyEdgeChanges(changes, eds))},
+		(changes) => {setEdges((eds) => {
+			console.log(eds); applyEdgeChanges(changes, eds)
+		})},
 		[],
 	)
 	const [activityPopup, setActivityPopup] = useState(false)
@@ -135,9 +138,9 @@ const Flowchart = ({weaveId, nodes, edges, setEdges, setNodes, onNodesChange, ed
 				<ReactFlow
 					nodes={nodes}
 					edges={edges}
-					onNodesChange={editable? onNodesChange:()=>null}
-					onEdgesChange={editable? onEdgesChange:()=>null}
-					onConnect={editable?onConnect:()=> null}
+					onNodesChange={editable? onNodesChange : () => null}
+					onEdgesChange={editable? onEdgesChange : () => null}
+					onConnect={editable? onConnect : ()=> null}
 					fitView
 					attributionPosition="top-right"
 					nodeTypes={nodeTypes}
