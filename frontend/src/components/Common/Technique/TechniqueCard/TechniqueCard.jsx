@@ -75,7 +75,7 @@ function TechniqueCard({ technique, checkBox, id, popUp, techniqueInProtocol}) {
 				</PopupMini>
 				:
 				<PopupMini title = {technique.name} id = "pop-up-id-tech" isOpen = {isOpen} setIsOpen = {setIsOpen} isNested = {true}> 
-					<TechniqueDetailMini id = {id}>
+					<TechniqueDetailMini id = {id ? id : (technique.techniqueID ? technique.techniqueID : technique.activity_id)}>
 					</TechniqueDetailMini>
 				</PopupMini>}
 			
