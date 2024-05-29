@@ -12,8 +12,20 @@ import Button from "../../../components/Common/Button/Button.jsx"
 import Flowchart from "../../../components/Common/Flowchart/Flowchart.jsx"
 import Divider from "../../../components/Common/Divider/Divider.jsx"
 
+/**
+ * The Technique Chain page, displays the thechnique chain and the path in its parent weave.
+ * 
+ * @author Team Durian
+ * @version 1.0
+ * @since 2024-05-29
+ */
 export default function Techniquechain_page() {
 
+	//TODOO: add a printer button and functionallity to print a chain and its graph
+	//TODOO: add functionality to edit and delete a chain.
+	//TODOO: add functionality, when you press a technique/node in the chain info like technique, description comes up.
+	//TODOO: show in the react Flow where the start node is.
+	
 	const navigate = useNavigate()
 	const techniqueId = localStorage.getItem("stored_techniquechain")
 
@@ -109,7 +121,6 @@ export default function Techniquechain_page() {
 		}
 	}
 
-
 	const getNodes = async (weaveId, nodeArr) => {
 		const requestOptionsNodes = {
 			method: "GET",
@@ -199,11 +210,10 @@ export default function Techniquechain_page() {
 				{isAdminUser(context) && (
 					<div style={{ display: "flex", flexDirection: "row", gap: "10px", justifyContent: "flex-end"}}>
                         
-						{/* TODOO: add a printer button and functionallity to print a chain and its graph */}
 						<Pencil
 							onClick={() => {
 								window.localStorage.setItem("popupState", true)
-								navigate("/excercise/edit/" + techniqueId)
+								//navigate("/excercise/edit/" + techniqueId)
 							}
 							}
 							size="24px"
@@ -221,6 +231,7 @@ export default function Techniquechain_page() {
 			<p style={{ textAlign: "left", whiteSpace: techniquechain?.description ? "pre-line" : "normal", fontStyle: !techniquechain?.description ? "italic" : "normal", color: !techniquechain?.description ? "var(--gray)" : "inherit" }}>
 				{techniquechain?.description || "Beskrivning saknas."}
 			</p>
+			<Divider option={"h1_left"} title={"Tekniker i Tråden"} />
 			{ loading === false?
 				<div>
 					<InfiniteScrollComponent>

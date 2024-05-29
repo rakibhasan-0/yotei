@@ -1,11 +1,15 @@
 package se.umu.cs.pvt.techniqueChain;
-
 import java.io.IOException;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
+/**
+ * The Serializer for the outgoing data in the TechniqueWeaveRepresent.
+ * @author Team Durian
+ * @date 2024-05-29
+ * @version 1.0
+ */
 public class TechniqueChainWeaveRepresentSerializer extends StdSerializer<TechniqueWeaveRepresent>{
     
     public TechniqueChainWeaveRepresentSerializer() {
@@ -16,6 +20,7 @@ public class TechniqueChainWeaveRepresentSerializer extends StdSerializer<Techni
         super(t);
     }
 
+    //To send the data in the TechniqueWeaveRepresent insted of just the object.
     @Override
     public void serialize(TechniqueWeaveRepresent node, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();

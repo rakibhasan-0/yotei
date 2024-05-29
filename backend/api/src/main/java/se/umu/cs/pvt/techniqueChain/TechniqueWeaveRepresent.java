@@ -1,15 +1,13 @@
 package se.umu.cs.pvt.techniqueChain;
 import javax.persistence.*;
-
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
- * Entity class for the node table.
- * This class represents nodes
+ * Entity class for the weave_representation table.
  * @author Team Durian
+ * @date 2024-05-29
+ * @version 1.0
  */
 @Entity
 @Table(name = "weave_representation")
@@ -34,20 +32,20 @@ public class TechniqueWeaveRepresent implements Serializable {
     @JoinColumn(name = "parent_weave_id", nullable = false)
     private TechniqueChainWeave techniqueWeave;
     
+    //used to remove and edit a representation.
     @Transient
     private Long techniqueWeaveId;
 
-/*
-    @Column(nullable = false, name = "parent_weave_id")
-    private Long techniqueWeave;
-*/
 
     /**
      * Constructs a new node with all field values initialized.
      *
      * @param id The identifier for the comment.
-     * @param node_x_pos The name of the node.
-     * @param description The description of the node.
+     * @param node_x_pos The x pos of the node.
+     * @param node_y_pos The y pos of the node.
+     * @param techniqueWeave The wheave the representation belongs in.
+     * @param node_id The id of the node the representation is for.
+     * @param techniqueWeaveId The id if the weave the representation is for.
      */
     public TechniqueWeaveRepresent(Long id, int node_x_pos, int node_y_pos, TechniqueChainWeave techniqueWeave, Long node_id, Long techniqueWeaveId) {
         this.id = id;
@@ -60,8 +58,7 @@ public class TechniqueWeaveRepresent implements Serializable {
     /**
      * Protected no-args constructor for JPA use only.
      */
-    protected TechniqueWeaveRepresent() {
-    }
+    protected TechniqueWeaveRepresent() {}
 
     public Long getTechniqueWeaveId() {
         return techniqueWeaveId;

@@ -1,6 +1,13 @@
 package se.umu.cs.pvt.techniqueChain;
 
+/**
+ * The DTO to the chain edge.
+ * @author Team Durian
+ * @date 2024-05-29
+ * @version 1.0
+ */
 public class TechniqueChainEdgeDTO {
+    
     private Long fromNodeId;
     private Long toNodeId;
     private Long edgeToDelete;

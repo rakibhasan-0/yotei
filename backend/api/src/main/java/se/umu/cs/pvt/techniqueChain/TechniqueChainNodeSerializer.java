@@ -2,9 +2,14 @@ package se.umu.cs.pvt.techniqueChain;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-
 import java.io.IOException;
 
+/**
+ * A serializer for the data that the node returns.
+ * @author Team Durian
+ * @date 2024-05-29
+ * @version 1.0
+ */
 public class TechniqueChainNodeSerializer extends StdSerializer<TechniqueChainNode> {
 
     public TechniqueChainNodeSerializer() {

@@ -7,6 +7,8 @@ import java.io.Serializable;
  * Entity class for the node table.
  * This class represents nodes
  * @author Team Durian
+ * @date 2024-05-29
+ * @version 1.0
  */
 @Entity
 @Table(name = "edges")
@@ -16,13 +18,7 @@ public class TechniqueChainEdges implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "id")
     private Long id;
-/*
-    @Column(nullable = false, name = "from_node_id")
-    private int from_node_id;
 
-    @Column(nullable = false, name = "to_node_id")
-    private int to_node_id;
-*/
     @ManyToOne
     @JoinColumn(name = "from_node_id", nullable = false)
     private TechniqueChainNode fromNode;
@@ -33,11 +29,11 @@ public class TechniqueChainEdges implements Serializable {
     
 
     /**
-     * Constructs a new node with all field values initialized.
+     * Constructs a new edge with all field values initialized.
      *
      * @param id The identifier for the comment.
-     * @param from_node_id The name of the node.
-     * @param description The description of the node.
+     * @param fromNode The id of the node.
+     * @param toNode The id of the toNode
      */
     public TechniqueChainEdges(Long id, TechniqueChainNode fromNode, TechniqueChainNode toNode) {
         this.id = id;
@@ -47,8 +43,7 @@ public class TechniqueChainEdges implements Serializable {
     /**
      * Protected no-args constructor for JPA use only.
      */
-    protected TechniqueChainEdges() {
-    }
+    protected TechniqueChainEdges() {}
 
     public Long getId() {
         return id;

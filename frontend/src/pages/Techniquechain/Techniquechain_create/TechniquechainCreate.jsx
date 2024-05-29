@@ -14,6 +14,14 @@ import TechniquechainNode from "../../../components/Common/TechniquechainCard/Te
 
 export default function TechniquechainCreate() {
 
+	//TODOO: add Taggs visability i.e the same stuff that a pass have.
+	//TODOO: add error checks so that the name techniqueWeave and chains arent empty.
+	//TODOO: add functionality to remove a chosen node from the weave.
+	//TODOO: add functionality to se the technique and description of the nodes before you choose it.
+	//TODOO: add a popup window to make sure that the user whant to quit before saving.
+	//TODOO: add functionality to not have to choose a weave and just make it from techniques.
+	//TODOO: add a spinner when loading in the next nodes.
+
 	const { state } = useLocation()
 	// eslint-disable-next-line no-unused-vars
 	const [errorMessage, setErrorMessage] = useState("")
@@ -165,16 +173,6 @@ export default function TechniquechainCreate() {
 			const data = await response.json()
 			setNewChainId(data.id)
 		}
-	}
-	const appendToChosenNodes = (foundObject) => {
-		setChosenNodes(prevNodes => {
-			if (Array.isArray(prevNodes)) {
-				return [...prevNodes, foundObject]
-			} else {
-				console.error("Previous nodes state is not an array:", prevNodes)
-				return [foundObject] // Fallback to ensure the state remains an array
-			}
-		})
 	}
 
 	useEffect(() => {

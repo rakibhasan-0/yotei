@@ -4,9 +4,11 @@ import java.util.List;
 import java.io.Serializable;
 
 /**
- * Entity class for the chain table.
- * This class represents nodes
+ * Entity class for the technique_chain table.
+ * This class represents chains (trådar)
  * @author Team Durian
+ * @date 2024-05-29
+ * @version 1.0
  */
 @Entity
 @Table(name = "technique_chain")
@@ -40,6 +42,8 @@ public class TechniqueChainChain implements Serializable {
      * @param parent_weave The identifier for the parent weave.
      * @param name The name of the node.
      * @param description The description of the node.
+     * @param node The node in the technique chain.
+     * @param parentId the id of the parent weave, is used to finde chains by the backend.
      */
     public TechniqueChainChain(Long id, String name, String description, TechniqueChainWeave parent_weave_id, List<TechniqueChainNode> node, Long parentId) {
         this.id = id;
@@ -52,8 +56,7 @@ public class TechniqueChainChain implements Serializable {
     /**
      * Protected no-args constructor for JPA use only.
      */
-    protected TechniqueChainChain() {
-    }
+    protected TechniqueChainChain() {}
 
     public Long getParentId() {
         return parentId;

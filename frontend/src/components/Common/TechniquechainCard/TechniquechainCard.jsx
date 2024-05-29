@@ -10,7 +10,6 @@ import { Link } from "react-router-dom"
  * 
  * Props:
  *     	item @type {string} 		- Text displaying the title of the exercise
- *     	children @type {string} 	- Text displaying the description of the exercise
  * 		detailURL @type {string} 	- The base URL for exercises
  * 		id @type {integer} 			- The ID for this particular exercise in database
  * 		index @type {integer} 		- The ID for this particular exercise on current page (Used for coloring)
@@ -18,11 +17,10 @@ import { Link } from "react-router-dom"
  * 
  * Example usage:
  * 		<TechniquechainCard
- * 			item={the exercise name}
- * 			text={exercise duration + " min"}
- * 			id={The unique ID for an exercises, gets concatenated onto detailURL}
+ * 			item={the chain name}
+ * 			id={The unique ID for a chain}
  * 			detailURL={the base URL for chains}
- * 			index={The index for the exercise in the list containing fetched exercises}>
+ * 			index={The index for the chain in the list containing fetched exercises}>
  * 
  * 			"Description"
  * 		</TechniquechainCard>
@@ -33,6 +31,8 @@ import { Link } from "react-router-dom"
  * based on earlyer code by Chimera, Phoenix
  */
 export default function TechniquechainCard({ item, detailURL, id, index, checkBox , path}) {
+
+	//TODOO: fix the dropdown, so that the description is displayed when you press the chevron.
 
 	// Fixes the path regardless if the exercise is in a list or not.
 	const tempPath = (path === undefined) ? id : path

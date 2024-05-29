@@ -9,7 +9,7 @@ import Techniquechain from "./Techniquechain/Techniquechain.jsx"
 
 /**
  * The technique index page.
- * Fetches and displays the techniques.
+ * Fetches and displays the techniquechains/techniqueweaves.
  * 
  * @author Durian Team 3
  * @version 1.0
