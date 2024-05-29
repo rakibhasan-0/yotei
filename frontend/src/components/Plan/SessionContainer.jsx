@@ -17,8 +17,8 @@ import SessionWorkout from "./SessionWorkout"
  * 
  * @returns 
  * 
- * @author Griffin DV21JJN, Team Durian (Group 3)
- * @since 2024-05-07
+ * @author Griffin DV21JJN, Team Durian (Group 3), Team Mango
+ * @since 2024-05-29
  */
 function SessionContainer ({ id, workout, session, plan}) {
 	const [toggled, setToggled] = useState(false)
