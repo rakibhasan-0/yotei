@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Test class for USER-API methods.
  *
- * @author Quattro Formaggio (Group 1), Phoenix (25-04-2023)
+ * @author Quattro Formaggio (Group 1), Phoenix (2023-04-25)
  * @author Team Mango (Grupp 4) - 2024-05-22
  */
 
@@ -51,7 +51,6 @@ public class UserApiTest {
         lc = new UserController(userRepository, roleRepository, roleToPermissionRepository, userToPermissionRepository);
     }
 
-
     @Test
     void shouldFailWhenCreatingWithoutCredentials() {
         try {
@@ -63,11 +62,11 @@ public class UserApiTest {
                 HttpStatus actual = ((ResponseEntity<?>) response).getStatusCode();
                 assertEquals(HttpStatus.NOT_ACCEPTABLE, actual);
             }
-        } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+        } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException
+                | InvalidKeySpecException e) {
             fail();
         }
     }
-
 
     @Test
     void shouldFailIfCreatedUserExists() {
@@ -82,11 +81,11 @@ public class UserApiTest {
                 HttpStatus actual = ((ResponseEntity<?>) response).getStatusCode();
                 assertEquals(HttpStatus.NOT_ACCEPTABLE, actual);
             }
-        } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+        } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException
+                | InvalidKeySpecException e) {
             fail();
         }
     }
-
 
     @Test
     void shouldSucceedIfNewUserGivesRightResponse() {
@@ -101,7 +100,8 @@ public class UserApiTest {
                 HttpStatus actual = ((ResponseEntity<?>) response).getStatusCode();
                 assertEquals(HttpStatus.OK, actual);
             }
-        } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+        } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException
+                | InvalidKeySpecException e) {
             fail();
         }
     }
@@ -121,7 +121,6 @@ public class UserApiTest {
         }
     }
 
-
     @Test
     void shouldSucceedWhenRemovingUsers() {
         try {
@@ -136,7 +135,6 @@ public class UserApiTest {
             fail();
         }
     }
-
 
     @Test
     void shouldFailWhenRemovingNoneExistingUser() {
@@ -153,7 +151,6 @@ public class UserApiTest {
         }
     }
 
-
     @Test
     void shouldFailWhenRemovingUserWithDatabaseFail() {
         try {
@@ -169,56 +166,63 @@ public class UserApiTest {
         }
     }
 
+    // These tests are for the old role system, should be rewritten for the new
+    // system
+    /*
+     * @Test
+     * void shouldFailWhenChangingRoleOnNoneExistingUser() {
+     * try {
+     * Long id = 20L;
+     * Mockito.when(userRepository.findById(id)).thenAnswer(invocation ->
+     * Optional.empty());
+     * 
+     * Object response = lc.changeRoleUser(id, User.Role.ADMIN.getKey());
+     * if (response instanceof ResponseEntity<?>) {
+     * HttpStatus actual = ((ResponseEntity<?>) response).getStatusCode();
+     * assertEquals(HttpStatus.BAD_REQUEST, actual);
+     * }
+     * } catch (Exception e) {
+     * fail();
+     * }
+     * }
+     */
 
-    // These tests are for the old role system, should be rewritten for the new system
-    /* @Test
-    void shouldFailWhenChangingRoleOnNoneExistingUser() {
-        try {
-            Long id = 20L;
-            Mockito.when(userRepository.findById(id)).thenAnswer(invocation -> Optional.empty());
-
-            Object response = lc.changeRoleUser(id, User.Role.ADMIN.getKey());
-            if (response instanceof ResponseEntity<?>) {
-                HttpStatus actual = ((ResponseEntity<?>) response).getStatusCode();
-                assertEquals(HttpStatus.BAD_REQUEST, actual);
-            }
-        } catch (Exception e) {
-            fail();
-        }
-    } */
-
-
-    /* @Test
-    void shouldFailWhenChangingRoleOnUserWithDatabaseFail() {
-        try {
-            Long id = 3L;
-            Mockito.when(userRepository.findById(id)).thenAnswer(invocation -> Optional.empty());
-
-            Object response = lc.changeRoleUser(id, User.Role.USER.getKey());
-            if (response instanceof ResponseEntity<?>) {
-                HttpStatus actual = ((ResponseEntity<?>) response).getStatusCode();
-                assertEquals(HttpStatus.BAD_REQUEST, actual);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail();
-        }
-    } */
+    /*
+     * @Test
+     * void shouldFailWhenChangingRoleOnUserWithDatabaseFail() {
+     * try {
+     * Long id = 3L;
+     * Mockito.when(userRepository.findById(id)).thenAnswer(invocation ->
+     * Optional.empty());
+     * 
+     * Object response = lc.changeRoleUser(id, User.Role.USER.getKey());
+     * if (response instanceof ResponseEntity<?>) {
+     * HttpStatus actual = ((ResponseEntity<?>) response).getStatusCode();
+     * assertEquals(HttpStatus.BAD_REQUEST, actual);
+     * }
+     * } catch (Exception e) {
+     * e.printStackTrace();
+     * fail();
+     * }
+     * }
+     */
 
     @Test
     void shouldSetRoleCorrectly() {
         try {
             Long id = 3L;
-            Mockito.lenient().when(userRepository.findById(id)).thenAnswer(invocation -> Optional.of(new User("user3", "user3", 2L)));
+            Mockito.lenient().when(userRepository.findById(id))
+                    .thenAnswer(invocation -> Optional.of(new User("user3", "user3", 2L)));
 
-            Mockito.lenient().when(roleRepository.findById(Mockito.anyLong())).thenAnswer(invocation -> Optional.of(new Role("test")));
+            Mockito.lenient().when(roleRepository.findById(Mockito.anyLong()))
+                    .thenAnswer(invocation -> Optional.of(new Role("test")));
 
             Mockito.lenient().when(userRepository.save(Mockito.any()))
-                .thenAnswer(invocation -> {
-                    User newUser = invocation.getArgument(0);
-                    return newUser;
-                });
-            
+                    .thenAnswer(invocation -> {
+                        User newUser = invocation.getArgument(0);
+                        return newUser;
+                    });
+
             Object response = lc.setUserRoleThroughRoleId(id, 4L);
             if (response instanceof ResponseEntity<?>) {
                 HttpStatus actual = ((ResponseEntity<?>) response).getStatusCode();
@@ -233,13 +237,14 @@ public class UserApiTest {
     @Test
     void shouldRemoveRoleCorrectly() {
         Long id = 3L;
-        Mockito.lenient().when(userRepository.findById(id)).thenAnswer(invocation -> Optional.of(new User("user3", "user3", 2L)));
+        Mockito.lenient().when(userRepository.findById(id))
+                .thenAnswer(invocation -> Optional.of(new User("user3", "user3", 2L)));
 
         Mockito.lenient().when(userRepository.save(Mockito.any()))
-            .thenAnswer(invocation -> {
-                User newUser = invocation.getArgument(0);
-                return newUser;
-            });
+                .thenAnswer(invocation -> {
+                    User newUser = invocation.getArgument(0);
+                    return newUser;
+                });
 
         Object response = lc.removeRoleFromUserWithId(id);
         if (response instanceof ResponseEntity<?>) {
