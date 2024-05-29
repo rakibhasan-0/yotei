@@ -82,44 +82,44 @@ function TechniqueDetailMini({ id }) {
 	}
 
 	return (
-		<>
-			<div className={styles["technique-detail-container"]} id={id == undefined ? "technique" : id}>
-				<title>Tekniker</title>
-			
-
-				<div className={styles["technique-detail-belts-container"]}>
-					{technique.belts ? ( 
-						technique.belts.filter(belt => !belt.child).sort(beltSort).map(belt => <BeltIcon key={belt.name} belt={belt} />)
-					) : (
-						<p>Inga bälten kunde hittas för denna teknik.</p>
-					)}
-				</div>
-				<div className={styles["technique-detail-belts-container"]}>
-					{(
-						technique.belts.filter(belt => belt.child).sort(beltSort).map(belt => <BeltIcon key={belt.name} belt={belt} />)
-					)}
-				</div> 
-				
-				<h2>Beskrivning</h2>
-				{technique.description ? (
-					<p style={{whiteSpace: "pre-wrap", wordBreak: "break-word"}}>{technique.description}</p>
-				) : (
-					<p style={{ fontStyle: "italic", color: "var(--gray)" }}>Beskrivning saknas.</p>
-				)}
-				<h2>Taggar</h2>
-				<div className={styles["technique-detail-tag-container"]}>
-					{technique.tags ? (
-						technique.tags.map(tag => <Tag key={tag.id} text={tag.name} tagType="default" />)
-					) : (
-						<p>Denna teknik saknar taggar.</p>
-					)
-					}
-				</div>
 		
-				<Gallery id={id} />
-				
+		<div className={styles["technique-detail-container"]} id={id == undefined ? "technique" : id}>
+			<title>Tekniker</title>
+		
+
+			<div className={styles["technique-detail-belts-container"]}>
+				{technique.belts ? ( 
+					technique.belts.filter(belt => !belt.child).sort(beltSort).map(belt => <BeltIcon key={belt.name} belt={belt} />)
+				) : (
+					<p>Inga bälten kunde hittas för denna teknik.</p>
+				)}
 			</div>
-		</>
+			<div className={styles["technique-detail-belts-container"]}>
+				{(
+					technique.belts.filter(belt => belt.child).sort(beltSort).map(belt => <BeltIcon key={belt.name} belt={belt} />)
+				)}
+			</div> 
+			
+			<h2>Beskrivning</h2>
+			{technique.description ? (
+				<p id = "tech-mini-desc" style={{whiteSpace: "pre-wrap", wordBreak: "break-word"}}>{technique.description}</p>
+			) : (
+				<p style={{ fontStyle: "italic", color: "var(--gray)" }}>Beskrivning saknas.</p>
+			)}
+			<h2>Taggar</h2>
+			<div className={styles["technique-detail-tag-container"]}>
+				{technique.tags ? (
+					technique.tags.map(tag => <Tag key={tag.id} text={tag.name} tagType="default" />)
+				) : (
+					<p>Denna teknik saknar taggar.</p>
+				)
+				}
+			</div>
+	
+			<Gallery id={id} />
+			
+		</div>
+	
 	)
 }
 

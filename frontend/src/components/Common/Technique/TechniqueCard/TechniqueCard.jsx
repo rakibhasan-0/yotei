@@ -5,6 +5,7 @@ import PopupMini from "../../Popup/PopupMini"
 import TechniqueDetailMini from "../../../../pages/Activity/Technique/TechniqueDetail/TechniqueDetailMini"
 //import ExerciseDetailMini from "../../../../pages/Activity/Exercise/ExerciseDetailMini"
 import { useState } from "react"
+import ExerciseDetailMini from "../../../../pages/Activity/Exercise/ExerciseDetailMini"
 
 /**
  * Technique card component.
@@ -33,9 +34,7 @@ function TechniqueCard({ technique, checkBox, id, popUp, techniqueInProtocol}) {
 	const path = (technique.path === undefined) ? technique.techniqueID : technique.path
 
 	const handleClick = () => {
-		
 		setTechnique()
-
 		if (!popUp){
 			if (technique.activity_id && technique.type === "technique") {
 				navigate("/technique/" + technique.activity_id)
@@ -69,11 +68,17 @@ function TechniqueCard({ technique, checkBox, id, popUp, techniqueInProtocol}) {
 			}`}
 			id={id} 
 			onClick={setTechnique}>
+			{technique.type && technique.type == "exercise" ? 
+				<PopupMini title = {technique.name} id = "pop-up-id-tech" isOpen = {isOpen} setIsOpen = {setIsOpen} isNested = {true}> 
+					<ExerciseDetailMini id = {id}>
+					</ExerciseDetailMini>
+				</PopupMini>
+				:
+				<PopupMini title = {technique.name} id = "pop-up-id-tech" isOpen = {isOpen} setIsOpen = {setIsOpen} isNested = {true}> 
+					<TechniqueDetailMini id = {id}>
+					</TechniqueDetailMini>
+				</PopupMini>}
 			
-			<PopupMini title = {technique.name} id = "pop-up-id-tech" isOpen = {isOpen} setIsOpen = {setIsOpen} isNested = {true}> 
-				<TechniqueDetailMini id = {technique.techniqueID ? technique.techniqueID : technique.activity_id}>
-				</TechniqueDetailMini>
-			</PopupMini>
 
 			{technique.type === "exercise" ? null : constructColor(technique)}
 

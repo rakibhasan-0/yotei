@@ -45,8 +45,8 @@ import { useParams } from "react-router-dom"
  * 
  */
 export default function TechniqueInfoPanel({
-	beltColor = "#FFDD33", 
-	categoryTitle = "Test Kategori",
+	//beltColor = "#FFDD33", 
+	//categoryTitle = "Test Kategori",
 	currentTechniqueTitle = "1. Grepp i två handleder framifrån och svingslag Frigöring – Ju morote jodan uke",
 	nextTechniqueTitle = "2. Stryptag framifrån och svingslag, backhand Frigöring – Ju morote jodan uke, ude osae, ude osae gatame",
 	mainCategoryTitle = "Huvudkategori"
@@ -184,7 +184,6 @@ export default function TechniqueInfoPanel({
 			})
 
 			if (response.status === 404) {
-				console.log("No existing comment, 404 status")
 				setCommentText("")
 				setInitialCommentText("")
 				setExistingComment(false)
@@ -216,8 +215,7 @@ export default function TechniqueInfoPanel({
 		}
 	}
 	// To have linter not fail, all below should be removed later if not used before 2024-06-10
-	console.log(beltColor)
-	console.log(categoryTitle)
+	
 	/* This was inside return earlier, but removed to get more space
 		After row: <fieldset className={styles.infoPanel}>
 		Before row: <div>
@@ -238,7 +236,7 @@ export default function TechniqueInfoPanel({
 					<h3 className={styles.categoryTitle} id="categoryTitle">{mainCategoryTitle}</h3>
 				</div>
 				<div className={styles.buttonGroupComment}>
-					<CommentButton onClick={() => setAddComment(true)} hasComment={hasComment} />
+					<CommentButton id="technique-info-panel-comment-button" onClick={() => setAddComment(true)} hasComment={hasComment} />
 				</div>
 				<div>
 					<h2 className={styles.currentTechnique} id="currentTechniqueTitle">{currentTechniqueTitle}</h2>

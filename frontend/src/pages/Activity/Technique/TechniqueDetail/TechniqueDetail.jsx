@@ -14,7 +14,7 @@ import styles from "./TechniqueDetail.module.css"
 import ErrorState from "../../../../components/Common/ErrorState/ErrorState"
 import Spinner from "../../../../components/Common/Spinner/Spinner"
 import Gallery from "../../../../components/Gallery/Gallery"
-import { canCreateAndEditActivity, isAdminUser } from "../../../../utils"
+import { canCreateAndEditTechnique, isAdminUser } from "../../../../utils"
 
 import Popup from "../../../../components/Common/Popup/Popup"
 import ConfirmPopup from "../../../../components/Common/ConfirmPopup/ConfirmPopup"
@@ -139,8 +139,8 @@ function TechniqueDetail({ id }) {
 
 			<div className={styles["technique-detail-container"]} id={id == undefined ? "technique" : id}>
 				<title>Tekniker</title>
-				<h1>{technique.name}</h1>
-				{(isAdminUser(context) || canCreateAndEditActivity(context)) && <div className={styles["technique-detail-actions-container"]} data-testid="technique-detail-actions-container">
+				<h1 style={{wordBreak: "break-word"}}>{technique.name}</h1>
+				{(isAdminUser(context) || canCreateAndEditTechnique(context)) && <div className={styles["technique-detail-actions-container"]} data-testid="technique-detail-actions-container">
 					<Link to={"edit"}>
 						<Pencil
 							id="technique-edit-button"

@@ -114,8 +114,10 @@ export default function EditableListTagItem({ item, id, index, onRemove, onEdit,
 		// See https://stackoverflow.com/a/73487544
 		// This, in combination with useEffect, is visibly slow.
 		// Maybe react-textarea-autosize would help?
-		textbox.current.style.height = "inherit"
-		textbox.current.style.height = `${textbox.current.scrollHeight}px`
+		if (textbox.current) {
+			textbox.current.style.height = "inherit"
+			textbox.current.style.height = `${textbox.current.scrollHeight}px`
+		}
 	}
 
 	return (

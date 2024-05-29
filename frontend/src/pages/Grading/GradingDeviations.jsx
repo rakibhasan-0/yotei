@@ -38,7 +38,9 @@ export default function GradingDeviations() {
 	const navigate = useNavigate()
 
 	useEffect(() => {
-		//Fetches all data required
+		/**
+		 * Fetches all data required for this page
+		 */
 		const fetchData = async () => {
 			const requestOptions = {
 				headers: { "Content-type": "application/json", token: context.token }
@@ -57,12 +59,16 @@ export default function GradingDeviations() {
 				setName(json["name"])
 				fetchResult(json["gradingId"])
 				fetchGrading(json["gradingId"])
+				fetchPersonalComments()
 				fetchGroupComments(json["gradingId"])
 				fetchPairComments(json["gradingId"])
 			}
 		}
 
-		//Fetches the grading object based on an id
+		/**
+		 * Fetches a grading entry based on the grading ID
+		 * @param {int} gradingId the grading ID of which to fetch a grading from 
+		 */
 		const fetchGrading = async (gradingId) => {
 			const requestOptions = {
 				headers: { "Content-type": "application/json", token: context.token }
@@ -81,7 +87,11 @@ export default function GradingDeviations() {
 			}
 		}
 
-		//Fetches the correct grading protocol based on a belt id
+		/**
+		 * Fetches the correct grading protocol based on the belt ID
+		 * @param {int} beltId The belt ID of this grading 
+		 * @returns The entire grading protocol for the specified belt ID
+		 */
 		const fetchProtocol = async (beltId) => {
 			const requestOptions = {
 				headers: { "Content-type": "application/json", token: context.token }
@@ -108,7 +118,11 @@ export default function GradingDeviations() {
 			}
 		}
 
-		//Fetches an examinees grading result
+		/**
+		 * Fetches an examinees grading results
+		 * @param {int} gradingId the id of the current grading 
+		 * @returns Sets the result list array with boolean values
+		 */
 		const fetchResult = async (gradingId) => {
 			const requestOptions = {
 				headers: { "Content-type": "application/json", token: context.token }
@@ -125,7 +139,10 @@ export default function GradingDeviations() {
 			setResultList(json)
 		}
 
-		//Fetches an examinees personal grading comments
+		/**
+		 * Fetches an examinees personal grading comments
+		 * @returns Sets the personal comment array
+		 */
 		const fetchPersonalComments = async () => {
 			const requestOptions = {
 				headers: { "Content-type": "application/json", token: context.token }
@@ -142,6 +159,11 @@ export default function GradingDeviations() {
 			setPersonalComments(json)
 		}
 
+		/**
+		 * Fetches an examinees pair comments
+		 * @param {int} gradingId the id of the current grading 
+		 * @returns Sets the pair comment array
+		 */
 		const fetchPairComments = async (gradingId) => {
 			const requestOptions = {
 				headers: { "Content-type": "application/json", token: context.token }
@@ -156,11 +178,12 @@ export default function GradingDeviations() {
 			}
 			const json = await response.json()
 			for (let i = 0; i < json.length; i++) {
-				if (json[i]["examinee_1"].id == userId || json[i]["examinee_2"].id == userId) {
-					const response2 = await fetch("/api/examination/comment/pair/all/" + json[i]["pair_id"], requestOptions).catch(() => {
-						setError("Serverfel: Kunde inte ansluta till servern.")
-						return
-					})
+				const examinee1 = json[i]["examinee_1"]
+				const examinee2 = json[i]["examinee_2"]
+
+				if ((examinee1 && examinee1.id === userId) || (examinee2 && examinee2.id === userId)) {
+					const response2 = await fetch("/api/examination/comment/pair/all/" + json[i]["pair_id"], requestOptions)
+					
 					if (response2.status != HTTP_STATUS_CODES.OK) {
 						setError("Kunde inte hämta par-kommentarer. Felkod: " + response2.status)
 						return
@@ -171,7 +194,11 @@ export default function GradingDeviations() {
 			}
 		}
 
-		//Fetches the entire groups grading comments
+		/**
+		 * Fetches the entire groups comments
+		 * @param {int} gradingId the id of the current grading 
+		 * @returns Sets the group comment array
+		 */
 		const fetchGroupComments = async (gradingId) => {
 			const requestOptions = {
 				headers: { "Content-type": "application/json", token: context.token }
@@ -189,7 +216,6 @@ export default function GradingDeviations() {
 		}
 
 		fetchData()
-		fetchPersonalComments()
 	}, [])
 
 	if (!isAdminUser(context) && !canHandleGradings(context)) {
@@ -197,6 +223,16 @@ export default function GradingDeviations() {
 		return null
 	}
 
+	function hasStatus(techniqueName) {
+		for (let i = 0; i < resultList.length; i++) {
+			if (resultList[i] != null) {
+				if (resultList[i]["techniqueName"] == techniqueName) {
+					return true
+				}
+			}
+		}
+		return false
+	}
 
 	/**
 	 * Checks if the examinee has passed a specific technique
@@ -309,7 +345,7 @@ export default function GradingDeviations() {
 								<Divider id='divider-example' option='h2_left' title={category.category_name} key={index_id} />
 								{category.techniques.map((technique, index) => (
 									(isDeviating(technique.text) || !showingDeviationsOnly) ?
-										<Container id={index} name={technique.text} passed={hasPassed(technique.text)} key={index}
+										<Container id={index} name={technique.text} passed={hasStatus(technique.text) ? hasPassed(technique.text) : undefined} key={index}
 											comment={getPersonalComment(technique.text)} pairComment={getPairComment(technique.text)} generalComment={getGroupComment(technique.text)}></Container>
 										: null
 								))}
