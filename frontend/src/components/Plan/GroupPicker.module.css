@@ -1,3 +1,12 @@
+/**
+ * CSS file for GroupPicker.
+ * 
+ * @author UNKNOWN & Team Mango (Grupp 4) (2024-05-29)
+ * 
+ * Updates 2024-05-29: added .dropdownRow and .dropdownRowText.
+ * 
+ */
+
 .gp23_groupRow{
     display: flex;
     
@@ -37,4 +46,23 @@
     overflow: hidden;
     line-height: normal;
     text-overflow: ellipsis;
+}
+
+.dropdownRow {
+    border-top: solid 1px black;
+    height: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    padding: 3px 10px 3px 10px;
+    transition: all 0.2s ease-in;
+}
+
+.dropdownRowText {
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: left;
 }
