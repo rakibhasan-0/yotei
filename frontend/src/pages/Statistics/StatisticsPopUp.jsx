@@ -5,7 +5,9 @@ import StarRatings from "react-star-ratings"
 import BeltColorChart from "../../components/Common/BeltColorChart/BeltColorChart"
 
 /**
-	 * Statistics pop-up component.
+	 * Statistics pop-up component. The pop-up displays the average rating of the sessions,
+	 * the number of sessions done in the interval, and a chart of the techniques done by belt color.
+	 * 
 	 * @input groupActivities - The activities to be displayed in the pop-up.
 	 * @input dates - The date interval of the sessions
 	 * @input averageRating - The average rating of the sessions
@@ -23,12 +25,12 @@ export default function StatisticsPopUp({groupActivities,dates,averageRating,num
 
 	useEffect(() => {
 
-		// Function calculates the amount of techniques per belt color
+		// Calculates the amount of techniques per belt color.
 		const calculateBeltColorsData = () => {
 			const beltColors = {}
 			groupActivities.forEach(activity => {
 
-				if(activity.type == "technique") {
+				if (activity.type == "technique") {
 					activity.beltColors.forEach(beltColor => {
 						const identifier = beltColor.belt_name + (beltColor.is_child ? "_c" : "")
 
@@ -42,14 +44,14 @@ export default function StatisticsPopUp({groupActivities,dates,averageRating,num
 					})
 				}
 			})
-
+			
 			const entries = Object.entries(beltColors)
 			entries.sort((a, b) => b[1].count - a[1].count)
 			const sortedBeltColors = Object.fromEntries(entries)
 			setBeltColorsData(sortedBeltColors)
 		}
 		
-		// Call the function to calculate belt colors data when groupActivities change
+		// Call the function to calculate belt colors data when groupActivities change.
 		calculateBeltColorsData()
 	}, [groupActivities])
 
