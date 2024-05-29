@@ -158,6 +158,8 @@ export default function GradingBefore() {
         if(data.step === 3) {
           navigate(`/grading/${gradingId}/3`)
         }
+        
+        console.log(data)
 
 				// set belt color
 				const [beltData] = await Promise.all([
@@ -223,6 +225,18 @@ export default function GradingBefore() {
 					setExaminees(convertedToAloneLocalPairs)
 					
 				}
+
+        // add alone examinees
+        if(data.step === 1) {
+
+          
+          const aloneExaminees = data.examinees.filter(examinee => {
+            return exsistingPairs.map(pair => {
+              examinee.id !== pair[0].id && examinee.id !== pair[1].id 
+            })
+          })
+        }
+
 			} catch (error) {	
 				console.error("Misslyckades skicka vidare till nästa steg i gradering:", error)
 			}
