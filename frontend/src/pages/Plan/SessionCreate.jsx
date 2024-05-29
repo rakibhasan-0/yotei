@@ -8,12 +8,13 @@ import { useContext, useEffect, useState } from "react"
 import { AccountContext } from "../../context"
 import { useLocation } from "react-router-dom"
 import Divider from "../../components/Common/Divider/Divider"
-import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../utils"
+import {setError as setErrorToast, setSuccess as setSuccessToast, canEditSessionsAndGroups} from "../../utils"
 /**
  * A component for creating a session.
  * 
- * @author Chimera (dv21aag, c20lln), Team Durian (Group 3) (2024-04-23), Team Kiwi (2024-05-07)
+ * @author Chimera (dv21aag, c20lln), Team Durian (Group 3) (2024-04-23), Team Kiwi (2024-05-07), Team Mango (2024-05-28)
  * @since 2023-05-03
+ * updated Team Mango (2024-05-28): changed so a user with permission to create session for own groups only can select own groups. 
  */
 export default function SessionCreate({setIsBlocking}) {
 	const { state } = useLocation()
@@ -27,6 +28,7 @@ export default function SessionCreate({setIsBlocking}) {
 	const [workout, setWorkout] = useState(state?.session?.workout)
 	const [groupError, setGroupError] = useState()
 	const [timeError, setTimeError] = useState()
+	const context = useContext(AccountContext)
 
 	
 	useEffect(() => {
@@ -44,7 +46,10 @@ export default function SessionCreate({setIsBlocking}) {
 				if (!response.ok) {
 					throw new Error("Could not fetch groups")
 				}
-				setGroups(await response.json())
+
+				const json = await response.json()
+				setGroups(json.filter(group => canEditSessionsAndGroups(context, group.userId)))
+
 			} catch (ex) {
 				setErrorToast("Kunde inte hämta alla grupper")
 				console.error(ex)
