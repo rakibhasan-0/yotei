@@ -82,7 +82,7 @@ const WorkoutEdit = () => {
 					duration: activity.duration,
 					order: activityOrder,
 				}
-
+				
 				if (activity.techniqueId) {
 					// Convert the id to the correct form if it comes from a list.
 					if (typeof activity.techniqueId === "string" && activity.techniqueId.includes("-technique-")) {
