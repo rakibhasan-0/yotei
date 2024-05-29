@@ -2,7 +2,7 @@ import { React, useState, useContext, useEffect } from "react"
 import { AccountContext } from "../../context"
 import { useNavigate } from "react-router"
 import styles from "./SessionsCreate.module.css"
-import {setError as setErrorToast, setSuccess as setSuccessToast} from "../../utils"
+import {HTTP_STATUS_CODES, setError as setErrorToast, setSuccess as setSuccessToast, canEditSessionsAndGroups} from "../../utils"
 import { useLocation } from "react-router-dom"
 import Dropdown from "../../components/Common/List/Dropdown"
 import Divider from "../../components/Common/Divider/Divider.jsx"
@@ -20,8 +20,9 @@ import Button from "../../components/Common/Button/Button.jsx"
  * As well as checkboxses indicating which day of the week to include, reused components from both SessionCreate and PlanCreate to
  * implement this page.
  * 
- * @author Team Kiwi
+ * @author Team Kiwi, Team Mango (Grupp 4) (2024-05-28)
  * @since 2024-05-03
+ * Updates 2024-05-28: Changed so if user only have permission to create session for own groups, only show the groups that the user owns.
  */
 
 
@@ -40,22 +41,22 @@ export default function SessionsCreate({setIsBlocking}){
 
 	const [groups, setGroups] = useState()
 	const [group, setGroup] = useState(state?.session?.group)
-    
-
-	
-
+	const context = useContext(AccountContext)
 
 	useEffect(() => {
 		(async () => {
 			try {
 				const response = await fetch("/api/plan/all", { headers: { token } })
-				if (response.status === 404) {
+				if (response.status === HTTP_STATUS_CODES.NO_CONTENT) {
+					//There are no groups.
 					return
 				}
 				if (!response.ok) {
 					throw new Error("Could not fetch groups")
 				}
-				setGroups(await response.json())
+				// Filter out so user only can create session for the groups they have permission to create for.
+				const json = await response.json()
+				setGroups(json.filter(group => canEditSessionsAndGroups(context, group.userId)))
 			} catch (ex) {
 				setErrorToast("Kunde inte hämta alla grupper")
 				console.error(ex)
