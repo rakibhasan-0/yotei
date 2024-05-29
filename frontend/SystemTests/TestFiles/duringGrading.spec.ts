@@ -11,6 +11,15 @@ test.describe('Systest for DuringGrading page.', () => {
         await duringGradingPage.visit(`grading/${gradingId}/2`)
         expect(page.getByTestId("infoPanel"))
     })
+    test.afterEach('delete created grading', async ({}) => {
+
+        const gradingId = await duringGradingPage.getCurrentUrl()
+        await duringGradingPage.visit(`grading/${gradingId}/2`)
+        await duringGradingPage.saveGrading()
+        await duringGradingPage.visit(`grading`)
+        await duringGradingPage.removeGrading()
+
+    })
     
     test('1. Should set result for technique to pass and fail to half of the examinees.', async ({ page }) => {
         // Act by calling methods in POM and assert by using expect.

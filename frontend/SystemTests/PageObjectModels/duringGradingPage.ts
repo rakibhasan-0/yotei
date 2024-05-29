@@ -108,4 +108,20 @@ export class DuringGradingPage {
         const gradingId = parts[4];
         return gradingId
     }
+    async saveGrading() {
+        await this.page.getByRole('button', { name: 'Tekniker', exact: true }).click();
+        await this.page.getByRole('button', { name: 'Fortsätt till summering' }).click();
+        await this.page.getByRole('button', { name: 'Spara och avsluta' }).click();
+    }
+    async removeGrading() {
+        await this.page.waitForTimeout(500);
+        const targetText = 'Systest123'; 
+
+        const targetDiv = this.page.locator(`text=${targetText}`).locator('..');
+
+        const trashIcon = targetDiv.locator('[data-testid="trash-icon"]');
+
+        await trashIcon.click();
+        await this.page.getByRole('button', { name: 'Ja' }).click();
+    }
 }
