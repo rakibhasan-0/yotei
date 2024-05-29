@@ -75,7 +75,7 @@ export default function ExerciseListItem({ item, text, detailURL, id, index, che
 								<div className={styles["exercise-list-duration"]} data-testid="ExerciseListItem-text">
 									<p>{text}</p>
 								</div>
-								<Link to={detailURL + tempPath}>
+								<Link >
 									<ChevronRight size="30px" />
 								</Link>
 							</div>
