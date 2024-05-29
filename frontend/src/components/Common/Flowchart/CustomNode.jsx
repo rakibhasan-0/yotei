@@ -1,6 +1,10 @@
 import { Handle, Position, useStore } from "reactflow"
 /**
 *	Custom node component used to illustrate a technique weave.
+
+* @param {Object} data: object used to pass necessary data to the node.
+* example: {id: number, ownName(optional): string, name: string, participant: 1/2, attack: bool}
+
 * @author Durian Team 3
 * @version 1.0
 * @since 2024-05-20

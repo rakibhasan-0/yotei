@@ -1,5 +1,4 @@
 import { useState, useContext, useEffect } from "react"
-import { useCookies } from "react-cookie"
 import { AccountContext } from "../../../context"
 import { Plus } from "react-bootstrap-icons"
 import { isAdminUser } from "../../../utils"
@@ -11,18 +10,17 @@ import TechniquechainCard from "../../../components/Common/TechniquechainCard/Te
 import Spinner from "../../../components/Common/Spinner/Spinner"
 
 /**
- * The technique weave index page.
+ * Landing page for the weave tab.
  * 
  * !NOTE! 
  * This component is far from done and is not optimally implemented, 
  * it is left in this state due to time constraints and unclear specifications.
  * The decision on starting the implementation was made so that the users can test
- * something that maybe resembles what they are looking for. A complete remodel
- * might be a good idea...
+ * something that maybe resembles what they are looking for.
  * !NOTE!
  * 
  * TODOS: Search, filter, open and view details of a weave, edit weave
- * 								delete weave
+ * 				delete weave
  * 
  * @author Team Durian
  * @version 1.0
@@ -31,21 +29,10 @@ import Spinner from "../../../components/Common/Spinner/Spinner"
 
 const TechniquechainIndex = ()=> {
 	const context = useContext(AccountContext)
-	//const cookieID = "techniquechain-filter-userId-"+context.userId
-	// eslint-disable-next-line no-unused-vars
 	const [techniqueWeaves, setTechniqueWeaves] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
-
-	//const filterCookie = cookies[cookieID]
-	//const [cookies, setCookie] = useCookies([cookieID])
-	//const [searchBarText, setSearchBarText] = useState(filterCookie ? filterCookie.searchText : "")
-
 	const detailURL = "/techniquechain/techniqueWeave_page/"
 
-
-	/* 	const saveSearchText = () => {
-		localStorage.setItem("searchText", searchBarText)
-	} */
 
 	useEffect(() => {
 		getWeaves()
@@ -67,7 +54,6 @@ const TechniquechainIndex = ()=> {
 			setIsLoading(false)
 		}
 	}
-	//Implment functionality to open and show details of a weave
 	return (
 		<>
 			<h1 id ={"teknikväv-header"}></h1>

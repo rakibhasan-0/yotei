@@ -15,17 +15,19 @@ import { HTTP_STATUS_CODES } from "../../../../utils"
 import { useNodesState } from "reactflow"
 
 /**
- * The technique weave create page.
+ * The technique weave create page. Enables the user to create a new technique weave.
+ * 
  * !NOTE! 
  * This component is far from done and is not optimally implemented, 
  * it is left in this state due to time constraints and unclear specifications.
  * The decision on starting the implementation was made so that the users can test
- * something that maybe resembles what they are looking for. A complete remodel
- * might be a good idea...
+ * something that maybe resembles what they are looking for.
  * !NOTE!
  * 
- * TODOS: Validation of input, not being able to save a weave without a name
- * 				add node coordinates when saving a weave (more things are commented in the code)
+ * TODOS: Validation of input, disable being able to save a weave without a name,
+ * 				delete weave if not saved (it is created on render for reasons...)
+ * 				Some more notes are left in the code, see them as suggestions based on what was known
+ * 				to me at time of coding.
  * 
  * @author Team Durian
  * @version 1.0
@@ -48,7 +50,10 @@ const CreateWeave = () => {
 	useEffect(()=> {
 		createWeave()
 	}, [])
-
+	/**
+	 * Creates a new weave in the database, this has to be done before any nodes 
+	 * can be created due to foreign key restrictions.
+	 */
 	const createWeave = async () => {
 		const requestOptions = {
 			method: "POST",
@@ -68,12 +73,11 @@ const CreateWeave = () => {
 			setWeaveId(data.id)
 		}
 	}
-
+	/**
+	 * Adds all edges to db, saves the weave to db and iterates over the list of 
+	 * nodes adding their coordinates and parent weave to weaveRepresentation table.
+	 */
 	const handleSave = async () => {
-		console.log("Edges")
-		console.log(edges)
-		console.log("nodes")
-		console.log(nodes)
 		// Should probably check for unnecessary whitespaces and wierd characters
 		if(techniqueWeaveName) {
 			edges.map(async (edge)  => {
