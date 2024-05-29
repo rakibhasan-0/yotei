@@ -41,23 +41,22 @@ export class DuringGradingPage {
 
     async addGroupComment(comment: Comment) {
         await this.page.locator('#infoPanel i').click();
-        await this.page.locator('#TextareaTestId').click();
+        await this.page.waitForTimeout(500);
         await this.page.locator('#TextareaTestId').fill(comment.content);
         await this.page.getByRole('button', { name: 'Lägg till' }).click();
     }
 
     async addExamineeComment(comment: Comment) {
-        await this.page.locator('fieldset').filter({ hasText: /^TestPerson2$/ }).locator('i').click();
-        await this.page.locator('#TextareaTestId').click();
-        await this.page.locator('#TextareaTestId').fill(comment.content);
+        await this.page.getByTestId(comment.examineeName + "systest").locator('i').click();
+        await this.page.waitForTimeout(500);
+        await this.page.locator('#TextareaTestId').fill('Systest Kommentar');
         await this.page.getByRole('button', { name: 'Lägg till' }).click();
     }
-
+    
     async addPairComment(comment: Comment) {
-
-        await this.page.getByText('P1TestPerson21TestPerson1').click();
-        await this.page.locator('#TextareaTestId').click();
-        await this.page.locator('#TextareaTestId').fill(comment.content);
+        await this.page.getByTestId(comment.pairId).locator('i').click();
+        await this.page.waitForTimeout(500);
+        await this.page.locator('#TextareaTestId').fill('Systest Kommentar Par');
         await this.page.getByRole('button', { name: 'Lägg till' }).click();
     }
 

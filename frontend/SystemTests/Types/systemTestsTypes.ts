@@ -87,10 +87,9 @@ export type Pair = {
 }
 
 export type Comment = {
-  commentId?: number,
   techniqueName?: string,
-  examineeId?: number,
-  pairId?: number,
+  examineeName?: string,
+  pairId?: string,
   content?: string,
 }
 

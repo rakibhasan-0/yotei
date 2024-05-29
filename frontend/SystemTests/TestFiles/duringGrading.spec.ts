@@ -116,7 +116,21 @@ test.describe('Systest for DuringGrading page.', () => {
         expect(backgroundColor22).toBe('rgb(240, 128, 128)');
         expect(backgroundColor33).toBe('rgb(144, 238, 144)');
         expect(backgroundColor44).toBe('rgb(240, 128, 128)');
-
     })
 
+    test('4. Should add Examinee Comment and load it.', async ({ page }) => {
+        await duringGradingPage.addExamineeComment({ examineeName: "TestPerson1", content: "Systest Kommentar Personlig1" })
+        await duringGradingPage.addExamineeComment({ examineeName: "TestPerson2", content: "Systest Kommentar Personlig2" })
+        await duringGradingPage.addExamineeComment({ examineeName: "TestPerson3", content: "Systest Kommentar Personlig3" })
+        await duringGradingPage.addExamineeComment({ examineeName: "TestPerson4", content: "Systest Kommentar Personlig4" })
+    })
+
+    test('5. Should add Pair Comment and load it.', async ({ page }) => {
+        await duringGradingPage.addPairComment({ pairId: "P1systest", content: "Systest Kommentar Par1" })
+        await duringGradingPage.addPairComment({ pairId: "P2systest", content: "Systest Kommentar Par2" })
+    })
+
+    test('6. Should add Group Comment and load it.', async ({ page }) => {
+        await duringGradingPage.addGroupComment({ content: "Systest Kommentar Grupp" })
+    })
 })
