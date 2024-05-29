@@ -6,8 +6,8 @@ import styles from "./WeekdayTimePicker.module.css"
 /**
  * A component that should be used to select days and starting time of the sessions for a group plan.
  * 
- * @param id The id of the component. (string)
- * @param weekdays The object containing the data of the weekdays. (If they're checked and what time is set.)
+ * id @type {String/Number} The id of the component. (string)
+ * weekdays @type {Object} The object containing the data of the weekdays. (If they're checked and what time is set.)
  *  Example of weekdays data:
  *		[
  *			{ name: "Mån", value: false, time: "" },
@@ -18,13 +18,14 @@ import styles from "./WeekdayTimePicker.module.css"
  *			{ name: "Lör", value: false, time: "" },
  *			{ name: "Sön", value: false, time: "" }
  *		]
- * @param dayName A short name of the day. (Mån, Tis, Ons, Tors, Fre, Lör, Sön) (string)
- * @param weekdayClickHandler A handler for handling the checking of the Weekday checkbox. (function)
- * @param dayTimeClickHandler A handler for handling the input of data to the TimePicker. (function)
+ * dayName @type {String} A short name of the day. (Mån, Tis, Ons, Tors, Fre, Lör, Sön) (string)
+ * weekdayClickHandler @type {Function} A handler for handling the checking of the Weekday checkbox. (function)
+ * dayTimeClickHandler @type {Function} A handler for handling the input of data to the TimePicker. (function)
  * 
  * @author Griffin
  * @since 2023-05-04
- * @version 1.0
+ * @updated 2024-05-29 Kiwi, Updated comment props.
+ * @version 1.1
  */
 
 export default function WeekdayTimePicker({id, weekdays, dayName, weekdayClickHandler, dayTimeClickHandler}){

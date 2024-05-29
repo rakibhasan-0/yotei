@@ -8,8 +8,8 @@ import Spinner from "../../components/Common/Spinner/Spinner"
 import { AccountContext } from "../../context"
 
 /**
- *  Component for the grading statistics popup. It shows what techniques are required for each belt.
- *  And what techniques have been completed by the group.
+ * Grading statistics popup component. Displays what techniques are required for each belt,
+ * and which techniques have been practiced by the group.
  * 
  * @param {String} id - The id of the component, for testing purposes
  * @param {String} groupID - The id of the group
@@ -36,7 +36,7 @@ export default function GradingStatisticsPopup({ id, groupID, belts, datesFrom, 
 		}
 	}, [belts])
 
-	// Fetches and sets groups protocols and data
+	// Fetches and sets groups protocols and data.
 	useEffect(() => {
 		if (groupID && beltID !== null) {
 			const fetchGroupGradingProtocol = async () => {
@@ -53,8 +53,8 @@ export default function GradingStatisticsPopup({ id, groupID, belts, datesFrom, 
 						throw new Error("Failed to fetch group data")
 					}
 
-					if(response.status === 204){
-						//For belts that do not have grading protocols
+					if (response.status === 204) {
+						// For belts that do not have grading protocols.
 						setProtocols([])
 					} else {
 						const groups = await response.json()
@@ -71,7 +71,7 @@ export default function GradingStatisticsPopup({ id, groupID, belts, datesFrom, 
 		}
 	}, [beltID])
 	
-	// Finds and sets the selected belts ids for the chosen protocol
+	// Finds and sets the selected belts ids for the chosen protocol.
 	useEffect(() => {
 		if (chosenProtocol) {
 			const index = protocols.findIndex(p => p === chosenProtocol)
@@ -83,10 +83,10 @@ export default function GradingStatisticsPopup({ id, groupID, belts, datesFrom, 
 	}, [chosenProtocol])
 
 	/**
-	 * Completes the url for the api call to retrieve the next belt
+	 * Completes the url for the api call to retrieve the next belt.
 	 * 
-	 * @param baseUrl the base url to which numbers will be appended
-	 * @param numbers the numbers added to the base url
+	 * @param baseUrl The base URL to which the numbers will be appended
+	 * @param numbers The numbers added to the base URL
 	 */
 	function addNumbersToUrl(baseUrl, numbers, key = "beltId") {
 		const params = new URLSearchParams()
@@ -94,19 +94,20 @@ export default function GradingStatisticsPopup({ id, groupID, belts, datesFrom, 
 		return `${baseUrl}?${params.toString()}`
 	}
 
-	// Toggles popups visibility
+	// Toggles popups visibility.
 	const togglePopup = () => {
 		setShowPopup(!showPopup)
 	}
 
-	// Sets chosen protocol
+	// Sets chosen protocol.
 	const onSelectRow = (protocol) => {
 		setChosenProtocol(protocol)
 	}
 
+	// Fetches the next belts for the group.
 	const getNextBelts = async () => {
 		
-		// Run initially to get the next belt of the current
+		// Runs the fetch request to get the next belts for the group.
 		const requestOptions = {
 			headers: {"Content-type": "application/json", token: token}
 		}
@@ -132,6 +133,7 @@ export default function GradingStatisticsPopup({ id, groupID, belts, datesFrom, 
 		}
 	}
 
+	// Sets the belt ID to the first belt in the newBelts array.
 	useEffect(() => {
 		if (newBelts[0]) {
 			setBeltID(newBelts[0].id)

@@ -7,7 +7,8 @@ import style from "./FilterStatistics.module.css"
 
 /**
  * 
- * Component for filtering statistics. Can filter by dates, belts, exercises and kihon.
+ * Component for filtering statistics. Can display exercises and kihon,
+ * and also filter by dates and belts.
  * 
  * Example usage:
  * 
@@ -47,7 +48,7 @@ export default function FilterStatistics({ exercises, kihon, onToggleExercise, o
 					<div></div>
 					<DatePicker
 						id="start-date-picker"
-						selectedDate={dates.from} // two years before from today
+						selectedDate={dates.from} // Default: two years before from today
 						onChange={(e) => {
 							onDateChanges("from", e.target.value)
 						}}
@@ -59,7 +60,7 @@ export default function FilterStatistics({ exercises, kihon, onToggleExercise, o
 					<div></div>
 					<DatePicker
 						id="end-date-picker"
-						selectedDate={dates.to} // today's date
+						selectedDate={dates.to} // Default: today's date
 						onChange={(e) => {
 							onDateChanges("to", e.target.value)
 						}}

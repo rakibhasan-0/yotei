@@ -2,9 +2,10 @@
  * A component to represent a user in the page for summering.
  * 
  *   Props:
- *    id
  *    id    @type {String}   An id for the component
- *    id    @type {String}   A name for the user
+ *    name    @type {String}   A name for the user
+ * 	  passedTechniques @type {number} Amount of passed tehniques?
+ * 	  totalAmountOfTechniques @type {number} AMount of techniques in total
  *	<UserBoxGrading
  *	key={examinee.examinee_id}
  *	id={examinee.examinee_id}
@@ -12,13 +13,29 @@
  *	))}
  * @author Pomegranate
  * @since 2024-05-09
+ * @updated 2024-05-29 Kiwi, Updated props comment. Passedtechniques might be wrong?
  * @version 1.0 
  */
 import React from "react"
 import { Link } from "react-router-dom"
 import { ChevronDown } from "react-bootstrap-icons"
 import styles from "../../pages/Grading/GradingAfterComp.module.css"
-const UserBoxGrading = ({ id, name, passedTechniques, totalAmountOfTechniques  }) => {
+
+/**
+ * Gets a small bubble notification if the technique has any comments, else nothing
+ * @returns a small bubble notification if the technique has any comments, else nothing
+ */
+function getCommentNotification() {
+	return (
+		<div className={styles.outerCircle}>
+			<div className={styles.innerCircle}>
+				<p>!</p>
+			</div>
+		</div>
+	)
+}
+
+const UserBoxGrading = ({ id, name, passedTechniques, totalAmountOfTechniques, hasNullTechnique }) => {
 	const truncateName = (name) => {
 		return name.length > 16 ? name.substring(0, 16) + "..." : name
 	}
@@ -32,7 +49,8 @@ const UserBoxGrading = ({ id, name, passedTechniques, totalAmountOfTechniques  }
 					</div>
 					{/* if the technique object has count attribute then we will not render ChevronDown sign */}
 					<div className={styles["technique-arrow-container"]}>
-						<span>{passedTechniques}/{totalAmountOfTechniques}</span> 
+						<span>{passedTechniques}/{totalAmountOfTechniques}</span>
+						{hasNullTechnique && getCommentNotification()}
 						<Link to={`/grading/${id}/4`}>
 
 							<ChevronDown />

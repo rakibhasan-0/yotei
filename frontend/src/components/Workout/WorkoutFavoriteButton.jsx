@@ -8,9 +8,14 @@ import {setError as setErrorToast} from "../../utils"
 /**
  * This component is an extension of the star button which includes
  * Favorite logic capabilities.
+ * 
+ * Props:
+ * 		id @type {String/number} id for starbutton.
+ * 		workout @type {object} A workout.
  *
  * @author Cyclops (Group 5) dv21adt
  * @since May 9, 2023
+ * @updated 2024-05-29 Kiwi, Updated props in comment.
  */
 export default function WorkoutFavoriteButton({id, workout, favoriteCallback = () => {}}) {
 	const { token, userId } = useContext(AccountContext)

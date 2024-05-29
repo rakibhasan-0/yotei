@@ -16,6 +16,7 @@ import styles from "./Button.module.css"
  *    width	   	@type {String}   A custom width to overrun default width
  *    type 	   	@type {String}   Change type of component from default button
  *    disabled 	@type {Boolean}  An overide to disable the button and change it's graphics
+ * 	  onClick   @type {Function} A function to be run when the button is clicked.
  * 
  * Example Usage:
  * const [disabled, setDisabled] = useState(false)
@@ -30,8 +31,9 @@ import styles from "./Button.module.css"
  * 
  * The parent container using this button must constrain its width.
  * 
- * @author Chimera
+ * @author Chimera, Kiwi
  * @since 2023-05-02
+ * @updated 2024-05-29
  * @version 2.0 
  */
 export default function Button({onClick, outlined, children, width, id, disabled, type, isToggled}) {
