@@ -780,7 +780,7 @@ ALTER TABLE in_chain OWNER TO psql;
 \ir defaults/activitylists.sql
 \ir defaults/examination_protocols.sql
 \ir defaults/grading_protocols.sql
---\ir defaults/techniqueChain.sql
+\ir defaults/techniqueChain.sql
 -- Triggers for user
 --
 CREATE OR REPLACE FUNCTION remove_user_references() RETURNS TRIGGER AS $$ 
