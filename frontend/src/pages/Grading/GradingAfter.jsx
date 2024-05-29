@@ -73,7 +73,7 @@ export default function GradingAfter() {
 	}
 
 	/**
-	 * Function that fetchs all of the results of each examinee.
+	 * Function that fetches all of the results of each examinee.
 	 * @returns {Promise} The belt data.
 	 * @since 2024-05-15
 	 */
@@ -82,12 +82,20 @@ export default function GradingAfter() {
 			method: "GET",
 			headers: { "token": token }
 		}).then(response => {
-			if(!response.ok){
-				throw new Error("Network response was not ok")
+			if (!response.ok) {
+				throw new Error("Network response was not ok");
 			}
-			return response.json()
-		})
-	}
+			return response.json();
+		}).then(data => {
+			console.log("Fetched Examinee Result:", data);
+			if (data === null) {
+				console.log("The fetched examinee result is null.");
+			}
+			return data;
+		}).catch(error => {
+			console.error("Error fetching examinee result:", error);
+		});
+	};
 
 	/**
 	 * Function that fetchs all of the results of each examinee.
@@ -186,6 +194,7 @@ export default function GradingAfter() {
 				setIsExaminee(true)
 				setTotalAmountOfTechniques(result_data.totalTechniques)
 				setFetchedResult(result_data)
+				console.log("The result data is: ", result_data)
 
 			} catch (error) {
 				console.error("There was a problem with the fetch operation:", error)
@@ -226,7 +235,7 @@ export default function GradingAfter() {
 							>{grading.title}</h2>
 						</div>
 					</div>
-					<h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "10px", paddingBottom: "10px" }}>Summering</h1>
+					<h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "10px", paddingBottom: "10px" }}>Summering </h1>
 				</div>
     
 				<div className={styles.scrollableContainer}>
@@ -236,7 +245,8 @@ export default function GradingAfter() {
 							id={examinee.examineeId}
 							name={examinee.name}
 							passedTechniques={examinee.passedTechniques}
-							totalAmountOfTechniques={totalAmountOfTechniques}
+							totalAmountOfTechniques={totalAmountOfTechniques}	
+							hasNullTechnique = {true}						
 						/>
 					))}
 				</div>
