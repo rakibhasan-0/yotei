@@ -1,4 +1,4 @@
-import { useState, useContext, useCallback, useEffect } from "react"
+import { useState, useContext, useCallback } from "react"
 import { Form } from "react-bootstrap"
 import styles from "./WorkoutFormComponent.module.css"
 import InputTextField from "../../Common/InputTextField/InputTextField"
@@ -20,7 +20,6 @@ import AddActivity from "./AddActivity"
 import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
 import EditActivityPopup from "./EditActivityPopup"
 import { useParams } from "react-router"
-import { unstable_useBlocker as useBlocker } from "react-router"
 
 /**
  * Component for input-form to be used to create a new workout (WorkoutCreate.js)
@@ -48,21 +47,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 	//const location = useLocation()
 	//const hasPreviousState = location.key !== "default"
 	const [showPopup, setShowPopup] = useState(false)
-	const [isBlocking, setIsBlocking] = useState(false)
-	const [isSubmitting, setIsSubmitting] = useState(false);
 	const { workoutId } = useParams()
-
-    const blocker = useBlocker(() => {
-        if (isBlocking && !isSubmitting) {
-            setShowPopup(true)
-            return true
-        }
-        return false
-    })
-
-    useEffect(() => {
-        setIsBlocking(true)
-    }, [])
 	
 	/**
 	 * Sets the title of the page.
@@ -89,27 +74,22 @@ export default function WorkoutFormComponent({ callback, state }) {
 	 * @param {*} event
 	 */
 	function handleSubmit(event) {
-        const form = event.currentTarget;
-        event.preventDefault();
+		const form = event.currentTarget
+		event.preventDefault()
 
-        if (form.checkValidity() === false) {
-            event.stopPropagation();
-        } else if (
-            workoutCreateInfo.data.activityItems.length == 0 &&
-            !acceptActivities
-        ) {
-            setAcceptActivities(true);
-        } else {
-            setIsSubmitting(true); // Temporarily disable the blocker
-            setIsBlocking(false); // Disable blocking
-            callback().finally(() => {
-                setIsSubmitting(false); // Re-enable the blocker
-                setIsBlocking(true); // Re-enable blocking
-            });
-        }
+		if (form.checkValidity() === false) {
+			event.stopPropagation()
+		} else if (
+			workoutCreateInfo.data.activityItems.length == 0 &&
+			!acceptActivities
+		) {
+			setAcceptActivities(true)
+		} else {
+			callback()
+		}
 
-        setValidated(true);
-    }
+		setValidated(true)
+	}
 
 	/**
 	 * This function is called when the "go back" button is pressed.
@@ -311,10 +291,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 							id = "confirm-pop-up-go-back"
 							showPopup={showPopup}
 							setShowPopup={setShowPopup}
-							onClick={async () => {
-								confirmGoBack()
-								blocker.proceed()
-							}}
+							onClick={confirmGoBack}
 							popupText="Är du säker på att du vill lämna sidan? Dina ändringar kommer inte att sparas."
 							confirmText="Ja"
 							backText="Avbryt"
