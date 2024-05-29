@@ -13,17 +13,16 @@ import { Link } from "react-router-dom"
 import { Dot } from "react-bootstrap-icons"
 import { ChevronRight } from "react-bootstrap-icons"
 import { AccountContext } from "../../context"
-import { useContext} from "react"
-
+import { useContext } from "react"
 
 export default function ProfileListItem({ item, Icon }) {
 	//Commented due to linter
 	//const { userId, token } = useContext(AccountContext)
-	const { userId} = useContext(AccountContext)
+	const { userId } = useContext(AccountContext)
 
 	return (
-		<div className={`${styles["profile-item-row"]}`}>
-			<Link to={item.id==-1?("/profile/favouriteWorkouts"): (`/profile/list/${item.id}`)}>
+		<div className={`${styles["profile-item-row"]}`} id={item.id}>
+			<Link to={item.id == -1 ? "/profile/favouriteWorkouts" : `/profile/list/${item.id}`}>
 				<div className={"row align-items-center font-weight-bold px-3 py-2"}>
 					<div className={"col-2 "}>
 						{/* Handles both Icons and JSX elements */}
@@ -41,9 +40,13 @@ export default function ProfileListItem({ item, Icon }) {
 							) : (
 								<p className="mb-0">
 									{item.author.userId === userId ? (
-										<>av mig <Dot /> {item.size} aktiviter</>
+										<>
+											av mig <Dot /> {item.size} aktiviter
+										</>
 									) : (
-										<>av {item.author.username} <Dot /> {item.size} aktiviter</>
+										<>
+											av {item.author.username} <Dot /> {item.size} aktiviter
+										</>
 									)}
 								</p>
 							)}
