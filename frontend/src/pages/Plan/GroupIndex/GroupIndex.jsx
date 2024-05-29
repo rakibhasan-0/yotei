@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react"
-import { setError as setErrorToast, canCreateGroups, canEditGroups, isAdminUser, HTTP_STATUS_CODES } from "../../../utils"
+import { setError as setErrorToast, canCreateSessionsAndGroups, canEditSessionsAndGroups, isAdminUser, HTTP_STATUS_CODES } from "../../../utils"
 import { AccountContext } from "../../../context"
 import style from "./GroupIndex.module.css"
 import BeltBox from "../../../components/Plan/BeltBox"
@@ -78,7 +78,7 @@ export default function GroupIndex() {
 								<div className={style.item}>
 									<BeltBox id={index} belts={group.belts} />
 								</div>
-								<div style = {{marginLeft: "5px", display: "flex"}}> { (isAdminUser(context) || canEditGroups(context, group.userId)) && (
+								<div style = {{marginLeft: "5px", display: "flex"}}> { (isAdminUser(context) || canEditSessionsAndGroups(context, group.userId)) && (
 									<>
 										<Link to={`/plan/edit/${group.id}`}>
 											<Pencil id={"edit-group-button"} size={24} color="var(--red-primary)"/>
@@ -107,7 +107,7 @@ export default function GroupIndex() {
 					
 					{
 
-						(isAdminUser(context) || canCreateGroups(context)) ?
+						(isAdminUser(context) || canCreateSessionsAndGroups(context)) ?
 							<RoundButton linkTo={"/plan/create"}>
 								<Plus className="plus-icon" />
 							</RoundButton>
