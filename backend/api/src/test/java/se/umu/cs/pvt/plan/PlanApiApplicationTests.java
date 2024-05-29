@@ -1,8 +1,10 @@
 package se.umu.cs.pvt.plan;
+
 /**
  * A test-class for the Plan-controller API-methods
  *
- * @author Calzone, Phoenix (25-04-2023)
+ * @author Calzone, Phoenix (2023-04-25), Mango (2024-05-28)
+ * Updates: 2024-05-28: Updated test to expect NO_CONTENT instead of NOT_FOUND when there are no groups.
  */
 
 import org.junit.jupiter.api.BeforeEach;
@@ -61,14 +63,12 @@ class PlanApiApplicationTests {
         belts.add(belt3);
     }
 
-
     @Test
     void shouldFailWhenUpdatingANonExistingPlan() {
         Mockito.when(repository.findById(ex1.getId())).thenReturn(Optional.empty());
         controller.updatePlan(ex1);
         assertEquals(HttpStatus.NOT_FOUND, controller.updatePlan(ex1).getStatusCode());
     }
-
 
     @Test
     void shouldFailWhenUpdatingWithoutId() {
@@ -77,14 +77,12 @@ class PlanApiApplicationTests {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
-
     @Test
     void shouldFailWhenUpdatingWithNullAttributes() {
         Plan invalidPlan = new Plan(1L, "color", null, null);
         ResponseEntity<Plan> response = controller.updatePlan(invalidPlan);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
-
 
     @Test
     void shouldFailWhenUpdatingWithInvalidBeltSet() {
@@ -93,14 +91,12 @@ class PlanApiApplicationTests {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
-
     @Test
     void shouldFailWhenAddingPlanWithBeltsBeingNull() {
         Plan invalidPlan = new Plan(null, "name", 1L, null);
         ResponseEntity<Plan> response = controller.postPlan(invalidPlan);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
-
 
     @Test
     void shouldFailWhenAddingPlanWithNullAttributes() {
@@ -109,18 +105,16 @@ class PlanApiApplicationTests {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
-
     @Test
     void shouldSucceedUpdatingExistingPlan() {
         Mockito.when(repository.findById(ex1.getId())).thenReturn(Optional.of(ex1));
         assertEquals(HttpStatus.OK, controller.updatePlan(ex1).getStatusCode());
     }
 
-
     @Test
     void shouldFailWhenGettingAllPlansFromEmptyTable() {
         ResponseEntity response = controller.getAllPlan();
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     }
 
     @Test
