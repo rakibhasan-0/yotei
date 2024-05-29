@@ -72,7 +72,7 @@ export default function GradingAfter() {
 	}
 
 	/**
-	 * Function that fetchs all of the results of each examinee.
+	 * Function that fetches all of the results of each examinee.
 	 * @returns {Promise} The belt data.
 	 * @since 2024-05-15
 	 */
@@ -216,7 +216,6 @@ export default function GradingAfter() {
 				setIsExaminee(true)
 				setTotalAmountOfTechniques(result_data.totalTechniques)
 				setFetchedResult(result_data)
-
 			} catch (error) {
 				console.error("There was a problem with the fetch operation:", error)
 			}
@@ -256,20 +255,26 @@ export default function GradingAfter() {
 							>{grading.title}</h2>
 						</div>
 					</div>
-					<h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "10px", paddingBottom: "10px" }}>Summering</h1>
+					<h1 style={{ fontFamily: "Open Sans", fontSize: "25px", paddingTop: "10px", paddingBottom: "10px" }}>Summering </h1>
 				</div>
     
 				<div className={styles.scrollableContainer}>
-					{fetchedResult.examineeResults && fetchedResult.examineeResults.map((examinee) => (
-						<UserBoxGrading
-							key={examinee.examineeId}
-							id={examinee.examineeId}
-							name={examinee.name}
-							passedTechniques={examinee.passedTechniques}
-							totalAmountOfTechniques={totalAmountOfTechniques}
-						/>
-					))}
+					{fetchedResult.examineeResults && fetchedResult.examineeResults.map((examinee) => {
+						const totalTechniques = examinee.failedTechniques + examinee.passedTechniques
+						const hasNullTechnique = totalTechniques < totalAmountOfTechniques
+						return (
+							<UserBoxGrading
+								key={examinee.examineeId}
+								id={examinee.examineeId}
+								name={examinee.name}
+								passedTechniques={examinee.passedTechniques}
+								totalAmountOfTechniques={totalAmountOfTechniques}	
+								hasNullTechnique={hasNullTechnique} 		
+							/>
+						)
+					})}
 				</div>
+
     
 				<div className={styles.bottomContainer}>
 					<div style={{ display: "flex", justifyContent: "flex-end", paddingTop: "10px" }}>
