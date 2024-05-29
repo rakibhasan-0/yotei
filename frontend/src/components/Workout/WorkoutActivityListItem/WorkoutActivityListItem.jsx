@@ -23,16 +23,6 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 	const [isOpen, setIsOpen] = useState(false)
 	let bgColor = "#ffdfe3"
 
-	console.log(id) // here so id is used for now
-
-	/*
-	const isFreeTextElem = () => {
-		console.log(activity.id)
-		console.log(id)
-		return activity.exercise == null && activity.technique == null
-	}
-	
-
 	const name = 
 		activity.exercise ? (
 			
@@ -41,9 +31,7 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 		
 			activity.technique.name
 		)
-		*/
-
-
+		
 	const createStripes = () => {
 		index % 2 == 0 ? bgColor = "#F8EBEC" : bgColor = "#FFFFFF"
 	}
@@ -56,16 +44,16 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 		<>
 			{
 				activity.technique ?
-					<PopupMini title = {activity.name ? activity.name : "hej"} id = "popup-list-item-tech" isOpen = {isOpen} setIsOpen = {setIsOpen} >
-						<TechniqueDetailMini id = {activity.id}></TechniqueDetailMini>
+					<PopupMini title = {name} id = "popup-list-item-tech" isOpen = {isOpen} setIsOpen = {setIsOpen} >
+						<TechniqueDetailMini id = {activity.technique.id}></TechniqueDetailMini>
 					</PopupMini>
 					:
-					<PopupMini title = {activity.name ? activity.name : "hej"} id = "popup-list-item-exer" isOpen = {isOpen} setIsOpen = {setIsOpen} >
-						<ExerciseDetailMini id = {activity.id}></ExerciseDetailMini>
+					<PopupMini title = {name} id = "popup-list-item-exer" isOpen = {isOpen} setIsOpen = {setIsOpen} >
+						<ExerciseDetailMini id = {activity.exercise.id}></ExerciseDetailMini>
 					</PopupMini>	
 			}		
 
-			<div id={activity.id} className="animate">
+			<div id={id} className="animate">
 				{createStripes()}
 				<div className={"row align-items-center " + "py-2"}  key={activity.id}
 					style={{
@@ -73,7 +61,7 @@ const WorkoutActivityListItem = ({ activity, index, id}) => {
 					}}>
 
 					<Link role = "link" className="col text-left" onClick = {handleClick}  >
-						<h5 className={`${styles["workoutActivityName"]} m-0`}>{activity.name}</h5>
+						<h5 className={`${styles["workoutActivityName"]} m-0`}>{name}</h5>
 					</Link>
 				
 					<div className={`${styles["listItemTime"]} d-flex align-items-center justify-content-end col-xs-5 pl-0 text-right`}>
