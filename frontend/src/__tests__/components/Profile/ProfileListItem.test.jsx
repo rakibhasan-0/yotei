@@ -49,6 +49,21 @@ describe("ProfileListItem.jsx", () => {
 			expect(screen.getByText(/av\s+ADMIN/)).toBeInTheDocument()
 			expect(screen.getByText(/3\s+aktiviteter/)).toBeInTheDocument()
 		})
+
+		test("should render link to /profile/list/1", () => {
+			render(
+				<AccountContext.Provider
+					value={{ undefined, userId: 1, permissions: USER_PERMISSION_LIST_ALL, username: "name" }}
+				>
+					<BrowserRouter>
+						<ProfileListItem item={list} key={1} Icon={<Eye />} />
+					</BrowserRouter>
+				</AccountContext.Provider>
+			)
+			const linkElement = screen.getByRole("link")
+			expect(linkElement).toHaveTextContent("test list")
+			expect(linkElement.getAttribute("href")).toBe("/profile/list/1")
+		})
 	})
 
 	describe("when render component that has id -1", () => {
