@@ -78,7 +78,7 @@ public class Permission implements Serializable{
         return this.permission_name;
     }
 
-    public void setPermissinDescription(String desc) {
+    public void setPermissionDescription(String desc) {
         this.permission_desc = desc;
     }
 
