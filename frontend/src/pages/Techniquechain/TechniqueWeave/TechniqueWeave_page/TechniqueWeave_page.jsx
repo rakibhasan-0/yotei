@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router"
-import { isAdminUser, HTTP_STATUS_CODES, hasBetaAccess } from "../../../../utils.js"
+import { isAdminUser, HTTP_STATUS_CODES, hasBetaAccess } from "../../../../utils"
 import { AccountContext } from "../../../../context"
 import Spinner from "../../../../components/Common/Spinner/Spinner"
 import Button from "../../../../components/Common/Button/Button.jsx"

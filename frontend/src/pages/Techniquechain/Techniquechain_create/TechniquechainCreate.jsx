@@ -2,7 +2,7 @@ import InputTextField from "../../../components/Common/InputTextField/InputTextF
 import React, { useContext, useEffect, useState } from "react"
 import styles from "./TechniquechainCreate.module.css"
 import { AccountContext } from "../../../context"
-import { HTTP_STATUS_CODES } from "../../../utils"
+import { isAdminUser, hasBetaAccess, HTTP_STATUS_CODES } from "../../../utils.js"
 import TextArea from "../../../components/Common/TextArea/TextArea.jsx"
 import Divider from "../../../components/Common/Divider/Divider.jsx"
 import Dropdown from "../../../components/Common/List/Dropdown"
