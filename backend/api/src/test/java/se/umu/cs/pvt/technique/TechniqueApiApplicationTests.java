@@ -28,10 +28,11 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 /**
  * A test-class for testing the methods inside TechniqueController, API.
  *
- * @author Quattro Formaggio, Calrkskrove, Phoenix (25-04-2023), Team Granatäpple (Grupp 1) (23-04-2024)
+ * @author Quattro Formaggio, Calrkskrove, Phoenix (2023-04-25), Team
+ *         Granatäpple (Grupp 1) (2024-04-23)
  */
 
- @ExtendWith(MockitoExtension.class)
+@ExtendWith(MockitoExtension.class)
 @WebMvcTest(controllers = TechniqueController.class)
 public class TechniqueApiApplicationTests {
 
@@ -52,6 +53,7 @@ public class TechniqueApiApplicationTests {
 
     @Autowired
     private TechniqueController techniqueController;
+
     @Test
     void contextLoads() {
         assertThat(techniqueController).isNotNull();
@@ -64,8 +66,6 @@ public class TechniqueApiApplicationTests {
     private final Set<Belt> belts = new HashSet<>();
     private final Set<Tag> tags = new HashSet<>();
 
-
-
     private final Technique tec1 = new Technique(1L, "Test1", "Descripton1", new HashSet<>(), new HashSet<>());
     private final Technique tec2 = new Technique(2L, "Test2", "Descripton2", new HashSet<>(), new HashSet<>());
     private ArrayList<Technique> techniques;
@@ -73,6 +73,7 @@ public class TechniqueApiApplicationTests {
     private Technique createTechnique(Long id, String name, String description) {
         return new Technique(id, name, description, new HashSet<>(), new HashSet<>());
     }
+
     private Technique createTechnique(Long id, String name, String description, Set<Belt> belts, Set<Tag> tags) {
         return new Technique(id, name, description, new HashSet<>(), tags);
     }
@@ -97,7 +98,6 @@ public class TechniqueApiApplicationTests {
                 techniqueController.postTechnique(invalid).getStatusCode());
     }
 
-
     @Test
     void shouldFailWhenUpdatingNonExistingTechnique() {
         Mockito.when(repository.findById(tec1.getId())).thenReturn(Optional.empty());
@@ -105,14 +105,12 @@ public class TechniqueApiApplicationTests {
         assertEquals(HttpStatus.NOT_FOUND, techniqueController.updateTechnique(tec1).getStatusCode());
     }
 
-
     @Test
     void shouldSuceedWhenUpdatingExistingTechnique() {
         Mockito.when(repository.findById(tec1.getId())).thenReturn(Optional.empty());
         techniqueController.updateTechnique(tec1);
         assertNotEquals(HttpStatus.OK, techniqueController.updateTechnique(tec1).getStatusCode());
     }
-
 
     @Test
     void shouldFailWhenUpdatingExerciseWithInvalidFormat() {
@@ -124,14 +122,12 @@ public class TechniqueApiApplicationTests {
         assertEquals(HttpStatus.NOT_ACCEPTABLE, response.getStatusCode());
     }
 
-
     @Test
     void shouldSucceedWhenUpdatingExistingTechnique() {
         Mockito.when(repository.findById(tec1.getId())).thenReturn(Optional.ofNullable(tec1));
 
         assertEquals(HttpStatus.CREATED, techniqueController.updateTechnique(tec1).getStatusCode());
     }
-
 
     @Test
     void shouldMakeNotAcceptableWhenUpdatingToNoName() {
@@ -143,12 +139,11 @@ public class TechniqueApiApplicationTests {
     }
 
     @Test
-    void shouldFailWhenRemovingNoneExistingTechnique(){
+    void shouldFailWhenRemovingNoneExistingTechnique() {
         Mockito.when(repository.findById(tec1.getId())).thenReturn(Optional.empty());
 
         assertEquals(HttpStatus.NOT_FOUND, techniqueController.removeTechnique(tec1.getId()).getStatusCode());
     }
-
 
     @Test
     void shouldReturnAllExercisesFromGetExercises() {
@@ -157,12 +152,9 @@ public class TechniqueApiApplicationTests {
         ResponseEntity<Object> response = techniqueController.getTechniques();
         List<Technique> result = (List<Technique>) response.getBody();
 
-
-
         assertThat(result.get(0)).isEqualTo(tec1);
         assertThat(result.get(1)).isEqualTo(tec2);
     }
-
 
     @Test
     void shouldReturnExerciseFromGetExerciseWithRealID() {
@@ -176,13 +168,15 @@ public class TechniqueApiApplicationTests {
 
     @Test
     void shouldSucceedWithGetReview() {
-        Mockito.when(techniqueReviewRepository.findReviewsForTechnique(1)).thenReturn(new ArrayList<TechniqueReviewReturnInterface>());
+        Mockito.when(techniqueReviewRepository.findReviewsForTechnique(1))
+                .thenReturn(new ArrayList<TechniqueReviewReturnInterface>());
         assertEquals(HttpStatus.OK, techniqueController.getReviewsForTechnique(1).getStatusCode());
     }
 
     @Test
     void shouldSucceedWithInsertReview() {
-        TechniqueReview review = new TechniqueReview((long)1,3,4,5,"Snyggt byggt","fräsig kärra",new Date(1648930522000L));
+        TechniqueReview review = new TechniqueReview((long) 1, 3, 4, 5, "Snyggt byggt", "fräsig kärra",
+                new Date(1648930522000L));
         Mockito.when(techniqueReviewRepository.save(review)).thenReturn(review);
         assertEquals(HttpStatus.OK, techniqueController.insertReviewForTechnique(review).getStatusCode());
     }
@@ -190,7 +184,8 @@ public class TechniqueApiApplicationTests {
     @Test
     void shouldSucceedWithUpdateReview() {
 
-        TechniqueReview review = new TechniqueReview((long)1,3,4,5,"Snyggt byggt","fräsig kärra",new Date(1648930522000L));
+        TechniqueReview review = new TechniqueReview((long) 1, 3, 4, 5, "Snyggt byggt", "fräsig kärra",
+                new Date(1648930522000L));
         Mockito.when(techniqueReviewRepository.save(review)).thenReturn(review);
         Mockito.when(techniqueReviewRepository.findById(review.getId())).thenReturn(Optional.of(review));
         assertEquals(HttpStatus.OK, techniqueController.updateReview(review).getStatusCode());
