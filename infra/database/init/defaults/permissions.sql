@@ -9,7 +9,7 @@
 INSERT INTO permission (permission_name, permission_desc) VALUES ('Adminrättigheter', 'Admin rättigheter. Detsamma som att ha alla rättigheter på sidan.');
 
 -- Beta access
-INSERT INTO permission (permission_name, permission_desc) VALUES ('Beta tillgång', 'Ger användaren tillgång till funktioner som inte är fullt implementerat i systemet.');
+INSERT INTO permission (permission_name, permission_desc) VALUES ('Experimentella funktioner', 'Ger användaren tillgång till funktioner som inte är fullt implementerat i systemet.');
 
 -- Grupper (Plan) och Tillfällen (Session)
 INSERT INTO permission (permission_name, permission_desc) VALUES ('Hantera egna grupper och tillfällen', 'Tillåtelse att skapa, redigera och radera sina egna grupper och tillfällen till de grupperna.');
@@ -46,17 +46,16 @@ INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 8);
 INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 9);
 
 -- Editor role
-INSERT INTO role_to_permission (role_id, permission_id) VALUES (2, 2);
 INSERT INTO role_to_permission (role_id, permission_id) VALUES (2, 3);
 INSERT INTO role_to_permission (role_id, permission_id) VALUES (2, 4);
 INSERT INTO role_to_permission (role_id, permission_id) VALUES (2, 5);
 INSERT INTO role_to_permission (role_id, permission_id) VALUES (2, 6);
 INSERT INTO role_to_permission (role_id, permission_id) VALUES (2, 7);
 INSERT INTO role_to_permission (role_id, permission_id) VALUES (2, 8);
-INSERT INTO role_to_permission (role_id, permission_id) VALUES (1, 9);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (2, 9);
 
 
 -- User role
-INSERT INTO role_to_permission (role_id, permission_id) VALUES (3, 2);
-INSERT INTO role_to_permission (role_id, permission_id) VALUES (3, 4);
-INSERT INTO role_to_permission (role_id, permission_id) VALUES (3, 6);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (3, 3);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (3, 5);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (3, 7);
