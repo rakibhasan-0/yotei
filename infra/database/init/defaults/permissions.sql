@@ -4,11 +4,16 @@
 --
 -- INSERTS FOR PERMISSION
 --
-INSERT INTO permission (permission_name, permission_desc) VALUES ('Admin-rättigheter: Ger alla rättigheter', 'Admin rättigheter. Detsamma som att ha alla rättigheter på sidan.');
+
+-- Admin
+INSERT INTO permission (permission_name, permission_desc) VALUES ('Admin-rättigheter', 'Admin rättigheter. Detsamma som att ha alla rättigheter på sidan.');
+
+-- Beta access
+INSERT INTO permission (permission_name, permission_desc) VALUES ('Beta access', 'Ger användaren tillgång till funktioner som inte är fullt implementerat i systemet.')
 
 -- Tillfällen (Session)
-INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa/redigera/radera tillfällen för egna grupper', 'Tillåtelse att skapa, redigera och radera sina egna tillfällen.');
-INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa/redigera/radera alla tillfällen', 'Tillåtelse att skapa tillfällen samt redigera och radera tillfällen som de kan nå.');
+INSERT INTO permission (permission_name, permission_desc) VALUES ('Hantera tillfällen för egna grupper', 'Tillåtelse att skapa, redigera och radera tillfällen för sina egna grupper.');
+INSERT INTO permission (permission_name, permission_desc) VALUES ('Hantera tillfällen för alla grupper', 'Tillåtelse att skapa, rediger och radera alla tillfällen, oberoende av grupp.');
 
 -- Grupper (Plan)
 INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa/redigera/radera egna grupper', 'Tillåtelse att skapa, redigera och radera sina egna grupper.');

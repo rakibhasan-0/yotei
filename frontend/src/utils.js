@@ -57,6 +57,16 @@ export function isAdminUser(context) {
 	return (context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS))
 }
 
+/**
+ * 
+ * @param {*} context AccountContext from user. 
+ * @returns 
+ */
+export function hasBetaAccess(context) {
+	if (!context.permissions) return false
+	return (context.permissions.includes(USER_PERMISSION_CODES.BETA_ACCESS))
+}
+
 
 /**
  * canCreateGroups() - check if a user can create a group.
@@ -223,17 +233,18 @@ export const HTTP_STATUS_CODES = {
 // These attributes have to be in the same order from 1-x as inserted into the database.
 export const USER_PERMISSION_CODES = {
 	ADMIN_RIGHTS: 1,
-	SESSION_OWN: 2, //Edit your own sessions.
-	SESSION_ALL: 3, //Edit all sessions.
-	PLAN_OWN: 4, // Plan = groups
-	PLAN_ALL: 5,
-	WORKOUT_OWN: 6,
-	WORKOUT_ALL: 7,
-	TECHNIQUE_EXERCISE_ALL: 8, //Old name: ACTIVITY_ALL (Was a potential conflict in the database naming, so we changed it.)
-	GRADING_ALL: 9,
+	BETA_ACCESS: 2,
+	SESSION_OWN: 3, //Edit your own sessions.
+	SESSION_ALL: 4, //Edit all sessions.
+	PLAN_OWN: 5, // Plan = groups
+	PLAN_ALL: 6,
+	WORKOUT_OWN: 7,
+	WORKOUT_ALL: 8,
+	TECHNIQUE_EXERCISE_ALL: 9, //Old name: ACTIVITY_ALL (Was a potential conflict in the database naming, so we changed it.)
+	GRADING_ALL: 10,
 }
 
-export const USER_PERMISSION_LIST_ALL = [1,2,3,4,5,6,7,8,9]
+export const USER_PERMISSION_LIST_ALL = [1,2,3,4,5,6,7,8,9,10]
 
 /**
  * Scrolls an element with given id into view.
