@@ -4,6 +4,9 @@ import { DuringGradingPage } from '../PageObjectModels/duringGradingPage'
 test.describe('Systest for DuringGrading page.', () => {
     let duringGradingPage: DuringGradingPage
     
+    /**
+     * this is run to set up a new grading for each test.
+     */
     test.beforeEach('navigate to technique section', async ({ page }) => {
         duringGradingPage = new DuringGradingPage(page)
         await duringGradingPage.createGrading()
@@ -11,6 +14,11 @@ test.describe('Systest for DuringGrading page.', () => {
         await duringGradingPage.visit(`grading/${gradingId}/2`)
         expect(page.getByTestId("infoPanel"))
     })
+
+    /**
+     * this is run after each test to remove grading that are created
+     * to test the during grading functionality.
+     */
     test.afterEach('delete created grading', async ({}) => {
 
         const gradingId = await duringGradingPage.getCurrentUrl()
@@ -21,6 +29,10 @@ test.describe('Systest for DuringGrading page.', () => {
 
     })
     
+    /**
+     * this test is to check that during a grading that an examinator can click the EamineeBox to 
+     * cycle through pass/fail/reset to see that it actually works as intended
+     */
     test('1. Should set result for technique to pass and fail to half of the examinees.', async ({ page }) => {
         // Act by calling methods in POM and assert by using expect.
         // Do not forget to delete data in the database that was created during the test.
@@ -48,7 +60,10 @@ test.describe('Systest for DuringGrading page.', () => {
         expect(backgroundColor4).toBe('rgb(240, 128, 128)');
     
     })
-    
+    /**
+     * this test is used to show that the color of the ExamineeBox component actually resets when going
+     * to a new technique.
+     */
     test('2. Should go to next technique. and the colors should be set to default.', async ({ page }) => {
         await duringGradingPage.moveToNextTechnique()
 
@@ -71,6 +86,10 @@ test.describe('Systest for DuringGrading page.', () => {
         expect(backgroundColor4).toBe('rgb(255, 255, 255)');
     })
 
+    /**
+     * this test is used to show that when you have graded a technique and navigated to the next technique
+     * and then back to the previous that the correct colors should load from the database for each examinee.
+     */
     test('3. Should fill out the first technique for all examinees and move to next and then back to see if they are filled.', async ({ page }) => {
         await duringGradingPage.setPassResultForExaminee({ examineeId: 1, name: "TestPerson1" })
         await duringGradingPage.setFailResultForExaminee({ examineeId: 1, name: "TestPerson2" })
@@ -118,6 +137,10 @@ test.describe('Systest for DuringGrading page.', () => {
         expect(backgroundColor44).toBe('rgb(240, 128, 128)');
     })
 
+    /**
+     * this test works by adding comment to the examinees then navigate to the next technique and then
+     * back to the previous technique it actually loads the comments correctly fron the database.
+     */
     test('4. Should add Examinee Comment and load it.', async ({ page }) => {
         await duringGradingPage.navigateToExamineeComment({ examineeName: "TestPerson1" })
         await duringGradingPage.addExamineeComment({content: "Systest Kommentar Personlig1" })
@@ -155,6 +178,10 @@ test.describe('Systest for DuringGrading page.', () => {
         await duringGradingPage.closeExamineePopup() 
     })
 
+    /**
+     * this test works by adding a comment to a pair then navigate to the next technique and then
+     * back to the previous technique it actually loads the comment correctly fron the database.
+     */
     test('5. Should add Pair Comment and load it.', async ({ page }) => {
         await duringGradingPage.navigateToPairComment({pairId: "P1systest"})
         await duringGradingPage.addPairComment({content: "Systest Kommentar Par1" })
@@ -175,6 +202,10 @@ test.describe('Systest for DuringGrading page.', () => {
         await duringGradingPage.closePairPopup()
     })
 
+    /**
+     * this test works by adding a comment to the group then navigate to the next technique and then
+     * back to the previous technique it actually loads the comment correctly fron the database.
+     */
     test('6. Should add Group Comment and load it.', async ({ page }) => {
         await duringGradingPage.navigateToGroupComment()
         await duringGradingPage.addGroupComment({content: "Systest Kommentar grupp" })
