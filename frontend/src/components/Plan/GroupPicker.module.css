@@ -1,3 +1,12 @@
+/**
+ * CSS file for GroupPicker.
+ * 
+ * @author UNKNOWN & Team Mango (Grupp 4) (2024-05-29)
+ * 
+ * Updates 2024-05-29: added .dropdownRow and .dropdownRowText.
+ * 
+ */
+
 .gp23_groupRow{
     display: flex;
     
