@@ -23,9 +23,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * @author  Phoenix (25-04-2023)
- *          Dragon (16-05-2023)
- *          Team Mango (Grupp 4) - 2024-05-17
+ * @author Phoenix (2023-04-25)
+ *         Dragon (2023-05-16)
+ *         Team Mango (Grupp 4) - 2024-05-17
  */
 @ExtendWith(MockitoExtension.class)
 public class LoginTest {
@@ -40,7 +40,7 @@ public class LoginTest {
 
     @Mock
     final RoleRepository roleRepository = Mockito.mock(RoleRepository.class);
-    
+
     @Mock
     final RoleToPermissionRepository roleToPermissionRepository = Mockito.mock(RoleToPermissionRepository.class);
 
@@ -66,7 +66,8 @@ public class LoginTest {
             if (response instanceof ResponseEntity<?>) {
                 assertEquals(((ResponseEntity<?>) response).getStatusCode(), HttpStatus.NOT_ACCEPTABLE);
             }
-        } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+        } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException
+                | InvalidKeySpecException e) {
             fail();
         }
     }
@@ -83,7 +84,8 @@ public class LoginTest {
             if (response instanceof ResponseEntity<?>) {
                 assertEquals(((ResponseEntity<?>) response).getStatusCode(), HttpStatus.NOT_ACCEPTABLE);
             }
-        } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+        } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException
+                | InvalidKeySpecException e) {
             fail();
         }
     }
@@ -119,7 +121,8 @@ public class LoginTest {
             if (response instanceof ResponseEntity<?>) {
                 assertNull(((ResponseEntity<?>) response).getBody());
             }
-        } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+        } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException
+                | InvalidKeySpecException e) {
             fail();
         }
     }
@@ -130,7 +133,8 @@ public class LoginTest {
             user.setUsername("user");
             user.setPassword("invalidPassword");
 
-            Mockito.when(userRepository.findUserByUsernameIgnoreCase(user.getUsername())).thenReturn(Optional.of(new User("user", "123")));
+            Mockito.when(userRepository.findUserByUsernameIgnoreCase(user.getUsername()))
+                    .thenReturn(Optional.of(new User("user", "123")));
 
             map.put("username", user.getUsername());
             map.put("password", user.getPassword());
@@ -139,7 +143,8 @@ public class LoginTest {
             if (response instanceof ResponseEntity<?>) {
                 assertEquals(((ResponseEntity<?>) response).getStatusCode(), HttpStatus.BAD_REQUEST);
             }
-        }  catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+        } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException
+                | InvalidKeySpecException e) {
             fail();
         }
     }
@@ -159,7 +164,8 @@ public class LoginTest {
 
             String responseToken = (String) lc.userVerification(map);
             assertNotNull(new JWTUtil().validateToken(responseToken));
-        } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+        } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException
+                | InvalidKeySpecException e) {
             fail();
         }
     }
