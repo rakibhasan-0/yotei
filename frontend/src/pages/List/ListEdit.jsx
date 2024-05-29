@@ -47,9 +47,9 @@ const ListEdit = () => {
 		if (isEdit) {
 			listId = await updateActivityList(data)
 			if (listId) {
-				setSuccess("Träningen uppdaterades!")
+				setSuccess("Listan uppdaterades!")
 			} else {
-				setError("Träningen kunde inte uppdateras.")
+				setError("Listan kunde inte uppdateras.")
 			}
 			localStorage.removeItem(localStorageDestination)
 			navigate(-1)
@@ -57,12 +57,11 @@ const ListEdit = () => {
 			listId = await createActivityList(data)
 
 			if (listId) {
-				setSuccess("Träningen skapades!")
+				setSuccess("Listan skapades!")
 			} else {
-				setError("Träningen kunde inte skapas.")
+				setError("Listan kunde inte skapas.")
 			}
 			localStorage.removeItem(localStorageDestination)
-			console.log("skickar till listInfo: " + JSON.stringify(returnTo))
 			navigate("/profile/list/" + listId, { state: { returnTo: returnTo } })
 		}
 	}

@@ -1,4 +1,4 @@
-INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (3, 
+INSERT INTO examination_protocol (belt_id, belt_color, examination_protocol) VALUES (3, 'FFDD33', 
 '{
     "examination_protocol": {"code": "5 KYU", "color": "GULT BÄLTE"},
     "categories": [
@@ -59,7 +59,7 @@ INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (3,
         }
     ]
 }'::JSON);
-INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (6, 
+INSERT INTO examination_protocol (belt_id, belt_color, examination_protocol) VALUES (6, 'FFA133',
 '{
     "examination_protocol": {"code": "4 KYU", "color": "ORANGE BÄLTE"},
     "categories": [
@@ -124,7 +124,7 @@ INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (6,
         }
     ]
 }'::JSON);
-INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (9, 
+INSERT INTO examination_protocol (belt_id, belt_color, examination_protocol) VALUES (9, '0C7D2B',
 '{
     "examination_protocol": {"code": "3 KYU", "color": "GRÖNT BÄLTE"},
     "categories": [
@@ -196,7 +196,7 @@ INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (9,
         }
     ]
 }'::JSON);
-INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (12, 
+INSERT INTO examination_protocol (belt_id, belt_color, examination_protocol) VALUES (12, '1E9CE3',
 '{
     "examination_protocol": {"code": "2 KYU", "color": "BLÅTT BÄLTE"},
     "categories": [
@@ -277,7 +277,7 @@ INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (12,
         }
     ]
 }'::JSON);
-INSERT INTO examination_protocol (belt_id, examination_protocol) VALUES (13, 
+INSERT INTO examination_protocol (belt_id, belt_color, examination_protocol) VALUES (13, '83530C',
 '{
     "examination_protocol": {"code": "1 KYU", "color": "BRUNT BÄLTE"},
     "categories": [
