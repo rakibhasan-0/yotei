@@ -8,6 +8,16 @@
     position: relative; /* Allow absolute positioning of children */
 }
 
+.beltRowClear {
+    border-top: solid 1px black;
+    height: 52px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 3px 10px;
+    position: relative; /* Allow absolute positioning of children */
+}
+
 .beltRow:nth-child(even) {
     background-color: var(--red-secondary);
 }
@@ -22,6 +32,14 @@
     align-items: center;
     margin-left: auto;
     flex-wrap: wrap;
+}   
+
+@media screen and (max-width: 402px){
+    .beltItem, .beltItemChild {
+        all:unset;
+        margin-left: auto;
+        flex-wrap: nowrap;
+    }   
 }
 
 .beltItemDuo {
@@ -29,7 +47,9 @@
     height: 50px;
     align-items: center;
     gap: 2px;
-    justify-content: center;
+    justify-content: flex-end;
+    flex-direction: row-reverse;
+    margin-left: auto;
 }
 
 .beltTextSpecial {

@@ -70,10 +70,10 @@ const BeltRow = ({ belt, states, onToggle }) => {
 					: <></>
 				}
 				{adult ? <>
-				<div className={styles.beltItemDuo}>
-					<BeltIcon id={`belt-adult-${name}-icon`} belt={adult} />
-					<CheckBox id={`belt-adult-${name}`} onClick={toggleAdultState} checked={adultState} />
-				</div>
+					<div className={styles.beltItemDuo}>
+						<BeltIcon id={`belt-adult-${name}-icon`} belt={adult} />
+						<CheckBox id={`belt-adult-${name}`} onClick={toggleAdultState} checked={adultState} />
+					</div>
 
 				</>
 					: <div style={{width:"72px"}} />
@@ -194,7 +194,7 @@ export default function BeltPicker({ id, states, onToggle, centered, onClearBelt
 							<BeltRow onToggle={onToggle} states={states} key={index} belt={belt} />
 						))}
 						{onClearBelts &&
-							<div className={styles.beltRow} onClick={clearBelts}>
+							<div className={styles.beltRowClear} onClick={clearBelts}>
 								<p className={`${styles.beltTextSpecial} ${styles.centeredText}`}>Rensa valda bälten</p>
 							</div>
 						}
