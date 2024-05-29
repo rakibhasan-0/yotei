@@ -133,7 +133,7 @@ export default function GradingAfter() {
 			console.log("URL created:", url)
 			const link = document.createElement("a")
 			link.href = url
-			link.setAttribute("download", "filename.pdf")
+			link.setAttribute("download", grading.title)
 			document.body.appendChild(link)
 			link.click()
 			setTimeout(() => { 

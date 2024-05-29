@@ -227,6 +227,16 @@ export default function GradingDeviations() {
 		return null
 	}
 
+	function hasStatus(techniqueName) {
+		for (let i = 0; i < resultList.length; i++) {
+			if (resultList[i] != null) {
+				if (resultList[i]["techniqueName"] == techniqueName) {
+					return true
+				}
+			}
+		}
+		return false
+	}
 
 	/**
 	 * Checks if the examinee has passed a specific technique
@@ -396,7 +406,7 @@ export default function GradingDeviations() {
 								<Divider id='divider-example' option='h2_left' title={category.category_name} key={index_id} />
 								{category.techniques.map((technique, index) => (
 									(isDeviating(technique.text) || !showingDeviationsOnly) ?
-										<Container id={index} name={technique.text} passed={hasPassed(technique.text)} key={index}
+										<Container id={index} name={technique.text} passed={hasStatus(technique.text) ? hasPassed(technique.text) : undefined} key={index}
 											comment={getPersonalComment(technique.text)} pairComment={getPairComment(technique.text)} generalComment={getGroupComment(technique.text)}></Container>
 										: null
 								))}
