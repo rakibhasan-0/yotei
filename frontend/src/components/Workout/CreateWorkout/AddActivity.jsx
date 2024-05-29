@@ -622,6 +622,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null, scrollId="s
 								activities={visibleExercises}
 								activeKey={key}
 								searchCount={searchCount.current}
+								scrollId={scrollId}
 							>
 								{visibleExercises.map((exercise, key) => (
 									<ExerciseListItem

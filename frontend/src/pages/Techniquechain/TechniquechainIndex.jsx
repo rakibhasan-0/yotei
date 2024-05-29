@@ -1,10 +1,12 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { Modal } from "react-bootstrap"
 import TechniqueWeaveIndex from "./TechniqueWeave/TechniqueWeaveIndex"
 import Tab from "react-bootstrap/Tab"
 import Tabs from "react-bootstrap/Tabs"
 import styles from "./TechniquechainIndex.module.css"
 import Techniquechain from "./Techniquechain/Techniquechain.jsx"
+import { isAdminUser, hasBetaAccess } from "../../utils.js"
+import { AccountContext } from "../../context.js"
 
 
 /**
@@ -18,6 +20,12 @@ import Techniquechain from "./Techniquechain/Techniquechain.jsx"
 export default function TechniquechainIndex() {
 
 	const [key, setKey] = useState(sessionStorage.getItem("active-tab") || "technique")
+	const context = useContext(AccountContext)
+	
+	if(!isAdminUser(context) && !hasBetaAccess(context)){
+		window.location.replace("/404")
+		return null
+	}
 	
 	return (
 		<Modal.Body style={{ padding: "0" }}>

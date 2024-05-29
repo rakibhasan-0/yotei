@@ -34,7 +34,7 @@ import { useCookies } from "react-cookie"
  * @since 2024-05-21
  * Based on AddActivity.jsx
  */
-function AddActivity({ id, setShowActivityInfo }) {
+function AddActivity({ id, setShowActivityInfo, scrollId="scrollable-content"  }) {
 	const { token } = useContext(AccountContext)
 	const { listCreateInfo, listCreateInfoDispatch } = useContext(ListCreateContext)
 	const { checkedActivities } = listCreateInfo
@@ -399,6 +399,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 							:
 							(<InfiniteScrollComponent
 								activities={techniques}
+								scrollId={scrollId}
 							>
 								{techniques.map((technique, key) => (
 									<TechniqueCard
@@ -439,6 +440,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 							:
 							<InfiniteScrollComponent
 								activities={visibleExercises}
+								scrollId={scrollId}
 							>
 								{visibleExercises.map((exercise, key) => (
 									<ExerciseListItem
@@ -454,7 +456,7 @@ function AddActivity({ id, setShowActivityInfo }) {
 										item={exercise.name}
 										key={key}
 										index={key}
-										popUp={true}
+										popUp={true}	
 									/>
 								))}
 							</InfiniteScrollComponent>
