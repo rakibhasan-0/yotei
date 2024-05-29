@@ -55,6 +55,7 @@ export default function GradingBefore() {
 
 
 
+
 	/**
 	 * Get method for the grading information. 
 	 * @returns JSON response
@@ -277,6 +278,8 @@ export default function GradingBefore() {
 			editGradingName(gradingId, "Gradering " + gradingId + " | " + getTodaysDate())
 		}
 	}
+
+
 
 	/**
 	 * Effect that are used to navigate to the next step in the grading process
