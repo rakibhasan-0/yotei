@@ -222,7 +222,6 @@ export default function Statistics() {
 	return (
 		<div>
 			<title>Statistik</title>
-			{console.log("groupActivities", activities)}
 			{groupLoading ? (
 				<Spinner />
 			) : (
