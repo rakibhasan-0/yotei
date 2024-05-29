@@ -61,7 +61,7 @@ public class PermissionController {
         }
         Permission newPermission = permission.get();
         newPermission.setPermissionName(updatedPermission.getPermissionName());
-        newPermission.setPermissinDescription(updatedPermission.getPermissionDescription());
+        newPermission.setPermissionDescription(updatedPermission.getPermissionDescription());
 
         repository.save(newPermission);
 
