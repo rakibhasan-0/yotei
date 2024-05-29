@@ -166,9 +166,6 @@ export default function GradingBefore() {
 					getBeltColor(data.beltId, token).catch(() => setErrorToast("Kunde inte hämta bältesfärgen. Kontrollera din internetuppkoppling.")),
 				])
 				setBeltColor("#" + beltData)
-
-				//const data = await getGrading(token)
-				//	.catch(() => setErrorToast("Kunde inte hämta examinationen. Kontrollera din internetuppkoppling."))
 	
 				// Set the step so we know how to navigate back, what type of route it should choose, in function @handleNavigation
 				setGradingStep(data.step)
@@ -227,21 +224,25 @@ export default function GradingBefore() {
 				}
 
         // add alone examinees
-        if(data.step === 1) {
+        if(data.step === 1 && data.examinees.length >= 1) {
           
-          let aloneExaminees = data.examinees.map(examinee => {
-            return {name: examinee.name, id: examinee.examineeId, isLocked: false}
-          })
-          
-          if(exsistingPairs.length >= 1) {
-            aloneExaminees = aloneExaminees.filter(examinee => {
-                return exsistingPairs.map(pair => {
+          let aloneExaminees = data.examinees.map(examinee => ({
+            name: examinee.name,
+            id: examinee.examineeId,
+            isLocked: false
+          }));
 
-                })
-            })
+          if (exsistingPairs.length >= 1) {
+            aloneExaminees = aloneExaminees.filter(examinee => {
+              return !exsistingPairs.some(pair => 
+                pair.examinee_1.id === examinee.id || pair.examinee_2.id === examinee.id
+              );
+            });
           }
-          
-          setExaminees([...examinees, aloneExaminees])
+
+          if (aloneExaminees.length >= 1) {
+            setExaminees(aloneExaminees);
+          }
         }
 
 			} catch (error) {	
