@@ -2,9 +2,10 @@
  * A component to represent a user in the page for summering.
  * 
  *   Props:
- *    id
  *    id    @type {String}   An id for the component
- *    id    @type {String}   A name for the user
+ *    name    @type {String}   A name for the user
+ * 	  passedTechniques @type {number} Amount of passed tehniques?
+ * 	  totalAmountOfTechniques @type {number} AMount of techniques in total
  *	<UserBoxGrading
  *	key={examinee.examinee_id}
  *	id={examinee.examinee_id}
@@ -12,6 +13,7 @@
  *	))}
  * @author Pomegranate
  * @since 2024-05-09
+ * @updated 2024-05-29 Kiwi, Updated props comment. Passedtechniques might be wrong?
  * @version 1.0 
  */
 import React from "react"
