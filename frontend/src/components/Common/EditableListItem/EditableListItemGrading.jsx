@@ -11,8 +11,8 @@ import GradingCheckBox from "../CheckBox/GradingCheckBox"
  * 
  * Props:
  *     	item @type {string} 		- Text displaying the title of the exercise
- * 		  id @type {integer} 			- The ID for this particular exercise in database
- * 		  index @type {integer} 		- The ID for this particular exercise on current page (Used for coloring)
+ * 		id @type {integer} 			- The ID for this particular exercise in database
+ * 		index @type {integer} 		- The ID for this particular exercise on current page (Used for coloring)
  *      onRemove @type {function} - Action when removing the item
  *      onEdit @type {function}   - Action when editing the item
  *      onCheck @type {function} - Action when checking the checkbox
@@ -20,7 +20,10 @@ import GradingCheckBox from "../CheckBox/GradingCheckBox"
  *      checked @type {boolen} - What the default value will be for the checkbox
  *      validateInput @type {function} - Action to validate the input given
  *      grayThrash @type {boolean} - True if the trash icon should be grey otherwise it is red
- * 		  showThrash @type {boolean} - True if the trash icon should be visible
+ * 		showThrash @type {boolean} - True if the trash icon should be visible
+ * 		showX @type {boolean} - True if the X icon should be visible
+ * 		showPencil @type {boolean} - True if the Pencil icon should be visible
+ * 		showLock @type {boolean} - True if the Lock icon should be visible
  * 
  * Example usage:
  * 		<EditableListItem
