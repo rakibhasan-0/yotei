@@ -68,6 +68,7 @@ test.describe("Workout", () => {
 		// Generates a random string of five characters
 		const name = Math.random().toString(36).slice(2, 7) // Will generate a random string of 5 characters
 
+		// workout object for test
 		const workout = {
 			description: "description description description", 
 			name: name, 
