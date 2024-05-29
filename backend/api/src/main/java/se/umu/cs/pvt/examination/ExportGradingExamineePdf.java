@@ -486,7 +486,7 @@ public class ExportGradingExamineePdf {
         for(ExaminationComment ec : examinationPairComments) {
             //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
             contentStream.newLineAtOffset(0, -15);
-            contentStream.showText(ec.getComment().replaceAll("\\u000a", " "));
+            contentStream.showText(ec.getTechniqueName() + "-" + ec.getComment().replaceAll("\\u000a", " "));
         }    
     
         contentStream.endText();
@@ -541,7 +541,7 @@ public class ExportGradingExamineePdf {
         for( ExaminationComment ec: examineeComments){
             //This newLineAtOffset position is relative to the previous due to it being in the same beginText to endText section
             contentStream.newLineAtOffset(0, -15);
-            List<String> rows = getRows(ec.getComment().replaceAll("\\u000a", " "), 120);
+            List<String> rows = getRows(ec.getTechniqueName() + "-" + ec.getComment().replaceAll("\\u000a", " "), 120);
             for(String r : rows){
                 contentStream.showText(r);
                 contentStream.newLineAtOffset(0, -15);
