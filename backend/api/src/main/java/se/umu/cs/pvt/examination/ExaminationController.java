@@ -531,9 +531,11 @@ public class ExaminationController {
         for (Examinee examinee : examinees) {
             Map<String, String> examineeInfo = new HashMap<>();
             long passedTechniques = examinationResultRepository.countByExamineeIdAndPassTrue(examinee.getExamineeId());
+            long failedTechniques = examinationResultRepository.countByExamineeIdAndPassFalse(examinee.getExamineeId());
             examineeInfo.put("examineeId", examinee.getExamineeId().toString());
             examineeInfo.put("passedTechniques", Long.toString(passedTechniques)); // Convert long to Long and invoke toString()
             examineeInfo.put("name", examinee.getName());
+            examineeInfo.put("failedTechniques", Long.toString(failedTechniques));
             examineeResults.add(examineeInfo);
         }
         response.put("examineeResults", examineeResults);

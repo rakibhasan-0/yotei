@@ -82,20 +82,12 @@ export default function GradingAfter() {
 			method: "GET",
 			headers: { "token": token }
 		}).then(response => {
-			if (!response.ok) {
-				throw new Error("Network response was not ok");
+			if(!response.ok){
+				throw new Error("Network response was not ok")
 			}
-			return response.json();
-		}).then(data => {
-			console.log("Fetched Examinee Result:", data);
-			if (data === null) {
-				console.log("The fetched examinee result is null.");
-			}
-			return data;
-		}).catch(error => {
-			console.error("Error fetching examinee result:", error);
-		});
-	};
+			return response.json()
+		})
+	}
 
 	/**
 	 * Function that fetchs all of the results of each examinee.
@@ -194,8 +186,6 @@ export default function GradingAfter() {
 				setIsExaminee(true)
 				setTotalAmountOfTechniques(result_data.totalTechniques)
 				setFetchedResult(result_data)
-				console.log("The result data is: ", result_data)
-
 			} catch (error) {
 				console.error("There was a problem with the fetch operation:", error)
 			}
@@ -239,17 +229,22 @@ export default function GradingAfter() {
 				</div>
     
 				<div className={styles.scrollableContainer}>
-					{fetchedResult.examineeResults && fetchedResult.examineeResults.map((examinee) => (
-						<UserBoxGrading
-							key={examinee.examineeId}
-							id={examinee.examineeId}
-							name={examinee.name}
-							passedTechniques={examinee.passedTechniques}
-							totalAmountOfTechniques={totalAmountOfTechniques}	
-							hasNullTechnique = {true}						
-						/>
-					))}
+					{fetchedResult.examineeResults && fetchedResult.examineeResults.map((examinee) => {
+						const totalTechniques = examinee.failedTechniques + examinee.passedTechniques;
+						const hasNullTechnique = totalTechniques < totalAmountOfTechniques;
+						return (
+							<UserBoxGrading
+								key={examinee.examineeId}
+								id={examinee.examineeId}
+								name={examinee.name}
+								passedTechniques={examinee.passedTechniques}
+								totalAmountOfTechniques={totalAmountOfTechniques}	
+								hasNullTechnique={hasNullTechnique} 		
+							/>
+						)
+					})}
 				</div>
+
     
 				<div className={styles.bottomContainer}>
 					<div style={{ display: "flex", justifyContent: "flex-end", paddingTop: "10px" }}>
