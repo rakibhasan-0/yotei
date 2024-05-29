@@ -220,7 +220,7 @@ public class UserController {
     public Object hejhej(@RequestBody List<String> users) {
         for (String u : users) {
             try {
-            User u2 = new User(u, u, 1L);
+            User u2 = new User(u, u, 3L);
             User saved = repository.save(u2);
             } catch (Exception e){
                 e.printStackTrace();
