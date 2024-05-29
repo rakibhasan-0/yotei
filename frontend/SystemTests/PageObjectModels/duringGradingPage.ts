@@ -68,7 +68,7 @@ export class DuringGradingPage {
      */
     async navigateToGroupComment(){
         await this.page.locator('#infoPanel i').click();
-        await this.page.waitForTimeout(250);
+        await this.page.waitForTimeout(100);
     }
 
     /**
@@ -87,7 +87,7 @@ export class DuringGradingPage {
      */
     async navigateToExamineeComment(comment: Comment){
         await this.page.getByTestId(comment.examineeName + "systest").locator('i').click();
-        await this.page.waitForTimeout(250);
+        await this.page.waitForTimeout(100);
     }
     
     /**
@@ -106,7 +106,7 @@ export class DuringGradingPage {
      */
     async navigateToPairComment(comment: Comment){
         await this.page.getByTestId(comment.pairId).locator('i').click();
-        await this.page.waitForTimeout(250);
+        await this.page.waitForTimeout(100);
     }
 
     /**
@@ -114,6 +114,7 @@ export class DuringGradingPage {
      */
     async closePairPopup(){
         await this.page.locator('#pair-comment-popup').getByRole('button').first().click();
+        await this.page.waitForTimeout(100);
     }
 
     /**
@@ -121,6 +122,7 @@ export class DuringGradingPage {
      */
     async closeExamineePopup(){
         await this.page.locator('#examinee-comment-popup').getByRole('button').first().click();
+        await this.page.waitForTimeout(100);
     }
 
     /**
@@ -128,6 +130,7 @@ export class DuringGradingPage {
      */
     async closeGroupPopup(){
         await this.page.locator('#group-comment-popup').getByRole('button').first().click();
+        await this.page.waitForTimeout(100);
     }
 
     /**
