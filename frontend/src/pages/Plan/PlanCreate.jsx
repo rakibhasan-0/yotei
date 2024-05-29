@@ -15,7 +15,7 @@ import ConfirmPopup from "../../components/Common/ConfirmPopup/ConfirmPopup"
  * As well as checkboxes, indicating which day of the week to
  * include.
  *
- * @author Calzone (2022-05-13), Hawaii (2022-05-13), Squad 2 Griffin, Team Mango (2024-04-22), Team Durian (Group 3) (2024-04-23)
+ * @author Calzone (2022-05-13), Hawaii (2022-05-13), Squad 2 Griffin, Team Mango (2024-04-22), Team Durian (Group 3) (2024-05-29)
  */
 
 export default function PlanCreate() {
@@ -395,6 +395,12 @@ export default function PlanCreate() {
 		for (let i = 0; i < 7; i++) {
 			const day = weekdays[i]
 			if (day.value && day.time == "") {
+				setErrorToast("Du måste ge tid till varje aktiv dag")
+				res = false
+				break
+			}
+			//This statment is invoked when the time is modified from a set time to an empty string
+			else if (day.value && day.time.target.value == "") {
 				setErrorToast("Du måste ge tid till varje aktiv dag")
 				res = false
 				break
