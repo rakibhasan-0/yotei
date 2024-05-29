@@ -17,10 +17,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 /**
- * As of (18/05-2022) this testclass only tests each individual return statement from each method in the
+ * As of (2022-05-18) this testclass only tests each individual return statement
+ * from each method in the
  * WorkoutController class.
  *
- * @author  Phoenix (25-04-2023)
+ * @author Phoenix (2023-04-25)
  */
 
 @WebMvcTest(controllers = ActivityController.class)
