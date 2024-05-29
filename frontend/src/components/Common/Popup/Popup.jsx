@@ -13,10 +13,13 @@ import Divider from "../Divider/Divider"
  *     id        @type {string}   - Sets the id of the popup window
  * 	   isOpen    @type {boolean}  - Sets if popup should be visible or not
  *     setIsOpen @type {useState} - Sets the state of the popup window
+ * 	   children  @type {JSX}      - Children something unclear?  
  * 	   style     @type {object}   - Additional styles to add to the popup container.
  * 	   isNested  @type {boolean}  - disables the tinted background and fills the parent container. 
  * 								    Should be used in nested popups.
  *     divderOption @type {string} - "h1_left" is default, but can be changed to any option in Divider 
+ * 	   onClose @type {Function} - Function to be run when the popup closes.
+ *     zIndex @type {Int} - The zIndex of the popup
  *
  * Example usage:
  *  
@@ -34,6 +37,7 @@ import Divider from "../Divider/Divider"
  * @author Team Medusa, Team Chimera, Team Durian 
  * @version 3.0
  * @since 2024-05-17
+ * @updated 2024-05-29 Kiwi, Updated props comment.
  */
 export default function Popup({ title, id, isOpen, setIsOpen, children, isNested, style, onClose, zIndex, dividerOption }) {
 
