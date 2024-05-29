@@ -41,7 +41,7 @@ import { ActivityLists } from "./ActivityLists.jsx"
  * @updated 2024-05-20 Tomato, Added search function for activity lists.
  * @updated 2024-05-28 Tomato, Fixed logic regarding the checkbox for toggling all activities in a list when adding activities
  */
-function AddActivity({ id, setShowActivityInfo, sendActivity = null }) {
+function AddActivity({ id, setShowActivityInfo, sendActivity = null, scrollId="scrollable-content" }) {
 	const { token } = useContext(AccountContext)
 	const { workoutCreateInfo, workoutCreateInfoDispatch } = useContext(WorkoutCreateContext)
 	const { checkedActivities } = workoutCreateInfo
@@ -572,6 +572,7 @@ function AddActivity({ id, setShowActivityInfo, sendActivity = null }) {
 								activities={techniques}
 								activeKey={key}
 								searchCount={searchCount.current}
+								scrollId={scrollId}
 							>
 								{techniques.map((technique, key) => (
 									<TechniqueCard

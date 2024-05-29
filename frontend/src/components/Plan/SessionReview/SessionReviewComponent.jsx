@@ -773,12 +773,14 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 						id={"addMorePopup"}
 						isOpen={workoutCreateInfo.popupState.isOpened}
 						setIsOpen={toggleAddMore}
+						scrollId = "scrollable-activity-content" // Popup in popup requires other id for scrolling event listeners 
 					>
 						<WorkoutCreateContext.Provider value={{ workoutCreateInfo, workoutCreateInfoDispatch }}>
 							{workoutCreateInfo.popupState.types.showAddActivity && (
 								<AddActivity
 									id="add-activity-popup"
 									sendActivity={getActivities}
+									scrollId = "scrollable-activity-content" // Popup in popup requires other id for scrolling event listeners 
 								/>
 							)}
 							{workoutCreateInfo.popupState.types.showActivityInfo && (

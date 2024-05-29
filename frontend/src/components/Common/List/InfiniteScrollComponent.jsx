@@ -24,7 +24,7 @@ import Spinner from "../Spinner/Spinner"
  * @since 2024-05-08
  */
 
-export default function InfiniteScrollComponent({ children, activities, activeKey, searchCount }) {
+export default function InfiniteScrollComponent({ children, activities, activeKey, searchCount, scrollId }) {
 
 	const shownItems = useRef(20)
 
@@ -44,10 +44,8 @@ export default function InfiniteScrollComponent({ children, activities, activeKe
 		let startIndex = shownItems.current - 20
 		let endIndex = shownItems.current 
 		let data = children.slice(startIndex, endIndex)
-
 		setVisibleTechniques(prevItems => [...prevItems, ...data])
 		fetchedUpdate()
-		
 		shownItems.current += 20
 		setIsLoading(false)
 	}
@@ -115,7 +113,7 @@ export default function InfiniteScrollComponent({ children, activities, activeKe
 
 	return (
 		isLoading ? 
-			< Spinner />
+			< Spinner/>
 			:
 			<InfiniteScroll
 				dataLength={visibleTechniques.length}
@@ -126,7 +124,7 @@ export default function InfiniteScrollComponent({ children, activities, activeKe
 						<Spinner/>
 					</div>
 				}
-				scrollableTarget={"scrollable-content"}
+				scrollableTarget={scrollId}
 			>
 				<div>
 					{visibleTechniques}
