@@ -48,6 +48,10 @@ const BeltRow = ({ belt, states, onToggle }) => {
 
 	return (
 		<div className={styles.beltRow}>
+			<p id={`belt-text-${name}`} >
+				
+				{(name == "Svart") ? "1 Dan":name}
+			</p>
 			<div className={styles.beltItem}>
 				{(child) ? <>
 					<BeltIcon id={`belt-child-${name}-icon`} belt={child} />
@@ -67,10 +71,7 @@ const BeltRow = ({ belt, states, onToggle }) => {
 					: <div style={{width:"72px"}} />
 				}
 			</div>
-			<p id={`belt-text-${name}`} className={styles.beltText}>
-				
-				{(name == "Svart") ? "1 Dan":name}
-			</p>
+			
 		</div>
 	)
 

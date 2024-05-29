@@ -13,7 +13,11 @@ import styles from "./CommentButton.module.css"
 
 
 /**
- *
+ * Props:
+ *    id 		@type {String}   An id for the button
+ *    onClick 	@type {Function}  Function to be called when clicked. 
+ * 	  hasComment @type {boolean} True if has comment.
+ * 
  * @returns {JSX.Element}
  * @constructor
  */

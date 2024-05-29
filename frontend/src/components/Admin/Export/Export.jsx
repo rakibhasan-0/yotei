@@ -7,6 +7,16 @@ import style from "./Export.module.css"
 
 import Popup from "../../Common/Popup/Popup"
 
+/**
+ * Props:
+ *     	type @type {String} - Type of activity string eg. technique
+ *		show @type {boolean} - If is being shown or not.
+ *		setShow @type {function} - Setter for show.
+ *
+ * @author Team Kiwi
+ * @since 2024-05-02
+ * @version 1.1
+ * */
 const WarningPopup = ({type,show,setShow}) => {
 	const context = useContext(AccountContext)
 

@@ -320,34 +320,39 @@ export default function DuringGrading() {
 					</div>
 					<div className={styles.bottomRowContainer}>
 						{/* Prev technique button */}
-						<div 
-							id={"prev_technique"} 
-							onClick={() => {
-								goToPrevTechnique() 
-								scrollableContainerRef.current.scrollTop = 0}} 
-							className={styles.btnPrevActivity}>
-							{<ArrowLeft/>}
-						</div>
+						{(currentTechniqueStep === 0) ? (
+							<div className={styles.btnPlaceholder}></div>
+						) : (
+							<div 
+								id={"prev_technique"} 
+								onClick={() => {
+									goToPrevTechnique() 
+									scrollableContainerRef.current.scrollTop = 0}} 
+								className={styles.btnPrevActivity}>
+								{<ArrowLeft/>}
+							</div>
+						)}
 						{ /*Techniques button*/ }
-						<Button id={"techniques-button"} onClick={() => setShowPopup(true)}><p>Tekniker</p></Button>
+						<Button id={"navigation-button"} onClick={() => setShowPopup(true)}><p>Navigering</p></Button>
 						{ /* Next technique button */ }
-						<div 
-							id={"next_technique"} 
-							onClick={() => {
-								if (currentTechniqueStep != techniqueNameList.length -1){
+						{(currentTechniqueStep === techniqueNameList.length - 1) ? (
+							<div className={styles.btnPlaceholder}></div>
+						) : (
+							<div 
+								id={"next_technique"} 
+								onClick={() => {
 									goToNextTechnique()									
-								}else{
-									gotoSummary()
-								}
-								scrollableContainerRef.current.scrollTop = 0}} 
-							className={styles.btnNextActivity}>
-							{<ArrowRight/>}
-						</div>
+									scrollableContainerRef.current.scrollTop = 0
+								}} 
+								className={styles.btnNextActivity}>
+								{<ArrowRight/>}
+							</div>
+						)}
 					</div>
 
 					<Popup 
 						id={"navigation-popup"} 
-						title={"Tekniker-kategorier"} 
+						title={"Navigering"} 
 						isOpen={showPopup} 
 						setIsOpen={setShowPopup}> 
 						{techniqueNameList && (		
@@ -457,7 +462,7 @@ export default function DuringGrading() {
 
 	/**
 	 * Update step for the grading process. 
-	 * @param {String} grading_data 
+	 * @param {String} grading_data data on JSON format for a grading
 	 * @returns status code
 	 */
 	function updateStep(grading_data) {

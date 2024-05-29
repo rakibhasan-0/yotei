@@ -8,11 +8,12 @@ import Tag from "../../Common/Tag/Tag"
 /**
  * A builder for a list element inside the dropdown inside the 'Add user' component.
  * 
- * @param userObject the object which the list entry should represent.
- * @param addedUsers The getter for the state of added users.
- * @param setAddedUsers The setter for the state of added users.
+ * @param userObject @type {Object} the object which the list entry should represent.
+ * @param addedUsers @type {Array/List} The getter for the state of added users.
+ * @param setAddedUsers @type {UseState} The setter for the state of added users.
  * 
  * @author: Olle Lögdahl (Minotaur), Team Tomato (6)
+ * @updated 2024-05-29 Kiwi, Updated props comment
  */
 function UserListItem({userObject, addedUsers, setAddedUsers}) {
 	const isChecked = () => addedUsers.find(e => e.userId == userObject.userId) != undefined
