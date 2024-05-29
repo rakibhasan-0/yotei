@@ -6,10 +6,10 @@ import Spinner from "../Spinner/Spinner"
  * This component is used to show the first couple of list items and
  * render in more as the user scrolls to the bottom.
  * 
- * @param {children} children The list items to show.
- * @param {activities} Also activities? very unclear
- * @param {activeKey} The currently active tab - Tekniker or Övningar
- * @param {searchCount} A counter variable to ensure that no race conditions are caused by running code to many times.
+ * children @type {Array} The array of items to show.
+ * activities @type {activities} Also activities? very unclear
+ * activeKey @type {String} String representing the activeTab - "tekniker eller övningar"
+ * searchCount @type {searchCount} A counter variable to ensure that no race conditions are caused by running code to many times.
  * @returns {JSX.Element} The rendered InfiniteScrollComponent.
  * @example
  * // Usage
@@ -20,7 +20,8 @@ import Spinner from "../Spinner/Spinner"
  * </InfiniteScrollComponent>
  * 
  * @author Kraken (Grupp 7), Kiwi (Group 2 - 2024)
- * @version 1.1
+ * @updated 2024-05-29 Kiwi, Added auto-scroll and updated comment
+ * @version 1.2
  * @since 2024-05-08
  */
 
