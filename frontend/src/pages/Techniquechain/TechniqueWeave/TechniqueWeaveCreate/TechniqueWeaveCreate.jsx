@@ -170,6 +170,9 @@ const CreateWeave = () => {
 				id = "exercise-description-input"
 				errorDisabled={true}
 			/>
+			<label>
+				<strong>Hint:</strong> När man ska koppla ihop Tekniker, dra från tekniken ni vill koppla, när en linje och en prick dyker på på tekniken tryck sedan på tekniken pilen ska peka på, eller Skapa väven på en dator.
+			</label>
 			<Flowchart 
 				weaveId={weaveId}
 				nodes={nodes}
