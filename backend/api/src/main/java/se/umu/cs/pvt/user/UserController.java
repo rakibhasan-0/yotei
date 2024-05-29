@@ -9,7 +9,6 @@ import se.umu.cs.pvt.permission.UserToPermissionRepository;
 import se.umu.cs.pvt.role.Role;
 import se.umu.cs.pvt.role.RoleRepository;
 
-import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.pbkdf2.SHA256Digest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
