@@ -19,7 +19,7 @@ import { USER_PERMISSION_CODES, USER_PERMISSION_LIST_ALL } from "../../../../uti
  * @version 1.0
  * @since 2024-05-02
  * Updates: 2024-05-21: Added correct permissions to old tests and wrote new permission tests.
- * Updates: 2024-05-22: Fixed broken tests from new merge from other group ???.
+ * Updates: 2024-05-22: Fixed broken tests from new merge from other group.
  * 
  */
 const api = jest.fn()
