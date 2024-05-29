@@ -21,7 +21,7 @@ export default function GradingAfter() {
 	const { token} = context
 	const { gradingId } = useParams()
 	const navigate = useNavigate()
-	const [grading, setGrading] = useState([])
+	const [grading, setGrading] = useState([])	
 	const[totalAmountOfTechniques, setTotalAmountOfTechniques] = useState("")
 	const[fetchedResult, setFetchedResult] = useState([])
 	const [beltInfo, setBeltInfo] = useState({
@@ -101,7 +101,7 @@ export default function GradingAfter() {
 			})
 	
 			if (!response.ok) {
-				throw new Error("Network response was not ok")
+				throw new Error("Nätverk svar var inte OK, felkod: " + response.status)
 			}
 	
 			const base64String = await response.text()
@@ -114,8 +114,7 @@ export default function GradingAfter() {
 			const blob = new Blob([byteArray], {type: "application/pdf"}) // Create a blob from the byte array
 			return blob
 		} catch (error) {
-			console.error("Error fetching PDF:", error)
-			return null
+			console.error("Ett fel inträffade vid hämtning av PDF, felkod:" + error)
 		}
 	}
 	
