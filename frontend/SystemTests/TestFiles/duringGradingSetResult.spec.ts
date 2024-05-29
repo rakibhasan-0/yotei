@@ -39,6 +39,60 @@ test.describe('Systest for DuringGrading page.', () => {
     })
     
     /**
+     * This test is to check that during a grading that an examinator can click the EamineeBox to 
+     * cycle through pass/fail/reset to see that it actually works as intended
+     */
+    test('1. Should set result for technique to pass and fail to half of the examinees.', async ({ page }) => {
+        await duringGradingPage.setPassResultForExaminee({ examineeId: 1, name: "TestPerson1" })
+        await duringGradingPage.setFailResultForExaminee({ examineeId: 1, name: "TestPerson2" })
+        await duringGradingPage.setPassResultForExaminee({ examineeId: 1, name: "TestPerson3" })
+        await duringGradingPage.setFailResultForExaminee({ examineeId: 1, name: "TestPerson4" })
+        
+        const backgroundColor1 = await page.$eval('[data-testid="TestPerson1systest"]', (element) => {
+            return window.getComputedStyle(element).backgroundColor
+        })
+        const backgroundColor2 = await page.$eval('[data-testid="TestPerson2systest"]', (element) => {
+            return window.getComputedStyle(element).backgroundColor
+        })
+        const backgroundColor3 = await page.$eval('[data-testid="TestPerson3systest"]', (element) => {
+            return window.getComputedStyle(element).backgroundColor
+        })
+        const backgroundColor4 = await page.$eval('[data-testid="TestPerson4systest"]', (element) => {
+            return window.getComputedStyle(element).backgroundColor
+        })
+
+        expect(backgroundColor1).toBe('rgb(144, 238, 144)')
+        expect(backgroundColor2).toBe('rgb(240, 128, 128)')
+        expect(backgroundColor3).toBe('rgb(144, 238, 144)')
+        expect(backgroundColor4).toBe('rgb(240, 128, 128)')
+    })
+    /**
+     * This test is used to show that the color of the ExamineeBox component actually resets when going
+     * to a new technique.
+     */
+    test('2. Should go to next technique. and the colors should be set to default.', async ({ page }) => {
+        await duringGradingPage.moveToNextTechnique()
+
+        const backgroundColor1 = await page.$eval('[data-testid="TestPerson1systest"]', (element) => {
+            return window.getComputedStyle(element).backgroundColor
+        })
+        const backgroundColor2 = await page.$eval('[data-testid="TestPerson2systest"]', (element) => {
+            return window.getComputedStyle(element).backgroundColor
+        })
+        const backgroundColor3 = await page.$eval('[data-testid="TestPerson3systest"]', (element) => {
+            return window.getComputedStyle(element).backgroundColor
+        })
+        const backgroundColor4 = await page.$eval('[data-testid="TestPerson4systest"]', (element) => {
+            return window.getComputedStyle(element).backgroundColor
+        })
+
+        expect(backgroundColor1).toBe('rgb(255, 255, 255)')
+        expect(backgroundColor2).toBe('rgb(255, 255, 255)')
+        expect(backgroundColor3).toBe('rgb(255, 255, 255)')
+        expect(backgroundColor4).toBe('rgb(255, 255, 255)')
+    })
+
+    /**
      * This test is used to show that when you have graded a technique and navigated to the next technique
      * and then back to the previous that the correct colors should load from the database for each examinee.
      */

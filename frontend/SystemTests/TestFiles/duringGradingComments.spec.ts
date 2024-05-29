@@ -37,7 +37,7 @@ test.describe('Systest for DuringGrading page.', () => {
         await duringGradingPage.visit(`grading`)
         await duringGradingPage.removeGrading()
     })
-
+    
     /**
      * This test works by adding comment to the examinees then navigate to the next technique and then
      * back to the previous technique it actually loads the comments correctly from the database.
@@ -77,5 +77,46 @@ test.describe('Systest for DuringGrading page.', () => {
         const textAreaValue4 = await page.$eval('#TextareaTestId', (el) =>(el as HTMLTextAreaElement).value)
         expect(textAreaValue4).toBe("Systest Kommentar Personlig4")
         await duringGradingPage.closeExamineePopup() 
+    })
+
+    /**
+     * This test works by adding a comment to a pair then navigate to the next technique and then
+     * back to the previous technique to see if it actually loads the comment correctly fron the database.
+     */
+    test('5. Should add Pair Comment and load it.', async ({ page }) => {
+        await duringGradingPage.navigateToPairComment({pairId: "P1systest"})
+        await duringGradingPage.addPairComment({content: "Systest Kommentar Par1" })
+        await duringGradingPage.navigateToPairComment({pairId: "P2systest"})
+        await duringGradingPage.addPairComment({content: "Systest Kommentar Par2" })
+
+        await duringGradingPage.moveToNextTechnique()
+        await duringGradingPage.moveToPreviousTechnique()
+
+        await duringGradingPage.navigateToPairComment({pairId: "P1systest"})
+        const textAreaValue1 = await page.$eval('#TextareaTestId', (el) =>(el as HTMLTextAreaElement).value)
+        expect(textAreaValue1).toBe("Systest Kommentar Par1")
+        await duringGradingPage.closePairPopup()
+
+        await duringGradingPage.navigateToPairComment({pairId: "P2systest"})
+        const textAreaValue2 = await page.$eval('#TextareaTestId', (el) => (el as HTMLTextAreaElement).value)
+        expect(textAreaValue2).toBe("Systest Kommentar Par2")
+        await duringGradingPage.closePairPopup()
+    })
+
+    /**
+     * This test works by adding a comment to the group then navigate to the next technique and then
+     * back to the previous technique to see if it actually loads the comment correctly fron the database.
+     */
+    test('6. Should add Group Comment and load it.', async ({ page }) => {
+        await duringGradingPage.navigateToGroupComment()
+        await duringGradingPage.addGroupComment({content: "Systest Kommentar grupp" })
+
+        await duringGradingPage.moveToNextTechnique()
+        await duringGradingPage.moveToPreviousTechnique()
+
+        await duringGradingPage.navigateToGroupComment()
+        const textAreaValue1 = await page.$eval('#TextareaTestId', (el) =>(el as HTMLTextAreaElement).value)
+        expect(textAreaValue1).toBe("Systest Kommentar grupp")
+        await duringGradingPage.closeGroupPopup()
     })
 })
