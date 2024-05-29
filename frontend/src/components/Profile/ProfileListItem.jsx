@@ -22,7 +22,7 @@ export default function ProfileListItem({ item, Icon }) {
 
 	return (
 		<div className={`${styles["profile-item-row"]}`} id={item.id}>
-			<Link to={item.id == -1 ? "/profile/favouriteWorkouts" : `/profile/list/${item.id}`}>
+			<Link id={"link-test-id"} to={item.id === -1 ? "/profile/favouriteWorkouts" : `/profile/list/${item.id}`}>
 				<div className={"row align-items-center font-weight-bold px-3 py-2"}>
 					<div className={"col-2 "}>
 						{/* Handles both Icons and JSX elements */}
@@ -35,17 +35,17 @@ export default function ProfileListItem({ item, Icon }) {
 					<div className={`col-8 ${styles["profile-text"]}`}>
 						<div className="text-left">
 							{item.name}
-							{item.id == -1 ? (
+							{item.id === -1 ? (
 								<p className="mb-0">{item.size} pass</p>
 							) : (
 								<p className="mb-0">
 									{item.author.userId === userId ? (
 										<>
-											av mig <Dot /> {item.size} aktiviter
+											av mig <Dot /> {item.size} aktiviteter
 										</>
 									) : (
 										<>
-											av {item.author.username} <Dot /> {item.size} aktiviter
+											av {item.author.username} <Dot /> {item.size} aktiviteter
 										</>
 									)}
 								</p>
