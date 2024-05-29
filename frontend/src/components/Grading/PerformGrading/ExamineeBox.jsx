@@ -195,7 +195,6 @@ export default function ExamineeBox({
 			})
 
 			if (response.status === 404) {
-				console.log("No existing comment, 404 status")
 				setCommentText("")
 				setInitialCommentText("")
 				setExistingComment(false)

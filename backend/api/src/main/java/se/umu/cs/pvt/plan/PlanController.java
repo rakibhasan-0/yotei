@@ -10,7 +10,11 @@ import java.util.List;
 /**
  * Plan API for creating, reading, updating and deleting plans.
  *
- * @author Calzone (Doc:Griffin c20wnn)
+ * @author Calzone (Doc:Griffin c20wnn) Team Mango (2024-05-28)
+ * 
+ *         Updates:
+ *         * 2024-05-28: Updated the HTTP status code to 204 instead of
+ *         404 when there are no plans (groups) in the database.
  */
 
 @RestController
@@ -21,6 +25,7 @@ public class PlanController {
 
     /**
      * Constructor for plan controller
+     * 
      * @param planRepository plan repository extending a JPA repository
      */
     @Autowired
@@ -33,7 +38,8 @@ public class PlanController {
      * 1651821130 is 06/05/2022 09:12:30
      *
      * @param toAdd the body in json format with correct attributes example:
-     *                {"name": "test", "color": "#FFFFFF","startDate": "2020-03-24","endDate": "2022-04-24","userId": 1}
+     *              {"name": "test", "color": "#FFFFFF","startDate":
+     *              "2020-03-24","endDate": "2022-04-24","userId": 1}
      * @return HTTP response status:
      *         * 400: The plan to be added contains null attributes
      *         * 201: The plan was added to the database successfully
@@ -45,7 +51,7 @@ public class PlanController {
         if (toAdd.hasNullAttributes() || toAdd.nameIsEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else if (this.planRepository.findByName(toAdd.getName()) != null) {
-            //checks if plan to add already exists.
+            // checks if plan to add already exists.
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
@@ -59,13 +65,14 @@ public class PlanController {
      *
      * @param id id of plan to be removed
      * @return HTTP response status:
-     *         * 404: the provided id does not correspond to an entry in the database
+     *         * 404: the provided id does not correspond to an entry in the
+     *         database
      *         * 200: The provided plan was removed successfully
      */
     @DeleteMapping("/remove")
     public ResponseEntity<Void> removePlan(@RequestParam("id") Long id) {
 
-        if(planRepository.findById(id).isEmpty()){
+        if (planRepository.findById(id).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -77,17 +84,18 @@ public class PlanController {
 
     /**
      * This method updates an existing plan to the database.
+     * 
      * @param toUpdate the body in json format with correct attributes example:
-     *       {
-     *          "id":1,
-     *          "name":"updated plan",
-     *          "startDate":"2020-03-23",
-     *          "endDate":"2022-04-23",
-     *          "userId":1,
-     *          belts[{
-     *              belt_id:1
-     *          }]
-     * }
+     *                 {
+     *                 "id":1,
+     *                 "name":"updated plan",
+     *                 "startDate":"2020-03-23",
+     *                 "endDate":"2022-04-23",
+     *                 "userId":1,
+     *                 belts[{
+     *                 belt_id:1
+     *                 }]
+     *                 }
      * @return HTTP response status:
      *         * 400: The updated plan provided is not valid
      *         * 404: The plan to be updated is not stored in the database
@@ -97,7 +105,7 @@ public class PlanController {
     public ResponseEntity<Plan> updatePlan(@RequestBody Plan toUpdate) {
 
         // Abort if the provided plan is invalid
-        if(toUpdate.hasNullAttributes() || (toUpdate.getId() == null) || toUpdate.nameIsEmpty()) {
+        if (toUpdate.hasNullAttributes() || (toUpdate.getId() == null) || toUpdate.nameIsEmpty()) {
             return new ResponseEntity<>(toUpdate, HttpStatus.BAD_REQUEST);
         }
 
@@ -111,9 +119,11 @@ public class PlanController {
     }
 
     /**
-     * Returns all plans from the database, or if no plans are present, the 404 HTTP status is returned.
+     * Returns all plans from the database, or if no plans are present, the 204 HTTP
+     * status is returned.
+     * 
      * @return HTTP response status:
-     *         * 404: No plans exist in the database
+     *         * 204: No plans exist in the database
      *         * 200: A list of all plans is returned
      */
     @GetMapping("/all")
@@ -121,8 +131,8 @@ public class PlanController {
 
         List<Plan> planList = planRepository.findAll();
 
-        if(planList.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (planList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
         return new ResponseEntity<>(planList, HttpStatus.OK);
