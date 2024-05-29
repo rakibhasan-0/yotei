@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router"
-import { isAdminUser, HTTP_STATUS_CODES } from "../../../../utils.js"
+import { isAdminUser, HTTP_STATUS_CODES, hasBetaAccess } from "../../../../utils.js"
 import { AccountContext } from "../../../../context"
 import Spinner from "../../../../components/Common/Spinner/Spinner"
 import Button from "../../../../components/Common/Button/Button.jsx"
@@ -124,6 +124,11 @@ export default function TechniqueWeave_page() {
 	const handleGoback = () => {
 		sessionStorage.setItem("active-tab", "weave")
 		navigate("/techniquechain")
+	}
+
+	if(!isAdminUser(context) && !hasBetaAccess(context)){
+		window.location.replace("/404")
+		return null
 	}
 
 	return (

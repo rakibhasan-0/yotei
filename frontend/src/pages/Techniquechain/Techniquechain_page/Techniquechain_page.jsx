@@ -200,6 +200,11 @@ export default function Techniquechain_page() {
 		return { strokeWidth: 3, stroke: "black", strokeDasharray: 5 }
 	}
 
+	if(!isAdminUser(context) && !hasBetaAccess(context)){
+		window.location.replace("/404")
+		return null
+	}
+	
 	return (
 		<div style={{ display: "flex", flexDirection: "column" }}>
 			<title>Tekniktrådar</title>

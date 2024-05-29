@@ -236,7 +236,10 @@ export default function TechniquechainCreate() {
 		}
 	}
 
-
+	if(!isAdminUser(context) && !hasBetaAccess(context)){
+		window.location.replace("/404")
+		return null
+	}
 
 	return (
 		<div>

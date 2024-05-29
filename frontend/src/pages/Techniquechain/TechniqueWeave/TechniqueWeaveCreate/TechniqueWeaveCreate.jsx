@@ -142,6 +142,11 @@ const CreateWeave = () => {
 		console.log("TODO")
 	}
 
+	if(!isAdminUser(context) && !hasBetaAccess(context)){
+		window.location.replace("/404")
+		return null
+	}
+
 	return (
 		<div className={styles.content}>
 			<title>Skapa teknikväv</title>

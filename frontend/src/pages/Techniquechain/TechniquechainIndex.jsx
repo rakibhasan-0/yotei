@@ -19,6 +19,11 @@ export default function TechniquechainIndex() {
 
 	const [key, setKey] = useState(sessionStorage.getItem("active-tab") || "technique")
 	
+	if(!isAdminUser(context) && !hasBetaAccess(context)){
+		window.location.replace("/404")
+		return null
+	}
+	
 	return (
 		<Modal.Body style={{ padding: "0" }}>
 			<title>Tekniktrådar</title>
