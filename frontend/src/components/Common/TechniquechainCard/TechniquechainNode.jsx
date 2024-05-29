@@ -1,0 +1,53 @@
+import styles from "./techniquechainCard.module.css"
+
+/**
+ * An TechniquechainCard that can be used in an list view.
+ * It displays the title of an chain,
+ * also the description belonging to the chain when the
+ * drop-down is toggled.
+ * 
+ * Props:
+ *     	item @type {string} 		- Text displaying the title of the exercise
+ *     	children @type {string} 	- Text displaying the description of the exercise
+ * 		detailURL @type {string} 	- The base URL for exercises
+ * 		id @type {integer} 			- The ID for this particular exercise in database
+ * 		index @type {integer} 		- The ID for this particular exercise on current page (Used for coloring)
+ * 		path @type {string}			- The path to the specific exercise (only used if the exercise is in a list)
+ * 
+ * Example usage:
+ * 		<TechniquechainCard
+ * 			item={the exercise name}
+ * 			text={exercise duration + " min"}
+ * 			id={The unique ID for an exercises, gets concatenated onto detailURL}
+ * 			detailURL={the base URL for chains}
+ * 			index={The index for the exercise in the list containing fetched exercises}>
+ * 
+ * 			"Description"
+ * 		</TechniquechainCard>
+ * 
+ * @author Durian Team 3
+ * @since 2024-05-20
+ * @version 1.0
+ * based on earlyer code by Chimera, Phoenix
+ */
+export default function TechniquechainNode({ item, detailURL, id, index, checkBox}) {
+
+	// Fixes the path regardless if the exercise is in a list or not.
+	const handleClick = () =>{
+		detailURL(id)
+	}
+
+	return (
+		<div className={styles["exercise-list-container"]} data-testid="ExerciseListItem" onClick={handleClick} id={id}>
+			<div className={styles["exercise-list-header"]} style={{ backgroundColor: (index % 2 === 0) ? "var(--red-secondary)" : "var(--background)" }}>
+				{checkBox}
+
+				<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+					<div style={{display: "flex", alignItems: "center"}}>
+						<div className={styles["href-link"]} style={{ wordBreak: "break-word", textAlign: "left" }} data-testid="ExerciseListItem-item">{item}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	)
+}
