@@ -106,9 +106,9 @@ export function canDeleteComment(context, commentId) {
 } //PERMISSION TODO: Should there be a permission for deleting others' comments without being an admin? And should everyone be able to write comments?
 
 /**
- * canCreateAndEditTechnique() - Check if user can create an technique.
- * @param {*} context Accountcontext from user.
- * @returns true if user can create/edit an technique.
+ * canCreateAndEditTechnique() - Check if user can create a technique.
+ * @param {*} context Accountcontext from user. 
+ * @returns true if user can create/edit a technique.
  */
 export function canCreateAndEditTechnique(context) {
 	if (!context.permissions) return false
