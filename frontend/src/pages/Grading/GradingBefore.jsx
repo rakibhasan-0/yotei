@@ -278,8 +278,6 @@ export default function GradingBefore() {
 		}
 	}
 
-	
-
 	/**
 	 * Effect that are used to navigate to the next step in the grading process
 	 */
