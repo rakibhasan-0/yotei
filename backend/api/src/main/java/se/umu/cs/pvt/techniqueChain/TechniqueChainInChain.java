@@ -1,9 +1,13 @@
 package se.umu.cs.pvt.techniqueChain;
-
 import java.io.Serializable;
-
 import javax.persistence.*;
 
+/**
+ * The Entity class for the in_chain table.
+ * @author Team Durian
+ * @date 2024-05-29
+ * @version 1.0
+ */
 @Entity
 @Table(name = "in_chain")
 public class TechniqueChainInChain implements Serializable{
@@ -26,8 +30,9 @@ public class TechniqueChainInChain implements Serializable{
      * Constructs a new node with all field values initialized.
      *
      * @param id The identifier for the comment.
-     * @param from_node_id The name of the node.
-     * @param description The description of the node.
+     * @param nodeId The id of the node.
+     * @param chainId The id of the chain the node belong in.
+     * @param posInChain The position that the node have in the chain.
      */
     public TechniqueChainInChain(Long id, Long nodeId, Long chainId, int posInChain) {
         this.id = id;

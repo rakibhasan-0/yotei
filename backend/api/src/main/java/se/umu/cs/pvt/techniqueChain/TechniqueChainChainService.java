@@ -4,12 +4,16 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * The servise class for TechniqueChainChain
+ * @author Team Durian
+ * @date 2024-05-29
+ * @version 1.0
+ */
 @Service
 public class TechniqueChainChainService {
-    
     
     private TechniqueChainChainRepository chainRepository;
 

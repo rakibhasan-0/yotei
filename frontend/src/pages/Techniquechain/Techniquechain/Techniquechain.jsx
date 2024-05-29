@@ -1,8 +1,6 @@
 import { useState, useEffect, useContext } from "react"
-import styles from "./Techniquechain.module.css"
 import SearchBar from "../../../components/Common/SearchBar/SearchBar"
 import { useCookies } from "react-cookie"
-import { Link, useLocation, useNavigate} from "react-router-dom"
 import { AccountContext } from "../../../context"
 import Spinner from "../../../components/Common/Spinner/Spinner"
 import InfiniteScrollComponent from "../../../components/Common/List/InfiniteScrollComponent"
@@ -24,6 +22,9 @@ import { Plus } from "react-bootstrap-icons"
  */
 export default function Techniquechain() {
 
+	//TODOO: add some filtering
+	//TODOO: search does not work. 
+	//TODOO: cookies does not work, to save what tab you are on and filter options and stuff like that.
 	const sortOptions = [
 		{label: "Namn: A-Ö", cmp: (a, b) => {return a.name.localeCompare(b.name)}},
 		{label: "Namn: Ö-A", cmp: (a, b) => {return -a.name.localeCompare(b.name)}},
@@ -37,7 +38,6 @@ export default function Techniquechain() {
 	const [searchBarText, setSearchBarText] = useState(filterCookie ? filterCookie.searchText : "")
 	const [tags, setTags] = useState(filterCookie ? filterCookie.tags : [])
 	const [suggestedTags, setSuggestedTags] = useState([])
-	//const [showFilterBox, setShowFilterBox] = useState(false)
 	const [loading, setIsLoading] = useState(false)
 	const [sort, setSort] = useState(sortOptions[0])
 	const [visibleList, setVisibleList] = useState([])
@@ -47,10 +47,13 @@ export default function Techniquechain() {
 	}
 
 	useEffect(() => {
+		//setCookie dummy data
+		setCookie(cookieID, { belts: [], kihon: false, tags: tags, searchText: searchBarText }, { path: "/" })
 		getChains()
 	}, [])
 
 	const getChains = async () => {
+
 		const requestOptions = {
 			method: "GET",
 			headers: { "Content-type": "application/json", "token": context.token }

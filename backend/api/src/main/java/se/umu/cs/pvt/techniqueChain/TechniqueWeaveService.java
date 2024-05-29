@@ -4,13 +4,17 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The service for the TechniqueChainWeave.
+ * @author Team Durian
+ * @date 2024-05-29
+ * @version 1.0
+ */
 @Service
 public class TechniqueWeaveService {
 
     @Autowired
     private TechniqueChainWeaveRepository weaveRepository;
-
-
 
     public List<TechniqueChainWeave> getAllTechniqueWeaves() {
         return weaveRepository.findAll();

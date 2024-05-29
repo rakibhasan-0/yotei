@@ -11,6 +11,8 @@ import java.io.Serializable;
  * Entity class for the node table.
  * This class represents nodes
  * @author Team Durian
+ * @date 2024-05-29
+ * @version 1.0
  */
 @Entity
 @Table(name = "node")
@@ -42,6 +44,7 @@ public class TechniqueChainNode implements Serializable {
     @Column(nullable = false, name = "participant")
     private int participant;
 
+    //TODOO: remove this from the table, it is never used but a massive job to remove it (the ManyToOne is the problem).
     @ManyToOne
     @JoinColumn(name = "in_chain")
     @JsonDeserialize(using = TechniqueChainChainDeserializer.class)
@@ -59,7 +62,9 @@ public class TechniqueChainNode implements Serializable {
      * @param description The description of the node.
      * @param technique The id of the technique the node uses.
      * @param attack If the node is a attack node or a defence node.
-     * @param partisipant what partisepant it is.
+     * @param participant what partisepant it is.
+     * @param outgoingEdges All the edges that starts in this node.
+     * @param inChain Not used (technical debt)
      */
     public TechniqueChainNode(Long id, TechniqueChainWeave parentWeave, String name, String description, int technique, Boolean attack, int participant, List<TechniqueChainEdges> outgoingEdges, TechniqueChainChain inChain) {
         this.id = id;
@@ -75,8 +80,7 @@ public class TechniqueChainNode implements Serializable {
     /**
      * Protected no-args constructor for JPA use only.
      */
-    protected TechniqueChainNode() {
-    }
+    protected TechniqueChainNode() {}
 
     public Long getId() {
         return id;

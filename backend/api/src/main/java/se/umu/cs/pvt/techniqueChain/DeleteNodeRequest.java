@@ -1,6 +1,11 @@
 package se.umu.cs.pvt.techniqueChain;
 
-
+/**
+ * Class for deleting nodes
+ * @author Team Durian
+ * @date 2024-05-29
+ * @version 1.0
+ */
 public class DeleteNodeRequest {
     
     private Long deleteNode;
@@ -9,13 +14,7 @@ public class DeleteNodeRequest {
     /**
      * Constructs a new node with all field values initialized.
      *
-     * @param id The identifier for the comment.
-     * @param parent_weave The identifier for the parent weave.
-     * @param name The name of the node.
-     * @param description The description of the node.
-     * @param technique The id of the technique the node uses.
-     * @param attack If the node is a attack node or a defence node.
-     * @param partisipant what partisepant it is.
+     * @param deletenode the node id to delete.
      */
     public DeleteNodeRequest(Long deleteNode) {
         this.deleteNode = deleteNode;

@@ -7,6 +7,12 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+/**
+ * Deserializer to parse the incoming data of the chainChain correctly.
+ * @author Team Durian
+ * @date 2024-05-29
+ * @version 1.0
+ */
 @Component
 public class TechniqueChainChainDeserializer extends JsonDeserializer<TechniqueChainChain> {
 

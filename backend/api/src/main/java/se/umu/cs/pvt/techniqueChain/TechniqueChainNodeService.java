@@ -4,6 +4,12 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.List;
 
+/**
+ * The servise class for the TechniqueChainNode.
+ * @author Team Durian
+ * @date 2024-05-29
+ * @version 1.0
+ */
 @Service
 public class TechniqueChainNodeService {
 
