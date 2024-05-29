@@ -27,7 +27,7 @@ jest.mock("react-router-dom", () => ({
 
 jest.mock("../../../utils", () => ({
 	...jest.requireActual("../../../utils"),
-	canEditGroups: jest.fn().mockReturnValue(true),
+	canEditSessionsAndGroups: jest.fn().mockReturnValue(true),
 }))
   
 
