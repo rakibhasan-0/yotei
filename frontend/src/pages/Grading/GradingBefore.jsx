@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import React, { useState, useEffect, useContext } from "react"
-import { useNavigate, useParams, useLocation } from "react-router-dom"
+import { useNavigate, useParams, useLocation} from "react-router-dom"
 import Button from "../../components/Common/Button/Button"
 import styles from "./GradingBefore.module.css"
 import { AccountContext } from "../../context"
@@ -24,6 +24,7 @@ import EditableInputTextField from "../../components/Common/EditableInputTextFie
 
 
 export default function GradingBefore() {
+
 
 	const location = useLocation()
 	const navigate = useNavigate()
@@ -142,6 +143,8 @@ export default function GradingBefore() {
 
 		return yyyy + "-" + mm + "-" + dd
 	}
+
+
 
 	/**
 	 * This effects called when you enter the page first time
@@ -269,10 +272,19 @@ export default function GradingBefore() {
 		}
 	}
 
+	window.onpopstate = () => {
+		if (gradingName == "") {
+			editGradingName(gradingId, "Gradering " + gradingId + " | " + getTodaysDate())
+		}
+	}
+
+	
+
 	/**
 	 * Effect that are used to navigate to the next step in the grading process
 	 */
 	useEffect(() => {
+		
 		if (redirect != false) {
 			try {
 				const exec = async () => {
@@ -295,6 +307,7 @@ export default function GradingBefore() {
 				}
 
 				exec()
+
 
 			} catch (error) {
 				console.error("Misslyckades skicka vidare till nästa steg i gradering:", error)
