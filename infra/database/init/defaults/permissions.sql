@@ -6,25 +6,25 @@
 --
 
 -- Admin
-INSERT INTO permission (permission_name, permission_desc) VALUES ('Admin-rättigheter', 'Admin rättigheter. Detsamma som att ha alla rättigheter på sidan.');
+INSERT INTO permission (permission_name, permission_desc) VALUES ('Adminrättigheter', 'Admin rättigheter. Detsamma som att ha alla rättigheter på sidan.');
 
 -- Beta access
-INSERT INTO permission (permission_name, permission_desc) VALUES ('Beta access', 'Ger användaren tillgång till funktioner som inte är fullt implementerat i systemet.')
+INSERT INTO permission (permission_name, permission_desc) VALUES ('Beta tillgång', 'Ger användaren tillgång till funktioner som inte är fullt implementerat i systemet.')
 
 -- Tillfällen (Session)
 INSERT INTO permission (permission_name, permission_desc) VALUES ('Hantera tillfällen för egna grupper', 'Tillåtelse att skapa, redigera och radera tillfällen för sina egna grupper.');
 INSERT INTO permission (permission_name, permission_desc) VALUES ('Hantera tillfällen för alla grupper', 'Tillåtelse att skapa, rediger och radera alla tillfällen, oberoende av grupp.');
 
 -- Grupper (Plan)
-INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa/redigera/radera egna grupper', 'Tillåtelse att skapa, redigera och radera sina egna grupper.');
-INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa/redigera/radera alla grupper', 'Tillåtelse att skapa grupper samt redigera och radera grupper som de kan nå.');
+INSERT INTO permission (permission_name, permission_desc) VALUES ('Hantera egna grupper', 'Tillåtelse att skapa, redigera och radera sina egna grupper.');
+INSERT INTO permission (permission_name, permission_desc) VALUES ('Hantera alla grupper', 'Tillåtelse att skapa, redigera och radera alla grupper.');
 
 -- Pass (Workout)
-INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa/redigera/radera egna pass', 'Tillåtelse att skapa, redigera och radera sina egna pass.');
-INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa/redigera/radera alla pass', 'Tillåtelse att skapa pass samt redigera och radera pass som de kan nå.');
+INSERT INTO permission (permission_name, permission_desc) VALUES ('Hantera egna pass', 'Tillåtelse att skapa, redigera och radera sina egna pass.');
+INSERT INTO permission (permission_name, permission_desc) VALUES ('Hantera alla pass', 'Tillåtelse att skapa, redigera och radera pass som de kan nå.');
 
 -- Tekniker och övningar (Activity)
-INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa/redigera/radera alla tekniker/övningar', 'Tillåtelse att skapa tekniker och övningar samt redigera och radera tekniker och övningar som de kan nå.');
+INSERT INTO permission (permission_name, permission_desc) VALUES ('Hantera alla tekniker/övningar', 'Tillåtelse att skapa tekniker och övningar samt redigera och radera tekniker och övningar som de kan nå.');
 
 -- Gradering (Grading)
 INSERT INTO permission (permission_name, permission_desc) VALUES ('Kan skapa en gradering', 'Tillåtelse att skapa graderingar samt redigera och radera graderingar som de kan nå.');
