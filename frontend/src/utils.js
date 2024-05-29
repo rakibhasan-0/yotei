@@ -12,6 +12,7 @@ import { toast } from "react-toastify"
  * 			2024-05-27  by Team Coconut: Tweaking numbers of toasts and disabled the progessbar on customers wishes
  * 										 every toast function no longer takes a second argument and uses the message sent as ID instead
  * 										 this automatically ensures that the same message is not displayed multiple times.
+ * 			2024-05-29	by Team Mango: Added BETA_ACCESS permission and relevant hasBetaAccess function.
  */
 
 /**
@@ -58,7 +59,7 @@ export function isAdminUser(context) {
 }
 
 /**
- * 
+ * hasBetaAccess() - check if a user has access to beta features.
  * @param {*} context AccountContext from user. 
  * @returns 
  */
