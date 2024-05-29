@@ -280,17 +280,12 @@ public class SessionController {
         }
 
         Plan plan = planRepository.getById(session.getPlan());
-        Long plan_owner = plan.getUserId();
+        Long planOwner = plan.getUserId();
 
-        if (userId == plan_owner) {
-            return true;
-        }
-
-
-        return false;
+        return userId == planOwner;
     }
     
-    private boolean isGroupOwner(String token, Long plan_id) {
+    private boolean isGroupOwner(String token, Long planId) {
         DecodedJWT jwt;
 
         try {
@@ -306,13 +301,9 @@ public class SessionController {
             return true;
         }
 
-        Plan plan = planRepository.getById(plan_id);
+        Plan plan = planRepository.getById(planId);
         Long plan_owner = plan.getUserId();
 
-        if (userId == plan_owner) {
-            return true;
-        }
-
-        return false;
+        return userId == plan_owner;
     }
 }
