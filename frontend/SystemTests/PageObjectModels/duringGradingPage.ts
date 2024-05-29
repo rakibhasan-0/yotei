@@ -185,7 +185,7 @@ export class DuringGradingPage {
      * (This is not tested, yet)
      */
     async moveToRandori() {
-        await this.page.getByRole('button', { name: 'Tekniker', exact: true }).click();
+        await this.page.getByRole('button', { name: 'Navigering', exact: true }).click();
         await this.page.getByRole('button', { name: 'YAKUSOKU GEIKO ELLER RANDORI' }).click();
     }
 
@@ -194,7 +194,7 @@ export class DuringGradingPage {
      * (This is not tested, yet)
      */
     async moveBackFromRandori() {
-        await this.page.getByRole('button', { name: 'Tekniker', exact: true }).click();
+        await this.page.getByRole('button', { name: 'Navigering', exact: true }).click();
         await this.page.getByRole('button', { name: 'Tillbaka till 5. Stryptag' }).click();
     }
 
@@ -212,7 +212,7 @@ export class DuringGradingPage {
      * Saves a grading so it will be set at a finished status.
      */
     async saveGrading() {
-        await this.page.getByRole('button', { name: 'Tekniker', exact: true }).click();
+        await this.page.getByRole('button', { name: 'Navigering', exact: true }).click();
         await this.page.getByRole('button', { name: 'Fortsätt till summering' }).click();
         await this.page.getByRole('button', { name: 'Spara och avsluta' }).click();
     }
