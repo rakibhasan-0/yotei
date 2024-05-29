@@ -33,7 +33,7 @@ import SavedActivityList from "../../SavedList/SavedListInfo/SavedListComponent"
  * @updated 20204-05-29 Kiwi, Updated props comment
  * Based on WorkoutFormComponent.jsx
  */
-export default function ListFormComponent({ callback, state, listCreateInfoDispatchProp = null }) {
+export default function ListFormComponent({ callback, state, listCreateInfoDispatchProp = null}) {
 	const { listCreateInfo, listCreateInfoDispatch } = useContext(ListCreateContext)
 	const [leaveActivityPickerPopup, setLeaveActivityPickerPopup] = useState(false)
 	const [validated, setValidated] = useState(false)
@@ -258,11 +258,13 @@ export default function ListFormComponent({ callback, state, listCreateInfoDispa
 				isOpen={listCreateInfo.popupState.isOpened}
 				setIsOpen={handlePopupClose}
 				title={getPopupTitle()}
+				scrollId="scrollable-list-content"
 			>
 				{listCreateInfo.popupState.types.activityPopup && <ActivityInfoPopUp />}
 				{listCreateInfo.popupState.types.chooseActivityPopup && (
 					<AddActivity
 						id="add-activity-popup"
+						
 						setShowActivityInfo={(activities) => {
 							listCreateInfoDispatch({
 								type: LIST_CREATE_TYPES.SET_ACTIVITIES_WITH_PARSING,
@@ -272,6 +274,8 @@ export default function ListFormComponent({ callback, state, listCreateInfoDispa
 								type: LIST_CREATE_TYPES.OPEN_ACTIVITY_POPUP,
 							})
 						}}
+						scrollId="scrollable-list-content"
+						
 					/>
 				)}
 				{listCreateInfo.popupState.types.editActivityPopup && <EditActivityPopup />}

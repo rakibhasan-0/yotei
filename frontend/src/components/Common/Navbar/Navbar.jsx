@@ -3,7 +3,7 @@ import Button from "../Button/Button"
 import { List as HamburgerIcon, X as CloseIcon , Hammer as AdminIcon, Person as UserIcon} from "react-bootstrap-icons"
 import styles from "./Navbar.module.css"
 import { useNavigate } from "react-router"
-import { canHandleGradings, isAdminUser } from "../../../utils"
+import { canHandleGradings, hasBetaAccess, isAdminUser } from "../../../utils"
 import { AccountContext } from "../../../context"
 
 /**
@@ -73,7 +73,7 @@ function Navbar({ testId }) {
 						<h1 className={styles.commonNavbarButton}>Tekniker & Övningar</h1>
 					</Button>
 
-					{(isAdminUser(context)) ?
+					{(isAdminUser(context) || hasBetaAccess(context)) ?
 						<Button width={"100%"} onClick={() => navigateAndClose("/techniquechain")}>
 							<h1 className={styles.commonNavbarButton}>Tekniktrådar</h1>
 						</Button>

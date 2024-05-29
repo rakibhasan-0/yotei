@@ -807,21 +807,55 @@ END;
 
 $$ LANGUAGE 'plpgsql';
 
-CREATE OR REPLACE FUNCTION protect_final_admin_role() RETURNS TRIGGER AS $$ 
+--
+-- This is a function used for making sure that there is always one admin present.
+-- In the current system however, the original admin user is sort of required due to the function above.
+-- Therefore, bring this back if the above function gets fixed. (Should probably change owner to first best admin
+-- rather than user_id 1)
+--
+--CREATE OR REPLACE FUNCTION protect_final_admin_role() RETURNS TRIGGER AS $$ 
+--BEGIN 
+--	IF OLD.role_id = admin_role_id()
+--	AND (
+--		SELECT
+--			COUNT(user_id)
+--		FROM
+--			user_table
+--		WHERE
+--			role_id = admin_role_id()
+--	) <= 1 THEN RAISE EXCEPTION 'cannot remove final admin';
+--
+--	END IF;
+--
+--	IF TG_OP = 'UPDATE' THEN RETURN NEW;
+--
+--	ELSE RETURN OLD;
+--
+--	END IF;
+--END;
+--$$ LANGUAGE 'plpgsql';
+--
+--CREATE TRIGGER protect_admin_role BEFORE DELETE OR
+--	UPDATE OF role_id ON user_table
+--	FOR EACH ROW EXECUTE PROCEDURE protect_final_admin_role();
+
+--
+-- This is a temporary function for protecting the original admin user. Read above for more info.
+-- It simply prevents anyone from deleting or changing the role of the original admin.
+--
+CREATE OR REPLACE FUNCTION protect_original_admin() RETURNS TRIGGER AS $$ 
 BEGIN 
-	IF OLD.role_id = admin_role_id()
-	AND (
-		SELECT
-			COUNT(user_id)
-		FROM
-			user_table
-		WHERE
-			role_id = admin_role_id()
-	) <= 1 THEN RAISE EXCEPTION 'cannot remove final admin';
+	IF
+		(OLD.user_id = 1
+		AND
+		(TG_OP = 'DELETE'
+		OR 
+		OLD.role_id != NEW.role_id))
+			THEN RAISE EXCEPTION 'cannot modify original admin';
 
-	END IF;
-
-	IF TG_OP = 'UPDATE' THEN RETURN NEW;
+	ELSEIF
+		TG_OP = 'UPDATE' 
+			THEN RETURN NEW;
 
 	ELSE RETURN OLD;
 
@@ -829,13 +863,12 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
-CREATE TRIGGER remove_user BEFORE DELETE ON user_table FOR EACH ROW
-EXECUTE PROCEDURE remove_user_references ();
+CREATE TRIGGER protect_original_admin_user BEFORE DELETE OR UPDATE ON user_table
+	FOR EACH ROW EXECUTE PROCEDURE protect_original_admin();
 
-CREATE TRIGGER protect_admin_role BEFORE DELETE
-OR
-UPDATE OF role_id ON user_table FOR EACH ROW
-EXECUTE PROCEDURE protect_final_admin_role ();
+CREATE TRIGGER remove_user BEFORE DELETE ON user_table 
+	FOR EACH ROW EXECUTE PROCEDURE remove_user_references();
+
 
 --
 -- Triggers for categories

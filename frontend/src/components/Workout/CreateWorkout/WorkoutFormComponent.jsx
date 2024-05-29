@@ -332,6 +332,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 				isOpen={workoutCreateInfo.popupState.isOpened}
 				setIsOpen={handlePopupClose}
 				title={getPopupTitle()}
+				scrollId = "scrollable-activity-content" 
 			>
 				{workoutCreateInfo.popupState.types.freeTextPopup && (
 					<ActivityInfoPopUp isFreeText={true} />
@@ -351,6 +352,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 								type: WORKOUT_CREATE_TYPES.OPEN_ACTIVITY_POPUP
 							})
 						}}
+						scrollId = "scrollable-activity-content" 
 					/>
 				)}
 				{workoutCreateInfo.popupState.types.editActivityPopup && 
