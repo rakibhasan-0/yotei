@@ -17,13 +17,15 @@ import {setError as setErrorToast} from "../../utils"
  * Props:
  *     id @type {number}  - Id of component
  *     exerciseId  @type {number} - Id of an exercise or technique that the uploaded media belongs to 
- *
+ *	   fetchMediaMetaToBeUplloaded @type {Function} Fetched meta data for upload media,
+	   fetchMediaFilesThatWasUploaded @type {Function} Fetchh media that was uploaded.
  * Example usage:
  *     <UploadMedia id={11} exerciseId={current_technique}/>
  *
  * @author Team Dragon (Group 3)
  * @version 1.0
  * @since 20XX-XX-XX
+ * @updated 2024-05-29 Kiwi, Updated commetn props.
  */
 
 function UploadMedia({id, exerciseId, fetchMediaMetaToBeUploaded, fetchMediaFilesThatWasUploaded}) {
