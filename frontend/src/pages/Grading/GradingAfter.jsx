@@ -230,8 +230,8 @@ export default function GradingAfter() {
     
 				<div className={styles.scrollableContainer}>
 					{fetchedResult.examineeResults && fetchedResult.examineeResults.map((examinee) => {
-						const totalTechniques = examinee.failedTechniques + examinee.passedTechniques;
-						const hasNullTechnique = totalTechniques < totalAmountOfTechniques;
+						const totalTechniques = examinee.failedTechniques + examinee.passedTechniques
+						const hasNullTechnique = totalTechniques < totalAmountOfTechniques
 						return (
 							<UserBoxGrading
 								key={examinee.examineeId}

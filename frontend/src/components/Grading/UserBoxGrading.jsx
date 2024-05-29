@@ -25,15 +25,15 @@ import styles from "../../pages/Grading/GradingAfterComp.module.css"
  */
 function getCommentNotification() {
 	return (
-			<div className={styles.outerCircle}>
-				<div className={styles.innerCircle}>
-					<p>!</p>
-				</div>
+		<div className={styles.outerCircle}>
+			<div className={styles.innerCircle}>
+				<p>!</p>
 			</div>
-		)
+		</div>
+	)
 }
 
-const UserBoxGrading = ({ id, name, passedTechniques, totalAmountOfTechniques, hasNullTechnique}) => {
+const UserBoxGrading = ({ id, name, passedTechniques, totalAmountOfTechniques, hasNullTechnique }) => {
 	const truncateName = (name) => {
 		return name.length > 16 ? name.substring(0, 16) + "..." : name
 	}
@@ -47,7 +47,7 @@ const UserBoxGrading = ({ id, name, passedTechniques, totalAmountOfTechniques, h
 					</div>
 					{/* if the technique object has count attribute then we will not render ChevronDown sign */}
 					<div className={styles["technique-arrow-container"]}>
-						<span>{passedTechniques}/{totalAmountOfTechniques}</span> 
+						<span>{passedTechniques}/{totalAmountOfTechniques}</span>
 						{hasNullTechnique && getCommentNotification()}
 						<Link to={`/grading/${id}/4`}>
 
