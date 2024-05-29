@@ -186,11 +186,11 @@ export default function GroupPicker({ id, states, testFetchMethod, onToggle, onl
 				
 				<DropDown text={"Grupper"} id= {"gp-drop-down" + id} centered={true} autoClose={false}>
 						
-						{groups?.length > 0 ? groups.map((group) => (
-							<GroupRow key={group.id} selected={group.selected} group={group} onToggle={handleToggle} />
-						)) : <div className={styles.dropdownRow}>
-							<p className={styles.dropdownRowText}>Kunde inte hitta några grupper</p>
-						</div>}
+					{groups?.length > 0 ? groups.map((group) => (
+						<GroupRow key={group.id} selected={group.selected} group={group} onToggle={handleToggle} />
+					)) : <div className={styles.dropdownRow}>
+						<p className={styles.dropdownRowText}>Kunde inte hitta några grupper</p>
+					</div>}
 					
 				</DropDown>
 
