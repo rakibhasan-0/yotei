@@ -19,19 +19,21 @@ export class DuringGradingPage {
     async createGrading() {
         await this.page.goto('/grading/create');
         await this.page.getByRole('button', { name: 'KYU GULT BÄLTE' }).click();
+        await this.page.getByText('Lägg till ett namn på').click();
+        await this.page.locator('#edit-element').fill('Systest123');
         await this.page.getByPlaceholder('Lägg till ny deltagare').click();
         await this.page.getByPlaceholder('Lägg till ny deltagare').fill('TestPerson1');
         await this.page.getByPlaceholder('Lägg till ny deltagare').press('Enter');
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(500);
         await this.page.getByPlaceholder('Lägg till ny deltagare').fill('TestPerson2');
         await this.page.getByPlaceholder('Lägg till ny deltagare').press('Enter');
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(500);
         await this.page.getByPlaceholder('Lägg till ny deltagare').fill('TestPerson3');
         await this.page.getByPlaceholder('Lägg till ny deltagare').press('Enter');
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(500);
         await this.page.getByPlaceholder('Lägg till ny deltagare').fill('TestPerson4');
         await this.page.getByPlaceholder('Lägg till ny deltagare').press('Enter');
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(500);
         await this.page.getByRole('button', { name: 'Fortsätt' }).click();
         await this.page.getByRole('button', { name: 'Ja' }).click();
 
@@ -60,33 +62,35 @@ export class DuringGradingPage {
     }
 
     async setPassResultForExaminee(examinee: Examinee) {
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(500);
         await this.page.getByText(examinee.name, { exact: true }).first().click();
     }
 
     async setFailResultForExaminee(examinee: Examinee) {
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(500);
         await this.page.getByText(examinee.name, { exact: true }).first().click();
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(500);
         await this.page.getByText(examinee.name, { exact: true }).first().click();
     }
 
     async setDefaultResultForExaminee(examinee: Examinee) {
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(500);
         await this.page.getByText(examinee.name, { exact: true }).first().click();
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(500);
         await this.page.getByText(examinee.name, { exact: true }).first().click();
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(500);
         await this.page.getByText(examinee.name, { exact: true }).first().click();
     }
 
     async moveToNextTechnique() {
         await this.page.locator('#next_technique').getByRole('img').click();
+        await this.page.waitForTimeout(500);
 
     }
 
     async moveToPreviousTechnique() {
         await this.page.locator('#prev_technique').getByRole('img').click();
+        await this.page.waitForTimeout(500);
     }
 
     async moveToRandori() {
