@@ -27,10 +27,10 @@ describe("verify that", () => {
 		window.HTMLElement.prototype.scrollIntoView = jest.fn
 		const router = createMemoryRouter(
 			createRoutesFromElements( [
-                <Route key={"key1"} path="workout" element={<WorkoutIndex/>}/> , //The path is found in index.js.
+				<Route key={"key1"} path="workout" element={<WorkoutIndex/>}/> , //The path is found in index.js.
 			]
 			),
-			{initialEntries: [`/workout`]}
+			{initialEntries: ["/workout"]}
 		)
 
 		render ( //eslint-disable-next-line no-dupe-keys
@@ -55,7 +55,7 @@ describe("verify that", () => {
 		expect(screen.getByTestId("CreateWorkoutButton")).toBeInTheDocument()
 	})
 
-    test("someone with `edit own workouts` rights should see create button", async () => {
+	test("someone with `edit own workouts` rights should see create button", async () => {
 		await renderWithRouter([USER_PERMISSION_CODES.WORKOUT_OWN])
 
 		expect(screen.getByTestId("CreateWorkoutButton")).toBeInTheDocument()
