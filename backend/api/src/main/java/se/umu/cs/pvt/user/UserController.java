@@ -9,6 +9,7 @@ import se.umu.cs.pvt.permission.UserToPermissionRepository;
 import se.umu.cs.pvt.role.Role;
 import se.umu.cs.pvt.role.RoleRepository;
 
+import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.pbkdf2.SHA256Digest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -204,13 +205,31 @@ public class UserController {
         if(repository.findUserByUsernameIgnoreCase(user.getUsername()).isPresent()) {
             return new ResponseEntity<>("Användarnamnet används redan", HttpStatus.NOT_ACCEPTABLE);
         }
-
         try {
             User saved = repository.save(user);
             return new ResponseEntity<>(saved, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Kunde inte spara användare i databasen", HttpStatus.NOT_ACCEPTABLE);
         }
+    }
+
+    /**
+     * GENERATES USERS IN THE DATABASE, REMOVE LATER
+     * @return HTTP status.
+     */
+    @PostMapping("generate")
+    public Object hejhej(@RequestBody List<String> users) {
+        for (String u : users) {
+            try {
+            User u2 = new User(u, u, 1L);
+            User saved = repository.save(u2);
+            } catch (Exception e){
+                e.printStackTrace();
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
