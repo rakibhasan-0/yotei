@@ -179,13 +179,18 @@ export default function GroupPicker({ id, states, testFetchMethod, onToggle, onl
 	return(
 		checkID(id) ?
 			<div id = {id} className={styles.gp23_group_picker} >
+
 				<DropDown text={"Grupper"} id= {"gp-drop-down" + id} centered={true} autoClose={false}>
-					{
-						groups && groups.map((group) => (
+					
+						{groups?.length > 0 ? groups.map((group) => (
 							<GroupRow key={group.id} selected={group.selected} group={group} onToggle={handleToggle} />
-						))
-					}
+						)) : <div className={styles.dropdownRow}>
+							<p className={styles.dropdownRowText}>Kunde inte hitta några grupper</p>
+						</div>}
+					
 				</DropDown>
+
+
 			</div>
 			:
 			<div id = "error-load-group-picker" className={styles.gp23_failed_to_load}>
