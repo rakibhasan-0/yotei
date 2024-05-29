@@ -13,8 +13,8 @@ import { toast } from "react-toastify"
  * 										 every toast function no longer takes a second argument and uses the message sent as ID instead
  * 										 this automatically ensures that the same message is not displayed multiple times.
  * 			2024-05-28  by Team Mango: Separated technique and exercises permissions. Also updated permissions list and functions to include new permissions.
- *									   Groups and sessions are now combined).
- * 			2024-05-29	by Team Mango: Added BETA_ACCESS permission and relevant hasBetaAccess function.
+ *									   Groups and sessions are now combined). Removed technique and exercise own in checks because variable do not exist.
+ * 			2024-05-29	by Team Mango: Added BETA_ACCESS permission and relevant hasBetaAccess function.st.
  */
 
 /**
@@ -106,25 +106,23 @@ export function canDeleteComment(context, commentId) {
 /**
  * canCreateAndEditTechnique() - Check if user can create an technique.
  * @param {*} context Accountcontext from user. 
- * @returns true if user can create an technique.
+ * @returns true if user can create/edit an technique.
  */
 export function canCreateAndEditTechnique(context) {
 	if (!context.permissions) return false
-	return (context.permissions.includes(USER_PERMISSION_CODES.TECHNIQUE_OWN) ||
-			context.permissions.includes(USER_PERMISSION_CODES.TECHNIQUE_ALL))
+	return (context.permissions.includes(USER_PERMISSION_CODES.TECHNIQUE_ALL))
 }
 
 /**
  * canCreateAndEditExercise() - Check if user can create an exercise.
  * @param {*} context Accountcontext from user. 
- * @returns true if user can create an exercise.
+ * @returns true if user can create/edit an exercise.
  */
 export function canCreateAndEditExercise(context) {
 	if (!context.permissions) return false
-	return (context.permissions.includes(USER_PERMISSION_CODES.EXERCISE_OWN ||
-			context.permissions.includes(USER_PERMISSION_CODES.EXERCISE_ALL)
-	))
+	return (context.permissions.includes(USER_PERMISSION_CODES.EXERCISE_ALL))
 }
+
 /**
  * canHandleGradings() - Check if user can create a grading.
  * @param {*} context Accountcontext from user. 
