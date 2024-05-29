@@ -40,56 +40,74 @@ export class DuringGradingPage {
     }
 
     async addGroupComment(comment: Comment) {
-        await this.page.locator('#infoPanel i').click();
         await this.page.waitForTimeout(500);
         await this.page.locator('#TextareaTestId').fill(comment.content);
         await this.page.getByRole('button', { name: 'Lägg till' }).click();
+    }
+    async navigateToGroupComment(){
+        await this.page.locator('#infoPanel i').click();
+        await this.page.waitForTimeout(100);
     }
 
     async addExamineeComment(comment: Comment) {
-        await this.page.getByTestId(comment.examineeName + "systest").locator('i').click();
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(100);
         await this.page.locator('#TextareaTestId').fill(comment.content);
         await this.page.getByRole('button', { name: 'Lägg till' }).click();
+    }
+    async navigateToExamineeComment(comment: Comment){
+        await this.page.getByTestId(comment.examineeName + "systest").locator('i').click();
+        await this.page.waitForTimeout(100);
     }
     
     async addPairComment(comment: Comment) {
-        await this.page.getByTestId(comment.pairId).locator('i').click();
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(100);
         await this.page.locator('#TextareaTestId').fill(comment.content);
         await this.page.getByRole('button', { name: 'Lägg till' }).click();
     }
+    async navigateToPairComment(comment: Comment){
+        await this.page.getByTestId(comment.pairId).locator('i').click();
+        await this.page.waitForTimeout(100);
+    }
+    async closePairPopup(){
+        await this.page.locator('#pair-comment-popup').getByRole('button').first().click();
+    }
+    async closeExamineePopup(){
+        await this.page.locator('#examinee-comment-popup').getByRole('button').first().click();
+    }
+    async closeGroupPopup(){
+        await this.page.locator('#group-comment-popup').getByRole('button').first().click();
+    }
 
     async setPassResultForExaminee(examinee: Examinee) {
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(100);
         await this.page.getByText(examinee.name, { exact: true }).first().click();
     }
 
     async setFailResultForExaminee(examinee: Examinee) {
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(100);
         await this.page.getByText(examinee.name, { exact: true }).first().click();
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(100);
         await this.page.getByText(examinee.name, { exact: true }).first().click();
     }
 
     async setDefaultResultForExaminee(examinee: Examinee) {
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(100);
         await this.page.getByText(examinee.name, { exact: true }).first().click();
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(100);
         await this.page.getByText(examinee.name, { exact: true }).first().click();
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(100);
         await this.page.getByText(examinee.name, { exact: true }).first().click();
     }
 
     async moveToNextTechnique() {
         await this.page.locator('#next_technique').getByRole('img').click();
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(100);
 
     }
 
     async moveToPreviousTechnique() {
         await this.page.locator('#prev_technique').getByRole('img').click();
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(100);
     }
 
     async moveToRandori() {

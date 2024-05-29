@@ -119,18 +119,72 @@ test.describe('Systest for DuringGrading page.', () => {
     })
 
     test('4. Should add Examinee Comment and load it.', async ({ page }) => {
-        await duringGradingPage.addExamineeComment({ examineeName: "TestPerson1", content: "Systest Kommentar Personlig1" })
-        await duringGradingPage.addExamineeComment({ examineeName: "TestPerson2", content: "Systest Kommentar Personlig2" })
-        await duringGradingPage.addExamineeComment({ examineeName: "TestPerson3", content: "Systest Kommentar Personlig3" })
-        await duringGradingPage.addExamineeComment({ examineeName: "TestPerson4", content: "Systest Kommentar Personlig4" })
+        await duringGradingPage.navigateToExamineeComment({ examineeName: "TestPerson1" })
+        await duringGradingPage.addExamineeComment({content: "Systest Kommentar Personlig1" })
+
+        await duringGradingPage.navigateToExamineeComment({ examineeName: "TestPerson2" })
+        await duringGradingPage.addExamineeComment({content: "Systest Kommentar Personlig2" })
+
+        await duringGradingPage.navigateToExamineeComment({ examineeName: "TestPerson3" })
+        await duringGradingPage.addExamineeComment({content: "Systest Kommentar Personlig3" })
+        
+        await duringGradingPage.navigateToExamineeComment({ examineeName: "TestPerson4" })
+        await duringGradingPage.addExamineeComment({content: "Systest Kommentar Personlig4" })
+
+        await duringGradingPage.moveToNextTechnique()
+        await duringGradingPage.moveToPreviousTechnique()
+
+        await duringGradingPage.navigateToExamineeComment({ examineeName: "TestPerson1" })
+        const textAreaValue1 = await page.$eval('#TextareaTestId', (el) =>(el as HTMLTextAreaElement).value)
+        await expect(textAreaValue1).toBe("Systest Kommentar Personlig1")
+        await duringGradingPage.closeExamineePopup()
+
+        await duringGradingPage.navigateToExamineeComment({ examineeName: "TestPerson2" })
+        const textAreaValue2 = await page.$eval('#TextareaTestId', (el) => (el as HTMLTextAreaElement).value)
+        await expect(textAreaValue2).toBe("Systest Kommentar Personlig2")
+        await duringGradingPage.closeExamineePopup()
+
+        await duringGradingPage.navigateToExamineeComment({ examineeName: "TestPerson3" })
+        const textAreaValue3 = await page.$eval('#TextareaTestId', (el) =>(el as HTMLTextAreaElement).value)
+        await expect(textAreaValue3).toBe("Systest Kommentar Personlig3")
+        await duringGradingPage.closeExamineePopup()
+
+        await duringGradingPage.navigateToExamineeComment({ examineeName: "TestPerson4" })
+        const textAreaValue4 = await page.$eval('#TextareaTestId', (el) =>(el as HTMLTextAreaElement).value)
+        await expect(textAreaValue4).toBe("Systest Kommentar Personlig4")
+        await duringGradingPage.closeExamineePopup() 
     })
 
     test('5. Should add Pair Comment and load it.', async ({ page }) => {
-        await duringGradingPage.addPairComment({ pairId: "P1systest", content: "Systest Kommentar Par1" })
-        await duringGradingPage.addPairComment({ pairId: "P2systest", content: "Systest Kommentar Par2" })
+        await duringGradingPage.navigateToPairComment({pairId: "P1systest"})
+        await duringGradingPage.addPairComment({content: "Systest Kommentar Par1" })
+        await duringGradingPage.navigateToPairComment({pairId: "P2systest"})
+        await duringGradingPage.addPairComment({content: "Systest Kommentar Par2" })
+
+        await duringGradingPage.moveToNextTechnique()
+        await duringGradingPage.moveToPreviousTechnique()
+
+        await duringGradingPage.navigateToPairComment({pairId: "P1systest"})
+        const textAreaValue1 = await page.$eval('#TextareaTestId', (el) =>(el as HTMLTextAreaElement).value)
+        await expect(textAreaValue1).toBe("Systest Kommentar Par1")
+        await duringGradingPage.closePairPopup()
+
+        await duringGradingPage.navigateToPairComment({pairId: "P2systest"})
+        const textAreaValue2 = await page.$eval('#TextareaTestId', (el) => (el as HTMLTextAreaElement).value)
+        await expect(textAreaValue2).toBe("Systest Kommentar Par2")
+        await duringGradingPage.closePairPopup()
     })
 
     test('6. Should add Group Comment and load it.', async ({ page }) => {
-        await duringGradingPage.addGroupComment({ content: "Systest Kommentar Grupp" })
+        await duringGradingPage.navigateToGroupComment()
+        await duringGradingPage.addGroupComment({content: "Systest Kommentar grupp" })
+
+        await duringGradingPage.moveToNextTechnique()
+        await duringGradingPage.moveToPreviousTechnique()
+
+        await duringGradingPage.navigateToGroupComment()
+        const textAreaValue1 = await page.$eval('#TextareaTestId', (el) =>(el as HTMLTextAreaElement).value)
+        await expect(textAreaValue1).toBe("Systest Kommentar grupp")
+        await duringGradingPage.closeGroupPopup()
     })
 })
