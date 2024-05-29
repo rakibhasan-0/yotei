@@ -162,14 +162,14 @@ function SessionContainer ({ id, workout, session, plan}) {
 										<BeltBox id ={styles["sc23-session-container-beltbox"]} style={{borderTopLeftRadius:"4px"}}/>
 								}
 								{
-									checkPlan() && checkColor() ?<ChevronDown id={styles["sc23-dropdown"]} style={{ color: "black", zIndex: 1 }}
+									checkPlan() && checkColor() ?<ChevronDown id={styles["sc23-dropdown"]} style={{ color: "black"}}
 										className={[
 											styles["sc23-session-container-chevron-rotation-animation"],
 											styles["sc23-session-container-header-overlap"],
 											toggled ? styles["sc23-chevron-rotate"] : ""
 										].join(" ")} size={20}/>
 										:
-										<ChevronDown id={styles["sc23-dropdown"]} style={{ zIndex: 1 }}
+										<ChevronDown id={styles["sc23-dropdown"]}
 											className={[
 												styles["sc23-session-container-chevron-rotation-animation"],
 												styles["sc23-session-container-header-overlap"],
