@@ -15,9 +15,11 @@ import {HTTP_STATUS_CODES, setError as setErrorToast} from "../../utils"
  * @author UNKNOWN & Team Mango (Grupp 4) (2024-05-29)
  * 
  * Updates 2024-05-29: Added so group drop down shows text saying no groups when there is no groups to see.
+ * @updated 2024-05-29 Kiwi, Updated comment props
  * 
- * @param group Object that represents the group data. Name, id, and belts.
- * @param onToggle Function that runs when checkbox is clicked and 
+ * Props:
+ * 		group @type {Object} - Represents the group data. Name, id, and belts.
+ * 		onToggle @type {Function} Function that runs when checkbox is clicked and 
  *                 and toggles it.
  * 
  * @returns The html for th new group row.
