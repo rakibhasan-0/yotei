@@ -1,4 +1,4 @@
-import { useState, useContext, useCallback } from "react"
+import { useState, useContext, useCallback, useEffect } from "react"
 import { Form } from "react-bootstrap"
 import styles from "./WorkoutFormComponent.module.css"
 import InputTextField from "../../Common/InputTextField/InputTextField"
@@ -20,6 +20,7 @@ import AddActivity from "./AddActivity"
 import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
 import EditActivityPopup from "./EditActivityPopup"
 import { useParams } from "react-router"
+import { unstable_useBlocker as useBlocker } from "react-router"
 
 /**
  * Component for input-form to be used to create a new workout (WorkoutCreate.js)
@@ -47,7 +48,21 @@ export default function WorkoutFormComponent({ callback, state }) {
 	//const location = useLocation()
 	//const hasPreviousState = location.key !== "default"
 	const [showPopup, setShowPopup] = useState(false)
+	const [isBlocking, setIsBlocking] = useState(false)
+
 	const { workoutId } = useParams()
+	
+	const blocker = useBlocker(() => {
+		if (isBlocking) {
+			setShowPopup(true)
+			return true
+		}
+		return false
+	})
+
+	useEffect(() => {
+		setIsBlocking(true)
+	}, [])
 	
 	/**
 	 * Sets the title of the page.
@@ -74,6 +89,8 @@ export default function WorkoutFormComponent({ callback, state }) {
 	 * @param {*} event
 	 */
 	function handleSubmit(event) {
+		setIsBlocking(false)
+		setShowPopup(false)
 		const form = event.currentTarget
 		event.preventDefault()
 
@@ -291,7 +308,10 @@ export default function WorkoutFormComponent({ callback, state }) {
 							id = "confirm-pop-up-go-back"
 							showPopup={showPopup}
 							setShowPopup={setShowPopup}
-							onClick={confirmGoBack}
+							onClick={async () => {
+								confirmGoBack()
+								blocker.proceed()
+							}}
 							popupText="Är du säker på att du vill lämna sidan? Dina ändringar kommer inte att sparas."
 							confirmText="Ja"
 							backText="Avbryt"
