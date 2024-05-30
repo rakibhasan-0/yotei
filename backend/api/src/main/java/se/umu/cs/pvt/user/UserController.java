@@ -213,24 +213,6 @@ public class UserController {
     }
 
     /**
-     * GENERATES USERS IN THE DATABASE, REMOVE LATER
-     * @return HTTP status.
-     */
-    @PostMapping("generate")
-    public Object hejhej(@RequestBody List<String> users) {
-        for (String u : users) {
-            try {
-            User u2 = new User(u, u, 3L);
-            User saved = repository.save(u2);
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    /**
      * (GET) Gets the Username by an id. User ID must be greater than or equal to zero.
      * @param id The ID of the user to get the username for.
      * @return BAD_REQUEST if userId is null or less than zero.
