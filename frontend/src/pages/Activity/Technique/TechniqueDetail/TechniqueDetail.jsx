@@ -41,6 +41,7 @@ import ActivityDelete from "../../../../components/Activity/ActivityDelete/Activ
  * @since 2024-04-25
  * 
  * @update 2024-05-21: changed check for user premission to edit technique to the new check.
+ * @update 2024-05-30: removed the review button for users without correct permission.
  */
 function TechniqueDetail({ id }) {
 
@@ -196,7 +197,7 @@ function TechniqueDetail({ id }) {
 		
 				<Gallery id={techniqueId} />
 				{getReviewContainer(showRPopup, setRShowPopup, techniqueId)}
-				{getButtons(navigate, hasPreviousState, setRShowPopup)}
+				{getButtons(navigate, hasPreviousState, setRShowPopup, context)}
 			</div>
 		</>
 	)
@@ -206,7 +207,7 @@ function getReviewContainer(showRPopup, setRShowPopup, techniqueId){
 	return (<Review isOpen={showRPopup} setIsOpen={setRShowPopup} technique_id={techniqueId}/>)
 }
 
-function getButtons(navigate, hasPreviousState, setRShowPopup) {
+function getButtons(navigate, hasPreviousState, setRShowPopup, context) {
 
 	const handleNavigation = () => {
 		if(hasPreviousState) {
@@ -224,11 +225,13 @@ function getButtons(navigate, hasPreviousState, setRShowPopup) {
 					<p>Tillbaka</p>
 				</Button>
 			</div>
+			{(isAdminUser(context) || canCreateAndEditTechnique(context)) &&
 			<div className="d-flex col mb-3 mt-3 justify-content-end">
 				<Button onClick={() => setRShowPopup(true)} outlined={false}>
 					<p>Utvärdering</p>
 				</Button>
 			</div>
+			}
 		</div>
 	)
 }
