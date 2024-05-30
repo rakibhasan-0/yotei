@@ -15,7 +15,7 @@ import TechniquechainNode from "../../../components/Common/TechniquechainCard/Te
 export default function TechniquechainCreate() {
 
 	//TODOO: add Taggs visability i.e the same stuff that a pass have.
-	//TODOO: add error checks so that the name techniqueWeave and chains arent empty.
+	//TODOO: add error checks so that the name techniqueWeave and chains arent empty. and display them, name weave and atleast one node in the weave is manditory.
 	//TODOO: add functionality to remove a chosen node from the weave.
 	//TODOO: add functionality to se the technique and description of the nodes before you choose it.
 	//TODOO: add a popup window to make sure that the user whant to quit before saving.
@@ -155,6 +155,10 @@ export default function TechniquechainCreate() {
 	}
 
 	const handleSave = async () => {
+
+		if(name.length === 0 || !group || chosenNodes.length === 0) {
+			return
+		}
 
 		const requestOptions = {
 			method: "POST",
