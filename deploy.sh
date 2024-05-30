@@ -43,6 +43,7 @@ else
                 case $yn in 
                     [yY] ) 
                         docker volume ls | grep "pgdata" | rev | cut -d' ' -f1 | rev | xargs docker volume rm &> /dev/null
+			docker volume ls | grep "media" | rev | cut -d' ' -f1 | rev | xargs docker volume rm &> /dev/null
                         break;;
                     [nN] )
                         break;;
