@@ -4,7 +4,7 @@ import styles from "./TechniqueInfoPanel.module.css"
 import Popup from "../../Common/Popup/Popup"
 import Button from "../../Common/Button/Button"
 import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
-import { setError as setErrorToast } from "../../../utils"
+import { HTTP_STATUS_CODES, setError as setErrorToast } from "../../../utils"
 import { AccountContext } from "../../../context"
 import { useParams } from "react-router-dom"
 
@@ -183,7 +183,7 @@ export default function TechniqueInfoPanel({
 				headers: { "token": token }
 			})
 
-			if (response.status === 404) {
+			if (response.status === HTTP_STATUS_CODES.NOT_FOUND) {
 				setCommentText("")
 				setInitialCommentText("")
 				setExistingComment(false)
