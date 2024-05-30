@@ -4,7 +4,7 @@ import BeltButton from "../../components/Common/Button/BeltButton"
 import style from "./GradingCreate.module.css"
 import Spinner from "../../components/Common/Spinner/Spinner"
 import { AccountContext } from "../../context"
-import {canHandleGradings, isAdminUser, setError as setErrorToast} from "../../utils"
+import {HTTP_STATUS_CODES, canHandleGradings, isAdminUser, setError as setErrorToast} from "../../utils"
 
 /**
  * The grading create page.
@@ -128,7 +128,7 @@ export default function GradingCreate() {
 		const fetchData = async () => {
 			try {
 				const response = await fetch("/api/examination/examinationprotocol/all", { headers: { "token": token } })
-				if (response.status === 404) {
+				if (response.status === HTTP_STATUS_CODES.NOT_FOUND) {
 					return
 				}
 				if (!response.ok) {
