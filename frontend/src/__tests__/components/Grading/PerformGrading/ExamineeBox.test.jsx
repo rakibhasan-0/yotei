@@ -1,7 +1,7 @@
 import {configure, screen, render, fireEvent, waitFor} from "@testing-library/react"
 import ExamineeBox from "../../../../components/Grading/PerformGrading/ExamineeBox.jsx"
 import "@testing-library/jest-dom"
-import React from "react"
+import React, { useState } from "react"
 
 configure({testIdAttribute: "id"})
 
@@ -13,6 +13,8 @@ configure({testIdAttribute: "id"})
  * @since 2024-05-23
  * @version 1.0
  */
+
+
 describe("ExamineeBox name testing", () => {
 	test("name rendering.", () => {
 		const testText = "Förnamn Efternamn"
@@ -22,22 +24,30 @@ describe("ExamineeBox name testing", () => {
 })
 
 describe("ExamineeBox onClick testing", () => {
+	const renderWithState = (ui, { initialState = false } = {}) => {
+		const Wrapper = ({ children }) => {
+			const [isApiCallInProgress, setIsApiCallInProgress] = useState(initialState)
+			return React.cloneElement(children, { isApiCallInProgress, setIsApiCallInProgress })
+		}
+		return render(ui, { wrapper: Wrapper })
+	}
+
 	test("ExamineeBox: function should run once on click", () => {
 		const handleClick = jest.fn()
-		render(<ExamineeBox id={"ExamineeBox"} examineeName={"testname"} onClick={handleClick}/>)
+		renderWithState(<ExamineeBox id={"ExamineeBox"} examineeName={"testname"} onClick={handleClick}/>)
 		fireEvent.click(screen.getByTestId("ExamineeName"))
 		expect(handleClick).toHaveBeenCalledTimes(1)
 	})
 
 	test("ExamineeBox: intial color should be white", () => {
-		render(<ExamineeBox id="ExamineeBox" examineeName="testname"/>)
+		renderWithState(<ExamineeBox id="ExamineeBox" examineeName="testname"/>)
 		const examineeBox = screen.getByTestId("ExamineeBox")
 		expect(examineeBox).toHaveStyle({ backgroundColor: "white" })
 	})
 
 	test("ExamineeBox: clicked should swap colors to lightgreen", () => {
 		const handleClick = jest.fn()
-		render(<ExamineeBox id="ExamineeBox" examineeName="testname" onClick={handleClick} />)
+		renderWithState(<ExamineeBox id="ExamineeBox" examineeName="testname" onClick={handleClick} />)
 		const examineeBox = screen.getByTestId("ExamineeBox")
 		fireEvent.click(screen.getByTestId("ExamineeName"))
 		expect(examineeBox).toHaveStyle({ backgroundColor: "lightgreen" })
@@ -45,7 +55,7 @@ describe("ExamineeBox onClick testing", () => {
 
 	test("ExamineeBox: clicked twice should swap colors to lightcoral", async () => {
 		const handleClick = jest.fn()
-		render(<ExamineeBox id="ExamineeBox" examineeName="testname" onClick={handleClick} />)
+		renderWithState(<ExamineeBox id="ExamineeBox" examineeName="testname" onClick={handleClick}/>)
 		const examineeBox = screen.getByTestId("ExamineeBox")
 		fireEvent.click(screen.getByTestId("ExamineeName"))
 
@@ -58,7 +68,7 @@ describe("ExamineeBox onClick testing", () => {
 	})
 
 	test("ExamineeBox: should have a comment button", () => {
-		render(<ExamineeBox id="ExamineeBox" examineeName="testname"/>)
+		renderWithState(<ExamineeBox id="ExamineeBox" examineeName="testname" />)
 		const examineeCommentButton = screen.getByTestId("examinee-comment-button")
 		expect(examineeCommentButton).toBeInTheDocument()
 	})
