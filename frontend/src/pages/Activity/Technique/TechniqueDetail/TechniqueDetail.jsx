@@ -209,6 +209,8 @@ function getReviewContainer(showRPopup, setRShowPopup, techniqueId){
 
 function getButtons(navigate, hasPreviousState, setRShowPopup) {
 
+	const context = useContext(AccountContext)
+
 	const handleNavigation = () => {
 		if(hasPreviousState) {
 			navigate(-1)
