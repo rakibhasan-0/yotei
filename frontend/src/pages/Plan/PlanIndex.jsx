@@ -86,7 +86,7 @@ export default function PlanIndex() {
 				//Filter out only my groups.
 				let myGroups = groups?.filter(group => group.userId === user.userId)
 				//Filter out the selected groups from myGroups. (Basically we have removed the other selected groups now.)
-				let mySelectedGroups = myGroups.filter(group => selectedPlans.includes(group.id))?.map(g => g.id)
+				let mySelectedGroups = myGroups?.filter(group => selectedPlans.includes(group.id))?.map(g => g.id)
 				//(The map part just extracts the id to get an array of ids.)
 
 				if (mySelectedGroups && mySelectedGroups.length === 0) {
