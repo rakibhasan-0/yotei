@@ -181,7 +181,6 @@ export default function GradingDeviations() {
 				return
 			}
 			const json = await response.json()
-			console.log(json)
 			for (let i = 0; i < json.length; i++) {
 				const examinee1 = json[i]["examinee_1"]
 				const examinee2 = json[i]["examinee_2"]
@@ -325,7 +324,6 @@ export default function GradingDeviations() {
 		const pdfBlob = await fetchPdf()
 		if (pdfBlob) {
 			const url = window.URL.createObjectURL(pdfBlob)
-			console.log("URL created:", url)
 			const link = document.createElement("a")
 			link.href = url
 			link.setAttribute("download", "Gradering_" + name + ".pdf")
