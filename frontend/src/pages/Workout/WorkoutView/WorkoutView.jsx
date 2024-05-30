@@ -31,6 +31,7 @@ import ConfirmPopup from "../../../components/Common/ConfirmPopup/ConfirmPopup"
  * @updated 2024-05-03 Team Kiwi, fixed navigation from other websites
  * @updated 2024-05-08 Team Mango, fixed navigation bug connecting planIndex and workoutIndex
  * @updated 2024-05-22 Team Mango, updated permission check and removed unnecessary variable.
+ * @updated 2024-05-30 Team Mango, fixed a bug with review button still showing even without permission.
  *
  * @version 1.7
  *
@@ -121,11 +122,13 @@ export default function WorkoutView({ id }) {
 						<p>Tillbaka</p>
 					</Button>
 				</div>
+				{(isAdminUser(context) || canEditWorkout(context, workoutData.author.user_id)) &&
 				<div className="d-flex col mb-3 mt-3 justify-content-end">
 					<Button onClick={() => setRShowPopup(true)} outlined={false}>
 						<p>Utvärdering</p>
 					</Button>
 				</div>
+				}
 			</div>
 		)
 	}
