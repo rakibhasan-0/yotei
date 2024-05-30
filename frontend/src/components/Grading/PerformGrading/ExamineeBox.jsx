@@ -47,6 +47,8 @@ export default function ExamineeBox({
 	techniqueName, 
 	onClick, 
 	status, 
+	isApiCallInProgress,
+	setIsApiCallInProgress
 }) {
 	const [showDiscardComment, setShowDiscardComment] = useState(false)
 	const [isAddingComment, setAddComment] = useState(false)
@@ -55,7 +57,7 @@ export default function ExamineeBox({
 	const [commentError, setCommentError] = useState("")
 	const [hasComment, setExistingComment] = useState(false)
 	const [commentId, setCommentId] = useState(null)
-	const [isApiCallInProgress, setIsApiCallInProgress] = useState(false)
+	// const [isApiCallInProgress, setIsApiCallInProgress] = useState(false)
 
 	
 	const isErr = !(commentError == undefined || commentError == null || commentError == "")

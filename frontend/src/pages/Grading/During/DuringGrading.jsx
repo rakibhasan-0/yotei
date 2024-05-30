@@ -296,6 +296,8 @@ export default function DuringGrading() {
 												status={getExamineeStatus(item.leftId, results)}
 												examineeId={item.leftId}
 												techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
+												isApiCallInProgress={isSubmitting}
+												setIsApiCallInProgress={setIsSubmitting}
 											/>
 										}
 										rightExaminee={
@@ -306,6 +308,8 @@ export default function DuringGrading() {
 													status={getExamineeStatus(item.rightId, results)}
 													examineeId={item.rightId}
 													techniqueName={techniqueNameList[currentTechniqueStep].technique.text}
+													isApiCallInProgress={isSubmitting}
+													setIsApiCallInProgress={setIsSubmitting}
 												/>
 											) : null
 										}
@@ -509,8 +513,6 @@ export default function DuringGrading() {
 	 * @author Team Apelsin (2024-05-17) - c21ion
 	 */
 	async function addExamineeResult(examineeId, techniqueName, passStatus) {
-		if (isSubmitting) return
-		setIsSubmitting(true)
 
 		// Convert string for pass status to Boolean
 		const passStatusMap = {
@@ -537,7 +539,6 @@ export default function DuringGrading() {
 			// Update the state with the modified copy
 			setResults(tempRes)
 		}
-		setIsSubmitting(false)
 	}
 
 	/**
@@ -627,10 +628,10 @@ export default function DuringGrading() {
 				const id2 = examinee2 ? examinee2.examineeId : ""
 				pair_names_current_grading.push({ 
 					pairId: examineePair,
-					nameLeft: name1, 
-					nameRight: name2, 
-					leftId: id1, 
-					rightId: id2
+					nameLeft: name2, 
+					nameRight: name1, 
+					leftId: id2, 
+					rightId: id1
 				})
 			}
 		})
