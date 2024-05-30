@@ -313,11 +313,11 @@ export default function GradingAfter() {
 						</Button>
 
 						<PopupSmall id={"test-popup"} title={"Varning"} isOpen={showPopup} setIsOpen={setShowPopup} direction={saveAndExitGrading}>
-							<h2>Kontrollera att alla deltagare är tillagda.</h2>
-							<h2>Du kan ändra namn på skapade individer i efterhand.</h2>
-							<h2>Men det går <span style={{ fontWeight: "bold", fontSize: "18px" }}>inte</span> att redigera par i efterhand.</h2>
+							<h2>En eller flera deltagare saknar gradering på vissa övningar.</h2>
+							<h2>Du kan gå tillbaka och sätta gradering.</h2>
+							<h2>Men det går <span style={{ fontWeight: "bold", fontSize: "18px" }}>inte</span> att redigera gradering i efterhand.</h2>
 							<br></br>
-							<h2> När du är redo, fortsätt till graderingsprocessen.</h2>
+							<h2> När du är redo, avsluta graderingsprocessen.</h2>
 						</PopupSmall>
 						
 						{grading.step === 4 ? null : (
