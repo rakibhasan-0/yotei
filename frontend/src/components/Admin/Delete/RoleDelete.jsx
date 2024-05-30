@@ -7,7 +7,6 @@ import { useLocation, useNavigate } from "react-router"
 import { toast } from "react-toastify" 
 import RoleCard from "../../Common/RoleCard/RoleListItem"
 import { Spinner } from "react-bootstrap"
-import InfiniteScroll from "react-infinite-scroll-component"
 /**
  * RoleDelete is a popup page that allows a user with the admin role to delete
  * other roles and all their permissions. 
