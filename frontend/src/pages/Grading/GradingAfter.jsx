@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { AccountContext } from "../../context"
 import UserBoxGrading from "../../components/Grading/UserBoxGrading"
 import Button from "../../components/Common/Button/Button"
+import PopupSmall from "../../components/Common/Popup/PopupSmall"
 import styles from "./GradingBefore.module.css"
 import { Download } from "react-bootstrap-icons"
 import { useParams } from "react-router-dom"
@@ -17,6 +18,7 @@ import Spinner from "../../components/Common/Spinner/Spinner"
  * @since 2024-05-15
  */
 export default function GradingAfter() {
+	const [showPopup, setShowPopup] = useState(false)
 	const context = useContext(AccountContext)
 	const { token} = context
 	const { gradingId } = useParams()
@@ -34,6 +36,7 @@ export default function GradingAfter() {
 	const [ isExaminee, setIsExaminee ] = useState(false)
 	const [ downloadingPdf, setDownloadingPdf] = useState(false)
 
+	let hasNullTechnique = false
 	/**
 	 * Function to fetch the grading from the backend.
 	 * @returns {Promise} The grading data.
@@ -194,7 +197,7 @@ export default function GradingAfter() {
 		}
 		
 	}
-
+	
 	/**
 	 * Fetches the grading and belt data when the component mounts.
 	 */
@@ -261,7 +264,7 @@ export default function GradingAfter() {
 				<div className={styles.scrollableContainer}>
 					{fetchedResult.examineeResults && fetchedResult.examineeResults.map((examinee) => {
 						const totalTechniques = examinee.failedTechniques + examinee.passedTechniques
-						const hasNullTechnique = totalTechniques < totalAmountOfTechniques
+						hasNullTechnique = totalTechniques < totalAmountOfTechniques
 						return (
 							<UserBoxGrading
 								key={examinee.examineeId}
@@ -308,13 +311,31 @@ export default function GradingAfter() {
 						>
 							<p>Tillbaka</p>
 						</Button>
-						{(grading.step === 4) ? null : (
-							<Button
-								width="100%"
-								onClick={saveAndExitGrading}
-							>
-								<p>Spara och avsluta</p>
-							</Button>
+
+						<PopupSmall id={"test-popup"} title={"Varning"} isOpen={showPopup} setIsOpen={setShowPopup} direction={saveAndExitGrading}>
+							<h2>En eller flera deltagare saknar gradering på vissa övningar.</h2>
+							<h2>Du kan gå tillbaka och sätta gradering.</h2>
+							<h2>Men det går <span style={{ fontWeight: "bold", fontSize: "18px" }}>inte</span> att redigera gradering i efterhand.</h2>
+							<br></br>
+							<h2> När du är redo, avsluta graderingsprocessen.</h2>
+						</PopupSmall>
+						
+						{grading.step === 4 ? null : (
+							hasNullTechnique ? (
+								<Button
+									width="100%"
+									onClick={() => setShowPopup(true)}
+								>
+									<p>Spara och avsluta</p>
+								</Button>
+							) : (
+								<Button
+									width="100%"
+									onClick={saveAndExitGrading}
+								>
+									<p>Spara och avsluta</p>
+								</Button>
+							)
 						)}
 					</div>
 				</div>
