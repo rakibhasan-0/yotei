@@ -183,34 +183,30 @@ export default function Techniquechain_page() {
 	}
 
 	const findMarkedEdges = (edges, techniqueNodes) => {
-		console.log("edges")
-		console.log(edges)
-		console.log("nodes ")
-		console.log(techniqueNodes)
 		const nodeIds = new Set(techniqueNodes.map(node => node.id.toString()))
 		const filteredEdges = edges.filter(edge => 
 			nodeIds.has(edge.source) && nodeIds.has(edge.target)
 		)
-		console.log("filteredEdges")
-		console.log(filteredEdges)
 		const filteredEdgesInChain = removeEdgesNotInChain(techniqueNodes, filteredEdges)
-		console.log("filteredEdgesInChain")
-		console.log(filteredEdgesInChain)
 		setEdges(edges.map(edge => ({...edge, style:applyEdgeStyle(edge, filteredEdgesInChain)})))
 		setIsLoading(false)
 	}
 
 	const removeEdgesNotInChain = (nodes , edges) => {
-		const nodePositionMap = nodes.reduce((acc, node) => {
-			acc[node.id] = node.posInChain
-			return acc
+
+		const chainDict = {}
+		nodes.forEach(node => {
+			chainDict[node.id] = node.posInChain
 		})
-		const filteredEdgesInChain = edges.filter(edge => {
-			const sourcePos = nodePositionMap[edge.source]
-			const targetPos = nodePositionMap[edge.target]
-			return targetPos === sourcePos + 1
+
+		// Filter edges based on consecutive positions in the chain
+		const filteredEdges = edges.filter(edge => {
+			const sourcePos = chainDict[parseInt(edge.source, 10)]
+			const targetPos = chainDict[parseInt(edge.target, 10)]
+			return sourcePos !== undefined && targetPos !== undefined && targetPos === sourcePos + 1
 		})
-		return filteredEdgesInChain
+
+		return filteredEdges
 	}
 
 	const applyEdgeStyle = (edge, filteredEdges) => {
