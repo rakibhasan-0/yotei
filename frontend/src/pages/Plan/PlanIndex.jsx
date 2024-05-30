@@ -27,6 +27,7 @@ import { HTTP_STATUS_CODES, canCreateSessionsAndGroups, isAdminUser, setError } 
  *  		2024-05-28: Fixed a filtering bug for the onlyMyGroups selection and refactored the code a bit.
  * 						Also updated error handling to remove unnecessary error message.
  * 			2024-05-29: Added an id to the create session button to be able to test it.
+ * 			2024-05-30: Fixed a critical bug where the site crashes if you have no selected groups and refactored code slightly.
  */
 export default function PlanIndex() {
 	const { token } = useContext(AccountContext)
