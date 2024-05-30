@@ -54,19 +54,27 @@ const BeltRow = ({ belt, states, onToggle }) => {
 			</p>
 			<div className={styles.beltItem}>
 				{(child) ? <>
-					<BeltIcon id={`belt-child-${name}-icon`} belt={child} />
-					<CheckBox id={`belt-child-${name}`} onClick={toggleChildState} checked={childState} />
-					
+					<div className={styles.beltItemDuo}>					
+						<BeltIcon id={`belt-child-${name}-icon`} belt={child} />
+						<CheckBox id={`belt-child-${name}`} onClick={toggleChildState} checked={childState} />
+					</div>
+
 				</> : <></>}
 				{inverted ? <>
-					<BeltIcon id={`belt-inverted-${name}-icon`} belt={inverted} />
-					<CheckBox id={`belt-inverted-${name}`} onClick={toggleInvertedState} checked={invertedState}/>
+					<div className={styles.beltItemDuo}>
+						<BeltIcon id={`belt-inverted-${name}-icon`} belt={inverted} />
+						<CheckBox id={`belt-inverted-${name}`} onClick={toggleInvertedState} checked={invertedState}/>
+					</div>
+
 				</>
 					: <></>
 				}
 				{adult ? <>
-					<BeltIcon id={`belt-adult-${name}-icon`} belt={adult} />
-					<CheckBox id={`belt-adult-${name}`} onClick={toggleAdultState} checked={adultState} />
+					<div className={styles.beltItemDuo}>
+						<BeltIcon id={`belt-adult-${name}-icon`} belt={adult} />
+						<CheckBox id={`belt-adult-${name}`} onClick={toggleAdultState} checked={adultState} />
+					</div>
+
 				</>
 					: <div style={{width:"72px"}} />
 				}
@@ -186,7 +194,7 @@ export default function BeltPicker({ id, states, onToggle, centered, onClearBelt
 							<BeltRow onToggle={onToggle} states={states} key={index} belt={belt} />
 						))}
 						{onClearBelts &&
-							<div className={styles.beltRow} onClick={clearBelts}>
+							<div className={styles.beltRowClear} onClick={clearBelts}>
 								<p className={`${styles.beltTextSpecial} ${styles.centeredText}`}>Rensa valda bälten</p>
 							</div>
 						}

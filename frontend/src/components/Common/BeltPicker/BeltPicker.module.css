@@ -1,6 +1,16 @@
 .beltRow {
     border-top: solid 1px black;
-    height: 50px;
+    height: auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 3px 10px;
+    position: relative; /* Allow absolute positioning of children */
+}
+
+.beltRowClear {
+    border-top: solid 1px black;
+    height: 52px;
     width: 100%;
     display: flex;
     align-items: center;
@@ -20,11 +30,27 @@
     display: flex;
     gap: 10px;
     align-items: center;
-    flex-shrink: 0; /* Prevent shrinking */
     margin-left: auto;
+    flex-wrap: wrap;
+}   
+
+@media screen and (max-width: 402px){
+    .beltItem, .beltItemChild {
+        all:unset;
+        margin-left: auto;
+        flex-wrap: nowrap;
+    }   
 }
 
-
+.beltItemDuo {
+    display: flex;
+    height: 50px;
+    align-items: center;
+    gap: 2px;
+    justify-content: flex-end;
+    flex-direction: row-reverse;
+    margin-left: auto;
+}
 
 .beltTextSpecial {
     margin: 0;
