@@ -139,10 +139,10 @@ function EditGroup() {
 			return
 		}
 		setSuccessToast("Ändringar sparade.")
-		
+
 		//2 Lines below are needed for scroll to work again on the group page after removal of group
-		setConfirmationOpen(false); // Close the confirmation popup
-        document.body.style.overflow = "auto"; // Reset body overflow
+		setConfirmationOpen(false) // Close the confirmation popup
+		document.body.style.overflow = "auto" // Reset body overflow
 		navigate("/groups")
 	}
 
