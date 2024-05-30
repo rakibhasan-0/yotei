@@ -1,5 +1,9 @@
 #!/bin/bash
 
+HOST=localhost
+USERNAME=psql
+DATABASE=yotei
+
 OUTFILE="yotei_backup_$(date -I)" # Standard output file
 SAVELOCALLY=false                 # Don't save local copy by default
 
@@ -38,15 +42,6 @@ while getopts ':ho:l:' opt; do
     esac
 done
 
-HOST=localhost
-USERNAME=psql
-DATABASE=yotei
-
-
-SCRIPT_PATH=$(dirname "$0")         # Find path of this script
-OLD_PGPASS=$PGPASS                  # Save old path
-export PGPASSFILE=$SCRIPT_PATH/pgpass.conf # Remember to edit this!
-
 echo "Making backup in file '$OUTFILE' (in container)"
 docker exec -t yotei-psql-1 pg_dump -Fc -h "$HOST" -U "$USERNAME" "$DATABASE" -f "$OUTFILE"
 
@@ -55,5 +50,3 @@ then
     echo "Making backup in file '$LOCALFILE' (locally)"
     docker cp yotei-psql-1:$OUTFILE $LOCALFILE
 fi
-
-PGPASSFILE=$OLD_PGPASS          # Restore old path
