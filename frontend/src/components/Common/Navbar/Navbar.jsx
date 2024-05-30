@@ -86,14 +86,16 @@ function Navbar({ testId }) {
 						</Button>
 						:<></>
 					}
+					{ isAdminUser(context) ? 
+						<Button width={"min-content"} onClick={() => navigateAndClose("/admin")}>
+							<AdminIcon role="button" className={styles.commonNavbarIconAdmin}  onClick={() => navigateAndClose("/admin")} />
+						</Button>
+						:<></>
+					}
+
 				</div>
 
-				{ isAdminUser(context) ? 
-					<Button width={"min-content"} onClick={() => navigateAndClose("/admin")}>
-						<AdminIcon role="button" className={styles.commonNavbarIconAdmin}  onClick={() => navigateAndClose("/admin")} />
-					</Button>
-					:<></>
-				}
+				
 				
 			</div>
 			<div className={`${styles.boxShadowBackground} ${open ? styles.boxShadowBackgroundOpen : styles.boxShadowBackgroundClosed}`} onClick={() => {setOpen(false)}}/>
