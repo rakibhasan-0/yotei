@@ -43,12 +43,14 @@ public class SearchActivityListResponseBuilder {
         List<ActivityListEntry> entries = activityListEntryRepository.findAllByActivityListId(result.getId());
         int numOccurences = 0;
         for(ActivityListEntry entry : entries){
-            if(exerciseId != null){
-                if(entry.getExerciseId() == exerciseId){
+            if(exerciseId != null && entry.getExerciseId() != null){
+                System.out.println("exerciseId:" + exerciseId);
+                if(entry.getExerciseId() == exerciseId ){
                     numOccurences++;
                 }
             }
-            else if (techniqueId != null){
+            else if (techniqueId != null && entry.getTechniqueId() != null){
+                System.out.println("techniqueId:" + techniqueId);
                 if(entry.getTechniqueId() == techniqueId){
                     numOccurences++;
                 }
