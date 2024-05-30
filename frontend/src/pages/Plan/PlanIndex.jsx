@@ -96,7 +96,6 @@ export default function PlanIndex() {
 					mySelectedGroups = myGroups?.map(p => p.id)
 				}
 				planIds = mySelectedGroups?.join("&id=")
-				fetchSessionPath = "api/session/getByPlans?id=" + planIds
 				
 				//In case there are no selected planIds.
 				if (!planIds) {
@@ -104,6 +103,7 @@ export default function PlanIndex() {
 					setLoading(false)
 					return null
 				}
+				fetchSessionPath = "api/session/getByPlans?id=" + planIds
 			} else {
 				fetchSessionPath = "api/session/getByPlans?id=" + planIds
 			}
@@ -113,28 +113,20 @@ export default function PlanIndex() {
 			if (onlyMyGroups) {
 				//We still only want to fetch sessions connected to this user's groups.
 
-				//Filter out only my groups (array of group ids used)
-				if (!groups) {
-					//The groups have not been fetched yet. (Or there are no groups.)
-					setLoading(false)
-					return null//Nothing could be done.
-				}
-
 				//Filter out only my groups.
-				let myGroups = groups.filter(group => group.userId === user.userId)
-				
+				let myGroups = groups?.filter(group => group.userId === user.userId)
 
 				//Extract the group ids into an array and form the string.
 				let groupIds = myGroups?.map(g => g.id)
-				let groupIdsStr = groupIds?.join("&id=")
 				
-				if (groupIds?.length === 0) {
+				if (!groupIds || groupIds.length === 0) {
 					//There are no groups.
 					setSessions([]) //This removes all sessions, since none should be shown. Remove if you can create sessions without groups.
 					setLoading(false)
 					return null//Nothing could be done.
 				}
 
+				let groupIdsStr = groupIds?.join("&id=")
 				fetchSessionPath = "api/session/getByPlans?id=" + groupIdsStr
 			} //If false, then all sessions connected to all groups may be fetched (default).
 		}
@@ -189,10 +181,12 @@ export default function PlanIndex() {
 		setCookie("plan-filter", args, { path: "/" })
 		
 		
-		if (!selectedPlans) {
+		if (!selectedPlans || !groups) {
+			//The groups have not been fetched yet. (Or there are no groups or nothing is chosen.)
 			setLoading(false)
-			return
+			return //Nothing to be done.
 		}
+		
 		let planIds = selectedPlans.join("&id=")
 		//let fetchSessionPath = "api/session/all"
 		let fetchSessionPath = getFetchSessionPath(planIds)
