@@ -197,7 +197,7 @@ function TechniqueDetail({ id }) {
 		
 				<Gallery id={techniqueId} />
 				{getReviewContainer(showRPopup, setRShowPopup, techniqueId)}
-				{getButtons(navigate, hasPreviousState, setRShowPopup)}
+				{getButtons(navigate, hasPreviousState, setRShowPopup, context)}
 			</div>
 		</>
 	)
@@ -207,9 +207,7 @@ function getReviewContainer(showRPopup, setRShowPopup, techniqueId){
 	return (<Review isOpen={showRPopup} setIsOpen={setRShowPopup} technique_id={techniqueId}/>)
 }
 
-function getButtons(navigate, hasPreviousState, setRShowPopup) {
-
-	const context = useContext(AccountContext)
+function getButtons(navigate, hasPreviousState, setRShowPopup, context) {
 
 	const handleNavigation = () => {
 		if(hasPreviousState) {
