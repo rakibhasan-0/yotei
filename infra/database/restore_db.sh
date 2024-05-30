@@ -1,4 +1,6 @@
 #!/bin/bash
+# Author: Team Tomato (6)
+# Date: 2024-05-30
 
 HOST=localhost
 USERNAME=psql
