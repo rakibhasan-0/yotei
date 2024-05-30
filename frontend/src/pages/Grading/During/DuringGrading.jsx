@@ -9,7 +9,7 @@ import ExamineeBox from "../../../components/Grading/PerformGrading/ExamineeBox"
 import styles from "./DuringGrading.module.css"
 import { ArrowRight, ArrowLeft } from "react-bootstrap-icons"
 import { useParams, useNavigate } from "react-router-dom"
-import {canHandleGradings, isAdminUser, setError as setErrorToast} from "../../../utils" 
+import {HTTP_STATUS_CODES, canHandleGradings, isAdminUser, setError as setErrorToast} from "../../../utils" 
 
 import { AccountContext } from "../../../context"
 import Spinner from "../../../components/Common/Spinner/Spinner"
@@ -172,7 +172,7 @@ export default function DuringGrading() {
 		(async () => {
 			try {
 				const response = await fetch("/api/examination/examinee/all", {headers: {"token": token}})
-				if (response.status === 404) {
+				if (response.status === HTTP_STATUS_CODES.NOT_FOUND) {
 					return
 				}
 				if (!response.ok) {
@@ -686,7 +686,7 @@ export default function DuringGrading() {
      */
 	async function fetchGrading() {
 		const response = await fetch("/api/examination/all", {headers: {"token": token}})
-		if (response.status === 404) {
+		if (response.status === HTTP_STATUS_CODES.NOT_FOUND) {
 			return
 		}
 		if (!response.ok) {
@@ -705,7 +705,7 @@ export default function DuringGrading() {
      */
 	async function fetchProtocol(grading) {
 		const response = await fetch("/api/examination/examinationprotocol/all", { headers: { "token": token } })
-		if (response.status === 404) {
+		if (response.status === HTTP_STATUS_CODES.NOT_FOUND) {
 			return
 		}
 		if (!response.ok) {

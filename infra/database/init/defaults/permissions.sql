@@ -58,4 +58,5 @@ INSERT INTO role_to_permission (role_id, permission_id) VALUES (2, 9);
 -- User role
 INSERT INTO role_to_permission (role_id, permission_id) VALUES (3, 3);
 INSERT INTO role_to_permission (role_id, permission_id) VALUES (3, 5);
-INSERT INTO role_to_permission (role_id, permission_id) VALUES (3, 7);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (3, 8);
+INSERT INTO role_to_permission (role_id, permission_id) VALUES (3, 9);

@@ -8,13 +8,14 @@ import { useContext, useEffect, useState } from "react"
 import { AccountContext } from "../../context"
 import { useLocation } from "react-router-dom"
 import Divider from "../../components/Common/Divider/Divider"
-import {setError as setErrorToast, setSuccess as setSuccessToast, canEditSessionsAndGroups} from "../../utils"
+import {setError as setErrorToast, setSuccess as setSuccessToast, canEditSessionsAndGroups, HTTP_STATUS_CODES} from "../../utils"
 /**
  * A component for creating a session.
  * 
  * @author Chimera (dv21aag, c20lln), Team Durian (Group 3) (2024-04-23), Team Kiwi (2024-05-07), Team Mango (2024-05-28)
  * @since 2023-05-03
- * updated Team Mango (2024-05-28): changed so a user with permission to create session for own groups only can select own groups. 
+ * @update Team Mango (2024-05-28): Changed so a user with permission to create session for own groups only can select own groups. 
+ * @update Team Mango (2024-05-30): Updated error handling with error codes.
  */
 export default function SessionCreate({setIsBlocking}) {
 	const { state } = useLocation()
@@ -40,7 +41,10 @@ export default function SessionCreate({setIsBlocking}) {
 		(async () => {
 			try {
 				const response = await fetch("/api/plan/all", { headers: { token } })
-				if (response.status === 404) {
+				if (response.status === HTTP_STATUS_CODES.NO_CONTENT) {
+					return //There were no groups that could be fetched.
+				}
+				if (response.status === HTTP_STATUS_CODES.NOT_FOUND) {
 					return
 				}
 				if (!response.ok) {

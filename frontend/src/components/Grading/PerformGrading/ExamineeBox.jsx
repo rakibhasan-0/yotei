@@ -6,7 +6,7 @@ import Button from "../../Common/Button/Button"
 import ConfirmPopup from "../../Common/ConfirmPopup/ConfirmPopup"
 import { AccountContext } from "../../../context"
 import { useParams } from "react-router-dom"
-import { setError as setErrorToast } from "../../../utils"
+import { HTTP_STATUS_CODES, setError as setErrorToast } from "../../../utils"
 
 /**
  * This is a box containing the Examinee's name.
@@ -196,7 +196,7 @@ export default function ExamineeBox({
 				headers: { "token": token }
 			})
 
-			if (response.status === 404) {
+			if (response.status === HTTP_STATUS_CODES.NOT_FOUND) {
 				setCommentText("")
 				setInitialCommentText("")
 				setExistingComment(false)
