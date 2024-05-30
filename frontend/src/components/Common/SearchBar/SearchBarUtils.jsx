@@ -4,7 +4,7 @@
  *
  * @module SearchBarUtils
  * @category SearchBar
- * @author Kraken, Team Tomato (Group 6)
+ * @author Kraken, Team Tomato (Group 6), Team Durian
  */
 
 /**
@@ -90,7 +90,12 @@ export const listContentRequestArguments = {
  */
 
 export async function getTechniques(args, token, map, mapActions, callBack) {
-	let query = `/api/search/techniques?name=${args.text}&beltColors=${args.selectedBelts}&kihon=${args.kihon}&tags=${args.selectedTags}`
+	const url = new URL("/api/search/techniques", window.location.origin)
+	url.searchParams.append("name", args.text.trim())
+	url.searchParams.append("beltColors", args.selectedBelts)
+	url.searchParams.append("kihon", args.kihon)
+	url.searchParams.append("tags", args.selectedTags)
+	const query = url.toString()
 
 	// Checks if the query is cached and if so return it.
 	if (map && mapActions.lookup(query) !== undefined) {
@@ -99,7 +104,7 @@ export async function getTechniques(args, token, map, mapActions, callBack) {
 	}
 
 	// eslint-disable-next-line quotes
-	await fetch(query, {
+	await fetch(url, {
 		method: "GET",
 		headers: {
 			token: token,
@@ -133,7 +138,10 @@ export async function getTechniques(args, token, map, mapActions, callBack) {
  * @returns The results of the fetch. If the result is valid, it will simply return the data. If the result is invalid, it will return an object with an error property.
  */
 export async function getExercises(args, token, map, mapActions, callBack) {
-	let query = `/api/search/exercises?name=${args.text}&tags=${args.selectedTags}`
+	const url = new URL("/api/search/exercises", window.location.origin)
+	url.searchParams.append("name", args.text.trim())
+	url.searchParams.append("tags", args.selectedTags)
+	const query = url.toString()
 
 	// Checks if the query is cached and if so return it.
 	if (map && mapActions.lookup(query) !== undefined) {
@@ -141,7 +149,7 @@ export async function getExercises(args, token, map, mapActions, callBack) {
 		return
 	}
 
-	await fetch(query, {
+	await fetch(url, {
 		method: "GET",
 		headers: {
 			token: token,
@@ -174,8 +182,12 @@ export async function getExercises(args, token, map, mapActions, callBack) {
  * @returns The results of the fetch. If the result is valid, it will simply return the data. If the result is invalid, it will return an object with an error property.
  */
 export async function getLists(args, token, map, mapActions, callBack) {
-
-	let query = `/api/search/activitylists/?&name=${args.text}&isAuthor=${args.isAuthor}&hidden=${args.hidden}&isShared=${args.isShared}&techniqueId=${args.techniqueId}&exerciseId=${args.exerciseId}`
+	const url = new URL("/api/search/activitylists", window.location.origin)
+	url.searchParams.append("name", args.text.trim())
+	url.searchParams.append("isAuthor", args.isAuthor)
+	url.searchParams.append("hidden", args.hidden)
+	url.searchParams.append("isShared", args.isShared)
+	const query = url.toString()
 
 	// Checks if the query is cached and if so return it.
 	if (map && mapActions.lookup(query) !== undefined) {
@@ -183,7 +195,7 @@ export async function getLists(args, token, map, mapActions, callBack) {
 		return
 	}
 
-	await fetch(query, {
+	await fetch(url, {
 		method: "GET",
 		headers: {
 			token: token,
@@ -216,7 +228,8 @@ export async function getLists(args, token, map, mapActions, callBack) {
  * @returns The results of the fetch. If the result is valid, it will simply return the data. If the result is invalid, it will return an object with an error property.
  */
 export async function getListContent(args, token, map, mapActions, callBack) {
-	let query = `/api/activitylists/${args.id}`
+
+	const query = `/api/activitylists/${args.id}`
 
 	// Checks if the query is cached and if so return it.
 	if (map && mapActions.lookup(query) !== undefined) {
@@ -260,17 +273,23 @@ export async function getListContent(args, token, map, mapActions, callBack) {
  */
 
 export async function getWorkouts(args, token, map, mapActions, callBack) {
-	let query = `/api/search/workouts?name=${args.text}&from=${args.from}&to=${args.to}&favourite=${args.isFavorite}&tags=${args.selectedTags}`
+	const url = new URL("/api/search/workouts", window.location.origin)
+	url.searchParams.append("name", args.text.trim())
+	url.searchParams.append("from", args.from)
+	url.searchParams.append("to", args.to)
+	url.searchParams.append("favourite", args.isFavorite)
+	url.searchParams.append("tags", args.selectedTags)
 	if (args.id) {
-		query += `&id=${args.id}`
+		url.searchParams.append("id", args.id)
 	}
+	const query = url.toString()
 
 	if (map && mapActions.lookup(query) !== undefined) {
 		callBack(mapActions.lookup(query))
 		return
 	}
 
-	fetch(query, {
+	fetch(url, {
 		method: "GET",
 		headers: {
 			token: token,
