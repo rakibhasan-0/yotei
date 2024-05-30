@@ -685,7 +685,7 @@ export default function DuringGrading() {
      */
 	async function fetchGrading() {
 		const response = await fetch("/api/examination/all", {headers: {"token": token}})
-		if (response.status === 404) {
+		if (response.status === HTTP_STATUS_CODES.NOT_FOUND) {
 			return
 		}
 		if (!response.ok) {
@@ -704,7 +704,7 @@ export default function DuringGrading() {
      */
 	async function fetchProtocol(grading) {
 		const response = await fetch("/api/examination/examinationprotocol/all", { headers: { "token": token } })
-		if (response.status === 404) {
+		if (response.status === HTTP_STATUS_CODES.NOT_FOUND) {
 			return
 		}
 		if (!response.ok) {
