@@ -159,11 +159,9 @@ export default function GradingBefore() {
 					getGrading(token).catch(() => setErrorToast("Kunde inte hämta examinationen. Kontrollera din internetuppkoppling.")),
 				])
         
-        if(data.step === 3) {
+        if(data.step === 4) {
           navigate(`/grading/${gradingId}/3`)
         }
-        
-        console.log(data)
 
 				// set belt color
 				const [beltData] = await Promise.all([

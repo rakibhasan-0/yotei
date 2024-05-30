@@ -116,6 +116,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 	 * If no changes to the workout are made, then it navigates back.
 	 */
 	function handleGoBack() {
+		setIsBlocking(false)
 		setShowPopup(true)
 	}
 
@@ -241,10 +242,13 @@ export default function WorkoutFormComponent({ callback, state }) {
 									<h2>+ Fri text</h2>
 								</Button>
 								<Button
-									onClick={() =>
+									onClick={() => {
 										workoutCreateInfoDispatch({
 											type: WORKOUT_CREATE_TYPES.OPEN_CHOOSE_ACTIVITY_POPUP
 										})
+										setIsBlocking(false)
+									}
+										
 									}
 								>
 									<h2>+ Aktivitet</h2>
@@ -332,6 +336,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 				isOpen={workoutCreateInfo.popupState.isOpened}
 				setIsOpen={handlePopupClose}
 				title={getPopupTitle()}
+				scrollId = "scrollable-activity-content" 
 			>
 				{workoutCreateInfo.popupState.types.freeTextPopup && (
 					<ActivityInfoPopUp isFreeText={true} />
@@ -351,6 +356,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 								type: WORKOUT_CREATE_TYPES.OPEN_ACTIVITY_POPUP
 							})
 						}}
+						scrollId = "scrollable-activity-content" 
 					/>
 				)}
 				{workoutCreateInfo.popupState.types.editActivityPopup && 
@@ -366,6 +372,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 				backText="Avbryt"
 				zIndex={1000}
 				onClick={() => {
+					setIsBlocking(true)
 					workoutCreateInfoDispatch({
 						type: WORKOUT_CREATE_TYPES.CLEAR_ADDED_ACTIVITIES
 					})

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react"
 import { Trash, Pencil } from "react-bootstrap-icons"
 import { useNavigate } from "react-router"
 import { useNodesState } from "reactflow"
-import { isAdminUser, HTTP_STATUS_CODES } from "../../../utils"
+import { hasBetaAccess, isAdminUser, HTTP_STATUS_CODES } from "../../../utils.js"
 import { AccountContext } from "../../../context"
 import styles from "./Techniquechain_page.module.css"
 import Spinner from "../../../components/Common/Spinner/Spinner"
@@ -200,6 +200,11 @@ export default function Techniquechain_page() {
 		return { strokeWidth: 3, stroke: "black", strokeDasharray: 5 }
 	}
 
+	if(!isAdminUser(context) && !hasBetaAccess(context)){
+		window.location.replace("/404")
+		return null
+	}
+	
 	return (
 		<div style={{ display: "flex", flexDirection: "column" }}>
 			<title>Tekniktrådar</title>
