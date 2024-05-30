@@ -187,6 +187,8 @@ export async function getLists(args, token, map, mapActions, callBack) {
 	url.searchParams.append("isAuthor", args.isAuthor)
 	url.searchParams.append("hidden", args.hidden)
 	url.searchParams.append("isShared", args.isShared)
+	url.searchParams.append("techniqueId", args.techniqueId)
+	url.searchParams.append("exerciseId", args.exerciseId)
 	const query = url.toString()
 
 	// Checks if the query is cached and if so return it.
