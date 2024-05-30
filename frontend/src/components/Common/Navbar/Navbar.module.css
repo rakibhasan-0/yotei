@@ -136,5 +136,5 @@ button:has(.commonNavbarIconAdmin){
 
 .commonNavbar .closeAndUserIconsWrapper .commonNavbarUserIcon {
     padding-right: 0px;
-    width: 80%;
+    width: 48px;
 }
