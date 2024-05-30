@@ -26,11 +26,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 /**
- * As of (18/05-2022) this testclass only tests each individual return statement
+ * As of (2022-05-18) this testclass only tests each individual return statement
  * from each method in the
  * WorkoutController class.
  *
- * @author Phoenix (25-04-2023) & Team Tomato
+ * @author Phoenix (2023-04-25) & Team Tomato
  * @updated 2024-04-23 by Team Tomato
  */
 

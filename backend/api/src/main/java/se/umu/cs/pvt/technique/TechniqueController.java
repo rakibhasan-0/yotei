@@ -11,15 +11,15 @@ import se.umu.cs.pvt.media.*;
 
 import java.util.*;
 
-
 /**
  * Class to get, insert, update, and remove technique.
  * <p>
  * Original by:
  *
- * @author Quattro Formaggio, Carlskrove, Hawaii (Doc: Griffin ens19amd), Team Granatäpple (Grupp 1) (23-04-2024)
- * <p>
- * Updated by:
+ * @author Quattro Formaggio, Carlskrove, Hawaii (Doc: Griffin ens19amd), Team
+ *         Granatäpple (Grupp 1) (2024-04-23)
+ *         <p>
+ *         Updated by:
  * @author Medusa
  */
 @RestController
@@ -95,8 +95,10 @@ public class TechniqueController {
      * <p>
      * Returns 201 CREATED if the technique is posted.
      * Returns 409 CONFLICT if the given name is taken.
-     * Returns 409 NOT ACCEPTABLE if the given name is in a illegal format. (Too short or too long).
-     * Returns 500 INTERNAL SERVER ERROR if an error occurs during the database transaction.
+     * Returns 409 NOT ACCEPTABLE if the given name is in a illegal format. (Too
+     * short or too long).
+     * Returns 500 INTERNAL SERVER ERROR if an error occurs during the database
+     * transaction.
      *
      * @param toAdd the body in json format with correct attributes
      *              Example:
@@ -117,11 +119,13 @@ public class TechniqueController {
         toAdd.trimText();
 
         if (!techniqueRepository.findByNameIgnoreCase(toAdd.getName()).isEmpty()) {
-            return new ResponseEntity<>("Tekniken med namnet '" + toAdd.getName() + "' finns redan", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Tekniken med namnet '" + toAdd.getName() + "' finns redan",
+                    HttpStatus.CONFLICT);
         }
 
         if (!toAdd.validFormat()) {
-            return new ResponseEntity<>("Fel format: Namn på teknik saknas eller är för långt.", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("Fel format: Namn på teknik saknas eller är för långt.",
+                    HttpStatus.NOT_ACCEPTABLE);
         }
 
         try {
@@ -135,7 +139,8 @@ public class TechniqueController {
     /**
      * This method updates an existing technique to the database. Technique
      * must have a name.
-     * Omitting an attribute will null it. This is used to, for example, remove a tag.
+     * Omitting an attribute will null it. This is used to, for example, remove a
+     * tag.
      *
      * @param toUpdate the body in json format with correct attributes example:
      *                 {
@@ -168,16 +173,19 @@ public class TechniqueController {
                 Long existingID = technique.getId();
 
                 if (toUpdateName.equals(existingName) && !toUpdateID.equals(existingID)) {
-                    return new ResponseEntity<>("Tekniken med namnet '" + toUpdate.getName() + "' finns redan", HttpStatus.CONFLICT);
+                    return new ResponseEntity<>("Tekniken med namnet '" + toUpdate.getName() + "' finns redan",
+                            HttpStatus.CONFLICT);
                 }
             }
         }
 
         if (!toUpdate.validFormat()) {
-            return new ResponseEntity<>("Fel format: Namn på teknik saknas eller är för långt", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("Fel format: Namn på teknik saknas eller är för långt",
+                    HttpStatus.NOT_ACCEPTABLE);
         }
 
-        // A technique can't be updated if description is null, since its column is NOT NULL in the database.
+        // A technique can't be updated if description is null, since its column is NOT
+        // NULL in the database.
         if (toUpdate.getDescription() == null) {
             toUpdate.setDescription("");
         }
@@ -190,7 +198,8 @@ public class TechniqueController {
     }
 
     /**
-     * This method removes an existing technique in the database. If the technique does not exist in the database a
+     * This method removes an existing technique in the database. If the technique
+     * does not exist in the database a
      * BAD_REQUEST is returned.
      *
      * @param id The Id of the technique to remove.
@@ -203,23 +212,22 @@ public class TechniqueController {
             return new ResponseEntity<>("Ingen teknik med ID " + id + " hittades", HttpStatus.NOT_FOUND);
         }
 
-        //remove technique from any activity
+        // remove technique from any activity
         List<Activity> affectedActivities = findAssociatedActivities(id);
 
-        //delete affected activities
+        // delete affected activities
         activityRepository.deleteAll(affectedActivities);
 
         // remove any existing media
         List<Media> existingMedia = this.mediaRepository.findAllMediaById(id);
         this.mediaRepository.deleteAll(existingMedia);
 
-        //remove technique
+        // remove technique
         Technique toBeDeleted = technique.get();
         techniqueRepository.delete(toBeDeleted);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 
     private List<Activity> findAssociatedActivities(Long id) {
         List<Activity> activities = activityRepository.findAll();
@@ -232,7 +240,6 @@ public class TechniqueController {
         }
         return associatedActivities;
     }
-
 
     /**
      * A method that is used to retrieve reviews for a technique from the database.
@@ -263,10 +270,10 @@ public class TechniqueController {
      *
      * @param id The id for the review to delete
      * @return the id
-     * HttpStatus
-     * OK if technique with id exists
-     * BAD_REQUEST if id is not valid
-     * NOT FOUND if id is valid but not found
+     *         HttpStatus
+     *         OK if technique with id exists
+     *         BAD_REQUEST if id is not valid
+     *         NOT FOUND if id is valid but not found
      */
     @DeleteMapping("/reviews")
     public ResponseEntity<Long> deleteReview(@RequestParam("id") Long id) {
@@ -285,10 +292,10 @@ public class TechniqueController {
      *
      * @param review The review to update
      * @return the id
-     * HttpStatus
-     * OK if technique with id exists
-     * BAD_REQUEST if id is not valid
-     * NOT FOUND if id is valid but not found
+     *         HttpStatus
+     *         OK if technique with id exists
+     *         BAD_REQUEST if id is not valid
+     *         NOT FOUND if id is valid but not found
      */
     @PutMapping("/reviews")
     public ResponseEntity<Object> updateReview(@RequestBody TechniqueReview review) {

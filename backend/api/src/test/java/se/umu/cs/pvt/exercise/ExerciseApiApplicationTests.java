@@ -7,11 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +18,6 @@ import se.umu.cs.pvt.workout.ActivityRepository;
 import se.umu.cs.pvt.workout.WorkoutRepository;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 /**
  * A test-class for the Exercise-controller API-methods.
  *
- * @author Quattro Formaggio, Carlskrove (05-05-2022), Phoenix (25-04-2023)
+ * @author Quattro Formaggio, Carlskrove (2022-05-05), Phoenix (2023-04-25)
  */
 
 @ExtendWith(MockitoExtension.class)
@@ -55,6 +52,7 @@ class ExerciseApiApplicationTests {
     private Exercise ex2 = new Exercise(2L, "Test2", "Descripton2", 20);
 
     ArrayList<Exercise> exercises;
+
     @BeforeEach
     void init() {
         exercises = new ArrayList<>();
@@ -67,24 +65,21 @@ class ExerciseApiApplicationTests {
         assertThat(controller).isNotNull();
     }
 
-
     @Test
-    void shouldGiveBadRequestUpdatingANonExistingExercise(){
+    void shouldGiveBadRequestUpdatingANonExistingExercise() {
         Mockito.when(repository.findById(ex1.getId())).thenReturn(Optional.empty());
         controller.updateExercise(ex1);
         assertEquals(HttpStatus.BAD_REQUEST, controller.updateExercise(ex1).getStatusCode());
 
     }
 
-
     @Test
-    void shouldFailUpdatingANonExistingExercise(){
+    void shouldFailUpdatingANonExistingExercise() {
         Mockito.when(repository.findById(ex1.getId())).thenReturn(Optional.empty());
         controller.updateExercise(ex1);
         assertNotEquals(HttpStatus.OK, controller.updateExercise(ex1).getStatusCode());
 
     }
-
 
     @Test
     void shouldFailUpdateExerciseWithInvalidFormat() {
@@ -96,7 +91,6 @@ class ExerciseApiApplicationTests {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
-
     @Test
     void shouldSucceedUpdateExistingExercise() {
         Mockito.when(repository.findById(ex1.getId())).thenReturn(Optional.ofNullable(ex1));
@@ -104,14 +98,12 @@ class ExerciseApiApplicationTests {
         assertEquals(HttpStatus.OK, controller.updateExercise(ex1).getStatusCode());
     }
 
-
     @Test
-    void shouldFailWhenRemovingNonExistingExercise(){
+    void shouldFailWhenRemovingNonExistingExercise() {
         Mockito.when(repository.findById(ex1.getId())).thenReturn(Optional.empty());
 
         assertEquals(HttpStatus.BAD_REQUEST, controller.removeExercise(ex1.getId()).getStatusCode());
     }
-
 
     @Test
     void shouldSucceedWhenRemovingExistingExercise() {
@@ -120,7 +112,6 @@ class ExerciseApiApplicationTests {
         assertEquals(HttpStatus.OK, controller.removeExercise(ex1.getId()).getStatusCode());
 
     }
-
 
     @Test
     void shouldFailWhenExerciseHasInvalidNameAndDuration() {
@@ -131,15 +122,13 @@ class ExerciseApiApplicationTests {
                 controller.postExercise(exerciseWithInvalidDuration).getStatusCode());
     }
 
-
     @Test
-    void  shouldFailWhenExerciseHasNoName() {
+    void shouldFailWhenExerciseHasNoName() {
         Exercise exerciseWithNoName = new Exercise(1L, "", "No name", 32);
 
         Assertions.assertEquals(HttpStatus.BAD_REQUEST,
                 controller.postExercise(exerciseWithNoName).getStatusCode());
     }
-
 
     @Test
     void shouldFailWhenExerciseHasInvalidIdAndName() {
@@ -156,5 +145,5 @@ class ExerciseApiApplicationTests {
 
         Assertions.assertEquals(HttpStatus.BAD_REQUEST,
                 controller.updateExercise(invalid).getStatusCode());
-    }    
+    }
 }

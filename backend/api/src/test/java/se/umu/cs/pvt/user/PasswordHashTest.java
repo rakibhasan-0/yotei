@@ -6,7 +6,7 @@ import java.security.spec.InvalidKeySpecException;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * @author  Phoenix (25-04-2023)
+ * @author Phoenix (2023-04-25)
  */
 class PasswordHashTest {
 
