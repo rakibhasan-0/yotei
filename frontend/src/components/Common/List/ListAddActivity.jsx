@@ -180,7 +180,7 @@ function AddActivity({ id, setShowActivityInfo, scrollId="scrollable-content"  }
 	
 	useEffect(() => {
 		const activeTab = tabCookie["active-tab"]
-		if (activeTab) {
+		if (activeTab&&activeTab.length>0) {
 			setKey(activeTab)
 		} else {
 			setKey("technique")
