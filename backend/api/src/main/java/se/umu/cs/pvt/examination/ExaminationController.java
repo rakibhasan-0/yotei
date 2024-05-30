@@ -95,7 +95,7 @@ public class ExaminationController {
         // if(beltRepository.findById(grading.getBelt_id()).isEmpty()) {
         //     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         // }
-        System.out.println(grading.getCreat
+        System.out.println(grading.getCrea
         System.out.println(grading.getBeltId());
         Grading new_grading = gradingRepository.save(grading);
         return new ResponseEntity<>(new_grading, HttpStatus.OK);
