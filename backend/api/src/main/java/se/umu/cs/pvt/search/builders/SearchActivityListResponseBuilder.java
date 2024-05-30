@@ -13,8 +13,10 @@ import se.umu.cs.pvt.workout.UserShort;
 import se.umu.cs.pvt.workout.UserShortRepository;
 
 /**
- * This class builds a list of {@link ActivityListSearchResponse ActivityListSearchResponses}
- * based on the given list of {@link ActivityListDBResult ActivityListDBResults}.
+ * This class builds a list of {@link ActivityListSearchResponse
+ * ActivityListSearchResponses}
+ * based on the given list of {@link ActivityListDBResult
+ * ActivityListDBResults}.
  * 
  * @author Team Tomato
  * @since 2024-05-20, updated 2024-05-27
@@ -26,43 +28,41 @@ public class SearchActivityListResponseBuilder {
     private final UserShortRepository userShortRepository;
     private final ActivityListEntryRepository activityListEntryRepository;
 
-    public SearchActivityListResponseBuilder(List<ActivityListDBResult> activityListDBResultList, UserShortRepository userShortRepository, ActivityListEntryRepository activityListEntryRepository, Long exerciseId, Long techniqueId){
+    public SearchActivityListResponseBuilder(List<ActivityListDBResult> activityListDBResultList,
+            UserShortRepository userShortRepository, ActivityListEntryRepository activityListEntryRepository,
+            Long exerciseId, Long techniqueId) {
         this.exerciseId = exerciseId;
         this.techniqueId = techniqueId;
         this.activityListEntryRepository = activityListEntryRepository;
         this.activityListDBResultList = activityListDBResultList;
         this.userShortRepository = userShortRepository;
-    } 
-
+    }
 
     public List<ActivityListSearchResponse> build() {
-    List<ActivityListSearchResponse> response = new ArrayList<>();
-    activityListDBResultList.forEach(result -> {
-        Optional<UserShort> userShort = userShortRepository.findById(result.getAuthor());
-        UserShortDTO authorDTO = userShort.isPresent() ? new UserShortDTO(userShort.get()) : null;
-        List<ActivityListEntry> entries = activityListEntryRepository.findAllByActivityListId(result.getId());
-        int numOccurences = 0;
-        for(ActivityListEntry entry : entries){
-            if(exerciseId != null && entry.getExerciseId() != null){
-                System.out.println("exerciseId:" + exerciseId);
-                if(entry.getExerciseId() == exerciseId ){
-                    numOccurences++;
+        List<ActivityListSearchResponse> response = new ArrayList<>();
+        activityListDBResultList.forEach(result -> {
+            Optional<UserShort> userShort = userShortRepository.findById(result.getAuthor());
+            UserShortDTO authorDTO = userShort.isPresent() ? new UserShortDTO(userShort.get()) : null;
+            List<ActivityListEntry> entries = activityListEntryRepository.findAllByActivityListId(result.getId());
+            int numOccurences = 0;
+            for (ActivityListEntry entry : entries) {
+                if (exerciseId != null && entry.getExerciseId() != null) {
+                    if (entry.getExerciseId().equals(exerciseId)) {
+                        numOccurences++;
+                    }
+
+                } else if (techniqueId != null && entry.getTechniqueId() != null) {
+                    if (entry.getTechniqueId().equals(techniqueId)) {
+                        numOccurences++;
+                    }
                 }
             }
-            else if (techniqueId != null && entry.getTechniqueId() != null){
-                System.out.println("techniqueId:" + techniqueId);
-                if(entry.getTechniqueId() == techniqueId){
-                    numOccurences++;
-                }
-            }
-        }
 
-        response.add(new ActivityListSearchResponse(
-            result.getId(), authorDTO, result.getName(), result.getHidden(), result.getDate(), entries.size(), numOccurences
-        ));
-    });
-    return response;
-}
+            response.add(new ActivityListSearchResponse(
+                    result.getId(), authorDTO, result.getName(), result.getHidden(), result.getDate(), entries.size(),
+                    numOccurences));
+        });
+        return response;
+    }
 
-    
 }
