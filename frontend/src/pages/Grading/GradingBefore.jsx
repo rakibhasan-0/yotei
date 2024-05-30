@@ -705,7 +705,7 @@ export default function GradingBefore() {
 	/**
 	 * Get all examinees from a specific grading
 	 * @param {any} token 
-	 * @returns empty array if response is 404 otherwise return the json object
+	 * @returns empty array if response is 404 (NOT_FOUND), otherwise return the json object
 	 */
 	async function getAllPairOfExaminees(token) {
 		const requestOptions = {
