@@ -1,5 +1,9 @@
 #!/bin/bash
 
+HOST=localhost
+USERNAME=psql
+DATABASE=yotei
+
 INFILE=$1
 USELOCALFILE=false
 
@@ -40,14 +44,6 @@ while getopts ':hvl:' opt; do
     esac
 done
 
-HOST=localhost
-USERNAME=psql
-DATABASE=yotei
-
-SCRIPT_PATH=$(dirname "$0")         # Find path of this script
-OLD_PGPASS=$PGPASSFILE              # Save old path
-export PGPASSFILE=$SCRIPT_PATH/pgpass.conf # Remember to edit this file!
-
 if $USELOCALFILE
 then
     echo "Using local file '$INFILE'"
@@ -55,8 +51,6 @@ then
 else
     echo "Using file '$INFILE' in container"
 fi
-
-
 
 if 
     (docker exec -t yotei-psql-1 \
@@ -71,5 +65,3 @@ if
 then
     echo "Successfully restored from backup!"
 fi
-
-PGPASSFILE=$OLD_PGPASS          # Restore old path
