@@ -243,6 +243,7 @@ export default function GradingIndex() {
 						<div>
 							{currentGradings.map((grading, index) => (
 								<BeltButton
+									id={grading.title + index}
 									key={index}
 									width={"100%"}
 									
@@ -262,7 +263,7 @@ export default function GradingIndex() {
 											}}
 											size="24px"
 											style={ { color: "var(--black)", marginLeft:"auto" }}
-											id="close-icon"
+											id={"close-icon-" + grading.title + index}
 											data-testid="trash-icon"/>
 									
 									</div>

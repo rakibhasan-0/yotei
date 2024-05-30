@@ -782,6 +782,7 @@ export default function GradingBefore() {
                 {Boolean(!pair[0].isLocked) === true ? 
                 <div>
                   <Link
+                      id={"pair-icon"}
                       key={"close-icon-" + toString(pair[0].id) + toString(pair[1].id) + "-pairId-" + toString(pair[0].pairId)}
                       color="var(--red-primary)"
                       className={styles.link}
@@ -797,6 +798,7 @@ export default function GradingBefore() {
                     position="static"
 										color="var(--red-primary)"
                     size="24px"
+                    id="lock-icon"
                   />  
                 </div>}				
                 <EditableListItem

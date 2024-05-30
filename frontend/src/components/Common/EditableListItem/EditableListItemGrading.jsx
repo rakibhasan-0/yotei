@@ -156,6 +156,7 @@ export default function EditableListItem({ item, id, index, onRemove, onEdit, on
 											)}
 											{showLock && (
 												<LockFill
+													id="lock-icon"
 													size="24px" style={{ color: "var(--red-primary)" }}
 												/>
 											)}
