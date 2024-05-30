@@ -219,6 +219,8 @@ const WorkoutCreate = () => {
 			workoutCreateInfoDispatch({ type: WORKOUT_CREATE_TYPES.SET_INITIAL_STATE })
 		}
 
+		workoutCreateInfoDispatch({type: WORKOUT_CREATE_TYPES.CLOSE_POPUP})
+
 		setHasLoadedData(true)
 	}, [])
 

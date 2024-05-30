@@ -63,6 +63,9 @@ export default function WorkoutFormComponent({ callback, state }) {
 	})
 
 	useEffect(() => {
+		workoutCreateInfoDispatch({
+			type: WORKOUT_CREATE_TYPES.CLOSE_POPUP
+		})
 		setIsBlocking(true)
 	}, [])
 	
@@ -320,7 +323,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 							}}
 							popupText="Är du säker på att du vill lämna sidan? Dina ändringar kommer inte att sparas."
 							confirmText="Ja"
-							backText="Avbryt"
+							backText="Avbryt" 
 							zIndex={1000} 
 						/>
 						<Button type="submit" id="workout-create-back-button" onClick={handleSubmit}>
