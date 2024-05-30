@@ -46,7 +46,7 @@ function AddActivity({ id, setShowActivityInfo, scrollId="scrollable-content"  }
 	 */
 	const [map, mapActions] = useMap()
 	const [key, setKey] = useState("technique")
-	const [tabCookie, setCookie] = useCookies(["active-tab"])
+	const [tabCookie, setCookie] = useCookies(["active-list-tab"])
 
 
 	/**
@@ -82,7 +82,7 @@ function AddActivity({ id, setShowActivityInfo, scrollId="scrollable-content"  }
 	const [fetchedTech, setFetchedTech] = useState(false)
 	const [fetchedExer, setFetchedExer] = useState(false)
 
-	const [activeTab, setActiveTab] = useState("")
+	const [activeListTab, setActiveTab] = useState("")
 
 	/**
 	 * Keeps track of which activities that are checked/selected by the user.
@@ -142,8 +142,8 @@ function AddActivity({ id, setShowActivityInfo, scrollId="scrollable-content"  }
 
 
 	useEffect(() => {
-		setJSONSession("activeTab", activeTab)
-	},[activeTab])
+		setJSONSession("activeTab", activeListTab)
+	},[activeListTab])
 
 
 	useEffect(() => {
@@ -179,16 +179,14 @@ function AddActivity({ id, setShowActivityInfo, scrollId="scrollable-content"  }
 	useEffect(setExerciseList, [exercises, sort, searchExerText])
 	
 	useEffect(() => {
-		const activeTab = tabCookie["active-tab"]
-		if (activeTab&&activeTab.length>0) {
+		const activeTab = tabCookie["active-list-tab"]
+		if (activeTab) {
 			setKey(activeTab)
-		} else {
-			setKey("technique")
 		}
 	}, [])
 
 	useEffect(() => {
-		setCookie("active-tab", key, { path: "/" })
+		setCookie("active-list-tab", key, { path: "/" })
 	}, [key])
 
 	useEffect(() => {
