@@ -177,15 +177,16 @@ export default function GradingDeviations() {
 				return
 			})
 			if (response.status != HTTP_STATUS_CODES.OK) {
-				setError("Kunde inte hämta gruppens kommentarer. Felkod: " + response.status)
+				setError("Kunde inte hämta graderingens par. Felkod: " + response.status)
 				return
 			}
 			const json = await response.json()
+			console.log(json)
 			for (let i = 0; i < json.length; i++) {
 				const examinee1 = json[i]["examinee_1"]
 				const examinee2 = json[i]["examinee_2"]
 
-				if ((examinee1 && examinee1.id === userId) || (examinee2 && examinee2.id === userId)) {
+				if ((examinee1 && examinee1.id == userId) || (examinee2 && examinee2.id == userId)) {
 					const response2 = await fetch("/api/examination/comment/pair/all/" + json[i]["pair_id"], requestOptions)
 					
 					if (response2.status != HTTP_STATUS_CODES.OK) {
