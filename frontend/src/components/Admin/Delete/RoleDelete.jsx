@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from "react-router"
 import { toast } from "react-toastify" 
 import RoleCard from "../../Common/RoleCard/RoleListItem"
 import { Spinner } from "react-bootstrap"
-
+import InfiniteScroll from "react-infinite-scroll-component"
 /**
  * RoleDelete is a popup page that allows a user with the admin role to delete
  * other roles and all their permissions. 
@@ -35,6 +35,7 @@ import { Spinner } from "react-bootstrap"
  * @version 1.0
  * @since 2024-05-13
  * Updates: 2024-05-27: Changed text for when role is already used and someone tries to delete it.
+ * Updates: 2024-05-30: Added so scroll works when many users have a role.
  */
 export default function RoleDelete({ id, roleID, name, setIsOpen }) {
 	
@@ -119,12 +120,14 @@ export default function RoleDelete({ id, roleID, name, setIsOpen }) {
 	function constructUserList() {
 		return <>
 			<p>{users.length > 0 ? "Rollen används av följande användare:" : ""}</p>
-			<div className={"grip-striped"} style={{textAlign: "center", marginBottom: "1rem"}}>
+
+			<div className={`grip-striped ${styles.cardContainer}`}>
 				{users.map((user, index) => {
-					console.log(user.username)
+			
 					return <RoleCard item={user.username} key={user.userId} index={index} />})
 				}
 			</div>
+
 		</>
 	}
 
