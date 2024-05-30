@@ -64,15 +64,15 @@ export default function Statistics() {
 	*/	
 	const filterActivityByBelt = (activity, selectedBelts) => {
 		return activity.beltColors?.some(belt => {
-				return selectedBelts.some(selectedBelt => {
-					if (selectedBelt.child) {
-						return belt.is_child === true && selectedBelt.name === belt.belt_name
-					} else {
-						return belt.is_child === false && selectedBelt.name === belt.belt_name
-					}
-				})
+			return selectedBelts.some(selectedBelt => {
+				if (selectedBelt.child) {
+					return belt.is_child === true && selectedBelt.name === belt.belt_name
+				} else {
+					return belt.is_child === false && selectedBelt.name === belt.belt_name
+				}
 			})
-		}
+		})
+	}
 
 	/* 
 		Filters the group's activities based on the selected belts.
@@ -81,7 +81,7 @@ export default function Statistics() {
 	*/
 	const activities = selectedBelts.length > 0 ? 
 		groupActivities.filter(activity => filterActivityByBelt(activity, selectedBelts))
-    	: groupActivities
+		: groupActivities
 
 	// Stores the selected belts data. 	
 	function handleBeltToggle(isSelected, belt) {
