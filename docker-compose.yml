@@ -39,7 +39,7 @@ services:
     build: backend/api
     restart: always
     volumes:
-      - ./media:/media
+      - media:/media
     ports:
       - "8085:8085"
     links:
@@ -54,6 +54,7 @@ services:
 
 volumes:
   pgdata:
+  media:
     #                 O  O  O
     #                        O
     #                  ._, __|__.
