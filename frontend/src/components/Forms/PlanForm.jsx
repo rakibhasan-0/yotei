@@ -30,8 +30,9 @@ import InputTextField from "../Common/InputTextField/InputTextField"
  * 
  * @author Squad 2 Griffins, Squad 3 Durian
  * @since 2023-05-10, 2024-04-17
- * @update 2024-04-29, Team Kiwi : Added true for filtering basic techniques in BeltPicker 
+ * @update 2024-04-29, Team Kiwi - Added true for filtering basic techniques in BeltPicker 
  * @update 2024-05-29, Team Kiwi - Updated props comment
+ * @update 2024-05-30, Team Mango - Fixed a CSS bug due to a typo.
  */
 
 export default function PlanForm(props) {
@@ -80,7 +81,7 @@ export default function PlanForm(props) {
 						minDate={dateFormatter(today)}   
 					/>
 				</div>
-				<p className={styles.p_date-name}>Till:</p>
+				<p className={styles.p_date_name}>Till:</p>
 				<div className={styles.p_date_picker}>
 					<DatePicker 
 						id="end-date-picker"
