@@ -11,7 +11,7 @@ import TagInput from "../../../../components/Common/Tag/TagInput"
 import AddUserComponent from "../../../../components/Workout/CreateWorkout/AddUserComponent"
 import { AccountContext } from "../../../../context"
 import { useNavigate} from "react-router"
-import { HTTP_STATUS_CODES } from "../../../../utils"
+import { isAdminUser, hasBetaAccess, HTTP_STATUS_CODES } from "../../../../utils"
 import { useNodesState } from "reactflow"
 
 /**
@@ -140,6 +140,11 @@ const CreateWeave = () => {
 	const confirmGoBack = () => {
 		//Confirm to discard unsaved changes, navigate to techniquechain with correct tab
 		console.log("TODO")
+	}
+
+	if(!isAdminUser(context) && !hasBetaAccess(context)){
+		window.location.replace("/404")
+		return null
 	}
 
 	return (

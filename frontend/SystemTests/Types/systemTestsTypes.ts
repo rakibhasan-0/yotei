@@ -75,6 +75,33 @@ export type Workout = {
   tags?: string[]
 }
 
+export type Examinee = {
+  examineeId?: number,
+  name?: string
+}
+
+export type Pair = {
+  pairId?: number,
+  examinee1?: Examinee,
+  examinee2?: Examinee
+}
+
+export type Comment = {
+  techniqueName?: string,
+  examineeName?: string,
+  pairId?: string,
+  content?: string,
+}
+
+export type DuringGrading = {
+  gradingId?: number,
+  name?: string, 
+  examinees?: Examinee[],
+  pairs?: Pair[],
+  techniques?: string[],
+  passOrFail?: boolean[],
+}
+
 // Data related to creating a group.
 export type Group = {
   name?: string,

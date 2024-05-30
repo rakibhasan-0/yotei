@@ -274,6 +274,8 @@ export default function TechniqueEdit({ id }) {
 				label={"Kihon"}>
 			</CheckBox>
 
+			<div style={{margin: "2px"}}/>
+
 			<BeltPicker
 				id="techniqueEditBeltpicker"
 				onToggle={onToggle}

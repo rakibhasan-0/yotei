@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react"
 import { AccountContext } from "../../../context"
 import { Plus } from "react-bootstrap-icons"
-import { isAdminUser } from "../../../utils"
+import { hasBetaAccess, isAdminUser } from "../../../utils"
 import { HTTP_STATUS_CODES } from "../../../utils"
 import RoundButton from "../../../components/Common/RoundButton/RoundButton"
 import styles from "./TechniqueWeaveIndex.module.css"
@@ -73,7 +73,7 @@ const TechniquechainIndex = ()=> {
 					index={index}
 				/>
 			)}
-			{isAdminUser(context) && (
+			{(isAdminUser(context) || hasBetaAccess(context)) && (
 				<RoundButton id={"technique-add-button"} linkTo={"/techniquechain/techniqueweavecreate/"}>
 					<Plus className={styles["plus-icon"]} />
 				</RoundButton>
