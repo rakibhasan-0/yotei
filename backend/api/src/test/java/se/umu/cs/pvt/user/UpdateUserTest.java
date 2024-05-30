@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Test class for UPDATE-USER methods.
  *
- * @author Quattro Formaggio (Group 1), Phoenix (25-04-2023)
+ * @author Quattro Formaggio (Group 1), Phoenix (2023-04-25)
  * @author Team Mango (Grupp 4) - 2024-05-17
  */
 
@@ -49,7 +49,8 @@ public class UpdateUserTest {
     @BeforeEach
     void init() {
         user = new User();
-        userController = new UserController(userRepository, roleRepository, roleToPermissionRepository, userToPermissionRepository);
+        userController = new UserController(userRepository, roleRepository, roleToPermissionRepository,
+                userToPermissionRepository);
         map = new HashMap<>();
     }
 
@@ -71,13 +72,15 @@ public class UpdateUserTest {
             newUser.setUserId(42L);
 
             ResponseEntity<Object> response = userController.updateUsername(map);
-            // You should check if a user was found (HttpStatus) before doing the following...
+            // You should check if a user was found (HttpStatus) before doing the
+            // following...
             user = (User) response.getBody();
 
             assert user != null;
             assertEquals("newName", user.getUsername());
 
-        } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+        } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException
+                | InvalidKeySpecException e) {
             fail();
         }
     }
@@ -99,7 +102,8 @@ public class UpdateUserTest {
 
             assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
-        } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+        } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException
+                | InvalidKeySpecException e) {
             fail();
         }
     }
@@ -120,17 +124,20 @@ public class UpdateUserTest {
             ResponseEntity<Object> response = userController.updateUsername(map);
             assertEquals(HttpStatus.NOT_ACCEPTABLE, response.getStatusCode());
 
-        } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+        } catch (InvalidUserNameException | InvalidPasswordException | NoSuchAlgorithmException
+                | InvalidKeySpecException e) {
             fail();
         }
     }
+
     @Test
     void shouldFailWhenUpdatingPasswordWithNoInput() {
         try {
             user.setUsername("user");
             user.setPassword("1234");
             user.setUserId(42L);
-        } catch (InvalidUserNameException | InvalidKeySpecException | NoSuchAlgorithmException | InvalidPasswordException e) {
+        } catch (InvalidUserNameException | InvalidKeySpecException | NoSuchAlgorithmException
+                | InvalidPasswordException e) {
             e.printStackTrace();
         }
         map.put("newPassword", "");
@@ -143,13 +150,15 @@ public class UpdateUserTest {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
     }
+
     @Test
     void shouldFailWhenUpdatingPasswordWithNewPasswordsDifferent() {
         try {
             user.setUsername("user");
             user.setPassword("1234");
             user.setUserId(42L);
-        } catch (InvalidUserNameException | InvalidKeySpecException | NoSuchAlgorithmException | InvalidPasswordException e) {
+        } catch (InvalidUserNameException | InvalidKeySpecException | NoSuchAlgorithmException
+                | InvalidPasswordException e) {
             e.printStackTrace();
         }
         map.put("newPassword", "4321");
@@ -161,13 +170,15 @@ public class UpdateUserTest {
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
+
     @Test
     void shouldFailWhenUpdatingPasswordWithOldPasswordWrong() {
         try {
             user.setUsername("user");
             user.setPassword("1234");
             user.setUserId(42L);
-        } catch (InvalidUserNameException | InvalidKeySpecException | NoSuchAlgorithmException | InvalidPasswordException e) {
+        } catch (InvalidUserNameException | InvalidKeySpecException | NoSuchAlgorithmException
+                | InvalidPasswordException e) {
             e.printStackTrace();
         }
         map.put("newPassword", "4321");
@@ -175,25 +186,25 @@ public class UpdateUserTest {
         map.put("oldPassword", "5555");
         map.put("id", "42");
 
-
         Mockito.when(userRepository.findById(42L)).thenReturn(Optional.of(user));
         ResponseEntity<Object> response = userController.updatePassword(map);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
+
     @Test
     void shouldSucceedWhenUpdatingPasswordWithCorrectInput() throws NoSuchAlgorithmException, InvalidKeySpecException {
         try {
             user.setUsername("user");
             user.setPassword("1234");
             user.setUserId(42L);
-        } catch (InvalidUserNameException | InvalidKeySpecException | NoSuchAlgorithmException | InvalidPasswordException e) {
+        } catch (InvalidUserNameException | InvalidKeySpecException | NoSuchAlgorithmException
+                | InvalidPasswordException e) {
             e.printStackTrace();
         }
         map.put("newPassword", "4321");
         map.put("verifyNewPassword", "4321");
         map.put("oldPassword", "1234");
         map.put("id", "42");
-
 
         Mockito.when(userRepository.findById(42L)).thenReturn(Optional.of(user));
         ResponseEntity<Object> response = userController.updatePassword(map);

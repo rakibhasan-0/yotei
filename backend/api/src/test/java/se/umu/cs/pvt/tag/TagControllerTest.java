@@ -23,8 +23,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * The tests for the Tag part of the Tag API.
+ * 
  * @Author Team 5 Verona
- * @Author Phoenix (25-04-2023)
+ * @Author Phoenix (2023-04-25)
  * @Author Team 3 (Durian)
  * @since 2024-05-02
  */
@@ -104,16 +105,16 @@ class TagControllerTest {
     @Test
     void shouldSucceedWhenUpdatingTag() {
         Tag firstTag = new Tag(1L, "firstTag");
-        
+
         when(tagRepository.findById(firstTag.getId())).thenReturn(Optional.of(firstTag));
-    
+
         Tag updatedTag = new Tag(1L, "updatedTag");
-    
+
         ResponseEntity<TagResponse> responseEntity = tagController.updateTag(firstTag.getId(), updatedTag);
-        
+
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
         assertEquals(firstTag.getId(), responseEntity.getBody().getTagId());
         assertEquals(updatedTag.getName().toLowerCase(), responseEntity.getBody().getTagName().toLowerCase());
-    }    
+    }
 }
