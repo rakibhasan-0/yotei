@@ -12,9 +12,11 @@ import ExerciseDetailMini from "../../../../pages/Activity/Exercise/ExerciseDeta
  * Used to display each technique on the technique page.
  *
  * Props:
- *		technique (object) : The technique/activity object.
- *		checkBox (Component) : If you want a checkbox to be displayed, send it as a prop.
- *		id: Id used for testing.
+ *		technique @type {object} - The technique/activity object.
+ *		checkBox @type {Component} - If you want a checkbox to be displayed, send it as a prop.
+ *		id: @type {String/Int} - Id used for testing.
+ *		popUp @type {boolean} - True if should be in popup
+ * 		techniqueInProtocol @type {boolean} - True if in protocol
  *
  * @author Medusa, Coconut, Tomato, Team Kiwi
  * @version 2.3
@@ -75,7 +77,7 @@ function TechniqueCard({ technique, checkBox, id, popUp, techniqueInProtocol}) {
 				</PopupMini>
 				:
 				<PopupMini title = {technique.name} id = "pop-up-id-tech" isOpen = {isOpen} setIsOpen = {setIsOpen} isNested = {true}> 
-					<TechniqueDetailMini id = {id}>
+					<TechniqueDetailMini id = {technique.techniqueID ? technique.techniqueID : technique.activity_id}>
 					</TechniqueDetailMini>
 				</PopupMini>}
 			

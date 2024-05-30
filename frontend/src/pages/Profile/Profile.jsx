@@ -13,7 +13,7 @@ import { logOut } from "../../utils"
 import useMap from "../../hooks/useMap"
 import Divider from "../../components/Common/Divider/Divider"
 import Spinner from "../../components/Common/Spinner/Spinner"
-import ProfileListItem from "./ProfileListItem"
+import ProfileListItem from "../../components/Profile/ProfileListItem"
 import { Lock, Eye } from "react-bootstrap-icons"
 import RoundButton from "../../components/Common/RoundButton/RoundButton"
 import { Plus } from "react-bootstrap-icons"
@@ -100,10 +100,9 @@ export default function Profile() {
 			setWorkouts((old) => [
 				...old.map((w) => {
 					if (w.workoutID === workout.workoutID) {
-						(w.favourite?
-							setAmountOfFavouriteWorkouts(amountOfFavouriteWorkouts-1):
-							setAmountOfFavouriteWorkouts(amountOfFavouriteWorkouts+1)
-						)
+						w.favourite
+							? setAmountOfFavouriteWorkouts(amountOfFavouriteWorkouts - 1)
+							: setAmountOfFavouriteWorkouts(amountOfFavouriteWorkouts + 1)
 						w.favourite = !w.favourite
 					}
 					return w

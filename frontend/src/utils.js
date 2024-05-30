@@ -13,19 +13,29 @@ import { toast } from "react-toastify"
  * 										 every toast function no longer takes a second argument and uses the message sent as ID instead
  * 										 this automatically ensures that the same message is not displayed multiple times.
  * 			2024-05-28  by Team Mango: Separated technique and exercises permissions. Also updated permissions list and functions to include new permissions.
- *									   Groups and sessions are now combined).
+ *									   Groups and sessions are now combined). Removed technique and exercise own in checks because variable do not exist.
+ * 			2024-05-29	by Team Mango: Added BETA_ACCESS permission and relevant hasBetaAccess function.st.
  */
 
 /**
  * isAdminUser() - Checks if a user has the permission to edit users.
  * @param {} context AccountContext from user.
- * @returns True if user is alloowed to edit users, else false. 
+ * @returns True if user is alloowed to edit users, else false.
  */
 export function isAdminUser(context) {
 	if (!context.permissions) return false
-	return (context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS))
+	return context.permissions.includes(USER_PERMISSION_CODES.ADMIN_RIGHTS)
 }
 
+/**
+ * hasBetaAccess() - check if a user has access to beta features.
+ * @param {*} context AccountContext from user. 
+ * @returns 
+ */
+export function hasBetaAccess(context) {
+	if (!context.permissions) return false
+	return (context.permissions.includes(USER_PERMISSION_CODES.BETA_ACCESS))
+}
 
 /**
  * canCreateSessionsAndGroups() - check if a user can create a group or session.
@@ -34,8 +44,10 @@ export function isAdminUser(context) {
  */
 export function canCreateSessionsAndGroups(context) {
 	if (!context.permissions) return false
-	return (context.permissions.includes(USER_PERMISSION_CODES.SESSION_GROUP_ALL) ||
-	(context.permissions.includes(USER_PERMISSION_CODES.SESSION_GROUP_OWN)))
+	return (
+		context.permissions.includes(USER_PERMISSION_CODES.SESSION_GROUP_ALL) ||
+		context.permissions.includes(USER_PERMISSION_CODES.SESSION_GROUP_OWN)
+	)
 }
 
 /**
@@ -47,9 +59,10 @@ export function canCreateSessionsAndGroups(context) {
 export function canEditSessionsAndGroups(context, groupCreatorId) {
 	if (!context.permissions) return false
 
-	return (context.permissions.includes(USER_PERMISSION_CODES.SESSION_GROUP_ALL) ||
-	(context.permissions.includes(USER_PERMISSION_CODES.SESSION_GROUP_OWN) &&
-	(context.userId === groupCreatorId)))
+	return (
+		context.permissions.includes(USER_PERMISSION_CODES.SESSION_GROUP_ALL) ||
+		(context.permissions.includes(USER_PERMISSION_CODES.SESSION_GROUP_OWN) && context.userId === groupCreatorId)
+	)
 }
 
 /**
@@ -59,8 +72,10 @@ export function canEditSessionsAndGroups(context, groupCreatorId) {
  */
 export function canCreateWorkouts(context) {
 	if (!context.permissions) return false
-	return (context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_ALL) ||
-	(context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_OWN)))
+	return (
+		context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_ALL) ||
+		context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_OWN)
+	)
 }
 
 /**
@@ -72,9 +87,10 @@ export function canCreateWorkouts(context) {
 export function canEditWorkout(context, workoutId) {
 	if (!context.permissions) return false //If the user's context disappears they lose all permissions and must log in again.
 	//True if the user may edit all workouts or "owns" the workout and is able to edit their own workouts.
-	return (context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_ALL) ||
-	(context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_OWN) &&
-	(context.userId === workoutId)))
+	return (
+		context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_ALL) ||
+		(context.permissions.includes(USER_PERMISSION_CODES.WORKOUT_OWN) && context.userId === workoutId)
+	)
 }
 
 /**
@@ -86,43 +102,38 @@ export function canEditWorkout(context, workoutId) {
 export function canDeleteComment(context, commentId) {
 	if (!context.permissions) return false //If the user's context disappears they lose all permissions and must log in again.
 	//True if the user is an admin or "owns" the comment.
-	return (context.userId === commentId)
+	return context.userId === commentId
 } //PERMISSION TODO: Should there be a permission for deleting others' comments without being an admin? And should everyone be able to write comments?
 
-
-
-
 /**
- * canCreateAndEditTechnique() - Check if user can create an technique.
+ * canCreateAndEditTechnique() - Check if user can create a technique.
  * @param {*} context Accountcontext from user. 
- * @returns true if user can create an technique.
+ * @returns true if user can create/edit a technique.
  */
 export function canCreateAndEditTechnique(context) {
 	if (!context.permissions) return false
-	return (context.permissions.includes(USER_PERMISSION_CODES.TECHNIQUE_OWN) ||
-			context.permissions.includes(USER_PERMISSION_CODES.TECHNIQUE_ALL))
+	return context.permissions.includes(USER_PERMISSION_CODES.TECHNIQUE_ALL)
 }
 
 /**
  * canCreateAndEditExercise() - Check if user can create an exercise.
- * @param {*} context Accountcontext from user. 
- * @returns true if user can create an exercise.
+ * @param {*} context Accountcontext from user.
+ * @returns true if user can create/edit an exercise.
  */
 export function canCreateAndEditExercise(context) {
 	if (!context.permissions) return false
-	return (context.permissions.includes(USER_PERMISSION_CODES.EXERCISE_OWN ||
-			context.permissions.includes(USER_PERMISSION_CODES.EXERCISE_ALL)
-	))
+	return context.permissions.includes(USER_PERMISSION_CODES.EXERCISE_ALL)
 }
+
 /**
  * canHandleGradings() - Check if user can create a grading.
- * @param {*} context Accountcontext from user. 
+ * @param {*} context Accountcontext from user.
  * @returns true if user can create a grading.
  */
 
 export function canHandleGradings(context) {
 	if (!context.permissions) return false
-	return (context.permissions.includes(USER_PERMISSION_CODES.GRADING_ALL))
+	return context.permissions.includes(USER_PERMISSION_CODES.GRADING_ALL)
 }
 
 /**
@@ -138,7 +149,6 @@ export function logOut() {
  * Sets the message of a toast error message and displays it.
  */
 export function setError(msg) {
-
 	toast.error(msg, {
 		position: "top-center",
 		autoClose: 2000,
@@ -156,7 +166,6 @@ export function setError(msg) {
  * Sets the message of a toast success message and displays it.
  */
 export function setSuccess(msg) {
-
 	toast.success(msg, {
 		position: "top-center",
 		autoClose: 2000,
@@ -174,7 +183,6 @@ export function setSuccess(msg) {
  * Sets the message of a toast error message and displays it.
  */
 export function setInfo(msg) {
-
 	toast.info(msg, {
 		position: "top-center",
 		autoClose: 2000,
@@ -205,16 +213,17 @@ export const HTTP_STATUS_CODES = {
 // These attributes have to be in the same order from 1-x as inserted into the database.
 export const USER_PERMISSION_CODES = {
 	ADMIN_RIGHTS: 1,
-	SESSION_GROUP_OWN: 2, //Edit your own groups and sessions.
-	SESSION_GROUP_ALL: 3, //Edit all groups and sessions.
-	WORKOUT_OWN: 4,
-	WORKOUT_ALL: 5,
-	TECHNIQUE_ALL: 6,
-	EXERCISE_ALL: 7,
-	GRADING_ALL: 8,
+	BETA_ACCESS: 2,
+	SESSION_GROUP_OWN: 3, //Edit your own groups and sessions.
+	SESSION_GROUP_ALL: 4, //Edit all groups and sessions.
+	WORKOUT_OWN: 5,
+	WORKOUT_ALL: 6,
+	TECHNIQUE_ALL: 7,
+	EXERCISE_ALL: 8,
+	GRADING_ALL: 9,
 }
 
-export const USER_PERMISSION_LIST_ALL = [1,2,3,4,5,6,7,8]
+export const USER_PERMISSION_LIST_ALL = [1, 2, 3, 4, 5, 6, 7, 8]
 
 /**
  * Scrolls an element with given id into view.
@@ -224,4 +233,33 @@ export const USER_PERMISSION_LIST_ALL = [1,2,3,4,5,6,7,8]
  */
 export function scrollToElementWithId(id) {
 	document.getElementById(id).scrollIntoView({ behavior: "smooth" })
+}
+
+/**
+ * Parses the data from the listCreateInfo state to a format that the API accepts.
+ *
+ * @param {*} data
+ * @returns The parsed data.
+ */
+export const parseActivityListToDTO = (data, userId) => {
+	let activities = []
+	data.activities.forEach((a) => {
+		const activity = {
+			entryId: a.entryId ? a.entryId : null,
+			type: a.type,
+			id: a.id,
+			duration: a.duration,
+		}
+		activities.push(activity)
+	})
+
+	return {
+		id: data.id,
+		name: data.name,
+		desc: data.desc,
+		hidden: data.hidden,
+		author: userId,
+		activities: activities,
+		users: data.users.map((user) => user.userId),
+	}
 }

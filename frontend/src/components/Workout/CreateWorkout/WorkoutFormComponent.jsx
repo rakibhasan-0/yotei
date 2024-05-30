@@ -28,7 +28,8 @@ import { unstable_useBlocker as useBlocker } from "react-router"
  * This component requires the WorkoutCreateContext to be used.
  *
  * Props:
- *     callback @id {function}  - Function to call when form is filled and to be sent.
+ *     callback @type {function}  - Function to call when form is filled and to be sent.
+ * 		state @type {State} - Holds information about the caller
  *
  * Example usage:
  *		<WorkoutFormComponent callback={submitHandler} />
@@ -37,6 +38,7 @@ import { unstable_useBlocker as useBlocker } from "react-router"
  * @version 2.1
  * @since 2023-05-24, 2024-05-28
  * @updated 2023-06-01 Chimera, updated pathing when pressing return to create session
+ * @updated 2024-05-29 Kiwi, Updated props comment.
  */
 export default function WorkoutFormComponent({ callback, state }) {
 	const { workoutCreateInfo, workoutCreateInfoDispatch } =
@@ -114,6 +116,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 	 * If no changes to the workout are made, then it navigates back.
 	 */
 	function handleGoBack() {
+		setIsBlocking(false)
 		setShowPopup(true)
 	}
 
@@ -239,10 +242,13 @@ export default function WorkoutFormComponent({ callback, state }) {
 									<h2>+ Fri text</h2>
 								</Button>
 								<Button
-									onClick={() =>
+									onClick={() => {
 										workoutCreateInfoDispatch({
 											type: WORKOUT_CREATE_TYPES.OPEN_CHOOSE_ACTIVITY_POPUP
 										})
+										setIsBlocking(false)
+									}
+										
 									}
 								>
 									<h2>+ Aktivitet</h2>
@@ -330,6 +336,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 				isOpen={workoutCreateInfo.popupState.isOpened}
 				setIsOpen={handlePopupClose}
 				title={getPopupTitle()}
+				scrollId = "scrollable-activity-content" 
 			>
 				{workoutCreateInfo.popupState.types.freeTextPopup && (
 					<ActivityInfoPopUp isFreeText={true} />
@@ -349,6 +356,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 								type: WORKOUT_CREATE_TYPES.OPEN_ACTIVITY_POPUP
 							})
 						}}
+						scrollId = "scrollable-activity-content" 
 					/>
 				)}
 				{workoutCreateInfo.popupState.types.editActivityPopup && 
@@ -364,6 +372,7 @@ export default function WorkoutFormComponent({ callback, state }) {
 				backText="Avbryt"
 				zIndex={1000}
 				onClick={() => {
+					setIsBlocking(true)
 					workoutCreateInfoDispatch({
 						type: WORKOUT_CREATE_TYPES.CLEAR_ADDED_ACTIVITIES
 					})

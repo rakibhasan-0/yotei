@@ -6,9 +6,10 @@ import styles from "./MinutePicker.module.css"
  * numbers.
  *
  * Props:
- *     prop1 @id {string}  - Id for the component.
- *     prop3 @callback {function} - Callback function that will be called on input,
+ *     id @type {string}  - Id for the component.
+ *     callback @type {function} - Callback function that will be called on input,
  *     								should take id and time as input.
+ * 		initialValue @type {Int} - Initial minute Value
  *
  * Example usage:
  *		const [time1, updateTime1] = useState("")
@@ -18,6 +19,7 @@ import styles from "./MinutePicker.module.css"
  * @author Team Minotaur, Squad Phoenix, Team Coconut
  * @version 3.0
  * @since 2024-04-24
+ * @updated 2024-05-29 Kiwi, Updated props comment
  */
 export default function MinutePicker({id, callback, initialValue}) {
 	const [number,setNumber] = useState( initialValue == null ? 0 : initialValue)

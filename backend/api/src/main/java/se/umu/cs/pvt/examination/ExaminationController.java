@@ -531,9 +531,11 @@ public class ExaminationController {
         for (Examinee examinee : examinees) {
             Map<String, String> examineeInfo = new HashMap<>();
             long passedTechniques = examinationResultRepository.countByExamineeIdAndPassTrue(examinee.getExamineeId());
+            long failedTechniques = examinationResultRepository.countByExamineeIdAndPassFalse(examinee.getExamineeId());
             examineeInfo.put("examineeId", examinee.getExamineeId().toString());
             examineeInfo.put("passedTechniques", Long.toString(passedTechniques)); // Convert long to Long and invoke toString()
             examineeInfo.put("name", examinee.getName());
+            examineeInfo.put("failedTechniques", Long.toString(failedTechniques));
             examineeResults.add(examineeInfo);
         }
         response.put("examineeResults", examineeResults);
@@ -623,9 +625,6 @@ public class ExaminationController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-
-        System.out.println(examinationProtocolRepository.findByBeltId(grading.get().getBeltId()).getExaminationProtocol().toString());
-
         ExportGradingPdf pdfExport = new ExportGradingPdf(examinationProtocolRepository.findByBeltId(grading.get().getBeltId()).getExaminationProtocol().toString(),gradingRepository.findById(grading_id).get(), examineeRepository.findByGradingId(grading_id), examinationResultRepository.findAll(), examinationCommentRepository.findByGradingId(grading_id), examineePairRepository.findAll());
 
         try {
@@ -648,8 +647,8 @@ public class ExaminationController {
         if(examinee.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        ExportGradingExamineePdf pdfExport = new ExportGradingExamineePdf(examinationProtocolRepository.findByBeltId(examinee.get().getGradingId()).getExaminationProtocol().toString(), gradingRepository.findById(examinee.get().getGradingId()).get(),examinee.get(),examinationResultRepository.findByExamineeId(examinee_id),examinationCommentRepository.findByExamineeId(examinee_id),examineePairRepository.findAll(),examineeRepository.findByGradingId(examinee.get().getGradingId()));
-
+        ExportGradingExamineePdf pdfExport = new ExportGradingExamineePdf(examinationProtocolRepository.findByBeltId(gradingRepository.findById(examinee.get().getGradingId()).get().getBeltId()).getExaminationProtocol().toString(), gradingRepository.findById(examinee.get().getGradingId()).get(),examinee.get(),examinationResultRepository.findByExamineeId(examinee_id),examinationCommentRepository.findByGradingId(examinee.get().getGradingId()),examineePairRepository.findAll(),examineeRepository.findByGradingId(examinee.get().getGradingId()));
+        
         try {
             InputStream stream = pdfExport.generate();
             return new ResponseEntity<Object>( Base64.getEncoder().encode(stream.readAllBytes()), HttpStatus.OK);

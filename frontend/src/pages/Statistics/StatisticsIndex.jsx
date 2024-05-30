@@ -13,14 +13,14 @@ import SortingArrowButton from "../../components/Common/SortingArrowButton/Sorti
 
 /**
  * 
- * Component is responsible for the visualization of the statistics for a group.
- * It shows the techniques and statistics for the selected group. The user will be able to filter
- * the list of techniques and exercise based on the selected belts, dates, kihon. 
+ * The StatisticsIndex component is responsible for the visualization
+ * of a group's statistics. The user is able to filter the list of techniques
+ * to include exercises and sort by belt, between dates and kihon techniques.
  * 
  * Example usage:
  *  <Statistics />
  * 
- * @returns A page with statistics for a group.
+ * @returns A page with a group's statistics.
  * @author Team Coconut 
  * @since 2024-05-08
  * @version 1.0
@@ -44,34 +44,46 @@ export default function Statistics() {
 	})
 	const [rotate, setDescendingOrder] = useState(localStorage.getItem("statistics-filter-order") ? JSON.parse(localStorage.getItem("statistics-filter-order")) : false)
 
-	// creates two date objects, one two years before now and one with today's date
+	// Creates two date objects, one two years before now and one with today's date.
 	const twoYearsBeforeFromNow = new Date()
 	twoYearsBeforeFromNow.setFullYear(twoYearsBeforeFromNow.getFullYear() - 2)
 	const today = new Date()
 
-	// state for storing the dates
+	// State for storing the dates.
 	const [dates, setDates] = useState(localStorage.getItem("statistics-filter-dates") ? JSON.parse(localStorage.getItem("statistics-filter-dates")) : {
 		from: getFormattedDateString(twoYearsBeforeFromNow),
 		to: getFormattedDateString(today),
 	})
 
-	// filters the groups activities based on the selected belts.
-	// first it checks if selectedBelts is not empty, then it filters the groupActivities based on the selected belts.
-	// if the selectedBelts is empty, it will show all groupActivities. 
-	const activities =	
-	selectedBelts.length > 0	
-		? groupActivities.filter((activity) =>
-			activity.beltColors?.some((belt) =>	
-				selectedBelts.some((selectedBelt) =>	
-					selectedBelt.child	
-						? belt.is_child == true && selectedBelt.name === belt.belt_name
-						:	selectedBelt.name === belt.belt_name && belt.is_child == false
-				)
-			)
-		)
+
+
+	/**
+	*	Filters an activity based on belt colors and selected belt criteria.
+ 	*	This function checks if any of the activity's belt colors match the selected belts.
+	*	A belt matches if it satisfies the 'child' condition (if applicable) and the belt name.
+	*/	
+	const filterActivityByBelt = (activity, selectedBelts) => {
+		return activity.beltColors?.some(belt => {
+			return selectedBelts.some(selectedBelt => {
+				if (selectedBelt.child) {
+					return belt.is_child === true && selectedBelt.name === belt.belt_name
+				} else {
+					return belt.is_child === false && selectedBelt.name === belt.belt_name
+				}
+			})
+		})
+	}
+
+	/* 
+		Filters the group's activities based on the selected belts.
+		First it checks if selectedBelts is not empty, then it filters the groupActivities based on the selected belts.
+		If the selectedBelts is empty, it instead shows all groupActivities. 
+	*/
+	const activities = selectedBelts.length > 0 ? 
+		groupActivities.filter(activity => filterActivityByBelt(activity, selectedBelts))
 		: groupActivities
 
-	// function stores the selected belts data. 	
+	// Stores the selected belts data. 	
 	function handleBeltToggle(isSelected, belt) {
 		setSelectedBelts(prevSelected => {
 			if (isSelected) {
@@ -82,18 +94,19 @@ export default function Statistics() {
 		})
 	}
 
-	// function clears selected belts when user clears belts in belts filter.
+	// Clears selected belts when user clears belts in the belts filter.
 	function onBeltsClear() {
 		setSelectedBelts([])
 	}
 
-	// regex function to check if the format of the date is correct or not.
+	// Check if the format of the date is correct or not.
 	function checkIfDateIsValid(date) {
 		return /^[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(date) && !isNaN(new Date(date).getTime())
 	}
 
+	// Fetches the group's data.
 	useEffect(() => {
-		async function fetchGroup(){
+		async function fetchGroup() {
 			try {
 				setGroupLoading(true)
 				const responseFromGroupNameAPI= await fetch("/api/plan/all", { headers: { token } })
@@ -102,7 +115,7 @@ export default function Statistics() {
 					throw new Error("Failed to fetch group data")
 				}
 				
-				if(responseFromGroupNameAPI.status === 200) {
+				if (responseFromGroupNameAPI.status === 200) {
 					const groups = await responseFromGroupNameAPI.json()	
 					const group = groups.find((group) => group.id === parseInt(groupID))
 					setGroup(group)
@@ -118,18 +131,17 @@ export default function Statistics() {
 			}
 		}
 		fetchGroup()
-	},[])
+	}, [])
 
 	useEffect(() => {
-
-		// function fetches groups activities and groups name.
+		// Fetches the group's activities and the group's name.
 		async function fetchGroupActivitiesData() {	
 			
 			if(!checkIfDateIsValid(dates.from) || !checkIfDateIsValid(dates.to)) {
 				return
 			}
 			
-			// by utilizing the URLSearchParams, we can easily create a query string for the API.
+			// Creates a query string for the API by using URLSearchParams.
 			const param = new URLSearchParams({
 				kihon: filter.showKihon ? "true" : "false",
 				showexercises: filter.showExercises ? "true" : "false",
@@ -141,13 +153,13 @@ export default function Statistics() {
 				setListLoading(true)
 				const responseFromGroupDetailsAPI = await fetch(`/api/statistics/${groupID}?${param}`, {headers: { token }})
 
-				if(responseFromGroupDetailsAPI.status === 200) {
+				if (responseFromGroupDetailsAPI.status === 200) {
 					const data = await responseFromGroupDetailsAPI.json()
 					setNumberOfSessions(data.numberOfSessions)
 					setAverageRating(data.averageRating)
 					setGroupActivities(rotate ? data.activities.reverse() : data.activities)
-				}else if (responseFromGroupDetailsAPI.status === 204) {
-					// if the response is 204, it means that there is no data to show for the selected filters.
+				} else if (responseFromGroupDetailsAPI.status === 204) {
+					// If the response is 204, it means that there is no data to show for the selected filters.
 					setGroupActivities([])
 				}
 
@@ -184,7 +196,7 @@ export default function Statistics() {
 		localStorage.setItem("statistics-filter-belts", JSON.stringify(selectedBelts))
 	}, [selectedBelts])
 
-	// that function is responsible for handling the date changes and storing the dates state.
+	// Handles the date changes and storing the dates state.
 	function handleDateChanges(variableName, value) {
 		const selectedDate = new Date(value)
 		const toDate = new Date(dates.to)
@@ -196,15 +208,12 @@ export default function Statistics() {
 		}
 	}
 
-	// when user checks checkbox for showing exercises and kihon, this function will be called 
-	// and it will update the filter state.
+	// When the 'show exercises' and 'show kihon' checkboxes are checked, the filter state is updated.
 	function handleChanges(variableName, value) {
 		setFilter({ ...filter, [variableName]: value })
 	}
 
-
-	// function changes the order of group activities.
-	// initially, order is ascending, when user clicks the sorting button, order changes to descending.
+	// Changes the order of the group's activities. Default is ascending.
 	function changeOrder() {
 		setDescendingOrder(!rotate)
 		setGroupActivities(groupActivities.reverse())

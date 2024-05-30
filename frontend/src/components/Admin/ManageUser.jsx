@@ -174,7 +174,7 @@ export default function ManageUser() {
 					</div>
 				))}
 			</Dropdown>
-			<div className='mb-2' />
+			<div className='mb-3' />
 			<InputTextFieldBorderLabel errorMessage={mgmError} id = {"confirm-username-input"} text={mgmConfirmUser} type={"user"} label= {"Bekräfta användarnamn"} onChange={(event) => setMgmConfirmUser(event.target.value)}/>
 			<div className='mb-2' />
 			<Dropdown 

@@ -10,22 +10,19 @@ import {
 import { ListCreateContext } from "../../components/Common/List/ListCreateContext.js"
 import styles from "./WorkoutModify.module.css"
 import { Spinner } from "react-bootstrap"
-import { setSuccess, setError } from "../../utils.js"
+import { setSuccess, setError, parseActivityListToDTO } from "../../utils.js"
 
 /**
  * This is the page for editing a saved list.
  *
  * @author Team Tomato (6)
  * @version 1.0
- * @since 2024-05-22, updated 2024-05-23
+ * @since 2024-05-22
+ * @updated 2024-05-29 by Team Tomato, refactoring
  */
 
 const ListEdit = () => {
-	const [listCreateInfo, listCreateInfoDispatch] = useReducer(
-		listCreateReducer,
-		JSON.parse(JSON.stringify(ListCreateInitialState))
-	)
-	const isEdit = window.location.href.toString().includes("edit")
+	const [listCreateInfo, listCreateInfoDispatch] = useReducer(listCreateReducer, ListCreateInitialState)
 
 	const navigate = useNavigate()
 	const { userId, token } = useContext(AccountContext)
@@ -33,66 +30,23 @@ const ListEdit = () => {
 	const location = useLocation()
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const [isLoading, setIsLoading] = useState(true)
-	const localStorageDestination = isEdit ? "listCreateInfoEdit" : "listCreateInfoCreate"
-	const returnTo = location.state?.returnTo || "/activity"
+	const localStorageDestination = "listCreateInfoEdit"
 
 	/**
 	 * Submits the form data to the API.
 	 */
 	async function submitHandler() {
 		setIsSubmitted(true)
-		const data = parseData(listCreateInfo.data)
-		let listId
+		const data = parseActivityListToDTO(listCreateInfo.data, userId)
 
-		if (isEdit) {
-			listId = await updateActivityList(data)
-			if (listId) {
-				setSuccess("Listan uppdaterades!")
-			} else {
-				setError("Listan kunde inte uppdateras.")
-			}
-			localStorage.removeItem(localStorageDestination)
-			navigate(-1)
+		const listId = await updateActivityList(data)
+		if (listId) {
+			setSuccess("Listan uppdaterades!")
 		} else {
-			listId = await createActivityList(data)
-
-			if (listId) {
-				setSuccess("Listan skapades!")
-			} else {
-				setError("Listan kunde inte skapas.")
-			}
-			localStorage.removeItem(localStorageDestination)
-			navigate("/profile/list/" + listId, { state: { returnTo: returnTo } })
+			setError("Listan kunde inte uppdateras.")
 		}
-	}
-
-	/**
-	 * Parses the data from the listCreateInfo state to a format that the API accepts.
-	 *
-	 * @param {*} data
-	 * @returns The parsed data.
-	 */
-	function parseData(data) {
-		let activities = []
-		data.activities.forEach((a) => {
-			const activity = {
-				entryId: a.entryId ? a.entryId : null,
-				type: a.type,
-				id: a.id,
-				duration: a.duration,
-			}
-			activities.push(activity)
-		})
-
-		return {
-			id: data.id,
-			name: data.name,
-			desc: data.desc,
-			hidden: data.hidden,
-			author: userId,
-			activities: activities,
-			users: data.users.map((user) => user.userId),
-		}
+		localStorage.removeItem(localStorageDestination)
+		navigate(-1)
 	}
 
 	const updateActivityList = async (body) => {
@@ -112,21 +66,6 @@ const ListEdit = () => {
 		return jsonResp
 	}
 
-	const createActivityList = async (body) => {
-		const requestOptions = {
-			method: "POST",
-			headers: {
-				Accept: "application/json",
-				"Content-type": "application/json",
-				token,
-			},
-			body: JSON.stringify(body),
-		}
-		const response = await fetch("/api/activitylists/add", requestOptions)
-		const jsonResp = await response.json()
-
-		return jsonResp
-	}
 	/**
 	 * Fetches the data from the local storage and context.
 	 */
@@ -135,14 +74,12 @@ const ListEdit = () => {
 		const item = localStorage.getItem(localStorageDestination)
 		const listData = location.state?.list
 		const userData = location.state?.list?.users
-		if (listData && isEdit) {
+		if (listData) {
 			listCreateInfoDispatch({
 				type: LIST_CREATE_TYPES.INIT_EDIT_DATA,
 				payload: { listData, userData: userData ? userData : [] },
 			})
 			window.history.replaceState({}, document.title)
-		} else if (!item && !isEdit) {
-			listCreateInfoDispatch({ type: LIST_CREATE_TYPES.SET_INITIAL_STATE })
 		} else if (item) {
 			listCreateInfoDispatch({
 				type: LIST_CREATE_TYPES.INIT_WITH_DATA,
@@ -165,6 +102,7 @@ const ListEdit = () => {
 			if (isSubmitted) localStorage.removeItem(localStorageDestination)
 		}
 	}, [listCreateInfo, isSubmitted])
+
 	return (
 		<>
 			{isLoading ? (
@@ -172,17 +110,8 @@ const ListEdit = () => {
 			) : (
 				<>
 					<ListCreateContext.Provider value={{ listCreateInfo, listCreateInfoDispatch }}>
-						{isEdit ? (
-							<>
-								<title>Redigera lista</title>
-								<h1 className={styles.title}>Redigera lista</h1>
-							</>
-						) : (
-							<>
-								<title>Skapa lista</title>
-								<h1 className={styles.title}>Skapa lista</h1>
-							</>
-						)}
+						<title>Redigera lista</title>
+						<h1 className={styles.title}>Redigera lista</h1>
 
 						<ListFormComponent
 							callback={submitHandler}

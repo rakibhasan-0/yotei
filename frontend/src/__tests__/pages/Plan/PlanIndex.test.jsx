@@ -5,9 +5,15 @@ import { rest } from "msw"
 import { server } from "../../server"
 import GroupPicker from "../../../components/Plan/GroupPicker"
 
+//TODO: Get permission tests working using correct imports and correct code... Compare with e.g. WorkoutIndex.test.jsx.
+//import { AccountContext } from "../../../context"
+//import { Route, RouterProvider, createMemoryRouter, createRoutesFromElements } from "react-router"
+//import { Route, createMemoryRouter, createRoutesFromElements, RouterProvider } from "react-router-dom"
+//import { USER_PERMISSION_CODES, USER_PERMISSION_LIST_ALL } from "../../../utils"
 
 /**
- * @author Team Durian (Group 3) (2024-04-23)  Team Mango (Group 4) (2024-05-16)
+ * @author Team Durian (Group 3) (2024-04-23)  Team Mango (Group 4) (2024-05-29)
+ * Updates: 2024-05-29: Added permission unit tests.
  */
 
 configure({testIdAttribute: "id"})
@@ -67,8 +73,48 @@ test("should render data from the plan api", async () => {
     
 })
 
+//TODO remove these? Or do?
 test.todo("should render data from the sessions api")
-
 test.todo("should render data from the workout api")
 
 
+
+//PERMISSION TESTS.
+/*
+describe("verify permissions", () => {
+
+	// Render the PlanIndex page with router and account context.
+const renderWithRouter = async(permissions_list) => {
+	window.HTMLElement.prototype.scrollIntoView = jest.fn
+	const router = createMemoryRouter(
+		createRoutesFromElements( [
+			<Route key={"key1"} path="plan" element={<PlanIndex/>}/> , //The path is found in index.js.
+		]
+		),
+		{initialEntries: ["/plan"]}
+	)
+
+	render ( //eslint-disable-next-line no-dupe-keys
+		<AccountContext.Provider value={{ undefined, userId: "", permissions: permissions_list, undefined }}>
+			<RouterProvider router={router}/>
+		</AccountContext.Provider>
+	)
+}
+
+	test("Admin should see create session button", async () => {
+		renderWithRouter(USER_PERMISSION_LIST_ALL)
+		expect(screen.getByTestId("CreateSessionButton")).toBeInTheDocument()
+	})
+
+	test("Admin should see create session button", async () => {
+		renderWithRouter([USER_PERMISSION_CODES.GRADING_ALL])
+		expect(screen.getByTestId("CreateSessionButton")).toBeInTheDocument()
+	})
+
+	test("Admin should see create session button", async () => {
+		renderWithRouter(USER_PERMISSION_LIST_ALL)
+		expect(screen.getByTestId("CreateSessionButton")).toBeInTheDocument()
+	})
+
+})
+*/

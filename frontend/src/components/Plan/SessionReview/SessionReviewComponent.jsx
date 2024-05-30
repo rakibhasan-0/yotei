@@ -24,9 +24,17 @@ import ActivityInfoPopUp from "../../Workout/CreateWorkout/ActivityInfoPopUp"
  * A session can have one review on it, filled in by the trainer
  * The review can be seen and edited through the plan window
  * Based on "ReviewFormComponent.jsx"
+ * 
+ * Props:
+ * 		id @type {String/Number} - ID representing the Review
+ * 		isOpen @type {boolean} True if open
+ * 		setIsOpen @type {useState} Setter for isOpen
+ * 		session_id @type {String/Number} ID representing the session
+ * 		workout_id @type {String/Number} ID representing the workout.
  *
  * @author Hannes c21hhn (Group 1, pomegranate), Team Coconut
  * @since 2024-05-22
+ * @updated 2024-05-29 Kiwi, Updated props comment.
  * @version 1.1
  */
 
@@ -763,6 +771,7 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 					<button
 						className={styles.add_more_button_container}
 						onClick={toggleAddMore}
+						id={"AddActivityButton"}
 					>
 						<img src="/add_more_icon.svg" />
 					</button>
@@ -773,12 +782,14 @@ export default function Review({id, isOpen, setIsOpen, session_id, workout_id}) 
 						id={"addMorePopup"}
 						isOpen={workoutCreateInfo.popupState.isOpened}
 						setIsOpen={toggleAddMore}
+						scrollId = "scrollable-activity-content" // Popup in popup requires other id for scrolling event listeners 
 					>
 						<WorkoutCreateContext.Provider value={{ workoutCreateInfo, workoutCreateInfoDispatch }}>
 							{workoutCreateInfo.popupState.types.showAddActivity && (
 								<AddActivity
 									id="add-activity-popup"
 									sendActivity={getActivities}
+									scrollId = "scrollable-activity-content" // Popup in popup requires other id for scrolling event listeners 
 								/>
 							)}
 							{workoutCreateInfo.popupState.types.showActivityInfo && (

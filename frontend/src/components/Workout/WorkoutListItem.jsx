@@ -2,13 +2,18 @@
  * This class is responsible to create the UI for a Workout-item in the list.
  * It's made up by one stripe row with the name and an arrow and redirects the user
  * to the appropriate workout.
- * 
+ *
+ * Props:
+ * 		workout @type {Object} The workout.
+ * 		favoriteCallback @type {Function} Called on click of favorite button.
+ *  
  * Changes version 3.0:
  *     Added prop showFavorite, to show or not show the favorite button on a workout.
  *
  * @author Hot-pepper (Group 7), Cyclops (Group 5), Medusa (Group 6)
  * @since May 9, 2023
- * @version 3.0
+ * @updated 2024-05-29 3.1 Kiwi, Updated props in comment.
+ * @version 3.1
  */
 import styles from "./WorkoutListItem.module.css"
 import { Link } from "react-router-dom"

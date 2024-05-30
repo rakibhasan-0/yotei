@@ -18,7 +18,9 @@ import ExerciseDetailMini from "../../../pages/Activity/Exercise/ExerciseDetailM
  * 		detailURL @type {string} 	- The base URL for exercises
  * 		id @type {integer} 			- The ID for this particular exercise in database
  * 		index @type {integer} 		- The ID for this particular exercise on current page (Used for coloring)
+ * 		checkBox @type {Object}     - Chckbox to be rendered in the ListItem
  * 		path @type {string}			- The path to the specific exercise (only used if the exercise is in a list)
+ * 		popUp @type {boolean}       - True if it should be a popUp
  * 
  * Example usage:
  * 		<ExerciseListItem
@@ -36,6 +38,7 @@ import ExerciseDetailMini from "../../../pages/Activity/Exercise/ExerciseDetailM
  * @updated 2023-05-30 Chimera, updated documentation
  * @updated 2024-05-17 Tomato, Fixed so that an exercise get the correct path if in a list.
  * @updated 2024-05-22 Kiwi, fixed a popup window for when popUp is true, added links so you can better se when something redirects to popups.
+ * @updated 2024-05-29 Kiwi, Updated props comment
  * @version 1.1
  */
 export default function ExerciseListItem({ item, text, detailURL, id, index, checkBox, path, popUp }) {
@@ -75,7 +78,7 @@ export default function ExerciseListItem({ item, text, detailURL, id, index, che
 								<div className={styles["exercise-list-duration"]} data-testid="ExerciseListItem-text">
 									<p>{text}</p>
 								</div>
-								<Link to={detailURL + tempPath}>
+								<Link >
 									<ChevronRight size="30px" />
 								</Link>
 							</div>

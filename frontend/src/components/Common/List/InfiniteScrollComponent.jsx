@@ -6,10 +6,10 @@ import Spinner from "../Spinner/Spinner"
  * This component is used to show the first couple of list items and
  * render in more as the user scrolls to the bottom.
  * 
- * @param {children} children The list items to show.
- * @param {activities} Also activities? very unclear
- * @param {activeKey} The currently active tab - Tekniker or Övningar
- * @param {searchCount} A counter variable to ensure that no race conditions are caused by running code to many times.
+ * children @type {Array} The array of items to show.
+ * activities @type {activities} Also activities? very unclear
+ * activeKey @type {String} String representing the activeTab - "tekniker eller övningar"
+ * searchCount @type {searchCount} A counter variable to ensure that no race conditions are caused by running code to many times.
  * @returns {JSX.Element} The rendered InfiniteScrollComponent.
  * @example
  * // Usage
@@ -19,12 +19,14 @@ import Spinner from "../Spinner/Spinner"
  *   ))}
  * </InfiniteScrollComponent>
  * 
- * @author Kraken (Grupp 7), Kiwi (Group 2 - 2024)
+ * @author Kraken (Grupp 7), Kiwi (Group 2 - 2024), Coconut (Group 7- 2024)
  * @version 1.1
  * @since 2024-05-08
+ * @updated 2024-05-29 - Added scrollId to make popup inside popup possible
+ * @updated 2024-05-29 Kiwi, Added auto-scroll and updated comment
  */
 
-export default function InfiniteScrollComponent({ children, activities, activeKey, searchCount }) {
+export default function InfiniteScrollComponent({ children, activities, activeKey, searchCount, scrollId }) {
 
 	const shownItems = useRef(20)
 
@@ -44,10 +46,8 @@ export default function InfiniteScrollComponent({ children, activities, activeKe
 		let startIndex = shownItems.current - 20
 		let endIndex = shownItems.current 
 		let data = children.slice(startIndex, endIndex)
-
 		setVisibleTechniques(prevItems => [...prevItems, ...data])
 		fetchedUpdate()
-		
 		shownItems.current += 20
 		setIsLoading(false)
 	}
@@ -115,7 +115,7 @@ export default function InfiniteScrollComponent({ children, activities, activeKe
 
 	return (
 		isLoading ? 
-			< Spinner />
+			< Spinner/>
 			:
 			<InfiniteScroll
 				dataLength={visibleTechniques.length}
@@ -126,7 +126,7 @@ export default function InfiniteScrollComponent({ children, activities, activeKe
 						<Spinner/>
 					</div>
 				}
-				scrollableTarget={"scrollable-content"}
+				scrollableTarget={scrollId}
 			>
 				<div>
 					{visibleTechniques}

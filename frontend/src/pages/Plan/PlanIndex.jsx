@@ -26,6 +26,7 @@ import { HTTP_STATUS_CODES, canCreateSessionsAndGroups, isAdminUser, setError } 
  * 		    2024-05-22: Added a numFilters counter to the FilterPlan.
  *  		2024-05-28: Fixed a filtering bug for the onlyMyGroups selection and refactored the code a bit.
  * 						Also updated error handling to remove unnecessary error message.
+ * 			2024-05-29: Added an id to the create session button to be able to test it.
  */
 export default function PlanIndex() {
 	const { token } = useContext(AccountContext)
@@ -331,7 +332,7 @@ export default function PlanIndex() {
 
 			{
 				(isAdminUser(user) || canCreateSessionsAndGroups(user)) ? 
-					<RoundButton linkTo={"/session/create"}>
+					<RoundButton linkTo={"/session/create"} id={"CreateSessionButton"}>
 						<Plus />
 					</RoundButton>
 					: <></>
